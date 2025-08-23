@@ -636,7 +636,7 @@ export default function Hotels() {
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
-                          { code: "ar", name: "الع��بية", flag: "🇸🇦" },
+                          { code: "ar", name: "الع��بي��", flag: "🇸🇦" },
                           { code: "hi", name: "��ि��्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日��語", flag: "🇯🇵" },
                           { code: "ko", name: "한국어", flag: "🇰🇷" },
@@ -938,45 +938,47 @@ export default function Hotels() {
               </div>
             </div>
 
-            {/* Contact Methods */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-4 mb-12">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">👥</span>
-                </div>
-                <div className="text-sm font-medium text-gray-900">
-                  Live Chat
-                </div>
+            {/* Contact Methods - Enhanced Grid */}
+            <div className="bg-white rounded-3xl shadow-xl p-8 mb-16 border border-gray-100">
+              <div className="text-center mb-8">
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">Safe, Verified, and Instant Confirmations</h3>
+                <p className="text-gray-600">Backed by real humans</p>
               </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">📞</span>
+
+              <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
+                <div className="text-center group hover:scale-105 transition-transform duration-200">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
+                    <Users className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="font-semibold text-gray-900 text-sm">Live Chat</div>
                 </div>
-                <div className="text-sm font-medium text-gray-900">
-                  Phone Call
+
+                <div className="text-center group hover:scale-105 transition-transform duration-200">
+                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
+                    <span className="text-2xl">📞</span>
+                  </div>
+                  <div className="font-semibold text-gray-900 text-sm">Phone Call</div>
                 </div>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-purple-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">✉️</span>
+
+                <div className="text-center group hover:scale-105 transition-transform duration-200">
+                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
+                    <span className="text-2xl">✉️</span>
+                  </div>
+                  <div className="font-semibold text-gray-900 text-sm">Email</div>
                 </div>
-                <div className="text-sm font-medium text-gray-900">Email</div>
-              </div>
-              <div className="text-center">
-                <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">🎅</span>
+
+                <div className="text-center group hover:scale-105 transition-transform duration-200">
+                  <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
+                    <Headphones className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="font-semibold text-gray-900 text-sm">24/7 Support</div>
                 </div>
-                <div className="text-sm font-medium text-gray-900">
-                  24/7 Support
-                </div>
-              </div>
-              <div className="text-center md:col-span-1 col-span-2">
-                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                  <span className="text-2xl">🔒</span>
-                </div>
-                <div className="text-sm font-medium text-gray-900">
-                  Safe, Verified, and Instant Confirmations. Backed by real
-                  humans.
+
+                <div className="text-center group hover:scale-105 transition-transform duration-200 md:col-span-1 col-span-2">
+                  <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
+                    <Shield className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="font-semibold text-gray-900 text-sm">Instant Confirmations</div>
                 </div>
               </div>
             </div>
