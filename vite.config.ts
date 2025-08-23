@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react-swc";
 import path from "path";
 
 // https://vitejs.dev/config/
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   server: {
     host: "::",
     port: 8080,
@@ -18,27 +18,22 @@ export default defineConfig({
     outDir: "dist/spa",
     sourcemap: false,
   },
-<<<<<<< HEAD
   esbuild: {
     drop: mode === "production" ? ["console", "debugger"] : [],
   },
   define: {
-    "process.env.NODE_ENV": '"production"',
-    __DEV__: false,
+    "process.env.NODE_ENV": JSON.stringify(mode),
+    __DEV__: mode === "development",
   },
   plugins: [
     react({
       jsxRuntime: "automatic",
     }),
-    ...(mode === "development" ? [expressPlugin()] : []),
   ],
-=======
-  plugins: [react()],
->>>>>>> refs/remotes/origin/main
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./client"),
       "@shared": path.resolve(__dirname, "./shared"),
     },
   },
-});
+}));
