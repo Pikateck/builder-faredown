@@ -3913,7 +3913,7 @@ export default function FlightResults() {
                                           Airline fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ₹0
+                                          ���0
                                         </span>
                                       </div>
                                       <div className="flex justify-between">
@@ -4667,8 +4667,8 @@ export default function FlightResults() {
                 <div className="grid grid-cols-2 gap-2 mb-3">
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀️" },
-                    { label: "Afternoon", range: [12, 18], icon: "�����️" },
-                    { label: "Evening", range: [18, 24], icon: "����" },
+                    { label: "Afternoon", range: [12, 18], icon: "☀️" },
+                    { label: "Evening", range: [18, 24], icon: "🌙" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
                     <button
