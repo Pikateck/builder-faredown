@@ -1258,7 +1258,7 @@ export default function FlightResults() {
                 <p className="text-blue-200 text-xs">
                   {selectedFromCity && selectedToCity
                     ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
-                    : "Search Results • "}
+                    : "Search Results ��� "}
                   {tripType === "one-way"
                     ? "One way"
                     : tripType === "multi-city"
@@ -1437,7 +1437,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮����" },
+                      { code: "hi", name: "हिन्दी", flag: "������" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -3072,16 +3072,21 @@ export default function FlightResults() {
                             >
                               View Details
                             </Button>
-                            <FlightBargainButton
-                              flight={flight}
-                              basePrice={flight.price?.amount || flight.fareTypes?.[0]?.price || 0}
-                              productRef={flight.id || 'flight-' + Math.random()}
-                              userName={userName}
-                              buttonText="Bargain Now"
-                              buttonSize="md"
-                              showIcon={true}
-                              className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold min-h-[44px] rounded-xl transition-all duration-200 active:scale-95 touch-manipulation relative z-50"
-                            />
+                            <Button
+                              onClick={(e) => {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                console.log("Desktop Bargain clicked for flight:", flight.id);
+                                // Add bargain logic here - can integrate with modal later
+                              }}
+                              className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                              onTouchStart={(e) => {
+                                e.stopPropagation();
+                              }}
+                            >
+                              <TrendingDown className="w-4 h-4" />
+                              Bargain Now
+                            </Button>
                           </div>
                         </div>
                       </div>
@@ -3832,7 +3837,7 @@ export default function FlightResults() {
                                         change your flight.
                                       </p>
                                       <p>
-                                        • Cancellation/Flight change charges are
+                                        �� Cancellation/Flight change charges are
                                         indicated per traveller. Clearing will
                                         stop accepting cancellation/change
                                         request if 72 hours before departure of
@@ -4033,7 +4038,7 @@ export default function FlightResults() {
                                     </p>
                                     <div className="text-xs text-gray-700 space-y-1">
                                       <p>
-                                        �� Direct flights are usually cheaper
+                                        • Direct flights are usually cheaper
                                         than refundable flights. However, you
                                         may have to pay a large fee to cancel or
                                         change your flight.
