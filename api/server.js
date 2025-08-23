@@ -212,6 +212,7 @@ app.use("/api/flights", flightRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/hotels-live", hotelsLiveRoutes);
 app.use("/api/bargain", bargainRoutes);
+app.use("/api/ai-bargains", aiBargainRoutes);
 app.use("/api/currency", currencyRoutes);
 app.use("/api/promo", promoRoutes);
 app.use("/api/analytics", authenticateToken, analyticsRoutes);
