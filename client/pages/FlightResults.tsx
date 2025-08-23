@@ -2939,7 +2939,7 @@ export default function FlightResults() {
                           onClick={(e) => {
                             e.preventDefault();
                             e.stopPropagation();
-                            console.log("Mobile Bargain clicked for flight:", flight.id);
+                            handleBargainClick(flight);
                           }}
                           className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                           onTouchStart={(e) => {
@@ -3251,7 +3251,7 @@ export default function FlightResults() {
                               onClick={(e) => {
                                 e.preventDefault();
                                 e.stopPropagation();
-                                console.log("Desktop Bargain clicked for flight:", flight.id);
+                                handleBargainClick(flight);
                               }}
                               className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                               onTouchStart={(e) => {
@@ -5226,7 +5226,7 @@ export default function FlightResults() {
                         Delhi → Singapore
                       </div>
                       <div className="text-xs text-blue-200">
-                        Air India • 1 stop • 8h 45m
+                        Air India • 1 stop ��� 8h 45m
                       </div>
                     </div>
                     <div className="text-lg font-bold">₹22800</div>
