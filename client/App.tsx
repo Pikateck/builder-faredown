@@ -1,9 +1,13 @@
+<<<<<<< HEAD
 import React, { useEffect } from "react";
 import { initializeBargainPlatform } from "./services/bargainAppInit";
 import ErrorBoundary from "./components/ErrorBoundary";
 // Import CSS for conversational bargain feature
 import "./styles/mobile-bargain-optimizations.css";
 import "./styles/bargain-button.css";
+=======
+import React from "react";
+>>>>>>> refs/remotes/origin/main
 import {
   BrowserRouter as Router,
   Routes,
@@ -84,6 +88,7 @@ import APITestingDashboard from "./pages/admin/APITestingDashboard";
 
 function App() {
   return (
+<<<<<<< HEAD
     <ErrorBoundary>
       <div className="App">
         <AuthProvider>
@@ -206,6 +211,104 @@ function App() {
                       <Route path="/refund-policy" element={<RefundPolicy />} />
                       <Route path="/cookie-policy" element={<CookiePolicy />} />
                       <Route path="/my-trips" element={<MyTrips />} />
+=======
+    <div className="App">
+      <AuthProvider>
+        <CurrencyProvider>
+          <DateProvider>
+            <LoyaltyProvider>
+              <Router>
+                <Routes>
+                  {/* Original Web Routes */}
+                  <Route path="/" element={<Index />} />
+                  <Route
+                    path="/flights"
+                    element={<Navigate to="/?tab=flights" replace />}
+                  />
+                  <Route path="/flights/results" element={<FlightResults />} />
+                  <Route
+                    path="/flight-details/:flightId"
+                    element={<FlightDetails />}
+                  />
+                  <Route path="/booking-flow" element={<BookingFlow />} />
+                  <Route path="/booking" element={<Booking />} />
+                  <Route
+                    path="/booking-confirmation"
+                    element={<BookingConfirmation />}
+                  />
+                  <Route path="/account" element={<Account />} />
+                  <Route path="/my-account" element={<Account />} />
+                  <Route path="/account/trips" element={<MyTrips />} />
+                  <Route path="/account/payment" element={<Account />} />
+                  <Route path="/saved" element={<Saved />} />
+                  <Route path="/hotels" element={<Hotels />} />
+                  <Route path="/hotels/results" element={<HotelResults />} />
+                  <Route path="/hotels/:hotelId" element={<HotelDetails />} />
+                  <Route path="/hotels/booking" element={<HotelBooking />} />
+                  <Route
+                    path="/booking/hotel"
+                    element={<HotelBookingConfirmation />}
+                  />
+                  <Route path="/reserve" element={<ReservationPage />} />
+                  <Route
+                    path="/booking-confirmation"
+                    element={<HotelBookingConfirmation />}
+                  />
+                  <Route
+                    path="/booking/confirmation/:bookingRef"
+                    element={<BookingConfirmation />}
+                  />
+                  <Route path="/booking-voucher" element={<BookingVoucher />} />
+                  <Route path="/booking-invoice" element={<BookingInvoice />} />
+                  <Route path="/bookings" element={<Bookings />} />
+                  <Route path="/sightseeing" element={<Sightseeing />} />
+                  <Route
+                    path="/sightseeing/results"
+                    element={<SightseeingResults />}
+                  />
+                  <Route
+                    path="/sightseeing/:attractionId"
+                    element={<SightseeingDetails />}
+                  />
+                  <Route
+                    path="/sightseeing/booking"
+                    element={<SightseeingBooking />}
+                  />
+                  <Route
+                    path="/sightseeing/booking/confirmation"
+                    element={<SightseeingBookingConfirmation />}
+                  />
+                  <Route path="/sports" element={<SportsEvents />} />
+                  <Route path="/sports-events" element={<SportsEvents />} />
+                  <Route path="/transfers" element={<Transfers />} />
+                  <Route
+                    path="/transfer-results"
+                    element={<TransferResults />}
+                  />
+                  <Route
+                    path="/transfer-details/:id"
+                    element={<TransferDetails />}
+                  />
+                  <Route
+                    path="/transfer-booking"
+                    element={<TransferBooking />}
+                  />
+                  <Route
+                    path="/transfer-confirmation"
+                    element={<TransferConfirmation />}
+                  />
+                  <Route path="/help" element={<HelpCenter />} />
+                  <Route path="/help-center" element={<HelpCenter />} />
+                  <Route path="/support" element={<HelpCenter />} />
+                  <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                  <Route
+                    path="/terms-conditions"
+                    element={<TermsConditions />}
+                  />
+                  <Route path="/refund-policy" element={<RefundPolicy />} />
+                  <Route path="/cookie-policy" element={<CookiePolicy />} />
+                  <Route path="/my-trips" element={<MyTrips />} />
+>>>>>>> refs/remotes/origin/main
 
                       {/* Development/Testing Routes */}
                       <Route path="/api-test" element={<ApiTestPanel />} />
