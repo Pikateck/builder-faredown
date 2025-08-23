@@ -13,6 +13,7 @@ import { CurrencyProvider } from "./contexts/CurrencyContext";
 import { AuthProvider } from "./contexts/AuthContext";
 import { DateProvider } from "./contexts/DateContext";
 import { LoyaltyProvider } from "./contexts/LoyaltyContext";
+import { BookingProvider } from "./contexts/BookingContext";
 
 // Original pages
 import Index from "./pages/Index";
