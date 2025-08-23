@@ -3528,7 +3528,7 @@ export default function FlightResults() {
                                               ) || flight.fareTypes[0];
                                             handleBooking(flight, fareType);
                                           }}
-                                          className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
+                                          className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-xl shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-95 touch-manipulation"
                                         >
                                           Book Now •{" "}
                                           {formatPrice(
@@ -3810,7 +3810,7 @@ export default function FlightResults() {
                                               ) || flight.fareTypes[0];
                                             handleBooking(flight, fareType);
                                           }}
-                                          className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-lg shadow-lg transition-all duration-200 transform hover:scale-[1.02]"
+                                          className="w-full bg-[#00c851] hover:bg-[#00a142] text-white py-4 text-lg font-bold rounded-xl shadow-lg transition-all duration-200 transform hover:scale-[1.02] active:scale-95 touch-manipulation"
                                         >
                                           Book Now •{" "}
                                           {formatPrice(
