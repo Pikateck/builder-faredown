@@ -1759,7 +1759,7 @@ export default function FlightResults() {
                         <button
                           key={classType}
                           onClick={() => {
-                            setSelectedClass(classType);
+                            handleClassChange(classType);
                             setShowClassDropdown(false);
                           }}
                           className={`w-full text-left px-3 py-2 hover:bg-blue-50 rounded text-sm transition-colors ${
