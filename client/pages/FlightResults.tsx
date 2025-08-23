@@ -6049,7 +6049,7 @@ export default function FlightResults() {
           },
         }}
         selectedCity={selectedFromCity}
-        onSelectCity={setSelectedFromCity}
+        onSelectCity={handleFromCityChange}
       />
 
       <MobileCityDropdown
