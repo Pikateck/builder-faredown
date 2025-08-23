@@ -10,18 +10,18 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     outDir: "dist/spa",
-    sourcemap: false, // Disable source maps
+    sourcemap: false,
   },
   define: {
-    // Force production mode for React to disable debug features
-    'process.env.NODE_ENV': '"production"',
+    "process.env.NODE_ENV": JSON.stringify("production"),
   },
   plugins: [
     react({
-      // Disable all React development features and debugging
-      devTarget: "esnext",
-      fastRefresh: false, // Disable fast refresh
-      jsxRuntime: "automatic",
+      babel: {
+        plugins: [
+          ["@babel/plugin-transform-react-jsx", { development: false }]
+        ]
+      }
     }),
     ...(mode === "development" ? [expressPlugin()] : [])
   ],
