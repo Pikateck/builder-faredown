@@ -1239,12 +1239,6 @@ export default function FlightResults() {
     });
   };
 
-  // Handle bargain click for flights
-  const handleBargainClick = (flight: any) => {
-    console.log("Bargain clicked for flight:", flight.id);
-    // Add your bargain logic here
-    // This could open a bargain modal or navigate to a bargain page
-  };
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
