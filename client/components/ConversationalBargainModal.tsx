@@ -343,9 +343,7 @@ export function ConversationalBargainModal({
     console.error('ConversationalBargainModal: Hotel data required for hotels module');
   }
 
-  if (!shouldRenderModal) return null;
-
-  return (
+  return shouldRenderModal ? (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent 
         className={`
@@ -544,7 +542,7 @@ export function ConversationalBargainModal({
         )}
       </DialogContent>
     </Dialog>
-  );
+  ) : null;
 }
 
 export default ConversationalBargainModal;
