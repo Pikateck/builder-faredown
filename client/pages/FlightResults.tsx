@@ -4089,7 +4089,7 @@ export default function FlightResults() {
                                         change your flight.
                                       </p>
                                       <p>
-                                        • Cancellation/Flight change charges are
+                                        �� Cancellation/Flight change charges are
                                         indicated per traveller. Clearing will
                                         stop accepting cancellation/change
                                         request if 72 hours before departure of
@@ -6111,10 +6111,10 @@ export default function FlightResults() {
                     </h5>
                     <ul className="text-sm text-gray-600 space-y-1">
                       <li>
-                        �� Passenger names cannot be changed after booking
+                        • Passenger names cannot be changed after booking
                       </li>
                       <li>
-                        �� Check-in must be completed 2 hours before departure
+                        • Check-in must be completed 2 hours before departure
                       </li>
                       <li>• Valid government-issued photo ID required</li>
                       <li>
