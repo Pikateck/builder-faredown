@@ -5,6 +5,7 @@ import { useDateContext } from "@/contexts/DateContext";
 import { useBooking } from "@/contexts/BookingContext";
 import { flightsService, Flight } from "@/services/flightsService";
 import { Button } from "@/components/ui/button";
+import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 import { Badge } from "@/components/ui/badge";
 import { MobileFilters } from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
