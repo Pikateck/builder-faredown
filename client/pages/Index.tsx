@@ -1091,9 +1091,11 @@ export default function Index() {
 
                   <div className="flex-1">
                     <button
-                      onClick={() => {
-                        console.log("��� To city button clicked!");
+                      onClick={(e) => {
+                        e.preventDefault();
+                        console.log("🛩️ To city button clicked! Current state:", showToCities);
                         setShowToCities(true);
+                        console.log("✅ Setting showToCities to true");
                       }}
                       className="w-full text-left touch-manipulation active:bg-gray-50 hover:bg-gray-50 rounded-lg p-2 transition-colors"
                     >
