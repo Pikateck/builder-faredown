@@ -5269,7 +5269,7 @@ export default function FlightResults() {
       )}
 
       {/* Enhanced AI Bargain Modal */}
-      <Dialog open={showBargainModal} onOpenChange={setShowBargainModal}>
+      <Dialog open={false} onOpenChange={() => {}}>
         <DialogContent className="w-full h-full max-w-none m-0 rounded-none md:max-w-2xl md:h-auto md:rounded-lg bg-gradient-to-br from-blue-50 to-white overflow-y-auto">
           <DialogHeader className="border-b border-[#003580]/20 pb-4 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white rounded-t-lg -m-6 mb-0 p-6">
             <DialogTitle className="flex items-center space-x-3">
@@ -5907,7 +5907,7 @@ export default function FlightResults() {
                     <div>
                       <div className="flex items-center justify-between mb-4">
                         <h5 className="font-medium text-gray-900">
-                          Return •{" "}
+                          Return ���{" "}
                           {returnDate
                             ? formatDisplayDate(returnDate, "eee, MMM d")
                             : "Select date"}
