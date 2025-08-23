@@ -1581,7 +1581,7 @@ export default function FlightResults() {
                       { code: "fr", name: "Français", flag: "🇫�����" },
                       { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
-                      { code: "pt", name: "Portugu��s", flag: "🇵🇹" },
+                      { code: "pt", name: "Portugu����s", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
@@ -2963,7 +2963,7 @@ export default function FlightResults() {
                                   className="w-8 h-6 object-contain"
                                   onError={(e) => {
                                     (e.target as HTMLImageElement).src =
-                                      "https://via.placeholder.com/32x24/E5E7EB/6B7280?text=✈";
+                                      "https://via.placeholder.com/32x24/E5E7EB/6B7280?text=��";
                                   }}
                                 />
                               </div>
@@ -3059,7 +3059,7 @@ export default function FlightResults() {
                                       {flight.returnArrivalTime}
                                     </div>
                                     <div className="text-sm text-gray-600 font-medium">
-                                      {flight.departureCode} ��{" "}
+                                      {flight.departureCode} →{" "}
                                       {returnDate
                                         ? formatDisplayDate(returnDate, "MMM d")
                                         : "Select return date"}
