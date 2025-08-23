@@ -1,5 +1,8 @@
 import React, { useEffect } from "react";
 import { initializeBargainPlatform } from "./services/bargainAppInit";
+// Import CSS for conversational bargain feature
+import "./styles/mobile-bargain-optimizations.css";
+import "./styles/bargain-button.css";
 import {
   BrowserRouter as Router,
   Routes,
