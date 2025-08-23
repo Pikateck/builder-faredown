@@ -1514,7 +1514,7 @@ export default function FlightResults() {
                       { code: "hi", name: "हिन्दी", flag: "🇮����" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
-                      { code: "zh", name: "中文", flag: "🇨🇳" },
+                      { code: "zh", name: "中文", flag: "🇨���" },
                     ].map((language) => (
                       <DropdownMenuItem
                         key={language.code}
@@ -4226,7 +4226,7 @@ export default function FlightResults() {
                                           or change your flight.
                                         </p>
                                         <p>
-                                          • Cancellation/Flight change charges
+                                          ��� Cancellation/Flight change charges
                                           are indicated per traveller. Clearing
                                           will stop accepting
                                           cancellation/change request if 72
@@ -6089,7 +6089,7 @@ export default function FlightResults() {
           },
         }}
         selectedCity={selectedToCity}
-        onSelectCity={setSelectedToCity}
+        onSelectCity={handleToCityChange}
       />
 
       <MobileDatePicker
