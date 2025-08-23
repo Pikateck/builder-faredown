@@ -6211,8 +6211,7 @@ export default function FlightResults() {
 
       <MobileNavigation />
 
-      {/* Phase 1 Bargain Modal */}
-      <BargainModalPhase1 {...bargainHook.getBargainModalProps()} />
+      {/* Old Phase 1 Bargain Modal removed - now using ConversationalBargainModal via FlightBargainButton */}
     </div>
   );
 }
