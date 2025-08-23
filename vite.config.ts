@@ -12,17 +12,10 @@ export default defineConfig(({ mode }) => ({
     outDir: "dist/spa",
     sourcemap: false,
   },
-  define: {
-    "process.env.NODE_ENV": '"production"',
-    __DEV__: false,
-  },
   plugins: [
     react({
-      jsxRuntime: "classic",
-      jsxImportSource: "react",
-      // Disable all development features
-      development: false,
-      devTarget: undefined,
+      // Use automatic JSX runtime consistently
+      jsxRuntime: "automatic",
     }),
     ...(mode === "development" ? [expressPlugin()] : [])
   ],
