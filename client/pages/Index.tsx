@@ -37,6 +37,14 @@ import {
   Linkedin,
   Twitter,
   BookOpen,
+  Sparkles,
+  Target,
+  Lock,
+  MessageCircle,
+  Crown,
+  Rocket,
+  Star,
+  ArrowRight,
 } from "lucide-react";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
