@@ -465,55 +465,111 @@ export default function Hotels() {
           </div>
         </div>
 
-        {/* Why Faredown Section - Enhanced Mobile Design */}
-        <div className="bg-gradient-to-b from-gray-50 to-white py-12">
-          <div className="px-4">
-            <div className="text-center mb-8">
-              <div className="inline-flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full mb-4">
-                <div className="w-2 h-2 bg-[#003580] rounded-full animate-pulse"></div>
-                <span className="text-[#003580] font-medium text-xs">Trusted worldwide</span>
+        {/* Why Faredown Section - Ultra Modern Mobile Design */}
+        <div className="relative bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40 py-16 overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute top-10 left-4 w-32 h-32 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-10 right-4 w-40 h-40 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-3xl"></div>
+          </div>
+
+          <div className="relative px-6 max-w-sm mx-auto">
+            {/* Header */}
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center space-x-2 bg-white/70 backdrop-blur-xl border border-white/20 px-5 py-2.5 rounded-full mb-6 shadow-lg">
+                <div className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
+                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-semibold text-sm">Hotel Excellence</span>
               </div>
-              <h2 className="text-2xl font-bold text-center mb-2 text-gray-900">
-                Why Faredown?
+              <h2 className="text-3xl font-black text-slate-900 mb-3 leading-tight">
+                Why Choose
+                <br />
+                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Faredown Hotels?</span>
               </h2>
-              <p className="text-gray-600 text-sm">Experience the future of travel booking</p>
+              <p className="text-slate-600 font-medium">Premium stays, unbeatable prices</p>
             </div>
-            <div className="grid grid-cols-2 gap-6">
-              <div className="bg-white rounded-2xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 transform">
-                <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <Zap className="w-8 h-8 text-white" />
+
+            {/* Feature Cards - Asymmetrical Layout */}
+            <div className="space-y-4">
+              {/* Primary Feature - Full Width */}
+              <div className="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative flex items-start space-x-5">
+                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Sparkles className="w-8 h-8 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
+                      Room Upgrade Bargaining
+                    </h3>
+                    <p className="text-slate-600 text-sm leading-relaxed">
+                      Our AI negotiates room upgrades in real-time, turning standard bookings into luxury suites at incredible prices.
+                    </p>
+                  </div>
                 </div>
-                <h3 className="font-bold text-base mb-2 text-gray-900">Live Bargaining</h3>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  Negotiate real-time prices with AI technology
-                </p>
               </div>
-              <div className="bg-white rounded-2xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 transform">
-                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <TrendingUp className="w-8 h-8 text-white" />
+
+              {/* Secondary Features - Side by Side */}
+              <div className="grid grid-cols-2 gap-4">
+                <div className="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-green-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative text-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
+                      <Target className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="font-bold text-slate-900 mb-2 text-sm group-hover:text-emerald-600 transition-colors">
+                      Best Hotel Rates
+                    </h3>
+                    <p className="text-slate-600 text-xs leading-relaxed">
+                      Pay what you think is fair for luxury stays
+                    </p>
+                  </div>
                 </div>
-                <h3 className="font-bold text-base mb-2 text-gray-900">Best Prices</h3>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  Pay what you feel is fair for premium services
-                </p>
+
+                <div className="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <div className="relative text-center">
+                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
+                      <Lock className="w-6 h-6 text-white" />
+                    </div>
+                    <h3 className="font-bold text-slate-900 mb-2 text-sm group-hover:text-purple-600 transition-colors">
+                      Secure Bookings
+                    </h3>
+                    <p className="text-slate-600 text-xs leading-relaxed">
+                      Instant confirmations with verified hotels
+                    </p>
+                  </div>
+                </div>
               </div>
-              <div className="bg-white rounded-2xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 transform">
-                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <Shield className="w-8 h-8 text-white" />
+
+              {/* Support Feature - Full Width */}
+              <div className="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <div className="relative flex items-center justify-between">
+                  <div className="flex items-center space-x-4">
+                    <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
+                      <MessageCircle className="w-7 h-7 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-bold text-slate-900 mb-1 group-hover:text-amber-600 transition-colors">
+                        24/7 Hotel Concierge
+                      </h3>
+                      <p className="text-slate-600 text-sm">
+                        Expert hotel assistance anytime
+                      </p>
+                    </div>
+                  </div>
+                  <div className="w-8 h-8 bg-gradient-to-r from-slate-200 to-slate-300 rounded-lg flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-amber-100 group-hover:to-orange-100 transition-all duration-300">
+                    <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-amber-600 transition-colors" />
+                  </div>
                 </div>
-                <h3 className="font-bold text-base mb-2 text-gray-900">Secure Booking</h3>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  Instant confirmations with bank-level security
-                </p>
               </div>
-              <div className="bg-white rounded-2xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 transform">
-                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
-                  <Headphones className="w-8 h-8 text-white" />
-                </div>
-                <h3 className="font-bold text-base mb-2 text-gray-900">24/7 Support</h3>
-                <p className="text-xs text-gray-600 leading-relaxed">
-                  Always here to help via chat, call, or email
-                </p>
+            </div>
+
+            {/* Bottom CTA */}
+            <div className="text-center mt-8">
+              <div className="inline-flex items-center space-x-2 text-sm text-slate-500">
+                <Star className="w-4 h-4 text-yellow-500" />
+                <span>Premium hotels worldwide</span>
               </div>
             </div>
           </div>
