@@ -580,40 +580,43 @@ export default function Index() {
 
         {/* Footer - Mobile */}
         <footer className="bg-gray-900 text-white py-12">
-          <div className="px-6">
-            <div className="text-center mb-8">
-              <div className="flex items-center justify-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
-                  <Plane className="w-4 h-4 text-[#003580]" />
-                </div>
-                <span className="text-xl font-bold">faredown.com</span>
+          <div className="px-6 text-center">
+            <div className="flex items-center justify-center space-x-2 mb-6">
+              <div className="w-10 h-10 bg-[#febb02] rounded-xl flex items-center justify-center">
+                <Plane className="w-5 h-5 text-[#003580]" />
               </div>
-              <p className="text-gray-400 text-sm">AI-powered travel booking</p>
+              <span className="text-2xl font-bold">faredown.com</span>
             </div>
-            
-            <div className="grid grid-cols-2 gap-6 mb-8">
-              <div>
-                <h4 className="font-bold mb-3">Services</h4>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  <li><button onClick={() => handleTabChange("flights")}>Flights</button></li>
-                  <li><button onClick={() => handleTabChange("hotels")}>Hotels</button></li>
-                  <li><button onClick={() => handleTabChange("sightseeing")}>Sightseeing</button></li>
-                  <li><button onClick={() => handleTabChange("transfers")}>Transfers</button></li>
-                </ul>
-              </div>
-              
-              <div>
-                <h4 className="font-bold mb-3">Support</h4>
-                <ul className="space-y-2 text-sm text-gray-400">
-                  <li><Link to="/help">Help Center</Link></li>
-                  <li><Link to="/contact">Contact Us</Link></li>
-                  <li><Link to="/about">About</Link></li>
-                  <li><Link to="/terms">Terms</Link></li>
-                </ul>
-              </div>
+
+            <p className="text-gray-400 mb-8">The world's first AI-powered travel portal</p>
+
+            <div className="flex justify-center space-x-6 mb-8 text-sm text-gray-400">
+              <button onClick={() => handleTabChange("flights")}>Flights</button>
+              <button onClick={() => handleTabChange("hotels")}>Hotels</button>
+              <Link to="/help">Help</Link>
+              <Link to="/contact">Contact</Link>
             </div>
-            
-            <div className="text-center pt-6 border-t border-gray-800">
+
+            <div className="flex justify-center space-x-4 mb-8">
+              {[Facebook, Instagram, Twitter, Linkedin].map((Social, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  className="w-10 h-10 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-[#003580] transition-colors"
+                >
+                  <Social className="w-4 h-4" />
+                </a>
+              ))}
+            </div>
+
+            <div className="border-t border-gray-800 pt-6">
+              <div className="flex items-center justify-center space-x-4 mb-4">
+                {["TAAI", "TAAFI", "IATA"].map((cert) => (
+                  <div key={cert} className="bg-white rounded-lg px-3 py-1">
+                    <span className="text-[#003580] font-bold text-xs">{cert}</span>
+                  </div>
+                ))}
+              </div>
               <p className="text-sm text-gray-400">© 2025 Faredown.com. All rights reserved.</p>
             </div>
           </div>
