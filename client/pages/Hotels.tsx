@@ -826,67 +826,69 @@ export default function Hotels() {
           </div>
         </div>
 
-        {/* Why Choose Faredown Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-[1280px] mx-auto px-4">
-            <div className="text-center mb-12">
-              <h2 className="text-3xl font-bold text-gray-900 mb-4">
-                Why Faredown Is Reinventing Hotel Booking
+        {/* Why Choose Faredown Section - Enhanced Desktop Design */}
+        <section className="py-20 bg-gradient-to-b from-white to-gray-50">
+          <div className="max-w-[1280px] mx-auto px-6">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center space-x-2 bg-blue-50 px-6 py-3 rounded-full mb-6">
+                <div className="w-3 h-3 bg-[#003580] rounded-full animate-pulse"></div>
+                <span className="text-[#003580] font-semibold text-sm">Revolutionizing Travel</span>
+              </div>
+              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
+                Why Faredown Is Reinventing Travel Booking
               </h2>
-              <p className="text-gray-600 text-lg">
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 The future of booking isn't fixed pricing — it's{" "}
-                <strong>live bargaining.</strong>
+                <span className="text-[#003580] font-bold">live bargaining</span> powered by cutting-edge AI technology.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <TrendingUp className="w-8 h-8 text-white" />
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+              <div className="bg-white rounded-3xl p-8 text-center shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 transform group">
+                <div className="w-20 h-20 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Zap className="w-10 h-10 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">
+                <h3 className="text-xl font-bold mb-4 text-gray-900">
                   Live Bargain Technology
                 </h3>
-                <p className="text-gray-600 text-sm">
-                  Negotiate room upgrades instantly — from standard to suite,
-                  from basic to deluxe.
+                <p className="text-gray-600 leading-relaxed">
+                  Negotiate room upgrades instantly — from standard to suite, from basic to deluxe with our revolutionary AI engine.
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <DollarSign className="w-8 h-8 text-white" />
+              <div className="bg-white rounded-3xl p-8 text-center shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 transform group">
+                <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <DollarSign className="w-10 h-10 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">
+                <h3 className="text-xl font-bold mb-4 text-gray-900">
                   Pay What You Feel Is Fair
                 </h3>
-                <p className="text-gray-600 text-sm">
-                  Set your price and let Faredown try to get it for you — no
-                  more overpaying.
+                <p className="text-gray-600 leading-relaxed">
+                  Set your price and let Faredown negotiate for you — no more overpaying for hotel experiences.
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Shield className="w-8 h-8 text-white" />
+              <div className="bg-white rounded-3xl p-8 text-center shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 transform group">
+                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Shield className="w-10 h-10 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">
+                <h3 className="text-xl font-bold mb-4 text-gray-900">
                   Secure, Real-Time Bookings
                 </h3>
-                <p className="text-gray-600 text-sm">
-                  Your data is encrypted and bookings are confirmed instantly.
+                <p className="text-gray-600 leading-relaxed">
+                  Your data is encrypted with bank-level security and bookings are confirmed instantly with verified hotels.
                 </p>
               </div>
 
-              <div className="text-center">
-                <div className="w-16 h-16 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-4">
-                  <Headphones className="w-8 h-8 text-white" />
+              <div className="bg-white rounded-3xl p-8 text-center shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 transform group">
+                <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                  <Headphones className="w-10 h-10 text-white" />
                 </div>
-                <h3 className="text-xl font-semibold mb-2">
+                <h3 className="text-xl font-bold mb-4 text-gray-900">
                   Smarter Than Any Travel Agent
                 </h3>
-                <p className="text-gray-600 text-sm">
-                  Skip the back and forth. Our AI works faster, 24/7.
+                <p className="text-gray-600 leading-relaxed">
+                  Skip the back and forth. Our AI works faster, smarter, and is available 24/7 to secure your best hotel deals.
                 </p>
               </div>
             </div>
