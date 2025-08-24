@@ -850,70 +850,168 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Why Choose Faredown Section - Enhanced Desktop Design */}
-        <section className="py-20 bg-gradient-to-b from-white to-gray-50">
-          <div className="max-w-[1280px] mx-auto px-6">
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center space-x-2 bg-blue-50 px-6 py-3 rounded-full mb-6">
-                <div className="w-3 h-3 bg-[#003580] rounded-full animate-pulse"></div>
-                <span className="text-[#003580] font-semibold text-sm">Revolutionizing Travel</span>
+        {/* Why Choose Faredown Section - Ultra Modern Desktop Design */}
+        <section className="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/30 overflow-hidden">
+          {/* Background Elements */}
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-3xl"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full blur-3xl"></div>
+          </div>
+
+          <div className="relative max-w-7xl mx-auto px-8">
+            {/* Header */}
+            <div className="text-center mb-20">
+              <div className="inline-flex items-center space-x-3 bg-white/70 backdrop-blur-xl border border-white/20 px-8 py-4 rounded-full mb-8 shadow-lg">
+                <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
+                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-bold text-lg">The Faredown Revolution</span>
               </div>
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                Why Faredown Is Reinventing Travel Booking
+
+              <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-8 leading-tight">
+                Why Choose{" "}
+                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  Faredown?
+                </span>
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                The future of booking isn't fixed pricing — it's{" "}
-                <span className="text-[#003580] font-bold">live bargaining</span> powered by cutting-edge AI technology.
+
+              <p className="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed font-medium">
+                Experience the future of travel booking — where{" "}
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold">AI-powered bargaining</span>{" "}
+                meets uncompromising luxury and unprecedented savings.
               </p>
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
-              <div className="bg-white rounded-3xl p-8 text-center shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 transform group">
-                <div className="w-20 h-20 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <Zap className="w-10 h-10 text-white" />
+            {/* Feature Grid - Modern Asymmetrical Layout */}
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+              {/* Hero Feature - Spans 8 columns */}
+              <div className="lg:col-span-8 group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-4xl p-12 shadow-2xl hover:shadow-3xl transition-all duration-700 hover:-translate-y-3">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-indigo-500/5 rounded-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+                <div className="relative flex items-start space-x-8">
+                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
+                    <Sparkles className="w-12 h-12 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="flex items-center space-x-3 mb-4">
+                      <h3 className="text-3xl font-black text-slate-900 group-hover:text-blue-600 transition-colors">
+                        AI-Powered Live Bargaining
+                      </h3>
+                      <div className="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold rounded-full">
+                        REVOLUTIONARY
+                      </div>
+                    </div>
+                    <p className="text-slate-600 text-lg leading-relaxed mb-6">
+                      Our cutting-edge AI negotiates with suppliers in real-time, securing premium upgrades and exclusive deals that traditional booking sites simply can't match. Experience the future of travel booking today.
+                    </p>
+                    <div className="flex items-center space-x-6 text-sm text-slate-500">
+                      <div className="flex items-center space-x-2">
+                        <Rocket className="w-4 h-4 text-blue-500" />
+                        <span>Real-time negotiations</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Crown className="w-4 h-4 text-purple-500" />
+                        <span>Premium upgrades</span>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Target className="w-4 h-4 text-emerald-500" />
+                        <span>Unbeatable prices</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900">
-                  Live Bargain Technology
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Negotiate upgrades instantly — from standard to suite, from basic to deluxe with our revolutionary AI engine.
-                </p>
               </div>
 
-              <div className="bg-white rounded-3xl p-8 text-center shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 transform group">
-                <div className="w-20 h-20 bg-gradient-to-br from-green-500 to-green-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <DollarSign className="w-10 h-10 text-white" />
+              {/* Secondary Feature - Spans 4 columns */}
+              <div className="lg:col-span-4 group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-green-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative text-center">
+                  <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Target className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-emerald-600 transition-colors">
+                    Fair Pricing Revolution
+                  </h3>
+                  <p className="text-slate-600 leading-relaxed mb-4">
+                    Set your own price and let our AI work its magic. No more overpaying — only fair, transparent pricing that puts you in control.
+                  </p>
+                  <div className="inline-flex items-center text-emerald-600 font-semibold text-sm group-hover:text-emerald-700 transition-colors">
+                    <span>Save up to 60%</span>
+                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900">
-                  Pay What You Feel Is Fair
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Set your price and let Faredown negotiate for you — no more overpaying for travel experiences.
-                </p>
               </div>
 
-              <div className="bg-white rounded-3xl p-8 text-center shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 transform group">
-                <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-purple-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <Shield className="w-10 h-10 text-white" />
+              {/* Security Feature - Spans 6 columns */}
+              <div className="lg:col-span-6 group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative">
+                  <div className="flex items-start space-x-6">
+                    <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <Lock className="w-10 h-10 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-purple-600 transition-colors">
+                        Military-Grade Security
+                      </h3>
+                      <p className="text-slate-600 leading-relaxed mb-4">
+                        Your data is protected with bank-level encryption and real-time fraud detection. Book with complete confidence.
+                      </p>
+                      <div className="flex items-center space-x-4 text-sm text-slate-500">
+                        <span className="flex items-center space-x-1">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span>256-bit SSL</span>
+                        </span>
+                        <span className="flex items-center space-x-1">
+                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
+                          <span>PCI Compliant</span>
+                        </span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900">
-                  Secure, Real-Time Bookings
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Your data is encrypted with bank-level security and bookings are confirmed instantly with verified suppliers.
-                </p>
               </div>
 
-              <div className="bg-white rounded-3xl p-8 text-center shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-300 hover:-translate-y-2 transform group">
-                <div className="w-20 h-20 bg-gradient-to-br from-orange-500 to-orange-600 rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                  <Headphones className="w-10 h-10 text-white" />
+              {/* Support Feature - Spans 6 columns */}
+              <div className="lg:col-span-6 group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
+                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                <div className="relative">
+                  <div className="flex items-start space-x-6">
+                    <div className="w-20 h-20 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
+                      <MessageCircle className="w-10 h-10 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors">
+                        24/7 Human Excellence
+                      </h3>
+                      <p className="text-slate-600 leading-relaxed mb-4">
+                        Real travel experts available around the clock. Get instant support via chat, call, or email — whenever you need it.
+                      </p>
+                      <div className="inline-flex items-center text-amber-600 font-semibold text-sm group-hover:text-amber-700 transition-colors">
+                        <span>Talk to an expert</span>
+                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <h3 className="text-xl font-bold mb-4 text-gray-900">
-                  Smarter Than Any Travel Agent
-                </h3>
-                <p className="text-gray-600 leading-relaxed">
-                  Skip the back and forth. Our AI works faster, smarter, and is available 24/7 to secure your best deals.
-                </p>
+              </div>
+            </div>
+
+            {/* Bottom Stats */}
+            <div className="mt-20 text-center">
+              <div className="inline-flex items-center space-x-8 bg-white/70 backdrop-blur-xl border border-white/20 px-8 py-4 rounded-full shadow-lg">
+                <div className="flex items-center space-x-2">
+                  <Star className="w-5 h-5 text-yellow-500" />
+                  <span className="text-slate-700 font-semibold">4.9/5 Rating</span>
+                </div>
+                <div className="w-px h-6 bg-slate-300"></div>
+                <div className="flex items-center space-x-2">
+                  <Users className="w-5 h-5 text-blue-500" />
+                  <span className="text-slate-700 font-semibold">50M+ Travelers</span>
+                </div>
+                <div className="w-px h-6 bg-slate-300"></div>
+                <div className="flex items-center space-x-2">
+                  <Rocket className="w-5 h-5 text-purple-500" />
+                  <span className="text-slate-700 font-semibold">AI-Powered</span>
+                </div>
               </div>
             </div>
           </div>
