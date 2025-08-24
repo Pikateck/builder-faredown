@@ -51,6 +51,8 @@ import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 import { TransfersSearchForm } from "@/components/TransfersSearchForm";
 
 export default function Index() {
+  useScrollToTop();
+
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
   const { isLoggedIn, user, logout } = useAuth();
@@ -729,7 +731,7 @@ export default function Index() {
                           { code: "es", name: "Español", flag: "🇪🇸" },
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
-                          { code: "it", name: "Italiano", flag: "���🇹" },
+                          { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
                           { code: "ar", name: "العربية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
