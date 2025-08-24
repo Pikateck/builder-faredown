@@ -309,16 +309,20 @@ export default function HotelDetails() {
         } catch (error) {
           console.warn(`⚠️ Attempt ${retryCount + 1} failed:`, error);
 
-          // Retry up to 2 times with exponential backoff
-          if (
-            retryCount < 2 &&
-            (error instanceof TypeError || // Network errors
-              error.message.includes("Failed to fetch") ||
-              error.message.includes("NetworkError") ||
-              error.message.includes("fetch"))
-          ) {
+          // Retry up to 2 times with exponential backoff for specific errors
+          const isRetryableError =
+            error instanceof TypeError || // Network errors
+            error.message.includes("Failed to fetch") ||
+            error.message.includes("NetworkError") ||
+            error.message.includes("fetch") ||
+            error.message.includes("HTTP 503") || // Server unavailable
+            error.message.includes("HTTP 502") || // Bad gateway
+            error.message.includes("HTTP 504") || // Gateway timeout
+            error.message.includes("HTTP 500"); // Internal server error
+
+          if (retryCount < 2 && isRetryableError) {
             const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
-            console.log(`🔄 Retrying in ${delay}ms...`);
+            console.log(`🔄 Retrying in ${delay}ms... (Error: ${error.message})`);
             await new Promise((resolve) => setTimeout(resolve, delay));
             return attemptFetch(retryCount + 1);
           }
