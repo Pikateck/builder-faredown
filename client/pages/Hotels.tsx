@@ -50,6 +50,13 @@ import {
   BookOpen,
   Camera,
   Car,
+  Sparkles,
+  Target,
+  Lock,
+  MessageCircle,
+  Crown,
+  Rocket,
+  Star,
 } from "lucide-react";
 import {
   MobileCityDropdown,
