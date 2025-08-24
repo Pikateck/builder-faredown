@@ -161,6 +161,15 @@ export default function HotelDetails() {
   const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
   const [hotelData, setHotelData] = useState<any>(null);
   const [isLoadingHotel, setIsLoadingHotel] = useState(true);
+  const [apiStatus, setApiStatus] = useState<{
+    isOffline: boolean;
+    message: string;
+    type: 'error' | 'warning' | 'info' | null;
+  }>({
+    isOffline: false,
+    message: '',
+    type: null
+  });
   const [selectedFilters, setSelectedFilters] = useState({
     popularFilters: new Set<string>(),
     propertyTypes: new Set<string>(),
