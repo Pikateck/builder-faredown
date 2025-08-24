@@ -3,6 +3,7 @@ import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { useDateContext } from "@/contexts/DateContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -728,7 +729,7 @@ export default function Index() {
                           { code: "es", name: "Español", flag: "🇪🇸" },
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
-                          { code: "it", name: "Italiano", flag: "🇮🇹" },
+                          { code: "it", name: "Italiano", flag: "���🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
                           { code: "ar", name: "العربية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
