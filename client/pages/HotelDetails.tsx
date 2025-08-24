@@ -378,18 +378,45 @@ export default function HotelDetails() {
         const fallbackData = getMockHotelData();
         setHotelData(fallbackData);
 
-        // Show user-friendly message based on error type
+        // Set API status and show user-friendly message based on error type
         if (error.message.includes("HTTP 503")) {
           console.info("ℹ️ Hotel service temporarily unavailable, using cached data");
+          setApiStatus({
+            isOffline: true,
+            message: "Hotel service temporarily unavailable. Showing cached data.",
+            type: 'warning'
+          });
         } else if (error.message.includes("HTTP 50")) {
           console.info("ℹ️ Hotel service experiencing issues, using fallback data");
+          setApiStatus({
+            isOffline: true,
+            message: "Hotel service experiencing issues. Showing available data.",
+            type: 'warning'
+          });
+        } else if (error.message.includes("API_UNAVAILABLE")) {
+          console.info("ℹ️ API health check failed, using offline data");
+          setApiStatus({
+            isOffline: true,
+            message: "Service temporarily offline. Showing available data.",
+            type: 'info'
+          });
         } else if (
           error instanceof TypeError ||
           error.message.includes("Failed to fetch")
         ) {
           console.info("ℹ️ Using offline mode due to network connectivity issues");
+          setApiStatus({
+            isOffline: true,
+            message: "Connection issues. Using offline mode.",
+            type: 'info'
+          });
         } else {
           console.info("ℹ️ Using cached hotel data");
+          setApiStatus({
+            isOffline: true,
+            message: "Using cached hotel data.",
+            type: 'info'
+          });
         }
       } finally {
         setIsLoadingHotel(false);
