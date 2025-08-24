@@ -240,12 +240,35 @@ export default function HotelDetails() {
         }
       };
 
+      // Quick API health check on first attempt
+      const checkApiHealth = async (): Promise<boolean> => {
+        try {
+          const healthResponse = await fetchWithTimeout(
+            `/api/hotels-live/health`,
+            { method: "GET" },
+            2000 // Quick health check timeout
+          );
+          return healthResponse.ok;
+        } catch {
+          return false;
+        }
+      };
+
       // Retry logic with exponential backoff
       const attemptFetch = async (retryCount = 0): Promise<any> => {
         try {
           console.log(
             `🏨 Attempt ${retryCount + 1}: Fetching hotel details for: ${hotelId}`,
           );
+
+          // On first attempt, check if API is healthy
+          if (retryCount === 0) {
+            const isApiHealthy = await checkApiHealth();
+            if (!isApiHealthy) {
+              console.warn("⚠️ API health check failed, using fallback immediately");
+              throw new Error("API_UNAVAILABLE: Service health check failed");
+            }
+          }
 
           // Try using the hotels service first for proper API integration
           try {
