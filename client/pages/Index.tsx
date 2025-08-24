@@ -884,8 +884,8 @@ export default function Index() {
             {/* Feature Grid - Modern Asymmetrical Layout */}
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
               {/* Hero Feature - Spans 8 columns */}
-              <div className="lg:col-span-8 group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-4xl p-12 shadow-2xl hover:shadow-3xl transition-all duration-700 hover:-translate-y-3">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-indigo-500/5 rounded-4xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
+              <div className="lg:col-span-8 group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-2xl hover:shadow-3xl transition-all duration-700 hover:-translate-y-3">
+                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-indigo-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
                 <div className="relative flex items-start space-x-8">
                   <div className="w-24 h-24 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
                     <Sparkles className="w-12 h-12 text-white" />
