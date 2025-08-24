@@ -292,7 +292,7 @@ export default function HotelDetails() {
             console.log("✅ Hotel data received via service:", hotel);
             return hotel;
           } catch (serviceError) {
-            console.warn("⚠️ Service failed, trying direct API:", serviceError);
+            console.warn("⚠��� Service failed, trying direct API:", serviceError);
 
             // Fallback to direct API call
             const apiUrl = new URL(
@@ -331,6 +331,11 @@ export default function HotelDetails() {
           }
         } catch (error) {
           console.warn(`⚠️ Attempt ${retryCount + 1} failed:`, error);
+
+          // Skip retries for API unavailable errors
+          if (error.message.includes("API_UNAVAILABLE")) {
+            throw error;
+          }
 
           // Retry up to 2 times with exponential backoff for specific errors
           const isRetryableError =
