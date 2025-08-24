@@ -75,7 +75,9 @@ export function FlightSearchForm() {
   const weekLater = new Date();
   weekLater.setDate(weekLater.getDate() + 8);
 
-  const [departureDate, setDepartureDate] = useState<Date | undefined>(tomorrow);
+  const [departureDate, setDepartureDate] = useState<Date | undefined>(
+    tomorrow,
+  );
   const [returnDate, setReturnDate] = useState<Date | undefined>(weekLater);
   const [isDepartureDateOpen, setIsDepartureDateOpen] = useState(false);
   const [isReturnDateOpen, setIsReturnDateOpen] = useState(false);
@@ -94,20 +96,104 @@ export function FlightSearchForm() {
 
   // Popular airports data
   const popularAirports: Airport[] = [
-    { code: "DXB", name: "Dubai International", city: "Dubai", country: "UAE", popular: true },
-    { code: "LHR", name: "Heathrow", city: "London", country: "UK", popular: true },
-    { code: "CDG", name: "Charles de Gaulle", city: "Paris", country: "France", popular: true },
-    { code: "BCN", name: "Barcelona El Prat", city: "Barcelona", country: "Spain", popular: true },
-    { code: "FCO", name: "Leonardo da Vinci", city: "Rome", country: "Italy", popular: true },
-    { code: "JFK", name: "John F. Kennedy", city: "New York", country: "USA", popular: true },
-    { code: "LAX", name: "Los Angeles International", city: "Los Angeles", country: "USA", popular: true },
-    { code: "BKK", name: "Suvarnabhumi", city: "Bangkok", country: "Thailand", popular: true },
-    { code: "SIN", name: "Changi", city: "Singapore", country: "Singapore", popular: true },
-    { code: "NRT", name: "Narita International", city: "Tokyo", country: "Japan", popular: true },
-    { code: "SYD", name: "Kingsford Smith", city: "Sydney", country: "Australia", popular: true },
-    { code: "BOM", name: "Chhatrapati Shivaji", city: "Mumbai", country: "India", popular: true },
-    { code: "DEL", name: "Indira Gandhi International", city: "Delhi", country: "India", popular: true },
-    { code: "BLR", name: "Kempegowda International", city: "Bangalore", country: "India", popular: true },
+    {
+      code: "DXB",
+      name: "Dubai International",
+      city: "Dubai",
+      country: "UAE",
+      popular: true,
+    },
+    {
+      code: "LHR",
+      name: "Heathrow",
+      city: "London",
+      country: "UK",
+      popular: true,
+    },
+    {
+      code: "CDG",
+      name: "Charles de Gaulle",
+      city: "Paris",
+      country: "France",
+      popular: true,
+    },
+    {
+      code: "BCN",
+      name: "Barcelona El Prat",
+      city: "Barcelona",
+      country: "Spain",
+      popular: true,
+    },
+    {
+      code: "FCO",
+      name: "Leonardo da Vinci",
+      city: "Rome",
+      country: "Italy",
+      popular: true,
+    },
+    {
+      code: "JFK",
+      name: "John F. Kennedy",
+      city: "New York",
+      country: "USA",
+      popular: true,
+    },
+    {
+      code: "LAX",
+      name: "Los Angeles International",
+      city: "Los Angeles",
+      country: "USA",
+      popular: true,
+    },
+    {
+      code: "BKK",
+      name: "Suvarnabhumi",
+      city: "Bangkok",
+      country: "Thailand",
+      popular: true,
+    },
+    {
+      code: "SIN",
+      name: "Changi",
+      city: "Singapore",
+      country: "Singapore",
+      popular: true,
+    },
+    {
+      code: "NRT",
+      name: "Narita International",
+      city: "Tokyo",
+      country: "Japan",
+      popular: true,
+    },
+    {
+      code: "SYD",
+      name: "Kingsford Smith",
+      city: "Sydney",
+      country: "Australia",
+      popular: true,
+    },
+    {
+      code: "BOM",
+      name: "Chhatrapati Shivaji",
+      city: "Mumbai",
+      country: "India",
+      popular: true,
+    },
+    {
+      code: "DEL",
+      name: "Indira Gandhi International",
+      city: "Delhi",
+      country: "India",
+      popular: true,
+    },
+    {
+      code: "BLR",
+      name: "Kempegowda International",
+      city: "Bangalore",
+      country: "India",
+      popular: true,
+    },
   ];
 
   // Debounced search ref
@@ -146,7 +232,7 @@ export function FlightSearchForm() {
               airport.name.toLowerCase().includes(query.toLowerCase()) ||
               airport.city.toLowerCase().includes(query.toLowerCase()) ||
               airport.code.toLowerCase().includes(query.toLowerCase()) ||
-              airport.country.toLowerCase().includes(query.toLowerCase())
+              airport.country.toLowerCase().includes(query.toLowerCase()),
           );
           setResults(filtered.slice(0, 10));
         } catch (error) {
@@ -157,13 +243,13 @@ export function FlightSearchForm() {
         }
       }, 200);
     },
-    []
+    [],
   );
 
   // Handle passenger count updates
   const updatePassengerCount = (
     type: keyof PassengerConfig,
-    operation: "increment" | "decrement"
+    operation: "increment" | "decrement",
   ) => {
     setPassengers((prev) => {
       const newValue =
@@ -171,9 +257,11 @@ export function FlightSearchForm() {
 
       // Validation rules
       if (type === "adults" && newValue < 1) return prev;
-      if ((type === "children" || type === "infants") && newValue < 0) return prev;
+      if ((type === "children" || type === "infants") && newValue < 0)
+        return prev;
       if (type === "adults" && newValue > 9) return prev;
-      if ((type === "children" || type === "infants") && newValue > 9) return prev;
+      if ((type === "children" || type === "infants") && newValue > 9)
+        return prev;
 
       return {
         ...prev,
@@ -186,7 +274,7 @@ export function FlightSearchForm() {
   const swapAirports = () => {
     const tempAirport = fromAirport;
     const tempSearch = fromSearchValue;
-    
+
     setFromAirport(toAirport);
     setToAirport(tempAirport);
     setFromSearchValue(toSearchValue);
@@ -263,10 +351,14 @@ export function FlightSearchForm() {
     const parts = [];
     parts.push(`${passengers.adults} adult${passengers.adults > 1 ? "s" : ""}`);
     if (passengers.children > 0) {
-      parts.push(`${passengers.children} child${passengers.children > 1 ? "ren" : ""}`);
+      parts.push(
+        `${passengers.children} child${passengers.children > 1 ? "ren" : ""}`,
+      );
     }
     if (passengers.infants > 0) {
-      parts.push(`${passengers.infants} infant${passengers.infants > 1 ? "s" : ""}`);
+      parts.push(
+        `${passengers.infants} infant${passengers.infants > 1 ? "s" : ""}`,
+      );
     }
     return parts.join(" • ");
   };
@@ -339,7 +431,9 @@ export function FlightSearchForm() {
           {loadingAirports ? (
             <div className="flex items-center justify-center p-4">
               <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-600 mr-2"></div>
-              <span className="text-sm text-gray-600">Searching airports...</span>
+              <span className="text-sm text-gray-600">
+                Searching airports...
+              </span>
             </div>
           ) : suggestions.length > 0 ? (
             <div>
@@ -419,7 +513,10 @@ export function FlightSearchForm() {
         <div className="flex flex-col sm:flex-row gap-2 mb-4">
           <div className="flex gap-2">
             {/* Trip Type */}
-            <Select value={tripType} onValueChange={(value: TripType) => setTripType(value)}>
+            <Select
+              value={tripType}
+              onValueChange={(value: TripType) => setTripType(value)}
+            >
               <SelectTrigger className="w-32 h-8 text-xs">
                 <SelectValue />
               </SelectTrigger>
@@ -431,7 +528,10 @@ export function FlightSearchForm() {
             </Select>
 
             {/* Cabin Class */}
-            <Select value={cabinClass} onValueChange={(value: CabinClass) => setCabinClass(value)}>
+            <Select
+              value={cabinClass}
+              onValueChange={(value: CabinClass) => setCabinClass(value)}
+            >
               <SelectTrigger className="w-36 h-8 text-xs">
                 <SelectValue />
               </SelectTrigger>
@@ -500,7 +600,10 @@ export function FlightSearchForm() {
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Departure
             </label>
-            <Popover open={isDepartureDateOpen} onOpenChange={setIsDepartureDateOpen}>
+            <Popover
+              open={isDepartureDateOpen}
+              onOpenChange={setIsDepartureDateOpen}
+            >
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -508,7 +611,9 @@ export function FlightSearchForm() {
                 >
                   <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span className="truncate">
-                    {departureDate ? format(departureDate, "MMM d") : "Departure"}
+                    {departureDate
+                      ? format(departureDate, "MMM d")
+                      : "Departure"}
                   </span>
                 </Button>
               </PopoverTrigger>
@@ -534,7 +639,10 @@ export function FlightSearchForm() {
               <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
                 Return
               </label>
-              <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
+              <Popover
+                open={isReturnDateOpen}
+                onOpenChange={setIsReturnDateOpen}
+              >
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
@@ -549,8 +657,10 @@ export function FlightSearchForm() {
                 <PopoverContent className="w-auto p-0" align="start">
                   <BookingCalendar
                     initialRange={{
-                      startDate: returnDate || addDays(departureDate || new Date(), 7),
-                      endDate: returnDate || addDays(departureDate || new Date(), 7),
+                      startDate:
+                        returnDate || addDays(departureDate || new Date(), 7),
+                      endDate:
+                        returnDate || addDays(departureDate || new Date(), 7),
                     }}
                     onChange={(range) => {
                       setReturnDate(range.startDate);
@@ -579,7 +689,16 @@ export function FlightSearchForm() {
                 >
                   <Users className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span className="truncate">
-                    {passengers.adults + passengers.children + passengers.infants} passenger{passengers.adults + passengers.children + passengers.infants > 1 ? "s" : ""}
+                    {passengers.adults +
+                      passengers.children +
+                      passengers.infants}{" "}
+                    passenger
+                    {passengers.adults +
+                      passengers.children +
+                      passengers.infants >
+                    1
+                      ? "s"
+                      : ""}
                   </span>
                 </Button>
               </PopoverTrigger>
@@ -596,7 +715,9 @@ export function FlightSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("adults", "decrement")}
+                        onClick={() =>
+                          updatePassengerCount("adults", "decrement")
+                        }
                         disabled={passengers.adults <= 1}
                       >
                         <Minus className="w-3 h-3" />
@@ -608,7 +729,9 @@ export function FlightSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("adults", "increment")}
+                        onClick={() =>
+                          updatePassengerCount("adults", "increment")
+                        }
                         disabled={passengers.adults >= 9}
                       >
                         <Plus className="w-3 h-3" />
@@ -627,7 +750,9 @@ export function FlightSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("children", "decrement")}
+                        onClick={() =>
+                          updatePassengerCount("children", "decrement")
+                        }
                         disabled={passengers.children <= 0}
                       >
                         <Minus className="w-3 h-3" />
@@ -639,7 +764,9 @@ export function FlightSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("children", "increment")}
+                        onClick={() =>
+                          updatePassengerCount("children", "increment")
+                        }
                         disabled={passengers.children >= 9}
                       >
                         <Plus className="w-3 h-3" />
@@ -658,7 +785,9 @@ export function FlightSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("infants", "decrement")}
+                        onClick={() =>
+                          updatePassengerCount("infants", "decrement")
+                        }
                         disabled={passengers.infants <= 0}
                       >
                         <Minus className="w-3 h-3" />
@@ -670,7 +799,9 @@ export function FlightSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("infants", "increment")}
+                        onClick={() =>
+                          updatePassengerCount("infants", "increment")
+                        }
                         disabled={passengers.infants >= 9}
                       >
                         <Plus className="w-3 h-3" />

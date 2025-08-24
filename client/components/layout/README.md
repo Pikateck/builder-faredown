@@ -5,15 +5,18 @@ This directory contains the global layout components that ensure consistent head
 ## Components
 
 ### `Layout.tsx`
+
 The main layout wrapper component that provides consistent structure across all pages.
 
 **Props:**
+
 - `children`: React.ReactNode - The page content
 - `showSearch?: boolean` - Whether to show the search panel (default: true)
 - `showMobileNav?: boolean` - Whether to show mobile bottom navigation (default: true)
 - `className?: string` - Additional CSS classes for the main content area
 
 **Usage:**
+
 ```tsx
 import { Layout } from "@/components/layout/Layout";
 
@@ -30,6 +33,7 @@ export default function MyPage() {
 ```
 
 **Hide Search Panel (for pages like Help Center):**
+
 ```tsx
 <Layout showSearch={false} showMobileNav={false}>
   {/* Content for pages that don't need search */}
@@ -37,7 +41,9 @@ export default function MyPage() {
 ```
 
 ### `Header.tsx`
+
 Unified header component with:
+
 - Mobile hamburger menu with overlay
 - Desktop navigation bar
 - Currency selector
@@ -46,14 +52,18 @@ Unified header component with:
 - Responsive design
 
 ### `SearchPanel.tsx`
+
 Smart search panel that:
+
 - Detects current tab/page from URL
 - Shows appropriate search form (flights, hotels, sightseeing, transfers)
 - Displays relevant titles and subtitles
 - Works on both mobile and desktop
 
 ### `Footer.tsx`
+
 Consistent footer with:
+
 - Logo and tagline
 - Service links (Flights, Hotels, etc.)
 - Social media icons
@@ -61,7 +71,9 @@ Consistent footer with:
 - Copyright information
 
 ### `MobileBottomNav.tsx`
+
 Mobile bottom navigation bar with:
+
 - Tab switching (Flights, Hotels, Sightseeing, Transfers, Account)
 - Active state indicators
 - Touch-friendly targets
@@ -69,28 +81,33 @@ Mobile bottom navigation bar with:
 ## Key Features
 
 ### 🔄 **Automatic Scroll-to-Top**
+
 The Layout component automatically scrolls to the top when navigating between pages using the `useScrollToTop` hook.
 
 ### 📱 **Mobile-First Design**
+
 All components are designed mobile-first with responsive breakpoints for desktop.
 
 ### 🎨 **Consistent Branding**
+
 - Primary Blue: `#003580`
-- Secondary Blue: `#0071c2` 
+- Secondary Blue: `#0071c2`
 - Accent Yellow: `#febb02` with hover: `#e6a602`
 
 ### 🧭 **Smart Navigation**
+
 The header automatically detects the current page/tab and highlights the active navigation item.
 
 ## Migration Guide
 
 ### Before (Old Pattern):
+
 ```tsx
 // ❌ Old way - duplicated header/footer in each page
 export default function MyPage() {
   const navigate = useNavigate();
   // ... lots of header state and logic
-  
+
   return (
     <div className="min-h-screen">
       <header>/* complex header logic */</header>
@@ -102,6 +119,7 @@ export default function MyPage() {
 ```
 
 ### After (New Pattern):
+
 ```tsx
 // ✅ New way - clean and consistent
 import { Layout } from "@/components/layout/Layout";

@@ -1,12 +1,7 @@
 import React from "react";
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import {
-  Sparkles,
-  Target,
-  Crown,
-  Star,
-} from "lucide-react";
+import { Sparkles, Target, Crown, Star } from "lucide-react";
 
 export default function FlightsSimple() {
   return (
@@ -17,9 +12,10 @@ export default function FlightsSimple() {
           <h1 className="text-4xl font-bold text-gray-900 mb-8">
             Flight Excellence with AI Bargaining
           </h1>
-          
+
           <p className="text-xl text-gray-600 mb-12 max-w-3xl mx-auto">
-            Discover amazing flight deals and let our AI negotiate the best prices for you.
+            Discover amazing flight deals and let our AI negotiate the best
+            prices for you.
           </p>
 
           <div className="grid grid-cols-1 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
@@ -70,11 +66,22 @@ export default function FlightsSimple() {
             {[
               { destination: "Dubai", price: "₹25,000", savings: "Save 40%" },
               { destination: "London", price: "₹55,000", savings: "Save 35%" },
-              { destination: "Singapore", price: "₹35,000", savings: "Save 45%" },
+              {
+                destination: "Singapore",
+                price: "₹35,000",
+                savings: "Save 45%",
+              },
             ].map((flight, index) => (
-              <div key={index} className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow">
-                <h3 className="text-xl font-bold text-gray-900 mb-2">{flight.destination}</h3>
-                <p className="text-2xl font-bold text-[#003580] mb-1">{flight.price}</p>
+              <div
+                key={index}
+                className="bg-white rounded-xl p-6 shadow-lg hover:shadow-xl transition-shadow"
+              >
+                <h3 className="text-xl font-bold text-gray-900 mb-2">
+                  {flight.destination}
+                </h3>
+                <p className="text-2xl font-bold text-[#003580] mb-1">
+                  {flight.price}
+                </p>
                 <p className="text-green-600 font-medium">{flight.savings}</p>
               </div>
             ))}

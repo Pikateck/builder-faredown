@@ -164,11 +164,11 @@ export default function HotelDetails() {
   const [apiStatus, setApiStatus] = useState<{
     isOffline: boolean;
     message: string;
-    type: 'error' | 'warning' | 'info' | null;
+    type: "error" | "warning" | "info" | null;
   }>({
     isOffline: false,
-    message: '',
-    type: null
+    message: "",
+    type: null,
   });
   const [selectedFilters, setSelectedFilters] = useState({
     popularFilters: new Set<string>(),
@@ -255,7 +255,7 @@ export default function HotelDetails() {
           const healthResponse = await fetchWithTimeout(
             `/api/hotels-live/health`,
             { method: "GET" },
-            2000 // Quick health check timeout
+            2000, // Quick health check timeout
           );
           return healthResponse.ok;
         } catch {
@@ -274,7 +274,9 @@ export default function HotelDetails() {
           if (retryCount === 0) {
             const isApiHealthy = await checkApiHealth();
             if (!isApiHealthy) {
-              console.warn("⚠️ API health check failed, using fallback immediately");
+              console.warn(
+                "⚠️ API health check failed, using fallback immediately",
+              );
               throw new Error("API_UNAVAILABLE: Service health check failed");
             }
           }
@@ -301,7 +303,10 @@ export default function HotelDetails() {
             console.log("✅ Hotel data received via service:", hotel);
             return hotel;
           } catch (serviceError) {
-            console.warn("⚠��� Service failed, trying direct API:", serviceError);
+            console.warn(
+              "⚠��� Service failed, trying direct API:",
+              serviceError,
+            );
 
             // Fallback to direct API call
             const apiUrl = new URL(
@@ -359,7 +364,9 @@ export default function HotelDetails() {
 
           if (retryCount < 2 && isRetryableError) {
             const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
-            console.log(`🔄 Retrying in ${delay}ms... (Error: ${error.message})`);
+            console.log(
+              `🔄 Retrying in ${delay}ms... (Error: ${error.message})`,
+            );
             await new Promise((resolve) => setTimeout(resolve, delay));
             return attemptFetch(retryCount + 1);
           }
@@ -380,42 +387,50 @@ export default function HotelDetails() {
 
         // Set API status and show user-friendly message based on error type
         if (error.message.includes("HTTP 503")) {
-          console.info("ℹ️ Hotel service temporarily unavailable, using cached data");
+          console.info(
+            "ℹ️ Hotel service temporarily unavailable, using cached data",
+          );
           setApiStatus({
             isOffline: true,
-            message: "Hotel service temporarily unavailable. Showing cached data.",
-            type: 'warning'
+            message:
+              "Hotel service temporarily unavailable. Showing cached data.",
+            type: "warning",
           });
         } else if (error.message.includes("HTTP 50")) {
-          console.info("ℹ️ Hotel service experiencing issues, using fallback data");
+          console.info(
+            "ℹ️ Hotel service experiencing issues, using fallback data",
+          );
           setApiStatus({
             isOffline: true,
-            message: "Hotel service experiencing issues. Showing available data.",
-            type: 'warning'
+            message:
+              "Hotel service experiencing issues. Showing available data.",
+            type: "warning",
           });
         } else if (error.message.includes("API_UNAVAILABLE")) {
           console.info("ℹ️ API health check failed, using offline data");
           setApiStatus({
             isOffline: true,
             message: "Service temporarily offline. Showing available data.",
-            type: 'info'
+            type: "info",
           });
         } else if (
           error instanceof TypeError ||
           error.message.includes("Failed to fetch")
         ) {
-          console.info("ℹ️ Using offline mode due to network connectivity issues");
+          console.info(
+            "ℹ️ Using offline mode due to network connectivity issues",
+          );
           setApiStatus({
             isOffline: true,
             message: "Connection issues. Using offline mode.",
-            type: 'info'
+            type: "info",
           });
         } else {
           console.info("ℹ️ Using cached hotel data");
           setApiStatus({
             isOffline: true,
             message: "Using cached hotel data.",
-            type: 'info'
+            type: "info",
           });
         }
       } finally {

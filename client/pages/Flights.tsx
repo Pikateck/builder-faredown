@@ -160,7 +160,10 @@ export default function Flights() {
                     className="flex items-center space-x-3 text-gray-700 py-3 px-3 rounded-lg hover:bg-gray-50 transition-colors touch-manipulation"
                     onClick={() => setShowMobileMenu(false)}
                   >
-                    <Camera className="w-5 h-5 text-[#003580]" strokeWidth={2} />
+                    <Camera
+                      className="w-5 h-5 text-[#003580]"
+                      strokeWidth={2}
+                    />
                     <span className="font-medium">Sightseeing</span>
                   </Link>
                   <Link
@@ -256,7 +259,8 @@ export default function Flights() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Control your price for flights & hotels — with live AI bargaining.
+                Control your price for flights & hotels — with live AI
+                bargaining.
               </p>
             </div>
 
@@ -280,14 +284,20 @@ export default function Flights() {
             <div className="text-center mb-12">
               <div className="inline-flex items-center space-x-2 bg-white/70 backdrop-blur-xl border border-white/20 px-5 py-2.5 rounded-full mb-6 shadow-lg">
                 <div className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
-                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-semibold text-sm">Flight Excellence</span>
+                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-semibold text-sm">
+                  Flight Excellence
+                </span>
               </div>
               <h2 className="text-3xl font-black text-slate-900 mb-3 leading-tight">
                 Why Choose
                 <br />
-                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Faredown Flights?</span>
+                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  Faredown Flights?
+                </span>
               </h2>
-              <p className="text-slate-600 font-medium">Sky-high savings, premium upgrades</p>
+              <p className="text-slate-600 font-medium">
+                Sky-high savings, premium upgrades
+              </p>
             </div>
 
             {/* Feature Cards - Asymmetrical Layout */}
@@ -304,7 +314,8 @@ export default function Flights() {
                       Flight Upgrade Bargaining
                     </h3>
                     <p className="text-slate-600 text-sm leading-relaxed">
-                      Our AI negotiates seat upgrades in real-time, turning economy bookings into business class at unbeatable prices.
+                      Our AI negotiates seat upgrades in real-time, turning
+                      economy bookings into business class at unbeatable prices.
                     </p>
                   </div>
                 </div>
@@ -385,7 +396,9 @@ export default function Flights() {
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
             >
               <Plane className="w-5 h-5 text-[#003580]" />
-              <span className="text-xs text-[#003580] font-medium">Flights</span>
+              <span className="text-xs text-[#003580] font-medium">
+                Flights
+              </span>
             </Link>
             <Link
               to="/hotels"
@@ -650,7 +663,8 @@ export default function Flights() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Control your price for flights & hotels — with live AI bargaining.
+                Control your price for flights & hotels — with live AI
+                bargaining.
               </h1>
             </div>
 
@@ -665,14 +679,19 @@ export default function Flights() {
             <div className="text-center mb-16">
               <div className="inline-flex items-center space-x-2 bg-blue-50 px-6 py-3 rounded-full mb-6">
                 <div className="w-3 h-3 bg-[#003580] rounded-full animate-pulse"></div>
-                <span className="text-[#003580] font-semibold text-sm">Revolutionizing Travel</span>
+                <span className="text-[#003580] font-semibold text-sm">
+                  Revolutionizing Travel
+                </span>
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                 Why Faredown Is Reinventing Travel Booking
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 The future of booking isn't fixed pricing — it's{" "}
-                <span className="text-[#003580] font-bold">live bargaining</span> powered by cutting-edge AI technology.
+                <span className="text-[#003580] font-bold">
+                  live bargaining
+                </span>{" "}
+                powered by cutting-edge AI technology.
               </p>
             </div>
 
@@ -685,7 +704,9 @@ export default function Flights() {
                   Live Bargain Technology
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Negotiate flight upgrades instantly — from economy to business, from basic to deluxe with our revolutionary AI engine.
+                  Negotiate flight upgrades instantly — from economy to
+                  business, from basic to deluxe with our revolutionary AI
+                  engine.
                 </p>
               </div>
 
@@ -697,7 +718,8 @@ export default function Flights() {
                   Pay What You Feel Is Fair
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Set your price and let Faredown negotiate for you — no more overpaying for flight experiences.
+                  Set your price and let Faredown negotiate for you — no more
+                  overpaying for flight experiences.
                 </p>
               </div>
 
@@ -709,7 +731,8 @@ export default function Flights() {
                   Secure, Real-Time Bookings
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Your data is encrypted with bank-level security and bookings are confirmed instantly with verified airlines.
+                  Your data is encrypted with bank-level security and bookings
+                  are confirmed instantly with verified airlines.
                 </p>
               </div>
 
@@ -721,7 +744,8 @@ export default function Flights() {
                   Smarter Than Any Travel Agent
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Skip the back and forth. Our AI works faster, smarter, and is available 24/7 to secure your best flight deals.
+                  Skip the back and forth. Our AI works faster, smarter, and is
+                  available 24/7 to secure your best flight deals.
                 </p>
               </div>
             </div>
@@ -735,7 +759,9 @@ export default function Flights() {
             <div className="text-center mb-16">
               <div className="inline-flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-full mb-6">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-green-700 font-medium text-sm">Trusted by millions worldwide</span>
+                <span className="text-green-700 font-medium text-sm">
+                  Trusted by millions worldwide
+                </span>
               </div>
 
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -751,7 +777,12 @@ export default function Flights() {
                 <div className="flex items-center justify-center space-x-4 mb-4">
                   <div className="flex items-center space-x-1">
                     {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                      <svg
+                        key={i}
+                        className="w-6 h-6 text-yellow-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
                     ))}
@@ -760,10 +791,16 @@ export default function Flights() {
                 </div>
 
                 <div className="text-center">
-                  <div className="font-semibold text-gray-900 text-lg">Excellent</div>
-                  <div className="text-gray-600 text-sm">Based on 50,000+ reviews on</div>
+                  <div className="font-semibold text-gray-900 text-lg">
+                    Excellent
+                  </div>
+                  <div className="text-gray-600 text-sm">
+                    Based on 50,000+ reviews on
+                  </div>
                   <div className="flex items-center justify-center space-x-2 mt-2">
-                    <div className="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">Trustpilot</div>
+                    <div className="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">
+                      Trustpilot
+                    </div>
                     <span className="text-green-600 font-medium">★★★★★</span>
                   </div>
                 </div>
@@ -778,8 +815,12 @@ export default function Flights() {
                     <Headphones className="w-6 h-6" />
                   </div>
                   <div className="text-left">
-                    <div className="text-xl font-bold">24/7 Customer Support</div>
-                    <div className="text-blue-100">Live Chat & Call Available</div>
+                    <div className="text-xl font-bold">
+                      24/7 Customer Support
+                    </div>
+                    <div className="text-blue-100">
+                      Live Chat & Call Available
+                    </div>
                   </div>
                 </div>
               </div>
@@ -788,7 +829,9 @@ export default function Flights() {
             {/* Contact Methods - Enhanced Grid */}
             <div className="bg-white rounded-3xl shadow-xl p-8 mb-16 border border-gray-100">
               <div className="text-center mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Safe, Verified, and Instant Confirmations</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Safe, Verified, and Instant Confirmations
+                </h3>
                 <p className="text-gray-600">Backed by real humans</p>
               </div>
 
@@ -797,35 +840,45 @@ export default function Flights() {
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <Users className="w-8 h-8 text-white" />
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Live Chat</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Live Chat
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200">
                   <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <span className="text-2xl">📞</span>
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Phone Call</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Phone Call
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200">
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <span className="text-2xl">✉️</span>
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Email</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Email
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200">
                   <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <Headphones className="w-8 h-8 text-white" />
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">24/7 Support</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    24/7 Support
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200 md:col-span-1 col-span-2">
                   <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <Shield className="w-8 h-8 text-white" />
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Instant Confirmations</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Instant Confirmations
+                  </div>
                 </div>
               </div>
             </div>
@@ -838,18 +891,29 @@ export default function Flights() {
                     <span className="text-white font-bold text-xl">P</span>
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900 text-lg">Priya Sharma</div>
-                    <div className="text-gray-500 text-sm">Marketing Manager</div>
+                    <div className="font-bold text-gray-900 text-lg">
+                      Priya Sharma
+                    </div>
+                    <div className="text-gray-500 text-sm">
+                      Marketing Manager
+                    </div>
                     <div className="flex items-center mt-1">
                       <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-green-600 text-xs font-medium">Verified Purchase</span>
+                      <span className="text-green-600 text-xs font-medium">
+                        Verified Purchase
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      key={i}
+                      className="w-5 h-5 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
@@ -857,7 +921,9 @@ export default function Flights() {
                 </div>
 
                 <blockquote className="text-gray-700 leading-relaxed italic">
-                  "Saved ₹15,000 on my Dubai trip! The bargaining feature is amazing. Got business class using Bargain™. Faredown is revolutionary! Customer service is excellent."
+                  "Saved ₹15,000 on my Dubai trip! The bargaining feature is
+                  amazing. Got business class using Bargain™. Faredown is
+                  revolutionary! Customer service is excellent."
                 </blockquote>
               </div>
 
@@ -867,18 +933,29 @@ export default function Flights() {
                     <span className="text-white font-bold text-xl">R</span>
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900 text-lg">Rohit Kumar</div>
-                    <div className="text-gray-500 text-sm">Software Engineer</div>
+                    <div className="font-bold text-gray-900 text-lg">
+                      Rohit Kumar
+                    </div>
+                    <div className="text-gray-500 text-sm">
+                      Software Engineer
+                    </div>
                     <div className="flex items-center mt-1">
                       <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-green-600 text-xs font-medium">Verified Purchase</span>
+                      <span className="text-green-600 text-xs font-medium">
+                        Verified Purchase
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      key={i}
+                      className="w-5 h-5 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
@@ -886,7 +963,9 @@ export default function Flights() {
                 </div>
 
                 <blockquote className="text-gray-700 leading-relaxed italic">
-                  "Got business class upgrade in Singapore flight using Bargain™. Faredown is revolutionary! Customer service is excellent."
+                  "Got business class upgrade in Singapore flight using
+                  Bargain™. Faredown is revolutionary! Customer service is
+                  excellent."
                 </blockquote>
               </div>
 
@@ -896,18 +975,29 @@ export default function Flights() {
                     <span className="text-white font-bold text-xl">A</span>
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900 text-lg">Anjali Patel</div>
-                    <div className="text-gray-500 text-sm">Product Designer</div>
+                    <div className="font-bold text-gray-900 text-lg">
+                      Anjali Patel
+                    </div>
+                    <div className="text-gray-500 text-sm">
+                      Product Designer
+                    </div>
                     <div className="flex items-center mt-1">
                       <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-green-600 text-xs font-medium">Verified Purchase</span>
+                      <span className="text-green-600 text-xs font-medium">
+                        Verified Purchase
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      key={i}
+                      className="w-5 h-5 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
@@ -915,7 +1005,8 @@ export default function Flights() {
                 </div>
 
                 <blockquote className="text-gray-700 leading-relaxed italic">
-                  "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!"
+                  "Easy booking process and instant confirmations. Saved on both
+                  flights and hotels. Will use again!"
                 </blockquote>
               </div>
             </div>

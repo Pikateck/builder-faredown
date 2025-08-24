@@ -1,12 +1,6 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { 
-  Plane, 
-  Facebook, 
-  Instagram, 
-  Twitter, 
-  Linkedin 
-} from "lucide-react";
+import { Plane, Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 
 export function Footer() {
   const navigate = useNavigate();
@@ -30,70 +24,70 @@ export function Footer() {
           </div>
           <span className="text-3xl font-bold">faredown.com</span>
         </div>
-        
+
         <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
           The world's first AI-powered travel platform
         </p>
-        
+
         <div className="flex justify-center space-x-8 mb-12 text-gray-400 flex-wrap">
-          <button 
-            onClick={() => handleTabChange("flights")} 
+          <button
+            onClick={() => handleTabChange("flights")}
             className="hover:text-white transition-colors font-medium mb-2"
           >
             Flights
           </button>
-          <button 
-            onClick={() => handleTabChange("hotels")} 
+          <button
+            onClick={() => handleTabChange("hotels")}
             className="hover:text-white transition-colors font-medium mb-2"
           >
             Hotels
           </button>
-          <button 
-            onClick={() => handleTabChange("sightseeing")} 
+          <button
+            onClick={() => handleTabChange("sightseeing")}
             className="hover:text-white transition-colors font-medium mb-2"
           >
             Sightseeing
           </button>
-          <button 
-            onClick={() => handleTabChange("transfers")} 
+          <button
+            onClick={() => handleTabChange("transfers")}
             className="hover:text-white transition-colors font-medium mb-2"
           >
             Transfers
           </button>
-          <button 
-            onClick={() => handleNavigation("/help")} 
+          <button
+            onClick={() => handleNavigation("/help")}
             className="hover:text-white transition-colors font-medium mb-2"
           >
             Help Center
           </button>
-          <button 
-            onClick={() => handleNavigation("/contact")} 
+          <button
+            onClick={() => handleNavigation("/contact")}
             className="hover:text-white transition-colors font-medium mb-2"
           >
             Contact
           </button>
-          <Link 
-            to="/privacy" 
+          <Link
+            to="/privacy"
             className="hover:text-white transition-colors font-medium mb-2"
             onClick={() => window.scrollTo(0, 0)}
           >
             Privacy
           </Link>
-          <Link 
-            to="/terms" 
+          <Link
+            to="/terms"
             className="hover:text-white transition-colors font-medium mb-2"
             onClick={() => window.scrollTo(0, 0)}
           >
             Terms
           </Link>
         </div>
-        
+
         <div className="flex justify-center space-x-6 mb-12">
           {[
             { Icon: Facebook, href: "https://facebook.com" },
             { Icon: Instagram, href: "https://instagram.com" },
             { Icon: Twitter, href: "https://twitter.com" },
-            { Icon: Linkedin, href: "https://linkedin.com" }
+            { Icon: Linkedin, href: "https://linkedin.com" },
           ].map(({ Icon, href }, index) => (
             <a
               key={index}
@@ -119,7 +113,7 @@ export function Footer() {
                 ))}
               </div>
             </div>
-            
+
             <p className="text-gray-400 text-lg">
               © 2025 Faredown.com. All rights reserved.
             </p>

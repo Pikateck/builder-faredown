@@ -152,7 +152,10 @@ export default function Sightseeing() {
                     className="flex items-center space-x-3 text-[#003580] bg-blue-50 py-3 px-3 rounded-lg touch-manipulation font-medium"
                     onClick={() => setShowMobileMenu(false)}
                   >
-                    <Camera className="w-5 h-5 text-[#003580]" strokeWidth={2} />
+                    <Camera
+                      className="w-5 h-5 text-[#003580]"
+                      strokeWidth={2}
+                    />
                     <span>Sightseeing</span>
                   </Link>
                   <Link
@@ -248,7 +251,9 @@ export default function Sightseeing() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-gray-600 text-sm mb-3">
-                Explore fascinating attractions, cultural landmarks, and exciting activities. Create unforgettable memories with our curated sightseeing experiences.
+                Explore fascinating attractions, cultural landmarks, and
+                exciting activities. Create unforgettable memories with our
+                curated sightseeing experiences.
               </p>
             </div>
 
@@ -265,19 +270,25 @@ export default function Sightseeing() {
             <div className="text-center mb-8">
               <div className="inline-flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full mb-4">
                 <div className="w-2 h-2 bg-[#003580] rounded-full animate-pulse"></div>
-                <span className="text-[#003580] font-medium text-xs">Trusted worldwide</span>
+                <span className="text-[#003580] font-medium text-xs">
+                  Trusted worldwide
+                </span>
               </div>
               <h2 className="text-2xl font-bold text-center mb-2 text-gray-900">
                 Why Faredown?
               </h2>
-              <p className="text-gray-600 text-sm">Experience the future of travel booking</p>
+              <p className="text-gray-600 text-sm">
+                Experience the future of travel booking
+              </p>
             </div>
             <div className="grid grid-cols-2 gap-6">
               <div className="bg-white rounded-2xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 transform">
                 <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <Zap className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-bold text-base mb-2 text-gray-900">Live Bargaining</h3>
+                <h3 className="font-bold text-base mb-2 text-gray-900">
+                  Live Bargaining
+                </h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
                   Negotiate real-time prices with AI technology
                 </p>
@@ -286,7 +297,9 @@ export default function Sightseeing() {
                 <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <TrendingUp className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-bold text-base mb-2 text-gray-900">Best Prices</h3>
+                <h3 className="font-bold text-base mb-2 text-gray-900">
+                  Best Prices
+                </h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
                   Pay what you feel is fair for premium services
                 </p>
@@ -295,7 +308,9 @@ export default function Sightseeing() {
                 <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <Shield className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-bold text-base mb-2 text-gray-900">Secure Booking</h3>
+                <h3 className="font-bold text-base mb-2 text-gray-900">
+                  Secure Booking
+                </h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
                   Instant confirmations with bank-level security
                 </p>
@@ -304,7 +319,9 @@ export default function Sightseeing() {
                 <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
                   <Headphones className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-bold text-base mb-2 text-gray-900">24/7 Support</h3>
+                <h3 className="font-bold text-base mb-2 text-gray-900">
+                  24/7 Support
+                </h3>
                 <p className="text-xs text-gray-600 leading-relaxed">
                   Always here to help via chat, call, or email
                 </p>
@@ -335,7 +352,9 @@ export default function Sightseeing() {
               className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
             >
               <Camera className="w-5 h-5 text-[#003580]" />
-              <span className="text-xs text-[#003580] font-medium">Sightseeing</span>
+              <span className="text-xs text-[#003580] font-medium">
+                Sightseeing
+              </span>
             </Link>
             <Link
               to="/saved"
@@ -586,7 +605,9 @@ export default function Sightseeing() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Explore fascinating attractions, cultural landmarks, and exciting activities. Create unforgettable memories with our curated sightseeing experiences.
+                Explore fascinating attractions, cultural landmarks, and
+                exciting activities. Create unforgettable memories with our
+                curated sightseeing experiences.
               </h1>
             </div>
 
@@ -601,14 +622,19 @@ export default function Sightseeing() {
             <div className="text-center mb-16">
               <div className="inline-flex items-center space-x-2 bg-blue-50 px-6 py-3 rounded-full mb-6">
                 <div className="w-3 h-3 bg-[#003580] rounded-full animate-pulse"></div>
-                <span className="text-[#003580] font-semibold text-sm">Revolutionizing Travel</span>
+                <span className="text-[#003580] font-semibold text-sm">
+                  Revolutionizing Travel
+                </span>
               </div>
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
                 Why Faredown Is Reinventing Travel Booking
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 The future of booking isn't fixed pricing — it's{" "}
-                <span className="text-[#003580] font-bold">live bargaining</span> powered by cutting-edge AI technology.
+                <span className="text-[#003580] font-bold">
+                  live bargaining
+                </span>{" "}
+                powered by cutting-edge AI technology.
               </p>
             </div>
 
@@ -621,7 +647,8 @@ export default function Sightseeing() {
                   Live Bargain Technology
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Negotiate tour prices instantly — from basic to premium, from standard to deluxe with our revolutionary AI engine.
+                  Negotiate tour prices instantly — from basic to premium, from
+                  standard to deluxe with our revolutionary AI engine.
                 </p>
               </div>
 
@@ -633,7 +660,8 @@ export default function Sightseeing() {
                   Pay What You Feel Is Fair
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Set your price and let Faredown negotiate for you — no more overpaying for sightseeing experiences.
+                  Set your price and let Faredown negotiate for you — no more
+                  overpaying for sightseeing experiences.
                 </p>
               </div>
 
@@ -645,7 +673,8 @@ export default function Sightseeing() {
                   Secure, Real-Time Bookings
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Your data is encrypted with bank-level security and bookings are confirmed instantly with verified operators.
+                  Your data is encrypted with bank-level security and bookings
+                  are confirmed instantly with verified operators.
                 </p>
               </div>
 
@@ -657,7 +686,8 @@ export default function Sightseeing() {
                   Smarter Than Any Travel Agent
                 </h3>
                 <p className="text-gray-600 leading-relaxed">
-                  Skip the back and forth. Our AI works faster, smarter, and is available 24/7 to secure your best sightseeing deals.
+                  Skip the back and forth. Our AI works faster, smarter, and is
+                  available 24/7 to secure your best sightseeing deals.
                 </p>
               </div>
             </div>
@@ -671,7 +701,9 @@ export default function Sightseeing() {
             <div className="text-center mb-16">
               <div className="inline-flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-full mb-6">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-green-700 font-medium text-sm">Trusted by millions worldwide</span>
+                <span className="text-green-700 font-medium text-sm">
+                  Trusted by millions worldwide
+                </span>
               </div>
 
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -687,7 +719,12 @@ export default function Sightseeing() {
                 <div className="flex items-center justify-center space-x-4 mb-4">
                   <div className="flex items-center space-x-1">
                     {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                      <svg
+                        key={i}
+                        className="w-6 h-6 text-yellow-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
                     ))}
@@ -696,10 +733,16 @@ export default function Sightseeing() {
                 </div>
 
                 <div className="text-center">
-                  <div className="font-semibold text-gray-900 text-lg">Excellent</div>
-                  <div className="text-gray-600 text-sm">Based on 50,000+ reviews on</div>
+                  <div className="font-semibold text-gray-900 text-lg">
+                    Excellent
+                  </div>
+                  <div className="text-gray-600 text-sm">
+                    Based on 50,000+ reviews on
+                  </div>
                   <div className="flex items-center justify-center space-x-2 mt-2">
-                    <div className="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">Trustpilot</div>
+                    <div className="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">
+                      Trustpilot
+                    </div>
                     <span className="text-green-600 font-medium">★★★★★</span>
                   </div>
                 </div>
@@ -714,8 +757,12 @@ export default function Sightseeing() {
                     <Headphones className="w-6 h-6" />
                   </div>
                   <div className="text-left">
-                    <div className="text-xl font-bold">24/7 Customer Support</div>
-                    <div className="text-blue-100">Live Chat & Call Available</div>
+                    <div className="text-xl font-bold">
+                      24/7 Customer Support
+                    </div>
+                    <div className="text-blue-100">
+                      Live Chat & Call Available
+                    </div>
                   </div>
                 </div>
               </div>
@@ -724,7 +771,9 @@ export default function Sightseeing() {
             {/* Contact Methods - Enhanced Grid */}
             <div className="bg-white rounded-3xl shadow-xl p-8 mb-16 border border-gray-100">
               <div className="text-center mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Safe, Verified, and Instant Confirmations</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Safe, Verified, and Instant Confirmations
+                </h3>
                 <p className="text-gray-600">Backed by real humans</p>
               </div>
 
@@ -733,35 +782,45 @@ export default function Sightseeing() {
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <Users className="w-8 h-8 text-white" />
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Live Chat</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Live Chat
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200">
                   <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <span className="text-2xl">📞</span>
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Phone Call</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Phone Call
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200">
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <span className="text-2xl">✉️</span>
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Email</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Email
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200">
                   <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <Headphones className="w-8 h-8 text-white" />
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">24/7 Support</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    24/7 Support
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200 md:col-span-1 col-span-2">
                   <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <Shield className="w-8 h-8 text-white" />
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Instant Confirmations</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Instant Confirmations
+                  </div>
                 </div>
               </div>
             </div>
@@ -774,18 +833,29 @@ export default function Sightseeing() {
                     <span className="text-white font-bold text-xl">P</span>
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900 text-lg">Priya Sharma</div>
-                    <div className="text-gray-500 text-sm">Marketing Manager</div>
+                    <div className="font-bold text-gray-900 text-lg">
+                      Priya Sharma
+                    </div>
+                    <div className="text-gray-500 text-sm">
+                      Marketing Manager
+                    </div>
                     <div className="flex items-center mt-1">
                       <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-green-600 text-xs font-medium">Verified Purchase</span>
+                      <span className="text-green-600 text-xs font-medium">
+                        Verified Purchase
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      key={i}
+                      className="w-5 h-5 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
@@ -793,7 +863,9 @@ export default function Sightseeing() {
                 </div>
 
                 <blockquote className="text-gray-700 leading-relaxed italic">
-                  "Saved ₹8,000 on my Dubai city tour! The bargaining feature is amazing. Got premium tour package using Bargain™. Faredown is revolutionary! Customer service is excellent."
+                  "Saved ₹8,000 on my Dubai city tour! The bargaining feature is
+                  amazing. Got premium tour package using Bargain™. Faredown is
+                  revolutionary! Customer service is excellent."
                 </blockquote>
               </div>
 
@@ -803,18 +875,29 @@ export default function Sightseeing() {
                     <span className="text-white font-bold text-xl">R</span>
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900 text-lg">Rohit Kumar</div>
-                    <div className="text-gray-500 text-sm">Software Engineer</div>
+                    <div className="font-bold text-gray-900 text-lg">
+                      Rohit Kumar
+                    </div>
+                    <div className="text-gray-500 text-sm">
+                      Software Engineer
+                    </div>
                     <div className="flex items-center mt-1">
                       <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-green-600 text-xs font-medium">Verified Purchase</span>
+                      <span className="text-green-600 text-xs font-medium">
+                        Verified Purchase
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      key={i}
+                      className="w-5 h-5 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
@@ -822,7 +905,8 @@ export default function Sightseeing() {
                 </div>
 
                 <blockquote className="text-gray-700 leading-relaxed italic">
-                  "Got VIP sightseeing tour in Singapore using Bargain™. Faredown is revolutionary! Customer service is excellent."
+                  "Got VIP sightseeing tour in Singapore using Bargain™.
+                  Faredown is revolutionary! Customer service is excellent."
                 </blockquote>
               </div>
 
@@ -832,18 +916,29 @@ export default function Sightseeing() {
                     <span className="text-white font-bold text-xl">A</span>
                   </div>
                   <div>
-                    <div className="font-bold text-gray-900 text-lg">Anjali Patel</div>
-                    <div className="text-gray-500 text-sm">Product Designer</div>
+                    <div className="font-bold text-gray-900 text-lg">
+                      Anjali Patel
+                    </div>
+                    <div className="text-gray-500 text-sm">
+                      Product Designer
+                    </div>
                     <div className="flex items-center mt-1">
                       <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-green-600 text-xs font-medium">Verified Purchase</span>
+                      <span className="text-green-600 text-xs font-medium">
+                        Verified Purchase
+                      </span>
                     </div>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                    <svg
+                      key={i}
+                      className="w-5 h-5 text-yellow-400"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
+                    >
                       <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                     </svg>
                   ))}
@@ -851,7 +946,8 @@ export default function Sightseeing() {
                 </div>
 
                 <blockquote className="text-gray-700 leading-relaxed italic">
-                  "Easy sightseeing booking process and instant confirmations. Saved on multiple tour packages. Will use again!"
+                  "Easy sightseeing booking process and instant confirmations.
+                  Saved on multiple tour packages. Will use again!"
                 </blockquote>
               </div>
             </div>

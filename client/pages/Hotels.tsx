@@ -482,14 +482,20 @@ export default function Hotels() {
             <div className="text-center mb-12">
               <div className="inline-flex items-center space-x-2 bg-white/70 backdrop-blur-xl border border-white/20 px-5 py-2.5 rounded-full mb-6 shadow-lg">
                 <div className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
-                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-semibold text-sm">Hotel Excellence</span>
+                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-semibold text-sm">
+                  Hotel Excellence
+                </span>
               </div>
               <h2 className="text-3xl font-black text-slate-900 mb-3 leading-tight">
                 Why Choose
                 <br />
-                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Faredown Hotels?</span>
+                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
+                  Faredown Hotels?
+                </span>
               </h2>
-              <p className="text-slate-600 font-medium">Premium stays, unbeatable prices</p>
+              <p className="text-slate-600 font-medium">
+                Premium stays, unbeatable prices
+              </p>
             </div>
 
             {/* Feature Cards - Asymmetrical Layout */}
@@ -506,7 +512,8 @@ export default function Hotels() {
                       Room Upgrade Bargaining
                     </h3>
                     <p className="text-slate-600 text-sm leading-relaxed">
-                      Our AI negotiates room upgrades in real-time, turning standard bookings into luxury suites at incredible prices.
+                      Our AI negotiates room upgrades in real-time, turning
+                      standard bookings into luxury suites at incredible prices.
                     </p>
                   </div>
                 </div>
@@ -906,7 +913,9 @@ export default function Hotels() {
             <div className="text-center mb-20">
               <div className="inline-flex items-center space-x-3 bg-white/70 backdrop-blur-xl border border-white/20 px-8 py-4 rounded-full mb-8 shadow-lg">
                 <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
-                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-bold text-lg">Hotel Excellence Redefined</span>
+                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-bold text-lg">
+                  Hotel Excellence Redefined
+                </span>
               </div>
 
               <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-8 leading-tight">
@@ -918,7 +927,9 @@ export default function Hotels() {
 
               <p className="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed font-medium">
                 Experience luxury hotels like never before — where{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold">AI-powered room upgrades</span>{" "}
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold">
+                  AI-powered room upgrades
+                </span>{" "}
                 meet uncompromising comfort and unprecedented savings.
               </p>
             </div>
@@ -942,7 +953,9 @@ export default function Hotels() {
                       </div>
                     </div>
                     <p className="text-slate-600 text-lg leading-relaxed mb-6">
-                      Our AI negotiates directly with hotels to secure room upgrades, premium amenities, and exclusive perks that transform your stay from ordinary to extraordinary.
+                      Our AI negotiates directly with hotels to secure room
+                      upgrades, premium amenities, and exclusive perks that
+                      transform your stay from ordinary to extraordinary.
                     </p>
                     <div className="flex items-center space-x-6 text-sm text-slate-500">
                       <div className="flex items-center space-x-2">
@@ -973,7 +986,8 @@ export default function Hotels() {
                     Premium for Less
                   </h3>
                   <p className="text-slate-600 leading-relaxed mb-4">
-                    Set your budget and let our AI secure luxury accommodations at prices that work for you.
+                    Set your budget and let our AI secure luxury accommodations
+                    at prices that work for you.
                   </p>
                   <div className="inline-flex items-center text-emerald-600 font-semibold text-sm group-hover:text-emerald-700 transition-colors">
                     <span>Save up to 70%</span>
@@ -995,7 +1009,9 @@ export default function Hotels() {
                         Verified Hotel Partners
                       </h3>
                       <p className="text-slate-600 leading-relaxed mb-4">
-                        Every hotel in our network is verified and trusted. Book with complete confidence knowing your reservation is guaranteed.
+                        Every hotel in our network is verified and trusted. Book
+                        with complete confidence knowing your reservation is
+                        guaranteed.
                       </p>
                       <div className="flex items-center space-x-4 text-sm text-slate-500">
                         <span className="flex items-center space-x-1">
@@ -1025,7 +1041,8 @@ export default function Hotels() {
                         Hotel Concierge Service
                       </h3>
                       <p className="text-slate-600 leading-relaxed mb-4">
-                        Dedicated hotel experts available 24/7 to handle special requests, room preferences, and any travel needs.
+                        Dedicated hotel experts available 24/7 to handle special
+                        requests, room preferences, and any travel needs.
                       </p>
                       <div className="inline-flex items-center text-amber-600 font-semibold text-sm group-hover:text-amber-700 transition-colors">
                         <span>Connect with concierge</span>
@@ -1042,17 +1059,23 @@ export default function Hotels() {
               <div className="inline-flex items-center space-x-8 bg-white/70 backdrop-blur-xl border border-white/20 px-8 py-4 rounded-full shadow-lg">
                 <div className="flex items-center space-x-2">
                   <Star className="w-5 h-5 text-yellow-500" />
-                  <span className="text-slate-700 font-semibold">5-Star Hotels</span>
+                  <span className="text-slate-700 font-semibold">
+                    5-Star Hotels
+                  </span>
                 </div>
                 <div className="w-px h-6 bg-slate-300"></div>
                 <div className="flex items-center space-x-2">
                   <Hotel className="w-5 h-5 text-blue-500" />
-                  <span className="text-slate-700 font-semibold">Global Network</span>
+                  <span className="text-slate-700 font-semibold">
+                    Global Network
+                  </span>
                 </div>
                 <div className="w-px h-6 bg-slate-300"></div>
                 <div className="flex items-center space-x-2">
                   <Crown className="w-5 h-5 text-purple-500" />
-                  <span className="text-slate-700 font-semibold">Luxury Upgrades</span>
+                  <span className="text-slate-700 font-semibold">
+                    Luxury Upgrades
+                  </span>
                 </div>
               </div>
             </div>
@@ -1066,7 +1089,9 @@ export default function Hotels() {
             <div className="text-center mb-16">
               <div className="inline-flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-full mb-6">
                 <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-green-700 font-medium text-sm">Trusted by millions worldwide</span>
+                <span className="text-green-700 font-medium text-sm">
+                  Trusted by millions worldwide
+                </span>
               </div>
 
               <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
@@ -1082,7 +1107,12 @@ export default function Hotels() {
                 <div className="flex items-center justify-center space-x-4 mb-4">
                   <div className="flex items-center space-x-1">
                     {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
+                      <svg
+                        key={i}
+                        className="w-6 h-6 text-yellow-400"
+                        fill="currentColor"
+                        viewBox="0 0 20 20"
+                      >
                         <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
                       </svg>
                     ))}
@@ -1091,10 +1121,16 @@ export default function Hotels() {
                 </div>
 
                 <div className="text-center">
-                  <div className="font-semibold text-gray-900 text-lg">Excellent</div>
-                  <div className="text-gray-600 text-sm">Based on 50,000+ reviews on</div>
+                  <div className="font-semibold text-gray-900 text-lg">
+                    Excellent
+                  </div>
+                  <div className="text-gray-600 text-sm">
+                    Based on 50,000+ reviews on
+                  </div>
                   <div className="flex items-center justify-center space-x-2 mt-2">
-                    <div className="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">Trustpilot</div>
+                    <div className="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">
+                      Trustpilot
+                    </div>
                     <span className="text-green-600 font-medium">★★★★★</span>
                   </div>
                 </div>
@@ -1109,8 +1145,12 @@ export default function Hotels() {
                     <Headphones className="w-6 h-6" />
                   </div>
                   <div className="text-left">
-                    <div className="text-xl font-bold">24/7 Customer Support</div>
-                    <div className="text-blue-100">Live Chat & Call Available</div>
+                    <div className="text-xl font-bold">
+                      24/7 Customer Support
+                    </div>
+                    <div className="text-blue-100">
+                      Live Chat & Call Available
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1119,7 +1159,9 @@ export default function Hotels() {
             {/* Contact Methods - Enhanced Grid */}
             <div className="bg-white rounded-3xl shadow-xl p-8 mb-16 border border-gray-100">
               <div className="text-center mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Safe, Verified, and Instant Confirmations</h3>
+                <h3 className="text-xl font-semibold text-gray-900 mb-2">
+                  Safe, Verified, and Instant Confirmations
+                </h3>
                 <p className="text-gray-600">Backed by real humans</p>
               </div>
 
@@ -1128,35 +1170,45 @@ export default function Hotels() {
                   <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <Users className="w-8 h-8 text-white" />
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Live Chat</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Live Chat
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200">
                   <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <span className="text-2xl">📞</span>
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Phone Call</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Phone Call
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200">
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <span className="text-2xl">✉️</span>
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Email</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Email
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200">
                   <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <Headphones className="w-8 h-8 text-white" />
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">24/7 Support</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    24/7 Support
+                  </div>
                 </div>
 
                 <div className="text-center group hover:scale-105 transition-transform duration-200 md:col-span-1 col-span-2">
                   <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
                     <Shield className="w-8 h-8 text-white" />
                   </div>
-                  <div className="font-semibold text-gray-900 text-sm">Instant Confirmations</div>
+                  <div className="font-semibold text-gray-900 text-sm">
+                    Instant Confirmations
+                  </div>
                 </div>
               </div>
             </div>

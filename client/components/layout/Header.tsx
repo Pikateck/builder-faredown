@@ -52,10 +52,10 @@ export function Header() {
     const searchParams = new URLSearchParams(location.search);
     const tab = searchParams.get("tab");
     if (tab) return tab;
-    
+
     if (location.pathname === "/") return "flights";
     if (location.pathname.includes("/flights")) return "flights";
-    if (location.pathname.includes("/hotels")) return "hotels"; 
+    if (location.pathname.includes("/hotels")) return "hotels";
     if (location.pathname.includes("/sightseeing")) return "sightseeing";
     if (location.pathname.includes("/transfers")) return "transfers";
     return "flights";
@@ -170,7 +170,7 @@ export function Header() {
                         "flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left",
                         activeTab === "flights"
                           ? "text-[#003580] bg-blue-50"
-                          : "text-gray-700 hover:bg-gray-100"
+                          : "text-gray-700 hover:bg-gray-100",
                       )}
                     >
                       <Plane className="w-5 h-5 text-[#003580]" />
@@ -186,7 +186,7 @@ export function Header() {
                         "flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left",
                         activeTab === "hotels"
                           ? "text-[#003580] bg-blue-50"
-                          : "text-gray-700 hover:bg-gray-100"
+                          : "text-gray-700 hover:bg-gray-100",
                       )}
                     >
                       <Hotel className="w-5 h-5 text-[#003580]" />
@@ -202,7 +202,7 @@ export function Header() {
                         "flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left",
                         activeTab === "sightseeing"
                           ? "text-[#003580] bg-blue-50"
-                          : "text-gray-700 hover:bg-gray-100"
+                          : "text-gray-700 hover:bg-gray-100",
                       )}
                     >
                       <Camera className="w-5 h-5 text-[#003580]" />
@@ -218,7 +218,7 @@ export function Header() {
                         "flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left",
                         activeTab === "transfers"
                           ? "text-[#003580] bg-blue-50"
-                          : "text-gray-700 hover:bg-gray-100"
+                          : "text-gray-700 hover:bg-gray-100",
                       )}
                     >
                       <Car className="w-5 h-5 text-[#003580]" />
@@ -412,7 +412,7 @@ export function Header() {
                   onClick={() => handleTabChange("flights")}
                   className={cn(
                     "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
-                    activeTab === "flights" && "border-b-2 border-white"
+                    activeTab === "flights" && "border-b-2 border-white",
                   )}
                 >
                   <span>Flights</span>
@@ -421,7 +421,7 @@ export function Header() {
                   onClick={() => handleTabChange("hotels")}
                   className={cn(
                     "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
-                    activeTab === "hotels" && "border-b-2 border-white"
+                    activeTab === "hotels" && "border-b-2 border-white",
                   )}
                 >
                   <span>Hotels</span>
@@ -430,7 +430,7 @@ export function Header() {
                   onClick={() => handleTabChange("sightseeing")}
                   className={cn(
                     "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
-                    activeTab === "sightseeing" && "border-b-2 border-white"
+                    activeTab === "sightseeing" && "border-b-2 border-white",
                   )}
                 >
                   <span>Sightseeing</span>
@@ -439,7 +439,7 @@ export function Header() {
                   onClick={() => handleTabChange("transfers")}
                   className={cn(
                     "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
-                    activeTab === "transfers" && "border-b-2 border-white"
+                    activeTab === "transfers" && "border-b-2 border-white",
                   )}
                 >
                   <span>Transfers</span>

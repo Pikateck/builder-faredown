@@ -16,7 +16,7 @@ export function Layout({
   children,
   showSearch = true,
   showMobileNav = true,
-  className = ""
+  className = "",
 }: LayoutProps) {
   useScrollToTop();
 
@@ -24,9 +24,7 @@ export function Layout({
     <div className="min-h-screen bg-gray-50 flex flex-col pb-16 md:pb-0">
       <Header />
       {showSearch && <SearchPanel />}
-      <main className={`flex-1 ${className}`}>
-        {children}
-      </main>
+      <main className={`flex-1 ${className}`}>{children}</main>
       <Footer />
       {showMobileNav && <MobileBottomNav />}
     </div>

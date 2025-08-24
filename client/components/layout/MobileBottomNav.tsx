@@ -1,13 +1,7 @@
 import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import {
-  Plane,
-  Hotel,
-  Camera,
-  Car,
-  User,
-} from "lucide-react";
+import { Plane, Hotel, Camera, Car, User } from "lucide-react";
 
 export function MobileBottomNav() {
   const location = useLocation();
@@ -18,10 +12,10 @@ export function MobileBottomNav() {
     const searchParams = new URLSearchParams(location.search);
     const tab = searchParams.get("tab");
     if (tab) return tab;
-    
+
     if (location.pathname === "/") return "flights";
     if (location.pathname.includes("/flights")) return "flights";
-    if (location.pathname.includes("/hotels")) return "hotels"; 
+    if (location.pathname.includes("/hotels")) return "hotels";
     if (location.pathname.includes("/sightseeing")) return "sightseeing";
     if (location.pathname.includes("/transfers")) return "transfers";
     return "flights";
@@ -46,29 +40,85 @@ export function MobileBottomNav() {
           onClick={() => handleTabChange("flights")}
           className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
         >
-          <Plane className={cn("w-5 h-5", activeTab === "flights" ? "text-[#003580]" : "text-gray-400")} />
-          <span className={cn("text-xs", activeTab === "flights" ? "text-[#003580] font-medium" : "text-gray-500")}>Flights</span>
+          <Plane
+            className={cn(
+              "w-5 h-5",
+              activeTab === "flights" ? "text-[#003580]" : "text-gray-400",
+            )}
+          />
+          <span
+            className={cn(
+              "text-xs",
+              activeTab === "flights"
+                ? "text-[#003580] font-medium"
+                : "text-gray-500",
+            )}
+          >
+            Flights
+          </span>
         </button>
         <button
           onClick={() => handleTabChange("hotels")}
           className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
         >
-          <Hotel className={cn("w-5 h-5", activeTab === "hotels" ? "text-[#003580]" : "text-gray-400")} />
-          <span className={cn("text-xs", activeTab === "hotels" ? "text-[#003580] font-medium" : "text-gray-500")}>Hotels</span>
+          <Hotel
+            className={cn(
+              "w-5 h-5",
+              activeTab === "hotels" ? "text-[#003580]" : "text-gray-400",
+            )}
+          />
+          <span
+            className={cn(
+              "text-xs",
+              activeTab === "hotels"
+                ? "text-[#003580] font-medium"
+                : "text-gray-500",
+            )}
+          >
+            Hotels
+          </span>
         </button>
         <button
           onClick={() => handleTabChange("sightseeing")}
           className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
         >
-          <Camera className={cn("w-5 h-5", activeTab === "sightseeing" ? "text-[#003580]" : "text-gray-400")} />
-          <span className={cn("text-xs", activeTab === "sightseeing" ? "text-[#003580] font-medium" : "text-gray-500")}>Sightseeing</span>
+          <Camera
+            className={cn(
+              "w-5 h-5",
+              activeTab === "sightseeing" ? "text-[#003580]" : "text-gray-400",
+            )}
+          />
+          <span
+            className={cn(
+              "text-xs",
+              activeTab === "sightseeing"
+                ? "text-[#003580] font-medium"
+                : "text-gray-500",
+            )}
+          >
+            Sightseeing
+          </span>
         </button>
         <button
           onClick={() => handleTabChange("transfers")}
           className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
         >
-          <Car className={cn("w-5 h-5", activeTab === "transfers" ? "text-[#003580]" : "text-gray-400")} />
-          <span className={cn("text-xs", activeTab === "transfers" ? "text-[#003580] font-medium" : "text-gray-500")}>Transfers</span>
+          <Car
+            className={cn(
+              "w-5 h-5",
+              activeTab === "transfers" ? "text-[#003580]" : "text-gray-400",
+            )}
+          />
+          <span
+            className={cn(
+              "text-xs",
+              activeTab === "transfers"
+                ? "text-[#003580] font-medium"
+                : "text-gray-500",
+            )}
+          >
+            Transfers
+          </span>
         </button>
         <Link
           to="/account"

@@ -24,17 +24,19 @@ export default function Index() {
           <div className="absolute top-4 left-4 w-24 h-24 bg-[#febb02] rounded-full blur-2xl animate-pulse"></div>
           <div className="absolute bottom-8 right-4 w-32 h-32 bg-white rounded-full blur-3xl"></div>
         </div>
-        
+
         <div className="relative px-6 text-center text-white">
           <div className="inline-flex items-center space-x-2 bg-[#febb02] text-[#003580] px-4 py-2 rounded-full mb-8 font-bold text-sm">
             <Sparkles className="w-4 h-4" />
             <span>AI that bargains while you relax</span>
           </div>
-          
+
           <h2 className="text-4xl font-black mb-6 leading-tight">
-            Save more,<br />fly smarter.
+            Save more,
+            <br />
+            fly smarter.
           </h2>
-          
+
           <Button className="bg-[#febb02] hover:bg-[#e6a602] text-[#003580] font-bold px-10 py-4 rounded-full text-lg">
             Start Bargaining Now
           </Button>
@@ -45,9 +47,11 @@ export default function Index() {
       <section className="md:hidden py-16 bg-white">
         <div className="px-6">
           <div className="text-center mb-16">
-            <h2 className="text-3xl font-black text-gray-900 mb-4">Your fare, your win.</h2>
+            <h2 className="text-3xl font-black text-gray-900 mb-4">
+              Your fare, your win.
+            </h2>
           </div>
-          
+
           <div className="grid grid-cols-2 gap-6">
             <div className="text-center">
               <div className="w-16 h-16 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -60,7 +64,9 @@ export default function Index() {
               <div className="w-16 h-16 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mx-auto mb-4">
                 <Crown className="w-8 h-8 text-white" />
               </div>
-              <h3 className="font-bold text-gray-900">AI upgrades your journey</h3>
+              <h3 className="font-bold text-gray-900">
+                AI upgrades your journey
+              </h3>
             </div>
           </div>
         </div>
@@ -72,7 +78,7 @@ export default function Index() {
           <h2 className="text-2xl font-black text-gray-900 mb-8">
             4.9★ – Loved by travelers worldwide
           </h2>
-          
+
           <div className="space-y-6">
             <div className="bg-white rounded-2xl p-6 shadow-lg">
               <div className="flex items-center space-x-3 mb-4">
@@ -83,12 +89,18 @@ export default function Index() {
                   <div className="font-bold text-gray-900">Priya Sharma</div>
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-[#febb02] fill-current" />
+                      <Star
+                        key={i}
+                        className="w-4 h-4 text-[#febb02] fill-current"
+                      />
                     ))}
                   </div>
                 </div>
               </div>
-              <p className="text-gray-700 text-left">"Saved ₹15,000 on my Dubai trip – business class at economy price!"</p>
+              <p className="text-gray-700 text-left">
+                "Saved ₹15,000 on my Dubai trip – business class at economy
+                price!"
+              </p>
             </div>
 
             <div className="bg-white rounded-2xl p-6 shadow-lg">
@@ -100,12 +112,18 @@ export default function Index() {
                   <div className="font-bold text-gray-900">Rohit Kumar</div>
                   <div className="flex items-center">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-[#febb02] fill-current" />
+                      <Star
+                        key={i}
+                        className="w-4 h-4 text-[#febb02] fill-current"
+                      />
                     ))}
                   </div>
                 </div>
               </div>
-              <p className="text-gray-700 text-left">"Suite upgrade in Singapore using AI Bargaining – revolutionary!"</p>
+              <p className="text-gray-700 text-left">
+                "Suite upgrade in Singapore using AI Bargaining –
+                revolutionary!"
+              </p>
             </div>
           </div>
         </div>
@@ -117,10 +135,14 @@ export default function Index() {
           <div className="w-20 h-20 bg-[#febb02] rounded-2xl flex items-center justify-center mx-auto mb-6">
             <Smartphone className="w-10 h-10 text-[#003580]" />
           </div>
-          
-          <h2 className="text-2xl font-bold mb-4">Your AI travel companion, in your pocket.</h2>
-          <p className="text-blue-100 mb-8">Download for exclusive mobile deals</p>
-          
+
+          <h2 className="text-2xl font-bold mb-4">
+            Your AI travel companion, in your pocket.
+          </h2>
+          <p className="text-blue-100 mb-8">
+            Download for exclusive mobile deals
+          </p>
+
           <div className="space-y-4">
             <Button className="w-full bg-black hover:bg-gray-900 text-white py-4 rounded-xl flex items-center justify-center space-x-3">
               <Download className="w-5 h-5" />
@@ -129,7 +151,7 @@ export default function Index() {
                 <div className="font-bold">App Store</div>
               </div>
             </Button>
-            
+
             <Button className="w-full bg-black hover:bg-gray-900 text-white py-4 rounded-xl flex items-center justify-center space-x-3">
               <Download className="w-5 h-5" />
               <div className="text-left">
@@ -153,11 +175,14 @@ export default function Index() {
         <div className="relative max-w-7xl mx-auto px-8 text-center">
           <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white px-8 py-4 rounded-full mb-12 shadow-lg">
             <Sparkles className="w-5 h-5" />
-            <span className="font-bold text-lg">AI that bargains while you relax</span>
+            <span className="font-bold text-lg">
+              AI that bargains while you relax
+            </span>
           </div>
 
           <h1 className="text-7xl md:text-8xl font-black text-gray-900 mb-16 leading-tight">
-            Save more,<br />
+            Save more,
+            <br />
             <span className="bg-gradient-to-r from-[#003580] to-[#0071c2] bg-clip-text text-transparent">
               fly smarter.
             </span>
@@ -167,8 +192,11 @@ export default function Index() {
             <Button className="bg-[#febb02] hover:bg-[#e6a602] text-[#003580] font-bold text-xl px-16 py-6 rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
               Start Bargaining Now
             </Button>
-            
-            <Button variant="outline" className="border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-bold text-xl px-16 py-6 rounded-full">
+
+            <Button
+              variant="outline"
+              className="border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-bold text-xl px-16 py-6 rounded-full"
+            >
               <Play className="w-6 h-6 mr-3" />
               Watch Demo
             </Button>
@@ -178,17 +206,25 @@ export default function Index() {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
             <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg">
               <div className="text-5xl font-black text-[#003580] mb-3">60%</div>
-              <div className="text-gray-600 font-medium text-lg">Average savings</div>
+              <div className="text-gray-600 font-medium text-lg">
+                Average savings
+              </div>
             </div>
-            
+
             <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg">
               <div className="text-5xl font-black text-[#003580] mb-3">2M+</div>
-              <div className="text-gray-600 font-medium text-lg">Happy travelers</div>
+              <div className="text-gray-600 font-medium text-lg">
+                Happy travelers
+              </div>
             </div>
-            
+
             <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg">
-              <div className="text-5xl font-black text-[#003580] mb-3">4.9★</div>
-              <div className="text-gray-600 font-medium text-lg">Customer rating</div>
+              <div className="text-5xl font-black text-[#003580] mb-3">
+                4.9★
+              </div>
+              <div className="text-gray-600 font-medium text-lg">
+                Customer rating
+              </div>
             </div>
           </div>
         </div>
@@ -208,28 +244,36 @@ export default function Index() {
               <div className="w-24 h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
                 <Zap className="w-12 h-12 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900">Bargain in seconds</h3>
+              <h3 className="text-xl font-bold text-gray-900">
+                Bargain in seconds
+              </h3>
             </div>
 
             <div className="text-center group">
               <div className="w-24 h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
                 <Crown className="w-12 h-12 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900">AI upgrades your journey</h3>
+              <h3 className="text-xl font-bold text-gray-900">
+                AI upgrades your journey
+              </h3>
             </div>
 
             <div className="text-center group">
               <div className="w-24 h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
                 <Target className="w-12 h-12 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900">Your fare, your win</h3>
+              <h3 className="text-xl font-bold text-gray-900">
+                Your fare, your win
+              </h3>
             </div>
 
             <div className="text-center group">
               <div className="w-24 h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
                 <Star className="w-12 h-12 text-white" />
               </div>
-              <h3 className="text-xl font-bold text-gray-900">Trusted worldwide</h3>
+              <h3 className="text-xl font-bold text-gray-900">
+                Trusted worldwide
+              </h3>
             </div>
           </div>
         </div>
@@ -256,15 +300,19 @@ export default function Index() {
                   <div className="text-gray-500 text-sm">Marketing Manager</div>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                  <Star
+                    key={i}
+                    className="w-5 h-5 text-[#febb02] fill-current"
+                  />
                 ))}
               </div>
-              
+
               <blockquote className="text-gray-700 leading-relaxed text-lg">
-                "Saved ₹15,000 on my Dubai trip – business class at economy price!"
+                "Saved ₹15,000 on my Dubai trip – business class at economy
+                price!"
               </blockquote>
             </div>
 
@@ -278,15 +326,19 @@ export default function Index() {
                   <div className="text-gray-500 text-sm">Software Engineer</div>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                  <Star
+                    key={i}
+                    className="w-5 h-5 text-[#febb02] fill-current"
+                  />
                 ))}
               </div>
-              
+
               <blockquote className="text-gray-700 leading-relaxed text-lg">
-                "Suite upgrade in Singapore using AI Bargaining – revolutionary!"
+                "Suite upgrade in Singapore using AI Bargaining –
+                revolutionary!"
               </blockquote>
             </div>
 
@@ -300,15 +352,19 @@ export default function Index() {
                   <div className="text-gray-500 text-sm">Product Designer</div>
                 </div>
               </div>
-              
+
               <div className="flex items-center space-x-1 mb-4">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                  <Star
+                    key={i}
+                    className="w-5 h-5 text-[#febb02] fill-current"
+                  />
                 ))}
               </div>
-              
+
               <blockquote className="text-gray-700 leading-relaxed text-lg">
-                "Easy booking + instant savings. Faredown is my go-to travel app."
+                "Easy booking + instant savings. Faredown is my go-to travel
+                app."
               </blockquote>
             </div>
           </div>
@@ -321,16 +377,17 @@ export default function Index() {
           <div className="w-28 h-28 bg-[#febb02] rounded-3xl flex items-center justify-center mx-auto mb-8">
             <Smartphone className="w-14 h-14 text-[#003580]" />
           </div>
-          
+
           <h2 className="text-5xl font-black mb-8">
-            Travel Smarter. Bargain Better.<br />
+            Travel Smarter. Bargain Better.
+            <br />
             <span className="text-[#febb02]">On the Go.</span>
           </h2>
-          
+
           <p className="text-xl text-blue-100 mb-12">
             Get the Faredown app for instant bargains and exclusive deals.
           </p>
-          
+
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-12">
             <div className="flex items-center space-x-2 text-blue-100">
               <Zap className="w-5 h-5 text-[#febb02]" />
@@ -345,7 +402,7 @@ export default function Index() {
               <span>Offline support</span>
             </div>
           </div>
-          
+
           <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
             <Button className="bg-black hover:bg-gray-900 text-white py-6 px-8 rounded-2xl flex items-center space-x-4 text-lg">
               <Download className="w-6 h-6" />
@@ -354,7 +411,7 @@ export default function Index() {
                 <div className="font-bold">App Store</div>
               </div>
             </Button>
-            
+
             <Button className="bg-black hover:bg-gray-900 text-white py-6 px-8 rounded-2xl flex items-center space-x-4 text-lg">
               <Download className="w-6 h-6" />
               <div className="text-left">

@@ -7,16 +7,16 @@ import { TransfersSearchForm } from "@/components/TransfersSearchForm";
 
 export function SearchPanel() {
   const location = useLocation();
-  
+
   // Get active tab from URL
   const getActiveTab = () => {
     const searchParams = new URLSearchParams(location.search);
     const tab = searchParams.get("tab");
     if (tab) return tab;
-    
+
     if (location.pathname === "/") return "flights";
     if (location.pathname.includes("/flights")) return "flights";
-    if (location.pathname.includes("/hotels")) return "hotels"; 
+    if (location.pathname.includes("/hotels")) return "hotels";
     if (location.pathname.includes("/sightseeing")) return "sightseeing";
     if (location.pathname.includes("/transfers")) return "transfers";
     return "flights";
@@ -36,19 +36,22 @@ export function SearchPanel() {
       case "sightseeing":
         return {
           title: "Upgrade. Bargain. Book.",
-          subtitle: "Explore fascinating attractions, cultural landmarks, and exciting activities. Create unforgettable memories with our curated sightseeing experiences.",
+          subtitle:
+            "Explore fascinating attractions, cultural landmarks, and exciting activities. Create unforgettable memories with our curated sightseeing experiences.",
           searchForm: <SightseeingSearchForm />,
         };
       case "transfers":
         return {
           title: "Upgrade. Bargain. Book.",
-          subtitle: "Ride in comfort for less — AI secures your best deal on every trip.",
+          subtitle:
+            "Ride in comfort for less — AI secures your best deal on every trip.",
           searchForm: <TransfersSearchForm />,
         };
       default: // flights
         return {
           title: "Upgrade. Bargain. Book.",
-          subtitle: "Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.",
+          subtitle:
+            "Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.",
           searchForm: <FlightSearchForm />,
         };
     }
@@ -73,9 +76,7 @@ export function SearchPanel() {
             </div>
 
             {/* Search Form */}
-            <div className="mx-auto">
-              {tabContent.searchForm}
-            </div>
+            <div className="mx-auto">{tabContent.searchForm}</div>
           </div>
         </div>
       </div>
@@ -99,9 +100,7 @@ export function SearchPanel() {
             </div>
 
             {/* Desktop Search Form */}
-            <div className="max-w-7xl mx-auto">
-              {tabContent.searchForm}
-            </div>
+            <div className="max-w-7xl mx-auto">{tabContent.searchForm}</div>
           </div>
         </div>
       </div>
