@@ -1167,90 +1167,56 @@ export default function Index() {
         </section>
 
         {/* Premium Footer */}
-        <footer className="bg-gray-900 text-white py-16">
-          <div className="max-w-7xl mx-auto px-8">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-              <div className="md:col-span-2">
-                <div className="flex items-center space-x-3 mb-6">
-                  <div className="w-10 h-10 bg-[#febb02] rounded-xl flex items-center justify-center">
-                    <Plane className="w-5 h-5 text-[#003580]" />
-                  </div>
-                  <span className="text-2xl font-bold">faredown.com</span>
-                </div>
-                
-                <p className="text-gray-400 text-lg leading-relaxed mb-6 max-w-md">
-                  The world's first AI-powered travel platform that negotiates 
-                  better deals while you focus on your journey.
-                </p>
-                
-                <div className="flex space-x-4">
-                  {[Facebook, Instagram, Twitter, Linkedin].map((Social, index) => (
-                    <a
-                      key={index}
-                      href="#"
-                      className="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-[#003580] transition-colors"
-                    >
-                      <Social className="w-5 h-5" />
-                    </a>
-                  ))}
-                </div>
+        <footer className="bg-gray-900 text-white py-20">
+          <div className="max-w-7xl mx-auto px-8 text-center">
+            <div className="flex items-center justify-center space-x-3 mb-8">
+              <div className="w-12 h-12 bg-[#febb02] rounded-2xl flex items-center justify-center">
+                <Plane className="w-6 h-6 text-[#003580]" />
               </div>
+              <span className="text-3xl font-bold">faredown.com</span>
+            </div>
 
-              <div>
-                <h4 className="font-bold text-lg mb-6">Services</h4>
-                <ul className="space-y-3 text-gray-400">
-                  {[
-                    { label: "Flights", tab: "flights" },
-                    { label: "Hotels", tab: "hotels" },
-                    { label: "Sightseeing", tab: "sightseeing" },
-                    { label: "Transfers", tab: "transfers" }
-                  ].map((item) => (
-                    <li key={item.tab}>
-                      <button 
-                        onClick={() => handleTabChange(item.tab)}
-                        className="hover:text-white transition-colors"
-                      >
-                        {item.label}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <p className="text-xl text-gray-400 mb-12 max-w-2xl mx-auto">
+              The world's first AI-powered travel platform
+            </p>
 
-              <div>
-                <h4 className="font-bold text-lg mb-6">Support</h4>
-                <ul className="space-y-3 text-gray-400">
-                  {[
-                    { label: "Help Center", to: "/help" },
-                    { label: "Contact Us", to: "/contact" },
-                    { label: "About", to: "/about" },
-                    { label: "Privacy Policy", to: "/privacy" },
-                    { label: "Terms of Service", to: "/terms" }
-                  ].map((item) => (
-                    <li key={item.to}>
-                      <Link to={item.to} className="hover:text-white transition-colors">
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="flex justify-center space-x-8 mb-12 text-gray-400">
+              <button onClick={() => handleTabChange("flights")} className="hover:text-white transition-colors font-medium">Flights</button>
+              <button onClick={() => handleTabChange("hotels")} className="hover:text-white transition-colors font-medium">Hotels</button>
+              <button onClick={() => handleTabChange("sightseeing")} className="hover:text-white transition-colors font-medium">Sightseeing</button>
+              <button onClick={() => handleTabChange("transfers")} className="hover:text-white transition-colors font-medium">Transfers</button>
+              <Link to="/help" className="hover:text-white transition-colors font-medium">Help Center</Link>
+              <Link to="/contact" className="hover:text-white transition-colors font-medium">Contact</Link>
+              <Link to="/privacy" className="hover:text-white transition-colors font-medium">Privacy</Link>
+              <Link to="/terms" className="hover:text-white transition-colors font-medium">Terms</Link>
+            </div>
+
+            <div className="flex justify-center space-x-6 mb-12">
+              {[Facebook, Instagram, Twitter, Linkedin].map((Social, index) => (
+                <a
+                  key={index}
+                  href="#"
+                  className="w-14 h-14 bg-gray-800 rounded-2xl flex items-center justify-center hover:bg-[#003580] transition-colors"
+                >
+                  <Social className="w-6 h-6" />
+                </a>
+              ))}
             </div>
 
             <div className="border-t border-gray-800 pt-8">
-              <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+              <div className="flex flex-col md:flex-row justify-between items-center space-y-6 md:space-y-0">
                 <div className="flex items-center space-x-6">
                   <span className="text-gray-400 font-medium">Certified by:</span>
                   <div className="flex items-center space-x-4">
                     {["TAAI", "TAAFI", "IATA"].map((cert) => (
-                      <div key={cert} className="bg-white rounded-lg px-3 py-1">
-                        <span className="text-[#003580] font-bold text-sm">{cert}</span>
+                      <div key={cert} className="bg-white rounded-xl px-4 py-2">
+                        <span className="text-[#003580] font-bold">{cert}</span>
                       </div>
                     ))}
                   </div>
                 </div>
-                
-                <p className="text-gray-400">
+
+                <p className="text-gray-400 text-lg">
                   © 2025 Faredown.com. All rights reserved.
                 </p>
               </div>
