@@ -43,7 +43,7 @@ import {
   Star,
   ArrowRight,
 } from "lucide-react";
-import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { FlightSearchForm } from "@/components/FlightSearchForm";
 
 export default function Flights() {
   useScrollToTop();
@@ -262,7 +262,7 @@ export default function Flights() {
 
             {/* Flight Search Form */}
             <div className="mx-auto">
-              <BookingSearchForm />
+              <FlightSearchForm />
             </div>
           </div>
         </div>
@@ -655,7 +655,7 @@ export default function Flights() {
             </div>
 
             {/* Desktop Flight Search Form */}
-            <BookingSearchForm />
+            <FlightSearchForm />
           </div>
         </div>
 
