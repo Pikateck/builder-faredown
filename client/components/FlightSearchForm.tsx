@@ -394,21 +394,14 @@ export function FlightSearchForm() {
             value={airport ? `${airport.code} - ${airport.city}` : searchValue}
             onChange={(e) => {
               const value = e.target.value;
-              // If there's a selected airport and user starts typing, clear the selection
-              if (airport) {
-                setAirport(null);
-              }
               setSearchValue(value);
-              searchAirports(value, setSuggestions);
+              if (!airport) {
+                searchAirports(value, setSuggestions);
+              }
             }}
             onFocus={() => {
               setIsOpen(true);
-              // If there's a selected airport and user focuses to edit, clear it and show popular airports
-              if (airport) {
-                setAirport(null);
-                setSearchValue("");
-                setSuggestions(popularAirports.slice(0, 8));
-              } else if (!searchValue) {
+              if (!airport) {
                 setSuggestions(popularAirports.slice(0, 8));
               }
             }}
