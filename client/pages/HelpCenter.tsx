@@ -26,8 +26,6 @@ import {
 } from "lucide-react";
 
 export default function HelpCenter() {
-  useScrollToTop();
-
   const [searchQuery, setSearchQuery] = useState("");
   const [bookingReference, setBookingReference] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
