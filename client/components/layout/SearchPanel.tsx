@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
+import { FlightSearchForm } from "@/components/FlightSearchForm";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 import { TransfersSearchForm } from "@/components/TransfersSearchForm";
@@ -48,7 +49,7 @@ export function SearchPanel() {
         return {
           title: "Upgrade. Bargain. Book.",
           subtitle: "Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.",
-          searchForm: <BookingSearchForm />,
+          searchForm: <FlightSearchForm />,
         };
     }
   };
