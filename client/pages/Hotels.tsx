@@ -57,7 +57,6 @@ import {
   MobileTravelers,
 } from "@/components/MobileDropdowns";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
-import { TrustSection } from "@/components/TrustSection";
 
 export default function Hotels() {
   const navigate = useNavigate();
