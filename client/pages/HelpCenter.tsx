@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link } from "react-router-dom";
 import { Header } from "@/components/Header";
+import { Footer } from "@/components/Footer";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent } from "@/components/ui/card";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import {
   Search,
   Plane,
@@ -26,6 +28,8 @@ import {
 } from "lucide-react";
 
 export default function HelpCenter() {
+  useScrollToTop();
+
   const [searchQuery, setSearchQuery] = useState("");
   const [bookingReference, setBookingReference] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -440,91 +444,7 @@ export default function HelpCenter() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">Faredown</h3>
-              <p className="text-gray-400 text-sm">
-                Your trusted travel partner for smart bookings and great deals.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Support</h4>
-              <div className="space-y-2 text-sm">
-                <Link
-                  to="/help"
-                  className="text-gray-400 hover:text-white block"
-                >
-                  Help Center
-                </Link>
-                <Link
-                  to="/contact"
-                  className="text-gray-400 hover:text-white block"
-                >
-                  Contact Us
-                </Link>
-                <Link
-                  to="/faq"
-                  className="text-gray-400 hover:text-white block"
-                >
-                  FAQ
-                </Link>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Services</h4>
-              <div className="space-y-2 text-sm">
-                <Link
-                  to="/flights"
-                  className="text-gray-400 hover:text-white block"
-                >
-                  Flights
-                </Link>
-                <Link
-                  to="/hotels"
-                  className="text-gray-400 hover:text-white block"
-                >
-                  Hotels
-                </Link>
-                <Link
-                  to="/manage"
-                  className="text-gray-400 hover:text-white block"
-                >
-                  Manage Booking
-                </Link>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Company</h4>
-              <div className="space-y-2 text-sm">
-                <Link
-                  to="/about"
-                  className="text-gray-400 hover:text-white block"
-                >
-                  About Us
-                </Link>
-                <Link
-                  to="/careers"
-                  className="text-gray-400 hover:text-white block"
-                >
-                  Careers
-                </Link>
-                <Link
-                  to="/privacy"
-                  className="text-gray-400 hover:text-white block"
-                >
-                  Privacy Policy
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 Faredown.com. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
+      <Footer />
     </div>
   );
 }
