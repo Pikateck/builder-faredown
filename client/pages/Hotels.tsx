@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import { useDateContext } from "@/contexts/DateContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { Footer } from "@/components/Footer";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import {
@@ -66,6 +68,8 @@ import {
 import { BookingSearchForm } from "@/components/BookingSearchForm";
 
 export default function Hotels() {
+  useScrollToTop();
+
   const navigate = useNavigate();
   const { isLoggedIn, user, logout } = useAuth();
   const {
