@@ -45,6 +45,15 @@ import {
   Rocket,
   Star,
   ArrowRight,
+  Check,
+  Play,
+  Download,
+  Smartphone,
+  Clock,
+  Award,
+  TrendingDown,
+  RefreshCw,
+  Umbrella,
 } from "lucide-react";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
@@ -444,115 +453,163 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Why Faredown Section - Ultra Modern Mobile Design */}
-        <div className="relative bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40 py-16 overflow-hidden">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-10 left-4 w-32 h-32 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-10 right-4 w-40 h-40 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-3xl"></div>
-          </div>
+        {/* ========== FRESH MOBILE REDESIGN STARTS HERE ========== */}
 
-          <div className="relative px-6 max-w-sm mx-auto">
-            {/* Header */}
+        {/* AI Hero Banner - Mobile */}
+        <section className="relative bg-gradient-to-br from-[#003580] via-[#0071c2] to-[#003580] py-16 overflow-hidden">
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-4 left-4 w-24 h-24 bg-[#febb02] rounded-full blur-2xl animate-pulse"></div>
+            <div className="absolute bottom-8 right-4 w-32 h-32 bg-white rounded-full blur-3xl"></div>
+          </div>
+          
+          <div className="relative px-6 text-center text-white">
+            <div className="inline-flex items-center space-x-2 bg-[#febb02] text-[#003580] px-4 py-2 rounded-full mb-6 font-bold text-sm">
+              <Sparkles className="w-4 h-4" />
+              <span>AI that bargains for you</span>
+            </div>
+            
+            <h2 className="text-3xl font-black mb-4 leading-tight">
+              Save more,<br />fly smarter.
+            </h2>
+            
+            <p className="text-blue-100 mb-8 leading-relaxed">
+              Your AI travel companion negotiates better deals while you relax
+            </p>
+            
+            <Button className="bg-[#febb02] hover:bg-[#e6a602] text-[#003580] font-bold px-8 py-3 rounded-full">
+              Start Bargaining Now
+            </Button>
+          </div>
+        </section>
+
+        {/* Benefits Grid - Mobile */}
+        <section className="py-16 bg-white">
+          <div className="px-6">
             <div className="text-center mb-12">
-              <div className="inline-flex items-center space-x-2 bg-white/70 backdrop-blur-xl border border-white/20 px-5 py-2.5 rounded-full mb-6 shadow-lg">
-                <div className="w-2.5 h-2.5 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
-                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-semibold text-sm">The Faredown Advantage</span>
-              </div>
-              <h2 className="text-3xl font-black text-slate-900 mb-3 leading-tight">
-                Why Choose
-                <br />
-                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Faredown?</span>
-              </h2>
-              <p className="text-slate-600 font-medium">Revolutionary travel booking reimagined</p>
+              <h2 className="text-2xl font-black text-gray-900 mb-2">Your fare, your win.</h2>
+              <p className="text-gray-600">Premium travel made affordable</p>
             </div>
-
-            {/* Feature Cards - Asymmetrical Layout */}
-            <div className="space-y-4">
-              {/* Primary Feature - Full Width */}
-              <div className="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-purple-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative flex items-start space-x-5">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Sparkles className="w-8 h-8 text-white" />
+            
+            <div className="space-y-6">
+              <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-6 rounded-2xl">
+                <div className="flex items-center space-x-4 mb-4">
+                  <div className="w-12 h-12 bg-[#febb02] rounded-xl flex items-center justify-center">
+                    <Zap className="w-6 h-6 text-[#003580]" />
                   </div>
-                  <div className="flex-1">
-                    <h3 className="text-xl font-bold text-slate-900 mb-2 group-hover:text-blue-600 transition-colors">
-                      AI-Powered Bargaining
-                    </h3>
-                    <p className="text-slate-600 text-sm leading-relaxed">
-                      Our revolutionary AI negotiates the best deals in real-time, securing premium upgrades at unbeatable prices.
-                    </p>
+                  <div>
+                    <h3 className="font-bold text-lg">Bargain in seconds</h3>
+                    <p className="text-blue-100 text-sm">Not hours of searching</p>
                   </div>
                 </div>
               </div>
 
-              {/* Secondary Features - Side by Side */}
               <div className="grid grid-cols-2 gap-4">
-                <div className="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                  <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-green-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="relative text-center">
-                    <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-green-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
-                      <Target className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="font-bold text-slate-900 mb-2 text-sm group-hover:text-emerald-600 transition-colors">
-                      Fair Pricing
-                    </h3>
-                    <p className="text-slate-600 text-xs leading-relaxed">
-                      Pay what feels right, not what they demand
-                    </p>
+                <div className="bg-gray-50 p-4 rounded-xl text-center">
+                  <div className="w-10 h-10 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <Shield className="w-5 h-5 text-white" />
                   </div>
+                  <h3 className="font-bold text-sm text-gray-900 mb-1">Bank-level security</h3>
+                  <p className="text-xs text-gray-600">Your data protected</p>
                 </div>
 
-                <div className="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                  <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                  <div className="relative text-center">
-                    <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-xl flex items-center justify-center mx-auto mb-4 shadow-md group-hover:scale-110 transition-transform duration-300">
-                      <Lock className="w-6 h-6 text-white" />
-                    </div>
-                    <h3 className="font-bold text-slate-900 mb-2 text-sm group-hover:text-purple-600 transition-colors">
-                      Bank-Level Security
-                    </h3>
-                    <p className="text-slate-600 text-xs leading-relaxed">
-                      Your data protected with military-grade encryption
-                    </p>
+                <div className="bg-gray-50 p-4 rounded-xl text-center">
+                  <div className="w-10 h-10 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-3">
+                    <MessageCircle className="w-5 h-5 text-white" />
                   </div>
+                  <h3 className="font-bold text-sm text-gray-900 mb-1">24/7 support</h3>
+                  <p className="text-xs text-gray-600">Real people, anytime</p>
                 </div>
-              </div>
-
-              {/* Support Feature - Full Width */}
-              <div className="group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative flex items-center justify-between">
-                  <div className="flex items-center space-x-4">
-                    <div className="w-14 h-14 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-md group-hover:scale-110 transition-transform duration-300">
-                      <MessageCircle className="w-7 h-7 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-bold text-slate-900 mb-1 group-hover:text-amber-600 transition-colors">
-                        24/7 Human Support
-                      </h3>
-                      <p className="text-slate-600 text-sm">
-                        Real people, real solutions, anytime
-                      </p>
-                    </div>
-                  </div>
-                  <div className="w-8 h-8 bg-gradient-to-r from-slate-200 to-slate-300 rounded-lg flex items-center justify-center group-hover:bg-gradient-to-r group-hover:from-amber-100 group-hover:to-orange-100 transition-all duration-300">
-                    <ArrowRight className="w-4 h-4 text-slate-600 group-hover:text-amber-600 transition-colors" />
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom CTA */}
-            <div className="text-center mt-8">
-              <div className="inline-flex items-center space-x-2 text-sm text-slate-500">
-                <Star className="w-4 h-4 text-yellow-500" />
-                <span>Rated #1 by travelers worldwide</span>
               </div>
             </div>
           </div>
-        </div>
+        </section>
+
+        {/* Trust Section - Mobile */}
+        <section className="py-12 bg-gray-50">
+          <div className="px-6 text-center">
+            <div className="bg-white rounded-2xl p-6 shadow-lg">
+              <div className="flex items-center justify-center space-x-1 mb-3">
+                {[...Array(5)].map((_, i) => (
+                  <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                ))}
+                <span className="text-2xl font-bold text-gray-900 ml-2">4.9</span>
+              </div>
+              <p className="text-gray-600 font-medium">Trusted by millions of travelers worldwide</p>
+              <p className="text-sm text-gray-500 mt-1">50,000+ verified reviews</p>
+            </div>
+          </div>
+        </section>
+
+        {/* App Download - Mobile */}
+        <section className="py-16 bg-[#003580] text-white">
+          <div className="px-6 text-center">
+            <div className="w-20 h-20 bg-[#febb02] rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Smartphone className="w-10 h-10 text-[#003580]" />
+            </div>
+            
+            <h2 className="text-2xl font-bold mb-4">Your AI travel companion, in your pocket.</h2>
+            <p className="text-blue-100 mb-8">Download for exclusive mobile deals</p>
+            
+            <div className="space-y-4">
+              <Button className="w-full bg-black hover:bg-gray-900 text-white py-4 rounded-xl flex items-center justify-center space-x-3">
+                <Download className="w-5 h-5" />
+                <div className="text-left">
+                  <div className="text-xs opacity-75">Download on the</div>
+                  <div className="font-bold">App Store</div>
+                </div>
+              </Button>
+              
+              <Button className="w-full bg-black hover:bg-gray-900 text-white py-4 rounded-xl flex items-center justify-center space-x-3">
+                <Download className="w-5 h-5" />
+                <div className="text-left">
+                  <div className="text-xs opacity-75">Get it on</div>
+                  <div className="font-bold">Google Play</div>
+                </div>
+              </Button>
+            </div>
+          </div>
+        </section>
+
+        {/* Footer - Mobile */}
+        <footer className="bg-gray-900 text-white py-12">
+          <div className="px-6">
+            <div className="text-center mb-8">
+              <div className="flex items-center justify-center space-x-2 mb-4">
+                <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
+                  <Plane className="w-4 h-4 text-[#003580]" />
+                </div>
+                <span className="text-xl font-bold">faredown.com</span>
+              </div>
+              <p className="text-gray-400 text-sm">AI-powered travel booking</p>
+            </div>
+            
+            <div className="grid grid-cols-2 gap-6 mb-8">
+              <div>
+                <h4 className="font-bold mb-3">Services</h4>
+                <ul className="space-y-2 text-sm text-gray-400">
+                  <li><button onClick={() => handleTabChange("flights")}>Flights</button></li>
+                  <li><button onClick={() => handleTabChange("hotels")}>Hotels</button></li>
+                  <li><button onClick={() => handleTabChange("sightseeing")}>Sightseeing</button></li>
+                  <li><button onClick={() => handleTabChange("transfers")}>Transfers</button></li>
+                </ul>
+              </div>
+              
+              <div>
+                <h4 className="font-bold mb-3">Support</h4>
+                <ul className="space-y-2 text-sm text-gray-400">
+                  <li><Link to="/help">Help Center</Link></li>
+                  <li><Link to="/contact">Contact Us</Link></li>
+                  <li><Link to="/about">About</Link></li>
+                  <li><Link to="/terms">Terms</Link></li>
+                </ul>
+              </div>
+            </div>
+            
+            <div className="text-center pt-6 border-t border-gray-800">
+              <p className="text-sm text-gray-400">© 2025 Faredown.com. All rights reserved.</p>
+            </div>
+          </div>
+        </footer>
 
         {/* Mobile Bottom Navigation */}
         <div className="block md:hidden bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0 z-50">
@@ -596,7 +653,7 @@ export default function Index() {
         </div>
       </div>
 
-      {/* DESKTOP LAYOUT (≥769px) - Enhanced Original Design */}
+      {/* DESKTOP LAYOUT (≥769px) - Fresh Premium Design */}
       <div className="hidden md:block">
         {/* Desktop Header */}
         <header className="text-white" style={{ backgroundColor: "#003580" }}>
@@ -826,7 +883,7 @@ export default function Index() {
           </div>
         </header>
 
-        {/* Desktop Main Content */}
+        {/* Desktop Search Section */}
         <div
           className="py-3 sm:py-6 md:py-8 pb-24 sm:pb-8"
           style={{ backgroundColor: "#003580" }}
@@ -850,594 +907,374 @@ export default function Index() {
           </div>
         </div>
 
-        {/* Why Choose Faredown Section - Ultra Modern Desktop Design */}
-        <section className="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/30 overflow-hidden">
-          {/* Background Elements */}
+        {/* ========== FRESH DESKTOP REDESIGN STARTS HERE ========== */}
+
+        {/* Premium AI Hero Section */}
+        <section className="relative py-24 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 overflow-hidden">
           <div className="absolute inset-0 opacity-5">
-            <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-3xl"></div>
-            <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-3xl"></div>
-            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-gradient-to-r from-emerald-400 to-blue-500 rounded-full blur-3xl"></div>
+            <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-full blur-3xl"></div>
+            <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-[#febb02] to-[#e6a602] rounded-full blur-3xl"></div>
           </div>
 
-          <div className="relative max-w-7xl mx-auto px-8">
-            {/* Header */}
-            <div className="text-center mb-20">
-              <div className="inline-flex items-center space-x-3 bg-white/70 backdrop-blur-xl border border-white/20 px-8 py-4 rounded-full mb-8 shadow-lg">
-                <div className="w-3 h-3 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full animate-pulse"></div>
-                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-bold text-lg">The Faredown Revolution</span>
-              </div>
-
-              <h2 className="text-5xl md:text-6xl font-black text-slate-900 mb-8 leading-tight">
-                Why Choose{" "}
-                <span className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">
-                  Faredown?
-                </span>
-              </h2>
-
-              <p className="text-xl text-slate-600 max-w-4xl mx-auto leading-relaxed font-medium">
-                Experience the future of travel booking — where{" "}
-                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent font-bold">AI-powered bargaining</span>{" "}
-                meets uncompromising luxury and unprecedented savings.
-              </p>
+          <div className="relative max-w-7xl mx-auto px-8 text-center">
+            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white px-8 py-4 rounded-full mb-8 shadow-lg">
+              <Sparkles className="w-5 h-5" />
+              <span className="font-bold text-lg">AI that bargains while you relax</span>
             </div>
 
-            {/* Feature Grid - Modern Asymmetrical Layout */}
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-              {/* Hero Feature - Spans 8 columns */}
-              <div className="lg:col-span-8 group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-12 shadow-2xl hover:shadow-3xl transition-all duration-700 hover:-translate-y-3">
-                <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 via-purple-500/5 to-indigo-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-700"></div>
-                <div className="relative flex items-start space-x-8">
-                  <div className="w-24 h-24 bg-gradient-to-br from-blue-500 via-blue-600 to-purple-600 rounded-3xl flex items-center justify-center shadow-2xl group-hover:scale-110 group-hover:rotate-3 transition-all duration-500">
-                    <Sparkles className="w-12 h-12 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center space-x-3 mb-4">
-                      <h3 className="text-3xl font-black text-slate-900 group-hover:text-blue-600 transition-colors">
-                        AI-Powered Live Bargaining
-                      </h3>
-                      <div className="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-500 text-white text-xs font-bold rounded-full">
-                        REVOLUTIONARY
-                      </div>
-                    </div>
-                    <p className="text-slate-600 text-lg leading-relaxed mb-6">
-                      Our cutting-edge AI negotiates with suppliers in real-time, securing premium upgrades and exclusive deals that traditional booking sites simply can't match. Experience the future of travel booking today.
-                    </p>
-                    <div className="flex items-center space-x-6 text-sm text-slate-500">
-                      <div className="flex items-center space-x-2">
-                        <Rocket className="w-4 h-4 text-blue-500" />
-                        <span>Real-time negotiations</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Crown className="w-4 h-4 text-purple-500" />
-                        <span>Premium upgrades</span>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Target className="w-4 h-4 text-emerald-500" />
-                        <span>Unbeatable prices</span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
+            <h1 className="text-6xl md:text-7xl font-black text-gray-900 mb-8 leading-tight">
+              Save more,<br />
+              <span className="bg-gradient-to-r from-[#003580] to-[#0071c2] bg-clip-text text-transparent">
+                fly smarter.
+              </span>
+            </h1>
 
-              {/* Secondary Feature - Spans 4 columns */}
-              <div className="lg:col-span-4 group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                <div className="absolute inset-0 bg-gradient-to-br from-emerald-500/5 to-green-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative text-center">
-                  <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-green-500 rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Target className="w-10 h-10 text-white" />
-                  </div>
-                  <h3 className="text-2xl font-bold text-slate-900 mb-4 group-hover:text-emerald-600 transition-colors">
-                    Fair Pricing Revolution
-                  </h3>
-                  <p className="text-slate-600 leading-relaxed mb-4">
-                    Set your own price and let our AI work its magic. No more overpaying — only fair, transparent pricing that puts you in control.
-                  </p>
-                  <div className="inline-flex items-center text-emerald-600 font-semibold text-sm group-hover:text-emerald-700 transition-colors">
-                    <span>Save up to 60%</span>
-                    <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                  </div>
-                </div>
-              </div>
-
-              {/* Security Feature - Spans 6 columns */}
-              <div className="lg:col-span-6 group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                <div className="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-indigo-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative">
-                  <div className="flex items-start space-x-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                      <Lock className="w-10 h-10 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-purple-600 transition-colors">
-                        Military-Grade Security
-                      </h3>
-                      <p className="text-slate-600 leading-relaxed mb-4">
-                        Your data is protected with bank-level encryption and real-time fraud detection. Book with complete confidence.
-                      </p>
-                      <div className="flex items-center space-x-4 text-sm text-slate-500">
-                        <span className="flex items-center space-x-1">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span>256-bit SSL</span>
-                        </span>
-                        <span className="flex items-center space-x-1">
-                          <div className="w-2 h-2 bg-green-500 rounded-full"></div>
-                          <span>PCI Compliant</span>
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* Support Feature - Spans 6 columns */}
-              <div className="lg:col-span-6 group relative bg-white/80 backdrop-blur-xl border border-white/20 rounded-3xl p-10 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2">
-                <div className="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-                <div className="relative">
-                  <div className="flex items-start space-x-6">
-                    <div className="w-20 h-20 bg-gradient-to-br from-amber-500 to-orange-500 rounded-2xl flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-300">
-                      <MessageCircle className="w-10 h-10 text-white" />
-                    </div>
-                    <div className="flex-1">
-                      <h3 className="text-2xl font-bold text-slate-900 mb-3 group-hover:text-amber-600 transition-colors">
-                        24/7 Human Excellence
-                      </h3>
-                      <p className="text-slate-600 leading-relaxed mb-4">
-                        Real travel experts available around the clock. Get instant support via chat, call, or email — whenever you need it.
-                      </p>
-                      <div className="inline-flex items-center text-amber-600 font-semibold text-sm group-hover:text-amber-700 transition-colors">
-                        <span>Talk to an expert</span>
-                        <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Bottom Stats */}
-            <div className="mt-20 text-center">
-              <div className="inline-flex items-center space-x-8 bg-white/70 backdrop-blur-xl border border-white/20 px-8 py-4 rounded-full shadow-lg">
-                <div className="flex items-center space-x-2">
-                  <Star className="w-5 h-5 text-yellow-500" />
-                  <span className="text-slate-700 font-semibold">4.9/5 Rating</span>
-                </div>
-                <div className="w-px h-6 bg-slate-300"></div>
-                <div className="flex items-center space-x-2">
-                  <Users className="w-5 h-5 text-blue-500" />
-                  <span className="text-slate-700 font-semibold">50M+ Travelers</span>
-                </div>
-                <div className="w-px h-6 bg-slate-300"></div>
-                <div className="flex items-center space-x-2">
-                  <Rocket className="w-5 h-5 text-purple-500" />
-                  <span className="text-slate-700 font-semibold">AI-Powered</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Trust & Social Proof Section - Enhanced Classy Design */}
-        <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
-          <div className="max-w-[1280px] mx-auto px-6">
-            {/* Header with Trust Indicators */}
-            <div className="text-center mb-16">
-              <div className="inline-flex items-center space-x-2 bg-green-50 px-4 py-2 rounded-full mb-6">
-                <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse"></div>
-                <span className="text-green-700 font-medium text-sm">Trusted by millions worldwide</span>
-              </div>
-
-              <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-                Trusted by 50M+ Travelers
-              </h2>
-
-              <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-                Real reviews from verified travelers
-              </p>
-
-              {/* Trust Score Display */}
-              <div className="bg-white rounded-2xl shadow-lg p-8 max-w-md mx-auto border border-gray-100">
-                <div className="flex items-center justify-center space-x-4 mb-4">
-                  <div className="flex items-center space-x-1">
-                    {[...Array(5)].map((_, i) => (
-                      <svg key={i} className="w-6 h-6 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                      </svg>
-                    ))}
-                  </div>
-                  <span className="text-4xl font-bold text-gray-900">4.9</span>
-                </div>
-
-                <div className="text-center">
-                  <div className="font-semibold text-gray-900 text-lg">Excellent</div>
-                  <div className="text-gray-600 text-sm">Based on 50,000+ reviews on</div>
-                  <div className="flex items-center justify-center space-x-2 mt-2">
-                    <div className="bg-green-500 text-white px-3 py-1 rounded text-xs font-bold">Trustpilot</div>
-                    <span className="text-green-600 font-medium">★★★★★</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Customer Support Banner */}
-            <div className="text-center mb-16">
-              <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white py-6 px-8 rounded-2xl inline-block shadow-xl">
-                <div className="flex items-center justify-center space-x-4">
-                  <div className="bg-white/20 p-3 rounded-full">
-                    <Headphones className="w-6 h-6" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xl font-bold">24/7 Customer Support</div>
-                    <div className="text-blue-100">Live Chat & Call Available</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Contact Methods - Enhanced Grid */}
-            <div className="bg-white rounded-3xl shadow-xl p-8 mb-16 border border-gray-100">
-              <div className="text-center mb-8">
-                <h3 className="text-xl font-semibold text-gray-900 mb-2">Safe, Verified, and Instant Confirmations</h3>
-                <p className="text-gray-600">Backed by real humans</p>
-              </div>
-
-              <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
-                <div className="text-center group hover:scale-105 transition-transform duration-200">
-                  <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-blue-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
-                    <Users className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="font-semibold text-gray-900 text-sm">Live Chat</div>
-                </div>
-
-                <div className="text-center group hover:scale-105 transition-transform duration-200">
-                  <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
-                    <span className="text-2xl">📞</span>
-                  </div>
-                  <div className="font-semibold text-gray-900 text-sm">Phone Call</div>
-                </div>
-
-                <div className="text-center group hover:scale-105 transition-transform duration-200">
-                  <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
-                    <span className="text-2xl">✉️</span>
-                  </div>
-                  <div className="font-semibold text-gray-900 text-sm">Email</div>
-                </div>
-
-                <div className="text-center group hover:scale-105 transition-transform duration-200">
-                  <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
-                    <Headphones className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="font-semibold text-gray-900 text-sm">24/7 Support</div>
-                </div>
-
-                <div className="text-center group hover:scale-105 transition-transform duration-200 md:col-span-1 col-span-2">
-                  <div className="w-16 h-16 bg-gradient-to-br from-red-500 to-red-600 rounded-2xl flex items-center justify-center mx-auto mb-3 shadow-lg group-hover:shadow-xl transition-shadow">
-                    <Shield className="w-8 h-8 text-white" />
-                  </div>
-                  <div className="font-semibold text-gray-900 text-sm">Instant Confirmations</div>
-                </div>
-              </div>
-            </div>
-
-            {/* Customer Testimonials - Enhanced Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300 hover:-translate-y-1 transform transition-transform">
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-xl">P</span>
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900 text-lg">Priya Sharma</div>
-                    <div className="text-gray-500 text-sm">Marketing Manager</div>
-                    <div className="flex items-center mt-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-green-600 text-xs font-medium">Verified Purchase</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                  <span className="text-gray-600 text-sm ml-2">5.0</span>
-                </div>
-
-                <blockquote className="text-gray-700 leading-relaxed italic">
-                  "Saved ₹15,000 on my Dubai trip! The bargaining feature is amazing. Got business class using Bargain™. Faredown is revolutionary! Customer service is excellent."
-                </blockquote>
-              </div>
-
-              <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300 hover:-translate-y-1 transform transition-transform">
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-xl">R</span>
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900 text-lg">Rohit Kumar</div>
-                    <div className="text-gray-500 text-sm">Software Engineer</div>
-                    <div className="flex items-center mt-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-green-600 text-xs font-medium">Verified Purchase</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                  <span className="text-gray-600 text-sm ml-2">5.0</span>
-                </div>
-
-                <blockquote className="text-gray-700 leading-relaxed italic">
-                  "Got suite upgrade in Singapore hotel using Bargain™. Faredown is revolutionary! Customer service is excellent."
-                </blockquote>
-              </div>
-
-              <div className="bg-white rounded-2xl p-8 shadow-xl border border-gray-100 hover:shadow-2xl transition-shadow duration-300 hover:-translate-y-1 transform transition-transform">
-                <div className="flex items-center space-x-4 mb-6">
-                  <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-xl">A</span>
-                  </div>
-                  <div>
-                    <div className="font-bold text-gray-900 text-lg">Anjali Patel</div>
-                    <div className="text-gray-500 text-sm">Product Designer</div>
-                    <div className="flex items-center mt-1">
-                      <div className="w-2 h-2 bg-green-500 rounded-full mr-2"></div>
-                      <span className="text-green-600 text-xs font-medium">Verified Purchase</span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="flex items-center space-x-1 mb-4">
-                  {[...Array(5)].map((_, i) => (
-                    <svg key={i} className="w-5 h-5 text-yellow-400" fill="currentColor" viewBox="0 0 20 20">
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                  ))}
-                  <span className="text-gray-600 text-sm ml-2">5.0</span>
-                </div>
-
-                <blockquote className="text-gray-700 leading-relaxed italic">
-                  "Easy booking process and instant confirmations. Saved on both flights and hotels. Will use again!"
-                </blockquote>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Mobile App Section */}
-        <section className="py-16 bg-[#003580] text-white">
-          <div className="max-w-[1280px] mx-auto px-4 text-center">
-            <h2 className="text-3xl font-bold mb-4">
-              Travel Smarter. Bargain Better. On the Go.
-            </h2>
-            <p className="text-lg mb-8 text-blue-200">
-              Download the Faredown app for exclusive mobile-only deals and
-              instant bargain alerts.
+            <p className="text-2xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed">
+              Your AI travel companion negotiates premium upgrades and unbeatable prices — 
+              while you focus on what matters most.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-8">
-              <div className="flex items-center space-x-3 text-blue-200">
-                <span className="text-xl">📱</span>
-                <span>Instant notifications</span>
-              </div>
-              <div className="flex items-center space-x-3 text-blue-200">
-                <span className="text-xl">⚡</span>
-                <span>Mobile exclusive deals</span>
-              </div>
-              <div className="flex items-center space-x-3 text-blue-200">
-                <span className="text-xl">🎯</span>
-                <span>Offline support available</span>
-              </div>
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-16">
+              <Button className="bg-[#febb02] hover:bg-[#e6a602] text-[#003580] font-bold text-lg px-12 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+                Start Bargaining Now
+              </Button>
+              
+              <Button variant="outline" className="border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-bold text-lg px-12 py-4 rounded-full">
+                <Play className="w-5 h-5 mr-2" />
+                Watch Demo
+              </Button>
             </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <button className="bg-black text-white px-6 py-3 rounded-lg flex items-center space-x-3 hover:bg-gray-800 transition-colors">
-                <span className="text-2xl">🍎</span>
-                <div className="text-left">
-                  <div className="text-xs">Download on the</div>
-                  <div className="text-lg font-semibold">App Store</div>
-                </div>
-              </button>
-              <button className="bg-black text-white px-6 py-3 rounded-lg flex items-center space-x-3 hover:bg-gray-800 transition-colors">
-                <span className="text-2xl">🤖</span>
-                <div className="text-left">
-                  <div className="text-xs">Get it on</div>
-                  <div className="text-lg font-semibold">Google Play</div>
-                </div>
-              </button>
+            {/* Hero Stats */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
+              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg">
+                <div className="text-4xl font-black text-[#003580] mb-2">60%</div>
+                <div className="text-gray-600 font-medium">Average savings per booking</div>
+              </div>
+              
+              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg">
+                <div className="text-4xl font-black text-[#003580] mb-2">2M+</div>
+                <div className="text-gray-600 font-medium">Happy travelers served</div>
+              </div>
+              
+              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg">
+                <div className="text-4xl font-black text-[#003580] mb-2">4.9★</div>
+                <div className="text-gray-600 font-medium">Customer rating</div>
+              </div>
             </div>
           </div>
         </section>
 
-        {/* Email Signup Section */}
-        <section className="py-16 bg-white">
-          <div className="max-w-[1280px] mx-auto px-4 text-center">
+        {/* Premium Benefits Section */}
+        <section className="py-24 bg-white">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="text-center mb-20">
+              <h2 className="text-5xl font-black text-gray-900 mb-8">
+                Your fare, <span className="text-[#003580]">your win.</span>
+              </h2>
+              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+                Revolutionary AI technology meets world-class service
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              {/* Primary Benefit */}
+              <div className="lg:col-span-2 group relative bg-gradient-to-br from-[#003580] to-[#0071c2] text-white rounded-3xl p-12 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden">
+                <div className="absolute top-0 right-0 w-40 h-40 bg-[#febb02]/20 rounded-full blur-3xl"></div>
+                <div className="relative">
+                  <div className="w-20 h-20 bg-[#febb02] rounded-2xl flex items-center justify-center mb-8 shadow-lg">
+                    <Zap className="w-10 h-10 text-[#003580]" />
+                  </div>
+                  
+                  <h3 className="text-3xl font-black mb-6">
+                    Bargain in seconds, not hours
+                  </h3>
+                  
+                  <p className="text-blue-100 text-lg leading-relaxed mb-8">
+                    Our AI negotiates with thousands of suppliers simultaneously, 
+                    finding premium upgrades and exclusive deals in real-time. 
+                    What used to take hours now happens instantly.
+                  </p>
+                  
+                  <div className="flex items-center space-x-6">
+                    <div className="flex items-center space-x-2">
+                      <Clock className="w-5 h-5 text-[#febb02]" />
+                      <span className="text-blue-100">Instant results</span>
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <RefreshCw className="w-5 h-5 text-[#febb02]" />
+                      <span className="text-blue-100">Real-time pricing</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Secondary Benefits */}
+              <div className="space-y-8">
+                <div className="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition-shadow">
+                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-6">
+                    <Shield className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">Bank-level security</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Your data is protected with enterprise-grade encryption and fraud detection
+                  </p>
+                </div>
+
+                <div className="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition-shadow">
+                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-6">
+                    <MessageCircle className="w-8 h-8 text-white" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-900 mb-4">24/7 human support</h3>
+                  <p className="text-gray-600 leading-relaxed">
+                    Real travel experts available around the clock via chat, phone, or email
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Trust & Social Proof */}
+        <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="text-center mb-16">
+              <h2 className="text-4xl font-bold text-gray-900 mb-6">
+                Trusted by millions of travelers worldwide
+              </h2>
+              <p className="text-xl text-gray-600">4.9★ rating with 50,000+ verified reviews</p>
+            </div>
+
+            {/* Trust Indicators */}
+            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
+              {[
+                { icon: Shield, label: "Secure payments", color: "bg-green-500" },
+                { icon: Clock, label: "Instant confirmations", color: "bg-blue-500" },
+                { icon: Award, label: "Industry certified", color: "bg-purple-500" },
+                { icon: MessageCircle, label: "24/7 support", color: "bg-orange-500" },
+                { icon: Umbrella, label: "Travel protection", color: "bg-red-500" },
+              ].map((item, index) => (
+                <div key={index} className="text-center group">
+                  <div className={`w-20 h-20 ${item.color} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
+                    <item.icon className="w-10 h-10 text-white" />
+                  </div>
+                  <h3 className="font-bold text-gray-900">{item.label}</h3>
+                </div>
+              ))}
+            </div>
+
+            {/* Customer Reviews */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {[
+                {
+                  name: "Priya Sharma",
+                  role: "Marketing Manager",
+                  avatar: "P",
+                  review: "Saved ₹15,000 on my Dubai trip! The AI bargaining is incredible — got business class for economy price."
+                },
+                {
+                  name: "Rohit Kumar", 
+                  role: "Software Engineer",
+                  avatar: "R",
+                  review: "Suite upgrade in Singapore using AI bargaining. Customer service is outstanding. Faredown is revolutionary!"
+                },
+                {
+                  name: "Anjali Patel",
+                  role: "Product Designer", 
+                  avatar: "A",
+                  review: "Easy booking, instant confirmations, great savings. The mobile app makes travel planning effortless."
+                }
+              ].map((testimonial, index) => (
+                <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                  <div className="flex items-center space-x-4 mb-6">
+                    <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center">
+                      <span className="text-white font-bold text-xl">{testimonial.avatar}</span>
+                    </div>
+                    <div>
+                      <div className="font-bold text-gray-900">{testimonial.name}</div>
+                      <div className="text-gray-500 text-sm">{testimonial.role}</div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center space-x-1 mb-4">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                    ))}
+                  </div>
+                  
+                  <blockquote className="text-gray-700 leading-relaxed italic">
+                    "{testimonial.review}"
+                  </blockquote>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Mobile App CTA */}
+        <section className="py-20 bg-[#003580] text-white">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+              <div>
+                <div className="w-24 h-24 bg-[#febb02] rounded-3xl flex items-center justify-center mb-8">
+                  <Smartphone className="w-12 h-12 text-[#003580]" />
+                </div>
+                
+                <h2 className="text-4xl font-bold mb-6">
+                  Travel Smarter. Bargain Better.<br />
+                  <span className="text-[#febb02]">On the Go.</span>
+                </h2>
+                
+                <p className="text-xl text-blue-100 mb-8 leading-relaxed">
+                  Download the Faredown app for exclusive mobile-only deals, 
+                  instant bargain alerts, and seamless travel management.
+                </p>
+                
+                <div className="flex items-center space-x-6 mb-8">
+                  {[
+                    "Instant notifications",
+                    "Mobile exclusive deals", 
+                    "Offline support"
+                  ].map((feature, index) => (
+                    <div key={index} className="flex items-center space-x-2">
+                      <Check className="w-5 h-5 text-[#febb02]" />
+                      <span className="text-blue-100">{feature}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <Button className="w-full bg-black hover:bg-gray-900 text-white py-6 rounded-2xl flex items-center justify-center space-x-4 text-lg">
+                  <Download className="w-6 h-6" />
+                  <div className="text-left">
+                    <div className="text-sm opacity-75">Download on the</div>
+                    <div className="font-bold">App Store</div>
+                  </div>
+                </Button>
+                
+                <Button className="w-full bg-black hover:bg-gray-900 text-white py-6 rounded-2xl flex items-center justify-center space-x-4 text-lg">
+                  <Download className="w-6 h-6" />
+                  <div className="text-left">
+                    <div className="text-sm opacity-75">Get it on</div>
+                    <div className="font-bold">Google Play</div>
+                  </div>
+                </Button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* Newsletter Signup */}
+        <section className="py-16 bg-gray-50">
+          <div className="max-w-4xl mx-auto px-8 text-center">
             <h2 className="text-3xl font-bold text-gray-900 mb-4">
-              Stay ahead with secret travel bargains
+              Book smarter with AI
             </h2>
             <p className="text-gray-600 text-lg mb-8">
-              Enter your email address
+              Join 2M+ travelers getting exclusive deals and travel tips
             </p>
 
             <div className="flex flex-col sm:flex-row max-w-md mx-auto space-y-4 sm:space-y-0 sm:space-x-4">
               <input
                 type="email"
-                placeholder="Your email address"
-                className="flex-1 px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#003580] text-gray-900"
+                placeholder="Enter your email"
+                className="flex-1 px-6 py-4 border border-gray-300 rounded-xl focus:outline-none focus:border-[#003580] text-gray-900"
               />
-              <Button className="bg-[#003580] hover:bg-[#0071c2] text-white px-8 py-3 rounded-lg font-medium">
+              <Button className="bg-[#003580] hover:bg-[#0071c2] text-white px-8 py-4 rounded-xl font-medium">
                 Subscribe
               </Button>
             </div>
 
-            <p className="text-xs text-gray-500 mt-4">No spam emails</p>
+            <p className="text-sm text-gray-500 mt-4">No spam. Unsubscribe anytime.</p>
           </div>
         </section>
 
-        {/* Footer */}
-        <footer className="bg-[#1a1a2e] text-white py-8">
-          <div className="max-w-7xl mx-auto px-4">
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-              <div>
-                <h3 className="text-lg font-bold mb-3">Faredown</h3>
-                <p className="text-gray-400 text-sm mb-4">
-                  The world's first travel portal where you can negotiate and
-                  bargain for better deals.
+        {/* Premium Footer */}
+        <footer className="bg-gray-900 text-white py-16">
+          <div className="max-w-7xl mx-auto px-8">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
+              <div className="md:col-span-2">
+                <div className="flex items-center space-x-3 mb-6">
+                  <div className="w-10 h-10 bg-[#febb02] rounded-xl flex items-center justify-center">
+                    <Plane className="w-5 h-5 text-[#003580]" />
+                  </div>
+                  <span className="text-2xl font-bold">faredown.com</span>
+                </div>
+                
+                <p className="text-gray-400 text-lg leading-relaxed mb-6 max-w-md">
+                  The world's first AI-powered travel platform that negotiates 
+                  better deals while you focus on your journey.
                 </p>
-                <div className="flex space-x-3">
-                  <a
-                    href="https://facebook.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-600 transition-colors"
-                  >
-                    <Facebook className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="https://instagram.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-pink-600 transition-colors"
-                  >
-                    <Instagram className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="https://twitter.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-gray-800 transition-colors"
-                  >
-                    <Twitter className="w-4 h-4" />
-                  </a>
-                  <a
-                    href="https://linkedin.com"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="w-8 h-8 bg-gray-700 rounded-full flex items-center justify-center hover:bg-blue-700 transition-colors"
-                  >
-                    <Linkedin className="w-4 h-4" />
-                  </a>
+                
+                <div className="flex space-x-4">
+                  {[Facebook, Instagram, Twitter, Linkedin].map((Social, index) => (
+                    <a
+                      key={index}
+                      href="#"
+                      className="w-12 h-12 bg-gray-800 rounded-xl flex items-center justify-center hover:bg-[#003580] transition-colors"
+                    >
+                      <Social className="w-5 h-5" />
+                    </a>
+                  ))}
                 </div>
               </div>
 
               <div>
-                <h4 className="font-semibold mb-3">Quick Links</h4>
-                <ul className="space-y-1 text-sm text-gray-400">
-                  <li>
-                    <Link to="/about" className="hover:text-white">
-                      About Us
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/how-it-works" className="hover:text-white">
-                      How It Works
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/contact" className="hover:text-white">
-                      Contact
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/help" className="hover:text-white">
-                      Help Center
-                    </Link>
-                  </li>
+                <h4 className="font-bold text-lg mb-6">Services</h4>
+                <ul className="space-y-3 text-gray-400">
+                  {[
+                    { label: "Flights", tab: "flights" },
+                    { label: "Hotels", tab: "hotels" },
+                    { label: "Sightseeing", tab: "sightseeing" },
+                    { label: "Transfers", tab: "transfers" }
+                  ].map((item) => (
+                    <li key={item.tab}>
+                      <button 
+                        onClick={() => handleTabChange(item.tab)}
+                        className="hover:text-white transition-colors"
+                      >
+                        {item.label}
+                      </button>
+                    </li>
+                  ))}
                 </ul>
               </div>
 
               <div>
-                <h4 className="font-semibold mb-3">Services</h4>
-                <ul className="space-y-0.5 text-sm text-gray-400">
-                  <li>
-                    <button
-                      onClick={() => handleTabChange("flights")}
-                      className="hover:text-white"
-                    >
-                      Flights
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => handleTabChange("hotels")}
-                      className="hover:text-white"
-                    >
-                      Hotels
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => handleTabChange("sightseeing")}
-                      className="hover:text-white"
-                    >
-                      Sightseeing
-                    </button>
-                  </li>
-                  <li>
-                    <button
-                      onClick={() => handleTabChange("transfers")}
-                      className="hover:text-white"
-                    >
-                      Transfers
-                    </button>
-                  </li>
-                </ul>
-              </div>
-
-              <div>
-                <h4 className="font-semibold mb-3">Legal</h4>
-                <ul className="space-y-1 text-sm text-gray-400">
-                  <li>
-                    <Link to="/privacy" className="hover:text-white">
-                      Privacy Policy
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/terms" className="hover:text-white">
-                      Terms of Service
-                    </Link>
-                  </li>
-                  <li>
-                    <Link to="/refund" className="hover:text-white">
-                      Refund Policy
-                    </Link>
-                  </li>
+                <h4 className="font-bold text-lg mb-6">Support</h4>
+                <ul className="space-y-3 text-gray-400">
+                  {[
+                    { label: "Help Center", to: "/help" },
+                    { label: "Contact Us", to: "/contact" },
+                    { label: "About", to: "/about" },
+                    { label: "Privacy Policy", to: "/privacy" },
+                    { label: "Terms of Service", to: "/terms" }
+                  ].map((item) => (
+                    <li key={item.to}>
+                      <Link to={item.to} className="hover:text-white transition-colors">
+                        {item.label}
+                      </Link>
+                    </li>
+                  ))}
                 </ul>
               </div>
             </div>
 
-            <div className="border-t border-gray-700 mt-6 pt-6">
+            <div className="border-t border-gray-800 pt-8">
               <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
                 <div className="flex items-center space-x-6">
-                  <div className="flex items-center space-x-3 text-xs text-gray-400">
-                    <span className="font-semibold">Certified by:</span>
-                    <div className="flex items-center space-x-4">
-                      <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">
-                          TAAI
-                        </span>
+                  <span className="text-gray-400 font-medium">Certified by:</span>
+                  <div className="flex items-center space-x-4">
+                    {["TAAI", "TAAFI", "IATA"].map((cert) => (
+                      <div key={cert} className="bg-white rounded-lg px-3 py-1">
+                        <span className="text-[#003580] font-bold text-sm">{cert}</span>
                       </div>
-                      <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">
-                          TAAFI
-                        </span>
-                      </div>
-                      <div className="bg-white rounded px-2 py-1">
-                        <span className="text-[#003580] font-bold text-xs">
-                          IATA
-                        </span>
-                      </div>
-                    </div>
+                    ))}
                   </div>
                 </div>
-                <p className="text-gray-400 text-sm">
+                
+                <p className="text-gray-400">
                   © 2025 Faredown.com. All rights reserved.
                 </p>
               </div>
