@@ -39,21 +39,11 @@ import {
   BookOpen,
   Sparkles,
   Target,
-  Lock,
-  MessageCircle,
   Crown,
-  Rocket,
   Star,
-  ArrowRight,
-  Check,
   Play,
   Download,
   Smartphone,
-  Clock,
-  Award,
-  TrendingDown,
-  RefreshCw,
-  Umbrella,
 } from "lucide-react";
 import { BookingSearchForm } from "@/components/BookingSearchForm";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
