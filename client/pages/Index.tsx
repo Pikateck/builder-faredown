@@ -456,69 +456,48 @@ export default function Index() {
         {/* ========== FRESH MOBILE REDESIGN STARTS HERE ========== */}
 
         {/* AI Hero Banner - Mobile */}
-        <section className="relative bg-gradient-to-br from-[#003580] via-[#0071c2] to-[#003580] py-16 overflow-hidden">
+        <section className="relative bg-gradient-to-br from-[#003580] via-[#0071c2] to-[#003580] py-20 overflow-hidden">
           <div className="absolute inset-0 opacity-10">
             <div className="absolute top-4 left-4 w-24 h-24 bg-[#febb02] rounded-full blur-2xl animate-pulse"></div>
             <div className="absolute bottom-8 right-4 w-32 h-32 bg-white rounded-full blur-3xl"></div>
           </div>
-          
+
           <div className="relative px-6 text-center text-white">
-            <div className="inline-flex items-center space-x-2 bg-[#febb02] text-[#003580] px-4 py-2 rounded-full mb-6 font-bold text-sm">
+            <div className="inline-flex items-center space-x-2 bg-[#febb02] text-[#003580] px-4 py-2 rounded-full mb-8 font-bold text-sm">
               <Sparkles className="w-4 h-4" />
-              <span>AI that bargains for you</span>
+              <span>AI that bargains while you relax</span>
             </div>
-            
-            <h2 className="text-3xl font-black mb-4 leading-tight">
+
+            <h2 className="text-4xl font-black mb-6 leading-tight">
               Save more,<br />fly smarter.
             </h2>
-            
-            <p className="text-blue-100 mb-8 leading-relaxed">
-              Your AI travel companion negotiates better deals while you relax
-            </p>
-            
-            <Button className="bg-[#febb02] hover:bg-[#e6a602] text-[#003580] font-bold px-8 py-3 rounded-full">
+
+            <Button className="bg-[#febb02] hover:bg-[#e6a602] text-[#003580] font-bold px-10 py-4 rounded-full text-lg">
               Start Bargaining Now
             </Button>
           </div>
         </section>
 
-        {/* Benefits Grid - Mobile */}
+        {/* Minimal Benefits - Mobile */}
         <section className="py-16 bg-white">
           <div className="px-6">
-            <div className="text-center mb-12">
-              <h2 className="text-2xl font-black text-gray-900 mb-2">Your fare, your win.</h2>
-              <p className="text-gray-600">Premium travel made affordable</p>
+            <div className="text-center mb-16">
+              <h2 className="text-3xl font-black text-gray-900 mb-4">Your fare, your win.</h2>
             </div>
-            
-            <div className="space-y-6">
-              <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-6 rounded-2xl">
-                <div className="flex items-center space-x-4 mb-4">
-                  <div className="w-12 h-12 bg-[#febb02] rounded-xl flex items-center justify-center">
-                    <Zap className="w-6 h-6 text-[#003580]" />
-                  </div>
-                  <div>
-                    <h3 className="font-bold text-lg">Bargain in seconds</h3>
-                    <p className="text-blue-100 text-sm">Not hours of searching</p>
-                  </div>
+
+            <div className="grid grid-cols-2 gap-6">
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Zap className="w-8 h-8 text-white" />
                 </div>
+                <h3 className="font-bold text-gray-900">Bargain in seconds</h3>
               </div>
 
-              <div className="grid grid-cols-2 gap-4">
-                <div className="bg-gray-50 p-4 rounded-xl text-center">
-                  <div className="w-10 h-10 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <Shield className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="font-bold text-sm text-gray-900 mb-1">Bank-level security</h3>
-                  <p className="text-xs text-gray-600">Your data protected</p>
+              <div className="text-center">
+                <div className="w-16 h-16 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mx-auto mb-4">
+                  <Crown className="w-8 h-8 text-white" />
                 </div>
-
-                <div className="bg-gray-50 p-4 rounded-xl text-center">
-                  <div className="w-10 h-10 bg-[#003580] rounded-lg flex items-center justify-center mx-auto mb-3">
-                    <MessageCircle className="w-5 h-5 text-white" />
-                  </div>
-                  <h3 className="font-bold text-sm text-gray-900 mb-1">24/7 support</h3>
-                  <p className="text-xs text-gray-600">Real people, anytime</p>
-                </div>
+                <h3 className="font-bold text-gray-900">AI upgrades your journey</h3>
               </div>
             </div>
           </div>
@@ -725,7 +704,7 @@ export default function Index() {
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
                           { code: "es", name: "Español", flag: "🇪🇸" },
-                          { code: "fr", name: "Français", flag: "🇫🇷" },
+                          { code: "fr", name: "Français", flag: "��🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
@@ -910,126 +889,92 @@ export default function Index() {
         {/* ========== FRESH DESKTOP REDESIGN STARTS HERE ========== */}
 
         {/* Premium AI Hero Section */}
-        <section className="relative py-24 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 overflow-hidden">
+        <section className="relative py-32 bg-gradient-to-br from-slate-50 via-white to-blue-50/30 overflow-hidden">
           <div className="absolute inset-0 opacity-5">
             <div className="absolute top-20 left-20 w-96 h-96 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-full blur-3xl"></div>
             <div className="absolute bottom-20 right-20 w-80 h-80 bg-gradient-to-r from-[#febb02] to-[#e6a602] rounded-full blur-3xl"></div>
           </div>
 
           <div className="relative max-w-7xl mx-auto px-8 text-center">
-            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white px-8 py-4 rounded-full mb-8 shadow-lg">
+            <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-[#003580] to-[#0071c2] text-white px-8 py-4 rounded-full mb-12 shadow-lg">
               <Sparkles className="w-5 h-5" />
               <span className="font-bold text-lg">AI that bargains while you relax</span>
             </div>
 
-            <h1 className="text-6xl md:text-7xl font-black text-gray-900 mb-8 leading-tight">
+            <h1 className="text-7xl md:text-8xl font-black text-gray-900 mb-16 leading-tight">
               Save more,<br />
               <span className="bg-gradient-to-r from-[#003580] to-[#0071c2] bg-clip-text text-transparent">
                 fly smarter.
               </span>
             </h1>
 
-            <p className="text-2xl text-gray-600 max-w-4xl mx-auto mb-12 leading-relaxed">
-              Your AI travel companion negotiates premium upgrades and unbeatable prices — 
-              while you focus on what matters most.
-            </p>
-
-            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-16">
-              <Button className="bg-[#febb02] hover:bg-[#e6a602] text-[#003580] font-bold text-lg px-12 py-4 rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-6 sm:space-y-0 sm:space-x-8 mb-20">
+              <Button className="bg-[#febb02] hover:bg-[#e6a602] text-[#003580] font-bold text-xl px-16 py-6 rounded-full shadow-xl hover:shadow-2xl transition-all transform hover:scale-105">
                 Start Bargaining Now
               </Button>
-              
-              <Button variant="outline" className="border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-bold text-lg px-12 py-4 rounded-full">
-                <Play className="w-5 h-5 mr-2" />
+
+              <Button variant="outline" className="border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white font-bold text-xl px-16 py-6 rounded-full">
+                <Play className="w-6 h-6 mr-3" />
                 Watch Demo
               </Button>
             </div>
 
             {/* Hero Stats */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg">
-                <div className="text-4xl font-black text-[#003580] mb-2">60%</div>
-                <div className="text-gray-600 font-medium">Average savings per booking</div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-12 max-w-5xl mx-auto">
+              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg">
+                <div className="text-5xl font-black text-[#003580] mb-3">60%</div>
+                <div className="text-gray-600 font-medium text-lg">Average savings</div>
               </div>
-              
-              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg">
-                <div className="text-4xl font-black text-[#003580] mb-2">2M+</div>
-                <div className="text-gray-600 font-medium">Happy travelers served</div>
+
+              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg">
+                <div className="text-5xl font-black text-[#003580] mb-3">2M+</div>
+                <div className="text-gray-600 font-medium text-lg">Happy travelers</div>
               </div>
-              
-              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-2xl p-6 shadow-lg">
-                <div className="text-4xl font-black text-[#003580] mb-2">4.9★</div>
-                <div className="text-gray-600 font-medium">Customer rating</div>
+
+              <div className="bg-white/80 backdrop-blur-sm border border-white/20 rounded-3xl p-8 shadow-lg">
+                <div className="text-5xl font-black text-[#003580] mb-3">4.9★</div>
+                <div className="text-gray-600 font-medium text-lg">Customer rating</div>
               </div>
             </div>
           </div>
         </section>
 
-        {/* Premium Benefits Section */}
+        {/* Minimal Benefits Section */}
         <section className="py-24 bg-white">
           <div className="max-w-7xl mx-auto px-8">
             <div className="text-center mb-20">
-              <h2 className="text-5xl font-black text-gray-900 mb-8">
+              <h2 className="text-6xl font-black text-gray-900 mb-4">
                 Your fare, <span className="text-[#003580]">your win.</span>
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Revolutionary AI technology meets world-class service
-              </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Primary Benefit */}
-              <div className="lg:col-span-2 group relative bg-gradient-to-br from-[#003580] to-[#0071c2] text-white rounded-3xl p-12 shadow-2xl hover:shadow-3xl transition-all duration-500 overflow-hidden">
-                <div className="absolute top-0 right-0 w-40 h-40 bg-[#febb02]/20 rounded-full blur-3xl"></div>
-                <div className="relative">
-                  <div className="w-20 h-20 bg-[#febb02] rounded-2xl flex items-center justify-center mb-8 shadow-lg">
-                    <Zap className="w-10 h-10 text-[#003580]" />
-                  </div>
-                  
-                  <h3 className="text-3xl font-black mb-6">
-                    Bargain in seconds, not hours
-                  </h3>
-                  
-                  <p className="text-blue-100 text-lg leading-relaxed mb-8">
-                    Our AI negotiates with thousands of suppliers simultaneously, 
-                    finding premium upgrades and exclusive deals in real-time. 
-                    What used to take hours now happens instantly.
-                  </p>
-                  
-                  <div className="flex items-center space-x-6">
-                    <div className="flex items-center space-x-2">
-                      <Clock className="w-5 h-5 text-[#febb02]" />
-                      <span className="text-blue-100">Instant results</span>
-                    </div>
-                    <div className="flex items-center space-x-2">
-                      <RefreshCw className="w-5 h-5 text-[#febb02]" />
-                      <span className="text-blue-100">Real-time pricing</span>
-                    </div>
-                  </div>
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-12 max-w-6xl mx-auto">
+              <div className="text-center group">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                  <Zap className="w-12 h-12 text-white" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900">Bargain in seconds</h3>
               </div>
 
-              {/* Secondary Benefits */}
-              <div className="space-y-8">
-                <div className="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition-shadow">
-                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-6">
-                    <Shield className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">Bank-level security</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Your data is protected with enterprise-grade encryption and fraud detection
-                  </p>
+              <div className="text-center group">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                  <Crown className="w-12 h-12 text-white" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900">AI upgrades your journey</h3>
+              </div>
 
-                <div className="bg-gray-50 rounded-2xl p-8 hover:shadow-lg transition-shadow">
-                  <div className="w-16 h-16 bg-[#003580] rounded-xl flex items-center justify-center mb-6">
-                    <MessageCircle className="w-8 h-8 text-white" />
-                  </div>
-                  <h3 className="text-xl font-bold text-gray-900 mb-4">24/7 human support</h3>
-                  <p className="text-gray-600 leading-relaxed">
-                    Real travel experts available around the clock via chat, phone, or email
-                  </p>
+              <div className="text-center group">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                  <Target className="w-12 h-12 text-white" />
                 </div>
+                <h3 className="text-xl font-bold text-gray-900">Your fare, your win</h3>
+              </div>
+
+              <div className="text-center group">
+                <div className="w-24 h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:scale-110 transition-transform">
+                  <Star className="w-12 h-12 text-white" />
+                </div>
+                <h3 className="text-xl font-bold text-gray-900">Trusted worldwide</h3>
               </div>
             </div>
           </div>
@@ -1039,154 +984,153 @@ export default function Index() {
         <section className="py-20 bg-gradient-to-b from-gray-50 to-white">
           <div className="max-w-7xl mx-auto px-8">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-6">
-                Trusted by millions of travelers worldwide
+              <h2 className="text-5xl font-black text-gray-900 mb-8">
+                4.9★ – Loved by travelers worldwide
               </h2>
-              <p className="text-xl text-gray-600">4.9★ rating with 50,000+ verified reviews</p>
-            </div>
-
-            {/* Trust Indicators */}
-            <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-16">
-              {[
-                { icon: Shield, label: "Secure payments", color: "bg-green-500" },
-                { icon: Clock, label: "Instant confirmations", color: "bg-blue-500" },
-                { icon: Award, label: "Industry certified", color: "bg-purple-500" },
-                { icon: MessageCircle, label: "24/7 support", color: "bg-orange-500" },
-                { icon: Umbrella, label: "Travel protection", color: "bg-red-500" },
-              ].map((item, index) => (
-                <div key={index} className="text-center group">
-                  <div className={`w-20 h-20 ${item.color} rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg group-hover:scale-110 transition-transform`}>
-                    <item.icon className="w-10 h-10 text-white" />
-                  </div>
-                  <h3 className="font-bold text-gray-900">{item.label}</h3>
-                </div>
-              ))}
             </div>
 
             {/* Customer Reviews */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {[
-                {
-                  name: "Priya Sharma",
-                  role: "Marketing Manager",
-                  avatar: "P",
-                  review: "Saved ₹15,000 on my Dubai trip! The AI bargaining is incredible — got business class for economy price."
-                },
-                {
-                  name: "Rohit Kumar", 
-                  role: "Software Engineer",
-                  avatar: "R",
-                  review: "Suite upgrade in Singapore using AI bargaining. Customer service is outstanding. Faredown is revolutionary!"
-                },
-                {
-                  name: "Anjali Patel",
-                  role: "Product Designer", 
-                  avatar: "A",
-                  review: "Easy booking, instant confirmations, great savings. The mobile app makes travel planning effortless."
-                }
-              ].map((testimonial, index) => (
-                <div key={index} className="bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-shadow">
-                  <div className="flex items-center space-x-4 mb-6">
-                    <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center">
-                      <span className="text-white font-bold text-xl">{testimonial.avatar}</span>
-                    </div>
-                    <div>
-                      <div className="font-bold text-gray-900">{testimonial.name}</div>
-                      <div className="text-gray-500 text-sm">{testimonial.role}</div>
-                    </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+              <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-xl">P</span>
                   </div>
-                  
-                  <div className="flex items-center space-x-1 mb-4">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
-                    ))}
+                  <div>
+                    <div className="font-bold text-gray-900">Priya Sharma</div>
+                    <div className="text-gray-500 text-sm">Marketing Manager</div>
                   </div>
-                  
-                  <blockquote className="text-gray-700 leading-relaxed italic">
-                    "{testimonial.review}"
-                  </blockquote>
                 </div>
-              ))}
+
+                <div className="flex items-center space-x-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                  ))}
+                </div>
+
+                <blockquote className="text-gray-700 leading-relaxed text-lg">
+                  "Saved ₹15,000 on my Dubai trip – business class at economy price!"
+                </blockquote>
+              </div>
+
+              <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-xl">R</span>
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-900">Rohit Kumar</div>
+                    <div className="text-gray-500 text-sm">Software Engineer</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                  ))}
+                </div>
+
+                <blockquote className="text-gray-700 leading-relaxed text-lg">
+                  "Suite upgrade in Singapore using AI Bargaining – revolutionary!"
+                </blockquote>
+              </div>
+
+              <div className="bg-white rounded-3xl p-8 shadow-lg hover:shadow-xl transition-shadow">
+                <div className="flex items-center space-x-4 mb-6">
+                  <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold text-xl">A</span>
+                  </div>
+                  <div>
+                    <div className="font-bold text-gray-900">Anjali Patel</div>
+                    <div className="text-gray-500 text-sm">Product Designer</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center space-x-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                  ))}
+                </div>
+
+                <blockquote className="text-gray-700 leading-relaxed text-lg">
+                  "Easy booking + instant savings. Faredown is my go-to travel app."
+                </blockquote>
+              </div>
             </div>
           </div>
         </section>
 
         {/* Mobile App CTA */}
         <section className="py-20 bg-[#003580] text-white">
-          <div className="max-w-7xl mx-auto px-8">
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-              <div>
-                <div className="w-24 h-24 bg-[#febb02] rounded-3xl flex items-center justify-center mb-8">
-                  <Smartphone className="w-12 h-12 text-[#003580]" />
-                </div>
-                
-                <h2 className="text-4xl font-bold mb-6">
-                  Travel Smarter. Bargain Better.<br />
-                  <span className="text-[#febb02]">On the Go.</span>
-                </h2>
-                
-                <p className="text-xl text-blue-100 mb-8 leading-relaxed">
-                  Download the Faredown app for exclusive mobile-only deals, 
-                  instant bargain alerts, and seamless travel management.
-                </p>
-                
-                <div className="flex items-center space-x-6 mb-8">
-                  {[
-                    "Instant notifications",
-                    "Mobile exclusive deals", 
-                    "Offline support"
-                  ].map((feature, index) => (
-                    <div key={index} className="flex items-center space-x-2">
-                      <Check className="w-5 h-5 text-[#febb02]" />
-                      <span className="text-blue-100">{feature}</span>
-                    </div>
-                  ))}
-                </div>
+          <div className="max-w-5xl mx-auto px-8 text-center">
+            <div className="w-28 h-28 bg-[#febb02] rounded-3xl flex items-center justify-center mx-auto mb-8">
+              <Smartphone className="w-14 h-14 text-[#003580]" />
+            </div>
+
+            <h2 className="text-5xl font-black mb-8">
+              Travel Smarter. Bargain Better.<br />
+              <span className="text-[#febb02]">On the Go.</span>
+            </h2>
+
+            <p className="text-xl text-blue-100 mb-12">
+              Get the Faredown app for instant bargains and exclusive deals.
+            </p>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6 mb-12">
+              <div className="flex items-center space-x-2 text-blue-100">
+                <Zap className="w-5 h-5 text-[#febb02]" />
+                <span>Instant alerts</span>
               </div>
-              
-              <div className="space-y-4">
-                <Button className="w-full bg-black hover:bg-gray-900 text-white py-6 rounded-2xl flex items-center justify-center space-x-4 text-lg">
-                  <Download className="w-6 h-6" />
-                  <div className="text-left">
-                    <div className="text-sm opacity-75">Download on the</div>
-                    <div className="font-bold">App Store</div>
-                  </div>
-                </Button>
-                
-                <Button className="w-full bg-black hover:bg-gray-900 text-white py-6 rounded-2xl flex items-center justify-center space-x-4 text-lg">
-                  <Download className="w-6 h-6" />
-                  <div className="text-left">
-                    <div className="text-sm opacity-75">Get it on</div>
-                    <div className="font-bold">Google Play</div>
-                  </div>
-                </Button>
+              <div className="flex items-center space-x-2 text-blue-100">
+                <Smartphone className="w-5 h-5 text-[#febb02]" />
+                <span>Mobile exclusive deals</span>
               </div>
+              <div className="flex items-center space-x-2 text-blue-100">
+                <Headphones className="w-5 h-5 text-[#febb02]" />
+                <span>Offline support</span>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-center justify-center space-y-4 sm:space-y-0 sm:space-x-6">
+              <Button className="bg-black hover:bg-gray-900 text-white py-6 px-8 rounded-2xl flex items-center space-x-4 text-lg">
+                <Download className="w-6 h-6" />
+                <div className="text-left">
+                  <div className="text-sm opacity-75">Download on the</div>
+                  <div className="font-bold">App Store</div>
+                </div>
+              </Button>
+
+              <Button className="bg-black hover:bg-gray-900 text-white py-6 px-8 rounded-2xl flex items-center space-x-4 text-lg">
+                <Download className="w-6 h-6" />
+                <div className="text-left">
+                  <div className="text-sm opacity-75">Get it on</div>
+                  <div className="font-bold">Google Play</div>
+                </div>
+              </Button>
             </div>
           </div>
         </section>
 
         {/* Newsletter Signup */}
-        <section className="py-16 bg-gray-50">
+        <section className="py-20 bg-gray-50">
           <div className="max-w-4xl mx-auto px-8 text-center">
-            <h2 className="text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-4xl font-black text-gray-900 mb-6">
               Book smarter with AI
             </h2>
-            <p className="text-gray-600 text-lg mb-8">
-              Join 2M+ travelers getting exclusive deals and travel tips
+            <p className="text-xl text-gray-600 mb-12">
+              Join 2M+ travelers getting exclusive deals
             </p>
 
-            <div className="flex flex-col sm:flex-row max-w-md mx-auto space-y-4 sm:space-y-0 sm:space-x-4">
+            <div className="flex flex-col sm:flex-row max-w-lg mx-auto space-y-4 sm:space-y-0 sm:space-x-4">
               <input
                 type="email"
                 placeholder="Enter your email"
-                className="flex-1 px-6 py-4 border border-gray-300 rounded-xl focus:outline-none focus:border-[#003580] text-gray-900"
+                className="flex-1 px-6 py-5 border border-gray-300 rounded-2xl focus:outline-none focus:border-[#003580] text-gray-900 text-lg"
               />
-              <Button className="bg-[#003580] hover:bg-[#0071c2] text-white px-8 py-4 rounded-xl font-medium">
+              <Button className="bg-[#003580] hover:bg-[#0071c2] text-white px-10 py-5 rounded-2xl font-bold text-lg">
                 Subscribe
               </Button>
             </div>
-
-            <p className="text-sm text-gray-500 mt-4">No spam. Unsubscribe anytime.</p>
           </div>
         </section>
 
