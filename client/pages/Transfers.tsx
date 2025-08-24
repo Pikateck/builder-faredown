@@ -255,44 +255,55 @@ export default function Transfers() {
           </div>
         </div>
 
-        {/* Why Faredown Section */}
-        <div className="bg-gray-50 py-8">
+        {/* Why Faredown Section - Enhanced Mobile Design */}
+        <div className="bg-gradient-to-b from-gray-50 to-white py-12">
           <div className="px-4">
-            <h2 className="text-xl font-bold text-center mb-6 text-gray-900">
-              Why Faredown?
-            </h2>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Zap className="w-6 h-6 text-white" />
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center space-x-2 bg-blue-50 px-4 py-2 rounded-full mb-4">
+                <div className="w-2 h-2 bg-[#003580] rounded-full animate-pulse"></div>
+                <span className="text-[#003580] font-medium text-xs">Trusted worldwide</span>
+              </div>
+              <h2 className="text-2xl font-bold text-center mb-2 text-gray-900">
+                Why Faredown?
+              </h2>
+              <p className="text-gray-600 text-sm">Experience the future of travel booking</p>
+            </div>
+            <div className="grid grid-cols-2 gap-6">
+              <div className="bg-white rounded-2xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 transform">
+                <div className="w-16 h-16 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <Zap className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1">Live Bargaining</h3>
-                <p className="text-xs text-gray-600">
-                  Negotiate real-time prices
+                <h3 className="font-bold text-base mb-2 text-gray-900">Live Bargaining</h3>
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  Negotiate real-time prices with AI technology
                 </p>
               </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <TrendingUp className="w-6 h-6 text-white" />
+              <div className="bg-white rounded-2xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 transform">
+                <div className="w-16 h-16 bg-gradient-to-br from-green-500 to-green-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <TrendingUp className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1">Best Prices</h3>
-                <p className="text-xs text-gray-600">
-                  Pay what you feel is fair
+                <h3 className="font-bold text-base mb-2 text-gray-900">Best Prices</h3>
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  Pay what you feel is fair for premium services
                 </p>
               </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Shield className="w-6 h-6 text-white" />
+              <div className="bg-white rounded-2xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 transform">
+                <div className="w-16 h-16 bg-gradient-to-br from-purple-500 to-purple-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <Shield className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1">Secure Booking</h3>
-                <p className="text-xs text-gray-600">Instant confirmations</p>
+                <h3 className="font-bold text-base mb-2 text-gray-900">Secure Booking</h3>
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  Instant confirmations with bank-level security
+                </p>
               </div>
-              <div className="bg-white rounded-xl p-4 text-center shadow-sm">
-                <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-3">
-                  <Headphones className="w-6 h-6 text-white" />
+              <div className="bg-white rounded-2xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1 transform">
+                <div className="w-16 h-16 bg-gradient-to-br from-orange-500 to-orange-600 rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg">
+                  <Headphones className="w-8 h-8 text-white" />
                 </div>
-                <h3 className="font-semibold text-sm mb-1">24/7 Support</h3>
-                <p className="text-xs text-gray-600">Always here to help</p>
+                <h3 className="font-bold text-base mb-2 text-gray-900">24/7 Support</h3>
+                <p className="text-xs text-gray-600 leading-relaxed">
+                  Always here to help via chat, call, or email
+                </p>
               </div>
             </div>
           </div>
