@@ -504,17 +504,46 @@ export default function Index() {
         </section>
 
         {/* Trust Section - Mobile */}
-        <section className="py-12 bg-gray-50">
+        <section className="py-16 bg-gray-50">
           <div className="px-6 text-center">
-            <div className="bg-white rounded-2xl p-6 shadow-lg">
-              <div className="flex items-center justify-center space-x-1 mb-3">
-                {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
-                ))}
-                <span className="text-2xl font-bold text-gray-900 ml-2">4.9</span>
+            <h2 className="text-2xl font-black text-gray-900 mb-8">
+              4.9★ – Loved by travelers worldwide
+            </h2>
+
+            <div className="space-y-6">
+              <div className="bg-white rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold">P</span>
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-gray-900">Priya Sharma</div>
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 text-[#febb02] fill-current" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-700 text-left">"Saved ₹15,000 on my Dubai trip – business class at economy price!"</p>
               </div>
-              <p className="text-gray-600 font-medium">Trusted by millions of travelers worldwide</p>
-              <p className="text-sm text-gray-500 mt-1">50,000+ verified reviews</p>
+
+              <div className="bg-white rounded-2xl p-6 shadow-lg">
+                <div className="flex items-center space-x-3 mb-4">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center">
+                    <span className="text-white font-bold">R</span>
+                  </div>
+                  <div className="text-left">
+                    <div className="font-bold text-gray-900">Rohit Kumar</div>
+                    <div className="flex items-center">
+                      {[...Array(5)].map((_, i) => (
+                        <Star key={i} className="w-4 h-4 text-[#febb02] fill-current" />
+                      ))}
+                    </div>
+                  </div>
+                </div>
+                <p className="text-gray-700 text-left">"Suite upgrade in Singapore using AI Bargaining – revolutionary!"</p>
+              </div>
             </div>
           </div>
         </section>
@@ -704,7 +733,7 @@ export default function Index() {
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
                           { code: "es", name: "Español", flag: "🇪🇸" },
-                          { code: "fr", name: "Français", flag: "��🇷" },
+                          { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
