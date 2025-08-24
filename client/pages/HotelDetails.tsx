@@ -341,14 +341,18 @@ export default function HotelDetails() {
         const fallbackData = getMockHotelData();
         setHotelData(fallbackData);
 
-        // Show user-friendly message for network issues
-        if (
+        // Show user-friendly message based on error type
+        if (error.message.includes("HTTP 503")) {
+          console.info("ℹ️ Hotel service temporarily unavailable, using cached data");
+        } else if (error.message.includes("HTTP 50")) {
+          console.info("ℹ️ Hotel service experiencing issues, using fallback data");
+        } else if (
           error instanceof TypeError ||
           error.message.includes("Failed to fetch")
         ) {
-          console.info(
-            "ℹ️ Using offline mode due to network connectivity issues",
-          );
+          console.info("ℹ️ Using offline mode due to network connectivity issues");
+        } else {
+          console.info("ℹ️ Using cached hotel data");
         }
       } finally {
         setIsLoadingHotel(false);
