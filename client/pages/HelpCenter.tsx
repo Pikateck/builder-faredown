@@ -122,8 +122,7 @@ export default function HelpCenter() {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <Layout showSearch={false} showMobileNav={false}>
 
       {/* Hero Section with Search */}
       <section className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] text-white py-20 overflow-hidden">
@@ -440,7 +439,6 @@ export default function HelpCenter() {
         </div>
       </section>
 
-      <Footer />
-    </div>
+    </Layout>
   );
 }
