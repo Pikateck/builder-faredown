@@ -106,7 +106,7 @@ import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { hotelsService } from "@/services/hotelsService";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
-import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { HotelSearchForm } from "@/components/HotelSearchForm";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useDateContext } from "@/contexts/DateContext";
 
@@ -987,7 +987,7 @@ export default function HotelDetails() {
         {/* Mobile Search Bar */}
         <div className="bg-white border-b border-gray-200 px-4 py-3">
           <div className="max-w-md mx-auto">
-            <BookingSearchForm />
+            <HotelSearchForm />
           </div>
         </div>
 
@@ -1569,7 +1569,7 @@ export default function HotelDetails() {
         {/* Desktop Search Bar */}
         <div className="bg-white border-b border-gray-200 px-4 py-4">
           <div className="max-w-6xl mx-auto">
-            <BookingSearchForm />
+            <HotelSearchForm />
           </div>
         </div>
 
@@ -1931,7 +1931,7 @@ export default function HotelDetails() {
                               <div className="lg:col-span-3 mt-4 lg:mt-0">
                                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
                                   <div className="text-2xl font-bold text-gray-900 mb-1">
-                                    ₹
+                                    ���
                                     {calculateTotalPrice(
                                       room.pricePerNight,
                                     ).toLocaleString()}
