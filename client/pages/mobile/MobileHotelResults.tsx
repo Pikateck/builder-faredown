@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
-import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { HotelSearchForm } from "@/components/HotelSearchForm";
 import {
   ArrowLeft,
   Filter,
