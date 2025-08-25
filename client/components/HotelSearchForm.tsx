@@ -1,36 +1,29 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { Calendar } from "@/components/ui/calendar";
+import { BookingCalendar } from "@/components/BookingCalendar";
+import { format, addDays } from "date-fns";
 import {
-  Search,
   MapPin,
-  Calendar as CalendarIcon,
+  CalendarIcon,
   Users,
-  Minus,
+  Search,
   Plus,
+  Minus,
 } from "lucide-react";
-// Removed date-fns dependency - using native Date methods
+import { ErrorBanner } from "@/components/ErrorBanner";
 
 interface GuestConfig {
   adults: number;
   children: number;
-  rooms: number;
   childrenAges: number[];
+  rooms: number;
 }
 
 interface HotelSearchFormProps {
@@ -45,36 +38,70 @@ export function HotelSearchForm({
   onSearch,
 }: HotelSearchFormProps) {
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showError, setShowError] = useState(false);
+  
   const [destination, setDestination] = useState("");
-  const [checkIn, setCheckIn] = useState<Date>();
-  const [checkOut, setCheckOut] = useState<Date>();
-  const [showCheckInCalendar, setShowCheckInCalendar] = useState(false);
-  const [showCheckOutCalendar, setShowCheckOutCalendar] = useState(false);
-  const [showGuestDropdown, setShowGuestDropdown] = useState(false);
+  
+  // Set default dates to future dates
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const checkOutDefault = new Date();
+  checkOutDefault.setDate(checkOutDefault.getDate() + 4);
+
+  const [checkInDate, setCheckInDate] = useState<Date | undefined>(tomorrow);
+  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(checkOutDefault);
+  const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  
   const [guests, setGuests] = useState<GuestConfig>({
     adults: 2,
-    children: 0,
+    children: 1,
+    childrenAges: [10],
     rooms: 1,
-    childrenAges: [],
   });
+  const [isGuestPopoverOpen, setIsGuestPopoverOpen] = useState(false);
+
+  // Mobile detection
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   // Popular destinations
   const popularDestinations = [
     "Dubai, United Arab Emirates",
-    "New York, United States",
     "London, United Kingdom",
+    "Barcelona, Spain",
     "Paris, France",
-    "Tokyo, Japan",
-    "Mumbai, India",
-    "Singapore",
-    "Los Angeles, United States",
+    "Rome, Italy",
+    "New York, United States",
     "Bangkok, Thailand",
-    "Istanbul, Turkey",
+    "Singapore",
+    "Tokyo, Japan",
+    "Sydney, Australia",
+    "Mumbai, India",
+    "Delhi, India",
   ];
 
-  const handleDestinationChange = (value: string) => {
-    setDestination(value);
+  const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
+
+  const calculateNights = (
+    checkIn: Date | undefined,
+    checkOut: Date | undefined,
+  ): number => {
+    if (!checkIn || !checkOut) return 0;
+    const timeDiff = checkOut.getTime() - checkIn.getTime();
+    const nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
+    return Math.max(nights, 1);
   };
+
+  const nights = calculateNights(checkInDate, checkOutDate);
 
   const updateGuestCount = (
     type: keyof Pick<GuestConfig, "adults" | "children" | "rooms">,
@@ -97,393 +124,365 @@ export function HotelSearchForm({
         const childrenAges = [...prev.childrenAges];
         if (newValue > prev.children) {
           // Add new child age
-          childrenAges.push(5); // Default age
+          childrenAges.push(10);
         } else if (newValue < prev.children) {
           // Remove last child age
           childrenAges.pop();
         }
-        return { ...prev, [type]: newValue, childrenAges };
+        return {
+          ...prev,
+          [type]: newValue,
+          childrenAges,
+        };
       }
 
-      return { ...prev, [type]: newValue };
+      return {
+        ...prev,
+        [type]: newValue,
+      };
     });
   };
 
   const updateChildAge = (index: number, age: number) => {
-    setGuests((prev) => {
-      const childrenAges = [...prev.childrenAges];
-      childrenAges[index] = age;
-      return { ...prev, childrenAges };
-    });
+    setGuests((prev) => ({
+      ...prev,
+      childrenAges: prev.childrenAges.map((existingAge, i) =>
+        i === index ? age : existingAge,
+      ),
+    }));
   };
 
   const handleSearch = () => {
-    if (!destination || !checkIn || !checkOut) {
-      alert("Please fill in all required fields");
+    console.log("🔍 Starting hotel search with:", {
+      destination,
+      checkInDate,
+      checkOutDate,
+      guests,
+    });
+
+    // Only validate dates, destination is optional for browsing
+    if (!checkInDate || !checkOutDate) {
+      setErrorMessage("Please select check-in and check-out dates");
+      setShowError(true);
       return;
     }
 
-    const searchData = {
-      destination,
-      checkIn: checkIn.toISOString().split("T")[0],
-      checkOut: checkOut.toISOString().split("T")[0],
-      adults: guests.adults.toString(),
-      children: guests.children.toString(),
-      rooms: guests.rooms.toString(),
-      childrenAges: guests.childrenAges.join(","),
-    };
-
-    if (onSearch) {
-      onSearch(searchData);
-    } else {
-      const searchParams = new URLSearchParams(searchData);
-      navigate(`/hotels/results?${searchParams.toString()}`);
-    }
-  };
-
-  const getGuestSummary = () => {
-    const parts = [];
-    if (guests.adults > 0) {
-      parts.push(
-        `${guests.adults} ${guests.adults === 1 ? "adult" : "adults"}`,
-      );
-    }
-    if (guests.children > 0) {
-      parts.push(
-        `${guests.children} ${guests.children === 1 ? "child" : "children"}`,
-      );
-    }
-    parts.push(`${guests.rooms} ${guests.rooms === 1 ? "room" : "rooms"}`);
-    return parts.join(", ");
-  };
-
-  if (variant === "compact") {
-    return (
-      <div className={`bg-white rounded-lg shadow-sm border p-4 ${className}`}>
-        <div className="flex flex-col sm:flex-row gap-3">
-          <div className="flex-1">
-            <Select value={destination} onValueChange={handleDestinationChange}>
-              <SelectTrigger>
-                <SelectValue placeholder="Where are you going?" />
-              </SelectTrigger>
-              <SelectContent>
-                {popularDestinations.map((dest) => (
-                  <SelectItem key={dest} value={dest}>
-                    {dest}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div className="flex gap-2">
-            <Popover
-              open={showCheckInCalendar}
-              onOpenChange={setShowCheckInCalendar}
-            >
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="justify-start text-left">
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {checkIn
-                    ? checkIn.toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : "Check-in"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={checkIn}
-                  onSelect={(date) => {
-                    setCheckIn(date);
-                    setShowCheckInCalendar(false);
-                  }}
-                  disabled={(date) => date < new Date()}
-                />
-              </PopoverContent>
-            </Popover>
-            <Popover
-              open={showCheckOutCalendar}
-              onOpenChange={setShowCheckOutCalendar}
-            >
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="justify-start text-left">
-                  <CalendarIcon className="mr-2 h-4 w-4" />
-                  {checkOut
-                    ? checkOut.toLocaleDateString("en-US", {
-                        month: "short",
-                        day: "numeric",
-                      })
-                    : "Check-out"}
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0">
-                <Calendar
-                  mode="single"
-                  selected={checkOut}
-                  onSelect={(date) => {
-                    setCheckOut(date);
-                    setShowCheckOutCalendar(false);
-                  }}
-                  disabled={(date) => date < (checkIn || new Date())}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-          <Button onClick={handleSearch} className="px-6">
-            <Search className="w-4 h-4 mr-2" />
-            Search
-          </Button>
-        </div>
-      </div>
+    // Validate date range
+    const daysBetween = Math.ceil(
+      (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
     );
-  }
+    if (daysBetween < 1) {
+      setErrorMessage("Check-out date must be after check-in date");
+      setShowError(true);
+      return;
+    }
+    if (daysBetween > 30) {
+      setErrorMessage("Maximum stay duration is 30 days");
+      setShowError(true);
+      return;
+    }
+
+    try {
+      const searchParams = new URLSearchParams({
+        checkIn: checkInDate.toISOString(),
+        checkOut: checkOutDate.toISOString(),
+        adults: guests.adults.toString(),
+        children: guests.children.toString(),
+        rooms: guests.rooms.toString(),
+        searchType: "live",
+        searchId: Date.now().toString(),
+      });
+
+      // Only add destination if it exists
+      if (destination) {
+        searchParams.set("destination", destination);
+        searchParams.set("destinationName", destination);
+      }
+
+      const url = `/hotels/results?${searchParams.toString()}`;
+      console.log("🏨 Navigating to hotel search:", url);
+      
+      if (onSearch) {
+        onSearch({
+          destination,
+          checkInDate,
+          checkOutDate,
+          guests,
+        });
+      } else {
+        navigate(url);
+      }
+    } catch (error) {
+      console.error("🚨 Error in hotel search:", error);
+      setErrorMessage("Search failed. Please try again.");
+      setShowError(true);
+    }
+  };
+
+  const guestSummary = () => {
+    const parts = [];
+    parts.push(`${guests.adults} adult${guests.adults > 1 ? "s" : ""}`);
+    if (guests.children > 0) {
+      parts.push(`${guests.children} child${guests.children > 1 ? "ren" : ""}`);
+    }
+    parts.push(`${guests.rooms} room${guests.rooms > 1 ? "s" : ""}`);
+    return parts.join(" • ");
+  };
 
   return (
-    <div className={`bg-white rounded-lg shadow-lg border p-6 ${className}`}>
-      <h2 className="text-xl font-semibold mb-4">Find Your Perfect Stay</h2>
-
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        {/* Destination */}
-        <div className="md:col-span-2">
-          <Label htmlFor="destination">Destination</Label>
-          <Select value={destination} onValueChange={handleDestinationChange}>
-            <SelectTrigger>
-              <MapPin className="w-4 h-4 mr-2" />
-              <SelectValue placeholder="Where are you going?" />
-            </SelectTrigger>
-            <SelectContent>
-              {popularDestinations.map((dest) => (
-                <SelectItem key={dest} value={dest}>
-                  {dest}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {/* Check-in Date */}
-        <div>
-          <Label>Check-in</Label>
-          <Popover
-            open={showCheckInCalendar}
-            onOpenChange={setShowCheckInCalendar}
-          >
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-left"
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {checkIn
-                  ? checkIn.toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })
-                  : "Select date"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={checkIn}
-                onSelect={(date) => {
-                  setCheckIn(date);
-                  setShowCheckInCalendar(false);
-                  // Auto-set checkout to next day if not set
-                  if (!checkOut && date) {
-                    setCheckOut(new Date(date.getTime() + 24 * 60 * 60 * 1000));
-                  }
-                }}
-                disabled={(date) => date < new Date()}
+    <>
+      <ErrorBanner
+        message={errorMessage}
+        isVisible={showError}
+        onClose={() => setShowError(false)}
+      />
+      <div className={`bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200 ${className}`}>
+        {/* Main Search Form */}
+        <div className="flex flex-col lg:flex-row gap-2 mb-4">
+          {/* Destination */}
+          <div className="flex-1 lg:max-w-[320px] relative">
+            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+              Destination
+            </label>
+            <div className="relative">
+              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4" />
+              <Input
+                type="text"
+                value={destination}
+                onChange={(e) => setDestination(e.target.value)}
+                className="pl-10 pr-4 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
+                placeholder="Where are you going?"
+                autoComplete="off"
+                list="destinations"
               />
-            </PopoverContent>
-          </Popover>
-        </div>
+              <datalist id="destinations">
+                {popularDestinations.map((dest, index) => (
+                  <option key={index} value={dest} />
+                ))}
+              </datalist>
+            </div>
+          </div>
 
-        {/* Check-out Date */}
-        <div>
-          <Label>Check-out</Label>
-          <Popover
-            open={showCheckOutCalendar}
-            onOpenChange={setShowCheckOutCalendar}
-          >
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-left"
-              >
-                <CalendarIcon className="mr-2 h-4 w-4" />
-                {checkOut
-                  ? checkOut.toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "numeric",
-                      year: "numeric",
-                    })
-                  : "Select date"}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-auto p-0">
-              <Calendar
-                mode="single"
-                selected={checkOut}
-                onSelect={(date) => {
-                  setCheckOut(date);
-                  setShowCheckOutCalendar(false);
-                }}
-                disabled={(date) => date < (checkIn || new Date())}
-              />
-            </PopoverContent>
-          </Popover>
-        </div>
-      </div>
+          {/* Check-in/Check-out Dates */}
+          <div className="flex-1 lg:max-w-[280px]">
+            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+              Dates
+            </label>
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
+                >
+                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                  <span className="truncate text-xs sm:text-sm">
+                    {checkInDate && checkOutDate ? (
+                      <>
+                        <span className="hidden md:inline">
+                          {format(checkInDate, "EEE, MMM d")} to{" "}
+                          {format(checkOutDate, "EEE, MMM d")}
+                        </span>
+                        <span className="md:hidden">
+                          {format(checkInDate, "d MMM")} -{" "}
+                          {format(checkOutDate, "d MMM")}
+                        </span>
+                      </>
+                    ) : (
+                      "Check-in to Check-out"
+                    )}
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-auto p-0" align="start">
+                <BookingCalendar
+                  initialRange={{
+                    startDate: checkInDate || new Date(),
+                    endDate: checkOutDate || addDays(checkInDate || new Date(), 3),
+                  }}
+                  onChange={(range) => {
+                    console.log("Hotel calendar range selected:", range);
+                    setCheckInDate(range.startDate);
+                    setCheckOutDate(range.endDate);
+                  }}
+                  onClose={() => setIsCalendarOpen(false)}
+                  className="w-full"
+                />
+              </PopoverContent>
+            </Popover>
+          </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
-        {/* Guests & Rooms */}
-        <div>
-          <Label>Guests & Rooms</Label>
-          <Popover open={showGuestDropdown} onOpenChange={setShowGuestDropdown}>
-            <PopoverTrigger asChild>
-              <Button
-                variant="outline"
-                className="w-full justify-start text-left"
-              >
-                <Users className="mr-2 h-4 w-4" />
-                {getGuestSummary()}
-              </Button>
-            </PopoverTrigger>
-            <PopoverContent className="w-80 p-4">
-              <div className="space-y-4">
-                {/* Adults */}
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium">Adults</div>
-                    <div className="text-sm text-gray-600">Ages 18+</div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updateGuestCount("adults", "decrement")}
-                      disabled={guests.adults <= 1}
-                    >
-                      <Minus className="w-4 h-4" />
-                    </Button>
-                    <span className="w-8 text-center">{guests.adults}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updateGuestCount("adults", "increment")}
-                      disabled={guests.adults >= 16}
-                    >
-                      <Plus className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Children */}
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium">Children</div>
-                    <div className="text-sm text-gray-600">Ages 0-17</div>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updateGuestCount("children", "decrement")}
-                      disabled={guests.children <= 0}
-                    >
-                      <Minus className="w-4 h-4" />
-                    </Button>
-                    <span className="w-8 text-center">{guests.children}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updateGuestCount("children", "increment")}
-                      disabled={guests.children >= 16}
-                    >
-                      <Plus className="w-4 h-4" />
-                    </Button>
-                  </div>
-                </div>
-
-                {/* Children Ages */}
-                {guests.children > 0 && (
-                  <div className="space-y-2">
-                    <div className="text-sm font-medium">Children's ages</div>
-                    <div className="grid grid-cols-3 gap-2">
-                      {guests.childrenAges.map((age, index) => (
-                        <Select
-                          key={index}
-                          value={age.toString()}
-                          onValueChange={(value) =>
-                            updateChildAge(index, parseInt(value))
-                          }
-                        >
-                          <SelectTrigger className="h-8">
-                            <SelectValue />
-                          </SelectTrigger>
-                          <SelectContent>
-                            {Array.from({ length: 18 }, (_, i) => (
-                              <SelectItem key={i} value={i.toString()}>
-                                {i} {i === 1 ? "year" : "years"}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                      ))}
+          {/* Guests & Rooms */}
+          <div className="flex-1 lg:max-w-[220px]">
+            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+              Guests & Rooms
+            </label>
+            <Popover
+              open={isGuestPopoverOpen}
+              onOpenChange={setIsGuestPopoverOpen}
+            >
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
+                >
+                  <Users className="mr-2 h-4 w-4 flex-shrink-0" />
+                  <span className="truncate text-xs sm:text-sm">
+                    <span className="hidden md:inline">
+                      {guests.adults} adults, {guests.children} children,{" "}
+                      {guests.rooms} room{guests.rooms > 1 ? "s" : ""}
+                    </span>
+                    <span className="hidden sm:inline md:hidden">
+                      {guests.adults + guests.children} guests, {guests.rooms}{" "}
+                      room{guests.rooms > 1 ? "s" : ""}
+                    </span>
+                    <span className="sm:hidden">
+                      {guests.rooms} Room{guests.rooms > 1 ? "s" : ""} •{" "}
+                      {guests.adults} Adult{guests.adults > 1 ? "s" : ""} •{" "}
+                      {guests.children} Child
+                      {guests.children !== 1 ? "ren" : ""}
+                    </span>
+                  </span>
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-80 sm:w-96" align="start">
+                <div className="space-y-4">
+                  {/* Adults */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium">Adults</div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                        onClick={() => updateGuestCount("adults", "decrement")}
+                        disabled={guests.adults <= 1}
+                      >
+                        <Minus className="w-3 h-3" />
+                      </Button>
+                      <span className="w-8 text-center font-medium">
+                        {guests.adults}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                        onClick={() => updateGuestCount("adults", "increment")}
+                        disabled={guests.adults >= 16}
+                      >
+                        <Plus className="w-3 h-3" />
+                      </Button>
                     </div>
                   </div>
-                )}
 
-                {/* Rooms */}
-                <div className="flex items-center justify-between">
-                  <div>
-                    <div className="font-medium">Rooms</div>
+                  {/* Children */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium">Children</div>
+                      <div className="text-sm text-gray-500">Ages 0-17</div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                        onClick={() => updateGuestCount("children", "decrement")}
+                        disabled={guests.children <= 0}
+                      >
+                        <Minus className="w-3 h-3" />
+                      </Button>
+                      <span className="w-8 text-center font-medium">
+                        {guests.children}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                        onClick={() => updateGuestCount("children", "increment")}
+                        disabled={guests.children >= 16}
+                      >
+                        <Plus className="w-3 h-3" />
+                      </Button>
+                    </div>
                   </div>
-                  <div className="flex items-center space-x-2">
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updateGuestCount("rooms", "decrement")}
-                      disabled={guests.rooms <= 1}
-                    >
-                      <Minus className="w-4 h-4" />
-                    </Button>
-                    <span className="w-8 text-center">{guests.rooms}</span>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => updateGuestCount("rooms", "increment")}
-                      disabled={guests.rooms >= 8}
-                    >
-                      <Plus className="w-4 h-4" />
-                    </Button>
+
+                  {/* Children Ages */}
+                  {guests.children > 0 && (
+                    <div className="space-y-2">
+                      {guests.childrenAges.map((age, index) => (
+                        <div key={index} className="flex items-center justify-between">
+                          <span className="text-sm">Age of child {index + 1}</span>
+                          <select
+                            value={age}
+                            onChange={(e) => updateChildAge(index, parseInt(e.target.value))}
+                            className="border rounded px-2 py-1 text-sm"
+                          >
+                            {childAgeOptions.map((ageOption) => (
+                              <option key={ageOption} value={ageOption}>
+                                {ageOption} years old
+                              </option>
+                            ))}
+                          </select>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Rooms */}
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-medium">Rooms</div>
+                    </div>
+                    <div className="flex items-center space-x-3">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                        onClick={() => updateGuestCount("rooms", "decrement")}
+                        disabled={guests.rooms <= 1}
+                      >
+                        <Minus className="w-3 h-3" />
+                      </Button>
+                      <span className="w-8 text-center font-medium">
+                        {guests.rooms}
+                      </span>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
+                        onClick={() => updateGuestCount("rooms", "increment")}
+                        disabled={guests.rooms >= 8}
+                      >
+                        <Plus className="w-3 h-3" />
+                      </Button>
+                    </div>
                   </div>
+
+                  <Button
+                    onClick={() => setIsGuestPopoverOpen(false)}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                  >
+                    Done
+                  </Button>
                 </div>
+              </PopoverContent>
+            </Popover>
+          </div>
 
-                <Button
-                  onClick={() => setShowGuestDropdown(false)}
-                  className="w-full"
-                >
-                  Done
-                </Button>
-              </div>
-            </PopoverContent>
-          </Popover>
-        </div>
-
-        {/* Search Button */}
-        <div className="flex items-end">
-          <Button onClick={handleSearch} className="w-full h-10">
-            <Search className="w-4 h-4 mr-2" />
-            Search Hotels
-          </Button>
+          {/* Search Button */}
+          <div className="flex-shrink-0 w-full sm:w-auto">
+            <Button
+              onClick={handleSearch}
+              className="h-10 sm:h-12 w-full sm:w-auto bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 transition-all duration-150"
+              title="Search hotels"
+            >
+              <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+              <span className="text-sm sm:text-base">Search</span>
+            </Button>
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 }
