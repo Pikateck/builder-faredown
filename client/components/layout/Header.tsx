@@ -65,10 +65,21 @@ export function Header() {
 
   // Handle tab change
   const handleTabChange = (tab: string) => {
-    if (tab === "flights") {
-      navigate("/?tab=flights");
-    } else {
-      navigate(`/?tab=${tab}`);
+    switch (tab) {
+      case "flights":
+        navigate("/flights");
+        break;
+      case "hotels":
+        navigate("/hotels");
+        break;
+      case "sightseeing":
+        navigate("/sightseeing");
+        break;
+      case "transfers":
+        navigate("/transfers");
+        break;
+      default:
+        navigate("/");
     }
     window.scrollTo(0, 0);
   };
