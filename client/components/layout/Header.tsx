@@ -49,15 +49,17 @@ export function Header() {
 
   // Get active tab from URL
   const getActiveTab = () => {
+    // Check actual route paths first
+    if (location.pathname === "/" || location.pathname === "/flights") return "flights";
+    if (location.pathname.includes("/hotels")) return "hotels";
+    if (location.pathname.includes("/sightseeing")) return "sightseeing";
+    if (location.pathname.includes("/transfers")) return "transfers";
+
+    // Fallback to query parameters for backward compatibility
     const searchParams = new URLSearchParams(location.search);
     const tab = searchParams.get("tab");
     if (tab) return tab;
 
-    if (location.pathname === "/") return "flights";
-    if (location.pathname.includes("/flights")) return "flights";
-    if (location.pathname.includes("/hotels")) return "hotels";
-    if (location.pathname.includes("/sightseeing")) return "sightseeing";
-    if (location.pathname.includes("/transfers")) return "transfers";
     return "flights";
   };
 
