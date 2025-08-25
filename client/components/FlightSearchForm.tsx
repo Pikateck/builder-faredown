@@ -167,31 +167,19 @@ export function FlightSearchForm() {
           <div className="flex items-center space-x-1 mr-6">
             <button
               onClick={() => setTripType("round-trip")}
-              className={`px-3 py-1 text-sm font-medium border rounded-sm transition-colors ${
-                tripType === "round-trip"
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-blue-600 border-blue-600 hover:bg-blue-50"
-              }`}
+              className={`booking-trip-button ${tripType === "round-trip" ? "active" : ""}`}
             >
               Round-trip
             </button>
             <button
               onClick={() => setTripType("one-way")}
-              className={`px-3 py-1 text-sm font-medium border rounded-sm transition-colors ${
-                tripType === "one-way"
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-blue-600 border-blue-600 hover:bg-blue-50"
-              }`}
+              className={`booking-trip-button ${tripType === "one-way" ? "active" : ""}`}
             >
               One-way
             </button>
             <button
               onClick={() => setTripType("multi-city")}
-              className={`px-3 py-1 text-sm font-medium border rounded-sm transition-colors ${
-                tripType === "multi-city"
-                  ? "bg-blue-600 text-white border-blue-600"
-                  : "bg-white text-blue-600 border-blue-600 hover:bg-blue-50"
-              }`}
+              className={`booking-trip-button ${tripType === "multi-city" ? "active" : ""}`}
             >
               Multi-city
             </button>
