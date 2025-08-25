@@ -895,6 +895,9 @@ export default function BookingFlow() {
   const selectedFareType = booking.selectedFare;
   const passengersFromState = booking.searchParams.passengers;
 
+  // Extract negotiatedPrice from location state with fallback
+  const negotiatedPrice = location.state?.negotiatedPrice || selectedFareType?.price || 32168;
+
   // Define renderFlightSegment function after selectedFlight is available
 
   // Load dates from URL params and redirect if no flight data
