@@ -16,7 +16,7 @@ import { LandingPageSearchPanel } from "@/components/LandingPageSearchPanel";
 
 export default function Index() {
   return (
-    <Layout>
+    <Layout showSearch={false}>
       {/* ========== FRESH MOBILE REDESIGN STARTS HERE ========== */}
 
       {/* AI Hero Banner - Mobile */}
