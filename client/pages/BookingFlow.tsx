@@ -1921,7 +1921,7 @@ export default function BookingFlow() {
                   <div className="space-y-6">
                     {travellers.map((traveller, index) => (
                       <div
-                        key={traveller.id}
+                        key={`traveller-details-${traveller.id}`}
                         className="border border-[#666]/20 rounded-lg p-4 md:p-6 bg-white"
                       >
                         {/* Header with traveller name and icon */}
