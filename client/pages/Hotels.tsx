@@ -65,7 +65,7 @@ import {
   MobileDatePicker,
   MobileTravelers,
 } from "@/components/MobileDropdowns";
-import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { HotelSearchForm } from "@/components/HotelSearchForm";
 
 export default function Hotels() {
   useScrollToTop();
@@ -464,7 +464,7 @@ export default function Hotels() {
 
             {/* Hotel Search Form with Hotelbeds Test Destinations */}
             <div className="mx-auto">
-              <BookingSearchForm />
+              <HotelSearchForm />
             </div>
           </div>
         </div>
@@ -894,7 +894,7 @@ export default function Hotels() {
 
             {/* Desktop Hotel Search Form with Hotelbeds Test Destinations */}
             <div className="max-w-7xl mx-auto">
-              <BookingSearchForm />
+              <HotelSearchForm />
             </div>
           </div>
         </div>
