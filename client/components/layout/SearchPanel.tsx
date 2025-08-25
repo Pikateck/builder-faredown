@@ -24,34 +24,39 @@ export function SearchPanel() {
 
   const activeTab = getActiveTab();
 
-  // Get content based on active tab
+  // Get content based on active tab with enhanced designs
   const getTabContent = () => {
     switch (activeTab) {
       case "hotels":
         return {
           title: "Find your perfect stay",
-          subtitle: "Search hotels with live AI bargaining.",
+          subtitle: "Search hotels with live AI bargaining — luxury for less.",
+          icon: "🏨",
+          gradient: "from-orange-500 to-red-500",
           searchForm: <HotelSearchForm />,
         };
       case "sightseeing":
         return {
-          title: "Upgrade. Bargain. Book.",
-          subtitle:
-            "Explore fascinating attractions, cultural landmarks, and exciting activities. Create unforgettable memories with our curated sightseeing experiences.",
+          title: "Discover. Explore. Experience.",
+          subtitle: "Unforgettable attractions and cultural landmarks await your discovery.",
+          icon: "🎭",
+          gradient: "from-purple-500 to-pink-500",
           searchForm: <SightseeingSearchForm />,
         };
       case "transfers":
         return {
-          title: "Upgrade. Bargain. Book.",
-          subtitle:
-            "Ride in comfort for less — AI secures your best deal on every trip.",
+          title: "Seamless Airport Transfers",
+          subtitle: "Ride in comfort for less — AI secures your best deal on every trip.",
+          icon: "🚗",
+          gradient: "from-green-500 to-teal-500",
           searchForm: <TransfersSearchForm />,
         };
       default: // flights
         return {
           title: "Upgrade. Bargain. Book.",
-          subtitle:
-            "Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.",
+          subtitle: "Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.",
+          icon: "✈️",
+          gradient: "from-blue-600 to-blue-700",
           searchForm: <FlightSearchForm />,
         };
     }
@@ -61,46 +66,94 @@ export function SearchPanel() {
 
   return (
     <>
-      {/* Mobile Search Section */}
+      {/* Mobile Search Section - Enhanced Design */}
       <div className="md:hidden">
-        <div className="pb-8 pt-4 bg-white">
-          <div className="px-4">
-            {/* Upgrade Message */}
-            <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-2 text-gray-900">
+        <div className="relative pb-8 pt-6 bg-gradient-to-br from-white via-blue-50/30 to-indigo-50/40 overflow-hidden">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-5">
+            <div className="absolute top-4 right-4 w-24 h-24 bg-gradient-to-r from-blue-600 to-purple-600 rounded-full blur-2xl"></div>
+            <div className="absolute bottom-4 left-4 w-32 h-32 bg-gradient-to-r from-purple-600 to-pink-600 rounded-full blur-2xl"></div>
+          </div>
+          
+          <div className="relative px-4">
+            {/* Enhanced Header */}
+            <div className="text-center mb-8">
+              <div className="inline-flex items-center space-x-3 bg-white/80 backdrop-blur-xl border border-white/20 px-6 py-3 rounded-full mb-4 shadow-lg">
+                <span className="text-2xl">{tabContent.icon}</span>
+                <span className="bg-gradient-to-r from-slate-700 to-slate-900 bg-clip-text text-transparent font-bold text-sm">
+                  {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)}
+                </span>
+              </div>
+              
+              <h1 className="text-2xl sm:text-3xl font-black text-slate-900 mb-3 leading-tight">
                 {tabContent.title}
               </h1>
-              <p className="text-gray-600 text-sm mb-3">
+              <p className="text-slate-600 font-medium text-sm leading-relaxed max-w-sm mx-auto">
                 {tabContent.subtitle}
               </p>
             </div>
 
-            {/* Search Form */}
-            <div className="mx-auto">{tabContent.searchForm}</div>
+            {/* Enhanced Search Form Container */}
+            <div className="bg-white/90 backdrop-blur-xl rounded-2xl p-1 shadow-xl border border-white/20">
+              {tabContent.searchForm}
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Desktop Search Section */}
+      {/* Desktop Search Section - Enhanced Design */}
       <div className="hidden md:block">
         <div
-          className="py-3 sm:py-6 md:py-8 pb-24 sm:pb-8"
-          style={{ backgroundColor: "#003580" }}
+          className={`relative py-6 md:py-12 pb-16 bg-gradient-to-br ${tabContent.gradient} overflow-hidden`}
         >
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <div className="text-center mb-2 sm:mb-3">
-              <div className="mb-3 sm:mb-5">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-                  {tabContent.title}
-                </h2>
+          {/* Enhanced Background Elements */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute top-10 left-10 w-40 h-40 bg-white rounded-full blur-3xl"></div>
+            <div className="absolute bottom-10 right-10 w-48 h-48 bg-white rounded-full blur-3xl"></div>
+            <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+          </div>
+
+          <div className="relative max-w-7xl mx-auto px-4 sm:px-6">
+            {/* Enhanced Header Section */}
+            <div className="text-center mb-8 lg:mb-12">
+              <div className="inline-flex items-center space-x-3 bg-white/20 backdrop-blur-xl border border-white/30 px-8 py-4 rounded-full mb-6 shadow-lg">
+                <span className="text-3xl">{tabContent.icon}</span>
+                <span className="text-white font-bold text-lg">
+                  {activeTab.charAt(0).toUpperCase() + activeTab.slice(1)} Search
+                </span>
               </div>
-              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                {tabContent.subtitle}
+              
+              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-black text-white mb-4 leading-tight">
+                {tabContent.title}
               </h1>
+              <p className="text-lg sm:text-xl lg:text-2xl font-medium text-white/90 mb-6 leading-relaxed max-w-4xl mx-auto">
+                {tabContent.subtitle}
+              </p>
+
+              {/* Feature Pills */}
+              <div className="flex flex-wrap justify-center gap-3 mb-8">
+                <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm font-medium">
+                  ⚡ Instant Results
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm font-medium">
+                  🎯 Best Prices
+                </div>
+                <div className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-white text-sm font-medium">
+                  🛡️ Secure Booking
+                </div>
+              </div>
             </div>
 
-            {/* Desktop Search Form */}
-            <div className="max-w-7xl mx-auto">{tabContent.searchForm}</div>
+            {/* Enhanced Search Form Container */}
+            <div className="bg-white/95 backdrop-blur-xl rounded-2xl p-6 lg:p-8 shadow-2xl border border-white/20 max-w-6xl mx-auto">
+              <div className="bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-4 mb-4">
+                <div className="flex items-center justify-center space-x-2 text-sm text-gray-600">
+                  <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
+                  <span className="font-medium">Live search powered by AI bargaining technology</span>
+                </div>
+              </div>
+              {tabContent.searchForm}
+            </div>
           </div>
         </div>
       </div>
