@@ -3,7 +3,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDateContext } from "@/contexts/DateContext";
 import { Header } from "@/components/Header";
 import { HotelCard } from "@/components/HotelCard";
-import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { HotelSearchForm } from "@/components/HotelSearchForm";
 import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
 import { ComprehensiveFilters } from "@/components/ComprehensiveFilters";
 import { Button } from "@/components/ui/button";
@@ -1068,7 +1068,7 @@ export default function HotelResults() {
         {/* Hotel Search Bar - Booking.com style */}
         <div className="bg-[#003580] py-2 sm:py-4">
           <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
-            <BookingSearchForm />
+            <HotelSearchForm />
           </div>
         </div>
 
