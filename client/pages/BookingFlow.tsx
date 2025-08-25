@@ -785,7 +785,7 @@ const SeatMap = ({
 
               return (
                 <div
-                  key={traveller.id}
+                  key={`dubai-mumbai-summary-${traveller.id}`}
                   className="flex justify-between items-center"
                 >
                   <span>
@@ -1100,7 +1100,7 @@ export default function BookingFlow() {
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
     { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
-    { name: "Italy", code: "+39", flag: "🇮�����" },
+    { name: "Italy", code: "+39", flag: "🇮����" },
     { name: "Ivory Coast", code: "+225", flag: "🇨���" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
