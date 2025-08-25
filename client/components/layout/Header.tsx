@@ -458,7 +458,7 @@ export function Header() {
                   <span>Transfers</span>
                 </button>
                 <button
-                  onClick={() => handleNavigation("/help")}
+                  onClick={() => handleNavigation("/help-center")}
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
                 >
                   <span>Help Center</span>
