@@ -9,15 +9,17 @@ export function MobileBottomNav() {
 
   // Get active tab from URL
   const getActiveTab = () => {
+    // Check actual route paths first
+    if (location.pathname === "/" || location.pathname === "/flights") return "flights";
+    if (location.pathname.includes("/hotels")) return "hotels";
+    if (location.pathname.includes("/sightseeing")) return "sightseeing";
+    if (location.pathname.includes("/transfers")) return "transfers";
+
+    // Fallback to query parameters for backward compatibility
     const searchParams = new URLSearchParams(location.search);
     const tab = searchParams.get("tab");
     if (tab) return tab;
 
-    if (location.pathname === "/") return "flights";
-    if (location.pathname.includes("/flights")) return "flights";
-    if (location.pathname.includes("/hotels")) return "hotels";
-    if (location.pathname.includes("/sightseeing")) return "sightseeing";
-    if (location.pathname.includes("/transfers")) return "transfers";
     return "flights";
   };
 
@@ -25,10 +27,21 @@ export function MobileBottomNav() {
 
   // Handle tab change
   const handleTabChange = (tab: string) => {
-    if (tab === "flights") {
-      navigate("/?tab=flights");
-    } else {
-      navigate(`/?tab=${tab}`);
+    switch (tab) {
+      case "flights":
+        navigate("/flights");
+        break;
+      case "hotels":
+        navigate("/hotels");
+        break;
+      case "sightseeing":
+        navigate("/sightseeing");
+        break;
+      case "transfers":
+        navigate("/transfers");
+        break;
+      default:
+        navigate("/");
     }
     window.scrollTo(0, 0);
   };
