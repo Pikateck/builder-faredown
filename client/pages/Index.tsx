@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import {
   Sparkles,
@@ -15,6 +16,31 @@ import { Button } from "@/components/ui/button";
 import { LandingPageSearchPanel } from "@/components/LandingPageSearchPanel";
 
 export default function Index() {
+  const location = useLocation();
+  const navigate = useNavigate();
+
+  // Handle tab redirects
+  useEffect(() => {
+    const searchParams = new URLSearchParams(location.search);
+    const tab = searchParams.get("tab");
+
+    if (tab) {
+      switch (tab) {
+        case "flights":
+          navigate("/flights", { replace: true });
+          break;
+        case "hotels":
+          navigate("/hotels", { replace: true });
+          break;
+        case "sightseeing":
+          navigate("/sightseeing", { replace: true });
+          break;
+        case "transfers":
+          navigate("/transfers", { replace: true });
+          break;
+      }
+    }
+  }, [location.search, navigate]);
   return (
     <Layout showSearch={false}>
       {/* ========== FRESH MOBILE REDESIGN STARTS HERE ========== */}
