@@ -130,6 +130,11 @@ export default function Index() {
         </div>
       </section>
 
+      {/* Flight Search Panel - Mobile Only */}
+      <div className="md:hidden">
+        <LandingPageSearchPanel />
+      </div>
+
       {/* App Download - Mobile */}
       <section className="md:hidden py-16 bg-[#003580] text-white">
         <div className="px-6 text-center">
