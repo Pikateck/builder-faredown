@@ -460,12 +460,12 @@ export function FlightSearchForm() {
 
           {/* Search Button */}
           <div className="flex items-center px-4">
-            <Button
+            <button
               onClick={handleSearch}
-              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-sm font-medium text-sm transition-colors"
+              className="booking-search-button"
             >
               Search
-            </Button>
+            </button>
           </div>
         </div>
       </div>
