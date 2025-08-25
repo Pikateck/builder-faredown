@@ -449,14 +449,14 @@ export default function Hotels() {
         )}
 
         {/* Mobile Search Section */}
-        <div className="pb-8 pt-4 bg-white">
+        <div className="pb-8 pt-4" style={{ backgroundColor: "#003580" }}>
           <div className="px-4">
             {/* Upgrade Message */}
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-2 text-gray-900">
+              <h1 className="text-2xl font-bold mb-2 text-white">
                 Upgrade. Bargain. Book.
               </h1>
-              <p className="text-gray-600 text-sm mb-3">
+              <p className="text-blue-200 text-sm mb-3">
                 Control your price for flights & hotels — with live AI
                 bargaining.
               </p>
@@ -884,11 +884,11 @@ export default function Hotels() {
             <div className="text-center mb-2 sm:mb-3">
               <div className="mb-3 sm:mb-5">
                 <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-                  Find your perfect stay
+                  Upgrade. Bargain. Book.
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Search hotels with live AI bargaining.
+                Control your price for flights & hotels — with live AI bargaining.
               </h1>
             </div>
 
