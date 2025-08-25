@@ -1,0 +1,301 @@
+/* Booking.com Flight Search Specific Styles */
+/* Ensures pixel-perfect match with Booking.com's design */
+
+.booking-flight-search {
+  font-family: "BlinkMacSystemFont", -apple-system, "Segoe UI", "Roboto", "Helvetica", "Arial", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Override Tailwind default borders for sharp Booking.com look */
+.booking-search-input {
+  border-radius: 0 !important;
+  border: 1px solid #d4d4d8 !important;
+  box-shadow: none !important;
+  outline: none !important;
+}
+
+.booking-search-input:focus {
+  border-color: #0066cc !important;
+  box-shadow: 0 0 0 1px #0066cc !important;
+}
+
+/* Trip type buttons - exact Booking.com styling */
+.booking-trip-button {
+  font-size: 14px;
+  font-weight: 500;
+  padding: 6px 12px;
+  border: 1px solid #0066cc;
+  border-radius: 2px;
+  background: white;
+  color: #0066cc;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.booking-trip-button:hover {
+  background-color: #f0f7ff;
+}
+
+.booking-trip-button.active {
+  background-color: #0066cc;
+  color: white;
+}
+
+/* Search section styling */
+.booking-search-section {
+  border: 1px solid #d4d4d8;
+  border-radius: 0;
+  background: white;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.booking-search-field {
+  padding: 16px;
+  border-right: 1px solid #d4d4d8;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.booking-search-field:hover {
+  background-color: #f8f9fa;
+}
+
+.booking-search-field:last-child {
+  border-right: none;
+}
+
+/* Labels matching Booking.com */
+.booking-field-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #666;
+  margin-bottom: 4px;
+  display: block;
+  text-transform: none;
+}
+
+/* Input text styling */
+.booking-field-input {
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+  background: transparent;
+  border: none;
+  outline: none;
+  width: 100%;
+  padding-left: 24px;
+}
+
+.booking-field-input::placeholder {
+  color: #999;
+  font-weight: normal;
+}
+
+/* Icon positioning */
+.booking-field-icon {
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #666;
+  width: 16px;
+  height: 16px;
+}
+
+/* Dropdown styling */
+.booking-dropdown {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: white;
+  border: 1px solid #d4d4d8;
+  border-top: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 50;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.booking-dropdown-item {
+  padding: 12px 16px;
+  cursor: pointer;
+  border-bottom: 1px solid #f0f0f0;
+  transition: background-color 0.2s ease;
+}
+
+.booking-dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.booking-dropdown-item:last-child {
+  border-bottom: none;
+}
+
+/* Airport suggestion styling */
+.booking-airport-suggestion {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.booking-airport-info {
+  flex: 1;
+}
+
+.booking-airport-name {
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+  margin-bottom: 2px;
+}
+
+.booking-airport-details {
+  font-size: 12px;
+  color: #666;
+}
+
+/* Passenger counter styling */
+.booking-passenger-counter {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.booking-counter-button {
+  width: 32px;
+  height: 32px;
+  border: 1px solid #d4d4d8;
+  border-radius: 50%;
+  background: white;
+  color: #666;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.booking-counter-button:hover:not(:disabled) {
+  background-color: #f8f9fa;
+  border-color: #0066cc;
+}
+
+.booking-counter-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.booking-counter-value {
+  min-width: 32px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: #262626;
+}
+
+/* Search button styling */
+.booking-search-button {
+  background-color: #0066cc;
+  color: white;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 32px;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.booking-search-button:hover {
+  background-color: #0052a3;
+}
+
+/* Calendar override to match Booking.com */
+.booking-calendar {
+  border: 1px solid #d4d4d8;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Mobile specific adjustments */
+@media (max-width: 768px) {
+  .booking-search-section {
+    border-radius: 4px;
+    margin: 16px;
+  }
+  
+  .booking-search-field {
+    border-right: none;
+    border-bottom: 1px solid #d4d4d8;
+  }
+  
+  .booking-search-field:last-child {
+    border-bottom: none;
+  }
+  
+  .booking-search-button {
+    width: 100%;
+    margin-top: 16px;
+    padding: 16px;
+  }
+}
+
+/* Ensure proper z-indexing for dropdowns */
+.booking-dropdown-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+}
+
+/* Typography consistency */
+.booking-text-primary {
+  color: #262626;
+  font-weight: 500;
+}
+
+.booking-text-secondary {
+  color: #666;
+  font-weight: normal;
+}
+
+.booking-text-muted {
+  color: #999;
+  font-weight: normal;
+}
+
+/* Remove any unwanted focus outlines that don't match Booking.com */
+.booking-flight-search *:focus {
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+.booking-flight-search input:focus,
+.booking-flight-search button:focus,
+.booking-flight-search select:focus {
+  outline: none !important;
+}
+
+/* Ensure consistent line heights */
+.booking-flight-search {
+  line-height: 1.4;
+}
+
+/* Consistent spacing */
+.booking-section-spacing {
+  margin-bottom: 24px;
+}
+
+/* Disable text selection on buttons and labels */
+.booking-trip-button,
+.booking-field-label,
+.booking-counter-button {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}
