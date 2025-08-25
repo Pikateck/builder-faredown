@@ -368,24 +368,24 @@ export function FlightSearchForm() {
                   {/* Adults */}
                   <div className="flex items-center justify-between py-3 border-b border-gray-200">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">Adults</div>
-                      <div className="text-xs text-gray-500">Ages 18+</div>
+                      <div className="text-sm font-medium booking-text-primary">Adults</div>
+                      <div className="text-xs booking-text-secondary">Ages 18+</div>
                     </div>
-                    <div className="flex items-center space-x-3">
+                    <div className="booking-passenger-counter">
                       <button
                         onClick={() => updatePassengerCount("adults", "decrement")}
                         disabled={passengers.adults <= 1}
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                        className="booking-counter-button"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span className="w-8 text-center text-sm font-medium">
+                      <span className="booking-counter-value">
                         {passengers.adults}
                       </span>
                       <button
                         onClick={() => updatePassengerCount("adults", "increment")}
                         disabled={passengers.adults >= 30}
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                        className="booking-counter-button"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
@@ -395,24 +395,24 @@ export function FlightSearchForm() {
                   {/* Children */}
                   <div className="flex items-center justify-between py-3 border-b border-gray-200">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">Children</div>
-                      <div className="text-xs text-gray-500">Ages 0-17</div>
+                      <div className="text-sm font-medium booking-text-primary">Children</div>
+                      <div className="text-xs booking-text-secondary">Ages 0-17</div>
                     </div>
-                    <div className="flex items-center space-x-3">
+                    <div className="booking-passenger-counter">
                       <button
                         onClick={() => updatePassengerCount("children", "decrement")}
                         disabled={passengers.children <= 0}
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                        className="booking-counter-button"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span className="w-8 text-center text-sm font-medium">
+                      <span className="booking-counter-value">
                         {passengers.children}
                       </span>
                       <button
                         onClick={() => updatePassengerCount("children", "increment")}
                         disabled={passengers.children >= 30}
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                        className="booking-counter-button"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
@@ -422,23 +422,23 @@ export function FlightSearchForm() {
                   {/* Rooms */}
                   <div className="flex items-center justify-between py-3">
                     <div>
-                      <div className="text-sm font-medium text-gray-900">Rooms</div>
+                      <div className="text-sm font-medium booking-text-primary">Rooms</div>
                     </div>
-                    <div className="flex items-center space-x-3">
+                    <div className="booking-passenger-counter">
                       <button
                         onClick={() => updatePassengerCount("rooms", "decrement")}
                         disabled={passengers.rooms <= 1}
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                        className="booking-counter-button"
                       >
                         <Minus className="w-4 h-4" />
                       </button>
-                      <span className="w-8 text-center text-sm font-medium">
+                      <span className="booking-counter-value">
                         {passengers.rooms}
                       </span>
                       <button
                         onClick={() => updatePassengerCount("rooms", "increment")}
                         disabled={passengers.rooms >= 30}
-                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
+                        className="booking-counter-button"
                       >
                         <Plus className="w-4 h-4" />
                       </button>
