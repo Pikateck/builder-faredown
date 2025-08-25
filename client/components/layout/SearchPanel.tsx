@@ -1,7 +1,7 @@
 import React from "react";
 import { useLocation } from "react-router-dom";
 import { FlightSearchForm } from "@/components/FlightSearchForm";
-import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { HotelSearchForm } from "@/components/HotelSearchForm";
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 import { TransfersSearchForm } from "@/components/TransfersSearchForm";
 
@@ -31,7 +31,7 @@ export function SearchPanel() {
         return {
           title: "Find your perfect stay",
           subtitle: "Search hotels with live AI bargaining.",
-          searchForm: <BookingSearchForm />,
+          searchForm: <HotelSearchForm />,
         };
       case "sightseeing":
         return {
