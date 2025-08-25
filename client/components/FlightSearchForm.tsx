@@ -256,32 +256,32 @@ export function FlightSearchForm() {
           </div>
 
           {/* Going To */}
-          <div className="flex-1 relative border-r border-gray-300">
-            <div className="p-4">
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+          <div className="flex-1 relative">
+            <div className="booking-search-field">
+              <label className="booking-field-label">
                 Going to
               </label>
               <div className="relative">
-                <MapPin className="absolute left-0 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <MapPin className="booking-field-icon" />
                 <input
                   type="text"
                   value={arrivalCity}
                   onChange={(e) => setArrivalCity(e.target.value)}
                   onFocus={() => setShowArrivalDropdown(true)}
-                  className="w-full pl-6 text-sm font-medium text-gray-900 bg-transparent border-none outline-none"
+                  className="booking-field-input"
                   placeholder="Airport or city"
                 />
               </div>
             </div>
-            
+
             {/* Arrival Dropdown */}
             {showArrivalDropdown && (
               <>
-                <div 
-                  className="fixed inset-0 z-40"
+                <div
+                  className="booking-dropdown-overlay"
                   onClick={() => setShowArrivalDropdown(false)}
                 />
-                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 shadow-lg z-50 max-h-64 overflow-y-auto">
+                <div className="booking-dropdown">
                   {filterAirports(arrivalCity).map((airport) => (
                     <button
                       key={airport.code}
@@ -289,15 +289,17 @@ export function FlightSearchForm() {
                         setArrivalCity(`${airport.city} (${airport.code})`);
                         setShowArrivalDropdown(false);
                       }}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 flex items-center space-x-3"
+                      className="booking-dropdown-item"
                     >
-                      <MapPin className="w-4 h-4 text-gray-400" />
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">
-                          {airport.city} ({airport.code})
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {airport.airport}, {airport.country}
+                      <div className="booking-airport-suggestion">
+                        <MapPin className="w-4 h-4 text-gray-400" />
+                        <div className="booking-airport-info">
+                          <div className="booking-airport-name">
+                            {airport.city} ({airport.code})
+                          </div>
+                          <div className="booking-airport-details">
+                            {airport.airport}, {airport.country}
+                          </div>
                         </div>
                       </div>
                     </button>
