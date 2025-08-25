@@ -219,6 +219,56 @@
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
 }
 
+/* Popover content styling for date picker */
+[data-radix-popper-content-wrapper] {
+  z-index: 60 !important;
+}
+
+/* Date picker popover styling */
+.booking-flight-search .relative .absolute[data-radix-popper-content-wrapper] {
+  z-index: 60;
+}
+
+/* Ensure calendar shows properly */
+.booking-flight-search [role="dialog"] {
+  background: white;
+  border: 1px solid #d4d4d8;
+  border-radius: 4px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* Calendar button styling */
+.booking-flight-search button[role="gridcell"] {
+  font-size: 14px;
+  font-weight: normal;
+  color: #262626;
+}
+
+.booking-flight-search button[role="gridcell"]:hover {
+  background-color: #e6f3ff;
+  color: #0066cc;
+}
+
+.booking-flight-search button[role="gridcell"][data-selected] {
+  background-color: #0066cc;
+  color: white;
+}
+
+/* Calendar navigation buttons */
+.booking-flight-search button[name="previous-month"],
+.booking-flight-search button[name="next-month"] {
+  color: #0066cc;
+  background: transparent;
+  border: none;
+  padding: 8px;
+  border-radius: 4px;
+}
+
+.booking-flight-search button[name="previous-month"]:hover,
+.booking-flight-search button[name="next-month"]:hover {
+  background-color: #f0f7ff;
+}
+
 /* Mobile specific adjustments */
 @media (max-width: 768px) {
   .booking-search-section {
