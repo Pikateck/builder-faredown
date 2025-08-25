@@ -346,16 +346,16 @@ export function FlightSearchForm() {
           </div>
 
           {/* Travelers */}
-          <div className="flex-1 relative border-r border-gray-300">
+          <div className="flex-1 relative">
             <Popover open={isPassengerPopoverOpen} onOpenChange={setIsPassengerPopoverOpen}>
               <PopoverTrigger asChild>
-                <div className="p-4 cursor-pointer hover:bg-gray-50 h-full">
-                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                <div className="booking-search-field cursor-pointer h-full">
+                  <label className="booking-field-label">
                     Travelers
                   </label>
                   <div className="flex items-center">
-                    <Users className="w-4 h-4 text-gray-400 mr-2" />
-                    <span className="text-sm font-medium text-gray-900">
+                    <Users className="booking-field-icon mr-2" />
+                    <span className="text-sm font-medium booking-text-primary">
                       {getPassengerSummary()}
                     </span>
                   </div>
