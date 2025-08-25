@@ -223,11 +223,11 @@ export function FlightSearchForm() {
             {/* Departure Dropdown */}
             {showDepartureDropdown && (
               <>
-                <div 
-                  className="fixed inset-0 z-40"
+                <div
+                  className="booking-dropdown-overlay"
                   onClick={() => setShowDepartureDropdown(false)}
                 />
-                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 shadow-lg z-50 max-h-64 overflow-y-auto">
+                <div className="booking-dropdown">
                   {filterAirports(departureCity).map((airport) => (
                     <button
                       key={airport.code}
@@ -235,15 +235,17 @@ export function FlightSearchForm() {
                         setDepartureCity(`${airport.city} (${airport.code})`);
                         setShowDepartureDropdown(false);
                       }}
-                      className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 flex items-center space-x-3"
+                      className="booking-dropdown-item"
                     >
-                      <Plane className="w-4 h-4 text-gray-400" />
-                      <div>
-                        <div className="text-sm font-medium text-gray-900">
-                          {airport.city} ({airport.code})
-                        </div>
-                        <div className="text-xs text-gray-500">
-                          {airport.airport}, {airport.country}
+                      <div className="booking-airport-suggestion">
+                        <Plane className="w-4 h-4 text-gray-400" />
+                        <div className="booking-airport-info">
+                          <div className="booking-airport-name">
+                            {airport.city} ({airport.code})
+                          </div>
+                          <div className="booking-airport-details">
+                            {airport.airport}, {airport.country}
+                          </div>
                         </div>
                       </div>
                     </button>
