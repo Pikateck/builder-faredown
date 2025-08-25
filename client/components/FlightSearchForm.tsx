@@ -21,176 +21,185 @@ import {
   CalendarIcon,
   Users,
   Search,
-  ArrowUpDown,
   Plus,
   Minus,
+  MapPin,
 } from "lucide-react";
-import { ErrorBanner } from "@/components/ErrorBanner";
 
 interface PassengerConfig {
   adults: number;
   children: number;
-  infants: number;
+  rooms: number;
 }
 
 export function FlightSearchForm() {
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
-  const [showError, setShowError] = useState(false);
 
-  // Trip configuration
+  // Trip configuration - exactly like Booking.com
   const [tripType, setTripType] = useState("round-trip");
   const [cabinClass, setCabinClass] = useState("economy");
 
   // Airports
-  const [fromCity, setFromCity] = useState("");
-  const [toCity, setToCity] = useState("");
+  const [departureCity, setDepartureCity] = useState("");
+  const [arrivalCity, setArrivalCity] = useState("");
+  const [showDepartureDropdown, setShowDepartureDropdown] = useState(false);
+  const [showArrivalDropdown, setShowArrivalDropdown] = useState(false);
 
   // Dates
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  const nextWeek = new Date();
-  nextWeek.setDate(nextWeek.getDate() + 8);
+  const dayAfter = new Date();
+  dayAfter.setDate(dayAfter.getDate() + 8);
 
   const [departureDate, setDepartureDate] = useState<Date | undefined>(tomorrow);
-  const [returnDate, setReturnDate] = useState<Date | undefined>(nextWeek);
+  const [returnDate, setReturnDate] = useState<Date | undefined>(dayAfter);
   const [isDepartureDateOpen, setIsDepartureDateOpen] = useState(false);
   const [isReturnDateOpen, setIsReturnDateOpen] = useState(false);
 
-  // Passengers
+  // Passengers - exactly like Booking.com
   const [passengers, setPassengers] = useState<PassengerConfig>({
     adults: 1,
     children: 0,
-    infants: 0,
+    rooms: 1,
   });
   const [isPassengerPopoverOpen, setIsPassengerPopoverOpen] = useState(false);
 
-  // Mobile detection
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
-
-  // Popular airports for quick selection
-  const popularAirports = [
-    { code: "DXB", city: "Dubai" },
-    { code: "LHR", city: "London" },
-    { code: "CDG", city: "Paris" },
-    { code: "BCN", city: "Barcelona" },
-    { code: "FCO", city: "Rome" },
-    { code: "JFK", city: "New York" },
-    { code: "LAX", city: "Los Angeles" },
-    { code: "BKK", city: "Bangkok" },
-    { code: "SIN", city: "Singapore" },
-    { code: "NRT", city: "Tokyo" },
-    { code: "SYD", city: "Sydney" },
-    { code: "BOM", city: "Mumbai" },
-    { code: "DEL", city: "Delhi" },
-    { code: "BLR", city: "Bangalore" },
+  // Airport suggestions - matching Booking.com's popular destinations
+  const airportSuggestions = [
+    { code: "BOM", city: "Mumbai", country: "India", airport: "Chhatrapati Shivaji Intl" },
+    { code: "DEL", city: "New Delhi", country: "India", airport: "Indira Gandhi Intl" },
+    { code: "DXB", city: "Dubai", country: "United Arab Emirates", airport: "Dubai Intl" },
+    { code: "LHR", city: "London", country: "United Kingdom", airport: "Heathrow" },
+    { code: "JFK", city: "New York", country: "United States", airport: "John F Kennedy Intl" },
+    { code: "CDG", city: "Paris", country: "France", airport: "Charles de Gaulle" },
+    { code: "FRA", city: "Frankfurt", country: "Germany", airport: "Frankfurt am Main" },
+    { code: "AMS", city: "Amsterdam", country: "Netherlands", airport: "Schiphol" },
+    { code: "SIN", city: "Singapore", country: "Singapore", airport: "Changi" },
+    { code: "BKK", city: "Bangkok", country: "Thailand", airport: "Suvarnabhumi" },
+    { code: "NRT", city: "Tokyo", country: "Japan", airport: "Narita Intl" },
+    { code: "SYD", city: "Sydney", country: "Australia", airport: "Kingsford Smith" },
   ];
+
+  const filterAirports = (query: string) => {
+    if (!query || query.length < 2) return airportSuggestions.slice(0, 8);
+    return airportSuggestions.filter(airport =>
+      airport.city.toLowerCase().includes(query.toLowerCase()) ||
+      airport.code.toLowerCase().includes(query.toLowerCase()) ||
+      airport.country.toLowerCase().includes(query.toLowerCase()) ||
+      airport.airport.toLowerCase().includes(query.toLowerCase())
+    );
+  };
 
   const updatePassengerCount = (
     type: keyof PassengerConfig,
     operation: "increment" | "decrement"
   ) => {
     setPassengers((prev) => {
-      const newValue =
-        operation === "increment" ? prev[type] + 1 : prev[type] - 1;
-
+      const newValue = operation === "increment" ? prev[type] + 1 : prev[type] - 1;
+      
       if (type === "adults" && newValue < 1) return prev;
-      if ((type === "children" || type === "infants") && newValue < 0) return prev;
-      if (newValue > 9) return prev;
+      if (type === "children" && newValue < 0) return prev;
+      if (type === "rooms" && newValue < 1) return prev;
+      if (newValue > 30) return prev;
 
-      return {
-        ...prev,
-        [type]: newValue,
-      };
+      return { ...prev, [type]: newValue };
     });
   };
 
-  const swapCities = () => {
-    const temp = fromCity;
-    setFromCity(toCity);
-    setToCity(temp);
-  };
-
   const handleSearch = () => {
-    // Basic validation
-    if (!fromCity || !toCity) {
-      setErrorMessage("Please enter departure and arrival cities");
-      setShowError(true);
+    if (!departureCity || !arrivalCity) {
+      alert("Please select departure and arrival cities");
       return;
     }
 
     if (!departureDate) {
-      setErrorMessage("Please select departure date");
-      setShowError(true);
+      alert("Please select departure date");
       return;
     }
 
     if (tripType === "round-trip" && !returnDate) {
-      setErrorMessage("Please select return date for round-trip");
-      setShowError(true);
+      alert("Please select return date");
       return;
     }
 
-    try {
-      const searchParams = new URLSearchParams({
-        from: fromCity,
-        to: toCity,
-        departureDate: departureDate.toISOString(),
-        adults: passengers.adults.toString(),
-        children: passengers.children.toString(),
-        infants: passengers.infants.toString(),
-        tripType,
-        cabinClass,
-      });
+    const searchParams = new URLSearchParams({
+      from: departureCity,
+      to: arrivalCity,
+      departureDate: departureDate.toISOString(),
+      adults: passengers.adults.toString(),
+      children: passengers.children.toString(),
+      rooms: passengers.rooms.toString(),
+      tripType,
+      cabinClass,
+    });
 
-      if (tripType === "round-trip" && returnDate) {
-        searchParams.set("returnDate", returnDate.toISOString());
-      }
-
-      navigate(`/flights/results?${searchParams.toString()}`);
-    } catch (error) {
-      console.error("Flight search error:", error);
-      setErrorMessage("Search failed. Please try again.");
-      setShowError(true);
+    if (tripType === "round-trip" && returnDate) {
+      searchParams.set("returnDate", returnDate.toISOString());
     }
+
+    navigate(`/flights/results?${searchParams.toString()}`);
   };
 
-  const passengerSummary = () => {
-    const total = passengers.adults + passengers.children + passengers.infants;
-    return `${total} passenger${total > 1 ? "s" : ""}`;
+  const getPassengerSummary = () => {
+    const total = passengers.adults + passengers.children;
+    const roomText = passengers.rooms === 1 ? "room" : "rooms";
+    return `${total} traveler${total !== 1 ? "s" : ""}, ${passengers.rooms} ${roomText}`;
+  };
+
+  const formatDateRange = () => {
+    if (!departureDate) return "Travel dates";
+    
+    if (tripType === "round-trip" && returnDate) {
+      return `${format(departureDate, "E MMM d")} - ${format(returnDate, "E MMM d")}`;
+    }
+    
+    return format(departureDate, "E MMM d");
   };
 
   return (
-    <>
-      <ErrorBanner
-        message={errorMessage}
-        isVisible={showError}
-        onClose={() => setShowError(false)}
-      />
-      <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
-        {/* Trip Type and Class Selection */}
-        <div className="flex flex-col sm:flex-row gap-2 mb-4">
-          <Select value={tripType} onValueChange={setTripType}>
-            <SelectTrigger className="w-full sm:w-32 h-8 text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="round-trip">Round-trip</SelectItem>
-              <SelectItem value="one-way">One-way</SelectItem>
-            </SelectContent>
-          </Select>
+    <div className="w-full max-w-7xl mx-auto">
+      {/* Booking.com Style Flight Search */}
+      <div className="bg-white border border-gray-300 rounded-none shadow-sm">
+        {/* Top Row: Trip Type and Class */}
+        <div className="flex items-center px-4 py-3 border-b border-gray-200 bg-gray-50">
+          {/* Trip Type Buttons */}
+          <div className="flex items-center space-x-1 mr-6">
+            <button
+              onClick={() => setTripType("round-trip")}
+              className={`px-3 py-1 text-sm font-medium border rounded-sm transition-colors ${
+                tripType === "round-trip"
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-white text-blue-600 border-blue-600 hover:bg-blue-50"
+              }`}
+            >
+              Round-trip
+            </button>
+            <button
+              onClick={() => setTripType("one-way")}
+              className={`px-3 py-1 text-sm font-medium border rounded-sm transition-colors ${
+                tripType === "one-way"
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-white text-blue-600 border-blue-600 hover:bg-blue-50"
+              }`}
+            >
+              One-way
+            </button>
+            <button
+              onClick={() => setTripType("multi-city")}
+              className={`px-3 py-1 text-sm font-medium border rounded-sm transition-colors ${
+                tripType === "multi-city"
+                  ? "bg-blue-600 text-white border-blue-600"
+                  : "bg-white text-blue-600 border-blue-600 hover:bg-blue-50"
+              }`}
+            >
+              Multi-city
+            </button>
+          </div>
 
+          {/* Cabin Class */}
           <Select value={cabinClass} onValueChange={setCabinClass}>
-            <SelectTrigger className="w-full sm:w-36 h-8 text-xs">
+            <SelectTrigger className="w-32 h-8 text-sm border-gray-300 rounded-sm bg-white">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -202,272 +211,272 @@ export function FlightSearchForm() {
           </Select>
         </div>
 
-        {/* Main Search Form */}
-        <div className="flex flex-col lg:flex-row gap-2 mb-4">
-          {/* From City */}
-          <div className="flex-1 lg:max-w-[200px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              From
-            </label>
-            <div className="relative">
-              <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4" />
-              <Input
-                type="text"
-                value={fromCity}
-                onChange={(e) => setFromCity(e.target.value)}
-                className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
-                placeholder="From where?"
-                autoComplete="off"
-                list="from-cities"
-              />
-              <datalist id="from-cities">
-                {popularAirports.map((airport) => (
-                  <option key={airport.code} value={`${airport.city} (${airport.code})`} />
-                ))}
-              </datalist>
+        {/* Main Search Row */}
+        <div className="flex items-stretch">
+          {/* Leaving From */}
+          <div className="flex-1 relative border-r border-gray-300">
+            <div className="p-4">
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                Leaving from
+              </label>
+              <div className="relative">
+                <Plane className="absolute left-0 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input
+                  type="text"
+                  value={departureCity}
+                  onChange={(e) => setDepartureCity(e.target.value)}
+                  onFocus={() => setShowDepartureDropdown(true)}
+                  className="w-full pl-6 text-sm font-medium text-gray-900 bg-transparent border-none outline-none"
+                  placeholder="Airport or city"
+                />
+              </div>
             </div>
+            
+            {/* Departure Dropdown */}
+            {showDepartureDropdown && (
+              <>
+                <div 
+                  className="fixed inset-0 z-40"
+                  onClick={() => setShowDepartureDropdown(false)}
+                />
+                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 shadow-lg z-50 max-h-64 overflow-y-auto">
+                  {filterAirports(departureCity).map((airport) => (
+                    <button
+                      key={airport.code}
+                      onClick={() => {
+                        setDepartureCity(`${airport.city} (${airport.code})`);
+                        setShowDepartureDropdown(false);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 flex items-center space-x-3"
+                    >
+                      <Plane className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {airport.city} ({airport.code})
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {airport.airport}, {airport.country}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
-          {/* Swap Button */}
-          <div className="flex items-center justify-center lg:px-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={swapCities}
-              className="w-8 h-8 p-0 rounded-full border-blue-400 hover:bg-blue-50"
-            >
-              <ArrowUpDown className="w-4 h-4 text-blue-600" />
-            </Button>
-          </div>
-
-          {/* To City */}
-          <div className="flex-1 lg:max-w-[200px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              To
-            </label>
-            <div className="relative">
-              <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4" />
-              <Input
-                type="text"
-                value={toCity}
-                onChange={(e) => setToCity(e.target.value)}
-                className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
-                placeholder="To where?"
-                autoComplete="off"
-                list="to-cities"
-              />
-              <datalist id="to-cities">
-                {popularAirports.map((airport) => (
-                  <option key={airport.code} value={`${airport.city} (${airport.code})`} />
-                ))}
-              </datalist>
+          {/* Going To */}
+          <div className="flex-1 relative border-r border-gray-300">
+            <div className="p-4">
+              <label className="block text-xs font-medium text-gray-600 mb-1">
+                Going to
+              </label>
+              <div className="relative">
+                <MapPin className="absolute left-0 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <input
+                  type="text"
+                  value={arrivalCity}
+                  onChange={(e) => setArrivalCity(e.target.value)}
+                  onFocus={() => setShowArrivalDropdown(true)}
+                  className="w-full pl-6 text-sm font-medium text-gray-900 bg-transparent border-none outline-none"
+                  placeholder="Airport or city"
+                />
+              </div>
             </div>
+            
+            {/* Arrival Dropdown */}
+            {showArrivalDropdown && (
+              <>
+                <div 
+                  className="fixed inset-0 z-40"
+                  onClick={() => setShowArrivalDropdown(false)}
+                />
+                <div className="absolute top-full left-0 right-0 bg-white border border-gray-300 shadow-lg z-50 max-h-64 overflow-y-auto">
+                  {filterAirports(arrivalCity).map((airport) => (
+                    <button
+                      key={airport.code}
+                      onClick={() => {
+                        setArrivalCity(`${airport.city} (${airport.code})`);
+                        setShowArrivalDropdown(false);
+                      }}
+                      className="w-full px-4 py-3 text-left hover:bg-gray-50 border-b border-gray-100 flex items-center space-x-3"
+                    >
+                      <MapPin className="w-4 h-4 text-gray-400" />
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {airport.city} ({airport.code})
+                        </div>
+                        <div className="text-xs text-gray-500">
+                          {airport.airport}, {airport.country}
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </>
+            )}
           </div>
 
-          {/* Departure Date */}
-          <div className="flex-1 lg:max-w-[140px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Departure
-            </label>
+          {/* Travel Dates */}
+          <div className="flex-1 relative border-r border-gray-300">
             <Popover open={isDepartureDateOpen} onOpenChange={setIsDepartureDateOpen}>
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate">
-                    {departureDate ? format(departureDate, "MMM d") : "Departure"}
-                  </span>
-                </Button>
+                <div className="p-4 cursor-pointer hover:bg-gray-50 h-full">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Travel dates
+                  </label>
+                  <div className="flex items-center">
+                    <CalendarIcon className="w-4 h-4 text-gray-400 mr-2" />
+                    <span className="text-sm font-medium text-gray-900">
+                      {formatDateRange()}
+                    </span>
+                  </div>
+                </div>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <BookingCalendar
                   initialRange={{
                     startDate: departureDate || new Date(),
-                    endDate: departureDate || new Date(),
+                    endDate: returnDate || addDays(departureDate || new Date(), 7),
                   }}
                   onChange={(range) => {
                     setDepartureDate(range.startDate);
+                    if (tripType === "round-trip") {
+                      setReturnDate(range.endDate);
+                    }
                     setIsDepartureDateOpen(false);
                   }}
                   onClose={() => setIsDepartureDateOpen(false)}
+                  showRange={tripType === "round-trip"}
                 />
               </PopoverContent>
             </Popover>
           </div>
 
-          {/* Return Date */}
-          {tripType === "round-trip" && (
-            <div className="flex-1 lg:max-w-[140px]">
-              <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                Return
-              </label>
-              <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">
-                      {returnDate ? format(returnDate, "MMM d") : "Return"}
-                    </span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <BookingCalendar
-                    initialRange={{
-                      startDate: returnDate || addDays(departureDate || new Date(), 7),
-                      endDate: returnDate || addDays(departureDate || new Date(), 7),
-                    }}
-                    onChange={(range) => {
-                      setReturnDate(range.startDate);
-                      setIsReturnDateOpen(false);
-                    }}
-                    onClose={() => setIsReturnDateOpen(false)}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-          )}
-
-          {/* Passengers */}
-          <div className="flex-1 lg:max-w-[160px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Passengers
-            </label>
-            <Popover
-              open={isPassengerPopoverOpen}
-              onOpenChange={setIsPassengerPopoverOpen}
-            >
+          {/* Travelers */}
+          <div className="flex-1 relative border-r border-gray-300">
+            <Popover open={isPassengerPopoverOpen} onOpenChange={setIsPassengerPopoverOpen}>
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  <Users className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate">{passengerSummary()}</span>
-                </Button>
+                <div className="p-4 cursor-pointer hover:bg-gray-50 h-full">
+                  <label className="block text-xs font-medium text-gray-600 mb-1">
+                    Travelers
+                  </label>
+                  <div className="flex items-center">
+                    <Users className="w-4 h-4 text-gray-400 mr-2" />
+                    <span className="text-sm font-medium text-gray-900">
+                      {getPassengerSummary()}
+                    </span>
+                  </div>
+                </div>
               </PopoverTrigger>
               <PopoverContent className="w-80" align="start">
-                <div className="space-y-4">
+                <div className="p-4">
+                  <h3 className="font-medium text-gray-900 mb-4">Travelers</h3>
+                  
                   {/* Adults */}
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between py-3 border-b border-gray-200">
                     <div>
-                      <div className="font-medium">Adults</div>
-                      <div className="text-sm text-gray-500">12+ years</div>
+                      <div className="text-sm font-medium text-gray-900">Adults</div>
+                      <div className="text-xs text-gray-500">Ages 18+</div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
+                      <button
                         onClick={() => updatePassengerCount("adults", "decrement")}
                         disabled={passengers.adults <= 1}
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                       >
-                        <Minus className="w-3 h-3" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="w-8 text-center text-sm font-medium">
                         {passengers.adults}
                       </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
+                      <button
                         onClick={() => updatePassengerCount("adults", "increment")}
-                        disabled={passengers.adults >= 9}
+                        disabled={passengers.adults >= 30}
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                       >
-                        <Plus className="w-3 h-3" />
-                      </Button>
+                        <Plus className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
 
                   {/* Children */}
-                  <div className="flex items-center justify-between">
+                  <div className="flex items-center justify-between py-3 border-b border-gray-200">
                     <div>
-                      <div className="font-medium">Children</div>
-                      <div className="text-sm text-gray-500">2-11 years</div>
+                      <div className="text-sm font-medium text-gray-900">Children</div>
+                      <div className="text-xs text-gray-500">Ages 0-17</div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
+                      <button
                         onClick={() => updatePassengerCount("children", "decrement")}
                         disabled={passengers.children <= 0}
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                       >
-                        <Minus className="w-3 h-3" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="w-8 text-center text-sm font-medium">
                         {passengers.children}
                       </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
+                      <button
                         onClick={() => updatePassengerCount("children", "increment")}
-                        disabled={passengers.children >= 9}
+                        disabled={passengers.children >= 30}
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                       >
-                        <Plus className="w-3 h-3" />
-                      </Button>
+                        <Plus className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
 
-                  {/* Infants */}
-                  <div className="flex items-center justify-between">
+                  {/* Rooms */}
+                  <div className="flex items-center justify-between py-3">
                     <div>
-                      <div className="font-medium">Infants</div>
-                      <div className="text-sm text-gray-500">Under 2 years</div>
+                      <div className="text-sm font-medium text-gray-900">Rooms</div>
                     </div>
                     <div className="flex items-center space-x-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("infants", "decrement")}
-                        disabled={passengers.infants <= 0}
+                      <button
+                        onClick={() => updatePassengerCount("rooms", "decrement")}
+                        disabled={passengers.rooms <= 1}
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                       >
-                        <Minus className="w-3 h-3" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">
-                        {passengers.infants}
+                        <Minus className="w-4 h-4" />
+                      </button>
+                      <span className="w-8 text-center text-sm font-medium">
+                        {passengers.rooms}
                       </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("infants", "increment")}
-                        disabled={passengers.infants >= 9}
+                      <button
+                        onClick={() => updatePassengerCount("rooms", "increment")}
+                        disabled={passengers.rooms >= 30}
+                        className="w-8 h-8 rounded-full border border-gray-300 flex items-center justify-center disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-50"
                       >
-                        <Plus className="w-3 h-3" />
-                      </Button>
+                        <Plus className="w-4 h-4" />
+                      </button>
                     </div>
                   </div>
 
-                  <Button
-                    onClick={() => setIsPassengerPopoverOpen(false)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                  >
-                    Done
-                  </Button>
+                  <div className="mt-4">
+                    <Button
+                      onClick={() => setIsPassengerPopoverOpen(false)}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      Done
+                    </Button>
+                  </div>
                 </div>
               </PopoverContent>
             </Popover>
           </div>
 
           {/* Search Button */}
-          <div className="flex-shrink-0 w-full sm:w-auto">
+          <div className="flex items-center px-4">
             <Button
               onClick={handleSearch}
-              className="h-10 sm:h-12 w-full sm:w-auto bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 transition-all duration-150"
+              className="bg-blue-600 hover:bg-blue-700 text-white px-8 py-3 rounded-sm font-medium text-sm transition-colors"
             >
-              <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-sm sm:text-base">Search Flights</span>
+              Search
             </Button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
