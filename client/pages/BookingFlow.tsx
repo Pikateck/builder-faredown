@@ -887,6 +887,9 @@ export default function BookingFlow() {
     generateBookingData,
   } = useBooking();
 
+  // Extract currentStep from booking state
+  const currentStep = booking.currentStep;
+
   // Get data from booking context instead of location state
   const selectedFlight = booking.selectedFlight;
   const selectedFareType = booking.selectedFare;
@@ -1094,7 +1097,7 @@ export default function BookingFlow() {
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
     { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
-    { name: "Italy", code: "+39", flag: "🇮🇹" },
+    { name: "Italy", code: "+39", flag: "🇮����" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
