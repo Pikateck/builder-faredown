@@ -12,6 +12,7 @@ import {
   Headphones,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { LandingPageSearchPanel } from "@/components/LandingPageSearchPanel";
 
 export default function Index() {
   return (
