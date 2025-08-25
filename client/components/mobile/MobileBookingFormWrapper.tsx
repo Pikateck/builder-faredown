@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { BookingSearchForm } from "@/components/BookingSearchForm";
+import { HotelSearchForm } from "@/components/HotelSearchForm";
 import MobileCurrencySelector from "./MobileCurrencySelector";
 import { useNavigate } from "react-router-dom";
 import { isMobileDevice } from "@/utils/mobileDetection";
