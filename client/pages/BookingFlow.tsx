@@ -590,7 +590,7 @@ const SeatMap = ({
 
                     {/* Economy Rows */}
                     {seatLayout
-                      .filter((r) => r.type !== "business")
+                      .filter((r) => r.type !== "business" && r.type !== "economy-plus")
                       .map(({ row, seats, type }) => (
                         <div
                           key={`economy-${row}`}
@@ -1101,7 +1101,7 @@ export default function BookingFlow() {
     { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
     { name: "Italy", code: "+39", flag: "🇮����" },
-    { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
+    { name: "Ivory Coast", code: "+225", flag: "🇨���" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
   ];
@@ -2287,7 +2287,7 @@ export default function BookingFlow() {
                                 Bronze Service (1000₹ if Bag Coverage)
                               </span>
                             </div>
-                            <span className="font-semibold">₹49</span>
+                            <span className="font-semibold">���49</span>
                           </div>
                         </label>
 
