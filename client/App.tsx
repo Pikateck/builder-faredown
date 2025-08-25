@@ -90,10 +90,7 @@ function App() {
                   <Routes>
                     {/* Original Web Routes */}
                     <Route path="/" element={<Index />} />
-                    <Route
-                      path="/flights"
-                      element={<Navigate to="/?tab=flights" replace />}
-                    />
+                    <Route path="/flights" element={<Flights />} />
                     <Route path="/flights/results" element={<FlightResults />} />
                     <Route
                       path="/flight-details/:flightId"
