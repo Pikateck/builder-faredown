@@ -234,11 +234,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Flight Search Panel - Desktop Only */}
-      <div className="hidden md:block">
-        <LandingPageSearchPanel />
-      </div>
-
       {/* Minimal Benefits Section */}
       <section className="hidden md:block py-24 bg-white">
         <div className="max-w-7xl mx-auto px-8">
