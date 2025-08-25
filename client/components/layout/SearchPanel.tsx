@@ -32,6 +32,7 @@ export function SearchPanel() {
           title: "Find your perfect stay",
           subtitle: "Search hotels with live AI bargaining.",
           searchForm: <HotelSearchForm />,
+          showHeader: true,
         };
       case "sightseeing":
         return {
@@ -39,6 +40,7 @@ export function SearchPanel() {
           subtitle:
             "Explore fascinating attractions, cultural landmarks, and exciting activities. Create unforgettable memories with our curated sightseeing experiences.",
           searchForm: <SightseeingSearchForm />,
+          showHeader: true,
         };
       case "transfers":
         return {
@@ -46,13 +48,14 @@ export function SearchPanel() {
           subtitle:
             "Ride in comfort for less — AI secures your best deal on every trip.",
           searchForm: <TransfersSearchForm />,
+          showHeader: true,
         };
       default: // flights
         return {
-          title: "Upgrade. Bargain. Book.",
-          subtitle:
-            "Turn your seat into an upgrade and your fare into a win, with AI that bargains for you.",
+          title: "Discover your next flight",
+          subtitle: "Discover your next dream destination",
           searchForm: <FlightSearchForm />,
+          showHeader: true, // Show header for flights to match Booking.com
         };
     }
   };
@@ -65,15 +68,17 @@ export function SearchPanel() {
       <div className="md:hidden">
         <div className="pb-8 pt-4 bg-white">
           <div className="px-4">
-            {/* Upgrade Message */}
-            <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-2 text-gray-900">
-                {tabContent.title}
-              </h1>
-              <p className="text-gray-600 text-sm mb-3">
-                {tabContent.subtitle}
-              </p>
-            </div>
+            {/* Header for mobile */}
+            {tabContent.showHeader && (
+              <div className="text-center mb-6">
+                <h1 className="text-2xl font-bold mb-2 text-gray-900">
+                  {tabContent.title}
+                </h1>
+                <p className="text-gray-600 text-sm mb-3">
+                  {tabContent.subtitle}
+                </p>
+              </div>
+            )}
 
             {/* Search Form */}
             <div className="mx-auto">{tabContent.searchForm}</div>
@@ -83,26 +88,49 @@ export function SearchPanel() {
 
       {/* Desktop Search Section */}
       <div className="hidden md:block">
-        <div
-          className="py-3 sm:py-6 md:py-8 pb-24 sm:pb-8"
-          style={{ backgroundColor: "#003580" }}
-        >
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <div className="text-center mb-2 sm:mb-3">
-              <div className="mb-3 sm:mb-5">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
+        {/* Booking.com Style Header for Flights */}
+        {activeTab === "flights" ? (
+          <div className="bg-[#003580] py-12">
+            <div className="max-w-7xl mx-auto px-4">
+              {/* Booking.com style header */}
+              <div className="text-center mb-8">
+                <h1 className="text-4xl font-bold text-white mb-4">
                   {tabContent.title}
-                </h2>
+                </h1>
+                <p className="text-lg text-blue-100">
+                  {tabContent.subtitle}
+                </p>
               </div>
-              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                {tabContent.subtitle}
-              </h1>
-            </div>
 
-            {/* Desktop Search Form */}
-            <div className="max-w-7xl mx-auto">{tabContent.searchForm}</div>
+              {/* Booking.com style search form */}
+              <div className="flex justify-center">
+                {tabContent.searchForm}
+              </div>
+            </div>
           </div>
-        </div>
+        ) : (
+          // Original style for other modules
+          <div
+            className="py-3 sm:py-6 md:py-8 pb-24 sm:pb-8"
+            style={{ backgroundColor: "#003580" }}
+          >
+            <div className="max-w-7xl mx-auto px-3 sm:px-4">
+              <div className="text-center mb-2 sm:mb-3">
+                <div className="mb-3 sm:mb-5">
+                  <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
+                    {tabContent.title}
+                  </h2>
+                </div>
+                <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
+                  {tabContent.subtitle}
+                </h1>
+              </div>
+
+              {/* Desktop Search Form */}
+              <div className="max-w-7xl mx-auto">{tabContent.searchForm}</div>
+            </div>
+          </div>
+        )}
       </div>
     </>
   );
