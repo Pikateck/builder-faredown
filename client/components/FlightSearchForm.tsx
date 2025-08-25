@@ -202,19 +202,19 @@ export function FlightSearchForm() {
         {/* Main Search Row */}
         <div className="flex items-stretch">
           {/* Leaving From */}
-          <div className="flex-1 relative border-r border-gray-300">
-            <div className="p-4">
-              <label className="block text-xs font-medium text-gray-600 mb-1">
+          <div className="flex-1 relative">
+            <div className="booking-search-field">
+              <label className="booking-field-label">
                 Leaving from
               </label>
               <div className="relative">
-                <Plane className="absolute left-0 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                <Plane className="booking-field-icon" />
                 <input
                   type="text"
                   value={departureCity}
                   onChange={(e) => setDepartureCity(e.target.value)}
                   onFocus={() => setShowDepartureDropdown(true)}
-                  className="w-full pl-6 text-sm font-medium text-gray-900 bg-transparent border-none outline-none"
+                  className="booking-field-input"
                   placeholder="Airport or city"
                 />
               </div>
