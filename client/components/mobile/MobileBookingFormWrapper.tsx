@@ -66,7 +66,7 @@ const MobileBookingFormWrapper: React.FC<MobileBookingFormWrapperProps> = ({
 
       {/* Enhanced Booking Form */}
       <div className="mobile-form-container">
-        <BookingSearchForm />
+        <HotelSearchForm />
       </div>
 
       {/* Mobile-specific styles */}
