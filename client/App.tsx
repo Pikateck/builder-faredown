@@ -13,6 +13,7 @@ import { BookingProvider } from "./contexts/BookingContext";
 
 // Original pages
 import Index from "./pages/Index";
+import Flights from "./pages/Flights";
 import FlightResults from "./pages/FlightResults";
 import FlightDetails from "./pages/FlightDetails";
 import BookingFlow from "./pages/BookingFlow";
