@@ -536,6 +536,18 @@ export default function FlightResults() {
         // Handle multi-city properly - don't convert to one-way
         const searchTripType = apiTripType;
 
+        // Parse multi-city legs if present
+        let multiCityLegs = null;
+        const multiCityLegsParam = searchParams.get("multiCityLegs");
+        if (multiCityLegsParam && apiTripType === "multi_city") {
+          try {
+            multiCityLegs = JSON.parse(multiCityLegsParam);
+            console.log("🔍 Multi-city legs found:", multiCityLegs);
+          } catch (error) {
+            console.error("Failed to parse multi-city legs:", error);
+          }
+        }
+
         console.log("🔍 Searching flights:", {
           origin,
           destination,
@@ -544,6 +556,7 @@ export default function FlightResults() {
           children,
           cabinClass,
           apiTripType,
+          multiCityLegs: multiCityLegs?.length || 0,
         });
 
         const searchRequest = {
