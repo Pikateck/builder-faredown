@@ -6,6 +6,15 @@
 import { apiClient, ApiResponse, PaginatedResponse } from "@/lib/api";
 
 // Types
+export interface FlightLeg {
+  id: string;
+  from: string;
+  fromCode: string;
+  to: string;
+  toCode: string;
+  date: Date;
+}
+
 export interface FlightSearchRequest {
   departure: string;
   arrival: string;
@@ -16,6 +25,7 @@ export interface FlightSearchRequest {
   infants?: number;
   cabinClass: "economy" | "premium_economy" | "business" | "first";
   tripType: "one_way" | "round_trip" | "multi_city";
+  multiCityLegs?: FlightLeg[];
   currencyCode?: string;
   promoCode?: string;
   userId?: string;
