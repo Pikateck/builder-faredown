@@ -288,8 +288,48 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
   const fieldLabels = getFieldLabels();
   const ModuleIcon = getModuleIcon();
 
+  // Validation for multi-city searches
+  const validateMultiCitySearch = (): { isValid: boolean; error?: string } => {
+    if (module !== "flights" || tripType !== "multi-city") {
+      return { isValid: true };
+    }
+
+    if (multiCityLegs.length < 2) {
+      return {
+        isValid: false,
+        error: "Add at least 2 flight segments for multi-city travel"
+      };
+    }
+
+    // Check if all legs have valid destinations
+    for (let i = 0; i < multiCityLegs.length; i++) {
+      const leg = multiCityLegs[i];
+      if (!leg.from || !leg.fromCode || !leg.to || !leg.toCode) {
+        return {
+          isValid: false,
+          error: `Complete destinations for Flight ${i + 1}`
+        };
+      }
+      if (!leg.date) {
+        return {
+          isValid: false,
+          error: `Select date for Flight ${i + 1}`
+        };
+      }
+    }
+
+    return { isValid: true };
+  };
+
   // Handle search
   const handleSearch = () => {
+    // Validate multi-city before proceeding
+    const validation = validateMultiCitySearch();
+    if (!validation.isValid) {
+      alert(validation.error); // Show validation error
+      return;
+    }
+
     const searchParams = new URLSearchParams({
       from: fromCode,
       to: toCode,
@@ -298,6 +338,11 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
       children: (travelers.children || 0).toString(),
       tripType,
     });
+
+    // Add multi-city legs data
+    if (module === "flights" && tripType === "multi-city") {
+      searchParams.set("multiCityLegs", JSON.stringify(multiCityLegs));
+    }
 
     if (dateRange.endDate && (tripType === "round-trip" || module === "hotels")) {
       searchParams.set("returnDate", dateRange.endDate.toISOString());
