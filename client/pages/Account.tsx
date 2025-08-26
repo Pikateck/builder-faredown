@@ -1455,7 +1455,7 @@ Please keep this ticket for your records.
                 <button
                   onClick={() => setActiveTab("bookings")}
                   className={cn(
-                    "lg:w-full whitespace-nowrap text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium min-w-fit",
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
                     activeTab === "bookings"
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
@@ -1470,7 +1470,7 @@ Please keep this ticket for your records.
                 <button
                   onClick={() => setActiveTab("profile")}
                   className={cn(
-                    "lg:w-full whitespace-nowrap text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium min-w-fit",
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
                     activeTab === "profile"
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
@@ -1482,7 +1482,7 @@ Please keep this ticket for your records.
                 <button
                   onClick={() => setActiveTab("loyalty")}
                   className={cn(
-                    "lg:w-full whitespace-nowrap text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium min-w-fit",
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
                     activeTab === "loyalty"
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
@@ -1497,7 +1497,7 @@ Please keep this ticket for your records.
                 <button
                   onClick={() => setActiveTab("payment")}
                   className={cn(
-                    "lg:w-full whitespace-nowrap text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium min-w-fit",
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
                     activeTab === "payment"
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
@@ -1512,7 +1512,7 @@ Please keep this ticket for your records.
                 <button
                   onClick={() => setActiveTab("settings")}
                   className={cn(
-                    "lg:w-full whitespace-nowrap text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium min-w-fit",
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
                     activeTab === "settings"
                       ? "bg-blue-100 text-blue-700 border border-blue-200"
                       : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
