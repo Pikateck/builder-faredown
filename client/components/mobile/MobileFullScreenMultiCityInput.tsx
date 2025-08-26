@@ -90,10 +90,13 @@ export function MobileFullScreenMultiCityInput({
     setEditingField(null);
   };
 
-  const handleDateSelect = (legId: string, date: Date) => {
-    updateLeg(legId, "date", date);
+  const handleDateSelect = (range: { startDate: Date; endDate?: Date }) => {
+    if (editingLeg) {
+      updateLeg(editingLeg, "date", range.startDate);
+    }
     setEditingLeg(null);
     setEditingField(null);
+    setShowDateInput(false);
   };
 
   const handleConfirm = () => {
