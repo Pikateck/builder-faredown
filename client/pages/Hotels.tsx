@@ -14,58 +14,28 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-import { SimpleCalendar } from "@/components/SimpleCalendar";
-import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import { addDays } from "date-fns";
-import {
   Plane,
   ChevronDown,
-  ArrowRightLeft,
-  MapPin,
-  Calendar as CalendarIcon,
   Users,
   Settings,
   User,
   Hotel,
   Heart,
-  TrendingUp,
   DollarSign,
   Shield,
   Headphones,
-  ArrowRight,
-  Search,
   X,
   Globe,
-  Zap,
   Bell,
   Menu,
   LogOut,
   Code,
-  Facebook,
-  Instagram,
-  Linkedin,
-  Twitter,
-  BookOpen,
   Camera,
   Car,
-  Sparkles,
-  Target,
-  Lock,
-  MessageCircle,
-  Crown,
-  Rocket,
-  Star,
 } from "lucide-react";
-import {
-  MobileCityDropdown,
-  MobileDatePicker,
-  MobileTravelers,
-} from "@/components/MobileDropdowns";
 import { HotelSearchForm } from "@/components/HotelSearchForm";
+import { UnifiedSearchPanel } from "@/components/UnifiedSearchPanel";
+import { UnifiedLandingPage } from "@/components/UnifiedLandingPage";
 
 export default function Hotels() {
   useScrollToTop();
@@ -448,25 +418,18 @@ export default function Hotels() {
           </div>
         )}
 
-        {/* Mobile Search Section */}
-        <div className="pb-8 pt-4" style={{ backgroundColor: "#003580" }}>
-          <div className="px-4">
-            {/* Upgrade Message */}
-            <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-2 text-white">
-                Upgrade. Bargain. Book.
-              </h1>
-              <p className="text-blue-200 text-sm mb-3">
-                Control your price with AI-powered hotel upgrades.
-              </p>
-            </div>
-
-            {/* Hotel Search Form with Hotelbeds Test Destinations */}
-            <div className="mx-auto">
-              <HotelSearchForm />
-            </div>
-          </div>
-        </div>
+        {/* Mobile Unified Landing Page */}
+        <UnifiedLandingPage
+          module="hotels"
+          tagline="Control your price with AI-powered hotel upgrades."
+          searchPanel={
+            <UnifiedSearchPanel
+              module="hotels"
+              tagline="Control your price with AI-powered hotel upgrades."
+              searchForm={<HotelSearchForm />}
+            />
+          }
+        />
 
         {/* Why Faredown Section - Ultra Modern Mobile Design */}
         <div className="relative bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50/40 py-16 overflow-hidden">
@@ -874,29 +837,18 @@ export default function Hotels() {
           </div>
         </header>
 
-        {/* Desktop Main Content */}
-        <div
-          className="py-3 sm:py-6 md:py-8 pb-24 sm:pb-8"
-          style={{ backgroundColor: "#003580" }}
-        >
-          <div className="max-w-7xl mx-auto px-3 sm:px-4">
-            <div className="text-center mb-2 sm:mb-3">
-              <div className="mb-3 sm:mb-5">
-                <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
-                  Upgrade. Bargain. Book.
-                </h2>
-              </div>
-              <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Control your price with AI-powered hotel upgrades.
-              </h1>
-            </div>
-
-            {/* Desktop Hotel Search Form with Hotelbeds Test Destinations */}
-            <div className="max-w-7xl mx-auto">
-              <HotelSearchForm />
-            </div>
-          </div>
-        </div>
+        {/* Desktop Unified Landing Page */}
+        <UnifiedLandingPage
+          module="hotels"
+          tagline="Control your price with AI-powered hotel upgrades."
+          searchPanel={
+            <UnifiedSearchPanel
+              module="hotels"
+              tagline="Control your price with AI-powered hotel upgrades."
+              searchForm={<HotelSearchForm />}
+            />
+          }
+        />
 
         {/* Why Choose Faredown Section - Ultra Modern Desktop Design */}
         <section className="relative py-24 bg-gradient-to-br from-slate-50 via-blue-50/20 to-indigo-50/30 overflow-hidden">
