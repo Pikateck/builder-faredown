@@ -175,6 +175,7 @@ export class FlightsService {
       children: searchParams.children || 0,
       cabinClass: searchParams.cabinClass?.toUpperCase() || "ECONOMY",
       tripType: searchParams.tripType || "one_way", // Ensure trip type is passed
+      multiCityLegs: searchParams.multiCityLegs ? JSON.stringify(searchParams.multiCityLegs) : undefined,
       promoCode: searchParams.promoCode,
       userId: searchParams.userId,
     };
