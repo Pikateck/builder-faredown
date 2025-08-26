@@ -457,8 +457,7 @@ export default function Hotels() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-blue-200 text-sm mb-3">
-                Control your price for flights & hotels — with live AI
-                bargaining.
+                Control your price with AI-powered hotel upgrades.
               </p>
             </div>
 
@@ -722,7 +721,7 @@ export default function Hotels() {
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "🇵🇹" },
                           { code: "ar", name: "الع��بي��", flag: "🇸🇦" },
-                          { code: "hi", name: "��ि��्दी", flag: "🇮🇳" },
+                          { code: "hi", name: "���ि��्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日��語", flag: "🇯🇵" },
                           { code: "ko", name: "��국어", flag: "🇰🇷" },
                           { code: "zh", name: "中文", flag: "🇨🇳" },
@@ -888,7 +887,7 @@ export default function Hotels() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Control your price for flights & hotels — with live AI bargaining.
+                Control your price with AI-powered hotel upgrades.
               </h1>
             </div>
 
