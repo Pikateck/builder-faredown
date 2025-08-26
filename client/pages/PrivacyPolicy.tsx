@@ -1,331 +1,154 @@
-import { Header } from "@/components/Header";
-import { Card, CardContent } from "@/components/ui/card";
-import { Link } from "react-router-dom";
-import { useScrollToTop } from "@/hooks/useScrollToTop";
+import React from "react";
+import { Layout } from "@/components/layout/Layout";
 
 export default function PrivacyPolicy() {
-  useScrollToTop();
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-
-      <div className="max-w-4xl mx-auto px-4 py-8">
-        <div className="bg-white rounded-lg shadow-sm">
-          <div className="bg-[#003580] text-white px-8 py-6 rounded-t-lg">
-            <h1 className="text-3xl font-bold">Privacy Policy</h1>
-            <p className="text-blue-200 mt-2">
-              Faredown Bookings and Travels Pvt Ltd
-            </p>
+    <Layout showSearch={false}>
+      <div className="max-w-4xl mx-auto px-6 py-12">
+        <div className="bg-white rounded-lg shadow-lg p-8">
+          <h1 className="text-3xl font-bold text-gray-900 mb-6">Privacy Policy</h1>
+          
+          <div className="text-sm text-gray-600 mb-8">
+            <strong>Effective Date:</strong> August 26, 2025
           </div>
-
-          <div className="px-8 py-6 space-y-8">
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                1. General Principles
-              </h2>
-              <div className="space-y-4 text-gray-700 leading-relaxed">
-                <p>
-                  Protecting your privacy is very important to us. We have
-                  developed this Privacy Policy to protect your personal
-                  information and keep it confidential.
-                </p>
-                <p>
-                  This website is published and maintained by{" "}
-                  <strong>Faredown Bookings and Travels Pvt Ltd</strong>{" "}
-                  ("Faredown"). The Privacy Policy is applicable to the websites
-                  of Faredown including www.faredown.com, which also comprises
-                  of the mobile site, Smartphone App Platforms such as iOS,
-                  Android, Windows (all together referred to as "Site").
-                </p>
-                <p>
-                  This privacy policy does not apply to the websites of our
-                  business partners, corporate affiliates or to any other third
-                  parties, even if their websites are linked to the site. We
-                  recommend you to review the respective privacy statements of
-                  the other parties with whom you interact.
-                </p>
-                <p>
-                  By browsing, visiting, accessing and/or using the services on
-                  this Site (or searching for any of the pages on this Site),
-                  the customer ("You") explicitly consents and agrees to our
-                  Privacy Policy laid out herein. You also agree that the
-                  information furnished by you is lawful, true and correct and
-                  does not violate or infringe any laws. In case of any
-                  violations, infringement, furnishing of wrongful or
-                  unauthorized information, Faredown shall not be liable for the
-                  same.
-                </p>
-              </div>
+          
+          <div className="prose prose-gray max-w-none">
+            <p className="text-lg text-gray-700 mb-6">
+              Faredown.com ("Faredown," "we," "our," or "us") values your privacy. This Privacy Policy explains how we collect, use, store, and protect your information when you use our website, mobile apps, or services (collectively, the "Platform").
+            </p>
+            
+            <p className="mb-6">
+              By using Faredown.com, you agree to the practices described in this Privacy Policy.
+            </p>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">1. Information We Collect</h2>
+              <p className="mb-4">We may collect the following categories of personal and non-personal data:</p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li><strong>Identity & Contact Information:</strong> Name, email address, phone number, address, date of birth.</li>
+                <li><strong>Booking Information:</strong> Passport details, travel preferences, flight/hotel details, special requests.</li>
+                <li><strong>Payment Information:</strong> Credit/debit card details, UPI, wallets, and other payment methods (processed via third-party gateways).</li>
+                <li><strong>Device & Technical Information:</strong> IP address, browser type, OS, device identifiers, geolocation.</li>
+                <li><strong>Usage Data:</strong> Search history, preferences, interactions with our Platform.</li>
+                <li><strong>Cookies & Tracking:</strong> Session cookies, analytics tags, and similar technologies (see Section 6).</li>
+              </ul>
             </section>
-
-            <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Information Categories
-              </h3>
-              <div className="space-y-4 text-gray-700">
-                <p>
-                  We categorise information about you (collectively referred to
-                  as "Personal Information") as follows:
-                </p>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <Card>
-                    <CardContent className="p-4">
-                      <h4 className="font-semibold text-gray-900 mb-2">
-                        Profiling Information
-                      </h4>
-                      <ul className="text-sm space-y-1">
-                        <li>• Personal identity information</li>
-                        <li>• Financial information</li>
-                        <li>• Contact details</li>
-                      </ul>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardContent className="p-4">
-                      <h4 className="font-semibold text-gray-900 mb-2">
-                        Payment Information
-                      </h4>
-                      <ul className="text-sm space-y-1">
-                        <li>• Account history</li>
-                        <li>• Billing information</li>
-                        <li>• Payment history</li>
-                      </ul>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardContent className="p-4">
-                      <h4 className="font-semibold text-gray-900 mb-2">
-                        Service Usage
-                      </h4>
-                      <ul className="text-sm space-y-1">
-                        <li>• Navigation information</li>
-                        <li>• Website URLs visited</li>
-                        <li>• Download requests</li>
-                      </ul>
-                    </CardContent>
-                  </Card>
-
-                  <Card>
-                    <CardContent className="p-4">
-                      <h4 className="font-semibold text-gray-900 mb-2">
-                        Log Information
-                      </h4>
-                      <ul className="text-sm space-y-1">
-                        <li>• Web requests</li>
-                        <li>• IP address</li>
-                        <li>• Browser information</li>
-                      </ul>
-                    </CardContent>
-                  </Card>
-                </div>
-              </div>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">2. How We Use Your Information</h2>
+              <p className="mb-4">We use your data for:</p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>Processing bookings, cancellations, and refunds.</li>
+                <li>Providing customer support and account management.</li>
+                <li>Personalizing recommendations using our <strong>AI Bargaining Engine</strong>.</li>
+                <li>Sending confirmations, alerts, and promotional offers (with opt-out option).</li>
+                <li>Improving security, performance, and user experience.</li>
+                <li>Compliance with legal obligations.</li>
+              </ul>
             </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                2. Right To Collect
-              </h2>
-              <div className="space-y-4 text-gray-700">
-                <p>
-                  By accepting the Terms you agree that we may collect and store
-                  your Personal Information as long as you subscribe to or use
-                  our Services subject to the limitations set out in this
-                  Privacy Policy.
-                </p>
-                <p>
-                  We collect your Profiling and Account Information for the
-                  following reasons:
-                </p>
-                <ul className="list-disc list-inside space-y-2 ml-4">
-                  <li>
-                    We need your identity details, contact details, banking
-                    information and account history to manage our relationship
-                    with you and provide Services to you.
-                  </li>
-                  <li>
-                    We use certain of your information in an aggregated form to
-                    compile statistical and demographical profiles for our
-                    business and marketing activities.
-                  </li>
-                  <li>
-                    To determine and verify the Service Charges payable by you
-                    and to administer our relationship with you.
-                  </li>
-                  <li>
-                    To comply with any statutory or regulatory requirement.
-                  </li>
-                </ul>
-              </div>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">3. Data Sharing & Disclosure</h2>
+              <p className="mb-4">We may share your information only in the following cases:</p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li><strong>With Travel Suppliers:</strong> Airlines, hotels, sightseeing operators, transfer providers, etc., to complete bookings.</li>
+                <li><strong>With Service Providers:</strong> Payment gateways, IT/cloud providers, analytics and marketing tools.</li>
+                <li><strong>For Legal Compliance:</strong> To law enforcement or regulators when required by law.</li>
+                <li><strong>Business Transfers:</strong> In case of merger, acquisition, or asset sale, data may be transferred with safeguards.</li>
+              </ul>
+              <p className="mt-4 font-semibold">We do not sell or rent your personal data to third parties.</p>
             </section>
-
-            <section>
-              <h3 className="text-xl font-semibold text-gray-900 mb-3">
-                Cookies
-              </h3>
-              <div className="space-y-4 text-gray-700">
-                <p>
-                  Some of our own websites use "cookies" so that we can provide
-                  you with more customized information when you return to our
-                  website. "Cookies" are used to store user preferences and to
-                  track user trends, so as to enhance your interactive
-                  experience and generally improve our Services to you.
-                </p>
-                <p>
-                  You can set your browser to notify you when you are sent a
-                  "cookie", giving you the chance to decide whether or not to
-                  accept it. If you do accept a "cookie", you thereby agree to
-                  our use of any Personal Information collected by us using that
-                  Cookie.
-                </p>
-              </div>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">4. Data Security</h2>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>We use <strong>encryption (SSL/TLS)</strong>, secure firewalls, and multi-layered authentication.</li>
+                <li>Sensitive payment data is processed only by <strong>PCI-DSS compliant payment gateways</strong>.</li>
+                <li>Access to personal data is restricted to authorized personnel under confidentiality obligations.</li>
+              </ul>
             </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                3. General Exceptions
-              </h2>
-              <div className="space-y-4 text-gray-700">
-                <p>
-                  In order to ensure that all our Users comply with the User
-                  Rules, we may monitor your Personal Information to the extent
-                  that this may be required to determine compliance and/or to
-                  identify instances of non-compliance.
-                </p>
-                <p>
-                  To ensure that the security and integrity of our Services are
-                  safeguarded, we may monitor your Personal Information. This
-                  monitoring may include (without limitation) the filtering of
-                  incoming and outgoing electronic data messages to identify,
-                  limit and/or prevent the transmission of spam, viruses and/or
-                  unlawful, defamatory, obscene or otherwise undesirable
-                  material or content.
-                </p>
-              </div>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">5. Data Retention</h2>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>We retain booking and payment data only as long as necessary for legal, tax, or accounting purposes.</li>
+                <li>User accounts may request deletion (see Section 8).</li>
+              </ul>
             </section>
-
-            <section>
-              <h2 className="text-2xl font-bold text-gray-900 mb-4">
-                Contact Information
-              </h2>
-              <div className="bg-gray-50 p-6 rounded-lg">
-                <p className="text-gray-700">
-                  If you are no longer interested in receiving e-mail
-                  announcements and other marketing information from us, or you
-                  want us to remove any PII that we have collected about you,
-                  please contact us at{" "}
-                  <Link
-                    to="/support"
-                    className="text-blue-600 hover:text-blue-800 underline"
-                  >
-                    www.faredown.com/support
-                  </Link>
-                </p>
-              </div>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">6. Cookies & Tracking</h2>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>We use cookies to remember your preferences, enable faster searches, and provide analytics.</li>
+                <li>You can manage or disable cookies in your browser/app settings, though some features may not work properly.</li>
+              </ul>
             </section>
-
-            <div className="border-t pt-6 mt-8">
-              <p className="text-sm text-gray-500">
-                Last updated: {new Date().toLocaleDateString()}
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">7. Your Rights (GDPR + Indian IT Act)</h2>
+              <p className="mb-4">Depending on your jurisdiction, you have the right to:</p>
+              <ul className="list-disc pl-6 space-y-2">
+                <li>Access and receive a copy of your data.</li>
+                <li>Request correction of inaccurate information.</li>
+                <li>Request deletion ("Right to be Forgotten").</li>
+                <li>Restrict or object to processing.</li>
+                <li>Withdraw consent at any time (e.g., for marketing emails).</li>
+                <li>Port your data to another provider (GDPR).</li>
+              </ul>
+              <p className="mt-4">
+                Requests can be made via <strong><a href="mailto:support@faredown.com" className="text-blue-600 hover:underline">support@faredown.com</a></strong>. We will respond within <strong>30 days</strong>.
               </p>
-              <p className="text-sm text-gray-500 mt-2">
-                For any questions regarding this Privacy Policy, please contact
-                our support team.
+            </section>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">8. Children's Privacy</h2>
+              <p>
+                Our services are <strong>not intended for users under 18 years</strong>. We do not knowingly collect data from minors. If discovered, such data will be deleted immediately.
               </p>
+            </section>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">9. International Data Transfers</h2>
+              <p>
+                Your data may be processed outside your home country, but always under adequate safeguards (e.g., EU Standard Contractual Clauses for GDPR).
+              </p>
+            </section>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">10. Third-Party Links</h2>
+              <p>
+                Our Platform may link to third-party websites. We are not responsible for their privacy practices. Please review their policies before sharing data.
+              </p>
+            </section>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">11. Changes to this Privacy Policy</h2>
+              <p>
+                We may update this Privacy Policy from time to time. Any material changes will be notified via the Platform or email. Continued use after updates constitutes acceptance.
+              </p>
+            </section>
+            
+            <section className="mb-8">
+              <h2 className="text-2xl font-semibold text-gray-900 mb-4">12. Contact Information</h2>
+              <p>For privacy-related requests, please contact:</p>
+              <div className="bg-gray-50 p-4 rounded-lg mt-4">
+                <p className="font-semibold">Faredown Bookings and Travels Pvt Ltd (Faredown.com)</p>
+                <p>Registered Office: [Insert Mumbai Office Address]</p>
+                <p>Email: <a href="mailto:support@faredown.com" className="text-blue-600 hover:underline">support@faredown.com</a></p>
+              </div>
+            </section>
+            
+            <div className="bg-green-50 border-l-4 border-green-400 p-4 mt-8">
+              <div className="text-green-800">
+                <p className="font-semibold">Data Protection Commitment</p>
+                <p className="text-sm mt-2">
+                  All proprietary algorithms, including our AI-powered Bargaining Engine, remain the exclusive property of Faredown Bookings and Travels Pvt Ltd. No third-party entity has rights to use, modify, or claim ownership of any part of this system.
+                </p>
+              </div>
             </div>
           </div>
         </div>
       </div>
-
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">Faredown</h3>
-              <p className="text-gray-400 text-sm">
-                The world's first travel portal where you control the price.
-                Bargain for better deals on flights and hotels.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <div className="space-y-2 text-sm">
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  About Us
-                </div>
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  How It Works
-                </div>
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  Contact
-                </div>
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  Help Center
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Services</h4>
-              <div className="space-y-2 text-sm">
-                <Link
-                  to="/flights"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Flights
-                </Link>
-                <Link
-                  to="/hotels"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Hotels
-                </Link>
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  Car Rentals
-                </div>
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  Travel Insurance
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <div className="space-y-2 text-sm">
-                <Link
-                  to="/privacy-policy"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Privacy Policy
-                </Link>
-                <Link
-                  to="/terms-conditions"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Terms of Service
-                </Link>
-                <Link
-                  to="/cookie-policy"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Cookie Policy
-                </Link>
-                <Link
-                  to="/refund-policy"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Refund Policy
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 Faredown.com. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </Layout>
   );
 }
