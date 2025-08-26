@@ -1548,7 +1548,7 @@ export default function Booking() {
                         onChange={(e) =>
                           handleGstInputChange("companyName", e.target.value)
                         }
-                        placeholder="Faredown Technologies Pvt Ltd"
+                        placeholder="Faredown Bookings and Travels Pvt Ltd"
                         required
                       />
                     </div>
