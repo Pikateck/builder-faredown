@@ -1,12 +1,20 @@
 import React, { useState } from "react";
 import { ChevronLeft, Users, Plus, Minus, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface Travelers {
   adults: number;
   children: number;
   infants?: number;
   rooms?: number;
+  childAges?: number[]; // For hotels - child age tracking
 }
 
 interface MobileFullScreenTravelersInputProps {
@@ -24,18 +32,47 @@ export function MobileFullScreenTravelersInput({
   onSelect,
   onBack
 }: MobileFullScreenTravelersInputProps) {
-  const [travelers, setTravelers] = useState<Travelers>(initialTravelers);
+  const [travelers, setTravelers] = useState<Travelers>({
+    ...initialTravelers,
+    childAges: initialTravelers.childAges || []
+  });
 
   const updateCount = (type: keyof Travelers, operation: "increment" | "decrement") => {
     setTravelers(prev => {
-      const newValue = operation === "increment" ? (prev[type] || 0) + 1 : Math.max(0, (prev[type] || 0) - 1);
+      const newValue = operation === "increment" ? (prev[type] as number || 0) + 1 : Math.max(0, (prev[type] as number || 0) - 1);
       
       // Validation rules
       if (type === "adults" && newValue < 1) return prev;
       if (type === "rooms" && newValue < 1) return prev;
       if (newValue > 30) return prev;
 
-      return { ...prev, [type]: newValue };
+      const newTravelers = { ...prev, [type]: newValue };
+
+      // Handle child ages for hotels
+      if (type === "children" && bookingType === "hotel") {
+        const currentAges = prev.childAges || [];
+        if (newValue > currentAges.length) {
+          // Add default ages for new children
+          const newAges = [...currentAges];
+          for (let i = currentAges.length; i < newValue; i++) {
+            newAges.push(5); // Default age
+          }
+          newTravelers.childAges = newAges;
+        } else if (newValue < currentAges.length) {
+          // Remove ages for removed children
+          newTravelers.childAges = currentAges.slice(0, newValue);
+        }
+      }
+
+      return newTravelers;
+    });
+  };
+
+  const updateChildAge = (index: number, age: number) => {
+    setTravelers(prev => {
+      const newAges = [...(prev.childAges || [])];
+      newAges[index] = age;
+      return { ...prev, childAges: newAges };
     });
   };
 
@@ -163,6 +200,38 @@ export function MobileFullScreenTravelersInput({
             type="children"
           />
 
+          {/* Child Ages (for hotels only) */}
+          {bookingType === "hotel" && travelers.children && travelers.children > 0 && (
+            <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
+              <h3 className="font-semibold text-gray-900 mb-3">Child Ages</h3>
+              <p className="text-sm text-gray-600 mb-4">Please specify the age of each child at the time of travel</p>
+              <div className="space-y-3">
+                {Array.from({ length: travelers.children }, (_, index) => (
+                  <div key={index} className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-gray-700">
+                      Child {index + 1}
+                    </span>
+                    <Select
+                      value={(travelers.childAges?.[index] || 5).toString()}
+                      onValueChange={(value) => updateChildAge(index, parseInt(value))}
+                    >
+                      <SelectTrigger className="w-20 h-8 text-sm">
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {Array.from({ length: 18 }, (_, i) => (
+                          <SelectItem key={i} value={i.toString()}>
+                            {i}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
           {/* Infants (for flights) */}
           {bookingType === "flight" && (
             <Counter
@@ -197,8 +266,9 @@ export function MobileFullScreenTravelersInput({
             )}
             {bookingType === "hotel" && (
               <>
-                <li>• Extra beds may be available for children</li>
-                <li>• Some hotels offer free stays for children</li>
+                <li>• Child ages determine room rates and occupancy</li>
+                <li>• Some hotels offer free stays for children under certain ages</li>
+                <li>• Extra beds may be available for additional guests</li>
               </>
             )}
             <li>• Maximum 9 travelers per booking</li>
