@@ -224,6 +224,7 @@ export default function Account() {
     // Add sample data to demonstrate modular display if no bookings exist
     if (savedBookings.length === 0) {
       const sampleBookings = [
+        // Flight Booking 1
         {
           type: 'flight',
           bookingDetails: {
@@ -248,6 +249,32 @@ export default function Account() {
           },
           paymentId: 'pay_demo123456789'
         },
+        // Flight Booking 2
+        {
+          type: 'flight',
+          bookingDetails: {
+            bookingRef: 'FD-FL-004',
+            bookingDate: '2024-01-20',
+            passengers: [{
+              firstName: 'Jane',
+              lastName: 'Smith',
+              title: 'Ms'
+            }],
+            contactDetails: {
+              email: 'jane@example.com',
+              countryCode: '+91',
+              phone: '9876543211'
+            },
+            currency: { symbol: '₹' },
+            totalAmount: 38000
+          },
+          flightDetails: {
+            airline: 'IndiGo',
+            flightNumber: '6E-542'
+          },
+          paymentId: 'pay_demo789123456'
+        },
+        // Hotel Booking 1
         {
           type: 'hotel',
           bookingDetails: {
@@ -268,6 +295,28 @@ export default function Account() {
           },
           paymentId: 'pay_demo987654321'
         },
+        // Hotel Booking 2
+        {
+          type: 'hotel',
+          bookingDetails: {
+            bookingRef: 'FD-HT-005',
+            bookingDate: '2024-01-22',
+            passengers: [{
+              firstName: 'Mike',
+              lastName: 'Johnson',
+              title: 'Mr'
+            }],
+            contactDetails: {
+              email: 'mike@example.com',
+              countryCode: '+91',
+              phone: '9876543212'
+            },
+            currency: { symbol: '₹' },
+            totalAmount: 8500
+          },
+          paymentId: 'pay_demo555666777'
+        },
+        // Sightseeing Booking 1
         {
           type: 'sightseeing',
           bookingDetails: {
@@ -287,6 +336,69 @@ export default function Account() {
             totalAmount: 3500
           },
           paymentId: 'pay_demo456789123'
+        },
+        // Sightseeing Booking 2
+        {
+          type: 'sightseeing',
+          bookingDetails: {
+            bookingRef: 'FD-ST-006',
+            bookingDate: '2024-01-25',
+            passengers: [{
+              firstName: 'Sarah',
+              lastName: 'Wilson',
+              title: 'Ms'
+            }],
+            contactDetails: {
+              email: 'sarah@example.com',
+              countryCode: '+91',
+              phone: '9876543213'
+            },
+            currency: { symbol: '₹' },
+            totalAmount: 4200
+          },
+          paymentId: 'pay_demo111222333'
+        },
+        // Transfer Booking 1
+        {
+          type: 'transfer',
+          bookingDetails: {
+            bookingRef: 'FD-TR-007',
+            bookingDate: '2024-01-18',
+            passengers: [{
+              firstName: 'John',
+              lastName: 'Doe',
+              title: 'Mr'
+            }],
+            contactDetails: {
+              email: 'john@example.com',
+              countryCode: '+91',
+              phone: '9876543210'
+            },
+            currency: { symbol: '₹' },
+            totalAmount: 1200
+          },
+          paymentId: 'pay_demo888999000'
+        },
+        // Transfer Booking 2
+        {
+          type: 'transfer',
+          bookingDetails: {
+            bookingRef: 'FD-TR-008',
+            bookingDate: '2024-01-28',
+            passengers: [{
+              firstName: 'David',
+              lastName: 'Brown',
+              title: 'Mr'
+            }],
+            contactDetails: {
+              email: 'david@example.com',
+              countryCode: '+91',
+              phone: '9876543214'
+            },
+            currency: { symbol: '₹' },
+            totalAmount: 950
+          },
+          paymentId: 'pay_demo444555666'
         }
       ];
       setBookings(sampleBookings);
