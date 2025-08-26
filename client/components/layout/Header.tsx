@@ -319,21 +319,94 @@ export function Header() {
                   {isLoggedIn ? (
                     <div className="mt-8 px-4">
                       <div className="bg-blue-50 rounded-lg p-4">
-                        <div className="flex items-center space-x-3 mb-3">
-                          <div className="w-10 h-10 bg-[#003580] rounded-full flex items-center justify-center">
-                            <span className="text-white font-bold text-sm">
-                              {userName.charAt(0)}
-                            </span>
-                          </div>
-                          <div>
-                            <div className="font-medium text-gray-900">
-                              {userName}
+                        {/* User Profile Button */}
+                        <button
+                          className="flex items-center justify-between w-full mb-3 hover:bg-blue-100 p-2 rounded-lg transition-colors"
+                          onClick={() => setShowMobileUserDropdown(!showMobileUserDropdown)}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="w-10 h-10 bg-[#003580] rounded-full flex items-center justify-center">
+                              <span className="text-white font-bold text-sm">
+                                {userName.charAt(0)}
+                              </span>
                             </div>
-                            <div className="text-sm text-gray-600">
-                              Loyalty Level 1
+                            <div className="text-left">
+                              <div className="font-medium text-gray-900">
+                                {userName}
+                              </div>
+                              <div className="text-sm text-gray-600">
+                                Loyalty Level 1
+                              </div>
                             </div>
                           </div>
-                        </div>
+                          <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${showMobileUserDropdown ? 'rotate-180' : ''}`} />
+                        </button>
+
+                        {/* User Dropdown Menu */}
+                        {showMobileUserDropdown && (
+                          <div className="space-y-1 border-t border-gray-200 pt-3 mb-3">
+                            <button
+                              onClick={() => {
+                                handleNavigation("/account?tab=bookings");
+                                setShowMobileMenu(false);
+                                setShowMobileUserDropdown(false);
+                              }}
+                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
+                            >
+                              <Plane className="w-4 h-4 text-[#003580]" />
+                              <span className="text-sm font-medium">My Bookings</span>
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                handleNavigation("/account?tab=profile");
+                                setShowMobileMenu(false);
+                                setShowMobileUserDropdown(false);
+                              }}
+                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
+                            >
+                              <User className="w-4 h-4 text-[#003580]" />
+                              <span className="text-sm font-medium">Profile</span>
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                handleNavigation("/account?tab=loyalty");
+                                setShowMobileMenu(false);
+                                setShowMobileUserDropdown(false);
+                              }}
+                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
+                            >
+                              <Award className="w-4 h-4 text-[#003580]" />
+                              <span className="text-sm font-medium">Loyalty Program</span>
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                handleNavigation("/account?tab=payment");
+                                setShowMobileMenu(false);
+                                setShowMobileUserDropdown(false);
+                              }}
+                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
+                            >
+                              <CreditCard className="w-4 h-4 text-[#003580]" />
+                              <span className="text-sm font-medium">Payment & Wallet</span>
+                            </button>
+
+                            <button
+                              onClick={() => {
+                                handleNavigation("/account?tab=settings");
+                                setShowMobileMenu(false);
+                                setShowMobileUserDropdown(false);
+                              }}
+                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
+                            >
+                              <Settings className="w-4 h-4 text-[#003580]" />
+                              <span className="text-sm font-medium">Settings</span>
+                            </button>
+                          </div>
+                        )}
+
                         <button
                           className="flex items-center space-x-2 text-red-600 hover:text-red-700 w-full"
                           onClick={() => {
