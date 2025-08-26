@@ -167,7 +167,11 @@ export function MobileFullScreenMultiCityInput({
 
               {/* From */}
               <button
-                onClick={() => { setEditingLeg(leg.id); setEditingField("from"); }}
+                onClick={() => {
+                  setEditingLeg(leg.id);
+                  setEditingField("from");
+                  setShowCityInput(true);
+                }}
                 className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-left mb-3 hover:border-[#003580] hover:bg-blue-50"
               >
                 <div className="flex items-center space-x-3">
