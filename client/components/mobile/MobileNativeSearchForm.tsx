@@ -9,12 +9,15 @@ import {
   MapPin,
   Hotel,
   Camera,
-  Car
+  Car,
+  Clock
 } from "lucide-react";
 import { format, addDays } from "date-fns";
 import { MobileFullScreenCityInput } from "./MobileFullScreenCityInput";
 import { MobileFullScreenDateInput } from "./MobileFullScreenDateInput";
 import { MobileFullScreenTravelersInput } from "./MobileFullScreenTravelersInput";
+import { MobileFullScreenTimeInput } from "./MobileFullScreenTimeInput";
+import { MobileFullScreenTransferTypeInput } from "./MobileFullScreenTransferTypeInput";
 
 interface Travelers {
   adults: number;
@@ -85,13 +88,20 @@ const cityData = {
   },
 };
 
-export function MobileNativeSearchForm({ module, transferType }: MobileNativeSearchFormProps) {
+export function MobileNativeSearchForm({ module, transferType: initialTransferType }: MobileNativeSearchFormProps) {
   const navigate = useNavigate();
   
   // Form states
   const [tripType, setTripType] = useState<"round-trip" | "one-way" | "multi-city">(
-    module === "hotels" || module === "sightseeing" || module === "transfers" ? "one-way" : "round-trip"
+    module === "hotels" || module === "sightseeing" ? "one-way" : 
+    module === "transfers" ? "one-way" : "round-trip"
   );
+  
+  // Transfers specific state
+  const [transferType, setTransferType] = useState<"airport-taxi" | "car-rentals">(
+    initialTransferType || "airport-taxi"
+  );
+  const [transferTripType, setTransferTripType] = useState<"one-way" | "return">("one-way");
   
   // Location states
   const [fromCity, setFromCity] = useState("Mumbai");
@@ -104,6 +114,10 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
     startDate: addDays(new Date(), 1),
     endDate: addDays(new Date(), 8),
   });
+  
+  // Time states (for transfers)
+  const [pickupTime, setPickupTime] = useState("12:00");
+  const [returnTime, setReturnTime] = useState("12:00");
   
   // Travelers state
   const [travelers, setTravelers] = useState<Travelers>({
@@ -118,6 +132,8 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
   const [showToInput, setShowToInput] = useState(false);
   const [showDateInput, setShowDateInput] = useState(false);
   const [showTravelersInput, setShowTravelersInput] = useState(false);
+  const [showTimeInput, setShowTimeInput] = useState(false);
+  const [showTransferTypeInput, setShowTransferTypeInput] = useState(false);
 
   // Handle city selection
   const handleFromCitySelect = (city: string, code: string) => {
@@ -140,6 +156,21 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
     setTravelers(newTravelers);
   };
 
+  // Handle time selection
+  const handleTimeSelect = (time: string, type: "pickup" | "return") => {
+    if (type === "pickup") {
+      setPickupTime(time);
+    } else {
+      setReturnTime(time);
+    }
+  };
+
+  // Handle transfer type selection
+  const handleTransferTypeSelect = (type: "airport-taxi" | "car-rentals", tripType: "one-way" | "return") => {
+    setTransferType(type);
+    setTransferTripType(tripType);
+  };
+
   // Format date display
   const formatDateDisplay = () => {
     if (!dateRange.startDate) return "Select dates";
@@ -150,8 +181,12 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
       return `${checkIn} - ${checkOut}`;
     }
     
-    if (tripType === "one-way") {
+    if (tripType === "one-way" || module === "transfers") {
       return format(dateRange.startDate, "MMM d");
+    }
+    
+    if (tripType === "multi-city") {
+      return "Multi-city dates";
     }
     
     if (dateRange.endDate) {
@@ -198,7 +233,7 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
         return {
           from: "Leaving from",
           to: "Going to",
-          dates: tripType === "one-way" ? "Departure" : "Travel dates",
+          dates: tripType === "one-way" ? "Departure" : tripType === "multi-city" ? "Travel dates" : "Travel dates",
         };
       case "hotels":
         return {
@@ -241,7 +276,7 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
       tripType,
     });
 
-    if (dateRange.endDate) {
+    if (dateRange.endDate && (tripType === "round-trip" || module === "hotels")) {
       searchParams.set("returnDate", dateRange.endDate.toISOString());
     }
 
@@ -249,8 +284,17 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
       searchParams.set("rooms", travelers.rooms.toString());
     }
 
-    if (module === "transfers" && transferType) {
+    if (module === "transfers") {
       searchParams.set("transferType", transferType);
+      searchParams.set("transferTripType", transferTripType);
+      searchParams.set("pickupTime", pickupTime);
+      if (transferTripType === "return") {
+        searchParams.set("returnTime", returnTime);
+      }
+    }
+
+    if (module === "flights" && travelers.infants) {
+      searchParams.set("infants", travelers.infants.toString());
     }
 
     navigate(`/${module}/results?${searchParams.toString()}`);
@@ -280,7 +324,7 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4">
           {/* Trip Type Selection (for flights only) */}
           {module === "flights" && (
-            <div className="flex items-center space-x-6 mb-4 pb-4 border-b border-gray-100">
+            <div className="flex items-center space-x-4 mb-4 pb-4 border-b border-gray-100">
               <button
                 onClick={() => setTripType("round-trip")}
                 className={`flex items-center space-x-2 ${
@@ -308,22 +352,41 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
                 }`}></div>
                 <span className="text-sm font-medium">One way</span>
               </button>
+              
+              <button
+                onClick={() => setTripType("multi-city")}
+                className={`flex items-center space-x-2 ${
+                  tripType === "multi-city" ? "text-[#003580]" : "text-gray-500"
+                }`}
+              >
+                <div className={`w-4 h-4 rounded-full border-2 ${
+                  tripType === "multi-city" 
+                    ? "bg-[#003580] border-[#003580]" 
+                    : "border-gray-300"
+                }`}></div>
+                <span className="text-sm font-medium">Multi-city</span>
+              </button>
             </div>
           )}
 
           {/* Transfer Type Selection (for transfers only) */}
           {module === "transfers" && (
-            <div className="flex items-center space-x-6 mb-4 pb-4 border-b border-gray-100">
-              <button
-                onClick={() => setTripType("one-way")}
-                className="flex items-center space-x-2 text-[#003580]"
-              >
-                <div className="w-4 h-4 rounded-full bg-[#003580] border-2 border-[#003580]"></div>
-                <span className="text-sm font-medium">
-                  {transferType === "airport-taxi" ? "Airport Taxi" : "Car Rentals"}
-                </span>
-              </button>
-            </div>
+            <button
+              onClick={() => setShowTransferTypeInput(true)}
+              className="w-full p-4 bg-white border-2 border-gray-200 rounded-xl text-left hover:border-[#003580] transition-colors focus:outline-none focus:border-[#003580] mb-4"
+            >
+              <div className="flex items-center space-x-3">
+                <div className="w-10 h-10 bg-orange-500 rounded-lg flex items-center justify-center">
+                  <Car className="w-5 h-5 text-white" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-xs text-gray-500 mb-1">Transfer type</div>
+                  <div className="font-semibold text-gray-900 text-base">
+                    {transferType === "airport-taxi" ? "Airport Taxi" : "Car Rentals"} • {transferTripType === "one-way" ? "One-way" : "Return"}
+                  </div>
+                </div>
+              </div>
+            </button>
           )}
 
           {/* Search Fields */}
@@ -384,6 +447,31 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
               </div>
             </button>
 
+            {/* Time Field (for transfers only) */}
+            {module === "transfers" && (
+              <button
+                onClick={() => setShowTimeInput(true)}
+                className="w-full p-4 bg-white border-2 border-gray-200 rounded-xl text-left hover:border-[#003580] transition-colors focus:outline-none focus:border-[#003580]"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-blue-500 rounded-lg flex items-center justify-center">
+                    <Clock className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs text-gray-500 mb-1">
+                      {transferTripType === "return" ? "Pickup & return time" : "Pickup time"}
+                    </div>
+                    <div className="font-semibold text-gray-900 text-base">
+                      {transferTripType === "return" 
+                        ? `${pickupTime} - ${returnTime}`
+                        : pickupTime
+                      }
+                    </div>
+                  </div>
+                </div>
+              </button>
+            )}
+
             {/* Travelers Field */}
             <button
               onClick={() => setShowTravelersInput(true)}
@@ -442,7 +530,7 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
       {showDateInput && (
         <MobileFullScreenDateInput
           title={fieldLabels.dates || "Select dates"}
-          tripType={tripType}
+          tripType={module === "transfers" ? transferTripType : tripType}
           initialRange={dateRange}
           onSelect={handleDateSelect}
           onBack={() => setShowDateInput(false)}
@@ -456,6 +544,27 @@ export function MobileNativeSearchForm({ module, transferType }: MobileNativeSea
           initialTravelers={travelers}
           onSelect={handleTravelersSelect}
           onBack={() => setShowTravelersInput(false)}
+        />
+      )}
+
+      {showTimeInput && module === "transfers" && (
+        <MobileFullScreenTimeInput
+          title="Select time"
+          transferTripType={transferTripType}
+          initialPickupTime={pickupTime}
+          initialReturnTime={returnTime}
+          onSelect={handleTimeSelect}
+          onBack={() => setShowTimeInput(false)}
+        />
+      )}
+
+      {showTransferTypeInput && module === "transfers" && (
+        <MobileFullScreenTransferTypeInput
+          title="Transfer type"
+          initialTransferType={transferType}
+          initialTripType={transferTripType}
+          onSelect={handleTransferTypeSelect}
+          onBack={() => setShowTransferTypeInput(false)}
         />
       )}
     </div>
