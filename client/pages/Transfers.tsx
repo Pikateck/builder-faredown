@@ -243,16 +243,15 @@ export default function Transfers() {
         </header>
 
         {/* Mobile Search Section */}
-        <div className="pb-8 pt-4 bg-white">
+        <div className="pb-8 pt-4" style={{ backgroundColor: "#003580" }}>
           <div className="px-4">
             {/* Upgrade Message */}
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-2 text-gray-900">
+              <h1 className="text-2xl font-bold mb-2 text-white">
                 Upgrade. Bargain. Book.
               </h1>
-              <p className="text-gray-600 text-sm mb-3">
-                Book safe, comfortable transfers with professional drivers and
-                competitive rates. From airport pickups to city transfers.
+              <p className="text-blue-200 text-sm mb-3">
+                Book safe, comfortable rides with the best AI-secured fares.
               </p>
             </div>
 
@@ -604,8 +603,7 @@ export default function Transfers() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Book safe, comfortable transfers with professional drivers and
-                competitive rates. From airport pickups to city transfers.
+                Book safe, comfortable rides with the best AI-secured fares.
               </h1>
             </div>
 
