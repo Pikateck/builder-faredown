@@ -138,9 +138,15 @@ export function TransfersSearchForm() {
   };
 
   const swapLocations = () => {
-    const temp = pickupLocation;
+    // Swap locations
+    const tempLocation = pickupLocation;
     setPickupLocation(dropoffLocation);
-    setDropoffLocation(temp);
+    setDropoffLocation(tempLocation);
+
+    // Swap codes
+    const tempCode = pickupCode;
+    setPickupCode(dropoffCode);
+    setDropoffCode(tempCode);
   };
 
   const handleSearch = () => {
