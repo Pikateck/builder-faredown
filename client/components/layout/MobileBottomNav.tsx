@@ -1,12 +1,11 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { Plane, Hotel, Camera, Car, User, Award, CreditCard, Settings, ChevronUp } from "lucide-react";
+import { Plane, Hotel, Camera, Car, User } from "lucide-react";
 
 export function MobileBottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
-  const [showAccountDropdown, setShowAccountDropdown] = useState(false);
 
   // Get active tab from URL
   const getActiveTab = () => {
