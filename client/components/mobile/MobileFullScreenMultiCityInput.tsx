@@ -198,13 +198,16 @@ export function MobileFullScreenMultiCityInput({
       {/* Summary */}
       <div className="bg-white px-4 py-4 border-b border-gray-200 flex-shrink-0">
         <div className="flex items-center space-x-3">
-          <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center shadow-md">
+          <div className="w-12 h-12 bg-orange-500 rounded-xl flex items-center justify-center shadow-md">
             <Plane className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1">
-            <div className="text-sm text-gray-600 mb-1">Multi-city itinerary</div>
+            <div className="text-sm text-gray-600 mb-1">Multi-city itinerary ({legs.length} flights)</div>
             <div className="font-semibold text-gray-900 text-base">
               {formatLegSummary()}
+            </div>
+            <div className="text-xs text-gray-500 mt-1">
+              Tap cities/dates to edit • Use + to add more flights
             </div>
           </div>
         </div>
@@ -276,14 +279,26 @@ export function MobileFullScreenMultiCityInput({
           {legs.length < 6 && (
             <button
               onClick={addLeg}
-              className="w-full p-4 border-2 border-dashed border-gray-300 rounded-xl text-center hover:border-[#003580] hover:bg-blue-50 transition-colors"
+              className="w-full p-5 border-2 border-dashed border-[#003580] rounded-xl text-center hover:border-[#002660] hover:bg-blue-50 transition-colors bg-blue-50/50"
             >
-              <div className="flex items-center justify-center space-x-2">
-                <Plus className="w-5 h-5 text-gray-500" />
-                <span className="text-gray-600 font-medium">Add another flight</span>
+              <div className="flex items-center justify-center space-x-3">
+                <div className="w-8 h-8 bg-[#003580] rounded-full flex items-center justify-center">
+                  <Plus className="w-5 h-5 text-white" />
+                </div>
+                <div className="text-left">
+                  <div className="text-[#003580] font-semibold">Add another flight</div>
+                  <div className="text-xs text-gray-600">Create multi-city itinerary</div>
+                </div>
               </div>
             </button>
           )}
+
+          {/* Help Text */}
+          <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <div className="text-sm text-blue-800">
+              <strong>💡 How it works:</strong> Add up to 6 flight segments to create your multi-city journey. Each segment can have different dates and destinations.
+            </div>
+          </div>
         </div>
       </div>
 

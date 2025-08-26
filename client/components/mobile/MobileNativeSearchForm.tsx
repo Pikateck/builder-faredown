@@ -195,9 +195,9 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
     if (module === "flights" && tripType === "multi-city") {
       if (multiCityLegs.length > 0) {
         const cities = multiCityLegs.map(leg => leg.fromCode).concat(multiCityLegs[multiCityLegs.length - 1].toCode);
-        return cities.join(" → ");
+        return `${cities.join(" → ")} (${multiCityLegs.length} flights)`;
       }
-      return "Multi-city flights";
+      return "Add multiple destinations";
     }
 
     if (!dateRange.startDate) return "Select dates";
@@ -464,14 +464,32 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
               className="w-full p-4 bg-white border-2 border-gray-200 rounded-xl text-left hover:border-[#003580] transition-colors focus:outline-none focus:border-[#003580]"
             >
               <div className="flex items-center space-x-3">
-                <div className="w-10 h-10 bg-emerald-500 rounded-lg flex items-center justify-center">
-                  <Calendar className="w-5 h-5 text-white" />
+                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                  module === "flights" && tripType === "multi-city"
+                    ? "bg-orange-500"
+                    : "bg-emerald-500"
+                }`}>
+                  {module === "flights" && tripType === "multi-city" ? (
+                    <Plane className="w-5 h-5 text-white" />
+                  ) : (
+                    <Calendar className="w-5 h-5 text-white" />
+                  )}
                 </div>
                 <div className="flex-1">
-                  <div className="text-xs text-gray-500 mb-1">{fieldLabels.dates}</div>
+                  <div className="text-xs text-gray-500 mb-1">
+                    {module === "flights" && tripType === "multi-city"
+                      ? "Multi-city flights"
+                      : fieldLabels.dates
+                    }
+                  </div>
                   <div className="font-semibold text-gray-900 text-base">
                     {formatDateDisplay()}
                   </div>
+                  {module === "flights" && tripType === "multi-city" && (
+                    <div className="text-xs text-blue-600 mt-1 font-medium">
+                      Tap to add flights →
+                    </div>
+                  )}
                 </div>
               </div>
             </button>
