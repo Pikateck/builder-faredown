@@ -149,6 +149,9 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
   const [showTransferTypeInput, setShowTransferTypeInput] = useState(false);
   const [showMultiCityInput, setShowMultiCityInput] = useState(false);
 
+  // Validation states
+  const [validationError, setValidationError] = useState<string | null>(null);
+
   // Handle city selection
   const handleFromCitySelect = (city: string, code: string) => {
     setFromCity(city);
