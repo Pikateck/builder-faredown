@@ -16,6 +16,7 @@ import {
   Search,
   Plus,
   Minus,
+  X,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 
