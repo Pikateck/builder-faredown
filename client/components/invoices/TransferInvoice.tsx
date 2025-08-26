@@ -138,7 +138,7 @@ export const TransferInvoice: React.FC<TransferInvoiceProps> = ({
             </h3>
             <div className="bg-gray-50 p-4 rounded-lg">
               <p className="font-semibold text-gray-900">
-                Faredown Technologies Pvt. Ltd.
+                Faredown Bookings and Travels Pvt Ltd
               </p>
               <p className="text-gray-600 text-sm mt-1">
                 123 Business Park, Electronic City
