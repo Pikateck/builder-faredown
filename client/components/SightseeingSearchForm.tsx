@@ -202,28 +202,6 @@ export function SightseeingSearchForm() {
           </div>
         </div>
 
-        {/* Popular Activities */}
-        <div className="mt-4 pt-4 border-t border-gray-200">
-          <div className="text-xs font-medium text-gray-600 mb-2">Popular Activities</div>
-          <div className="flex flex-wrap gap-2">
-            {[
-              "🎢 Theme Parks",
-              "🏛️ Museums",
-              "🌆 City Tours", 
-              "🏖️ Beach Activities",
-              "🗼 Landmarks",
-              "🍽️ Food Tours",
-            ].map((activity, index) => (
-              <button
-                key={index}
-                onClick={() => setDestination(activity.split(" ")[1])}
-                className="text-xs px-3 py-1 bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition-colors"
-              >
-                {activity}
-              </button>
-            ))}
-          </div>
-        </div>
       </div>
     </>
   );
