@@ -173,7 +173,9 @@ function App() {
                       path="/terms-conditions"
                       element={<TermsConditions />}
                     />
+                    <Route path="/terms-of-service" element={<TermsOfService />} />
                     <Route path="/refund-policy" element={<RefundPolicy />} />
+                    <Route path="/refund-cancellation-policy" element={<RefundCancellationPolicy />} />
                     <Route path="/cookie-policy" element={<CookiePolicy />} />
                     <Route path="/my-trips" element={<MyTrips />} />
 
