@@ -1,5 +1,7 @@
 {
-  "name": "fusion-starter",
+  "name": "faredown-platform",
+  "description": "Faredown.com - AI-powered travel booking and bargaining platform",
+  "author": "Faredown Bookings and Travels Pvt Ltd",
   "private": true,
   "type": "module",
   "pkg": {
