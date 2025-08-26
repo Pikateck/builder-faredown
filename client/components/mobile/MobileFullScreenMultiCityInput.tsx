@@ -286,8 +286,22 @@ export function MobileFullScreenMultiCityInput({
       {editingLeg && editingField === "to" && (
         <CitySelector legId={editingLeg} field="to" />
       )}
-      {editingLeg && editingField === "date" && (
-        <DateSelector legId={editingLeg} />
+
+      {/* Unified Date Input */}
+      {showDateInput && editingLeg && (
+        <MobileFullScreenDateInput
+          title="Select date"
+          tripType="one-way"
+          initialRange={{
+            startDate: legs.find(l => l.id === editingLeg)?.date || new Date()
+          }}
+          onSelect={handleDateSelect}
+          onBack={() => {
+            setShowDateInput(false);
+            setEditingLeg(null);
+            setEditingField(null);
+          }}
+        />
       )}
     </div>
   );
