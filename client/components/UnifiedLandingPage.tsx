@@ -69,15 +69,17 @@ const moduleConfig = {
 export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLandingPageProps) {
   const config = moduleConfig[module];
 
-  // On mobile, use the minimal native design
   return (
-    <div className="block md:hidden">
-      <MobileNativeLandingPage 
-        module={module} 
-        tagline={tagline} 
-        searchPanel={searchPanel} 
-      />
-      
+    <div>
+      {/* Mobile version - minimal native design */}
+      <div className="block md:hidden">
+        <MobileNativeLandingPage
+          module={module}
+          tagline={tagline}
+          searchPanel={searchPanel}
+        />
+      </div>
+
       {/* Desktop version remains rich with features */}
       <div className="hidden md:block">
         {/* Search Panel Section */}
