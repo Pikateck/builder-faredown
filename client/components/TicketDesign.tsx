@@ -261,7 +261,7 @@ export const TicketDesign: React.FC<TicketDesignProps> = ({ bookingData }) => {
           Thank you for choosing Faredown!
         </div>
         <div className="text-gray-400 text-sm">
-          © 2024 Faredown Technologies. All rights reserved. |
+          © 2025 Faredown Bookings and Travels Pvt Ltd. All rights reserved. |
           <span className="ml-2">
             The World's First Online Travel Bargain Portal™
           </span>
