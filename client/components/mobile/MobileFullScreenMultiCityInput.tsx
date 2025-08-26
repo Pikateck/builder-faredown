@@ -80,16 +80,19 @@ export function MobileFullScreenMultiCityInput({
     ));
   };
 
-  const handleCitySelect = (legId: string, field: "from" | "to", city: string, code: string) => {
-    if (field === "from") {
-      updateLeg(legId, "from", city);
-      updateLeg(legId, "fromCode", code);
-    } else {
-      updateLeg(legId, "to", city);
-      updateLeg(legId, "toCode", code);
+  const handleCitySelect = (city: string, code: string) => {
+    if (editingLeg && editingField) {
+      if (editingField === "from") {
+        updateLeg(editingLeg, "from", city);
+        updateLeg(editingLeg, "fromCode", code);
+      } else {
+        updateLeg(editingLeg, "to", city);
+        updateLeg(editingLeg, "toCode", code);
+      }
     }
     setEditingLeg(null);
     setEditingField(null);
+    setShowCityInput(false);
   };
 
   const handleDateSelect = (range: { startDate: Date; endDate?: Date }) => {
