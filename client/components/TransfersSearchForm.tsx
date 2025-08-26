@@ -39,6 +39,7 @@ export function TransfersSearchForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
+  const [serviceType, setServiceType] = useState("airport-taxi");
   const [tripType, setTripType] = useState("one-way");
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
