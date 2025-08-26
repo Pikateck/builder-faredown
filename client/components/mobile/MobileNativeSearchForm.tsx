@@ -326,10 +326,13 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
 
   // Handle search
   const handleSearch = () => {
+    // Clear previous validation errors
+    setValidationError(null);
+
     // Validate multi-city before proceeding
     const validation = validateMultiCitySearch();
     if (!validation.isValid) {
-      alert(validation.error); // Show validation error
+      setValidationError(validation.error!);
       return;
     }
 
