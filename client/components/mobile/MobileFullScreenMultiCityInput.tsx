@@ -114,39 +114,6 @@ export function MobileFullScreenMultiCityInput({
     return cities.join(" → ");
   };
 
-  // City selection modal
-  const CitySelector = ({ legId, field }: { legId: string; field: "from" | "to" }) => (
-    <div className="fixed inset-0 bg-white z-60">
-      <div className="bg-[#003580] text-white px-4 py-3">
-        <div className="flex items-center justify-between">
-          <button onClick={() => { setEditingLeg(null); setEditingField(null); }}>
-            <ChevronLeft className="w-6 h-6" />
-          </button>
-          <h1 className="text-lg font-semibold">Select {field === "from" ? "departure" : "destination"}</h1>
-          <div className="w-6"></div>
-        </div>
-      </div>
-      <div className="p-4 space-y-2">
-        {Object.entries(cities).map(([city, data]) => (
-          <button
-            key={city}
-            onClick={() => handleCitySelect(legId, field, city, data.code)}
-            className="w-full p-4 bg-white border border-gray-200 rounded-xl text-left hover:border-[#003580] hover:bg-blue-50"
-          >
-            <div className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-blue-50 rounded-full flex items-center justify-center">
-                <Plane className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <div className="font-semibold text-gray-900">{city} ({data.code})</div>
-                <div className="text-sm text-gray-600">{data.airport}</div>
-              </div>
-            </div>
-          </button>
-        ))}
-      </div>
-    </div>
-  );
 
 
   return (
