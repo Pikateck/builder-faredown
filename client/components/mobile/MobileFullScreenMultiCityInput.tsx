@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { ChevronLeft, Plus, Minus, Check, Plane, MapPin, Calendar, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { MobileFullScreenDateInput } from "./MobileFullScreenDateInput";
 import { format, addDays } from "date-fns";
 
 interface FlightLeg {
