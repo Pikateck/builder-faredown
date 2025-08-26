@@ -1478,8 +1478,13 @@ export default function FlightResults() {
                   Flight Results
                 </h1>
                 <p className="text-blue-200 text-xs">
-                  {tripType === "multi-city" && multiCityLegs && multiCityLegs.length > 0
-                    ? `${multiCityLegs.map(leg => leg.fromCode).concat(multiCityLegs[multiCityLegs.length - 1].toCode).join(" → ")} • `
+                  {tripType === "multi-city" &&
+                  multiCityLegs &&
+                  multiCityLegs.length > 0
+                    ? `${multiCityLegs
+                        .map((leg) => leg.fromCode)
+                        .concat(multiCityLegs[multiCityLegs.length - 1].toCode)
+                        .join(" → ")} • `
                     : selectedFromCity && selectedToCity
                       ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
                       : "Search Results • "}
@@ -1502,7 +1507,9 @@ export default function FlightResults() {
 
           {/* Enhanced Mobile Search Summary */}
           <div className="bg-white border-b border-gray-200 px-4 py-4">
-            {tripType === "multi-city" && multiCityLegs && multiCityLegs.length > 0 ? (
+            {tripType === "multi-city" &&
+            multiCityLegs &&
+            multiCityLegs.length > 0 ? (
               // Multi-city display
               <div>
                 <div className="flex items-center justify-between mb-4">
@@ -1523,7 +1530,12 @@ export default function FlightResults() {
                         </span>
                       </div>
                       <div className="text-sm text-gray-600">
-                        {multiCityLegs.map(leg => leg.fromCode).concat(multiCityLegs[multiCityLegs.length - 1].toCode).join(" → ")}
+                        {multiCityLegs
+                          .map((leg) => leg.fromCode)
+                          .concat(
+                            multiCityLegs[multiCityLegs.length - 1].toCode,
+                          )
+                          .join(" → ")}
                       </div>
                     </div>
                   </div>
@@ -1541,10 +1553,15 @@ export default function FlightResults() {
                 {/* Multi-city legs breakdown */}
                 <div className="space-y-3">
                   {multiCityLegs.map((leg, index) => (
-                    <div key={leg.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                    <div
+                      key={leg.id}
+                      className="flex items-center justify-between p-3 bg-gray-50 rounded-lg"
+                    >
                       <div className="flex items-center space-x-3">
                         <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-gray-200">
-                          <span className="text-sm font-semibold text-gray-700">{index + 1}</span>
+                          <span className="text-sm font-semibold text-gray-700">
+                            {index + 1}
+                          </span>
                         </div>
                         <div>
                           <div className="text-sm font-semibold text-gray-900">
@@ -1573,9 +1590,13 @@ export default function FlightResults() {
                         <span className="text-white text-xs">ℹ</span>
                       </div>
                       <div className="text-sm text-blue-800">
-                        <div className="font-medium">Multi-city Search Active</div>
+                        <div className="font-medium">
+                          Multi-city Search Active
+                        </div>
                         <div className="text-xs text-blue-600 mt-1">
-                          Searching for the best flight combinations across all {multiCityLegs.length} segments. Results will show compatible itineraries.
+                          Searching for the best flight combinations across all{" "}
+                          {multiCityLegs.length} segments. Results will show
+                          compatible itineraries.
                         </div>
                       </div>
                     </div>

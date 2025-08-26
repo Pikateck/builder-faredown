@@ -6,12 +6,11 @@ interface MobileNativeLandingPageProps {
   searchPanel: React.ReactNode;
 }
 
-export function MobileNativeLandingPage({ 
-  module, 
-  tagline, 
-  searchPanel 
+export function MobileNativeLandingPage({
+  module,
+  tagline,
+  searchPanel,
 }: MobileNativeLandingPageProps) {
-  
   return (
     <div className="bg-gray-50">
       {/* Search Panel - This is the primary focus */}
@@ -22,7 +21,9 @@ export function MobileNativeLandingPage({
         <div className="text-center">
           <div className="inline-flex items-center space-x-2 bg-blue-50 px-3 py-1.5 rounded-full mb-3">
             <div className="w-1.5 h-1.5 bg-[#003580] rounded-full animate-pulse"></div>
-            <span className="text-[#003580] font-medium text-xs">AI-Powered Platform</span>
+            <span className="text-[#003580] font-medium text-xs">
+              AI-Powered Platform
+            </span>
           </div>
 
           <p className="text-gray-600 text-sm max-w-sm mx-auto leading-relaxed">

@@ -15,7 +15,10 @@ export default function Hotels() {
             {/* Desktop Search Panel */}
             <div className="hidden md:block">
               {/* Blue Header Section - Consistent with flights */}
-              <div className="py-6 md:py-8" style={{ backgroundColor: "#003580" }}>
+              <div
+                className="py-6 md:py-8"
+                style={{ backgroundColor: "#003580" }}
+              >
                 <div className="max-w-7xl mx-auto px-3 sm:px-4">
                   <div className="text-center mb-4">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">

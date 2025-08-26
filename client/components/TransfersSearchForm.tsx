@@ -91,8 +91,8 @@ export function TransfersSearchForm() {
       setIsDropoffOpen(false);
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   // Popular transfer locations
@@ -120,14 +120,15 @@ export function TransfersSearchForm() {
 
   const updatePassengerCount = (
     type: keyof PassengerConfig,
-    operation: "increment" | "decrement"
+    operation: "increment" | "decrement",
   ) => {
     setPassengers((prev) => {
       const newValue =
         operation === "increment" ? prev[type] + 1 : prev[type] - 1;
 
       if (type === "adults" && newValue < 1) return prev;
-      if ((type === "children" || type === "infants") && newValue < 0) return prev;
+      if ((type === "children" || type === "infants") && newValue < 0)
+        return prev;
       if (newValue > 9) return prev;
 
       return {
@@ -264,7 +265,10 @@ export function TransfersSearchForm() {
         {/* Main Search Form */}
         <div className="flex flex-col lg:flex-row gap-2 mb-4">
           {/* Pickup Location */}
-          <div className="relative flex-1 lg:max-w-[240px] w-full" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative flex-1 lg:max-w-[240px] w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
             <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
               Pickup location
             </label>
@@ -334,7 +338,9 @@ export function TransfersSearchForm() {
                 <div className="space-y-1">
                   {popularLocations
                     .filter((location) =>
-                      location.toLowerCase().includes((pickupInputValue || "").toLowerCase())
+                      location
+                        .toLowerCase()
+                        .includes((pickupInputValue || "").toLowerCase()),
                     )
                     .slice(0, 8)
                     .map((location, index) => (
@@ -342,7 +348,9 @@ export function TransfersSearchForm() {
                         key={index}
                         onClick={() => {
                           setPickupLocation(location);
-                          setPickupCode(location.includes("Airport") ? "APT" : "CTY");
+                          setPickupCode(
+                            location.includes("Airport") ? "APT" : "CTY",
+                          );
                           setIsPickupOpen(false);
                           setPickupInputValue("");
                           setIsPickupUserTyping(false);
@@ -382,7 +390,10 @@ export function TransfersSearchForm() {
           </div>
 
           {/* Drop-off Location */}
-          <div className="relative flex-1 lg:max-w-[240px] w-full" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative flex-1 lg:max-w-[240px] w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
             <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
               Drop-off location
             </label>
@@ -452,7 +463,9 @@ export function TransfersSearchForm() {
                 <div className="space-y-1">
                   {popularLocations
                     .filter((location) =>
-                      location.toLowerCase().includes((dropoffInputValue || "").toLowerCase())
+                      location
+                        .toLowerCase()
+                        .includes((dropoffInputValue || "").toLowerCase()),
                     )
                     .slice(0, 8)
                     .map((location, index) => (
@@ -460,7 +473,9 @@ export function TransfersSearchForm() {
                         key={index}
                         onClick={() => {
                           setDropoffLocation(location);
-                          setDropoffCode(location.includes("Airport") ? "APT" : "CTY");
+                          setDropoffCode(
+                            location.includes("Airport") ? "APT" : "CTY",
+                          );
                           setIsDropoffOpen(false);
                           setDropoffInputValue("");
                           setIsDropoffUserTyping(false);
@@ -546,7 +561,10 @@ export function TransfersSearchForm() {
                 <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
                   Return Date
                 </label>
-                <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
+                <Popover
+                  open={isReturnDateOpen}
+                  onOpenChange={setIsReturnDateOpen}
+                >
                   <PopoverTrigger asChild>
                     <Button
                       variant="outline"
@@ -554,7 +572,9 @@ export function TransfersSearchForm() {
                     >
                       <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                       <span className="truncate">
-                        {returnDate ? format(returnDate, "MMM d") : "Return Date"}
+                        {returnDate
+                          ? format(returnDate, "MMM d")
+                          : "Return Date"}
                       </span>
                     </Button>
                   </PopoverTrigger>
@@ -625,7 +645,9 @@ export function TransfersSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("adults", "decrement")}
+                        onClick={() =>
+                          updatePassengerCount("adults", "decrement")
+                        }
                         disabled={passengers.adults <= 1}
                       >
                         <Minus className="w-3 h-3" />
@@ -637,7 +659,9 @@ export function TransfersSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("adults", "increment")}
+                        onClick={() =>
+                          updatePassengerCount("adults", "increment")
+                        }
                         disabled={passengers.adults >= 9}
                       >
                         <Plus className="w-3 h-3" />
@@ -656,7 +680,9 @@ export function TransfersSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("children", "decrement")}
+                        onClick={() =>
+                          updatePassengerCount("children", "decrement")
+                        }
                         disabled={passengers.children <= 0}
                       >
                         <Minus className="w-3 h-3" />
@@ -668,7 +694,9 @@ export function TransfersSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("children", "increment")}
+                        onClick={() =>
+                          updatePassengerCount("children", "increment")
+                        }
                         disabled={passengers.children >= 9}
                       >
                         <Plus className="w-3 h-3" />
@@ -687,7 +715,9 @@ export function TransfersSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("infants", "decrement")}
+                        onClick={() =>
+                          updatePassengerCount("infants", "decrement")
+                        }
                         disabled={passengers.infants <= 0}
                       >
                         <Minus className="w-3 h-3" />
@@ -699,7 +729,9 @@ export function TransfersSearchForm() {
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full"
-                        onClick={() => updatePassengerCount("infants", "increment")}
+                        onClick={() =>
+                          updatePassengerCount("infants", "increment")
+                        }
                         disabled={passengers.infants >= 9}
                       >
                         <Plus className="w-3 h-3" />

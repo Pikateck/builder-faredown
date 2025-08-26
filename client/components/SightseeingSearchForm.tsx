@@ -22,7 +22,7 @@ export function SightseeingSearchForm() {
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isUserTyping, setIsUserTyping] = useState(false);
-  
+
   // Set default dates to future dates
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -51,14 +51,14 @@ export function SightseeingSearchForm() {
       setIsDestinationOpen(false);
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   // Popular sightseeing destinations
   const popularDestinations = [
     "Dubai, United Arab Emirates",
-    "London, United Kingdom", 
+    "London, United Kingdom",
     "Paris, France",
     "Rome, Italy",
     "Barcelona, Spain",
@@ -124,7 +124,10 @@ export function SightseeingSearchForm() {
         {/* Main Search Form */}
         <div className="flex flex-col lg:flex-row gap-2 mb-4">
           {/* Destination */}
-          <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
             <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
               Where do you want to explore?
             </label>
@@ -194,7 +197,9 @@ export function SightseeingSearchForm() {
                 <div className="space-y-1">
                   {popularDestinations
                     .filter((dest) =>
-                      dest.toLowerCase().includes((inputValue || "").toLowerCase())
+                      dest
+                        .toLowerCase()
+                        .includes((inputValue || "").toLowerCase()),
                     )
                     .slice(0, 8)
                     .map((dest, index) => (
@@ -202,7 +207,10 @@ export function SightseeingSearchForm() {
                         key={index}
                         onClick={() => {
                           setDestination(dest);
-                          setDestinationCode(dest.split(",")[0]?.substring(0, 3).toUpperCase() || "ACT");
+                          setDestinationCode(
+                            dest.split(",")[0]?.substring(0, 3).toUpperCase() ||
+                              "ACT",
+                          );
                           setIsDestinationOpen(false);
                           setInputValue("");
                           setIsUserTyping(false);
@@ -297,7 +305,6 @@ export function SightseeingSearchForm() {
             </Button>
           </div>
         </div>
-
       </div>
     </>
   );

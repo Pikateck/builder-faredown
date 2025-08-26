@@ -31,16 +31,19 @@ const moduleConfig = {
   flights: {
     icon: "✈️",
     primaryFeature: "Flight Upgrade Bargaining",
-    primaryDescription: "Our AI negotiates seat upgrades in real-time, turning economy bookings into business class at unbeatable prices.",
-    testimonial: "Saved ₹15,000 on my Dubai trip – business class at economy price!",
+    primaryDescription:
+      "Our AI negotiates seat upgrades in real-time, turning economy bookings into business class at unbeatable prices.",
+    testimonial:
+      "Saved ₹15,000 on my Dubai trip – business class at economy price!",
     upgradeType: "flight upgrades",
     serviceType: "flights",
     supportType: "flight",
   },
   hotels: {
     icon: "🏨",
-    primaryFeature: "Room Upgrade Bargaining", 
-    primaryDescription: "Our AI negotiates room upgrades in real-time, turning standard bookings into luxury suites at incredible prices.",
+    primaryFeature: "Room Upgrade Bargaining",
+    primaryDescription:
+      "Our AI negotiates room upgrades in real-time, turning standard bookings into luxury suites at incredible prices.",
     testimonial: "Got luxury suite upgrade in Singapore using AI Bargaining!",
     upgradeType: "room upgrades",
     serviceType: "hotels",
@@ -49,8 +52,10 @@ const moduleConfig = {
   sightseeing: {
     icon: "📸",
     primaryFeature: "Tour Upgrade Bargaining",
-    primaryDescription: "Our AI negotiates premium tour experiences in real-time, turning basic tours into VIP experiences at amazing prices.",
-    testimonial: "Saved ₹8,000 on my Dubai city tour – VIP experience at standard price!",
+    primaryDescription:
+      "Our AI negotiates premium tour experiences in real-time, turning basic tours into VIP experiences at amazing prices.",
+    testimonial:
+      "Saved ₹8,000 on my Dubai city tour – VIP experience at standard price!",
     upgradeType: "tour upgrades",
     serviceType: "experiences",
     supportType: "tour",
@@ -58,15 +63,20 @@ const moduleConfig = {
   transfers: {
     icon: "🚗",
     primaryFeature: "Ride Upgrade Bargaining",
-    primaryDescription: "Our AI negotiates premium transfers in real-time, turning standard rides into luxury car service at great prices.",
+    primaryDescription:
+      "Our AI negotiates premium transfers in real-time, turning standard rides into luxury car service at great prices.",
     testimonial: "Got luxury car service in Singapore using AI Bargaining!",
-    upgradeType: "ride upgrades", 
+    upgradeType: "ride upgrades",
     serviceType: "transfers",
     supportType: "transfer",
   },
 };
 
-export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLandingPageProps) {
+export function UnifiedLandingPage({
+  module,
+  tagline,
+  searchPanel,
+}: UnifiedLandingPageProps) {
   const config = moduleConfig[module];
 
   return (
@@ -96,10 +106,12 @@ export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLand
                 </span>
               </div>
               <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
-                Why Choose Faredown {module.charAt(0).toUpperCase() + module.slice(1)}?
+                Why Choose Faredown{" "}
+                {module.charAt(0).toUpperCase() + module.slice(1)}?
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Experience the future of {config.serviceType} booking with AI-powered bargaining technology
+                Experience the future of {config.serviceType} booking with
+                AI-powered bargaining technology
               </p>
             </div>
 
@@ -142,8 +154,12 @@ export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLand
                     <Lock className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 text-sm">Secure Booking</h3>
-                    <p className="text-gray-600 text-xs">Instant confirmations</p>
+                    <h3 className="font-bold text-gray-900 text-sm">
+                      Secure Booking
+                    </h3>
+                    <p className="text-gray-600 text-xs">
+                      Instant confirmations
+                    </p>
                   </div>
                 </div>
               </div>
@@ -155,7 +171,9 @@ export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLand
                     <MessageCircle className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 text-sm">24/7 Support</h3>
+                    <h3 className="font-bold text-gray-900 text-sm">
+                      24/7 Support
+                    </h3>
                     <p className="text-gray-600 text-xs">Expert assistance</p>
                   </div>
                 </div>
@@ -168,7 +186,9 @@ export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLand
                     <Zap className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-bold text-gray-900 text-sm">AI Bargaining</h3>
+                    <h3 className="font-bold text-gray-900 text-sm">
+                      AI Bargaining
+                    </h3>
                     <p className="text-gray-600 text-xs">Live negotiations</p>
                   </div>
                 </div>
@@ -188,12 +208,15 @@ export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLand
                   Trusted worldwide
                 </span>
               </div>
-              
+
               <div className="bg-white rounded-xl shadow-md p-6 max-w-sm mx-auto border border-gray-100">
                 <div className="flex items-center justify-center space-x-3 mb-3">
                   <div className="flex items-center space-x-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-4 h-4 text-[#febb02] fill-current" />
+                      <Star
+                        key={i}
+                        className="w-4 h-4 text-[#febb02] fill-current"
+                      />
                     ))}
                   </div>
                   <span className="text-2xl font-bold text-gray-900">4.9</span>
@@ -219,10 +242,15 @@ export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLand
                     <span className="text-white font-bold text-sm">P</span>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900 text-sm">Priya Sharma</div>
+                    <div className="font-medium text-gray-900 text-sm">
+                      Priya Sharma
+                    </div>
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3 h-3 text-[#febb02] fill-current" />
+                        <Star
+                          key={i}
+                          className="w-3 h-3 text-[#febb02] fill-current"
+                        />
                       ))}
                     </div>
                   </div>
@@ -238,16 +266,22 @@ export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLand
                     <span className="text-white font-bold text-sm">R</span>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900 text-sm">Rohit Kumar</div>
+                    <div className="font-medium text-gray-900 text-sm">
+                      Rohit Kumar
+                    </div>
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3 h-3 text-[#febb02] fill-current" />
+                        <Star
+                          key={i}
+                          className="w-3 h-3 text-[#febb02] fill-current"
+                        />
                       ))}
                     </div>
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm leading-relaxed">
-                  "Professional service and instant confirmations. AI bargaining works perfectly!"
+                  "Professional service and instant confirmations. AI bargaining
+                  works perfectly!"
                 </p>
               </div>
 
@@ -257,16 +291,22 @@ export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLand
                     <span className="text-white font-bold text-sm">A</span>
                   </div>
                   <div>
-                    <div className="font-medium text-gray-900 text-sm">Anjali Patel</div>
+                    <div className="font-medium text-gray-900 text-sm">
+                      Anjali Patel
+                    </div>
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-3 h-3 text-[#febb02] fill-current" />
+                        <Star
+                          key={i}
+                          className="w-3 h-3 text-[#febb02] fill-current"
+                        />
                       ))}
                     </div>
                   </div>
                 </div>
                 <p className="text-gray-700 text-sm leading-relaxed">
-                  "Easy booking and great savings. Faredown's AI technology is revolutionary!"
+                  "Easy booking and great savings. Faredown's AI technology is
+                  revolutionary!"
                 </p>
               </div>
             </div>
@@ -280,7 +320,9 @@ export function UnifiedLandingPage({ module, tagline, searchPanel }: UnifiedLand
                   </div>
                   <div className="text-left">
                     <div className="font-bold">24/7 Customer Support</div>
-                    <div className="text-blue-100 text-sm">Live Chat & Call Available</div>
+                    <div className="text-blue-100 text-sm">
+                      Live Chat & Call Available
+                    </div>
                   </div>
                 </div>
               </div>

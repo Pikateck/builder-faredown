@@ -1,16 +1,16 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { 
-  Plane, 
-  Calendar, 
-  Users, 
+import {
+  Plane,
+  Calendar,
+  Users,
   Search,
   MapPin,
   Hotel,
   Camera,
   Car,
-  Clock
+  Clock,
 } from "lucide-react";
 import { format, addDays } from "date-fns";
 import { MobileFullScreenCityInput } from "./MobileFullScreenCityInput";
@@ -56,14 +56,14 @@ const cityData = {
   },
   Delhi: {
     code: "DEL",
-    city: "New Delhi", 
+    city: "New Delhi",
     country: "India",
     airport: "Indira Gandhi Intl",
   },
   Dubai: {
     code: "DXB",
     city: "Dubai",
-    country: "UAE", 
+    country: "UAE",
     airport: "Dubai International",
   },
   London: {
@@ -98,40 +98,50 @@ const cityData = {
   },
 };
 
-export function MobileNativeSearchForm({ module, transferType: initialTransferType }: MobileNativeSearchFormProps) {
+export function MobileNativeSearchForm({
+  module,
+  transferType: initialTransferType,
+}: MobileNativeSearchFormProps) {
   const navigate = useNavigate();
-  
+
   // Form states
-  const [tripType, setTripType] = useState<"round-trip" | "one-way" | "multi-city">(
-    module === "hotels" || module === "sightseeing" ? "one-way" : 
-    module === "transfers" ? "one-way" : "round-trip"
+  const [tripType, setTripType] = useState<
+    "round-trip" | "one-way" | "multi-city"
+  >(
+    module === "hotels" || module === "sightseeing"
+      ? "one-way"
+      : module === "transfers"
+        ? "one-way"
+        : "round-trip",
   );
-  
+
   // Transfers specific state
-  const [transferType, setTransferType] = useState<"airport-taxi" | "car-rentals">(
-    initialTransferType || "airport-taxi"
-  );
-  const [transferTripType, setTransferTripType] = useState<"one-way" | "return">("one-way");
-  
+  const [transferType, setTransferType] = useState<
+    "airport-taxi" | "car-rentals"
+  >(initialTransferType || "airport-taxi");
+  const [transferTripType, setTransferTripType] = useState<
+    "one-way" | "return"
+  >("one-way");
+
   // Location states
   const [fromCity, setFromCity] = useState("Mumbai");
   const [fromCode, setFromCode] = useState("BOM");
   const [toCity, setToCity] = useState("Dubai");
   const [toCode, setToCode] = useState("DXB");
-  
+
   // Date states
   const [dateRange, setDateRange] = useState<DateRange>({
     startDate: addDays(new Date(), 1),
     endDate: addDays(new Date(), 8),
   });
-  
+
   // Time states (for transfers)
   const [pickupTime, setPickupTime] = useState("12:00");
   const [returnTime, setReturnTime] = useState("12:00");
 
   // Multi-city states (for flights)
   const [multiCityLegs, setMultiCityLegs] = useState<FlightLeg[]>([]);
-  
+
   // Travelers state
   const [travelers, setTravelers] = useState<Travelers>({
     adults: 1,
@@ -139,7 +149,7 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
     infants: 0,
     rooms: 1,
   });
-  
+
   // UI states for full-screen inputs
   const [showFromInput, setShowFromInput] = useState(false);
   const [showToInput, setShowToInput] = useState(false);
@@ -183,7 +193,10 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
   };
 
   // Handle transfer type selection
-  const handleTransferTypeSelect = (type: "airport-taxi" | "car-rentals", tripType: "one-way" | "return") => {
+  const handleTransferTypeSelect = (
+    type: "airport-taxi" | "car-rentals",
+    tripType: "one-way" | "return",
+  ) => {
     setTransferType(type);
     setTransferTripType(tripType);
   };
@@ -197,7 +210,9 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
   const formatDateDisplay = () => {
     if (module === "flights" && tripType === "multi-city") {
       if (multiCityLegs.length > 0) {
-        const cities = multiCityLegs.map(leg => leg.fromCode).concat(multiCityLegs[multiCityLegs.length - 1].toCode);
+        const cities = multiCityLegs
+          .map((leg) => leg.fromCode)
+          .concat(multiCityLegs[multiCityLegs.length - 1].toCode);
         return `${cities.join(" → ")} (${multiCityLegs.length} flights)`;
       }
       return "Add multiple destinations";
@@ -207,7 +222,9 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
 
     if (module === "hotels") {
       const checkIn = format(dateRange.startDate, "MMM d");
-      const checkOut = dateRange.endDate ? format(dateRange.endDate, "MMM d") : "Check-out";
+      const checkOut = dateRange.endDate
+        ? format(dateRange.endDate, "MMM d")
+        : "Check-out";
       return `${checkIn} - ${checkOut}`;
     }
 
@@ -225,30 +242,37 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
   // Format travelers display
   const formatTravelersDisplay = () => {
     const parts = [];
-    
+
     if (travelers.adults > 0) {
-      parts.push(`${travelers.adults} adult${travelers.adults > 1 ? 's' : ''}`);
+      parts.push(`${travelers.adults} adult${travelers.adults > 1 ? "s" : ""}`);
     }
-    
+
     if (travelers.children && travelers.children > 0) {
-      parts.push(`${travelers.children} child${travelers.children > 1 ? 'ren' : ''}`);
+      parts.push(
+        `${travelers.children} child${travelers.children > 1 ? "ren" : ""}`,
+      );
     }
-    
+
     if (module === "hotels" && travelers.rooms && travelers.rooms > 0) {
-      parts.push(`${travelers.rooms} room${travelers.rooms > 1 ? 's' : ''}`);
+      parts.push(`${travelers.rooms} room${travelers.rooms > 1 ? "s" : ""}`);
     }
-    
-    return parts.join(', ') || "1 adult";
+
+    return parts.join(", ") || "1 adult";
   };
 
   // Get appropriate icon for module
   const getModuleIcon = () => {
     switch (module) {
-      case "flights": return Plane;
-      case "hotels": return Hotel;
-      case "sightseeing": return Camera;
-      case "transfers": return Car;
-      default: return Plane;
+      case "flights":
+        return Plane;
+      case "hotels":
+        return Hotel;
+      case "sightseeing":
+        return Camera;
+      case "transfers":
+        return Car;
+      default:
+        return Plane;
     }
   };
 
@@ -259,7 +283,12 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
         return {
           from: "Leaving from",
           to: "Going to",
-          dates: tripType === "one-way" ? "Departure" : tripType === "multi-city" ? "Travel dates" : "Travel dates",
+          dates:
+            tripType === "one-way"
+              ? "Departure"
+              : tripType === "multi-city"
+                ? "Travel dates"
+                : "Travel dates",
         };
       case "hotels":
         return {
@@ -275,8 +304,14 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
         };
       case "transfers":
         return {
-          from: transferType === "airport-taxi" ? "Pickup location" : "Pickup location",
-          to: transferType === "airport-taxi" ? "Drop-off location" : "Drop-off location",
+          from:
+            transferType === "airport-taxi"
+              ? "Pickup location"
+              : "Pickup location",
+          to:
+            transferType === "airport-taxi"
+              ? "Drop-off location"
+              : "Drop-off location",
           dates: "Transfer date",
         };
       default:
@@ -300,7 +335,7 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
     if (multiCityLegs.length < 2) {
       return {
         isValid: false,
-        error: "Add at least 2 flight segments for multi-city travel"
+        error: "Add at least 2 flight segments for multi-city travel",
       };
     }
 
@@ -310,13 +345,13 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
       if (!leg.from || !leg.fromCode || !leg.to || !leg.toCode) {
         return {
           isValid: false,
-          error: `Complete destinations for Flight ${i + 1}`
+          error: `Complete destinations for Flight ${i + 1}`,
         };
       }
       if (!leg.date) {
         return {
           isValid: false,
-          error: `Select date for Flight ${i + 1}`
+          error: `Select date for Flight ${i + 1}`,
         };
       }
     }
@@ -350,7 +385,10 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
       searchParams.set("multiCityLegs", JSON.stringify(multiCityLegs));
     }
 
-    if (dateRange.endDate && (tripType === "round-trip" || module === "hotels")) {
+    if (
+      dateRange.endDate &&
+      (tripType === "round-trip" || module === "hotels")
+    ) {
       searchParams.set("returnDate", dateRange.endDate.toISOString());
     }
 
@@ -384,10 +422,14 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
               Upgrade. Bargain. Book.
             </h2>
             <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-white leading-tight opacity-95">
-              {module === "flights" && "Turn your fare into an upgrade with live AI bargaining."}
-              {module === "hotels" && "Control your price with AI-powered hotel upgrades."}
-              {module === "sightseeing" && "Explore attractions & experiences with AI that bargains for you."}
-              {module === "transfers" && "Ride in comfort for less — AI secures your best deal on every trip."}
+              {module === "flights" &&
+                "Turn your fare into an upgrade with live AI bargaining."}
+              {module === "hotels" &&
+                "Control your price with AI-powered hotel upgrades."}
+              {module === "sightseeing" &&
+                "Explore attractions & experiences with AI that bargains for you."}
+              {module === "transfers" &&
+                "Ride in comfort for less — AI secures your best deal on every trip."}
             </h1>
           </div>
         </div>
@@ -405,39 +447,45 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
                   tripType === "round-trip" ? "text-[#003580]" : "text-gray-500"
                 }`}
               >
-                <div className={`w-4 h-4 rounded-full border-2 ${
-                  tripType === "round-trip" 
-                    ? "bg-[#003580] border-[#003580]" 
-                    : "border-gray-300"
-                }`}></div>
+                <div
+                  className={`w-4 h-4 rounded-full border-2 ${
+                    tripType === "round-trip"
+                      ? "bg-[#003580] border-[#003580]"
+                      : "border-gray-300"
+                  }`}
+                ></div>
                 <span className="text-sm font-medium">Round trip</span>
               </button>
-              
+
               <button
                 onClick={() => setTripType("one-way")}
                 className={`flex items-center space-x-2 ${
                   tripType === "one-way" ? "text-[#003580]" : "text-gray-500"
                 }`}
               >
-                <div className={`w-4 h-4 rounded-full border-2 ${
-                  tripType === "one-way" 
-                    ? "bg-[#003580] border-[#003580]" 
-                    : "border-gray-300"
-                }`}></div>
+                <div
+                  className={`w-4 h-4 rounded-full border-2 ${
+                    tripType === "one-way"
+                      ? "bg-[#003580] border-[#003580]"
+                      : "border-gray-300"
+                  }`}
+                ></div>
                 <span className="text-sm font-medium">One way</span>
               </button>
-              
+
               <button
                 onClick={() => setTripType("multi-city")}
                 className={`flex items-center space-x-2 ${
                   tripType === "multi-city" ? "text-[#003580]" : "text-gray-500"
                 }`}
               >
-                <div className={`w-4 h-4 rounded-full border-2 ${
-                  tripType === "multi-city" 
-                    ? "bg-[#003580] border-[#003580]" 
-                    : "border-gray-300"
-                }`}></div>
+                <div
+                  className={`w-4 h-4 rounded-full border-2 ${
+                    tripType === "multi-city"
+                      ? "bg-[#003580] border-[#003580]"
+                      : "border-gray-300"
+                  }`}
+                ></div>
                 <span className="text-sm font-medium">Multi-city</span>
               </button>
             </div>
@@ -454,9 +502,14 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
                   <Car className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1">
-                  <div className="text-xs text-gray-500 mb-1">Transfer type</div>
+                  <div className="text-xs text-gray-500 mb-1">
+                    Transfer type
+                  </div>
                   <div className="font-semibold text-gray-900 text-base">
-                    {transferType === "airport-taxi" ? "Airport Taxi" : "Car Rentals"} • {transferTripType === "one-way" ? "One-way" : "Return"}
+                    {transferType === "airport-taxi"
+                      ? "Airport Taxi"
+                      : "Car Rentals"}{" "}
+                    • {transferTripType === "one-way" ? "One-way" : "Return"}
                   </div>
                 </div>
               </div>
@@ -475,7 +528,9 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
                   <ModuleIcon className="w-5 h-5 text-white" />
                 </div>
                 <div className="flex-1">
-                  <div className="text-xs text-gray-500 mb-1">{fieldLabels.from}</div>
+                  <div className="text-xs text-gray-500 mb-1">
+                    {fieldLabels.from}
+                  </div>
                   <div className="font-semibold text-gray-900 text-base">
                     {fromCity} ({fromCode})
                   </div>
@@ -494,7 +549,9 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
                     <MapPin className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs text-gray-500 mb-1">{fieldLabels.to}</div>
+                    <div className="text-xs text-gray-500 mb-1">
+                      {fieldLabels.to}
+                    </div>
                     <div className="font-semibold text-gray-900 text-base">
                       {toCity} ({toCode})
                     </div>
@@ -515,11 +572,13 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
               className="w-full p-4 bg-white border-2 border-gray-200 rounded-xl text-left hover:border-[#003580] transition-colors focus:outline-none focus:border-[#003580]"
             >
               <div className="flex items-center space-x-3">
-                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${
-                  module === "flights" && tripType === "multi-city"
-                    ? "bg-orange-500"
-                    : "bg-emerald-500"
-                }`}>
+                <div
+                  className={`w-10 h-10 rounded-lg flex items-center justify-center ${
+                    module === "flights" && tripType === "multi-city"
+                      ? "bg-orange-500"
+                      : "bg-emerald-500"
+                  }`}
+                >
                   {module === "flights" && tripType === "multi-city" ? (
                     <Plane className="w-5 h-5 text-white" />
                   ) : (
@@ -530,8 +589,7 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
                   <div className="text-xs text-gray-500 mb-1">
                     {module === "flights" && tripType === "multi-city"
                       ? "Multi-city flights"
-                      : fieldLabels.dates
-                    }
+                      : fieldLabels.dates}
                   </div>
                   <div className="font-semibold text-gray-900 text-base">
                     {formatDateDisplay()}
@@ -557,13 +615,14 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
                   </div>
                   <div className="flex-1">
                     <div className="text-xs text-gray-500 mb-1">
-                      {transferTripType === "return" ? "Pickup & return time" : "Pickup time"}
+                      {transferTripType === "return"
+                        ? "Pickup & return time"
+                        : "Pickup time"}
                     </div>
                     <div className="font-semibold text-gray-900 text-base">
-                      {transferTripType === "return" 
+                      {transferTripType === "return"
                         ? `${pickupTime} - ${returnTime}`
-                        : pickupTime
-                      }
+                        : pickupTime}
                     </div>
                   </div>
                 </div>
@@ -597,7 +656,9 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
                   <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
                     <span className="text-white text-xs font-bold">!</span>
                   </div>
-                  <p className="text-red-700 text-sm font-medium">{validationError}</p>
+                  <p className="text-red-700 text-sm font-medium">
+                    {validationError}
+                  </p>
                 </div>
               </div>
             )}
@@ -606,11 +667,17 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
             <Button
               onClick={handleSearch}
               className={`w-full py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 mt-6 transition-all ${
-                module === "flights" && tripType === "multi-city" && !validateMultiCitySearch().isValid
+                module === "flights" &&
+                tripType === "multi-city" &&
+                !validateMultiCitySearch().isValid
                   ? "bg-gray-400 cursor-not-allowed text-white"
                   : "bg-[#003580] hover:bg-[#002660] text-white"
               }`}
-              disabled={module === "flights" && tripType === "multi-city" && !validateMultiCitySearch().isValid}
+              disabled={
+                module === "flights" &&
+                tripType === "multi-city" &&
+                !validateMultiCitySearch().isValid
+              }
             >
               <Search className="w-5 h-5" />
               <span>
@@ -618,8 +685,7 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
                   ? multiCityLegs.length < 2
                     ? "Add Flight Segments"
                     : "Search Multi-City"
-                  : "Search"
-                }
+                  : "Search"}
               </span>
             </Button>
           </div>
@@ -690,15 +756,17 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
         />
       )}
 
-      {showMultiCityInput && module === "flights" && tripType === "multi-city" && (
-        <MobileFullScreenMultiCityInput
-          title="Multi-city flights"
-          initialLegs={multiCityLegs}
-          onSelect={handleMultiCitySelect}
-          onBack={() => setShowMultiCityInput(false)}
-          cities={cityData}
-        />
-      )}
+      {showMultiCityInput &&
+        module === "flights" &&
+        tripType === "multi-city" && (
+          <MobileFullScreenMultiCityInput
+            title="Multi-city flights"
+            initialLegs={multiCityLegs}
+            onSelect={handleMultiCitySelect}
+            onBack={() => setShowMultiCityInput(false)}
+            cities={cityData}
+          />
+        )}
     </div>
   );
 }

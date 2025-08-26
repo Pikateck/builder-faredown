@@ -41,13 +41,13 @@ export function HotelSearchForm({
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
-  
+
   const [destination, setDestination] = useState("");
   const [destinationCode, setDestinationCode] = useState("");
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isUserTyping, setIsUserTyping] = useState(false);
-  
+
   // Set default dates to future dates
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
@@ -55,9 +55,11 @@ export function HotelSearchForm({
   checkOutDefault.setDate(checkOutDefault.getDate() + 4);
 
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(tomorrow);
-  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(checkOutDefault);
+  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(
+    checkOutDefault,
+  );
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  
+
   const [guests, setGuests] = useState<GuestConfig>({
     adults: 2,
     children: 1,
@@ -84,8 +86,8 @@ export function HotelSearchForm({
       setIsDestinationOpen(false);
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   // Popular destinations
@@ -216,7 +218,7 @@ export function HotelSearchForm({
 
       const url = `/hotels/results?${searchParams.toString()}`;
       console.log("🏨 Navigating to hotel search:", url);
-      
+
       if (onSearch) {
         onSearch({
           destination,
@@ -251,11 +253,16 @@ export function HotelSearchForm({
         isVisible={showError}
         onClose={() => setShowError(false)}
       />
-      <div className={`bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200 ${className}`}>
+      <div
+        className={`bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200 ${className}`}
+      >
         {/* Main Search Form */}
         <div className="flex flex-col lg:flex-row gap-2 mb-4">
           {/* Destination */}
-          <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full" onClick={(e) => e.stopPropagation()}>
+          <div
+            className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
             <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
               Where are you going?
             </label>
@@ -325,7 +332,9 @@ export function HotelSearchForm({
                 <div className="space-y-1">
                   {popularDestinations
                     .filter((dest) =>
-                      dest.toLowerCase().includes((inputValue || "").toLowerCase())
+                      dest
+                        .toLowerCase()
+                        .includes((inputValue || "").toLowerCase()),
                     )
                     .slice(0, 8)
                     .map((dest, index) => (
@@ -333,7 +342,10 @@ export function HotelSearchForm({
                         key={index}
                         onClick={() => {
                           setDestination(dest);
-                          setDestinationCode(dest.split(",")[0]?.substring(0, 3).toUpperCase() || "HTL");
+                          setDestinationCode(
+                            dest.split(",")[0]?.substring(0, 3).toUpperCase() ||
+                              "HTL",
+                          );
                           setIsDestinationOpen(false);
                           setInputValue("");
                           setIsUserTyping(false);
@@ -394,7 +406,8 @@ export function HotelSearchForm({
                 <BookingCalendar
                   initialRange={{
                     startDate: checkInDate || new Date(),
-                    endDate: checkOutDate || addDays(checkInDate || new Date(), 3),
+                    endDate:
+                      checkOutDate || addDays(checkInDate || new Date(), 3),
                   }}
                   onChange={(range) => {
                     console.log("Hotel calendar range selected:", range);
@@ -484,7 +497,9 @@ export function HotelSearchForm({
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
-                        onClick={() => updateGuestCount("children", "decrement")}
+                        onClick={() =>
+                          updateGuestCount("children", "decrement")
+                        }
                         disabled={guests.children <= 0}
                       >
                         <Minus className="w-3 h-3" />
@@ -496,7 +511,9 @@ export function HotelSearchForm({
                         variant="outline"
                         size="sm"
                         className="w-8 h-8 p-0 rounded-full border-blue-600 text-blue-600 hover:bg-blue-50"
-                        onClick={() => updateGuestCount("children", "increment")}
+                        onClick={() =>
+                          updateGuestCount("children", "increment")
+                        }
                         disabled={guests.children >= 16}
                       >
                         <Plus className="w-3 h-3" />
@@ -508,11 +525,18 @@ export function HotelSearchForm({
                   {guests.children > 0 && (
                     <div className="space-y-2">
                       {guests.childrenAges.map((age, index) => (
-                        <div key={index} className="flex items-center justify-between">
-                          <span className="text-sm">Age of child {index + 1}</span>
+                        <div
+                          key={index}
+                          className="flex items-center justify-between"
+                        >
+                          <span className="text-sm">
+                            Age of child {index + 1}
+                          </span>
                           <select
                             value={age}
-                            onChange={(e) => updateChildAge(index, parseInt(e.target.value))}
+                            onChange={(e) =>
+                              updateChildAge(index, parseInt(e.target.value))
+                            }
                             className="border rounded px-2 py-1 text-sm"
                           >
                             {childAgeOptions.map((ageOption) => (

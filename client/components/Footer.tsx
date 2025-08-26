@@ -1,6 +1,14 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Plane, Facebook, Instagram, Twitter, Linkedin, Star, Mail } from "lucide-react";
+import {
+  Plane,
+  Facebook,
+  Instagram,
+  Twitter,
+  Linkedin,
+  Star,
+  Mail,
+} from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 
@@ -27,7 +35,7 @@ export function Footer() {
             <p className="text-blue-200 text-sm">
               The world's first AI-powered travel platform
             </p>
-            
+
             {/* Certifications */}
             <div className="flex items-center space-x-2">
               {["TAAI", "TAAFI", "IATA"].map((cert) => (
@@ -100,13 +108,16 @@ export function Footer() {
           {/* Trust & Reviews */}
           <div className="space-y-3">
             <h3 className="font-semibold text-white mb-3">Trust & Reviews</h3>
-            
+
             {/* TrustPilot Rating */}
             <div className="bg-white/10 rounded-lg p-3">
               <div className="flex items-center space-x-2 mb-2">
                 <div className="flex items-center">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 text-[#febb02] fill-current" />
+                    <Star
+                      key={i}
+                      className="w-4 h-4 text-[#febb02] fill-current"
+                    />
                   ))}
                 </div>
                 <span className="text-white font-bold">4.9</span>
@@ -118,7 +129,7 @@ export function Footer() {
                 ★ Rated on TrustPilot
               </div>
             </div>
-            
+
             {/* Customer Review Snippet */}
             <div className="text-xs text-blue-200 italic">
               "Saved ₹15,000 on my Dubai trip using AI Bargaining!"
@@ -128,7 +139,7 @@ export function Footer() {
           {/* Social & Newsletter */}
           <div className="space-y-3">
             <h3 className="font-semibold text-white mb-3">Stay Connected</h3>
-            
+
             {/* Social Icons */}
             <div className="flex space-x-3">
               {[
@@ -148,10 +159,12 @@ export function Footer() {
                 </a>
               ))}
             </div>
-            
+
             {/* Newsletter Signup */}
             <div className="space-y-2">
-              <p className="text-xs text-blue-200">Subscribe for secret deals</p>
+              <p className="text-xs text-blue-200">
+                Subscribe for secret deals
+              </p>
               <div className="flex space-x-2">
                 <Input
                   type="email"
@@ -173,13 +186,16 @@ export function Footer() {
         <div className="max-w-7xl mx-auto px-6 py-4">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
             <div className="text-xs text-blue-200">
-              © 2025 Faredown Bookings and Travels Pvt Ltd. All rights reserved.
+              © 2025 Faredown Bookings and Travels Pvt Ltd. All rights
+              reserved.
             </div>
             <div className="flex items-center space-x-4 opacity-60">
               <span className="text-xs text-blue-300">Partners:</span>
               <div className="flex space-x-2">
                 {["Amadeus", "Hotelbeds", "Sabre"].map((partner) => (
-                  <span key={partner} className="text-xs text-blue-300">{partner}</span>
+                  <span key={partner} className="text-xs text-blue-300">
+                    {partner}
+                  </span>
                 ))}
               </div>
             </div>

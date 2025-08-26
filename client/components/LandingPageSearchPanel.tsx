@@ -8,13 +8,7 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { addDays, format } from "date-fns";
-import {
-  Plane,
-  ChevronDown,
-  X,
-  Calendar,
-  Plus,
-} from "lucide-react";
+import { Plane, ChevronDown, X, Calendar, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // City data mapping (same as FlightResults.tsx)
@@ -26,7 +20,7 @@ const cityData = {
     fullName: "Mumbai, Maharashtra, India",
   },
   Delhi: {
-    code: "DEL", 
+    code: "DEL",
     name: "Delhi",
     airport: "Indira Gandhi International",
     fullName: "New Delhi, Delhi, India",
@@ -46,7 +40,7 @@ const cityData = {
   Singapore: {
     code: "SIN",
     name: "Singapore",
-    airport: "Changi Airport", 
+    airport: "Changi Airport",
     fullName: "Singapore, Singapore",
   },
 };
@@ -58,7 +52,7 @@ interface Travelers {
 
 export function LandingPageSearchPanel() {
   const navigate = useNavigate();
-  
+
   // Trip type state
   const [tripType, setTripType] = useState("round-trip");
   const [selectedClass, setSelectedClass] = useState("Economy");
@@ -71,7 +65,9 @@ export function LandingPageSearchPanel() {
   const [showToCities, setShowToCities] = useState(false);
 
   // Date states
-  const [departureDate, setDepartureDate] = useState<Date>(new Date(Date.now() + 24 * 60 * 60 * 1000)); // Tomorrow
+  const [departureDate, setDepartureDate] = useState<Date>(
+    new Date(Date.now() + 24 * 60 * 60 * 1000),
+  ); // Tomorrow
   const [returnDate, setReturnDate] = useState<Date>(addDays(new Date(), 8)); // Week from now
   const [showCalendar, setShowCalendar] = useState(false);
 
@@ -96,10 +92,10 @@ export function LandingPageSearchPanel() {
   const handleSearch = () => {
     const fromCode = cityData[selectedFromCity]?.code || "BOM";
     const toCode = cityData[selectedToCity]?.code || "DXB";
-    
+
     const searchParams = new URLSearchParams({
       from: `${selectedFromCity} (${fromCode})`,
-      to: `${selectedToCity} (${toCode})`, 
+      to: `${selectedToCity} (${toCode})`,
       departureDate: departureDate.toISOString(),
       adults: travelers.adults.toString(),
       children: travelers.children.toString(),
@@ -129,8 +125,8 @@ export function LandingPageSearchPanel() {
       setShowTravelers(false);
     };
 
-    document.addEventListener('click', handleClickOutside);
-    return () => document.removeEventListener('click', handleClickOutside);
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   return (
@@ -148,7 +144,7 @@ export function LandingPageSearchPanel() {
           </div>
         </div>
       </div>
-      
+
       {/* Search Panel Section */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
@@ -166,7 +162,7 @@ export function LandingPageSearchPanel() {
                       "w-3 h-3 rounded-full border-2",
                       tripType === "round-trip"
                         ? "bg-blue-600 border-white ring-1 ring-blue-600"
-                        : "border-gray-300"
+                        : "border-gray-300",
                     )}
                   ></div>
                   <span
@@ -174,7 +170,7 @@ export function LandingPageSearchPanel() {
                       "text-sm",
                       tripType === "round-trip"
                         ? "font-medium text-gray-900"
-                        : "text-gray-500"
+                        : "text-gray-500",
                     )}
                   >
                     Round trip
@@ -191,7 +187,7 @@ export function LandingPageSearchPanel() {
                       "w-3 h-3 rounded-full border-2",
                       tripType === "one-way"
                         ? "bg-blue-600 border-white ring-1 ring-blue-600"
-                        : "border-gray-300"
+                        : "border-gray-300",
                     )}
                   ></div>
                   <span
@@ -199,7 +195,7 @@ export function LandingPageSearchPanel() {
                       "text-sm",
                       tripType === "one-way"
                         ? "font-medium text-gray-900"
-                        : "text-gray-500"
+                        : "text-gray-500",
                     )}
                   >
                     One way
@@ -216,7 +212,7 @@ export function LandingPageSearchPanel() {
                       "w-3 h-3 rounded-full border-2",
                       tripType === "multi-city"
                         ? "bg-blue-600 border-white ring-1 ring-blue-600"
-                        : "border-gray-300"
+                        : "border-gray-300",
                     )}
                   ></div>
                   <span
@@ -224,7 +220,7 @@ export function LandingPageSearchPanel() {
                       "text-sm",
                       tripType === "multi-city"
                         ? "font-medium text-gray-900"
-                        : "text-gray-500"
+                        : "text-gray-500",
                     )}
                   >
                     Multi-city
@@ -276,7 +272,10 @@ export function LandingPageSearchPanel() {
           {/* Search Inputs Row */}
           <div className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3 mt-2 w-full max-w-6xl overflow-visible">
             {/* Leaving From */}
-            <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Leaving from
               </label>
@@ -368,7 +367,10 @@ export function LandingPageSearchPanel() {
             </div>
 
             {/* Going To */}
-            <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Going to
               </label>
@@ -486,7 +488,8 @@ export function LandingPageSearchPanel() {
                     bookingType="flight"
                     initialRange={{
                       startDate: departureDate || new Date(),
-                      endDate: returnDate || addDays(departureDate || new Date(), 7),
+                      endDate:
+                        returnDate || addDays(departureDate || new Date(), 7),
                     }}
                     onChange={(range) => {
                       setDepartureDate(range.startDate);
@@ -502,7 +505,10 @@ export function LandingPageSearchPanel() {
             </div>
 
             {/* Travelers */}
-            <div className="relative flex-1 lg:min-w-[240px] lg:max-w-[280px] w-full" onClick={(e) => e.stopPropagation()}>
+            <div
+              className="relative flex-1 lg:min-w-[240px] lg:max-w-[280px] w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Travelers
               </label>
@@ -575,7 +581,9 @@ export function LandingPageSearchPanel() {
                     {/* Children */}
                     <div className="flex items-center justify-between py-2">
                       <div>
-                        <div className="font-medium text-gray-900">Children</div>
+                        <div className="font-medium text-gray-900">
+                          Children
+                        </div>
                         <div className="text-sm text-gray-500">Age 0-17</div>
                       </div>
                       <div className="flex items-center space-x-4">
@@ -624,7 +632,7 @@ export function LandingPageSearchPanel() {
 
             {/* Search Button */}
             <div className="w-full lg:w-auto lg:min-w-[120px]">
-              <Button 
+              <Button
                 onClick={handleSearch}
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-10 font-medium text-sm w-full touch-manipulation"
               >

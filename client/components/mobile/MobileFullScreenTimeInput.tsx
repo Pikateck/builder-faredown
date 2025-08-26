@@ -17,7 +17,7 @@ export function MobileFullScreenTimeInput({
   initialPickupTime,
   initialReturnTime,
   onSelect,
-  onBack
+  onBack,
 }: MobileFullScreenTimeInputProps) {
   const [pickupTime, setPickupTime] = useState(initialPickupTime);
   const [returnTime, setReturnTime] = useState(initialReturnTime);
@@ -42,7 +42,7 @@ export function MobileFullScreenTimeInput({
   };
 
   const getTimeDisplay = (timeValue: string) => {
-    const slot = timeSlots.find(slot => slot.value === timeValue);
+    const slot = timeSlots.find((slot) => slot.value === timeValue);
     return slot ? slot.display : timeValue;
   };
 
@@ -51,7 +51,7 @@ export function MobileFullScreenTimeInput({
       {/* Native App Header */}
       <div className="bg-[#003580] text-white px-4 py-3 shadow-lg flex-shrink-0">
         <div className="flex items-center justify-between">
-          <button 
+          <button
             onClick={onBack}
             className="p-2 -ml-2 rounded-full hover:bg-white/10 transition-colors"
           >
@@ -70,13 +70,14 @@ export function MobileFullScreenTimeInput({
           </div>
           <div className="flex-1">
             <div className="text-sm text-gray-600 mb-1">
-              {transferTripType === "return" ? "Pickup & return time" : "Pickup time"}
+              {transferTripType === "return"
+                ? "Pickup & return time"
+                : "Pickup time"}
             </div>
             <div className="font-semibold text-gray-900 text-base">
-              {transferTripType === "return" 
+              {transferTripType === "return"
                 ? `${getTimeDisplay(pickupTime)} - ${getTimeDisplay(returnTime)}`
-                : getTimeDisplay(pickupTime)
-              }
+                : getTimeDisplay(pickupTime)}
             </div>
           </div>
         </div>
@@ -86,7 +87,9 @@ export function MobileFullScreenTimeInput({
       <div className="flex-1 overflow-y-auto">
         {/* Pickup Time */}
         <div className="p-4">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Pickup Time</h2>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+            Pickup Time
+          </h2>
           <div className="grid grid-cols-3 gap-2">
             {timeSlots.map((slot) => (
               <button
@@ -107,7 +110,9 @@ export function MobileFullScreenTimeInput({
         {/* Return Time (if return trip) */}
         {transferTripType === "return" && (
           <div className="p-4 border-t border-gray-200">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Return Time</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">
+              Return Time
+            </h2>
             <div className="grid grid-cols-3 gap-2">
               {timeSlots.map((slot) => (
                 <button
@@ -128,17 +133,21 @@ export function MobileFullScreenTimeInput({
 
         {/* Popular Times */}
         <div className="p-4 border-t border-gray-200">
-          <h3 className="text-sm font-semibold text-gray-700 mb-3">Popular Times</h3>
+          <h3 className="text-sm font-semibold text-gray-700 mb-3">
+            Popular Times
+          </h3>
           <div className="flex flex-wrap gap-2">
-            {["06:00", "09:00", "12:00", "15:00", "18:00", "21:00"].map((time) => (
-              <button
-                key={time}
-                onClick={() => setPickupTime(time)}
-                className="px-4 py-2 bg-gray-100 hover:bg-blue-50 hover:border-[#003580] border border-gray-200 rounded-lg text-sm font-medium transition-colors"
-              >
-                {getTimeDisplay(time)}
-              </button>
-            ))}
+            {["06:00", "09:00", "12:00", "15:00", "18:00", "21:00"].map(
+              (time) => (
+                <button
+                  key={time}
+                  onClick={() => setPickupTime(time)}
+                  className="px-4 py-2 bg-gray-100 hover:bg-blue-50 hover:border-[#003580] border border-gray-200 rounded-lg text-sm font-medium transition-colors"
+                >
+                  {getTimeDisplay(time)}
+                </button>
+              ),
+            )}
           </div>
         </div>
       </div>

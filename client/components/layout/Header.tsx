@@ -53,7 +53,8 @@ export function Header() {
   // Get active tab from URL
   const getActiveTab = () => {
     // Check actual route paths first
-    if (location.pathname === "/" || location.pathname === "/flights") return "flights";
+    if (location.pathname === "/" || location.pathname === "/flights")
+      return "flights";
     if (location.pathname.includes("/hotels")) return "hotels";
     if (location.pathname.includes("/sightseeing")) return "sightseeing";
     if (location.pathname.includes("/transfers")) return "transfers";
@@ -313,7 +314,6 @@ export function Header() {
                         ))}
                       </div>
                     </div>
-
                   </nav>
 
                   {/* User Section */}
@@ -323,7 +323,9 @@ export function Header() {
                         {/* User Profile Button */}
                         <button
                           className="flex items-center justify-between w-full mb-3 hover:bg-blue-100 p-2 rounded-lg transition-colors"
-                          onClick={() => setShowMobileUserDropdown(!showMobileUserDropdown)}
+                          onClick={() =>
+                            setShowMobileUserDropdown(!showMobileUserDropdown)
+                          }
                         >
                           <div className="flex items-center space-x-3">
                             <div className="w-10 h-10 bg-[#003580] rounded-full flex items-center justify-center">
@@ -340,7 +342,9 @@ export function Header() {
                               </div>
                             </div>
                           </div>
-                          <ChevronDown className={`w-5 h-5 text-gray-500 transition-transform ${showMobileUserDropdown ? 'rotate-180' : ''}`} />
+                          <ChevronDown
+                            className={`w-5 h-5 text-gray-500 transition-transform ${showMobileUserDropdown ? "rotate-180" : ""}`}
+                          />
                         </button>
 
                         {/* User Dropdown Menu */}
@@ -355,7 +359,9 @@ export function Header() {
                               className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
                             >
                               <Plane className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">My Bookings</span>
+                              <span className="text-sm font-medium">
+                                My Bookings
+                              </span>
                             </button>
 
                             <button
@@ -367,7 +373,9 @@ export function Header() {
                               className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
                             >
                               <User className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">Profile</span>
+                              <span className="text-sm font-medium">
+                                Profile
+                              </span>
                             </button>
 
                             <button
@@ -379,7 +387,9 @@ export function Header() {
                               className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
                             >
                               <Award className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">Loyalty Program</span>
+                              <span className="text-sm font-medium">
+                                Loyalty Program
+                              </span>
                             </button>
 
                             <button
@@ -391,7 +401,9 @@ export function Header() {
                               className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
                             >
                               <CreditCard className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">Payment & Wallet</span>
+                              <span className="text-sm font-medium">
+                                Payment & Wallet
+                              </span>
                             </button>
 
                             <button
@@ -403,7 +415,9 @@ export function Header() {
                               className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
                             >
                               <Settings className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">Settings</span>
+                              <span className="text-sm font-medium">
+                                Settings
+                              </span>
                             </button>
                           </div>
                         )}
@@ -632,7 +646,10 @@ export function Header() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-48" align="end">
                         <DropdownMenuItem>
-                          <Link to="/account?tab=bookings" className="flex items-center">
+                          <Link
+                            to="/account?tab=bookings"
+                            className="flex items-center"
+                          >
                             <Plane className="w-4 h-4 mr-2" />
                             My Bookings
                           </Link>
@@ -665,7 +682,10 @@ export function Header() {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Link to="/account?tab=settings" className="flex items-center">
+                          <Link
+                            to="/account?tab=settings"
+                            className="flex items-center"
+                          >
                             <Settings className="w-4 h-4 mr-2" />
                             Settings
                           </Link>

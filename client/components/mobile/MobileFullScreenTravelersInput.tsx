@@ -30,17 +30,23 @@ export function MobileFullScreenTravelersInput({
   bookingType,
   initialTravelers,
   onSelect,
-  onBack
+  onBack,
 }: MobileFullScreenTravelersInputProps) {
   const [travelers, setTravelers] = useState<Travelers>({
     ...initialTravelers,
-    childAges: initialTravelers.childAges || []
+    childAges: initialTravelers.childAges || [],
   });
 
-  const updateCount = (type: keyof Travelers, operation: "increment" | "decrement") => {
-    setTravelers(prev => {
-      const newValue = operation === "increment" ? (prev[type] as number || 0) + 1 : Math.max(0, (prev[type] as number || 0) - 1);
-      
+  const updateCount = (
+    type: keyof Travelers,
+    operation: "increment" | "decrement",
+  ) => {
+    setTravelers((prev) => {
+      const newValue =
+        operation === "increment"
+          ? ((prev[type] as number) || 0) + 1
+          : Math.max(0, ((prev[type] as number) || 0) - 1);
+
       // Validation rules
       if (type === "adults" && newValue < 1) return prev;
       if (type === "rooms" && newValue < 1) return prev;
@@ -69,7 +75,7 @@ export function MobileFullScreenTravelersInput({
   };
 
   const updateChildAge = (index: number, age: number) => {
-    setTravelers(prev => {
+    setTravelers((prev) => {
       const newAges = [...(prev.childAges || [])];
       newAges[index] = age;
       return { ...prev, childAges: newAges };
@@ -82,45 +88,53 @@ export function MobileFullScreenTravelersInput({
   };
 
   const getTotalTravelers = () => {
-    return (travelers.adults || 0) + (travelers.children || 0) + (travelers.infants || 0);
+    return (
+      (travelers.adults || 0) +
+      (travelers.children || 0) +
+      (travelers.infants || 0)
+    );
   };
 
   const getSummary = () => {
     const parts = [];
-    
+
     if (travelers.adults) {
-      parts.push(`${travelers.adults} adult${travelers.adults > 1 ? 's' : ''}`);
+      parts.push(`${travelers.adults} adult${travelers.adults > 1 ? "s" : ""}`);
     }
-    
+
     if (travelers.children) {
-      parts.push(`${travelers.children} child${travelers.children > 1 ? 'ren' : ''}`);
+      parts.push(
+        `${travelers.children} child${travelers.children > 1 ? "ren" : ""}`,
+      );
     }
-    
+
     if (travelers.infants) {
-      parts.push(`${travelers.infants} infant${travelers.infants > 1 ? 's' : ''}`);
+      parts.push(
+        `${travelers.infants} infant${travelers.infants > 1 ? "s" : ""}`,
+      );
     }
-    
+
     if (bookingType === "hotel" && travelers.rooms) {
-      parts.push(`${travelers.rooms} room${travelers.rooms > 1 ? 's' : ''}`);
+      parts.push(`${travelers.rooms} room${travelers.rooms > 1 ? "s" : ""}`);
     }
-    
-    return parts.join(', ');
+
+    return parts.join(", ");
   };
 
-  const Counter = ({ 
-    label, 
-    description, 
-    value, 
-    type, 
-    min = 0, 
-    max = 30 
-  }: { 
-    label: string; 
-    description: string; 
-    value: number; 
-    type: keyof Travelers; 
-    min?: number; 
-    max?: number; 
+  const Counter = ({
+    label,
+    description,
+    value,
+    type,
+    min = 0,
+    max = 30,
+  }: {
+    label: string;
+    description: string;
+    value: number;
+    type: keyof Travelers;
+    min?: number;
+    max?: number;
   }) => (
     <div className="flex items-center justify-between py-6 px-4 bg-white rounded-xl border border-gray-200">
       <div className="flex-1">
@@ -154,7 +168,7 @@ export function MobileFullScreenTravelersInput({
       {/* Native App Header */}
       <div className="bg-[#003580] text-white px-4 py-3 shadow-lg flex-shrink-0">
         <div className="flex items-center justify-between">
-          <button 
+          <button
             onClick={onBack}
             className="p-2 -ml-2 rounded-full hover:bg-white/10 transition-colors"
           >
@@ -201,36 +215,45 @@ export function MobileFullScreenTravelersInput({
           />
 
           {/* Child Ages (for hotels only) */}
-          {bookingType === "hotel" && travelers.children && travelers.children > 0 && (
-            <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
-              <h3 className="font-semibold text-gray-900 mb-3">Child Ages</h3>
-              <p className="text-sm text-gray-600 mb-4">Please specify the age of each child at the time of travel</p>
-              <div className="space-y-3">
-                {Array.from({ length: travelers.children }, (_, index) => (
-                  <div key={index} className="flex items-center justify-between">
-                    <span className="text-sm font-medium text-gray-700">
-                      Child {index + 1}
-                    </span>
-                    <Select
-                      value={(travelers.childAges?.[index] || 5).toString()}
-                      onValueChange={(value) => updateChildAge(index, parseInt(value))}
+          {bookingType === "hotel" &&
+            travelers.children &&
+            travelers.children > 0 && (
+              <div className="bg-blue-50 p-4 rounded-xl border border-blue-200">
+                <h3 className="font-semibold text-gray-900 mb-3">Child Ages</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Please specify the age of each child at the time of travel
+                </p>
+                <div className="space-y-3">
+                  {Array.from({ length: travelers.children }, (_, index) => (
+                    <div
+                      key={index}
+                      className="flex items-center justify-between"
                     >
-                      <SelectTrigger className="w-20 h-8 text-sm">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {Array.from({ length: 18 }, (_, i) => (
-                          <SelectItem key={i} value={i.toString()}>
-                            {i}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                  </div>
-                ))}
+                      <span className="text-sm font-medium text-gray-700">
+                        Child {index + 1}
+                      </span>
+                      <Select
+                        value={(travelers.childAges?.[index] || 5).toString()}
+                        onValueChange={(value) =>
+                          updateChildAge(index, parseInt(value))
+                        }
+                      >
+                        <SelectTrigger className="w-20 h-8 text-sm">
+                          <SelectValue />
+                        </SelectTrigger>
+                        <SelectContent>
+                          {Array.from({ length: 18 }, (_, i) => (
+                            <SelectItem key={i} value={i.toString()}>
+                              {i}
+                            </SelectItem>
+                          ))}
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
           {/* Infants (for flights) */}
           {bookingType === "flight" && (
@@ -261,13 +284,17 @@ export function MobileFullScreenTravelersInput({
             {bookingType === "flight" && (
               <>
                 <li>• Infants under 2 can travel on your lap for free</li>
-                <li>• Children 12+ may need adult supervision for some airlines</li>
+                <li>
+                  • Children 12+ may need adult supervision for some airlines
+                </li>
               </>
             )}
             {bookingType === "hotel" && (
               <>
                 <li>• Child ages determine room rates and occupancy</li>
-                <li>• Some hotels offer free stays for children under certain ages</li>
+                <li>
+                  • Some hotels offer free stays for children under certain ages
+                </li>
                 <li>• Extra beds may be available for additional guests</li>
               </>
             )}

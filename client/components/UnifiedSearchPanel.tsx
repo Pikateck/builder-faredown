@@ -6,7 +6,11 @@ interface UnifiedSearchPanelProps {
   searchForm: React.ReactNode;
 }
 
-export function UnifiedSearchPanel({ module, tagline, searchForm }: UnifiedSearchPanelProps) {
+export function UnifiedSearchPanel({
+  module,
+  tagline,
+  searchForm,
+}: UnifiedSearchPanelProps) {
   return (
     <div>
       {/* Blue Header Section - Consistent across all modules */}
@@ -22,12 +26,10 @@ export function UnifiedSearchPanel({ module, tagline, searchForm }: UnifiedSearc
           </div>
         </div>
       </div>
-      
+
       {/* Search Form Section */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
-        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3">
-          {searchForm}
-        </div>
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3">{searchForm}</div>
       </div>
     </div>
   );

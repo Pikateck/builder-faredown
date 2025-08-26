@@ -1,7 +1,18 @@
 import React, { useState } from "react";
 import { ChevronLeft, Calendar, Check, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { format, addDays, addMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isToday, isBefore } from "date-fns";
+import {
+  format,
+  addDays,
+  addMonths,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  isToday,
+  isBefore,
+} from "date-fns";
 
 interface DateRange {
   startDate: Date;
@@ -21,7 +32,7 @@ export function MobileFullScreenDateInput({
   tripType,
   initialRange,
   onSelect,
-  onBack
+  onBack,
 }: MobileFullScreenDateInputProps) {
   const [selectedRange, setSelectedRange] = useState<DateRange>(initialRange);
   const [currentMonth, setCurrentMonth] = useState(new Date());
@@ -38,9 +49,9 @@ export function MobileFullScreenDateInput({
         if (isBefore(date, selectedRange.startDate)) {
           setSelectedRange({ startDate: date });
         } else {
-          setSelectedRange({ 
-            startDate: selectedRange.startDate, 
-            endDate: date 
+          setSelectedRange({
+            startDate: selectedRange.startDate,
+            endDate: date,
           });
         }
       }
@@ -54,15 +65,15 @@ export function MobileFullScreenDateInput({
 
   const formatDateRange = () => {
     if (!selectedRange.startDate) return "Select dates";
-    
+
     if (tripType === "one-way" || tripType === "multi-city") {
       return format(selectedRange.startDate, "EEE, MMM d, yyyy");
     }
-    
+
     if (selectedRange.endDate) {
       return `${format(selectedRange.startDate, "EEE, MMM d")} - ${format(selectedRange.endDate, "EEE, MMM d, yyyy")}`;
     }
-    
+
     return `${format(selectedRange.startDate, "EEE, MMM d, yyyy")} - Select return`;
   };
 
@@ -70,7 +81,7 @@ export function MobileFullScreenDateInput({
     const monthStart = startOfMonth(monthDate);
     const monthEnd = endOfMonth(monthDate);
     const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
-    
+
     // Get the first day of the week for proper grid layout
     const firstDayOfWeek = monthStart.getDay();
     const paddingDays = Array(firstDayOfWeek).fill(null);
@@ -102,8 +113,11 @@ export function MobileFullScreenDateInput({
 
         {/* Week Headers */}
         <div className="grid grid-cols-7 gap-1 mb-2 px-4">
-          {['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((day, index) => (
-            <div key={index} className="text-center text-sm font-medium text-gray-500 py-2">
+          {["S", "M", "T", "W", "T", "F", "S"].map((day, index) => (
+            <div
+              key={index}
+              className="text-center text-sm font-medium text-gray-500 py-2"
+            >
               {day}
             </div>
           ))}
@@ -115,13 +129,19 @@ export function MobileFullScreenDateInput({
           {paddingDays.map((_, index) => (
             <div key={`padding-${index}`} className="h-12"></div>
           ))}
-          
+
           {/* Actual days */}
           {days.map((date) => {
-            const isSelected = selectedRange.startDate && isSameDay(date, selectedRange.startDate);
-            const isEndSelected = selectedRange.endDate && isSameDay(date, selectedRange.endDate);
-            const isInRange = selectedRange.startDate && selectedRange.endDate && 
-              date > selectedRange.startDate && date < selectedRange.endDate;
+            const isSelected =
+              selectedRange.startDate &&
+              isSameDay(date, selectedRange.startDate);
+            const isEndSelected =
+              selectedRange.endDate && isSameDay(date, selectedRange.endDate);
+            const isInRange =
+              selectedRange.startDate &&
+              selectedRange.endDate &&
+              date > selectedRange.startDate &&
+              date < selectedRange.endDate;
             const isPast = isBefore(date, new Date()) && !isToday(date);
 
             return (
@@ -133,12 +153,12 @@ export function MobileFullScreenDateInput({
                   isPast
                     ? "text-gray-300 cursor-not-allowed"
                     : isSelected || isEndSelected
-                    ? "bg-[#003580] text-white shadow-md"
-                    : isInRange
-                    ? "bg-blue-100 text-[#003580]"
-                    : isToday(date)
-                    ? "bg-blue-50 text-[#003580] border border-[#003580]"
-                    : "text-gray-900 hover:bg-gray-100"
+                      ? "bg-[#003580] text-white shadow-md"
+                      : isInRange
+                        ? "bg-blue-100 text-[#003580]"
+                        : isToday(date)
+                          ? "bg-blue-50 text-[#003580] border border-[#003580]"
+                          : "text-gray-900 hover:bg-gray-100"
                 }`}
               >
                 {format(date, "d")}
@@ -155,7 +175,7 @@ export function MobileFullScreenDateInput({
       {/* Native App Header */}
       <div className="bg-[#003580] text-white px-4 py-3 shadow-lg flex-shrink-0">
         <div className="flex items-center justify-between">
-          <button 
+          <button
             onClick={onBack}
             className="p-2 -ml-2 rounded-full hover:bg-white/10 transition-colors"
           >
@@ -174,7 +194,11 @@ export function MobileFullScreenDateInput({
           </div>
           <div className="flex-1">
             <div className="text-sm text-gray-600 mb-1">
-              {tripType === "one-way" || tripType === "multi-city" ? "Departure date" : tripType === "round-trip" ? "Travel dates" : "Travel dates"}
+              {tripType === "one-way" || tripType === "multi-city"
+                ? "Departure date"
+                : tripType === "round-trip"
+                  ? "Travel dates"
+                  : "Travel dates"}
             </div>
             <div className="font-semibold text-gray-900 text-base">
               {formatDateRange()}
@@ -187,7 +211,7 @@ export function MobileFullScreenDateInput({
       <div className="flex-1 overflow-y-auto">
         {/* Current Month */}
         {renderMonth(currentMonth)}
-        
+
         {/* Next Month */}
         {renderMonth(addMonths(currentMonth, 1))}
 
@@ -208,7 +232,10 @@ export function MobileFullScreenDateInput({
                 const today = new Date();
                 const range: DateRange = {
                   startDate: today,
-                  endDate: (tripType === "round-trip" || tripType === "return") ? addDays(today, 7) : undefined
+                  endDate:
+                    tripType === "round-trip" || tripType === "return"
+                      ? addDays(today, 7)
+                      : undefined,
                 };
                 setSelectedRange(range);
               }}
@@ -223,7 +250,10 @@ export function MobileFullScreenDateInput({
                 const tomorrow = addDays(new Date(), 1);
                 const range: DateRange = {
                   startDate: tomorrow,
-                  endDate: (tripType === "round-trip" || tripType === "return") ? addDays(tomorrow, 7) : undefined
+                  endDate:
+                    tripType === "round-trip" || tripType === "return"
+                      ? addDays(tomorrow, 7)
+                      : undefined,
                 };
                 setSelectedRange(range);
               }}
@@ -238,7 +268,10 @@ export function MobileFullScreenDateInput({
                 const nextWeek = addDays(new Date(), 7);
                 const range: DateRange = {
                   startDate: nextWeek,
-                  endDate: (tripType === "round-trip" || tripType === "return") ? addDays(nextWeek, 7) : undefined
+                  endDate:
+                    tripType === "round-trip" || tripType === "return"
+                      ? addDays(nextWeek, 7)
+                      : undefined,
                 };
                 setSelectedRange(range);
               }}
@@ -251,7 +284,11 @@ export function MobileFullScreenDateInput({
           {/* Confirm Button */}
           <Button
             onClick={handleConfirm}
-            disabled={!selectedRange.startDate || ((tripType === "round-trip" || tripType === "return") && !selectedRange.endDate)}
+            disabled={
+              !selectedRange.startDate ||
+              ((tripType === "round-trip" || tripType === "return") &&
+                !selectedRange.endDate)
+            }
             className="w-full bg-[#003580] hover:bg-[#002660] text-white py-3 rounded-xl font-medium text-base flex items-center justify-center space-x-2"
           >
             <Check className="w-5 h-5" />

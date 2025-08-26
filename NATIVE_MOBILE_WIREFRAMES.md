@@ -1,4 +1,5 @@
 # 📱 Native Mobile App Visual Wireframes
+
 ## Complementary to NATIVE_MOBILE_APP_FLOW_DIAGRAM.md
 
 ---
@@ -175,6 +176,7 @@ CAR RENTALS TAB (when active):
 ## 📏 **PRECISE MEASUREMENTS**
 
 ### **Input Field Anatomy:**
+
 ```
 ┌─────────────────────────────────────┐ ← 44px (iOS) / 48px (Android) height
 │ [🚗] │ Pickup Location      │ [×] │ ← Icon + text + clear
@@ -185,17 +187,19 @@ CAR RENTALS TAB (when active):
 ```
 
 ### **Touch Target Spacing:**
+
 ```
 ┌───────────────────────────���─────────┐
 │ Input Field 1                       │ ← 44px min height
 ├─ 8px spacing ──────────────────────┤
-│ Input Field 2                       │ ← 44px min height  
+│ Input Field 2                       │ ← 44px min height
 ├─ 8px spacing ──────────────────────┤
 │ Input Field 3                       │ ← 44px min height
 └─────────────────────────────────────┘
 ```
 
 ### **Tab Bar Layout:**
+
 ```
 ┌─────────────────────────────────────┐
 │   AIRPORT TAXI   │   CAR RENTALS    │ ← Equal width tabs
@@ -210,22 +214,25 @@ CAR RENTALS TAB (when active):
 ## 🎨 **COLOR & STATE REFERENCES**
 
 ### **Input States:**
+
 ```
 Default:   Border #E5E7EB, Text #374151, Placeholder #9CA3AF
-Focus:     Border #3B82F6, Text #111827, Background #FFFFFF  
+Focus:     Border #3B82F6, Text #111827, Background #FFFFFF
 Filled:    Border #D1D5DB, Text #111827, Background #F9FAFB
 Error:     Border #EF4444, Text #DC2626, Background #FEF2F2
 ```
 
 ### **Icons:**
+
 ```
 Default:   #6B7280 (gray-500)
-Active:    #3B82F6 (blue-500)  
+Active:    #3B82F6 (blue-500)
 Error:     #EF4444 (red-500)
 Success:   #10B981 (green-500)
 ```
 
 ### **Tab States:**
+
 ```
 Active:    Background #3B82F6, Text #FFFFFF, Bold weight
 Inactive:  Background transparent, Text #6B7280, Medium weight
@@ -236,6 +243,7 @@ Inactive:  Background transparent, Text #6B7280, Medium weight
 ## ⚡ **INTERACTION BEHAVIORS**
 
 ### **Input Tap Flow:**
+
 ```
 User taps input → Full-screen page slides up from bottom →
 Keyboard appears → Input auto-focuses → User types →
@@ -244,6 +252,7 @@ Selected value appears in original input
 ```
 
 ### **Filter Tap Flow:**
+
 ```
 User taps "Filters" → Full-screen sheet slides up →
 Filter options visible → User makes selections →
@@ -252,6 +261,7 @@ Sheet slides down → Results page updates
 ```
 
 ### **Tab Switch Flow:**
+
 ```
 User taps inactive tab → Smooth transition animation →
 New tab content appears → Previous selections cleared →

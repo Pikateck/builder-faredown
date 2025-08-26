@@ -1,13 +1,15 @@
 # 📱 Native Mobile App UX Flow Diagram & Specifications
+
 ## For iOS & Android Development Team
 
 **Date:** August 26, 2025  
 **Project:** Faredown.com Native Mobile Apps  
-**Reference:** Booking.com Mobile UX Patterns  
+**Reference:** Booking.com Mobile UX Patterns
 
 ---
 
-## 🎯 **SCOPE LOCK:** 
+## 🎯 **SCOPE LOCK:**
+
 This document is **ONLY** for **native iOS and Android app development**. Do not implement these as web responsive features.
 
 ---
@@ -44,6 +46,7 @@ This document is **ONLY** for **native iOS and Android app development**. Do not
 ## 🏠 **1. LANDING PAGE SPECIFICATIONS**
 
 ### **Minimal Above-the-Fold Layout:**
+
 ```
 ┌─────────────────────────────────────┐
 │ [Header: Logo + Profile]            │
@@ -64,6 +67,7 @@ This document is **ONLY** for **native iOS and Android app development**. Do not
 ```
 
 ### **✅ Requirements:**
+
 - **Identical layout** across Flights, Hotels, Sightseeing, Transfers
 - **Clean, minimal** - remove oversized blocks/banners
 - **Essential only** above the fold
@@ -80,6 +84,7 @@ This document is **ONLY** for **native iOS and Android app development**. Do not
 ### **Trigger:** User taps **From**, **To**, or **Destination** field
 
 ### **Input Page Layout:**
+
 ```
 ┌─────────────────────────────────────┐
 │ [← Back] Search destinations   [×]  │
@@ -105,13 +110,14 @@ This document is **ONLY** for **native iOS and Android app development**. Do not
 ```
 
 ### **✅ Requirements:**
+
 - **Auto-focus** search input with keyboard shown
 - **Type-to-filter** with 250ms debounce
 - **Live suggestions** update as user types
 - **Recent searches** shown first
 - **Leading icons** appropriate to module:
   - Flights: ✈️ Plane icon
-  - Hotels: 🏨 Hotel icon  
+  - Hotels: 🏨 Hotel icon
   - Sightseeing: 🎯 Activity icon
   - Transfers: 🚗 Car icon
 - **Clear (X) button** inside input field
@@ -125,6 +131,7 @@ This document is **ONLY** for **native iOS and Android app development**. Do not
 ### **Trigger:** User taps "Filters" button from results
 
 ### **Filter Screen Layout:**
+
 ```
 ┌─────────────────────────────────────┐
 │ [← Back] Filters             [Reset]│
@@ -158,6 +165,7 @@ This document is **ONLY** for **native iOS and Android app development**. Do not
 ```
 
 ### **✅ Requirements:**
+
 - **Full-screen** overlay (not popup)
 - **Sticky "Apply" button** at bottom
 - **Counter** showing number of results
@@ -174,6 +182,7 @@ This document is **ONLY** for **native iOS and Android app development**. Do not
 ## 🚗 **4. TRANSFERS MODULE - DUAL TABS**
 
 ### **Tab Layout:**
+
 ```
 ┌─────────────────────────────────────┐
 │ ┌─────────────┐ ┌─────────────────┐ │
@@ -202,6 +211,7 @@ This document is **ONLY** for **native iOS and Android app development**. Do not
 ```
 
 ### **✅ Requirements:**
+
 - **Two distinct tabs:** Airport Taxi | Car Rentals
 - **Same input styling** as Flights/Hotels (height, radius, padding)
 - **Different logic** per tab:
@@ -216,6 +226,7 @@ This document is **ONLY** for **native iOS and Android app development**. Do not
 ## 🎨 **5. VISUAL CONSISTENCY GUIDELINES**
 
 ### **Input Field Standards:**
+
 ```
 Height: 44px (iOS) / 48px (Android)
 Radius: 8px
@@ -227,6 +238,7 @@ Font: 16px (prevents iOS zoom), medium weight
 ```
 
 ### **Icon Standards:**
+
 ```
 Style: Thin, minimal SVG icons
 Size: 20px × 20px for inputs, 24px × 24px for buttons
@@ -235,6 +247,7 @@ Set: Lucide React or similar consistent family
 ```
 
 ### **Touch Targets:**
+
 ```
 Minimum: 44px × 44px (iOS) / 48px × 48px (Android)
 Spacing: 8px minimum between interactive elements
@@ -242,9 +255,10 @@ Safe Areas: Respect iOS notch and Android navigation
 ```
 
 ### **Module-Specific Icons:**
+
 ```
 Flights: ✈️ Plane (from/to), 📅 Calendar, 👥 Users
-Hotels: 🏨 Hotel (destination), 📅 Calendar, 👥 Guests  
+Hotels: 🏨 Hotel (destination), 📅 Calendar, 👥 Guests
 Sightseeing: 🎯 Target (destination), 📅 Calendar, 👥 Travelers
 Transfers: 🚗 Car (pickup/dropoff), 📅 Calendar, 👥 Passengers
 ```
@@ -254,6 +268,7 @@ Transfers: 🚗 Car (pickup/dropoff), 📅 Calendar, 👥 Passengers
 ## 🔄 **6. BEHAVIORAL REQUIREMENTS**
 
 ### **Type-to-Filter Logic:**
+
 ```javascript
 // Pseudocode for all input fields
 onTextChange(input) {
@@ -266,6 +281,7 @@ onTextChange(input) {
 ```
 
 ### **Navigation Patterns:**
+
 ```
 From landing → Tap input → Full-screen input page
 From results → Tap filter → Full-screen filter sheet
@@ -274,6 +290,7 @@ Tab switching → Keep search inputs if possible
 ```
 
 ### **Keyboard Behavior:**
+
 ```
 Auto-focus: Yes (on input page load)
 Return key: "Search" or "Done"
@@ -288,12 +305,14 @@ Suggestions: Scrollable list, tap to select
 ### **Before Final Build Delivery:**
 
 **Landing Page:**
+
 - [ ] Minimal layout identical across all 4 modules
 - [ ] Only essentials above fold (header + search + tabs)
 - [ ] Module-specific taglines implemented
 - [ ] Reduced scroll compared to current version
 
 **Full-Screen Input Pages:**
+
 - [ ] From/To/Destination taps open full-screen pages
 - [ ] Auto-focus with keyboard shown
 - [ ] Type-to-filter working with 250ms debounce
@@ -302,18 +321,21 @@ Suggestions: Scrollable list, tap to select
 - [ ] Works across all 4 modules identically
 
 **Filter Screen:**
+
 - [ ] Filters open in full-screen overlay
 - [ ] Sticky "Apply" button at bottom with result count
 - [ ] Module-specific filter options implemented
 - [ ] Reset functionality working
 
 **Transfers Module:**
+
 - [ ] Two tabs visible: Airport Taxi | Car Rentals
 - [ ] Input styling identical to other modules
 - [ ] Different logic per tab implemented
 - [ ] Full-screen location selection working
 
 **Visual Consistency:**
+
 - [ ] Input heights consistent (44px iOS / 48px Android)
 - [ ] Icon set unified across all screens
 - [ ] Touch targets meet platform standards
@@ -324,6 +346,7 @@ Suggestions: Scrollable list, tap to select
 ## 📱 **8. FINAL DELIVERABLE FORMAT**
 
 ### **Required from Native Team:**
+
 1. **iOS .ipa build** + **Android .apk build**
 2. **Screen recordings** (30-60 seconds each) showing:
    - Landing page → Input selection → Full-screen input → Results
@@ -332,7 +355,8 @@ Suggestions: Scrollable list, tap to select
 3. **Screenshots** of each major screen per module
 4. **Build notes** confirming checklist items completed
 
-### **Timeline:** 
+### **Timeline:**
+
 Deliver builds + recordings within **72 hours** of receiving this specification.
 
 ---

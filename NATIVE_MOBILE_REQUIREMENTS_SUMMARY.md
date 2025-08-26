@@ -9,7 +9,7 @@
 ## 🎯 **NON-NEGOTIABLE DELIVERABLES**
 
 1. **Updated iOS .ipa build**
-2. **Updated Android .apk build** 
+2. **Updated Android .apk build**
 3. **Screen recordings** showing each UX flow
 4. **Screenshots** of major screens per module
 
@@ -18,12 +18,14 @@
 ## ✅ **CRITICAL REQUIREMENTS CHECKLIST**
 
 ### **Landing Page (All Modules)**
+
 - [ ] **Minimal layout** - only header + tagline + search panel + tabs above fold
 - [ ] **Identical structure** across Flights, Hotels, Sightseeing, Transfers
 - [ ] **Module-specific taglines** implemented correctly
 - [ ] **Reduced scroll** compared to current version
 
 ### **Full-Screen Input Pages**
+
 - [ ] **From/To/Destination taps** open full-screen pages (not popups)
 - [ ] **Auto-focus** with keyboard shown immediately
 - [ ] **Type-to-filter** with 250ms debounce working
@@ -32,18 +34,21 @@
 - [ ] **Consistent behavior** across all 4 modules
 
 ### **Dedicated Filter Screen**
+
 - [ ] **Full-screen overlay** (not embedded in results)
 - [ ] **Sticky "Apply" button** at bottom with result count
 - [ ] **Module-specific filters** (Stops, Airlines, etc.)
 - [ ] **Reset functionality** working
 
 ### **Transfers Module**
+
 - [ ] **Two tabs visible:** "Airport Taxi" | "Car Rentals"
 - [ ] **Same input styling** as Flights/Hotels (height, radius, padding)
 - [ ] **Different logic per tab** but same visual treatment
 - [ ] **Full-screen location selection** working for both tabs
 
 ### **Visual Consistency**
+
 - [ ] **Input heights:** 44px (iOS) / 48px (Android) exactly
 - [ ] **Icon set unified** - one consistent style throughout
 - [ ] **Touch targets** meet platform standards (44px+ / 48px+)
@@ -66,11 +71,12 @@
 
 ---
 
-## 📱 **REQUIRED SCREEN RECORDINGS** 
+## 📱 **REQUIRED SCREEN RECORDINGS**
 
 **Duration:** 30-60 seconds each
 
 ### **1. Input Flow Recording:**
+
 - Start on landing page
 - Tap "From" or "To" input
 - Show full-screen page opening
@@ -80,6 +86,7 @@
 - Show return to landing with selection
 
 ### **2. Filter Flow Recording:**
+
 - Start on results page
 - Tap "Filters" button
 - Show full-screen filter sheet
@@ -89,6 +96,7 @@
 - Show return to results with filters applied
 
 ### **3. Transfers Flow Recording:**
+
 - Start on Transfers landing
 - Show both tabs: Airport Taxi | Car Rentals
 - Tap Airport Taxi tab, fill inputs
@@ -97,6 +105,7 @@
 - Complete a search flow
 
 ### **4. Module Consistency Recording:**
+
 - Quick tour showing landing pages for Flights → Hotels → Sightseeing → Transfers
 - Demonstrate identical layouts and input behaviors
 - Show same input page experience across modules
@@ -126,7 +135,7 @@
 
 **Questions during development:** Contact project owner immediately  
 **Scope clarification:** Reference the detailed specification docs  
-**Technical blockers:** Escalate within 4 hours, don't wait  
+**Technical blockers:** Escalate within 4 hours, don't wait
 
 ---
 
@@ -137,15 +146,18 @@
 ## 🔧 **PLATFORM SPECIFICS**
 
 ### **Navigation Patterns:**
+
 - **iOS:** Push modals with swipe-to-dismiss; respect iOS navigation conventions
 - **Android:** Back button support on all full-screen inputs & filters; material design patterns
 
 ### **Gestures:**
+
 - **Pull-to-refresh** on results pages
 - **Swipe to clear** text in input fields
 - **Scroll-to-top** on tab reselect
 
 ### **Safe Areas:**
+
 - **iPhone:** Dynamic Island / notches handled properly
 - **Android:** Display cutouts and navigation bars
 - **Bottom insets** with sticky "Apply" button positioning
@@ -201,11 +213,13 @@
 ## 📊 **ANALYTICS EVENT SCHEMA**
 
 ### **Screen Views:**
+
 - `screen_landing_{module}`
 - `screen_fullscreen_input_{origin}` (From/To/Destination)
 - `screen_filters_{module}`
 
 ### **Events:**
+
 - `type_to_filter` (module, query_length, results_count)
 - `select_suggestion` (module, suggestion_type, position)
 - `apply_filters` (module, filter_count, results_count)
@@ -217,12 +231,14 @@
 ## 🔁 **QA CHECKLIST - DEVICE MATRIX**
 
 ### **iOS Testing:**
+
 - [ ] iPhone 12/13/14/15 (various screen sizes)
 - [ ] iPad sanity pass (if supported)
 - [ ] Light/Dark mode screenshots
 - [ ] Low-memory resume testing
 
 ### **Android Testing:**
+
 - [ ] Pixel 6/7 (stock Android)
 - [ ] Samsung A/M series (Samsung UI)
 - [ ] Various screen densities and sizes
@@ -233,12 +249,14 @@
 ## 🧩 **API CONTRACTS**
 
 ### **Required Endpoints:**
+
 - **Airport search:** `GET /airports?q={query}`
   - Returns: `{code, city, country, lat, lon}`
 - **City/hotel search:** `GET /destinations?q={query}&type=city|hotel`
 - **Transfers:** `GET /places?q={query}` + `GET /timeslots?place_id={id}`
 
 ### **Performance Requirements:**
+
 - **All endpoints:** <600ms p95 response time
 - **Paginated suggestions** for large result sets
 - **Graceful degradation** on slow connections
@@ -248,6 +266,7 @@
 ## 🧭 **DEEP LINKS SCHEMA**
 
 ### **Supported Deep Links:**
+
 - `faredown://search?module=flights`
 - `faredown://search?module=hotels`
 - `faredown://search?module=sightseeing`
@@ -257,6 +276,7 @@
 - `faredown://transfers?tab=car_rentals`
 
 ### **Behavior:**
+
 - Open to appropriate module with search panel ready
 - Maintain app state and navigation stack
 - Handle cold starts and warm resumes
@@ -266,6 +286,7 @@
 ## 🖼 **STORE READINESS**
 
 ### **Required Screenshots:**
+
 - Landing page for each module
 - Full-screen input page with suggestions
 - Results page with content
@@ -273,6 +294,7 @@
 - Transfers with both tabs visible
 
 ### **Promotional Video:**
+
 - **Duration:** 15–30 seconds
 - **Content:** Reuse screen recordings from deliverables
 - **Focus:** Key UX flows and AI bargaining features

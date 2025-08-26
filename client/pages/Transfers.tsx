@@ -15,14 +15,18 @@ export default function Transfers() {
             {/* Desktop Search Panel */}
             <div className="hidden md:block">
               {/* Blue Header Section - Consistent with flights */}
-              <div className="py-6 md:py-8" style={{ backgroundColor: "#003580" }}>
+              <div
+                className="py-6 md:py-8"
+                style={{ backgroundColor: "#003580" }}
+              >
                 <div className="max-w-7xl mx-auto px-3 sm:px-4">
                   <div className="text-center mb-4">
                     <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold text-white mb-2">
                       Upgrade. Bargain. Book.
                     </h2>
                     <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-white leading-tight opacity-95">
-                      Ride in comfort for less — AI secures your best deal on every trip.
+                      Ride in comfort for less — AI secures your best deal on
+                      every trip.
                     </h1>
                   </div>
                 </div>
@@ -37,7 +41,10 @@ export default function Transfers() {
             </div>
             {/* Mobile Native Search Form */}
             <div className="block md:hidden">
-              <MobileNativeSearchForm module="transfers" transferType="airport-taxi" />
+              <MobileNativeSearchForm
+                module="transfers"
+                transferType="airport-taxi"
+              />
             </div>
           </>
         }

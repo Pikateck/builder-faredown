@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { ChevronLeft, Plus, Minus, Check, Plane, MapPin, Calendar, X } from "lucide-react";
+import {
+  ChevronLeft,
+  Plus,
+  Minus,
+  Check,
+  Plane,
+  MapPin,
+  Calendar,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { MobileFullScreenDateInput } from "./MobileFullScreenDateInput";
 import { MobileFullScreenCityInput } from "./MobileFullScreenCityInput";
@@ -27,29 +36,35 @@ export function MobileFullScreenMultiCityInput({
   initialLegs,
   onSelect,
   onBack,
-  cities
+  cities,
 }: MobileFullScreenMultiCityInputProps) {
-  const [legs, setLegs] = useState<FlightLeg[]>(initialLegs.length > 0 ? initialLegs : [
-    {
-      id: "leg1",
-      from: "Mumbai",
-      fromCode: "BOM",
-      to: "Dubai", 
-      toCode: "DXB",
-      date: addDays(new Date(), 1)
-    },
-    {
-      id: "leg2",
-      from: "Dubai",
-      fromCode: "DXB", 
-      to: "London",
-      toCode: "LHR",
-      date: addDays(new Date(), 8)
-    }
-  ]);
+  const [legs, setLegs] = useState<FlightLeg[]>(
+    initialLegs.length > 0
+      ? initialLegs
+      : [
+          {
+            id: "leg1",
+            from: "Mumbai",
+            fromCode: "BOM",
+            to: "Dubai",
+            toCode: "DXB",
+            date: addDays(new Date(), 1),
+          },
+          {
+            id: "leg2",
+            from: "Dubai",
+            fromCode: "DXB",
+            to: "London",
+            toCode: "LHR",
+            date: addDays(new Date(), 8),
+          },
+        ],
+  );
 
   const [editingLeg, setEditingLeg] = useState<string | null>(null);
-  const [editingField, setEditingField] = useState<"from" | "to" | "date" | null>(null);
+  const [editingField, setEditingField] = useState<
+    "from" | "to" | "date" | null
+  >(null);
   const [showDateInput, setShowDateInput] = useState(false);
   const [showCityInput, setShowCityInput] = useState(false);
 
@@ -63,7 +78,7 @@ export function MobileFullScreenMultiCityInput({
       fromCode: lastLeg.toCode,
       to: "Paris",
       toCode: "CDG",
-      date: addDays(lastLeg.date, 3)
+      date: addDays(lastLeg.date, 3),
     };
 
     setLegs([...legs, newLeg]);
@@ -71,13 +86,13 @@ export function MobileFullScreenMultiCityInput({
 
   const removeLeg = (legId: string) => {
     if (legs.length <= 2) return; // Minimum 2 legs
-    setLegs(legs.filter(leg => leg.id !== legId));
+    setLegs(legs.filter((leg) => leg.id !== legId));
   };
 
   const updateLeg = (legId: string, field: keyof FlightLeg, value: any) => {
-    setLegs(legs.map(leg => 
-      leg.id === legId ? { ...leg, [field]: value } : leg
-    ));
+    setLegs(
+      legs.map((leg) => (leg.id === legId ? { ...leg, [field]: value } : leg)),
+    );
   };
 
   const handleCitySelect = (city: string, code: string) => {
@@ -110,18 +125,21 @@ export function MobileFullScreenMultiCityInput({
   };
 
   const formatLegSummary = () => {
-    const cities = legs.map(leg => leg.fromCode).concat(legs[legs.length - 1].toCode);
+    const cities = legs
+      .map((leg) => leg.fromCode)
+      .concat(legs[legs.length - 1].toCode);
     return cities.join(" → ");
   };
-
-
 
   return (
     <div className="fixed inset-0 bg-white z-50 overflow-hidden flex flex-col">
       {/* Header */}
       <div className="bg-[#003580] text-white px-4 py-3 shadow-lg flex-shrink-0">
         <div className="flex items-center justify-between">
-          <button onClick={onBack} className="p-2 -ml-2 rounded-full hover:bg-white/10">
+          <button
+            onClick={onBack}
+            className="p-2 -ml-2 rounded-full hover:bg-white/10"
+          >
             <ChevronLeft className="w-6 h-6" />
           </button>
           <h1 className="text-lg font-semibold">{title}</h1>
@@ -136,7 +154,9 @@ export function MobileFullScreenMultiCityInput({
             <Plane className="w-6 h-6 text-white" />
           </div>
           <div className="flex-1">
-            <div className="text-sm text-gray-600 mb-1">Multi-city itinerary ({legs.length} flights)</div>
+            <div className="text-sm text-gray-600 mb-1">
+              Multi-city itinerary ({legs.length} flights)
+            </div>
             <div className="font-semibold text-gray-900 text-base">
               {formatLegSummary()}
             </div>
@@ -151,10 +171,15 @@ export function MobileFullScreenMultiCityInput({
       <div className="flex-1 overflow-y-auto p-4">
         <div className="space-y-4">
           {legs.map((leg, index) => (
-            <div key={leg.id} className="bg-white rounded-xl border border-gray-200 p-4">
+            <div
+              key={leg.id}
+              className="bg-white rounded-xl border border-gray-200 p-4"
+            >
               {/* Leg Header */}
               <div className="flex items-center justify-between mb-4">
-                <h3 className="font-semibold text-gray-900">Flight {index + 1}</h3>
+                <h3 className="font-semibold text-gray-900">
+                  Flight {index + 1}
+                </h3>
                 {legs.length > 2 && (
                   <button
                     onClick={() => removeLeg(leg.id)}
@@ -178,7 +203,9 @@ export function MobileFullScreenMultiCityInput({
                   <Plane className="w-5 h-5 text-gray-500" />
                   <div>
                     <div className="text-xs text-gray-500">From</div>
-                    <div className="font-medium text-gray-900">{leg.from} ({leg.fromCode})</div>
+                    <div className="font-medium text-gray-900">
+                      {leg.from} ({leg.fromCode})
+                    </div>
                   </div>
                 </div>
               </button>
@@ -196,7 +223,9 @@ export function MobileFullScreenMultiCityInput({
                   <MapPin className="w-5 h-5 text-gray-500" />
                   <div>
                     <div className="text-xs text-gray-500">To</div>
-                    <div className="font-medium text-gray-900">{leg.to} ({leg.toCode})</div>
+                    <div className="font-medium text-gray-900">
+                      {leg.to} ({leg.toCode})
+                    </div>
                   </div>
                 </div>
               </button>
@@ -214,7 +243,9 @@ export function MobileFullScreenMultiCityInput({
                   <Calendar className="w-5 h-5 text-gray-500" />
                   <div>
                     <div className="text-xs text-gray-500">Departure</div>
-                    <div className="font-medium text-gray-900">{format(leg.date, "EEE, MMM d, yyyy")}</div>
+                    <div className="font-medium text-gray-900">
+                      {format(leg.date, "EEE, MMM d, yyyy")}
+                    </div>
                   </div>
                 </div>
               </button>
@@ -232,8 +263,12 @@ export function MobileFullScreenMultiCityInput({
                   <Plus className="w-5 h-5 text-white" />
                 </div>
                 <div className="text-left">
-                  <div className="text-[#003580] font-semibold">Add another flight</div>
-                  <div className="text-xs text-gray-600">Create multi-city itinerary</div>
+                  <div className="text-[#003580] font-semibold">
+                    Add another flight
+                  </div>
+                  <div className="text-xs text-gray-600">
+                    Create multi-city itinerary
+                  </div>
                 </div>
               </div>
             </button>
@@ -251,7 +286,9 @@ export function MobileFullScreenMultiCityInput({
           {/* Help Text */}
           <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
             <div className="text-sm text-blue-800">
-              <strong>💡 How it works:</strong> Add up to 6 flight segments to create your multi-city journey. Each segment can have different dates and destinations.
+              <strong>💡 How it works:</strong> Add up to 6 flight segments to
+              create your multi-city journey. Each segment can have different
+              dates and destinations.
             </div>
           </div>
         </div>
@@ -273,9 +310,10 @@ export function MobileFullScreenMultiCityInput({
         <MobileFullScreenCityInput
           title={`Select ${editingField === "from" ? "departure" : "destination"}`}
           placeholder="Search cities, airports..."
-          selectedValue={editingField === "from"
-            ? `${legs.find(l => l.id === editingLeg)?.from} (${legs.find(l => l.id === editingLeg)?.fromCode})`
-            : `${legs.find(l => l.id === editingLeg)?.to} (${legs.find(l => l.id === editingLeg)?.toCode})`
+          selectedValue={
+            editingField === "from"
+              ? `${legs.find((l) => l.id === editingLeg)?.from} (${legs.find((l) => l.id === editingLeg)?.fromCode})`
+              : `${legs.find((l) => l.id === editingLeg)?.to} (${legs.find((l) => l.id === editingLeg)?.toCode})`
           }
           onSelect={handleCitySelect}
           onBack={() => {
@@ -293,7 +331,8 @@ export function MobileFullScreenMultiCityInput({
           title="Select date"
           tripType="one-way"
           initialRange={{
-            startDate: legs.find(l => l.id === editingLeg)?.date || new Date()
+            startDate:
+              legs.find((l) => l.id === editingLeg)?.date || new Date(),
           }}
           onSelect={handleDateSelect}
           onBack={() => {

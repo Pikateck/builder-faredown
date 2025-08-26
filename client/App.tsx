@@ -93,7 +93,10 @@ function App() {
                     {/* Original Web Routes */}
                     <Route path="/" element={<Index />} />
                     <Route path="/flights" element={<Flights />} />
-                    <Route path="/flights/results" element={<FlightResults />} />
+                    <Route
+                      path="/flights/results"
+                      element={<FlightResults />}
+                    />
                     <Route
                       path="/flight-details/:flightId"
                       element={<FlightDetails />}
@@ -126,8 +129,14 @@ function App() {
                       path="/booking/confirmation/:bookingRef"
                       element={<BookingConfirmation />}
                     />
-                    <Route path="/booking-voucher" element={<BookingVoucher />} />
-                    <Route path="/booking-invoice" element={<BookingInvoice />} />
+                    <Route
+                      path="/booking-voucher"
+                      element={<BookingVoucher />}
+                    />
+                    <Route
+                      path="/booking-invoice"
+                      element={<BookingInvoice />}
+                    />
                     <Route path="/bookings" element={<Bookings />} />
                     <Route path="/sightseeing" element={<Sightseeing />} />
                     <Route
@@ -173,9 +182,15 @@ function App() {
                       path="/terms-conditions"
                       element={<TermsConditions />}
                     />
-                    <Route path="/terms-of-service" element={<TermsOfService />} />
+                    <Route
+                      path="/terms-of-service"
+                      element={<TermsOfService />}
+                    />
                     <Route path="/refund-policy" element={<RefundPolicy />} />
-                    <Route path="/refund-cancellation-policy" element={<RefundCancellationPolicy />} />
+                    <Route
+                      path="/refund-cancellation-policy"
+                      element={<RefundCancellationPolicy />}
+                    />
                     <Route path="/cookie-policy" element={<CookiePolicy />} />
                     <Route path="/my-trips" element={<MyTrips />} />
 
@@ -185,7 +200,10 @@ function App() {
                       path="/backend-test"
                       element={<BackendTestDashboard />}
                     />
-                    <Route path="/amadeus-test" element={<AmadeusTestPanel />} />
+                    <Route
+                      path="/amadeus-test"
+                      element={<AmadeusTestPanel />}
+                    />
                     <Route
                       path="/api-integration-test"
                       element={<ApiIntegrationTest />}
@@ -210,7 +228,10 @@ function App() {
                     {/* Admin CMS Routes */}
                     <Route path="/admin/login" element={<AdminLogin />} />
                     <Route path="/admin" element={<AdminDashboard />} />
-                    <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                    <Route
+                      path="/admin/dashboard"
+                      element={<AdminDashboard />}
+                    />
                     <Route path="/admin/users" element={<UserManagement />} />
                     <Route path="/admin/bargain" element={<BargainEngine />} />
                     <Route
@@ -221,7 +242,10 @@ function App() {
                       path="/admin/testing"
                       element={<AdminTestingDashboard />}
                     />
-                    <Route path="/admin/api" element={<APITestingDashboard />} />
+                    <Route
+                      path="/admin/api"
+                      element={<APITestingDashboard />}
+                    />
                     <Route
                       path="/admin/AIBargainingDashboard"
                       element={<AIBargainingDashboard />}
@@ -262,7 +286,10 @@ function App() {
                     <Route path="/mobile-profile" element={<MobileTrips />} />
 
                     {/* Loyalty Routes */}
-                    <Route path="/membership-card" element={<MembershipCard />} />
+                    <Route
+                      path="/membership-card"
+                      element={<MembershipCard />}
+                    />
 
                     {/* Fallback */}
                     <Route path="*" element={<NotFound />} />

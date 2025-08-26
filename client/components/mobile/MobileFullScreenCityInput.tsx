@@ -2,15 +2,15 @@ import React, { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { 
+import {
   ChevronLeft,
-  Search, 
-  Star, 
+  Search,
+  Star,
   Plane,
   Clock,
   TrendingUp,
   X,
-  MapPin
+  MapPin,
 } from "lucide-react";
 
 interface Airport {
@@ -39,7 +39,7 @@ export function MobileFullScreenCityInput({
   onSelect,
   onBack,
   cities,
-  recentSearches = []
+  recentSearches = [],
 }: MobileFullScreenCityInputProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredCities, setFilteredCities] = useState<Airport[]>([]);
@@ -51,20 +51,80 @@ export function MobileFullScreenCityInput({
 
   // Popular cities
   const popularCities = [
-    { code: "BOM", city: "Mumbai", country: "India", airport: "Chhatrapati Shivaji Intl", popular: true },
-    { code: "DEL", city: "New Delhi", country: "India", airport: "Indira Gandhi Intl", popular: true },
-    { code: "DXB", city: "Dubai", country: "UAE", airport: "Dubai International", popular: true },
-    { code: "LHR", city: "London", country: "UK", airport: "Heathrow", popular: true },
-    { code: "JFK", city: "New York", country: "USA", airport: "John F Kennedy Intl", popular: true },
-    { code: "SIN", city: "Singapore", country: "Singapore", airport: "Changi", popular: true },
+    {
+      code: "BOM",
+      city: "Mumbai",
+      country: "India",
+      airport: "Chhatrapati Shivaji Intl",
+      popular: true,
+    },
+    {
+      code: "DEL",
+      city: "New Delhi",
+      country: "India",
+      airport: "Indira Gandhi Intl",
+      popular: true,
+    },
+    {
+      code: "DXB",
+      city: "Dubai",
+      country: "UAE",
+      airport: "Dubai International",
+      popular: true,
+    },
+    {
+      code: "LHR",
+      city: "London",
+      country: "UK",
+      airport: "Heathrow",
+      popular: true,
+    },
+    {
+      code: "JFK",
+      city: "New York",
+      country: "USA",
+      airport: "John F Kennedy Intl",
+      popular: true,
+    },
+    {
+      code: "SIN",
+      city: "Singapore",
+      country: "Singapore",
+      airport: "Changi",
+      popular: true,
+    },
   ];
 
   // Trending cities
   const trendingCities = [
-    { code: "CDG", city: "Paris", country: "France", airport: "Charles de Gaulle", trending: true },
-    { code: "BKK", city: "Bangkok", country: "Thailand", airport: "Suvarnabhumi", trending: true },
-    { code: "AMS", city: "Amsterdam", country: "Netherlands", airport: "Schiphol", trending: true },
-    { code: "FRA", city: "Frankfurt", country: "Germany", airport: "Frankfurt am Main", trending: true },
+    {
+      code: "CDG",
+      city: "Paris",
+      country: "France",
+      airport: "Charles de Gaulle",
+      trending: true,
+    },
+    {
+      code: "BKK",
+      city: "Bangkok",
+      country: "Thailand",
+      airport: "Suvarnabhumi",
+      trending: true,
+    },
+    {
+      code: "AMS",
+      city: "Amsterdam",
+      country: "Netherlands",
+      airport: "Schiphol",
+      trending: true,
+    },
+    {
+      code: "FRA",
+      city: "Frankfurt",
+      country: "Germany",
+      airport: "Frankfurt am Main",
+      trending: true,
+    },
   ];
 
   // Auto-focus input when component mounts (native behavior)
@@ -79,11 +139,12 @@ export function MobileFullScreenCityInput({
     if (!searchQuery || searchQuery.length < 2) {
       setFilteredCities([]);
     } else {
-      const filtered = citiesArray.filter(city =>
-        city.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        city.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        city.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        city.airport.toLowerCase().includes(searchQuery.toLowerCase())
+      const filtered = citiesArray.filter(
+        (city) =>
+          city.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          city.code.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          city.country.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          city.airport.toLowerCase().includes(searchQuery.toLowerCase()),
       );
       setFilteredCities(filtered.slice(0, 20));
     }
@@ -106,7 +167,7 @@ export function MobileFullScreenCityInput({
       {/* Native App Header */}
       <div className="bg-[#003580] text-white px-4 py-3 shadow-lg flex-shrink-0">
         <div className="flex items-center justify-between">
-          <button 
+          <button
             onClick={onBack}
             className="p-2 -ml-2 rounded-full hover:bg-white/10 transition-colors"
           >
@@ -148,7 +209,9 @@ export function MobileFullScreenCityInput({
             <div className="mb-6">
               <div className="flex items-center space-x-2 mb-4">
                 <Star className="w-5 h-5 text-[#febb02]" />
-                <h2 className="text-lg font-semibold text-gray-900">Popular Destinations</h2>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Popular Destinations
+                </h2>
               </div>
               <div className="grid grid-cols-1 gap-3">
                 {popularCities.map((city) => (
@@ -161,12 +224,20 @@ export function MobileFullScreenCityInput({
                       <Plane className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1 text-left">
-                      <div className="font-semibold text-gray-900 text-base">{city.city}</div>
-                      <div className="text-sm text-gray-600">{city.airport}</div>
-                      <div className="text-xs text-gray-500">{city.country}</div>
+                      <div className="font-semibold text-gray-900 text-base">
+                        {city.city}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {city.airport}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {city.country}
+                      </div>
                     </div>
                     <div className="bg-gray-100 px-3 py-1 rounded-lg">
-                      <span className="text-sm font-mono text-gray-700">{city.code}</span>
+                      <span className="text-sm font-mono text-gray-700">
+                        {city.code}
+                      </span>
                     </div>
                   </button>
                 ))}
@@ -177,7 +248,9 @@ export function MobileFullScreenCityInput({
             <div className="mb-6">
               <div className="flex items-center space-x-2 mb-4">
                 <TrendingUp className="w-5 h-5 text-green-500" />
-                <h2 className="text-lg font-semibold text-gray-900">Trending Now</h2>
+                <h2 className="text-lg font-semibold text-gray-900">
+                  Trending Now
+                </h2>
               </div>
               <div className="grid grid-cols-1 gap-3">
                 {trendingCities.map((city) => (
@@ -190,12 +263,20 @@ export function MobileFullScreenCityInput({
                       <TrendingUp className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1 text-left">
-                      <div className="font-semibold text-gray-900 text-base">{city.city}</div>
-                      <div className="text-sm text-gray-600">{city.airport}</div>
-                      <div className="text-xs text-gray-500">{city.country}</div>
+                      <div className="font-semibold text-gray-900 text-base">
+                        {city.city}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {city.airport}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {city.country}
+                      </div>
                     </div>
                     <div className="bg-gray-100 px-3 py-1 rounded-lg">
-                      <span className="text-sm font-mono text-gray-700">{city.code}</span>
+                      <span className="text-sm font-mono text-gray-700">
+                        {city.code}
+                      </span>
                     </div>
                   </button>
                 ))}
@@ -207,14 +288,18 @@ export function MobileFullScreenCityInput({
               <div>
                 <div className="flex items-center space-x-2 mb-4">
                   <Clock className="w-5 h-5 text-gray-500" />
-                  <h2 className="text-lg font-semibold text-gray-900">Recent Searches</h2>
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    Recent Searches
+                  </h2>
                 </div>
                 <div className="grid grid-cols-1 gap-3">
                   {recentSearches.slice(0, 5).map((search, index) => (
                     <button
                       key={index}
                       onClick={() => {
-                        const city = popularCities.find(c => c.city === search);
+                        const city = popularCities.find(
+                          (c) => c.city === search,
+                        );
                         if (city) handleCitySelect(city);
                       }}
                       className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all"
@@ -223,7 +308,9 @@ export function MobileFullScreenCityInput({
                         <Clock className="w-5 h-5 text-gray-500" />
                       </div>
                       <div className="flex-1 text-left">
-                        <div className="font-medium text-gray-900">{search}</div>
+                        <div className="font-medium text-gray-900">
+                          {search}
+                        </div>
                       </div>
                     </button>
                   ))}
@@ -249,12 +336,20 @@ export function MobileFullScreenCityInput({
                       <MapPin className="w-6 h-6 text-white" />
                     </div>
                     <div className="flex-1 text-left">
-                      <div className="font-semibold text-gray-900 text-base">{city.city}</div>
-                      <div className="text-sm text-gray-600">{city.airport}</div>
-                      <div className="text-xs text-gray-500">{city.country}</div>
+                      <div className="font-semibold text-gray-900 text-base">
+                        {city.city}
+                      </div>
+                      <div className="text-sm text-gray-600">
+                        {city.airport}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {city.country}
+                      </div>
                     </div>
                     <div className="bg-gray-100 px-3 py-1 rounded-lg">
-                      <span className="text-sm font-mono text-gray-700">{city.code}</span>
+                      <span className="text-sm font-mono text-gray-700">
+                        {city.code}
+                      </span>
                     </div>
                   </button>
                 ))}
@@ -262,8 +357,12 @@ export function MobileFullScreenCityInput({
             ) : (
               <div className="text-center py-12">
                 <MapPin className="w-16 h-16 mx-auto mb-4 text-gray-300" />
-                <h3 className="text-lg font-medium text-gray-900 mb-2">No results found</h3>
-                <p className="text-gray-600">Try searching with a different term</p>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">
+                  No results found
+                </h3>
+                <p className="text-gray-600">
+                  Try searching with a different term
+                </p>
               </div>
             )}
           </div>
@@ -279,7 +378,9 @@ export function MobileFullScreenCityInput({
                 <MapPin className="w-5 h-5 text-white" />
               </div>
               <div>
-                <div className="font-medium text-gray-900">Currently Selected</div>
+                <div className="font-medium text-gray-900">
+                  Currently Selected
+                </div>
                 <div className="text-sm text-gray-600">{selectedValue}</div>
               </div>
             </div>

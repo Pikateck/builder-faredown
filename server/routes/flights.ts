@@ -352,7 +352,11 @@ router.get("/search", async (req, res) => {
     if (multiCityLegs && tripType === "multi_city") {
       try {
         parsedMultiCityLegs = JSON.parse(multiCityLegs as string);
-        console.log("🛫 Multi-city legs parsed:", parsedMultiCityLegs.length, "legs");
+        console.log(
+          "🛫 Multi-city legs parsed:",
+          parsedMultiCityLegs.length,
+          "legs",
+        );
       } catch (error) {
         return res.status(400).json({
           success: false,
@@ -372,7 +376,8 @@ router.get("/search", async (req, res) => {
     } else if (!origin || !destination || !departureDate) {
       return res.status(400).json({
         success: false,
-        error: "Missing required parameters: origin, destination, departureDate",
+        error:
+          "Missing required parameters: origin, destination, departureDate",
       });
     }
 
@@ -518,7 +523,12 @@ router.get("/:flightId", async (req, res) => {
             total: 25890,
           },
         },
-        amenities: ["WiFi", "Entertainment System", "Premium Meals", "Lounge Access"],
+        amenities: [
+          "WiFi",
+          "Entertainment System",
+          "Premium Meals",
+          "Lounge Access",
+        ],
         baggage: {
           carryOn: {
             weight: "7kg",
