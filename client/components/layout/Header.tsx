@@ -143,6 +143,7 @@ export function Header() {
                     setShowLanguageMenu(false);
                   }}
                   className="p-2 hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
+                  data-mobile-menu-trigger
                 >
                   <Menu className="w-5 h-5" />
                 </button>
