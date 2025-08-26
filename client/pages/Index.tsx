@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { LandingPageSearchPanel } from "@/components/LandingPageSearchPanel";
 import { UnifiedLandingPage } from "@/components/UnifiedLandingPage";
+import { MobileNativeSearchForm } from "@/components/mobile/MobileNativeSearchForm";
 
 export default function Index() {
   const location = useLocation();
@@ -30,12 +31,24 @@ export default function Index() {
       }
     }
   }, [location.search, navigate]);
+
   return (
     <Layout showSearch={false}>
       <UnifiedLandingPage
         module="flights"
         tagline="Turn your fare into an upgrade with live AI bargaining."
-        searchPanel={<LandingPageSearchPanel />}
+        searchPanel={
+          <>
+            {/* Desktop Search Panel */}
+            <div className="hidden md:block">
+              <LandingPageSearchPanel />
+            </div>
+            {/* Mobile Native Search Form */}
+            <div className="block md:hidden">
+              <MobileNativeSearchForm module="flights" />
+            </div>
+          </>
+        }
       />
     </Layout>
   );
