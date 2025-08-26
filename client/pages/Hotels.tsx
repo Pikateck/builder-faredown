@@ -1,5 +1,17 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import React from "react";
+import { Layout } from "@/components/layout/Layout";
+import { UnifiedLandingPage } from "@/components/UnifiedLandingPage";
+
+export default function Hotels() {
+  return (
+    <Layout>
+      <UnifiedLandingPage
+        module="hotels"
+        tagline="Control your price with AI-powered hotel upgrades."
+      />
+    </Layout>
+  );
+}
 import { useDateContext } from "@/contexts/DateContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useAuth } from "@/contexts/AuthContext";
