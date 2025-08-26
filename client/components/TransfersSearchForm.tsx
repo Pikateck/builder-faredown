@@ -195,6 +195,32 @@ export function TransfersSearchForm() {
         onClose={() => setShowError(false)}
       />
       <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
+        {/* Service Type Tabs */}
+        <div className="flex gap-1 mb-4 bg-gray-100 p-1 rounded-lg">
+          <button
+            onClick={() => setServiceType("airport-taxi")}
+            className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              serviceType === "airport-taxi"
+                ? "bg-[#003580] text-white shadow-sm"
+                : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
+            }`}
+          >
+            <Car className="w-4 h-4 inline mr-2" />
+            Airport Taxi
+          </button>
+          <button
+            onClick={() => setServiceType("car-rentals")}
+            className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
+              serviceType === "car-rentals"
+                ? "bg-[#003580] text-white shadow-sm"
+                : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
+            }`}
+          >
+            <Car className="w-4 h-4 inline mr-2" />
+            Car Rentals
+          </button>
+        </div>
+
         {/* Trip Type Selection */}
         <div className="flex gap-2 mb-4">
           <Select value={tripType} onValueChange={setTripType}>
