@@ -314,6 +314,7 @@ router.get("/search", async (req, res) => {
       children = 0,
       cabinClass = "ECONOMY",
       tripType = "one_way",
+      multiCityLegs,
     } = req.query;
 
     // Prepare search parameters for caching
@@ -972,7 +973,7 @@ router.delete("/bookings/:bookingRef", async (req, res) => {
       message: "Booking cancelled successfully",
     });
   } catch (error) {
-    console.error("🚨 Cancel booking error:", error);
+    console.error("���� Cancel booking error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to cancel booking",
