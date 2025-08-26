@@ -220,7 +220,79 @@ export default function Account() {
     const savedBookings = JSON.parse(
       localStorage.getItem("faredownBookings") || "[]",
     );
-    setBookings(savedBookings);
+
+    // Add sample data to demonstrate modular display if no bookings exist
+    if (savedBookings.length === 0) {
+      const sampleBookings = [
+        {
+          type: 'flight',
+          bookingDetails: {
+            bookingRef: 'FD-FL-001',
+            bookingDate: '2024-01-15',
+            passengers: [{
+              firstName: 'John',
+              lastName: 'Doe',
+              title: 'Mr'
+            }],
+            contactDetails: {
+              email: 'john@example.com',
+              countryCode: '+91',
+              phone: '9876543210'
+            },
+            currency: { symbol: '₹' },
+            totalAmount: 45000
+          },
+          flightDetails: {
+            airline: 'Air India',
+            flightNumber: 'AI-131'
+          },
+          paymentId: 'pay_demo123456789'
+        },
+        {
+          type: 'hotel',
+          bookingDetails: {
+            bookingRef: 'FD-HT-002',
+            bookingDate: '2024-01-16',
+            passengers: [{
+              firstName: 'John',
+              lastName: 'Doe',
+              title: 'Mr'
+            }],
+            contactDetails: {
+              email: 'john@example.com',
+              countryCode: '+91',
+              phone: '9876543210'
+            },
+            currency: { symbol: '₹' },
+            totalAmount: 12000
+          },
+          paymentId: 'pay_demo987654321'
+        },
+        {
+          type: 'sightseeing',
+          bookingDetails: {
+            bookingRef: 'FD-ST-003',
+            bookingDate: '2024-01-17',
+            passengers: [{
+              firstName: 'John',
+              lastName: 'Doe',
+              title: 'Mr'
+            }],
+            contactDetails: {
+              email: 'john@example.com',
+              countryCode: '+91',
+              phone: '9876543210'
+            },
+            currency: { symbol: '₹' },
+            totalAmount: 3500
+          },
+          paymentId: 'pay_demo456789123'
+        }
+      ];
+      setBookings(sampleBookings);
+    } else {
+      setBookings(savedBookings);
+    }
   }, []);
 
   useEffect(() => {
