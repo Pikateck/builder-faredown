@@ -237,27 +237,109 @@ export function TransfersSearchForm() {
         {/* Main Search Form */}
         <div className="flex flex-col lg:flex-row gap-2 mb-4">
           {/* Pickup Location */}
-          <div className="flex-1 lg:max-w-[200px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Pickup
+          <div className="relative flex-1 lg:max-w-[240px] w-full" onClick={(e) => e.stopPropagation()}>
+            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+              Pickup location
             </label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4" />
-              <Input
-                type="text"
-                value={pickupLocation}
-                onChange={(e) => setPickupLocation(e.target.value)}
-                className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
-                placeholder="Pickup location"
-                autoComplete="off"
-                list="pickup-locations"
-              />
-              <datalist id="pickup-locations">
-                {popularLocations.map((location, index) => (
-                  <option key={index} value={location} />
-                ))}
-              </datalist>
+              <button
+                onClick={() => setIsPickupOpen(!isPickupOpen)}
+                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
+              >
+                <Car className="w-4 h-4 text-gray-500 mr-2" />
+                <div className="flex items-center space-x-2 min-w-0">
+                  {pickupLocation ? (
+                    <>
+                      <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                        {pickupCode || "PKP"}
+                      </div>
+                      <span className="text-sm text-gray-700 font-medium truncate">
+                        {pickupLocation}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-sm text-gray-500 font-medium">
+                      Pickup location
+                    </span>
+                  )}
+                </div>
+              </button>
+              {pickupLocation && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setPickupLocation("");
+                    setPickupInputValue("");
+                    setIsPickupUserTyping(false);
+                    setPickupCode("");
+                    setIsPickupOpen(false);
+                  }}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  title="Clear pickup location"
+                >
+                  <X className="w-4 h-4 text-gray-400" />
+                </button>
+              )}
             </div>
+
+            {/* Pickup Locations Dropdown */}
+            {isPickupOpen && (
+              <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
+                <div className="mb-3">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                    Pickup location
+                  </h3>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={pickupInputValue}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setPickupInputValue(value);
+                        setIsPickupUserTyping(true);
+                      }}
+                      placeholder="Search locations..."
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  {popularLocations
+                    .filter((location) =>
+                      location.toLowerCase().includes((pickupInputValue || "").toLowerCase())
+                    )
+                    .slice(0, 8)
+                    .map((location, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setPickupLocation(location);
+                          setPickupCode(location.includes("Airport") ? "APT" : "CTY");
+                          setIsPickupOpen(false);
+                          setPickupInputValue("");
+                          setIsPickupUserTyping(false);
+                        }}
+                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                            <Car className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {location}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              Transfer location
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Swap Button */}
