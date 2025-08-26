@@ -259,8 +259,7 @@ export default function Flights() {
                 Upgrade. Bargain. Book.
               </h1>
               <p className="text-blue-200 text-sm mb-3">
-                Control your price for flights & hotels — with live AI
-                bargaining.
+                Turn your fare into an upgrade with live AI bargaining.
               </p>
             </div>
 
@@ -663,8 +662,7 @@ export default function Flights() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Control your price for flights & hotels — with live AI
-                bargaining.
+                Turn your fare into an upgrade with live AI bargaining.
               </h1>
             </div>
 
