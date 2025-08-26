@@ -523,7 +523,7 @@ export default function Account() {
               const ModuleIcon = module.icon;
               const moduleBookings = module.bookings;
 
-              if (moduleBookings.length === 0) return null;
+              // Always show module headers for better UX
 
               return (
                 <div key={module.id} className="space-y-4">
