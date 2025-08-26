@@ -30,6 +30,8 @@ import {
   Camera,
   Car,
   BookOpen,
+  Award,
+  CreditCard,
 } from "lucide-react";
 
 export function Header() {
