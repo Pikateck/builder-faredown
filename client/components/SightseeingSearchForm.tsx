@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { BookingCalendar } from "@/components/BookingCalendar";
 import { format, addDays } from "date-fns";
-import { MapPin, CalendarIcon, Search } from "lucide-react";
+import { MapPin, CalendarIcon, Search, X, Camera } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 
 export function SightseeingSearchForm() {
