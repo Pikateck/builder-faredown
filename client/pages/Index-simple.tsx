@@ -204,7 +204,7 @@ export default function Index() {
             The World's First Online Travel Bargain Portal™
           </p>
           <p className="text-gray-500 text-sm">
-            © 2024 Faredown Technologies. All rights reserved.
+            © 2025 Faredown Bookings and Travels Pvt Ltd. All rights reserved.
           </p>
         </div>
       </footer>
