@@ -223,7 +223,11 @@ export function MobileFullScreenMultiCityInput({
 
               {/* Date */}
               <button
-                onClick={() => { setEditingLeg(leg.id); setEditingField("date"); }}
+                onClick={() => {
+                  setEditingLeg(leg.id);
+                  setEditingField("date");
+                  setShowDateInput(true);
+                }}
                 className="w-full p-3 bg-gray-50 border border-gray-200 rounded-lg text-left hover:border-[#003580] hover:bg-blue-50"
               >
                 <div className="flex items-center space-x-3">
