@@ -312,37 +312,6 @@ export function Header() {
                       </div>
                     </div>
 
-                    <div className="border-t border-gray-200 my-4"></div>
-
-                    <button
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full"
-                      onClick={() => {
-                        setShowMobileMenu(false);
-                      }}
-                    >
-                      <Heart className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">Saved</span>
-                    </button>
-
-                    <button
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full"
-                      onClick={() => {
-                        setShowMobileMenu(false);
-                      }}
-                    >
-                      <Headphones className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">Help & Support</span>
-                    </button>
-
-                    <button
-                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full"
-                      onClick={() => {
-                        setShowMobileMenu(false);
-                      }}
-                    >
-                      <Settings className="w-5 h-5 text-[#003580]" />
-                      <span className="font-medium">Settings</span>
-                    </button>
                   </nav>
 
                   {/* User Section */}
