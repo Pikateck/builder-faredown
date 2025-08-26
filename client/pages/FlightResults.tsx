@@ -1502,52 +1502,120 @@ export default function FlightResults() {
 
           {/* Enhanced Mobile Search Summary */}
           <div className="bg-white border-b border-gray-200 px-4 py-4">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-3 flex-1">
-                <div className="flex items-center space-x-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
-                    <Plane className="w-5 h-5 text-white" />
-                  </div>
-                  <div className="flex-1">
-                    <div className="flex items-center gap-2 mb-1">
-                      <span className="text-base font-semibold text-gray-900">
-                        {selectedFromCity && selectedToCity
-                          ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""}`
-                          : "Flight Search"}
-                      </span>
-                      <div className="flex items-center gap-1">
-                        <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+            {tripType === "multi-city" && multiCityLegs && multiCityLegs.length > 0 ? (
+              // Multi-city display
+              <div>
+                <div className="flex items-center justify-between mb-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-orange-500 to-orange-600 rounded-xl flex items-center justify-center shadow-sm">
+                      <Plane className="w-5 h-5 text-white" />
+                    </div>
+                    <div>
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-base font-semibold text-gray-900">
+                          Multi-City Journey
+                        </span>
+                        <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
+                          {multiCityLegs.length} flights
+                        </span>
                         <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
                           {adults} adult{adults > 1 ? "s" : ""}
                         </span>
                       </div>
+                      <div className="text-sm text-gray-600">
+                        {multiCityLegs.map(leg => leg.fromCode).concat(multiCityLegs[multiCityLegs.length - 1].toCode).join(" → ")}
+                      </div>
                     </div>
-                    <div className="flex items-center gap-2">
-                      <Calendar className="w-3 h-3 text-blue-600" />
-                      <span className="text-sm text-gray-600 font-medium">
-                        {departureDate
-                          ? formatDisplayDate(departureDate, "MMM d")
-                          : "Select date"}
-                        {tripType === "round-trip" && returnDate
-                          ? ` - ${formatDisplayDate(returnDate, "MMM d")}`
-                          : tripType === "round-trip"
-                            ? " - Return"
-                            : ""}
-                      </span>
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="text-blue-600 hover:bg-blue-50 font-medium px-4 py-2 h-auto rounded-lg border border-blue-200"
+                    onClick={() => setShowSearchEdit(true)}
+                  >
+                    <Settings className="w-3 h-3 mr-1" />
+                    Edit
+                  </Button>
+                </div>
+
+                {/* Multi-city legs breakdown */}
+                <div className="space-y-3">
+                  {multiCityLegs.map((leg, index) => (
+                    <div key={leg.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center border border-gray-200">
+                          <span className="text-sm font-semibold text-gray-700">{index + 1}</span>
+                        </div>
+                        <div>
+                          <div className="text-sm font-semibold text-gray-900">
+                            {leg.fromCode} → {leg.toCode}
+                          </div>
+                          <div className="text-xs text-gray-600">
+                            {leg.from} to {leg.to}
+                          </div>
+                        </div>
+                      </div>
+                      <div className="text-right">
+                        <div className="text-sm font-medium text-gray-900">
+                          {format(new Date(leg.date), "MMM d")}
+                        </div>
+                        <div className="text-xs text-gray-600">
+                          {format(new Date(leg.date), "EEE")}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              // Regular flight display
+              <div className="flex items-center justify-between">
+                <div className="flex items-center space-x-3 flex-1">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-sm">
+                      <Plane className="w-5 h-5 text-white" />
+                    </div>
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-1">
+                        <span className="text-base font-semibold text-gray-900">
+                          {selectedFromCity && selectedToCity
+                            ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""}`
+                            : "Flight Search"}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+                          <span className="text-xs font-medium text-gray-600 bg-gray-100 px-2 py-0.5 rounded-full">
+                            {adults} adult{adults > 1 ? "s" : ""}
+                          </span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-2">
+                        <Calendar className="w-3 h-3 text-blue-600" />
+                        <span className="text-sm text-gray-600 font-medium">
+                          {departureDate
+                            ? formatDisplayDate(departureDate, "MMM d")
+                            : "Select date"}
+                          {tripType === "round-trip" && returnDate
+                            ? ` - ${formatDisplayDate(returnDate, "MMM d")}`
+                            : tripType === "round-trip"
+                              ? " - Return"
+                              : ""}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  className="text-blue-600 hover:bg-blue-50 font-medium px-4 py-2 h-auto rounded-lg border border-blue-200 active:scale-95 transition-all duration-200 touch-manipulation"
+                  onClick={() => setShowSearchEdit(true)}
+                >
+                  <Settings className="w-3 h-3 mr-1" />
+                  Edit
+                </Button>
               </div>
-              <Button
-                variant="ghost"
-                size="sm"
-                className="text-blue-600 hover:bg-blue-50 font-medium px-4 py-2 h-auto rounded-lg border border-blue-200 active:scale-95 transition-all duration-200 touch-manipulation"
-                onClick={() => setShowSearchEdit(true)}
-              >
-                <Settings className="w-3 h-3 mr-1" />
-                Edit
-              </Button>
-            </div>
+            )}
           </div>
 
           {/* Mobile Filter & Sort Bar */}
