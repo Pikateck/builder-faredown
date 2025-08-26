@@ -143,49 +143,6 @@ export function MobileFullScreenMultiCityInput({
     </div>
   );
 
-  // Date selection modal
-  const DateSelector = ({ legId }: { legId: string }) => {
-    const leg = legs.find(l => l.id === legId);
-    if (!leg) return null;
-
-    const generateDates = () => {
-      const dates = [];
-      for (let i = 0; i < 30; i++) {
-        dates.push(addDays(new Date(), i + 1));
-      }
-      return dates;
-    };
-
-    return (
-      <div className="fixed inset-0 bg-white z-60">
-        <div className="bg-[#003580] text-white px-4 py-3">
-          <div className="flex items-center justify-between">
-            <button onClick={() => { setEditingLeg(null); setEditingField(null); }}>
-              <ChevronLeft className="w-6 h-6" />
-            </button>
-            <h1 className="text-lg font-semibold">Select date</h1>
-            <div className="w-6"></div>
-          </div>
-        </div>
-        <div className="p-4 grid grid-cols-2 gap-2">
-          {generateDates().map((date) => (
-            <button
-              key={date.toISOString()}
-              onClick={() => handleDateSelect(legId, date)}
-              className={`p-3 rounded-xl border-2 text-center transition-all ${
-                format(date, "yyyy-MM-dd") === format(leg.date, "yyyy-MM-dd")
-                  ? "border-[#003580] bg-[#003580] text-white"
-                  : "border-gray-200 hover:border-[#003580] hover:bg-blue-50"
-              }`}
-            >
-              <div className="text-sm font-semibold">{format(date, "MMM d")}</div>
-              <div className="text-xs">{format(date, "EEE")}</div>
-            </button>
-          ))}
-        </div>
-      </div>
-    );
-  };
 
   return (
     <div className="fixed inset-0 bg-white z-50 overflow-hidden flex flex-col">
