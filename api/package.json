@@ -30,7 +30,7 @@
     "admin",
     "bargain"
   ],
-  "author": "Zubin Aibara <admin@faredown.com>",
+  "author": "Faredown Bookings and Travels Pvt Ltd <admin@faredown.com>",
   "license": "MIT",
   "dependencies": {
     "axios": "^1.6.2",
