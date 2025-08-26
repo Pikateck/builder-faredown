@@ -262,7 +262,7 @@ export const MobileTicket: React.FC<MobileTicketProps> = ({ bookingData }) => {
       {/* Footer */}
       <div className="bg-gray-900 text-white p-4 text-center">
         <div className="text-xs">
-          © 2024 Faredown Technologies • The World's First Online Travel
+          © 2025 Faredown Bookings and Travels Pvt Ltd • The World's First Online Travel
           Bargain Portal™
         </div>
       </div>
