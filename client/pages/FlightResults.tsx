@@ -1565,6 +1565,21 @@ export default function FlightResults() {
                       </div>
                     </div>
                   ))}
+
+                  {/* Multi-city search status */}
+                  <div className="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div className="flex items-center space-x-2">
+                      <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center flex-shrink-0">
+                        <span className="text-white text-xs">ℹ</span>
+                      </div>
+                      <div className="text-sm text-blue-800">
+                        <div className="font-medium">Multi-city Search Active</div>
+                        <div className="text-xs text-blue-600 mt-1">
+                          Searching for the best flight combinations across all {multiCityLegs.length} segments. Results will show compatible itineraries.
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             ) : (
@@ -1725,7 +1740,7 @@ export default function FlightResults() {
                       { code: "en", name: "English", flag: "🇬🇧" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
-                      { code: "de", name: "Deutsch", flag: "🇩🇪" },
+                      { code: "de", name: "Deutsch", flag: "���🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
@@ -5364,7 +5379,7 @@ export default function FlightResults() {
                         Delhi → Singapore
                       </div>
                       <div className="text-xs text-blue-200">
-                        Air India • 1 stop ��� 8h 45m
+                        Air India • 1 stop ����� 8h 45m
                       </div>
                     </div>
                     <div className="text-lg font-bold">₹22800</div>
