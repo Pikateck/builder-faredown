@@ -84,6 +84,17 @@ export function TransfersSearchForm() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setIsPickupOpen(false);
+      setIsDropoffOpen(false);
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   // Popular transfer locations
   const popularLocations = [
     "Dubai International Airport (DXB)",
