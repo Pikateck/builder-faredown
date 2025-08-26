@@ -43,6 +43,10 @@ export function HotelSearchForm({
   const [showError, setShowError] = useState(false);
   
   const [destination, setDestination] = useState("");
+  const [destinationCode, setDestinationCode] = useState("");
+  const [isDestinationOpen, setIsDestinationOpen] = useState(false);
+  const [inputValue, setInputValue] = useState("");
+  const [isUserTyping, setIsUserTyping] = useState(false);
   
   // Set default dates to future dates
   const tomorrow = new Date();
