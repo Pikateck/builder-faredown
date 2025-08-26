@@ -243,17 +243,15 @@ export default function Sightseeing() {
         </header>
 
         {/* Mobile Search Section */}
-        <div className="pb-8 pt-4 bg-white">
+        <div className="pb-8 pt-4" style={{ backgroundColor: "#003580" }}>
           <div className="px-4">
             {/* Upgrade Message */}
             <div className="text-center mb-6">
-              <h1 className="text-2xl font-bold mb-2 text-gray-900">
+              <h1 className="text-2xl font-bold mb-2 text-white">
                 Upgrade. Bargain. Book.
               </h1>
-              <p className="text-gray-600 text-sm mb-3">
-                Explore fascinating attractions, cultural landmarks, and
-                exciting activities. Create unforgettable memories with our
-                curated sightseeing experiences.
+              <p className="text-blue-200 text-sm mb-3">
+                Explore attractions & experiences with AI that bargains for you.
               </p>
             </div>
 
@@ -605,9 +603,7 @@ export default function Sightseeing() {
                 </h2>
               </div>
               <h1 className="text-lg sm:text-xl md:text-2xl lg:text-3xl font-semibold text-white mb-3 sm:mb-4 leading-tight px-2 opacity-95">
-                Explore fascinating attractions, cultural landmarks, and
-                exciting activities. Create unforgettable memories with our
-                curated sightseeing experiences.
+                Explore attractions & experiences with AI that bargains for you.
               </h1>
             </div>
 
