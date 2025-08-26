@@ -18,6 +18,7 @@ import { MobileFullScreenDateInput } from "./MobileFullScreenDateInput";
 import { MobileFullScreenTravelersInput } from "./MobileFullScreenTravelersInput";
 import { MobileFullScreenTimeInput } from "./MobileFullScreenTimeInput";
 import { MobileFullScreenTransferTypeInput } from "./MobileFullScreenTransferTypeInput";
+import { MobileFullScreenMultiCityInput } from "./MobileFullScreenMultiCityInput";
 
 interface Travelers {
   adults: number;
@@ -29,6 +30,15 @@ interface Travelers {
 interface DateRange {
   startDate: Date;
   endDate?: Date;
+}
+
+interface FlightLeg {
+  id: string;
+  from: string;
+  fromCode: string;
+  to: string;
+  toCode: string;
+  date: Date;
 }
 
 interface MobileNativeSearchFormProps {
@@ -118,6 +128,9 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
   // Time states (for transfers)
   const [pickupTime, setPickupTime] = useState("12:00");
   const [returnTime, setReturnTime] = useState("12:00");
+
+  // Multi-city states (for flights)
+  const [multiCityLegs, setMultiCityLegs] = useState<FlightLeg[]>([]);
   
   // Travelers state
   const [travelers, setTravelers] = useState<Travelers>({
@@ -134,6 +147,7 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
   const [showTravelersInput, setShowTravelersInput] = useState(false);
   const [showTimeInput, setShowTimeInput] = useState(false);
   const [showTransferTypeInput, setShowTransferTypeInput] = useState(false);
+  const [showMultiCityInput, setShowMultiCityInput] = useState(false);
 
   // Handle city selection
   const handleFromCitySelect = (city: string, code: string) => {
@@ -171,28 +185,37 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
     setTransferTripType(tripType);
   };
 
+  // Handle multi-city selection
+  const handleMultiCitySelect = (legs: FlightLeg[]) => {
+    setMultiCityLegs(legs);
+  };
+
   // Format date display
   const formatDateDisplay = () => {
+    if (module === "flights" && tripType === "multi-city") {
+      if (multiCityLegs.length > 0) {
+        const cities = multiCityLegs.map(leg => leg.fromCode).concat(multiCityLegs[multiCityLegs.length - 1].toCode);
+        return cities.join(" → ");
+      }
+      return "Multi-city flights";
+    }
+
     if (!dateRange.startDate) return "Select dates";
-    
+
     if (module === "hotels") {
       const checkIn = format(dateRange.startDate, "MMM d");
       const checkOut = dateRange.endDate ? format(dateRange.endDate, "MMM d") : "Check-out";
       return `${checkIn} - ${checkOut}`;
     }
-    
+
     if (tripType === "one-way" || module === "transfers") {
       return format(dateRange.startDate, "MMM d");
     }
-    
-    if (tripType === "multi-city") {
-      return "Multi-city dates";
-    }
-    
+
     if (dateRange.endDate) {
       return `${format(dateRange.startDate, "MMM d")} - ${format(dateRange.endDate, "MMM d")}`;
     }
-    
+
     return format(dateRange.startDate, "MMM d") + " - Return";
   };
 
@@ -431,7 +454,13 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
 
             {/* Dates Field */}
             <button
-              onClick={() => setShowDateInput(true)}
+              onClick={() => {
+                if (module === "flights" && tripType === "multi-city") {
+                  setShowMultiCityInput(true);
+                } else {
+                  setShowDateInput(true);
+                }
+              }}
               className="w-full p-4 bg-white border-2 border-gray-200 rounded-xl text-left hover:border-[#003580] transition-colors focus:outline-none focus:border-[#003580]"
             >
               <div className="flex items-center space-x-3">
@@ -565,6 +594,16 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
           initialTripType={transferTripType}
           onSelect={handleTransferTypeSelect}
           onBack={() => setShowTransferTypeInput(false)}
+        />
+      )}
+
+      {showMultiCityInput && module === "flights" && tripType === "multi-city" && (
+        <MobileFullScreenMultiCityInput
+          title="Multi-city flights"
+          initialLegs={multiCityLegs}
+          onSelect={handleMultiCitySelect}
+          onBack={() => setShowMultiCityInput(false)}
+          cities={cityData}
         />
       )}
     </div>
