@@ -30,8 +30,6 @@ import {
   Camera,
   Car,
   BookOpen,
-  Award,
-  CreditCard,
 } from "lucide-react";
 
 export function Header() {
@@ -176,85 +174,80 @@ export function Header() {
                 {/* Menu Items */}
                 <div className="flex-1 py-4">
                   <nav className="space-y-1 px-4">
-                    {/* Account Section */}
-                    <div className="mb-6">
-                      <div className="text-xs font-semibold text-gray-500 px-4 py-2 mb-2 uppercase tracking-wider">
-                        My Account
-                      </div>
+                    <button
+                      onClick={() => {
+                        handleTabChange("flights");
+                        setShowMobileMenu(false);
+                      }}
+                      className={cn(
+                        "flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left",
+                        activeTab === "flights"
+                          ? "text-[#003580] bg-blue-50"
+                          : "text-gray-700 hover:bg-gray-100",
+                      )}
+                    >
+                      <Plane className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Flights</span>
+                    </button>
 
-                      <button
-                        onClick={() => {
-                          handleNavigation("/account?tab=bookings");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
-                      >
-                        <Plane className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">My Bookings</span>
-                      </button>
+                    <button
+                      onClick={() => {
+                        handleTabChange("hotels");
+                        setShowMobileMenu(false);
+                      }}
+                      className={cn(
+                        "flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left",
+                        activeTab === "hotels"
+                          ? "text-[#003580] bg-blue-50"
+                          : "text-gray-700 hover:bg-gray-100",
+                      )}
+                    >
+                      <Hotel className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Hotels</span>
+                    </button>
 
-                      <button
-                        onClick={() => {
-                          handleNavigation("/account?tab=profile");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
-                      >
-                        <User className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Profile</span>
-                      </button>
+                    <button
+                      onClick={() => {
+                        handleTabChange("sightseeing");
+                        setShowMobileMenu(false);
+                      }}
+                      className={cn(
+                        "flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left",
+                        activeTab === "sightseeing"
+                          ? "text-[#003580] bg-blue-50"
+                          : "text-gray-700 hover:bg-gray-100",
+                      )}
+                    >
+                      <Camera className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Sightseeing</span>
+                    </button>
 
-                      <button
-                        onClick={() => {
-                          handleNavigation("/account?tab=loyalty");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
-                      >
-                        <Award className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Loyalty Program</span>
-                      </button>
+                    <button
+                      onClick={() => {
+                        handleTabChange("transfers");
+                        setShowMobileMenu(false);
+                      }}
+                      className={cn(
+                        "flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left",
+                        activeTab === "transfers"
+                          ? "text-[#003580] bg-blue-50"
+                          : "text-gray-700 hover:bg-gray-100",
+                      )}
+                    >
+                      <Car className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Transfers</span>
+                    </button>
 
-                      <button
-                        onClick={() => {
-                          handleNavigation("/account?tab=payment");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
-                      >
-                        <CreditCard className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Payment & Wallet</span>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          handleNavigation("/account?tab=settings");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
-                      >
-                        <Settings className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Settings</span>
-                      </button>
-                    </div>
-
-                    {/* Other Services Section */}
-                    <div className="border-t border-gray-200 pt-4">
-                      <div className="text-xs font-semibold text-gray-500 px-4 py-2 mb-2 uppercase tracking-wider">
-                        Other Services
-                      </div>
-
-                      <button
-                        onClick={() => {
-                          handleNavigation("/help");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left"
-                      >
-                        <BookOpen className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Help Center</span>
-                      </button>
-                    </div>
+                    <button
+                      onClick={() => {
+                        handleNavigation("/help");
+                        setShowMobileMenu(false);
+                      }}
+                      className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left"
+                    >
+                      <BookOpen className="w-5 h-5 text-[#003580]" />
+                      <span className="font-medium">Help Center</span>
+                    </button>
 
                     {/* Currency Selection Tab */}
                     <div className="border-t border-gray-200 my-4"></div>
