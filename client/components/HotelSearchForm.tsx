@@ -240,27 +240,109 @@ export function HotelSearchForm({
         {/* Main Search Form */}
         <div className="flex flex-col lg:flex-row gap-2 mb-4">
           {/* Destination */}
-          <div className="flex-1 lg:max-w-[320px] relative">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Destination
+          <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full" onClick={(e) => e.stopPropagation()}>
+            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+              Where are you going?
             </label>
             <div className="relative">
-              <MapPin className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4" />
-              <Input
-                type="text"
-                value={destination}
-                onChange={(e) => setDestination(e.target.value)}
-                className="pl-10 pr-4 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
-                placeholder="Where are you going?"
-                autoComplete="off"
-                list="destinations"
-              />
-              <datalist id="destinations">
-                {popularDestinations.map((dest, index) => (
-                  <option key={index} value={dest} />
-                ))}
-              </datalist>
+              <button
+                onClick={() => setIsDestinationOpen(!isDestinationOpen)}
+                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
+              >
+                <MapPin className="w-4 h-4 text-gray-500 mr-2" />
+                <div className="flex items-center space-x-2 min-w-0">
+                  {destination ? (
+                    <>
+                      <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                        {destinationCode || "HTL"}
+                      </div>
+                      <span className="text-sm text-gray-700 font-medium truncate">
+                        {destination}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-sm text-gray-500 font-medium">
+                      Where are you going?
+                    </span>
+                  )}
+                </div>
+              </button>
+              {destination && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setDestination("");
+                    setInputValue("");
+                    setIsUserTyping(false);
+                    setDestinationCode("");
+                    setIsDestinationOpen(false);
+                  }}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  title="Clear destination"
+                >
+                  <X className="w-4 h-4 text-gray-400" />
+                </button>
+              )}
             </div>
+
+            {/* Destinations Dropdown */}
+            {isDestinationOpen && (
+              <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
+                <div className="mb-3">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                    Hotel destination
+                  </h3>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => {
+                        const value = e.target.value;
+                        setInputValue(value);
+                        setIsUserTyping(true);
+                      }}
+                      placeholder="Search destinations..."
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  {popularDestinations
+                    .filter((dest) =>
+                      dest.toLowerCase().includes((inputValue || "").toLowerCase())
+                    )
+                    .slice(0, 8)
+                    .map((dest, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setDestination(dest);
+                          setDestinationCode(dest.split(",")[0]?.substring(0, 3).toUpperCase() || "HTL");
+                          setIsDestinationOpen(false);
+                          setInputValue("");
+                          setIsUserTyping(false);
+                        }}
+                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                            <MapPin className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {dest}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              Hotel destination
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Check-in/Check-out Dates */}
