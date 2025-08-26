@@ -49,6 +49,7 @@ export function MobileFullScreenMultiCityInput({
 
   const [editingLeg, setEditingLeg] = useState<string | null>(null);
   const [editingField, setEditingField] = useState<"from" | "to" | "date" | null>(null);
+  const [showDateInput, setShowDateInput] = useState(false);
 
   const addLeg = () => {
     if (legs.length >= 6) return; // Maximum 6 legs
