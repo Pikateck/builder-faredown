@@ -25,6 +25,7 @@ import {
   Plus,
   Minus,
   ArrowUpDown,
+  X,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 
