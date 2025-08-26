@@ -557,42 +557,42 @@ export function Header() {
                       </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-48" align="end">
                         <DropdownMenuItem>
-                          <Link to="/account" className="flex items-center">
-                            <User className="w-4 h-4 mr-2" />
-                            My account
-                          </Link>
-                        </DropdownMenuItem>
-                        <DropdownMenuItem>
-                          <Link
-                            to="/account/trips"
-                            className="flex items-center"
-                          >
+                          <Link to="/account?tab=bookings" className="flex items-center">
                             <Plane className="w-4 h-4 mr-2" />
-                            Bookings & Trips
+                            My Bookings
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Link
-                            to="/account/loyalty"
+                            to="/account?tab=profile"
                             className="flex items-center"
                           >
-                            <Heart className="w-4 h-4 mr-2" />
-                            Loyalty program
+                            <User className="w-4 h-4 mr-2" />
+                            Profile
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Link
-                            to="/account/payment"
+                            to="/account?tab=loyalty"
                             className="flex items-center"
                           >
-                            <DollarSign className="w-4 h-4 mr-2" />
-                            Rewards & Wallet
+                            <Award className="w-4 h-4 mr-2" />
+                            Loyalty Program
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Link to="/my-trips" className="flex items-center">
+                          <Link
+                            to="/account?tab=payment"
+                            className="flex items-center"
+                          >
+                            <CreditCard className="w-4 h-4 mr-2" />
+                            Payment & Wallet
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to="/account?tab=settings" className="flex items-center">
                             <Settings className="w-4 h-4 mr-2" />
-                            Completed trips
+                            Settings
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={handleSignOut}>
