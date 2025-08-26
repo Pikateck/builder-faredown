@@ -1451,7 +1451,7 @@ Please keep this ticket for your records.
           {/* Sidebar */}
           <div className="lg:col-span-1">
             <Card className="p-2 lg:p-4">
-              <nav className="lg:space-y-1 flex lg:flex-col overflow-x-auto lg:overflow-x-visible space-x-2 lg:space-x-0 pb-2 lg:pb-0">
+              <nav className="space-y-1 flex flex-col">
                 <button
                   onClick={() => setActiveTab("bookings")}
                   className={cn(
