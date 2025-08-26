@@ -81,11 +81,18 @@ export function Footer() {
                 Privacy
               </Link>
               <Link
-                to="/terms-conditions"
+                to="/terms-of-service"
                 className="block text-blue-200 hover:text-white transition-colors"
                 onClick={() => window.scrollTo(0, 0)}
               >
                 Terms
+              </Link>
+              <Link
+                to="/refund-cancellation-policy"
+                className="block text-blue-200 hover:text-white transition-colors"
+                onClick={() => window.scrollTo(0, 0)}
+              >
+                Refund Policy
               </Link>
             </div>
           </div>
