@@ -246,6 +246,17 @@ export function Header() {
 
                       <button
                         onClick={() => {
+                          handleNavigation("/saved");
+                          setShowMobileMenu(false);
+                        }}
+                        className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left"
+                      >
+                        <Heart className="w-5 h-5 text-[#003580]" />
+                        <span className="font-medium">Saved</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
                           handleNavigation("/help");
                           setShowMobileMenu(false);
                         }}
@@ -253,6 +264,17 @@ export function Header() {
                       >
                         <BookOpen className="w-5 h-5 text-[#003580]" />
                         <span className="font-medium">Help Center</span>
+                      </button>
+
+                      <button
+                        onClick={() => {
+                          handleNavigation("/help-support");
+                          setShowMobileMenu(false);
+                        }}
+                        className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left"
+                      >
+                        <Headphones className="w-5 h-5 text-[#003580]" />
+                        <span className="font-medium">Help & Support</span>
                       </button>
                     </div>
 
