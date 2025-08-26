@@ -43,7 +43,16 @@ export function TransfersSearchForm() {
   const [serviceType, setServiceType] = useState("airport-taxi");
   const [tripType, setTripType] = useState("one-way");
   const [pickupLocation, setPickupLocation] = useState("");
+  const [pickupCode, setPickupCode] = useState("");
+  const [isPickupOpen, setIsPickupOpen] = useState(false);
+  const [pickupInputValue, setPickupInputValue] = useState("");
+  const [isPickupUserTyping, setIsPickupUserTyping] = useState(false);
+
   const [dropoffLocation, setDropoffLocation] = useState("");
+  const [dropoffCode, setDropoffCode] = useState("");
+  const [isDropoffOpen, setIsDropoffOpen] = useState(false);
+  const [dropoffInputValue, setDropoffInputValue] = useState("");
+  const [isDropoffUserTyping, setIsDropoffUserTyping] = useState(false);
 
   // Set default dates
   const tomorrow = new Date();
