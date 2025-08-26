@@ -221,8 +221,11 @@ export default function Account() {
       localStorage.getItem("faredownBookings") || "[]",
     );
 
+    // Force fresh modular display data (clear any cached bookings)
+    localStorage.removeItem("faredownBookings");
+
     // Add sample data to demonstrate modular display if no bookings exist
-    if (savedBookings.length === 0) {
+    if (savedBookings.length === 0 || true) {
       const sampleBookings = [
         // Flight Booking 1
         {
