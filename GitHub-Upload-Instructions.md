@@ -11,7 +11,7 @@
 
 ### Step 1: Go to Your GitHub Repository
 
-Visit: https://github.com/Pikateck/faredown-booking-system20july
+Visit: https://github.com/faredown/faredown-platform
 
 ### Step 2: Upload Files
 
