@@ -239,6 +239,15 @@ export function MobileFullScreenMultiCityInput({
             </button>
           )}
 
+          {/* Select Button - Similar to Booking.com */}
+          <Button
+            onClick={handleConfirm}
+            className="w-full bg-[#003580] hover:bg-[#002660] text-white py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 shadow-lg"
+          >
+            <Check className="w-5 h-5" />
+            <span>Select ({legs.length} flights)</span>
+          </Button>
+
           {/* Help Text */}
           <div className="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
             <div className="text-sm text-blue-800">
