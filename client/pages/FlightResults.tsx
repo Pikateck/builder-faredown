@@ -533,9 +533,8 @@ export default function FlightResults() {
               ? "one_way"
               : "multi_city";
 
-        // For multi-city, use one-way search for now (simplified implementation)
-        const searchTripType =
-          apiTripType === "multi_city" ? "one_way" : apiTripType;
+        // Handle multi-city properly - don't convert to one-way
+        const searchTripType = apiTripType;
 
         console.log("🔍 Searching flights:", {
           origin,
