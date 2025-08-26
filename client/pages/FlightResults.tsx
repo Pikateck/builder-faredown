@@ -1478,13 +1478,15 @@ export default function FlightResults() {
                   Flight Results
                 </h1>
                 <p className="text-blue-200 text-xs">
-                  {selectedFromCity && selectedToCity
-                    ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
-                    : "Search Results • "}
+                  {tripType === "multi-city" && multiCityLegs && multiCityLegs.length > 0
+                    ? `${multiCityLegs.map(leg => leg.fromCode).concat(multiCityLegs[multiCityLegs.length - 1].toCode).join(" → ")} • `
+                    : selectedFromCity && selectedToCity
+                      ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
+                      : "Search Results • "}
                   {tripType === "one-way"
                     ? "One way"
                     : tripType === "multi-city"
-                      ? "Multi-city (showing one-way options)"
+                      ? `Multi-city (${multiCityLegs?.length || 0} flights)`
                       : "Round trip"}{" "}
                   • {adults} adult{adults > 1 ? "s" : ""}
                 </p>
@@ -4761,7 +4763,7 @@ export default function FlightResults() {
                   {[
                     { label: "Morning", range: [6, 12], icon: "☀️" },
                     { label: "Afternoon", range: [12, 18], icon: "☀️" },
-                    { label: "Evening", range: [18, 24], icon: "🌙" },
+                    { label: "Evening", range: [18, 24], icon: "��" },
                     { label: "Night", range: [0, 6], icon: "🌅" },
                   ].map((timeSlot) => (
                     <button
