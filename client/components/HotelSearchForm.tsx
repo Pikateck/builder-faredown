@@ -78,6 +78,16 @@ export function HotelSearchForm({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Close dropdowns when clicking outside
+  useEffect(() => {
+    const handleClickOutside = () => {
+      setIsDestinationOpen(false);
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => document.removeEventListener('click', handleClickOutside);
+  }, []);
+
   // Popular destinations
   const popularDestinations = [
     "Dubai, United Arab Emirates",
