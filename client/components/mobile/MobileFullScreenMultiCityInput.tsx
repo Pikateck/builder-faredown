@@ -259,12 +259,23 @@ export function MobileFullScreenMultiCityInput({
         </Button>
       </div>
 
-      {/* Modals */}
-      {editingLeg && editingField === "from" && (
-        <CitySelector legId={editingLeg} field="from" />
-      )}
-      {editingLeg && editingField === "to" && (
-        <CitySelector legId={editingLeg} field="to" />
+      {/* Unified City Input */}
+      {showCityInput && editingLeg && editingField && (
+        <MobileFullScreenCityInput
+          title={`Select ${editingField === "from" ? "departure" : "destination"}`}
+          placeholder="Search cities, airports..."
+          selectedValue={editingField === "from"
+            ? `${legs.find(l => l.id === editingLeg)?.from} (${legs.find(l => l.id === editingLeg)?.fromCode})`
+            : `${legs.find(l => l.id === editingLeg)?.to} (${legs.find(l => l.id === editingLeg)?.toCode})`
+          }
+          onSelect={handleCitySelect}
+          onBack={() => {
+            setShowCityInput(false);
+            setEditingLeg(null);
+            setEditingField(null);
+          }}
+          cities={cities}
+        />
       )}
 
       {/* Unified Date Input */}
