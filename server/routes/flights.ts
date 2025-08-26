@@ -347,12 +347,32 @@ router.get("/search", async (req, res) => {
       });
     }
 
+    // Parse multi-city legs if provided
+    let parsedMultiCityLegs = null;
+    if (multiCityLegs && tripType === "multi_city") {
+      try {
+        parsedMultiCityLegs = JSON.parse(multiCityLegs as string);
+        console.log("🛫 Multi-city legs parsed:", parsedMultiCityLegs.length, "legs");
+      } catch (error) {
+        return res.status(400).json({
+          success: false,
+          error: "Invalid multi-city legs format",
+        });
+      }
+    }
+
     // Validate required parameters
-    if (!origin || !destination || !departureDate) {
+    if (tripType === "multi_city") {
+      if (!parsedMultiCityLegs || parsedMultiCityLegs.length < 2) {
+        return res.status(400).json({
+          success: false,
+          error: "Multi-city search requires at least 2 flight legs",
+        });
+      }
+    } else if (!origin || !destination || !departureDate) {
       return res.status(400).json({
         success: false,
-        error:
-          "Missing required parameters: origin, destination, departureDate",
+        error: "Missing required parameters: origin, destination, departureDate",
       });
     }
 
@@ -973,7 +993,7 @@ router.delete("/bookings/:bookingRef", async (req, res) => {
       message: "Booking cancelled successfully",
     });
   } catch (error) {
-    console.error("���� Cancel booking error:", error);
+    console.error("🚨 Cancel booking error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to cancel booking",
