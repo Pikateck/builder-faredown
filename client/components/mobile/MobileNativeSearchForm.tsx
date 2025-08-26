@@ -590,13 +590,37 @@ export function MobileNativeSearchForm({ module, transferType: initialTransferTy
               </div>
             </button>
 
+            {/* Validation Error Display */}
+            {validationError && (
+              <div className="p-3 bg-red-50 border border-red-200 rounded-xl mt-4">
+                <div className="flex items-center space-x-2">
+                  <div className="w-5 h-5 bg-red-500 rounded-full flex items-center justify-center flex-shrink-0">
+                    <span className="text-white text-xs font-bold">!</span>
+                  </div>
+                  <p className="text-red-700 text-sm font-medium">{validationError}</p>
+                </div>
+              </div>
+            )}
+
             {/* Search Button */}
             <Button
               onClick={handleSearch}
-              className="w-full bg-[#003580] hover:bg-[#002660] text-white py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 mt-6"
+              className={`w-full py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 mt-6 transition-all ${
+                module === "flights" && tripType === "multi-city" && !validateMultiCitySearch().isValid
+                  ? "bg-gray-400 cursor-not-allowed text-white"
+                  : "bg-[#003580] hover:bg-[#002660] text-white"
+              }`}
+              disabled={module === "flights" && tripType === "multi-city" && !validateMultiCitySearch().isValid}
             >
               <Search className="w-5 h-5" />
-              <span>Search</span>
+              <span>
+                {module === "flights" && tripType === "multi-city"
+                  ? multiCityLegs.length < 2
+                    ? "Add Flight Segments"
+                    : "Search Multi-City"
+                  : "Search"
+                }
+              </span>
             </Button>
           </div>
         </div>
