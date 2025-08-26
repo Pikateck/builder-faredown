@@ -45,6 +45,7 @@ export function Header() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
   const [showLanguageMenu, setShowLanguageMenu] = useState(false);
+  const [showMobileUserDropdown, setShowMobileUserDropdown] = useState(false);
 
   // User state
   const userName = user?.name || "Zubin Aibara";
