@@ -22,7 +22,6 @@ import {
   Shield,
   Headphones,
   X,
-  Globe,
   Bell,
   Menu,
   LogOut,
@@ -44,7 +43,6 @@ export function Header() {
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [showMobileUserDropdown, setShowMobileUserDropdown] = useState(false);
 
   // User state
@@ -114,16 +112,6 @@ export function Header() {
                 <span className="text-xl font-bold text-white">faredown.com</span>
               </div>
               <div className="flex items-center space-x-3">
-                <button
-                  className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
-                  onClick={() => {
-                    setShowLanguageMenu(!showLanguageMenu);
-                    setShowNotifications(false);
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <Globe className="w-5 h-5" />
-                </button>
                 <button
                   className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                   onClick={() => {
@@ -645,7 +633,7 @@ export function Header() {
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
                           { code: "es", name: "Español", flag: "🇪🇸" },
-                          { code: "fr", name: "Français", flag: "🇫🇷" },
+                          { code: "fr", name: "Français", flag: "🇫���" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "���🇹" },
