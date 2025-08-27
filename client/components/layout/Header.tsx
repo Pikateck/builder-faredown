@@ -533,7 +533,7 @@ export function Header() {
               </nav>
 
               <div className="flex items-center space-x-2 md:space-x-6">
-                {/* Language and Currency */}
+                {/* Currency */}
                 <div className="flex items-center space-x-4 text-sm">
                   <div className="relative">
                     <DropdownMenu>
