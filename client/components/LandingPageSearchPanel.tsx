@@ -226,7 +226,16 @@ export function LandingPageSearchPanel() {
 
   // Close dropdowns when clicking outside
   useEffect(() => {
-    const handleClickOutside = () => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Element;
+
+      // Don't close if clicking inside a dropdown or popover
+      if (target.closest('[data-radix-popper-content-wrapper]') ||
+          target.closest('.absolute.top-14') ||
+          target.closest('button')) {
+        return;
+      }
+
       setShowFromCities(false);
       setShowToCities(false);
       setShowClassDropdown(false);
