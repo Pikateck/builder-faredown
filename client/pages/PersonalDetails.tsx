@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Layout } from "@/components/layout/Layout";
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -29,141 +30,7 @@ export default function PersonalDetails() {
   const [displayName, setDisplayName] = useState("Display name *");
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <header className="bg-blue-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="text-xl font-bold">
-              faredown.com
-            </Link>
-
-            <div className="flex items-center space-x-4">
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center space-x-1 text-sm hover:text-blue-200">
-                  <span>🌐</span>
-                  <span>English (UK)</span>
-                  <ChevronDown className="w-3 h-3" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent>
-                  <DropdownMenuItem>🇬🇧 English (UK)</DropdownMenuItem>
-                  <DropdownMenuItem>🇺🇸 English (US)</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center space-x-1 text-sm hover:text-blue-200">
-                  <span>INR</span>
-                  <ChevronDown className="w-3 h-3" />
-                </DropdownMenuTrigger>
-                <DropdownMenuContent className="max-h-64 overflow-y-auto">
-                  <DropdownMenuItem>₹ INR - Indian Rupee</DropdownMenuItem>
-                  <DropdownMenuItem>$ USD - US Dollar</DropdownMenuItem>
-                  <DropdownMenuItem>€ EUR - Euro</DropdownMenuItem>
-                  <DropdownMenuItem>£ GBP - British Pound</DropdownMenuItem>
-                  <DropdownMenuItem>¥ JPY - Japanese Yen</DropdownMenuItem>
-                  <DropdownMenuItem>C$ CAD - Canadian Dollar</DropdownMenuItem>
-                  <DropdownMenuItem>
-                    A$ AUD - Australian Dollar
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>CHF - Swiss Franc</DropdownMenuItem>
-                  <DropdownMenuItem>¥ CNY - Chinese Yuan</DropdownMenuItem>
-                  <DropdownMenuItem>kr SEK - Swedish Krona</DropdownMenuItem>
-                  <DropdownMenuItem>kr NOK - Norwegian Krone</DropdownMenuItem>
-                  <DropdownMenuItem>kr DKK - Danish Krone</DropdownMenuItem>
-                  <DropdownMenuItem>₩ KRW - South Korean Won</DropdownMenuItem>
-                  <DropdownMenuItem>S$ SGD - Singapore Dollar</DropdownMenuItem>
-                  <DropdownMenuItem>
-                    HK$ HKD - Hong Kong Dollar
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    NZ$ NZD - New Zealand Dollar
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>₽ RUB - Russian Ruble</DropdownMenuItem>
-                  <DropdownMenuItem>
-                    R ZAR - South African Rand
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>₺ TRY - Turkish Lira</DropdownMenuItem>
-                  <DropdownMenuItem>R$ BRL - Brazilian Real</DropdownMenuItem>
-                  <DropdownMenuItem>Mex$ MXN - Mexican Peso</DropdownMenuItem>
-                  <DropdownMenuItem>₪ ILS - Israeli Shekel</DropdownMenuItem>
-                  <DropdownMenuItem>₦ NGN - Nigerian Naira</DropdownMenuItem>
-                  <DropdownMenuItem>EGP - Egyptian Pound</DropdownMenuItem>
-                  <DropdownMenuItem>₨ PKR - Pakistani Rupee</DropdownMenuItem>
-                  <DropdownMenuItem>৳ BDT - Bangladeshi Taka</DropdownMenuItem>
-                  <DropdownMenuItem>₨ LKR - Sri Lankan Rupee</DropdownMenuItem>
-                  <DropdownMenuItem>
-                    Rp IDR - Indonesian Rupiah
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>₱ PHP - Philippine Peso</DropdownMenuItem>
-                  <DropdownMenuItem>₫ VND - Vietnamese Dong</DropdownMenuItem>
-                  <DropdownMenuItem>฿ THB - Thai Baht</DropdownMenuItem>
-                  <DropdownMenuItem>
-                    RM MYR - Malaysian Ringgit
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>AED - UAE Dirham</DropdownMenuItem>
-                  <DropdownMenuItem>SAR - Saudi Riyal</DropdownMenuItem>
-                  <DropdownMenuItem>QAR - Qatari Riyal</DropdownMenuItem>
-                  <DropdownMenuItem>KWD - Kuwaiti Dinar</DropdownMenuItem>
-                  <DropdownMenuItem>BHD - Bahraini Dinar</DropdownMenuItem>
-                  <DropdownMenuItem>OMR - Omani Rial</DropdownMenuItem>
-                  <DropdownMenuItem>zł PLN - Polish Zloty</DropdownMenuItem>
-                  <DropdownMenuItem>Kč CZK - Czech Koruna</DropdownMenuItem>
-                  <DropdownMenuItem>Ft HUF - Hungarian Forint</DropdownMenuItem>
-                  <DropdownMenuItem>RON - Romanian Leu</DropdownMenuItem>
-                  <DropdownMenuItem>BGN - Bulgarian Lev</DropdownMenuItem>
-                  <DropdownMenuItem>kn HRK - Croatian Kuna</DropdownMenuItem>
-                  <DropdownMenuItem>₴ UAH - Ukrainian Hryvnia</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-
-              <span className="text-sm">?</span>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex items-center space-x-2 bg-blue-600 rounded-full px-3 py-2 hover:bg-blue-800">
-                  <div className="w-6 h-6 bg-yellow-500 rounded-full flex items-center justify-center">
-                    <span className="text-xs font-bold text-black">Z</span>
-                  </div>
-                  <span className="text-sm">Zubin A</span>
-                  <span className="text-xs text-yellow-300">
-                    Loyalty Level 1
-                  </span>
-                </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48">
-                  <DropdownMenuItem>
-                    <User className="w-4 h-4 mr-2" />
-                    My account
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <BookOpen className="w-4 h-4 mr-2" />
-                    Bookings & Trips
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Award className="w-4 h-4 mr-2" />
-                    Loyalty program
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <CreditCard className="w-4 h-4 mr-2" />
-                    Rewards & Wallet
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Settings className="w-4 h-4 mr-2" />
-                    Reviews
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <Heart className="w-4 h-4 mr-2" />
-                    Saved
-                  </DropdownMenuItem>
-                  <DropdownMenuItem>
-                    <LogOut className="w-4 h-4 mr-2" />
-                    Sign out
-                  </DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
-          </div>
-        </div>
-      </header>
+    <Layout showSearch={false}>
 
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-600">
@@ -427,31 +294,6 @@ export default function PersonalDetails() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-white border-t mt-16 py-8">
-        <div className="max-w-7xl mx-auto px-4">
-          <div className="flex flex-wrap justify-center space-x-6 text-sm text-gray-600">
-            <Link to="#" className="hover:underline">
-              About Faredown.com
-            </Link>
-            <Link to="#" className="hover:underline">
-              Terms & conditions
-            </Link>
-            <Link to="#" className="hover:underline">
-              How We Work
-            </Link>
-            <Link to="#" className="hover:underline">
-              Privacy & Cookie Statement
-            </Link>
-            <Link to="#" className="hover:underline">
-              Help Center
-            </Link>
-          </div>
-          <div className="text-center text-xs text-gray-500 mt-4">
-            Copyright © 2024 Faredown.com™. All rights reserved.
-          </div>
-        </div>
-      </footer>
-    </div>
+    </Layout>
   );
 }
