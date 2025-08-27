@@ -117,27 +117,71 @@ export function LandingPageSearchPanel() {
     setTravelers(newTravelers);
   };
 
+  // Multi-city management functions
+  const addMultiCityLeg = () => {
+    if (multiCityLegs.length >= 6) return; // Maximum 6 legs
+
+    const lastLeg = multiCityLegs[multiCityLegs.length - 1];
+    const newLeg: FlightLeg = {
+      id: `leg${multiCityLegs.length + 1}`,
+      from: lastLeg.to, // Start from previous destination
+      fromCode: lastLeg.toCode,
+      to: "Paris",
+      toCode: "CDG",
+      date: addDays(lastLeg.date, 3),
+    };
+
+    setMultiCityLegs([...multiCityLegs, newLeg]);
+  };
+
+  const removeMultiCityLeg = (legId: string) => {
+    if (multiCityLegs.length <= 2) return; // Minimum 2 legs
+    setMultiCityLegs(multiCityLegs.filter((leg) => leg.id !== legId));
+  };
+
+  const updateMultiCityLeg = (legId: string, field: keyof FlightLeg, value: any) => {
+    setMultiCityLegs(
+      multiCityLegs.map((leg) =>
+        leg.id === legId ? { ...leg, [field]: value } : leg
+      )
+    );
+  };
+
   // Handle search
   const handleSearch = () => {
-    const fromCode = cityData[selectedFromCity]?.code || "BOM";
-    const toCode = cityData[selectedToCity]?.code || "DXB";
+    if (tripType === "multi-city") {
+      // Multi-city search
+      const searchParams = new URLSearchParams({
+        tripType: "multi-city",
+        adults: travelers.adults.toString(),
+        children: travelers.children.toString(),
+        cabinClass: selectedClass.toLowerCase().replace(" ", "-"),
+        multiCityLegs: JSON.stringify(multiCityLegs),
+      });
 
-    const searchParams = new URLSearchParams({
-      from: `${selectedFromCity} (${fromCode})`,
-      to: `${selectedToCity} (${toCode})`,
-      departureDate: departureDate.toISOString(),
-      adults: travelers.adults.toString(),
-      children: travelers.children.toString(),
-      rooms: "1",
-      tripType,
-      cabinClass: selectedClass.toLowerCase().replace(" ", "-"),
-    });
+      navigate(`/flights/results?${searchParams.toString()}`);
+    } else {
+      // Regular flight search
+      const fromCode = cityData[selectedFromCity]?.code || "BOM";
+      const toCode = cityData[selectedToCity]?.code || "DXB";
 
-    if (tripType === "round-trip") {
-      searchParams.set("returnDate", returnDate.toISOString());
+      const searchParams = new URLSearchParams({
+        from: `${selectedFromCity} (${fromCode})`,
+        to: `${selectedToCity} (${toCode})`,
+        departureDate: departureDate.toISOString(),
+        adults: travelers.adults.toString(),
+        children: travelers.children.toString(),
+        rooms: "1",
+        tripType,
+        cabinClass: selectedClass.toLowerCase().replace(" ", "-"),
+      });
+
+      if (tripType === "round-trip") {
+        searchParams.set("returnDate", returnDate.toISOString());
+      }
+
+      navigate(`/flights/results?${searchParams.toString()}`);
     }
-
-    navigate(`/flights/results?${searchParams.toString()}`);
   };
 
   // Handle class change
