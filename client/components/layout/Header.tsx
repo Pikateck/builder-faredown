@@ -22,6 +22,7 @@ import {
   Shield,
   Headphones,
   X,
+  Globe,
   Bell,
   Menu,
   LogOut,
@@ -43,6 +44,7 @@ export function Header() {
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [showMobileUserDropdown, setShowMobileUserDropdown] = useState(false);
 
   // User state
@@ -115,7 +117,18 @@ export function Header() {
                 <button
                   className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                   onClick={() => {
+                    setShowLanguageMenu(!showLanguageMenu);
+                    setShowNotifications(false);
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <Globe className="w-5 h-5" />
+                </button>
+                <button
+                  className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
+                  onClick={() => {
                     setShowNotifications(!showNotifications);
+                    setShowLanguageMenu(false);
                     setShowMobileMenu(false);
                   }}
                 >
@@ -126,6 +139,7 @@ export function Header() {
                   onClick={() => {
                     setShowMobileMenu(!showMobileMenu);
                     setShowNotifications(false);
+                    setShowLanguageMenu(false);
                   }}
                   className="p-2 hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                   data-mobile-menu-trigger
@@ -473,6 +487,45 @@ export function Header() {
           </div>
         )}
 
+        {/* Language Menu Dropdown - Mobile */}
+        {showLanguageMenu && (
+          <div className="fixed inset-0 z-40 md:hidden">
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50"
+              onClick={() => setShowLanguageMenu(false)}
+            />
+            <div className="fixed top-16 right-4 bg-white rounded-lg shadow-xl border border-gray-200 w-64">
+              <div className="p-4">
+                <h3 className="text-lg font-semibold text-gray-900 mb-3">Language</h3>
+                <div className="space-y-2">
+                  {[
+                    { code: "en", name: "English", flag: "🇬🇧" },
+                    { code: "es", name: "Español", flag: "🇪🇸" },
+                    { code: "fr", name: "Français", flag: "🇫🇷" },
+                    { code: "de", name: "Deutsch", flag: "🇩🇪" },
+                    { code: "it", name: "Italiano", flag: "🇮🇹" },
+                    { code: "pt", name: "Português", flag: "🇵🇹" },
+                    { code: "ar", name: "العربية", flag: "🇸🇦" },
+                    { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                    { code: "ja", name: "日本語", flag: "🇯🇵" },
+                    { code: "ko", name: "한국어", flag: "🇰🇷" },
+                    { code: "zh", name: "中文", flag: "🇨🇳" },
+                  ].map((language) => (
+                    <button
+                      key={language.code}
+                      onClick={() => setShowLanguageMenu(false)}
+                      className="w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-gray-100 rounded-lg"
+                    >
+                      <span className="text-lg">{language.flag}</span>
+                      <span className="font-medium">{language.name}</span>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Notifications Dropdown - Mobile */}
         {showNotifications && (
           <div className="fixed inset-0 z-40 md:hidden">
@@ -581,6 +634,13 @@ export function Header() {
                 <div className="flex items-center space-x-4 text-sm">
                   <div className="relative">
                     <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
+                          <Globe className="w-4 h-4" />
+                          <span>English</span>
+                          <ChevronDown className="w-4 h-4" />
+                        </button>
+                      </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-48">
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
@@ -588,7 +648,7 @@ export function Header() {
                           { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
-                          { code: "pt", name: "Português", flag: "�������" },
+                          { code: "pt", name: "Português", flag: "���🇹" },
                           { code: "ar", name: "العربية", flag: "🇸🇦" },
                           { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                           { code: "ja", name: "日本語", flag: "🇯🇵" },
