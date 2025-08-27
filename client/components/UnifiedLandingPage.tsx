@@ -103,7 +103,7 @@ export function UnifiedLandingPage({
                 <div className="w-12 h-12 bg-[#003580] rounded-xl flex items-center justify-center mx-auto mb-4">
                   <ModuleIcon className="w-6 h-6 text-white" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 text-sm">
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm">
                   {config.primaryFeature}
                 </h3>
                 <p className="text-[13px] text-gray-600 leading-relaxed">
