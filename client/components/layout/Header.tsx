@@ -109,7 +109,7 @@ export function Header() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <img src="/images/faredown-icon.png" alt="Faredown" className="w-8 h-8" />
-                <span className="text-xl font-bold text-white">faredown.com</span>
+                <span className="text-xl font-medium text-white">faredown.com</span>
               </div>
               <div className="flex items-center space-x-3">
                 <button
@@ -483,7 +483,7 @@ export function Header() {
               {/* Logo */}
               <Link to="/" className="flex items-center space-x-2">
                 <img src="/images/faredown-icon.png" alt="Faredown" className="w-8 h-8" />
-                <span className="text-xl font-bold text-white">faredown.com</span>
+                <span className="text-xl font-medium text-white">faredown.com</span>
               </Link>
 
               {/* Centered Navigation */}
