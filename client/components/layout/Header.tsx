@@ -112,7 +112,7 @@ export function Header() {
               <div className="flex items-center space-x-2">
                 <div className="w-8 h-8 flex items-center justify-center">
                   <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fcf4f992a0a794efe95e67804bcc7ee5f?format=webp&width=800&v=2"
+                    src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fcf4f992a0a794efe95e67804bcc7ee5f?format=webp&width=800"
                     alt="Faredown Logo"
                     className="w-10 h-10 object-contain"
                   />
@@ -504,7 +504,7 @@ export function Header() {
               <Link to="/" className="flex items-center space-x-2">
                 <div className="w-8 h-8 flex items-center justify-center">
                   <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fcf4f992a0a794efe95e67804bcc7ee5f?format=webp&width=800&v=2"
+                    src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fcf4f992a0a794efe95e67804bcc7ee5f?format=webp&width=800"
                     alt="Faredown Logo"
                     className="w-10 h-10 object-contain"
                   />
