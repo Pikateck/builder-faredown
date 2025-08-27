@@ -109,7 +109,8 @@ export function Header() {
         <header className="bg-[#003580] text-white">
           <div className="px-4 py-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center">
+              <div className="flex items-center space-x-2">
+                <img src="/images/faredown-icon.png" alt="Faredown" className="w-8 h-8" />
                 <span className="text-xl font-bold text-white">faredown.com</span>
               </div>
               <div className="flex items-center space-x-3">
@@ -494,7 +495,8 @@ export function Header() {
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
             <div className="flex items-center justify-between">
               {/* Logo */}
-              <Link to="/" className="flex items-center">
+              <Link to="/" className="flex items-center space-x-2">
+                <img src="/images/faredown-icon.png" alt="Faredown" className="w-8 h-8" />
                 <span className="text-xl font-bold text-white">faredown.com</span>
               </Link>
 
