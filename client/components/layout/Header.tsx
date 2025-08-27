@@ -114,7 +114,7 @@ export function Header() {
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb3ece29408ce4d279de7e81ec4937a79?format=webp&width=800"
                     alt="Faredown Logo"
-                    className="w-8 h-8 object-contain"
+                    className="w-12 h-12 object-contain"
                   />
                 </div>
                 <span className="text-lg font-bold">faredown.com</span>
@@ -506,7 +506,7 @@ export function Header() {
                   <img
                     src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb3ece29408ce4d279de7e81ec4937a79?format=webp&width=800"
                     alt="Faredown Logo"
-                    className="w-8 h-8 object-contain"
+                    className="w-12 h-12 object-contain"
                   />
                 </div>
                 <span className="text-lg sm:text-xl font-bold tracking-tight">
