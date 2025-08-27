@@ -29,7 +29,7 @@ export function Footer() {
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 flex items-center justify-center">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8a744af11174432ead8c68349416b774?format=webp&width=800"
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fcf4f992a0a794efe95e67804bcc7ee5f?format=webp&width=800"
                   alt="FareDown Logo"
                   className="w-8 h-8 object-contain"
                 />
