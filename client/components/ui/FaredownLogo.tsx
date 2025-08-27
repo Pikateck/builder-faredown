@@ -24,9 +24,9 @@ export function FaredownLogo({
   textClassName = ""
 }: FaredownLogoProps) {
   const sizeClasses = {
-    sm: "w-6 h-6",
-    md: "w-8 h-8",
-    lg: "w-12 h-12"
+    sm: "w-8 h-8",
+    md: "w-10 h-10",
+    lg: "w-14 h-14"
   };
 
   const textSizeClasses = {
@@ -39,7 +39,7 @@ export function FaredownLogo({
     <div className="flex items-center space-x-2">
       <div className={cn("flex items-center justify-center", sizeClasses[size])}>
         <img
-          src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fcf4f992a0a794efe95e67804bcc7ee5f?format=webp&width=800"
+          src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fcf4f992a0a794efe95e67804bcc7ee5f?format=webp&width=800&v=2"
           alt="FareDown Logo"
           className={cn(sizeClasses[size], "object-contain", className)}
         />
