@@ -862,18 +862,17 @@ export function LandingPageSearchPanel() {
                     </div>
 
                     {/* Going To */}
-                    <div
-                      className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
-                      onClick={(e) => e.stopPropagation()}
-                    >
+                    <div className="relative w-full">
                       <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                         Going to
                       </label>
                       <div className="relative">
                         <button
-                          onClick={() => {
+                          onClick={(e) => {
+                            e.stopPropagation();
                             updateFlightState('showToCities', !flightStates.showToCities);
                             updateFlightState('showFromCities', false);
+                            updateFlightState('showCalendar', false);
                           }}
                           className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
                         >
