@@ -865,7 +865,7 @@ export function LandingPageSearchPanel() {
                     </div>
 
                     {/* Going To */}
-                    <div className="relative w-full">
+                    <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full">
                       <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                         Going to
                       </label>
