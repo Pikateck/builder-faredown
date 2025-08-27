@@ -38,6 +38,9 @@ export function Footer() {
             <p className="text-white/70 text-[13px]">
               The world's first AI-powered travel bargain platform.
             </p>
+            <div className="mt-2 bg-[#febb02] text-[#003580] px-3 py-1 rounded-md text-xs font-bold">
+              ✅ NEW COMPACT FOOTER v3 - CACHE UPDATED
+            </div>
           </div>
 
           {/* Quick Links */}
