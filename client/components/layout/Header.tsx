@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { FaredownLogo } from "@/components/FaredownLogo";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -110,11 +111,7 @@ export function Header() {
           <div className="px-4 py-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center">
-                <img
-                  src="/logo/faredown-logo.png"
-                  alt="Faredown Logo"
-                  className="h-16 object-contain"
-                />
+                <FaredownLogo />
               </div>
               <div className="flex items-center space-x-3">
                 <button
@@ -499,11 +496,7 @@ export function Header() {
             <div className="flex items-center justify-between">
               {/* Logo */}
               <Link to="/" className="flex items-center">
-                <img
-                  src="/logo/faredown-logo.png"
-                  alt="Faredown Logo"
-                  className="h-16 object-contain"
-                />
+                <FaredownLogo />
               </Link>
 
               {/* Centered Navigation */}
