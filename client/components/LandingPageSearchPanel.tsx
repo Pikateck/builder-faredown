@@ -765,275 +765,282 @@ export function LandingPageSearchPanel() {
           {tripType === "multi-city" && (
             <div className="mt-4 space-y-3 overflow-visible">
               {/* Additional Flight Rows */}
-              {additionalFlights.map((flight, index) => {
-                const flightStates = additionalFlightStates[flight.id] || {
-                  showFromCities: false,
-                  showToCities: false,
-                  showCalendar: false,
-                };
-
-                const updateFlightState = (field: string, value: boolean) => {
-                  setAdditionalFlightStates(prev => ({
-                    ...prev,
-                    [flight.id]: {
-                      ...flightStates,
-                      [field]: value,
-                    }
-                  }));
-                };
-
-                return (
+              {additionalFlights.map((flight, index) => (
+                <div key={flight.id} className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3 w-full max-w-6xl overflow-visible">
+                  {/* Leaving From - Exact copy of main form */}
                   <div
-                    key={flight.id}
-                    className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3 w-full max-w-6xl overflow-visible"
+                    className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
+                    onClick={(e) => e.stopPropagation()}
                   >
-                    {/* Leaving From */}
-                    <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full">
-                      <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-                        Leaving from
-                      </label>
-                      <div className="relative">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            updateFlightState('showFromCities', !flightStates.showFromCities);
-                            updateFlightState('showToCities', false);
-                            updateFlightState('showCalendar', false);
-                          }}
-                          className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
-                        >
-                          <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                          <div className="flex items-center space-x-2 min-w-0">
-                            <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                              {flight.fromCode}
-                            </div>
-                            <span className="text-sm text-gray-700 font-medium truncate">
-                              {cityData[flight.from]?.airport || flight.from}
-                            </span>
-                          </div>
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            updateFlight(flight.id, "from", "");
-                            updateFlight(flight.id, "fromCode", "");
-                          }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                          title="Clear departure city"
-                        >
-                          <X className="w-4 h-4 text-gray-400" />
-                        </button>
-                      </div>
-
-                      {/* From Cities Dropdown */}
-                      {flightStates.showFromCities && (
-                        <div
-                          onClick={(e) => e.stopPropagation()}
-                          className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto"
-                        >
-                          <div className="mb-3">
-                            <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                              Airport, city or country
-                            </h3>
-                            <div className="relative">
-                              <input
-                                type="text"
-                                placeholder="Mumbai"
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            {Object.entries(cityData).map(([city, data]) => (
-                              <button
-                                key={city}
-                                onClick={() => {
-                                  updateFlight(flight.id, "from", city);
-                                  updateFlight(flight.id, "fromCode", data.code);
-                                  updateFlightState('showFromCities', false);
-                                }}
-                                className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                              >
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                                    <Plane className="w-4 h-4 text-blue-600" />
-                                  </div>
-                                  <div>
-                                    <div className="text-sm font-medium text-gray-900">
-                                      <span className="font-semibold">{data.code}</span>{" "}
-                                      • {city}
-                                    </div>
-                                    <div className="text-xs text-gray-500">
-                                      {data.airport}
-                                    </div>
-                                    <div className="text-xs text-gray-400">
-                                      {data.fullName}
-                                    </div>
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Going To */}
-                    <div className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full">
-                      <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-                        Going to
-                      </label>
-                      <div className="relative">
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            updateFlightState('showToCities', !flightStates.showToCities);
-                            updateFlightState('showFromCities', false);
-                            updateFlightState('showCalendar', false);
-                          }}
-                          className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
-                        >
-                          <Plane className="w-4 h-4 text-gray-500 mr-2" />
-                          <div className="flex items-center space-x-2 min-w-0">
-                            <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                              {flight.toCode}
-                            </div>
-                            <span className="text-sm text-gray-700 font-medium truncate">
-                              {cityData[flight.to]?.airport || flight.to}
-                            </span>
-                          </div>
-                        </button>
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            updateFlight(flight.id, "to", "");
-                            updateFlight(flight.id, "toCode", "");
-                          }}
-                          className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                          title="Clear destination city"
-                        >
-                          <X className="w-4 h-4 text-gray-400" />
-                        </button>
-                      </div>
-
-                      {/* To Cities Dropdown */}
-                      {flightStates.showToCities && (
-                        <div
-                          onClick={(e) => e.stopPropagation()}
-                          className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto"
-                        >
-                          <div className="mb-3">
-                            <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                              Airport, city or country
-                            </h3>
-                            <div className="relative">
-                              <input
-                                type="text"
-                                placeholder="Dubai"
-                                className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
-                              />
-                            </div>
-                          </div>
-
-                          <div className="space-y-1">
-                            {Object.entries(cityData).map(([city, data]) => (
-                              <button
-                                key={city}
-                                onClick={() => {
-                                  updateFlight(flight.id, "to", city);
-                                  updateFlight(flight.id, "toCode", data.code);
-                                  updateFlightState('showToCities', false);
-                                }}
-                                className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                              >
-                                <div className="flex items-center space-x-3">
-                                  <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                                    <Plane className="w-4 h-4 text-blue-600" />
-                                  </div>
-                                  <div>
-                                    <div className="text-sm font-medium text-gray-900">
-                                      <span className="font-semibold">{data.code}</span>{" "}
-                                      • {city}
-                                    </div>
-                                    <div className="text-xs text-gray-500">
-                                      {data.airport}
-                                    </div>
-                                    <div className="text-xs text-gray-400">
-                                      {data.fullName}
-                                    </div>
-                                  </div>
-                                </div>
-                              </button>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* Depart Date */}
-                    <div className="relative flex-1 lg:min-w-[240px] lg:max-w-[280px] w-full">
-                      <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-                        Depart
-                      </label>
-                      <Popover
-                        open={flightStates.showCalendar}
-                        onOpenChange={(open) => {
-                          updateFlightState('showCalendar', open);
-                          if (open) {
-                            updateFlightState('showFromCities', false);
-                            updateFlightState('showToCities', false);
-                          }
+                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                      Leaving from
+                    </label>
+                    <div className="relative">
+                      <button
+                        onClick={() => {
+                          setAdditionalFlightStates(prev => ({
+                            ...prev,
+                            [flight.id]: {
+                              ...prev[flight.id],
+                              showFromCities: !prev[flight.id]?.showFromCities,
+                              showToCities: false,
+                              showCalendar: false,
+                            }
+                          }));
                         }}
+                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
                       >
-                        <PopoverTrigger asChild>
-                          <button
-                            onClick={(e) => e.stopPropagation()}
-                            className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation"
-                          >
-                            <Calendar className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0" />
-                            <div className="flex items-center space-x-2 min-w-0">
-                              <span className="text-sm text-gray-700 font-medium truncate">
-                                {flight.date ? formatDisplayDate(flight.date) : "Select date"}
-                              </span>
-                            </div>
-                          </button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <BookingCalendar
-                            bookingType="flight"
-                            initialRange={{
-                              startDate: flight.date || new Date(),
-                              endDate: addDays(flight.date || new Date(), 7),
-                            }}
-                            onChange={(range) => {
-                              updateFlight(flight.id, "date", range.startDate);
-                            }}
-                            onClose={() => updateFlightState('showCalendar', false)}
-                            className="w-full"
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-
-                    {/* Remove Button */}
-                    <div className="w-full lg:w-auto lg:min-w-[120px]">
-                      <Button
+                        <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                        <div className="flex items-center space-x-2 min-w-0">
+                          <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                            {flight.fromCode}
+                          </div>
+                          <span className="text-sm text-gray-700 font-medium truncate">
+                            {cityData[flight.from]?.airport || flight.from}
+                          </span>
+                        </div>
+                      </button>
+                      <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          removeFlight(flight.id);
+                          updateFlight(flight.id, "from", "Mumbai");
+                          updateFlight(flight.id, "fromCode", "BOM");
                         }}
-                        variant="outline"
-                        className="w-full h-10 text-red-600 border-red-300 hover:bg-red-50 hover:border-red-400"
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                        title="Clear departure city"
                       >
-                        Remove
-                      </Button>
+                        <X className="w-4 h-4 text-gray-400" />
+                      </button>
                     </div>
-                  </div>
-                );
-              })}
 
-              {/* Add a Flight Button - Booking.com style */}
+                    {/* From Cities Dropdown */}
+                    {additionalFlightStates[flight.id]?.showFromCities && (
+                      <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
+                        <div className="mb-3">
+                          <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                            Airport, city or country
+                          </h3>
+                          <div className="relative">
+                            <input
+                              type="text"
+                              placeholder="Mumbai"
+                              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          {Object.entries(cityData).map(([city, data]) => (
+                            <button
+                              key={city}
+                              onClick={() => {
+                                updateFlight(flight.id, "from", city);
+                                updateFlight(flight.id, "fromCode", data.code);
+                                setAdditionalFlightStates(prev => ({
+                                  ...prev,
+                                  [flight.id]: {
+                                    ...prev[flight.id],
+                                    showFromCities: false,
+                                  }
+                                }));
+                              }}
+                              className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                                  <Plane className="w-4 h-4 text-blue-600" />
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-gray-900">
+                                    <span className="font-semibold">{data.code}</span>{" "}
+                                    • {city}
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    {data.airport}
+                                  </div>
+                                  <div className="text-xs text-gray-400">
+                                    {data.fullName}
+                                  </div>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Going To - Exact copy of main form */}
+                  <div
+                    className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                      Going to
+                    </label>
+                    <div className="relative">
+                      <button
+                        onClick={() => {
+                          setAdditionalFlightStates(prev => ({
+                            ...prev,
+                            [flight.id]: {
+                              ...prev[flight.id],
+                              showToCities: !prev[flight.id]?.showToCities,
+                              showFromCities: false,
+                              showCalendar: false,
+                            }
+                          }));
+                        }}
+                        className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
+                      >
+                        <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                        <div className="flex items-center space-x-2 min-w-0">
+                          <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                            {flight.toCode}
+                          </div>
+                          <span className="text-sm text-gray-700 font-medium truncate">
+                            {cityData[flight.to]?.airport || flight.to}
+                          </span>
+                        </div>
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          updateFlight(flight.id, "to", "Dubai");
+                          updateFlight(flight.id, "toCode", "DXB");
+                        }}
+                        className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                        title="Clear destination city"
+                      >
+                        <X className="w-4 h-4 text-gray-400" />
+                      </button>
+                    </div>
+
+                    {/* To Cities Dropdown */}
+                    {additionalFlightStates[flight.id]?.showToCities && (
+                      <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
+                        <div className="mb-3">
+                          <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                            Airport, city or country
+                          </h3>
+                          <div className="relative">
+                            <input
+                              type="text"
+                              placeholder="Dubai"
+                              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                            />
+                          </div>
+                        </div>
+
+                        <div className="space-y-1">
+                          {Object.entries(cityData).map(([city, data]) => (
+                            <button
+                              key={city}
+                              onClick={() => {
+                                updateFlight(flight.id, "to", city);
+                                updateFlight(flight.id, "toCode", data.code);
+                                setAdditionalFlightStates(prev => ({
+                                  ...prev,
+                                  [flight.id]: {
+                                    ...prev[flight.id],
+                                    showToCities: false,
+                                  }
+                                }));
+                              }}
+                              className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                            >
+                              <div className="flex items-center space-x-3">
+                                <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                                  <Plane className="w-4 h-4 text-blue-600" />
+                                </div>
+                                <div>
+                                  <div className="text-sm font-medium text-gray-900">
+                                    <span className="font-semibold">{data.code}</span>{" "}
+                                    • {city}
+                                  </div>
+                                  <div className="text-xs text-gray-500">
+                                    {data.airport}
+                                  </div>
+                                  <div className="text-xs text-gray-400">
+                                    {data.fullName}
+                                  </div>
+                                </div>
+                              </div>
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Travel Dates - Exact copy of main form */}
+                  <div className="relative flex-1 lg:min-w-[240px] lg:max-w-[280px] w-full">
+                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                      Depart
+                    </label>
+                    <Popover
+                      open={additionalFlightStates[flight.id]?.showCalendar || false}
+                      onOpenChange={(open) => {
+                        setAdditionalFlightStates(prev => ({
+                          ...prev,
+                          [flight.id]: {
+                            ...prev[flight.id],
+                            showCalendar: open,
+                            showFromCities: false,
+                            showToCities: false,
+                          }
+                        }));
+                      }}
+                    >
+                      <PopoverTrigger asChild>
+                        <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation">
+                          <Calendar className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0" />
+                          <div className="flex items-center space-x-2 min-w-0">
+                            <span className="text-sm text-gray-700 font-medium truncate">
+                              {flight.date ? formatDisplayDate(flight.date) : "Select date"}
+                            </span>
+                          </div>
+                        </button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0" align="start">
+                        <BookingCalendar
+                          bookingType="flight"
+                          initialRange={{
+                            startDate: flight.date || new Date(),
+                            endDate: addDays(flight.date || new Date(), 7),
+                          }}
+                          onChange={(range) => {
+                            updateFlight(flight.id, "date", range.startDate);
+                          }}
+                          onClose={() => {
+                            setAdditionalFlightStates(prev => ({
+                              ...prev,
+                              [flight.id]: {
+                                ...prev[flight.id],
+                                showCalendar: false,
+                              }
+                            }));
+                          }}
+                          className="w-full"
+                        />
+                      </PopoverContent>
+                    </Popover>
+                  </div>
+
+                  {/* Remove Button */}
+                  <div className="w-full lg:w-auto lg:min-w-[120px]">
+                    <Button
+                      onClick={() => removeFlight(flight.id)}
+                      variant="outline"
+                      className="w-full h-10 text-red-600 border-red-300 hover:bg-red-50 hover:border-red-400"
+                    >
+                      Remove
+                    </Button>
+                  </div>
+                </div>
+              ))}
+
+              {/* Add a Flight Button */}
               <button
                 onClick={addFlight}
                 className="flex items-center space-x-2 text-blue-600 hover:text-blue-700 font-medium text-sm bg-transparent border-none cursor-pointer p-0"
