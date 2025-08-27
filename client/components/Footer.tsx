@@ -1,13 +1,10 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
-  Plane,
   Facebook,
   Instagram,
   Twitter,
   Linkedin,
-  Star,
-  Mail,
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
@@ -21,182 +18,120 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-[#003580] text-white">
-      <div className="max-w-7xl mx-auto px-6 py-12">
+    <footer className="bg-[#003580] text-white/90">
+      <div className="mx-auto max-w-7xl px-4 py-8 sm:py-6">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand Block */}
-          <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <img src="/images/faredown-icon.png" alt="Faredown" className="w-6 h-6" />
-              <span className="text-lg font-bold text-white">faredown.com</span>
+          {/* Brand */}
+          <div className="space-y-3">
+            <div className="flex items-center gap-2">
+              <img 
+                src="/logo/faredown-logo.png?v=2" 
+                alt="Faredown" 
+                className="h-6 w-auto object-contain" 
+                onError={(e) => {
+                  // Fallback to text logo if image fails to load
+                  e.currentTarget.style.display = 'none';
+                  e.currentTarget.nextElementSibling.style.display = 'block';
+                }}
+              />
+              <span 
+                className="text-lg font-bold text-white hidden"
+                style={{ display: 'none' }}
+              >
+                faredown.com
+              </span>
             </div>
-            <p className="text-blue-200 text-sm">
-              The world's first AI-powered travel platform
+            <p className="text-white/70 text-[13px]">
+              The world's first AI-powered travel bargain platform.
             </p>
-
-            {/* Certifications */}
-            <div className="flex items-center space-x-2">
-              {["TAAI", "TAAFI", "IATA"].map((cert) => (
-                <div key={cert} className="bg-white/10 rounded px-2 py-1">
-                  <span className="text-white text-xs font-medium">{cert}</span>
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* Quick Links */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-white mb-3">Quick Links</h3>
-            <div className="space-y-2 text-sm">
-              <button
-                onClick={() => handleNavigation("/flights")}
-                className="block text-blue-200 hover:text-white transition-colors"
-              >
-                Flights
-              </button>
-              <button
-                onClick={() => handleNavigation("/hotels")}
-                className="block text-blue-200 hover:text-white transition-colors"
-              >
-                Hotels
-              </button>
-              <button
-                onClick={() => handleNavigation("/sightseeing")}
-                className="block text-blue-200 hover:text-white transition-colors"
-              >
-                Sightseeing
-              </button>
-              <button
-                onClick={() => handleNavigation("/transfers")}
-                className="block text-blue-200 hover:text-white transition-colors"
-              >
-                Transfers
-              </button>
-              <Link
-                to="/help-center"
-                className="block text-blue-200 hover:text-white transition-colors"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                Help Center
-              </Link>
-              <Link
-                to="/privacy-policy"
-                className="block text-blue-200 hover:text-white transition-colors"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                Privacy
-              </Link>
-              <Link
-                to="/terms-of-service"
-                className="block text-blue-200 hover:text-white transition-colors"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                Terms
-              </Link>
-              <Link
-                to="/refund-cancellation-policy"
-                className="block text-blue-200 hover:text-white transition-colors"
-                onClick={() => window.scrollTo(0, 0)}
-              >
-                Refund Policy
-              </Link>
-            </div>
+          <div>
+            <h4 className="text-sm font-semibold mb-3">Quick Links</h4>
+            <ul className="space-y-2 text-[13px]">
+              {[
+                { label: "Flights", path: "/flights" },
+                { label: "Hotels", path: "/hotels" },
+                { label: "Sightseeing", path: "/sightseeing" },
+                { label: "Transfers", path: "/transfers" },
+                { label: "Help Center", path: "/help-center" },
+                { label: "Privacy", path: "/privacy-policy" },
+                { label: "Terms", path: "/terms-of-service" },
+                { label: "Refund Policy", path: "/refund-cancellation-policy" }
+              ].map((item) => (
+                <li key={item.label}>
+                  <button
+                    onClick={() => handleNavigation(item.path)}
+                    className="text-white/80 hover:text-[#0071c2] transition-colors cursor-pointer"
+                  >
+                    {item.label}
+                  </button>
+                </li>
+              ))}
+            </ul>
           </div>
 
           {/* Trust & Reviews */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-white mb-3">Trust & Reviews</h3>
-
-            {/* TrustPilot Rating */}
-            <div className="bg-white/10 rounded-lg p-3">
-              <div className="flex items-center space-x-2 mb-2">
-                <div className="flex items-center">
-                  {[...Array(5)].map((_, i) => (
-                    <Star
-                      key={i}
-                      className="w-4 h-4 text-[#febb02] fill-current"
-                    />
-                  ))}
-                </div>
-                <span className="text-white font-bold">4.9</span>
+          <div>
+            <h4 className="text-sm font-semibold mb-3">Trust & Reviews</h4>
+            <div className="text-[13px] text-white/80">
+              <div className="flex items-center gap-2">
+                <span className="inline-flex items-center gap-1">4.9★</span>
+                <span>Excellent – 50,000+ reviews</span>
               </div>
-              <div className="text-xs text-blue-200">
-                Excellent • Based on 50,000+ reviews
+              <div className="mt-2 text-white/60 italic">
+                "Saved ₹15,000 on my Dubai trip using AI Bargaining!"
               </div>
-              <div className="text-xs text-green-400 mt-1">
-                ★ Rated on TrustPilot
-              </div>
-            </div>
-
-            {/* Customer Review Snippet */}
-            <div className="text-xs text-blue-200 italic">
-              "Saved ₹15,000 on my Dubai trip using AI Bargaining!"
             </div>
           </div>
 
-          {/* Social & Newsletter */}
-          <div className="space-y-3">
-            <h3 className="font-semibold text-white mb-3">Stay Connected</h3>
-
-            {/* Social Icons */}
-            <div className="flex space-x-3">
+          {/* Stay Connected */}
+          <div>
+            <h4 className="text-sm font-semibold mb-3">Stay Connected</h4>
+            <div className="flex items-center gap-3 mb-3">
               {[
-                { Icon: Facebook, href: "https://facebook.com" },
-                { Icon: Instagram, href: "https://instagram.com" },
-                { Icon: Twitter, href: "https://twitter.com" },
-                { Icon: Linkedin, href: "https://linkedin.com" },
-              ].map(({ Icon, href }, index) => (
+                { Icon: Facebook, href: "https://facebook.com", label: "facebook" },
+                { Icon: Instagram, href: "https://instagram.com", label: "instagram" },
+                { Icon: Twitter, href: "https://twitter.com", label: "x" },
+                { Icon: Linkedin, href: "https://linkedin.com", label: "linkedin" }
+              ].map(({ Icon, href, label }) => (
                 <a
-                  key={index}
+                  key={label}
                   href={href}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="w-8 h-8 bg-white/10 rounded-lg flex items-center justify-center hover:bg-white/20 transition-colors"
+                  aria-label={label}
+                  className="opacity-80 hover:opacity-100 transition-opacity"
                 >
-                  <Icon className="w-4 h-4" />
+                  <Icon className="text-[18px] w-[18px] h-[18px]" />
                 </a>
               ))}
             </div>
-
-            {/* Newsletter Signup */}
-            <div className="space-y-2">
-              <p className="text-xs text-blue-200">
-                Subscribe for secret deals
-              </p>
-              <div className="flex space-x-2">
-                <Input
-                  type="email"
-                  placeholder="Your email"
-                  className="h-8 text-xs bg-white/10 border-white/20 text-white placeholder:text-blue-200"
-                />
-                <Button className="h-8 px-3 bg-[#febb02] hover:bg-[#e6a602] text-[#003580] text-xs">
-                  <Mail className="w-3 h-3" />
-                </Button>
-              </div>
-              <p className="text-xs text-blue-300">No spam emails</p>
-            </div>
+            <form className="flex items-center gap-2">
+              <Input
+                type="email"
+                placeholder="Your email"
+                className="w-full h-9 rounded-md px-3 text-[13px] text-[#001833] placeholder:text-black/50 bg-white border-0 focus:ring-2 focus:ring-[#0071c2]"
+              />
+              <Button
+                type="submit"
+                className="h-9 px-3 rounded-md bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black text-sm font-medium border-0"
+              >
+                Subscribe
+              </Button>
+            </form>
           </div>
         </div>
       </div>
 
-      {/* Bottom Line */}
-      <div className="border-t border-blue-700">
-        <div className="max-w-7xl mx-auto px-6 py-4">
-          <div className="flex flex-col md:flex-row justify-between items-center space-y-2 md:space-y-0">
-            <div className="text-xs text-blue-200">
-              © 2025 Faredown Bookings and Travels Pvt Ltd. All rights
-              reserved.
-            </div>
-            <div className="flex items-center space-x-4 opacity-60">
-              <span className="text-xs text-blue-300">Partners:</span>
-              <div className="flex space-x-2">
-                {["Amadeus", "Hotelbeds", "Sabre"].map((partner) => (
-                  <span key={partner} className="text-xs text-blue-300">
-                    {partner}
-                  </span>
-                ))}
-              </div>
-            </div>
+      <div className="border-t border-white/10">
+        <div className="mx-auto max-w-7xl px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-[12px] text-white/70">
+          <div>
+            © {new Date().getFullYear()} Faredown Bookings and Travels Pvt Ltd. All rights reserved.
+          </div>
+          <div className="opacity-80">
+            Partners: Amadeus · Sabre · Hotelbeds · GIATA
           </div>
         </div>
       </div>
