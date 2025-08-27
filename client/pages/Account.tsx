@@ -13,7 +13,6 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import LoyaltyOverview from "@/components/loyalty/LoyaltyOverview";
 import LoyaltyHistory from "@/components/loyalty/LoyaltyHistory";
 import DigitalMembershipCard from "@/components/loyalty/DigitalMembershipCard";
