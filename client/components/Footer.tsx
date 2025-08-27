@@ -24,20 +24,10 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <img 
-                src="/logo/faredown-logo.png?v=2" 
-                alt="Faredown" 
-                className="h-6 w-auto object-contain" 
-                onError={(e) => {
-                  // Fallback to text logo if image fails to load
-                  e.currentTarget.style.display = 'none';
-                  e.currentTarget.nextElementSibling.style.display = 'block';
-                }}
-              />
-              <span 
-                className="text-lg font-bold text-white hidden"
-                style={{ display: 'none' }}
-              >
+              <div className="w-6 h-6 bg-[#febb02] rounded flex items-center justify-center">
+                <span className="text-[#003580] text-xs font-bold">▼</span>
+              </div>
+              <span className="text-lg font-bold text-white">
                 faredown.com
               </span>
             </div>
@@ -131,7 +121,7 @@ export function Footer() {
             © {new Date().getFullYear()} Faredown Bookings and Travels Pvt Ltd. All rights reserved.
           </div>
           <div className="opacity-80">
-            Partners: Amadeus · Sabre · Hotelbeds · GIATA
+            Partners: Amadeus · Sabre · Hotelbeds �� GIATA
           </div>
         </div>
       </div>
