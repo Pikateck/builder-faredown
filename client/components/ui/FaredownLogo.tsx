@@ -39,7 +39,7 @@ export function FaredownLogo({
     <div className="flex items-center space-x-2">
       <div className={cn("flex items-center justify-center", sizeClasses[size])}>
         <img
-          src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fcf4f992a0a794efe95e67804bcc7ee5f?format=webp&width=800"
+          src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fd7e351a308ce43ec90f42ecc366d9684?format=webp&width=800"
           alt="FareDown Logo"
           className={cn(sizeClasses[size], "object-contain", className)}
         />
