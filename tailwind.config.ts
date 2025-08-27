@@ -71,7 +71,10 @@ export default {
         },
         faredown: {
           blue: "hsl(var(--faredown-blue))",
+          "blue-secondary": "hsl(var(--faredown-blue-secondary))",
           orange: "hsl(var(--faredown-orange))",
+          "orange-hover": "hsl(var(--faredown-orange-hover))",
+          "orange-active": "hsl(var(--faredown-orange-active))",
           green: "hsl(var(--faredown-green))",
           red: "hsl(var(--faredown-red))",
           gray: "hsl(var(--faredown-gray))",
