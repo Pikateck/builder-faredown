@@ -126,7 +126,6 @@ export function Header() {
                   onClick={() => {
                     setShowMobileMenu(!showMobileMenu);
                     setShowNotifications(false);
-                    setShowLanguageMenu(false);
                   }}
                   className="p-2 hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                   data-mobile-menu-trigger
