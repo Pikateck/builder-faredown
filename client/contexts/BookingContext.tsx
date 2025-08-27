@@ -322,6 +322,8 @@ export function BookingProvider({ children }: { children: ReactNode }) {
             returnDepartureDate: selectedFlight.returnDepartureDate,
             returnArrivalDate: selectedFlight.returnArrivalDate,
           },
+          // Reset to step 1 (travelers) when starting a new booking
+          currentStep: 1,
         }));
       }
 
