@@ -756,7 +756,7 @@ export function LandingPageSearchPanel() {
             <div className="w-full lg:w-auto lg:min-w-[120px]">
               <Button
                 onClick={handleSearch}
-                className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded h-10 font-medium text-sm w-full touch-manipulation"
+                className="bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black px-6 py-2 rounded h-10 font-bold text-sm w-full touch-manipulation transition-colors duration-150"
               >
                 Search
               </Button>
