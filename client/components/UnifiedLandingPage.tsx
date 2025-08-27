@@ -116,7 +116,7 @@ export function UnifiedLandingPage({
                 <div className="w-12 h-12 bg-[#0071c2] rounded-xl flex items-center justify-center mx-auto mb-4">
                   <Target className="w-6 h-6 text-white" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 text-sm">
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm">
                   Best Rates
                 </h3>
                 <p className="text-[13px] text-gray-600 leading-relaxed">
@@ -129,7 +129,7 @@ export function UnifiedLandingPage({
                 <div className="w-12 h-12 bg-[#10b981] rounded-xl flex items-center justify-center mx-auto mb-4">
                   <Shield className="w-6 h-6 text-white" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 text-sm">
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm">
                   Secure Booking
                 </h3>
                 <p className="text-[13px] text-gray-600 leading-relaxed">
@@ -142,7 +142,7 @@ export function UnifiedLandingPage({
                 <div className="w-12 h-12 bg-[#8b5cf6] rounded-xl flex items-center justify-center mx-auto mb-4">
                   <Zap className="w-6 h-6 text-white" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 text-sm">
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm">
                   AI Bargaining
                 </h3>
                 <p className="text-[13px] text-gray-600 leading-relaxed">
@@ -155,7 +155,7 @@ export function UnifiedLandingPage({
                 <div className="w-12 h-12 bg-[#f59e0b] rounded-xl flex items-center justify-center mx-auto mb-4">
                   <Headphones className="w-6 h-6 text-white" strokeWidth={1.5} />
                 </div>
-                <h3 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-2 text-sm">
+                <h3 className="font-semibold text-gray-900 mb-2 text-sm">
                   24/7 Support
                 </h3>
                 <p className="text-[13px] text-gray-600 leading-relaxed">
@@ -173,7 +173,7 @@ export function UnifiedLandingPage({
             <h2 className="text-2xl md:text-3xl font-semibold text-gray-900 mb-4">
               {config.howItWorksTitle}
             </h2>
-            <p className="text-[15px] md:text-base text-gray-600 mb-12 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-[15px] md:text-base text-gray-600 mb-12 max-w-2xl mx-auto" style={{lineHeight: '1.5'}}>
               Experience the future of {config.serviceType} booking with AI-powered bargaining technology
             </p>
 
@@ -188,7 +188,7 @@ export function UnifiedLandingPage({
                   <span className="text-black font-bold text-sm">1</span>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Search</h3>
-                <p className="text-[15px] text-gray-600 leading-relaxed">
+                <p className="text-[15px] text-gray-600" style={{lineHeight: '1.5'}}>
                   Find your perfect {module === 'flights' ? 'flight' : module === 'hotels' ? 'hotel' : module === 'sightseeing' ? 'tour' : 'transfer'} with our smart search
                 </p>
               </div>
@@ -202,7 +202,7 @@ export function UnifiedLandingPage({
                   <span className="text-black font-bold text-sm">2</span>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Bargain</h3>
-                <p className="text-[15px] text-gray-600 leading-relaxed">
+                <p className="text-[15px] text-gray-600" style={{lineHeight: '1.5'}}>
                   AI negotiates upgrades in seconds using real-time market data
                 </p>
               </div>
@@ -216,7 +216,7 @@ export function UnifiedLandingPage({
                   <span className="text-black font-bold text-sm">3</span>
                 </div>
                 <h3 className="text-xl font-semibold text-gray-900 mb-3">Book/Upgrade</h3>
-                <p className="text-[15px] text-gray-600 leading-relaxed">
+                <p className="text-[15px] text-gray-600" style={{lineHeight: '1.5'}}>
                   Secure your upgrade with instant confirmation and peace of mind
                 </p>
               </div>
@@ -259,7 +259,7 @@ export function UnifiedLandingPage({
                     </div>
                   </div>
                 </div>
-                <p className="text-[15px] text-gray-600 leading-relaxed">
+                <p className="text-[15px] text-gray-600" style={{lineHeight: '1.5'}}>
                   "Saved ₹15,000 on my Dubai trip – business class at economy price!"
                 </p>
               </div>
@@ -278,7 +278,7 @@ export function UnifiedLandingPage({
                     </div>
                   </div>
                 </div>
-                <p className="text-[15px] text-gray-600 leading-relaxed">
+                <p className="text-[15px] text-gray-600" style={{lineHeight: '1.5'}}>
                   "Professional service and instant confirmations. AI bargaining works perfectly!"
                 </p>
               </div>
@@ -297,7 +297,7 @@ export function UnifiedLandingPage({
                     </div>
                   </div>
                 </div>
-                <p className="text-[15px] text-gray-600 leading-relaxed">
+                <p className="text-[15px] text-gray-600" style={{lineHeight: '1.5'}}>
                   "Easy booking and great savings. Faredown's AI technology is revolutionary!"
                 </p>
               </div>
