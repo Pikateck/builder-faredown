@@ -24,12 +24,15 @@ export function Footer() {
           {/* Left: Brand + Links */}
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="flex items-center gap-3">
-              <img 
-                src="/logo/faredown-logo.png?v=6" 
-                alt="faredown.com" 
-                className="h-5 w-auto" 
+              <img
+                src="/images/faredown-icon.png"
+                alt="Faredown"
+                className="w-8 h-8"
               />
-              <span className="text-white/75 text-[12px]">World's first AI travel bargain platform</span>
+              <div className="flex flex-col">
+                <span className="text-xl font-bold text-white">faredown.com</span>
+                <span className="text-white/75 text-[12px]">World's first AI travel bargain platform</span>
+              </div>
             </div>
             <nav className="flex items-center gap-4 text-[11px]">
               {[
