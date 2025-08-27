@@ -1,5 +1,5 @@
 import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import {
   Facebook,
   Instagram,
@@ -16,83 +16,73 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-[#003580] text-white" data-footer-version="v5">
-      <div className="mx-auto max-w-7xl px-4 py-5 md:py-5">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+    <footer className="bg-[#003580] text-white" data-footer-version="v6">
+      {/* Main Content - Ultra Compact */}
+      <div className="mx-auto max-w-7xl px-4 py-4">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           
-          {/* Brand */}
-          <div className="space-y-2">
-            <img 
-              src="/logo/faredown-logo.png?v=5" 
-              alt="faredown.com" 
-              className="h-5 w-auto" 
-            />
-            <p className="text-white/75 text-[13px] leading-tight">
-              World's first AI-powered travel bargain platform.
-            </p>
-          </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="font-semibold mb-2 text-white text-[13px]">Quick Links</h4>
-            <ul className="space-y-1 text-[12px] text-white/85">
+          {/* Left: Brand + Links */}
+          <div className="flex flex-col md:flex-row items-center gap-6">
+            <div className="flex items-center gap-3">
+              <img 
+                src="/logo/faredown-logo.png?v=6" 
+                alt="faredown.com" 
+                className="h-5 w-auto" 
+              />
+              <span className="text-white/75 text-[12px]">World's first AI travel bargain platform</span>
+            </div>
+            <nav className="flex items-center gap-4 text-[11px]">
               {[
                 { label: "Flights", path: "/flights" },
                 { label: "Hotels", path: "/hotels" },
                 { label: "Sightseeing", path: "/sightseeing" },
                 { label: "Transfers", path: "/transfers" },
-                { label: "Help Center", path: "/help-center" },
-                { label: "Privacy", path: "/privacy-policy" }
+                { label: "Help", path: "/help-center" }
               ].map((item) => (
-                <li key={item.label}>
-                  <button
-                    onClick={() => handleNavigation(item.path)}
-                    className="hover:text-[#0071c2] transition-colors cursor-pointer"
-                  >
-                    {item.label}
-                  </button>
-                </li>
+                <button
+                  key={item.label}
+                  onClick={() => handleNavigation(item.path)}
+                  className="text-white/80 hover:text-[#0071c2] transition-colors"
+                >
+                  {item.label}
+                </button>
               ))}
-            </ul>
+            </nav>
           </div>
 
-          {/* Trust */}
-          <div className="text-[12px] text-white/85">
-            <h4 className="font-semibold mb-2 text-white text-[13px]">Trust</h4>
-            <div className="font-semibold text-white">4.9★ Excellent — 50,000+ reviews</div>
-            <div className="mt-1 text-white/65 italic leading-tight">
-              "AI bargaining works perfectly!"
-            </div>
+          {/* Center: Trust */}
+          <div className="text-center">
+            <div className="text-white text-[12px] font-semibold">4.9★ • 50K+ reviews</div>
+            <div className="text-white/60 text-[10px] italic">"AI bargaining works!"</div>
           </div>
 
-          {/* Stay Connected */}
-          <div className="space-y-2">
-            <h4 className="font-semibold text-white text-[13px]">Stay Connected</h4>
-            <div className="flex gap-2 text-[16px] opacity-80">
-              <a href="#" aria-label="Facebook" className="hover:opacity-100 transition-opacity">
-                <Facebook className="w-[16px] h-[16px]" strokeWidth={2} />
+          {/* Right: Social + Newsletter */}
+          <div className="flex items-center gap-4">
+            <div className="flex gap-2">
+              <a href="#" aria-label="Facebook" className="text-white/70 hover:text-white transition-colors">
+                <Facebook className="w-3 h-3" strokeWidth={2} />
               </a>
-              <a href="#" aria-label="Instagram" className="hover:opacity-100 transition-opacity">
-                <Instagram className="w-[16px] h-[16px]" strokeWidth={2} />
+              <a href="#" aria-label="Instagram" className="text-white/70 hover:text-white transition-colors">
+                <Instagram className="w-3 h-3" strokeWidth={2} />
               </a>
-              <a href="#" aria-label="X" className="hover:opacity-100 transition-opacity">
-                <Twitter className="w-[16px] h-[16px]" strokeWidth={2} />
+              <a href="#" aria-label="X" className="text-white/70 hover:text-white transition-colors">
+                <Twitter className="w-3 h-3" strokeWidth={2} />
               </a>
-              <a href="#" aria-label="LinkedIn" className="hover:opacity-100 transition-opacity">
-                <Linkedin className="w-[16px] h-[16px]" strokeWidth={2} />
+              <a href="#" aria-label="LinkedIn" className="text-white/70 hover:text-white transition-colors">
+                <Linkedin className="w-3 h-3" strokeWidth={2} />
               </a>
             </div>
-            <form className="flex gap-1">
+            <form className="flex items-center gap-1">
               <input
                 type="email"
-                placeholder="Your email"
-                className="h-8 w-full rounded-md bg-white px-2 text-[12px] text-[#001833] placeholder:text-black/50 border-0 focus:ring-1 focus:ring-[#0071c2] focus:outline-none"
+                placeholder="Email"
+                className="h-7 w-32 rounded px-2 text-[10px] text-[#001833] placeholder:text-black/50 border-0 focus:ring-1 focus:ring-[#0071c2] focus:outline-none"
               />
               <button
                 type="submit"
-                className="h-8 px-2 rounded-md bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black text-[12px] font-medium transition-colors"
+                className="h-7 px-2 rounded bg-[#febb02] hover:bg-[#e6a602] text-black text-[10px] font-medium transition-colors"
               >
-                Subscribe
+                Join
               </button>
             </form>
           </div>
@@ -100,10 +90,11 @@ export function Footer() {
         </div>
       </div>
       
+      {/* Bottom Bar - Minimal */}
       <div className="border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-4 py-2 flex flex-col sm:flex-row items-center justify-between text-[11px] text-white/70 gap-1">
+        <div className="mx-auto max-w-7xl px-4 py-1 flex flex-col sm:flex-row items-center justify-between text-[9px] text-white/60 gap-1">
           <span>© 2025 Faredown Bookings and Travels Pvt Ltd.</span>
-          <span className="opacity-80">Partners: Amadeus · Sabre · Hotelbeds · GIATA</span>
+          <span>Amadeus • Sabre • Hotelbeds • GIATA</span>
         </div>
       </div>
     </footer>
