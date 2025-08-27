@@ -231,14 +231,16 @@ export function LandingPageSearchPanel() {
       setShowToCities(false);
       setShowClassDropdown(false);
       setShowTravelers(false);
-      // Close all additional flight dropdowns
+      // Close only city dropdowns for additional flights, NOT calendar
       setAdditionalFlightStates(prev => {
         const updated = { ...prev };
         Object.keys(updated).forEach(flightId => {
           updated[flightId] = {
+            ...updated[flightId],
             showFromCities: false,
             showToCities: false,
-            showCalendar: false,
+            // Keep calendar state unchanged
+            showCalendar: updated[flightId]?.showCalendar || false,
           };
         });
         return updated;
