@@ -797,7 +797,6 @@ export function LandingPageSearchPanel() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            alert(`Clicking "From" for flight ${flight.id}. Current showFromCities: ${flightStates.showFromCities}`);
                             updateFlightState('showFromCities', !flightStates.showFromCities);
                             updateFlightState('showToCities', false);
                             updateFlightState('showCalendar', false);
