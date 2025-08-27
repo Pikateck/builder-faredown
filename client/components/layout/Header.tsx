@@ -115,16 +115,6 @@ export function Header() {
                 <button
                   className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                   onClick={() => {
-                    setShowLanguageMenu(!showLanguageMenu);
-                    setShowNotifications(false);
-                    setShowMobileMenu(false);
-                  }}
-                >
-                  <span className="w-5 h-5 flex items-center justify-center">🌐</span>
-                </button>
-                <button
-                  className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
-                  onClick={() => {
                     setShowNotifications(!showNotifications);
                     setShowLanguageMenu(false);
                     setShowMobileMenu(false);
