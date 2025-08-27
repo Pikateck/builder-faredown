@@ -11,7 +11,6 @@ import {
 } from "lucide-react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
-import { FaredownLogo } from "./FaredownLogo";
 
 export function Footer() {
   const navigate = useNavigate();
@@ -28,7 +27,7 @@ export function Footer() {
           {/* Brand Block */}
           <div className="space-y-4">
             <div className="flex items-center">
-              <FaredownLogo className="h-8" />
+              <span className="text-lg font-bold text-white">Faredown</span>
             </div>
             <p className="text-blue-200 text-sm">
               The world's first AI-powered travel platform

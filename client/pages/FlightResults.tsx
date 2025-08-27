@@ -5,7 +5,6 @@ import { useDateContext } from "@/contexts/DateContext";
 import { useBooking } from "@/contexts/BookingContext";
 import { flightsService, Flight } from "@/services/flightsService";
 import { Button } from "@/components/ui/button";
-import { FaredownLogo } from "@/components/FaredownLogo";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 import { Badge } from "@/components/ui/badge";
 import { MobileFilters } from "@/components/MobileFilters";
@@ -578,7 +577,7 @@ export default function FlightResults() {
         };
 
         const flightResults = await flightsService.searchFlights(searchRequest);
-        console.log("✅ Loaded flights:", flightResults.length);
+        console.log("�� Loaded flights:", flightResults.length);
 
         setFlights(flightResults);
       } catch (error) {
@@ -1719,9 +1718,6 @@ export default function FlightResults() {
                   to="/"
                   className="flex items-center space-x-2 text-white hover:text-blue-200 transition-colors"
                 >
-                  <div className="w-8 h-8 flex items-center justify-center">
-                    <FaredownLogo className="w-8 h-8" />
-                  </div>
                   <span className="text-2xl font-bold">faredown.com</span>
                 </Link>
               </div>
@@ -5164,9 +5160,6 @@ export default function FlightResults() {
 
                 {/* Logo & Branding - 32x32px logo */}
                 <div className="flex items-center space-x-2 mb-2">
-                  <div className="w-8 h-8 flex items-center justify-center">
-                    <FaredownLogo className="w-8 h-8" />
-                  </div>
                   <span className="text-lg font-bold">faredown.com</span>
                 </div>
 

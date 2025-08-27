@@ -63,7 +63,6 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 // Import the price in words utility
 import { formatPriceInWords } from "@/lib/numberToWords";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import { FaredownLogo } from "@/components/FaredownLogo";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
@@ -1602,9 +1601,6 @@ export default function BookingFlow() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 flex items-center justify-center">
-                <FaredownLogo className="w-8 h-8" />
-              </div>
               <span className="text-lg sm:text-xl font-bold tracking-tight">
                 faredown.com
               </span>
@@ -1662,7 +1658,7 @@ export default function BookingFlow() {
                           code: "INR",
                           symbol: "₹",
                           name: "Indian Rupee",
-                          flag: "🇮🇳",
+                          flag: "���🇳",
                         },
                         {
                           code: "AED",
