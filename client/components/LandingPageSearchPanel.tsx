@@ -889,8 +889,6 @@ export function LandingPageSearchPanel() {
                         <button
                           onClick={(e) => {
                             e.stopPropagation();
-                            console.log('To button clicked for flight:', flight.id);
-                            console.log('Current state:', flightStates);
                             updateFlightState('showToCities', !flightStates.showToCities);
                             updateFlightState('showFromCities', false);
                             updateFlightState('showCalendar', false);
