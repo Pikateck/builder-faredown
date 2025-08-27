@@ -1,8 +1,7 @@
-import { Header } from "@/components/Header";
+import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
 import { Settings, Shield, BarChart3, Target } from "lucide-react";
-import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 export default function CookiePolicy() {
   useScrollToTop();
