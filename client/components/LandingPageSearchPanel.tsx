@@ -212,6 +212,18 @@ export function LandingPageSearchPanel() {
       setShowToCities(false);
       setShowClassDropdown(false);
       setShowTravelers(false);
+      // Close all additional flight dropdowns
+      setAdditionalFlightStates(prev => {
+        const updated = { ...prev };
+        Object.keys(updated).forEach(flightId => {
+          updated[flightId] = {
+            showFromCities: false,
+            showToCities: false,
+            showCalendar: false,
+          };
+        });
+        return updated;
+      });
     };
 
     document.addEventListener("click", handleClickOutside);
