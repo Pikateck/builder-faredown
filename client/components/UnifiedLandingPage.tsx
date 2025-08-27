@@ -93,34 +93,6 @@ export function UnifiedLandingPage({
         {/* Search Panel Section - DO NOT TOUCH */}
         {searchPanel}
 
-        {/* Hero Band - Copy Only */}
-        <section className="py-12 md:py-16 bg-white">
-          <div className="max-w-6xl mx-auto px-4 md:px-6 text-center">
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-900 mb-4 leading-tight">
-              Upgrade. Bargain. Book.
-            </h1>
-            <p className="text-[15px] md:text-base text-gray-600 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Turn your fare into an upgrade with live AI bargaining.
-            </p>
-            
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 max-w-md mx-auto">
-              <Button 
-                className="bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black px-8 py-3 rounded-xl font-medium text-[15px] w-full sm:w-auto"
-                onClick={() => document.getElementById('search-section')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                Start Bargaining
-              </Button>
-              <Button 
-                variant="outline" 
-                className="border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white px-8 py-3 rounded-xl font-medium text-[15px] w-full sm:w-auto"
-                onClick={() => document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth' })}
-              >
-                How it Works
-              </Button>
-            </div>
-          </div>
-        </section>
-
         {/* USP Tiles - 5 Cards with Classy Icons */}
         <section className="py-12 bg-gray-50">
           <div className="max-w-6xl mx-auto px-4 md:px-6">
