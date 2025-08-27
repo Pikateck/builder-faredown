@@ -274,7 +274,7 @@ const SeatMap = ({
             </h3>
             <p className="text-sm text-[#666]">
               {flightData?.duration || "3h 15m"} ��{" "}
-              {flightData?.airline || "Airlines"} •{" "}
+              {flightData?.airline || "Airlines"} ��{" "}
               {fareData?.name || "Economy"}
             </p>
           </div>
@@ -1603,7 +1603,7 @@ export default function BookingFlow() {
             <Link to="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 flex items-center justify-center">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F0f75ab6716bf42ffad706127c032e3b6?format=webp&width=800"
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8a744af11174432ead8c68349416b774?format=webp&width=800"
                   alt="FareDown Logo"
                   className="w-8 h-8 object-contain"
                 />
