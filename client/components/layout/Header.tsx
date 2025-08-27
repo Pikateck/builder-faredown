@@ -116,7 +116,6 @@ export function Header() {
                   className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                   onClick={() => {
                     setShowNotifications(!showNotifications);
-                    setShowLanguageMenu(false);
                     setShowMobileMenu(false);
                   }}
                 >
@@ -127,7 +126,6 @@ export function Header() {
                   onClick={() => {
                     setShowMobileMenu(!showMobileMenu);
                     setShowNotifications(false);
-                    setShowLanguageMenu(false);
                   }}
                   className="p-2 hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                   data-mobile-menu-trigger
@@ -633,7 +631,7 @@ export function Header() {
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
                           { code: "es", name: "Español", flag: "🇪🇸" },
-                          { code: "fr", name: "Français", flag: "🇫���" },
+                          { code: "fr", name: "Français", flag: "🇫🇷" },
                           { code: "de", name: "Deutsch", flag: "🇩🇪" },
                           { code: "it", name: "Italiano", flag: "🇮🇹" },
                           { code: "pt", name: "Português", flag: "���🇹" },
