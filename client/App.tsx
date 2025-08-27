@@ -196,6 +196,7 @@ function App() {
                     <Route path="/my-trips" element={<MyTrips />} />
 
                     {/* Development/Testing Routes */}
+                    <Route path="/footer-test" element={<FooterTest />} />
                     <Route path="/api-test" element={<ApiTestPanel />} />
                     <Route
                       path="/backend-test"
