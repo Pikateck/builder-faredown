@@ -26,7 +26,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Block */}
           <div className="space-y-4">
-            <div className="flex items-center">
+            <div className="flex items-center space-x-2">
+              <img src="/images/faredown-icon.png" alt="Faredown" className="w-6 h-6" />
               <span className="text-lg font-bold text-white">faredown.com</span>
             </div>
             <p className="text-blue-200 text-sm">
