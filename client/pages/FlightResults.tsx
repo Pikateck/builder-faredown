@@ -5,6 +5,7 @@ import { useDateContext } from "@/contexts/DateContext";
 import { useBooking } from "@/contexts/BookingContext";
 import { flightsService, Flight } from "@/services/flightsService";
 import { Button } from "@/components/ui/button";
+import { FaredownLogo } from "@/components/FaredownLogo";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 import { Badge } from "@/components/ui/badge";
 import { MobileFilters } from "@/components/MobileFilters";
@@ -1719,11 +1720,7 @@ export default function FlightResults() {
                   className="flex items-center space-x-2 text-white hover:text-blue-200 transition-colors"
                 >
                   <div className="w-8 h-8 flex items-center justify-center">
-                    <img
-                      src="/logo/faredown-logo.png"
-                      alt="FareDown Logo"
-                      className="w-8 h-8 object-contain"
-                    />
+                    <FaredownLogo className="w-8 h-8" />
                   </div>
                   <span className="text-2xl font-bold">faredown.com</span>
                 </Link>
@@ -5168,11 +5165,7 @@ export default function FlightResults() {
                 {/* Logo & Branding - 32x32px logo */}
                 <div className="flex items-center space-x-2 mb-2">
                   <div className="w-8 h-8 flex items-center justify-center">
-                    <img
-                      src="/logo/faredown-logo.png"
-                      alt="FareDown Logo"
-                      className="w-8 h-8 object-contain"
-                    />
+                    <FaredownLogo className="w-8 h-8" />
                   </div>
                   <span className="text-lg font-bold">faredown.com</span>
                 </div>
