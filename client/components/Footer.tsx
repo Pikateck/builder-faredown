@@ -26,15 +26,12 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
           {/* Brand Block */}
           <div className="space-y-4">
-            <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 flex items-center justify-center">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb3ece29408ce4d279de7e81ec4937a79?format=webp&width=800"
-                  alt="FareDown Logo"
-                  className="w-8 h-8 object-contain"
-                />
-              </div>
-              <span className="text-lg font-bold">faredown.com</span>
+            <div className="flex items-center">
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F43e54b7031eb478ca70fd5d337e458cb?format=webp&width=800"
+                alt="Faredown Logo"
+                className="h-8 object-contain"
+              />
             </div>
             <p className="text-blue-200 text-sm">
               The world's first AI-powered travel platform

@@ -36,25 +36,15 @@ export function FaredownLogo({
   };
 
   return (
-    <div className="flex items-center space-x-2">
-      <div className={cn("flex items-center justify-center", sizeClasses[size])}>
-        <img
-          src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb3ece29408ce4d279de7e81ec4937a79?format=webp&width=800"
-          alt="FareDown Logo"
-          className={cn(sizeClasses[size], "object-contain", className)}
-        />
-      </div>
-      {showText && (
-        <span 
-          className={cn(
-            textSizeClasses[size],
-            "font-bold tracking-tight",
-            textClassName
-          )}
-        >
-          faredown.com
-        </span>
-      )}
+    <div className="flex items-center">
+      <img
+        src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F43e54b7031eb478ca70fd5d337e458cb?format=webp&width=800"
+        alt="Faredown Logo"
+        className={cn("object-contain",
+          size === 'sm' ? 'h-6' : size === 'md' ? 'h-8' : 'h-12',
+          className
+        )}
+      />
     </div>
   );
 }

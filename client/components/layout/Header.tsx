@@ -109,15 +109,12 @@ export function Header() {
         <header className="bg-[#003580] text-white">
           <div className="px-4 py-3">
             <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb3ece29408ce4d279de7e81ec4937a79?format=webp&width=800"
-                    alt="Faredown Logo"
-                    className="w-12 h-12 object-contain"
-                  />
-                </div>
-                <span className="text-lg font-bold">faredown.com</span>
+              <div className="flex items-center">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F43e54b7031eb478ca70fd5d337e458cb?format=webp&width=800"
+                  alt="Faredown Logo"
+                  className="h-8 object-contain"
+                />
               </div>
               <div className="flex items-center space-x-3">
                 <button
@@ -501,17 +498,12 @@ export function Header() {
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
             <div className="flex items-center justify-between">
               {/* Logo */}
-              <Link to="/" className="flex items-center space-x-2">
-                <div className="w-8 h-8 flex items-center justify-center">
-                  <img
-                    src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb3ece29408ce4d279de7e81ec4937a79?format=webp&width=800"
-                    alt="Faredown Logo"
-                    className="w-12 h-12 object-contain"
-                  />
-                </div>
-                <span className="text-lg sm:text-xl font-bold tracking-tight">
-                  faredown.com
-                </span>
+              <Link to="/" className="flex items-center">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F43e54b7031eb478ca70fd5d337e458cb?format=webp&width=800"
+                  alt="Faredown Logo"
+                  className="h-8 object-contain"
+                />
               </Link>
 
               {/* Centered Navigation */}
