@@ -7,65 +7,64 @@ export default function FooterTest() {
       <div className="min-h-screen bg-white flex items-center justify-center">
         <div className="text-center max-w-2xl mx-auto px-4">
           <h1 className="text-h1 text-gray-900 mb-4">
-            Footer V4 Compact Test
+            Footer V5 Ultra-Compact Test
           </h1>
           <p className="text-body text-gray-600 mb-8">
-            Testing the new V4 compact footer implementation with premium design standards.
+            Testing the V5 ultra-compact footer with ≤220px desktop height requirement.
           </p>
           
           <div className="bg-green-50 border border-green-200 p-5 rounded-xl mb-8">
-            <h3 className="text-h3 text-green-800 mb-3">✅ V4 Compact Footer Active</h3>
-            <p className="text-body text-green-700">
-              The footer below should meet the new premium standards with proper height constraints.
+            <h3 className="font-semibold text-green-800 mb-2 text-[16px]">✅ V5 Ultra-Compact Footer Active</h3>
+            <p className="text-[13px] text-green-700 line-clamp-2">
+              The footer below should meet the strict height constraints with minimal copy and compact spacing.
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 text-left">
-            <div className="bg-[#003580]/5 p-5 rounded-xl">
-              <h4 className="text-h3 text-gray-900 mb-3">Height Requirements</h4>
-              <ul className="text-body text-gray-600 space-y-2">
-                <li>• Desktop: ≤ 240–260px (with bottom bar)</li>
-                <li>• Mobile: ≤ 360px total</li>
-                <li>• Container: py-6 md:py-8</li>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+            <div className="bg-[#003580]/5 p-4 rounded-xl">
+              <h4 className="font-semibold text-gray-900 mb-2 text-[16px]">V5 Height Requirements</h4>
+              <ul className="text-[13px] text-gray-600 space-y-1">
+                <li>• Desktop: ≤200–220px (with bottom bar)</li>
+                <li>• Mobile: ≤320px total</li>
+                <li>• Container: py-5 desktop/py-4 mobile</li>
                 <li>• Bottom bar: py-2</li>
               </ul>
             </div>
 
-            <div className="bg-[#0071c2]/5 p-5 rounded-xl">
-              <h4 className="text-h3 text-gray-900 mb-3">Design Elements</h4>
-              <ul className="text-body text-gray-600 space-y-2">
-                <li>• 4 columns layout</li>
-                <li>• Inter font family</li>
-                <li>• Lucide icons (18px, stroke 2)</li>
-                <li>• Yellow subscribe button</li>
+            <div className="bg-[#0071c2]/5 p-4 rounded-xl">
+              <h4 className="font-semibold text-gray-900 mb-2 text-[16px]">Copy Limits</h4>
+              <ul className="text-[13px] text-gray-600 space-y-1">
+                <li>• Brand blurb: ≤90 chars</li>
+                <li>• Quick Links: max 6 items, 12px text</li>
+                <li>• Trust: 1 line + short quote ≤60 chars</li>
                 <li>• No debug banners</li>
               </ul>
             </div>
 
-            <div className="bg-[#10b981]/5 p-5 rounded-xl">
-              <h4 className="text-h3 text-gray-900 mb-3">Brand Colors</h4>
-              <ul className="text-body text-gray-600 space-y-2">
-                <li>• Background: #003580</li>
-                <li>• Text: white/white-variants</li>
-                <li>• Hover: #0071c2</li>
-                <li>• CTA: #febb02 → #e6a602 → #d19900</li>
+            <div className="bg-[#10b981]/5 p-4 rounded-xl">
+              <h4 className="font-semibold text-gray-900 mb-2 text-[16px]">Typography & Icons</h4>
+              <ul className="text-[13px] text-gray-600 space-y-1">
+                <li>• Inter font family only</li>
+                <li>• Lucide icons, 16px size</li>
+                <li>• Compact 8px newsletter input</li>
+                <li>• Yellow CTA button</li>
               </ul>
             </div>
 
-            <div className="bg-[#febb02]/10 p-5 rounded-xl">
-              <h4 className="text-h3 text-gray-900 mb-3">Performance</h4>
-              <ul className="text-body text-gray-600 space-y-2">
-                <li>• SVG icons only</li>
-                <li>• Optimized font loading</li>
-                <li>• Minimal animations ≤150ms</li>
-                <li>• Responsive design</li>
+            <div className="bg-[#febb02]/10 p-4 rounded-xl">
+              <h4 className="font-semibold text-gray-900 mb-2 text-[16px]">Verification</h4>
+              <ul className="text-[13px] text-gray-600 space-y-1">
+                <li>• Measure footer height in DevTools</li>
+                <li>• Should be ≤220px desktop</li>
+                <li>• All text should be minimal</li>
+                <li>• Clean, elegant appearance</li>
               </ul>
             </div>
           </div>
 
-          <div className="mt-8 bg-gray-50 p-5 rounded-xl">
-            <p className="text-small text-gray-500">
-              Open DevTools and measure the footer height to verify it meets the 240-260px desktop requirement.
+          <div className="mt-6 bg-gray-50 p-4 rounded-xl">
+            <p className="text-[12px] text-gray-500">
+              Open DevTools → Elements → Find &lt;footer&gt; → Check computed height. Should be ≤220px on desktop.
             </p>
           </div>
         </div>
