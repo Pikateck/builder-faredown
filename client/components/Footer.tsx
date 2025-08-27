@@ -27,7 +27,7 @@ export function Footer() {
           {/* Brand Block */}
           <div className="space-y-4">
             <div className="flex items-center">
-              <span className="text-lg font-bold text-white">Faredown</span>
+              <span className="text-lg font-bold text-white">faredown.com</span>
             </div>
             <p className="text-blue-200 text-sm">
               The world's first AI-powered travel platform
