@@ -958,7 +958,7 @@ export function LandingPageSearchPanel() {
                                 <div>
                                   <div className="text-sm font-medium text-gray-900">
                                     <span className="font-semibold">{data.code}</span>{" "}
-                                    • {city}
+                                    ��� {city}
                                   </div>
                                   <div className="text-xs text-gray-500">
                                     {data.airport}
@@ -975,7 +975,7 @@ export function LandingPageSearchPanel() {
                     )}
                   </div>
 
-                  {/* Travel Dates - Exact copy of main form */}
+                  {/* Travel Dates - Simplified to match main form */}
                   <div className="relative flex-1 lg:min-w-[240px] lg:max-w-[280px] w-full">
                     <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                       Depart
@@ -988,8 +988,6 @@ export function LandingPageSearchPanel() {
                           [flight.id]: {
                             ...prev[flight.id],
                             showCalendar: open,
-                            showFromCities: false,
-                            showToCities: false,
                           }
                         }));
                       }}
