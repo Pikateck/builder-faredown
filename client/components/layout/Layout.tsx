@@ -25,10 +25,7 @@ export function Layout({
       <Header />
       {showSearch && <SearchPanel />}
       <main className={`flex-1 ${className}`}>{children}</main>
-      {/* Hide footer on mobile for native app experience */}
-      <div className="hidden md:block">
-        <Footer />
-      </div>
+      <Footer />
       {showMobileNav && <MobileBottomNav />}
     </div>
   );
