@@ -227,6 +227,57 @@ export default function Account() {
     },
   ]);
 
+  // Search and collapsible helper functions
+  const toggleSection = (sectionId) => {
+    setCollapsedSections(prev => ({
+      ...prev,
+      [sectionId]: !prev[sectionId]
+    }));
+  };
+
+  const filterBookings = (bookings, query) => {
+    if (!query.trim()) return bookings;
+
+    const lowercaseQuery = query.toLowerCase();
+    return bookings.filter(booking => {
+      const searchableFields = [
+        booking.bookingDetails?.bookingRef || '',
+        booking.bookingDetails?.passengers?.[0]?.firstName || '',
+        booking.bookingDetails?.passengers?.[0]?.lastName || '',
+        booking.bookingDetails?.contactDetails?.email || '',
+        booking.flightDetails?.airline || '',
+        booking.flightDetails?.flightNumber || '',
+        booking.type || 'flight',
+      ];
+
+      return searchableFields.some(field =>
+        field.toLowerCase().includes(lowercaseQuery)
+      );
+    });
+  };
+
+  const clearSearch = () => {
+    setSearchQuery("");
+  };
+
+  const expandAllSections = () => {
+    setCollapsedSections({
+      flights: false,
+      hotels: false,
+      sightseeing: false,
+      transfers: false,
+    });
+  };
+
+  const collapseAllSections = () => {
+    setCollapsedSections({
+      flights: true,
+      hotels: true,
+      sightseeing: true,
+      transfers: true,
+    });
+  };
+
   useEffect(() => {
     // Load bookings from localStorage
     const savedBookings = JSON.parse(
