@@ -22,7 +22,6 @@ import {
   Shield,
   Headphones,
   X,
-  Globe,
   Bell,
   Menu,
   LogOut,
@@ -122,7 +121,7 @@ export function Header() {
                     setShowMobileMenu(false);
                   }}
                 >
-                  <Globe className="w-5 h-5" />
+                  <span className="w-5 h-5 flex items-center justify-center">🌐</span>
                 </button>
                 <button
                   className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
