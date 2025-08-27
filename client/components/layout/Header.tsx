@@ -43,7 +43,6 @@ export function Header() {
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [showMobileUserDropdown, setShowMobileUserDropdown] = useState(false);
 
   // User state
