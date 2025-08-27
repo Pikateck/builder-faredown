@@ -26,12 +26,12 @@ export default {
     },
     fontFamily: {
       sans: [
-        'Inter',
-        '-apple-system',
-        'BlinkMacSystemFont',
+        "Inter",
+        "-apple-system",
+        "BlinkMacSystemFont",
         '"Segoe UI"',
-        'Roboto',
-        'sans-serif'
+        "Roboto",
+        "sans-serif",
       ],
     },
     extend: {
@@ -114,14 +114,20 @@ export default {
         sm: "calc(var(--radius) - 4px)",
       },
       fontSize: {
-        'h1': ['3rem', { lineHeight: '1.1', fontWeight: '700', letterSpacing: '-0.025em' }], // text-5xl md:text-6xl font-bold tracking-tight
-        'h1-md': ['3.75rem', { lineHeight: '1.1', fontWeight: '700', letterSpacing: '-0.025em' }],
-        'h2': ['1.875rem', { lineHeight: '1.2', fontWeight: '600' }], // text-3xl md:text-4xl font-semibold
-        'h2-md': ['2.25rem', { lineHeight: '1.2', fontWeight: '600' }],
-        'h3': ['1.5rem', { lineHeight: '1.3', fontWeight: '600' }], // text-2xl font-semibold
-        'body': ['15px', { lineHeight: '1.75' }], // text-[15px] md:text-base leading-7
-        'body-md': ['16px', { lineHeight: '1.75' }],
-        'small': ['13px', { lineHeight: '1.4' }], // text-[13px]
+        h1: [
+          "3rem",
+          { lineHeight: "1.1", fontWeight: "700", letterSpacing: "-0.025em" },
+        ], // text-5xl md:text-6xl font-bold tracking-tight
+        "h1-md": [
+          "3.75rem",
+          { lineHeight: "1.1", fontWeight: "700", letterSpacing: "-0.025em" },
+        ],
+        h2: ["1.875rem", { lineHeight: "1.2", fontWeight: "600" }], // text-3xl md:text-4xl font-semibold
+        "h2-md": ["2.25rem", { lineHeight: "1.2", fontWeight: "600" }],
+        h3: ["1.5rem", { lineHeight: "1.3", fontWeight: "600" }], // text-2xl font-semibold
+        body: ["15px", { lineHeight: "1.75" }], // text-[15px] md:text-base leading-7
+        "body-md": ["16px", { lineHeight: "1.75" }],
+        small: ["13px", { lineHeight: "1.4" }], // text-[13px]
       },
       keyframes: {
         "accordion-down": {
@@ -157,7 +163,7 @@ export default {
         "fade-in": "fade-in 150ms ease-out",
       },
       transitionDuration: {
-        '150': '150ms',
+        "150": "150ms",
       },
     },
   },

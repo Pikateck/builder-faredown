@@ -6,7 +6,6 @@ import { Plane } from "lucide-react";
 export default function Index() {
   return (
     <Layout showSearch={false}>
-
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white py-24">
         <div className="max-w-6xl mx-auto px-4 text-center">
@@ -160,7 +159,6 @@ export default function Index() {
           </div>
         </div>
       </section>
-
     </Layout>
   );
 }

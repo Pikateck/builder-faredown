@@ -225,9 +225,9 @@ export default function Account() {
 
   // Search and collapsible helper functions
   const toggleSection = (sectionId) => {
-    setCollapsedSections(prev => ({
+    setCollapsedSections((prev) => ({
       ...prev,
-      [sectionId]: !prev[sectionId]
+      [sectionId]: !prev[sectionId],
     }));
   };
 
@@ -235,19 +235,19 @@ export default function Account() {
     if (!query.trim()) return bookings;
 
     const lowercaseQuery = query.toLowerCase();
-    return bookings.filter(booking => {
+    return bookings.filter((booking) => {
       const searchableFields = [
-        booking.bookingDetails?.bookingRef || '',
-        booking.bookingDetails?.passengers?.[0]?.firstName || '',
-        booking.bookingDetails?.passengers?.[0]?.lastName || '',
-        booking.bookingDetails?.contactDetails?.email || '',
-        booking.flightDetails?.airline || '',
-        booking.flightDetails?.flightNumber || '',
-        booking.type || 'flight',
+        booking.bookingDetails?.bookingRef || "",
+        booking.bookingDetails?.passengers?.[0]?.firstName || "",
+        booking.bookingDetails?.passengers?.[0]?.lastName || "",
+        booking.bookingDetails?.contactDetails?.email || "",
+        booking.flightDetails?.airline || "",
+        booking.flightDetails?.flightNumber || "",
+        booking.type || "flight",
       ];
 
-      return searchableFields.some(field =>
-        field.toLowerCase().includes(lowercaseQuery)
+      return searchableFields.some((field) =>
+        field.toLowerCase().includes(lowercaseQuery),
       );
     });
   };
@@ -576,7 +576,8 @@ export default function Account() {
               </div>
             )}
             <div className="text-sm text-gray-600">
-              {totalBookings} {totalBookings === 1 ? "booking" : "bookings"} total
+              {totalBookings} {totalBookings === 1 ? "booking" : "bookings"}{" "}
+              total
             </div>
           </div>
         </div>
@@ -590,7 +591,9 @@ export default function Account() {
               </div>
               <div>
                 <h3 className="font-semibold text-gray-900">Smart Search</h3>
-                <p className="text-sm text-gray-600">Search by booking reference, passenger name, email, or airline</p>
+                <p className="text-sm text-gray-600">
+                  Search by booking reference, passenger name, email, or airline
+                </p>
               </div>
             </div>
 
@@ -639,10 +642,13 @@ export default function Account() {
               <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
                 <div className="flex items-center gap-2 text-yellow-800">
                   <Search className="w-4 h-4" />
-                  <span className="text-sm font-medium">No results found for "{searchQuery}"</span>
+                  <span className="text-sm font-medium">
+                    No results found for "{searchQuery}"
+                  </span>
                 </div>
                 <p className="text-xs text-yellow-700 mt-1">
-                  Try searching by booking reference, passenger name, email, or airline
+                  Try searching by booking reference, passenger name, email, or
+                  airline
                 </p>
               </div>
             )}
@@ -723,9 +729,10 @@ export default function Account() {
                         <p className="text-sm text-gray-600">
                           {moduleBookings.length}{" "}
                           {moduleBookings.length === 1 ? "booking" : "bookings"}
-                          {hasActiveSearch && moduleBookings.length !== bookingsByModule[module.id].length &&
-                            ` (filtered from ${bookingsByModule[module.id].length})`
-                          }
+                          {hasActiveSearch &&
+                            moduleBookings.length !==
+                              bookingsByModule[module.id].length &&
+                            ` (filtered from ${bookingsByModule[module.id].length})`}
                         </p>
                       </div>
                     </div>
@@ -767,13 +774,14 @@ export default function Account() {
                             }`}
                           />
                           <h4 className="text-lg font-medium text-gray-700 mb-2">
-                            {hasActiveSearch ? `No ${module.name.toLowerCase()} match your search` : module.emptyMessage}
+                            {hasActiveSearch
+                              ? `No ${module.name.toLowerCase()} match your search`
+                              : module.emptyMessage}
                           </h4>
                           <p className="text-sm text-gray-500 mb-4">
                             {hasActiveSearch
                               ? `Try adjusting your search terms or clear the filter`
-                              : `Start planning your next ${module.name.toLowerCase()} adventure`
-                            }
+                              : `Start planning your next ${module.name.toLowerCase()} adventure`}
                           </p>
                           {!hasActiveSearch && (
                             <Link to={module.searchLink}>
@@ -797,7 +805,10 @@ export default function Account() {
                         </Card>
                       ) : (
                         moduleBookings.map((booking, index) => (
-                          <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
+                          <Card
+                            key={index}
+                            className="overflow-hidden hover:shadow-lg transition-shadow"
+                          >
                             <CardHeader
                               className={`bg-gradient-to-r ${
                                 module.color === "blue"
@@ -823,7 +834,8 @@ export default function Account() {
                                   <p className="text-sm text-gray-600">
                                     Booking Reference:{" "}
                                     <span className="font-mono font-medium">
-                                      {booking.bookingDetails?.bookingRef || "N/A"}
+                                      {booking.bookingDetails?.bookingRef ||
+                                        "N/A"}
                                     </span>
                                   </p>
                                 </div>
@@ -868,7 +880,9 @@ export default function Account() {
                                         </div>
                                         <div className="flex items-center space-x-2 text-sm text-gray-600">
                                           <Calendar className="w-4 h-4" />
-                                          <span>Sat, Aug 3 • 10:15 - 13:45</span>
+                                          <span>
+                                            Sat, Aug 3 • 10:15 - 13:45
+                                          </span>
                                         </div>
                                         <div className="flex items-center space-x-2 text-sm text-gray-600">
                                           <Plane className="w-4 h-4" />
@@ -995,7 +1009,8 @@ export default function Account() {
                                         Payment ID
                                       </span>
                                       <span className="text-gray-900 font-mono text-xs">
-                                        {booking.paymentId?.slice(0, 12) || "N/A"}
+                                        {booking.paymentId?.slice(0, 12) ||
+                                          "N/A"}
                                         ...
                                       </span>
                                     </div>
@@ -2068,7 +2083,6 @@ Please keep this ticket for your records.
 
   return (
     <Layout showSearch={false}>
-
       <div className="max-w-6xl mx-auto px-3 sm:px-4 py-4 sm:py-8 pb-20 md:pb-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
           {/* Sidebar */}

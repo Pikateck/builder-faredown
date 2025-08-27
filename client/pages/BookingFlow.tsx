@@ -590,7 +590,10 @@ const SeatMap = ({
 
                     {/* Economy Rows */}
                     {seatLayout
-                      .filter((r) => r.type !== "business" && r.type !== "economy-plus")
+                      .filter(
+                        (r) =>
+                          r.type !== "business" && r.type !== "economy-plus",
+                      )
                       .map(({ row, seats, type }) => (
                         <div
                           key={`economy-${row}`}
@@ -896,7 +899,8 @@ export default function BookingFlow() {
   const passengersFromState = booking.searchParams.passengers;
 
   // Extract negotiatedPrice from location state with fallback
-  const negotiatedPrice = location.state?.negotiatedPrice || selectedFareType?.price || 32168;
+  const negotiatedPrice =
+    location.state?.negotiatedPrice || selectedFareType?.price || 32168;
 
   // Define renderFlightSegment function after selectedFlight is available
 

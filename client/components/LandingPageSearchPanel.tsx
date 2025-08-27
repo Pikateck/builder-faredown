@@ -86,11 +86,13 @@ export function LandingPageSearchPanel() {
   const [showToCities, setShowToCities] = useState(false);
 
   // Additional flights UI states
-  const [additionalFlightStates, setAdditionalFlightStates] = useState<{[key: string]: {
-    showFromCities: boolean;
-    showToCities: boolean;
-    showCalendar: boolean;
-  }}>({});
+  const [additionalFlightStates, setAdditionalFlightStates] = useState<{
+    [key: string]: {
+      showFromCities: boolean;
+      showToCities: boolean;
+      showCalendar: boolean;
+    };
+  }>({});
 
   // Date states
   const [departureDate, setDepartureDate] = useState<Date>(
@@ -132,33 +134,39 @@ export function LandingPageSearchPanel() {
     };
 
     // Initialize state for the new flight
-    setAdditionalFlightStates(prev => ({
+    setAdditionalFlightStates((prev) => ({
       ...prev,
       [newFlightId]: {
         showFromCities: false,
         showToCities: false,
         showCalendar: false,
-      }
+      },
     }));
 
     setAdditionalFlights([...additionalFlights, newFlight]);
   };
 
   const removeFlight = (flightId: string) => {
-    setAdditionalFlights(additionalFlights.filter(flight => flight.id !== flightId));
+    setAdditionalFlights(
+      additionalFlights.filter((flight) => flight.id !== flightId),
+    );
     // Clean up states for removed flight
-    setAdditionalFlightStates(prev => {
+    setAdditionalFlightStates((prev) => {
       const updated = { ...prev };
       delete updated[flightId];
       return updated;
     });
   };
 
-  const updateFlight = (flightId: string, field: keyof FlightLeg, value: any) => {
+  const updateFlight = (
+    flightId: string,
+    field: keyof FlightLeg,
+    value: any,
+  ) => {
     setAdditionalFlights(
-      additionalFlights.map((flight) => 
-        flight.id === flightId ? { ...flight, [field]: value } : flight
-      )
+      additionalFlights.map((flight) =>
+        flight.id === flightId ? { ...flight, [field]: value } : flight,
+      ),
     );
   };
 
@@ -183,7 +191,7 @@ export function LandingPageSearchPanel() {
           toCode: cityData[selectedToCity]?.code || "DXB",
           date: departureDate,
         },
-        ...additionalFlights
+        ...additionalFlights,
       ];
 
       const searchParams = new URLSearchParams({
@@ -193,7 +201,7 @@ export function LandingPageSearchPanel() {
         cabinClass: selectedClass.toLowerCase().replace(" ", "-"),
         multiCityLegs: JSON.stringify(allLegs),
       });
-      
+
       navigate(`/flights/results?${searchParams.toString()}`);
     } else {
       // Regular flight search
@@ -232,9 +240,9 @@ export function LandingPageSearchPanel() {
       setShowClassDropdown(false);
       setShowTravelers(false);
       // Close only city dropdowns for additional flights, NOT calendar
-      setAdditionalFlightStates(prev => {
+      setAdditionalFlightStates((prev) => {
         const updated = { ...prev };
-        Object.keys(updated).forEach(flightId => {
+        Object.keys(updated).forEach((flightId) => {
           updated[flightId] = {
             ...updated[flightId],
             showFromCities: false,
@@ -768,7 +776,10 @@ export function LandingPageSearchPanel() {
             <div className="mt-4 space-y-3 overflow-visible">
               {/* Additional Flight Rows */}
               {additionalFlights.map((flight, index) => (
-                <div key={flight.id} className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3 w-full max-w-6xl overflow-visible">
+                <div
+                  key={flight.id}
+                  className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3 w-full max-w-6xl overflow-visible"
+                >
                   {/* Leaving From - Exact copy of main form */}
                   <div
                     className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
@@ -780,14 +791,14 @@ export function LandingPageSearchPanel() {
                     <div className="relative">
                       <button
                         onClick={() => {
-                          setAdditionalFlightStates(prev => ({
+                          setAdditionalFlightStates((prev) => ({
                             ...prev,
                             [flight.id]: {
                               ...prev[flight.id],
                               showFromCities: !prev[flight.id]?.showFromCities,
                               showToCities: false,
                               showCalendar: false,
-                            }
+                            },
                           }));
                         }}
                         className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
@@ -838,12 +849,12 @@ export function LandingPageSearchPanel() {
                               onClick={() => {
                                 updateFlight(flight.id, "from", city);
                                 updateFlight(flight.id, "fromCode", data.code);
-                                setAdditionalFlightStates(prev => ({
+                                setAdditionalFlightStates((prev) => ({
                                   ...prev,
                                   [flight.id]: {
                                     ...prev[flight.id],
                                     showFromCities: false,
-                                  }
+                                  },
                                 }));
                               }}
                               className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
@@ -854,7 +865,9 @@ export function LandingPageSearchPanel() {
                                 </div>
                                 <div>
                                   <div className="text-sm font-medium text-gray-900">
-                                    <span className="font-semibold">{data.code}</span>{" "}
+                                    <span className="font-semibold">
+                                      {data.code}
+                                    </span>{" "}
                                     • {city}
                                   </div>
                                   <div className="text-xs text-gray-500">
@@ -883,14 +896,14 @@ export function LandingPageSearchPanel() {
                     <div className="relative">
                       <button
                         onClick={() => {
-                          setAdditionalFlightStates(prev => ({
+                          setAdditionalFlightStates((prev) => ({
                             ...prev,
                             [flight.id]: {
                               ...prev[flight.id],
                               showToCities: !prev[flight.id]?.showToCities,
                               showFromCities: false,
                               showCalendar: false,
-                            }
+                            },
                           }));
                         }}
                         className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
@@ -941,12 +954,12 @@ export function LandingPageSearchPanel() {
                               onClick={() => {
                                 updateFlight(flight.id, "to", city);
                                 updateFlight(flight.id, "toCode", data.code);
-                                setAdditionalFlightStates(prev => ({
+                                setAdditionalFlightStates((prev) => ({
                                   ...prev,
                                   [flight.id]: {
                                     ...prev[flight.id],
                                     showToCities: false,
-                                  }
+                                  },
                                 }));
                               }}
                               className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
@@ -957,7 +970,9 @@ export function LandingPageSearchPanel() {
                                 </div>
                                 <div>
                                   <div className="text-sm font-medium text-gray-900">
-                                    <span className="font-semibold">{data.code}</span>{" "}
+                                    <span className="font-semibold">
+                                      {data.code}
+                                    </span>{" "}
                                     ��� {city}
                                   </div>
                                   <div className="text-xs text-gray-500">
@@ -981,14 +996,16 @@ export function LandingPageSearchPanel() {
                       Depart
                     </label>
                     <Popover
-                      open={additionalFlightStates[flight.id]?.showCalendar || false}
+                      open={
+                        additionalFlightStates[flight.id]?.showCalendar || false
+                      }
                       onOpenChange={(open) => {
-                        setAdditionalFlightStates(prev => ({
+                        setAdditionalFlightStates((prev) => ({
                           ...prev,
                           [flight.id]: {
                             ...prev[flight.id],
                             showCalendar: open,
-                          }
+                          },
                         }));
                       }}
                     >
@@ -997,7 +1014,9 @@ export function LandingPageSearchPanel() {
                           <Calendar className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0" />
                           <div className="flex items-center space-x-2 min-w-0">
                             <span className="text-sm text-gray-700 font-medium truncate">
-                              {flight.date ? formatDisplayDate(flight.date) : "Select date"}
+                              {flight.date
+                                ? formatDisplayDate(flight.date)
+                                : "Select date"}
                             </span>
                           </div>
                         </button>
@@ -1013,12 +1032,12 @@ export function LandingPageSearchPanel() {
                             updateFlight(flight.id, "date", range.startDate);
                           }}
                           onClose={() => {
-                            setAdditionalFlightStates(prev => ({
+                            setAdditionalFlightStates((prev) => ({
                               ...prev,
                               [flight.id]: {
                                 ...prev[flight.id],
                                 showCalendar: false,
-                              }
+                              },
                             }));
                           }}
                           className="w-full"

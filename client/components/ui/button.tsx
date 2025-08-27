@@ -9,17 +9,21 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-[#003580] text-white hover:bg-[#0071c2] shadow-lg hover:shadow-xl transition-all duration-300",
+        default:
+          "bg-[#003580] text-white hover:bg-[#0071c2] shadow-lg hover:shadow-xl transition-all duration-300",
         destructive:
           "bg-destructive text-destructive-foreground hover:bg-destructive/90 shadow-lg",
         outline:
           "border-2 border-gray-200 bg-white hover:bg-gray-50 hover:border-[#003580] text-gray-900 transition-all duration-300",
         secondary:
           "bg-gray-100 text-gray-900 hover:bg-gray-200 shadow-md transition-all duration-300",
-        ghost: "hover:bg-gray-100 hover:text-gray-900 transition-all duration-300",
+        ghost:
+          "hover:bg-gray-100 hover:text-gray-900 transition-all duration-300",
         link: "text-[#003580] underline-offset-4 hover:underline font-medium",
-        yellow: "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold shadow-lg hover:shadow-xl transition-all duration-300",
-        premium: "bg-gradient-to-r from-[#003580] to-[#0071c2] text-white hover:from-[#0071c2] hover:to-[#003580] shadow-lg hover:shadow-xl transition-all duration-300",
+        yellow:
+          "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold shadow-lg hover:shadow-xl transition-all duration-300",
+        premium:
+          "bg-gradient-to-r from-[#003580] to-[#0071c2] text-white hover:from-[#0071c2] hover:to-[#003580] shadow-lg hover:shadow-xl transition-all duration-300",
       },
       size: {
         default: "h-11 px-6 py-3",

@@ -6,7 +6,6 @@ import { AlertCircle, Clock, CreditCard, RefreshCw } from "lucide-react";
 export default function RefundPolicy() {
   return (
     <Layout showSearch={false}>
-
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-sm">
           <div className="bg-[#003580] text-white px-8 py-6 rounded-t-lg">
@@ -381,7 +380,6 @@ export default function RefundPolicy() {
           </div>
         </div>
       </div>
-
     </Layout>
   );
 }

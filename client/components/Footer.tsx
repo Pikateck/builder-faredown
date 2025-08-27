@@ -1,11 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import {
-  Facebook,
-  Instagram,
-  Twitter,
-  Linkedin,
-} from "lucide-react";
+import { Facebook, Instagram, Twitter, Linkedin } from "lucide-react";
 
 export function Footer() {
   const navigate = useNavigate();
@@ -20,7 +15,6 @@ export function Footer() {
       {/* Main Content - Ultra Compact */}
       <div className="mx-auto max-w-7xl px-4 py-4">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-          
           {/* Left: Brand + Links */}
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="flex items-center gap-3">
@@ -30,8 +24,12 @@ export function Footer() {
                 className="w-8 h-8"
               />
               <div className="flex flex-col">
-                <span className="text-xl font-medium text-white">faredown.com</span>
-                <span className="text-white/75 text-[12px]">World's first AI travel bargain platform</span>
+                <span className="text-xl font-medium text-white">
+                  faredown.com
+                </span>
+                <span className="text-white/75 text-[12px]">
+                  World's first AI travel bargain platform
+                </span>
               </div>
             </div>
             <nav className="flex items-center gap-4 text-[11px]">
@@ -40,7 +38,7 @@ export function Footer() {
                 { label: "Contact Us", path: "/contact" },
                 { label: "Cancellation Policy", path: "/cancellation-policy" },
                 { label: "Refunds", path: "/refunds" },
-                { label: "About Us", path: "/about" }
+                { label: "About Us", path: "/about" },
               ].map((item) => (
                 <button
                   key={item.label}
@@ -55,23 +53,43 @@ export function Footer() {
 
           {/* Center: Trust */}
           <div className="text-center">
-            <div className="text-white text-[12px] font-semibold">4.9★ • 50K+ reviews</div>
-            <div className="text-white/60 text-[10px] italic">"AI bargaining works!"</div>
+            <div className="text-white text-[12px] font-semibold">
+              4.9★ • 50K+ reviews
+            </div>
+            <div className="text-white/60 text-[10px] italic">
+              "AI bargaining works!"
+            </div>
           </div>
 
           {/* Right: Social + Newsletter */}
           <div className="flex items-center gap-4">
             <div className="flex gap-2">
-              <a href="#" aria-label="Facebook" className="text-white/70 hover:text-white transition-colors">
+              <a
+                href="#"
+                aria-label="Facebook"
+                className="text-white/70 hover:text-white transition-colors"
+              >
                 <Facebook className="w-3 h-3" strokeWidth={2} />
               </a>
-              <a href="#" aria-label="Instagram" className="text-white/70 hover:text-white transition-colors">
+              <a
+                href="#"
+                aria-label="Instagram"
+                className="text-white/70 hover:text-white transition-colors"
+              >
                 <Instagram className="w-3 h-3" strokeWidth={2} />
               </a>
-              <a href="#" aria-label="X" className="text-white/70 hover:text-white transition-colors">
+              <a
+                href="#"
+                aria-label="X"
+                className="text-white/70 hover:text-white transition-colors"
+              >
                 <Twitter className="w-3 h-3" strokeWidth={2} />
               </a>
-              <a href="#" aria-label="LinkedIn" className="text-white/70 hover:text-white transition-colors">
+              <a
+                href="#"
+                aria-label="LinkedIn"
+                className="text-white/70 hover:text-white transition-colors"
+              >
                 <Linkedin className="w-3 h-3" strokeWidth={2} />
               </a>
             </div>
@@ -89,10 +107,9 @@ export function Footer() {
               </button>
             </form>
           </div>
-
         </div>
       </div>
-      
+
       {/* Bottom Bar - Minimal */}
       <div className="border-t border-white/10">
         <div className="mx-auto max-w-7xl px-4 py-1 flex flex-col sm:flex-row items-center justify-between text-[9px] text-white/60 gap-1">

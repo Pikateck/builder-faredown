@@ -44,8 +44,8 @@ const moduleConfig = {
   hotels: {
     icon: Hotel,
     primaryFeature: "Hotel Upgrades",
-    primaryDescription: "AI negotiates luxury suites", 
-    upgradeType: "room upgrades", 
+    primaryDescription: "AI negotiates luxury suites",
+    upgradeType: "room upgrades",
     serviceType: "hotels",
     howItWorksTitle: "AI Hotel Upgrades",
     accentColor: "from-indigo-600 to-indigo-700",
@@ -105,18 +105,23 @@ export function UnifiedLandingPage({
                 World's First AI Travel Bargain Platform
               </h2>
               <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-                Premium experiences at unbeatable prices through intelligent AI negotiation
+                Premium experiences at unbeatable prices through intelligent AI
+                negotiation
               </p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-              
               {/* Primary Feature */}
               <div className="group relative bg-white rounded-2xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100">
                 <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
-                  <div className={`w-16 h-16 ${config.iconBg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}>
-                    <ModuleIcon className="w-8 h-8 text-[#003580]" strokeWidth={1.5} />
+                  <div
+                    className={`w-16 h-16 ${config.iconBg} rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300`}
+                  >
+                    <ModuleIcon
+                      className="w-8 h-8 text-[#003580]"
+                      strokeWidth={1.5}
+                    />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     {config.primaryFeature}
@@ -132,7 +137,10 @@ export function UnifiedLandingPage({
                 <div className="absolute inset-0 bg-gradient-to-br from-amber-50/50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
                   <div className="w-16 h-16 bg-gradient-to-br from-amber-50 to-amber-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <Crown className="w-8 h-8 text-[#003580]" strokeWidth={1.5} />
+                    <Crown
+                      className="w-8 h-8 text-[#003580]"
+                      strokeWidth={1.5}
+                    />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Premium Quality
@@ -164,7 +172,10 @@ export function UnifiedLandingPage({
                 <div className="absolute inset-0 bg-gradient-to-br from-purple-50/50 to-transparent rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
                   <div className="w-16 h-16 bg-gradient-to-br from-purple-50 to-purple-100 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300">
-                    <Shield className="w-8 h-8 text-[#003580]" strokeWidth={1.5} />
+                    <Shield
+                      className="w-8 h-8 text-[#003580]"
+                      strokeWidth={1.5}
+                    />
                   </div>
                   <h3 className="text-xl font-bold text-gray-900 mb-3">
                     Trusted Platform
@@ -174,7 +185,6 @@ export function UnifiedLandingPage({
                   </p>
                 </div>
               </div>
-
             </div>
           </div>
         </section>
@@ -187,29 +197,44 @@ export function UnifiedLandingPage({
                 {config.howItWorksTitle}
               </h2>
               <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-                Advanced AI technology meets premium travel in three simple steps
+                Advanced AI technology meets premium travel in three simple
+                steps
               </p>
             </div>
 
             <div className="relative">
               {/* Connection Lines */}
               <div className="absolute top-20 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent hidden lg:block"></div>
-              
+
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 relative">
-                
                 {/* Search */}
                 <div className="text-center relative">
                   <div className="relative inline-block">
                     <div className="w-20 h-20 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mb-8 shadow-lg">
-                      <Search className="w-10 h-10 text-white" strokeWidth={1.5} />
+                      <Search
+                        className="w-10 h-10 text-white"
+                        strokeWidth={1.5}
+                      />
                     </div>
                     <div className="absolute -top-1 -right-1 w-8 h-8 bg-[#febb02] rounded-full flex items-center justify-center">
-                      <span className="text-[#003580] font-bold text-sm">1</span>
+                      <span className="text-[#003580] font-bold text-sm">
+                        1
+                      </span>
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Search</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    Search
+                  </h3>
                   <p className="text-gray-600 max-w-xs mx-auto leading-relaxed">
-                    Find your perfect {module === 'flights' ? 'flight' : module === 'hotels' ? 'hotel' : module === 'sightseeing' ? 'experience' : 'transfer'} from our premium inventory
+                    Find your perfect{" "}
+                    {module === "flights"
+                      ? "flight"
+                      : module === "hotels"
+                        ? "hotel"
+                        : module === "sightseeing"
+                          ? "experience"
+                          : "transfer"}{" "}
+                    from our premium inventory
                   </p>
                 </div>
 
@@ -217,15 +242,23 @@ export function UnifiedLandingPage({
                 <div className="text-center relative">
                   <div className="relative inline-block">
                     <div className="w-20 h-20 bg-gradient-to-br from-[#0071c2] to-[#003580] rounded-3xl flex items-center justify-center mb-8 shadow-lg">
-                      <TrendingUp className="w-10 h-10 text-white" strokeWidth={1.5} />
+                      <TrendingUp
+                        className="w-10 h-10 text-white"
+                        strokeWidth={1.5}
+                      />
                     </div>
                     <div className="absolute -top-1 -right-1 w-8 h-8 bg-[#febb02] rounded-full flex items-center justify-center">
-                      <span className="text-[#003580] font-bold text-sm">2</span>
+                      <span className="text-[#003580] font-bold text-sm">
+                        2
+                      </span>
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Negotiate</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    Negotiate
+                  </h3>
                   <p className="text-gray-600 max-w-xs mx-auto leading-relaxed">
-                    Our AI instantly negotiates the best possible upgrade using market intelligence
+                    Our AI instantly negotiates the best possible upgrade using
+                    market intelligence
                   </p>
                 </div>
 
@@ -233,18 +266,25 @@ export function UnifiedLandingPage({
                 <div className="text-center relative">
                   <div className="relative inline-block">
                     <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-3xl flex items-center justify-center mb-8 shadow-lg">
-                      <CheckCircle className="w-10 h-10 text-white" strokeWidth={1.5} />
+                      <CheckCircle
+                        className="w-10 h-10 text-white"
+                        strokeWidth={1.5}
+                      />
                     </div>
                     <div className="absolute -top-1 -right-1 w-8 h-8 bg-[#febb02] rounded-full flex items-center justify-center">
-                      <span className="text-[#003580] font-bold text-sm">3</span>
+                      <span className="text-[#003580] font-bold text-sm">
+                        3
+                      </span>
                     </div>
                   </div>
-                  <h3 className="text-2xl font-bold text-gray-900 mb-4">Secure</h3>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-4">
+                    Secure
+                  </h3>
                   <p className="text-gray-600 max-w-xs mx-auto leading-relaxed">
-                    Instant confirmation with premium protection and 24/7 support
+                    Instant confirmation with premium protection and 24/7
+                    support
                   </p>
                 </div>
-
               </div>
             </div>
           </div>
@@ -253,13 +293,16 @@ export function UnifiedLandingPage({
         {/* Social Proof - Refined */}
         <section className="py-16 bg-gradient-to-br from-gray-50 via-white to-gray-50">
           <div className="max-w-6xl mx-auto px-6">
-            
             {/* Trust Badge */}
             <div className="text-center mb-12">
               <div className="inline-flex items-center bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                 <div className="flex items-center space-x-2 mr-6">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-6 h-6 text-[#febb02] fill-current" strokeWidth={1.5} />
+                    <Star
+                      key={i}
+                      className="w-6 h-6 text-[#febb02] fill-current"
+                      strokeWidth={1.5}
+                    />
                   ))}
                 </div>
                 <div className="text-left">
@@ -271,7 +314,6 @@ export function UnifiedLandingPage({
 
             {/* Testimonials */}
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              
               <div className="bg-white rounded-2xl p-6 shadow-lg border border-gray-100">
                 <div className="flex items-center mb-4">
                   <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-full flex items-center justify-center mr-3">
@@ -281,13 +323,18 @@ export function UnifiedLandingPage({
                     <div className="font-bold text-gray-900">Priya Sharma</div>
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-[#febb02] fill-current" strokeWidth={1.5} />
+                        <Star
+                          key={i}
+                          className="w-4 h-4 text-[#febb02] fill-current"
+                          strokeWidth={1.5}
+                        />
                       ))}
                     </div>
                   </div>
                 </div>
                 <p className="text-gray-600 italic">
-                  "Business class at economy price – saved ₹15,000 on Dubai trip!"
+                  "Business class at economy price – saved ₹15,000 on Dubai
+                  trip!"
                 </p>
               </div>
 
@@ -300,13 +347,18 @@ export function UnifiedLandingPage({
                     <div className="font-bold text-gray-900">Rohit Kumar</div>
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-[#febb02] fill-current" strokeWidth={1.5} />
+                        <Star
+                          key={i}
+                          className="w-4 h-4 text-[#febb02] fill-current"
+                          strokeWidth={1.5}
+                        />
                       ))}
                     </div>
                   </div>
                 </div>
                 <p className="text-gray-600 italic">
-                  "AI bargaining is revolutionary – instant confirmations every time!"
+                  "AI bargaining is revolutionary – instant confirmations every
+                  time!"
                 </p>
               </div>
 
@@ -319,32 +371,44 @@ export function UnifiedLandingPage({
                     <div className="font-bold text-gray-900">Anjali Patel</div>
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-4 h-4 text-[#febb02] fill-current" strokeWidth={1.5} />
+                        <Star
+                          key={i}
+                          className="w-4 h-4 text-[#febb02] fill-current"
+                          strokeWidth={1.5}
+                        />
                       ))}
                     </div>
                   </div>
                 </div>
                 <p className="text-gray-600 italic">
-                  "Faredown's technology delivers incredible savings consistently!"
+                  "Faredown's technology delivers incredible savings
+                  consistently!"
                 </p>
               </div>
-
             </div>
           </div>
         </section>
 
         {/* App CTA - Premium */}
         <section className="py-20 bg-gradient-to-br from-[#003580] via-[#0071c2] to-[#003580] text-white relative overflow-hidden">
-          <div className={"absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.03\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"1\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"}></div>
+          <div
+            className={
+              'absolute inset-0 bg-[url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.03"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')] opacity-20'
+            }
+          ></div>
           <div className="max-w-4xl mx-auto px-6 text-center relative">
             <div className="w-20 h-20 bg-[#febb02] rounded-3xl flex items-center justify-center mx-auto mb-8">
-              <Smartphone className="w-10 h-10 text-[#003580]" strokeWidth={1.5} />
+              <Smartphone
+                className="w-10 h-10 text-[#003580]"
+                strokeWidth={1.5}
+              />
             </div>
             <h2 className="text-4xl font-bold mb-4 tracking-tight">
               Travel Smarter. Bargain Better.
             </h2>
             <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
-              Download the Faredown app for exclusive mobile deals and instant AI bargaining
+              Download the Faredown app for exclusive mobile deals and instant
+              AI bargaining
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
@@ -387,11 +451,12 @@ export function UnifiedLandingPage({
                   Subscribe
                 </Button>
               </div>
-              <p className="text-sm text-gray-500 mt-4">No spam, unsubscribe anytime</p>
+              <p className="text-sm text-gray-500 mt-4">
+                No spam, unsubscribe anytime
+              </p>
             </div>
           </div>
         </section>
-
       </div>
     </div>
   );

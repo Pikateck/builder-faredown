@@ -31,7 +31,6 @@ export default function PersonalDetails() {
 
   return (
     <Layout showSearch={false}>
-
       {/* Breadcrumb */}
       <div className="max-w-7xl mx-auto px-4 py-3 text-sm text-gray-600">
         <Link to="/account" className="hover:underline">
@@ -293,7 +292,6 @@ export default function PersonalDetails() {
           </div>
         </div>
       </div>
-
     </Layout>
   );
 }

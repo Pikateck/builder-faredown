@@ -398,7 +398,6 @@ export default function CookiePolicy() {
           </div>
         </div>
       </div>
-
     </Layout>
   );
 }
