@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logo Verification - Faredown</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; }
+        .test-section { background: #f5f5f5; padding: 15px; margin: 10px 0; border-radius: 5px; }
+        .success { color: #22c55e; font-weight: bold; }
+        .error { color: #ef4444; font-weight: bold; }
+        .code { background: #1f2937; color: #f9fafb; padding: 10px; border-radius: 4px; font-family: monospace; }
+        img { border: 2px solid #ddd; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Faredown Logo Verification</h1>
+    
+    <div class="test-section">
+        <h2>📱 Visual Test</h2>
+        <p>The logo should display as white "faredown.com" text with yellow triangle (#febb02):</p>
+        <div style="background: #003580; padding: 20px; border-radius: 8px;">
+            <img src="/logo/faredown-logo.png?v=2" alt="Faredown Logo" style="height: 64px; width: auto; object-fit: contain; border: none;">
+        </div>
+    </div>
+
+    <div class="test-section">
+        <h2>🔧 Technical Verification</h2>
+        <p>Open browser DevTools (F12) and run this in Console:</p>
+        <div class="code">
+fetch('/logo/faredown-logo.png?v=2')
+  .then(r => r.arrayBuffer())
+  .then(b => console.log([...new Uint8Array(b).slice(0,8)]));
+        </div>
+        <p><strong>Expected PNG signature:</strong> [137,80,78,71,13,10,26,10]</p>
+    </div>
+
+    <div class="test-section">
+        <h2>🌐 Network Verification</h2>
+        <p>In DevTools → Network tab, look for the logo request:</p>
+        <ul>
+            <li><strong>Status:</strong> Should be 200</li>
+            <li><strong>Content-Type:</strong> Should be image/png</li>
+            <li><strong>Size:</strong> Should be ~60KB</li>
+        </ul>
+    </div>
+
+    <div class="test-section">
+        <h2>⚡ Auto-Verification</h2>
+        <button onclick="runVerification()" style="background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 4px; cursor: pointer;">
+            Run PNG Verification
+        </button>
+        <div id="results" style="margin-top: 10px;"></div>
+    </div>
+
+    <script>
+        function runVerification() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '🔄 Running verification...';
+            
+            fetch('/logo/faredown-logo.png?v=2')
+                .then(response => {
+                    let html = '<h3>Results:</h3>';
+                    html += `<p>Status: <span class="${response.status === 200 ? 'success' : 'error'}">${response.status}</span></p>`;
+                    html += `<p>Content-Type: <span class="${response.headers.get('content-type') === 'image/png' ? 'success' : 'error'}">${response.headers.get('content-type')}</span></p>`;
+                    
+                    if (response.status === 200) {
+                        return response.arrayBuffer().then(buffer => {
+                            const bytes = [...new Uint8Array(buffer).slice(0, 8)];
+                            const pngSignature = [137, 80, 78, 71, 13, 10, 26, 10];
+                            const isPNG = bytes.every((byte, index) => byte === pngSignature[index]);
+                            
+                            html += `<p>File Size: <span class="success">${buffer.byteLength.toLocaleString()} bytes</span></p>`;
+                            html += `<p>PNG Format: <span class="${isPNG ? 'success' : 'error'}">${isPNG ? 'VALID' : 'INVALID'}</span></p>`;
+                            html += `<p>Signature: [${bytes.join(',')}]</p>`;
+                            
+                            resultsDiv.innerHTML = html;
+                        });
+                    } else {
+                        resultsDiv.innerHTML = html;
+                    }
+                })
+                .catch(error => {
+                    resultsDiv.innerHTML = `<p class="error">Error: ${error.message}</p>`;
+                });
+        }
+    </script>
+</body>
+</html>
