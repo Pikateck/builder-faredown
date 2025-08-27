@@ -1002,7 +1002,7 @@ export function LandingPageSearchPanel() {
                     </div>
 
                     {/* Remove Button */}
-                    <div className="w-full">
+                    <div className="w-full lg:w-auto lg:min-w-[120px]">
                       <Button
                         onClick={(e) => {
                           e.stopPropagation();
