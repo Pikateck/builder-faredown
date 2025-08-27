@@ -36,11 +36,11 @@ export function Footer() {
             </div>
             <nav className="flex items-center gap-4 text-[11px]">
               {[
-                { label: "Flights", path: "/flights" },
-                { label: "Hotels", path: "/hotels" },
-                { label: "Sightseeing", path: "/sightseeing" },
-                { label: "Transfers", path: "/transfers" },
-                { label: "Help", path: "/help-center" }
+                { label: "Help Center", path: "/help-center" },
+                { label: "Contact Us", path: "/contact" },
+                { label: "Cancellation Policy", path: "/cancellation-policy" },
+                { label: "Refunds", path: "/refunds" },
+                { label: "About Us", path: "/about" }
               ].map((item) => (
                 <button
                   key={item.label}
