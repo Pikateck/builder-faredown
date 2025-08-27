@@ -785,7 +785,6 @@ export function LandingPageSearchPanel() {
                 return (
                   <div
                     key={flight.id}
-                    onClick={(e) => e.stopPropagation()}
                     className="flex flex-col lg:flex-row items-center gap-2 lg:gap-3 w-full max-w-6xl overflow-visible"
                   >
                     {/* Leaving From */}
