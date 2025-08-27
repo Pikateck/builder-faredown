@@ -582,13 +582,6 @@ export function Header() {
                 <div className="flex items-center space-x-4 text-sm">
                   <div className="relative">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
-                          <Globe className="w-4 h-4" />
-                          <span>English</span>
-                          <ChevronDown className="w-4 h-4" />
-                        </button>
-                      </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-48">
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
