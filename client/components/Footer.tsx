@@ -30,7 +30,7 @@ export function Footer() {
                 className="w-8 h-8"
               />
               <div className="flex flex-col">
-                <span className="text-xl font-bold text-white">faredown.com</span>
+                <span className="text-xl font-medium text-white">faredown.com</span>
                 <span className="text-white/75 text-[12px]">World's first AI travel bargain platform</span>
               </div>
             </div>
