@@ -514,12 +514,15 @@ export default function Account() {
   };
 
   const renderModularBookings = () => {
-    // Organize bookings by modules
+    // Filter bookings based on search query
+    const filteredBookings = filterBookings(bookings, searchQuery);
+
+    // Organize filtered bookings by modules
     const bookingsByModule = {
-      flights: bookings.filter((b) => b.type === "flight" || !b.type), // Default to flight for existing bookings
-      hotels: bookings.filter((b) => b.type === "hotel"),
-      sightseeing: bookings.filter((b) => b.type === "sightseeing"),
-      transfers: bookings.filter((b) => b.type === "transfer"),
+      flights: filteredBookings.filter((b) => b.type === "flight" || !b.type), // Default to flight for existing bookings
+      hotels: filteredBookings.filter((b) => b.type === "hotel"),
+      sightseeing: filteredBookings.filter((b) => b.type === "sightseeing"),
+      transfers: filteredBookings.filter((b) => b.type === "transfer"),
     };
 
     const modules = [
@@ -529,7 +532,7 @@ export default function Account() {
         icon: Plane,
         color: "blue",
         bookings: bookingsByModule.flights,
-        emptyMessage: "No flight bookings yet",
+        emptyMessage: "No flight bookings found",
         searchLink: "/flights",
       },
       {
@@ -538,7 +541,7 @@ export default function Account() {
         icon: Hotel,
         color: "green",
         bookings: bookingsByModule.hotels,
-        emptyMessage: "No hotel bookings yet",
+        emptyMessage: "No hotel bookings found",
         searchLink: "/hotels",
       },
       {
@@ -547,7 +550,7 @@ export default function Account() {
         icon: Camera,
         color: "purple",
         bookings: bookingsByModule.sightseeing,
-        emptyMessage: "No sightseeing bookings yet",
+        emptyMessage: "No sightseeing bookings found",
         searchLink: "/sightseeing",
       },
       {
@@ -556,21 +559,99 @@ export default function Account() {
         icon: MapPin,
         color: "orange",
         bookings: bookingsByModule.transfers,
-        emptyMessage: "No transfer bookings yet",
+        emptyMessage: "No transfer bookings found",
         searchLink: "/transfers",
       },
     ];
 
     const totalBookings = bookings.length;
+    const totalFilteredBookings = filteredBookings.length;
+    const hasActiveSearch = searchQuery.trim().length > 0;
 
     return (
       <div className="space-y-6">
-        <div className="flex items-center justify-between">
+        {/* Header with title and stats */}
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <h2 className="text-2xl font-bold text-gray-900">My Bookings</h2>
-          <div className="text-sm text-gray-600">
-            {totalBookings} {totalBookings === 1 ? "booking" : "bookings"} found
+          <div className="flex items-center gap-4">
+            {hasActiveSearch && (
+              <div className="text-sm text-blue-600 font-medium">
+                {totalFilteredBookings} of {totalBookings} bookings shown
+              </div>
+            )}
+            <div className="text-sm text-gray-600">
+              {totalBookings} {totalBookings === 1 ? "booking" : "bookings"} total
+            </div>
           </div>
         </div>
+
+        {/* Smart Search Section */}
+        <Card className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-blue-200">
+          <div className="space-y-4">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                <Search className="w-4 h-4 text-blue-600" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-gray-900">Smart Search</h3>
+                <p className="text-sm text-gray-600">Search by booking reference, passenger name, email, or airline</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+                <Input
+                  placeholder="Search bookings... (e.g., FD-FL-001, John Doe, Air India)"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                />
+                {searchQuery && (
+                  <button
+                    onClick={clearSearch}
+                    className="absolute right-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400 hover:text-gray-600"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+
+              <div className="flex gap-2">
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={expandAllSections}
+                  className="whitespace-nowrap bg-white hover:bg-gray-50"
+                >
+                  <ChevronDown className="w-4 h-4 mr-1" />
+                  Expand All
+                </Button>
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={collapseAllSections}
+                  className="whitespace-nowrap bg-white hover:bg-gray-50"
+                >
+                  <ChevronUp className="w-4 h-4 mr-1" />
+                  Collapse All
+                </Button>
+              </div>
+            </div>
+
+            {hasActiveSearch && totalFilteredBookings === 0 && (
+              <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3">
+                <div className="flex items-center gap-2 text-yellow-800">
+                  <Search className="w-4 h-4" />
+                  <span className="text-sm font-medium">No results found for "{searchQuery}"</span>
+                </div>
+                <p className="text-xs text-yellow-700 mt-1">
+                  Try searching by booking reference, passenger name, email, or airline
+                </p>
+              </div>
+            )}
+          </div>
+        </Card>
 
         {totalBookings === 0 ? (
           <Card className="p-12 text-center">
@@ -600,17 +681,20 @@ export default function Account() {
             </div>
           </Card>
         ) : (
-          <div className="space-y-8">
+          <div className="space-y-6">
             {modules.map((module) => {
               const ModuleIcon = module.icon;
               const moduleBookings = module.bookings;
-
-              // Always show module headers for better UX
+              const isCollapsed = collapsedSections[module.id];
+              const ChevronIcon = isCollapsed ? ChevronDown : ChevronUp;
 
               return (
                 <div key={module.id} className="space-y-4">
-                  {/* Module Header */}
-                  <div className="flex items-center justify-between p-4 bg-gray-50 rounded-lg border">
+                  {/* Collapsible Module Header */}
+                  <div
+                    className="flex items-center justify-between p-4 bg-gray-50 hover:bg-gray-100 rounded-lg border cursor-pointer transition-colors select-none"
+                    onClick={() => toggleSection(module.id)}
+                  >
                     <div className="flex items-center space-x-3">
                       <div
                         className={`w-10 h-10 rounded-full flex items-center justify-center ${
@@ -636,303 +720,320 @@ export default function Account() {
                         />
                       </div>
                       <div>
-                        <h3 className="text-lg font-semibold text-gray-900">
+                        <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
                           {module.name}
+                          <ChevronIcon className="w-4 h-4 text-gray-400" />
                         </h3>
                         <p className="text-sm text-gray-600">
                           {moduleBookings.length}{" "}
                           {moduleBookings.length === 1 ? "booking" : "bookings"}
+                          {hasActiveSearch && moduleBookings.length !== bookingsByModule[module.id].length &&
+                            ` (filtered from ${bookingsByModule[module.id].length})`
+                          }
                         </p>
                       </div>
                     </div>
-                    <Badge
-                      variant="secondary"
-                      className={`${
-                        module.color === "blue"
-                          ? "bg-blue-100 text-blue-800"
-                          : module.color === "green"
-                            ? "bg-green-100 text-green-800"
-                            : module.color === "purple"
-                              ? "bg-purple-100 text-purple-800"
-                              : "bg-orange-100 text-orange-800"
-                      }`}
-                    >
-                      {moduleBookings.length}
-                    </Badge>
+                    <div className="flex items-center gap-3">
+                      <Badge
+                        variant="secondary"
+                        className={`${
+                          module.color === "blue"
+                            ? "bg-blue-100 text-blue-800"
+                            : module.color === "green"
+                              ? "bg-green-100 text-green-800"
+                              : module.color === "purple"
+                                ? "bg-purple-100 text-purple-800"
+                                : "bg-orange-100 text-orange-800"
+                        }`}
+                      >
+                        {moduleBookings.length}
+                      </Badge>
+                      <div className="text-gray-400 text-sm font-medium">
+                        {isCollapsed ? "Click to expand" : "Click to collapse"}
+                      </div>
+                    </div>
                   </div>
 
-                  {/* Module Bookings */}
-                  <div className="grid gap-4">
-                    {moduleBookings.length === 0 ? (
-                      <Card className="p-8 text-center bg-gray-50 border-dashed border-2">
-                        <ModuleIcon
-                          className={`w-16 h-16 mx-auto mb-4 ${
-                            module.color === "blue"
-                              ? "text-blue-300"
-                              : module.color === "green"
-                                ? "text-green-300"
-                                : module.color === "purple"
-                                  ? "text-purple-300"
-                                  : "text-orange-300"
-                          }`}
-                        />
-                        <h4 className="text-lg font-medium text-gray-700 mb-2">
-                          {module.emptyMessage}
-                        </h4>
-                        <p className="text-sm text-gray-500 mb-4">
-                          Start planning your next {module.name.toLowerCase()}{" "}
-                          adventure
-                        </p>
-                        <Link to={module.searchLink}>
-                          <Button
-                            size="sm"
-                            className={`${
+                  {/* Collapsible Module Content */}
+                  {!isCollapsed && (
+                    <div className="grid gap-4 animate-in slide-in-from-top-2 duration-200">
+                      {moduleBookings.length === 0 ? (
+                        <Card className="p-8 text-center bg-gray-50 border-dashed border-2">
+                          <ModuleIcon
+                            className={`w-16 h-16 mx-auto mb-4 ${
                               module.color === "blue"
-                                ? "bg-blue-600 hover:bg-blue-700"
+                                ? "text-blue-300"
                                 : module.color === "green"
-                                  ? "bg-green-600 hover:bg-green-700"
+                                  ? "text-green-300"
                                   : module.color === "purple"
-                                    ? "bg-purple-600 hover:bg-purple-700"
-                                    : "bg-orange-600 hover:bg-orange-700"
-                            } text-white`}
-                          >
-                            <ModuleIcon className="w-4 h-4 mr-2" />
-                            Search {module.name}
-                          </Button>
-                        </Link>
-                      </Card>
-                    ) : (
-                      moduleBookings.map((booking, index) => (
-                        <Card key={index} className="overflow-hidden">
-                          <CardHeader
-                            className={`bg-gradient-to-r ${
-                              module.color === "blue"
-                                ? "from-blue-50 to-blue-100"
-                                : module.color === "green"
-                                  ? "from-green-50 to-green-100"
-                                  : module.color === "purple"
-                                    ? "from-purple-50 to-purple-100"
-                                    : "from-orange-50 to-orange-100"
+                                    ? "text-purple-300"
+                                    : "text-orange-300"
                             }`}
-                          >
-                            <div className="flex items-center justify-between">
-                              <div>
-                                <CardTitle className="text-lg font-semibold text-gray-900">
-                                  {module.id === "flights"
-                                    ? "Mumbai ⇄ Dubai"
-                                    : module.id === "hotels"
-                                      ? "Hotel Booking"
-                                      : module.id === "sightseeing"
-                                        ? "Sightseeing Tour"
-                                        : "Transfer Service"}
-                                </CardTitle>
-                                <p className="text-sm text-gray-600">
-                                  Booking Reference:{" "}
-                                  {booking.bookingDetails?.bookingRef || "N/A"}
-                                </p>
+                          />
+                          <h4 className="text-lg font-medium text-gray-700 mb-2">
+                            {hasActiveSearch ? `No ${module.name.toLowerCase()} match your search` : module.emptyMessage}
+                          </h4>
+                          <p className="text-sm text-gray-500 mb-4">
+                            {hasActiveSearch
+                              ? `Try adjusting your search terms or clear the filter`
+                              : `Start planning your next ${module.name.toLowerCase()} adventure`
+                            }
+                          </p>
+                          {!hasActiveSearch && (
+                            <Link to={module.searchLink}>
+                              <Button
+                                size="sm"
+                                className={`${
+                                  module.color === "blue"
+                                    ? "bg-blue-600 hover:bg-blue-700"
+                                    : module.color === "green"
+                                      ? "bg-green-600 hover:bg-green-700"
+                                      : module.color === "purple"
+                                        ? "bg-purple-600 hover:bg-purple-700"
+                                        : "bg-orange-600 hover:bg-orange-700"
+                                } text-white`}
+                              >
+                                <ModuleIcon className="w-4 h-4 mr-2" />
+                                Search {module.name}
+                              </Button>
+                            </Link>
+                          )}
+                        </Card>
+                      ) : (
+                        moduleBookings.map((booking, index) => (
+                          <Card key={index} className="overflow-hidden hover:shadow-lg transition-shadow">
+                            <CardHeader
+                              className={`bg-gradient-to-r ${
+                                module.color === "blue"
+                                  ? "from-blue-50 to-blue-100"
+                                  : module.color === "green"
+                                    ? "from-green-50 to-green-100"
+                                    : module.color === "purple"
+                                      ? "from-purple-50 to-purple-100"
+                                      : "from-orange-50 to-orange-100"
+                              }`}
+                            >
+                              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                                <div>
+                                  <CardTitle className="text-lg font-semibold text-gray-900">
+                                    {module.id === "flights"
+                                      ? "Mumbai ⇄ Dubai"
+                                      : module.id === "hotels"
+                                        ? "Hotel Booking"
+                                        : module.id === "sightseeing"
+                                          ? "Sightseeing Tour"
+                                          : "Transfer Service"}
+                                  </CardTitle>
+                                  <p className="text-sm text-gray-600">
+                                    Booking Reference:{" "}
+                                    <span className="font-mono font-medium">
+                                      {booking.bookingDetails?.bookingRef || "N/A"}
+                                    </span>
+                                  </p>
+                                </div>
+                                <div className="text-left sm:text-right">
+                                  <Badge
+                                    variant="secondary"
+                                    className="bg-green-100 text-green-800 border-green-200"
+                                  >
+                                    {getBookingStatus(
+                                      booking.bookingDetails?.bookingDate,
+                                    )}
+                                  </Badge>
+                                  <p className="text-sm text-gray-600 mt-1">
+                                    Booked on{" "}
+                                    {formatDate(
+                                      booking.bookingDetails?.bookingDate,
+                                    )}
+                                  </p>
+                                </div>
                               </div>
-                              <div className="text-right">
-                                <Badge
-                                  variant="secondary"
-                                  className="bg-green-100 text-green-800 border-green-200"
-                                >
-                                  {getBookingStatus(
-                                    booking.bookingDetails?.bookingDate,
-                                  )}
-                                </Badge>
-                                <p className="text-sm text-gray-600 mt-1">
-                                  Booked on{" "}
-                                  {formatDate(
-                                    booking.bookingDetails?.bookingDate,
-                                  )}
-                                </p>
-                              </div>
-                            </div>
-                          </CardHeader>
+                            </CardHeader>
 
-                          <CardContent className="p-6">
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                              {/* Booking Details */}
-                              <div className="space-y-4">
+                            <CardContent className="p-6">
+                              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                                {/* Booking Details */}
+                                <div className="space-y-4">
+                                  <div>
+                                    <h4 className="font-semibold text-gray-900 mb-2">
+                                      {module.id === "flights"
+                                        ? "Flight Details"
+                                        : module.id === "hotels"
+                                          ? "Hotel Details"
+                                          : module.id === "sightseeing"
+                                            ? "Tour Details"
+                                            : "Transfer Details"}
+                                    </h4>
+                                    {module.id === "flights" && (
+                                      <>
+                                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                          <MapPin className="w-4 h-4" />
+                                          <span>BOM ⇄ DXB</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                          <Calendar className="w-4 h-4" />
+                                          <span>Sat, Aug 3 • 10:15 - 13:45</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                          <Plane className="w-4 h-4" />
+                                          <span>
+                                            {booking.flightDetails?.airline ||
+                                              "Airlines"}{" "}
+                                            {booking.flightDetails
+                                              ?.flightNumber || "FL-001"}
+                                          </span>
+                                        </div>
+                                      </>
+                                    )}
+                                    {module.id === "hotels" && (
+                                      <>
+                                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                          <MapPin className="w-4 h-4" />
+                                          <span>Dubai Hotel</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                          <Calendar className="w-4 h-4" />
+                                          <span>
+                                            Check-in: Aug 3 • Check-out: Aug 10
+                                          </span>
+                                        </div>
+                                      </>
+                                    )}
+                                    {module.id === "sightseeing" && (
+                                      <>
+                                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                          <MapPin className="w-4 h-4" />
+                                          <span>City Tour • Dubai</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                          <Calendar className="w-4 h-4" />
+                                          <span>Aug 5 • 9:00 AM - 6:00 PM</span>
+                                        </div>
+                                      </>
+                                    )}
+                                    {module.id === "transfers" && (
+                                      <>
+                                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                          <MapPin className="w-4 h-4" />
+                                          <span>Airport → Hotel</span>
+                                        </div>
+                                        <div className="flex items-center space-x-2 text-sm text-gray-600">
+                                          <Calendar className="w-4 h-4" />
+                                          <span>Aug 3 • 2:00 PM</span>
+                                        </div>
+                                      </>
+                                    )}
+                                  </div>
+                                </div>
+
+                                {/* Passenger/Guest Details */}
                                 <div>
                                   <h4 className="font-semibold text-gray-900 mb-2">
-                                    {module.id === "flights"
-                                      ? "Flight Details"
-                                      : module.id === "hotels"
-                                        ? "Hotel Details"
-                                        : module.id === "sightseeing"
-                                          ? "Tour Details"
-                                          : "Transfer Details"}
+                                    {module.id === "hotels"
+                                      ? "Guest Details"
+                                      : "Passengers"}
                                   </h4>
-                                  {module.id === "flights" && (
-                                    <>
-                                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                        <MapPin className="w-4 h-4" />
-                                        <span>BOM ⇄ DXB</span>
-                                      </div>
-                                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                        <Calendar className="w-4 h-4" />
-                                        <span>Sat, Aug 3 • 10:15 - 13:45</span>
-                                      </div>
-                                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                        <Plane className="w-4 h-4" />
-                                        <span>
-                                          {booking.flightDetails?.airline ||
-                                            "Airlines"}{" "}
-                                          {booking.flightDetails
-                                            ?.flightNumber || "FL-001"}
-                                        </span>
-                                      </div>
-                                    </>
-                                  )}
-                                  {module.id === "hotels" && (
-                                    <>
-                                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                        <MapPin className="w-4 h-4" />
-                                        <span>Dubai Hotel</span>
-                                      </div>
-                                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                        <Calendar className="w-4 h-4" />
-                                        <span>
-                                          Check-in: Aug 3 • Check-out: Aug 10
-                                        </span>
-                                      </div>
-                                    </>
-                                  )}
-                                  {module.id === "sightseeing" && (
-                                    <>
-                                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                        <MapPin className="w-4 h-4" />
-                                        <span>City Tour • Dubai</span>
-                                      </div>
-                                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                        <Calendar className="w-4 h-4" />
-                                        <span>Aug 5 • 9:00 AM - 6:00 PM</span>
-                                      </div>
-                                    </>
-                                  )}
-                                  {module.id === "transfers" && (
-                                    <>
-                                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                        <MapPin className="w-4 h-4" />
-                                        <span>Airport → Hotel</span>
-                                      </div>
-                                      <div className="flex items-center space-x-2 text-sm text-gray-600">
-                                        <Calendar className="w-4 h-4" />
-                                        <span>Aug 3 • 2:00 PM</span>
-                                      </div>
-                                    </>
-                                  )}
-                                </div>
-                              </div>
-
-                              {/* Passenger/Guest Details */}
-                              <div>
-                                <h4 className="font-semibold text-gray-900 mb-2">
-                                  {module.id === "hotels"
-                                    ? "Guest Details"
-                                    : "Passengers"}
-                                </h4>
-                                <div className="space-y-2">
-                                  {booking.bookingDetails?.passengers?.map(
-                                    (passenger, pIndex) => (
-                                      <div key={pIndex} className="text-sm">
-                                        <div className="font-medium text-gray-900">
-                                          {passenger.firstName}{" "}
-                                          {passenger.lastName}
+                                  <div className="space-y-2">
+                                    {booking.bookingDetails?.passengers?.map(
+                                      (passenger, pIndex) => (
+                                        <div key={pIndex} className="text-sm">
+                                          <div className="font-medium text-gray-900">
+                                            {passenger.firstName}{" "}
+                                            {passenger.lastName}
+                                          </div>
+                                          <div className="text-gray-600">
+                                            Adult {pIndex + 1} •{" "}
+                                            {passenger.title || "Not specified"}
+                                          </div>
                                         </div>
-                                        <div className="text-gray-600">
-                                          Adult {pIndex + 1} •{" "}
-                                          {passenger.title || "Not specified"}
-                                        </div>
-                                      </div>
-                                    ),
-                                  )}
-                                </div>
+                                      ),
+                                    )}
+                                  </div>
 
-                                <div className="mt-4">
-                                  <h5 className="font-medium text-gray-900 mb-1">
-                                    Contact
-                                  </h5>
-                                  <div className="text-sm text-gray-600">
-                                    <div className="flex items-center">
-                                      <Mail className="w-3 h-3 mr-1" />
-                                      {
-                                        booking.bookingDetails?.contactDetails
-                                          ?.email
-                                      }
-                                    </div>
-                                    <div className="flex items-center">
-                                      <Phone className="w-3 h-3 mr-1" />
-                                      {
-                                        booking.bookingDetails?.contactDetails
-                                          ?.countryCode
-                                      }{" "}
-                                      {
-                                        booking.bookingDetails?.contactDetails
-                                          ?.phone
-                                      }
+                                  <div className="mt-4">
+                                    <h5 className="font-medium text-gray-900 mb-1">
+                                      Contact
+                                    </h5>
+                                    <div className="text-sm text-gray-600">
+                                      <div className="flex items-center">
+                                        <Mail className="w-3 h-3 mr-1" />
+                                        {
+                                          booking.bookingDetails?.contactDetails
+                                            ?.email
+                                        }
+                                      </div>
+                                      <div className="flex items-center">
+                                        <Phone className="w-3 h-3 mr-1" />
+                                        {
+                                          booking.bookingDetails?.contactDetails
+                                            ?.countryCode
+                                        }{" "}
+                                        {
+                                          booking.bookingDetails?.contactDetails
+                                            ?.phone
+                                        }
+                                      </div>
                                     </div>
                                   </div>
                                 </div>
-                              </div>
 
-                              {/* Booking Summary */}
-                              <div>
-                                <h4 className="font-semibold text-gray-900 mb-2">
-                                  Booking Summary
-                                </h4>
-                                <div className="space-y-2 text-sm">
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">
-                                      Total Paid
-                                    </span>
-                                    <span className="font-semibold text-gray-900">
-                                      {booking.bookingDetails?.currency
-                                        ?.symbol || "₹"}
-                                      {booking.bookingDetails?.totalAmount?.toLocaleString() ||
-                                        "0"}
-                                    </span>
+                                {/* Booking Summary */}
+                                <div>
+                                  <h4 className="font-semibold text-gray-900 mb-2">
+                                    Booking Summary
+                                  </h4>
+                                  <div className="space-y-2 text-sm">
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">
+                                        Total Paid
+                                      </span>
+                                      <span className="font-semibold text-gray-900">
+                                        {booking.bookingDetails?.currency
+                                          ?.symbol || "₹"}
+                                        {booking.bookingDetails?.totalAmount?.toLocaleString() ||
+                                          "0"}
+                                      </span>
+                                    </div>
+                                    <div className="flex justify-between">
+                                      <span className="text-gray-600">
+                                        Payment ID
+                                      </span>
+                                      <span className="text-gray-900 font-mono text-xs">
+                                        {booking.paymentId?.slice(0, 12) || "N/A"}
+                                        ...
+                                      </span>
+                                    </div>
                                   </div>
-                                  <div className="flex justify-between">
-                                    <span className="text-gray-600">
-                                      Payment ID
-                                    </span>
-                                    <span className="text-gray-900 font-mono text-xs">
-                                      {booking.paymentId?.slice(0, 12) || "N/A"}
-                                      ...
-                                    </span>
+
+                                  <div className="mt-4 space-y-2">
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="w-full"
+                                    >
+                                      <Eye className="w-4 h-4 mr-2" />
+                                      View{" "}
+                                      {module.id === "flights"
+                                        ? "Ticket"
+                                        : "Voucher"}
+                                    </Button>
+                                    <Button
+                                      variant="outline"
+                                      size="sm"
+                                      className="w-full"
+                                    >
+                                      <Download className="w-4 h-4 mr-2" />
+                                      Download
+                                    </Button>
                                   </div>
                                 </div>
-
-                                <div className="mt-4 space-y-2">
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="w-full"
-                                  >
-                                    <Eye className="w-4 h-4 mr-2" />
-                                    View{" "}
-                                    {module.id === "flights"
-                                      ? "Ticket"
-                                      : "Voucher"}
-                                  </Button>
-                                  <Button
-                                    variant="outline"
-                                    size="sm"
-                                    className="w-full"
-                                  >
-                                    <Download className="w-4 h-4 mr-2" />
-                                    Download
-                                  </Button>
-                                </div>
                               </div>
-                            </div>
-                          </CardContent>
-                        </Card>
-                      ))
-                    )}
-                  </div>
+                            </CardContent>
+                          </Card>
+                        ))
+                      )}
+                    </div>
+                  )}
                 </div>
               );
             })}
