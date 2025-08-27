@@ -2,7 +2,7 @@
 export function FaredownLogo({ className = "" }: { className?: string }) {
   return (
     <img
-      src="/logo/faredown-logo.png?v=1"
+      src="/logo/faredown-logo.png?v=2"
       alt="Faredown Logo"
       className={`h-16 w-auto block object-contain ${className}`}
       loading="eager"
