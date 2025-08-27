@@ -812,7 +812,10 @@ export function LandingPageSearchPanel() {
 
                       {/* From Cities Dropdown */}
                       {flightStates.showFromCities && (
-                        <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
+                        <div
+                          onClick={(e) => e.stopPropagation()}
+                          className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto"
+                        >
                           <div className="mb-3">
                             <h3 className="text-sm font-semibold text-gray-900 mb-2">
                               Airport, city or country
