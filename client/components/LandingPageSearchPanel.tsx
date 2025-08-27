@@ -951,16 +951,25 @@ export function LandingPageSearchPanel() {
                     </div>
 
                     {/* Depart Date */}
-                    <div className="relative flex-1 lg:min-w-[240px] lg:max-w-[280px] w-full">
+                    <div className="relative w-full">
                       <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                         Depart
                       </label>
                       <Popover
                         open={flightStates.showCalendar}
-                        onOpenChange={(open) => updateFlightState('showCalendar', open)}
+                        onOpenChange={(open) => {
+                          updateFlightState('showCalendar', open);
+                          if (open) {
+                            updateFlightState('showFromCities', false);
+                            updateFlightState('showToCities', false);
+                          }
+                        }}
                       >
                         <PopoverTrigger asChild>
-                          <button className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation">
+                          <button
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation"
+                          >
                             <Calendar className="w-4 h-4 text-gray-500 mr-2 flex-shrink-0" />
                             <div className="flex items-center space-x-2 min-w-0">
                               <span className="text-sm text-gray-700 font-medium truncate">
@@ -987,9 +996,12 @@ export function LandingPageSearchPanel() {
                     </div>
 
                     {/* Remove Button */}
-                    <div className="w-full lg:w-auto lg:min-w-[120px]">
+                    <div className="w-full">
                       <Button
-                        onClick={() => removeFlight(flight.id)}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          removeFlight(flight.id);
+                        }}
                         variant="outline"
                         className="w-full h-10 text-red-600 border-red-300 hover:bg-red-50 hover:border-red-400"
                       >
