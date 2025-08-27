@@ -37,6 +37,7 @@ import {
   Save,
   X,
   ChevronDown,
+  ChevronUp,
   Menu,
   LogOut,
   BookOpen,
@@ -46,6 +47,8 @@ import {
   Plus,
   Hotel,
   Camera,
+  Search,
+  Filter,
 } from "lucide-react";
 import {
   DropdownMenu,
