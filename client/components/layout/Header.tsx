@@ -552,7 +552,7 @@ export function Header() {
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
                         <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
-                          <Globe className="w-4 h-4" />
+                          <span className="w-4 h-4 flex items-center justify-center">🌐</span>
                           <span>English</span>
                           <ChevronDown className="w-4 h-4" />
                         </button>
