@@ -134,6 +134,12 @@ export function LandingPageSearchPanel() {
 
   const removeFlight = (flightId: string) => {
     setAdditionalFlights(additionalFlights.filter(flight => flight.id !== flightId));
+    // Clean up states for removed flight
+    setAdditionalFlightStates(prev => {
+      const updated = { ...prev };
+      delete updated[flightId];
+      return updated;
+    });
   };
 
   const updateFlight = (flightId: string, field: keyof FlightLeg, value: any) => {
