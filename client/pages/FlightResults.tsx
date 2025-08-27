@@ -1718,8 +1718,12 @@ export default function FlightResults() {
                   to="/"
                   className="flex items-center space-x-2 text-white hover:text-blue-200 transition-colors"
                 >
-                  <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
-                    <Plane className="w-4 h-4 text-[#003580]" />
+                  <div className="w-8 h-8 flex items-center justify-center">
+                    <img
+                      src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F0f75ab6716bf42ffad706127c032e3b6?format=webp&width=800"
+                      alt="FareDown Logo"
+                      className="w-8 h-8 object-contain"
+                    />
                   </div>
                   <span className="text-2xl font-bold">faredown.com</span>
                 </Link>
@@ -1758,7 +1762,7 @@ export default function FlightResults() {
                 <DropdownMenu style={{ display: "none" }}>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
-                      { code: "en", name: "English", flag: "🇬🇧" },
+                      { code: "en", name: "English", flag: "��🇧" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
                       { code: "de", name: "Deutsch", flag: "���🇪" },
