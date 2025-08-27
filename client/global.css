@@ -131,7 +131,10 @@
 
     /* Faredown specific colors */
     --faredown-blue: 217 100% 25%;
+    --faredown-blue-secondary: 207 100% 38%;
     --faredown-orange: 45 98% 50%;
+    --faredown-orange-hover: 43 93% 46%;
+    --faredown-orange-active: 42 100% 41%;
     --faredown-green: 142 70% 45%;
     --faredown-red: 0 75% 55%;
     --faredown-gray: 214 16% 46%;
