@@ -1,41 +1,11 @@
 import React from "react";
+import { Layout } from "@/components/layout/Layout";
 import { Link } from "react-router-dom";
 import { Plane } from "lucide-react";
 
 export default function Index() {
   return (
-    <div className="min-h-screen bg-white">
-      {/* Header */}
-      <header className="bg-blue-700 text-white">
-        <div className="max-w-7xl mx-auto px-4 py-3">
-          <div className="flex items-center justify-between">
-            <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
-                <Plane className="w-4 h-4 text-[#003580]" />
-              </div>
-              <span className="text-xl font-bold tracking-tight">
-                faredown.com
-              </span>
-            </Link>
-            <div className="flex items-center space-x-6">
-              <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
-                <Link
-                  to="/?tab=flights"
-                  className="text-white hover:text-blue-200"
-                >
-                  Flights
-                </Link>
-                <span className="text-white hover:text-blue-200 cursor-pointer">
-                  Hotels
-                </span>
-                <span className="text-white hover:text-blue-200 cursor-pointer">
-                  Transfers
-                </span>
-              </nav>
-            </div>
-          </div>
-        </div>
-      </header>
+    <Layout showSearch={false}>
 
       {/* Hero Section */}
       <section className="bg-gradient-to-br from-blue-600 via-purple-600 to-blue-800 text-white py-24">
@@ -191,23 +161,6 @@ export default function Index() {
         </div>
       </section>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-8">
-        <div className="max-w-6xl mx-auto px-4 text-center">
-          <div className="flex items-center justify-center space-x-2 mb-2">
-            <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
-              <Plane className="w-4 h-4 text-[#003580]" />
-            </div>
-            <h3 className="text-xl font-bold">faredown.com</h3>
-          </div>
-          <p className="text-gray-400 mb-4">
-            The World's First Online Travel Bargain Portal™
-          </p>
-          <p className="text-gray-500 text-sm">
-            © 2025 Faredown Bookings and Travels Pvt Ltd. All rights reserved.
-          </p>
-        </div>
-      </footer>
-    </div>
+    </Layout>
   );
 }
