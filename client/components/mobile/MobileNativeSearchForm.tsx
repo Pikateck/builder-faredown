@@ -666,12 +666,12 @@ export function MobileNativeSearchForm({
             {/* Search Button */}
             <Button
               onClick={handleSearch}
-              className={`w-full py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 mt-6 transition-all ${
+              className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2 mt-6 transition-all duration-150 ${
                 module === "flights" &&
                 tripType === "multi-city" &&
                 !validateMultiCitySearch().isValid
                   ? "bg-gray-400 cursor-not-allowed text-white"
-                  : "bg-[#003580] hover:bg-[#002660] text-white"
+                  : "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black"
               }`}
               disabled={
                 module === "flights" &&
