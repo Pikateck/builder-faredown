@@ -1601,8 +1601,12 @@ export default function BookingFlow() {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
-              <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
-                <Plane className="w-4 h-4 text-[#003580]" />
+              <div className="w-8 h-8 flex items-center justify-center">
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F0f75ab6716bf42ffad706127c032e3b6?format=webp&width=800"
+                  alt="FareDown Logo"
+                  className="w-8 h-8 object-contain"
+                />
               </div>
               <span className="text-lg sm:text-xl font-bold tracking-tight">
                 faredown.com
