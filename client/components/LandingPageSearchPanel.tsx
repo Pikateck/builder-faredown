@@ -763,7 +763,7 @@ export function LandingPageSearchPanel() {
 
           {/* Additional Flights Section - Only for Multi-city */}
           {tripType === "multi-city" && (
-            <div className="mt-4 space-y-3">
+            <div className="mt-4 space-y-3 overflow-visible">
               {/* Additional Flight Rows */}
               {additionalFlights.map((flight, index) => {
                 const flightStates = additionalFlightStates[flight.id] || {
