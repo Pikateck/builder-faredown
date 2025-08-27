@@ -22,6 +22,7 @@ import {
   Shield,
   Headphones,
   X,
+  Globe,
   Bell,
   Menu,
   LogOut,
@@ -43,6 +44,7 @@ export function Header() {
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const [showLanguageMenu, setShowLanguageMenu] = useState(false);
   const [showMobileUserDropdown, setShowMobileUserDropdown] = useState(false);
 
   // User state
@@ -115,7 +117,18 @@ export function Header() {
                 <button
                   className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                   onClick={() => {
+                    setShowLanguageMenu(!showLanguageMenu);
+                    setShowNotifications(false);
+                    setShowMobileMenu(false);
+                  }}
+                >
+                  <Globe className="w-5 h-5" />
+                </button>
+                <button
+                  className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
+                  onClick={() => {
                     setShowNotifications(!showNotifications);
+                    setShowLanguageMenu(false);
                     setShowMobileMenu(false);
                   }}
                 >
@@ -126,6 +139,7 @@ export function Header() {
                   onClick={() => {
                     setShowMobileMenu(!showMobileMenu);
                     setShowNotifications(false);
+                    setShowLanguageMenu(false);
                   }}
                   className="p-2 hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                   data-mobile-menu-trigger
@@ -472,51 +486,6 @@ export function Header() {
             </div>
           </div>
         )}
-
-
-        {/* Notifications Dropdown - Mobile */}
-        {showNotifications && (
-          <div className="fixed inset-0 z-40 md:hidden">
-            <div
-              className="fixed inset-0 bg-black bg-opacity-50"
-              onClick={() => setShowNotifications(false)}
-            />
-            <div className="fixed top-16 right-4 bg-white rounded-lg shadow-xl border border-gray-200 w-80">
-              <div className="p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="text-lg font-semibold text-gray-900">Notifications</h3>
-                  <span className="bg-red-500 text-white text-xs px-2 py-1 rounded-full">2</span>
-                </div>
-                <div className="space-y-3">
-                  <div className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
-                    <div className="w-2 h-2 bg-blue-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">Flight Deal Alert</p>
-                      <p className="text-xs text-gray-600">Mumbai to Dubai from ₹12,999</p>
-                      <p className="text-xs text-gray-500 mt-1">2 hours ago</p>
-                    </div>
-                  </div>
-                  <div className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
-                    <div className="w-2 h-2 bg-yellow-500 rounded-full mt-2 flex-shrink-0"></div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">Booking Reminder</p>
-                      <p className="text-xs text-gray-600">Complete your hotel booking</p>
-                      <p className="text-xs text-gray-500 mt-1">1 day ago</p>
-                    </div>
-                  </div>
-                  <div className="text-center pt-3 border-t border-gray-200">
-                    <button
-                      onClick={() => setShowNotifications(false)}
-                      className="text-sm text-blue-600 hover:text-blue-800 font-medium"
-                    >
-                      View All Notifications
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
       </div>
 
       {/* Desktop Layout (≥769px) */}
@@ -578,10 +547,17 @@ export function Header() {
               </nav>
 
               <div className="flex items-center space-x-2 md:space-x-6">
-                {/* Currency */}
+                {/* Language and Currency */}
                 <div className="flex items-center space-x-4 text-sm">
                   <div className="relative">
                     <DropdownMenu>
+                      <DropdownMenuTrigger asChild>
+                        <button className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1">
+                          <Globe className="w-4 h-4" />
+                          <span>English</span>
+                          <ChevronDown className="w-4 h-4" />
+                        </button>
+                      </DropdownMenuTrigger>
                       <DropdownMenuContent className="w-48">
                         {[
                           { code: "en", name: "English", flag: "🇬🇧" },
