@@ -63,6 +63,7 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 // Import the price in words utility
 import { formatPriceInWords } from "@/lib/numberToWords";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
+import { FaredownLogo } from "@/components/FaredownLogo";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
@@ -1602,11 +1603,7 @@ export default function BookingFlow() {
             {/* Logo */}
             <Link to="/" className="flex items-center space-x-2">
               <div className="w-8 h-8 flex items-center justify-center">
-                <img
-                  src="/logo/faredown-logo.png"
-                  alt="FareDown Logo"
-                  className="w-8 h-8 object-contain"
-                />
+                <FaredownLogo className="w-8 h-8" />
               </div>
               <span className="text-lg sm:text-xl font-bold tracking-tight">
                 faredown.com
