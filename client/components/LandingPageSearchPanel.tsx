@@ -85,6 +85,13 @@ export function LandingPageSearchPanel() {
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
 
+  // Additional flights UI states
+  const [additionalFlightStates, setAdditionalFlightStates] = useState<{[key: string]: {
+    showFromCities: boolean;
+    showToCities: boolean;
+    showCalendar: boolean;
+  }}>({});
+
   // Date states
   const [departureDate, setDepartureDate] = useState<Date>(
     new Date(Date.now() + 24 * 60 * 60 * 1000),
