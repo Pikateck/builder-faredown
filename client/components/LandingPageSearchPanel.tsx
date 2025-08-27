@@ -957,7 +957,7 @@ export function LandingPageSearchPanel() {
                     </div>
 
                     {/* Depart Date */}
-                    <div className="relative w-full">
+                    <div className="relative flex-1 lg:min-w-[240px] lg:max-w-[280px] w-full">
                       <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                         Depart
                       </label>
