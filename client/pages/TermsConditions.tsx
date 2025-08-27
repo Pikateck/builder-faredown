@@ -1,15 +1,10 @@
-import { Header } from "@/components/Header";
+import { Layout } from "@/components/layout/Layout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Link } from "react-router-dom";
-import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 export default function TermsConditions() {
-  useScrollToTop();
-
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
-
+    <Layout showSearch={false}>
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="bg-white rounded-lg shadow-sm">
           <div className="bg-[#003580] text-white px-8 py-6 rounded-t-lg">
@@ -352,92 +347,6 @@ export default function TermsConditions() {
         </div>
       </div>
 
-      {/* Footer */}
-      <footer className="bg-gray-900 text-white py-12">
-        <div className="max-w-6xl mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-            <div>
-              <h3 className="text-xl font-bold mb-4">Faredown</h3>
-              <p className="text-gray-400 text-sm">
-                The world's first travel portal where you control the price.
-                Bargain for better deals on flights and hotels.
-              </p>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Quick Links</h4>
-              <div className="space-y-2 text-sm">
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  About Us
-                </div>
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  How It Works
-                </div>
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  Contact
-                </div>
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  Help Center
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Services</h4>
-              <div className="space-y-2 text-sm">
-                <Link
-                  to="/flights"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Flights
-                </Link>
-                <Link
-                  to="/hotels"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Hotels
-                </Link>
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  Car Rentals
-                </div>
-                <div className="text-gray-400 hover:text-white cursor-pointer">
-                  Travel Insurance
-                </div>
-              </div>
-            </div>
-            <div>
-              <h4 className="font-semibold mb-4">Legal</h4>
-              <div className="space-y-2 text-sm">
-                <Link
-                  to="/privacy-policy"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Privacy Policy
-                </Link>
-                <Link
-                  to="/terms-conditions"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Terms of Service
-                </Link>
-                <Link
-                  to="/cookie-policy"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Cookie Policy
-                </Link>
-                <Link
-                  to="/refund-policy"
-                  className="text-gray-400 hover:text-white cursor-pointer block"
-                >
-                  Refund Policy
-                </Link>
-              </div>
-            </div>
-          </div>
-          <div className="border-t border-gray-800 mt-8 pt-8 text-center text-sm text-gray-400">
-            <p>&copy; 2024 Faredown.com. All rights reserved.</p>
-          </div>
-        </div>
-      </footer>
-    </div>
+    </Layout>
   );
 }
