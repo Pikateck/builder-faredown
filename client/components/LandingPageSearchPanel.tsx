@@ -50,6 +50,15 @@ interface Travelers {
   children: number;
 }
 
+interface FlightLeg {
+  id: string;
+  from: string;
+  fromCode: string;
+  to: string;
+  toCode: string;
+  date: Date;
+}
+
 export function LandingPageSearchPanel() {
   const navigate = useNavigate();
 
@@ -70,6 +79,26 @@ export function LandingPageSearchPanel() {
   ); // Tomorrow
   const [returnDate, setReturnDate] = useState<Date>(addDays(new Date(), 8)); // Week from now
   const [showCalendar, setShowCalendar] = useState(false);
+
+  // Multi-city states
+  const [multiCityLegs, setMultiCityLegs] = useState<FlightLeg[]>([
+    {
+      id: "leg1",
+      from: "Mumbai",
+      fromCode: "BOM",
+      to: "Dubai",
+      toCode: "DXB",
+      date: addDays(new Date(), 1),
+    },
+    {
+      id: "leg2",
+      from: "Dubai",
+      fromCode: "DXB",
+      to: "London",
+      toCode: "LHR",
+      date: addDays(new Date(), 8),
+    },
+  ]);
 
   // Travelers state
   const [travelers, setTravelers] = useState<Travelers>({
