@@ -2067,7 +2067,7 @@ Please keep this ticket for your records.
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
+    <Layout showSearch={false}>
       {/* Header - Landing Page Style */}
       <header
         className="text-white sticky top-0 z-40"
@@ -2725,7 +2725,6 @@ Please keep this ticket for your records.
           </div>
         </DialogContent>
       </Dialog>
-      <MobileNavigation />
-    </div>
+    </Layout>
   );
 }
