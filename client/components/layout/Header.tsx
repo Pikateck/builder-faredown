@@ -473,44 +473,6 @@ export function Header() {
           </div>
         )}
 
-        {/* Language Menu Dropdown - Mobile */}
-        {showLanguageMenu && (
-          <div className="fixed inset-0 z-40 md:hidden">
-            <div
-              className="fixed inset-0 bg-black bg-opacity-50"
-              onClick={() => setShowLanguageMenu(false)}
-            />
-            <div className="fixed top-16 right-4 bg-white rounded-lg shadow-xl border border-gray-200 w-64">
-              <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-900 mb-3">Language</h3>
-                <div className="space-y-2">
-                  {[
-                    { code: "en", name: "English", flag: "🇬🇧" },
-                    { code: "es", name: "Español", flag: "🇪🇸" },
-                    { code: "fr", name: "Français", flag: "🇫🇷" },
-                    { code: "de", name: "Deutsch", flag: "🇩🇪" },
-                    { code: "it", name: "Italiano", flag: "🇮🇹" },
-                    { code: "pt", name: "Português", flag: "🇵🇹" },
-                    { code: "ar", name: "العربية", flag: "🇸🇦" },
-                    { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
-                    { code: "ja", name: "日本語", flag: "🇯🇵" },
-                    { code: "ko", name: "한국어", flag: "🇰🇷" },
-                    { code: "zh", name: "中文", flag: "🇨🇳" },
-                  ].map((language) => (
-                    <button
-                      key={language.code}
-                      onClick={() => setShowLanguageMenu(false)}
-                      className="w-full flex items-center space-x-3 px-3 py-2 text-left hover:bg-gray-100 rounded-lg"
-                    >
-                      <span className="text-lg">{language.flag}</span>
-                      <span className="font-medium">{language.name}</span>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Notifications Dropdown - Mobile */}
         {showNotifications && (
