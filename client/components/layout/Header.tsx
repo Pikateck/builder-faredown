@@ -116,7 +116,6 @@ export function Header() {
                   className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors touch-manipulation"
                   onClick={() => {
                     setShowNotifications(!showNotifications);
-                    setShowLanguageMenu(false);
                     setShowMobileMenu(false);
                   }}
                 >
