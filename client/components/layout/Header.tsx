@@ -113,7 +113,7 @@ export function Header() {
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F43e54b7031eb478ca70fd5d337e458cb?format=webp&width=800"
                   alt="Faredown Logo"
-                  className="h-12 object-contain"
+                  className="h-16 object-contain"
                 />
               </div>
               <div className="flex items-center space-x-3">
@@ -502,7 +502,7 @@ export function Header() {
                 <img
                   src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F43e54b7031eb478ca70fd5d337e458cb?format=webp&width=800"
                   alt="Faredown Logo"
-                  className="h-12 object-contain"
+                  className="h-16 object-contain"
                 />
               </Link>
 
