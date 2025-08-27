@@ -154,6 +154,7 @@ export function LandingPageSearchPanel() {
   useEffect(() => {
     if (tripType !== "multi-city") {
       setAdditionalFlights([]);
+      setAdditionalFlightStates({});
     }
   }, [tripType]);
 
