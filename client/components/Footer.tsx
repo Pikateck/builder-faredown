@@ -28,11 +28,9 @@ export function Footer() {
           {/* Brand */}
           <div className="space-y-3">
             <div className="flex items-center gap-2">
-              <img
-                src="/images/faredown-icon.png"
-                alt="Faredown"
-                className="h-6 w-6 object-contain"
-              />
+              <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
+                <span className="text-[#003580] font-bold text-sm">NEW</span>
+              </div>
               <span className="text-lg font-bold text-white">
                 faredown.com
               </span>
