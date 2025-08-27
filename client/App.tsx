@@ -50,6 +50,7 @@ import CookiePolicy from "./pages/CookiePolicy";
 import Saved from "./pages/Saved";
 import NotFound from "./pages/NotFound";
 import MembershipCard from "./pages/MembershipCard";
+import FooterTest from "./pages/FooterTest";
 
 // Mobile pages
 import MobileSplash from "./pages/mobile/MobileSplash";
