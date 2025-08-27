@@ -28,7 +28,7 @@ export function Footer() {
           <div className="space-y-4">
             <div className="flex items-center">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F43e54b7031eb478ca70fd5d337e458cb?format=webp&width=800"
+                src="/logo/faredown-logo.png"
                 alt="Faredown Logo"
                 className="h-8 object-contain"
               />

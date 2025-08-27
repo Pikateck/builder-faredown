@@ -1720,7 +1720,7 @@ export default function FlightResults() {
                 >
                   <div className="w-8 h-8 flex items-center justify-center">
                     <img
-                      src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F43e54b7031eb478ca70fd5d337e458cb?format=webp&width=800"
+                      src="/logo/faredown-logo.png"
                       alt="FareDown Logo"
                       className="w-8 h-8 object-contain"
                     />
@@ -5169,7 +5169,7 @@ export default function FlightResults() {
                 <div className="flex items-center space-x-2 mb-2">
                   <div className="w-8 h-8 flex items-center justify-center">
                     <img
-                      src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F43e54b7031eb478ca70fd5d337e458cb?format=webp&width=800"
+                      src="/logo/faredown-logo.png"
                       alt="FareDown Logo"
                       className="w-8 h-8 object-contain"
                     />
