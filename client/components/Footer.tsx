@@ -18,35 +18,26 @@ export function Footer() {
   };
 
   return (
-    <footer
-      className="bg-[#003580] text-white/90 border-t-4 border-[#febb02]"
-      data-footer-version="v3"
-      style={{ minHeight: '280px' }}
-    >
-      <div className="mx-auto max-w-7xl px-4 py-8 sm:py-6">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
+    <footer className="bg-[#003580] text-white" data-footer-version="v4">
+      <div className="mx-auto max-w-7xl px-4 py-6 md:py-8">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+          
           {/* Brand */}
           <div className="space-y-3">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
-                <span className="text-[#003580] font-bold text-sm">NEW</span>
-              </div>
-              <span className="text-lg font-bold text-white">
-                faredown.com
-              </span>
-            </div>
-            <p className="text-white/70 text-[13px]">
+            <img 
+              src="/logo/faredown-logo.png?v=4" 
+              alt="faredown.com" 
+              className="h-6 w-auto" 
+            />
+            <p className="text-white/75 text-[13px] leading-relaxed">
               The world's first AI-powered travel bargain platform.
             </p>
-            <div className="mt-2 bg-[#febb02] text-[#003580] px-3 py-1 rounded-md text-xs font-bold">
-              ✅ NEW COMPACT FOOTER v3 - CACHE UPDATED
-            </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="text-sm font-semibold mb-3">Quick Links</h4>
-            <ul className="space-y-2 text-[13px]">
+            <h4 className="font-semibold mb-3 text-white text-[14px]">Quick Links</h4>
+            <ul className="space-y-2 text-[13px] text-white/85">
               {[
                 { label: "Flights", path: "/flights" },
                 { label: "Hotels", path: "/hotels" },
@@ -60,7 +51,7 @@ export function Footer() {
                 <li key={item.label}>
                   <button
                     onClick={() => handleNavigation(item.path)}
-                    className="text-white/80 hover:text-[#0071c2] transition-colors cursor-pointer"
+                    className="hover:text-[#0071c2] transition-colors cursor-pointer"
                   >
                     {item.label}
                   </button>
@@ -69,67 +60,54 @@ export function Footer() {
             </ul>
           </div>
 
-          {/* Trust & Reviews */}
-          <div>
-            <h4 className="text-sm font-semibold mb-3">Trust & Reviews</h4>
-            <div className="text-[13px] text-white/80">
-              <div className="flex items-center gap-2">
-                <span className="inline-flex items-center gap-1">4.9★</span>
-                <span>Excellent – 50,000+ reviews</span>
-              </div>
-              <div className="mt-2 text-white/60 italic">
-                "Saved ₹15,000 on my Dubai trip using AI Bargaining!"
-              </div>
+          {/* Trust */}
+          <div className="text-[13px] text-white/85">
+            <h4 className="font-semibold mb-3 text-white text-[14px]">Trust</h4>
+            <div className="font-semibold text-white">4.9★ Excellent — 50,000+ reviews</div>
+            <div className="mt-2 text-white/65 italic">
+              "AI bargaining works perfectly!"
             </div>
           </div>
 
           {/* Stay Connected */}
-          <div>
-            <h4 className="text-sm font-semibold mb-3">Stay Connected</h4>
-            <div className="flex items-center gap-3 mb-3">
-              {[
-                { Icon: Facebook, href: "https://facebook.com", label: "facebook" },
-                { Icon: Instagram, href: "https://instagram.com", label: "instagram" },
-                { Icon: Twitter, href: "https://twitter.com", label: "x" },
-                { Icon: Linkedin, href: "https://linkedin.com", label: "linkedin" }
-              ].map(({ Icon, href, label }) => (
-                <a
-                  key={label}
-                  href={href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  aria-label={label}
-                  className="opacity-80 hover:opacity-100 transition-opacity"
-                >
-                  <Icon className="text-[18px] w-[18px] h-[18px]" />
-                </a>
-              ))}
+          <div className="space-y-3">
+            <h4 className="font-semibold text-white text-[14px]">Stay Connected</h4>
+            <div className="flex gap-3 text-[18px] opacity-80">
+              <a href="#" aria-label="Facebook" className="hover:opacity-100 transition-opacity">
+                <Facebook className="w-[18px] h-[18px]" strokeWidth={2} />
+              </a>
+              <a href="#" aria-label="Instagram" className="hover:opacity-100 transition-opacity">
+                <Instagram className="w-[18px] h-[18px]" strokeWidth={2} />
+              </a>
+              <a href="#" aria-label="X" className="hover:opacity-100 transition-opacity">
+                <Twitter className="w-[18px] h-[18px]" strokeWidth={2} />
+              </a>
+              <a href="#" aria-label="LinkedIn" className="hover:opacity-100 transition-opacity">
+                <Linkedin className="w-[18px] h-[18px]" strokeWidth={2} />
+              </a>
             </div>
-            <form className="flex items-center gap-2">
-              <Input
+            <form className="flex gap-2">
+              <input
                 type="email"
                 placeholder="Your email"
-                className="w-full h-9 rounded-md px-3 text-[13px] text-[#001833] placeholder:text-black/50 bg-white border-0 focus:ring-2 focus:ring-[#0071c2]"
+                className="h-9 w-full rounded-md bg-white px-3 text-[13px] text-[#001833] placeholder:text-black/50 border-0 focus:ring-2 focus:ring-[#0071c2] focus:outline-none"
               />
-              <Button
+              <button
                 type="submit"
-                className="h-9 px-3 rounded-md bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black text-sm font-medium border-0"
+                className="h-9 px-3 rounded-md bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black text-sm font-medium transition-colors"
               >
                 Subscribe
-              </Button>
+              </button>
             </form>
           </div>
+
         </div>
       </div>
-
+      
       <div className="border-t border-white/10">
-        <div className="mx-auto max-w-7xl px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-2 text-[12px] text-white/70">
-          <div>
-            © {new Date().getFullYear()} Faredown Bookings and Travels Pvt Ltd. All rights reserved.
-          </div>
-          <div className="opacity-80">
-            Partners: Amadeus · Sabre · Hotelbeds · GIATA
-          </div>
+        <div className="mx-auto max-w-7xl px-4 py-2 flex flex-col sm:flex-row items-center justify-between text-[12px] text-white/70 gap-2">
+          <span>© 2025 Faredown Bookings and Travels Pvt Ltd.</span>
+          <span className="opacity-80">Partners: Amadeus · Sabre · Hotelbeds · GIATA</span>
         </div>
       </div>
     </footer>
