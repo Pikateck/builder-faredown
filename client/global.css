@@ -189,11 +189,14 @@
 
     --border: 214 25% 18%;
     --input: 214 25% 15%;
-    --ring: 217 100% 60%;
+    --ring: 217 100% 35%;
 
     /* Dark mode Faredown colors */
-    --faredown-blue: 217 100% 60%;
-    --faredown-orange: 30 100% 60%;
+    --faredown-blue: 217 100% 35%;
+    --faredown-blue-secondary: 207 100% 45%;
+    --faredown-orange: 45 98% 55%;
+    --faredown-orange-hover: 43 93% 50%;
+    --faredown-orange-active: 42 100% 45%;
     --faredown-green: 142 70% 50%;
     --faredown-red: 0 75% 60%;
     --faredown-gray: 215 25% 65%;
