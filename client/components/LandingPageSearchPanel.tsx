@@ -226,14 +226,7 @@ export function LandingPageSearchPanel() {
 
   // Close dropdowns when clicking outside
   useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      const target = event.target as Element;
-
-      // Don't close if clicking on a button or inside a dropdown
-      if (target.closest('button') || target.closest('.absolute.top-14')) {
-        return;
-      }
-
+    const handleClickOutside = () => {
       setShowFromCities(false);
       setShowToCities(false);
       setShowClassDropdown(false);
