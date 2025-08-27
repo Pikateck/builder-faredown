@@ -108,30 +108,30 @@
     --popover: 0 0% 100%;
     --popover-foreground: 214 31% 17%;
 
-    --primary: 217 100% 50%;
+    --primary: 217 100% 25%;
     --primary-foreground: 0 0% 100%;
 
-    --secondary: 210 15% 95%;
-    --secondary-foreground: 214 31% 17%;
+    --secondary: 207 100% 38%;
+    --secondary-foreground: 0 0% 100%;
 
     --muted: 210 15% 96%;
     --muted-foreground: 214 16% 46%;
 
-    --accent: 30 100% 55%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 45 98% 50%;
+    --accent-foreground: 0 0% 0%;
 
     --destructive: 0 75% 55%;
     --destructive-foreground: 0 0% 100%;
 
     --border: 214 20% 90%;
     --input: 214 20% 95%;
-    --ring: 217 100% 50%;
+    --ring: 217 100% 25%;
 
     --radius: 0.75rem;
 
     /* Faredown specific colors */
-    --faredown-blue: 217 100% 50%;
-    --faredown-orange: 30 100% 55%;
+    --faredown-blue: 217 100% 25%;
+    --faredown-orange: 45 98% 50%;
     --faredown-green: 142 70% 45%;
     --faredown-red: 0 75% 55%;
     --faredown-gray: 214 16% 46%;
