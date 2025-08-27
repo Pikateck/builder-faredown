@@ -121,14 +121,26 @@ export function LandingPageSearchPanel() {
 
   // Multi-city functions - simple approach
   const addFlight = () => {
+    const newFlightId = `flight${additionalFlights.length + 2}`;
     const newFlight: FlightLeg = {
-      id: `flight${additionalFlights.length + 2}`,
+      id: newFlightId,
       from: "Mumbai",
       fromCode: "BOM",
       to: "Dubai",
       toCode: "DXB",
       date: addDays(new Date(), additionalFlights.length + 2),
     };
+
+    // Initialize state for the new flight
+    setAdditionalFlightStates(prev => ({
+      ...prev,
+      [newFlightId]: {
+        showFromCities: false,
+        showToCities: false,
+        showCalendar: false,
+      }
+    }));
+
     setAdditionalFlights([...additionalFlights, newFlight]);
   };
 
