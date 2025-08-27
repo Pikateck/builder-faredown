@@ -122,6 +122,15 @@ export default function Account() {
   const [editingProfileId, setEditingProfileId] = useState(null);
   const [editingProfileData, setEditingProfileData] = useState({});
 
+  // Search and collapsible functionality
+  const [searchQuery, setSearchQuery] = useState("");
+  const [collapsedSections, setCollapsedSections] = useState({
+    flights: false,
+    hotels: false,
+    sightseeing: false,
+    transfers: false,
+  });
+
   // Edit profile functions
   const startEditingProfile = (profile) => {
     setEditingProfileId(profile.id);
