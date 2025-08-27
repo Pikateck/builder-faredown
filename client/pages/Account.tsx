@@ -79,10 +79,6 @@ export default function Account() {
     email: "john@example.com",
     phone: "+91 9876543210",
   });
-  const [showMobileMenu, setShowMobileMenu] = useState(false);
-  const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
-  const [selectedCurrency] = useState({ code: "INR", symbol: "₹" });
-  const [isLoggedIn] = useState(true);
   const [userName] = useState("Zubin Aibara");
 
   // Settings modal states
