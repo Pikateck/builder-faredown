@@ -97,11 +97,11 @@ export function Footer() {
               <input
                 type="email"
                 placeholder="Email"
-                className="h-12 md:h-14 w-80 md:w-96 rounded-lg px-4 text-sm text-[#001833] placeholder:text-gray-500 border border-white/20 bg-white/95 focus:ring-2 focus:ring-[#0071c2] focus:border-[#0071c2] focus:outline-none transition-all duration-300"
+                className="h-14 w-80 md:w-[420px] rounded-lg px-3 md:px-4 text-sm text-[#001833] placeholder:text-gray-500 border border-white/20 bg-white/95 focus:ring-2 focus:ring-[#0071c2] focus:border-[#0071c2] focus:outline-none transition-all duration-300"
               />
               <button
                 type="submit"
-                className="h-12 md:h-14 px-6 md:px-8 rounded-lg bg-[#febb02] hover:bg-[#e6a602] text-black text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap"
+                className="h-14 px-6 md:px-8 rounded-lg bg-[#febb02] hover:bg-[#e6a602] text-black text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap"
               >
                 Subscribe
               </button>
