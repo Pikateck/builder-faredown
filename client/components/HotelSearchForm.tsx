@@ -17,8 +17,13 @@ import {
   Plus,
   Minus,
   X,
+  Hotel,
+  Building,
+  Landmark,
+  Plane,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
+import { searchHotels, getTypeIcon, getTypeLabel, type SearchResult } from "@/lib/hotelSearchData";
 
 interface GuestConfig {
   adults: number;
@@ -47,6 +52,8 @@ export function HotelSearchForm({
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isUserTyping, setIsUserTyping] = useState(false);
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [selectedResult, setSelectedResult] = useState<SearchResult | null>(null);
 
   // Set default dates to future dates
   const tomorrow = new Date();
@@ -90,21 +97,17 @@ export function HotelSearchForm({
     return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
-  // Popular destinations
-  const popularDestinations = [
-    "Dubai, United Arab Emirates",
-    "London, United Kingdom",
-    "Barcelona, Spain",
-    "Paris, France",
-    "Rome, Italy",
-    "New York, United States",
-    "Bangkok, Thailand",
-    "Singapore",
-    "Tokyo, Japan",
-    "Sydney, Australia",
-    "Mumbai, India",
-    "Delhi, India",
-  ];
+  // Update search results when input changes
+  useEffect(() => {
+    if (isUserTyping) {
+      const results = searchHotels(inputValue);
+      setSearchResults(results);
+    } else {
+      // Show popular destinations when not typing
+      const results = searchHotels("", 8);
+      setSearchResults(results);
+    }
+  }, [inputValue, isUserTyping]);
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
@@ -178,6 +181,8 @@ export function HotelSearchForm({
     });
 
     // Only validate dates, destination is optional for browsing
+    // Use selected result location if available
+    const searchDestination = selectedResult ? selectedResult.location : destination;
     if (!checkInDate || !checkOutDate) {
       setErrorMessage("Please select check-in and check-out dates");
       setShowError(true);
@@ -273,7 +278,21 @@ export function HotelSearchForm({
               >
                 <MapPin className="w-4 h-4 text-gray-500 mr-2" />
                 <div className="flex items-center space-x-2 min-w-0">
-                  {destination ? (
+                  {selectedResult ? (
+                    <>
+                      <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                        {selectedResult.code || "HTL"}
+                      </div>
+                      <div className="flex flex-col min-w-0">
+                        <span className="text-sm text-gray-900 font-medium truncate">
+                          {selectedResult.name}
+                        </span>
+                        <span className="text-xs text-gray-500 truncate">
+                          {getTypeLabel(selectedResult.type)} • {selectedResult.description}
+                        </span>
+                      </div>
+                    </>
+                  ) : destination ? (
                     <>
                       <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
                         {destinationCode || "HTL"}
@@ -284,12 +303,12 @@ export function HotelSearchForm({
                     </>
                   ) : (
                     <span className="text-sm text-gray-500 font-medium">
-                      Where are you going?
+                      Search hotels, cities, landmarks...
                     </span>
                   )}
                 </div>
               </button>
-              {destination && (
+              {(destination || selectedResult) && (
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
@@ -297,6 +316,7 @@ export function HotelSearchForm({
                     setInputValue("");
                     setIsUserTyping(false);
                     setDestinationCode("");
+                    setSelectedResult(null);
                     setIsDestinationOpen(false);
                   }}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -307,66 +327,116 @@ export function HotelSearchForm({
               )}
             </div>
 
-            {/* Destinations Dropdown */}
+            {/* Smart Search Dropdown */}
             {isDestinationOpen && (
               <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
                 <div className="mb-3">
                   <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                    Hotel destination
+                    {isUserTyping && inputValue ? `Search results for "${inputValue}"` : 'Popular destinations'}
                   </h3>
                   <div className="relative">
+                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
                     <input
                       type="text"
                       value={inputValue}
                       onChange={(e) => {
                         const value = e.target.value;
                         setInputValue(value);
-                        setIsUserTyping(true);
+                        setIsUserTyping(value.length > 0);
                       }}
-                      placeholder="Search destinations..."
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                      placeholder="Search hotels, cities, landmarks..."
+                      className="w-full pl-10 pr-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                      autoFocus
                     />
                   </div>
                 </div>
 
                 <div className="space-y-1">
-                  {popularDestinations
-                    .filter((dest) =>
-                      dest
-                        .toLowerCase()
-                        .includes((inputValue || "").toLowerCase()),
-                    )
-                    .slice(0, 8)
-                    .map((dest, index) => (
-                      <button
-                        key={index}
-                        onClick={() => {
-                          setDestination(dest);
-                          setDestinationCode(
-                            dest.split(",")[0]?.substring(0, 3).toUpperCase() ||
-                              "HTL",
-                          );
-                          setIsDestinationOpen(false);
-                          setInputValue("");
-                          setIsUserTyping(false);
-                        }}
-                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                            <MapPin className="w-4 h-4 text-blue-600" />
-                          </div>
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">
-                              {dest}
+                  {searchResults.length > 0 ? (
+                    searchResults.map((result) => {
+                      const getIcon = () => {
+                        switch (result.type) {
+                          case 'hotel':
+                            return <Hotel className="w-4 h-4 text-blue-600" />;
+                          case 'city':
+                            return <Building className="w-4 h-4 text-green-600" />;
+                          case 'area':
+                            return <MapPin className="w-4 h-4 text-purple-600" />;
+                          case 'landmark':
+                            return <Landmark className="w-4 h-4 text-orange-600" />;
+                          case 'airport':
+                            return <Plane className="w-4 h-4 text-gray-600" />;
+                          default:
+                            return <MapPin className="w-4 h-4 text-blue-600" />;
+                        }
+                      };
+
+                      const getIconBg = () => {
+                        switch (result.type) {
+                          case 'hotel':
+                            return 'bg-blue-50';
+                          case 'city':
+                            return 'bg-green-50';
+                          case 'area':
+                            return 'bg-purple-50';
+                          case 'landmark':
+                            return 'bg-orange-50';
+                          case 'airport':
+                            return 'bg-gray-50';
+                          default:
+                            return 'bg-blue-50';
+                        }
+                      };
+
+                      return (
+                        <button
+                          key={result.id}
+                          onClick={() => {
+                            setSelectedResult(result);
+                            setDestination(result.location);
+                            setDestinationCode(result.code || "HTL");
+                            setIsDestinationOpen(false);
+                            setInputValue("");
+                            setIsUserTyping(false);
+                          }}
+                          className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded transition-colors"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className={`w-8 h-8 ${getIconBg()} rounded-full flex items-center justify-center flex-shrink-0`}>
+                              {getIcon()}
                             </div>
-                            <div className="text-xs text-gray-500">
-                              Hotel destination
+                            <div className="min-w-0 flex-1">
+                              <div className="text-sm font-medium text-gray-900 truncate">
+                                {result.name}
+                                {result.rating && (
+                                  <span className="ml-2 text-xs text-yellow-600">
+                                    ⭐ {result.rating}
+                                  </span>
+                                )}
+                              </div>
+                              <div className="text-xs text-gray-500 truncate">
+                                {getTypeLabel(result.type)} • {result.description}
+                              </div>
+                              <div className="text-xs text-gray-400 truncate">
+                                {result.location}
+                              </div>
                             </div>
+                            {result.type === 'hotel' && (
+                              <div className="text-xs text-blue-600 font-medium px-2 py-1 bg-blue-50 rounded">
+                                Hotel
+                              </div>
+                            )}
                           </div>
-                        </div>
-                      </button>
-                    ))}
+                        </button>
+                      );
+                    })
+                  ) : (
+                    <div className="px-3 py-6 text-center text-gray-500">
+                      <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
+                      <p className="text-sm">No results found</p>
+                      <p className="text-xs mt-1">Try searching for hotels, cities, or landmarks</p>
+                    </div>
+                  )}
                 </div>
               </div>
             )}
