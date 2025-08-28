@@ -69,39 +69,39 @@ export function Footer() {
                 aria-label="Facebook"
                 className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-300 group"
               >
-                <Facebook className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-300" strokeWidth={1.5} />
+                <Facebook className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-150" strokeWidth={1.5} />
               </a>
               <a
                 href="#"
                 aria-label="Instagram"
-                className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-300 group"
+                className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-150 group"
               >
-                <Instagram className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-300" strokeWidth={1.5} />
+                <Instagram className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-150" strokeWidth={1.5} />
               </a>
               <a
                 href="#"
                 aria-label="X"
-                className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-300 group"
+                className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-150 group"
               >
-                <Twitter className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-300" strokeWidth={1.5} />
+                <Twitter className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-150" strokeWidth={1.5} />
               </a>
               <a
                 href="#"
                 aria-label="LinkedIn"
-                className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-300 group"
+                className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-150 group"
               >
-                <Linkedin className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-300" strokeWidth={1.5} />
+                <Linkedin className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-150" strokeWidth={1.5} />
               </a>
             </div>
             <form className="flex items-center gap-2">
               <input
                 type="email"
                 placeholder="Email"
-                className="h-14 w-80 md:w-[420px] rounded-lg px-3 md:px-4 text-sm text-[#001833] placeholder:text-gray-500 border border-white/20 bg-white/95 focus:ring-2 focus:ring-[#0071c2] focus:border-[#0071c2] focus:outline-none transition-all duration-300"
+                className="h-14 w-80 md:w-[420px] rounded-lg px-3 md:px-4 text-sm text-[#001833] placeholder:text-gray-500 border border-white/20 bg-white/95 focus:ring-2 focus:ring-[#0071c2] focus:border-[#0071c2] focus:outline-none transition-all duration-150"
               />
               <button
                 type="submit"
-                className="h-14 px-6 md:px-8 rounded-lg bg-[#febb02] hover:bg-[#e6a602] text-black text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap"
+                className="h-14 px-6 md:px-8 rounded-lg bg-[#febb02] hover:bg-[#e6a602] text-black text-sm font-semibold transition-all duration-150 shadow-lg hover:shadow-xl whitespace-nowrap"
               >
                 Subscribe
               </button>
