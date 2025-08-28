@@ -100,20 +100,20 @@ export function UnifiedLandingPage({
 
 
         {/* How it Works - Premium Cards with Standalone Icons */}
-        <section className="py-16 md:py-20 bg-white">
-          <div className="max-w-5xl mx-auto px-6">
-            <div className="text-center mb-16">
-              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
+        <section className="py-14 md:py-18 bg-white">
+          <div className="max-w-6xl mx-auto px-6">
+            <div className="text-center mb-14">
+              <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
                 How It Works
               </h2>
-              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+              <p className="text-base md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 Advanced AI technology meets premium travel in three simple steps
               </p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Upgrade */}
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-md hover:shadow-lg transition-all duration-150 border border-gray-100 text-center">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-all duration-150 border border-gray-100 text-center">
                 <div className="mb-6">
                   <Search className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-[#003580] mx-auto" strokeWidth={1.5} />
                 </div>
@@ -126,7 +126,7 @@ export function UnifiedLandingPage({
               </div>
 
               {/* Bargain */}
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-md hover:shadow-lg transition-all duration-150 border border-gray-100 text-center">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-all duration-150 border border-gray-100 text-center">
                 <div className="mb-6">
                   <TrendingUp className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-[#003580] mx-auto" strokeWidth={1.5} />
                 </div>
@@ -139,7 +139,7 @@ export function UnifiedLandingPage({
               </div>
 
               {/* Book */}
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-md hover:shadow-lg transition-all duration-150 border border-gray-100 text-center">
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-all duration-150 border border-gray-100 text-center">
                 <div className="mb-6">
                   <CheckCircle className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-[#003580] mx-auto" strokeWidth={1.5} />
                 </div>
