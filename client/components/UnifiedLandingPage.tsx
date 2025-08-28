@@ -99,56 +99,90 @@ export function UnifiedLandingPage({
 
 
 
-        {/* How it Works - Premium Cards with Standalone Icons */}
-        <section className="py-14 md:py-18 bg-white">
-          <div className="max-w-6xl mx-auto px-6">
-            <div className="text-center mb-14">
-              <h2 className="text-2xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
-                How It Works
+        {/* How it Works - Futuristic Glassmorphism Design */}
+        <section className="py-16 md:py-24 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50 relative overflow-hidden">
+          {/* Animated Background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-cyan-400/10 animate-pulse"></div>
+          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-bounce" style={{animationDuration: '6s'}}></div>
+          <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-purple-400/20 rounded-full blur-3xl animate-bounce" style={{animationDuration: '8s', animationDelay: '2s'}}></div>
+
+          <div className="max-w-7xl mx-auto px-6 relative">
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-2 mb-6 shadow-lg border border-white/20">
+                <Sparkles className="w-5 h-5 text-[#febb02]" />
+                <span className="text-sm font-semibold text-gray-700 tracking-wide">AI-POWERED TECHNOLOGY</span>
+              </div>
+              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+                How It <span className="bg-gradient-to-r from-[#003580] to-[#0071c2] bg-clip-text text-transparent">Works</span>
               </h2>
-              <p className="text-base md:text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Advanced AI technology meets premium travel in three simple steps
+              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
+                Experience the future of travel with our revolutionary AI bargaining system
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Upgrade */}
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-all duration-150 border border-gray-100 text-center">
-                <div className="mb-6">
-                  <Search className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-[#003580] mx-auto" strokeWidth={1.5} />
+              <div className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
+                <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105">
+                  <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">01</div>
+                  <div className="mb-8">
+                    <div className="w-20 h-20 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-6 shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
+                      <Search className="w-10 h-10 text-white" strokeWidth={1.5} />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    Upgrade
+                  </h3>
+                  <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-6">
+                    Pick your desired room type (Deluxe / Suite / View).
+                  </p>
+                  <div className="w-full h-1 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-full"></div>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
-                  Upgrade
-                </h3>
-                <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                  Pick your desired room type (Deluxe / Suite / View).
-                </p>
               </div>
 
               {/* Bargain */}
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-all duration-150 border border-gray-100 text-center">
-                <div className="mb-6">
-                  <TrendingUp className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-[#003580] mx-auto" strokeWidth={1.5} />
+              <div className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#0071c2] to-[#febb02] rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
+                <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105">
+                  <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">02</div>
+                  <div className="mb-8">
+                    <div className="w-20 h-20 bg-gradient-to-br from-[#0071c2] to-[#febb02] rounded-2xl flex items-center justify-center mb-6 shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
+                      <TrendingUp className="w-10 h-10 text-white" strokeWidth={1.5} />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    Bargain
+                  </h3>
+                  <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
+                    AI negotiates live with suppliers — <strong className="text-[#003580]">3 attempts</strong>, <strong className="text-[#003580]">30-second</strong> timer.
+                  </p>
+                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0071c2] to-[#febb02] rounded-full px-4 py-2 text-white text-sm font-semibold">
+                    <Clock className="w-4 h-4" />
+                    <span>Real-time AI</span>
+                  </div>
+                  <div className="w-full h-1 bg-gradient-to-r from-[#0071c2] to-[#febb02] rounded-full mt-4"></div>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
-                  Bargain
-                </h3>
-                <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                  AI negotiates live with suppliers — <strong>3 attempts</strong>, <strong>30-second</strong> timer.
-                </p>
               </div>
 
               {/* Book */}
-              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-sm hover:shadow-md transition-all duration-150 border border-gray-100 text-center">
-                <div className="mb-6">
-                  <CheckCircle className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-[#003580] mx-auto" strokeWidth={1.5} />
+              <div className="group relative">
+                <div className="absolute inset-0 bg-gradient-to-r from-[#febb02] to-[#003580] rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
+                <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105">
+                  <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">03</div>
+                  <div className="mb-8">
+                    <div className="w-20 h-20 bg-gradient-to-br from-[#febb02] to-[#003580] rounded-2xl flex items-center justify-center mb-6 shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
+                      <CheckCircle className="w-10 h-10 text-white" strokeWidth={1.5} />
+                    </div>
+                  </div>
+                  <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
+                    Book
+                  </h3>
+                  <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-6">
+                    Instant confirmation & support. Sleep suite tonight.
+                  </p>
+                  <div className="w-full h-1 bg-gradient-to-r from-[#febb02] to-[#003580] rounded-full"></div>
                 </div>
-                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
-                  Book
-                </h3>
-                <p className="text-base md:text-lg text-gray-600 leading-relaxed">
-                  Instant confirmation & support. Sleep suite tonight.
-                </p>
               </div>
             </div>
           </div>
