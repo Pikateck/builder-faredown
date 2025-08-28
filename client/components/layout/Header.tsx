@@ -51,9 +51,9 @@ export function Header() {
   // Get active tab from URL
   const getActiveTab = () => {
     // Check actual route paths first
-    if (location.pathname === "/" || location.pathname === "/flights")
-      return "flights";
-    if (location.pathname.includes("/hotels")) return "hotels";
+    if (location.pathname === "/" || location.pathname === "/hotels")
+      return "hotels";
+    if (location.pathname.includes("/flights")) return "flights";
     if (location.pathname.includes("/sightseeing")) return "sightseeing";
     if (location.pathname.includes("/transfers")) return "transfers";
 
@@ -62,7 +62,7 @@ export function Header() {
     const tab = searchParams.get("tab");
     if (tab) return tab;
 
-    return "flights";
+    return "hotels";
   };
 
   const activeTab = getActiveTab();
@@ -70,11 +70,11 @@ export function Header() {
   // Handle tab change
   const handleTabChange = (tab: string) => {
     switch (tab) {
-      case "flights":
-        navigate("/flights");
-        break;
       case "hotels":
         navigate("/hotels");
+        break;
+      case "flights":
+        navigate("/flights");
         break;
       case "sightseeing":
         navigate("/sightseeing");
@@ -109,8 +109,8 @@ export function Header() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8114d5f1e1b846358a2324b036ea8a2e?format=webp&width=800"
-                  alt="Faredown"
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=800"
+                  alt="Faredown Logo"
                   className="w-8 h-8 object-contain"
                   style={{background: 'none', border: 'none', boxShadow: 'none'}}
                 />
@@ -490,8 +490,8 @@ export function Header() {
               {/* Logo */}
               <Link to="/" className="flex items-center space-x-2">
                 <img
-                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8114d5f1e1b846358a2324b036ea8a2e?format=webp&width=800"
-                  alt="Faredown"
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=800"
+                  alt="Faredown Logo"
                   className="w-8 h-8 object-contain"
                   style={{background: 'none', border: 'none', boxShadow: 'none'}}
                 />
@@ -503,15 +503,6 @@ export function Header() {
               {/* Centered Navigation */}
               <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                 <button
-                  onClick={() => handleTabChange("flights")}
-                  className={cn(
-                    "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
-                    activeTab === "flights" && "border-b-2 border-white",
-                  )}
-                >
-                  <span>Flights</span>
-                </button>
-                <button
                   onClick={() => handleTabChange("hotels")}
                   className={cn(
                     "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
@@ -519,6 +510,15 @@ export function Header() {
                   )}
                 >
                   <span>Hotels</span>
+                </button>
+                <button
+                  onClick={() => handleTabChange("flights")}
+                  className={cn(
+                    "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
+                    activeTab === "flights" && "border-b-2 border-white",
+                  )}
+                >
+                  <span>Flights</span>
                 </button>
                 <button
                   onClick={() => handleTabChange("sightseeing")}
@@ -542,7 +542,7 @@ export function Header() {
                   onClick={() => handleNavigation("/help-center")}
                   className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
                 >
-                  <span>Help Center</span>
+                  <span>Help Centre</span>
                 </button>
               </nav>
 
