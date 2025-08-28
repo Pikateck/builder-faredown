@@ -394,28 +394,39 @@ export function UnifiedLandingPage({
               />
             </div>
             <h2 className="text-4xl font-bold mb-4 tracking-tight">
-              Travel Smarter. Bargain Better.
+              Get the Faredown App
             </h2>
             <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
-              Download the Faredown app for exclusive mobile deals and instant
-              AI bargaining
+              Exclusive mobile deals and instant AI bargaining on the go.
             </p>
 
             <div className="flex flex-col sm:flex-row items-center justify-center gap-6">
-              <Button className="bg-black hover:bg-gray-900 text-white py-4 px-8 rounded-2xl flex items-center space-x-3 transition-all duration-300 shadow-lg">
-                <Download className="w-5 h-5" strokeWidth={1.5} />
-                <div className="text-left">
-                  <div className="text-xs opacity-75">Download on the</div>
-                  <div className="font-bold">App Store</div>
-                </div>
-              </Button>
-              <Button className="bg-black hover:bg-gray-900 text-white py-4 px-8 rounded-2xl flex items-center space-x-3 transition-all duration-300 shadow-lg">
-                <Download className="w-5 h-5" strokeWidth={1.5} />
-                <div className="text-left">
-                  <div className="text-xs opacity-75">Get it on</div>
-                  <div className="font-bold">Google Play</div>
-                </div>
-              </Button>
+              <a
+                href="https://apps.apple.com/app/faredown"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Download Faredown on the App Store"
+                className="hover:opacity-80 transition-opacity duration-300"
+              >
+                <img
+                  src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
+                  alt="Download on the App Store"
+                  className="h-12 md:h-14"
+                />
+              </a>
+              <a
+                href="https://play.google.com/store/apps/details?id=com.faredown.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Get Faredown on Google Play"
+                className="hover:opacity-80 transition-opacity duration-300"
+              >
+                <img
+                  src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
+                  alt="Get it on Google Play"
+                  className="h-12 md:h-14"
+                />
+              </a>
             </div>
           </div>
         </section>
