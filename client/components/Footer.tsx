@@ -159,18 +159,9 @@ export function Footer() {
       {/* Bottom Bar */}
       <div className="border-t border-white/20 bg-black/20 backdrop-blur-sm">
         <div className="mx-auto max-w-7xl px-6 py-6">
-          <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="text-center">
             <div className="text-sm text-blue-200">
               © 2025 Faredown Bookings and Travels Pvt Ltd. All rights reserved.
-            </div>
-            <div className="flex items-center gap-6 text-xs text-blue-300">
-              <span>Powered by</span>
-              <div className="flex gap-3">
-                <span className="bg-white/10 px-2 py-1 rounded-md">Amadeus</span>
-                <span className="bg-white/10 px-2 py-1 rounded-md">Sabre</span>
-                <span className="bg-white/10 px-2 py-1 rounded-md">Hotelbeds</span>
-                <span className="bg-white/10 px-2 py-1 rounded-md">GIATA</span>
-              </div>
             </div>
           </div>
         </div>
