@@ -432,27 +432,27 @@ export function UnifiedLandingPage({
         </section>
 
         {/* Newsletter - Elegant */}
-        <section className="py-16 bg-white">
+        <section className="py-24 bg-white">
           <div className="max-w-4xl mx-auto px-6 text-center">
             <h2 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">
               Stay Ahead with Exclusive Deals
             </h2>
-            <p className="text-xl text-gray-600 mb-10">
+            <p className="text-xl text-gray-600 mb-12">
               Join 2M+ smart travelers getting secret bargains first
             </p>
 
-            <div className="max-w-md mx-auto">
-              <div className="flex bg-gray-50 rounded-2xl p-2 shadow-inner">
+            <div className="max-w-2xl mx-auto">
+              <div className="flex flex-col sm:flex-row bg-gray-50 rounded-2xl p-3 shadow-inner gap-3 sm:gap-2">
                 <Input
                   type="email"
                   placeholder="Enter your email address"
-                  className="flex-1 bg-transparent border-0 px-4 py-3 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-0"
+                  className="flex-1 bg-transparent border-0 px-6 py-4 h-14 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-0 min-w-0"
                 />
-                <Button className="bg-[#febb02] hover:bg-[#e6a602] text-black px-8 py-3 rounded-xl font-bold transition-all duration-300 shadow-lg">
+                <Button className="bg-[#febb02] hover:bg-[#e6a602] text-black px-8 py-4 h-14 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap">
                   Subscribe
                 </Button>
               </div>
-              <p className="text-sm text-gray-500 mt-4">
+              <p className="text-sm text-gray-500 mt-6">
                 No spam, unsubscribe anytime
               </p>
             </div>
