@@ -103,26 +103,26 @@ export function Header({ className }: HeaderProps) {
 
             <nav className="hidden md:flex items-center space-x-6 text-sm font-medium">
               <Link
-                to="/flights"
-                className={cn(
-                  "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
-                  location.pathname === "/flights" || location.pathname === "/"
-                    ? "font-semibold border-b-2 border-white"
-                    : "",
-                )}
-              >
-                <span>Flights</span>
-              </Link>
-              <Link
                 to="/hotels"
                 className={cn(
                   "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
-                  location.pathname === "/hotels"
+                  location.pathname === "/hotels" || location.pathname === "/"
                     ? "font-semibold border-b-2 border-white"
                     : "",
                 )}
               >
                 <span>Hotels</span>
+              </Link>
+              <Link
+                to="/flights"
+                className={cn(
+                  "text-white hover:text-[#e7f0fa] cursor-pointer flex items-center py-4",
+                  location.pathname === "/flights"
+                    ? "font-semibold border-b-2 border-white"
+                    : "",
+                )}
+              >
+                <span>Flights</span>
               </Link>
               <Link
                 to="/sightseeing"
@@ -214,18 +214,18 @@ export function Header({ className }: HeaderProps) {
           <div className="md:hidden mt-4 pb-4 border-t border-blue-600">
             <div className="flex flex-col space-y-3 pt-4">
               <Link
-                to="/flights"
-                className="hover:text-blue-200 transition-colors py-2"
-                onClick={() => setShowMobileMenu(false)}
-              >
-                Flights
-              </Link>
-              <Link
                 to="/hotels"
                 className="hover:text-blue-200 transition-colors py-2"
                 onClick={() => setShowMobileMenu(false)}
               >
                 Hotels
+              </Link>
+              <Link
+                to="/flights"
+                className="hover:text-blue-200 transition-colors py-2"
+                onClick={() => setShowMobileMenu(false)}
+              >
+                Flights
               </Link>
               <Link
                 to="/sightseeing"

@@ -13,14 +13,14 @@ export function MobileNavigation() {
 
   const navItems = [
     {
-      path: "/?tab=flights",
-      icon: Plane,
-      label: "Flights",
-    },
-    {
       path: "/hotels",
       icon: Building2,
       label: "Hotels",
+    },
+    {
+      path: "/?tab=flights",
+      icon: Plane,
+      label: "Flights",
     },
     {
       path: "/sightseeing",
