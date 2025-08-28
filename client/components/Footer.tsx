@@ -93,17 +93,17 @@ export function Footer() {
                 <Linkedin className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-300" strokeWidth={1.5} />
               </a>
             </div>
-            <form className="flex items-center gap-1">
+            <form className="flex items-center gap-2">
               <input
                 type="email"
                 placeholder="Email"
-                className="h-7 w-32 rounded px-2 text-[10px] text-[#001833] placeholder:text-black/50 border-0 focus:ring-1 focus:ring-[#0071c2] focus:outline-none"
+                className="h-12 md:h-14 w-80 md:w-96 rounded-lg px-4 text-sm text-[#001833] placeholder:text-gray-500 border border-white/20 bg-white/95 focus:ring-2 focus:ring-[#0071c2] focus:border-[#0071c2] focus:outline-none transition-all duration-300"
               />
               <button
                 type="submit"
-                className="h-7 px-2 rounded bg-[#febb02] hover:bg-[#e6a602] text-black text-[10px] font-medium transition-colors"
+                className="h-12 md:h-14 px-6 md:px-8 rounded-lg bg-[#febb02] hover:bg-[#e6a602] text-black text-sm font-semibold transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap"
               >
-                Join
+                Subscribe
               </button>
             </form>
           </div>
