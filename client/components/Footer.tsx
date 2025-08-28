@@ -63,34 +63,34 @@ export function Footer() {
 
           {/* Right: Social + Newsletter */}
           <div className="flex items-center gap-4">
-            <div className="flex gap-2">
+            <div className="flex gap-3">
               <a
                 href="#"
                 aria-label="Facebook"
-                className="text-white/70 hover:text-white transition-colors"
+                className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-300 group"
               >
-                <Facebook className="w-3 h-3" strokeWidth={2} />
+                <Facebook className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-300" strokeWidth={1.5} />
               </a>
               <a
                 href="#"
                 aria-label="Instagram"
-                className="text-white/70 hover:text-white transition-colors"
+                className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-300 group"
               >
-                <Instagram className="w-3 h-3" strokeWidth={2} />
+                <Instagram className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-300" strokeWidth={1.5} />
               </a>
               <a
                 href="#"
                 aria-label="X"
-                className="text-white/70 hover:text-white transition-colors"
+                className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-300 group"
               >
-                <Twitter className="w-3 h-3" strokeWidth={2} />
+                <Twitter className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-300" strokeWidth={1.5} />
               </a>
               <a
                 href="#"
                 aria-label="LinkedIn"
-                className="text-white/70 hover:text-white transition-colors"
+                className="w-8 h-8 rounded-full border border-white bg-[#003580] flex items-center justify-center hover:bg-white hover:border-[#003580] transition-all duration-300 group"
               >
-                <Linkedin className="w-3 h-3" strokeWidth={2} />
+                <Linkedin className="w-6 h-6 text-white group-hover:text-[#003580] transition-colors duration-300" strokeWidth={1.5} />
               </a>
             </div>
             <form className="flex items-center gap-1">
