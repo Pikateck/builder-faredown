@@ -219,8 +219,8 @@ export function UnifiedLandingPage({
               <div className="group relative bg-white rounded-2xl p-8 lg:p-12 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
-                  <div className="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Search className="w-10 h-10 lg:w-12 lg:h-12 text-white" strokeWidth={1.5} />
+                  <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <Search className="w-10 h-10 md:w-14 md:h-14 lg:w-18 lg:h-18 text-white" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-white mb-4 transition-colors duration-300">
                     Upgrade
@@ -235,8 +235,8 @@ export function UnifiedLandingPage({
               <div className="group relative bg-white rounded-2xl p-8 lg:p-12 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
-                  <div className="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#0071c2] to-[#003580] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <TrendingUp className="w-10 h-10 lg:w-12 lg:h-12 text-white" strokeWidth={1.5} />
+                  <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#0071c2] to-[#003580] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <TrendingUp className="w-10 h-10 md:w-14 md:h-14 lg:w-18 lg:h-18 text-white" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-white mb-4 transition-colors duration-300">
                     Bargain
@@ -251,8 +251,8 @@ export function UnifiedLandingPage({
               <div className="group relative bg-white rounded-2xl p-8 lg:p-12 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100">
                 <div className="absolute inset-0 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
-                  <div className="w-20 h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <CheckCircle className="w-10 h-10 lg:w-12 lg:h-12 text-white" strokeWidth={1.5} />
+                  <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
+                    <CheckCircle className="w-10 h-10 md:w-14 md:h-14 lg:w-18 lg:h-18 text-white" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-white mb-4 transition-colors duration-300">
                     Book
