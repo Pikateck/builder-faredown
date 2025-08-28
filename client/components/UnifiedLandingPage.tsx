@@ -207,7 +207,7 @@ export function UnifiedLandingPage({
               <div className="absolute top-20 left-1/2 transform -translate-x-1/2 w-full max-w-4xl h-px bg-gradient-to-r from-transparent via-gray-300 to-transparent hidden lg:block"></div>
 
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 relative">
-                {/* Search */}
+                {/* Upgrade */}
                 <div className="text-center relative">
                   <div className="relative inline-block">
                     <div className="w-20 h-20 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mb-8 shadow-lg">
@@ -223,22 +223,14 @@ export function UnifiedLandingPage({
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    Search
+                    Upgrade
                   </h3>
                   <p className="text-gray-600 max-w-xs mx-auto leading-relaxed">
-                    Find your perfect{" "}
-                    {module === "flights"
-                      ? "flight"
-                      : module === "hotels"
-                        ? "hotel"
-                        : module === "sightseeing"
-                          ? "experience"
-                          : "transfer"}{" "}
-                    from our premium inventory
+                    Turn a regular fare into premium travel.
                   </p>
                 </div>
 
-                {/* Negotiate */}
+                {/* Bargain */}
                 <div className="text-center relative">
                   <div className="relative inline-block">
                     <div className="w-20 h-20 bg-gradient-to-br from-[#0071c2] to-[#003580] rounded-3xl flex items-center justify-center mb-8 shadow-lg">
@@ -254,15 +246,14 @@ export function UnifiedLandingPage({
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    Negotiate
+                    Bargain
                   </h3>
                   <p className="text-gray-600 max-w-xs mx-auto leading-relaxed">
-                    Our AI instantly negotiates the best possible upgrade using
-                    market intelligence
+                    AI negotiates live with suppliers — 3 attempts, 30-second timer.
                   </p>
                 </div>
 
-                {/* Secure */}
+                {/* Book */}
                 <div className="text-center relative">
                   <div className="relative inline-block">
                     <div className="w-20 h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-3xl flex items-center justify-center mb-8 shadow-lg">
@@ -278,11 +269,10 @@ export function UnifiedLandingPage({
                     </div>
                   </div>
                   <h3 className="text-2xl font-bold text-gray-900 mb-4">
-                    Secure
+                    Book
                   </h3>
                   <p className="text-gray-600 max-w-xs mx-auto leading-relaxed">
-                    Instant confirmation with premium protection and 24/7
-                    support
+                    Lock the deal with instant confirmation & support.
                   </p>
                 </div>
               </div>
