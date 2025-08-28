@@ -204,32 +204,31 @@ export function UnifiedLandingPage({
 
 
         {/* App CTA - Premium */}
-        <section className="py-20 bg-gradient-to-br from-[#003580] via-[#0071c2] to-[#003580] text-white relative overflow-hidden">
-          <div className={"absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.03\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"1\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"}></div>
-          <div className="max-w-4xl mx-auto px-6 text-center relative">
-            <div className="w-20 h-20 bg-[#febb02] rounded-3xl flex items-center justify-center mx-auto mb-8">
-              <Smartphone className="w-10 h-10 text-[#003580]" strokeWidth={1.5} />
+        <section className="py-14 md:py-16 bg-gradient-to-br from-[#003580] via-[#0071c2] to-[#003580] text-white relative">
+          <div className="max-w-5xl mx-auto px-6 text-center relative">
+            <div className="w-16 h-16 bg-[#febb02] rounded-2xl flex items-center justify-center mx-auto mb-6">
+              <Smartphone className="w-8 h-8 text-[#003580]" strokeWidth={1.5} />
             </div>
 
-            <h2 className="text-4xl font-bold mb-4 tracking-tight">
+            <h2 className="text-2xl md:text-4xl font-bold mb-4 tracking-tight">
               Get the Faredown App
             </h2>
-            <p className="text-xl text-blue-100 mb-10 max-w-2xl mx-auto">
+            <p className="text-base md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
               Exclusive mobile deals and instant AI bargaining on the go.
             </p>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 mb-12">
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
               <a
                 href="https://apps.apple.com/app/faredown"
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Download Faredown on the App Store"
-                className="hover:opacity-80 transition-opacity duration-300"
+                className="hover:opacity-80 transition-opacity duration-150"
               >
                 <img
                   src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
                   alt="Download on the App Store"
-                  className="h-12 md:h-14"
+                  className="h-12 md:h-14 min-h-[48px]"
                 />
               </a>
               <a
@@ -237,28 +236,30 @@ export function UnifiedLandingPage({
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Get Faredown on Google Play"
-                className="hover:opacity-80 transition-opacity duration-300"
+                className="hover:opacity-80 transition-opacity duration-150"
               >
                 <img
                   src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
                   alt="Get it on Google Play"
-                  className="h-12 md:h-14"
+                  className="h-12 md:h-14 min-h-[48px]"
                 />
               </a>
             </div>
 
-            {/* App Features */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-8 text-blue-100">
+            {/* App Features - Compact bullets with tiny icons */}
+            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-blue-100 text-sm">
               <div className="flex items-center gap-2">
-                <Smartphone className="w-5 h-5" strokeWidth={1.5} />
+                <Smartphone className="w-4 h-4" strokeWidth={1.5} />
                 <span>Mobile-only upgrades</span>
               </div>
+              <span className="hidden sm:inline text-blue-200">•</span>
               <div className="flex items-center gap-2">
-                <Zap className="w-5 h-5" strokeWidth={1.5} />
+                <Zap className="w-4 h-4" strokeWidth={1.5} />
                 <span>Live counteroffers</span>
               </div>
+              <span className="hidden sm:inline text-blue-200">•</span>
               <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5" strokeWidth={1.5} />
+                <CheckCircle className="w-4 h-4" strokeWidth={1.5} />
                 <span>One-tap checkout</span>
               </div>
             </div>
