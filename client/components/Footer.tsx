@@ -19,7 +19,7 @@ export function Footer() {
           <div className="flex flex-col md:flex-row items-center gap-6">
             <div className="flex items-center gap-3">
               <img
-                src="/images/faredown-icon.png"
+                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb099b42735944c35a1612487d092bd48?format=webp&width=800"
                 alt="Faredown"
                 className="w-8 h-8"
               />
