@@ -271,12 +271,13 @@ export function UnifiedLandingPage({
           <div className="max-w-4xl mx-auto px-6">
             <div className="flex flex-col items-center gap-6 py-8">
               <div className="flex items-center gap-6">
-                {/* Trustpilot Wordmark - Using placeholder until official SVG is added */}
-                <div className="flex items-center gap-3">
-                  <svg width="120" height="24" viewBox="0 0 120 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-6 w-auto">
-                    <rect width="120" height="24" fill="#00B67A" rx="3"/>
-                    <text x="10" y="16" fill="white" fontSize="12" fontWeight="bold">Trustpilot</text>
-                  </svg>
+                {/* Trustpilot Wordmark - Official SVG from Brandfetch */}
+                <div className="flex items-center gap-4">
+                  <img
+                    src="/assets/partners/trustpilot/trustpilot-wordmark-dark.svg"
+                    alt="Trustpilot rating"
+                    className="h-6 w-auto"
+                  />
                   <a
                     href="#"
                     className="flex items-center gap-2 text-lg font-semibold text-[#00B67A] hover:underline focus:outline-none focus:ring-2 focus:ring-[#00B67A] focus:ring-offset-2 rounded-md px-2 py-1"
@@ -305,7 +306,8 @@ export function UnifiedLandingPage({
                   data-style-height="24"
                   data-theme="light"
                 >
-                  {/* Widget will be loaded here when Trustpilot script is added */}
+                  {/* Widget will be loaded here when Trustpilot script is added:
+                       <script async src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"></script> */}
                 </div>
               </div>
             </div>
