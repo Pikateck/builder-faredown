@@ -97,26 +97,36 @@ export function UnifiedLandingPage({
         {/* Search Panel Section - DO NOT TOUCH */}
         {searchPanel}
 
-
-
         {/* How it Works - Futuristic Glassmorphism Design */}
         <section className="py-16 md:py-24 bg-gradient-to-br from-slate-50 via-blue-50/30 to-indigo-50 relative overflow-hidden">
           {/* Animated Background */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-400/10 via-purple-400/10 to-cyan-400/10 animate-pulse"></div>
-          <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-bounce" style={{animationDuration: '6s'}}></div>
-          <div className="absolute bottom-0 right-1/4 w-64 h-64 bg-purple-400/20 rounded-full blur-3xl animate-bounce" style={{animationDuration: '8s', animationDelay: '2s'}}></div>
+          <div
+            className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl animate-bounce"
+            style={{ animationDuration: "6s" }}
+          ></div>
+          <div
+            className="absolute bottom-0 right-1/4 w-64 h-64 bg-purple-400/20 rounded-full blur-3xl animate-bounce"
+            style={{ animationDuration: "8s", animationDelay: "2s" }}
+          ></div>
 
           <div className="max-w-7xl mx-auto px-6 relative">
             <div className="text-center mb-16">
               <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-2 mb-6 shadow-lg border border-white/20">
                 <Sparkles className="w-5 h-5 text-[#febb02]" />
-                <span className="text-sm font-semibold text-gray-700 tracking-wide">AI-POWERED TECHNOLOGY</span>
+                <span className="text-sm font-semibold text-gray-700 tracking-wide">
+                  AI-POWERED TECHNOLOGY
+                </span>
               </div>
               <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
-                How It <span className="bg-gradient-to-r from-[#003580] to-[#0071c2] bg-clip-text text-transparent">Works</span>
+                How It{" "}
+                <span className="bg-gradient-to-r from-[#003580] to-[#0071c2] bg-clip-text text-transparent">
+                  Works
+                </span>
               </h2>
               <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-                Experience the future of travel with our revolutionary AI bargaining system
+                Experience the future of travel with our revolutionary AI
+                bargaining system
               </p>
             </div>
 
@@ -125,10 +135,15 @@ export function UnifiedLandingPage({
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
                 <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105">
-                  <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">01</div>
+                  <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">
+                    01
+                  </div>
                   <div className="mb-8">
                     <div className="w-20 h-20 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-6 shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
-                      <Search className="w-10 h-10 text-white" strokeWidth={1.5} />
+                      <Search
+                        className="w-10 h-10 text-white"
+                        strokeWidth={1.5}
+                      />
                     </div>
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
@@ -145,17 +160,24 @@ export function UnifiedLandingPage({
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0071c2] to-[#febb02] rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
                 <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105">
-                  <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">02</div>
+                  <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">
+                    02
+                  </div>
                   <div className="mb-8">
                     <div className="w-20 h-20 bg-gradient-to-br from-[#0071c2] to-[#febb02] rounded-2xl flex items-center justify-center mb-6 shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
-                      <TrendingUp className="w-10 h-10 text-white" strokeWidth={1.5} />
+                      <TrendingUp
+                        className="w-10 h-10 text-white"
+                        strokeWidth={1.5}
+                      />
                     </div>
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                     Bargain
                   </h3>
                   <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
-                    AI negotiates live with suppliers — <strong className="text-[#003580]">3 attempts</strong>, <strong className="text-[#003580]">30-second</strong> timer.
+                    AI negotiates live with suppliers —{" "}
+                    <strong className="text-[#003580]">3 attempts</strong>,{" "}
+                    <strong className="text-[#003580]">30-second</strong> timer.
                   </p>
                   <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0071c2] to-[#febb02] rounded-full px-4 py-2 text-white text-sm font-semibold">
                     <Clock className="w-4 h-4" />
@@ -169,10 +191,15 @@ export function UnifiedLandingPage({
               <div className="group relative">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#febb02] to-[#003580] rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
                 <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105">
-                  <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">03</div>
+                  <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">
+                    03
+                  </div>
                   <div className="mb-8">
                     <div className="w-20 h-20 bg-gradient-to-br from-[#febb02] to-[#003580] rounded-2xl flex items-center justify-center mb-6 shadow-xl group-hover:shadow-2xl transition-shadow duration-300">
-                      <CheckCircle className="w-10 h-10 text-white" strokeWidth={1.5} />
+                      <CheckCircle
+                        className="w-10 h-10 text-white"
+                        strokeWidth={1.5}
+                      />
                     </div>
                   </div>
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
@@ -191,7 +218,11 @@ export function UnifiedLandingPage({
         {/* Reviews & Trustpilot Section */}
         <section className="py-16 md:py-20 bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-white relative overflow-hidden">
           {/* Background Effects */}
-          <div className={"absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"1\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"}></div>
+          <div
+            className={
+              'absolute inset-0 bg-[url(\'data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%23ffffff" fill-opacity="0.05"%3E%3Ccircle cx="30" cy="30" r="1"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E\')]'
+            }
+          ></div>
 
           <div className="max-w-7xl mx-auto px-6 relative">
             {/* Trustpilot Header */}
@@ -205,7 +236,10 @@ export function UnifiedLandingPage({
                 <div className="flex items-center gap-2">
                   <div className="flex items-center gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-6 h-6 text-[#00B67A] fill-current" />
+                      <Star
+                        key={i}
+                        className="w-6 h-6 text-[#00B67A] fill-current"
+                      />
                     ))}
                   </div>
                   <a
@@ -221,10 +255,14 @@ export function UnifiedLandingPage({
               </div>
 
               <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
-                Trusted by <span className="bg-gradient-to-r from-[#00B67A] to-[#febb02] bg-clip-text text-transparent">Travelers Worldwide</span>
+                Trusted by{" "}
+                <span className="bg-gradient-to-r from-[#00B67A] to-[#febb02] bg-clip-text text-transparent">
+                  Travelers Worldwide
+                </span>
               </h2>
               <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
-                See what our community says about their AI bargaining experiences
+                See what our community says about their AI bargaining
+                experiences
               </p>
             </div>
 
@@ -234,11 +272,16 @@ export function UnifiedLandingPage({
               <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/15 transition-all duration-300">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                    <Star
+                      key={i}
+                      className="w-5 h-5 text-[#febb02] fill-current"
+                    />
                   ))}
                 </div>
                 <p className="text-gray-200 mb-6 italic leading-relaxed">
-                  "AI bargaining saved me ₹45,000 on my Dubai honeymoon! Got upgraded to a luxury suite for the price of a standard room. Absolutely revolutionary!"
+                  "AI bargaining saved me ₹45,000 on my Dubai honeymoon! Got
+                  upgraded to a luxury suite for the price of a standard room.
+                  Absolutely revolutionary!"
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center text-white font-bold text-lg">
@@ -255,11 +298,16 @@ export function UnifiedLandingPage({
               <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/15 transition-all duration-300">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                    <Star
+                      key={i}
+                      className="w-5 h-5 text-[#febb02] fill-current"
+                    />
                   ))}
                 </div>
                 <p className="text-gray-200 mb-6 italic leading-relaxed">
-                  "Business class upgrade on my London trip through AI bargaining. The technology is mind-blowing – instant confirmations every time!"
+                  "Business class upgrade on my London trip through AI
+                  bargaining. The technology is mind-blowing – instant
+                  confirmations every time!"
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-[#0071c2] to-[#febb02] rounded-full flex items-center justify-center text-white font-bold text-lg">
@@ -276,11 +324,16 @@ export function UnifiedLandingPage({
               <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/15 transition-all duration-300">
                 <div className="flex items-center gap-1 mb-4">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                    <Star
+                      key={i}
+                      className="w-5 h-5 text-[#febb02] fill-current"
+                    />
                   ))}
                 </div>
                 <p className="text-gray-200 mb-6 italic leading-relaxed">
-                  "Faredown's AI technology delivers incredible savings consistently! I've used it for 5 trips now – each time better deals than I could imagine."
+                  "Faredown's AI technology delivers incredible savings
+                  consistently! I've used it for 5 trips now – each time better
+                  deals than I could imagine."
                 </p>
                 <div className="flex items-center gap-3">
                   <div className="w-12 h-12 bg-gradient-to-br from-[#febb02] to-[#003580] rounded-full flex items-center justify-center text-white font-bold text-lg">
@@ -288,7 +341,9 @@ export function UnifiedLandingPage({
                   </div>
                   <div>
                     <div className="font-semibold text-white">Anjali Patel</div>
-                    <div className="text-sm text-gray-400">Bangalore, India</div>
+                    <div className="text-sm text-gray-400">
+                      Bangalore, India
+                    </div>
                   </div>
                 </div>
               </div>
@@ -306,7 +361,9 @@ export function UnifiedLandingPage({
                   data-style-height="24"
                   data-theme="dark"
                 >
-                  <p className="text-gray-400 text-sm">Official Trustpilot widget will load here</p>
+                  <p className="text-gray-400 text-sm">
+                    Official Trustpilot widget will load here
+                  </p>
                   {/* Widget will be loaded here when Trustpilot script is added:
                        <script async src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"></script> */}
                 </div>
@@ -315,13 +372,15 @@ export function UnifiedLandingPage({
           </div>
         </section>
 
-
         {/* Get the Faredown App - Modern Design */}
         <section className="py-16 md:py-24 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white relative overflow-hidden">
           {/* Animated Background */}
           <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20"></div>
           <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-blue-500/30 rounded-full blur-3xl animate-pulse"></div>
-          <div className="absolute bottom-1/4 right-1/3 w-64 h-64 bg-purple-500/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
+          <div
+            className="absolute bottom-1/4 right-1/3 w-64 h-64 bg-purple-500/30 rounded-full blur-3xl animate-pulse"
+            style={{ animationDelay: "1s" }}
+          ></div>
 
           <div className="max-w-7xl mx-auto px-6 relative">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
@@ -329,30 +388,43 @@ export function UnifiedLandingPage({
               <div className="text-center lg:text-left">
                 <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
                   <Smartphone className="w-5 h-5 text-[#febb02]" />
-                  <span className="text-sm font-semibold tracking-wide">MOBILE APP</span>
+                  <span className="text-sm font-semibold tracking-wide">
+                    MOBILE APP
+                  </span>
                 </div>
 
                 <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
-                  Get the <span className="bg-gradient-to-r from-[#febb02] to-[#ff6b6b] bg-clip-text text-transparent">Faredown</span> App
+                  Get the{" "}
+                  <span className="bg-gradient-to-r from-[#febb02] to-[#ff6b6b] bg-clip-text text-transparent">
+                    Faredown
+                  </span>{" "}
+                  App
                 </h2>
 
                 <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-lg lg:max-w-none">
-                  Exclusive mobile deals and instant AI bargaining on the go. Download now for premium travel experiences.
+                  Exclusive mobile deals and instant AI bargaining on the go.
+                  Download now for premium travel experiences.
                 </p>
 
                 {/* Features Grid */}
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
                     <Smartphone className="w-6 h-6 text-[#febb02] mb-2 mx-auto sm:mx-0" />
-                    <p className="text-sm font-semibold text-center sm:text-left">Mobile-only upgrades</p>
+                    <p className="text-sm font-semibold text-center sm:text-left">
+                      Mobile-only upgrades
+                    </p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
                     <Zap className="w-6 h-6 text-[#febb02] mb-2 mx-auto sm:mx-0" />
-                    <p className="text-sm font-semibold text-center sm:text-left">Live counteroffers</p>
+                    <p className="text-sm font-semibold text-center sm:text-left">
+                      Live counteroffers
+                    </p>
                   </div>
                   <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
                     <CheckCircle className="w-6 h-6 text-[#febb02] mb-2 mx-auto sm:mx-0" />
-                    <p className="text-sm font-semibold text-center sm:text-left">One-tap checkout</p>
+                    <p className="text-sm font-semibold text-center sm:text-left">
+                      One-tap checkout
+                    </p>
                   </div>
                 </div>
 
@@ -370,7 +442,9 @@ export function UnifiedLandingPage({
                         <span className="text-black font-bold text-lg"></span>
                       </div>
                       <div className="text-left">
-                        <div className="text-xs text-gray-300">Download on the</div>
+                        <div className="text-xs text-gray-300">
+                          Download on the
+                        </div>
                         <div className="text-lg font-semibold">App Store</div>
                       </div>
                     </div>
@@ -420,21 +494,37 @@ export function UnifiedLandingPage({
                                 src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=800"
                                 alt="Faredown Logo"
                                 className="w-6 h-6 object-contain"
-                                style={{background: 'none', border: 'none', boxShadow: 'none'}}
+                                style={{
+                                  background: "none",
+                                  border: "none",
+                                  boxShadow: "none",
+                                }}
                               />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900">faredown.com</h3>
-                            <p className="text-sm text-gray-600">AI Travel Bargains</p>
+                            <h3 className="text-lg font-bold text-gray-900">
+                              faredown.com
+                            </h3>
+                            <p className="text-sm text-gray-600">
+                              AI Travel Bargains
+                            </p>
                           </div>
 
                           <div className="space-y-3">
                             <div className="bg-white rounded-xl p-3 shadow-sm">
-                              <div className="text-sm font-semibold text-gray-900">Current Bargain</div>
-                              <div className="text-xs text-green-600">Suite Upgrade → ₹12,000 saved!</div>
+                              <div className="text-sm font-semibold text-gray-900">
+                                Current Bargain
+                              </div>
+                              <div className="text-xs text-green-600">
+                                Suite Upgrade → ₹12,000 saved!
+                              </div>
                             </div>
                             <div className="bg-white rounded-xl p-3 shadow-sm">
-                              <div className="text-sm font-semibold text-gray-900">AI Status</div>
-                              <div className="text-xs text-blue-600">Negotiating... 2/3 attempts</div>
+                              <div className="text-sm font-semibold text-gray-900">
+                                AI Status
+                              </div>
+                              <div className="text-xs text-blue-600">
+                                Negotiating... 2/3 attempts
+                              </div>
                             </div>
                           </div>
                         </div>
@@ -447,7 +537,10 @@ export function UnifiedLandingPage({
 
                   {/* Floating Elements */}
                   <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#febb02] rounded-full animate-bounce"></div>
-                  <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
+                  <div
+                    className="absolute -bottom-4 -left-4 w-6 h-6 bg-purple-400 rounded-full animate-bounce"
+                    style={{ animationDelay: "0.5s" }}
+                  ></div>
                 </div>
               </div>
             </div>
@@ -463,14 +556,20 @@ export function UnifiedLandingPage({
             <div className="text-center mb-12">
               <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-2 mb-6 shadow-lg border border-white/20">
                 <Star className="w-5 h-5 text-[#febb02]" />
-                <span className="text-sm font-semibold text-gray-700 tracking-wide">EXCLUSIVE DEALS</span>
+                <span className="text-sm font-semibold text-gray-700 tracking-wide">
+                  EXCLUSIVE DEALS
+                </span>
               </div>
 
               <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
-                Stay Ahead with <span className="bg-gradient-to-r from-[#003580] to-[#0071c2] bg-clip-text text-transparent">Exclusive Deals</span>
+                Stay Ahead with{" "}
+                <span className="bg-gradient-to-r from-[#003580] to-[#0071c2] bg-clip-text text-transparent">
+                  Exclusive Deals
+                </span>
               </h2>
               <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
-                Join 2M+ smart travelers getting secret bargains and AI-powered deals delivered to your inbox
+                Join 2M+ smart travelers getting secret bargains and AI-powered
+                deals delivered to your inbox
               </p>
             </div>
 
@@ -478,15 +577,25 @@ export function UnifiedLandingPage({
               {/* Stats */}
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
                 <div className="text-center bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                  <div className="text-2xl md:text-3xl font-bold text-[#003580] mb-2">2M+</div>
-                  <div className="text-sm text-gray-600">Active Subscribers</div>
+                  <div className="text-2xl md:text-3xl font-bold text-[#003580] mb-2">
+                    2M+
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Active Subscribers
+                  </div>
                 </div>
                 <div className="text-center bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                  <div className="text-2xl md:text-3xl font-bold text-[#0071c2] mb-2">₹50K</div>
-                  <div className="text-sm text-gray-600">Avg. Monthly Savings</div>
+                  <div className="text-2xl md:text-3xl font-bold text-[#0071c2] mb-2">
+                    ₹50K
+                  </div>
+                  <div className="text-sm text-gray-600">
+                    Avg. Monthly Savings
+                  </div>
                 </div>
                 <div className="text-center bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
-                  <div className="text-2xl md:text-3xl font-bold text-[#febb02] mb-2">24/7</div>
+                  <div className="text-2xl md:text-3xl font-bold text-[#febb02] mb-2">
+                    24/7
+                  </div>
                   <div className="text-sm text-gray-600">AI Deal Alerts</div>
                 </div>
               </div>
@@ -524,12 +633,19 @@ export function UnifiedLandingPage({
 
               {/* Social Proof */}
               <div className="text-center mt-8">
-                <p className="text-sm text-gray-500 mb-4">Trusted by travelers from 195+ countries</p>
+                <p className="text-sm text-gray-500 mb-4">
+                  Trusted by travelers from 195+ countries
+                </p>
                 <div className="flex items-center justify-center gap-2">
                   {[...Array(5)].map((_, i) => (
-                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                    <Star
+                      key={i}
+                      className="w-5 h-5 text-[#febb02] fill-current"
+                    />
                   ))}
-                  <span className="ml-2 text-sm font-semibold text-gray-600">4.9/5 from 50,000+ reviews</span>
+                  <span className="ml-2 text-sm font-semibold text-gray-600">
+                    4.9/5 from 50,000+ reviews
+                  </span>
                 </div>
               </div>
             </div>

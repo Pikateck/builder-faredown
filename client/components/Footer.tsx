@@ -11,7 +11,10 @@ export function Footer() {
   };
 
   return (
-    <footer className="bg-gradient-to-br from-[#001a33] via-[#003580] to-[#001a33] text-white relative overflow-hidden" data-footer-version="v7">
+    <footer
+      className="bg-gradient-to-br from-[#001a33] via-[#003580] to-[#001a33] text-white relative overflow-hidden"
+      data-footer-version="v7"
+    >
       {/* Background Effects */}
       <div className="absolute inset-0 opacity-10">
         <div className="absolute top-0 left-1/4 w-96 h-96 bg-blue-400/20 rounded-full blur-3xl"></div>
@@ -28,7 +31,11 @@ export function Footer() {
                 src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=800"
                 alt="Faredown Logo"
                 className="w-10 h-10 object-contain"
-                style={{background: 'none', border: 'none', boxShadow: 'none'}}
+                style={{
+                  background: "none",
+                  border: "none",
+                  boxShadow: "none",
+                }}
               />
               <div>
                 <span className="text-2xl font-bold text-white block">
@@ -40,14 +47,18 @@ export function Footer() {
               </div>
             </div>
             <p className="text-blue-100 text-sm leading-relaxed mb-6">
-              Experience the future of travel with our revolutionary AI bargaining technology. Get premium upgrades at your price.
+              Experience the future of travel with our revolutionary AI
+              bargaining technology. Get premium upgrades at your price.
             </p>
 
             {/* Trust Badge */}
             <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
               <div className="flex items-center gap-2 mb-2">
                 {[...Array(5)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-[#febb02] fill-current" />
+                  <Star
+                    key={i}
+                    className="w-4 h-4 text-[#febb02] fill-current"
+                  />
                 ))}
                 <span className="text-white font-semibold text-sm">4.9</span>
               </div>
@@ -57,7 +68,9 @@ export function Footer() {
 
           {/* Quick Links */}
           <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold text-white mb-6">Quick Links</h3>
+            <h3 className="text-lg font-semibold text-white mb-6">
+              Quick Links
+            </h3>
             <nav className="space-y-3">
               {[
                 { label: "Help Center", path: "/help-center" },
@@ -99,7 +112,9 @@ export function Footer() {
 
           {/* Newsletter & Social */}
           <div className="lg:col-span-1">
-            <h3 className="text-lg font-semibold text-white mb-6">Stay Connected</h3>
+            <h3 className="text-lg font-semibold text-white mb-6">
+              Stay Connected
+            </h3>
 
             {/* Newsletter Signup */}
             <div className="mb-8">
@@ -116,7 +131,9 @@ export function Footer() {
                   Subscribe
                 </button>
               </form>
-              <p className="text-blue-200 text-xs mt-2">Get exclusive deals & AI travel tips</p>
+              <p className="text-blue-200 text-xs mt-2">
+                Get exclusive deals & AI travel tips
+              </p>
             </div>
 
             {/* Social Links */}
@@ -128,28 +145,40 @@ export function Footer() {
                   aria-label="Facebook"
                   className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 hover:scale-110 transition-all duration-150 group"
                 >
-                  <Facebook className="w-5 h-5 text-blue-200 group-hover:text-white transition-colors duration-150" strokeWidth={1.5} />
+                  <Facebook
+                    className="w-5 h-5 text-blue-200 group-hover:text-white transition-colors duration-150"
+                    strokeWidth={1.5}
+                  />
                 </a>
                 <a
                   href="#"
                   aria-label="Instagram"
                   className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 hover:scale-110 transition-all duration-150 group"
                 >
-                  <Instagram className="w-5 h-5 text-blue-200 group-hover:text-white transition-colors duration-150" strokeWidth={1.5} />
+                  <Instagram
+                    className="w-5 h-5 text-blue-200 group-hover:text-white transition-colors duration-150"
+                    strokeWidth={1.5}
+                  />
                 </a>
                 <a
                   href="#"
                   aria-label="X"
                   className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 hover:scale-110 transition-all duration-150 group"
                 >
-                  <Twitter className="w-5 h-5 text-blue-200 group-hover:text-white transition-colors duration-150" strokeWidth={1.5} />
+                  <Twitter
+                    className="w-5 h-5 text-blue-200 group-hover:text-white transition-colors duration-150"
+                    strokeWidth={1.5}
+                  />
                 </a>
                 <a
                   href="#"
                   aria-label="LinkedIn"
                   className="w-10 h-10 rounded-xl bg-white/10 backdrop-blur-sm border border-white/20 flex items-center justify-center hover:bg-white/20 hover:scale-110 transition-all duration-150 group"
                 >
-                  <Linkedin className="w-5 h-5 text-blue-200 group-hover:text-white transition-colors duration-150" strokeWidth={1.5} />
+                  <Linkedin
+                    className="w-5 h-5 text-blue-200 group-hover:text-white transition-colors duration-150"
+                    strokeWidth={1.5}
+                  />
                 </a>
               </div>
             </div>
@@ -162,7 +191,8 @@ export function Footer() {
         <div className="mx-auto max-w-7xl px-6 py-6">
           <div className="text-center">
             <div className="text-sm text-blue-200">
-              © 2025 Faredown Bookings and Travels Pvt Ltd. All rights reserved.
+              © 2025 Faredown Bookings and Travels Pvt Ltd. All rights
+              reserved.
             </div>
           </div>
         </div>

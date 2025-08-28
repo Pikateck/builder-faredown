@@ -161,7 +161,8 @@ export function MobileNativeSearchForm({
   const [showTransferTypeInput, setShowTransferTypeInput] = useState(false);
   const [showMultiCityInput, setShowMultiCityInput] = useState(false);
   const [showHotelSmartSearch, setShowHotelSmartSearch] = useState(false);
-  const [selectedHotelResult, setSelectedHotelResult] = useState<SearchResult | null>(null);
+  const [selectedHotelResult, setSelectedHotelResult] =
+    useState<SearchResult | null>(null);
 
   // Validation states
   const [validationError, setValidationError] = useState<string | null>(null);
@@ -547,16 +548,15 @@ export function MobileNativeSearchForm({
                         {selectedHotelResult.name}
                       </div>
                       <div className="text-xs text-gray-500 mt-1">
-                        {selectedHotelResult.description} • {selectedHotelResult.location}
+                        {selectedHotelResult.description} •{" "}
+                        {selectedHotelResult.location}
                       </div>
                     </div>
                   ) : (
                     <div className="font-semibold text-gray-900 text-base">
-                      {module === "hotels" && !selectedHotelResult ? (
-                        "Search hotels, cities, landmarks..."
-                      ) : (
-                        `${fromCity} (${fromCode})`
-                      )}
+                      {module === "hotels" && !selectedHotelResult
+                        ? "Search hotels, cities, landmarks..."
+                        : `${fromCity} (${fromCode})`}
                     </div>
                   )}
                 </div>

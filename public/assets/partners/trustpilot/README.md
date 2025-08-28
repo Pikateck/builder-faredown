@@ -10,29 +10,33 @@ All Trustpilot logos and brand assets should be sourced from the official Brandf
 ## Current Files
 
 ### Placeholder Assets (TO BE REPLACED)
+
 - `trustpilot-wordmark-dark.svg` - Placeholder wordmark (replace with official SVG)
 - `trustpilot-mark.svg` - Placeholder mark/icon (replace with official SVG)
 
 ## Integration Requirements
 
 ### Asset Specifications
+
 - **Format**: SVG (vector format for retina-crisp display)
 - **Source**: Official Brandfetch assets only (no screenshots or recreations)
 - **Coloring**: Do NOT recolor Trustpilot brand assets
 - **Scaling**: Scale proportionally to maintain brand integrity
 
 ### Usage in Code
+
 The assets are integrated in `client/components/UnifiedLandingPage.tsx`:
 
 ```jsx
-<img 
-  src="/assets/partners/trustpilot/trustpilot-wordmark-dark.svg" 
-  alt="Trustpilot rating" 
+<img
+  src="/assets/partners/trustpilot/trustpilot-wordmark-dark.svg"
+  alt="Trustpilot rating"
   className="h-6 w-auto"
 />
 ```
 
 ### Accessibility Requirements
+
 - Alt text: "Trustpilot rating"
 - ARIA label on rating link
 - Keyboard focus visible (implemented with focus:ring-2)
@@ -42,14 +46,19 @@ The assets are integrated in `client/components/UnifiedLandingPage.tsx`:
 A placeholder is prepared for the official Trustpilot embed widget:
 
 ```html
-<div class="trustpilot-widget" 
-     data-locale="en-US"
-     data-template-id="PLACEHOLDER_TEMPLATE_ID"
-     data-businessunit-id="YOUR_BUSINESS_UNIT_ID"
-     data-style-width="100%" 
-     data-style-height="24" 
-     data-theme="light"></div>
-<script async src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"></script>
+<div
+  class="trustpilot-widget"
+  data-locale="en-US"
+  data-template-id="PLACEHOLDER_TEMPLATE_ID"
+  data-businessunit-id="YOUR_BUSINESS_UNIT_ID"
+  data-style-width="100%"
+  data-style-height="24"
+  data-theme="light"
+></div>
+<script
+  async
+  src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"
+></script>
 ```
 
 ## Replacement Instructions

@@ -112,7 +112,11 @@ export function Header() {
                   src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=800"
                   alt="Faredown Logo"
                   className="w-8 h-8 object-contain"
-                  style={{background: 'none', border: 'none', boxShadow: 'none'}}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    boxShadow: "none",
+                  }}
                 />
                 <span className="text-xl font-medium text-white">
                   faredown.com
@@ -493,7 +497,11 @@ export function Header() {
                   src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=800"
                   alt="Faredown Logo"
                   className="w-8 h-8 object-contain"
-                  style={{background: 'none', border: 'none', boxShadow: 'none'}}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    boxShadow: "none",
+                  }}
                 />
                 <span className="text-xl font-medium text-white">
                   faredown.com

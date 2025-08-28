@@ -23,7 +23,12 @@ import {
   Plane,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
-import { searchHotels, getTypeIcon, getTypeLabel, type SearchResult } from "@/lib/hotelSearchData";
+import {
+  searchHotels,
+  getTypeIcon,
+  getTypeLabel,
+  type SearchResult,
+} from "@/lib/hotelSearchData";
 
 interface GuestConfig {
   adults: number;
@@ -53,7 +58,9 @@ export function HotelSearchForm({
   const [inputValue, setInputValue] = useState("");
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
-  const [selectedResult, setSelectedResult] = useState<SearchResult | null>(null);
+  const [selectedResult, setSelectedResult] = useState<SearchResult | null>(
+    null,
+  );
 
   // Set default dates to future dates
   const tomorrow = new Date();
@@ -182,7 +189,9 @@ export function HotelSearchForm({
 
     // Only validate dates, destination is optional for browsing
     // Use selected result location if available
-    const searchDestination = selectedResult ? selectedResult.location : destination;
+    const searchDestination = selectedResult
+      ? selectedResult.location
+      : destination;
     if (!checkInDate || !checkOutDate) {
       setErrorMessage("Please select check-in and check-out dates");
       setShowError(true);
@@ -288,7 +297,8 @@ export function HotelSearchForm({
                           {selectedResult.name}
                         </span>
                         <span className="text-xs text-gray-500 truncate">
-                          {getTypeLabel(selectedResult.type)} • {selectedResult.description}
+                          {getTypeLabel(selectedResult.type)} •{" "}
+                          {selectedResult.description}
                         </span>
                       </div>
                     </>
@@ -332,7 +342,9 @@ export function HotelSearchForm({
               <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
                 <div className="mb-3">
                   <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                    {isUserTyping && inputValue ? `Search results for "${inputValue}"` : 'Popular destinations'}
+                    {isUserTyping && inputValue
+                      ? `Search results for "${inputValue}"`
+                      : "Popular destinations"}
                   </h3>
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -356,15 +368,21 @@ export function HotelSearchForm({
                     searchResults.map((result) => {
                       const getIcon = () => {
                         switch (result.type) {
-                          case 'hotel':
+                          case "hotel":
                             return <Hotel className="w-4 h-4 text-blue-600" />;
-                          case 'city':
-                            return <Building className="w-4 h-4 text-green-600" />;
-                          case 'area':
-                            return <MapPin className="w-4 h-4 text-purple-600" />;
-                          case 'landmark':
-                            return <Landmark className="w-4 h-4 text-orange-600" />;
-                          case 'airport':
+                          case "city":
+                            return (
+                              <Building className="w-4 h-4 text-green-600" />
+                            );
+                          case "area":
+                            return (
+                              <MapPin className="w-4 h-4 text-purple-600" />
+                            );
+                          case "landmark":
+                            return (
+                              <Landmark className="w-4 h-4 text-orange-600" />
+                            );
+                          case "airport":
                             return <Plane className="w-4 h-4 text-gray-600" />;
                           default:
                             return <MapPin className="w-4 h-4 text-blue-600" />;
@@ -373,18 +391,18 @@ export function HotelSearchForm({
 
                       const getIconBg = () => {
                         switch (result.type) {
-                          case 'hotel':
-                            return 'bg-blue-50';
-                          case 'city':
-                            return 'bg-green-50';
-                          case 'area':
-                            return 'bg-purple-50';
-                          case 'landmark':
-                            return 'bg-orange-50';
-                          case 'airport':
-                            return 'bg-gray-50';
+                          case "hotel":
+                            return "bg-blue-50";
+                          case "city":
+                            return "bg-green-50";
+                          case "area":
+                            return "bg-purple-50";
+                          case "landmark":
+                            return "bg-orange-50";
+                          case "airport":
+                            return "bg-gray-50";
                           default:
-                            return 'bg-blue-50';
+                            return "bg-blue-50";
                         }
                       };
 
@@ -402,7 +420,9 @@ export function HotelSearchForm({
                           className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded transition-colors"
                         >
                           <div className="flex items-center space-x-3">
-                            <div className={`w-8 h-8 ${getIconBg()} rounded-full flex items-center justify-center flex-shrink-0`}>
+                            <div
+                              className={`w-8 h-8 ${getIconBg()} rounded-full flex items-center justify-center flex-shrink-0`}
+                            >
                               {getIcon()}
                             </div>
                             <div className="min-w-0 flex-1">
@@ -415,13 +435,14 @@ export function HotelSearchForm({
                                 )}
                               </div>
                               <div className="text-xs text-gray-500 truncate">
-                                {getTypeLabel(result.type)} • {result.description}
+                                {getTypeLabel(result.type)} •{" "}
+                                {result.description}
                               </div>
                               <div className="text-xs text-gray-400 truncate">
                                 {result.location}
                               </div>
                             </div>
-                            {result.type === 'hotel' && (
+                            {result.type === "hotel" && (
                               <div className="text-xs text-blue-600 font-medium px-2 py-1 bg-blue-50 rounded">
                                 Hotel
                               </div>
@@ -434,7 +455,9 @@ export function HotelSearchForm({
                     <div className="px-3 py-6 text-center text-gray-500">
                       <Search className="w-8 h-8 mx-auto mb-2 text-gray-300" />
                       <p className="text-sm">No results found</p>
-                      <p className="text-xs mt-1">Try searching for hotels, cities, or landmarks</p>
+                      <p className="text-xs mt-1">
+                        Try searching for hotels, cities, or landmarks
+                      </p>
                     </div>
                   )}
                 </div>

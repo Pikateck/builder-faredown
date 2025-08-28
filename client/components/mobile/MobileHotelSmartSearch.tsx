@@ -10,7 +10,11 @@ import {
   Plane,
   ArrowLeft,
 } from "lucide-react";
-import { searchHotels, getTypeLabel, type SearchResult } from "@/lib/hotelSearchData";
+import {
+  searchHotels,
+  getTypeLabel,
+  type SearchResult,
+} from "@/lib/hotelSearchData";
 
 interface MobileHotelSmartSearchProps {
   isOpen: boolean;
@@ -53,15 +57,15 @@ export function MobileHotelSmartSearch({
 
   const getIcon = (type: string) => {
     switch (type) {
-      case 'hotel':
+      case "hotel":
         return <Hotel className="w-5 h-5 text-blue-600" />;
-      case 'city':
+      case "city":
         return <Building className="w-5 h-5 text-green-600" />;
-      case 'area':
+      case "area":
         return <MapPin className="w-5 h-5 text-purple-600" />;
-      case 'landmark':
+      case "landmark":
         return <Landmark className="w-5 h-5 text-orange-600" />;
-      case 'airport':
+      case "airport":
         return <Plane className="w-5 h-5 text-gray-600" />;
       default:
         return <MapPin className="w-5 h-5 text-blue-600" />;
@@ -70,18 +74,18 @@ export function MobileHotelSmartSearch({
 
   const getIconBg = (type: string) => {
     switch (type) {
-      case 'hotel':
-        return 'bg-blue-50';
-      case 'city':
-        return 'bg-green-50';
-      case 'area':
-        return 'bg-purple-50';
-      case 'landmark':
-        return 'bg-orange-50';
-      case 'airport':
-        return 'bg-gray-50';
+      case "hotel":
+        return "bg-blue-50";
+      case "city":
+        return "bg-green-50";
+      case "area":
+        return "bg-purple-50";
+      case "landmark":
+        return "bg-orange-50";
+      case "airport":
+        return "bg-gray-50";
       default:
-        return 'bg-blue-50';
+        return "bg-blue-50";
     }
   };
 
@@ -129,7 +133,9 @@ export function MobileHotelSmartSearch({
       <div className="flex-1 overflow-y-auto">
         <div className="p-4">
           <h3 className="text-sm font-semibold text-gray-900 mb-3">
-            {inputValue.trim() ? `Search results for "${inputValue}"` : 'Popular destinations'}
+            {inputValue.trim()
+              ? `Search results for "${inputValue}"`
+              : "Popular destinations"}
           </h3>
 
           {isSearching ? (
@@ -148,7 +154,9 @@ export function MobileHotelSmartSearch({
                   className="w-full p-4 bg-white border border-gray-200 rounded-xl text-left hover:border-[#003580] hover:shadow-md transition-all duration-200"
                 >
                   <div className="flex items-center space-x-3">
-                    <div className={`w-12 h-12 ${getIconBg(result.type)} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                    <div
+                      className={`w-12 h-12 ${getIconBg(result.type)} rounded-xl flex items-center justify-center flex-shrink-0`}
+                    >
                       {getIcon(result.type)}
                     </div>
                     <div className="flex-1 min-w-0">
@@ -172,7 +180,7 @@ export function MobileHotelSmartSearch({
                         {result.location}
                       </p>
                     </div>
-                    {result.type === 'hotel' && (
+                    {result.type === "hotel" && (
                       <div className="text-xs text-blue-600 font-medium px-2 py-1 bg-blue-50 rounded-lg">
                         Hotel
                       </div>
