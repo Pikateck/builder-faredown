@@ -210,9 +210,9 @@ export function UnifiedLandingPage({
                 {/* Upgrade */}
                 <div className="text-center relative">
                   <div className="relative inline-block">
-                    <div className="w-20 h-20 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-3xl flex items-center justify-center mb-8 shadow-lg">
+                    <div className="w-20 h-20 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-8 shadow-xl p-6 md:p-8">
                       <Search
-                        className="w-10 h-10 text-white"
+                        className="w-12 h-12 md:w-12 h-12 text-white"
                         strokeWidth={1.5}
                       />
                     </div>
