@@ -522,9 +522,15 @@ export function MobileNativeSearchForm({
 
           {/* Search Fields */}
           <div className="space-y-3">
-            {/* From Field */}
+            {/* From Field - Use Smart Search for Hotels */}
             <button
-              onClick={() => setShowFromInput(true)}
+              onClick={() => {
+                if (module === "hotels") {
+                  setShowHotelSmartSearch(true);
+                } else {
+                  setShowFromInput(true);
+                }
+              }}
               className="w-full p-4 bg-white border-2 border-gray-200 rounded-xl text-left hover:border-[#003580] transition-colors focus:outline-none focus:border-[#003580]"
             >
               <div className="flex items-center space-x-3">
@@ -535,9 +541,24 @@ export function MobileNativeSearchForm({
                   <div className="text-xs text-gray-500 mb-1">
                     {fieldLabels.from}
                   </div>
-                  <div className="font-semibold text-gray-900 text-base">
-                    {fromCity} ({fromCode})
-                  </div>
+                  {module === "hotels" && selectedHotelResult ? (
+                    <div>
+                      <div className="font-semibold text-gray-900 text-base">
+                        {selectedHotelResult.name}
+                      </div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {selectedHotelResult.description} • {selectedHotelResult.location}
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="font-semibold text-gray-900 text-base">
+                      {module === "hotels" && !selectedHotelResult ? (
+                        "Search hotels, cities, landmarks..."
+                      ) : (
+                        `${fromCity} (${fromCode})`
+                      )}
+                    </div>
+                  )}
                 </div>
               </div>
             </button>
