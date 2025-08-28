@@ -19,6 +19,8 @@ import { MobileFullScreenTravelersInput } from "./MobileFullScreenTravelersInput
 import { MobileFullScreenTimeInput } from "./MobileFullScreenTimeInput";
 import { MobileFullScreenTransferTypeInput } from "./MobileFullScreenTransferTypeInput";
 import { MobileFullScreenMultiCityInput } from "./MobileFullScreenMultiCityInput";
+import { MobileHotelSmartSearch } from "./MobileHotelSmartSearch";
+import { type SearchResult } from "@/lib/hotelSearchData";
 
 interface Travelers {
   adults: number;
@@ -158,6 +160,8 @@ export function MobileNativeSearchForm({
   const [showTimeInput, setShowTimeInput] = useState(false);
   const [showTransferTypeInput, setShowTransferTypeInput] = useState(false);
   const [showMultiCityInput, setShowMultiCityInput] = useState(false);
+  const [showHotelSmartSearch, setShowHotelSmartSearch] = useState(false);
+  const [selectedHotelResult, setSelectedHotelResult] = useState<SearchResult | null>(null);
 
   // Validation states
   const [validationError, setValidationError] = useState<string | null>(null);
