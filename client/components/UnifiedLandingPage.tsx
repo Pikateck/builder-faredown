@@ -220,7 +220,7 @@ export function UnifiedLandingPage({
                 <div className="absolute inset-0 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
                   <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Search className="w-10 h-10 md:w-14 md:h-14 lg:w-18 lg:h-18 text-white" strokeWidth={1.5} />
+                    <Search className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-white" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-white mb-4 transition-colors duration-300">
                     Upgrade
@@ -236,7 +236,7 @@ export function UnifiedLandingPage({
                 <div className="absolute inset-0 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
                   <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#0071c2] to-[#003580] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <TrendingUp className="w-10 h-10 md:w-14 md:h-14 lg:w-18 lg:h-18 text-white" strokeWidth={1.5} />
+                    <TrendingUp className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-white" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-white mb-4 transition-colors duration-300">
                     Bargain
@@ -252,7 +252,7 @@ export function UnifiedLandingPage({
                 <div className="absolute inset-0 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
                 <div className="relative">
                   <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <CheckCircle className="w-10 h-10 md:w-14 md:h-14 lg:w-18 lg:h-18 text-white" strokeWidth={1.5} />
+                    <CheckCircle className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-white" strokeWidth={1.5} />
                   </div>
                   <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-white mb-4 transition-colors duration-300">
                     Book
