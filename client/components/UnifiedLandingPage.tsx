@@ -316,64 +316,134 @@ export function UnifiedLandingPage({
         </section>
 
 
-        {/* App CTA - Premium */}
-        <section className="py-14 md:py-16 bg-gradient-to-br from-[#003580] via-[#0071c2] to-[#003580] text-white relative">
-          <div className="max-w-5xl mx-auto px-6 text-center relative">
-            <div className="w-16 h-16 bg-[#febb02] rounded-2xl flex items-center justify-center mx-auto mb-6">
-              <Smartphone className="w-8 h-8 text-[#003580]" strokeWidth={1.5} />
-            </div>
+        {/* Get the Faredown App - Modern Design */}
+        <section className="py-16 md:py-24 bg-gradient-to-br from-indigo-900 via-purple-900 to-pink-900 text-white relative overflow-hidden">
+          {/* Animated Background */}
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 via-purple-600/20 to-pink-600/20"></div>
+          <div className="absolute top-1/4 left-1/3 w-72 h-72 bg-blue-500/30 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 right-1/3 w-64 h-64 bg-purple-500/30 rounded-full blur-3xl animate-pulse" style={{animationDelay: '1s'}}></div>
 
-            <h2 className="text-2xl md:text-4xl font-bold mb-4 tracking-tight">
-              Get the Faredown App
-            </h2>
-            <p className="text-base md:text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
-              Exclusive mobile deals and instant AI bargaining on the go.
-            </p>
+          <div className="max-w-7xl mx-auto px-6 relative">
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+              {/* Left Side - Content */}
+              <div className="text-center lg:text-left">
+                <div className="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm rounded-full px-4 py-2 mb-6">
+                  <Smartphone className="w-5 h-5 text-[#febb02]" />
+                  <span className="text-sm font-semibold tracking-wide">MOBILE APP</span>
+                </div>
 
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8">
-              <a
-                href="https://apps.apple.com/app/faredown"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Download Faredown on the App Store"
-                className="hover:opacity-80 transition-opacity duration-150"
-              >
-                <img
-                  src="https://developer.apple.com/assets/elements/badges/download-on-the-app-store.svg"
-                  alt="Download on the App Store"
-                  className="h-12 md:h-14 min-h-[48px]"
-                />
-              </a>
-              <a
-                href="https://play.google.com/store/apps/details?id=com.faredown.app"
-                target="_blank"
-                rel="noopener noreferrer"
-                aria-label="Get Faredown on Google Play"
-                className="hover:opacity-80 transition-opacity duration-150"
-              >
-                <img
-                  src="https://play.google.com/intl/en_us/badges/static/images/badges/en_badge_web_generic.png"
-                  alt="Get it on Google Play"
-                  className="h-12 md:h-14 min-h-[48px]"
-                />
-              </a>
-            </div>
+                <h2 className="text-4xl md:text-6xl font-bold mb-6 tracking-tight">
+                  Get the <span className="bg-gradient-to-r from-[#febb02] to-[#ff6b6b] bg-clip-text text-transparent">Faredown</span> App
+                </h2>
 
-            {/* App Features - Compact bullets with tiny icons */}
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-6 text-blue-100 text-sm">
-              <div className="flex items-center gap-2">
-                <Smartphone className="w-4 h-4" strokeWidth={1.5} />
-                <span>Mobile-only upgrades</span>
+                <p className="text-lg md:text-xl text-gray-200 mb-8 max-w-lg lg:max-w-none">
+                  Exclusive mobile deals and instant AI bargaining on the go. Download now for premium travel experiences.
+                </p>
+
+                {/* Features Grid */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-10">
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                    <Smartphone className="w-6 h-6 text-[#febb02] mb-2 mx-auto sm:mx-0" />
+                    <p className="text-sm font-semibold text-center sm:text-left">Mobile-only upgrades</p>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                    <Zap className="w-6 h-6 text-[#febb02] mb-2 mx-auto sm:mx-0" />
+                    <p className="text-sm font-semibold text-center sm:text-left">Live counteroffers</p>
+                  </div>
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-4 border border-white/20">
+                    <CheckCircle className="w-6 h-6 text-[#febb02] mb-2 mx-auto sm:mx-0" />
+                    <p className="text-sm font-semibold text-center sm:text-left">One-tap checkout</p>
+                  </div>
+                </div>
+
+                {/* Download Buttons */}
+                <div className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
+                  <a
+                    href="https://apps.apple.com/app/faredown"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Download Faredown on the App Store"
+                    className="group bg-black/50 backdrop-blur-sm rounded-2xl p-4 border border-white/20 hover:bg-black/70 transition-all duration-300 hover:transform hover:scale-105"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                        <span className="text-black font-bold text-lg"></span>
+                      </div>
+                      <div className="text-left">
+                        <div className="text-xs text-gray-300">Download on the</div>
+                        <div className="text-lg font-semibold">App Store</div>
+                      </div>
+                    </div>
+                  </a>
+
+                  <a
+                    href="https://play.google.com/store/apps/details?id=com.faredown.app"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label="Get Faredown on Google Play"
+                    className="group bg-black/50 backdrop-blur-sm rounded-2xl p-4 border border-white/20 hover:bg-black/70 transition-all duration-300 hover:transform hover:scale-105"
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="w-8 h-8 bg-white rounded-lg flex items-center justify-center">
+                        <span className="text-black font-bold text-lg">▶</span>
+                      </div>
+                      <div className="text-left">
+                        <div className="text-xs text-gray-300">Get it on</div>
+                        <div className="text-lg font-semibold">Google Play</div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
               </div>
-              <span className="hidden sm:inline text-blue-200">•</span>
-              <div className="flex items-center gap-2">
-                <Zap className="w-4 h-4" strokeWidth={1.5} />
-                <span>Live counteroffers</span>
-              </div>
-              <span className="hidden sm:inline text-blue-200">•</span>
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-4 h-4" strokeWidth={1.5} />
-                <span>One-tap checkout</span>
+
+              {/* Right Side - Phone Mockup */}
+              <div className="relative flex justify-center lg:justify-end">
+                <div className="relative">
+                  {/* Phone Frame */}
+                  <div className="w-72 h-[600px] bg-gradient-to-b from-gray-800 to-gray-900 rounded-[3rem] p-2 shadow-2xl">
+                    <div className="w-full h-full bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-[2.5rem] relative overflow-hidden">
+                      {/* Screen Content */}
+                      <div className="absolute inset-4 bg-white rounded-[2rem] flex flex-col">
+                        {/* Status Bar */}
+                        <div className="h-6 bg-gray-100 rounded-t-[2rem] flex items-center justify-between px-4">
+                          <div className="text-xs font-semibold">9:41</div>
+                          <div className="flex gap-1">
+                            <div className="w-4 h-2 bg-green-500 rounded-sm"></div>
+                          </div>
+                        </div>
+
+                        {/* App Content */}
+                        <div className="flex-1 p-4 bg-gradient-to-br from-blue-50 to-indigo-50">
+                          <div className="text-center mb-4">
+                            <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-xl mx-auto mb-2 flex items-center justify-center">
+                              <Plane className="w-6 h-6 text-white" />
+                            </div>
+                            <h3 className="text-lg font-bold text-gray-900">Faredown</h3>
+                            <p className="text-sm text-gray-600">AI Travel Bargains</p>
+                          </div>
+
+                          <div className="space-y-3">
+                            <div className="bg-white rounded-xl p-3 shadow-sm">
+                              <div className="text-sm font-semibold text-gray-900">Current Bargain</div>
+                              <div className="text-xs text-green-600">Suite Upgrade → ₹12,000 saved!</div>
+                            </div>
+                            <div className="bg-white rounded-xl p-3 shadow-sm">
+                              <div className="text-sm font-semibold text-gray-900">AI Status</div>
+                              <div className="text-xs text-blue-600">Negotiating... 2/3 attempts</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* Glow Effect */}
+                      <div className="absolute inset-0 bg-gradient-to-r from-blue-400/20 to-purple-400/20 rounded-[2.5rem] animate-pulse"></div>
+                    </div>
+                  </div>
+
+                  {/* Floating Elements */}
+                  <div className="absolute -top-4 -right-4 w-8 h-8 bg-[#febb02] rounded-full animate-bounce"></div>
+                  <div className="absolute -bottom-4 -left-4 w-6 h-6 bg-purple-400 rounded-full animate-bounce" style={{animationDelay: '0.5s'}}></div>
+                </div>
               </div>
             </div>
           </div>
