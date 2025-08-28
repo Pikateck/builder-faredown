@@ -188,37 +188,115 @@ export function UnifiedLandingPage({
           </div>
         </section>
 
-        {/* Trustpilot Section */}
-        <section className="py-12 bg-gradient-to-br from-gray-50 via-white to-gray-50">
-          <div className="max-w-4xl mx-auto px-6">
-            <div className="flex flex-col items-center gap-6 py-8">
-              <div className="flex items-center gap-6">
-                {/* Trustpilot Wordmark - Official SVG from Brandfetch */}
-                <div className="flex items-center gap-4">
-                  <img
-                    src="/assets/partners/trustpilot/trustpilot-wordmark-dark.svg"
-                    alt="Trustpilot rating"
-                    className="h-6 w-auto"
-                  />
+        {/* Reviews & Trustpilot Section */}
+        <section className="py-16 md:py-20 bg-gradient-to-br from-gray-900 via-slate-800 to-gray-900 text-white relative overflow-hidden">
+          {/* Background Effects */}
+          <div className={"absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.05\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"1\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')]"}></div>
+
+          <div className="max-w-7xl mx-auto px-6 relative">
+            {/* Trustpilot Header */}
+            <div className="text-center mb-16">
+              <div className="inline-flex items-center gap-4 bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-4 mb-8 border border-white/20">
+                <img
+                  src="/assets/partners/trustpilot/trustpilot-wordmark-dark.svg"
+                  alt="Trustpilot rating"
+                  className="h-8 w-auto brightness-0 invert"
+                />
+                <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <Star key={i} className="w-6 h-6 text-[#00B67A] fill-current" />
+                    ))}
+                  </div>
                   <a
                     href="#"
-                    className="flex items-center gap-2 text-lg font-semibold text-[#00B67A] hover:underline focus:outline-none focus:ring-2 focus:ring-[#00B67A] focus:ring-offset-2 rounded-md px-2 py-1"
+                    className="text-xl font-bold text-white hover:text-[#00B67A] transition-colors focus:outline-none focus:ring-2 focus:ring-[#00B67A] focus:ring-offset-2 focus:ring-offset-gray-900 rounded-md px-2 py-1"
                     aria-label="Trustpilot rating: 4.9 out of 5 stars with 50k+ reviews"
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    <div className="flex items-center gap-1">
-                      {[...Array(5)].map((_, i) => (
-                        <Star key={i} className="w-5 h-5 text-[#00B67A] fill-current" />
-                      ))}
-                    </div>
-                    <span>4.9 • 50k+ reviews</span>
+                    4.9 • 50k+ reviews
                   </a>
                 </div>
               </div>
 
-              {/* Placeholder for future Trustpilot widget */}
-              <div className="w-full max-w-2xl">
+              <h2 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+                Trusted by <span className="bg-gradient-to-r from-[#00B67A] to-[#febb02] bg-clip-text text-transparent">Travelers Worldwide</span>
+              </h2>
+              <p className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto">
+                See what our community says about their AI bargaining experiences
+              </p>
+            </div>
+
+            {/* Customer Reviews */}
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {/* Review 1 */}
+              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/15 transition-all duration-300">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                  ))}
+                </div>
+                <p className="text-gray-200 mb-6 italic leading-relaxed">
+                  "AI bargaining saved me ₹45,000 on my Dubai honeymoon! Got upgraded to a luxury suite for the price of a standard room. Absolutely revolutionary!"
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    P
+                  </div>
+                  <div>
+                    <div className="font-semibold text-white">Priya Sharma</div>
+                    <div className="text-sm text-gray-400">Mumbai, India</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Review 2 */}
+              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/15 transition-all duration-300">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                  ))}
+                </div>
+                <p className="text-gray-200 mb-6 italic leading-relaxed">
+                  "Business class upgrade on my London trip through AI bargaining. The technology is mind-blowing – instant confirmations every time!"
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#0071c2] to-[#febb02] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    R
+                  </div>
+                  <div>
+                    <div className="font-semibold text-white">Rohit Kumar</div>
+                    <div className="text-sm text-gray-400">Delhi, India</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Review 3 */}
+              <div className="bg-white/10 backdrop-blur-lg rounded-2xl p-6 md:p-8 border border-white/20 hover:bg-white/15 transition-all duration-300">
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                  ))}
+                </div>
+                <p className="text-gray-200 mb-6 italic leading-relaxed">
+                  "Faredown's AI technology delivers incredible savings consistently! I've used it for 5 trips now – each time better deals than I could imagine."
+                </p>
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-gradient-to-br from-[#febb02] to-[#003580] rounded-full flex items-center justify-center text-white font-bold text-lg">
+                    A
+                  </div>
+                  <div>
+                    <div className="font-semibold text-white">Anjali Patel</div>
+                    <div className="text-sm text-gray-400">Bangalore, India</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Trustpilot Widget Placeholder */}
+            <div className="mt-12 text-center">
+              <div className="inline-block bg-white/5 backdrop-blur-sm rounded-xl p-6 border border-white/10">
                 <div
                   className="trustpilot-widget"
                   data-locale="en-US"
@@ -226,8 +304,9 @@ export function UnifiedLandingPage({
                   data-businessunit-id="YOUR_BUSINESS_UNIT_ID"
                   data-style-width="100%"
                   data-style-height="24"
-                  data-theme="light"
+                  data-theme="dark"
                 >
+                  <p className="text-gray-400 text-sm">Official Trustpilot widget will load here</p>
                   {/* Widget will be loaded here when Trustpilot script is added:
                        <script async src="https://widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js"></script> */}
                 </div>
