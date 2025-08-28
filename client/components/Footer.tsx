@@ -27,7 +27,8 @@ export function Footer() {
               <img
                 src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8114d5f1e1b846358a2324b036ea8a2e?format=webp&width=800"
                 alt="Faredown"
-                className="w-10 h-10"
+                className="w-10 h-10 object-contain"
+                style={{background: 'none', border: 'none', boxShadow: 'none'}}
               />
               <div>
                 <span className="text-2xl font-bold text-white block">
