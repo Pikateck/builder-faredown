@@ -97,18 +97,6 @@ export function UnifiedLandingPage({
         {/* Search Panel Section - DO NOT TOUCH */}
         {searchPanel}
 
-        {/* Hotels-first Hero */}
-        <section className="py-16 bg-gradient-to-br from-[#003580] via-[#0071c2] to-[#003580] text-white relative overflow-hidden">
-          <div className={"absolute inset-0 bg-[url('data:image/svg+xml,%3Csvg width=\"60\" height=\"60\" viewBox=\"0 0 60 60\" xmlns=\"http://www.w3.org/2000/svg\"%3E%3Cg fill=\"none\" fill-rule=\"evenodd\"%3E%3Cg fill=\"%23ffffff\" fill-opacity=\"0.03\"%3E%3Ccircle cx=\"30\" cy=\"30\" r=\"1\"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E')] opacity-20"}></div>
-          <div className="max-w-6xl mx-auto px-6 text-center relative">
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 tracking-tight">
-              Upgrade. Bargain. Book.
-            </h1>
-            <p className="text-xl md:text-2xl text-blue-100 mb-12 max-w-3xl mx-auto leading-relaxed">
-              Upgrade your hotel room by bargaining live with AI—premium rooms at your price.
-            </p>
-          </div>
-        </section>
 
 
         {/* How it Works - Premium Cards with Standalone Icons */}
