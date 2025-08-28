@@ -449,30 +449,84 @@ export function UnifiedLandingPage({
           </div>
         </section>
 
-        {/* Newsletter - Elegant */}
-        <section className="py-24 bg-white">
-          <div className="max-w-4xl mx-auto px-6 text-center">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">
-              Stay Ahead with Exclusive Deals
-            </h2>
-            <p className="text-xl text-gray-600 mb-12">
-              Join 2M+ smart travelers getting secret bargains first
-            </p>
+        {/* Newsletter - Modern & Engaging */}
+        <section className="py-16 md:py-24 bg-gradient-to-br from-blue-50 via-white to-indigo-50 relative overflow-hidden">
+          <div className="absolute top-1/4 right-1/4 w-64 h-64 bg-blue-200/30 rounded-full blur-3xl animate-pulse"></div>
+          <div className="absolute bottom-1/4 left-1/4 w-48 h-48 bg-indigo-200/30 rounded-full blur-3xl animate-pulse"></div>
 
-            <div className="max-w-2xl mx-auto">
-              <div className="flex flex-col sm:flex-row bg-gray-50 rounded-2xl p-3 shadow-inner gap-3 sm:gap-2">
-                <Input
-                  type="email"
-                  placeholder="Enter your email address"
-                  className="flex-1 bg-transparent border-0 px-6 py-4 h-14 text-gray-900 placeholder:text-gray-500 focus:outline-none focus:ring-0 min-w-0"
-                />
-                <Button className="bg-[#febb02] hover:bg-[#e6a602] text-black px-8 py-4 h-14 rounded-xl font-bold transition-all duration-300 shadow-lg hover:shadow-xl whitespace-nowrap">
-                  Subscribe
-                </Button>
+          <div className="max-w-6xl mx-auto px-6 relative">
+            <div className="text-center mb-12">
+              <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-2 mb-6 shadow-lg border border-white/20">
+                <Star className="w-5 h-5 text-[#febb02]" />
+                <span className="text-sm font-semibold text-gray-700 tracking-wide">EXCLUSIVE DEALS</span>
               </div>
-              <p className="text-sm text-gray-500 mt-6">
-                No spam, unsubscribe anytime
+
+              <h2 className="text-3xl md:text-5xl font-bold text-gray-900 mb-6 tracking-tight">
+                Stay Ahead with <span className="bg-gradient-to-r from-[#003580] to-[#0071c2] bg-clip-text text-transparent">Exclusive Deals</span>
+              </h2>
+              <p className="text-lg md:text-xl text-gray-600 mb-8 max-w-3xl mx-auto">
+                Join 2M+ smart travelers getting secret bargains and AI-powered deals delivered to your inbox
               </p>
+            </div>
+
+            <div className="max-w-3xl mx-auto">
+              {/* Stats */}
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-12">
+                <div className="text-center bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                  <div className="text-2xl md:text-3xl font-bold text-[#003580] mb-2">2M+</div>
+                  <div className="text-sm text-gray-600">Active Subscribers</div>
+                </div>
+                <div className="text-center bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                  <div className="text-2xl md:text-3xl font-bold text-[#0071c2] mb-2">₹50K</div>
+                  <div className="text-sm text-gray-600">Avg. Monthly Savings</div>
+                </div>
+                <div className="text-center bg-white/60 backdrop-blur-sm rounded-2xl p-6 border border-white/20">
+                  <div className="text-2xl md:text-3xl font-bold text-[#febb02] mb-2">24/7</div>
+                  <div className="text-sm text-gray-600">AI Deal Alerts</div>
+                </div>
+              </div>
+
+              {/* Email Signup */}
+              <div className="bg-white/80 backdrop-blur-lg rounded-3xl p-6 md:p-8 shadow-2xl border border-white/20">
+                <div className="flex flex-col sm:flex-row gap-4">
+                  <div className="flex-1">
+                    <Input
+                      type="email"
+                      placeholder="Enter your email address"
+                      className="w-full h-14 px-6 bg-white/90 border-2 border-gray-200 rounded-2xl text-gray-900 placeholder:text-gray-500 focus:border-[#0071c2] focus:ring-4 focus:ring-[#0071c2]/20 transition-all duration-150 text-base"
+                    />
+                  </div>
+                  <Button className="bg-gradient-to-r from-[#003580] to-[#0071c2] hover:from-[#002966] hover:to-[#005fa3] text-white px-8 py-4 h-14 rounded-2xl font-bold transition-all duration-150 shadow-lg hover:shadow-xl transform hover:scale-105 whitespace-nowrap">
+                    Get Exclusive Deals
+                  </Button>
+                </div>
+
+                <div className="flex items-center justify-center gap-6 mt-6 text-sm text-gray-600">
+                  <div className="flex items-center gap-2">
+                    <CheckCircle className="w-4 h-4 text-green-500" />
+                    <span>No spam, ever</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Shield className="w-4 h-4 text-blue-500" />
+                    <span>Secure & private</span>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <Zap className="w-4 h-4 text-yellow-500" />
+                    <span>Instant delivery</span>
+                  </div>
+                </div>
+              </div>
+
+              {/* Social Proof */}
+              <div className="text-center mt-8">
+                <p className="text-sm text-gray-500 mb-4">Trusted by travelers from 195+ countries</p>
+                <div className="flex items-center justify-center gap-2">
+                  {[...Array(5)].map((_, i) => (
+                    <Star key={i} className="w-5 h-5 text-[#febb02] fill-current" />
+                  ))}
+                  <span className="ml-2 text-sm font-semibold text-gray-600">4.9/5 from 50,000+ reviews</span>
+                </div>
+              </div>
             </div>
           </div>
         </section>
