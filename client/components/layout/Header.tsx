@@ -109,7 +109,7 @@ export function Header() {
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
                 <img
-                  src="/images/faredown-icon.png"
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb099b42735944c35a1612487d092bd48?format=webp&width=800"
                   alt="Faredown"
                   className="w-8 h-8"
                 />
@@ -489,7 +489,7 @@ export function Header() {
               {/* Logo */}
               <Link to="/" className="flex items-center space-x-2">
                 <img
-                  src="/images/faredown-icon.png"
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb099b42735944c35a1612487d092bd48?format=webp&width=800"
                   alt="Faredown"
                   className="w-8 h-8"
                 />
