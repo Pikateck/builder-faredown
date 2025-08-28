@@ -111,65 +111,56 @@ export function UnifiedLandingPage({
         </section>
 
 
-        {/* How it Works - Large Premium Cards */}
-        <section className="py-20 bg-white">
-          <div className="max-w-6xl mx-auto px-6">
+        {/* How it Works - Premium Cards with Standalone Icons */}
+        <section className="py-16 md:py-20 bg-white">
+          <div className="max-w-5xl mx-auto px-6">
             <div className="text-center mb-16">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4 tracking-tight">
+              <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 tracking-tight">
                 How It Works
               </h2>
-              <p className="text-xl text-gray-600 max-w-3xl mx-auto">
+              <p className="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
                 Advanced AI technology meets premium travel in three simple steps
               </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
               {/* Upgrade */}
-              <div className="group relative bg-white rounded-2xl p-8 lg:p-12 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative">
-                  <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <Search className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-white" strokeWidth={1.5} />
-                  </div>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-white mb-4 transition-colors duration-300">
-                    Upgrade
-                  </h3>
-                  <p className="text-lg text-gray-600 group-hover:text-blue-100 max-w-sm mx-auto leading-relaxed transition-colors duration-300">
-                    Pick your desired room type (Deluxe / Suite / View).
-                  </p>
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-md hover:shadow-lg transition-all duration-150 border border-gray-100 text-center">
+                <div className="mb-6">
+                  <Search className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-[#003580] mx-auto" strokeWidth={1.5} />
                 </div>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+                  Upgrade
+                </h3>
+                <p className="text-base md:text-lg text-gray-600 leading-relaxed">
+                  Pick your desired room type (Deluxe / Suite / View).
+                </p>
               </div>
 
               {/* Bargain */}
-              <div className="group relative bg-white rounded-2xl p-8 lg:p-12 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative">
-                  <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#0071c2] to-[#003580] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <TrendingUp className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-white" strokeWidth={1.5} />
-                  </div>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-white mb-4 transition-colors duration-300">
-                    Bargain
-                  </h3>
-                  <p className="text-lg text-gray-600 group-hover:text-blue-100 max-w-sm mx-auto leading-relaxed transition-colors duration-300">
-                    AI negotiates live with suppliers — <strong>3 attempts</strong>, <strong>30-second</strong> timer.
-                  </p>
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-md hover:shadow-lg transition-all duration-150 border border-gray-100 text-center">
+                <div className="mb-6">
+                  <TrendingUp className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-[#003580] mx-auto" strokeWidth={1.5} />
                 </div>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+                  Bargain
+                </h3>
+                <p className="text-base md:text-lg text-gray-600 leading-relaxed">
+                  AI negotiates live with suppliers — <strong>3 attempts</strong>, <strong>30-second</strong> timer.
+                </p>
               </div>
 
               {/* Book */}
-              <div className="group relative bg-white rounded-2xl p-8 lg:p-12 shadow-xl hover:shadow-2xl transition-all duration-300 border border-gray-100">
-                <div className="absolute inset-0 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-                <div className="relative">
-                  <div className="w-16 h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-2xl flex items-center justify-center mb-8 shadow-lg group-hover:scale-110 transition-transform duration-300">
-                    <CheckCircle className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-white" strokeWidth={1.5} />
-                  </div>
-                  <h3 className="text-2xl lg:text-3xl font-bold text-gray-900 group-hover:text-white mb-4 transition-colors duration-300">
-                    Book
-                  </h3>
-                  <p className="text-lg text-gray-600 group-hover:text-blue-100 max-w-sm mx-auto leading-relaxed transition-colors duration-300">
-                    Instant confirmation & support. Sleep suite tonight.
-                  </p>
+              <div className="bg-white rounded-2xl p-6 md:p-8 shadow-md hover:shadow-lg transition-all duration-150 border border-gray-100 text-center">
+                <div className="mb-6">
+                  <CheckCircle className="w-10 h-10 md:w-14 md:h-14 lg:w-[72px] lg:h-[72px] text-[#003580] mx-auto" strokeWidth={1.5} />
                 </div>
+                <h3 className="text-xl md:text-2xl font-bold text-gray-900 mb-4">
+                  Book
+                </h3>
+                <p className="text-base md:text-lg text-gray-600 leading-relaxed">
+                  Instant confirmation & support. Sleep suite tonight.
+                </p>
               </div>
             </div>
           </div>
