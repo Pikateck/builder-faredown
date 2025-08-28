@@ -91,9 +91,9 @@ export default function Index() {
               <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">🔍</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Search</h3>
+              <h3 className="text-xl font-semibold mb-2">Upgrade</h3>
               <p className="text-gray-600">
-                Find flights, hotels, and experiences from trusted partners
+                Turn a regular fare into premium travel.
               </p>
             </div>
 
@@ -103,7 +103,7 @@ export default function Index() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Bargain</h3>
               <p className="text-gray-600">
-                Let our AI negotiate better prices and upgrades for you
+                AI negotiates live with suppliers — 3 attempts, 30-second timer.
               </p>
             </div>
 
@@ -111,9 +111,9 @@ export default function Index() {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">✈️</span>
               </div>
-              <h3 className="text-xl font-semibold mb-2">Travel</h3>
+              <h3 className="text-xl font-semibold mb-2">Book</h3>
               <p className="text-gray-600">
-                Book your upgraded travel experience at the best price
+                Lock the deal with instant confirmation & support.
               </p>
             </div>
           </div>
