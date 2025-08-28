@@ -416,9 +416,14 @@ export function UnifiedLandingPage({
                         <div className="flex-1 p-4 bg-gradient-to-br from-blue-50 to-indigo-50">
                           <div className="text-center mb-4">
                             <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-xl mx-auto mb-2 flex items-center justify-center">
-                              <Plane className="w-6 h-6 text-white" />
+                              <img
+                                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=800"
+                                alt="Faredown Logo"
+                                className="w-6 h-6 object-contain"
+                                style={{background: 'none', border: 'none', boxShadow: 'none'}}
+                              />
                             </div>
-                            <h3 className="text-lg font-bold text-gray-900">Faredown</h3>
+                            <h3 className="text-lg font-bold text-gray-900">faredown.com</h3>
                             <p className="text-sm text-gray-600">AI Travel Bargains</p>
                           </div>
 

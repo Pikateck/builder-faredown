@@ -25,8 +25,8 @@ export function Footer() {
           <div className="lg:col-span-1">
             <div className="flex items-center gap-3 mb-6">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8114d5f1e1b846358a2324b036ea8a2e?format=webp&width=800"
-                alt="Faredown"
+                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=800"
+                alt="Faredown Logo"
                 className="w-10 h-10 object-contain"
                 style={{background: 'none', border: 'none', boxShadow: 'none'}}
               />
