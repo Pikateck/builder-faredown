@@ -717,6 +717,20 @@ export function MobileNativeSearchForm({
         </div>
       </div>
 
+      {/* Smart Search for Hotels */}
+      {showHotelSmartSearch && (
+        <MobileHotelSmartSearch
+          isOpen={showHotelSmartSearch}
+          onClose={() => setShowHotelSmartSearch(false)}
+          onSelect={(result) => {
+            setSelectedHotelResult(result);
+            setFromCity(result.location.split(",")[0]?.trim() || result.name);
+            setFromCode(result.code || "HTL");
+          }}
+          initialValue={fromCity}
+        />
+      )}
+
       {/* Full-Screen Input Components */}
       {showFromInput && (
         <MobileFullScreenCityInput
