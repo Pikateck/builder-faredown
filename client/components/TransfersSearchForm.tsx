@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
@@ -40,19 +32,12 @@ export function TransfersSearchForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
-  const [serviceType, setServiceType] = useState("airport-taxi");
-  const [tripType, setTripType] = useState("one-way");
   const [pickupLocation, setPickupLocation] = useState("");
-  const [pickupCode, setPickupCode] = useState("");
-  const [isPickupOpen, setIsPickupOpen] = useState(false);
-  const [pickupInputValue, setPickupInputValue] = useState("");
-  const [isPickupUserTyping, setIsPickupUserTyping] = useState(false);
-
   const [dropoffLocation, setDropoffLocation] = useState("");
-  const [dropoffCode, setDropoffCode] = useState("");
+  const [isPickupOpen, setIsPickupOpen] = useState(false);
   const [isDropoffOpen, setIsDropoffOpen] = useState(false);
+  const [pickupInputValue, setPickupInputValue] = useState("");
   const [dropoffInputValue, setDropoffInputValue] = useState("");
-  const [isDropoffUserTyping, setIsDropoffUserTyping] = useState(false);
 
   // Set default dates
   const tomorrow = new Date();
@@ -60,10 +45,7 @@ export function TransfersSearchForm() {
 
   const [pickupDate, setPickupDate] = useState<Date | undefined>(tomorrow);
   const [returnDate, setReturnDate] = useState<Date | undefined>();
-  const [pickupTime, setPickupTime] = useState("12:00");
-  const [returnTime, setReturnTime] = useState("12:00");
   const [isPickupDateOpen, setIsPickupDateOpen] = useState(false);
-  const [isReturnDateOpen, setIsReturnDateOpen] = useState(false);
 
   const [passengers, setPassengers] = useState<PassengerConfig>({
     adults: 2,
@@ -71,18 +53,6 @@ export function TransfersSearchForm() {
     infants: 0,
   });
   const [isPassengerPopoverOpen, setIsPassengerPopoverOpen] = useState(false);
-
-  // Mobile detection
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -111,13 +81,6 @@ export function TransfersSearchForm() {
     "Singapore Marina Bay",
   ];
 
-  // Time slots
-  const timeSlots = Array.from({ length: 24 * 2 }, (_, i) => {
-    const hour = Math.floor(i / 2);
-    const minute = i % 2 === 0 ? "00" : "30";
-    return `${hour.toString().padStart(2, "0")}:${minute}`;
-  });
-
   const updatePassengerCount = (
     type: keyof PassengerConfig,
     operation: "increment" | "decrement",
@@ -139,29 +102,12 @@ export function TransfersSearchForm() {
   };
 
   const swapLocations = () => {
-    // Swap locations
-    const tempLocation = pickupLocation;
+    const temp = pickupLocation;
     setPickupLocation(dropoffLocation);
-    setDropoffLocation(tempLocation);
-
-    // Swap codes
-    const tempCode = pickupCode;
-    setPickupCode(dropoffCode);
-    setDropoffCode(tempCode);
+    setDropoffLocation(temp);
   };
 
   const handleSearch = () => {
-    console.log("🔍 Starting transfer search with:", {
-      tripType,
-      pickupLocation,
-      dropoffLocation,
-      pickupDate,
-      returnDate,
-      pickupTime,
-      returnTime,
-      passengers,
-    });
-
     // Basic validation
     if (!pickupLocation || !dropoffLocation) {
       setErrorMessage("Please enter pickup and drop-off locations");
@@ -175,36 +121,26 @@ export function TransfersSearchForm() {
       return;
     }
 
-    if (tripType === "return" && !returnDate) {
-      setErrorMessage("Please select return date for round-trip");
-      setShowError(true);
-      return;
-    }
-
     try {
       const searchParams = new URLSearchParams({
         pickup: pickupLocation,
         dropoff: dropoffLocation,
         pickupDate: pickupDate.toISOString(),
-        pickupTime,
         adults: passengers.adults.toString(),
         children: passengers.children.toString(),
         infants: passengers.infants.toString(),
-        tripType,
         searchType: "live",
         searchId: Date.now().toString(),
       });
 
-      if (tripType === "return" && returnDate) {
+      if (returnDate) {
         searchParams.set("returnDate", returnDate.toISOString());
-        searchParams.set("returnTime", returnTime);
       }
 
       const url = `/transfers/results?${searchParams.toString()}`;
-      console.log("🚗 Navigating to transfer search:", url);
       navigate(url);
     } catch (error) {
-      console.error("🚨 Error in transfer search:", error);
+      console.error("Transfer search error:", error);
       setErrorMessage("Search failed. Please try again.");
       setShowError(true);
     }
@@ -223,50 +159,11 @@ export function TransfersSearchForm() {
         onClose={() => setShowError(false)}
       />
       <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
-        {/* Service Type Tabs */}
-        <div className="flex gap-1 mb-4 bg-gray-100 p-1 rounded-lg">
-          <button
-            onClick={() => setServiceType("airport-taxi")}
-            className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-              serviceType === "airport-taxi"
-                ? "bg-[#003580] text-white shadow-sm"
-                : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
-            }`}
-          >
-            <Car className="w-4 h-4 inline mr-2" />
-            Airport Taxi
-          </button>
-          <button
-            onClick={() => setServiceType("car-rentals")}
-            className={`flex-1 px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-              serviceType === "car-rentals"
-                ? "bg-[#003580] text-white shadow-sm"
-                : "text-gray-600 hover:text-gray-800 hover:bg-gray-200"
-            }`}
-          >
-            <Car className="w-4 h-4 inline mr-2" />
-            Car Rentals
-          </button>
-        </div>
-
-        {/* Trip Type Selection */}
-        <div className="flex gap-2 mb-4">
-          <Select value={tripType} onValueChange={setTripType}>
-            <SelectTrigger className="w-32 h-8 text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="one-way">One-way</SelectItem>
-              <SelectItem value="return">Return</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
         {/* Main Search Form */}
         <div className="flex flex-col lg:flex-row gap-2 mb-4">
           {/* Pickup Location */}
           <div
-            className="relative flex-1 lg:max-w-[240px] w-full"
+            className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
             onClick={(e) => e.stopPropagation()}
           >
             <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
@@ -282,7 +179,7 @@ export function TransfersSearchForm() {
                   {pickupLocation ? (
                     <>
                       <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                        {pickupCode || "PKP"}
+                        PKP
                       </div>
                       <span className="text-sm text-gray-700 font-medium truncate">
                         {pickupLocation}
@@ -301,8 +198,6 @@ export function TransfersSearchForm() {
                     e.stopPropagation();
                     setPickupLocation("");
                     setPickupInputValue("");
-                    setIsPickupUserTyping(false);
-                    setPickupCode("");
                     setIsPickupOpen(false);
                   }}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -324,11 +219,7 @@ export function TransfersSearchForm() {
                     <input
                       type="text"
                       value={pickupInputValue}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setPickupInputValue(value);
-                        setIsPickupUserTyping(true);
-                      }}
+                      onChange={(e) => setPickupInputValue(e.target.value)}
                       placeholder="Search locations..."
                       className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
                     />
@@ -348,12 +239,8 @@ export function TransfersSearchForm() {
                         key={index}
                         onClick={() => {
                           setPickupLocation(location);
-                          setPickupCode(
-                            location.includes("Airport") ? "APT" : "CTY",
-                          );
                           setIsPickupOpen(false);
                           setPickupInputValue("");
-                          setIsPickupUserTyping(false);
                         }}
                         className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
                       >
@@ -391,7 +278,7 @@ export function TransfersSearchForm() {
 
           {/* Drop-off Location */}
           <div
-            className="relative flex-1 lg:max-w-[240px] w-full"
+            className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
             onClick={(e) => e.stopPropagation()}
           >
             <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
@@ -400,14 +287,14 @@ export function TransfersSearchForm() {
             <div className="relative">
               <button
                 onClick={() => setIsDropoffOpen(!isDropoffOpen)}
-                className="flex items-center bg-white rounded border border-gray-300 px-3 py-2 h-10 w-full hover:border-blue-500 touch-manipulation pr-10"
+                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
               >
                 <Car className="w-4 h-4 text-gray-500 mr-2" />
                 <div className="flex items-center space-x-2 min-w-0">
                   {dropoffLocation ? (
                     <>
                       <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                        {dropoffCode || "DRP"}
+                        DRP
                       </div>
                       <span className="text-sm text-gray-700 font-medium truncate">
                         {dropoffLocation}
@@ -426,8 +313,6 @@ export function TransfersSearchForm() {
                     e.stopPropagation();
                     setDropoffLocation("");
                     setDropoffInputValue("");
-                    setIsDropoffUserTyping(false);
-                    setDropoffCode("");
                     setIsDropoffOpen(false);
                   }}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
@@ -449,11 +334,7 @@ export function TransfersSearchForm() {
                     <input
                       type="text"
                       value={dropoffInputValue}
-                      onChange={(e) => {
-                        const value = e.target.value;
-                        setDropoffInputValue(value);
-                        setIsDropoffUserTyping(true);
-                      }}
+                      onChange={(e) => setDropoffInputValue(e.target.value)}
                       placeholder="Search locations..."
                       className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
                     />
@@ -473,12 +354,8 @@ export function TransfersSearchForm() {
                         key={index}
                         onClick={() => {
                           setDropoffLocation(location);
-                          setDropoffCode(
-                            location.includes("Airport") ? "APT" : "CTY",
-                          );
                           setIsDropoffOpen(false);
                           setDropoffInputValue("");
-                          setIsDropoffUserTyping(false);
                         }}
                         className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
                       >
@@ -502,31 +379,42 @@ export function TransfersSearchForm() {
             )}
           </div>
 
-          {/* Pickup Date & Time */}
-          <div className="flex-1 lg:max-w-[140px]">
+          {/* Transfer Date */}
+          <div className="flex-1 lg:max-w-[280px]">
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Pickup Date
+              Transfer dates
             </label>
             <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate">
-                    {pickupDate ? format(pickupDate, "MMM d") : "Pickup Date"}
+                <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
+                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
+                  <span className="truncate text-xs sm:text-sm">
+                    <span className="hidden md:inline">
+                      {pickupDate && returnDate
+                        ? `${format(pickupDate, "MMM d")} - ${format(returnDate, "MMM d")}`
+                        : pickupDate
+                        ? format(pickupDate, "MMM d")
+                        : "Transfer dates"}
+                    </span>
+                    <span className="md:hidden">
+                      {pickupDate && returnDate
+                        ? `${format(pickupDate, "d MMM")} - ${format(returnDate, "d MMM")}`
+                        : pickupDate
+                        ? format(pickupDate, "d MMM")
+                        : "Dates"}
+                    </span>
                   </span>
-                </Button>
+                </button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <BookingCalendar
                   initialRange={{
                     startDate: pickupDate || new Date(),
-                    endDate: pickupDate || new Date(),
+                    endDate: returnDate || pickupDate || new Date(),
                   }}
                   onChange={(range) => {
                     setPickupDate(range.startDate);
+                    setReturnDate(range.endDate);
                     setIsPickupDateOpen(false);
                   }}
                   onClose={() => setIsPickupDateOpen(false)}
@@ -535,87 +423,8 @@ export function TransfersSearchForm() {
             </Popover>
           </div>
 
-          {/* Pickup Time */}
-          <div className="flex-1 lg:max-w-[100px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Time
-            </label>
-            <Select value={pickupTime} onValueChange={setPickupTime}>
-              <SelectTrigger className="w-full h-10 sm:h-12 text-xs sm:text-sm border-2 border-blue-400">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {timeSlots.map((time) => (
-                  <SelectItem key={time} value={time}>
-                    {time}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Return Date & Time (if return trip) */}
-          {tripType === "return" && (
-            <>
-              <div className="flex-1 lg:max-w-[140px]">
-                <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                  Return Date
-                </label>
-                <Popover
-                  open={isReturnDateOpen}
-                  onOpenChange={setIsReturnDateOpen}
-                >
-                  <PopoverTrigger asChild>
-                    <Button
-                      variant="outline"
-                      className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
-                    >
-                      <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                      <span className="truncate">
-                        {returnDate
-                          ? format(returnDate, "MMM d")
-                          : "Return Date"}
-                      </span>
-                    </Button>
-                  </PopoverTrigger>
-                  <PopoverContent className="w-auto p-0" align="start">
-                    <BookingCalendar
-                      initialRange={{
-                        startDate: returnDate || new Date(),
-                        endDate: returnDate || new Date(),
-                      }}
-                      onChange={(range) => {
-                        setReturnDate(range.startDate);
-                        setIsReturnDateOpen(false);
-                      }}
-                      onClose={() => setIsReturnDateOpen(false)}
-                    />
-                  </PopoverContent>
-                </Popover>
-              </div>
-
-              <div className="flex-1 lg:max-w-[100px]">
-                <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                  Return Time
-                </label>
-                <Select value={returnTime} onValueChange={setReturnTime}>
-                  <SelectTrigger className="w-full h-10 sm:h-12 text-xs sm:text-sm border-2 border-blue-400">
-                    <SelectValue />
-                  </SelectTrigger>
-                  <SelectContent>
-                    {timeSlots.map((time) => (
-                      <SelectItem key={time} value={time}>
-                        {time}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-              </div>
-            </>
-          )}
-
           {/* Passengers */}
-          <div className="flex-1 lg:max-w-[140px]">
+          <div className="flex-1 lg:max-w-[280px]">
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Passengers
             </label>
@@ -624,13 +433,10 @@ export function TransfersSearchForm() {
               onOpenChange={setIsPassengerPopoverOpen}
             >
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  <Users className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate">{passengerSummary()}</span>
-                </Button>
+                <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
+                  <Users className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
+                  <span className="truncate text-xs sm:text-sm">{passengerSummary()}</span>
+                </button>
               </PopoverTrigger>
               <PopoverContent className="w-80" align="start">
                 <div className="space-y-4">
@@ -754,7 +560,7 @@ export function TransfersSearchForm() {
           <div className="flex-shrink-0 w-full sm:w-auto">
             <Button
               onClick={handleSearch}
-              className="h-10 sm:h-12 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
+              className="h-10 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
             >
               <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               <span className="text-sm sm:text-base">Search Transfers</span>
