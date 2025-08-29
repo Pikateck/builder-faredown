@@ -103,8 +103,7 @@ const Contact = () => {
   ];
 
   return (
-    <div className="min-h-screen bg-gray-50">
-      <Header />
+    <Layout showSearch={false}>
       
       <div className="pt-20">
         {/* Hero Section */}
@@ -336,15 +335,7 @@ const Contact = () => {
         </div>
       </div>
 
-      {/* Footer */}
-      <Footer />
-
-      {/* Mobile Bottom Navigation - Fixed at bottom on mobile */}
-      <MobileBottomNav />
-
-      {/* Mobile Bottom Padding - prevents content from being hidden behind bottom nav */}
-      <div className="h-16 md:hidden"></div>
-    </div>
+    </Layout>
   );
 };
 
