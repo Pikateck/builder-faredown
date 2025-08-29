@@ -84,7 +84,7 @@ export function MobileNavBar({
           <div className="flex items-center justify-between px-4 py-2">
             <Link to="/" className="flex items-center space-x-2">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F646af7310fef4dfcbb02efff819f5205?format=webp&width=800"
+                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fbee7a6d0074144f5a821e1a9b786eae9?format=webp&width=800"
                 alt="Faredown Logo"
                 className="w-6 h-6 object-contain"
                 style={{ background: 'none', border: 'none', boxShadow: 'none' }}
