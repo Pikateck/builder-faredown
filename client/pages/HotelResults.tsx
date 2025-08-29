@@ -162,8 +162,9 @@ export default function HotelResults() {
   // Load hotels from live Hotelbeds API and dates from URL params
   useEffect(() => {
     loadDatesFromParams(searchParams);
+    loadFromUrlParams(searchParams); // Load search parameters into SearchContext
     loadHotels();
-  }, [searchParams, selectedCurrency, loadDatesFromParams]);
+  }, [searchParams, selectedCurrency, loadDatesFromParams, loadFromUrlParams]);
 
   // Helper function to transform Hotelbeds images to usable URLs
   const transformHotelImages = (images: any[]): string[] => {
