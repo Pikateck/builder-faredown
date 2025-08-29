@@ -103,6 +103,14 @@ export default function HotelResults() {
   const children = searchParams.get("children") || "0";
   const rooms = searchParams.get("rooms") || "1";
 
+  // Get authenticated user's first name
+  const { user } = useAuth();
+  const storedUser = authService.getStoredUser();
+  const userFirstName =
+    user?.name && user.name.trim()
+      ? user.name.split(" ")[0]
+      : storedUser?.firstName || "Guest";
+
   // City data for hotel destinations
   const cityData = {
     Mumbai: {
