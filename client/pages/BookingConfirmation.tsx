@@ -1853,8 +1853,11 @@ export default function BookingConfirmation() {
                   {bookingType === "flight"
                     ? booking.contactDetails?.email ||
                       booking.guest?.email ||
-                      "john.doe@example.com"
-                    : booking.guest?.email || "email@example.com"}
+                      searchParams.get("guestEmail") ||
+                      "zubin0478@gmail.com"
+                    : booking.guest?.email ||
+                      searchParams.get("guestEmail") ||
+                      "zubin0478@gmail.com"}
                 </p>
                 <p>
                   <span className="text-gray-600">Phone:</span>{" "}
