@@ -596,7 +596,7 @@ export default function FlightDetails({
         onHold={(orderRef) => {
           console.log("Bargain offer on hold with order ref:", orderRef);
         }}
-        userName="Guest"
+        userName={userFirstName}
         module="flights"
         basePrice={displayFlight.price.amount}
         productRef={displayFlight.id}
