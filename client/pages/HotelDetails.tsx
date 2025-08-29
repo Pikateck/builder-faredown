@@ -120,6 +120,7 @@ export default function HotelDetails() {
   const [searchParams] = useSearchParams();
   const { formatPrice } = useCurrency();
   const { loadDatesFromParams } = useDateContext();
+  const { loadFromUrlParams, getDisplayData } = useSearch();
   const [activeTab, setActiveTab] = useState(() => {
     // Check if tab parameter is provided in URL
     const tabParam = searchParams.get("tab");
