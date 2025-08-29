@@ -581,7 +581,7 @@ export default function HotelDetails() {
         name: room.name || `Room Type ${index + 1}`,
         type: room.name || `1 X ${room.name || "Standard"}`,
         details: room.features
-          ? room.features.join(", ")
+          ? room.features.map(f => typeof f === 'string' ? f : f?.name || 'Feature').join(", ")
           : "Standard accommodations",
         pricePerNight:
           room.price || room.pricePerNight || hotelData.currentPrice || 167,
