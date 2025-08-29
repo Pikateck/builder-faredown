@@ -94,19 +94,19 @@ export function HotelSearchForm({
       setDestination(displayData.destination);
       setDestinationCode("");
     }
-    if (displayData.checkIn) {
+    if (searchParams.checkIn) {
       const checkInDateFromContext = new Date(searchParams.checkIn);
       if (!isNaN(checkInDateFromContext.getTime())) {
         setCheckInDate(checkInDateFromContext);
       }
     }
-    if (displayData.checkOut) {
+    if (searchParams.checkOut) {
       const checkOutDateFromContext = new Date(searchParams.checkOut);
       if (!isNaN(checkOutDateFromContext.getTime())) {
         setCheckOutDate(checkOutDateFromContext);
       }
     }
-    if (displayData.adults || displayData.children) {
+    if (displayData.adults || displayData.children || displayData.rooms) {
       setGuests(prev => ({
         ...prev,
         adults: displayData.adults || prev.adults,
