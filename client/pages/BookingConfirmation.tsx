@@ -1864,8 +1864,11 @@ export default function BookingConfirmation() {
                   {bookingType === "flight"
                     ? booking.contactDetails?.phone ||
                       booking.guest?.phone ||
-                      "+91 9876543210"
-                    : booking.guest?.phone || "Phone Number"}
+                      searchParams.get("guestPhone") ||
+                      "+919820453331"
+                    : booking.guest?.phone ||
+                      searchParams.get("guestPhone") ||
+                      "+919820453331"}
                 </p>
                 {bookingType === "flight" &&
                   booking.passengers &&
