@@ -1833,14 +1833,20 @@ export default function BookingConfirmation() {
                     ? booking.passengers?.[0]?.firstName ||
                       booking.contactDetails?.firstName ||
                       booking.guest?.firstName ||
-                      "John"
-                    : booking.guest?.firstName || "Guest"}{" "}
+                      searchParams.get("guestFirstName") ||
+                      "Zubin"
+                    : booking.guest?.firstName ||
+                      searchParams.get("guestFirstName") ||
+                      "Zubin"}{" "}
                   {bookingType === "flight"
                     ? booking.passengers?.[0]?.lastName ||
                       booking.contactDetails?.lastName ||
                       booking.guest?.lastName ||
-                      "Doe"
-                    : booking.guest?.lastName || "Name"}
+                      searchParams.get("guestLastName") ||
+                      "Aibara"
+                    : booking.guest?.lastName ||
+                      searchParams.get("guestLastName") ||
+                      "Aibara"}
                 </p>
                 <p>
                   <span className="text-gray-600">Email:</span>{" "}
