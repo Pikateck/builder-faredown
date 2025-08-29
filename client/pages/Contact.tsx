@@ -326,6 +326,15 @@ const Contact = () => {
           </div>
         </div>
       </div>
+
+      {/* Footer */}
+      <Footer />
+
+      {/* Mobile Bottom Navigation - Fixed at bottom on mobile */}
+      <MobileBottomNav />
+
+      {/* Mobile Bottom Padding - prevents content from being hidden behind bottom nav */}
+      <div className="h-16 md:hidden"></div>
     </div>
   );
 };
