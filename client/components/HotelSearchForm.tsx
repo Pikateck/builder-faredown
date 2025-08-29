@@ -87,6 +87,36 @@ export function HotelSearchForm({
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
 
+  // Initialize form with data from SearchContext (for results page)
+  useEffect(() => {
+    const displayData = getDisplayData();
+    if (displayData.destination && displayData.destination !== "Dubai") {
+      setDestination(displayData.destination);
+      setDestinationCode("");
+    }
+    if (displayData.checkIn) {
+      const checkInDateFromContext = new Date(searchParams.checkIn);
+      if (!isNaN(checkInDateFromContext.getTime())) {
+        setCheckInDate(checkInDateFromContext);
+      }
+    }
+    if (displayData.checkOut) {
+      const checkOutDateFromContext = new Date(searchParams.checkOut);
+      if (!isNaN(checkOutDateFromContext.getTime())) {
+        setCheckOutDate(checkOutDateFromContext);
+      }
+    }
+    if (displayData.adults || displayData.children) {
+      setGuests(prev => ({
+        ...prev,
+        adults: displayData.adults || prev.adults,
+        children: displayData.children || prev.children,
+        childrenAges: Array(displayData.children || prev.children).fill(10).map((_, i) => prev.childrenAges[i] || 10),
+        rooms: displayData.rooms || prev.rooms,
+      }));
+    }
+  }, [searchParams, getDisplayData]);
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
