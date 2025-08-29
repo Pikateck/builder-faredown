@@ -108,6 +108,8 @@ import { hotelsService } from "@/services/hotelsService";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { HotelSearchForm } from "@/components/HotelSearchForm";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { authService } from "@/services/authService";
 import { useDateContext } from "@/contexts/DateContext";
 
 export default function HotelDetails() {
