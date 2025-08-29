@@ -160,8 +160,12 @@ function App() {
                     <Route path="/sports-events" element={<SportsEvents />} />
                     <Route path="/transfers" element={<Transfers />} />
                     <Route
-                      path="/transfer-results"
+                      path="/transfers/results"
                       element={<TransferResults />}
+                    />
+                    <Route
+                      path="/transfer-results"
+                      element={<Navigate to="/transfers/results" replace />}
                     />
                     <Route
                       path="/transfer-details/:id"
