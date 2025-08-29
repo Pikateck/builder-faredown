@@ -605,6 +605,7 @@ export default function HotelResults() {
           title={searchParams.get("destinationName") || destination || "Dubai"}
           subtitle={`${filteredAndSortedHotels.length} hotels found`}
           onBack={() => navigate("/hotels")}
+          showLogo={true}
           rightActions={
             isLiveData && (
               <div className="flex items-center gap-1 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
