@@ -38,6 +38,7 @@ import {
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol, calculateNights } from "@/lib/pricing";
 import { useAuth } from "@/contexts/AuthContext";
+import { useSearch } from "@/contexts/SearchContext";
 import { authService } from "@/services/authService";
 import {
   MobileCityDropdown,
