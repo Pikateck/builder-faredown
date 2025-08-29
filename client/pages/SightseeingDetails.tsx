@@ -138,6 +138,14 @@ export default function SightseeingDetails() {
     };
   });
 
+  // Get authenticated user's first name
+  const { user } = useAuth();
+  const storedUser = authService.getStoredUser();
+  const userFirstName =
+    user?.name && user.name.trim()
+      ? user.name.split(" ")[0]
+      : storedUser?.firstName || "Guest";
+
   // Debug logging (after state declarations)
   console.log("🎯 SightseeingDetails component loaded", {
     attractionId,
@@ -369,7 +377,7 @@ export default function SightseeingDetails() {
           return;
         }
 
-        console.log("✅ Setting attraction data:", attractionData.name);
+        console.log("�� Setting attraction data:", attractionData.name);
         setAttraction(attractionData);
       } catch (err) {
         console.error("Error loading attraction:", err);
