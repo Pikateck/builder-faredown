@@ -110,7 +110,16 @@ const Contact = () => {
       
       <div className="pt-20">
         {/* Hero Section */}
-        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white py-16">
+        <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white py-16 relative">
+          {/* Mobile Back Button */}
+          <button
+            onClick={() => navigate(-1)}
+            className="absolute top-4 left-4 md:hidden flex items-center gap-2 text-white hover:text-blue-200 transition-colors z-10"
+          >
+            <ArrowLeft className="w-5 h-5" />
+            <span className="text-sm font-medium">Back</span>
+          </button>
+
           <div className="container mx-auto px-4 text-center">
             <h1 className="text-4xl md:text-5xl font-bold mb-4">Contact Us</h1>
             <p className="text-xl md:text-2xl mb-8 opacity-90">
