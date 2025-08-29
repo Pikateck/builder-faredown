@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail, Phone, MapPin, Clock, Send, MessageSquare, HelpCircle, Star } from 'lucide-react';
 import { Header } from '../components/layout/Header';
+import { MobileBottomNav } from '../components/layout/MobileBottomNav';
+import { Footer } from '../components/Footer';
 import { Button } from '../components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '../components/ui/card';
 import { Input } from '../components/ui/input';
