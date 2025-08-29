@@ -18,6 +18,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useDateContext } from "@/contexts/DateContext";
+import { useAuth } from "@/contexts/AuthContext";
+import { authService } from "@/services/authService";
 import {
   MapPin,
   Star,
