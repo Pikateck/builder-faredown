@@ -58,6 +58,9 @@ export default function BookingConfirmation() {
   };
 
   useEffect(() => {
+    // Load search data from URL parameters and booking context
+    loadFromBookingData(bookingContext);
+
     // Prioritize booking context data first (most reliable)
     if (bookingContext.isComplete && bookingContext.selectedFlight) {
       console.log("🎯 Using booking context data - most reliable source");
