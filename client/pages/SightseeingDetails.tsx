@@ -4,9 +4,8 @@ import { Header } from "@/components/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ErrorBanner } from "@/components/ErrorBanner";
-import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
+import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
 import { MobileSightseeingBooking } from "@/components/mobile/MobileSightseeingBooking";
-import { MobileBargainModal } from "@/components/mobile/MobileBargainModal";
 import { sightseeingService } from "@/services/sightseeingService";
 import {
   AlertDialog,
