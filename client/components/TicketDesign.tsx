@@ -32,10 +32,16 @@ export const TicketDesign: React.FC<TicketDesignProps> = ({ bookingData }) => {
                 src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F646af7310fef4dfcbb02efff819f5205?format=webp&width=800"
                 alt="Faredown Logo"
                 className="h-10 w-auto object-contain"
-                style={{ background: 'none', border: 'none', boxShadow: 'none' }}
+                style={{
+                  background: "none",
+                  border: "none",
+                  boxShadow: "none",
+                }}
               />
               <div>
-                <span className="text-xl font-medium text-white">faredown.com</span>
+                <span className="text-xl font-medium text-white">
+                  faredown.com
+                </span>
                 <p className="text-blue-100 text-lg">
                   Don't Just Book It. Bargain It.™
                 </p>

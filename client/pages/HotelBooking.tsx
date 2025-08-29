@@ -254,9 +254,15 @@ export default function HotelBooking() {
                   src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F646af7310fef4dfcbb02efff819f5205?format=webp&width=800"
                   alt="Faredown Logo"
                   className="h-6 w-auto object-contain"
-                  style={{ background: 'none', border: 'none', boxShadow: 'none' }}
+                  style={{
+                    background: "none",
+                    border: "none",
+                    boxShadow: "none",
+                  }}
                 />
-                <span className="text-lg font-medium text-white">faredown.com</span>
+                <span className="text-lg font-medium text-white">
+                  faredown.com
+                </span>
               </Link>
               <div className="text-xs sm:text-sm text-blue-200 hidden sm:block">
                 / Hotel Booking

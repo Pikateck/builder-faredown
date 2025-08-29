@@ -25,7 +25,8 @@ export default function Transfers() {
                       Upgrade. Bargain. Book.
                     </h2>
                     <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-white leading-tight opacity-95">
-                      Ride in comfort for less — AI secures your best deal on every trip.
+                      Ride in comfort for less — AI secures your best deal on
+                      every trip.
                     </h1>
                   </div>
                 </div>

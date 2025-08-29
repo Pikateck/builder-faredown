@@ -89,7 +89,7 @@ export function Header({ className }: HeaderProps) {
               src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fbee7a6d0074144f5a821e1a9b786eae9?format=webp&width=800"
               alt="Faredown Logo"
               className="w-8 h-8 object-contain"
-              style={{ background: 'none', border: 'none', boxShadow: 'none' }}
+              style={{ background: "none", border: "none", boxShadow: "none" }}
             />
             <span className="text-xl font-medium text-white">faredown.com</span>
           </Link>

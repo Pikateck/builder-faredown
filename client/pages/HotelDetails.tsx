@@ -302,7 +302,7 @@ export default function HotelDetails() {
             return hotel;
           } catch (serviceError) {
             console.info(
-              "Service handled with built-in fallback. Using returned data."
+              "Service handled with built-in fallback. Using returned data.",
             );
             // The service now provides mock data on failure, so this shouldn't throw
             // If it does throw, something else is wrong, so let it bubble up
@@ -584,7 +584,9 @@ export default function HotelDetails() {
         name: room.name || `Room Type ${index + 1}`,
         type: room.name || `1 X ${room.name || "Standard"}`,
         details: room.features
-          ? room.features.map(f => typeof f === 'string' ? f : f?.name || 'Feature').join(", ")
+          ? room.features
+              .map((f) => (typeof f === "string" ? f : f?.name || "Feature"))
+              .join(", ")
           : "Standard accommodations",
         pricePerNight:
           room.price || room.pricePerNight || hotelData.currentPrice || 167,
@@ -599,7 +601,9 @@ export default function HotelDetails() {
               : hotelData.images[1].url
             : "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300"),
         features: Array.isArray(room.features)
-          ? room.features.map(f => typeof f === 'string' ? f : f?.name || 'Feature')
+          ? room.features.map((f) =>
+              typeof f === "string" ? f : f?.name || "Feature",
+            )
           : [
               "Standard room",
               "Free WiFi",
@@ -807,7 +811,8 @@ export default function HotelDetails() {
           selectedFilters.popularFilters,
         ).some((filter) =>
           roomFeatures.some((feature: any) => {
-            const featureName = typeof feature === 'string' ? feature : feature?.name || '';
+            const featureName =
+              typeof feature === "string" ? feature : feature?.name || "";
             return featureName.toLowerCase().includes(filter.toLowerCase());
           }),
         );
@@ -1110,7 +1115,9 @@ export default function HotelDetails() {
                                 key={idx}
                                 className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
                               >
-                                {typeof feature === 'string' ? feature : feature?.name || 'Feature'}
+                                {typeof feature === "string"
+                                  ? feature
+                                  : feature?.name || "Feature"}
                               </span>
                             ))}
                           </div>
@@ -2946,8 +2953,8 @@ export default function HotelDetails() {
             id: hotel.id,
             name: hotel.name,
             location: hotel.location,
-            checkIn: checkInDate.toISOString().split('T')[0],
-            checkOut: checkOutDate.toISOString().split('T')[0],
+            checkIn: checkInDate.toISOString().split("T")[0],
+            checkOut: checkOutDate.toISOString().split("T")[0],
             price: selectedRoomType.pricePerNight,
             rating: hotel.rating,
           }}
@@ -2958,7 +2965,12 @@ export default function HotelDetails() {
             setBargainingRoomId(null);
           }}
           onAccept={(finalPrice, orderRef) => {
-            console.log("Hotel details bargain booking success with price:", finalPrice, "Order ref:", orderRef);
+            console.log(
+              "Hotel details bargain booking success with price:",
+              finalPrice,
+              "Order ref:",
+              orderRef,
+            );
             setIsBargainModalOpen(false);
             handleBooking(selectedRoomType, finalPrice);
             // Mark room as successfully bargained
@@ -2971,7 +2983,10 @@ export default function HotelDetails() {
             setBargainingRoomId(null);
           }}
           onHold={(orderRef) => {
-            console.log("Hotel details bargain offer on hold with order ref:", orderRef);
+            console.log(
+              "Hotel details bargain offer on hold with order ref:",
+              orderRef,
+            );
           }}
           userName={userFirstName}
           module="hotels"

@@ -3,12 +3,12 @@
  * Backup Date: February 18, 2025 - 15:30 UTC
  * Backup ID: BACKUP_SearchPanel_2025-02-18_15-30-UTC
  * Status: CRITICAL COMPONENT - FULLY FUNCTIONAL
- * 
+ *
  * COMPONENT DESCRIPTION:
  * Unified search interface that dynamically displays the appropriate search form
  * based on the current route/tab. Provides consistent branding and messaging
  * across all travel modules (Flights, Hotels, Sightseeing, Transfers).
- * 
+ *
  * KEY FEATURES:
  * - Dynamic tab detection from URL path
  * - Responsive mobile/desktop layouts

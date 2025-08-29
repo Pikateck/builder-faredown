@@ -183,7 +183,7 @@ export function TransfersSearchForm() {
         searchParams.set("children", passengers.children.toString());
         searchParams.set("infants", passengers.infants.toString());
         searchParams.set("tripType", tripType);
-        
+
         if (tripType === "return" && returnDate) {
           searchParams.set("returnDate", returnDate.toISOString());
           searchParams.set("returnTime", returnTime);
@@ -215,7 +215,7 @@ export function TransfersSearchForm() {
     label: string,
     placeholder: string,
     code: string,
-    height: "h-10" | "h-12" = "h-10"
+    height: "h-10" | "h-12" = "h-10",
   ) => (
     <div
       className="relative flex-1 w-full"
@@ -283,9 +283,7 @@ export function TransfersSearchForm() {
           <div className="space-y-1">
             {popularLocations
               .filter((loc) =>
-                loc
-                  .toLowerCase()
-                  .includes((inputValue || "").toLowerCase()),
+                loc.toLowerCase().includes((inputValue || "").toLowerCase()),
               )
               .slice(0, 8)
               .map((loc, index) => (
@@ -307,7 +305,9 @@ export function TransfersSearchForm() {
                         {loc}
                       </div>
                       <div className="text-xs text-gray-500">
-                        {serviceType === "car-rentals" ? "Car rental location" : "Transfer location"}
+                        {serviceType === "car-rentals"
+                          ? "Car rental location"
+                          : "Transfer location"}
                       </div>
                     </div>
                   </div>
@@ -368,7 +368,7 @@ export function TransfersSearchForm() {
               "Pick-up location",
               "Pick-up location",
               "PKP",
-              "h-12"
+              "h-12",
             )}
 
             {/* Drop-off Location */}
@@ -383,7 +383,7 @@ export function TransfersSearchForm() {
               "Drop-off location",
               "Drop-off location",
               "DRP",
-              "h-12"
+              "h-12",
             )}
 
             {/* Pick-up Date */}
@@ -391,12 +391,17 @@ export function TransfersSearchForm() {
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Pick-up date
               </label>
-              <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
+              <Popover
+                open={isPickupDateOpen}
+                onOpenChange={setIsPickupDateOpen}
+              >
                 <PopoverTrigger asChild>
                   <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
                     <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                     <span className="truncate text-xs sm:text-sm">
-                      {pickupDate ? format(pickupDate, "MMM d") : "Pick-up date"}
+                      {pickupDate
+                        ? format(pickupDate, "MMM d")
+                        : "Pick-up date"}
                     </span>
                   </button>
                 </PopoverTrigger>
@@ -440,12 +445,17 @@ export function TransfersSearchForm() {
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Drop-off date
               </label>
-              <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
+              <Popover
+                open={isReturnDateOpen}
+                onOpenChange={setIsReturnDateOpen}
+              >
                 <PopoverTrigger asChild>
                   <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
                     <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                     <span className="truncate text-xs sm:text-sm">
-                      {returnDate ? format(returnDate, "MMM d") : "Drop-off date"}
+                      {returnDate
+                        ? format(returnDate, "MMM d")
+                        : "Drop-off date"}
                     </span>
                   </button>
                 </PopoverTrigger>
@@ -544,7 +554,7 @@ export function TransfersSearchForm() {
                 "From pick-up location",
                 "From pick-up location",
                 "PKP",
-                "h-12"
+                "h-12",
               )}
 
               {/* Enter destination */}
@@ -559,7 +569,7 @@ export function TransfersSearchForm() {
                 "Enter destination",
                 "Enter destination",
                 "DRP",
-                "h-12"
+                "h-12",
               )}
 
               {/* Pick-up Date */}
@@ -567,12 +577,17 @@ export function TransfersSearchForm() {
                 <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                   Pick-up date
                 </label>
-                <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
+                <Popover
+                  open={isPickupDateOpen}
+                  onOpenChange={setIsPickupDateOpen}
+                >
                   <PopoverTrigger asChild>
                     <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
                       <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                       <span className="truncate text-xs sm:text-sm">
-                        {pickupDate ? format(pickupDate, "MMM d") : "Pick-up date"}
+                        {pickupDate
+                          ? format(pickupDate, "MMM d")
+                          : "Pick-up date"}
                       </span>
                     </button>
                   </PopoverTrigger>
@@ -618,12 +633,17 @@ export function TransfersSearchForm() {
                     <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                       Drop-off date
                     </label>
-                    <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
+                    <Popover
+                      open={isReturnDateOpen}
+                      onOpenChange={setIsReturnDateOpen}
+                    >
                       <PopoverTrigger asChild>
                         <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
                           <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                           <span className="truncate text-xs sm:text-sm">
-                            {returnDate ? format(returnDate, "MMM d") : "Drop-off date"}
+                            {returnDate
+                              ? format(returnDate, "MMM d")
+                              : "Drop-off date"}
                           </span>
                         </button>
                       </PopoverTrigger>
@@ -675,7 +695,9 @@ export function TransfersSearchForm() {
                   <PopoverTrigger asChild>
                     <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
                       <Users className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
-                      <span className="truncate text-xs sm:text-sm">{passengerSummary()}</span>
+                      <span className="truncate text-xs sm:text-sm">
+                        {passengerSummary()}
+                      </span>
                     </button>
                   </PopoverTrigger>
                   <PopoverContent className="w-80" align="start">
@@ -719,7 +741,9 @@ export function TransfersSearchForm() {
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="font-medium">Children</div>
-                          <div className="text-sm text-gray-500">2-11 years</div>
+                          <div className="text-sm text-gray-500">
+                            2-11 years
+                          </div>
                         </div>
                         <div className="flex items-center space-x-3">
                           <Button
@@ -754,7 +778,9 @@ export function TransfersSearchForm() {
                       <div className="flex items-center justify-between">
                         <div>
                           <div className="font-medium">Infants</div>
-                          <div className="text-sm text-gray-500">Under 2 years</div>
+                          <div className="text-sm text-gray-500">
+                            Under 2 years
+                          </div>
                         </div>
                         <div className="flex items-center space-x-3">
                           <Button

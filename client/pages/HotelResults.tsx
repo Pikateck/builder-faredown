@@ -1454,9 +1454,16 @@ export default function HotelResults() {
                 id: selectedHotel.id,
                 name: selectedHotel.name,
                 location: selectedHotel.location,
-                checkIn: searchParams.get("checkIn") || new Date().toISOString().split('T')[0],
-                checkOut: searchParams.get("checkOut") || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-                price: selectedHotel.currentPrice || selectedHotel.pricePerNight,
+                checkIn:
+                  searchParams.get("checkIn") ||
+                  new Date().toISOString().split("T")[0],
+                checkOut:
+                  searchParams.get("checkOut") ||
+                  new Date(Date.now() + 24 * 60 * 60 * 1000)
+                    .toISOString()
+                    .split("T")[0],
+                price:
+                  selectedHotel.currentPrice || selectedHotel.pricePerNight,
                 rating: selectedHotel.rating,
               }
             : null
@@ -1467,7 +1474,12 @@ export default function HotelResults() {
           setSelectedHotel(null);
         }}
         onAccept={(finalPrice, orderRef) => {
-          console.log("Hotel bargain booking success with price:", finalPrice, "Order ref:", orderRef);
+          console.log(
+            "Hotel bargain booking success with price:",
+            finalPrice,
+            "Order ref:",
+            orderRef,
+          );
           setIsBargainModalOpen(false);
           setSelectedHotel(null);
 
@@ -1481,7 +1493,9 @@ export default function HotelResults() {
         }}
         userName={userFirstName}
         module="hotels"
-        basePrice={selectedHotel?.currentPrice || selectedHotel?.pricePerNight || 0}
+        basePrice={
+          selectedHotel?.currentPrice || selectedHotel?.pricePerNight || 0
+        }
         productRef={selectedHotel?.id || ""}
       />
 

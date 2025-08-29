@@ -107,11 +107,13 @@ export function HotelSearchForm({
       }
     }
     if (displayData.adults || displayData.children || displayData.rooms) {
-      setGuests(prev => ({
+      setGuests((prev) => ({
         ...prev,
         adults: displayData.adults || prev.adults,
         children: displayData.children || prev.children,
-        childrenAges: Array(displayData.children || prev.children).fill(10).map((_, i) => prev.childrenAges[i] || 10),
+        childrenAges: Array(displayData.children || prev.children)
+          .fill(10)
+          .map((_, i) => prev.childrenAges[i] || 10),
         rooms: displayData.rooms || prev.rooms,
       }));
     }

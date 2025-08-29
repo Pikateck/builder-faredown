@@ -32,7 +32,7 @@ export default function HelpCenter() {
   const handleBackNavigation = () => {
     // For native app experience, always go back to main app (hotels by default)
     // This ensures consistent navigation behavior
-    navigate('/hotels');
+    navigate("/hotels");
   };
 
   const [searchQuery, setSearchQuery] = useState("");
