@@ -1759,9 +1759,9 @@ export default function BookingConfirmation() {
                     <div className="bg-gray-50 p-3 rounded-lg text-center">
                       <p className="text-sm text-gray-600">Check-in</p>
                       <p className="font-bold">
-                        {formatDate(
-                          booking.checkIn || new Date().toISOString(),
-                        )}
+                        {booking.checkIn
+                          ? formatDate(booking.checkIn)
+                          : getDisplayData().checkIn || formatDate(new Date().toISOString())}
                       </p>
                     </div>
                     <div className="bg-gray-50 p-3 rounded-lg text-center">
@@ -1945,7 +1945,7 @@ export default function BookingConfirmation() {
                   international flights
                 </p>
                 <p>
-                  • <strong>Partial cancellation:</strong> Cancellation fees may
+                  �� <strong>Partial cancellation:</strong> Cancellation fees may
                   apply as per airline policy
                 </p>
                 <p>
