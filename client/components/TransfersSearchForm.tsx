@@ -214,7 +214,8 @@ export function TransfersSearchForm() {
     setInputValue: (value: string) => void,
     label: string,
     placeholder: string,
-    code: string
+    code: string,
+    height: "h-10" | "h-12" = "h-10"
   ) => (
     <div
       className="relative flex-1 w-full"
@@ -226,7 +227,7 @@ export function TransfersSearchForm() {
       <div className="relative">
         <button
           onClick={() => setIsOpen(!isOpen)}
-          className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation pr-10"
+          className={`flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 ${height} w-full hover:border-blue-600 touch-manipulation pr-10`}
         >
           <Car className="w-4 h-4 text-gray-500 mr-2" />
           <div className="flex items-center space-x-2 min-w-0">
