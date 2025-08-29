@@ -103,6 +103,14 @@ export default function SightseeingResults() {
   const [showMobileFilters, setShowMobileFilters] = useState(false);
   const [showMobileSort, setShowMobileSort] = useState(false);
 
+  // Get authenticated user's first name
+  const { user } = useAuth();
+  const storedUser = authService.getStoredUser();
+  const userFirstName =
+    user?.name && user.name.trim()
+      ? user.name.split(" ")[0]
+      : storedUser?.firstName || "Guest";
+
   // Sightseeing bargain modal state
   const [selectedAttraction, setSelectedAttraction] =
     useState<SightseeingAttraction | null>(null);
