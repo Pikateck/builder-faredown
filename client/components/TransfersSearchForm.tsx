@@ -384,13 +384,13 @@ export function TransfersSearchForm() {
             )}
 
             {/* Pick-up Date */}
-            <div className="flex-1 lg:max-w-[140px]">
+            <div className="relative flex-1 lg:max-w-[140px]">
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Pick-up date
               </label>
               <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
                 <PopoverTrigger asChild>
-                  <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation relative">
+                  <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
                     <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                     <span className="truncate text-xs sm:text-sm">
                       {pickupDate ? format(pickupDate, "MMM d") : "Pick-up date"}
@@ -414,12 +414,12 @@ export function TransfersSearchForm() {
             </div>
 
             {/* Pick-up Time */}
-            <div className="w-24">
+            <div className="relative w-24">
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Time
               </label>
               <Select value={pickupTime} onValueChange={setPickupTime}>
-                <SelectTrigger className="w-full h-12 text-xs border-2 border-blue-500 relative">
+                <SelectTrigger className="w-full h-12 text-xs border-2 border-blue-500">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -433,13 +433,13 @@ export function TransfersSearchForm() {
             </div>
 
             {/* Drop-off Date */}
-            <div className="flex-1 lg:max-w-[140px]">
+            <div className="relative flex-1 lg:max-w-[140px]">
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Drop-off date
               </label>
               <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
                 <PopoverTrigger asChild>
-                  <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation relative">
+                  <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
                     <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                     <span className="truncate text-xs sm:text-sm">
                       {returnDate ? format(returnDate, "MMM d") : "Drop-off date"}
@@ -463,12 +463,12 @@ export function TransfersSearchForm() {
             </div>
 
             {/* Drop-off Time */}
-            <div className="w-24">
+            <div className="relative w-24">
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Time
               </label>
               <Select value={returnTime} onValueChange={setReturnTime}>
-                <SelectTrigger className="w-full h-12 text-xs border-2 border-blue-500 relative">
+                <SelectTrigger className="w-full h-12 text-xs border-2 border-blue-500">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
@@ -482,12 +482,12 @@ export function TransfersSearchForm() {
             </div>
 
             {/* Driver Age */}
-            <div className="w-32">
+            <div className="relative w-32">
               <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                 Driver's age
               </label>
               <Select value={driverAge} onValueChange={setDriverAge}>
-                <SelectTrigger className="w-full h-12 text-xs border-2 border-blue-500 relative">
+                <SelectTrigger className="w-full h-12 text-xs border-2 border-blue-500">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
