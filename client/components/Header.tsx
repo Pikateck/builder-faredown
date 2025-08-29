@@ -86,10 +86,12 @@ export function Header({ className }: HeaderProps) {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2 group">
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb9dafbe622e641dfbe95653789ddecba?format=webp&width=800"
+              src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F646af7310fef4dfcbb02efff819f5205?format=webp&width=800"
               alt="Faredown Logo"
-              className="h-8 w-auto object-contain"
+              className="w-8 h-8 object-contain"
+              style={{ background: 'none', border: 'none', boxShadow: 'none' }}
             />
+            <span className="text-xl font-medium text-white">faredown.com</span>
           </Link>
           <div className="flex items-center space-x-2 md:space-x-6">
             {/* Mobile menu button */}
