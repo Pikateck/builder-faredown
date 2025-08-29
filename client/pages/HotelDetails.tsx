@@ -59,7 +59,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
+import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
 import { EnhancedFilters } from "@/components/EnhancedFilters";
 import { calculateTotalPrice as calculatePriceBreakdown } from "@/lib/pricing";
 import {
