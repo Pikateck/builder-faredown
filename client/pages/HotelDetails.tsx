@@ -1104,7 +1104,7 @@ export default function HotelDetails() {
                                 key={idx}
                                 className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
                               >
-                                {feature}
+                                {typeof feature === 'string' ? feature : feature?.name || 'Feature'}
                               </span>
                             ))}
                           </div>
