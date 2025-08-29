@@ -85,12 +85,11 @@ export function Header({ className }: HeaderProps) {
       <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2 group">
-            <div className="w-8 h-8 bg-[#febb02] rounded-lg flex items-center justify-center">
-              <Plane className="w-5 h-5 text-[#003580]" />
-            </div>
-            <span className="text-lg sm:text-xl font-bold tracking-tight">
-              faredown.com
-            </span>
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb9dafbe622e641dfbe95653789ddecba?format=webp&width=800"
+              alt="Faredown Logo"
+              className="h-8 w-auto object-contain"
+            />
           </Link>
           <div className="flex items-center space-x-2 md:space-x-6">
             {/* Mobile menu button */}
