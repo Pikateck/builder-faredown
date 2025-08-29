@@ -595,12 +595,14 @@ export default function HotelDetails() {
               ? hotelData.images[1]
               : hotelData.images[1].url
             : "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300"),
-        features: room.features || [
-          "Standard room",
-          "Free WiFi",
-          "Air conditioning",
-          "Private bathroom",
-        ],
+        features: Array.isArray(room.features)
+          ? room.features.map(f => typeof f === 'string' ? f : f?.name || 'Feature')
+          : [
+              "Standard room",
+              "Free WiFi",
+              "Air conditioning",
+              "Private bathroom",
+            ],
         isLiveData: true,
       }));
     }
