@@ -28,6 +28,8 @@ import {
 import { flightsService, Flight } from "@/services/flightsService";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
+import { useAuth } from "@/contexts/AuthContext";
+import { authService } from "@/services/authService";
 
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 
