@@ -100,6 +100,14 @@ export default function TransferResults() {
     searchParams.get("returnDate") !== null ||
     searchParams.get("isRoundTrip") === "true";
 
+  // Get authenticated user's first name
+  const { user } = useAuth();
+  const storedUser = authService.getStoredUser();
+  const userFirstName =
+    user?.name && user.name.trim()
+      ? user.name.split(" ")[0]
+      : storedUser?.firstName || "Guest";
+
   // State for transfers data
   const [transfers, setTransfers] = useState<Transfer[]>([]);
   const [loading, setLoading] = useState(true);
