@@ -91,7 +91,8 @@ function App() {
             <LoyaltyProvider>
               <Router>
                 <BookingProvider>
-                  <Routes>
+                  <SearchProvider>
+                    <Routes>
                     {/* Original Web Routes */}
                     <Route path="/" element={<Index />} />
                     <Route path="/flights" element={<Flights />} />
@@ -300,7 +301,8 @@ function App() {
 
                     {/* Fallback */}
                     <Route path="*" element={<NotFound />} />
-                  </Routes>
+                    </Routes>
+                  </SearchProvider>
                 </BookingProvider>
               </Router>
             </LoyaltyProvider>
