@@ -331,12 +331,7 @@ export default function HotelDetails() {
         } catch (error) {
           console.warn(`⚠️ Attempt ${retryCount + 1} failed:`, error);
 
-          // Skip retries for API unavailable errors
-          if (error.message.includes("API_UNAVAILABLE")) {
-            throw error;
-          }
-
-          // Retry up to 2 times with exponential backoff for specific errors
+          // Retry up to 1 time with a short delay for any errors
           const isRetryableError =
             error instanceof TypeError || // Network errors
             error.message.includes("Failed to fetch") ||
@@ -345,10 +340,12 @@ export default function HotelDetails() {
             error.message.includes("HTTP 503") || // Server unavailable
             error.message.includes("HTTP 502") || // Bad gateway
             error.message.includes("HTTP 504") || // Gateway timeout
-            error.message.includes("HTTP 500"); // Internal server error
+            error.message.includes("HTTP 500") || // Internal server error
+            error.message.includes("timeout") ||
+            error.name === "AbortError";
 
-          if (retryCount < 2 && isRetryableError) {
-            const delay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+          if (retryCount < 1 && isRetryableError) {
+            const delay = 1500; // 1.5 second delay
             console.log(
               `🔄 Retrying in ${delay}ms... (Error: ${error.message})`,
             );
@@ -3306,7 +3303,7 @@ export default function HotelDetails() {
               <div className="flex-1">
                 <div className="text-xs text-gray-500 mb-1">Starting from</div>
                 <div className="text-lg font-bold text-gray-900">
-                  ₹{calculateTotalPrice(lowestPrice).toLocaleString()}
+                  ���{calculateTotalPrice(lowestPrice).toLocaleString()}
                 </div>
                 <div className="text-xs text-gray-600 font-medium">
                   Total Price (All Inclusive)
