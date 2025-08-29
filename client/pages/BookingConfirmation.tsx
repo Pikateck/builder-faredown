@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useBooking } from "@/contexts/BookingContext";
+import { useSearch } from "@/contexts/SearchContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -26,6 +27,7 @@ export default function BookingConfirmation() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { booking: bookingContext, generateBookingData } = useBooking();
+  const { loadFromBookingData, getDisplayData } = useSearch();
   const [booking, setBooking] = useState<any>(null);
   const [bookingType, setBookingType] = useState<"flight" | "hotel">("flight");
   const [showVoucher, setShowVoucher] = useState(false);
