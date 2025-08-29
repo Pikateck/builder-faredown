@@ -3015,31 +3015,17 @@ export default function HotelDetails() {
         </DialogContent>
       </Dialog>
 
-      {/* Hotel Bargain Modal */}
+      {/* Hotel Conversational Bargain Modal */}
       {selectedRoomType && (
-        <FlightStyleBargainModal
-          roomType={{
-            id: selectedRoomType.id,
-            name: selectedRoomType.name,
-            description:
-              selectedRoomType.features?.join(", ") ||
-              "Comfortable room with great amenities",
-            image: selectedRoomType.image || hotel.image,
-            marketPrice: selectedRoomType.pricePerNight * 1.2,
-            totalPrice: selectedRoomType.pricePerNight,
-            total: selectedRoomType.pricePerNight,
-            features: selectedRoomType.features || ["City View", "Free WiFi"],
-            maxOccupancy: 2,
-            bedType: selectedRoomType.details || "Comfortable bed",
-            size: "Standard size",
-            cancellation: "Free cancellation",
-          }}
+        <ConversationalBargainModal
           hotel={{
             id: hotel.id,
             name: hotel.name,
             location: hotel.location,
+            checkIn: checkInDate.toISOString().split('T')[0],
+            checkOut: checkOutDate.toISOString().split('T')[0],
+            price: selectedRoomType.pricePerNight,
             rating: hotel.rating,
-            image: hotel.image,
           }}
           isOpen={isBargainModalOpen}
           onClose={() => {
@@ -3047,10 +3033,8 @@ export default function HotelDetails() {
             setSelectedRoomType(null);
             setBargainingRoomId(null);
           }}
-          checkInDate={checkInDate}
-          checkOutDate={checkOutDate}
-          roomsCount={parseInt(roomsParam || "1")}
-          onBookingSuccess={(finalPrice) => {
+          onAccept={(finalPrice, orderRef) => {
+            console.log("Hotel details bargain booking success with price:", finalPrice, "Order ref:", orderRef);
             setIsBargainModalOpen(false);
             handleBooking(selectedRoomType, finalPrice);
             // Mark room as successfully bargained
@@ -3062,6 +3046,13 @@ export default function HotelDetails() {
             setSelectedRoomType(null);
             setBargainingRoomId(null);
           }}
+          onHold={(orderRef) => {
+            console.log("Hotel details bargain offer on hold with order ref:", orderRef);
+          }}
+          userName="Guest"
+          module="hotels"
+          basePrice={selectedRoomType.pricePerNight}
+          productRef={selectedRoomType.id}
         />
       )}
 
