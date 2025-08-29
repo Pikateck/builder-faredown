@@ -111,6 +111,7 @@ import { useCurrency } from "@/contexts/CurrencyContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { authService } from "@/services/authService";
 import { useDateContext } from "@/contexts/DateContext";
+import { useSearch } from "@/contexts/SearchContext";
 
 export default function HotelDetails() {
   useScrollToTop();
