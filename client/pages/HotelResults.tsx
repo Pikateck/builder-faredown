@@ -4,7 +4,7 @@ import { useDateContext } from "@/contexts/DateContext";
 import { Header } from "@/components/Header";
 import { HotelCard } from "@/components/HotelCard";
 import { HotelSearchForm } from "@/components/HotelSearchForm";
-import { FlightStyleBargainModal } from "@/components/FlightStyleBargainModal";
+import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
 import { ComprehensiveFilters } from "@/components/ComprehensiveFilters";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
