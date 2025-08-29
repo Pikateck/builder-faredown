@@ -1112,59 +1112,18 @@ export default function SightseeingResults() {
         </div>
       )}
 
-      {/* Sightseeing Bargain Modal */}
-      <FlightStyleBargainModal
-        type="sightseeing"
-        roomType={
-          selectedAttraction
-            ? (() => {
-                // Calculate consistent pricing with tax included
-                const priceCalc = sightseeingService.calculatePrice(
-                  selectedAttraction.currentPrice,
-                  parseInt(adults),
-                  parseInt(children),
-                  parseInt(searchParams.get("infants") || "0"),
-                );
-
-                return {
-                  id: selectedAttraction.id,
-                  name: selectedAttraction.name,
-                  description: selectedAttraction.description,
-                  image: selectedAttraction.images?.[0] || "/placeholder.svg",
-                  marketPrice: priceCalc.totalPrice, // Use same price to avoid confusion
-                  totalPrice: priceCalc.totalPrice,
-                  total: priceCalc.totalPrice,
-                  features: selectedAttraction.highlights || [],
-                  maxOccupancy: parseInt(adults), // Number of adults for sightseeing
-                  bedType: selectedAttraction.duration,
-                  size: selectedAttraction.category,
-                  cancellation: "Free cancellation",
-                };
-              })()
-            : null
-        }
-        hotel={
-          selectedAttraction
-            ? {
-                id: parseInt(selectedAttraction.id),
-                name: selectedAttraction.name,
-                location: selectedAttraction.location,
-                rating: selectedAttraction.rating,
-                image: selectedAttraction.images?.[0] || "/placeholder.svg",
-              }
-            : null
-        }
+      {/* Sightseeing Conversational Bargain Modal */}
+      <ConversationalBargainModal
         isOpen={isBargainModalOpen}
         onClose={() => {
           setIsBargainModalOpen(false);
           setSelectedAttraction(null);
         }}
-        checkInDate={new Date()}
-        checkOutDate={new Date()}
-        roomsCount={1}
-        onBookingSuccess={(finalPrice) => {
+        onAccept={(finalPrice, orderRef) => {
+          console.log("Sightseeing bargain booking success with price:", finalPrice, "Order ref:", orderRef);
           setIsBargainModalOpen(false);
-          // Navigate to sightseeing booking page (not confirmation) to enter passenger details
+
+          // Navigate to sightseeing booking page with bargained price
           const searchParams = new URLSearchParams(window.location.search);
           searchParams.set("attractionId", selectedAttraction?.id || "");
           searchParams.set("ticketType", "0"); // Default to first ticket type
@@ -1172,6 +1131,7 @@ export default function SightseeingResults() {
           searchParams.set("adults", adults.toString());
           searchParams.set("bargainApplied", "true");
           searchParams.set("bargainPrice", finalPrice.toString());
+          searchParams.set("orderRef", orderRef);
 
           // Add visitDate if not already set
           if (!searchParams.get("visitDate")) {
@@ -1183,6 +1143,22 @@ export default function SightseeingResults() {
 
           navigate(`/sightseeing/booking?${searchParams.toString()}`);
         }}
+        onHold={(orderRef) => {
+          console.log("Sightseeing bargain offer on hold with order ref:", orderRef);
+        }}
+        userName="Guest"
+        module="sightseeing"
+        basePrice={
+          selectedAttraction
+            ? sightseeingService.calculatePrice(
+                selectedAttraction.currentPrice,
+                parseInt(adults),
+                parseInt(children),
+                parseInt(searchParams.get("infants") || "0"),
+              ).totalPrice
+            : 0
+        }
+        productRef={selectedAttraction?.id || ""}
       />
 
       {/* Hotel-Style Bottom Panel */}
