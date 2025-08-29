@@ -1775,15 +1775,21 @@ export default function BookingConfirmation() {
                   </div>
                   <div className="grid grid-cols-3 gap-3 text-center">
                     <div>
-                      <p className="text-lg font-bold">{booking.nights || 1}</p>
+                      <p className="text-lg font-bold">
+                        {booking.nights || getDisplayData().nights || 1}
+                      </p>
                       <p className="text-xs text-gray-600">nights</p>
                     </div>
                     <div>
-                      <p className="text-lg font-bold">{booking.guests || 1}</p>
+                      <p className="text-lg font-bold">
+                        {booking.guests || getDisplayData().totalGuests || 1}
+                      </p>
                       <p className="text-xs text-gray-600">guests</p>
                     </div>
                     <div>
-                      <p className="text-lg font-bold">{booking.rooms || 1}</p>
+                      <p className="text-lg font-bold">
+                        {booking.rooms || getDisplayData().rooms || 1}
+                      </p>
                       <p className="text-xs text-gray-600">room</p>
                     </div>
                   </div>
