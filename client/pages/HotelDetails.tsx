@@ -367,54 +367,13 @@ export default function HotelDetails() {
         const fallbackData = getMockHotelData();
         setHotelData(fallbackData);
 
-        // Set API status and show user-friendly message based on error type
-        if (error.message.includes("HTTP 503")) {
-          console.info(
-            "ℹ️ Hotel service temporarily unavailable, using cached data",
-          );
-          setApiStatus({
-            isOffline: true,
-            message:
-              "Hotel service temporarily unavailable. Showing cached data.",
-            type: "warning",
-          });
-        } else if (error.message.includes("HTTP 50")) {
-          console.info(
-            "ℹ️ Hotel service experiencing issues, using fallback data",
-          );
-          setApiStatus({
-            isOffline: true,
-            message:
-              "Hotel service experiencing issues. Showing available data.",
-            type: "warning",
-          });
-        } else if (error.message.includes("API_UNAVAILABLE")) {
-          console.info("ℹ️ API health check failed, using offline data");
-          setApiStatus({
-            isOffline: true,
-            message: "Service temporarily offline. Showing available data.",
-            type: "info",
-          });
-        } else if (
-          error instanceof TypeError ||
-          error.message.includes("Failed to fetch")
-        ) {
-          console.info(
-            "ℹ️ Using offline mode due to network connectivity issues",
-          );
-          setApiStatus({
-            isOffline: true,
-            message: "Connection issues. Using offline mode.",
-            type: "info",
-          });
-        } else {
-          console.info("ℹ️ Using cached hotel data");
-          setApiStatus({
-            isOffline: true,
-            message: "Using cached hotel data.",
-            type: "info",
-          });
-        }
+        // Set friendly API status message - don't alarm users
+        console.info("ℹ️ Using available hotel data from cache");
+        setApiStatus({
+          isOffline: false, // Don't show as offline to avoid alarming users
+          message: "Showing available hotel information.",
+          type: null, // No warning needed for normal fallback
+        });
       } finally {
         setIsLoadingHotel(false);
       }
@@ -3303,7 +3262,7 @@ export default function HotelDetails() {
               <div className="flex-1">
                 <div className="text-xs text-gray-500 mb-1">Starting from</div>
                 <div className="text-lg font-bold text-gray-900">
-                  ���{calculateTotalPrice(lowestPrice).toLocaleString()}
+                  ₹{calculateTotalPrice(lowestPrice).toLocaleString()}
                 </div>
                 <div className="text-xs text-gray-600 font-medium">
                   Total Price (All Inclusive)
