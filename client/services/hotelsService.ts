@@ -668,8 +668,10 @@ export class HotelsService {
           pricePerNight: 167,
           availability: 5,
           features: [
-            { name: "City View", icon: "eye", included: true },
-            { name: "Free WiFi", icon: "wifi", included: true },
+            "City View",
+            "Free WiFi",
+            "Air Conditioning",
+            "Private Bathroom",
           ],
         },
       ],
