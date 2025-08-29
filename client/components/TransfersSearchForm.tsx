@@ -515,7 +515,7 @@ export function TransfersSearchForm() {
             </div>
           </div>
         ) : (
-          // Airport Taxi Layout (Original responsive layout)
+          // Airport Taxi Layout (Booking.com style horizontal)
           <>
             {/* Trip Type Selection */}
             <div className="flex gap-2 mb-4">
@@ -530,91 +530,125 @@ export function TransfersSearchForm() {
               </Select>
             </div>
 
-            <div className="space-y-4">
-              {/* Row 1: Locations */}
-              <div className="flex flex-col md:flex-row gap-2">
-                {/* Pickup Location */}
-                {renderLocationDropdown(
-                  "pickup",
-                  pickupLocation,
-                  setPickupLocation,
-                  isPickupOpen,
-                  setIsPickupOpen,
-                  pickupInputValue,
-                  setPickupInputValue,
-                  "Pickup location",
-                  "Pickup location",
-                  "PKP",
-                  "h-10"
-                )}
+            {/* Airport Taxi Horizontal Layout */}
+            <div className="flex flex-col lg:flex-row gap-2 mb-4">
+              {/* From pick-up location */}
+              {renderLocationDropdown(
+                "pickup",
+                pickupLocation,
+                setPickupLocation,
+                isPickupOpen,
+                setIsPickupOpen,
+                pickupInputValue,
+                setPickupInputValue,
+                "From pick-up location",
+                "From pick-up location",
+                "PKP",
+                "h-12"
+              )}
 
-                {/* Swap Button */}
-                <div className="flex items-center justify-center md:px-2">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={swapLocations}
-                    className="w-8 h-8 p-0 rounded-full border-blue-400 hover:bg-blue-50"
-                  >
-                    <ArrowUpDown className="w-4 h-4 text-blue-600" />
-                  </Button>
-                </div>
+              {/* Enter destination */}
+              {renderLocationDropdown(
+                "dropoff",
+                dropoffLocation,
+                setDropoffLocation,
+                isDropoffOpen,
+                setIsDropoffOpen,
+                dropoffInputValue,
+                setDropoffInputValue,
+                "Enter destination",
+                "Enter destination",
+                "DRP",
+                "h-12"
+              )}
 
-                {/* Drop-off Location */}
-                {renderLocationDropdown(
-                  "dropoff",
-                  dropoffLocation,
-                  setDropoffLocation,
-                  isDropoffOpen,
-                  setIsDropoffOpen,
-                  dropoffInputValue,
-                  setDropoffInputValue,
-                  "Drop-off location",
-                  "Drop-off location",
-                  "DRP",
-                  "h-10"
-                )}
+              {/* Pick-up Date */}
+              <div className="relative flex-1 lg:max-w-[140px]">
+                <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                  Pick-up date
+                </label>
+                <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
+                  <PopoverTrigger asChild>
+                    <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
+                      <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
+                      <span className="truncate text-xs sm:text-sm">
+                        {pickupDate ? format(pickupDate, "MMM d") : "Pick-up date"}
+                      </span>
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-auto p-0" align="start">
+                    <BookingCalendar
+                      initialRange={{
+                        startDate: pickupDate || new Date(),
+                        endDate: pickupDate || new Date(),
+                      }}
+                      onChange={(range) => {
+                        setPickupDate(range.startDate);
+                        setIsPickupDateOpen(false);
+                      }}
+                      onClose={() => setIsPickupDateOpen(false)}
+                    />
+                  </PopoverContent>
+                </Popover>
               </div>
 
-              {/* Row 2: Date, Time, and Options */}
-              <div className="flex flex-col sm:flex-row gap-2">
-                {/* Pickup Date & Time */}
-                <div className="flex gap-2 flex-1">
-                  <div className="flex-1 min-w-[120px]">
-                    <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                      Pickup Date
+              {/* Pick-up Time */}
+              <div className="relative w-24">
+                <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                  Time
+                </label>
+                <Select value={pickupTime} onValueChange={setPickupTime}>
+                  <SelectTrigger className="w-full h-12 text-xs border-2 border-blue-500">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {timeSlots.map((time) => (
+                      <SelectItem key={time} value={time}>
+                        {time}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              {/* Return Date & Time (if return trip) */}
+              {tripType === "return" && (
+                <>
+                  <div className="relative flex-1 lg:max-w-[140px]">
+                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                      Drop-off date
                     </label>
-                    <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
+                    <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
                       <PopoverTrigger asChild>
-                        <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
+                        <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
                           <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                           <span className="truncate text-xs sm:text-sm">
-                            {pickupDate ? format(pickupDate, "MMM d") : "Pickup Date"}
+                            {returnDate ? format(returnDate, "MMM d") : "Drop-off date"}
                           </span>
                         </button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
                         <BookingCalendar
                           initialRange={{
-                            startDate: pickupDate || new Date(),
-                            endDate: pickupDate || new Date(),
+                            startDate: returnDate || new Date(),
+                            endDate: returnDate || new Date(),
                           }}
                           onChange={(range) => {
-                            setPickupDate(range.startDate);
-                            setIsPickupDateOpen(false);
+                            setReturnDate(range.startDate);
+                            setIsReturnDateOpen(false);
                           }}
-                          onClose={() => setIsPickupDateOpen(false)}
+                          onClose={() => setIsReturnDateOpen(false)}
                         />
                       </PopoverContent>
                     </Popover>
                   </div>
 
-                  <div className="w-24">
-                    <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+                  <div className="relative w-24">
+                    <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
                       Time
                     </label>
-                    <Select value={pickupTime} onValueChange={setPickupTime}>
-                      <SelectTrigger className="w-full h-10 text-xs border-2 border-blue-500">
+                    <Select value={returnTime} onValueChange={setReturnTime}>
+                      <SelectTrigger className="w-full h-12 text-xs border-2 border-blue-500">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
@@ -626,208 +660,151 @@ export function TransfersSearchForm() {
                       </SelectContent>
                     </Select>
                   </div>
-                </div>
+                </>
+              )}
 
-                {/* Return Date & Time (if return trip) */}
-                {tripType === "return" && (
-                  <div className="flex gap-2 flex-1">
-                    <div className="flex-1 min-w-[120px]">
-                      <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                        Return Date
-                      </label>
-                      <Popover
-                        open={isReturnDateOpen}
-                        onOpenChange={setIsReturnDateOpen}
-                      >
-                        <PopoverTrigger asChild>
-                          <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
-                            <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
-                            <span className="truncate text-xs sm:text-sm">
-                              {returnDate
-                                ? format(returnDate, "MMM d")
-                                : "Return Date"}
-                            </span>
-                          </button>
-                        </PopoverTrigger>
-                        <PopoverContent className="w-auto p-0" align="start">
-                          <BookingCalendar
-                            initialRange={{
-                              startDate: returnDate || new Date(),
-                              endDate: returnDate || new Date(),
-                            }}
-                            onChange={(range) => {
-                              setReturnDate(range.startDate);
-                              setIsReturnDateOpen(false);
-                            }}
-                            onClose={() => setIsReturnDateOpen(false)}
-                          />
-                        </PopoverContent>
-                      </Popover>
-                    </div>
-
-                    <div className="w-24">
-                      <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                        Return Time
-                      </label>
-                      <Select value={returnTime} onValueChange={setReturnTime}>
-                        <SelectTrigger className="w-full h-10 text-xs border-2 border-blue-500">
-                          <SelectValue />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {timeSlots.map((time) => (
-                            <SelectItem key={time} value={time}>
-                              {time}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                )}
-
-                {/* Passengers */}
-                <div className="w-full sm:w-40">
-                  <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                    Passengers
-                  </label>
-                  <Popover
-                    open={isPassengerPopoverOpen}
-                    onOpenChange={setIsPassengerPopoverOpen}
-                  >
-                    <PopoverTrigger asChild>
-                      <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
-                        <Users className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
-                        <span className="truncate text-xs sm:text-sm">{passengerSummary()}</span>
-                      </button>
-                    </PopoverTrigger>
-                    <PopoverContent className="w-80" align="start">
-                      <div className="space-y-4">
-                        {/* Adults */}
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">Adults</div>
-                            <div className="text-sm text-gray-500">12+ years</div>
-                          </div>
-                          <div className="flex items-center space-x-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-8 h-8 p-0 rounded-full"
-                              onClick={() =>
-                                updatePassengerCount("adults", "decrement")
-                              }
-                              disabled={passengers.adults <= 1}
-                            >
-                              <Minus className="w-3 h-3" />
-                            </Button>
-                            <span className="w-8 text-center font-medium">
-                              {passengers.adults}
-                            </span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-8 h-8 p-0 rounded-full"
-                              onClick={() =>
-                                updatePassengerCount("adults", "increment")
-                              }
-                              disabled={passengers.adults >= 9}
-                            >
-                              <Plus className="w-3 h-3" />
-                            </Button>
-                          </div>
+              {/* Passengers */}
+              <div className="relative w-32">
+                <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                  Passengers
+                </label>
+                <Popover
+                  open={isPassengerPopoverOpen}
+                  onOpenChange={setIsPassengerPopoverOpen}
+                >
+                  <PopoverTrigger asChild>
+                    <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-12 w-full hover:border-blue-600 touch-manipulation">
+                      <Users className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
+                      <span className="truncate text-xs sm:text-sm">{passengerSummary()}</span>
+                    </button>
+                  </PopoverTrigger>
+                  <PopoverContent className="w-80" align="start">
+                    <div className="space-y-4">
+                      {/* Adults */}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-medium">Adults</div>
+                          <div className="text-sm text-gray-500">12+ years</div>
                         </div>
-
-                        {/* Children */}
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">Children</div>
-                            <div className="text-sm text-gray-500">2-11 years</div>
-                          </div>
-                          <div className="flex items-center space-x-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-8 h-8 p-0 rounded-full"
-                              onClick={() =>
-                                updatePassengerCount("children", "decrement")
-                              }
-                              disabled={passengers.children <= 0}
-                            >
-                              <Minus className="w-3 h-3" />
-                            </Button>
-                            <span className="w-8 text-center font-medium">
-                              {passengers.children}
-                            </span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-8 h-8 p-0 rounded-full"
-                              onClick={() =>
-                                updatePassengerCount("children", "increment")
-                              }
-                              disabled={passengers.children >= 9}
-                            >
-                              <Plus className="w-3 h-3" />
-                            </Button>
-                          </div>
+                        <div className="flex items-center space-x-3">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-8 h-8 p-0 rounded-full"
+                            onClick={() =>
+                              updatePassengerCount("adults", "decrement")
+                            }
+                            disabled={passengers.adults <= 1}
+                          >
+                            <Minus className="w-3 h-3" />
+                          </Button>
+                          <span className="w-8 text-center font-medium">
+                            {passengers.adults}
+                          </span>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-8 h-8 p-0 rounded-full"
+                            onClick={() =>
+                              updatePassengerCount("adults", "increment")
+                            }
+                            disabled={passengers.adults >= 9}
+                          >
+                            <Plus className="w-3 h-3" />
+                          </Button>
                         </div>
-
-                        {/* Infants */}
-                        <div className="flex items-center justify-between">
-                          <div>
-                            <div className="font-medium">Infants</div>
-                            <div className="text-sm text-gray-500">Under 2 years</div>
-                          </div>
-                          <div className="flex items-center space-x-3">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-8 h-8 p-0 rounded-full"
-                              onClick={() =>
-                                updatePassengerCount("infants", "decrement")
-                              }
-                              disabled={passengers.infants <= 0}
-                            >
-                              <Minus className="w-3 h-3" />
-                            </Button>
-                            <span className="w-8 text-center font-medium">
-                              {passengers.infants}
-                            </span>
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              className="w-8 h-8 p-0 rounded-full"
-                              onClick={() =>
-                                updatePassengerCount("infants", "increment")
-                              }
-                              disabled={passengers.infants >= 9}
-                            >
-                              <Plus className="w-3 h-3" />
-                            </Button>
-                          </div>
-                        </div>
-
-                        <Button
-                          onClick={() => setIsPassengerPopoverOpen(false)}
-                          className="w-full bg-blue-600 hover:bg-blue-700 text-white"
-                        >
-                          Done
-                        </Button>
                       </div>
-                    </PopoverContent>
-                  </Popover>
-                </div>
 
-                {/* Search Button */}
-                <div className="w-full sm:w-auto">
-                  <Button
-                    onClick={handleSearch}
-                    className="h-10 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
-                  >
-                    <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-                    <span className="text-sm sm:text-base">Search Transfers</span>
-                  </Button>
-                </div>
+                      {/* Children */}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-medium">Children</div>
+                          <div className="text-sm text-gray-500">2-11 years</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-8 h-8 p-0 rounded-full"
+                            onClick={() =>
+                              updatePassengerCount("children", "decrement")
+                            }
+                            disabled={passengers.children <= 0}
+                          >
+                            <Minus className="w-3 h-3" />
+                          </Button>
+                          <span className="w-8 text-center font-medium">
+                            {passengers.children}
+                          </span>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-8 h-8 p-0 rounded-full"
+                            onClick={() =>
+                              updatePassengerCount("children", "increment")
+                            }
+                            disabled={passengers.children >= 9}
+                          >
+                            <Plus className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      {/* Infants */}
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <div className="font-medium">Infants</div>
+                          <div className="text-sm text-gray-500">Under 2 years</div>
+                        </div>
+                        <div className="flex items-center space-x-3">
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-8 h-8 p-0 rounded-full"
+                            onClick={() =>
+                              updatePassengerCount("infants", "decrement")
+                            }
+                            disabled={passengers.infants <= 0}
+                          >
+                            <Minus className="w-3 h-3" />
+                          </Button>
+                          <span className="w-8 text-center font-medium">
+                            {passengers.infants}
+                          </span>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            className="w-8 h-8 p-0 rounded-full"
+                            onClick={() =>
+                              updatePassengerCount("infants", "increment")
+                            }
+                            disabled={passengers.infants >= 9}
+                          >
+                            <Plus className="w-3 h-3" />
+                          </Button>
+                        </div>
+                      </div>
+
+                      <Button
+                        onClick={() => setIsPassengerPopoverOpen(false)}
+                        className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                      >
+                        Done
+                      </Button>
+                    </div>
+                  </PopoverContent>
+                </Popover>
+              </div>
+
+              {/* Search Button */}
+              <div className="w-full sm:w-auto">
+                <Button
+                  onClick={handleSearch}
+                  className="h-12 w-full sm:w-auto bg-[#003580] hover:bg-[#002a66] text-white font-bold rounded px-6 sm:px-8 transition-all duration-150"
+                >
+                  <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                  <span className="text-sm sm:text-base">Search</span>
+                </Button>
               </div>
             </div>
           </>
