@@ -68,6 +68,7 @@ export default function HotelResults() {
     formatDisplayDate,
     loadDatesFromParams,
   } = useDateContext();
+  const { loadFromUrlParams, getDisplayData } = useSearch();
   const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
   const [selectedFilters, setSelectedFilters] = useState<
