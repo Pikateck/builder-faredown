@@ -198,7 +198,7 @@ export function BargainIntegration({
         onClose={handleClose}
         onAccept={handleAccept}
         onHold={handleHold}
-        userName={userName}
+        userName={effectiveUserName}
         module={module}
         onBackToResults={handleClose}
         basePrice={basePrice}
