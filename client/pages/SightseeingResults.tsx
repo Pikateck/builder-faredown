@@ -12,6 +12,8 @@ import { ConversationalBargainModal } from "@/components/ConversationalBargainMo
 import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { sightseeingService } from "@/services/sightseeingService";
+import { useAuth } from "@/contexts/AuthContext";
+import { authService } from "@/services/authService";
 import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
 import {
   Filter,
