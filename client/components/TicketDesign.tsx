@@ -27,11 +27,17 @@ export const TicketDesign: React.FC<TicketDesignProps> = ({ bookingData }) => {
         <div className="absolute inset-0 bg-black bg-opacity-10"></div>
         <div className="relative p-8">
           <div className="flex items-center justify-between mb-6">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">faredown.com</h1>
-              <p className="text-blue-100 text-lg">
-                Don't Just Book It. Bargain It.™
-              </p>
+            <div className="flex items-center space-x-4">
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb9dafbe622e641dfbe95653789ddecba?format=webp&width=800"
+                alt="Faredown Logo"
+                className="h-10 w-auto object-contain"
+              />
+              <div>
+                <p className="text-blue-100 text-lg">
+                  Don't Just Book It. Bargain It.™
+                </p>
+              </div>
             </div>
             <div className="text-right">
               <div className="bg-white bg-opacity-20 rounded-lg p-4 backdrop-blur-sm">
