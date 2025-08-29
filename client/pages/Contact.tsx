@@ -120,7 +120,7 @@ const Contact = () => {
             className="absolute top-4 left-4 md:hidden flex items-center gap-2 text-white hover:text-blue-200 transition-colors z-10"
           >
             <ArrowLeft className="w-5 h-5" />
-            <span className="text-sm font-medium">Back</span>
+            <span className="text-sm font-medium">Back to App</span>
           </button>
 
           <div className="container mx-auto px-4 text-center">
