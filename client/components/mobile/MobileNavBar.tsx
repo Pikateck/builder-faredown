@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   ChevronLeft,
@@ -20,6 +20,7 @@ interface MobileNavBarProps {
   showMap?: boolean;
   showShare?: boolean;
   showBookmark?: boolean;
+  showLogo?: boolean;
   isBookmarked?: boolean;
   onBookmarkToggle?: () => void;
   onShareClick?: () => void;
@@ -39,6 +40,7 @@ export function MobileNavBar({
   showMap = false,
   showShare = false,
   showBookmark = false,
+  showLogo = false,
   isBookmarked = false,
   onBookmarkToggle,
   onShareClick,
@@ -76,6 +78,23 @@ export function MobileNavBar({
 
   return (
     <div className="md:hidden bg-white">
+      {/* Logo Header - matches desktop Header component */}
+      {showLogo && (
+        <div className="bg-[#003580] text-white">
+          <div className="flex items-center justify-between px-4 py-2">
+            <Link to="/" className="flex items-center space-x-2">
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F646af7310fef4dfcbb02efff819f5205?format=webp&width=800"
+                alt="Faredown Logo"
+                className="w-6 h-6 object-contain"
+                style={{ background: 'none', border: 'none', boxShadow: 'none' }}
+              />
+              <span className="text-sm font-medium text-white">faredown.com</span>
+            </Link>
+          </div>
+        </div>
+      )}
+
       {/* Main Header */}
       <div className="text-white" style={{ backgroundColor }}>
         <div className="flex items-center justify-between px-4 py-3">
