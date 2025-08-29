@@ -155,6 +155,14 @@ export default function HotelDetails() {
   const [bargainingRoomId, setBargainingRoomId] = useState<string | null>(null);
   const [bargainedRooms, setBargainedRooms] = useState<Set<string>>(new Set());
 
+  // Get authenticated user's first name
+  const { user } = useAuth();
+  const storedUser = authService.getStoredUser();
+  const userFirstName =
+    user?.name && user.name.trim()
+      ? user.name.split(" ")[0]
+      : storedUser?.firstName || "Guest";
+
   // Hotel bargain modal state
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
