@@ -1432,38 +1432,18 @@ export default function HotelResults() {
         </div>
       </div>
 
-      {/* Hotel Bargain Modal */}
-      <FlightStyleBargainModal
-        roomType={
-          selectedHotel
-            ? {
-                id: "standard",
-                name: "Standard Room",
-                description: "Comfortable standard room",
-                image: selectedHotel.images?.[0] || "/placeholder.svg",
-                marketPrice:
-                  selectedHotel.originalPrice ||
-                  selectedHotel.pricePerNight * 1.2,
-                totalPrice:
-                  selectedHotel.currentPrice || selectedHotel.pricePerNight,
-                total:
-                  selectedHotel.currentPrice || selectedHotel.pricePerNight,
-                features: selectedHotel.features || [],
-                maxOccupancy: 2,
-                bedType: "1 double bed",
-                size: "Standard size",
-                cancellation: "Free cancellation",
-              }
-            : null
-        }
+      {/* Hotel Conversational Bargain Modal */}
+      <ConversationalBargainModal
         hotel={
           selectedHotel
             ? {
                 id: selectedHotel.id,
                 name: selectedHotel.name,
                 location: selectedHotel.location,
+                checkIn: searchParams.get("checkIn") || new Date().toISOString().split('T')[0],
+                checkOut: searchParams.get("checkOut") || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+                price: selectedHotel.currentPrice || selectedHotel.pricePerNight,
                 rating: selectedHotel.rating,
-                image: selectedHotel.images?.[0] || "/placeholder.svg",
               }
             : null
         }
@@ -1472,24 +1452,23 @@ export default function HotelResults() {
           setIsBargainModalOpen(false);
           setSelectedHotel(null);
         }}
-        checkInDate={
-          searchParams.get("checkIn")
-            ? new Date(searchParams.get("checkIn")!)
-            : new Date()
-        }
-        checkOutDate={
-          searchParams.get("checkOut")
-            ? new Date(searchParams.get("checkOut")!)
-            : new Date(Date.now() + 24 * 60 * 60 * 1000)
-        }
-        roomsCount={parseInt(searchParams.get("rooms") || "1")}
-        onBookingSuccess={(finalPrice) => {
+        onAccept={(finalPrice, orderRef) => {
+          console.log("Hotel bargain booking success with price:", finalPrice, "Order ref:", orderRef);
           setIsBargainModalOpen(false);
+          setSelectedHotel(null);
+
           // Navigate to booking with bargained price
           navigate(
-            `/hotel-booking-confirmation?price=${finalPrice}&bargainApplied=true`,
+            `/hotel-booking-confirmation?price=${finalPrice}&bargainApplied=true&orderRef=${orderRef}`,
           );
         }}
+        onHold={(orderRef) => {
+          console.log("Hotel bargain offer on hold with order ref:", orderRef);
+        }}
+        userName="Guest"
+        module="hotels"
+        basePrice={selectedHotel?.currentPrice || selectedHotel?.pricePerNight || 0}
+        productRef={selectedHotel?.id || ""}
       />
 
       {/* Mobile Dropdown Components for Edit Search */}
