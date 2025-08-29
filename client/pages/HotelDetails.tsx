@@ -241,7 +241,7 @@ export default function HotelDetails() {
       const fetchWithTimeout = async (
         url: string,
         options: RequestInit = {},
-        timeout = 5000, // Reduced timeout for faster fallback
+        timeout = 10000, // Increased timeout for better stability
       ): Promise<Response> => {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), timeout);
