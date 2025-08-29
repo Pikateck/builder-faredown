@@ -87,6 +87,25 @@ export function BargainIntegration({
 }: BargainIntegrationProps) {
   const [showBargainModal, setShowBargainModal] = useState(false);
 
+  // Get authenticated user's first name
+  const { user } = useAuth();
+  const storedUser = authService.getStoredUser();
+
+  // Compute effective user name with fallback priority:
+  // 1. If caller passed a specific userName (not "Guest"), use it
+  // 2. Extract first name from AuthContext user.name
+  // 3. Use authService stored user firstName
+  // 4. Default to "Guest"
+  const computedFirstName =
+    user?.name && user.name.trim()
+      ? user.name.split(" ")[0]
+      : storedUser?.firstName || "Guest";
+
+  const effectiveUserName =
+    userName && userName !== "Guest"
+      ? userName
+      : computedFirstName;
+
   // Safety checks for required props
   if (!basePrice || !productRef) {
     console.error(
