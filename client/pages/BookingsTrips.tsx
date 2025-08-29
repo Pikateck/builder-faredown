@@ -25,8 +25,12 @@ export default function BookingsTrips() {
       <header className="bg-blue-700 text-white">
         <div className="max-w-7xl mx-auto px-4 py-3">
           <div className="flex items-center justify-between">
-            <Link to="/" className="text-xl font-bold">
-              faredown.com
+            <Link to="/" className="flex items-center">
+              <img
+                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb9dafbe622e641dfbe95653789ddecba?format=webp&width=800"
+                alt="Faredown Logo"
+                className="h-6 w-auto object-contain"
+              />
             </Link>
 
             <div className="flex items-center space-x-4">
