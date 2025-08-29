@@ -199,9 +199,15 @@ function App() {
                       path="/terms-of-service"
                       element={<TermsOfService />}
                     />
+                    <Route path="/terms" element={<TermsOfService />} />
                     <Route path="/refund-policy" element={<RefundPolicy />} />
+                    <Route path="/refunds" element={<RefundPolicy />} />
                     <Route
                       path="/refund-cancellation-policy"
+                      element={<RefundCancellationPolicy />}
+                    />
+                    <Route
+                      path="/cancellation-policy"
                       element={<RefundCancellationPolicy />}
                     />
                     <Route path="/cookie-policy" element={<CookiePolicy />} />
