@@ -671,25 +671,26 @@ export default function SightseeingDetails() {
           </AlertDialogContent>
         </AlertDialog>
 
-        {/* Sightseeing Bargain Modal for Mobile */}
+        {/* Sightseeing Conversational Bargain Modal for Mobile */}
         {attraction && (
-          <MobileBargainModal
+          <ConversationalBargainModal
             isOpen={isBargainModalOpen}
             onClose={() => setIsBargainModalOpen(false)}
-            onBargainSuccess={handleBargainSuccess}
-            ticketName={
-              attraction.ticketTypes[bargainTicketType]?.name ||
-              "Standard Admission"
-            }
-            originalPrice={
+            onAccept={(finalPrice, orderRef) => {
+              console.log("Sightseeing details bargain booking success with price:", finalPrice, "Order ref:", orderRef);
+              handleBargainSuccess(finalPrice);
+            }}
+            onHold={(orderRef) => {
+              console.log("Sightseeing details bargain offer on hold with order ref:", orderRef);
+            }}
+            userName="Guest"
+            module="sightseeing"
+            basePrice={
               getTicketTotalPrice(bargainTicketType) ||
               attraction.ticketTypes[bargainTicketType]?.price ||
               149
             }
-            venueName={attraction.name}
-            ticketFeatures={
-              attraction.ticketTypes[bargainTicketType]?.features || []
-            }
+            productRef={attraction.id || ""}
           />
         )}
       </>
