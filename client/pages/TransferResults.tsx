@@ -10,6 +10,8 @@ import { ConversationalBargainModal } from "@/components/ConversationalBargainMo
 import { TransfersSearchForm } from "@/components/TransfersSearchForm";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
+import { useAuth } from "@/contexts/AuthContext";
+import { authService } from "@/services/authService";
 import {
   Filter,
   SlidersHorizontal,
