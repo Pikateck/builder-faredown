@@ -229,318 +229,268 @@ export function TransfersSearchForm() {
           </Select>
         </div>
 
-        {/* Main Search Form */}
-        <div className="flex flex-col lg:flex-row gap-2 mb-4">
-          {/* Pickup Location */}
-          <div
-            className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-              Pickup location
-            </label>
-            <div className="relative">
-              <button
-                onClick={() => setIsPickupOpen(!isPickupOpen)}
-                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
-              >
-                <Car className="w-4 h-4 text-gray-500 mr-2" />
-                <div className="flex items-center space-x-2 min-w-0">
-                  {pickupLocation ? (
-                    <>
-                      <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                        PKP
-                      </div>
-                      <span className="text-sm text-gray-700 font-medium truncate">
-                        {pickupLocation}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-sm text-gray-500 font-medium">
-                      Pickup location
-                    </span>
-                  )}
-                </div>
-              </button>
-              {pickupLocation && (
-                <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setPickupLocation("");
-                    setPickupInputValue("");
-                    setIsPickupOpen(false);
-                  }}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                  title="Clear pickup location"
-                >
-                  <X className="w-4 h-4 text-gray-400" />
-                </button>
-              )}
-            </div>
-
-            {/* Pickup Locations Dropdown */}
-            {isPickupOpen && (
-              <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
-                <div className="mb-3">
-                  <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                    Pickup location
-                  </h3>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={pickupInputValue}
-                      onChange={(e) => setPickupInputValue(e.target.value)}
-                      placeholder="Search locations..."
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
-                    />
-                  </div>
-                </div>
-
-                <div className="space-y-1">
-                  {popularLocations
-                    .filter((location) =>
-                      location
-                        .toLowerCase()
-                        .includes((pickupInputValue || "").toLowerCase()),
-                    )
-                    .slice(0, 8)
-                    .map((location, index) => (
-                      <button
-                        key={index}
-                        onClick={() => {
-                          setPickupLocation(location);
-                          setIsPickupOpen(false);
-                          setPickupInputValue("");
-                        }}
-                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                            <Car className="w-4 h-4 text-blue-600" />
-                          </div>
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">
-                              {location}
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              Transfer location
-                            </div>
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                </div>
-              </div>
-            )}
-          </div>
-
-          {/* Swap Button */}
-          <div className="flex items-center justify-center lg:px-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={swapLocations}
-              className="w-8 h-8 p-0 rounded-full border-blue-400 hover:bg-blue-50"
+        {/* Main Search Form - Responsive Layout */}
+        <div className="space-y-4">
+          {/* Row 1: Locations */}
+          <div className="flex flex-col md:flex-row gap-2">
+            {/* Pickup Location */}
+            <div
+              className="relative flex-1 w-full"
+              onClick={(e) => e.stopPropagation()}
             >
-              <ArrowUpDown className="w-4 h-4 text-blue-600" />
-            </Button>
-          </div>
-
-          {/* Drop-off Location */}
-          <div
-            className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
-              Drop-off location
-            </label>
-            <div className="relative">
-              <button
-                onClick={() => setIsDropoffOpen(!isDropoffOpen)}
-                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
-              >
-                <Car className="w-4 h-4 text-gray-500 mr-2" />
-                <div className="flex items-center space-x-2 min-w-0">
-                  {dropoffLocation ? (
-                    <>
-                      <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
-                        DRP
-                      </div>
-                      <span className="text-sm text-gray-700 font-medium truncate">
-                        {dropoffLocation}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-sm text-gray-500 font-medium">
-                      Drop-off location
-                    </span>
-                  )}
-                </div>
-              </button>
-              {dropoffLocation && (
+              <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                Pickup location
+              </label>
+              <div className="relative">
                 <button
-                  onClick={(e) => {
-                    e.stopPropagation();
-                    setDropoffLocation("");
-                    setDropoffInputValue("");
-                    setIsDropoffOpen(false);
-                  }}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                  title="Clear drop-off location"
+                  onClick={() => setIsPickupOpen(!isPickupOpen)}
+                  className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
                 >
-                  <X className="w-4 h-4 text-gray-400" />
+                  <Car className="w-4 h-4 text-gray-500 mr-2" />
+                  <div className="flex items-center space-x-2 min-w-0">
+                    {pickupLocation ? (
+                      <>
+                        <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                          PKP
+                        </div>
+                        <span className="text-sm text-gray-700 font-medium truncate">
+                          {pickupLocation}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-sm text-gray-500 font-medium">
+                        Pickup location
+                      </span>
+                    )}
+                  </div>
                 </button>
+                {pickupLocation && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setPickupLocation("");
+                      setPickupInputValue("");
+                      setIsPickupOpen(false);
+                    }}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    title="Clear pickup location"
+                  >
+                    <X className="w-4 h-4 text-gray-400" />
+                  </button>
+                )}
+              </div>
+
+              {/* Pickup Locations Dropdown */}
+              {isPickupOpen && (
+                <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
+                  <div className="mb-3">
+                    <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                      Pickup location
+                    </h3>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={pickupInputValue}
+                        onChange={(e) => setPickupInputValue(e.target.value)}
+                        placeholder="Search locations..."
+                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    {popularLocations
+                      .filter((location) =>
+                        location
+                          .toLowerCase()
+                          .includes((pickupInputValue || "").toLowerCase()),
+                      )
+                      .slice(0, 8)
+                      .map((location, index) => (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            setPickupLocation(location);
+                            setIsPickupOpen(false);
+                            setPickupInputValue("");
+                          }}
+                          className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                              <Car className="w-4 h-4 text-blue-600" />
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {location}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Transfer location
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
+                  </div>
+                </div>
               )}
             </div>
 
-            {/* Dropoff Locations Dropdown */}
-            {isDropoffOpen && (
-              <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
-                <div className="mb-3">
-                  <h3 className="text-sm font-semibold text-gray-900 mb-2">
-                    Drop-off location
-                  </h3>
-                  <div className="relative">
-                    <input
-                      type="text"
-                      value={dropoffInputValue}
-                      onChange={(e) => setDropoffInputValue(e.target.value)}
-                      placeholder="Search locations..."
-                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
-                    />
+            {/* Swap Button */}
+            <div className="flex items-center justify-center md:px-2">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={swapLocations}
+                className="w-8 h-8 p-0 rounded-full border-blue-400 hover:bg-blue-50"
+              >
+                <ArrowUpDown className="w-4 h-4 text-blue-600" />
+              </Button>
+            </div>
+
+            {/* Drop-off Location */}
+            <div
+              className="relative flex-1 w-full"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+                Drop-off location
+              </label>
+              <div className="relative">
+                <button
+                  onClick={() => setIsDropoffOpen(!isDropoffOpen)}
+                  className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
+                >
+                  <Car className="w-4 h-4 text-gray-500 mr-2" />
+                  <div className="flex items-center space-x-2 min-w-0">
+                    {dropoffLocation ? (
+                      <>
+                        <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                          DRP
+                        </div>
+                        <span className="text-sm text-gray-700 font-medium truncate">
+                          {dropoffLocation}
+                        </span>
+                      </>
+                    ) : (
+                      <span className="text-sm text-gray-500 font-medium">
+                        Drop-off location
+                      </span>
+                    )}
+                  </div>
+                </button>
+                {dropoffLocation && (
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      setDropoffLocation("");
+                      setDropoffInputValue("");
+                      setIsDropoffOpen(false);
+                    }}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                    title="Clear drop-off location"
+                  >
+                    <X className="w-4 h-4 text-gray-400" />
+                  </button>
+                )}
+              </div>
+
+              {/* Dropoff Locations Dropdown */}
+              {isDropoffOpen && (
+                <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
+                  <div className="mb-3">
+                    <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                      Drop-off location
+                    </h3>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        value={dropoffInputValue}
+                        onChange={(e) => setDropoffInputValue(e.target.value)}
+                        placeholder="Search locations..."
+                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    {popularLocations
+                      .filter((location) =>
+                        location
+                          .toLowerCase()
+                          .includes((dropoffInputValue || "").toLowerCase()),
+                      )
+                      .slice(0, 8)
+                      .map((location, index) => (
+                        <button
+                          key={index}
+                          onClick={() => {
+                            setDropoffLocation(location);
+                            setIsDropoffOpen(false);
+                            setDropoffInputValue("");
+                          }}
+                          className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                              <Car className="w-4 h-4 text-blue-600" />
+                            </div>
+                            <div>
+                              <div className="text-sm font-medium text-gray-900">
+                                {location}
+                              </div>
+                              <div className="text-xs text-gray-500">
+                                Transfer location
+                              </div>
+                            </div>
+                          </div>
+                        </button>
+                      ))}
                   </div>
                 </div>
-
-                <div className="space-y-1">
-                  {popularLocations
-                    .filter((location) =>
-                      location
-                        .toLowerCase()
-                        .includes((dropoffInputValue || "").toLowerCase()),
-                    )
-                    .slice(0, 8)
-                    .map((location, index) => (
-                      <button
-                        key={index}
-                        onClick={() => {
-                          setDropoffLocation(location);
-                          setIsDropoffOpen(false);
-                          setDropoffInputValue("");
-                        }}
-                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
-                      >
-                        <div className="flex items-center space-x-3">
-                          <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
-                            <Car className="w-4 h-4 text-blue-600" />
-                          </div>
-                          <div>
-                            <div className="text-sm font-medium text-gray-900">
-                              {location}
-                            </div>
-                            <div className="text-xs text-gray-500">
-                              Transfer location
-                            </div>
-                          </div>
-                        </div>
-                      </button>
-                    ))}
-                </div>
-              </div>
-            )}
+              )}
+            </div>
           </div>
 
-          {/* Pickup Date & Time */}
-          <div className="flex-1 lg:max-w-[140px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Pickup Date
-            </label>
-            <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
-              <PopoverTrigger asChild>
-                <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
-                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
-                  <span className="truncate text-xs sm:text-sm">
-                    {pickupDate ? format(pickupDate, "MMM d") : "Pickup Date"}
-                  </span>
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <BookingCalendar
-                  initialRange={{
-                    startDate: pickupDate || new Date(),
-                    endDate: pickupDate || new Date(),
-                  }}
-                  onChange={(range) => {
-                    setPickupDate(range.startDate);
-                    setIsPickupDateOpen(false);
-                  }}
-                  onClose={() => setIsPickupDateOpen(false)}
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          {/* Pickup Time */}
-          <div className="flex-1 lg:max-w-[100px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Time
-            </label>
-            <Select value={pickupTime} onValueChange={setPickupTime}>
-              <SelectTrigger className="w-full h-10 text-xs sm:text-sm border-2 border-blue-500">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {timeSlots.map((time) => (
-                  <SelectItem key={time} value={time}>
-                    {time}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-
-          {/* Return Date & Time (if return trip) */}
-          {tripType === "return" && (
-            <>
-              <div className="flex-1 lg:max-w-[140px]">
+          {/* Row 2: Date, Time, and Options */}
+          <div className="flex flex-col sm:flex-row gap-2">
+            {/* Pickup Date & Time */}
+            <div className="flex gap-2 flex-1">
+              <div className="flex-1 min-w-[120px]">
                 <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                  Return Date
+                  Pickup Date
                 </label>
-                <Popover
-                  open={isReturnDateOpen}
-                  onOpenChange={setIsReturnDateOpen}
-                >
+                <Popover open={isPickupDateOpen} onOpenChange={setIsPickupDateOpen}>
                   <PopoverTrigger asChild>
                     <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
                       <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                       <span className="truncate text-xs sm:text-sm">
-                        {returnDate
-                          ? format(returnDate, "MMM d")
-                          : "Return Date"}
+                        {pickupDate ? format(pickupDate, "MMM d") : "Pickup Date"}
                       </span>
                     </button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
                     <BookingCalendar
                       initialRange={{
-                        startDate: returnDate || new Date(),
-                        endDate: returnDate || new Date(),
+                        startDate: pickupDate || new Date(),
+                        endDate: pickupDate || new Date(),
                       }}
                       onChange={(range) => {
-                        setReturnDate(range.startDate);
-                        setIsReturnDateOpen(false);
+                        setPickupDate(range.startDate);
+                        setIsPickupDateOpen(false);
                       }}
-                      onClose={() => setIsReturnDateOpen(false)}
+                      onClose={() => setIsPickupDateOpen(false)}
                     />
                   </PopoverContent>
                 </Popover>
               </div>
 
-              <div className="flex-1 lg:max-w-[100px]">
+              <div className="w-24">
                 <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                  Return Time
+                  Time
                 </label>
-                <Select value={returnTime} onValueChange={setReturnTime}>
-                  <SelectTrigger className="w-full h-10 text-xs sm:text-sm border-2 border-blue-500">
+                <Select value={pickupTime} onValueChange={setPickupTime}>
+                  <SelectTrigger className="w-full h-10 text-xs border-2 border-blue-500">
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
@@ -552,151 +502,208 @@ export function TransfersSearchForm() {
                   </SelectContent>
                 </Select>
               </div>
-            </>
-          )}
+            </div>
 
-          {/* Passengers */}
-          <div className="flex-1 lg:max-w-[140px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Passengers
-            </label>
-            <Popover
-              open={isPassengerPopoverOpen}
-              onOpenChange={setIsPassengerPopoverOpen}
-            >
-              <PopoverTrigger asChild>
-                <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
-                  <Users className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
-                  <span className="truncate text-xs sm:text-sm">{passengerSummary()}</span>
-                </button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80" align="start">
-                <div className="space-y-4">
-                  {/* Adults */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Adults</div>
-                      <div className="text-sm text-gray-500">12+ years</div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
-                        onClick={() =>
-                          updatePassengerCount("adults", "decrement")
-                        }
-                        disabled={passengers.adults <= 1}
-                      >
-                        <Minus className="w-3 h-3" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">
-                        {passengers.adults}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
-                        onClick={() =>
-                          updatePassengerCount("adults", "increment")
-                        }
-                        disabled={passengers.adults >= 9}
-                      >
-                        <Plus className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Children */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Children</div>
-                      <div className="text-sm text-gray-500">2-11 years</div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
-                        onClick={() =>
-                          updatePassengerCount("children", "decrement")
-                        }
-                        disabled={passengers.children <= 0}
-                      >
-                        <Minus className="w-3 h-3" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">
-                        {passengers.children}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
-                        onClick={() =>
-                          updatePassengerCount("children", "increment")
-                        }
-                        disabled={passengers.children >= 9}
-                      >
-                        <Plus className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Infants */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium">Infants</div>
-                      <div className="text-sm text-gray-500">Under 2 years</div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
-                        onClick={() =>
-                          updatePassengerCount("infants", "decrement")
-                        }
-                        disabled={passengers.infants <= 0}
-                      >
-                        <Minus className="w-3 h-3" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">
-                        {passengers.infants}
-                      </span>
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="w-8 h-8 p-0 rounded-full"
-                        onClick={() =>
-                          updatePassengerCount("infants", "increment")
-                        }
-                        disabled={passengers.infants >= 9}
-                      >
-                        <Plus className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  <Button
-                    onClick={() => setIsPassengerPopoverOpen(false)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+            {/* Return Date & Time (if return trip) */}
+            {tripType === "return" && (
+              <div className="flex gap-2 flex-1">
+                <div className="flex-1 min-w-[120px]">
+                  <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+                    Return Date
+                  </label>
+                  <Popover
+                    open={isReturnDateOpen}
+                    onOpenChange={setIsReturnDateOpen}
                   >
-                    Done
-                  </Button>
+                    <PopoverTrigger asChild>
+                      <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
+                        <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
+                        <span className="truncate text-xs sm:text-sm">
+                          {returnDate
+                            ? format(returnDate, "MMM d")
+                            : "Return Date"}
+                        </span>
+                      </button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0" align="start">
+                      <BookingCalendar
+                        initialRange={{
+                          startDate: returnDate || new Date(),
+                          endDate: returnDate || new Date(),
+                        }}
+                        onChange={(range) => {
+                          setReturnDate(range.startDate);
+                          setIsReturnDateOpen(false);
+                        }}
+                        onClose={() => setIsReturnDateOpen(false)}
+                      />
+                    </PopoverContent>
+                  </Popover>
                 </div>
-              </PopoverContent>
-            </Popover>
-          </div>
 
-          {/* Search Button */}
-          <div className="flex-shrink-0 w-full sm:w-auto">
-            <Button
-              onClick={handleSearch}
-              className="h-10 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
-            >
-              <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-sm sm:text-base">Search Transfers</span>
-            </Button>
+                <div className="w-24">
+                  <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+                    Return Time
+                  </label>
+                  <Select value={returnTime} onValueChange={setReturnTime}>
+                    <SelectTrigger className="w-full h-10 text-xs border-2 border-blue-500">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      {timeSlots.map((time) => (
+                        <SelectItem key={time} value={time}>
+                          {time}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+            )}
+
+            {/* Passengers */}
+            <div className="w-full sm:w-40">
+              <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+                Passengers
+              </label>
+              <Popover
+                open={isPassengerPopoverOpen}
+                onOpenChange={setIsPassengerPopoverOpen}
+              >
+                <PopoverTrigger asChild>
+                  <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
+                    <Users className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
+                    <span className="truncate text-xs sm:text-sm">{passengerSummary()}</span>
+                  </button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80" align="start">
+                  <div className="space-y-4">
+                    {/* Adults */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">Adults</div>
+                        <div className="text-sm text-gray-500">12+ years</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full"
+                          onClick={() =>
+                            updatePassengerCount("adults", "decrement")
+                          }
+                          disabled={passengers.adults <= 1}
+                        >
+                          <Minus className="w-3 h-3" />
+                        </Button>
+                        <span className="w-8 text-center font-medium">
+                          {passengers.adults}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full"
+                          onClick={() =>
+                            updatePassengerCount("adults", "increment")
+                          }
+                          disabled={passengers.adults >= 9}
+                        >
+                          <Plus className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Children */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">Children</div>
+                        <div className="text-sm text-gray-500">2-11 years</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full"
+                          onClick={() =>
+                            updatePassengerCount("children", "decrement")
+                          }
+                          disabled={passengers.children <= 0}
+                        >
+                          <Minus className="w-3 h-3" />
+                        </Button>
+                        <span className="w-8 text-center font-medium">
+                          {passengers.children}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full"
+                          onClick={() =>
+                            updatePassengerCount("children", "increment")
+                          }
+                          disabled={passengers.children >= 9}
+                        >
+                          <Plus className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Infants */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium">Infants</div>
+                        <div className="text-sm text-gray-500">Under 2 years</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full"
+                          onClick={() =>
+                            updatePassengerCount("infants", "decrement")
+                          }
+                          disabled={passengers.infants <= 0}
+                        >
+                          <Minus className="w-3 h-3" />
+                        </Button>
+                        <span className="w-8 text-center font-medium">
+                          {passengers.infants}
+                        </span>
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-8 h-8 p-0 rounded-full"
+                          onClick={() =>
+                            updatePassengerCount("infants", "increment")
+                          }
+                          disabled={passengers.infants >= 9}
+                        >
+                          <Plus className="w-3 h-3" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <Button
+                      onClick={() => setIsPassengerPopoverOpen(false)}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      Done
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Search Button */}
+            <div className="w-full sm:w-auto">
+              <Button
+                onClick={handleSearch}
+                className="h-10 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
+              >
+                <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+                <span className="text-sm sm:text-base">Search Transfers</span>
+              </Button>
+            </div>
           </div>
         </div>
       </div>
