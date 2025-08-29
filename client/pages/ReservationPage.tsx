@@ -56,6 +56,7 @@ export default function ReservationPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
+  const { loadFromUrlParams, getDisplayData } = useSearch();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
 
