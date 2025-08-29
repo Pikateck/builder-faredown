@@ -693,7 +693,7 @@ export default function SightseeingDetails() {
             onHold={(orderRef) => {
               console.log("Sightseeing details bargain offer on hold with order ref:", orderRef);
             }}
-            userName="Guest"
+            userName={userFirstName}
             module="sightseeing"
             basePrice={
               getTicketTotalPrice(bargainTicketType) ||
