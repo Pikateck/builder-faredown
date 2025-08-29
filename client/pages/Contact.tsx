@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { Mail, Phone, MapPin, Clock, Send, MessageSquare, HelpCircle, Star } from 'lucide-react';
+import { Link, useNavigate } from 'react-router-dom';
+import { Mail, Phone, MapPin, Clock, Send, MessageSquare, HelpCircle, Star, ArrowLeft } from 'lucide-react';
 import { Header } from '../components/layout/Header';
 import { MobileBottomNav } from '../components/layout/MobileBottomNav';
 import { Footer } from '../components/Footer';
