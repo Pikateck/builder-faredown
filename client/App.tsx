@@ -188,6 +188,8 @@ function App() {
                     <Route path="/help-center" element={<HelpCenter />} />
                     <Route path="/support" element={<HelpCenter />} />
                     <Route path="/contact" element={<Contact />} />
+                    <Route path="/about" element={<About />} />
+                    <Route path="/how-it-works" element={<HowItWorks />} />
                     <Route path="/privacy-policy" element={<PrivacyPolicy />} />
                     <Route
                       path="/terms-conditions"
