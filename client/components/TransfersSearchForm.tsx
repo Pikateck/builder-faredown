@@ -367,7 +367,8 @@ export function TransfersSearchForm() {
               setPickupInputValue,
               "Pick-up location",
               "Pick-up location",
-              "PKP"
+              "PKP",
+              "h-12"
             )}
 
             {/* Drop-off Location */}
@@ -381,7 +382,8 @@ export function TransfersSearchForm() {
               setDropoffInputValue,
               "Drop-off location",
               "Drop-off location",
-              "DRP"
+              "DRP",
+              "h-12"
             )}
 
             {/* Pick-up Date */}
@@ -542,7 +544,8 @@ export function TransfersSearchForm() {
                   setPickupInputValue,
                   "Pickup location",
                   "Pickup location",
-                  "PKP"
+                  "PKP",
+                  "h-10"
                 )}
 
                 {/* Swap Button */}
@@ -568,7 +571,8 @@ export function TransfersSearchForm() {
                   setDropoffInputValue,
                   "Drop-off location",
                   "Drop-off location",
-                  "DRP"
+                  "DRP",
+                  "h-10"
                 )}
               </div>
 
