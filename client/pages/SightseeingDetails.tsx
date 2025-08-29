@@ -1439,48 +1439,28 @@ export default function SightseeingDetails() {
         </AlertDialogContent>
       </AlertDialog>
 
-      {/* Sightseeing Bargain Modal */}
+      {/* Sightseeing Conversational Bargain Modal */}
       {attraction &&
         attraction.ticketTypes &&
         attraction.ticketTypes[bargainTicketType] && (
-          <FlightStyleBargainModal
-            type="sightseeing"
-            roomType={{
-              id: attraction.ticketTypes[bargainTicketType]?.name || "standard",
-              name:
-                attraction.ticketTypes[bargainTicketType]?.name ||
-                "Standard Admission",
-              description: `${attraction.name} - ${attraction.ticketTypes[bargainTicketType]?.name || "Standard Admission"}`,
-              image: attraction.images?.[0] || "",
-              marketPrice:
-                getTicketTotalPrice(bargainTicketType) ||
-                attraction.ticketTypes[bargainTicketType]?.price ||
-                149,
-              totalPrice:
-                getTicketTotalPrice(bargainTicketType) ||
-                attraction.ticketTypes[bargainTicketType]?.price ||
-                149,
-              features:
-                attraction.ticketTypes[bargainTicketType]?.features || [],
-              maxOccupancy: adults || 2,
-              bedType: attraction.duration || "1-2 hours",
-              size: attraction.category || "activity",
-              cancellation:
-                "Free cancellation up to 24 hours before visit date",
-            }}
-            hotel={{
-              id: attraction.id || "unknown",
-              name: attraction.name || "Unknown Attraction",
-              location: attraction.location || "Unknown Location",
-              checkIn: new Date().toISOString().split("T")[0],
-              checkOut: new Date().toISOString().split("T")[0],
-            }}
+          <ConversationalBargainModal
             isOpen={isBargainModalOpen}
             onClose={() => setIsBargainModalOpen(false)}
-            checkInDate={new Date()}
-            checkOutDate={new Date()}
-            roomsCount={1}
-            onBookingSuccess={handleBargainSuccess}
+            onAccept={(finalPrice, orderRef) => {
+              console.log("Sightseeing details bargain booking success with price:", finalPrice, "Order ref:", orderRef);
+              handleBargainSuccess(finalPrice);
+            }}
+            onHold={(orderRef) => {
+              console.log("Sightseeing details bargain offer on hold with order ref:", orderRef);
+            }}
+            userName="Guest"
+            module="sightseeing"
+            basePrice={
+              getTicketTotalPrice(bargainTicketType) ||
+              attraction.ticketTypes[bargainTicketType]?.price ||
+              149
+            }
+            productRef={attraction.id || ""}
           />
         )}
     </div>
