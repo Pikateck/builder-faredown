@@ -216,6 +216,29 @@ export function HotelSearchForm({
     }
 
     try {
+      // Update SearchContext with the search parameters
+      updateSearchParams({
+        destination: destination,
+        destinationName: destination,
+        checkIn: checkInDate.toISOString(),
+        checkOut: checkOutDate.toISOString(),
+        departureDate: checkInDate.toISOString(),
+        returnDate: checkOutDate.toISOString(),
+        guests: {
+          adults: guests.adults,
+          children: guests.children,
+        },
+        passengers: {
+          adults: guests.adults,
+          children: guests.children,
+          infants: 0,
+        },
+        rooms: guests.rooms,
+        module: "hotels",
+        tripType: "round-trip",
+        searchTimestamp: new Date().toISOString(),
+      });
+
       const searchParams = new URLSearchParams({
         checkIn: checkInDate.toISOString(),
         checkOut: checkOutDate.toISOString(),
