@@ -36,9 +36,15 @@ export const TicketPDF: React.FC<TicketPDFProps> = ({ booking }) => {
       {/* Header */}
       <div className="bg-[#003580] text-white p-6 rounded-t-lg">
         <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold">faredown.com</h1>
-            <p className="text-blue-100 mt-1">Electronic Ticket</p>
+          <div className="flex items-center space-x-3">
+            <img
+              src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb9dafbe622e641dfbe95653789ddecba?format=webp&width=800"
+              alt="Faredown Logo"
+              className="h-8 w-auto object-contain"
+            />
+            <div>
+              <p className="text-blue-100 mt-1">Electronic Ticket</p>
+            </div>
           </div>
           <div className="text-right">
             <p className="text-blue-100">Booking Reference</p>
