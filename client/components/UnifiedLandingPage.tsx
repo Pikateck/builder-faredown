@@ -132,9 +132,9 @@ export function UnifiedLandingPage({
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
               {/* Upgrade */}
-              <div className="group relative">
+              <div className="group relative h-full">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
-                <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105">
+                <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105 h-full flex flex-col">
                   <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">
                     01
                   </div>
@@ -149,17 +149,22 @@ export function UnifiedLandingPage({
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                     Upgrade
                   </h3>
-                  <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-6">
-                    Pick your desired room type (Deluxe / Suite / View).
-                  </p>
-                  <div className="w-full h-1 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-full"></div>
+                  <div className="flex-grow">
+                    <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
+                      Pick your desired room type (Deluxe / Suite / View).
+                    </p>
+                    <div className="h-10 flex items-center">
+                      {/* Spacer to match other cards */}
+                    </div>
+                  </div>
+                  <div className="w-full h-1 bg-gradient-to-r from-[#003580] to-[#0071c2] rounded-full mt-4"></div>
                 </div>
               </div>
 
               {/* Bargain */}
-              <div className="group relative">
+              <div className="group relative h-full">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#0071c2] to-[#febb02] rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
-                <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105">
+                <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105 h-full flex flex-col">
                   <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">
                     02
                   </div>
@@ -174,23 +179,27 @@ export function UnifiedLandingPage({
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                     Bargain
                   </h3>
-                  <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
-                    AI negotiates live with suppliers —{" "}
-                    <strong className="text-[#003580]">3 attempts</strong>,{" "}
-                    <strong className="text-[#003580]">30-second</strong> timer.
-                  </p>
-                  <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0071c2] to-[#febb02] rounded-full px-4 py-2 text-white text-sm font-semibold">
-                    <Clock className="w-4 h-4" />
-                    <span>Real-time AI</span>
+                  <div className="flex-grow">
+                    <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
+                      AI negotiates live with suppliers —{" "}
+                      <strong className="text-[#003580]">3 attempts</strong>,{" "}
+                      <strong className="text-[#003580]">30-second</strong> timer.
+                    </p>
+                    <div className="h-10 flex items-center">
+                      <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0071c2] to-[#febb02] rounded-full px-4 py-2 text-white text-sm font-semibold">
+                        <Clock className="w-4 h-4" />
+                        <span>Real-time AI</span>
+                      </div>
+                    </div>
                   </div>
                   <div className="w-full h-1 bg-gradient-to-r from-[#0071c2] to-[#febb02] rounded-full mt-4"></div>
                 </div>
               </div>
 
               {/* Book */}
-              <div className="group relative">
+              <div className="group relative h-full">
                 <div className="absolute inset-0 bg-gradient-to-r from-[#febb02] to-[#003580] rounded-3xl blur-xl opacity-25 group-hover:opacity-40 transition-opacity duration-300"></div>
-                <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105">
+                <div className="relative bg-white/80 backdrop-blur-lg rounded-3xl p-8 md:p-10 shadow-2xl border border-white/20 hover:shadow-3xl transition-all duration-300 hover:transform hover:scale-105 h-full flex flex-col">
                   <div className="absolute top-6 right-6 text-6xl font-bold text-gray-100/50">
                     03
                   </div>
@@ -205,10 +214,15 @@ export function UnifiedLandingPage({
                   <h3 className="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
                     Book
                   </h3>
-                  <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-6">
-                    Instant confirmation & support. Sleep suite tonight.
-                  </p>
-                  <div className="w-full h-1 bg-gradient-to-r from-[#febb02] to-[#003580] rounded-full"></div>
+                  <div className="flex-grow">
+                    <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
+                      Instant confirmation & support. Sleep suite tonight.
+                    </p>
+                    <div className="h-10 flex items-center">
+                      {/* Spacer to match other cards */}
+                    </div>
+                  </div>
+                  <div className="w-full h-1 bg-gradient-to-r from-[#febb02] to-[#003580] rounded-full mt-4"></div>
                 </div>
               </div>
             </div>
