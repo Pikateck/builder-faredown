@@ -250,9 +250,11 @@ export default function HotelBooking() {
                 <ArrowLeft className="w-5 h-5" />
               </button>
               <Link to="/" className="flex items-center space-x-2">
-                <span className="text-base sm:text-xl font-bold tracking-tight">
-                  faredown.com
-                </span>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb9dafbe622e641dfbe95653789ddecba?format=webp&width=800"
+                  alt="Faredown Logo"
+                  className="h-6 w-auto object-contain"
+                />
               </Link>
               <div className="text-xs sm:text-sm text-blue-200 hidden sm:block">
                 / Hotel Booking
