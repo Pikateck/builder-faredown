@@ -803,9 +803,10 @@ export default function HotelDetails() {
         const hasSelectedFeature = Array.from(
           selectedFilters.popularFilters,
         ).some((filter) =>
-          roomFeatures.some((feature: string) =>
-            feature.toLowerCase().includes(filter.toLowerCase()),
-          ),
+          roomFeatures.some((feature: any) => {
+            const featureName = typeof feature === 'string' ? feature : feature?.name || '';
+            return featureName.toLowerCase().includes(filter.toLowerCase());
+          }),
         );
         if (!hasSelectedFeature) return false;
       }
