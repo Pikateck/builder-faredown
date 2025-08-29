@@ -1,14 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Popover,
   PopoverContent,
@@ -24,6 +16,7 @@ import {
   ArrowUpDown,
   Plus,
   Minus,
+  X,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 
@@ -38,13 +31,13 @@ export function FlightSearchForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
-  // Trip configuration
-  const [tripType, setTripType] = useState("round-trip");
-  const [cabinClass, setCabinClass] = useState("economy");
-
   // Airports
   const [fromCity, setFromCity] = useState("");
   const [toCity, setToCity] = useState("");
+  const [isFromOpen, setIsFromOpen] = useState(false);
+  const [isToOpen, setIsToOpen] = useState(false);
+  const [fromInputValue, setFromInputValue] = useState("");
+  const [toInputValue, setToInputValue] = useState("");
 
   // Dates
   const tomorrow = new Date();
@@ -55,7 +48,6 @@ export function FlightSearchForm() {
   const [departureDate, setDepartureDate] = useState<Date | undefined>(tomorrow);
   const [returnDate, setReturnDate] = useState<Date | undefined>(nextWeek);
   const [isDepartureDateOpen, setIsDepartureDateOpen] = useState(false);
-  const [isReturnDateOpen, setIsReturnDateOpen] = useState(false);
 
   // Passengers
   const [passengers, setPassengers] = useState<PassengerConfig>({
@@ -65,34 +57,33 @@ export function FlightSearchForm() {
   });
   const [isPassengerPopoverOpen, setIsPassengerPopoverOpen] = useState(false);
 
-  // Mobile detection
-  const [isMobile, setIsMobile] = useState(false);
-
+  // Close dropdowns when clicking outside
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
+    const handleClickOutside = () => {
+      setIsFromOpen(false);
+      setIsToOpen(false);
     };
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
+
+    document.addEventListener("click", handleClickOutside);
+    return () => document.removeEventListener("click", handleClickOutside);
   }, []);
 
   // Popular airports for quick selection
   const popularAirports = [
-    { code: "DXB", city: "Dubai" },
-    { code: "LHR", city: "London" },
-    { code: "CDG", city: "Paris" },
-    { code: "BCN", city: "Barcelona" },
-    { code: "FCO", city: "Rome" },
-    { code: "JFK", city: "New York" },
-    { code: "LAX", city: "Los Angeles" },
-    { code: "BKK", city: "Bangkok" },
-    { code: "SIN", city: "Singapore" },
-    { code: "NRT", city: "Tokyo" },
-    { code: "SYD", city: "Sydney" },
-    { code: "BOM", city: "Mumbai" },
-    { code: "DEL", city: "Delhi" },
-    { code: "BLR", city: "Bangalore" },
+    "Dubai (DXB)",
+    "London (LHR)",
+    "Paris (CDG)",
+    "Barcelona (BCN)",
+    "Rome (FCO)",
+    "New York (JFK)",
+    "Los Angeles (LAX)",
+    "Bangkok (BKK)",
+    "Singapore (SIN)",
+    "Tokyo (NRT)",
+    "Sydney (SYD)",
+    "Mumbai (BOM)",
+    "Delhi (DEL)",
+    "Bangalore (BLR)",
   ];
 
   const updatePassengerCount = (
@@ -134,12 +125,6 @@ export function FlightSearchForm() {
       return;
     }
 
-    if (tripType === "round-trip" && !returnDate) {
-      setErrorMessage("Please select return date for round-trip");
-      setShowError(true);
-      return;
-    }
-
     try {
       const searchParams = new URLSearchParams({
         from: fromCity,
@@ -148,11 +133,9 @@ export function FlightSearchForm() {
         adults: passengers.adults.toString(),
         children: passengers.children.toString(),
         infants: passengers.infants.toString(),
-        tripType,
-        cabinClass,
       });
 
-      if (tripType === "round-trip" && returnDate) {
+      if (returnDate) {
         searchParams.set("returnDate", returnDate.toISOString());
       }
 
@@ -177,55 +160,109 @@ export function FlightSearchForm() {
         onClose={() => setShowError(false)}
       />
       <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
-        {/* Trip Type and Class Selection */}
-        <div className="flex flex-col sm:flex-row gap-2 mb-4">
-          <Select value={tripType} onValueChange={setTripType}>
-            <SelectTrigger className="w-full sm:w-32 h-8 text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="round-trip">Round-trip</SelectItem>
-              <SelectItem value="one-way">One-way</SelectItem>
-            </SelectContent>
-          </Select>
-
-          <Select value={cabinClass} onValueChange={setCabinClass}>
-            <SelectTrigger className="w-full sm:w-36 h-8 text-xs">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="economy">Economy</SelectItem>
-              <SelectItem value="premium-economy">Premium Economy</SelectItem>
-              <SelectItem value="business">Business</SelectItem>
-              <SelectItem value="first">First Class</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-
         {/* Main Search Form */}
         <div className="flex flex-col lg:flex-row gap-2 mb-4">
           {/* From City */}
-          <div className="flex-1 lg:max-w-[200px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              From
+          <div
+            className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+              From where?
             </label>
             <div className="relative">
-              <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4" />
-              <Input
-                type="text"
-                value={fromCity}
-                onChange={(e) => setFromCity(e.target.value)}
-                className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
-                placeholder="From where?"
-                autoComplete="off"
-                list="from-cities"
-              />
-              <datalist id="from-cities">
-                {popularAirports.map((airport) => (
-                  <option key={airport.code} value={`${airport.city} (${airport.code})`} />
-                ))}
-              </datalist>
+              <button
+                onClick={() => setIsFromOpen(!isFromOpen)}
+                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
+              >
+                <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                <div className="flex items-center space-x-2 min-w-0">
+                  {fromCity ? (
+                    <>
+                      <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                        DEP
+                      </div>
+                      <span className="text-sm text-gray-700 font-medium truncate">
+                        {fromCity}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-sm text-gray-500 font-medium">
+                      From where?
+                    </span>
+                  )}
+                </div>
+              </button>
+              {fromCity && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setFromCity("");
+                    setFromInputValue("");
+                    setIsFromOpen(false);
+                  }}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  title="Clear departure city"
+                >
+                  <X className="w-4 h-4 text-gray-400" />
+                </button>
+              )}
             </div>
+
+            {/* From Cities Dropdown */}
+            {isFromOpen && (
+              <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
+                <div className="mb-3">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                    Departure city
+                  </h3>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={fromInputValue}
+                      onChange={(e) => setFromInputValue(e.target.value)}
+                      placeholder="Search airports..."
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  {popularAirports
+                    .filter((airport) =>
+                      airport
+                        .toLowerCase()
+                        .includes((fromInputValue || "").toLowerCase()),
+                    )
+                    .slice(0, 8)
+                    .map((airport, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setFromCity(airport);
+                          setIsFromOpen(false);
+                          setFromInputValue("");
+                        }}
+                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                            <Plane className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {airport}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              Airport
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Swap Button */}
@@ -241,54 +278,144 @@ export function FlightSearchForm() {
           </div>
 
           {/* To City */}
-          <div className="flex-1 lg:max-w-[200px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              To
+          <div
+            className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+              To where?
             </label>
             <div className="relative">
-              <Plane className="absolute left-3 top-1/2 transform -translate-y-1/2 text-blue-600 w-4 h-4" />
-              <Input
-                type="text"
-                value={toCity}
-                onChange={(e) => setToCity(e.target.value)}
-                className="pl-10 h-10 sm:h-12 bg-white border-2 border-blue-400 focus:border-[#003580] rounded font-medium text-xs sm:text-sm"
-                placeholder="To where?"
-                autoComplete="off"
-                list="to-cities"
-              />
-              <datalist id="to-cities">
-                {popularAirports.map((airport) => (
-                  <option key={airport.code} value={`${airport.city} (${airport.code})`} />
-                ))}
-              </datalist>
+              <button
+                onClick={() => setIsToOpen(!isToOpen)}
+                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
+              >
+                <Plane className="w-4 h-4 text-gray-500 mr-2" />
+                <div className="flex items-center space-x-2 min-w-0">
+                  {toCity ? (
+                    <>
+                      <div className="bg-blue-600 text-white px-2 py-1 rounded text-xs font-bold">
+                        ARR
+                      </div>
+                      <span className="text-sm text-gray-700 font-medium truncate">
+                        {toCity}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-sm text-gray-500 font-medium">
+                      To where?
+                    </span>
+                  )}
+                </div>
+              </button>
+              {toCity && (
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation();
+                    setToCity("");
+                    setToInputValue("");
+                    setIsToOpen(false);
+                  }}
+                  className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                  title="Clear arrival city"
+                >
+                  <X className="w-4 h-4 text-gray-400" />
+                </button>
+              )}
             </div>
+
+            {/* To Cities Dropdown */}
+            {isToOpen && (
+              <div className="absolute top-14 left-0 right-0 sm:right-auto bg-white border border-gray-200 rounded-lg shadow-xl p-3 sm:p-4 z-50 w-full sm:w-96 max-h-80 overflow-y-auto">
+                <div className="mb-3">
+                  <h3 className="text-sm font-semibold text-gray-900 mb-2">
+                    Arrival city
+                  </h3>
+                  <div className="relative">
+                    <input
+                      type="text"
+                      value={toInputValue}
+                      onChange={(e) => setToInputValue(e.target.value)}
+                      placeholder="Search airports..."
+                      className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:border-blue-500 text-sm"
+                    />
+                  </div>
+                </div>
+
+                <div className="space-y-1">
+                  {popularAirports
+                    .filter((airport) =>
+                      airport
+                        .toLowerCase()
+                        .includes((toInputValue || "").toLowerCase()),
+                    )
+                    .slice(0, 8)
+                    .map((airport, index) => (
+                      <button
+                        key={index}
+                        onClick={() => {
+                          setToCity(airport);
+                          setIsToOpen(false);
+                          setToInputValue("");
+                        }}
+                        className="w-full text-left px-3 py-3 hover:bg-gray-100 rounded"
+                      >
+                        <div className="flex items-center space-x-3">
+                          <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center">
+                            <Plane className="w-4 h-4 text-blue-600" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-gray-900">
+                              {airport}
+                            </div>
+                            <div className="text-xs text-gray-500">
+                              Airport
+                            </div>
+                          </div>
+                        </div>
+                      </button>
+                    ))}
+                </div>
+              </div>
+            )}
           </div>
 
           {/* Departure Date */}
-          <div className="flex-1 lg:max-w-[140px]">
+          <div className="flex-1 lg:max-w-[280px]">
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Departure
+              Travel dates
             </label>
             <Popover open={isDepartureDateOpen} onOpenChange={setIsDepartureDateOpen}>
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate">
-                    {departureDate ? format(departureDate, "MMM d") : "Departure"}
+                <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
+                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
+                  <span className="truncate text-xs sm:text-sm">
+                    <span className="hidden md:inline">
+                      {departureDate && returnDate
+                        ? `${format(departureDate, "MMM d")} - ${format(returnDate, "MMM d")}`
+                        : departureDate
+                        ? format(departureDate, "MMM d")
+                        : "Travel dates"}
+                    </span>
+                    <span className="md:hidden">
+                      {departureDate && returnDate
+                        ? `${format(departureDate, "d MMM")} - ${format(returnDate, "d MMM")}`
+                        : departureDate
+                        ? format(departureDate, "d MMM")
+                        : "Dates"}
+                    </span>
                   </span>
-                </Button>
+                </button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <BookingCalendar
                   initialRange={{
                     startDate: departureDate || new Date(),
-                    endDate: departureDate || new Date(),
+                    endDate: returnDate || addDays(departureDate || new Date(), 7),
                   }}
                   onChange={(range) => {
                     setDepartureDate(range.startDate);
+                    setReturnDate(range.endDate);
                     setIsDepartureDateOpen(false);
                   }}
                   onClose={() => setIsDepartureDateOpen(false)}
@@ -297,43 +424,8 @@ export function FlightSearchForm() {
             </Popover>
           </div>
 
-          {/* Return Date */}
-          {tripType === "round-trip" && (
-            <div className="flex-1 lg:max-w-[140px]">
-              <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                Return
-              </label>
-              <Popover open={isReturnDateOpen} onOpenChange={setIsReturnDateOpen}>
-                <PopoverTrigger asChild>
-                  <Button
-                    variant="outline"
-                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
-                  >
-                    <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                    <span className="truncate">
-                      {returnDate ? format(returnDate, "MMM d") : "Return"}
-                    </span>
-                  </Button>
-                </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <BookingCalendar
-                    initialRange={{
-                      startDate: returnDate || addDays(departureDate || new Date(), 7),
-                      endDate: returnDate || addDays(departureDate || new Date(), 7),
-                    }}
-                    onChange={(range) => {
-                      setReturnDate(range.startDate);
-                      setIsReturnDateOpen(false);
-                    }}
-                    onClose={() => setIsReturnDateOpen(false)}
-                  />
-                </PopoverContent>
-              </Popover>
-            </div>
-          )}
-
           {/* Passengers */}
-          <div className="flex-1 lg:max-w-[160px]">
+          <div className="flex-1 lg:max-w-[280px]">
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Passengers
             </label>
@@ -342,13 +434,10 @@ export function FlightSearchForm() {
               onOpenChange={setIsPassengerPopoverOpen}
             >
               <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  <Users className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate">{passengerSummary()}</span>
-                </Button>
+                <button className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation">
+                  <Users className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
+                  <span className="truncate text-xs sm:text-sm">{passengerSummary()}</span>
+                </button>
               </PopoverTrigger>
               <PopoverContent className="w-80" align="start">
                 <div className="space-y-4">
@@ -460,7 +549,7 @@ export function FlightSearchForm() {
           <div className="flex-shrink-0 w-full sm:w-auto">
             <Button
               onClick={handleSearch}
-              className="h-10 sm:h-12 w-full sm:w-auto bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 transition-all duration-150"
+              className="h-10 w-full sm:w-auto bg-orange-500 hover:bg-orange-600 active:bg-orange-700 text-white font-bold rounded px-6 sm:px-8 transition-all duration-150"
             >
               <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
               <span className="text-sm sm:text-base">Search Flights</span>
