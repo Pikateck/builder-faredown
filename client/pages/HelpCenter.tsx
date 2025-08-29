@@ -135,6 +135,16 @@ export default function HelpCenter() {
       {/* Hero Section with Search */}
       <section className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] text-white py-20 overflow-hidden">
         <div className="absolute inset-0 bg-black opacity-20"></div>
+
+        {/* Mobile Back Button */}
+        <button
+          onClick={handleBackNavigation}
+          className="absolute top-4 left-4 md:hidden flex items-center gap-2 text-white hover:text-blue-200 active:bg-white/20 transition-all z-10 px-3 py-2 rounded-lg touch-manipulation"
+        >
+          <ArrowLeft className="w-5 h-5" />
+          <span className="text-sm font-medium">Back to App</span>
+        </button>
+
         <div className="relative max-w-6xl mx-auto px-4 text-center">
           <h1 className="text-4xl md:text-5xl font-bold mb-4">
             What can we help you with?
