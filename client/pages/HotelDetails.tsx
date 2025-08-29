@@ -3059,7 +3059,7 @@ export default function HotelDetails() {
           onHold={(orderRef) => {
             console.log("Hotel details bargain offer on hold with order ref:", orderRef);
           }}
-          userName="Guest"
+          userName={userFirstName}
           module="hotels"
           basePrice={selectedRoomType.pricePerNight}
           productRef={selectedRoomType.id}
