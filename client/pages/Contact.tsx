@@ -12,12 +12,9 @@ const Contact = () => {
   const navigate = useNavigate();
 
   const handleBackNavigation = () => {
-    // Try to go back in history, but if there's no history, go to home
-    if (window.history.length > 1) {
-      navigate(-1);
-    } else {
-      navigate('/');
-    }
+    // For native app experience, always go back to main app (hotels by default)
+    // This ensures consistent navigation behavior
+    navigate('/hotels');
   };
 
   const [formData, setFormData] = useState({
