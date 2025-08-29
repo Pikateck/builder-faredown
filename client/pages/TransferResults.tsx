@@ -1326,7 +1326,7 @@ export default function TransferResults() {
         onHold={(orderRef) => {
           console.log("Transfer bargain offer on hold with order ref:", orderRef);
         }}
-        userName="Guest"
+        userName={userFirstName}
         module="transfers"
         basePrice={selectedTransfer?.pricing.totalPrice || 0}
         productRef={selectedTransfer?.id || ""}
