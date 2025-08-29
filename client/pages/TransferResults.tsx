@@ -1281,49 +1281,15 @@ export default function TransferResults() {
         </div>
       )}
 
-      {/* Transfer Bargain Modal */}
-      <FlightStyleBargainModal
-        type="transfer"
-        roomType={
-          selectedTransfer
-            ? {
-                id: selectedTransfer.id,
-                name: selectedTransfer.vehicleName,
-                description: `${selectedTransfer.vehicleClass.charAt(0).toUpperCase() + selectedTransfer.vehicleClass.slice(1)} transfer for up to ${selectedTransfer.maxPassengers} passengers`,
-                image:
-                  selectedTransfer.vehicleImage || "/api/placeholder/120/80",
-                marketPrice: selectedTransfer.pricing.totalPrice * 1.2, // Show higher market price
-                totalPrice: selectedTransfer.pricing.totalPrice,
-                total: selectedTransfer.pricing.totalPrice,
-                features: selectedTransfer.features || [],
-                maxOccupancy: selectedTransfer.maxPassengers,
-                bedType: `${formatDuration(selectedTransfer.estimatedDuration)} journey`,
-                size: selectedTransfer.vehicleType,
-                cancellation: "Free cancellation",
-              }
-            : null
-        }
-        hotel={
-          selectedTransfer
-            ? {
-                id: parseInt(selectedTransfer.id.replace(/\D/g, "") || "1"),
-                name: `${selectedTransfer.vehicleClass.charAt(0).toUpperCase() + selectedTransfer.vehicleClass.slice(1)} - ${selectedTransfer.vehicleType.charAt(0).toUpperCase() + selectedTransfer.vehicleType.slice(1)}`,
-                location: `${pickupLocation} → ${dropoffLocation}`,
-                rating: selectedTransfer.providerRating || 4.5,
-                image:
-                  selectedTransfer.vehicleImage || "/api/placeholder/120/80",
-              }
-            : null
-        }
+      {/* Transfer Conversational Bargain Modal */}
+      <ConversationalBargainModal
         isOpen={showBargainModal}
         onClose={() => {
           setShowBargainModal(false);
           setSelectedTransfer(null);
         }}
-        checkInDate={new Date()} // Transfer date
-        checkOutDate={new Date()} // Same day for transfers
-        roomsCount={1} // One transfer booking
-        onBookingSuccess={(finalPrice) => {
+        onAccept={(finalPrice, orderRef) => {
+          console.log("Transfer bargain booking success with price:", finalPrice, "Order ref:", orderRef);
           setShowBargainModal(false);
           setSelectedTransfer(null);
 
@@ -1342,10 +1308,18 @@ export default function TransferResults() {
             adults: adults.toString(),
             children: children.toString(),
             infants: infants.toString(),
+            orderRef: orderRef,
           });
 
           navigate(`/transfer-booking?${bookingParams.toString()}`);
         }}
+        onHold={(orderRef) => {
+          console.log("Transfer bargain offer on hold with order ref:", orderRef);
+        }}
+        userName="Guest"
+        module="transfers"
+        basePrice={selectedTransfer?.pricing.totalPrice || 0}
+        productRef={selectedTransfer?.id || ""}
       />
     </div>
   );
