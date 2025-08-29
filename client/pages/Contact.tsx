@@ -14,6 +14,7 @@ const Contact = () => {
   const handleBackNavigation = () => {
     // For native app experience, always go back to main app (hotels by default)
     // This ensures consistent navigation behavior
+    console.log('Back button clicked - navigating to /hotels');
     navigate('/hotels');
   };
 
