@@ -43,6 +43,8 @@ import TransferBooking from "./pages/TransferBooking";
 import TransferConfirmation from "./pages/TransferConfirmation";
 import HelpCenter from "./pages/HelpCenter";
 import Contact from "./pages/Contact";
+import About from "./pages/About";
+import HowItWorks from "./pages/HowItWorks";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
 import TermsConditions from "./pages/TermsConditions";
 import TermsOfService from "./pages/TermsOfService";
