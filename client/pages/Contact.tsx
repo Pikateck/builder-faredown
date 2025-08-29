@@ -117,7 +117,7 @@ const Contact = () => {
           {/* Mobile Back Button */}
           <button
             onClick={handleBackNavigation}
-            className="absolute top-4 left-4 md:hidden flex items-center gap-2 text-white hover:text-blue-200 transition-colors z-10"
+            className="absolute top-4 left-4 md:hidden flex items-center gap-2 text-white hover:text-blue-200 active:bg-white/20 transition-all z-10 px-3 py-2 rounded-lg touch-manipulation"
           >
             <ArrowLeft className="w-5 h-5" />
             <span className="text-sm font-medium">Back to App</span>
