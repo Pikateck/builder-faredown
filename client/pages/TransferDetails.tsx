@@ -247,7 +247,7 @@ export default function TransferDetails() {
           </div>
           <Button
             variant="outline"
-            onClick={() => navigate("/transfer-results")}
+            onClick={() => navigate("/transfers/results")}
             className="text-blue-600 border-blue-600 hover:bg-blue-50"
           >
             ← Back to Results

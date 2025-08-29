@@ -224,7 +224,7 @@ export default function TransferBooking() {
         <div className="flex items-center mb-6">
           <Button
             variant="ghost"
-            onClick={() => navigate("/transfer-results")}
+            onClick={() => navigate("/transfers/results")}
             className="mr-4"
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
