@@ -107,6 +107,14 @@ export default function FlightDetails({
     {},
   );
 
+  // Get authenticated user's first name
+  const { user } = useAuth();
+  const storedUser = authService.getStoredUser();
+  const userFirstName =
+    user?.name && user.name.trim()
+      ? user.name.split(" ")[0]
+      : storedUser?.firstName || "Guest";
+
   const finalFlightId = flightId || params.flightId;
 
   useEffect(() => {
