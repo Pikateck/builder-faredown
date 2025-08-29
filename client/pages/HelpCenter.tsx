@@ -27,6 +27,14 @@ import {
 } from "lucide-react";
 
 export default function HelpCenter() {
+  const navigate = useNavigate();
+
+  const handleBackNavigation = () => {
+    // For native app experience, always go back to main app (hotels by default)
+    // This ensures consistent navigation behavior
+    navigate('/hotels');
+  };
+
   const [searchQuery, setSearchQuery] = useState("");
   const [bookingReference, setBookingReference] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
