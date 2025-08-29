@@ -213,6 +213,7 @@ export default function HotelDetails() {
   const checkOutParam = searchParams.get("checkOut");
   const roomsParam = searchParams.get("rooms");
   const adultsParam = searchParams.get("adults");
+  const childrenParam = searchParams.get("children");
 
   // Calculate dates and nights dynamically
   const checkInDate = checkInParam
