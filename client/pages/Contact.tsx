@@ -119,7 +119,7 @@ const Contact = () => {
         <div className="bg-gradient-to-r from-blue-600 via-blue-700 to-blue-800 text-white py-16 relative">
           {/* Mobile Back Button */}
           <button
-            onClick={() => navigate(-1)}
+            onClick={handleBackNavigation}
             className="absolute top-4 left-4 md:hidden flex items-center gap-2 text-white hover:text-blue-200 transition-colors z-10"
           >
             <ArrowLeft className="w-5 h-5" />
