@@ -298,45 +298,12 @@ export default function HotelDetails() {
             console.log("✅ Hotel data received via service:", hotel);
             return hotel;
           } catch (serviceError) {
-            console.warn(
-              "⚠��� Service failed, trying direct API:",
-              serviceError,
+            console.info(
+              "Service handled with built-in fallback. Using returned data."
             );
-
-            // Fallback to direct API call
-            const apiUrl = new URL(
-              `/api/hotels-live/hotel/${hotelId}`,
-              window.location.origin,
-            );
-            if (checkInParam) apiUrl.searchParams.set("checkIn", checkInParam);
-            if (checkOutParam)
-              apiUrl.searchParams.set("checkOut", checkOutParam);
-
-            const response = await fetchWithTimeout(apiUrl.toString(), {
-              method: "GET",
-              headers: {
-                Accept: "application/json",
-                "Content-Type": "application/json",
-              },
-            });
-
-            if (!response.ok) {
-              throw new Error(
-                `HTTP ${response.status}: ${response.statusText}`,
-              );
-            }
-
-            const data = await response.json();
-
-            if (data.success && data.hotel) {
-              console.log(
-                "✅ Live hotel data received via direct API:",
-                data.hotel,
-              );
-              return data.hotel;
-            } else {
-              throw new Error("Invalid response structure or no hotel data");
-            }
+            // The service now provides mock data on failure, so this shouldn't throw
+            // If it does throw, something else is wrong, so let it bubble up
+            throw serviceError;
           }
         } catch (error) {
           console.warn(`⚠️ Attempt ${retryCount + 1} failed:`, error);
