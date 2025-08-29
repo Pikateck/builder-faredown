@@ -1156,7 +1156,7 @@ export default function SightseeingResults() {
         onHold={(orderRef) => {
           console.log("Sightseeing bargain offer on hold with order ref:", orderRef);
         }}
-        userName="Guest"
+        userName={userFirstName}
         module="sightseeing"
         basePrice={
           selectedAttraction
