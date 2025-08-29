@@ -37,6 +37,8 @@ import {
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol, calculateNights } from "@/lib/pricing";
+import { useAuth } from "@/contexts/AuthContext";
+import { authService } from "@/services/authService";
 import {
   MobileCityDropdown,
   MobileDatePicker,
