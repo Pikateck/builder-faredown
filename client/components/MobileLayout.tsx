@@ -89,9 +89,13 @@ const MobileLayout: React.FC<MobileLayoutProps> = ({
                 </Button>
               )}
               <div>
-                <h1 className="text-lg font-bold text-blue-600">faredown</h1>
+                <img
+                  src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb9dafbe622e641dfbe95653789ddecba?format=webp&width=800"
+                  alt="Faredown Logo"
+                  className="h-6 w-auto object-contain"
+                />
                 {title && (
-                  <p className="text-sm text-gray-600 -mt-1">{title}</p>
+                  <p className="text-sm text-gray-600 mt-1">{title}</p>
                 )}
               </div>
             </div>
