@@ -267,6 +267,15 @@ export default function HotelDetails() {
             `🏨 Attempt ${retryCount + 1}: Fetching hotel details for: ${hotelId}`,
           );
 
+          // Check if we're in development environment
+          const isDevelopment =
+            typeof window !== "undefined" &&
+            (window.location.hostname.includes("localhost") ||
+              window.location.hostname.includes("127.0.0.1") ||
+              window.location.hostname.includes(".dev") ||
+              window.location.hostname.includes(".local") ||
+              window.location.port !== "");
+
           // Try using the hotels service first for proper API integration
           try {
             const searchParams = {
