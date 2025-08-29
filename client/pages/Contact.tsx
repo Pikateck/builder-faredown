@@ -11,6 +11,15 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '.
 const Contact = () => {
   const navigate = useNavigate();
 
+  const handleBackNavigation = () => {
+    // Try to go back in history, but if there's no history, go to home
+    if (window.history.length > 1) {
+      navigate(-1);
+    } else {
+      navigate('/');
+    }
+  };
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
