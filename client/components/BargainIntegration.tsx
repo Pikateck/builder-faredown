@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import BargainButton from "@/components/ui/BargainButton";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 import { TrendingDown } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { authService } from "@/services/authService";
 
 // Import CSS files for mobile optimizations and button styling
 import "@/styles/mobile-bargain-optimizations.css";
