@@ -93,8 +93,14 @@ router.put("/:id", async (req, res) => {
 // PATCH /api/markups/:id/status
 router.patch("/:id/status", async (req, res) => {
   try {
-    const { is_active } = req.body;
-    const result = await pool.query("UPDATE markup_rules SET is_active = COALESCE($1, is_active), updated_at = now() WHERE id = $2 RETURNING *", [is_active, req.params.id]);
+    const { is_active } = req.body || {};
+    let result;
+    if (typeof is_active === "undefined") {
+      // Toggle when no explicit value is provided
+      result = await pool.query("UPDATE markup_rules SET is_active = NOT is_active, updated_at = now() WHERE id = $1 RETURNING *", [req.params.id]);
+    } else {
+      result = await pool.query("UPDATE markup_rules SET is_active = $1, updated_at = now() WHERE id = $2 RETURNING *", [is_active, req.params.id]);
+    }
     if (!result.rowCount) return res.status(404).json({ success:false, error:"Not found"});
     res.json({ success: true, item: result.rows[0] });
   } catch (err) {
