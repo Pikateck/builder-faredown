@@ -3,12 +3,24 @@
     "name": "Faredown Markup API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" }
+  ],
   "item": [
     {
       "name": "List Markups",
       "request": {
         "method": "GET",
-        "url": {{baseUrl}}"/api/markups?module=air&page=1&pageSize=20"
+        "url": {
+          "raw": "{{baseUrl}}/api/markups?module=air&page=1&pageSize=20",
+          "host": ["{{baseUrl}}"],
+          "path": ["api","markups"],
+          "query": [
+            {"key":"module","value":"air"},
+            {"key":"page","value":"1"},
+            {"key":"pageSize","value":"20"}
+          ]
+        }
       }
     },
     {
@@ -20,7 +32,7 @@
           "mode": "raw",
           "raw": "{\n  \"module\": \"transfer\",\n  \"rule_name\": \"Airport Taxi Sedan BOM→NAVI\",\n  \"transfer_kind\": \"airport_taxi\",\n  \"vehicle_type\": \"sedan\",\n  \"route_from\": \"BOM\",\n  \"route_to\": \"NAVI\",\n  \"m_type\": \"flat\",\n  \"m_value\": 150,\n  \"priority\": 1,\n  \"user_type\": \"all\",\n  \"is_active\": true\n}"
         },
-        "url": {{baseUrl}}"/api/markups"
+        "url": {"raw": "{{baseUrl}}/api/markups", "host": ["{{baseUrl}}"], "path": ["api","markups"]}
       }
     },
     {
@@ -29,7 +41,7 @@
         "method": "PUT",
         "header": [{"key":"Content-Type","value":"application/json"}],
         "body": {"mode": "raw", "raw": "{\n  \"rule_name\": \"Updated Rule\"\n}"},
-        "url": {{baseUrl}}"/api/markups/:id"
+        "url": {"raw": "{{baseUrl}}/api/markups/:id", "host": ["{{baseUrl}}"], "path": ["api","markups",":id"]}
       }
     },
     {
@@ -38,12 +50,12 @@
         "method": "PATCH",
         "header": [{"key":"Content-Type","value":"application/json"}],
         "body": {"mode": "raw", "raw": "{ \n  \"is_active\": false\n}"},
-        "url": {{baseUrl}}"/api/markups/:id/status"
+        "url": {"raw": "{{baseUrl}}/api/markups/:id/status", "host": ["{{baseUrl}}"], "path": ["api","markups",":id","status"]}
       }
     },
     {
       "name": "Delete Markup",
-      "request": {"method": "DELETE", "url": {{baseUrl}}"/api/markups/:id"}
+      "request": {"method": "DELETE", "url": {"raw": "{{baseUrl}}/api/markups/:id", "host": ["{{baseUrl}}"], "path": ["api","markups",":id"]}}
     },
     {
       "name": "Test Apply (Air)",
@@ -54,9 +66,8 @@
           "mode": "raw",
           "raw": "{\n  \"module\": \"air\",\n  \"airline_code\": \"EK\",\n  \"route_from\": \"BOM\",\n  \"route_to\": \"DXB\",\n  \"booking_class\": \"Y\",\n  \"base_amount\": 12000,\n  \"currency\": \"INR\"\n}"
         },
-        "url": {{baseUrl}}"/api/markups/test-apply"
+        "url": {"raw": "{{baseUrl}}/api/markups/test-apply", "host": ["{{baseUrl}}"], "path": ["api","markups","test-apply"]}
       }
     }
-  ],
-  "variable": []
+  ]
 }
