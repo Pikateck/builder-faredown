@@ -32,8 +32,7 @@ app.use(cors(corsOptions));
 
 // Database connection
 const pool = new Pool({
-  connectionString:
-    "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db",
+  connectionString: process.env.DATABASE_URL || "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db",
   ssl: { rejectUnauthorized: false },
 });
 
@@ -144,7 +143,7 @@ async function startServer() {
       console.log(
         `🧪 Test Endpoint: http://localhost:${PORT}/api/pricing/test-quote`,
       );
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
+      console.log(`��� Environment: ${process.env.NODE_ENV || "development"}`);
       console.log(`🗄️  Database: Connected to PostgreSQL`);
       console.log("================================\n");
     });
