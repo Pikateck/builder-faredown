@@ -5364,7 +5364,7 @@ export default function FlightResults() {
 
                 {/* SEARCH BUTTON - Full width, blue background, 12px border-radius */}
                 <Button
-                  className="w-full bg-[#003580] hover:bg-[#0071c2] text-white py-4 text-lg font-semibold rounded-xl shadow-lg mt-4"
+                  className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black py-4 text-lg font-semibold rounded-xl shadow-lg mt-4"
                   onClick={() => setShowSearchEdit(false)}
                 >
                   <Search className="w-5 h-5 mr-2" />
