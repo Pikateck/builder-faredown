@@ -79,20 +79,11 @@ class ApiClient {
   private timeout: number;
   private authToken: string | null = null;
   private devClient: DevApiClient;
-  private isProduction: boolean;
-
   constructor() {
     this.baseURL = API_CONFIG.BASE_URL;
     this.timeout = API_CONFIG.TIMEOUT;
     this.devClient = new DevApiClient(this.baseURL);
-    this.isProduction = window.location.hostname !== "localhost";
     this.loadAuthToken();
-
-    if (this.isProduction) {
-      console.log(
-        "🌐 Production mode detected - using fallback for all API calls to prevent fetch errors",
-      );
-    }
   }
 
   private loadAuthToken() {
@@ -156,14 +147,6 @@ class ApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
-    // In production, use fallback mode to prevent fetch errors
-    if (this.isProduction) {
-      console.log(
-        `🔄 Production mode: Using fallback for ${endpoint} (avoiding fetch errors)`,
-      );
-      return this.devClient.get<T>(endpoint, params);
-    }
-
     const url = new URL(`${this.baseURL}${endpoint}`);
 
     if (params) {
@@ -231,12 +214,6 @@ class ApiClient {
     data?: any,
     customHeaders?: Record<string, string>,
   ): Promise<T> {
-    // In production, always use fallback mode to avoid fetch errors
-    if (this.isProduction) {
-      console.log(`🔄 Production mode: Using fallback for POST ${endpoint}`);
-      return this.devClient.post<T>(endpoint, data);
-    }
-
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
@@ -293,17 +270,40 @@ class ApiClient {
   }
 
   async put<T>(endpoint: string, data?: any): Promise<T> {
-    // Always use dev client to completely avoid fetch errors
-    console.log("🔄 Using development fallback mode for PUT (fetch disabled)");
-    return this.devClient.post<T>(endpoint, data); // DevClient doesn't have PUT, use post
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+    try {
+      console.log(`🌐 API PUT: ${this.baseURL}${endpoint}`);
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        method: "PUT",
+        headers: this.getHeaders({ "Content-Type": "application/json" }),
+        body: data ? JSON.stringify(data) : undefined,
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+      return this.handleResponse<T>(response);
+    } catch (error) {
+      clearTimeout(timeoutId);
+      try { return this.devClient.post<T>(endpoint, data); } catch { throw error as any; }
+    }
   }
 
   async delete<T>(endpoint: string): Promise<T> {
-    // Always use dev client to completely avoid fetch errors
-    console.log(
-      "🔄 Using development fallback mode for DELETE (fetch disabled)",
-    );
-    return this.devClient.get<T>(endpoint); // DevClient doesn't have DELETE, use get
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+    try {
+      console.log(`🌐 API DELETE: ${this.baseURL}${endpoint}`);
+      const response = await fetch(`${this.baseURL}${endpoint}`, {
+        method: "DELETE",
+        headers: this.getHeaders(),
+        signal: controller.signal,
+      });
+      clearTimeout(timeoutId);
+      return this.handleResponse<T>(response);
+    } catch (error) {
+      clearTimeout(timeoutId);
+      try { return this.devClient.get<T>(endpoint); } catch { throw error as any; }
+    }
   }
 
   setAuthToken(token: string) {
