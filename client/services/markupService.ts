@@ -190,7 +190,67 @@ export interface MarkupFilters {
 }
 
 class MarkupService {
-  private baseUrl = "/api/markup";
+  private baseUrl = "/api/markups";
+
+  private mapAirRow(row: any): AirMarkup {
+    return {
+      id: String(row.id),
+      name: row.rule_name || "",
+      description: row.description || "",
+      airline: row.airline_code || "ALL",
+      route: { from: row.route_from || "ALL", to: row.route_to || "ALL" },
+      class: (row.booking_class || "all").toLowerCase(),
+      markupType: (row.m_type || "percentage").toLowerCase(),
+      markupValue: Number(row.m_value || 0),
+      minAmount: 0,
+      maxAmount: 999999,
+      currentFareMin: Number(row.current_min_pct || 0),
+      currentFareMax: Number(row.current_max_pct || 0),
+      bargainFareMin: Number(row.bargain_min_pct || 0),
+      bargainFareMax: Number(row.bargain_max_pct || 0),
+      validFrom: row.valid_from || "",
+      validTo: row.valid_to || "",
+      status: row.is_active ? "active" : "inactive",
+      priority: Number(row.priority || 0),
+      userType: (row.user_type || "all").toLowerCase(),
+      specialConditions: "",
+      createdAt: row.created_at || new Date().toISOString(),
+      updatedAt: row.updated_at || new Date().toISOString(),
+    };
+  }
+
+  private mapHotelRow(row: any): HotelMarkup {
+    return {
+      id: String(row.id),
+      name: row.rule_name || "",
+      description: row.description || "",
+      city: row.hotel_city || "",
+      hotelName: row.hotel_name || "",
+      hotelChain: row.hotel_chain || "",
+      starRating: String(row.hotel_star_min || row.star_rating || "3"),
+      roomCategory: row.room_category || "standard",
+      markupType: (row.m_type || "percentage").toLowerCase(),
+      markupValue: Number(row.m_value || 0),
+      minAmount: 0,
+      maxAmount: 999999,
+      currentFareMin: Number(row.current_min_pct || 0),
+      currentFareMax: Number(row.current_max_pct || 0),
+      bargainFareMin: Number(row.bargain_min_pct || 0),
+      bargainFareMax: Number(row.bargain_max_pct || 0),
+      validFrom: row.valid_from || "",
+      validTo: row.valid_to || "",
+      seasonType: "Regular",
+      applicableDays: [],
+      minStay: 1,
+      maxStay: 30,
+      status: row.is_active ? "active" : "inactive",
+      priority: Number(row.priority || 0),
+      userType: (row.user_type || "all").toLowerCase(),
+      specialConditions: "",
+      createdAt: row.created_at || new Date().toISOString(),
+      updatedAt: row.updated_at || new Date().toISOString(),
+    };
+  }
 
   /**
    * Get all air markups with optional filters
@@ -202,27 +262,31 @@ class MarkupService {
     totalPages: number;
   }> {
     try {
-      const params = new URLSearchParams();
-
-      if (filters.search) params.append("search", filters.search);
+      const params: Record<string, any> = { module: "air" };
+      if (filters.search) params.search = filters.search;
       if (filters.airline && filters.airline !== "all")
-        params.append("airline", filters.airline);
+        params.airline_code = filters.airline;
       if (filters.class && filters.class !== "all")
-        params.append("class", filters.class);
+        params.booking_class = filters.class;
       if (filters.status && filters.status !== "all")
-        params.append("status", filters.status);
-      if (filters.page) params.append("page", filters.page.toString());
-      if (filters.limit) params.append("limit", filters.limit.toString());
+        params.status = filters.status;
+      if (filters.page) params.page = filters.page;
+      if (filters.limit) params.limit = filters.limit;
 
-      const response = await apiClient.get(
-        `${this.baseUrl}/air?${params.toString()}`,
-      );
-
-      if (response.ok) {
-        return response.data;
-      } else {
-        throw new Error(response.error || "Failed to fetch air markups");
+      const response: any = await apiClient.get(`${this.baseUrl}`, params);
+      if (response && (response.success || response.items)) {
+        const items = response.items || [];
+        const total = response.total || 0;
+        const page = response.page || 1;
+        const pageSize = response.pageSize || items.length || 20;
+        return {
+          markups: items.map((r: any) => this.mapAirRow(r)),
+          total,
+          page,
+          totalPages: Math.max(1, Math.ceil(total / pageSize)),
+        };
       }
+      throw new Error(response?.error || "Failed to fetch air markups");
     } catch (error) {
       console.error("Error fetching air markups:", error);
       throw error;
