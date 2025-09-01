@@ -78,6 +78,14 @@ app.get("/", (req, res) => {
 // Pricing routes
 app.use("/api/pricing", pricingRoutes);
 
+// Unified markups routes (for Admin CMS)
+try {
+  const markupsRoutes = require("./routes/markups-unified");
+  app.use("/api/markups", markupsRoutes);
+} catch (e) {
+  console.warn("⚠️ Markups routes not mounted:", e?.message);
+}
+
 // Error handling middleware
 app.use((err, req, res, next) => {
   console.error("Error:", err);
