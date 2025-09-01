@@ -1,581 +1,308 @@
 const express = require("express");
+const { Pool } = require("pg");
+
 const router = express.Router();
+const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 
-// Mock database
-let airMarkups = [
-  {
-    id: "1",
-    name: "Mumbai-Dubai Economy Markup",
-    description: "Standard markup for Mumbai to Dubai economy flights",
-    airline: "EK",
-    route: { from: "BOM", to: "DXB" },
-    class: "economy",
-    markupType: "percentage",
-    markupValue: 5.5,
-    minAmount: 500,
-    maxAmount: 2000,
-    // Current Fare Range (existing functionality)
-    currentFareMin: 10.0, // Min markup percentage for user-visible fare
-    currentFareMax: 12.0, // Max markup percentage for user-visible fare
-    // New Bargain Fare Range fields
-    bargainFareMin: 5.0, // Min acceptable bargain percentage
-    bargainFareMax: 15.0, // Max acceptable bargain percentage
-    validFrom: "2024-01-01",
-    validTo: "2024-12-31",
-    status: "active",
-    priority: 1,
-    userType: "all",
-    specialConditions: "Valid for advance bookings only",
-    createdAt: "2024-01-15T10:00:00Z",
-    updatedAt: "2024-01-20T15:30:00Z",
-  },
-  // Zubin's Sample Data - Airline Markup (Amadeus)
-  {
-    id: "2",
-    name: "Amadeus Emirates BOM-DXB Economy",
-    description:
-      "Airline Markup for BOM to DXB route with Emirates via Amadeus",
-    airline: "EK", // Emirates
-    route: { from: "BOM", to: "DXB" },
-    class: "economy",
-    markupType: "percentage",
-    markupValue: 12.0, // Average of the ranges
-    minAmount: 500,
-    maxAmount: 5000,
-    // High Fare Range
-    highFareMin: 20.0,
-    highFareMax: 25.0,
-    // Low Fare Range
-    lowFareMin: 15.0,
-    lowFareMax: 20.0,
-    // Current Fare Range (Min/Max) - User-visible pricing
-    currentFareMin: 10.0, // From Zubin's spec
-    currentFareMax: 12.0, // From Zubin's spec
-    // Discount Fare Range (Min/Max) - Used for bargain logic
-    bargainFareMin: 5.0, // From Zubin's spec (Discount Fare Min)
-    bargainFareMax: 15.0, // From Zubin's spec (Discount Fare Max)
-    validFrom: "2025-01-01",
-    validTo: "2025-12-31",
-    status: "active",
-    priority: 1,
-    userType: "all",
-    specialConditions:
-      "Sample data as per Zubin's specifications for Amadeus Emirates route",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
+// Helpers
+function mapAirRowToClient(row) {
+  return {
+    id: String(row.id),
+    name: row.rule_name,
+    description: row.description || "",
+    airline: row.airline_code || "ALL",
+    route: { from: row.route_from || "ALL", to: row.route_to || "ALL" },
+    class: (row.booking_class || "all").toLowerCase(),
+    markupType: row.m_type === "flat" ? "fixed" : "percentage",
+    markupValue: Number(row.m_value || 0),
+    minAmount: 0,
+    maxAmount: 0,
+    currentFareMin: Number(row.current_min_pct || 0),
+    currentFareMax: Number(row.current_max_pct || 0),
+    bargainFareMin: Number(row.bargain_min_pct || 0),
+    bargainFareMax: Number(row.bargain_max_pct || 0),
+    validFrom: row.valid_from || null,
+    validTo: row.valid_to || null,
+    status: row.is_active ? "active" : "inactive",
+    priority: row.priority || 1,
+    userType: row.user_type || "all",
+    specialConditions: "",
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
 
-let hotelMarkups = [
-  {
-    id: "1",
-    name: "Mumbai Luxury Hotels Markup",
-    description: "Standard markup for luxury hotels in Mumbai",
-    city: "Mumbai",
-    hotelName: "Taj Hotel",
-    hotelChain: "Taj Hotels",
-    starRating: 5,
-    roomCategory: "deluxe",
-    markupType: "percentage",
-    markupValue: 8.5,
-    minAmount: 1000,
-    maxAmount: 5000,
-    // Current Fare Range (for dynamic pricing display)
-    currentFareMin: 10.0, // Min markup percentage for user-visible hotel rates
-    currentFareMax: 15.0, // Max markup percentage for user-visible hotel rates
-    // Bargain Fare Range (for user-entered price validation)
-    bargainFareMin: 5.0, // Min acceptable bargain percentage for hotels
-    bargainFareMax: 15.0, // Max acceptable bargain percentage for hotels
-    validFrom: "2024-01-01",
-    validTo: "2024-12-31",
-    checkInDays: ["friday", "saturday", "sunday"],
-    applicableDays: ["friday", "saturday", "sunday"], // Alias for checkInDays
-    minStay: 1,
-    maxStay: 7,
-    status: "active",
-    priority: 1,
-    userType: "all",
-    seasonType: "Peak Season",
-    specialConditions: "Valid for weekend bookings only",
-    createdAt: "2024-01-15T10:00:00Z",
-    updatedAt: "2024-01-20T15:30:00Z",
-  },
-  // Zubin's Sample Data - Hotel Markup (Hotelbeds)
-  {
-    id: "2",
-    name: "Hotelbeds Taj Mahal Palace Mumbai",
-    description: "Hotel Markup for Taj Mahal Palace Mumbai via Hotelbeds",
-    city: "Mumbai", // From Zubin's spec: Mumbai
-    hotelName: "Taj Mahal Palace", // From Zubin's spec: 53331 (Taj Mahal Palace)
-    hotelChain: "Taj Hotels",
-    starRating: 5,
-    roomCategory: "deluxe",
-    markupType: "percentage",
-    markupValue: 12.0, // Average of the ranges
-    minAmount: 1000,
-    maxAmount: 8000,
-    // Hotel No reference from spec
-    hotelCode: "53331", // From Zubin's spec
-    // High Fare Range
-    highFareMin: 20.0,
-    highFareMax: 25.0,
-    // Low Fare Range
-    lowFareMin: 15.0,
-    lowFareMax: 20.0,
-    // Current Fare Range (Min/Max) - User-visible hotel rates
-    currentFareMin: 10.0, // From Zubin's spec
-    currentFareMax: 12.0, // From Zubin's spec
-    // Discount Fare Range (Min/Max) - Used for hotel bargain logic
-    bargainFareMin: 10.0, // From Zubin's spec (Discount Fare Min)
-    bargainFareMax: 20.0, // From Zubin's spec (Discount Fare Max)
-    validFrom: "2025-01-01",
-    validTo: "2025-12-31",
-    checkInDays: [
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-      "sunday",
-    ],
-    applicableDays: [
-      "monday",
-      "tuesday",
-      "wednesday",
-      "thursday",
-      "friday",
-      "saturday",
-      "sunday",
-    ],
-    minStay: 1,
-    maxStay: 30,
-    status: "active",
-    priority: 1,
-    userType: "all",
+function mapHotelRowToClient(row) {
+  return {
+    id: String(row.id),
+    name: row.rule_name,
+    description: row.description || "",
+    city: row.hotel_city || "ALL",
+    hotelName: "",
+    hotelChain: "",
+    starRating: String(row.hotel_star_min || "") || "",
+    roomCategory: "",
+    markupType: row.m_type === "flat" ? "fixed" : "percentage",
+    markupValue: Number(row.m_value || 0),
+    minAmount: 0,
+    maxAmount: 0,
+    currentFareMin: Number(row.current_min_pct || 0),
+    currentFareMax: Number(row.current_max_pct || 0),
+    bargainFareMin: Number(row.bargain_min_pct || 0),
+    bargainFareMax: Number(row.bargain_max_pct || 0),
+    validFrom: row.valid_from || null,
+    validTo: row.valid_to || null,
     seasonType: "Regular",
-    specialConditions:
-      "Sample data as per Zubin's specifications for Hotelbeds Taj Mahal Palace",
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-];
+    applicableDays: [],
+    minStay: 0,
+    maxStay: 0,
+    status: row.is_active ? "active" : "inactive",
+    priority: row.priority || 1,
+    userType: row.user_type || "all",
+    specialConditions: row.description || "",
+    createdAt: row.created_at,
+    updatedAt: row.updated_at,
+  };
+}
 
-// Middleware to check authentication
-const authenticateToken = (req, res, next) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader && authHeader.split(" ")[1];
-
-  if (!token) {
-    return res.status(401).json({ error: "Access token required" });
-  }
-
-  // In production, verify JWT token properly
-  req.user = { id: "1", role: "admin" }; // Mock user
-  next();
-};
-
-// AIR MARKUP ROUTES
-
-// GET /api/markup/air - Get all air markups
-router.get("/air", authenticateToken, (req, res) => {
+// ===== AIR MARKUP ROUTES =====
+router.get("/air", async (req, res) => {
   try {
-    const {
-      search,
-      airline,
-      class: cabinClass,
-      status,
-      page = 1,
-      limit = 10,
-    } = req.query;
+    const { search, airline, class: cabinClass, status, page = 1, limit = 10 } = req.query;
+    const where = ["module = 'air'"]; const params = []; let i = 1;
+    if (status && status !== "all") { where.push(`is_active = $${i++}`); params.push(status === "active"); }
+    if (airline && airline !== "all") { where.push(`airline_code = $${i++}`); params.push(airline); }
+    if (cabinClass && cabinClass !== "all") { where.push(`LOWER(booking_class) = LOWER($${i++})`); params.push(cabinClass); }
+    if (search) { where.push(`(LOWER(rule_name) LIKE $${i} OR LOWER(description) LIKE $${i})`); params.push(`%${String(search).toLowerCase()}%`); i++; }
+    const whereSql = `WHERE ${where.join(" AND ")}`;
 
-    let filteredMarkups = [...airMarkups];
+    const count = await pool.query(`SELECT COUNT(*)::int AS total FROM markup_rules ${whereSql}`, params);
+    const total = count.rows[0].total;
 
-    // Apply filters
-    if (search) {
-      filteredMarkups = filteredMarkups.filter(
-        (markup) =>
-          markup.name.toLowerCase().includes(search.toLowerCase()) ||
-          markup.description.toLowerCase().includes(search.toLowerCase()) ||
-          `${markup.route.from}-${markup.route.to}`
-            .toLowerCase()
-            .includes(search.toLowerCase()),
-      );
-    }
-
-    if (airline && airline !== "all") {
-      filteredMarkups = filteredMarkups.filter(
-        (markup) => markup.airline === airline,
-      );
-    }
-
-    if (cabinClass && cabinClass !== "all") {
-      filteredMarkups = filteredMarkups.filter(
-        (markup) => markup.class === cabinClass,
-      );
-    }
-
-    if (status && status !== "all") {
-      filteredMarkups = filteredMarkups.filter(
-        (markup) => markup.status === status,
-      );
-    }
-
-    // Pagination
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
-    const paginatedMarkups = filteredMarkups.slice(startIndex, endIndex);
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const data = await pool.query(
+      `SELECT * FROM markup_rules ${whereSql} ORDER BY priority ASC, updated_at DESC LIMIT $${i} OFFSET $${i + 1}`,
+      [...params, parseInt(limit), offset]
+    );
 
     res.json({
-      markups: paginatedMarkups,
-      total: filteredMarkups.length,
+      markups: data.rows.map(mapAirRowToClient),
+      total,
       page: parseInt(page),
-      totalPages: Math.ceil(filteredMarkups.length / limit),
+      totalPages: Math.ceil(total / parseInt(limit)),
     });
-  } catch (error) {
+  } catch (err) {
+    console.error("GET /api/markup/air error", err);
     res.status(500).json({ error: "Failed to fetch air markups" });
   }
 });
 
-// POST /api/markup/air - Create new air markup
-router.post("/air", authenticateToken, (req, res) => {
+router.post("/air", async (req, res) => {
   try {
-    const {
-      name,
-      description,
-      airline,
-      route,
-      class: cabinClass,
-      markupType,
-      markupValue,
-      minAmount,
-      maxAmount,
-      // Current Fare Range fields
-      currentFareMin,
-      currentFareMax,
-      // Bargain Fare Range fields
-      bargainFareMin,
-      bargainFareMax,
-      // Additional fare range fields
-      highFareMin,
-      highFareMax,
-      lowFareMin,
-      lowFareMax,
-      validFrom,
-      validTo,
-      status,
-      priority,
-      userType,
-      specialConditions,
-    } = req.body;
-
-    // Validate required fields
-    if (!name || !airline || !route || !markupType || !markupValue) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    const newMarkup = {
-      id: Date.now().toString(),
-      name,
-      description: description || "",
-      airline,
-      route,
-      class: cabinClass || "all",
-      markupType,
-      markupValue,
-      minAmount: minAmount || 0,
-      maxAmount: maxAmount || 0,
-      // Current Fare Range (existing functionality)
-      currentFareMin: currentFareMin || 10.0, // Default Min markup percentage for user-visible fare
-      currentFareMax: currentFareMax || 15.0, // Default Max markup percentage for user-visible fare
-      // Bargain Fare Range fields
-      bargainFareMin: bargainFareMin || 5.0, // Default Min acceptable bargain percentage
-      bargainFareMax: bargainFareMax || 15.0, // Default Max acceptable bargain percentage
-      // Additional fare ranges if provided
-      ...(highFareMin && { highFareMin }),
-      ...(highFareMax && { highFareMax }),
-      ...(lowFareMin && { lowFareMin }),
-      ...(lowFareMax && { lowFareMax }),
-      validFrom: validFrom || new Date().toISOString().split("T")[0],
-      validTo: validTo || "2025-12-31",
-      status: status || "active",
-      priority: priority || 1,
-      userType: userType || "all",
-      specialConditions: specialConditions || "",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    airMarkups.push(newMarkup);
-    res.status(201).json(newMarkup);
-  } catch (error) {
+    const b = req.body || {};
+    const q = `INSERT INTO markup_rules(module, rule_name, description, airline_code, route_from, route_to, booking_class, m_type, m_value, current_min_pct, current_max_pct, bargain_min_pct, bargain_max_pct, valid_from, valid_to, priority, user_type, is_active)
+               VALUES('air',$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`;
+    const vals = [
+      b.name,
+      b.description || null,
+      b.airline || null,
+      b.route?.from || null,
+      b.route?.to || null,
+      b.class || null,
+      (b.markupType === "fixed" ? "flat" : "percentage"),
+      b.markupValue || 0,
+      b.currentFareMin || null,
+      b.currentFareMax || null,
+      b.bargainFareMin || null,
+      b.bargainFareMax || null,
+      b.validFrom || null,
+      b.validTo || null,
+      b.priority || 1,
+      b.userType || "all",
+      b.status ? b.status === "active" : true,
+    ];
+    const r = await pool.query(q, vals);
+    res.status(201).json({ markup: mapAirRowToClient(r.rows[0]) });
+  } catch (err) {
+    console.error("POST /api/markup/air error", err);
     res.status(500).json({ error: "Failed to create air markup" });
   }
 });
 
-// PUT /api/markup/air/:id - Update air markup
-router.put("/air/:id", authenticateToken, (req, res) => {
+router.put("/air/:id", async (req, res) => {
   try {
-    const markupIndex = airMarkups.findIndex((m) => m.id === req.params.id);
-    if (markupIndex === -1) {
-      return res.status(404).json({ error: "Air markup not found" });
-    }
-
-    const updatedMarkup = {
-      ...airMarkups[markupIndex],
-      ...req.body,
-      updatedAt: new Date().toISOString(),
+    const b = req.body || {};
+    const updates = [];
+    const params = []; let i = 1;
+    const map = {
+      rule_name: b.name,
+      description: b.description,
+      airline_code: b.airline,
+      route_from: b.route?.from,
+      route_to: b.route?.to,
+      booking_class: b.class,
+      m_type: b.markupType ? (b.markupType === "fixed" ? "flat" : "percentage") : undefined,
+      m_value: b.markupValue,
+      current_min_pct: b.currentFareMin,
+      current_max_pct: b.currentFareMax,
+      bargain_min_pct: b.bargainFareMin,
+      bargain_max_pct: b.bargainFareMax,
+      valid_from: b.validFrom,
+      valid_to: b.validTo,
+      priority: b.priority,
+      user_type: b.userType,
+      is_active: typeof b.status === "string" ? b.status === "active" : undefined,
     };
-
-    airMarkups[markupIndex] = updatedMarkup;
-    res.json(updatedMarkup);
-  } catch (error) {
+    Object.entries(map).forEach(([k,v])=>{ if (v !== undefined) { updates.push(`${k} = $${i++}`); params.push(v); }});
+    if (!updates.length) return res.status(400).json({ error: "No fields to update" });
+    params.push(req.params.id);
+    const r = await pool.query(`UPDATE markup_rules SET ${updates.join(", ")}, updated_at = now() WHERE id = $${i} AND module = 'air' RETURNING *`, params);
+    if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
+    res.json({ markup: mapAirRowToClient(r.rows[0]) });
+  } catch (err) {
+    console.error("PUT /api/markup/air/:id error", err);
     res.status(500).json({ error: "Failed to update air markup" });
   }
 });
 
-// DELETE /api/markup/air/:id - Delete air markup
-router.delete("/air/:id", authenticateToken, (req, res) => {
+router.delete("/air/:id", async (req, res) => {
   try {
-    const markupIndex = airMarkups.findIndex((m) => m.id === req.params.id);
-    if (markupIndex === -1) {
-      return res.status(404).json({ error: "Air markup not found" });
-    }
-
-    airMarkups.splice(markupIndex, 1);
+    const r = await pool.query("DELETE FROM markup_rules WHERE id = $1 AND module = 'air'", [req.params.id]);
+    if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
     res.json({ message: "Air markup deleted successfully" });
-  } catch (error) {
+  } catch (err) {
+    console.error("DELETE /api/markup/air/:id error", err);
     res.status(500).json({ error: "Failed to delete air markup" });
   }
 });
 
-// HOTEL MARKUP ROUTES
-
-// GET /api/markup/hotel - Get all hotel markups
-router.get("/hotel", authenticateToken, (req, res) => {
+router.post("/air/:id/toggle-status", async (req, res) => {
   try {
-    const { search, city, category, status, page = 1, limit = 10 } = req.query;
+    const r = await pool.query("UPDATE markup_rules SET is_active = NOT is_active, updated_at = now() WHERE id = $1 AND module = 'air' RETURNING *", [req.params.id]);
+    if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
+    res.json({ markup: mapAirRowToClient(r.rows[0]) });
+  } catch (err) {
+    console.error("POST /api/markup/air/:id/toggle-status error", err);
+    res.status(500).json({ error: "Failed to toggle air markup status" });
+  }
+});
 
-    let filteredMarkups = [...hotelMarkups];
+// ===== HOTEL MARKUP ROUTES =====
+router.get("/hotel", async (req, res) => {
+  try {
+    const { search, city, starRating, status, page = 1, limit = 10 } = req.query;
+    const where = ["module = 'hotel'"]; const params = []; let i = 1;
+    if (status && status !== "all") { where.push(`is_active = $${i++}`); params.push(status === "active"); }
+    if (city && city !== "all") { where.push(`hotel_city ILIKE $${i++}`); params.push(`%${city}%`); }
+    if (starRating && starRating !== "all") { where.push(`hotel_star_min >= $${i++}`); params.push(parseInt(starRating)); }
+    if (search) { where.push(`(LOWER(rule_name) LIKE $${i} OR LOWER(description) LIKE $${i})`); params.push(`%${String(search).toLowerCase()}%`); i++; }
+    const whereSql = `WHERE ${where.join(" AND ")}`;
 
-    // Apply filters
-    if (search) {
-      filteredMarkups = filteredMarkups.filter(
-        (markup) =>
-          markup.name.toLowerCase().includes(search.toLowerCase()) ||
-          markup.description.toLowerCase().includes(search.toLowerCase()) ||
-          markup.city.toLowerCase().includes(search.toLowerCase()) ||
-          markup.hotelName.toLowerCase().includes(search.toLowerCase()),
-      );
-    }
+    const count = await pool.query(`SELECT COUNT(*)::int AS total FROM markup_rules ${whereSql}`, params);
+    const total = count.rows[0].total;
 
-    if (city && city !== "all") {
-      filteredMarkups = filteredMarkups.filter((markup) =>
-        markup.city.toLowerCase().includes(city.toLowerCase()),
-      );
-    }
-
-    if (category && category !== "all") {
-      filteredMarkups = filteredMarkups.filter(
-        (markup) => markup.roomCategory === category,
-      );
-    }
-
-    if (status && status !== "all") {
-      filteredMarkups = filteredMarkups.filter(
-        (markup) => markup.status === status,
-      );
-    }
-
-    // Pagination
-    const startIndex = (page - 1) * limit;
-    const endIndex = startIndex + parseInt(limit);
-    const paginatedMarkups = filteredMarkups.slice(startIndex, endIndex);
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const data = await pool.query(
+      `SELECT * FROM markup_rules ${whereSql} ORDER BY priority ASC, updated_at DESC LIMIT $${i} OFFSET $${i + 1}`,
+      [...params, parseInt(limit), offset]
+    );
 
     res.json({
-      markups: paginatedMarkups,
-      total: filteredMarkups.length,
+      markups: data.rows.map(mapHotelRowToClient),
+      total,
       page: parseInt(page),
-      totalPages: Math.ceil(filteredMarkups.length / limit),
+      totalPages: Math.ceil(total / parseInt(limit)),
     });
-  } catch (error) {
+  } catch (err) {
+    console.error("GET /api/markup/hotel error", err);
     res.status(500).json({ error: "Failed to fetch hotel markups" });
   }
 });
 
-// POST /api/markup/hotel - Create new hotel markup
-router.post("/hotel", authenticateToken, (req, res) => {
+router.post("/hotel", async (req, res) => {
   try {
-    const {
-      name,
-      description,
-      city,
-      hotelName,
-      hotelChain,
-      starRating,
-      roomCategory,
-      markupType,
-      markupValue,
-      minAmount,
-      maxAmount,
-      // Current Fare Range fields for hotels
-      currentFareMin,
-      currentFareMax,
-      // Bargain Fare Range fields for hotels
-      bargainFareMin,
-      bargainFareMax,
-      // Additional fare range fields
-      highFareMin,
-      highFareMax,
-      lowFareMin,
-      lowFareMax,
-      hotelCode,
-      validFrom,
-      validTo,
-      checkInDays,
-      applicableDays,
-      minStay,
-      maxStay,
-      status,
-      priority,
-      userType,
-      seasonType,
-      specialConditions,
-    } = req.body;
-
-    // Validate required fields
-    if (!name || !city || !markupType || !markupValue) {
-      return res.status(400).json({ error: "Missing required fields" });
-    }
-
-    const newMarkup = {
-      id: Date.now().toString(),
-      name,
-      description: description || "",
-      city,
-      hotelName: hotelName || "",
-      hotelChain: hotelChain || "",
-      starRating: starRating || 3,
-      roomCategory: roomCategory || "standard",
-      markupType,
-      markupValue,
-      minAmount: minAmount || 0,
-      maxAmount: maxAmount || 0,
-      // Current Fare Range (for dynamic pricing display)
-      currentFareMin: currentFareMin || 10.0, // Default Min markup percentage for user-visible hotel rates
-      currentFareMax: currentFareMax || 15.0, // Default Max markup percentage for user-visible hotel rates
-      // Bargain Fare Range (for user-entered price validation)
-      bargainFareMin: bargainFareMin || 5.0, // Default Min acceptable bargain percentage for hotels
-      bargainFareMax: bargainFareMax || 15.0, // Default Max acceptable bargain percentage for hotels
-      // Additional fare ranges if provided
-      ...(highFareMin && { highFareMin }),
-      ...(highFareMax && { highFareMax }),
-      ...(lowFareMin && { lowFareMin }),
-      ...(lowFareMax && { lowFareMax }),
-      ...(hotelCode && { hotelCode }),
-      validFrom: validFrom || new Date().toISOString().split("T")[0],
-      validTo: validTo || "2025-12-31",
-      checkInDays: checkInDays || [],
-      applicableDays: applicableDays || checkInDays || [],
-      minStay: minStay || 1,
-      maxStay: maxStay || 30,
-      status: status || "active",
-      priority: priority || 1,
-      userType: userType || "all",
-      seasonType: seasonType || "Regular",
-      specialConditions: specialConditions || "",
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    hotelMarkups.push(newMarkup);
-    res.status(201).json(newMarkup);
-  } catch (error) {
+    const b = req.body || {};
+    const q = `INSERT INTO markup_rules(module, rule_name, description, hotel_city, hotel_star_min, hotel_star_max, m_type, m_value, current_min_pct, current_max_pct, bargain_min_pct, bargain_max_pct, valid_from, valid_to, priority, user_type, is_active)
+               VALUES('hotel',$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16) RETURNING *`;
+    const vals = [
+      b.name,
+      b.description || null,
+      b.city || null,
+      b.starRating ? parseInt(b.starRating) : null,
+      null,
+      (b.markupType === "fixed" ? "flat" : "percentage"),
+      b.markupValue || 0,
+      b.currentFareMin || null,
+      b.currentFareMax || null,
+      b.bargainFareMin || null,
+      b.bargainFareMax || null,
+      b.validFrom || null,
+      b.validTo || null,
+      b.priority || 1,
+      b.userType || "all",
+      b.status ? b.status === "active" : true,
+    ];
+    const r = await pool.query(q, vals);
+    res.status(201).json({ markup: mapHotelRowToClient(r.rows[0]) });
+  } catch (err) {
+    console.error("POST /api/markup/hotel error", err);
     res.status(500).json({ error: "Failed to create hotel markup" });
   }
 });
 
-// PUT /api/markup/hotel/:id - Update hotel markup
-router.put("/hotel/:id", authenticateToken, (req, res) => {
+router.put("/hotel/:id", async (req, res) => {
   try {
-    const markupIndex = hotelMarkups.findIndex((m) => m.id === req.params.id);
-    if (markupIndex === -1) {
-      return res.status(404).json({ error: "Hotel markup not found" });
-    }
-
-    const updatedMarkup = {
-      ...hotelMarkups[markupIndex],
-      ...req.body,
-      updatedAt: new Date().toISOString(),
+    const b = req.body || {};
+    const updates = [];
+    const params = []; let i = 1;
+    const map = {
+      rule_name: b.name,
+      description: b.description,
+      hotel_city: b.city,
+      hotel_star_min: b.starRating ? parseInt(b.starRating) : undefined,
+      m_type: b.markupType ? (b.markupType === "fixed" ? "flat" : "percentage") : undefined,
+      m_value: b.markupValue,
+      current_min_pct: b.currentFareMin,
+      current_max_pct: b.currentFareMax,
+      bargain_min_pct: b.bargainFareMin,
+      bargain_max_pct: b.bargainFareMax,
+      valid_from: b.validFrom,
+      valid_to: b.validTo,
+      priority: b.priority,
+      user_type: b.userType,
+      is_active: typeof b.status === "string" ? b.status === "active" : undefined,
     };
-
-    hotelMarkups[markupIndex] = updatedMarkup;
-    res.json(updatedMarkup);
-  } catch (error) {
+    Object.entries(map).forEach(([k,v])=>{ if (v !== undefined) { updates.push(`${k} = $${i++}`); params.push(v); }});
+    if (!updates.length) return res.status(400).json({ error: "No fields to update" });
+    params.push(req.params.id);
+    const r = await pool.query(`UPDATE markup_rules SET ${updates.join(", ")}, updated_at = now() WHERE id = $${i} AND module = 'hotel' RETURNING *`, params);
+    if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
+    res.json({ markup: mapHotelRowToClient(r.rows[0]) });
+  } catch (err) {
+    console.error("PUT /api/markup/hotel/:id error", err);
     res.status(500).json({ error: "Failed to update hotel markup" });
   }
 });
 
-// DELETE /api/markup/hotel/:id - Delete hotel markup
-router.delete("/hotel/:id", authenticateToken, (req, res) => {
+router.delete("/hotel/:id", async (req, res) => {
   try {
-    const markupIndex = hotelMarkups.findIndex((m) => m.id === req.params.id);
-    if (markupIndex === -1) {
-      return res.status(404).json({ error: "Hotel markup not found" });
-    }
-
-    hotelMarkups.splice(markupIndex, 1);
+    const r = await pool.query("DELETE FROM markup_rules WHERE id = $1 AND module = 'hotel'", [req.params.id]);
+    if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
     res.json({ message: "Hotel markup deleted successfully" });
-  } catch (error) {
+  } catch (err) {
+    console.error("DELETE /api/markup/hotel/:id error", err);
     res.status(500).json({ error: "Failed to delete hotel markup" });
   }
 });
 
-// COMMON ROUTES
-
-// POST /api/markup/:type/:id/toggle-status - Toggle markup status
-router.post("/:type/:id/toggle-status", authenticateToken, (req, res) => {
+router.post("/hotel/:id/toggle-status", async (req, res) => {
   try {
-    const { type, id } = req.params;
-    let markups = type === "air" ? airMarkups : hotelMarkups;
-
-    const markupIndex = markups.findIndex((m) => m.id === id);
-    if (markupIndex === -1) {
-      return res.status(404).json({ error: "Markup not found" });
-    }
-
-    markups[markupIndex].status =
-      markups[markupIndex].status === "active" ? "inactive" : "active";
-    markups[markupIndex].updatedAt = new Date().toISOString();
-
-    res.json(markups[markupIndex]);
-  } catch (error) {
-    res.status(500).json({ error: "Failed to toggle markup status" });
-  }
-});
-
-// GET /api/markup/stats - Get markup statistics
-router.get("/stats", authenticateToken, (req, res) => {
-  try {
-    const airStats = {
-      total: airMarkups.length,
-      active: airMarkups.filter((m) => m.status === "active").length,
-      inactive: airMarkups.filter((m) => m.status === "inactive").length,
-    };
-
-    const hotelStats = {
-      total: hotelMarkups.length,
-      active: hotelMarkups.filter((m) => m.status === "active").length,
-      inactive: hotelMarkups.filter((m) => m.status === "inactive").length,
-    };
-
-    res.json({
-      air: airStats,
-      hotel: hotelStats,
-      total: airStats.total + hotelStats.total,
-    });
-  } catch (error) {
-    res.status(500).json({ error: "Failed to fetch markup statistics" });
+    const r = await pool.query("UPDATE markup_rules SET is_active = NOT is_active, updated_at = now() WHERE id = $1 AND module = 'hotel' RETURNING *", [req.params.id]);
+    if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
+    res.json({ markup: mapHotelRowToClient(r.rows[0]) });
+  } catch (err) {
+    console.error("POST /api/markup/hotel/:id/toggle-status error", err);
+    res.status(500).json({ error: "Failed to toggle hotel markup status" });
   }
 });
 
