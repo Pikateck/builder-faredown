@@ -180,7 +180,7 @@ const About = () => {
             </div>
             <div className="relative">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=600"
+                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F6610cbb1369a49b6a98ce99413f8d9ae?format=webp&width=600"
                 alt="Faredown Team"
                 className="rounded-xl shadow-lg w-full h-96 object-cover"
               />
