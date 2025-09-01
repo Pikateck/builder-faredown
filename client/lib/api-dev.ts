@@ -708,7 +708,156 @@ export class DevApiClient {
       };
     }
 
-    // Markup endpoints - Air Markups
+    // Unified Markups - List
+    if (endpoint.includes("/markups") && !endpoint.includes("test-apply") && (!params || params.module)) {
+      const module = params?.module || "air";
+      if (module === "air") {
+        const items = [
+          {
+            id: 1,
+            module: "air",
+            rule_name: "Mumbai-Dubai Economy Markup",
+            description: "Standard markup for Mumbai to Dubai economy flights",
+            airline_code: "EK",
+            route_from: "BOM",
+            route_to: "DXB",
+            booking_class: "economy",
+            m_type: "percentage",
+            m_value: 5.5,
+            current_min_pct: 10.0,
+            current_max_pct: 12.0,
+            bargain_min_pct: 5.0,
+            bargain_max_pct: 15.0,
+            valid_from: "2024-01-01",
+            valid_to: "2024-12-31",
+            is_active: true,
+            priority: 1,
+            user_type: "all",
+            created_at: "2024-01-15T10:00:00Z",
+            updated_at: "2024-01-20T15:30:00Z",
+          },
+          {
+            id: 2,
+            module: "air",
+            rule_name: "Amadeus Emirates BOM-DXB Economy",
+            description:
+              "Airline Markup for BOM to DXB route with Emirates via Amadeus",
+            airline_code: "EK",
+            route_from: "BOM",
+            route_to: "DXB",
+            booking_class: "economy",
+            m_type: "percentage",
+            m_value: 12.0,
+            current_min_pct: 10.0,
+            current_max_pct: 12.0,
+            bargain_min_pct: 5.0,
+            bargain_max_pct: 15.0,
+            valid_from: "2025-01-01",
+            valid_to: "2025-12-31",
+            is_active: true,
+            priority: 1,
+            user_type: "all",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        ];
+        return { success: true, items, total: items.length, page: 1, pageSize: items.length };
+      }
+      if (module === "hotel") {
+        const items = [
+          {
+            id: 1,
+            module: "hotel",
+            rule_name: "Mumbai Luxury Hotels Markup",
+            description: "Standard markup for luxury hotels in Mumbai",
+            hotel_city: "Mumbai",
+            hotel_star_min: 5,
+            hotel_star_max: 5,
+            m_type: "percentage",
+            m_value: 8.5,
+            current_min_pct: 10.0,
+            current_max_pct: 15.0,
+            bargain_min_pct: 5.0,
+            bargain_max_pct: 15.0,
+            valid_from: "2024-01-01",
+            valid_to: "2024-12-31",
+            is_active: true,
+            priority: 1,
+            user_type: "all",
+            created_at: "2024-01-15T10:00:00Z",
+            updated_at: "2024-01-20T15:30:00Z",
+          },
+          {
+            id: 2,
+            module: "hotel",
+            rule_name: "Hotelbeds Taj Mahal Palace Mumbai",
+            description: "Hotel Markup for Taj Mahal Palace Mumbai via Hotelbeds",
+            hotel_city: "Mumbai",
+            hotel_star_min: 5,
+            hotel_star_max: 5,
+            m_type: "percentage",
+            m_value: 12.0,
+            current_min_pct: 10.0,
+            current_max_pct: 12.0,
+            bargain_min_pct: 10.0,
+            bargain_max_pct: 20.0,
+            valid_from: "2025-01-01",
+            valid_to: "2025-12-31",
+            is_active: true,
+            priority: 1,
+            user_type: "all",
+            created_at: new Date().toISOString(),
+            updated_at: new Date().toISOString(),
+          },
+        ];
+        return { success: true, items, total: items.length, page: 1, pageSize: items.length };
+      }
+    }
+
+    // Unified Markups - Create
+    if (endpoint.endsWith("/markups") && params && params.module) {
+      const now = new Date().toISOString();
+      const item = { id: Math.floor(Math.random() * 10000), created_at: now, updated_at: now, ...params };
+      return { success: true, item } as ApiResponse<any>;
+    }
+
+    // Unified Markups - Update
+    if (endpoint.includes("/markups/") && !endpoint.endsWith("/status") && !endpoint.includes("test-apply")) {
+      const id = endpoint.split("/markups/")[1];
+      const now = new Date().toISOString();
+      const item = { id, updated_at: now, ...params };
+      return { success: true, item } as ApiResponse<any>;
+    }
+
+    // Unified Markups - Toggle Status
+    if (endpoint.endsWith("/status")) {
+      const id = endpoint.split("/").slice(-2)[0];
+      return { success: true, item: { id, is_active: true, updated_at: new Date().toISOString() } } as ApiResponse<any>;
+    }
+
+    // Unified Markups - Delete
+    if (endpoint.includes("/markups/") && endpoint.endsWith("")) {
+      return { success: true } as ApiResponse<any>;
+    }
+
+    // Test apply (pricing snapshot)
+    if (endpoint.includes("/markups/test-apply")) {
+      const base = Number(params?.base_amount || 0);
+      const markup_value = 10;
+      const final = base + (base * markup_value) / 100;
+      return {
+        success: true,
+        matched_rule_id: "mock_rule",
+        base_amount: base,
+        markup_type: "percentage",
+        markup_value,
+        final_amount: final,
+        currency: "INR",
+        quote_id: "mock-quote-id",
+      };
+    }
+
+    // Markup endpoints - Air Markups (legacy fallback)
     if (endpoint.includes("/markup/air")) {
       return {
         success: true,
@@ -775,7 +924,7 @@ export class DevApiClient {
       };
     }
 
-    // Markup endpoints - Hotel Markups
+    // Markup endpoints - Hotel Markups (legacy fallback)
     if (endpoint.includes("/markup/hotel")) {
       return {
         success: true,
