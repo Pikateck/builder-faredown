@@ -5,16 +5,21 @@ const router = express.Router();
 const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 
 function buildWhere(query) {
-  const { module, airline_code, route_from, route_to, booking_class, status, search } = query;
+  const { module, airline_code, route_from, route_to, booking_class, status, search, hotel_city, supplier_id, product_code, vehicle_type, transfer_kind } = query;
   const where = [];
   const params = [];
   let i = 1;
   if (module) { where.push(`module = $${i++}`); params.push(module); }
-  if (status) { where.push(`is_active = $${i++}`); params.push(status === "active"); }
+  if (status) { where.push(`is_active = $${i++}`); params.push(status === "active" || status === true || status === "true"); }
   if (airline_code) { where.push(`airline_code = $${i++}`); params.push(airline_code); }
   if (route_from) { where.push(`route_from = $${i++}`); params.push(route_from); }
   if (route_to) { where.push(`route_to = $${i++}`); params.push(route_to); }
   if (booking_class) { where.push(`booking_class = $${i++}`); params.push(booking_class); }
+  if (hotel_city) { where.push(`hotel_city = $${i++}`); params.push(hotel_city); }
+  if (supplier_id) { where.push(`supplier_id = $${i++}`); params.push(supplier_id); }
+  if (product_code) { where.push(`product_code = $${i++}`); params.push(product_code); }
+  if (vehicle_type) { where.push(`vehicle_type = $${i++}`); params.push(vehicle_type); }
+  if (transfer_kind) { where.push(`transfer_kind = $${i++}`); params.push(transfer_kind); }
   if (search) {
     where.push(`(LOWER(rule_name) LIKE $${i} OR LOWER(description) LIKE $${i})`);
     params.push(`%${search.toLowerCase()}%`); i++;
