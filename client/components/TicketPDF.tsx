@@ -38,7 +38,7 @@ export const TicketPDF: React.FC<TicketPDFProps> = ({ booking }) => {
         <div className="flex justify-between items-center">
           <div className="flex items-center space-x-3">
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F646af7310fef4dfcbb02efff819f5205?format=webp&width=800"
+              src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F101d62bb04d544d490348a0108724dfb?format=webp&width=800"
               alt="Faredown Logo"
               className="h-8 w-auto object-contain"
               style={{ background: "none", border: "none", boxShadow: "none" }}

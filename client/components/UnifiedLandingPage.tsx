@@ -505,7 +505,7 @@ export function UnifiedLandingPage({
                           <div className="text-center mb-4">
                             <div className="w-12 h-12 bg-gradient-to-br from-[#003580] to-[#0071c2] rounded-xl mx-auto mb-2 flex items-center justify-center">
                               <img
-                                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=800"
+                                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F101d62bb04d544d490348a0108724dfb?format=webp&width=800"
                                 alt="Faredown Logo"
                                 className="w-6 h-6 object-contain"
                                 style={{

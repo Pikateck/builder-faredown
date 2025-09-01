@@ -27,7 +27,7 @@ export default function BookingsTrips() {
           <div className="flex items-center justify-between">
             <Link to="/" className="flex items-center space-x-2">
               <img
-                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F646af7310fef4dfcbb02efff819f5205?format=webp&width=800"
+                src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F101d62bb04d544d490348a0108724dfb?format=webp&width=800"
                 alt="Faredown Logo"
                 className="h-6 w-auto object-contain"
                 style={{
