@@ -517,7 +517,7 @@ export function TransfersSearchForm() {
             <div className="w-full sm:w-auto">
               <Button
                 onClick={handleSearch}
-                className="h-12 w-full sm:w-auto bg-[#003580] hover:bg-[#002a66] text-white font-bold rounded px-6 sm:px-8 transition-all duration-150"
+                className="h-12 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
               >
                 <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                 <span className="text-sm sm:text-base">Search</span>
@@ -826,7 +826,7 @@ export function TransfersSearchForm() {
               <div className="w-full sm:w-auto">
                 <Button
                   onClick={handleSearch}
-                  className="h-12 w-full sm:w-auto bg-[#003580] hover:bg-[#002a66] text-white font-bold rounded px-6 sm:px-8 transition-all duration-150"
+                  className="h-12 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
                 >
                   <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   <span className="text-sm sm:text-base">Search</span>
