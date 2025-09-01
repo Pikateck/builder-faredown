@@ -86,7 +86,7 @@ export function Header({ className }: HeaderProps) {
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center space-x-2 group">
             <img
-              src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F101d62bb04d544d490348a0108724dfb?format=webp&width=800"
+              src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F6610cbb1369a49b6a98ce99413f8d9ae?format=webp&width=800"
               alt="Faredown Logo"
               className="w-8 h-8 object-contain"
               style={{ background: "none", border: "none", boxShadow: "none" }}
