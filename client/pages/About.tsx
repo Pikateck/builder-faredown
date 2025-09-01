@@ -58,7 +58,7 @@ const About = () => {
       name: "Zubin Aibara",
       role: "Founder & CEO",
       image:
-        "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=400",
+        "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F6610cbb1369a49b6a98ce99413f8d9ae?format=webp&width=400",
       description:
         "Visionary leader with 15+ years in travel technology and AI innovation.",
     },
@@ -66,7 +66,7 @@ const About = () => {
       name: "Priya Sharma",
       role: "Chief Technology Officer",
       image:
-        "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=400",
+        "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F6610cbb1369a49b6a98ce99413f8d9ae?format=webp&width=400",
       description:
         "AI expert leading our bargaining algorithm development and platform architecture.",
     },
@@ -74,7 +74,7 @@ const About = () => {
       name: "Rahul Kumar",
       role: "Head of Customer Experience",
       image:
-        "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8c87258c0ecd41ac881b0f2489cecf7d?format=webp&width=400",
+        "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F6610cbb1369a49b6a98ce99413f8d9ae?format=webp&width=400",
       description:
         "Ensuring every customer interaction exceeds expectations across all touchpoints.",
     },
