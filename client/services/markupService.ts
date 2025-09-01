@@ -303,27 +303,27 @@ class MarkupService {
     totalPages: number;
   }> {
     try {
-      const params = new URLSearchParams();
+      const params: Record<string, any> = { module: "hotel" };
+      if (filters.search) params.search = filters.search;
+      if (filters.city && filters.city !== "all") params.hotel_city = filters.city;
+      if (filters.status && filters.status !== "all") params.status = filters.status;
+      if (filters.page) params.page = filters.page;
+      if (filters.limit) params.limit = filters.limit;
 
-      if (filters.search) params.append("search", filters.search);
-      if (filters.city && filters.city !== "all")
-        params.append("city", filters.city);
-      if (filters.starRating && filters.starRating !== "all")
-        params.append("starRating", filters.starRating);
-      if (filters.status && filters.status !== "all")
-        params.append("status", filters.status);
-      if (filters.page) params.append("page", filters.page.toString());
-      if (filters.limit) params.append("limit", filters.limit.toString());
-
-      const response = await apiClient.get(
-        `${this.baseUrl}/hotel?${params.toString()}`,
-      );
-
-      if (response.ok) {
-        return response.data;
-      } else {
-        throw new Error(response.error || "Failed to fetch hotel markups");
+      const response: any = await apiClient.get(`${this.baseUrl}`, params);
+      if (response && (response.success || response.items)) {
+        const items = response.items || [];
+        const total = response.total || 0;
+        const page = response.page || 1;
+        const pageSize = response.pageSize || items.length || 20;
+        return {
+          markups: items.map((r: any) => this.mapHotelRow(r)),
+          total,
+          page,
+          totalPages: Math.max(1, Math.ceil(total / pageSize)),
+        };
       }
+      throw new Error(response?.error || "Failed to fetch hotel markups");
     } catch (error) {
       console.error("Error fetching hotel markups:", error);
       throw error;
@@ -337,13 +337,31 @@ class MarkupService {
     markupData: CreateAirMarkupRequest,
   ): Promise<AirMarkup> {
     try {
-      const response = await apiClient.post(`${this.baseUrl}/air`, markupData);
-
-      if (response.ok) {
-        return response.data.markup;
-      } else {
-        throw new Error(response.error || "Failed to create air markup");
+      const payload = {
+        module: "air",
+        rule_name: markupData.name,
+        description: markupData.description,
+        airline_code: markupData.airline,
+        route_from: markupData.route?.from,
+        route_to: markupData.route?.to,
+        booking_class: markupData.class,
+        m_type: markupData.markupType,
+        m_value: markupData.markupValue,
+        current_min_pct: markupData.currentFareMin,
+        current_max_pct: markupData.currentFareMax,
+        bargain_min_pct: markupData.bargainFareMin,
+        bargain_max_pct: markupData.bargainFareMax,
+        valid_from: markupData.validFrom,
+        valid_to: markupData.validTo,
+        priority: markupData.priority,
+        user_type: markupData.userType,
+        is_active: markupData.status === "active",
+      };
+      const response: any = await apiClient.post(`${this.baseUrl}`, payload);
+      if (response && response.success) {
+        return this.mapAirRow(response.item);
       }
+      throw new Error(response?.error || "Failed to create air markup");
     } catch (error) {
       console.error("Error creating air markup:", error);
       throw error;
@@ -357,16 +375,30 @@ class MarkupService {
     markupData: CreateHotelMarkupRequest,
   ): Promise<HotelMarkup> {
     try {
-      const response = await apiClient.post(
-        `${this.baseUrl}/hotel`,
-        markupData,
-      );
-
-      if (response.ok) {
-        return response.data.markup;
-      } else {
-        throw new Error(response.error || "Failed to create hotel markup");
+      const payload = {
+        module: "hotel",
+        rule_name: markupData.name,
+        description: markupData.description,
+        hotel_city: markupData.city,
+        hotel_star_min: parseInt(String(markupData.starRating || "3"), 10),
+        hotel_star_max: parseInt(String(markupData.starRating || "3"), 10),
+        m_type: markupData.markupType,
+        m_value: markupData.markupValue,
+        current_min_pct: markupData.currentFareMin,
+        current_max_pct: markupData.currentFareMax,
+        bargain_min_pct: markupData.bargainFareMin,
+        bargain_max_pct: markupData.bargainFareMax,
+        valid_from: markupData.validFrom,
+        valid_to: markupData.validTo,
+        priority: markupData.priority,
+        user_type: markupData.userType,
+        is_active: markupData.status === "active",
+      };
+      const response: any = await apiClient.post(`${this.baseUrl}`, payload);
+      if (response && response.success) {
+        return this.mapHotelRow(response.item);
       }
+      throw new Error(response?.error || "Failed to create hotel markup");
     } catch (error) {
       console.error("Error creating hotel markup:", error);
       throw error;
@@ -381,16 +413,30 @@ class MarkupService {
     markupData: Partial<CreateAirMarkupRequest>,
   ): Promise<AirMarkup> {
     try {
-      const response = await apiClient.put(
-        `${this.baseUrl}/air/${markupId}`,
-        markupData,
-      );
+      const payload: any = {};
+      if (markupData.name !== undefined) payload.rule_name = markupData.name;
+      if (markupData.description !== undefined) payload.description = markupData.description;
+      if (markupData.airline !== undefined) payload.airline_code = markupData.airline;
+      if (markupData.route?.from !== undefined) payload.route_from = markupData.route.from;
+      if (markupData.route?.to !== undefined) payload.route_to = markupData.route.to;
+      if (markupData.class !== undefined) payload.booking_class = markupData.class;
+      if (markupData.markupType !== undefined) payload.m_type = markupData.markupType;
+      if (markupData.markupValue !== undefined) payload.m_value = markupData.markupValue;
+      if (markupData.currentFareMin !== undefined) payload.current_min_pct = markupData.currentFareMin;
+      if (markupData.currentFareMax !== undefined) payload.current_max_pct = markupData.currentFareMax;
+      if (markupData.bargainFareMin !== undefined) payload.bargain_min_pct = markupData.bargainFareMin;
+      if (markupData.bargainFareMax !== undefined) payload.bargain_max_pct = markupData.bargainFareMax;
+      if (markupData.validFrom !== undefined) payload.valid_from = markupData.validFrom;
+      if (markupData.validTo !== undefined) payload.valid_to = markupData.validTo;
+      if (markupData.priority !== undefined) payload.priority = markupData.priority;
+      if (markupData.userType !== undefined) payload.user_type = markupData.userType;
+      if (markupData.status !== undefined) payload.is_active = markupData.status === "active";
 
-      if (response.ok) {
-        return response.data.markup;
-      } else {
-        throw new Error(response.error || "Failed to update air markup");
+      const response: any = await apiClient.put(`${this.baseUrl}/${markupId}`, payload);
+      if (response && response.success) {
+        return this.mapAirRow(response.item);
       }
+      throw new Error(response?.error || "Failed to update air markup");
     } catch (error) {
       console.error("Error updating air markup:", error);
       throw error;
@@ -405,16 +451,31 @@ class MarkupService {
     markupData: Partial<CreateHotelMarkupRequest>,
   ): Promise<HotelMarkup> {
     try {
-      const response = await apiClient.put(
-        `${this.baseUrl}/hotel/${markupId}`,
-        markupData,
-      );
-
-      if (response.ok) {
-        return response.data.markup;
-      } else {
-        throw new Error(response.error || "Failed to update hotel markup");
+      const payload: any = {};
+      if (markupData.name !== undefined) payload.rule_name = markupData.name;
+      if (markupData.description !== undefined) payload.description = markupData.description;
+      if (markupData.city !== undefined) payload.hotel_city = markupData.city;
+      if (markupData.starRating !== undefined) {
+        const sr = parseInt(String(markupData.starRating), 10);
+        payload.hotel_star_min = sr; payload.hotel_star_max = sr;
       }
+      if (markupData.markupType !== undefined) payload.m_type = markupData.markupType;
+      if (markupData.markupValue !== undefined) payload.m_value = markupData.markupValue;
+      if (markupData.currentFareMin !== undefined) payload.current_min_pct = markupData.currentFareMin;
+      if (markupData.currentFareMax !== undefined) payload.current_max_pct = markupData.currentFareMax;
+      if (markupData.bargainFareMin !== undefined) payload.bargain_min_pct = markupData.bargainFareMin;
+      if (markupData.bargainFareMax !== undefined) payload.bargain_max_pct = markupData.bargainFareMax;
+      if (markupData.validFrom !== undefined) payload.valid_from = markupData.validFrom;
+      if (markupData.validTo !== undefined) payload.valid_to = markupData.validTo;
+      if (markupData.priority !== undefined) payload.priority = markupData.priority;
+      if (markupData.userType !== undefined) payload.user_type = markupData.userType;
+      if (markupData.status !== undefined) payload.is_active = markupData.status === "active";
+
+      const response: any = await apiClient.put(`${this.baseUrl}/${markupId}`, payload);
+      if (response && response.success) {
+        return this.mapHotelRow(response.item);
+      }
+      throw new Error(response?.error || "Failed to update hotel markup");
     } catch (error) {
       console.error("Error updating hotel markup:", error);
       throw error;
@@ -426,11 +487,8 @@ class MarkupService {
    */
   async deleteAirMarkup(markupId: string): Promise<void> {
     try {
-      const response = await apiClient.delete(
-        `${this.baseUrl}/air/${markupId}`,
-      );
-
-      if (!response.ok) {
+      const response: any = await apiClient.delete(`${this.baseUrl}/${markupId}`);
+      if (response && response.success === false) {
         throw new Error(response.error || "Failed to delete air markup");
       }
     } catch (error) {
@@ -444,11 +502,8 @@ class MarkupService {
    */
   async deleteHotelMarkup(markupId: string): Promise<void> {
     try {
-      const response = await apiClient.delete(
-        `${this.baseUrl}/hotel/${markupId}`,
-      );
-
-      if (!response.ok) {
+      const response: any = await apiClient.delete(`${this.baseUrl}/${markupId}`);
+      if (response && response.success === false) {
         throw new Error(response.error || "Failed to delete hotel markup");
       }
     } catch (error) {
@@ -462,15 +517,13 @@ class MarkupService {
    */
   async toggleAirMarkupStatus(markupId: string): Promise<AirMarkup> {
     try {
-      const response = await apiClient.post(
-        `${this.baseUrl}/air/${markupId}/toggle-status`,
+      const response: any = await apiClient.post(
+        `${this.baseUrl}/${markupId}/status`,
       );
-
-      if (response.ok) {
-        return response.data.markup;
-      } else {
-        throw new Error(response.error || "Failed to toggle air markup status");
+      if (response && response.success) {
+        return this.mapAirRow(response.item);
       }
+      throw new Error(response?.error || "Failed to toggle air markup status");
     } catch (error) {
       console.error("Error toggling air markup status:", error);
       throw error;
@@ -482,17 +535,13 @@ class MarkupService {
    */
   async toggleHotelMarkupStatus(markupId: string): Promise<HotelMarkup> {
     try {
-      const response = await apiClient.post(
-        `${this.baseUrl}/hotel/${markupId}/toggle-status`,
+      const response: any = await apiClient.post(
+        `${this.baseUrl}/${markupId}/status`,
       );
-
-      if (response.ok) {
-        return response.data.markup;
-      } else {
-        throw new Error(
-          response.error || "Failed to toggle hotel markup status",
-        );
+      if (response && response.success) {
+        return this.mapHotelRow(response.item);
       }
+      throw new Error(response?.error || "Failed to toggle hotel markup status");
     } catch (error) {
       console.error("Error toggling hotel markup status:", error);
       throw error;
@@ -528,14 +577,59 @@ class MarkupService {
     try {
       console.log("🔍 Attempting to calculate markup via API...");
 
-      const response = await apiClient.post(
-        `${this.baseUrl}/calculate`,
-        bookingDetails,
+      const payload: any = {
+        module: bookingDetails.type === "air" ? "air" : bookingDetails.type === "hotel" ? "hotel" : "sightseeing",
+        base_amount: bookingDetails.basePrice,
+      };
+      if (bookingDetails.type === "air") {
+        if (bookingDetails.airline) payload.airline_code = bookingDetails.airline;
+        if (bookingDetails.route?.from) payload.route_from = bookingDetails.route.from;
+        if (bookingDetails.route?.to) payload.route_to = bookingDetails.route.to;
+        if (bookingDetails.class) payload.booking_class = bookingDetails.class;
+      } else if (bookingDetails.type === "hotel") {
+        if (bookingDetails.city) payload.hotel_city = bookingDetails.city;
+        if (bookingDetails.starRating) payload.hotel_star_min = parseInt(bookingDetails.starRating, 10);
+      }
+
+      const response: any = await apiClient.post(
+        `${this.baseUrl}/test-apply`,
+        payload,
       );
 
-      if (response.ok) {
-        console.log("✅ Markup calculated successfully via API");
-        return response.data;
+      if (response && response.success) {
+        const markupAmount = Number(response.final_amount) - Number(response.base_amount);
+        const selectedMarkup = {
+          id: String(response.matched_rule_id || ""),
+          name: "Applied Markup",
+          description: "",
+          airline: bookingDetails.airline || "",
+          route: bookingDetails.route || { from: "", to: "" },
+          class: bookingDetails.class || "all",
+          markupType: response.markup_type,
+          markupValue: Number(response.markup_value || 0),
+          minAmount: 0,
+          maxAmount: 999999,
+          currentFareMin: 0,
+          currentFareMax: 0,
+          bargainFareMin: 0,
+          bargainFareMax: 0,
+          validFrom: new Date().toISOString(),
+          validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          status: "active" as const,
+          priority: 0,
+          userType: "all" as const,
+          specialConditions: "",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        } as AirMarkup | HotelMarkup;
+
+        return {
+          applicableMarkups: [selectedMarkup],
+          selectedMarkup,
+          markupAmount,
+          finalPrice: Number(response.final_amount),
+          markupRange: { min: 0, max: 0 },
+        };
       } else {
         console.warn("⚠️ API markup calculation failed, using fallback");
         return this.getFallbackMarkupCalculation(bookingDetails);
