@@ -822,7 +822,7 @@ export class DevApiClient {
     }
 
     // Unified Markups - Update
-    if (endpoint.includes("/markups/") && !endpoint.endsWith("/status") && !endpoint.includes("test-apply")) {
+    if (endpoint.includes("/markups/") && params && !endpoint.endsWith("/status") && !endpoint.includes("test-apply")) {
       const id = endpoint.split("/markups/")[1];
       const now = new Date().toISOString();
       const item = { id, updated_at: now, ...params };
@@ -836,7 +836,7 @@ export class DevApiClient {
     }
 
     // Unified Markups - Delete
-    if (endpoint.includes("/markups/") && endpoint.endsWith("")) {
+    if (endpoint.includes("/markups/") && !params && !endpoint.endsWith("/status") && !endpoint.includes("test-apply")) {
       return { success: true } as ApiResponse<any>;
     }
 
