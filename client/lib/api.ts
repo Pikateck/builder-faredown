@@ -78,7 +78,8 @@ class ApiClient {
     this.timeout = API_CONFIG.TIMEOUT;
     this.devClient = new DevApiClient(this.baseURL || "");
     this.loadAuthToken();
-    this.forceFallback = !this.baseURL;
+    const isFly = typeof window !== "undefined" && window.location.hostname.includes("fly.dev");
+    this.forceFallback = !this.baseURL || isFly;
   }
 
   private loadAuthToken() {
