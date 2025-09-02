@@ -12,21 +12,14 @@ const getBackendUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
 
-  // Production backend URL detection
-  if (window.location.hostname !== "localhost") {
-    // Check if we're on the fly.dev domain
-    if (window.location.hostname.includes("fly.dev")) {
-      // Extract the app name from the URL and construct backend URL
-      const appName = window.location.hostname.split("-")[0];
-      const backendUrl = `https://${appName}-backend.fly.dev`;
-      console.log("🌐 Production mode - using fly.dev backend:", backendUrl);
-      return backendUrl;
-    }
+  // On fly.dev preview without explicit API, don't guess – use fallback
+  if (window.location.hostname.includes("fly.dev")) {
+    return null as unknown as string;
+  }
 
-    // For other production environments, try different port on same domain
-    const backendUrl = `${window.location.protocol}//${window.location.hostname}:8080`;
-    console.log("🌐 Production mode - using backend port:", backendUrl);
-    return backendUrl;
+  // For other production environments, try different port on same domain
+  if (window.location.hostname !== "localhost") {
+    return `${window.location.protocol}//${window.location.hostname}:8080`;
   }
 
   // Default to localhost for development
@@ -75,15 +68,17 @@ export class ApiError extends Error {
 
 // HTTP Client Class
 class ApiClient {
-  private baseURL: string;
+  private baseURL: string | null;
   private timeout: number;
   private authToken: string | null = null;
   private devClient: DevApiClient;
+  private forceFallback: boolean;
   constructor() {
-    this.baseURL = API_CONFIG.BASE_URL;
+    this.baseURL = API_CONFIG.BASE_URL as string | null;
     this.timeout = API_CONFIG.TIMEOUT;
-    this.devClient = new DevApiClient(this.baseURL);
+    this.devClient = new DevApiClient(this.baseURL || "");
     this.loadAuthToken();
+    this.forceFallback = !this.baseURL;
   }
 
   private loadAuthToken() {
@@ -147,6 +142,9 @@ class ApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+    if (this.forceFallback) {
+      return this.devClient.get<T>(endpoint, params);
+    }
     const url = new URL(`${this.baseURL}${endpoint}`);
 
     if (params) {
@@ -214,6 +212,9 @@ class ApiClient {
     data?: any,
     customHeaders?: Record<string, string>,
   ): Promise<T> {
+    if (this.forceFallback) {
+      return this.devClient.post<T>(endpoint, data);
+    }
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
@@ -270,6 +271,9 @@ class ApiClient {
   }
 
   async put<T>(endpoint: string, data?: any): Promise<T> {
+    if (this.forceFallback) {
+      return this.devClient.post<T>(endpoint, data);
+    }
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
     try {
@@ -289,6 +293,9 @@ class ApiClient {
   }
 
   async delete<T>(endpoint: string): Promise<T> {
+    if (this.forceFallback) {
+      return this.devClient.get<T>(endpoint);
+    }
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
     try {
