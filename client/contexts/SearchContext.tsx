@@ -335,7 +335,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
     };
   }, [searchParams]);
 
-  const generateUrlParams = () => {
+  const generateUrlParams = React.useCallback(() => {
     const params = new URLSearchParams();
     
     if (searchParams.destination) params.set("destination", searchParams.destination);
@@ -360,7 +360,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
     if (searchParams.transferType) params.set("transferType", searchParams.transferType);
     
     return params;
-  };
+  }, [searchParams]);
 
   const clearSearchParams = () => {
     setSearchParams(initialSearchParams);
