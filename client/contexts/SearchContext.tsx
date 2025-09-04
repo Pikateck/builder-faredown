@@ -129,10 +129,10 @@ export function SearchProvider({ children }: { children: ReactNode }) {
     }
   }, [location.search]);
 
-  const updateSearchParams = (params: Partial<UnifiedSearchParams>) => {
+  const updateSearchParams = React.useCallback((params: Partial<UnifiedSearchParams>) => {
     setSearchParams((prev) => {
       const updated = { ...prev, ...params };
-      
+
       // Sync dates between different naming conventions
       if (params.departureDate) {
         updated.checkIn = params.departureDate;
@@ -146,7 +146,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
       if (params.checkOut) {
         updated.returnDate = params.checkOut;
       }
-      
+
       // Sync guests/passengers
       if (params.passengers) {
         updated.guests = {
@@ -161,7 +161,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
           infants: updated.passengers.infants,
         };
       }
-      
+
       // Calculate nights if dates are available
       if (updated.checkIn && updated.checkOut) {
         const checkInDate = new Date(updated.checkIn);
@@ -169,10 +169,10 @@ export function SearchProvider({ children }: { children: ReactNode }) {
         const timeDiff = checkOutDate.getTime() - checkInDate.getTime();
         updated.nights = Math.ceil(timeDiff / (1000 * 3600 * 24));
       }
-      
+
       return updated;
     });
-  };
+  }, []);
 
   const loadFromUrlParams = (urlParams: URLSearchParams) => {
     const newParams: Partial<UnifiedSearchParams> = {};
