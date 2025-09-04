@@ -2993,7 +2993,7 @@ export default function HotelDetails() {
             location: hotel.location,
             checkIn: checkInDate.toISOString().split("T")[0],
             checkOut: checkOutDate.toISOString().split("T")[0],
-            price: selectedRoomType.pricePerNight,
+            price: calculateTotalPrice(selectedRoomType.pricePerNight),
             rating: hotel.rating,
           }}
           isOpen={isBargainModalOpen}
@@ -3028,7 +3028,7 @@ export default function HotelDetails() {
           }}
           userName={userFirstName}
           module="hotels"
-          basePrice={selectedRoomType.pricePerNight}
+          basePrice={calculateTotalPrice(selectedRoomType.pricePerNight)}
           productRef={selectedRoomType.id}
         />
       )}
