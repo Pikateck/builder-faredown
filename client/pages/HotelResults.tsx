@@ -159,12 +159,17 @@ export default function HotelResults() {
     setEditRooms(parseInt(rooms) || 1);
   }, [searchParams, destination, adults, children, rooms]);
 
-  // Load hotels from live Hotelbeds API and dates from URL params
+  // Sync contexts from URL only when query string changes
+  const searchKey = searchParams.toString();
   useEffect(() => {
     loadDatesFromParams(searchParams);
-    loadFromUrlParams(searchParams); // Load search parameters into SearchContext
+    loadFromUrlParams(searchParams);
+  }, [searchKey, loadDatesFromParams, loadFromUrlParams]);
+
+  // Fetch hotels when search or currency code changes (avoid object identity churn)
+  useEffect(() => {
     loadHotels();
-  }, [searchParams, selectedCurrency, loadDatesFromParams, loadFromUrlParams]);
+  }, [searchKey, selectedCurrency?.code]);
 
   // Helper function to transform Hotelbeds images to usable URLs
   const transformHotelImages = (images: any[]): string[] => {
