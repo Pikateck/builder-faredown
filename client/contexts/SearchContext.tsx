@@ -362,10 +362,10 @@ export function SearchProvider({ children }: { children: ReactNode }) {
     return params;
   }, [searchParams]);
 
-  const clearSearchParams = () => {
+  const clearSearchParams = React.useCallback(() => {
     setSearchParams(initialSearchParams);
     localStorage.removeItem("faredown_search_params");
-  };
+  }, []);
 
   const contextValue: SearchContextType = {
     searchParams,
