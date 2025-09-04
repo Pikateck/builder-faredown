@@ -237,7 +237,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
     updateSearchParams(newParams);
   }, [updateSearchParams]);
 
-  const loadFromBookingData = (booking: any) => {
+  const loadFromBookingData = React.useCallback((booking: any) => {
     if (!booking) return;
 
     const newParams: Partial<UnifiedSearchParams> = {};
@@ -299,7 +299,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
     }
 
     updateSearchParams(newParams);
-  };
+  }, [updateSearchParams]);
 
   const getDisplayData = React.useCallback(() => {
     const formatDate = (dateStr: string) => {
