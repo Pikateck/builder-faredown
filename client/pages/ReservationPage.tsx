@@ -153,18 +153,23 @@ export default function ReservationPage() {
     rooms,
   );
 
-  // Use the total price passed from bargain modal if available, otherwise use calculated total
-  const finalTotal =
-    hotelData.isBargained && hotelData.totalPrice && hotelData.totalPrice > 0
-      ? hotelData.totalPrice // Use the exact bargained price
-      : priceBreakdown.total; // Use calculated price for non-bargained bookings
+  // Prefer explicitly negotiated totalPrice/finalPrice from URL when present
+  const negotiatedFromUrl = parseInt(
+    searchParams.get("finalPrice") || searchParams.get("totalPrice") || "0",
+  );
+  const finalTotal = negotiatedFromUrl > 0 ? negotiatedFromUrl : priceBreakdown.total;
+
+  // If negotiated total provided, derive a consistent per-night value for display
+  const derivedPerNight = negotiatedFromUrl > 0 && nights > 0
+    ? Math.round(negotiatedFromUrl / nights)
+    : hotelData.pricePerNight;
 
   const pricing = {
     basePrice: priceBreakdown.basePrice,
     taxes: priceBreakdown.taxes,
     fees: priceBreakdown.fees,
     total: finalTotal,
-    perNightPrice: hotelData.pricePerNight,
+    perNightPrice: derivedPerNight,
   };
 
   // Date formatting function
