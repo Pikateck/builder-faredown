@@ -17,9 +17,9 @@ const getBackendUrl = () => {
     return null as unknown as string;
   }
 
-  // For other production environments, try different port on same domain
+  // For production environments, use same-origin base URL (no hardcoded port)
   if (window.location.hostname !== "localhost") {
-    return `${window.location.protocol}//${window.location.hostname}:8080`;
+    return window.location.origin;
   }
 
   // Default to localhost for development
@@ -168,7 +168,7 @@ class ApiClient {
       });
 
       clearTimeout(timeoutId);
-      console.log(`✅ API Response: ${response.status}`);
+      console.log(`�� API Response: ${response.status}`);
       return this.handleResponse<T>(response);
     } catch (error) {
       clearTimeout(timeoutId);
