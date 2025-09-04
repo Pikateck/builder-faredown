@@ -579,7 +579,7 @@ export default function HotelDetails() {
   const roomTypes = (() => {
     if (hotelData && hotelData.roomTypes && hotelData.roomTypes.length > 0) {
       // Use live room data from Hotelbeds
-      return hotelData.roomTypes.map((room: any, index: number) => ({
+      const mapped = hotelData.roomTypes.map((room: any, index: number) => ({
         id: `live-room-${index}`,
         name: room.name || `Room Type ${index + 1}`,
         type: room.name || `1 X ${room.name || "Standard"}`,
@@ -612,6 +612,44 @@ export default function HotelDetails() {
             ],
         isLiveData: true,
       }));
+
+      // If too few options returned, synthesize sensible upgrades so users can choose
+      if (mapped.length < 3) {
+        const base = Math.min(...mapped.map((r) => r.pricePerNight || 167));
+        const extras = [
+          {
+            id: `gen-king-${mapped.length}`,
+            name: "King Room with Skyline View",
+            type: "1 X King Classic",
+            details: "1 king bed",
+            pricePerNight: base + 18,
+            status: "Upgrade for +₹18",
+            statusColor: "yellow",
+            nonRefundable: true,
+            image:
+              "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop",
+            features: ["King Room", "Better city views"],
+            isLiveData: false,
+          },
+          {
+            id: `gen-deluxe-${mapped.length}`,
+            name: "Deluxe Suite with Ocean View",
+            type: "1 X Deluxe Suite",
+            details: "Suite with separate living area",
+            pricePerNight: base + 55,
+            status: "Upgrade for +₹55",
+            statusColor: "blue",
+            nonRefundable: false,
+            image:
+              "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop",
+            features: ["Ocean View Suite", "Premium amenities"],
+            isLiveData: false,
+          },
+        ];
+        return [...mapped, ...extras].slice(0, 3).sort((a, b) => a.pricePerNight - b.pricePerNight);
+      }
+
+      return mapped.sort((a, b) => a.pricePerNight - b.pricePerNight);
     }
 
     // Fallback mock room types
