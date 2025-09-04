@@ -78,7 +78,9 @@ class ApiClient {
     this.timeout = API_CONFIG.TIMEOUT;
     this.devClient = new DevApiClient(this.baseURL || "");
     this.loadAuthToken();
-    const isFly = typeof window !== "undefined" && window.location.hostname.includes("fly.dev");
+    const isFly =
+      typeof window !== "undefined" &&
+      window.location.hostname.includes("fly.dev");
     this.forceFallback = !this.baseURL || isFly;
   }
 
@@ -289,7 +291,11 @@ class ApiClient {
       return this.handleResponse<T>(response);
     } catch (error) {
       clearTimeout(timeoutId);
-      try { return this.devClient.post<T>(endpoint, data); } catch { throw error as any; }
+      try {
+        return this.devClient.post<T>(endpoint, data);
+      } catch {
+        throw error as any;
+      }
     }
   }
 
@@ -310,7 +316,11 @@ class ApiClient {
       return this.handleResponse<T>(response);
     } catch (error) {
       clearTimeout(timeoutId);
-      try { return this.devClient.get<T>(endpoint); } catch { throw error as any; }
+      try {
+        return this.devClient.get<T>(endpoint);
+      } catch {
+        throw error as any;
+      }
     }
   }
 
