@@ -97,7 +97,16 @@ export default function HotelResults() {
   const [showEditDates, setShowEditDates] = useState(false);
   const [showEditGuests, setShowEditGuests] = useState(false);
 
-  // Helpers for consistent bargain pricing
+
+  // Get search parameters
+  const destination = searchParams.get("destination") || "";
+  const checkIn = searchParams.get("checkIn") || "";
+  const checkOut = searchParams.get("checkOut") || "";
+  const adults = searchParams.get("adults") || "2";
+  const children = searchParams.get("children") || "0";
+  const rooms = searchParams.get("rooms") || "1";
+
+  // Helpers for consistent bargain pricing (moved here to use initialized vars)
   const getCheapestPerNight = (hotel: HotelType | null | undefined): number => {
     if (!hotel) return 0;
     const roomsArr: any[] = (hotel as any).roomTypes || [];
@@ -114,14 +123,6 @@ export default function HotelResults() {
   const checkOutDate = checkOut ? new Date(checkOut) : new Date(Date.now() + 24 * 60 * 60 * 1000);
   const nights = calculateNights(checkInDate, checkOutDate);
   const roomsCount = parseInt(rooms || "1");
-
-  // Get search parameters
-  const destination = searchParams.get("destination") || "";
-  const checkIn = searchParams.get("checkIn") || "";
-  const checkOut = searchParams.get("checkOut") || "";
-  const adults = searchParams.get("adults") || "2";
-  const children = searchParams.get("children") || "0";
-  const rooms = searchParams.get("rooms") || "1";
 
   // Get authenticated user's first name
   const { user } = useAuth();
