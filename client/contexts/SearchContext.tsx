@@ -174,7 +174,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
     });
   }, []);
 
-  const loadFromUrlParams = (urlParams: URLSearchParams) => {
+  const loadFromUrlParams = React.useCallback((urlParams: URLSearchParams) => {
     const newParams: Partial<UnifiedSearchParams> = {};
 
     // Location/Destination
@@ -235,7 +235,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
     }
 
     updateSearchParams(newParams);
-  };
+  }, [updateSearchParams]);
 
   const loadFromBookingData = (booking: any) => {
     if (!booking) return;
