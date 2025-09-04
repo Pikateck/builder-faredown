@@ -301,7 +301,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
     updateSearchParams(newParams);
   };
 
-  const getDisplayData = () => {
+  const getDisplayData = React.useCallback(() => {
     const formatDate = (dateStr: string) => {
       if (!dateStr) return "";
       try {
@@ -333,7 +333,7 @@ export function SearchProvider({ children }: { children: ReactNode }) {
       nights,
       totalGuests,
     };
-  };
+  }, [searchParams]);
 
   const generateUrlParams = () => {
     const params = new URLSearchParams();
