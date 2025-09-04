@@ -36,7 +36,7 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { formatPriceWithSymbol, calculateNights } from "@/lib/pricing";
+import { formatPriceWithSymbol, calculateNights, calculateTotalPrice } from "@/lib/pricing";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSearch } from "@/contexts/SearchContext";
 import { authService } from "@/services/authService";
@@ -96,6 +96,24 @@ export default function HotelResults() {
   const [showEditDestination, setShowEditDestination] = useState(false);
   const [showEditDates, setShowEditDates] = useState(false);
   const [showEditGuests, setShowEditGuests] = useState(false);
+
+  // Helpers for consistent bargain pricing
+  const getCheapestPerNight = (hotel: HotelType | null | undefined): number => {
+    if (!hotel) return 0;
+    const roomsArr: any[] = (hotel as any).roomTypes || [];
+    if (Array.isArray(roomsArr) && roomsArr.length > 0) {
+      const prices = roomsArr
+        .map((r: any) => (r ? r.pricePerNight || r.price || 0 : 0))
+        .filter((p: number) => typeof p === "number" && isFinite(p) && p > 0);
+      if (prices.length > 0) return Math.min(...prices);
+    }
+    return (hotel as any).currentPrice || (hotel as any).pricePerNight || (hotel as any).priceRange?.min || 0;
+  };
+
+  const checkInDate = checkIn ? new Date(checkIn) : new Date();
+  const checkOutDate = checkOut ? new Date(checkOut) : new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const nights = calculateNights(checkInDate, checkOutDate);
+  const roomsCount = parseInt(rooms || "1");
 
   // Get search parameters
   const destination = searchParams.get("destination") || "";
@@ -1467,8 +1485,11 @@ export default function HotelResults() {
                   new Date(Date.now() + 24 * 60 * 60 * 1000)
                     .toISOString()
                     .split("T")[0],
-                price:
-                  selectedHotel.currentPrice || selectedHotel.pricePerNight,
+                price: (() => {
+                  const perNight = getCheapestPerNight(selectedHotel);
+                  const breakdown = calculateTotalPrice(perNight, nights, roomsCount);
+                  return breakdown.total;
+                })(),
                 rating: selectedHotel.rating,
               }
             : null
@@ -1498,9 +1519,11 @@ export default function HotelResults() {
         }}
         userName={userFirstName}
         module="hotels"
-        basePrice={
-          selectedHotel?.currentPrice || selectedHotel?.pricePerNight || 0
-        }
+        basePrice={(() => {
+          const perNight = getCheapestPerNight(selectedHotel);
+          const breakdown = calculateTotalPrice(perNight, nights, roomsCount);
+          return breakdown.total;
+        })()}
         productRef={selectedHotel?.id || ""}
       />
 
