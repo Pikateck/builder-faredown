@@ -195,10 +195,16 @@ export function HotelCard({
   };
 
   const getHotelPrice = (): number => {
-    if (hotel.currentPrice) return hotel.currentPrice;
+    // Prefer the cheapest available room type if present
     if (hotel.roomTypes && hotel.roomTypes.length > 0) {
-      return hotel.roomTypes[0].pricePerNight || hotel.roomTypes[0].price || 0;
+      const minRoomPrice = Math.min(
+        ...hotel.roomTypes
+          .map((r: any) => (typeof r === "object" ? r.pricePerNight || r.price || 0 : 0))
+          .filter((p: number) => typeof p === "number" && isFinite(p))
+      );
+      if (isFinite(minRoomPrice) && minRoomPrice > 0) return minRoomPrice;
     }
+    if (hotel.currentPrice) return hotel.currentPrice;
     if (hotel.priceRange?.min) return hotel.priceRange.min;
     return 0;
   };
