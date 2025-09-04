@@ -560,7 +560,9 @@ export class HotelsService {
         );
 
         if (response.success && response.data) {
-          console.log("✅ Successfully fetched hotel details from fallback API");
+          console.log(
+            "✅ Successfully fetched hotel details from fallback API",
+          );
           return response.data;
         }
       } catch (fallbackError) {
@@ -592,7 +594,8 @@ export class HotelsService {
     const mockHotel: Hotel = {
       id: hotelId,
       name: `Hotel ${hotelId}`,
-      description: "Experience comfort and luxury at this premium hotel with modern amenities.",
+      description:
+        "Experience comfort and luxury at this premium hotel with modern amenities.",
       address: {
         street: "123 Hotel Street",
         city: "Dubai",
@@ -608,7 +611,11 @@ export class HotelsService {
         country: "United Arab Emirates",
         landmarks: [
           { name: "Dubai Marina", distance: 0.5, type: "attraction" },
-          { name: "Dubai International Airport", distance: 25, type: "airport" },
+          {
+            name: "Dubai International Airport",
+            distance: 25,
+            type: "airport",
+          },
         ],
       },
       rating: 4.2,
@@ -687,11 +694,7 @@ export class HotelsService {
           ],
           pricePerNight: 185,
           availability: 3,
-          features: [
-            "Upgrade +₹18",
-            "King Bed",
-            "Better City Views",
-          ],
+          features: ["Upgrade +₹18", "King Bed", "Better City Views"],
         },
         {
           id: "deluxe-suite",
@@ -700,17 +703,19 @@ export class HotelsService {
           maxOccupancy: 3,
           size: "45 sqm",
           bedTypes: ["1 King Bed", "1 Sofa Bed"],
-          amenities: ["WiFi", "Air Conditioning", "TV", "Mini Bar", "Workspace"],
+          amenities: [
+            "WiFi",
+            "Air Conditioning",
+            "TV",
+            "Mini Bar",
+            "Workspace",
+          ],
           images: [
             "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&fit=crop",
           ],
           pricePerNight: 222,
           availability: 2,
-          features: [
-            "Upgrade +₹55",
-            "Ocean View",
-            "Premium amenities",
-          ],
+          features: ["Upgrade +₹55", "Ocean View", "Premium amenities"],
         },
         {
           id: "family-room",
@@ -725,11 +730,7 @@ export class HotelsService {
           ],
           pricePerNight: 202,
           availability: 3,
-          features: [
-            "Upgrade +₹35",
-            "Family friendly",
-            "Extra space",
-          ],
+          features: ["Upgrade +₹35", "Family friendly", "Extra space"],
         },
         {
           id: "executive-room",
@@ -744,11 +745,7 @@ export class HotelsService {
           ],
           pricePerNight: 209,
           availability: 2,
-          features: [
-            "Upgrade +₹42",
-            "Executive Access",
-            "Business lounge",
-          ],
+          features: ["Upgrade +₹42", "Executive Access", "Business lounge"],
         },
         {
           id: "standard-double",
@@ -763,11 +760,7 @@ export class HotelsService {
           ],
           pricePerNight: 152,
           availability: 6,
-          features: [
-            "Save ₹15",
-            "Standard Room",
-            "Best value option",
-          ],
+          features: ["Save ₹15", "Standard Room", "Best value option"],
         },
       ],
       policies: {

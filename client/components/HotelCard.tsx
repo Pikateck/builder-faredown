@@ -199,8 +199,10 @@ export function HotelCard({
     if (hotel.roomTypes && hotel.roomTypes.length > 0) {
       const minRoomPrice = Math.min(
         ...hotel.roomTypes
-          .map((r: any) => (typeof r === "object" ? r.pricePerNight || r.price || 0 : 0))
-          .filter((p: number) => typeof p === "number" && isFinite(p))
+          .map((r: any) =>
+            typeof r === "object" ? r.pricePerNight || r.price || 0 : 0,
+          )
+          .filter((p: number) => typeof p === "number" && isFinite(p)),
       );
       if (isFinite(minRoomPrice) && minRoomPrice > 0) return minRoomPrice;
     }

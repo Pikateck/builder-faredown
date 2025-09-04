@@ -646,7 +646,9 @@ export default function HotelDetails() {
             isLiveData: false,
           },
         ];
-        return [...mapped, ...extras].slice(0, 3).sort((a, b) => a.pricePerNight - b.pricePerNight);
+        return [...mapped, ...extras]
+          .slice(0, 3)
+          .sort((a, b) => a.pricePerNight - b.pricePerNight);
       }
 
       return mapped.sort((a, b) => a.pricePerNight - b.pricePerNight);

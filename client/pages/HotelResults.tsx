@@ -36,7 +36,11 @@ import {
   ChevronLeft,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { formatPriceWithSymbol, calculateNights, calculateTotalPrice } from "@/lib/pricing";
+import {
+  formatPriceWithSymbol,
+  calculateNights,
+  calculateTotalPrice,
+} from "@/lib/pricing";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSearch } from "@/contexts/SearchContext";
 import { authService } from "@/services/authService";
@@ -97,7 +101,6 @@ export default function HotelResults() {
   const [showEditDates, setShowEditDates] = useState(false);
   const [showEditGuests, setShowEditGuests] = useState(false);
 
-
   // Get search parameters
   const destination = searchParams.get("destination") || "";
   const checkIn = searchParams.get("checkIn") || "";
@@ -116,11 +119,18 @@ export default function HotelResults() {
         .filter((p: number) => typeof p === "number" && isFinite(p) && p > 0);
       if (prices.length > 0) return Math.min(...prices);
     }
-    return (hotel as any).currentPrice || (hotel as any).pricePerNight || (hotel as any).priceRange?.min || 0;
+    return (
+      (hotel as any).currentPrice ||
+      (hotel as any).pricePerNight ||
+      (hotel as any).priceRange?.min ||
+      0
+    );
   };
 
   const checkInDate = checkIn ? new Date(checkIn) : new Date();
-  const checkOutDate = checkOut ? new Date(checkOut) : new Date(Date.now() + 24 * 60 * 60 * 1000);
+  const checkOutDate = checkOut
+    ? new Date(checkOut)
+    : new Date(Date.now() + 24 * 60 * 60 * 1000);
   const nights = calculateNights(checkInDate, checkOutDate);
   const roomsCount = parseInt(rooms || "1");
 
@@ -1488,7 +1498,11 @@ export default function HotelResults() {
                     .split("T")[0],
                 price: (() => {
                   const perNight = getCheapestPerNight(selectedHotel);
-                  const breakdown = calculateTotalPrice(perNight, nights, roomsCount);
+                  const breakdown = calculateTotalPrice(
+                    perNight,
+                    nights,
+                    roomsCount,
+                  );
                   return breakdown.total;
                 })(),
                 rating: selectedHotel.rating,
