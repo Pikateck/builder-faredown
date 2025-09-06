@@ -27,7 +27,7 @@ class PricingEngine {
 
     const query = `
       SELECT *
-      FROM markup_rules
+      FROM pricing_markup_rules
       WHERE status = 'active'
         AND module = $1
         AND (origin IS NULL OR origin = $2)
@@ -83,7 +83,7 @@ class PricingEngine {
 
     const query = `
       SELECT *
-      FROM promo_codes
+      FROM pricing_promo_codes
       WHERE code = $1
         AND status = 'active'
         AND (valid_from IS NULL OR valid_from <= CURRENT_DATE)
