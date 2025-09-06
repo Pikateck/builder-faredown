@@ -6,21 +6,8 @@ import path from "path";
 // Create Express app
 const app = express();
 
-// Enable CORS with specific headers for Builder.io
-app.use(cors({
-  origin: '*',
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With'],
-  credentials: false
-}));
-
-// Add headers for iframe embedding (Builder.io compatibility)
-app.use((req, res, next) => {
-  res.setHeader('X-Frame-Options', 'ALLOWALL');
-  res.setHeader('Content-Security-Policy', "frame-ancestors *");
-  next();
-});
-
+// Enable CORS
+app.use(cors());
 app.use(express.json());
 
 // 1) API proxy to external API server
