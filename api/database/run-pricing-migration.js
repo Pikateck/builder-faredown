@@ -37,14 +37,14 @@ async function runPricingMigration() {
       await ensureSeedData();
 
     } else {
-      // Read the migration SQL file
-      const migrationPath = path.join(__dirname, 'migrations', 'V2025_09_06_pricing_engine.sql');
+      // Use compatibility migration that works with existing schema
+      const migrationPath = path.join(__dirname, 'migrations', 'V2025_09_06_pricing_engine_compatibility.sql');
       const migrationSQL = fs.readFileSync(migrationPath, 'utf8');
 
-      console.log('📁 Migration file loaded:', migrationPath);
+      console.log('📁 Compatibility migration file loaded:', migrationPath);
 
       // Execute the migration
-      console.log('⚡ Executing migration...');
+      console.log('⚡ Executing compatibility migration...');
       await pool.query(migrationSQL);
     }
     
