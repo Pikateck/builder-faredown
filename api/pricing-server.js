@@ -36,8 +36,21 @@ const pool = new Pool({
   ssl: { rejectUnauthorized: false },
 });
 
-// Import pricing routes
+// Import pricing components
 const pricingRoutes = require("./routes/pricing");
+const { priceEcho, createDiffEndpoint } = require("./middleware/priceEcho");
+
+// Initialize Price Echo middleware
+const priceEchoMiddleware = priceEcho({
+  pool,
+  stepHeader: 'x-fd-step',
+  journeyHeader: 'x-fd-journey',
+  webhookUrl: process.env.PRICE_ALERT_WEBHOOK || null,
+  enabled: process.env.PRICE_ECHO_ENABLED !== 'false'
+});
+
+// Apply Price Echo middleware before pricing routes
+app.use(priceEchoMiddleware);
 
 // Health check endpoint
 app.get("/health", async (req, res) => {
