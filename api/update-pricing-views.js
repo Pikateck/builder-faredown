@@ -13,10 +13,13 @@ async function updateViews() {
   console.log('🔄 Updating pricing compatibility views...');
   
   try {
-    // Update promo codes view with fixed date handling
-    console.log('1️⃣ Updating pricing_promo_codes view...');
+    // Drop and recreate promo codes view with fixed date handling
+    console.log('1️⃣ Dropping existing pricing_promo_codes view...');
+    await pool.query(`DROP VIEW IF EXISTS pricing_promo_codes`);
+
+    console.log('2️⃣ Creating new pricing_promo_codes view...');
     await pool.query(`
-      CREATE OR REPLACE VIEW pricing_promo_codes AS
+      CREATE VIEW pricing_promo_codes AS
       SELECT 
         id::text as id,
         code,
