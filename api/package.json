@@ -14,11 +14,15 @@
     "build": "npm run lint && npm run test",
     "deploy": "npm run build && npm start",
     "migrate:ai": "node database/run-ai-migration.js",
+    "migrate:pricing": "psql $DATABASE_URL -f database/migrations/V2025_09_06_pricing_engine.sql",
     "init:redis": "node scripts/init-redis.js",
     "test:offerability": "node scripts/test-offerability.js",
     "test:bargain-api": "node scripts/test-bargain-api.js",
+    "test:pricing": "jest --config tests/jest.config.js tests/pricing*.test.js",
+    "test:pricing:watch": "jest --config tests/jest.config.js --watch tests/pricing*.test.js",
     "seed:bargain-data": "node scripts/seed-bargain-data.js",
-    "seed:bargain-cleanup": "node scripts/seed-bargain-data.js --cleanup"
+    "seed:bargain-cleanup": "node scripts/seed-bargain-data.js --cleanup",
+    "start:pricing": "node pricing-server.js"
   },
   "keywords": [
     "faredown",
