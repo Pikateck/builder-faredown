@@ -14,7 +14,7 @@ async function updateViews() {
   
   try {
     // Drop and recreate promo codes view with fixed date handling
-    console.log('1️⃣ Dropping existing pricing_promo_codes view...');
+    console.log('1��⃣ Dropping existing pricing_promo_codes view...');
     await pool.query(`DROP VIEW IF EXISTS pricing_promo_codes`);
 
     console.log('2️⃣ Creating new pricing_promo_codes view...');
@@ -42,7 +42,7 @@ async function updateViews() {
     console.log('✅ pricing_promo_codes view updated');
 
     // Test the view
-    console.log('2️⃣ Testing updated view...');
+    console.log('3️⃣ Testing new view...');
     const testResult = await pool.query(`
       SELECT code, type, value, valid_from, valid_to 
       FROM pricing_promo_codes 
