@@ -4,9 +4,9 @@
  */
 
 // Set test environment variables
-process.env.NODE_ENV = 'test';
-process.env.DATABASE_URL = 'postgresql://test:test@localhost:5432/test_db';
-process.env.DEBUG_PRICING = 'true';
+process.env.NODE_ENV = "test";
+process.env.DATABASE_URL = "postgresql://test:test@localhost:5432/test_db";
+process.env.DEBUG_PRICING = "true";
 
 // Mock console methods to reduce noise in tests
 global.console = {
@@ -19,39 +19,39 @@ global.console = {
 
 // Global test helpers
 global.createMockPricingParams = (overrides = {}) => ({
-  module: 'air',
+  module: "air",
   baseFare: 500,
-  currency: 'USD',
-  userType: 'b2c',
-  ...overrides
+  currency: "USD",
+  userType: "b2c",
+  ...overrides,
 });
 
 global.createMockMarkupRule = (overrides = {}) => ({
   id: 1,
-  module: 'air',
-  markup_type: 'percent',
-  markup_value: 8.00,
+  module: "air",
+  markup_type: "percent",
+  markup_value: 8.0,
   priority: 10,
-  status: 'active',
-  ...overrides
+  status: "active",
+  ...overrides,
 });
 
 global.createMockPromoCode = (overrides = {}) => ({
   id: 1,
-  code: 'WELCOME10',
-  type: 'percent',
-  value: 10.00,
-  status: 'active',
-  ...overrides
+  code: "WELCOME10",
+  type: "percent",
+  value: 10.0,
+  status: "active",
+  ...overrides,
 });
 
 global.createMockTaxPolicy = (overrides = {}) => ({
   id: 1,
-  module: 'air',
-  type: 'percent',
-  value: 12.00,
-  status: 'active',
-  ...overrides
+  module: "air",
+  type: "percent",
+  value: 12.0,
+  status: "active",
+  ...overrides,
 });
 
 // Cleanup after each test
@@ -62,7 +62,7 @@ afterEach(() => {
 // Setup fake timers for consistent test runs
 beforeAll(() => {
   jest.useFakeTimers();
-  jest.setSystemTime(new Date('2025-09-06T10:00:00Z'));
+  jest.setSystemTime(new Date("2025-09-06T10:00:00Z"));
 });
 
 afterAll(() => {

@@ -45,9 +45,10 @@ npm run migrate:pricing
 ```
 
 This will create:
+
 - `markup_rules` - Pricing rules by route/airline/class
 - `promo_codes` - Discount codes
-- `tax_policies` - Tax calculation rules  
+- `tax_policies` - Tax calculation rules
 - `price_checkpoints` - Price tracking logs
 
 ### 3. Start the Pricing Server
@@ -75,6 +76,7 @@ npm run test:pricing:watch
 Calculate pricing with all markups, discounts, and taxes.
 
 **Request Body:**
+
 ```json
 {
   "module": "air",
@@ -94,6 +96,7 @@ Calculate pricing with all markups, discounts, and taxes.
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -136,17 +139,17 @@ Health check endpoint for monitoring.
 ### Journey Tracking
 
 ```typescript
-import { getJourneyId, JOURNEY_STEPS } from '@/utils/journey';
-import { pricingApi } from '@/utils/pricingApi';
+import { getJourneyId, JOURNEY_STEPS } from "@/utils/journey";
+import { pricingApi } from "@/utils/pricingApi";
 
 // Start new journey on search
 const journeyId = startNewJourney();
 
 // Use throughout the booking flow
 const pricing = await pricingApi.searchResults({
-  module: 'air',
+  module: "air",
   baseFare: supplierFare,
-  currency: 'USD',
+  currency: "USD",
   // ... other params
 });
 ```
@@ -163,7 +166,7 @@ The system automatically tracks price consistency using these headers:
 - `search_results` - Search results page
 - `view_details` - Hotel/flight details page
 - `bargain_pre` - Before bargaining
-- `bargain_post` - After bargaining  
+- `bargain_post` - After bargaining
 - `book` - Booking page
 - `payment` - Payment page
 - `invoice` - Invoice generation
@@ -189,10 +192,10 @@ Configure pricing rules in the `markup_rules` table:
 
 ```sql
 INSERT INTO markup_rules (
-  module, origin, destination, service_class, 
+  module, origin, destination, service_class,
   user_type, markup_type, markup_value, priority
 ) VALUES (
-  'air', 'BOM', 'JFK', 'Y', 
+  'air', 'BOM', 'JFK', 'Y',
   'b2c', 'percent', 8.00, 10
 );
 ```
@@ -225,11 +228,11 @@ Test API endpoints with mock data:
 
 ```javascript
 const response = await request(app)
-  .post('/api/pricing/quote')
+  .post("/api/pricing/quote")
   .send({
-    module: 'air',
+    module: "air",
     baseFare: 500,
-    currency: 'USD'
+    currency: "USD",
   })
   .expect(200);
 ```
@@ -254,10 +257,10 @@ The system automatically detects price mismatches (except during bargaining) and
   "type": "PRICE_MISMATCH",
   "journeyId": "abc-123-def",
   "firstStep": "search_results",
-  "firstPrice": 500.00,
+  "firstPrice": 500.0,
   "currentStep": "payment",
-  "currentPrice": 520.00,
-  "delta": 20.00,
+  "currentPrice": 520.0,
+  "delta": 20.0,
   "timestamp": "2025-09-06T10:00:00Z"
 }
 ```
@@ -276,14 +279,14 @@ curl http://localhost:3001/api/pricing/health
 
 ```javascript
 const pricing = await pricingApi.searchResults({
-  module: 'air',
-  origin: 'BOM',
-  destination: 'JFK',
-  serviceClass: 'Y',
-  airlineCode: 'AI',
-  currency: 'USD',
+  module: "air",
+  origin: "BOM",
+  destination: "JFK",
+  serviceClass: "Y",
+  airlineCode: "AI",
+  currency: "USD",
   baseFare: supplierFare,
-  userType: 'b2c'
+  userType: "b2c",
 });
 
 // Display pricing.totalFare to user
@@ -298,7 +301,7 @@ const preBargain = await pricingApi.bargainPre(params);
 // After user negotiation
 const postBargain = await pricingApi.bargainPost({
   ...params,
-  baseFare: negotiatedFare  // Updated fare after bargaining
+  baseFare: negotiatedFare, // Updated fare after bargaining
 });
 ```
 
@@ -307,13 +310,13 @@ const postBargain = await pricingApi.bargainPost({
 ```javascript
 // Preview what rule would apply
 const preview = await previewPricingRules({
-  module: 'air',
-  origin: 'BOM',
-  destination: 'JFK',
-  serviceClass: 'Y'
+  module: "air",
+  origin: "BOM",
+  destination: "JFK",
+  serviceClass: "Y",
 });
 
-console.log('Matched rule:', preview.matchedRule);
+console.log("Matched rule:", preview.matchedRule);
 ```
 
 ## 🛡️ Error Handling
@@ -321,7 +324,7 @@ console.log('Matched rule:', preview.matchedRule);
 The pricing engine includes comprehensive error handling:
 
 - **Validation errors**: Invalid parameters return 400 with details
-- **Database errors**: Graceful degradation with 500 response  
+- **Database errors**: Graceful degradation with 500 response
 - **Missing rules**: Falls back to default module rules
 - **Invalid promos**: Silently ignored, no discount applied
 

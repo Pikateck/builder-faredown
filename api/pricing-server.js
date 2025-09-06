@@ -32,7 +32,9 @@ app.use(cors(corsOptions));
 
 // Database connection
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL || "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db",
+  connectionString:
+    process.env.DATABASE_URL ||
+    "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db",
   ssl: { rejectUnauthorized: false },
 });
 
@@ -43,10 +45,10 @@ const { priceEcho, createDiffEndpoint } = require("./middleware/priceEcho");
 // Initialize Price Echo middleware
 const priceEchoMiddleware = priceEcho({
   pool,
-  stepHeader: 'x-fd-step',
-  journeyHeader: 'x-fd-journey',
+  stepHeader: "x-fd-step",
+  journeyHeader: "x-fd-journey",
   webhookUrl: process.env.PRICE_ALERT_WEBHOOK || null,
-  enabled: process.env.PRICE_ECHO_ENABLED !== 'false'
+  enabled: process.env.PRICE_ECHO_ENABLED !== "false",
 });
 
 // Apply Price Echo middleware before pricing routes

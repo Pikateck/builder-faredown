@@ -2,22 +2,22 @@
  * Update pricing compatibility views
  */
 
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 async function updateViews() {
-  console.log('🔄 Updating pricing compatibility views...');
-  
+  console.log("🔄 Updating pricing compatibility views...");
+
   try {
     // Drop and recreate promo codes view with fixed date handling
-    console.log('1️⃣ Dropping existing pricing_promo_codes view...');
+    console.log("1️⃣ Dropping existing pricing_promo_codes view...");
     await pool.query(`DROP VIEW IF EXISTS pricing_promo_codes`);
 
-    console.log('2️⃣ Creating new pricing_promo_codes view...');
+    console.log("2️⃣ Creating new pricing_promo_codes view...");
     await pool.query(`
       CREATE VIEW pricing_promo_codes AS
       SELECT
@@ -39,25 +39,26 @@ async function updateViews() {
       FROM promo_codes
       WHERE status = 'active'
     `);
-    console.log('✅ pricing_promo_codes view updated');
+    console.log("✅ pricing_promo_codes view updated");
 
     // Test the view
-    console.log('3️⃣ Testing new view...');
+    console.log("3️⃣ Testing new view...");
     const testResult = await pool.query(`
       SELECT code, type, value, valid_from, valid_to 
       FROM pricing_promo_codes 
       LIMIT 3
     `);
-    
-    console.log('✅ View test successful, sample data:');
-    testResult.rows.forEach(row => {
-      console.log(`   ${row.code}: ${row.type} ${row.value} (${row.valid_from} to ${row.valid_to})`);
+
+    console.log("✅ View test successful, sample data:");
+    testResult.rows.forEach((row) => {
+      console.log(
+        `   ${row.code}: ${row.type} ${row.value} (${row.valid_from} to ${row.valid_to})`,
+      );
     });
 
-    console.log('\n🎉 Views updated successfully!');
-
+    console.log("\n🎉 Views updated successfully!");
   } catch (error) {
-    console.error('❌ Failed to update views:', error.message);
+    console.error("❌ Failed to update views:", error.message);
   } finally {
     await pool.end();
   }

@@ -3,20 +3,20 @@
  * Handles all pricing-related API calls with journey tracking
  */
 
-import { getJourneyId, type JourneyStep, isValidJourneyStep } from './journey';
+import { getJourneyId, type JourneyStep, isValidJourneyStep } from "./journey";
 
 /**
  * Pricing quote parameters
  */
 export interface PricingQuoteParams {
-  module: 'air' | 'hotel' | 'sightseeing' | 'transfer';
+  module: "air" | "hotel" | "sightseeing" | "transfer";
   origin?: string;
   destination?: string;
   serviceClass?: string;
   hotelCategory?: string;
   serviceType?: string;
   airlineCode?: string;
-  userType?: 'all' | 'b2c' | 'b2b';
+  userType?: "all" | "b2c" | "b2b";
   currency: string;
   baseFare: number;
   debug?: boolean;
@@ -72,18 +72,18 @@ export interface ApiResponse<T> {
 export async function fetchWithJourneyTracking(
   step: JourneyStep,
   input: RequestInfo,
-  init: RequestInit = {}
+  init: RequestInit = {},
 ): Promise<Response> {
   if (!isValidJourneyStep(step)) {
     throw new Error(`Invalid journey step: ${step}`);
   }
 
   const headers = new Headers(init.headers || {});
-  
+
   // Add journey tracking headers
-  headers.set('x-fd-journey', getJourneyId());
-  headers.set('x-fd-step', step);
-  headers.set('Content-Type', 'application/json');
+  headers.set("x-fd-journey", getJourneyId());
+  headers.set("x-fd-step", step);
+  headers.set("Content-Type", "application/json");
 
   const response = await fetch(input, {
     ...init,
@@ -105,17 +105,17 @@ export async function fetchWithJourneyTracking(
  */
 export async function getPricingQuote(
   step: JourneyStep,
-  params: PricingQuoteParams
+  params: PricingQuoteParams,
 ): Promise<PricingQuoteResult> {
-  const response = await fetchWithJourneyTracking(step, '/api/pricing/quote', {
-    method: 'POST',
+  const response = await fetchWithJourneyTracking(step, "/api/pricing/quote", {
+    method: "POST",
     body: JSON.stringify(params),
   });
 
   const result: ApiResponse<PricingQuoteResult> = await response.json();
-  
+
   if (!result.success || !result.data) {
-    throw new Error(result.error || 'Pricing calculation failed');
+    throw new Error(result.error || "Pricing calculation failed");
   }
 
   return result.data;
@@ -127,10 +127,10 @@ export async function getPricingQuote(
  * @returns Promise<any>
  */
 export async function previewPricingRules(
-  params: Partial<PricingQuoteParams>
+  params: Partial<PricingQuoteParams>,
 ): Promise<any> {
   const queryParams = new URLSearchParams();
-  
+
   Object.entries(params).forEach(([key, value]) => {
     if (value !== undefined && value !== null) {
       queryParams.append(key, String(value));
@@ -138,15 +138,15 @@ export async function previewPricingRules(
   });
 
   const response = await fetch(`/api/pricing/rules/preview?${queryParams}`);
-  
+
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
   }
 
   const result: ApiResponse<any> = await response.json();
-  
+
   if (!result.success) {
-    throw new Error(result.error || 'Rules preview failed');
+    throw new Error(result.error || "Rules preview failed");
   }
 
   return result.data;
@@ -159,17 +159,19 @@ export async function previewPricingRules(
  */
 export async function getPriceDiff(journeyId?: string): Promise<any> {
   const targetJourneyId = journeyId || getJourneyId();
-  
-  const response = await fetch(`/api/pricing/diff?journeyId=${encodeURIComponent(targetJourneyId)}`);
-  
+
+  const response = await fetch(
+    `/api/pricing/diff?journeyId=${encodeURIComponent(targetJourneyId)}`,
+  );
+
   if (!response.ok) {
     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
   }
 
   const result: ApiResponse<any> = await response.json();
-  
+
   if (!result.success) {
-    throw new Error(result.error || 'Price diff analysis failed');
+    throw new Error(result.error || "Price diff analysis failed");
   }
 
   return result;
@@ -181,11 +183,11 @@ export async function getPriceDiff(journeyId?: string): Promise<any> {
  * @returns Promise<any>
  */
 export async function validatePricingParams(
-  params: PricingQuoteParams
+  params: PricingQuoteParams,
 ): Promise<{ isValid: boolean; errors: string[] }> {
-  const response = await fetch('/api/pricing/validate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+  const response = await fetch("/api/pricing/validate", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
     body: JSON.stringify(params),
   });
 
@@ -193,10 +195,11 @@ export async function validatePricingParams(
     throw new Error(`HTTP ${response.status}: ${response.statusText}`);
   }
 
-  const result: ApiResponse<{ isValid: boolean; errors: string[] }> = await response.json();
-  
+  const result: ApiResponse<{ isValid: boolean; errors: string[] }> =
+    await response.json();
+
   if (!result.success || !result.data) {
-    throw new Error(result.error || 'Validation failed');
+    throw new Error(result.error || "Validation failed");
   }
 
   return result.data;
@@ -209,50 +212,46 @@ export const pricingApi = {
   /**
    * Search results pricing
    */
-  searchResults: (params: PricingQuoteParams) => 
-    getPricingQuote('search_results', params),
+  searchResults: (params: PricingQuoteParams) =>
+    getPricingQuote("search_results", params),
 
   /**
    * View details pricing
    */
-  viewDetails: (params: PricingQuoteParams) => 
-    getPricingQuote('view_details', params),
+  viewDetails: (params: PricingQuoteParams) =>
+    getPricingQuote("view_details", params),
 
   /**
    * Pre-bargain pricing
    */
-  bargainPre: (params: PricingQuoteParams) => 
-    getPricingQuote('bargain_pre', params),
+  bargainPre: (params: PricingQuoteParams) =>
+    getPricingQuote("bargain_pre", params),
 
   /**
    * Post-bargain pricing
    */
-  bargainPost: (params: PricingQuoteParams) => 
-    getPricingQuote('bargain_post', params),
+  bargainPost: (params: PricingQuoteParams) =>
+    getPricingQuote("bargain_post", params),
 
   /**
    * Booking page pricing
    */
-  book: (params: PricingQuoteParams) => 
-    getPricingQuote('book', params),
+  book: (params: PricingQuoteParams) => getPricingQuote("book", params),
 
   /**
    * Payment pricing
    */
-  payment: (params: PricingQuoteParams) => 
-    getPricingQuote('payment', params),
+  payment: (params: PricingQuoteParams) => getPricingQuote("payment", params),
 
   /**
    * Invoice pricing
    */
-  invoice: (params: PricingQuoteParams) => 
-    getPricingQuote('invoice', params),
+  invoice: (params: PricingQuoteParams) => getPricingQuote("invoice", params),
 
   /**
    * My trips pricing
    */
-  myTrips: (params: PricingQuoteParams) => 
-    getPricingQuote('my_trips', params),
+  myTrips: (params: PricingQuoteParams) => getPricingQuote("my_trips", params),
 };
 
 /**
@@ -275,10 +274,10 @@ export class PricingApiError extends Error {
   constructor(
     message: string,
     public status?: number,
-    public code?: string
+    public code?: string,
   ) {
     super(message);
-    this.name = 'PricingApiError';
+    this.name = "PricingApiError";
   }
 }
 
@@ -286,10 +285,10 @@ export class PricingApiError extends Error {
  * Helper to create pricing parameters from search/booking data
  */
 export function createPricingParams(
-  module: PricingQuoteParams['module'],
+  module: PricingQuoteParams["module"],
   searchData: any,
   baseFare: number,
-  options: Partial<PricingQuoteParams> = {}
+  options: Partial<PricingQuoteParams> = {},
 ): PricingQuoteParams {
   return {
     module,
@@ -299,8 +298,8 @@ export function createPricingParams(
     hotelCategory: searchData.starRating || searchData.category,
     serviceType: searchData.transferType || searchData.serviceType,
     airlineCode: searchData.airline || searchData.airlineCode,
-    userType: 'b2c', // Default to B2C
-    currency: searchData.currency || 'USD',
+    userType: "b2c", // Default to B2C
+    currency: searchData.currency || "USD",
     baseFare,
     extras: {
       pax: searchData.adults || searchData.passengers || 1,

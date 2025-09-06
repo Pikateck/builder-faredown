@@ -9,10 +9,10 @@
  */
 export const generateJourneyId = (): string => {
   // Use crypto.randomUUID if available (modern browsers)
-  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+  if (typeof crypto !== "undefined" && crypto.randomUUID) {
     return crypto.randomUUID();
   }
-  
+
   // Fallback for older browsers
   return `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
 };
@@ -23,17 +23,17 @@ export const generateJourneyId = (): string => {
  */
 export const getJourneyId = (): string => {
   try {
-    let journeyId = localStorage.getItem('fd_journey_id');
-    
+    let journeyId = localStorage.getItem("fd_journey_id");
+
     if (!journeyId) {
       journeyId = generateJourneyId();
-      localStorage.setItem('fd_journey_id', journeyId);
+      localStorage.setItem("fd_journey_id", journeyId);
     }
-    
+
     return journeyId;
   } catch (error) {
     // If localStorage is not available, generate a session-only ID
-    console.warn('localStorage not available, using session-only journey ID');
+    console.warn("localStorage not available, using session-only journey ID");
     return generateJourneyId();
   }
 };
@@ -45,10 +45,10 @@ export const getJourneyId = (): string => {
 export const startNewJourney = (): string => {
   try {
     const newJourneyId = generateJourneyId();
-    localStorage.setItem('fd_journey_id', newJourneyId);
+    localStorage.setItem("fd_journey_id", newJourneyId);
     return newJourneyId;
   } catch (error) {
-    console.warn('localStorage not available for new journey');
+    console.warn("localStorage not available for new journey");
     return generateJourneyId();
   }
 };
@@ -58,9 +58,9 @@ export const startNewJourney = (): string => {
  */
 export const endJourney = (): void => {
   try {
-    localStorage.removeItem('fd_journey_id');
+    localStorage.removeItem("fd_journey_id");
   } catch (error) {
-    console.warn('localStorage not available for ending journey');
+    console.warn("localStorage not available for ending journey");
   }
 };
 
@@ -68,17 +68,17 @@ export const endJourney = (): void => {
  * Journey steps enum for consistency
  */
 export const JOURNEY_STEPS = {
-  SEARCH_RESULTS: 'search_results',
-  VIEW_DETAILS: 'view_details',
-  BARGAIN_PRE: 'bargain_pre',
-  BARGAIN_POST: 'bargain_post',
-  BOOK: 'book',
-  PAYMENT: 'payment',
-  INVOICE: 'invoice',
-  MY_TRIPS: 'my_trips'
+  SEARCH_RESULTS: "search_results",
+  VIEW_DETAILS: "view_details",
+  BARGAIN_PRE: "bargain_pre",
+  BARGAIN_POST: "bargain_post",
+  BOOK: "book",
+  PAYMENT: "payment",
+  INVOICE: "invoice",
+  MY_TRIPS: "my_trips",
 } as const;
 
-export type JourneyStep = typeof JOURNEY_STEPS[keyof typeof JOURNEY_STEPS];
+export type JourneyStep = (typeof JOURNEY_STEPS)[keyof typeof JOURNEY_STEPS];
 
 /**
  * Validate journey step
@@ -95,12 +95,13 @@ export const isValidJourneyStep = (step: string): step is JourneyStep => {
  */
 export const getJourneyMetadata = () => {
   const journeyId = getJourneyId();
-  
+
   return {
     journeyId,
-    startedAt: localStorage.getItem('fd_journey_started') || new Date().toISOString(),
+    startedAt:
+      localStorage.getItem("fd_journey_started") || new Date().toISOString(),
     userAgent: navigator.userAgent,
-    timestamp: new Date().toISOString()
+    timestamp: new Date().toISOString(),
   };
 };
 
@@ -109,8 +110,8 @@ export const getJourneyMetadata = () => {
  */
 export const markJourneyStart = (): void => {
   try {
-    localStorage.setItem('fd_journey_started', new Date().toISOString());
+    localStorage.setItem("fd_journey_started", new Date().toISOString());
   } catch (error) {
-    console.warn('localStorage not available for journey start time');
+    console.warn("localStorage not available for journey start time");
   }
 };

@@ -6,8 +6,11 @@
 class PricingEngine {
   constructor(dbConnection) {
     this.db = dbConnection;
-    console.log('[PricingEngine] Initialized with connection:', !!dbConnection);
-    console.log('[PricingEngine] Connection config:', dbConnection?.options || 'No options available');
+    console.log("[PricingEngine] Initialized with connection:", !!dbConnection);
+    console.log(
+      "[PricingEngine] Connection config:",
+      dbConnection?.options || "No options available",
+    );
   }
 
   /**
@@ -24,7 +27,7 @@ class PricingEngine {
       hotelCategory = null,
       serviceType = null,
       airlineCode = null,
-      userType = 'all'
+      userType = "all",
     } = params;
 
     const query = `
@@ -63,11 +66,11 @@ class PricingEngine {
         hotelCategory,
         serviceType,
         airlineCode,
-        userType
+        userType,
       ]);
       return result.rows[0] || null;
     } catch (error) {
-      console.error('Error fetching markup rule:', error);
+      console.error("Error fetching markup rule:", error);
       throw error;
     }
   }
@@ -80,7 +83,7 @@ class PricingEngine {
   async getPromoDiscount(params) {
     const { extras = {} } = params;
     const promoCode = extras.promoCode?.trim();
-    
+
     if (!promoCode) return null;
 
     const query = `
@@ -98,14 +101,14 @@ class PricingEngine {
     try {
       const result = await this.db.query(query, [promoCode, params.module]);
       const promo = result.rows[0];
-      
+
       if (promo && promo.min_fare && params.baseFare < promo.min_fare) {
         return null; // Minimum fare not met
       }
-      
+
       return promo || null;
     } catch (error) {
-      console.error('Error fetching promo code:', error);
+      console.error("Error fetching promo code:", error);
       throw error;
     }
   }
@@ -128,7 +131,7 @@ class PricingEngine {
       const result = await this.db.query(query, [params.module]);
       return result.rows[0] || null;
     } catch (error) {
-      console.error('Error fetching tax policy:', error);
+      console.error("Error fetching tax policy:", error);
       throw error;
     }
   }
@@ -142,55 +145,57 @@ class PricingEngine {
     const {
       module,
       baseFare = 0,
-      currency = 'USD',
+      currency = "USD",
       debug = false,
-      extras = {}
+      extras = {},
     } = params;
 
     const breakdown = debug ? { steps: [] } : undefined;
     let fare = Number(baseFare) || 0;
 
-    if (debug) breakdown.steps.push({ label: 'baseFare', value: fare });
+    if (debug) breakdown.steps.push({ label: "baseFare", value: fare });
 
     // 1. Apply markup
     const markupRule = await this.getApplicableMarkupRule(params);
     let markup = 0;
-    
+
     if (markupRule) {
-      if (markupRule.markup_type === 'percent') {
+      if (markupRule.markup_type === "percent") {
         markup = Number((fare * (markupRule.markup_value / 100)).toFixed(2));
-      } else if (markupRule.markup_type === 'fixed') {
+      } else if (markupRule.markup_type === "fixed") {
         markup = Number(markupRule.markup_value.toFixed(2));
       }
-      if (debug) breakdown.steps.push({ 
-        label: 'markup', 
-        rule: markupRule, 
-        value: markup 
-      });
+      if (debug)
+        breakdown.steps.push({
+          label: "markup",
+          rule: markupRule,
+          value: markup,
+        });
     }
 
     // 2. Apply promo discount
     const promoCode = await this.getPromoDiscount(params);
     let discount = 0;
-    
+
     if (promoCode) {
       const discountBase = fare + markup;
-      if (promoCode.type === 'percent') {
+      if (promoCode.type === "percent") {
         discount = Number((discountBase * (promoCode.value / 100)).toFixed(2));
-      } else if (promoCode.type === 'fixed') {
+      } else if (promoCode.type === "fixed") {
         discount = Number(promoCode.value.toFixed(2));
       }
-      
+
       // Apply max discount limit if set
       if (promoCode.max_discount && discount > promoCode.max_discount) {
         discount = Number(promoCode.max_discount.toFixed(2));
       }
-      
-      if (debug) breakdown.steps.push({ 
-        label: 'discount', 
-        promo: promoCode, 
-        value: -discount 
-      });
+
+      if (debug)
+        breakdown.steps.push({
+          label: "discount",
+          promo: promoCode,
+          value: -discount,
+        });
     }
 
     // 3. Calculate taxable amount
@@ -199,24 +204,25 @@ class PricingEngine {
     // 4. Apply tax
     const taxPolicy = await this.getTaxPolicy(params);
     let tax = 0;
-    
+
     if (taxPolicy) {
-      if (taxPolicy.type === 'percent') {
+      if (taxPolicy.type === "percent") {
         tax = Number((taxableAmount * (taxPolicy.value / 100)).toFixed(2));
-      } else if (taxPolicy.type === 'fixed') {
+      } else if (taxPolicy.type === "fixed") {
         tax = Number(taxPolicy.value.toFixed(2));
       }
-      if (debug) breakdown.steps.push({ 
-        label: 'tax', 
-        policy: taxPolicy, 
-        value: tax 
-      });
+      if (debug)
+        breakdown.steps.push({
+          label: "tax",
+          policy: taxPolicy,
+          value: tax,
+        });
     }
 
     // 5. Calculate final total
     const totalFare = Number((taxableAmount + tax).toFixed(2));
-    
-    if (debug) breakdown.steps.push({ label: 'totalFare', value: totalFare });
+
+    if (debug) breakdown.steps.push({ label: "totalFare", value: totalFare });
 
     const result = {
       baseFare: fare,
@@ -226,15 +232,15 @@ class PricingEngine {
       totalFare,
       currency,
       taxableAmount,
-      ...(debug ? { breakdown } : {})
+      ...(debug ? { breakdown } : {}),
     };
 
     // Log calculation for audit
-    if (process.env.NODE_ENV === 'production' || debug) {
+    if (process.env.NODE_ENV === "production" || debug) {
       console.log(`[PricingEngine] ${module} quote:`, {
         input: params,
         output: result,
-        timestamp: new Date().toISOString()
+        timestamp: new Date().toISOString(),
       });
     }
 
@@ -257,7 +263,7 @@ class PricingEngine {
     try {
       await this.db.query(query, [promoCode]);
     } catch (error) {
-      console.error('Error updating promo usage:', error);
+      console.error("Error updating promo usage:", error);
       throw error;
     }
   }
@@ -269,26 +275,23 @@ class PricingEngine {
    */
   validateParams(params) {
     const errors = [];
-    const {
-      module,
-      baseFare,
-      currency
-    } = params;
+    const { module, baseFare, currency } = params;
 
     // Required fields
-    if (!module) errors.push('module is required');
-    if (!['air', 'hotel', 'sightseeing', 'transfer'].includes(module)) {
-      errors.push('module must be one of: air, hotel, sightseeing, transfer');
+    if (!module) errors.push("module is required");
+    if (!["air", "hotel", "sightseeing", "transfer"].includes(module)) {
+      errors.push("module must be one of: air, hotel, sightseeing, transfer");
     }
-    if (baseFare === undefined || baseFare === null) errors.push('baseFare is required');
+    if (baseFare === undefined || baseFare === null)
+      errors.push("baseFare is required");
     if (isNaN(Number(baseFare)) || Number(baseFare) < 0) {
-      errors.push('baseFare must be a positive number');
+      errors.push("baseFare must be a positive number");
     }
-    if (!currency) errors.push('currency is required');
+    if (!currency) errors.push("currency is required");
 
     return {
       isValid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -317,7 +320,7 @@ class PricingEngine {
       const result = await this.db.query(query, params);
       return result.rows;
     } catch (error) {
-      console.error('Error fetching rules summary:', error);
+      console.error("Error fetching rules summary:", error);
       throw error;
     }
   }
