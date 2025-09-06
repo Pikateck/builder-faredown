@@ -6,6 +6,8 @@
 class PricingEngine {
   constructor(dbConnection) {
     this.db = dbConnection;
+    console.log('[PricingEngine] Initialized with connection:', !!dbConnection);
+    console.log('[PricingEngine] Connection config:', dbConnection?.options || 'No options available');
   }
 
   /**
