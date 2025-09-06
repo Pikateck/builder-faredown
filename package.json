@@ -4,6 +4,9 @@
   "author": "Faredown Bookings and Travels Pvt Ltd",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "pkg": {
     "assets": [
       "dist/spa/*"
