@@ -87,7 +87,8 @@ app.get("/", (req, res) => {
   });
 });
 
-// Pricing routes
+// Pricing routes - create with database pool
+const pricingRoutes = createPricingRoutes(pool);
 app.use("/api/pricing", pricingRoutes);
 
 // Price diff debugging endpoint
