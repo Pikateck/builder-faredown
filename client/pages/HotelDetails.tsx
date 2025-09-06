@@ -1150,7 +1150,7 @@ export default function HotelDetails() {
 
                           {/* Simple Room Features */}
                           <div className="flex flex-wrap gap-2 mb-4">
-                            {room.features?.slice(0, 3).map((feature, idx) => (
+                            {Array.isArray(room.features) ? room.features.slice(0, 3).map((feature: any, idx: number) => (
                               <span
                                 key={idx}
                                 className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
@@ -1159,7 +1159,7 @@ export default function HotelDetails() {
                                   ? feature
                                   : feature?.name || "Feature"}
                               </span>
-                            ))}
+                            )) : null}
                           </div>
 
                           {/* Action Buttons */}
