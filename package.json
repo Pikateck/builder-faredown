@@ -17,8 +17,8 @@
   },
   "scripts": {
     "dev": "node dev-server.js",
-    "build": "npx vite build",
-    "build:client": "npx vite build",
+    "build": "node build-render.js",
+    "build:client": "node build-render.js",
     "build:server": "echo 'Server build skipped for production'",
     "preview": "npx vite preview",
     "start": "node server.js",
