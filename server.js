@@ -1,7 +1,7 @@
 import express from "express";
 import cors from "cors";
 import path from "path";
-import { fileURLToPath } from 'url';
+import { fileURLToPath } from "url";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -45,8 +45,9 @@ app.use("/api", async (req, res) => {
 
     const data = await response.text();
     res.status(response.status);
-    
-    const contentType = response.headers.get("content-type") || "application/json";
+
+    const contentType =
+      response.headers.get("content-type") || "application/json";
     res.setHeader("Content-Type", contentType);
     res.send(data);
   } catch (error) {
@@ -60,11 +61,11 @@ app.use("/api", async (req, res) => {
 });
 
 // Serve static files from dist
-app.use(express.static(path.join(__dirname, 'dist/spa')));
+app.use(express.static(path.join(__dirname, "dist/spa")));
 
 // Handle React Router (SPA) - serve index.html for all non-API routes
-app.get('*', (req, res) => {
-  res.sendFile(path.join(__dirname, 'dist/spa', 'index.html'));
+app.get("*", (req, res) => {
+  res.sendFile(path.join(__dirname, "dist/spa", "index.html"));
 });
 
 const port = process.env.PORT || 8080;
