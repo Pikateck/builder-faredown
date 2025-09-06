@@ -5,19 +5,13 @@
 
 const express = require('express');
 const PricingEngine = require('../services/pricing/PricingEngine');
-const { Pool } = require('pg');
 
-const router = express.Router();
+// Factory function to create pricing routes with database pool
+function createPricingRoutes(pool) {
+  const router = express.Router();
 
-// Get database pool from parent (pricing server should pass it)
-// For now, create a properly configured pool
-const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
-});
-
-// Initialize pricing engine
-const pricingEngine = new PricingEngine(pool);
+  // Initialize pricing engine with passed pool
+  const pricingEngine = new PricingEngine(pool);
 
 /**
  * POST /api/pricing/quote
@@ -233,4 +227,7 @@ router.use((error, req, res, next) => {
   });
 });
 
-module.exports = router;
+  return router;
+}
+
+module.exports = createPricingRoutes;
