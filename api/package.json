@@ -14,7 +14,7 @@
     "build": "npm run lint && npm run test",
     "deploy": "npm run build && npm start",
     "migrate:ai": "node database/run-ai-migration.js",
-    "migrate:pricing": "psql $DATABASE_URL -f database/migrations/V2025_09_06_pricing_engine.sql",
+    "migrate:pricing": "node database/run-pricing-migration.js",
     "init:redis": "node scripts/init-redis.js",
     "test:offerability": "node scripts/test-offerability.js",
     "test:bargain-api": "node scripts/test-bargain-api.js",
