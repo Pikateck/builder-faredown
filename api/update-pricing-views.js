@@ -14,23 +14,23 @@ async function updateViews() {
   
   try {
     // Drop and recreate promo codes view with fixed date handling
-    console.log('1��⃣ Dropping existing pricing_promo_codes view...');
+    console.log('1️⃣ Dropping existing pricing_promo_codes view...');
     await pool.query(`DROP VIEW IF EXISTS pricing_promo_codes`);
 
     console.log('2️⃣ Creating new pricing_promo_codes view...');
     await pool.query(`
       CREATE VIEW pricing_promo_codes AS
-      SELECT 
+      SELECT
         id::text as id,
         code,
         discount_type as type,
         (discount_min + discount_max) / 2 as value,
         module,
         min_fare_amount as min_fare,
-        null as max_discount,
-        null as usage_limit,
-        0 as usage_count,
-        1 as user_limit,
+        null::numeric as max_discount,
+        null::integer as usage_limit,
+        0::integer as usage_count,
+        1::integer as user_limit,
         status,
         CURRENT_DATE as valid_from,
         expires_on as valid_to,
