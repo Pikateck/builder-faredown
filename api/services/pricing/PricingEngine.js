@@ -306,7 +306,7 @@ class PricingEngine {
         COUNT(CASE WHEN status = 'active' THEN 1 END) as active_rules,
         AVG(CASE WHEN markup_type = 'percent' THEN markup_value END) as avg_percent_markup,
         AVG(CASE WHEN markup_type = 'fixed' THEN markup_value END) as avg_fixed_markup
-      FROM markup_rules 
+      FROM pricing_markup_rules 
       ${whereClause}
       GROUP BY module;
     `;
