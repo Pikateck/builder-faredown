@@ -82,6 +82,56 @@ async function runPricingMigration() {
   }
 }
 
+async function ensureSeedData() {
+  try {
+    // Check and add basic markup rules
+    const markupCheck = await pool.query('SELECT COUNT(*) FROM markup_rules');
+    if (markupCheck.rows[0].count === '0') {
+      console.log('   Adding basic markup rules...');
+      await pool.query(`
+        INSERT INTO markup_rules (module, markup_type, markup_value, priority, status)
+        VALUES
+          ('air', 'percent', 5.00, 1, 'active'),
+          ('hotel', 'percent', 8.00, 1, 'active'),
+          ('sightseeing', 'percent', 10.00, 1, 'active'),
+          ('transfer', 'percent', 12.00, 1, 'active')
+      `);
+    }
+
+    // Check and add promo codes
+    const promoCheck = await pool.query('SELECT COUNT(*) FROM promo_codes');
+    if (promoCheck.rows[0].count === '0') {
+      console.log('   Adding sample promo codes...');
+      await pool.query(`
+        INSERT INTO promo_codes (code, type, value, status, valid_from, valid_to)
+        VALUES
+          ('WELCOME10', 'percent', 10.00, 'active', CURRENT_DATE, CURRENT_DATE + INTERVAL '30 days'),
+          ('FIRST50', 'fixed', 50.00, 'active', CURRENT_DATE, CURRENT_DATE + INTERVAL '30 days'),
+          ('SAVE100', 'fixed', 100.00, 'active', CURRENT_DATE, CURRENT_DATE + INTERVAL '7 days')
+      `);
+    }
+
+    // Check and add tax policies
+    const taxCheck = await pool.query('SELECT COUNT(*) FROM tax_policies');
+    if (taxCheck.rows[0].count === '0') {
+      console.log('   Adding tax policies...');
+      await pool.query(`
+        INSERT INTO tax_policies (module, type, value, priority, status)
+        VALUES
+          ('air', 'percent', 12.00, 10, 'active'),
+          ('hotel', 'percent', 18.00, 10, 'active'),
+          ('sightseeing', 'percent', 18.00, 10, 'active'),
+          ('transfer', 'percent', 18.00, 10, 'active')
+      `);
+    }
+
+    console.log('✅ Seed data verified/added successfully');
+
+  } catch (error) {
+    console.error('⚠️ Error ensuring seed data:', error.message);
+  }
+}
+
 // Check if this script is being run directly
 if (require.main === module) {
   runPricingMigration().catch(console.error);
