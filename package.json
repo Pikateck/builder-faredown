@@ -40,7 +40,10 @@
     "react-date-range": "^2.0.1",
     "uuid": "^11.1.0",
     "zod": "^3.23.8",
-    "cors": "^2.8.5"
+    "cors": "^2.8.5",
+    "vite": "^6.2.2",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@hookform/resolvers": "^3.9.0",
