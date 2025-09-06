@@ -14,6 +14,7 @@ async function buildApp() {
 
     await build({
       root: __dirname,
+      plugins: [react()],
       build: {
         outDir: "dist/spa",
         sourcemap: false,
