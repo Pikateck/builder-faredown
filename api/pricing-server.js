@@ -91,7 +91,7 @@ app.get("/", (req, res) => {
 app.use("/api/pricing", pricingRoutes);
 
 // Price diff debugging endpoint
-app.get("/api/pricing/diff", createDiffEndpoint(pool));
+app.get("/api/pricing/diff", (req, res) => createDiffEndpoint(pool)(req, res));
 
 // Unified markups routes (for Admin CMS)
 try {
