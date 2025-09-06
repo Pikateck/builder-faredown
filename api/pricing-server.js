@@ -37,7 +37,7 @@ const pool = new Pool({
 });
 
 // Import pricing components
-const pricingRoutes = require("./routes/pricing");
+const createPricingRoutes = require("./routes/pricing");
 const { priceEcho, createDiffEndpoint } = require("./middleware/priceEcho");
 
 // Initialize Price Echo middleware
