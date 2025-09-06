@@ -26,23 +26,29 @@ app.use("/api", async (req, res) => {
   const targetUrl = `${apiServerUrl}${req.originalUrl}`;
 
   try {
-    const fetch = (await import('node-fetch')).default;
+    const fetch = (await import("node-fetch")).default;
     const response = await fetch(targetUrl, {
       method: req.method,
       headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        ...(req.headers['user-agent'] && { 'User-Agent': req.headers['user-agent'] }),
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        ...(req.headers["user-agent"] && {
+          "User-Agent": req.headers["user-agent"],
+        }),
       },
-      body: req.method !== 'GET' && req.method !== 'HEAD' ? JSON.stringify(req.body) : undefined,
+      body:
+        req.method !== "GET" && req.method !== "HEAD"
+          ? JSON.stringify(req.body)
+          : undefined,
     });
 
     const data = await response.text();
     res.status(response.status);
 
     // Set content type based on response
-    const contentType = response.headers.get('content-type') || 'application/json';
-    res.setHeader('Content-Type', contentType);
+    const contentType =
+      response.headers.get("content-type") || "application/json";
+    res.setHeader("Content-Type", contentType);
 
     res.send(data);
   } catch (error) {
@@ -50,7 +56,7 @@ app.use("/api", async (req, res) => {
     res.status(503).json({
       error: "API server unavailable",
       path: req.originalUrl,
-      message: error.message
+      message: error.message,
     });
   }
 });
