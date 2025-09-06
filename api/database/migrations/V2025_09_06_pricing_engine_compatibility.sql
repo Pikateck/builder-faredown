@@ -66,7 +66,7 @@ WHERE status = 'active';
 
 -- Add compatibility view for promo_codes
 CREATE OR REPLACE VIEW pricing_promo_codes AS
-SELECT 
+SELECT
   id::text as id,
   code,
   discount_type as type,  -- Map discount_type to type
@@ -78,7 +78,7 @@ SELECT
   0 as usage_count,      -- Default to 0
   1 as user_limit,       -- Default to 1
   status,
-  null as valid_from,    -- Not available in current schema
+  CURRENT_DATE as valid_from,    -- Default to current date
   expires_on as valid_to,
   created_at,
   updated_at
