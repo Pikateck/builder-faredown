@@ -90,6 +90,9 @@ app.get("/", (req, res) => {
 // Pricing routes
 app.use("/api/pricing", pricingRoutes);
 
+// Price diff debugging endpoint
+app.get("/api/pricing/diff", createDiffEndpoint(pool));
+
 // Unified markups routes (for Admin CMS)
 try {
   const markupsRoutes = require("./routes/markups-unified");
