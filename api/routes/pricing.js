@@ -1,516 +1,235 @@
 /**
- * Pricing API Routes
- * Handles quotes, bargaining, and booking confirmation for all modules
+ * Faredown Pricing API Routes
+ * Handles all pricing calculation endpoints
  */
 
-const express = require("express");
-const router = express.Router();
-const { body, validationResult, query } = require("express-validator");
-const PricingEngine = require("../services/pricingEngine");
+const express = require('express');
+const PricingEngine = require('../services/pricing/PricingEngine');
+const { Pool } = require('pg');
 
-// Database connection
-const { Pool } = require("pg");
+const router = express.Router();
+
+// Initialize database connection
 const pool = new Pool({
-  connectionString:
-    process.env.DATABASE_URL ||
-    "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db",
-  ssl:
-    process.env.NODE_ENV === "production"
-      ? { rejectUnauthorized: false }
-      : false,
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
 });
 
+// Initialize pricing engine
 const pricingEngine = new PricingEngine(pool);
 
-// Validation middleware
-const validateQuoteRequest = [
-  body("module")
-    .isIn(["air", "hotel", "sightseeing", "transfer"])
-    .withMessage("Invalid module"),
-  body("baseNetAmount")
-    .isFloat({ min: 0 })
-    .withMessage("Base net amount must be a positive number"),
-  body("origin").optional().trim().isLength({ max: 100 }),
-  body("destination").optional().trim().isLength({ max: 100 }),
-  body("serviceClass").optional().isIn(["Economy", "Business", "First"]),
-  body("hotelCategory")
-    .optional()
-    .isIn(["1-star", "2-star", "3-star", "4-star", "5-star"]),
-  body("serviceType").optional().isIn(["Standard", "Premium", "Luxury"]),
-  body("airlineCode").optional().trim().isLength({ max: 10 }),
-  body("promoCode").optional().trim().isLength({ max: 50 }),
-  body("userType")
-    .optional()
-    .isIn(["all", "b2c", "b2b"])
-    .withMessage("Invalid user type"),
-];
-
-const validateBargainRequest = [
-  body("tempId").trim().notEmpty().withMessage("Temp ID is required"),
-  body("offeredPrice")
-    .isFloat({ min: 0 })
-    .withMessage("Offered price must be a positive number"),
-  body("userId").optional().isUUID().withMessage("Invalid user ID format"),
-];
-
-const validateBookingRequest = [
-  body("tempId").trim().notEmpty().withMessage("Temp ID is required"),
-  body("paymentReference")
-    .trim()
-    .notEmpty()
-    .withMessage("Payment reference is required"),
-  body("userId").optional().isUUID().withMessage("Invalid user ID format"),
-];
-
-// POST /api/pricing/quote - Generate pricing quote
-router.post("/quote", validateQuoteRequest, async (req, res) => {
+/**
+ * POST /api/pricing/quote
+ * Main pricing calculation endpoint
+ * 
+ * Body example:
+ * {
+ *   "module": "air",
+ *   "origin": "BOM",
+ *   "destination": "JFK", 
+ *   "serviceClass": "Y",
+ *   "airlineCode": "AI",
+ *   "currency": "USD",
+ *   "baseFare": 512.35,
+ *   "userType": "b2c",
+ *   "debug": true,
+ *   "extras": { "promoCode": "WELCOME10", "pax": 1 }
+ * }
+ */
+router.post('/quote', async (req, res) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
+    const params = req.body;
+    
+    // Validate required parameters
+    const validation = pricingEngine.validateParams(params);
+    if (!validation.isValid) {
       return res.status(400).json({
         success: false,
-        error: "Validation failed",
-        details: errors.array(),
+        error: 'Validation failed',
+        details: validation.errors
       });
     }
 
-    const quote = await pricingEngine.generateQuote(req.body);
-
-    res.json({
-      success: true,
-      data: quote,
+    // Enable debug mode if environment variable is set or explicitly requested
+    const debugMode = (process.env.DEBUG_PRICING === 'true') || params.debug === true;
+    
+    // Calculate pricing
+    const result = await pricingEngine.quote({ 
+      ...params, 
+      debug: debugMode 
     });
-  } catch (error) {
-    console.error("Error generating quote:", error);
-    res.status(500).json({
-      success: false,
-      error: "Failed to generate quote",
-      message:
-        process.env.NODE_ENV === "development"
-          ? error.message
-          : "Internal server error",
-    });
-  }
-});
-
-// POST /api/pricing/bargain - Process bargain offer
-router.post("/bargain", validateBargainRequest, async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        error: "Validation failed",
-        details: errors.array(),
-      });
+    
+    // Increment promo usage if promo code was applied
+    if (params.extras?.promoCode && result.discount > 0) {
+      try {
+        await pricingEngine.incrementPromoUsage(params.extras.promoCode);
+      } catch (error) {
+        console.error('Error updating promo usage:', error);
+        // Don't fail the request for this
+      }
     }
-
-    const { tempId, offeredPrice, userId } = req.body;
-    const result = await pricingEngine.processBargainOffer(
-      tempId,
-      offeredPrice,
-      userId,
-    );
 
     res.json({
       success: true,
       data: result,
+      timestamp: new Date().toISOString()
     });
+
   } catch (error) {
-    console.error("Error processing bargain:", error);
+    console.error('Pricing quote error:', error);
     res.status(500).json({
       success: false,
-      error: "Failed to process bargain offer",
-      message:
-        process.env.NODE_ENV === "development"
-          ? error.message
-          : "Internal server error",
-    });
-  }
-});
-
-// POST /api/pricing/confirm - Confirm booking
-router.post("/confirm", validateBookingRequest, async (req, res) => {
-  try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({
-        success: false,
-        error: "Validation failed",
-        details: errors.array(),
-      });
-    }
-
-    const { tempId, paymentReference, userId } = req.body;
-    const booking = await pricingEngine.confirmBooking(
-      tempId,
-      paymentReference,
-      userId,
-    );
-
-    res.json({
-      success: true,
-      data: booking,
-    });
-  } catch (error) {
-    console.error("Error confirming booking:", error);
-    res.status(500).json({
-      success: false,
-      error: "Failed to confirm booking",
-      message:
-        process.env.NODE_ENV === "development"
-          ? error.message
-          : "Internal server error",
-    });
-  }
-});
-
-// GET /api/pricing/booking/:id - Get booking details
-router.get("/booking/:id", async (req, res) => {
-  try {
-    const bookingId = req.params.id;
-
-    if (!bookingId) {
-      return res.status(400).json({
-        success: false,
-        error: "Booking ID is required",
-      });
-    }
-
-    const booking = await pricingEngine.getBookingDetails(bookingId);
-
-    if (!booking) {
-      return res.status(404).json({
-        success: false,
-        error: "Booking not found",
-      });
-    }
-
-    res.json({
-      success: true,
-      data: booking,
-    });
-  } catch (error) {
-    console.error("Error fetching booking:", error);
-    res.status(500).json({
-      success: false,
-      error: "Failed to fetch booking",
-      message:
-        process.env.NODE_ENV === "development"
-          ? error.message
-          : "Internal server error",
-    });
-  }
-});
-
-// GET /api/pricing/analytics - Get pricing analytics
-router.get(
-  "/analytics",
-  [
-    query("module")
-      .optional()
-      .isIn(["air", "hotel", "sightseeing", "transfer"]),
-    query("startDate")
-      .optional()
-      .isISO8601()
-      .withMessage("Invalid start date format"),
-    query("endDate")
-      .optional()
-      .isISO8601()
-      .withMessage("Invalid end date format"),
-  ],
-  async (req, res) => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({
-          success: false,
-          error: "Validation failed",
-          details: errors.array(),
-        });
-      }
-
-      const { module, startDate, endDate } = req.query;
-      const analytics = await pricingEngine.getAnalytics(
-        module,
-        startDate,
-        endDate,
-      );
-
-      res.json({
-        success: true,
-        data: analytics,
-      });
-    } catch (error) {
-      console.error("Error fetching analytics:", error);
-      res.status(500).json({
-        success: false,
-        error: "Failed to fetch analytics",
-        message:
-          process.env.NODE_ENV === "development"
-            ? error.message
-            : "Internal server error",
-      });
-    }
-  },
-);
-
-// GET /api/pricing/markup-rules - Get all markup rules
-router.get(
-  "/markup-rules",
-  [
-    query("module")
-      .optional()
-      .isIn(["air", "hotel", "sightseeing", "transfer"]),
-    query("status").optional().isIn(["active", "inactive"]),
-    query("page").optional().isInt({ min: 1 }),
-    query("limit").optional().isInt({ min: 1, max: 100 }),
-  ],
-  async (req, res) => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({
-          success: false,
-          error: "Validation failed",
-          details: errors.array(),
-        });
-      }
-
-      const { module, status, page = 1, limit = 20 } = req.query;
-      const offset = (page - 1) * limit;
-
-      let whereConditions = [];
-      let queryParams = [];
-      let paramIndex = 1;
-
-      if (module) {
-        whereConditions.push(`module = $${paramIndex}`);
-        queryParams.push(module);
-        paramIndex++;
-      }
-
-      if (status) {
-        whereConditions.push(`status = $${paramIndex}`);
-        queryParams.push(status);
-        paramIndex++;
-      }
-
-      const whereClause =
-        whereConditions.length > 0
-          ? `WHERE ${whereConditions.join(" AND ")}`
-          : "";
-
-      // Get total count
-      const countQuery = `SELECT COUNT(*) as total FROM markup_rules ${whereClause}`;
-      const countResult = await pool.query(countQuery, queryParams);
-      const total = parseInt(countResult.rows[0].total);
-
-      // Get paginated data
-      const dataQuery = `
-      SELECT * FROM markup_rules 
-      ${whereClause}
-      ORDER BY module, priority DESC, created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
-    `;
-      queryParams.push(limit, offset);
-      const dataResult = await pool.query(dataQuery, queryParams);
-
-      res.json({
-        success: true,
-        data: dataResult.rows,
-        pagination: {
-          current_page: parseInt(page),
-          per_page: parseInt(limit),
-          total_items: total,
-          total_pages: Math.ceil(total / limit),
-        },
-      });
-    } catch (error) {
-      console.error("Error fetching markup rules:", error);
-      res.status(500).json({
-        success: false,
-        error: "Failed to fetch markup rules",
-        message:
-          process.env.NODE_ENV === "development"
-            ? error.message
-            : "Internal server error",
-      });
-    }
-  },
-);
-
-// GET /api/pricing/promo-codes - Get all promo codes
-router.get(
-  "/promo-codes",
-  [
-    query("module")
-      .optional()
-      .isIn(["air", "hotel", "sightseeing", "transfer"]),
-    query("status").optional().isIn(["active", "pending", "inactive"]),
-    query("page").optional().isInt({ min: 1 }),
-    query("limit").optional().isInt({ min: 1, max: 100 }),
-  ],
-  async (req, res) => {
-    try {
-      const errors = validationResult(req);
-      if (!errors.isEmpty()) {
-        return res.status(400).json({
-          success: false,
-          error: "Validation failed",
-          details: errors.array(),
-        });
-      }
-
-      const { module, status, page = 1, limit = 20 } = req.query;
-      const offset = (page - 1) * limit;
-
-      let whereConditions = [];
-      let queryParams = [];
-      let paramIndex = 1;
-
-      if (module) {
-        whereConditions.push(`module = $${paramIndex}`);
-        queryParams.push(module);
-        paramIndex++;
-      }
-
-      if (status) {
-        whereConditions.push(`status = $${paramIndex}`);
-        queryParams.push(status);
-        paramIndex++;
-      }
-
-      const whereClause =
-        whereConditions.length > 0
-          ? `WHERE ${whereConditions.join(" AND ")}`
-          : "";
-
-      // Get total count
-      const countQuery = `SELECT COUNT(*) as total FROM promo_codes ${whereClause}`;
-      const countResult = await pool.query(countQuery, queryParams);
-      const total = parseInt(countResult.rows[0].total);
-
-      // Get paginated data with budget usage
-      const dataQuery = `
-      SELECT *,
-             CASE 
-               WHEN marketing_budget > 0 THEN (budget_spent / marketing_budget * 100)::numeric(5,2)
-               ELSE 0
-             END as budget_usage_percent
-      FROM promo_codes 
-      ${whereClause}
-      ORDER BY module, created_at DESC
-      LIMIT $${paramIndex} OFFSET $${paramIndex + 1}
-    `;
-      queryParams.push(limit, offset);
-      const dataResult = await pool.query(dataQuery, queryParams);
-
-      res.json({
-        success: true,
-        data: dataResult.rows,
-        pagination: {
-          current_page: parseInt(page),
-          per_page: parseInt(limit),
-          total_items: total,
-          total_pages: Math.ceil(total / limit),
-        },
-      });
-    } catch (error) {
-      console.error("Error fetching promo codes:", error);
-      res.status(500).json({
-        success: false,
-        error: "Failed to fetch promo codes",
-        message:
-          process.env.NODE_ENV === "development"
-            ? error.message
-            : "Internal server error",
-      });
-    }
-  },
-);
-
-// POST /api/pricing/test-quote - Test endpoint with sample data
-router.post("/test-quote", async (req, res) => {
-  try {
-    const testCases = [
-      {
-        name: "Business Class Flight",
-        params: {
-          module: "air",
-          baseNetAmount: 5000,
-          origin: "DXB",
-          destination: "LHR",
-          serviceClass: "Business",
-          promoCode: "BUSINESSDEAL",
-        },
-      },
-      {
-        name: "First Class Flight",
-        params: {
-          module: "air",
-          baseNetAmount: 8000,
-          origin: "JFK",
-          destination: "LAX",
-          serviceClass: "First",
-          promoCode: "FIRSTLUXE",
-        },
-      },
-      {
-        name: "5-Star Hotel",
-        params: {
-          module: "hotel",
-          baseNetAmount: 3000,
-          destination: "Dubai",
-          hotelCategory: "5-star",
-          promoCode: "FIVESTARSTAY",
-        },
-      },
-      {
-        name: "Luxury Transfer",
-        params: {
-          module: "transfer",
-          baseNetAmount: 800,
-          origin: "Dubai Airport",
-          destination: "Dubai Marina",
-          serviceType: "Luxury",
-          promoCode: "LUXURYTREAT",
-        },
-      },
-    ];
-
-    const results = [];
-
-    for (const testCase of testCases) {
-      try {
-        const quote = await pricingEngine.generateQuote(testCase.params);
-        results.push({
-          name: testCase.name,
-          success: true,
-          quote,
-        });
-      } catch (error) {
-        results.push({
-          name: testCase.name,
-          success: false,
-          error: error.message,
-        });
-      }
-    }
-
-    res.json({
-      success: true,
-      message: "Test quotes generated",
-      data: results,
-    });
-  } catch (error) {
-    console.error("Error in test quotes:", error);
-    res.status(500).json({
-      success: false,
-      error: "Failed to generate test quotes",
+      error: 'Pricing calculation failed',
       message: error.message,
+      ...(process.env.NODE_ENV === 'development' ? { stack: error.stack } : {})
     });
   }
+});
+
+/**
+ * GET /api/pricing/rules/preview
+ * Preview which markup rule would match given parameters
+ * 
+ * Query params: module, origin, destination, serviceClass, hotelCategory, 
+ *               serviceType, airlineCode, userType, baseFare
+ */
+router.get('/rules/preview', async (req, res) => {
+  try {
+    const params = {
+      module: req.query.module || 'air',
+      origin: req.query.origin || null,
+      destination: req.query.destination || null,
+      serviceClass: req.query.serviceClass || null,
+      hotelCategory: req.query.hotelCategory || null,
+      serviceType: req.query.serviceType || null,
+      airlineCode: req.query.airlineCode || null,
+      userType: req.query.userType || 'all',
+      currency: req.query.currency || 'USD',
+      baseFare: Number(req.query.baseFare || 0)
+    };
+
+    const rule = await pricingEngine.getApplicableMarkupRule(params);
+    const taxPolicy = await pricingEngine.getTaxPolicy(params);
+    
+    // Get promo if provided
+    let promo = null;
+    if (req.query.promoCode) {
+      promo = await pricingEngine.getPromoDiscount({
+        ...params,
+        extras: { promoCode: req.query.promoCode }
+      });
+    }
+
+    res.json({
+      success: true,
+      data: {
+        matchedRule: rule,
+        taxPolicy: taxPolicy,
+        promoCode: promo,
+        parameters: params
+      },
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('Rules preview error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Rule preview failed',
+      message: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/pricing/rules/summary
+ * Get pricing rules summary for admin dashboard
+ */
+router.get('/rules/summary', async (req, res) => {
+  try {
+    const module = req.query.module || null;
+    const summary = await pricingEngine.getRulesSummary(module);
+    
+    res.json({
+      success: true,
+      data: summary,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('Rules summary error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Failed to get rules summary',
+      message: error.message
+    });
+  }
+});
+
+/**
+ * POST /api/pricing/validate
+ * Validate pricing parameters without calculating
+ */
+router.post('/validate', (req, res) => {
+  try {
+    const validation = pricingEngine.validateParams(req.body);
+    
+    res.json({
+      success: true,
+      data: validation,
+      timestamp: new Date().toISOString()
+    });
+
+  } catch (error) {
+    console.error('Validation error:', error);
+    res.status(500).json({
+      success: false,
+      error: 'Validation failed',
+      message: error.message
+    });
+  }
+});
+
+/**
+ * GET /api/pricing/health
+ * Health check endpoint
+ */
+router.get('/health', async (req, res) => {
+  try {
+    // Test database connection
+    await pool.query('SELECT 1');
+    
+    res.json({
+      success: true,
+      status: 'healthy',
+      service: 'Faredown Pricing Engine',
+      timestamp: new Date().toISOString(),
+      version: '1.0.0'
+    });
+
+  } catch (error) {
+    console.error('Health check failed:', error);
+    res.status(503).json({
+      success: false,
+      status: 'unhealthy',
+      error: error.message,
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+/**
+ * Error handling middleware for pricing routes
+ */
+router.use((error, req, res, next) => {
+  console.error('Pricing API error:', error);
+  
+  res.status(error.status || 500).json({
+    success: false,
+    error: 'Internal server error',
+    message: process.env.NODE_ENV === 'development' ? error.message : 'Something went wrong',
+    timestamp: new Date().toISOString()
+  });
 });
 
 module.exports = router;
