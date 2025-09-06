@@ -1,39 +1,24 @@
 #!/usr/bin/env node
 
-// Standalone build script for Render deployment
-import { spawn } from 'child_process';
+// Simple build script that avoids vite config import issues
+import { execSync } from 'child_process';
 import { promises as fs } from 'fs';
-import path from 'path';
 
-console.log('🔨 Starting Render build...');
+console.log('🔨 Building for Render deployment...');
 
-// Ensure dist directory exists
-await fs.mkdir('dist/spa', { recursive: true });
+try {
+  // Ensure output directory
+  await fs.mkdir('dist/spa', { recursive: true });
 
-// Copy index.html to dist
-await fs.copyFile('index.html', 'dist/spa/index.html');
+  // Run vite build with no config to avoid import issues
+  console.log('🏗️ Running vite build...');
+  execSync('npx vite build --outDir dist/spa --emptyOutDir --minify', {
+    stdio: 'inherit',
+    env: { ...process.env, NODE_ENV: 'production' }
+  });
 
-// Use inline vite config to avoid import issues
-const viteArgs = [
-  'vite', 'build',
-  '--outDir', 'dist/spa',
-  '--emptyOutDir',
-  '--config-file', 'false', // Don't use any config file
-  '--mode', 'production'
-];
-
-console.log('🏗️ Running vite build...');
-
-const vite = spawn('npx', viteArgs, { 
-  stdio: 'inherit',
-  shell: true 
-});
-
-vite.on('close', (code) => {
-  if (code === 0) {
-    console.log('✅ Build completed successfully!');
-  } else {
-    console.error('❌ Build failed with code:', code);
-    process.exit(1);
-  }
-});
+  console.log('✅ Build completed successfully!');
+} catch (error) {
+  console.error('❌ Build failed:', error.message);
+  process.exit(1);
+}
