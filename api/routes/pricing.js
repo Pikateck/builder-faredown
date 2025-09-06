@@ -8,6 +8,9 @@ const PricingEngine = require('../services/pricing/PricingEngine');
 
 // Factory function to create pricing routes with database pool
 function createPricingRoutes(pool) {
+  console.log('[PricingRoutes] Creating routes with pool:', !!pool);
+  console.log('[PricingRoutes] Pool config:', pool?.options || 'No options available');
+
   const router = express.Router();
 
   // Initialize pricing engine with passed pool
