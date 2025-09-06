@@ -9,7 +9,8 @@ const { Pool } = require('pg');
 
 const router = express.Router();
 
-// Initialize database connection
+// Get database pool from parent (pricing server should pass it)
+// For now, create a properly configured pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false }
