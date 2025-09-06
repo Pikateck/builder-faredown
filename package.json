@@ -17,8 +17,8 @@
   },
   "scripts": {
     "dev": "node dev-server.js",
-    "build": "npx vite build --outDir dist/spa",
-    "build:client": "npx vite build --outDir dist/spa",
+    "build": "npx vite build --config vite.config.simple.js --outDir dist/spa",
+    "build:client": "npx vite build --config vite.config.simple.js --outDir dist/spa",
     "build:server": "echo 'Server build skipped for production'",
     "preview": "npx vite preview",
     "start": "node server.js",
