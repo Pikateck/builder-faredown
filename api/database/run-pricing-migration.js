@@ -15,17 +15,38 @@ const pool = new Pool({
 
 async function runPricingMigration() {
   console.log('🚀 Starting Pricing Engine Migration...');
-  
+
   try {
-    // Read the migration SQL file
-    const migrationPath = path.join(__dirname, 'migrations', 'V2025_09_06_pricing_engine.sql');
-    const migrationSQL = fs.readFileSync(migrationPath, 'utf8');
-    
-    console.log('📁 Migration file loaded:', migrationPath);
-    
-    // Execute the migration
-    console.log('⚡ Executing migration...');
-    await pool.query(migrationSQL);
+    // Check if pricing tables already exist
+    console.log('🔍 Checking existing tables...');
+    const tablesCheck = await pool.query(`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
+      AND table_name IN ('markup_rules', 'promo_codes', 'tax_policies', 'price_checkpoints')
+    `);
+
+    console.log(`📊 Found ${tablesCheck.rows.length}/4 pricing tables already exist`);
+    tablesCheck.rows.forEach(row => console.log(`   ✓ ${row.table_name}`));
+
+    if (tablesCheck.rows.length === 4) {
+      console.log('✅ All pricing tables already exist - skipping migration');
+      console.log('🌱 Verifying seed data...');
+
+      // Check and add seed data if missing
+      await ensureSeedData();
+
+    } else {
+      // Read the migration SQL file
+      const migrationPath = path.join(__dirname, 'migrations', 'V2025_09_06_pricing_engine.sql');
+      const migrationSQL = fs.readFileSync(migrationPath, 'utf8');
+
+      console.log('📁 Migration file loaded:', migrationPath);
+
+      // Execute the migration
+      console.log('⚡ Executing migration...');
+      await pool.query(migrationSQL);
+    }
     
     console.log('✅ Pricing Engine migration completed successfully!');
     console.log('');
