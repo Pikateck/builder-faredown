@@ -2902,7 +2902,7 @@ export default function HotelDetails() {
                     </div>
                     <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center relative">
                       <div className="text-center">
-                        <div className="text-4xl mb-2">���️</div>
+                        <div className="text-4xl mb-2">🗺️</div>
                         <div className="text-gray-600">Interactive Map</div>
                         <div className="text-sm text-gray-500">
                           Hotel location and nearby landmarks
