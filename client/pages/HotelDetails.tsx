@@ -1890,14 +1890,14 @@ export default function HotelDetails() {
                               )}
                               {index > 0 && (
                                 <Badge className="bg-orange-100 text-orange-800 border border-orange-200 text-xs font-semibold px-3 py-1">
-                                  Upgrade for +���
+                                  Upgrade for +₹
                                   {room.pricePerNight -
                                     roomTypes[0].pricePerNight}
                                 </Badge>
                               )}
                             </div>
                             <div className="text-sm text-gray-600">
-                              {room.type} �� {room.details}
+                              {room.type} • {room.details}
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
@@ -1990,7 +1990,7 @@ export default function HotelDetails() {
                               <div className="lg:col-span-3 mt-4 lg:mt-0">
                                 <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
                                   <div className="text-2xl font-bold text-gray-900 mb-1">
-                                    ���
+                                    ₹
                                     {calculateTotalPrice(
                                       room.pricePerNight,
                                     ).toLocaleString()}
@@ -2906,7 +2906,7 @@ export default function HotelDetails() {
 
                 <div className="mt-4">
                   <div className="flex items-center gap-2 text-sm text-gray-600">
-                    <span>��️</span>
+                    <span>🗺️</span>
                     <span>
                       <strong>Interactive View</strong>
                     </span>
