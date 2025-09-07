@@ -2137,7 +2137,7 @@ export default function HotelDetails() {
                         { icon: "🔥", text: "Fire extinguishers" },
                         { icon: "📹", text: "CCTV surveillance" },
                         { icon: "🚨", text: "Smoke alarms" },
-                        { icon: "����", text: "Security alarm" },
+                        { icon: "🔒", text: "Security alarm" },
                         { icon: "🔑", text: "Key card access" },
                         { icon: "🔐", text: "In-room safe" },
                         { icon: "👮", text: "24-hour security" },
@@ -2165,7 +2165,7 @@ export default function HotelDetails() {
                     <div className="grid grid-cols-2 gap-2 text-sm">
                       {[
                         { icon: "🇺🇸", text: "English" },
-                        { icon: "🇦����", text: "Arabic" },
+                        { icon: "🇦🇪", text: "Arabic" },
                         { icon: "🇩🇪", text: "German" },
                         { icon: "🇫🇷", text: "French" },
                         { icon: "🇪🇸", text: "Spanish" },
