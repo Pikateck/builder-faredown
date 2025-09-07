@@ -768,16 +768,31 @@ export default function HotelDetails() {
   }, [roomTypes.length]);
 
   // Create final hotel object with calculated roomTypes
-  // Ensure no duplicate room types by name
+  // Ensure no duplicate room types by name with comprehensive deduplication
   const deduplicatedRoomTypes = (() => {
     const seen = new Set();
-    return roomTypes.filter((room) => {
-      if (seen.has(room.name)) {
-        return false;
-      }
-      seen.add(room.name);
-      return true;
+    const uniqueRooms = [];
+
+    console.log("🔍 Before deduplication - Total rooms:", roomTypes.length);
+    roomTypes.forEach(room => {
+      console.log("📋 Room:", room.name, "ID:", room.id);
     });
+
+    for (const room of roomTypes) {
+      // Create a key based on room name (case-insensitive)
+      const key = room.name.toLowerCase().trim();
+
+      if (!seen.has(key)) {
+        seen.add(key);
+        uniqueRooms.push(room);
+        console.log("✅ Added unique room:", room.name);
+      } else {
+        console.log("❌ Skipped duplicate room:", room.name);
+      }
+    }
+
+    console.log("🎯 After deduplication - Unique rooms:", uniqueRooms.length);
+    return uniqueRooms.sort((a, b) => a.pricePerNight - b.pricePerNight);
   })();
 
   const hotel = tempHotelData
