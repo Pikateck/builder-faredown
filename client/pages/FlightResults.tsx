@@ -578,7 +578,7 @@ export default function FlightResults() {
         };
 
         const flightResults = await flightsService.searchFlights(searchRequest);
-        console.log("�� Loaded flights:", flightResults.length);
+        console.log("✈️ Loaded flights:", flightResults.length);
 
         setFlights(flightResults);
       } catch (error) {
@@ -1487,7 +1487,7 @@ export default function FlightResults() {
                         .concat(multiCityLegs[multiCityLegs.length - 1].toCode)
                         .join(" → ")} • `
                     : selectedFromCity && selectedToCity
-                      ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
+                      ? `${cityData[selectedFromCity]?.code || ""} ��� ${cityData[selectedToCity]?.code || ""} • `
                       : "Search Results • "}
                   {tripType === "one-way"
                     ? "One way"
@@ -1756,10 +1756,10 @@ export default function FlightResults() {
                 <DropdownMenu style={{ display: "none" }}>
                   <DropdownMenuContent className="w-56 max-h-60 overflow-y-auto">
                     {[
-                      { code: "en", name: "English", flag: "��🇧" },
+                      { code: "en", name: "English", flag: "🇬🇧" },
                       { code: "es", name: "Español", flag: "🇪🇸" },
                       { code: "fr", name: "Français", flag: "🇫🇷" },
-                      { code: "de", name: "Deutsch", flag: "���🇪" },
+                      { code: "de", name: "Deutsch", flag: "🇩🇪" },
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
@@ -1798,7 +1798,7 @@ export default function FlightResults() {
                     {Object.entries({
                       USD: { symbol: "$", name: "US Dollar" },
                       EUR: { symbol: "€", name: "Euro" },
-                      GBP: { symbol: "£", name: "British Pound" },
+                      GBP: { symbol: "��", name: "British Pound" },
                       INR: { symbol: "₹", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
                       SAR: { symbol: "ر.س", name: "Saudi Riyal" },
@@ -4325,7 +4325,7 @@ export default function FlightResults() {
                                           Faredown Fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ₹500
+                                          ��500
                                         </span>
                                       </div>
                                     </div>
