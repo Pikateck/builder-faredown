@@ -2852,8 +2852,8 @@ export default function FlightResults() {
                       <div className="space-y-3">
                         <div className="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-3">
                           <p className="text-xs text-blue-700 text-center">
-                            ✈️ <strong>Next:</strong> Choose your seat, meals
-                            & extras before final payment
+                            ✈️ <strong>Next:</strong> Choose your seat, meals &
+                            extras before final payment
                           </p>
                         </div>
                         <Button

@@ -687,11 +687,19 @@ export default function SightseeingDetails() {
             isOpen={isBargainModalOpen}
             onClose={() => setIsBargainModalOpen(false)}
             onAccept={(finalPrice, orderRef) => {
-              console.log("Sightseeing details bargain booking success with price:", finalPrice, "Order ref:", orderRef);
+              console.log(
+                "Sightseeing details bargain booking success with price:",
+                finalPrice,
+                "Order ref:",
+                orderRef,
+              );
               handleBargainSuccess(finalPrice);
             }}
             onHold={(orderRef) => {
-              console.log("Sightseeing details bargain offer on hold with order ref:", orderRef);
+              console.log(
+                "Sightseeing details bargain offer on hold with order ref:",
+                orderRef,
+              );
             }}
             userName={userFirstName}
             module="sightseeing"
@@ -1300,45 +1308,55 @@ export default function SightseeingDetails() {
 
                                 return (
                                   <>
-                                    {priceCalc?.breakdown?.adults?.count > 0 && (
+                                    {priceCalc?.breakdown?.adults?.count >
+                                      0 && (
                                       <div className="flex justify-between items-center">
                                         <span className="text-gray-600">
-                                          {priceCalc?.breakdown?.adults?.count || 0} ×
-                                          Adult (
+                                          {priceCalc?.breakdown?.adults
+                                            ?.count || 0}{" "}
+                                          × Adult (
                                           {formatPrice(
-                                            priceCalc?.breakdown?.adults?.price || 0,
+                                            priceCalc?.breakdown?.adults
+                                              ?.price || 0,
                                           )}
                                           )
                                         </span>
                                         <span className="font-medium text-gray-900">
                                           {formatPrice(
-                                            priceCalc?.breakdown?.adults?.total || 0,
+                                            priceCalc?.breakdown?.adults
+                                              ?.total || 0,
                                           )}
                                         </span>
                                       </div>
                                     )}
-                                    {priceCalc?.breakdown?.children?.count > 0 && (
+                                    {priceCalc?.breakdown?.children?.count >
+                                      0 && (
                                       <div className="flex justify-between items-center">
                                         <span className="text-gray-600">
-                                          {priceCalc?.breakdown?.children?.count || 0} ×
-                                          Child (
+                                          {priceCalc?.breakdown?.children
+                                            ?.count || 0}{" "}
+                                          × Child (
                                           {formatPrice(
-                                            priceCalc?.breakdown?.children?.price || 0,
+                                            priceCalc?.breakdown?.children
+                                              ?.price || 0,
                                           )}
                                           )
                                         </span>
                                         <span className="font-medium text-gray-900">
                                           {formatPrice(
-                                            priceCalc?.breakdown?.children?.total || 0,
+                                            priceCalc?.breakdown?.children
+                                              ?.total || 0,
                                           )}
                                         </span>
                                       </div>
                                     )}
-                                    {priceCalc?.breakdown?.infants?.count > 0 && (
+                                    {priceCalc?.breakdown?.infants?.count >
+                                      0 && (
                                       <div className="flex justify-between items-center">
                                         <span className="text-gray-600">
-                                          {priceCalc?.breakdown?.infants?.count || 0} ×
-                                          Infant (Free)
+                                          {priceCalc?.breakdown?.infants
+                                            ?.count || 0}{" "}
+                                          × Infant (Free)
                                         </span>
                                         <span className="font-medium text-gray-900">
                                           {formatPrice(0)}
@@ -1457,11 +1475,19 @@ export default function SightseeingDetails() {
             isOpen={isBargainModalOpen}
             onClose={() => setIsBargainModalOpen(false)}
             onAccept={(finalPrice, orderRef) => {
-              console.log("Sightseeing details bargain booking success with price:", finalPrice, "Order ref:", orderRef);
+              console.log(
+                "Sightseeing details bargain booking success with price:",
+                finalPrice,
+                "Order ref:",
+                orderRef,
+              );
               handleBargainSuccess(finalPrice);
             }}
             onHold={(orderRef) => {
-              console.log("Sightseeing details bargain offer on hold with order ref:", orderRef);
+              console.log(
+                "Sightseeing details bargain offer on hold with order ref:",
+                orderRef,
+              );
             }}
             userName={userFirstName}
             module="sightseeing"

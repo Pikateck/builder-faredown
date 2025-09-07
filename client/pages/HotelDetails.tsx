@@ -616,7 +616,7 @@ export default function HotelDetails() {
       // If too few options returned, synthesize sensible upgrades so users can choose
       if (mapped.length < 3) {
         const base = Math.min(...mapped.map((r) => r.pricePerNight || 167));
-        const existingNames = new Set(mapped.map(room => room.name));
+        const existingNames = new Set(mapped.map((room) => room.name));
 
         const potentialExtras = [
           {
@@ -644,7 +644,11 @@ export default function HotelDetails() {
             nonRefundable: false,
             image:
               "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop",
-            features: ["Executive Suite", "Business Lounge", "Premium amenities"],
+            features: [
+              "Executive Suite",
+              "Business Lounge",
+              "Premium amenities",
+            ],
             isLiveData: false,
           },
           {
@@ -664,7 +668,9 @@ export default function HotelDetails() {
         ];
 
         // Only add extras that don't duplicate existing room names
-        const extras = potentialExtras.filter(extra => !existingNames.has(extra.name));
+        const extras = potentialExtras.filter(
+          (extra) => !existingNames.has(extra.name),
+        );
 
         return [...mapped, ...extras]
           .slice(0, 3)
@@ -774,7 +780,7 @@ export default function HotelDetails() {
     const uniqueRooms = [];
 
     console.log("🔍 Before deduplication - Total rooms:", roomTypes.length);
-    roomTypes.forEach(room => {
+    roomTypes.forEach((room) => {
       console.log("📋 Room:", room.name, "ID:", room.id);
     });
 
@@ -805,7 +811,8 @@ export default function HotelDetails() {
         id: parseInt(hotelId || "1"),
         name: "Hotel " + (hotelId || "1"),
         location: "Dubai, United Arab Emirates",
-        image: "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
+        image:
+          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
         images: [],
         rating: 4.2,
         reviews: 1247,
@@ -814,7 +821,8 @@ export default function HotelDetails() {
         totalNights: totalNights,
         rooms: parseInt(roomsParam || "1"),
         adults: parseInt(adultsParam || "2"),
-        description: "Experience exceptional hospitality at this premium hotel.",
+        description:
+          "Experience exceptional hospitality at this premium hotel.",
         amenities: ["WiFi", "Pool", "Restaurant"],
         features: ["City View"],
         currentPrice: 167,
@@ -823,21 +831,25 @@ export default function HotelDetails() {
         available: true,
         supplier: "fallback",
         isLiveData: false,
-        roomTypes: deduplicatedRoomTypes.length > 0 ? deduplicatedRoomTypes : [
-          {
-            id: "standard-room",
-            name: "Standard Double Room",
-            type: "1 X Standard Double",
-            details: "Comfortable double room",
-            pricePerNight: 167,
-            status: "Available",
-            statusColor: "green",
-            nonRefundable: true,
-            image: "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop",
-            features: ["Standard Room", "Free WiFi", "Air conditioning"],
-            isLiveData: false,
-          }
-        ]
+        roomTypes:
+          deduplicatedRoomTypes.length > 0
+            ? deduplicatedRoomTypes
+            : [
+                {
+                  id: "standard-room",
+                  name: "Standard Double Room",
+                  type: "1 X Standard Double",
+                  details: "Comfortable double room",
+                  pricePerNight: 167,
+                  status: "Available",
+                  statusColor: "green",
+                  nonRefundable: true,
+                  image:
+                    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop",
+                  features: ["Standard Room", "Free WiFi", "Air conditioning"],
+                  isLiveData: false,
+                },
+              ],
       };
 
   const tabs = [

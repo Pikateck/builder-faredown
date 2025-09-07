@@ -3889,14 +3889,13 @@ export default function FlightResults() {
                                                   or change your flight.
                                                 </p>
                                                 <p>
-                                                  ⚠️ Cancellation/Flight
-                                                  change charges are indicated
-                                                  per traveller. Clearing will
-                                                  stop accepting
-                                                  cancellation/change request if
-                                                  72 hours before departure of
-                                                  the flight, depending on the
-                                                  airline.
+                                                  ⚠️ Cancellation/Flight change
+                                                  charges are indicated per
+                                                  traveller. Clearing will stop
+                                                  accepting cancellation/change
+                                                  request if 72 hours before
+                                                  departure of the flight,
+                                                  depending on the airline.
                                                 </p>
                                               </div>
                                             </div>

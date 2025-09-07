@@ -229,11 +229,25 @@ export default function BookingConfirmation() {
             image:
               "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300",
           },
-          checkIn: searchParams.get("checkIn") || getDisplayData().checkIn || "2025-07-16",
-          checkOut: searchParams.get("checkOut") || getDisplayData().checkOut || "2025-07-19",
+          checkIn:
+            searchParams.get("checkIn") ||
+            getDisplayData().checkIn ||
+            "2025-07-16",
+          checkOut:
+            searchParams.get("checkOut") ||
+            getDisplayData().checkOut ||
+            "2025-07-19",
           nights: parseInt(nights) || getDisplayData().nights || 3,
-          guests: parseInt(searchParams.get("guests") || searchParams.get("adults") || "0") + parseInt(searchParams.get("children") || "0") || getDisplayData().totalGuests || 2,
-          rooms: parseInt(searchParams.get("rooms") || "0") || getDisplayData().rooms || 1,
+          guests:
+            parseInt(
+              searchParams.get("guests") || searchParams.get("adults") || "0",
+            ) + parseInt(searchParams.get("children") || "0") ||
+            getDisplayData().totalGuests ||
+            2,
+          rooms:
+            parseInt(searchParams.get("rooms") || "0") ||
+            getDisplayData().rooms ||
+            1,
           total: parseInt(price),
           originalPrice: bargained === "true" ? parseInt(price) * 1.15 : null,
           bargained: bargained === "true",
@@ -1761,7 +1775,8 @@ export default function BookingConfirmation() {
                       <p className="font-bold">
                         {booking.checkIn
                           ? formatDate(booking.checkIn)
-                          : getDisplayData().checkIn || formatDate(new Date().toISOString())}
+                          : getDisplayData().checkIn ||
+                            formatDate(new Date().toISOString())}
                       </p>
                     </div>
                     <div className="bg-gray-50 p-3 rounded-lg text-center">
@@ -1769,7 +1784,8 @@ export default function BookingConfirmation() {
                       <p className="font-bold">
                         {booking.checkOut
                           ? formatDate(booking.checkOut)
-                          : getDisplayData().checkOut || formatDate(new Date().toISOString())}
+                          : getDisplayData().checkOut ||
+                            formatDate(new Date().toISOString())}
                       </p>
                     </div>
                   </div>
