@@ -237,7 +237,7 @@ export function BookingSearchForm() {
             country: dest.country,
             type: dest.type as "city" | "region" | "country" | "landmark",
             popular: (dest as any).popular || false,
-            flag: (dest as any).flag || "����",
+            flag: (dest as any).flag || "🏳️",
           }));
 
           setDestinationSuggestions(formattedResults);
