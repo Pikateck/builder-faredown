@@ -1798,7 +1798,7 @@ export default function FlightResults() {
                     {Object.entries({
                       USD: { symbol: "$", name: "US Dollar" },
                       EUR: { symbol: "€", name: "Euro" },
-                      GBP: { symbol: "��", name: "British Pound" },
+                      GBP: { symbol: "���", name: "British Pound" },
                       INR: { symbol: "₹", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
                       SAR: { symbol: "ر.س", name: "Saudi Riyal" },
@@ -2865,7 +2865,7 @@ export default function FlightResults() {
                                         Base fare:
                                       </span>
                                       <span className="font-medium text-gray-900">
-                                        ��
+                                        ₹
                                         {(
                                           flight.price?.breakdown?.baseFare || 0
                                         ).toLocaleString("en-IN")}
@@ -4325,7 +4325,7 @@ export default function FlightResults() {
                                           Faredown Fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ��500
+                                          ���500
                                         </span>
                                       </div>
                                     </div>
