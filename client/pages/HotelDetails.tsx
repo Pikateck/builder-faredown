@@ -1800,8 +1800,7 @@ export default function HotelDetails() {
                   </div>
                 </div>
 
-                {/* DISABLED: Duplicate Available Rooms Section - Causes duplication in mobile view
-                {/* Available Rooms Section */}
+                {false && (
                 <div className="bg-white rounded-lg border border-gray-200 overflow-hidden">
                   <div className="bg-blue-700 text-white p-3">
                     <h2 className="text-base font-semibold">
@@ -2029,7 +2028,7 @@ export default function HotelDetails() {
                     ))}
                   </div>
                 </div>
-                {/* END OF DISABLED DUPLICATE SECTION */}
+                )}
               </>
             )}
 
