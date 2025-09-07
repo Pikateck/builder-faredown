@@ -377,7 +377,7 @@ export default function SightseeingDetails() {
           return;
         }
 
-        console.log("�� Setting attraction data:", attractionData.name);
+        console.log("🏛️ Setting attraction data:", attractionData.name);
         setAttraction(attractionData);
       } catch (err) {
         console.error("Error loading attraction:", err);
