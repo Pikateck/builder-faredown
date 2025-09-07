@@ -616,7 +616,9 @@ export default function HotelDetails() {
       // If too few options returned, synthesize sensible upgrades so users can choose
       if (mapped.length < 3) {
         const base = Math.min(...mapped.map((r) => r.pricePerNight || 167));
-        const extras = [
+        const existingNames = new Set(mapped.map(room => room.name));
+
+        const potentialExtras = [
           {
             id: `gen-king-${mapped.length}`,
             name: "King Room with Skyline View",
@@ -632,7 +634,7 @@ export default function HotelDetails() {
             isLiveData: false,
           },
           {
-            id: `gen-deluxe-${mapped.length}`,
+            id: `gen-deluxe-${mapped.length + 1}`,
             name: "Deluxe Suite with Ocean View",
             type: "1 X Deluxe Suite",
             details: "Suite with separate living area",
@@ -645,7 +647,25 @@ export default function HotelDetails() {
             features: ["Ocean View Suite", "Premium amenities"],
             isLiveData: false,
           },
+          {
+            id: `gen-superior-${mapped.length + 2}`,
+            name: "Superior Room with City View",
+            type: "1 X Superior Room",
+            details: "Superior accommodations with city view",
+            pricePerNight: base + 30,
+            status: "Upgrade for +₹30",
+            statusColor: "blue",
+            nonRefundable: true,
+            image:
+              "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=400&h=300&q=80&auto=format&fit=crop",
+            features: ["Superior Room", "City view", "Enhanced amenities"],
+            isLiveData: false,
+          },
         ];
+
+        // Only add extras that don't duplicate existing room names
+        const extras = potentialExtras.filter(extra => !existingNames.has(extra.name));
+
         return [...mapped, ...extras]
           .slice(0, 3)
           .sort((a, b) => a.pricePerNight - b.pricePerNight);
