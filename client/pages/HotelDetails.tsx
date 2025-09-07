@@ -768,10 +768,22 @@ export default function HotelDetails() {
   }, [roomTypes.length]);
 
   // Create final hotel object with calculated roomTypes
+  // Ensure no duplicate room types by name
+  const deduplicatedRoomTypes = (() => {
+    const seen = new Set();
+    return roomTypes.filter((room) => {
+      if (seen.has(room.name)) {
+        return false;
+      }
+      seen.add(room.name);
+      return true;
+    });
+  })();
+
   const hotel = tempHotelData
     ? {
         ...tempHotelData,
-        roomTypes: roomTypes,
+        roomTypes: deduplicatedRoomTypes,
       }
     : null;
 
