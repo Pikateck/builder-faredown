@@ -1839,7 +1839,7 @@ export default function HotelDetails() {
                               )}
                               {index > 0 && (
                                 <Badge className="bg-orange-100 text-orange-800 border border-orange-200 text-xs font-semibold px-3 py-1">
-                                  Upgrade for +₹
+                                  Upgrade for +���
                                   {room.pricePerNight -
                                     roomTypes[0].pricePerNight}
                                 </Badge>
@@ -2029,6 +2029,7 @@ export default function HotelDetails() {
                     ))}
                   </div>
                 </div>
+                {/* END OF DISABLED DUPLICATE SECTION */}
               </>
             )}
 
