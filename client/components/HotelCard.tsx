@@ -485,7 +485,7 @@ export function HotelCard({
                   useBargainModal={true}
                   module="hotels"
                   itemName={hotel.name}
-                  supplierNetRate={totalPriceInclusiveTaxes}
+                  basePrice={totalPriceInclusiveTaxes}
                   itemDetails={{
                     location: hotelLocation,
                     provider: "Hotelbeds",
@@ -634,7 +634,7 @@ export function HotelCard({
                   useBargainModal={true}
                   module="hotels"
                   itemName={hotel.name}
-                  supplierNetRate={totalPriceInclusiveTaxes}
+                  basePrice={totalPriceInclusiveTaxes}
                   itemDetails={{
                     location: hotelLocation,
                     provider: "Hotelbeds",
@@ -783,7 +783,7 @@ export function HotelCard({
                 useBargainModal={true}
                 module="hotels"
                 itemName={hotel.name}
-                supplierNetRate={totalPriceInclusiveTaxes}
+                basePrice={totalPriceInclusiveTaxes}
                 itemDetails={{
                   location: hotelLocation,
                   provider: "Hotelbeds",
