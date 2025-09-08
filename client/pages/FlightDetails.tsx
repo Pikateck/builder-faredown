@@ -588,38 +588,6 @@ export default function FlightDetails({
       </div>
 
       {/* Conversational Bargain Modal */}
-      <ConversationalBargainModal
-        flight={displayFlight}
-        isOpen={showBargainModal}
-        onClose={() => setShowBargainModal(false)}
-        onAccept={(finalPrice, orderRef) => {
-          console.log("Bargain booking success with price:", finalPrice, "Order ref:", orderRef);
-          setShowBargainModal(false);
-
-          // Navigate to booking flow with negotiated price
-          navigate("/booking-flow", {
-            state: {
-              selectedFlight: displayFlight,
-              selectedFareType: {
-                id: "bargain",
-                name: displayFlight.fareClass || "Economy",
-                price: finalPrice,
-                refundability: "Non-Refundable",
-              },
-              negotiatedPrice: finalPrice,
-              passengers: { adults: 1, children: 0 },
-              orderRef: orderRef,
-            },
-          });
-        }}
-        onHold={(orderRef) => {
-          console.log("Bargain offer on hold with order ref:", orderRef);
-        }}
-        userName={userFirstName}
-        module="flights"
-        basePrice={displayFlight.price.amount}
-        productRef={displayFlight.id}
-      />
     </div>
   );
 }
