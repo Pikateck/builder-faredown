@@ -486,8 +486,8 @@ export default function HotelResults() {
       ],
       rating: 4.6,
       reviews: 856,
-      originalPrice: 12000, // ₹12,000 per night
-      currentPrice: 9500, // ₹9,500 per night
+      originalPrice: 175, // ₹175 per night (original price)
+      currentPrice: 152, // ₹152 per night (current discounted price)
       description: `Modern business hotel in ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with excellent facilities for corporate travelers and leisure guests.`,
       amenities: ["Beach Access", "Spa", "Restaurant", "Bar", "WiFi", "Pool"],
       features: [
@@ -499,12 +499,12 @@ export default function HotelResults() {
       roomTypes: [
         {
           name: "Ocean View Room",
-          price: 9500, // ₹9,500 per night
+          price: 152, // ₹152 per night (matches currentPrice)
           features: ["Queen Bed", "Ocean View", "Balcony"],
         },
         {
           name: "Beach Villa",
-          price: 18000, // ₹18,000 per night
+          price: 195, // ₹195 per night (upgrade option)
           features: ["Private Beach Access", "Outdoor Shower", "Terrace"],
         },
       ],
