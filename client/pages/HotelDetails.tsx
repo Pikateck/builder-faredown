@@ -1363,17 +1363,22 @@ export default function HotelDetails() {
                             </Button>
 
                             <BargainButton
-                              useEnhancedModal={true}
+                              useBargainModal={true}
                               module="hotels"
                               itemName={`${hotel.name} - ${room.name}`}
-                              supplierNetRate={calculateTotalPrice(room.pricePerNight)}
+                              basePrice={calculateTotalPrice(room.pricePerNight)}
+                              productRef={room.id}
                               itemDetails={{
+                                id: room.id,
+                                name: `${hotel.name} - ${room.name}`,
                                 location: hotel.location || "Hotel Location",
                                 provider: "Hotelbeds",
+                                checkIn: searchParams.get('checkIn') || '',
+                                checkOut: searchParams.get('checkOut') || '',
                                 features: Array.isArray(room.features) ? room.features.slice(0, 5).map(f => typeof f === 'string' ? f : f?.name || 'Feature') : [],
                               }}
-                              onBargainSuccess={(finalPrice, savings) => {
-                                console.log(`Hotel Details Room Selection Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                              onBargainSuccess={(finalPrice, orderRef) => {
+                                console.log(`Hotel Details Room Selection Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`);
                                 handleBooking(room, finalPrice);
                                 setBargainedRooms((prev) => new Set([...prev, room.id]));
                                 if (navigator.vibrate) {
@@ -2133,17 +2138,22 @@ export default function HotelDetails() {
                                     Reserve Room
                                   </Button>
                                   <BargainButton
-                                    useEnhancedModal={true}
+                                    useBargainModal={true}
                                     module="hotels"
                                     itemName={`${hotel.name} - ${room.name}`}
-                                    supplierNetRate={calculateTotalPrice(room.pricePerNight)}
+                                    basePrice={calculateTotalPrice(room.pricePerNight)}
+                                    productRef={room.id}
                                     itemDetails={{
+                                      id: room.id,
+                                      name: `${hotel.name} - ${room.name}`,
                                       location: hotel.location || "Hotel Location",
                                       provider: "Hotelbeds",
+                                      checkIn: searchParams.get('checkIn') || '',
+                                      checkOut: searchParams.get('checkOut') || '',
                                       features: room.amenities || [],
                                     }}
-                                    onBargainSuccess={(finalPrice, savings) => {
-                                      console.log(`Hotel Details Desktop Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                                    onBargainSuccess={(finalPrice, orderRef) => {
+                                      console.log(`Hotel Details Desktop Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`);
                                       handleBooking(room, finalPrice);
                                       setBargainedRooms((prev) => new Set([...prev, room.id]));
                                     }}
