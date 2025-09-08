@@ -180,6 +180,7 @@ app.get("/", (req, res) => {
       transfers: "/api/transfers",
       transfersBargain: "/api/transfers-bargain",
       bargain: "/api/bargain",
+      enhancedBargain: "/api/enhanced-bargain",
       aiBargains: "/api/ai-bargains",
       currency: "/api/currency",
       promo: "/api/promo",
