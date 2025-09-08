@@ -1,29 +1,64 @@
 /**
- * Fixed API Configuration and Base Service
- * Fixes TypeError: Failed to fetch errors
+ * Enhanced API Configuration with Production Safety
+ * Handles both client and server-side environments
  */
 
 import { DevApiClient } from "./api-dev";
 
-// Fixed backend URL detection
+// Enhanced backend URL detection with server-side support
 const getBackendUrl = () => {
-  // Try environment variable first
+  // Server-side: use environment variable
+  if (typeof window === 'undefined') {
+    return process.env.API_BASE_URL || process.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+  }
+
+  // Client-side: try environment variable first
   if (import.meta.env.VITE_API_BASE_URL) {
     return import.meta.env.VITE_API_BASE_URL;
   }
 
-  // FIXED: Don't return null for fly.dev - use same-origin
-  if (window.location.hostname.includes("fly.dev") || window.location.hostname.includes("builder.codes")) {
+  // Builder.codes and fly.dev environments
+  if (window.location.hostname.includes("builder.codes") || 
+      window.location.hostname.includes("fly.dev")) {
     return window.location.origin + "/api";
   }
 
-  // For production environments, use same-origin base URL
+  // Production environments (non-localhost)
   if (window.location.hostname !== "localhost") {
     return window.location.origin + "/api";
   }
 
-  // Default to localhost for development
+  // Development default
   return "http://localhost:3001/api";
+};
+
+// Production environment detection
+const isProduction = () => {
+  if (typeof window === 'undefined') {
+    return process.env.NODE_ENV === 'production';
+  }
+  return import.meta.env.PROD || 
+         window.location.hostname.includes('.com') ||
+         window.location.hostname.includes('.app');
+};
+
+// Offline fallback configuration
+const getOfflineFallbackEnabled = () => {
+  // Server-side: disabled by default
+  if (typeof window === 'undefined') {
+    return process.env.ENABLE_OFFLINE_FALLBACK === 'true';
+  }
+  
+  // Client-side: check environment variables
+  const envFlag = import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK;
+  
+  // Production: disabled unless explicitly enabled
+  if (isProduction()) {
+    return envFlag === 'true';
+  }
+  
+  // Development: enabled by default unless explicitly disabled
+  return envFlag !== 'false';
 };
 
 // API Configuration
@@ -34,6 +69,8 @@ export const API_CONFIG = {
     "Content-Type": "application/json",
     Accept: "application/json",
   },
+  IS_PRODUCTION: isProduction(),
+  OFFLINE_FALLBACK_ENABLED: getOfflineFallbackEnabled(),
 };
 
 // API Response Types
@@ -66,7 +103,35 @@ export class ApiError extends Error {
   }
 }
 
-// Enhanced API Client with better error handling
+// Production-safe logging
+const logApiEvent = (level: 'info' | 'warn' | 'error', message: string, data?: any) => {
+  const logData = {
+    message,
+    timestamp: new Date().toISOString(),
+    environment: API_CONFIG.IS_PRODUCTION ? 'production' : 'development',
+    ...(data && { data })
+  };
+
+  if (API_CONFIG.IS_PRODUCTION) {
+    // Production: Use structured logging for monitoring
+    if (typeof window !== 'undefined' && (window as any).Sentry) {
+      (window as any).Sentry.addBreadcrumb({
+        message,
+        level,
+        category: 'api',
+        data: logData
+      });
+    }
+    
+    // Tag for monitoring systems
+    console[level](`[FAREDOWN_API] ${message}`, logData);
+  } else {
+    // Development: Detailed console logging
+    console[level](`🌐 ${message}`, logData);
+  }
+};
+
+// Enhanced API Client with production safety
 export class ApiClient {
   private baseURL: string;
   private timeout: number;
@@ -77,14 +142,21 @@ export class ApiClient {
   constructor(config: typeof API_CONFIG) {
     this.baseURL = config.BASE_URL || "";
     this.timeout = config.TIMEOUT;
-    this.authToken = localStorage.getItem("auth_token");
+    this.authToken = typeof window !== 'undefined' ? localStorage.getItem("auth_token") : null;
     this.devClient = new DevApiClient(this.baseURL);
     
-    // Force fallback if no valid base URL
+    // Force fallback if no valid base URL or explicitly disabled
     if (!this.baseURL || this.baseURL === "null") {
-      console.warn("⚠️ No valid API base URL detected, using fallback mode");
+      logApiEvent('warn', 'No valid API base URL detected, using fallback mode');
       this.forceFallback = true;
     }
+
+    // Production safety: log configuration
+    logApiEvent('info', 'API Client initialized', {
+      baseURL: this.baseURL,
+      isProduction: config.IS_PRODUCTION,
+      offlineFallbackEnabled: config.OFFLINE_FALLBACK_ENABLED
+    });
   }
 
   private getHeaders(customHeaders: Record<string, string> = {}): Record<string, string> {
@@ -106,12 +178,18 @@ export class ApiClient {
       try {
         errorData = await response.json();
       } catch (jsonError) {
-        // If JSON parsing fails, create simple error object
         errorData = { 
           message: `HTTP ${response.status}: ${response.statusText}`,
           status: response.status 
         };
       }
+      
+      // Log API errors for monitoring
+      logApiEvent('error', 'API request failed', {
+        status: response.status,
+        url: response.url,
+        error: errorData
+      });
       
       throw new ApiError(
         (errorData as any).message || "API request failed",
@@ -125,7 +203,7 @@ export class ApiClient {
       try {
         return await response.json();
       } catch (jsonError) {
-        console.warn("Failed to parse response JSON:", jsonError);
+        logApiEvent('warn', 'Failed to parse response JSON', { error: jsonError });
         throw new ApiError("Invalid JSON response", response.status);
       }
     }
@@ -138,8 +216,10 @@ export class ApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
-    // Use fallback immediately if forced or no base URL
-    if (this.forceFallback || !this.baseURL) {
+    // Use fallback immediately if forced or offline mode disabled in production
+    if (this.forceFallback || 
+        (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)) {
+      logApiEvent('info', `Using fallback data for ${endpoint}`);
       return this.devClient.get<T>(endpoint, params);
     }
 
@@ -168,31 +248,40 @@ export class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      // Enhanced error handling
+      // Enhanced error handling with production safety
       if (error instanceof Error) {
         if (error.name === "AbortError") {
-          console.log(`⏰ Request timeout for ${endpoint} - using fallback`);
+          logApiEvent('warn', `Request timeout for ${endpoint}`, { timeout: this.timeout });
         } else if (error.message.includes("Failed to fetch") || 
                    error.message.includes("NetworkError") ||
                    error.message.includes("fetch")) {
-          console.log(`🌐 Network unavailable for ${endpoint} - using fallback`);
+          logApiEvent('warn', `Network unavailable for ${endpoint}`, { error: error.message });
         } else {
-          console.warn(`⚠️ Request failed: ${error.message}`);
+          logApiEvent('error', `Request failed for ${endpoint}`, { error: error.message });
         }
       }
 
-      // Always return fallback data to prevent error propagation
-      try {
-        return this.devClient.get<T>(endpoint, params);
-      } catch (fallbackError) {
-        console.error("Fallback also failed:", fallbackError);
-        // Return safe default structure
-        return {
-          success: false,
-          error: "Service unavailable - using offline mode",
-          data: null,
-        } as T;
+      // Fallback handling with production safety
+      if (API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
+        try {
+          logApiEvent('info', `Using fallback data for ${endpoint}`);
+          return this.devClient.get<T>(endpoint, params);
+        } catch (fallbackError) {
+          logApiEvent('error', `Fallback also failed for ${endpoint}`, { error: fallbackError });
+        }
       }
+
+      // Production: don't silently swallow errors
+      if (API_CONFIG.IS_PRODUCTION) {
+        throw error;
+      }
+
+      // Development: return safe default
+      return {
+        success: false,
+        error: "Service unavailable - using offline mode",
+        data: null,
+      } as T;
     }
   }
 
@@ -201,7 +290,8 @@ export class ApiClient {
     data?: any,
     customHeaders?: Record<string, string>,
   ): Promise<T> {
-    if (this.forceFallback || !this.baseURL) {
+    if (this.forceFallback || 
+        (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)) {
       return this.devClient.post<T>(endpoint, data);
     }
 
@@ -221,35 +311,33 @@ export class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      // Enhanced error handling for POST
+      // Same error handling pattern as GET
       if (error instanceof Error) {
-        if (error.name === "AbortError") {
-          console.log(`⏰ POST request timeout for ${endpoint} - using fallback`);
-        } else if (error.message.includes("Failed to fetch") || 
-                   error.message.includes("NetworkError") ||
-                   error.message.includes("fetch")) {
-          console.log(`🌐 POST network unavailable for ${endpoint} - using fallback`);
-        } else {
-          console.warn(`⚠️ POST request failed: ${error.message}`);
+        logApiEvent('error', `POST request failed for ${endpoint}`, { error: error.message });
+      }
+
+      if (API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
+        try {
+          return this.devClient.post<T>(endpoint, data);
+        } catch (fallbackError) {
+          logApiEvent('error', `POST fallback failed for ${endpoint}`, { error: fallbackError });
         }
       }
 
-      // Always return fallback data
-      try {
-        return this.devClient.post<T>(endpoint, data);
-      } catch (fallbackError) {
-        console.error("POST fallback also failed:", fallbackError);
-        return {
-          success: false,
-          error: "Service unavailable - using offline mode",
-          data: null,
-        } as T;
+      if (API_CONFIG.IS_PRODUCTION) {
+        throw error;
       }
+
+      return {
+        success: false,
+        error: "Service unavailable - using offline mode",
+        data: null,
+      } as T;
     }
   }
 
   async put<T>(endpoint: string, data?: any): Promise<T> {
-    if (this.forceFallback || !this.baseURL) {
+    if (this.forceFallback || (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)) {
       return this.devClient.post<T>(endpoint, data);
     }
 
@@ -269,20 +357,28 @@ export class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
       
-      try {
-        return this.devClient.post<T>(endpoint, data);
-      } catch {
-        return {
-          success: false,
-          error: "Service unavailable",
-          data: null,
-        } as T;
+      if (API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
+        try {
+          return this.devClient.post<T>(endpoint, data);
+        } catch {
+          // Silent fallback
+        }
       }
+
+      if (API_CONFIG.IS_PRODUCTION) {
+        throw error;
+      }
+
+      return {
+        success: false,
+        error: "Service unavailable",
+        data: null,
+      } as T;
     }
   }
 
   async delete<T>(endpoint: string): Promise<T> {
-    if (this.forceFallback || !this.baseURL) {
+    if (this.forceFallback || (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)) {
       return this.devClient.get<T>(endpoint);
     }
 
@@ -301,42 +397,61 @@ export class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
       
-      try {
-        return this.devClient.get<T>(endpoint);
-      } catch {
-        return {
-          success: false,
-          error: "Service unavailable",
-          data: null,
-        } as T;
+      if (API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
+        try {
+          return this.devClient.get<T>(endpoint);
+        } catch {
+          // Silent fallback
+        }
       }
+
+      if (API_CONFIG.IS_PRODUCTION) {
+        throw error;
+      }
+
+      return {
+        success: false,
+        error: "Service unavailable",
+        data: null,
+      } as T;
     }
   }
 
   setAuthToken(token: string) {
     this.authToken = token;
-    localStorage.setItem("auth_token", token);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("auth_token", token);
+    }
   }
 
   clearAuthToken() {
     this.authToken = null;
-    localStorage.removeItem("auth_token");
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem("auth_token");
+    }
   }
 
-  // Enhanced health check
+  // Enhanced health check with monitoring
   async healthCheck(): Promise<{
     status: string;
     database: string;
     timestamp: string;
+    environment: string;
   }> {
     try {
-      return await this.get("/health");
+      const response = await this.get("/health");
+      logApiEvent('info', 'Health check successful');
+      return {
+        ...response,
+        environment: API_CONFIG.IS_PRODUCTION ? 'production' : 'development'
+      };
     } catch (error) {
-      // Return fallback health data
+      logApiEvent('warn', 'Health check failed', { error });
       return {
         status: "fallback",
         database: "offline",
         timestamp: new Date().toISOString(),
+        environment: API_CONFIG.IS_PRODUCTION ? 'production' : 'development'
       };
     }
   }
@@ -351,23 +466,32 @@ export class ApiClient {
     }
   }
 
-  // Enable fallback mode
-  enableFallbackMode() {
-    this.forceFallback = true;
-    console.log("🔄 Fallback mode enabled - using offline data");
+  // Get current configuration
+  getConfig() {
+    return {
+      baseURL: this.baseURL,
+      isProduction: API_CONFIG.IS_PRODUCTION,
+      offlineFallbackEnabled: API_CONFIG.OFFLINE_FALLBACK_ENABLED,
+      forceFallback: this.forceFallback
+    };
   }
 
-  // Disable fallback mode (re-enable API calls)
+  // Enable/disable fallback mode
+  enableFallbackMode() {
+    this.forceFallback = true;
+    logApiEvent('info', 'Fallback mode enabled');
+  }
+
   disableFallbackMode() {
     this.forceFallback = false;
-    console.log("🌐 API mode enabled - using live data");
+    logApiEvent('info', 'API mode enabled');
   }
 }
 
 // Create singleton instance
 export const apiClient = new ApiClient(API_CONFIG);
 
-// Helper functions for common patterns
+// Helper functions
 export const createApiResponse = <T>(
   data: T,
   success: boolean = true,
