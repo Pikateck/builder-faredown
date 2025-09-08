@@ -20,6 +20,7 @@ interface BargainButtonProps {
   module?: 'flights' | 'hotels' | 'sightseeing' | 'transfers';
   itemName?: string;
   basePrice?: number;
+  supplierNetRate?: number; // Alternative prop name for price
   productRef?: string;
   itemDetails?: {
     features?: string[];
@@ -33,6 +34,7 @@ interface BargainButtonProps {
   };
   onBargainSuccess?: (finalPrice: number, orderRef: string) => void;
   useBargainModal?: boolean;
+  useEnhancedModal?: boolean; // Alternative prop name for modal
   userName?: string;
   isMobile?: boolean;
 }
