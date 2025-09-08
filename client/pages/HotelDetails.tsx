@@ -864,6 +864,48 @@ export default function HotelDetails() {
     ].sort((a, b) => a.pricePerNight - b.pricePerNight);
   })();
 
+  // Auto-select room based on Results page selection or default to first room
+  useEffect(() => {
+    if (roomTypes.length > 0) {
+      let roomToSelect = null;
+
+      // First priority: Pre-selected room from Results page
+      if (preSelectedRoomId || preSelectedRoomType) {
+        roomToSelect = roomTypes.find(room =>
+          room.id === preSelectedRoomId ||
+          room.name === preSelectedRoomType ||
+          room.type === preSelectedRoomType
+        );
+
+        if (roomToSelect && preSelectedPrice) {
+          // Verify price matches (within a reasonable tolerance for rounding)
+          const expectedPrice = parseFloat(preSelectedPrice);
+          const roomPrice = roomToSelect.pricePerNight || 0;
+          const priceDiff = Math.abs(roomPrice - expectedPrice);
+
+          // If price differs significantly, find closest matching price
+          if (priceDiff > 5) {
+            roomToSelect = roomTypes.reduce((closest, room) => {
+              const currentDiff = Math.abs((room.pricePerNight || 0) - expectedPrice);
+              const closestDiff = Math.abs((closest?.pricePerNight || 0) - expectedPrice);
+              return currentDiff < closestDiff ? room : closest;
+            }, roomTypes[0]);
+          }
+        }
+      }
+
+      // Fallback: Select first room if no pre-selection or no match found
+      if (!roomToSelect) {
+        roomToSelect = roomTypes[0];
+      }
+
+      // Only update if different from current selection
+      if (!selectedRoomType || selectedRoomType.id !== roomToSelect.id) {
+        setSelectedRoomType(roomToSelect);
+      }
+    }
+  }, [roomTypes.length, preSelectedRoomId, preSelectedRoomType, preSelectedPrice]);
+
   // Expand first room by default when room types are available
   useEffect(() => {
     if (roomTypes.length > 0) {
