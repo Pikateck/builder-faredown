@@ -528,8 +528,8 @@ export default function HotelResults() {
       ],
       rating: 4.9,
       reviews: 567,
-      originalPrice: 7500, // ₹7,500 per night
-      currentPrice: 5800, // ₹5,800 per night
+      originalPrice: 140, // ₹140 per night (original price)
+      currentPrice: 120, // ₹120 per night (current discounted price)
       description: `Charming boutique hotel in ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with unique character and personalized service.`,
       amenities: ["Ski Access", "Fireplace", "Spa", "Restaurant", "WiFi"],
       features: ["Ski-in/Ski-out", "Mountain Views", "Fireplace", "Hot Tub"],
