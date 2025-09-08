@@ -97,19 +97,12 @@ export function BargainButton({
     console.log('Bargain held:', orderRef);
   };
 
-  // Updated to match search button colors (blue theme)
-  const mobileClasses = "flex-1 py-4 bg-[#003580] hover:bg-[#0071c2] active:bg-[#001a40] text-white font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200";
-  const desktopClasses = "text-sm px-5 py-3 bg-[#003580] hover:bg-[#0071c2] active:bg-[#001a40] text-white font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200";
-
-  // Use size variants for backward compatibility
-  const sizeClasses = {
-    sm: "text-sm px-4 py-2 bg-[#003580] hover:bg-[#0071c2] active:bg-[#001a40] text-white font-semibold flex items-center gap-2 min-h-[40px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200",
-    md: desktopClasses,
-    lg: "text-lg px-6 py-4 bg-[#003580] hover:bg-[#0071c2] active:bg-[#001a40] text-white font-semibold flex items-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200",
-  };
+  // Use Button's built-in variant system (default already has correct blue colors)
+  const mobileClasses = "flex-1 touch-manipulation active:scale-95";
+  const additionalClasses = "touch-manipulation active:scale-95";
 
   // Determine which classes to use
-  let buttonClasses = className || (isMobile ? mobileClasses : sizeClasses[size]);
+  let buttonClasses = className || (isMobile ? mobileClasses : additionalClasses);
 
   return (
     <>
