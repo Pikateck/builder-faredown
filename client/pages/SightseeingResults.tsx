@@ -1122,54 +1122,6 @@ export default function SightseeingResults() {
         </div>
       )}
 
-      {/* Sightseeing Conversational Bargain Modal */}
-      <ConversationalBargainModal
-        isOpen={isBargainModalOpen}
-        onClose={() => {
-          setIsBargainModalOpen(false);
-          setSelectedAttraction(null);
-        }}
-        onAccept={(finalPrice, orderRef) => {
-          console.log("Sightseeing bargain booking success with price:", finalPrice, "Order ref:", orderRef);
-          setIsBargainModalOpen(false);
-
-          // Navigate to sightseeing booking page with bargained price
-          const searchParams = new URLSearchParams(window.location.search);
-          searchParams.set("attractionId", selectedAttraction?.id || "");
-          searchParams.set("ticketType", "0"); // Default to first ticket type
-          searchParams.set("selectedTime", "10:30"); // Default time slot
-          searchParams.set("adults", adults.toString());
-          searchParams.set("bargainApplied", "true");
-          searchParams.set("bargainPrice", finalPrice.toString());
-          searchParams.set("orderRef", orderRef);
-
-          // Add visitDate if not already set
-          if (!searchParams.get("visitDate")) {
-            searchParams.set(
-              "visitDate",
-              new Date().toISOString().split("T")[0],
-            );
-          }
-
-          navigate(`/sightseeing/booking?${searchParams.toString()}`);
-        }}
-        onHold={(orderRef) => {
-          console.log("Sightseeing bargain offer on hold with order ref:", orderRef);
-        }}
-        userName={userFirstName}
-        module="sightseeing"
-        basePrice={
-          selectedAttraction
-            ? sightseeingService.calculatePrice(
-                selectedAttraction.currentPrice,
-                parseInt(adults),
-                parseInt(children),
-                parseInt(searchParams.get("infants") || "0"),
-              ).totalPrice
-            : 0
-        }
-        productRef={selectedAttraction?.id || ""}
-      />
 
       {/* Hotel-Style Bottom Panel */}
       {showBottomBar && selectedAttractions.size > 0 && (
@@ -1212,18 +1164,35 @@ export default function SightseeingResults() {
               >
                 Reserve
               </Button>
-              <Button
-                onClick={() => {
-                  handleBottomBarBargain();
+              <BargainButton
+                useEnhancedModal={true}
+                module="sightseeing"
+                itemName={selectedAttractions.size > 0 ? attractions.find(a => selectedAttractions.has(a.id))?.name || "Selected Experience" : "Experience"}
+                supplierNetRate={calculateTotalPrice()}
+                itemDetails={{
+                  location: destinationName || destination,
+                  provider: "Local Tours",
+                  features: selectedAttractions.size > 0 ? attractions.find(a => selectedAttractions.has(a.id))?.highlights?.slice(0, 5) || [] : [],
+                }}
+                onBargainSuccess={(finalPrice, savings) => {
+                  console.log(`Sightseeing Results Bottom Bar Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                  // Navigate to booking with bargained price
+                  const firstSelected = attractions.find(a => selectedAttractions.has(a.id));
+                  if (firstSelected) {
+                    const params = new URLSearchParams(searchParams);
+                    params.set("attractionId", firstSelected.id);
+                    params.set("bargainApplied", "true");
+                    params.set("bargainPrice", finalPrice.toString());
+                    navigate(`/sightseeing/booking?${params.toString()}`);
+                  }
                   if (navigator.vibrate) {
                     navigator.vibrate(50);
                   }
                 }}
-                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-3 flex items-center justify-center gap-2 min-h-[44px]"
+                className="flex-1 text-black font-semibold py-3 min-h-[44px]"
               >
-                <TrendingDown className="w-4 h-4" />
                 Bargain Now
-              </Button>
+              </BargainButton>
             </div>
           </div>
         </div>
