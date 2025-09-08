@@ -741,7 +741,7 @@ export default function HotelDetails() {
             type: "1 X Premium Room",
             details: "Premium accommodations with city view",
             pricePerNight: base + 25,
-            status: "Upgrade for +��25",
+            status: "Upgrade for +₹25",
             statusColor: "yellow",
             nonRefundable: true,
             image:
@@ -1490,14 +1490,15 @@ export default function HotelDetails() {
                               module="hotels"
                               itemName={`${hotel.name} - ${room.name}`}
                               basePrice={(() => {
-                                const roomTotal = calculateTotalPrice(room.pricePerNight);
+                                const roomTotal = calculateTotalPrice(room.pricePerNight, room);
                                 // Debug trace for bargain opening
                                 console.log('[BARGAIN BASE]', {
                                   baseFromSelectedRate: roomTotal,
                                   roomId: room.id,
                                   roomName: room.name,
                                   perNightPrice: room.pricePerNight,
-                                  isPreselectedRoom: preselectRate?.rateKey === room.id
+                                  isPreselectedRoom: preselectRate?.rateKey === room.id,
+                                  usingExactResultsPrice: room.priceConsistent && room.exactResultsTotal
                                 });
                                 return roomTotal;
                               })()}
@@ -3074,7 +3075,7 @@ export default function HotelDetails() {
                             </span>
                           </div>
                           <div className="text-xs text-gray-500 mb-2">
-                            {review.room} • {review.date} ��� {review.type}
+                            {review.room} • {review.date} • {review.type}
                           </div>
                           <h4 className="font-semibold mb-1">{review.title}</h4>
                           <p className="text-sm text-gray-700 mb-2">
