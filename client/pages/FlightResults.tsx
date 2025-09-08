@@ -6487,26 +6487,6 @@ export default function FlightResults() {
 
       <MobileNavigation />
 
-      {/* Conversational Bargain Modal */}
-      <ConversationalBargainModal
-        isOpen={showBargainModal}
-        flight={selectedBargainFlight}
-        selectedFareType={{
-          type: selectedBargainFlight?.fareTypes?.[0]?.name || "Economy",
-          price: selectedBargainFlight?.fareTypes?.[0]?.price || 0,
-          features: selectedBargainFlight?.fareTypes?.[0]?.features || [],
-        }}
-        onClose={handleBargainClose}
-        onAccept={handleBargainAccept}
-        onHold={handleBargainHold}
-        userName={user?.name || "Guest"}
-        module="flights"
-        onBackToResults={handleBargainClose}
-        basePrice={selectedBargainFlight?.fareTypes?.[0]?.price || 0}
-        productRef={
-          selectedBargainFlight ? `flight-${selectedBargainFlight.id}` : ""
-        }
-      />
     </div>
   );
 }
