@@ -125,11 +125,6 @@ export default function TransferResults() {
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-  // Bargain modal states
-  const [showBargainModal, setShowBargainModal] = useState(false);
-  const [selectedTransfer, setSelectedTransfer] = useState<Transfer | null>(
-    null,
-  );
 
   // Selection state for mobile
   const [selectedTransfers, setSelectedTransfers] = useState<Set<string>>(
@@ -505,10 +500,6 @@ export default function TransferResults() {
     }
   };
 
-  const handleBargain = (transfer: Transfer) => {
-    setSelectedTransfer(transfer);
-    setShowBargainModal(true);
-  };
 
   // Handle transfer selection
   const handleTransferSelect = (transfer: Transfer) => {
@@ -534,12 +525,8 @@ export default function TransferResults() {
 
   // Handle bottom bar actions
   const handleBottomBarBargain = () => {
-    if (selectedTransfers.size > 0) {
-      const firstSelected = transfers.find((t) => selectedTransfers.has(t.id));
-      if (firstSelected) {
-        handleBargain(firstSelected);
-      }
-    }
+    // Bottom bar bargain will be handled by individual BargainButton components
+    console.log('Bottom bar bargain clicked');
   };
 
   const handleBottomBarViewDetails = () => {
