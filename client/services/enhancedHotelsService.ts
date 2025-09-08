@@ -34,6 +34,22 @@ export interface HotelSearchParams {
   };
 }
 
+export interface HotelBookingData {
+  hotelId: string;
+  date: string;
+  guestDetails: {
+    firstName: string;
+    lastName: string;
+    email: string;
+    phone: string;
+  };
+  paymentDetails: {
+    method: string;
+    amount: number;
+    currency: string;
+  };
+}
+
 class EnhancedHotelsService extends EnhancedApiService {
   constructor() {
     super('hotels', '/hotels-live');
