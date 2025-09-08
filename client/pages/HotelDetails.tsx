@@ -1362,18 +1362,28 @@ export default function HotelDetails() {
                               )}
                             </Button>
 
-                            <Button
-                              onClick={() => {
-                                handleBargainClick(room);
+                            <BargainButton
+                              useEnhancedModal={true}
+                              module="hotels"
+                              itemName={`${hotel.name} - ${room.name}`}
+                              supplierNetRate={calculateTotalPrice(room.pricePerNight)}
+                              itemDetails={{
+                                location: hotel.location || "Hotel Location",
+                                provider: "Hotelbeds",
+                                features: Array.isArray(room.features) ? room.features.slice(0, 5).map(f => typeof f === 'string' ? f : f?.name || 'Feature') : [],
+                              }}
+                              onBargainSuccess={(finalPrice, savings) => {
+                                console.log(`Hotel Details Room Selection Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                                handleBooking(room, finalPrice);
+                                setBargainedRooms((prev) => new Set([...prev, room.id]));
                                 if (navigator.vibrate) {
                                   navigator.vibrate(50);
                                 }
                               }}
-                              className="w-full bg-[#febb02] hover:bg-[#e6a602] text-black font-medium py-2 text-sm flex items-center justify-center gap-2"
+                              className="w-full text-black font-medium py-2 text-sm min-h-[44px]"
                             >
-                              <TrendingDown className="w-4 h-4" />
                               Bargain Now
-                            </Button>
+                            </BargainButton>
 
                             <Button
                               onClick={handleStarClick}
@@ -3461,18 +3471,30 @@ export default function HotelDetails() {
               >
                 Reserve
               </Button>
-              <Button
-                onClick={() => {
-                  handleBargainClick(selectedRoomType);
+              <BargainButton
+                useEnhancedModal={true}
+                module="hotels"
+                itemName={`${hotel.name} - ${selectedRoomType?.name}`}
+                supplierNetRate={selectedRoomType ? calculateTotalPrice(selectedRoomType.pricePerNight) : 0}
+                itemDetails={{
+                  location: hotel.location || "Hotel Location",
+                  provider: "Hotelbeds",
+                  features: selectedRoomType && Array.isArray(selectedRoomType.features) ? selectedRoomType.features.slice(0, 5).map(f => typeof f === 'string' ? f : f?.name || 'Feature') : [],
+                }}
+                onBargainSuccess={(finalPrice, savings) => {
+                  console.log(`Hotel Details Bottom Bar Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                  if (selectedRoomType) {
+                    handleBooking(selectedRoomType, finalPrice);
+                    setBargainedRooms((prev) => new Set([...prev, selectedRoomType.id]));
+                  }
                   if (navigator.vibrate) {
                     navigator.vibrate(50);
                   }
                 }}
-                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold py-3 flex items-center justify-center gap-2 min-h-[44px]"
+                className="flex-1 text-black font-semibold py-3 min-h-[44px]"
               >
-                <TrendingDown className="w-4 h-4" />
                 Bargain Now
-              </Button>
+              </BargainButton>
             </div>
           </div>
         ) : (
