@@ -2122,15 +2122,29 @@ export default function HotelDetails() {
                                   >
                                     Reserve Room
                                   </Button>
-                                  <Button
-                                    onClick={() => handleBargainClick(room)}
-                                    className={`w-full font-medium py-2 text-sm transition-all duration-200 flex items-center justify-center gap-2 ${
+                                  <BargainButton
+                                    useEnhancedModal={true}
+                                    module="hotels"
+                                    itemName={`${hotel.name} - ${room.name}`}
+                                    supplierNetRate={roomTotalPrice}
+                                    itemDetails={{
+                                      location: hotel.location || "Hotel Location",
+                                      provider: "Hotelbeds",
+                                      features: room.amenities || [],
+                                    }}
+                                    onBargainSuccess={(finalPrice, savings) => {
+                                      console.log(`Hotel Details Desktop Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                                      handleBooking(room, finalPrice);
+                                      setBargainedRooms((prev) => new Set([...prev, room.id]));
+                                    }}
+                                    className={`w-full font-medium py-2 text-sm transition-all duration-200 min-h-[44px] ${
                                       bargainedRooms.has(room.id)
                                         ? "bg-green-600 text-white"
                                         : bargainingRoomId === room.id
                                           ? "bg-blue-600 text-white animate-pulse"
-                                          : "bg-[#febb02] hover:bg-[#e6a602] text-black"
+                                          : ""
                                     }`}
+                                    disabled={bargainedRooms.has(room.id) || bargainingRoomId === room.id}
                                   >
                                     {bargainedRooms.has(room.id) ? (
                                       <span className="flex items-center justify-center">
@@ -2140,12 +2154,9 @@ export default function HotelDetails() {
                                     ) : bargainingRoomId === room.id ? (
                                       "Bargaining..."
                                     ) : (
-                                      <>
-                                        <TrendingDown className="w-4 h-4" />
-                                        Bargain Now
-                                      </>
+                                      "Bargain Now"
                                     )}
-                                  </Button>
+                                  </BargainButton>
                                 </div>
 
                                 <div className="mt-3 flex items-center justify-center space-x-4 text-xs text-green-700">
