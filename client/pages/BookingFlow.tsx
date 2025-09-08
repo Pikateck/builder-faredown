@@ -380,7 +380,7 @@ const SeatMap = ({
             <div className="flex justify-between items-center text-sm font-medium">
               <span>Seat fees for this flight:</span>
               <span className="text-[#003580] font-semibold text-base">
-                {formatCurrency(getFlightTotalPrice(flightLeg))}
+                {formatPrice(getFlightTotalPrice(flightLeg))}
               </span>
             </div>
           </div>
@@ -764,7 +764,7 @@ const SeatMap = ({
               <div className="flex justify-between items-center text-sm font-medium">
                 <span>Mumbai-Dubai seat fees:</span>
                 <span className="text-[#003580]">
-                  {formatCurrency(getFlightTotalPrice("Mumbai-Dubai"))}
+                  {formatPrice(getFlightTotalPrice("Mumbai-Dubai"))}
                 </span>
               </div>
             </div>
@@ -813,7 +813,7 @@ const SeatMap = ({
               <div className="flex justify-between items-center text-sm font-medium">
                 <span>Dubai-Mumbai seat fees:</span>
                 <span className="text-[#003580]">
-                  {formatCurrency(getFlightTotalPrice("Dubai-Mumbai"))}
+                  {formatPrice(getFlightTotalPrice("Dubai-Mumbai"))}
                 </span>
               </div>
             </div>
@@ -826,7 +826,7 @@ const SeatMap = ({
             <div className="flex justify-between items-center">
               <span className="text-lg font-semibold">Total Seat Fees:</span>
               <span className="text-2xl font-bold">
-                {formatCurrency(
+                {formatPrice(
                   getFlightTotalPrice("Mumbai-Dubai") +
                     getFlightTotalPrice("Dubai-Mumbai"),
                 )}
@@ -1679,7 +1679,7 @@ export default function BookingFlow() {
                           code: "JPY",
                           symbol: "¥",
                           name: "Japanese Yen",
-                          flag: "🇯🇵",
+                          flag: "���🇵",
                         },
                         {
                           code: "CNY",
@@ -2250,7 +2250,7 @@ export default function BookingFlow() {
                                 </span>
                               </div>
                               <span className="font-semibold text-gray-900">
-                                {formatCurrency(meal.price)}
+                                {formatPrice(meal.price)}
                               </span>
                             </label>
                           ))}
@@ -2440,7 +2440,7 @@ export default function BookingFlow() {
                               Yes, protect my booking
                             </span>
                             <span className="font-semibold">
-                              {formatCurrency(calculateRefundProtectionCost())}
+                              {formatPrice(calculateRefundProtectionCost())}
                             </span>
                           </div>
                         </label>
@@ -2658,7 +2658,7 @@ export default function BookingFlow() {
                             <div className="flex justify-between">
                               <span>Refund Protection</span>
                               <span>
-                                {formatCurrency(
+                                {formatPrice(
                                   calculateRefundProtectionCost(),
                                 )}
                               </span>
@@ -2690,7 +2690,7 @@ export default function BookingFlow() {
                               Extras Total:
                             </span>
                             <span className="text-2xl text-black font-bold">
-                              {formatCurrency(calculateExtrasTotal())}
+                              {formatPrice(calculateExtrasTotal())}
                             </span>
                           </div>
                         </div>
@@ -3228,7 +3228,7 @@ export default function BookingFlow() {
                       </h3>
                       <div className="space-y-2">
                         <p className="text-3xl font-bold">
-                          {formatCurrency(
+                          {formatPrice(
                             calculateBaseFareTotal() +
                               calculateExtrasTotal() +
                               getTotalSeatFees(),
@@ -3456,7 +3456,7 @@ export default function BookingFlow() {
                           Final Amount
                         </span>
                         <span className="text-xl font-bold text-blue-700">
-                          {formatCurrency(
+                          {formatPrice(
                             calculateBaseFareTotal() +
                               calculateExtrasTotal() +
                               getTotalSeatFees(),
@@ -3523,7 +3523,7 @@ export default function BookingFlow() {
                     className="bg-[#003580] hover:bg-[#009fe3] text-white px-8 w-full sm:w-auto"
                   >
                     {currentStep === 5
-                      ? `Pay ${formatCurrency(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}`
+                      ? `Pay ${formatPrice(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}`
                       : currentStep === 4
                         ? "Proceed to Payment"
                         : "Next"}
@@ -3578,14 +3578,14 @@ export default function BookingFlow() {
                           className={`w-3 h-3 transition-transform ${showAdultFare ? "rotate-180" : ""}`}
                         />
                       </button>
-                      <span>{formatCurrency(calculateTotalAdultsPrice())}</span>
+                      <span>{formatPrice(calculateTotalAdultsPrice())}</span>
                     </div>
                     {showAdultFare && (
                       <div className="ml-4 space-y-1">
                         <div className="flex justify-between text-[#666]">
                           <span>Flight fare</span>
                           <span>
-                            {formatCurrency(
+                            {formatPrice(
                               calculateAdultPrice() *
                                 passengersFromState.adults,
                             )}
@@ -3594,7 +3594,7 @@ export default function BookingFlow() {
                         <div className="flex justify-between text-[#666]">
                           <span>Airline taxes and fees</span>
                           <span>
-                            {formatCurrency(
+                            {formatPrice(
                               calculateAdultTaxes() *
                                 passengersFromState.adults,
                             )}
@@ -3621,7 +3621,7 @@ export default function BookingFlow() {
                           />
                         </button>
                         <span>
-                          {formatCurrency(calculateTotalChildrenPrice())}
+                          {formatPrice(calculateTotalChildrenPrice())}
                         </span>
                       </div>
                       {showChildFare && (
@@ -3629,7 +3629,7 @@ export default function BookingFlow() {
                           <div className="flex justify-between text-[#666]">
                             <span>Flight fare</span>
                             <span>
-                              {formatCurrency(
+                              {formatPrice(
                                 calculateChildPrice() *
                                   passengersFromState.children,
                               )}
@@ -3638,7 +3638,7 @@ export default function BookingFlow() {
                           <div className="flex justify-between text-[#666]">
                             <span>Airline taxes and fees</span>
                             <span>
-                              {formatCurrency(
+                              {formatPrice(
                                 calculateChildTaxes() *
                                   passengersFromState.children,
                               )}
@@ -3662,32 +3662,32 @@ export default function BookingFlow() {
                       {selectedMealIds.length > 0 && (
                         <div className="flex justify-between">
                           <span>Meals</span>
-                          <span>{formatCurrency(calculateMealsTotal())}</span>
+                          <span>{formatPrice(calculateMealsTotal())}</span>
                         </div>
                       )}
                       {calculateBaggageTotal() > 0 && (
                         <div className="flex justify-between">
                           <span>Additional Baggage</span>
-                          <span>{formatCurrency(calculateBaggageTotal())}</span>
+                          <span>{formatPrice(calculateBaggageTotal())}</span>
                         </div>
                       )}
                       {selectedBaggageProtection === "bronze" && (
                         <div className="flex justify-between">
                           <span>Bronze Baggage Protection</span>
-                          <span>{formatCurrency(49)}</span>
+                          <span>{formatPrice(49)}</span>
                         </div>
                       )}
                       {selectedBaggageProtection === "gold" && (
                         <div className="flex justify-between">
                           <span>Gold Baggage Protection</span>
-                          <span>{formatCurrency(200)}</span>
+                          <span>{formatPrice(200)}</span>
                         </div>
                       )}
                       {selectedRefundProtection === "yes" && (
                         <div className="flex justify-between">
                           <span>Refund Protection</span>
                           <span>
-                            {formatCurrency(calculateRefundProtectionCost())}
+                            {formatPrice(calculateRefundProtectionCost())}
                           </span>
                         </div>
                       )}
@@ -3697,7 +3697,7 @@ export default function BookingFlow() {
                             Other Options ({selectedOtherOptions.length})
                           </span>
                           <span>
-                            {formatCurrency(
+                            {formatPrice(
                               selectedOtherOptions.reduce((total, id) => {
                                 const prices = {
                                   vpn: 14,
@@ -3728,7 +3728,7 @@ export default function BookingFlow() {
                         <div className="flex justify-between">
                           <span>Mumbai → Dubai</span>
                           <span>
-                            {formatCurrency(calculateSeatTotal("Mumbai-Dubai"))}
+                            {formatPrice(calculateSeatTotal("Mumbai-Dubai"))}
                           </span>
                         </div>
                       )}
@@ -3736,7 +3736,7 @@ export default function BookingFlow() {
                         <div className="flex justify-between">
                           <span>Dubai → Mumbai</span>
                           <span>
-                            {formatCurrency(calculateSeatTotal("Dubai-Mumbai"))}
+                            {formatPrice(calculateSeatTotal("Dubai-Mumbai"))}
                           </span>
                         </div>
                       )}
@@ -3748,7 +3748,7 @@ export default function BookingFlow() {
                   <div className="flex justify-between items-center font-semibold text-lg">
                     <span>Total</span>
                     <span>
-                      {formatCurrency(
+                      {formatPrice(
                         calculateBaseFareTotal() +
                           calculateExtrasTotal() +
                           getTotalSeatFees(),
