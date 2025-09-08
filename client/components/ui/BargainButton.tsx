@@ -109,6 +109,7 @@ export function BargainButton({
       <Button
         onClick={handleClick}
         disabled={disabled || loading}
+        size={size === "md" ? "default" : size}
         className={cn(buttonClasses)}
         onTouchStart={(e) => {
           e.stopPropagation();
