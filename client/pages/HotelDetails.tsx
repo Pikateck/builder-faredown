@@ -2136,7 +2136,7 @@ export default function HotelDetails() {
                                     useEnhancedModal={true}
                                     module="hotels"
                                     itemName={`${hotel.name} - ${room.name}`}
-                                    supplierNetRate={roomTotalPrice}
+                                    supplierNetRate={calculateTotalPrice(room.pricePerNight)}
                                     itemDetails={{
                                       location: hotel.location || "Hotel Location",
                                       provider: "Hotelbeds",
