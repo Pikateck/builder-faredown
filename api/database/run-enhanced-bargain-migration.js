@@ -14,7 +14,7 @@ const dbConfig = {
   database: process.env.DB_NAME || "faredown_booking_db",
   user: process.env.DB_USER || "postgres",
   password: process.env.DB_PASSWORD,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+  ssl: process.env.DB_HOST && process.env.DB_HOST.includes('render.com') ? { rejectUnauthorized: false } : false,
 };
 
 async function runEnhancedBargainMigration() {
