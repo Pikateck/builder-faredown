@@ -548,6 +548,14 @@ export default function HotelDetails() {
         id: parseInt(hotelId || "1"),
         name: (() => {
           const hotelNames = {
+            // Map actual hotel IDs from search results
+            "hotel-1": "Grand Hotel Dubai",
+            "hotel-2": "Business Hotel Dubai",
+            "hotel-3": "Boutique Hotel Dubai",
+            "1": "Grand Hotel Dubai",
+            "2": "Business Hotel Dubai",
+            "3": "Boutique Hotel Dubai",
+            // Legacy codes for backward compatibility
             "htl-DXB-001": "Grand Hyatt Dubai",
             "htl-DXB-002": "Business Hotel Dubai Marina",
             "htl-DXB-003": "Boutique Hotel Downtown Dubai",
