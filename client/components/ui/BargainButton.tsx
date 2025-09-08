@@ -123,7 +123,9 @@ export function BargainButton({
       onClick={handleClick}
       disabled={disabled || loading}
       type="button"
-      aria-label={typeof children === 'string' ? children : 'Bargain button'}
+      id={id}
+      data-testid={dataTestId}
+      aria-label={ariaLabel || (typeof children === 'string' ? children : 'Bargain button')}
     >
       {/* Shimmer Effect */}
       <div
