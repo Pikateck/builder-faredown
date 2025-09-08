@@ -418,6 +418,10 @@ export default function HotelDetails() {
       "1": "Sheikh Zayed Road, Dubai, United Arab Emirates",
       "2": "Dubai Marina, Dubai, United Arab Emirates",
       "3": "Downtown Dubai, Dubai, United Arab Emirates",
+      // Additional common patterns
+      "htl-1": "Sheikh Zayed Road, Dubai, United Arab Emirates",
+      "htl-2": "Dubai Marina, Dubai, United Arab Emirates",
+      "htl-3": "Downtown Dubai, Dubai, United Arab Emirates",
       // Legacy codes for backward compatibility
       "htl-DXB-001": "Sheikh Zayed Road, Dubai, United Arab Emirates",
       "htl-DXB-002": "Dubai Marina, Dubai, United Arab Emirates",
