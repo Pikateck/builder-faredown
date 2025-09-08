@@ -27,7 +27,7 @@ import {
 } from "lucide-react";
 import { flightsService, Flight } from "@/services/flightsService";
 import { useCurrency } from "@/contexts/CurrencyContext";
-import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
+import { BargainButton } from "@/components/ui/BargainButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { authService } from "@/services/authService";
 
