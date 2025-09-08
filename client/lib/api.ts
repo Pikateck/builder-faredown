@@ -176,6 +176,9 @@ export class ApiClient {
       headers.Authorization = `Bearer ${this.authToken}`;
     }
 
+    // Add correlation ID for request tracking
+    headers['X-Request-ID'] = `faredown_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
     return headers;
   }
 
