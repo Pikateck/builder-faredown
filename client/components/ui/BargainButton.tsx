@@ -118,6 +118,8 @@ export function BargainButton({
         "hover:scale-105 hover:shadow-xl",
         !className.includes("shadow") && "shadow-lg shadow-yellow-200/30",
         !className.includes("min-h") && sizeClasses[size],
+        // Add custom CSS classes for animations
+        "bargain-button-locked",
         className,
       )}
       onClick={handleClick}
