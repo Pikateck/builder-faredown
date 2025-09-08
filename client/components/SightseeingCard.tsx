@@ -428,10 +428,22 @@ export function SightseeingCard({
                     gap: "12px",
                   }}
                 >
-                  <button
+                  <BargainButton
+                    useEnhancedModal={true}
+                    module="sightseeing"
+                    itemName={attraction.name}
+                    supplierNetRate={totalPrice}
+                    itemDetails={{
+                      location: attraction.location,
+                      provider: "Local Tours",
+                      features: attraction.highlights?.slice(0, 5) || [],
+                    }}
+                    onBargainSuccess={(finalPrice, savings) => {
+                      console.log(`Sightseeing Card Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                      // Handle successful bargain - could trigger navigation to booking
+                    }}
                     onClick={(e) => {
-                      e.stopPropagation();
-                      onBargainClick();
+                      e?.stopPropagation();
                     }}
                     style={{
                       backgroundColor: "#febb02",
@@ -451,9 +463,8 @@ export function SightseeingCard({
                       boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
                     }}
                   >
-                    <TrendingDown size={14} />
                     Bargain Now
-                  </button>
+                  </BargainButton>
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
