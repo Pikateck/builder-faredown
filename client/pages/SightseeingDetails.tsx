@@ -4,7 +4,7 @@ import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { ErrorBanner } from "@/components/ErrorBanner";
-import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
+import { BargainButton } from "@/components/ui/BargainButton";
 import { MobileSightseeingBooking } from "@/components/mobile/MobileSightseeingBooking";
 import { sightseeingService } from "@/services/sightseeingService";
 import {
