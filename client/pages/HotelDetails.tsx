@@ -812,88 +812,80 @@ export default function HotelDetails() {
       return mapped.sort((a, b) => a.pricePerNight - b.pricePerNight);
     }
 
-    // Fallback mock room types
+    // Fallback mock room types - use consistent pricing from Results page
+    const basePrice = (() => {
+      // Use Results page pricing if available for consistency
+      if (preselectRate && preselectRate.perNightPrice) {
+        console.log('[FALLBACK ROOMS USING RESULTS PRICE]', {
+          basePrice: preselectRate.perNightPrice,
+          source: 'Results page preselect'
+        });
+        return preselectRate.perNightPrice;
+      }
+
+      // Otherwise use hotel data price
+      const hotelPrice = tempHotelData?.currentPrice || 167;
+      console.log('[FALLBACK ROOMS USING HOTEL PRICE]', {
+        basePrice: hotelPrice,
+        source: 'Hotel data or fallback'
+      });
+      return hotelPrice;
+    })();
+
     return [
+      {
+        id: "standard-double",
+        name: "Standard Double Room",
+        type: "1 X Standard Double",
+        details: "Comfortable double room",
+        pricePerNight: basePrice,
+        status: "Cheapest Room",
+        statusColor: "green",
+        nonRefundable: true,
+        image:
+          "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop",
+        features: ["Standard Room", "Best value option", "Free WiFi"],
+        // Mark as price consistent if using Results page data
+        priceConsistent: !!(preselectRate && preselectRate.perNightPrice),
+        exactResultsTotal: preselectRate?.totalPrice,
+      },
       {
         id: "twin-skyline",
         name: "Twin Room with Skyline View",
         type: "1 X Twin Classic",
         details: "Twin bed",
-        pricePerNight: tempHotelData?.currentPrice || 167,
-        status: "Base Price",
-        statusColor: "green",
+        pricePerNight: basePrice + 15,
+        status: "Upgrade for +₹15",
+        statusColor: "yellow",
         nonRefundable: true,
         image:
-          "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Twin room
-        features: [
-          "No price change",
-          "Twin Classic",
-          "Complimentary breakfast",
-        ],
+          "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop",
+        features: ["Upgrade for +₹15", "Twin Classic", "City View"],
       },
       {
         id: "king-skyline",
         name: "King Room with Skyline View",
         type: "1 X King Classic",
         details: "1 king bed",
-        pricePerNight: (tempHotelData?.currentPrice || 167) + 18,
-        status: "Upgrade for +₹18",
+        pricePerNight: basePrice + 33,
+        status: "Upgrade for +₹33",
         statusColor: "yellow",
         image:
-          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop", // King room
-        features: ["Upgrade for +₹18", "King Room", "Better city views"],
+          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop",
+        features: ["Upgrade for +₹33", "King Room", "Better city views"],
       },
       {
         id: "deluxe-suite",
         name: "Deluxe Suite with Ocean View",
         type: "1 X Deluxe Suite",
         details: "Suite with separate living area",
-        pricePerNight: (tempHotelData?.currentPrice || 167) + 55,
+        pricePerNight: basePrice + 55,
         status: "Upgrade for +₹55",
         statusColor: "blue",
         nonRefundable: false,
         image:
-          "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop", // Deluxe suite
+          "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop",
         features: ["Upgrade for +₹55", "Ocean View Suite", "Premium amenities"],
-      },
-      {
-        id: "family-room",
-        name: "Family Room with City View",
-        type: "1 X Family Room",
-        details: "Spacious room for families",
-        pricePerNight: (tempHotelData?.currentPrice || 167) + 35,
-        status: "Upgrade for +₹35",
-        statusColor: "blue",
-        nonRefundable: true,
-        image:
-          "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=400&h=300&q=80&auto=format&fit=crop", // Family room
-        features: ["Upgrade for +₹35", "Family Room", "Kid-friendly space"],
-      },
-      {
-        id: "executive-room",
-        name: "Executive Room with Business Lounge",
-        type: "1 X Executive Room",
-        details: "Business-class accommodation",
-        pricePerNight: (tempHotelData?.currentPrice || 167) + 42,
-        status: "Upgrade for +₹42",
-        statusColor: "blue",
-        nonRefundable: false,
-        image:
-          "https://images.unsplash.com/photo-1590490360182-c33d57733427?w=400&h=300&q=80&auto=format&fit=crop", // Executive room
-        features: ["Upgrade for +₹42", "Executive Access", "Business lounge"],
-      },
-      {
-        id: "standard-double",
-        name: "Standard Double Room",
-        type: "1 X Standard Double",
-        details: "Comfortable double room",
-        pricePerNight: (tempHotelData?.currentPrice || 167) - 15,
-        status: "Save ₹15",
-        statusColor: "green",
-        nonRefundable: true,
-        image:
-          "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop", // Standard double
-        features: ["Save ₹15", "Standard Room", "Best value option"],
       },
     ].sort((a, b) => a.pricePerNight - b.pricePerNight);
   })();
