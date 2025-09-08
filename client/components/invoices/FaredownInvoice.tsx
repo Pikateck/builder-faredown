@@ -259,12 +259,10 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
                       {item.quantity}
                     </td>
                     <td className="px-4 py-3 text-right text-gray-600">
-                      {booking.currency || "₹"}
-                      {item.unitPrice.toLocaleString()}
+                      {currencyService.formatCurrency(item.unitPrice, booking.currency || "INR")}
                     </td>
                     <td className="px-4 py-3 text-right font-medium text-gray-900">
-                      {booking.currency || "₹"}
-                      {item.total.toLocaleString()}
+                      {currencyService.formatCurrency(item.total, booking.currency || "INR")}
                     </td>
                   </tr>
                 ))}
@@ -285,8 +283,7 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
               <div className="flex justify-between py-2">
                 <span className="text-gray-600 text-sm">Subtotal:</span>
                 <span className="font-medium text-gray-900 text-sm">
-                  {booking.currency || "₹"}
-                  {subtotal.toLocaleString()}
+                  {currencyService.formatCurrency(subtotal, booking.currency || "INR")}
                 </span>
               </div>
 
@@ -297,8 +294,7 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
                     {tax.name} ({tax.rate}%):
                   </span>
                   <span className="font-medium text-gray-900 text-sm">
-                    {booking.currency || "₹"}
-                    {tax.amount.toLocaleString()}
+                    {currencyService.formatCurrency(tax.amount, booking.currency || "INR")}
                   </span>
                 </div>
               ))}
@@ -318,8 +314,7 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
                     Total Amount:
                   </span>
                   <span className="text-lg sm:text-xl font-bold text-[#003580]">
-                    {booking.currency || "₹"}
-                    {total.toLocaleString()}
+                    {currencyService.formatCurrency(total, booking.currency || "INR")}
                   </span>
                 </div>
               </div>
