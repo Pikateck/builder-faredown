@@ -381,6 +381,10 @@ export default function HotelDetails() {
       "1": "Grand Hotel Dubai",
       "2": "Business Hotel Dubai",
       "3": "Boutique Hotel Dubai",
+      // Additional common patterns
+      "htl-1": "Grand Hotel Dubai",
+      "htl-2": "Business Hotel Dubai",
+      "htl-3": "Boutique Hotel Dubai",
       // Legacy codes for backward compatibility
       "htl-DXB-001": "Grand Hyatt Dubai",
       "htl-DXB-002": "Business Hotel Dubai Marina",
@@ -390,15 +394,20 @@ export default function HotelDetails() {
       "htl-DXB-006": "Express Hotel Dubai Airport",
     };
 
-    const defaultName =
-      hotelNames[hotelCode] ||
-      (isBusinessHotel
-        ? `Business Hotel Dubai`
-        : isLuxuryHotel
-          ? `Grand Luxury Hotel Dubai`
-          : isBoutiqueHotel
-            ? `Boutique Hotel Dubai`
-            : `Premium Hotel Dubai`);
+    // First try exact match, then try with different case combinations
+    const getHotelName = () => {
+      if (hotelNames[hotelCode]) return hotelNames[hotelCode];
+      if (hotelNames[hotelCode.toLowerCase()]) return hotelNames[hotelCode.toLowerCase()];
+      if (hotelNames[hotelCode.toUpperCase()]) return hotelNames[hotelCode.toUpperCase()];
+
+      // Fallback based on hotel type
+      if (isBusinessHotel) return `Business Hotel Dubai`;
+      if (isLuxuryHotel) return `Grand Luxury Hotel Dubai`;
+      if (isBoutiqueHotel) return `Boutique Hotel Dubai`;
+      return `Premium Hotel Dubai`;
+    };
+
+    const defaultName = getHotelName();
 
     // Hotel-specific locations
     const hotelLocations = {
