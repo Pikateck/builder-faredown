@@ -49,12 +49,12 @@ export function calculateTotalPrice(
 }
 
 export function formatPriceWithSymbol(
-  priceInUSD: number,
+  priceInINR: number,
   currencyOrCode: Currency | string,
 ): string {
   // Handle NaN and invalid numbers - but don't convert valid 0 to 0
-  if (isNaN(priceInUSD) || !isFinite(priceInUSD)) {
-    priceInUSD = 0;
+  if (isNaN(priceInINR) || !isFinite(priceInINR)) {
+    priceInINR = 0;
   }
 
   // Handle both Currency object and currency code string
@@ -63,12 +63,13 @@ export function formatPriceWithSymbol(
   if (typeof currencyOrCode === "string") {
     // Find currency by code
     const foundCurrency = CURRENCIES.find((c) => c.code === currencyOrCode);
-    currency = foundCurrency || CURRENCIES[0]; // Default to USD if not found
+    currency = foundCurrency || CURRENCIES[0]; // Default to INR if not found
   } else {
     currency = currencyOrCode;
   }
 
-  const convertedPrice = Math.round(priceInUSD * currency.rate);
+  // Convert from INR to target currency using the exchange rate
+  const convertedPrice = Math.round(priceInINR * currency.rate);
   return `${currency.symbol}${convertedPrice.toLocaleString()}`;
 }
 
