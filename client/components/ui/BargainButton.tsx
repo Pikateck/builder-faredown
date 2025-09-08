@@ -16,18 +16,24 @@ interface BargainButtonProps {
   loading?: boolean;
   className?: string;
   size?: "sm" | "md" | "lg";
-  // Enhanced bargain props
+  // Bargain props for ConversationalBargainModal
   module?: 'flights' | 'hotels' | 'sightseeing' | 'transfers';
   itemName?: string;
-  supplierNetRate?: number;
+  basePrice?: number;
+  productRef?: string;
   itemDetails?: {
     features?: string[];
     location?: string;
     provider?: string;
+    id?: string;
+    name?: string;
+    checkIn?: string;
+    checkOut?: string;
+    rating?: number;
   };
-  promoCode?: string;
-  onBargainSuccess?: (finalPrice: number, savings: number) => void;
-  useEnhancedModal?: boolean;
+  onBargainSuccess?: (finalPrice: number, orderRef: string) => void;
+  useBargainModal?: boolean;
+  userName?: string;
   isMobile?: boolean;
 }
 
@@ -38,14 +44,15 @@ export function BargainButton({
   loading = false,
   className = "",
   size = "md",
-  // Enhanced bargain props
+  // Bargain props
   module = 'hotels',
   itemName = '',
-  supplierNetRate = 0,
+  basePrice = 0,
+  productRef = '',
   itemDetails = {},
-  promoCode,
   onBargainSuccess,
-  useEnhancedModal = false,
+  useBargainModal = false,
+  userName = 'Guest',
   isMobile = false,
   // Extract only valid DOM props
   id,
@@ -58,7 +65,7 @@ export function BargainButton({
   'aria-label'?: string;
   [key: string]: any;
 }) {
-  const [isEnhancedModalOpen, setIsEnhancedModalOpen] = useState(false);
+  const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
 
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
@@ -71,17 +78,23 @@ export function BargainButton({
       hapticFeedback("light");
     }
 
-    // Use enhanced modal if enabled and required props are provided
-    if (useEnhancedModal && itemName && supplierNetRate > 0) {
-      setIsEnhancedModalOpen(true);
+    // Use bargain modal if enabled and required props are provided
+    if (useBargainModal && itemName && basePrice > 0) {
+      setIsBargainModalOpen(true);
     } else {
       onClick?.(e);
     }
   };
 
-  const handleEnhancedBargainSuccess = (finalPrice: number, savings: number) => {
-    setIsEnhancedModalOpen(false);
-    onBargainSuccess?.(finalPrice, savings);
+  const handleBargainSuccess = (finalPrice: number, orderRef: string) => {
+    setIsBargainModalOpen(false);
+    onBargainSuccess?.(finalPrice, orderRef);
+  };
+
+  const handleBargainHold = (orderRef: string) => {
+    setIsBargainModalOpen(false);
+    // Handle hold logic if needed
+    console.log('Bargain held:', orderRef);
   };
 
   // Original working classes from backup
@@ -123,17 +136,37 @@ export function BargainButton({
         {children}
       </Button>
 
-      {/* Enhanced Bargain Modal */}
-      {useEnhancedModal && (
-        <EnhancedMobileBargainModal
-          isOpen={isEnhancedModalOpen}
-          onClose={() => setIsEnhancedModalOpen(false)}
-          onBargainSuccess={handleEnhancedBargainSuccess}
+      {/* Conversational Bargain Modal */}
+      {useBargainModal && (
+        <ConversationalBargainModal
+          isOpen={isBargainModalOpen}
+          onClose={() => setIsBargainModalOpen(false)}
+          onAccept={handleBargainSuccess}
+          onHold={handleBargainHold}
           module={module}
-          itemName={itemName}
-          supplierNetRate={supplierNetRate}
-          itemDetails={itemDetails}
-          promoCode={promoCode}
+          userName={userName}
+          basePrice={basePrice}
+          productRef={productRef || itemName || 'product'}
+          flight={module === 'flights' ? {
+            id: itemDetails.id || '1',
+            airline: itemDetails.provider || 'Airline',
+            flightNumber: productRef || 'FL001',
+            from: itemDetails.location || 'Origin',
+            to: 'Destination',
+            departureTime: '10:00',
+            arrivalTime: '12:00',
+            price: basePrice,
+            duration: '2h'
+          } : undefined}
+          hotel={module === 'hotels' ? {
+            id: itemDetails.id || '1',
+            name: itemName || 'Hotel',
+            location: itemDetails.location || 'City',
+            checkIn: itemDetails.checkIn || '2025-01-01',
+            checkOut: itemDetails.checkOut || '2025-01-02',
+            price: basePrice,
+            rating: itemDetails.rating || 4
+          } : undefined}
         />
       )}
     </>
