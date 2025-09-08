@@ -30,7 +30,7 @@ export interface HotelSearchParams {
 
 class EnhancedHotelsService extends EnhancedApiService {
   constructor() {
-    super('hotels', '/hotels');
+    super('hotels', '/hotels-live');
   }
 
   private createFallbackHotels(): Hotel[] {
