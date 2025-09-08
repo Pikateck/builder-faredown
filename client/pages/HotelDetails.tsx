@@ -1451,7 +1451,18 @@ export default function HotelDetails() {
                               useBargainModal={true}
                               module="hotels"
                               itemName={`${hotel.name} - ${room.name}`}
-                              basePrice={calculateTotalPrice(room.pricePerNight)}
+                              basePrice={(() => {
+                                const roomTotal = calculateTotalPrice(room.pricePerNight);
+                                // Debug trace for bargain opening
+                                console.log('[BARGAIN BASE]', {
+                                  baseFromSelectedRate: roomTotal,
+                                  roomId: room.id,
+                                  roomName: room.name,
+                                  perNightPrice: room.pricePerNight,
+                                  isPreselectedRoom: preselectRate?.rateKey === room.id
+                                });
+                                return roomTotal;
+                              })()}
                               productRef={room.id}
                               itemDetails={{
                                 id: room.id,
