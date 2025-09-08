@@ -89,7 +89,8 @@ export function BargainButton({
   };
 
   return (
-    <button
+    <>
+      <button
       className={cn(
         // Base styles with className override support
         !className.includes("bg-") &&
@@ -131,7 +132,7 @@ export function BargainButton({
       )}
 
       {/* Icon */}
-      {icon && !loading && <Sparkles className="w-4 h-4" />}
+      {icon && !loading && (useEnhancedModal ? <TrendingDown className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />)}
 
       {/* Button Text */}
       <span className="relative z-10 font-bold">{children}</span>
@@ -231,7 +232,22 @@ export function BargainButton({
           }
         }
       `}</style>
-    </button>
+      </button>
+
+      {/* Enhanced Bargain Modal */}
+      {useEnhancedModal && (
+        <EnhancedMobileBargainModal
+          isOpen={isEnhancedModalOpen}
+          onClose={() => setIsEnhancedModalOpen(false)}
+          onBargainSuccess={handleEnhancedBargainSuccess}
+          module={module}
+          itemName={itemName}
+          supplierNetRate={supplierNetRate}
+          itemDetails={itemDetails}
+          promoCode={promoCode}
+        />
+      )}
+    </>
   );
 }
 
