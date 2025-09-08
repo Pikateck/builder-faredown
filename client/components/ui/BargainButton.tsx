@@ -138,7 +138,7 @@ export function BargainButton({
       </Button>
 
       {/* Conversational Bargain Modal */}
-      {useBargainModal && (
+      {shouldUseBargainModal && (
         <ConversationalBargainModal
           isOpen={isBargainModalOpen}
           onClose={() => setIsBargainModalOpen(false)}
@@ -146,7 +146,7 @@ export function BargainButton({
           onHold={handleBargainHold}
           module={module}
           userName={userName}
-          basePrice={basePrice}
+          basePrice={effectivePrice}
           productRef={productRef || itemName || 'product'}
           flight={module === 'flights' ? {
             id: itemDetails.id || '1',
@@ -156,7 +156,7 @@ export function BargainButton({
             to: 'Destination',
             departureTime: '10:00',
             arrivalTime: '12:00',
-            price: basePrice,
+            price: effectivePrice,
             duration: '2h'
           } : undefined}
           hotel={module === 'hotels' ? {
@@ -165,7 +165,7 @@ export function BargainButton({
             location: itemDetails.location || 'City',
             checkIn: itemDetails.checkIn || '2025-01-01',
             checkOut: itemDetails.checkOut || '2025-01-02',
-            price: basePrice,
+            price: effectivePrice,
             rating: itemDetails.rating || 4
           } : undefined}
         />
