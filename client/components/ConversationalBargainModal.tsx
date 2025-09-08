@@ -427,6 +427,17 @@ export function ConversationalBargainModal({
   }, [finalOffer, formatPrice, addMessage, onAccept, productRef, module, basePrice]);
 
   const handleTryAgain = useCallback(() => {
+    // Track decline of current offer
+    const entityId = productRef || `${module}_${Date.now()}`;
+    if (finalOffer) {
+      chatAnalyticsService.trackDeclined(
+        module,
+        entityId,
+        finalOffer,
+        round >= 3 ? 'max_rounds_reached' : 'try_different_price'
+      ).catch(console.warn);
+    }
+
     if (round >= 3) {
       addMessage(
         "agent",
@@ -447,7 +458,7 @@ export function ConversationalBargainModal({
       "agent",
       `Let's try again! What price would you like to offer? (Round ${round + 1}/3)`,
     );
-  }, [round, addMessage]);
+  }, [round, addMessage, finalOffer, productRef, module]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
