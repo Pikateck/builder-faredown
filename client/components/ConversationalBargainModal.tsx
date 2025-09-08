@@ -411,6 +411,11 @@ export function ConversationalBargainModal({
         `Booking confirmed at ${formatPrice(finalOffer)}! Reference: ${orderRef}`,
       );
 
+      // Track final booking acceptance
+      const entityId = productRef || `${module}_${Date.now()}`;
+      const savings = basePrice - finalOffer;
+      chatAnalyticsService.trackAccepted(module, entityId, finalOffer, savings).catch(console.warn);
+
       if (isMobileDevice()) {
         hapticFeedback("heavy");
       }
@@ -419,7 +424,7 @@ export function ConversationalBargainModal({
         onAccept(finalOffer, orderRef);
       }, 1000);
     }
-  }, [finalOffer, formatPrice, addMessage, onAccept]);
+  }, [finalOffer, formatPrice, addMessage, onAccept, productRef, module, basePrice]);
 
   const handleTryAgain = useCallback(() => {
     if (round >= 3) {
