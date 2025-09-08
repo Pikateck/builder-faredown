@@ -299,14 +299,15 @@ export function HotelCard({
     }
   };
 
-  // Helper function to get cheapest room data for navigation
+  // Helper function to get cheapest room data for navigation (must match Results page logic)
   const getCheapestRoomFromHotel = (hotel: Hotel): {
     price: number;
     room: any | null;
     roomId: string | null;
     roomType: string | null;
+    displayPrice: number; // Add displayed price for consistency
   } => {
-    if (!hotel) return { price: 0, room: null, roomId: null, roomType: null };
+    if (!hotel) return { price: 0, room: null, roomId: null, roomType: null, displayPrice: 0 };
 
     const roomsArr: any[] = (hotel as any).roomTypes || [];
     if (Array.isArray(roomsArr) && roomsArr.length > 0) {
@@ -323,11 +324,15 @@ export function HotelCard({
       });
 
       if (cheapestRoom) {
+        // Use the exact same price calculation as displayed on Results page
+        const displayedTotal = calculateTotalPrice(cheapestPrice, totalNights, roomsCount).total;
+
         return {
           price: cheapestPrice,
           room: cheapestRoom,
           roomId: cheapestRoom.id || `room-${roomsArr.indexOf(cheapestRoom)}`,
           roomType: cheapestRoom.name || cheapestRoom.type || 'Standard Room',
+          displayPrice: displayedTotal, // This is the price shown on Results page
         };
       }
     }
@@ -338,11 +343,14 @@ export function HotelCard({
       (hotel as any).priceRange?.min ||
       0;
 
+    const fallbackDisplayPrice = calculateTotalPrice(fallbackPrice, totalNights, roomsCount).total;
+
     return {
       price: fallbackPrice,
       room: null,
       roomId: null,
-      roomType: null
+      roomType: null,
+      displayPrice: fallbackDisplayPrice
     };
   };
 
