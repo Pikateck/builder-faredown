@@ -342,21 +342,62 @@ export function HotelCard({
 
   // Handle view details action
   const handleViewDetails = () => {
-    // Navigate to hotel details page with search context
+    // Get cheapest room data for comprehensive rate object
+    const cheapestRoomData = getCheapestRoomFromHotel(hotel);
+    const totalPriceData = calculateTotalPrice(currentPrice, totalNights, roomsCount);
+
+    // Build comprehensive rate object as single source of truth
+    const preselectRate = {
+      hotelId: hotel.id,
+      roomTypeId: cheapestRoomData.roomId,
+      roomId: cheapestRoomData.roomId,
+      ratePlanId: cheapestRoomData.roomId, // Using roomId as rateKey for now
+      rateKey: cheapestRoomData.roomId,
+      roomName: cheapestRoomData.roomType,
+      roomType: cheapestRoomData.roomType,
+      board: 'Room Only', // Default board type
+      occupancy: {
+        adults: parseInt(searchParams.get("adults") || "2"),
+        children: parseInt(searchParams.get("children") || "0"),
+        rooms: roomsCount
+      },
+      nights: totalNights,
+      currency: selectedCurrency?.code || "INR",
+      taxesIncluded: true,
+      totalPrice: totalPriceData.total,
+      perNightPrice: currentPrice,
+      priceBreakdown: {
+        basePrice: totalPriceData.basePrice,
+        taxes: totalPriceData.taxes,
+        fees: totalPriceData.fees,
+        total: totalPriceData.total
+      },
+      checkIn: checkInDate.toISOString(),
+      checkOut: checkOutDate.toISOString(),
+      supplierData: {
+        supplier: 'hotelbeds',
+        isLiveData: hotel.isLiveData || false
+      }
+    };
+
+    // Debug trace for navigation
+    console.log('[NAVIGATE]', {
+      hotelId: hotel.id,
+      rateKey: preselectRate.rateKey,
+      totalPrice: preselectRate.totalPrice,
+      perNightPrice: preselectRate.perNightPrice,
+      roomName: preselectRate.roomName
+    });
+
+    // Navigate with state for price consistency
     const detailParams = new URLSearchParams();
     searchParams.forEach((value, key) => {
       detailParams.set(key, value);
     });
 
-    // Pass cheapest room data for price consistency
-    const cheapestRoomData = getCheapestRoomFromHotel(hotel);
-    if (cheapestRoomData.roomId) {
-      detailParams.set('preSelectedRoomId', cheapestRoomData.roomId);
-      detailParams.set('preSelectedRoomType', cheapestRoomData.roomType || '');
-      detailParams.set('preSelectedPrice', cheapestRoomData.price.toString());
-    }
-
-    navigate(`/hotels/${hotel.id}?${detailParams.toString()}`);
+    navigate(`/hotels/${hotel.id}?${detailParams.toString()}`, {
+      state: { preselectRate }
+    });
   };
 
   // Handle image gallery click
