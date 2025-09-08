@@ -7,14 +7,6 @@ const express = require("express");
 const transfersService = require("../services/transfersService");
 const transfersRepository = require("../repositories/transfersRepository");
 const markupService = require("../services/markupService");
-<<<<<<< HEAD
-const promoService = require("../services/promoService");
-const voucherService = require("../services/voucherService");
-const emailService = require("../services/emailService");
-const { validateBookingData } = require("../middleware/validation");
-const { auditRequest } = require("../middleware/audit");
-const { authenticateToken, requireAdmin } = require("../middleware/auth");
-=======
 
 let promoService, voucherService, emailService;
 try {
@@ -37,10 +29,10 @@ try {
   console.warn("emailService not available in transfers routes");
   emailService = null;
 }
-// const { validateBookingData } = require("../middleware/validation"); // Not available
+
+const { validateBookingData } = require("../middleware/validation");
 const { auditLogger: auditRequest } = require("../middleware/audit");
 const { authenticateToken: requireAuth, requireAdmin } = require("../middleware/auth");
->>>>>>> refs/remotes/origin/main
 const winston = require("winston");
 
 const router = express.Router();
@@ -297,12 +289,8 @@ router.post("/checkout/price", auditRequest, async (req, res) => {
  */
 router.post(
   "/checkout/book",
-<<<<<<< HEAD
-  authenticateToken,
-  validateBookingData,
-=======
   requireAuth,
->>>>>>> refs/remotes/origin/main
+  validateBookingData,
   auditRequest,
   async (req, res) => {
     try {
