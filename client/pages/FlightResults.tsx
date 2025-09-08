@@ -3096,20 +3096,32 @@ export default function FlightResults() {
                         >
                           View Details
                         </Button>
-                        <Button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleBargainClick(flight);
+                        <BargainButton
+                          useEnhancedModal={true}
+                          module="flights"
+                          itemName={`${flight.airline} ${flight.flightNumber}`}
+                          supplierNetRate={flight.fareTypes?.[0]?.price || 0}
+                          itemDetails={{
+                            location: `${selectedFromCity} to ${selectedToCity}`,
+                            provider: flight.airline,
+                            features: flight.fareTypes?.[0]?.features || [],
                           }}
-                          className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                          onBargainSuccess={(finalPrice, savings) => {
+                            console.log(`Flight Mobile Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                            // Handle successful bargain
+                            handleBargainAccept(finalPrice, `flight-${flight.id}`);
+                          }}
+                          onClick={(e) => {
+                            e?.preventDefault();
+                            e?.stopPropagation();
+                          }}
+                          className="flex-1 py-4 text-black font-semibold text-sm min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                           onTouchStart={(e) => {
-                            e.stopPropagation();
+                            e?.stopPropagation();
                           }}
                         >
-                          <TrendingDown className="w-4 h-4" />
                           Bargain Now
-                        </Button>
+                        </BargainButton>
                       </div>
                     </div>
                   </div>
