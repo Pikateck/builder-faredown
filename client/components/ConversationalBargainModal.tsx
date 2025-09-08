@@ -169,8 +169,21 @@ export function ConversationalBargainModal({
         timestamp: Date.now(),
       };
       setMessages([welcomeMessage]);
+
+      // Track chat open event
+      const entityId = productRef || `${module}_${Date.now()}`;
+      const rateKey = productRef || `rate_${Date.now()}`;
+      chatAnalyticsService.trackChatOpen(
+        module,
+        entityId,
+        rateKey,
+        selectedCurrency.code,
+        basePrice
+      ).catch(error => {
+        console.warn('Failed to track chat_open event:', error);
+      });
     }
-  }, [isOpen, userName, module, basePrice, formatPrice, messages.length]);
+  }, [isOpen, userName, module, basePrice, formatPrice, messages.length, productRef, selectedCurrency.code]);
 
   // Timer Effect
   useEffect(() => {
