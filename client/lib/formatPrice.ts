@@ -2,7 +2,7 @@
 
 export function formatPriceNoDecimals(
   price: number,
-  symbol: string = "₹",
+  symbol: string,
 ): string {
   const roundedPrice = Math.round(price);
   return `${symbol}${roundedPrice.toLocaleString()}`;
