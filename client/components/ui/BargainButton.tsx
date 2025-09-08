@@ -47,8 +47,17 @@ export function BargainButton({
   promoCode,
   onBargainSuccess,
   useEnhancedModal = false,
-  ...props
-}: BargainButtonProps) {
+  // Extract only valid DOM props, filter out component-specific props
+  id,
+  'data-testid': dataTestId,
+  'aria-label': ariaLabel,
+  ...domProps
+}: BargainButtonProps & {
+  id?: string;
+  'data-testid'?: string;
+  'aria-label'?: string;
+  [key: string]: any;
+}) {
   const [isEnhancedModalOpen, setIsEnhancedModalOpen] = useState(false);
 
   const handleClick = (e: React.MouseEvent) => {
