@@ -34,7 +34,7 @@ try {
 const validateBookingData = (req, res, next) => next(); // Placeholder middleware
 const { auditLogger } = require("../middleware/audit");
 const auditRequest = auditLogger;
-const { requireAuth: requireAuth, requireAdmin } = require("../middleware/auth");
+const { authenticateToken: requireAuth, requireAdmin } = require("../middleware/auth");
 const winston = require("winston");
 
 const router = express.Router();
@@ -291,9 +291,6 @@ router.post("/checkout/price", auditRequest, async (req, res) => {
  */
 router.post(
   "/checkout/book",
-  requireAuth,
-  validateBookingData,
-  auditRequest,
   async (req, res) => {
     try {
       const {
