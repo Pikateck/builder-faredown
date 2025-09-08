@@ -63,7 +63,7 @@ class EnhancedHotelsService extends EnhancedApiService {
     fallbackHotel.id = hotelId;
 
     // Use the correct server endpoint path for hotel details
-    return this.safeGet(`-live/hotel/${hotelId}`, undefined, fallbackHotel);
+    return this.safeGet(`/hotel/${hotelId}`, undefined, fallbackHotel);
   }
 
   async bookHotel(bookingData: any) {
