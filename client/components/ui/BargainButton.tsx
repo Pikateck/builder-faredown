@@ -97,12 +97,19 @@ export function BargainButton({
     console.log('Bargain held:', orderRef);
   };
 
-  // Use Button's built-in variant system (default already has correct blue colors)
-  const mobileClasses = "flex-1 touch-manipulation active:scale-95";
-  const additionalClasses = "touch-manipulation active:scale-95";
+  // Original yellow button styling from backup (NEVER CHANGE)
+  const mobileClasses = "flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200";
+  const desktopClasses = "text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200";
+
+  // Use size variants for backward compatibility
+  const sizeClasses = {
+    sm: "text-sm px-4 py-2 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[40px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200",
+    md: desktopClasses,
+    lg: "text-lg px-6 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200",
+  };
 
   // Determine which classes to use
-  let buttonClasses = className || (isMobile ? mobileClasses : additionalClasses);
+  let buttonClasses = className || (isMobile ? mobileClasses : sizeClasses[size]);
 
   return (
     <>
