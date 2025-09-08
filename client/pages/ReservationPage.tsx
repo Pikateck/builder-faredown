@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { useSearch } from "@/contexts/SearchContext";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/layout/Header";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { Button } from "@/components/ui/button";
