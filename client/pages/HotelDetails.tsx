@@ -670,7 +670,18 @@ export default function HotelDetails() {
       }
     : null;
 
-  const calculateTotalPrice = (roomPricePerNight: number) => {
+  const calculateTotalPrice = (roomPricePerNight: number, room?: any) => {
+    // Use exact Results page price if available to ensure consistency
+    if (room && room.exactResultsTotal && room.priceConsistent) {
+      console.log('[USING EXACT RESULTS PRICE]', {
+        exactTotal: room.exactResultsTotal,
+        roomId: room.id,
+        reason: 'Price consistency from Results page'
+      });
+      return room.exactResultsTotal;
+    }
+
+    // Fallback to calculation
     const rooms = parseInt(roomsParam || "1");
     const breakdown = calculatePriceBreakdown(
       roomPricePerNight,
