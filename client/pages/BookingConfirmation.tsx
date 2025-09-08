@@ -19,7 +19,7 @@ import {
   X,
   Send,
 } from "lucide-react";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/layout/Header";
 import { generateBookingPackage } from "@/lib/downloadUtils";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 

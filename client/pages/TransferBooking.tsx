@@ -46,7 +46,7 @@ import {
   Hotel,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/layout/Header";
 
 export default function TransferBooking() {
   const navigate = useNavigate();
