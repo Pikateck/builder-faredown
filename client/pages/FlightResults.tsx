@@ -3,7 +3,7 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
 import { useBooking } from "@/contexts/BookingContext";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/layout/Header";
 import { flightsService, Flight } from "@/services/flightsService";
 import { Button } from "@/components/ui/button";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";

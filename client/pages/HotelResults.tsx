@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useDateContext } from "@/contexts/DateContext";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/layout/Header";
 import { HotelCard } from "@/components/HotelCard";
 import { HotelSearchForm } from "@/components/HotelSearchForm";
 import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
