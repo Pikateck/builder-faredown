@@ -133,6 +133,11 @@ export default function HotelDetails() {
   const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [showSaveDropdown, setShowSaveDropdown] = useState(false);
+
+  // Pre-selected room data from Results page for price consistency
+  const preSelectedRoomId = searchParams.get('preSelectedRoomId');
+  const preSelectedRoomType = searchParams.get('preSelectedRoomType');
+  const preSelectedPrice = searchParams.get('preSelectedPrice');
   const saveDropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
