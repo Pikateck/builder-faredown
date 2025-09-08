@@ -50,13 +50,10 @@ const adminBookingsRoutes = require("./routes/admin-bookings");
 const adminSightseeingRoutes = require("./routes/admin-sightseeing");
 const sightseeingSearchRoutes = require("./routes/sightseeing-search");
 const adminAiRoutes = require("./routes/admin-ai");
-<<<<<<< HEAD
 const aiBargainRoutes = require("./routes/ai-bargains");
-=======
 const transfersMarkupRoutes = require("./routes/admin-transfers-markup");
 const pricingRoutes = require("./routes/pricing");
 const adminReportsRoutes = require("./routes/admin-reports");
->>>>>>> refs/remotes/origin/main
 
 // Import middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
