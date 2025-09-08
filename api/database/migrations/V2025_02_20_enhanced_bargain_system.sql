@@ -184,8 +184,8 @@ CREATE TABLE IF NOT EXISTS bargain_holds_enhanced (
   expires_at            TIMESTAMPTZ NOT NULL,
   
   -- Promo code information
-  promo_code_id         UUID REFERENCES promo_codes_enhanced(id) ON DELETE SET NULL,
-  markup_rule_id        INT REFERENCES markup_rules(id) ON DELETE SET NULL,
+  promo_code_id         UUID,
+  markup_rule_id        INT,
   
   -- Hold status
   status                TEXT NOT NULL DEFAULT 'active' CHECK (status IN ('active','expired','consumed','cancelled')),
