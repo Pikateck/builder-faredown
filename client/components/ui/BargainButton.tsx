@@ -7,7 +7,7 @@ import {
   isMobileDevice,
 } from "@/lib/mobileUtils";
 import { TrendingDown } from "lucide-react";
-import EnhancedMobileBargainModal from "@/components/mobile/EnhancedMobileBargainModal";
+import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
 
 interface BargainButtonProps {
   children: React.ReactNode;
