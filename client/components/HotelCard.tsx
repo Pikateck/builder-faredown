@@ -301,6 +301,14 @@ export function HotelCard({
       detailParams.set(key, value);
     });
 
+    // Pass cheapest room data for price consistency
+    const cheapestRoomData = getCheapestRoomFromHotel(hotel);
+    if (cheapestRoomData.roomId) {
+      detailParams.set('preSelectedRoomId', cheapestRoomData.roomId);
+      detailParams.set('preSelectedRoomType', cheapestRoomData.roomType || '');
+      detailParams.set('preSelectedPrice', cheapestRoomData.price.toString());
+    }
+
     navigate(`/hotels/${hotel.id}?${detailParams.toString()}`);
   };
 
