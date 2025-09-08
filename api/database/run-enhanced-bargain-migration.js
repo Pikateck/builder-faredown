@@ -26,7 +26,7 @@ async function runEnhancedBargainMigration() {
     console.log("✅ Connected to database");
 
     // Read the migration file
-    const migrationPath = path.join(__dirname, "migrations", "V2025_02_20_enhanced_bargain_system.sql");
+    const migrationPath = path.join(__dirname, "migrations", "V2025_02_20_simple_enhanced_bargain.sql");
     const migrationSQL = fs.readFileSync(migrationPath, "utf8");
 
     console.log("🔄 Running enhanced bargain system migration...");
