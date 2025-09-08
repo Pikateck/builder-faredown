@@ -910,11 +910,35 @@ export default function HotelDetails() {
           }
         }
 
+        // CRITICAL: Override the room's displayed price with the exact price from Results page
+        if (roomToSelect && preselectRate.totalPrice) {
+          // Create a modified room object with the exact displayed total price from Results
+          roomToSelect = {
+            ...roomToSelect,
+            // Keep original per-night price for calculations
+            originalPricePerNight: roomToSelect.pricePerNight,
+            // Override with Results page price to ensure consistency
+            pricePerNight: preselectRate.perNightPrice,
+            // Store the exact total price from Results page
+            exactResultsTotal: preselectRate.totalPrice,
+            // Mark this as price-consistent
+            priceConsistent: true
+          };
+
+          console.log('[PRICE CONSISTENCY OVERRIDE]', {
+            originalRoomPrice: roomToSelect.originalPricePerNight,
+            overriddenPerNight: preselectRate.perNightPrice,
+            exactResultsTotal: preselectRate.totalPrice,
+            preselectData: preselectRate
+          });
+        }
+
         // Debug trace for room matching
         console.log('[ROOM MATCHING]', {
           preselectRateKey: preselectRate.rateKey,
           preselectRoomName: preselectRate.roomName,
           preselectPrice: preselectRate.perNightPrice,
+          preselectTotal: preselectRate.totalPrice,
           matchedRoomId: roomToSelect?.id,
           matchedRoomName: roomToSelect?.name,
           matchedPrice: roomToSelect?.pricePerNight,
@@ -937,8 +961,10 @@ export default function HotelDetails() {
           selectedRoomId: roomToSelect.id,
           selectedRoomName: roomToSelect.name,
           selectedPrice: roomToSelect.pricePerNight,
+          exactTotal: roomToSelect.exactResultsTotal,
           matchType,
-          totalCalc: calculateTotalPrice(roomToSelect.pricePerNight)
+          calculatedTotal: calculateTotalPrice(roomToSelect.pricePerNight),
+          isPriceConsistent: roomToSelect.priceConsistent
         });
       }
     }
