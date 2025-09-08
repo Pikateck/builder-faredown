@@ -6,12 +6,57 @@
 -- Enable UUID extension if not exists
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
+-- Create modules table first (product types)
+CREATE TABLE IF NOT EXISTS modules (
+  id            SERIAL PRIMARY KEY,
+  name          TEXT UNIQUE NOT NULL CHECK (name IN ('flights','hotels','sightseeing','transfers')),
+  display_name  TEXT NOT NULL,
+  icon          TEXT,
+  description   TEXT,
+  active        BOOLEAN DEFAULT TRUE,
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+-- Create bargain sessions table if it doesn't exist
+CREATE TABLE IF NOT EXISTS bargain_sessions (
+  id             UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+  user_id        UUID,                                    -- nullable for guest users
+  module_id      INT NOT NULL REFERENCES modules(id) ON DELETE CASCADE,
+  product_ref    TEXT NOT NULL,                          -- external reference (flight ID, hotel ID, etc.)
+  attempt_count  INT NOT NULL DEFAULT 0,
+  max_attempts   INT NOT NULL DEFAULT 3,
+  ai_personality TEXT NOT NULL DEFAULT 'standard',       -- AI behavior type
+  emotional_state JSONB DEFAULT '{}'::jsonb,             -- AI emotional context
+  user_context   JSONB DEFAULT '{}'::jsonb,              -- user preferences, history
+  base_price     NUMERIC(12,2) NOT NULL,                 -- original price
+  final_price    NUMERIC(12,2),                          -- negotiated price if successful
+  status         TEXT DEFAULT 'active' CHECK (status IN ('active','completed','expired','cancelled')),
+  created_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at     TIMESTAMPTZ NOT NULL DEFAULT now(),
+  expires_at     TIMESTAMPTZ                             -- session expiration
+);
+
+-- Create suppliers table if it doesn't exist
+CREATE TABLE IF NOT EXISTS suppliers (
+  id            SERIAL PRIMARY KEY,
+  module_id     INT NOT NULL REFERENCES modules(id) ON DELETE CASCADE,
+  code          TEXT NOT NULL,                          -- supplier code (e.g., 'AMADEUS', 'HOTELBEDS')
+  name          TEXT NOT NULL,                          -- display name
+  active        BOOLEAN DEFAULT TRUE,
+  api_config    JSONB DEFAULT '{}'::jsonb,              -- API configuration
+  metadata      JSONB DEFAULT '{}'::jsonb,              -- additional supplier data
+  created_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  updated_at    TIMESTAMPTZ NOT NULL DEFAULT now(),
+  UNIQUE(module_id, code)
+);
+
 -- Drop existing constraints that might conflict
-DO $$ 
+DO $$
 BEGIN
     -- Check and drop existing constraint if it exists
-    IF EXISTS (SELECT 1 FROM information_schema.table_constraints 
-               WHERE constraint_name = 'modules_name_check' 
+    IF EXISTS (SELECT 1 FROM information_schema.table_constraints
+               WHERE constraint_name = 'modules_name_check'
                AND table_name = 'modules') THEN
         ALTER TABLE modules DROP CONSTRAINT modules_name_check;
     END IF;
@@ -19,7 +64,7 @@ END $$;
 
 -- Update modules table to include all travel product types
 ALTER TABLE modules DROP CONSTRAINT IF EXISTS modules_name_check;
-ALTER TABLE modules ADD CONSTRAINT modules_name_check 
+ALTER TABLE modules ADD CONSTRAINT modules_name_check
 CHECK (name IN ('flights','hotels','sightseeing','transfers'));
 
 -- Insert all required modules if they don't exist
