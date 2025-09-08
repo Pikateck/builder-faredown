@@ -32,7 +32,8 @@ try {
 
 // const { validateBookingData } = require("../middleware/validation"); // Not available
 const validateBookingData = (req, res, next) => next(); // Placeholder middleware
-const { auditLogger: auditRequest } = require("../middleware/audit");
+const { auditLogger } = require("../middleware/audit");
+const auditRequest = auditLogger;
 const { requireAuth: requireAuth, requireAdmin } = require("../middleware/auth");
 const winston = require("winston");
 
