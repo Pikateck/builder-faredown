@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { BargainButton } from "@/components/ui/BargainButton";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -323,6 +324,55 @@ export default function TransferDetails() {
               <p className="text-sm text-gray-500 mb-4">per transfer</p>
 
               <div className="space-y-2">
+                <BargainButton
+                  useEnhancedModal={true}
+                  module="transfers"
+                  itemName={transfer.vehicleName}
+                  supplierNetRate={transfer.price}
+                  itemDetails={{
+                    transferId: id || "hotelbeds_1",
+                    rateKey: "sample_rate_1",
+                    vehicleName: transfer.vehicleName,
+                    pickupLocation: transfer.from,
+                    dropoffLocation: transfer.to,
+                    pickupDate: pickupDate,
+                    pickupTime: pickupTime,
+                    ...(isRoundTrip && returnDate && { returnDate, returnTime }),
+                    adults: adults,
+                    children: children,
+                    infants: infants,
+                    maxPassengers: 3,
+                    maxLuggage: 2,
+                    estimatedDuration: 45,
+                    providerName: "Premium Transfers",
+                    vehicleType: "sedan",
+                    vehicleClass: transfer.type.toLowerCase(),
+                    features: transfer.features,
+                    inclusions: ["Professional driver", "Meet & greet service", "Free waiting"]
+                  }}
+                  onBargainSuccess={(finalPrice, savings) => {
+                    console.log('Transfer bargain success:', { finalPrice, savings });
+                    const bookingParams = new URLSearchParams({
+                      transferId: id || "hotelbeds_1",
+                      rateKey: "sample_rate_1",
+                      pickupLocation: transfer.from,
+                      dropoffLocation: transfer.to,
+                      pickupDate: pickupDate,
+                      pickupTime: pickupTime,
+                      ...(isRoundTrip && returnDate && { returnDate, returnTime }),
+                      adults: adults,
+                      children: children,
+                      infants: infants,
+                      price: finalPrice.toString(),
+                      bargainApplied: 'true',
+                      vehicleName: transfer.vehicleName,
+                    });
+                    navigate(`/transfer-booking?${bookingParams.toString()}`);
+                  }}
+                  className="w-full py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                >
+                  Bargain
+                </BargainButton>
                 <Button
                   onClick={() => {
                     const bookingParams = new URLSearchParams({
