@@ -3484,5 +3484,3 @@ export default function HotelDetails() {
     </div>
   );
 }
-
-export default HotelDetails;
