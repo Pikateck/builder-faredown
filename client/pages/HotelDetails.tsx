@@ -3534,7 +3534,19 @@ export default function HotelDetails() {
                 useBargainModal={true}
                 module="hotels"
                 itemName={`${hotel.name} - ${selectedRoomType?.name}`}
-                basePrice={selectedRoomType ? calculateTotalPrice(selectedRoomType.pricePerNight) : 0}
+                basePrice={(() => {
+                  const selectedTotal = selectedRoomType ? calculateTotalPrice(selectedRoomType.pricePerNight) : 0;
+                  // Debug trace for mobile bottom bar bargain opening
+                  console.log('[BARGAIN BASE - MOBILE]', {
+                    baseFromSelectedRate: selectedTotal,
+                    selectedRoomId: selectedRoomType?.id,
+                    selectedRoomName: selectedRoomType?.name,
+                    perNightPrice: selectedRoomType?.pricePerNight,
+                    isPreselectedRoom: preselectRate?.rateKey === selectedRoomType?.id,
+                    fromPreselectRate: preselectRate?.totalPrice
+                  });
+                  return selectedTotal;
+                })()}
                 productRef={selectedRoomType?.id || ''}
                 itemDetails={{
                   id: selectedRoomType?.id || '',
