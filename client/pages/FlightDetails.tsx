@@ -549,19 +549,38 @@ export default function FlightDetails({
                   Book Now
                 </Button>
 
-                <Button
-                  className="min-h-[52px] px-6 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d4950b] text-black font-semibold text-sm flex items-center justify-center gap-2 rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
-                  onClick={() => {
-                    if (onBargain) {
-                      onBargain(displayFlight);
-                    } else {
-                      setShowBargainModal(true);
-                    }
+                <BargainButton
+                  useEnhancedModal={true}
+                  module="flights"
+                  itemName={`${displayFlight.airline} ${displayFlight.flightNumber}`}
+                  supplierNetRate={displayFlight.price.amount}
+                  itemDetails={{
+                    location: `${displayFlight.departure.city} to ${displayFlight.arrival.city}`,
+                    provider: displayFlight.airline,
+                    features: [`${displayFlight.fareClass}`, `${displayFlight.duration}`, `${displayFlight.stops === 0 ? 'Direct' : `${displayFlight.stops} stops`}`],
                   }}
+                  onBargainSuccess={(finalPrice, savings) => {
+                    console.log(`Flight Details Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                    // Navigate to booking flow with bargained price
+                    navigate("/booking-flow", {
+                      state: {
+                        selectedFlight: displayFlight,
+                        selectedFareType: {
+                          id: "bargain",
+                          name: displayFlight.fareClass || "Economy",
+                          price: finalPrice,
+                          refundability: "Refundable",
+                        },
+                        negotiatedPrice: finalPrice,
+                        passengers: { adults: 1, children: 0 },
+                        isBargained: true,
+                      },
+                    });
+                  }}
+                  className="min-h-[52px] px-6 py-4 text-black font-semibold text-sm rounded-xl shadow-lg active:shadow-md transition-all touch-manipulation"
                 >
-                  <TrendingDown className="w-4 h-4" />
                   Bargain Now
-                </Button>
+                </BargainButton>
               </div>
             </div>
           </div>
