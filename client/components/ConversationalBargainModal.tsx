@@ -262,6 +262,12 @@ export function ConversationalBargainModal({
 
     if (!userOffer || userOffer <= 0) {
       addMessage("agent", "Please enter a valid price amount.");
+      chatAnalyticsService.trackChatError(
+        module,
+        productRef || `${module}_${Date.now()}`,
+        'INVALID_OFFER',
+        'User entered invalid price amount'
+      ).catch(console.warn);
       return;
     }
 
@@ -270,6 +276,12 @@ export function ConversationalBargainModal({
         "agent",
         `That's actually higher than our current price of ${formatPrice(basePrice)}! You can book now at this great rate.`,
       );
+      chatAnalyticsService.trackChatError(
+        module,
+        productRef || `${module}_${Date.now()}`,
+        'OFFER_TOO_HIGH',
+        'User offer higher than base price'
+      ).catch(console.warn);
       return;
     }
 
@@ -279,6 +291,11 @@ export function ConversationalBargainModal({
 
     setIsNegotiating(true);
     setCurrentPrice("");
+
+    // Track message send and round
+    const entityId = productRef || `${module}_${Date.now()}`;
+    chatAnalyticsService.trackMessageSend(module, entityId, round, userOffer).catch(console.warn);
+    chatAnalyticsService.trackRound(module, entityId, round, basePrice, userOffer).catch(console.warn);
 
     // Add user message
     addMessage("user", `I'd like to pay ${formatPrice(userOffer)}`);
