@@ -113,7 +113,8 @@ export function BargainButton({
       )}
       onClick={handleClick}
       disabled={disabled || loading}
-      {...props}
+      type="button"
+      aria-label={typeof children === 'string' ? children : 'Bargain button'}
     >
       {/* Shimmer Effect */}
       <div
