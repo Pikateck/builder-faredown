@@ -76,10 +76,8 @@ const airlineLogos = {
     "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F840806a2a1814c7494eef5c3d8626229?format=webp&width=800",
 };
 
-// Utility function to format currency
-const formatCurrency = (amount: number) => {
-  return `₹ ${amount.toLocaleString("en-IN")}`;
-};
+// Import currency context at the top of the file if not already imported
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 // Seat Map Component
 const SeatMap = ({
