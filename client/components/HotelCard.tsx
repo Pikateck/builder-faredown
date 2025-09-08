@@ -265,6 +265,16 @@ export function HotelCard({
   );
   const totalPriceInclusiveTaxes = priceCalculation.total;
 
+  // Debug logging for total price calculation
+  console.log(`[HOTEL CARD ${hotel.id}] Total Price Calculation:`, {
+    currentPrice,
+    totalNights,
+    roomsCount,
+    priceCalculation,
+    totalPriceInclusiveTaxes,
+    perNightInclusiveTaxes
+  });
+
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
   };
