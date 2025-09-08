@@ -97,15 +97,15 @@ export function BargainButton({
     console.log('Bargain held:', orderRef);
   };
 
-  // Original working classes from backup
-  const mobileClasses = "flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200";
-  const desktopClasses = "text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200";
-  
+  // Updated to match search button colors (blue theme)
+  const mobileClasses = "flex-1 py-4 bg-[#003580] hover:bg-[#0071c2] active:bg-[#001a40] text-white font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200";
+  const desktopClasses = "text-sm px-5 py-3 bg-[#003580] hover:bg-[#0071c2] active:bg-[#001a40] text-white font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200";
+
   // Use size variants for backward compatibility
   const sizeClasses = {
-    sm: "text-sm px-4 py-2 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[40px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200",
+    sm: "text-sm px-4 py-2 bg-[#003580] hover:bg-[#0071c2] active:bg-[#001a40] text-white font-semibold flex items-center gap-2 min-h-[40px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200",
     md: desktopClasses,
-    lg: "text-lg px-6 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200",
+    lg: "text-lg px-6 py-4 bg-[#003580] hover:bg-[#0071c2] active:bg-[#001a40] text-white font-semibold flex items-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200",
   };
 
   // Determine which classes to use
