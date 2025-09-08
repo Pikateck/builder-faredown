@@ -36,6 +36,7 @@ import {
   isIOS,
   isAndroid,
 } from "@/lib/mobileUtils";
+import { chatAnalyticsService } from "@/services/chatAnalyticsService";
 
 // TypeScript Interfaces
 interface ChatMessage {
