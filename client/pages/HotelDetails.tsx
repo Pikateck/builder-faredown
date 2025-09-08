@@ -3179,53 +3179,6 @@ export default function HotelDetails() {
       </Dialog>
 
       {/* Hotel Conversational Bargain Modal */}
-      {selectedRoomType && (
-        <ConversationalBargainModal
-          hotel={{
-            id: hotel.id,
-            name: hotel.name,
-            location: hotel.location,
-            checkIn: checkInDate.toISOString().split("T")[0],
-            checkOut: checkOutDate.toISOString().split("T")[0],
-            price: calculateTotalPrice(selectedRoomType.pricePerNight),
-            rating: hotel.rating,
-          }}
-          isOpen={isBargainModalOpen}
-          onClose={() => {
-            setIsBargainModalOpen(false);
-            setSelectedRoomType(null);
-            setBargainingRoomId(null);
-          }}
-          onAccept={(finalPrice, orderRef) => {
-            console.log(
-              "Hotel details bargain booking success with price:",
-              finalPrice,
-              "Order ref:",
-              orderRef,
-            );
-            setIsBargainModalOpen(false);
-            handleBooking(selectedRoomType, finalPrice);
-            // Mark room as successfully bargained
-            if (selectedRoomType) {
-              setBargainedRooms(
-                (prev) => new Set([...prev, selectedRoomType.id]),
-              );
-            }
-            setSelectedRoomType(null);
-            setBargainingRoomId(null);
-          }}
-          onHold={(orderRef) => {
-            console.log(
-              "Hotel details bargain offer on hold with order ref:",
-              orderRef,
-            );
-          }}
-          userName={userFirstName}
-          module="hotels"
-          basePrice={calculateTotalPrice(selectedRoomType.pricePerNight)}
-          productRef={selectedRoomType.id}
-        />
-      )}
 
       {/* Write Review Modal - Optimized for Mobile/Native */}
       <Dialog
