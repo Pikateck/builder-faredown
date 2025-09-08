@@ -443,25 +443,25 @@ export default function HotelResults() {
       ],
       rating: 4.8,
       reviews: 1234,
-      originalPrice: 8500, // ₹8,500 per night
-      currentPrice: 6750, // ₹6,750 per night
+      originalPrice: 160, // ₹160 per night (original price)
+      currentPrice: 138, // ₹138 per night (current discounted price)
       description: `Experience luxury in the heart of ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with stunning views, world-class amenities, and exceptional service.`,
       amenities: ["WiFi", "Parking", "Restaurant", "Gym", "Pool", "Spa"],
       features: ["City View", "Business Center", "Concierge", "Room Service"],
       roomTypes: [
         {
           name: "Standard Room",
-          price: 6750, // ₹6,750 per night
+          price: 138, // ₹138 per night (matches currentPrice)
           features: ["King Bed", "City View", "Free WiFi"],
         },
         {
           name: "Deluxe Suite",
-          price: 9500, // ₹9,500 per night
+          price: 155, // ₹155 per night (upgrade option)
           features: ["Living Area", "Ocean View", "Mini Bar"],
         },
         {
           name: "Presidential Suite",
-          price: 15000, // ₹15,000 per night
+          price: 180, // ₹180 per night (premium option)
           features: ["2 Bedrooms", "Private Balcony", "Butler Service"],
         },
       ],
