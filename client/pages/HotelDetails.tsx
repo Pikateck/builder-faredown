@@ -741,7 +741,7 @@ export default function HotelDetails() {
             type: "1 X Premium Room",
             details: "Premium accommodations with city view",
             pricePerNight: base + 25,
-            status: "Upgrade for +₹25",
+            status: "Upgrade for +��25",
             statusColor: "yellow",
             nonRefundable: true,
             image:
@@ -1432,6 +1432,7 @@ export default function HotelDetails() {
                                 ₹
                                 {calculateTotalPrice(
                                   room.pricePerNight,
+                                  room
                                 ).toLocaleString()}
                               </div>
                               <div className="text-xs text-gray-500">
@@ -2140,6 +2141,7 @@ export default function HotelDetails() {
                                 ₹
                                 {calculateTotalPrice(
                                   room.pricePerNight,
+                                  room
                                 ).toLocaleString()}
                               </div>
                               <div className="text-xs text-gray-500">
@@ -2227,6 +2229,7 @@ export default function HotelDetails() {
                                     ₹
                                     {calculateTotalPrice(
                                       room.pricePerNight,
+                                      room
                                     ).toLocaleString()}
                                   </div>
                                   <div className="text-sm font-semibold text-gray-900 mb-1">
@@ -3071,7 +3074,7 @@ export default function HotelDetails() {
                             </span>
                           </div>
                           <div className="text-xs text-gray-500 mb-2">
-                            {review.room} • {review.date} • {review.type}
+                            {review.room} • {review.date} ��� {review.type}
                           </div>
                           <h4 className="font-semibold mb-1">{review.title}</h4>
                           <p className="text-sm text-gray-700 mb-2">
