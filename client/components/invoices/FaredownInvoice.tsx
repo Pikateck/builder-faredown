@@ -9,6 +9,7 @@ import {
   CreditCard,
 } from "lucide-react";
 import { preparePrintDocument } from "@/utils/printUtils";
+import { currencyService } from "@/services/currencyService";
 
 interface InvoiceItem {
   description: string;
