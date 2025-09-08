@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import {
@@ -6,7 +6,8 @@ import {
   hapticFeedback,
   isMobileDevice,
 } from "@/lib/mobileUtils";
-import { Sparkles } from "lucide-react";
+import { Sparkles, TrendingDown } from "lucide-react";
+import EnhancedMobileBargainModal from "@/components/mobile/EnhancedMobileBargainModal";
 
 interface BargainButtonProps {
   children: React.ReactNode;
@@ -16,6 +17,18 @@ interface BargainButtonProps {
   className?: string;
   size?: "sm" | "md" | "lg";
   icon?: boolean;
+  // Enhanced bargain props
+  module?: 'flights' | 'hotels' | 'sightseeing' | 'transfers';
+  itemName?: string;
+  supplierNetRate?: number;
+  itemDetails?: {
+    features?: string[];
+    location?: string;
+    provider?: string;
+  };
+  promoCode?: string;
+  onBargainSuccess?: (finalPrice: number, savings: number) => void;
+  useEnhancedModal?: boolean;
 }
 
 export function BargainButton({
@@ -26,8 +39,18 @@ export function BargainButton({
   className = "",
   size = "md",
   icon = true,
+  // Enhanced bargain props
+  module = 'hotels',
+  itemName = '',
+  supplierNetRate = 0,
+  itemDetails = {},
+  promoCode,
+  onBargainSuccess,
+  useEnhancedModal = false,
   ...props
 }: BargainButtonProps) {
+  const [isEnhancedModalOpen, setIsEnhancedModalOpen] = useState(false);
+
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
 
@@ -36,7 +59,17 @@ export function BargainButton({
       hapticFeedback("light");
     }
 
-    onClick?.(e);
+    // Use enhanced modal if enabled and required props are provided
+    if (useEnhancedModal && itemName && supplierNetRate > 0) {
+      setIsEnhancedModalOpen(true);
+    } else {
+      onClick?.(e);
+    }
+  };
+
+  const handleEnhancedBargainSuccess = (finalPrice: number, savings: number) => {
+    setIsEnhancedModalOpen(false);
+    onBargainSuccess?.(finalPrice, savings);
   };
 
   React.useEffect(() => {
