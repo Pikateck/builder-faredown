@@ -240,9 +240,9 @@ CREATE TABLE IF NOT EXISTS bargain_rounds (
 -- Create promo code usage tracking table
 CREATE TABLE IF NOT EXISTS promo_usage_log (
   id                    UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  promo_code_id         UUID NOT NULL REFERENCES promo_codes_enhanced(id) ON DELETE CASCADE,
+  promo_code_id         UUID NOT NULL,
   user_id               UUID,
-  session_id            UUID REFERENCES bargain_sessions(id) ON DELETE SET NULL,
+  session_id            UUID,
   module_id             INT NOT NULL REFERENCES modules(id) ON DELETE CASCADE,
   
   -- Usage details
