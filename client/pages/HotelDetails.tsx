@@ -875,43 +875,74 @@ export default function HotelDetails() {
   useEffect(() => {
     if (roomTypes.length > 0) {
       let roomToSelect = null;
+      let matchType = 'default';
 
-      // First priority: Pre-selected room from Results page
-      if (preSelectedRoomId || preSelectedRoomType) {
+      // First priority: Pre-selected room from Results page navigation state
+      if (preselectRate) {
+        // Try to match by rateKey/roomId first
         roomToSelect = roomTypes.find(room =>
-          room.id === preSelectedRoomId ||
-          room.name === preSelectedRoomType ||
-          room.type === preSelectedRoomType
+          room.id === preselectRate.rateKey ||
+          room.id === preselectRate.roomId ||
+          room.id === preselectRate.roomTypeId
         );
 
-        if (roomToSelect && preSelectedPrice) {
-          // Verify price matches (within a reasonable tolerance for rounding)
-          const expectedPrice = parseFloat(preSelectedPrice);
-          const roomPrice = roomToSelect.pricePerNight || 0;
-          const priceDiff = Math.abs(roomPrice - expectedPrice);
+        if (roomToSelect) {
+          matchType = 'rateKey';
+        } else {
+          // Try to match by room name/type
+          roomToSelect = roomTypes.find(room =>
+            room.name === preselectRate.roomName ||
+            room.name === preselectRate.roomType ||
+            room.type === preselectRate.roomType
+          );
 
-          // If price differs significantly, find closest matching price
-          if (priceDiff > 5) {
+          if (roomToSelect) {
+            matchType = 'roomName';
+          } else {
+            // Match by closest price if exact room not found
+            const expectedPerNight = preselectRate.perNightPrice;
             roomToSelect = roomTypes.reduce((closest, room) => {
-              const currentDiff = Math.abs((room.pricePerNight || 0) - expectedPrice);
-              const closestDiff = Math.abs((closest?.pricePerNight || 0) - expectedPrice);
+              const currentDiff = Math.abs((room.pricePerNight || 0) - expectedPerNight);
+              const closestDiff = Math.abs((closest?.pricePerNight || 0) - expectedPerNight);
               return currentDiff < closestDiff ? room : closest;
             }, roomTypes[0]);
+            matchType = 'priceMatch';
           }
         }
+
+        // Debug trace for room matching
+        console.log('[ROOM MATCHING]', {
+          preselectRateKey: preselectRate.rateKey,
+          preselectRoomName: preselectRate.roomName,
+          preselectPrice: preselectRate.perNightPrice,
+          matchedRoomId: roomToSelect?.id,
+          matchedRoomName: roomToSelect?.name,
+          matchedPrice: roomToSelect?.pricePerNight,
+          matchType
+        });
       }
 
       // Fallback: Select first room if no pre-selection or no match found
       if (!roomToSelect) {
         roomToSelect = roomTypes[0];
+        matchType = 'fallback';
       }
 
       // Only update if different from current selection
       if (!selectedRoomType || selectedRoomType.id !== roomToSelect.id) {
         setSelectedRoomType(roomToSelect);
+
+        // Debug trace for final selection
+        console.log('[DETAILS ROOM SELECTED]', {
+          selectedRoomId: roomToSelect.id,
+          selectedRoomName: roomToSelect.name,
+          selectedPrice: roomToSelect.pricePerNight,
+          matchType,
+          totalCalc: calculateTotalPrice(roomToSelect.pricePerNight)
+        });
       }
     }
-  }, [roomTypes.length, preSelectedRoomId, preSelectedRoomType, preSelectedPrice]);
+  }, [roomTypes.length, preselectRate]);
 
   // Expand first room by default when room types are available
   useEffect(() => {
