@@ -34,6 +34,12 @@ import {
   formatLocalPrice,
   calculateNights,
 } from "@/lib/pricing";
+import {
+  createRateData,
+  findCheapestRoom,
+  logNavigationDebug,
+  formatPrice as utilFormatPrice
+} from "@/utils/priceUtils";
 
 // Extend HotelType with additional props for backward compatibility
 interface Hotel extends Partial<HotelType> {
