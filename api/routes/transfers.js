@@ -32,7 +32,7 @@ try {
 
 const { validateBookingData } = require("../middleware/validation");
 const { auditLogger: auditRequest } = require("../middleware/audit");
-const { authenticateToken: requireAuth, requireAdmin } = require("../middleware/auth");
+const { requireAuth: requireAuth, requireAdmin } = require("../middleware/auth");
 const winston = require("winston");
 
 const router = express.Router();
@@ -382,7 +382,7 @@ router.post(
  */
 router.get(
   "/booking/:id",
-  authenticateToken,
+  requireAuth,
   auditRequest,
   async (req, res) => {
     try {
@@ -438,7 +438,7 @@ router.get(
  */
 router.post(
   "/booking/:id/cancel",
-  authenticateToken,
+  requireAuth,
   auditRequest,
   async (req, res) => {
     try {
