@@ -3,6 +3,7 @@ import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { BargainButton } from "@/components/ui/BargainButton";
 import type { Hotel as HotelType } from "@/services/hotelsService";
 import {
   Star,
@@ -756,13 +757,24 @@ export function HotelCard({
               >
                 View Details
               </Button>
-              <Button
-                onClick={() => onBargainClick(hotel, searchParams)}
-                className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+              <BargainButton
+                useEnhancedModal={true}
+                module="hotels"
+                itemName={hotel.name}
+                supplierNetRate={totalPriceInclusiveTaxes}
+                itemDetails={{
+                  location: hotelLocation,
+                  provider: "Hotelbeds",
+                  features: hotel.features || hotelAmenities,
+                }}
+                onBargainSuccess={(finalPrice, savings) => {
+                  console.log(`Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                  // Handle successful bargain - could navigate to booking or update state
+                }}
+                className="text-sm px-5 py-3 font-semibold min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
               >
-                <TrendingDown className="w-4 h-4" />
                 Bargain Now
-              </Button>
+              </BargainButton>
             </div>
           </div>
         </CardContent>
