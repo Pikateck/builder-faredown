@@ -6,7 +6,7 @@ import { useBooking } from "@/contexts/BookingContext";
 import { Header } from "@/components/layout/Header";
 import { flightsService, Flight } from "@/services/flightsService";
 import { Button } from "@/components/ui/button";
-import ConversationalBargainModal from "@/components/ConversationalBargainModal";
+import { BargainButton } from "@/components/ui/BargainButton";
 import { Badge } from "@/components/ui/badge";
 import { MobileFilters } from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
