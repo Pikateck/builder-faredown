@@ -1245,15 +1245,30 @@ export default function SightseeingDetails() {
                           {/* Action Buttons */}
                           <div className="p-4 md:p-6">
                             <div className="flex flex-col sm:flex-row gap-3">
-                              <Button
-                                onClick={() => handleBargainClick(index)}
-                                className="flex-1 bg-[#febb02] hover:bg-[#e5a700] text-[#003580] font-semibold py-3 px-4 text-sm sm:text-base rounded-lg shadow-sm border border-[#d19900] transition-all duration-200 min-h-[48px] flex items-center justify-center"
+                              <BargainButton
+                                useEnhancedModal={true}
+                                module="sightseeing"
+                                itemName={`${attraction.name} - ${ticket.name}`}
+                                supplierNetRate={totalPrice}
+                                itemDetails={{
+                                  location: attraction.location,
+                                  provider: "Local Tours",
+                                  features: ticket.features?.slice(0, 5) || [],
+                                }}
+                                onBargainSuccess={(finalPrice, savings) => {
+                                  console.log(`Sightseeing Details Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                                  // Navigate to booking with bargained price
+                                  const params = new URLSearchParams(searchParams);
+                                  params.set("attractionId", attraction.id);
+                                  params.set("ticketType", index.toString());
+                                  params.set("bargainApplied", "true");
+                                  params.set("bargainPrice", finalPrice.toString());
+                                  navigate(`/sightseeing/booking?${params.toString()}`);
+                                }}
+                                className="flex-1 text-[#003580] font-semibold py-3 px-4 text-sm sm:text-base rounded-lg shadow-sm border border-[#d19900] transition-all duration-200 min-h-[48px]"
                               >
-                                <TrendingDown className="w-4 h-4 mr-2 flex-shrink-0" />
-                                <span className="truncate">
-                                  Bargain This Price
-                                </span>
-                              </Button>
+                                Bargain This Price
+                              </BargainButton>
                               <Button
                                 onClick={() => handleBookNow(index)}
                                 className="flex-1 bg-[#003580] hover:bg-[#002a66] text-white font-bold py-3 px-4 text-sm sm:text-base rounded-lg shadow-lg transition-all duration-200 min-h-[48px] flex items-center justify-center"
