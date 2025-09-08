@@ -1173,13 +1173,56 @@ export default function TransferResults() {
                         >
                           View Details
                         </Button>
-                        <Button
-                          onClick={() => handleBargain(transfer)}
+                        <BargainButton
+                          useEnhancedModal={true}
+                          module="transfers"
+                          itemName={transfer.vehicleName}
+                          supplierNetRate={transfer.pricing.totalPrice}
+                          itemDetails={{
+                            transferId: transfer.id,
+                            rateKey: transfer.rateKey,
+                            vehicleName: transfer.vehicleName,
+                            pickupLocation: transfer.pickupLocation,
+                            dropoffLocation: transfer.dropoffLocation,
+                            pickupDate,
+                            pickupTime,
+                            ...(isRoundTrip && { returnDate, returnTime }),
+                            adults: adults.toString(),
+                            children: children.toString(),
+                            infants: infants.toString(),
+                            maxPassengers: transfer.maxPassengers,
+                            maxLuggage: transfer.maxLuggage,
+                            estimatedDuration: transfer.estimatedDuration,
+                            providerName: transfer.providerName,
+                            vehicleType: transfer.vehicleType,
+                            vehicleClass: transfer.vehicleClass,
+                            features: transfer.features,
+                            inclusions: transfer.inclusions
+                          }}
+                          onBargainSuccess={(finalPrice, savings) => {
+                            console.log('Transfer bargain success:', { finalPrice, savings });
+                            const bookingParams = new URLSearchParams({
+                              transferId: transfer.id,
+                              rateKey: transfer.rateKey,
+                              vehicleName: transfer.vehicleName,
+                              price: finalPrice.toString(),
+                              bargainApplied: 'true',
+                              pickupLocation: pickupLocation,
+                              dropoffLocation: dropoffLocation,
+                              pickupDate: pickupDate,
+                              pickupTime: pickupTime,
+                              ...(isRoundTrip && { returnDate, returnTime }),
+                              adults: adults.toString(),
+                              children: children.toString(),
+                              infants: infants.toString(),
+                            });
+                            navigate(`/transfer-booking?${bookingParams.toString()}`);
+                          }}
                           className="w-full py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                         >
                           <TrendingDown className="w-4 h-4" />
                           Bargain
-                        </Button>
+                        </BargainButton>
                       </div>
 
                       {/* Cancellation Policy */}
@@ -1273,13 +1316,13 @@ export default function TransferResults() {
             </div>
 
             <div className="flex gap-3">
-              <Button
+              <BargainButton
                 onClick={handleBottomBarBargain}
-                className="flex-1 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                className="flex-1 bg-[#febb02] hover:bg-[#e6a602] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
               >
                 <TrendingDown className="w-4 h-4" />
                 Bargain
-              </Button>
+              </BargainButton>
               <Button
                 onClick={handleBottomBarViewDetails}
                 className="flex-1 py-3 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
@@ -1291,46 +1334,6 @@ export default function TransferResults() {
         </div>
       )}
 
-      {/* Transfer Conversational Bargain Modal */}
-      <ConversationalBargainModal
-        isOpen={showBargainModal}
-        onClose={() => {
-          setShowBargainModal(false);
-          setSelectedTransfer(null);
-        }}
-        onAccept={(finalPrice, orderRef) => {
-          console.log("Transfer bargain booking success with price:", finalPrice, "Order ref:", orderRef);
-          setShowBargainModal(false);
-          setSelectedTransfer(null);
-
-          // Navigate to transfer booking with bargained price
-          const bookingParams = new URLSearchParams({
-            transferId: selectedTransfer?.id || "",
-            rateKey: selectedTransfer?.rateKey || "",
-            vehicleName: selectedTransfer?.vehicleName || "",
-            price: finalPrice.toString(),
-            bargainApplied: "true",
-            pickupLocation: pickupLocation,
-            dropoffLocation: dropoffLocation,
-            pickupDate: pickupDate,
-            pickupTime: pickupTime,
-            ...(isRoundTrip && { returnDate, returnTime }),
-            adults: adults.toString(),
-            children: children.toString(),
-            infants: infants.toString(),
-            orderRef: orderRef,
-          });
-
-          navigate(`/transfer-booking?${bookingParams.toString()}`);
-        }}
-        onHold={(orderRef) => {
-          console.log("Transfer bargain offer on hold with order ref:", orderRef);
-        }}
-        userName={userFirstName}
-        module="transfers"
-        basePrice={selectedTransfer?.pricing.totalPrice || 0}
-        productRef={selectedTransfer?.id || ""}
-      />
     </div>
   );
 }
