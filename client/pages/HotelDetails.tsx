@@ -568,6 +568,14 @@ export default function HotelDetails() {
         })(),
         location: (() => {
           const hotelLocations = {
+            // Map actual hotel IDs from search results
+            "hotel-1": "Sheikh Zayed Road, Dubai, United Arab Emirates",
+            "hotel-2": "Dubai Marina, Dubai, United Arab Emirates",
+            "hotel-3": "Downtown Dubai, Dubai, United Arab Emirates",
+            "1": "Sheikh Zayed Road, Dubai, United Arab Emirates",
+            "2": "Dubai Marina, Dubai, United Arab Emirates",
+            "3": "Downtown Dubai, Dubai, United Arab Emirates",
+            // Legacy codes for backward compatibility
             "htl-DXB-001": "Sheikh Zayed Road, Dubai, United Arab Emirates",
             "htl-DXB-002": "Dubai Marina, Dubai, United Arab Emirates",
             "htl-DXB-003": "Downtown Dubai, Dubai, United Arab Emirates",
