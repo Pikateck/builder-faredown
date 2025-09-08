@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { BargainButton } from "@/components/ui/BargainButton";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { sightseeingService } from "@/services/sightseeingService";
 import {
