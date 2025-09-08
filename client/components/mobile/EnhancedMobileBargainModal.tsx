@@ -121,10 +121,20 @@ export const EnhancedMobileBargainModal: React.FC<EnhancedMobileBargainModalProp
   const initializeBargainSession = async () => {
     try {
       setError('');
+      // Generate a temporary user ID if not available
+      const tempUserId = localStorage.getItem('temp_user_id') ||
+        `guest_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+      localStorage.setItem('temp_user_id', tempUserId);
+
+      // Use hotel ID as product_id, fallback to a generated ID
+      const productId = itemDetails.hotelId || itemDetails.id || `product_${Date.now()}`;
+
       const response = await enhancedBargainService.startSession({
+        user_id: tempUserId,
         module,
+        product_id: productId,
         supplier_net_rate: supplierNetRate,
-        user_context: {
+        product_details: {
           item_name: itemName,
           location: itemDetails.location,
           features: itemDetails.features,
