@@ -232,6 +232,16 @@ export function HotelCard({
   const currentPrice = getHotelPrice();
   const hotelAmenities = getHotelAmenities();
 
+  // Debug logging for price calculations
+  console.log(`[HOTEL CARD ${hotel.id}] Price Calculation:`, {
+    hotelId: hotel.id,
+    hotelName: hotel.name,
+    currentPrice,
+    hotelCurrentPrice: hotel.currentPrice,
+    roomTypes: hotel.roomTypes,
+    priceRange: hotel.priceRange
+  });
+
   // Get search parameters for price calculation
   const checkInDate = searchParams.get("checkIn")
     ? new Date(searchParams.get("checkIn")!)
