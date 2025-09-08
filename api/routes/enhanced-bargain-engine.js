@@ -337,7 +337,7 @@ router.post("/offer", async (req, res) => {
         markup_amount: Math.round(pricing.markup_amount),
         promo_discount: Math.round(pricing.promo_discount),
         total_discount: Math.round(pricing.total_discount),
-        your_savings: user_target_price < supplier_net_rate + pricing.markup_amount 
+        your_savings: user_target_price < (supplier_net_rate + pricing.markup_amount)
           ? Math.round((supplier_net_rate + pricing.markup_amount) - user_target_price)
           : 0
       },
