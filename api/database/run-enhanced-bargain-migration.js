@@ -57,11 +57,9 @@ async function runEnhancedBargainMigration() {
       // Test the calculation function
       console.log("🧪 Testing bargain calculation function...");
       const testResult = await client.query(`
-        SELECT * FROM calculate_bargain_price(
+        SELECT * FROM calculate_enhanced_bargain_price(
           10000,  -- ₹10,000 supplier net rate
-          (SELECT id FROM modules WHERE name = 'hotels' LIMIT 1),  -- Hotels module
-          NULL,   -- No specific supplier
-          '{}',   -- No filters
+          'hotels',  -- Hotels module
           'FAREDOWN25'  -- Test promo code
         )
       `);
