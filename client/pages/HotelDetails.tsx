@@ -882,51 +882,32 @@ export default function HotelDetails() {
         ...tempHotelData,
         roomTypes: deduplicatedRoomTypes,
       }
-    : {
-        // Emergency fallback if tempHotelData is null
-        id: parseInt(hotelId || "1"),
-        name: "Hotel " + (hotelId || "1"),
-        location: "Dubai, United Arab Emirates",
-        image:
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
-        images: [],
-        rating: 4.2,
-        reviews: 1247,
-        checkIn: checkInDate.toISOString().split("T")[0],
-        checkOut: checkOutDate.toISOString().split("T")[0],
-        totalNights: totalNights,
-        rooms: parseInt(roomsParam || "1"),
-        adults: parseInt(adultsParam || "2"),
-        description:
-          "Experience exceptional hospitality at this premium hotel.",
-        amenities: ["WiFi", "Pool", "Restaurant"],
-        features: ["City View"],
-        currentPrice: 167,
-        totalPrice: 167 * totalNights,
-        currency: "USD",
-        available: true,
-        supplier: "fallback",
-        isLiveData: false,
-        roomTypes:
-          deduplicatedRoomTypes.length > 0
-            ? deduplicatedRoomTypes
-            : [
-                {
-                  id: "standard-room",
-                  name: "Standard Double Room",
-                  type: "1 X Standard Double",
-                  details: "Comfortable double room",
-                  pricePerNight: 167,
-                  status: "Available",
-                  statusColor: "green",
-                  nonRefundable: true,
-                  image:
-                    "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop",
-                  features: ["Standard Room", "Free WiFi", "Air conditioning"],
-                  isLiveData: false,
-                },
-              ],
-      };
+    : (() => {
+        // Emergency fallback - use proper mapped names instead of placeholder
+        const fallbackData = getMockHotelData();
+        return {
+          ...fallbackData,
+          roomTypes:
+            deduplicatedRoomTypes.length > 0
+              ? deduplicatedRoomTypes
+              : [
+                  {
+                    id: "standard-room",
+                    name: "Standard Double Room",
+                    type: "1 X Standard Double",
+                    details: "Comfortable double room",
+                    pricePerNight: fallbackData.currentPrice || 167,
+                    status: "Available",
+                    statusColor: "green",
+                    nonRefundable: true,
+                    image:
+                      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop",
+                    features: ["Standard Room", "Free WiFi", "Air conditioning"],
+                    isLiveData: false,
+                  },
+                ],
+        };
+      })();
 
   const tabs = [
     { id: "overview", label: "Overview" },
