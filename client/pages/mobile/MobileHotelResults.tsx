@@ -44,7 +44,7 @@ const MobileHotelResults = () => {
       price: 45000,
       originalPrice: 55000,
       currency: "INR",
-      images: ["hotel1.jpg"],
+      images: ["https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop"],
       amenities: ["wifi", "parking", "pool", "gym", "spa"],
       description: "Iconic sail-shaped luxury hotel with world-class amenities",
       rooms: [
