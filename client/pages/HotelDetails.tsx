@@ -372,8 +372,16 @@ export default function HotelDetails() {
       hotelCode.toLowerCase().includes("luxury");
     const isBoutiqueHotel = hotelCode.toLowerCase().includes("boutique");
 
-    // Generate realistic hotel names based on code
+    // Generate realistic hotel names based on actual hotel IDs from search results
     const hotelNames = {
+      // Map actual hotel IDs from search results
+      "hotel-1": "Grand Hotel Dubai",
+      "hotel-2": "Business Hotel Dubai",
+      "hotel-3": "Boutique Hotel Dubai",
+      "1": "Grand Hotel Dubai",
+      "2": "Business Hotel Dubai",
+      "3": "Boutique Hotel Dubai",
+      // Legacy codes for backward compatibility
       "htl-DXB-001": "Grand Hyatt Dubai",
       "htl-DXB-002": "Business Hotel Dubai Marina",
       "htl-DXB-003": "Boutique Hotel Downtown Dubai",
@@ -385,15 +393,23 @@ export default function HotelDetails() {
     const defaultName =
       hotelNames[hotelCode] ||
       (isBusinessHotel
-        ? `Business Hotel ${hotelCode}`
+        ? `Business Hotel Dubai`
         : isLuxuryHotel
-          ? `Grand Luxury Hotel ${hotelCode}`
+          ? `Grand Luxury Hotel Dubai`
           : isBoutiqueHotel
-            ? `Boutique Hotel ${hotelCode}`
-            : `Premium Hotel ${hotelCode}`);
+            ? `Boutique Hotel Dubai`
+            : `Premium Hotel Dubai`);
 
     // Hotel-specific locations
     const hotelLocations = {
+      // Map actual hotel IDs from search results
+      "hotel-1": "Sheikh Zayed Road, Dubai, United Arab Emirates",
+      "hotel-2": "Dubai Marina, Dubai, United Arab Emirates",
+      "hotel-3": "Downtown Dubai, Dubai, United Arab Emirates",
+      "1": "Sheikh Zayed Road, Dubai, United Arab Emirates",
+      "2": "Dubai Marina, Dubai, United Arab Emirates",
+      "3": "Downtown Dubai, Dubai, United Arab Emirates",
+      // Legacy codes for backward compatibility
       "htl-DXB-001": "Sheikh Zayed Road, Dubai, United Arab Emirates",
       "htl-DXB-002": "Dubai Marina, Dubai, United Arab Emirates",
       "htl-DXB-003": "Downtown Dubai, Dubai, United Arab Emirates",
