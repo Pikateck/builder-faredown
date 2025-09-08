@@ -33,9 +33,11 @@ export interface EnhancedBargainRound {
 }
 
 export interface EnhancedBargainRequest {
+  user_id: string;
   module: 'flights' | 'hotels' | 'sightseeing' | 'transfers';
+  product_id: string;
   supplier_net_rate: number;
-  user_context?: {
+  product_details?: {
     location?: string;
     item_name?: string;
     features?: string[];
