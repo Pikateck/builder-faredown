@@ -466,6 +466,18 @@ export function ConversationalBargainModal({
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
+  // Handle modal close with analytics tracking
+  const handleClose = useCallback(() => {
+    const entityId = productRef || `${module}_${Date.now()}`;
+    const closeReason = isComplete ? 'max_rounds_reached' :
+                       timerExpired ? 'timer_expired' :
+                       showOfferActions ? 'offer_pending' :
+                       'user_closed';
+
+    chatAnalyticsService.trackClosed(module, entityId, round, closeReason).catch(console.warn);
+    onClose();
+  }, [productRef, module, isComplete, timerExpired, showOfferActions, round, onClose]);
+
   // Validation flags - no early returns to maintain hooks consistency
   const hasValidCallbacks = onClose && onAccept;
   const hasValidFlightData = module !== "flights" || flight;
