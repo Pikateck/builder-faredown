@@ -117,6 +117,7 @@ export default function HotelDetails() {
   useScrollToTop();
   const { hotelId } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const { formatPrice } = useCurrency();
   const { loadDatesFromParams } = useDateContext();
@@ -134,10 +135,16 @@ export default function HotelDetails() {
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [showSaveDropdown, setShowSaveDropdown] = useState(false);
 
-  // Pre-selected room data from Results page for price consistency
-  const preSelectedRoomId = searchParams.get('preSelectedRoomId');
-  const preSelectedRoomType = searchParams.get('preSelectedRoomType');
-  const preSelectedPrice = searchParams.get('preSelectedPrice');
+  // Pre-selected rate data from Results page (single source of truth)
+  const preselectRate = (location.state as any)?.preselectRate;
+
+  // Debug trace for details mount
+  console.log('[DETAILS PRESELECT]', {
+    receivedRateKey: preselectRate?.rateKey,
+    receivedTotalPrice: preselectRate?.totalPrice,
+    receivedRoomName: preselectRate?.roomName,
+    hasPreselectData: !!preselectRate
+  });
   const saveDropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
