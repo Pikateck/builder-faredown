@@ -50,10 +50,12 @@ export function BargainButton({
   module = 'hotels',
   itemName = '',
   basePrice = 0,
+  supplierNetRate,
   productRef = '',
   itemDetails = {},
   onBargainSuccess,
   useBargainModal = false,
+  useEnhancedModal = false,
   userName = 'Guest',
   isMobile = false,
   // Extract only valid DOM props
@@ -69,6 +71,12 @@ export function BargainButton({
 }) {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
 
+  // Use either basePrice or supplierNetRate
+  const effectivePrice = supplierNetRate || basePrice;
+
+  // Use either useBargainModal or useEnhancedModal
+  const shouldUseBargainModal = useBargainModal || useEnhancedModal;
+
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
 
@@ -81,7 +89,7 @@ export function BargainButton({
     }
 
     // Use bargain modal if enabled and required props are provided
-    if (useBargainModal && itemName && basePrice > 0) {
+    if (shouldUseBargainModal && itemName && effectivePrice > 0) {
       setIsBargainModalOpen(true);
     } else {
       onClick?.(e);
