@@ -250,7 +250,7 @@ export class ApiClient {
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
     // Use fallback immediately if forced or offline mode disabled in production
-    if (this.forceFallback || 
+    if (this.forceFallback ||
         (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)) {
       logApiEvent('info', `Using fallback data for ${endpoint}`);
       return this.devClient.get<T>(endpoint, params);
@@ -285,27 +285,34 @@ export class ApiClient {
       if (error instanceof Error) {
         if (error.name === "AbortError") {
           logApiEvent('warn', `Request timeout for ${endpoint}`, { timeout: this.timeout });
-        } else if (error.message.includes("Failed to fetch") || 
+        } else if (error.message.includes("Failed to fetch") ||
                    error.message.includes("NetworkError") ||
                    error.message.includes("fetch")) {
           logApiEvent('warn', `Network unavailable for ${endpoint}`, { error: error.message });
+        } else if (error instanceof ApiError && error.status === 503) {
+          logApiEvent('warn', `Backend server unavailable for ${endpoint}`, { error: error.message });
         } else {
           logApiEvent('error', `Request failed for ${endpoint}`, { error: error.message });
         }
       }
 
-      // Fallback handling with production safety
-      if (API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
+      // Fallback handling - always try fallback for common error scenarios
+      if (API_CONFIG.OFFLINE_FALLBACK_ENABLED ||
+          (error instanceof Error && (
+            error.message.includes("Failed to fetch") ||
+            error.message.includes("Service unavailable") ||
+            (error instanceof ApiError && error.status === 503)
+          ))) {
         try {
-          logApiEvent('info', `Using fallback data for ${endpoint}`);
+          logApiEvent('info', `Using fallback data for ${endpoint} due to error: ${error instanceof Error ? error.message : 'Unknown error'}`);
           return this.devClient.get<T>(endpoint, params);
         } catch (fallbackError) {
           logApiEvent('error', `Fallback also failed for ${endpoint}`, { error: fallbackError });
         }
       }
 
-      // Production: don't silently swallow errors
-      if (API_CONFIG.IS_PRODUCTION) {
+      // Production: don't silently swallow errors unless using fallback
+      if (API_CONFIG.IS_PRODUCTION && !API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
         throw error;
       }
 
