@@ -49,7 +49,7 @@ async function testEnhancedBargainAPI() {
     // Test 1: Start a bargain session
     console.log('\n📋 Test 1: Starting bargain session...');
     const startResponse = await makeRequest('/api/enhanced-bargain/start', 'POST', {
-      user_id: 'test-user-123',
+      user_id: '123e4567-e89b-12d3-a456-426614174000',
       module: 'hotels',
       product_id: 'hotel-dubai-123',
       supplier_net_rate: 10000,
