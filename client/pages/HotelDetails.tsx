@@ -456,7 +456,7 @@ export default function HotelDetails() {
           ],
           "hotel-3": [
             // Boutique Hotel Dubai
-            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb6e5d29525ed45bca0c16b169e94ceb9?format=webp&width=800",
+            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb4f543bb6e0a4724b7e504a2bba7767b?format=webp&width=800",
             "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F9669661aee854b14a48bb7396266976b?format=webp&width=800",
             "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop",
@@ -477,7 +477,7 @@ export default function HotelDetails() {
           ],
           "3": [
             // Boutique Hotel Dubai (numeric ID)
-            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb6e5d29525ed45bca0c16b169e94ceb9?format=webp&width=800",
+            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb4f543bb6e0a4724b7e504a2bba7767b?format=webp&width=800",
             "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F9669661aee854b14a48bb7396266976b?format=webp&width=800",
             "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop",
@@ -499,7 +499,7 @@ export default function HotelDetails() {
           ],
           "htl-DXB-003": [
             // Boutique Hotel Downtown Dubai
-            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb6e5d29525ed45bca0c16b169e94ceb9?format=webp&width=800",
+            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fb4f543bb6e0a4724b7e504a2bba7767b?format=webp&width=800",
             "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F9669661aee854b14a48bb7396266976b?format=webp&width=800",
             "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop",
