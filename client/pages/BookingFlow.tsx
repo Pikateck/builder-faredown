@@ -499,7 +499,7 @@ const SeatMap = ({
                   <div className="mb-6">
                     <div className="text-center mb-2">
                       <span className="text-xs font-medium text-white bg-[#009fe3] px-2 py-1 rounded">
-                        Economy Plus (₹1,500)
+                        Economy Plus (���1,500)
                       </span>
                     </div>
 
@@ -848,6 +848,7 @@ const SeatMap = ({
 
 export default function BookingFlow() {
   useScrollToTop();
+  const { formatPrice } = useCurrency();
 
   // Custom CSS for consistent form control sizing
   const customStyles = `
