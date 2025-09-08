@@ -293,6 +293,53 @@ export function HotelCard({
     }
   };
 
+  // Helper function to get cheapest room data for navigation
+  const getCheapestRoomFromHotel = (hotel: Hotel): {
+    price: number;
+    room: any | null;
+    roomId: string | null;
+    roomType: string | null;
+  } => {
+    if (!hotel) return { price: 0, room: null, roomId: null, roomType: null };
+
+    const roomsArr: any[] = (hotel as any).roomTypes || [];
+    if (Array.isArray(roomsArr) && roomsArr.length > 0) {
+      // Find the cheapest room with all its details
+      let cheapestRoom: any = null;
+      let cheapestPrice = Infinity;
+
+      roomsArr.forEach((room: any, index: number) => {
+        const price = room ? room.pricePerNight || room.price || 0 : 0;
+        if (typeof price === "number" && isFinite(price) && price > 0 && price < cheapestPrice) {
+          cheapestPrice = price;
+          cheapestRoom = room;
+        }
+      });
+
+      if (cheapestRoom) {
+        return {
+          price: cheapestPrice,
+          room: cheapestRoom,
+          roomId: cheapestRoom.id || `room-${roomsArr.indexOf(cheapestRoom)}`,
+          roomType: cheapestRoom.name || cheapestRoom.type || 'Standard Room',
+        };
+      }
+    }
+
+    // Fallback to hotel-level pricing
+    const fallbackPrice = (hotel as any).currentPrice ||
+      (hotel as any).pricePerNight ||
+      (hotel as any).priceRange?.min ||
+      0;
+
+    return {
+      price: fallbackPrice,
+      room: null,
+      roomId: null,
+      roomType: null
+    };
+  };
+
   // Handle view details action
   const handleViewDetails = () => {
     // Navigate to hotel details page with search context
