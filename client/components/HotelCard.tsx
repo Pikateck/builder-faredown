@@ -356,18 +356,40 @@ export function HotelCard({
 
   // Handle view details action
   const handleViewDetails = () => {
-    // Use unified utilities for consistent rate data creation
-    const cheapestRoomData = findCheapestRoom(hotel);
-    const preselectRate = createRateData(
-      hotel,
-      cheapestRoomData.room,
-      searchParams,
-      selectedCurrency,
-      checkInDate,
-      checkOutDate,
-      totalNights,
-      roomsCount
-    );
+    // Get the exact same room and price data shown on this Results card
+    const cheapestRoomData = getCheapestRoomFromHotel(hotel);
+
+    // Create rate data using the exact displayed total price from Results page
+    const preselectRate = {
+      hotelId: hotel.id,
+      roomTypeId: cheapestRoomData.roomId,
+      roomId: cheapestRoomData.roomId,
+      ratePlanId: cheapestRoomData.roomId,
+      rateKey: cheapestRoomData.roomId,
+      roomName: cheapestRoomData.roomType,
+      roomType: cheapestRoomData.roomType,
+      board: 'Room Only',
+      occupancy: {
+        adults: parseInt(searchParams.get("adults") || "2"),
+        children: parseInt(searchParams.get("children") || "0"),
+        rooms: roomsCount
+      },
+      nights: totalNights,
+      currency: selectedCurrency?.code || "INR",
+      taxesIncluded: true,
+      totalPrice: cheapestRoomData.displayPrice, // Use exact displayed price from Results
+      perNightPrice: cheapestRoomData.price, // Original per-night price
+      priceBreakdown: calculateTotalPrice(cheapestRoomData.price, totalNights, roomsCount),
+      checkIn: checkInDate.toISOString(),
+      checkOut: checkOutDate.toISOString(),
+      supplierData: {
+        supplier: hotel?.supplier || 'hotelbeds',
+        isLiveData: hotel?.isLiveData || false
+      },
+      // Add displayed formatting for debugging
+      displayedTotalPrice: totalPriceInclusiveTaxes, // What user sees on Results
+      displayedPerNightPrice: currentPrice // What user sees per night on Results
+    };
 
     // Debug trace for navigation using unified logger
     logNavigationDebug('NAVIGATE', {
@@ -375,7 +397,9 @@ export function HotelCard({
       rateKey: preselectRate.rateKey,
       totalPrice: preselectRate.totalPrice,
       perNightPrice: preselectRate.perNightPrice,
-      roomName: preselectRate.roomName
+      roomName: preselectRate.roomName,
+      displayedOnResults: totalPriceInclusiveTaxes,
+      exactMatch: preselectRate.totalPrice === totalPriceInclusiveTaxes
     });
 
     // Navigate with state for price consistency
