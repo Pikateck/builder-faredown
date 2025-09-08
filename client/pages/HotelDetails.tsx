@@ -969,6 +969,24 @@ export default function HotelDetails() {
       if (!roomToSelect) {
         roomToSelect = roomTypes[0];
         matchType = 'fallback';
+
+        // If using fallback and we have Results page data, ensure price consistency
+        if (preselectRate && roomToSelect) {
+          roomToSelect = {
+            ...roomToSelect,
+            priceConsistent: true,
+            exactResultsTotal: preselectRate.totalPrice,
+            originalPricePerNight: roomToSelect.pricePerNight,
+            // Use Results page price for consistency
+            pricePerNight: preselectRate.perNightPrice
+          };
+          console.log('[FALLBACK ROOM PRICE OVERRIDE]', {
+            roomId: roomToSelect.id,
+            originalPrice: roomToSelect.originalPricePerNight,
+            resultsPrice: preselectRate.perNightPrice,
+            exactTotal: preselectRate.totalPrice
+          });
+        }
       }
 
       // Only update if different from current selection
@@ -982,8 +1000,9 @@ export default function HotelDetails() {
           selectedPrice: roomToSelect.pricePerNight,
           exactTotal: roomToSelect.exactResultsTotal,
           matchType,
-          calculatedTotal: calculateTotalPrice(roomToSelect.pricePerNight),
-          isPriceConsistent: roomToSelect.priceConsistent
+          calculatedTotal: calculateTotalPrice(roomToSelect.pricePerNight, roomToSelect),
+          isPriceConsistent: roomToSelect.priceConsistent,
+          hasResultsData: !!preselectRate
         });
       }
     }
@@ -3224,7 +3243,7 @@ export default function HotelDetails() {
                     </div>
                     <div className="w-full h-64 bg-gray-100 rounded-lg flex items-center justify-center relative">
                       <div className="text-center">
-                        <div className="text-4xl mb-2">🗺️</div>
+                        <div className="text-4xl mb-2">🗺��</div>
                         <div className="text-gray-600">Interactive Map</div>
                         <div className="text-sm text-gray-500">
                           Hotel location and nearby landmarks
