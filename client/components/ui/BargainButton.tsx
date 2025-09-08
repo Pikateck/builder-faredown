@@ -6,7 +6,7 @@ import {
   hapticFeedback,
   isMobileDevice,
 } from "@/lib/mobileUtils";
-import { Sparkles, TrendingDown } from "lucide-react";
+import { TrendingDown } from "lucide-react";
 import EnhancedMobileBargainModal from "@/components/mobile/EnhancedMobileBargainModal";
 
 interface BargainButtonProps {
@@ -16,7 +16,6 @@ interface BargainButtonProps {
   loading?: boolean;
   className?: string;
   size?: "sm" | "md" | "lg";
-  icon?: boolean;
   // Enhanced bargain props
   module?: 'flights' | 'hotels' | 'sightseeing' | 'transfers';
   itemName?: string;
@@ -29,6 +28,7 @@ interface BargainButtonProps {
   promoCode?: string;
   onBargainSuccess?: (finalPrice: number, savings: number) => void;
   useEnhancedModal?: boolean;
+  isMobile?: boolean;
 }
 
 export function BargainButton({
@@ -38,7 +38,6 @@ export function BargainButton({
   loading = false,
   className = "",
   size = "md",
-  icon = true,
   // Enhanced bargain props
   module = 'hotels',
   itemName = '',
@@ -47,7 +46,8 @@ export function BargainButton({
   promoCode,
   onBargainSuccess,
   useEnhancedModal = false,
-  // Extract only valid DOM props, filter out component-specific props
+  isMobile = false,
+  // Extract only valid DOM props
   id,
   'data-testid': dataTestId,
   'aria-label': ariaLabel,
@@ -62,6 +62,9 @@ export function BargainButton({
 
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
+
+    e.preventDefault();
+    e.stopPropagation();
 
     // Haptic feedback for mobile devices
     if (isMobileDevice()) {
@@ -81,82 +84,44 @@ export function BargainButton({
     onBargainSuccess?.(finalPrice, savings);
   };
 
-  React.useEffect(() => {
-    // Add mobile touch optimizations when component mounts
-    const buttonElement = document.querySelector(
-      ".bargain-button-locked",
-    ) as HTMLElement;
-    if (buttonElement && isMobileDevice()) {
-      addMobileTouchOptimizations(buttonElement);
-    }
-  }, []);
-
+  // Original working classes from backup
+  const mobileClasses = "flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200";
+  const desktopClasses = "text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200";
+  
+  // Use size variants for backward compatibility
   const sizeClasses = {
-    sm: "px-4 py-2 text-sm min-h-[40px]",
-    md: "px-6 py-3 text-base min-h-[44px]",
-    lg: "px-8 py-4 text-lg min-h-[48px]",
+    sm: "text-sm px-4 py-2 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[40px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200",
+    md: desktopClasses,
+    lg: "text-lg px-6 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200",
   };
+
+  // Determine which classes to use
+  let buttonClasses = className || (isMobile ? mobileClasses : sizeClasses[size]);
 
   return (
     <>
-      <button
-      className={cn(
-        // Base styles with className override support
-        !className.includes("bg-") &&
-          "bg-gradient-to-br from-[#febb02] to-[#f4a902]",
-        !className.includes("text-") && "text-black",
-        !className.includes("rounded") && "rounded-full",
-        "relative overflow-hidden",
-        "inline-flex items-center justify-center gap-2",
-        "font-bold tracking-wide",
-        "transition-all duration-300 ease-out",
-        "transform-gpu", // Use GPU acceleration
-        "touch-manipulation", // Better touch handling
-        "focus:outline-none focus:ring-4 focus:ring-yellow-200 focus:ring-opacity-50",
-        "active:scale-95", // Press animation
-        "disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none",
-        "hover:scale-105 hover:shadow-xl",
-        !className.includes("shadow") && "shadow-lg shadow-yellow-200/30",
-        !className.includes("min-h") && sizeClasses[size],
-        // Add custom CSS classes for animations
-        "bargain-button-locked",
-        className,
-      )}
-      onClick={handleClick}
-      disabled={disabled || loading}
-      type="button"
-      id={id}
-      data-testid={dataTestId}
-      aria-label={ariaLabel || (typeof children === 'string' ? children : 'Bargain button')}
-    >
-      {/* Shimmer Effect */}
-      <div
-        className="absolute inset-0 opacity-0 hover:opacity-100 transition-opacity duration-700"
-        style={{
-          background:
-            "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)",
-          transform: "translateX(-100%)",
-          animation: "shimmer 2s infinite",
+      <Button
+        onClick={handleClick}
+        disabled={disabled || loading}
+        className={cn(buttonClasses)}
+        onTouchStart={(e) => {
+          e.stopPropagation();
         }}
-      />
+        id={id}
+        data-testid={dataTestId}
+        aria-label={ariaLabel || (typeof children === 'string' ? children : 'Bargain button')}
+      >
+        {/* Loading Spinner */}
+        {loading && (
+          <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" />
+        )}
 
-      {/* Loading Spinner */}
-      {loading && (
-        <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" />
-      )}
+        {/* Icon - Always TrendingDown as per backup */}
+        {!loading && <TrendingDown className="w-4 h-4" />}
 
-      {/* Icon */}
-      {icon && !loading && (useEnhancedModal ? <TrendingDown className="w-4 h-4" /> : <Sparkles className="w-4 h-4" />)}
-
-      {/* Button Text */}
-      <span className="relative z-10 font-bold">{children}</span>
-
-      {/* Ripple effect container */}
-      <div className="absolute inset-0 rounded-full overflow-hidden">
-        <div className="absolute inset-0 bg-white opacity-0 transform scale-0 transition-all duration-300 hover:opacity-20 hover:scale-100" />
-      </div>
-
-      </button>
+        {/* Button Text */}
+        {children}
+      </Button>
 
       {/* Enhanced Bargain Modal */}
       {useEnhancedModal && (
@@ -184,14 +149,9 @@ export function BargainButtonLarge(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="lg" {...props} />;
 }
 
-// Specialized variants
-export function BargainButtonPulse(props: BargainButtonProps) {
-  return (
-    <BargainButton
-      {...props}
-      className={cn("bargain-button-pulse", props.className)}
-    />
-  );
+// Mobile variant with explicit mobile styling
+export function BargainButtonMobile(props: Omit<BargainButtonProps, "isMobile">) {
+  return <BargainButton isMobile={true} {...props} />;
 }
 
 export default BargainButton;
