@@ -24,18 +24,18 @@ const getBackendUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
 
-  // Builder.codes and fly.dev environments
-  if (window.location.hostname.includes("builder.codes") || 
+  // Builder.codes and fly.dev environments - use proxy
+  if (window.location.hostname.includes("builder.codes") ||
       window.location.hostname.includes("fly.dev")) {
     return window.location.origin + "/api";
   }
 
-  // Production environments (non-localhost)
+  // Production environments (non-localhost) - use proxy
   if (window.location.hostname !== "localhost") {
     return window.location.origin + "/api";
   }
 
-  // Development default
+  // Development default - but check if backend is available
   return "http://localhost:3001/api";
 };
 
@@ -55,15 +55,20 @@ const getOfflineFallbackEnabled = () => {
   if (typeof window === 'undefined') {
     return process.env.ENABLE_OFFLINE_FALLBACK === 'true';
   }
-  
+
   // Client-side: check environment variables
   const envFlag = import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK;
-  
+
+  // Builder.codes environment: enable fallback by default due to no backend
+  if (window.location.hostname.includes("builder.codes")) {
+    return envFlag !== 'false'; // Default to true unless explicitly disabled
+  }
+
   // Production: disabled unless explicitly enabled
   if (isProduction()) {
     return envFlag === 'true';
   }
-  
+
   // Development: enabled by default unless explicitly disabled
   return envFlag !== 'false';
 };
@@ -151,18 +156,25 @@ export class ApiClient {
     this.timeout = config.TIMEOUT;
     this.authToken = typeof window !== 'undefined' ? localStorage.getItem("auth_token") : null;
     this.devClient = new DevApiClient(this.baseURL);
-    
+
     // Force fallback if no valid base URL or explicitly disabled
     if (!this.baseURL || this.baseURL === "null") {
       logApiEvent('warn', 'No valid API base URL detected, using fallback mode');
       this.forceFallback = true;
     }
 
+    // For Builder.codes environment, enable fallback by default since backend might not be available
+    if (typeof window !== 'undefined' && window.location.hostname.includes("builder.codes")) {
+      this.forceFallback = !config.OFFLINE_FALLBACK_ENABLED ? false : true;
+      logApiEvent('info', 'Builder.codes environment detected, fallback mode enabled');
+    }
+
     // Production safety: log configuration
     logApiEvent('info', 'API Client initialized', {
       baseURL: this.baseURL,
       isProduction: config.IS_PRODUCTION,
-      offlineFallbackEnabled: config.OFFLINE_FALLBACK_ENABLED
+      offlineFallbackEnabled: config.OFFLINE_FALLBACK_ENABLED,
+      forceFallback: this.forceFallback
     });
   }
 
