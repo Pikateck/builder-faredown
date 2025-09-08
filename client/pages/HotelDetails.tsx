@@ -456,7 +456,7 @@ export default function HotelDetails() {
           ],
           "hotel-3": [
             // Boutique Hotel Dubai
-            "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop",
+            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fe7cdaa194b1140a4a86c6fa826bf4eeb?format=webp&width=800",
             "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop",
             "https://images.unsplash.com/photo-1455587734955-081b22074882?w=800&h=600&q=80&auto=format&fit=crop",
