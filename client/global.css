@@ -637,3 +637,92 @@
       sans-serif !important;
   }
 }
+
+/* BargainButton animations and styles */
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.bargain-button-locked::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.4),
+    transparent
+  );
+  transform: translateX(-100%);
+  transition: transform 0.7s ease-out;
+  z-index: 1;
+}
+
+.bargain-button-locked:hover::before {
+  transform: translateX(100%);
+}
+
+/* Pulse animation for special states */
+.bargain-button-pulse {
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow:
+      0 10px 25px -3px rgb(254 187 2 / 0.3),
+      0 4px 6px -2px rgb(254 187 2 / 0.1);
+  }
+  50% {
+    box-shadow:
+      0 15px 35px -3px rgb(254 187 2 / 0.5),
+      0 8px 15px -2px rgb(254 187 2 / 0.3);
+  }
+  100% {
+    box-shadow:
+      0 10px 25px -3px rgb(254 187 2 / 0.3),
+      0 4px 6px -2px rgb(254 187 2 / 0.1);
+  }
+}
+
+/* Mobile optimizations for BargainButton */
+@media (max-width: 640px) {
+  .bargain-button-locked {
+    min-height: 44px; /* iOS accessibility guidelines */
+    min-width: 44px;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+  }
+}
+
+/* Accessibility improvements for BargainButton */
+@media (prefers-reduced-motion: reduce) {
+  .bargain-button-locked {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+  }
+
+  .bargain-button-locked::before {
+    display: none;
+  }
+}
+
+/* High contrast mode support for BargainButton */
+@media (prefers-contrast: high) {
+  .bargain-button-locked {
+    border: 2px solid currentColor;
+  }
+}
