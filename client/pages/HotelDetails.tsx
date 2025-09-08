@@ -563,8 +563,12 @@ export default function HotelDetails() {
             "htl-DXB-005": "City Hotel Dubai Mall",
             "htl-DXB-006": "Express Hotel Dubai Airport",
           };
-          // Prioritize API name, fallback to mapped names only if API data is missing
-          return hotelData.name || hotelNames[hotelId] || "Premium Hotel Dubai";
+          // Prioritize API name, but ensure we never show placeholder "hotel1" type names
+          if (hotelData.name && !hotelData.name.toLowerCase().includes('hotel1') && !hotelData.name.toLowerCase().includes('hotel 1')) {
+            return hotelData.name;
+          }
+          // Use mapped names as fallback
+          return hotelNames[hotelId] || hotelNames[hotelId?.toLowerCase()] || "Premium Hotel Dubai";
         })(),
         location: (() => {
           const hotelLocations = {
