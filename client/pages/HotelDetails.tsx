@@ -59,7 +59,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
+import { BargainButton } from "@/components/ui/BargainButton";
 import { EnhancedFilters } from "@/components/EnhancedFilters";
 import { calculateTotalPrice as calculatePriceBreakdown } from "@/lib/pricing";
 import {
