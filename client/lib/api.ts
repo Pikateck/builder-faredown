@@ -9,7 +9,14 @@ import { DevApiClient } from "./api-dev";
 const getBackendUrl = () => {
   // Server-side: use environment variable
   if (typeof window === 'undefined') {
-    return process.env.API_BASE_URL || process.env.VITE_API_BASE_URL || 'http://localhost:3001/api';
+    const serverUrl = process.env.API_BASE_URL || process.env.VITE_API_BASE_URL;
+
+    // Production: Fail fast if no API URL configured
+    if (process.env.NODE_ENV === 'production' && !serverUrl) {
+      throw new Error('PRODUCTION ERROR: API_BASE_URL must be configured in production environment');
+    }
+
+    return serverUrl || 'http://localhost:3001/api';
   }
 
   // Client-side: try environment variable first
