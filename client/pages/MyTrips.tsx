@@ -14,7 +14,7 @@ import {
   Filter,
   Search,
 } from "lucide-react";
-import { Header } from "@/components/Header";
+import { Header } from "@/components/layout/Header";
 
 interface Trip {
   id: string;
