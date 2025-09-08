@@ -660,9 +660,25 @@ export default function HotelDetails() {
           "Experience luxury accommodations with exceptional service.",
         amenities: hotelData.amenities || ["WiFi", "Pool", "Restaurant"],
         features: hotelData.features || ["City View"],
-        currentPrice: hotelData.currentPrice || 167,
-        totalPrice:
-          hotelData.totalPrice || (hotelData.currentPrice || 167) * totalNights,
+        currentPrice: (() => {
+          // Use preselected rate price if available for consistency
+          if (preselectRate && preselectRate.perNightPrice) {
+            console.log('[USING RESULTS PAGE PRICE]', {
+              resultsPrice: preselectRate.perNightPrice,
+              hotelDataPrice: hotelData.currentPrice,
+              fallbackPrice: 167
+            });
+            return preselectRate.perNightPrice;
+          }
+          return hotelData.currentPrice || 167;
+        })(),
+        totalPrice: (() => {
+          // Use preselected total price if available for consistency
+          if (preselectRate && preselectRate.totalPrice) {
+            return preselectRate.totalPrice;
+          }
+          return hotelData.totalPrice || (hotelData.currentPrice || 167) * totalNights;
+        })(),
         currency: hotelData.currency || "USD",
         available: hotelData.available !== false,
         supplier: hotelData.supplier || "hotelbeds",
