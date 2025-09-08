@@ -481,13 +481,24 @@ export function HotelCard({
                 >
                   View Details
                 </Button>
-                <Button
-                  onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                <BargainButton
+                  useEnhancedModal={true}
+                  module="hotels"
+                  itemName={hotel.name}
+                  supplierNetRate={totalPriceInclusiveTaxes}
+                  itemDetails={{
+                    location: hotelLocation,
+                    provider: "Hotelbeds",
+                    features: hotel.features || hotelAmenities,
+                  }}
+                  onBargainSuccess={(finalPrice, savings) => {
+                    console.log(`Mobile Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                    // Handle successful bargain - could navigate to booking or update state
+                  }}
+                  className="flex-1 py-4 text-sm font-semibold min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                 >
-                  <TrendingDown className="w-4 h-4" />
                   Bargain Now
-                </Button>
+                </BargainButton>
               </div>
             </div>
           </CardContent>
@@ -619,13 +630,24 @@ export function HotelCard({
                 >
                   View Details
                 </Button>
-                <Button
-                  onClick={() => onBargainClick(hotel, searchParams)}
-                  className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                <BargainButton
+                  useEnhancedModal={true}
+                  module="hotels"
+                  itemName={hotel.name}
+                  supplierNetRate={totalPriceInclusiveTaxes}
+                  itemDetails={{
+                    location: hotelLocation,
+                    provider: "Hotelbeds",
+                    features: hotel.features || hotelAmenities,
+                  }}
+                  onBargainSuccess={(finalPrice, savings) => {
+                    console.log(`Mobile List Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                    // Handle successful bargain - could navigate to booking or update state
+                  }}
+                  className="flex-1 py-4 text-sm font-semibold min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                 >
-                  <TrendingDown className="w-4 h-4" />
                   Bargain Now
-                </Button>
+                </BargainButton>
               </div>
             </div>
           </CardContent>
