@@ -330,6 +330,11 @@ export function ConversationalBargainModal({
           `Great news! We can accept ${formatPrice(userOffer)} for this booking.`,
         );
 
+        // Track accepted event
+        const entityId = productRef || `${module}_${Date.now()}`;
+        const savings = basePrice - userOffer;
+        chatAnalyticsService.trackAccepted(module, entityId, userOffer, savings).catch(console.warn);
+
         setTimeout(() => {
           addMessage(
             "agent",
@@ -347,6 +352,10 @@ export function ConversationalBargainModal({
         // Counter offer
         const counterOffer = calculateCounterOffer(userOffer, round);
         setFinalOffer(counterOffer);
+
+        // Track counter offer event
+        const entityId = productRef || `${module}_${Date.now()}`;
+        chatAnalyticsService.trackCounterOffer(module, entityId, round, counterOffer).catch(console.warn);
 
         addMessage(
           "supplier",
