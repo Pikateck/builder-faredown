@@ -111,20 +111,55 @@ export default function HotelResults() {
 
   // Helpers for consistent bargain pricing (moved here to use initialized vars)
   const getCheapestPerNight = (hotel: HotelType | null | undefined): number => {
-    if (!hotel) return 0;
+    const result = getCheapestRoomData(hotel);
+    return result.price;
+  };
+
+  // Enhanced function that returns both price and room details for navigation
+  const getCheapestRoomData = (hotel: HotelType | null | undefined): {
+    price: number;
+    room: any | null;
+    roomId: string | null;
+    roomType: string | null;
+  } => {
+    if (!hotel) return { price: 0, room: null, roomId: null, roomType: null };
+
     const roomsArr: any[] = (hotel as any).roomTypes || [];
     if (Array.isArray(roomsArr) && roomsArr.length > 0) {
-      const prices = roomsArr
-        .map((r: any) => (r ? r.pricePerNight || r.price || 0 : 0))
-        .filter((p: number) => typeof p === "number" && isFinite(p) && p > 0);
-      if (prices.length > 0) return Math.min(...prices);
+      // Find the cheapest room with all its details
+      let cheapestRoom: any = null;
+      let cheapestPrice = Infinity;
+
+      roomsArr.forEach((room: any, index: number) => {
+        const price = room ? room.pricePerNight || room.price || 0 : 0;
+        if (typeof price === "number" && isFinite(price) && price > 0 && price < cheapestPrice) {
+          cheapestPrice = price;
+          cheapestRoom = room;
+        }
+      });
+
+      if (cheapestRoom) {
+        return {
+          price: cheapestPrice,
+          room: cheapestRoom,
+          roomId: cheapestRoom.id || `room-${roomsArr.indexOf(cheapestRoom)}`,
+          roomType: cheapestRoom.name || cheapestRoom.type || 'Standard Room',
+        };
+      }
     }
-    return (
-      (hotel as any).currentPrice ||
+
+    // Fallback to hotel-level pricing
+    const fallbackPrice = (hotel as any).currentPrice ||
       (hotel as any).pricePerNight ||
       (hotel as any).priceRange?.min ||
-      0
-    );
+      0;
+
+    return {
+      price: fallbackPrice,
+      room: null,
+      roomId: null,
+      roomType: null
+    };
   };
 
   const checkInDate = checkIn ? new Date(checkIn) : new Date();
