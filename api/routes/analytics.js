@@ -21,13 +21,13 @@ router.post("/chat-events", (req, res) => {
     }
 
     // Validate payload has required chat analytics fields
-    const requiredFields = ['module', 'entityId', 'sessionId'];
-    const missingFields = requiredFields.filter(field => !payload[field]);
+    const requiredFields = ["module", "entityId", "sessionId"];
+    const missingFields = requiredFields.filter((field) => !payload[field]);
 
     if (missingFields.length > 0) {
       return res.status(400).json({
         error: "Missing payload fields",
-        message: `Required fields missing: ${missingFields.join(', ')}`,
+        message: `Required fields missing: ${missingFields.join(", ")}`,
         required: requiredFields,
       });
     }
@@ -37,9 +37,9 @@ router.post("/chat-events", (req, res) => {
       event,
       payload,
       timestamp: timestamp || new Date().toISOString(),
-      requestId: req.headers['x-request-id'] || 'no-request-id',
-      userAgent: req.headers['user-agent'] || 'unknown',
-      ip: req.ip || 'unknown'
+      requestId: req.headers["x-request-id"] || "no-request-id",
+      userAgent: req.headers["user-agent"] || "unknown",
+      ip: req.ip || "unknown",
     });
 
     // Respond with success
@@ -48,9 +48,8 @@ router.post("/chat-events", (req, res) => {
       message: "Analytics event tracked successfully",
       event,
       tracked_at: new Date().toISOString(),
-      event_id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`
+      event_id: `evt_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`,
     });
-
   } catch (error) {
     console.error("[CHAT-ANALYTICS] Error tracking event:", error);
     res.status(500).json({

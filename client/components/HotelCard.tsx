@@ -38,7 +38,7 @@ import {
   createRateData,
   findCheapestRoom,
   logNavigationDebug,
-  formatPrice as utilFormatPrice
+  formatPrice as utilFormatPrice,
 } from "@/utils/priceUtils";
 
 // Extend HotelType with additional props for backward compatibility
@@ -239,7 +239,7 @@ export function HotelCard({
     currentPrice,
     hotelCurrentPrice: hotel.currentPrice,
     roomTypes: hotel.roomTypes,
-    priceRange: hotel.priceRange
+    priceRange: hotel.priceRange,
   });
 
   // Get search parameters for price calculation
@@ -272,7 +272,7 @@ export function HotelCard({
     roomsCount,
     priceCalculation,
     totalPriceInclusiveTaxes,
-    perNightInclusiveTaxes
+    perNightInclusiveTaxes,
   });
 
   const nextImage = () => {
@@ -320,14 +320,23 @@ export function HotelCard({
   };
 
   // Helper function to get cheapest room data for navigation (must match Results page logic)
-  const getCheapestRoomFromHotel = (hotel: Hotel): {
+  const getCheapestRoomFromHotel = (
+    hotel: Hotel,
+  ): {
     price: number;
     room: any | null;
     roomId: string | null;
     roomType: string | null;
     displayPrice: number; // Add displayed price for consistency
   } => {
-    if (!hotel) return { price: 0, room: null, roomId: null, roomType: null, displayPrice: 0 };
+    if (!hotel)
+      return {
+        price: 0,
+        room: null,
+        roomId: null,
+        roomType: null,
+        displayPrice: 0,
+      };
 
     const roomsArr: any[] = (hotel as any).roomTypes || [];
     if (Array.isArray(roomsArr) && roomsArr.length > 0) {
@@ -337,7 +346,12 @@ export function HotelCard({
 
       roomsArr.forEach((room: any, index: number) => {
         const price = room ? room.pricePerNight || room.price || 0 : 0;
-        if (typeof price === "number" && isFinite(price) && price > 0 && price < cheapestPrice) {
+        if (
+          typeof price === "number" &&
+          isFinite(price) &&
+          price > 0 &&
+          price < cheapestPrice
+        ) {
           cheapestPrice = price;
           cheapestRoom = room;
         }
@@ -345,32 +359,41 @@ export function HotelCard({
 
       if (cheapestRoom) {
         // Use the exact same price calculation as displayed on Results page
-        const displayedTotal = calculateTotalPrice(cheapestPrice, totalNights, roomsCount).total;
+        const displayedTotal = calculateTotalPrice(
+          cheapestPrice,
+          totalNights,
+          roomsCount,
+        ).total;
 
         return {
           price: cheapestPrice,
           room: cheapestRoom,
           roomId: cheapestRoom.id || `room-${roomsArr.indexOf(cheapestRoom)}`,
-          roomType: cheapestRoom.name || cheapestRoom.type || 'Standard Room',
+          roomType: cheapestRoom.name || cheapestRoom.type || "Standard Room",
           displayPrice: displayedTotal, // This is the price shown on Results page
         };
       }
     }
 
     // Fallback to hotel-level pricing
-    const fallbackPrice = (hotel as any).currentPrice ||
+    const fallbackPrice =
+      (hotel as any).currentPrice ||
       (hotel as any).pricePerNight ||
       (hotel as any).priceRange?.min ||
       0;
 
-    const fallbackDisplayPrice = calculateTotalPrice(fallbackPrice, totalNights, roomsCount).total;
+    const fallbackDisplayPrice = calculateTotalPrice(
+      fallbackPrice,
+      totalNights,
+      roomsCount,
+    ).total;
 
     return {
       price: fallbackPrice,
       room: null,
       roomId: null,
       roomType: null,
-      displayPrice: fallbackDisplayPrice
+      displayPrice: fallbackDisplayPrice,
     };
   };
 
@@ -388,38 +411,42 @@ export function HotelCard({
       rateKey: cheapestRoomData.roomId,
       roomName: cheapestRoomData.roomType,
       roomType: cheapestRoomData.roomType,
-      board: 'Room Only',
+      board: "Room Only",
       occupancy: {
         adults: parseInt(searchParams.get("adults") || "2"),
         children: parseInt(searchParams.get("children") || "0"),
-        rooms: roomsCount
+        rooms: roomsCount,
       },
       nights: totalNights,
       currency: selectedCurrency?.code || "INR",
       taxesIncluded: true,
       totalPrice: cheapestRoomData.displayPrice, // Use exact displayed price from Results
       perNightPrice: cheapestRoomData.price, // Original per-night price
-      priceBreakdown: calculateTotalPrice(cheapestRoomData.price, totalNights, roomsCount),
+      priceBreakdown: calculateTotalPrice(
+        cheapestRoomData.price,
+        totalNights,
+        roomsCount,
+      ),
       checkIn: checkInDate.toISOString(),
       checkOut: checkOutDate.toISOString(),
       supplierData: {
-        supplier: hotel?.supplier || 'hotelbeds',
-        isLiveData: hotel?.isLiveData || false
+        supplier: hotel?.supplier || "hotelbeds",
+        isLiveData: hotel?.isLiveData || false,
       },
       // Add displayed formatting for debugging
       displayedTotalPrice: totalPriceInclusiveTaxes, // What user sees on Results
-      displayedPerNightPrice: currentPrice // What user sees per night on Results
+      displayedPerNightPrice: currentPrice, // What user sees per night on Results
     };
 
     // Debug trace for navigation using unified logger
-    logNavigationDebug('NAVIGATE', {
+    logNavigationDebug("NAVIGATE", {
       hotelId: hotel.id,
       rateKey: preselectRate.rateKey,
       totalPrice: preselectRate.totalPrice,
       perNightPrice: preselectRate.perNightPrice,
       roomName: preselectRate.roomName,
       displayedOnResults: totalPriceInclusiveTaxes,
-      exactMatch: preselectRate.totalPrice === totalPriceInclusiveTaxes
+      exactMatch: preselectRate.totalPrice === totalPriceInclusiveTaxes,
     });
 
     // Navigate with state for price consistency
@@ -429,7 +456,7 @@ export function HotelCard({
     });
 
     navigate(`/hotels/${hotel.id}?${detailParams.toString()}`, {
-      state: { preselectRate }
+      state: { preselectRate },
     });
   };
 
@@ -445,7 +472,7 @@ export function HotelCard({
       checkInDate,
       checkOutDate,
       totalNights,
-      roomsCount
+      roomsCount,
     );
 
     const detailParams = new URLSearchParams();
@@ -455,7 +482,7 @@ export function HotelCard({
     detailParams.set("tab", "gallery");
 
     navigate(`/hotels/${hotel.id}?${detailParams.toString()}`, {
-      state: { preselectRate }
+      state: { preselectRate },
     });
   };
 
@@ -635,7 +662,9 @@ export function HotelCard({
                     features: hotel.features || hotelAmenities,
                   }}
                   onBargainSuccess={(finalPrice, savings) => {
-                    console.log(`Mobile Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                    console.log(
+                      `Mobile Bargain success! Final price: ${finalPrice}, Savings: ${savings}`,
+                    );
                     // Handle successful bargain - could navigate to booking or update state
                   }}
                   className="flex-1 py-4 text-sm font-semibold min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
@@ -784,7 +813,9 @@ export function HotelCard({
                     features: hotel.features || hotelAmenities,
                   }}
                   onBargainSuccess={(finalPrice, savings) => {
-                    console.log(`Mobile List Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                    console.log(
+                      `Mobile List Bargain success! Final price: ${finalPrice}, Savings: ${savings}`,
+                    );
                     // Handle successful bargain - could navigate to booking or update state
                   }}
                   className="flex-1 py-4 text-sm font-semibold min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
@@ -933,7 +964,9 @@ export function HotelCard({
                   features: hotel.features || hotelAmenities,
                 }}
                 onBargainSuccess={(finalPrice, savings) => {
-                  console.log(`Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                  console.log(
+                    `Bargain success! Final price: ${finalPrice}, Savings: ${savings}`,
+                  );
                   // Handle successful bargain - could navigate to booking or update state
                 }}
                 className="text-sm px-5 py-3 font-semibold min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"

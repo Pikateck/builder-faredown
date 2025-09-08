@@ -17,7 +17,7 @@ interface BargainButtonProps {
   className?: string;
   size?: "sm" | "md" | "lg";
   // Bargain props for ConversationalBargainModal
-  module?: 'flights' | 'hotels' | 'sightseeing' | 'transfers';
+  module?: "flights" | "hotels" | "sightseeing" | "transfers";
   itemName?: string;
   basePrice?: number;
   supplierNetRate?: number; // Alternative prop name for price
@@ -47,26 +47,26 @@ export function BargainButton({
   className = "",
   size = "md",
   // Bargain props
-  module = 'hotels',
-  itemName = '',
+  module = "hotels",
+  itemName = "",
   basePrice = 0,
   supplierNetRate,
-  productRef = '',
+  productRef = "",
   itemDetails = {},
   onBargainSuccess,
   useBargainModal = false,
   useEnhancedModal = false,
-  userName = 'Guest',
+  userName = "Guest",
   isMobile = false,
   // Extract only valid DOM props
   id,
-  'data-testid': dataTestId,
-  'aria-label': ariaLabel,
+  "data-testid": dataTestId,
+  "aria-label": ariaLabel,
   ...domProps
 }: BargainButtonProps & {
   id?: string;
-  'data-testid'?: string;
-  'aria-label'?: string;
+  "data-testid"?: string;
+  "aria-label"?: string;
   [key: string]: any;
 }) {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
@@ -104,11 +104,13 @@ export function BargainButton({
   const handleBargainHold = (orderRef: string) => {
     setIsBargainModalOpen(false);
     // Handle hold logic if needed
-    console.log('Bargain held:', orderRef);
+    console.log("Bargain held:", orderRef);
   };
 
   // Use Button's built-in yellow variant to ensure proper styling
-  const additionalClasses = isMobile ? "flex-1 touch-manipulation active:scale-95" : "touch-manipulation active:scale-95";
+  const additionalClasses = isMobile
+    ? "flex-1 touch-manipulation active:scale-95"
+    : "touch-manipulation active:scale-95";
 
   return (
     <>
@@ -123,7 +125,10 @@ export function BargainButton({
         }}
         id={id}
         data-testid={dataTestId}
-        aria-label={ariaLabel || (typeof children === 'string' ? children : 'Bargain button')}
+        aria-label={
+          ariaLabel ||
+          (typeof children === "string" ? children : "Bargain button")
+        }
       >
         {/* Loading Spinner */}
         {loading && (
@@ -147,27 +152,35 @@ export function BargainButton({
           module={module}
           userName={userName}
           basePrice={effectivePrice}
-          productRef={productRef || itemName || 'product'}
-          flight={module === 'flights' ? {
-            id: itemDetails.id || '1',
-            airline: itemDetails.provider || 'Airline',
-            flightNumber: productRef || 'FL001',
-            from: itemDetails.location || 'Origin',
-            to: 'Destination',
-            departureTime: '10:00',
-            arrivalTime: '12:00',
-            price: effectivePrice,
-            duration: '2h'
-          } : undefined}
-          hotel={module === 'hotels' ? {
-            id: itemDetails.id || '1',
-            name: itemName || 'Hotel',
-            location: itemDetails.location || 'City',
-            checkIn: itemDetails.checkIn || '2025-01-01',
-            checkOut: itemDetails.checkOut || '2025-01-02',
-            price: effectivePrice,
-            rating: itemDetails.rating || 4
-          } : undefined}
+          productRef={productRef || itemName || "product"}
+          flight={
+            module === "flights"
+              ? {
+                  id: itemDetails.id || "1",
+                  airline: itemDetails.provider || "Airline",
+                  flightNumber: productRef || "FL001",
+                  from: itemDetails.location || "Origin",
+                  to: "Destination",
+                  departureTime: "10:00",
+                  arrivalTime: "12:00",
+                  price: effectivePrice,
+                  duration: "2h",
+                }
+              : undefined
+          }
+          hotel={
+            module === "hotels"
+              ? {
+                  id: itemDetails.id || "1",
+                  name: itemName || "Hotel",
+                  location: itemDetails.location || "City",
+                  checkIn: itemDetails.checkIn || "2025-01-01",
+                  checkOut: itemDetails.checkOut || "2025-01-02",
+                  price: effectivePrice,
+                  rating: itemDetails.rating || 4,
+                }
+              : undefined
+          }
         />
       )}
     </>
@@ -184,7 +197,9 @@ export function BargainButtonLarge(props: Omit<BargainButtonProps, "size">) {
 }
 
 // Mobile variant with explicit mobile styling
-export function BargainButtonMobile(props: Omit<BargainButtonProps, "isMobile">) {
+export function BargainButtonMobile(
+  props: Omit<BargainButtonProps, "isMobile">,
+) {
   return <BargainButton isMobile={true} {...props} />;
 }
 

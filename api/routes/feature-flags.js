@@ -10,12 +10,15 @@ const { requirePermission, PERMISSIONS } = require("../middleware/auth");
 // Default feature flag values with fallbacks
 const DEFAULT_FLAGS = {
   AI_TRAFFIC: parseFloat(process.env.AI_TRAFFIC || "0.0"),
-  AI_SHADOW: process.env.AI_SHADOW === "true" || process.env.AI_SHADOW === undefined, // Default true if not set
+  AI_SHADOW:
+    process.env.AI_SHADOW === "true" || process.env.AI_SHADOW === undefined, // Default true if not set
   AI_KILL_SWITCH: process.env.AI_KILL_SWITCH === "true" || false,
   AI_AUTO_SCALE: process.env.AI_AUTO_SCALE === "true" || false,
   ENABLE_CHAT_ANALYTICS: process.env.ENABLE_CHAT_ANALYTICS === "true" || true, // Default enabled
   MAX_BARGAIN_ROUNDS: parseInt(process.env.MAX_BARGAIN_ROUNDS || "3"),
-  BARGAIN_TIMEOUT_SECONDS: parseInt(process.env.BARGAIN_TIMEOUT_SECONDS || "30"),
+  BARGAIN_TIMEOUT_SECONDS: parseInt(
+    process.env.BARGAIN_TIMEOUT_SECONDS || "30",
+  ),
 };
 
 // In-memory flag overrides (in production, use Redis or database)
@@ -26,9 +29,9 @@ let flagOverrides = {};
  * @apiName GetFeatureFlags
  * @apiGroup FeatureFlags
  * @apiVersion 1.0.0
- * 
+ *
  * @apiDescription Get current feature flag values for AI chat analytics and bargain engine
- * 
+ *
  * @apiSuccess {Number} AI_TRAFFIC Traffic percentage for AI features (0.0-1.0)
  * @apiSuccess {Boolean} AI_SHADOW Enable shadow mode logging
  * @apiSuccess {Boolean} AI_KILL_SWITCH Emergency disable switch
@@ -36,7 +39,7 @@ let flagOverrides = {};
  * @apiSuccess {Boolean} ENABLE_CHAT_ANALYTICS Chat analytics tracking
  * @apiSuccess {Number} MAX_BARGAIN_ROUNDS Maximum bargaining rounds
  * @apiSuccess {Number} BARGAIN_TIMEOUT_SECONDS Bargain offer timeout
- * 
+ *
  * @apiSuccessExample {json} Success Response:
  * {
  *   "AI_TRAFFIC": 0.0,
@@ -57,10 +60,10 @@ router.get("/", (req, res) => {
     };
 
     console.log("[FEATURE-FLAGS] GET request:", {
-      requestId: req.headers['x-request-id'] || 'no-request-id',
-      userAgent: req.headers['user-agent'] || 'unknown',
+      requestId: req.headers["x-request-id"] || "no-request-id",
+      userAgent: req.headers["user-agent"] || "unknown",
       flags: currentFlags,
-      source: 'api/routes/feature-flags.js'
+      source: "api/routes/feature-flags.js",
     });
 
     res.json(currentFlags);
@@ -78,12 +81,12 @@ router.get("/", (req, res) => {
  * @apiName UpdateFeatureFlags
  * @apiGroup FeatureFlags
  * @apiVersion 1.0.0
- * 
+ *
  * @apiDescription Update feature flag values (Admin only)
- * 
+ *
  * @apiHeader {String} Authorization Bearer token required
  * @apiPermission admin
- * 
+ *
  * @apiParam {Number} [AI_TRAFFIC] Traffic percentage (0.0-1.0)
  * @apiParam {Boolean} [AI_SHADOW] Shadow mode
  * @apiParam {Boolean} [AI_KILL_SWITCH] Kill switch
@@ -91,14 +94,14 @@ router.get("/", (req, res) => {
  * @apiParam {Boolean} [ENABLE_CHAT_ANALYTICS] Chat analytics
  * @apiParam {Number} [MAX_BARGAIN_ROUNDS] Max rounds (1-5)
  * @apiParam {Number} [BARGAIN_TIMEOUT_SECONDS] Timeout (10-120)
- * 
+ *
  * @apiParamExample {json} Request Example:
  * {
  *   "AI_TRAFFIC": 0.1,
  *   "AI_SHADOW": true,
  *   "AI_KILL_SWITCH": false
  * }
- * 
+ *
  * @apiSuccess {Object} flags Updated flag values
  * @apiSuccess {String} message Success message
  * @apiSuccess {String} updatedAt Update timestamp
@@ -152,11 +155,11 @@ router.post("/", requirePermission(PERMISSIONS.ADMIN_MANAGE), (req, res) => {
     };
 
     console.log("[FEATURE-FLAGS] POST update:", {
-      requestId: req.headers['x-request-id'] || 'no-request-id',
-      userId: req.user?.id || 'anonymous',
+      requestId: req.headers["x-request-id"] || "no-request-id",
+      userId: req.user?.id || "anonymous",
       updates: validUpdates,
       newFlags: updatedFlags,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     res.json({
@@ -179,9 +182,9 @@ router.post("/", requirePermission(PERMISSIONS.ADMIN_MANAGE), (req, res) => {
  * @apiName GetFeatureFlagStatus
  * @apiGroup FeatureFlags
  * @apiVersion 1.0.0
- * 
+ *
  * @apiDescription Get detailed status of feature flags including source
- * 
+ *
  * @apiSuccess {Object} flags Current flag values
  * @apiSuccess {Object} sources Flag value sources (env, override, default)
  * @apiSuccess {String} environment Current environment

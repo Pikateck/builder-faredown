@@ -1,4 +1,4 @@
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 
 // Generate unique request ID for tracking
 const generateRequestId = (): string => {
@@ -7,17 +7,17 @@ const generateRequestId = (): string => {
 
 // Get or create session ID
 const getSessionId = (): string => {
-  let sessionId = sessionStorage.getItem('chat_session_id');
+  let sessionId = sessionStorage.getItem("chat_session_id");
   if (!sessionId) {
     sessionId = `session_${Date.now()}_${uuidv4().slice(0, 8)}`;
-    sessionStorage.setItem('chat_session_id', sessionId);
+    sessionStorage.setItem("chat_session_id", sessionId);
   }
   return sessionId;
 };
 
 // Get user ID or anonymous ID
 const getUserId = (): string => {
-  const user = localStorage.getItem('user');
+  const user = localStorage.getItem("user");
   if (user) {
     try {
       const userData = JSON.parse(user);
@@ -34,14 +34,14 @@ const shouldTrackEvents = async (): Promise<boolean> => {
   try {
     // Always track events in shadow/canary mode as requested
     // This respects the feature flag while ensuring analytics work
-    const response = await fetch('/api/feature-flags');
+    const response = await fetch("/api/feature-flags");
     if (response.ok) {
       const flags = await response.json();
       // Track if AI_TRAFFIC > 0 OR AI_SHADOW is true (shadow/canary mode)
       return flags.AI_TRAFFIC > 0 || flags.AI_SHADOW === true;
     }
   } catch (error) {
-    console.warn('Could not check feature flags for analytics:', error);
+    console.warn("Could not check feature flags for analytics:", error);
   }
   // Default to tracking for development
   return true;
@@ -49,7 +49,7 @@ const shouldTrackEvents = async (): Promise<boolean> => {
 
 // Base event payload interface
 interface BaseEventPayload {
-  module: 'flights' | 'hotels' | 'sightseeing' | 'transfers';
+  module: "flights" | "hotels" | "sightseeing" | "transfers";
   entityId: string;
   sessionId: string;
   userId?: string;
@@ -102,36 +102,41 @@ interface ChatErrorPayload extends BaseEventPayload {
 }
 
 // Union type for all event payloads
-type EventPayload = 
-  | ChatOpenPayload 
-  | MessageSendPayload 
-  | CounterOfferPayload 
-  | RoundPayload 
-  | AcceptedPayload 
-  | DeclinedPayload 
-  | ClosedPayload 
+type EventPayload =
+  | ChatOpenPayload
+  | MessageSendPayload
+  | CounterOfferPayload
+  | RoundPayload
+  | AcceptedPayload
+  | DeclinedPayload
+  | ClosedPayload
   | ChatErrorPayload;
 
 // Event name type
-type EventName = 
-  | 'chat_open' 
-  | 'message_send' 
-  | 'counter_offer' 
-  | 'round_n' 
-  | 'accepted' 
-  | 'declined' 
-  | 'closed' 
-  | 'chat_error';
+type EventName =
+  | "chat_open"
+  | "message_send"
+  | "counter_offer"
+  | "round_n"
+  | "accepted"
+  | "declined"
+  | "closed"
+  | "chat_error";
 
 /**
  * Main tracking function - logs events to console and sends to analytics endpoint
  */
-export const trackEvent = async (eventName: EventName, payload: Partial<EventPayload>): Promise<void> => {
+export const trackEvent = async (
+  eventName: EventName,
+  payload: Partial<EventPayload>,
+): Promise<void> => {
   try {
     // Check if tracking is enabled
     const shouldTrack = await shouldTrackEvents();
     if (!shouldTrack) {
-      console.log(`[Analytics] Tracking disabled by feature flags, skipping: ${eventName}`);
+      console.log(
+        `[Analytics] Tracking disabled by feature flags, skipping: ${eventName}`,
+      );
       return;
     }
 
@@ -139,11 +144,11 @@ export const trackEvent = async (eventName: EventName, payload: Partial<EventPay
     const sessionId = getSessionId();
     const userId = getUserId();
     const xRequestId = generateRequestId();
-    
+
     const completePayload = {
       ...payload,
       sessionId,
-      ...(userId.startsWith('anon_') ? { anonId: userId } : { userId }),
+      ...(userId.startsWith("anon_") ? { anonId: userId } : { userId }),
       xRequestId,
       timestamp: Date.now(),
     };
@@ -153,11 +158,11 @@ export const trackEvent = async (eventName: EventName, payload: Partial<EventPay
 
     // Send to analytics endpoint (non-blocking)
     try {
-      await fetch('/api/analytics/chat-events', {
-        method: 'POST',
+      await fetch("/api/analytics/chat-events", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'X-Request-ID': xRequestId,
+          "Content-Type": "application/json",
+          "X-Request-ID": xRequestId,
         },
         body: JSON.stringify({
           event: eventName,
@@ -169,7 +174,6 @@ export const trackEvent = async (eventName: EventName, payload: Partial<EventPay
       // Don't block on analytics API failures
       console.warn(`[Analytics] Failed to send ${eventName} event:`, apiError);
     }
-
   } catch (error) {
     console.error(`[Analytics] Error tracking ${eventName}:`, error);
   }
@@ -179,13 +183,13 @@ export const trackEvent = async (eventName: EventName, payload: Partial<EventPay
  * Helper functions for specific events
  */
 export const trackChatOpen = (
-  module: 'flights' | 'hotels' | 'sightseeing' | 'transfers',
+  module: "flights" | "hotels" | "sightseeing" | "transfers",
   entityId: string,
   rateKey: string,
   currency: string,
-  baseTotal: number
+  baseTotal: number,
 ) => {
-  return trackEvent('chat_open', {
+  return trackEvent("chat_open", {
     module,
     entityId,
     rateKey,
@@ -195,12 +199,12 @@ export const trackChatOpen = (
 };
 
 export const trackMessageSend = (
-  module: 'flights' | 'hotels' | 'sightseeing' | 'transfers',
+  module: "flights" | "hotels" | "sightseeing" | "transfers",
   entityId: string,
   round: number,
-  offerValue: number
+  offerValue: number,
 ) => {
-  return trackEvent('message_send', {
+  return trackEvent("message_send", {
     module,
     entityId,
     round,
@@ -209,12 +213,12 @@ export const trackMessageSend = (
 };
 
 export const trackCounterOffer = (
-  module: 'flights' | 'hotels' | 'sightseeing' | 'transfers',
+  module: "flights" | "hotels" | "sightseeing" | "transfers",
   entityId: string,
   round: number,
-  counterValue: number
+  counterValue: number,
 ) => {
-  return trackEvent('counter_offer', {
+  return trackEvent("counter_offer", {
     module,
     entityId,
     round,
@@ -223,13 +227,13 @@ export const trackCounterOffer = (
 };
 
 export const trackRound = (
-  module: 'flights' | 'hotels' | 'sightseeing' | 'transfers',
+  module: "flights" | "hotels" | "sightseeing" | "transfers",
   entityId: string,
   round: number,
   baseTotal: number,
-  currentOffer: number
+  currentOffer: number,
 ) => {
-  return trackEvent('round_n', {
+  return trackEvent("round_n", {
     module,
     entityId,
     round,
@@ -239,12 +243,12 @@ export const trackRound = (
 };
 
 export const trackAccepted = (
-  module: 'flights' | 'hotels' | 'sightseeing' | 'transfers',
+  module: "flights" | "hotels" | "sightseeing" | "transfers",
   entityId: string,
   finalTotal: number,
-  savings: number
+  savings: number,
 ) => {
-  return trackEvent('accepted', {
+  return trackEvent("accepted", {
     module,
     entityId,
     final_total: finalTotal,
@@ -253,12 +257,12 @@ export const trackAccepted = (
 };
 
 export const trackDeclined = (
-  module: 'flights' | 'hotels' | 'sightseeing' | 'transfers',
+  module: "flights" | "hotels" | "sightseeing" | "transfers",
   entityId: string,
   lastOffer: number,
-  reason?: string
+  reason?: string,
 ) => {
-  return trackEvent('declined', {
+  return trackEvent("declined", {
     module,
     entityId,
     last_offer: lastOffer,
@@ -267,12 +271,12 @@ export const trackDeclined = (
 };
 
 export const trackClosed = (
-  module: 'flights' | 'hotels' | 'sightseeing' | 'transfers',
+  module: "flights" | "hotels" | "sightseeing" | "transfers",
   entityId: string,
   round: number,
-  closeReason: string
+  closeReason: string,
 ) => {
-  return trackEvent('closed', {
+  return trackEvent("closed", {
     module,
     entityId,
     round,
@@ -281,12 +285,12 @@ export const trackClosed = (
 };
 
 export const trackChatError = (
-  module: 'flights' | 'hotels' | 'sightseeing' | 'transfers',
+  module: "flights" | "hotels" | "sightseeing" | "transfers",
   entityId: string,
   errorCode: string,
-  message: string
+  message: string,
 ) => {
-  return trackEvent('chat_error', {
+  return trackEvent("chat_error", {
     module,
     entityId,
     error_code: errorCode,

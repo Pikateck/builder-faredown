@@ -116,7 +116,9 @@ export default function HotelResults() {
   };
 
   // Enhanced function that returns both price and room details for navigation
-  const getCheapestRoomData = (hotel: HotelType | null | undefined): {
+  const getCheapestRoomData = (
+    hotel: HotelType | null | undefined,
+  ): {
     price: number;
     room: any | null;
     roomId: string | null;
@@ -132,7 +134,12 @@ export default function HotelResults() {
 
       roomsArr.forEach((room: any, index: number) => {
         const price = room ? room.pricePerNight || room.price || 0 : 0;
-        if (typeof price === "number" && isFinite(price) && price > 0 && price < cheapestPrice) {
+        if (
+          typeof price === "number" &&
+          isFinite(price) &&
+          price > 0 &&
+          price < cheapestPrice
+        ) {
           cheapestPrice = price;
           cheapestRoom = room;
         }
@@ -143,13 +150,14 @@ export default function HotelResults() {
           price: cheapestPrice,
           room: cheapestRoom,
           roomId: cheapestRoom.id || `room-${roomsArr.indexOf(cheapestRoom)}`,
-          roomType: cheapestRoom.name || cheapestRoom.type || 'Standard Room',
+          roomType: cheapestRoom.name || cheapestRoom.type || "Standard Room",
         };
       }
     }
 
     // Fallback to hotel-level pricing
-    const fallbackPrice = (hotel as any).currentPrice ||
+    const fallbackPrice =
+      (hotel as any).currentPrice ||
       (hotel as any).pricePerNight ||
       (hotel as any).priceRange?.min ||
       0;
@@ -158,7 +166,7 @@ export default function HotelResults() {
       price: fallbackPrice,
       room: null,
       roomId: null,
-      roomType: null
+      roomType: null,
     };
   };
 

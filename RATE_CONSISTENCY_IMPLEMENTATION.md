@@ -5,6 +5,7 @@
 ### Changes Made
 
 #### 1. **HotelCard.tsx** - Navigation with State
+
 - **Changed**: Navigation from URL query params to React Router state
 - **Added**: Comprehensive rate data object creation using `createRateData()`
 - **Added**: Debug trace `[NAVIGATE]` for navigation tracking
@@ -21,6 +22,7 @@ navigate(`/hotels/${hotel.id}?${detailParams.toString()}`, { state: { preselectR
 ```
 
 #### 2. **HotelDetails.tsx** - State-Based Preselection
+
 - **Added**: `useLocation` import and state reading
 - **Changed**: Room selection logic to use `preselectRate` from navigation state
 - **Added**: Debug traces `[DETAILS PRESELECT]`, `[ROOM MATCHING]`, `[BARGAIN BASE]`
@@ -28,19 +30,21 @@ navigate(`/hotels/${hotel.id}?${detailParams.toString()}`, { state: { preselectR
 
 ```typescript
 // Before: URL params
-const preSelectedRoomId = searchParams.get('preSelectedRoomId');
+const preSelectedRoomId = searchParams.get("preSelectedRoomId");
 
 // After: Navigation state
 const preselectRate = (location.state as any)?.preselectRate;
 ```
 
 #### 3. **priceUtils.ts** - Unified Price Calculations
+
 - **Created**: Single source of truth for all price calculations
 - **Added**: `RateData` interface for comprehensive rate information
 - **Added**: `calculateTotalPrice()`, `formatPrice()`, `createRateData()` utilities
 - **Added**: Debug logging and validation functions
 
 #### 4. **BargainButton Integration**
+
 - **Updated**: All BargainButton instances to use consistent `basePrice` calculation
 - **Added**: Debug traces for bargain opening with rate information
 - **Ensured**: Same total price flows from Results → Details → Bargain
@@ -48,31 +52,51 @@ const preselectRate = (location.state as any)?.preselectRate;
 ### Debug Traces Added
 
 #### Navigation (Results → Details)
+
 ```typescript
-console.log('[NAVIGATE]', { 
-  hotelId, rateKey, totalPrice, perNightPrice, roomName 
+console.log("[NAVIGATE]", {
+  hotelId,
+  rateKey,
+  totalPrice,
+  perNightPrice,
+  roomName,
 });
 ```
 
 #### Details Page Mount
+
 ```typescript
-console.log('[DETAILS PRESELECT]', { 
-  receivedRateKey, receivedTotalPrice, receivedRoomName, hasPreselectData 
+console.log("[DETAILS PRESELECT]", {
+  receivedRateKey,
+  receivedTotalPrice,
+  receivedRoomName,
+  hasPreselectData,
 });
 ```
 
 #### Room Matching Logic
+
 ```typescript
-console.log('[ROOM MATCHING]', {
-  preselectRateKey, preselectRoomName, preselectPrice,
-  matchedRoomId, matchedRoomName, matchedPrice, matchType
+console.log("[ROOM MATCHING]", {
+  preselectRateKey,
+  preselectRoomName,
+  preselectPrice,
+  matchedRoomId,
+  matchedRoomName,
+  matchedPrice,
+  matchType,
 });
 ```
 
 #### Bargain Modal Opening
+
 ```typescript
-console.log('[BARGAIN BASE]', { 
-  baseFromSelectedRate, roomId, roomName, perNightPrice, isPreselectedRoom 
+console.log("[BARGAIN BASE]", {
+  baseFromSelectedRate,
+  roomId,
+  roomName,
+  perNightPrice,
+  isPreselectedRoom,
 });
 ```
 
@@ -85,11 +109,11 @@ interface RateData {
   hotelId: string | number;
   roomTypeId: string | null;
   roomId: string | null;
-  ratePlanId: string | null;  // Stable identifier
-  rateKey: string | null;     // Supplier rate key
-  roomName: string | null;    // "1 x Twin Classic • Twin bed"
-  roomType: string | null;    // Room type description
-  board: string;              // "Room Only", "Breakfast Included", etc.
+  ratePlanId: string | null; // Stable identifier
+  rateKey: string | null; // Supplier rate key
+  roomName: string | null; // "1 x Twin Classic • Twin bed"
+  roomType: string | null; // Room type description
+  board: string; // "Room Only", "Breakfast Included", etc.
   occupancy: {
     adults: number;
     children: number;
@@ -98,16 +122,16 @@ interface RateData {
   nights: number;
   currency: string;
   taxesIncluded: boolean;
-  totalPrice: number;         // Full stay total
-  perNightPrice: number;      // Per room per night
+  totalPrice: number; // Full stay total
+  perNightPrice: number; // Per room per night
   priceBreakdown: {
     basePrice: number;
     taxes: number;
     fees: number;
     total: number;
   };
-  checkIn: string;            // ISO date string
-  checkOut: string;           // ISO date string
+  checkIn: string; // ISO date string
+  checkOut: string; // ISO date string
   supplierData: {
     supplier: string;
     isLiveData: boolean;
@@ -131,7 +155,7 @@ interface RateData {
 ✅ **Navigation state** preserves complete rate information  
 ✅ **Debug traces** for easy verification and debugging  
 ✅ **Fallback handling** if exact rate unavailable  
-✅ **Currency/nights consistency** maintained  
+✅ **Currency/nights consistency** maintained
 
 ### Testing Instructions
 
@@ -151,8 +175,9 @@ interface RateData {
 ### Ready for Extension
 
 This pattern is now ready to be replicated for:
+
 - **Flights**: Flight search → Flight details → Flight bargain
-- **Sightseeing**: Activity search → Activity details → Activity bargain  
+- **Sightseeing**: Activity search → Activity details → Activity bargain
 - **Transfers**: Transfer search → Transfer details → Transfer bargain
 
 The unified `priceUtils.ts` can be extended with flight/activity/transfer-specific calculation logic while maintaining the same consistent navigation and state management pattern.

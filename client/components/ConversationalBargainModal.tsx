@@ -173,17 +173,28 @@ export function ConversationalBargainModal({
       // Track chat open event
       const entityId = productRef || `${module}_${Date.now()}`;
       const rateKey = productRef || `rate_${Date.now()}`;
-      chatAnalyticsService.trackChatOpen(
-        module,
-        entityId,
-        rateKey,
-        selectedCurrency.code,
-        basePrice
-      ).catch(error => {
-        console.warn('Failed to track chat_open event:', error);
-      });
+      chatAnalyticsService
+        .trackChatOpen(
+          module,
+          entityId,
+          rateKey,
+          selectedCurrency.code,
+          basePrice,
+        )
+        .catch((error) => {
+          console.warn("Failed to track chat_open event:", error);
+        });
     }
-  }, [isOpen, userName, module, basePrice, formatPrice, messages.length, productRef, selectedCurrency.code]);
+  }, [
+    isOpen,
+    userName,
+    module,
+    basePrice,
+    formatPrice,
+    messages.length,
+    productRef,
+    selectedCurrency.code,
+  ]);
 
   // Timer Effect
   useEffect(() => {
@@ -262,12 +273,14 @@ export function ConversationalBargainModal({
 
     if (!userOffer || userOffer <= 0) {
       addMessage("agent", "Please enter a valid price amount.");
-      chatAnalyticsService.trackChatError(
-        module,
-        productRef || `${module}_${Date.now()}`,
-        'INVALID_OFFER',
-        'User entered invalid price amount'
-      ).catch(console.warn);
+      chatAnalyticsService
+        .trackChatError(
+          module,
+          productRef || `${module}_${Date.now()}`,
+          "INVALID_OFFER",
+          "User entered invalid price amount",
+        )
+        .catch(console.warn);
       return;
     }
 
@@ -276,12 +289,14 @@ export function ConversationalBargainModal({
         "agent",
         `That's actually higher than our current price of ${formatPrice(basePrice)}! You can book now at this great rate.`,
       );
-      chatAnalyticsService.trackChatError(
-        module,
-        productRef || `${module}_${Date.now()}`,
-        'OFFER_TOO_HIGH',
-        'User offer higher than base price'
-      ).catch(console.warn);
+      chatAnalyticsService
+        .trackChatError(
+          module,
+          productRef || `${module}_${Date.now()}`,
+          "OFFER_TOO_HIGH",
+          "User offer higher than base price",
+        )
+        .catch(console.warn);
       return;
     }
 
@@ -294,8 +309,12 @@ export function ConversationalBargainModal({
 
     // Track message send and round
     const entityId = productRef || `${module}_${Date.now()}`;
-    chatAnalyticsService.trackMessageSend(module, entityId, round, userOffer).catch(console.warn);
-    chatAnalyticsService.trackRound(module, entityId, round, basePrice, userOffer).catch(console.warn);
+    chatAnalyticsService
+      .trackMessageSend(module, entityId, round, userOffer)
+      .catch(console.warn);
+    chatAnalyticsService
+      .trackRound(module, entityId, round, basePrice, userOffer)
+      .catch(console.warn);
 
     // Add user message
     addMessage("user", `I'd like to pay ${formatPrice(userOffer)}`);
@@ -333,7 +352,9 @@ export function ConversationalBargainModal({
         // Track accepted event
         const entityId = productRef || `${module}_${Date.now()}`;
         const savings = basePrice - userOffer;
-        chatAnalyticsService.trackAccepted(module, entityId, userOffer, savings).catch(console.warn);
+        chatAnalyticsService
+          .trackAccepted(module, entityId, userOffer, savings)
+          .catch(console.warn);
 
         setTimeout(() => {
           addMessage(
@@ -355,7 +376,9 @@ export function ConversationalBargainModal({
 
         // Track counter offer event
         const entityId = productRef || `${module}_${Date.now()}`;
-        chatAnalyticsService.trackCounterOffer(module, entityId, round, counterOffer).catch(console.warn);
+        chatAnalyticsService
+          .trackCounterOffer(module, entityId, round, counterOffer)
+          .catch(console.warn);
 
         addMessage(
           "supplier",
@@ -414,7 +437,9 @@ export function ConversationalBargainModal({
       // Track final booking acceptance
       const entityId = productRef || `${module}_${Date.now()}`;
       const savings = basePrice - finalOffer;
-      chatAnalyticsService.trackAccepted(module, entityId, finalOffer, savings).catch(console.warn);
+      chatAnalyticsService
+        .trackAccepted(module, entityId, finalOffer, savings)
+        .catch(console.warn);
 
       if (isMobileDevice()) {
         hapticFeedback("heavy");
@@ -424,18 +449,28 @@ export function ConversationalBargainModal({
         onAccept(finalOffer, orderRef);
       }, 1000);
     }
-  }, [finalOffer, formatPrice, addMessage, onAccept, productRef, module, basePrice]);
+  }, [
+    finalOffer,
+    formatPrice,
+    addMessage,
+    onAccept,
+    productRef,
+    module,
+    basePrice,
+  ]);
 
   const handleTryAgain = useCallback(() => {
     // Track decline of current offer
     const entityId = productRef || `${module}_${Date.now()}`;
     if (finalOffer) {
-      chatAnalyticsService.trackDeclined(
-        module,
-        entityId,
-        finalOffer,
-        round >= 3 ? 'max_rounds_reached' : 'try_different_price'
-      ).catch(console.warn);
+      chatAnalyticsService
+        .trackDeclined(
+          module,
+          entityId,
+          finalOffer,
+          round >= 3 ? "max_rounds_reached" : "try_different_price",
+        )
+        .catch(console.warn);
     }
 
     if (round >= 3) {
@@ -469,14 +504,27 @@ export function ConversationalBargainModal({
   // Handle modal close with analytics tracking
   const handleClose = useCallback(() => {
     const entityId = productRef || `${module}_${Date.now()}`;
-    const closeReason = isComplete ? 'max_rounds_reached' :
-                       timerExpired ? 'timer_expired' :
-                       showOfferActions ? 'offer_pending' :
-                       'user_closed';
+    const closeReason = isComplete
+      ? "max_rounds_reached"
+      : timerExpired
+        ? "timer_expired"
+        : showOfferActions
+          ? "offer_pending"
+          : "user_closed";
 
-    chatAnalyticsService.trackClosed(module, entityId, round, closeReason).catch(console.warn);
+    chatAnalyticsService
+      .trackClosed(module, entityId, round, closeReason)
+      .catch(console.warn);
     onClose();
-  }, [productRef, module, isComplete, timerExpired, showOfferActions, round, onClose]);
+  }, [
+    productRef,
+    module,
+    isComplete,
+    timerExpired,
+    showOfferActions,
+    round,
+    onClose,
+  ]);
 
   // Validation flags - no early returns to maintain hooks consistency
   const hasValidCallbacks = onClose && onAccept;

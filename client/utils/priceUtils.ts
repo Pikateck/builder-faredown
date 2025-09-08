@@ -73,16 +73,16 @@ export function calculateTotalPrice(
  * Consistent formatting across all components
  */
 export function formatPrice(
-  price: number, 
-  currency: string = 'INR',
-  includeSymbol: boolean = true
+  price: number,
+  currency: string = "INR",
+  includeSymbol: boolean = true,
 ): string {
   if (isNaN(price) || !isFinite(price)) {
-    return includeSymbol ? '₹0' : '0';
+    return includeSymbol ? "₹0" : "0";
   }
 
-  const formatter = new Intl.NumberFormat('en-IN', {
-    style: includeSymbol ? 'currency' : 'decimal',
+  const formatter = new Intl.NumberFormat("en-IN", {
+    style: includeSymbol ? "currency" : "decimal",
     currency: currency,
     minimumFractionDigits: 0,
     maximumFractionDigits: 0,
@@ -103,10 +103,15 @@ export function createRateData(
   checkInDate: Date,
   checkOutDate: Date,
   totalNights: number,
-  roomsCount: number
+  roomsCount: number,
 ): RateData {
-  const roomPrice = room?.pricePerNight || room?.price || hotel?.currentPrice || 0;
-  const totalPriceData = calculateTotalPrice(roomPrice, totalNights, roomsCount);
+  const roomPrice =
+    room?.pricePerNight || room?.price || hotel?.currentPrice || 0;
+  const totalPriceData = calculateTotalPrice(
+    roomPrice,
+    totalNights,
+    roomsCount,
+  );
 
   return {
     hotelId: hotel.id,
@@ -116,11 +121,11 @@ export function createRateData(
     rateKey: room?.rateKey || room?.id || null,
     roomName: room?.name || room?.type || null,
     roomType: room?.type || room?.name || null,
-    board: room?.board || 'Room Only',
+    board: room?.board || "Room Only",
     occupancy: {
       adults: parseInt(searchParams.get("adults") || "2"),
       children: parseInt(searchParams.get("children") || "0"),
-      rooms: roomsCount
+      rooms: roomsCount,
     },
     nights: totalNights,
     currency: selectedCurrency?.code || "INR",
@@ -131,9 +136,9 @@ export function createRateData(
     checkIn: checkInDate.toISOString(),
     checkOut: checkOutDate.toISOString(),
     supplierData: {
-      supplier: hotel?.supplier || 'hotelbeds',
-      isLiveData: hotel?.isLiveData || false
-    }
+      supplier: hotel?.supplier || "hotelbeds",
+      isLiveData: hotel?.isLiveData || false,
+    },
   };
 }
 
@@ -148,42 +153,48 @@ export function findCheapestRoom(hotel: any): {
   roomType: string | null;
 } {
   if (!hotel) return { price: 0, room: null, roomId: null, roomType: null };
-  
+
   const roomsArr: any[] = (hotel as any).roomTypes || [];
   if (Array.isArray(roomsArr) && roomsArr.length > 0) {
     // Find the cheapest room with all its details
     let cheapestRoom: any = null;
     let cheapestPrice = Infinity;
-    
+
     roomsArr.forEach((room: any, index: number) => {
       const price = room ? room.pricePerNight || room.price || 0 : 0;
-      if (typeof price === "number" && isFinite(price) && price > 0 && price < cheapestPrice) {
+      if (
+        typeof price === "number" &&
+        isFinite(price) &&
+        price > 0 &&
+        price < cheapestPrice
+      ) {
         cheapestPrice = price;
         cheapestRoom = room;
       }
     });
-    
+
     if (cheapestRoom) {
       return {
         price: cheapestPrice,
         room: cheapestRoom,
         roomId: cheapestRoom.id || `room-${roomsArr.indexOf(cheapestRoom)}`,
-        roomType: cheapestRoom.name || cheapestRoom.type || 'Standard Room',
+        roomType: cheapestRoom.name || cheapestRoom.type || "Standard Room",
       };
     }
   }
-  
+
   // Fallback to hotel-level pricing
-  const fallbackPrice = (hotel as any).currentPrice ||
+  const fallbackPrice =
+    (hotel as any).currentPrice ||
     (hotel as any).pricePerNight ||
     (hotel as any).priceRange?.min ||
     0;
-  
-  return { 
-    price: fallbackPrice, 
-    room: null, 
-    roomId: null, 
-    roomType: null 
+
+  return {
+    price: fallbackPrice,
+    room: null,
+    roomId: null,
+    roomType: null,
   };
 }
 
@@ -199,7 +210,7 @@ export function logNavigationDebug(
     perNightPrice?: number;
     roomName?: string | null;
     [key: string]: any;
-  }
+  },
 ) {
   console.log(`[${action.toUpperCase()}]`, data);
 }
@@ -210,31 +221,39 @@ export function logNavigationDebug(
 export function validateRateConsistency(
   resultsRate: RateData,
   detailsRate: RateData,
-  tolerance: number = 5
+  tolerance: number = 5,
 ): {
   isConsistent: boolean;
   issues: string[];
 } {
   const issues: string[] = [];
-  
+
   if (resultsRate.hotelId !== detailsRate.hotelId) {
-    issues.push('Hotel ID mismatch');
+    issues.push("Hotel ID mismatch");
   }
-  
+
   if (Math.abs(resultsRate.totalPrice - detailsRate.totalPrice) > tolerance) {
-    issues.push(`Total price mismatch: ${resultsRate.totalPrice} vs ${detailsRate.totalPrice}`);
+    issues.push(
+      `Total price mismatch: ${resultsRate.totalPrice} vs ${detailsRate.totalPrice}`,
+    );
   }
-  
-  if (Math.abs(resultsRate.perNightPrice - detailsRate.perNightPrice) > tolerance) {
-    issues.push(`Per night price mismatch: ${resultsRate.perNightPrice} vs ${detailsRate.perNightPrice}`);
+
+  if (
+    Math.abs(resultsRate.perNightPrice - detailsRate.perNightPrice) > tolerance
+  ) {
+    issues.push(
+      `Per night price mismatch: ${resultsRate.perNightPrice} vs ${detailsRate.perNightPrice}`,
+    );
   }
-  
+
   if (resultsRate.roomName !== detailsRate.roomName) {
-    issues.push(`Room name mismatch: "${resultsRate.roomName}" vs "${detailsRate.roomName}"`);
+    issues.push(
+      `Room name mismatch: "${resultsRate.roomName}" vs "${detailsRate.roomName}"`,
+    );
   }
-  
+
   return {
     isConsistent: issues.length === 0,
-    issues
+    issues,
   };
 }

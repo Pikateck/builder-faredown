@@ -1,11 +1,13 @@
 # 🎯 LIVE QA CHECKLIST - STAGING VERIFICATION
 
 ## PRE-REQUISITE
+
 - [x] Code deployed to staging
 - [ ] **API server restarted** (REQUIRED - pending infra ticket)
 - [ ] Routes active: `/api/feature-flags` and `/api/analytics/chat-events`
 
 ## STAGING URL
+
 `https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.projects.builder.codes`
 
 ---
@@ -13,16 +15,27 @@
 ## 1. ✅ FEATURE FLAGS VERIFICATION
 
 ### Command:
+
 ```bash
 curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.projects.builder.codes/api/feature-flags
 ```
 
 ### Expected Response (EXACT MATCH):
+
 ```json
-{"AI_TRAFFIC":0.0,"AI_SHADOW":true,"AI_KILL_SWITCH":false,"AI_AUTO_SCALE":false,"ENABLE_CHAT_ANALYTICS":true,"MAX_BARGAIN_ROUNDS":3,"BARGAIN_TIMEOUT_SECONDS":30}
+{
+  "AI_TRAFFIC": 0.0,
+  "AI_SHADOW": true,
+  "AI_KILL_SWITCH": false,
+  "AI_AUTO_SCALE": false,
+  "ENABLE_CHAT_ANALYTICS": true,
+  "MAX_BARGAIN_ROUNDS": 3,
+  "BARGAIN_TIMEOUT_SECONDS": 30
+}
 ```
 
 ### Evidence to Capture:
+
 - [ ] Raw JSON response
 - [ ] Exact URL hit
 - [ ] Timestamp of test
@@ -32,12 +45,14 @@ curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.proje
 ## 2. 📊 CHAT ANALYTICS HAR CAPTURE
 
 ### Flow to Execute:
+
 1. Open Hotels: `https://...builder.codes/hotels/results`
 2. Select any hotel → Click "Bargain Now"
 3. Complete full flow: `chat_open → message_send → counter_offer → round_n → accepted/declined → closed`
 4. Capture HAR file during the flow
 
 ### Required Events (in order):
+
 - [ ] `chat_open` - payload includes: `module, entityId, rateKey, currency, base_total, sessionId, xRequestId`
 - [ ] `message_send` - payload includes: `round, offer_value`
 - [ ] `counter_offer` - payload includes: `round, counter_value`
@@ -46,6 +61,7 @@ curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.proje
 - [ ] `closed` - payload includes: `round, close_reason`
 
 ### Evidence to Capture:
+
 - [ ] Complete HAR file
 - [ ] One JSON payload per event (mask PII)
 - [ ] Verify all required fields present
@@ -55,12 +71,14 @@ curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.proje
 ## 3. 🎬 UI PARITY RECORDINGS (4 clips, 20-30s each)
 
 ### Modules to Test:
+
 - [ ] **Hotels**: Open bargain → complete 1 round → verify Design Box + starting price = Results price
 - [ ] **Flights**: Same verification
-- [ ] **Sightseeing**: Same verification  
+- [ ] **Sightseeing**: Same verification
 - [ ] **Transfers**: Same verification
 
 ### What to Verify in Each Recording:
+
 - [ ] Design Box is identical across all modules
 - [ ] Starting price in bargain modal matches Results page price
 - [ ] UI components render consistently
@@ -72,6 +90,7 @@ curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.proje
 ### Test 1: Hotel - Base ₹10,000 + 5% markup + 10% promo (capped ₹1,000) × 3 nights
 
 **Test Data:**
+
 ```json
 {
   "module": "hotels",
@@ -84,6 +103,7 @@ curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.proje
 ```
 
 **Expected Response Elements:**
+
 - [ ] Per-night price: ₹10,000
 - [ ] Total nights: 3
 - [ ] Subtotal: ₹30,000
@@ -94,16 +114,18 @@ curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.proje
 ### Test 2: Flight - Route-specific markup + ₹300 fixed promo
 
 **Test Data:**
+
 ```json
 {
   "module": "flights",
   "baseFare": 25000,
   "promoCode": "FIXED300OFF",
-  "route": {"from": "BOM", "to": "DXB"}
+  "route": { "from": "BOM", "to": "DXB" }
 }
 ```
 
 **Expected Response Elements:**
+
 - [ ] Route-specific markup applied
 - [ ] Fixed ₹300 discount applied
 - [ ] Segment vs itinerary handling shown
@@ -111,6 +133,7 @@ curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.proje
 ### Test 3: Bargain Floor - Negotiated < floor → promo blocked
 
 **Test Data:**
+
 ```json
 {
   "module": "hotels",
@@ -121,6 +144,7 @@ curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.proje
 ```
 
 **Expected Response:**
+
 - [ ] Success: false
 - [ ] Error: "Promo code blocked"
 - [ ] User message: "Your negotiated price is below the minimum required for this promo. Please try a higher offer."
@@ -130,12 +154,13 @@ curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.proje
 ## 5. 🗄️ DATABASE & AUDIT PROOF
 
 ### Required Screenshots/SQL:
+
 - [ ] `markup_rules` table inserts from test executions
 - [ ] `promo_codes` table with test promo codes
 - [ ] `promo_code_usage` entries from successful redemptions
 - [ ] Audit log entry showing:
   - `booking_ref`
-  - `markup_rule_id` 
+  - `markup_rule_id`
   - `promo_redemption_id`
   - Final pricing breakdown
 
@@ -144,6 +169,7 @@ curl -s https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.proje
 ## 6. 📝 DEPLOYED COMMIT VERIFICATION
 
 ### Confirm these commit hashes are deployed:
+
 - [ ] `api/routes/feature-flags.js`: `99c5cf57`
 - [ ] `api/routes/analytics.js`: `1d864a1c`
 - [ ] `client/services/chatAnalyticsService.ts`: `87f037b0`

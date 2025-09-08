@@ -8,15 +8,17 @@ import { DevApiClient } from "./api-dev";
 // Enhanced backend URL detection with server-side support
 const getBackendUrl = () => {
   // Server-side: use environment variable
-  if (typeof window === 'undefined') {
+  if (typeof window === "undefined") {
     const serverUrl = process.env.API_BASE_URL || process.env.VITE_API_BASE_URL;
 
     // Production: Fail fast if no API URL configured
-    if (process.env.NODE_ENV === 'production' && !serverUrl) {
-      throw new Error('PRODUCTION ERROR: API_BASE_URL must be configured in production environment');
+    if (process.env.NODE_ENV === "production" && !serverUrl) {
+      throw new Error(
+        "PRODUCTION ERROR: API_BASE_URL must be configured in production environment",
+      );
     }
 
-    return serverUrl || 'http://localhost:3001/api';
+    return serverUrl || "http://localhost:3001/api";
   }
 
   // Client-side: try environment variable first
@@ -25,8 +27,10 @@ const getBackendUrl = () => {
   }
 
   // Builder.codes and fly.dev environments - use proxy
-  if (window.location.hostname.includes("builder.codes") ||
-      window.location.hostname.includes("fly.dev")) {
+  if (
+    window.location.hostname.includes("builder.codes") ||
+    window.location.hostname.includes("fly.dev")
+  ) {
     return window.location.origin + "/api";
   }
 
@@ -41,19 +45,21 @@ const getBackendUrl = () => {
 
 // Production environment detection
 const isProduction = () => {
-  if (typeof window === 'undefined') {
-    return process.env.NODE_ENV === 'production';
+  if (typeof window === "undefined") {
+    return process.env.NODE_ENV === "production";
   }
-  return import.meta.env.PROD || 
-         window.location.hostname.includes('.com') ||
-         window.location.hostname.includes('.app');
+  return (
+    import.meta.env.PROD ||
+    window.location.hostname.includes(".com") ||
+    window.location.hostname.includes(".app")
+  );
 };
 
 // Offline fallback configuration
 const getOfflineFallbackEnabled = () => {
   // Server-side: disabled by default
-  if (typeof window === 'undefined') {
-    return process.env.ENABLE_OFFLINE_FALLBACK === 'true';
+  if (typeof window === "undefined") {
+    return process.env.ENABLE_OFFLINE_FALLBACK === "true";
   }
 
   // Client-side: check environment variables
@@ -61,16 +67,16 @@ const getOfflineFallbackEnabled = () => {
 
   // Builder.codes environment: enable fallback by default due to no backend
   if (window.location.hostname.includes("builder.codes")) {
-    return envFlag !== 'false'; // Default to true unless explicitly disabled
+    return envFlag !== "false"; // Default to true unless explicitly disabled
   }
 
   // Production: disabled unless explicitly enabled
   if (isProduction()) {
-    return envFlag === 'true';
+    return envFlag === "true";
   }
 
   // Development: enabled by default unless explicitly disabled
-  return envFlag !== 'false';
+  return envFlag !== "false";
 };
 
 // API Configuration
@@ -116,25 +122,29 @@ export class ApiError extends Error {
 }
 
 // Production-safe logging
-const logApiEvent = (level: 'info' | 'warn' | 'error', message: string, data?: any) => {
+const logApiEvent = (
+  level: "info" | "warn" | "error",
+  message: string,
+  data?: any,
+) => {
   const logData = {
     message,
     timestamp: new Date().toISOString(),
-    environment: API_CONFIG.IS_PRODUCTION ? 'production' : 'development',
-    ...(data && { data })
+    environment: API_CONFIG.IS_PRODUCTION ? "production" : "development",
+    ...(data && { data }),
   };
 
   if (API_CONFIG.IS_PRODUCTION) {
     // Production: Use structured logging for monitoring
-    if (typeof window !== 'undefined' && (window as any).Sentry) {
+    if (typeof window !== "undefined" && (window as any).Sentry) {
       (window as any).Sentry.addBreadcrumb({
         message,
         level,
-        category: 'api',
-        data: logData
+        category: "api",
+        data: logData,
       });
     }
-    
+
     // Tag for monitoring systems
     console[level](`[FAREDOWN_API] ${message}`, logData);
   } else {
@@ -154,31 +164,43 @@ export class ApiClient {
   constructor(config: typeof API_CONFIG) {
     this.baseURL = config.BASE_URL || "";
     this.timeout = config.TIMEOUT;
-    this.authToken = typeof window !== 'undefined' ? localStorage.getItem("auth_token") : null;
+    this.authToken =
+      typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
     this.devClient = new DevApiClient(this.baseURL);
 
     // Force fallback if no valid base URL or explicitly disabled
     if (!this.baseURL || this.baseURL === "null") {
-      logApiEvent('warn', 'No valid API base URL detected, using fallback mode');
+      logApiEvent(
+        "warn",
+        "No valid API base URL detected, using fallback mode",
+      );
       this.forceFallback = true;
     }
 
     // For Builder.codes environment, enable fallback by default since backend might not be available
-    if (typeof window !== 'undefined' && window.location.hostname.includes("builder.codes")) {
+    if (
+      typeof window !== "undefined" &&
+      window.location.hostname.includes("builder.codes")
+    ) {
       this.forceFallback = !config.OFFLINE_FALLBACK_ENABLED ? false : true;
-      logApiEvent('info', 'Builder.codes environment detected, fallback mode enabled');
+      logApiEvent(
+        "info",
+        "Builder.codes environment detected, fallback mode enabled",
+      );
     }
 
     // Production safety: log configuration
-    logApiEvent('info', 'API Client initialized', {
+    logApiEvent("info", "API Client initialized", {
       baseURL: this.baseURL,
       isProduction: config.IS_PRODUCTION,
       offlineFallbackEnabled: config.OFFLINE_FALLBACK_ENABLED,
-      forceFallback: this.forceFallback
+      forceFallback: this.forceFallback,
     });
   }
 
-  private getHeaders(customHeaders: Record<string, string> = {}): Record<string, string> {
+  private getHeaders(
+    customHeaders: Record<string, string> = {},
+  ): Record<string, string> {
     const headers = {
       ...API_CONFIG.HEADERS,
       ...customHeaders,
@@ -189,7 +211,8 @@ export class ApiClient {
     }
 
     // Add correlation ID for request tracking
-    headers['X-Request-ID'] = `faredown_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+    headers["X-Request-ID"] =
+      `faredown_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
     return headers;
   }
@@ -202,26 +225,34 @@ export class ApiClient {
       } catch (jsonError) {
         errorData = {
           message: `HTTP ${response.status}: ${response.statusText}`,
-          status: response.status
+          status: response.status,
         };
       }
 
       // Special handling for 503 (Service Unavailable) - this indicates backend server is down
       if (response.status === 503) {
-        logApiEvent('warn', 'Backend server unavailable (503), should use fallback', {
-          status: response.status,
-          url: response.url,
-          error: errorData
-        });
+        logApiEvent(
+          "warn",
+          "Backend server unavailable (503), should use fallback",
+          {
+            status: response.status,
+            url: response.url,
+            error: errorData,
+          },
+        );
         // Throw a specific error that can be caught and handled with fallback
-        throw new ApiError("Service unavailable - use fallback", 503, errorData);
+        throw new ApiError(
+          "Service unavailable - use fallback",
+          503,
+          errorData,
+        );
       }
 
       // Log API errors for monitoring
-      logApiEvent('error', 'API request failed', {
+      logApiEvent("error", "API request failed", {
         status: response.status,
         url: response.url,
-        error: errorData
+        error: errorData,
       });
 
       throw new ApiError(
@@ -236,7 +267,9 @@ export class ApiClient {
       try {
         return await response.json();
       } catch (jsonError) {
-        logApiEvent('warn', 'Failed to parse response JSON', { error: jsonError });
+        logApiEvent("warn", "Failed to parse response JSON", {
+          error: jsonError,
+        });
         throw new ApiError("Invalid JSON response", response.status);
       }
     }
@@ -250,9 +283,11 @@ export class ApiClient {
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
     // Use fallback immediately if forced or offline mode disabled in production
-    if (this.forceFallback ||
-        (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)) {
-      logApiEvent('info', `Using fallback data for ${endpoint}`);
+    if (
+      this.forceFallback ||
+      (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)
+    ) {
+      logApiEvent("info", `Using fallback data for ${endpoint}`);
       return this.devClient.get<T>(endpoint, params);
     }
 
@@ -284,30 +319,46 @@ export class ApiClient {
       // Enhanced error handling with production safety
       if (error instanceof Error) {
         if (error.name === "AbortError") {
-          logApiEvent('warn', `Request timeout for ${endpoint}`, { timeout: this.timeout });
-        } else if (error.message.includes("Failed to fetch") ||
-                   error.message.includes("NetworkError") ||
-                   error.message.includes("fetch")) {
-          logApiEvent('warn', `Network unavailable for ${endpoint}`, { error: error.message });
+          logApiEvent("warn", `Request timeout for ${endpoint}`, {
+            timeout: this.timeout,
+          });
+        } else if (
+          error.message.includes("Failed to fetch") ||
+          error.message.includes("NetworkError") ||
+          error.message.includes("fetch")
+        ) {
+          logApiEvent("warn", `Network unavailable for ${endpoint}`, {
+            error: error.message,
+          });
         } else if (error instanceof ApiError && error.status === 503) {
-          logApiEvent('warn', `Backend server unavailable for ${endpoint}`, { error: error.message });
+          logApiEvent("warn", `Backend server unavailable for ${endpoint}`, {
+            error: error.message,
+          });
         } else {
-          logApiEvent('error', `Request failed for ${endpoint}`, { error: error.message });
+          logApiEvent("error", `Request failed for ${endpoint}`, {
+            error: error.message,
+          });
         }
       }
 
       // Fallback handling - always try fallback for common error scenarios
-      if (API_CONFIG.OFFLINE_FALLBACK_ENABLED ||
-          (error instanceof Error && (
-            error.message.includes("Failed to fetch") ||
+      if (
+        API_CONFIG.OFFLINE_FALLBACK_ENABLED ||
+        (error instanceof Error &&
+          (error.message.includes("Failed to fetch") ||
             error.message.includes("Service unavailable") ||
-            (error instanceof ApiError && error.status === 503)
-          ))) {
+            (error instanceof ApiError && error.status === 503)))
+      ) {
         try {
-          logApiEvent('info', `Using fallback data for ${endpoint} due to error: ${error instanceof Error ? error.message : 'Unknown error'}`);
+          logApiEvent(
+            "info",
+            `Using fallback data for ${endpoint} due to error: ${error instanceof Error ? error.message : "Unknown error"}`,
+          );
           return this.devClient.get<T>(endpoint, params);
         } catch (fallbackError) {
-          logApiEvent('error', `Fallback also failed for ${endpoint}`, { error: fallbackError });
+          logApiEvent("error", `Fallback also failed for ${endpoint}`, {
+            error: fallbackError,
+          });
         }
       }
 
@@ -330,8 +381,10 @@ export class ApiClient {
     data?: any,
     customHeaders?: Record<string, string>,
   ): Promise<T> {
-    if (this.forceFallback || 
-        (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)) {
+    if (
+      this.forceFallback ||
+      (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)
+    ) {
       return this.devClient.post<T>(endpoint, data);
     }
 
@@ -353,14 +406,18 @@ export class ApiClient {
 
       // Same error handling pattern as GET
       if (error instanceof Error) {
-        logApiEvent('error', `POST request failed for ${endpoint}`, { error: error.message });
+        logApiEvent("error", `POST request failed for ${endpoint}`, {
+          error: error.message,
+        });
       }
 
       if (API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
         try {
           return this.devClient.post<T>(endpoint, data);
         } catch (fallbackError) {
-          logApiEvent('error', `POST fallback failed for ${endpoint}`, { error: fallbackError });
+          logApiEvent("error", `POST fallback failed for ${endpoint}`, {
+            error: fallbackError,
+          });
         }
       }
 
@@ -377,13 +434,16 @@ export class ApiClient {
   }
 
   async put<T>(endpoint: string, data?: any): Promise<T> {
-    if (this.forceFallback || (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)) {
+    if (
+      this.forceFallback ||
+      (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)
+    ) {
       return this.devClient.post<T>(endpoint, data);
     }
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
-    
+
     try {
       const response = await fetch(`${this.baseURL}${endpoint}`, {
         method: "PUT",
@@ -391,12 +451,12 @@ export class ApiClient {
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
       });
-      
+
       clearTimeout(timeoutId);
       return this.handleResponse<T>(response);
     } catch (error) {
       clearTimeout(timeoutId);
-      
+
       if (API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
         try {
           return this.devClient.post<T>(endpoint, data);
@@ -418,25 +478,28 @@ export class ApiClient {
   }
 
   async delete<T>(endpoint: string): Promise<T> {
-    if (this.forceFallback || (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)) {
+    if (
+      this.forceFallback ||
+      (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)
+    ) {
       return this.devClient.get<T>(endpoint);
     }
 
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
-    
+
     try {
       const response = await fetch(`${this.baseURL}${endpoint}`, {
         method: "DELETE",
         headers: this.getHeaders(),
         signal: controller.signal,
       });
-      
+
       clearTimeout(timeoutId);
       return this.handleResponse<T>(response);
     } catch (error) {
       clearTimeout(timeoutId);
-      
+
       if (API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
         try {
           return this.devClient.get<T>(endpoint);
@@ -459,14 +522,14 @@ export class ApiClient {
 
   setAuthToken(token: string) {
     this.authToken = token;
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.setItem("auth_token", token);
     }
   }
 
   clearAuthToken() {
     this.authToken = null;
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       localStorage.removeItem("auth_token");
     }
   }
@@ -480,18 +543,18 @@ export class ApiClient {
   }> {
     try {
       const response = await this.get("/health");
-      logApiEvent('info', 'Health check successful');
+      logApiEvent("info", "Health check successful");
       return {
         ...response,
-        environment: API_CONFIG.IS_PRODUCTION ? 'production' : 'development'
+        environment: API_CONFIG.IS_PRODUCTION ? "production" : "development",
       };
     } catch (error) {
-      logApiEvent('warn', 'Health check failed', { error });
+      logApiEvent("warn", "Health check failed", { error });
       return {
         status: "fallback",
         database: "offline",
         timestamp: new Date().toISOString(),
-        environment: API_CONFIG.IS_PRODUCTION ? 'production' : 'development'
+        environment: API_CONFIG.IS_PRODUCTION ? "production" : "development",
       };
     }
   }
@@ -512,19 +575,19 @@ export class ApiClient {
       baseURL: this.baseURL,
       isProduction: API_CONFIG.IS_PRODUCTION,
       offlineFallbackEnabled: API_CONFIG.OFFLINE_FALLBACK_ENABLED,
-      forceFallback: this.forceFallback
+      forceFallback: this.forceFallback,
     };
   }
 
   // Enable/disable fallback mode
   enableFallbackMode() {
     this.forceFallback = true;
-    logApiEvent('info', 'Fallback mode enabled');
+    logApiEvent("info", "Fallback mode enabled");
   }
 
   disableFallbackMode() {
     this.forceFallback = false;
-    logApiEvent('info', 'API mode enabled');
+    logApiEvent("info", "API mode enabled");
   }
 }
 

@@ -49,7 +49,12 @@ const sliderStyles = `
     display: none;
   }
 `;
-import { useParams, useNavigate, useSearchParams, useLocation } from "react-router-dom";
+import {
+  useParams,
+  useNavigate,
+  useSearchParams,
+  useLocation,
+} from "react-router-dom";
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -139,11 +144,11 @@ export default function HotelDetails() {
   const preselectRate = (location.state as any)?.preselectRate;
 
   // Debug trace for details mount
-  console.log('[DETAILS PRESELECT]', {
+  console.log("[DETAILS PRESELECT]", {
     receivedRateKey: preselectRate?.rateKey,
     receivedTotalPrice: preselectRate?.totalPrice,
     receivedRoomName: preselectRate?.roomName,
-    hasPreselectData: !!preselectRate
+    hasPreselectData: !!preselectRate,
   });
   const saveDropdownRef = useRef<HTMLDivElement>(null);
 
@@ -409,8 +414,10 @@ export default function HotelDetails() {
     // First try exact match, then try with different case combinations
     const getHotelName = () => {
       if (hotelNames[hotelCode]) return hotelNames[hotelCode];
-      if (hotelNames[hotelCode.toLowerCase()]) return hotelNames[hotelCode.toLowerCase()];
-      if (hotelNames[hotelCode.toUpperCase()]) return hotelNames[hotelCode.toUpperCase()];
+      if (hotelNames[hotelCode.toLowerCase()])
+        return hotelNames[hotelCode.toLowerCase()];
+      if (hotelNames[hotelCode.toUpperCase()])
+        return hotelNames[hotelCode.toUpperCase()];
 
       // Fallback based on hotel type
       if (isBusinessHotel) return `Business Hotel Dubai`;
@@ -589,11 +596,19 @@ export default function HotelDetails() {
             "htl-DXB-006": "Express Hotel Dubai Airport",
           };
           // Prioritize API name, but ensure we never show placeholder "hotel1" type names
-          if (hotelData.name && !hotelData.name.toLowerCase().includes('hotel1') && !hotelData.name.toLowerCase().includes('hotel 1')) {
+          if (
+            hotelData.name &&
+            !hotelData.name.toLowerCase().includes("hotel1") &&
+            !hotelData.name.toLowerCase().includes("hotel 1")
+          ) {
             return hotelData.name;
           }
           // Use mapped names as fallback
-          return hotelNames[hotelId] || hotelNames[hotelId?.toLowerCase()] || "Premium Hotel Dubai";
+          return (
+            hotelNames[hotelId] ||
+            hotelNames[hotelId?.toLowerCase()] ||
+            "Premium Hotel Dubai"
+          );
         })(),
         location: (() => {
           const hotelLocations = {
@@ -663,10 +678,10 @@ export default function HotelDetails() {
         currentPrice: (() => {
           // Use preselected rate price if available for consistency
           if (preselectRate && preselectRate.perNightPrice) {
-            console.log('[USING RESULTS PAGE PRICE]', {
+            console.log("[USING RESULTS PAGE PRICE]", {
               resultsPrice: preselectRate.perNightPrice,
               hotelDataPrice: hotelData.currentPrice,
-              fallbackPrice: 167
+              fallbackPrice: 167,
             });
             return preselectRate.perNightPrice;
           }
@@ -677,7 +692,10 @@ export default function HotelDetails() {
           if (preselectRate && preselectRate.totalPrice) {
             return preselectRate.totalPrice;
           }
-          return hotelData.totalPrice || (hotelData.currentPrice || 167) * totalNights;
+          return (
+            hotelData.totalPrice ||
+            (hotelData.currentPrice || 167) * totalNights
+          );
         })(),
         currency: hotelData.currency || "USD",
         available: hotelData.available !== false,
@@ -689,10 +707,10 @@ export default function HotelDetails() {
   const calculateTotalPrice = (roomPricePerNight: number, room?: any) => {
     // Use exact Results page price if available to ensure consistency
     if (room && room.exactResultsTotal && room.priceConsistent) {
-      console.log('[USING EXACT RESULTS PRICE]', {
+      console.log("[USING EXACT RESULTS PRICE]", {
         exactTotal: room.exactResultsTotal,
         roomId: room.id,
-        reason: 'Price consistency from Results page'
+        reason: "Price consistency from Results page",
       });
       return room.exactResultsTotal;
     }
@@ -816,18 +834,18 @@ export default function HotelDetails() {
     const basePrice = (() => {
       // Use Results page pricing if available for consistency
       if (preselectRate && preselectRate.perNightPrice) {
-        console.log('[FALLBACK ROOMS USING RESULTS PRICE]', {
+        console.log("[FALLBACK ROOMS USING RESULTS PRICE]", {
           basePrice: preselectRate.perNightPrice,
-          source: 'Results page preselect'
+          source: "Results page preselect",
         });
         return preselectRate.perNightPrice;
       }
 
       // Otherwise use hotel data price
       const hotelPrice = tempHotelData?.currentPrice || 167;
-      console.log('[FALLBACK ROOMS USING HOTEL PRICE]', {
+      console.log("[FALLBACK ROOMS USING HOTEL PRICE]", {
         basePrice: hotelPrice,
-        source: 'Hotel data or fallback'
+        source: "Hotel data or fallback",
       });
       return hotelPrice;
     })();
@@ -894,38 +912,44 @@ export default function HotelDetails() {
   useEffect(() => {
     if (roomTypes.length > 0) {
       let roomToSelect = null;
-      let matchType = 'default';
+      let matchType = "default";
 
       // First priority: Pre-selected room from Results page navigation state
       if (preselectRate) {
         // Try to match by rateKey/roomId first
-        roomToSelect = roomTypes.find(room =>
-          room.id === preselectRate.rateKey ||
-          room.id === preselectRate.roomId ||
-          room.id === preselectRate.roomTypeId
+        roomToSelect = roomTypes.find(
+          (room) =>
+            room.id === preselectRate.rateKey ||
+            room.id === preselectRate.roomId ||
+            room.id === preselectRate.roomTypeId,
         );
 
         if (roomToSelect) {
-          matchType = 'rateKey';
+          matchType = "rateKey";
         } else {
           // Try to match by room name/type
-          roomToSelect = roomTypes.find(room =>
-            room.name === preselectRate.roomName ||
-            room.name === preselectRate.roomType ||
-            room.type === preselectRate.roomType
+          roomToSelect = roomTypes.find(
+            (room) =>
+              room.name === preselectRate.roomName ||
+              room.name === preselectRate.roomType ||
+              room.type === preselectRate.roomType,
           );
 
           if (roomToSelect) {
-            matchType = 'roomName';
+            matchType = "roomName";
           } else {
             // Match by closest price if exact room not found
             const expectedPerNight = preselectRate.perNightPrice;
             roomToSelect = roomTypes.reduce((closest, room) => {
-              const currentDiff = Math.abs((room.pricePerNight || 0) - expectedPerNight);
-              const closestDiff = Math.abs((closest?.pricePerNight || 0) - expectedPerNight);
+              const currentDiff = Math.abs(
+                (room.pricePerNight || 0) - expectedPerNight,
+              );
+              const closestDiff = Math.abs(
+                (closest?.pricePerNight || 0) - expectedPerNight,
+              );
               return currentDiff < closestDiff ? room : closest;
             }, roomTypes[0]);
-            matchType = 'priceMatch';
+            matchType = "priceMatch";
           }
         }
 
@@ -941,19 +965,19 @@ export default function HotelDetails() {
             // Store the exact total price from Results page
             exactResultsTotal: preselectRate.totalPrice,
             // Mark this as price-consistent
-            priceConsistent: true
+            priceConsistent: true,
           };
 
-          console.log('[PRICE CONSISTENCY OVERRIDE]', {
+          console.log("[PRICE CONSISTENCY OVERRIDE]", {
             originalRoomPrice: roomToSelect.originalPricePerNight,
             overriddenPerNight: preselectRate.perNightPrice,
             exactResultsTotal: preselectRate.totalPrice,
-            preselectData: preselectRate
+            preselectData: preselectRate,
           });
         }
 
         // Debug trace for room matching
-        console.log('[ROOM MATCHING]', {
+        console.log("[ROOM MATCHING]", {
           preselectRateKey: preselectRate.rateKey,
           preselectRoomName: preselectRate.roomName,
           preselectPrice: preselectRate.perNightPrice,
@@ -961,14 +985,14 @@ export default function HotelDetails() {
           matchedRoomId: roomToSelect?.id,
           matchedRoomName: roomToSelect?.name,
           matchedPrice: roomToSelect?.pricePerNight,
-          matchType
+          matchType,
         });
       }
 
       // Fallback: Select first room if no pre-selection or no match found
       if (!roomToSelect) {
         roomToSelect = roomTypes[0];
-        matchType = 'fallback';
+        matchType = "fallback";
 
         // If using fallback and we have Results page data, ensure price consistency
         if (preselectRate && roomToSelect) {
@@ -978,13 +1002,13 @@ export default function HotelDetails() {
             exactResultsTotal: preselectRate.totalPrice,
             originalPricePerNight: roomToSelect.pricePerNight,
             // Use Results page price for consistency
-            pricePerNight: preselectRate.perNightPrice
+            pricePerNight: preselectRate.perNightPrice,
           };
-          console.log('[FALLBACK ROOM PRICE OVERRIDE]', {
+          console.log("[FALLBACK ROOM PRICE OVERRIDE]", {
             roomId: roomToSelect.id,
             originalPrice: roomToSelect.originalPricePerNight,
             resultsPrice: preselectRate.perNightPrice,
-            exactTotal: preselectRate.totalPrice
+            exactTotal: preselectRate.totalPrice,
           });
         }
       }
@@ -994,15 +1018,18 @@ export default function HotelDetails() {
         setSelectedRoomType(roomToSelect);
 
         // Debug trace for final selection
-        console.log('[DETAILS ROOM SELECTED]', {
+        console.log("[DETAILS ROOM SELECTED]", {
           selectedRoomId: roomToSelect.id,
           selectedRoomName: roomToSelect.name,
           selectedPrice: roomToSelect.pricePerNight,
           exactTotal: roomToSelect.exactResultsTotal,
           matchType,
-          calculatedTotal: calculateTotalPrice(roomToSelect.pricePerNight, roomToSelect),
+          calculatedTotal: calculateTotalPrice(
+            roomToSelect.pricePerNight,
+            roomToSelect,
+          ),
           isPriceConsistent: roomToSelect.priceConsistent,
-          hasResultsData: !!preselectRate
+          hasResultsData: !!preselectRate,
         });
       }
     }
@@ -1068,7 +1095,11 @@ export default function HotelDetails() {
                     nonRefundable: true,
                     image:
                       "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop",
-                    features: ["Standard Room", "Free WiFi", "Air conditioning"],
+                    features: [
+                      "Standard Room",
+                      "Free WiFi",
+                      "Air conditioning",
+                    ],
                     isLiveData: false,
                   },
                 ],
@@ -1459,7 +1490,7 @@ export default function HotelDetails() {
                                 ₹
                                 {calculateTotalPrice(
                                   room.pricePerNight,
-                                  room
+                                  room,
                                 ).toLocaleString()}
                               </div>
                               <div className="text-xs text-gray-500">
@@ -1517,15 +1548,21 @@ export default function HotelDetails() {
                               module="hotels"
                               itemName={`${hotel.name} - ${room.name}`}
                               basePrice={(() => {
-                                const roomTotal = calculateTotalPrice(room.pricePerNight, room);
+                                const roomTotal = calculateTotalPrice(
+                                  room.pricePerNight,
+                                  room,
+                                );
                                 // Debug trace for bargain opening
-                                console.log('[BARGAIN BASE]', {
+                                console.log("[BARGAIN BASE]", {
                                   baseFromSelectedRate: roomTotal,
                                   roomId: room.id,
                                   roomName: room.name,
                                   perNightPrice: room.pricePerNight,
-                                  isPreselectedRoom: preselectRate?.rateKey === room.id,
-                                  usingExactResultsPrice: room.priceConsistent && room.exactResultsTotal
+                                  isPreselectedRoom:
+                                    preselectRate?.rateKey === room.id,
+                                  usingExactResultsPrice:
+                                    room.priceConsistent &&
+                                    room.exactResultsTotal,
                                 });
                                 return roomTotal;
                               })()}
@@ -1535,14 +1572,26 @@ export default function HotelDetails() {
                                 name: `${hotel.name} - ${room.name}`,
                                 location: hotel.location || "Hotel Location",
                                 provider: "Hotelbeds",
-                                checkIn: searchParams.get('checkIn') || '',
-                                checkOut: searchParams.get('checkOut') || '',
-                                features: Array.isArray(room.features) ? room.features.slice(0, 5).map(f => typeof f === 'string' ? f : f?.name || 'Feature') : [],
+                                checkIn: searchParams.get("checkIn") || "",
+                                checkOut: searchParams.get("checkOut") || "",
+                                features: Array.isArray(room.features)
+                                  ? room.features
+                                      .slice(0, 5)
+                                      .map((f) =>
+                                        typeof f === "string"
+                                          ? f
+                                          : f?.name || "Feature",
+                                      )
+                                  : [],
                               }}
                               onBargainSuccess={(finalPrice, orderRef) => {
-                                console.log(`Hotel Details Room Selection Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`);
+                                console.log(
+                                  `Hotel Details Room Selection Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`,
+                                );
                                 handleBooking(room, finalPrice);
-                                setBargainedRooms((prev) => new Set([...prev, room.id]));
+                                setBargainedRooms(
+                                  (prev) => new Set([...prev, room.id]),
+                                );
                                 if (navigator.vibrate) {
                                   navigator.vibrate(50);
                                 }
@@ -2169,7 +2218,7 @@ export default function HotelDetails() {
                                 ₹
                                 {calculateTotalPrice(
                                   room.pricePerNight,
-                                  room
+                                  room,
                                 ).toLocaleString()}
                               </div>
                               <div className="text-xs text-gray-500">
@@ -2257,7 +2306,7 @@ export default function HotelDetails() {
                                     ₹
                                     {calculateTotalPrice(
                                       room.pricePerNight,
-                                      room
+                                      room,
                                     ).toLocaleString()}
                                   </div>
                                   <div className="text-sm font-semibold text-gray-900 mb-1">
@@ -2306,15 +2355,19 @@ export default function HotelDetails() {
                                     module="hotels"
                                     itemName={`${hotel.name} - ${room.name}`}
                                     basePrice={(() => {
-                                      const roomTotal = calculateTotalPrice(room.pricePerNight, room);
+                                      const roomTotal = calculateTotalPrice(
+                                        room.pricePerNight,
+                                        room,
+                                      );
                                       // Debug trace for bargain opening
-                                      console.log('[BARGAIN BASE DESKTOP]', {
+                                      console.log("[BARGAIN BASE DESKTOP]", {
                                         baseFromSelectedRate: roomTotal,
                                         roomId: room.id,
                                         roomName: room.name,
                                         perNightPrice: room.pricePerNight,
                                         isConsistentPrice: room.priceConsistent,
-                                        exactResultsTotal: room.exactResultsTotal
+                                        exactResultsTotal:
+                                          room.exactResultsTotal,
                                       });
                                       return roomTotal;
                                     })()}
@@ -2322,16 +2375,26 @@ export default function HotelDetails() {
                                     itemDetails={{
                                       id: room.id,
                                       name: `${hotel.name} - ${room.name}`,
-                                      location: hotel.location || "Hotel Location",
+                                      location:
+                                        hotel.location || "Hotel Location",
                                       provider: "Hotelbeds",
-                                      checkIn: searchParams.get('checkIn') || '',
-                                      checkOut: searchParams.get('checkOut') || '',
+                                      checkIn:
+                                        searchParams.get("checkIn") || "",
+                                      checkOut:
+                                        searchParams.get("checkOut") || "",
                                       features: room.amenities || [],
                                     }}
-                                    onBargainSuccess={(finalPrice, orderRef) => {
-                                      console.log(`Hotel Details Desktop Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`);
+                                    onBargainSuccess={(
+                                      finalPrice,
+                                      orderRef,
+                                    ) => {
+                                      console.log(
+                                        `Hotel Details Desktop Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`,
+                                      );
                                       handleBooking(room, finalPrice);
-                                      setBargainedRooms((prev) => new Set([...prev, room.id]));
+                                      setBargainedRooms(
+                                        (prev) => new Set([...prev, room.id]),
+                                      );
                                     }}
                                     className={`w-full font-medium py-2 text-sm transition-all duration-200 min-h-[44px] ${
                                       bargainedRooms.has(room.id)
@@ -2340,7 +2403,10 @@ export default function HotelDetails() {
                                           ? "bg-blue-600 text-white animate-pulse"
                                           : ""
                                     }`}
-                                    disabled={bargainedRooms.has(room.id) || bargainingRoomId === room.id}
+                                    disabled={
+                                      bargainedRooms.has(room.id) ||
+                                      bargainingRoomId === room.id
+                                    }
                                   >
                                     {bargainedRooms.has(room.id) ? (
                                       <span className="flex items-center justify-center">
@@ -3615,33 +3681,47 @@ export default function HotelDetails() {
                 module="hotels"
                 itemName={`${hotel.name} - ${selectedRoomType?.name}`}
                 basePrice={(() => {
-                  const selectedTotal = selectedRoomType ? calculateTotalPrice(selectedRoomType.pricePerNight) : 0;
+                  const selectedTotal = selectedRoomType
+                    ? calculateTotalPrice(selectedRoomType.pricePerNight)
+                    : 0;
                   // Debug trace for mobile bottom bar bargain opening
-                  console.log('[BARGAIN BASE - MOBILE]', {
+                  console.log("[BARGAIN BASE - MOBILE]", {
                     baseFromSelectedRate: selectedTotal,
                     selectedRoomId: selectedRoomType?.id,
                     selectedRoomName: selectedRoomType?.name,
                     perNightPrice: selectedRoomType?.pricePerNight,
-                    isPreselectedRoom: preselectRate?.rateKey === selectedRoomType?.id,
-                    fromPreselectRate: preselectRate?.totalPrice
+                    isPreselectedRoom:
+                      preselectRate?.rateKey === selectedRoomType?.id,
+                    fromPreselectRate: preselectRate?.totalPrice,
                   });
                   return selectedTotal;
                 })()}
-                productRef={selectedRoomType?.id || ''}
+                productRef={selectedRoomType?.id || ""}
                 itemDetails={{
-                  id: selectedRoomType?.id || '',
+                  id: selectedRoomType?.id || "",
                   name: `${hotel.name} - ${selectedRoomType?.name}`,
                   location: hotel.location || "Hotel Location",
                   provider: "Hotelbeds",
-                  checkIn: searchParams.get('checkIn') || '',
-                  checkOut: searchParams.get('checkOut') || '',
-                  features: selectedRoomType && Array.isArray(selectedRoomType.features) ? selectedRoomType.features.slice(0, 5).map(f => typeof f === 'string' ? f : f?.name || 'Feature') : [],
+                  checkIn: searchParams.get("checkIn") || "",
+                  checkOut: searchParams.get("checkOut") || "",
+                  features:
+                    selectedRoomType && Array.isArray(selectedRoomType.features)
+                      ? selectedRoomType.features
+                          .slice(0, 5)
+                          .map((f) =>
+                            typeof f === "string" ? f : f?.name || "Feature",
+                          )
+                      : [],
                 }}
                 onBargainSuccess={(finalPrice, orderRef) => {
-                  console.log(`Hotel Details Bottom Bar Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`);
+                  console.log(
+                    `Hotel Details Bottom Bar Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`,
+                  );
                   if (selectedRoomType) {
                     handleBooking(selectedRoomType, finalPrice);
-                    setBargainedRooms((prev) => new Set([...prev, selectedRoomType.id]));
+                    setBargainedRooms(
+                      (prev) => new Set([...prev, selectedRoomType.id]),
+                    );
                   }
                   if (navigator.vibrate) {
                     navigator.vibrate(50);

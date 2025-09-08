@@ -5,8 +5,17 @@
 **URL**: `GET https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.projects.builder.codes/api/feature-flags`
 
 **Expected Response**:
+
 ```json
-{"AI_TRAFFIC":0.0,"AI_SHADOW":true,"AI_KILL_SWITCH":false,"AI_AUTO_SCALE":false,"ENABLE_CHAT_ANALYTICS":true,"MAX_BARGAIN_ROUNDS":3,"BARGAIN_TIMEOUT_SECONDS":30}
+{
+  "AI_TRAFFIC": 0.0,
+  "AI_SHADOW": true,
+  "AI_KILL_SWITCH": false,
+  "AI_AUTO_SCALE": false,
+  "ENABLE_CHAT_ANALYTICS": true,
+  "MAX_BARGAIN_ROUNDS": 3,
+  "BARGAIN_TIMEOUT_SECONDS": 30
+}
 ```
 
 ## 2. ANALYTICS TEST - SUCCESS CONFIRMATION
@@ -14,6 +23,7 @@
 **URL**: `POST https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.projects.builder.codes/api/analytics/chat-events`
 
 **Sample Request**:
+
 ```json
 {
   "event": "chat_open",
@@ -30,6 +40,7 @@
 ```
 
 **Expected Response**:
+
 ```json
 {
   "success": true,
@@ -42,6 +53,7 @@
 ## 3. SAMPLE CHAT EVENT PAYLOADS (for HAR comparison)
 
 ### chat_open
+
 ```json
 {
   "event": "chat_open",
@@ -60,6 +72,7 @@
 ```
 
 ### message_send
+
 ```json
 {
   "event": "message_send",
@@ -76,6 +89,7 @@
 ```
 
 ### counter_offer
+
 ```json
 {
   "event": "counter_offer",
@@ -92,6 +106,7 @@
 ```
 
 ### round_n
+
 ```json
 {
   "event": "round_n",
@@ -109,6 +124,7 @@
 ```
 
 ### accepted
+
 ```json
 {
   "event": "accepted",
@@ -125,6 +141,7 @@
 ```
 
 ### closed
+
 ```json
 {
   "event": "closed",
@@ -145,6 +162,7 @@
 ### Hotel Test: ₹10,000 base + 5% markup + 10% promo (capped ₹1,000) × 3 nights
 
 **Expected Response Structure**:
+
 ```json
 {
   "success": true,
@@ -172,6 +190,7 @@
 ### Flight Test: Route markup + ₹300 fixed promo
 
 **Expected Response Structure**:
+
 ```json
 {
   "success": true,
@@ -192,6 +211,7 @@
 ### Bargain Floor Test: Negotiated < floor → blocked
 
 **Expected Response**:
+
 ```json
 {
   "success": false,
@@ -207,36 +227,40 @@
 ## 5. DATABASE EVIDENCE EXPECTED
 
 ### markup_rules insert
+
 ```sql
 INSERT INTO pricing_markup_rules (module, destination, markup_type, markup_value, status, created_at)
 VALUES ('hotels', 'DXB', 'percentage', 5.00, 'active', '2025-09-08 12:30:00');
 ```
 
-### promo_codes insert  
+### promo_codes insert
+
 ```sql
 INSERT INTO promo_codes (code, type, value, max_discount, status, valid_from, valid_to)
 VALUES ('SAVE10PERCENT', 'percent', 10.00, 1000.00, 'active', '2025-01-15', '2025-12-31');
 ```
 
 ### promo_code_usage insert
+
 ```sql
 INSERT INTO promo_code_usage (promo_code_id, user_id, booking_ref, discount_amount, original_price, final_price, created_at)
 VALUES (7, 'user-uuid-xxx', 'BK_HTL_20250908_001', 1000.00, 35305.00, 34305.00, '2025-09-08 12:35:00');
 ```
 
 ### Audit log entry
+
 ```json
 {
   "audit_id": "audit_20250908_001",
   "booking_ref": "BK_HTL_20250908_001",
-  "user_id": "user-uuid-xxx", 
+  "user_id": "user-uuid-xxx",
   "action": "pricing_calculated",
   "details": {
     "markup_rule_id": 123,
     "promo_redemption_id": "PROMO_20250908_001",
-    "markup_applied": 1500.00,
-    "promo_discount": 1000.00,
-    "final_price": 34305.00
+    "markup_applied": 1500.0,
+    "promo_discount": 1000.0,
+    "final_price": 34305.0
   },
   "timestamp": "2025-09-08T12:35:00Z"
 }
