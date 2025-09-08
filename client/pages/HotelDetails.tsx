@@ -2201,9 +2201,6 @@ export default function HotelDetails() {
                   <h2 className="text-xl font-bold text-gray-900">
                     Facilities of Grand Hyatt Dubai
                   </h2>
-                  <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium">
-                    See availability
-                  </button>
                 </div>
                 {/* Most popular facilities */}
                 <div className="mb-8">
