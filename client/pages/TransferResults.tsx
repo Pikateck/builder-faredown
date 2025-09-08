@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Slider } from "@/components/ui/slider";
 import { Checkbox } from "@/components/ui/checkbox";
 import { ErrorBanner } from "@/components/ErrorBanner";
-import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
+import { BargainButton } from "@/components/ui/BargainButton";
 import { TransfersSearchForm } from "@/components/TransfersSearchForm";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { MobileBottomBar } from "@/components/mobile/MobileBottomBar";
