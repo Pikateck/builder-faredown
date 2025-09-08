@@ -219,8 +219,7 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
                     {item.description}
                   </p>
                   <span className="text-sm font-bold text-gray-900 whitespace-nowrap">
-                    {booking.currency || "₹"}
-                    {item.total.toLocaleString()}
+                    {currencyService.formatCurrency(item.total, booking.currency || "INR")}
                   </span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs text-gray-600">
@@ -229,8 +228,7 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
                   </div>
                   <div className="text-right">
                     <span className="font-medium">Unit:</span>{" "}
-                    {booking.currency || "₹"}
-                    {item.unitPrice.toLocaleString()}
+                    {currencyService.formatCurrency(item.unitPrice, booking.currency || "INR")}
                   </div>
                 </div>
               </div>
