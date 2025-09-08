@@ -55,7 +55,7 @@ class EnhancedHotelsService extends EnhancedApiService {
       pagination: { total: 1, page: 1, limit: 20, pages: 1 }
     };
 
-    return this.safePost('/search', params, fallbackData);
+    return this.safeGet('/search', params, fallbackData);
   }
 
   async getHotelDetails(hotelId: string) {
