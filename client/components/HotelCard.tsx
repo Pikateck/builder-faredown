@@ -383,37 +383,18 @@ export function HotelCard({
 
   // Handle image gallery click
   const handleImageClick = () => {
-    // Use same preselect rate logic as handleViewDetails but with gallery tab
-    const cheapestRoomData = getCheapestRoomFromHotel(hotel);
-    const totalPriceData = calculateTotalPrice(currentPrice, totalNights, roomsCount);
-
-    const preselectRate = {
-      hotelId: hotel.id,
-      roomTypeId: cheapestRoomData.roomId,
-      roomId: cheapestRoomData.roomId,
-      ratePlanId: cheapestRoomData.roomId,
-      rateKey: cheapestRoomData.roomId,
-      roomName: cheapestRoomData.roomType,
-      roomType: cheapestRoomData.roomType,
-      board: 'Room Only',
-      occupancy: {
-        adults: parseInt(searchParams.get("adults") || "2"),
-        children: parseInt(searchParams.get("children") || "0"),
-        rooms: roomsCount
-      },
-      nights: totalNights,
-      currency: selectedCurrency?.code || "INR",
-      taxesIncluded: true,
-      totalPrice: totalPriceData.total,
-      perNightPrice: currentPrice,
-      priceBreakdown: totalPriceData,
-      checkIn: checkInDate.toISOString(),
-      checkOut: checkOutDate.toISOString(),
-      supplierData: {
-        supplier: 'hotelbeds',
-        isLiveData: hotel.isLiveData || false
-      }
-    };
+    // Use unified utilities for consistent rate data creation
+    const cheapestRoomData = findCheapestRoom(hotel);
+    const preselectRate = createRateData(
+      hotel,
+      cheapestRoomData.room,
+      searchParams,
+      selectedCurrency,
+      checkInDate,
+      checkOutDate,
+      totalNights,
+      roomsCount
+    );
 
     const detailParams = new URLSearchParams();
     searchParams.forEach((value, key) => {
