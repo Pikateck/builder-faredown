@@ -627,7 +627,7 @@ export default function HotelDetails() {
                   "htl-DXB-002":
                     "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop",
                   "htl-DXB-003":
-                    "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop",
+                    "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fe7cdaa194b1140a4a86c6fa826bf4eeb?format=webp&width=800",
                   "htl-DXB-004":
                     "https://images.unsplash.com/photo-1584132967334-10e028bd69f7?w=800&h=600&q=80&auto=format&fit=crop",
                 };
