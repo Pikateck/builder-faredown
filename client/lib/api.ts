@@ -200,19 +200,30 @@ export class ApiClient {
       try {
         errorData = await response.json();
       } catch (jsonError) {
-        errorData = { 
+        errorData = {
           message: `HTTP ${response.status}: ${response.statusText}`,
-          status: response.status 
+          status: response.status
         };
       }
-      
+
+      // Special handling for 503 (Service Unavailable) - this indicates backend server is down
+      if (response.status === 503) {
+        logApiEvent('warn', 'Backend server unavailable (503), should use fallback', {
+          status: response.status,
+          url: response.url,
+          error: errorData
+        });
+        // Throw a specific error that can be caught and handled with fallback
+        throw new ApiError("Service unavailable - use fallback", 503, errorData);
+      }
+
       // Log API errors for monitoring
       logApiEvent('error', 'API request failed', {
         status: response.status,
         url: response.url,
         error: errorData
       });
-      
+
       throw new ApiError(
         (errorData as any).message || "API request failed",
         response.status,
