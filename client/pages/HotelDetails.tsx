@@ -3435,17 +3435,22 @@ export default function HotelDetails() {
                 Reserve
               </Button>
               <BargainButton
-                useEnhancedModal={true}
+                useBargainModal={true}
                 module="hotels"
                 itemName={`${hotel.name} - ${selectedRoomType?.name}`}
-                supplierNetRate={selectedRoomType ? calculateTotalPrice(selectedRoomType.pricePerNight) : 0}
+                basePrice={selectedRoomType ? calculateTotalPrice(selectedRoomType.pricePerNight) : 0}
+                productRef={selectedRoomType?.id || ''}
                 itemDetails={{
+                  id: selectedRoomType?.id || '',
+                  name: `${hotel.name} - ${selectedRoomType?.name}`,
                   location: hotel.location || "Hotel Location",
                   provider: "Hotelbeds",
+                  checkIn: searchParams.get('checkIn') || '',
+                  checkOut: searchParams.get('checkOut') || '',
                   features: selectedRoomType && Array.isArray(selectedRoomType.features) ? selectedRoomType.features.slice(0, 5).map(f => typeof f === 'string' ? f : f?.name || 'Feature') : [],
                 }}
-                onBargainSuccess={(finalPrice, savings) => {
-                  console.log(`Hotel Details Bottom Bar Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                onBargainSuccess={(finalPrice, orderRef) => {
+                  console.log(`Hotel Details Bottom Bar Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`);
                   if (selectedRoomType) {
                     handleBooking(selectedRoomType, finalPrice);
                     setBargainedRooms((prev) => new Set([...prev, selectedRoomType.id]));
