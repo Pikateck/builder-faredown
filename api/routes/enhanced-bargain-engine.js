@@ -127,8 +127,8 @@ router.post("/start", async (req, res) => {
       })
     ]);
 
-    // Calculate display price with markup
-    const display_price = supplier_net_rate + pricing.markup_amount;
+    // Calculate display price with markup (this is what customer sees initially)
+    const display_price = Math.round(supplier_net_rate + pricing.markup_amount);
 
     res.json({
       success: true,
