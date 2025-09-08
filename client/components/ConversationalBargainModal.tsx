@@ -519,7 +519,7 @@ export function ConversationalBargainModal({
         {/* Header */}
         <div className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4 sm:p-6 rounded-t-xl">
           <button
-            onClick={onClose}
+            onClick={handleClose}
             className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-10"
             style={{ minWidth: "36px", minHeight: "36px" }}
           >
