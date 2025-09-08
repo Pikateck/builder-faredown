@@ -482,7 +482,7 @@ export function HotelCard({
                   View Details
                 </Button>
                 <BargainButton
-                  useEnhancedModal={true}
+                  useBargainModal={true}
                   module="hotels"
                   itemName={hotel.name}
                   supplierNetRate={totalPriceInclusiveTaxes}
@@ -631,7 +631,7 @@ export function HotelCard({
                   View Details
                 </Button>
                 <BargainButton
-                  useEnhancedModal={true}
+                  useBargainModal={true}
                   module="hotels"
                   itemName={hotel.name}
                   supplierNetRate={totalPriceInclusiveTaxes}
@@ -780,7 +780,7 @@ export function HotelCard({
                 View Details
               </Button>
               <BargainButton
-                useEnhancedModal={true}
+                useBargainModal={true}
                 module="hotels"
                 itemName={hotel.name}
                 supplierNetRate={totalPriceInclusiveTaxes}
