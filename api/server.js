@@ -223,7 +223,7 @@ app.use("/api/ai-bargains", aiBargainRoutes);
 app.use("/api/currency", currencyRoutes);
 app.use("/api/promo", promoRoutes);
 app.use("/api/feature-flags", featureFlagsRoutes);
-app.use("/api/analytics", authenticateToken, analyticsRoutes);
+app.use("/api/analytics", analyticsRoutes);
 app.use("/api/payments", authenticateToken, paymentRoutes);
 app.use("/api/cms", cmsRoutes);
 app.use("/api/test-live", testLiveRoutes);
