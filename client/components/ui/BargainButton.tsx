@@ -56,7 +56,7 @@ export function BargainButton({
   onBargainSuccess,
   useBargainModal = false,
   useEnhancedModal = false,
-  userName = "Guest",
+  userName,
   isMobile = false,
   // Extract only valid DOM props
   id,
@@ -70,6 +70,10 @@ export function BargainButton({
   [key: string]: any;
 }) {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
+  const { user, isLoggedIn } = useAuth();
+
+  // Use authenticated user's name, fallback to provided userName, then to "Guest"
+  const effectiveUserName = isLoggedIn && user?.name ? user.name : (userName || "Guest");
 
   // Use either basePrice or supplierNetRate
   const effectivePrice = supplierNetRate || basePrice;
