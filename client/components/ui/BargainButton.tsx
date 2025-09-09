@@ -8,6 +8,7 @@ import {
 } from "@/lib/mobileUtils";
 import { TrendingDown } from "lucide-react";
 import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
+import { useAuth } from "@/contexts/AuthContext";
 
 interface BargainButtonProps {
   children: React.ReactNode;
@@ -154,7 +155,7 @@ export function BargainButton({
           onAccept={handleBargainSuccess}
           onHold={handleBargainHold}
           module={module}
-          userName={userName}
+          userName={effectiveUserName}
           basePrice={effectivePrice}
           productRef={productRef || itemName || "product"}
           flight={
