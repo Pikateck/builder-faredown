@@ -232,10 +232,12 @@ app.use("/api/test-hotelbeds", testHotelbedsRoutes);
 // 🎯 ADD PRICING ROUTES TO FIX builder-faredown-pricing
 try {
   const createPricingRoutes = require("./routes/pricing");
-  if (typeof createPricingRoutes === 'function') {
+  if (typeof createPricingRoutes === "function") {
     const pricingRoutes = createPricingRoutes(pool);
     app.use("/api/pricing", pricingRoutes);
-    console.log("✅ Pricing routes mounted successfully - builder-faredown-pricing should now work");
+    console.log(
+      "✅ Pricing routes mounted successfully - builder-faredown-pricing should now work",
+    );
   }
 } catch (error) {
   console.error("❌ Failed to mount pricing routes:", error.message);
