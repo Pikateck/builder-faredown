@@ -85,8 +85,10 @@ export abstract class EnhancedApiService {
     } catch (error) {
       // Enhanced error categorization
       if (error instanceof Error) {
-        if (error.message.includes("Failed to fetch") || 
+        if (error.name === "TypeError" ||
+            error.message.includes("Failed to fetch") ||
             error.message.includes("NetworkError") ||
+            error.message.includes("ECONNREFUSED") ||
             error.message.includes("Service unavailable")) {
           
           this.logServiceEvent('warn', `${operationDesc} - network unavailable, using fallback`, {
