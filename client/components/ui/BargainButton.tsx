@@ -74,7 +74,8 @@ export function BargainButton({
   const { user, isLoggedIn } = useAuth();
 
   // Use authenticated user's name, fallback to provided userName, then to "Guest"
-  const effectiveUserName = isLoggedIn && user?.name ? user.name : (userName || "Guest");
+  const effectiveUserName =
+    isLoggedIn && user?.name ? user.name : userName || "Guest";
 
   // Use either basePrice or supplierNetRate
   const effectivePrice = supplierNetRate || basePrice;

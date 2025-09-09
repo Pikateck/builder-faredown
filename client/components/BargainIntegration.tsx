@@ -103,9 +103,7 @@ export function BargainIntegration({
       : storedUser?.firstName || "Guest";
 
   const effectiveUserName =
-    userName && userName !== "Guest"
-      ? userName
-      : computedFirstName;
+    userName && userName !== "Guest" ? userName : computedFirstName;
 
   // Safety checks for required props
   if (!basePrice || !productRef) {

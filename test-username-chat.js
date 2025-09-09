@@ -13,16 +13,19 @@ const simulateAuthContext = () => {
     id: "1",
     name: "Zubin Aibara",
     email: "zubin@faredown.com",
-    loyaltyLevel: 1
+    loyaltyLevel: 1,
   };
   const isLoggedIn = true;
   const userName = "Guest"; // Default prop
 
-  const effectiveUserName = isLoggedIn && mockUser?.name ? mockUser.name : (userName || "Guest");
+  const effectiveUserName =
+    isLoggedIn && mockUser?.name ? mockUser.name : userName || "Guest";
   console.log(`   AuthContext User: ${mockUser.name}`);
   console.log(`   Logged In: ${isLoggedIn}`);
   console.log(`   Effective Name: ${effectiveUserName}`);
-  console.log(`   Chat Message: "Hello ${effectiveUserName}! I'm here to help..."`);
+  console.log(
+    `   Chat Message: "Hello ${effectiveUserName}! I'm here to help..."`,
+  );
   console.log(`   ✅ Expected: "Hello Zubin Aibara!"\n`);
 
   // Test Case 2: User is not logged in
@@ -31,11 +34,14 @@ const simulateAuthContext = () => {
   const isLoggedInFalse = false;
   const userNameGuest = "Guest";
 
-  const effectiveUserNameGuest = isLoggedInFalse && noUser?.name ? noUser.name : (userNameGuest || "Guest");
+  const effectiveUserNameGuest =
+    isLoggedInFalse && noUser?.name ? noUser.name : userNameGuest || "Guest";
   console.log(`   AuthContext User: ${noUser}`);
   console.log(`   Logged In: ${isLoggedInFalse}`);
   console.log(`   Effective Name: ${effectiveUserNameGuest}`);
-  console.log(`   Chat Message: "Hello ${effectiveUserNameGuest}! I'm here to help..."`);
+  console.log(
+    `   Chat Message: "Hello ${effectiveUserNameGuest}! I'm here to help..."`,
+  );
   console.log(`   ✅ Expected: "Hello Guest!"\n`);
 
   // Test Case 3: Custom userName provided
@@ -44,12 +50,17 @@ const simulateAuthContext = () => {
   const isLoggedInCustom = false;
   const noUserCustom = null;
 
-  const effectiveUserNameCustom = isLoggedInCustom && noUserCustom?.name ? noUserCustom.name : (customUserName || "Guest");
+  const effectiveUserNameCustom =
+    isLoggedInCustom && noUserCustom?.name
+      ? noUserCustom.name
+      : customUserName || "Guest";
   console.log(`   AuthContext User: ${noUserCustom}`);
   console.log(`   Logged In: ${isLoggedInCustom}`);
   console.log(`   Custom Username: ${customUserName}`);
   console.log(`   Effective Name: ${effectiveUserNameCustom}`);
-  console.log(`   Chat Message: "Hello ${effectiveUserNameCustom}! I'm here to help..."`);
+  console.log(
+    `   Chat Message: "Hello ${effectiveUserNameCustom}! I'm here to help..."`,
+  );
   console.log(`   ✅ Expected: "Hello John Doe!"\n`);
 
   // Test Case 4: User avatar initials
@@ -65,7 +76,9 @@ const simulateAuthContext = () => {
   console.log("- ✅ Non-authenticated users see 'Guest'");
   console.log("- ✅ Custom userNames are respected");
   console.log("- ✅ Avatar initials match displayed names");
-  console.log("- ✅ All modules (Hotels, Flights, Sightseeing, Transfers) use same logic");
+  console.log(
+    "- ✅ All modules (Hotels, Flights, Sightseeing, Transfers) use same logic",
+  );
 };
 
 // Run the simulation
@@ -75,14 +88,14 @@ simulateAuthContext();
 const testLocalStorageAuth = () => {
   console.log("\n🔍 Current AuthContext Default State:");
   console.log("When no saved auth state exists, default user is set:");
-  
+
   const defaultUser = {
     id: "1",
     name: "Zubin Aibara",
     email: "zubin@faredown.com",
     loyaltyLevel: 1,
   };
-  
+
   console.log("Default User:", JSON.stringify(defaultUser, null, 2));
   console.log("This means chat will show: 'Hello Zubin Aibara!' by default");
   console.log("✅ Ready for testing in the application");
