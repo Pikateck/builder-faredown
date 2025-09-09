@@ -22,6 +22,7 @@ import {
   Handshake,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useAuth } from "@/contexts/AuthContext";
 import {
   numberToWords,
   formatNumberWithCommas,
@@ -105,6 +106,10 @@ export function ConversationalBargainModal({
   basePrice,
   productRef,
 }: Props) {
+  // Get authenticated user's name with fallback
+  const { user, isLoggedIn } = useAuth();
+  const effectiveUserName = isLoggedIn && user?.name ? user.name : userName;
+
   // State Management
   const [currentPrice, setCurrentPrice] = useState<string>("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -165,7 +170,7 @@ export function ConversationalBargainModal({
       const welcomeMessage: ChatMessage = {
         id: `msg_${Date.now()}`,
         speaker: "agent",
-        message: `Hello ${userName}! I'm here to help you get the best price for your ${module.slice(0, -1)}. The current price is ${formatPrice(basePrice)}. What price would you like to pay?`,
+        message: `Hello ${effectiveUserName}! I'm here to help you get the best price for your ${module.slice(0, -1)}. The current price is ${formatPrice(basePrice)}. What price would you like to pay?`,
         timestamp: Date.now(),
       };
       setMessages([welcomeMessage]);
@@ -187,7 +192,7 @@ export function ConversationalBargainModal({
     }
   }, [
     isOpen,
-    userName,
+    effectiveUserName,
     module,
     basePrice,
     formatPrice,
@@ -616,7 +621,7 @@ export function ConversationalBargainModal({
                   `}
                   >
                     {message.speaker === "user" ? (
-                      userName.charAt(0).toUpperCase()
+                      effectiveUserName.charAt(0).toUpperCase()
                     ) : message.speaker === "supplier" ? (
                       <Crown className="w-4 h-4" />
                     ) : (
