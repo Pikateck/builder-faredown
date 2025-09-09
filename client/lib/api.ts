@@ -323,12 +323,15 @@ export class ApiClient {
             timeout: this.timeout,
           });
         } else if (
+          error.name === "TypeError" ||
           error.message.includes("Failed to fetch") ||
           error.message.includes("NetworkError") ||
+          error.message.includes("ECONNREFUSED") ||
           error.message.includes("fetch")
         ) {
           logApiEvent("warn", `Network unavailable for ${endpoint}`, {
             error: error.message,
+            errorType: error.name,
           });
         } else if (error instanceof ApiError && error.status === 503) {
           logApiEvent("warn", `Backend server unavailable for ${endpoint}`, {
@@ -345,7 +348,9 @@ export class ApiClient {
       if (
         API_CONFIG.OFFLINE_FALLBACK_ENABLED ||
         (error instanceof Error &&
-          (error.message.includes("Failed to fetch") ||
+          (error.name === "TypeError" ||
+            error.message.includes("Failed to fetch") ||
+            error.message.includes("ECONNREFUSED") ||
             error.message.includes("Service unavailable") ||
             (error instanceof ApiError && error.status === 503)))
       ) {
