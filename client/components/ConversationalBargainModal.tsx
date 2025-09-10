@@ -134,6 +134,7 @@ export function ConversationalBargainModal({
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const prevOfferTimerRef = useRef<NodeJS.Timeout | null>(null);
 
   // Module Configuration
   const moduleConfig = {
