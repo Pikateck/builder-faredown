@@ -175,7 +175,7 @@ export function ConversationalBargainModal({
       const welcomeMessage: ChatMessage = {
         id: `msg_${Date.now()}`,
         speaker: "agent",
-        message: `Hello ${effectiveUserName}! I'm here to help you get the best price for your ${module.slice(0, -1)}. The current price is ${formatPrice(basePrice)}. What price would you like to pay?`,
+        message: `Hello ${effectiveUserName}. I’ll help you get the best available price. Current price is ${formatPrice(basePrice)}. What price would you like to pay?`,
         timestamp: Date.now(),
       };
       setMessages([welcomeMessage]);
@@ -218,7 +218,7 @@ export function ConversationalBargainModal({
       setShowOfferActions(false);
       addMessage(
         "agent",
-        "The offer has expired. You can try negotiating again or book at the original price.",
+        `The offer expired. You can try again or book the original price ${formatPrice(basePrice)}.`,
       );
     }
 
@@ -283,28 +283,28 @@ export function ConversationalBargainModal({
       case 1:
         return {
           warningMessage: null, // No warning for Round 1
-          checkingMessage: "Let me check with {supplier} about {price}...",
-          supplierResponse: "We can offer {offer}.",
+          checkingMessage: "Let me check with {supplier} about {price}…",
+          supplierResponse: "Good news — we can offer {offer}.",
           agentResponse:
-            "This is a special price! {offer} for your {module}. 30 seconds to book.",
+            "Note: the first offer is often the best. {offer}. 30 seconds to book.",
           acceptanceChance: 0.7, // 70% chance for Round 1 (best-tilt)
         };
       case 2:
         return {
-          warningMessage: "⚠️ This may not be better than our previous offer.",
-          checkingMessage: "Checking...",
-          supplierResponse: "We can offer {offer}.",
+          warningMessage: "Round 2. This may not be better than your last offer.",
+          checkingMessage: "Rechecking at {price}…",
+          supplierResponse: "Today’s offer is {offer}.",
           agentResponse: "Round 2 offer: {offer}. 30 seconds to decide.",
           acceptanceChance: 0.5, // 50% chance for Round 2 (risk)
         };
       case 3:
         return {
           warningMessage:
-            "⚠️ Last round - price could be higher or lower than previous offers.",
-          checkingMessage: "Final check...",
-          supplierResponse: "Final offer {offer}.",
+            "Final round. The price could be higher, the same, or lower.",
+          checkingMessage: "Final check…",
+          supplierResponse: "Final offer: {offer}.",
           agentResponse:
-            "FINAL OFFER: {offer}. **30 seconds** to book or return to original price.",
+            "Final offer: {offer}. You have 30 seconds to book.",
           acceptanceChance: 0.4, // 40% chance for Round 3 (final)
         };
       default:
@@ -417,7 +417,7 @@ export function ConversationalBargainModal({
     setTimeout(
       () => {
         setIsTyping(false);
-        addMessage("supplier", "Processing your request...");
+        addMessage("supplier", "Processing your request…");
       },
       roundBehavior.warningMessage ? 2500 : 1800,
     );
@@ -439,7 +439,7 @@ export function ConversationalBargainModal({
           setTimeout(() => {
             addMessage(
               "agent",
-              `🎉 Amazing news ${effectiveUserName}! We've matched your exact price of ${formatPrice(userOffer)}. **30 seconds** to book this incredible deal!`,
+              `Your price ${formatPrice(userOffer)} is matched. 30 seconds to book.`,
             );
             setShowOfferActions(true);
             setTimerActive(true);
