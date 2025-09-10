@@ -105,13 +105,126 @@ export class DevApiClient {
       };
     }
 
-    // Hotel search
+    // Hotel search (legacy path)
     if (endpoint.includes("/hotels/search")) {
       return {
         success: true,
         data: [],
         message: "API server offline - using fallback data in HotelResults",
         totalResults: 0,
+      };
+    }
+
+    // Live Hotelbeds search (enhanced path)
+    if (endpoint.includes("/hotels-live/search")) {
+      const destination = params?.destination || "DXB";
+      const hotels = [
+        {
+          id: `live-fallback-${destination}-001`,
+          code: `LFB${destination}001`,
+          name: `Grand ${destination} City Hotel`,
+          description: `Premium hotel in ${destination} with excellent amenities and service.`,
+          currentPrice: 120,
+          originalPrice: 160,
+          currency: "EUR",
+          rating: 4.5,
+          reviewScore: 9.1,
+          reviewCount: 312,
+          address: {
+            street: "1 Hotel Street",
+            city: destination,
+            country: "United Arab Emirates",
+            zipCode: `${destination}12345`,
+          },
+          images: [
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&q=80&auto=format&fit=crop",
+          ],
+          amenities: [
+            "Free WiFi",
+            "Pool",
+            "Restaurant",
+            "Spa",
+            "Gym",
+            "Airport Shuttle",
+          ],
+          rooms: [
+            { name: "Standard Room", price: 120, currency: "EUR", features: ["City View", "Free WiFi"] },
+            { name: "Deluxe Room", price: 160, currency: "EUR", features: ["Sea View", "Breakfast Included"] },
+          ],
+          isLiveData: false,
+          supplier: "fallback-system",
+        },
+        {
+          id: `live-fallback-${destination}-002`,
+          code: `LFB${destination}002`,
+          name: `${destination} Marina Resort`,
+          description: `Beachfront resort in ${destination} with stunning views and top amenities.`,
+          currentPrice: 140,
+          originalPrice: 190,
+          currency: "EUR",
+          rating: 4.3,
+          reviewScore: 8.7,
+          reviewCount: 221,
+          address: {
+            street: "2 Beach Road",
+            city: destination,
+            country: "United Arab Emirates",
+            zipCode: `${destination}12346`,
+          },
+          images: [
+            "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&q=80&auto=format&fit=crop",
+            "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=800&h=600&q=80&auto=format&fit=crop",
+          ],
+          amenities: [
+            "Beach Access",
+            "Pool",
+            "Spa",
+            "Restaurant",
+            "Bar",
+            "Free Parking",
+          ],
+          rooms: [
+            { name: "Garden View", price: 140, currency: "EUR", features: ["Garden View", "King Bed"] },
+            { name: "Ocean View", price: 185, currency: "EUR", features: ["Ocean View", "Balcony"] },
+          ],
+          isLiveData: false,
+          supplier: "fallback-system",
+        },
+      ];
+
+      return {
+        success: true,
+        data: hotels,
+        totalResults: hotels.length,
+        isLiveData: false,
+        source: "Fallback System (Live API unavailable)",
+        message: "Live hotels API offline - using fallback data",
+      };
+    }
+
+    // Live Hotelbeds details
+    if (endpoint.includes("/hotels-live/hotel/")) {
+      const code = endpoint.split("/hotels-live/hotel/")[1] || "00001";
+      return {
+        success: true,
+        data: {
+          id: code,
+          code,
+          name: `Hotel ${code}`,
+          description: "Detailed hotel info (fallback)",
+          rating: 4.4,
+          images: [
+            "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop",
+          ],
+          amenities: ["WiFi", "Pool", "Restaurant"],
+          rooms: [
+            { name: "Standard", price: 120, currency: "EUR" },
+            { name: "Deluxe", price: 160, currency: "EUR" },
+          ],
+          address: { city: "Dubai", country: "United Arab Emirates" },
+        },
+        message: "Live hotel details API offline - using fallback data",
       };
     }
 
