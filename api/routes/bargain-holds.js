@@ -86,8 +86,31 @@ router.post("/create-hold", async (req, res) => {
 
     let holdResult;
 
-    if (pool) {
-      holdResult = await pool.query(holdQuery, holdValues);
+      if (pool) {
+      try {
+        holdResult = await pool.query(holdQuery, holdValues);
+      } catch (dbErr) {
+        console.warn(
+          "⚠️ DB error creating hold, falling back to in-memory storage:",
+          dbErr.message,
+        );
+        global.bargainHolds = global.bargainHolds || new Map();
+        global.bargainHolds.set(holdId, {
+          hold_id: holdId,
+          session_id: sessionId,
+          module,
+          product_ref: productRef,
+          original_price: originalPrice,
+          negotiated_price: negotiatedPrice,
+          currency,
+          order_ref: orderRef,
+          expires_at: expiresAt,
+          status: "active",
+          user_data: userData,
+          created_at: new Date(),
+        });
+        holdResult = { rows: [global.bargainHolds.get(holdId)] };
+      }
     } else {
       // Fallback: Store in memory (for development)
       console.warn("⚠️ No database pool - storing hold in memory only");
