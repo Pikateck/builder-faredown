@@ -54,12 +54,34 @@ const priceEchoMiddleware = priceEcho({
 // Apply Price Echo middleware before pricing routes
 app.use(priceEchoMiddleware);
 
-// Health check endpoint
-app.get("/health", async (req, res) => {
+// Health check endpoint for Render
+app.get("/api/health", async (req, res) => {
   try {
     // Check database health
     const result = await pool.query("SELECT 1");
 
+    res.json({
+      status: "healthy",
+      timestamp: new Date().toISOString(),
+      service: "faredown-pricing",
+      database: "connected",
+      version: "1.0.0",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "unhealthy",
+      timestamp: new Date().toISOString(),
+      service: "faredown-pricing",
+      database: "offline",
+      error: error.message,
+    });
+  }
+});
+
+// Legacy health endpoint (keeping for backward compatibility)
+app.get("/health", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT 1");
     res.json({
       status: "healthy",
       timestamp: new Date().toISOString(),
