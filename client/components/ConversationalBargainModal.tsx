@@ -491,29 +491,91 @@ export function ConversationalBargainModal({
     productRef,
   ]);
 
-  const handleAcceptOffer = useCallback(() => {
+  const handleAcceptOffer = useCallback(async () => {
     if (finalOffer) {
-      const orderRef = `ORD_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       setTimerActive(false);
+
+      // Generate order reference with timestamp for tracking
+      const orderRef = `BRG_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+
       addMessage(
         "agent",
-        `Booking confirmed at ${formatPrice(finalOffer)}! Reference: ${orderRef}`,
+        `🎉 Excellent! Creating your booking hold at ${formatPrice(finalOffer)}...`,
       );
 
-      // Track final booking acceptance
-      const entityId = productRef || `${module}_${Date.now()}`;
-      const savings = basePrice - finalOffer;
-      chatAnalyticsService
-        .trackAccepted(module, entityId, finalOffer, savings)
-        .catch(console.warn);
+      try {
+        // 📌 CREATE PRICE HOLD - Call backend to hold this price
+        const holdResponse = await fetch('/api/bargain/create-hold', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({
+            sessionId,
+            module,
+            productRef,
+            originalPrice: basePrice,
+            negotiatedPrice: finalOffer,
+            currency: selectedCurrency.code,
+            orderRef,
+            holdDurationMinutes: 15, // Hold price for 15 minutes
+            userData: {
+              userName: effectiveUserName,
+              round,
+            }
+          })
+        });
 
-      if (isMobileDevice()) {
-        hapticFeedback("heavy");
+        if (holdResponse.ok) {
+          const holdData = await holdResponse.json();
+
+          addMessage(
+            "agent",
+            `📌 Price locked for 15 minutes! Reference: ${orderRef}. Redirecting to booking...`,
+          );
+
+          // Track successful hold creation
+          const entityId = productRef || `${module}_${Date.now()}`;
+          const savings = basePrice - finalOffer;
+          chatAnalyticsService
+            .trackAccepted(module, entityId, finalOffer, savings)
+            .catch(console.warn);
+
+          if (isMobileDevice()) {
+            hapticFeedback("heavy");
+          }
+
+          // Pass both the final price and the hold data
+          setTimeout(() => {
+            onAccept(finalOffer, orderRef, {
+              isHeld: true,
+              holdId: holdData.holdId,
+              expiresAt: holdData.expiresAt,
+              originalPrice: basePrice,
+              savings: savings,
+              module,
+              productRef,
+            });
+          }, 1500);
+        } else {
+          throw new Error('Failed to create price hold');
+        }
+      } catch (error) {
+        console.error('Hold creation failed:', error);
+
+        addMessage(
+          "agent",
+          `⚠️ Unable to hold the price. You can still proceed at ${formatPrice(finalOffer)}, but the price may change.`,
+        );
+
+        // Fallback - proceed without hold
+        setTimeout(() => {
+          onAccept(finalOffer, orderRef, {
+            isHeld: false,
+            warning: 'Price not held - may change during booking',
+          });
+        }, 1000);
       }
-
-      setTimeout(() => {
-        onAccept(finalOffer, orderRef);
-      }, 1000);
     }
   }, [
     finalOffer,
@@ -523,6 +585,10 @@ export function ConversationalBargainModal({
     productRef,
     module,
     basePrice,
+    sessionId,
+    selectedCurrency.code,
+    effectiveUserName,
+    round,
   ]);
 
   const handleTryAgain = useCallback(() => {
