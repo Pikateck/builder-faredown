@@ -371,6 +371,7 @@ export function ConversationalBargainModal({
       return;
     }
 
+    setLastTarget(userOffer);
     if (isMobileDevice()) {
       hapticFeedback("light");
     }
