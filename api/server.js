@@ -81,7 +81,11 @@ app.use(
         scriptSrc: ["'self'"],
         connectSrc: ["'self'", "https://api.exchangerate-api.com"],
         // 🎯 BUILDER.IO IFRAME SUPPORT
-        frameAncestors: ["'self'", "https://builder.io", "https://*.builder.io"],
+        frameAncestors: [
+          "'self'",
+          "https://builder.io",
+          "https://*.builder.io",
+        ],
       },
     },
     // Remove X-Frame-Options header to allow Builder.io embedding

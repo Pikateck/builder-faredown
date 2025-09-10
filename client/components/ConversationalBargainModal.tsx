@@ -280,7 +280,8 @@ export function ConversationalBargainModal({
           warningMessage: null, // No warning for Round 1
           checkingMessage: "Let me check with {supplier} about {price}...",
           supplierResponse: "We can offer {offer}.",
-          agentResponse: "This is a special price! {offer} for your {module}. 30 seconds to book.",
+          agentResponse:
+            "This is a special price! {offer} for your {module}. 30 seconds to book.",
           acceptanceChance: 0.7, // 70% chance for Round 1 (best-tilt)
         };
       case 2:
@@ -293,10 +294,12 @@ export function ConversationalBargainModal({
         };
       case 3:
         return {
-          warningMessage: "⚠️ Last round - price could be higher or lower than previous offers.",
+          warningMessage:
+            "⚠️ Last round - price could be higher or lower than previous offers.",
           checkingMessage: "Final check...",
           supplierResponse: "Final offer {offer}.",
-          agentResponse: "FINAL OFFER: {offer}. **30 seconds** to book or return to original price.",
+          agentResponse:
+            "FINAL OFFER: {offer}. **30 seconds** to book or return to original price.",
           acceptanceChance: 0.4, // 40% chance for Round 3 (final)
         };
       default:
@@ -393,90 +396,101 @@ export function ConversationalBargainModal({
     }
 
     // STEP 2: Agent checking with supplier
-    setTimeout(() => {
-      setIsTyping(true);
-      const checkingMsg = roundBehavior.checkingMessage
-        .replace("{supplier}", config.supplierName)
-        .replace("{price}", formatPrice(userOffer));
-      addMessage("agent", checkingMsg);
-    }, roundBehavior.warningMessage ? 1500 : 800);
+    setTimeout(
+      () => {
+        setIsTyping(true);
+        const checkingMsg = roundBehavior.checkingMessage
+          .replace("{supplier}", config.supplierName)
+          .replace("{price}", formatPrice(userOffer));
+        addMessage("agent", checkingMsg);
+      },
+      roundBehavior.warningMessage ? 1500 : 800,
+    );
 
     // STEP 3: Supplier response
-    setTimeout(() => {
-      setIsTyping(false);
-      addMessage("supplier", "Processing your request...");
-    }, roundBehavior.warningMessage ? 2500 : 1800);
+    setTimeout(
+      () => {
+        setIsTyping(false);
+        addMessage("supplier", "Processing your request...");
+      },
+      roundBehavior.warningMessage ? 2500 : 1800,
+    );
 
     // STEP 4: Check if exact match or calculate counter-offer
-    setTimeout(async () => {
-      // Check for exact match (user got lucky)
-      const isExactMatch = Math.random() < 0.1; // 10% chance of exact match
+    setTimeout(
+      async () => {
+        // Check for exact match (user got lucky)
+        const isExactMatch = Math.random() < 0.1; // 10% chance of exact match
 
-      if (isExactMatch) {
-        // 🎉 MATCH CASE - User got their exact price
-        setFinalOffer(userOffer);
-        addMessage(
-          "supplier",
-          `🎉 Congratulations! Your price ${formatPrice(userOffer)} is matched!`,
-        );
-
-        setTimeout(() => {
+        if (isExactMatch) {
+          // 🎉 MATCH CASE - User got their exact price
+          setFinalOffer(userOffer);
           addMessage(
-            "agent",
-            `🎉 Amazing news ${effectiveUserName}! We've matched your exact price of ${formatPrice(userOffer)}. **30 seconds** to book this incredible deal!`,
+            "supplier",
+            `🎉 Congratulations! Your price ${formatPrice(userOffer)} is matched!`,
           );
-          setShowOfferActions(true);
-          setTimerActive(true);
-          setTimerSeconds(30);
 
-          if (isMobileDevice()) {
-            hapticFeedback("heavy");
-          }
-        }, 1000);
+          setTimeout(() => {
+            addMessage(
+              "agent",
+              `🎉 Amazing news ${effectiveUserName}! We've matched your exact price of ${formatPrice(userOffer)}. **30 seconds** to book this incredible deal!`,
+            );
+            setShowOfferActions(true);
+            setTimerActive(true);
+            setTimerSeconds(30);
 
-        // Track exact match
-        chatAnalyticsService
-          .trackAccepted(module, entityId, userOffer, basePrice - userOffer)
-          .catch(console.warn);
-      } else {
-        // Counter offer based on round logic
-        const counterOffer = calculateRoundSpecificOffer(userOffer, round);
-        setFinalOffer(counterOffer);
+            if (isMobileDevice()) {
+              hapticFeedback("heavy");
+            }
+          }, 1000);
 
-        // Supplier response with offer
-        const supplierMsg = roundBehavior.supplierResponse
-          .replace("{offer}", formatPrice(counterOffer));
-        addMessage("supplier", supplierMsg);
+          // Track exact match
+          chatAnalyticsService
+            .trackAccepted(module, entityId, userOffer, basePrice - userOffer)
+            .catch(console.warn);
+        } else {
+          // Counter offer based on round logic
+          const counterOffer = calculateRoundSpecificOffer(userOffer, round);
+          setFinalOffer(counterOffer);
 
-        // Track counter offer event
-        chatAnalyticsService
-          .trackCounterOffer(module, entityId, round, counterOffer)
-          .catch(console.warn);
+          // Supplier response with offer
+          const supplierMsg = roundBehavior.supplierResponse.replace(
+            "{offer}",
+            formatPrice(counterOffer),
+          );
+          addMessage("supplier", supplierMsg);
 
-        setTimeout(() => {
-          // Agent response with round-specific messaging
-          const agentMsg = roundBehavior.agentResponse
-            .replace("{offer}", formatPrice(counterOffer))
-            .replace("{module}", module.slice(0, -1));
-          addMessage("agent", agentMsg);
+          // Track counter offer event
+          chatAnalyticsService
+            .trackCounterOffer(module, entityId, round, counterOffer)
+            .catch(console.warn);
 
-          // Final round completion check
-          if (round >= 3) {
-            setIsComplete(true);
-          }
+          setTimeout(() => {
+            // Agent response with round-specific messaging
+            const agentMsg = roundBehavior.agentResponse
+              .replace("{offer}", formatPrice(counterOffer))
+              .replace("{module}", module.slice(0, -1));
+            addMessage("agent", agentMsg);
 
-          setShowOfferActions(true);
-          setTimerActive(true);
-          setTimerSeconds(30);
+            // Final round completion check
+            if (round >= 3) {
+              setIsComplete(true);
+            }
 
-          if (isMobileDevice()) {
-            hapticFeedback("medium");
-          }
-        }, 1500);
-      }
+            setShowOfferActions(true);
+            setTimerActive(true);
+            setTimerSeconds(30);
 
-      setIsNegotiating(false);
-    }, roundBehavior.warningMessage ? 4000 : 3300);
+            if (isMobileDevice()) {
+              hapticFeedback("medium");
+            }
+          }, 1500);
+        }
+
+        setIsNegotiating(false);
+      },
+      roundBehavior.warningMessage ? 4000 : 3300,
+    );
   }, [
     currentPrice,
     basePrice,
@@ -505,10 +519,10 @@ export function ConversationalBargainModal({
 
       try {
         // 📌 CREATE PRICE HOLD - Call backend to hold this price
-        const holdResponse = await fetch('/api/bargain/create-hold', {
-          method: 'POST',
+        const holdResponse = await fetch("/api/bargain/create-hold", {
+          method: "POST",
           headers: {
-            'Content-Type': 'application/json',
+            "Content-Type": "application/json",
           },
           body: JSON.stringify({
             sessionId,
@@ -522,8 +536,8 @@ export function ConversationalBargainModal({
             userData: {
               userName: effectiveUserName,
               round,
-            }
-          })
+            },
+          }),
         });
 
         if (holdResponse.ok) {
@@ -558,10 +572,10 @@ export function ConversationalBargainModal({
             });
           }, 1500);
         } else {
-          throw new Error('Failed to create price hold');
+          throw new Error("Failed to create price hold");
         }
       } catch (error) {
-        console.error('Hold creation failed:', error);
+        console.error("Hold creation failed:", error);
 
         addMessage(
           "agent",
@@ -572,7 +586,7 @@ export function ConversationalBargainModal({
         setTimeout(() => {
           onAccept(finalOffer, orderRef, {
             isHeld: false,
-            warning: 'Price not held - may change during booking',
+            warning: "Price not held - may change during booking",
           });
         }, 1000);
       }
@@ -850,7 +864,9 @@ export function ConversationalBargainModal({
                   variant="outline"
                   className="w-full mobile-touch-target"
                 >
-                  {round === 1 ? "Try Round 2 (⚠️ May not be better)" : "Try Final Round 3 (⚠️ Unpredictable)"}
+                  {round === 1
+                    ? "Try Round 2 (⚠️ May not be better)"
+                    : "Try Final Round 3 (⚠️ Unpredictable)"}
                 </Button>
               )}
             </div>
