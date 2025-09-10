@@ -149,6 +149,7 @@ app.use("*", (req, res) => {
       "/api/pricing/test-quote",
       "/api/pricing/markup-rules",
       "/api/pricing/promo-codes",
+      "/api/health",
       "/health",
     ],
   });

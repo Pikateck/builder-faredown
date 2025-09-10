@@ -1,0 +1,27 @@
+# Render Configuration for Faredown Pricing API
+services:
+  - type: web
+    name: builder-faredown-pricing
+    env: node
+    rootDir: api
+    buildCommand: npm ci
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromService:
+          type: pserv
+          name: faredown-postgres
+          envVarKey: DATABASE_URL
+      - key: PRICE_ECHO_ENABLED
+        value: true
+    healthCheckPath: /api/health
+    numInstances: 1
+    plan: starter
+    region: singapore
+    scaling:
+      minInstances: 1
+      maxInstances: 3
+      targetMemoryPercent: 70
+      targetCPUPercent: 70
