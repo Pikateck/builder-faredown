@@ -114,7 +114,7 @@ app.use(morgan("combined"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// CORS configuration
+// CORS configuration - Updated for Builder.io iframe support
 const corsOptions = {
   origin: [
     "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev",
@@ -123,6 +123,10 @@ const corsOptions = {
     "http://localhost:8080",
     "https://faredown.com",
     "https://www.faredown.com",
+    // 🎯 BUILDER.IO IFRAME SUPPORT
+    "https://builder.io",
+    "https://*.builder.io",
+    /^https:\/\/.*\.builder\.io$/,
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
