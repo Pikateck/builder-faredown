@@ -83,7 +83,7 @@ interface Props {
   hotel?: Hotel | null;
   selectedFareType?: FareType | null;
   onClose: () => void;
-  onAccept: (finalPrice: number, orderRef: string) => void;
+  onAccept: (finalPrice: number, orderRef: string, holdData?: HoldData) => void;
   onHold: (orderRef: string) => void;
   userName?: string;
   module?: "flights" | "hotels" | "sightseeing" | "transfers";
