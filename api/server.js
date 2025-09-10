@@ -55,7 +55,7 @@ const sightseeingSearchRoutes = require("./routes/sightseeing-search");
 const adminAiRoutes = require("./routes/admin-ai");
 const aiBargainRoutes = require("./routes/ai-bargains");
 const transfersMarkupRoutes = require("./routes/admin-transfers-markup");
-const pricingRoutes = require("./routes/pricing");
+const { router: bargainHoldsRouter, initializeBargainHolds } = require("./routes/bargain-holds");
 const adminReportsRoutes = require("./routes/admin-reports");
 
 // Import middleware
@@ -247,7 +247,7 @@ app.use("/api/test-hotelbeds", testHotelbedsRoutes);
 try {
   const createPricingRoutes = require("./routes/pricing");
   if (typeof createPricingRoutes === "function") {
-    const pricingRoutes = createPricingRoutes(pool);
+    const pricingRoutes = createPricingRoutes(db.pool);
     app.use("/api/pricing", pricingRoutes);
     console.log(
       "✅ Pricing routes mounted successfully - builder-faredown-pricing should now work",
@@ -287,7 +287,7 @@ app.use(
   auditLogger,
   transfersMarkupRoutes,
 );
-app.use("/api/pricing", pricingRoutes);
+app.use("/api/bargain", bargainHoldsRouter);
 app.use(
   "/api/admin/reports",
   authenticateToken,
@@ -379,6 +379,13 @@ async function startServer() {
     console.log("🔌 Initializing database connection...");
     await db.initialize();
     await db.initializeSchema();
+    if (initializeBargainHolds && db.pool) {
+      try {
+        initializeBargainHolds(db.pool);
+      } catch (e) {
+        console.warn("⚠️ Failed to initialize Bargain Holds with DB pool:", e.message);
+      }
+    }
     console.log("✅ Database connected and schema ready");
 
     // Start server
@@ -397,7 +404,7 @@ async function startServer() {
     return server;
   } catch (error) {
     console.error("❌ Failed to start server:", error);
-    console.log("⚠️  Starting server without database (fallback mode)");
+    console.log("���️  Starting server without database (fallback mode)");
 
     // Start server without database
     const server = app.listen(PORT, () => {
