@@ -126,6 +126,9 @@ export function ConversationalBargainModal({
   const [sessionId] = useState<string>(
     () => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
   );
+  const [lastTarget, setLastTarget] = useState<number | null>(null);
+  const [previousOfferPrice, setPreviousOfferPrice] = useState<number | null>(null);
+  const [previousOfferSeconds, setPreviousOfferSeconds] = useState<number | null>(null);
 
   const { selectedCurrency, formatPrice } = useCurrency();
   const chatEndRef = useRef<HTMLDivElement>(null);
