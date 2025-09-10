@@ -38,6 +38,7 @@ import {
   isAndroid,
 } from "@/lib/mobileUtils";
 import { chatAnalyticsService } from "@/services/chatAnalyticsService";
+import RoundFooter from "./RoundFooter";
 
 // TypeScript Interfaces
 interface ChatMessage {
