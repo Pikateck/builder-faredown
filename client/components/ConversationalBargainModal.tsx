@@ -903,34 +903,94 @@ export function ConversationalBargainModal({
               </div>
             </div>
 
-            <div className="flex space-x-2">
-              <div className="flex-1 relative">
-                <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
-                  {selectedCurrency.symbol}
-                </span>
-                <Input
-                  ref={inputRef}
-                  type="number"
-                  value={currentPrice}
-                  onChange={(e) => setCurrentPrice(e.target.value)}
-                  placeholder="Enter your target price"
-                  className="pl-8 pr-12 py-3 text-base mobile-input"
-                  disabled={isNegotiating}
-                  onKeyPress={(e) => {
-                    if (e.key === "Enter") {
-                      handleSubmitOffer();
-                    }
-                  }}
-                />
-                <button
-                  onClick={handleSubmitOffer}
-                  disabled={isNegotiating || !currentPrice}
-                  className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center"
-                >
-                  <Handshake className="w-4 h-4" />
-                </button>
+            {round >= 2 ? (
+              <RoundFooter
+                currencySymbol={selectedCurrency.symbol}
+                lastTarget={lastTarget ?? undefined}
+                lastOffer={previousOfferPrice ?? undefined}
+                lastOfferSecondsLeft={previousOfferSeconds ?? undefined}
+                disabled={isNegotiating}
+                onSend={(price) => handleSubmitOffer(price)}
+                onAcceptPrevious={
+                  previousOfferPrice ? async () => {
+                    await (async () => {
+                      // accept previous offer directly
+                      const price = previousOfferPrice;
+                      const orderRef = `BRG_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
+                      addMessage(
+                        "agent",
+                        `🎉 Excellent! Creating your booking hold at ${formatPrice(price)}...`,
+                      );
+                      try {
+                        const holdResponse = await fetch("/api/bargain/create-hold", {
+                          method: "POST",
+                          headers: { "Content-Type": "application/json" },
+                          body: JSON.stringify({
+                            sessionId,
+                            module,
+                            productRef,
+                            originalPrice: basePrice,
+                            negotiatedPrice: price,
+                            currency: selectedCurrency.code,
+                            orderRef,
+                            holdDurationMinutes: 15,
+                            userData: { userName: effectiveUserName, round },
+                          }),
+                        });
+                        if (holdResponse.ok) {
+                          const holdData = await holdResponse.json();
+                          const entityId = productRef || `${module}_${Date.now()}`;
+                          const savings = basePrice - price;
+                          chatAnalyticsService
+                            .trackAccepted(module, entityId, price, savings)
+                            .catch(console.warn);
+                          onAccept(price, orderRef, {
+                            isHeld: true,
+                            holdId: holdData.holdId,
+                            expiresAt: holdData.expiresAt,
+                            originalPrice: basePrice,
+                            savings,
+                            module,
+                            productRef,
+                          });
+                        }
+                      } catch (e) {
+                        onAccept(previousOfferPrice, orderRef, { isHeld: false });
+                      }
+                    })();
+                  } : undefined
+                }
+              />
+            ) : (
+              <div className="flex space-x-2">
+                <div className="flex-1 relative">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
+                    {selectedCurrency.symbol}
+                  </span>
+                  <Input
+                    ref={inputRef}
+                    type="number"
+                    value={currentPrice}
+                    onChange={(e) => setCurrentPrice(e.target.value)}
+                    placeholder="Enter your target price"
+                    className="pl-8 pr-12 py-3 text-base mobile-input"
+                    disabled={isNegotiating}
+                    onKeyPress={(e) => {
+                      if (e.key === "Enter") {
+                        handleSubmitOffer();
+                      }
+                    }}
+                  />
+                  <button
+                    onClick={() => handleSubmitOffer()}
+                    disabled={isNegotiating || !currentPrice}
+                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center"
+                  >
+                    <Handshake className="w-4 h-4" />
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
           </div>
         )}
 
