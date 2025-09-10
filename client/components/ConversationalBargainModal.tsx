@@ -623,6 +623,20 @@ export function ConversationalBargainModal({
           round >= 3 ? "max_rounds_reached" : "try_different_price",
         )
         .catch(console.warn);
+      // Preserve previous offer with remaining TTL
+      setPreviousOfferPrice(finalOffer);
+      setPreviousOfferSeconds(timerSeconds);
+      if (prevOfferTimerRef.current) clearInterval(prevOfferTimerRef.current);
+      prevOfferTimerRef.current = setInterval(() => {
+        setPreviousOfferSeconds((s) => {
+          if (s == null) return s;
+          if (s <= 1) {
+            if (prevOfferTimerRef.current) clearInterval(prevOfferTimerRef.current);
+            return 0;
+          }
+          return s - 1;
+        });
+      }, 1000);
     }
 
     if (round >= 3) {
@@ -647,9 +661,9 @@ export function ConversationalBargainModal({
     let nextRoundMessage = "";
 
     if (nextRound === 2) {
-      nextRoundMessage = `Let's try Round 2! ⚠️ Remember: the next offer may not be better. What price would you like to try?`;
+      nextRoundMessage = `Round 2. This may not be better than your last offer. What price would you like to try?`;
     } else if (nextRound === 3) {
-      nextRoundMessage = `Final Round 3! ⚠️ This is your last chance - the price could be higher or lower. What's your final offer?`;
+      nextRoundMessage = `Final round. The price could be higher, the same, or lower. What's your final offer?`;
     }
 
     addMessage("agent", nextRoundMessage);
@@ -657,7 +671,7 @@ export function ConversationalBargainModal({
     if (isMobileDevice()) {
       hapticFeedback("light");
     }
-  }, [round, addMessage, finalOffer, productRef, module]);
+  }, [round, addMessage, finalOffer, productRef, module, timerSeconds]);
 
   const formatTime = (seconds: number): string => {
     const mins = Math.floor(seconds / 60);
