@@ -177,7 +177,7 @@ async function startServer() {
     });
 
     // Start server - MUST bind to 0.0.0.0 for Render
-    const server = app.listen(PORT, '0.0.0.0', () => {
+    const server = app.listen(PORT, "0.0.0.0", () => {
       console.log("\n🚀 Faredown Pricing API Server Started");
       console.log("================================");
       console.log(`📍 Server URL: http://0.0.0.0:${PORT}`);

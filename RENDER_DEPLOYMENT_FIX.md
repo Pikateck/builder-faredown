@@ -5,21 +5,25 @@
 Based on codebase analysis, here are the **critical issues** causing deployment failures:
 
 ### **1. ESM/CommonJS Module Conflict**
+
 - ❌ **Root package.json**: `"type": "module"` (ESM)
 - ❌ **API code**: Uses `require()`, `module.exports` (CommonJS)
 - 🔥 **Result**: "Cannot use import statement outside a module" errors
 
 ### **2. Inconsistent Node Version**
+
 - ❌ **Root**: `"node": ">=18.0.0"`
 - ❌ **API**: `"node": ">=16.0.0"`
 - 🔥 **Result**: Runtime compatibility issues
 
 ### **3. Wrong Service Configuration**
+
 - ❌ **Main entry**: Points to `server.js` but should be `pricing-server.js`
 - ❌ **Health endpoint**: `/health` instead of `/api/health`
 - ❌ **Host binding**: Missing explicit `0.0.0.0` binding
 
 ### **4. Missing Production Scripts**
+
 - ❌ **No proper build command** for production deployment
 - ❌ **Start script pointing to wrong file**
 
@@ -28,6 +32,7 @@ Based on codebase analysis, here are the **critical issues** causing deployment 
 ## ✅ **IMMEDIATE FIXES REQUIRED**
 
 ### **Fix 1: Update API package.json**
+
 ```json
 {
   "name": "faredown-pricing-api",
@@ -48,32 +53,34 @@ Based on codebase analysis, here are the **critical issues** causing deployment 
 ```
 
 ### **Fix 2: Update pricing-server.js for Render**
+
 ```javascript
 // Add explicit host binding
-const server = app.listen(PORT, '0.0.0.0', () => {
+const server = app.listen(PORT, "0.0.0.0", () => {
   console.log(`🚀 Pricing API listening on 0.0.0.0:${PORT}`);
 });
 
 // Add /api/health endpoint for Render
-app.get('/api/health', async (req, res) => {
+app.get("/api/health", async (req, res) => {
   try {
-    const result = await pool.query('SELECT 1');
+    const result = await pool.query("SELECT 1");
     res.json({
-      status: 'healthy',
+      status: "healthy",
       timestamp: new Date().toISOString(),
-      service: 'faredown-pricing',
-      database: 'connected'
+      service: "faredown-pricing",
+      database: "connected",
     });
   } catch (error) {
     res.status(500).json({
-      status: 'unhealthy',
-      error: error.message
+      status: "unhealthy",
+      error: error.message,
     });
   }
 });
 ```
 
 ### **Fix 3: Render Service Settings**
+
 ```yaml
 # Render Configuration
 Root Directory: api
@@ -85,6 +92,7 @@ Environment: Node.js
 ```
 
 ### **Fix 4: Environment Variables**
+
 ```bash
 # Required on Render
 DATABASE_URL=postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db
@@ -98,60 +106,64 @@ PRICE_ECHO_ENABLED=true
 ## 🔧 **STEP-BY-STEP IMPLEMENTATION**
 
 ### **Step 1: Fix package.json**
+
 ```bash
 cd api
 # Update package.json with correct settings
 ```
 
 ### **Step 2: Fix server binding**
+
 ```javascript
 // In pricing-server.js, replace the startServer function
 async function startServer() {
   try {
-    console.log('🔌 Testing database connection...');
-    await pool.query('SELECT 1');
-    console.log('✅ Database connected successfully');
+    console.log("🔌 Testing database connection...");
+    await pool.query("SELECT 1");
+    console.log("✅ Database connected successfully");
 
     // Explicit host binding for Render
-    const server = app.listen(PORT, '0.0.0.0', () => {
+    const server = app.listen(PORT, "0.0.0.0", () => {
       console.log(`🚀 Faredown Pricing API Server Started`);
       console.log(`📍 Server URL: http://0.0.0.0:${PORT}`);
       console.log(`🏥 Health Check: http://0.0.0.0:${PORT}/api/health`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+      console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
     });
 
     return server;
   } catch (error) {
-    console.error('❌ Failed to start server:', error);
+    console.error("❌ Failed to start server:", error);
     process.exit(1);
   }
 }
 ```
 
 ### **Step 3: Add health endpoint**
+
 ```javascript
 // Add this BEFORE the existing /health endpoint
-app.get('/api/health', async (req, res) => {
+app.get("/api/health", async (req, res) => {
   try {
-    const result = await pool.query('SELECT 1');
+    const result = await pool.query("SELECT 1");
     res.json({
-      status: 'healthy',
+      status: "healthy",
       timestamp: new Date().toISOString(),
-      service: 'faredown-pricing',
-      database: 'connected',
-      version: '1.0.0'
+      service: "faredown-pricing",
+      database: "connected",
+      version: "1.0.0",
     });
   } catch (error) {
     res.status(500).json({
-      status: 'unhealthy',
+      status: "unhealthy",
       timestamp: new Date().toISOString(),
-      error: error.message
+      error: error.message,
     });
   }
 });
 ```
 
 ### **Step 4: Render Configuration**
+
 1. **Service Settings:**
    - Name: `builder-faredown-pricing`
    - Environment: `Node`
@@ -177,11 +189,13 @@ app.get('/api/health', async (req, res) => {
 ## 🚀 **DEPLOYMENT VERIFICATION**
 
 ### **Test Endpoints After Deploy:**
+
 1. **Health Check**: `https://YOUR-SERVICE.onrender.com/api/health`
 2. **API Info**: `https://YOUR-SERVICE.onrender.com/`
 3. **Pricing Quote**: `https://YOUR-SERVICE.onrender.com/api/pricing/quote`
 
 ### **Expected Responses:**
+
 ```json
 // /api/health
 {

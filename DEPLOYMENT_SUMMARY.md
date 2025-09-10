@@ -26,18 +26,21 @@ The `builder-faredown-pricing` service was failing due to **5 critical issues**:
 ## 📁 **FILES MODIFIED**
 
 ### **✅ api/package.json**
+
 - Main entry: `pricing-server.js`
 - Node version: `20.x`
 - Start script: `node pricing-server.js`
 - Name: `faredown-pricing-api`
 
-### **✅ api/pricing-server.js** 
+### **✅ api/pricing-server.js**
+
 - Added `/api/health` endpoint
 - Server binding: `0.0.0.0` instead of `localhost`
 - Updated console logs for Render
 - Added compatibility indicators
 
 ### **✅ Configuration Files Added**
+
 - `.nvmrc`: Node 20 version lock
 - `api/.nvmrc`: API-specific Node version
 - `api/render.yaml`: Render service configuration
@@ -47,6 +50,7 @@ The `builder-faredown-pricing` service was failing due to **5 critical issues**:
 ## 🚀 **RENDER CONFIGURATION**
 
 ### **Service Settings:**
+
 ```
 Service Name: builder-faredown-pricing
 Environment: Node
@@ -58,6 +62,7 @@ Health Check Path: /api/health
 ```
 
 ### **Environment Variables Needed:**
+
 ```
 DATABASE_URL=postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db
 NODE_ENV=production
@@ -71,12 +76,15 @@ PRICE_ECHO_ENABLED=true
 After deployment, test these endpoints:
 
 ### **Health Check:**
+
 ```bash
 curl https://YOUR-SERVICE.onrender.com/api/health
 ```
+
 **Expected:** `{"status": "healthy", "service": "faredown-pricing"}`
 
 ### **Pricing API:**
+
 ```bash
 curl -X POST https://YOUR-SERVICE.onrender.com/api/pricing/quote \
   -H "Content-Type: application/json" \
@@ -98,6 +106,7 @@ curl -X POST https://YOUR-SERVICE.onrender.com/api/pricing/quote \
 ## 🎉 **EXPECTED OUTCOME**
 
 ✅ **Service should now:**
+
 - Deploy successfully on Render
 - Pass health checks (`/api/health`)
 - Accept pricing API requests
@@ -111,6 +120,7 @@ curl -X POST https://YOUR-SERVICE.onrender.com/api/pricing/quote \
 ## 📞 **SUPPORT**
 
 If issues persist:
+
 1. Check Render build logs for specific errors
 2. Verify environment variables are set
 3. Test database connectivity
