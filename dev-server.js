@@ -3,6 +3,14 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 
+// Start API server on port 3001 so our /api proxy has a local target
+try {
+  await import("./api/server.js");
+  console.log("✅ API server bootstrapped alongside dev server");
+} catch (e) {
+  console.warn("⚠️ Failed to bootstrap API server:", e.message);
+}
+
 // Create Express app
 const app = express();
 
