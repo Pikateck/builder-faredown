@@ -180,12 +180,13 @@ export class ApiClient {
     // For Builder.codes environment, enable fallback by default since backend might not be available
     if (
       typeof window !== "undefined" &&
-      window.location.hostname.includes("builder.codes")
+      (window.location.hostname.includes("builder.codes") ||
+        window.location.hostname.includes("fly.dev"))
     ) {
-      this.forceFallback = !config.OFFLINE_FALLBACK_ENABLED ? false : true;
+      this.forceFallback = config.OFFLINE_FALLBACK_ENABLED ? true : false;
       logApiEvent(
         "info",
-        "Builder.codes environment detected, fallback mode enabled",
+        `${window.location.hostname.includes("builder.codes") ? "Builder.codes" : "fly.dev"} environment detected, fallback mode ${this.forceFallback ? "enabled" : "disabled"}`,
       );
     }
 
