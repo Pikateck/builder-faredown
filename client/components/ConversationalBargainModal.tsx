@@ -272,7 +272,65 @@ export function ConversationalBargainModal({
     [basePrice],
   );
 
-  // Main negotiation logic
+  // 🎯 ROUND-SPECIFIC LOGIC - Restore proper conversational flow
+  const getRoundBehavior = useCallback((round: number) => {
+    switch (round) {
+      case 1:
+        return {
+          warningMessage: null, // No warning for Round 1
+          checkingMessage: "Let me check with {supplier} about {price}...",
+          supplierResponse: "We can offer {offer}.",
+          agentResponse: "This is a special price! {offer} for your {module}. 30 seconds to book.",
+          acceptanceChance: 0.7, // 70% chance for Round 1 (best-tilt)
+        };
+      case 2:
+        return {
+          warningMessage: "⚠️ This may not be better than our previous offer.",
+          checkingMessage: "Checking...",
+          supplierResponse: "We can offer {offer}.",
+          agentResponse: "Round 2 offer: {offer}. 30 seconds to decide.",
+          acceptanceChance: 0.5, // 50% chance for Round 2 (risk)
+        };
+      case 3:
+        return {
+          warningMessage: "⚠️ Last round - price could be higher or lower than previous offers.",
+          checkingMessage: "Final check...",
+          supplierResponse: "Final offer {offer}.",
+          agentResponse: "FINAL OFFER: {offer}. **30 seconds** to book or return to original price.",
+          acceptanceChance: 0.4, // 40% chance for Round 3 (final)
+        };
+      default:
+        return getRoundBehavior(3);
+    }
+  }, []);
+
+  // Enhanced counter offer calculation with round-specific logic
+  const calculateRoundSpecificOffer = useCallback(
+    (userOffer: number, round: number): number => {
+      const difference = basePrice - userOffer;
+
+      // Round 1: Best offer (closest to user request)
+      // Round 2: Risk (could be worse)
+      // Round 3: Final (unpredictable)
+
+      if (round === 1) {
+        // Best-tilt: Give them close to what they want
+        const factor = 0.3; // Only add 30% of difference back
+        return Math.round(userOffer + difference * factor);
+      } else if (round === 2) {
+        // Risk: Could be worse than Round 1
+        const factor = Math.random() > 0.5 ? 0.4 : 0.6; // 40% or 60% of difference
+        return Math.round(userOffer + difference * factor);
+      } else {
+        // Final: Unpredictable - could be better or worse
+        const factor = Math.random() > 0.3 ? 0.2 : 0.8; // 20% (great) or 80% (poor)
+        return Math.round(userOffer + difference * factor);
+      }
+    },
+    [basePrice],
+  );
+
+  // Main negotiation logic with proper conversational flow
   const handleSubmitOffer = useCallback(async () => {
     const userOffer = parseFloat(currentPrice);
 
@@ -321,87 +379,90 @@ export function ConversationalBargainModal({
       .trackRound(module, entityId, round, basePrice, userOffer)
       .catch(console.warn);
 
+    // Get round-specific behavior
+    const roundBehavior = getRoundBehavior(round);
+
     // Add user message
     addMessage("user", `I'd like to pay ${formatPrice(userOffer)}`);
 
-    // Simulate typing delay
+    // STEP 1: Show warning for R2/R3
+    if (roundBehavior.warningMessage) {
+      setTimeout(() => {
+        addMessage("agent", roundBehavior.warningMessage);
+      }, 500);
+    }
+
+    // STEP 2: Agent checking with supplier
     setTimeout(() => {
       setIsTyping(true);
-      addMessage(
-        "agent",
-        `Let me check with ${config.supplierName} about ${formatPrice(userOffer)}...`,
-      );
-    }, 500);
+      const checkingMsg = roundBehavior.checkingMessage
+        .replace("{supplier}", config.supplierName)
+        .replace("{price}", formatPrice(userOffer));
+      addMessage("agent", checkingMsg);
+    }, roundBehavior.warningMessage ? 1500 : 800);
 
+    // STEP 3: Supplier response
     setTimeout(() => {
       setIsTyping(false);
-      addMessage(
-        "supplier",
-        `Checking availability at ${formatPrice(userOffer)}...`,
-      );
-    }, 1500);
+      addMessage("supplier", "Processing your request...");
+    }, roundBehavior.warningMessage ? 2500 : 1800);
 
-    // AI Decision Logic
+    // STEP 4: Check if exact match or calculate counter-offer
     setTimeout(async () => {
-      const acceptanceChance = getAcceptanceChance(userOffer);
-      const isAccepted = Math.random() < acceptanceChance;
+      // Check for exact match (user got lucky)
+      const isExactMatch = Math.random() < 0.1; // 10% chance of exact match
 
-      if (isAccepted) {
-        // Offer accepted
+      if (isExactMatch) {
+        // 🎉 MATCH CASE - User got their exact price
         setFinalOffer(userOffer);
         addMessage(
           "supplier",
-          `Great news! We can accept ${formatPrice(userOffer)} for this booking.`,
+          `🎉 Congratulations! Your price ${formatPrice(userOffer)} is matched!`,
         );
-
-        // Track accepted event
-        const entityId = productRef || `${module}_${Date.now()}`;
-        const savings = basePrice - userOffer;
-        chatAnalyticsService
-          .trackAccepted(module, entityId, userOffer, savings)
-          .catch(console.warn);
 
         setTimeout(() => {
           addMessage(
             "agent",
-            `Excellent news ${userName}! We've secured ${formatPrice(userOffer)} for you. You have 30 seconds to book this price.`,
+            `🎉 Amazing news ${effectiveUserName}! We've matched your exact price of ${formatPrice(userOffer)}. **30 seconds** to book this incredible deal!`,
           );
           setShowOfferActions(true);
           setTimerActive(true);
           setTimerSeconds(30);
 
           if (isMobileDevice()) {
-            hapticFeedback("medium");
+            hapticFeedback("heavy");
           }
         }, 1000);
+
+        // Track exact match
+        chatAnalyticsService
+          .trackAccepted(module, entityId, userOffer, basePrice - userOffer)
+          .catch(console.warn);
       } else {
-        // Counter offer
-        const counterOffer = calculateCounterOffer(userOffer, round);
+        // Counter offer based on round logic
+        const counterOffer = calculateRoundSpecificOffer(userOffer, round);
         setFinalOffer(counterOffer);
 
+        // Supplier response with offer
+        const supplierMsg = roundBehavior.supplierResponse
+          .replace("{offer}", formatPrice(counterOffer));
+        addMessage("supplier", supplierMsg);
+
         // Track counter offer event
-        const entityId = productRef || `${module}_${Date.now()}`;
         chatAnalyticsService
           .trackCounterOffer(module, entityId, round, counterOffer)
           .catch(console.warn);
 
-        addMessage(
-          "supplier",
-          `We can offer ${formatPrice(counterOffer)} as our best price for this ${module.slice(0, -1)}.`,
-        );
-
         setTimeout(() => {
+          // Agent response with round-specific messaging
+          const agentMsg = roundBehavior.agentResponse
+            .replace("{offer}", formatPrice(counterOffer))
+            .replace("{module}", module.slice(0, -1));
+          addMessage("agent", agentMsg);
+
+          // Final round completion check
           if (round >= 3) {
-            addMessage(
-              "agent",
-              `This is our final offer at ${formatPrice(counterOffer)}. You have 30 seconds to decide, or you can book at the original price of ${formatPrice(basePrice)}.`,
-            );
             setIsComplete(true);
-          } else {
-            addMessage(
-              "agent",
-              `${config.supplierName} can do ${formatPrice(counterOffer)}. Would you like to accept this or try another price? (Round ${round}/3)`,
-            );
           }
 
           setShowOfferActions(true);
@@ -411,23 +472,23 @@ export function ConversationalBargainModal({
           if (isMobileDevice()) {
             hapticFeedback("medium");
           }
-        }, 1000);
+        }, 1500);
       }
 
       setIsNegotiating(false);
-    }, 2500);
+    }, roundBehavior.warningMessage ? 4000 : 3300);
   }, [
     currentPrice,
     basePrice,
     formatPrice,
     config.supplierName,
-    userName,
+    effectiveUserName,
     module,
     round,
     addMessage,
-    getAcceptanceChance,
-    calculateCounterOffer,
-    isMobileDevice,
+    getRoundBehavior,
+    calculateRoundSpecificOffer,
+    productRef,
   ]);
 
   const handleAcceptOffer = useCallback(() => {
@@ -481,12 +542,13 @@ export function ConversationalBargainModal({
     if (round >= 3) {
       addMessage(
         "agent",
-        "You've reached the maximum number of negotiation rounds. You can book at the original price or try again later.",
+        "You've reached the maximum number of negotiation rounds (3/3). You can book at the original price or close this chat.",
       );
       setIsComplete(true);
       return;
     }
 
+    // Reset for next round
     setRound((prev) => prev + 1);
     setShowOfferActions(false);
     setTimerActive(false);
@@ -494,10 +556,21 @@ export function ConversationalBargainModal({
     setFinalOffer(null);
     setTimerSeconds(30);
 
-    addMessage(
-      "agent",
-      `Let's try again! What price would you like to offer? (Round ${round + 1}/3)`,
-    );
+    // Round-specific prompt for next round
+    const nextRound = round + 1;
+    let nextRoundMessage = "";
+
+    if (nextRound === 2) {
+      nextRoundMessage = `Let's try Round 2! ⚠️ Remember: the next offer may not be better. What price would you like to try?`;
+    } else if (nextRound === 3) {
+      nextRoundMessage = `Final Round 3! ⚠️ This is your last chance - the price could be higher or lower. What's your final offer?`;
+    }
+
+    addMessage("agent", nextRoundMessage);
+
+    if (isMobileDevice()) {
+      hapticFeedback("light");
+    }
   }, [round, addMessage, finalOffer, productRef, module]);
 
   const formatTime = (seconds: number): string => {
@@ -711,7 +784,7 @@ export function ConversationalBargainModal({
                   variant="outline"
                   className="w-full mobile-touch-target"
                 >
-                  Try Different Price (Round {round + 1}/3)
+                  {round === 1 ? "Try Round 2 (⚠️ May not be better)" : "Try Final Round 3 (⚠️ Unpredictable)"}
                 </Button>
               )}
             </div>
