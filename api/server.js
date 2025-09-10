@@ -69,7 +69,7 @@ const db = require("./database/connection");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Security middleware
+// Security middleware - Modified for Builder.io iframe support
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -80,8 +80,12 @@ app.use(
         imgSrc: ["'self'", "data:", "https:", "http:"],
         scriptSrc: ["'self'"],
         connectSrc: ["'self'", "https://api.exchangerate-api.com"],
+        // 🎯 BUILDER.IO IFRAME SUPPORT
+        frameAncestors: ["'self'", "https://builder.io", "https://*.builder.io"],
       },
     },
+    // Remove X-Frame-Options header to allow Builder.io embedding
+    frameguard: false,
   }),
 );
 
