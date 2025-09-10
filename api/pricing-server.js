@@ -183,7 +183,7 @@ async function startServer() {
       console.log(`📍 Server URL: http://0.0.0.0:${PORT}`);
       console.log(`🏥 Health Check: http://0.0.0.0:${PORT}/api/health`);
       console.log(
-        `🧪 Test Endpoint: http://localhost:${PORT}/api/pricing/test-quote`,
+        `🧪 Test Endpoint: http://0.0.0.0:${PORT}/api/pricing/test-quote`,
       );
       console.log(`��� Environment: ${process.env.NODE_ENV || "development"}`);
       console.log(`🗄️  Database: Connected to PostgreSQL`);
