@@ -339,8 +339,8 @@ export function ConversationalBargainModal({
   );
 
   // Main negotiation logic with proper conversational flow
-  const handleSubmitOffer = useCallback(async () => {
-    const userOffer = parseFloat(currentPrice);
+  const handleSubmitOffer = useCallback(async (overridePrice?: number) => {
+    const userOffer = overridePrice ?? parseFloat(currentPrice);
 
     if (!userOffer || userOffer <= 0) {
       addMessage("agent", "Please enter a valid price amount.");
