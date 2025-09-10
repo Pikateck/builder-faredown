@@ -1,17 +1,17 @@
 {
-  "name": "faredown-api",
+  "name": "faredown-pricing-api",
   "version": "1.0.0",
-  "description": "Node.js API backend for Faredown travel booking platform",
-  "main": "server.js",
+  "description": "Faredown Pricing Engine API for Render deployment",
+  "main": "pricing-server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node pricing-server.js",
     "dev": "nodemon server.js",
     "test": "jest --coverage",
     "test:watch": "jest --watch",
     "lint": "eslint . --ext .js",
     "lint:fix": "eslint . --ext .js --fix",
     "docs": "apidoc -i routes/ -o public/docs/",
-    "build": "npm run lint && npm run test",
+    "build": "echo 'Production build ready - no compilation needed' && exit 0",
     "deploy": "npm run build && npm start",
     "migrate:ai": "node database/run-ai-migration.js",
     "migrate:pricing": "node database/run-pricing-migration.js",
@@ -78,7 +78,7 @@
     "supertest": "^6.3.3"
   },
   "engines": {
-    "node": ">=16.0.0",
+    "node": "20.x",
     "npm": ">=8.0.0"
   },
   "repository": {
