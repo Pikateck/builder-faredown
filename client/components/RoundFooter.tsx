@@ -103,17 +103,21 @@ export const RoundFooter: React.FC<RoundFooterProps> = ({
         </div>
       )}
 
-      {lastOffer != null && lastOfferSecondsLeft != null && lastOfferSecondsLeft > 0 && (
-        <button
-          type="button"
-          onClick={onAcceptPrevious}
-          disabled={disabled}
-          className="text-sm text-[#0071c2] hover:underline inline-flex items-center gap-2"
-        >
-          <CheckCircle className="w-4 h-4" /> Accept previous offer {currencySymbol}
-          {Math.round(lastOffer).toLocaleString()} ({String(lastOfferSecondsLeft).padStart(2, "0")}s left)
-        </button>
-      )}
+      {lastOffer != null &&
+        lastOfferSecondsLeft != null &&
+        lastOfferSecondsLeft > 0 && (
+          <button
+            type="button"
+            onClick={onAcceptPrevious}
+            disabled={disabled}
+            className="text-sm text-[#0071c2] hover:underline inline-flex items-center gap-2"
+          >
+            <CheckCircle className="w-4 h-4" /> Accept previous offer{" "}
+            {currencySymbol}
+            {Math.round(lastOffer).toLocaleString()} (
+            {String(lastOfferSecondsLeft).padStart(2, "0")}s left)
+          </button>
+        )}
     </div>
   );
 };
