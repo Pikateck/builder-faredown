@@ -272,7 +272,7 @@ export default function AdminDashboard() {
 
   const checkAuth = async () => {
     try {
-      const currentUser = adminAuthService.getCurrentUser();
+      const currentUser = await adminAuthService.getCurrentUser();
       if (!currentUser) {
         navigate("/admin/login");
         return;
