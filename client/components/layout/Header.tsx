@@ -428,6 +428,29 @@ export function Header() {
                           <span className="text-sm font-medium">Sign Out</span>
                         </button>
 
+                        <div className="mt-2 space-y-2">
+                          <button
+                            onClick={() => {
+                              handleNavigation("/admin/dashboard");
+                              setShowMobileMenu(false);
+                            }}
+                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
+                          >
+                            <Shield className="w-4 h-4" />
+                            <span className="text-sm font-medium">Admin Panel</span>
+                          </button>
+                          <button
+                            onClick={() => {
+                              handleNavigation("/admin/api");
+                              setShowMobileMenu(false);
+                            }}
+                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
+                          >
+                            <Code className="w-4 h-4" />
+                            <span className="text-sm font-medium">Live APIs</span>
+                          </button>
+                        </div>
+
                       </div>
                     </div>
                   ) : (
@@ -634,6 +657,18 @@ export function Header() {
                         <DropdownMenuItem onClick={handleSignOut}>
                           <LogOut className="w-4 h-4 mr-2" />
                           Sign out
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to="/admin/dashboard" className="flex items-center">
+                            <Shield className="w-4 h-4 mr-2" />
+                            Admin Panel
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link to="/admin/api" className="flex items-center">
+                            <Code className="w-4 h-4 mr-2" />
+                            Live APIs
+                          </Link>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>
