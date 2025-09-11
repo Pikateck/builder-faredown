@@ -2,6 +2,7 @@ import { createServer } from "vite";
 import express from "express";
 import cors from "cors";
 import path from "path";
+import { createServer } from "vite";
 
 // Start API server on port 3001 so our /api proxy has a local target
 try {
