@@ -431,7 +431,7 @@ export function Header() {
                         <div className="mt-2 space-y-2">
                           <button
                             onClick={() => {
-                              handleNavigation("/admin/dashboard");
+                              handleNavigation("/admin/login");
                               setShowMobileMenu(false);
                             }}
                             className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
@@ -659,7 +659,7 @@ export function Header() {
                           Sign out
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Link to="/admin/dashboard" className="flex items-center">
+                          <Link to="/admin/login" className="flex items-center">
                             <Shield className="w-4 h-4 mr-2" />
                             Admin Panel
                           </Link>
