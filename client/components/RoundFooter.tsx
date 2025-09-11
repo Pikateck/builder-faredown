@@ -45,8 +45,13 @@ export const RoundFooter: React.FC<RoundFooterProps> = ({
       <div className="flex items-center gap-2">
         <button
           type="button"
-          disabled={disabled}
-          onClick={() => setMode("reuse")}
+          disabled={disabled || lastTarget == null}
+          onClick={() => {
+            setMode("reuse");
+            if (lastTarget != null) {
+              onSend(Math.round(lastTarget));
+            }
+          }}
           className={`px-3 py-2 rounded-full text-sm border transition-colors ${mode === "reuse" ? "bg-[#0071c2] text-white border-[#0071c2]" : "bg-white text-[#0071c2] border-[#0071c2]"}`}
         >
           Use {currencySymbol}
