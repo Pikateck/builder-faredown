@@ -74,6 +74,7 @@ import BargainErrorTest from "./components/BargainErrorTest";
 import MobileBargainTestSuite from "./components/MobileBargainTestSuite";
 import LogoDesignOptions from "./components/LogoDesignOptions";
 import FaredownColorPalette from "./components/FaredownColorPalette";
+import CmsPage from "./pages/CmsPage";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
