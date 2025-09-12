@@ -14,8 +14,8 @@ export default function CmsPage() {
       initBuilder();
       setIsBuilderReady(true);
     } catch (err) {
-      console.error('Builder initialization failed:', err);
-      setError('Failed to initialize Builder.io');
+      console.error("Builder initialization failed:", err);
+      setError("Failed to initialize Builder.io");
     }
   }, []);
 
@@ -26,11 +26,11 @@ export default function CmsPage() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-gray-900 mb-4">CMS Preview Error</h1>
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">
+            CMS Preview Error
+          </h1>
           <p className="text-gray-600 mb-4">{error}</p>
-          <p className="text-sm text-gray-500">
-            Path: {urlPath}
-          </p>
+          <p className="text-sm text-gray-500">Path: {urlPath}</p>
         </div>
       </div>
     );
@@ -42,9 +42,7 @@ export default function CmsPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading CMS content...</p>
-          <p className="text-sm text-gray-500 mt-2">
-            Path: {urlPath}
-          </p>
+          <p className="text-sm text-gray-500 mt-2">Path: {urlPath}</p>
         </div>
       </div>
     );
