@@ -96,19 +96,6 @@ export default function FlightResults() {
   const adults = parseInt(searchParams.get("adults") || "1");
   const children = parseInt(searchParams.get("children") || "0");
 
-  // Load flights (simplified)
-  useEffect(() => {
-    setIsLoading(true);
-    
-    // Simulate API call
-    const timer = setTimeout(() => {
-      setFlights(sampleFlights);
-      setIsLoading(false);
-    }, 1000);
-
-    return () => clearTimeout(timer);
-  }, [searchParams]);
-
   // Format price
   const formatPrice = (amount: number) => {
     return `₹${amount.toLocaleString()}`;
