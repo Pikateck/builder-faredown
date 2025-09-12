@@ -259,6 +259,7 @@ function App() {
                       />
 
                       {/* Admin CMS Routes */}
+                      <Route path="/cms/*" element={<CmsPage />} />
                       <Route path="/admin/login" element={<AdminLogin />} />
                       <Route path="/admin" element={<AdminDashboard />} />
                       <Route
