@@ -588,13 +588,16 @@ export function HotelSearchForm({
                   <Users className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span className="text-xs sm:text-sm overflow-hidden">
                     <span className="hidden lg:inline">
-                      {guests.adults} adults, {guests.children} children, {guests.rooms} room{guests.rooms > 1 ? "s" : ""}
+                      {guests.adults} adults, {guests.children} children,{" "}
+                      {guests.rooms} room{guests.rooms > 1 ? "s" : ""}
                     </span>
                     <span className="hidden md:inline lg:hidden">
-                      {guests.adults + guests.children} guests, {guests.rooms} room{guests.rooms > 1 ? "s" : ""}
+                      {guests.adults + guests.children} guests, {guests.rooms}{" "}
+                      room{guests.rooms > 1 ? "s" : ""}
                     </span>
                     <span className="hidden sm:inline md:hidden">
-                      {guests.adults + guests.children} guests, {guests.rooms}rm{guests.rooms > 1 ? "s" : ""}
+                      {guests.adults + guests.children} guests, {guests.rooms}rm
+                      {guests.rooms > 1 ? "s" : ""}
                     </span>
                     <span className="sm:hidden">
                       {guests.rooms}rm • {guests.adults + guests.children}ppl
