@@ -586,20 +586,18 @@ export function HotelSearchForm({
                   className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
                 >
                   <Users className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate text-xs sm:text-sm">
-                    <span className="hidden md:inline">
-                      {guests.adults} adults, {guests.children} children,{" "}
-                      {guests.rooms} room{guests.rooms > 1 ? "s" : ""}
+                  <span className="text-xs sm:text-sm overflow-hidden">
+                    <span className="hidden lg:inline">
+                      {guests.adults} adults, {guests.children} children, {guests.rooms} room{guests.rooms > 1 ? "s" : ""}
+                    </span>
+                    <span className="hidden md:inline lg:hidden">
+                      {guests.adults + guests.children} guests, {guests.rooms} room{guests.rooms > 1 ? "s" : ""}
                     </span>
                     <span className="hidden sm:inline md:hidden">
-                      {guests.adults + guests.children} guests, {guests.rooms}{" "}
-                      room{guests.rooms > 1 ? "s" : ""}
+                      {guests.adults + guests.children} guests, {guests.rooms}rm{guests.rooms > 1 ? "s" : ""}
                     </span>
                     <span className="sm:hidden">
-                      {guests.rooms} Room{guests.rooms > 1 ? "s" : ""} •{" "}
-                      {guests.adults} Adult{guests.adults > 1 ? "s" : ""} •{" "}
-                      {guests.children} Child
-                      {guests.children !== 1 ? "ren" : ""}
+                      {guests.rooms}rm • {guests.adults + guests.children}ppl
                     </span>
                   </span>
                 </Button>
