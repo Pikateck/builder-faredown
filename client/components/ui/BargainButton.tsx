@@ -5,21 +5,21 @@ import { TrendingDown } from "lucide-react";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 
 /* ----------------------------------------------------------------------------
-   Yellow bargain button styling (fixes "buttonClasses is not defined")
+  Yellow button styling (matches approved design)
 ----------------------------------------------------------------------------- */
 const buttonClasses = cn(
   // base button shape/accessibility
   "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
   "disabled:pointer-events-none disabled:opacity-50",
-  // yellow theme to match legacy design
+  // yellow theme
   "bg-[#FFC107] hover:bg-[#FFB300] text-[#1a1f2c]",
   // size
   "h-10 px-4"
 );
 
 /* ----------------------------------------------------------------------------
-   Types
+  Types
 ----------------------------------------------------------------------------- */
 export interface BargainButtonProps {
   children?: React.ReactNode;
@@ -29,7 +29,7 @@ export interface BargainButtonProps {
   className?: string;
   size?: "sm" | "md" | "lg";
 
-  /** Modal usage (optional) */
+  /** Use the round-based conversational bargain modal */
   useBargainModal?: boolean;
   module?: "flights" | "hotels" | "sightseeing" | "transfers";
   userName?: string;
@@ -48,10 +48,10 @@ export interface BargainButtonProps {
     rating?: number;
   };
 
-  /** Modal callbacks */
+  /** Callbacks */
   onBargainSuccess?: (finalPrice: number, orderRef: string) => void;
 
-  /** Valid DOM props we may forward */
+  /** Forwarded DOM props */
   id?: string;
   "data-testid"?: string;
   "aria-label"?: string;
@@ -59,7 +59,7 @@ export interface BargainButtonProps {
 }
 
 /* ----------------------------------------------------------------------------
-   Component
+  Component
 ----------------------------------------------------------------------------- */
 export default function BargainButton({
   children = "Bargain Now",
@@ -79,7 +79,7 @@ export default function BargainButton({
   itemDetails = {},
   onBargainSuccess,
 
-  // forward DOM props
+  // forwarded DOM props
   id,
   "data-testid": dataTestId,
   "aria-label": ariaLabel,
@@ -90,6 +90,7 @@ export default function BargainButton({
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
 
+    // Open modal if enabled & we have a price context
     if (useBargainModal && basePrice > 0) {
       e.preventDefault();
       e.stopPropagation();
@@ -108,26 +109,26 @@ export default function BargainButton({
   const handleBargainHold = (orderRef: string) => {
     // optional hold flow
     setIsBargainModalOpen(false);
-    // console.log("Bargain held:", orderRef);
   };
 
   return (
     <>
       <Button
-        // keep using Button; add our legacy yellow styling via buttonClasses
-        className={cn(buttonClasses, className)}
         onClick={handleClick}
         disabled={disabled || loading}
+        className={cn(buttonClasses, className)}
         id={id}
         data-testid={dataTestId}
-        aria-label={ariaLabel || (typeof children === "string" ? children : "Bargain button")}
+        aria-label={
+          ariaLabel || (typeof children === "string" ? children : "Bargain button")
+        }
         {...domProps}
       >
+        {!loading && <TrendingDown className="w-4 h-4" />}
         {loading && (
-          <span className="mr-2 inline-block h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
+          <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" />
         )}
-        {!loading && <TrendingDown className="h-4 w-4" />}
-        <span>{children}</span>
+        {children}
       </Button>
 
       {useBargainModal && (
@@ -140,7 +141,6 @@ export default function BargainButton({
           userName={userName}
           basePrice={basePrice}
           productRef={productRef || itemName || "product"}
-          // Provide minimal shape for flights/hotels as needed by the modal
           flight={
             module === "flights"
               ? {
@@ -175,13 +175,17 @@ export default function BargainButton({
   );
 }
 
-/* Convenience variants */
+/* ----------------------------------------------------------------------------
+  Convenience variants
+----------------------------------------------------------------------------- */
 export function BargainButtonSmall(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="sm" {...props} />;
 }
+
 export function BargainButtonLarge(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="lg" {...props} />;
 }
+
 export function BargainButtonMobile(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="md" {...props} />;
 }
