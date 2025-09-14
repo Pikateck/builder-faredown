@@ -6,7 +6,7 @@ import { useBooking } from "@/contexts/BookingContext";
 import { Header } from "@/components/layout/Header";
 import { flightsService, Flight } from "@/services/flightsService";
 import { Button } from "@/components/ui/button";
-import ConversationalBargainModal from "@/components/ConversationalBargainModal";
+import { BargainButton } from "@/components/ui/BargainButton";
 import { Badge } from "@/components/ui/badge";
 import { MobileFilters } from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
@@ -3096,20 +3096,32 @@ export default function FlightResults() {
                         >
                           View Details
                         </Button>
-                        <Button
-                          onClick={(e) => {
-                            e.preventDefault();
-                            e.stopPropagation();
-                            handleBargainClick(flight);
+                        <BargainButton
+                          useEnhancedModal={true}
+                          module="flights"
+                          itemName={`${flight.airline} ${flight.flightNumber}`}
+                          supplierNetRate={flight.fareTypes?.[0]?.price || 0}
+                          itemDetails={{
+                            location: `${selectedFromCity} to ${selectedToCity}`,
+                            provider: flight.airline,
+                            features: flight.fareTypes?.[0]?.features || [],
                           }}
-                          className="flex-1 py-4 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                          onBargainSuccess={(finalPrice, savings) => {
+                            console.log(`Flight Mobile Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                            // Handle successful bargain
+                            handleBargainAccept(finalPrice, `flight-${flight.id}`);
+                          }}
+                          onClick={(e) => {
+                            e?.preventDefault();
+                            e?.stopPropagation();
+                          }}
+                          className="flex-1 py-4 text-black font-semibold text-sm min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                           onTouchStart={(e) => {
-                            e.stopPropagation();
+                            e?.stopPropagation();
                           }}
                         >
-                          <TrendingDown className="w-4 h-4" />
                           Bargain Now
-                        </Button>
+                        </BargainButton>
                       </div>
                     </div>
                   </div>
@@ -3408,20 +3420,32 @@ export default function FlightResults() {
                             >
                               View Details
                             </Button>
-                            <Button
-                              onClick={(e) => {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                handleBargainClick(flight);
+                            <BargainButton
+                              useEnhancedModal={true}
+                              module="flights"
+                              itemName={`${flight.airline} ${flight.flightNumber}`}
+                              supplierNetRate={flight.fareTypes?.[0]?.price || 0}
+                              itemDetails={{
+                                location: `${selectedFromCity} to ${selectedToCity}`,
+                                provider: flight.airline,
+                                features: flight.fareTypes?.[0]?.features || [],
                               }}
-                              className="text-sm px-5 py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold flex items-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
+                              onBargainSuccess={(finalPrice, savings) => {
+                                console.log(`Flight Desktop Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                                // Handle successful bargain
+                                handleBargainAccept(finalPrice, `flight-${flight.id}`);
+                              }}
+                              onClick={(e) => {
+                                e?.preventDefault();
+                                e?.stopPropagation();
+                              }}
+                              className="text-sm px-5 py-3 text-black font-semibold min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                               onTouchStart={(e) => {
-                                e.stopPropagation();
+                                e?.stopPropagation();
                               }}
                             >
-                              <TrendingDown className="w-4 h-4" />
                               Bargain Now
-                            </Button>
+                            </BargainButton>
                           </div>
                         </div>
                       </div>
@@ -4324,7 +4348,7 @@ export default function FlightResults() {
                                           Faredown Fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ���500
+                                          �����500
                                         </span>
                                       </div>
                                     </div>
