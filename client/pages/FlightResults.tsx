@@ -6478,6 +6478,7 @@ export default function FlightResults() {
 
       {/* Conversational Bargain Modal */}
       {/* Conversational Bargain Modal */}
+{/* Conversational Bargain Modal */}
 <ConversationalBargainModal
   isOpen={showBargainModal}
   onClose={handleBargainClose}
@@ -6493,5 +6494,9 @@ export default function FlightResults() {
   module="flights"
   onBackToResults={handleBargainClose}
   basePrice={selectedBargainFlight?.fareTypes?.[0]?.price || 0}
-  productRef={selectedBargainFlight ? `flight-${selectedBargainFlight.id}` : ""}
+    productRef={selectedBargainFlight ? `flight-${selectedBargainFlight.id}` : ""}
 />
+
+</div>
+);
+}
