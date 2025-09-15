@@ -4,23 +4,6 @@ import { cn } from "@/lib/utils";
 import { TrendingDown } from "lucide-react";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 
-/* ----------------------------------------------------------------------------
-  Yellow button styling (matches approved design)
------------------------------------------------------------------------------ */
-const buttonClasses = cn(
-  // base button shape/accessibility
-  "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors",
-  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
-  "disabled:pointer-events-none disabled:opacity-50",
-  // yellow theme
-  "bg-[#FFC107] hover:bg-[#FFB300] text-[#1a1f2c]",
-  // size
-  "h-10 px-4"
-);
-
-/* ----------------------------------------------------------------------------
-  Types
------------------------------------------------------------------------------ */
 export interface BargainButtonProps {
   children?: React.ReactNode;
   onClick?: (e?: React.MouseEvent) => void;
@@ -28,13 +11,9 @@ export interface BargainButtonProps {
   loading?: boolean;
   className?: string;
   size?: "sm" | "md" | "lg";
-
-  /** Use the round-based conversational bargain modal */
   useBargainModal?: boolean;
   module?: "flights" | "hotels" | "sightseeing" | "transfers";
   userName?: string;
-
-  /** Pricing/Product context for modal */
   itemName?: string;
   basePrice?: number;
   productRef?: string;
@@ -47,20 +26,21 @@ export interface BargainButtonProps {
     checkOut?: string;
     rating?: number;
   };
-
-  /** Callbacks */
   onBargainSuccess?: (finalPrice: number, orderRef: string) => void;
-
-  /** Forwarded DOM props */
   id?: string;
   "data-testid"?: string;
   "aria-label"?: string;
   [key: string]: any;
 }
 
-/* ----------------------------------------------------------------------------
-  Component
------------------------------------------------------------------------------ */
+const buttonClasses = cn(
+  "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+  "disabled:pointer-events-none disabled:opacity-50",
+  "bg-[#FFC107] hover:bg-[#FFB300] text-[#1a1f2c]",
+  "h-10 px-4"
+);
+
 export default function BargainButton({
   children = "Bargain Now",
   onClick,
@@ -68,8 +48,6 @@ export default function BargainButton({
   loading = false,
   className,
   size = "md",
-
-  // modal props
   useBargainModal = false,
   module = "flights",
   userName = "Guest",
@@ -78,8 +56,6 @@ export default function BargainButton({
   productRef = "",
   itemDetails = {},
   onBargainSuccess,
-
-  // forwarded DOM props
   id,
   "data-testid": dataTestId,
   "aria-label": ariaLabel,
@@ -89,16 +65,13 @@ export default function BargainButton({
 
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
-
-    // Open modal if enabled & we have a price context
     if (useBargainModal && basePrice > 0) {
       e.preventDefault();
       e.stopPropagation();
       setIsBargainModalOpen(true);
-      return;
+    } else {
+      onClick?.(e);
     }
-
-    onClick?.(e);
   };
 
   const handleBargainSuccess = (finalPrice: number, orderRef: string) => {
@@ -107,7 +80,6 @@ export default function BargainButton({
   };
 
   const handleBargainHold = (orderRef: string) => {
-    // optional hold flow
     setIsBargainModalOpen(false);
   };
 
@@ -119,9 +91,7 @@ export default function BargainButton({
         className={cn(buttonClasses, className)}
         id={id}
         data-testid={dataTestId}
-        aria-label={
-          ariaLabel || (typeof children === "string" ? children : "Bargain button")
-        }
+        aria-label={ariaLabel || (typeof children === "string" ? children : "Bargain button")}
         {...domProps}
       >
         {!loading && <TrendingDown className="w-4 h-4" />}
@@ -175,17 +145,12 @@ export default function BargainButton({
   );
 }
 
-/* ----------------------------------------------------------------------------
-  Convenience variants
------------------------------------------------------------------------------ */
 export function BargainButtonSmall(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="sm" {...props} />;
 }
-
 export function BargainButtonLarge(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="lg" {...props} />;
 }
-
 export function BargainButtonMobile(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="md" {...props} />;
 }
