@@ -9,7 +9,7 @@ import { flightsService, Flight } from "@/services/flightsService";
 import { Button } from "@/components/ui/button";
 import { BargainButton } from "@/components/ui/BargainButton";
 import { Badge } from "@/components/ui/badge";
-import { MobileFilters } from "@/components/MobileFilters";
+import MobileFilters from "@/components/MobileFilters";
 import { Input } from "@/components/ui/input";
 import { Progress } from "@/components/ui/progress";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
@@ -6476,8 +6476,6 @@ export default function FlightResults() {
 
       <MobileNavigation />
 
-      {/* Conversational Bargain Modal */}
-      {/* Conversational Bargain Modal */}
 {/* Conversational Bargain Modal */}
 <ConversationalBargainModal
   isOpen={showBargainModal}
@@ -6494,9 +6492,10 @@ export default function FlightResults() {
   module="flights"
   onBackToResults={handleBargainClose}
   basePrice={selectedBargainFlight?.fareTypes?.[0]?.price || 0}
-    productRef={selectedBargainFlight ? `flight-${selectedBargainFlight.id}` : ""}
+  productRef={selectedBargainFlight ? `flight-${selectedBargainFlight.id}` : ""}
 />
 
 </div>
-);
-}
+); // end of return(...)
+
+} // end of function component
