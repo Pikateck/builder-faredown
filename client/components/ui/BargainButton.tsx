@@ -1,7 +1,3 @@
-Here’s the complete, corrected `client/components/ui/BargainButton.tsx` you can paste in.
-(It keeps the **default export** and also adds a **named export** so both `import BargainButton …` and `import { BargainButton } …` work.)
-
-```tsx
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -173,4 +169,3 @@ export function BargainButtonMobile(props: Omit<BargainButtonProps, "size">) {
 //   import BargainButton from "...";
 //   import { BargainButton } from "...";
 export { BargainButton, BargainButtonSmall, BargainButtonLarge, BargainButtonMobile };
-```
