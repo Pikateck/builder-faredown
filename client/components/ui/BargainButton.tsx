@@ -11,12 +11,13 @@ export interface BargainButtonProps {
   loading?: boolean;
   className?: string;
   size?: "sm" | "md" | "lg";
-  /** Open the conversational bargain modal instead of firing onClick */
+
+  /** Use the conversational bargain modal instead of plain onClick */
   useBargainModal?: boolean;
   module?: "flights" | "hotels" | "sightseeing" | "transfers";
   userName?: string;
 
-  /** Context used by the modal */
+  /** Context for the modal */
   itemName?: string;
   basePrice?: number;
   productRef?: string;
@@ -32,7 +33,7 @@ export interface BargainButtonProps {
 
   onBargainSuccess?: (finalPrice: number, orderRef: string) => void;
 
-  /** DOM props we may forward */
+  /** Forwarded DOM props */
   id?: string;
   "data-testid"?: string;
   "aria-label"?: string;
@@ -50,7 +51,8 @@ const buttonClasses = cn(
   "h-10 px-4"
 );
 
-export default function BargainButton({
+// Make BargainButton a **named** export…
+export function BargainButton({
   children = "Bargain Now",
   onClick,
   disabled = false,
@@ -155,6 +157,7 @@ export default function BargainButton({
   );
 }
 
+// …and keep the size variants as named exports too.
 export function BargainButtonSmall(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="sm" {...props} />;
 }
@@ -165,7 +168,7 @@ export function BargainButtonMobile(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="md" {...props} />;
 }
 
-// Support both import styles:
+// Also export it as the default so both styles work:
 //   import BargainButton from "...";
-//   import { BargainButton } from "...";
-export { BargainButton, BargainButtonSmall, BargainButtonLarge, BargainButtonMobile };
+//   import { BargainButton } from "..."
+export default BargainButton;
