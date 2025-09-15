@@ -1,3 +1,7 @@
+Here’s the complete, corrected `client/components/ui/BargainButton.tsx` you can paste in.
+(It keeps the **default export** and also adds a **named export** so both `import BargainButton …` and `import { BargainButton } …` work.)
+
+```tsx
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -11,9 +15,12 @@ export interface BargainButtonProps {
   loading?: boolean;
   className?: string;
   size?: "sm" | "md" | "lg";
+  /** Open the conversational bargain modal instead of firing onClick */
   useBargainModal?: boolean;
   module?: "flights" | "hotels" | "sightseeing" | "transfers";
   userName?: string;
+
+  /** Context used by the modal */
   itemName?: string;
   basePrice?: number;
   productRef?: string;
@@ -26,7 +33,10 @@ export interface BargainButtonProps {
     checkOut?: string;
     rating?: number;
   };
+
   onBargainSuccess?: (finalPrice: number, orderRef: string) => void;
+
+  /** DOM props we may forward */
   id?: string;
   "data-testid"?: string;
   "aria-label"?: string;
@@ -34,10 +44,13 @@ export interface BargainButtonProps {
 }
 
 const buttonClasses = cn(
+  // base / a11y
   "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors",
   "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
   "disabled:pointer-events-none disabled:opacity-50",
+  // yellow theme
   "bg-[#FFC107] hover:bg-[#FFB300] text-[#1a1f2c]",
+  // size
   "h-10 px-4"
 );
 
@@ -65,6 +78,7 @@ export default function BargainButton({
 
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
+
     if (useBargainModal && basePrice > 0) {
       e.preventDefault();
       e.stopPropagation();
@@ -154,3 +168,9 @@ export function BargainButtonLarge(props: Omit<BargainButtonProps, "size">) {
 export function BargainButtonMobile(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="md" {...props} />;
 }
+
+// Support both import styles:
+//   import BargainButton from "...";
+//   import { BargainButton } from "...";
+export { BargainButton, BargainButtonSmall, BargainButtonLarge, BargainButtonMobile };
+```
