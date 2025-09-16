@@ -42,7 +42,6 @@ import {
   EyeOff,
   Globe,
   Users,
-  FileText,
   Heart,
   Star,
   CheckCircle,
