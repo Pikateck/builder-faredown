@@ -733,7 +733,7 @@ export default function Account() {
   // If we're on a sub-page, show breadcrumb and sub-page content
   if (isSubPage) {
     return (
-      <Layout>
+      <Layout showSearch={false}>
         <div className="min-h-screen bg-gray-50">
           {/* Breadcrumb Header */}
           <div className="bg-white border-b border-gray-200">
