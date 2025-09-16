@@ -426,7 +426,7 @@ export default function Account() {
           <div className="flex items-center justify-between mb-6">
             <h2 className="text-xl font-bold text-gray-900">Recent Activity</h2>
             <Link to="/account/trips">
-              <Button variant="outline" size="sm">
+              <Button variant="outline" size="sm" className="hover:bg-[#0071c2] hover:text-white transition-colors">
                 View all trips
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
