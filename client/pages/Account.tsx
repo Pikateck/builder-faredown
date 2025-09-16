@@ -240,11 +240,11 @@ export default function Account() {
           <div className="py-6">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                  <User className="w-8 h-8 text-blue-600" />
+                <div className="w-16 h-16 bg-[#f5f5f5] rounded-lg flex items-center justify-center border border-[#e5e5e5] shadow-sm">
+                  <User className="w-8 h-8 text-[#003580]" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-[#003580]">
+                  <h1 className="text-2xl font-bold text-[#1a1a1a]">
                     Hi, {userName}
                   </h1>
                   <div className="flex items-center space-x-2">
