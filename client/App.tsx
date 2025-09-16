@@ -20,6 +20,7 @@ import FlightDetails from "./pages/FlightDetails";
 import BookingFlow from "./pages/BookingFlow";
 import BookingConfirmation from "./pages/BookingConfirmation";
 import Account from "./pages/Account";
+import Profile from "./pages/Profile";
 import Booking from "./pages/Booking";
 import Hotels from "./pages/Hotels";
 import HotelResults from "./pages/HotelResults";
