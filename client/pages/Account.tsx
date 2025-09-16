@@ -488,7 +488,7 @@ export default function Account() {
                 Start your journey by booking your first trip
               </p>
               <Link to="/flights">
-                <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+                <Button className="bg-[#003580] hover:bg-[#0071c2] text-white transition-colors">
                   <Plane className="w-4 h-4 mr-2" />
                   Search Flights
                 </Button>
@@ -595,7 +595,7 @@ export default function Account() {
               Start your journey by booking your first trip
             </p>
             <Link to="/flights">
-              <Button className="bg-blue-600 hover:bg-blue-700 text-white">
+              <Button className="bg-[#003580] hover:bg-[#0071c2] text-white transition-colors">
                 <Plane className="w-4 h-4 mr-2" />
                 Search Flights
               </Button>
