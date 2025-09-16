@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
-import SearchBar from "@/components/SearchBar";
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -771,7 +770,7 @@ export default function SightseeingResults() {
       {/* Search Bar - Same as Landing Page */}
       <div className="bg-white border-b border-gray-200 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 py-4">
-          <SearchBar module="sightseeing" />
+          <SightseeingSearchForm />
         </div>
       </div>
 
