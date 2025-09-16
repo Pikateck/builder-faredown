@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
+import { qp, saveLastSearch, getLastSearch } from "@/lib/searchParams";
 import { Button } from "@/components/ui/button";
 import {
   Select,
