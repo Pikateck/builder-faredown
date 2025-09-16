@@ -31,6 +31,7 @@ const getBackendUrl = () => {
     window.location.hostname.includes("builder.codes") ||
     window.location.hostname.includes("fly.dev")
   ) {
+    console.log("🌐 Detected Builder.codes/fly.dev environment, using origin proxy");
     return window.location.origin + "/api";
   }
 
