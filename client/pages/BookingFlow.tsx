@@ -295,8 +295,7 @@ const SeatMap = ({
         {/* Show seat selection summary for this flight */}
         <div className="mb-3">
           <p className="text-xs text-[#666] mb-2">
-            Click on passenger name to select them, then choose a seat from the
-            map below
+            Click on passenger name to select them, then click any available seat - it will be automatically saved
           </p>
         </div>
         <div className="space-y-2">
@@ -1120,7 +1119,7 @@ export default function BookingFlow() {
     { name: "Iran", code: "+98", flag: "🇮🇷" },
     { name: "Iraq", code: "+964", flag: "🇮🇶" },
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
-    { name: "Isle of Man", code: "+44", flag: "���🇲" },
+    { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
