@@ -372,44 +372,28 @@ export default function Account() {
             return (
               <Link key={section.id} to={section.href}>
                 <Card className={cn(
-                  "h-full hover:shadow-lg transition-all duration-200 cursor-pointer group",
+                  "h-full hover:shadow-lg transition-all duration-200 cursor-pointer group bg-[#ffffff] border border-[#e5e5e5]",
                   "hover:border-[#0071c2] hover:-translate-y-1 active:scale-[0.98] md:active:scale-100"
                 )}>
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
-                      <div className={cn(
-                        "w-12 h-12 rounded-lg flex items-center justify-center",
-                        section.color === "faredown-blue" && "bg-blue-50 border border-[#0071c2]",
-                        section.color === "faredown-secondary" && "bg-blue-50 border border-[#0071c2]",
-                        section.color === "faredown-yellow" && "bg-yellow-50 border border-[#febb02]",
-                        section.color === "faredown-accent" && "bg-amber-50 border border-amber-400",
-                        section.color === "faredown-neutral" && "bg-slate-50 border border-slate-300",
-                        section.color === "faredown-gray" && "bg-gray-50 border border-gray-300"
-                      )}>
-                        <IconComponent className={cn(
-                          "w-6 h-6",
-                          section.color === "faredown-blue" && "text-[#003580]",
-                          section.color === "faredown-secondary" && "text-[#0071c2]",
-                          section.color === "faredown-yellow" && "text-[#e6a602]",
-                          section.color === "faredown-accent" && "text-amber-600",
-                          section.color === "faredown-neutral" && "text-slate-600",
-                          section.color === "faredown-gray" && "text-gray-600"
-                        )} />
+                      <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-blue-50 border border-[#e5e5e5]">
+                        <IconComponent className="w-6 h-6 text-[#0071c2]" />
                       </div>
-                      <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#0071c2] transition-colors" />
+                      <ChevronRight className="w-5 h-5 text-[#7a7a7a] group-hover:text-[#0071c2] transition-colors" />
                     </div>
-                    
-                    <h3 className="text-lg font-semibold text-gray-900 mb-2">
+
+                    <h3 className="text-lg font-semibold text-[#003580] mb-2">
                       {section.title}
                     </h3>
-                    <p className="text-sm text-gray-600 mb-4">
+                    <p className="text-sm text-[#7a7a7a] mb-4">
                       {section.description}
                     </p>
-                    
+
                     <div className="space-y-1">
                       {section.items.slice(0, 3).map((item, index) => (
-                        <div key={index} className="flex items-center text-sm text-gray-500">
-                          <div className="w-1 h-1 bg-gray-400 rounded-full mr-2"></div>
+                        <div key={index} className="flex items-center text-sm text-[#7a7a7a]">
+                          <div className="w-1 h-1 bg-[#e5e5e5] rounded-full mr-2"></div>
                           {item}
                         </div>
                       ))}
