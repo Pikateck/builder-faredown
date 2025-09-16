@@ -248,10 +248,10 @@ export default function Account() {
                     Hi, {userName}
                   </h1>
                   <div className="flex items-center space-x-2">
-                    <Badge className="bg-amber-500 text-white text-sm font-medium">
-                      🟡 FaredownClub Gold
+                    <Badge className="bg-[#febb02] text-[#1a1a1a] text-sm font-medium border border-[#e6a602] shadow-sm">
+                      👑 FaredownClub Gold
                     </Badge>
-                    <span className="text-gray-600 text-sm">Member since Dec 2024</span>
+                    <span className="text-[#7a7a7a] text-sm">Member since Dec 2024</span>
                   </div>
                 </div>
               </div>
