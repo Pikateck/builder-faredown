@@ -50,7 +50,7 @@ export default function AccountDashboard() {
                   <ChevronDown className="w-3 h-3" />
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>🇬🇧 English (UK)</DropdownMenuItem>
+                  <DropdownMenuItem>🇬�� English (UK)</DropdownMenuItem>
                   <DropdownMenuItem>🇺�� English (US)</DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
@@ -455,7 +455,7 @@ export default function AccountDashboard() {
             </Link>
           </div>
           <div className="text-center text-xs text-gray-500 mt-4">
-            Copyright © 2024 Faredown.com��. All rights reserved.
+            Copyright © 2024 Faredown.com. All rights reserved.
           </div>
         </div>
       </div>
