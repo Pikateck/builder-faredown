@@ -129,6 +129,21 @@ export function SightseeingSearchForm() {
     }
 
     try {
+      // Prepare data for sessionStorage (normalized format)
+      const searchData = {
+        city: destination,
+        date: tourDate.toISOString().split('T')[0],
+        adults: "2",
+        children: "0",
+      };
+
+      if (endDate) {
+        searchData.endDate = endDate.toISOString().split('T')[0];
+      }
+
+      // Save to sessionStorage for persistence
+      saveLastSearch(searchData);
+
       const searchParams = new URLSearchParams({
         destination: destination,
         tourDate: tourDate.toISOString(),
