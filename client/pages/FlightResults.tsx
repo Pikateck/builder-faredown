@@ -1809,7 +1809,7 @@ export default function FlightResults() {
                     {Object.entries({
                       USD: { symbol: "$", name: "US Dollar" },
                       EUR: { symbol: "€", name: "Euro" },
-                      GBP: { symbol: "���", name: "British Pound" },
+                      GBP: { symbol: "£", name: "British Pound" },
                       INR: { symbol: "₹", name: "Indian Rupee" },
                       AED: { symbol: "د.إ", name: "UAE Dirham" },
                       SAR: { symbol: "ر.س", name: "Saudi Riyal" },
