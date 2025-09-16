@@ -4009,6 +4009,78 @@ export default function BookingFlow() {
                 </div>
               )}
 
+              {/* Profile System Integration */}
+              {savedTravelers.length > 0 && (
+                <div className="bg-gradient-to-r from-green-50 to-emerald-50 p-4 rounded-xl border border-green-200">
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center">
+                      <Users className="w-5 h-5 text-green-600 mr-2" />
+                      <label className="block text-sm font-semibold text-green-900">
+                        Profile System Travelers
+                      </label>
+                    </div>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setShowSavedTravelers(!showSavedTravelers)}
+                      className="text-green-700 border-green-300 hover:bg-green-100"
+                    >
+                      {showSavedTravelers ? 'Hide' : 'Show'} ({savedTravelers.length})
+                    </Button>
+                  </div>
+                  <p className="text-xs text-green-700 mb-3">
+                    🆕 Select from your comprehensive profile system (includes passport details)
+                  </p>
+
+                  {showSavedTravelers && (
+                    <div className="grid grid-cols-1 gap-2 max-h-40 overflow-y-auto">
+                      {savedTravelers.map((traveler) => (
+                        <div
+                          key={traveler.id}
+                          className="flex items-center justify-between p-3 bg-white border border-green-200 rounded-lg hover:border-green-300 transition-colors cursor-pointer"
+                          onClick={() => populateFromSavedTraveler(selectedTraveller, traveler)}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <div className="w-8 h-8 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center">
+                              <User className="w-4 h-4 text-green-700" />
+                            </div>
+                            <div>
+                              <div className="font-medium text-gray-900">
+                                {traveler.first_name} {traveler.last_name}
+                              </div>
+                              <div className="text-xs text-gray-600 flex items-center space-x-2">
+                                <span className="bg-gray-100 px-2 py-0.5 rounded">
+                                  {traveler.relationship || 'Adult'}
+                                </span>
+                                {traveler.nationality_iso2 && (
+                                  <>
+                                    <span>•</span>
+                                    <span>{traveler.nationality_iso2}</span>
+                                  </>
+                                )}
+                                {traveler.is_primary && (
+                                  <>
+                                    <span>•</span>
+                                    <span className="text-green-600 font-medium">Primary</span>
+                                  </>
+                                )}
+                              </div>
+                            </div>
+                          </div>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-green-700 hover:text-green-900 hover:bg-green-100"
+                          >
+                            Select
+                          </Button>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )}
+
               {/* Manual Entry Fields */}
               <div>
                 <label className="block text-sm font-bold text-red-700 mb-1">
