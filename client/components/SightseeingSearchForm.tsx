@@ -37,6 +37,42 @@ export function SightseeingSearchForm() {
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
 
+  // Initialize form with URL params or sessionStorage data
+  useEffect(() => {
+    const location = window.location;
+    const urlParams = qp.parse(location.search);
+    const lastSearch = getLastSearch();
+
+    // Use URL params if available, otherwise fallback to sessionStorage
+    const sourceData = Object.keys(urlParams).length > 0 ? urlParams : lastSearch;
+
+    if (sourceData) {
+      // Set destination
+      if (sourceData.destination || sourceData.city) {
+        const dest = sourceData.destination || sourceData.city;
+        setDestination(dest);
+        setInputValue(dest);
+      }
+
+      // Set tour date
+      if (sourceData.tourDate || sourceData.date) {
+        const tourDateStr = sourceData.tourDate || sourceData.date;
+        const tourDateFromSource = new Date(tourDateStr);
+        if (!isNaN(tourDateFromSource.getTime())) {
+          setTourDate(tourDateFromSource);
+        }
+      }
+
+      // Set end date if available
+      if (sourceData.endDate) {
+        const endDateFromSource = new Date(sourceData.endDate);
+        if (!isNaN(endDateFromSource.getTime())) {
+          setEndDate(endDateFromSource);
+        }
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
