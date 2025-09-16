@@ -165,7 +165,7 @@ export default function Account() {
       icon: Wallet,
       href: "/account/payment",
       items: ["Rewards & Wallet", "Payment methods"],
-      color: "blue",
+      color: "faredown-blue",
     },
     {
       id: "account",
