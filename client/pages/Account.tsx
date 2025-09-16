@@ -434,7 +434,7 @@ export default function Account() {
           </div>
           
           {bookings.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {bookings.slice(0, 2).map((booking, index) => (
                 <Card key={index} className="hover:shadow-md transition-shadow">
                   <CardContent className="p-6">
