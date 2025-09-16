@@ -47,7 +47,7 @@ import {
   Download,
   Eye,
   EyeOff,
-  Passport,
+  FileText,
   CreditCard,
   MapPin,
   Phone,
