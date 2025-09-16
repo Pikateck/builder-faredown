@@ -608,10 +608,10 @@ export default function Account() {
               return (
                 <div key={module.id} className="space-y-4">
                   <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 rounded-full flex items-center justify-center bg-blue-50 border border-[#e5e5e5]">
-                      <ModuleIcon className="w-5 h-5 text-[#0071c2]" />
+                    <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
+                      <ModuleIcon className="w-6 h-6 text-[#003580]" />
                     </div>
-                    <h3 className="text-lg font-semibold text-[#003580]">
+                    <h3 className="text-lg font-semibold text-[#1a1a1a]">
                       {module.name} ({moduleBookings.length})
                     </h3>
                   </div>
