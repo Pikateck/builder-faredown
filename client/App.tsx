@@ -118,9 +118,14 @@ function App() {
                       />
                       <Route path="/account" element={<Account />} />
                       <Route path="/my-account" element={<Account />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/account/trips" element={<MyTrips />} />
+                      <Route path="/account/personal" element={<Account />} />
+                      <Route path="/account/security" element={<Account />} />
+                      <Route path="/account/travelers" element={<Account />} />
+                      <Route path="/account/preferences" element={<Account />} />
                       <Route path="/account/payment" element={<Account />} />
+                      <Route path="/account/privacy" element={<Account />} />
+                      <Route path="/account/trips" element={<Account />} />
+                      <Route path="/profile" element={<Profile />} />
                       <Route path="/saved" element={<Saved />} />
                       <Route path="/hotels" element={<Hotels />} />
                       <Route
