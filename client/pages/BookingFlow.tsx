@@ -1199,6 +1199,30 @@ export default function BookingFlow() {
           }
         : traveller
     ));
+
+    // Show success feedback
+    setShowSavedTravelers(false); // Collapse the section
+    alert(`✅ Traveler details populated for ${savedTraveler.first_name} ${savedTraveler.last_name}`);
+  };
+
+  // Function to save current booking with profile links
+  const saveBookingWithProfiles = async (bookingData) => {
+    try {
+      // Create booking first (would integrate with your booking API)
+      const bookingId = `FD-${Date.now()}`; // Demo booking ID
+
+      // Link passengers to saved travelers if they have profile data
+      for (const traveller of travellers) {
+        if (traveller.profileData) {
+          await profileAPI.addPassengerToBooking(bookingId, traveller.profileData.id);
+        }
+      }
+
+      return bookingId;
+    } catch (error) {
+      console.error("Failed to save booking with profiles:", error);
+      return null;
+    }
   };
 
   // Utility functions for seat pricing
@@ -1237,7 +1261,7 @@ export default function BookingFlow() {
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
     { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
-    { name: "Italy", code: "+39", flag: "���🇹" },
+    { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
     { name: "Jamaica", code: "+1", flag: "🇯🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
@@ -1825,7 +1849,7 @@ export default function BookingFlow() {
                           code: "KRW",
                           symbol: "₩",
                           name: "South Korean Won",
-                          flag: "🇰🇷",
+                          flag: "��🇷",
                         },
                         {
                           code: "SGD",
