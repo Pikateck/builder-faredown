@@ -48,6 +48,7 @@ const currencyAdminRoutes = require("./routes/currency");
 const reportsRoutes = require("./routes/reports");
 const suppliersRoutes = require("./routes/suppliers");
 const voucherRoutes = require("./routes/vouchers");
+const profileRoutes = require("./routes/profile");
 const adminBookingsRoutes = require("./routes/admin-bookings");
 const adminSightseeingRoutes = require("./routes/admin-sightseeing");
 const sightseeingSearchRoutes = require("./routes/sightseeing-search");
