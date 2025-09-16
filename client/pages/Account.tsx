@@ -647,7 +647,7 @@ export default function Account() {
                                   <>
                                     <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
                                       <MapPin className="w-4 h-4" />
-                                      <span>BOM ��� DXB</span>
+                                      <span>BOM ⇄ DXB</span>
                                     </div>
                                     <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
                                       <Calendar className="w-4 h-4" />
@@ -730,11 +730,11 @@ export default function Account() {
                               </div>
 
                               <div className="mt-4 space-y-2">
-                                <Button variant="outline" size="sm" className="w-full">
+                                <Button variant="outline" size="sm" className="w-full border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]">
                                   <Eye className="w-4 h-4 mr-2" />
                                   View {module.id === "flights" ? "Ticket" : "Voucher"}
                                 </Button>
-                                <Button variant="outline" size="sm" className="w-full">
+                                <Button variant="outline" size="sm" className="w-full border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]">
                                   <Download className="w-4 h-4 mr-2" />
                                   Download
                                 </Button>
