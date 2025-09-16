@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
-import SearchBar from "@/components/SearchBar";
 import { useDateContext } from "@/contexts/DateContext";
 import { Header } from "@/components/layout/Header";
 import { HotelCard } from "@/components/HotelCard";
@@ -1160,7 +1159,7 @@ export default function HotelResults() {
         {/* Hotel Search Bar - Booking.com style */}
         <div className="bg-[#003580] py-2 sm:py-4">
           <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
-            <SearchBar module="hotels" />
+            <HotelSearchForm />
           </div>
         </div>
 
