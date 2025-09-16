@@ -66,8 +66,9 @@ const getOfflineFallbackEnabled = () => {
   // Client-side: check environment variables
   const envFlag = import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK;
 
-  // Builder.codes environment: enable fallback by default due to no backend
-  if (window.location.hostname.includes("builder.codes")) {
+  // Builder.codes and fly.dev environments: enable fallback by default due to potential backend unavailability
+  if (window.location.hostname.includes("builder.codes") ||
+      window.location.hostname.includes("fly.dev")) {
     return envFlag !== "false"; // Default to true unless explicitly disabled
   }
 
