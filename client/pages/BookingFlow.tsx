@@ -312,11 +312,11 @@ const SeatMap = ({
           {travellers.map((traveller) => (
             <div
               key={`seat-selection-${traveller.id}-${flightLeg}`}
-              className={`flex items-center justify-between py-2 px-3 rounded-lg transition-colors ${
+              className={`flex items-center justify-between py-3 px-4 rounded-lg transition-all border-2 ${
                 selectedTraveller === traveller.id &&
                 currentFlight === flightLeg
-                  ? "bg-[#003580]/10 border border-[#003580]"
-                  : "hover:bg-gray-50"
+                  ? "bg-[#003580]/10 border-[#003580] shadow-md"
+                  : "border-gray-200 hover:border-[#003580]/30 hover:bg-gray-50"
               }`}
             >
               <button
@@ -326,15 +326,24 @@ const SeatMap = ({
                   setExpandedFlight(flightLeg);
                   setCurrentFlight(flightLeg);
                 }}
-                className={`text-sm font-medium text-left flex-1 ${
+                className={`text-sm font-medium text-left flex-1 flex items-center space-x-2 ${
                   selectedTraveller === traveller.id &&
                   currentFlight === flightLeg
                     ? "text-[#003580] font-semibold"
                     : "text-gray-900 hover:text-[#003580]"
                 }`}
               >
-                {traveller.firstName} {traveller.lastName} (
-                {traveller.type.toLowerCase()})
+                <span className={`w-3 h-3 rounded-full border-2 ${
+                  selectedTraveller === traveller.id && currentFlight === flightLeg
+                    ? "bg-[#003580] border-[#003580]"
+                    : "border-gray-300"
+                }`}></span>
+                <span>
+                  {traveller.firstName} {traveller.lastName} ({traveller.type.toLowerCase()})
+                  {selectedTraveller === traveller.id && currentFlight === flightLeg && (
+                    <span className="text-xs text-[#003580] ml-2 font-normal">← Selected for seat assignment</span>
+                  )}
+                </span>
               </button>
               <div className="flex items-center space-x-4">
                 {getTravellerSeat(traveller.id, flightLeg) ? (
@@ -1753,7 +1762,7 @@ export default function BookingFlow() {
                           code: "THB",
                           symbol: "฿",
                           name: "Thai Baht",
-                          flag: "🇹🇭",
+                          flag: "����🇭",
                         },
                         {
                           code: "MYR",
@@ -2665,7 +2674,7 @@ export default function BookingFlow() {
                           {selectedMealIds.length > 0 && (
                             <div className="flex justify-between">
                               <span>Meals</span>
-                              <span>₹{calculateMealsTotal()}</span>
+                              <span>��{calculateMealsTotal()}</span>
                             </div>
                           )}
                           {calculateBaggageTotal() > 0 && (
