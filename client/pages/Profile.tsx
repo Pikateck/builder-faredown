@@ -187,8 +187,8 @@ const profileAPI = {
 };
 
 // Main Profile Component
-export default function Profile({ standalone = true }) {
-  const [activeTab, setActiveTab] = useState("personal");
+export default function Profile({ standalone = true, initialTab = "personal" }) {
+  const [activeTab, setActiveTab] = useState(initialTab);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [profile, setProfile] = useState(null);
