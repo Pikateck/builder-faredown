@@ -458,7 +458,7 @@ const SeatMap = ({
                     }
                   </p>
                   <p className="text-xs text-[#666] mt-1">
-                    Click on any available seat to select
+                    Click any available seat - it will be automatically saved and added to your summary
                   </p>
                 </div>
               )}
