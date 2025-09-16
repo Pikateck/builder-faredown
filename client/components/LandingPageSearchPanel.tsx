@@ -241,6 +241,27 @@ export function LandingPageSearchPanel() {
 
   // Handle search
   const handleSearch = () => {
+    const fromCode = cityData[selectedFromCity]?.code || "BOM";
+    const toCode = cityData[selectedToCity]?.code || "DXB";
+
+    // Prepare data for sessionStorage (normalized format)
+    const searchData = {
+      from: `${selectedFromCity} (${fromCode})`,
+      to: `${selectedToCity} (${toCode})`,
+      depart: departureDate.toISOString().split('T')[0],
+      adults: travelers.adults.toString(),
+      children: travelers.children.toString(),
+      class: selectedClass.toUpperCase(),
+      tripType: tripType,
+    };
+
+    if (tripType === "round-trip") {
+      searchData.return = returnDate.toISOString().split('T')[0];
+    }
+
+    // Save to sessionStorage for persistence
+    saveLastSearch(searchData);
+
     if (tripType === "multi-city") {
       // Build multi-city legs from main form + additional flights
       const allLegs = [
@@ -266,9 +287,6 @@ export function LandingPageSearchPanel() {
       navigate(`/flights/results?${searchParams.toString()}`);
     } else {
       // Regular flight search
-      const fromCode = cityData[selectedFromCity]?.code || "BOM";
-      const toCode = cityData[selectedToCity]?.code || "DXB";
-
       const searchParams = new URLSearchParams({
         from: `${selectedFromCity} (${fromCode})`,
         to: `${selectedToCity} (${toCode})`,
