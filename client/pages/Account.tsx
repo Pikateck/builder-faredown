@@ -396,7 +396,7 @@ export default function Account() {
                           section.color === "faredown-gray" && "text-gray-600"
                         )} />
                       </div>
-                      <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
+                      <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-[#0071c2] transition-colors" />
                     </div>
                     
                     <h3 className="text-lg font-semibold text-gray-900 mb-2">
