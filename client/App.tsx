@@ -80,6 +80,7 @@ import FaredownColorPalette from "./components/FaredownColorPalette";
 import AdminDashboard from "./pages/admin/AdminDashboard";
 import AdminLogin from "./pages/admin/AdminLogin";
 import UserManagement from "./pages/admin/UserManagement";
+import ProfileManagement from "./pages/admin/ProfileManagement";
 import BargainEngine from "./pages/admin/BargainEngine";
 import PaymentDashboard from "./pages/admin/PaymentDashboard";
 import AdminTestingDashboard from "./pages/admin/AdminTestingDashboard";
