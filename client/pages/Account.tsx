@@ -323,6 +323,48 @@ export default function Account() {
           </Card>
         </div>
 
+        {/* FaredownClub Tier System */}
+        <Card className="mb-8 bg-gradient-to-r from-amber-50 via-yellow-50 to-amber-50 border-2 border-amber-200">
+          <CardContent className="p-6">
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="flex items-center space-x-4">
+                <div className="w-16 h-16 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-lg">
+                  <span className="text-white font-bold text-2xl">G</span>
+                </div>
+                <div>
+                  <h3 className="text-xl font-bold text-gray-900 flex items-center space-x-2">
+                    <span>FaredownClub Gold</span>
+                    <Badge className="bg-amber-500 text-white">🟡 Current Tier</Badge>
+                  </h3>
+                  <p className="text-gray-600">Enjoy enhanced benefits and exclusive rewards</p>
+                  <div className="mt-2 flex flex-wrap gap-2">
+                    <Badge variant="outline" className="text-xs">Higher discounts</Badge>
+                    <Badge variant="outline" className="text-xs">Free seat upgrades</Badge>
+                    <Badge variant="outline" className="text-xs">Early check-in</Badge>
+                  </div>
+                </div>
+              </div>
+
+              <div className="text-right">
+                <div className="mb-4">
+                  <p className="text-sm text-gray-600 mb-2">Progress to 🟣 Platinum</p>
+                  <div className="w-48 h-3 bg-gray-200 rounded-full">
+                    <div className="w-1/3 h-3 bg-gradient-to-r from-amber-400 via-purple-400 to-purple-600 rounded-full relative">
+                      <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-purple-600 rounded-full border-2 border-white"></div>
+                    </div>
+                  </div>
+                  <div className="flex justify-between text-xs text-gray-500 mt-1">
+                    <span>5 bookings</span>
+                    <span>15 bookings</span>
+                  </div>
+                </div>
+                <p className="text-sm font-medium text-purple-600">10 more bookings to unlock Platinum</p>
+                <p className="text-xs text-gray-500">Next tier: Max discounts, free meals, lounge access</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
         {/* Account Sections Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {accountSections.map((section) => {
