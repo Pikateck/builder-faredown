@@ -345,10 +345,10 @@ export default function Account() {
                 </div>
               </div>
 
-              <div className="text-right">
+              <div className="text-left md:text-right w-full md:w-auto">
                 <div className="mb-4">
                   <p className="text-sm text-gray-600 mb-2">Progress to 🟣 Platinum</p>
-                  <div className="w-48 h-3 bg-gray-200 rounded-full">
+                  <div className="w-full md:w-48 h-3 bg-gray-200 rounded-full">
                     <div className="w-1/3 h-3 bg-gradient-to-r from-amber-400 via-purple-400 to-purple-600 rounded-full relative">
                       <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-purple-600 rounded-full border-2 border-white"></div>
                     </div>
@@ -359,7 +359,7 @@ export default function Account() {
                   </div>
                 </div>
                 <p className="text-sm font-medium text-purple-600">10 more bookings to unlock Platinum</p>
-                <p className="text-xs text-gray-500">Next tier: Max discounts, free meals, lounge access</p>
+                <p className="text-xs text-gray-500 max-w-64">Next tier: Max discounts, free meals, lounge access</p>
               </div>
             </div>
           </CardContent>
