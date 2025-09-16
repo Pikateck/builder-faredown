@@ -314,6 +314,17 @@ export function HotelSearchForm({
         searchParams.set("destinationName", destination);
       }
 
+      // Save search data to sessionStorage for persistence
+      const searchData = {
+        city: destination,
+        checkin: checkInDate.toISOString().split('T')[0],
+        checkout: checkOutDate.toISOString().split('T')[0],
+        adults: guests.adults.toString(),
+        children: guests.children.toString(),
+        rooms: guests.rooms.toString(),
+      };
+      saveLastSearch(searchData);
+
       const url = `/hotels/results?${searchParams.toString()}`;
       console.log("🏨 Navigating to hotel search:", url);
 
