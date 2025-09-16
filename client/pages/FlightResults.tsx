@@ -1465,7 +1465,10 @@ export default function FlightResults() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
-      {/* MOBILE-FIRST DESIGN: App-style header for mobile, standard for desktop */}
+      {/* Standard Header - Consistent across all pages */}
+      <Header />
+
+      {/* Mobile Flight Results Header - App Style for mobile only */}
       <header className="bg-white md:bg-[#003580] shadow-sm md:shadow-none sticky top-0 z-50">
         {/* Mobile Header (≤768px) - App Style */}
         <div className="block md:hidden">
