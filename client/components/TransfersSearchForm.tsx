@@ -233,6 +233,39 @@ export function TransfersSearchForm() {
     }
 
     try {
+      // Prepare data for sessionStorage (normalized format)
+      const searchData = {
+        fromLat: pickupLocation.split(',')[0] || "",
+        fromLng: pickupLocation.split(',')[1] || "",
+        toLat: dropoffLocation.split(',')[0] || "",
+        toLng: dropoffLocation.split(',')[1] || "",
+        date: pickupDate.toISOString().split('T')[0],
+        adults: passengers.adults.toString(),
+        bags: "0",
+        pickup: pickupLocation,
+        dropoff: dropoffLocation,
+        pickupTime,
+        serviceType,
+        tripType,
+      };
+
+      if (serviceType === "car-rentals") {
+        searchData.dropoffDate = returnDate!.toISOString().split('T')[0];
+        searchData.dropoffTime = returnTime;
+        searchData.driverAge = driverAge;
+      } else {
+        searchData.children = passengers.children.toString();
+        searchData.infants = passengers.infants.toString();
+
+        if (tripType === "return" && returnDate) {
+          searchData.returnDate = returnDate.toISOString().split('T')[0];
+          searchData.returnTime = returnTime;
+        }
+      }
+
+      // Save to sessionStorage for persistence
+      saveLastSearch(searchData);
+
       const searchParams = new URLSearchParams({
         pickup: pickupLocation,
         dropoff: dropoffLocation,
