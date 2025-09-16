@@ -256,8 +256,16 @@ export default function Account() {
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm text-gray-500">You have 5 Genius rewards</p>
-                <p className="text-sm text-blue-600 font-medium">Complete your first trip for Genius Level 2</p>
+                <p className="text-sm text-gray-500">You have 1,250 FaredownClub points</p>
+                <div className="mt-2">
+                  <div className="flex items-center justify-end space-x-2 mb-1">
+                    <span className="text-xs text-gray-500">Progress to Platinum</span>
+                    <div className="w-24 h-2 bg-gray-200 rounded-full">
+                      <div className="w-2/3 h-2 bg-gradient-to-r from-amber-400 to-purple-500 rounded-full"></div>
+                    </div>
+                  </div>
+                  <p className="text-xs text-purple-600 font-medium">10 more bookings for FaredownClub Platinum</p>
+                </div>
               </div>
             </div>
           </div>
