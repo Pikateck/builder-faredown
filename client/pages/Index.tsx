@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
+import { HotelSearchForm } from "@/components/HotelSearchForm";
 import { UnifiedLandingPage } from "@/components/UnifiedLandingPage";
 import { MobileNativeSearchForm } from "@/components/mobile/MobileNativeSearchForm";
-import SearchBar from "@/components/SearchBar";
 
 export default function Index() {
   const location = useLocation();
@@ -61,7 +61,7 @@ export default function Index() {
               {/* Search Panel Section - Same design as other modules */}
               <div className="bg-white border-b border-gray-200 shadow-sm">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
-                  <SearchBar module="hotels" />
+                  <HotelSearchForm />
                 </div>
               </div>
             </div>
