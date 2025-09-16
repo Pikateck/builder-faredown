@@ -247,7 +247,12 @@ export default function Account() {
                   <h1 className="text-2xl font-bold text-gray-900">
                     Hi, {userName}
                   </h1>
-                  <p className="text-gray-600">Genius Level 2</p>
+                  <div className="flex items-center space-x-2">
+                    <Badge className="bg-amber-500 text-white text-sm font-medium">
+                      🟡 FaredownClub Gold
+                    </Badge>
+                    <span className="text-gray-600 text-sm">Member since Dec 2024</span>
+                  </div>
                 </div>
               </div>
               <div className="text-right">
