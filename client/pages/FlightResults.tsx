@@ -1,5 +1,8 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import SearchBar from "@/components/SearchBar";
+import { useQuerySync } from "@/hooks/useQuerySync";
+import { qp, getLastSearch } from "@/lib/searchParams";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
 import { useBooking } from "@/contexts/BookingContext";
