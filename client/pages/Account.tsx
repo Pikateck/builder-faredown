@@ -373,7 +373,7 @@ export default function Account() {
               <Link key={section.id} to={section.href}>
                 <Card className={cn(
                   "h-full hover:shadow-lg transition-all duration-200 cursor-pointer group",
-                  "hover:border-blue-300 hover:-translate-y-1"
+                  "hover:border-[#0071c2] hover:-translate-y-1 active:scale-[0.98] md:active:scale-100"
                 )}>
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
