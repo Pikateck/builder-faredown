@@ -2179,7 +2179,7 @@ Please keep this ticket for your records.
           <div className="lg:col-span-3">
             {activeTab === "bookings" && renderModularBookings()}
             {activeTab === "profile" && renderProfile()}
-            {activeTab === "profile-comprehensive" && <Profile />}
+            {activeTab === "profile-comprehensive" && <Profile standalone={false} />}
             {activeTab === "loyalty" && renderLoyalty()}
             {activeTab === "payment" && renderPayment()}
             {activeTab === "settings" && renderSettings()}
