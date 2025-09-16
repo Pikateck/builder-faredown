@@ -242,6 +242,7 @@ app.use("/api/vat", authenticateToken, vatRoutes);
 app.use("/api/reports", authenticateToken, reportsRoutes);
 app.use("/api/suppliers", authenticateToken, suppliersRoutes);
 app.use("/api/vouchers", voucherRoutes);
+app.use("/api/profile", profileRoutes);
 app.use("/api/admin/bookings", adminBookingsRoutes);
 app.use("/api/admin/ai", adminAiRoutes);
 app.use("/api/db-test", dbTestRoutes);
