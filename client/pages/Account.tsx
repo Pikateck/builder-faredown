@@ -2114,7 +2114,19 @@ Please keep this ticket for your records.
                   )}
                 >
                   <User className="w-5 h-5 flex-shrink-0" />
-                  <span>Profile</span>
+                  <span>Profile (Legacy)</span>
+                </button>
+                <button
+                  onClick={() => setActiveTab("profile-comprehensive")}
+                  className={cn(
+                    "w-full text-left px-4 py-3 rounded-lg flex items-center space-x-3 transition-colors font-medium",
+                    activeTab === "profile-comprehensive"
+                      ? "bg-blue-100 text-blue-700 border border-blue-200"
+                      : "text-gray-600 hover:bg-gray-50 hover:text-gray-900",
+                  )}
+                >
+                  <User className="w-5 h-5 flex-shrink-0" />
+                  <span>Profile System</span>
                 </button>
                 <button
                   onClick={() => setActiveTab("loyalty")}
