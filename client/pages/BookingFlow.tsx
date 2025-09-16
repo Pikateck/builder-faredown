@@ -87,6 +87,9 @@ const SeatMap = ({
   selectedFlight,
   selectedFareType,
 }) => {
+  // Add useCurrency hook to access formatPrice function
+  const { formatPrice } = useCurrency();
+
   // Use the shared seat selections from parent component
   const selectedSeats = seatSelections;
   const setSelectedSeats = setSeatSelections;
