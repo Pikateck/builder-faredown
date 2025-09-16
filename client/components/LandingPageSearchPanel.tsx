@@ -112,6 +112,66 @@ export function LandingPageSearchPanel() {
   });
   const [showTravelers, setShowTravelers] = useState(false);
 
+  // Initialize form with URL params or sessionStorage data
+  useEffect(() => {
+    const location = window.location;
+    const urlParams = qp.parse(location.search);
+    const lastSearch = getLastSearch();
+
+    // Use URL params if available, otherwise fallback to sessionStorage
+    const sourceData = Object.keys(urlParams).length > 0 ? urlParams : lastSearch;
+
+    if (sourceData) {
+      // Set from/to cities
+      if (sourceData.from) {
+        const fromMatch = Object.entries(cityData).find(([name, data]) =>
+          sourceData.from.includes(data.code) || sourceData.from.includes(name)
+        );
+        if (fromMatch) setSelectedFromCity(fromMatch[0]);
+      }
+
+      if (sourceData.to) {
+        const toMatch = Object.entries(cityData).find(([name, data]) =>
+          sourceData.to.includes(data.code) || sourceData.to.includes(name)
+        );
+        if (toMatch) setSelectedToCity(toMatch[0]);
+      }
+
+      // Set dates
+      if (sourceData.departureDate || sourceData.depart) {
+        const depDate = new Date(sourceData.departureDate || sourceData.depart);
+        if (!isNaN(depDate.getTime())) setDepartureDate(depDate);
+      }
+
+      if (sourceData.returnDate || sourceData.return) {
+        const retDate = new Date(sourceData.returnDate || sourceData.return);
+        if (!isNaN(retDate.getTime())) setReturnDate(retDate);
+      }
+
+      // Set travelers
+      const adults = parseInt(sourceData.adults) || 1;
+      const children = parseInt(sourceData.children) || 0;
+      setTravelers({ adults, children });
+
+      // Set class
+      if (sourceData.cabinClass || sourceData.class) {
+        const classStr = sourceData.cabinClass || sourceData.class;
+        const classMap: {[key: string]: string} = {
+          'economy': 'Economy',
+          'premium': 'Premium Economy',
+          'business': 'Business',
+          'first': 'First'
+        };
+        setSelectedClass(classMap[classStr.toLowerCase()] || 'Economy');
+      }
+
+      // Set trip type
+      if (sourceData.tripType) {
+        setTripType(sourceData.tripType);
+      }
+    }
+  }, []);
+
   // Format date for display
   const formatDisplayDate = (date: Date) => {
     return format(date, "E MMM d");
