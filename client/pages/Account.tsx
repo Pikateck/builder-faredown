@@ -408,9 +408,9 @@ export default function Account() {
         {/* Recent Activity Section */}
         <div className="mt-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-gray-900">Recent Activity</h2>
+            <h2 className="text-xl font-bold text-[#003580]">Recent Activity</h2>
             <Link to="/account/trips">
-              <Button variant="outline" size="sm" className="hover:bg-[#0071c2] hover:text-white transition-colors">
+              <Button variant="outline" size="sm" className="border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2] transition-colors">
                 View all trips
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
