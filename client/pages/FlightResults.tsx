@@ -370,23 +370,29 @@ export default function FlightResults() {
 
     loadDatesFromParams(searchParams);
 
-    // Load city selections from URL parameters
+    // Load city selections from URL parameters or sessionStorage fallback
     const fromParam = searchParams.get("from");
     const toParam = searchParams.get("to");
+    const lastSearch = getLastSearch();
 
-    // Find matching city names from codes
-    if (fromParam) {
-      const fromCity = Object.entries(cityData).find(
-        ([city, data]) => data.code === fromParam,
+    // Find matching city names from codes (URL params first, then sessionStorage)
+    const fromSource = fromParam || lastSearch?.from;
+    const toSource = toParam || lastSearch?.to;
+
+    if (fromSource) {
+      // Handle both "Mumbai (BOM)" format and just "BOM" format
+      let fromCity = Object.entries(cityData).find(
+        ([city, data]) => fromSource.includes(data.code) || fromSource.includes(city),
       )?.[0];
       if (fromCity) {
         setSelectedFromCity(fromCity);
       }
     }
 
-    if (toParam) {
-      const toCity = Object.entries(cityData).find(
-        ([city, data]) => data.code === toParam,
+    if (toSource) {
+      // Handle both "Dubai (DXB)" format and just "DXB" format
+      let toCity = Object.entries(cityData).find(
+        ([city, data]) => toSource.includes(data.code) || toSource.includes(city),
       )?.[0];
       if (toCity) {
         setSelectedToCity(toCity);
