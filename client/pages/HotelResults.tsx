@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import SearchBar from "@/components/SearchBar";
 import { useDateContext } from "@/contexts/DateContext";
 import { Header } from "@/components/layout/Header";
 import { HotelCard } from "@/components/HotelCard";
@@ -1466,7 +1467,7 @@ export default function HotelResults() {
                     connection.
                   </p>
                   <Button onClick={loadHotels} className="mt-4">
-                    🔄 Retry Search
+                    ���� Retry Search
                   </Button>
                 </div>
               ) : (
