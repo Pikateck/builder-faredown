@@ -8,6 +8,43 @@ import {
 import { useDateContext } from "@/contexts/DateContext";
 import { useBooking } from "@/contexts/BookingContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
+
+// Profile API service
+const profileAPI = {
+  baseURL: "/api/profile",
+
+  async fetchTravelers() {
+    try {
+      const response = await fetch(`${this.baseURL}/travelers`, {
+        headers: { "X-User-ID": "1" } // Demo: use actual auth
+      });
+      if (response.ok) {
+        const data = await response.json();
+        return data.travelers || [];
+      }
+    } catch (error) {
+      console.error("Failed to fetch travelers:", error);
+    }
+    return [];
+  },
+
+  async addPassengerToBooking(bookingId, travelerId) {
+    try {
+      const response = await fetch(`${this.baseURL}/booking-passengers`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-User-ID": "1"
+        },
+        body: JSON.stringify({ bookingId, travelerId })
+      });
+      return response.json();
+    } catch (error) {
+      console.error("Failed to add passenger to booking:", error);
+      return null;
+    }
+  }
+};
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
