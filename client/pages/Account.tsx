@@ -608,21 +608,15 @@ export default function Account() {
                     {moduleBookings.map((booking, index) => (
                       <Card
                         key={index}
-                        className="overflow-hidden hover:shadow-lg transition-shadow"
+                        className="overflow-hidden hover:shadow-lg transition-shadow bg-[#ffffff] border border-[#e5e5e5]"
                       >
-                        <CardHeader
-                          className={`bg-gradient-to-r ${
-                            module.color === "blue"
-                              ? "from-blue-50 to-blue-100"
-                              : "from-green-50 to-green-100"
-                          }`}
-                        >
+                        <CardHeader className="bg-blue-50 border-b border-[#e5e5e5]">
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <div>
-                              <CardTitle className="text-lg font-semibold text-gray-900">
+                              <CardTitle className="text-lg font-semibold text-[#003580]">
                                 {module.id === "flights" ? "Mumbai ⇄ Dubai" : "Hotel Booking"}
                               </CardTitle>
-                              <p className="text-sm text-gray-600">
+                              <p className="text-sm text-[#7a7a7a]">
                                 Booking Reference:{" "}
                                 <span className="font-mono font-medium">
                                   {booking.bookingDetails?.bookingRef || "N/A"}
@@ -630,13 +624,10 @@ export default function Account() {
                               </p>
                             </div>
                             <div className="text-left sm:text-right">
-                              <Badge
-                                variant="secondary"
-                                className="bg-green-100 text-green-800 border-green-200"
-                              >
+                              <Badge className="bg-[#febb02] text-[#1a1a1a] border border-[#e6a602]">
                                 Confirmed
                               </Badge>
-                              <p className="text-sm text-gray-600 mt-1">
+                              <p className="text-sm text-[#7a7a7a] mt-1">
                                 Booked on{" "}
                                 {new Date(booking.bookingDetails?.bookingDate).toLocaleDateString()}
                               </p>
