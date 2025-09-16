@@ -459,13 +459,23 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
   };
   
   const loadTravelers = async () => {
-    const res = await profileAPI.fetchTravelers();
-    setTravelers(res.travelers || []);
+    try {
+      const res = await profileAPI.fetchTravelers();
+      setTravelers(res.travelers || []);
+    } catch (error) {
+      console.error("Failed to load travelers:", error);
+      setTravelers([]);
+    }
   };
-  
+
   const loadPaymentMethods = async () => {
-    const res = await profileAPI.fetchPaymentMethods();
-    setPaymentMethods(res.paymentMethods || []);
+    try {
+      const res = await profileAPI.fetchPaymentMethods();
+      setPaymentMethods(res.paymentMethods || []);
+    } catch (error) {
+      console.error("Failed to load payment methods:", error);
+      setPaymentMethods([]);
+    }
   };
   
   const countries = [
