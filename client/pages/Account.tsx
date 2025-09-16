@@ -478,8 +478,10 @@ export default function Account() {
             </div>
           ) : (
             <Card className="p-12 text-center bg-[#ffffff] border border-[#e5e5e5]">
-              <Plane className="w-16 h-16 text-[#e5e5e5] mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-[#003580] mb-2">
+              <div className="w-24 h-24 rounded-lg flex items-center justify-center bg-[#f5f5f5] border border-[#e5e5e5] mx-auto mb-6">
+                <Plane className="w-12 h-12 text-[#003580]" />
+              </div>
+              <h3 className="text-xl font-semibold text-[#1a1a1a] mb-2">
                 No trips yet
               </h3>
               <p className="text-[#7a7a7a] mb-6">
