@@ -1099,6 +1099,11 @@ export default function BookingFlow() {
   });
   const [selectedProfileId, setSelectedProfileId] = useState("");
 
+  // Profile system integration states
+  const [savedTravelers, setSavedTravelers] = useState([]);
+  const [showSavedTravelers, setShowSavedTravelers] = useState(false);
+  const [loadingTravelers, setLoadingTravelers] = useState(false);
+
   // Currency state
   const [selectedCurrency, setSelectedCurrency] = useState({
     code: "INR",
