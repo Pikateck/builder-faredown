@@ -1712,8 +1712,8 @@ export default function FlightResults() {
           </div>
         </div>
 
-        {/* Desktop Header (≥769px) - Consistent Design */}
-        <div className="hidden md:block">
+        {/* Desktop Header (≥769px) - Consistent Design - HIDDEN TO PREVENT DUPLICATION */}
+        <div className="hidden">
           <div className="max-w-7xl mx-auto px-6 py-4">
             <div className="flex items-center justify-between text-white">
               {/* Left: Logo */}
