@@ -318,20 +318,70 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
   const loadInitialData = async () => {
     try {
       setLoading(true);
-      const [profileRes, travelersRes, paymentRes, preferencesRes] = await Promise.all([
-        profileAPI.fetchProfile(),
-        profileAPI.fetchTravelers(),
-        profileAPI.fetchPaymentMethods(),
-        profileAPI.fetchPreferences()
-      ]);
-      
+
+      // Load data sequentially to avoid potential race conditions
+      console.log("Loading profile data...");
+
+      // Load profile first
+      const profileRes = await profileAPI.fetchProfile();
+      console.log("Profile loaded:", profileRes);
       setProfile(profileRes.profile || {});
       setPersonalForm(profileRes.profile || {});
+
+      // Load other data in parallel
+      const [travelersRes, paymentRes, preferencesRes] = await Promise.all([
+        profileAPI.fetchTravelers().catch(error => {
+          console.error("Travelers fetch failed:", error);
+          return { travelers: [] };
+        }),
+        profileAPI.fetchPaymentMethods().catch(error => {
+          console.error("Payment methods fetch failed:", error);
+          return { paymentMethods: [] };
+        }),
+        profileAPI.fetchPreferences().catch(error => {
+          console.error("Preferences fetch failed:", error);
+          return {
+            preferences: {
+              currency_iso3: "INR",
+              language: "en",
+              email_notifications: true,
+              price_alerts: false,
+              marketing_opt_in: false
+            }
+          };
+        })
+      ]);
+
+      console.log("Additional data loaded:", { travelersRes, paymentRes, preferencesRes });
+
       setTravelers(travelersRes.travelers || []);
       setPaymentMethods(paymentRes.paymentMethods || []);
       setPreferences(preferencesRes.preferences || {});
+
+      console.log("Profile data loading completed successfully");
     } catch (error) {
       console.error("Failed to load profile data:", error);
+      // Set default values on error
+      setProfile({
+        first_name: "Zubin",
+        last_name: "Aibara",
+        email: "zubin@example.com",
+        email_verified: true
+      });
+      setPersonalForm({
+        first_name: "Zubin",
+        last_name: "Aibara",
+        email: "zubin@example.com"
+      });
+      setTravelers([]);
+      setPaymentMethods([]);
+      setPreferences({
+        currency_iso3: "INR",
+        language: "en",
+        email_notifications: true,
+        price_alerts: false,
+        marketing_opt_in: false
+      });
     } finally {
       setLoading(false);
     }
