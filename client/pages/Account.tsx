@@ -640,7 +640,7 @@ export default function Account() {
                             {/* Booking Details */}
                             <div className="space-y-4">
                               <div>
-                                <h4 className="font-semibold text-gray-900 mb-2">
+                                <h4 className="font-semibold text-[#003580] mb-2">
                                   {module.id === "flights" ? "Flight Details" : "Hotel Details"}
                                 </h4>
                                 {module.id === "flights" ? (
