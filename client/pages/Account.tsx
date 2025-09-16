@@ -420,40 +420,40 @@ export default function Account() {
           {bookings.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {bookings.slice(0, 2).map((booking, index) => (
-                <Card key={index} className="hover:shadow-md transition-shadow">
+                <Card key={index} className="bg-[#ffffff] border border-[#e5e5e5] hover:shadow-md transition-shadow">
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
                         {booking.type === "flight" ? (
-                          <Plane className="w-6 h-6 text-blue-600" />
+                          <Plane className="w-6 h-6 text-[#0071c2]" />
                         ) : (
-                          <Hotel className="w-6 h-6 text-green-600" />
+                          <Hotel className="w-6 h-6 text-[#0071c2]" />
                         )}
                         <div>
-                          <h3 className="font-semibold text-gray-900">
+                          <h3 className="font-semibold text-[#003580]">
                             {booking.type === "flight" ? "Flight Booking" : "Hotel Booking"}
                           </h3>
-                          <p className="text-sm text-gray-600">
+                          <p className="text-sm text-[#7a7a7a]">
                             {booking.bookingDetails.bookingRef}
                           </p>
                         </div>
                       </div>
-                      <Badge variant="secondary" className="bg-green-100 text-green-800">
+                      <Badge className="bg-[#febb02] text-[#1a1a1a] border border-[#e6a602]">
                         Confirmed
                       </Badge>
                     </div>
-                    
-                    <div className="text-sm text-gray-600 space-y-1">
+
+                    <div className="text-sm text-[#7a7a7a] space-y-1">
                       <p>Date: {new Date(booking.bookingDetails.bookingDate).toLocaleDateString()}</p>
                       <p>Amount: {booking.bookingDetails.currency.symbol}{booking.bookingDetails.totalAmount.toLocaleString()}</p>
                     </div>
-                    
+
                     <div className="mt-4 flex space-x-2">
-                      <Button variant="outline" size="sm" className="flex-1">
+                      <Button variant="outline" size="sm" className="flex-1 border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]">
                         <Eye className="w-4 h-4 mr-2" />
                         View Details
                       </Button>
-                      <Button variant="outline" size="sm" className="flex-1">
+                      <Button variant="outline" size="sm" className="flex-1 border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]">
                         <Download className="w-4 h-4 mr-2" />
                         Download
                       </Button>
