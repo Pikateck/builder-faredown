@@ -463,12 +463,12 @@ export default function Account() {
               ))}
             </div>
           ) : (
-            <Card className="p-12 text-center">
-              <Plane className="w-16 h-16 text-gray-300 mx-auto mb-4" />
-              <h3 className="text-xl font-semibold text-gray-900 mb-2">
+            <Card className="p-12 text-center bg-[#ffffff] border border-[#e5e5e5]">
+              <Plane className="w-16 h-16 text-[#e5e5e5] mx-auto mb-4" />
+              <h3 className="text-xl font-semibold text-[#003580] mb-2">
                 No trips yet
               </h3>
-              <p className="text-gray-600 mb-6">
+              <p className="text-[#7a7a7a] mb-6">
                 Start your journey by booking your first trip
               </p>
               <Link to="/flights">
