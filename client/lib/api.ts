@@ -178,15 +178,21 @@ export class ApiClient {
       this.forceFallback = true;
     }
 
-    // For Builder.codes environment, enable fallback by default since backend might not be available
+    // For Builder.codes and fly.dev environments, enable fallback by default since backend might not be available
     if (
       typeof window !== "undefined" &&
-      window.location.hostname.includes("builder.codes")
+      (window.location.hostname.includes("builder.codes") ||
+       window.location.hostname.includes("fly.dev"))
     ) {
-      this.forceFallback = !config.OFFLINE_FALLBACK_ENABLED ? false : true;
+      this.forceFallback = config.OFFLINE_FALLBACK_ENABLED !== false;
       logApiEvent(
         "info",
-        "Builder.codes environment detected, fallback mode enabled",
+        `Builder.codes/fly.dev environment detected, fallback mode: ${this.forceFallback ? 'enabled' : 'disabled'}`,
+        {
+          hostname: window.location.hostname,
+          offlineFallbackEnabled: config.OFFLINE_FALLBACK_ENABLED,
+          forceFallback: this.forceFallback
+        }
       );
     }
 
