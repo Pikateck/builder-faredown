@@ -1498,7 +1498,7 @@ export default function FlightResults() {
                         .concat(multiCityLegs[multiCityLegs.length - 1].toCode)
                         .join(" → ")} • `
                     : selectedFromCity && selectedToCity
-                      ? `${cityData[selectedFromCity]?.code || ""} ��� ${cityData[selectedToCity]?.code || ""} • `
+                      ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
                       : "Search Results • "}
                   {tripType === "one-way"
                     ? "One way"
