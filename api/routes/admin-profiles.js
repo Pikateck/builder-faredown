@@ -8,7 +8,7 @@ const router = express.Router();
 const { Pool } = require("pg");
 const { requirePermission, PERMISSIONS } = require("../middleware/auth");
 const { validate, validatePagination } = require("../middleware/validation");
-const { audit } = require("../middleware/audit");
+const { auditLogger } = require("../middleware/audit");
 
 // Database connection
 const pool = new Pool({
