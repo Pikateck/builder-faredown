@@ -1465,8 +1465,11 @@ export default function FlightResults() {
 
   return (
     <div className="min-h-screen bg-gray-50 pb-16 md:pb-0">
-      {/* MOBILE-FIRST DESIGN: App-style header for mobile, standard for desktop */}
-      <header className="bg-white md:bg-[#003580] shadow-sm md:shadow-none sticky top-0 z-50">
+      {/* Standard Header - Consistent across all pages */}
+      <Header />
+
+      {/* Flight Results Mobile Header */}
+      <header className="bg-white md:hidden shadow-sm sticky top-0 z-50">
         {/* Mobile Header (≤768px) - App Style */}
         <div className="block md:hidden">
           <div className="px-4 py-3 bg-[#003580]">
@@ -2837,7 +2840,7 @@ export default function FlightResults() {
                               {flight.airline}
                             </div>
                             <div className="text-xs text-gray-500">
-                              {flight.flightNumber} • {flight.aircraft}
+                              {flight.flightNumber} ��� {flight.aircraft}
                             </div>
                           </div>
                         </div>
@@ -5415,7 +5418,7 @@ export default function FlightResults() {
                   <div className="bg-white/10 rounded-xl p-4 flex justify-between items-center">
                     <div>
                       <div className="text-sm font-medium">
-                        Delhi → Singapore
+                        Delhi �� Singapore
                       </div>
                       <div className="text-xs text-blue-200">
                         Air India • 1 stop • 8h 45m
