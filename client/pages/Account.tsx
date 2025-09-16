@@ -174,7 +174,7 @@ export default function Account() {
       icon: User,
       href: "/account/personal",
       items: ["Personal details", "Security settings", "Other travelers"],
-      color: "green",
+      color: "faredown-secondary",
     },
     {
       id: "preferences",
@@ -183,7 +183,7 @@ export default function Account() {
       icon: Settings,
       href: "/account/preferences",
       items: ["Customization preferences", "Email preferences"],
-      color: "purple",
+      color: "faredown-yellow",
     },
     {
       id: "activity",
@@ -192,7 +192,7 @@ export default function Account() {
       icon: Plane,
       href: "/account/trips",
       items: ["Trips & bookings", "Saved lists", "My reviews"],
-      color: "orange",
+      color: "faredown-accent",
     },
     {
       id: "help",
@@ -201,7 +201,7 @@ export default function Account() {
       icon: HelpCircle,
       href: "/help",
       items: ["Contact Customer Service", "Using the platform", "Dispute resolution"],
-      color: "indigo",
+      color: "faredown-neutral",
     },
     {
       id: "legal",
@@ -210,7 +210,7 @@ export default function Account() {
       icon: Scale,
       href: "/account/privacy",
       items: ["Privacy and data management", "Content guidelines"],
-      color: "gray",
+      color: "faredown-gray",
     },
   ];
 
