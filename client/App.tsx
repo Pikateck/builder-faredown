@@ -126,6 +126,15 @@ function App() {
                       <Route path="/account/privacy" element={<Account />} />
                       <Route path="/account/trips" element={<Account />} />
                       <Route path="/profile" element={<Profile />} />
+
+                      {/* Legacy route redirects */}
+                      <Route path="/profile-legacy" element={<Navigate to="/account/personal" replace />} />
+                      <Route path="/account/profile" element={<Navigate to="/account/personal" replace />} />
+                      <Route path="/account/profile-legacy" element={<Navigate to="/account/personal" replace />} />
+                      <Route path="/settings" element={<Navigate to="/account/preferences" replace />} />
+                      <Route path="/account/settings" element={<Navigate to="/account/preferences" replace />} />
+                      <Route path="/payments" element={<Navigate to="/account/payment" replace />} />
+                      <Route path="/privacy" element={<Navigate to="/account/privacy" replace />} />
                       <Route path="/saved" element={<Saved />} />
                       <Route path="/hotels" element={<Hotels />} />
                       <Route
