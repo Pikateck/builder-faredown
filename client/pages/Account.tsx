@@ -369,21 +369,27 @@ export default function Account() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {accountSections.map((section) => {
             const IconComponent = section.icon;
+            const isSelected = location.pathname.startsWith(section.href);
             return (
               <Link key={section.id} to={section.href}>
                 <Card className={cn(
-                  "h-full hover:shadow-lg transition-all duration-200 cursor-pointer group bg-[#ffffff] border border-[#e5e5e5]",
-                  "hover:border-[#0071c2] hover:-translate-y-1 active:scale-[0.98] md:active:scale-100"
+                  "h-full transition-all duration-200 cursor-pointer group bg-[#ffffff] border border-[#e5e5e5]",
+                  "hover:bg-[#f5f5f5] hover:shadow-sm hover:border-[#e5e5e5] rounded-lg",
+                  isSelected && "bg-[#f5f5f5] border-[#e5e5e5]"
                 )}>
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
-                      <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-blue-50 border border-[#e5e5e5]">
-                        <IconComponent className="w-6 h-6 text-[#0071c2]" />
+                      <div className="w-12 h-12 rounded-10 flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
+                        <IconComponent className="w-6 h-6 text-[#003580]" />
                       </div>
-                      <ChevronRight className="w-5 h-5 text-[#7a7a7a] group-hover:text-[#0071c2] transition-colors" />
+                      <ChevronRight className="w-5 h-5 text-[#7a7a7a] group-hover:text-[#003580] transition-colors" />
                     </div>
 
-                    <h3 className="text-lg font-semibold text-[#003580] mb-2">
+                    <h3 className={cn(
+                      "text-lg font-semibold text-[#1a1a1a] mb-2 transition-all",
+                      "group-hover:font-bold",
+                      isSelected && "font-bold"
+                    )}>
                       {section.title}
                     </h3>
                     <p className="text-sm text-[#7a7a7a] mb-4">
