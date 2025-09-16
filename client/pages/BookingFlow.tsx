@@ -194,6 +194,17 @@ const SeatMap = ({
       );
       return newSelectedSeats;
     });
+
+    // Auto-advance to next traveller if available
+    const nextTraveller = travellers.find(
+      (t) => t.id !== travellerToAssign && !getTravellerSeat(t.id, flightLeg),
+    );
+    if (nextTraveller) {
+      setSelectedTraveller(nextTraveller.id);
+    } else {
+      // All travellers have seats for this flight, clear selection
+      setSelectedTraveller(null);
+    }
   };
 
   const getSeatStatus = (seat, flightLeg) => {
@@ -1104,7 +1115,7 @@ export default function BookingFlow() {
     { name: "Iran", code: "+98", flag: "🇮🇷" },
     { name: "Iraq", code: "+964", flag: "🇮🇶" },
     { name: "Ireland", code: "+353", flag: "🇮🇪" },
-    { name: "Isle of Man", code: "+44", flag: "🇮🇲" },
+    { name: "Isle of Man", code: "+44", flag: "���🇲" },
     { name: "Israel", code: "+972", flag: "🇮🇱" },
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
