@@ -337,7 +337,7 @@ export default function Account() {
                     <div className="flex items-start justify-between mb-4">
                       <div className={cn(
                         "w-12 h-12 rounded-lg flex items-center justify-center",
-                        section.color === "blue" && "bg-blue-100",
+                        section.color === "faredown-blue" && "bg-blue-50 border border-[#0071c2]",
                         section.color === "green" && "bg-green-100",
                         section.color === "purple" && "bg-purple-100",
                         section.color === "orange" && "bg-orange-100",
@@ -346,7 +346,7 @@ export default function Account() {
                       )}>
                         <IconComponent className={cn(
                           "w-6 h-6",
-                          section.color === "blue" && "text-blue-600",
+                          section.color === "faredown-blue" && "text-[#003580]",
                           section.color === "green" && "text-green-600",
                           section.color === "purple" && "text-purple-600",
                           section.color === "orange" && "text-orange-600",
