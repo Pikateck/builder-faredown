@@ -42,7 +42,7 @@ import {
   EyeOff,
   Globe,
   Users,
-  Passport,
+  FileText,
   Heart,
   Star,
   CheckCircle,
