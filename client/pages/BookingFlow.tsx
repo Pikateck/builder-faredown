@@ -681,13 +681,17 @@ const SeatMap = ({
                 <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
                   <span className="text-sm text-[#666]">{flightTitle}</span>
                   <div className="flex items-center space-x-3">
-                    {selectedTraveller && currentFlight === flightLeg && (
+                    {selectedTraveller && currentFlight === flightLeg ? (
                       <span className="text-sm text-[#666]">
-                        Select a seat for{" "}
+                        Click any available seat to select for{" "}
                         {
                           travellers.find((t) => t.id === selectedTraveller)
                             ?.firstName
                         }
+                      </span>
+                    ) : (
+                      <span className="text-sm text-green-600 font-medium">
+                        ✓ Seats automatically saved when selected
                       </span>
                     )}
                     <Button
@@ -696,9 +700,10 @@ const SeatMap = ({
                         setSelectedTraveller(null);
                         setExpandedFlight(null);
                       }}
-                      className="bg-[#003580] hover:bg-[#009fe3] text-white font-semibold"
+                      variant="outline"
+                      className="border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white"
                     >
-                      Confirm Selection
+                      Done
                     </Button>
                   </div>
                 </div>
