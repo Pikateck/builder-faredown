@@ -1,8 +1,8 @@
 import React from "react";
 import { Layout } from "@/components/layout/Layout";
 import { UnifiedLandingPage } from "@/components/UnifiedLandingPage";
+import { SightseeingSearchForm } from "@/components/SightseeingSearchForm";
 import { MobileNativeSearchForm } from "@/components/mobile/MobileNativeSearchForm";
-import SearchBar from "@/components/SearchBar";
 
 export default function Sightseeing() {
   return (
@@ -35,7 +35,7 @@ export default function Sightseeing() {
               {/* Search Panel Section - Same design as flights */}
               <div className="bg-white border-b border-gray-200 shadow-sm">
                 <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
-                  <SearchBar module="sightseeing" />
+                  <SightseeingSearchForm />
                 </div>
               </div>
             </div>
