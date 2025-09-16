@@ -786,7 +786,7 @@ function TravelersTab({ travelers, onEdit, onDelete, onAddNew, onAddPassport, co
                       size="sm"
                       onClick={() => onAddPassport(traveler)}
                     >
-                      <Passport className="w-4 h-4 mr-1" />
+                      <FileText className="w-4 h-4 mr-1" />
                       Passport
                     </Button>
                     <Button
