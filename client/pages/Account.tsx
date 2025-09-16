@@ -436,13 +436,15 @@ export default function Account() {
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
-                        {booking.type === "flight" ? (
-                          <Plane className="w-6 h-6 text-[#0071c2]" />
-                        ) : (
-                          <Hotel className="w-6 h-6 text-[#0071c2]" />
-                        )}
+                        <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
+                          {booking.type === "flight" ? (
+                            <Plane className="w-6 h-6 text-[#003580]" />
+                          ) : (
+                            <Hotel className="w-6 h-6 text-[#003580]" />
+                          )}
+                        </div>
                         <div>
-                          <h3 className="font-semibold text-[#003580]">
+                          <h3 className="font-semibold text-[#1a1a1a]">
                             {booking.type === "flight" ? "Flight Booking" : "Hotel Booking"}
                           </h3>
                           <p className="text-sm text-[#7a7a7a]">
