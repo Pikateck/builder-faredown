@@ -269,6 +269,7 @@ function App() {
                         element={<AdminDashboard />}
                       />
                       <Route path="/admin/users" element={<UserManagement />} />
+                      <Route path="/admin/profiles" element={<ProfileManagement />} />
                       <Route
                         path="/admin/bargain"
                         element={<BargainEngine />}
