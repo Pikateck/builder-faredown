@@ -343,6 +343,7 @@ function App() {
           </DateProvider>
         </CurrencyProvider>
       </AuthProvider>
+      <ApiDiagnostic />
     </div>
   );
 }
