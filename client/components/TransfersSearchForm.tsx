@@ -75,6 +75,74 @@ export function TransfersSearchForm() {
   });
   const [isPassengerPopoverOpen, setIsPassengerPopoverOpen] = useState(false);
 
+  // Initialize form with URL params or sessionStorage data
+  useEffect(() => {
+    const location = window.location;
+    const urlParams = qp.parse(location.search);
+    const lastSearch = getLastSearch();
+
+    // Use URL params if available, otherwise fallback to sessionStorage
+    const sourceData = Object.keys(urlParams).length > 0 ? urlParams : lastSearch;
+
+    if (sourceData) {
+      // Set pickup and dropoff locations
+      if (sourceData.pickup || sourceData.fromLat) {
+        setPickupLocation(sourceData.pickup || `${sourceData.fromLat},${sourceData.fromLng}`);
+        setPickupInputValue(sourceData.pickup || `${sourceData.fromLat},${sourceData.fromLng}`);
+      }
+
+      if (sourceData.dropoff || sourceData.toLat) {
+        setDropoffLocation(sourceData.dropoff || `${sourceData.toLat},${sourceData.toLng}`);
+        setDropoffInputValue(sourceData.dropoff || `${sourceData.toLat},${sourceData.toLng}`);
+      }
+
+      // Set pickup date and time
+      if (sourceData.pickupDate || sourceData.date) {
+        const pickupDateStr = sourceData.pickupDate || sourceData.date;
+        const pickupDateFromSource = new Date(pickupDateStr);
+        if (!isNaN(pickupDateFromSource.getTime())) {
+          setPickupDate(pickupDateFromSource);
+        }
+      }
+
+      if (sourceData.pickupTime) {
+        setPickupTime(sourceData.pickupTime);
+      }
+
+      // Set return date and time
+      if (sourceData.returnDate) {
+        const returnDateFromSource = new Date(sourceData.returnDate);
+        if (!isNaN(returnDateFromSource.getTime())) {
+          setReturnDate(returnDateFromSource);
+        }
+      }
+
+      if (sourceData.returnTime) {
+        setReturnTime(sourceData.returnTime);
+      }
+
+      // Set passenger counts
+      const adults = parseInt(sourceData.adults) || 2;
+      const children = parseInt(sourceData.children) || 0;
+      const infants = parseInt(sourceData.infants) || 0;
+
+      setPassengers({ adults, children, infants });
+
+      // Set service and trip types
+      if (sourceData.serviceType) {
+        setServiceType(sourceData.serviceType);
+      }
+
+      if (sourceData.tripType) {
+        setTripType(sourceData.tripType);
+      }
+
+      if (sourceData.driverAge) {
+        setDriverAge(sourceData.driverAge);
+      }
+    }
+  }, []);
+
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = () => {
