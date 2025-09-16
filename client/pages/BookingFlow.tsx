@@ -299,9 +299,13 @@ const SeatMap = ({
         </div>
 
         {/* Show seat selection summary for this flight */}
-        <div className="mb-3">
-          <p className="text-xs text-[#666] mb-2">
-            Click on passenger name to select them, then click any available seat - it will be automatically saved
+        <div className="mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+          <h5 className="text-sm font-semibold text-blue-900 mb-2 flex items-center">
+            👤 Select Traveller First
+          </h5>
+          <p className="text-xs text-blue-700">
+            Step 1: Click on passenger name below to select them<br/>
+            Step 2: Click any available seat on the map - it will be automatically saved
           </p>
         </div>
         <div className="space-y-2">
