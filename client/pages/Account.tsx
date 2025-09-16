@@ -244,7 +244,7 @@ export default function Account() {
                   <User className="w-8 h-8 text-blue-600" />
                 </div>
                 <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
+                  <h1 className="text-2xl font-bold text-[#003580]">
                     Hi, {userName}
                   </h1>
                   <div className="flex items-center space-x-2">
@@ -555,7 +555,7 @@ export default function Account() {
       <div className="space-y-6">
         {/* Header with search */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          <h2 className="text-2xl font-bold text-gray-900">My Bookings</h2>
+          <h2 className="text-2xl font-bold text-[#003580]">My Bookings</h2>
           <div className="flex items-center gap-4">
             <div className="relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
@@ -647,7 +647,7 @@ export default function Account() {
                                   <>
                                     <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
                                       <MapPin className="w-4 h-4" />
-                                      <span>BOM ⇄ DXB</span>
+                                      <span>BOM ��� DXB</span>
                                     </div>
                                     <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
                                       <Calendar className="w-4 h-4" />
@@ -678,13 +678,13 @@ export default function Account() {
 
                             {/* Passenger Details */}
                             <div>
-                              <h4 className="font-semibold text-gray-900 mb-2">
+                              <h4 className="font-semibold text-[#003580] mb-2">
                                 {module.id === "hotels" ? "Guest Details" : "Passengers"}
                               </h4>
                               <div className="space-y-2">
                                 {booking.bookingDetails?.passengers?.map((passenger, pIndex) => (
                                   <div key={pIndex} className="text-sm">
-                                    <div className="font-medium text-gray-900">
+                                    <div className="font-medium text-[#003580]">
                                       {passenger.firstName} {passenger.lastName}
                                     </div>
                                     <div className="text-[#7a7a7a]">
@@ -695,7 +695,7 @@ export default function Account() {
                               </div>
 
                               <div className="mt-4">
-                                <h5 className="font-medium text-gray-900 mb-1">Contact</h5>
+                                <h5 className="font-medium text-[#003580] mb-1">Contact</h5>
                                 <div className="text-sm text-[#7a7a7a]">
                                   <div className="flex items-center">
                                     <Mail className="w-3 h-3 mr-1" />
@@ -712,18 +712,18 @@ export default function Account() {
 
                             {/* Booking Summary */}
                             <div>
-                              <h4 className="font-semibold text-gray-900 mb-2">Booking Summary</h4>
+                              <h4 className="font-semibold text-[#003580] mb-2">Booking Summary</h4>
                               <div className="space-y-2 text-sm">
                                 <div className="flex justify-between">
                                   <span className="text-[#7a7a7a]">Total Paid</span>
-                                  <span className="font-semibold text-gray-900">
+                                  <span className="font-semibold text-[#003580]">
                                     {booking.bookingDetails?.currency?.symbol || "₹"}
                                     {booking.bookingDetails?.totalAmount?.toLocaleString() || "0"}
                                   </span>
                                 </div>
                                 <div className="flex justify-between">
                                   <span className="text-[#7a7a7a]">Payment ID</span>
-                                  <span className="text-gray-900 font-mono text-xs">
+                                  <span className="text-[#003580] font-mono text-xs">
                                     {booking.paymentId?.slice(0, 12) || "N/A"}...
                                   </span>
                                 </div>
@@ -774,7 +774,7 @@ export default function Account() {
                       <ChevronRight className="w-4 h-4" />
                     </>
                   )}
-                  <span className="text-gray-900 font-medium">{breadcrumb.title}</span>
+                  <span className="text-[#003580] font-medium">{breadcrumb.title}</span>
                 </nav>
               </div>
             </div>
