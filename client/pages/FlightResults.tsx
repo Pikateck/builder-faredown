@@ -1,8 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
-import SearchBar from "@/components/SearchBar";
-import { useQuerySync } from "@/hooks/useQuerySync";
-import { qp, getLastSearch } from "@/lib/searchParams";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
 import { useBooking } from "@/contexts/BookingContext";
@@ -1661,13 +1658,6 @@ export default function FlightResults() {
             )}
           </div>
 
-          {/* Search Bar Section - Persistent Search Interface */}
-          <div className="bg-white border-b border-gray-200 shadow-sm sticky top-16 md:top-0 z-40">
-            <div className="max-w-7xl mx-auto px-4 py-3">
-              <SearchBar module="flights" />
-            </div>
-          </div>
-
           {/* Mobile Filter & Sort Bar */}
           <div className="bg-white border-b border-gray-200 px-4 py-3">
             <div className="flex items-center space-x-3">
@@ -1776,7 +1766,7 @@ export default function FlightResults() {
                       { code: "it", name: "Italiano", flag: "🇮🇹" },
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
-                      { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
+                      { code: "hi", name: "हि���्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰🇷" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
