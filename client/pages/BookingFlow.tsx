@@ -1165,6 +1165,41 @@ export default function BookingFlow() {
     }
   }, [travellers]);
 
+  // Load saved travelers from profile system
+  useEffect(() => {
+    const loadSavedTravelers = async () => {
+      setLoadingTravelers(true);
+      try {
+        const travelers = await profileAPI.fetchTravelers();
+        setSavedTravelers(travelers);
+      } catch (error) {
+        console.error("Failed to load saved travelers:", error);
+      } finally {
+        setLoadingTravelers(false);
+      }
+    };
+
+    loadSavedTravelers();
+  }, []);
+
+  // Function to populate traveler data from saved profile
+  const populateFromSavedTraveler = (travelerId, savedTraveler) => {
+    setTravellers(prev => prev.map(traveller =>
+      traveller.id === travelerId
+        ? {
+            ...traveller,
+            firstName: savedTraveler.first_name,
+            lastName: savedTraveler.last_name,
+            title: savedTraveler.gender === 'male' ? 'Mr' : savedTraveler.gender === 'female' ? 'Ms' : 'Mx',
+            gender: savedTraveler.gender === 'male' ? 'Male' : savedTraveler.gender === 'female' ? 'Female' : 'Other',
+            nationality: savedTraveler.nationality_iso2 || 'IN',
+            dateOfBirth: savedTraveler.dob || '',
+            profileData: savedTraveler // Store reference to saved profile
+          }
+        : traveller
+    ));
+  };
+
   // Utility functions for seat pricing
   const getTravellerSeat = (travellerId, flightLeg) => {
     const seatId = Object.keys(seatSelections[flightLeg] || {}).find(
