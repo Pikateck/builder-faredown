@@ -88,35 +88,61 @@ export function HotelSearchForm({
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
 
-  // Initialize form with data from SearchContext (for results page)
+  // Initialize form with data from URL params, SearchContext, or sessionStorage
   useEffect(() => {
+    const location = window.location;
+    const urlParams = qp.parse(location.search);
+    const lastSearch = getLastSearch();
     const displayData = getDisplayData();
-    if (displayData.destination && displayData.destination !== "Dubai") {
-      setDestination(displayData.destination);
-      setDestinationCode("");
-    }
-    if (searchParams.checkIn) {
-      const checkInDateFromContext = new Date(searchParams.checkIn);
-      if (!isNaN(checkInDateFromContext.getTime())) {
-        setCheckInDate(checkInDateFromContext);
+
+    // Priority: URL params > SearchContext > sessionStorage > defaults
+    const sourceData = Object.keys(urlParams).length > 0 ? urlParams :
+                      (displayData.destination ? displayData : lastSearch);
+
+    if (sourceData) {
+      // Set destination
+      if (sourceData.destination || sourceData.city) {
+        const dest = sourceData.destination || sourceData.city;
+        if (dest && dest !== "Dubai") {
+          setDestination(dest);
+          setDestinationCode("");
+        }
       }
-    }
-    if (searchParams.checkOut) {
-      const checkOutDateFromContext = new Date(searchParams.checkOut);
-      if (!isNaN(checkOutDateFromContext.getTime())) {
-        setCheckOutDate(checkOutDateFromContext);
+
+      // Set check-in date
+      if (sourceData.checkIn || sourceData.checkin) {
+        const checkInDateStr = sourceData.checkIn || sourceData.checkin;
+        const checkInDateFromSource = new Date(checkInDateStr);
+        if (!isNaN(checkInDateFromSource.getTime())) {
+          setCheckInDate(checkInDateFromSource);
+        }
       }
-    }
-    if (displayData.adults || displayData.children || displayData.rooms) {
-      setGuests((prev) => ({
-        ...prev,
-        adults: displayData.adults || prev.adults,
-        children: displayData.children || prev.children,
-        childrenAges: Array(displayData.children || prev.children)
-          .fill(10)
-          .map((_, i) => prev.childrenAges[i] || 10),
-        rooms: displayData.rooms || prev.rooms,
-      }));
+
+      // Set check-out date
+      if (sourceData.checkOut || sourceData.checkout) {
+        const checkOutDateStr = sourceData.checkOut || sourceData.checkout;
+        const checkOutDateFromSource = new Date(checkOutDateStr);
+        if (!isNaN(checkOutDateFromSource.getTime())) {
+          setCheckOutDate(checkOutDateFromSource);
+        }
+      }
+
+      // Set guest configuration
+      const adults = parseInt(sourceData.adults) || displayData.adults;
+      const children = parseInt(sourceData.children) || displayData.children;
+      const rooms = parseInt(sourceData.rooms) || displayData.rooms;
+
+      if (adults || children || rooms) {
+        setGuests((prev) => ({
+          ...prev,
+          adults: adults || prev.adults,
+          children: children || prev.children,
+          childrenAges: Array(children || prev.children)
+            .fill(10)
+            .map((_, i) => prev.childrenAges[i] || 10),
+          rooms: rooms || prev.rooms,
+        }));
+      }
     }
   }, [searchParams, getDisplayData]);
 
