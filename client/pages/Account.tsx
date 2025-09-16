@@ -275,47 +275,49 @@ export default function Account() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
         {/* Quick Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
-          <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
+          <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-[#0071c2] border-2">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-blue-600 text-sm font-medium">Total Bookings</p>
-                  <p className="text-2xl font-bold text-blue-900">{bookings.length}</p>
+                  <p className="text-[#003580] text-sm font-medium">Total Bookings</p>
+                  <p className="text-2xl font-bold text-[#003580]">{bookings.length}</p>
                 </div>
-                <Plane className="w-8 h-8 text-blue-600" />
+                <Plane className="w-8 h-8 text-[#0071c2]" />
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
+          <Card className="bg-gradient-to-r from-yellow-50 to-yellow-100 border-[#febb02] border-2">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-green-600 text-sm font-medium">Countries Visited</p>
-                  <p className="text-2xl font-bold text-green-900">2</p>
+                  <p className="text-[#e6a602] text-sm font-medium">Countries Visited</p>
+                  <p className="text-2xl font-bold text-[#e6a602]">2</p>
                 </div>
-                <Globe className="w-8 h-8 text-green-600" />
+                <Globe className="w-8 h-8 text-[#febb02]" />
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-purple-200">
+          <Card className="bg-gradient-to-r from-amber-50 to-amber-100 border-amber-400 border-2">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-purple-600 text-sm font-medium">Rewards Points</p>
-                  <p className="text-2xl font-bold text-purple-900">1,250</p>
+                  <p className="text-amber-600 text-sm font-medium">FaredownClub Points</p>
+                  <p className="text-2xl font-bold text-amber-700">1,250</p>
                 </div>
-                <Award className="w-8 h-8 text-purple-600" />
+                <Award className="w-8 h-8 text-amber-500" />
               </div>
             </CardContent>
           </Card>
-          <Card className="bg-gradient-to-r from-orange-50 to-orange-100 border-orange-200">
+          <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-purple-400 border-2">
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-orange-600 text-sm font-medium">Member Since</p>
-                  <p className="text-2xl font-bold text-orange-900">Dec 2024</p>
+                  <p className="text-purple-600 text-sm font-medium">Current Tier</p>
+                  <p className="text-lg font-bold text-purple-700">🟡 Gold</p>
                 </div>
-                <Calendar className="w-8 h-8 text-orange-600" />
+                <div className="w-12 h-12 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center">
+                  <span className="text-white font-bold text-lg">G</span>
+                </div>
               </div>
             </CardContent>
           </Card>
