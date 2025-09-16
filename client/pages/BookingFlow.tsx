@@ -196,6 +196,11 @@ const SeatMap = ({
       return newSelectedSeats;
     });
 
+    // Show brief success feedback
+    const travellerName = travellers.find((t) => t.id === travellerToAssign)?.firstName;
+    setRecentlySelected({ seat: seat.id, traveller: travellerName, flight: flightLeg });
+    setTimeout(() => setRecentlySelected(null), 2000);
+
     // Auto-advance to next traveller if available
     const nextTraveller = travellers.find(
       (t) => t.id !== travellerToAssign && !getTravellerSeat(t.id, flightLeg),
