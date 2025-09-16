@@ -194,6 +194,7 @@ app.get("/", (req, res) => {
       reports: "/api/reports",
       suppliers: "/api/suppliers",
       vouchers: "/api/vouchers",
+      profile: "/api/profile",
       testHotelbeds: "/api/test-hotelbeds",
     },
     documentation: "/api/docs",
