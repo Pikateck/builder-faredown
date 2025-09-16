@@ -270,6 +270,13 @@ app.use(
   auditLogger,
   adminReportsRoutes,
 );
+app.use(
+  "/api/admin/profiles",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminProfilesRoutes,
+);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
