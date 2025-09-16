@@ -338,20 +338,20 @@ export default function Account() {
                       <div className={cn(
                         "w-12 h-12 rounded-lg flex items-center justify-center",
                         section.color === "faredown-blue" && "bg-blue-50 border border-[#0071c2]",
-                        section.color === "green" && "bg-green-100",
-                        section.color === "purple" && "bg-purple-100",
-                        section.color === "orange" && "bg-orange-100",
-                        section.color === "indigo" && "bg-indigo-100",
-                        section.color === "gray" && "bg-gray-100"
+                        section.color === "faredown-secondary" && "bg-blue-50 border border-[#0071c2]",
+                        section.color === "faredown-yellow" && "bg-yellow-50 border border-[#febb02]",
+                        section.color === "faredown-accent" && "bg-amber-50 border border-amber-400",
+                        section.color === "faredown-neutral" && "bg-slate-50 border border-slate-300",
+                        section.color === "faredown-gray" && "bg-gray-50 border border-gray-300"
                       )}>
                         <IconComponent className={cn(
                           "w-6 h-6",
                           section.color === "faredown-blue" && "text-[#003580]",
-                          section.color === "green" && "text-green-600",
-                          section.color === "purple" && "text-purple-600",
-                          section.color === "orange" && "text-orange-600",
-                          section.color === "indigo" && "text-indigo-600",
-                          section.color === "gray" && "text-gray-600"
+                          section.color === "faredown-secondary" && "text-[#0071c2]",
+                          section.color === "faredown-yellow" && "text-[#e6a602]",
+                          section.color === "faredown-accent" && "text-amber-600",
+                          section.color === "faredown-neutral" && "text-slate-600",
+                          section.color === "faredown-gray" && "text-gray-600"
                         )} />
                       </div>
                       <ChevronRight className="w-5 h-5 text-gray-400 group-hover:text-blue-500 transition-colors" />
