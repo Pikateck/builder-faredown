@@ -195,7 +195,7 @@ router.get("/:id", requirePermission("manage_users"), async (req, res) => {
 });
 
 // PUT /api/admin/profiles/:id - Update profile (admin override)
-router.put("/:id", requirePermission("manage_users"), audit, async (req, res) => {
+router.put("/:id", requirePermission("manage_users"), auditLogger, async (req, res) => {
   let client;
   try {
     client = await pool.connect();
