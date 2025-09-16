@@ -252,7 +252,7 @@ router.put("/:id", requirePermission("manage_users"), auditLogger, async (req, r
 });
 
 // DELETE /api/admin/profiles/:id - Delete profile and all associated data
-router.delete("/:id", requirePermission("manage_users"), audit, async (req, res) => {
+router.delete("/:id", requirePermission("manage_users"), auditLogger, async (req, res) => {
   let client;
   try {
     client = await pool.connect();
