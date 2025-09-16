@@ -55,6 +55,7 @@ const sightseeingSearchRoutes = require("./routes/sightseeing-search");
 const adminAiRoutes = require("./routes/admin-ai");
 const aiBargainRoutes = require("./routes/ai-bargains");
 const transfersMarkupRoutes = require("./routes/admin-transfers-markup");
+const adminProfilesRoutes = require("./routes/admin-profiles");
 const pricingRoutes = require("./routes/pricing");
 const adminReportsRoutes = require("./routes/admin-reports");
 
