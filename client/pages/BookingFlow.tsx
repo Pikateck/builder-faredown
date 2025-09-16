@@ -422,6 +422,12 @@ const SeatMap = ({
       {/* Interactive Seat Map - Only show for expanded flight */}
       {isExpanded && (
         <div className="p-2 md:p-4">
+          {/* Mobile Instructions */}
+          <div className="lg:hidden mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <p className="text-sm text-blue-800 font-medium flex items-center">
+              📱 <span className="ml-2">Mobile Tip: Tap and scroll on the seat map below. Selected seats appear instantly!</span>
+            </p>
+          </div>
           <div className="flex flex-col lg:flex-row gap-4">
             {/* Filter Panel */}
             <div className="w-full lg:w-48">
