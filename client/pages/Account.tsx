@@ -282,7 +282,9 @@ export default function Account() {
                   <p className="text-[#7a7a7a] text-sm font-medium">Total Bookings</p>
                   <p className="text-2xl font-bold text-[#003580]">{bookings.length}</p>
                 </div>
-                <Plane className="w-8 h-8 text-[#0071c2]" />
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
+                  <Plane className="w-6 h-6 text-[#003580]" />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -293,7 +295,9 @@ export default function Account() {
                   <p className="text-[#7a7a7a] text-sm font-medium">Countries Visited</p>
                   <p className="text-2xl font-bold text-[#003580]">2</p>
                 </div>
-                <Globe className="w-8 h-8 text-[#0071c2]" />
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
+                  <Globe className="w-6 h-6 text-[#003580]" />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -304,7 +308,9 @@ export default function Account() {
                   <p className="text-[#7a7a7a] text-sm font-medium">FaredownClub Points</p>
                   <p className="text-2xl font-bold text-[#003580]">1,250</p>
                 </div>
-                <Award className="w-8 h-8 text-[#febb02]" />
+                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
+                  <Award className="w-6 h-6 text-[#003580]" />
+                </div>
               </div>
             </CardContent>
           </Card>
@@ -315,7 +321,7 @@ export default function Account() {
                   <p className="text-[#7a7a7a] text-sm font-medium">Current Tier</p>
                   <p className="text-lg font-bold text-[#003580]">👑 Gold</p>
                 </div>
-                <div className="w-12 h-12 bg-[#febb02] rounded-full flex items-center justify-center shadow-sm">
+                <div className="w-12 h-12 bg-[#febb02] rounded-lg flex items-center justify-center shadow-sm border border-[#e6a602]">
                   <span className="text-[#1a1a1a] font-bold text-lg">G</span>
                 </div>
               </div>
