@@ -766,5 +766,5 @@ export default function Account() {
   }
 
   // Otherwise show the main account landing
-  return <Layout>{renderAccountLanding()}</Layout>;
+  return <Layout showSearch={false}>{renderAccountLanding()}</Layout>;
 }
