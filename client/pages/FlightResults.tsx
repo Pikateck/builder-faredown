@@ -399,25 +399,26 @@ export default function FlightResults() {
       }
     }
 
-    // Load class selection from URL parameters
-    const classParam = searchParams.get("class");
+    // Load class selection from URL parameters or sessionStorage fallback
+    const classParam = searchParams.get("class") || lastSearch?.class;
     if (classParam) {
       const className =
         classParam.charAt(0).toUpperCase() + classParam.slice(1);
       setSelectedClass(className);
     }
 
-    // Load trip type from URL parameters (sync with DateContext)
+    // Load trip type from URL parameters or sessionStorage (sync with DateContext)
+    const tripSource = tripTypeParam || lastSearch?.tripType;
     if (
-      tripTypeParam &&
-      ["round-trip", "one-way", "multi-city"].includes(tripTypeParam)
+      tripSource &&
+      ["round-trip", "one-way", "multi-city"].includes(tripSource)
     ) {
-      setEditTripType(tripTypeParam as "round-trip" | "one-way" | "multi-city");
+      setEditTripType(tripSource as "round-trip" | "one-way" | "multi-city");
     }
 
-    // Load traveler counts from URL parameters
-    const adultsParam = searchParams.get("adults");
-    const childrenParam = searchParams.get("children");
+    // Load traveler counts from URL parameters or sessionStorage fallback
+    const adultsParam = searchParams.get("adults") || lastSearch?.adults;
+    const childrenParam = searchParams.get("children") || lastSearch?.children;
     if (adultsParam || childrenParam) {
       setTravelers({
         adults: adultsParam ? parseInt(adultsParam) : 1,
