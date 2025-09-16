@@ -467,10 +467,10 @@ const SeatMap = ({
                 </div>
               </div>
 
-              {selectedTraveller && currentFlight === flightLeg && (
+              {selectedTraveller && currentFlight === flightLeg ? (
                 <div className="mt-6 p-3 bg-[#f2f6fa] rounded-lg border border-[#003580]">
                   <p className="text-sm font-medium text-[#003580]">
-                    Select seat for:
+                    ✈️ Select seat for:
                   </p>
                   <p className="text-sm text-gray-900 font-semibold">
                     {
@@ -484,6 +484,15 @@ const SeatMap = ({
                   </p>
                   <p className="text-xs text-[#666] mt-1">
                     Click any available seat - it will be automatically saved and added to your summary
+                  </p>
+                </div>
+              ) : (
+                <div className="mt-6 p-3 bg-orange-50 rounded-lg border border-orange-200">
+                  <p className="text-sm font-medium text-orange-800">
+                    ⚠️ Select a passenger first
+                  </p>
+                  <p className="text-xs text-orange-700 mt-1">
+                    Choose a passenger from the list above, then select their seat from the map
                   </p>
                 </div>
               )}
