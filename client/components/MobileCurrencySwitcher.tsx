@@ -195,7 +195,7 @@ const CurrencyModal: React.FC<CurrencyModalProps> = ({
             onClick={onClose}
             className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
           >
-            <span className="text-gray-500 text-xl">��</span>
+            <span className="text-gray-500 text-xl">💱</span>
           </button>
         </div>
 
