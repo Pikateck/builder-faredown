@@ -96,6 +96,7 @@ const SeatMap = ({
   const [selectedTraveller, setSelectedTraveller] = useState(null);
   const [expandedFlight, setExpandedFlight] = useState(null);
   const [currentFlight, setCurrentFlight] = useState("Mumbai-Dubai");
+  const [recentlySelected, setRecentlySelected] = useState(null);
 
   // Generate seat layout for aircraft (Economy classes only)
   const generateSeatLayout = () => {
