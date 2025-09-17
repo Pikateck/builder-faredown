@@ -1671,12 +1671,12 @@ export default function BookingFlow() {
             airline: selectedFlight?.airline || "Airlines",
             flightNumber: selectedFlight?.flightNumber || "FL 507",
           },
-          ...(tripType === "round-trip" && returnDate
+          ...(exactTripType === "roundtrip" && exactReturnDate
             ? [
                 {
                   from: "Dubai",
                   to: "Mumbai",
-                  date: formatDisplayDate(returnDate, "EEE, MMM d"),
+                  date: formatExactDate(exactReturnDate).replace(/^\w+, /, "").replace(/, \d{4}$/, ""),
                   time: selectedFlight?.returnDepartureTime || "08:45",
                   duration: selectedFlight?.returnDuration || "3h 20m",
                   airline: selectedFlight?.airline || "Airlines",
@@ -1850,7 +1850,7 @@ export default function BookingFlow() {
                           name: "US Dollar",
                           flag: "🇺🇸",
                         },
-                        { code: "EUR", symbol: "€", name: "Euro", flag: "🇪🇺" },
+                        { code: "EUR", symbol: "��", name: "Euro", flag: "🇪🇺" },
                         {
                           code: "GBP",
                           symbol: "£",
@@ -2189,7 +2189,7 @@ export default function BookingFlow() {
                                 1 carry-on bag
                               </p>
                               <p className="text-xs text-[#666]">
-                                22 x 55 x 40 cm ����� 7 kg
+                                22 x 55 x 40 cm ��� 7 kg
                               </p>
                             </div>
                           </div>
@@ -3435,7 +3435,7 @@ export default function BookingFlow() {
                           only
                         </p>
                         <p className="text-xs text-blue-200 mt-3">
-                          ✓ All taxes and fees included • No hidden charges
+                          �� All taxes and fees included • No hidden charges
                         </p>
                       </div>
                     </div>
