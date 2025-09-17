@@ -692,7 +692,7 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
 }
 
 // Personal Details Tab Component
-function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, saving, countries }) {
+function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, saving }) {
   return (
     <Card>
       <CardHeader>
