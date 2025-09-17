@@ -859,18 +859,14 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
             </div>
             <div>
               <Label htmlFor="country">Country</Label>
-              <Select value={personalForm.country_iso2 || ""} onValueChange={(value) => setPersonalForm({...personalForm, country_iso2: value})}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select country" />
-                </SelectTrigger>
-                <SelectContent>
-                  {countries.map((country) => (
-                    <SelectItem key={country.code} value={country.code}>
-                      {country.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <CountrySelect
+                value={personalForm.country_iso2 || ""}
+                onValueChange={(value) => setPersonalForm({...personalForm, country_iso2: value})}
+                placeholder="Select country"
+                prioritizePopular={true}
+                showFlags={true}
+                className="w-full"
+              />
             </div>
           </div>
         </div>
