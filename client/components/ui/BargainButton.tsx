@@ -1,95 +1,85 @@
 import React, { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import {
-  addMobileTouchOptimizations,
-  hapticFeedback,
-  isMobileDevice,
-} from "@/lib/mobileUtils";
 import { TrendingDown } from "lucide-react";
-import { ConversationalBargainModal } from "@/components/ConversationalBargainModal";
+import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 
-interface BargainButtonProps {
-  children: React.ReactNode;
+export interface BargainButtonProps {
+  children?: React.ReactNode;
   onClick?: (e?: React.MouseEvent) => void;
   disabled?: boolean;
   loading?: boolean;
   className?: string;
   size?: "sm" | "md" | "lg";
-  // Bargain props for ConversationalBargainModal
+
+  /** Use the conversational bargain modal instead of plain onClick */
+  useBargainModal?: boolean;
   module?: "flights" | "hotels" | "sightseeing" | "transfers";
+  userName?: string;
+
+  /** Context for the modal */
   itemName?: string;
   basePrice?: number;
-  supplierNetRate?: number; // Alternative prop name for price
   productRef?: string;
   itemDetails?: {
-    features?: string[];
-    location?: string;
-    provider?: string;
     id?: string;
     name?: string;
+    provider?: string;
+    location?: string;
     checkIn?: string;
     checkOut?: string;
     rating?: number;
   };
-  onBargainSuccess?: (finalPrice: number, orderRef: string) => void;
-  useBargainModal?: boolean;
-  useEnhancedModal?: boolean; // Alternative prop name for modal
-  userName?: string;
-  isMobile?: boolean;
-}
 
-export function BargainButton({
-  children,
-  onClick,
-  disabled = false,
-  loading = false,
-  className = "",
-  size = "md",
-  // Bargain props
-  module = "hotels",
-  itemName = "",
-  basePrice = 0,
-  supplierNetRate,
-  productRef = "",
-  itemDetails = {},
-  onBargainSuccess,
-  useBargainModal = false,
-  useEnhancedModal = false,
-  userName = "Guest",
-  isMobile = false,
-  // Extract only valid DOM props
-  id,
-  "data-testid": dataTestId,
-  "aria-label": ariaLabel,
-  ...domProps
-}: BargainButtonProps & {
+  onBargainSuccess?: (finalPrice: number, orderRef: string) => void;
+
+  /** Forwarded DOM props */
   id?: string;
   "data-testid"?: string;
   "aria-label"?: string;
   [key: string]: any;
-}) {
+}
+
+const buttonClasses = cn(
+  // base / a11y
+  "inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-colors",
+  "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2",
+  "disabled:pointer-events-none disabled:opacity-50",
+  // yellow theme
+  "bg-[#FFC107] hover:bg-[#FFB300] text-[#1a1f2c]",
+  // size
+  "h-10 px-4"
+);
+
+// Make BargainButton a **named** export…
+export function BargainButton({
+  children = "Bargain Now",
+  onClick,
+  disabled = false,
+  loading = false,
+  className,
+  size = "md",
+  useBargainModal = false,
+  module = "flights",
+  userName = "Guest",
+  itemName = "",
+  basePrice = 0,
+  productRef = "",
+  itemDetails = {},
+  onBargainSuccess,
+  id,
+  "data-testid": dataTestId,
+  "aria-label": ariaLabel,
+  ...domProps
+}: BargainButtonProps) {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
-
-  // Use either basePrice or supplierNetRate
-  const effectivePrice = supplierNetRate || basePrice;
-
-  // Use either useBargainModal or useEnhancedModal
-  const shouldUseBargainModal = useBargainModal || useEnhancedModal;
 
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
 
-    e.preventDefault();
-    e.stopPropagation();
-
-    // Haptic feedback for mobile devices
-    if (isMobileDevice()) {
-      hapticFeedback("light");
-    }
-
-    // Use bargain modal if enabled and required props are provided
-    if (shouldUseBargainModal && itemName && effectivePrice > 0) {
+    if (useBargainModal && basePrice > 0) {
+      e.preventDefault();
+      e.stopPropagation();
       setIsBargainModalOpen(true);
     } else {
       onClick?.(e);
@@ -103,47 +93,27 @@ export function BargainButton({
 
   const handleBargainHold = (orderRef: string) => {
     setIsBargainModalOpen(false);
-    // Handle hold logic if needed
-    console.log("Bargain held:", orderRef);
   };
-
-  // Use Button's built-in yellow variant to ensure proper styling
-  const additionalClasses = isMobile
-    ? "flex-1 touch-manipulation active:scale-95"
-    : "touch-manipulation active:scale-95";
 
   return (
     <>
       <Button
         onClick={handleClick}
         disabled={disabled || loading}
-        variant="yellow"
-        size={size === "md" ? "default" : size}
-        className={cn(additionalClasses, className)}
-        onTouchStart={(e) => {
-          e.stopPropagation();
-        }}
+        className={cn(buttonClasses, className)}
         id={id}
         data-testid={dataTestId}
-        aria-label={
-          ariaLabel ||
-          (typeof children === "string" ? children : "Bargain button")
-        }
+        aria-label={ariaLabel || (typeof children === "string" ? children : "Bargain button")}
+        {...domProps}
       >
-        {/* Loading Spinner */}
+        {!loading && <TrendingDown className="w-4 h-4" />}
         {loading && (
           <div className="animate-spin w-4 h-4 border-2 border-current border-t-transparent rounded-full mr-2" />
         )}
-
-        {/* Icon - Always TrendingDown as per backup */}
-        {!loading && <TrendingDown className="w-4 h-4" />}
-
-        {/* Button Text */}
         {children}
       </Button>
 
-      {/* Conversational Bargain Modal */}
-      {shouldUseBargainModal && (
+      {useBargainModal && (
         <ConversationalBargainModal
           isOpen={isBargainModalOpen}
           onClose={() => setIsBargainModalOpen(false)}
@@ -151,7 +121,7 @@ export function BargainButton({
           onHold={handleBargainHold}
           module={module}
           userName={userName}
-          basePrice={effectivePrice}
+          basePrice={basePrice}
           productRef={productRef || itemName || "product"}
           flight={
             module === "flights"
@@ -163,7 +133,7 @@ export function BargainButton({
                   to: "Destination",
                   departureTime: "10:00",
                   arrivalTime: "12:00",
-                  price: effectivePrice,
+                  price: basePrice,
                   duration: "2h",
                 }
               : undefined
@@ -176,7 +146,7 @@ export function BargainButton({
                   location: itemDetails.location || "City",
                   checkIn: itemDetails.checkIn || "2025-01-01",
                   checkOut: itemDetails.checkOut || "2025-01-02",
-                  price: effectivePrice,
+                  price: basePrice,
                   rating: itemDetails.rating || 4,
                 }
               : undefined
@@ -187,20 +157,18 @@ export function BargainButton({
   );
 }
 
-// Convenience exports for different sizes
+// …and keep the size variants as named exports too.
 export function BargainButtonSmall(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="sm" {...props} />;
 }
-
 export function BargainButtonLarge(props: Omit<BargainButtonProps, "size">) {
   return <BargainButton size="lg" {...props} />;
 }
-
-// Mobile variant with explicit mobile styling
-export function BargainButtonMobile(
-  props: Omit<BargainButtonProps, "isMobile">,
-) {
-  return <BargainButton isMobile={true} {...props} />;
+export function BargainButtonMobile(props: Omit<BargainButtonProps, "size">) {
+  return <BargainButton size="md" {...props} />;
 }
 
+// Also export it as the default so both styles work:
+//   import BargainButton from "...";
+//   import { BargainButton } from "..."
 export default BargainButton;

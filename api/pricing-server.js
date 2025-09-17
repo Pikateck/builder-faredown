@@ -54,12 +54,34 @@ const priceEchoMiddleware = priceEcho({
 // Apply Price Echo middleware before pricing routes
 app.use(priceEchoMiddleware);
 
-// Health check endpoint
-app.get("/health", async (req, res) => {
+// Health check endpoint for Render
+app.get("/api/health", async (req, res) => {
   try {
     // Check database health
     const result = await pool.query("SELECT 1");
 
+    res.json({
+      status: "healthy",
+      timestamp: new Date().toISOString(),
+      service: "faredown-pricing",
+      database: "connected",
+      version: "1.0.0",
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "unhealthy",
+      timestamp: new Date().toISOString(),
+      service: "faredown-pricing",
+      database: "offline",
+      error: error.message,
+    });
+  }
+});
+
+// Legacy health endpoint (keeping for backward compatibility)
+app.get("/health", async (req, res) => {
+  try {
+    const result = await pool.query("SELECT 1");
     res.json({
       status: "healthy",
       timestamp: new Date().toISOString(),
@@ -127,6 +149,7 @@ app.use("*", (req, res) => {
       "/api/pricing/test-quote",
       "/api/pricing/markup-rules",
       "/api/pricing/promo-codes",
+      "/api/health",
       "/health",
     ],
   });
@@ -153,17 +176,18 @@ async function startServer() {
       console.log(`   - ${row.table_name}`);
     });
 
-    // Start server
-    const server = app.listen(PORT, () => {
+    // Start server - MUST bind to 0.0.0.0 for Render
+    const server = app.listen(PORT, "0.0.0.0", () => {
       console.log("\n🚀 Faredown Pricing API Server Started");
       console.log("================================");
-      console.log(`📍 Server URL: http://localhost:${PORT}`);
-      console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
+      console.log(`📍 Server URL: http://0.0.0.0:${PORT}`);
+      console.log(`🏥 Health Check: http://0.0.0.0:${PORT}/api/health`);
       console.log(
-        `🧪 Test Endpoint: http://localhost:${PORT}/api/pricing/test-quote`,
+        `🧪 Test Endpoint: http://0.0.0.0:${PORT}/api/pricing/test-quote`,
       );
       console.log(`��� Environment: ${process.env.NODE_ENV || "development"}`);
       console.log(`🗄️  Database: Connected to PostgreSQL`);
+      console.log(`🔗 Render Compatible: ✅`);
       console.log("================================\n");
     });
 

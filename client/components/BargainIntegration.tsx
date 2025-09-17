@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import BargainButton from "@/components/ui/BargainButton";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
+import { useAuth } from "@/contexts/AuthContext";
 import { TrendingDown } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { authService } from "@/services/authService";
@@ -102,9 +103,7 @@ export function BargainIntegration({
       : storedUser?.firstName || "Guest";
 
   const effectiveUserName =
-    userName && userName !== "Guest"
-      ? userName
-      : computedFirstName;
+    userName && userName !== "Guest" ? userName : computedFirstName;
 
   // Safety checks for required props
   if (!basePrice || !productRef) {

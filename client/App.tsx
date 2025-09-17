@@ -75,6 +75,7 @@ import BargainErrorTest from "./components/BargainErrorTest";
 import MobileBargainTestSuite from "./components/MobileBargainTestSuite";
 import LogoDesignOptions from "./components/LogoDesignOptions";
 import FaredownColorPalette from "./components/FaredownColorPalette";
+import CmsPage from "./pages/CmsPage";
 
 // Admin Pages
 import AdminDashboard from "./pages/admin/AdminDashboard";
@@ -276,6 +277,7 @@ function App() {
                       />
 
                       {/* Admin CMS Routes */}
+                      <Route path="/cms/*" element={<CmsPage />} />
                       <Route path="/admin/login" element={<AdminLogin />} />
                       <Route path="/admin" element={<AdminDashboard />} />
                       <Route

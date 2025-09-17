@@ -3,12 +3,37 @@ import express from "express";
 import cors from "cors";
 import path from "path";
 
+// Start API server on port 3001 so our /api proxy has a local target
+try {
+  await import("./api/server.js");
+  console.log("✅ API server bootstrapped alongside dev server");
+} catch (e) {
+  console.warn("⚠️ Failed to bootstrap API server:", e.message);
+}
+
 // Create Express app
 const app = express();
 
 // Enable CORS
 app.use(cors());
 app.use(express.json());
+
+// 🎯 BUILDER.IO IFRAME SUPPORT - Add headers for Builder.io preview
+app.use((req, res, next) => {
+  // Remove X-Frame-Options to allow embedding
+  res.removeHeader("X-Frame-Options");
+
+  // Add CSP to allow Builder.io iframes
+  res.setHeader(
+    "Content-Security-Policy",
+    "frame-ancestors 'self' https://builder.io https://*.builder.io",
+  );
+
+  // Configure cookies for cross-site context
+  res.setHeader("Set-Cookie", "SameSite=None; Secure");
+
+  next();
+});
 
 // 1) API proxy to external API server
 app.use("/api", async (req, res) => {

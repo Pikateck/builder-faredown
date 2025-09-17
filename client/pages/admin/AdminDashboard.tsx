@@ -272,7 +272,7 @@ export default function AdminDashboard() {
 
   const checkAuth = async () => {
     try {
-      const currentUser = adminAuthService.getCurrentUser();
+      const currentUser = await adminAuthService.getCurrentUser();
       if (!currentUser) {
         navigate("/admin/login");
         return;
@@ -698,7 +698,7 @@ export default function AdminDashboard() {
                 <p className="text-sm font-medium text-gray-900">
                   {user?.username}
                 </p>
-                <p className="text-xs text-gray-600">{user?.role}</p>
+                <p className="text-xs text-gray-600">{(user as any)?.role?.name ?? (user as any)?.role ?? ""}</p>
               </div>
             </div>
           </div>

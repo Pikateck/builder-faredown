@@ -25,6 +25,7 @@ const flightRoutes = require("./routes/flights");
 const hotelRoutes = require("./routes/hotels");
 const hotelsLiveRoutes = require("./routes/hotels-live");
 const bargainRoutes = require("./routes/bargain");
+const bargainV1Routes = require("./routes/bargain-final");
 const currencyRoutes = require("./routes/currency");
 const promoRoutes = require("./routes/promo");
 const analyticsRoutes = require("./routes/analytics");
@@ -57,6 +58,7 @@ const aiBargainRoutes = require("./routes/ai-bargains");
 const transfersMarkupRoutes = require("./routes/admin-transfers-markup");
 const adminProfilesRoutes = require("./routes/admin-profiles");
 const pricingRoutes = require("./routes/pricing");
+const { router: bargainHoldsRouter, initializeBargainHolds } = require("./routes/bargain-holds");
 const adminReportsRoutes = require("./routes/admin-reports");
 
 // Import middleware
@@ -71,7 +73,7 @@ const db = require("./database/connection");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Security middleware
+// Security middleware - Modified for Builder.io iframe support
 app.use(
   helmet({
     contentSecurityPolicy: {
@@ -82,8 +84,16 @@ app.use(
         imgSrc: ["'self'", "data:", "https:", "http:"],
         scriptSrc: ["'self'"],
         connectSrc: ["'self'", "https://api.exchangerate-api.com"],
+        // 🎯 BUILDER.IO IFRAME SUPPORT
+        frameAncestors: [
+          "'self'",
+          "https://builder.io",
+          "https://*.builder.io",
+        ],
       },
     },
+    // Remove X-Frame-Options header to allow Builder.io embedding
+    frameguard: false,
   }),
 );
 
@@ -112,7 +122,7 @@ app.use(morgan("combined"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 
-// CORS configuration
+// CORS configuration - Updated for Builder.io iframe support
 const corsOptions = {
   origin: [
     "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev",
@@ -121,6 +131,10 @@ const corsOptions = {
     "http://localhost:8080",
     "https://faredown.com",
     "https://www.faredown.com",
+    // 🎯 BUILDER.IO IFRAME SUPPORT
+    "https://builder.io",
+    "https://*.builder.io",
+    /^https:\/\/.*\.builder\.io$/,
   ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
@@ -222,15 +236,31 @@ app.use("/api/flights", flightRoutes);
 app.use("/api/hotels", hotelRoutes);
 app.use("/api/hotels-live", hotelsLiveRoutes);
 app.use("/api/bargain", bargainRoutes);
+app.use("/api/bargain/v1", bargainV1Routes);
 app.use("/api/ai-bargains", aiBargainRoutes);
 app.use("/api/currency", currencyRoutes);
 app.use("/api/promo", promoRoutes);
 app.use("/api/feature-flags", featureFlagsRoutes);
-app.use("/api/analytics", authenticateToken, analyticsRoutes);
+app.use("/api/analytics", analyticsRoutes);
 app.use("/api/payments", authenticateToken, paymentRoutes);
 app.use("/api/cms", cmsRoutes);
 app.use("/api/test-live", testLiveRoutes);
 app.use("/api/test-hotelbeds", testHotelbedsRoutes);
+
+// 🎯 ADD PRICING ROUTES TO FIX builder-faredown-pricing
+try {
+  const createPricingRoutes = require("./routes/pricing");
+  if (typeof createPricingRoutes === "function") {
+    const pricingRoutes = createPricingRoutes(db.pool);
+    app.use("/api/pricing", pricingRoutes);
+    console.log(
+      "✅ Pricing routes mounted successfully - builder-faredown-pricing should now work",
+    );
+  }
+} catch (error) {
+  console.error("❌ Failed to mount pricing routes:", error.message);
+  console.log("💡 Make sure ./routes/pricing.js exists and exports a function");
+}
 app.use("/api/test-live-hotel", testLiveHotelRoutes);
 app.use("/api/sightseeing", sightseeingRoutes);
 app.use("/api/sightseeing-search", sightseeingSearchRoutes);
@@ -262,7 +292,7 @@ app.use(
   auditLogger,
   transfersMarkupRoutes,
 );
-app.use("/api/pricing", pricingRoutes);
+app.use("/api/bargain", bargainHoldsRouter);
 app.use(
   "/api/admin/reports",
   authenticateToken,
@@ -361,6 +391,13 @@ async function startServer() {
     console.log("🔌 Initializing database connection...");
     await db.initialize();
     await db.initializeSchema();
+    if (initializeBargainHolds && db.pool) {
+      try {
+        initializeBargainHolds(db.pool);
+      } catch (e) {
+        console.warn("⚠️ Failed to initialize Bargain Holds with DB pool:", e.message);
+      }
+    }
     console.log("✅ Database connected and schema ready");
 
     // Start server
@@ -379,7 +416,7 @@ async function startServer() {
     return server;
   } catch (error) {
     console.error("❌ Failed to start server:", error);
-    console.log("⚠️  Starting server without database (fallback mode)");
+    console.log("���️  Starting server without database (fallback mode)");
 
     // Start server without database
     const server = app.listen(PORT, () => {

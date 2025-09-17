@@ -8,6 +8,7 @@ const express = require("express");
 const { Client } = require("pg");
 const crypto = require("crypto");
 const { redisHotCache } = require("../services/redisHotCache");
+const PricingEngine = require("../services/pricing/PricingEngine");
 const router = express.Router();
 
 // Database connection pool
@@ -26,6 +27,14 @@ try {
   });
 } catch (error) {
   console.error("❌ Database pool initialization failed:", error);
+}
+
+// Initialize pricing engine for audit fields
+let pricingEngine = null;
+try {
+  pricingEngine = new PricingEngine(pgPool);
+} catch (e) {
+  console.warn("⚠️ PricingEngine initialization failed (audit disabled)", e);
 }
 
 // Performance metrics
@@ -459,7 +468,7 @@ router.post("/session/offer", async (req, res) => {
       timestamp: Date.now(),
     });
 
-    // Response
+    // Response with pricing audit (non-blocking)
     const response = {
       decision: decision,
       min_floor: sessionData.min_floor,
@@ -475,6 +484,53 @@ router.post("/session/offer", async (req, res) => {
     if (decision === "counter" && counterOffer) {
       response.counter_offer = counterOffer;
       response.accept_prob = acceptProb;
+    }
+
+    // Attach audit fields using PricingEngine when available
+    if (pricingEngine) {
+      try {
+        const module = (sessionData.canonical_key || "").startsWith("FL")
+          ? "air"
+          : (sessionData.canonical_key || "").startsWith("HT")
+            ? "hotel"
+            : (sessionData.canonical_key || "").startsWith("ST")
+              ? "sightseeing"
+              : (sessionData.canonical_key || "").startsWith("TR")
+                ? "transfer"
+                : "air";
+        const quote = await pricingEngine.quote({
+          module,
+          baseFare: sessionData.displayed_price_usd,
+          currency: "USD",
+          debug: true,
+          extras: { promoCode: sessionData.promo_code || undefined },
+        });
+        const markupRuleId = quote.breakdown?.steps?.find((s) => s.label === "markup")?.rule?.id || null;
+        const markupPct = quote.breakdown?.steps?.find((s) => s.label === "markup")?.rule?.markup_value || 0;
+        const markupAmount = quote.markup || 0;
+        const promo = quote.breakdown?.steps?.find((s) => s.label === "discount")?.promo || null;
+        const promoAmount = quote.discount || 0;
+        const candidatePrice = Math.max(0, quote.taxableAmount);
+        const offerPrice = decision === "accept" ? user_offer : counterOffer;
+
+        response.audit = {
+          net: sessionData.displayed_price_usd,
+          markup_rule_id: markupRuleId,
+          markup_pct: markupPct,
+          markup_amount: markupAmount,
+          promo_code: promo?.code || null,
+          promo_type: promo?.type || null,
+          promo_amount: promoAmount,
+          total_discount: Number((markupAmount - promoAmount).toFixed(2)),
+          candidate_price: candidatePrice,
+          round: (await pgPool.query("SELECT COUNT(*)::int as n FROM ai.bargain_events WHERE session_id=$1 AND event_type='offer'", [session_id])).rows[0].n + 1,
+          offer_price: offerPrice,
+          matched: decision === "accept",
+          expires_in: 30,
+        };
+      } catch (auditErr) {
+        console.warn("⚠️ Pricing audit generation failed", auditErr.message);
+      }
     }
 
     res.json(response);

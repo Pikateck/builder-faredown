@@ -428,33 +428,29 @@ export function Header() {
                           <span className="text-sm font-medium">Sign Out</span>
                         </button>
 
-                        {/* Admin Panel Access */}
-                        <div className="border-t border-gray-200 pt-4 mt-4">
+                        <div className="mt-2 space-y-2">
                           <button
-                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
                             onClick={() => {
-                              window.open("/admin/login", "_blank");
+                              handleNavigation("/admin/login");
                               setShowMobileMenu(false);
                             }}
+                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
                           >
                             <Shield className="w-4 h-4" />
-                            <span className="text-sm font-medium">
-                              Admin Panel
-                            </span>
+                            <span className="text-sm font-medium">Admin Panel</span>
                           </button>
                           <button
-                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
                             onClick={() => {
-                              window.open("/admin/api", "_blank");
+                              handleNavigation("/admin/api");
                               setShowMobileMenu(false);
                             }}
+                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
                           >
                             <Code className="w-4 h-4" />
-                            <span className="text-sm font-medium">
-                              Live API
-                            </span>
+                            <span className="text-sm font-medium">Live APIs</span>
                           </button>
                         </div>
+
                       </div>
                     </div>
                   ) : (
@@ -662,18 +658,17 @@ export function Header() {
                           <LogOut className="w-4 h-4 mr-2" />
                           Sign out
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => window.open("/admin/login", "_blank")}
-                          className="border-t mt-1 pt-2"
-                        >
-                          <Shield className="w-4 h-4 mr-2" />
-                          Admin Panel
+                        <DropdownMenuItem>
+                          <Link to="/admin/login" className="flex items-center">
+                            <Shield className="w-4 h-4 mr-2" />
+                            Admin Panel
+                          </Link>
                         </DropdownMenuItem>
-                        <DropdownMenuItem
-                          onClick={() => window.open("/admin/api", "_blank")}
-                        >
-                          <Code className="w-4 h-4 mr-2" />
-                          Live API
+                        <DropdownMenuItem>
+                          <Link to="/admin/api" className="flex items-center">
+                            <Code className="w-4 h-4 mr-2" />
+                            Live APIs
+                          </Link>
                         </DropdownMenuItem>
                       </DropdownMenuContent>
                     </DropdownMenu>

@@ -12,6 +12,23 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
+// 🎯 BUILDER.IO IFRAME SUPPORT - Add headers for Builder.io preview
+app.use((req, res, next) => {
+  // Remove X-Frame-Options to allow embedding
+  res.removeHeader("X-Frame-Options");
+
+  // Add CSP to allow Builder.io iframes
+  res.setHeader(
+    "Content-Security-Policy",
+    "frame-ancestors 'self' https://builder.io https://*.builder.io",
+  );
+
+  // Configure cookies for cross-site context
+  res.setHeader("Set-Cookie", "SameSite=None; Secure");
+
+  next();
+});
+
 // API proxy to external API server
 app.use("/api", async (req, res) => {
   if (req.path === "/api/health") {
