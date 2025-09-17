@@ -874,7 +874,7 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
 }
 
 // Travelers Tab Component
-function TravelersTab({ travelers, onEdit, onDelete, onAddNew, onAddPassport, countries }) {
+function TravelersTab({ travelers, onEdit, onDelete, onAddNew, onAddPassport }) {
   return (
     <Card>
       <CardHeader>
