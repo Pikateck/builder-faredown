@@ -401,6 +401,33 @@ export function HotelCard({
 
   // Handle view details action
   const handleViewDetails = () => {
+    // Create standardized search object for hotels following the user's requirements
+    const standardizedHotelSearchParams = {
+      module: "hotels" as const,
+      destination: searchParams.get("destination") || hotelLocation,
+      destinationCode: searchParams.get("destinationCode") || "DXB",
+      destinationName: searchParams.get("destinationName") || hotelLocation,
+      // Use exact date format as specified by user: "2025-10-01"
+      checkIn: searchParams.get("checkIn") || checkInDate.toISOString().split('T')[0],
+      checkOut: searchParams.get("checkOut") || checkOutDate.toISOString().split('T')[0],
+      rooms: roomsCount,
+      nights: totalNights,
+      guests: {
+        adults: parseInt(searchParams.get("adults") || "2"),
+        children: parseInt(searchParams.get("children") || "0"),
+      },
+      pax: {
+        adults: parseInt(searchParams.get("adults") || "2"),
+        children: parseInt(searchParams.get("children") || "0"),
+        infants: 0, // Hotels typically don't track infants separately
+      },
+      currency: selectedCurrency?.code || "INR",
+      searchId: `hotel_search_${Date.now()}`,
+      searchTimestamp: new Date().toISOString(),
+    };
+
+    console.log("🏨 Standardized Hotel Search Object being passed:", standardizedHotelSearchParams);
+
     // Get the exact same room and price data shown on this Results card
     const cheapestRoomData = getCheapestRoomFromHotel(hotel);
 
@@ -415,12 +442,12 @@ export function HotelCard({
       roomType: cheapestRoomData.roomType,
       board: "Room Only",
       occupancy: {
-        adults: parseInt(searchParams.get("adults") || "2"),
-        children: parseInt(searchParams.get("children") || "0"),
-        rooms: roomsCount,
+        adults: standardizedHotelSearchParams.guests.adults,
+        children: standardizedHotelSearchParams.guests.children,
+        rooms: standardizedHotelSearchParams.rooms,
       },
-      nights: totalNights,
-      currency: selectedCurrency?.code || "INR",
+      nights: standardizedHotelSearchParams.nights,
+      currency: standardizedHotelSearchParams.currency,
       taxesIncluded: true,
       totalPrice: cheapestRoomData.displayPrice, // Use exact displayed price from Results
       perNightPrice: cheapestRoomData.price, // Original per-night price
@@ -429,8 +456,8 @@ export function HotelCard({
         totalNights,
         roomsCount,
       ),
-      checkIn: checkInDate.toISOString(),
-      checkOut: checkOutDate.toISOString(),
+      checkIn: standardizedHotelSearchParams.checkIn,
+      checkOut: standardizedHotelSearchParams.checkOut,
       supplierData: {
         supplier: hotel?.supplier || "hotelbeds",
         isLiveData: hotel?.isLiveData || false,
@@ -451,14 +478,27 @@ export function HotelCard({
       exactMatch: preselectRate.totalPrice === totalPriceInclusiveTaxes,
     });
 
-    // Navigate with state for price consistency
-    const detailParams = new URLSearchParams();
-    searchParams.forEach((value, key) => {
-      detailParams.set(key, value);
-    });
+    // Load standardized search object to enhanced booking context
+    loadCompleteSearchObject(standardizedHotelSearchParams);
 
+    // Create URL params from standardized search object
+    const detailParams = new URLSearchParams();
+    detailParams.set("destination", standardizedHotelSearchParams.destination);
+    detailParams.set("destinationCode", standardizedHotelSearchParams.destinationCode);
+    detailParams.set("destinationName", standardizedHotelSearchParams.destinationName);
+    detailParams.set("checkIn", standardizedHotelSearchParams.checkIn);
+    detailParams.set("checkOut", standardizedHotelSearchParams.checkOut);
+    detailParams.set("adults", standardizedHotelSearchParams.guests.adults.toString());
+    detailParams.set("children", standardizedHotelSearchParams.guests.children.toString());
+    detailParams.set("rooms", standardizedHotelSearchParams.rooms.toString());
+    detailParams.set("currency", standardizedHotelSearchParams.currency);
+
+    // Navigate with complete state for immediate availability and URL persistence
     navigate(`/hotels/${hotel.id}?${detailParams.toString()}`, {
-      state: { preselectRate },
+      state: {
+        preselectRate,
+        searchParams: standardizedHotelSearchParams
+      },
     });
   };
 
