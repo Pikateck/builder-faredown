@@ -27,6 +27,7 @@ import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 export default function BookingConfirmation() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const { booking: bookingContext, generateBookingData } = useBooking();
   const { booking: enhancedBookingContext, generateBookingData: generateEnhancedBookingData } = useEnhancedBooking();
   const { loadFromBookingData, getDisplayData } = useSearch();
@@ -2027,7 +2028,7 @@ export default function BookingConfirmation() {
                   before international flights
                 </li>
                 <li>
-                  ��� Check-in opens 48 hours before departure for most airlines
+                  • Check-in opens 48 hours before departure for most airlines
                 </li>
                 <li>• Baggage restrictions apply as per airline policy</li>
                 <li>
