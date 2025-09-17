@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { useBooking } from "@/contexts/BookingContext";
+import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
 import { useSearch } from "@/contexts/SearchContext";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
