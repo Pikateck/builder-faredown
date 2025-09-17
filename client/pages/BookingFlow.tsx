@@ -3030,12 +3030,7 @@ export default function BookingFlow() {
                                   {selectedFlight?.departureTime || "14:35"}
                                 </p>
                                 <p className="text-xs text-[#666]">
-                                  {departureDate
-                                    ? formatDisplayDate(
-                                        departureDate,
-                                        "eee, MMM d, yyyy",
-                                      )
-                                    : "Select date"}
+                                  {formatExactDate(exactDepartDate)}
                                 </p>
                               </div>
 
