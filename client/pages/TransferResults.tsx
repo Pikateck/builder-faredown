@@ -80,6 +80,7 @@ export default function TransferResults() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { formatPrice } = useCurrency();
+  const { loadCompleteSearchObject } = useEnhancedBooking();
 
   // Extract search parameters
   const pickupCode = searchParams.get("pickup") || "";
