@@ -28,6 +28,7 @@ export default function BookingConfirmation() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { booking: bookingContext, generateBookingData } = useBooking();
+  const { booking: enhancedBookingContext, generateBookingData: generateEnhancedBookingData } = useEnhancedBooking();
   const { loadFromBookingData, getDisplayData } = useSearch();
   const [booking, setBooking] = useState<any>(null);
   const [bookingType, setBookingType] = useState<"flight" | "hotel">("flight");
