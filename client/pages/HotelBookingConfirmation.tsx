@@ -26,9 +26,12 @@ import {
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
+import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
+import { useLocation } from "react-router-dom";
 
 export default function HotelBookingConfirmation() {
   const navigate = useNavigate();
+  const location = useLocation();
   const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
   const [isLoading, setIsLoading] = useState(false);
