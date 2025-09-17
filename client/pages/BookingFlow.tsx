@@ -1674,10 +1674,48 @@ export default function BookingFlow() {
           lastName: t.lastName,
           type: t.type,
         })),
+        // Complete flight segments with all details
+        flightSegments: [
+          {
+            type: "outbound",
+            from: searchParams.from,
+            to: searchParams.to,
+            fromCode: searchParams.fromCode,
+            toCode: searchParams.toCode,
+            date: exactDepartDate,
+            formattedDate: formatExactDate(exactDepartDate),
+            time: selectedFlight?.departureTime || "14:35",
+            arrivalTime: selectedFlight?.arrivalTime || "17:50",
+            duration: selectedFlight?.duration || "3h 15m",
+            airline: selectedFlight?.airline || "Airlines",
+            flightNumber: selectedFlight?.flightNumber || "FL 507",
+            aircraft: selectedFlight?.aircraft || "Boeing 777-300ER",
+          },
+          ...(exactTripType === "roundtrip" && exactReturnDate
+            ? [
+                {
+                  type: "return",
+                  from: searchParams.to,
+                  to: searchParams.from,
+                  fromCode: searchParams.toCode,
+                  toCode: searchParams.fromCode,
+                  date: exactReturnDate,
+                  formattedDate: formatExactDate(exactReturnDate),
+                  time: selectedFlight?.returnDepartureTime || "08:45",
+                  arrivalTime: selectedFlight?.returnArrivalTime || "14:05",
+                  duration: selectedFlight?.returnDuration || "3h 20m",
+                  airline: selectedFlight?.airline || "Airlines",
+                  flightNumber: selectedFlight?.returnFlightNumber || "FL 508",
+                  aircraft: selectedFlight?.aircraft || "Boeing 777-300ER",
+                },
+              ]
+            : []),
+        ],
+        // Legacy flights array for backward compatibility
         flights: [
           {
-            from: "Mumbai",
-            to: "Dubai",
+            from: searchParams.from,
+            to: searchParams.to,
             date: formatExactDate(exactDepartDate).replace(/^\w+, /, "").replace(/, \d{4}$/, ""),
             time: selectedFlight?.departureTime || "14:35",
             duration: selectedFlight?.duration || "3h 15m",
@@ -1687,8 +1725,8 @@ export default function BookingFlow() {
           ...(exactTripType === "roundtrip" && exactReturnDate
             ? [
                 {
-                  from: "Dubai",
-                  to: "Mumbai",
+                  from: searchParams.to,
+                  to: searchParams.from,
                   date: formatExactDate(exactReturnDate).replace(/^\w+, /, "").replace(/, \d{4}$/, ""),
                   time: selectedFlight?.returnDepartureTime || "08:45",
                   duration: selectedFlight?.returnDuration || "3h 20m",
