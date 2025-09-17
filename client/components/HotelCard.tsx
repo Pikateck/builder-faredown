@@ -291,29 +291,58 @@ export function HotelCard({
       setIsBooking(true);
       console.log("🚀 Starting quick booking for hotel:", hotel.name);
 
-      // Extract destination code from URL params
-      const destinationCode = searchParams.get("destination") || "DXB";
-      const destinationName =
-        searchParams.get("destinationName") || hotelLocation || "Unknown";
+      // Create standardized search object for hotel booking
+      const standardizedHotelSearchParams = {
+        module: "hotels" as const,
+        destination: searchParams.get("destination") || hotelLocation,
+        destinationCode: searchParams.get("destinationCode") || "DXB",
+        destinationName: searchParams.get("destinationName") || hotelLocation,
+        checkIn: searchParams.get("checkIn") || checkInDate.toISOString().split('T')[0],
+        checkOut: searchParams.get("checkOut") || checkOutDate.toISOString().split('T')[0],
+        rooms: roomsCount,
+        nights: totalNights,
+        guests: {
+          adults: parseInt(searchParams.get("adults") || "2"),
+          children: parseInt(searchParams.get("children") || "0"),
+        },
+        pax: {
+          adults: parseInt(searchParams.get("adults") || "2"),
+          children: parseInt(searchParams.get("children") || "0"),
+          infants: 0,
+        },
+        currency: selectedCurrency?.code || "INR",
+        searchId: `hotel_booking_${Date.now()}`,
+        searchTimestamp: new Date().toISOString(),
+      };
 
-      // Navigate to booking page with hotel and search details
+      // Load standardized search object to enhanced booking context
+      loadCompleteSearchObject(standardizedHotelSearchParams);
+
+      // Navigate to booking page with standardized search data
       const bookingParams = new URLSearchParams({
         hotelId: String(hotel.id),
-        destinationCode,
-        destinationName,
-        checkIn: checkInDate.toISOString(),
-        checkOut: checkOutDate.toISOString(),
-        rooms: roomsCount.toString(),
-        adults: searchParams.get("adults") || "2",
-        children: searchParams.get("children") || "0",
-        currency: selectedCurrency?.code || "INR",
+        destination: standardizedHotelSearchParams.destination,
+        destinationCode: standardizedHotelSearchParams.destinationCode,
+        destinationName: standardizedHotelSearchParams.destinationName,
+        checkIn: standardizedHotelSearchParams.checkIn,
+        checkOut: standardizedHotelSearchParams.checkOut,
+        rooms: standardizedHotelSearchParams.rooms.toString(),
+        adults: standardizedHotelSearchParams.guests.adults.toString(),
+        children: standardizedHotelSearchParams.guests.children.toString(),
+        currency: standardizedHotelSearchParams.currency,
         totalPrice: priceCalculation.total.toString(),
         hotelName: hotel.name,
         hotelLocation: hotelLocation,
         hotelRating: hotel.rating.toString(),
       });
 
-      navigate(`/booking/hotel?${bookingParams.toString()}`);
+      navigate(`/booking/hotel?${bookingParams.toString()}`, {
+        state: {
+          searchParams: standardizedHotelSearchParams,
+          hotelData: hotel,
+          priceData: priceCalculation,
+        }
+      });
     } catch (error) {
       console.error("Quick booking error:", error);
     } finally {
