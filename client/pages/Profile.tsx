@@ -595,7 +595,6 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
                     setPassportForm({});
                     setShowPassportModal(true);
                   }}
-                  countries={countries}
                 />
               )}
               
