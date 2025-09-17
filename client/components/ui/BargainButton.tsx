@@ -114,7 +114,6 @@ export function BargainButton({
         id={id}
         data-testid={dataTestId}
         aria-label={ariaLabel || (typeof children === "string" ? children : "Bargain button")}
-        {...domProps}
       >
         {!loading && <TrendingDown className="w-4 h-4" />}
         {loading && (
@@ -123,7 +122,7 @@ export function BargainButton({
         {children}
       </Button>
 
-      {useBargainModal && (
+      {shouldShowModal && (
         <ConversationalBargainModal
           isOpen={isBargainModalOpen}
           onClose={() => setIsBargainModalOpen(false)}
@@ -131,7 +130,7 @@ export function BargainButton({
           onHold={handleBargainHold}
           module={module}
           userName={userName}
-          basePrice={basePrice}
+          basePrice={effectivePrice}
           productRef={productRef || itemName || "product"}
           flight={
             module === "flights"
@@ -143,7 +142,7 @@ export function BargainButton({
                   to: "Destination",
                   departureTime: "10:00",
                   arrivalTime: "12:00",
-                  price: basePrice,
+                  price: effectivePrice,
                   duration: "2h",
                 }
               : undefined
@@ -156,7 +155,7 @@ export function BargainButton({
                   location: itemDetails.location || "City",
                   checkIn: itemDetails.checkIn || "2025-01-01",
                   checkOut: itemDetails.checkOut || "2025-01-02",
-                  price: basePrice,
+                  price: effectivePrice,
                   rating: itemDetails.rating || 4,
                 }
               : undefined
