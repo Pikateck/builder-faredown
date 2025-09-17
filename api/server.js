@@ -58,7 +58,10 @@ const aiBargainRoutes = require("./routes/ai-bargains");
 const transfersMarkupRoutes = require("./routes/admin-transfers-markup");
 const adminProfilesRoutes = require("./routes/admin-profiles");
 const pricingRoutes = require("./routes/pricing");
-const { router: bargainHoldsRouter, initializeBargainHolds } = require("./routes/bargain-holds");
+const {
+  router: bargainHoldsRouter,
+  initializeBargainHolds,
+} = require("./routes/bargain-holds");
 const adminReportsRoutes = require("./routes/admin-reports");
 
 // Import middleware
@@ -395,7 +398,10 @@ async function startServer() {
       try {
         initializeBargainHolds(db.pool);
       } catch (e) {
-        console.warn("⚠️ Failed to initialize Bargain Holds with DB pool:", e.message);
+        console.warn(
+          "⚠️ Failed to initialize Bargain Holds with DB pool:",
+          e.message,
+        );
       }
     }
     console.log("✅ Database connected and schema ready");

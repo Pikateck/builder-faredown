@@ -16,9 +16,9 @@ export type FlightItem = {
   to: string;
   departTime: string; // "08:15"
   arriveTime: string; // "12:30"
-  duration: string;   // "4h 15m"
-  stops?: string;     // "1 Stop" | "Direct"
-  price: number;      // all-inclusive
+  duration: string; // "4h 15m"
+  stops?: string; // "1 Stop" | "Direct"
+  price: number; // all-inclusive
   fareTypes?: FareType[];
 };
 
@@ -26,7 +26,11 @@ export type FlightCardProps = {
   flight: FlightItem;
   // wired by Builder or page
   onViewDetails?: (flight: FlightItem) => void;
-  onBargainSuccess?: (finalPrice: number, orderRef: string, flight: FlightItem) => void;
+  onBargainSuccess?: (
+    finalPrice: number,
+    orderRef: string,
+    flight: FlightItem,
+  ) => void;
   variant?: "default" | "compact";
 };
 
@@ -36,18 +40,39 @@ export default function FlightCard({
   onBargainSuccess,
   variant = "default",
 }: FlightCardProps) {
-  const { airline, logo, from, to, departTime, arriveTime, duration, stops, price, fareTypes } = flight;
+  const {
+    airline,
+    logo,
+    from,
+    to,
+    departTime,
+    arriveTime,
+    duration,
+    stops,
+    price,
+    fareTypes,
+  } = flight;
 
   return (
     <div className="w-full rounded-2xl border border-slate-200 bg-white shadow-sm p-4 md:p-5">
       <div className="flex items-center gap-3">
         {logo ? (
-          <Image src={logo} alt={airline} width={40} height={40} className="rounded-md" />
+          <Image
+            src={logo}
+            alt={airline}
+            width={40}
+            height={40}
+            className="rounded-md"
+          />
         ) : (
           <div className="w-10 h-10 rounded-md bg-slate-100" />
         )}
         <div className="font-medium">{airline}</div>
-        {stops && <div className="ml-auto text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">{stops}</div>}
+        {stops && (
+          <div className="ml-auto text-xs px-2 py-1 rounded bg-emerald-50 text-emerald-700">
+            {stops}
+          </div>
+        )}
       </div>
 
       <div className="mt-3 grid grid-cols-3 items-end gap-3 md:gap-4">
@@ -72,7 +97,9 @@ export default function FlightCard({
       <div className="mt-4 flex items-center justify-between">
         <div>
           <div className="text-xs text-slate-500">All-inclusive price</div>
-          <div className="text-2xl font-semibold">₹{price.toLocaleString("en-IN")}</div>
+          <div className="text-2xl font-semibold">
+            ₹{price.toLocaleString("en-IN")}
+          </div>
         </div>
 
         <div className="flex gap-2">
@@ -105,7 +132,9 @@ export default function FlightCard({
 
       {variant !== "compact" && fareTypes?.length ? (
         <div className="mt-3 text-xs text-slate-600">
-          <div className="font-medium mb-1">Flexible ticket upgrade available</div>
+          <div className="font-medium mb-1">
+            Flexible ticket upgrade available
+          </div>
           <ul className="list-disc ml-5 space-y-0.5">
             {fareTypes.slice(0, 3).map((f, i) => (
               <li key={i}>

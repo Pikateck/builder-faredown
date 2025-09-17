@@ -31,7 +31,9 @@ const getBackendUrl = () => {
     window.location.hostname.includes("builder.codes") ||
     window.location.hostname.includes("fly.dev")
   ) {
-    console.log("🌐 Detected Builder.codes/fly.dev environment, using origin proxy");
+    console.log(
+      "🌐 Detected Builder.codes/fly.dev environment, using origin proxy",
+    );
     return window.location.origin + "/api";
   }
 
@@ -67,8 +69,10 @@ const getOfflineFallbackEnabled = () => {
   const envFlag = import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK;
 
   // Builder.codes and fly.dev environments: enable fallback by default due to potential backend unavailability
-  if (window.location.hostname.includes("builder.codes") ||
-      window.location.hostname.includes("fly.dev")) {
+  if (
+    window.location.hostname.includes("builder.codes") ||
+    window.location.hostname.includes("fly.dev")
+  ) {
     return envFlag !== "false"; // Default to true unless explicitly disabled
   }
 
@@ -183,7 +187,7 @@ export class ApiClient {
     if (
       typeof window !== "undefined" &&
       (window.location.hostname.includes("builder.codes") ||
-       window.location.hostname.includes("fly.dev"))
+        window.location.hostname.includes("fly.dev"))
     ) {
       // In builder.codes / fly.dev preview environments, default to fallback unless explicitly disabled
       this.forceFallback = config.OFFLINE_FALLBACK_ENABLED !== false;
@@ -193,8 +197,8 @@ export class ApiClient {
         {
           hostname: window.location.hostname,
           offlineFallbackEnabled: config.OFFLINE_FALLBACK_ENABLED,
-          forceFallback: this.forceFallback
-        }
+          forceFallback: this.forceFallback,
+        },
       );
     }
 
