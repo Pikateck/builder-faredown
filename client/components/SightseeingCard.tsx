@@ -135,8 +135,58 @@ export function SightseeingCard({
 
   // Navigation handlers
   const handleViewDetails = () => {
-    const params = new URLSearchParams(searchParams);
-    navigate(`/sightseeing/${attraction.id}?${params.toString()}`);
+    // Create standardized search object for sightseeing following the user's requirements
+    const standardizedSightseeingSearchParams = {
+      module: "sightseeing" as const,
+      destination: searchParams.get("destination") || attraction.location.split(",")[0] || "Dubai",
+      destinationCode: searchParams.get("destinationCode") || "DXB",
+      destinationName: searchParams.get("destinationName") || attraction.location || "Dubai, UAE",
+      // Use exact date format as specified by user: "2025-10-01"
+      checkIn: searchParams.get("checkIn") || searchParams.get("visitDate") || new Date().toISOString().split('T')[0],
+      checkOut: searchParams.get("checkOut") || searchParams.get("visitDate") || new Date().toISOString().split('T')[0],
+      category: attraction.category,
+      duration: attraction.duration,
+      guests: {
+        adults: parseInt(searchParams.get("adults") || "2"),
+        children: parseInt(searchParams.get("children") || "0"),
+      },
+      pax: {
+        adults: parseInt(searchParams.get("adults") || "2"),
+        children: parseInt(searchParams.get("children") || "0"),
+        infants: parseInt(searchParams.get("infants") || "0"),
+      },
+      currency: "INR",
+      searchId: `sightseeing_search_${Date.now()}`,
+      searchTimestamp: new Date().toISOString(),
+    };
+
+    console.log("🎯 Standardized Sightseeing Search Object being passed:", standardizedSightseeingSearchParams);
+
+    // Load standardized search object to enhanced booking context
+    loadCompleteSearchObject(standardizedSightseeingSearchParams);
+
+    // Create URL params from standardized search object
+    const params = new URLSearchParams();
+    params.set("destination", standardizedSightseeingSearchParams.destination);
+    params.set("destinationCode", standardizedSightseeingSearchParams.destinationCode);
+    params.set("destinationName", standardizedSightseeingSearchParams.destinationName);
+    params.set("checkIn", standardizedSightseeingSearchParams.checkIn);
+    params.set("checkOut", standardizedSightseeingSearchParams.checkOut);
+    params.set("adults", standardizedSightseeingSearchParams.guests.adults.toString());
+    params.set("children", standardizedSightseeingSearchParams.guests.children.toString());
+    params.set("infants", standardizedSightseeingSearchParams.pax.infants.toString());
+    params.set("category", standardizedSightseeingSearchParams.category || "any");
+    params.set("duration", standardizedSightseeingSearchParams.duration || "any");
+    params.set("currency", standardizedSightseeingSearchParams.currency);
+
+    // Navigate with complete state for immediate availability and URL persistence
+    navigate(`/sightseeing/${attraction.id}?${params.toString()}`, {
+      state: {
+        searchParams: standardizedSightseeingSearchParams,
+        attractionData: attraction,
+        priceData: { totalPrice, pricePerPerson },
+      },
+    });
   };
 
   // Selection handler
