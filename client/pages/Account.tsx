@@ -100,14 +100,6 @@ export default function Account() {
     location.pathname !== "/account" && location.pathname !== "/my-account";
   const currentSection = location.pathname.split("/")[2]; // e.g., "personal", "security", etc.
 
-  // Debug logging
-  console.log("🔍 Account Debug:", {
-    pathname: location.pathname,
-    isSubPage,
-    currentSection,
-    pathSplit: location.pathname.split("/")
-  });
-
   // Search and collapsible functionality for bookings
   const [searchQuery, setSearchQuery] = useState("");
   const [collapsedSections, setCollapsedSections] = useState({
@@ -620,7 +612,6 @@ export default function Account() {
   // Render sub-page content
   const renderSubPage = () => {
     switch (currentSection) {
-      case "personal":
       case "personal":
       case "security":
       case "travelers":
