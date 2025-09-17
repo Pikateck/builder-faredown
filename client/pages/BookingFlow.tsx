@@ -1014,6 +1014,24 @@ export default function BookingFlow() {
   const negotiatedPrice =
     location.state?.negotiatedPrice || selectedFareType?.price || 32168;
 
+  // Helper function to format dates from the enhanced booking context
+  const formatExactDate = (dateStr: string) => {
+    if (!dateStr) return "Select date";
+    try {
+      // Parse date in YYYY-MM-DD format (e.g., "2025-10-01")
+      const date = new Date(dateStr + 'T00:00:00'); // Add time to avoid timezone issues
+      return date.toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric'
+      });
+    } catch (error) {
+      console.warn("Date formatting error:", error);
+      return dateStr;
+    }
+  };
+
   // Define renderFlightSegment function after selectedFlight is available
 
   // Load search parameters and dates from location state and URL params
