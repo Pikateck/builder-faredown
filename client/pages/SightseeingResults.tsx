@@ -136,6 +136,36 @@ export default function SightseeingResults() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Load standardized search object for sightseeing state persistence
+  useEffect(() => {
+    const standardizedSightseeingSearchParams = {
+      module: "sightseeing" as const,
+      destination: destination || "Dubai",
+      destinationCode: searchParams.get("destinationCode") || "DXB",
+      destinationName: destinationName || "Dubai, UAE",
+      // Use exact date format as specified by user: "2025-10-01"
+      checkIn: checkIn || new Date().toISOString().split('T')[0],
+      checkOut: checkOut || checkIn || new Date().toISOString().split('T')[0],
+      category: experienceType === "any" ? undefined : experienceType,
+      duration: duration === "any" ? undefined : duration,
+      guests: {
+        adults: parseInt(adults),
+        children: parseInt(children),
+      },
+      pax: {
+        adults: parseInt(adults),
+        children: parseInt(children),
+        infants: 0, // Sightseeing typically doesn't track infants separately
+      },
+      currency: "INR",
+      searchId: `sightseeing_results_${Date.now()}`,
+      searchTimestamp: new Date().toISOString(),
+    };
+
+    console.log("🎯 Loading standardized sightseeing search object to context:", standardizedSightseeingSearchParams);
+    loadCompleteSearchObject(standardizedSightseeingSearchParams);
+  }, [destination, destinationName, checkIn, checkOut, adults, children, experienceType, duration, loadCompleteSearchObject]);
+
   // Load sample attractions data
   useEffect(() => {
     const loadAttractions = async () => {
