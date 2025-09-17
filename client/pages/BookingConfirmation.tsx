@@ -1707,11 +1707,13 @@ export default function BookingConfirmation() {
                     <div className="p-3 border border-gray-200 rounded-lg text-center">
                       <p className="text-sm text-gray-600">Departure</p>
                       <p className="font-bold">
-                        {formatDate(
-                          booking.flights?.[0]?.date ||
-                            booking.departureDate ||
-                            new Date().toISOString(),
-                        )}
+                        {booking.searchParams?.departDate
+                          ? formatDate(booking.searchParams.departDate)
+                          : formatDate(
+                              booking.flights?.[0]?.date ||
+                                booking.departureDate ||
+                                new Date().toISOString(),
+                            )}
                       </p>
                       <p className="text-xs text-gray-500">
                         {booking.flights?.[0]?.departureTime || "10:15"} -{" "}
