@@ -996,13 +996,19 @@ export default function BookingFlow() {
     generateBookingData,
   } = useBooking();
 
-  // Extract currentStep from booking state
-  const currentStep = booking.currentStep;
+  // Extract currentStep from enhanced booking state
+  const currentStep = enhancedBooking.currentStep;
 
-  // Get data from booking context instead of location state
-  const selectedFlight = booking.selectedFlight;
-  const selectedFareType = booking.selectedFare;
-  const passengersFromState = booking.searchParams.passengers;
+  // Get data from enhanced booking context for proper state persistence
+  const selectedFlight = enhancedBooking.selectedFlight;
+  const selectedFareType = enhancedBooking.selectedFare;
+  const passengersFromState = enhancedBooking.searchParams.pax;
+
+  // Get the exact search parameters with proper date format
+  const searchParams = enhancedBooking.searchParams;
+  const exactDepartDate = searchParams.departDate;
+  const exactReturnDate = searchParams.returnDate;
+  const exactTripType = searchParams.tripType;
 
   // Extract negotiatedPrice from location state with fallback
   const negotiatedPrice =
@@ -1261,7 +1267,7 @@ export default function BookingFlow() {
     { name: "Guernsey", code: "+44", flag: "🇬🇬" },
     { name: "Guinea", code: "+224", flag: "🇬🇳" },
     { name: "Guinea-Bissau", code: "+245", flag: "��🇼" },
-    { name: "Guyana", code: "+592", flag: "������" },
+    { name: "Guyana", code: "+592", flag: "���🇾" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
     { name: "Honduras", code: "+504", flag: "🇭🇳" },
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
