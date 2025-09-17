@@ -63,17 +63,18 @@ export function BargainButton({
   className,
   size = "md",
   useBargainModal = false,
+  useEnhancedModal = false,
   module = "flights",
   userName = "Guest",
   itemName = "",
   basePrice = 0,
+  supplierNetRate,
   productRef = "",
   itemDetails = {},
   onBargainSuccess,
   id,
   "data-testid": dataTestId,
   "aria-label": ariaLabel,
-  ...domProps
 }: BargainButtonProps) {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
 
