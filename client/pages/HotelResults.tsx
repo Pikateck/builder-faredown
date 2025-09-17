@@ -43,6 +43,7 @@ import {
 } from "@/lib/pricing";
 import { useAuth } from "@/contexts/AuthContext";
 import { useSearch } from "@/contexts/SearchContext";
+import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
 import { authService } from "@/services/authService";
 import {
   MobileCityDropdown,
