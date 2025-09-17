@@ -3120,10 +3120,7 @@ export default function BookingFlow() {
                                       "08:45"}
                                   </p>
                                   <p className="text-xs text-[#666]">
-                                    {formatDisplayDate(
-                                      returnDate,
-                                      "eee, MMM d, yyyy",
-                                    )}
+                                    {formatExactDate(exactReturnDate || "")}
                                   </p>
                                 </div>
 
