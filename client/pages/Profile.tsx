@@ -650,7 +650,6 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
           setForm={setTravelerForm}
           onSave={handleSaveTraveler}
           saving={saving}
-          countries={countries}
         />
         
         <PassportModal
