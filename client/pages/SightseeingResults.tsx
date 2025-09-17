@@ -164,7 +164,7 @@ export default function SightseeingResults() {
 
     console.log("🎯 Loading standardized sightseeing search object to context:", standardizedSightseeingSearchParams);
     loadCompleteSearchObject(standardizedSightseeingSearchParams);
-  }, [destination, destinationName, checkIn, checkOut, adults, children, experienceType, duration, loadCompleteSearchObject]);
+  }, [destination, destinationName, checkIn, checkOut, adults, children, experienceType, duration]);
 
   // Load sample attractions data
   useEffect(() => {
