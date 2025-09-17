@@ -49,6 +49,7 @@ import {
   Loader2,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { CountrySelect } from "@/components/ui/country-select";
 
 // API Service with proper error handling
 const profileAPI = {
@@ -1014,7 +1015,7 @@ function PaymentMethodsTab({ paymentMethods, onAddNew, onSetDefault, onDelete })
                     <div>
                       <div className="flex items-center space-x-2">
                         <span className="font-medium">
-                          {method.brand} •••• {method.last4}
+                          {method.brand} •••��� {method.last4}
                         </span>
                         {method.is_default && (
                           <Badge variant="secondary">Default</Badge>
