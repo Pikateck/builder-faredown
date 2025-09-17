@@ -439,16 +439,33 @@ export default function Account() {
                     </div>
 
                     <div className="text-sm text-[#7a7a7a] space-y-1">
-                      <p>Date: {new Date(booking.bookingDetails.bookingDate).toLocaleDateString()}</p>
-                      <p>Amount: {booking.bookingDetails.currency.symbol}{booking.bookingDetails.totalAmount.toLocaleString()}</p>
+                      <p>Date: {formatAppDate(booking.bookingDetails.bookingDate)}</p>
+                      <p>Amount: {formatPrice(booking.bookingDetails.totalAmount)}</p>
                     </div>
 
                     <div className="mt-4 flex space-x-2">
-                      <Button variant="outline" size="sm" className="flex-1 border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]"
+                        onClick={() => navigate(`/account/trips?booking=${booking.bookingDetails.bookingRef}`)}
+                      >
                         <Eye className="w-4 h-4 mr-2" />
                         View Details
                       </Button>
-                      <Button variant="outline" size="sm" className="flex-1 border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="flex-1 border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]"
+                        onClick={async () => {
+                          try {
+                            const downloadUrl = await accountService.downloadTicket(booking.bookingDetails.bookingRef);
+                            window.open(downloadUrl, '_blank');
+                          } catch (error) {
+                            console.error('Download failed:', error);
+                          }
+                        }}
+                      >
                         <Download className="w-4 h-4 mr-2" />
                         Download
                       </Button>
