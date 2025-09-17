@@ -41,9 +41,9 @@ class DatabaseConnection {
           reapIntervalMillis: 1000, // How often to check for idle connections
           createRetryIntervalMillis: 200, // Time between connection creation attempts
           // SSL configuration for Render PostgreSQL
-          ssl: process.env.NODE_ENV === 'production' ? {
+          ssl: {
             rejectUnauthorized: false, // Required for Render PostgreSQL
-          } : false,
+          },
         };
       } else {
         // Fallback to individual environment variables
