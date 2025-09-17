@@ -367,6 +367,7 @@ app.use("*", (req, res) => {
       "/api/hotels",
       "/api/bargain",
       "/api/currency",
+      "/api/countries",
       "/api/promo",
       "/api/analytics",
       "/api/payments",
