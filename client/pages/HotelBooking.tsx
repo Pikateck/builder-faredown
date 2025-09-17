@@ -52,14 +52,30 @@ export default function HotelBooking() {
   const location = useLocation();
   const { booking: enhancedBooking, loadCompleteSearchObject } = useEnhancedBooking();
 
-  // Get booking data from navigation state
+  // Load search parameters from location state if available
+  useEffect(() => {
+    if (location.state?.searchParams) {
+      console.log("🏨 Loading hotel search params from location state:", location.state.searchParams);
+      loadCompleteSearchObject(location.state.searchParams);
+    }
+  }, [location.state, loadCompleteSearchObject]);
+
+  // Get booking data from enhanced booking context and navigation state
   const selectedHotel = location.state?.selectedHotel;
-  const checkIn = location.state?.checkIn || "2024-12-15";
-  const checkOut = location.state?.checkOut || "2024-12-18";
-  const guests = location.state?.guests || { adults: 2, children: 0, rooms: 1 };
-  const negotiatedPrice =
-    location.state?.negotiatedPrice || selectedHotel?.price;
-  const nights = location.state?.nights || 3;
+  const searchParams = enhancedBooking.searchParams;
+
+  // Use exact search dates from enhanced booking context (user's requirements)
+  const checkIn = searchParams.checkIn || location.state?.checkIn || new Date().toISOString().split('T')[0];
+  const checkOut = searchParams.checkOut || location.state?.checkOut || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
+  const guests = {
+    adults: searchParams.guests?.adults || location.state?.guests?.adults || 2,
+    children: searchParams.guests?.children || location.state?.guests?.children || 0,
+    rooms: searchParams.rooms || location.state?.guests?.rooms || 1
+  };
+  const negotiatedPrice = location.state?.negotiatedPrice || selectedHotel?.price;
+  const nights = searchParams.nights || location.state?.nights || 3;
+
+  console.log("🏨 Hotel booking using exact search dates:", { checkIn, checkOut, nights, guests });
 
   // UI States
   const [currentStep, setCurrentStep] = useState(1);
