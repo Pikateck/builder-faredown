@@ -973,9 +973,21 @@ export default function BookingFlow() {
     loadDatesFromParams,
   } = useDateContext();
 
-  // Use booking context for centralized state management
+  // Use enhanced booking context for proper state persistence
   const {
-    booking,
+    booking: enhancedBooking,
+    updateTravellers: updateEnhancedTravellers,
+    updateContactDetails: updateEnhancedContactDetails,
+    updateExtras: updateEnhancedExtras,
+    setCurrentStep: setEnhancedCurrentStep,
+    completeBooking: completeEnhancedBooking,
+    generateBookingData: generateEnhancedBookingData,
+    loadCompleteSearchObject,
+  } = useEnhancedBooking();
+
+  // Keep old booking context for backward compatibility during transition
+  const {
+    booking: legacyBooking,
     updateTravellers,
     updateContactDetails,
     updateExtras,
@@ -1249,7 +1261,7 @@ export default function BookingFlow() {
     { name: "Guernsey", code: "+44", flag: "🇬🇬" },
     { name: "Guinea", code: "+224", flag: "🇬🇳" },
     { name: "Guinea-Bissau", code: "+245", flag: "��🇼" },
-    { name: "Guyana", code: "+592", flag: "���🇾" },
+    { name: "Guyana", code: "+592", flag: "������" },
     { name: "Haiti", code: "+509", flag: "🇭🇹" },
     { name: "Honduras", code: "+504", flag: "🇭🇳" },
     { name: "Hong Kong", code: "+852", flag: "🇭🇰" },
