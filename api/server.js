@@ -244,6 +244,7 @@ app.use("/api/bargain", bargainRoutes);
 app.use("/api/bargain/v1", bargainV1Routes);
 app.use("/api/ai-bargains", aiBargainRoutes);
 app.use("/api/currency", currencyRoutes);
+app.use("/api/countries", countriesRoutes);
 app.use("/api/promo", promoRoutes);
 app.use("/api/feature-flags", featureFlagsRoutes);
 app.use("/api/analytics", analyticsRoutes);
