@@ -295,6 +295,21 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
     }
   }, [booking]);
 
+  // Memoize functions to prevent infinite re-renders
+  const updateSearchParams = useCallback((params: Partial<StandardizedSearchParams>) => {
+    setBooking((prev) => ({
+      ...prev,
+      searchParams: { ...prev.searchParams, ...params },
+    }));
+  }, []);
+
+  const loadCompleteSearchObject = useCallback((searchObj: Partial<StandardizedSearchParams>) => {
+    setBooking((prev) => ({
+      ...prev,
+      searchParams: { ...prev.searchParams, ...searchObj },
+    }));
+  }, []);
+
   // Load from URL parameters with standardized structure
   const loadFromUrlParams = useCallback((urlParams: URLSearchParams) => {
     const newSearchParams: Partial<StandardizedSearchParams> = {};
@@ -304,54 +319,38 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
     if (urlParams.get("to")) newSearchParams.to = urlParams.get("to")!;
     if (urlParams.get("fromCode")) newSearchParams.fromCode = urlParams.get("fromCode")!;
     if (urlParams.get("toCode")) newSearchParams.toCode = urlParams.get("toCode")!;
-    
+
     // Handle dates - support both departDate and departureDate for compatibility
     if (urlParams.get("departDate")) newSearchParams.departDate = urlParams.get("departDate")!;
     if (urlParams.get("departureDate")) newSearchParams.departDate = urlParams.get("departureDate")!;
     if (urlParams.get("returnDate")) newSearchParams.returnDate = urlParams.get("returnDate")!;
-    
+
     // Trip type
     if (urlParams.get("tripType")) {
       const tripType = urlParams.get("tripType")!;
       newSearchParams.tripType = tripType === "round-trip" ? "roundtrip" : tripType as any;
     }
-    
+
     // Cabin class
     if (urlParams.get("class")) {
       const classValue = urlParams.get("class")!;
       newSearchParams.cabin = (classValue.charAt(0).toUpperCase() + classValue.slice(1)) as any;
     }
     if (urlParams.get("cabin")) newSearchParams.cabin = urlParams.get("cabin") as any;
-    
+
     // Currency
     if (urlParams.get("currency")) newSearchParams.currency = urlParams.get("currency")!;
-    
+
     // Passengers
     const adults = parseInt(urlParams.get("adults") || "1");
     const children = parseInt(urlParams.get("children") || "0");
     const infants = parseInt(urlParams.get("infants") || "0");
-    
+
     newSearchParams.pax = { adults, children, infants };
 
     // Update booking state
     updateSearchParams(newSearchParams);
   }, [updateSearchParams]);
-
-
-  // Memoize functions to prevent infinite re-renders
-  const loadCompleteSearchObject = useCallback((searchObj: Partial<StandardizedSearchParams>) => {
-    setBooking((prev) => ({
-      ...prev,
-      searchParams: { ...prev.searchParams, ...searchObj },
-    }));
-  }, []);
-
-  const updateSearchParams = useCallback((params: Partial<StandardizedSearchParams>) => {
-    setBooking((prev) => ({
-      ...prev,
-      searchParams: { ...prev.searchParams, ...params },
-    }));
-  }, []);
 
   const setSelectedFlight = useCallback((flight: SelectedFlight) => {
     setBooking((prev) => ({ ...prev, selectedFlight: flight }));
