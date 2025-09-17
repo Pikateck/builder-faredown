@@ -51,6 +51,9 @@ import {
 import { cn } from "@/lib/utils";
 import { CountrySelect } from "@/components/ui/country-select";
 
+// Check if offline mode is enabled
+const isOfflineMode = import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK === 'true';
+
 // API Service with proper error handling and mock fallbacks
 const profileAPI = {
   baseURL: "/api/profile",
@@ -84,6 +87,24 @@ const profileAPI = {
   },
 
   async fetchProfile() {
+    // Return mock data immediately if offline mode is enabled
+    if (isOfflineMode) {
+      return {
+        success: true,
+        profile: {
+          id: 1,
+          first_name: "Zubin",
+          last_name: "Aibara",
+          email: "zubin@example.com",
+          phone: "+91 9876543210",
+          email_verified: true,
+          nationality_iso2: "IN",
+          date_of_birth: "1990-01-01",
+          gender: "male",
+        },
+      };
+    }
+
     try {
       const response = await fetch(`${this.baseURL}`, {
         headers: { "X-User-ID": "1" }, // Demo: use actual auth
@@ -127,6 +148,26 @@ const profileAPI = {
   },
 
   async fetchTravelers() {
+    // Return mock data immediately if offline mode is enabled
+    if (isOfflineMode) {
+      return {
+        success: true,
+        travelers: [
+          {
+            id: 1,
+            first_name: "Zubin",
+            last_name: "Aibara",
+            date_of_birth: "1990-01-01",
+            gender: "male",
+            nationality_iso2: "IN",
+            passport_number: "A1234567",
+            passport_expiry: "2030-12-31",
+            issuing_country: "IN"
+          }
+        ]
+      };
+    }
+
     try {
       const response = await fetch(`${this.baseURL}/travelers`, {
         headers: { "X-User-ID": "1" },
@@ -248,6 +289,25 @@ const profileAPI = {
   },
 
   async fetchPaymentMethods() {
+    // Return mock data immediately if offline mode is enabled
+    if (isOfflineMode) {
+      return {
+        success: true,
+        paymentMethods: [
+          {
+            id: 1,
+            type: "credit_card",
+            last_four: "1234",
+            card_brand: "visa",
+            expiry_month: 12,
+            expiry_year: 2025,
+            is_default: true,
+            cardholder_name: "Zubin Aibara"
+          }
+        ]
+      };
+    }
+
     try {
       const response = await fetch(`${this.baseURL}/payment-methods`, {
         headers: { "X-User-ID": "1" },
@@ -320,6 +380,23 @@ const profileAPI = {
   },
 
   async fetchPreferences() {
+    // Return mock data immediately if offline mode is enabled
+    if (isOfflineMode) {
+      return {
+        success: true,
+        preferences: {
+          currency_iso3: "INR",
+          language: "en",
+          email_notifications: true,
+          push_notifications: false,
+          price_alerts: false,
+          marketing_opt_in: false,
+          newsletter: true,
+          booking_reminders: true
+        },
+      };
+    }
+
     try {
       const response = await fetch(`${this.baseURL}/preferences`, {
         headers: { "X-User-ID": "1" },
