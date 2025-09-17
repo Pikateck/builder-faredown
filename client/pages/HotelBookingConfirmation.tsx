@@ -34,6 +34,7 @@ export default function HotelBookingConfirmation() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
+  const { booking: enhancedBooking, loadCompleteSearchObject } = useEnhancedBooking();
   const [isLoading, setIsLoading] = useState(false);
 
   const bookingId = searchParams.get("bookingId") || "HTL" + Date.now();
