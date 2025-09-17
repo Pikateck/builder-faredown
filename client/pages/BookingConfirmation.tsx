@@ -63,9 +63,18 @@ export default function BookingConfirmation() {
     // Load search data from URL parameters and booking context
     loadFromBookingData(bookingContext);
 
-    // Prioritize booking context data first (most reliable)
+    // Prioritize enhanced booking context data first (most reliable for dates)
+    if (enhancedBookingContext.isComplete && enhancedBookingContext.selectedFlight) {
+      console.log("🎯 Using enhanced booking context data - most reliable source for dates");
+      const enhancedContextBookingData = generateEnhancedBookingData();
+      setBooking(enhancedContextBookingData);
+      setBookingType("flight");
+      return;
+    }
+
+    // Fallback to legacy booking context
     if (bookingContext.isComplete && bookingContext.selectedFlight) {
-      console.log("🎯 Using booking context data - most reliable source");
+      console.log("🎯 Using legacy booking context data");
       const contextBookingData = generateBookingData();
       setBooking(contextBookingData);
       setBookingType("flight");
@@ -2018,7 +2027,7 @@ export default function BookingConfirmation() {
                   before international flights
                 </li>
                 <li>
-                  • Check-in opens 48 hours before departure for most airlines
+                  ��� Check-in opens 48 hours before departure for most airlines
                 </li>
                 <li>• Baggage restrictions apply as per airline policy</li>
                 <li>
