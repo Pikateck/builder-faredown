@@ -93,12 +93,17 @@ const profileAPI = {
       console.error("fetchProfile error:", error);
       // Return mock data for development
       return {
+        success: true,
         profile: {
+          id: 1,
           first_name: "Zubin",
           last_name: "Aibara",
           email: "zubin@example.com",
           phone: "+91 9876543210",
           email_verified: true,
+          nationality_iso2: "IN",
+          date_of_birth: "1990-01-01",
+          gender: "male",
         },
       };
     }
