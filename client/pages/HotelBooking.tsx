@@ -45,10 +45,12 @@ import {
   X,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
 
 export default function HotelBooking() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { booking: enhancedBooking, loadCompleteSearchObject } = useEnhancedBooking();
 
   // Get booking data from navigation state
   const selectedHotel = location.state?.selectedHotel;
