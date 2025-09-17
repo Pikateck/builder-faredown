@@ -1307,7 +1307,7 @@ export default function BookingFlow() {
     { name: "Israel", code: "+972", flag: "🇮🇱" },
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
-    { name: "Jamaica", code: "+1", flag: "🇯🇲" },
+    { name: "Jamaica", code: "+1", flag: "🇯����" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
   ];
 
@@ -1850,7 +1850,7 @@ export default function BookingFlow() {
                           name: "US Dollar",
                           flag: "🇺🇸",
                         },
-                        { code: "EUR", symbol: "��", name: "Euro", flag: "🇪🇺" },
+                        { code: "EUR", symbol: "€", name: "Euro", flag: "🇪🇺" },
                         {
                           code: "GBP",
                           symbol: "£",
@@ -2098,8 +2098,8 @@ export default function BookingFlow() {
                 {tripType === "one-way" ? "One way" : "Round trip"} •{" "}
                 {travellers.length} traveller
                 {travellers.length > 1 ? "s" : ""} •{" "}
-                {departureDate
-                  ? formatDisplayDate(departureDate, "eee, MMM d")
+                {exactDepartDate
+                  ? formatExactDate(exactDepartDate).replace(/, \d{4}$/, "")
                   : "Select dates"}
               </div>
               <h1 className="text-xl md:text-2xl font-bold text-gray-900 mb-4 md:mb-6">
@@ -3435,7 +3435,7 @@ export default function BookingFlow() {
                           only
                         </p>
                         <p className="text-xs text-blue-200 mt-3">
-                          �� All taxes and fees included • No hidden charges
+                          ✓ All taxes and fees included • No hidden charges
                         </p>
                       </div>
                     </div>
