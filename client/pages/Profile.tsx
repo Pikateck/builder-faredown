@@ -1285,18 +1285,14 @@ function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
             </div>
             <div>
               <Label htmlFor="nationality">Nationality</Label>
-              <Select value={form.nationalityIso2 || ""} onValueChange={(value) => setForm({...form, nationalityIso2: value})}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select nationality" />
-                </SelectTrigger>
-                <SelectContent>
-                  {countries.map((country) => (
-                    <SelectItem key={country.code} value={country.code}>
-                      {country.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
+              <CountrySelect
+                value={form.nationalityIso2 || ""}
+                onValueChange={(value) => setForm({...form, nationalityIso2: value})}
+                placeholder="Select nationality"
+                prioritizePopular={true}
+                showFlags={true}
+                className="w-full"
+              />
             </div>
           </div>
           
