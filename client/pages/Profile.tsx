@@ -653,7 +653,7 @@ export default function Profile({
 
   const languages = [
     { code: "en", name: "English" },
-    { code: "hi", name: "हिन्दी" },
+    { code: "hi", name: "ह��न्दी" },
     { code: "es", name: "Español" },
     { code: "fr", name: "Français" },
     { code: "de", name: "Deutsch" },
@@ -1152,8 +1152,8 @@ function TravelersTab({
                           Nationality:{" "}
                           {
                             countries.find(
-                              (c) => c.code === traveler.nationality_iso2,
-                            )?.name
+                              (c) => c.iso2 === traveler.nationality_iso2,
+                            )?.display_name
                           }
                         </p>
                       )}
