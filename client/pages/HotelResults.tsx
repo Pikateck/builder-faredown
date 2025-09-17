@@ -238,7 +238,38 @@ export default function HotelResults() {
   useEffect(() => {
     loadDatesFromParams(searchParams);
     loadFromUrlParams(searchParams);
-  }, [searchKey, loadDatesFromParams, loadFromUrlParams]);
+
+    // Create and load standardized hotel search object for state persistence
+    const standardizedHotelSearchParams = {
+      module: "hotels" as const,
+      destination: searchParams.get("destination") || destination || "Dubai",
+      destinationCode: searchParams.get("destinationCode") || "DXB",
+      destinationName: searchParams.get("destinationName") || destination || "Dubai, United Arab Emirates",
+      // Use exact date format as specified by user: "2025-10-01"
+      checkIn: searchParams.get("checkIn") || checkIn || new Date().toISOString().split('T')[0],
+      checkOut: searchParams.get("checkOut") || checkOut || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      rooms: parseInt(searchParams.get("rooms") || rooms || "1"),
+      nights: calculateNights(
+        new Date(searchParams.get("checkIn") || checkIn || new Date().toISOString()),
+        new Date(searchParams.get("checkOut") || checkOut || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString())
+      ),
+      guests: {
+        adults: parseInt(searchParams.get("adults") || adults || "2"),
+        children: parseInt(searchParams.get("children") || children || "0"),
+      },
+      pax: {
+        adults: parseInt(searchParams.get("adults") || adults || "2"),
+        children: parseInt(searchParams.get("children") || children || "0"),
+        infants: 0,
+      },
+      currency: selectedCurrency?.code || "INR",
+      searchId: `hotel_results_${Date.now()}`,
+      searchTimestamp: new Date().toISOString(),
+    };
+
+    console.log("🏨 Loading standardized hotel search object to context:", standardizedHotelSearchParams);
+    loadCompleteSearchObject(standardizedHotelSearchParams);
+  }, [searchKey, loadDatesFromParams, loadFromUrlParams, destination, checkIn, checkOut, adults, children, rooms, selectedCurrency]);
 
   // Fetch hotels when search or currency code changes (avoid object identity churn)
   useEffect(() => {
