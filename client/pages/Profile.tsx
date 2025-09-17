@@ -50,6 +50,7 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { CountrySelect } from "@/components/ui/country-select";
+import useCountries from "@/hooks/useCountries";
 
 // Check if offline mode is enabled
 const isOfflineMode = import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK === 'true';
@@ -465,6 +466,9 @@ export default function Profile({
   const [passportForm, setPassportForm] = useState({});
   const [paymentForm, setPaymentForm] = useState({});
 
+  // Load countries data
+  const { countries } = useCountries({ autoFetch: true });
+
   useEffect(() => {
     loadInitialData();
   }, []);
@@ -742,6 +746,7 @@ export default function Profile({
             {activeTab === "travelers" && (
               <TravelersTab
                 travelers={travelers}
+                countries={countries}
                 onEdit={(traveler) => {
                   setEditingTraveler(traveler);
                   setTravelerForm(traveler);
@@ -1089,6 +1094,7 @@ function PersonalDetailsTab({
 // Travelers Tab Component
 function TravelersTab({
   travelers,
+  countries = [],
   onEdit,
   onDelete,
   onAddNew,
