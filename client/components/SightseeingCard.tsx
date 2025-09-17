@@ -81,6 +81,7 @@ export function SightseeingCard({
 }: SightseeingCardProps) {
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
+  const { loadCompleteSearchObject } = useEnhancedBooking();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showImageGallery, setShowImageGallery] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
