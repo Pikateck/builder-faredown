@@ -529,72 +529,7 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
     }));
     // Recalculate price breakdown when extras change
     setTimeout(() => updatePriceBreakdown({}), 0);
-  }, []);
-
-  const updatePriceBreakdown = useCallback((prices: Partial<PriceBreakdown>) => {
-    setBooking((prev) => {
-      const passengers = prev.searchParams.pax;
-      const totalPassengers = passengers.adults + passengers.children + passengers.infants;
-      const fare = prev.selectedFare;
-
-      if (!fare) return prev;
-
-      // Calculate base fare
-      const adultFare = fare.price;
-      const childFare = fare.price * 0.75;
-      const infantFare = fare.price * 0.1;
-
-      const baseFare =
-        passengers.adults * adultFare +
-        passengers.children * childFare +
-        passengers.infants * infantFare;
-
-      // Calculate taxes (18% of base fare)
-      const taxes = baseFare * 0.18;
-
-      // Calculate fees (airport charges, fuel surcharge, etc.)
-      const fees = baseFare * 0.05;
-
-      // Calculate extras total
-      const extrasTotal =
-        prev.extras.meals.reduce((sum, meal) => sum + meal.price, 0) +
-        prev.extras.baggage.reduce((sum, bag) => sum + bag.price * bag.quantity, 0) +
-        prev.extras.otherServices.reduce((sum, service) => sum + service.price, 0);
-
-      // Calculate seats total
-      const seatsTotal = prev.extras.seats.reduce((sum, seat) => sum + seat.price, 0);
-
-      // Calculate insurance total
-      const insuranceTotal =
-        prev.extras.insurance.refundProtectionCost +
-        prev.extras.insurance.baggageProtectionCost;
-
-      // Calculate savings if bargained
-      const savings =
-        fare.isBargained && fare.originalPrice
-          ? (fare.originalPrice - fare.price) * totalPassengers
-          : 0;
-
-      const total = baseFare + taxes + fees + extrasTotal + seatsTotal + insuranceTotal;
-
-      const newPriceBreakdown: PriceBreakdown = {
-        baseFare,
-        taxes,
-        fees,
-        extras: extrasTotal,
-        seats: seatsTotal,
-        insurance: insuranceTotal,
-        total,
-        savings,
-        ...prices,
-      };
-
-      return {
-        ...prev,
-        priceBreakdown: newPriceBreakdown,
-      };
-    });
-  }, []);
+  }, [updatePriceBreakdown]);
 
 
   const generateBookingData = useCallback(() => {
