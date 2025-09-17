@@ -1169,6 +1169,34 @@ export default function TransferResults() {
                       <div className="space-y-2">
                         <Button
                           onClick={() => {
+                            // Create standardized search object for transfers following the user's requirements
+                            const standardizedTransfersSearchParams = {
+                              module: "transfers" as const,
+                              pickupLocation: transfer.pickupLocation,
+                              dropoffLocation: transfer.dropoffLocation,
+                              transferType: isRoundTrip ? "airport-hotel" : "airport-hotel",
+                              // Use exact date format as specified by user: "2025-10-01"
+                              checkIn: pickupDate || new Date().toISOString().split('T')[0],
+                              checkOut: returnDate || pickupDate || new Date().toISOString().split('T')[0],
+                              guests: {
+                                adults: adults,
+                                children: children,
+                              },
+                              pax: {
+                                adults: adults,
+                                children: children,
+                                infants: infants,
+                              },
+                              currency: "INR",
+                              searchId: `transfers_details_${Date.now()}`,
+                              searchTimestamp: new Date().toISOString(),
+                            };
+
+                            console.log("🚗 Standardized Transfers Search Object being passed to details:", standardizedTransfersSearchParams);
+
+                            // Load standardized search object to enhanced booking context
+                            loadCompleteSearchObject(standardizedTransfersSearchParams);
+
                             const detailParams = new URLSearchParams({
                               price: transfer.pricing.totalPrice.toString(),
                               from: transfer.pickupLocation,
@@ -1182,8 +1210,17 @@ export default function TransferResults() {
                               infants: infants.toString(),
                               tripType: isRoundTrip ? "return" : "one-way",
                             });
+
+                            // Navigate with complete state for immediate availability and URL persistence
                             navigate(
                               `/transfer-details/${transfer.id}?${detailParams.toString()}`,
+                              {
+                                state: {
+                                  searchParams: standardizedTransfersSearchParams,
+                                  transferData: transfer,
+                                  priceData: transfer.pricing,
+                                },
+                              }
                             );
                           }}
                           className="w-full py-3 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
