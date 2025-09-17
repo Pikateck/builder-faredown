@@ -1,5 +1,5 @@
 import React from "react";
-import Image from "@/components/OptimizedImage"; // or plain <img> if you prefer
+import { OptimizedImage as Image } from "@/components/ui/OptimizedImage";
 import BargainButton from "@/components/ui/BargainButton";
 
 export type FareType = {
