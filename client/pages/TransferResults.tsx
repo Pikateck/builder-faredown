@@ -277,7 +277,7 @@ export default function TransferResults() {
 
     console.log("🚗 Loading standardized transfers search object to context:", standardizedTransfersSearchParams);
     loadCompleteSearchObject(standardizedTransfersSearchParams);
-  }, [pickupLocation, dropoffLocation, pickupDate, returnDate, adults, children, infants, isRoundTrip, loadCompleteSearchObject]);
+  }, [pickupLocation, dropoffLocation, pickupDate, returnDate, adults, children, infants, isRoundTrip]);
 
   // Load transfer data
   useEffect(() => {
