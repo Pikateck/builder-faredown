@@ -74,6 +74,7 @@ export default function SightseeingResults() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const { formatPrice } = useCurrency();
+  const { loadCompleteSearchObject } = useEnhancedBooking();
 
   // Extract search parameters
   const destination = searchParams.get("destination") || "";
