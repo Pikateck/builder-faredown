@@ -51,7 +51,7 @@ import {
 import { cn } from "@/lib/utils";
 import { CountrySelect } from "@/components/ui/country-select";
 
-// API Service with proper error handling
+// API Service with proper error handling and mock fallbacks
 const profileAPI = {
   baseURL: "/api/profile",
 
@@ -1161,7 +1161,7 @@ function PaymentMethodsTab({
                     <div>
                       <div className="flex items-center space-x-2">
                         <span className="font-medium">
-                          {method.brand} •••• {method.last4}
+                          {method.brand} ��••• {method.last4}
                         </span>
                         {method.is_default && (
                           <Badge variant="secondary">Default</Badge>
