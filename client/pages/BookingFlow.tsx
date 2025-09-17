@@ -1665,9 +1665,7 @@ export default function BookingFlow() {
           {
             from: "Mumbai",
             to: "Dubai",
-            date: departureDate
-              ? formatDisplayDate(departureDate, "EEE, MMM d")
-              : "Select date",
+            date: formatExactDate(exactDepartDate).replace(/^\w+, /, "").replace(/, \d{4}$/, ""),
             time: selectedFlight?.departureTime || "14:35",
             duration: selectedFlight?.duration || "3h 15m",
             airline: selectedFlight?.airline || "Airlines",
@@ -2191,7 +2189,7 @@ export default function BookingFlow() {
                                 1 carry-on bag
                               </p>
                               <p className="text-xs text-[#666]">
-                                22 x 55 x 40 cm ��� 7 kg
+                                22 x 55 x 40 cm ����� 7 kg
                               </p>
                             </div>
                           </div>
