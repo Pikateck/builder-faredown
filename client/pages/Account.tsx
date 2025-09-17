@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import Profile from "./Profile";
+import EnhancedMyBookings from "./EnhancedMyBookings";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -72,13 +73,18 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
+import { formatAppDate, formatAppDateWithDay } from "@/utils/dateUtils";
+import { accountService, type AccountOverview } from "@/services/accountService";
+import { useCurrency } from "@/contexts/CurrencyContext";
 
 export default function Account() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const location = useLocation();
   const [bookings, setBookings] = useState([]);
+  const [accountOverview, setAccountOverview] = useState<AccountOverview | null>(null);
   const [userName] = useState("Zubin Aibara");
+  const { formatPrice } = useCurrency();
 
   // Determine if we're on a sub-page or the main account landing
   const isSubPage = location.pathname !== "/account" && location.pathname !== "/my-account";
@@ -94,67 +100,42 @@ export default function Account() {
   });
 
   useEffect(() => {
-    // Load bookings data (same as before)
-    const savedBookings = JSON.parse(
-      localStorage.getItem("faredownBookings") || "[]",
-    );
-
-    if (savedBookings.length === 0 || true) {
-      const sampleBookings = [
-        {
-          type: "flight",
-          bookingDetails: {
-            bookingRef: "FD-FL-001",
-            bookingDate: "2024-01-15",
-            passengers: [
-              {
-                firstName: "John",
-                lastName: "Doe",
-                title: "Mr",
-              },
-            ],
-            contactDetails: {
-              email: "john@example.com",
-              countryCode: "+91",
-              phone: "9876543210",
-            },
-            currency: { symbol: "₹" },
-            totalAmount: 45000,
-          },
-          flightDetails: {
-            airline: "Air India",
-            flightNumber: "AI-131",
-          },
-          paymentId: "pay_demo123456789",
-        },
-        {
-          type: "hotel",
-          bookingDetails: {
-            bookingRef: "FD-HT-002",
-            bookingDate: "2024-01-16",
-            passengers: [
-              {
-                firstName: "John",
-                lastName: "Doe",
-                title: "Mr",
-              },
-            ],
-            contactDetails: {
-              email: "john@example.com",
-              countryCode: "+91",
-              phone: "9876543210",
-            },
-            currency: { symbol: "₹" },
-            totalAmount: 12000,
-          },
-          paymentId: "pay_demo987654321",
-        },
-      ];
-      setBookings(sampleBookings);
-    } else {
-      setBookings(savedBookings);
-    }
+    loadAccountData();
   }, []);
+
+  const loadAccountData = async () => {
+    try {
+      const overview = await accountService.getAccountOverview();
+      setAccountOverview(overview);
+
+      // Convert to old format for backward compatibility
+      const oldFormatBookings = overview.recent_activity.map(activity => ({
+        type: activity.module,
+        bookingDetails: {
+          bookingRef: activity.booking_ref,
+          bookingDate: activity.date,
+          passengers: [{ firstName: "John", lastName: "Doe", title: "Mr" }],
+          contactDetails: {
+            email: "john@example.com",
+            countryCode: "+91",
+            phone: "9876543210",
+          },
+          currency: { symbol: "₹" },
+          totalAmount: activity.amount,
+        },
+        flightDetails: activity.module === 'flight' ? {
+          airline: "Air India",
+          flightNumber: "AI-131",
+        } : undefined,
+        paymentId: `pay_demo${Math.random().toString().slice(2, 14)}`,
+      }));
+      setBookings(oldFormatBookings);
+    } catch (error) {
+      console.error('Failed to load account data:', error);
+      // Fallback to mock data
+      setBookings([]);
+    }
+  };
 
   // Account landing page sections like Booking.com
   const accountSections = [
@@ -256,7 +237,7 @@ export default function Account() {
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm text-[#7a7a7a]">You have 1,250 FaredownClub points</p>
+                <p className="text-sm text-[#7a7a7a]">You have {accountOverview?.loyalty_points?.toLocaleString() || '1,250'} FaredownClub points</p>
                 <div className="mt-2">
                   <div className="flex items-center justify-end space-x-2 mb-1">
                     <span className="text-xs text-[#7a7a7a]">Progress to Platinum</span>
@@ -264,7 +245,7 @@ export default function Account() {
                       <div className="w-2/3 h-2 bg-[#febb02] rounded-full"></div>
                     </div>
                   </div>
-                  <p className="text-xs text-[#003580] font-medium">10 more bookings for FaredownClub Platinum</p>
+                  <p className="text-xs text-[#003580] font-medium">{accountOverview?.progress_to_next_tier?.remaining || 10} more bookings for FaredownClub Platinum</p>
                 </div>
               </div>
             </div>
@@ -512,7 +493,7 @@ export default function Account() {
       case "payment":
         return <Profile standalone={false} initialTab="payments" />;
       case "trips":
-        return renderTripsPage();
+        return <EnhancedMyBookings />;
       default:
         return renderAccountLanding();
     }
