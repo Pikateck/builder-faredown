@@ -64,6 +64,14 @@ export default function BookingConfirmation() {
     // Load search data from URL parameters and booking context
     loadFromBookingData(bookingContext);
 
+    // Check for booking data passed via location state (highest priority)
+    if (location.state?.bookingData) {
+      console.log("🎯 Using booking data from location state - includes complete search object");
+      setBooking(location.state.bookingData);
+      setBookingType("flight");
+      return;
+    }
+
     // Prioritize enhanced booking context data first (most reliable for dates)
     if (enhancedBookingContext.isComplete && enhancedBookingContext.selectedFlight) {
       console.log("🎯 Using enhanced booking context data - most reliable source for dates");
