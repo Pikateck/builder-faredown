@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { Link, useSearchParams, useNavigate, useLocation } from "react-router-dom";
+import {
+  Link,
+  useSearchParams,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import Profile from "./Profile";
 import EnhancedMyBookings from "./EnhancedMyBookings";
@@ -74,7 +79,10 @@ import { Switch } from "@/components/ui/switch";
 import { Separator } from "@/components/ui/separator";
 import { cn } from "@/lib/utils";
 import { formatAppDate, formatAppDateWithDay } from "@/utils/dateUtils";
-import { accountService, type AccountOverview } from "@/services/accountService";
+import {
+  accountService,
+  type AccountOverview,
+} from "@/services/accountService";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
 export default function Account() {
@@ -82,12 +90,14 @@ export default function Account() {
   const navigate = useNavigate();
   const location = useLocation();
   const [bookings, setBookings] = useState([]);
-  const [accountOverview, setAccountOverview] = useState<AccountOverview | null>(null);
+  const [accountOverview, setAccountOverview] =
+    useState<AccountOverview | null>(null);
   const [userName] = useState("Zubin Aibara");
   const { formatPrice } = useCurrency();
 
   // Determine if we're on a sub-page or the main account landing
-  const isSubPage = location.pathname !== "/account" && location.pathname !== "/my-account";
+  const isSubPage =
+    location.pathname !== "/account" && location.pathname !== "/my-account";
   const currentSection = location.pathname.split("/")[2]; // e.g., "personal", "security", etc.
 
   // Search and collapsible functionality for bookings
@@ -109,7 +119,7 @@ export default function Account() {
       setAccountOverview(overview);
 
       // Convert to old format for backward compatibility
-      const oldFormatBookings = overview.recent_activity.map(activity => ({
+      const oldFormatBookings = overview.recent_activity.map((activity) => ({
         type: activity.module,
         bookingDetails: {
           bookingRef: activity.booking_ref,
@@ -123,15 +133,18 @@ export default function Account() {
           currency: { symbol: "₹" },
           totalAmount: activity.amount,
         },
-        flightDetails: activity.module === 'flight' ? {
-          airline: "Air India",
-          flightNumber: "AI-131",
-        } : undefined,
+        flightDetails:
+          activity.module === "flight"
+            ? {
+                airline: "Air India",
+                flightNumber: "AI-131",
+              }
+            : undefined,
         paymentId: `pay_demo${Math.random().toString().slice(2, 14)}`,
       }));
       setBookings(oldFormatBookings);
     } catch (error) {
-      console.error('Failed to load account data:', error);
+      console.error("Failed to load account data:", error);
       // Fallback to mock data
       setBookings([]);
     }
@@ -181,7 +194,11 @@ export default function Account() {
       description: "Get help with your bookings and account",
       icon: HelpCircle,
       href: "/help",
-      items: ["Contact Customer Service", "Using the platform", "Dispute resolution"],
+      items: [
+        "Contact Customer Service",
+        "Using the platform",
+        "Dispute resolution",
+      ],
       color: "faredown-neutral",
     },
     {
@@ -201,7 +218,10 @@ export default function Account() {
       personal: { title: "Personal details", parent: "Manage account" },
       security: { title: "Security settings", parent: "Manage account" },
       travelers: { title: "Other travelers", parent: "Manage account" },
-      preferences: { title: "Customization preferences", parent: "Preferences" },
+      preferences: {
+        title: "Customization preferences",
+        parent: "Preferences",
+      },
       payment: { title: "Payment methods", parent: "Payment & Wallet" },
       privacy: { title: "Privacy & data", parent: "Legal & privacy" },
       trips: { title: "Trips & bookings", parent: "Travel activity" },
@@ -232,20 +252,31 @@ export default function Account() {
                     <Badge className="bg-[#febb02] text-[#1a1a1a] text-sm font-medium border border-[#e6a602] shadow-sm">
                       👑 FaredownClub Gold
                     </Badge>
-                    <span className="text-[#7a7a7a] text-sm">Member since Dec 2024</span>
+                    <span className="text-[#7a7a7a] text-sm">
+                      Member since Dec 2024
+                    </span>
                   </div>
                 </div>
               </div>
               <div className="text-right">
-                <p className="text-sm text-[#7a7a7a]">You have {accountOverview?.loyalty_points?.toLocaleString() || '1,250'} FaredownClub points</p>
+                <p className="text-sm text-[#7a7a7a]">
+                  You have{" "}
+                  {accountOverview?.loyalty_points?.toLocaleString() || "1,250"}{" "}
+                  FaredownClub points
+                </p>
                 <div className="mt-2">
                   <div className="flex items-center justify-end space-x-2 mb-1">
-                    <span className="text-xs text-[#7a7a7a]">Progress to Platinum</span>
+                    <span className="text-xs text-[#7a7a7a]">
+                      Progress to Platinum
+                    </span>
                     <div className="w-24 h-2 bg-[#e5e5e5] rounded-full">
                       <div className="w-2/3 h-2 bg-[#febb02] rounded-full"></div>
                     </div>
                   </div>
-                  <p className="text-xs text-[#003580] font-medium">{accountOverview?.progress_to_next_tier?.remaining || 10} more bookings for FaredownClub Platinum</p>
+                  <p className="text-xs text-[#003580] font-medium">
+                    {accountOverview?.progress_to_next_tier?.remaining || 10}{" "}
+                    more bookings for FaredownClub Platinum
+                  </p>
                 </div>
               </div>
             </div>
@@ -260,8 +291,12 @@ export default function Account() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#7a7a7a] text-sm font-medium">Total Bookings</p>
-                  <p className="text-2xl font-bold text-[#003580]">{accountOverview?.total_bookings || bookings.length}</p>
+                  <p className="text-[#7a7a7a] text-sm font-medium">
+                    Total Bookings
+                  </p>
+                  <p className="text-2xl font-bold text-[#003580]">
+                    {accountOverview?.total_bookings || bookings.length}
+                  </p>
                 </div>
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
                   <Plane className="w-6 h-6 text-[#003580]" />
@@ -273,8 +308,12 @@ export default function Account() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#7a7a7a] text-sm font-medium">Countries Visited</p>
-                  <p className="text-2xl font-bold text-[#003580]">{accountOverview?.countries_visited || 2}</p>
+                  <p className="text-[#7a7a7a] text-sm font-medium">
+                    Countries Visited
+                  </p>
+                  <p className="text-2xl font-bold text-[#003580]">
+                    {accountOverview?.countries_visited || 2}
+                  </p>
                 </div>
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
                   <Globe className="w-6 h-6 text-[#003580]" />
@@ -286,8 +325,13 @@ export default function Account() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#7a7a7a] text-sm font-medium">FaredownClub Points</p>
-                  <p className="text-2xl font-bold text-[#003580]">{accountOverview?.loyalty_points?.toLocaleString() || '1,250'}</p>
+                  <p className="text-[#7a7a7a] text-sm font-medium">
+                    FaredownClub Points
+                  </p>
+                  <p className="text-2xl font-bold text-[#003580]">
+                    {accountOverview?.loyalty_points?.toLocaleString() ||
+                      "1,250"}
+                  </p>
                 </div>
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
                   <Award className="w-6 h-6 text-[#003580]" />
@@ -299,7 +343,9 @@ export default function Account() {
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-[#7a7a7a] text-sm font-medium">Current Tier</p>
+                  <p className="text-[#7a7a7a] text-sm font-medium">
+                    Current Tier
+                  </p>
                   <p className="text-lg font-bold text-[#003580]">👑 Gold</p>
                 </div>
                 <div className="w-12 h-12 bg-[#febb02] rounded-lg flex items-center justify-center shadow-sm border border-[#e6a602]">
@@ -321,32 +367,66 @@ export default function Account() {
                 <div>
                   <h3 className="text-xl font-bold text-[#003580] flex items-center space-x-2">
                     <span>FaredownClub Gold</span>
-                    <Badge className="bg-[#febb02] text-[#1a1a1a] border border-[#e6a602]">Current Tier</Badge>
+                    <Badge className="bg-[#febb02] text-[#1a1a1a] border border-[#e6a602]">
+                      Current Tier
+                    </Badge>
                   </h3>
-                  <p className="text-[#7a7a7a]">Enjoy enhanced benefits and exclusive rewards</p>
+                  <p className="text-[#7a7a7a]">
+                    Enjoy enhanced benefits and exclusive rewards
+                  </p>
                   <div className="mt-2 flex flex-wrap gap-2">
-                    <Badge variant="outline" className="text-xs border-[#e5e5e5] text-[#7a7a7a]">Higher discounts</Badge>
-                    <Badge variant="outline" className="text-xs border-[#e5e5e5] text-[#7a7a7a]">Free seat upgrades</Badge>
-                    <Badge variant="outline" className="text-xs border-[#e5e5e5] text-[#7a7a7a]">Early check-in</Badge>
+                    <Badge
+                      variant="outline"
+                      className="text-xs border-[#e5e5e5] text-[#7a7a7a]"
+                    >
+                      Higher discounts
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="text-xs border-[#e5e5e5] text-[#7a7a7a]"
+                    >
+                      Free seat upgrades
+                    </Badge>
+                    <Badge
+                      variant="outline"
+                      className="text-xs border-[#e5e5e5] text-[#7a7a7a]"
+                    >
+                      Early check-in
+                    </Badge>
                   </div>
                 </div>
               </div>
 
               <div className="text-left md:text-right w-full md:w-auto">
                 <div className="mb-4">
-                  <p className="text-sm text-[#7a7a7a] mb-2">Progress to Platinum</p>
+                  <p className="text-sm text-[#7a7a7a] mb-2">
+                    Progress to Platinum
+                  </p>
                   <div className="w-full md:w-48 h-3 bg-[#e5e5e5] rounded-full">
                     <div className="w-1/3 h-3 bg-[#febb02] rounded-full relative">
                       <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[#febb02] rounded-full border-2 border-[#ffffff]"></div>
                     </div>
                   </div>
                   <div className="flex justify-between text-xs text-[#7a7a7a] mt-1">
-                    <span>{accountOverview?.progress_to_next_tier?.current_bookings || 5} bookings</span>
-                    <span>{accountOverview?.progress_to_next_tier?.required_bookings || 15} bookings</span>
+                    <span>
+                      {accountOverview?.progress_to_next_tier
+                        ?.current_bookings || 5}{" "}
+                      bookings
+                    </span>
+                    <span>
+                      {accountOverview?.progress_to_next_tier
+                        ?.required_bookings || 15}{" "}
+                      bookings
+                    </span>
                   </div>
                 </div>
-                <p className="text-sm font-medium text-[#003580]">{accountOverview?.progress_to_next_tier?.remaining || 10} more bookings to unlock Platinum</p>
-                <p className="text-xs text-[#7a7a7a] max-w-64">Next tier: Max discounts, free meals, lounge access</p>
+                <p className="text-sm font-medium text-[#003580]">
+                  {accountOverview?.progress_to_next_tier?.remaining || 10} more
+                  bookings to unlock Platinum
+                </p>
+                <p className="text-xs text-[#7a7a7a] max-w-64">
+                  Next tier: Max discounts, free meals, lounge access
+                </p>
               </div>
             </div>
           </CardContent>
@@ -359,11 +439,13 @@ export default function Account() {
             const isSelected = location.pathname.startsWith(section.href);
             return (
               <Link key={section.id} to={section.href}>
-                <Card className={cn(
-                  "h-full transition-all duration-200 cursor-pointer group bg-[#ffffff] border border-[#e5e5e5]",
-                  "hover:bg-[#f5f5f5] hover:shadow-sm hover:border-[#e5e5e5] rounded-lg",
-                  isSelected && "bg-[#f5f5f5] border-[#e5e5e5]"
-                )}>
+                <Card
+                  className={cn(
+                    "h-full transition-all duration-200 cursor-pointer group bg-[#ffffff] border border-[#e5e5e5]",
+                    "hover:bg-[#f5f5f5] hover:shadow-sm hover:border-[#e5e5e5] rounded-lg",
+                    isSelected && "bg-[#f5f5f5] border-[#e5e5e5]",
+                  )}
+                >
                   <CardContent className="p-6">
                     <div className="flex items-start justify-between mb-4">
                       <div className="w-12 h-12 rounded-10 flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
@@ -372,11 +454,13 @@ export default function Account() {
                       <ChevronRight className="w-5 h-5 text-[#7a7a7a] group-hover:text-[#003580] transition-colors" />
                     </div>
 
-                    <h3 className={cn(
-                      "text-lg font-semibold text-[#1a1a1a] mb-2 transition-all",
-                      "group-hover:font-bold",
-                      isSelected && "font-bold"
-                    )}>
+                    <h3
+                      className={cn(
+                        "text-lg font-semibold text-[#1a1a1a] mb-2 transition-all",
+                        "group-hover:font-bold",
+                        isSelected && "font-bold",
+                      )}
+                    >
                       {section.title}
                     </h3>
                     <p className="text-sm text-[#7a7a7a] mb-4">
@@ -385,7 +469,10 @@ export default function Account() {
 
                     <div className="space-y-1">
                       {section.items.slice(0, 3).map((item, index) => (
-                        <div key={index} className="flex items-center text-sm text-[#7a7a7a]">
+                        <div
+                          key={index}
+                          className="flex items-center text-sm text-[#7a7a7a]"
+                        >
                           <div className="w-1 h-1 bg-[#e5e5e5] rounded-full mr-2"></div>
                           {item}
                         </div>
@@ -401,19 +488,28 @@ export default function Account() {
         {/* Recent Activity Section */}
         <div className="mt-12">
           <div className="flex items-center justify-between mb-6">
-            <h2 className="text-xl font-bold text-[#003580]">Recent Activity</h2>
+            <h2 className="text-xl font-bold text-[#003580]">
+              Recent Activity
+            </h2>
             <Link to="/account/trips">
-              <Button variant="outline" size="sm" className="border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2] transition-colors">
+              <Button
+                variant="outline"
+                size="sm"
+                className="border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2] transition-colors"
+              >
                 View all trips
                 <ChevronRight className="w-4 h-4 ml-2" />
               </Button>
             </Link>
           </div>
-          
+
           {bookings.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               {bookings.slice(0, 2).map((booking, index) => (
-                <Card key={index} className="bg-[#ffffff] border border-[#e5e5e5] hover:shadow-md transition-shadow">
+                <Card
+                  key={index}
+                  className="bg-[#ffffff] border border-[#e5e5e5] hover:shadow-md transition-shadow"
+                >
                   <CardContent className="p-6">
                     <div className="flex items-center justify-between mb-4">
                       <div className="flex items-center space-x-3">
@@ -426,7 +522,9 @@ export default function Account() {
                         </div>
                         <div>
                           <h3 className="font-semibold text-[#1a1a1a]">
-                            {booking.type === "flight" ? "Flight Booking" : "Hotel Booking"}
+                            {booking.type === "flight"
+                              ? "Flight Booking"
+                              : "Hotel Booking"}
                           </h3>
                           <p className="text-sm text-[#7a7a7a]">
                             {booking.bookingDetails.bookingRef}
@@ -439,8 +537,14 @@ export default function Account() {
                     </div>
 
                     <div className="text-sm text-[#7a7a7a] space-y-1">
-                      <p>Date: {formatAppDate(booking.bookingDetails.bookingDate)}</p>
-                      <p>Amount: {formatPrice(booking.bookingDetails.totalAmount)}</p>
+                      <p>
+                        Date:{" "}
+                        {formatAppDate(booking.bookingDetails.bookingDate)}
+                      </p>
+                      <p>
+                        Amount:{" "}
+                        {formatPrice(booking.bookingDetails.totalAmount)}
+                      </p>
                     </div>
 
                     <div className="mt-4 flex space-x-2">
@@ -448,7 +552,11 @@ export default function Account() {
                         variant="outline"
                         size="sm"
                         className="flex-1 border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]"
-                        onClick={() => navigate(`/account/trips?booking=${booking.bookingDetails.bookingRef}`)}
+                        onClick={() =>
+                          navigate(
+                            `/account/trips?booking=${booking.bookingDetails.bookingRef}`,
+                          )
+                        }
                       >
                         <Eye className="w-4 h-4 mr-2" />
                         View Details
@@ -459,10 +567,13 @@ export default function Account() {
                         className="flex-1 border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]"
                         onClick={async () => {
                           try {
-                            const downloadUrl = await accountService.downloadTicket(booking.bookingDetails.bookingRef);
-                            window.open(downloadUrl, '_blank');
+                            const downloadUrl =
+                              await accountService.downloadTicket(
+                                booking.bookingDetails.bookingRef,
+                              );
+                            window.open(downloadUrl, "_blank");
                           } catch (error) {
-                            console.error('Download failed:', error);
+                            console.error("Download failed:", error);
                           }
                         }}
                       >
@@ -630,7 +741,9 @@ export default function Account() {
                           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
                             <div>
                               <CardTitle className="text-lg font-semibold text-[#003580]">
-                                {module.id === "flights" ? "Mumbai ⇄ Dubai" : "Hotel Booking"}
+                                {module.id === "flights"
+                                  ? "Mumbai ⇄ Dubai"
+                                  : "Hotel Booking"}
                               </CardTitle>
                               <p className="text-sm text-[#7a7a7a]">
                                 Booking Reference:{" "}
@@ -645,7 +758,9 @@ export default function Account() {
                               </Badge>
                               <p className="text-sm text-[#7a7a7a] mt-1">
                                 Booked on{" "}
-                                {new Date(booking.bookingDetails?.bookingDate).toLocaleDateString()}
+                                {new Date(
+                                  booking.bookingDetails?.bookingDate,
+                                ).toLocaleDateString()}
                               </p>
                             </div>
                           </div>
@@ -657,7 +772,9 @@ export default function Account() {
                             <div className="space-y-4">
                               <div>
                                 <h4 className="font-semibold text-[#003580] mb-2">
-                                  {module.id === "flights" ? "Flight Details" : "Hotel Details"}
+                                  {module.id === "flights"
+                                    ? "Flight Details"
+                                    : "Hotel Details"}
                                 </h4>
                                 {module.id === "flights" ? (
                                   <>
@@ -672,8 +789,10 @@ export default function Account() {
                                     <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
                                       <Plane className="w-4 h-4" />
                                       <span>
-                                        {booking.flightDetails?.airline || "Airlines"}{" "}
-                                        {booking.flightDetails?.flightNumber || "FL-001"}
+                                        {booking.flightDetails?.airline ||
+                                          "Airlines"}{" "}
+                                        {booking.flightDetails?.flightNumber ||
+                                          "FL-001"}
                                       </span>
                                     </div>
                                   </>
@@ -685,7 +804,9 @@ export default function Account() {
                                     </div>
                                     <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
                                       <Calendar className="w-4 h-4" />
-                                      <span>Check-in: Aug 3 • Check-out: Aug 10</span>
+                                      <span>
+                                        Check-in: Aug 3 • Check-out: Aug 10
+                                      </span>
                                     </div>
                                   </>
                                 )}
@@ -695,32 +816,49 @@ export default function Account() {
                             {/* Passenger Details */}
                             <div>
                               <h4 className="font-semibold text-[#003580] mb-2">
-                                {module.id === "hotels" ? "Guest Details" : "Passengers"}
+                                {module.id === "hotels"
+                                  ? "Guest Details"
+                                  : "Passengers"}
                               </h4>
                               <div className="space-y-2">
-                                {booking.bookingDetails?.passengers?.map((passenger, pIndex) => (
-                                  <div key={pIndex} className="text-sm">
-                                    <div className="font-medium text-[#003580]">
-                                      {passenger.firstName} {passenger.lastName}
+                                {booking.bookingDetails?.passengers?.map(
+                                  (passenger, pIndex) => (
+                                    <div key={pIndex} className="text-sm">
+                                      <div className="font-medium text-[#003580]">
+                                        {passenger.firstName}{" "}
+                                        {passenger.lastName}
+                                      </div>
+                                      <div className="text-[#7a7a7a]">
+                                        Adult {pIndex + 1} •{" "}
+                                        {passenger.title || "Not specified"}
+                                      </div>
                                     </div>
-                                    <div className="text-[#7a7a7a]">
-                                      Adult {pIndex + 1} • {passenger.title || "Not specified"}
-                                    </div>
-                                  </div>
-                                ))}
+                                  ),
+                                )}
                               </div>
 
                               <div className="mt-4">
-                                <h5 className="font-medium text-[#003580] mb-1">Contact</h5>
+                                <h5 className="font-medium text-[#003580] mb-1">
+                                  Contact
+                                </h5>
                                 <div className="text-sm text-[#7a7a7a]">
                                   <div className="flex items-center">
                                     <Mail className="w-3 h-3 mr-1" />
-                                    {booking.bookingDetails?.contactDetails?.email}
+                                    {
+                                      booking.bookingDetails?.contactDetails
+                                        ?.email
+                                    }
                                   </div>
                                   <div className="flex items-center">
                                     <Phone className="w-3 h-3 mr-1" />
-                                    {booking.bookingDetails?.contactDetails?.countryCode}{" "}
-                                    {booking.bookingDetails?.contactDetails?.phone}
+                                    {
+                                      booking.bookingDetails?.contactDetails
+                                        ?.countryCode
+                                    }{" "}
+                                    {
+                                      booking.bookingDetails?.contactDetails
+                                        ?.phone
+                                    }
                                   </div>
                                 </div>
                               </div>
@@ -728,29 +866,49 @@ export default function Account() {
 
                             {/* Booking Summary */}
                             <div>
-                              <h4 className="font-semibold text-[#003580] mb-2">Booking Summary</h4>
+                              <h4 className="font-semibold text-[#003580] mb-2">
+                                Booking Summary
+                              </h4>
                               <div className="space-y-2 text-sm">
                                 <div className="flex justify-between">
-                                  <span className="text-[#7a7a7a]">Total Paid</span>
+                                  <span className="text-[#7a7a7a]">
+                                    Total Paid
+                                  </span>
                                   <span className="font-semibold text-[#003580]">
-                                    {booking.bookingDetails?.currency?.symbol || "₹"}
-                                    {booking.bookingDetails?.totalAmount?.toLocaleString() || "0"}
+                                    {booking.bookingDetails?.currency?.symbol ||
+                                      "₹"}
+                                    {booking.bookingDetails?.totalAmount?.toLocaleString() ||
+                                      "0"}
                                   </span>
                                 </div>
                                 <div className="flex justify-between">
-                                  <span className="text-[#7a7a7a]">Payment ID</span>
+                                  <span className="text-[#7a7a7a]">
+                                    Payment ID
+                                  </span>
                                   <span className="text-[#003580] font-mono text-xs">
-                                    {booking.paymentId?.slice(0, 12) || "N/A"}...
+                                    {booking.paymentId?.slice(0, 12) || "N/A"}
+                                    ...
                                   </span>
                                 </div>
                               </div>
 
                               <div className="mt-4 space-y-2">
-                                <Button variant="outline" size="sm" className="w-full border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]"
+                                >
                                   <Eye className="w-4 h-4 mr-2" />
-                                  View {module.id === "flights" ? "Ticket" : "Voucher"}
+                                  View{" "}
+                                  {module.id === "flights"
+                                    ? "Ticket"
+                                    : "Voucher"}
                                 </Button>
-                                <Button variant="outline" size="sm" className="w-full border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  className="w-full border-[#e5e5e5] text-[#003580] hover:bg-[#0071c2] hover:text-white hover:border-[#0071c2]"
+                                >
                                   <Download className="w-4 h-4 mr-2" />
                                   Download
                                 </Button>
@@ -790,7 +948,9 @@ export default function Account() {
                       <ChevronRight className="w-4 h-4" />
                     </>
                   )}
-                  <span className="text-[#003580] font-medium">{breadcrumb.title}</span>
+                  <span className="text-[#003580] font-medium">
+                    {breadcrumb.title}
+                  </span>
                 </nav>
               </div>
             </div>

@@ -16,10 +16,12 @@ The Country Master system has been implemented with:
 ### 1. Database Setup ✅
 
 **Prerequisites:**
+
 - Ensure PostgreSQL database is running
 - Have database admin access
 
 **Steps:**
+
 ```bash
 # Run the seed file
 psql -h [your_host] -U [your_user] -d [your_db] -f api/database/seed_countries.sql
@@ -75,6 +77,7 @@ curl -X GET "http://localhost:3001/api/countries/IN" \
 ```
 
 **Expected Status Codes:**
+
 - ✅ 200 for successful requests
 - ✅ 404 for non-existent country codes
 - ✅ 400 for invalid search queries
@@ -88,16 +91,16 @@ Create a test component to verify the hook:
 
 ```tsx
 // Test component (temporary)
-import { useCountries } from '@/hooks/useCountries';
+import { useCountries } from "@/hooks/useCountries";
 
 function CountriesTest() {
   const { countries, loading, error, popularCountries } = useCountries();
-  
-  console.log('Countries loaded:', countries.length);
-  console.log('Popular countries:', popularCountries.length);
-  console.log('Loading:', loading);
-  console.log('Error:', error);
-  
+
+  console.log("Countries loaded:", countries.length);
+  console.log("Popular countries:", popularCountries.length);
+  console.log("Loading:", loading);
+  console.log("Error:", error);
+
   return (
     <div>
       <p>Total Countries: {countries.length}</p>
@@ -110,6 +113,7 @@ function CountriesTest() {
 ```
 
 **Expected Results:**
+
 - ✅ Hook loads 249 countries from API
 - ✅ Popular countries filter works (7 countries)
 - ✅ Loading states managed properly
@@ -122,11 +126,11 @@ function CountriesTest() {
 
 ```tsx
 // Test component for CountrySelect
-import { CountrySelect } from '@/components/ui/country-select';
+import { CountrySelect } from "@/components/ui/country-select";
 
 function CountrySelectTest() {
-  const [selectedCountry, setSelectedCountry] = useState('');
-  
+  const [selectedCountry, setSelectedCountry] = useState("");
+
   return (
     <div className="p-4 space-y-4">
       {/* Basic usage */}
@@ -135,7 +139,7 @@ function CountrySelectTest() {
         onValueChange={setSelectedCountry}
         placeholder="Select country"
       />
-      
+
       {/* Popular only */}
       <CountrySelect
         value={selectedCountry}
@@ -143,7 +147,7 @@ function CountrySelectTest() {
         placeholder="Popular countries"
         popularOnly={true}
       />
-      
+
       {/* With flags and search */}
       <CountrySelect
         value={selectedCountry}
@@ -152,7 +156,7 @@ function CountrySelectTest() {
         showFlags={true}
         searchable={true}
       />
-      
+
       <p>Selected: {selectedCountry}</p>
     </div>
   );
@@ -160,6 +164,7 @@ function CountrySelectTest() {
 ```
 
 **Expected Behavior:**
+
 - ✅ Dropdown renders with all countries
 - ✅ Search functionality works
 - ✅ Popular countries appear first
@@ -173,6 +178,7 @@ function CountrySelectTest() {
 **Test Profile Page Country Selectors:**
 
 1. **Navigate to Profile Page:**
+
    ```
    http://localhost:3000/profile (or your dev URL)
    ```
@@ -197,12 +203,14 @@ function CountrySelectTest() {
 ### 6. Performance Testing ✅
 
 **Cache Performance:**
+
 - ✅ First API call loads countries (check Network tab)
 - ✅ Subsequent component mounts use cache (no new API calls)
 - ✅ Cache expires after 30 minutes
 - ✅ Manual refresh works
 
 **Search Performance:**
+
 - ✅ Client-side search responds instantly
 - ✅ Server-side search API responds < 500ms
 - ✅ Search results highlight properly
@@ -231,12 +239,14 @@ function CountrySelectTest() {
 ### Production Environment
 
 1. **Database Migration:**
+
    ```bash
    # Run on production database
    psql $DATABASE_URL -f api/database/seed_countries.sql
    ```
 
 2. **API Health Check:**
+
    ```bash
    curl -X GET "https://yourapp.com/api/countries/popular"
    ```
@@ -285,7 +295,7 @@ function CountrySelectTest() {
 This Country Master implementation provides:
 
 - **Scalability**: Easy to add/modify countries via database
-- **Performance**: Efficient caching and optimized queries  
+- **Performance**: Efficient caching and optimized queries
 - **UX**: Smooth search, popular countries prioritized
 - **Maintainability**: Centralized country data, reusable components
 - **Reliability**: Fallback data, error handling, graceful degradation

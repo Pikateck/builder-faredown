@@ -384,7 +384,8 @@ export default function FlightResults() {
     if (fromSource) {
       // Handle both "Mumbai (BOM)" format and just "BOM" format
       let fromCity = Object.entries(cityData).find(
-        ([city, data]) => fromSource.includes(data.code) || fromSource.includes(city),
+        ([city, data]) =>
+          fromSource.includes(data.code) || fromSource.includes(city),
       )?.[0];
       if (fromCity) {
         setSelectedFromCity(fromCity);
@@ -394,7 +395,8 @@ export default function FlightResults() {
     if (toSource) {
       // Handle both "Dubai (DXB)" format and just "DXB" format
       let toCity = Object.entries(cityData).find(
-        ([city, data]) => toSource.includes(data.code) || toSource.includes(city),
+        ([city, data]) =>
+          toSource.includes(data.code) || toSource.includes(city),
       )?.[0];
       if (toCity) {
         setSelectedToCity(toCity);
@@ -1399,29 +1401,46 @@ export default function FlightResults() {
   const handleBooking = (flight: (typeof flightData)[0], fareType: any) => {
     // Create the exact search object structure specified by the user
     const standardizedSearchParams = {
-      tripType: tripType === "round-trip" ? "roundtrip" : tripType === "one-way" ? "one-way" : "roundtrip",
+      tripType:
+        tripType === "round-trip"
+          ? "roundtrip"
+          : tripType === "one-way"
+            ? "one-way"
+            : "roundtrip",
       from: selectedFromCity || "Mumbai",
       to: selectedToCity || "Dubai",
-      fromCode: Object.entries({
-        Mumbai: "BOM",
-        Delhi: "DEL",
-        Bangalore: "BLR",
-        Chennai: "MAA",
-        Kolkata: "CCU",
-      }).find(([city]) => city === selectedFromCity)?.[1] || "BOM",
-      toCode: Object.entries({
-        Dubai: "DXB",
-        London: "LHR",
-        "New York": "JFK",
-        Singapore: "SIN",
-        Tokyo: "NRT",
-      }).find(([city]) => city === selectedToCity)?.[1] || "DXB",
+      fromCode:
+        Object.entries({
+          Mumbai: "BOM",
+          Delhi: "DEL",
+          Bangalore: "BLR",
+          Chennai: "MAA",
+          Kolkata: "CCU",
+        }).find(([city]) => city === selectedFromCity)?.[1] || "BOM",
+      toCode:
+        Object.entries({
+          Dubai: "DXB",
+          London: "LHR",
+          "New York": "JFK",
+          Singapore: "SIN",
+          Tokyo: "NRT",
+        }).find(([city]) => city === selectedToCity)?.[1] || "DXB",
       // Use exact date format as specified: "2025-10-01"
-      departDate: departureDate || new Date().toISOString().split('T')[0],
-      returnDate: tripType === "round-trip" ? (returnDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]) : undefined,
-      cabin: (selectedClass === "economy" ? "Economy" :
-              selectedClass === "premium-economy" ? "Premium Economy" :
-              selectedClass === "business" ? "Business" : "Economy") as any,
+      departDate: departureDate || new Date().toISOString().split("T")[0],
+      returnDate:
+        tripType === "round-trip"
+          ? returnDate ||
+            new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)
+              .toISOString()
+              .split("T")[0]
+          : undefined,
+      cabin: (selectedClass === "economy"
+        ? "Economy"
+        : selectedClass === "premium-economy"
+          ? "Premium Economy"
+          : selectedClass === "business"
+            ? "Business"
+            : "Economy") as any,
       pax: {
         adults: travelers.adults || 1,
         children: travelers.children || 0,
@@ -1432,7 +1451,10 @@ export default function FlightResults() {
       searchTimestamp: new Date().toISOString(),
     };
 
-    console.log("🔍 Standardized Search Object being passed to booking:", standardizedSearchParams);
+    console.log(
+      "🔍 Standardized Search Object being passed to booking:",
+      standardizedSearchParams,
+    );
 
     // Update booking context with current search parameters using the old context for backward compatibility
     updateSearchParams({
@@ -1442,7 +1464,10 @@ export default function FlightResults() {
       toCode: standardizedSearchParams.toCode,
       departureDate: standardizedSearchParams.departDate,
       returnDate: standardizedSearchParams.returnDate,
-      tripType: standardizedSearchParams.tripType === "roundtrip" ? "round-trip" : standardizedSearchParams.tripType,
+      tripType:
+        standardizedSearchParams.tripType === "roundtrip"
+          ? "round-trip"
+          : standardizedSearchParams.tripType,
       passengers: standardizedSearchParams.pax,
       class: selectedClass as any,
     });
@@ -1464,10 +1489,23 @@ export default function FlightResults() {
       departureDate: standardizedSearchParams.departDate,
       arrivalDate: standardizedSearchParams.departDate,
       // Ensure return leg data is properly populated for round-trip flights
-      returnFlightNumber: standardizedSearchParams.tripType === "roundtrip" ? (flight.returnFlightNumber || `${flight.flightNumber.split(' ')[0]} ${parseInt(flight.flightNumber.split(' ')[1]) + 1}`) : undefined,
-      returnDepartureTime: standardizedSearchParams.tripType === "roundtrip" ? (flight.returnDepartureTime || "08:45") : undefined,
-      returnArrivalTime: standardizedSearchParams.tripType === "roundtrip" ? (flight.returnArrivalTime || "14:05") : undefined,
-      returnDuration: standardizedSearchParams.tripType === "roundtrip" ? (flight.returnDuration || flight.duration) : undefined,
+      returnFlightNumber:
+        standardizedSearchParams.tripType === "roundtrip"
+          ? flight.returnFlightNumber ||
+            `${flight.flightNumber.split(" ")[0]} ${parseInt(flight.flightNumber.split(" ")[1]) + 1}`
+          : undefined,
+      returnDepartureTime:
+        standardizedSearchParams.tripType === "roundtrip"
+          ? flight.returnDepartureTime || "08:45"
+          : undefined,
+      returnArrivalTime:
+        standardizedSearchParams.tripType === "roundtrip"
+          ? flight.returnArrivalTime || "14:05"
+          : undefined,
+      returnDuration:
+        standardizedSearchParams.tripType === "roundtrip"
+          ? flight.returnDuration || flight.duration
+          : undefined,
       returnDepartureDate: standardizedSearchParams.returnDate,
       returnArrivalDate: standardizedSearchParams.returnDate,
     };
@@ -1501,7 +1539,7 @@ export default function FlightResults() {
         selectedFareType: fareType,
         // Also pass as URL params for persistence
         replace: true,
-      }
+      },
     });
 
     // Also update URL params for full persistence
@@ -1522,7 +1560,11 @@ export default function FlightResults() {
     urlParams.set("currency", standardizedSearchParams.currency);
 
     // Replace URL with search params
-    window.history.replaceState(null, '', `/booking-flow?${urlParams.toString()}`);
+    window.history.replaceState(
+      null,
+      "",
+      `/booking-flow?${urlParams.toString()}`,
+    );
   };
 
   return (
@@ -3172,9 +3214,14 @@ export default function FlightResults() {
                             features: flight.fareTypes?.[0]?.features || [],
                           }}
                           onBargainSuccess={(finalPrice, savings) => {
-                            console.log(`Flight Mobile Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                            console.log(
+                              `Flight Mobile Bargain success! Final price: ${finalPrice}, Savings: ${savings}`,
+                            );
                             // Handle successful bargain
-                            handleBargainAccept(finalPrice, `flight-${flight.id}`);
+                            handleBargainAccept(
+                              finalPrice,
+                              `flight-${flight.id}`,
+                            );
                           }}
                           onClick={(e) => {
                             e?.preventDefault();
@@ -6540,26 +6587,26 @@ export default function FlightResults() {
 
       <MobileNavigation />
 
-{/* Conversational Bargain Modal */}
-<ConversationalBargainModal
-  isOpen={showBargainModal}
-  onClose={handleBargainClose}
-  onAccept={handleBargainAccept}
-  onHold={handleBargainHold}
-  flight={selectedBargainFlight}
-  selectedFareType={{
-    type: selectedBargainFlight?.fareTypes?.[0]?.name || "Economy",
-    price: selectedBargainFlight?.fareTypes?.[0]?.price || 0,
-    features: selectedBargainFlight?.fareTypes?.[0]?.features || [],
-  }}
-  username={user?.name || "Guest"}
-  module="flights"
-  onBackToResults={handleBargainClose}
-  basePrice={selectedBargainFlight?.fareTypes?.[0]?.price || 0}
-  productRef={selectedBargainFlight ? `flight-${selectedBargainFlight.id}` : ""}
-/>
-
-</div>
-); // end of return(...)
-
+      {/* Conversational Bargain Modal */}
+      <ConversationalBargainModal
+        isOpen={showBargainModal}
+        onClose={handleBargainClose}
+        onAccept={handleBargainAccept}
+        onHold={handleBargainHold}
+        flight={selectedBargainFlight}
+        selectedFareType={{
+          type: selectedBargainFlight?.fareTypes?.[0]?.name || "Economy",
+          price: selectedBargainFlight?.fareTypes?.[0]?.price || 0,
+          features: selectedBargainFlight?.fareTypes?.[0]?.features || [],
+        }}
+        username={user?.name || "Guest"}
+        module="flights"
+        onBackToResults={handleBargainClose}
+        basePrice={selectedBargainFlight?.fareTypes?.[0]?.price || 0}
+        productRef={
+          selectedBargainFlight ? `flight-${selectedBargainFlight.id}` : ""
+        }
+      />
+    </div>
+  ); // end of return(...)
 } // end of function component

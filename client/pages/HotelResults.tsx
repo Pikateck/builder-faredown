@@ -244,14 +244,29 @@ export default function HotelResults() {
       module: "hotels" as const,
       destination: searchParams.get("destination") || destination || "Dubai",
       destinationCode: searchParams.get("destinationCode") || "DXB",
-      destinationName: searchParams.get("destinationName") || destination || "Dubai, United Arab Emirates",
+      destinationName:
+        searchParams.get("destinationName") ||
+        destination ||
+        "Dubai, United Arab Emirates",
       // Use exact date format as specified by user: "2025-10-01"
-      checkIn: searchParams.get("checkIn") || checkIn || new Date().toISOString().split('T')[0],
-      checkOut: searchParams.get("checkOut") || checkOut || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      checkIn:
+        searchParams.get("checkIn") ||
+        checkIn ||
+        new Date().toISOString().split("T")[0],
+      checkOut:
+        searchParams.get("checkOut") ||
+        checkOut ||
+        new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       rooms: parseInt(searchParams.get("rooms") || rooms || "1"),
       nights: calculateNights(
-        new Date(searchParams.get("checkIn") || checkIn || new Date().toISOString()),
-        new Date(searchParams.get("checkOut") || checkOut || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString())
+        new Date(
+          searchParams.get("checkIn") || checkIn || new Date().toISOString(),
+        ),
+        new Date(
+          searchParams.get("checkOut") ||
+            checkOut ||
+            new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+        ),
       ),
       guests: {
         adults: parseInt(searchParams.get("adults") || adults || "2"),
@@ -267,9 +282,23 @@ export default function HotelResults() {
       searchTimestamp: new Date().toISOString(),
     };
 
-    console.log("🏨 Loading standardized hotel search object to context:", standardizedHotelSearchParams);
+    console.log(
+      "🏨 Loading standardized hotel search object to context:",
+      standardizedHotelSearchParams,
+    );
     loadCompleteSearchObject(standardizedHotelSearchParams);
-  }, [searchKey, loadDatesFromParams, loadFromUrlParams, destination, checkIn, checkOut, adults, children, rooms, selectedCurrency]);
+  }, [
+    searchKey,
+    loadDatesFromParams,
+    loadFromUrlParams,
+    destination,
+    checkIn,
+    checkOut,
+    adults,
+    children,
+    rooms,
+    selectedCurrency,
+  ]);
 
   // Fetch hotels when search or currency code changes (avoid object identity churn)
   useEffect(() => {

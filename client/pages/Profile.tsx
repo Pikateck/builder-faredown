@@ -58,7 +58,9 @@ const profileAPI = {
   async handleResponse(response) {
     if (!response.ok) {
       const errorText = await response.text();
-      throw new Error(`HTTP ${response.status}: ${errorText || response.statusText}`);
+      throw new Error(
+        `HTTP ${response.status}: ${errorText || response.statusText}`,
+      );
     }
 
     // Check if response has content
@@ -73,7 +75,7 @@ const profileAPI = {
   async fetchProfile() {
     try {
       const response = await fetch(`${this.baseURL}`, {
-        headers: { "X-User-ID": "1" } // Demo: use actual auth
+        headers: { "X-User-ID": "1" }, // Demo: use actual auth
       });
       return await this.handleResponse(response);
     } catch (error) {
@@ -85,8 +87,8 @@ const profileAPI = {
           last_name: "Aibara",
           email: "zubin@example.com",
           phone: "+91 9876543210",
-          email_verified: true
-        }
+          email_verified: true,
+        },
       };
     }
   },
@@ -97,9 +99,9 @@ const profileAPI = {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "X-User-ID": "1"
+          "X-User-ID": "1",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       return await this.handleResponse(response);
     } catch (error) {
@@ -111,7 +113,7 @@ const profileAPI = {
   async fetchTravelers() {
     try {
       const response = await fetch(`${this.baseURL}/travelers`, {
-        headers: { "X-User-ID": "1" }
+        headers: { "X-User-ID": "1" },
       });
       return await this.handleResponse(response);
     } catch (error) {
@@ -126,9 +128,9 @@ const profileAPI = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-User-ID": "1"
+          "X-User-ID": "1",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       return await this.handleResponse(response);
     } catch (error) {
@@ -143,9 +145,9 @@ const profileAPI = {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "X-User-ID": "1"
+          "X-User-ID": "1",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       return await this.handleResponse(response);
     } catch (error) {
@@ -158,7 +160,7 @@ const profileAPI = {
     try {
       const response = await fetch(`${this.baseURL}/travelers/${id}`, {
         method: "DELETE",
-        headers: { "X-User-ID": "1" }
+        headers: { "X-User-ID": "1" },
       });
       return await this.handleResponse(response);
     } catch (error) {
@@ -169,9 +171,12 @@ const profileAPI = {
 
   async fetchPassports(travelerId) {
     try {
-      const response = await fetch(`${this.baseURL}/travelers/${travelerId}/passports`, {
-        headers: { "X-User-ID": "1" }
-      });
+      const response = await fetch(
+        `${this.baseURL}/travelers/${travelerId}/passports`,
+        {
+          headers: { "X-User-ID": "1" },
+        },
+      );
       return await this.handleResponse(response);
     } catch (error) {
       console.error("fetchPassports error:", error);
@@ -181,14 +186,17 @@ const profileAPI = {
 
   async createPassport(travelerId, data) {
     try {
-      const response = await fetch(`${this.baseURL}/travelers/${travelerId}/passports`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          "X-User-ID": "1"
+      const response = await fetch(
+        `${this.baseURL}/travelers/${travelerId}/passports`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "X-User-ID": "1",
+          },
+          body: JSON.stringify(data),
         },
-        body: JSON.stringify(data)
-      });
+      );
       return await this.handleResponse(response);
     } catch (error) {
       console.error("createPassport error:", error);
@@ -199,7 +207,7 @@ const profileAPI = {
   async fetchPaymentMethods() {
     try {
       const response = await fetch(`${this.baseURL}/payment-methods`, {
-        headers: { "X-User-ID": "1" }
+        headers: { "X-User-ID": "1" },
       });
       return await this.handleResponse(response);
     } catch (error) {
@@ -214,9 +222,9 @@ const profileAPI = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-User-ID": "1"
+          "X-User-ID": "1",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       return await this.handleResponse(response);
     } catch (error) {
@@ -227,10 +235,13 @@ const profileAPI = {
 
   async setDefaultPaymentMethod(id) {
     try {
-      const response = await fetch(`${this.baseURL}/payment-methods/${id}/default`, {
-        method: "PUT",
-        headers: { "X-User-ID": "1" }
-      });
+      const response = await fetch(
+        `${this.baseURL}/payment-methods/${id}/default`,
+        {
+          method: "PUT",
+          headers: { "X-User-ID": "1" },
+        },
+      );
       return await this.handleResponse(response);
     } catch (error) {
       console.error("setDefaultPaymentMethod error:", error);
@@ -242,7 +253,7 @@ const profileAPI = {
     try {
       const response = await fetch(`${this.baseURL}/payment-methods/${id}`, {
         method: "DELETE",
-        headers: { "X-User-ID": "1" }
+        headers: { "X-User-ID": "1" },
       });
       return await this.handleResponse(response);
     } catch (error) {
@@ -254,7 +265,7 @@ const profileAPI = {
   async fetchPreferences() {
     try {
       const response = await fetch(`${this.baseURL}/preferences`, {
-        headers: { "X-User-ID": "1" }
+        headers: { "X-User-ID": "1" },
       });
       return await this.handleResponse(response);
     } catch (error) {
@@ -265,8 +276,8 @@ const profileAPI = {
           language: "en",
           email_notifications: true,
           price_alerts: false,
-          marketing_opt_in: false
-        }
+          marketing_opt_in: false,
+        },
       };
     }
   },
@@ -277,20 +288,23 @@ const profileAPI = {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          "X-User-ID": "1"
+          "X-User-ID": "1",
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
       });
       return await this.handleResponse(response);
     } catch (error) {
       console.error("updatePreferences error:", error);
       return { success: true, preferences: data };
     }
-  }
+  },
 };
 
 // Main Profile Component
-export default function Profile({ standalone = true, initialTab = "personal" }) {
+export default function Profile({
+  standalone = true,
+  initialTab = "personal",
+}) {
   const [activeTab, setActiveTab] = useState(initialTab);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -298,24 +312,25 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
   const [travelers, setTravelers] = useState([]);
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [preferences, setPreferences] = useState(null);
-  
+
   // Modal states
   const [showTravelerModal, setShowTravelerModal] = useState(false);
   const [showPassportModal, setShowPassportModal] = useState(false);
   const [showPaymentModal, setShowPaymentModal] = useState(false);
   const [editingTraveler, setEditingTraveler] = useState(null);
-  const [selectedTravelerForPassport, setSelectedTravelerForPassport] = useState(null);
-  
+  const [selectedTravelerForPassport, setSelectedTravelerForPassport] =
+    useState(null);
+
   // Form states
   const [personalForm, setPersonalForm] = useState({});
   const [travelerForm, setTravelerForm] = useState({});
   const [passportForm, setPassportForm] = useState({});
   const [paymentForm, setPaymentForm] = useState({});
-  
+
   useEffect(() => {
     loadInitialData();
   }, []);
-  
+
   const loadInitialData = async () => {
     try {
       setLoading(true);
@@ -331,15 +346,15 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
 
       // Load other data in parallel
       const [travelersRes, paymentRes, preferencesRes] = await Promise.all([
-        profileAPI.fetchTravelers().catch(error => {
+        profileAPI.fetchTravelers().catch((error) => {
           console.error("Travelers fetch failed:", error);
           return { travelers: [] };
         }),
-        profileAPI.fetchPaymentMethods().catch(error => {
+        profileAPI.fetchPaymentMethods().catch((error) => {
           console.error("Payment methods fetch failed:", error);
           return { paymentMethods: [] };
         }),
-        profileAPI.fetchPreferences().catch(error => {
+        profileAPI.fetchPreferences().catch((error) => {
           console.error("Preferences fetch failed:", error);
           return {
             preferences: {
@@ -347,13 +362,17 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
               language: "en",
               email_notifications: true,
               price_alerts: false,
-              marketing_opt_in: false
-            }
+              marketing_opt_in: false,
+            },
           };
-        })
+        }),
       ]);
 
-      console.log("Additional data loaded:", { travelersRes, paymentRes, preferencesRes });
+      console.log("Additional data loaded:", {
+        travelersRes,
+        paymentRes,
+        preferencesRes,
+      });
 
       setTravelers(travelersRes.travelers || []);
       setPaymentMethods(paymentRes.paymentMethods || []);
@@ -367,12 +386,12 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
         first_name: "Zubin",
         last_name: "Aibara",
         email: "zubin@example.com",
-        email_verified: true
+        email_verified: true,
       });
       setPersonalForm({
         first_name: "Zubin",
         last_name: "Aibara",
-        email: "zubin@example.com"
+        email: "zubin@example.com",
       });
       setTravelers([]);
       setPaymentMethods([]);
@@ -381,13 +400,13 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
         language: "en",
         email_notifications: true,
         price_alerts: false,
-        marketing_opt_in: false
+        marketing_opt_in: false,
       });
     } finally {
       setLoading(false);
     }
   };
-  
+
   const handleSavePersonal = async () => {
     try {
       setSaving(true);
@@ -400,7 +419,7 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
       setSaving(false);
     }
   };
-  
+
   const handleSaveTraveler = async () => {
     try {
       setSaving(true);
@@ -419,7 +438,7 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
       setSaving(false);
     }
   };
-  
+
   const handleDeleteTraveler = async (id) => {
     if (confirm("Are you sure you want to delete this traveler?")) {
       try {
@@ -430,11 +449,14 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
       }
     }
   };
-  
+
   const handleSavePassport = async () => {
     try {
       setSaving(true);
-      await profileAPI.createPassport(selectedTravelerForPassport.id, passportForm);
+      await profileAPI.createPassport(
+        selectedTravelerForPassport.id,
+        passportForm,
+      );
       setShowPassportModal(false);
       setPassportForm({});
       setSelectedTravelerForPassport(null);
@@ -444,7 +466,7 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
       setSaving(false);
     }
   };
-  
+
   const handleSavePayment = async () => {
     try {
       setSaving(true);
@@ -458,7 +480,7 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
       setSaving(false);
     }
   };
-  
+
   const loadTravelers = async () => {
     try {
       const res = await profileAPI.fetchTravelers();
@@ -478,8 +500,7 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
       setPaymentMethods([]);
     }
   };
-  
-  
+
   const currencies = [
     { code: "INR", name: "Indian Rupee", symbol: "₹" },
     { code: "USD", name: "US Dollar", symbol: "$" },
@@ -487,7 +508,7 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
     { code: "GBP", name: "British Pound", symbol: "£" },
     { code: "AED", name: "UAE Dirham", symbol: "AED" },
   ];
-  
+
   const languages = [
     { code: "en", name: "English" },
     { code: "hi", name: "हिन्दी" },
@@ -495,7 +516,7 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
     { code: "fr", name: "Français" },
     { code: "de", name: "Deutsch" },
   ];
-  
+
   const navigationItems = [
     { id: "personal", label: "Personal details", icon: User },
     { id: "security", label: "Security settings", icon: Shield },
@@ -504,7 +525,7 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
     { id: "payments", label: "Payment methods", icon: CreditCard },
     { id: "privacy", label: "Privacy & data", icon: Eye },
   ];
-  
+
   if (loading) {
     return (
       <Layout>
@@ -515,169 +536,177 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
       </Layout>
     );
   }
-  
+
   const profileContent = (
     <div className="min-h-screen bg-gray-50">
-        {/* Header */}
-        <div className="bg-white border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="py-6">
-              <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-                  <User className="w-8 h-8 text-blue-600" />
-                </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-gray-900">
-                    {profile?.full_name || `${profile?.first_name} ${profile?.last_name}` || "Your Profile"}
-                  </h1>
-                  <p className="text-gray-600">Manage your account settings and preferences</p>
-                </div>
+      {/* Header */}
+      <div className="bg-white border-b border-gray-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="py-6">
+            <div className="flex items-center space-x-4">
+              <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
+                <User className="w-8 h-8 text-blue-600" />
+              </div>
+              <div>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  {profile?.full_name ||
+                    `${profile?.first_name} ${profile?.last_name}` ||
+                    "Your Profile"}
+                </h1>
+                <p className="text-gray-600">
+                  Manage your account settings and preferences
+                </p>
               </div>
             </div>
           </div>
         </div>
-        
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <div className="flex flex-col lg:flex-row gap-8">
-            {/* Navigation Sidebar */}
-            <div className="lg:w-1/4">
-              <Card>
-                <CardContent className="p-6">
-                  <nav className="space-y-2">
-                    {navigationItems.map((item) => (
-                      <button
-                        key={item.id}
-                        onClick={() => setActiveTab(item.id)}
-                        className={cn(
-                          "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors",
-                          activeTab === item.id
-                            ? "bg-blue-50 text-blue-700 border border-blue-200"
-                            : "hover:bg-gray-50 text-gray-700"
-                        )}
-                      >
-                        <item.icon className="w-5 h-5" />
-                        <span className="text-sm font-medium">{item.label}</span>
-                      </button>
-                    ))}
-                  </nav>
-                </CardContent>
-              </Card>
-            </div>
-            
-            {/* Main Content */}
-            <div className="lg:w-3/4">
-              {activeTab === "personal" && (
-                <PersonalDetailsTab
-                  profile={profile}
-                  personalForm={personalForm}
-                  setPersonalForm={setPersonalForm}
-                  onSave={handleSavePersonal}
-                  saving={saving}
-                />
-              )}
-              
-              {activeTab === "travelers" && (
-                <TravelersTab
-                  travelers={travelers}
-                  onEdit={(traveler) => {
-                    setEditingTraveler(traveler);
-                    setTravelerForm(traveler);
-                    setShowTravelerModal(true);
-                  }}
-                  onDelete={handleDeleteTraveler}
-                  onAddNew={() => {
-                    setEditingTraveler(null);
-                    setTravelerForm({});
-                    setShowTravelerModal(true);
-                  }}
-                  onAddPassport={(traveler) => {
-                    setSelectedTravelerForPassport(traveler);
-                    setPassportForm({});
-                    setShowPassportModal(true);
-                  }}
-                />
-              )}
-              
-              {activeTab === "payments" && (
-                <PaymentMethodsTab
-                  paymentMethods={paymentMethods}
-                  onAddNew={() => {
-                    setPaymentForm({});
-                    setShowPaymentModal(true);
-                  }}
-                  onSetDefault={async (id) => {
-                    await profileAPI.setDefaultPaymentMethod(id);
+      </div>
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Navigation Sidebar */}
+          <div className="lg:w-1/4">
+            <Card>
+              <CardContent className="p-6">
+                <nav className="space-y-2">
+                  {navigationItems.map((item) => (
+                    <button
+                      key={item.id}
+                      onClick={() => setActiveTab(item.id)}
+                      className={cn(
+                        "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors",
+                        activeTab === item.id
+                          ? "bg-blue-50 text-blue-700 border border-blue-200"
+                          : "hover:bg-gray-50 text-gray-700",
+                      )}
+                    >
+                      <item.icon className="w-5 h-5" />
+                      <span className="text-sm font-medium">{item.label}</span>
+                    </button>
+                  ))}
+                </nav>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Main Content */}
+          <div className="lg:w-3/4">
+            {activeTab === "personal" && (
+              <PersonalDetailsTab
+                profile={profile}
+                personalForm={personalForm}
+                setPersonalForm={setPersonalForm}
+                onSave={handleSavePersonal}
+                saving={saving}
+              />
+            )}
+
+            {activeTab === "travelers" && (
+              <TravelersTab
+                travelers={travelers}
+                onEdit={(traveler) => {
+                  setEditingTraveler(traveler);
+                  setTravelerForm(traveler);
+                  setShowTravelerModal(true);
+                }}
+                onDelete={handleDeleteTraveler}
+                onAddNew={() => {
+                  setEditingTraveler(null);
+                  setTravelerForm({});
+                  setShowTravelerModal(true);
+                }}
+                onAddPassport={(traveler) => {
+                  setSelectedTravelerForPassport(traveler);
+                  setPassportForm({});
+                  setShowPassportModal(true);
+                }}
+              />
+            )}
+
+            {activeTab === "payments" && (
+              <PaymentMethodsTab
+                paymentMethods={paymentMethods}
+                onAddNew={() => {
+                  setPaymentForm({});
+                  setShowPaymentModal(true);
+                }}
+                onSetDefault={async (id) => {
+                  await profileAPI.setDefaultPaymentMethod(id);
+                  await loadPaymentMethods();
+                }}
+                onDelete={async (id) => {
+                  if (
+                    confirm(
+                      "Are you sure you want to delete this payment method?",
+                    )
+                  ) {
+                    await profileAPI.deletePaymentMethod(id);
                     await loadPaymentMethods();
-                  }}
-                  onDelete={async (id) => {
-                    if (confirm("Are you sure you want to delete this payment method?")) {
-                      await profileAPI.deletePaymentMethod(id);
-                      await loadPaymentMethods();
-                    }
-                  }}
-                />
-              )}
-              
-              {activeTab === "preferences" && (
-                <PreferencesTab
-                  preferences={preferences}
-                  onUpdate={async (data) => {
-                    await profileAPI.updatePreferences(data);
-                    const res = await profileAPI.fetchPreferences();
-                    setPreferences(res.preferences);
-                  }}
-                  currencies={currencies}
-                  languages={languages}
-                />
-              )}
-              
-              {activeTab === "security" && <SecurityTab />}
-              {activeTab === "privacy" && <PrivacyTab />}
-            </div>
+                  }
+                }}
+              />
+            )}
+
+            {activeTab === "preferences" && (
+              <PreferencesTab
+                preferences={preferences}
+                onUpdate={async (data) => {
+                  await profileAPI.updatePreferences(data);
+                  const res = await profileAPI.fetchPreferences();
+                  setPreferences(res.preferences);
+                }}
+                currencies={currencies}
+                languages={languages}
+              />
+            )}
+
+            {activeTab === "security" && <SecurityTab />}
+            {activeTab === "privacy" && <PrivacyTab />}
           </div>
         </div>
-        
-        {/* Modals */}
-        <TravelerModal
-          isOpen={showTravelerModal}
-          onClose={() => {
-            setShowTravelerModal(false);
-            setEditingTraveler(null);
-            setTravelerForm({});
-          }}
-          traveler={editingTraveler}
-          form={travelerForm}
-          setForm={setTravelerForm}
-          onSave={handleSaveTraveler}
-          saving={saving}
-        />
-        
-        <PassportModal
-          isOpen={showPassportModal}
-          onClose={() => {
-            setShowPassportModal(false);
-            setSelectedTravelerForPassport(null);
-            setPassportForm({});
-          }}
-          traveler={selectedTravelerForPassport}
-          form={passportForm}
-          setForm={setPassportForm}
-          onSave={handleSavePassport}
-          saving={saving}
-        />
-        
-        <PaymentMethodModal
-          isOpen={showPaymentModal}
-          onClose={() => {
-            setShowPaymentModal(false);
-            setPaymentForm({});
-          }}
-          form={paymentForm}
-          setForm={setPaymentForm}
-          onSave={handleSavePayment}
-          saving={saving}
-        />
       </div>
+
+      {/* Modals */}
+      <TravelerModal
+        isOpen={showTravelerModal}
+        onClose={() => {
+          setShowTravelerModal(false);
+          setEditingTraveler(null);
+          setTravelerForm({});
+        }}
+        traveler={editingTraveler}
+        form={travelerForm}
+        setForm={setTravelerForm}
+        onSave={handleSaveTraveler}
+        saving={saving}
+      />
+
+      <PassportModal
+        isOpen={showPassportModal}
+        onClose={() => {
+          setShowPassportModal(false);
+          setSelectedTravelerForPassport(null);
+          setPassportForm({});
+        }}
+        traveler={selectedTravelerForPassport}
+        form={passportForm}
+        setForm={setPassportForm}
+        onSave={handleSavePassport}
+        saving={saving}
+      />
+
+      <PaymentMethodModal
+        isOpen={showPaymentModal}
+        onClose={() => {
+          setShowPaymentModal(false);
+          setPaymentForm({});
+        }}
+        form={paymentForm}
+        setForm={setPaymentForm}
+        onSave={handleSavePayment}
+        saving={saving}
+      />
+    </div>
   );
 
   if (standalone) {
@@ -688,14 +717,24 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
 }
 
 // Personal Details Tab Component
-function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, saving }) {
+function PersonalDetailsTab({
+  profile,
+  personalForm,
+  setPersonalForm,
+  onSave,
+  saving,
+}) {
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between">
           <span>Personal details</span>
           <Button onClick={onSave} disabled={saving}>
-            {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : <Save className="w-4 h-4 mr-2" />}
+            {saving ? (
+              <Loader2 className="w-4 h-4 animate-spin mr-2" />
+            ) : (
+              <Save className="w-4 h-4 mr-2" />
+            )}
             Save changes
           </Button>
         </CardTitle>
@@ -707,7 +746,9 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
             <Input
               id="firstName"
               value={personalForm.first_name || ""}
-              onChange={(e) => setPersonalForm({...personalForm, first_name: e.target.value})}
+              onChange={(e) =>
+                setPersonalForm({ ...personalForm, first_name: e.target.value })
+              }
               placeholder="Enter your first name"
             />
           </div>
@@ -716,32 +757,40 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
             <Input
               id="lastName"
               value={personalForm.last_name || ""}
-              onChange={(e) => setPersonalForm({...personalForm, last_name: e.target.value})}
+              onChange={(e) =>
+                setPersonalForm({ ...personalForm, last_name: e.target.value })
+              }
               placeholder="Enter your last name"
             />
           </div>
         </div>
-        
+
         <div>
           <Label htmlFor="displayName">Display name</Label>
           <Input
             id="displayName"
             value={personalForm.display_name || ""}
-            onChange={(e) => setPersonalForm({...personalForm, display_name: e.target.value})}
+            onChange={(e) =>
+              setPersonalForm({ ...personalForm, display_name: e.target.value })
+            }
             placeholder="How would you like to be addressed?"
           />
         </div>
-        
+
         <div>
           <Label htmlFor="email" className="flex items-center">
             Email address
-            {profile?.email_verified && <CheckCircle className="w-4 h-4 text-green-600 ml-2" />}
+            {profile?.email_verified && (
+              <CheckCircle className="w-4 h-4 text-green-600 ml-2" />
+            )}
           </Label>
           <Input
             id="email"
             type="email"
             value={personalForm.email || ""}
-            onChange={(e) => setPersonalForm({...personalForm, email: e.target.value})}
+            onChange={(e) =>
+              setPersonalForm({ ...personalForm, email: e.target.value })
+            }
             placeholder="Enter your email address"
           />
           {!profile?.email_verified && (
@@ -751,18 +800,20 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
             </p>
           )}
         </div>
-        
+
         <div>
           <Label htmlFor="phone">Phone number</Label>
           <Input
             id="phone"
             type="tel"
             value={personalForm.phone || ""}
-            onChange={(e) => setPersonalForm({...personalForm, phone: e.target.value})}
+            onChange={(e) =>
+              setPersonalForm({ ...personalForm, phone: e.target.value })
+            }
             placeholder="Enter your phone number"
           />
         </div>
-        
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <Label htmlFor="dob">Date of birth</Label>
@@ -770,14 +821,18 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
               id="dob"
               type="date"
               value={personalForm.dob || ""}
-              onChange={(e) => setPersonalForm({...personalForm, dob: e.target.value})}
+              onChange={(e) =>
+                setPersonalForm({ ...personalForm, dob: e.target.value })
+              }
             />
           </div>
           <div>
             <Label htmlFor="nationality">Nationality</Label>
             <CountrySelect
               value={personalForm.nationality_iso2 || ""}
-              onValueChange={(value) => setPersonalForm({...personalForm, nationality_iso2: value})}
+              onValueChange={(value) =>
+                setPersonalForm({ ...personalForm, nationality_iso2: value })
+              }
               placeholder="Select nationality"
               prioritizePopular={true}
               showFlags={true}
@@ -785,10 +840,15 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
             />
           </div>
         </div>
-        
+
         <div>
           <Label htmlFor="gender">Gender</Label>
-          <Select value={personalForm.gender || ""} onValueChange={(value) => setPersonalForm({...personalForm, gender: value})}>
+          <Select
+            value={personalForm.gender || ""}
+            onValueChange={(value) =>
+              setPersonalForm({ ...personalForm, gender: value })
+            }
+          >
             <SelectTrigger>
               <SelectValue placeholder="Select gender" />
             </SelectTrigger>
@@ -796,13 +856,15 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
               <SelectItem value="male">Male</SelectItem>
               <SelectItem value="female">Female</SelectItem>
               <SelectItem value="non_binary">Non-binary</SelectItem>
-              <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
+              <SelectItem value="prefer_not_to_say">
+                Prefer not to say
+              </SelectItem>
             </SelectContent>
           </Select>
         </div>
-        
+
         <Separator />
-        
+
         <div>
           <h3 className="text-lg font-semibold mb-4">Address</h3>
           <div className="space-y-4">
@@ -811,7 +873,9 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
               <Input
                 id="address1"
                 value={personalForm.line1 || ""}
-                onChange={(e) => setPersonalForm({...personalForm, line1: e.target.value})}
+                onChange={(e) =>
+                  setPersonalForm({ ...personalForm, line1: e.target.value })
+                }
                 placeholder="Street address"
               />
             </div>
@@ -820,7 +884,9 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
               <Input
                 id="address2"
                 value={personalForm.line2 || ""}
-                onChange={(e) => setPersonalForm({...personalForm, line2: e.target.value})}
+                onChange={(e) =>
+                  setPersonalForm({ ...personalForm, line2: e.target.value })
+                }
                 placeholder="Apartment, suite, etc."
               />
             </div>
@@ -830,7 +896,9 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
                 <Input
                   id="city"
                   value={personalForm.city || ""}
-                  onChange={(e) => setPersonalForm({...personalForm, city: e.target.value})}
+                  onChange={(e) =>
+                    setPersonalForm({ ...personalForm, city: e.target.value })
+                  }
                   placeholder="City"
                 />
               </div>
@@ -839,7 +907,9 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
                 <Input
                   id="state"
                   value={personalForm.state || ""}
-                  onChange={(e) => setPersonalForm({...personalForm, state: e.target.value})}
+                  onChange={(e) =>
+                    setPersonalForm({ ...personalForm, state: e.target.value })
+                  }
                   placeholder="State"
                 />
               </div>
@@ -848,7 +918,12 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
                 <Input
                   id="postal"
                   value={personalForm.postal_code || ""}
-                  onChange={(e) => setPersonalForm({...personalForm, postal_code: e.target.value})}
+                  onChange={(e) =>
+                    setPersonalForm({
+                      ...personalForm,
+                      postal_code: e.target.value,
+                    })
+                  }
                   placeholder="Postal code"
                 />
               </div>
@@ -857,7 +932,9 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
               <Label htmlFor="country">Country</Label>
               <CountrySelect
                 value={personalForm.country_iso2 || ""}
-                onValueChange={(value) => setPersonalForm({...personalForm, country_iso2: value})}
+                onValueChange={(value) =>
+                  setPersonalForm({ ...personalForm, country_iso2: value })
+                }
                 placeholder="Select country"
                 prioritizePopular={true}
                 showFlags={true}
@@ -872,7 +949,13 @@ function PersonalDetailsTab({ profile, personalForm, setPersonalForm, onSave, sa
 }
 
 // Travelers Tab Component
-function TravelersTab({ travelers, onEdit, onDelete, onAddNew, onAddPassport }) {
+function TravelersTab({
+  travelers,
+  onEdit,
+  onDelete,
+  onAddNew,
+  onAddPassport,
+}) {
   return (
     <Card>
       <CardHeader>
@@ -888,7 +971,7 @@ function TravelersTab({ travelers, onEdit, onDelete, onAddNew, onAddPassport }) 
         <p className="text-gray-600 mb-6">
           Save details about the people you're traveling with.
         </p>
-        
+
         {travelers.length === 0 ? (
           <div className="text-center py-8">
             <Users className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -900,7 +983,10 @@ function TravelersTab({ travelers, onEdit, onDelete, onAddNew, onAddPassport }) 
         ) : (
           <div className="space-y-4">
             {travelers.map((traveler) => (
-              <div key={traveler.id} className="border border-gray-200 rounded-lg p-4">
+              <div
+                key={traveler.id}
+                className="border border-gray-200 rounded-lg p-4"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex-1">
                     <div className="flex items-center space-x-2 mb-2">
@@ -912,10 +998,20 @@ function TravelersTab({ travelers, onEdit, onDelete, onAddNew, onAddPassport }) 
                       )}
                     </div>
                     <div className="text-sm text-gray-600 space-y-1">
-                      <p>Date of birth: {new Date(traveler.dob).toLocaleDateString()}</p>
+                      <p>
+                        Date of birth:{" "}
+                        {new Date(traveler.dob).toLocaleDateString()}
+                      </p>
                       <p>Gender: {traveler.gender}</p>
                       {traveler.nationality_iso2 && (
-                        <p>Nationality: {countries.find(c => c.code === traveler.nationality_iso2)?.name}</p>
+                        <p>
+                          Nationality:{" "}
+                          {
+                            countries.find(
+                              (c) => c.code === traveler.nationality_iso2,
+                            )?.name
+                          }
+                        </p>
                       )}
                       {traveler.relationship && (
                         <p>Relationship: {traveler.relationship}</p>
@@ -958,7 +1054,12 @@ function TravelersTab({ travelers, onEdit, onDelete, onAddNew, onAddPassport }) 
 }
 
 // Payment Methods Tab Component
-function PaymentMethodsTab({ paymentMethods, onAddNew, onSetDefault, onDelete }) {
+function PaymentMethodsTab({
+  paymentMethods,
+  onAddNew,
+  onSetDefault,
+  onDelete,
+}) {
   return (
     <Card>
       <CardHeader>
@@ -972,9 +1073,10 @@ function PaymentMethodsTab({ paymentMethods, onAddNew, onSetDefault, onDelete })
       </CardHeader>
       <CardContent>
         <p className="text-gray-600 mb-6">
-          Securely add or remove payment methods to make it easier when you book.
+          Securely add or remove payment methods to make it easier when you
+          book.
         </p>
-        
+
         {paymentMethods.length === 0 ? (
           <div className="text-center py-8">
             <CreditCard className="w-12 h-12 text-gray-400 mx-auto mb-4" />
@@ -986,7 +1088,10 @@ function PaymentMethodsTab({ paymentMethods, onAddNew, onSetDefault, onDelete })
         ) : (
           <div className="space-y-4">
             {paymentMethods.map((method) => (
-              <div key={method.id} className="border border-gray-200 rounded-lg p-4">
+              <div
+                key={method.id}
+                className="border border-gray-200 rounded-lg p-4"
+              >
                 <div className="flex items-center justify-between">
                   <div className="flex items-center space-x-4">
                     <div className="w-12 h-8 bg-gray-100 rounded flex items-center justify-center">
@@ -1002,10 +1107,13 @@ function PaymentMethodsTab({ paymentMethods, onAddNew, onSetDefault, onDelete })
                         )}
                       </div>
                       <p className="text-sm text-gray-600">
-                        Expires {method.exp_month?.toString().padStart(2, '0')}/{method.exp_year}
+                        Expires {method.exp_month?.toString().padStart(2, "0")}/
+                        {method.exp_year}
                       </p>
                       {method.holder_name && (
-                        <p className="text-sm text-gray-600">{method.holder_name}</p>
+                        <p className="text-sm text-gray-600">
+                          {method.holder_name}
+                        </p>
                       )}
                     </div>
                   </div>
@@ -1041,15 +1149,15 @@ function PaymentMethodsTab({ paymentMethods, onAddNew, onSetDefault, onDelete })
 // Preferences Tab Component
 function PreferencesTab({ preferences, onUpdate, currencies, languages }) {
   const [localPreferences, setLocalPreferences] = useState(preferences || {});
-  
+
   useEffect(() => {
     setLocalPreferences(preferences || {});
   }, [preferences]);
-  
+
   const handleSave = () => {
     onUpdate(localPreferences);
   };
-  
+
   return (
     <Card>
       <CardHeader>
@@ -1064,9 +1172,11 @@ function PreferencesTab({ preferences, onUpdate, currencies, languages }) {
       <CardContent className="space-y-6">
         <div>
           <Label htmlFor="currency">Currency</Label>
-          <Select 
-            value={localPreferences.currency_iso3 || "INR"} 
-            onValueChange={(value) => setLocalPreferences({...localPreferences, currency_iso3: value})}
+          <Select
+            value={localPreferences.currency_iso3 || "INR"}
+            onValueChange={(value) =>
+              setLocalPreferences({ ...localPreferences, currency_iso3: value })
+            }
           >
             <SelectTrigger>
               <SelectValue />
@@ -1080,12 +1190,14 @@ function PreferencesTab({ preferences, onUpdate, currencies, languages }) {
             </SelectContent>
           </Select>
         </div>
-        
+
         <div>
           <Label htmlFor="language">Language</Label>
-          <Select 
-            value={localPreferences.language || "en"} 
-            onValueChange={(value) => setLocalPreferences({...localPreferences, language: value})}
+          <Select
+            value={localPreferences.language || "en"}
+            onValueChange={(value) =>
+              setLocalPreferences({ ...localPreferences, language: value })
+            }
           >
             <SelectTrigger>
               <SelectValue />
@@ -1099,42 +1211,63 @@ function PreferencesTab({ preferences, onUpdate, currencies, languages }) {
             </SelectContent>
           </Select>
         </div>
-        
+
         <Separator />
-        
+
         <div>
           <h3 className="text-lg font-semibold mb-4">Notifications</h3>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">Email notifications</p>
-                <p className="text-sm text-gray-600">Receive booking confirmations and updates</p>
+                <p className="text-sm text-gray-600">
+                  Receive booking confirmations and updates
+                </p>
               </div>
               <Switch
                 checked={localPreferences.email_notifications !== false}
-                onCheckedChange={(checked) => setLocalPreferences({...localPreferences, email_notifications: checked})}
+                onCheckedChange={(checked) =>
+                  setLocalPreferences({
+                    ...localPreferences,
+                    email_notifications: checked,
+                  })
+                }
               />
             </div>
-            
+
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">Price alerts</p>
-                <p className="text-sm text-gray-600">Get notified when prices drop</p>
+                <p className="text-sm text-gray-600">
+                  Get notified when prices drop
+                </p>
               </div>
               <Switch
                 checked={localPreferences.price_alerts === true}
-                onCheckedChange={(checked) => setLocalPreferences({...localPreferences, price_alerts: checked})}
+                onCheckedChange={(checked) =>
+                  setLocalPreferences({
+                    ...localPreferences,
+                    price_alerts: checked,
+                  })
+                }
               />
             </div>
-            
+
             <div className="flex items-center justify-between">
               <div>
                 <p className="font-medium">Marketing communications</p>
-                <p className="text-sm text-gray-600">Receive deals and promotional offers</p>
+                <p className="text-sm text-gray-600">
+                  Receive deals and promotional offers
+                </p>
               </div>
               <Switch
                 checked={localPreferences.marketing_opt_in === true}
-                onCheckedChange={(checked) => setLocalPreferences({...localPreferences, marketing_opt_in: checked})}
+                onCheckedChange={(checked) =>
+                  setLocalPreferences({
+                    ...localPreferences,
+                    marketing_opt_in: checked,
+                  })
+                }
               />
             </div>
           </div>
@@ -1154,33 +1287,27 @@ function SecurityTab() {
       <CardContent className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold mb-4">Password</h3>
-          <Button variant="outline">
-            Change password
-          </Button>
+          <Button variant="outline">Change password</Button>
         </div>
-        
+
         <Separator />
-        
+
         <div>
-          <h3 className="text-lg font-semibold mb-4">Two-factor authentication</h3>
+          <h3 className="text-lg font-semibold mb-4">
+            Two-factor authentication
+          </h3>
           <p className="text-gray-600 mb-4">
             Add an extra layer of security to your account
           </p>
-          <Button variant="outline">
-            Enable 2FA
-          </Button>
+          <Button variant="outline">Enable 2FA</Button>
         </div>
-        
+
         <Separator />
-        
+
         <div>
           <h3 className="text-lg font-semibold mb-4">Active sessions</h3>
-          <p className="text-gray-600 mb-4">
-            Manage where you're signed in
-          </p>
-          <Button variant="outline">
-            View active sessions
-          </Button>
+          <p className="text-gray-600 mb-4">Manage where you're signed in</p>
+          <Button variant="outline">View active sessions</Button>
         </div>
       </CardContent>
     </Card>
@@ -1197,25 +1324,21 @@ function PrivacyTab() {
       <CardContent className="space-y-6">
         <div>
           <h3 className="text-lg font-semibold mb-4">Data export</h3>
-          <p className="text-gray-600 mb-4">
-            Download a copy of your data
-          </p>
+          <p className="text-gray-600 mb-4">Download a copy of your data</p>
           <Button variant="outline">
             <Download className="w-4 h-4 mr-2" />
             Export data
           </Button>
         </div>
-        
+
         <Separator />
-        
+
         <div>
           <h3 className="text-lg font-semibold mb-4">Account deletion</h3>
           <p className="text-gray-600 mb-4">
             Permanently delete your account and all associated data
           </p>
-          <Button variant="destructive">
-            Delete account
-          </Button>
+          <Button variant="destructive">Delete account</Button>
         </div>
       </CardContent>
     </Card>
@@ -1223,7 +1346,15 @@ function PrivacyTab() {
 }
 
 // Traveler Modal Component
-function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, saving }) {
+function TravelerModal({
+  isOpen,
+  onClose,
+  traveler,
+  form,
+  setForm,
+  onSave,
+  saving,
+}) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -1232,7 +1363,7 @@ function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
             {traveler ? "Edit traveler" : "Add new traveler"}
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -1240,7 +1371,9 @@ function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
               <Input
                 id="firstName"
                 value={form.firstName || ""}
-                onChange={(e) => setForm({...form, firstName: e.target.value})}
+                onChange={(e) =>
+                  setForm({ ...form, firstName: e.target.value })
+                }
                 placeholder="First name"
               />
             </div>
@@ -1249,26 +1382,29 @@ function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
               <Input
                 id="lastName"
                 value={form.lastName || ""}
-                onChange={(e) => setForm({...form, lastName: e.target.value})}
+                onChange={(e) => setForm({ ...form, lastName: e.target.value })}
                 placeholder="Last name"
               />
             </div>
           </div>
-          
+
           <div>
             <Label htmlFor="dob">Date of birth *</Label>
             <Input
               id="dob"
               type="date"
               value={form.dob || ""}
-              onChange={(e) => setForm({...form, dob: e.target.value})}
+              onChange={(e) => setForm({ ...form, dob: e.target.value })}
             />
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="gender">Gender</Label>
-              <Select value={form.gender || ""} onValueChange={(value) => setForm({...form, gender: value})}>
+              <Select
+                value={form.gender || ""}
+                onValueChange={(value) => setForm({ ...form, gender: value })}
+              >
                 <SelectTrigger>
                   <SelectValue placeholder="Select gender" />
                 </SelectTrigger>
@@ -1276,7 +1412,9 @@ function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
                   <SelectItem value="male">Male</SelectItem>
                   <SelectItem value="female">Female</SelectItem>
                   <SelectItem value="non_binary">Non-binary</SelectItem>
-                  <SelectItem value="prefer_not_to_say">Prefer not to say</SelectItem>
+                  <SelectItem value="prefer_not_to_say">
+                    Prefer not to say
+                  </SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -1284,7 +1422,9 @@ function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
               <Label htmlFor="nationality">Nationality</Label>
               <CountrySelect
                 value={form.nationalityIso2 || ""}
-                onValueChange={(value) => setForm({...form, nationalityIso2: value})}
+                onValueChange={(value) =>
+                  setForm({ ...form, nationalityIso2: value })
+                }
                 placeholder="Select nationality"
                 prioritizePopular={true}
                 showFlags={true}
@@ -1292,10 +1432,15 @@ function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
               />
             </div>
           </div>
-          
+
           <div>
             <Label htmlFor="relationship">Relationship</Label>
-            <Select value={form.relationship || ""} onValueChange={(value) => setForm({...form, relationship: value})}>
+            <Select
+              value={form.relationship || ""}
+              onValueChange={(value) =>
+                setForm({ ...form, relationship: value })
+              }
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select relationship" />
               </SelectTrigger>
@@ -1311,27 +1456,33 @@ function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
               </SelectContent>
             </Select>
           </div>
-          
+
           <div>
-            <Label htmlFor="frequentFlyer">Frequent flyer number (optional)</Label>
+            <Label htmlFor="frequentFlyer">
+              Frequent flyer number (optional)
+            </Label>
             <Input
               id="frequentFlyer"
               value={form.frequentFlyerNumber || ""}
-              onChange={(e) => setForm({...form, frequentFlyerNumber: e.target.value})}
+              onChange={(e) =>
+                setForm({ ...form, frequentFlyerNumber: e.target.value })
+              }
               placeholder="Enter frequent flyer number"
             />
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <Switch
               id="isPrimary"
               checked={form.isPrimary === true}
-              onCheckedChange={(checked) => setForm({...form, isPrimary: checked})}
+              onCheckedChange={(checked) =>
+                setForm({ ...form, isPrimary: checked })
+              }
             />
             <Label htmlFor="isPrimary">Set as primary traveler</Label>
           </div>
         </div>
-        
+
         <div className="flex justify-end space-x-2 pt-4">
           <Button variant="outline" onClick={onClose}>
             Cancel
@@ -1347,7 +1498,15 @@ function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
 }
 
 // Passport Modal Component
-function PassportModal({ isOpen, onClose, traveler, form, setForm, onSave, saving }) {
+function PassportModal({
+  isOpen,
+  onClose,
+  traveler,
+  form,
+  setForm,
+  onSave,
+  saving,
+}) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -1356,7 +1515,7 @@ function PassportModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
             Add passport for {traveler?.first_name} {traveler?.last_name}
           </DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div className="grid grid-cols-2 gap-4">
             <div>
@@ -1364,7 +1523,9 @@ function PassportModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
               <Input
                 id="givenNames"
                 value={form.givenNames || ""}
-                onChange={(e) => setForm({...form, givenNames: e.target.value})}
+                onChange={(e) =>
+                  setForm({ ...form, givenNames: e.target.value })
+                }
                 placeholder="Given names"
               />
             </div>
@@ -1373,34 +1534,38 @@ function PassportModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
               <Input
                 id="surname"
                 value={form.surname || ""}
-                onChange={(e) => setForm({...form, surname: e.target.value})}
+                onChange={(e) => setForm({ ...form, surname: e.target.value })}
                 placeholder="Surname"
               />
             </div>
           </div>
-          
+
           <div>
             <Label htmlFor="passportNumber">Passport number *</Label>
             <Input
               id="passportNumber"
               value={form.passportNumber || ""}
-              onChange={(e) => setForm({...form, passportNumber: e.target.value})}
+              onChange={(e) =>
+                setForm({ ...form, passportNumber: e.target.value })
+              }
               placeholder="Enter passport number"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="issuingCountry">Issuing country *</Label>
             <CountrySelect
               value={form.issuingCountry || ""}
-              onValueChange={(value) => setForm({...form, issuingCountry: value})}
+              onValueChange={(value) =>
+                setForm({ ...form, issuingCountry: value })
+              }
               placeholder="Select issuing country"
               prioritizePopular={true}
               showFlags={true}
               className="w-full"
             />
           </div>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="issueDate">Issue date</Label>
@@ -1408,7 +1573,9 @@ function PassportModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
                 id="issueDate"
                 type="date"
                 value={form.issueDate || ""}
-                onChange={(e) => setForm({...form, issueDate: e.target.value})}
+                onChange={(e) =>
+                  setForm({ ...form, issueDate: e.target.value })
+                }
               />
             </div>
             <div>
@@ -1417,31 +1584,37 @@ function PassportModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
                 id="expiryDate"
                 type="date"
                 value={form.expiryDate || ""}
-                onChange={(e) => setForm({...form, expiryDate: e.target.value})}
+                onChange={(e) =>
+                  setForm({ ...form, expiryDate: e.target.value })
+                }
               />
             </div>
           </div>
-          
+
           <div>
             <Label htmlFor="placeOfBirth">Place of birth</Label>
             <Input
               id="placeOfBirth"
               value={form.placeOfBirth || ""}
-              onChange={(e) => setForm({...form, placeOfBirth: e.target.value})}
+              onChange={(e) =>
+                setForm({ ...form, placeOfBirth: e.target.value })
+              }
               placeholder="Enter place of birth"
             />
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <Switch
               id="isPrimary"
               checked={form.isPrimary === true}
-              onCheckedChange={(checked) => setForm({...form, isPrimary: checked})}
+              onCheckedChange={(checked) =>
+                setForm({ ...form, isPrimary: checked })
+              }
             />
             <Label htmlFor="isPrimary">Set as primary passport</Label>
           </div>
         </div>
-        
+
         <div className="flex justify-end space-x-2 pt-4">
           <Button variant="outline" onClick={onClose}>
             Cancel
@@ -1457,18 +1630,28 @@ function PassportModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
 }
 
 // Payment Method Modal Component
-function PaymentMethodModal({ isOpen, onClose, form, setForm, onSave, saving }) {
+function PaymentMethodModal({
+  isOpen,
+  onClose,
+  form,
+  setForm,
+  onSave,
+  saving,
+}) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
           <DialogTitle>Add payment method</DialogTitle>
         </DialogHeader>
-        
+
         <div className="space-y-4">
           <div>
             <Label htmlFor="type">Payment type *</Label>
-            <Select value={form.type || ""} onValueChange={(value) => setForm({...form, type: value})}>
+            <Select
+              value={form.type || ""}
+              onValueChange={(value) => setForm({ ...form, type: value })}
+            >
               <SelectTrigger>
                 <SelectValue placeholder="Select payment type" />
               </SelectTrigger>
@@ -1480,7 +1663,7 @@ function PaymentMethodModal({ isOpen, onClose, form, setForm, onSave, saving }) 
               </SelectContent>
             </Select>
           </div>
-          
+
           {form.type === "card" && (
             <>
               <div>
@@ -1488,62 +1671,84 @@ function PaymentMethodModal({ isOpen, onClose, form, setForm, onSave, saving }) 
                 <Input
                   id="holderName"
                   value={form.holderName || ""}
-                  onChange={(e) => setForm({...form, holderName: e.target.value})}
+                  onChange={(e) =>
+                    setForm({ ...form, holderName: e.target.value })
+                  }
                   placeholder="Name on card"
                 />
               </div>
-              
+
               <div>
                 <Label htmlFor="brand">Card brand *</Label>
-                <Select value={form.brand || ""} onValueChange={(value) => setForm({...form, brand: value})}>
+                <Select
+                  value={form.brand || ""}
+                  onValueChange={(value) => setForm({ ...form, brand: value })}
+                >
                   <SelectTrigger>
                     <SelectValue placeholder="Select card brand" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="Visa">Visa</SelectItem>
                     <SelectItem value="Mastercard">Mastercard</SelectItem>
-                    <SelectItem value="American Express">American Express</SelectItem>
+                    <SelectItem value="American Express">
+                      American Express
+                    </SelectItem>
                     <SelectItem value="Discover">Discover</SelectItem>
                     <SelectItem value="RuPay">RuPay</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
-              
+
               <div>
                 <Label htmlFor="last4">Last 4 digits *</Label>
                 <Input
                   id="last4"
                   value={form.last4 || ""}
-                  onChange={(e) => setForm({...form, last4: e.target.value})}
+                  onChange={(e) => setForm({ ...form, last4: e.target.value })}
                   placeholder="1234"
                   maxLength={4}
                 />
               </div>
-              
+
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <Label htmlFor="expMonth">Expiry month *</Label>
-                  <Select value={form.expMonth?.toString() || ""} onValueChange={(value) => setForm({...form, expMonth: parseInt(value)})}>
+                  <Select
+                    value={form.expMonth?.toString() || ""}
+                    onValueChange={(value) =>
+                      setForm({ ...form, expMonth: parseInt(value) })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Month" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Array.from({length: 12}, (_, i) => i + 1).map(month => (
-                        <SelectItem key={month} value={month.toString()}>
-                          {month.toString().padStart(2, '0')}
-                        </SelectItem>
-                      ))}
+                      {Array.from({ length: 12 }, (_, i) => i + 1).map(
+                        (month) => (
+                          <SelectItem key={month} value={month.toString()}>
+                            {month.toString().padStart(2, "0")}
+                          </SelectItem>
+                        ),
+                      )}
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
                   <Label htmlFor="expYear">Expiry year *</Label>
-                  <Select value={form.expYear?.toString() || ""} onValueChange={(value) => setForm({...form, expYear: parseInt(value)})}>
+                  <Select
+                    value={form.expYear?.toString() || ""}
+                    onValueChange={(value) =>
+                      setForm({ ...form, expYear: parseInt(value) })
+                    }
+                  >
                     <SelectTrigger>
                       <SelectValue placeholder="Year" />
                     </SelectTrigger>
                     <SelectContent>
-                      {Array.from({length: 20}, (_, i) => new Date().getFullYear() + i).map(year => (
+                      {Array.from(
+                        { length: 20 },
+                        (_, i) => new Date().getFullYear() + i,
+                      ).map((year) => (
                         <SelectItem key={year} value={year.toString()}>
                           {year}
                         </SelectItem>
@@ -1554,37 +1759,39 @@ function PaymentMethodModal({ isOpen, onClose, form, setForm, onSave, saving }) 
               </div>
             </>
           )}
-          
+
           <div>
             <Label htmlFor="provider">Provider *</Label>
             <Input
               id="provider"
               value={form.provider || ""}
-              onChange={(e) => setForm({...form, provider: e.target.value})}
+              onChange={(e) => setForm({ ...form, provider: e.target.value })}
               placeholder="e.g., stripe, razorpay"
             />
           </div>
-          
+
           <div>
             <Label htmlFor="token">Token *</Label>
             <Input
               id="token"
               value={form.token || ""}
-              onChange={(e) => setForm({...form, token: e.target.value})}
+              onChange={(e) => setForm({ ...form, token: e.target.value })}
               placeholder="Payment provider token"
             />
           </div>
-          
+
           <div className="flex items-center space-x-2">
             <Switch
               id="isDefault"
               checked={form.isDefault === true}
-              onCheckedChange={(checked) => setForm({...form, isDefault: checked})}
+              onCheckedChange={(checked) =>
+                setForm({ ...form, isDefault: checked })
+              }
             />
             <Label htmlFor="isDefault">Set as default payment method</Label>
           </div>
         </div>
-        
+
         <div className="flex justify-end space-x-2 pt-4">
           <Button variant="outline" onClick={onClose}>
             Cancel

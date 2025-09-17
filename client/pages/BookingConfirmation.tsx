@@ -1,5 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { Link, useSearchParams, useNavigate, useLocation } from "react-router-dom";
+import {
+  Link,
+  useSearchParams,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 import { useBooking } from "@/contexts/BookingContext";
 import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
 import { useSearch } from "@/contexts/SearchContext";
@@ -29,7 +34,10 @@ export default function BookingConfirmation() {
   const navigate = useNavigate();
   const location = useLocation();
   const { booking: bookingContext, generateBookingData } = useBooking();
-  const { booking: enhancedBookingContext, generateBookingData: generateEnhancedBookingData } = useEnhancedBooking();
+  const {
+    booking: enhancedBookingContext,
+    generateBookingData: generateEnhancedBookingData,
+  } = useEnhancedBooking();
   const { loadFromBookingData, getDisplayData } = useSearch();
   const [booking, setBooking] = useState<any>(null);
   const [bookingType, setBookingType] = useState<"flight" | "hotel">("flight");
@@ -66,15 +74,22 @@ export default function BookingConfirmation() {
 
     // Check for booking data passed via location state (highest priority)
     if (location.state?.bookingData) {
-      console.log("🎯 Using booking data from location state - includes complete search object");
+      console.log(
+        "🎯 Using booking data from location state - includes complete search object",
+      );
       setBooking(location.state.bookingData);
       setBookingType("flight");
       return;
     }
 
     // Prioritize enhanced booking context data first (most reliable for dates)
-    if (enhancedBookingContext.isComplete && enhancedBookingContext.selectedFlight) {
-      console.log("🎯 Using enhanced booking context data - most reliable source for dates");
+    if (
+      enhancedBookingContext.isComplete &&
+      enhancedBookingContext.selectedFlight
+    ) {
+      console.log(
+        "🎯 Using enhanced booking context data - most reliable source for dates",
+      );
       const enhancedContextBookingData = generateEnhancedBookingData();
       setBooking(enhancedContextBookingData);
       setBookingType("flight");
@@ -1747,7 +1762,8 @@ export default function BookingConfirmation() {
                           {booking.searchParams?.returnDate
                             ? formatDate(booking.searchParams.returnDate)
                             : formatDate(
-                                booking.flights[1].date || new Date().toISOString(),
+                                booking.flights[1].date ||
+                                  new Date().toISOString(),
                               )}
                         </p>
                         <p className="text-xs text-gray-500">

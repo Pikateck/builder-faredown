@@ -144,8 +144,8 @@ export default function SightseeingResults() {
       destinationCode: searchParams.get("destinationCode") || "DXB",
       destinationName: destinationName || "Dubai, UAE",
       // Use exact date format as specified by user: "2025-10-01"
-      checkIn: checkIn || new Date().toISOString().split('T')[0],
-      checkOut: checkOut || checkIn || new Date().toISOString().split('T')[0],
+      checkIn: checkIn || new Date().toISOString().split("T")[0],
+      checkOut: checkOut || checkIn || new Date().toISOString().split("T")[0],
       category: experienceType === "any" ? undefined : experienceType,
       duration: duration === "any" ? undefined : duration,
       guests: {
@@ -162,9 +162,21 @@ export default function SightseeingResults() {
       searchTimestamp: new Date().toISOString(),
     };
 
-    console.log("🎯 Loading standardized sightseeing search object to context:", standardizedSightseeingSearchParams);
+    console.log(
+      "🎯 Loading standardized sightseeing search object to context:",
+      standardizedSightseeingSearchParams,
+    );
     loadCompleteSearchObject(standardizedSightseeingSearchParams);
-  }, [destination, destinationName, checkIn, checkOut, adults, children, experienceType, duration]);
+  }, [
+    destination,
+    destinationName,
+    checkIn,
+    checkOut,
+    adults,
+    children,
+    experienceType,
+    duration,
+  ]);
 
   // Load sample attractions data
   useEffect(() => {
@@ -1154,7 +1166,6 @@ export default function SightseeingResults() {
         </div>
       )}
 
-
       {/* Hotel-Style Bottom Panel */}
       {showBottomBar && selectedAttractions.size > 0 && (
         <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-[60]">
@@ -1199,17 +1210,31 @@ export default function SightseeingResults() {
               <BargainButton
                 useEnhancedModal={true}
                 module="sightseeing"
-                itemName={selectedAttractions.size > 0 ? attractions.find(a => selectedAttractions.has(a.id))?.name || "Selected Experience" : "Experience"}
+                itemName={
+                  selectedAttractions.size > 0
+                    ? attractions.find((a) => selectedAttractions.has(a.id))
+                        ?.name || "Selected Experience"
+                    : "Experience"
+                }
                 supplierNetRate={calculateTotalPrice()}
                 itemDetails={{
                   location: destinationName || destination,
                   provider: "Local Tours",
-                  features: selectedAttractions.size > 0 ? attractions.find(a => selectedAttractions.has(a.id))?.highlights?.slice(0, 5) || [] : [],
+                  features:
+                    selectedAttractions.size > 0
+                      ? attractions
+                          .find((a) => selectedAttractions.has(a.id))
+                          ?.highlights?.slice(0, 5) || []
+                      : [],
                 }}
                 onBargainSuccess={(finalPrice, savings) => {
-                  console.log(`Sightseeing Results Bottom Bar Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                  console.log(
+                    `Sightseeing Results Bottom Bar Bargain success! Final price: ${finalPrice}, Savings: ${savings}`,
+                  );
                   // Navigate to booking with bargained price
-                  const firstSelected = attractions.find(a => selectedAttractions.has(a.id));
+                  const firstSelected = attractions.find((a) =>
+                    selectedAttractions.has(a.id),
+                  );
                   if (firstSelected) {
                     const params = new URLSearchParams(searchParams);
                     params.set("attractionId", firstSelected.id);

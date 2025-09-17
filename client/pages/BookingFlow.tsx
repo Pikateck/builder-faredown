@@ -17,7 +17,7 @@ const profileAPI = {
   async fetchTravelers() {
     try {
       const response = await fetch(`${this.baseURL}/travelers`, {
-        headers: { "X-User-ID": "1" } // Demo: use actual auth
+        headers: { "X-User-ID": "1" }, // Demo: use actual auth
       });
       if (response.ok) {
         const data = await response.json();
@@ -35,16 +35,16 @@ const profileAPI = {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          "X-User-ID": "1"
+          "X-User-ID": "1",
         },
-        body: JSON.stringify({ bookingId, travelerId })
+        body: JSON.stringify({ bookingId, travelerId }),
       });
       return response.json();
     } catch (error) {
       console.error("Failed to add passenger to booking:", error);
       return null;
     }
-  }
+  },
 };
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -236,8 +236,14 @@ const SeatMap = ({
     });
 
     // Show brief success feedback
-    const travellerName = travellers.find((t) => t.id === travellerToAssign)?.firstName;
-    setRecentlySelected({ seat: seat.id, traveller: travellerName, flight: flightLeg });
+    const travellerName = travellers.find(
+      (t) => t.id === travellerToAssign,
+    )?.firstName;
+    setRecentlySelected({
+      seat: seat.id,
+      traveller: travellerName,
+      flight: flightLeg,
+    });
     setTimeout(() => setRecentlySelected(null), 2000);
 
     // Auto-advance to next traveller if available
@@ -343,8 +349,10 @@ const SeatMap = ({
             👤 Select Traveller First
           </h5>
           <p className="text-xs text-blue-700">
-            Step 1: Click on passenger name below to select them<br/>
-            Step 2: Click any available seat on the map - it will be automatically saved
+            Step 1: Click on passenger name below to select them
+            <br />
+            Step 2: Click any available seat on the map - it will be
+            automatically saved
           </p>
         </div>
         <div className="space-y-2">
@@ -372,16 +380,23 @@ const SeatMap = ({
                     : "text-gray-900 hover:text-[#003580]"
                 }`}
               >
-                <span className={`w-3 h-3 rounded-full border-2 ${
-                  selectedTraveller === traveller.id && currentFlight === flightLeg
-                    ? "bg-[#003580] border-[#003580]"
-                    : "border-gray-300"
-                }`}></span>
+                <span
+                  className={`w-3 h-3 rounded-full border-2 ${
+                    selectedTraveller === traveller.id &&
+                    currentFlight === flightLeg
+                      ? "bg-[#003580] border-[#003580]"
+                      : "border-gray-300"
+                  }`}
+                ></span>
                 <span>
-                  {traveller.firstName} {traveller.lastName} ({traveller.type.toLowerCase()})
-                  {selectedTraveller === traveller.id && currentFlight === flightLeg && (
-                    <span className="text-xs text-[#003580] ml-2 font-normal">← Selected for seat assignment</span>
-                  )}
+                  {traveller.firstName} {traveller.lastName} (
+                  {traveller.type.toLowerCase()})
+                  {selectedTraveller === traveller.id &&
+                    currentFlight === flightLeg && (
+                      <span className="text-xs text-[#003580] ml-2 font-normal">
+                        ← Selected for seat assignment
+                      </span>
+                    )}
                 </span>
               </button>
               <div className="flex items-center space-x-4">
@@ -464,7 +479,11 @@ const SeatMap = ({
           {/* Mobile Instructions */}
           <div className="lg:hidden mb-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
             <p className="text-sm text-blue-800 font-medium flex items-center">
-              📱 <span className="ml-2">Mobile Tip: Tap and scroll on the seat map below. Selected seats appear instantly!</span>
+              📱{" "}
+              <span className="ml-2">
+                Mobile Tip: Tap and scroll on the seat map below. Selected seats
+                appear instantly!
+              </span>
             </p>
           </div>
           <div className="flex flex-col lg:flex-row gap-4">
@@ -522,7 +541,8 @@ const SeatMap = ({
                     }
                   </p>
                   <p className="text-xs text-[#666] mt-1">
-                    Click any available seat - it will be automatically saved and added to your summary
+                    Click any available seat - it will be automatically saved
+                    and added to your summary
                   </p>
                 </div>
               ) : (
@@ -531,7 +551,8 @@ const SeatMap = ({
                     ⚠️ Select a passenger first
                   </p>
                   <p className="text-xs text-orange-700 mt-1">
-                    Choose a passenger from the list above, then select their seat from the map
+                    Choose a passenger from the list above, then select their
+                    seat from the map
                   </p>
                 </div>
               )}
@@ -753,9 +774,11 @@ const SeatMap = ({
                 <div className="flex justify-between items-center mt-4 pt-4 border-t border-gray-200">
                   <span className="text-sm text-[#666]">{flightTitle}</span>
                   <div className="flex items-center space-x-3">
-                    {recentlySelected && recentlySelected.flight === flightLeg ? (
+                    {recentlySelected &&
+                    recentlySelected.flight === flightLeg ? (
                       <span className="text-sm text-green-600 font-medium animate-pulse">
-                        ✓ Seat {recentlySelected.seat} selected for {recentlySelected.traveller}!
+                        ✓ Seat {recentlySelected.seat} selected for{" "}
+                        {recentlySelected.traveller}!
                       </span>
                     ) : selectedTraveller && currentFlight === flightLeg ? (
                       <span className="text-sm text-[#666]">
@@ -1019,12 +1042,12 @@ export default function BookingFlow() {
     if (!dateStr) return "Select date";
     try {
       // Parse date in YYYY-MM-DD format (e.g., "2025-10-01")
-      const date = new Date(dateStr + 'T00:00:00'); // Add time to avoid timezone issues
-      return date.toLocaleDateString('en-US', {
-        weekday: 'short',
-        month: 'short',
-        day: 'numeric',
-        year: 'numeric'
+      const date = new Date(dateStr + "T00:00:00"); // Add time to avoid timezone issues
+      return date.toLocaleDateString("en-US", {
+        weekday: "short",
+        month: "short",
+        day: "numeric",
+        year: "numeric",
       });
     } catch (error) {
       console.warn("Date formatting error:", error);
@@ -1041,7 +1064,10 @@ export default function BookingFlow() {
 
     // Load complete search object from location state if available
     if (location.state?.searchParams) {
-      console.log("🔄 Loading search params from location state:", location.state.searchParams);
+      console.log(
+        "🔄 Loading search params from location state:",
+        location.state.searchParams,
+      );
       loadCompleteSearchObject(location.state.searchParams);
     }
 
@@ -1229,24 +1255,38 @@ export default function BookingFlow() {
 
   // Function to populate traveler data from saved profile
   const populateFromSavedTraveler = (travelerId, savedTraveler) => {
-    setTravellers(prev => prev.map(traveller =>
-      traveller.id === travelerId
-        ? {
-            ...traveller,
-            firstName: savedTraveler.first_name,
-            lastName: savedTraveler.last_name,
-            title: savedTraveler.gender === 'male' ? 'Mr' : savedTraveler.gender === 'female' ? 'Ms' : 'Mx',
-            gender: savedTraveler.gender === 'male' ? 'Male' : savedTraveler.gender === 'female' ? 'Female' : 'Other',
-            nationality: savedTraveler.nationality_iso2 || 'IN',
-            dateOfBirth: savedTraveler.dob || '',
-            profileData: savedTraveler // Store reference to saved profile
-          }
-        : traveller
-    ));
+    setTravellers((prev) =>
+      prev.map((traveller) =>
+        traveller.id === travelerId
+          ? {
+              ...traveller,
+              firstName: savedTraveler.first_name,
+              lastName: savedTraveler.last_name,
+              title:
+                savedTraveler.gender === "male"
+                  ? "Mr"
+                  : savedTraveler.gender === "female"
+                    ? "Ms"
+                    : "Mx",
+              gender:
+                savedTraveler.gender === "male"
+                  ? "Male"
+                  : savedTraveler.gender === "female"
+                    ? "Female"
+                    : "Other",
+              nationality: savedTraveler.nationality_iso2 || "IN",
+              dateOfBirth: savedTraveler.dob || "",
+              profileData: savedTraveler, // Store reference to saved profile
+            }
+          : traveller,
+      ),
+    );
 
     // Show success feedback
     setShowSavedTravelers(false); // Collapse the section
-    alert(`✅ Traveler details populated for ${savedTraveler.first_name} ${savedTraveler.last_name}`);
+    alert(
+      `✅ Traveler details populated for ${savedTraveler.first_name} ${savedTraveler.last_name}`,
+    );
   };
 
   // Function to save current booking with profile links
@@ -1258,7 +1298,10 @@ export default function BookingFlow() {
       // Link passengers to saved travelers if they have profile data
       for (const traveller of travellers) {
         if (traveller.profileData) {
-          await profileAPI.addPassengerToBooking(bookingId, traveller.profileData.id);
+          await profileAPI.addPassengerToBooking(
+            bookingId,
+            traveller.profileData.id,
+          );
         }
       }
 
@@ -1716,7 +1759,9 @@ export default function BookingFlow() {
           {
             from: searchParams.from,
             to: searchParams.to,
-            date: formatExactDate(exactDepartDate).replace(/^\w+, /, "").replace(/, \d{4}$/, ""),
+            date: formatExactDate(exactDepartDate)
+              .replace(/^\w+, /, "")
+              .replace(/, \d{4}$/, ""),
             time: selectedFlight?.departureTime || "14:35",
             duration: selectedFlight?.duration || "3h 15m",
             airline: selectedFlight?.airline || "Airlines",
@@ -1727,7 +1772,9 @@ export default function BookingFlow() {
                 {
                   from: searchParams.to,
                   to: searchParams.from,
-                  date: formatExactDate(exactReturnDate).replace(/^\w+, /, "").replace(/, \d{4}$/, ""),
+                  date: formatExactDate(exactReturnDate)
+                    .replace(/^\w+, /, "")
+                    .replace(/, \d{4}$/, ""),
                   time: selectedFlight?.returnDepartureTime || "08:45",
                   duration: selectedFlight?.returnDuration || "3h 20m",
                   airline: selectedFlight?.airline || "Airlines",
@@ -1771,15 +1818,18 @@ export default function BookingFlow() {
       completeBooking(bookingId);
 
       // Simulate payment processing
-      console.log("✅ Booking completed with complete search object:", bookingData);
+      console.log(
+        "✅ Booking completed with complete search object:",
+        bookingData,
+      );
 
       // Navigate to confirmation with flight type indicator
       navigate("/booking-confirmation?type=flight", {
         replace: true,
         state: {
           bookingData: bookingData,
-          searchParams: searchParams
-        }
+          searchParams: searchParams,
+        },
       });
     } catch (error) {
       console.error("Booking failed:", error);
@@ -2921,9 +2971,7 @@ export default function BookingFlow() {
                             <div className="flex justify-between">
                               <span>Refund Protection</span>
                               <span>
-                                {formatPrice(
-                                  calculateRefundProtectionCost(),
-                                )}
+                                {formatPrice(calculateRefundProtectionCost())}
                               </span>
                             </div>
                           )}
@@ -4147,11 +4195,13 @@ export default function BookingFlow() {
                       onClick={() => setShowSavedTravelers(!showSavedTravelers)}
                       className="text-green-700 border-green-300 hover:bg-green-100"
                     >
-                      {showSavedTravelers ? 'Hide' : 'Show'} ({savedTravelers.length})
+                      {showSavedTravelers ? "Hide" : "Show"} (
+                      {savedTravelers.length})
                     </Button>
                   </div>
                   <p className="text-xs text-green-700 mb-3">
-                    🆕 Select from your comprehensive profile system (includes passport details)
+                    🆕 Select from your comprehensive profile system (includes
+                    passport details)
                   </p>
 
                   {showSavedTravelers && (
@@ -4160,7 +4210,12 @@ export default function BookingFlow() {
                         <div
                           key={traveler.id}
                           className="flex items-center justify-between p-3 bg-white border border-green-200 rounded-lg hover:border-green-300 transition-colors cursor-pointer"
-                          onClick={() => populateFromSavedTraveler(selectedTraveller, traveler)}
+                          onClick={() =>
+                            populateFromSavedTraveler(
+                              selectedTraveller,
+                              traveler,
+                            )
+                          }
                         >
                           <div className="flex items-center space-x-3">
                             <div className="w-8 h-8 bg-gradient-to-br from-green-100 to-green-200 rounded-full flex items-center justify-center">
@@ -4172,7 +4227,7 @@ export default function BookingFlow() {
                               </div>
                               <div className="text-xs text-gray-600 flex items-center space-x-2">
                                 <span className="bg-gray-100 px-2 py-0.5 rounded">
-                                  {traveler.relationship || 'Adult'}
+                                  {traveler.relationship || "Adult"}
                                 </span>
                                 {traveler.nationality_iso2 && (
                                   <>
@@ -4183,7 +4238,9 @@ export default function BookingFlow() {
                                 {traveler.is_primary && (
                                   <>
                                     <span>•</span>
-                                    <span className="text-green-600 font-medium">Primary</span>
+                                    <span className="text-green-600 font-medium">
+                                      Primary
+                                    </span>
                                   </>
                                 )}
                               </div>

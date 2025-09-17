@@ -202,10 +202,14 @@ interface EnhancedBookingContextType {
   loadFromUrlParams: (searchParams: URLSearchParams) => void;
   generateBookingData: () => any;
   // New method to load complete search object
-  loadCompleteSearchObject: (searchObj: Partial<StandardizedSearchParams>) => void;
+  loadCompleteSearchObject: (
+    searchObj: Partial<StandardizedSearchParams>,
+  ) => void;
 }
 
-const EnhancedBookingContext = createContext<EnhancedBookingContextType | undefined>(undefined);
+const EnhancedBookingContext = createContext<
+  EnhancedBookingContextType | undefined
+>(undefined);
 
 const initialBookingState: EnhancedBookingState = {
   searchParams: {
@@ -296,136 +300,171 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
   }, [booking]);
 
   // Memoize functions to prevent infinite re-renders
-  const updateSearchParams = useCallback((params: Partial<StandardizedSearchParams>) => {
-    setBooking((prev) => ({
-      ...prev,
-      searchParams: { ...prev.searchParams, ...params },
-    }));
-  }, []);
+  const updateSearchParams = useCallback(
+    (params: Partial<StandardizedSearchParams>) => {
+      setBooking((prev) => ({
+        ...prev,
+        searchParams: { ...prev.searchParams, ...params },
+      }));
+    },
+    [],
+  );
 
-  const loadCompleteSearchObject = useCallback((searchObj: Partial<StandardizedSearchParams>) => {
-    setBooking((prev) => ({
-      ...prev,
-      searchParams: { ...prev.searchParams, ...searchObj },
-    }));
-  }, []);
+  const loadCompleteSearchObject = useCallback(
+    (searchObj: Partial<StandardizedSearchParams>) => {
+      setBooking((prev) => ({
+        ...prev,
+        searchParams: { ...prev.searchParams, ...searchObj },
+      }));
+    },
+    [],
+  );
 
   // Load from URL parameters with standardized structure
-  const loadFromUrlParams = useCallback((urlParams: URLSearchParams) => {
-    const newSearchParams: Partial<StandardizedSearchParams> = {};
+  const loadFromUrlParams = useCallback(
+    (urlParams: URLSearchParams) => {
+      const newSearchParams: Partial<StandardizedSearchParams> = {};
 
-    // Extract search parameters using both naming conventions
-    if (urlParams.get("from")) newSearchParams.from = urlParams.get("from")!;
-    if (urlParams.get("to")) newSearchParams.to = urlParams.get("to")!;
-    if (urlParams.get("fromCode")) newSearchParams.fromCode = urlParams.get("fromCode")!;
-    if (urlParams.get("toCode")) newSearchParams.toCode = urlParams.get("toCode")!;
+      // Extract search parameters using both naming conventions
+      if (urlParams.get("from")) newSearchParams.from = urlParams.get("from")!;
+      if (urlParams.get("to")) newSearchParams.to = urlParams.get("to")!;
+      if (urlParams.get("fromCode"))
+        newSearchParams.fromCode = urlParams.get("fromCode")!;
+      if (urlParams.get("toCode"))
+        newSearchParams.toCode = urlParams.get("toCode")!;
 
-    // Handle dates - support both departDate and departureDate for compatibility
-    if (urlParams.get("departDate")) newSearchParams.departDate = urlParams.get("departDate")!;
-    if (urlParams.get("departureDate")) newSearchParams.departDate = urlParams.get("departureDate")!;
-    if (urlParams.get("returnDate")) newSearchParams.returnDate = urlParams.get("returnDate")!;
+      // Handle dates - support both departDate and departureDate for compatibility
+      if (urlParams.get("departDate"))
+        newSearchParams.departDate = urlParams.get("departDate")!;
+      if (urlParams.get("departureDate"))
+        newSearchParams.departDate = urlParams.get("departureDate")!;
+      if (urlParams.get("returnDate"))
+        newSearchParams.returnDate = urlParams.get("returnDate")!;
 
-    // Trip type
-    if (urlParams.get("tripType")) {
-      const tripType = urlParams.get("tripType")!;
-      newSearchParams.tripType = tripType === "round-trip" ? "roundtrip" : tripType as any;
-    }
+      // Trip type
+      if (urlParams.get("tripType")) {
+        const tripType = urlParams.get("tripType")!;
+        newSearchParams.tripType =
+          tripType === "round-trip" ? "roundtrip" : (tripType as any);
+      }
 
-    // Cabin class
-    if (urlParams.get("class")) {
-      const classValue = urlParams.get("class")!;
-      newSearchParams.cabin = (classValue.charAt(0).toUpperCase() + classValue.slice(1)) as any;
-    }
-    if (urlParams.get("cabin")) newSearchParams.cabin = urlParams.get("cabin") as any;
+      // Cabin class
+      if (urlParams.get("class")) {
+        const classValue = urlParams.get("class")!;
+        newSearchParams.cabin = (classValue.charAt(0).toUpperCase() +
+          classValue.slice(1)) as any;
+      }
+      if (urlParams.get("cabin"))
+        newSearchParams.cabin = urlParams.get("cabin") as any;
 
-    // Currency
-    if (urlParams.get("currency")) newSearchParams.currency = urlParams.get("currency")!;
+      // Currency
+      if (urlParams.get("currency"))
+        newSearchParams.currency = urlParams.get("currency")!;
 
-    // Passengers
-    const adults = parseInt(urlParams.get("adults") || "1");
-    const children = parseInt(urlParams.get("children") || "0");
-    const infants = parseInt(urlParams.get("infants") || "0");
+      // Passengers
+      const adults = parseInt(urlParams.get("adults") || "1");
+      const children = parseInt(urlParams.get("children") || "0");
+      const infants = parseInt(urlParams.get("infants") || "0");
 
-    newSearchParams.pax = { adults, children, infants };
+      newSearchParams.pax = { adults, children, infants };
 
-    // Update booking state
-    updateSearchParams(newSearchParams);
-  }, [updateSearchParams]);
+      // Update booking state
+      updateSearchParams(newSearchParams);
+    },
+    [updateSearchParams],
+  );
 
-  const updatePriceBreakdown = useCallback((prices: Partial<PriceBreakdown>) => {
-    setBooking((prev) => {
-      const passengers = prev.searchParams.pax;
-      const totalPassengers = passengers.adults + passengers.children + passengers.infants;
-      const fare = prev.selectedFare;
+  const updatePriceBreakdown = useCallback(
+    (prices: Partial<PriceBreakdown>) => {
+      setBooking((prev) => {
+        const passengers = prev.searchParams.pax;
+        const totalPassengers =
+          passengers.adults + passengers.children + passengers.infants;
+        const fare = prev.selectedFare;
 
-      if (!fare) return prev;
+        if (!fare) return prev;
 
-      // Calculate base fare
-      const adultFare = fare.price;
-      const childFare = fare.price * 0.75;
-      const infantFare = fare.price * 0.1;
+        // Calculate base fare
+        const adultFare = fare.price;
+        const childFare = fare.price * 0.75;
+        const infantFare = fare.price * 0.1;
 
-      const baseFare =
-        passengers.adults * adultFare +
-        passengers.children * childFare +
-        passengers.infants * infantFare;
+        const baseFare =
+          passengers.adults * adultFare +
+          passengers.children * childFare +
+          passengers.infants * infantFare;
 
-      // Calculate taxes (18% of base fare)
-      const taxes = baseFare * 0.18;
+        // Calculate taxes (18% of base fare)
+        const taxes = baseFare * 0.18;
 
-      // Calculate fees (airport charges, fuel surcharge, etc.)
-      const fees = baseFare * 0.05;
+        // Calculate fees (airport charges, fuel surcharge, etc.)
+        const fees = baseFare * 0.05;
 
-      // Calculate extras total
-      const extrasTotal =
-        prev.extras.meals.reduce((sum, meal) => sum + meal.price, 0) +
-        prev.extras.baggage.reduce((sum, bag) => sum + bag.price * bag.quantity, 0) +
-        prev.extras.otherServices.reduce((sum, service) => sum + service.price, 0);
+        // Calculate extras total
+        const extrasTotal =
+          prev.extras.meals.reduce((sum, meal) => sum + meal.price, 0) +
+          prev.extras.baggage.reduce(
+            (sum, bag) => sum + bag.price * bag.quantity,
+            0,
+          ) +
+          prev.extras.otherServices.reduce(
+            (sum, service) => sum + service.price,
+            0,
+          );
 
-      // Calculate seats total
-      const seatsTotal = prev.extras.seats.reduce((sum, seat) => sum + seat.price, 0);
+        // Calculate seats total
+        const seatsTotal = prev.extras.seats.reduce(
+          (sum, seat) => sum + seat.price,
+          0,
+        );
 
-      // Calculate insurance total
-      const insuranceTotal =
-        prev.extras.insurance.refundProtectionCost +
-        prev.extras.insurance.baggageProtectionCost;
+        // Calculate insurance total
+        const insuranceTotal =
+          prev.extras.insurance.refundProtectionCost +
+          prev.extras.insurance.baggageProtectionCost;
 
-      // Calculate savings if bargained
-      const savings =
-        fare.isBargained && fare.originalPrice
-          ? (fare.originalPrice - fare.price) * totalPassengers
-          : 0;
+        // Calculate savings if bargained
+        const savings =
+          fare.isBargained && fare.originalPrice
+            ? (fare.originalPrice - fare.price) * totalPassengers
+            : 0;
 
-      const total = baseFare + taxes + fees + extrasTotal + seatsTotal + insuranceTotal;
+        const total =
+          baseFare + taxes + fees + extrasTotal + seatsTotal + insuranceTotal;
 
-      const newPriceBreakdown: PriceBreakdown = {
-        baseFare,
-        taxes,
-        fees,
-        extras: extrasTotal,
-        seats: seatsTotal,
-        insurance: insuranceTotal,
-        total,
-        savings,
-        ...prices,
-      };
+        const newPriceBreakdown: PriceBreakdown = {
+          baseFare,
+          taxes,
+          fees,
+          extras: extrasTotal,
+          seats: seatsTotal,
+          insurance: insuranceTotal,
+          total,
+          savings,
+          ...prices,
+        };
 
-      return {
-        ...prev,
-        priceBreakdown: newPriceBreakdown,
-      };
-    });
-  }, []);
+        return {
+          ...prev,
+          priceBreakdown: newPriceBreakdown,
+        };
+      });
+    },
+    [],
+  );
 
   const setSelectedFlight = useCallback((flight: SelectedFlight) => {
     setBooking((prev) => ({ ...prev, selectedFlight: flight }));
   }, []);
 
-  const setSelectedFare = useCallback((fare: SelectedFare) => {
-    setBooking((prev) => ({ ...prev, selectedFare: fare }));
-    // Recalculate price breakdown when fare changes
-    setTimeout(() => updatePriceBreakdown({}), 0);
-  }, [updatePriceBreakdown]);
+  const setSelectedFare = useCallback(
+    (fare: SelectedFare) => {
+      setBooking((prev) => ({ ...prev, selectedFare: fare }));
+      // Recalculate price breakdown when fare changes
+      setTimeout(() => updatePriceBreakdown({}), 0);
+    },
+    [updatePriceBreakdown],
+  );
 
   const updateTravellers = useCallback((travellers: Traveller[]) => {
     setBooking((prev) => ({ ...prev, travellers }));
@@ -456,7 +495,12 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
   // Load from location state (from flight results selection)
   useEffect(() => {
     if (location.state) {
-      const { selectedFlight, selectedFareType, negotiatedPrice, searchParams: stateSearchParams } = location.state;
+      const {
+        selectedFlight,
+        selectedFareType,
+        negotiatedPrice,
+        searchParams: stateSearchParams,
+      } = location.state;
 
       // First, load search parameters if provided
       if (stateSearchParams) {
@@ -475,18 +519,25 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
             duration: selectedFlight.duration,
             aircraft: selectedFlight.aircraft || "Aircraft",
             stops: selectedFlight.stops || 0,
-            departureCode: selectedFlight.departureCode || prev.searchParams.fromCode,
+            departureCode:
+              selectedFlight.departureCode || prev.searchParams.fromCode,
             arrivalCode: selectedFlight.arrivalCode || prev.searchParams.toCode,
-            departureCity: selectedFlight.departureCity || prev.searchParams.from,
+            departureCity:
+              selectedFlight.departureCity || prev.searchParams.from,
             arrivalCity: selectedFlight.arrivalCity || prev.searchParams.to,
-            departureDate: selectedFlight.departureDate || prev.searchParams.departDate,
-            arrivalDate: selectedFlight.arrivalDate || prev.searchParams.departDate,
+            departureDate:
+              selectedFlight.departureDate || prev.searchParams.departDate,
+            arrivalDate:
+              selectedFlight.arrivalDate || prev.searchParams.departDate,
             returnFlightNumber: selectedFlight.returnFlightNumber,
             returnDepartureTime: selectedFlight.returnDepartureTime,
             returnArrivalTime: selectedFlight.returnArrivalTime,
             returnDuration: selectedFlight.returnDuration,
-            returnDepartureDate: selectedFlight.returnDepartureDate || prev.searchParams.returnDate,
-            returnArrivalDate: selectedFlight.returnArrivalDate || prev.searchParams.returnDate,
+            returnDepartureDate:
+              selectedFlight.returnDepartureDate ||
+              prev.searchParams.returnDate,
+            returnArrivalDate:
+              selectedFlight.returnArrivalDate || prev.searchParams.returnDate,
           },
           currentStep: 1,
         }));
@@ -521,16 +572,17 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
     }
   }, [location.search]);
 
-
-  const updateExtras = useCallback((extras: Partial<BookingExtras>) => {
-    setBooking((prev) => ({
-      ...prev,
-      extras: { ...prev.extras, ...extras },
-    }));
-    // Recalculate price breakdown when extras change
-    setTimeout(() => updatePriceBreakdown({}), 0);
-  }, [updatePriceBreakdown]);
-
+  const updateExtras = useCallback(
+    (extras: Partial<BookingExtras>) => {
+      setBooking((prev) => ({
+        ...prev,
+        extras: { ...prev.extras, ...extras },
+      }));
+      // Recalculate price breakdown when extras change
+      setTimeout(() => updatePriceBreakdown({}), 0);
+    },
+    [updatePriceBreakdown],
+  );
 
   const generateBookingData = useCallback(() => {
     const {
@@ -584,7 +636,8 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
           duration: selectedFlight?.duration,
           stops: selectedFlight?.stops,
         },
-        ...(searchParams.tripType === "roundtrip" && selectedFlight?.returnFlightNumber
+        ...(searchParams.tripType === "roundtrip" &&
+        selectedFlight?.returnFlightNumber
           ? [
               {
                 type: "return",
@@ -695,7 +748,9 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
 export function useEnhancedBooking() {
   const context = useContext(EnhancedBookingContext);
   if (context === undefined) {
-    throw new Error("useEnhancedBooking must be used within an EnhancedBookingProvider");
+    throw new Error(
+      "useEnhancedBooking must be used within an EnhancedBookingProvider",
+    );
   }
   return context;
 }

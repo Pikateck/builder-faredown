@@ -165,7 +165,9 @@ export function Header() {
               <div className="flex flex-col h-full">
                 {/* Header */}
                 <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
-                  <span className="text-lg font-bold text-gray-900">Notifications</span>
+                  <span className="text-lg font-bold text-gray-900">
+                    Notifications
+                  </span>
                   <button
                     onClick={() => setShowNotifications(false)}
                     className="p-2 text-gray-900 hover:bg-gray-100 rounded-lg"
@@ -187,9 +189,12 @@ export function Header() {
                           Booking Confirmed
                         </p>
                         <p className="text-xs text-gray-600 mt-1">
-                          Your hotel booking in Dubai has been confirmed. Reference: FD12345
+                          Your hotel booking in Dubai has been confirmed.
+                          Reference: FD12345
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">2 hours ago</p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          2 hours ago
+                        </p>
                       </div>
                     </div>
 
@@ -202,9 +207,12 @@ export function Header() {
                           Flight Update
                         </p>
                         <p className="text-xs text-gray-600 mt-1">
-                          Your flight AI 131 departure time has been updated to 14:30
+                          Your flight AI 131 departure time has been updated to
+                          14:30
                         </p>
-                        <p className="text-xs text-gray-400 mt-1">5 hours ago</p>
+                        <p className="text-xs text-gray-400 mt-1">
+                          5 hours ago
+                        </p>
                       </div>
                     </div>
 
@@ -217,7 +225,8 @@ export function Header() {
                           Check-in Reminder
                         </p>
                         <p className="text-xs text-gray-600 mt-1">
-                          Don't forget to check-in for your flight tomorrow at 10:00 AM
+                          Don't forget to check-in for your flight tomorrow at
+                          10:00 AM
                         </p>
                         <p className="text-xs text-gray-400 mt-1">1 day ago</p>
                       </div>
@@ -232,7 +241,8 @@ export function Header() {
                           Payment Failed
                         </p>
                         <p className="text-xs text-gray-600 mt-1">
-                          Your payment for booking FD12346 was declined. Please update your payment method.
+                          Your payment for booking FD12346 was declined. Please
+                          update your payment method.
                         </p>
                         <p className="text-xs text-gray-400 mt-1">2 days ago</p>
                       </div>
@@ -247,7 +257,8 @@ export function Header() {
                           Special Offer
                         </p>
                         <p className="text-xs text-gray-600 mt-1">
-                          Get 20% off on your next hotel booking. Use code SAVE20
+                          Get 20% off on your next hotel booking. Use code
+                          SAVE20
                         </p>
                         <p className="text-xs text-gray-400 mt-1">3 days ago</p>
                       </div>
@@ -561,7 +572,9 @@ export function Header() {
                             className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
                           >
                             <Shield className="w-4 h-4" />
-                            <span className="text-sm font-medium">Admin Panel</span>
+                            <span className="text-sm font-medium">
+                              Admin Panel
+                            </span>
                           </button>
                           <button
                             onClick={() => {
@@ -571,10 +584,11 @@ export function Header() {
                             className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
                           >
                             <Code className="w-4 h-4" />
-                            <span className="text-sm font-medium">Live APIs</span>
+                            <span className="text-sm font-medium">
+                              Live APIs
+                            </span>
                           </button>
                         </div>
-
                       </div>
                     </div>
                   ) : (
@@ -739,7 +753,9 @@ export function Header() {
                           <div className="flex flex-col h-full">
                             {/* Header */}
                             <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
-                              <span className="text-lg font-bold text-gray-900">Notifications</span>
+                              <span className="text-lg font-bold text-gray-900">
+                                Notifications
+                              </span>
                               <button
                                 onClick={() => setShowNotifications(false)}
                                 className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded"
@@ -760,9 +776,12 @@ export function Header() {
                                       Booking Confirmed
                                     </p>
                                     <p className="text-xs text-gray-600 mt-1">
-                                      Your hotel booking in Dubai has been confirmed.
+                                      Your hotel booking in Dubai has been
+                                      confirmed.
                                     </p>
-                                    <p className="text-xs text-gray-400 mt-1">2 hours ago</p>
+                                    <p className="text-xs text-gray-400 mt-1">
+                                      2 hours ago
+                                    </p>
                                   </div>
                                 </div>
 
@@ -775,9 +794,12 @@ export function Header() {
                                       Flight Update
                                     </p>
                                     <p className="text-xs text-gray-600 mt-1">
-                                      Your flight departure time has been updated.
+                                      Your flight departure time has been
+                                      updated.
                                     </p>
-                                    <p className="text-xs text-gray-400 mt-1">5 hours ago</p>
+                                    <p className="text-xs text-gray-400 mt-1">
+                                      5 hours ago
+                                    </p>
                                   </div>
                                 </div>
 
@@ -790,9 +812,12 @@ export function Header() {
                                       Check-in Reminder
                                     </p>
                                     <p className="text-xs text-gray-600 mt-1">
-                                      Don't forget to check-in for your flight tomorrow.
+                                      Don't forget to check-in for your flight
+                                      tomorrow.
                                     </p>
-                                    <p className="text-xs text-gray-400 mt-1">1 day ago</p>
+                                    <p className="text-xs text-gray-400 mt-1">
+                                      1 day ago
+                                    </p>
                                   </div>
                                 </div>
                               </div>
@@ -803,7 +828,9 @@ export function Header() {
                               <button
                                 onClick={() => {
                                   setShowNotifications(false);
-                                  handleNavigation("/account?tab=notifications");
+                                  handleNavigation(
+                                    "/account?tab=notifications",
+                                  );
                                 }}
                                 className="w-full text-center text-sm text-[#003580] font-medium hover:text-[#0071c2]"
                               >

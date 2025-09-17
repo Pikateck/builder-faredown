@@ -3,7 +3,7 @@
  * Implements the API structure provided by the user
  */
 
-import { formatAppDate } from '@/utils/dateUtils';
+import { formatAppDate } from "@/utils/dateUtils";
 
 // Types matching the user's API specification
 export interface AccountOverview {
@@ -49,7 +49,7 @@ export interface BookingListItem {
 
 export interface FlightBookingDetail {
   booking_ref: string;
-  module: 'flight';
+  module: "flight";
   status: string;
   booked_on: string;
   total_paid: number;
@@ -85,7 +85,7 @@ export interface FlightBookingDetail {
 
 export interface HotelBookingDetail {
   booking_ref: string;
-  module: 'hotel';
+  module: "hotel";
   status: string;
   booked_on: string;
   total_paid: number;
@@ -122,8 +122,8 @@ export interface HotelBookingDetail {
 export type BookingDetail = FlightBookingDetail | HotelBookingDetail;
 
 class AccountService {
-  private baseUrl = '/api/account';
-  private bookingsUrl = '/api/bookings';
+  private baseUrl = "/api/account";
+  private bookingsUrl = "/api/bookings";
 
   // Mock data for development - replace with real API calls
   private mockData = {
@@ -136,7 +136,7 @@ class AccountService {
       progress_to_next_tier: {
         current_bookings: 5,
         required_bookings: 15,
-        remaining: 10
+        remaining: 10,
       },
       total_bookings: 2,
       countries_visited: 2,
@@ -146,16 +146,16 @@ class AccountService {
           module: "flight",
           date: "2024-01-15",
           amount: 45000,
-          status: "confirmed"
+          status: "confirmed",
         },
         {
           booking_ref: "FD-HT-002",
           module: "hotel",
           date: "2024-01-16",
           amount: 12000,
-          status: "confirmed"
-        }
-      ]
+          status: "confirmed",
+        },
+      ],
     },
     travelActivity: [
       {
@@ -164,7 +164,7 @@ class AccountService {
         title: "Mumbai → Dubai",
         date: "2024-01-15",
         amount: 45000,
-        status: "confirmed"
+        status: "confirmed",
       },
       {
         booking_ref: "FD-HT-002",
@@ -172,8 +172,8 @@ class AccountService {
         title: "Dubai Hotel",
         date: "2024-01-16",
         amount: 12000,
-        status: "confirmed"
-      }
+        status: "confirmed",
+      },
     ],
     bookings: [
       {
@@ -183,7 +183,7 @@ class AccountService {
         date: "2024-01-15",
         amount: 45000,
         status: "confirmed",
-        payment_id: "pay_demo12345"
+        payment_id: "pay_demo12345",
       },
       {
         booking_ref: "FD-HT-002",
@@ -192,8 +192,8 @@ class AccountService {
         date: "2024-01-16",
         amount: 12000,
         status: "confirmed",
-        payment_id: "pay_demo98765"
-      }
+        payment_id: "pay_demo98765",
+      },
     ],
     flightDetail: {
       booking_ref: "FD-FL-001",
@@ -208,7 +208,7 @@ class AccountService {
         dep_at: "2025-08-03T10:15:00",
         arr_at: "2025-08-03T13:45:00",
         carrier: "Air India",
-        flight_no: "AI-131"
+        flight_no: "AI-131",
       },
       passengers: [
         {
@@ -216,21 +216,21 @@ class AccountService {
           title: "Mr",
           type: "Adult",
           email: "john@example.com",
-          phone: "+91 9876543210"
-        }
+          phone: "+91 9876543210",
+        },
       ],
       ticket: {
         ticket_no: "AI131-789456123",
         issue_date: "2024-01-15",
-        eticket_pdf_url: "https://cdn.faredown.com/docs/FD-FL-001-ticket.pdf"
+        eticket_pdf_url: "https://cdn.faredown.com/docs/FD-FL-001-ticket.pdf",
       },
       invoice: {
         invoice_no: "INV-FL-001",
         issued_at: "2024-01-15",
         amount: 45000,
         currency: "INR",
-        pdf_url: "https://cdn.faredown.com/docs/FD-FL-001-invoice.pdf"
-      }
+        pdf_url: "https://cdn.faredown.com/docs/FD-FL-001-invoice.pdf",
+      },
     },
     hotelDetail: {
       booking_ref: "FD-HT-002",
@@ -245,7 +245,7 @@ class AccountService {
         checkin_at: "2025-08-03",
         checkout_at: "2025-08-10",
         guests_adults: 1,
-        guests_children: 0
+        guests_children: 0,
       },
       guests: [
         {
@@ -253,22 +253,22 @@ class AccountService {
           title: "Mr",
           type: "Adult",
           email: "john@example.com",
-          phone: "+91 9876543210"
-        }
+          phone: "+91 9876543210",
+        },
       ],
       voucher: {
         voucher_no: "VCH-HT-002",
         issue_date: "2024-01-16",
-        voucher_pdf_url: "https://cdn.faredown.com/docs/FD-HT-002-voucher.pdf"
+        voucher_pdf_url: "https://cdn.faredown.com/docs/FD-HT-002-voucher.pdf",
       },
       invoice: {
         invoice_no: "INV-HT-002",
         issued_at: "2024-01-16",
         amount: 12000,
         currency: "INR",
-        pdf_url: "https://cdn.faredown.com/docs/FD-HT-002-invoice.pdf"
-      }
-    }
+        pdf_url: "https://cdn.faredown.com/docs/FD-HT-002-invoice.pdf",
+      },
+    },
   };
 
   /**
@@ -277,15 +277,15 @@ class AccountService {
   async getAccountOverview(): Promise<AccountOverview> {
     try {
       const response = await fetch(`${this.baseUrl}/overview`);
-      
+
       if (!response.ok) {
-        console.warn('API endpoint not available, using mock data');
+        console.warn("API endpoint not available, using mock data");
         return this.mockData.overview;
       }
-      
+
       return await response.json();
     } catch (error) {
-      console.warn('Failed to fetch account overview, using mock data:', error);
+      console.warn("Failed to fetch account overview, using mock data:", error);
       return this.mockData.overview;
     }
   }
@@ -296,15 +296,15 @@ class AccountService {
   async getTravelActivity(): Promise<TravelActivity[]> {
     try {
       const response = await fetch(`${this.baseUrl}/travel-activity`);
-      
+
       if (!response.ok) {
-        console.warn('API endpoint not available, using mock data');
+        console.warn("API endpoint not available, using mock data");
         return this.mockData.travelActivity;
       }
-      
+
       return await response.json();
     } catch (error) {
-      console.warn('Failed to fetch travel activity, using mock data:', error);
+      console.warn("Failed to fetch travel activity, using mock data:", error);
       return this.mockData.travelActivity;
     }
   }
@@ -312,36 +312,37 @@ class AccountService {
   /**
    * Get bookings list with optional module filter
    */
-  async getBookings(module: string = 'all'): Promise<BookingListItem[]> {
+  async getBookings(module: string = "all"): Promise<BookingListItem[]> {
     try {
-      const url = module === 'all' 
-        ? `${this.baseUrl}/bookings` 
-        : `${this.baseUrl}/bookings?module=${module}`;
-      
+      const url =
+        module === "all"
+          ? `${this.baseUrl}/bookings`
+          : `${this.baseUrl}/bookings?module=${module}`;
+
       const response = await fetch(url);
-      
+
       if (!response.ok) {
-        console.warn('API endpoint not available, using mock data');
+        console.warn("API endpoint not available, using mock data");
         let bookings = this.mockData.bookings;
-        
+
         // Filter by module if specified
-        if (module !== 'all') {
-          bookings = bookings.filter(b => b.module === module);
+        if (module !== "all") {
+          bookings = bookings.filter((b) => b.module === module);
         }
-        
+
         return bookings;
       }
-      
+
       return await response.json();
     } catch (error) {
-      console.warn('Failed to fetch bookings, using mock data:', error);
+      console.warn("Failed to fetch bookings, using mock data:", error);
       let bookings = this.mockData.bookings;
-      
+
       // Filter by module if specified
-      if (module !== 'all') {
-        bookings = bookings.filter(b => b.module === module);
+      if (module !== "all") {
+        bookings = bookings.filter((b) => b.module === module);
       }
-      
+
       return bookings;
     }
   }
@@ -352,31 +353,31 @@ class AccountService {
   async getBookingDetail(bookingRef: string): Promise<BookingDetail | null> {
     try {
       const response = await fetch(`${this.bookingsUrl}/${bookingRef}`);
-      
+
       if (!response.ok) {
-        console.warn('API endpoint not available, using mock data');
-        
+        console.warn("API endpoint not available, using mock data");
+
         // Return mock data based on booking reference
-        if (bookingRef.includes('FL')) {
+        if (bookingRef.includes("FL")) {
           return this.mockData.flightDetail;
-        } else if (bookingRef.includes('HT')) {
+        } else if (bookingRef.includes("HT")) {
           return this.mockData.hotelDetail;
         }
-        
+
         return null;
       }
-      
+
       return await response.json();
     } catch (error) {
-      console.warn('Failed to fetch booking detail, using mock data:', error);
-      
+      console.warn("Failed to fetch booking detail, using mock data:", error);
+
       // Return mock data based on booking reference
-      if (bookingRef.includes('FL')) {
+      if (bookingRef.includes("FL")) {
         return this.mockData.flightDetail;
-      } else if (bookingRef.includes('HT')) {
+      } else if (bookingRef.includes("HT")) {
         return this.mockData.hotelDetail;
       }
-      
+
       return null;
     }
   }
@@ -387,29 +388,29 @@ class AccountService {
   async downloadTicket(bookingRef: string): Promise<string> {
     try {
       const response = await fetch(`${this.bookingsUrl}/${bookingRef}/ticket`);
-      
+
       if (!response.ok) {
-        console.warn('API endpoint not available, using mock URL');
-        
-        if (bookingRef.includes('FL')) {
+        console.warn("API endpoint not available, using mock URL");
+
+        if (bookingRef.includes("FL")) {
           return this.mockData.flightDetail.ticket.eticket_pdf_url;
-        } else if (bookingRef.includes('HT')) {
+        } else if (bookingRef.includes("HT")) {
           return this.mockData.hotelDetail.voucher.voucher_pdf_url;
         }
-        
-        throw new Error('Ticket not found');
+
+        throw new Error("Ticket not found");
       }
-      
+
       return response.url;
     } catch (error) {
-      console.warn('Failed to get ticket download URL:', error);
-      
-      if (bookingRef.includes('FL')) {
+      console.warn("Failed to get ticket download URL:", error);
+
+      if (bookingRef.includes("FL")) {
         return this.mockData.flightDetail.ticket.eticket_pdf_url;
-      } else if (bookingRef.includes('HT')) {
+      } else if (bookingRef.includes("HT")) {
         return this.mockData.hotelDetail.voucher.voucher_pdf_url;
       }
-      
+
       throw error;
     }
   }
@@ -420,29 +421,29 @@ class AccountService {
   async downloadInvoice(bookingRef: string): Promise<string> {
     try {
       const response = await fetch(`${this.bookingsUrl}/${bookingRef}/invoice`);
-      
+
       if (!response.ok) {
-        console.warn('API endpoint not available, using mock URL');
-        
-        if (bookingRef.includes('FL')) {
+        console.warn("API endpoint not available, using mock URL");
+
+        if (bookingRef.includes("FL")) {
           return this.mockData.flightDetail.invoice.pdf_url;
-        } else if (bookingRef.includes('HT')) {
+        } else if (bookingRef.includes("HT")) {
           return this.mockData.hotelDetail.invoice.pdf_url;
         }
-        
-        throw new Error('Invoice not found');
+
+        throw new Error("Invoice not found");
       }
-      
+
       return response.url;
     } catch (error) {
-      console.warn('Failed to get invoice download URL:', error);
-      
-      if (bookingRef.includes('FL')) {
+      console.warn("Failed to get invoice download URL:", error);
+
+      if (bookingRef.includes("FL")) {
         return this.mockData.flightDetail.invoice.pdf_url;
-      } else if (bookingRef.includes('HT')) {
+      } else if (bookingRef.includes("HT")) {
         return this.mockData.hotelDetail.invoice.pdf_url;
       }
-      
+
       throw error;
     }
   }
@@ -455,20 +456,22 @@ class AccountService {
       ...booking,
       booked_on_formatted: formatAppDate(booking.booked_on),
       // Add specific formatting based on module type
-      ...(booking.module === 'flight' && {
+      ...(booking.module === "flight" && {
         flight_details: {
           ...booking.flight_details,
           dep_at_formatted: formatAppDate(booking.flight_details.dep_at),
           arr_at_formatted: formatAppDate(booking.flight_details.arr_at),
-        }
+        },
       }),
-      ...(booking.module === 'hotel' && {
+      ...(booking.module === "hotel" && {
         hotel_details: {
           ...booking.hotel_details,
           checkin_at_formatted: formatAppDate(booking.hotel_details.checkin_at),
-          checkout_at_formatted: formatAppDate(booking.hotel_details.checkout_at),
-        }
-      })
+          checkout_at_formatted: formatAppDate(
+            booking.hotel_details.checkout_at,
+          ),
+        },
+      }),
     };
   }
 }

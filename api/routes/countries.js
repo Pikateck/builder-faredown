@@ -1,5 +1,5 @@
-const express = require('express');
-const { pool } = require('../database/connection');
+const express = require("express");
+const { pool } = require("../database/connection");
 const router = express.Router();
 
 /**
@@ -7,7 +7,7 @@ const router = express.Router();
  * Returns all countries with proper formatting for frontend dropdowns
  * Includes caching headers for performance
  */
-router.get('/', async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const { rows } = await pool.query(`
       SELECT 
@@ -25,23 +25,22 @@ router.get('/', async (req, res) => {
 
     // Add caching headers for performance (24 hours)
     res.set({
-      'Cache-Control': 'public, max-age=86400',
-      'ETag': `"countries-${rows.length}"`,
-      'Last-Modified': new Date().toUTCString()
+      "Cache-Control": "public, max-age=86400",
+      ETag: `"countries-${rows.length}"`,
+      "Last-Modified": new Date().toUTCString(),
     });
 
     res.json({
       success: true,
       count: rows.length,
-      countries: rows
+      countries: rows,
     });
-
   } catch (error) {
-    console.error('GET /api/countries error:', error);
+    console.error("GET /api/countries error:", error);
     res.status(500).json({
       success: false,
-      error: 'Unable to fetch countries',
-      message: 'Internal server error while retrieving countries data'
+      error: "Unable to fetch countries",
+      message: "Internal server error while retrieving countries data",
     });
   }
 });
@@ -50,7 +49,7 @@ router.get('/', async (req, res) => {
  * GET /api/countries/popular
  * Returns only popular countries for quick access
  */
-router.get('/popular', async (req, res) => {
+router.get("/popular", async (req, res) => {
   try {
     const { rows } = await pool.query(`
       SELECT 
@@ -63,19 +62,18 @@ router.get('/popular', async (req, res) => {
       ORDER BY name ASC
     `);
 
-    res.set('Cache-Control', 'public, max-age=86400');
-    
+    res.set("Cache-Control", "public, max-age=86400");
+
     res.json({
       success: true,
       count: rows.length,
-      countries: rows
+      countries: rows,
     });
-
   } catch (error) {
-    console.error('GET /api/countries/popular error:', error);
+    console.error("GET /api/countries/popular error:", error);
     res.status(500).json({
       success: false,
-      error: 'Unable to fetch popular countries'
+      error: "Unable to fetch popular countries",
     });
   }
 });
@@ -84,20 +82,21 @@ router.get('/popular', async (req, res) => {
  * GET /api/countries/search?q=query
  * Search countries by name or code
  */
-router.get('/search', async (req, res) => {
+router.get("/search", async (req, res) => {
   try {
     const { q: query } = req.query;
-    
+
     if (!query || query.trim().length < 1) {
       return res.status(400).json({
         success: false,
-        error: 'Search query is required'
+        error: "Search query is required",
       });
     }
 
     const searchTerm = `%${query.trim().toLowerCase()}%`;
-    
-    const { rows } = await pool.query(`
+
+    const { rows } = await pool.query(
+      `
       SELECT 
         iso2,
         name as display_name,
@@ -119,20 +118,25 @@ router.get('/search', async (req, res) => {
         END,
         name ASC
       LIMIT 20
-    `, [searchTerm, `${query.trim().toLowerCase()}%`, query.trim().toLowerCase()]);
+    `,
+      [
+        searchTerm,
+        `${query.trim().toLowerCase()}%`,
+        query.trim().toLowerCase(),
+      ],
+    );
 
     res.json({
       success: true,
       query: query.trim(),
       count: rows.length,
-      countries: rows
+      countries: rows,
     });
-
   } catch (error) {
-    console.error('GET /api/countries/search error:', error);
+    console.error("GET /api/countries/search error:", error);
     res.status(500).json({
       success: false,
-      error: 'Unable to search countries'
+      error: "Unable to search countries",
     });
   }
 });
@@ -141,18 +145,19 @@ router.get('/search', async (req, res) => {
  * GET /api/countries/:code
  * Get specific country by ISO2 code
  */
-router.get('/:code', async (req, res) => {
+router.get("/:code", async (req, res) => {
   try {
     const { code } = req.params;
-    
+
     if (!code || code.length !== 2) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid country code. Must be 2-letter ISO code.'
+        error: "Invalid country code. Must be 2-letter ISO code.",
       });
     }
 
-    const { rows } = await pool.query(`
+    const { rows } = await pool.query(
+      `
       SELECT 
         iso2,
         name as display_name,
@@ -166,27 +171,28 @@ router.get('/:code', async (req, res) => {
         updated_at
       FROM public.countries
       WHERE UPPER(iso2) = UPPER($1)
-    `, [code]);
+    `,
+      [code],
+    );
 
     if (rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'Country not found'
+        error: "Country not found",
       });
     }
 
-    res.set('Cache-Control', 'public, max-age=86400');
-    
+    res.set("Cache-Control", "public, max-age=86400");
+
     res.json({
       success: true,
-      country: rows[0]
+      country: rows[0],
     });
-
   } catch (error) {
     console.error(`GET /api/countries/${req.params.code} error:`, error);
     res.status(500).json({
       success: false,
-      error: 'Unable to fetch country details'
+      error: "Unable to fetch country details",
     });
   }
 });

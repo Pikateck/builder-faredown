@@ -34,13 +34,17 @@ export default function HotelBookingConfirmation() {
   const location = useLocation();
   const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
-  const { booking: enhancedBooking, loadCompleteSearchObject } = useEnhancedBooking();
+  const { booking: enhancedBooking, loadCompleteSearchObject } =
+    useEnhancedBooking();
   const [isLoading, setIsLoading] = useState(false);
 
   // Load search parameters from location state if available
   useEffect(() => {
     if (location.state?.searchParams) {
-      console.log("🏨 Loading hotel confirmation search params from location state:", location.state.searchParams);
+      console.log(
+        "🏨 Loading hotel confirmation search params from location state:",
+        location.state.searchParams,
+      );
       loadCompleteSearchObject(location.state.searchParams);
     }
   }, [location.state, loadCompleteSearchObject]);
@@ -54,7 +58,7 @@ export default function HotelBookingConfirmation() {
     checkOut: enhancedBooking.searchParams.checkOut,
     nights: enhancedBooking.searchParams.nights,
     guests: enhancedBooking.searchParams.guests,
-    rooms: enhancedBooking.searchParams.rooms
+    rooms: enhancedBooking.searchParams.rooms,
   });
 
   // Mock booking data (would be fetched from API)
@@ -100,11 +104,23 @@ export default function HotelBookingConfirmation() {
     },
     stay: {
       // Use exact search dates from enhanced booking context (user's requirements)
-      checkIn: enhancedBooking.searchParams.checkIn || searchParams.get("checkIn") || new Date().toISOString().split('T')[0],
-      checkOut: enhancedBooking.searchParams.checkOut || searchParams.get("checkOut") || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-      nights: enhancedBooking.searchParams.nights || parseInt(searchParams.get("nights") || "3"),
-      guests: enhancedBooking.searchParams.guests?.adults || parseInt(searchParams.get("adults") || "2"),
-      rooms: enhancedBooking.searchParams.rooms || parseInt(searchParams.get("rooms") || "1"),
+      checkIn:
+        enhancedBooking.searchParams.checkIn ||
+        searchParams.get("checkIn") ||
+        new Date().toISOString().split("T")[0],
+      checkOut:
+        enhancedBooking.searchParams.checkOut ||
+        searchParams.get("checkOut") ||
+        new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      nights:
+        enhancedBooking.searchParams.nights ||
+        parseInt(searchParams.get("nights") || "3"),
+      guests:
+        enhancedBooking.searchParams.guests?.adults ||
+        parseInt(searchParams.get("adults") || "2"),
+      rooms:
+        enhancedBooking.searchParams.rooms ||
+        parseInt(searchParams.get("rooms") || "1"),
     },
     pricing: {
       roomRate: 259,

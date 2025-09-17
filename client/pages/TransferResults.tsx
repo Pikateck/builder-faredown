@@ -127,7 +127,6 @@ export default function TransferResults() {
   const [isMobile, setIsMobile] = useState(false);
   const [showMobileFilters, setShowMobileFilters] = useState(false);
 
-
   // Selection state for mobile
   const [selectedTransfers, setSelectedTransfers] = useState<Set<string>>(
     new Set(),
@@ -259,8 +258,9 @@ export default function TransferResults() {
       dropoffLocation: dropoffLocation,
       transferType: isRoundTrip ? "airport-hotel" : "airport-hotel", // Could be enhanced to detect type
       // Use exact date format as specified by user: "2025-10-01"
-      checkIn: pickupDate || new Date().toISOString().split('T')[0], // Use pickup date as check-in equivalent
-      checkOut: returnDate || pickupDate || new Date().toISOString().split('T')[0], // Use return date as check-out equivalent
+      checkIn: pickupDate || new Date().toISOString().split("T")[0], // Use pickup date as check-in equivalent
+      checkOut:
+        returnDate || pickupDate || new Date().toISOString().split("T")[0], // Use return date as check-out equivalent
       guests: {
         adults: adults,
         children: children,
@@ -275,9 +275,21 @@ export default function TransferResults() {
       searchTimestamp: new Date().toISOString(),
     };
 
-    console.log("🚗 Loading standardized transfers search object to context:", standardizedTransfersSearchParams);
+    console.log(
+      "🚗 Loading standardized transfers search object to context:",
+      standardizedTransfersSearchParams,
+    );
     loadCompleteSearchObject(standardizedTransfersSearchParams);
-  }, [pickupLocation, dropoffLocation, pickupDate, returnDate, adults, children, infants, isRoundTrip]);
+  }, [
+    pickupLocation,
+    dropoffLocation,
+    pickupDate,
+    returnDate,
+    adults,
+    children,
+    infants,
+    isRoundTrip,
+  ]);
 
   // Load transfer data
   useEffect(() => {
@@ -530,7 +542,6 @@ export default function TransferResults() {
     }
   };
 
-
   // Handle transfer selection
   const handleTransferSelect = (transfer: Transfer) => {
     const newSelected = new Set(selectedTransfers);
@@ -556,7 +567,7 @@ export default function TransferResults() {
   // Handle bottom bar actions
   const handleBottomBarBargain = () => {
     // Bottom bar bargain will be handled by individual BargainButton components
-    console.log('Bottom bar bargain clicked');
+    console.log("Bottom bar bargain clicked");
   };
 
   const handleBottomBarViewDetails = () => {
@@ -1174,10 +1185,17 @@ export default function TransferResults() {
                               module: "transfers" as const,
                               pickupLocation: transfer.pickupLocation,
                               dropoffLocation: transfer.dropoffLocation,
-                              transferType: isRoundTrip ? "airport-hotel" : "airport-hotel",
+                              transferType: isRoundTrip
+                                ? "airport-hotel"
+                                : "airport-hotel",
                               // Use exact date format as specified by user: "2025-10-01"
-                              checkIn: pickupDate || new Date().toISOString().split('T')[0],
-                              checkOut: returnDate || pickupDate || new Date().toISOString().split('T')[0],
+                              checkIn:
+                                pickupDate ||
+                                new Date().toISOString().split("T")[0],
+                              checkOut:
+                                returnDate ||
+                                pickupDate ||
+                                new Date().toISOString().split("T")[0],
                               guests: {
                                 adults: adults,
                                 children: children,
@@ -1192,10 +1210,15 @@ export default function TransferResults() {
                               searchTimestamp: new Date().toISOString(),
                             };
 
-                            console.log("🚗 Standardized Transfers Search Object being passed to details:", standardizedTransfersSearchParams);
+                            console.log(
+                              "🚗 Standardized Transfers Search Object being passed to details:",
+                              standardizedTransfersSearchParams,
+                            );
 
                             // Load standardized search object to enhanced booking context
-                            loadCompleteSearchObject(standardizedTransfersSearchParams);
+                            loadCompleteSearchObject(
+                              standardizedTransfersSearchParams,
+                            );
 
                             const detailParams = new URLSearchParams({
                               price: transfer.pricing.totalPrice.toString(),
@@ -1216,11 +1239,12 @@ export default function TransferResults() {
                               `/transfer-details/${transfer.id}?${detailParams.toString()}`,
                               {
                                 state: {
-                                  searchParams: standardizedTransfersSearchParams,
+                                  searchParams:
+                                    standardizedTransfersSearchParams,
                                   transferData: transfer,
                                   priceData: transfer.pricing,
                                 },
-                              }
+                              },
                             );
                           }}
                           className="w-full py-3 border-2 border-[#003580] bg-transparent hover:bg-[#003580] text-[#003580] hover:text-white font-semibold text-sm min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
@@ -1251,16 +1275,19 @@ export default function TransferResults() {
                             vehicleType: transfer.vehicleType,
                             vehicleClass: transfer.vehicleClass,
                             features: transfer.features,
-                            inclusions: transfer.inclusions
+                            inclusions: transfer.inclusions,
                           }}
                           onBargainSuccess={(finalPrice, savings) => {
-                            console.log('Transfer bargain success:', { finalPrice, savings });
+                            console.log("Transfer bargain success:", {
+                              finalPrice,
+                              savings,
+                            });
                             const bookingParams = new URLSearchParams({
                               transferId: transfer.id,
                               rateKey: transfer.rateKey,
                               vehicleName: transfer.vehicleName,
                               price: finalPrice.toString(),
-                              bargainApplied: 'true',
+                              bargainApplied: "true",
                               pickupLocation: pickupLocation,
                               dropoffLocation: dropoffLocation,
                               pickupDate: pickupDate,
@@ -1270,7 +1297,9 @@ export default function TransferResults() {
                               children: children.toString(),
                               infants: infants.toString(),
                             });
-                            navigate(`/transfer-booking?${bookingParams.toString()}`);
+                            navigate(
+                              `/transfer-booking?${bookingParams.toString()}`,
+                            );
                           }}
                           className="w-full py-3 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-semibold text-sm flex items-center justify-center gap-2 min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
                         >
@@ -1387,7 +1416,6 @@ export default function TransferResults() {
           </div>
         </div>
       )}
-
     </div>
   );
 }

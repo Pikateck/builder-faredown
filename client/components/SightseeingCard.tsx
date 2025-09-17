@@ -138,12 +138,24 @@ export function SightseeingCard({
     // Create standardized search object for sightseeing following the user's requirements
     const standardizedSightseeingSearchParams = {
       module: "sightseeing" as const,
-      destination: searchParams.get("destination") || attraction.location.split(",")[0] || "Dubai",
+      destination:
+        searchParams.get("destination") ||
+        attraction.location.split(",")[0] ||
+        "Dubai",
       destinationCode: searchParams.get("destinationCode") || "DXB",
-      destinationName: searchParams.get("destinationName") || attraction.location || "Dubai, UAE",
+      destinationName:
+        searchParams.get("destinationName") ||
+        attraction.location ||
+        "Dubai, UAE",
       // Use exact date format as specified by user: "2025-10-01"
-      checkIn: searchParams.get("checkIn") || searchParams.get("visitDate") || new Date().toISOString().split('T')[0],
-      checkOut: searchParams.get("checkOut") || searchParams.get("visitDate") || new Date().toISOString().split('T')[0],
+      checkIn:
+        searchParams.get("checkIn") ||
+        searchParams.get("visitDate") ||
+        new Date().toISOString().split("T")[0],
+      checkOut:
+        searchParams.get("checkOut") ||
+        searchParams.get("visitDate") ||
+        new Date().toISOString().split("T")[0],
       category: attraction.category,
       duration: attraction.duration,
       guests: {
@@ -160,7 +172,10 @@ export function SightseeingCard({
       searchTimestamp: new Date().toISOString(),
     };
 
-    console.log("🎯 Standardized Sightseeing Search Object being passed:", standardizedSightseeingSearchParams);
+    console.log(
+      "🎯 Standardized Sightseeing Search Object being passed:",
+      standardizedSightseeingSearchParams,
+    );
 
     // Load standardized search object to enhanced booking context
     loadCompleteSearchObject(standardizedSightseeingSearchParams);
@@ -168,15 +183,36 @@ export function SightseeingCard({
     // Create URL params from standardized search object
     const params = new URLSearchParams();
     params.set("destination", standardizedSightseeingSearchParams.destination);
-    params.set("destinationCode", standardizedSightseeingSearchParams.destinationCode);
-    params.set("destinationName", standardizedSightseeingSearchParams.destinationName);
+    params.set(
+      "destinationCode",
+      standardizedSightseeingSearchParams.destinationCode,
+    );
+    params.set(
+      "destinationName",
+      standardizedSightseeingSearchParams.destinationName,
+    );
     params.set("checkIn", standardizedSightseeingSearchParams.checkIn);
     params.set("checkOut", standardizedSightseeingSearchParams.checkOut);
-    params.set("adults", standardizedSightseeingSearchParams.guests.adults.toString());
-    params.set("children", standardizedSightseeingSearchParams.guests.children.toString());
-    params.set("infants", standardizedSightseeingSearchParams.pax.infants.toString());
-    params.set("category", standardizedSightseeingSearchParams.category || "any");
-    params.set("duration", standardizedSightseeingSearchParams.duration || "any");
+    params.set(
+      "adults",
+      standardizedSightseeingSearchParams.guests.adults.toString(),
+    );
+    params.set(
+      "children",
+      standardizedSightseeingSearchParams.guests.children.toString(),
+    );
+    params.set(
+      "infants",
+      standardizedSightseeingSearchParams.pax.infants.toString(),
+    );
+    params.set(
+      "category",
+      standardizedSightseeingSearchParams.category || "any",
+    );
+    params.set(
+      "duration",
+      standardizedSightseeingSearchParams.duration || "any",
+    );
     params.set("currency", standardizedSightseeingSearchParams.currency);
 
     // Navigate with complete state for immediate availability and URL persistence
@@ -491,7 +527,9 @@ export function SightseeingCard({
                       features: attraction.highlights?.slice(0, 5) || [],
                     }}
                     onBargainSuccess={(finalPrice, savings) => {
-                      console.log(`Sightseeing Card Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
+                      console.log(
+                        `Sightseeing Card Bargain success! Final price: ${finalPrice}, Savings: ${savings}`,
+                      );
                       // Handle successful bargain - could trigger navigation to booking
                     }}
                     onClick={(e) => {

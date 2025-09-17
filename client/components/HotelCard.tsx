@@ -297,8 +297,12 @@ export function HotelCard({
         destination: searchParams.get("destination") || hotelLocation,
         destinationCode: searchParams.get("destinationCode") || "DXB",
         destinationName: searchParams.get("destinationName") || hotelLocation,
-        checkIn: searchParams.get("checkIn") || checkInDate.toISOString().split('T')[0],
-        checkOut: searchParams.get("checkOut") || checkOutDate.toISOString().split('T')[0],
+        checkIn:
+          searchParams.get("checkIn") ||
+          checkInDate.toISOString().split("T")[0],
+        checkOut:
+          searchParams.get("checkOut") ||
+          checkOutDate.toISOString().split("T")[0],
         rooms: roomsCount,
         nights: totalNights,
         guests: {
@@ -341,7 +345,7 @@ export function HotelCard({
           searchParams: standardizedHotelSearchParams,
           hotelData: hotel,
           priceData: priceCalculation,
-        }
+        },
       });
     } catch (error) {
       console.error("Quick booking error:", error);
@@ -437,8 +441,11 @@ export function HotelCard({
       destinationCode: searchParams.get("destinationCode") || "DXB",
       destinationName: searchParams.get("destinationName") || hotelLocation,
       // Use exact date format as specified by user: "2025-10-01"
-      checkIn: searchParams.get("checkIn") || checkInDate.toISOString().split('T')[0],
-      checkOut: searchParams.get("checkOut") || checkOutDate.toISOString().split('T')[0],
+      checkIn:
+        searchParams.get("checkIn") || checkInDate.toISOString().split("T")[0],
+      checkOut:
+        searchParams.get("checkOut") ||
+        checkOutDate.toISOString().split("T")[0],
       rooms: roomsCount,
       nights: totalNights,
       guests: {
@@ -455,7 +462,10 @@ export function HotelCard({
       searchTimestamp: new Date().toISOString(),
     };
 
-    console.log("🏨 Standardized Hotel Search Object being passed:", standardizedHotelSearchParams);
+    console.log(
+      "🏨 Standardized Hotel Search Object being passed:",
+      standardizedHotelSearchParams,
+    );
 
     // Get the exact same room and price data shown on this Results card
     const cheapestRoomData = getCheapestRoomFromHotel(hotel);
@@ -513,12 +523,24 @@ export function HotelCard({
     // Create URL params from standardized search object
     const detailParams = new URLSearchParams();
     detailParams.set("destination", standardizedHotelSearchParams.destination);
-    detailParams.set("destinationCode", standardizedHotelSearchParams.destinationCode);
-    detailParams.set("destinationName", standardizedHotelSearchParams.destinationName);
+    detailParams.set(
+      "destinationCode",
+      standardizedHotelSearchParams.destinationCode,
+    );
+    detailParams.set(
+      "destinationName",
+      standardizedHotelSearchParams.destinationName,
+    );
     detailParams.set("checkIn", standardizedHotelSearchParams.checkIn);
     detailParams.set("checkOut", standardizedHotelSearchParams.checkOut);
-    detailParams.set("adults", standardizedHotelSearchParams.guests.adults.toString());
-    detailParams.set("children", standardizedHotelSearchParams.guests.children.toString());
+    detailParams.set(
+      "adults",
+      standardizedHotelSearchParams.guests.adults.toString(),
+    );
+    detailParams.set(
+      "children",
+      standardizedHotelSearchParams.guests.children.toString(),
+    );
     detailParams.set("rooms", standardizedHotelSearchParams.rooms.toString());
     detailParams.set("currency", standardizedHotelSearchParams.currency);
 
@@ -526,7 +548,7 @@ export function HotelCard({
     navigate(`/hotels/${hotel.id}?${detailParams.toString()}`, {
       state: {
         preselectRate,
-        searchParams: standardizedHotelSearchParams
+        searchParams: standardizedHotelSearchParams,
       },
     });
   };
