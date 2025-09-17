@@ -573,7 +573,6 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
                   setPersonalForm={setPersonalForm}
                   onSave={handleSavePersonal}
                   saving={saving}
-                  countries={countries}
                 />
               )}
               
