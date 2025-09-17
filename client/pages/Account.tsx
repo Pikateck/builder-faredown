@@ -613,6 +613,7 @@ export default function Account() {
   const renderSubPage = () => {
     switch (currentSection) {
       case "personal":
+      case "personal":
       case "security":
       case "travelers":
       case "preferences":
