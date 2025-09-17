@@ -3,6 +3,7 @@ import React, {
   useContext,
   useState,
   useEffect,
+  useCallback,
   ReactNode,
 } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
@@ -295,7 +296,7 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
   }, [booking]);
 
   // Load from URL parameters with standardized structure
-  const loadFromUrlParams = (urlParams: URLSearchParams) => {
+  const loadFromUrlParams = useCallback((urlParams: URLSearchParams) => {
     const newSearchParams: Partial<StandardizedSearchParams> = {};
 
     // Extract search parameters using both naming conventions
@@ -334,12 +335,59 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
 
     // Update booking state
     updateSearchParams(newSearchParams);
-  };
+  }, [updateSearchParams]);
 
-  // New method to load complete search object (for perfect state transfer)
-  const loadCompleteSearchObject = (searchObj: Partial<StandardizedSearchParams>) => {
-    updateSearchParams(searchObj);
-  };
+
+  // Memoize functions to prevent infinite re-renders
+  const loadCompleteSearchObject = useCallback((searchObj: Partial<StandardizedSearchParams>) => {
+    setBooking((prev) => ({
+      ...prev,
+      searchParams: { ...prev.searchParams, ...searchObj },
+    }));
+  }, []);
+
+  const updateSearchParams = useCallback((params: Partial<StandardizedSearchParams>) => {
+    setBooking((prev) => ({
+      ...prev,
+      searchParams: { ...prev.searchParams, ...params },
+    }));
+  }, []);
+
+  const setSelectedFlight = useCallback((flight: SelectedFlight) => {
+    setBooking((prev) => ({ ...prev, selectedFlight: flight }));
+  }, []);
+
+  const setSelectedFare = useCallback((fare: SelectedFare) => {
+    setBooking((prev) => ({ ...prev, selectedFare: fare }));
+    // Recalculate price breakdown when fare changes
+    setTimeout(() => updatePriceBreakdown({}), 0);
+  }, []);
+
+  const updateTravellers = useCallback((travellers: Traveller[]) => {
+    setBooking((prev) => ({ ...prev, travellers }));
+  }, []);
+
+  const updateContactDetails = useCallback((contact: ContactDetails) => {
+    setBooking((prev) => ({ ...prev, contactDetails: contact }));
+  }, []);
+
+  const setCurrentStep = useCallback((step: number) => {
+    setBooking((prev) => ({ ...prev, currentStep: step }));
+  }, []);
+
+  const completeBooking = useCallback((bookingId: string) => {
+    setBooking((prev) => ({
+      ...prev,
+      isComplete: true,
+      bookingId,
+      paymentStatus: "completed",
+    }));
+  }, []);
+
+  const resetBooking = useCallback(() => {
+    setBooking(initialBookingState);
+    localStorage.removeItem("enhanced_booking_state");
+  }, []);
 
   // Load from location state (from flight results selection)
   useEffect(() => {
@@ -409,41 +457,17 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
     }
   }, [location.search]);
 
-  const updateSearchParams = (params: Partial<StandardizedSearchParams>) => {
-    setBooking((prev) => ({
-      ...prev,
-      searchParams: { ...prev.searchParams, ...params },
-    }));
-  };
 
-  const setSelectedFlight = (flight: SelectedFlight) => {
-    setBooking((prev) => ({ ...prev, selectedFlight: flight }));
-  };
-
-  const setSelectedFare = (fare: SelectedFare) => {
-    setBooking((prev) => ({ ...prev, selectedFare: fare }));
-    // Recalculate price breakdown when fare changes
-    updatePriceBreakdown({});
-  };
-
-  const updateTravellers = (travellers: Traveller[]) => {
-    setBooking((prev) => ({ ...prev, travellers }));
-  };
-
-  const updateContactDetails = (contact: ContactDetails) => {
-    setBooking((prev) => ({ ...prev, contactDetails: contact }));
-  };
-
-  const updateExtras = (extras: Partial<BookingExtras>) => {
+  const updateExtras = useCallback((extras: Partial<BookingExtras>) => {
     setBooking((prev) => ({
       ...prev,
       extras: { ...prev.extras, ...extras },
     }));
     // Recalculate price breakdown when extras change
     setTimeout(() => updatePriceBreakdown({}), 0);
-  };
+  }, []);
 
-  const updatePriceBreakdown = (prices: Partial<PriceBreakdown>) => {
+  const updatePriceBreakdown = useCallback((prices: Partial<PriceBreakdown>) => {
     setBooking((prev) => {
       const passengers = prev.searchParams.pax;
       const totalPassengers = passengers.adults + passengers.children + passengers.infants;
@@ -506,27 +530,10 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
         priceBreakdown: newPriceBreakdown,
       };
     });
-  };
+  }, []);
 
-  const setCurrentStep = (step: number) => {
-    setBooking((prev) => ({ ...prev, currentStep: step }));
-  };
 
-  const completeBooking = (bookingId: string) => {
-    setBooking((prev) => ({
-      ...prev,
-      isComplete: true,
-      bookingId,
-      paymentStatus: "completed",
-    }));
-  };
-
-  const resetBooking = () => {
-    setBooking(initialBookingState);
-    localStorage.removeItem("enhanced_booking_state");
-  };
-
-  const generateBookingData = () => {
+  const generateBookingData = useCallback(() => {
     const {
       searchParams,
       selectedFlight,
@@ -660,7 +667,7 @@ export function EnhancedBookingProvider({ children }: { children: ReactNode }) {
         source: "faredown_web",
       },
     };
-  };
+  }, [booking]);
 
   const contextValue: EnhancedBookingContextType = {
     booking,
