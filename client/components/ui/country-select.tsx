@@ -252,11 +252,6 @@ export function CountrySelect({
               : filteredCountries.map((country) => (
                   <SelectItem key={country.iso2} value={country.iso2}>
                     {formatCountryDisplay(country)}
-                    {country.popular && prioritizePopular && (
-                      <span className="ml-2 text-xs text-blue-600">
-                        Popular
-                      </span>
-                    )}
                   </SelectItem>
                 ))}
           </SelectContent>
@@ -341,7 +336,7 @@ export function CountrySelect({
                 popularCountries.length > 0 &&
                 prioritizePopular &&
                 !popularOnly && (
-                  <CommandGroup heading="Popular Countries">
+                  <CommandGroup>
                     {popularCountries
                       .filter((country) => {
                         if (!searchQuery.trim()) return true;
@@ -361,9 +356,6 @@ export function CountrySelect({
                           className="cursor-pointer"
                         >
                           {formatCountryDisplay(country)}
-                          <span className="ml-auto text-xs text-blue-600">
-                            Popular
-                          </span>
                         </CommandItem>
                       ))}
                   </CommandGroup>
@@ -413,9 +405,7 @@ export function CountrySelect({
                 : !loading &&
                   !fetchError && (
                     <CommandGroup
-                      heading={
-                        popularOnly ? "Popular Countries" : "All Countries"
-                      }
+                      heading={"Countries"}
                     >
                       {filteredCountries
                         .filter(
