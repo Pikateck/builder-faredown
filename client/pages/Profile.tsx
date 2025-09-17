@@ -479,14 +479,6 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
     }
   };
   
-  const countries = [
-    { code: "IN", name: "India" },
-    { code: "US", name: "United States" },
-    { code: "GB", name: "United Kingdom" },
-    { code: "AE", name: "United Arab Emirates" },
-    { code: "SG", name: "Singapore" },
-    // Add more countries as needed
-  ];
   
   const currencies = [
     { code: "INR", name: "Indian Rupee", symbol: "₹" },
@@ -1015,7 +1007,7 @@ function PaymentMethodsTab({ paymentMethods, onAddNew, onSetDefault, onDelete })
                     <div>
                       <div className="flex items-center space-x-2">
                         <span className="font-medium">
-                          {method.brand} •••��� {method.last4}
+                          {method.brand} •••• {method.last4}
                         </span>
                         {method.is_default && (
                           <Badge variant="secondary">Default</Badge>
