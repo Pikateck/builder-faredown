@@ -204,6 +204,7 @@ app.get("/", (req, res) => {
       enhancedBargain: "/api/enhanced-bargain",
       aiBargains: "/api/ai-bargains",
       currency: "/api/currency",
+      countries: "/api/countries",
       promo: "/api/promo",
       analytics: "/api/analytics",
       payments: "/api/payments",
