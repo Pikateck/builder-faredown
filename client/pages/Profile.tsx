@@ -56,11 +56,17 @@ const profileAPI = {
   baseURL: "/api/profile",
 
   async handleResponse(response) {
+    const contentType = response.headers.get("content-type");
+
     if (!response.ok) {
       let errorText = '';
       try {
-        const errorData = await response.text();
-        errorText = errorData;
+        if (contentType && contentType.includes("application/json")) {
+          const errorData = await response.json();
+          errorText = JSON.stringify(errorData);
+        } else {
+          errorText = await response.text();
+        }
       } catch (e) {
         errorText = response.statusText;
       }
@@ -69,20 +75,9 @@ const profileAPI = {
       );
     }
 
-    // Check if response has content
-    const contentType = response.headers.get("content-type");
+    // Parse successful response
     if (contentType && contentType.includes("application/json")) {
-      try {
-        return await response.json();
-      } catch (e) {
-        console.warn('Failed to parse JSON response:', e);
-        // If JSON parsing fails, try to get text from a fresh response
-        const textResponse = await fetch(response.url, {
-          method: response.method || 'GET',
-          headers: response.headers,
-        });
-        return await textResponse.text();
-      }
+      return await response.json();
     }
 
     return await response.text();
