@@ -91,11 +91,12 @@ export default function HotelBookingConfirmation() {
       maxGuests: 3,
     },
     stay: {
-      checkIn: "2024-07-25",
-      checkOut: "2024-07-28",
-      nights: 3,
-      guests: 2,
-      rooms: 1,
+      // Use exact search dates from enhanced booking context (user's requirements)
+      checkIn: enhancedBooking.searchParams.checkIn || searchParams.get("checkIn") || new Date().toISOString().split('T')[0],
+      checkOut: enhancedBooking.searchParams.checkOut || searchParams.get("checkOut") || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      nights: enhancedBooking.searchParams.nights || parseInt(searchParams.get("nights") || "3"),
+      guests: enhancedBooking.searchParams.guests?.adults || parseInt(searchParams.get("adults") || "2"),
+      rooms: enhancedBooking.searchParams.rooms || parseInt(searchParams.get("rooms") || "1"),
     },
     pricing: {
       roomRate: 259,
