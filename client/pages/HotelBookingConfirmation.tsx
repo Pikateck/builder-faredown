@@ -37,6 +37,14 @@ export default function HotelBookingConfirmation() {
   const { booking: enhancedBooking, loadCompleteSearchObject } = useEnhancedBooking();
   const [isLoading, setIsLoading] = useState(false);
 
+  // Load search parameters from location state if available
+  useEffect(() => {
+    if (location.state?.searchParams) {
+      console.log("🏨 Loading hotel confirmation search params from location state:", location.state.searchParams);
+      loadCompleteSearchObject(location.state.searchParams);
+    }
+  }, [location.state, loadCompleteSearchObject]);
+
   const bookingId = searchParams.get("bookingId") || "HTL" + Date.now();
   const hotelId = searchParams.get("hotelId") || "1";
   const hotelName = searchParams.get("hotelName");
