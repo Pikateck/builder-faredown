@@ -1016,11 +1016,18 @@ export default function BookingFlow() {
 
   // Define renderFlightSegment function after selectedFlight is available
 
-  // Load dates from URL params and redirect if no flight data
+  // Load search parameters and dates from location state and URL params
   useEffect(() => {
     const urlParams = new URLSearchParams(location.search);
     loadDatesFromParams(urlParams);
 
+    // Load complete search object from location state if available
+    if (location.state?.searchParams) {
+      console.log("🔄 Loading search params from location state:", location.state.searchParams);
+      loadCompleteSearchObject(location.state.searchParams);
+    }
+
+    // If no flight data, try to load from URL params or redirect
     if (!selectedFlight && !selectedFareType) {
       console.warn("No flight data found, redirecting to flight search");
       navigate("/flights");
