@@ -14,12 +14,16 @@ export interface BargainButtonProps {
 
   /** Use the conversational bargain modal instead of plain onClick */
   useBargainModal?: boolean;
+  /** Enhanced modal variant (alias for useBargainModal) */
+  useEnhancedModal?: boolean;
   module?: "flights" | "hotels" | "sightseeing" | "transfers";
   userName?: string;
 
   /** Context for the modal */
   itemName?: string;
   basePrice?: number;
+  /** Supplier net rate (alias for basePrice) */
+  supplierNetRate?: number;
   productRef?: string;
   itemDetails?: {
     id?: string;
@@ -37,7 +41,6 @@ export interface BargainButtonProps {
   id?: string;
   "data-testid"?: string;
   "aria-label"?: string;
-  [key: string]: any;
 }
 
 const buttonClasses = cn(
