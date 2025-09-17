@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Link, useSearchParams, useNavigate } from "react-router-dom";
+import { Link, useSearchParams, useNavigate, useLocation } from "react-router-dom";
 import { useBooking } from "@/contexts/BookingContext";
 import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
 import { useSearch } from "@/contexts/SearchContext";
