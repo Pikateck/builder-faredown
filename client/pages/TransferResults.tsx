@@ -251,6 +251,34 @@ export default function TransferResults() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
+  // Load standardized search object for transfers state persistence
+  useEffect(() => {
+    const standardizedTransfersSearchParams = {
+      module: "transfers" as const,
+      pickupLocation: pickupLocation,
+      dropoffLocation: dropoffLocation,
+      transferType: isRoundTrip ? "airport-hotel" : "airport-hotel", // Could be enhanced to detect type
+      // Use exact date format as specified by user: "2025-10-01"
+      checkIn: pickupDate || new Date().toISOString().split('T')[0], // Use pickup date as check-in equivalent
+      checkOut: returnDate || pickupDate || new Date().toISOString().split('T')[0], // Use return date as check-out equivalent
+      guests: {
+        adults: adults,
+        children: children,
+      },
+      pax: {
+        adults: adults,
+        children: children,
+        infants: infants,
+      },
+      currency: "INR",
+      searchId: `transfers_results_${Date.now()}`,
+      searchTimestamp: new Date().toISOString(),
+    };
+
+    console.log("🚗 Loading standardized transfers search object to context:", standardizedTransfersSearchParams);
+    loadCompleteSearchObject(standardizedTransfersSearchParams);
+  }, [pickupLocation, dropoffLocation, pickupDate, returnDate, adults, children, infants, isRoundTrip, loadCompleteSearchObject]);
+
   // Load transfer data
   useEffect(() => {
     const loadTransfers = async () => {
