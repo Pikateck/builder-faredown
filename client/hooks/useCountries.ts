@@ -100,6 +100,18 @@ export function useCountries(options: UseCountriesOptions = {}) {
         });
 
         if (!response.ok) {
+          // If rate limited, use fallback data immediately
+          if (response.status === 429) {
+            console.warn('Countries API rate limited, using fallback data');
+            const fallbackData = getFallbackCountries(popularOnly);
+            // Cache the fallback data temporarily
+            cache.set(cacheKey, {
+              data: fallbackData,
+              timestamp: Date.now(),
+              popularOnly,
+            });
+            return fallbackData;
+          }
           throw new Error(`HTTP ${response.status}: ${response.statusText}`);
         }
 
