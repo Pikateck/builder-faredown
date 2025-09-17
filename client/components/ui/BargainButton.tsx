@@ -78,10 +78,16 @@ export function BargainButton({
 }: BargainButtonProps) {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
 
+  // Use either useEnhancedModal or useBargainModal
+  const shouldShowModal = useBargainModal || useEnhancedModal;
+
+  // Use supplierNetRate if provided, otherwise fall back to basePrice
+  const effectivePrice = supplierNetRate ?? basePrice;
+
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
 
-    if (useBargainModal && basePrice > 0) {
+    if (shouldShowModal && effectivePrice > 0) {
       e.preventDefault();
       e.stopPropagation();
       setIsBargainModalOpen(true);
