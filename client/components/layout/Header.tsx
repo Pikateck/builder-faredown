@@ -719,6 +719,103 @@ export function Header() {
                 </div>
 
                 <div className="flex items-center space-x-3">
+                  {/* Desktop Notifications Bell */}
+                  {isLoggedIn && (
+                    <div className="relative">
+                      <button
+                        className="p-2 relative hover:bg-white/10 active:bg-white/20 rounded-lg transition-colors"
+                        onClick={() => {
+                          setShowNotifications(!showNotifications);
+                          setShowCurrencyDropdown(false);
+                        }}
+                      >
+                        <Bell className="w-5 h-5 text-white" />
+                        <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse shadow-lg"></span>
+                      </button>
+
+                      {/* Desktop Notifications Dropdown */}
+                      {showNotifications && (
+                        <div className="absolute top-12 right-0 bg-white border border-gray-200 rounded-lg shadow-xl w-80 max-h-96 overflow-hidden z-50">
+                          <div className="flex flex-col h-full">
+                            {/* Header */}
+                            <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+                              <span className="text-lg font-bold text-gray-900">Notifications</span>
+                              <button
+                                onClick={() => setShowNotifications(false)}
+                                className="p-1 text-gray-500 hover:text-gray-700 hover:bg-gray-100 rounded"
+                              >
+                                <X className="w-4 h-4" />
+                              </button>
+                            </div>
+
+                            {/* Notifications List */}
+                            <div className="max-h-80 overflow-y-auto">
+                              <div className="space-y-1">
+                                <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 border-b border-gray-100">
+                                  <div className="flex-shrink-0 w-6 h-6 bg-green-100 rounded-full flex items-center justify-center">
+                                    <CheckCircle className="w-3 h-3 text-green-600" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium text-gray-900">
+                                      Booking Confirmed
+                                    </p>
+                                    <p className="text-xs text-gray-600 mt-1">
+                                      Your hotel booking in Dubai has been confirmed.
+                                    </p>
+                                    <p className="text-xs text-gray-400 mt-1">2 hours ago</p>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 border-b border-gray-100">
+                                  <div className="flex-shrink-0 w-6 h-6 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <Plane className="w-3 h-3 text-blue-600" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium text-gray-900">
+                                      Flight Update
+                                    </p>
+                                    <p className="text-xs text-gray-600 mt-1">
+                                      Your flight departure time has been updated.
+                                    </p>
+                                    <p className="text-xs text-gray-400 mt-1">5 hours ago</p>
+                                  </div>
+                                </div>
+
+                                <div className="flex items-start space-x-3 p-3 hover:bg-gray-50 border-b border-gray-100">
+                                  <div className="flex-shrink-0 w-6 h-6 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <Clock className="w-3 h-3 text-yellow-600" />
+                                  </div>
+                                  <div className="flex-1">
+                                    <p className="text-sm font-medium text-gray-900">
+                                      Check-in Reminder
+                                    </p>
+                                    <p className="text-xs text-gray-600 mt-1">
+                                      Don't forget to check-in for your flight tomorrow.
+                                    </p>
+                                    <p className="text-xs text-gray-400 mt-1">1 day ago</p>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+
+                            {/* Footer */}
+                            <div className="border-t border-gray-200 p-3">
+                              <button
+                                onClick={() => {
+                                  setShowNotifications(false);
+                                  handleNavigation("/account?tab=notifications");
+                                }}
+                                className="w-full text-center text-sm text-[#003580] font-medium hover:text-[#0071c2]"
+                              >
+                                View All Notifications
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   {isLoggedIn ? (
                     <DropdownMenu>
                       <DropdownMenuTrigger asChild>
