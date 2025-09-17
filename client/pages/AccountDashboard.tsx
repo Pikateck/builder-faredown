@@ -408,7 +408,7 @@ export default function AccountDashboard() {
                     <BookOpen className="w-5 h-5 text-gray-600" />
                     <span className="text-sm">Trips and bookings</span>
                   </div>
-                  <ChevronDown className="w-4 h-4 text-gray-400 rotate-270" />
+                  <ChevronRight className="w-4 h-4 text-gray-400" />
                 </Link>
                 <Link
                   to="/account/saved"
