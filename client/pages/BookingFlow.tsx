@@ -1307,7 +1307,7 @@ export default function BookingFlow() {
     { name: "Israel", code: "+972", flag: "🇮🇱" },
     { name: "Italy", code: "+39", flag: "🇮🇹" },
     { name: "Ivory Coast", code: "+225", flag: "🇨🇮" },
-    { name: "Jamaica", code: "+1", flag: "🇯����" },
+    { name: "Jamaica", code: "+1", flag: "🇯🇲" },
     { name: "Japan", code: "+81", flag: "🇯🇵" },
   ];
 
@@ -1921,7 +1921,7 @@ export default function BookingFlow() {
                           code: "THB",
                           symbol: "฿",
                           name: "Thai Baht",
-                          flag: "����🇭",
+                          flag: "������🇭",
                         },
                         {
                           code: "MYR",
@@ -3056,7 +3056,7 @@ export default function BookingFlow() {
                       </div>
 
                       {/* Return Flight (if round trip) */}
-                      {tripType === "round-trip" && returnDate && (
+                      {exactTripType === "roundtrip" && exactReturnDate && (
                         <div className="mb-4">
                           <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
                             <div className="flex items-center justify-between mb-3">
