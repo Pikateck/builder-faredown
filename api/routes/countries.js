@@ -11,7 +11,7 @@ router.get('/', async (req, res) => {
   try {
     const { rows } = await pool.query(`
       SELECT 
-        code as iso2,
+        iso2,
         name as display_name,
         iso3_code,
         continent,
@@ -54,7 +54,7 @@ router.get('/popular', async (req, res) => {
   try {
     const { rows } = await pool.query(`
       SELECT 
-        code as iso2,
+        iso2,
         name as display_name,
         flag_emoji,
         popular
@@ -99,7 +99,7 @@ router.get('/search', async (req, res) => {
     
     const { rows } = await pool.query(`
       SELECT 
-        code as iso2,
+        iso2,
         name as display_name,
         iso3_code,
         flag_emoji,
@@ -108,13 +108,13 @@ router.get('/search', async (req, res) => {
       FROM public.countries
       WHERE 
         LOWER(name) LIKE $1 OR 
-        LOWER(code) LIKE $1 OR 
+        LOWER(iso2) LIKE $1 OR 
         LOWER(iso3_code) LIKE $1
       ORDER BY 
         popular DESC,
         CASE 
           WHEN LOWER(name) LIKE $2 THEN 1
-          WHEN LOWER(code) = $3 THEN 2
+          WHEN LOWER(iso2) = $3 THEN 2
           ELSE 3
         END,
         name ASC
@@ -154,7 +154,7 @@ router.get('/:code', async (req, res) => {
 
     const { rows } = await pool.query(`
       SELECT 
-        code as iso2,
+        iso2,
         name as display_name,
         iso3_code,
         continent,
@@ -165,7 +165,7 @@ router.get('/:code', async (req, res) => {
         created_at,
         updated_at
       FROM public.countries
-      WHERE UPPER(code) = UPPER($1)
+      WHERE UPPER(iso2) = UPPER($1)
     `, [code]);
 
     if (rows.length === 0) {
