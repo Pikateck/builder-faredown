@@ -10,6 +10,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import { DateProvider } from "./contexts/DateContext";
 import { LoyaltyProvider } from "./contexts/LoyaltyContext";
 import { BookingProvider } from "./contexts/BookingContext";
+import { EnhancedBookingProvider } from "./contexts/EnhancedBookingContext";
 import { SearchProvider } from "./contexts/SearchContext";
 
 // Original pages
