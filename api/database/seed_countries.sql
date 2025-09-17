@@ -5,7 +5,7 @@
 -- Create the countries table if it doesn't exist
 CREATE TABLE IF NOT EXISTS public.countries (
     id SERIAL PRIMARY KEY,
-    code CHAR(2) NOT NULL UNIQUE,
+    iso2 CHAR(2) NOT NULL UNIQUE,
     name VARCHAR(255) NOT NULL,
     iso3_code CHAR(3),
     continent VARCHAR(50),
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS public.countries (
 TRUNCATE TABLE public.countries RESTART IDENTITY;
 
 -- Insert all 249 countries with full data
-INSERT INTO public.countries (code, name, iso3_code, continent, currency_code, phone_prefix, flag_emoji, popular) VALUES
+INSERT INTO public.countries (iso2, name, iso3_code, continent, currency_code, phone_prefix, flag_emoji, popular) VALUES
 ('AD', 'Andorra', 'AND', 'Europe', 'EUR', '+376', '🇦🇩', false),
 ('AE', 'United Arab Emirates', 'ARE', 'Asia', 'AED', '+971', '🇦🇪', true),
 ('AF', 'Afghanistan', 'AFG', 'Asia', 'AFN', '+93', '🇦🇫', false),
@@ -70,7 +70,7 @@ INSERT INTO public.countries (code, name, iso3_code, continent, currency_code, p
 ('CL', 'Chile', 'CHL', 'South America', 'CLP', '+56', '🇨🇱', false),
 ('CM', 'Cameroon', 'CMR', 'Africa', 'XAF', '+237', '🇨🇲', false),
 ('CN', 'China', 'CHN', 'Asia', 'CNY', '+86', '🇨🇳', false),
-('CO', 'Colombia', 'COL', 'South America', 'COP', '+57', '🇨🇴', false),
+('CO', 'Colombia', 'COL', 'South America', 'COP', '+57', '🇨����', false),
 ('CR', 'Costa Rica', 'CRI', 'North America', 'CRC', '+506', '🇨🇷', false),
 ('CU', 'Cuba', 'CUB', 'North America', 'CUP', '+53', '🇨🇺', false),
 ('CV', 'Cape Verde', 'CPV', 'Africa', 'CVE', '+238', '🇨🇻', false),
