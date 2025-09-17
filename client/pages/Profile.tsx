@@ -56,8 +56,16 @@ const profileAPI = {
   baseURL: "/api/profile",
 
   async handleResponse(response) {
+    // Clone response to allow multiple reads if needed
+    const responseClone = response.clone();
+
     if (!response.ok) {
-      const errorText = await response.text();
+      let errorText = '';
+      try {
+        errorText = await responseClone.text();
+      } catch (e) {
+        errorText = response.statusText;
+      }
       throw new Error(
         `HTTP ${response.status}: ${errorText || response.statusText}`,
       );
@@ -66,7 +74,12 @@ const profileAPI = {
     // Check if response has content
     const contentType = response.headers.get("content-type");
     if (contentType && contentType.includes("application/json")) {
-      return await response.json();
+      try {
+        return await response.json();
+      } catch (e) {
+        console.warn('Failed to parse JSON response:', e);
+        return await responseClone.text();
+      }
     }
 
     return await response.text();
