@@ -7,6 +7,7 @@ import {
 } from "react-router-dom";
 import { useDateContext } from "@/contexts/DateContext";
 import { useBooking } from "@/contexts/BookingContext";
+import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 
 // Profile API service
