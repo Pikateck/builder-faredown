@@ -261,7 +261,7 @@ export default function Account() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[#7a7a7a] text-sm font-medium">Total Bookings</p>
-                  <p className="text-2xl font-bold text-[#003580]">{bookings.length}</p>
+                  <p className="text-2xl font-bold text-[#003580]">{accountOverview?.total_bookings || bookings.length}</p>
                 </div>
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
                   <Plane className="w-6 h-6 text-[#003580]" />
@@ -274,7 +274,7 @@ export default function Account() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[#7a7a7a] text-sm font-medium">Countries Visited</p>
-                  <p className="text-2xl font-bold text-[#003580]">2</p>
+                  <p className="text-2xl font-bold text-[#003580]">{accountOverview?.countries_visited || 2}</p>
                 </div>
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
                   <Globe className="w-6 h-6 text-[#003580]" />
@@ -287,7 +287,7 @@ export default function Account() {
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-[#7a7a7a] text-sm font-medium">FaredownClub Points</p>
-                  <p className="text-2xl font-bold text-[#003580]">1,250</p>
+                  <p className="text-2xl font-bold text-[#003580]">{accountOverview?.loyalty_points?.toLocaleString() || '1,250'}</p>
                 </div>
                 <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
                   <Award className="w-6 h-6 text-[#003580]" />
@@ -341,11 +341,11 @@ export default function Account() {
                     </div>
                   </div>
                   <div className="flex justify-between text-xs text-[#7a7a7a] mt-1">
-                    <span>5 bookings</span>
-                    <span>15 bookings</span>
+                    <span>{accountOverview?.progress_to_next_tier?.current_bookings || 5} bookings</span>
+                    <span>{accountOverview?.progress_to_next_tier?.required_bookings || 15} bookings</span>
                   </div>
                 </div>
-                <p className="text-sm font-medium text-[#003580]">10 more bookings to unlock Platinum</p>
+                <p className="text-sm font-medium text-[#003580]">{accountOverview?.progress_to_next_tier?.remaining || 10} more bookings to unlock Platinum</p>
                 <p className="text-xs text-[#7a7a7a] max-w-64">Next tier: Max discounts, free meals, lounge access</p>
               </div>
             </div>
