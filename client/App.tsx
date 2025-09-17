@@ -87,7 +87,6 @@ import PaymentDashboard from "./pages/admin/PaymentDashboard";
 import AdminTestingDashboard from "./pages/admin/AdminTestingDashboard";
 import AIBargainingDashboard from "./pages/admin/AIBargainingDashboard";
 import APITestingDashboard from "./pages/admin/APITestingDashboard";
-import { ApiDiagnostic } from "./components/ApiDiagnostic";
 
 function App() {
   return (
