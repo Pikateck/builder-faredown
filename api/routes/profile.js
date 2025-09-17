@@ -10,10 +10,10 @@ const bcrypt = require("bcryptjs");
 const { validate } = require("../middleware/validation");
 const { audit } = require("../middleware/audit");
 
-// Database connection
+// Database connection - Use SSL for Render PostgreSQL
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: process.env.DATABASE_URL ? { rejectUnauthorized: false } : false
 });
 
 // Middleware to set passport encryption key
