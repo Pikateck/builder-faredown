@@ -1921,7 +1921,7 @@ export default function BookingFlow() {
                           code: "THB",
                           symbol: "฿",
                           name: "Thai Baht",
-                          flag: "������🇭",
+                          flag: "����🇭",
                         },
                         {
                           code: "MYR",
@@ -3264,7 +3264,7 @@ export default function BookingFlow() {
                         </div>
 
                         {/* Return Flight Fare Rules (if applicable) */}
-                        {tripType === "round-trip" && returnDate && (
+                        {exactTripType === "roundtrip" && exactReturnDate && (
                           <div className="bg-[#f8fafc] rounded-lg p-4 border border-[#e2e8f0]">
                             <h4 className="font-medium text-gray-900 mb-3">
                               Return: {selectedFlight?.to || "Dubai"} →{" "}
