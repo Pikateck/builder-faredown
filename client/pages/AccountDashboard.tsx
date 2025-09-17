@@ -11,6 +11,7 @@ import {
 import {
   User,
   ChevronDown,
+  ChevronRight,
   MapPin,
   CreditCard,
   Settings,
@@ -24,6 +25,7 @@ import {
   Home,
   Gift,
   DollarSign,
+  Plane,
 } from "lucide-react";
 
 export default function AccountDashboard() {
