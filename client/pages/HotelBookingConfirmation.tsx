@@ -49,6 +49,14 @@ export default function HotelBookingConfirmation() {
   const hotelId = searchParams.get("hotelId") || "1";
   const hotelName = searchParams.get("hotelName");
 
+  console.log("🏨 Hotel confirmation using exact search dates:", {
+    checkIn: enhancedBooking.searchParams.checkIn,
+    checkOut: enhancedBooking.searchParams.checkOut,
+    nights: enhancedBooking.searchParams.nights,
+    guests: enhancedBooking.searchParams.guests,
+    rooms: enhancedBooking.searchParams.rooms
+  });
+
   // Mock booking data (would be fetched from API)
   const bookingData = {
     id: bookingId,
