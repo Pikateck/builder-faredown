@@ -1764,11 +1764,23 @@ export default function BookingFlow() {
         console.warn("Failed to save booking data to localStorage:", error);
       }
 
+      // Update enhanced booking context with completion
+      completeEnhancedBooking(bookingId);
+
+      // Also update legacy booking context for compatibility
+      completeBooking(bookingId);
+
       // Simulate payment processing
-      console.log("Processing payment...", paymentDetails);
+      console.log("✅ Booking completed with complete search object:", bookingData);
 
       // Navigate to confirmation with flight type indicator
-      navigate("/booking-confirmation?type=flight", { replace: true });
+      navigate("/booking-confirmation?type=flight", {
+        replace: true,
+        state: {
+          bookingData: bookingData,
+          searchParams: searchParams
+        }
+      });
     } catch (error) {
       console.error("Booking failed:", error);
       // Handle error - could show error message
@@ -1906,7 +1918,7 @@ export default function BookingFlow() {
                           code: "GBP",
                           symbol: "£",
                           name: "British Pound",
-                          flag: "🇬🇧",
+                          flag: "🇬����",
                         },
                         {
                           code: "INR",
