@@ -1350,7 +1350,7 @@ function TravelerModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
 }
 
 // Passport Modal Component
-function PassportModal({ isOpen, onClose, traveler, form, setForm, onSave, saving, countries }) {
+function PassportModal({ isOpen, onClose, traveler, form, setForm, onSave, saving }) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
       <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
