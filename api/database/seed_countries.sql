@@ -55,7 +55,7 @@ INSERT INTO public.countries (iso2, name, iso3_code, continent, currency_code, p
 ('BR', 'Brazil', 'BRA', 'South America', 'BRL', '+55', '🇧🇷', false),
 ('BS', 'Bahamas', 'BHS', 'North America', 'BSD', '+1-242', '🇧🇸', false),
 ('BT', 'Bhutan', 'BTN', 'Asia', 'BTN', '+975', '🇧🇹', false),
-('BV', 'Bouvet Island', 'BVT', 'Antarctica', 'NOK', NULL, '🇧🇻', false),
+('BV', 'Bouvet Island', 'BVT', 'Antarctica', 'NOK', NULL, '���🇻', false),
 ('BW', 'Botswana', 'BWA', 'Africa', 'BWP', '+267', '🇧🇼', false),
 ('BY', 'Belarus', 'BLR', 'Europe', 'BYN', '+375', '🇧🇾', false),
 ('BZ', 'Belize', 'BLZ', 'North America', 'BZD', '+501', '🇧🇿', false),
@@ -70,7 +70,7 @@ INSERT INTO public.countries (iso2, name, iso3_code, continent, currency_code, p
 ('CL', 'Chile', 'CHL', 'South America', 'CLP', '+56', '🇨🇱', false),
 ('CM', 'Cameroon', 'CMR', 'Africa', 'XAF', '+237', '🇨🇲', false),
 ('CN', 'China', 'CHN', 'Asia', 'CNY', '+86', '🇨🇳', false),
-('CO', 'Colombia', 'COL', 'South America', 'COP', '+57', '🇨����', false),
+('CO', 'Colombia', 'COL', 'South America', 'COP', '+57', '🇨🇴', false),
 ('CR', 'Costa Rica', 'CRI', 'North America', 'CRC', '+506', '🇨🇷', false),
 ('CU', 'Cuba', 'CUB', 'North America', 'CUP', '+53', '🇨🇺', false),
 ('CV', 'Cape Verde', 'CPV', 'Africa', 'CVE', '+238', '🇨🇻', false),
@@ -273,35 +273,35 @@ INSERT INTO public.countries (iso2, name, iso3_code, continent, currency_code, p
 ('ZW', 'Zimbabwe', 'ZWE', 'Africa', 'ZWL', '+263', '🇿🇼', false);
 
 -- Create indexes for performance
-CREATE INDEX IF NOT EXISTS idx_countries_code ON public.countries(code);
+CREATE INDEX IF NOT EXISTS idx_countries_iso2 ON public.countries(iso2);
 CREATE INDEX IF NOT EXISTS idx_countries_popular ON public.countries(popular) WHERE popular = true;
 CREATE INDEX IF NOT EXISTS idx_countries_continent ON public.countries(continent);
 
 -- Add foreign key constraints to link with existing tables
 DO $$ 
 BEGIN
-    -- Link users.nationality_iso2 to countries.code
+    -- Link users.nationality_iso2 to countries.iso2
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_users_nationality_iso2') THEN
-        ALTER TABLE users ADD CONSTRAINT fk_users_nationality_iso2 
-        FOREIGN KEY (nationality_iso2) REFERENCES public.countries(code);
+        ALTER TABLE users ADD CONSTRAINT fk_users_nationality_iso2
+        FOREIGN KEY (nationality_iso2) REFERENCES public.countries(iso2);
     END IF;
     
-    -- Link faredown.addresses.country_iso2 to countries.code
+    -- Link faredown.addresses.country_iso2 to countries.iso2
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_addresses_country_iso2') THEN
-        ALTER TABLE faredown.addresses ADD CONSTRAINT fk_addresses_country_iso2 
-        FOREIGN KEY (country_iso2) REFERENCES public.countries(code);
+        ALTER TABLE faredown.addresses ADD CONSTRAINT fk_addresses_country_iso2
+        FOREIGN KEY (country_iso2) REFERENCES public.countries(iso2);
     END IF;
     
-    -- Link faredown.travelers.nationality_iso2 to countries.code
+    -- Link faredown.travelers.nationality_iso2 to countries.iso2
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_travelers_nationality_iso2') THEN
-        ALTER TABLE faredown.travelers ADD CONSTRAINT fk_travelers_nationality_iso2 
-        FOREIGN KEY (nationality_iso2) REFERENCES public.countries(code);
+        ALTER TABLE faredown.travelers ADD CONSTRAINT fk_travelers_nationality_iso2
+        FOREIGN KEY (nationality_iso2) REFERENCES public.countries(iso2);
     END IF;
     
-    -- Link faredown.passports.issuing_country to countries.code
+    -- Link faredown.passports.issuing_country to countries.iso2
     IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'fk_passports_issuing_country') THEN
-        ALTER TABLE faredown.passports ADD CONSTRAINT fk_passports_issuing_country 
-        FOREIGN KEY (issuing_country) REFERENCES public.countries(code);
+        ALTER TABLE faredown.passports ADD CONSTRAINT fk_passports_issuing_country
+        FOREIGN KEY (issuing_country) REFERENCES public.countries(iso2);
     END IF;
 EXCEPTION
     WHEN others THEN
@@ -311,4 +311,4 @@ END $$;
 
 -- Verify the seed
 SELECT 'Countries seeded successfully!' as status, COUNT(*) as total_countries FROM public.countries;
-SELECT 'Popular countries:' as info, code, name FROM public.countries WHERE popular = true ORDER BY name;
+SELECT 'Popular countries:' as info, iso2, name FROM public.countries WHERE popular = true ORDER BY name;
