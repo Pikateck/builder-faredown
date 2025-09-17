@@ -98,7 +98,8 @@ function App() {
             <LoyaltyProvider>
               <Router>
                 <BookingProvider>
-                  <SearchProvider>
+                  <EnhancedBookingProvider>
+                    <SearchProvider>
                     <Routes>
                       {/* Original Web Routes */}
                       <Route path="/" element={<Index />} />
@@ -383,7 +384,8 @@ function App() {
                       {/* Fallback */}
                       <Route path="*" element={<NotFound />} />
                     </Routes>
-                  </SearchProvider>
+                    </SearchProvider>
+                  </EnhancedBookingProvider>
                 </BookingProvider>
               </Router>
             </LoyaltyProvider>
