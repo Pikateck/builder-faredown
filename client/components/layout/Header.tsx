@@ -19,6 +19,9 @@ import {
   Hotel,
   Heart,
   DollarSign,
+  CheckCircle,
+  Clock,
+  AlertCircle,
   Shield,
   Headphones,
   X,
@@ -147,6 +150,127 @@ export function Header() {
             </div>
           </div>
         </header>
+
+        {/* Mobile Notifications Panel */}
+        {showNotifications && (
+          <div className="fixed inset-0 z-50 md:hidden">
+            {/* Backdrop */}
+            <div
+              className="fixed inset-0 bg-black bg-opacity-50"
+              onClick={() => setShowNotifications(false)}
+            />
+
+            {/* Notifications Panel */}
+            <div className="fixed top-16 left-0 right-0 mx-4 bg-white rounded-lg shadow-xl max-h-96 overflow-hidden">
+              <div className="flex flex-col h-full">
+                {/* Header */}
+                <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white">
+                  <span className="text-lg font-bold text-gray-900">Notifications</span>
+                  <button
+                    onClick={() => setShowNotifications(false)}
+                    className="p-2 text-gray-900 hover:bg-gray-100 rounded-lg"
+                  >
+                    <X className="w-5 h-5" />
+                  </button>
+                </div>
+
+                {/* Notifications List */}
+                <div className="flex-1 overflow-y-auto">
+                  {/* Sample notifications */}
+                  <div className="space-y-1">
+                    <div className="flex items-start space-x-3 p-4 hover:bg-gray-50 border-b border-gray-100">
+                      <div className="flex-shrink-0 w-8 h-8 bg-green-100 rounded-full flex items-center justify-center">
+                        <CheckCircle className="w-4 h-4 text-green-600" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          Booking Confirmed
+                        </p>
+                        <p className="text-xs text-gray-600 mt-1">
+                          Your hotel booking in Dubai has been confirmed. Reference: FD12345
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">2 hours ago</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-3 p-4 hover:bg-gray-50 border-b border-gray-100">
+                      <div className="flex-shrink-0 w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
+                        <Plane className="w-4 h-4 text-blue-600" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          Flight Update
+                        </p>
+                        <p className="text-xs text-gray-600 mt-1">
+                          Your flight AI 131 departure time has been updated to 14:30
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">5 hours ago</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-3 p-4 hover:bg-gray-50 border-b border-gray-100">
+                      <div className="flex-shrink-0 w-8 h-8 bg-yellow-100 rounded-full flex items-center justify-center">
+                        <Clock className="w-4 h-4 text-yellow-600" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          Check-in Reminder
+                        </p>
+                        <p className="text-xs text-gray-600 mt-1">
+                          Don't forget to check-in for your flight tomorrow at 10:00 AM
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">1 day ago</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-3 p-4 hover:bg-gray-50 border-b border-gray-100">
+                      <div className="flex-shrink-0 w-8 h-8 bg-red-100 rounded-full flex items-center justify-center">
+                        <AlertCircle className="w-4 h-4 text-red-600" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          Payment Failed
+                        </p>
+                        <p className="text-xs text-gray-600 mt-1">
+                          Your payment for booking FD12346 was declined. Please update your payment method.
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">2 days ago</p>
+                      </div>
+                    </div>
+
+                    <div className="flex items-start space-x-3 p-4 hover:bg-gray-50">
+                      <div className="flex-shrink-0 w-8 h-8 bg-purple-100 rounded-full flex items-center justify-center">
+                        <Heart className="w-4 h-4 text-purple-600" />
+                      </div>
+                      <div className="flex-1">
+                        <p className="text-sm font-medium text-gray-900">
+                          Special Offer
+                        </p>
+                        <p className="text-xs text-gray-600 mt-1">
+                          Get 20% off on your next hotel booking. Use code SAVE20
+                        </p>
+                        <p className="text-xs text-gray-400 mt-1">3 days ago</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Footer */}
+                <div className="border-t border-gray-200 p-4">
+                  <button
+                    onClick={() => {
+                      setShowNotifications(false);
+                      handleNavigation("/account?tab=notifications");
+                    }}
+                    className="w-full text-center text-sm text-[#003580] font-medium hover:text-[#0071c2]"
+                  >
+                    View All Notifications
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Mobile Menu Overlay */}
         {showMobileMenu && (
