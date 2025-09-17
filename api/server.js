@@ -27,6 +27,7 @@ const hotelsLiveRoutes = require("./routes/hotels-live");
 const bargainRoutes = require("./routes/bargain");
 const bargainV1Routes = require("./routes/bargain-final");
 const currencyRoutes = require("./routes/currency");
+const countriesRoutes = require("./routes/countries");
 const promoRoutes = require("./routes/promo");
 const analyticsRoutes = require("./routes/analytics");
 const dbTestRoutes = require("./routes/db-test");
