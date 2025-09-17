@@ -1394,18 +1394,14 @@ function PassportModal({ isOpen, onClose, traveler, form, setForm, onSave, savin
           
           <div>
             <Label htmlFor="issuingCountry">Issuing country *</Label>
-            <Select value={form.issuingCountry || ""} onValueChange={(value) => setForm({...form, issuingCountry: value})}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select issuing country" />
-              </SelectTrigger>
-              <SelectContent>
-                {countries.map((country) => (
-                  <SelectItem key={country.code} value={country.code}>
-                    {country.name}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            <CountrySelect
+              value={form.issuingCountry || ""}
+              onValueChange={(value) => setForm({...form, issuingCountry: value})}
+              placeholder="Select issuing country"
+              prioritizePopular={true}
+              showFlags={true}
+              className="w-full"
+            />
           </div>
           
           <div className="grid grid-cols-2 gap-4">
