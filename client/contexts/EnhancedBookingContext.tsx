@@ -7,24 +7,52 @@ import React, {
 } from "react";
 import { useLocation, useNavigate, useSearchParams } from "react-router-dom";
 
-// Standardized search object structure that matches the user's requirements
+// Standardized search object structure that matches the user's requirements for all modules
 export interface StandardizedSearchParams {
-  tripType: "one-way" | "roundtrip" | "multi-city";
-  from: string;
-  to: string;
-  fromCode: string;
-  toCode: string;
-  departDate: string; // This should match the user's exact example: "2025-10-01"
-  returnDate?: string; // This should match the user's exact example: "2025-10-10"
-  cabin: "Economy" | "Premium Economy" | "Business" | "First";
-  pax: {
+  // Common for all modules
+  module: "flights" | "hotels" | "sightseeing" | "transfers";
+  currency: string;
+  searchId?: string;
+  searchTimestamp?: string;
+
+  // Flight-specific fields
+  tripType?: "one-way" | "roundtrip" | "multi-city";
+  from?: string;
+  to?: string;
+  fromCode?: string;
+  toCode?: string;
+  departDate?: string; // For flights: departure date
+  returnDate?: string; // For flights: return date
+  cabin?: "Economy" | "Premium Economy" | "Business" | "First";
+
+  // Hotel-specific fields
+  destination?: string;
+  destinationCode?: string;
+  destinationName?: string;
+  checkIn?: string; // For hotels: check-in date (should match user's exact format: "2025-10-01")
+  checkOut?: string; // For hotels: check-out date (should match user's exact format: "2025-10-10")
+  rooms?: number;
+  nights?: number;
+
+  // Common passenger/guest fields
+  pax?: {
     adults: number;
     children: number;
     infants: number;
   };
-  currency: string;
-  searchId?: string;
-  searchTimestamp?: string;
+  guests?: {
+    adults: number;
+    children: number;
+  };
+
+  // Transfer-specific fields
+  transferType?: "airport-hotel" | "hotel-airport" | "city-transfer";
+  pickupLocation?: string;
+  dropoffLocation?: string;
+
+  // Sightseeing-specific fields
+  category?: string;
+  duration?: string;
 }
 
 export interface SelectedFlight {
