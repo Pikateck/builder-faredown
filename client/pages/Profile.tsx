@@ -664,7 +664,6 @@ export default function Profile({ standalone = true, initialTab = "personal" }) 
           setForm={setPassportForm}
           onSave={handleSavePassport}
           saving={saving}
-          countries={countries}
         />
         
         <PaymentMethodModal
