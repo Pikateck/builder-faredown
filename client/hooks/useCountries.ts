@@ -102,7 +102,7 @@ export function useCountries(options: UseCountriesOptions = {}) {
         if (!response.ok) {
           // If rate limited, use fallback data immediately
           if (response.status === 429) {
-            console.warn('Countries API rate limited, using fallback data');
+            console.warn("Countries API rate limited, using fallback data");
             const fallbackData = getFallbackCountries(popularOnly);
             // Cache the fallback data temporarily
             cache.set(cacheKey, {

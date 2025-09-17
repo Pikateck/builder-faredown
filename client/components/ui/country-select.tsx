@@ -404,9 +404,7 @@ export function CountrySelect({
                     ))
                 : !loading &&
                   !fetchError && (
-                    <CommandGroup
-                      heading={"Countries"}
-                    >
+                    <CommandGroup heading={"Countries"}>
                       {filteredCountries
                         .filter(
                           (country) =>

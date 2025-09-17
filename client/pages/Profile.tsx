@@ -53,7 +53,7 @@ import { CountrySelect } from "@/components/ui/country-select";
 import useCountries from "@/hooks/useCountries";
 
 // Check if offline mode is enabled
-const isOfflineMode = import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK === 'true';
+const isOfflineMode = import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK === "true";
 
 // API Service with proper error handling and mock fallbacks
 const profileAPI = {
@@ -63,7 +63,7 @@ const profileAPI = {
     const contentType = response.headers.get("content-type");
 
     if (!response.ok) {
-      let errorText = '';
+      let errorText = "";
       try {
         if (contentType && contentType.includes("application/json")) {
           const errorData = await response.json();
@@ -163,9 +163,9 @@ const profileAPI = {
             nationality_iso2: "IN",
             passport_number: "A1234567",
             passport_expiry: "2030-12-31",
-            issuing_country: "IN"
-          }
-        ]
+            issuing_country: "IN",
+          },
+        ],
       };
     }
 
@@ -188,9 +188,9 @@ const profileAPI = {
             nationality_iso2: "IN",
             passport_number: "A1234567",
             passport_expiry: "2030-12-31",
-            issuing_country: "IN"
-          }
-        ]
+            issuing_country: "IN",
+          },
+        ],
       };
     }
   },
@@ -262,9 +262,9 @@ const profileAPI = {
             issuing_country: "IN",
             issue_date: "2020-01-01",
             expiry_date: "2030-12-31",
-            traveler_id: travelerId
-          }
-        ]
+            traveler_id: travelerId,
+          },
+        ],
       };
     }
   },
@@ -303,9 +303,9 @@ const profileAPI = {
             expiry_month: 12,
             expiry_year: 2025,
             is_default: true,
-            cardholder_name: "Zubin Aibara"
-          }
-        ]
+            cardholder_name: "Zubin Aibara",
+          },
+        ],
       };
     }
 
@@ -327,9 +327,9 @@ const profileAPI = {
             expiry_month: 12,
             expiry_year: 2025,
             is_default: true,
-            cardholder_name: "Zubin Aibara"
-          }
-        ]
+            cardholder_name: "Zubin Aibara",
+          },
+        ],
       };
     }
   },
@@ -393,7 +393,7 @@ const profileAPI = {
           price_alerts: false,
           marketing_opt_in: false,
           newsletter: true,
-          booking_reminders: true
+          booking_reminders: true,
         },
       };
     }
@@ -415,7 +415,7 @@ const profileAPI = {
           price_alerts: false,
           marketing_opt_in: false,
           newsletter: true,
-          booking_reminders: true
+          booking_reminders: true,
         },
       };
     }
