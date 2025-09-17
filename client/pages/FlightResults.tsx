@@ -1397,39 +1397,58 @@ export default function FlightResults() {
   );
 
   const handleBooking = (flight: (typeof flightData)[0], fareType: any) => {
-    // Update booking context with current search parameters
-    updateSearchParams({
-      from: selectedFromCity,
-      to: selectedToCity,
-      fromCode:
-        Object.entries({
-          Mumbai: "BOM",
-          Delhi: "DEL",
-          Bangalore: "BLR",
-          Chennai: "MAA",
-          Kolkata: "CCU",
-        }).find(([city]) => city === selectedFromCity)?.[1] || "BOM",
-      toCode:
-        Object.entries({
-          Dubai: "DXB",
-          London: "LHR",
-          "New York": "JFK",
-          Singapore: "SIN",
-          Tokyo: "NRT",
-        }).find(([city]) => city === selectedToCity)?.[1] || "DXB",
-      departureDate: departureDate || "",
-      returnDate: returnDate,
-      tripType: tripType,
-      passengers: {
-        adults: travelers.adults,
-        children: travelers.children,
+    // Create the exact search object structure specified by the user
+    const standardizedSearchParams = {
+      tripType: tripType === "round-trip" ? "roundtrip" : tripType === "one-way" ? "one-way" : "roundtrip",
+      from: selectedFromCity || "Mumbai",
+      to: selectedToCity || "Dubai",
+      fromCode: Object.entries({
+        Mumbai: "BOM",
+        Delhi: "DEL",
+        Bangalore: "BLR",
+        Chennai: "MAA",
+        Kolkata: "CCU",
+      }).find(([city]) => city === selectedFromCity)?.[1] || "BOM",
+      toCode: Object.entries({
+        Dubai: "DXB",
+        London: "LHR",
+        "New York": "JFK",
+        Singapore: "SIN",
+        Tokyo: "NRT",
+      }).find(([city]) => city === selectedToCity)?.[1] || "DXB",
+      // Use exact date format as specified: "2025-10-01"
+      departDate: departureDate || new Date().toISOString().split('T')[0],
+      returnDate: tripType === "round-trip" ? (returnDate || new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]) : undefined,
+      cabin: (selectedClass === "economy" ? "Economy" :
+              selectedClass === "premium-economy" ? "Premium Economy" :
+              selectedClass === "business" ? "Business" : "Economy") as any,
+      pax: {
+        adults: travelers.adults || 1,
+        children: travelers.children || 0,
         infants: travelers.infants || 0,
       },
+      currency: "INR",
+      searchId: `search_${Date.now()}`,
+      searchTimestamp: new Date().toISOString(),
+    };
+
+    console.log("🔍 Standardized Search Object being passed to booking:", standardizedSearchParams);
+
+    // Update booking context with current search parameters using the old context for backward compatibility
+    updateSearchParams({
+      from: standardizedSearchParams.from,
+      to: standardizedSearchParams.to,
+      fromCode: standardizedSearchParams.fromCode,
+      toCode: standardizedSearchParams.toCode,
+      departureDate: standardizedSearchParams.departDate,
+      returnDate: standardizedSearchParams.returnDate,
+      tripType: standardizedSearchParams.tripType === "roundtrip" ? "round-trip" : standardizedSearchParams.tripType,
+      passengers: standardizedSearchParams.pax,
       class: selectedClass as any,
     });
 
-    // Update booking context with selected flight
-    setSelectedFlight({
+    // Create comprehensive flight object with both outbound and return leg data
+    const completeFlightData = {
       id: flight.id.toString(),
       airline: flight.airline,
       flightNumber: flight.flightNumber,
@@ -1438,19 +1457,25 @@ export default function FlightResults() {
       duration: flight.duration,
       aircraft: flight.aircraft || "Aircraft",
       stops: flight.stops || 0,
-      departureCode: flight.departureCode,
-      arrivalCode: flight.arrivalCode,
-      departureCity: selectedFromCity,
-      arrivalCity: selectedToCity,
-      departureDate: departureDate || "",
-      arrivalDate: departureDate || "",
-      returnFlightNumber: flight.returnFlightNumber,
-      returnDepartureTime: flight.returnDepartureTime,
-      returnArrivalTime: flight.returnArrivalTime,
-      returnDuration: flight.returnDuration,
-      returnDepartureDate: returnDate,
-      returnArrivalDate: returnDate,
-    });
+      departureCode: flight.departureCode || standardizedSearchParams.fromCode,
+      arrivalCode: flight.arrivalCode || standardizedSearchParams.toCode,
+      departureCity: standardizedSearchParams.from,
+      arrivalCity: standardizedSearchParams.to,
+      departureDate: standardizedSearchParams.departDate,
+      arrivalDate: standardizedSearchParams.departDate,
+      // Ensure return leg data is properly populated for round-trip flights
+      returnFlightNumber: standardizedSearchParams.tripType === "roundtrip" ? (flight.returnFlightNumber || `${flight.flightNumber.split(' ')[0]} ${parseInt(flight.flightNumber.split(' ')[1]) + 1}`) : undefined,
+      returnDepartureTime: standardizedSearchParams.tripType === "roundtrip" ? (flight.returnDepartureTime || "08:45") : undefined,
+      returnArrivalTime: standardizedSearchParams.tripType === "roundtrip" ? (flight.returnArrivalTime || "14:05") : undefined,
+      returnDuration: standardizedSearchParams.tripType === "roundtrip" ? (flight.returnDuration || flight.duration) : undefined,
+      returnDepartureDate: standardizedSearchParams.returnDate,
+      returnArrivalDate: standardizedSearchParams.returnDate,
+    };
+
+    console.log("✈️ Complete Flight Data with return leg:", completeFlightData);
+
+    // Update booking context with selected flight
+    setSelectedFlight(completeFlightData);
 
     // Update booking context with selected fare
     setSelectedFare({
@@ -1468,8 +1493,36 @@ export default function FlightResults() {
       cancellation: fareType.cancellation || { allowed: false },
     });
 
-    // Navigate to booking flow - context will provide all data
-    navigate("/booking-flow");
+    // Navigate with complete state in location.state for immediate availability
+    navigate("/booking-flow", {
+      state: {
+        searchParams: standardizedSearchParams,
+        selectedFlight: completeFlightData,
+        selectedFareType: fareType,
+        // Also pass as URL params for persistence
+        replace: true,
+      }
+    });
+
+    // Also update URL params for full persistence
+    const urlParams = new URLSearchParams();
+    urlParams.set("from", standardizedSearchParams.from);
+    urlParams.set("to", standardizedSearchParams.to);
+    urlParams.set("fromCode", standardizedSearchParams.fromCode);
+    urlParams.set("toCode", standardizedSearchParams.toCode);
+    urlParams.set("departDate", standardizedSearchParams.departDate);
+    if (standardizedSearchParams.returnDate) {
+      urlParams.set("returnDate", standardizedSearchParams.returnDate);
+    }
+    urlParams.set("tripType", standardizedSearchParams.tripType);
+    urlParams.set("cabin", standardizedSearchParams.cabin);
+    urlParams.set("adults", standardizedSearchParams.pax.adults.toString());
+    urlParams.set("children", standardizedSearchParams.pax.children.toString());
+    urlParams.set("infants", standardizedSearchParams.pax.infants.toString());
+    urlParams.set("currency", standardizedSearchParams.currency);
+
+    // Replace URL with search params
+    window.history.replaceState(null, '', `/booking-flow?${urlParams.toString()}`);
   };
 
   return (
