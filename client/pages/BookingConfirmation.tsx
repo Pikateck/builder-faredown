@@ -1744,9 +1744,11 @@ export default function BookingConfirmation() {
                           Return Departure
                         </p>
                         <p className="font-bold">
-                          {formatDate(
-                            booking.flights[1].date || new Date().toISOString(),
-                          )}
+                          {booking.searchParams?.returnDate
+                            ? formatDate(booking.searchParams.returnDate)
+                            : formatDate(
+                                booking.flights[1].date || new Date().toISOString(),
+                              )}
                         </p>
                         <p className="text-xs text-gray-500">
                           {booking.flights[1].departureTime || "14:00"} -{" "}
