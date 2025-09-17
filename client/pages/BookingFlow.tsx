@@ -1656,6 +1656,19 @@ export default function BookingFlow() {
         baseFareTotal: calculateBaseFareTotal(),
         extrasTotal: calculateExtrasTotal(),
         seatFeesTotal: getTotalSeatFees(),
+        // Complete search object as specified by user requirements
+        searchParams: {
+          tripType: exactTripType,
+          from: searchParams.from,
+          to: searchParams.to,
+          fromCode: searchParams.fromCode,
+          toCode: searchParams.toCode,
+          departDate: exactDepartDate,
+          returnDate: exactReturnDate,
+          cabin: searchParams.cabin,
+          pax: searchParams.pax,
+          currency: searchParams.currency,
+        },
         passengers: travellers.map((t) => ({
           firstName: t.firstName,
           lastName: t.lastName,
