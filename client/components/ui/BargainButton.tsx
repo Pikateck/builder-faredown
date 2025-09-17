@@ -51,7 +51,7 @@ const buttonClasses = cn(
   // yellow theme
   "bg-[#FFC107] hover:bg-[#FFB300] text-[#1a1f2c]",
   // size
-  "h-10 px-4"
+  "h-10 px-4",
 );
 
 // Make BargainButton a **named** export…
@@ -113,7 +113,10 @@ export function BargainButton({
         className={cn(buttonClasses, className)}
         id={id}
         data-testid={dataTestId}
-        aria-label={ariaLabel || (typeof children === "string" ? children : "Bargain button")}
+        aria-label={
+          ariaLabel ||
+          (typeof children === "string" ? children : "Bargain button")
+        }
       >
         {!loading && <TrendingDown className="w-4 h-4" />}
         {loading && (

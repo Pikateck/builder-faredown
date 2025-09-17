@@ -121,20 +121,44 @@ function App() {
                       <Route path="/account/personal" element={<Account />} />
                       <Route path="/account/security" element={<Account />} />
                       <Route path="/account/travelers" element={<Account />} />
-                      <Route path="/account/preferences" element={<Account />} />
+                      <Route
+                        path="/account/preferences"
+                        element={<Account />}
+                      />
                       <Route path="/account/payment" element={<Account />} />
                       <Route path="/account/privacy" element={<Account />} />
                       <Route path="/account/trips" element={<Account />} />
                       <Route path="/profile" element={<Profile />} />
 
                       {/* Legacy route redirects */}
-                      <Route path="/profile-legacy" element={<Navigate to="/account/personal" replace />} />
-                      <Route path="/account/profile" element={<Navigate to="/account/personal" replace />} />
-                      <Route path="/account/profile-legacy" element={<Navigate to="/account/personal" replace />} />
-                      <Route path="/settings" element={<Navigate to="/account/preferences" replace />} />
-                      <Route path="/account/settings" element={<Navigate to="/account/preferences" replace />} />
-                      <Route path="/payments" element={<Navigate to="/account/payment" replace />} />
-                      <Route path="/privacy" element={<Navigate to="/account/privacy" replace />} />
+                      <Route
+                        path="/profile-legacy"
+                        element={<Navigate to="/account/personal" replace />}
+                      />
+                      <Route
+                        path="/account/profile"
+                        element={<Navigate to="/account/personal" replace />}
+                      />
+                      <Route
+                        path="/account/profile-legacy"
+                        element={<Navigate to="/account/personal" replace />}
+                      />
+                      <Route
+                        path="/settings"
+                        element={<Navigate to="/account/preferences" replace />}
+                      />
+                      <Route
+                        path="/account/settings"
+                        element={<Navigate to="/account/preferences" replace />}
+                      />
+                      <Route
+                        path="/payments"
+                        element={<Navigate to="/account/payment" replace />}
+                      />
+                      <Route
+                        path="/privacy"
+                        element={<Navigate to="/account/privacy" replace />}
+                      />
                       <Route path="/saved" element={<Saved />} />
                       <Route path="/hotels" element={<Hotels />} />
                       <Route
@@ -284,7 +308,10 @@ function App() {
                         element={<AdminDashboard />}
                       />
                       <Route path="/admin/users" element={<UserManagement />} />
-                      <Route path="/admin/profiles" element={<ProfileManagement />} />
+                      <Route
+                        path="/admin/profiles"
+                        element={<ProfileManagement />}
+                      />
                       <Route
                         path="/admin/bargain"
                         element={<BargainEngine />}
