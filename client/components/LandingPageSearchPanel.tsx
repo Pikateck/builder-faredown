@@ -614,7 +614,7 @@ export function LandingPageSearchPanel() {
                     )}
                   </div>
                 </button>
-                {selectedFromCity && (
+                {selectedFromCity && selectedFromCity !== "Mumbai" && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
@@ -709,7 +709,7 @@ export function LandingPageSearchPanel() {
                     )}
                   </div>
                 </button>
-                {selectedToCity && (
+                {selectedToCity && selectedToCity !== "Dubai" && (
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
