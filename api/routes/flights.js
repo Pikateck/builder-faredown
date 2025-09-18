@@ -301,44 +301,65 @@ async function transformAmadeusFlightData(amadeusData, searchParams) {
  */
 async function logFlightSearch(req, searchParams, results) {
   try {
-    const userAgent = req.headers['user-agent'] || '';
-    const sessionId = req.headers['x-session-id'] || req.sessionID || 'anonymous';
+    const userAgent = req.headers["user-agent"] || "";
+    const sessionId =
+      req.headers["x-session-id"] || req.sessionID || "anonymous";
     const userId = req.user?.id || req.query.userId || null;
 
     // Parse multi-city legs if present
     let legs = [];
-    if (searchParams.tripType === 'multi-city' && searchParams.multiCityLegs) {
+    if (searchParams.tripType === "multi-city" && searchParams.multiCityLegs) {
       try {
-        legs = typeof searchParams.multiCityLegs === 'string'
-          ? JSON.parse(searchParams.multiCityLegs)
-          : searchParams.multiCityLegs;
+        legs =
+          typeof searchParams.multiCityLegs === "string"
+            ? JSON.parse(searchParams.multiCityLegs)
+            : searchParams.multiCityLegs;
       } catch (e) {
-        console.warn('Failed to parse multiCityLegs:', e);
+        console.warn("Failed to parse multiCityLegs:", e);
         legs = [];
       }
     } else {
       // Single leg for round-trip or one-way
-      legs = [{
-        from: searchParams.from || 'Unknown',
-        fromCode: searchParams.origin || searchParams.fromCode || 'XXX',
-        to: searchParams.to || 'Unknown',
-        toCode: searchParams.destination || searchParams.toCode || 'XXX',
-        date: searchParams.departureDate
-      }];
+      legs = [
+        {
+          from: searchParams.from || "Unknown",
+          fromCode: searchParams.origin || searchParams.fromCode || "XXX",
+          to: searchParams.to || "Unknown",
+          toCode: searchParams.destination || searchParams.toCode || "XXX",
+          date: searchParams.departureDate,
+        },
+      ];
     }
 
     // Helper function to detect platform
     const detectPlatform = (userAgent) => {
-      if (!userAgent) return 'unknown';
-      if (userAgent.includes('iOS-Native-App') || userAgent.includes('CFNetwork')) return 'ios-native';
-      if (userAgent.includes('Android-Native-App') || userAgent.includes('okhttp')) return 'android-native';
-      if (userAgent.includes('Mobile') || userAgent.includes('Android') || userAgent.includes('iPhone')) return 'mobile-web';
-      return 'web';
+      if (!userAgent) return "unknown";
+      if (
+        userAgent.includes("iOS-Native-App") ||
+        userAgent.includes("CFNetwork")
+      )
+        return "ios-native";
+      if (
+        userAgent.includes("Android-Native-App") ||
+        userAgent.includes("okhttp")
+      )
+        return "android-native";
+      if (
+        userAgent.includes("Mobile") ||
+        userAgent.includes("Android") ||
+        userAgent.includes("iPhone")
+      )
+        return "mobile-web";
+      return "web";
     };
 
-    const isMobile = userAgent.includes('Mobile') || userAgent.includes('Android') ||
-                    userAgent.includes('iPhone') || userAgent.includes('iPad') ||
-                    userAgent.includes('iOS-Native-App') || userAgent.includes('Android-Native-App');
+    const isMobile =
+      userAgent.includes("Mobile") ||
+      userAgent.includes("Android") ||
+      userAgent.includes("iPhone") ||
+      userAgent.includes("iPad") ||
+      userAgent.includes("iOS-Native-App") ||
+      userAgent.includes("Android-Native-App");
 
     // Log each leg separately for detailed tracking
     for (let i = 0; i < legs.length; i++) {
@@ -346,7 +367,7 @@ async function logFlightSearch(req, searchParams, results) {
 
       // Extract city names from codes or full strings
       const extractCityInfo = (cityString, code) => {
-        if (!cityString) return { name: 'Unknown', code: code || 'XXX' };
+        if (!cityString) return { name: "Unknown", code: code || "XXX" };
 
         // Handle format: "Mumbai (BOM)" or just "Mumbai" or just "BOM"
         const match = cityString.match(/^(.+?)\s*\(([A-Z]{3})\)$/);
@@ -360,7 +381,7 @@ async function logFlightSearch(req, searchParams, results) {
         }
 
         // If it's just a city name
-        return { name: cityString, code: code || 'XXX' };
+        return { name: cityString, code: code || "XXX" };
       };
 
       const fromInfo = extractCityInfo(leg.from, leg.fromCode);
@@ -382,16 +403,16 @@ async function logFlightSearch(req, searchParams, results) {
         fromInfo.name,
         toInfo.code,
         toInfo.name,
-        searchParams.tripType || 'one-way',
-        'flights',
+        searchParams.tripType || "one-way",
+        "flights",
         searchParams.departureDate,
         searchParams.returnDate || null,
         JSON.stringify({
           adults: parseInt(searchParams.adults) || 1,
           children: parseInt(searchParams.children) || 0,
-          infants: parseInt(searchParams.infants) || 0
+          infants: parseInt(searchParams.infants) || 0,
         }),
-        searchParams.cabinClass || 'ECONOMY',
+        searchParams.cabinClass || "ECONOMY",
         userAgent,
         isMobile,
         detectPlatform(userAgent),
@@ -400,17 +421,18 @@ async function logFlightSearch(req, searchParams, results) {
           searchParams: searchParams,
           resultsCount: results?.length || 0,
           ip: req.ip,
-          timestamp: new Date().toISOString()
-        })
+          timestamp: new Date().toISOString(),
+        }),
       ];
 
       await db.query(logQuery, logValues);
     }
 
-    console.log(`🔍 Flight search logged: ${legs.length} leg(s) for session ${sessionId}`);
-
+    console.log(
+      `🔍 Flight search logged: ${legs.length} leg(s) for session ${sessionId}`,
+    );
   } catch (error) {
-    console.error('Error logging flight search:', error);
+    console.error("Error logging flight search:", error);
     // Don't throw - logging failures shouldn't break the search
   }
 }

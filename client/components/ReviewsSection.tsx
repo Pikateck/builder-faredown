@@ -1,19 +1,19 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import { Card, CardContent } from "@/components/ui/card";
 import { toast } from "@/hooks/use-toast";
-import { 
-  Star, 
-  ThumbsUp, 
-  Flag, 
+import {
+  Star,
+  ThumbsUp,
+  Flag,
   ChevronDown,
   Filter,
   Calendar,
@@ -21,9 +21,9 @@ import {
   User,
   CheckCircle,
   AlertCircle,
-  Loader2
+  Loader2,
 } from "lucide-react";
-import { useAuth } from '@/contexts/AuthContext';
+import { useAuth } from "@/contexts/AuthContext";
 
 interface Review {
   id: string;
@@ -77,39 +77,39 @@ interface ReviewsSectionProps {
 }
 
 const SORT_OPTIONS = [
-  { value: 'recent', label: 'Most Recent' },
-  { value: 'top', label: 'Highest Rated' },
-  { value: 'lowest', label: 'Lowest Rated' },
-  { value: 'helpful', label: 'Most Helpful' },
+  { value: "recent", label: "Most Recent" },
+  { value: "top", label: "Highest Rated" },
+  { value: "lowest", label: "Lowest Rated" },
+  { value: "helpful", label: "Most Helpful" },
 ];
 
 const FILTER_OPTIONS = [
-  { value: 'all', label: 'All Reviews' },
-  { value: 'verified', label: 'Verified Stays Only' },
+  { value: "all", label: "All Reviews" },
+  { value: "verified", label: "Verified Stays Only" },
 ];
 
 const TRIP_TYPE_OPTIONS = [
-  { value: '', label: 'All Trip Types' },
-  { value: 'Leisure', label: 'Leisure' },
-  { value: 'Business', label: 'Business' },
-  { value: 'Family', label: 'Family' },
-  { value: 'Couple', label: 'Couple' },
-  { value: 'Solo', label: 'Solo Travel' },
+  { value: "", label: "All Trip Types" },
+  { value: "Leisure", label: "Leisure" },
+  { value: "Business", label: "Business" },
+  { value: "Family", label: "Family" },
+  { value: "Couple", label: "Couple" },
+  { value: "Solo", label: "Solo Travel" },
 ];
 
-const StarDisplay: React.FC<{ rating: number; size?: 'sm' | 'md' }> = ({ 
-  rating, 
-  size = 'sm' 
+const StarDisplay: React.FC<{ rating: number; size?: "sm" | "md" }> = ({
+  rating,
+  size = "sm",
 }) => {
-  const sizeClass = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
-  
+  const sizeClass = size === "sm" ? "w-4 h-4" : "w-5 h-5";
+
   return (
     <div className="flex items-center">
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
           className={`${sizeClass} ${
-            star <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+            star <= rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
           }`}
         />
       ))}
@@ -117,21 +117,21 @@ const StarDisplay: React.FC<{ rating: number; size?: 'sm' | 'md' }> = ({
   );
 };
 
-const RatingBar: React.FC<{ 
-  label: string; 
-  rating?: number; 
-  maxRating?: number 
+const RatingBar: React.FC<{
+  label: string;
+  rating?: number;
+  maxRating?: number;
 }> = ({ label, rating, maxRating = 5 }) => {
   if (!rating) return null;
-  
+
   const percentage = (rating / maxRating) * 100;
-  
+
   return (
     <div className="flex items-center gap-3">
       <span className="text-sm font-medium text-gray-700 w-20">{label}</span>
       <div className="flex-1 bg-gray-200 rounded-full h-2">
-        <div 
-          className="bg-blue-600 h-2 rounded-full" 
+        <div
+          className="bg-blue-600 h-2 rounded-full"
           style={{ width: `${percentage}%` }}
         />
       </div>
@@ -142,17 +142,17 @@ const RatingBar: React.FC<{
   );
 };
 
-const ReviewCard: React.FC<{ 
-  review: Review; 
+const ReviewCard: React.FC<{
+  review: Review;
   onHelpfulClick: (reviewId: string) => void;
   onReportClick: (reviewId: string) => void;
   isLoadingAction: boolean;
 }> = ({ review, onHelpfulClick, onReportClick, isLoadingAction }) => {
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "long",
+      day: "numeric",
     });
   };
 
@@ -215,10 +215,11 @@ const ReviewCard: React.FC<{
           <div className="flex items-center gap-1">
             <Calendar className="w-3 h-3" />
             <span>
-              Stayed {getDaysBetween(review.stay_start, review.stay_end)} nights in{' '}
-              {new Date(review.stay_start).toLocaleDateString('en-US', { 
-                month: 'long', 
-                year: 'numeric' 
+              Stayed {getDaysBetween(review.stay_start, review.stay_end)} nights
+              in{" "}
+              {new Date(review.stay_start).toLocaleDateString("en-US", {
+                month: "long",
+                year: "numeric",
               })}
             </span>
           </div>
@@ -231,7 +232,9 @@ const ReviewCard: React.FC<{
         </div>
 
         {/* Category Ratings */}
-        {(review.staff_rating || review.cleanliness_rating || review.value_rating) && (
+        {(review.staff_rating ||
+          review.cleanliness_rating ||
+          review.value_rating) && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 p-3 bg-gray-50 rounded-lg">
             {review.staff_rating && (
               <div className="text-center">
@@ -299,7 +302,7 @@ const ReviewCard: React.FC<{
           </div>
           {review.photo_count > 0 && (
             <Badge variant="outline" className="text-xs">
-              {review.photo_count} photo{review.photo_count > 1 ? 's' : ''}
+              {review.photo_count} photo{review.photo_count > 1 ? "s" : ""}
             </Badge>
           )}
         </div>
@@ -308,9 +311,9 @@ const ReviewCard: React.FC<{
   );
 };
 
-export const ReviewsSection: React.FC<ReviewsSectionProps> = ({ 
-  propertyId, 
-  onWriteReviewClick 
+export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
+  propertyId,
+  onWriteReviewClick,
 }) => {
   const { user } = useAuth();
   const [reviews, setReviews] = useState<Review[]>([]);
@@ -320,9 +323,9 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
   const [filters, setFilters] = useState({
-    sort: 'recent',
-    filter: 'all',
-    trip_type: ''
+    sort: "recent",
+    filter: "all",
+    trip_type: "",
   });
 
   // Fetch reviews
@@ -333,10 +336,12 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
         page: page.toString(),
         sort: filters.sort,
         filter: filters.filter,
-        ...(filters.trip_type && { trip_type: filters.trip_type })
+        ...(filters.trip_type && { trip_type: filters.trip_type }),
       });
 
-      const response = await fetch(`/api/properties/${propertyId}/reviews?${params}`);
+      const response = await fetch(
+        `/api/properties/${propertyId}/reviews?${params}`,
+      );
       const result = await response.json();
 
       if (result.success) {
@@ -345,14 +350,14 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
         setCurrentPage(result.data.pagination.page);
         setTotalPages(result.data.pagination.pages);
       } else {
-        throw new Error(result.error || 'Failed to fetch reviews');
+        throw new Error(result.error || "Failed to fetch reviews");
       }
     } catch (error) {
-      console.error('Error fetching reviews:', error);
+      console.error("Error fetching reviews:", error);
       toast({
         title: "Error",
         description: "Failed to load reviews",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -370,7 +375,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
       toast({
         title: "Login Required",
         description: "Please log in to mark reviews as helpful",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -378,36 +383,39 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
     setIsLoadingAction(true);
     try {
       const response = await fetch(`/api/reviews/${reviewId}/helpful`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'X-User-ID': user.id
-        }
+          "X-User-ID": user.id,
+        },
       });
 
       const result = await response.json();
 
       if (result.success) {
         // Update the review in the list
-        setReviews(prev => prev.map(review => 
-          review.id === reviewId 
-            ? { ...review, helpful_count: result.data.helpful_count }
-            : review
-        ));
-        
+        setReviews((prev) =>
+          prev.map((review) =>
+            review.id === reviewId
+              ? { ...review, helpful_count: result.data.helpful_count }
+              : review,
+          ),
+        );
+
         toast({
           title: "Thank you!",
           description: "Review marked as helpful",
-          variant: "default"
+          variant: "default",
         });
       } else {
-        throw new Error(result.error || 'Failed to mark as helpful');
+        throw new Error(result.error || "Failed to mark as helpful");
       }
     } catch (error) {
-      console.error('Error marking helpful:', error);
+      console.error("Error marking helpful:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to mark as helpful",
-        variant: "destructive"
+        description:
+          error instanceof Error ? error.message : "Failed to mark as helpful",
+        variant: "destructive",
       });
     } finally {
       setIsLoadingAction(false);
@@ -420,7 +428,7 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
       toast({
         title: "Login Required",
         description: "Please log in to report reviews",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -428,12 +436,12 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
     setIsLoadingAction(true);
     try {
       const response = await fetch(`/api/reviews/${reviewId}/report`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'X-User-ID': user.id
+          "Content-Type": "application/json",
+          "X-User-ID": user.id,
         },
-        body: JSON.stringify({ reason: 'Reported by user' })
+        body: JSON.stringify({ reason: "Reported by user" }),
       });
 
       const result = await response.json();
@@ -442,17 +450,18 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
         toast({
           title: "Reported",
           description: "Review has been reported for moderation",
-          variant: "default"
+          variant: "default",
         });
       } else {
-        throw new Error(result.error || 'Failed to report review');
+        throw new Error(result.error || "Failed to report review");
       }
     } catch (error) {
-      console.error('Error reporting review:', error);
+      console.error("Error reporting review:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to report review",
-        variant: "destructive"
+        description:
+          error instanceof Error ? error.message : "Failed to report review",
+        variant: "destructive",
       });
     } finally {
       setIsLoadingAction(false);
@@ -470,16 +479,21 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
               <div>
                 <div className="flex items-center gap-4 mb-4">
                   <div className="text-4xl font-bold text-gray-900">
-                    {summary.avg_overall?.toFixed(1) || 'N/A'}
+                    {summary.avg_overall?.toFixed(1) || "N/A"}
                   </div>
                   <div>
-                    <StarDisplay rating={Math.round(summary.avg_overall || 0)} size="md" />
+                    <StarDisplay
+                      rating={Math.round(summary.avg_overall || 0)}
+                      size="md"
+                    />
                     <p className="text-sm text-gray-600">
-                      Based on {summary.total_approved} review{summary.total_approved > 1 ? 's' : ''}
+                      Based on {summary.total_approved} review
+                      {summary.total_approved > 1 ? "s" : ""}
                     </p>
                     {summary.total_verified > 0 && (
                       <p className="text-xs text-gray-500">
-                        {summary.total_verified} verified stay{summary.total_verified > 1 ? 's' : ''}
+                        {summary.total_verified} verified stay
+                        {summary.total_verified > 1 ? "s" : ""}
                       </p>
                     )}
                   </div>
@@ -489,7 +503,10 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
               {/* Category Ratings */}
               <div className="space-y-2">
                 <RatingBar label="Staff" rating={summary.avg_staff} />
-                <RatingBar label="Cleanliness" rating={summary.avg_cleanliness} />
+                <RatingBar
+                  label="Cleanliness"
+                  rating={summary.avg_cleanliness}
+                />
                 <RatingBar label="Value" rating={summary.avg_value} />
                 <RatingBar label="Facilities" rating={summary.avg_facilities} />
                 <RatingBar label="Comfort" rating={summary.avg_comfort} />
@@ -504,19 +521,27 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
       {/* Header with Write Review Button */}
       <div className="flex items-center justify-between">
         <h2 className="text-xl font-bold text-gray-900">Guest Reviews</h2>
-        <Button onClick={onWriteReviewClick} className="bg-blue-600 hover:bg-blue-700">
+        <Button
+          onClick={onWriteReviewClick}
+          className="bg-blue-600 hover:bg-blue-700"
+        >
           Write a Review
         </Button>
       </div>
 
       {/* Filters */}
       <div className="flex flex-wrap gap-4">
-        <Select value={filters.sort} onValueChange={(value) => setFilters(prev => ({ ...prev, sort: value }))}>
+        <Select
+          value={filters.sort}
+          onValueChange={(value) =>
+            setFilters((prev) => ({ ...prev, sort: value }))
+          }
+        >
           <SelectTrigger className="w-48">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {SORT_OPTIONS.map(option => (
+            {SORT_OPTIONS.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}
               </SelectItem>
@@ -524,12 +549,17 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
           </SelectContent>
         </Select>
 
-        <Select value={filters.filter} onValueChange={(value) => setFilters(prev => ({ ...prev, filter: value }))}>
+        <Select
+          value={filters.filter}
+          onValueChange={(value) =>
+            setFilters((prev) => ({ ...prev, filter: value }))
+          }
+        >
           <SelectTrigger className="w-48">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {FILTER_OPTIONS.map(option => (
+            {FILTER_OPTIONS.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}
               </SelectItem>
@@ -537,12 +567,17 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
           </SelectContent>
         </Select>
 
-        <Select value={filters.trip_type} onValueChange={(value) => setFilters(prev => ({ ...prev, trip_type: value }))}>
+        <Select
+          value={filters.trip_type}
+          onValueChange={(value) =>
+            setFilters((prev) => ({ ...prev, trip_type: value }))
+          }
+        >
           <SelectTrigger className="w-48">
             <SelectValue />
           </SelectTrigger>
           <SelectContent>
-            {TRIP_TYPE_OPTIONS.map(option => (
+            {TRIP_TYPE_OPTIONS.map((option) => (
               <SelectItem key={option.value} value={option.value}>
                 {option.label}
               </SelectItem>
@@ -561,18 +596,18 @@ export const ReviewsSection: React.FC<ReviewsSectionProps> = ({
         <Card>
           <CardContent className="p-12 text-center">
             <AlertCircle className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No reviews yet</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No reviews yet
+            </h3>
             <p className="text-gray-600 mb-4">
               Be the first to share your experience at this property.
             </p>
-            <Button onClick={onWriteReviewClick}>
-              Write the First Review
-            </Button>
+            <Button onClick={onWriteReviewClick}>Write the First Review</Button>
           </CardContent>
         </Card>
       ) : (
         <>
-          {reviews.map(review => (
+          {reviews.map((review) => (
             <ReviewCard
               key={review.id}
               review={review}

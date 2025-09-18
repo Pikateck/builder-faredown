@@ -36,15 +36,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/properties/{{propertyId}}/reviews",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "properties",
-                "{{propertyId}}",
-                "reviews"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "properties", "{{propertyId}}", "reviews"]
             },
             "body": {
               "mode": "raw",
@@ -60,15 +53,8 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/api/properties/{{propertyId}}/reviews?sort=recent&filter=all&page=1&limit=10",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "properties",
-                "{{propertyId}}",
-                "reviews"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "properties", "{{propertyId}}", "reviews"],
               "query": [
                 {
                   "key": "sort",
@@ -106,9 +92,7 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/api/properties/{{propertyId}}/reviews/summary",
-              "host": [
-                "{{baseUrl}}"
-              ],
+              "host": ["{{baseUrl}}"],
               "path": [
                 "api",
                 "properties",
@@ -144,15 +128,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/helpful",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "reviews",
-                "{{reviewId}}",
-                "helpful"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "helpful"]
             },
             "description": "Marks a review as helpful. One vote per user per review."
           },
@@ -189,15 +166,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/report",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "reviews",
-                "{{reviewId}}",
-                "report"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "reviews", "{{reviewId}}", "report"]
             },
             "description": "Reports a review for moderation."
           },
@@ -224,14 +194,8 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/api/admin/reviews?status=pending&page=1&limit=50",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "reviews"
-              ],
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "reviews"],
               "query": [
                 {
                   "key": "status",
@@ -280,15 +244,8 @@
             "method": "GET",
             "url": {
               "raw": "{{baseUrl}}/api/admin/reviews/stats",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "reviews",
-                "stats"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "reviews", "stats"]
             },
             "description": "Gets review statistics for admin dashboard."
           },
@@ -317,16 +274,8 @@
             ],
             "url": {
               "raw": "{{baseUrl}}/api/admin/reviews/{{reviewId}}/approve",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "reviews",
-                "{{reviewId}}",
-                "approve"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "reviews", "{{reviewId}}", "approve"]
             },
             "description": "Approves a pending review."
           },
@@ -363,16 +312,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/admin/reviews/{{reviewId}}/reject",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "reviews",
-                "{{reviewId}}",
-                "reject"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "reviews", "{{reviewId}}", "reject"]
             },
             "description": "Rejects a review with optional reason."
           },
@@ -409,16 +350,8 @@
             },
             "url": {
               "raw": "{{baseUrl}}/api/admin/reviews/{{reviewId}}/respond",
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "path": [
-                "api",
-                "admin",
-                "reviews",
-                "{{reviewId}}",
-                "respond"
-              ]
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "admin", "reviews", "{{reviewId}}", "respond"]
             },
             "description": "Adds an official property response to a review."
           },

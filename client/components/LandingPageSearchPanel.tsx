@@ -121,20 +121,24 @@ export function LandingPageSearchPanel() {
     const lastSearch = getLastSearch();
 
     // Use URL params if available, otherwise fallback to sessionStorage
-    const sourceData = Object.keys(urlParams).length > 0 ? urlParams : lastSearch;
+    const sourceData =
+      Object.keys(urlParams).length > 0 ? urlParams : lastSearch;
 
     if (sourceData) {
       // Set from/to cities
       if (sourceData.from) {
-        const fromMatch = Object.entries(cityData).find(([name, data]) =>
-          sourceData.from.includes(data.code) || sourceData.from.includes(name)
+        const fromMatch = Object.entries(cityData).find(
+          ([name, data]) =>
+            sourceData.from.includes(data.code) ||
+            sourceData.from.includes(name),
         );
         if (fromMatch) setSelectedFromCity(fromMatch[0]);
       }
 
       if (sourceData.to) {
-        const toMatch = Object.entries(cityData).find(([name, data]) =>
-          sourceData.to.includes(data.code) || sourceData.to.includes(name)
+        const toMatch = Object.entries(cityData).find(
+          ([name, data]) =>
+            sourceData.to.includes(data.code) || sourceData.to.includes(name),
         );
         if (toMatch) setSelectedToCity(toMatch[0]);
       }
@@ -158,13 +162,13 @@ export function LandingPageSearchPanel() {
       // Set class
       if (sourceData.cabinClass || sourceData.class) {
         const classStr = sourceData.cabinClass || sourceData.class;
-        const classMap: {[key: string]: string} = {
-          'economy': 'Economy',
-          'premium': 'Premium Economy',
-          'business': 'Business',
-          'first': 'First'
+        const classMap: { [key: string]: string } = {
+          economy: "Economy",
+          premium: "Premium Economy",
+          business: "Business",
+          first: "First",
         };
-        setSelectedClass(classMap[classStr.toLowerCase()] || 'Economy');
+        setSelectedClass(classMap[classStr.toLowerCase()] || "Economy");
       }
 
       // Set trip type
@@ -247,13 +251,13 @@ export function LandingPageSearchPanel() {
   const validateSearch = () => {
     // Check if From city is selected
     if (!selectedFromCity) {
-      alert('Please select a departure city');
+      alert("Please select a departure city");
       return false;
     }
 
     // Check if To city is selected (except for hotels and sightseeing)
     if (!selectedToCity) {
-      alert('Please select a destination city');
+      alert("Please select a destination city");
       return false;
     }
 
@@ -261,14 +265,16 @@ export function LandingPageSearchPanel() {
     const fromCode = cityData[selectedFromCity]?.code || "BOM";
     const toCode = cityData[selectedToCity]?.code || "DXB";
     if (fromCode === toCode) {
-      alert('Departure and destination cities cannot be the same');
+      alert("Departure and destination cities cannot be the same");
       return false;
     }
 
     // Multi-city validation
     if (tripType === "multi-city") {
       if (additionalFlights.length === 0) {
-        alert('Please add at least one additional flight for multi-city travel');
+        alert(
+          "Please add at least one additional flight for multi-city travel",
+        );
         return false;
       }
 
@@ -280,7 +286,9 @@ export function LandingPageSearchPanel() {
           return false;
         }
         if (flight.fromCode === flight.toCode) {
-          alert(`Departure and destination cannot be the same for Flight ${i + 2}`);
+          alert(
+            `Departure and destination cannot be the same for Flight ${i + 2}`,
+          );
           return false;
         }
         if (!flight.date) {
@@ -292,13 +300,13 @@ export function LandingPageSearchPanel() {
 
     // Check if departure date is selected
     if (!departureDate) {
-      alert('Please select a departure date');
+      alert("Please select a departure date");
       return false;
     }
 
     // Check if return date is selected for round-trip
     if (tripType === "round-trip" && !returnDate) {
-      alert('Please select a return date');
+      alert("Please select a return date");
       return false;
     }
 
@@ -315,7 +323,7 @@ export function LandingPageSearchPanel() {
     const toCode = cityData[selectedToCity]?.code || "DXB";
 
     // Debug logging for search payload
-    console.log('Search initiated:', {
+    console.log("Search initiated:", {
       from: { city: selectedFromCity, code: fromCode },
       to: { city: selectedToCity, code: toCode },
       tripType,
@@ -323,14 +331,14 @@ export function LandingPageSearchPanel() {
       returnDate: returnDate?.toISOString(),
       travelers,
       multiCityLegs: additionalFlights.length,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
 
     // Prepare data for sessionStorage (normalized format)
     const searchData = {
       from: `${selectedFromCity} (${fromCode})`,
       to: `${selectedToCity} (${toCode})`,
-      depart: departureDate.toISOString().split('T')[0],
+      depart: departureDate.toISOString().split("T")[0],
       adults: travelers.adults.toString(),
       children: travelers.children.toString(),
       class: selectedClass.toUpperCase(),
@@ -338,7 +346,7 @@ export function LandingPageSearchPanel() {
     };
 
     if (tripType === "round-trip") {
-      searchData.return = returnDate.toISOString().split('T')[0];
+      searchData.return = returnDate.toISOString().split("T")[0];
     }
 
     // Save to sessionStorage for persistence
@@ -361,11 +369,11 @@ export function LandingPageSearchPanel() {
       ];
 
       // Debug logging for multi-city payload
-      console.log('Multi-city search payload:', {
+      console.log("Multi-city search payload:", {
         legs: allLegs,
         totalLegs: allLegs.length,
         travelers,
-        cabinClass: selectedClass
+        cabinClass: selectedClass,
       });
 
       const searchParams = new URLSearchParams({
@@ -379,14 +387,15 @@ export function LandingPageSearchPanel() {
       navigate(`/flights/results?${searchParams.toString()}`);
     } else {
       // Debug logging for regular flight search
-      console.log('Regular flight search payload:', {
+      console.log("Regular flight search payload:", {
         from: `${selectedFromCity} (${fromCode})`,
         to: `${selectedToCity} (${toCode})`,
         departureDate: departureDate.toISOString(),
-        returnDate: tripType === "round-trip" ? returnDate?.toISOString() : null,
+        returnDate:
+          tripType === "round-trip" ? returnDate?.toISOString() : null,
         travelers,
         tripType,
-        cabinClass: selectedClass
+        cabinClass: selectedClass,
       });
 
       // Regular flight search
@@ -991,8 +1000,10 @@ export function LandingPageSearchPanel() {
                             {flight.fromCode}
                           </div>
                           <span className="text-sm text-gray-700 font-medium truncate">
-                          {flight.fromAirport || cityData[flight.from]?.airport || flight.from}
-                        </span>
+                            {flight.fromAirport ||
+                              cityData[flight.from]?.airport ||
+                              flight.from}
+                          </span>
                         </div>
                       </button>
                       {flight.from && flight.from !== "Mumbai" && (
@@ -1001,7 +1012,11 @@ export function LandingPageSearchPanel() {
                             e.stopPropagation();
                             updateFlight(flight.id, "from", "Mumbai");
                             updateFlight(flight.id, "fromCode", "BOM");
-                            updateFlight(flight.id, "fromAirport", "Rajiv Gandhi Shivaji International");
+                            updateFlight(
+                              flight.id,
+                              "fromAirport",
+                              "Rajiv Gandhi Shivaji International",
+                            );
                           }}
                           className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
                           title="Reset to default departure city"
@@ -1033,13 +1048,21 @@ export function LandingPageSearchPanel() {
                               key={city}
                               onClick={() => {
                                 // Debug logging for airport selection
-                                console.log('Airport selection:', {
+                                console.log("Airport selection:", {
                                   flightId: flight.id,
-                                  selected: { code: data.code, name: city, airport: data.airport }
+                                  selected: {
+                                    code: data.code,
+                                    name: city,
+                                    airport: data.airport,
+                                  },
                                 });
                                 updateFlight(flight.id, "from", city);
                                 updateFlight(flight.id, "fromCode", data.code);
-                                updateFlight(flight.id, "fromAirport", data.airport);
+                                updateFlight(
+                                  flight.id,
+                                  "fromAirport",
+                                  data.airport,
+                                );
                                 setAdditionalFlightStates((prev) => ({
                                   ...prev,
                                   [flight.id]: {
@@ -1105,8 +1128,10 @@ export function LandingPageSearchPanel() {
                             {flight.toCode}
                           </div>
                           <span className="text-sm text-gray-700 font-medium truncate">
-                          {flight.toAirport || cityData[flight.to]?.airport || flight.to}
-                        </span>
+                            {flight.toAirport ||
+                              cityData[flight.to]?.airport ||
+                              flight.to}
+                          </span>
                         </div>
                       </button>
                       {flight.to && flight.to !== "Dubai" && (
@@ -1115,7 +1140,11 @@ export function LandingPageSearchPanel() {
                             e.stopPropagation();
                             updateFlight(flight.id, "to", "Dubai");
                             updateFlight(flight.id, "toCode", "DXB");
-                            updateFlight(flight.id, "toAirport", "Dubai International Airport");
+                            updateFlight(
+                              flight.id,
+                              "toAirport",
+                              "Dubai International Airport",
+                            );
                           }}
                           className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
                           title="Reset to default destination city"
@@ -1147,13 +1176,21 @@ export function LandingPageSearchPanel() {
                               key={city}
                               onClick={() => {
                                 // Debug logging for airport selection
-                                console.log('Airport selection:', {
+                                console.log("Airport selection:", {
                                   flightId: flight.id,
-                                  selected: { code: data.code, name: city, airport: data.airport }
+                                  selected: {
+                                    code: data.code,
+                                    name: city,
+                                    airport: data.airport,
+                                  },
                                 });
                                 updateFlight(flight.id, "to", city);
                                 updateFlight(flight.id, "toCode", data.code);
-                                updateFlight(flight.id, "toAirport", data.airport);
+                                updateFlight(
+                                  flight.id,
+                                  "toAirport",
+                                  data.airport,
+                                );
                                 setAdditionalFlightStates((prev) => ({
                                   ...prev,
                                   [flight.id]: {

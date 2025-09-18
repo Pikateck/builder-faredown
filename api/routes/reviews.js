@@ -6,25 +6,25 @@ const router = express.Router();
 // Middleware for authentication (adjust based on your auth system)
 const requireAuth = (req, res, next) => {
   // Check for user in request (set by your auth middleware)
-  if (!req.user && !req.headers['x-user-id']) {
-    return res.status(401).json({ 
-      success: false, 
-      error: "Authentication required to submit reviews" 
+  if (!req.user && !req.headers["x-user-id"]) {
+    return res.status(401).json({
+      success: false,
+      error: "Authentication required to submit reviews",
     });
   }
-  
+
   // If using header-based auth for development
-  if (!req.user && req.headers['x-user-id']) {
-    req.user = { id: req.headers['x-user-id'] };
+  if (!req.user && req.headers["x-user-id"]) {
+    req.user = { id: req.headers["x-user-id"] };
   }
-  
+
   next();
 };
 
 // Optional auth (for helpful/report endpoints)
 const optionalAuth = (req, res, next) => {
-  if (req.headers['x-user-id']) {
-    req.user = { id: req.headers['x-user-id'] };
+  if (req.headers["x-user-id"]) {
+    req.user = { id: req.headers["x-user-id"] };
   }
   next();
 };
@@ -33,16 +33,17 @@ const optionalAuth = (req, res, next) => {
 const requireAdmin = (req, res, next) => {
   // Check for admin role (implement based on your system)
   if (!req.user || !req.user.isAdmin) {
-    return res.status(403).json({ 
-      success: false, 
-      error: "Admin access required" 
+    return res.status(403).json({
+      success: false,
+      error: "Admin access required",
     });
   }
   next();
 };
 
 // Rate limiting helper
-const rateLimitKey = (userId, propertyId) => `review_rate_${userId}_${propertyId}`;
+const rateLimitKey = (userId, propertyId) =>
+  `review_rate_${userId}_${propertyId}`;
 
 // Helper function for validation errors
 const handleValidationErrors = (req, res) => {
@@ -51,7 +52,7 @@ const handleValidationErrors = (req, res) => {
     return res.status(400).json({
       success: false,
       error: "Validation failed",
-      details: errors.array()
+      details: errors.array(),
     });
   }
   return null;
@@ -65,11 +66,14 @@ const handleValidationErrors = (req, res) => {
  * POST /api/properties/:propertyId/reviews
  * Create a new review for a property
  */
-router.post("/api/properties/:propertyId/reviews", 
+router.post(
+  "/api/properties/:propertyId/reviews",
   requireAuth,
   [
     // Validation rules
-    body("overall_rating").isInt({ min: 1, max: 5 }).withMessage("Overall rating must be 1-5"),
+    body("overall_rating")
+      .isInt({ min: 1, max: 5 })
+      .withMessage("Overall rating must be 1-5"),
     body("staff_rating").optional().isInt({ min: 1, max: 5 }),
     body("cleanliness_rating").optional().isInt({ min: 1, max: 5 }),
     body("value_rating").optional().isInt({ min: 1, max: 5 }),
@@ -77,14 +81,24 @@ router.post("/api/properties/:propertyId/reviews",
     body("comfort_rating").optional().isInt({ min: 1, max: 5 }),
     body("location_rating").optional().isInt({ min: 1, max: 5 }),
     body("wifi_rating").optional().isInt({ min: 1, max: 5 }),
-    body("title").isLength({ min: 3, max: 200 }).withMessage("Title must be 3-200 characters"),
-    body("body").isLength({ min: 50, max: 2000 }).withMessage("Review must be 50-2000 characters"),
-    body("trip_type").isIn(["Leisure","Business","Family","Couple","Solo"]).withMessage("Invalid trip type"),
+    body("title")
+      .isLength({ min: 3, max: 200 })
+      .withMessage("Title must be 3-200 characters"),
+    body("body")
+      .isLength({ min: 50, max: 2000 })
+      .withMessage("Review must be 50-2000 characters"),
+    body("trip_type")
+      .isIn(["Leisure", "Business", "Family", "Couple", "Solo"])
+      .withMessage("Invalid trip type"),
     body("room_type").optional().isLength({ max: 255 }),
-    body("country_code").isLength({ min: 2, max: 2 }).withMessage("Country code must be 2 characters"),
+    body("country_code")
+      .isLength({ min: 2, max: 2 })
+      .withMessage("Country code must be 2 characters"),
     body("stay_start").isISO8601().withMessage("Invalid stay start date"),
     body("stay_end").isISO8601().withMessage("Invalid stay end date"),
-    body("reviewer_name").isLength({ min: 1, max: 100 }).withMessage("Name is required")
+    body("reviewer_name")
+      .isLength({ min: 1, max: 100 })
+      .withMessage("Name is required"),
   ],
   async (req, res) => {
     try {
@@ -102,20 +116,20 @@ router.post("/api/properties/:propertyId/reviews",
       if (stayStart >= stayEnd) {
         return res.status(400).json({
           success: false,
-          error: "Stay end date must be after start date"
+          error: "Stay end date must be after start date",
         });
       }
 
       // Check for existing review from this user for this property
       const { rows: existingReviews } = await pool.query(
         "SELECT id FROM reviews WHERE user_id = $1 AND property_id = $2",
-        [user.id, propertyId]
+        [user.id, propertyId],
       );
 
       if (existingReviews.length > 0) {
         return res.status(409).json({
           success: false,
-          error: "You have already reviewed this property"
+          error: "You have already reviewed this property",
         });
       }
 
@@ -126,11 +140,14 @@ router.post("/api/properties/:propertyId/reviews",
           `SELECT 1 FROM hotel_bookings 
            WHERE user_id = $1 AND hotel_code = $2 
            AND status = 'completed' AND check_out_date <= NOW() LIMIT 1`,
-          [user.id, propertyId]
+          [user.id, propertyId],
         );
         verified = bookings.length > 0;
       } catch (error) {
-        console.warn("Could not check booking history for verification:", error.message);
+        console.warn(
+          "Could not check booking history for verification:",
+          error.message,
+        );
         // Continue without verification
       }
 
@@ -139,7 +156,7 @@ router.post("/api/properties/:propertyId/reviews",
       try {
         const { rows: countries } = await pool.query(
           "SELECT name FROM public.countries WHERE iso2 = $1",
-          [payload.country_code.toUpperCase()]
+          [payload.country_code.toUpperCase()],
         );
         if (countries.length > 0) {
           countryName = countries[0].name;
@@ -179,9 +196,9 @@ router.post("/api/properties/:propertyId/reviews",
         payload.stay_start,
         payload.stay_end,
         verified,
-        'pending', // All reviews start as pending
+        "pending", // All reviews start as pending
         payload.reviewer_name,
-        countryName
+        countryName,
       ];
 
       const { rows } = await pool.query(query, values);
@@ -194,80 +211,96 @@ router.post("/api/properties/:propertyId/reviews",
           status: "pending",
           verified_stay: verified,
           created_at: review.created_at,
-          message: "Review submitted successfully and is pending approval"
-        }
+          message: "Review submitted successfully and is pending approval",
+        },
       });
-
     } catch (error) {
       console.error("Error creating review:", error);
       res.status(500).json({
         success: false,
         error: "Internal server error",
-        message: "Failed to submit review"
+        message: "Failed to submit review",
       });
     }
-  }
+  },
 );
 
 /**
  * GET /api/properties/:propertyId/reviews
  * Get reviews for a property with filtering and pagination
  */
-router.get("/api/properties/:propertyId/reviews", [
-  query("page").optional().isInt({ min: 1 }).withMessage("Page must be a positive integer"),
-  query("limit").optional().isInt({ min: 1, max: 50 }).withMessage("Limit must be 1-50"),
-  query("sort").optional().isIn(["recent", "top", "lowest", "helpful"]).withMessage("Invalid sort option"),
-  query("filter").optional().isIn(["all", "verified", "trip_type"]).withMessage("Invalid filter option"),
-  query("trip_type").optional().isIn(["Leisure","Business","Family","Couple","Solo"])
-], async (req, res) => {
-  try {
-    const validationError = handleValidationErrors(req, res);
-    if (validationError) return;
+router.get(
+  "/api/properties/:propertyId/reviews",
+  [
+    query("page")
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage("Page must be a positive integer"),
+    query("limit")
+      .optional()
+      .isInt({ min: 1, max: 50 })
+      .withMessage("Limit must be 1-50"),
+    query("sort")
+      .optional()
+      .isIn(["recent", "top", "lowest", "helpful"])
+      .withMessage("Invalid sort option"),
+    query("filter")
+      .optional()
+      .isIn(["all", "verified", "trip_type"])
+      .withMessage("Invalid filter option"),
+    query("trip_type")
+      .optional()
+      .isIn(["Leisure", "Business", "Family", "Couple", "Solo"]),
+  ],
+  async (req, res) => {
+    try {
+      const validationError = handleValidationErrors(req, res);
+      if (validationError) return;
 
-    const { propertyId } = req.params;
-    const {
-      page = 1,
-      limit = 20,
-      sort = "recent",
-      filter = "all",
-      trip_type
-    } = req.query;
+      const { propertyId } = req.params;
+      const {
+        page = 1,
+        limit = 20,
+        sort = "recent",
+        filter = "all",
+        trip_type,
+      } = req.query;
 
-    const offset = (parseInt(page) - 1) * parseInt(limit);
+      const offset = (parseInt(page) - 1) * parseInt(limit);
 
-    // Build WHERE clause
-    let whereClause = "WHERE r.property_id = $1 AND r.status = 'approved'";
-    const queryParams = [propertyId];
-    let paramCount = 1;
+      // Build WHERE clause
+      let whereClause = "WHERE r.property_id = $1 AND r.status = 'approved'";
+      const queryParams = [propertyId];
+      let paramCount = 1;
 
-    if (filter === "verified") {
-      whereClause += " AND r.verified_stay = true";
-    }
+      if (filter === "verified") {
+        whereClause += " AND r.verified_stay = true";
+      }
 
-    if (trip_type) {
-      paramCount++;
-      whereClause += ` AND r.trip_type = $${paramCount}`;
-      queryParams.push(trip_type);
-    }
+      if (trip_type) {
+        paramCount++;
+        whereClause += ` AND r.trip_type = $${paramCount}`;
+        queryParams.push(trip_type);
+      }
 
-    // Build ORDER BY clause
-    let orderClause;
-    switch (sort) {
-      case "top":
-        orderClause = "ORDER BY r.overall_rating DESC, r.created_at DESC";
-        break;
-      case "lowest":
-        orderClause = "ORDER BY r.overall_rating ASC, r.created_at DESC";
-        break;
-      case "helpful":
-        orderClause = "ORDER BY r.helpful_count DESC, r.created_at DESC";
-        break;
-      default: // recent
-        orderClause = "ORDER BY r.created_at DESC";
-    }
+      // Build ORDER BY clause
+      let orderClause;
+      switch (sort) {
+        case "top":
+          orderClause = "ORDER BY r.overall_rating DESC, r.created_at DESC";
+          break;
+        case "lowest":
+          orderClause = "ORDER BY r.overall_rating ASC, r.created_at DESC";
+          break;
+        case "helpful":
+          orderClause = "ORDER BY r.helpful_count DESC, r.created_at DESC";
+          break;
+        default: // recent
+          orderClause = "ORDER BY r.created_at DESC";
+      }
 
-    // Get reviews with responses
-    const reviewsQuery = `
+      // Get reviews with responses
+      const reviewsQuery = `
       SELECT 
         r.id, r.overall_rating, r.staff_rating, r.cleanliness_rating, r.value_rating,
         r.facilities_rating, r.comfort_rating, r.location_rating, r.wifi_rating,
@@ -283,25 +316,25 @@ router.get("/api/properties/:propertyId/reviews", [
       LIMIT $${++paramCount} OFFSET $${++paramCount}
     `;
 
-    queryParams.push(parseInt(limit), offset);
+      queryParams.push(parseInt(limit), offset);
 
-    // Get total count for pagination
-    const countQuery = `
+      // Get total count for pagination
+      const countQuery = `
       SELECT COUNT(*) as total
       FROM reviews r
       ${whereClause}
     `;
 
-    const [reviewsResult, countResult] = await Promise.all([
-      pool.query(reviewsQuery, queryParams),
-      pool.query(countQuery, queryParams.slice(0, -2)) // Remove limit/offset params
-    ]);
+      const [reviewsResult, countResult] = await Promise.all([
+        pool.query(reviewsQuery, queryParams),
+        pool.query(countQuery, queryParams.slice(0, -2)), // Remove limit/offset params
+      ]);
 
-    const reviews = reviewsResult.rows;
-    const total = parseInt(countResult.rows[0].total);
+      const reviews = reviewsResult.rows;
+      const total = parseInt(countResult.rows[0].total);
 
-    // Get summary stats
-    const summaryQuery = `
+      // Get summary stats
+      const summaryQuery = `
       SELECT 
         total_approved, total_verified, avg_overall, avg_staff, avg_cleanliness,
         avg_value, avg_facilities, avg_comfort, avg_location, avg_wifi,
@@ -310,40 +343,40 @@ router.get("/api/properties/:propertyId/reviews", [
       WHERE property_id = $1
     `;
 
-    const summaryResult = await pool.query(summaryQuery, [propertyId]);
-    const summary = summaryResult.rows[0] || {
-      total_approved: 0,
-      avg_overall: null
-    };
+      const summaryResult = await pool.query(summaryQuery, [propertyId]);
+      const summary = summaryResult.rows[0] || {
+        total_approved: 0,
+        avg_overall: null,
+      };
 
-    res.json({
-      success: true,
-      data: {
-        reviews,
-        pagination: {
-          page: parseInt(page),
-          limit: parseInt(limit),
-          total,
-          pages: Math.ceil(total / parseInt(limit))
+      res.json({
+        success: true,
+        data: {
+          reviews,
+          pagination: {
+            page: parseInt(page),
+            limit: parseInt(limit),
+            total,
+            pages: Math.ceil(total / parseInt(limit)),
+          },
+          summary,
+          filters: {
+            sort,
+            filter,
+            trip_type,
+          },
         },
-        summary,
-        filters: {
-          sort,
-          filter,
-          trip_type
-        }
-      }
-    });
-
-  } catch (error) {
-    console.error("Error fetching reviews:", error);
-    res.status(500).json({
-      success: false,
-      error: "Internal server error",
-      message: "Failed to fetch reviews"
-    });
-  }
-});
+      });
+    } catch (error) {
+      console.error("Error fetching reviews:", error);
+      res.status(500).json({
+        success: false,
+        error: "Internal server error",
+        message: "Failed to fetch reviews",
+      });
+    }
+  },
+);
 
 /**
  * GET /api/properties/:propertyId/reviews/summary
@@ -359,7 +392,7 @@ router.get("/api/properties/:propertyId/reviews/summary", async (req, res) => {
     `;
 
     const { rows } = await pool.query(query, [propertyId]);
-    
+
     if (rows.length === 0) {
       return res.json({
         success: true,
@@ -373,21 +406,20 @@ router.get("/api/properties/:propertyId/reviews/summary", async (req, res) => {
           avg_facilities: null,
           avg_comfort: null,
           avg_location: null,
-          avg_wifi: null
-        }
+          avg_wifi: null,
+        },
       });
     }
 
     res.json({
       success: true,
-      data: rows[0]
+      data: rows[0],
     });
-
   } catch (error) {
     console.error("Error fetching review summary:", error);
     res.status(500).json({
       success: false,
-      error: "Internal server error"
+      error: "Internal server error",
     });
   }
 });
@@ -404,41 +436,40 @@ router.post("/api/reviews/:reviewId/helpful", requireAuth, async (req, res) => {
     // Check if user already voted helpful on this review
     const { rows: existingVotes } = await pool.query(
       "SELECT id FROM review_votes WHERE review_id = $1 AND user_id = $2 AND vote_type = 'helpful'",
-      [reviewId, userId]
+      [reviewId, userId],
     );
 
     if (existingVotes.length > 0) {
       return res.status(409).json({
         success: false,
-        error: "You have already marked this review as helpful"
+        error: "You have already marked this review as helpful",
       });
     }
 
     // Insert the helpful vote
     await pool.query(
       "INSERT INTO review_votes (review_id, user_id, vote_type) VALUES ($1, $2, 'helpful')",
-      [reviewId, userId]
+      [reviewId, userId],
     );
 
     // Get updated helpful count
     const { rows: reviewRows } = await pool.query(
       "SELECT helpful_count FROM reviews WHERE id = $1",
-      [reviewId]
+      [reviewId],
     );
 
     res.json({
       success: true,
       data: {
         helpful_count: reviewRows[0]?.helpful_count || 0,
-        message: "Review marked as helpful"
-      }
+        message: "Review marked as helpful",
+      },
     });
-
   } catch (error) {
     console.error("Error marking review as helpful:", error);
     res.status(500).json({
       success: false,
-      error: "Internal server error"
+      error: "Internal server error",
     });
   }
 });
@@ -447,54 +478,61 @@ router.post("/api/reviews/:reviewId/helpful", requireAuth, async (req, res) => {
  * POST /api/reviews/:reviewId/report
  * Report a review
  */
-router.post("/api/reviews/:reviewId/report", requireAuth, [
-  body("reason").optional().isLength({ max: 500 }).withMessage("Reason must be under 500 characters")
-], async (req, res) => {
-  try {
-    const validationError = handleValidationErrors(req, res);
-    if (validationError) return;
+router.post(
+  "/api/reviews/:reviewId/report",
+  requireAuth,
+  [
+    body("reason")
+      .optional()
+      .isLength({ max: 500 })
+      .withMessage("Reason must be under 500 characters"),
+  ],
+  async (req, res) => {
+    try {
+      const validationError = handleValidationErrors(req, res);
+      if (validationError) return;
 
-    const { reviewId } = req.params;
-    const userId = req.user.id;
-    const { reason } = req.body;
+      const { reviewId } = req.params;
+      const userId = req.user.id;
+      const { reason } = req.body;
 
-    // Check if user already reported this review
-    const { rows: existingVotes } = await pool.query(
-      "SELECT id FROM review_votes WHERE review_id = $1 AND user_id = $2 AND vote_type = 'report'",
-      [reviewId, userId]
-    );
+      // Check if user already reported this review
+      const { rows: existingVotes } = await pool.query(
+        "SELECT id FROM review_votes WHERE review_id = $1 AND user_id = $2 AND vote_type = 'report'",
+        [reviewId, userId],
+      );
 
-    if (existingVotes.length > 0) {
-      return res.status(409).json({
+      if (existingVotes.length > 0) {
+        return res.status(409).json({
+          success: false,
+          error: "You have already reported this review",
+        });
+      }
+
+      // Insert the report vote
+      await pool.query(
+        "INSERT INTO review_votes (review_id, user_id, vote_type) VALUES ($1, $2, 'report')",
+        [reviewId, userId],
+      );
+
+      // Log the report reason if provided (you might want a separate reports table)
+      if (reason) {
+        console.log(`Review ${reviewId} reported by user ${userId}: ${reason}`);
+      }
+
+      res.json({
+        success: true,
+        message: "Review reported successfully",
+      });
+    } catch (error) {
+      console.error("Error reporting review:", error);
+      res.status(500).json({
         success: false,
-        error: "You have already reported this review"
+        error: "Internal server error",
       });
     }
-
-    // Insert the report vote
-    await pool.query(
-      "INSERT INTO review_votes (review_id, user_id, vote_type) VALUES ($1, $2, 'report')",
-      [reviewId, userId]
-    );
-
-    // Log the report reason if provided (you might want a separate reports table)
-    if (reason) {
-      console.log(`Review ${reviewId} reported by user ${userId}: ${reason}`);
-    }
-
-    res.json({
-      success: true,
-      message: "Review reported successfully"
-    });
-
-  } catch (error) {
-    console.error("Error reporting review:", error);
-    res.status(500).json({
-      success: false,
-      error: "Internal server error"
-    });
-  }
-});
+  },
+);
 
 // =====================================================
 // ADMIN REVIEW ENDPOINTS
@@ -504,48 +542,67 @@ router.post("/api/reviews/:reviewId/report", requireAuth, [
  * GET /api/admin/reviews
  * Get reviews for admin moderation with filtering
  */
-router.get("/api/admin/reviews", requireAdmin, [
-  query("property_id").optional().isInt().withMessage("Property ID must be an integer"),
-  query("status").optional().isIn(["pending", "approved", "rejected"]).withMessage("Invalid status"),
-  query("verified").optional().isBoolean().withMessage("Verified must be boolean"),
-  query("page").optional().isInt({ min: 1 }).withMessage("Page must be positive integer"),
-  query("limit").optional().isInt({ min: 1, max: 100 }).withMessage("Limit must be 1-100")
-], async (req, res) => {
-  try {
-    const validationError = handleValidationErrors(req, res);
-    if (validationError) return;
+router.get(
+  "/api/admin/reviews",
+  requireAdmin,
+  [
+    query("property_id")
+      .optional()
+      .isInt()
+      .withMessage("Property ID must be an integer"),
+    query("status")
+      .optional()
+      .isIn(["pending", "approved", "rejected"])
+      .withMessage("Invalid status"),
+    query("verified")
+      .optional()
+      .isBoolean()
+      .withMessage("Verified must be boolean"),
+    query("page")
+      .optional()
+      .isInt({ min: 1 })
+      .withMessage("Page must be positive integer"),
+    query("limit")
+      .optional()
+      .isInt({ min: 1, max: 100 })
+      .withMessage("Limit must be 1-100"),
+  ],
+  async (req, res) => {
+    try {
+      const validationError = handleValidationErrors(req, res);
+      if (validationError) return;
 
-    const {
-      property_id,
-      status = "pending",
-      verified,
-      page = 1,
-      limit = 50
-    } = req.query;
+      const {
+        property_id,
+        status = "pending",
+        verified,
+        page = 1,
+        limit = 50,
+      } = req.query;
 
-    const offset = (parseInt(page) - 1) * parseInt(limit);
+      const offset = (parseInt(page) - 1) * parseInt(limit);
 
-    // Build WHERE clause
-    let whereClause = "WHERE 1=1";
-    const queryParams = [];
-    let paramCount = 0;
+      // Build WHERE clause
+      let whereClause = "WHERE 1=1";
+      const queryParams = [];
+      let paramCount = 0;
 
-    if (property_id) {
-      whereClause += ` AND r.property_id = $${++paramCount}`;
-      queryParams.push(property_id);
-    }
+      if (property_id) {
+        whereClause += ` AND r.property_id = $${++paramCount}`;
+        queryParams.push(property_id);
+      }
 
-    if (status) {
-      whereClause += ` AND r.status = $${++paramCount}`;
-      queryParams.push(status);
-    }
+      if (status) {
+        whereClause += ` AND r.status = $${++paramCount}`;
+        queryParams.push(status);
+      }
 
-    if (verified !== undefined) {
-      whereClause += ` AND r.verified_stay = $${++paramCount}`;
-      queryParams.push(verified === 'true');
-    }
+      if (verified !== undefined) {
+        whereClause += ` AND r.verified_stay = $${++paramCount}`;
+        queryParams.push(verified === "true");
+      }
 
-    const query = `
+      const query = `
       SELECT 
         r.id, r.property_id, r.user_id, r.overall_rating, r.title, r.body,
         r.trip_type, r.room_type, r.country_code, r.stay_start, r.stay_end,
@@ -559,168 +616,186 @@ router.get("/api/admin/reviews", requireAdmin, [
       LIMIT $${++paramCount} OFFSET $${++paramCount}
     `;
 
-    queryParams.push(parseInt(limit), offset);
+      queryParams.push(parseInt(limit), offset);
 
-    const { rows } = await pool.query(query, queryParams);
+      const { rows } = await pool.query(query, queryParams);
 
-    res.json({
-      success: true,
-      data: rows,
-      pagination: {
-        page: parseInt(page),
-        limit: parseInt(limit)
-      }
-    });
-
-  } catch (error) {
-    console.error("Error fetching admin reviews:", error);
-    res.status(500).json({
-      success: false,
-      error: "Internal server error"
-    });
-  }
-});
+      res.json({
+        success: true,
+        data: rows,
+        pagination: {
+          page: parseInt(page),
+          limit: parseInt(limit),
+        },
+      });
+    } catch (error) {
+      console.error("Error fetching admin reviews:", error);
+      res.status(500).json({
+        success: false,
+        error: "Internal server error",
+      });
+    }
+  },
+);
 
 /**
  * POST /api/admin/reviews/:reviewId/approve
  * Approve a review
  */
-router.post("/api/admin/reviews/:reviewId/approve", requireAdmin, async (req, res) => {
-  try {
-    const { reviewId } = req.params;
+router.post(
+  "/api/admin/reviews/:reviewId/approve",
+  requireAdmin,
+  async (req, res) => {
+    try {
+      const { reviewId } = req.params;
 
-    const { rows } = await pool.query(
-      "UPDATE reviews SET status = 'approved', updated_at = NOW() WHERE id = $1 RETURNING id, status",
-      [reviewId]
-    );
+      const { rows } = await pool.query(
+        "UPDATE reviews SET status = 'approved', updated_at = NOW() WHERE id = $1 RETURNING id, status",
+        [reviewId],
+      );
 
-    if (rows.length === 0) {
-      return res.status(404).json({
+      if (rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          error: "Review not found",
+        });
+      }
+
+      res.json({
+        success: true,
+        data: {
+          id: rows[0].id,
+          status: rows[0].status,
+          message: "Review approved successfully",
+        },
+      });
+    } catch (error) {
+      console.error("Error approving review:", error);
+      res.status(500).json({
         success: false,
-        error: "Review not found"
+        error: "Internal server error",
       });
     }
-
-    res.json({
-      success: true,
-      data: {
-        id: rows[0].id,
-        status: rows[0].status,
-        message: "Review approved successfully"
-      }
-    });
-
-  } catch (error) {
-    console.error("Error approving review:", error);
-    res.status(500).json({
-      success: false,
-      error: "Internal server error"
-    });
-  }
-});
+  },
+);
 
 /**
  * POST /api/admin/reviews/:reviewId/reject
  * Reject a review
  */
-router.post("/api/admin/reviews/:reviewId/reject", requireAdmin, [
-  body("reason").optional().isLength({ max: 500 }).withMessage("Reason must be under 500 characters")
-], async (req, res) => {
-  try {
-    const validationError = handleValidationErrors(req, res);
-    if (validationError) return;
+router.post(
+  "/api/admin/reviews/:reviewId/reject",
+  requireAdmin,
+  [
+    body("reason")
+      .optional()
+      .isLength({ max: 500 })
+      .withMessage("Reason must be under 500 characters"),
+  ],
+  async (req, res) => {
+    try {
+      const validationError = handleValidationErrors(req, res);
+      if (validationError) return;
 
-    const { reviewId } = req.params;
-    const { reason } = req.body;
+      const { reviewId } = req.params;
+      const { reason } = req.body;
 
-    const { rows } = await pool.query(
-      "UPDATE reviews SET status = 'rejected', updated_at = NOW() WHERE id = $1 RETURNING id, status",
-      [reviewId]
-    );
+      const { rows } = await pool.query(
+        "UPDATE reviews SET status = 'rejected', updated_at = NOW() WHERE id = $1 RETURNING id, status",
+        [reviewId],
+      );
 
-    if (rows.length === 0) {
-      return res.status(404).json({
+      if (rows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          error: "Review not found",
+        });
+      }
+
+      // Log rejection reason
+      if (reason) {
+        console.log(
+          `Review ${reviewId} rejected by admin ${req.user.id}: ${reason}`,
+        );
+      }
+
+      res.json({
+        success: true,
+        data: {
+          id: rows[0].id,
+          status: rows[0].status,
+          message: "Review rejected successfully",
+        },
+      });
+    } catch (error) {
+      console.error("Error rejecting review:", error);
+      res.status(500).json({
         success: false,
-        error: "Review not found"
+        error: "Internal server error",
       });
     }
-
-    // Log rejection reason
-    if (reason) {
-      console.log(`Review ${reviewId} rejected by admin ${req.user.id}: ${reason}`);
-    }
-
-    res.json({
-      success: true,
-      data: {
-        id: rows[0].id,
-        status: rows[0].status,
-        message: "Review rejected successfully"
-      }
-    });
-
-  } catch (error) {
-    console.error("Error rejecting review:", error);
-    res.status(500).json({
-      success: false,
-      error: "Internal server error"
-    });
-  }
-});
+  },
+);
 
 /**
  * POST /api/admin/reviews/:reviewId/respond
  * Add an admin response to a review
  */
-router.post("/api/admin/reviews/:reviewId/respond", requireAdmin, [
-  body("body").isLength({ min: 10, max: 1000 }).withMessage("Response must be 10-1000 characters")
-], async (req, res) => {
-  try {
-    const validationError = handleValidationErrors(req, res);
-    if (validationError) return;
+router.post(
+  "/api/admin/reviews/:reviewId/respond",
+  requireAdmin,
+  [
+    body("body")
+      .isLength({ min: 10, max: 1000 })
+      .withMessage("Response must be 10-1000 characters"),
+  ],
+  async (req, res) => {
+    try {
+      const validationError = handleValidationErrors(req, res);
+      if (validationError) return;
 
-    const { reviewId } = req.params;
-    const { body: responseBody } = req.body;
-    const adminId = req.user.id;
+      const { reviewId } = req.params;
+      const { body: responseBody } = req.body;
+      const adminId = req.user.id;
 
-    // Check if review exists
-    const { rows: reviewRows } = await pool.query(
-      "SELECT id FROM reviews WHERE id = $1",
-      [reviewId]
-    );
+      // Check if review exists
+      const { rows: reviewRows } = await pool.query(
+        "SELECT id FROM reviews WHERE id = $1",
+        [reviewId],
+      );
 
-    if (reviewRows.length === 0) {
-      return res.status(404).json({
+      if (reviewRows.length === 0) {
+        return res.status(404).json({
+          success: false,
+          error: "Review not found",
+        });
+      }
+
+      // Insert the response
+      const { rows } = await pool.query(
+        "INSERT INTO review_responses (review_id, admin_id, body) VALUES ($1, $2, $3) RETURNING id, created_at",
+        [reviewId, adminId, responseBody],
+      );
+
+      res.json({
+        success: true,
+        data: {
+          id: rows[0].id,
+          review_id: reviewId,
+          body: responseBody,
+          created_at: rows[0].created_at,
+          message: "Response added successfully",
+        },
+      });
+    } catch (error) {
+      console.error("Error adding admin response:", error);
+      res.status(500).json({
         success: false,
-        error: "Review not found"
+        error: "Internal server error",
       });
     }
-
-    // Insert the response
-    const { rows } = await pool.query(
-      "INSERT INTO review_responses (review_id, admin_id, body) VALUES ($1, $2, $3) RETURNING id, created_at",
-      [reviewId, adminId, responseBody]
-    );
-
-    res.json({
-      success: true,
-      data: {
-        id: rows[0].id,
-        review_id: reviewId,
-        body: responseBody,
-        created_at: rows[0].created_at,
-        message: "Response added successfully"
-      }
-    });
-
-  } catch (error) {
-    console.error("Error adding admin response:", error);
-    res.status(500).json({
-      success: false,
-      error: "Internal server error"
-    });
-  }
-});
+  },
+);
 
 /**
  * GET /api/admin/reviews/stats
@@ -746,14 +821,13 @@ router.get("/api/admin/reviews/stats", requireAdmin, async (req, res) => {
 
     res.json({
       success: true,
-      data: rows[0]
+      data: rows[0],
     });
-
   } catch (error) {
     console.error("Error fetching review stats:", error);
     res.status(500).json({
       success: false,
-      error: "Internal server error"
+      error: "Internal server error",
     });
   }
 });

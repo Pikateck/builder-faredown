@@ -44,7 +44,8 @@ export function SightseeingSearchForm() {
     const lastSearch = getLastSearch();
 
     // Use URL params if available, otherwise fallback to sessionStorage
-    const sourceData = Object.keys(urlParams).length > 0 ? urlParams : lastSearch;
+    const sourceData =
+      Object.keys(urlParams).length > 0 ? urlParams : lastSearch;
 
     if (sourceData) {
       // Set destination
@@ -132,13 +133,13 @@ export function SightseeingSearchForm() {
       // Prepare data for sessionStorage (normalized format)
       const searchData = {
         city: destination,
-        date: tourDate.toISOString().split('T')[0],
+        date: tourDate.toISOString().split("T")[0],
         adults: "2",
         children: "0",
       };
 
       if (endDate) {
-        searchData.endDate = endDate.toISOString().split('T')[0];
+        searchData.endDate = endDate.toISOString().split("T")[0];
       }
 
       // Save to sessionStorage for persistence

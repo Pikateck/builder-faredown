@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect } from "react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
 } from "@/components/ui/select";
 import {
   Dialog,
@@ -18,7 +18,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { toast } from "@/hooks/use-toast";
-import { 
+import {
   Star,
   CheckCircle,
   XCircle,
@@ -34,7 +34,7 @@ import {
   Eye,
   AlertTriangle,
   Loader2,
-  MoreHorizontal
+  MoreHorizontal,
 } from "lucide-react";
 
 interface Review {
@@ -57,7 +57,7 @@ interface Review {
   stay_start: string;
   stay_end: string;
   verified_stay: boolean;
-  status: 'pending' | 'approved' | 'rejected';
+  status: "pending" | "approved" | "rejected";
   helpful_count: number;
   reported_count: number;
   reviewer_name: string;
@@ -80,19 +80,19 @@ interface AdminStats {
   reviews_last_7d: number;
 }
 
-const StarDisplay: React.FC<{ rating: number; size?: 'sm' | 'md' }> = ({ 
-  rating, 
-  size = 'sm' 
+const StarDisplay: React.FC<{ rating: number; size?: "sm" | "md" }> = ({
+  rating,
+  size = "sm",
 }) => {
-  const sizeClass = size === 'sm' ? 'w-4 h-4' : 'w-5 h-5';
-  
+  const sizeClass = size === "sm" ? "w-4 h-4" : "w-5 h-5";
+
   return (
     <div className="flex items-center">
       {[1, 2, 3, 4, 5].map((star) => (
         <Star
           key={star}
           className={`${sizeClass} ${
-            star <= rating ? 'text-yellow-400 fill-yellow-400' : 'text-gray-300'
+            star <= rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
           }`}
         />
       ))}
@@ -108,23 +108,23 @@ const ReviewCard: React.FC<{
   isLoading: boolean;
 }> = ({ review, onApprove, onReject, onRespond, isLoading }) => {
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('en-US', {
-      year: 'numeric',
-      month: 'short',
-      day: 'numeric',
-      hour: '2-digit',
-      minute: '2-digit'
+    return new Date(dateString).toLocaleDateString("en-US", {
+      year: "numeric",
+      month: "short",
+      day: "numeric",
+      hour: "2-digit",
+      minute: "2-digit",
     });
   };
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'approved':
-        return 'bg-green-100 text-green-800';
-      case 'rejected':
-        return 'bg-red-100 text-red-800';
+      case "approved":
+        return "bg-green-100 text-green-800";
+      case "rejected":
+        return "bg-red-100 text-red-800";
       default:
-        return 'bg-yellow-100 text-yellow-800';
+        return "bg-yellow-100 text-yellow-800";
     }
   };
 
@@ -192,17 +192,19 @@ const ReviewCard: React.FC<{
           <div className="flex items-center gap-1">
             <Calendar className="w-3 h-3" />
             <span>
-              {getDaysBetween(review.stay_start, review.stay_end)} nights •{' '}
-              {new Date(review.stay_start).toLocaleDateString('en-US', { 
-                month: 'short', 
-                year: 'numeric' 
+              {getDaysBetween(review.stay_start, review.stay_end)} nights •{" "}
+              {new Date(review.stay_start).toLocaleDateString("en-US", {
+                month: "short",
+                year: "numeric",
               })}
             </span>
           </div>
         </div>
 
         {/* Category Ratings */}
-        {(review.staff_rating || review.cleanliness_rating || review.value_rating) && (
+        {(review.staff_rating ||
+          review.cleanliness_rating ||
+          review.value_rating) && (
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 p-3 bg-gray-50 rounded-lg">
             {review.staff_rating && (
               <div className="text-center">
@@ -234,7 +236,9 @@ const ReviewCard: React.FC<{
         {/* Property Response */}
         {review.response_body && (
           <div className="mt-4 p-4 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-            <h4 className="font-medium text-blue-900 mb-2">Property Response</h4>
+            <h4 className="font-medium text-blue-900 mb-2">
+              Property Response
+            </h4>
             <p className="text-blue-800 text-sm">{review.response_body}</p>
             <p className="text-xs text-blue-600 mt-2">
               {formatDate(review.response_date!)}
@@ -259,7 +263,7 @@ const ReviewCard: React.FC<{
         {/* Admin Actions */}
         <div className="flex items-center justify-between pt-4 border-t border-gray-200">
           <div className="flex items-center gap-2">
-            {review.status === 'pending' && (
+            {review.status === "pending" && (
               <>
                 <Button
                   size="sm"
@@ -288,7 +292,7 @@ const ReviewCard: React.FC<{
               disabled={isLoading}
             >
               <MessageSquare className="w-4 h-4 mr-1" />
-              {review.response_body ? 'Edit Response' : 'Respond'}
+              {review.response_body ? "Edit Response" : "Respond"}
             </Button>
           </div>
           <div className="text-xs text-gray-500">
@@ -300,18 +304,18 @@ const ReviewCard: React.FC<{
   );
 };
 
-const StatsCard: React.FC<{ title: string; value: number | string; icon: React.ReactNode; color?: string }> = ({
-  title,
-  value,
-  icon,
-  color = 'blue'
-}) => {
+const StatsCard: React.FC<{
+  title: string;
+  value: number | string;
+  icon: React.ReactNode;
+  color?: string;
+}> = ({ title, value, icon, color = "blue" }) => {
   const colorClasses = {
-    blue: 'bg-blue-100 text-blue-600',
-    green: 'bg-green-100 text-green-600',
-    yellow: 'bg-yellow-100 text-yellow-600',
-    red: 'bg-red-100 text-red-600',
-    purple: 'bg-purple-100 text-purple-600'
+    blue: "bg-blue-100 text-blue-600",
+    green: "bg-green-100 text-green-600",
+    yellow: "bg-yellow-100 text-yellow-600",
+    red: "bg-red-100 text-red-600",
+    purple: "bg-purple-100 text-purple-600",
   };
 
   return (
@@ -322,7 +326,9 @@ const StatsCard: React.FC<{ title: string; value: number | string; icon: React.R
             <p className="text-sm font-medium text-gray-600">{title}</p>
             <p className="text-2xl font-bold text-gray-900">{value}</p>
           </div>
-          <div className={`w-12 h-12 rounded-lg flex items-center justify-center ${colorClasses[color as keyof typeof colorClasses]}`}>
+          <div
+            className={`w-12 h-12 rounded-lg flex items-center justify-center ${colorClasses[color as keyof typeof colorClasses]}`}
+          >
             {icon}
           </div>
         </div>
@@ -338,11 +344,18 @@ const ResponseModal: React.FC<{
   existingResponse?: string;
   onSubmit: (reviewId: string, response: string) => void;
   isSubmitting: boolean;
-}> = ({ isOpen, onClose, reviewId, existingResponse, onSubmit, isSubmitting }) => {
-  const [response, setResponse] = useState(existingResponse || '');
+}> = ({
+  isOpen,
+  onClose,
+  reviewId,
+  existingResponse,
+  onSubmit,
+  isSubmitting,
+}) => {
+  const [response, setResponse] = useState(existingResponse || "");
 
   useEffect(() => {
-    setResponse(existingResponse || '');
+    setResponse(existingResponse || "");
   }, [existingResponse, isOpen]);
 
   const handleSubmit = () => {
@@ -350,7 +363,7 @@ const ResponseModal: React.FC<{
       toast({
         title: "Error",
         description: "Response must be at least 10 characters long",
-        variant: "destructive"
+        variant: "destructive",
       });
       return;
     }
@@ -362,7 +375,7 @@ const ResponseModal: React.FC<{
       <DialogContent className="max-w-md">
         <DialogHeader>
           <DialogTitle>
-            {existingResponse ? 'Edit Response' : 'Respond to Review'}
+            {existingResponse ? "Edit Response" : "Respond to Review"}
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4">
@@ -392,7 +405,7 @@ const ResponseModal: React.FC<{
                   Submitting...
                 </>
               ) : (
-                'Submit Response'
+                "Submit Response"
               )}
             </Button>
           </div>
@@ -409,33 +422,33 @@ export const ReviewModerationPanel: React.FC = () => {
   const [isActionLoading, setIsActionLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const [filters, setFilters] = useState({
-    status: 'pending',
-    property_id: '',
-    verified: ''
+    status: "pending",
+    property_id: "",
+    verified: "",
   });
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [selectedReview, setSelectedReview] = useState<string | null>(null);
   const [responseModal, setResponseModal] = useState({
     isOpen: false,
-    reviewId: '',
-    existingResponse: ''
+    reviewId: "",
+    existingResponse: "",
   });
 
   // Fetch admin stats
   const fetchStats = async () => {
     try {
-      const response = await fetch('/api/admin/reviews/stats', {
+      const response = await fetch("/api/admin/reviews/stats", {
         headers: {
-          'X-User-ID': 'admin' // Replace with actual admin auth
-        }
+          "X-User-ID": "admin", // Replace with actual admin auth
+        },
       });
       const result = await response.json();
-      
+
       if (result.success) {
         setStats(result.data);
       }
     } catch (error) {
-      console.error('Error fetching stats:', error);
+      console.error("Error fetching stats:", error);
     }
   };
 
@@ -445,14 +458,14 @@ export const ReviewModerationPanel: React.FC = () => {
     try {
       const params = new URLSearchParams({
         page: page.toString(),
-        limit: '20',
-        ...filters
+        limit: "20",
+        ...filters,
       });
 
       const response = await fetch(`/api/admin/reviews?${params}`, {
         headers: {
-          'X-User-ID': 'admin' // Replace with actual admin auth
-        }
+          "X-User-ID": "admin", // Replace with actual admin auth
+        },
       });
       const result = await response.json();
 
@@ -460,14 +473,14 @@ export const ReviewModerationPanel: React.FC = () => {
         setReviews(result.data);
         setCurrentPage(page);
       } else {
-        throw new Error(result.error || 'Failed to fetch reviews');
+        throw new Error(result.error || "Failed to fetch reviews");
       }
     } catch (error) {
-      console.error('Error fetching reviews:', error);
+      console.error("Error fetching reviews:", error);
       toast({
         title: "Error",
         description: "Failed to load reviews",
-        variant: "destructive"
+        variant: "destructive",
       });
     } finally {
       setIsLoading(false);
@@ -485,38 +498,41 @@ export const ReviewModerationPanel: React.FC = () => {
     setIsActionLoading(true);
     try {
       const response = await fetch(`/api/admin/reviews/${reviewId}/approve`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'X-User-ID': 'admin'
-        }
+          "X-User-ID": "admin",
+        },
       });
 
       const result = await response.json();
 
       if (result.success) {
-        setReviews(prev => prev.map(review => 
-          review.id === reviewId 
-            ? { ...review, status: 'approved' as const }
-            : review
-        ));
-        
+        setReviews((prev) =>
+          prev.map((review) =>
+            review.id === reviewId
+              ? { ...review, status: "approved" as const }
+              : review,
+          ),
+        );
+
         toast({
           title: "Success",
           description: "Review approved successfully",
-          variant: "default"
+          variant: "default",
         });
-        
+
         // Refresh stats
         fetchStats();
       } else {
-        throw new Error(result.error || 'Failed to approve review');
+        throw new Error(result.error || "Failed to approve review");
       }
     } catch (error) {
-      console.error('Error approving review:', error);
+      console.error("Error approving review:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to approve review",
-        variant: "destructive"
+        description:
+          error instanceof Error ? error.message : "Failed to approve review",
+        variant: "destructive",
       });
     } finally {
       setIsActionLoading(false);
@@ -528,40 +544,43 @@ export const ReviewModerationPanel: React.FC = () => {
     setIsActionLoading(true);
     try {
       const response = await fetch(`/api/admin/reviews/${reviewId}/reject`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'X-User-ID': 'admin'
+          "Content-Type": "application/json",
+          "X-User-ID": "admin",
         },
-        body: JSON.stringify({ reason: 'Rejected by admin' })
+        body: JSON.stringify({ reason: "Rejected by admin" }),
       });
 
       const result = await response.json();
 
       if (result.success) {
-        setReviews(prev => prev.map(review => 
-          review.id === reviewId 
-            ? { ...review, status: 'rejected' as const }
-            : review
-        ));
-        
+        setReviews((prev) =>
+          prev.map((review) =>
+            review.id === reviewId
+              ? { ...review, status: "rejected" as const }
+              : review,
+          ),
+        );
+
         toast({
           title: "Success",
           description: "Review rejected",
-          variant: "default"
+          variant: "default",
         });
-        
+
         // Refresh stats
         fetchStats();
       } else {
-        throw new Error(result.error || 'Failed to reject review');
+        throw new Error(result.error || "Failed to reject review");
       }
     } catch (error) {
-      console.error('Error rejecting review:', error);
+      console.error("Error rejecting review:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to reject review",
-        variant: "destructive"
+        description:
+          error instanceof Error ? error.message : "Failed to reject review",
+        variant: "destructive",
       });
     } finally {
       setIsActionLoading(false);
@@ -569,48 +588,54 @@ export const ReviewModerationPanel: React.FC = () => {
   };
 
   // Handle response submission
-  const handleResponseSubmit = async (reviewId: string, responseText: string) => {
+  const handleResponseSubmit = async (
+    reviewId: string,
+    responseText: string,
+  ) => {
     setIsActionLoading(true);
     try {
       const response = await fetch(`/api/admin/reviews/${reviewId}/respond`, {
-        method: 'POST',
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json',
-          'X-User-ID': 'admin'
+          "Content-Type": "application/json",
+          "X-User-ID": "admin",
         },
-        body: JSON.stringify({ body: responseText })
+        body: JSON.stringify({ body: responseText }),
       });
 
       const result = await response.json();
 
       if (result.success) {
         // Update the review in the list
-        setReviews(prev => prev.map(review => 
-          review.id === reviewId 
-            ? { 
-                ...review, 
-                response_body: responseText,
-                response_date: new Date().toISOString()
-              }
-            : review
-        ));
-        
-        setResponseModal({ isOpen: false, reviewId: '', existingResponse: '' });
-        
+        setReviews((prev) =>
+          prev.map((review) =>
+            review.id === reviewId
+              ? {
+                  ...review,
+                  response_body: responseText,
+                  response_date: new Date().toISOString(),
+                }
+              : review,
+          ),
+        );
+
+        setResponseModal({ isOpen: false, reviewId: "", existingResponse: "" });
+
         toast({
           title: "Success",
           description: "Response added successfully",
-          variant: "default"
+          variant: "default",
         });
       } else {
-        throw new Error(result.error || 'Failed to submit response');
+        throw new Error(result.error || "Failed to submit response");
       }
     } catch (error) {
-      console.error('Error submitting response:', error);
+      console.error("Error submitting response:", error);
       toast({
         title: "Error",
-        description: error instanceof Error ? error.message : "Failed to submit response",
-        variant: "destructive"
+        description:
+          error instanceof Error ? error.message : "Failed to submit response",
+        variant: "destructive",
       });
     } finally {
       setIsActionLoading(false);
@@ -619,11 +644,11 @@ export const ReviewModerationPanel: React.FC = () => {
 
   // Open response modal
   const openResponseModal = (reviewId: string) => {
-    const review = reviews.find(r => r.id === reviewId);
+    const review = reviews.find((r) => r.id === reviewId);
     setResponseModal({
       isOpen: true,
       reviewId,
-      existingResponse: review?.response_body || ''
+      existingResponse: review?.response_body || "",
     });
   };
 
@@ -632,7 +657,9 @@ export const ReviewModerationPanel: React.FC = () => {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Review Moderation</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            Review Moderation
+          </h1>
           <p className="text-gray-600">Manage and moderate customer reviews</p>
         </div>
         <Button variant="outline">
@@ -658,7 +685,7 @@ export const ReviewModerationPanel: React.FC = () => {
           />
           <StatsCard
             title="Avg Rating"
-            value={stats.avg_rating ? stats.avg_rating.toFixed(1) : 'N/A'}
+            value={stats.avg_rating ? stats.avg_rating.toFixed(1) : "N/A"}
             icon={<Star className="w-6 h-6" />}
             color="green"
           />
@@ -684,8 +711,13 @@ export const ReviewModerationPanel: React.FC = () => {
                 className="w-64"
               />
             </div>
-            
-            <Select value={filters.status} onValueChange={(value) => setFilters(prev => ({ ...prev, status: value }))}>
+
+            <Select
+              value={filters.status}
+              onValueChange={(value) =>
+                setFilters((prev) => ({ ...prev, status: value }))
+              }
+            >
               <SelectTrigger className="w-48">
                 <SelectValue />
               </SelectTrigger>
@@ -697,7 +729,12 @@ export const ReviewModerationPanel: React.FC = () => {
               </SelectContent>
             </Select>
 
-            <Select value={filters.verified} onValueChange={(value) => setFilters(prev => ({ ...prev, verified: value }))}>
+            <Select
+              value={filters.verified}
+              onValueChange={(value) =>
+                setFilters((prev) => ({ ...prev, verified: value }))
+              }
+            >
               <SelectTrigger className="w-48">
                 <SelectValue placeholder="Verification Status" />
               </SelectTrigger>
@@ -711,7 +748,9 @@ export const ReviewModerationPanel: React.FC = () => {
             <Input
               placeholder="Property ID"
               value={filters.property_id}
-              onChange={(e) => setFilters(prev => ({ ...prev, property_id: e.target.value }))}
+              onChange={(e) =>
+                setFilters((prev) => ({ ...prev, property_id: e.target.value }))
+              }
               className="w-32"
             />
           </div>
@@ -728,7 +767,9 @@ export const ReviewModerationPanel: React.FC = () => {
         <Card>
           <CardContent className="p-12 text-center">
             <MessageSquare className="w-12 h-12 text-gray-400 mx-auto mb-4" />
-            <h3 className="text-lg font-medium text-gray-900 mb-2">No reviews found</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">
+              No reviews found
+            </h3>
             <p className="text-gray-600">
               No reviews match your current filters.
             </p>
@@ -736,7 +777,7 @@ export const ReviewModerationPanel: React.FC = () => {
         </Card>
       ) : (
         <>
-          {reviews.map(review => (
+          {reviews.map((review) => (
             <ReviewCard
               key={review.id}
               review={review}
@@ -756,9 +797,7 @@ export const ReviewModerationPanel: React.FC = () => {
             >
               Previous
             </Button>
-            <span className="text-sm text-gray-600">
-              Page {currentPage}
-            </span>
+            <span className="text-sm text-gray-600">Page {currentPage}</span>
             <Button
               variant="outline"
               onClick={() => fetchReviews(currentPage + 1)}
@@ -773,7 +812,13 @@ export const ReviewModerationPanel: React.FC = () => {
       {/* Response Modal */}
       <ResponseModal
         isOpen={responseModal.isOpen}
-        onClose={() => setResponseModal({ isOpen: false, reviewId: '', existingResponse: '' })}
+        onClose={() =>
+          setResponseModal({
+            isOpen: false,
+            reviewId: "",
+            existingResponse: "",
+          })
+        }
         reviewId={responseModal.reviewId}
         existingResponse={responseModal.existingResponse}
         onSubmit={handleResponseSubmit}

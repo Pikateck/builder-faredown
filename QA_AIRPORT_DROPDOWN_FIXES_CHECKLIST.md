@@ -11,25 +11,25 @@
 
 | Area               | Checkpoint                                                               | Status | Tested By | Date |
 | ------------------ | ------------------------------------------------------------------------ | ------ | --------- | ---- |
-| **UI Behavior**    | Selecting DXB (or any airport) updates visible label instantly (desktop) | [ ]   |           |      |
-|                    | Selecting airports updates correctly in mobile search + multi-city input | [ ]   |           |      |
-|                    | Chosen airport persists between steps/pages                              | [ ]   |           |      |
-| **Validation**     | Search blocked if any From/To field is blank                             | [ ]   |           |      |
-|                    | Search blocked if From and To are the same airport                       | [ ]   |           |      |
-|                    | Search blocked if any date is missing                                    | [ ]   |           |      |
-|                    | Error messages display clearly and inline                                | [ ]   |           |      |
-| **Data Flow**      | Console logs show correct `code + name` for each leg                     | [ ]   |           |      |
-|                    | Console logs show full payload before submission                         | [ ]   |           |      |
-|                    | API receives correct airport data (verified via Postman)                 | [ ]   |           |      |
-|                    | No incorrect/fallback airport codes in API request body                  | [ ]   |           |      |
-| **Database Logs**  | Entries created in `flight_search_logs` for every search                 | [ ]   |           |      |
-|                    | Verification SQL shows no name/code mismatches vs master                 | [ ]   |           |      |
-|                    | No entries where `from_code = to_code`                                   | [ ]   |           |      |
-| **Cross-Platform** | Works on desktop browsers                                                | [ ]   |           |      |
-|                    | Works on mobile web (Chrome, Safari)                                     | [ ]   |           |      |
-|                    | Works in native iOS and Android apps                                     | [ ]   |           |      |
-| **Cleanup**        | Debug console logs removed after QA passes                               | [ ]   |           |      |
-|                    | Temporary DB logging removed/disabled post-production                    | [ ]   |           |      |
+| **UI Behavior**    | Selecting DXB (or any airport) updates visible label instantly (desktop) | [ ]    |           |      |
+|                    | Selecting airports updates correctly in mobile search + multi-city input | [ ]    |           |      |
+|                    | Chosen airport persists between steps/pages                              | [ ]    |           |      |
+| **Validation**     | Search blocked if any From/To field is blank                             | [ ]    |           |      |
+|                    | Search blocked if From and To are the same airport                       | [ ]    |           |      |
+|                    | Search blocked if any date is missing                                    | [ ]    |           |      |
+|                    | Error messages display clearly and inline                                | [ ]    |           |      |
+| **Data Flow**      | Console logs show correct `code + name` for each leg                     | [ ]    |           |      |
+|                    | Console logs show full payload before submission                         | [ ]    |           |      |
+|                    | API receives correct airport data (verified via Postman)                 | [ ]    |           |      |
+|                    | No incorrect/fallback airport codes in API request body                  | [ ]    |           |      |
+| **Database Logs**  | Entries created in `flight_search_logs` for every search                 | [ ]    |           |      |
+|                    | Verification SQL shows no name/code mismatches vs master                 | [ ]    |           |      |
+|                    | No entries where `from_code = to_code`                                   | [ ]    |           |      |
+| **Cross-Platform** | Works on desktop browsers                                                | [ ]    |           |      |
+|                    | Works on mobile web (Chrome, Safari)                                     | [ ]    |           |      |
+|                    | Works in native iOS and Android apps                                     | [ ]    |           |      |
+| **Cleanup**        | Debug console logs removed after QA passes                               | [ ]    |           |      |
+|                    | Temporary DB logging removed/disabled post-production                    | [ ]    |           |      |
 
 ---
 
@@ -83,17 +83,20 @@
 
 9. **Search Logging**
    - Perform a search, then run SQL:
+
    ```sql
-   SELECT from_code, from_name, to_code, to_name 
-   FROM flight_search_logs 
+   SELECT from_code, from_name, to_code, to_name
+   FROM flight_search_logs
    ORDER BY created_at DESC LIMIT 5;
    ```
+
    - **Expected:** Recent search appears with correct codes/names
 
 10. **Validation Query**
     ```sql
     SELECT * FROM flight_search_logs WHERE from_code = to_code;
     ```
+
     - **Expected:** No results (same From/To should be blocked)
 
 ### **Cross-Platform Tests**
@@ -115,15 +118,18 @@
 ## 🔍 **Key Files to Verify**
 
 ### Frontend Components:
+
 - `client/components/LandingPageSearchPanel.tsx`
 - `client/components/mobile/MobileNativeSearchForm.tsx`
 - `client/components/mobile/MobileFullScreenMultiCityInput.tsx`
 
 ### Backend Components:
+
 - `api/routes/flights.js` (logFlightSearch function)
 - `api/database/migrations/V2025_01_03_flight_search_logs.sql`
 
 ### Testing Tools:
+
 - `api/postman/Airport-Dropdown-Validation.postman_collection.json`
 
 ---
@@ -131,6 +137,7 @@
 ## ✅ **Success Criteria**
 
 **PASS Requirements:**
+
 - [ ] All UI checkpoints pass on web and mobile
 - [ ] All validation rules prevent invalid searches
 - [ ] Console logs show correct airport data
@@ -139,6 +146,7 @@
 - [ ] No regression in existing functionality
 
 **FAIL Criteria:**
+
 - Airport names don't update correctly
 - Same From/To searches are allowed
 - Console logs show incorrect data
@@ -165,16 +173,20 @@ After all tests pass:
 
 ## 📝 **QA Sign-Off**
 
-**QA Lead:** ____________________  
-**Date Completed:** ____________________  
-**Overall Result:** 
+**QA Lead:** ********\_\_\_\_********  
+**Date Completed:** ********\_\_\_\_********  
+**Overall Result:**
+
 - [ ] **APPROVED** - Ready for production deployment
 - [ ] **CONDITIONAL** - Minor fixes required (see notes)
 - [ ] **REJECTED** - Major issues found, requires rework
 
 **Notes:**
-_________________________________________________________________
-_________________________________________________________________
-_________________________________________________________________
 
-**Final Approval:** ____________________
+---
+
+---
+
+---
+
+**Final Approval:** ********\_\_\_\_********

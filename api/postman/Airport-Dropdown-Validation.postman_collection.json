@@ -79,13 +79,8 @@
             ],
             "url": {
               "raw": "{{api_base}}/flights/search?origin=BOM&destination=DXB&departureDate=2025-01-15&adults=1&cabinClass=ECONOMY&tripType=one-way",
-              "host": [
-                "{{api_base}}"
-              ],
-              "path": [
-                "flights",
-                "search"
-              ],
+              "host": ["{{api_base}}"],
+              "path": ["flights", "search"],
               "query": [
                 {
                   "key": "origin",
@@ -179,13 +174,8 @@
             ],
             "url": {
               "raw": "{{api_base}}/flights/search?tripType=multi-city&adults=1&children=0&cabinClass=economy&multiCityLegs=%5B%7B%22id%22%3A%22flight1%22%2C%22from%22%3A%22Mumbai%22%2C%22fromCode%22%3A%22BOM%22%2C%22fromAirport%22%3A%22Rajiv%20Gandhi%20Shivaji%20International%22%2C%22to%22%3A%22Dubai%22%2C%22toCode%22%3A%22DXB%22%2C%22toAirport%22%3A%22Dubai%20International%20Airport%22%2C%22date%22%3A%222025-01-15T00%3A00%3A00.000Z%22%7D%2C%7B%22id%22%3A%22flight2%22%2C%22from%22%3A%22Dubai%22%2C%22fromCode%22%3A%22DXB%22%2C%22fromAirport%22%3A%22Dubai%20International%20Airport%22%2C%22to%22%3A%22London%22%2C%22toCode%22%3A%22LHR%22%2C%22toAirport%22%3A%22Heathrow%22%2C%22date%22%3A%222025-01-20T00%3A00%3A00.000Z%22%7D%5D",
-              "host": [
-                "{{api_base}}"
-              ],
-              "path": [
-                "flights",
-                "search"
-              ],
+              "host": ["{{api_base}}"],
+              "path": ["flights", "search"],
               "query": [
                 {
                   "key": "tripType",
@@ -255,13 +245,8 @@
             ],
             "url": {
               "raw": "{{api_base}}/flights/search?origin=BOM&destination=BOM&departureDate=2025-01-15&adults=1&cabinClass=ECONOMY&tripType=one-way",
-              "host": [
-                "{{api_base}}"
-              ],
-              "path": [
-                "flights",
-                "search"
-              ],
+              "host": ["{{api_base}}"],
+              "path": ["flights", "search"],
               "query": [
                 {
                   "key": "origin",
@@ -327,13 +312,8 @@
             ],
             "url": {
               "raw": "{{api_base}}/flights/search?origin=DXB&destination=LHR&departureDate=2025-01-15&adults=2&cabinClass=BUSINESS&tripType=one-way",
-              "host": [
-                "{{api_base}}"
-              ],
-              "path": [
-                "flights",
-                "search"
-              ],
+              "host": ["{{api_base}}"],
+              "path": ["flights", "search"],
               "query": [
                 {
                   "key": "origin",
@@ -404,13 +384,8 @@
             "header": [],
             "url": {
               "raw": "{{api_base}}/debug/search-logs?limit=10",
-              "host": [
-                "{{api_base}}"
-              ],
-              "path": [
-                "debug",
-                "search-logs"
-              ],
+              "host": ["{{api_base}}"],
+              "path": ["debug", "search-logs"],
               "query": [
                 {
                   "key": "limit",

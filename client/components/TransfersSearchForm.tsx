@@ -82,18 +82,27 @@ export function TransfersSearchForm() {
     const lastSearch = getLastSearch();
 
     // Use URL params if available, otherwise fallback to sessionStorage
-    const sourceData = Object.keys(urlParams).length > 0 ? urlParams : lastSearch;
+    const sourceData =
+      Object.keys(urlParams).length > 0 ? urlParams : lastSearch;
 
     if (sourceData) {
       // Set pickup and dropoff locations
       if (sourceData.pickup || sourceData.fromLat) {
-        setPickupLocation(sourceData.pickup || `${sourceData.fromLat},${sourceData.fromLng}`);
-        setPickupInputValue(sourceData.pickup || `${sourceData.fromLat},${sourceData.fromLng}`);
+        setPickupLocation(
+          sourceData.pickup || `${sourceData.fromLat},${sourceData.fromLng}`,
+        );
+        setPickupInputValue(
+          sourceData.pickup || `${sourceData.fromLat},${sourceData.fromLng}`,
+        );
       }
 
       if (sourceData.dropoff || sourceData.toLat) {
-        setDropoffLocation(sourceData.dropoff || `${sourceData.toLat},${sourceData.toLng}`);
-        setDropoffInputValue(sourceData.dropoff || `${sourceData.toLat},${sourceData.toLng}`);
+        setDropoffLocation(
+          sourceData.dropoff || `${sourceData.toLat},${sourceData.toLng}`,
+        );
+        setDropoffInputValue(
+          sourceData.dropoff || `${sourceData.toLat},${sourceData.toLng}`,
+        );
       }
 
       // Set pickup date and time
@@ -235,11 +244,11 @@ export function TransfersSearchForm() {
     try {
       // Prepare data for sessionStorage (normalized format)
       const searchData = {
-        fromLat: pickupLocation.split(',')[0] || "",
-        fromLng: pickupLocation.split(',')[1] || "",
-        toLat: dropoffLocation.split(',')[0] || "",
-        toLng: dropoffLocation.split(',')[1] || "",
-        date: pickupDate.toISOString().split('T')[0],
+        fromLat: pickupLocation.split(",")[0] || "",
+        fromLng: pickupLocation.split(",")[1] || "",
+        toLat: dropoffLocation.split(",")[0] || "",
+        toLng: dropoffLocation.split(",")[1] || "",
+        date: pickupDate.toISOString().split("T")[0],
         adults: passengers.adults.toString(),
         bags: "0",
         pickup: pickupLocation,
@@ -250,7 +259,7 @@ export function TransfersSearchForm() {
       };
 
       if (serviceType === "car-rentals") {
-        searchData.dropoffDate = returnDate!.toISOString().split('T')[0];
+        searchData.dropoffDate = returnDate!.toISOString().split("T")[0];
         searchData.dropoffTime = returnTime;
         searchData.driverAge = driverAge;
       } else {
@@ -258,7 +267,7 @@ export function TransfersSearchForm() {
         searchData.infants = passengers.infants.toString();
 
         if (tripType === "return" && returnDate) {
-          searchData.returnDate = returnDate.toISOString().split('T')[0];
+          searchData.returnDate = returnDate.toISOString().split("T")[0];
           searchData.returnTime = returnTime;
         }
       }
@@ -353,9 +362,10 @@ export function TransfersSearchForm() {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              const defaultLocation = type === "pickup"
-                ? "Dubai International Airport (DXB)"
-                : "Dubai Downtown";
+              const defaultLocation =
+                type === "pickup"
+                  ? "Dubai International Airport (DXB)"
+                  : "Dubai Downtown";
               setLocation(defaultLocation);
               setInputValue("");
               setIsOpen(false);

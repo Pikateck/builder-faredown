@@ -3439,13 +3439,13 @@ export default function HotelDetails() {
         isOpen={isWriteReviewModalOpen}
         onClose={() => setIsWriteReviewModalOpen(false)}
         hotel={{
-          id: hotelId || '',
+          id: hotelId || "",
           name: hotel.name,
-          roomTypes: hotel.roomTypes || []
+          roomTypes: hotel.roomTypes || [],
         }}
         searchDates={{
-          checkIn: checkInParam || '',
-          checkOut: checkOutParam || ''
+          checkIn: checkInParam || "",
+          checkOut: checkOutParam || "",
         }}
       />
 

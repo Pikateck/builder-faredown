@@ -107,22 +107,30 @@ export function MobileFullScreenMultiCityInput({
     if (editingLeg && editingField) {
       if (editingField === "from") {
         // Debug logging for airport selection
-        console.log('Multi-city from airport selected:', {
+        console.log("Multi-city from airport selected:", {
           legId: editingLeg,
-          selected: { code, city, airport: cities[city]?.airport }
+          selected: { code, city, airport: cities[city]?.airport },
         });
         updateLeg(editingLeg, "from", city);
         updateLeg(editingLeg, "fromCode", code);
-        updateLeg(editingLeg, "fromAirport", cities[city]?.airport || "Unknown Airport");
+        updateLeg(
+          editingLeg,
+          "fromAirport",
+          cities[city]?.airport || "Unknown Airport",
+        );
       } else {
         // Debug logging for airport selection
-        console.log('Multi-city to airport selected:', {
+        console.log("Multi-city to airport selected:", {
           legId: editingLeg,
-          selected: { code, city, airport: cities[city]?.airport }
+          selected: { code, city, airport: cities[city]?.airport },
         });
         updateLeg(editingLeg, "to", city);
         updateLeg(editingLeg, "toCode", code);
-        updateLeg(editingLeg, "toAirport", cities[city]?.airport || "Unknown Airport");
+        updateLeg(
+          editingLeg,
+          "toAirport",
+          cities[city]?.airport || "Unknown Airport",
+        );
       }
     }
     setEditingLeg(null);

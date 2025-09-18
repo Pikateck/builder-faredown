@@ -172,8 +172,10 @@ export function MobileNativeSearchForm({
   // Handle city selection
   const handleFromCitySelect = (city: string, code: string) => {
     // Debug logging for airport selection
-    console.log('From airport selected:', {
-      city, code, airport: cityData[city]?.airport
+    console.log("From airport selected:", {
+      city,
+      code,
+      airport: cityData[city]?.airport,
     });
     setFromCity(city);
     setFromCode(code);
@@ -181,8 +183,10 @@ export function MobileNativeSearchForm({
 
   const handleToCitySelect = (city: string, code: string) => {
     // Debug logging for airport selection
-    console.log('To airport selected:', {
-      city, code, airport: cityData[city]?.airport
+    console.log("To airport selected:", {
+      city,
+      code,
+      airport: cityData[city]?.airport,
     });
     setToCity(city);
     setToCode(code);
@@ -347,23 +351,31 @@ export function MobileNativeSearchForm({
     if (!fromCity || !fromCode) {
       return {
         isValid: false,
-        error: "Please select a departure location"
+        error: "Please select a departure location",
       };
     }
 
     // Check if To city is selected (except for hotels and sightseeing)
-    if (module !== "hotels" && module !== "sightseeing" && (!toCity || !toCode)) {
+    if (
+      module !== "hotels" &&
+      module !== "sightseeing" &&
+      (!toCity || !toCode)
+    ) {
       return {
         isValid: false,
-        error: "Please select a destination"
+        error: "Please select a destination",
       };
     }
 
     // Check if From and To are the same
-    if (module !== "hotels" && module !== "sightseeing" && fromCode === toCode) {
+    if (
+      module !== "hotels" &&
+      module !== "sightseeing" &&
+      fromCode === toCode
+    ) {
       return {
         isValid: false,
-        error: "Departure and destination cannot be the same"
+        error: "Departure and destination cannot be the same",
       };
     }
 
@@ -404,7 +416,7 @@ export function MobileNativeSearchForm({
     if (!dateRange.startDate) {
       return {
         isValid: false,
-        error: "Please select travel dates"
+        error: "Please select travel dates",
       };
     }
 
@@ -412,7 +424,7 @@ export function MobileNativeSearchForm({
     if (tripType === "round-trip" && !dateRange.endDate) {
       return {
         isValid: false,
-        error: "Please select a return date"
+        error: "Please select a return date",
       };
     }
 
@@ -432,7 +444,7 @@ export function MobileNativeSearchForm({
     }
 
     // Debug logging for search payload
-    console.log('Mobile search initiated:', {
+    console.log("Mobile search initiated:", {
       module,
       from: { city: fromCity, code: fromCode },
       to: { city: toCity, code: toCode },
@@ -440,8 +452,11 @@ export function MobileNativeSearchForm({
       travelers,
       tripType,
       transferType: module === "transfers" ? transferType : undefined,
-      multiCityLegs: module === "flights" && tripType === "multi-city" ? multiCityLegs.length : undefined,
-      timestamp: new Date().toISOString()
+      multiCityLegs:
+        module === "flights" && tripType === "multi-city"
+          ? multiCityLegs.length
+          : undefined,
+      timestamp: new Date().toISOString(),
     });
 
     const searchParams = new URLSearchParams({
@@ -771,10 +786,10 @@ export function MobileNativeSearchForm({
                 {!validateSearch().isValid
                   ? "Complete Required Fields"
                   : module === "flights" && tripType === "multi-city"
-                  ? multiCityLegs.length < 2
-                    ? "Add Flight Segments"
-                    : "Search Multi-City"
-                  : "Search"}
+                    ? multiCityLegs.length < 2
+                      ? "Add Flight Segments"
+                      : "Search Multi-City"
+                    : "Search"}
               </span>
             </Button>
           </div>
