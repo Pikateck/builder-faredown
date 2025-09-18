@@ -2594,12 +2594,12 @@ export default function HotelDetails() {
                         Parking
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">₹</span> Air
-                        conditioning
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Air conditioning
                       </li>
                       <li className="flex items-center">
-                        <span className="text-green-600 mr-2">₹</span> Private
-                        bathroom
+                        <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
+                        Private bathroom
                       </li>
                       <li className="flex items-center">
                         <CheckCircle className="w-4 h-4 text-green-600 mr-2" />{" "}
