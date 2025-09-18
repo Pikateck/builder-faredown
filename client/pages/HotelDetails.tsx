@@ -117,6 +117,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { authService } from "@/services/authService";
 import { useDateContext } from "@/contexts/DateContext";
 import { useSearch } from "@/contexts/SearchContext";
+import ReviewModal from "@/components/ReviewModal";
 
 export default function HotelDetails() {
   useScrollToTop();
