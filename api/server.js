@@ -59,6 +59,7 @@ const aiBargainRoutes = require("./routes/ai-bargains");
 const transfersMarkupRoutes = require("./routes/admin-transfers-markup");
 const adminProfilesRoutes = require("./routes/admin-profiles");
 const pricingRoutes = require("./routes/pricing");
+const reviewsRoutes = require("./routes/reviews");
 const {
   router: bargainHoldsRouter,
   initializeBargainHolds,
