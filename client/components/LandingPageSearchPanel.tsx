@@ -378,6 +378,17 @@ export function LandingPageSearchPanel() {
 
       navigate(`/flights/results?${searchParams.toString()}`);
     } else {
+      // Debug logging for regular flight search
+      console.log('Regular flight search payload:', {
+        from: `${selectedFromCity} (${fromCode})`,
+        to: `${selectedToCity} (${toCode})`,
+        departureDate: departureDate.toISOString(),
+        returnDate: tripType === "round-trip" ? returnDate?.toISOString() : null,
+        travelers,
+        tripType,
+        cabinClass: selectedClass
+      });
+
       // Regular flight search
       const searchParams = new URLSearchParams({
         from: `${selectedFromCity} (${fromCode})`,
