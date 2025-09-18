@@ -67,8 +67,10 @@ interface FlightLeg {
   id: string;
   from: string;
   fromCode: string;
+  fromAirport: string;
   to: string;
   toCode: string;
+  toAirport: string;
   date: Date;
 }
 
@@ -189,8 +191,10 @@ export function LandingPageSearchPanel() {
       id: newFlightId,
       from: "Mumbai",
       fromCode: "BOM",
+      fromAirport: "Rajiv Gandhi Shivaji International",
       to: "Dubai",
       toCode: "DXB",
+      toAirport: "Dubai International Airport",
       date: addDays(new Date(), additionalFlights.length + 2),
     };
 
@@ -888,8 +892,8 @@ export function LandingPageSearchPanel() {
                             {flight.fromCode}
                           </div>
                           <span className="text-sm text-gray-700 font-medium truncate">
-                            {cityData[flight.from]?.airport || flight.from}
-                          </span>
+                          {flight.fromAirport || cityData[flight.from]?.airport || flight.from}
+                        </span>
                         </div>
                       </button>
                       <button
@@ -897,6 +901,7 @@ export function LandingPageSearchPanel() {
                           e.stopPropagation();
                           updateFlight(flight.id, "from", "Mumbai");
                           updateFlight(flight.id, "fromCode", "BOM");
+                          updateFlight(flight.id, "fromAirport", "Rajiv Gandhi Shivaji International");
                         }}
                         className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
                         title="Clear departure city"
@@ -926,8 +931,14 @@ export function LandingPageSearchPanel() {
                             <button
                               key={city}
                               onClick={() => {
+                                // Debug logging for airport selection
+                                console.log('Airport selection:', {
+                                  flightId: flight.id,
+                                  selected: { code: data.code, name: city, airport: data.airport }
+                                });
                                 updateFlight(flight.id, "from", city);
                                 updateFlight(flight.id, "fromCode", data.code);
+                                updateFlight(flight.id, "fromAirport", data.airport);
                                 setAdditionalFlightStates((prev) => ({
                                   ...prev,
                                   [flight.id]: {
@@ -993,8 +1004,8 @@ export function LandingPageSearchPanel() {
                             {flight.toCode}
                           </div>
                           <span className="text-sm text-gray-700 font-medium truncate">
-                            {cityData[flight.to]?.airport || flight.to}
-                          </span>
+                          {flight.toAirport || cityData[flight.to]?.airport || flight.to}
+                        </span>
                         </div>
                       </button>
                       <button
@@ -1002,6 +1013,7 @@ export function LandingPageSearchPanel() {
                           e.stopPropagation();
                           updateFlight(flight.id, "to", "Dubai");
                           updateFlight(flight.id, "toCode", "DXB");
+                          updateFlight(flight.id, "toAirport", "Dubai International Airport");
                         }}
                         className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
                         title="Clear destination city"
@@ -1031,8 +1043,14 @@ export function LandingPageSearchPanel() {
                             <button
                               key={city}
                               onClick={() => {
+                                // Debug logging for airport selection
+                                console.log('Airport selection:', {
+                                  flightId: flight.id,
+                                  selected: { code: data.code, name: city, airport: data.airport }
+                                });
                                 updateFlight(flight.id, "to", city);
                                 updateFlight(flight.id, "toCode", data.code);
+                                updateFlight(flight.id, "toAirport", data.airport);
                                 setAdditionalFlightStates((prev) => ({
                                   ...prev,
                                   [flight.id]: {
