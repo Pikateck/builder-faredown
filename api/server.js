@@ -216,6 +216,7 @@ app.get("/", (req, res) => {
       suppliers: "/api/suppliers",
       vouchers: "/api/vouchers",
       profile: "/api/profile",
+      reviews: "/api/properties/:id/reviews",
       testHotelbeds: "/api/test-hotelbeds",
     },
     documentation: "/api/docs",
@@ -436,7 +437,7 @@ async function startServer() {
       console.log("================================");
       console.log(`📍 Server URL: http://localhost:${PORT}`);
       console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
-      console.log(`⚠️  Database: Offline (using in-memory storage)`);
+      console.log(`���️  Database: Offline (using in-memory storage)`);
       console.log("================================\n");
     });
 
