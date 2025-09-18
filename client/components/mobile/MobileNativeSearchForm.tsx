@@ -38,8 +38,10 @@ interface FlightLeg {
   id: string;
   from: string;
   fromCode: string;
+  fromAirport: string;
   to: string;
   toCode: string;
+  toAirport: string;
   date: Date;
 }
 
@@ -169,11 +171,19 @@ export function MobileNativeSearchForm({
 
   // Handle city selection
   const handleFromCitySelect = (city: string, code: string) => {
+    // Debug logging for airport selection
+    console.log('From airport selected:', {
+      city, code, airport: cityData[city]?.airport
+    });
     setFromCity(city);
     setFromCode(code);
   };
 
   const handleToCitySelect = (city: string, code: string) => {
+    // Debug logging for airport selection
+    console.log('To airport selected:', {
+      city, code, airport: cityData[city]?.airport
+    });
     setToCity(city);
     setToCode(code);
   };
@@ -331,34 +341,79 @@ export function MobileNativeSearchForm({
   const fieldLabels = getFieldLabels();
   const ModuleIcon = getModuleIcon();
 
-  // Validation for multi-city searches
-  const validateMultiCitySearch = (): { isValid: boolean; error?: string } => {
-    if (module !== "flights" || tripType !== "multi-city") {
-      return { isValid: true };
-    }
-
-    if (multiCityLegs.length < 2) {
+  // Enhanced validation for all searches
+  const validateSearch = (): { isValid: boolean; error?: string } => {
+    // Check if From city is selected
+    if (!fromCity || !fromCode) {
       return {
         isValid: false,
-        error: "Add at least 2 flight segments for multi-city travel",
+        error: "Please select a departure location"
       };
     }
 
-    // Check if all legs have valid destinations
-    for (let i = 0; i < multiCityLegs.length; i++) {
-      const leg = multiCityLegs[i];
-      if (!leg.from || !leg.fromCode || !leg.to || !leg.toCode) {
+    // Check if To city is selected (except for hotels and sightseeing)
+    if (module !== "hotels" && module !== "sightseeing" && (!toCity || !toCode)) {
+      return {
+        isValid: false,
+        error: "Please select a destination"
+      };
+    }
+
+    // Check if From and To are the same
+    if (module !== "hotels" && module !== "sightseeing" && fromCode === toCode) {
+      return {
+        isValid: false,
+        error: "Departure and destination cannot be the same"
+      };
+    }
+
+    // Multi-city validation
+    if (module === "flights" && tripType === "multi-city") {
+      if (multiCityLegs.length < 2) {
         return {
           isValid: false,
-          error: `Complete destinations for Flight ${i + 1}`,
+          error: "Add at least 2 flight segments for multi-city travel",
         };
       }
-      if (!leg.date) {
-        return {
-          isValid: false,
-          error: `Select date for Flight ${i + 1}`,
-        };
+
+      // Check if all legs have valid destinations
+      for (let i = 0; i < multiCityLegs.length; i++) {
+        const leg = multiCityLegs[i];
+        if (!leg.from || !leg.fromCode || !leg.to || !leg.toCode) {
+          return {
+            isValid: false,
+            error: `Complete destinations for Flight ${i + 1}`,
+          };
+        }
+        if (leg.fromCode === leg.toCode) {
+          return {
+            isValid: false,
+            error: `Departure and destination cannot be the same for Flight ${i + 1}`,
+          };
+        }
+        if (!leg.date) {
+          return {
+            isValid: false,
+            error: `Select date for Flight ${i + 1}`,
+          };
+        }
       }
+    }
+
+    // Check if dates are selected
+    if (!dateRange.startDate) {
+      return {
+        isValid: false,
+        error: "Please select travel dates"
+      };
+    }
+
+    // Check return date for round-trip
+    if (tripType === "round-trip" && !dateRange.endDate) {
+      return {
+        isValid: false,
+        error: "Please select a return date"
+      };
     }
 
     return { isValid: true };
@@ -369,12 +424,25 @@ export function MobileNativeSearchForm({
     // Clear previous validation errors
     setValidationError(null);
 
-    // Validate multi-city before proceeding
-    const validation = validateMultiCitySearch();
+    // Validate search before proceeding
+    const validation = validateSearch();
     if (!validation.isValid) {
       setValidationError(validation.error!);
       return;
     }
+
+    // Debug logging for search payload
+    console.log('Mobile search initiated:', {
+      module,
+      from: { city: fromCity, code: fromCode },
+      to: { city: toCity, code: toCode },
+      dateRange,
+      travelers,
+      tripType,
+      transferType: module === "transfers" ? transferType : undefined,
+      multiCityLegs: module === "flights" && tripType === "multi-city" ? multiCityLegs.length : undefined,
+      timestamp: new Date().toISOString()
+    });
 
     const searchParams = new URLSearchParams({
       from: fromCode,
@@ -692,21 +760,17 @@ export function MobileNativeSearchForm({
             <Button
               onClick={handleSearch}
               className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2 mt-6 transition-all duration-150 ${
-                module === "flights" &&
-                tripType === "multi-city" &&
-                !validateMultiCitySearch().isValid
+                !validateSearch().isValid
                   ? "bg-gray-400 cursor-not-allowed text-white"
                   : "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black"
               }`}
-              disabled={
-                module === "flights" &&
-                tripType === "multi-city" &&
-                !validateMultiCitySearch().isValid
-              }
+              disabled={!validateSearch().isValid}
             >
               <Search className="w-5 h-5" />
               <span>
-                {module === "flights" && tripType === "multi-city"
+                {!validateSearch().isValid
+                  ? "Complete Required Fields"
+                  : module === "flights" && tripType === "multi-city"
                   ? multiCityLegs.length < 2
                     ? "Add Flight Segments"
                     : "Search Multi-City"
