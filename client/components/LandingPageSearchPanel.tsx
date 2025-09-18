@@ -314,6 +314,18 @@ export function LandingPageSearchPanel() {
     const fromCode = cityData[selectedFromCity]?.code || "BOM";
     const toCode = cityData[selectedToCity]?.code || "DXB";
 
+    // Debug logging for search payload
+    console.log('Search initiated:', {
+      from: { city: selectedFromCity, code: fromCode },
+      to: { city: selectedToCity, code: toCode },
+      tripType,
+      departureDate: departureDate?.toISOString(),
+      returnDate: returnDate?.toISOString(),
+      travelers,
+      multiCityLegs: additionalFlights.length,
+      timestamp: new Date().toISOString()
+    });
+
     // Prepare data for sessionStorage (normalized format)
     const searchData = {
       from: `${selectedFromCity} (${fromCode})`,
