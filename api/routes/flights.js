@@ -534,6 +534,9 @@ router.get("/search", async (req, res) => {
     // Save search to database
     await saveSearchToDatabase(searchParams, transformedFlights);
 
+    // Log search for debugging airport selection (per developer note)
+    await logFlightSearch(req, searchParams, transformedFlights);
+
     // Return results
     res.json({
       success: true,
