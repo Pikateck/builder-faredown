@@ -210,14 +210,14 @@ export function SightseeingSearchForm() {
                 <button
                   onClick={(e) => {
                     e.stopPropagation();
-                    setDestination("");
+                    setDestination("Dubai, United Arab Emirates");
                     setInputValue("");
                     setIsUserTyping(false);
-                    setDestinationCode("");
+                    setDestinationCode("DUB");
                     setIsDestinationOpen(false);
                   }}
                   className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                  title="Clear destination"
+                  title="Reset to default destination"
                 >
                   <X className="w-4 h-4 text-gray-400" />
                 </button>
