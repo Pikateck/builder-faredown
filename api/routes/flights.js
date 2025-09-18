@@ -554,6 +554,9 @@ router.get("/search", async (req, res) => {
     // Return fallback data on API failure
     const fallbackFlights = getFallbackFlightData(req.query);
 
+    // Log fallback search as well for debugging
+    await logFlightSearch(req, req.query, fallbackFlights);
+
     res.json({
       success: true,
       data: fallbackFlights,
