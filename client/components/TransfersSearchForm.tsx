@@ -353,12 +353,15 @@ export function TransfersSearchForm() {
           <button
             onClick={(e) => {
               e.stopPropagation();
-              setLocation("");
+              const defaultLocation = type === "pickup"
+                ? "Dubai International Airport (DXB)"
+                : "Dubai Downtown";
+              setLocation(defaultLocation);
               setInputValue("");
               setIsOpen(false);
             }}
             className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-            title={`Clear ${type} location`}
+            title={`Reset ${type} location to default`}
           >
             <X className="w-4 h-4 text-gray-400" />
           </button>
