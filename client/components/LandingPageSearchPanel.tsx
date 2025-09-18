@@ -995,18 +995,20 @@ export function LandingPageSearchPanel() {
                         </span>
                         </div>
                       </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          updateFlight(flight.id, "from", "Mumbai");
-                          updateFlight(flight.id, "fromCode", "BOM");
-                          updateFlight(flight.id, "fromAirport", "Rajiv Gandhi Shivaji International");
-                        }}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                        title="Clear departure city"
-                      >
-                        <X className="w-4 h-4 text-gray-400" />
-                      </button>
+                      {flight.from && flight.from !== "Mumbai" && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            updateFlight(flight.id, "from", "Mumbai");
+                            updateFlight(flight.id, "fromCode", "BOM");
+                            updateFlight(flight.id, "fromAirport", "Rajiv Gandhi Shivaji International");
+                          }}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                          title="Reset to default departure city"
+                        >
+                          <X className="w-4 h-4 text-gray-400" />
+                        </button>
+                      )}
                     </div>
 
                     {/* From Cities Dropdown */}
@@ -1107,18 +1109,20 @@ export function LandingPageSearchPanel() {
                         </span>
                         </div>
                       </button>
-                      <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          updateFlight(flight.id, "to", "Dubai");
-                          updateFlight(flight.id, "toCode", "DXB");
-                          updateFlight(flight.id, "toAirport", "Dubai International Airport");
-                        }}
-                        className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                        title="Clear destination city"
-                      >
-                        <X className="w-4 h-4 text-gray-400" />
-                      </button>
+                      {flight.to && flight.to !== "Dubai" && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            updateFlight(flight.id, "to", "Dubai");
+                            updateFlight(flight.id, "toCode", "DXB");
+                            updateFlight(flight.id, "toAirport", "Dubai International Airport");
+                          }}
+                          className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
+                          title="Reset to default destination city"
+                        >
+                          <X className="w-4 h-4 text-gray-400" />
+                        </button>
+                      )}
                     </div>
 
                     {/* To Cities Dropdown */}
