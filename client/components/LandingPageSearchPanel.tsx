@@ -618,10 +618,10 @@ export function LandingPageSearchPanel() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedFromCity("");
+                      setSelectedFromCity("Mumbai");
                     }}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                    title="Clear departure city"
+                    title="Reset to default departure city"
                   >
                     <X className="w-4 h-4 text-gray-400" />
                   </button>
@@ -713,10 +713,10 @@ export function LandingPageSearchPanel() {
                   <button
                     onClick={(e) => {
                       e.stopPropagation();
-                      setSelectedToCity("");
+                      setSelectedToCity("Dubai");
                     }}
                     className="absolute right-2 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded-full transition-colors"
-                    title="Clear destination city"
+                    title="Reset to default destination city"
                   >
                     <X className="w-4 h-4 text-gray-400" />
                   </button>
