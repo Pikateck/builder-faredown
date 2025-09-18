@@ -296,6 +296,126 @@ async function transformAmadeusFlightData(amadeusData, searchParams) {
 }
 
 /**
+ * Log flight search for debugging airport selection issues
+ * Created per developer note for tracking BOM/DXB display problems
+ */
+async function logFlightSearch(req, searchParams, results) {
+  try {
+    const userAgent = req.headers['user-agent'] || '';
+    const sessionId = req.headers['x-session-id'] || req.sessionID || 'anonymous';
+    const userId = req.user?.id || req.query.userId || null;
+
+    // Parse multi-city legs if present
+    let legs = [];
+    if (searchParams.tripType === 'multi-city' && searchParams.multiCityLegs) {
+      try {
+        legs = typeof searchParams.multiCityLegs === 'string'
+          ? JSON.parse(searchParams.multiCityLegs)
+          : searchParams.multiCityLegs;
+      } catch (e) {
+        console.warn('Failed to parse multiCityLegs:', e);
+        legs = [];
+      }
+    } else {
+      // Single leg for round-trip or one-way
+      legs = [{
+        from: searchParams.from || 'Unknown',
+        fromCode: searchParams.origin || searchParams.fromCode || 'XXX',
+        to: searchParams.to || 'Unknown',
+        toCode: searchParams.destination || searchParams.toCode || 'XXX',
+        date: searchParams.departureDate
+      }];
+    }
+
+    // Helper function to detect platform
+    const detectPlatform = (userAgent) => {
+      if (!userAgent) return 'unknown';
+      if (userAgent.includes('iOS-Native-App') || userAgent.includes('CFNetwork')) return 'ios-native';
+      if (userAgent.includes('Android-Native-App') || userAgent.includes('okhttp')) return 'android-native';
+      if (userAgent.includes('Mobile') || userAgent.includes('Android') || userAgent.includes('iPhone')) return 'mobile-web';
+      return 'web';
+    };
+
+    const isMobile = userAgent.includes('Mobile') || userAgent.includes('Android') ||
+                    userAgent.includes('iPhone') || userAgent.includes('iPad') ||
+                    userAgent.includes('iOS-Native-App') || userAgent.includes('Android-Native-App');
+
+    // Log each leg separately for detailed tracking
+    for (let i = 0; i < legs.length; i++) {
+      const leg = legs[i];
+
+      // Extract city names from codes or full strings
+      const extractCityInfo = (cityString, code) => {
+        if (!cityString) return { name: 'Unknown', code: code || 'XXX' };
+
+        // Handle format: "Mumbai (BOM)" or just "Mumbai" or just "BOM"
+        const match = cityString.match(/^(.+?)\s*\(([A-Z]{3})\)$/);
+        if (match) {
+          return { name: match[1].trim(), code: match[2] };
+        }
+
+        // If it's just a code
+        if (/^[A-Z]{3}$/.test(cityString)) {
+          return { name: cityString, code: cityString };
+        }
+
+        // If it's just a city name
+        return { name: cityString, code: code || 'XXX' };
+      };
+
+      const fromInfo = extractCityInfo(leg.from, leg.fromCode);
+      const toInfo = extractCityInfo(leg.to, leg.toCode);
+
+      const logQuery = `
+        INSERT INTO flight_search_logs (
+          user_id, session_id, leg_index, from_code, from_name, to_code, to_name,
+          search_type, module_type, departure_date, return_date, travelers,
+          cabin_class, user_agent, is_mobile, platform, raw_payload
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17)
+      `;
+
+      const logValues = [
+        userId,
+        sessionId,
+        i + 1, // leg_index (1-based)
+        fromInfo.code,
+        fromInfo.name,
+        toInfo.code,
+        toInfo.name,
+        searchParams.tripType || 'one-way',
+        'flights',
+        searchParams.departureDate,
+        searchParams.returnDate || null,
+        JSON.stringify({
+          adults: parseInt(searchParams.adults) || 1,
+          children: parseInt(searchParams.children) || 0,
+          infants: parseInt(searchParams.infants) || 0
+        }),
+        searchParams.cabinClass || 'ECONOMY',
+        userAgent,
+        isMobile,
+        detectPlatform(userAgent),
+        JSON.stringify({
+          originalParams: req.query,
+          searchParams: searchParams,
+          resultsCount: results?.length || 0,
+          ip: req.ip,
+          timestamp: new Date().toISOString()
+        })
+      ];
+
+      await db.query(logQuery, logValues);
+    }
+
+    console.log(`🔍 Flight search logged: ${legs.length} leg(s) for session ${sessionId}`);
+
+  } catch (error) {
+    console.error('Error logging flight search:', error);
+    // Don't throw - logging failures shouldn't break the search
+  }
+}
+
+/**
  * Save search to database
  */
 async function saveSearchToDatabase(searchParams, results) {
