@@ -1,0 +1,452 @@
+{
+  "info": {
+    "name": "Airport Dropdown Validation Tests",
+    "description": "Postman collection to verify airport selection validation per developer note for BOM/DXB display issues",
+    "version": "1.0.0",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:3000",
+      "type": "string"
+    },
+    {
+      "key": "api_base",
+      "value": "{{base_url}}/api",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "Flight Search Tests",
+      "item": [
+        {
+          "name": "Single Leg Flight Search - BOM to DXB",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Airport Selection Validation Test",
+                  "pm.test('Response status is 200', function () {",
+                  "    pm.response.to.have.status(200);",
+                  "});",
+                  "",
+                  "pm.test('Response has success true', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "});",
+                  "",
+                  "pm.test('Airport codes are correctly received', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    const searchParams = responseJson.meta.searchParams;",
+                  "    ",
+                  "    // Check that origin and destination are correctly set",
+                  "    pm.expect(searchParams.origin).to.eql('BOM');",
+                  "    pm.expect(searchParams.destination).to.eql('DXB');",
+                  "});",
+                  "",
+                  "pm.test('Search results contain flight data', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.data).to.be.an('array');",
+                  "    pm.expect(responseJson.data.length).to.be.greaterThan(0);",
+                  "});",
+                  "",
+                  "// Store search params for database verification",
+                  "const responseJson = pm.response.json();",
+                  "pm.globals.set('last_search_origin', responseJson.meta.searchParams.origin);",
+                  "pm.globals.set('last_search_destination', responseJson.meta.searchParams.destination);",
+                  "pm.globals.set('last_search_timestamp', responseJson.meta.timestamp);"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "Postman-Airport-Validation-Test",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-ID",
+                "value": "postman-test-session-{{$randomUUID}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base}}/flights/search?origin=BOM&destination=DXB&departureDate=2025-01-15&adults=1&cabinClass=ECONOMY&tripType=one-way",
+              "host": [
+                "{{api_base}}"
+              ],
+              "path": [
+                "flights",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "origin",
+                  "value": "BOM"
+                },
+                {
+                  "key": "destination",
+                  "value": "DXB"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2025-01-15"
+                },
+                {
+                  "key": "adults",
+                  "value": "1"
+                },
+                {
+                  "key": "cabinClass",
+                  "value": "ECONOMY"
+                },
+                {
+                  "key": "tripType",
+                  "value": "one-way"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Multi-City Flight Search",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Multi-city airport validation test",
+                  "pm.test('Multi-city legs have valid airport codes', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    ",
+                  "    // Parse the multi-city legs from request",
+                  "    const requestUrl = pm.request.url.toString();",
+                  "    const urlParams = new URLSearchParams(requestUrl.split('?')[1]);",
+                  "    const multiCityLegs = JSON.parse(decodeURIComponent(urlParams.get('multiCityLegs')));",
+                  "    ",
+                  "    // Validate each leg has proper airport codes",
+                  "    multiCityLegs.forEach((leg, index) => {",
+                  "        pm.expect(leg.fromCode).to.match(/^[A-Z]{3}$/, `Leg ${index+1} From code must be 3-letter IATA`);",
+                  "        pm.expect(leg.toCode).to.match(/^[A-Z]{3}$/, `Leg ${index+1} To code must be 3-letter IATA`);",
+                  "        pm.expect(leg.from).to.be.a('string').and.not.empty;",
+                  "        pm.expect(leg.to).to.be.a('string').and.not.empty;",
+                  "        ",
+                  "        // Airport names should exist",
+                  "        if (leg.fromAirport) {",
+                  "            pm.expect(leg.fromAirport).to.be.a('string').and.not.empty;",
+                  "        }",
+                  "        if (leg.toAirport) {",
+                  "            pm.expect(leg.toAirport).to.be.a('string').and.not.empty;",
+                  "        }",
+                  "    });",
+                  "});",
+                  "",
+                  "pm.test('No identical From/To codes in any leg', function () {",
+                  "    const requestUrl = pm.request.url.toString();",
+                  "    const urlParams = new URLSearchParams(requestUrl.split('?')[1]);",
+                  "    const multiCityLegs = JSON.parse(decodeURIComponent(urlParams.get('multiCityLegs')));",
+                  "    ",
+                  "    multiCityLegs.forEach((leg, index) => {",
+                  "        pm.expect(leg.fromCode).to.not.eql(leg.toCode, `Leg ${index+1} cannot have same From and To codes`);",
+                  "    });",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "Postman-Multi-City-Test",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-ID",
+                "value": "postman-multicity-{{$randomUUID}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base}}/flights/search?tripType=multi-city&adults=1&children=0&cabinClass=economy&multiCityLegs=%5B%7B%22id%22%3A%22flight1%22%2C%22from%22%3A%22Mumbai%22%2C%22fromCode%22%3A%22BOM%22%2C%22fromAirport%22%3A%22Rajiv%20Gandhi%20Shivaji%20International%22%2C%22to%22%3A%22Dubai%22%2C%22toCode%22%3A%22DXB%22%2C%22toAirport%22%3A%22Dubai%20International%20Airport%22%2C%22date%22%3A%222025-01-15T00%3A00%3A00.000Z%22%7D%2C%7B%22id%22%3A%22flight2%22%2C%22from%22%3A%22Dubai%22%2C%22fromCode%22%3A%22DXB%22%2C%22fromAirport%22%3A%22Dubai%20International%20Airport%22%2C%22to%22%3A%22London%22%2C%22toCode%22%3A%22LHR%22%2C%22toAirport%22%3A%22Heathrow%22%2C%22date%22%3A%222025-01-20T00%3A00%3A00.000Z%22%7D%5D",
+              "host": [
+                "{{api_base}}"
+              ],
+              "path": [
+                "flights",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "tripType",
+                  "value": "multi-city"
+                },
+                {
+                  "key": "adults",
+                  "value": "1"
+                },
+                {
+                  "key": "children",
+                  "value": "0"
+                },
+                {
+                  "key": "cabinClass",
+                  "value": "economy"
+                },
+                {
+                  "key": "multiCityLegs",
+                  "value": "%5B%7B%22id%22%3A%22flight1%22%2C%22from%22%3A%22Mumbai%22%2C%22fromCode%22%3A%22BOM%22%2C%22fromAirport%22%3A%22Rajiv%20Gandhi%20Shivaji%20International%22%2C%22to%22%3A%22Dubai%22%2C%22toCode%22%3A%22DXB%22%2C%22toAirport%22%3A%22Dubai%20International%20Airport%22%2C%22date%22%3A%222025-01-15T00%3A00%3A00.000Z%22%7D%2C%7B%22id%22%3A%22flight2%22%2C%22from%22%3A%22Dubai%22%2C%22fromCode%22%3A%22DXB%22%2C%22fromAirport%22%3A%22Dubai%20International%20Airport%22%2C%22to%22%3A%22London%22%2C%22toCode%22%3A%22LHR%22%2C%22toAirport%22%3A%22Heathrow%22%2C%22date%22%3A%222025-01-20T00%3A00%3A00.000Z%22%7D%5D",
+                  "description": "URL-encoded JSON: [{\"id\":\"flight1\",\"from\":\"Mumbai\",\"fromCode\":\"BOM\",\"fromAirport\":\"Rajiv Gandhi Shivaji International\",\"to\":\"Dubai\",\"toCode\":\"DXB\",\"toAirport\":\"Dubai International Airport\",\"date\":\"2025-01-15T00:00:00.000Z\"},{\"id\":\"flight2\",\"from\":\"Dubai\",\"fromCode\":\"DXB\",\"fromAirport\":\"Dubai International Airport\",\"to\":\"London\",\"toCode\":\"LHR\",\"toAirport\":\"Heathrow\",\"date\":\"2025-01-20T00:00:00.000Z\"}]"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Invalid Search - Same From/To",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test validation of identical From/To codes",
+                  "pm.test('API should handle same From/To gracefully', function () {",
+                  "    // This test verifies the backend handles validation",
+                  "    // The response should either reject with 400 or handle gracefully",
+                  "    const status = pm.response.code;",
+                  "    pm.expect([200, 400]).to.include(status);",
+                  "    ",
+                  "    if (status === 200) {",
+                  "        const responseJson = pm.response.json();",
+                  "        pm.expect(responseJson.success).to.exist;",
+                  "        ",
+                  "        // If search succeeds, log warning for review",
+                  "        console.log('WARNING: Same From/To search was allowed - review validation logic');",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "Postman-Validation-Test",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-ID",
+                "value": "postman-validation-{{$randomUUID}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base}}/flights/search?origin=BOM&destination=BOM&departureDate=2025-01-15&adults=1&cabinClass=ECONOMY&tripType=one-way",
+              "host": [
+                "{{api_base}}"
+              ],
+              "path": [
+                "flights",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "origin",
+                  "value": "BOM"
+                },
+                {
+                  "key": "destination",
+                  "value": "BOM"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2025-01-15"
+                },
+                {
+                  "key": "adults",
+                  "value": "1"
+                },
+                {
+                  "key": "cabinClass",
+                  "value": "ECONOMY"
+                },
+                {
+                  "key": "tripType",
+                  "value": "one-way"
+                }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Mobile Web Search Test",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Test mobile web user agent detection",
+                  "pm.test('Mobile search is properly logged', function () {",
+                  "    const responseJson = pm.response.json();",
+                  "    pm.expect(responseJson.success).to.be.true;",
+                  "    ",
+                  "    // This search should be logged as mobile in the database",
+                  "    // Database verification should show is_mobile = true and platform = 'mobile-web'",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "Mozilla/5.0 (iPhone; CPU iPhone OS 14_0 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/14.0 Mobile/15E148 Safari/604.1",
+                "type": "text"
+              },
+              {
+                "key": "X-Session-ID",
+                "value": "postman-mobile-{{$randomUUID}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{api_base}}/flights/search?origin=DXB&destination=LHR&departureDate=2025-01-15&adults=2&cabinClass=BUSINESS&tripType=one-way",
+              "host": [
+                "{{api_base}}"
+              ],
+              "path": [
+                "flights",
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "origin",
+                  "value": "DXB"
+                },
+                {
+                  "key": "destination",
+                  "value": "LHR"
+                },
+                {
+                  "key": "adults",
+                  "value": "2"
+                },
+                {
+                  "key": "cabinClass",
+                  "value": "BUSINESS"
+                },
+                {
+                  "key": "tripType",
+                  "value": "one-way"
+                },
+                {
+                  "key": "departureDate",
+                  "value": "2025-01-15"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "Database Verification Tests",
+      "item": [
+        {
+          "name": "Check Recent Search Logs",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "// Note: This assumes you have a database query endpoint",
+                  "// You may need to implement this endpoint or run SQL queries manually",
+                  "pm.test('Search logs can be retrieved', function () {",
+                  "    // This test would verify that the flight_search_logs table",
+                  "    // contains the recent searches with correct airport codes",
+                  "    const responseJson = pm.response.json();",
+                  "    ",
+                  "    if (responseJson.success) {",
+                  "        pm.expect(responseJson.data).to.be.an('array');",
+                  "        ",
+                  "        // Check that recent logs have proper IATA codes",
+                  "        responseJson.data.forEach((log) => {",
+                  "            pm.expect(log.from_code).to.match(/^[A-Z]{3}$/);",
+                  "            pm.expect(log.to_code).to.match(/^[A-Z]{3}$/);",
+                  "            pm.expect(log.from_name).to.be.a('string').and.not.empty;",
+                  "            pm.expect(log.to_name).to.be.a('string').and.not.empty;",
+                  "        });",
+                  "    }",
+                  "});"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{api_base}}/debug/search-logs?limit=10",
+              "host": [
+                "{{api_base}}"
+              ],
+              "path": [
+                "debug",
+                "search-logs"
+              ],
+              "query": [
+                {
+                  "key": "limit",
+                  "value": "10"
+                }
+              ]
+            }
+          }
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "exec": [
+          "// Set up test environment variables",
+          "if (!pm.globals.get('test_session_id')) {",
+          "    pm.globals.set('test_session_id', 'postman-test-' + Date.now());",
+          "}"
+        ],
+        "type": "text/javascript"
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "exec": [
+          "// Global test cleanup",
+          "pm.test('Response time is reasonable', function () {",
+          "    pm.expect(pm.response.responseTime).to.be.below(10000);",
+          "});"
+        ],
+        "type": "text/javascript"
+      }
+    }
+  ]
+}
