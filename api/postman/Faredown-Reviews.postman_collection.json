@@ -1,0 +1,456 @@
+{
+  "info": {
+    "name": "Faredown Reviews API",
+    "_postman_id": "75672de4-97ec-44ab-8fdd-3badb5fedf13",
+    "description": "Endpoints for the end-to-end Reviews system (public + admin).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Public",
+      "item": [
+        {
+          "name": "Create Review (POST)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-ID",
+                "value": "{{userId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/properties/{{propertyId}}/reviews",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "properties",
+                "{{propertyId}}",
+                "reviews"
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"overall_rating\": 5,\n  \"staff_rating\": 5,\n  \"cleanliness_rating\": 5,\n  \"value_rating\": 4,\n  \"facilities_rating\": 5,\n  \"comfort_rating\": 5,\n  \"location_rating\": 5,\n  \"wifi_rating\": 4,\n  \"title\": \"Excellent stay at Dubai hotel\",\n  \"body\": \"We had an amazing stay at this hotel. The staff was incredibly friendly and helpful throughout our visit. The room was spacious, clean, and had a beautiful view of the city. The breakfast buffet was fantastic with a wide variety of options. The location is perfect for exploring Dubai. Would definitely recommend this hotel to anyone visiting the area.\",\n  \"trip_type\": \"Leisure\",\n  \"room_type\": \"Deluxe King Room\",\n  \"country_code\": \"IN\",\n  \"stay_start\": \"2025-01-15\",\n  \"stay_end\": \"2025-01-20\",\n  \"reviewer_name\": \"John Smith\"\n}"
+            },
+            "description": "Creates a review for a property. Auto-fills verification status based on booking history."
+          },
+          "response": []
+        },
+        {
+          "name": "List Reviews (GET)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/properties/{{propertyId}}/reviews?sort=recent&filter=all&page=1&limit=10",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "properties",
+                "{{propertyId}}",
+                "reviews"
+              ],
+              "query": [
+                {
+                  "key": "sort",
+                  "value": "recent",
+                  "description": "recent, top, lowest, helpful"
+                },
+                {
+                  "key": "filter",
+                  "value": "all",
+                  "description": "all, verified"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "10"
+                },
+                {
+                  "key": "trip_type",
+                  "value": "Leisure",
+                  "disabled": true,
+                  "description": "Optional: Leisure, Business, Family, Couple, Solo"
+                }
+              ]
+            },
+            "description": "Gets paginated reviews for a property with filtering and sorting options."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Review Summary (GET)",
+          "request": {
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/properties/{{propertyId}}/reviews/summary",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "properties",
+                "{{propertyId}}",
+                "reviews",
+                "summary"
+              ]
+            },
+            "description": "Gets aggregated review statistics for a property."
+          },
+          "response": []
+        },
+        {
+          "name": "Mark Helpful (POST)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "{{userId}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/helpful",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "reviews",
+                "{{reviewId}}",
+                "helpful"
+              ]
+            },
+            "description": "Marks a review as helpful. One vote per user per review."
+          },
+          "response": []
+        },
+        {
+          "name": "Report Review (POST)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{authToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-ID",
+                "value": "{{userId}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Inappropriate content\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/reviews/{{reviewId}}/report",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "reviews",
+                "{{reviewId}}",
+                "report"
+              ]
+            },
+            "description": "Reports a review for moderation."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Admin",
+      "item": [
+        {
+          "name": "Admin List Reviews (GET)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/reviews?status=pending&page=1&limit=50",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "reviews"
+              ],
+              "query": [
+                {
+                  "key": "status",
+                  "value": "pending",
+                  "description": "pending, approved, rejected"
+                },
+                {
+                  "key": "page",
+                  "value": "1"
+                },
+                {
+                  "key": "limit",
+                  "value": "50"
+                },
+                {
+                  "key": "property_id",
+                  "value": "{{propertyId}}",
+                  "disabled": true,
+                  "description": "Optional: filter by property"
+                },
+                {
+                  "key": "verified",
+                  "value": "true",
+                  "disabled": true,
+                  "description": "Optional: true/false"
+                }
+              ]
+            },
+            "description": "Gets reviews for admin moderation with filtering options."
+          },
+          "response": []
+        },
+        {
+          "name": "Get Admin Stats (GET)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/reviews/stats",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "reviews",
+                "stats"
+              ]
+            },
+            "description": "Gets review statistics for admin dashboard."
+          },
+          "response": []
+        },
+        {
+          "name": "Approve Review (POST)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "X-User-ID",
+                "value": "admin",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/reviews/{{reviewId}}/approve",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "reviews",
+                "{{reviewId}}",
+                "approve"
+              ]
+            },
+            "description": "Approves a pending review."
+          },
+          "response": []
+        },
+        {
+          "name": "Reject Review (POST)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-ID",
+                "value": "admin",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"reason\": \"Inappropriate content or violates community guidelines\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/reviews/{{reviewId}}/reject",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "reviews",
+                "{{reviewId}}",
+                "reject"
+              ]
+            },
+            "description": "Rejects a review with optional reason."
+          },
+          "response": []
+        },
+        {
+          "name": "Respond to Review (POST)",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{adminToken}}",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "X-User-ID",
+                "value": "admin",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"body\": \"Thank you for your wonderful review! We're delighted to hear that you enjoyed your stay with us. We appreciate your feedback about our staff and facilities, and we look forward to welcoming you back soon.\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/admin/reviews/{{reviewId}}/respond",
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "path": [
+                "api",
+                "admin",
+                "reviews",
+                "{{reviewId}}",
+                "respond"
+              ]
+            },
+            "description": "Adds an official property response to a review."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev"
+    },
+    {
+      "key": "propertyId",
+      "value": "12345"
+    },
+    {
+      "key": "reviewId",
+      "value": "00000000-0000-0000-0000-000000000000"
+    },
+    {
+      "key": "userId",
+      "value": "user123"
+    },
+    {
+      "key": "authToken",
+      "value": "user-jwt-token-here"
+    },
+    {
+      "key": "adminToken",
+      "value": "admin-jwt-token-here"
+    }
+  ]
+}
