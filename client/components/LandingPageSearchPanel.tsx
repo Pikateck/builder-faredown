@@ -243,8 +243,74 @@ export function LandingPageSearchPanel() {
     }
   }, [tripType]);
 
+  // Validation function
+  const validateSearch = () => {
+    // Check if From city is selected
+    if (!selectedFromCity) {
+      alert('Please select a departure city');
+      return false;
+    }
+
+    // Check if To city is selected (except for hotels and sightseeing)
+    if (!selectedToCity) {
+      alert('Please select a destination city');
+      return false;
+    }
+
+    // Check if From and To are the same
+    const fromCode = cityData[selectedFromCity]?.code || "BOM";
+    const toCode = cityData[selectedToCity]?.code || "DXB";
+    if (fromCode === toCode) {
+      alert('Departure and destination cities cannot be the same');
+      return false;
+    }
+
+    // Multi-city validation
+    if (tripType === "multi-city") {
+      if (additionalFlights.length === 0) {
+        alert('Please add at least one additional flight for multi-city travel');
+        return false;
+      }
+
+      // Check each leg for validity
+      for (let i = 0; i < additionalFlights.length; i++) {
+        const flight = additionalFlights[i];
+        if (!flight.from || !flight.fromCode || !flight.to || !flight.toCode) {
+          alert(`Please complete all details for Flight ${i + 2}`);
+          return false;
+        }
+        if (flight.fromCode === flight.toCode) {
+          alert(`Departure and destination cannot be the same for Flight ${i + 2}`);
+          return false;
+        }
+        if (!flight.date) {
+          alert(`Please select a date for Flight ${i + 2}`);
+          return false;
+        }
+      }
+    }
+
+    // Check if departure date is selected
+    if (!departureDate) {
+      alert('Please select a departure date');
+      return false;
+    }
+
+    // Check if return date is selected for round-trip
+    if (tripType === "round-trip" && !returnDate) {
+      alert('Please select a return date');
+      return false;
+    }
+
+    return true;
+  };
+
   // Handle search
   const handleSearch = () => {
+    // Validate before proceeding
+    if (!validateSearch()) {
+      return;
+    }
     const fromCode = cityData[selectedFromCity]?.code || "BOM";
     const toCode = cityData[selectedToCity]?.code || "DXB";
 
