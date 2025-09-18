@@ -18,8 +18,10 @@ interface FlightLeg {
   id: string;
   from: string;
   fromCode: string;
+  fromAirport: string;
   to: string;
   toCode: string;
+  toAirport: string;
   date: Date;
 }
 
@@ -46,16 +48,20 @@ export function MobileFullScreenMultiCityInput({
             id: "leg1",
             from: "Mumbai",
             fromCode: "BOM",
+            fromAirport: "Chhatrapati Shivaji Intl",
             to: "Dubai",
             toCode: "DXB",
+            toAirport: "Dubai International",
             date: addDays(new Date(), 1),
           },
           {
             id: "leg2",
             from: "Dubai",
             fromCode: "DXB",
+            fromAirport: "Dubai International",
             to: "London",
             toCode: "LHR",
+            toAirport: "Heathrow",
             date: addDays(new Date(), 8),
           },
         ],
@@ -76,8 +82,10 @@ export function MobileFullScreenMultiCityInput({
       id: `leg${legs.length + 1}`,
       from: lastLeg.to, // Start from previous destination
       fromCode: lastLeg.toCode,
+      fromAirport: lastLeg.toAirport,
       to: "Paris",
       toCode: "CDG",
+      toAirport: "Charles de Gaulle",
       date: addDays(lastLeg.date, 3),
     };
 
@@ -98,11 +106,23 @@ export function MobileFullScreenMultiCityInput({
   const handleCitySelect = (city: string, code: string) => {
     if (editingLeg && editingField) {
       if (editingField === "from") {
+        // Debug logging for airport selection
+        console.log('Multi-city from airport selected:', {
+          legId: editingLeg,
+          selected: { code, city, airport: cities[city]?.airport }
+        });
         updateLeg(editingLeg, "from", city);
         updateLeg(editingLeg, "fromCode", code);
+        updateLeg(editingLeg, "fromAirport", cities[city]?.airport || "Unknown Airport");
       } else {
+        // Debug logging for airport selection
+        console.log('Multi-city to airport selected:', {
+          legId: editingLeg,
+          selected: { code, city, airport: cities[city]?.airport }
+        });
         updateLeg(editingLeg, "to", city);
         updateLeg(editingLeg, "toCode", code);
+        updateLeg(editingLeg, "toAirport", cities[city]?.airport || "Unknown Airport");
       }
     }
     setEditingLeg(null);
