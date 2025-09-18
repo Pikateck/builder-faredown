@@ -351,12 +351,22 @@ export function LandingPageSearchPanel() {
           id: "flight1",
           from: selectedFromCity,
           fromCode: cityData[selectedFromCity]?.code || "BOM",
+          fromAirport: cityData[selectedFromCity]?.airport || "Unknown Airport",
           to: selectedToCity,
           toCode: cityData[selectedToCity]?.code || "DXB",
+          toAirport: cityData[selectedToCity]?.airport || "Unknown Airport",
           date: departureDate,
         },
         ...additionalFlights,
       ];
+
+      // Debug logging for multi-city payload
+      console.log('Multi-city search payload:', {
+        legs: allLegs,
+        totalLegs: allLegs.length,
+        travelers,
+        cabinClass: selectedClass
+      });
 
       const searchParams = new URLSearchParams({
         tripType: "multi-city",
