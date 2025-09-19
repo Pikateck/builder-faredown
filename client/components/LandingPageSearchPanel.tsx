@@ -82,9 +82,9 @@ export function LandingPageSearchPanel() {
   const [selectedClass, setSelectedClass] = useState("Economy");
   const [showClassDropdown, setShowClassDropdown] = useState(false);
 
-  // City selection states
-  const [selectedFromCity, setSelectedFromCity] = useState("Mumbai");
-  const [selectedToCity, setSelectedToCity] = useState("Dubai");
+  // City selection states - start blank by default
+  const [selectedFromCity, setSelectedFromCity] = useState("");
+  const [selectedToCity, setSelectedToCity] = useState("");
   const [showFromCities, setShowFromCities] = useState(false);
   const [showToCities, setShowToCities] = useState(false);
 
