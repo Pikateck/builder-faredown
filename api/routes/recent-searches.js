@@ -17,8 +17,23 @@ function identifyUser(req, res, next) {
   }
 
   // Handle guest users with device_id cookie
-  let deviceId = req.cookies?.fd_device_id;
-  
+  // Parse cookies manually if req.cookies is not available
+  let deviceId = null;
+
+  if (req.cookies && req.cookies.fd_device_id) {
+    deviceId = req.cookies.fd_device_id;
+  } else if (req.headers.cookie) {
+    // Manual cookie parsing as fallback
+    const cookies = req.headers.cookie.split(';');
+    for (let cookie of cookies) {
+      const [name, value] = cookie.trim().split('=');
+      if (name === 'fd_device_id') {
+        deviceId = value;
+        break;
+      }
+    }
+  }
+
   if (!deviceId) {
     deviceId = uuidv4();
     res.cookie('fd_device_id', deviceId, {
@@ -28,7 +43,8 @@ function identifyUser(req, res, next) {
       secure: process.env.NODE_ENV === 'production'
     });
   }
-  
+
+  console.log('🍪 Device ID:', deviceId); // Debug log
   req.identity = { type: 'device', id: deviceId };
   next();
 }
