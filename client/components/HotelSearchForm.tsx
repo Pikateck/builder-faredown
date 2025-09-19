@@ -303,6 +303,45 @@ export function HotelSearchForm({
       };
       saveLastSearch(searchData);
 
+      // Store in recent searches API (non-blocking)
+      const recentSearchData = {
+        destination: {
+          name: destination || 'Any destination',
+          code: destinationCode || 'HTL'
+        },
+        dates: {
+          checkin: checkInDate.toISOString(),
+          checkout: checkOutDate.toISOString()
+        },
+        adults: guests.adults,
+        children: guests.children,
+        rooms: guests.rooms
+      };
+
+      // Non-blocking API call to store recent search
+      fetch('/api/recent-searches', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          module: 'hotels',
+          query: recentSearchData
+        })
+      }).then(response => {
+        if (response.ok) {
+          console.log('✅ Recent hotel search saved successfully');
+          return response.json();
+        } else {
+          throw new Error(`API error: ${response.status}`);
+        }
+      }).then(data => {
+        console.log('📋 Saved hotel search ID:', data.id);
+      }).catch(error => {
+        console.error('Failed to save recent hotel search:', error);
+      });
+
       const url = `/hotels/results?${searchParams.toString()}`;
       console.log("🏨 Navigating to hotel search:", url);
 
@@ -570,10 +609,10 @@ export function HotelSearchForm({
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <BookingCalendar
+                  bookingType="hotel"
                   initialRange={{
                     startDate: checkInDate || new Date(),
-                    endDate:
-                      checkOutDate || addDays(checkInDate || new Date(), 3),
+                    endDate: checkOutDate || addDays(checkInDate || new Date(), 3),
                   }}
                   onChange={(range) => {
                     console.log("Hotel calendar range selected:", range);
@@ -769,6 +808,15 @@ export function HotelSearchForm({
               <span className="text-sm sm:text-base">Search</span>
             </Button>
           </div>
+        </div>
+
+        {/* Recent Searches Section */}
+        <div className="mt-8">
+          <RecentSearches
+            module="hotels"
+            onSearchClick={handleRecentSearchClick}
+            className="p-4 sm:p-6 border border-gray-200 shadow-sm"
+          />
         </div>
       </div>
     </>
