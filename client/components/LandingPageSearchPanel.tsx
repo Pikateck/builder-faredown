@@ -134,6 +134,69 @@ export function LandingPageSearchPanel() {
     setTravelers(newTravelers);
   };
 
+  // Handle recent search click - populate form with selected search data
+  const handleRecentSearchClick = (searchData: any) => {
+    try {
+      // Set cities
+      if (searchData.from) {
+        const fromMatch = Object.entries(cityData).find(
+          ([name, data]) =>
+            searchData.from.code === data.code ||
+            searchData.from.name === name ||
+            name === searchData.from.name
+        );
+        if (fromMatch) setSelectedFromCity(fromMatch[0]);
+      }
+
+      if (searchData.to) {
+        const toMatch = Object.entries(cityData).find(
+          ([name, data]) =>
+            searchData.to.code === data.code ||
+            searchData.to.name === name ||
+            name === searchData.to.name
+        );
+        if (toMatch) setSelectedToCity(toMatch[0]);
+      }
+
+      // Set dates
+      if (searchData.dates?.depart) {
+        const depDate = new Date(searchData.dates.depart);
+        if (!isNaN(depDate.getTime())) setDepartureDate(depDate);
+      }
+
+      if (searchData.dates?.return) {
+        const retDate = new Date(searchData.dates.return);
+        if (!isNaN(retDate.getTime())) setReturnDate(retDate);
+      }
+
+      // Set travelers
+      if (searchData.adults || searchData.children) {
+        setTravelers({
+          adults: searchData.adults || 1,
+          children: searchData.children || 0
+        });
+      }
+
+      // Set trip type
+      if (searchData.tripType) {
+        setTripType(searchData.tripType);
+      }
+
+      // Set cabin class
+      if (searchData.cabin) {
+        const classMap: { [key: string]: string } = {
+          economy: "Economy",
+          premium: "Premium Economy",
+          business: "Business",
+          first: "First",
+        };
+        setSelectedClass(classMap[searchData.cabin.toLowerCase()] || "Economy");
+      }
+    } catch (error) {
+      console.error('Error loading recent search:', error);
+    }
+  };
+
   // Multi-city functions - simple approach
   const addFlight = () => {
     const newFlightId = `flight${additionalFlights.length + 2}`;
