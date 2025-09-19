@@ -21,9 +21,24 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch recent searches on component mount
+  // Fetch recent searches on component mount with retry
   useEffect(() => {
-    fetchRecentSearches();
+    let retryCount = 0;
+    const maxRetries = 2;
+
+    const fetchWithRetry = async () => {
+      try {
+        await fetchRecentSearches();
+      } catch (error) {
+        if (retryCount < maxRetries) {
+          retryCount++;
+          console.log(`Retrying recent searches fetch (${retryCount}/${maxRetries})`);
+          setTimeout(fetchWithRetry, 1000 * retryCount); // Exponential backoff
+        }
+      }
+    };
+
+    fetchWithRetry();
   }, [module]);
 
   const fetchRecentSearches = async () => {
@@ -32,18 +47,40 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
       setError(null);
 
       const response = await fetch(`/api/recent-searches?module=${module}&limit=6`, {
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
       });
 
       if (!response.ok) {
-        throw new Error('Failed to fetch recent searches');
+        // Handle specific HTTP status codes
+        if (response.status === 404) {
+          console.warn('Recent searches API not available');
+          setRecentSearches([]);
+          return;
+        } else if (response.status >= 500) {
+          throw new Error('Server error - please try again later');
+        } else {
+          throw new Error(`API error: ${response.status}`);
+        }
       }
 
       const data = await response.json();
-      setRecentSearches(data);
+      setRecentSearches(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching recent searches:', err);
-      setError(err instanceof Error ? err.message : 'Failed to load recent searches');
+
+      // Handle network errors gracefully
+      if (err instanceof TypeError && err.message.includes('fetch')) {
+        setError('Unable to connect to server');
+      } else {
+        setError(err instanceof Error ? err.message : 'Failed to load recent searches');
+      }
+
+      // Set empty array as fallback
+      setRecentSearches([]);
     } finally {
       setLoading(false);
     }
@@ -51,21 +88,29 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
 
   const deleteRecentSearch = async (searchId: number, event: React.MouseEvent) => {
     event.stopPropagation();
-    
+
     try {
       const response = await fetch(`/api/recent-searches/${searchId}`, {
         method: 'DELETE',
-        credentials: 'include'
+        credentials: 'include',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        }
       });
 
-      if (response.ok) {
+      if (response.ok || response.status === 204) {
         // Remove from local state
         setRecentSearches(prev => prev.filter(search => search.id !== searchId));
+      } else if (response.status === 404) {
+        // Item already deleted, just remove from UI
+        setRecentSearches(prev => prev.filter(search => search.id !== searchId));
       } else {
-        console.error('Failed to delete recent search');
+        console.error('Failed to delete recent search:', response.status);
       }
     } catch (err) {
       console.error('Error deleting recent search:', err);
+      // Don't show error to user for delete operations
     }
   };
 
