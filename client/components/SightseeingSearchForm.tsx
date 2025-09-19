@@ -71,6 +71,31 @@ export function SightseeingSearchForm() {
     }
   }, []);
 
+  // Handle recent search click - populate form with selected search data
+  const handleRecentSearchClick = (searchData: any) => {
+    try {
+      // Set destination
+      if (searchData.destination?.name) {
+        setDestination(searchData.destination.name);
+        setDestinationCode(searchData.destination.code || "");
+        setInputValue(searchData.destination.name);
+      }
+
+      // Set dates
+      if (searchData.tourDate) {
+        const tourDateObj = new Date(searchData.tourDate);
+        if (!isNaN(tourDateObj.getTime())) setTourDate(tourDateObj);
+      }
+
+      if (searchData.endDate) {
+        const endDateObj = new Date(searchData.endDate);
+        if (!isNaN(endDateObj.getTime())) setEndDate(endDateObj);
+      }
+    } catch (error) {
+      console.error('Error loading recent sightseeing search:', error);
+    }
+  };
+
   useEffect(() => {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768);
@@ -157,7 +182,7 @@ export function SightseeingSearchForm() {
       console.log("🎯 Navigating to sightseeing search:", url);
       navigate(url);
     } catch (error) {
-      console.error("🚨 Error in sightseeing search:", error);
+      console.error("�� Error in sightseeing search:", error);
       setErrorMessage("Search failed. Please try again.");
       setShowError(true);
     }
