@@ -226,6 +226,69 @@ export function MobileNativeSearchForm({
     setMultiCityLegs(legs);
   };
 
+  // Handle recent search click - populate form with selected search data
+  const handleRecentSearchClick = (searchData: any) => {
+    try {
+      // Set cities
+      if (searchData.from) {
+        const fromMatch = Object.entries(cityData).find(
+          ([name, data]) =>
+            searchData.from.code === data.code ||
+            searchData.from.name === name ||
+            name === searchData.from.name
+        );
+        if (fromMatch) {
+          setFromCity(fromMatch[0]);
+          setFromCode(fromMatch[1].code);
+        }
+      }
+
+      if (searchData.to) {
+        const toMatch = Object.entries(cityData).find(
+          ([name, data]) =>
+            searchData.to.code === data.code ||
+            searchData.to.name === name ||
+            name === searchData.to.name
+        );
+        if (toMatch) {
+          setToCity(toMatch[0]);
+          setToCode(toMatch[1].code);
+        }
+      }
+
+      // Set dates
+      if (searchData.dates?.depart) {
+        const depDate = new Date(searchData.dates.depart);
+        if (!isNaN(depDate.getTime())) {
+          setDateRange(prev => ({ ...prev, startDate: depDate }));
+        }
+      }
+
+      if (searchData.dates?.return) {
+        const retDate = new Date(searchData.dates.return);
+        if (!isNaN(retDate.getTime())) {
+          setDateRange(prev => ({ ...prev, endDate: retDate }));
+        }
+      }
+
+      // Set travelers
+      if (searchData.adults || searchData.children) {
+        setTravelers(prev => ({
+          ...prev,
+          adults: searchData.adults || 1,
+          children: searchData.children || 0
+        }));
+      }
+
+      // Set trip type
+      if (searchData.tripType && module === 'flights') {
+        setTripType(searchData.tripType);
+      }
+    } catch (error) {
+      console.error('Error loading recent search:', error);
+    }
+  };
+
   // Format date display
   const formatDateDisplay = () => {
     if (module === "flights" && tripType === "multi-city") {
