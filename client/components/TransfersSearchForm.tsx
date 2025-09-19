@@ -1029,14 +1029,12 @@ export function TransfersSearchForm() {
               </div>
             </div>
 
-            {/* Recent Searches Section */}
-            <div className="mt-8">
-              <RecentSearches
-                module="transfers"
-                onSearchClick={handleRecentSearchClick}
-                className="p-4 sm:p-6 border border-gray-200 shadow-sm"
-              />
-            </div>
+            {/* Recent Searches Section - Only render wrapper if component has content */}
+            <RecentSearches
+              module="transfers"
+              onSearchClick={handleRecentSearchClick}
+              className="mt-8 p-4 sm:p-6 border border-gray-200 shadow-sm"
+            />
           </>
         )}
       </div>
