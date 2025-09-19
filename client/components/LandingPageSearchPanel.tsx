@@ -143,7 +143,7 @@ export function LandingPageSearchPanel() {
       fromAirport: "",
       to: "",
       toCode: "",
-      toAirport: "Dubai International Airport",
+      toAirport: "",
       date: addDays(new Date(), additionalFlights.length + 2),
     };
 
