@@ -561,6 +561,41 @@ export function MobileNativeSearchForm({
       searchParams.set("infants", travelers.infants.toString());
     }
 
+    // Store in recent searches API (non-blocking)
+    const recentSearchData = {
+      tripType,
+      from: {
+        code: fromCode,
+        name: fromCity
+      },
+      to: {
+        code: toCode,
+        name: toCity
+      },
+      dates: {
+        depart: dateRange.startDate.toISOString(),
+        return: dateRange.endDate ? dateRange.endDate.toISOString() : null
+      },
+      adults: travelers.adults,
+      children: travelers.children || 0,
+      directOnly: false
+    };
+
+    // Non-blocking API call to store recent search
+    fetch('/api/recent-searches', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        module: module,
+        query: recentSearchData
+      })
+    }).catch(error => {
+      console.error('Failed to save recent search:', error);
+    });
+
     navigate(`/${module}/results?${searchParams.toString()}`);
   };
 
