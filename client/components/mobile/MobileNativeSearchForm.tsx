@@ -984,6 +984,15 @@ export function MobileNativeSearchForm({
             cities={cityData}
           />
         )}
+
+      {/* Recent Searches Section */}
+      <div className="mt-6 px-3 sm:px-4">
+        <RecentSearches
+          module={module}
+          onSearchClick={handleRecentSearchClick}
+          className="p-4 bg-white rounded-xl border border-gray-200 shadow-sm"
+        />
+      </div>
     </div>
   );
 }
