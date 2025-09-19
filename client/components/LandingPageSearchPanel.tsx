@@ -138,11 +138,11 @@ export function LandingPageSearchPanel() {
     const newFlightId = `flight${additionalFlights.length + 2}`;
     const newFlight: FlightLeg = {
       id: newFlightId,
-      from: "Mumbai",
-      fromCode: "BOM",
-      fromAirport: "Rajiv Gandhi Shivaji International",
-      to: "Dubai",
-      toCode: "DXB",
+      from: "",
+      fromCode: "",
+      fromAirport: "",
+      to: "",
+      toCode: "",
       toAirport: "Dubai International Airport",
       date: addDays(new Date(), additionalFlights.length + 2),
     };
