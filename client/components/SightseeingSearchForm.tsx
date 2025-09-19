@@ -167,6 +167,40 @@ export function SightseeingSearchForm() {
       // Save to sessionStorage for persistence
       saveLastSearch(searchData);
 
+      // Store in recent searches API (non-blocking)
+      const recentSearchData = {
+        destination: {
+          name: destination,
+          code: destinationCode || 'ACT'
+        },
+        tourDate: tourDate.toISOString(),
+        endDate: endDate?.toISOString() || null
+      };
+
+      // Non-blocking API call to store recent search
+      fetch('/api/recent-searches', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          module: 'sightseeing',
+          query: recentSearchData
+        })
+      }).then(response => {
+        if (response.ok) {
+          console.log('✅ Recent sightseeing search saved successfully');
+          return response.json();
+        } else {
+          throw new Error(`API error: ${response.status}`);
+        }
+      }).then(data => {
+        console.log('📋 Saved sightseeing search ID:', data.id);
+      }).catch(error => {
+        console.error('Failed to save recent sightseeing search:', error);
+      });
+
       const searchParams = new URLSearchParams({
         destination: destination,
         tourDate: tourDate.toISOString(),
@@ -182,7 +216,7 @@ export function SightseeingSearchForm() {
       console.log("🎯 Navigating to sightseeing search:", url);
       navigate(url);
     } catch (error) {
-      console.error("�� Error in sightseeing search:", error);
+      console.error("🚨 Error in sightseeing search:", error);
       setErrorMessage("Search failed. Please try again.");
       setShowError(true);
     }
@@ -379,6 +413,15 @@ export function SightseeingSearchForm() {
               <span className="text-sm sm:text-base">Explore</span>
             </Button>
           </div>
+        </div>
+
+        {/* Recent Searches Section */}
+        <div className="mt-8">
+          <RecentSearches
+            module="sightseeing"
+            onSearchClick={handleRecentSearchClick}
+            className="p-4 sm:p-6 border border-gray-200 shadow-sm"
+          />
         </div>
       </div>
     </>
