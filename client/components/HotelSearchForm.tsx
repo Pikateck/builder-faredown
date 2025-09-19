@@ -31,6 +31,7 @@ import {
   getTypeLabel,
   type SearchResult,
 } from "@/lib/hotelSearchData";
+import { RecentSearches } from "./RecentSearches";
 
 interface GuestConfig {
   adults: number;
@@ -55,6 +56,7 @@ export function HotelSearchForm({
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
+  // Start blank by default - no pre-filled values
   const [destination, setDestination] = useState("");
   const [destinationCode, setDestinationCode] = useState("");
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
@@ -65,22 +67,16 @@ export function HotelSearchForm({
     null,
   );
 
-  // Set default dates to future dates
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const checkOutDefault = new Date();
-  checkOutDefault.setDate(checkOutDefault.getDate() + 4);
-
-  const [checkInDate, setCheckInDate] = useState<Date | undefined>(tomorrow);
-  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(
-    checkOutDefault,
-  );
+  // Start with no dates selected - user must choose
+  const [checkInDate, setCheckInDate] = useState<Date | undefined>(undefined);
+  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(undefined);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
+  // Start with default guest configuration
   const [guests, setGuests] = useState<GuestConfig>({
     adults: 2,
-    children: 1,
-    childrenAges: [10],
+    children: 0,
+    childrenAges: [],
     rooms: 1,
   });
   const [isGuestPopoverOpen, setIsGuestPopoverOpen] = useState(false);
@@ -88,63 +84,10 @@ export function HotelSearchForm({
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
 
-  // Initialize form with data from URL params, SearchContext, or sessionStorage
-  useEffect(() => {
-    const location = window.location;
-    const urlParams = qp.parse(location.search);
-    const lastSearch = getLastSearch();
-    const displayData = getDisplayData();
-
-    // Priority: URL params > SearchContext > sessionStorage > defaults
-    const sourceData = Object.keys(urlParams).length > 0 ? urlParams :
-                      (displayData.destination ? displayData : lastSearch);
-
-    if (sourceData) {
-      // Set destination
-      if (sourceData.destination || sourceData.city) {
-        const dest = sourceData.destination || sourceData.city;
-        if (dest && dest !== "Dubai") {
-          setDestination(dest);
-          setDestinationCode("");
-        }
-      }
-
-      // Set check-in date
-      if (sourceData.checkIn || sourceData.checkin) {
-        const checkInDateStr = sourceData.checkIn || sourceData.checkin;
-        const checkInDateFromSource = new Date(checkInDateStr);
-        if (!isNaN(checkInDateFromSource.getTime())) {
-          setCheckInDate(checkInDateFromSource);
-        }
-      }
-
-      // Set check-out date
-      if (sourceData.checkOut || sourceData.checkout) {
-        const checkOutDateStr = sourceData.checkOut || sourceData.checkout;
-        const checkOutDateFromSource = new Date(checkOutDateStr);
-        if (!isNaN(checkOutDateFromSource.getTime())) {
-          setCheckOutDate(checkOutDateFromSource);
-        }
-      }
-
-      // Set guest configuration
-      const adults = parseInt(sourceData.adults) || displayData.adults;
-      const children = parseInt(sourceData.children) || displayData.children;
-      const rooms = parseInt(sourceData.rooms) || displayData.rooms;
-
-      if (adults || children || rooms) {
-        setGuests((prev) => ({
-          ...prev,
-          adults: adults || prev.adults,
-          children: children || prev.children,
-          childrenAges: Array(children || prev.children)
-            .fill(10)
-            .map((_, i) => prev.childrenAges[i] || 10),
-          rooms: rooms || prev.rooms,
-        }));
-      }
-    }
-  }, [searchParams, getDisplayData]);
+  // Keep form blank by default - users can load from Recent Searches if needed
+  // useEffect(() => {
+  //   // Auto-population logic commented out to ensure blank-by-default behavior
+  // }, [searchParams, getDisplayData]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -178,6 +121,41 @@ export function HotelSearchForm({
   }, [inputValue, isUserTyping]);
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
+
+  // Handle recent search click - populate form with selected search data
+  const handleRecentSearchClick = (searchData: any) => {
+    try {
+      // Set destination
+      if (searchData.destination?.name) {
+        setDestination(searchData.destination.name);
+        setDestinationCode(searchData.destination.code || "");
+      }
+
+      // Set dates
+      if (searchData.dates?.checkin) {
+        const checkinDate = new Date(searchData.dates.checkin);
+        if (!isNaN(checkinDate.getTime())) setCheckInDate(checkinDate);
+      }
+
+      if (searchData.dates?.checkout) {
+        const checkoutDate = new Date(searchData.dates.checkout);
+        if (!isNaN(checkoutDate.getTime())) setCheckOutDate(checkoutDate);
+      }
+
+      // Set guests
+      if (searchData.adults || searchData.children || searchData.rooms) {
+        setGuests(prev => ({
+          ...prev,
+          adults: searchData.adults || prev.adults,
+          children: searchData.children || 0,
+          childrenAges: Array(searchData.children || 0).fill(10),
+          rooms: searchData.rooms || prev.rooms
+        }));
+      }
+    } catch (error) {
+      console.error('Error loading recent hotel search:', error);
+    }
+  };
 
   const calculateNights = (
     checkIn: Date | undefined,
