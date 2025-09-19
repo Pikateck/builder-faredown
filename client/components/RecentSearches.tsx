@@ -194,41 +194,39 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
         <h3 className="text-lg font-semibold text-gray-900">Your recent searches</h3>
       </div>
 
-      {!loading && !error && recentSearches.length > 0 && (
-        <div className="space-y-2">
-          {recentSearches.map((search) => {
-            const { title, subtitle, icon } = formatSearchDisplay(search);
-            
-            return (
-              <div
-                key={search.id}
-                onClick={() => onSearchClick(search.query)}
-                className="group flex items-center justify-between p-3 bg-gray-50 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors"
-              >
-                <div className="flex items-center space-x-3 min-w-0 flex-1">
-                  {icon}
-                  <div className="min-w-0 flex-1">
-                    <div className="text-sm font-medium text-gray-900 truncate">
-                      {title}
-                    </div>
-                    <div className="text-xs text-gray-600 truncate">
-                      {subtitle}
-                    </div>
+      <div className="space-y-2">
+        {recentSearches.map((search) => {
+          const { title, subtitle, icon } = formatSearchDisplay(search);
+
+          return (
+            <div
+              key={search.id}
+              onClick={() => onSearchClick(search.query)}
+              className="group flex items-center justify-between p-3 bg-gray-50 hover:bg-blue-50 rounded-lg cursor-pointer transition-colors"
+            >
+              <div className="flex items-center space-x-3 min-w-0 flex-1">
+                {icon}
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-medium text-gray-900 truncate">
+                    {title}
+                  </div>
+                  <div className="text-xs text-gray-600 truncate">
+                    {subtitle}
                   </div>
                 </div>
-                
-                <button
-                  onClick={(e) => deleteRecentSearch(search.id, e)}
-                  className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white rounded-full transition-all"
-                  title="Remove from recent searches"
-                >
-                  <X className="w-3 h-3 text-gray-400 hover:text-gray-600" />
-                </button>
               </div>
-            );
-          })}
-        </div>
-      )}
+
+              <button
+                onClick={(e) => deleteRecentSearch(search.id, e)}
+                className="opacity-0 group-hover:opacity-100 p-1 hover:bg-white rounded-full transition-all"
+                title="Remove from recent searches"
+              >
+                <X className="w-3 h-3 text-gray-400 hover:text-gray-600" />
+              </button>
+            </div>
+          );
+        })}
+      </div>
     </div>
   );
 }
