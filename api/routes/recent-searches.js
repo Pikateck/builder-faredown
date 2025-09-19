@@ -44,7 +44,6 @@ function identifyUser(req, res, next) {
     });
   }
 
-  console.log('🍪 Device ID:', deviceId); // Debug log
   req.identity = { type: 'device', id: deviceId };
   next();
 }
