@@ -182,8 +182,18 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
     }
   };
 
-  // Don't render if no searches and not loading
+  // Don't render anything if no searches (including loading and error states for blank state)
   if (!loading && recentSearches.length === 0) {
+    return null;
+  }
+
+  // Don't render during initial load if there are no cached searches
+  if (loading && recentSearches.length === 0) {
+    return null;
+  }
+
+  // Don't render if there's an error and no searches to show
+  if (error && recentSearches.length === 0) {
     return null;
   }
 
@@ -194,7 +204,7 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
         <h3 className="text-lg font-semibold text-gray-900">Your recent searches</h3>
       </div>
 
-      {loading && (
+      {loading && recentSearches.length === 0 && (
         <div className="space-y-3">
           {[1, 2, 3].map(i => (
             <div key={i} className="animate-pulse">
@@ -207,12 +217,6 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
               </div>
             </div>
           ))}
-        </div>
-      )}
-
-      {error && (
-        <div className="text-sm text-gray-500 py-4">
-          Unable to load recent searches
         </div>
       )}
 
