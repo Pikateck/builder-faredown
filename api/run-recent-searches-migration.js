@@ -18,28 +18,20 @@ async function runMigration() {
     const migrationPath = path.join(__dirname, 'database/migrations/V2025_09_19_recent_searches.sql');
     const migrationSQL = fs.readFileSync(migrationPath, 'utf8');
     
-    // Split by semicolons and filter out empty statements
-    const statements = migrationSQL
-      .split(';')
-      .map(stmt => stmt.trim())
-      .filter(stmt => stmt.length > 0 && !stmt.startsWith('--'));
-    
-    console.log(`📋 Executing ${statements.length} SQL statements...`);
-    
-    // Execute each statement
-    for (let i = 0; i < statements.length; i++) {
-      try {
-        await pool.query(statements[i]);
-        console.log(`✅ Statement ${i + 1} executed successfully`);
-      } catch (error) {
-        if (error.message.includes('already exists')) {
-          console.log(`⚠️  Statement ${i + 1} skipped (already exists): ${error.message}`);
-        } else {
-          console.error(`❌ Statement ${i + 1} failed:`, error.message);
-          throw error;
-        }
+    // Execute the entire migration as one transaction
+    console.log('📋 Executing migration SQL...');
+
+    try {
+      await pool.query(migrationSQL);
+      console.log('✅ Migration executed successfully');
+    } catch (error) {
+      if (error.message.includes('already exists')) {
+        console.log('⚠️  Migration skipped (objects already exist)');
+      } else {
+        throw error;
       }
     }
+    
     
     console.log('🎉 Recent searches migration completed successfully!');
     
