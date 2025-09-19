@@ -29,6 +29,7 @@ import {
   Clock,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
+import { RecentSearches } from "./RecentSearches";
 
 interface PassengerConfig {
   adults: number;
