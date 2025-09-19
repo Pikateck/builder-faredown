@@ -1,18 +1,18 @@
-const express = require('express');
-const crypto = require('crypto');
-const { Pool } = require('pg');
-const { v4: uuidv4 } = require('uuid');
+const express = require("express");
+const crypto = require("crypto");
+const { Pool } = require("pg");
+const { v4: uuidv4 } = require("uuid");
 
 const router = express.Router();
 
 // Use existing database connection
-const pool = require('../database/connection');
+const pool = require("../database/connection");
 
 // Middleware to identify user/device
 function identifyUser(req, res, next) {
   // Check if user is authenticated (assuming auth middleware sets req.user)
   if (req.user && req.user.id) {
-    req.identity = { type: 'user', id: req.user.id };
+    req.identity = { type: "user", id: req.user.id };
     return next();
   }
 
@@ -24,10 +24,10 @@ function identifyUser(req, res, next) {
     deviceId = req.cookies.fd_device_id;
   } else if (req.headers.cookie) {
     // Manual cookie parsing as fallback
-    const cookies = req.headers.cookie.split(';');
+    const cookies = req.headers.cookie.split(";");
     for (let cookie of cookies) {
-      const [name, value] = cookie.trim().split('=');
-      if (name === 'fd_device_id') {
+      const [name, value] = cookie.trim().split("=");
+      if (name === "fd_device_id") {
         deviceId = value;
         break;
       }
@@ -36,15 +36,15 @@ function identifyUser(req, res, next) {
 
   if (!deviceId) {
     deviceId = uuidv4();
-    res.cookie('fd_device_id', deviceId, {
+    res.cookie("fd_device_id", deviceId, {
       httpOnly: true,
-      sameSite: 'lax',
+      sameSite: "lax",
       maxAge: 365 * 24 * 60 * 60 * 1000, // 1 year
-      secure: process.env.NODE_ENV === 'production'
+      secure: process.env.NODE_ENV === "production",
     });
   }
 
-  req.identity = { type: 'device', id: deviceId };
+  req.identity = { type: "device", id: deviceId };
   next();
 }
 
@@ -53,35 +53,44 @@ function createQueryHash(module, query) {
   // Sort keys for consistent hashing
   const sortedKeys = Object.keys(query).sort();
   const canonical = {};
-  sortedKeys.forEach(key => {
+  sortedKeys.forEach((key) => {
     canonical[key] = query[key];
   });
-  
+
   const canonicalString = `${module}:${JSON.stringify(canonical)}`;
-  return crypto.createHash('sha256').update(canonicalString).digest('hex');
+  return crypto.createHash("sha256").update(canonicalString).digest("hex");
 }
 
 // POST /api/recent-searches - Create a new recent search entry
-router.post('/', identifyUser, async (req, res) => {
+router.post("/", identifyUser, async (req, res) => {
   try {
     const { module, query } = req.body;
 
     // Validation
     if (!module || !query) {
-      return res.status(400).json({ 
-        error: 'module and query are required' 
+      return res.status(400).json({
+        error: "module and query are required",
       });
     }
 
-    const validModules = ['flights', 'hotels', 'flight_hotel', 'cars', 'activities', 'taxis', 'sightseeing', 'transfers'];
+    const validModules = [
+      "flights",
+      "hotels",
+      "flight_hotel",
+      "cars",
+      "activities",
+      "taxis",
+      "sightseeing",
+      "transfers",
+    ];
     if (!validModules.includes(module)) {
-      return res.status(400).json({ 
-        error: `module must be one of: ${validModules.join(', ')}` 
+      return res.status(400).json({
+        error: `module must be one of: ${validModules.join(", ")}`,
       });
     }
 
     const queryHash = createQueryHash(module, query);
-    
+
     const insertQuery = `
       INSERT INTO recent_searches (user_id, device_id, module, query_hash, query)
       VALUES ($1, $2, $3, $4, $5)
@@ -93,15 +102,15 @@ router.post('/', identifyUser, async (req, res) => {
     `;
 
     const values = [
-      req.identity.type === 'user' ? req.identity.id : null,
-      req.identity.type === 'device' ? req.identity.id : null,
+      req.identity.type === "user" ? req.identity.id : null,
+      req.identity.type === "device" ? req.identity.id : null,
       module,
       queryHash,
-      query
+      query,
     ];
 
     const result = await pool.query(insertQuery, values);
-    
+
     if (result.rows.length === 0) {
       // Fetch existing record if insert was ignored
       const existingQuery = `
@@ -111,33 +120,43 @@ router.post('/', identifyUser, async (req, res) => {
       `;
       const existingValues = [req.identity.id, queryHash];
       const existing = await pool.query(existingQuery, existingValues);
-      
+
       return res.status(200).json(existing.rows[0]);
     }
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
-    console.error('Error creating recent search:', error);
-    res.status(500).json({ 
-      error: 'Internal server error',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    console.error("Error creating recent search:", error);
+    res.status(500).json({
+      error: "Internal server error",
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 });
 
 // GET /api/recent-searches - Get recent searches for user/device
-router.get('/', identifyUser, async (req, res) => {
+router.get("/", identifyUser, async (req, res) => {
   try {
     const { module, limit = 6 } = req.query;
 
     if (!module) {
-      return res.status(400).json({ error: 'module parameter is required' });
+      return res.status(400).json({ error: "module parameter is required" });
     }
 
-    const validModules = ['flights', 'hotels', 'flight_hotel', 'cars', 'activities', 'taxis', 'sightseeing', 'transfers'];
+    const validModules = [
+      "flights",
+      "hotels",
+      "flight_hotel",
+      "cars",
+      "activities",
+      "taxis",
+      "sightseeing",
+      "transfers",
+    ];
     if (!validModules.includes(module)) {
-      return res.status(400).json({ 
-        error: `module must be one of: ${validModules.join(', ')}` 
+      return res.status(400).json({
+        error: `module must be one of: ${validModules.join(", ")}`,
       });
     }
 
@@ -156,21 +175,22 @@ router.get('/', identifyUser, async (req, res) => {
 
     res.json(result.rows);
   } catch (error) {
-    console.error('Error fetching recent searches:', error);
-    res.status(500).json({ 
-      error: 'Internal server error',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    console.error("Error fetching recent searches:", error);
+    res.status(500).json({
+      error: "Internal server error",
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 });
 
 // DELETE /api/recent-searches/:id - Delete a specific recent search
-router.delete('/:id', identifyUser, async (req, res) => {
+router.delete("/:id", identifyUser, async (req, res) => {
   try {
     const { id } = req.params;
 
     if (!id || isNaN(parseInt(id))) {
-      return res.status(400).json({ error: 'Valid ID is required' });
+      return res.status(400).json({ error: "Valid ID is required" });
     }
 
     // Ensure user can only delete their own searches
@@ -184,25 +204,31 @@ router.delete('/:id', identifyUser, async (req, res) => {
     const result = await pool.query(deleteQuery, values);
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ error: 'Recent search not found or unauthorized' });
+      return res
+        .status(404)
+        .json({ error: "Recent search not found or unauthorized" });
     }
 
     res.status(204).send();
   } catch (error) {
-    console.error('Error deleting recent search:', error);
-    res.status(500).json({ 
-      error: 'Internal server error',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    console.error("Error deleting recent search:", error);
+    res.status(500).json({
+      error: "Internal server error",
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 });
 
 // GET /api/recent-searches/all - Get all recent searches (for admin/debugging)
-router.get('/all', identifyUser, async (req, res) => {
+router.get("/all", identifyUser, async (req, res) => {
   try {
     // Only allow in development or for admin users
-    if (process.env.NODE_ENV !== 'development' && (!req.user || !req.user.isAdmin)) {
-      return res.status(403).json({ error: 'Forbidden' });
+    if (
+      process.env.NODE_ENV !== "development" &&
+      (!req.user || !req.user.isAdmin)
+    ) {
+      return res.status(403).json({ error: "Forbidden" });
     }
 
     const { limit = 50 } = req.query;
@@ -218,10 +244,11 @@ router.get('/all', identifyUser, async (req, res) => {
     const result = await pool.query(selectQuery, [maxLimit]);
     res.json(result.rows);
   } catch (error) {
-    console.error('Error fetching all recent searches:', error);
-    res.status(500).json({ 
-      error: 'Internal server error',
-      details: process.env.NODE_ENV === 'development' ? error.message : undefined
+    console.error("Error fetching all recent searches:", error);
+    res.status(500).json({
+      error: "Internal server error",
+      details:
+        process.env.NODE_ENV === "development" ? error.message : undefined,
     });
   }
 });

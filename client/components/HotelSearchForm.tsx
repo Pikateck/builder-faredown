@@ -144,16 +144,16 @@ export function HotelSearchForm({
 
       // Set guests
       if (searchData.adults || searchData.children || searchData.rooms) {
-        setGuests(prev => ({
+        setGuests((prev) => ({
           ...prev,
           adults: searchData.adults || prev.adults,
           children: searchData.children || 0,
           childrenAges: Array(searchData.children || 0).fill(10),
-          rooms: searchData.rooms || prev.rooms
+          rooms: searchData.rooms || prev.rooms,
         }));
       }
     } catch (error) {
-      console.error('Error loading recent hotel search:', error);
+      console.error("Error loading recent hotel search:", error);
     }
   };
 
@@ -295,8 +295,8 @@ export function HotelSearchForm({
       // Save search data to sessionStorage for persistence
       const searchData = {
         city: destination,
-        checkin: checkInDate.toISOString().split('T')[0],
-        checkout: checkOutDate.toISOString().split('T')[0],
+        checkin: checkInDate.toISOString().split("T")[0],
+        checkout: checkOutDate.toISOString().split("T")[0],
         adults: guests.adults.toString(),
         children: guests.children.toString(),
         rooms: guests.rooms.toString(),
@@ -306,41 +306,44 @@ export function HotelSearchForm({
       // Store in recent searches API (non-blocking)
       const recentSearchData = {
         destination: {
-          name: destination || 'Any destination',
-          code: destinationCode || 'HTL'
+          name: destination || "Any destination",
+          code: destinationCode || "HTL",
         },
         dates: {
           checkin: checkInDate.toISOString(),
-          checkout: checkOutDate.toISOString()
+          checkout: checkOutDate.toISOString(),
         },
         adults: guests.adults,
         children: guests.children,
-        rooms: guests.rooms
+        rooms: guests.rooms,
       };
 
       // Non-blocking API call to store recent search
-      fetch('/api/recent-searches', {
-        method: 'POST',
+      fetch("/api/recent-searches", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({
-          module: 'hotels',
-          query: recentSearchData
+          module: "hotels",
+          query: recentSearchData,
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("✅ Recent hotel search saved successfully");
+            return response.json();
+          } else {
+            throw new Error(`API error: ${response.status}`);
+          }
         })
-      }).then(response => {
-        if (response.ok) {
-          console.log('✅ Recent hotel search saved successfully');
-          return response.json();
-        } else {
-          throw new Error(`API error: ${response.status}`);
-        }
-      }).then(data => {
-        console.log('📋 Saved hotel search ID:', data.id);
-      }).catch(error => {
-        console.error('Failed to save recent hotel search:', error);
-      });
+        .then((data) => {
+          console.log("📋 Saved hotel search ID:", data.id);
+        })
+        .catch((error) => {
+          console.error("Failed to save recent hotel search:", error);
+        });
 
       const url = `/hotels/results?${searchParams.toString()}`;
       console.log("🏨 Navigating to hotel search:", url);
@@ -612,7 +615,8 @@ export function HotelSearchForm({
                   bookingType="hotel"
                   initialRange={{
                     startDate: checkInDate || new Date(),
-                    endDate: checkOutDate || addDays(checkInDate || new Date(), 3),
+                    endDate:
+                      checkOutDate || addDays(checkInDate || new Date(), 3),
                   }}
                   onChange={(range) => {
                     console.log("Hotel calendar range selected:", range);

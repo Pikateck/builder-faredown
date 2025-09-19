@@ -100,18 +100,18 @@ export function TransfersSearchForm() {
 
       // Set passengers
       if (searchData.adults || searchData.children || searchData.infants) {
-        setPassengers(prev => ({
+        setPassengers((prev) => ({
           ...prev,
           adults: searchData.adults || prev.adults,
           children: searchData.children || 0,
-          infants: searchData.infants || 0
+          infants: searchData.infants || 0,
         }));
       }
 
       // Set driver age for car rentals
       if (searchData.driverAge) setDriverAge(searchData.driverAge);
     } catch (error) {
-      console.error('Error loading recent transfer search:', error);
+      console.error("Error loading recent transfer search:", error);
     }
   };
 
@@ -320,7 +320,10 @@ export function TransfersSearchForm() {
         pickup: pickupLocation,
         dropoff: dropoffLocation,
         pickupDate: pickupDate.toISOString(),
-        returnDate: (serviceType === 'car-rentals' || tripType === 'return') ? returnDate?.toISOString() : null,
+        returnDate:
+          serviceType === "car-rentals" || tripType === "return"
+            ? returnDate?.toISOString()
+            : null,
         pickupTime,
         returnTime,
         serviceType,
@@ -328,32 +331,35 @@ export function TransfersSearchForm() {
         adults: passengers.adults,
         children: passengers.children,
         infants: passengers.infants,
-        driverAge: serviceType === 'car-rentals' ? driverAge : undefined
+        driverAge: serviceType === "car-rentals" ? driverAge : undefined,
       };
 
       // Non-blocking API call to store recent search
-      fetch('/api/recent-searches', {
-        method: 'POST',
+      fetch("/api/recent-searches", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({
-          module: 'transfers',
-          query: recentSearchData
+          module: "transfers",
+          query: recentSearchData,
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("✅ Recent transfer search saved successfully");
+            return response.json();
+          } else {
+            throw new Error(`API error: ${response.status}`);
+          }
         })
-      }).then(response => {
-        if (response.ok) {
-          console.log('✅ Recent transfer search saved successfully');
-          return response.json();
-        } else {
-          throw new Error(`API error: ${response.status}`);
-        }
-      }).then(data => {
-        console.log('📋 Saved transfer search ID:', data.id);
-      }).catch(error => {
-        console.error('Failed to save recent transfer search:', error);
-      });
+        .then((data) => {
+          console.log("📋 Saved transfer search ID:", data.id);
+        })
+        .catch((error) => {
+          console.error("Failed to save recent transfer search:", error);
+        });
 
       const searchParams = new URLSearchParams({
         pickup: pickupLocation,

@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { Clock, X, Plane, MapPin, Calendar, Users } from 'lucide-react';
-import { format } from 'date-fns';
+import React, { useState, useEffect } from "react";
+import { Clock, X, Plane, MapPin, Calendar, Users } from "lucide-react";
+import { format } from "date-fns";
 
 interface RecentSearch {
   id: number;
@@ -11,12 +11,24 @@ interface RecentSearch {
 }
 
 interface RecentSearchesProps {
-  module: 'flights' | 'hotels' | 'flight_hotel' | 'cars' | 'activities' | 'taxis' | 'sightseeing' | 'transfers';
+  module:
+    | "flights"
+    | "hotels"
+    | "flight_hotel"
+    | "cars"
+    | "activities"
+    | "taxis"
+    | "sightseeing"
+    | "transfers";
   onSearchClick: (searchData: any) => void;
   className?: string;
 }
 
-export function RecentSearches({ module, onSearchClick, className = '' }: RecentSearchesProps) {
+export function RecentSearches({
+  module,
+  onSearchClick,
+  className = "",
+}: RecentSearchesProps) {
   const [recentSearches, setRecentSearches] = useState<RecentSearch[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -32,7 +44,9 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
       } catch (error) {
         if (retryCount < maxRetries) {
           retryCount++;
-          console.log(`Retrying recent searches fetch (${retryCount}/${maxRetries})`);
+          console.log(
+            `Retrying recent searches fetch (${retryCount}/${maxRetries})`,
+          );
           setTimeout(fetchWithRetry, 1000 * retryCount); // Exponential backoff
         }
       }
@@ -46,38 +60,43 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
       setLoading(true);
       setError(null);
 
-      const response = await fetch(`/api/recent-searches?module=${module}&limit=6`, {
-        credentials: 'include',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
-      });
+      const response = await fetch(
+        `/api/recent-searches?module=${module}&limit=6`,
+        {
+          credentials: "include",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+          },
+        },
+      );
 
       if (!response.ok) {
         // Handle specific HTTP status codes
         if (response.status === 404) {
-          console.warn('Recent searches API not available');
+          console.warn("Recent searches API not available");
           setRecentSearches([]);
           return;
         } else if (response.status >= 500) {
-          throw new Error('Server error - please try again later');
+          throw new Error("Server error - please try again later");
         } else {
           throw new Error(`API error: ${response.status}`);
         }
       }
 
       const data = await response.json();
-      console.log('📋 Fetched recent searches:', data.length, 'items');
+      console.log("📋 Fetched recent searches:", data.length, "items");
       setRecentSearches(Array.isArray(data) ? data : []);
     } catch (err) {
-      console.error('Error fetching recent searches:', err);
+      console.error("Error fetching recent searches:", err);
 
       // Handle network errors gracefully
-      if (err instanceof TypeError && err.message.includes('fetch')) {
-        setError('Unable to connect to server');
+      if (err instanceof TypeError && err.message.includes("fetch")) {
+        setError("Unable to connect to server");
       } else {
-        setError(err instanceof Error ? err.message : 'Failed to load recent searches');
+        setError(
+          err instanceof Error ? err.message : "Failed to load recent searches",
+        );
       }
 
       // Set empty array as fallback
@@ -87,97 +106,107 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
     }
   };
 
-  const deleteRecentSearch = async (searchId: number, event: React.MouseEvent) => {
+  const deleteRecentSearch = async (
+    searchId: number,
+    event: React.MouseEvent,
+  ) => {
     event.stopPropagation();
 
     try {
       const response = await fetch(`/api/recent-searches/${searchId}`, {
-        method: 'DELETE',
-        credentials: 'include',
+        method: "DELETE",
+        credentials: "include",
         headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        }
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
       });
 
       if (response.ok || response.status === 204) {
         // Remove from local state
-        setRecentSearches(prev => prev.filter(search => search.id !== searchId));
+        setRecentSearches((prev) =>
+          prev.filter((search) => search.id !== searchId),
+        );
       } else if (response.status === 404) {
         // Item already deleted, just remove from UI
-        setRecentSearches(prev => prev.filter(search => search.id !== searchId));
+        setRecentSearches((prev) =>
+          prev.filter((search) => search.id !== searchId),
+        );
       } else {
-        console.error('Failed to delete recent search:', response.status);
+        console.error("Failed to delete recent search:", response.status);
       }
     } catch (err) {
-      console.error('Error deleting recent search:', err);
+      console.error("Error deleting recent search:", err);
       // Don't show error to user for delete operations
     }
   };
 
   const formatFlightSearch = (query: any) => {
-    const from = query.from?.name || query.from?.code || 'Unknown';
-    const to = query.to?.name || query.to?.code || 'Unknown';
+    const from = query.from?.name || query.from?.code || "Unknown";
+    const to = query.to?.name || query.to?.code || "Unknown";
     const dates = query.dates;
     const adults = query.adults || 1;
     const children = query.children || 0;
-    
-    let dateStr = '';
+
+    let dateStr = "";
     if (dates?.depart) {
       const departDate = new Date(dates.depart);
-      dateStr = format(departDate, 'dd MMM');
-      
-      if (dates.return && query.tripType === 'round_trip') {
+      dateStr = format(departDate, "dd MMM");
+
+      if (dates.return && query.tripType === "round_trip") {
         const returnDate = new Date(dates.return);
-        dateStr += ` – ${format(returnDate, 'dd MMM')}`;
+        dateStr += ` – ${format(returnDate, "dd MMM")}`;
       }
     }
 
-    let travelers = `${adults} adult${adults > 1 ? 's' : ''}`;
+    let travelers = `${adults} adult${adults > 1 ? "s" : ""}`;
     if (children > 0) {
-      travelers += `, ${children} child${children > 1 ? 'ren' : ''}`;
+      travelers += `, ${children} child${children > 1 ? "ren" : ""}`;
     }
 
     return {
       title: `${from} → ${to}`,
       subtitle: `${dateStr} · ${travelers}`,
-      icon: <Plane className="w-4 h-4 text-blue-600" />
+      icon: <Plane className="w-4 h-4 text-blue-600" />,
     };
   };
 
   const formatHotelSearch = (query: any) => {
-    const destination = query.destination?.name || 'Unknown destination';
+    const destination = query.destination?.name || "Unknown destination";
     const dates = query.dates;
     const rooms = query.rooms || [{ adults: 2, children: 0 }];
-    
-    let dateStr = '';
+
+    let dateStr = "";
     if (dates?.checkin && dates?.checkout) {
       const checkinDate = new Date(dates.checkin);
       const checkoutDate = new Date(dates.checkout);
-      dateStr = `${format(checkinDate, 'dd MMM')} – ${format(checkoutDate, 'dd MMM')}`;
+      dateStr = `${format(checkinDate, "dd MMM")} – ${format(checkoutDate, "dd MMM")}`;
     }
 
-    const totalAdults = rooms.reduce((sum: number, room: any) => sum + (room.adults || 0), 0);
+    const totalAdults = rooms.reduce(
+      (sum: number, room: any) => sum + (room.adults || 0),
+      0,
+    );
     const roomCount = rooms.length;
 
     return {
       title: destination,
-      subtitle: `${dateStr} · ${totalAdults} adult${totalAdults > 1 ? 's' : ''} · ${roomCount} room${roomCount > 1 ? 's' : ''}`,
-      icon: <MapPin className="w-4 h-4 text-green-600" />
+      subtitle: `${dateStr} · ${totalAdults} adult${totalAdults > 1 ? "s" : ""} · ${roomCount} room${roomCount > 1 ? "s" : ""}`,
+      icon: <MapPin className="w-4 h-4 text-green-600" />,
     };
   };
 
   const formatSearchDisplay = (search: RecentSearch) => {
     switch (search.module) {
-      case 'flights':
+      case "flights":
         return formatFlightSearch(search.query);
-      case 'hotels':
+      case "hotels":
         return formatHotelSearch(search.query);
       default:
         return {
           title: `${search.module} search`,
-          subtitle: 'Recent search',
-          icon: <Clock className="w-4 h-4 text-gray-600" />
+          subtitle: "Recent search",
+          icon: <Clock className="w-4 h-4 text-gray-600" />,
         };
     }
   };
@@ -191,7 +220,9 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
     <div className={`bg-white rounded-lg ${className}`}>
       <div className="flex items-center space-x-2 mb-4">
         <Clock className="w-5 h-5 text-gray-600" />
-        <h3 className="text-lg font-semibold text-gray-900">Your recent searches</h3>
+        <h3 className="text-lg font-semibold text-gray-900">
+          Your recent searches
+        </h3>
       </div>
 
       <div className="space-y-2">

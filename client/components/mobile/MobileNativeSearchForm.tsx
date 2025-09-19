@@ -235,7 +235,7 @@ export function MobileNativeSearchForm({
           ([name, data]) =>
             searchData.from.code === data.code ||
             searchData.from.name === name ||
-            name === searchData.from.name
+            name === searchData.from.name,
         );
         if (fromMatch) {
           setFromCity(fromMatch[0]);
@@ -248,7 +248,7 @@ export function MobileNativeSearchForm({
           ([name, data]) =>
             searchData.to.code === data.code ||
             searchData.to.name === name ||
-            name === searchData.to.name
+            name === searchData.to.name,
         );
         if (toMatch) {
           setToCity(toMatch[0]);
@@ -260,32 +260,32 @@ export function MobileNativeSearchForm({
       if (searchData.dates?.depart) {
         const depDate = new Date(searchData.dates.depart);
         if (!isNaN(depDate.getTime())) {
-          setDateRange(prev => ({ ...prev, startDate: depDate }));
+          setDateRange((prev) => ({ ...prev, startDate: depDate }));
         }
       }
 
       if (searchData.dates?.return) {
         const retDate = new Date(searchData.dates.return);
         if (!isNaN(retDate.getTime())) {
-          setDateRange(prev => ({ ...prev, endDate: retDate }));
+          setDateRange((prev) => ({ ...prev, endDate: retDate }));
         }
       }
 
       // Set travelers
       if (searchData.adults || searchData.children) {
-        setTravelers(prev => ({
+        setTravelers((prev) => ({
           ...prev,
           adults: searchData.adults || 1,
-          children: searchData.children || 0
+          children: searchData.children || 0,
         }));
       }
 
       // Set trip type
-      if (searchData.tripType && module === 'flights') {
+      if (searchData.tripType && module === "flights") {
         setTripType(searchData.tripType);
       }
     } catch (error) {
-      console.error('Error loading recent search:', error);
+      console.error("Error loading recent search:", error);
     }
   };
 
@@ -566,34 +566,34 @@ export function MobileNativeSearchForm({
       tripType,
       from: {
         code: fromCode,
-        name: fromCity
+        name: fromCity,
       },
       to: {
         code: toCode,
-        name: toCity
+        name: toCity,
       },
       dates: {
         depart: dateRange.startDate.toISOString(),
-        return: dateRange.endDate ? dateRange.endDate.toISOString() : null
+        return: dateRange.endDate ? dateRange.endDate.toISOString() : null,
       },
       adults: travelers.adults,
       children: travelers.children || 0,
-      directOnly: false
+      directOnly: false,
     };
 
     // Non-blocking API call to store recent search
-    fetch('/api/recent-searches', {
-      method: 'POST',
+    fetch("/api/recent-searches", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
       body: JSON.stringify({
         module: module,
-        query: recentSearchData
-      })
-    }).catch(error => {
-      console.error('Failed to save recent search:', error);
+        query: recentSearchData,
+      }),
+    }).catch((error) => {
+      console.error("Failed to save recent search:", error);
     });
 
     navigate(`/${module}/results?${searchParams.toString()}`);

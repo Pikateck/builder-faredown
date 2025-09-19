@@ -143,7 +143,7 @@ export function LandingPageSearchPanel() {
           ([name, data]) =>
             searchData.from.code === data.code ||
             searchData.from.name === name ||
-            name === searchData.from.name
+            name === searchData.from.name,
         );
         if (fromMatch) setSelectedFromCity(fromMatch[0]);
       }
@@ -153,7 +153,7 @@ export function LandingPageSearchPanel() {
           ([name, data]) =>
             searchData.to.code === data.code ||
             searchData.to.name === name ||
-            name === searchData.to.name
+            name === searchData.to.name,
         );
         if (toMatch) setSelectedToCity(toMatch[0]);
       }
@@ -173,7 +173,7 @@ export function LandingPageSearchPanel() {
       if (searchData.adults || searchData.children) {
         setTravelers({
           adults: searchData.adults || 1,
-          children: searchData.children || 0
+          children: searchData.children || 0,
         });
       }
 
@@ -193,7 +193,7 @@ export function LandingPageSearchPanel() {
         setSelectedClass(classMap[searchData.cabin.toLowerCase()] || "Economy");
       }
     } catch (error) {
-      console.error('Error loading recent search:', error);
+      console.error("Error loading recent search:", error);
     }
   };
 
@@ -366,45 +366,48 @@ export function LandingPageSearchPanel() {
       tripType,
       from: {
         code: fromCode,
-        name: selectedFromCity
+        name: selectedFromCity,
       },
       to: {
         code: toCode,
-        name: selectedToCity
+        name: selectedToCity,
       },
       dates: {
         depart: departureDate.toISOString(),
-        return: tripType === "round-trip" ? returnDate?.toISOString() : null
+        return: tripType === "round-trip" ? returnDate?.toISOString() : null,
       },
       cabin: selectedClass.toLowerCase().replace(" ", "_"),
       adults: travelers.adults,
       children: travelers.children,
-      directOnly: false
+      directOnly: false,
     };
 
     // Non-blocking API call to store recent search
-    fetch('/api/recent-searches', {
-      method: 'POST',
+    fetch("/api/recent-searches", {
+      method: "POST",
       headers: {
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
       },
-      credentials: 'include',
+      credentials: "include",
       body: JSON.stringify({
-        module: 'flights',
-        query: recentSearchData
+        module: "flights",
+        query: recentSearchData,
+      }),
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log("✅ Recent search saved successfully");
+          return response.json();
+        } else {
+          throw new Error(`API error: ${response.status}`);
+        }
       })
-    }).then(response => {
-      if (response.ok) {
-        console.log('✅ Recent search saved successfully');
-        return response.json();
-      } else {
-        throw new Error(`API error: ${response.status}`);
-      }
-    }).then(data => {
-      console.log('📋 Saved search ID:', data.id);
-    }).catch(error => {
-      console.error('Failed to save recent search:', error);
-    });
+      .then((data) => {
+        console.log("📋 Saved search ID:", data.id);
+      })
+      .catch((error) => {
+        console.error("Failed to save recent search:", error);
+      });
 
     if (tripType === "multi-city") {
       // Build multi-city legs from main form + additional flights

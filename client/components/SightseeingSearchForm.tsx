@@ -63,7 +63,7 @@ export function SightseeingSearchForm() {
         if (!isNaN(endDateObj.getTime())) setEndDate(endDateObj);
       }
     } catch (error) {
-      console.error('Error loading recent sightseeing search:', error);
+      console.error("Error loading recent sightseeing search:", error);
     }
   };
 
@@ -142,35 +142,38 @@ export function SightseeingSearchForm() {
       const recentSearchData = {
         destination: {
           name: destination,
-          code: destinationCode || 'ACT'
+          code: destinationCode || "ACT",
         },
         tourDate: tourDate.toISOString(),
-        endDate: endDate?.toISOString() || null
+        endDate: endDate?.toISOString() || null,
       };
 
       // Non-blocking API call to store recent search
-      fetch('/api/recent-searches', {
-        method: 'POST',
+      fetch("/api/recent-searches", {
+        method: "POST",
         headers: {
-          'Content-Type': 'application/json'
+          "Content-Type": "application/json",
         },
-        credentials: 'include',
+        credentials: "include",
         body: JSON.stringify({
-          module: 'sightseeing',
-          query: recentSearchData
+          module: "sightseeing",
+          query: recentSearchData,
+        }),
+      })
+        .then((response) => {
+          if (response.ok) {
+            console.log("✅ Recent sightseeing search saved successfully");
+            return response.json();
+          } else {
+            throw new Error(`API error: ${response.status}`);
+          }
         })
-      }).then(response => {
-        if (response.ok) {
-          console.log('✅ Recent sightseeing search saved successfully');
-          return response.json();
-        } else {
-          throw new Error(`API error: ${response.status}`);
-        }
-      }).then(data => {
-        console.log('📋 Saved sightseeing search ID:', data.id);
-      }).catch(error => {
-        console.error('Failed to save recent sightseeing search:', error);
-      });
+        .then((data) => {
+          console.log("📋 Saved sightseeing search ID:", data.id);
+        })
+        .catch((error) => {
+          console.error("Failed to save recent sightseeing search:", error);
+        });
 
       const searchParams = new URLSearchParams({
         destination: destination,
