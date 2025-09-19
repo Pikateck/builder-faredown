@@ -361,6 +361,42 @@ export function LandingPageSearchPanel() {
     // Save to sessionStorage for persistence
     saveLastSearch(searchData);
 
+    // Store in recent searches API (non-blocking)
+    const recentSearchData = {
+      tripType,
+      from: {
+        code: fromCode,
+        name: selectedFromCity
+      },
+      to: {
+        code: toCode,
+        name: selectedToCity
+      },
+      dates: {
+        depart: departureDate.toISOString(),
+        return: tripType === "round-trip" ? returnDate?.toISOString() : null
+      },
+      cabin: selectedClass.toLowerCase().replace(" ", "_"),
+      adults: travelers.adults,
+      children: travelers.children,
+      directOnly: false
+    };
+
+    // Non-blocking API call to store recent search
+    fetch('/api/recent-searches', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      credentials: 'include',
+      body: JSON.stringify({
+        module: 'flights',
+        query: recentSearchData
+      })
+    }).catch(error => {
+      console.error('Failed to save recent search:', error);
+    });
+
     if (tripType === "multi-city") {
       // Build multi-city legs from main form + additional flights
       const allLegs = [
