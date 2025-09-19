@@ -68,6 +68,7 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
       }
 
       const data = await response.json();
+      console.log('📋 Fetched recent searches:', data.length, 'items');
       setRecentSearches(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error('Error fetching recent searches:', err);

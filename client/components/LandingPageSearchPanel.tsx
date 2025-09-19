@@ -393,6 +393,15 @@ export function LandingPageSearchPanel() {
         module: 'flights',
         query: recentSearchData
       })
+    }).then(response => {
+      if (response.ok) {
+        console.log('✅ Recent search saved successfully');
+        return response.json();
+      } else {
+        throw new Error(`API error: ${response.status}`);
+      }
+    }).then(data => {
+      console.log('📋 Saved search ID:', data.id);
     }).catch(error => {
       console.error('Failed to save recent search:', error);
     });
