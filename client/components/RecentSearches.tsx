@@ -182,8 +182,8 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
     }
   };
 
-  // Only render if we have searches to show or are loading with existing searches
-  if (recentSearches.length === 0 && !loading) {
+  // ONLY render if we have actual searches to display - never show loading states for blank initial state
+  if (recentSearches.length === 0) {
     return null;
   }
 
@@ -193,22 +193,6 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
         <Clock className="w-5 h-5 text-gray-600" />
         <h3 className="text-lg font-semibold text-gray-900">Your recent searches</h3>
       </div>
-
-      {loading && recentSearches.length === 0 && (
-        <div className="space-y-3">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="animate-pulse">
-              <div className="flex items-center space-x-3 p-3 bg-gray-100 rounded-lg">
-                <div className="w-4 h-4 bg-gray-300 rounded"></div>
-                <div className="flex-1">
-                  <div className="h-4 bg-gray-300 rounded w-3/4 mb-2"></div>
-                  <div className="h-3 bg-gray-300 rounded w-1/2"></div>
-                </div>
-              </div>
-            </div>
-          ))}
-        </div>
-      )}
 
       {!loading && !error && recentSearches.length > 0 && (
         <div className="space-y-2">
