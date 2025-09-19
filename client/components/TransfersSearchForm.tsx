@@ -46,6 +46,7 @@ export function TransfersSearchForm() {
   const [serviceType, setServiceType] = useState("airport-taxi");
   const [tripType, setTripType] = useState("one-way");
 
+  // Start blank by default - no pre-filled values
   const [pickupLocation, setPickupLocation] = useState("");
   const [dropoffLocation, setDropoffLocation] = useState("");
   const [isPickupOpen, setIsPickupOpen] = useState(false);
@@ -53,14 +54,9 @@ export function TransfersSearchForm() {
   const [pickupInputValue, setPickupInputValue] = useState("");
   const [dropoffInputValue, setDropoffInputValue] = useState("");
 
-  // Set default dates
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const dayAfter = new Date();
-  dayAfter.setDate(dayAfter.getDate() + 2);
-
-  const [pickupDate, setPickupDate] = useState<Date | undefined>(tomorrow);
-  const [returnDate, setReturnDate] = useState<Date | undefined>(dayAfter);
+  // Start with no dates selected - user must choose
+  const [pickupDate, setPickupDate] = useState<Date | undefined>(undefined);
+  const [returnDate, setReturnDate] = useState<Date | undefined>(undefined);
   const [pickupTime, setPickupTime] = useState("10:00");
   const [returnTime, setReturnTime] = useState("10:00");
   const [isPickupDateOpen, setIsPickupDateOpen] = useState(false);
@@ -70,11 +66,54 @@ export function TransfersSearchForm() {
   const [driverAge, setDriverAge] = useState("30");
 
   const [passengers, setPassengers] = useState<PassengerConfig>({
-    adults: 2,
+    adults: 1,
     children: 0,
     infants: 0,
   });
   const [isPassengerPopoverOpen, setIsPassengerPopoverOpen] = useState(false);
+
+  // Handle recent search click - populate form with selected search data
+  const handleRecentSearchClick = (searchData: any) => {
+    try {
+      // Set locations
+      if (searchData.pickup) setPickupLocation(searchData.pickup);
+      if (searchData.dropoff) setDropoffLocation(searchData.dropoff);
+
+      // Set dates
+      if (searchData.pickupDate) {
+        const pickupDateObj = new Date(searchData.pickupDate);
+        if (!isNaN(pickupDateObj.getTime())) setPickupDate(pickupDateObj);
+      }
+
+      if (searchData.returnDate) {
+        const returnDateObj = new Date(searchData.returnDate);
+        if (!isNaN(returnDateObj.getTime())) setReturnDate(returnDateObj);
+      }
+
+      // Set times
+      if (searchData.pickupTime) setPickupTime(searchData.pickupTime);
+      if (searchData.returnTime) setReturnTime(searchData.returnTime);
+
+      // Set service and trip type
+      if (searchData.serviceType) setServiceType(searchData.serviceType);
+      if (searchData.tripType) setTripType(searchData.tripType);
+
+      // Set passengers
+      if (searchData.adults || searchData.children || searchData.infants) {
+        setPassengers(prev => ({
+          ...prev,
+          adults: searchData.adults || prev.adults,
+          children: searchData.children || 0,
+          infants: searchData.infants || 0
+        }));
+      }
+
+      // Set driver age for car rentals
+      if (searchData.driverAge) setDriverAge(searchData.driverAge);
+    } catch (error) {
+      console.error('Error loading recent transfer search:', error);
+    }
+  };
 
   // Initialize form with URL params or sessionStorage data
   useEffect(() => {
@@ -275,6 +314,46 @@ export function TransfersSearchForm() {
 
       // Save to sessionStorage for persistence
       saveLastSearch(searchData);
+
+      // Store in recent searches API (non-blocking)
+      const recentSearchData = {
+        pickup: pickupLocation,
+        dropoff: dropoffLocation,
+        pickupDate: pickupDate.toISOString(),
+        returnDate: (serviceType === 'car-rentals' || tripType === 'return') ? returnDate?.toISOString() : null,
+        pickupTime,
+        returnTime,
+        serviceType,
+        tripType,
+        adults: passengers.adults,
+        children: passengers.children,
+        infants: passengers.infants,
+        driverAge: serviceType === 'car-rentals' ? driverAge : undefined
+      };
+
+      // Non-blocking API call to store recent search
+      fetch('/api/recent-searches', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          module: 'transfers',
+          query: recentSearchData
+        })
+      }).then(response => {
+        if (response.ok) {
+          console.log('✅ Recent transfer search saved successfully');
+          return response.json();
+        } else {
+          throw new Error(`API error: ${response.status}`);
+        }
+      }).then(data => {
+        console.log('📋 Saved transfer search ID:', data.id);
+      }).catch(error => {
+        console.error('Failed to save recent transfer search:', error);
+      });
 
       const searchParams = new URLSearchParams({
         pickup: pickupLocation,
@@ -948,6 +1027,15 @@ export function TransfersSearchForm() {
                   <span className="text-sm sm:text-base">Search</span>
                 </Button>
               </div>
+            </div>
+
+            {/* Recent Searches Section */}
+            <div className="mt-8">
+              <RecentSearches
+                module="transfers"
+                onSearchClick={handleRecentSearchClick}
+                className="p-4 sm:p-6 border border-gray-200 shadow-sm"
+              />
             </div>
           </>
         )}
