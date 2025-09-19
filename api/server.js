@@ -60,6 +60,7 @@ const transfersMarkupRoutes = require("./routes/admin-transfers-markup");
 const adminProfilesRoutes = require("./routes/admin-profiles");
 const pricingRoutes = require("./routes/pricing");
 const reviewsRoutes = require("./routes/reviews");
+const recentSearchesRoutes = require("./routes/recent-searches");
 const {
   router: bargainHoldsRouter,
   initializeBargainHolds,
@@ -249,6 +250,7 @@ app.use("/api/currency", currencyRoutes);
 app.use("/api/countries", countriesRoutes);
 app.use("/api/promo", promoRoutes);
 app.use("/api/feature-flags", featureFlagsRoutes);
+app.use("/api/recent-searches", recentSearchesRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/payments", authenticateToken, paymentRoutes);
 app.use("/api/cms", cmsRoutes);
