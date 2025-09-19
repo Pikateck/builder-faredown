@@ -11,6 +11,7 @@ import {
 import { addDays, format } from "date-fns";
 import { Plane, ChevronDown, X, Calendar, Plus } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { RecentSearches } from "./RecentSearches";
 
 // City data mapping (same as FlightResults.tsx)
 const cityData = {
