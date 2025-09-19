@@ -19,20 +19,16 @@ export function SightseeingSearchForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
+  // Start blank by default - no pre-filled values
   const [destination, setDestination] = useState("");
   const [destinationCode, setDestinationCode] = useState("");
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [inputValue, setInputValue] = useState("");
   const [isUserTyping, setIsUserTyping] = useState(false);
 
-  // Set default dates to future dates
-  const tomorrow = new Date();
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const nextWeek = new Date();
-  nextWeek.setDate(nextWeek.getDate() + 7);
-
-  const [tourDate, setTourDate] = useState<Date | undefined>(tomorrow);
-  const [endDate, setEndDate] = useState<Date | undefined>(nextWeek);
+  // Start with no dates selected - user must choose
+  const [tourDate, setTourDate] = useState<Date | undefined>(undefined);
+  const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   // Mobile detection
