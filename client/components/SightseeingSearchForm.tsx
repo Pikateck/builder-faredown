@@ -12,6 +12,7 @@ import { BookingCalendar } from "@/components/BookingCalendar";
 import { format, addDays } from "date-fns";
 import { MapPin, CalendarIcon, Search, X, Camera } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
+import { RecentSearches } from "./RecentSearches";
 
 export function SightseeingSearchForm() {
   const navigate = useNavigate();
