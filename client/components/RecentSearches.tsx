@@ -182,18 +182,8 @@ export function RecentSearches({ module, onSearchClick, className = '' }: Recent
     }
   };
 
-  // Don't render anything if no searches (including loading and error states for blank state)
-  if (!loading && recentSearches.length === 0) {
-    return null;
-  }
-
-  // Don't render during initial load if there are no cached searches
-  if (loading && recentSearches.length === 0) {
-    return null;
-  }
-
-  // Don't render if there's an error and no searches to show
-  if (error && recentSearches.length === 0) {
+  // Only render if we have searches to show or are loading with existing searches
+  if (recentSearches.length === 0 && !loading) {
     return null;
   }
 
