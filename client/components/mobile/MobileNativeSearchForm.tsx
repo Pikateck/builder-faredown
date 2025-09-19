@@ -127,11 +127,11 @@ export function MobileNativeSearchForm({
     "one-way" | "return"
   >("one-way");
 
-  // Location states
-  const [fromCity, setFromCity] = useState("Mumbai");
-  const [fromCode, setFromCode] = useState("BOM");
-  const [toCity, setToCity] = useState("Dubai");
-  const [toCode, setToCode] = useState("DXB");
+  // Location states - start blank by default
+  const [fromCity, setFromCity] = useState("");
+  const [fromCode, setFromCode] = useState("");
+  const [toCity, setToCity] = useState("");
+  const [toCode, setToCode] = useState("");
 
   // Date states
   const [dateRange, setDateRange] = useState<DateRange>({
