@@ -62,7 +62,9 @@ export default function FlightDetails({
   useScrollToTop();
   const params = useParams();
   const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
+  const { departureDate, returnDate, formatDisplayDate, loadDatesFromParams } = useDateContext();
   // Immediately use fallback data to prevent loading delays
   const fallbackFlight = {
     id: "fallback",
@@ -117,6 +119,11 @@ export default function FlightDetails({
       : storedUser?.firstName || "Guest";
 
   const finalFlightId = flightId || params.flightId;
+
+  useEffect(() => {
+    // Load dates from URL parameters
+    loadDatesFromParams(searchParams);
+  }, [searchParams, loadDatesFromParams]);
 
   useEffect(() => {
     // Only load if we have a specific flight ID and no provided flight
