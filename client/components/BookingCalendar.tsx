@@ -263,14 +263,11 @@ export function BookingCalendar({
           background: #f8fafc;
         }
 
-        .booking-calendar .rdrWeekDay,
-        .booking-calendar .rdrWeekDay span {
-          color: #1f2937 !important;
-          font-weight: 600 !important;
-          font-size: 13px !important;
-          text-transform: capitalize !important;
-          letter-spacing: 0.5px !important;
-          padding: 8px 0 !important;
+        .booking-calendar .rdrWeekDay {
+          color: #1f2937;
+          font-weight: 600;
+          font-size: 13px;
+          text-transform: capitalize;
         }
 
         .booking-calendar .rdrDays {
