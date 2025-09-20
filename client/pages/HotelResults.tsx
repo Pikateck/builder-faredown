@@ -231,7 +231,7 @@ export default function HotelResults() {
   // Initialize edit states from current search params
   React.useEffect(() => {
     setEditDestination(
-      searchParams.get("destinationName") || destination || "Dubai",
+      urlSearchParams.get("destinationName") || destination || "Dubai",
     );
     setEditTravelers({
       adults: parseInt(adults) || 2,
@@ -249,39 +249,39 @@ export default function HotelResults() {
     // Create and load standardized hotel search object for state persistence
     const standardizedHotelSearchParams = {
       module: "hotels" as const,
-      destination: searchParams.get("destination") || destination || "Dubai",
-      destinationCode: searchParams.get("destinationCode") || "DXB",
+      destination: urlSearchParams.get("destination") || destination || "Dubai",
+      destinationCode: urlSearchParams.get("destinationCode") || "DXB",
       destinationName:
-        searchParams.get("destinationName") ||
+        urlSearchParams.get("destinationName") ||
         destination ||
         "Dubai, United Arab Emirates",
       // Use exact date format as specified by user: "2025-10-01"
       checkIn:
-        searchParams.get("checkIn") ||
+        urlSearchParams.get("checkIn") ||
         checkIn ||
         new Date().toISOString().split("T")[0],
       checkOut:
-        searchParams.get("checkOut") ||
+        urlSearchParams.get("checkOut") ||
         checkOut ||
         new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-      rooms: parseInt(searchParams.get("rooms") || rooms || "1"),
+      rooms: parseInt(urlSearchParams.get("rooms") || rooms || "1"),
       nights: calculateNights(
         new Date(
-          searchParams.get("checkIn") || checkIn || new Date().toISOString(),
+          urlSearchParams.get("checkIn") || checkIn || new Date().toISOString(),
         ),
         new Date(
-          searchParams.get("checkOut") ||
+          urlSearchParams.get("checkOut") ||
             checkOut ||
             new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
         ),
       ),
       guests: {
-        adults: parseInt(searchParams.get("adults") || adults || "2"),
-        children: parseInt(searchParams.get("children") || children || "0"),
+        adults: parseInt(urlSearchParams.get("adults") || adults || "2"),
+        children: parseInt(urlSearchParams.get("children") || children || "0"),
       },
       pax: {
-        adults: parseInt(searchParams.get("adults") || adults || "2"),
-        children: parseInt(searchParams.get("children") || children || "0"),
+        adults: parseInt(urlSearchParams.get("adults") || adults || "2"),
+        children: parseInt(urlSearchParams.get("children") || children || "0"),
         infants: 0,
       },
       currency: selectedCurrency?.code || "INR",
@@ -511,8 +511,8 @@ export default function HotelResults() {
   const getMockHotels = (): Hotel[] => [
     {
       id: 1,
-      name: `Grand Hotel ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"}`,
-      location: `City Center, ${searchParams.get("destinationName") || destination || "Dubai, United Arab Emirates"}`,
+      name: `Grand Hotel ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"}`,
+      location: `City Center, ${urlSearchParams.get("destinationName") || destination || "Dubai, United Arab Emirates"}`,
       images: [
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&q=80&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=800&h=600&q=80&auto=format&fit=crop",
@@ -522,7 +522,7 @@ export default function HotelResults() {
       reviews: 1234,
       originalPrice: 160, // ₹160 per night (original price)
       currentPrice: 138, // ₹138 per night (current discounted price)
-      description: `Experience luxury in the heart of ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with stunning views, world-class amenities, and exceptional service.`,
+      description: `Experience luxury in the heart of ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with stunning views, world-class amenities, and exceptional service.`,
       amenities: ["WiFi", "Parking", "Restaurant", "Gym", "Pool", "Spa"],
       features: ["City View", "Business Center", "Concierge", "Room Service"],
       roomTypes: [
@@ -554,8 +554,8 @@ export default function HotelResults() {
     },
     {
       id: 2,
-      name: `Business Hotel ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"}`,
-      location: `Business District, ${searchParams.get("destinationName") || destination || "Dubai, United Arab Emirates"}`,
+      name: `Business Hotel ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"}`,
+      location: `Business District, ${urlSearchParams.get("destinationName") || destination || "Dubai, United Arab Emirates"}`,
       images: [
         "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=800&h=600&q=80&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=800&h=600&q=80&auto=format&fit=crop",
@@ -565,7 +565,7 @@ export default function HotelResults() {
       reviews: 856,
       originalPrice: 175, // ₹175 per night (original price)
       currentPrice: 152, // ₹152 per night (current discounted price)
-      description: `Modern business hotel in ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with excellent facilities for corporate travelers and leisure guests.`,
+      description: `Modern business hotel in ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with excellent facilities for corporate travelers and leisure guests.`,
       amenities: ["Beach Access", "Spa", "Restaurant", "Bar", "WiFi", "Pool"],
       features: [
         "Beachfront",
@@ -596,8 +596,8 @@ export default function HotelResults() {
     },
     {
       id: 3,
-      name: `Boutique Hotel ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"}`,
-      location: `Historic District, ${searchParams.get("destinationName") || destination || "Dubai, United Arab Emirates"}`,
+      name: `Boutique Hotel ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"}`,
+      location: `Historic District, ${urlSearchParams.get("destinationName") || destination || "Dubai, United Arab Emirates"}`,
       images: [
         "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=800&h=600&q=80&auto=format&fit=crop",
         "https://images.unsplash.com/photo-1618773928121-c32242e63f39?w=800&h=600&q=80&auto=format&fit=crop",
@@ -607,7 +607,7 @@ export default function HotelResults() {
       reviews: 567,
       originalPrice: 140, // ₹140 per night (original price)
       currentPrice: 120, // ₹120 per night (current discounted price)
-      description: `Charming boutique hotel in ${searchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with unique character and personalized service.`,
+      description: `Charming boutique hotel in ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with unique character and personalized service.`,
       amenities: ["Ski Access", "Fireplace", "Spa", "Restaurant", "WiFi"],
       features: ["Ski-in/Ski-out", "Mountain Views", "Fireplace", "Hot Tub"],
       roomTypes: [
@@ -748,7 +748,7 @@ export default function HotelResults() {
       {/* Mobile-First Layout */}
       <div className="md:hidden">
         <MobileNavBar
-          title={searchParams.get("destinationName") || destination || "Dubai"}
+          title={urlSearchParams.get("destinationName") || destination || "Dubai"}
           subtitle={`${filteredAndSortedHotels.length} hotels found`}
           onBack={() => navigate("/hotels")}
           showLogo={true}
@@ -770,7 +770,7 @@ export default function HotelResults() {
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 text-gray-500 mr-1" />
                   <span className="font-medium text-gray-900 truncate">
-                    {searchParams.get("destinationName") ||
+                    {urlSearchParams.get("destinationName") ||
                       destination ||
                       "Dubai"}
                   </span>
@@ -1239,7 +1239,7 @@ export default function HotelResults() {
               <span>🌍 Global</span>
               <span className="mx-2">•</span>
               <span>
-                {searchParams.get("destinationName") || destination || "Dubai"}
+                {urlSearchParams.get("destinationName") || destination || "Dubai"}
               </span>
               <span className="mx-2">›</span>
               <span className="text-gray-900 font-medium">
@@ -1312,7 +1312,7 @@ export default function HotelResults() {
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-3">
                     <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
-                      {searchParams.get("destinationName") ||
+                      {urlSearchParams.get("destinationName") ||
                         destination ||
                         "Dubai"}
                       : {filteredAndSortedHotels.length} properties found
@@ -1601,10 +1601,10 @@ export default function HotelResults() {
                 name: selectedHotel.name,
                 location: selectedHotel.location,
                 checkIn:
-                  searchParams.get("checkIn") ||
+                  urlSearchParams.get("checkIn") ||
                   new Date().toISOString().split("T")[0],
                 checkOut:
-                  searchParams.get("checkOut") ||
+                  urlSearchParams.get("checkOut") ||
                   new Date(Date.now() + 24 * 60 * 60 * 1000)
                     .toISOString()
                     .split("T")[0],
