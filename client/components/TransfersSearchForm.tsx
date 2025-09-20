@@ -284,6 +284,30 @@ export function TransfersSearchForm() {
     }
 
     try {
+      // Update SearchContext with the search parameters
+      updateSearchParams({
+        destination: `${pickupLocation} to ${dropoffLocation}`,
+        destinationName: `${pickupLocation} to ${dropoffLocation}`,
+        departureDate: pickupDate.toISOString(),
+        returnDate: returnDate?.toISOString(),
+        checkIn: pickupDate.toISOString(),
+        checkOut: returnDate?.toISOString() || pickupDate.toISOString(),
+        passengers: {
+          adults: passengers.adults,
+          children: passengers.children,
+          infants: passengers.infants,
+        },
+        guests: {
+          adults: passengers.adults,
+          children: passengers.children,
+        },
+        rooms: 1,
+        module: "transfers",
+        tripType: tripType === "return" ? "round-trip" : "one-way",
+        transferType: serviceType as any,
+        searchTimestamp: new Date().toISOString(),
+      });
+
       // Prepare data for sessionStorage (normalized format)
       const searchData = {
         fromLat: pickupLocation.split(",")[0] || "",
