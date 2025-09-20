@@ -620,8 +620,19 @@ export function HotelSearchForm({
                   }}
                   onChange={(range) => {
                     console.log("Hotel calendar range selected:", range);
-                    setCheckInDate(range.startDate);
-                    setCheckOutDate(range.endDate);
+                    if (range.startDate && range.endDate) {
+                      setCheckInDate(range.startDate);
+                      setCheckOutDate(range.endDate);
+                      console.log("✅ Dates set:", {
+                        checkIn: range.startDate,
+                        checkOut: range.endDate
+                      });
+                      // Clear any existing error when valid dates are selected
+                      if (showError && errorMessage.includes("Please select check-in")) {
+                        setShowError(false);
+                        setErrorMessage("");
+                      }
+                    }
                   }}
                   onClose={() => setIsCalendarOpen(false)}
                   className="w-full"
@@ -659,7 +670,7 @@ export function HotelSearchForm({
                       {guests.rooms > 1 ? "s" : ""}
                     </span>
                     <span className="sm:hidden">
-                      {guests.rooms}rm • {guests.adults + guests.children}ppl
+                      {guests.rooms}rm �� {guests.adults + guests.children}ppl
                     </span>
                   </span>
                 </Button>
