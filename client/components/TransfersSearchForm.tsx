@@ -40,6 +40,7 @@ interface PassengerConfig {
 
 export function TransfersSearchForm() {
   const navigate = useNavigate();
+  const { updateSearchParams, getDisplayData, searchParams } = useSearch();
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
