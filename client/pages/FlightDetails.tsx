@@ -158,6 +158,11 @@ export default function FlightDetails({
     });
   };
 
+  const formatFlightDate = (date: Date | null, time: string) => {
+    if (!date) return `${time}`;
+    return `${formatDisplayDate(date, "EEE, MMM d")} • ${time}`;
+  };
+
   const formatPrice = (amount: number) => {
     return `${selectedCurrency.symbol}${amount.toLocaleString("en-IN")}`;
   };
