@@ -533,16 +533,16 @@ export default function FlightResults() {
         setSearchError(null);
 
         // Get search parameters from URL or use defaults
-        const origin = searchParams.get("from") || "BOM";
-        const destination = searchParams.get("to") || "DXB";
+        const origin = urlSearchParams.get("from") || "BOM";
+        const destination = urlSearchParams.get("to") || "DXB";
         const departure =
-          searchParams.get("departure") ||
+          urlSearchParams.get("departure") ||
           departureDate?.toISOString().split("T")[0] ||
           new Date().toISOString().split("T")[0];
-        const adults = parseInt(searchParams.get("adults") || "1");
-        const children = parseInt(searchParams.get("children") || "0");
-        const cabinClass = searchParams.get("class") || "economy";
-        const tripTypeParam = searchParams.get("tripType") || tripType;
+        const adults = parseInt(urlSearchParams.get("adults") || "1");
+        const children = parseInt(urlSearchParams.get("children") || "0");
+        const cabinClass = urlSearchParams.get("class") || "economy";
+        const tripTypeParam = urlSearchParams.get("tripType") || tripType;
 
         console.log("🎯 Trip type for search:", tripTypeParam);
 
