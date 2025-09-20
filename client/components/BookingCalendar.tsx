@@ -88,19 +88,18 @@ export function BookingCalendar({
     };
   }, []); // Empty dependency array - only run once
 
-  // Update selection when initialRange changes
+  // Update selection when initialRange changes - prevent excessive re-renders
   useEffect(() => {
-    if (initialRange?.startDate) {
+    if (initialRange?.startDate && selection[0]?.startDate) {
       const startDate = initialRange.startDate;
       const endDate = initialRange.endDate || addDays(startDate, 1);
-
-      // Only update if the dates are actually different
       const currentStart = selection[0].startDate;
       const currentEnd = selection[0].endDate;
 
+      // Only update if dates are significantly different to prevent flickering
       if (
-        !isSameDay(startDate, currentStart) ||
-        !isSameDay(endDate, currentEnd)
+        Math.abs(startDate.getTime() - currentStart.getTime()) > 86400000 || // > 1 day difference
+        Math.abs((endDate?.getTime() || 0) - (currentEnd?.getTime() || 0)) > 86400000
       ) {
         setSelection([
           {
@@ -111,7 +110,7 @@ export function BookingCalendar({
         ]);
       }
     }
-  }, [initialRange?.startDate?.getTime(), initialRange?.endDate?.getTime()]);
+  }, [initialRange?.startDate?.toDateString(), initialRange?.endDate?.toDateString()]);
 
   const handleSelect = (ranges: RangeKeyDict) => {
     const range = ranges.selection;
