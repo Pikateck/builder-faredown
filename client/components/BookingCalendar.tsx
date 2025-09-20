@@ -225,18 +225,15 @@ export function BookingCalendar({
           justify-content: space-between;
         }
 
-        .booking-calendar .rdrMonthAndYearPickers,
-        .booking-calendar .rdrMonthAndYearPickers select,
-        .booking-calendar .rdrMonthAndYearPickers option {
-          font-weight: 900 !important;
-          color: #1f2937 !important;
-          font-size: 20px !important;
-          pointer-events: none !important;
+        .booking-calendar .rdrMonthAndYearPickers {
+          font-weight: 700;
+          color: #1f2937;
+          font-size: 18px;
         }
 
         .booking-calendar .rdrMonthPicker,
         .booking-calendar .rdrYearPicker {
-          display: none !important;
+          display: none;
         }
 
         .booking-calendar .rdrNextPrevButton {
