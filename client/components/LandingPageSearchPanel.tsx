@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { qp, saveLastSearch, getLastSearch } from "@/lib/searchParams";
 import { Button } from "@/components/ui/button";
-import { BookingCalendar } from "@/components/BookingCalendar";
+import { StableStableBookingCalendar } from "@/components/StableStableBookingCalendar";
 import {
   Popover,
   PopoverContent,
@@ -862,7 +862,7 @@ export function LandingPageSearchPanel() {
                   </button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <BookingCalendar
+                  <StableBookingCalendar
                     bookingType="flight"
                     initialRange={{
                       startDate: departureDate || new Date(),
@@ -1316,7 +1316,7 @@ export function LandingPageSearchPanel() {
                         </button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
-                        <BookingCalendar
+                        <StableBookingCalendar
                           bookingType="flight"
                           initialRange={{
                             startDate: flight.date || new Date(),
