@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, useNavigate, Link } from "react-router-dom";
+import { useParams, useNavigate, Link, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 
@@ -27,6 +27,7 @@ import {
 } from "lucide-react";
 import { flightsService, Flight } from "@/services/flightsService";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useDateContext } from "@/contexts/DateContext";
 import { BargainButton } from "@/components/ui/BargainButton";
 import { useAuth } from "@/contexts/AuthContext";
 import { authService } from "@/services/authService";
