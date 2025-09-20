@@ -544,6 +544,28 @@ export function BookingCalendar({
           />
         </div>
 
+        {/* Date Selection Summary */}
+        {selection[0].startDate && selection[0].endDate && (
+          <div className="px-4 py-3 bg-blue-50 border-t border-blue-100">
+            <div className="text-center">
+              <div className="text-sm font-semibold text-blue-900">
+                Selected Dates
+              </div>
+              <div className="text-lg font-bold text-blue-800 mt-1">
+                {formatSelectionText()}
+              </div>
+              {getTotalNights() > 0 && (
+                <div className="text-sm text-blue-700 mt-1">
+                  {getTotalNights()} night{getTotalNights() > 1 ? 's' : ''}
+                </div>
+              )}
+              <div className="text-xs text-blue-600 mt-2">
+                Click "Apply Dates" to confirm your selection
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Footer with action buttons */}
         <div className="flex justify-between items-center p-4 border-t border-gray-200">
           <button
