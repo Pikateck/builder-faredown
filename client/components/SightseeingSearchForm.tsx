@@ -360,7 +360,7 @@ export function SightseeingSearchForm() {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
-                <BookingCalendar
+                <StableBookingCalendar
                   initialRange={{
                     startDate: tourDate || new Date(),
                     endDate: endDate || addDays(tourDate || new Date(), 3),
