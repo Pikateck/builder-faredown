@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { StableStableBookingCalendar } from "@/components/StableStableBookingCalendar";
+import { StableBookingCalendar } from "@/components/StableBookingCalendar";
 import { MobileDatePicker } from "@/components/MobileDropdowns";
 import {
   Select,
