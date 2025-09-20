@@ -430,8 +430,8 @@ export default function FlightResults() {
     }
 
     // Load traveler counts from URL parameters or sessionStorage fallback
-    const adultsParam = searchParams.get("adults") || lastSearch?.adults;
-    const childrenParam = searchParams.get("children") || lastSearch?.children;
+    const adultsParam = urlSearchParams.get("adults") || lastSearch?.adults;
+    const childrenParam = urlSearchParams.get("children") || lastSearch?.children;
     if (adultsParam || childrenParam) {
       setTravelers({
         adults: adultsParam ? parseInt(adultsParam) : 1,
@@ -441,8 +441,8 @@ export default function FlightResults() {
   }, [searchParams, loadDatesFromParams]);
 
   // Get passenger data from URL params
-  const adults = parseInt(searchParams.get("adults") || "1");
-  const children = parseInt(searchParams.get("children") || "0");
+  const adults = parseInt(urlSearchParams.get("adults") || "1");
+  const children = parseInt(urlSearchParams.get("children") || "0");
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [showMobileMenu, setShowMobileMenu] = useState(false);
