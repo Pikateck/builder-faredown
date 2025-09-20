@@ -35,8 +35,6 @@ export function BookingCalendar({
     const defaultDays = (bookingType === "sightseeing" || bookingType === "transfers") ? 0 : 3;
     const endDate = initialRange?.endDate || addDays(startDate, defaultDays);
 
-    console.log("Initial calendar range:", { startDate, endDate, bookingType });
-
     return [
       {
         startDate,
