@@ -14,7 +14,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { StableBookingCalendar } from "@/components/StableBookingCalendar";
+import { StableStableBookingCalendar } from "@/components/StableStableBookingCalendar";
 import { format } from "date-fns";
 import {
   MapPin,
@@ -607,7 +607,7 @@ export function TransfersSearchForm() {
                   </button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <BookingCalendar
+                  <StableBookingCalendar
                     initialRange={{
                       startDate: pickupDate || new Date(),
                       endDate: pickupDate || new Date(),
@@ -661,7 +661,7 @@ export function TransfersSearchForm() {
                   </button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <BookingCalendar
+                  <StableBookingCalendar
                     initialRange={{
                       startDate: returnDate || new Date(),
                       endDate: returnDate || new Date(),
@@ -793,7 +793,7 @@ export function TransfersSearchForm() {
                     </button>
                   </PopoverTrigger>
                   <PopoverContent className="w-auto p-0" align="start">
-                    <BookingCalendar
+                    <StableBookingCalendar
                       initialRange={{
                         startDate: pickupDate || new Date(),
                         endDate: pickupDate || new Date(),
@@ -849,7 +849,7 @@ export function TransfersSearchForm() {
                         </button>
                       </PopoverTrigger>
                       <PopoverContent className="w-auto p-0" align="start">
-                        <BookingCalendar
+                        <StableBookingCalendar
                           initialRange={{
                             startDate: returnDate || new Date(),
                             endDate: returnDate || new Date(),
