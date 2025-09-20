@@ -76,9 +76,9 @@ export function BookingCalendar({
       // Apply weekday styling
       const weekdays = document.querySelectorAll('.rdrWeekDay');
       weekdays.forEach(weekday => {
-        (header as HTMLElement).style.color = '#1f2937';
-        (header as HTMLElement).style.fontWeight = '600';
-        (header as HTMLElement).style.textTransform = 'capitalize';
+        (weekday as HTMLElement).style.color = '#1f2937';
+        (weekday as HTMLElement).style.fontWeight = '600';
+        (weekday as HTMLElement).style.textTransform = 'capitalize';
       });
     };
 
