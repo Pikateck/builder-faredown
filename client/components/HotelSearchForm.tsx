@@ -646,10 +646,6 @@ export function HotelSearchForm({
                         setShowError(false);
                         setErrorMessage("");
                       }
-                      // Auto-close calendar after a brief moment to show selection
-                      setTimeout(() => {
-                        setIsCalendarOpen(false);
-                      }, 500);
                     }
                   }}
                   onClose={() => setIsCalendarOpen(false)}
