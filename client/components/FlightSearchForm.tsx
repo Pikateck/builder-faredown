@@ -410,7 +410,7 @@ export function FlightSearchForm() {
                 </button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
-                <BookingCalendar
+                <StableBookingCalendar
                   initialRange={{
                     startDate: departureDate || new Date(),
                     endDate:
