@@ -784,7 +784,7 @@ export default function SightseeingResults() {
         selectedAttractions.has(a.id),
       );
       if (firstSelected) {
-        handleBargainClick(firstSelected, searchParams);
+        handleBargainClick(firstSelected, urlSearchParams);
       }
     }
   };
@@ -795,7 +795,7 @@ export default function SightseeingResults() {
         selectedAttractions.has(a.id),
       );
       if (firstSelected) {
-        const params = new URLSearchParams(searchParams);
+        const params = new URLSearchParams(urlSearchParams);
         navigate(`/sightseeing/${firstSelected.id}?${params.toString()}`);
       }
     }
