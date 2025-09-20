@@ -125,6 +125,30 @@ export function SightseeingSearchForm() {
     }
 
     try {
+      // Update SearchContext with the search parameters
+      updateSearchParams({
+        destination: destination,
+        destinationName: destination,
+        destinationCode: destinationCode || "ACT",
+        checkIn: tourDate.toISOString(),
+        checkOut: endDate?.toISOString() || tourDate.toISOString(),
+        departureDate: tourDate.toISOString(),
+        returnDate: endDate?.toISOString(),
+        guests: {
+          adults: 2,
+          children: 0,
+        },
+        passengers: {
+          adults: 2,
+          children: 0,
+          infants: 0,
+        },
+        rooms: 1,
+        module: "sightseeing",
+        tripType: "round-trip",
+        searchTimestamp: new Date().toISOString(),
+      });
+
       // Prepare data for sessionStorage (normalized format)
       const searchData = {
         city: destination,
