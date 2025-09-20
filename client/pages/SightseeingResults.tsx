@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { useNavigate, useSearchParams } from "react-router-dom";
+import { useSearch } from "@/contexts/SearchContext";
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -72,20 +73,29 @@ interface SightseeingAttraction {
 
 export default function SightseeingResults() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [urlSearchParams] = useSearchParams();
   const { formatPrice } = useCurrency();
   const { loadCompleteSearchObject } = useEnhancedBooking();
+  const { searchParams, getDisplayData, loadFromUrlParams } = useSearch();
 
-  // Extract search parameters
-  const destination = searchParams.get("destination") || "";
-  const destinationName = searchParams.get("destinationName") || "";
-  const checkIn = searchParams.get("checkIn") || "";
-  const checkOut = searchParams.get("checkOut") || "";
+  // Load search params from URL if available
+  useEffect(() => {
+    if (urlSearchParams.toString()) {
+      loadFromUrlParams(urlSearchParams);
+    }
+  }, [urlSearchParams, loadFromUrlParams]);
+
+  // Get display data from SearchContext
+  const displayData = getDisplayData();
+  const destination = displayData.destination;
+  const destinationName = searchParams.destinationName || displayData.destination;
+  const checkIn = displayData.checkIn;
+  const checkOut = displayData.checkOut;
   const visitDate = checkIn; // Use checkIn as visitDate for backward compatibility
-  const adults = searchParams.get("adults") || "2";
-  const children = searchParams.get("children") || "0";
-  const experienceType = searchParams.get("experienceType") || "any";
-  const duration = searchParams.get("duration") || "any";
+  const adults = displayData.adults.toString();
+  const children = displayData.children.toString();
+  const experienceType = urlSearchParams.get("experienceType") || "any";
+  const duration = urlSearchParams.get("duration") || "any";
 
   // State for attractions data
   const [attractions, setAttractions] = useState<SightseeingAttraction[]>([]);
