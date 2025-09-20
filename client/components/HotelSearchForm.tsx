@@ -231,15 +231,7 @@ export function HotelSearchForm({
     const searchDestination = selectedResult
       ? selectedResult.location
       : destination;
-    // Debug current state
-    console.log("🔍 Search validation - Current state:", {
-      checkInDate: checkInDate,
-      checkOutDate: checkOutDate,
-      checkInType: typeof checkInDate,
-      checkOutType: typeof checkOutDate,
-      checkInValid: checkInDate instanceof Date,
-      checkOutValid: checkOutDate instanceof Date
-    });
+    // Validate dates are properly set
 
     if (!checkInDate || !checkOutDate || !(checkInDate instanceof Date) || !(checkOutDate instanceof Date)) {
       const missingFields = [];
