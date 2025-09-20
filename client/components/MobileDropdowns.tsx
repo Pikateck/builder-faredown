@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { StableStableBookingCalendar } from "@/components/StableStableBookingCalendar";
+import { StableBookingCalendar } from "@/components/StableBookingCalendar";
 import { addDays } from "date-fns";
 
 interface CityData {
