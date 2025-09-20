@@ -79,21 +79,30 @@ interface Transfer {
 
 export default function TransferResults() {
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [urlSearchParams] = useSearchParams();
   const { formatPrice } = useCurrency();
   const { loadCompleteSearchObject } = useEnhancedBooking();
+  const { searchParams, getDisplayData, loadFromUrlParams } = useSearch();
 
-  // Extract search parameters
-  const pickupCode = searchParams.get("pickup") || "";
-  const dropoffCode = searchParams.get("dropoff") || "";
+  // Load search params from URL if available
+  useEffect(() => {
+    if (urlSearchParams.toString()) {
+      loadFromUrlParams(urlSearchParams);
+    }
+  }, [urlSearchParams, loadFromUrlParams]);
+
+  // Get display data from SearchContext
+  const displayData = getDisplayData();
+  const pickupCode = urlSearchParams.get("pickup") || "";
+  const dropoffCode = urlSearchParams.get("dropoff") || "";
   const pickupLocation =
-    searchParams.get("pickupLocation") || searchParams.get("pickup") || "";
+    urlSearchParams.get("pickupLocation") || urlSearchParams.get("pickup") || searchParams.destination || "";
   const dropoffLocation =
-    searchParams.get("dropoffLocation") || searchParams.get("dropoff") || "";
-  const pickupDate = searchParams.get("pickupDate") || "";
-  const pickupTime = searchParams.get("pickupTime") || "10:00";
-  const returnDate = searchParams.get("returnDate") || "";
-  const returnTime = searchParams.get("returnTime") || "14:00";
+    urlSearchParams.get("dropoffLocation") || urlSearchParams.get("dropoff") || "";
+  const pickupDate = displayData.checkIn || urlSearchParams.get("pickupDate") || "";
+  const pickupTime = urlSearchParams.get("pickupTime") || "10:00";
+  const returnDate = displayData.checkOut || urlSearchParams.get("returnDate") || "";
+  const returnTime = urlSearchParams.get("returnTime") || "14:00";
   const passengers = searchParams.get("passengers") || "2";
   const adults = parseInt(searchParams.get("adults") || "2");
   const children = parseInt(searchParams.get("children") || "0");
