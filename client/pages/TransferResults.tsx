@@ -103,14 +103,14 @@ export default function TransferResults() {
   const pickupTime = urlSearchParams.get("pickupTime") || "10:00";
   const returnDate = displayData.checkOut || urlSearchParams.get("returnDate") || "";
   const returnTime = urlSearchParams.get("returnTime") || "14:00";
-  const passengers = searchParams.get("passengers") || "2";
-  const adults = parseInt(searchParams.get("adults") || "2");
-  const children = parseInt(searchParams.get("children") || "0");
-  const infants = parseInt(searchParams.get("infants") || "0");
-  const vehicleType = searchParams.get("vehicleType") || "";
+  const passengers = urlSearchParams.get("passengers") || "2";
+  const adults = parseInt(urlSearchParams.get("adults") || "2");
+  const children = parseInt(urlSearchParams.get("children") || "0");
+  const infants = parseInt(urlSearchParams.get("infants") || "0");
+  const vehicleType = urlSearchParams.get("vehicleType") || "";
   const isRoundTrip =
-    searchParams.get("returnDate") !== null ||
-    searchParams.get("isRoundTrip") === "true";
+    urlSearchParams.get("returnDate") !== null ||
+    urlSearchParams.get("isRoundTrip") === "true";
 
   // Get authenticated user's first name
   const { user } = useAuth();
