@@ -111,12 +111,12 @@ export default function HotelResults() {
   const [showEditGuests, setShowEditGuests] = useState(false);
 
   // Get search parameters
-  const destination = searchParams.get("destination") || "";
-  const checkIn = searchParams.get("checkIn") || "";
-  const checkOut = searchParams.get("checkOut") || "";
-  const adults = searchParams.get("adults") || "2";
-  const children = searchParams.get("children") || "0";
-  const rooms = searchParams.get("rooms") || "1";
+  const destination = urlSearchParams.get("destination") || "";
+  const checkIn = urlSearchParams.get("checkIn") || "";
+  const checkOut = urlSearchParams.get("checkOut") || "";
+  const adults = urlSearchParams.get("adults") || "2";
+  const children = urlSearchParams.get("children") || "0";
+  const rooms = urlSearchParams.get("rooms") || "1";
 
   // Helpers for consistent bargain pricing (moved here to use initialized vars)
   const getCheapestPerNight = (hotel: HotelType | null | undefined): number => {
