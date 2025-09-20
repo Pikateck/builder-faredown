@@ -151,7 +151,7 @@ export default function SightseeingResults() {
     const standardizedSightseeingSearchParams = {
       module: "sightseeing" as const,
       destination: destination || "Dubai",
-      destinationCode: searchParams.get("destinationCode") || "DXB",
+      destinationCode: urlSearchParams.get("destinationCode") || "DXB",
       destinationName: destinationName || "Dubai, UAE",
       // Use exact date format as specified by user: "2025-10-01"
       checkIn: checkIn || new Date().toISOString().split("T")[0],
@@ -758,9 +758,9 @@ export default function SightseeingResults() {
 
   // Calculate total price for selected attractions
   const calculateTotalPrice = () => {
-    const adultsCount = parseInt(searchParams.get("adults") || "2");
-    const childrenCount = parseInt(searchParams.get("children") || "0");
-    const infantsCount = parseInt(searchParams.get("infants") || "0");
+    const adultsCount = parseInt(urlSearchParams.get("adults") || "2");
+    const childrenCount = parseInt(urlSearchParams.get("children") || "0");
+    const infantsCount = parseInt(urlSearchParams.get("infants") || "0");
 
     return Array.from(selectedAttractions).reduce((total, attractionId) => {
       const attraction = attractions.find((a) => a.id === attractionId);
