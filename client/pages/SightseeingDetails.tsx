@@ -394,7 +394,9 @@ export default function SightseeingDetails() {
   }, [attractionId]);
 
   // Load context data from URL parameters
-  // Note: searchParams here is from useSearchParams() hook, so it's correct
+  useEffect(() => {
+    loadDatesFromParams(searchParams);
+  }, [searchParams, loadDatesFromParams]);
 
   // Mobile detection
   useEffect(() => {
@@ -468,7 +470,7 @@ export default function SightseeingDetails() {
     });
 
     if (!selectedTime) {
-      console.log("�� No time selected");
+      console.log("❌ No time selected");
       setShowTimeAlert(true);
       return;
     }
