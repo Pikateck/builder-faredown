@@ -1246,7 +1246,7 @@ export default function SightseeingResults() {
                     selectedAttractions.has(a.id),
                   );
                   if (firstSelected) {
-                    const params = new URLSearchParams(searchParams);
+                    const params = new URLSearchParams(urlSearchParams);
                     params.set("attractionId", firstSelected.id);
                     params.set("bargainApplied", "true");
                     params.set("bargainPrice", finalPrice.toString());
