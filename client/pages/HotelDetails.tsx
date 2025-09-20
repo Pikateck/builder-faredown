@@ -250,8 +250,8 @@ export default function HotelDetails() {
   // Load context data from URL parameters
   useEffect(() => {
     loadDatesFromParams(searchParams);
-    loadFromUrlParams(searchParams); // Load search parameters into SearchContext
-  }, [searchParams, loadDatesFromParams, loadFromUrlParams]);
+    // loadFromUrlParams(searchParams); // Load search parameters into SearchContext
+  }, [searchParams, loadDatesFromParams]);
 
   // Fetch live hotel data from Hotelbeds API
   useEffect(() => {

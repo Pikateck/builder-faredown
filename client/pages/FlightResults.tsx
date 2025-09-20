@@ -379,7 +379,7 @@ export default function FlightResults() {
       setTripType(tripTypeParam as "one-way" | "round-trip" | "multi-city");
     }
 
-    loadDatesFromParams(searchParams);
+    loadDatesFromParams(urlSearchParams);
 
     // Load city selections from URL parameters or sessionStorage fallback
     const fromParam = urlSearchParams.get("from");
