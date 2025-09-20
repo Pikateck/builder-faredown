@@ -1031,9 +1031,9 @@ export default function SightseeingResults() {
                     key={attraction.id}
                     attraction={attraction}
                     onBargainClick={() =>
-                      handleBargainClick(attraction, searchParams)
+                      handleBargainClick(attraction, urlSearchParams)
                     }
-                    searchParams={searchParams}
+                    searchParams={urlSearchParams}
                     className="transition-all hover:shadow-md"
                     isSelected={selectedAttractions.has(attraction.id)}
                     onSelect={handleAttractionSelect}
