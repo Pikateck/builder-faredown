@@ -382,8 +382,8 @@ export default function FlightResults() {
     loadDatesFromParams(searchParams);
 
     // Load city selections from URL parameters or sessionStorage fallback
-    const fromParam = searchParams.get("from");
-    const toParam = searchParams.get("to");
+    const fromParam = urlSearchParams.get("from");
+    const toParam = urlSearchParams.get("to");
     const lastSearch = getLastSearch();
 
     // Find matching city names from codes (URL params first, then sessionStorage)
@@ -413,7 +413,7 @@ export default function FlightResults() {
     }
 
     // Load class selection from URL parameters or sessionStorage fallback
-    const classParam = searchParams.get("class") || lastSearch?.class;
+    const classParam = urlSearchParams.get("class") || lastSearch?.class;
     if (classParam) {
       const className =
         classParam.charAt(0).toUpperCase() + classParam.slice(1);
