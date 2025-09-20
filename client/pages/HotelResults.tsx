@@ -241,10 +241,10 @@ export default function HotelResults() {
   }, [searchParams, destination, adults, children, rooms]);
 
   // Sync contexts from URL only when query string changes
-  const searchKey = searchParams.toString();
+  const searchKey = urlSearchParams.toString();
   useEffect(() => {
-    loadDatesFromParams(searchParams);
-    loadFromUrlParams(searchParams);
+    loadDatesFromParams(urlSearchParams);
+    loadFromUrlParams(urlSearchParams);
 
     // Create and load standardized hotel search object for state persistence
     const standardizedHotelSearchParams = {
