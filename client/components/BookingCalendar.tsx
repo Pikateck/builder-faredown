@@ -570,6 +570,10 @@ export function BookingCalendar({
             onClick={() => {
               // Apply the selected dates before closing
               if (onChange && selection[0].startDate) {
+                console.log("🗓️ Applying calendar dates:", {
+                  startDate: selection[0].startDate,
+                  endDate: selection[0].endDate
+                });
                 onChange({
                   startDate: selection[0].startDate,
                   endDate: selection[0].endDate,
@@ -577,10 +581,10 @@ export function BookingCalendar({
               }
               onClose?.();
             }}
-            className="px-8 py-2 text-sm font-medium text-white bg-blue-600 rounded hover:bg-blue-700 transition-colors"
-            disabled={!selection[0].startDate}
+            className="px-10 py-3 text-base font-semibold text-white bg-blue-600 rounded-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-xl"
+            disabled={!selection[0].startDate || !selection[0].endDate}
           >
-            Apply
+            Apply Dates
           </button>
         </div>
       </div>
