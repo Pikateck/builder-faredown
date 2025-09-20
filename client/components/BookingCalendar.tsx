@@ -160,13 +160,6 @@ export function BookingCalendar({
           endDate: endDate,
         });
       }
-
-      // On mobile, auto-close after a short delay when both dates are selected
-      if (isMobile && range.startDate && endDate && !isSameDay(range.startDate, endDate)) {
-        setTimeout(() => {
-          onClose?.();
-        }, 1000); // 1 second delay to show the selection
-      }
     }
   };
 
