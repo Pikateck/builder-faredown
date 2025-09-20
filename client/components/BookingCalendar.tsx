@@ -573,10 +573,6 @@ export function BookingCalendar({
             onClick={() => {
               // Apply the selected dates before closing
               if (onChange && selection[0].startDate) {
-                console.log("🗓️ Applying calendar dates:", {
-                  startDate: selection[0].startDate,
-                  endDate: selection[0].endDate
-                });
                 onChange({
                   startDate: selection[0].startDate,
                   endDate: selection[0].endDate,
