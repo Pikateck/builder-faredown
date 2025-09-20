@@ -116,42 +116,25 @@ export function BookingCalendar({
   }, [initialRange?.startDate?.getTime(), initialRange?.endDate?.getTime()]);
 
   const handleSelect = (ranges: RangeKeyDict) => {
-    console.log("🗓�� Calendar selection changed:", ranges);
-    console.log("🗓️ Current selection state:", selection);
     const range = ranges.selection;
 
     if (range && range.startDate) {
       let endDate = range.endDate;
 
-      // For sightseeing and transfers, allow same-day selections (single day experience)
       // For hotels, ensure minimum 1 night stay
       if (!endDate) {
-        // If no end date selected yet, use start date (user is still selecting)
         endDate = range.startDate;
-      } else if (
-        bookingType === "hotel" &&
-        isSameDay(range.startDate, endDate)
-      ) {
-        // For hotels, ensure at least 1 night stay
+      } else if (bookingType === "hotel" && isSameDay(range.startDate, endDate)) {
         endDate = addDays(range.startDate, 1);
       }
-      // For sightseeing and transfers, allow same day (single day experience)
 
-      const newSelection = [
+      setSelection([
         {
           startDate: range.startDate,
           endDate: endDate,
           key: "selection",
         },
-      ];
-
-      console.log(
-        "Setting new selection:",
-        newSelection,
-        "bookingType:",
-        bookingType,
-      );
-      setSelection(newSelection);
+      ]);
 
       // Call onChange with proper date range
       if (onChange) {
