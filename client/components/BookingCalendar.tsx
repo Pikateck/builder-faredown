@@ -62,7 +62,7 @@ export function BookingCalendar({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Force calendar styling after component mounts
+  // Apply calendar styling once after component mounts
   useEffect(() => {
     const applyCalendarStyling = () => {
       // Apply month header styling
@@ -76,21 +76,19 @@ export function BookingCalendar({
       // Apply weekday styling
       const weekdays = document.querySelectorAll('.rdrWeekDay');
       weekdays.forEach(weekday => {
-        (weekday as HTMLElement).style.color = '#1f2937';
-        (weekday as HTMLElement).style.fontWeight = '600';
-        (weekday as HTMLElement).style.textTransform = 'capitalize';
+        (header as HTMLElement).style.color = '#1f2937';
+        (header as HTMLElement).style.fontWeight = '600';
+        (header as HTMLElement).style.textTransform = 'capitalize';
       });
     };
 
-    // Apply styling immediately and after any changes
-    const timer = setTimeout(applyCalendarStyling, 100);
-    const interval = setInterval(applyCalendarStyling, 500);
+    // Apply styling only once after a brief delay
+    const timer = setTimeout(applyCalendarStyling, 200);
 
     return () => {
       clearTimeout(timer);
-      clearInterval(interval);
     };
-  }, [selection]);
+  }, []); // Empty dependency array - only run once
 
   // Update selection when initialRange changes
   useEffect(() => {
