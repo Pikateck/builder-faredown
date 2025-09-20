@@ -346,7 +346,8 @@ export default function FlightResults() {
   const [searchError, setSearchError] = useState<string | null>(null);
 
   const navigate = useNavigate();
-  const [searchParams] = useSearchParams();
+  const [urlSearchParams] = useSearchParams();
+  const { searchParams, getDisplayData, loadFromUrlParams } = useSearch();
 
   // Load all filter states from URL parameters when component mounts
   useEffect(() => {
