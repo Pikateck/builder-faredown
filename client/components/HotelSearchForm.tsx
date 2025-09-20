@@ -231,8 +231,22 @@ export function HotelSearchForm({
     const searchDestination = selectedResult
       ? selectedResult.location
       : destination;
-    if (!checkInDate || !checkOutDate) {
-      setErrorMessage("Please select check-in and check-out dates");
+    // Debug current state
+    console.log("🔍 Search validation - Current state:", {
+      checkInDate: checkInDate,
+      checkOutDate: checkOutDate,
+      checkInType: typeof checkInDate,
+      checkOutType: typeof checkOutDate,
+      checkInValid: checkInDate instanceof Date,
+      checkOutValid: checkOutDate instanceof Date
+    });
+
+    if (!checkInDate || !checkOutDate || !(checkInDate instanceof Date) || !(checkOutDate instanceof Date)) {
+      const missingFields = [];
+      if (!checkInDate || !(checkInDate instanceof Date)) missingFields.push("check-in date");
+      if (!checkOutDate || !(checkOutDate instanceof Date)) missingFields.push("check-out date");
+
+      setErrorMessage(`Please select ${missingFields.join(" and ")}`);
       setShowError(true);
       return;
     }
