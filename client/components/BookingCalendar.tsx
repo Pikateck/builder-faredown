@@ -60,33 +60,7 @@ export function BookingCalendar({
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Apply calendar styling once after component mounts
-  useEffect(() => {
-    const applyCalendarStyling = () => {
-      // Apply month header styling
-      const monthHeaders = document.querySelectorAll('.rdrMonthAndYearPickers');
-      monthHeaders.forEach(header => {
-        (header as HTMLElement).style.color = '#1f2937';
-        (header as HTMLElement).style.fontWeight = '900';
-        (header as HTMLElement).style.fontSize = '20px';
-      });
-
-      // Apply weekday styling
-      const weekdays = document.querySelectorAll('.rdrWeekDay');
-      weekdays.forEach(weekday => {
-        (weekday as HTMLElement).style.color = '#1f2937';
-        (weekday as HTMLElement).style.fontWeight = '600';
-        (weekday as HTMLElement).style.textTransform = 'capitalize';
-      });
-    };
-
-    // Apply styling only once after a brief delay
-    const timer = setTimeout(applyCalendarStyling, 200);
-
-    return () => {
-      clearTimeout(timer);
-    };
-  }, []); // Empty dependency array - only run once
+  // Remove programmatic styling that was causing flickering - now handled via CSS
 
   // Update selection when initialRange changes - prevent excessive re-renders
   useEffect(() => {
