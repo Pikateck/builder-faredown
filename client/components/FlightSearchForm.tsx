@@ -131,6 +131,29 @@ export function FlightSearchForm() {
     }
 
     try {
+      // Update SearchContext with the search parameters
+      updateSearchParams({
+        destination: `${fromCity} to ${toCity}`,
+        destinationName: `${fromCity} to ${toCity}`,
+        departureDate: departureDate.toISOString(),
+        returnDate: returnDate?.toISOString(),
+        checkIn: departureDate.toISOString(),
+        checkOut: returnDate?.toISOString() || departureDate.toISOString(),
+        passengers: {
+          adults: passengers.adults,
+          children: passengers.children,
+          infants: passengers.infants,
+        },
+        guests: {
+          adults: passengers.adults,
+          children: passengers.children,
+        },
+        rooms: 1,
+        module: "flights",
+        tripType: returnDate ? "round-trip" : "one-way",
+        searchTimestamp: new Date().toISOString(),
+      });
+
       const searchParams = new URLSearchParams({
         from: fromCity,
         to: toCity,
