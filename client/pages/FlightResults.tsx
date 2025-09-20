@@ -1,6 +1,7 @@
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useSearch } from "@/contexts/SearchContext";
 import { getLastSearch } from "@/lib/searchParams";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDateContext } from "@/contexts/DateContext";
