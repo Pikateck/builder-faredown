@@ -62,7 +62,7 @@ interface Hotel extends HotelType {
 
 export default function HotelResults() {
   useScrollToTop();
-  const [searchParams] = useSearchParams();
+  const [urlSearchParams] = useSearchParams();
   const navigate = useNavigate();
   const { selectedCurrency } = useCurrency();
   const {
@@ -73,8 +73,15 @@ export default function HotelResults() {
     formatDisplayDate,
     loadDatesFromParams,
   } = useDateContext();
-  const { loadFromUrlParams, getDisplayData } = useSearch();
+  const { loadFromUrlParams, getDisplayData, searchParams } = useSearch();
   const { loadCompleteSearchObject } = useEnhancedBooking();
+
+  // Load search params from URL if available
+  useEffect(() => {
+    if (urlSearchParams.toString()) {
+      loadFromUrlParams(urlSearchParams);
+    }
+  }, [urlSearchParams, loadFromUrlParams]);
   const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
   const [selectedFilters, setSelectedFilters] = useState<
