@@ -349,12 +349,19 @@ export default function FlightResults() {
   const [urlSearchParams] = useSearchParams();
   const { searchParams, getDisplayData, loadFromUrlParams } = useSearch();
 
+  // Load search params from URL if available
+  useEffect(() => {
+    if (urlSearchParams.toString()) {
+      loadFromUrlParams(urlSearchParams);
+    }
+  }, [urlSearchParams, loadFromUrlParams]);
+
   // Load all filter states from URL parameters when component mounts
   useEffect(() => {
     // Force reload dates from URL parameters to ensure sync
-    const departureDateParam = searchParams.get("departureDate");
-    const returnDateParam = searchParams.get("returnDate");
-    const tripTypeParam = searchParams.get("tripType");
+    const departureDateParam = urlSearchParams.get("departureDate");
+    const returnDateParam = urlSearchParams.get("returnDate");
+    const tripTypeParam = urlSearchParams.get("tripType");
 
     console.log("🔄 Loading URL params:", {
       departureDateParam,
