@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { BookingCalendar } from "@/components/BookingCalendar";
+import { StableStableBookingCalendar } from "@/components/StableStableBookingCalendar";
 import { MobileDatePicker } from "@/components/MobileDropdowns";
 import {
   Select,
@@ -939,7 +939,7 @@ export function BookingSearchForm() {
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
                   <div className="flex flex-col">
-                    <BookingCalendar
+                    <StableBookingCalendar
                       initialRange={{
                         startDate: checkInDate || new Date(),
                         endDate:
