@@ -14,7 +14,7 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { BookingCalendar } from "@/components/BookingCalendar";
+import { StableStableBookingCalendar } from "@/components/StableStableBookingCalendar";
 import { addDays } from "date-fns";
 
 interface CityData {
@@ -628,7 +628,7 @@ export function MobileDatePicker({
 
         {/* Calendar */}
         <div className="mb-6">
-          <BookingCalendar
+          <StableBookingCalendar
             initialRange={{
               startDate: selectedDepartureDate || new Date(),
               endDate:
