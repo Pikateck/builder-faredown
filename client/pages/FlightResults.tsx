@@ -559,7 +559,7 @@ export default function FlightResults() {
 
         // Parse multi-city legs if present
         let multiCityLegs = null;
-        const multiCityLegsParam = searchParams.get("multiCityLegs");
+        const multiCityLegsParam = urlSearchParams.get("multiCityLegs");
         if (multiCityLegsParam && apiTripType === "multi_city") {
           try {
             multiCityLegs = JSON.parse(multiCityLegsParam);
