@@ -633,14 +633,9 @@ export function HotelSearchForm({
                       checkOutDate || addDays(checkInDate || new Date(), 3),
                   }}
                   onChange={(range) => {
-                    console.log("Hotel calendar range selected:", range);
                     if (range.startDate && range.endDate) {
                       setCheckInDate(range.startDate);
                       setCheckOutDate(range.endDate);
-                      console.log("✅ Dates set:", {
-                        checkIn: range.startDate,
-                        checkOut: range.endDate
-                      });
                       // Clear any existing error when valid dates are selected
                       if (showError && errorMessage.includes("Please select check-in")) {
                         setShowError(false);
