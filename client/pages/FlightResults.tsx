@@ -593,7 +593,7 @@ export default function FlightResults() {
           cabinClass: cabinClass as any,
           tripType: searchTripType,
           multiCityLegs: multiCityLegs || undefined,
-          promoCode: searchParams.get("promoCode") || undefined,
+          promoCode: urlSearchParams.get("promoCode") || undefined,
           userId: user?.id || undefined,
         };
 
