@@ -630,7 +630,10 @@ export function MobileNativeSearchForm({
       module,
       from: { city: fromCity, code: fromCode },
       to: { city: toCity, code: toCode },
-      dateRange,
+      dateRange: {
+        startDate: dateContext.departureDate,
+        endDate: dateContext.returnDate,
+      },
       travelers,
       tripType,
       selectedClass: module === "flights" ? selectedClass : undefined,
@@ -645,7 +648,7 @@ export function MobileNativeSearchForm({
     const searchParams = new URLSearchParams({
       from: fromCode,
       to: toCode,
-      departureDate: dateRange.startDate.toISOString(),
+      departureDate: dateContext.departureDate!.toISOString(),
       adults: travelers.adults.toString(),
       children: (travelers.children || 0).toString(),
       tripType,
@@ -657,10 +660,10 @@ export function MobileNativeSearchForm({
     }
 
     if (
-      dateRange.endDate &&
+      dateContext.returnDate &&
       (tripType === "round-trip" || module === "hotels")
     ) {
-      searchParams.set("returnDate", dateRange.endDate.toISOString());
+      searchParams.set("returnDate", dateContext.returnDate.toISOString());
     }
 
     if (module === "hotels" && travelers.rooms) {
