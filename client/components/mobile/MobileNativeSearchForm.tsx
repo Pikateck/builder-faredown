@@ -396,8 +396,11 @@ export function MobileNativeSearchForm({
     }
   };
 
-  // Format date display
+  // Format date display using context dates
   const formatDateDisplay = () => {
+    const startDate = dateContext.departureDate;
+    const endDate = dateContext.returnDate;
+
     if (module === "flights" && tripType === "multi-city") {
       if (multiCityLegs.length > 0) {
         const cities = multiCityLegs
@@ -408,25 +411,25 @@ export function MobileNativeSearchForm({
       return "Add multiple destinations";
     }
 
-    if (!dateRange.startDate) return "Select dates";
+    if (!startDate) return "Select dates";
 
     if (module === "hotels") {
-      const checkIn = format(dateRange.startDate, "MMM d");
-      const checkOut = dateRange.endDate
-        ? format(dateRange.endDate, "MMM d")
+      const checkIn = format(startDate, "MMM d");
+      const checkOut = endDate
+        ? format(endDate, "MMM d")
         : "Check-out";
       return `${checkIn} - ${checkOut}`;
     }
 
     if (tripType === "one-way" || module === "transfers") {
-      return format(dateRange.startDate, "MMM d");
+      return format(startDate, "MMM d");
     }
 
-    if (dateRange.endDate) {
-      return `${format(dateRange.startDate, "MMM d")} - ${format(dateRange.endDate, "MMM d")}`;
+    if (endDate) {
+      return `${format(startDate, "MMM d")} - ${format(endDate, "MMM d")}`;
     }
 
-    return format(dateRange.startDate, "MMM d") + " - Return";
+    return format(startDate, "MMM d") + " - Return";
   };
 
   // Format travelers display
