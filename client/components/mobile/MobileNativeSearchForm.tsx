@@ -33,6 +33,7 @@ interface Travelers {
   children: number;
   infants?: number;
   rooms?: number;
+  childAges?: number[]; // For hotels - child age tracking
 }
 
 interface DateRange {
@@ -163,6 +164,7 @@ export function MobileNativeSearchForm({
     children: 0,
     infants: 0,
     rooms: 1,
+    childAges: [], // For hotel child ages
   });
 
   // Flight class state (for flights only)
@@ -478,6 +480,16 @@ export function MobileNativeSearchForm({
       parts.push(`${travelers.rooms} room${travelers.rooms > 1 ? "s" : ""}`);
     }
 
+    // Add child age summary for hotels if there are children
+    if (module === "hotels" && travelers.children && travelers.children > 0 && travelers.childAges && travelers.childAges.length > 0) {
+      const ageText = travelers.childAges.length === 1 ? `age ${travelers.childAges[0]}` : `ages ${travelers.childAges.join(", ")}`;
+      // Replace the children part to include ages
+      const childIndex = parts.findIndex(part => part.includes("child"));
+      if (childIndex !== -1) {
+        parts[childIndex] = `${travelers.children} child${travelers.children > 1 ? "ren" : ""} (${ageText})`;
+      }
+    }
+
     return parts.join(", ") || "1 adult";
   };
 
@@ -696,6 +708,10 @@ export function MobileNativeSearchForm({
 
     if (module === "hotels" && travelers.rooms) {
       searchParams.set("rooms", travelers.rooms.toString());
+      // Add child ages for hotels
+      if (travelers.childAges && travelers.childAges.length > 0) {
+        searchParams.set("childAges", JSON.stringify(travelers.childAges));
+      }
     }
 
     if (module === "transfers") {
@@ -732,6 +748,8 @@ export function MobileNativeSearchForm({
       },
       adults: travelers.adults,
       children: travelers.children || 0,
+      rooms: module === "hotels" ? travelers.rooms : undefined,
+      childAges: module === "hotels" ? travelers.childAges : undefined,
       directOnly: false,
     };
 

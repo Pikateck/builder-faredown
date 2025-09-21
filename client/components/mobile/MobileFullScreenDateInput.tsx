@@ -51,7 +51,7 @@ export function MobileFullScreenDateInput({
     } else {
       setIsSelectingEnd(false);
     }
-  }, [initialRange, tripType]);
+  }, [initialRange.startDate?.toISOString(), initialRange.endDate?.toISOString(), tripType, module]);
 
   // Debug logging
   console.log('MobileFullScreenDateInput rendered:', {
@@ -137,16 +137,18 @@ export function MobileFullScreenDateInput({
       currentURL: window.location.href
     });
 
-    // Call the parent callback
-    try {
-      onSelect(selectedRange);
-      console.log('onSelect callback completed successfully');
-    } catch (error) {
-      console.error('Error in onSelect callback:', error);
-    }
+    // Call the parent callback with a small delay to prevent double-triggering
+    setTimeout(() => {
+      try {
+        onSelect(selectedRange);
+        console.log('onSelect callback completed successfully');
+      } catch (error) {
+        console.error('Error in onSelect callback:', error);
+      }
 
-    // Close the picker
-    onBack();
+      // Close the picker after callback
+      onBack();
+    }, 100);
   };
 
   const formatDateRange = () => {
