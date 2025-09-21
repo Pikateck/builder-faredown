@@ -279,54 +279,25 @@ export function MobileFullScreenTravelersInput({
 
       </div>
 
-      {/* Confirm Button - Fixed at Bottom (Faredown Brand Style) */}
-      <div
-        className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 p-6 shadow-2xl z-[9999] max-w-full"
-        style={{
-          position: 'fixed',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          zIndex: 9999,
-          backgroundColor: 'white',
-          boxShadow: '0 -10px 25px -5px rgba(0, 0, 0, 0.1), 0 -4px 10px -3px rgba(0, 0, 0, 0.05)'
-        }}
-      >
-        {/* Debug info */}
-        <div className="text-xs text-gray-500 mb-2 text-center">
+      {/* Confirm Button - Fixed at Bottom */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
+        {/* Summary */}
+        <div className="text-sm text-gray-600 mb-3 text-center">
           {getSummary()}
         </div>
 
-        {/* Confirm Button (Always Visible - Faredown Brand Yellow) */}
+        {/* Done Button */}
         <button
           onClick={handleConfirm}
           disabled={!travelers.adults || travelers.adults < 1}
+          className={`w-full py-4 px-6 rounded-xl font-bold text-lg flex items-center justify-center space-x-2 transition-all ${
+            !travelers.adults || travelers.adults < 1
+              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+              : 'bg-yellow-400 hover:bg-yellow-500 text-black cursor-pointer shadow-lg'
+          }`}
           style={{
-            width: '100%',
-            padding: '16px 24px',
-            borderRadius: '12px',
-            fontWeight: 'bold',
-            fontSize: '18px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            border: 'none',
-            cursor: (!travelers.adults || travelers.adults < 1) ? 'not-allowed' : 'pointer',
             backgroundColor: (!travelers.adults || travelers.adults < 1) ? '#d1d5db' : '#febb02',
-            color: (!travelers.adults || travelers.adults < 1) ? '#6b7280' : 'black',
-            transition: 'all 0.2s ease',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
-          }}
-          onMouseDown={(e) => {
-            if (travelers.adults && travelers.adults >= 1) {
-              e.currentTarget.style.backgroundColor = '#d19900';
-            }
-          }}
-          onMouseUp={(e) => {
-            if (travelers.adults && travelers.adults >= 1) {
-              e.currentTarget.style.backgroundColor = '#febb02';
-            }
+            color: (!travelers.adults || travelers.adults < 1) ? '#6b7280' : '#000000'
           }}
         >
           <Check className="w-5 h-5" />
