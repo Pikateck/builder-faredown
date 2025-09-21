@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect, useCallback } from "react";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Plane,
@@ -14,6 +14,8 @@ import {
   Award,
 } from "lucide-react";
 import { format, addDays } from "date-fns";
+import { useDateContext } from "@/contexts/DateContext";
+import { useSearch } from "@/contexts/SearchContext";
 import { MobileFullScreenCityInput } from "./MobileFullScreenCityInput";
 import { MobileFullScreenDateInput } from "./MobileFullScreenDateInput";
 import { MobileFullScreenTravelersInput } from "./MobileFullScreenTravelersInput";
