@@ -961,7 +961,17 @@ export function MobileNativeSearchForm({
 
             {/* Dates Field */}
             <button
-              onClick={() => {
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                console.log('Dates button clicked - preventing multiple opens');
+
+                // Prevent double-opening by checking if already open
+                if (showDateInput || showMultiCityInput) {
+                  console.log('Date picker already open, ignoring click');
+                  return;
+                }
+
                 if (module === "flights" && tripType === "multi-city") {
                   setShowMultiCityInput(true);
                 } else {
@@ -1030,7 +1040,12 @@ export function MobileNativeSearchForm({
 
             {/* Travelers Field */}
             <button
-              onClick={() => setShowTravelersInput(true)}
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (showTravelersInput) return;
+                setShowTravelersInput(true);
+              }}
               className="w-full p-4 bg-white border-2 border-gray-200 rounded-xl text-left hover:border-[#003580] transition-colors focus:outline-none focus:border-[#003580]"
             >
               <div className="flex items-center space-x-3">
