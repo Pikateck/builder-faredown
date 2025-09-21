@@ -331,7 +331,7 @@ export function MobileFullScreenDateInput({
           onClick={handleConfirm}
           disabled={
             !selectedRange.startDate ||
-            ((tripType === "round-trip" || tripType === "return") &&
+            ((tripType === "round-trip" || tripType === "return" || module === "hotels") &&
               !selectedRange.endDate)
           }
           style={{
