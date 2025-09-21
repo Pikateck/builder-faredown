@@ -147,8 +147,8 @@ export function MobileNativeSearchForm({
   // Use context for dates instead of local state - memoized to prevent unnecessary re-renders
   const dateRange = useMemo(() => ({
     startDate: dateContext.departureDate || addDays(new Date(), 1),
-    endDate: dateContext.returnDate || (tripType === "round-trip" ? addDays(new Date(), 8) : undefined),
-  }), [dateContext.departureDate, dateContext.returnDate, tripType]);
+    endDate: dateContext.returnDate || ((tripType === "round-trip" || module === "hotels") ? addDays(new Date(), 8) : undefined),
+  }), [dateContext.departureDate, dateContext.returnDate, tripType, module]);
 
   // Time states (for transfers)
   const [pickupTime, setPickupTime] = useState("12:00");
