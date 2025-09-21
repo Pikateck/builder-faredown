@@ -22,6 +22,7 @@ interface DateRange {
 interface MobileFullScreenDateInputProps {
   title: string;
   tripType: "round-trip" | "one-way" | "multi-city" | "return";
+  module?: "flights" | "hotels" | "sightseeing" | "transfers";
   initialRange: DateRange;
   onSelect: (range: DateRange) => void;
   onBack: () => void;
