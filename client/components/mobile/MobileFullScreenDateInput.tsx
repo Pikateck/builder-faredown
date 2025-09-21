@@ -98,6 +98,10 @@ export function MobileFullScreenDateInput({
         setSelectedRange({ startDate: date, endDate: undefined });
         setIsSelectingEnd(true);
       }
+    } else {
+      // For sightseeing, transfers, one-way flights - only need one date
+      setSelectedRange({ startDate: date, endDate: undefined });
+      setIsSelectingEnd(false);
     }
   };
 
