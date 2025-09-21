@@ -347,21 +347,21 @@ export function MobileFullScreenDateInput({
             border: 'none',
             cursor: (() => {
               const hasStartDate = !!selectedRange.startDate;
-              const needsEndDate = tripType === "round-trip" || tripType === "return";
+              const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
               const hasEndDate = !!selectedRange.endDate;
               const isValid = hasStartDate && (!needsEndDate || hasEndDate);
               return isValid ? 'pointer' : 'not-allowed';
             })(),
             backgroundColor: (() => {
               const hasStartDate = !!selectedRange.startDate;
-              const needsEndDate = tripType === "round-trip" || tripType === "return";
+              const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
               const hasEndDate = !!selectedRange.endDate;
               const isValid = hasStartDate && (!needsEndDate || hasEndDate);
               return isValid ? '#febb02' : '#d1d5db';
             })(),
             color: (() => {
               const hasStartDate = !!selectedRange.startDate;
-              const needsEndDate = tripType === "round-trip" || tripType === "return";
+              const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
               const hasEndDate = !!selectedRange.endDate;
               const isValid = hasStartDate && (!needsEndDate || hasEndDate);
               return isValid ? 'black' : '#6b7280';
