@@ -24,6 +24,44 @@ interface RecentSearchesProps {
   className?: string;
 }
 
+// Utility function to save searches to localStorage when API is unavailable
+export const saveRecentSearchToLocalStorage = (
+  module: string,
+  searchData: any
+) => {
+  try {
+    const key = `faredown_recent_searches_${module}`;
+    const existing = localStorage.getItem(key);
+    let searches = [];
+
+    if (existing) {
+      searches = JSON.parse(existing);
+    }
+
+    // Add new search with timestamp
+    const newSearch = {
+      ...searchData,
+      timestamp: new Date().toISOString(),
+    };
+
+    // Remove duplicates and add to front
+    searches = searches.filter((s: any) =>
+      JSON.stringify(s) !== JSON.stringify(searchData)
+    );
+    searches.unshift(newSearch);
+
+    // Keep only last 6 searches
+    searches = searches.slice(0, 6);
+
+    localStorage.setItem(key, JSON.stringify(searches));
+    console.log(`💾 Saved search to localStorage for ${module}`);
+    return true;
+  } catch (err) {
+    console.error("Error saving to localStorage:", err);
+    return false;
+  }
+};
+
 export function RecentSearches({
   module,
   onSearchClick,
