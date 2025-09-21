@@ -363,18 +363,18 @@ export function MobileNativeSearchForm({
         }
       }
 
-      // Set dates
+      // Set dates using context
       if (searchData.dates?.depart) {
         const depDate = new Date(searchData.dates.depart);
         if (!isNaN(depDate.getTime())) {
-          setDateRange((prev) => ({ ...prev, startDate: depDate }));
+          dateContext.setDepartureDate(depDate);
         }
       }
 
       if (searchData.dates?.return) {
         const retDate = new Date(searchData.dates.return);
         if (!isNaN(retDate.getTime())) {
-          setDateRange((prev) => ({ ...prev, endDate: retDate }));
+          dateContext.setReturnDate(retDate);
         }
       }
 
