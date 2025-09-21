@@ -1015,6 +1015,16 @@ export function MobileNativeSearchForm({
           />
         )}
 
+      {/* Flight Class Selection (for flights only) */}
+      {showClassInput && module === "flights" && (
+        <MobileClassDropdown
+          isOpen={showClassInput}
+          onClose={() => setShowClassInput(false)}
+          selectedClass={selectedClass}
+          onSelectClass={handleClassSelect}
+        />
+      )}
+
       {/* Recent Searches Section */}
       <div className="mt-6 px-3 sm:px-4">
         <RecentSearches
