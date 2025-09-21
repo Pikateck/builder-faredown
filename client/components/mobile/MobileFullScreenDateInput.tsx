@@ -244,7 +244,13 @@ export function MobileFullScreenDateInput({
             ((tripType === "round-trip" || tripType === "return") &&
               !selectedRange.endDate)
           }
-          className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] disabled:bg-gray-300 disabled:cursor-not-allowed text-black py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 transition-colors"
+          className={`w-full py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 transition-colors ${
+            !selectedRange.startDate ||
+            ((tripType === "round-trip" || tripType === "return") &&
+              !selectedRange.endDate)
+              ? "bg-gray-300 cursor-not-allowed text-gray-500"
+              : "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black"
+          }`}
         >
           <Check className="w-5 h-5" />
           <span>Select Dates</span>
