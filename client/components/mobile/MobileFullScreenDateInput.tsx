@@ -45,8 +45,8 @@ export function MobileFullScreenDateInput({
     console.log('Syncing initial range:', initialRange);
     setSelectedRange(initialRange);
 
-    // Set isSelectingEnd based on trip type and current selection
-    if (tripType === "round-trip" || tripType === "return") {
+    // Set isSelectingEnd based on module and trip type
+    if (module === "hotels" || tripType === "round-trip" || tripType === "return") {
       setIsSelectingEnd(!initialRange.endDate && !!initialRange.startDate);
     } else {
       setIsSelectingEnd(false);
