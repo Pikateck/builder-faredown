@@ -525,6 +525,7 @@ export function MobileNativeSearchForm({
       dateRange,
       travelers,
       tripType,
+      selectedClass: module === "flights" ? selectedClass : undefined,
       transferType: module === "transfers" ? transferType : undefined,
       multiCityLegs:
         module === "flights" && tripType === "multi-city"
@@ -569,6 +570,10 @@ export function MobileNativeSearchForm({
 
     if (module === "flights" && travelers.infants) {
       searchParams.set("infants", travelers.infants.toString());
+    }
+
+    if (module === "flights") {
+      searchParams.set("class", selectedClass);
     }
 
     // Store in recent searches API (non-blocking)
