@@ -26,7 +26,6 @@ import { MobileFullScreenMultiCityInput } from "./MobileFullScreenMultiCityInput
 import { MobileHotelSmartSearch } from "./MobileHotelSmartSearch";
 import { MobileClassDropdown } from "../MobileDropdowns";
 import { type SearchResult } from "@/lib/hotelSearchData";
-import { RecentSearches } from "../RecentSearches";
 
 interface Travelers {
   adults: number;
