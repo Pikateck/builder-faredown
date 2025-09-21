@@ -68,14 +68,12 @@ export function MobileFullScreenDateInput({
       date: format(date, 'MMM d, yyyy'),
       currentRange: selectedRange,
       tripType,
+      module,
       isSelectingEnd
     });
 
-    if (tripType === "one-way" || tripType === "multi-city") {
-      // For one-way, always replace with new date
-      setSelectedRange({ startDate: date, endDate: undefined });
-      setIsSelectingEnd(false);
-    } else if (tripType === "round-trip" || tripType === "return") {
+    // Hotels always need check-in AND check-out dates (like round-trip)
+    if (module === "hotels" || tripType === "round-trip" || tripType === "return") {
       // For round-trip logic
       if (!selectedRange.startDate) {
         // No dates selected yet - set start date
