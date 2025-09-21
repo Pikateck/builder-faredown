@@ -409,11 +409,13 @@ export function MobileNativeSearchForm({
       }
 
       // Set travelers
-      if (searchData.adults || searchData.children) {
+      if (searchData.adults || searchData.children || searchData.rooms || searchData.childAges) {
         setTravelers((prev) => ({
           ...prev,
           adults: searchData.adults || 1,
           children: searchData.children || 0,
+          rooms: searchData.rooms || (module === "hotels" ? 1 : prev.rooms),
+          childAges: searchData.childAges || [],
         }));
       }
 
@@ -647,6 +649,24 @@ export function MobileNativeSearchForm({
       return {
         isValid: false,
         error: "Please select check-out date",
+      };
+    }
+
+    // Check if child ages are provided for hotels when children are present
+    if (module === "hotels" && travelers.children && travelers.children > 0) {
+      if (!travelers.childAges || travelers.childAges.length !== travelers.children) {
+        return {
+          isValid: false,
+          error: "Please specify ages for all children",
+        };
+      }
+    }
+
+    // Check if at least one room is selected for hotels
+    if (module === "hotels" && (!travelers.rooms || travelers.rooms < 1)) {
+      return {
+        isValid: false,
+        error: "Please select at least one room",
       };
     }
 
