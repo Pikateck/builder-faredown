@@ -195,7 +195,7 @@ export function MobileFullScreenTravelersInput({
       </div>
 
       {/* Travelers Configuration */}
-      <div className="flex-1 overflow-y-auto p-4">
+      <div className="flex-1 overflow-y-auto p-4 pb-32">
         <div className="space-y-4">
           {/* Adults */}
           <Counter
