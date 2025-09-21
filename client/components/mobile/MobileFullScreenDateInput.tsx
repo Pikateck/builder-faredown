@@ -48,21 +48,41 @@ export function MobileFullScreenDateInput({
   });
 
   const handleDateClick = (date: Date) => {
+    console.log('Date clicked:', {
+      date: format(date, 'MMM d, yyyy'),
+      currentRange: selectedRange,
+      tripType,
+      isSelectingEnd
+    });
+
     if (tripType === "one-way" || tripType === "multi-city") {
-      setSelectedRange({ startDate: date });
-    } else {
-      if (!selectedRange.startDate || isSelectingEnd) {
-        setSelectedRange({ startDate: date });
-        setIsSelectingEnd(false);
-      } else {
+      // For one-way, always replace with new date
+      setSelectedRange({ startDate: date, endDate: undefined });
+      setIsSelectingEnd(false);
+    } else if (tripType === "round-trip" || tripType === "return") {
+      // For round-trip logic
+      if (!selectedRange.startDate) {
+        // No dates selected yet - set start date
+        setSelectedRange({ startDate: date, endDate: undefined });
+        setIsSelectingEnd(true);
+      } else if (!selectedRange.endDate || isSelectingEnd) {
+        // Start date exists, now setting end date
         if (isBefore(date, selectedRange.startDate)) {
-          setSelectedRange({ startDate: date });
+          // Clicked date is before start date - make it new start date
+          setSelectedRange({ startDate: date, endDate: undefined });
+          setIsSelectingEnd(true);
         } else {
+          // Clicked date is after start date - make it end date
           setSelectedRange({
             startDate: selectedRange.startDate,
             endDate: date,
           });
+          setIsSelectingEnd(false);
         }
+      } else {
+        // Both dates already selected - start fresh with new start date
+        setSelectedRange({ startDate: date, endDate: undefined });
+        setIsSelectingEnd(true);
       }
     }
   };
