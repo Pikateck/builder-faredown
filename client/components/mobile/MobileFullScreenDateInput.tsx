@@ -38,6 +38,15 @@ export function MobileFullScreenDateInput({
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [isSelectingEnd, setIsSelectingEnd] = useState(false);
 
+  // Debug logging
+  console.log('MobileFullScreenDateInput rendered:', {
+    title,
+    tripType,
+    initialRange,
+    selectedRange,
+    hasButton: true
+  });
+
   const handleDateClick = (date: Date) => {
     if (tripType === "one-way" || tripType === "multi-city") {
       setSelectedRange({ startDate: date });
