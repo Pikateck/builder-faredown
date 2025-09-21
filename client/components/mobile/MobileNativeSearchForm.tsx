@@ -1078,15 +1078,29 @@ export function MobileNativeSearchForm({
         />
       )}
 
-      {showDateInput && (
-        <MobileFullScreenDateInput
-          title={fieldLabels.dates || "Select dates"}
-          tripType={module === "transfers" ? transferTripType : tripType}
-          initialRange={dateRange}
-          onSelect={handleDateSelect}
-          onBack={() => setShowDateInput(false)}
-        />
-      )}
+      {showDateInput && (() => {
+        const pickerTripType = module === "transfers" ? transferTripType : tripType;
+        console.log('Rendering MobileFullScreenDateInput with props:', {
+          title: fieldLabels.dates || "Select dates",
+          tripType: pickerTripType,
+          initialRange: dateRange,
+          context: {
+            departureDate: dateContext.departureDate,
+            returnDate: dateContext.returnDate,
+            contextTripType: dateContext.tripType
+          }
+        });
+
+        return (
+          <MobileFullScreenDateInput
+            title={fieldLabels.dates || "Select dates"}
+            tripType={pickerTripType}
+            initialRange={dateRange}
+            onSelect={handleDateSelect}
+            onBack={() => setShowDateInput(false)}
+          />
+        );
+      })()}
 
       {showTravelersInput && (
         <MobileFullScreenTravelersInput
