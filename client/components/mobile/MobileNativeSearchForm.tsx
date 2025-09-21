@@ -11,6 +11,7 @@ import {
   Camera,
   Car,
   Clock,
+  Award,
 } from "lucide-react";
 import { format, addDays } from "date-fns";
 import { MobileFullScreenCityInput } from "./MobileFullScreenCityInput";
