@@ -121,40 +121,6 @@ export function HotelSearchForm({
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
-  // Handle recent search click - populate form with selected search data
-  const handleRecentSearchClick = (searchData: any) => {
-    try {
-      // Set destination
-      if (searchData.destination?.name) {
-        setDestination(searchData.destination.name);
-        setDestinationCode(searchData.destination.code || "");
-      }
-
-      // Set dates
-      if (searchData.dates?.checkin) {
-        const checkinDate = new Date(searchData.dates.checkin);
-        if (!isNaN(checkinDate.getTime())) setCheckInDate(checkinDate);
-      }
-
-      if (searchData.dates?.checkout) {
-        const checkoutDate = new Date(searchData.dates.checkout);
-        if (!isNaN(checkoutDate.getTime())) setCheckOutDate(checkoutDate);
-      }
-
-      // Set guests
-      if (searchData.adults || searchData.children || searchData.rooms) {
-        setGuests((prev) => ({
-          ...prev,
-          adults: searchData.adults || prev.adults,
-          children: searchData.children || 0,
-          childrenAges: Array(searchData.children || 0).fill(10),
-          rooms: searchData.rooms || prev.rooms,
-        }));
-      }
-    } catch (error) {
-      console.error("Error loading recent hotel search:", error);
-    }
-  };
 
   const calculateNights = (
     checkIn: Date | undefined,
