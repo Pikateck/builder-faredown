@@ -227,81 +227,21 @@ export function MobileFullScreenDateInput({
         {renderMonth(addMonths(currentMonth, 3))}
       </div>
 
-      {/* Select Dates Button - Fixed at Bottom (Booking.com Style) */}
+      {/* Select Dates Button - Fixed at Bottom (Faredown Brand Style) */}
       <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
-        <div className="space-y-3">
-          {/* Quick Date Options */}
-          <div className="flex space-x-2">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                const today = new Date();
-                const range: DateRange = {
-                  startDate: today,
-                  endDate:
-                    tripType === "round-trip" || tripType === "return"
-                      ? addDays(today, 7)
-                      : undefined,
-                };
-                setSelectedRange(range);
-              }}
-              className="flex-1 text-xs"
-            >
-              Today
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                const tomorrow = addDays(new Date(), 1);
-                const range: DateRange = {
-                  startDate: tomorrow,
-                  endDate:
-                    tripType === "round-trip" || tripType === "return"
-                      ? addDays(tomorrow, 7)
-                      : undefined,
-                };
-                setSelectedRange(range);
-              }}
-              className="flex-1 text-xs"
-            >
-              Tomorrow
-            </Button>
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={() => {
-                const nextWeek = addDays(new Date(), 7);
-                const range: DateRange = {
-                  startDate: nextWeek,
-                  endDate:
-                    tripType === "round-trip" || tripType === "return"
-                      ? addDays(nextWeek, 7)
-                      : undefined,
-                };
-                setSelectedRange(range);
-              }}
-              className="flex-1 text-xs"
-            >
-              Next Week
-            </Button>
-          </div>
-
-          {/* Select Dates Button (Booking.com Style) */}
-          <Button
-            onClick={handleConfirm}
-            disabled={
-              !selectedRange.startDate ||
-              ((tripType === "round-trip" || tripType === "return") &&
-                !selectedRange.endDate)
-            }
-            className="w-full bg-[#003580] hover:bg-[#002660] disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 transition-colors"
-          >
-            <Check className="w-5 h-5" />
-            <span>Select Dates</span>
-          </Button>
-        </div>
+        {/* Select Dates Button (Always Visible - Faredown Brand Yellow) */}
+        <Button
+          onClick={handleConfirm}
+          disabled={
+            !selectedRange.startDate ||
+            ((tripType === "round-trip" || tripType === "return") &&
+              !selectedRange.endDate)
+          }
+          className="w-full bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] disabled:bg-gray-300 disabled:cursor-not-allowed text-black py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 transition-colors"
+        >
+          <Check className="w-5 h-5" />
+          <span>Select Dates</span>
+        </Button>
       </div>
     </div>
   );
