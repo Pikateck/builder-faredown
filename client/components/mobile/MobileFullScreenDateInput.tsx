@@ -115,6 +115,7 @@ export function MobileFullScreenDateInput({
     console.log('handleConfirm called:', {
       selectedRange,
       tripType,
+      module,
       validation: { hasStartDate, needsEndDate, hasEndDate, isValid }
     });
 
