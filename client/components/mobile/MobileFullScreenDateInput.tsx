@@ -31,6 +31,7 @@ interface MobileFullScreenDateInputProps {
 export function MobileFullScreenDateInput({
   title,
   tripType,
+  module = "flights",
   initialRange,
   onSelect,
   onBack,
