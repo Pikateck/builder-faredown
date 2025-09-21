@@ -16,6 +16,7 @@ import {
 import { format, addDays } from "date-fns";
 import { useDateContext } from "@/contexts/DateContext";
 import { useSearch } from "@/contexts/SearchContext";
+import { saveRecentSearchToLocalStorage } from "../RecentSearches";
 import { MobileFullScreenCityInput } from "./MobileFullScreenCityInput";
 import { MobileFullScreenDateInput } from "./MobileFullScreenDateInput";
 import { MobileFullScreenTravelersInput } from "./MobileFullScreenTravelersInput";
