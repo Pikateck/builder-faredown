@@ -183,6 +183,23 @@ export function MobileNativeSearchForm({
   // Validation states
   const [validationError, setValidationError] = useState<string | null>(null);
 
+  // Sync trip type changes with DateContext
+  useEffect(() => {
+    dateContext.setTripType(tripType);
+    // Clear return date if switching to one-way
+    if (tripType === "one-way" && dateContext.returnDate) {
+      dateContext.setReturnDate(null);
+    }
+  }, [tripType, dateContext]);
+
+  // Load initial data from URL parameters on mount
+  useEffect(() => {
+    if (urlSearchParams.toString()) {
+      dateContext.loadDatesFromParams(urlSearchParams);
+      searchContext.loadFromUrlParams(urlSearchParams);
+    }
+  }, []);
+
   // Handle city selection
   const handleFromCitySelect = (city: string, code: string) => {
     // Debug logging for airport selection
