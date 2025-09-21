@@ -60,6 +60,21 @@ export function RecentSearches({
       setLoading(true);
       setError(null);
 
+      // First check if API server is reachable
+      const healthResponse = await fetch("/health", {
+        method: "GET",
+        credentials: "include",
+        headers: {
+          Accept: "application/json",
+        },
+      });
+
+      if (!healthResponse.ok) {
+        console.warn("API server health check failed, falling back to local storage");
+        loadFromLocalStorage();
+        return;
+      }
+
       const response = await fetch(
         `/api/recent-searches?module=${module}&limit=6`,
         {
@@ -74,36 +89,63 @@ export function RecentSearches({
       if (!response.ok) {
         // Handle specific HTTP status codes
         if (response.status === 404) {
-          console.warn("Recent searches API not available");
-          setRecentSearches([]);
+          console.warn("Recent searches API endpoint not found, falling back to local storage");
+          loadFromLocalStorage();
           return;
         } else if (response.status >= 500) {
-          throw new Error("Server error - please try again later");
+          console.warn("Server error, falling back to local storage");
+          loadFromLocalStorage();
+          return;
         } else {
           throw new Error(`API error: ${response.status}`);
         }
       }
 
       const data = await response.json();
-      console.log("📋 Fetched recent searches:", data.length, "items");
+      console.log("📋 Fetched recent searches from API:", data.length, "items");
       setRecentSearches(Array.isArray(data) ? data : []);
     } catch (err) {
       console.error("Error fetching recent searches:", err);
 
-      // Handle network errors gracefully
+      // Handle network errors gracefully - fall back to localStorage
       if (err instanceof TypeError && err.message.includes("fetch")) {
-        setError("Unable to connect to server");
+        console.warn("Network error, falling back to local storage");
+        loadFromLocalStorage();
       } else {
-        setError(
-          err instanceof Error ? err.message : "Failed to load recent searches",
-        );
+        console.warn("API error, falling back to local storage");
+        loadFromLocalStorage();
       }
-
-      // Set empty array as fallback
-      setRecentSearches([]);
     } finally {
       setLoading(false);
     }
+  };
+
+  // Fallback function to load from localStorage
+  const loadFromLocalStorage = () => {
+    try {
+      const stored = localStorage.getItem(`faredown_recent_searches_${module}`);
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed)) {
+          console.log("📋 Loaded recent searches from localStorage:", parsed.length, "items");
+          // Transform localStorage format to match API format
+          const transformed = parsed.map((item, index) => ({
+            id: index + 1,
+            module,
+            query: item,
+            created_at: item.timestamp || new Date().toISOString(),
+            updated_at: item.timestamp || new Date().toISOString(),
+          }));
+          setRecentSearches(transformed.slice(0, 6));
+          return;
+        }
+      }
+    } catch (err) {
+      console.error("Error loading from localStorage:", err);
+    }
+
+    // Final fallback - empty array
+    setRecentSearches([]);
   };
 
   const deleteRecentSearch = async (
