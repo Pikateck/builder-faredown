@@ -46,9 +46,6 @@ export function MobileFullScreenCityInput({
   const inputRef = useRef<HTMLInputElement>(null);
   const navigate = useNavigate();
 
-  // Convert cities object to array
-  const citiesArray = Object.values(cities);
-
   // Popular cities
   const popularCities = [
     {
@@ -139,6 +136,7 @@ export function MobileFullScreenCityInput({
     if (!searchQuery || searchQuery.length < 2) {
       setFilteredCities([]);
     } else {
+      const citiesArray = Object.values(cities);
       const filtered = citiesArray.filter(
         (city) =>
           city.city.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -148,7 +146,7 @@ export function MobileFullScreenCityInput({
       );
       setFilteredCities(filtered.slice(0, 20));
     }
-  }, [searchQuery, citiesArray]);
+  }, [searchQuery, cities]);
 
   const handleCitySelect = (city: Airport) => {
     onSelect(city.city, city.code);
