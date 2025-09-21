@@ -866,6 +866,26 @@ export function MobileNativeSearchForm({
               </div>
             </button>
 
+            {/* Flight Class Field (for flights only) */}
+            {module === "flights" && (
+              <button
+                onClick={() => setShowClassInput(true)}
+                className="w-full p-4 bg-white border-2 border-gray-200 rounded-xl text-left hover:border-[#003580] transition-colors focus:outline-none focus:border-[#003580]"
+              >
+                <div className="flex items-center space-x-3">
+                  <div className="w-10 h-10 bg-indigo-500 rounded-lg flex items-center justify-center">
+                    <Award className="w-5 h-5 text-white" />
+                  </div>
+                  <div className="flex-1">
+                    <div className="text-xs text-gray-500 mb-1">Travel class</div>
+                    <div className="font-semibold text-gray-900 text-base">
+                      {selectedClass}
+                    </div>
+                  </div>
+                </div>
+              </button>
+            )}
+
             {/* Validation Error Display */}
             {validationError && (
               <div className="p-3 bg-red-50 border border-red-200 rounded-xl mt-4">
