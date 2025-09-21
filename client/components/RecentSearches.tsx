@@ -191,7 +191,14 @@ export function RecentSearches({
   ) => {
     event.stopPropagation();
 
+    // First remove from UI immediately for better UX
+    const searchToDelete = recentSearches.find(s => s.id === searchId);
+    setRecentSearches((prev) =>
+      prev.filter((search) => search.id !== searchId),
+    );
+
     try {
+      // Try to delete from API
       const response = await fetch(`/api/recent-searches/${searchId}`, {
         method: "DELETE",
         credentials: "include",
@@ -201,22 +208,31 @@ export function RecentSearches({
         },
       });
 
-      if (response.ok || response.status === 204) {
-        // Remove from local state
-        setRecentSearches((prev) =>
-          prev.filter((search) => search.id !== searchId),
-        );
-      } else if (response.status === 404) {
-        // Item already deleted, just remove from UI
-        setRecentSearches((prev) =>
-          prev.filter((search) => search.id !== searchId),
-        );
+      if (response.ok || response.status === 204 || response.status === 404) {
+        console.log("✅ Successfully deleted from API");
       } else {
-        console.error("Failed to delete recent search:", response.status);
+        console.warn("API delete failed, will update localStorage");
       }
     } catch (err) {
-      console.error("Error deleting recent search:", err);
-      // Don't show error to user for delete operations
+      console.warn("API delete failed, will update localStorage:", err);
+    }
+
+    // Always update localStorage regardless of API success/failure
+    try {
+      if (searchToDelete) {
+        const key = `faredown_recent_searches_${module}`;
+        const existing = localStorage.getItem(key);
+        if (existing) {
+          let searches = JSON.parse(existing);
+          searches = searches.filter((s: any) =>
+            JSON.stringify(s) !== JSON.stringify(searchToDelete.query)
+          );
+          localStorage.setItem(key, JSON.stringify(searches));
+          console.log("💾 Updated localStorage after delete");
+        }
+      }
+    } catch (err) {
+      console.error("Error updating localStorage:", err);
     }
   };
 
