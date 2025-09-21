@@ -180,6 +180,19 @@ export function MobileNativeSearchForm({
   const [showMultiCityInput, setShowMultiCityInput] = useState(false);
   const [showClassInput, setShowClassInput] = useState(false);
   const [showHotelSmartSearch, setShowHotelSmartSearch] = useState(false);
+
+  // Helper function to close all inputs before opening a new one
+  const closeAllInputs = () => {
+    setShowFromInput(false);
+    setShowToInput(false);
+    setShowDateInput(false);
+    setShowTravelersInput(false);
+    setShowTimeInput(false);
+    setShowTransferTypeInput(false);
+    setShowMultiCityInput(false);
+    setShowClassInput(false);
+    setShowHotelSmartSearch(false);
+  };
   const [selectedHotelResult, setSelectedHotelResult] =
     useState<SearchResult | null>(null);
 
@@ -966,17 +979,17 @@ export function MobileNativeSearchForm({
                 e.stopPropagation();
                 console.log('Dates button clicked - preventing multiple opens');
 
-                // Prevent double-opening by checking if already open
-                if (showDateInput || showMultiCityInput) {
-                  console.log('Date picker already open, ignoring click');
-                  return;
-                }
+                // Close all inputs first
+                closeAllInputs();
 
-                if (module === "flights" && tripType === "multi-city") {
-                  setShowMultiCityInput(true);
-                } else {
-                  setShowDateInput(true);
-                }
+                // Add small delay to ensure state is clean
+                setTimeout(() => {
+                  if (module === "flights" && tripType === "multi-city") {
+                    setShowMultiCityInput(true);
+                  } else {
+                    setShowDateInput(true);
+                  }
+                }, 50);
               }}
               className="w-full p-4 bg-white border-2 border-gray-200 rounded-xl text-left hover:border-[#003580] transition-colors focus:outline-none focus:border-[#003580]"
             >
@@ -1043,8 +1056,10 @@ export function MobileNativeSearchForm({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                if (showTravelersInput) return;
-                setShowTravelersInput(true);
+                closeAllInputs();
+                setTimeout(() => {
+                  setShowTravelersInput(true);
+                }, 50);
               }}
               className="w-full p-4 bg-white border-2 border-gray-200 rounded-xl text-left hover:border-[#003580] transition-colors focus:outline-none focus:border-[#003580]"
             >
