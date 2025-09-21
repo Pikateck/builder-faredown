@@ -268,7 +268,7 @@ export function MobileNativeSearchForm({
     newParams.set("tripType", tripType);
     setUrlSearchParams(newParams, { replace: true });
 
-    // Save to recent searches (non-blocking)
+    // Save to recent searches (non-blocking) with localStorage fallback
     try {
       const recentSearchData = {
         tripType,
@@ -282,14 +282,39 @@ export function MobileNativeSearchForm({
         timestamp: new Date().toISOString(),
       };
 
+      // Try API first
       fetch("/api/recent-searches", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         credentials: "include",
         body: JSON.stringify({ module, query: recentSearchData }),
-      }).catch(console.error);
+      }).catch(apiError => {
+        console.warn("API save failed, using localStorage fallback:", apiError);
+        // Fallback to localStorage if API fails
+        saveRecentSearchToLocalStorage(module, recentSearchData);
+      });
+
+      // Also save to localStorage as backup
+      saveRecentSearchToLocalStorage(module, recentSearchData);
     } catch (error) {
       console.error("Failed to save recent search:", error);
+      // Try localStorage as final fallback
+      try {
+        const fallbackData = {
+          tripType,
+          module,
+          dates: {
+            depart: range.startDate?.toISOString() || "",
+            return: range.endDate?.toISOString() || "",
+          },
+          from: { code: fromCode, name: fromCity },
+          to: { code: toCode, name: toCity },
+          timestamp: new Date().toISOString(),
+        };
+        saveRecentSearchToLocalStorage(module, fallbackData);
+      } catch (fallbackError) {
+        console.error("Even localStorage fallback failed:", fallbackError);
+      }
     }
 
     // Console log current URL for debugging
