@@ -62,6 +62,7 @@ const adminProfilesRoutes = require("./routes/admin-profiles");
 const pricingRoutes = require("./routes/pricing");
 const reviewsRoutes = require("./routes/reviews");
 const recentSearchesRoutes = require("./routes/recent-searches");
+const healthCheckRoutes = require("./routes/health-check");
 const {
   router: bargainHoldsRouter,
   initializeBargainHolds,
