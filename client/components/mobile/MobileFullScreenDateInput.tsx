@@ -146,8 +146,10 @@ export function MobileFullScreenDateInput({
         console.error('Error in onSelect callback:', error);
       }
 
-      // Close the picker after callback
-      onBack();
+      // Close the picker after callback with additional delay
+      setTimeout(() => {
+        onBack();
+      }, 50);
     }, 100);
   };
 
@@ -274,7 +276,12 @@ export function MobileFullScreenDateInput({
       <div className="bg-[#003580] text-white px-4 py-3 shadow-lg flex-shrink-0">
         <div className="flex items-center justify-between">
           <button
-            onClick={onBack}
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              console.log('Date picker back button clicked');
+              onBack();
+            }}
             className="p-2 -ml-2 rounded-full hover:bg-white/10 transition-colors"
           >
             <ChevronLeft className="w-6 h-6" />
