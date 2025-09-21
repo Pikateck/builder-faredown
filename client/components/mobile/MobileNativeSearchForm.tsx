@@ -699,8 +699,8 @@ export function MobileNativeSearchForm({
         name: toCity,
       },
       dates: {
-        depart: dateRange.startDate.toISOString(),
-        return: dateRange.endDate ? dateRange.endDate.toISOString() : null,
+        depart: dateContext.departureDate!.toISOString(),
+        return: dateContext.returnDate ? dateContext.returnDate.toISOString() : null,
       },
       adults: travelers.adults,
       children: travelers.children || 0,
