@@ -123,9 +123,9 @@ export function MobileNativeSearchForm({
   const [tripType, setTripType] = useState<
     "round-trip" | "one-way" | "multi-city"
   >(
-    module === "hotels" || module === "sightseeing"
-      ? "one-way"
-      : module === "transfers"
+    module === "hotels"
+      ? "round-trip" // Hotels always need check-in AND check-out dates
+      : module === "sightseeing" || module === "transfers"
         ? "one-way"
         : "round-trip",
   );
