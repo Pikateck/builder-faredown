@@ -371,7 +371,7 @@ export function MobileFullScreenDateInput({
           }}
           onMouseDown={(e) => {
             const hasStartDate = !!selectedRange.startDate;
-            const needsEndDate = tripType === "round-trip" || tripType === "return";
+            const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
             const hasEndDate = !!selectedRange.endDate;
             const isValid = hasStartDate && (!needsEndDate || hasEndDate);
             if (isValid) {
@@ -380,7 +380,7 @@ export function MobileFullScreenDateInput({
           }}
           onMouseUp={(e) => {
             const hasStartDate = !!selectedRange.startDate;
-            const needsEndDate = tripType === "round-trip" || tripType === "return";
+            const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
             const hasEndDate = !!selectedRange.endDate;
             const isValid = hasStartDate && (!needsEndDate || hasEndDate);
             if (isValid) {
