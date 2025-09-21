@@ -31,7 +31,6 @@ import {
   getTypeLabel,
   type SearchResult,
 } from "@/lib/hotelSearchData";
-import { RecentSearches } from "./RecentSearches";
 
 interface GuestConfig {
   adults: number;
