@@ -342,14 +342,20 @@ export function MobileFullScreenDateInput({
             boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
           }}
           onMouseDown={(e) => {
-            if (selectedRange.startDate &&
-                (tripType === "one-way" || tripType === "multi-city" || selectedRange.endDate)) {
+            const hasStartDate = !!selectedRange.startDate;
+            const needsEndDate = tripType === "round-trip" || tripType === "return";
+            const hasEndDate = !!selectedRange.endDate;
+            const isValid = hasStartDate && (!needsEndDate || hasEndDate);
+            if (isValid) {
               e.currentTarget.style.backgroundColor = '#d19900';
             }
           }}
           onMouseUp={(e) => {
-            if (selectedRange.startDate &&
-                (tripType === "one-way" || tripType === "multi-city" || selectedRange.endDate)) {
+            const hasStartDate = !!selectedRange.startDate;
+            const needsEndDate = tripType === "round-trip" || tripType === "return";
+            const hasEndDate = !!selectedRange.endDate;
+            const isValid = hasStartDate && (!needsEndDate || hasEndDate);
+            if (isValid) {
               e.currentTarget.style.backgroundColor = '#febb02';
             }
           }}
