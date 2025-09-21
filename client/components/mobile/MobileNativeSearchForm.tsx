@@ -1121,6 +1121,7 @@ export function MobileNativeSearchForm({
           <MobileFullScreenDateInput
             title={fieldLabels.dates || "Select dates"}
             tripType={pickerTripType}
+            module={module}
             initialRange={dateRange}
             onSelect={handleDateSelect}
             onBack={() => setShowDateInput(false)}
