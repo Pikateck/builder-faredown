@@ -38,12 +38,26 @@ export function MobileFullScreenDateInput({
   const [currentMonth, setCurrentMonth] = useState(new Date());
   const [isSelectingEnd, setIsSelectingEnd] = useState(false);
 
+  // Sync selectedRange with initialRange when it changes
+  React.useEffect(() => {
+    console.log('Syncing initial range:', initialRange);
+    setSelectedRange(initialRange);
+
+    // Set isSelectingEnd based on trip type and current selection
+    if (tripType === "round-trip" || tripType === "return") {
+      setIsSelectingEnd(!initialRange.endDate && !!initialRange.startDate);
+    } else {
+      setIsSelectingEnd(false);
+    }
+  }, [initialRange, tripType]);
+
   // Debug logging
   console.log('MobileFullScreenDateInput rendered:', {
     title,
     tripType,
     initialRange,
     selectedRange,
+    isSelectingEnd,
     hasButton: true
   });
 
