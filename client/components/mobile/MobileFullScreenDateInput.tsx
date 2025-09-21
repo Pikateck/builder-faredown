@@ -235,7 +235,7 @@ export function MobileFullScreenDateInput({
       </div>
 
       {/* Select Dates Button - Fixed at Bottom (Faredown Brand Style) */}
-      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-2xl z-[9999] max-w-full">
         {/* Select Dates Button (Always Visible - Faredown Brand Yellow) */}
         <Button
           onClick={handleConfirm}
@@ -244,12 +244,12 @@ export function MobileFullScreenDateInput({
             ((tripType === "round-trip" || tripType === "return") &&
               !selectedRange.endDate)
           }
-          className={`w-full py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 transition-colors ${
+          className={`w-full py-4 rounded-xl font-bold text-lg flex items-center justify-center space-x-2 transition-all duration-200 shadow-lg ${
             !selectedRange.startDate ||
             ((tripType === "round-trip" || tripType === "return") &&
               !selectedRange.endDate)
               ? "bg-gray-300 cursor-not-allowed text-gray-500"
-              : "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black"
+              : "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black hover:shadow-xl transform hover:scale-[1.02]"
           }`}
         >
           <Check className="w-5 h-5" />
