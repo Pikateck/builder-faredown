@@ -220,8 +220,8 @@ export function MobileFullScreenDateInput({
         {renderMonth(addMonths(currentMonth, 3))}
       </div>
 
-      {/* Confirm Button */}
-      <div className="bg-white border-t border-gray-200 p-4 shadow-lg flex-shrink-0">
+      {/* Select Dates Button - Fixed at Bottom (Booking.com Style) */}
+      <div className="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 p-4 shadow-lg z-50">
         <div className="space-y-3">
           {/* Quick Date Options */}
           <div className="flex space-x-2">
@@ -281,7 +281,7 @@ export function MobileFullScreenDateInput({
             </Button>
           </div>
 
-          {/* Confirm Button */}
+          {/* Select Dates Button (Booking.com Style) */}
           <Button
             onClick={handleConfirm}
             disabled={
@@ -289,10 +289,10 @@ export function MobileFullScreenDateInput({
               ((tripType === "round-trip" || tripType === "return") &&
                 !selectedRange.endDate)
             }
-            className="w-full bg-[#003580] hover:bg-[#002660] text-white py-3 rounded-xl font-medium text-base flex items-center justify-center space-x-2"
+            className="w-full bg-[#003580] hover:bg-[#002660] disabled:bg-gray-300 disabled:cursor-not-allowed text-white py-4 rounded-xl font-semibold text-base flex items-center justify-center space-x-2 transition-colors"
           >
             <Check className="w-5 h-5" />
-            <span>Confirm Dates</span>
+            <span>Select Dates</span>
           </Button>
         </div>
       </div>
