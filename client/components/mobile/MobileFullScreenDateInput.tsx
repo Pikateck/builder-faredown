@@ -147,10 +147,20 @@ export function MobileFullScreenDateInput({
   const formatDateRange = () => {
     if (!selectedRange.startDate) return "Select dates";
 
+    // Hotels always show date range format
+    if (module === "hotels") {
+      if (selectedRange.endDate) {
+        return `${format(selectedRange.startDate, "EEE, MMM d")} - ${format(selectedRange.endDate, "EEE, MMM d, yyyy")}`;
+      }
+      return `${format(selectedRange.startDate, "EEE, MMM d, yyyy")} - Select check-out`;
+    }
+
+    // One-way trips show single date
     if (tripType === "one-way" || tripType === "multi-city") {
       return format(selectedRange.startDate, "EEE, MMM d, yyyy");
     }
 
+    // Round-trip flights show date range
     if (selectedRange.endDate) {
       return `${format(selectedRange.startDate, "EEE, MMM d")} - ${format(selectedRange.endDate, "EEE, MMM d, yyyy")}`;
     }
