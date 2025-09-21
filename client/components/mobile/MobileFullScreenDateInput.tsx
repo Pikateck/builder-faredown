@@ -185,7 +185,7 @@ export function MobileFullScreenDateInput({
   };
 
   return (
-    <div className="fixed inset-0 bg-white z-50 overflow-hidden flex flex-col">
+    <div className="fixed inset-0 bg-white z-[9998] overflow-hidden flex flex-col">
       {/* Native App Header */}
       <div className="bg-[#003580] text-white px-4 py-3 shadow-lg flex-shrink-0">
         <div className="flex items-center justify-between">
