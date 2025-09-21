@@ -231,11 +231,13 @@ export function MobileNativeSearchForm({
       end: range.endDate?.toISOString(),
       tripType,
       module,
+      currentModule: module // Ensure we stay in the same module
     });
 
     // Update DateContext
     dateContext.setDepartureDate(range.startDate);
-    if (tripType === "round-trip" || module === "hotels") {
+    // Hotels always need both check-in and check-out dates
+    if (module === "hotels" || tripType === "round-trip") {
       dateContext.setReturnDate(range.endDate || null);
     } else {
       dateContext.setReturnDate(null);
