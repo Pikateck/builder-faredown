@@ -277,11 +277,15 @@ export function MobileFullScreenDateInput({
           </div>
           <div className="flex-1">
             <div className="text-sm text-gray-600 mb-1">
-              {tripType === "one-way" || tripType === "multi-city"
-                ? "Departure date"
-                : tripType === "round-trip"
-                  ? "Travel dates"
-                  : "Travel dates"}
+              {module === "hotels"
+                ? "Check-in & Check-out"
+                : module === "sightseeing"
+                  ? "Activity date"
+                  : module === "transfers"
+                    ? "Transfer date"
+                    : tripType === "one-way" || tripType === "multi-city"
+                      ? "Departure date"
+                      : "Travel dates"}
             </div>
             <div className="font-semibold text-gray-900 text-base">
               {formatDateRange()}
