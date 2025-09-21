@@ -39,7 +39,7 @@ export function MobileFullScreenDateInput({
   const [isSelectingEnd, setIsSelectingEnd] = useState(false);
 
   // Sync selectedRange with initialRange when it changes
-  React.useEffect(() => {
+  useEffect(() => {
     console.log('Syncing initial range:', initialRange);
     setSelectedRange(initialRange);
 
