@@ -36,7 +36,7 @@ export function RecentSearches({
   // Fetch recent searches on component mount with retry
   useEffect(() => {
     let retryCount = 0;
-    const maxRetries = 2;
+    const maxRetries = 1; // Reduced retries since we have localStorage fallback
 
     const fetchWithRetry = async () => {
       try {
@@ -48,12 +48,49 @@ export function RecentSearches({
             `Retrying recent searches fetch (${retryCount}/${maxRetries})`,
           );
           setTimeout(fetchWithRetry, 1000 * retryCount); // Exponential backoff
+        } else {
+          // All retries failed, use localStorage fallback
+          console.warn("All retries failed, using localStorage fallback");
+          loadFromLocalStorage();
         }
       }
     };
 
     fetchWithRetry();
   }, [module]);
+
+  // Save search to localStorage as backup
+  const saveToLocalStorage = (searchData: any) => {
+    try {
+      const key = `faredown_recent_searches_${module}`;
+      const existing = localStorage.getItem(key);
+      let searches = [];
+
+      if (existing) {
+        searches = JSON.parse(existing);
+      }
+
+      // Add new search with timestamp
+      const newSearch = {
+        ...searchData,
+        timestamp: new Date().toISOString(),
+      };
+
+      // Remove duplicates and add to front
+      searches = searches.filter((s: any) =>
+        JSON.stringify(s) !== JSON.stringify(searchData)
+      );
+      searches.unshift(newSearch);
+
+      // Keep only last 6 searches
+      searches = searches.slice(0, 6);
+
+      localStorage.setItem(key, JSON.stringify(searches));
+      console.log(`💾 Saved search to localStorage for ${module}`);
+    } catch (err) {
+      console.error("Error saving to localStorage:", err);
+    }
+  };
 
   const fetchRecentSearches = async () => {
     try {
