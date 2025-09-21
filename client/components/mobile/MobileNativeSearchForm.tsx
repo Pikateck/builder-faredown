@@ -187,11 +187,11 @@ export function MobileNativeSearchForm({
   // Sync trip type changes with DateContext
   useEffect(() => {
     dateContext.setTripType(tripType);
-    // Clear return date if switching to one-way
-    if (tripType === "one-way" && dateContext.returnDate) {
+    // Clear return date if switching to one-way (but not for hotels)
+    if (tripType === "one-way" && module !== "hotels" && dateContext.returnDate) {
       dateContext.setReturnDate(null);
     }
-  }, [tripType, dateContext]);
+  }, [tripType, module, dateContext]);
 
   // Load initial data from URL parameters on mount
   useEffect(() => {
