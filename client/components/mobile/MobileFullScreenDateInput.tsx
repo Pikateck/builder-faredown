@@ -294,6 +294,8 @@ export function MobileFullScreenDateInput({
         <div className="text-xs text-gray-500 mb-2 text-center">
           Selected: {selectedRange.startDate ? format(selectedRange.startDate, 'MMM d') : 'None'}
           {selectedRange.endDate && ` - ${format(selectedRange.endDate, 'MMM d')}`}
+          <br />
+          Trip: {tripType} | Selecting: {isSelectingEnd ? 'End' : 'Start'}
         </div>
 
         {/* Select Dates Button (Always Visible - Faredown Brand Yellow) */}
