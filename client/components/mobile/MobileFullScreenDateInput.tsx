@@ -222,7 +222,7 @@ export function MobileFullScreenDateInput({
       </div>
 
       {/* Calendar Section - Two Months Stacked Vertically */}
-      <div className="flex-1 overflow-y-auto pb-24">
+      <div className="flex-1 overflow-y-auto pb-32">
         {/* Current Month */}
         {renderMonth(currentMonth)}
 
