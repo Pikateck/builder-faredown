@@ -102,12 +102,28 @@ export function MobileFullScreenDateInput({
   };
 
   const handleConfirm = () => {
+    // Validate selection before proceeding
+    const hasStartDate = !!selectedRange.startDate;
+    const needsEndDate = tripType === "round-trip" || tripType === "return";
+    const hasEndDate = !!selectedRange.endDate;
+    const isValid = hasStartDate && (!needsEndDate || hasEndDate);
+
+    console.log('handleConfirm called:', {
+      selectedRange,
+      tripType,
+      validation: { hasStartDate, needsEndDate, hasEndDate, isValid }
+    });
+
+    if (!isValid) {
+      console.warn('Invalid date selection - cannot confirm');
+      return;
+    }
+
     console.log('datesChanged', {
       start: selectedRange.startDate?.toISOString(),
       end: selectedRange.endDate?.toISOString(),
       tripType,
-      isValid: selectedRange.startDate &&
-        (tripType === "one-way" || tripType === "multi-city" || selectedRange.endDate)
+      isValid
     });
 
     console.log('Mobile date picker - Select Dates button tapped:', {
@@ -116,7 +132,15 @@ export function MobileFullScreenDateInput({
       currentURL: window.location.href
     });
 
-    onSelect(selectedRange);
+    // Call the parent callback
+    try {
+      onSelect(selectedRange);
+      console.log('onSelect callback completed successfully');
+    } catch (error) {
+      console.error('Error in onSelect callback:', error);
+    }
+
+    // Close the picker
     onBack();
   };
 
