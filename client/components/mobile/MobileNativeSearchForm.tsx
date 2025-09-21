@@ -586,8 +586,8 @@ export function MobileNativeSearchForm({
       }
     }
 
-    // Check if dates are selected
-    if (!dateRange.startDate) {
+    // Check if dates are selected using context
+    if (!dateContext.departureDate) {
       return {
         isValid: false,
         error: "Please select travel dates",
@@ -595,10 +595,18 @@ export function MobileNativeSearchForm({
     }
 
     // Check return date for round-trip
-    if (tripType === "round-trip" && !dateRange.endDate) {
+    if (tripType === "round-trip" && !dateContext.returnDate) {
       return {
         isValid: false,
         error: "Please select a return date",
+      };
+    }
+
+    // Check return date for hotels
+    if (module === "hotels" && !dateContext.returnDate) {
+      return {
+        isValid: false,
+        error: "Please select check-out date",
       };
     }
 
