@@ -1202,7 +1202,7 @@ export function MobileNativeSearchForm({
       {showTravelersInput && (
         <MobileFullScreenTravelersInput
           title={module === "hotels" ? "Guests & rooms" : "Travelers"}
-          bookingType={module}
+          bookingType={module === "hotels" ? "hotel" : module === "flights" ? "flight" : module === "sightseeing" ? "sightseeing" : "transfer"}
           initialTravelers={travelers}
           onSelect={handleTravelersSelect}
           onBack={() => setShowTravelersInput(false)}
