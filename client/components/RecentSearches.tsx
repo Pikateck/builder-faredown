@@ -27,7 +27,7 @@ interface RecentSearchesProps {
 // Utility function to save searches to localStorage when API is unavailable
 export const saveRecentSearchToLocalStorage = (
   module: string,
-  searchData: any
+  searchData: any,
 ) => {
   try {
     const key = `faredown_recent_searches_${module}`;
@@ -45,8 +45,8 @@ export const saveRecentSearchToLocalStorage = (
     };
 
     // Remove duplicates and add to front
-    searches = searches.filter((s: any) =>
-      JSON.stringify(s) !== JSON.stringify(searchData)
+    searches = searches.filter(
+      (s: any) => JSON.stringify(s) !== JSON.stringify(searchData),
     );
     searches.unshift(newSearch);
 
@@ -115,8 +115,8 @@ export function RecentSearches({
       };
 
       // Remove duplicates and add to front
-      searches = searches.filter((s: any) =>
-        JSON.stringify(s) !== JSON.stringify(searchData)
+      searches = searches.filter(
+        (s: any) => JSON.stringify(s) !== JSON.stringify(searchData),
       );
       searches.unshift(newSearch);
 
@@ -145,7 +145,9 @@ export function RecentSearches({
       });
 
       if (!healthResponse.ok) {
-        console.warn("API server health check failed, falling back to local storage");
+        console.warn(
+          "API server health check failed, falling back to local storage",
+        );
         loadFromLocalStorage();
         return;
       }
@@ -164,7 +166,9 @@ export function RecentSearches({
       if (!response.ok) {
         // Handle specific HTTP status codes
         if (response.status === 404) {
-          console.warn("Recent searches API endpoint not found, falling back to local storage");
+          console.warn(
+            "Recent searches API endpoint not found, falling back to local storage",
+          );
           loadFromLocalStorage();
           return;
         } else if (response.status >= 500) {
@@ -202,7 +206,11 @@ export function RecentSearches({
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed)) {
-          console.log("📋 Loaded recent searches from localStorage:", parsed.length, "items");
+          console.log(
+            "📋 Loaded recent searches from localStorage:",
+            parsed.length,
+            "items",
+          );
           // Transform localStorage format to match API format
           const transformed = parsed.map((item, index) => ({
             id: index + 1,
@@ -230,7 +238,7 @@ export function RecentSearches({
     event.stopPropagation();
 
     // First remove from UI immediately for better UX
-    const searchToDelete = recentSearches.find(s => s.id === searchId);
+    const searchToDelete = recentSearches.find((s) => s.id === searchId);
     setRecentSearches((prev) =>
       prev.filter((search) => search.id !== searchId),
     );
@@ -262,8 +270,9 @@ export function RecentSearches({
         const existing = localStorage.getItem(key);
         if (existing) {
           let searches = JSON.parse(existing);
-          searches = searches.filter((s: any) =>
-            JSON.stringify(s) !== JSON.stringify(searchToDelete.query)
+          searches = searches.filter(
+            (s: any) =>
+              JSON.stringify(s) !== JSON.stringify(searchToDelete.query),
           );
           localStorage.setItem(key, JSON.stringify(searches));
           console.log("💾 Updated localStorage after delete");

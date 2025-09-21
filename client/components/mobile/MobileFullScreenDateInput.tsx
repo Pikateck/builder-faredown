@@ -42,38 +42,51 @@ export function MobileFullScreenDateInput({
 
   // Sync selectedRange with initialRange when it changes
   useEffect(() => {
-    console.log('Syncing initial range:', initialRange);
+    console.log("Syncing initial range:", initialRange);
     setSelectedRange(initialRange);
 
     // Set isSelectingEnd based on module and trip type
-    if (module === "hotels" || tripType === "round-trip" || tripType === "return") {
+    if (
+      module === "hotels" ||
+      tripType === "round-trip" ||
+      tripType === "return"
+    ) {
       setIsSelectingEnd(!initialRange.endDate && !!initialRange.startDate);
     } else {
       setIsSelectingEnd(false);
     }
-  }, [initialRange.startDate?.toISOString(), initialRange.endDate?.toISOString(), tripType, module]);
+  }, [
+    initialRange.startDate?.toISOString(),
+    initialRange.endDate?.toISOString(),
+    tripType,
+    module,
+  ]);
 
   // Debug logging
-  console.log('MobileFullScreenDateInput rendered:', {
+  console.log("MobileFullScreenDateInput rendered:", {
     title,
     tripType,
     initialRange,
     selectedRange,
     isSelectingEnd,
-    hasButton: true
+    hasButton: true,
   });
 
   const handleDateClick = (date: Date) => {
-    console.log('Date clicked:', {
-      date: format(date, 'MMM d, yyyy'),
+    console.log("Date clicked:", {
+      date: format(date, "MMM d, yyyy"),
       currentRange: selectedRange,
       tripType,
       module,
-      isSelectingEnd
+      isSelectingEnd,
     });
 
     // Hotels always need check-in AND check-out dates (like round-trip)
-    if (module === "hotels" || tripType === "round-trip" || tripType === "return") {
+    if (
+      module === "hotels" ||
+      tripType === "round-trip" ||
+      tripType === "return"
+    ) {
       // For round-trip logic
       if (!selectedRange.startDate) {
         // No dates selected yet - set start date
@@ -108,42 +121,43 @@ export function MobileFullScreenDateInput({
   const handleConfirm = () => {
     // Validate selection before proceeding
     const hasStartDate = !!selectedRange.startDate;
-    const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
+    const needsEndDate =
+      tripType === "round-trip" || tripType === "return" || module === "hotels";
     const hasEndDate = !!selectedRange.endDate;
     const isValid = hasStartDate && (!needsEndDate || hasEndDate);
 
-    console.log('handleConfirm called:', {
+    console.log("handleConfirm called:", {
       selectedRange,
       tripType,
       module,
-      validation: { hasStartDate, needsEndDate, hasEndDate, isValid }
+      validation: { hasStartDate, needsEndDate, hasEndDate, isValid },
     });
 
     if (!isValid) {
-      console.warn('Invalid date selection - cannot confirm');
+      console.warn("Invalid date selection - cannot confirm");
       return;
     }
 
-    console.log('datesChanged', {
+    console.log("datesChanged", {
       start: selectedRange.startDate?.toISOString(),
       end: selectedRange.endDate?.toISOString(),
       tripType,
-      isValid
+      isValid,
     });
 
-    console.log('Mobile date picker - Select Dates button tapped:', {
+    console.log("Mobile date picker - Select Dates button tapped:", {
       selectedRange,
       tripType,
-      currentURL: window.location.href
+      currentURL: window.location.href,
     });
 
     // Call the parent callback with a small delay to prevent double-triggering
     setTimeout(() => {
       try {
         onSelect(selectedRange);
-        console.log('onSelect callback completed successfully');
+        console.log("onSelect callback completed successfully");
       } catch (error) {
-        console.error('Error in onSelect callback:', error);
+        console.error("Error in onSelect callback:", error);
       }
 
       // Close the picker after callback with additional delay
@@ -279,7 +293,7 @@ export function MobileFullScreenDateInput({
             onClick={(e) => {
               e.preventDefault();
               e.stopPropagation();
-              console.log('Date picker back button clicked');
+              console.log("Date picker back button clicked");
               onBack();
             }}
             className="p-2 -ml-2 rounded-full hover:bg-white/10 transition-colors"
@@ -333,21 +347,27 @@ export function MobileFullScreenDateInput({
       <div
         className="fixed bottom-0 left-0 right-0 bg-white border-t-2 border-gray-300 p-6 shadow-2xl z-[9999] max-w-full"
         style={{
-          position: 'fixed',
+          position: "fixed",
           bottom: 0,
           left: 0,
           right: 0,
           zIndex: 9999,
-          backgroundColor: 'white',
-          boxShadow: '0 -10px 25px -5px rgba(0, 0, 0, 0.1), 0 -4px 10px -3px rgba(0, 0, 0, 0.05)'
+          backgroundColor: "white",
+          boxShadow:
+            "0 -10px 25px -5px rgba(0, 0, 0, 0.1), 0 -4px 10px -3px rgba(0, 0, 0, 0.05)",
         }}
       >
         {/* Debug info */}
         <div className="text-xs text-gray-500 mb-2 text-center">
-          Selected: {selectedRange.startDate ? format(selectedRange.startDate, 'MMM d') : 'None'}
-          {selectedRange.endDate && ` - ${format(selectedRange.endDate, 'MMM d')}`}
+          Selected:{" "}
+          {selectedRange.startDate
+            ? format(selectedRange.startDate, "MMM d")
+            : "None"}
+          {selectedRange.endDate &&
+            ` - ${format(selectedRange.endDate, "MMM d")}`}
           <br />
-          Module: {module} | Trip: {tripType} | Selecting: {isSelectingEnd ? 'End' : 'Start'}
+          Module: {module} | Trip: {tripType} | Selecting:{" "}
+          {isSelectingEnd ? "End" : "Start"}
         </div>
 
         {/* Select Dates Button (Always Visible - Faredown Brand Yellow) */}
@@ -355,60 +375,77 @@ export function MobileFullScreenDateInput({
           onClick={handleConfirm}
           disabled={
             !selectedRange.startDate ||
-            ((tripType === "round-trip" || tripType === "return" || module === "hotels") &&
+            ((tripType === "round-trip" ||
+              tripType === "return" ||
+              module === "hotels") &&
               !selectedRange.endDate)
           }
           style={{
-            width: '100%',
-            padding: '16px 24px',
-            borderRadius: '12px',
-            fontWeight: 'bold',
-            fontSize: '18px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: '8px',
-            border: 'none',
+            width: "100%",
+            padding: "16px 24px",
+            borderRadius: "12px",
+            fontWeight: "bold",
+            fontSize: "18px",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "8px",
+            border: "none",
             cursor: (() => {
               const hasStartDate = !!selectedRange.startDate;
-              const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
+              const needsEndDate =
+                tripType === "round-trip" ||
+                tripType === "return" ||
+                module === "hotels";
               const hasEndDate = !!selectedRange.endDate;
               const isValid = hasStartDate && (!needsEndDate || hasEndDate);
-              return isValid ? 'pointer' : 'not-allowed';
+              return isValid ? "pointer" : "not-allowed";
             })(),
             backgroundColor: (() => {
               const hasStartDate = !!selectedRange.startDate;
-              const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
+              const needsEndDate =
+                tripType === "round-trip" ||
+                tripType === "return" ||
+                module === "hotels";
               const hasEndDate = !!selectedRange.endDate;
               const isValid = hasStartDate && (!needsEndDate || hasEndDate);
-              return isValid ? '#febb02' : '#d1d5db';
+              return isValid ? "#febb02" : "#d1d5db";
             })(),
             color: (() => {
               const hasStartDate = !!selectedRange.startDate;
-              const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
+              const needsEndDate =
+                tripType === "round-trip" ||
+                tripType === "return" ||
+                module === "hotels";
               const hasEndDate = !!selectedRange.endDate;
               const isValid = hasStartDate && (!needsEndDate || hasEndDate);
-              return isValid ? 'black' : '#6b7280';
+              return isValid ? "black" : "#6b7280";
             })(),
-            transition: 'all 0.2s ease',
-            boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1)'
+            transition: "all 0.2s ease",
+            boxShadow: "0 4px 6px -1px rgba(0, 0, 0, 0.1)",
           }}
           onMouseDown={(e) => {
             const hasStartDate = !!selectedRange.startDate;
-            const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
+            const needsEndDate =
+              tripType === "round-trip" ||
+              tripType === "return" ||
+              module === "hotels";
             const hasEndDate = !!selectedRange.endDate;
             const isValid = hasStartDate && (!needsEndDate || hasEndDate);
             if (isValid) {
-              e.currentTarget.style.backgroundColor = '#d19900';
+              e.currentTarget.style.backgroundColor = "#d19900";
             }
           }}
           onMouseUp={(e) => {
             const hasStartDate = !!selectedRange.startDate;
-            const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
+            const needsEndDate =
+              tripType === "round-trip" ||
+              tripType === "return" ||
+              module === "hotels";
             const hasEndDate = !!selectedRange.endDate;
             const isValid = hasStartDate && (!needsEndDate || hasEndDate);
             if (isValid) {
-              e.currentTarget.style.backgroundColor = '#febb02';
+              e.currentTarget.style.backgroundColor = "#febb02";
             }
           }}
         >

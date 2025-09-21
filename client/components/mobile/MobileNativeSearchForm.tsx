@@ -145,10 +145,17 @@ export function MobileNativeSearchForm({
   const [toCode, setToCode] = useState("");
 
   // Use context for dates instead of local state - memoized to prevent unnecessary re-renders
-  const dateRange = useMemo(() => ({
-    startDate: dateContext.departureDate || addDays(new Date(), 1),
-    endDate: dateContext.returnDate || ((tripType === "round-trip" || module === "hotels") ? addDays(new Date(), 8) : undefined),
-  }), [dateContext.departureDate, dateContext.returnDate, tripType, module]);
+  const dateRange = useMemo(
+    () => ({
+      startDate: dateContext.departureDate || addDays(new Date(), 1),
+      endDate:
+        dateContext.returnDate ||
+        (tripType === "round-trip" || module === "hotels"
+          ? addDays(new Date(), 8)
+          : undefined),
+    }),
+    [dateContext.departureDate, dateContext.returnDate, tripType, module],
+  );
 
   // Time states (for transfers)
   const [pickupTime, setPickupTime] = useState("12:00");
@@ -202,7 +209,11 @@ export function MobileNativeSearchForm({
   useEffect(() => {
     dateContext.setTripType(tripType);
     // Clear return date if switching to one-way (but not for hotels)
-    if (tripType === "one-way" && module !== "hotels" && dateContext.returnDate) {
+    if (
+      tripType === "one-way" &&
+      module !== "hotels" &&
+      dateContext.returnDate
+    ) {
       dateContext.setReturnDate(null);
     }
   }, [tripType, module, dateContext]);
@@ -239,84 +250,55 @@ export function MobileNativeSearchForm({
   };
 
   // Handle date selection with proper state management
-  const handleDateSelect = useCallback((range: DateRange) => {
-    console.log('datesChanged', {
-      start: range.startDate?.toISOString(),
-      end: range.endDate?.toISOString(),
-      tripType,
-      module,
-      currentModule: module // Ensure we stay in the same module
-    });
-
-    // Update DateContext
-    dateContext.setDepartureDate(range.startDate);
-    // Hotels always need both check-in and check-out dates
-    if (module === "hotels" || tripType === "round-trip") {
-      dateContext.setReturnDate(range.endDate || null);
-    } else {
-      dateContext.setReturnDate(null);
-    }
-    dateContext.setTripType(tripType);
-
-    // Update SearchContext
-    searchContext.updateSearchParams({
-      departureDate: range.startDate?.toISOString() || "",
-      returnDate: range.endDate?.toISOString() || "",
-      checkIn: range.startDate?.toISOString() || "",
-      checkOut: range.endDate?.toISOString() || "",
-      tripType,
-      module,
-    });
-
-    // Update URL parameters
-    const newParams = new URLSearchParams(urlSearchParams);
-    if (range.startDate) {
-      newParams.set("departureDate", range.startDate.toISOString());
-      newParams.set("checkIn", range.startDate.toISOString());
-    }
-    if (range.endDate && (tripType === "round-trip" || module === "hotels")) {
-      newParams.set("returnDate", range.endDate.toISOString());
-      newParams.set("checkOut", range.endDate.toISOString());
-    } else {
-      newParams.delete("returnDate");
-      newParams.delete("checkOut");
-    }
-    newParams.set("tripType", tripType);
-    setUrlSearchParams(newParams, { replace: true });
-
-    // Save to recent searches (non-blocking) with localStorage fallback
-    try {
-      const recentSearchData = {
+  const handleDateSelect = useCallback(
+    (range: DateRange) => {
+      console.log("datesChanged", {
+        start: range.startDate?.toISOString(),
+        end: range.endDate?.toISOString(),
         tripType,
         module,
-        dates: {
-          depart: range.startDate?.toISOString() || "",
-          return: range.endDate?.toISOString() || "",
-        },
-        from: { code: fromCode, name: fromCity },
-        to: { code: toCode, name: toCity },
-        timestamp: new Date().toISOString(),
-      };
-
-      // Try API first
-      fetch("/api/recent-searches", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ module, query: recentSearchData }),
-      }).catch(apiError => {
-        console.warn("API save failed, using localStorage fallback:", apiError);
-        // Fallback to localStorage if API fails
-        saveRecentSearchToLocalStorage(module, recentSearchData);
+        currentModule: module, // Ensure we stay in the same module
       });
 
-      // Also save to localStorage as backup
-      saveRecentSearchToLocalStorage(module, recentSearchData);
-    } catch (error) {
-      console.error("Failed to save recent search:", error);
-      // Try localStorage as final fallback
+      // Update DateContext
+      dateContext.setDepartureDate(range.startDate);
+      // Hotels always need both check-in and check-out dates
+      if (module === "hotels" || tripType === "round-trip") {
+        dateContext.setReturnDate(range.endDate || null);
+      } else {
+        dateContext.setReturnDate(null);
+      }
+      dateContext.setTripType(tripType);
+
+      // Update SearchContext
+      searchContext.updateSearchParams({
+        departureDate: range.startDate?.toISOString() || "",
+        returnDate: range.endDate?.toISOString() || "",
+        checkIn: range.startDate?.toISOString() || "",
+        checkOut: range.endDate?.toISOString() || "",
+        tripType,
+        module,
+      });
+
+      // Update URL parameters
+      const newParams = new URLSearchParams(urlSearchParams);
+      if (range.startDate) {
+        newParams.set("departureDate", range.startDate.toISOString());
+        newParams.set("checkIn", range.startDate.toISOString());
+      }
+      if (range.endDate && (tripType === "round-trip" || module === "hotels")) {
+        newParams.set("returnDate", range.endDate.toISOString());
+        newParams.set("checkOut", range.endDate.toISOString());
+      } else {
+        newParams.delete("returnDate");
+        newParams.delete("checkOut");
+      }
+      newParams.set("tripType", tripType);
+      setUrlSearchParams(newParams, { replace: true });
+
+      // Save to recent searches (non-blocking) with localStorage fallback
       try {
-        const fallbackData = {
+        const recentSearchData = {
           tripType,
           module,
           dates: {
@@ -327,20 +309,73 @@ export function MobileNativeSearchForm({
           to: { code: toCode, name: toCity },
           timestamp: new Date().toISOString(),
         };
-        saveRecentSearchToLocalStorage(module, fallbackData);
-      } catch (fallbackError) {
-        console.error("Even localStorage fallback failed:", fallbackError);
+
+        // Try API first
+        fetch("/api/recent-searches", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          credentials: "include",
+          body: JSON.stringify({ module, query: recentSearchData }),
+        }).catch((apiError) => {
+          console.warn(
+            "API save failed, using localStorage fallback:",
+            apiError,
+          );
+          // Fallback to localStorage if API fails
+          saveRecentSearchToLocalStorage(module, recentSearchData);
+        });
+
+        // Also save to localStorage as backup
+        saveRecentSearchToLocalStorage(module, recentSearchData);
+      } catch (error) {
+        console.error("Failed to save recent search:", error);
+        // Try localStorage as final fallback
+        try {
+          const fallbackData = {
+            tripType,
+            module,
+            dates: {
+              depart: range.startDate?.toISOString() || "",
+              return: range.endDate?.toISOString() || "",
+            },
+            from: { code: fromCode, name: fromCity },
+            to: { code: toCode, name: toCity },
+            timestamp: new Date().toISOString(),
+          };
+          saveRecentSearchToLocalStorage(module, fallbackData);
+        } catch (fallbackError) {
+          console.error("Even localStorage fallback failed:", fallbackError);
+        }
       }
-    }
 
-    // Console log current URL for debugging
-    console.log('Current URL with updated params:', window.location.href);
+      // Console log current URL for debugging
+      console.log("Current URL with updated params:", window.location.href);
 
-    // Emit custom event for other components
-    window.dispatchEvent(new CustomEvent('datesChanged', {
-      detail: { start: range.startDate, end: range.endDate, tripType, module }
-    }));
-  }, [tripType, module, dateContext, searchContext, urlSearchParams, setUrlSearchParams, fromCode, fromCity, toCode, toCity]);
+      // Emit custom event for other components
+      window.dispatchEvent(
+        new CustomEvent("datesChanged", {
+          detail: {
+            start: range.startDate,
+            end: range.endDate,
+            tripType,
+            module,
+          },
+        }),
+      );
+    },
+    [
+      tripType,
+      module,
+      dateContext,
+      searchContext,
+      urlSearchParams,
+      setUrlSearchParams,
+      fromCode,
+      fromCity,
+      toCode,
+      toCity,
+    ],
+  );
 
   // Handle travelers selection
   const handleTravelersSelect = (newTravelers: Travelers) => {
@@ -375,7 +410,6 @@ export function MobileNativeSearchForm({
     setSelectedClass(classType);
   };
 
-
   // Format date display using context dates
   const formatDateDisplay = () => {
     const startDate = dateContext.departureDate;
@@ -395,9 +429,7 @@ export function MobileNativeSearchForm({
 
     if (module === "hotels") {
       const checkIn = format(startDate, "MMM d");
-      const checkOut = endDate
-        ? format(endDate, "MMM d")
-        : "Check-out";
+      const checkOut = endDate ? format(endDate, "MMM d") : "Check-out";
       return `${checkIn} - ${checkOut}`;
     }
 
@@ -431,12 +463,22 @@ export function MobileNativeSearchForm({
     }
 
     // Add child age summary for hotels if there are children
-    if (module === "hotels" && travelers.children && travelers.children > 0 && travelers.childAges && travelers.childAges.length > 0) {
-      const ageText = travelers.childAges.length === 1 ? `age ${travelers.childAges[0]}` : `ages ${travelers.childAges.join(", ")}`;
+    if (
+      module === "hotels" &&
+      travelers.children &&
+      travelers.children > 0 &&
+      travelers.childAges &&
+      travelers.childAges.length > 0
+    ) {
+      const ageText =
+        travelers.childAges.length === 1
+          ? `age ${travelers.childAges[0]}`
+          : `ages ${travelers.childAges.join(", ")}`;
       // Replace the children part to include ages
-      const childIndex = parts.findIndex(part => part.includes("child"));
+      const childIndex = parts.findIndex((part) => part.includes("child"));
       if (childIndex !== -1) {
-        parts[childIndex] = `${travelers.children} child${travelers.children > 1 ? "ren" : ""} (${ageText})`;
+        parts[childIndex] =
+          `${travelers.children} child${travelers.children > 1 ? "ren" : ""} (${ageText})`;
       }
     }
 
@@ -602,7 +644,10 @@ export function MobileNativeSearchForm({
 
     // Check if child ages are provided for hotels when children are present
     if (module === "hotels" && travelers.children && travelers.children > 0) {
-      if (!travelers.childAges || travelers.childAges.length !== travelers.children) {
+      if (
+        !travelers.childAges ||
+        travelers.childAges.length !== travelers.children
+      ) {
         return {
           isValid: false,
           error: "Please specify ages for all children",
@@ -712,7 +757,9 @@ export function MobileNativeSearchForm({
       },
       dates: {
         depart: dateContext.departureDate!.toISOString(),
-        return: dateContext.returnDate ? dateContext.returnDate.toISOString() : null,
+        return: dateContext.returnDate
+          ? dateContext.returnDate.toISOString()
+          : null,
       },
       adults: travelers.adults,
       children: travelers.children || 0,
@@ -912,7 +959,7 @@ export function MobileNativeSearchForm({
               onClick={(e) => {
                 e.preventDefault();
                 e.stopPropagation();
-                console.log('Dates button clicked - preventing multiple opens');
+                console.log("Dates button clicked - preventing multiple opens");
 
                 // Close all inputs first
                 closeAllInputs();
@@ -1024,7 +1071,9 @@ export function MobileNativeSearchForm({
                     <Award className="w-5 h-5 text-white" />
                   </div>
                   <div className="flex-1">
-                    <div className="text-xs text-gray-500 mb-1">Travel class</div>
+                    <div className="text-xs text-gray-500 mb-1">
+                      Travel class
+                    </div>
                     <div className="font-semibold text-gray-900 text-base">
                       {selectedClass}
                     </div>
@@ -1109,35 +1158,45 @@ export function MobileNativeSearchForm({
         />
       )}
 
-      {showDateInput && (() => {
-        const pickerTripType = module === "transfers" ? transferTripType : tripType;
-        console.log('Rendering MobileFullScreenDateInput with props:', {
-          title: fieldLabels.dates || "Select dates",
-          tripType: pickerTripType,
-          initialRange: dateRange,
-          context: {
-            departureDate: dateContext.departureDate,
-            returnDate: dateContext.returnDate,
-            contextTripType: dateContext.tripType
-          }
-        });
+      {showDateInput &&
+        (() => {
+          const pickerTripType =
+            module === "transfers" ? transferTripType : tripType;
+          console.log("Rendering MobileFullScreenDateInput with props:", {
+            title: fieldLabels.dates || "Select dates",
+            tripType: pickerTripType,
+            initialRange: dateRange,
+            context: {
+              departureDate: dateContext.departureDate,
+              returnDate: dateContext.returnDate,
+              contextTripType: dateContext.tripType,
+            },
+          });
 
-        return (
-          <MobileFullScreenDateInput
-            title={fieldLabels.dates || "Select dates"}
-            tripType={pickerTripType}
-            module={module}
-            initialRange={dateRange}
-            onSelect={handleDateSelect}
-            onBack={() => setShowDateInput(false)}
-          />
-        );
-      })()}
+          return (
+            <MobileFullScreenDateInput
+              title={fieldLabels.dates || "Select dates"}
+              tripType={pickerTripType}
+              module={module}
+              initialRange={dateRange}
+              onSelect={handleDateSelect}
+              onBack={() => setShowDateInput(false)}
+            />
+          );
+        })()}
 
       {showTravelersInput && (
         <MobileFullScreenTravelersInput
           title={module === "hotels" ? "Guests & rooms" : "Travelers"}
-          bookingType={module === "hotels" ? "hotel" : module === "flights" ? "flight" : module === "sightseeing" ? "sightseeing" : "transfer"}
+          bookingType={
+            module === "hotels"
+              ? "hotel"
+              : module === "flights"
+                ? "flight"
+                : module === "sightseeing"
+                  ? "sightseeing"
+                  : "transfer"
+          }
           initialTravelers={travelers}
           onSelect={handleTravelersSelect}
           onBack={() => setShowTravelersInput(false)}
@@ -1186,7 +1245,6 @@ export function MobileNativeSearchForm({
           onSelectClass={handleClassSelect}
         />
       )}
-
     </div>
   );
 }

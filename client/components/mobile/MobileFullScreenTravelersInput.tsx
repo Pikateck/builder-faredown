@@ -276,7 +276,6 @@ export function MobileFullScreenTravelersInput({
             />
           )}
         </div>
-
       </div>
 
       {/* Confirm Button - Fixed at Bottom */}
@@ -292,12 +291,14 @@ export function MobileFullScreenTravelersInput({
           disabled={!travelers.adults || travelers.adults < 1}
           className={`w-full py-4 px-6 rounded-xl font-bold text-lg flex items-center justify-center space-x-2 transition-all ${
             !travelers.adults || travelers.adults < 1
-              ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-              : 'bg-yellow-400 hover:bg-yellow-500 text-black cursor-pointer shadow-lg'
+              ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-yellow-400 hover:bg-yellow-500 text-black cursor-pointer shadow-lg"
           }`}
           style={{
-            backgroundColor: (!travelers.adults || travelers.adults < 1) ? '#d1d5db' : '#febb02',
-            color: (!travelers.adults || travelers.adults < 1) ? '#6b7280' : '#000000'
+            backgroundColor:
+              !travelers.adults || travelers.adults < 1 ? "#d1d5db" : "#febb02",
+            color:
+              !travelers.adults || travelers.adults < 1 ? "#6b7280" : "#000000",
           }}
         >
           <Check className="w-5 h-5" />
