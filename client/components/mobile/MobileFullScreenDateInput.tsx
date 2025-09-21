@@ -59,6 +59,13 @@ export function MobileFullScreenDateInput({
   };
 
   const handleConfirm = () => {
+    console.log('Mobile date picker - Select Dates button tapped:', {
+      selectedRange,
+      tripType,
+      isValid: selectedRange.startDate &&
+        (tripType === "one-way" || tripType === "multi-city" || selectedRange.endDate)
+    });
+
     onSelect(selectedRange);
     onBack();
   };
