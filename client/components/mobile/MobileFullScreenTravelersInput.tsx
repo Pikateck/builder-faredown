@@ -277,30 +277,6 @@ export function MobileFullScreenTravelersInput({
           )}
         </div>
 
-        {/* Tips Section */}
-        <div className="mt-8 p-4 bg-blue-50 rounded-xl border border-blue-200">
-          <h3 className="font-medium text-blue-900 mb-2">Tips</h3>
-          <ul className="space-y-1 text-sm text-blue-800">
-            {bookingType === "flight" && (
-              <>
-                <li>• Infants under 2 can travel on your lap for free</li>
-                <li>
-                  • Children 12+ may need adult supervision for some airlines
-                </li>
-              </>
-            )}
-            {bookingType === "hotel" && (
-              <>
-                <li>• Child ages determine room rates and occupancy</li>
-                <li>
-                  • Some hotels offer free stays for children under certain ages
-                </li>
-                <li>• Extra beds may be available for additional guests</li>
-              </>
-            )}
-            <li>• Maximum 9 travelers per booking</li>
-          </ul>
-        </div>
       </div>
 
       {/* Confirm Button - Fixed at Bottom (Faredown Brand Style) */}
