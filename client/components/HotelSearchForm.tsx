@@ -121,7 +121,6 @@ export function HotelSearchForm({
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
 
-
   const calculateNights = (
     checkIn: Date | undefined,
     checkOut: Date | undefined,
@@ -198,10 +197,17 @@ export function HotelSearchForm({
       : destination;
     // Validate dates are properly set
 
-    if (!checkInDate || !checkOutDate || !(checkInDate instanceof Date) || !(checkOutDate instanceof Date)) {
+    if (
+      !checkInDate ||
+      !checkOutDate ||
+      !(checkInDate instanceof Date) ||
+      !(checkOutDate instanceof Date)
+    ) {
       const missingFields = [];
-      if (!checkInDate || !(checkInDate instanceof Date)) missingFields.push("check-in date");
-      if (!checkOutDate || !(checkOutDate instanceof Date)) missingFields.push("check-out date");
+      if (!checkInDate || !(checkInDate instanceof Date))
+        missingFields.push("check-in date");
+      if (!checkOutDate || !(checkOutDate instanceof Date))
+        missingFields.push("check-out date");
 
       setErrorMessage(`Please select ${missingFields.join(" and ")}`);
       setShowError(true);
@@ -594,7 +600,10 @@ export function HotelSearchForm({
                       setCheckInDate(range.startDate);
                       setCheckOutDate(range.endDate);
                       // Clear any existing error when valid dates are selected
-                      if (showError && errorMessage.includes("Please select check-in")) {
+                      if (
+                        showError &&
+                        errorMessage.includes("Please select check-in")
+                      ) {
                         setShowError(false);
                         setErrorMessage("");
                       }
@@ -790,7 +799,6 @@ export function HotelSearchForm({
             </Button>
           </div>
         </div>
-
       </div>
     </>
   );
