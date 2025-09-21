@@ -20,6 +20,7 @@ import { MobileFullScreenTimeInput } from "./MobileFullScreenTimeInput";
 import { MobileFullScreenTransferTypeInput } from "./MobileFullScreenTransferTypeInput";
 import { MobileFullScreenMultiCityInput } from "./MobileFullScreenMultiCityInput";
 import { MobileHotelSmartSearch } from "./MobileHotelSmartSearch";
+import { MobileClassDropdown } from "../MobileDropdowns";
 import { type SearchResult } from "@/lib/hotelSearchData";
 import { RecentSearches } from "../RecentSearches";
 
@@ -155,6 +156,9 @@ export function MobileNativeSearchForm({
     rooms: 1,
   });
 
+  // Flight class state (for flights only)
+  const [selectedClass, setSelectedClass] = useState("Economy");
+
   // UI states for full-screen inputs
   const [showFromInput, setShowFromInput] = useState(false);
   const [showToInput, setShowToInput] = useState(false);
@@ -163,6 +167,7 @@ export function MobileNativeSearchForm({
   const [showTimeInput, setShowTimeInput] = useState(false);
   const [showTransferTypeInput, setShowTransferTypeInput] = useState(false);
   const [showMultiCityInput, setShowMultiCityInput] = useState(false);
+  const [showClassInput, setShowClassInput] = useState(false);
   const [showHotelSmartSearch, setShowHotelSmartSearch] = useState(false);
   const [selectedHotelResult, setSelectedHotelResult] =
     useState<SearchResult | null>(null);
@@ -224,6 +229,11 @@ export function MobileNativeSearchForm({
   // Handle multi-city selection
   const handleMultiCitySelect = (legs: FlightLeg[]) => {
     setMultiCityLegs(legs);
+  };
+
+  // Handle flight class selection
+  const handleClassSelect = (classType: string) => {
+    setSelectedClass(classType);
   };
 
   // Handle recent search click - populate form with selected search data
