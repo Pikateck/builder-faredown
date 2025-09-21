@@ -206,10 +206,82 @@ export function MobileNativeSearchForm({
     setToCode(code);
   };
 
-  // Handle date selection
-  const handleDateSelect = (range: DateRange) => {
-    setDateRange(range);
-  };
+  // Handle date selection with proper state management
+  const handleDateSelect = useCallback((range: DateRange) => {
+    console.log('datesChanged', {
+      start: range.startDate?.toISOString(),
+      end: range.endDate?.toISOString(),
+      tripType,
+      module,
+    });
+
+    // Update DateContext
+    dateContext.setDepartureDate(range.startDate);
+    if (tripType === "round-trip" || module === "hotels") {
+      dateContext.setReturnDate(range.endDate || null);
+    } else {
+      dateContext.setReturnDate(null);
+    }
+    dateContext.setTripType(tripType);
+
+    // Update SearchContext
+    searchContext.updateSearchParams({
+      departureDate: range.startDate?.toISOString() || "",
+      returnDate: range.endDate?.toISOString() || "",
+      checkIn: range.startDate?.toISOString() || "",
+      checkOut: range.endDate?.toISOString() || "",
+      tripType,
+      module,
+    });
+
+    // Update URL parameters
+    const newParams = new URLSearchParams(urlSearchParams);
+    if (range.startDate) {
+      newParams.set("departureDate", range.startDate.toISOString());
+      newParams.set("checkIn", range.startDate.toISOString());
+    }
+    if (range.endDate && (tripType === "round-trip" || module === "hotels")) {
+      newParams.set("returnDate", range.endDate.toISOString());
+      newParams.set("checkOut", range.endDate.toISOString());
+    } else {
+      newParams.delete("returnDate");
+      newParams.delete("checkOut");
+    }
+    newParams.set("tripType", tripType);
+    setUrlSearchParams(newParams, { replace: true });
+
+    // Save to recent searches (non-blocking)
+    try {
+      const recentSearchData = {
+        tripType,
+        module,
+        dates: {
+          depart: range.startDate?.toISOString() || "",
+          return: range.endDate?.toISOString() || "",
+        },
+        from: { code: fromCode, name: fromCity },
+        to: { code: toCode, name: toCity },
+        timestamp: new Date().toISOString(),
+      };
+
+      fetch("/api/recent-searches", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ module, query: recentSearchData }),
+      }).catch(console.error);
+    } catch (error) {
+      console.error("Failed to save recent search:", error);
+    }
+
+    // Console log current URL for debugging
+    console.log('Current URL with updated params:', window.location.href);
+
+    // Emit custom event for other components
+    window.dispatchEvent(new CustomEvent('datesChanged', {
+      detail: { start: range.startDate, end: range.endDate, tripType, module }
+    }));
+  }, [tripType, module, dateContext, searchContext, urlSearchParams, setUrlSearchParams, fromCode, fromCity, toCode, toCity]);
 
   // Handle travelers selection
   const handleTravelersSelect = (newTravelers: Travelers) => {
