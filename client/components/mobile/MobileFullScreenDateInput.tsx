@@ -104,7 +104,7 @@ export function MobileFullScreenDateInput({
   const handleConfirm = () => {
     // Validate selection before proceeding
     const hasStartDate = !!selectedRange.startDate;
-    const needsEndDate = tripType === "round-trip" || tripType === "return";
+    const needsEndDate = tripType === "round-trip" || tripType === "return" || module === "hotels";
     const hasEndDate = !!selectedRange.endDate;
     const isValid = hasStartDate && (!needsEndDate || hasEndDate);
 
