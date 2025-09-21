@@ -112,6 +112,11 @@ export function MobileNativeSearchForm({
   transferType: initialTransferType,
 }: MobileNativeSearchFormProps) {
   const navigate = useNavigate();
+  const [urlSearchParams, setUrlSearchParams] = useSearchParams();
+
+  // Global state contexts
+  const dateContext = useDateContext();
+  const searchContext = useSearch();
 
   // Form states
   const [tripType, setTripType] = useState<
@@ -138,11 +143,11 @@ export function MobileNativeSearchForm({
   const [toCity, setToCity] = useState("");
   const [toCode, setToCode] = useState("");
 
-  // Date states
-  const [dateRange, setDateRange] = useState<DateRange>({
-    startDate: addDays(new Date(), 1),
-    endDate: addDays(new Date(), 8),
-  });
+  // Use context for dates instead of local state
+  const dateRange = {
+    startDate: dateContext.departureDate || addDays(new Date(), 1),
+    endDate: dateContext.returnDate || (tripType === "round-trip" ? addDays(new Date(), 8) : undefined),
+  };
 
   // Time states (for transfers)
   const [pickupTime, setPickupTime] = useState("12:00");
