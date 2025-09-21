@@ -212,6 +212,7 @@ app.get("/", (req, res) => {
       countries: "/api/countries",
       promo: "/api/promo",
       recentSearches: "/api/recent-searches",
+      healthCheck: "/api/health-check",
       analytics: "/api/analytics",
       payments: "/api/payments",
       cms: "/api/cms",
