@@ -269,13 +269,17 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
             <label className="block text-sm font-medium text-gray-700 mb-1">
               Email address *
             </label>
-            <Input
-              type="email"
-              placeholder="Enter your email address"
-              value={formData.email}
-              onChange={(e) => handleInputChange("email", e.target.value)}
-              required
-            />
+            <div className="relative">
+              <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+              <Input
+                type="email"
+                placeholder="Enter your email address"
+                value={formData.email}
+                onChange={(e) => handleInputChange("email", e.target.value)}
+                required
+                className="pl-10"
+              />
+            </div>
           </div>
 
           {/* Phone (Register only) */}
