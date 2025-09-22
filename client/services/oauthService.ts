@@ -265,6 +265,12 @@ export class OAuthService {
 
       } catch (error) {
         console.error("🔴 OAuth flow error:", error);
+        clearTimeout(timeout);
+        clearInterval(checkClosed);
+        window.removeEventListener('message', handleMessage);
+        if (!popup.closed) {
+          popup.close();
+        }
         reject(error);
       }
     });
