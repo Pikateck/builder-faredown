@@ -21,6 +21,8 @@ interface AuthModalProps {
 export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalProps) {
   const [mode, setMode] = useState<"login" | "register" | "forgot-password">(initialMode);
   const [isLoading, setIsLoading] = useState(false);
+  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const [isFacebookLoading, setIsFacebookLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -180,56 +182,64 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
 
   // Social login handlers
   const handleGoogleLogin = async () => {
-    setIsLoading(true);
+    setIsGoogleLoading(true);
     setError("");
 
     try {
+      console.log("🔵 Starting Google OAuth flow...");
       const response = await oauthService.loginWithGoogle();
+      console.log("🔵 Google OAuth response:", response);
 
       if (response.success && response.user) {
+        console.log("🔵 Google OAuth success, updating auth context...");
         login({
           id: response.user.id,
-          name: response.user.username,
+          name: response.user.username || response.user.firstName + " " + response.user.lastName,
           email: response.user.email,
           loyaltyLevel: 1,
         });
 
         handleClose();
       } else {
+        console.error("🔴 Google OAuth failed:", response);
         setError("Google login failed. Please try again.");
       }
     } catch (error: any) {
-      console.error("Google login error:", error);
+      console.error("🔴 Google login error:", error);
       setError(error.message || "Google login failed. Please try again.");
     } finally {
-      setIsLoading(false);
+      setIsGoogleLoading(false);
     }
   };
 
   const handleFacebookLogin = async () => {
-    setIsLoading(true);
+    setIsFacebookLoading(true);
     setError("");
 
     try {
+      console.log("🔵 Starting Facebook OAuth flow...");
       const response = await oauthService.loginWithFacebook();
+      console.log("🔵 Facebook OAuth response:", response);
 
       if (response.success && response.user) {
+        console.log("🔵 Facebook OAuth success, updating auth context...");
         login({
           id: response.user.id,
-          name: response.user.username,
+          name: response.user.username || response.user.firstName + " " + response.user.lastName,
           email: response.user.email,
           loyaltyLevel: 1,
         });
 
         handleClose();
       } else {
+        console.error("🔴 Facebook OAuth failed:", response);
         setError("Facebook login failed. Please try again.");
       }
     } catch (error: any) {
-      console.error("Facebook login error:", error);
+      console.error("🔴 Facebook login error:", error);
       setError(error.message || "Facebook login failed. Please try again.");
     } finally {
-      setIsLoading(false);
+      setIsFacebookLoading(false);
     }
   };
 
@@ -439,9 +449,9 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
                   variant="outline"
                   className="h-12 bg-white hover:bg-gray-50 text-gray-700 font-medium border border-gray-300 flex items-center justify-center space-x-2"
                   onClick={handleGoogleLogin}
-                  disabled={isLoading}
+                  disabled={isGoogleLoading || isLoading}
                 >
-                  {isLoading ? (
+                  {isGoogleLoading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
                     <svg className="w-5 h-5" viewBox="0 0 24 24">
@@ -459,9 +469,9 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
                   type="button"
                   className="h-12 bg-[#1877F2] hover:bg-[#166FE5] text-white font-medium flex items-center justify-center space-x-2"
                   onClick={handleFacebookLogin}
-                  disabled={isLoading}
+                  disabled={isFacebookLoading || isLoading}
                 >
-                  {isLoading ? (
+                  {isFacebookLoading ? (
                     <Loader2 className="w-5 h-5 animate-spin" />
                   ) : (
                     <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
