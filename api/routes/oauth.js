@@ -221,8 +221,17 @@ router.post("/google/callback", async (req, res) => {
  */
 router.get("/facebook/url", (req, res) => {
   try {
+    // Check if Facebook OAuth is configured
+    if (!isFacebookConfigured) {
+      return res.status(503).json({
+        success: false,
+        message: "Facebook OAuth is not configured. Please set FACEBOOK_APP_ID and FACEBOOK_APP_SECRET environment variables.",
+        error: "SERVICE_UNAVAILABLE"
+      });
+    }
+
     const baseUrl = 'https://www.facebook.com/v18.0/dialog/oauth';
-    const redirectUri = process.env.FACEBOOK_REDIRECT_URI || `${process.env.API_BASE_URL}/auth/facebook/callback`;
+    const redirectUri = process.env.FACEBOOK_REDIRECT_URI || `${process.env.API_BASE_URL}/oauth/facebook/callback`;
     const state = crypto.randomBytes(16).toString('hex');
     
     const params = new URLSearchParams({
