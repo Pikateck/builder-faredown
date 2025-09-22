@@ -232,11 +232,11 @@ export class OAuthService {
             console.error("🔴 Google auth error from popup:", event.data.error);
 
             messageReceived = true; // Mark that we received a message
-            clearInterval(checkClosed); // Stop checking for manual closure
-            clearTimeout(timeout); // Clear timeout
+            if (checkClosed) clearInterval(checkClosed); // Stop checking for manual closure
+            if (timeout) clearTimeout(timeout); // Clear timeout
 
-            window.removeEventListener('message', handleMessage);
-            if (!popup.closed) {
+            if (handleMessage) window.removeEventListener('message', handleMessage);
+            if (popup && !popup.closed) {
               popup.close();
             }
             reject(new Error(event.data.error || 'Google authentication failed'));
