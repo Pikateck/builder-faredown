@@ -18,11 +18,12 @@ export interface User {
 }
 
 export interface LoginRequest {
-  email: string;
+  username: string;
   password: string;
 }
 
 export interface RegisterRequest {
+  username: string;
   email: string;
   password: string;
   firstName: string;
