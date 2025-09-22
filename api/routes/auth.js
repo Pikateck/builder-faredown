@@ -8,6 +8,7 @@ const router = express.Router();
 const {
   generateToken,
   comparePassword,
+  getUserByEmail,
   getUserByUsername,
   createUser,
   authenticateToken,
@@ -21,7 +22,7 @@ const { audit } = require("../middleware/audit");
  * @apiGroup Authentication
  * @apiVersion 1.0.0
  *
- * @apiParam {String} username User's username
+ * @apiParam {String} email User's email address
  * @apiParam {String} password User's password
  * @apiParam {String} [department] User's department
  *
@@ -30,7 +31,8 @@ const { audit } = require("../middleware/audit");
  * @apiSuccess {String} token JWT access token
  * @apiSuccess {Object} user User information
  * @apiSuccess {String} user.id User ID
- * @apiSuccess {String} user.username Username
+ * @apiSuccess {String} user.firstName First name
+ * @apiSuccess {String} user.lastName Last name
  * @apiSuccess {String} user.email Email address
  * @apiSuccess {String} user.role User role
  * @apiSuccess {String} user.department User department
@@ -41,16 +43,22 @@ const { audit } = require("../middleware/audit");
  */
 router.post("/login", validate.login, async (req, res) => {
   try {
-    const { username, password, department } = req.body;
+    const { email, username, password, department } = req.body;
 
-    // Get user from database
-    const user = getUserByUsername(username);
+    // Support both email and username for backward compatibility
+    const loginIdentifier = email || username;
+
+    // Get user from database - try email first, then username
+    let user = getUserByEmail(loginIdentifier);
+    if (!user && username) {
+      user = getUserByUsername(username);
+    }
 
     if (!user) {
-      await audit.login(req, { username }, false);
+      await audit.login(req, { email: loginIdentifier }, false);
       return res.status(401).json({
         success: false,
-        message: "Invalid username or password",
+        message: "Invalid email or password",
       });
     }
 
@@ -70,7 +78,7 @@ router.post("/login", validate.login, async (req, res) => {
       await audit.login(req, user, false);
       return res.status(401).json({
         success: false,
-        message: "Invalid username or password",
+        message: "Invalid email or password",
       });
     }
 
@@ -99,7 +107,8 @@ router.post("/login", validate.login, async (req, res) => {
       token,
       user: {
         id: user.id,
-        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         role: user.role,
         department: user.department,
@@ -122,11 +131,11 @@ router.post("/login", validate.login, async (req, res) => {
  * @apiGroup Authentication
  * @apiVersion 1.0.0
  *
- * @apiParam {String} username Unique username
- * @apiParam {String} email Email address
+ * @apiParam {String} email Email address (used as identifier)
  * @apiParam {String} password Password (min 8 characters)
+ * @apiParam {String} firstName First name
+ * @apiParam {String} lastName Last name
  * @apiParam {String} [role=user] User role
- * @apiParam {String} [department] User department
  *
  * @apiSuccess {Boolean} success Registration success status
  * @apiSuccess {String} message Success message
@@ -137,25 +146,25 @@ router.post("/login", validate.login, async (req, res) => {
  */
 router.post("/register", validate.register, async (req, res) => {
   try {
-    const { username, email, password, role, department } = req.body;
+    const { email, password, firstName, lastName, role } = req.body;
 
     // Check if user already exists
-    const existingUser = getUserByUsername(username);
+    const existingUser = getUserByEmail(email);
 
     if (existingUser) {
       return res.status(409).json({
         success: false,
-        message: "Username already exists",
+        message: "An account with this email already exists",
       });
     }
 
     // Create new user
     const newUser = await createUser({
-      username,
       email,
       password,
+      firstName,
+      lastName,
       role: role || "user",
-      department,
     });
 
     // Log user creation
