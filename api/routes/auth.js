@@ -146,18 +146,30 @@ router.post("/login", validate.login, async (req, res) => {
  */
 router.post("/register", validate.register, async (req, res) => {
   try {
+    console.log("🔵 Registration request received");
+    console.log("🔵 Request body:", {
+      email: req.body.email,
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      role: req.body.role,
+      passwordLength: req.body.password?.length
+    });
+
     const { email, password, firstName, lastName, role } = req.body;
 
+    console.log("🔵 Checking if user already exists...");
     // Check if user already exists
     const existingUser = getUserByEmail(email);
 
     if (existingUser) {
+      console.log("🔴 User already exists:", email);
       return res.status(409).json({
         success: false,
         message: "An account with this email already exists",
       });
     }
 
+    console.log("🔵 Creating new user...");
     // Create new user
     const newUser = await createUser({
       email,
@@ -167,22 +179,31 @@ router.post("/register", validate.register, async (req, res) => {
       role: role || "user",
     });
 
+    console.log("🔵 User created successfully:", { id: newUser.id, email: newUser.email });
+
     // Log user creation
-    await audit.userAction(req, "create", newUser);
+    try {
+      await audit.userAction(req, "create", newUser);
+    } catch (auditError) {
+      console.log("⚠️ Audit logging failed:", auditError.message);
+      // Don't fail the registration if audit fails
+    }
 
     // Return success response (without password)
     const { password: _, ...userResponse } = newUser;
 
+    console.log("✅ Registration completed successfully");
     res.status(201).json({
       success: true,
       message: "User registered successfully",
       user: userResponse,
     });
   } catch (error) {
-    console.error("Registration error:", error);
+    console.error("🔴 Registration error:", error);
     res.status(500).json({
       success: false,
       message: "Internal server error during registration",
+      error: error.message,
     });
   }
 });
