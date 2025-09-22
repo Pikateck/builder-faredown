@@ -956,6 +956,13 @@ export function Header() {
           </div>
         </header>
       </div>
+
+      {/* Authentication Modal */}
+      <AuthModal
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        initialMode={authModalMode}
+      />
     </>
   );
 }
