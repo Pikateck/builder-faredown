@@ -21,13 +21,9 @@ const schemas = {
     email: Joi.string().email().required(),
     password: Joi.string()
       .min(8)
-      .pattern(
-        new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*])"),
-      )
       .required()
       .messages({
-        "string.pattern.base":
-          "Password must contain at least one lowercase letter, one uppercase letter, one number and one special character",
+        "string.min": "Password must be at least 8 characters long",
       }),
     firstName: Joi.string().min(1).max(50).required(),
     lastName: Joi.string().min(1).max(50).required(),
