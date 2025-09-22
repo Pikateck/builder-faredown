@@ -236,6 +236,7 @@ app.use("/api/auth", authLimiter);
 
 // Route handlers
 app.use("/api/auth", authRoutes);
+app.use("/api/oauth", oauthRoutes);
 app.use(
   "/api/admin",
   authenticateToken,
