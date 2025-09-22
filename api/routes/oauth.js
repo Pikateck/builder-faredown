@@ -10,12 +10,29 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const router = express.Router();
 
-// OAuth clients setup
-const googleClient = new OAuth2Client(
-  process.env.GOOGLE_CLIENT_ID,
-  process.env.GOOGLE_CLIENT_SECRET,
-  process.env.GOOGLE_REDIRECT_URI || `${process.env.API_BASE_URL}/auth/google/callback`
-);
+// OAuth environment validation
+const isGoogleConfigured = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+const isFacebookConfigured = !!(process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET);
+const isAppleConfigured = !!(process.env.APPLE_TEAM_ID && process.env.APPLE_KEY_ID && process.env.APPLE_SERVICE_ID);
+
+console.log("OAuth Configuration Status:", {
+  google: isGoogleConfigured,
+  facebook: isFacebookConfigured,
+  apple: isAppleConfigured
+});
+
+// OAuth clients setup (only if configured)
+let googleClient = null;
+if (isGoogleConfigured) {
+  googleClient = new OAuth2Client(
+    process.env.GOOGLE_CLIENT_ID,
+    process.env.GOOGLE_CLIENT_SECRET,
+    process.env.GOOGLE_REDIRECT_URI || `${process.env.API_BASE_URL}/oauth/google/callback`
+  );
+  console.log("✅ Google OAuth client initialized");
+} else {
+  console.log("⚠️ Google OAuth not configured - missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET");
+}
 
 // Helper function to generate JWT token
 const generateToken = (user) => {
