@@ -247,11 +247,11 @@ export class OAuthService {
 
         // Check if popup was closed manually (with longer delay to avoid race condition)
         checkClosed = setInterval(() => {
-          if (popup.closed && !messageReceived) {
+          if (popup && popup.closed && !messageReceived) {
             console.log("🔴 Popup was closed manually (no success/error message received)");
-            clearInterval(checkClosed);
-            clearTimeout(timeout);
-            window.removeEventListener('message', handleMessage);
+            if (checkClosed) clearInterval(checkClosed);
+            if (timeout) clearTimeout(timeout);
+            if (handleMessage) window.removeEventListener('message', handleMessage);
             reject(new Error('Authentication cancelled'));
           }
         }, 2000); // Check every 2 seconds instead of 1 second
