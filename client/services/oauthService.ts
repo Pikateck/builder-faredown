@@ -163,7 +163,7 @@ export class OAuthService {
         console.log("🔵 Popup opened, waiting for callback...");
 
         // Listen for popup messages
-        const handleMessage = async (event: MessageEvent) => {
+        handleMessage = async (event: MessageEvent) => {
           console.log("🔵 Received popup message:", event.data);
           console.log("🔵 Message origin:", event.origin);
           console.log("🔵 Current origin:", window.location.origin);
