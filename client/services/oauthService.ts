@@ -269,15 +269,25 @@ export class OAuthService {
   async getAppleAuthUrl(): Promise<string> {
     try {
       const response = await apiClient.get<OAuthUrlResponse>(`${this.baseUrl}/apple/url`);
-      
+
       if (response.success && response.url) {
         return response.url;
       }
-      
+
       throw new Error("Failed to get Apple auth URL");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Apple auth URL error:", error);
-      throw error;
+
+      // Handle configuration errors
+      if (error.response?.status === 503) {
+        throw new Error("Apple sign-in is currently unavailable. Please try again later or use email/password login.");
+      }
+
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+
+      throw new Error("Unable to connect to Apple sign-in service. Please try again.");
     }
   }
 
