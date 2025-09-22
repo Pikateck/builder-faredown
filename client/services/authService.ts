@@ -32,10 +32,10 @@ export interface RegisterRequest {
 }
 
 export interface AuthResponse {
+  success: boolean;
+  message: string;
   user: User;
-  accessToken: string;
-  refreshToken: string;
-  expiresIn: number;
+  token?: string;
 }
 
 export interface PasswordResetRequest {
@@ -56,20 +56,22 @@ export class AuthService {
    */
   async login(credentials: LoginRequest): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<ApiResponse<AuthResponse>>(
+      const response = await apiClient.post<AuthResponse>(
         `${this.baseUrl}/login`,
         credentials,
       );
 
-      if (response.data) {
-        // Store auth token
-        apiClient.setAuthToken(response.data.accessToken);
+      if (response && response.success) {
+        // Store auth token if provided
+        if (response.token) {
+          apiClient.setAuthToken(response.token);
+          localStorage.setItem("auth_token", response.token);
+        }
 
         // Store user data
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        localStorage.setItem("refresh_token", response.data.refreshToken);
+        localStorage.setItem("user", JSON.stringify(response.user));
 
-        return response.data;
+        return response;
       }
 
       throw new Error("Login failed: No data received");
@@ -84,20 +86,17 @@ export class AuthService {
    */
   async register(userData: RegisterRequest): Promise<AuthResponse> {
     try {
-      const response = await apiClient.post<ApiResponse<AuthResponse>>(
+      const response = await apiClient.post<AuthResponse>(
         `${this.baseUrl}/register`,
         userData,
       );
 
-      if (response.data) {
-        // Store auth token
-        apiClient.setAuthToken(response.data.accessToken);
-
+      if (response && response.success) {
         // Store user data
-        localStorage.setItem("user", JSON.stringify(response.data.user));
-        localStorage.setItem("refresh_token", response.data.refreshToken);
+        localStorage.setItem("user", JSON.stringify(response.user));
 
-        return response.data;
+        // Note: Register endpoint doesn't return token, user needs to login
+        return response;
       }
 
       throw new Error("Registration failed: No data received");
@@ -237,7 +236,7 @@ export class AuthService {
   private clearLocalAuth(): void {
     apiClient.clearAuthToken();
     localStorage.removeItem("user");
-    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("auth_token");
   }
 }
 
