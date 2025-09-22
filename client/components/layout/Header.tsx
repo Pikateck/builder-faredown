@@ -4,6 +4,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { AuthModal } from "@/components/AuthModal";
 import {
   DropdownMenu,
   DropdownMenuContent,
