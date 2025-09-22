@@ -151,15 +151,25 @@ export class OAuthService {
   async getFacebookAuthUrl(): Promise<string> {
     try {
       const response = await apiClient.get<OAuthUrlResponse>(`${this.baseUrl}/facebook/url`);
-      
+
       if (response.success && response.url) {
         return response.url;
       }
-      
+
       throw new Error("Failed to get Facebook auth URL");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Facebook auth URL error:", error);
-      throw error;
+
+      // Handle configuration errors
+      if (error.response?.status === 503) {
+        throw new Error("Facebook sign-in is currently unavailable. Please try again later or use email/password login.");
+      }
+
+      if (error.response?.data?.message) {
+        throw new Error(error.response.data.message);
+      }
+
+      throw new Error("Unable to connect to Facebook sign-in service. Please try again.");
     }
   }
 
