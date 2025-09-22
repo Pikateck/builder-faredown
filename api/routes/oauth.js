@@ -1,14 +1,33 @@
 /**
  * OAuth Authentication Routes
  * Handles Google, Facebook, and Apple social login
+ * Updated for iframe compatibility and proper session management
  */
 
 const express = require("express");
+const session = require("express-session");
 const { OAuth2Client } = require("google-auth-library");
 const axios = require("axios");
 const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const router = express.Router();
+
+// Session configuration for OAuth state management
+const sessionConfig = {
+  secret: process.env.SESSION_SECRET || 'fallback-session-secret',
+  resave: false,
+  saveUninitialized: false,
+  cookie: {
+    secure: process.env.NODE_ENV === 'production', // HTTPS in production
+    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for iframe compatibility
+    maxAge: 10 * 60 * 1000, // 10 minutes for OAuth state
+    httpOnly: true
+  },
+  name: 'oauth.sid' // Different name from main session
+};
+
+// Apply session middleware to OAuth routes
+router.use(session(sessionConfig));
 
 // OAuth environment validation
 const isGoogleConfigured = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
@@ -24,12 +43,28 @@ console.log("OAuth Configuration Status:", {
 // OAuth clients setup (only if configured)
 let googleClient = null;
 if (isGoogleConfigured) {
+  const redirectUris = [
+    // Builder.io preview environment
+    `${process.env.VITE_API_BASE_URL || process.env.API_BASE_URL}/oauth/google/callback`,
+    // Production domain
+    'https://www.faredowntravels.com/oauth/google/callback',
+    // Staging/render environment
+    'https://faredown-web.onrender.com/oauth/google/callback',
+    // Local development
+    'http://localhost:3000/oauth/google/callback',
+    'http://localhost:5173/oauth/google/callback'
+  ];
+
+  // Use the first available redirect URI or default
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || redirectUris[0];
+
   googleClient = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    process.env.GOOGLE_REDIRECT_URI || `${process.env.API_BASE_URL}/oauth/google/callback`
+    redirectUri
   );
-  console.log("✅ Google OAuth client initialized");
+  console.log("✅ Google OAuth client initialized with redirect URI:", redirectUri);
+  console.log("📋 Configured redirect URIs should include:", redirectUris);
 } else {
   console.log("⚠️ Google OAuth not configured - missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET");
 }
@@ -181,14 +216,25 @@ router.post("/google/callback", async (req, res) => {
     console.log("🔵 Session state:", req.session?.oauthState);
     console.log("🔵 Provided state:", state);
 
-    // Verify state for CSRF protection - Skip for now to debug
-    // if (req.session?.oauthState && req.session.oauthState !== state) {
-    //   console.error("🔴 State mismatch");
-    //   return res.status(400).json({
-    //     success: false,
-    //     message: "Invalid state parameter"
-    //   });
-    // }
+    // Verify state for CSRF protection
+    if (!req.session?.oauthState) {
+      console.error("🔴 No OAuth state found in session");
+      return res.status(400).json({
+        success: false,
+        message: "OAuth session expired. Please try again."
+      });
+    }
+
+    if (req.session.oauthState !== state) {
+      console.error("🔴 State mismatch", { expected: req.session.oauthState, received: state });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid state parameter. Possible CSRF attack."
+      });
+    }
+
+    // Clear the state after successful validation
+    delete req.session.oauthState;
 
     console.log("🔵 Exchanging code for tokens...");
     // Exchange code for tokens
@@ -229,6 +275,17 @@ router.post("/google/callback", async (req, res) => {
     console.log("🔵 Generating JWT token...");
     // Generate JWT token
     const token = generateToken(user);
+
+    // Set authentication cookie for session persistence
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      domain: process.env.NODE_ENV === 'production' ? '.faredowntravels.com' : undefined
+    };
+
+    res.cookie('auth_token', token, cookieOptions);
 
     const response = {
       success: true,
