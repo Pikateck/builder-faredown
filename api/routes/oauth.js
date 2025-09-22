@@ -162,8 +162,11 @@ const createOrGetSocialUser = async (profile, provider) => {
  */
 router.get("/google/url", (req, res) => {
   try {
+    console.log("🔵 Generating Google OAuth URL...");
+
     // Check if Google OAuth is configured
     if (!isGoogleConfigured || !googleClient) {
+      console.log("🔴 Google OAuth not configured");
       return res.status(503).json({
         success: false,
         message: "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.",
@@ -185,9 +188,10 @@ router.get("/google/url", (req, res) => {
       include_granted_scopes: true
     });
 
-    // Store state in session/cache for validation
-    req.session = req.session || {};
-    req.session.oauthState = state;
+    // Store state in our reliable in-memory store
+    storeState(state);
+
+    console.log(`✅ Generated Google OAuth URL with state: ${state.substring(0, 8)}...`);
 
     res.json({
       success: true,
@@ -195,7 +199,7 @@ router.get("/google/url", (req, res) => {
       state: state
     });
   } catch (error) {
-    console.error("Google OAuth URL generation error:", error);
+    console.error("🔴 Google OAuth URL generation error:", error);
     res.status(500).json({
       success: false,
       message: "Failed to generate Google OAuth URL"
@@ -360,7 +364,7 @@ router.get("/google/callback", async (req, res) => {
     </div>
     <script>
         console.log('🔵 OAuth bridge page loaded');
-        console.log('��� Window opener exists:', !!window.opener);
+        console.log('🔵 Window opener exists:', !!window.opener);
         console.log('🔵 Parent origin:', '${parentOrigin}');
 
         // Send success message to parent window
