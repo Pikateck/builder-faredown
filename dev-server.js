@@ -108,10 +108,10 @@ const vite = await createServer({
   appType: "spa",
 });
 
-// 3) Use Vite's middleware for everything that's NOT /api/*
+// 3) Use Vite's middleware for everything that's NOT /api/* or /auth/*
 app.use((req, res, next) => {
-  if (req.path.startsWith("/api/")) {
-    next(); // Skip to API routes above
+  if (req.path.startsWith("/api/") || req.path.startsWith("/auth/")) {
+    next(); // Skip to API/OAuth routes above
   } else {
     vite.middlewares(req, res, next); // Let Vite handle React app
   }
