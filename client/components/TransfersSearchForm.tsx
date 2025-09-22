@@ -30,7 +30,6 @@ import {
   Clock,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
-import { RecentSearches } from "./RecentSearches";
 
 interface PassengerConfig {
   adults: number;
@@ -74,48 +73,6 @@ export function TransfersSearchForm() {
   });
   const [isPassengerPopoverOpen, setIsPassengerPopoverOpen] = useState(false);
 
-  // Handle recent search click - populate form with selected search data
-  const handleRecentSearchClick = (searchData: any) => {
-    try {
-      // Set locations
-      if (searchData.pickup) setPickupLocation(searchData.pickup);
-      if (searchData.dropoff) setDropoffLocation(searchData.dropoff);
-
-      // Set dates
-      if (searchData.pickupDate) {
-        const pickupDateObj = new Date(searchData.pickupDate);
-        if (!isNaN(pickupDateObj.getTime())) setPickupDate(pickupDateObj);
-      }
-
-      if (searchData.returnDate) {
-        const returnDateObj = new Date(searchData.returnDate);
-        if (!isNaN(returnDateObj.getTime())) setReturnDate(returnDateObj);
-      }
-
-      // Set times
-      if (searchData.pickupTime) setPickupTime(searchData.pickupTime);
-      if (searchData.returnTime) setReturnTime(searchData.returnTime);
-
-      // Set service and trip type
-      if (searchData.serviceType) setServiceType(searchData.serviceType);
-      if (searchData.tripType) setTripType(searchData.tripType);
-
-      // Set passengers
-      if (searchData.adults || searchData.children || searchData.infants) {
-        setPassengers((prev) => ({
-          ...prev,
-          adults: searchData.adults || prev.adults,
-          children: searchData.children || 0,
-          infants: searchData.infants || 0,
-        }));
-      }
-
-      // Set driver age for car rentals
-      if (searchData.driverAge) setDriverAge(searchData.driverAge);
-    } catch (error) {
-      console.error("Error loading recent transfer search:", error);
-    }
-  };
 
   // Initialize form with URL params or sessionStorage data
   useEffect(() => {
@@ -1061,12 +1018,6 @@ export function TransfersSearchForm() {
               </div>
             </div>
 
-            {/* Recent Searches Section - Only render wrapper if component has content */}
-            <RecentSearches
-              module="transfers"
-              onSearchClick={handleRecentSearchClick}
-              className="mt-8 p-4 sm:p-6 border border-gray-200 shadow-sm"
-            />
           </>
         )}
       </div>
