@@ -233,25 +233,33 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   First name *
                 </label>
-                <Input
-                  type="text"
-                  placeholder="First name"
-                  value={formData.firstName}
-                  onChange={(e) => handleInputChange("firstName", e.target.value)}
-                  required
-                />
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    type="text"
+                    placeholder="First name"
+                    value={formData.firstName}
+                    onChange={(e) => handleInputChange("firstName", e.target.value)}
+                    required
+                    className="pl-10"
+                  />
+                </div>
               </div>
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1">
                   Last name *
                 </label>
-                <Input
-                  type="text"
-                  placeholder="Last name"
-                  value={formData.lastName}
-                  onChange={(e) => handleInputChange("lastName", e.target.value)}
-                  required
-                />
+                <div className="relative">
+                  <User className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    type="text"
+                    placeholder="Last name"
+                    value={formData.lastName}
+                    onChange={(e) => handleInputChange("lastName", e.target.value)}
+                    required
+                    className="pl-10"
+                  />
+                </div>
               </div>
             </div>
           )}
