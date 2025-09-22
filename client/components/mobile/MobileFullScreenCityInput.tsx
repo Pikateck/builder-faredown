@@ -29,7 +29,6 @@ interface MobileFullScreenCityInputProps {
   onSelect: (city: string, code: string) => void;
   onBack: () => void;
   cities: Record<string, Airport>;
-  recentSearches?: string[];
 }
 
 export function MobileFullScreenCityInput({
@@ -39,7 +38,6 @@ export function MobileFullScreenCityInput({
   onSelect,
   onBack,
   cities,
-  recentSearches = [],
 }: MobileFullScreenCityInputProps) {
   const [searchQuery, setSearchQuery] = useState("");
   const [filteredCities, setFilteredCities] = useState<Airport[]>([]);
@@ -281,40 +279,6 @@ export function MobileFullScreenCityInput({
               </div>
             </div>
 
-            {/* Recent Searches */}
-            {recentSearches.length > 0 && (
-              <div>
-                <div className="flex items-center space-x-2 mb-4">
-                  <Clock className="w-5 h-5 text-gray-500" />
-                  <h2 className="text-lg font-semibold text-gray-900">
-                    Recent Searches
-                  </h2>
-                </div>
-                <div className="grid grid-cols-1 gap-3">
-                  {recentSearches.slice(0, 5).map((search, index) => (
-                    <button
-                      key={index}
-                      onClick={() => {
-                        const city = popularCities.find(
-                          (c) => c.city === search,
-                        );
-                        if (city) handleCitySelect(city);
-                      }}
-                      className="flex items-center space-x-4 p-4 bg-gray-50 rounded-xl hover:bg-gray-100 transition-all"
-                    >
-                      <div className="w-10 h-10 bg-gray-200 rounded-lg flex items-center justify-center">
-                        <Clock className="w-5 h-5 text-gray-500" />
-                      </div>
-                      <div className="flex-1 text-left">
-                        <div className="font-medium text-gray-900">
-                          {search}
-                        </div>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              </div>
-            )}
           </div>
         ) : (
           // Search Results
