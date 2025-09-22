@@ -55,8 +55,8 @@ async function testCompleteOAuthFlow() {
     // Test 4: Verify redirect URI configuration
     console.log('\n🔍 Test 4: Verifying redirect URI...');
     const redirectUri = params.get('redirect_uri');
-    const expectedRedirectUri = `${FRONTEND_URL}/oauth/google/callback`;
-    
+    const expectedRedirectUri = `${API_BASE_URL}/oauth/google/callback`;
+
     if (redirectUri === expectedRedirectUri) {
       console.log('✅ Redirect URI matches expected value');
     } else {
@@ -112,7 +112,7 @@ async function testCompleteOAuthFlow() {
     console.log('✅ Callback route returns HTML bridge page');
     console.log('✅ All OAuth parameters are properly formatted');
 
-    console.log('\n🚀 Ready for End-to-End Testing!');
+    console.log('\n��� Ready for End-to-End Testing!');
     console.log('================================');
     console.log('1. Open your app in Builder.io preview or direct URL');
     console.log('2. Click "Continue with Google"');
