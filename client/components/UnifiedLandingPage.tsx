@@ -151,7 +151,7 @@ export function UnifiedLandingPage({
                   </h3>
                   <div className="flex-grow">
                     <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
-                      Pick your desired room type (Deluxe / Suite / View).
+                      Your journey, your choice — seats, rooms, transfers, or activities.
                     </p>
                     <div className="h-10 flex items-center">
                       {/* Spacer to match other cards */}
