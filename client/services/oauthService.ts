@@ -62,7 +62,18 @@ export class OAuthService {
    */
   async getGoogleAuthUrl(): Promise<string> {
     try {
+      // Ensure we're not using fallback mode for OAuth requests
+      const originalFallback = apiClient.getConfig().forceFallback;
+      if (originalFallback) {
+        apiClient.disableFallbackMode();
+      }
+
       const response = await apiClient.get<OAuthUrlResponse>(`${this.baseUrl}/google/url`);
+
+      // Restore original fallback setting
+      if (originalFallback) {
+        apiClient.enableFallbackMode();
+      }
 
       if (response.success && response.url) {
         return response.url;
