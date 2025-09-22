@@ -51,14 +51,27 @@ const generateToken = (user) => {
 
 // Helper function to create or get user
 const createOrGetSocialUser = async (profile, provider) => {
-  // In a real implementation, this would interact with your database
-  // For now, we'll create a mock user object
+  console.log("🔵 Creating social user with profile:", profile);
+
+  // Check if user already exists by email
+  const { getUserByEmail } = require("../middleware/auth");
+  let existingUser = getUserByEmail(profile.email);
+
+  if (existingUser) {
+    console.log("🔵 Found existing user:", existingUser.email);
+    // Update last login
+    existingUser.lastLogin = new Date();
+    return existingUser;
+  }
+
+  console.log("🔵 Creating new social user");
+  // Create new user with email-based structure
   const user = {
     id: `${provider}_${profile.id}`,
-    username: profile.email || `${provider}_user_${profile.id}`,
-    email: profile.email,
-    firstName: profile.given_name || profile.name?.split(' ')[0] || '',
+    firstName: profile.given_name || profile.name?.split(' ')[0] || 'User',
     lastName: profile.family_name || profile.name?.split(' ').slice(1).join(' ') || '',
+    email: profile.email,
+    password: null, // Social login users don't have passwords
     provider: provider,
     providerId: profile.id,
     role: 'user',
@@ -68,6 +81,11 @@ const createOrGetSocialUser = async (profile, provider) => {
     createdAt: new Date(),
   };
 
+  // Store in our mock database using email as key
+  const users = require("../middleware/auth").users || new Map();
+  users.set(profile.email, user);
+
+  console.log("✅ Social user created:", { id: user.id, email: user.email });
   return user;
 };
 
