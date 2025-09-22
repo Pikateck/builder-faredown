@@ -90,6 +90,13 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
       return false;
     }
 
+    // Check password complexity (backend requirement)
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*])/;
+    if (!passwordRegex.test(formData.password)) {
+      setError("Password must contain at least one lowercase letter, one uppercase letter, one number and one special character (!@#$%^&*)");
+      return false;
+    }
+
     return true;
   };
 
@@ -122,9 +129,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
           username: formData.username,
           email: formData.email,
           password: formData.password,
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          phone: formData.phone,
+          role: "user",
         });
 
         // Registration successful, now automatically log in the user
