@@ -380,22 +380,36 @@ const getUserById = (id) => {
  * Create new user
  */
 const createUser = async (userData) => {
-  const hashedPassword = await hashPassword(userData.password);
-  const user = {
-    id: userData.email.split('@')[0] + '_' + Date.now(), // Generate unique ID
-    firstName: userData.firstName,
-    lastName: userData.lastName,
-    email: userData.email,
-    password: hashedPassword,
-    role: userData.role || ROLES.USER,
-    department: userData.department,
-    isActive: true,
-    createdAt: new Date(),
-    lastLogin: null,
-  };
+  console.log("🔵 Creating user with data:", userData);
 
-  users.set(user.email, user); // Use email as the key
-  return user;
+  try {
+    const hashedPassword = await hashPassword(userData.password);
+    console.log("🔵 Password hashed successfully");
+
+    const user = {
+      id: userData.email.split('@')[0] + '_' + Date.now(), // Generate unique ID
+      firstName: userData.firstName,
+      lastName: userData.lastName,
+      email: userData.email,
+      password: hashedPassword,
+      role: userData.role || ROLES.USER,
+      department: userData.department,
+      isActive: true,
+      createdAt: new Date(),
+      lastLogin: null,
+    };
+
+    console.log("🔵 User object created:", { id: user.id, email: user.email, role: user.role });
+
+    // Store user in the users Map
+    users.set(user.email, user); // Use email as the key
+    console.log("🔵 User stored in database, total users:", users.size);
+
+    return user;
+  } catch (error) {
+    console.error("🔴 Error creating user:", error);
+    throw error;
+  }
 };
 
 module.exports = {
@@ -414,4 +428,5 @@ module.exports = {
   getUserByUsername, // Legacy support
   getUserById,
   createUser,
+  users, // Export for debugging
 };
