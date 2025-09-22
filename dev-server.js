@@ -37,6 +37,10 @@ app.use((req, res, next) => {
 
 // 1) API proxy to external API server
 app.use("/api", async (req, res) => {
+  // Debug logging
+  console.log(`🔍 Proxy request: ${req.method} ${req.originalUrl}`);
+  console.log(`🔍 Request path: ${req.path}`);
+
   // Special case for frontend health check
   if (req.path === "/api/health") {
     return res.json({
@@ -49,6 +53,7 @@ app.use("/api", async (req, res) => {
 
   const apiServerUrl = process.env.API_SERVER_URL || "http://localhost:3001";
   const targetUrl = `${apiServerUrl}${req.originalUrl}`;
+  console.log(`🎯 Target URL: ${targetUrl}`);
 
   try {
     const fetch = (await import("node-fetch")).default;
