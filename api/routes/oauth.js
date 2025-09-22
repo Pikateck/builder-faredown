@@ -137,6 +137,15 @@ router.get("/google/url", (req, res) => {
  */
 router.post("/google/callback", async (req, res) => {
   try {
+    // Check if Google OAuth is configured
+    if (!isGoogleConfigured || !googleClient) {
+      return res.status(503).json({
+        success: false,
+        message: "Google OAuth is not configured",
+        error: "SERVICE_UNAVAILABLE"
+      });
+    }
+
     const { code, state } = req.body;
 
     if (!code) {
