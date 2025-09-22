@@ -97,8 +97,19 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!validateForm()) return;
+
+    console.log("🔵 Form submitted in mode:", mode);
+    console.log("🔵 Form data:", {
+      email: formData.email,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      passwordLength: formData.password?.length
+    });
+
+    if (!validateForm()) {
+      console.log("🔴 Form validation failed");
+      return;
+    }
 
     setIsLoading(true);
     setError("");
@@ -106,15 +117,19 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
 
     try {
       if (mode === "forgot-password") {
+        console.log("🔵 Processing forgot password...");
         const response = await authService.forgotPassword(formData.email);
         setSuccess("Password reset instructions have been sent to your email address.");
         // Auto switch to login after 3 seconds
         setTimeout(() => setMode("login"), 3000);
       } else if (mode === "login") {
+        console.log("🔵 Processing login...");
         const response = await authService.login({
           email: formData.email, // Use email as identifier
           password: formData.password,
         });
+
+        console.log("🔵 Login response:", response);
 
         // Update AuthContext
         login({
@@ -127,6 +142,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
         handleClose();
       } else {
         // Register mode
+        console.log("🔵 Processing registration...");
         const response = await authService.register({
           email: formData.email,
           password: formData.password,
@@ -135,11 +151,16 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
           role: "user",
         });
 
+        console.log("🔵 Registration response:", response);
+
         // Auto login after registration
+        console.log("🔵 Auto-login after registration...");
         const loginResponse = await authService.login({
           email: formData.email,
           password: formData.password,
         });
+
+        console.log("🔵 Auto-login response:", loginResponse);
 
         // Update AuthContext
         login({
@@ -149,6 +170,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
           loyaltyLevel: 1,
         });
 
+        console.log("✅ Registration and login completed successfully");
         handleClose();
       }
     } catch (error: any) {
