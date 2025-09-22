@@ -255,7 +255,7 @@ export class OAuthService {
         }, 2000); // Check every 2 seconds instead of 1 second
 
         // Add timeout after 60 seconds as fallback
-        const timeout = setTimeout(() => {
+        timeout = setTimeout(() => {
           if (!messageReceived) {
             console.log("🔴 OAuth flow timed out after 60 seconds");
             clearInterval(checkClosed);
