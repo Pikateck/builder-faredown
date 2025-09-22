@@ -28,11 +28,11 @@ http://localhost:5173
 Add these exact callback URLs for all environments:
 
 ```
-https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/oauth/google/callback
-https://faredown-web.onrender.com/oauth/google/callback
-https://www.faredowntravels.com/oauth/google/callback
-http://localhost:3000/oauth/google/callback
-http://localhost:5173/oauth/google/callback
+https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/oauth/google/callback
+https://faredown-web.onrender.com/api/oauth/google/callback
+https://www.faredowntravels.com/api/oauth/google/callback
+http://localhost:3000/api/oauth/google/callback
+http://localhost:5173/api/oauth/google/callback
 ```
 
 ## Environment Variables
