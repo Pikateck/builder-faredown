@@ -179,6 +179,91 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
     setError(""); // Clear error when user starts typing
   };
 
+  // Social login handlers
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await oauthService.loginWithGoogle();
+
+      if (response.success && response.user) {
+        // Update AuthContext
+        login({
+          id: response.user.id,
+          name: response.user.username,
+          email: response.user.email,
+          loyaltyLevel: 1,
+        });
+
+        handleClose();
+      } else {
+        setError("Google login failed. Please try again.");
+      }
+    } catch (error: any) {
+      console.error("Google login error:", error);
+      setError(error.message || "Google login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleFacebookLogin = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await oauthService.loginWithFacebook();
+
+      if (response.success && response.user) {
+        // Update AuthContext
+        login({
+          id: response.user.id,
+          name: response.user.username,
+          email: response.user.email,
+          loyaltyLevel: 1,
+        });
+
+        handleClose();
+      } else {
+        setError("Facebook login failed. Please try again.");
+      }
+    } catch (error: any) {
+      console.error("Facebook login error:", error);
+      setError(error.message || "Facebook login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleAppleLogin = async () => {
+    setIsLoading(true);
+    setError("");
+
+    try {
+      const response = await oauthService.loginWithApple();
+
+      if (response.success && response.user) {
+        // Update AuthContext
+        login({
+          id: response.user.id,
+          name: response.user.username,
+          email: response.user.email,
+          loyaltyLevel: 1,
+        });
+
+        handleClose();
+      } else {
+        setError("Apple login failed. Please try again.");
+      }
+    } catch (error: any) {
+      console.error("Apple login error:", error);
+      setError(error.message || "Apple login failed. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent className="max-w-md">
