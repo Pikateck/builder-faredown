@@ -277,6 +277,15 @@ router.get("/facebook/url", (req, res) => {
  */
 router.post("/facebook/callback", async (req, res) => {
   try {
+    // Check if Facebook OAuth is configured
+    if (!isFacebookConfigured) {
+      return res.status(503).json({
+        success: false,
+        message: "Facebook OAuth is not configured",
+        error: "SERVICE_UNAVAILABLE"
+      });
+    }
+
     const { code, state } = req.body;
 
     if (!code) {
