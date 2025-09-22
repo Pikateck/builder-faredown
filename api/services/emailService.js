@@ -21,7 +21,8 @@ class EmailService {
 
     this.companyDetails = {
       name: "Faredown Travel",
-      email: "support@faredown.com",
+      email: "admin@faredown.com", // Send from admin as requested
+      supportEmail: "support@faredown.com",
       phone: "+91-9876543210",
       website: "www.faredown.com",
       address: "Mumbai, Maharashtra, India",
@@ -133,6 +134,43 @@ class EmailService {
       throw new Error(
         `Failed to send payment confirmation email: ${error.message}`,
       );
+    }
+  }
+
+  /**
+   * Send password reset email
+   */
+  async sendPasswordResetEmail(email, resetToken, firstName = "User") {
+    try {
+      const resetUrl = `${process.env.FRONTEND_URL || 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev'}/reset-password?token=${resetToken}`;
+
+      const subject = `Reset Your Password - Faredown Travel`;
+      const htmlContent = this.generatePasswordResetHTML(email, resetUrl, firstName);
+      const textContent = this.generatePasswordResetText(email, resetUrl, firstName);
+
+      const mailOptions = {
+        from: {
+          name: this.companyDetails.name + " Admin",
+          address: this.companyDetails.email, // Send from admin@faredown.com
+        },
+        to: email,
+        subject,
+        html: htmlContent,
+        text: textContent,
+      };
+
+      const result = await this.transporter.sendMail(mailOptions);
+
+      console.log("Password reset email sent:", result.messageId);
+
+      return {
+        success: true,
+        messageId: result.messageId,
+        recipient: email,
+      };
+    } catch (error) {
+      console.error("Password reset email error:", error);
+      throw new Error(`Failed to send password reset email: ${error.message}`);
     }
   }
 
@@ -369,6 +407,108 @@ This is an automated email. Please do not reply to this message.
   generateCancellationText(bookingData, cancellationDetails) {
     // Simplified implementation
     return `Booking Cancelled\n\nYour booking ${bookingData.bookingRef} has been cancelled.`;
+  }
+
+  /**
+   * Generate password reset HTML email
+   */
+  generatePasswordResetHTML(email, resetUrl, firstName) {
+    return `
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Reset Your Password</title>
+  <style>
+    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+    .header { background: #003580; color: white; padding: 20px; text-align: center; }
+    .content { padding: 20px; background: #f9f9f9; }
+    .reset-box { background: white; padding: 30px; border-radius: 8px; margin: 20px 0; text-align: center; }
+    .btn { display: inline-block; background: #003580; color: white; padding: 16px 32px; text-decoration: none; border-radius: 8px; font-weight: bold; margin: 20px 0; }
+    .footer { background: #f1f1f1; padding: 20px; text-align: center; font-size: 12px; color: #666; }
+    .warning { background: #fef3c7; border: 1px solid #f59e0b; padding: 15px; border-radius: 6px; margin: 20px 0; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Faredown Travel</h1>
+      <p>Password Reset Request</p>
+    </div>
+
+    <div class="content">
+      <div class="reset-box">
+        <h2 style="color: #003580; margin-top: 0;">Hello ${firstName},</h2>
+        <p>We received a request to reset the password for your Faredown Travel account:</p>
+        <p><strong>${email}</strong></p>
+
+        <p>Click the button below to reset your password:</p>
+        <a href="${resetUrl}" class="btn">Reset My Password</a>
+
+        <div class="warning">
+          <p><strong>Important:</strong></p>
+          <ul style="text-align: left; margin: 10px 0;">
+            <li>This link will expire in 1 hour for security reasons</li>
+            <li>If you didn't request this reset, please ignore this email</li>
+            <li>Your password will remain unchanged until you create a new one</li>
+          </ul>
+        </div>
+
+        <p style="font-size: 14px; color: #666; margin-top: 30px;">
+          If the button doesn't work, copy and paste this link into your browser:<br>
+          <a href="${resetUrl}" style="color: #003580; word-break: break-all;">${resetUrl}</a>
+        </p>
+      </div>
+
+      <div style="text-align: center; margin: 30px 0;">
+        <p>Need help? Contact our support team:</p>
+        <p><strong>Email:</strong> ${this.companyDetails.supportEmail}<br>
+        <strong>Phone:</strong> ${this.companyDetails.phone}</p>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2025 Faredown Travel. All rights reserved.</p>
+      <p>${this.companyDetails.address}</p>
+      <p>This is an automated email sent from admin@faredown.com</p>
+    </div>
+  </div>
+</body>
+</html>`;
+  }
+
+  /**
+   * Generate password reset text email
+   */
+  generatePasswordResetText(email, resetUrl, firstName) {
+    return `
+PASSWORD RESET REQUEST - Faredown Travel
+
+Hello ${firstName},
+
+We received a request to reset the password for your Faredown Travel account: ${email}
+
+To reset your password, click on the following link:
+${resetUrl}
+
+IMPORTANT INFORMATION:
+- This link will expire in 1 hour for security reasons
+- If you didn't request this reset, please ignore this email
+- Your password will remain unchanged until you create a new one
+
+If you have any questions, please contact our support team:
+Email: ${this.companyDetails.supportEmail}
+Phone: ${this.companyDetails.phone}
+
+--
+Faredown Travel Admin
+Your Journey, Our Passion
+${this.companyDetails.address}
+
+This is an automated email sent from admin@faredown.com
+`;
   }
 
   /**
