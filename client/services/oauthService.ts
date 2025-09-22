@@ -186,7 +186,7 @@ export class OAuthService {
             console.log("🔵 User data:", event.data.user);
 
             messageReceived = true; // Mark that we received a message
-            clearInterval(checkClosed); // Stop checking for manual closure
+            if (checkClosed) clearInterval(checkClosed); // Stop checking for manual closure
 
             try {
               // Backend has already processed everything, just use the data
