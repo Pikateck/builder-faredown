@@ -35,7 +35,7 @@ export interface OAuthStatusResponse {
 }
 
 export class OAuthService {
-  private readonly baseUrl = "/api/oauth";
+  private readonly baseUrl = "/oauth";
 
   /**
    * Check OAuth services configuration status
