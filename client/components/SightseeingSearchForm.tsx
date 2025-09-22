@@ -13,7 +13,6 @@ import { StableBookingCalendar } from "@/components/StableBookingCalendar";
 import { format, addDays } from "date-fns";
 import { MapPin, CalendarIcon, Search, X, Camera } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
-import { RecentSearches } from "./RecentSearches";
 
 export function SightseeingSearchForm() {
   const navigate = useNavigate();
@@ -44,30 +43,6 @@ export function SightseeingSearchForm() {
   //   // Auto-population logic commented out to ensure blank-by-default behavior
   // }, []);
 
-  // Handle recent search click - populate form with selected search data
-  const handleRecentSearchClick = (searchData: any) => {
-    try {
-      // Set destination
-      if (searchData.destination?.name) {
-        setDestination(searchData.destination.name);
-        setDestinationCode(searchData.destination.code || "");
-        setInputValue(searchData.destination.name);
-      }
-
-      // Set dates
-      if (searchData.tourDate) {
-        const tourDateObj = new Date(searchData.tourDate);
-        if (!isNaN(tourDateObj.getTime())) setTourDate(tourDateObj);
-      }
-
-      if (searchData.endDate) {
-        const endDateObj = new Date(searchData.endDate);
-        if (!isNaN(endDateObj.getTime())) setEndDate(endDateObj);
-      }
-    } catch (error) {
-      console.error("Error loading recent sightseeing search:", error);
-    }
-  };
 
   useEffect(() => {
     const checkMobile = () => {
@@ -415,12 +390,6 @@ export function SightseeingSearchForm() {
           </div>
         </div>
 
-        {/* Recent Searches Section - Only render wrapper if component has content */}
-        <RecentSearches
-          module="sightseeing"
-          onSearchClick={handleRecentSearchClick}
-          className="mt-8 p-4 sm:p-6 border border-gray-200 shadow-sm"
-        />
       </div>
     </>
   );
