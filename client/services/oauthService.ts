@@ -101,25 +101,33 @@ export class OAuthService {
    */
   async handleGoogleCallback(code: string, state: string): Promise<OAuthResponse> {
     try {
+      console.log("🔵 Sending callback request to backend...");
       const response = await apiClient.post<OAuthResponse>(`${this.baseUrl}/google/callback`, {
         code,
         state
       });
 
+      console.log("🔵 Backend callback response:", response);
+
       if (response.success && response.token) {
+        console.log("🔵 Storing auth token and user data...");
         // Store auth token
         apiClient.setAuthToken(response.token);
         localStorage.setItem("auth_token", response.token);
-        
+
         // Store user data
         if (response.user) {
           localStorage.setItem("user", JSON.stringify(response.user));
         }
+
+        console.log("✅ OAuth callback completed successfully");
+      } else {
+        console.error("🔴 Backend callback failed:", response);
       }
 
       return response;
     } catch (error) {
-      console.error("Google callback error:", error);
+      console.error("🔴 Google callback error:", error);
       throw error;
     }
   }
@@ -130,8 +138,10 @@ export class OAuthService {
   async loginWithGoogle(): Promise<OAuthResponse> {
     return new Promise(async (resolve, reject) => {
       try {
+        console.log("🔵 Getting Google auth URL...");
         const authUrl = await this.getGoogleAuthUrl();
-        
+        console.log("🔵 Google auth URL:", authUrl);
+
         // Open popup window
         const popup = window.open(
           authUrl,
@@ -143,28 +153,40 @@ export class OAuthService {
           throw new Error("Failed to open popup window");
         }
 
+        console.log("🔵 Popup opened, waiting for callback...");
+
         // Listen for popup messages
         const handleMessage = async (event: MessageEvent) => {
+          console.log("🔵 Received popup message:", event.data);
+
           if (event.origin !== window.location.origin) {
+            console.log("🔴 Message from wrong origin:", event.origin);
             return;
           }
 
           if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
             const { code, state } = event.data;
-            
+            console.log("🔵 Google auth success, processing callback...", { code: code?.substring(0, 20) + "...", state });
+
             try {
               const result = await this.handleGoogleCallback(code, state);
+              console.log("🔵 Callback processed successfully:", result);
               popup.close();
               window.removeEventListener('message', handleMessage);
+              clearInterval(checkClosed);
               resolve(result);
             } catch (error) {
+              console.error("🔴 Callback processing failed:", error);
               popup.close();
               window.removeEventListener('message', handleMessage);
+              clearInterval(checkClosed);
               reject(error);
             }
           } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
+            console.error("🔴 Google auth error from popup:", event.data.error);
             popup.close();
             window.removeEventListener('message', handleMessage);
+            clearInterval(checkClosed);
             reject(new Error(event.data.error || 'Google authentication failed'));
           }
         };
@@ -174,6 +196,7 @@ export class OAuthService {
         // Check if popup was closed manually
         const checkClosed = setInterval(() => {
           if (popup.closed) {
+            console.log("🔴 Popup was closed manually");
             clearInterval(checkClosed);
             window.removeEventListener('message', handleMessage);
             reject(new Error('Authentication cancelled'));
@@ -181,6 +204,7 @@ export class OAuthService {
         }, 1000);
 
       } catch (error) {
+        console.error("🔴 OAuth flow error:", error);
         reject(error);
       }
     });
@@ -427,15 +451,22 @@ export class OAuthService {
    * Handle OAuth redirect in popup window
    */
   static handleOAuthRedirect() {
+    console.log("🔵 OAuth redirect handler called");
+    console.log("🔵 Current URL:", window.location.href);
+    console.log("🔵 Window opener exists:", !!window.opener);
+
     // This should be called in a separate OAuth callback page
     const urlParams = new URLSearchParams(window.location.search);
     const code = urlParams.get('code');
     const state = urlParams.get('state');
     const error = urlParams.get('error');
-    const provider = window.location.pathname.includes('google') ? 'google' : 
+    const provider = window.location.pathname.includes('google') ? 'google' :
                     window.location.pathname.includes('facebook') ? 'facebook' : 'apple';
 
+    console.log("🔵 OAuth parameters:", { code: code?.substring(0, 20) + "...", state, error, provider });
+
     if (error) {
+      console.error("🔴 OAuth error:", error);
       window.opener?.postMessage({
         type: `${provider.toUpperCase()}_AUTH_ERROR`,
         error: error
@@ -445,14 +476,25 @@ export class OAuthService {
     }
 
     if (code && state) {
+      console.log("🔵 Sending success message to parent window");
       const user = urlParams.get('user'); // For Apple login
-      window.opener?.postMessage({
+      const message = {
         type: `${provider.toUpperCase()}_AUTH_SUCCESS`,
         code,
         state,
         ...(user && { user })
-      }, window.location.origin);
-      window.close();
+      };
+      console.log("🔵 Message to send:", message);
+
+      window.opener?.postMessage(message, window.location.origin);
+
+      // Give some time for the message to be processed before closing
+      setTimeout(() => {
+        console.log("🔵 Closing popup window");
+        window.close();
+      }, 100);
+    } else {
+      console.error("🔴 Missing code or state parameters");
     }
   }
 }
