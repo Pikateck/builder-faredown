@@ -210,9 +210,10 @@ export class OAuthService {
               console.log("✅ OAuth success processed:", result);
 
               // Clean up
-              clearTimeout(timeout);
-              window.removeEventListener('message', handleMessage);
-              if (!popup.closed) {
+              if (timeout) clearTimeout(timeout);
+              if (checkClosed) clearInterval(checkClosed);
+              if (handleMessage) window.removeEventListener('message', handleMessage);
+              if (popup && !popup.closed) {
                 popup.close();
               }
 
