@@ -475,54 +475,41 @@ export class OAuthService {
   }
 
   /**
-   * Handle OAuth redirect in popup window
+   * Handle OAuth redirect in popup window (Legacy method - Backend now handles this)
    */
   static handleOAuthRedirect() {
-    console.log("🔵 OAuth redirect handler called");
+    console.log("🔵 OAuth redirect handler called (legacy)");
     console.log("🔵 Current URL:", window.location.href);
     console.log("🔵 Window opener exists:", !!window.opener);
 
-    // This should be called in a separate OAuth callback page
-    const urlParams = new URLSearchParams(window.location.search);
-    const code = urlParams.get('code');
-    const state = urlParams.get('state');
-    const error = urlParams.get('error');
-    const provider = window.location.pathname.includes('google') ? 'google' :
-                    window.location.pathname.includes('facebook') ? 'facebook' : 'apple';
+    // This method is now mostly obsolete since the backend renders the bridge page
+    // But we keep it as a fallback for any edge cases
 
-    console.log("🔵 OAuth parameters:", { code: code?.substring(0, 20) + "...", state, error, provider });
+    const urlParams = new URLSearchParams(window.location.search);
+    const error = urlParams.get('error');
 
     if (error) {
-      console.error("🔴 OAuth error:", error);
+      console.error("🔴 OAuth URL error:", error);
+      const parentOrigin = window.location.origin;
       window.opener?.postMessage({
-        type: `${provider.toUpperCase()}_AUTH_ERROR`,
-        error: error
-      }, window.location.origin);
+        type: 'GOOGLE_AUTH_ERROR',
+        error: `Authentication failed: ${error}`
+      }, parentOrigin);
       window.close();
       return;
     }
 
-    if (code && state) {
-      console.log("🔵 Sending success message to parent window");
-      const user = urlParams.get('user'); // For Apple login
-      const message = {
-        type: `${provider.toUpperCase()}_AUTH_SUCCESS`,
-        code,
-        state,
-        ...(user && { user })
-      };
-      console.log("🔵 Message to send:", message);
+    // If we reach here without an error, the backend should have handled everything
+    console.log("🔵 No error in URL, backend should have handled the OAuth flow");
+    console.log("🔵 If popup doesn't close automatically, this is a fallback");
 
-      window.opener?.postMessage(message, window.location.origin);
-
-      // Give some time for the message to be processed before closing
-      setTimeout(() => {
-        console.log("🔵 Closing popup window");
+    // Fallback: try to close popup after a delay
+    setTimeout(() => {
+      if (window.opener) {
+        console.log("🔵 Fallback: Closing popup window");
         window.close();
-      }, 100);
-    } else {
-      console.error("🔴 Missing code or state parameters");
-    }
+      }
+    }, 3000);
   }
 }
 
