@@ -18,16 +18,16 @@ export interface User {
 }
 
 export interface LoginRequest {
-  username: string;
+  email: string;
   password: string;
 }
 
 export interface RegisterRequest {
-  username: string;
   email: string;
   password: string;
+  firstName: string;
+  lastName: string;
   role?: string;
-  department?: string;
 }
 
 export interface AuthResponse {
@@ -150,6 +150,13 @@ export class AuthService {
     }
 
     throw new Error("Failed to update profile");
+  }
+
+  /**
+   * Request password reset (forgot password)
+   */
+  async forgotPassword(email: string): Promise<void> {
+    await apiClient.post(`${this.baseUrl}/forgot-password`, { email });
   }
 
   /**
