@@ -372,8 +372,17 @@ router.post("/facebook/callback", async (req, res) => {
  */
 router.get("/apple/url", (req, res) => {
   try {
+    // Check if Apple OAuth is configured
+    if (!isAppleConfigured) {
+      return res.status(503).json({
+        success: false,
+        message: "Apple OAuth is not configured. Please set APPLE_TEAM_ID, APPLE_KEY_ID, and APPLE_SERVICE_ID environment variables.",
+        error: "SERVICE_UNAVAILABLE"
+      });
+    }
+
     const baseUrl = 'https://appleid.apple.com/auth/authorize';
-    const redirectUri = process.env.APPLE_REDIRECT_URI || `${process.env.API_BASE_URL}/auth/apple/callback`;
+    const redirectUri = process.env.APPLE_REDIRECT_URI || `${process.env.API_BASE_URL}/oauth/apple/callback`;
     const state = crypto.randomBytes(16).toString('hex');
     
     const params = new URLSearchParams({
