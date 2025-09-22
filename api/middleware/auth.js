@@ -126,13 +126,14 @@ const ROLE_PERMISSIONS = {
   [ROLES.USER]: [],
 };
 
-// Mock user database (replace with real database)
+// Mock user database (replace with real database) - using email as key
 const users = new Map([
   [
-    "admin",
+    "admin@faredown.com",
     {
       id: "admin",
-      username: "admin",
+      firstName: "Admin",
+      lastName: "User",
       email: "admin@faredown.com",
       password: "$2a$10$N9qo8uLOickgx2ZMRZoMye.IIZKr3LNlLdDKQg7xWJ0PnP6LO7O1a", // admin123
       role: ROLES.SUPER_ADMIN,
@@ -143,10 +144,11 @@ const users = new Map([
     },
   ],
   [
-    "sales",
+    "sales@faredown.com",
     {
       id: "sales",
-      username: "sales",
+      firstName: "Sales",
+      lastName: "Manager",
       email: "sales@faredown.com",
       password: "$2a$10$fK8QQCjQRjKJG5zPQrZhJOVqO8YzZjYOVqO8YzZjYOVqO8YzZjYO", // sales123
       role: ROLES.SALES_MANAGER,
@@ -157,14 +159,30 @@ const users = new Map([
     },
   ],
   [
-    "support",
+    "support@faredown.com",
     {
       id: "support",
-      username: "support",
+      firstName: "Support",
+      lastName: "Team",
       email: "support@faredown.com",
       password: "$2a$10$gL9RRDkRSkkSK6zQQsZiKPWrP9ZaAkAkPWrP9ZaAkAkPWrP9ZaAk", // support123
       role: ROLES.SUPPORT,
       department: "customer_support",
+      isActive: true,
+      createdAt: new Date(),
+      lastLogin: null,
+    },
+  ],
+  [
+    "demo@faredown.com",
+    {
+      id: "demo",
+      firstName: "Demo",
+      lastName: "User",
+      email: "demo@faredown.com",
+      password: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password123
+      role: ROLES.USER,
+      department: null,
       isActive: true,
       createdAt: new Date(),
       lastLogin: null,
@@ -178,7 +196,8 @@ const users = new Map([
 const generateToken = (user) => {
   const payload = {
     id: user.id,
-    username: user.username,
+    firstName: user.firstName,
+    lastName: user.lastName,
     email: user.email,
     role: user.role,
     department: user.department,
@@ -325,10 +344,26 @@ const requireRole = (roles) => {
 };
 
 /**
- * Get user by username
+ * Get user by email
+ */
+const getUserByEmail = (email) => {
+  return users.get(email);
+};
+
+/**
+ * Get user by username (legacy support)
  */
 const getUserByUsername = (username) => {
-  return users.get(username);
+  // For backward compatibility, try to find by email if username looks like email
+  if (username.includes('@')) {
+    return users.get(username);
+  }
+
+  // Otherwise search by username in user data
+  for (const user of users.values()) {
+    if (user.username === username) return user;
+  }
+  return null;
 };
 
 /**
@@ -347,8 +382,9 @@ const getUserById = (id) => {
 const createUser = async (userData) => {
   const hashedPassword = await hashPassword(userData.password);
   const user = {
-    id: userData.username,
-    username: userData.username,
+    id: userData.email.split('@')[0] + '_' + Date.now(), // Generate unique ID
+    firstName: userData.firstName,
+    lastName: userData.lastName,
     email: userData.email,
     password: hashedPassword,
     role: userData.role || ROLES.USER,
@@ -358,7 +394,7 @@ const createUser = async (userData) => {
     lastLogin: null,
   };
 
-  users.set(user.username, user);
+  users.set(user.email, user); // Use email as the key
   return user;
 };
 
@@ -374,7 +410,8 @@ module.exports = {
   requireAdmin,
   requirePermission,
   requireRole,
-  getUserByUsername,
+  getUserByEmail,
+  getUserByUsername, // Legacy support
   getUserById,
   createUser,
 };
