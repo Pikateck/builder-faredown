@@ -35,8 +35,8 @@ app.use((req, res, next) => {
   next();
 });
 
-// 1) API proxy to external API server
-app.use("/api", async (req, res) => {
+// Helper function for API proxying
+async function proxyToAPI(req, res, routeType = "API") {
   // Special case for frontend health check
   if (req.path === "/api/health") {
     return res.json({
@@ -60,6 +60,10 @@ app.use("/api", async (req, res) => {
         ...(req.headers["user-agent"] && {
           "User-Agent": req.headers["user-agent"],
         }),
+        // Forward cookies for OAuth
+        ...(req.headers.cookie && {
+          Cookie: req.headers.cookie,
+        }),
       },
       body:
         req.method !== "GET" && req.method !== "HEAD"
@@ -70,6 +74,12 @@ app.use("/api", async (req, res) => {
     const data = await response.text();
     res.status(response.status);
 
+    // Forward cookies from backend
+    const setCookieHeader = response.headers.get("set-cookie");
+    if (setCookieHeader) {
+      res.setHeader("Set-Cookie", setCookieHeader);
+    }
+
     // Set content type based on response
     const contentType =
       response.headers.get("content-type") || "application/json";
@@ -77,14 +87,20 @@ app.use("/api", async (req, res) => {
 
     res.send(data);
   } catch (error) {
-    console.error(`API proxy error for ${req.originalUrl}:`, error);
+    console.error(`${routeType} proxy error for ${req.originalUrl}:`, error);
     res.status(503).json({
-      error: "API server unavailable",
+      error: `${routeType} server unavailable`,
       path: req.originalUrl,
       message: error.message,
     });
   }
-});
+}
+
+// 1) API proxy to external API server
+app.use("/api", (req, res) => proxyToAPI(req, res, "API"));
+
+// 2) OAuth auth proxy for simplified OAuth flow
+app.use("/auth", (req, res) => proxyToAPI(req, res, "OAuth"));
 
 // 2) Create Vite dev server for React app
 const vite = await createServer({
