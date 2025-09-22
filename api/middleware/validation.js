@@ -11,13 +11,13 @@ const Joi = require("joi");
 const schemas = {
   // Authentication schemas
   login: Joi.object({
-    username: Joi.string().alphanum().min(3).max(30).required(),
+    email: Joi.string().email().required(),
+    username: Joi.string().optional(), // Legacy support
     password: Joi.string().min(6).required(),
     department: Joi.string().optional(),
   }),
 
   register: Joi.object({
-    username: Joi.string().alphanum().min(3).max(30).required(),
     email: Joi.string().email().required(),
     password: Joi.string()
       .min(8)
@@ -29,6 +29,8 @@ const schemas = {
         "string.pattern.base":
           "Password must contain at least one lowercase letter, one uppercase letter, one number and one special character",
       }),
+    firstName: Joi.string().min(1).max(50).required(),
+    lastName: Joi.string().min(1).max(50).required(),
     role: Joi.string()
       .valid(
         "admin",
@@ -39,7 +41,6 @@ const schemas = {
         "user",
       )
       .optional(),
-    department: Joi.string().optional(),
   }),
 
   // User management schemas
