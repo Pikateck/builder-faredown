@@ -137,13 +137,20 @@ export class OAuthService {
    */
   async loginWithGoogle(): Promise<OAuthResponse> {
     return new Promise(async (resolve, reject) => {
+      // Declare variables in outer scope for cleanup
+      let popup: Window | null = null;
+      let handleMessage: ((event: MessageEvent) => void) | null = null;
+      let checkClosed: NodeJS.Timeout | null = null;
+      let timeout: NodeJS.Timeout | null = null;
+      let messageReceived = false;
+
       try {
         console.log("🔵 Getting Google auth URL...");
         const authUrl = await this.getGoogleAuthUrl();
         console.log("🔵 Google auth URL:", authUrl);
 
         // Open popup window
-        const popup = window.open(
+        popup = window.open(
           authUrl,
           'google-login',
           'width=500,height=600,scrollbars=yes,resizable=yes'
@@ -154,9 +161,6 @@ export class OAuthService {
         }
 
         console.log("🔵 Popup opened, waiting for callback...");
-
-        // Track if we've received a success/error message
-        let messageReceived = false;
 
         // Listen for popup messages
         const handleMessage = async (event: MessageEvent) => {
