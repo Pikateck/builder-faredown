@@ -239,6 +239,8 @@ app.use("/api/auth", authLimiter);
 app.use("/api/auth", authRoutes);
 app.use("/api/oauth", oauthRoutes);
 app.use("/api/oauth", oauthStatusRoutes);
+// Mount OAuth at /auth for simplified popup flow
+app.use("/auth", oauthRoutes);
 app.use(
   "/api/admin",
   authenticateToken,
