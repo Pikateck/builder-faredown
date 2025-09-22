@@ -153,15 +153,20 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
       
       // Handle different error types
       if (error.response?.status === 401) {
-        setError("Invalid email or password");
+        setError("Invalid username or password");
       } else if (error.response?.status === 409) {
-        setError("An account with this email already exists");
+        setError("An account with this username already exists");
       } else if (error.response?.status === 400) {
-        setError(error.response?.data?.message || "Invalid request");
+        const message = error.response?.data?.message || error.message;
+        if (message.includes("Password must contain")) {
+          setError("Password must contain at least one lowercase letter, one uppercase letter, one number and one special character (!@#$%^&*)");
+        } else {
+          setError(message || "Invalid request. Please check your information.");
+        }
       } else if (error.message?.includes("fetch")) {
         setError("Unable to connect to server. Please try again later.");
       } else {
-        setError(error.message || "Something went wrong. Please try again.");
+        setError(`Authentication failed: ${error.message || "Please try again."}`);
       }
     } finally {
       setIsLoading(false);
