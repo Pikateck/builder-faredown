@@ -12,22 +12,50 @@ const jwt = require("jsonwebtoken");
 const crypto = require("crypto");
 const router = express.Router();
 
-// Session configuration for OAuth state management
-const sessionConfig = {
-  secret: process.env.SESSION_SECRET || 'fallback-session-secret',
-  resave: false,
-  saveUninitialized: false,
-  cookie: {
-    secure: process.env.NODE_ENV === 'production', // HTTPS in production
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax', // 'none' for iframe compatibility
-    maxAge: 10 * 60 * 1000, // 10 minutes for OAuth state
-    httpOnly: true
-  },
-  name: 'oauth.sid' // Different name from main session
+// In-memory state store for OAuth CSRF protection (more reliable than sessions)
+const oauthStateStore = new Map(); // state -> { created: timestamp, data: any }
+
+// Clean up expired states every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  const expiredStates = [];
+
+  for (const [state, data] of oauthStateStore.entries()) {
+    if (now - data.created > 10 * 60 * 1000) { // 10 minutes
+      expiredStates.push(state);
+    }
+  }
+
+  expiredStates.forEach(state => oauthStateStore.delete(state));
+  if (expiredStates.length > 0) {
+    console.log(`🧹 Cleaned up ${expiredStates.length} expired OAuth states`);
+  }
+}, 5 * 60 * 1000);
+
+// Helper functions for state management
+const storeState = (state) => {
+  oauthStateStore.set(state, { created: Date.now() });
+  console.log(`🔵 Stored OAuth state: ${state.substring(0, 8)}...`);
 };
 
-// Apply session middleware to OAuth routes
-router.use(session(sessionConfig));
+const validateAndConsumeState = (state) => {
+  const data = oauthStateStore.get(state);
+  if (!data) {
+    console.log(`🔴 OAuth state not found: ${state?.substring(0, 8)}...`);
+    return false;
+  }
+
+  const now = Date.now();
+  if (now - data.created > 10 * 60 * 1000) { // 10 minutes
+    console.log(`🔴 OAuth state expired: ${state.substring(0, 8)}...`);
+    oauthStateStore.delete(state);
+    return false;
+  }
+
+  oauthStateStore.delete(state);
+  console.log(`✅ OAuth state validated and consumed: ${state.substring(0, 8)}...`);
+  return true;
+};
 
 // OAuth environment validation
 const isGoogleConfigured = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
@@ -332,7 +360,7 @@ router.get("/google/callback", async (req, res) => {
     </div>
     <script>
         console.log('🔵 OAuth bridge page loaded');
-        console.log('🔵 Window opener exists:', !!window.opener);
+        console.log('��� Window opener exists:', !!window.opener);
         console.log('🔵 Parent origin:', '${parentOrigin}');
 
         // Send success message to parent window
