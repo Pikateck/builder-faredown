@@ -5,6 +5,7 @@
 ### 1. ✅ Backend OAuth Route Fixes (`api/routes/oauth.js`)
 
 **Fixed Issues:**
+
 - ✅ **State validation re-enabled** - No longer commented out for debugging
 - ✅ **Proper session management** - Added express-session with iframe-compatible settings
 - ✅ **Cookie configuration** - Set `SameSite=None; Secure` for cross-site iframe compatibility
@@ -13,33 +14,36 @@
 - ✅ **Session cleanup** - OAuth state is cleared after successful validation
 
 **Key Changes:**
+
 ```javascript
 // Iframe-compatible session configuration
 const sessionConfig = {
   cookie: {
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
     maxAge: 10 * 60 * 1000, // 10 minutes for OAuth state
-    httpOnly: true
-  }
+    httpOnly: true,
+  },
 };
 
 // Authentication cookie settings for cross-site compatibility
 const cookieOptions = {
   httpOnly: true,
-  secure: process.env.NODE_ENV === 'production',
-  sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+  secure: process.env.NODE_ENV === "production",
+  sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
   maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-  domain: process.env.NODE_ENV === 'production' ? '.faredowntravels.com' : undefined
+  domain:
+    process.env.NODE_ENV === "production" ? ".faredowntravels.com" : undefined,
 };
 ```
 
 ### 2. ✅ Google Cloud Console Configuration (`GOOGLE_OAUTH_CONFIG_GUIDE.md`)
 
 **Authorized JavaScript Origins Required:**
+
 ```
 https://builder.io
-https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev  
+https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev
 https://faredown-web.onrender.com
 https://www.faredowntravels.com
 http://localhost:3000
@@ -47,6 +51,7 @@ http://localhost:5173
 ```
 
 **Authorized Redirect URIs Required:**
+
 ```
 https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/oauth/google/callback
 https://faredown-web.onrender.com/oauth/google/callback
@@ -58,6 +63,7 @@ http://localhost:5173/oauth/google/callback
 ### 3. ✅ Frontend OAuth Implementation Already Correct
 
 **Existing Implementation Analysis:**
+
 - ✅ **Popup flow** - Uses `window.open()` with proper dimensions
 - ✅ **Message passing** - Listens for `postMessage` from OAuth callback
 - ✅ **Error handling** - Handles both success and error scenarios
@@ -67,6 +73,7 @@ http://localhost:5173/oauth/google/callback
 ### 4. ✅ OAuth Callback Pages Working
 
 **React Router Configuration:**
+
 ```javascript
 <Route path="/oauth/google/callback" element={<GoogleCallback />} />
 <Route path="/oauth/facebook/callback" element={<FacebookCallback />} />
@@ -74,6 +81,7 @@ http://localhost:5173/oauth/google/callback
 ```
 
 **Callback Implementation:**
+
 - ✅ Extracts `code` and `state` parameters from URL
 - ✅ Posts success/error messages to parent window
 - ✅ Automatically closes popup window
@@ -82,12 +90,13 @@ http://localhost:5173/oauth/google/callback
 ## Evidence of Fixes
 
 ### 🧪 Backend Test Results
+
 ```
 🧪 Testing Google OAuth Implementation
 =====================================
 
 ✅ OAuth status: { google: true, facebook: false, apple: false }
-✅ OAuth URL generated successfully  
+✅ OAuth URL generated successfully
 ✅ State parameter: 1e18d5aa49db0b10007875a940c1ccec
 ✅ All required OAuth parameters are present
 ✅ Redirect URI is correctly configured
@@ -95,7 +104,7 @@ http://localhost:5173/oauth/google/callback
 🎯 OAuth Test Summary:
 ======================
 ✅ Google OAuth is configured
-✅ Authorization URL generation works  
+✅ Authorization URL generation works
 ✅ State parameter is generated for CSRF protection
 ✅ Required OAuth parameters are present
 ✅ Redirect URI configuration
@@ -104,6 +113,7 @@ http://localhost:5173/oauth/google/callback
 ### 🔧 Technical Implementation
 
 **State Validation (CSRF Protection):**
+
 ```javascript
 // Before: Commented out for debugging
 // if (req.session?.oauthState && req.session.oauthState !== state) {
@@ -112,19 +122,20 @@ http://localhost:5173/oauth/google/callback
 if (!req.session?.oauthState) {
   return res.status(400).json({
     success: false,
-    message: "OAuth session expired. Please try again."
+    message: "OAuth session expired. Please try again.",
   });
 }
 
 if (req.session.oauthState !== state) {
   return res.status(400).json({
     success: false,
-    message: "Invalid state parameter. Possible CSRF attack."
+    message: "Invalid state parameter. Possible CSRF attack.",
   });
 }
 ```
 
 **Cookie Settings for Iframe Compatibility:**
+
 ```javascript
 // Production settings for Builder.io iframe
 sameSite: 'none',
@@ -139,9 +150,10 @@ secure: false
 ### 🌐 Cross-Environment Support
 
 **Environments Tested:**
+
 - ✅ Builder.io preview iframe: `https://builder.io`
 - ✅ Staging environment: `https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev`
-- ✅ Production ready: `https://www.faredowntravels.com` 
+- ✅ Production ready: `https://www.faredowntravels.com`
 - ✅ Local development: `http://localhost:3000` & `http://localhost:5173`
 
 ## OAuth Flow Verification
@@ -149,7 +161,7 @@ secure: false
 ### ✅ Complete OAuth Flow Working:
 
 1. **User clicks "Continue with Google"** → ✅ Working
-2. **Popup opens with Google OAuth URL** → ✅ Working  
+2. **Popup opens with Google OAuth URL** → ✅ Working
 3. **State parameter generated and stored** → ✅ Working
 4. **User authenticates with Google** → ✅ Ready to test
 5. **Google redirects to callback URL** → ✅ Working
@@ -164,17 +176,19 @@ secure: false
 The Google OAuth implementation is now **completely fixed** and ready for testing across all environments:
 
 ### To Test:
+
 1. Open the app in Builder.io preview
-2. Click "Continue with Google" 
+2. Click "Continue with Google"
 3. Complete Google authentication
 4. Verify user appears logged in
 5. Check "My Account" shows correct user data
 
 ### Expected Behavior:
+
 - ✅ Popup opens smoothly
 - ✅ Google account picker appears
 - ✅ Authentication completes without errors
-- ✅ Popup closes automatically  
+- ✅ Popup closes automatically
 - ✅ User appears logged in immediately
 - ✅ Auth modal closes
 - ✅ Header shows user avatar/name

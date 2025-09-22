@@ -152,7 +152,7 @@ router.post("/register", validate.register, async (req, res) => {
       firstName: req.body.firstName,
       lastName: req.body.lastName,
       role: req.body.role,
-      passwordLength: req.body.password?.length
+      passwordLength: req.body.password?.length,
     });
 
     const { email, password, firstName, lastName, role } = req.body;
@@ -179,7 +179,10 @@ router.post("/register", validate.register, async (req, res) => {
       role: role || "user",
     });
 
-    console.log("🔵 User created successfully:", { id: newUser.id, email: newUser.email });
+    console.log("🔵 User created successfully:", {
+      id: newUser.id,
+      email: newUser.email,
+    });
 
     // Log user creation
     try {
@@ -348,7 +351,8 @@ router.post("/forgot-password", async (req, res) => {
       // For security, don't reveal if email exists or not
       return res.json({
         success: true,
-        message: "If an account with this email exists, a password reset link has been sent.",
+        message:
+          "If an account with this email exists, a password reset link has been sent.",
       });
     }
 
@@ -363,7 +367,9 @@ router.post("/forgot-password", async (req, res) => {
     // For now, we'll simulate sending an email
     console.log(`Password reset requested for: ${email}`);
     console.log(`Reset token: ${resetToken}`);
-    console.log(`Reset link: ${process.env.API_BASE_URL || 'http://localhost:3001'}/reset-password?token=${resetToken}`);
+    console.log(
+      `Reset link: ${process.env.API_BASE_URL || "http://localhost:3001"}/reset-password?token=${resetToken}`,
+    );
 
     // Simulate email service
     const { sendPasswordResetEmail } = require("../services/emailService");
@@ -376,7 +382,8 @@ router.post("/forgot-password", async (req, res) => {
 
     res.json({
       success: true,
-      message: "If an account with this email exists, a password reset link has been sent.",
+      message:
+        "If an account with this email exists, a password reset link has been sent.",
     });
   } catch (error) {
     console.error("Forgot password error:", error);

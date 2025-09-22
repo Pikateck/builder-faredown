@@ -49,16 +49,18 @@ function consumeState(state) {
 function issueSessionCookie(res, user) {
   const token = jwt.sign(
     { sub: user.id, email: user.email, name: user.name },
-    process.env.SESSION_JWT_SECRET || process.env.JWT_SECRET || "fallback-secret-key",
-    { expiresIn: "7d" }
+    process.env.SESSION_JWT_SECRET ||
+      process.env.JWT_SECRET ||
+      "fallback-secret-key",
+    { expiresIn: "7d" },
   );
 
   // Staging: no domain attribute (fly.dev exact host)
   // Prod: domain=.faredowntravels.com
-  const host = process.env.OAUTH_REDIRECT_BASE ? 
-    new URL(process.env.OAUTH_REDIRECT_BASE).hostname : 
-    '55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev';
-  
+  const host = process.env.OAUTH_REDIRECT_BASE
+    ? new URL(process.env.OAUTH_REDIRECT_BASE).hostname
+    : "55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev";
+
   const isProd = host.endsWith("faredowntravels.com");
   const cookieOpts = {
     httpOnly: true,
@@ -96,7 +98,7 @@ function findOrCreateUser({ email, name, picture }) {
 router.get("/google", async (req, res) => {
   try {
     console.log("🔵 Starting Google OAuth...");
-    
+
     const state = crypto.randomUUID();
     putState(state);
 
@@ -107,7 +109,9 @@ router.get("/google", async (req, res) => {
       state,
     });
 
-    console.log(`✅ Redirecting to Google with state: ${state.substring(0, 8)}...`);
+    console.log(
+      `✅ Redirecting to Google with state: ${state.substring(0, 8)}...`,
+    );
     res.redirect(authUrl);
   } catch (error) {
     console.error("🔴 OAuth start error:", error);
@@ -119,9 +123,9 @@ router.get("/google", async (req, res) => {
 router.get("/google/callback", async (req, res) => {
   try {
     console.log("🔵 Google OAuth callback received");
-    console.log("🔵 Query params:", { 
-      code: req.query.code?.substring(0, 20) + "...", 
-      state: req.query.state?.substring(0, 8) + "..." 
+    console.log("🔵 Query params:", {
+      code: req.query.code?.substring(0, 20) + "...",
+      state: req.query.state?.substring(0, 8) + "...",
     });
 
     const { code, state } = req.query;
@@ -160,9 +164,9 @@ router.get("/google/callback", async (req, res) => {
     console.log("✅ OAuth successful, serving bridge page");
 
     // Determine parent origin by our own origin
-    const parentOrigin = req.get('host')?.includes('fly.dev')
-      ? 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev'
-      : 'https://www.faredowntravels.com';
+    const parentOrigin = req.get("host")?.includes("fly.dev")
+      ? "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev"
+      : "https://www.faredowntravels.com";
 
     // Serve bridge page that posts success to parent and closes
     const bridgeHtml = `
@@ -216,15 +220,15 @@ router.get("/google/callback", async (req, res) => {
           window.close();
         }, 200);
       </script>`;
-    
+
     res.status(200).send(bridgeHtml);
   } catch (err) {
     console.error("🔴 OAuth callback error:", err?.message || err);
-    
-    const parentOrigin = req.get('host')?.includes('fly.dev')
-      ? 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev'
-      : 'https://www.faredowntravels.com';
-      
+
+    const parentOrigin = req.get("host")?.includes("fly.dev")
+      ? "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev"
+      : "https://www.faredowntravels.com";
+
     const errorHtml = `
       <!doctype html><meta charset="utf-8">
       <style>
@@ -256,13 +260,18 @@ router.get("/me", (req, res) => {
   }
 
   try {
-    const payload = jwt.verify(token, process.env.SESSION_JWT_SECRET || process.env.JWT_SECRET || "fallback-secret-key");
+    const payload = jwt.verify(
+      token,
+      process.env.SESSION_JWT_SECRET ||
+        process.env.JWT_SECRET ||
+        "fallback-secret-key",
+    );
     const user = [...users.values()].find((u) => u.id === payload.sub);
     if (!user) {
       console.log("🔴 User not found for token");
       return res.status(401).json({ ok: false });
     }
-    
+
     console.log(`✅ Session validated for user: ${user.email}`);
     res.json({ ok: true, user });
   } catch (error) {

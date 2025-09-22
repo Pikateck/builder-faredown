@@ -40,9 +40,15 @@ export class OAuthService {
   /**
    * Check OAuth services configuration status
    */
-  async getOAuthStatus(): Promise<{ google: boolean; facebook: boolean; apple: boolean }> {
+  async getOAuthStatus(): Promise<{
+    google: boolean;
+    facebook: boolean;
+    apple: boolean;
+  }> {
     try {
-      const response = await apiClient.get<OAuthStatusResponse>(`${this.baseUrl}/status`);
+      const response = await apiClient.get<OAuthStatusResponse>(
+        `${this.baseUrl}/status`,
+      );
 
       if (response.success && response.oauth) {
         return response.oauth;
@@ -68,7 +74,9 @@ export class OAuthService {
         apiClient.disableFallbackMode();
       }
 
-      const response = await apiClient.get<OAuthUrlResponse>(`${this.baseUrl}/google/url`);
+      const response = await apiClient.get<OAuthUrlResponse>(
+        `${this.baseUrl}/google/url`,
+      );
 
       // Restore original fallback setting
       if (originalFallback) {
@@ -85,27 +93,37 @@ export class OAuthService {
 
       // Handle configuration errors
       if (error.response?.status === 503) {
-        throw new Error("Google sign-in is currently unavailable. Please try again later or use email/password login.");
+        throw new Error(
+          "Google sign-in is currently unavailable. Please try again later or use email/password login.",
+        );
       }
 
       if (error.response?.data?.message) {
         throw new Error(error.response.data.message);
       }
 
-      throw new Error("Unable to connect to Google sign-in service. Please try again.");
+      throw new Error(
+        "Unable to connect to Google sign-in service. Please try again.",
+      );
     }
   }
 
   /**
    * Handle Google OAuth callback
    */
-  async handleGoogleCallback(code: string, state: string): Promise<OAuthResponse> {
+  async handleGoogleCallback(
+    code: string,
+    state: string,
+  ): Promise<OAuthResponse> {
     try {
       console.log("🔵 Sending callback request to backend...");
-      const response = await apiClient.post<OAuthResponse>(`${this.baseUrl}/google/callback`, {
-        code,
-        state
-      });
+      const response = await apiClient.post<OAuthResponse>(
+        `${this.baseUrl}/google/callback`,
+        {
+          code,
+          state,
+        },
+      );
 
       console.log("🔵 Backend callback response:", response);
 
@@ -140,14 +158,15 @@ export class OAuthService {
       console.log("🔵 Starting Google OAuth flow...");
 
       // Open popup window directly to /auth/google
-      const width = 500, height = 600;
+      const width = 500,
+        height = 600;
       const left = window.screenX + (window.outerWidth - width) / 2;
       const top = window.screenY + (window.outerHeight - height) / 2;
 
       const popup = window.open(
         "/auth/google", // Backend route to start OAuth
         "oauth-google",
-        `width=${width},height=${height},left=${left},top=${top},resizable,scrollbars=yes`
+        `width=${width},height=${height},left=${left},top=${top},resizable,scrollbars=yes`,
       );
 
       if (!popup) {
@@ -163,7 +182,7 @@ export class OAuthService {
         const allowed = [
           "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev",
           "https://www.faredowntravels.com",
-          "https://builder.io"
+          "https://builder.io",
         ];
 
         if (!allowed.includes(ev.origin)) {
@@ -185,8 +204,8 @@ export class OAuthService {
 
           // Fetch session from backend to confirm authentication
           fetch("/api/me", { credentials: "include" })
-            .then(res => res.json())
-            .then(data => {
+            .then((res) => res.json())
+            .then((data) => {
               if (data.ok && data.user) {
                 console.log("✅ Session confirmed, user logged in:", data.user);
                 resolve({
@@ -196,15 +215,15 @@ export class OAuthService {
                     id: data.user.id,
                     username: data.user.name || data.user.email,
                     email: data.user.email,
-                    role: 'user',
-                    provider: 'google'
-                  }
+                    role: "user",
+                    provider: "google",
+                  },
                 });
               } else {
                 reject(new Error("Session validation failed"));
               }
             })
-            .catch(error => {
+            .catch((error) => {
               console.error("🔴 Session validation error:", error);
               reject(new Error("Failed to validate session"));
             });
@@ -251,7 +270,9 @@ export class OAuthService {
    */
   async getFacebookAuthUrl(): Promise<string> {
     try {
-      const response = await apiClient.get<OAuthUrlResponse>(`${this.baseUrl}/facebook/url`);
+      const response = await apiClient.get<OAuthUrlResponse>(
+        `${this.baseUrl}/facebook/url`,
+      );
 
       if (response.success && response.url) {
         return response.url;
@@ -263,32 +284,42 @@ export class OAuthService {
 
       // Handle configuration errors
       if (error.response?.status === 503) {
-        throw new Error("Facebook sign-in is currently unavailable. Please try again later or use email/password login.");
+        throw new Error(
+          "Facebook sign-in is currently unavailable. Please try again later or use email/password login.",
+        );
       }
 
       if (error.response?.data?.message) {
         throw new Error(error.response.data.message);
       }
 
-      throw new Error("Unable to connect to Facebook sign-in service. Please try again.");
+      throw new Error(
+        "Unable to connect to Facebook sign-in service. Please try again.",
+      );
     }
   }
 
   /**
    * Handle Facebook OAuth callback
    */
-  async handleFacebookCallback(code: string, state: string): Promise<OAuthResponse> {
+  async handleFacebookCallback(
+    code: string,
+    state: string,
+  ): Promise<OAuthResponse> {
     try {
-      const response = await apiClient.post<OAuthResponse>(`${this.baseUrl}/facebook/callback`, {
-        code,
-        state
-      });
+      const response = await apiClient.post<OAuthResponse>(
+        `${this.baseUrl}/facebook/callback`,
+        {
+          code,
+          state,
+        },
+      );
 
       if (response.success && response.token) {
         // Store auth token
         apiClient.setAuthToken(response.token);
         localStorage.setItem("auth_token", response.token);
-        
+
         // Store user data
         if (response.user) {
           localStorage.setItem("user", JSON.stringify(response.user));
@@ -309,12 +340,12 @@ export class OAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         const authUrl = await this.getFacebookAuthUrl();
-        
+
         // Open popup window
         const popup = window.open(
           authUrl,
-          'facebook-login',
-          'width=500,height=600,scrollbars=yes,resizable=yes'
+          "facebook-login",
+          "width=500,height=600,scrollbars=yes,resizable=yes",
         );
 
         if (!popup) {
@@ -327,37 +358,38 @@ export class OAuthService {
             return;
           }
 
-          if (event.data.type === 'FACEBOOK_AUTH_SUCCESS') {
+          if (event.data.type === "FACEBOOK_AUTH_SUCCESS") {
             const { code, state } = event.data;
-            
+
             try {
               const result = await this.handleFacebookCallback(code, state);
               popup.close();
-              window.removeEventListener('message', handleMessage);
+              window.removeEventListener("message", handleMessage);
               resolve(result);
             } catch (error) {
               popup.close();
-              window.removeEventListener('message', handleMessage);
+              window.removeEventListener("message", handleMessage);
               reject(error);
             }
-          } else if (event.data.type === 'FACEBOOK_AUTH_ERROR') {
+          } else if (event.data.type === "FACEBOOK_AUTH_ERROR") {
             popup.close();
-            window.removeEventListener('message', handleMessage);
-            reject(new Error(event.data.error || 'Facebook authentication failed'));
+            window.removeEventListener("message", handleMessage);
+            reject(
+              new Error(event.data.error || "Facebook authentication failed"),
+            );
           }
         };
 
-        window.addEventListener('message', handleMessage);
+        window.addEventListener("message", handleMessage);
 
         // Check if popup was closed manually
         const checkClosed = setInterval(() => {
           if (popup.closed) {
             clearInterval(checkClosed);
-            window.removeEventListener('message', handleMessage);
-            reject(new Error('Authentication cancelled'));
+            window.removeEventListener("message", handleMessage);
+            reject(new Error("Authentication cancelled"));
           }
         }, 1000);
-
       } catch (error) {
         reject(error);
       }
@@ -369,7 +401,9 @@ export class OAuthService {
    */
   async getAppleAuthUrl(): Promise<string> {
     try {
-      const response = await apiClient.get<OAuthUrlResponse>(`${this.baseUrl}/apple/url`);
+      const response = await apiClient.get<OAuthUrlResponse>(
+        `${this.baseUrl}/apple/url`,
+      );
 
       if (response.success && response.url) {
         return response.url;
@@ -381,33 +415,44 @@ export class OAuthService {
 
       // Handle configuration errors
       if (error.response?.status === 503) {
-        throw new Error("Apple sign-in is currently unavailable. Please try again later or use email/password login.");
+        throw new Error(
+          "Apple sign-in is currently unavailable. Please try again later or use email/password login.",
+        );
       }
 
       if (error.response?.data?.message) {
         throw new Error(error.response.data.message);
       }
 
-      throw new Error("Unable to connect to Apple sign-in service. Please try again.");
+      throw new Error(
+        "Unable to connect to Apple sign-in service. Please try again.",
+      );
     }
   }
 
   /**
    * Handle Apple OAuth callback
    */
-  async handleAppleCallback(code: string, state: string, user?: any): Promise<OAuthResponse> {
+  async handleAppleCallback(
+    code: string,
+    state: string,
+    user?: any,
+  ): Promise<OAuthResponse> {
     try {
-      const response = await apiClient.post<OAuthResponse>(`${this.baseUrl}/apple/callback`, {
-        code,
-        state,
-        user
-      });
+      const response = await apiClient.post<OAuthResponse>(
+        `${this.baseUrl}/apple/callback`,
+        {
+          code,
+          state,
+          user,
+        },
+      );
 
       if (response.success && response.token) {
         // Store auth token
         apiClient.setAuthToken(response.token);
         localStorage.setItem("auth_token", response.token);
-        
+
         // Store user data
         if (response.user) {
           localStorage.setItem("user", JSON.stringify(response.user));
@@ -428,12 +473,12 @@ export class OAuthService {
     return new Promise(async (resolve, reject) => {
       try {
         const authUrl = await this.getAppleAuthUrl();
-        
+
         // Open popup window
         const popup = window.open(
           authUrl,
-          'apple-login',
-          'width=500,height=600,scrollbars=yes,resizable=yes'
+          "apple-login",
+          "width=500,height=600,scrollbars=yes,resizable=yes",
         );
 
         if (!popup) {
@@ -446,37 +491,38 @@ export class OAuthService {
             return;
           }
 
-          if (event.data.type === 'APPLE_AUTH_SUCCESS') {
+          if (event.data.type === "APPLE_AUTH_SUCCESS") {
             const { code, state, user } = event.data;
-            
+
             try {
               const result = await this.handleAppleCallback(code, state, user);
               popup.close();
-              window.removeEventListener('message', handleMessage);
+              window.removeEventListener("message", handleMessage);
               resolve(result);
             } catch (error) {
               popup.close();
-              window.removeEventListener('message', handleMessage);
+              window.removeEventListener("message", handleMessage);
               reject(error);
             }
-          } else if (event.data.type === 'APPLE_AUTH_ERROR') {
+          } else if (event.data.type === "APPLE_AUTH_ERROR") {
             popup.close();
-            window.removeEventListener('message', handleMessage);
-            reject(new Error(event.data.error || 'Apple authentication failed'));
+            window.removeEventListener("message", handleMessage);
+            reject(
+              new Error(event.data.error || "Apple authentication failed"),
+            );
           }
         };
 
-        window.addEventListener('message', handleMessage);
+        window.addEventListener("message", handleMessage);
 
         // Check if popup was closed manually
         const checkClosed = setInterval(() => {
           if (popup.closed) {
             clearInterval(checkClosed);
-            window.removeEventListener('message', handleMessage);
-            reject(new Error('Authentication cancelled'));
+            window.removeEventListener("message", handleMessage);
+            reject(new Error("Authentication cancelled"));
           }
         }, 1000);
-
       } catch (error) {
         reject(error);
       }
@@ -495,21 +541,26 @@ export class OAuthService {
     // But we keep it as a fallback for any edge cases
 
     const urlParams = new URLSearchParams(window.location.search);
-    const error = urlParams.get('error');
+    const error = urlParams.get("error");
 
     if (error) {
       console.error("🔴 OAuth URL error:", error);
       const parentOrigin = window.location.origin;
-      window.opener?.postMessage({
-        type: 'GOOGLE_AUTH_ERROR',
-        error: `Authentication failed: ${error}`
-      }, parentOrigin);
+      window.opener?.postMessage(
+        {
+          type: "GOOGLE_AUTH_ERROR",
+          error: `Authentication failed: ${error}`,
+        },
+        parentOrigin,
+      );
       window.close();
       return;
     }
 
     // If we reach here without an error, the backend should have handled everything
-    console.log("🔵 No error in URL, backend should have handled the OAuth flow");
+    console.log(
+      "🔵 No error in URL, backend should have handled the OAuth flow",
+    );
     console.log("🔵 If popup doesn't close automatically, this is a fallback");
 
     // Fallback: try to close popup after a delay

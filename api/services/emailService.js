@@ -142,11 +142,19 @@ class EmailService {
    */
   async sendPasswordResetEmail(email, resetToken, firstName = "User") {
     try {
-      const resetUrl = `${process.env.FRONTEND_URL || 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev'}/reset-password?token=${resetToken}`;
+      const resetUrl = `${process.env.FRONTEND_URL || "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev"}/reset-password?token=${resetToken}`;
 
       const subject = `Reset Your Password - Faredown Travel`;
-      const htmlContent = this.generatePasswordResetHTML(email, resetUrl, firstName);
-      const textContent = this.generatePasswordResetText(email, resetUrl, firstName);
+      const htmlContent = this.generatePasswordResetHTML(
+        email,
+        resetUrl,
+        firstName,
+      );
+      const textContent = this.generatePasswordResetText(
+        email,
+        resetUrl,
+        firstName,
+      );
 
       const mailOptions = {
         from: {

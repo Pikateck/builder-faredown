@@ -4,28 +4,33 @@
  * This React component serves as a fallback in case direct backend rendering fails
  */
 
-import React, { useEffect } from 'react';
-import { Loader2 } from 'lucide-react';
+import React, { useEffect } from "react";
+import { Loader2 } from "lucide-react";
 
 const GoogleCallback: React.FC = () => {
   useEffect(() => {
-    console.log('🔵 React GoogleCallback component mounted');
-    console.log('🔵 This should normally be handled by backend HTML response');
+    console.log("🔵 React GoogleCallback component mounted");
+    console.log("🔵 This should normally be handled by backend HTML response");
 
     // If we reach this point, it means the backend didn't render the bridge page
     // This is a fallback that tries to close the popup
     if (window.opener) {
-      console.log('🔵 Fallback: Attempting to close popup from React component');
-      window.opener.postMessage({
-        type: 'GOOGLE_AUTH_ERROR',
-        error: 'Authentication flow incomplete. Please try again.'
-      }, '*');
+      console.log(
+        "🔵 Fallback: Attempting to close popup from React component",
+      );
+      window.opener.postMessage(
+        {
+          type: "GOOGLE_AUTH_ERROR",
+          error: "Authentication flow incomplete. Please try again.",
+        },
+        "*",
+      );
 
       setTimeout(() => {
         window.close();
       }, 2000);
     } else {
-      console.log('🔴 No window.opener found in React fallback');
+      console.log("🔴 No window.opener found in React fallback");
       // Redirect to main app as last resort
       setTimeout(() => {
         window.location.href = window.location.origin;
@@ -44,7 +49,8 @@ const GoogleCallback: React.FC = () => {
           Please wait while we complete your sign-in...
         </p>
         <p className="text-sm text-orange-600 mt-4">
-          If this page doesn't close automatically, please close it manually and try again.
+          If this page doesn't close automatically, please close it manually and
+          try again.
         </p>
       </div>
     </div>

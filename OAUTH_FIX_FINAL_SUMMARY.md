@@ -40,7 +40,7 @@ const bridgeHTML = `
 </body>
 </html>`;
 
-res.setHeader('Content-Type', 'text/html');
+res.setHeader("Content-Type", "text/html");
 res.send(bridgeHTML);
 ```
 
@@ -50,29 +50,30 @@ res.send(bridgeHTML);
 
 ```typescript
 // OLD: Expected code/state to process callback manually
-if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
-    const { code, state } = event.data;
-    const result = await this.handleGoogleCallback(code, state);
+if (event.data.type === "GOOGLE_AUTH_SUCCESS") {
+  const { code, state } = event.data;
+  const result = await this.handleGoogleCallback(code, state);
 }
 
 // NEW: Backend already processed everything, just use the data
-if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
-    // Backend already processed callback and created user
-    const result = {
-        success: true,
-        token: event.data.token,
-        user: event.data.user
-    };
-    
-    // Store token and user data
-    localStorage.setItem("auth_token", result.token);
-    localStorage.setItem("user", JSON.stringify(result.user));
+if (event.data.type === "GOOGLE_AUTH_SUCCESS") {
+  // Backend already processed callback and created user
+  const result = {
+    success: true,
+    token: event.data.token,
+    user: event.data.user,
+  };
+
+  // Store token and user data
+  localStorage.setItem("auth_token", result.token);
+  localStorage.setItem("user", JSON.stringify(result.user));
 }
 ```
 
 ### 3. **Correct Redirect URI Configuration**
 
 **Environment Variable Updated**:
+
 ```bash
 GOOGLE_REDIRECT_URI="https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/oauth/google/callback"
 ```
@@ -84,7 +85,7 @@ GOOGLE_REDIRECT_URI="https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab4
 ===================================
 
 ✅ OAuth status: { google: true }
-✅ OAuth URL generated  
+✅ OAuth URL generated
 ✅ State parameter: 13eadf0d23cf25581fca351276ff5618
 ✅ client_id: 832664905965-h8qjvsjm5bbb6g21iug8hmm4f46c2n5u.apps.googleusercontent.com
 ✅ redirect_uri: .../api/oauth/google/callback
@@ -96,7 +97,7 @@ GOOGLE_REDIRECT_URI="https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab4
 ===============================
 ✅ Backend OAuth service is running
 ✅ Google OAuth URL generation works
-✅ State parameter is generated for CSRF protection  
+✅ State parameter is generated for CSRF protection
 ✅ Session management is configured
 ✅ Callback route returns HTML bridge page
 ✅ All OAuth parameters are properly formatted
@@ -105,6 +106,7 @@ GOOGLE_REDIRECT_URI="https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab4
 ## 🔧 **Exact Google Cloud Console Configuration**
 
 ### **Authorized JavaScript Origins:**
+
 ```
 https://builder.io
 https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev
@@ -112,6 +114,7 @@ https://www.faredowntravels.com
 ```
 
 ### **Authorized Redirect URIs:**
+
 ```
 https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/oauth/google/callback
 https://www.faredowntravels.com/api/oauth/google/callback
@@ -123,7 +126,7 @@ https://www.faredowntravels.com/api/oauth/google/callback
 
 ### **What Should Happen Now:**
 
-1. **User clicks "Continue with Google"** 
+1. **User clicks "Continue with Google"**
    → ✅ Popup opens with Google account picker
 
 2. **User selects Google account**
@@ -159,7 +162,7 @@ https://www.faredowntravels.com/api/oauth/google/callback
 - [ ] **After account selection**, popup shows brief "Authentication Successful" message
 - [ ] **Popup closes automatically** after ~1 second
 - [ ] **Auth modal closes immediately** on main page
-- [ ] **Header updates** to show user avatar or initials  
+- [ ] **Header updates** to show user avatar or initials
 - [ ] **"My Account" link works** and shows correct user details
 - [ ] **No console errors** in browser DevTools
 - [ ] **Auth cookie is set** (check Application > Cookies in DevTools)
@@ -167,7 +170,7 @@ https://www.faredowntravels.com/api/oauth/google/callback
 ### **If any step fails:**
 
 1. **Check Google Cloud Console** - Ensure exact URLs are added
-2. **Check browser console** - Look for postMessage or CORS errors  
+2. **Check browser console** - Look for postMessage or CORS errors
 3. **Check Application > Cookies** - Verify auth cookie is set
 4. **Try incognito mode** - Rule out extension interference
 5. **Check popup blockers** - Ensure popups are allowed for your domain
@@ -175,7 +178,7 @@ https://www.faredowntravels.com/api/oauth/google/callback
 ## 🎯 **Files Modified**
 
 1. **`api/routes/oauth.js`** - Fixed callback to render HTML bridge page
-2. **`client/services/oauthService.ts`** - Updated to handle backend-processed messages  
+2. **`client/services/oauthService.ts`** - Updated to handle backend-processed messages
 3. **`client/pages/oauth/GoogleCallback.tsx`** - Simplified as fallback only
 4. **`GOOGLE_OAUTH_CONFIG_GUIDE.md`** - Updated with correct redirect URIs
 5. **Environment variables** - Set correct `GOOGLE_REDIRECT_URI`
@@ -187,7 +190,7 @@ https://www.faredowntravels.com/api/oauth/google/callback
 ✅ **Cookie configuration** - `SameSite=None; Secure` for iframe compatibility  
 ✅ **Cross-origin support** - Works in Builder.io preview and direct URL  
 ✅ **Error handling** - Clear error messages if anything fails  
-✅ **UI updates** - Immediate login state change after successful auth  
+✅ **UI updates** - Immediate login state change after successful auth
 
 **🎉 The Google OAuth flow is now completely functional and ready for production use!**
 
@@ -195,7 +198,7 @@ https://www.faredowntravels.com/api/oauth/google/callback
 
 ## 📝 **Stern Note Response for Zubin**
 
-*Subject: Google OAuth Fixed - Complete Working Implementation*
+_Subject: Google OAuth Fixed - Complete Working Implementation_
 
 Google OAuth is now **completely functional**. I've implemented the exact technical fixes you requested:
 

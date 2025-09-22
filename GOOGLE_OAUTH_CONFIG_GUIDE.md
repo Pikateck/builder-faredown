@@ -69,7 +69,7 @@ The OAuth implementation now includes proper cookie settings:
 2. **Popup**: Opens `/oauth/google/url` in a centered popup window
 3. **Backend**: Generates secure auth URL with state parameter
 4. **Google**: User authenticates and grants permissions
-5. **Callback**: Google redirects to `/oauth/google/callback` 
+5. **Callback**: Google redirects to `/oauth/google/callback`
 6. **State Validation**: Backend validates CSRF state parameter
 7. **User Creation**: Create or retrieve user from database
 8. **JWT Token**: Generate and set secure authentication cookie

@@ -16,21 +16,25 @@ const router = express.Router();
 const oauthStateStore = new Map(); // state -> { created: timestamp, data: any }
 
 // Clean up expired states every 5 minutes
-setInterval(() => {
-  const now = Date.now();
-  const expiredStates = [];
+setInterval(
+  () => {
+    const now = Date.now();
+    const expiredStates = [];
 
-  for (const [state, data] of oauthStateStore.entries()) {
-    if (now - data.created > 10 * 60 * 1000) { // 10 minutes
-      expiredStates.push(state);
+    for (const [state, data] of oauthStateStore.entries()) {
+      if (now - data.created > 10 * 60 * 1000) {
+        // 10 minutes
+        expiredStates.push(state);
+      }
     }
-  }
 
-  expiredStates.forEach(state => oauthStateStore.delete(state));
-  if (expiredStates.length > 0) {
-    console.log(`🧹 Cleaned up ${expiredStates.length} expired OAuth states`);
-  }
-}, 5 * 60 * 1000);
+    expiredStates.forEach((state) => oauthStateStore.delete(state));
+    if (expiredStates.length > 0) {
+      console.log(`🧹 Cleaned up ${expiredStates.length} expired OAuth states`);
+    }
+  },
+  5 * 60 * 1000,
+);
 
 // Helper functions for state management
 const storeState = (state) => {
@@ -46,26 +50,37 @@ const validateAndConsumeState = (state) => {
   }
 
   const now = Date.now();
-  if (now - data.created > 10 * 60 * 1000) { // 10 minutes
+  if (now - data.created > 10 * 60 * 1000) {
+    // 10 minutes
     console.log(`🔴 OAuth state expired: ${state.substring(0, 8)}...`);
     oauthStateStore.delete(state);
     return false;
   }
 
   oauthStateStore.delete(state);
-  console.log(`✅ OAuth state validated and consumed: ${state.substring(0, 8)}...`);
+  console.log(
+    `✅ OAuth state validated and consumed: ${state.substring(0, 8)}...`,
+  );
   return true;
 };
 
 // OAuth environment validation
-const isGoogleConfigured = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
-const isFacebookConfigured = !!(process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET);
-const isAppleConfigured = !!(process.env.APPLE_TEAM_ID && process.env.APPLE_KEY_ID && process.env.APPLE_SERVICE_ID);
+const isGoogleConfigured = !!(
+  process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+);
+const isFacebookConfigured = !!(
+  process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET
+);
+const isAppleConfigured = !!(
+  process.env.APPLE_TEAM_ID &&
+  process.env.APPLE_KEY_ID &&
+  process.env.APPLE_SERVICE_ID
+);
 
 console.log("OAuth Configuration Status:", {
   google: isGoogleConfigured,
   facebook: isFacebookConfigured,
-  apple: isAppleConfigured
+  apple: isAppleConfigured,
 });
 
 // OAuth clients setup (only if configured)
@@ -75,26 +90,33 @@ if (isGoogleConfigured) {
     // Builder.io preview environment
     `${process.env.VITE_API_BASE_URL || process.env.API_BASE_URL}/oauth/google/callback`,
     // Production domain
-    'https://www.faredowntravels.com/oauth/google/callback',
+    "https://www.faredowntravels.com/oauth/google/callback",
     // Staging/render environment
-    'https://faredown-web.onrender.com/oauth/google/callback',
+    "https://faredown-web.onrender.com/oauth/google/callback",
     // Local development
-    'http://localhost:3000/oauth/google/callback',
-    'http://localhost:5173/oauth/google/callback'
+    "http://localhost:3000/oauth/google/callback",
+    "http://localhost:5173/oauth/google/callback",
   ];
 
   // Use the API redirect URI path
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.VITE_API_BASE_URL || process.env.API_BASE_URL}/oauth/google/callback`;
+  const redirectUri =
+    process.env.GOOGLE_REDIRECT_URI ||
+    `${process.env.VITE_API_BASE_URL || process.env.API_BASE_URL}/oauth/google/callback`;
 
   googleClient = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
     process.env.GOOGLE_CLIENT_SECRET,
-    redirectUri
+    redirectUri,
   );
-  console.log("✅ Google OAuth client initialized with redirect URI:", redirectUri);
+  console.log(
+    "✅ Google OAuth client initialized with redirect URI:",
+    redirectUri,
+  );
   console.log("📋 Configured redirect URIs should include:", redirectUris);
 } else {
-  console.log("⚠️ Google OAuth not configured - missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET");
+  console.log(
+    "⚠️ Google OAuth not configured - missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET",
+  );
 }
 
 // Helper function to generate JWT token
@@ -108,7 +130,7 @@ const generateToken = (user) => {
       department: user.department,
     },
     process.env.JWT_SECRET || "fallback-secret-key",
-    { expiresIn: process.env.JWT_EXPIRY || "24h" }
+    { expiresIn: process.env.JWT_EXPIRY || "24h" },
   );
 };
 
@@ -131,13 +153,14 @@ const createOrGetSocialUser = async (profile, provider) => {
   // Create new user with email-based structure
   const user = {
     id: `${provider}_${profile.id}`,
-    firstName: profile.given_name || profile.name?.split(' ')[0] || 'User',
-    lastName: profile.family_name || profile.name?.split(' ').slice(1).join(' ') || '',
+    firstName: profile.given_name || profile.name?.split(" ")[0] || "User",
+    lastName:
+      profile.family_name || profile.name?.split(" ").slice(1).join(" ") || "",
     email: profile.email,
     password: null, // Social login users don't have passwords
     provider: provider,
     providerId: profile.id,
-    role: 'user',
+    role: "user",
     department: null,
     isActive: true,
     lastLogin: new Date(),
@@ -169,40 +192,43 @@ router.get("/google/url", (req, res) => {
       console.log("🔴 Google OAuth not configured");
       return res.status(503).json({
         success: false,
-        message: "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.",
-        error: "SERVICE_UNAVAILABLE"
+        message:
+          "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.",
+        error: "SERVICE_UNAVAILABLE",
       });
     }
 
     const scopes = [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile'
+      "https://www.googleapis.com/auth/userinfo.email",
+      "https://www.googleapis.com/auth/userinfo.profile",
     ];
 
-    const state = crypto.randomBytes(16).toString('hex');
+    const state = crypto.randomBytes(16).toString("hex");
 
     const authUrl = googleClient.generateAuthUrl({
-      access_type: 'offline',
+      access_type: "offline",
       scope: scopes,
       state: state,
-      include_granted_scopes: true
+      include_granted_scopes: true,
     });
 
     // Store state in our reliable in-memory store
     storeState(state);
 
-    console.log(`✅ Generated Google OAuth URL with state: ${state.substring(0, 8)}...`);
+    console.log(
+      `✅ Generated Google OAuth URL with state: ${state.substring(0, 8)}...`,
+    );
 
     res.json({
       success: true,
       url: authUrl,
-      state: state
+      state: state,
     });
   } catch (error) {
     console.error("🔴 Google OAuth URL generation error:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to generate Google OAuth URL"
+      message: "Failed to generate Google OAuth URL",
     });
   }
 });
@@ -221,7 +247,10 @@ router.get("/google/url", (req, res) => {
 router.get("/google/callback", async (req, res) => {
   try {
     console.log("🔵 Google OAuth GET callback received");
-    console.log("🔵 Query params:", { code: req.query.code?.substring(0, 20) + "...", state: req.query.state });
+    console.log("🔵 Query params:", {
+      code: req.query.code?.substring(0, 20) + "...",
+      state: req.query.state,
+    });
 
     // Check if Google OAuth is configured
     if (!isGoogleConfigured || !googleClient) {
@@ -229,7 +258,7 @@ router.get("/google/callback", async (req, res) => {
       return res.status(503).json({
         success: false,
         message: "Google OAuth is not configured",
-        error: "SERVICE_UNAVAILABLE"
+        error: "SERVICE_UNAVAILABLE",
       });
     }
 
@@ -239,7 +268,7 @@ router.get("/google/callback", async (req, res) => {
       console.error("🔴 Missing authorization code");
       return res.status(400).json({
         success: false,
-        message: "Authorization code is required"
+        message: "Authorization code is required",
       });
     }
 
@@ -250,7 +279,7 @@ router.get("/google/callback", async (req, res) => {
       console.error("🔴 No state parameter provided");
       return res.status(400).json({
         success: false,
-        message: "Missing state parameter. Please try again."
+        message: "Missing state parameter. Please try again.",
       });
     }
 
@@ -258,14 +287,17 @@ router.get("/google/callback", async (req, res) => {
       console.error("🔴 Invalid or expired OAuth state");
       return res.status(400).json({
         success: false,
-        message: "OAuth session expired or invalid. Please try again."
+        message: "OAuth session expired or invalid. Please try again.",
       });
     }
 
     console.log("🔵 Exchanging code for tokens...");
     // Exchange code for tokens
     const { tokens } = await googleClient.getToken(code);
-    console.log("🔵 Tokens received:", { id_token: !!tokens.id_token, access_token: !!tokens.access_token });
+    console.log("🔵 Tokens received:", {
+      id_token: !!tokens.id_token,
+      access_token: !!tokens.access_token,
+    });
 
     googleClient.setCredentials(tokens);
 
@@ -273,7 +305,7 @@ router.get("/google/callback", async (req, res) => {
     // Get user info
     const ticket = await googleClient.verifyIdToken({
       idToken: tokens.id_token,
-      audience: process.env.GOOGLE_CLIENT_ID
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
@@ -281,22 +313,28 @@ router.get("/google/callback", async (req, res) => {
       sub: payload.sub,
       email: payload.email,
       name: payload.name,
-      email_verified: payload.email_verified
+      email_verified: payload.email_verified,
     });
 
     console.log("🔵 Creating/getting social user...");
     // Create or get user
-    const user = await createOrGetSocialUser({
-      id: payload.sub,
-      email: payload.email,
-      name: payload.name,
-      given_name: payload.given_name,
-      family_name: payload.family_name,
-      picture: payload.picture,
-      email_verified: payload.email_verified
-    }, 'google');
+    const user = await createOrGetSocialUser(
+      {
+        id: payload.sub,
+        email: payload.email,
+        name: payload.name,
+        given_name: payload.given_name,
+        family_name: payload.family_name,
+        picture: payload.picture,
+        email_verified: payload.email_verified,
+      },
+      "google",
+    );
 
-    console.log("🔵 User created/retrieved:", { id: user.id, email: user.email });
+    console.log("🔵 User created/retrieved:", {
+      id: user.id,
+      email: user.email,
+    });
 
     console.log("🔵 Generating JWT token...");
     // Generate JWT token
@@ -305,20 +343,27 @@ router.get("/google/callback", async (req, res) => {
     // Set authentication cookie for session persistence
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      domain: process.env.NODE_ENV === 'production' ? '.faredowntravels.com' : undefined
+      domain:
+        process.env.NODE_ENV === "production"
+          ? ".faredowntravels.com"
+          : undefined,
     };
 
-    res.cookie('auth_token', token, cookieOptions);
+    res.cookie("auth_token", token, cookieOptions);
 
-    console.log("✅ Google OAuth callback successful:", { userId: user.id, email: user.email });
+    console.log("✅ Google OAuth callback successful:", {
+      userId: user.id,
+      email: user.email,
+    });
 
     // Determine parent origin based on environment
-    const parentOrigin = process.env.NODE_ENV === 'production'
-      ? 'https://www.faredowntravels.com'
-      : 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev';
+    const parentOrigin =
+      process.env.NODE_ENV === "production"
+        ? "https://www.faredowntravels.com"
+        : "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev";
 
     // Render HTML bridge page that communicates with popup opener
     const bridgeHTML = `
@@ -402,16 +447,16 @@ router.get("/google/callback", async (req, res) => {
 </body>
 </html>`;
 
-    res.setHeader('Content-Type', 'text/html');
+    res.setHeader("Content-Type", "text/html");
     res.send(bridgeHTML);
-
   } catch (error) {
     console.error("🔴 Google OAuth GET callback error:", error);
 
     // Determine parent origin based on environment
-    const parentOrigin = process.env.NODE_ENV === 'production'
-      ? 'https://www.faredowntravels.com'
-      : 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev';
+    const parentOrigin =
+      process.env.NODE_ENV === "production"
+        ? "https://www.faredowntravels.com"
+        : "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev";
 
     // Render HTML bridge page for error communication
     const errorHTML = `
@@ -484,7 +529,7 @@ router.get("/google/callback", async (req, res) => {
 </body>
 </html>`;
 
-    res.setHeader('Content-Type', 'text/html');
+    res.setHeader("Content-Type", "text/html");
     res.send(errorHTML);
   }
 });
@@ -505,7 +550,10 @@ router.get("/google/callback", async (req, res) => {
 router.post("/google/callback", async (req, res) => {
   try {
     console.log("🔵 Google OAuth callback received");
-    console.log("🔵 Request body:", { code: req.body.code?.substring(0, 20) + "...", state: req.body.state });
+    console.log("🔵 Request body:", {
+      code: req.body.code?.substring(0, 20) + "...",
+      state: req.body.state,
+    });
 
     // Check if Google OAuth is configured
     if (!isGoogleConfigured || !googleClient) {
@@ -513,7 +561,7 @@ router.post("/google/callback", async (req, res) => {
       return res.status(503).json({
         success: false,
         message: "Google OAuth is not configured",
-        error: "SERVICE_UNAVAILABLE"
+        error: "SERVICE_UNAVAILABLE",
       });
     }
 
@@ -523,7 +571,7 @@ router.post("/google/callback", async (req, res) => {
       console.error("🔴 Missing authorization code");
       return res.status(400).json({
         success: false,
-        message: "Authorization code is required"
+        message: "Authorization code is required",
       });
     }
 
@@ -534,7 +582,7 @@ router.post("/google/callback", async (req, res) => {
       console.error("🔴 No state parameter provided");
       return res.status(400).json({
         success: false,
-        message: "Missing state parameter. Please try again."
+        message: "Missing state parameter. Please try again.",
       });
     }
 
@@ -542,14 +590,17 @@ router.post("/google/callback", async (req, res) => {
       console.error("🔴 Invalid or expired OAuth state");
       return res.status(400).json({
         success: false,
-        message: "OAuth session expired or invalid. Please try again."
+        message: "OAuth session expired or invalid. Please try again.",
       });
     }
 
     console.log("🔵 Exchanging code for tokens...");
     // Exchange code for tokens
     const { tokens } = await googleClient.getToken(code);
-    console.log("🔵 Tokens received:", { id_token: !!tokens.id_token, access_token: !!tokens.access_token });
+    console.log("🔵 Tokens received:", {
+      id_token: !!tokens.id_token,
+      access_token: !!tokens.access_token,
+    });
 
     googleClient.setCredentials(tokens);
 
@@ -557,7 +608,7 @@ router.post("/google/callback", async (req, res) => {
     // Get user info
     const ticket = await googleClient.verifyIdToken({
       idToken: tokens.id_token,
-      audience: process.env.GOOGLE_CLIENT_ID
+      audience: process.env.GOOGLE_CLIENT_ID,
     });
 
     const payload = ticket.getPayload();
@@ -565,22 +616,28 @@ router.post("/google/callback", async (req, res) => {
       sub: payload.sub,
       email: payload.email,
       name: payload.name,
-      email_verified: payload.email_verified
+      email_verified: payload.email_verified,
     });
 
     console.log("🔵 Creating/getting social user...");
     // Create or get user
-    const user = await createOrGetSocialUser({
-      id: payload.sub,
-      email: payload.email,
-      name: payload.name,
-      given_name: payload.given_name,
-      family_name: payload.family_name,
-      picture: payload.picture,
-      email_verified: payload.email_verified
-    }, 'google');
+    const user = await createOrGetSocialUser(
+      {
+        id: payload.sub,
+        email: payload.email,
+        name: payload.name,
+        given_name: payload.given_name,
+        family_name: payload.family_name,
+        picture: payload.picture,
+        email_verified: payload.email_verified,
+      },
+      "google",
+    );
 
-    console.log("🔵 User created/retrieved:", { id: user.id, email: user.email });
+    console.log("🔵 User created/retrieved:", {
+      id: user.id,
+      email: user.email,
+    });
 
     console.log("🔵 Generating JWT token...");
     // Generate JWT token
@@ -589,20 +646,27 @@ router.post("/google/callback", async (req, res) => {
     // Set authentication cookie for session persistence
     const cookieOptions = {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: process.env.NODE_ENV === "production" ? "none" : "lax",
       maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
-      domain: process.env.NODE_ENV === 'production' ? '.faredowntravels.com' : undefined
+      domain:
+        process.env.NODE_ENV === "production"
+          ? ".faredowntravels.com"
+          : undefined,
     };
 
-    res.cookie('auth_token', token, cookieOptions);
+    res.cookie("auth_token", token, cookieOptions);
 
-    console.log("✅ Google OAuth callback successful:", { userId: user.id, email: user.email });
+    console.log("✅ Google OAuth callback successful:", {
+      userId: user.id,
+      email: user.email,
+    });
 
     // Determine parent origin based on environment
-    const parentOrigin = process.env.NODE_ENV === 'production'
-      ? 'https://www.faredowntravels.com'
-      : 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev';
+    const parentOrigin =
+      process.env.NODE_ENV === "production"
+        ? "https://www.faredowntravels.com"
+        : "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev";
 
     // Render HTML bridge page that communicates with popup opener
     const bridgeHTML = `
@@ -686,16 +750,16 @@ router.post("/google/callback", async (req, res) => {
 </body>
 </html>`;
 
-    res.setHeader('Content-Type', 'text/html');
+    res.setHeader("Content-Type", "text/html");
     res.send(bridgeHTML);
-
   } catch (error) {
     console.error("🔴 Google OAuth callback error:", error);
 
     // Determine parent origin based on environment
-    const parentOrigin = process.env.NODE_ENV === 'production'
-      ? 'https://www.faredowntravels.com'
-      : 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev';
+    const parentOrigin =
+      process.env.NODE_ENV === "production"
+        ? "https://www.faredowntravels.com"
+        : "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev";
 
     // Render HTML bridge page for error communication
     const errorHTML = `
@@ -768,7 +832,7 @@ router.post("/google/callback", async (req, res) => {
 </body>
 </html>`;
 
-    res.setHeader('Content-Type', 'text/html');
+    res.setHeader("Content-Type", "text/html");
     res.send(errorHTML);
   }
 });
@@ -787,21 +851,24 @@ router.get("/facebook/url", (req, res) => {
     if (!isFacebookConfigured) {
       return res.status(503).json({
         success: false,
-        message: "Facebook OAuth is not configured. Please set FACEBOOK_APP_ID and FACEBOOK_APP_SECRET environment variables.",
-        error: "SERVICE_UNAVAILABLE"
+        message:
+          "Facebook OAuth is not configured. Please set FACEBOOK_APP_ID and FACEBOOK_APP_SECRET environment variables.",
+        error: "SERVICE_UNAVAILABLE",
       });
     }
 
-    const baseUrl = 'https://www.facebook.com/v18.0/dialog/oauth';
-    const redirectUri = process.env.FACEBOOK_REDIRECT_URI || `${process.env.API_BASE_URL}/oauth/facebook/callback`;
-    const state = crypto.randomBytes(16).toString('hex');
-    
+    const baseUrl = "https://www.facebook.com/v18.0/dialog/oauth";
+    const redirectUri =
+      process.env.FACEBOOK_REDIRECT_URI ||
+      `${process.env.API_BASE_URL}/oauth/facebook/callback`;
+    const state = crypto.randomBytes(16).toString("hex");
+
     const params = new URLSearchParams({
       client_id: process.env.FACEBOOK_APP_ID,
       redirect_uri: redirectUri,
       state: state,
-      scope: 'email,public_profile',
-      response_type: 'code'
+      scope: "email,public_profile",
+      response_type: "code",
     });
 
     const authUrl = `${baseUrl}?${params.toString()}`;
@@ -813,13 +880,13 @@ router.get("/facebook/url", (req, res) => {
     res.json({
       success: true,
       url: authUrl,
-      state: state
+      state: state,
     });
   } catch (error) {
     console.error("Facebook OAuth URL generation error:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to generate Facebook OAuth URL"
+      message: "Failed to generate Facebook OAuth URL",
     });
   }
 });
@@ -844,7 +911,7 @@ router.post("/facebook/callback", async (req, res) => {
       return res.status(503).json({
         success: false,
         message: "Facebook OAuth is not configured",
-        error: "SERVICE_UNAVAILABLE"
+        error: "SERVICE_UNAVAILABLE",
       });
     }
 
@@ -853,7 +920,7 @@ router.post("/facebook/callback", async (req, res) => {
     if (!code) {
       return res.status(400).json({
         success: false,
-        message: "Authorization code is required"
+        message: "Authorization code is required",
       });
     }
 
@@ -861,43 +928,54 @@ router.post("/facebook/callback", async (req, res) => {
     if (req.session?.oauthState && req.session.oauthState !== state) {
       return res.status(400).json({
         success: false,
-        message: "Invalid state parameter"
+        message: "Invalid state parameter",
       });
     }
 
-    const redirectUri = process.env.FACEBOOK_REDIRECT_URI || `${process.env.API_BASE_URL}/auth/facebook/callback`;
+    const redirectUri =
+      process.env.FACEBOOK_REDIRECT_URI ||
+      `${process.env.API_BASE_URL}/auth/facebook/callback`;
 
     // Exchange code for access token
-    const tokenResponse = await axios.get('https://graph.facebook.com/v18.0/oauth/access_token', {
-      params: {
-        client_id: process.env.FACEBOOK_APP_ID,
-        client_secret: process.env.FACEBOOK_APP_SECRET,
-        code: code,
-        redirect_uri: redirectUri
-      }
-    });
+    const tokenResponse = await axios.get(
+      "https://graph.facebook.com/v18.0/oauth/access_token",
+      {
+        params: {
+          client_id: process.env.FACEBOOK_APP_ID,
+          client_secret: process.env.FACEBOOK_APP_SECRET,
+          code: code,
+          redirect_uri: redirectUri,
+        },
+      },
+    );
 
     const accessToken = tokenResponse.data.access_token;
 
     // Get user profile
-    const profileResponse = await axios.get('https://graph.facebook.com/v18.0/me', {
-      params: {
-        access_token: accessToken,
-        fields: 'id,name,email,first_name,last_name,picture'
-      }
-    });
+    const profileResponse = await axios.get(
+      "https://graph.facebook.com/v18.0/me",
+      {
+        params: {
+          access_token: accessToken,
+          fields: "id,name,email,first_name,last_name,picture",
+        },
+      },
+    );
 
     const profile = profileResponse.data;
 
     // Create or get user
-    const user = await createOrGetSocialUser({
-      id: profile.id,
-      email: profile.email,
-      name: profile.name,
-      given_name: profile.first_name,
-      family_name: profile.last_name,
-      picture: profile.picture?.data?.url
-    }, 'facebook');
+    const user = await createOrGetSocialUser(
+      {
+        id: profile.id,
+        email: profile.email,
+        name: profile.name,
+        given_name: profile.first_name,
+        family_name: profile.last_name,
+        picture: profile.picture?.data?.url,
+      },
+      "facebook",
+    );
 
     // Generate JWT token
     const token = generateToken(user);
@@ -911,15 +989,14 @@ router.post("/facebook/callback", async (req, res) => {
         username: user.username,
         email: user.email,
         role: user.role,
-        provider: user.provider
-      }
+        provider: user.provider,
+      },
     });
-
   } catch (error) {
     console.error("Facebook OAuth callback error:", error);
     res.status(500).json({
       success: false,
-      message: "Facebook authentication failed"
+      message: "Facebook authentication failed",
     });
   }
 });
@@ -938,22 +1015,25 @@ router.get("/apple/url", (req, res) => {
     if (!isAppleConfigured) {
       return res.status(503).json({
         success: false,
-        message: "Apple OAuth is not configured. Please set APPLE_TEAM_ID, APPLE_KEY_ID, and APPLE_SERVICE_ID environment variables.",
-        error: "SERVICE_UNAVAILABLE"
+        message:
+          "Apple OAuth is not configured. Please set APPLE_TEAM_ID, APPLE_KEY_ID, and APPLE_SERVICE_ID environment variables.",
+        error: "SERVICE_UNAVAILABLE",
       });
     }
 
-    const baseUrl = 'https://appleid.apple.com/auth/authorize';
-    const redirectUri = process.env.APPLE_REDIRECT_URI || `${process.env.API_BASE_URL}/oauth/apple/callback`;
-    const state = crypto.randomBytes(16).toString('hex');
-    
+    const baseUrl = "https://appleid.apple.com/auth/authorize";
+    const redirectUri =
+      process.env.APPLE_REDIRECT_URI ||
+      `${process.env.API_BASE_URL}/oauth/apple/callback`;
+    const state = crypto.randomBytes(16).toString("hex");
+
     const params = new URLSearchParams({
       client_id: process.env.APPLE_SERVICE_ID,
       redirect_uri: redirectUri,
       state: state,
-      scope: 'name email',
-      response_type: 'code',
-      response_mode: 'form_post'
+      scope: "name email",
+      response_type: "code",
+      response_mode: "form_post",
     });
 
     const authUrl = `${baseUrl}?${params.toString()}`;
@@ -965,13 +1045,13 @@ router.get("/apple/url", (req, res) => {
     res.json({
       success: true,
       url: authUrl,
-      state: state
+      state: state,
     });
   } catch (error) {
     console.error("Apple OAuth URL generation error:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to generate Apple OAuth URL"
+      message: "Failed to generate Apple OAuth URL",
     });
   }
 });
@@ -997,7 +1077,7 @@ router.post("/apple/callback", async (req, res) => {
       return res.status(503).json({
         success: false,
         message: "Apple OAuth is not configured",
-        error: "SERVICE_UNAVAILABLE"
+        error: "SERVICE_UNAVAILABLE",
       });
     }
 
@@ -1006,7 +1086,7 @@ router.post("/apple/callback", async (req, res) => {
     if (!code) {
       return res.status(400).json({
         success: false,
-        message: "Authorization code is required"
+        message: "Authorization code is required",
       });
     }
 
@@ -1014,7 +1094,7 @@ router.post("/apple/callback", async (req, res) => {
     if (req.session?.oauthState && req.session.oauthState !== state) {
       return res.status(400).json({
         success: false,
-        message: "Invalid state parameter"
+        message: "Invalid state parameter",
       });
     }
 
@@ -1022,45 +1102,55 @@ router.post("/apple/callback", async (req, res) => {
     const clientSecret = generateAppleClientSecret();
 
     // Exchange code for tokens
-    const tokenResponse = await axios.post('https://appleid.apple.com/auth/token', 
+    const tokenResponse = await axios.post(
+      "https://appleid.apple.com/auth/token",
       new URLSearchParams({
         client_id: process.env.APPLE_SERVICE_ID,
         client_secret: clientSecret,
         code: code,
-        grant_type: 'authorization_code',
-        redirect_uri: process.env.APPLE_REDIRECT_URI || `${process.env.API_BASE_URL}/auth/apple/callback`
-      }), {
+        grant_type: "authorization_code",
+        redirect_uri:
+          process.env.APPLE_REDIRECT_URI ||
+          `${process.env.API_BASE_URL}/auth/apple/callback`,
+      }),
+      {
         headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        }
-      }
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      },
     );
 
     const { id_token } = tokenResponse.data;
 
     // Decode the ID token to get user info
     const payload = jwt.decode(id_token);
-    
+
     // Parse user data if provided (first-time authorization)
     let userInfo = {};
     if (userData) {
-      const parsedUserData = typeof userData === 'string' ? JSON.parse(userData) : userData;
+      const parsedUserData =
+        typeof userData === "string" ? JSON.parse(userData) : userData;
       userInfo = {
-        name: parsedUserData.name ? `${parsedUserData.name.firstName} ${parsedUserData.name.lastName}` : '',
-        given_name: parsedUserData.name?.firstName || '',
-        family_name: parsedUserData.name?.lastName || ''
+        name: parsedUserData.name
+          ? `${parsedUserData.name.firstName} ${parsedUserData.name.lastName}`
+          : "",
+        given_name: parsedUserData.name?.firstName || "",
+        family_name: parsedUserData.name?.lastName || "",
       };
     }
 
     // Create or get user
-    const user = await createOrGetSocialUser({
-      id: payload.sub,
-      email: payload.email,
-      name: userInfo.name || payload.email?.split('@')[0] || 'Apple User',
-      given_name: userInfo.given_name,
-      family_name: userInfo.family_name,
-      email_verified: payload.email_verified
-    }, 'apple');
+    const user = await createOrGetSocialUser(
+      {
+        id: payload.sub,
+        email: payload.email,
+        name: userInfo.name || payload.email?.split("@")[0] || "Apple User",
+        given_name: userInfo.given_name,
+        family_name: userInfo.family_name,
+        email_verified: payload.email_verified,
+      },
+      "apple",
+    );
 
     // Generate JWT token
     const token = generateToken(user);
@@ -1074,15 +1164,14 @@ router.post("/apple/callback", async (req, res) => {
         username: user.username,
         email: user.email,
         role: user.role,
-        provider: user.provider
-      }
+        provider: user.provider,
+      },
     });
-
   } catch (error) {
     console.error("Apple OAuth callback error:", error);
     res.status(500).json({
       success: false,
-      message: "Apple authentication failed"
+      message: "Apple authentication failed",
     });
   }
 });
@@ -1090,23 +1179,23 @@ router.post("/apple/callback", async (req, res) => {
 // Helper function to generate Apple client secret
 function generateAppleClientSecret() {
   const header = {
-    alg: 'ES256',
-    kid: process.env.APPLE_KEY_ID
+    alg: "ES256",
+    kid: process.env.APPLE_KEY_ID,
   };
 
   const payload = {
     iss: process.env.APPLE_TEAM_ID,
     iat: Math.floor(Date.now() / 1000),
-    exp: Math.floor(Date.now() / 1000) + (6 * 30 * 24 * 60 * 60), // 6 months
-    aud: 'https://appleid.apple.com',
-    sub: process.env.APPLE_SERVICE_ID
+    exp: Math.floor(Date.now() / 1000) + 6 * 30 * 24 * 60 * 60, // 6 months
+    aud: "https://appleid.apple.com",
+    sub: process.env.APPLE_SERVICE_ID,
   };
 
   // In a real implementation, you would use the Apple private key to sign this JWT
   // For now, we'll return a placeholder
-  return jwt.sign(payload, process.env.APPLE_PRIVATE_KEY || 'placeholder', { 
-    algorithm: 'ES256',
-    header: header
+  return jwt.sign(payload, process.env.APPLE_PRIVATE_KEY || "placeholder", {
+    algorithm: "ES256",
+    header: header,
   });
 }
 

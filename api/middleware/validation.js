@@ -19,12 +19,9 @@ const schemas = {
 
   register: Joi.object({
     email: Joi.string().email().required(),
-    password: Joi.string()
-      .min(8)
-      .required()
-      .messages({
-        "string.min": "Password must be at least 8 characters long",
-      }),
+    password: Joi.string().min(8).required().messages({
+      "string.min": "Password must be at least 8 characters long",
+    }),
     firstName: Joi.string().min(1).max(50).required(),
     lastName: Joi.string().min(1).max(50).required(),
     role: Joi.string()

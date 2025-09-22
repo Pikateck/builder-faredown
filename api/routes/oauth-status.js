@@ -7,9 +7,17 @@ const express = require("express");
 const router = express.Router();
 
 // OAuth environment validation
-const isGoogleConfigured = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
-const isFacebookConfigured = !!(process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET);
-const isAppleConfigured = !!(process.env.APPLE_TEAM_ID && process.env.APPLE_KEY_ID && process.env.APPLE_SERVICE_ID);
+const isGoogleConfigured = !!(
+  process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+);
+const isFacebookConfigured = !!(
+  process.env.FACEBOOK_APP_ID && process.env.FACEBOOK_APP_SECRET
+);
+const isAppleConfigured = !!(
+  process.env.APPLE_TEAM_ID &&
+  process.env.APPLE_KEY_ID &&
+  process.env.APPLE_SERVICE_ID
+);
 
 /**
  * @api {get} /api/oauth/status Get OAuth Configuration Status
@@ -27,9 +35,9 @@ router.get("/status", (req, res) => {
     oauth: {
       google: isGoogleConfigured,
       facebook: isFacebookConfigured,
-      apple: isAppleConfigured
+      apple: isAppleConfigured,
     },
-    message: "OAuth configuration status retrieved successfully"
+    message: "OAuth configuration status retrieved successfully",
   });
 });
 

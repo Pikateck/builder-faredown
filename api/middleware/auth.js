@@ -355,7 +355,7 @@ const getUserByEmail = (email) => {
  */
 const getUserByUsername = (username) => {
   // For backward compatibility, try to find by email if username looks like email
-  if (username.includes('@')) {
+  if (username.includes("@")) {
     return users.get(username);
   }
 
@@ -387,7 +387,7 @@ const createUser = async (userData) => {
     console.log("🔵 Password hashed successfully");
 
     const user = {
-      id: userData.email.split('@')[0] + '_' + Date.now(), // Generate unique ID
+      id: userData.email.split("@")[0] + "_" + Date.now(), // Generate unique ID
       firstName: userData.firstName,
       lastName: userData.lastName,
       email: userData.email,
@@ -399,7 +399,11 @@ const createUser = async (userData) => {
       lastLogin: null,
     };
 
-    console.log("🔵 User object created:", { id: user.id, email: user.email, role: user.role });
+    console.log("🔵 User object created:", {
+      id: user.id,
+      email: user.email,
+      role: user.role,
+    });
 
     // Store user in the users Map
     users.set(user.email, user); // Use email as the key
