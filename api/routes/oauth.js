@@ -380,11 +380,86 @@ router.post("/google/callback", async (req, res) => {
     res.send(bridgeHTML);
 
   } catch (error) {
-    console.error("Google OAuth callback error:", error);
-    res.status(500).json({
-      success: false,
-      message: "Google authentication failed"
-    });
+    console.error("🔴 Google OAuth callback error:", error);
+
+    // Determine parent origin based on environment
+    const parentOrigin = process.env.NODE_ENV === 'production'
+      ? 'https://www.faredowntravels.com'
+      : 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev';
+
+    // Render HTML bridge page for error communication
+    const errorHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authentication Failed</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f8fafc;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .error {
+            color: #ef4444;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .message {
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error">✗ Authentication Failed</div>
+        <div class="message">Please try again</div>
+    </div>
+    <script>
+        console.log('🔴 OAuth error bridge page loaded');
+        console.log('🔴 Error:', '${error.message}');
+
+        // Send error message to parent window
+        if (window.opener) {
+            const message = {
+                type: 'GOOGLE_AUTH_ERROR',
+                error: 'Google authentication failed. Please try again.'
+            };
+
+            console.log('🔴 Sending error message:', message);
+            window.opener.postMessage(message, '${parentOrigin}');
+
+            // Also try Builder.io origin if different
+            if ('${parentOrigin}' !== 'https://builder.io') {
+                window.opener.postMessage(message, 'https://builder.io');
+            }
+
+            // Close the popup after a short delay
+            setTimeout(() => {
+                window.close();
+            }, 3000);
+        } else {
+            // Fallback: redirect to main app with error
+            setTimeout(() => {
+                window.location.href = '${parentOrigin}?error=oauth_failed';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>`;
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(errorHTML);
   }
 });
 
