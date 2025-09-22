@@ -39,6 +39,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
 
   const resetForm = () => {
     setFormData({
+      username: "",
       email: "",
       password: "",
       confirmPassword: "",
