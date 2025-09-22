@@ -49,6 +49,10 @@ export function Header() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showMobileUserDropdown, setShowMobileUserDropdown] = useState(false);
 
+  // Auth modal state
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<"login" | "register">("login");
+
   // User state
   const userName = user?.name || "Zubin Aibara";
 
