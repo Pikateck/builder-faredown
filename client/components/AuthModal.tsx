@@ -333,13 +333,14 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
                 Confirm password *
               </label>
               <div className="relative">
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                 <Input
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm your password"
                   value={formData.confirmPassword}
                   onChange={(e) => handleInputChange("confirmPassword", e.target.value)}
                   required
-                  className="pr-10"
+                  className="pl-10 pr-10"
                 />
                 <button
                   type="button"
