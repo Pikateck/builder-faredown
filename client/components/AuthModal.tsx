@@ -127,11 +127,17 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
           phone: formData.phone,
         });
 
+        // Registration successful, now automatically log in the user
+        const loginResponse = await authService.login({
+          username: formData.username,
+          password: formData.password,
+        });
+
         // Update AuthContext
         login({
-          id: response.user.id,
-          name: `${response.user.firstName} ${response.user.lastName}`,
-          email: response.user.email,
+          id: loginResponse.user.id,
+          name: loginResponse.user.username,
+          email: loginResponse.user.email,
           loyaltyLevel: 1,
         });
 
