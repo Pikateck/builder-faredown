@@ -243,28 +243,24 @@ router.get("/google/callback", async (req, res) => {
       });
     }
 
-    console.log("🔵 Session state:", req.session?.oauthState);
-    console.log("🔵 Provided state:", state);
+    console.log("🔵 Validating OAuth state:", state?.substring(0, 8) + "...");
 
     // Verify state for CSRF protection
-    if (!req.session?.oauthState) {
-      console.error("🔴 No OAuth state found in session");
+    if (!state) {
+      console.error("🔴 No state parameter provided");
       return res.status(400).json({
         success: false,
-        message: "OAuth session expired. Please try again."
+        message: "Missing state parameter. Please try again."
       });
     }
 
-    if (req.session.oauthState !== state) {
-      console.error("🔴 State mismatch", { expected: req.session.oauthState, received: state });
+    if (!validateAndConsumeState(state)) {
+      console.error("🔴 Invalid or expired OAuth state");
       return res.status(400).json({
         success: false,
-        message: "Invalid state parameter. Possible CSRF attack."
+        message: "OAuth session expired or invalid. Please try again."
       });
     }
-
-    // Clear the state after successful validation
-    delete req.session.oauthState;
 
     console.log("🔵 Exchanging code for tokens...");
     // Exchange code for tokens
@@ -531,28 +527,24 @@ router.post("/google/callback", async (req, res) => {
       });
     }
 
-    console.log("🔵 Session state:", req.session?.oauthState);
-    console.log("🔵 Provided state:", state);
+    console.log("🔵 Validating OAuth state:", state?.substring(0, 8) + "...");
 
     // Verify state for CSRF protection
-    if (!req.session?.oauthState) {
-      console.error("🔴 No OAuth state found in session");
+    if (!state) {
+      console.error("🔴 No state parameter provided");
       return res.status(400).json({
         success: false,
-        message: "OAuth session expired. Please try again."
+        message: "Missing state parameter. Please try again."
       });
     }
 
-    if (req.session.oauthState !== state) {
-      console.error("🔴 State mismatch", { expected: req.session.oauthState, received: state });
+    if (!validateAndConsumeState(state)) {
+      console.error("🔴 Invalid or expired OAuth state");
       return res.status(400).json({
         success: false,
-        message: "Invalid state parameter. Possible CSRF attack."
+        message: "OAuth session expired or invalid. Please try again."
       });
     }
-
-    // Clear the state after successful validation
-    delete req.session.oauthState;
 
     console.log("🔵 Exchanging code for tokens...");
     // Exchange code for tokens
