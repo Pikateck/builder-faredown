@@ -241,6 +241,8 @@ app.use("/api/oauth", oauthRoutes);
 app.use("/api/oauth", oauthStatusRoutes);
 // Mount OAuth at /auth for simplified popup flow
 app.use("/auth", oauthRoutes);
+// Mount OAuth API routes at /api for session validation
+app.use("/api", oauthRoutes);
 app.use(
   "/api/admin",
   authenticateToken,
