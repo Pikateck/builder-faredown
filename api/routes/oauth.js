@@ -176,7 +176,293 @@ router.get("/google/url", (req, res) => {
 });
 
 /**
- * @api {post} /api/oauth/google/callback Handle Google OAuth Callback
+ * @api {get} /api/oauth/google/callback Handle Google OAuth Callback (GET)
+ * @apiName HandleGoogleCallbackGet
+ * @apiGroup OAuth
+ * @apiVersion 1.0.0
+ *
+ * @apiParam {String} code Authorization code from Google (query parameter)
+ * @apiParam {String} state State parameter for CSRF protection (query parameter)
+ *
+ * @apiSuccess {String} html HTML bridge page for popup communication
+ */
+router.get("/google/callback", async (req, res) => {
+  try {
+    console.log("🔵 Google OAuth GET callback received");
+    console.log("🔵 Query params:", { code: req.query.code?.substring(0, 20) + "...", state: req.query.state });
+
+    // Check if Google OAuth is configured
+    if (!isGoogleConfigured || !googleClient) {
+      console.error("🔴 Google OAuth not configured");
+      return res.status(503).json({
+        success: false,
+        message: "Google OAuth is not configured",
+        error: "SERVICE_UNAVAILABLE"
+      });
+    }
+
+    const { code, state } = req.query;
+
+    if (!code) {
+      console.error("🔴 Missing authorization code");
+      return res.status(400).json({
+        success: false,
+        message: "Authorization code is required"
+      });
+    }
+
+    console.log("🔵 Session state:", req.session?.oauthState);
+    console.log("🔵 Provided state:", state);
+
+    // Verify state for CSRF protection
+    if (!req.session?.oauthState) {
+      console.error("🔴 No OAuth state found in session");
+      return res.status(400).json({
+        success: false,
+        message: "OAuth session expired. Please try again."
+      });
+    }
+
+    if (req.session.oauthState !== state) {
+      console.error("🔴 State mismatch", { expected: req.session.oauthState, received: state });
+      return res.status(400).json({
+        success: false,
+        message: "Invalid state parameter. Possible CSRF attack."
+      });
+    }
+
+    // Clear the state after successful validation
+    delete req.session.oauthState;
+
+    console.log("🔵 Exchanging code for tokens...");
+    // Exchange code for tokens
+    const { tokens } = await googleClient.getToken(code);
+    console.log("🔵 Tokens received:", { id_token: !!tokens.id_token, access_token: !!tokens.access_token });
+
+    googleClient.setCredentials(tokens);
+
+    console.log("🔵 Verifying ID token...");
+    // Get user info
+    const ticket = await googleClient.verifyIdToken({
+      idToken: tokens.id_token,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+
+    const payload = ticket.getPayload();
+    console.log("🔵 User payload:", {
+      sub: payload.sub,
+      email: payload.email,
+      name: payload.name,
+      email_verified: payload.email_verified
+    });
+
+    console.log("🔵 Creating/getting social user...");
+    // Create or get user
+    const user = await createOrGetSocialUser({
+      id: payload.sub,
+      email: payload.email,
+      name: payload.name,
+      given_name: payload.given_name,
+      family_name: payload.family_name,
+      picture: payload.picture,
+      email_verified: payload.email_verified
+    }, 'google');
+
+    console.log("🔵 User created/retrieved:", { id: user.id, email: user.email });
+
+    console.log("🔵 Generating JWT token...");
+    // Generate JWT token
+    const token = generateToken(user);
+
+    // Set authentication cookie for session persistence
+    const cookieOptions = {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'lax',
+      maxAge: 7 * 24 * 60 * 60 * 1000, // 7 days
+      domain: process.env.NODE_ENV === 'production' ? '.faredowntravels.com' : undefined
+    };
+
+    res.cookie('auth_token', token, cookieOptions);
+
+    console.log("✅ Google OAuth callback successful:", { userId: user.id, email: user.email });
+
+    // Determine parent origin based on environment
+    const parentOrigin = process.env.NODE_ENV === 'production'
+      ? 'https://www.faredowntravels.com'
+      : 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev';
+
+    // Render HTML bridge page that communicates with popup opener
+    const bridgeHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authentication Successful</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f8fafc;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .success {
+            color: #10b981;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .loading {
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success">✓ Authentication Successful</div>
+        <div class="loading">Completing sign-in...</div>
+    </div>
+    <script>
+        console.log('🔵 OAuth bridge page loaded');
+        console.log('🔵 Window opener exists:', !!window.opener);
+        console.log('🔵 Parent origin:', '${parentOrigin}');
+
+        // Send success message to parent window
+        if (window.opener) {
+            const message = {
+                type: 'GOOGLE_AUTH_SUCCESS',
+                user: {
+                    id: '${user.id}',
+                    firstName: '${user.firstName}',
+                    lastName: '${user.lastName}',
+                    email: '${user.email}',
+                    role: '${user.role}',
+                    provider: '${user.provider}'
+                },
+                token: '${token}'
+            };
+
+            console.log('🔵 Sending success message:', message);
+            window.opener.postMessage(message, '${parentOrigin}');
+
+            // Also try Builder.io origin if different
+            if ('${parentOrigin}' !== 'https://builder.io') {
+                window.opener.postMessage(message, 'https://builder.io');
+            }
+
+            // Close the popup after a short delay
+            setTimeout(() => {
+                console.log('🔵 Closing popup window');
+                window.close();
+            }, 1000);
+        } else {
+            console.log('🔴 No window.opener found');
+            // Fallback: redirect to main app
+            setTimeout(() => {
+                window.location.href = '${parentOrigin}';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>`;
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(bridgeHTML);
+
+  } catch (error) {
+    console.error("🔴 Google OAuth GET callback error:", error);
+
+    // Determine parent origin based on environment
+    const parentOrigin = process.env.NODE_ENV === 'production'
+      ? 'https://www.faredowntravels.com'
+      : 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev';
+
+    // Render HTML bridge page for error communication
+    const errorHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authentication Failed</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f8fafc;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .error {
+            color: #ef4444;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .message {
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="error">✗ Authentication Failed</div>
+        <div class="message">Please try again</div>
+    </div>
+    <script>
+        console.log('🔴 OAuth error bridge page loaded');
+        console.log('🔴 Error:', '${error.message}');
+
+        // Send error message to parent window
+        if (window.opener) {
+            const message = {
+                type: 'GOOGLE_AUTH_ERROR',
+                error: 'Google authentication failed. Please try again.'
+            };
+
+            console.log('🔴 Sending error message:', message);
+            window.opener.postMessage(message, '${parentOrigin}');
+
+            // Also try Builder.io origin if different
+            if ('${parentOrigin}' !== 'https://builder.io') {
+                window.opener.postMessage(message, 'https://builder.io');
+            }
+
+            // Close the popup after a short delay
+            setTimeout(() => {
+                window.close();
+            }, 3000);
+        } else {
+            // Fallback: redirect to main app with error
+            setTimeout(() => {
+                window.location.href = '${parentOrigin}?error=oauth_failed';
+            }, 3000);
+        }
+    </script>
+</body>
+</html>`;
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(errorHTML);
+  }
+});
+
+/**
+ * @api {post} /api/oauth/google/callback Handle Google OAuth Callback (POST - Legacy)
  * @apiName HandleGoogleCallback
  * @apiGroup OAuth
  * @apiVersion 1.0.0
