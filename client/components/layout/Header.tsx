@@ -601,6 +601,8 @@ export function Header() {
                       <Button
                         className="w-full bg-[#003580] hover:bg-[#0071c2] text-white"
                         onClick={() => {
+                          setAuthModalMode("login");
+                          setShowAuthModal(true);
                           setShowMobileMenu(false);
                         }}
                       >
@@ -610,6 +612,8 @@ export function Header() {
                         variant="outline"
                         className="w-full border-[#003580] text-[#003580] hover:bg-blue-50"
                         onClick={() => {
+                          setAuthModalMode("register");
+                          setShowAuthModal(true);
                           setShowMobileMenu(false);
                         }}
                       >
