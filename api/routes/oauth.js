@@ -81,13 +81,22 @@ const createOrGetSocialUser = async (profile, provider) => {
  */
 router.get("/google/url", (req, res) => {
   try {
+    // Check if Google OAuth is configured
+    if (!isGoogleConfigured || !googleClient) {
+      return res.status(503).json({
+        success: false,
+        message: "Google OAuth is not configured. Please set GOOGLE_CLIENT_ID and GOOGLE_CLIENT_SECRET environment variables.",
+        error: "SERVICE_UNAVAILABLE"
+      });
+    }
+
     const scopes = [
       'https://www.googleapis.com/auth/userinfo.email',
       'https://www.googleapis.com/auth/userinfo.profile'
     ];
 
     const state = crypto.randomBytes(16).toString('hex');
-    
+
     const authUrl = googleClient.generateAuthUrl({
       access_type: 'offline',
       scope: scopes,
