@@ -28,6 +28,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
 
   // Form states
   const [formData, setFormData] = useState({
+    username: "",
     email: "",
     password: "",
     confirmPassword: "",
