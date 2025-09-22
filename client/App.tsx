@@ -290,6 +290,11 @@ function App() {
                         />
                         <Route path="/my-trips" element={<MyTrips />} />
 
+                        {/* OAuth Callback Routes */}
+                        <Route path="/oauth/google/callback" element={<GoogleCallback />} />
+                        <Route path="/oauth/facebook/callback" element={<FacebookCallback />} />
+                        <Route path="/oauth/apple/callback" element={<AppleCallback />} />
+
                         {/* Development/Testing Routes */}
                         <Route path="/footer-test" element={<FooterTest />} />
                         <Route path="/api-test" element={<ApiTestPanel />} />
