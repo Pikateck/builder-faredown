@@ -48,9 +48,7 @@ app.use("/api", async (req, res) => {
   }
 
   const apiServerUrl = process.env.API_SERVER_URL || "http://localhost:3001";
-  // Remove the /api prefix from the URL before forwarding to backend
-  const backendPath = req.originalUrl.replace('/api', '');
-  const targetUrl = `${apiServerUrl}/api${backendPath}`;
+  const targetUrl = `${apiServerUrl}${req.originalUrl}`;
 
   try {
     const fetch = (await import("node-fetch")).default;
