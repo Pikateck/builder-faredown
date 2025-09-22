@@ -24,6 +24,16 @@ export interface OAuthUrlResponse {
   state: string;
 }
 
+export interface OAuthStatusResponse {
+  success: boolean;
+  oauth: {
+    google: boolean;
+    facebook: boolean;
+    apple: boolean;
+  };
+  message: string;
+}
+
 export class OAuthService {
   private readonly baseUrl = "/api/oauth";
 
