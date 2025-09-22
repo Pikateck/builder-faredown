@@ -220,9 +220,10 @@ export class OAuthService {
               resolve(result);
             } catch (error) {
               console.error("🔴 Error processing success message:", error);
-              clearTimeout(timeout);
-              window.removeEventListener('message', handleMessage);
-              if (!popup.closed) {
+              if (timeout) clearTimeout(timeout);
+              if (checkClosed) clearInterval(checkClosed);
+              if (handleMessage) window.removeEventListener('message', handleMessage);
+              if (popup && !popup.closed) {
                 popup.close();
               }
               reject(error);
