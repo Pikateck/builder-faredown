@@ -53,24 +53,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         console.error("Error loading auth state:", error);
         localStorage.removeItem("faredown_auth");
       }
-    } else {
-      // For demo purposes, set default logged-in state
-      const defaultUser = {
-        id: "1",
-        name: "Zubin Aibara",
-        email: "zubin@faredown.com",
-        loyaltyLevel: 1,
-      };
-      setIsLoggedIn(true);
-      setUser(defaultUser);
-      // Save to localStorage
-      localStorage.setItem(
-        "faredown_auth",
-        JSON.stringify({
-          isLoggedIn: true,
-          user: defaultUser,
-        }),
-      );
     }
   }, []);
 
