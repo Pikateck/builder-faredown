@@ -271,10 +271,10 @@ export class OAuthService {
 
       } catch (error) {
         console.error("🔴 OAuth flow error:", error);
-        clearTimeout(timeout);
-        clearInterval(checkClosed);
-        window.removeEventListener('message', handleMessage);
-        if (!popup.closed) {
+        if (timeout) clearTimeout(timeout);
+        if (checkClosed) clearInterval(checkClosed);
+        if (handleMessage) window.removeEventListener('message', handleMessage);
+        if (popup && !popup.closed) {
           popup.close();
         }
         reject(error);
