@@ -215,6 +215,7 @@ export class OAuthService {
               resolve(result);
             } catch (error) {
               console.error("🔴 Error processing success message:", error);
+              clearTimeout(timeout);
               window.removeEventListener('message', handleMessage);
               if (!popup.closed) {
                 popup.close();
@@ -226,6 +227,7 @@ export class OAuthService {
 
             messageReceived = true; // Mark that we received a message
             clearInterval(checkClosed); // Stop checking for manual closure
+            clearTimeout(timeout); // Clear timeout
 
             window.removeEventListener('message', handleMessage);
             if (!popup.closed) {
