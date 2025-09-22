@@ -287,22 +287,97 @@ router.post("/google/callback", async (req, res) => {
 
     res.cookie('auth_token', token, cookieOptions);
 
-    const response = {
-      success: true,
-      message: "Google authentication successful",
-      token: token,
-      user: {
-        id: user.id,
-        firstName: user.firstName,
-        lastName: user.lastName,
-        email: user.email,
-        role: user.role,
-        provider: user.provider
-      }
-    };
-
     console.log("✅ Google OAuth callback successful:", { userId: user.id, email: user.email });
-    res.json(response);
+
+    // Determine parent origin based on environment
+    const parentOrigin = process.env.NODE_ENV === 'production'
+      ? 'https://www.faredowntravels.com'
+      : 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev';
+
+    // Render HTML bridge page that communicates with popup opener
+    const bridgeHTML = `
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Authentication Successful</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background: #f8fafc;
+        }
+        .container {
+            text-align: center;
+            padding: 2rem;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .success {
+            color: #10b981;
+            font-size: 1.25rem;
+            margin-bottom: 1rem;
+        }
+        .loading {
+            color: #6b7280;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success">✓ Authentication Successful</div>
+        <div class="loading">Completing sign-in...</div>
+    </div>
+    <script>
+        console.log('🔵 OAuth bridge page loaded');
+        console.log('🔵 Window opener exists:', !!window.opener);
+        console.log('🔵 Parent origin:', '${parentOrigin}');
+
+        // Send success message to parent window
+        if (window.opener) {
+            const message = {
+                type: 'GOOGLE_AUTH_SUCCESS',
+                user: {
+                    id: '${user.id}',
+                    firstName: '${user.firstName}',
+                    lastName: '${user.lastName}',
+                    email: '${user.email}',
+                    role: '${user.role}',
+                    provider: '${user.provider}'
+                },
+                token: '${token}'
+            };
+
+            console.log('🔵 Sending success message:', message);
+            window.opener.postMessage(message, '${parentOrigin}');
+
+            // Also try Builder.io origin if different
+            if ('${parentOrigin}' !== 'https://builder.io') {
+                window.opener.postMessage(message, 'https://builder.io');
+            }
+
+            // Close the popup after a short delay
+            setTimeout(() => {
+                console.log('🔵 Closing popup window');
+                window.close();
+            }, 1000);
+        } else {
+            console.log('🔴 No window.opener found');
+            // Fallback: redirect to main app
+            setTimeout(() => {
+                window.location.href = '${parentOrigin}';
+            }, 2000);
+        }
+    </script>
+</body>
+</html>`;
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(bridgeHTML);
 
   } catch (error) {
     console.error("Google OAuth callback error:", error);
