@@ -206,6 +206,7 @@ export class OAuthService {
               console.log("✅ OAuth success processed:", result);
 
               // Clean up
+              clearTimeout(timeout);
               window.removeEventListener('message', handleMessage);
               if (!popup.closed) {
                 popup.close();
