@@ -43,7 +43,7 @@ Ensure these environment variables are set in your deployment:
 # Google OAuth
 GOOGLE_CLIENT_ID="832664905965-h8qjvsjm5bbb6g21iug8hmm4f46c2n5u.apps.googleusercontent.com"
 GOOGLE_CLIENT_SECRET="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"
-GOOGLE_REDIRECT_URI="https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/oauth/google/callback"
+GOOGLE_REDIRECT_URI="https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/oauth/google/callback"
 
 # Session Management
 SESSION_SECRET="your-strong-session-secret-here"
