@@ -104,14 +104,14 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
     try {
       if (mode === "login") {
         const response = await authService.login({
-          email: formData.email,
+          username: formData.username,
           password: formData.password,
         });
 
         // Update AuthContext
         login({
           id: response.user.id,
-          name: `${response.user.firstName} ${response.user.lastName}`,
+          name: response.user.username,
           email: response.user.email,
           loyaltyLevel: 1,
         });
@@ -119,6 +119,7 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
         handleClose();
       } else {
         const response = await authService.register({
+          username: formData.username,
           email: formData.email,
           password: formData.password,
           firstName: formData.firstName,
