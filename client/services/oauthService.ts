@@ -155,6 +155,9 @@ export class OAuthService {
 
         console.log("🔵 Popup opened, waiting for callback...");
 
+        // Track if we've received a success/error message
+        let messageReceived = false;
+
         // Listen for popup messages
         const handleMessage = async (event: MessageEvent) => {
           console.log("🔵 Received popup message:", event.data);
@@ -178,6 +181,9 @@ export class OAuthService {
             console.log("🔵 Google auth success received from backend!");
             console.log("🔵 User data:", event.data.user);
 
+            messageReceived = true; // Mark that we received a message
+            clearInterval(checkClosed); // Stop checking for manual closure
+
             try {
               // Backend has already processed everything, just use the data
               const result: OAuthResponse = {
@@ -198,37 +204,60 @@ export class OAuthService {
               }
 
               console.log("✅ OAuth success processed:", result);
-              popup.close();
+
+              // Clean up
               window.removeEventListener('message', handleMessage);
-              clearInterval(checkClosed);
+              if (!popup.closed) {
+                popup.close();
+              }
+
               resolve(result);
             } catch (error) {
               console.error("🔴 Error processing success message:", error);
-              popup.close();
               window.removeEventListener('message', handleMessage);
-              clearInterval(checkClosed);
+              if (!popup.closed) {
+                popup.close();
+              }
               reject(error);
             }
           } else if (event.data.type === 'GOOGLE_AUTH_ERROR') {
             console.error("🔴 Google auth error from popup:", event.data.error);
-            popup.close();
+
+            messageReceived = true; // Mark that we received a message
+            clearInterval(checkClosed); // Stop checking for manual closure
+
             window.removeEventListener('message', handleMessage);
-            clearInterval(checkClosed);
+            if (!popup.closed) {
+              popup.close();
+            }
             reject(new Error(event.data.error || 'Google authentication failed'));
           }
         };
 
         window.addEventListener('message', handleMessage);
 
-        // Check if popup was closed manually
+        // Check if popup was closed manually (with longer delay to avoid race condition)
         const checkClosed = setInterval(() => {
-          if (popup.closed) {
-            console.log("🔴 Popup was closed manually");
+          if (popup.closed && !messageReceived) {
+            console.log("🔴 Popup was closed manually (no success/error message received)");
             clearInterval(checkClosed);
             window.removeEventListener('message', handleMessage);
             reject(new Error('Authentication cancelled'));
           }
-        }, 1000);
+        }, 2000); // Check every 2 seconds instead of 1 second
+
+        // Add timeout after 60 seconds as fallback
+        const timeout = setTimeout(() => {
+          if (!messageReceived) {
+            console.log("🔴 OAuth flow timed out after 60 seconds");
+            clearInterval(checkClosed);
+            window.removeEventListener('message', handleMessage);
+            if (!popup.closed) {
+              popup.close();
+            }
+            reject(new Error('Authentication timed out. Please try again.'));
+          }
+        }, 60000);
 
       } catch (error) {
         console.error("🔴 OAuth flow error:", error);
