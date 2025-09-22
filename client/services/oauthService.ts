@@ -244,6 +244,7 @@ export class OAuthService {
           if (popup.closed && !messageReceived) {
             console.log("🔴 Popup was closed manually (no success/error message received)");
             clearInterval(checkClosed);
+            clearTimeout(timeout);
             window.removeEventListener('message', handleMessage);
             reject(new Error('Authentication cancelled'));
           }
