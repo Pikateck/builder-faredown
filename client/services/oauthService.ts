@@ -244,7 +244,7 @@ export class OAuthService {
         window.addEventListener('message', handleMessage);
 
         // Check if popup was closed manually (with longer delay to avoid race condition)
-        const checkClosed = setInterval(() => {
+        checkClosed = setInterval(() => {
           if (popup.closed && !messageReceived) {
             console.log("🔴 Popup was closed manually (no success/error message received)");
             clearInterval(checkClosed);
