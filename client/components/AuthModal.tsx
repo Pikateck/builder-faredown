@@ -63,24 +63,19 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
   };
 
   const validateForm = () => {
-    if (!formData.email || !formData.password) {
-      setError("Email and password are required");
-      return false;
-    }
+    if (mode === "login") {
+      if (!formData.username || !formData.password) {
+        setError("Username and password are required");
+        return false;
+      }
+    } else {
+      if (!formData.username || !formData.email || !formData.password || !formData.firstName || !formData.lastName) {
+        setError("All required fields must be filled");
+        return false;
+      }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
-      setError("Please enter a valid email address");
-      return false;
-    }
-
-    if (formData.password.length < 8) {
-      setError("Password must be at least 8 characters long");
-      return false;
-    }
-
-    if (mode === "register") {
-      if (!formData.firstName || !formData.lastName) {
-        setError("First name and last name are required");
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        setError("Please enter a valid email address");
         return false;
       }
 
@@ -88,6 +83,11 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
         setError("Passwords do not match");
         return false;
       }
+    }
+
+    if (formData.password.length < 8) {
+      setError("Password must be at least 8 characters long");
+      return false;
     }
 
     return true;
