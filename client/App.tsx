@@ -89,6 +89,11 @@ import AdminTestingDashboard from "./pages/admin/AdminTestingDashboard";
 import AIBargainingDashboard from "./pages/admin/AIBargainingDashboard";
 import APITestingDashboard from "./pages/admin/APITestingDashboard";
 
+// OAuth Callback Components
+import GoogleCallback from "./pages/oauth/GoogleCallback";
+import FacebookCallback from "./pages/oauth/FacebookCallback";
+import AppleCallback from "./pages/oauth/AppleCallback";
+
 function App() {
   return (
     <div className="App">
