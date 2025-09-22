@@ -296,6 +296,77 @@ router.post("/refresh", authenticateToken, async (req, res) => {
 });
 
 /**
+ * @api {post} /api/auth/forgot-password Forgot Password
+ * @apiName ForgotPassword
+ * @apiGroup Authentication
+ * @apiVersion 1.0.0
+ *
+ * @apiParam {String} email User's email address
+ *
+ * @apiSuccess {Boolean} success Request success status
+ * @apiSuccess {String} message Success message
+ *
+ * @apiError {Boolean} success=false Request failed
+ * @apiError {String} message Error message
+ */
+router.post("/forgot-password", async (req, res) => {
+  try {
+    const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: "Email address is required",
+      });
+    }
+
+    // Check if user exists
+    const user = getUserByEmail(email);
+
+    if (!user) {
+      // For security, don't reveal if email exists or not
+      return res.json({
+        success: true,
+        message: "If an account with this email exists, a password reset link has been sent.",
+      });
+    }
+
+    // Generate password reset token (in real implementation, save this to database)
+    const resetToken = require("crypto").randomBytes(32).toString("hex");
+    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 hour from now
+
+    // In a real implementation, you would:
+    // 1. Save the reset token and expiry to the database
+    // 2. Send email with reset link
+
+    // For now, we'll simulate sending an email
+    console.log(`Password reset requested for: ${email}`);
+    console.log(`Reset token: ${resetToken}`);
+    console.log(`Reset link: ${process.env.API_BASE_URL || 'http://localhost:3001'}/reset-password?token=${resetToken}`);
+
+    // Simulate email service
+    const { sendPasswordResetEmail } = require("../services/emailService");
+    try {
+      await sendPasswordResetEmail(email, resetToken, user.firstName);
+    } catch (emailError) {
+      console.error("Failed to send password reset email:", emailError);
+      // Don't reveal email sending failure to user for security
+    }
+
+    res.json({
+      success: true,
+      message: "If an account with this email exists, a password reset link has been sent.",
+    });
+  } catch (error) {
+    console.error("Forgot password error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+});
+
+/**
  * @api {post} /api/auth/change-password Change Password
  * @apiName ChangePassword
  * @apiGroup Authentication
