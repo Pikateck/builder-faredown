@@ -430,6 +430,15 @@ router.get("/apple/url", (req, res) => {
  */
 router.post("/apple/callback", async (req, res) => {
   try {
+    // Check if Apple OAuth is configured
+    if (!isAppleConfigured) {
+      return res.status(503).json({
+        success: false,
+        message: "Apple OAuth is not configured",
+        error: "SERVICE_UNAVAILABLE"
+      });
+    }
+
     const { code, state, user: userData } = req.body;
 
     if (!code) {
