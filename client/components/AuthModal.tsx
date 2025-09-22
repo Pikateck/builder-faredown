@@ -307,13 +307,14 @@ export function AuthModal({ isOpen, onClose, initialMode = "login" }: AuthModalP
               Password *
             </label>
             <div className="relative">
+              <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
                 type={showPassword ? "text" : "password"}
                 placeholder={mode === "register" ? "Create a password (8+ characters)" : "Enter your password"}
                 value={formData.password}
                 onChange={(e) => handleInputChange("password", e.target.value)}
                 required
-                className="pr-10"
+                className="pl-10 pr-10"
               />
               <button
                 type="button"
