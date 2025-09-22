@@ -55,8 +55,8 @@ if (isGoogleConfigured) {
     'http://localhost:5173/oauth/google/callback'
   ];
 
-  // Use the first available redirect URI or default
-  const redirectUri = process.env.GOOGLE_REDIRECT_URI || redirectUris[0];
+  // Use the API redirect URI path
+  const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.VITE_API_BASE_URL || process.env.API_BASE_URL}/oauth/google/callback`;
 
   googleClient = new OAuth2Client(
     process.env.GOOGLE_CLIENT_ID,
