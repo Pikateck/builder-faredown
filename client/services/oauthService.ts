@@ -158,25 +158,52 @@ export class OAuthService {
         // Listen for popup messages
         const handleMessage = async (event: MessageEvent) => {
           console.log("🔵 Received popup message:", event.data);
+          console.log("🔵 Message origin:", event.origin);
+          console.log("🔵 Current origin:", window.location.origin);
 
-          if (event.origin !== window.location.origin) {
-            console.log("🔴 Message from wrong origin:", event.origin);
+          // Allow messages from our deployment domains and Builder.io
+          const allowedOrigins = [
+            window.location.origin,
+            'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev',
+            'https://www.faredowntravels.com',
+            'https://builder.io'
+          ];
+
+          if (!allowedOrigins.includes(event.origin)) {
+            console.log("🔴 Message from disallowed origin:", event.origin);
             return;
           }
 
           if (event.data.type === 'GOOGLE_AUTH_SUCCESS') {
-            const { code, state } = event.data;
-            console.log("🔵 Google auth success, processing callback...", { code: code?.substring(0, 20) + "...", state });
+            console.log("🔵 Google auth success received from backend!");
+            console.log("🔵 User data:", event.data.user);
 
             try {
-              const result = await this.handleGoogleCallback(code, state);
-              console.log("🔵 Callback processed successfully:", result);
+              // Backend has already processed everything, just use the data
+              const result: OAuthResponse = {
+                success: true,
+                message: "Google authentication successful",
+                token: event.data.token,
+                user: event.data.user
+              };
+
+              // Store auth token and user data (backend already set cookie)
+              if (result.token) {
+                apiClient.setAuthToken(result.token);
+                localStorage.setItem("auth_token", result.token);
+              }
+
+              if (result.user) {
+                localStorage.setItem("user", JSON.stringify(result.user));
+              }
+
+              console.log("✅ OAuth success processed:", result);
               popup.close();
               window.removeEventListener('message', handleMessage);
               clearInterval(checkClosed);
               resolve(result);
             } catch (error) {
-              console.error("🔴 Callback processing failed:", error);
+              console.error("🔴 Error processing success message:", error);
               popup.close();
               window.removeEventListener('message', handleMessage);
               clearInterval(checkClosed);
