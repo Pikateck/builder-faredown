@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2, Eye, EyeOff, User, Mail, Phone, Lock, UserCheck } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { authService } from "@/services/authService";
+import { oauthService } from "@/services/oauthService";
 
 interface AuthModalProps {
   isOpen: boolean;
