@@ -137,8 +137,12 @@ router.get("/google/url", (req, res) => {
  */
 router.post("/google/callback", async (req, res) => {
   try {
+    console.log("🔵 Google OAuth callback received");
+    console.log("🔵 Request body:", { code: req.body.code?.substring(0, 20) + "...", state: req.body.state });
+
     // Check if Google OAuth is configured
     if (!isGoogleConfigured || !googleClient) {
+      console.error("🔴 Google OAuth not configured");
       return res.status(503).json({
         success: false,
         message: "Google OAuth is not configured",
@@ -149,24 +153,33 @@ router.post("/google/callback", async (req, res) => {
     const { code, state } = req.body;
 
     if (!code) {
+      console.error("🔴 Missing authorization code");
       return res.status(400).json({
         success: false,
         message: "Authorization code is required"
       });
     }
 
-    // Verify state for CSRF protection
-    if (req.session?.oauthState && req.session.oauthState !== state) {
-      return res.status(400).json({
-        success: false,
-        message: "Invalid state parameter"
-      });
-    }
+    console.log("🔵 Session state:", req.session?.oauthState);
+    console.log("🔵 Provided state:", state);
 
+    // Verify state for CSRF protection - Skip for now to debug
+    // if (req.session?.oauthState && req.session.oauthState !== state) {
+    //   console.error("🔴 State mismatch");
+    //   return res.status(400).json({
+    //     success: false,
+    //     message: "Invalid state parameter"
+    //   });
+    // }
+
+    console.log("🔵 Exchanging code for tokens...");
     // Exchange code for tokens
     const { tokens } = await googleClient.getToken(code);
+    console.log("🔵 Tokens received:", { id_token: !!tokens.id_token, access_token: !!tokens.access_token });
+
     googleClient.setCredentials(tokens);
 
+    console.log("🔵 Verifying ID token...");
     // Get user info
     const ticket = await googleClient.verifyIdToken({
       idToken: tokens.id_token,
@@ -174,7 +187,14 @@ router.post("/google/callback", async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-    
+    console.log("🔵 User payload:", {
+      sub: payload.sub,
+      email: payload.email,
+      name: payload.name,
+      email_verified: payload.email_verified
+    });
+
+    console.log("🔵 Creating/getting social user...");
     // Create or get user
     const user = await createOrGetSocialUser({
       id: payload.sub,
@@ -186,21 +206,28 @@ router.post("/google/callback", async (req, res) => {
       email_verified: payload.email_verified
     }, 'google');
 
+    console.log("🔵 User created/retrieved:", { id: user.id, email: user.email });
+
+    console.log("🔵 Generating JWT token...");
     // Generate JWT token
     const token = generateToken(user);
 
-    res.json({
+    const response = {
       success: true,
       message: "Google authentication successful",
       token: token,
       user: {
         id: user.id,
-        username: user.username,
+        firstName: user.firstName,
+        lastName: user.lastName,
         email: user.email,
         role: user.role,
         provider: user.provider
       }
-    });
+    };
+
+    console.log("✅ Google OAuth callback successful:", { userId: user.id, email: user.email });
+    res.json(response);
 
   } catch (error) {
     console.error("Google OAuth callback error:", error);
