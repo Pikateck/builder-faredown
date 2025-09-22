@@ -931,12 +931,20 @@ export function Header() {
                         variant="outline"
                         size="sm"
                         className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600 transition-colors px-6 py-2 h-9 font-medium"
+                        onClick={() => {
+                          setAuthModalMode("register");
+                          setShowAuthModal(true);
+                        }}
                       >
                         Register
                       </Button>
                       <Button
                         size="sm"
                         className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 h-9 font-medium rounded-md"
+                        onClick={() => {
+                          setAuthModalMode("login");
+                          setShowAuthModal(true);
+                        }}
                       >
                         Sign in
                       </Button>
