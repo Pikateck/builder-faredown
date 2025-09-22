@@ -38,6 +38,26 @@ export class OAuthService {
   private readonly baseUrl = "/api/oauth";
 
   /**
+   * Check OAuth services configuration status
+   */
+  async getOAuthStatus(): Promise<{ google: boolean; facebook: boolean; apple: boolean }> {
+    try {
+      const response = await apiClient.get<OAuthStatusResponse>(`${this.baseUrl}/status`);
+
+      if (response.success && response.oauth) {
+        return response.oauth;
+      }
+
+      // Default to all disabled if status check fails
+      return { google: false, facebook: false, apple: false };
+    } catch (error) {
+      console.error("OAuth status check error:", error);
+      // Default to all disabled if status check fails
+      return { google: false, facebook: false, apple: false };
+    }
+  }
+
+  /**
    * Get Google OAuth authorization URL
    */
   async getGoogleAuthUrl(): Promise<string> {
