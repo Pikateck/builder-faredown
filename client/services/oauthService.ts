@@ -260,9 +260,9 @@ export class OAuthService {
         timeout = setTimeout(() => {
           if (!messageReceived) {
             console.log("🔴 OAuth flow timed out after 60 seconds");
-            clearInterval(checkClosed);
-            window.removeEventListener('message', handleMessage);
-            if (!popup.closed) {
+            if (checkClosed) clearInterval(checkClosed);
+            if (handleMessage) window.removeEventListener('message', handleMessage);
+            if (popup && !popup.closed) {
               popup.close();
             }
             reject(new Error('Authentication timed out. Please try again.'));
