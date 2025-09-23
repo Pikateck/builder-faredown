@@ -107,8 +107,10 @@ export function HotelSearchForm({
       setIsDestinationOpen(false);
     };
 
-    document.addEventListener("click", handleClickOutside);
-    return () => document.removeEventListener("click", handleClickOutside);
+    if (typeof document !== 'undefined') {
+      document.addEventListener("click", handleClickOutside);
+      return () => document.removeEventListener("click", handleClickOutside);
+    }
   }, []);
 
   // Update search results when input changes
