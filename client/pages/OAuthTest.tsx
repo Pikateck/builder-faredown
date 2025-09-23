@@ -69,7 +69,15 @@ export function OAuthTest() {
             disabled={isLoading}
             className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 disabled:opacity-50 w-full"
           >
-            {isLoading ? 'Testing...' : 'Test Google OAuth (Full Flow)'}
+            {isLoading ? 'Testing...' : 'Test Google OAuth (Backend Route)'}
+          </button>
+
+          <button
+            onClick={testDirectOAuth}
+            disabled={isLoading}
+            className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 disabled:opacity-50 w-full"
+          >
+            {isLoading ? 'Testing...' : 'Test Direct Google OAuth (Recommended)'}
           </button>
 
           <button
