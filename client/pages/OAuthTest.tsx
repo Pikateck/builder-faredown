@@ -45,13 +45,22 @@ export function OAuthTest() {
       <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
         <h1 className="text-2xl font-bold mb-6">OAuth Debug Test</h1>
         
-        <button
-          onClick={testGoogleOAuth}
-          disabled={isLoading}
-          className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 disabled:opacity-50"
-        >
-          {isLoading ? 'Testing...' : 'Test Google OAuth'}
-        </button>
+        <div className="space-y-4">
+          <button
+            onClick={testGoogleOAuth}
+            disabled={isLoading}
+            className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 disabled:opacity-50 w-full"
+          >
+            {isLoading ? 'Testing...' : 'Test Google OAuth (Full Flow)'}
+          </button>
+
+          <button
+            onClick={testManualOAuth}
+            className="bg-gray-500 text-white px-6 py-3 rounded-lg hover:bg-gray-600 w-full"
+          >
+            Open OAuth URL Directly (Debug)
+          </button>
+        </div>
 
         {error && (
           <div className="mt-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded">
