@@ -1837,7 +1837,7 @@ function PaymentMethodModal({
 }) {
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl">
+      <DialogContent className="max-w-2xl mx-3 md:mx-auto">
         <DialogHeader>
           <DialogTitle>Add payment method</DialogTitle>
         </DialogHeader>
