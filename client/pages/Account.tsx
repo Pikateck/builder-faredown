@@ -910,6 +910,10 @@ export default function Account() {
                               <h4 className="font-semibold text-[#003580] mb-2">
                                 {module.id === "hotels"
                                   ? "Guest Details"
+                                  : module.id === "sightseeing"
+                                  ? "Participant Details"
+                                  : module.id === "transfers"
+                                  ? "Passenger Details"
                                   : "Passengers"}
                               </h4>
                               <div className="space-y-2">
