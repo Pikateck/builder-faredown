@@ -73,11 +73,18 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   };
 
   const logout = () => {
+    console.log("🔵 AuthContext: Logging out user");
     setIsLoggedIn(false);
     setUser(null);
 
-    // Remove from localStorage
+    // Remove from localStorage and clear any OAuth session cookies
     localStorage.removeItem("faredown_auth");
+
+    // Clear any auth-related cookies
+    document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+
+    console.log("✅ AuthContext: User logged out and session cleaned");
   };
 
   const setUserName = (name: string) => {
