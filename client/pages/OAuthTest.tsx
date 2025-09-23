@@ -11,6 +11,24 @@ export function OAuthTest() {
     window.open('/auth/google', '_blank', 'width=600,height=700');
   };
 
+  const testDirectOAuth = async () => {
+    setIsLoading(true);
+    setError('');
+    setResult(null);
+
+    try {
+      console.log('🧪 Testing Direct Google OAuth...');
+      const response = await oauthService.loginWithGoogleDirect();
+      console.log('🧪 Direct OAuth Response:', response);
+      setResult(response);
+    } catch (err: any) {
+      console.error('🧪 Direct OAuth Error:', err);
+      setError(err.message || 'Direct OAuth failed');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const testGoogleOAuth = async () => {
     setIsLoading(true);
     setError('');
