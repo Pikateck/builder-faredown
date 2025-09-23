@@ -111,7 +111,7 @@ function App() {
                     <SearchProvider>
                       <Routes>
                         {/* Original Web Routes */}
-                        <Route path="/" element={<IndexSimple />} />
+                        <Route path="/" element={<Index />} />
                         <Route path="/flights" element={<Flights />} />
                         <Route
                           path="/flights/results"
