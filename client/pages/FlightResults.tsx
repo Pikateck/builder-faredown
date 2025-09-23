@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
 import { BookingCalendar } from "@/components/BookingCalendar";
+import { AuthModal } from "@/components/AuthModal";
 import {
   Popover,
   PopoverContent,
