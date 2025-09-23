@@ -782,6 +782,19 @@ export default function AdminDashboard() {
                 </p>
               </div>
               <div className="flex items-center space-x-4">
+                {activeModule === "dashboard" && (
+                  <Select value={dateFilter} onValueChange={setDateFilter}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="today">Today</SelectItem>
+                      <SelectItem value="week">This Week</SelectItem>
+                      <SelectItem value="month">This Month</SelectItem>
+                      <SelectItem value="year">This Year</SelectItem>
+                    </SelectContent>
+                  </Select>
+                )}
                 <Button variant="outline" size="sm">
                   <RefreshCw className="w-4 h-4 mr-2" />
                   Refresh Data
