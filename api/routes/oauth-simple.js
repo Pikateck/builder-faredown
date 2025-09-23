@@ -146,9 +146,10 @@ router.get("/google", async (req, res) => {
     const authUrl = client.generateAuthUrl({
       access_type: "offline",
       scope: ["openid", "email", "profile"],
-      prompt: "select_account",
+      prompt: "consent",
       state,
       redirect_uri: oauthRedirectUri,
+      include_granted_scopes: true,
     });
 
     console.log(`🔍 Generated OAuth URL: ${authUrl}`);
