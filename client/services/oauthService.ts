@@ -151,6 +151,95 @@ export class OAuthService {
   }
 
   /**
+   * Alternative Google login using direct OAuth URL
+   */
+  async loginWithGoogleDirect(): Promise<OAuthResponse> {
+    return new Promise(async (resolve, reject) => {
+      try {
+        console.log("🔵 Getting Google OAuth URL...");
+        const authUrl = await this.getGoogleAuthUrl();
+
+        console.log("🔵 Opening direct Google OAuth URL...");
+        const width = 500,
+          height = 650;
+        const left = window.screenX + (window.outerWidth - width) / 2;
+        const top = window.screenY + (window.outerHeight - height) / 2;
+
+        const popup = window.open(
+          authUrl,
+          "google-oauth-direct",
+          `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=no,location=no,toolbar=no,menubar=no,personalbar=no`,
+        );
+
+        if (!popup) {
+          reject(new Error("Failed to open popup window. Please check if popups are blocked."));
+          return;
+        }
+
+        popup.focus();
+
+        let messageReceived = false;
+
+        function messageHandler(ev: MessageEvent) {
+          const allowed = [
+            "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev",
+            "https://www.faredowntravels.com",
+            "https://builder.io",
+          ];
+
+          if (!allowed.includes(ev.origin)) {
+            console.log("🔴 Message from disallowed origin:", ev.origin);
+            return;
+          }
+
+          console.log("🔵 Received message:", ev.data, "from origin:", ev.origin);
+
+          if (ev.data?.type === "oauth:success") {
+            messageReceived = true;
+            window.removeEventListener("message", messageHandler);
+            if (popup && !popup.closed) {
+              popup.close();
+            }
+            resolve(ev.data);
+          } else if (ev.data?.type === "oauth:error") {
+            messageReceived = true;
+            window.removeEventListener("message", messageHandler);
+            if (popup && !popup.closed) {
+              popup.close();
+            }
+            reject(new Error(ev.data.error || "Authentication failed"));
+          }
+        }
+
+        window.addEventListener("message", messageHandler);
+
+        // Check if popup was closed manually
+        const checkClosed = setInterval(() => {
+          if (popup.closed && !messageReceived) {
+            clearInterval(checkClosed);
+            window.removeEventListener("message", messageHandler);
+            reject(new Error("Authentication cancelled"));
+          }
+        }, 1000);
+
+        // Timeout after 60 seconds
+        setTimeout(() => {
+          if (!messageReceived) {
+            clearInterval(checkClosed);
+            window.removeEventListener("message", messageHandler);
+            if (popup && !popup.closed) {
+              popup.close();
+            }
+            reject(new Error("Authentication timed out. Please try again."));
+          }
+        }, 60000);
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  /**
    * Initiate Google login with popup - Streamlined version per Zubin's specs
    */
   async loginWithGoogle(): Promise<OAuthResponse> {
