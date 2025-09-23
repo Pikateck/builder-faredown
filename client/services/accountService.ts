@@ -155,6 +155,20 @@ class AccountService {
           amount: 12000,
           status: "confirmed",
         },
+        {
+          booking_ref: "FD-SG-003",
+          module: "sightseeing",
+          date: "2024-01-17",
+          amount: 8500,
+          status: "confirmed",
+        },
+        {
+          booking_ref: "FD-TR-004",
+          module: "transfer",
+          date: "2024-01-18",
+          amount: 3200,
+          status: "confirmed",
+        },
       ],
     },
     travelActivity: [
