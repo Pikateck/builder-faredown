@@ -296,20 +296,24 @@ export function MobileNativeSearchForm({
       setUrlSearchParams(newParams, { replace: true });
 
 
-      // Console log current URL for debugging
-      console.log("Current URL with updated params:", window.location.href);
+      // Console log current URL for debugging (browser only)
+      if (typeof window !== 'undefined') {
+        console.log("Current URL with updated params:", window.location.href);
+      }
 
-      // Emit custom event for other components
-      window.dispatchEvent(
-        new CustomEvent("datesChanged", {
-          detail: {
-            start: range.startDate,
-            end: range.endDate,
-            tripType,
-            module,
-          },
-        }),
-      );
+      // Emit custom event for other components (browser only)
+      if (typeof window !== 'undefined') {
+        window.dispatchEvent(
+          new CustomEvent("datesChanged", {
+            detail: {
+              start: range.startDate,
+              end: range.endDate,
+              tripType,
+              module,
+            },
+          }),
+        );
+      }
     },
     [
       tripType,
