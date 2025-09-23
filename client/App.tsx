@@ -93,6 +93,7 @@ import APITestingDashboard from "./pages/admin/APITestingDashboard";
 import GoogleCallback from "./pages/oauth/GoogleCallback";
 import FacebookCallback from "./pages/oauth/FacebookCallback";
 import AppleCallback from "./pages/oauth/AppleCallback";
+import { OAuthTest } from "./pages/OAuthTest";
 
 function App() {
   return (
