@@ -57,15 +57,19 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, []);
 
   const login = (userData: User) => {
+    console.log("🔵 AuthContext: Logging in user:", userData);
     setIsLoggedIn(true);
     setUser(userData);
 
-    // Save to localStorage
+    // Save to localStorage with timestamp for session tracking
     const authData = {
       isLoggedIn: true,
       user: userData,
+      loginTime: new Date().toISOString(),
+      provider: 'oauth' // Track if this was an OAuth login
     };
     localStorage.setItem("faredown_auth", JSON.stringify(authData));
+    console.log("✅ AuthContext: User data saved to localStorage");
   };
 
   const logout = () => {
