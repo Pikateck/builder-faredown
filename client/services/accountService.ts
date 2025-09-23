@@ -188,6 +188,22 @@ class AccountService {
         amount: 12000,
         status: "confirmed",
       },
+      {
+        booking_ref: "FD-SG-003",
+        module: "sightseeing",
+        title: "Dubai City Tour",
+        date: "2024-01-17",
+        amount: 8500,
+        status: "confirmed",
+      },
+      {
+        booking_ref: "FD-TR-004",
+        module: "transfer",
+        title: "Airport Transfer",
+        date: "2024-01-18",
+        amount: 3200,
+        status: "confirmed",
+      },
     ],
     bookings: [
       {
@@ -207,6 +223,24 @@ class AccountService {
         amount: 12000,
         status: "confirmed",
         payment_id: "pay_demo98765",
+      },
+      {
+        booking_ref: "FD-SG-003",
+        module: "sightseeing",
+        title: "Dubai City Tour",
+        date: "2024-01-17",
+        amount: 8500,
+        status: "confirmed",
+        payment_id: "pay_demo11111",
+      },
+      {
+        booking_ref: "FD-TR-004",
+        module: "transfer",
+        title: "Airport Transfer",
+        date: "2024-01-18",
+        amount: 3200,
+        status: "confirmed",
+        payment_id: "pay_demo22222",
       },
     ],
     flightDetail: {
