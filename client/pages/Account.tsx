@@ -458,24 +458,24 @@ export default function Account() {
                     isSelected && "bg-[#f5f5f5] border-[#e5e5e5]",
                   )}
                 >
-                  <CardContent className="p-6">
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="w-12 h-12 rounded-10 flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
-                        <IconComponent className="w-6 h-6 text-[#003580]" />
+                  <CardContent className="p-4 md:p-6">
+                    <div className="flex items-start justify-between mb-3 md:mb-4">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm flex-shrink-0">
+                        <IconComponent className="w-5 h-5 md:w-6 md:h-6 text-[#003580]" />
                       </div>
-                      <ChevronRight className="w-5 h-5 text-[#7a7a7a] group-hover:text-[#003580] transition-colors" />
+                      <ChevronRight className="w-4 h-4 md:w-5 md:h-5 text-[#7a7a7a] group-hover:text-[#003580] transition-colors" />
                     </div>
 
                     <h3
                       className={cn(
-                        "text-lg font-semibold text-[#1a1a1a] mb-2 transition-all",
+                        "text-base md:text-lg font-semibold text-[#1a1a1a] mb-2 transition-all",
                         "group-hover:font-bold",
                         isSelected && "font-bold",
                       )}
                     >
                       {section.title}
                     </h3>
-                    <p className="text-sm text-[#7a7a7a] mb-4">
+                    <p className="text-xs md:text-sm text-[#7a7a7a] mb-3 md:mb-4 leading-relaxed">
                       {section.description}
                     </p>
 
@@ -483,10 +483,10 @@ export default function Account() {
                       {section.items.slice(0, 3).map((item, index) => (
                         <div
                           key={index}
-                          className="flex items-center text-sm text-[#7a7a7a]"
+                          className="flex items-center text-xs md:text-sm text-[#7a7a7a]"
                         >
-                          <div className="w-1 h-1 bg-[#e5e5e5] rounded-full mr-2"></div>
-                          {item}
+                          <div className="w-1 h-1 bg-[#e5e5e5] rounded-full mr-2 flex-shrink-0"></div>
+                          <span className="truncate">{item}</span>
                         </div>
                       ))}
                     </div>
