@@ -19,12 +19,38 @@ const ALLOWED_ORIGINS = [
   "https://www.faredowntravels.com",
 ];
 
+// Debug Google OAuth environment variables
+console.log("🔍 Google OAuth Environment Check:");
+console.log("  GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID ? `${process.env.GOOGLE_CLIENT_ID.substring(0, 20)}...` : "NOT SET");
+console.log("  GOOGLE_CLIENT_SECRET:", process.env.GOOGLE_CLIENT_SECRET ? "SET" : "NOT SET");
+console.log("  OAUTH_REDIRECT_BASE:", process.env.OAUTH_REDIRECT_BASE);
+console.log("  VITE_API_BASE_URL:", process.env.VITE_API_BASE_URL);
+
+// Validate required environment variables
+if (!process.env.GOOGLE_CLIENT_ID) {
+  console.error("🔴 GOOGLE_CLIENT_ID environment variable is required!");
+  throw new Error("Missing GOOGLE_CLIENT_ID environment variable");
+}
+
+if (!process.env.GOOGLE_CLIENT_SECRET) {
+  console.error("🔴 GOOGLE_CLIENT_SECRET environment variable is required!");
+  throw new Error("Missing GOOGLE_CLIENT_SECRET environment variable");
+}
+
+const redirectUri = `${process.env.OAUTH_REDIRECT_BASE || process.env.VITE_API_BASE_URL}/api/oauth/google/callback`;
+console.log("🔍 OAuth Redirect URI:", redirectUri);
+
 // Google OAuth client
 const client = new OAuth2Client({
   clientId: process.env.GOOGLE_CLIENT_ID,
   clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  redirectUri: `${process.env.OAUTH_REDIRECT_BASE || process.env.VITE_API_BASE_URL}/api/oauth/google/callback`,
+  redirectUri: redirectUri,
 });
+
+// Verify client configuration
+console.log("✅ Google OAuth client initialized with:")
+console.log("  Client ID:", process.env.GOOGLE_CLIENT_ID ? `${process.env.GOOGLE_CLIENT_ID.substring(0, 20)}...` : "MISSING");
+console.log("  Redirect URI:", redirectUri);
 
 // Tiny in-memory store for state (replace with Redis for production)
 const stateStore = new Map(); // state -> expiresAt
