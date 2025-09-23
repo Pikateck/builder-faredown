@@ -127,6 +127,23 @@ function findOrCreateUser({ email, name, picture }) {
 
 // ===== ROUTES =====
 
+// OAuth status check (for frontend service compatibility)
+router.get("/status", (req, res) => {
+  console.log("🔵 OAuth status check requested");
+
+  const googleConfigured = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+
+  res.json({
+    success: true,
+    oauth: {
+      google: googleConfigured,
+      facebook: false, // Not implemented in oauth-simple
+      apple: false     // Not implemented in oauth-simple
+    },
+    message: "OAuth status retrieved successfully"
+  });
+});
+
 // Get Google OAuth URL (for frontend service compatibility)
 router.get("/google/url", async (req, res) => {
   try {
