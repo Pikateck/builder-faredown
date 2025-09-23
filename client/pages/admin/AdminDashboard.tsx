@@ -563,9 +563,16 @@ export default function AdminDashboard() {
 
         <Card>
           <CardHeader>
-            <CardTitle className="flex items-center">
-              <Hotel className="w-5 h-5 mr-2" />
-              Hotel Bookings by City
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Hotel className="w-5 h-5 mr-2" />
+                Hotel Bookings by City
+              </div>
+              <Badge variant="outline" className="text-xs">
+                {dateFilter === "today" ? "Today" :
+                 dateFilter === "week" ? "This Week" :
+                 dateFilter === "month" ? "This Month" : "This Year"}
+              </Badge>
             </CardTitle>
           </CardHeader>
           <CardContent>
