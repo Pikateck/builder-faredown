@@ -37,7 +37,8 @@ if (!process.env.GOOGLE_CLIENT_SECRET) {
   throw new Error("Missing GOOGLE_CLIENT_SECRET environment variable");
 }
 
-const redirectUri = `${process.env.OAUTH_REDIRECT_BASE || process.env.VITE_API_BASE_URL}/api/oauth/google/callback`;
+// Use explicit redirect URI that matches Google Cloud Console setup
+const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.OAUTH_REDIRECT_BASE || process.env.VITE_API_BASE_URL}/api/oauth/google/callback`;
 console.log("🔍 OAuth Redirect URI:", redirectUri);
 
 // Google OAuth client
@@ -302,7 +303,7 @@ router.get("/me", (req, res) => {
     );
     const user = [...users.values()].find((u) => u.id === payload.sub);
     if (!user) {
-      console.log("🔴 User not found for token");
+      console.log("�� User not found for token");
       return res.status(401).json({ ok: false });
     }
 
