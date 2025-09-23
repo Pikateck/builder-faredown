@@ -327,6 +327,10 @@ function App() {
                           path="/color-palette"
                           element={<FaredownColorPalette />}
                         />
+                        <Route
+                          path="/oauth-test"
+                          element={<OAuthTest />}
+                        />
 
                         {/* Admin CMS Routes */}
                         <Route path="/cms/*" element={<CmsPage />} />
