@@ -10,9 +10,20 @@ export function OAuthTest() {
     setIsLoading(true);
     setError('');
     setResult(null);
-    
+
     try {
       console.log('🧪 Testing Google OAuth...');
+      console.log('🧪 Current URL:', window.location.href);
+      console.log('🧪 User Agent:', navigator.userAgent);
+      console.log('🧪 Popup blocker test...');
+
+      // Test if popups are blocked
+      const testPopup = window.open('', 'test', 'width=1,height=1');
+      if (!testPopup) {
+        throw new Error('Popup blocked by browser. Please allow popups for this site.');
+      }
+      testPopup.close();
+
       const response = await oauthService.loginWithGoogle();
       console.log('🧪 OAuth Response:', response);
       setResult(response);
