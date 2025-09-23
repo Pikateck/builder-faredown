@@ -367,24 +367,26 @@ export default function Account() {
         </div>
 
         {/* FaredownClub Tier System */}
-        <Card className="mb-8 bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
-          <CardContent className="p-6">
-            <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-              <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-[#febb02] rounded-full flex items-center justify-center shadow-sm border border-[#e6a602]">
-                  <Award className="w-8 h-8 text-[#1a1a1a]" />
+        <Card className="mb-6 md:mb-8 bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
+          <CardContent className="p-4 md:p-6">
+            <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-4 md:gap-6">
+              <div className="flex items-start md:items-center space-x-3 md:space-x-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-[#febb02] rounded-full flex items-center justify-center shadow-sm border border-[#e6a602] flex-shrink-0">
+                  <Award className="w-6 h-6 md:w-8 md:h-8 text-[#1a1a1a]" />
                 </div>
-                <div>
-                  <h3 className="text-xl font-bold text-[#003580] flex items-center space-x-2">
-                    <span>FaredownClub Gold</span>
-                    <Badge className="bg-[#febb02] text-[#1a1a1a] border border-[#e6a602]">
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-col sm:flex-row sm:items-center space-y-1 sm:space-y-0 sm:space-x-2">
+                    <h3 className="text-lg md:text-xl font-bold text-[#003580]">
+                      FaredownClub Gold
+                    </h3>
+                    <Badge className="bg-[#febb02] text-[#1a1a1a] border border-[#e6a602] text-xs self-start">
                       Current Tier
                     </Badge>
-                  </h3>
-                  <p className="text-[#7a7a7a]">
+                  </div>
+                  <p className="text-sm md:text-base text-[#7a7a7a] mt-1">
                     Enjoy enhanced benefits and exclusive rewards
                   </p>
-                  <div className="mt-2 flex flex-wrap gap-2">
+                  <div className="mt-2 flex flex-wrap gap-1 md:gap-2">
                     <Badge
                       variant="outline"
                       className="text-xs border-[#e5e5e5] text-[#7a7a7a]"
@@ -395,7 +397,7 @@ export default function Account() {
                       variant="outline"
                       className="text-xs border-[#e5e5e5] text-[#7a7a7a]"
                     >
-                      Free seat upgrades
+                      Free upgrades
                     </Badge>
                     <Badge
                       variant="outline"
@@ -407,12 +409,12 @@ export default function Account() {
                 </div>
               </div>
 
-              <div className="text-left md:text-right w-full md:w-auto">
+              <div className="text-left lg:text-right w-full lg:w-auto">
                 <div className="mb-4">
                   <p className="text-sm text-[#7a7a7a] mb-2">
                     Progress to Platinum
                   </p>
-                  <div className="w-full md:w-48 h-3 bg-[#e5e5e5] rounded-full">
+                  <div className="w-full lg:w-48 h-3 bg-[#e5e5e5] rounded-full">
                     <div className="w-1/3 h-3 bg-[#febb02] rounded-full relative">
                       <div className="absolute right-0 top-1/2 transform translate-x-1/2 -translate-y-1/2 w-3 h-3 bg-[#febb02] rounded-full border-2 border-[#ffffff]"></div>
                     </div>
