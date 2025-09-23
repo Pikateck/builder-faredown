@@ -243,46 +243,46 @@ export default function Account() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="py-6">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-4">
-                <div className="w-16 h-16 bg-[#f5f5f5] rounded-lg flex items-center justify-center border border-[#e5e5e5] shadow-sm">
-                  <User className="w-8 h-8 text-[#003580]" />
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8">
+          <div className="py-4 md:py-6">
+            <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-4 md:space-y-0">
+              <div className="flex items-center space-x-3 md:space-x-4">
+                <div className="w-12 h-12 md:w-16 md:h-16 bg-[#f5f5f5] rounded-lg flex items-center justify-center border border-[#e5e5e5] shadow-sm flex-shrink-0">
+                  <User className="w-6 h-6 md:w-8 md:h-8 text-[#003580]" />
                 </div>
-                <div>
-                  <h1 className="text-2xl font-bold text-[#1a1a1a]">
+                <div className="min-w-0 flex-1">
+                  <h1 className="text-xl md:text-2xl font-bold text-[#1a1a1a] truncate">
                     Hi, {userName}
                   </h1>
-                  <div className="flex items-center space-x-2">
-                    <Badge className="bg-[#febb02] text-[#1a1a1a] text-sm font-medium border border-[#e6a602] shadow-sm">
-                      <Award className="w-4 h-4 mr-1" />
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 space-y-1 sm:space-y-0 mt-1">
+                    <Badge className="bg-[#febb02] text-[#1a1a1a] text-xs md:text-sm font-medium border border-[#e6a602] shadow-sm self-start">
+                      <Award className="w-3 h-3 md:w-4 md:h-4 mr-1" />
                       FaredownClub Gold
                     </Badge>
-                    <span className="text-[#7a7a7a] text-sm">
+                    <span className="text-[#7a7a7a] text-xs md:text-sm">
                       Member since Dec 2024
                     </span>
                   </div>
                 </div>
               </div>
-              <div className="text-right">
-                <p className="text-sm text-[#7a7a7a]">
+              <div className="text-left md:text-right">
+                <p className="text-xs md:text-sm text-[#7a7a7a]">
                   You have{" "}
                   {accountOverview?.loyalty_points?.toLocaleString() || "1,250"}{" "}
                   FaredownClub points
                 </p>
                 <div className="mt-2">
-                  <div className="flex items-center justify-end space-x-2 mb-1">
-                    <span className="text-xs text-[#7a7a7a]">
+                  <div className="flex items-center md:justify-end space-x-2 mb-1">
+                    <span className="text-xs text-[#7a7a7a] whitespace-nowrap">
                       Progress to Platinum
                     </span>
-                    <div className="w-24 h-2 bg-[#e5e5e5] rounded-full">
+                    <div className="w-20 md:w-24 h-2 bg-[#e5e5e5] rounded-full">
                       <div className="w-2/3 h-2 bg-[#febb02] rounded-full"></div>
                     </div>
                   </div>
                   <p className="text-xs text-[#003580] font-medium">
                     {accountOverview?.progress_to_next_tier?.remaining || 10}{" "}
-                    more bookings for FaredownClub Platinum
+                    more bookings for Platinum
                   </p>
                 </div>
               </div>
