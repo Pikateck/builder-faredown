@@ -295,71 +295,71 @@ export default function Account() {
         {/* Quick Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6 md:mb-8">
           <Card className="bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[#7a7a7a] text-sm font-medium">
+            <CardContent className="p-3 md:p-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-2 md:space-y-0">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[#7a7a7a] text-xs md:text-sm font-medium truncate">
                     Total Bookings
                   </p>
-                  <p className="text-2xl font-bold text-[#003580]">
+                  <p className="text-lg md:text-2xl font-bold text-[#003580]">
                     {accountOverview?.total_bookings || bookings.length}
                   </p>
                 </div>
-                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
-                  <Plane className="w-6 h-6 text-[#003580]" />
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm flex-shrink-0 self-end md:self-center">
+                  <Plane className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card className="bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[#7a7a7a] text-sm font-medium">
+            <CardContent className="p-3 md:p-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-2 md:space-y-0">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[#7a7a7a] text-xs md:text-sm font-medium truncate">
                     Countries Visited
                   </p>
-                  <p className="text-2xl font-bold text-[#003580]">
+                  <p className="text-lg md:text-2xl font-bold text-[#003580]">
                     {accountOverview?.countries_visited || 2}
                   </p>
                 </div>
-                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
-                  <Globe className="w-6 h-6 text-[#003580]" />
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm flex-shrink-0 self-end md:self-center">
+                  <Globe className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card className="bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[#7a7a7a] text-sm font-medium">
+            <CardContent className="p-3 md:p-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-2 md:space-y-0">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[#7a7a7a] text-xs md:text-sm font-medium truncate">
                     FaredownClub Points
                   </p>
-                  <p className="text-2xl font-bold text-[#003580]">
+                  <p className="text-lg md:text-2xl font-bold text-[#003580]">
                     {accountOverview?.loyalty_points?.toLocaleString() ||
                       "1,250"}
                   </p>
                 </div>
-                <div className="w-12 h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
-                  <Award className="w-6 h-6 text-[#003580]" />
+                <div className="w-8 h-8 md:w-12 md:h-12 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm flex-shrink-0 self-end md:self-center">
+                  <Award className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                 </div>
               </div>
             </CardContent>
           </Card>
           <Card className="bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-[#7a7a7a] text-sm font-medium">
+            <CardContent className="p-3 md:p-6">
+              <div className="flex flex-col md:flex-row md:items-center md:justify-between space-y-2 md:space-y-0">
+                <div className="min-w-0 flex-1">
+                  <p className="text-[#7a7a7a] text-xs md:text-sm font-medium truncate">
                     Current Tier
                   </p>
-                  <p className="text-lg font-bold text-[#003580] flex items-center">
-                    <Award className="w-5 h-5 mr-1" />
+                  <p className="text-sm md:text-lg font-bold text-[#003580] flex items-center">
+                    <Award className="w-4 h-4 md:w-5 md:h-5 mr-1" />
                     Gold
                   </p>
                 </div>
-                <div className="w-12 h-12 bg-[#febb02] rounded-lg flex items-center justify-center shadow-sm border border-[#e6a602]">
-                  <span className="text-[#1a1a1a] font-bold text-lg">G</span>
+                <div className="w-8 h-8 md:w-12 md:h-12 bg-[#febb02] rounded-lg flex items-center justify-center shadow-sm border border-[#e6a602] flex-shrink-0 self-end md:self-center">
+                  <span className="text-[#1a1a1a] font-bold text-sm md:text-lg">G</span>
                 </div>
               </div>
             </CardContent>
