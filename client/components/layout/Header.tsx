@@ -393,16 +393,6 @@ export function Header() {
                         <span className="font-medium">Saved</span>
                       </button>
 
-                      <button
-                        onClick={() => {
-                          handleNavigation("/help");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left"
-                      >
-                        <BookOpen className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Help Center</span>
-                      </button>
 
                       <button
                         onClick={() => {
@@ -554,6 +544,20 @@ export function Header() {
                                 Settings
                               </span>
                             </button>
+
+                            <button
+                              onClick={() => {
+                                handleNavigation("/help-center");
+                                setShowMobileMenu(false);
+                                setShowMobileUserDropdown(false);
+                              }}
+                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
+                            >
+                              <BookOpen className="w-4 h-4 text-[#003580]" />
+                              <span className="text-sm font-medium">
+                                Help Centre
+                              </span>
+                            </button>
                           </div>
                         )}
 
@@ -688,12 +692,6 @@ export function Header() {
                   )}
                 >
                   <span>Transfers</span>
-                </button>
-                <button
-                  onClick={() => handleNavigation("/help-center")}
-                  className="text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4"
-                >
-                  <span>Help Centre</span>
                 </button>
               </nav>
 
@@ -909,6 +907,15 @@ export function Header() {
                           >
                             <Settings className="w-4 h-4 mr-2" />
                             Settings
+                          </Link>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem>
+                          <Link
+                            to="/help-center"
+                            className="flex items-center"
+                          >
+                            <BookOpen className="w-4 h-4 mr-2" />
+                            Help Centre
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem onClick={handleSignOut}>
