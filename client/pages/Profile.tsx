@@ -766,14 +766,14 @@ export default function Profile({
                       key={item.id}
                       onClick={() => setActiveTab(item.id)}
                       className={cn(
-                        "w-full flex items-center space-x-3 px-3 py-2 rounded-lg text-left transition-colors",
+                        "w-full flex items-center space-x-2 md:space-x-3 px-2 md:px-3 py-2 rounded-lg text-left transition-colors",
                         activeTab === item.id
                           ? "bg-blue-50 text-blue-700 border border-blue-200"
                           : "hover:bg-gray-50 text-gray-700",
                       )}
                     >
-                      <item.icon className="w-5 h-5" />
-                      <span className="text-sm font-medium">{item.label}</span>
+                      <item.icon className="w-4 h-4 md:w-5 md:h-5" />
+                      <span className="text-xs md:text-sm font-medium">{item.label}</span>
                     </button>
                   ))}
                 </nav>
