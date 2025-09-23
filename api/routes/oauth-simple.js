@@ -38,15 +38,21 @@ if (!process.env.GOOGLE_CLIENT_SECRET) {
 }
 
 // Use explicit redirect URI that matches Google Cloud Console setup
-const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.OAUTH_REDIRECT_BASE || process.env.VITE_API_BASE_URL}/api/oauth/google/callback`;
+const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.OAUTH_REDIRECT_BASE}/api/oauth/google/callback`;
 console.log("🔍 OAuth Redirect URI:", redirectUri);
 
+// Validate redirect URI
+if (!redirectUri || redirectUri.includes('undefined')) {
+  console.error("🔴 Invalid redirect URI:", redirectUri);
+  throw new Error("Invalid OAuth redirect URI configuration");
+}
+
 // Google OAuth client
-const client = new OAuth2Client({
-  clientId: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  redirectUri: redirectUri,
-});
+const client = new OAuth2Client(
+  process.env.GOOGLE_CLIENT_ID,
+  process.env.GOOGLE_CLIENT_SECRET,
+  redirectUri
+);
 
 // Verify client configuration
 console.log("✅ Google OAuth client initialized with:")
@@ -303,7 +309,7 @@ router.get("/me", (req, res) => {
     );
     const user = [...users.values()].find((u) => u.id === payload.sub);
     if (!user) {
-      console.log("�� User not found for token");
+      console.log("🔴 User not found for token");
       return res.status(401).json({ ok: false });
     }
 
