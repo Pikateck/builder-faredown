@@ -492,144 +492,18 @@ export function Header() {
                     </div>
                   </nav>
 
-                  {/* User Section */}
-                  {isLoggedIn ? (
-                    <div className="mt-8 px-4">
-                      <div className="bg-blue-50 rounded-lg p-4">
-                        {/* User Profile Button */}
-                        <button
-                          className="flex items-center justify-between w-full mb-3 hover:bg-blue-100 p-2 rounded-lg transition-colors"
-                          onClick={() =>
-                            setShowMobileUserDropdown(!showMobileUserDropdown)
-                          }
-                        >
-                          <div className="flex items-center space-x-3">
-                            <div className="w-10 h-10 bg-[#003580] rounded-full flex items-center justify-center">
-                              <span className="text-white font-bold text-sm">
-                                {userName.charAt(0)}
-                              </span>
-                            </div>
-                            <div className="text-left">
-                              <div className="font-medium text-gray-900">
-                                {userName}
-                              </div>
-                              <div className="text-sm text-gray-600">
-                                Loyalty Level 1
-                              </div>
-                            </div>
-                          </div>
-                          <ChevronDown
-                            className={`w-5 h-5 text-gray-500 transition-transform ${showMobileUserDropdown ? "rotate-180" : ""}`}
-                          />
-                        </button>
-
-                        {/* User Dropdown Menu */}
-                        {showMobileUserDropdown && (
-                          <div className="space-y-1 border-t border-gray-200 pt-3 mb-3">
-                            <button
-                              onClick={() => {
-                                handleNavigation("/account?tab=bookings");
-                                setShowMobileMenu(false);
-                                setShowMobileUserDropdown(false);
-                              }}
-                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
-                            >
-                              <Plane className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">
-                                My Bookings
-                              </span>
-                            </button>
-
-                            <button
-                              onClick={() => {
-                                handleNavigation("/account?tab=profile");
-                                setShowMobileMenu(false);
-                                setShowMobileUserDropdown(false);
-                              }}
-                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
-                            >
-                              <User className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">
-                                Profile
-                              </span>
-                            </button>
-
-                            <button
-                              onClick={() => {
-                                handleNavigation("/account?tab=loyalty");
-                                setShowMobileMenu(false);
-                                setShowMobileUserDropdown(false);
-                              }}
-                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
-                            >
-                              <Award className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">
-                                Loyalty Program
-                              </span>
-                            </button>
-
-                            <button
-                              onClick={() => {
-                                handleNavigation("/account?tab=payment");
-                                setShowMobileMenu(false);
-                                setShowMobileUserDropdown(false);
-                              }}
-                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
-                            >
-                              <CreditCard className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">
-                                Payment & Wallet
-                              </span>
-                            </button>
-
-                            <button
-                              onClick={() => {
-                                handleNavigation("/account?tab=settings");
-                                setShowMobileMenu(false);
-                                setShowMobileUserDropdown(false);
-                              }}
-                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
-                            >
-                              <Settings className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">
-                                Settings
-                              </span>
-                            </button>
-
-                            <button
-                              onClick={() => {
-                                handleNavigation("/help-center");
-                                setShowMobileMenu(false);
-                                setShowMobileUserDropdown(false);
-                              }}
-                              className="flex items-center space-x-3 px-3 py-2 rounded-lg w-full text-left text-gray-700 hover:bg-blue-100"
-                            >
-                              <BookOpen className="w-4 h-4 text-[#003580]" />
-                              <span className="text-sm font-medium">
-                                Help Centre
-                              </span>
-                            </button>
-                          </div>
-                        )}
-
-                        <button
-                          className="flex items-center space-x-2 text-red-600 hover:text-red-700 w-full"
-                          onClick={() => {
-                            handleSignOut();
-                            setShowMobileMenu(false);
-                          }}
-                        >
-                          <LogOut className="w-4 h-4" />
-                          <span className="text-sm font-medium">Sign Out</span>
-                        </button>
-
-                        <div className="mt-2 space-y-2">
+                  {/* Bottom Actions */}
+                  <div className="px-4 pb-4">
+                    {isLoggedIn ? (
+                      <div className="space-y-3">
+                        {/* Admin Links */}
+                        <div className="border-t border-gray-200 pt-4 space-y-2">
                           <button
                             onClick={() => {
                               handleNavigation("/admin/login");
                               setShowMobileMenu(false);
                             }}
-                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
+                            className="flex items-center space-x-3 px-3 py-2 text-[#003580] hover:bg-blue-50 rounded-lg w-full text-left"
                           >
                             <Shield className="w-4 h-4" />
                             <span className="text-sm font-medium">
@@ -641,7 +515,7 @@ export function Header() {
                               handleNavigation("/admin/api");
                               setShowMobileMenu(false);
                             }}
-                            className="flex items-center space-x-2 text-[#003580] hover:text-[#0071c2] w-full"
+                            className="flex items-center space-x-3 px-3 py-2 text-[#003580] hover:bg-blue-50 rounded-lg w-full text-left"
                           >
                             <Code className="w-4 h-4" />
                             <span className="text-sm font-medium">
@@ -649,33 +523,45 @@ export function Header() {
                             </span>
                           </button>
                         </div>
+
+                        {/* Sign Out */}
+                        <button
+                          className="flex items-center justify-center space-x-2 w-full py-3 text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                          onClick={() => {
+                            handleSignOut();
+                            setShowMobileMenu(false);
+                          }}
+                        >
+                          <LogOut className="w-5 h-5" />
+                          <span className="font-medium">Sign Out</span>
+                        </button>
                       </div>
-                    </div>
-                  ) : (
-                    <div className="mt-8 px-4 space-y-3">
-                      <Button
-                        className="w-full bg-[#003580] hover:bg-[#0071c2] text-white"
-                        onClick={() => {
-                          setAuthModalMode("login");
-                          setShowAuthModal(true);
-                          setShowMobileMenu(false);
-                        }}
-                      >
-                        Sign In
-                      </Button>
-                      <Button
-                        variant="outline"
-                        className="w-full border-[#003580] text-[#003580] hover:bg-blue-50"
-                        onClick={() => {
-                          setAuthModalMode("register");
-                          setShowAuthModal(true);
-                          setShowMobileMenu(false);
-                        }}
-                      >
-                        Register
-                      </Button>
-                    </div>
-                  )}
+                    ) : (
+                      <div className="space-y-3 border-t border-gray-200 pt-4">
+                        <Button
+                          className="w-full bg-[#003580] hover:bg-[#0071c2] text-white"
+                          onClick={() => {
+                            setAuthModalMode("login");
+                            setShowAuthModal(true);
+                            setShowMobileMenu(false);
+                          }}
+                        >
+                          Sign In
+                        </Button>
+                        <Button
+                          variant="outline"
+                          className="w-full border-[#003580] text-[#003580] hover:bg-blue-50"
+                          onClick={() => {
+                            setAuthModalMode("register");
+                            setShowAuthModal(true);
+                            setShowMobileMenu(false);
+                          }}
+                        >
+                          Register
+                        </Button>
+                      </div>
+                    )}
+                  </div>
                 </div>
               </div>
             </div>
