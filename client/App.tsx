@@ -15,7 +15,6 @@ import { SearchProvider } from "./contexts/SearchContext";
 
 // Original pages
 import Index from "./pages/Index";
-import IndexTest from "./pages/IndexTest";
 import Flights from "./pages/Flights";
 import FlightResults from "./pages/FlightResults";
 import FlightDetails from "./pages/FlightDetails";
@@ -111,7 +110,7 @@ function App() {
                     <SearchProvider>
                       <Routes>
                         {/* Original Web Routes */}
-                        <Route path="/" element={<IndexTest />} />
+                        <Route path="/" element={<Index />} />
                         <Route path="/flights" element={<Flights />} />
                         <Route
                           path="/flights/results"
