@@ -802,7 +802,7 @@ export function Header() {
                       <DropdownMenuContent className="w-48" align="end">
                         <DropdownMenuItem>
                           <Link
-                            to="/account?tab=bookings"
+                            to="/account/trips"
                             className="flex items-center"
                           >
                             <Plane className="w-4 h-4 mr-2" />
@@ -811,7 +811,7 @@ export function Header() {
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Link
-                            to="/account?tab=profile"
+                            to="/account/personal"
                             className="flex items-center"
                           >
                             <User className="w-4 h-4 mr-2" />
@@ -820,7 +820,7 @@ export function Header() {
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Link
-                            to="/account?tab=loyalty"
+                            to="/account/loyalty"
                             className="flex items-center"
                           >
                             <Award className="w-4 h-4 mr-2" />
@@ -829,7 +829,7 @@ export function Header() {
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Link
-                            to="/account?tab=payment"
+                            to="/account/payment"
                             className="flex items-center"
                           >
                             <CreditCard className="w-4 h-4 mr-2" />
@@ -838,7 +838,7 @@ export function Header() {
                         </DropdownMenuItem>
                         <DropdownMenuItem>
                           <Link
-                            to="/account?tab=settings"
+                            to="/account/preferences"
                             className="flex items-center"
                           >
                             <Settings className="w-4 h-4 mr-2" />
