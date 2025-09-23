@@ -337,6 +337,10 @@ function App() {
                           path="/auth-test"
                           element={<AuthTest />}
                         />
+                        <Route
+                          path="/oauth-summary"
+                          element={<OAuthImplementationSummary />}
+                        />
 
                         {/* Admin CMS Routes */}
                         <Route path="/cms/*" element={<CmsPage />} />
