@@ -396,6 +396,12 @@ class AccountService {
           return this.mockData.flightDetail.ticket.eticket_pdf_url;
         } else if (bookingRef.includes("HT")) {
           return this.mockData.hotelDetail.voucher.voucher_pdf_url;
+        } else if (bookingRef.includes("SG") || bookingRef.includes("SS")) {
+          // Sightseeing booking
+          return "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+        } else if (bookingRef.includes("TR") || bookingRef.includes("TF")) {
+          // Transfer booking
+          return "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
         }
 
         throw new Error("Ticket not found");
@@ -409,6 +415,12 @@ class AccountService {
         return this.mockData.flightDetail.ticket.eticket_pdf_url;
       } else if (bookingRef.includes("HT")) {
         return this.mockData.hotelDetail.voucher.voucher_pdf_url;
+      } else if (bookingRef.includes("SG") || bookingRef.includes("SS")) {
+        // Sightseeing booking
+        return "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+      } else if (bookingRef.includes("TR") || bookingRef.includes("TF")) {
+        // Transfer booking
+        return "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
       }
 
       throw error;
