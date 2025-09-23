@@ -920,9 +920,9 @@ function PersonalDetailsTab({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
-          <span>Personal details</span>
-          <Button onClick={onSave} disabled={saving}>
+        <CardTitle className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
+          <span className="text-lg md:text-xl">Personal details</span>
+          <Button onClick={onSave} disabled={saving} className="self-start sm:self-center w-full sm:w-auto">
             {saving ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
             ) : (
@@ -932,7 +932,7 @@ function PersonalDetailsTab({
           </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent className="space-y-6">
+      <CardContent className="space-y-4 md:space-y-6 p-4 md:p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div>
             <Label htmlFor="firstName">First name *</Label>
