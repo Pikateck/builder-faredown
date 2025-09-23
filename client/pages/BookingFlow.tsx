@@ -102,6 +102,7 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 
 // Import the price in words utility
 import { formatPriceInWords } from "@/lib/numberToWords";
+import { AuthModal } from "@/components/AuthModal";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 
 // Airline Logo Mapping - Professional Logos
