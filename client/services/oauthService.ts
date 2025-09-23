@@ -125,7 +125,7 @@ export class OAuthService {
         },
       );
 
-      console.log("🔵 Backend callback response:", response);
+      console.log("���� Backend callback response:", response);
 
       if (response.success && response.token) {
         console.log("🔵 Storing auth token and user data...");
@@ -331,6 +331,13 @@ export class OAuthService {
       let messageReceived = false;
 
       function messageHandler(ev: MessageEvent) {
+        console.log("🔵 [Regular OAuth] Raw message received:", {
+          origin: ev.origin,
+          data: ev.data,
+          type: typeof ev.data,
+          hasType: ev.data?.type
+        });
+
         const allowed = [
           "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev",
           "https://www.faredowntravels.com",
@@ -338,11 +345,12 @@ export class OAuthService {
         ];
 
         if (!allowed.includes(ev.origin)) {
-          console.log("��� Message from disallowed origin:", ev.origin);
+          console.log("🔴 [Regular OAuth] Message from disallowed origin:", ev.origin);
           return;
         }
 
-        console.log("🔵 Received message:", ev.data, "from origin:", ev.origin);
+        console.log("✅ [Regular OAuth] Message from allowed origin:", ev.origin);
+        console.log("🔵 [Regular OAuth] Message data:", ev.data);
 
         if (ev.data?.type === "oauth:success") {
           console.log("✅ OAuth success received!");
