@@ -125,7 +125,7 @@ export default function Account() {
 
       // Convert to old format for backward compatibility
       const oldFormatBookings = overview.recent_activity.map((activity) => ({
-        type: activity.module,
+        type: activity.module, // Map module to type for filtering
         bookingDetails: {
           bookingRef: activity.booking_ref,
           bookingDate: activity.date,
