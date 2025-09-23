@@ -1013,8 +1013,8 @@ function PersonalDetailsTab({
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <div>
-            <Label htmlFor="dob">Date of birth</Label>
+          <div className="space-y-2">
+            <Label htmlFor="dob" className="text-sm font-medium">Date of birth</Label>
             <Input
               id="dob"
               type="date"
@@ -1022,10 +1022,11 @@ function PersonalDetailsTab({
               onChange={(e) =>
                 setPersonalForm({ ...personalForm, dob: e.target.value })
               }
+              className="h-11"
             />
           </div>
-          <div>
-            <Label htmlFor="nationality">Nationality</Label>
+          <div className="space-y-2">
+            <Label htmlFor="nationality" className="text-sm font-medium">Nationality</Label>
             <CountrySelect
               value={personalForm.nationality_iso2 || ""}
               onValueChange={(value) =>
@@ -1034,20 +1035,20 @@ function PersonalDetailsTab({
               placeholder="Select nationality"
               prioritizePopular={true}
               showFlags={true}
-              className="w-full"
+              className="w-full h-11"
             />
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="gender">Gender</Label>
+        <div className="space-y-2">
+          <Label htmlFor="gender" className="text-sm font-medium">Gender</Label>
           <Select
             value={personalForm.gender || ""}
             onValueChange={(value) =>
               setPersonalForm({ ...personalForm, gender: value })
             }
           >
-            <SelectTrigger>
+            <SelectTrigger className="h-11">
               <SelectValue placeholder="Select gender" />
             </SelectTrigger>
             <SelectContent>
