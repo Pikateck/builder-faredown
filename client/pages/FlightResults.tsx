@@ -6007,105 +6007,12 @@ export default function FlightResults() {
         </DialogContent>
       </Dialog>
 
-      {/* Register Modal */}
-      <Dialog open={showRegister} onOpenChange={setShowRegister}>
-        <DialogContent className="max-w-md">
-          <DialogHeader>
-            <DialogTitle className="text-xl font-bold text-center">
-              Create your account
-            </DialogTitle>
-          </DialogHeader>
-
-          <div className="space-y-4 p-4">
-            {authError && (
-              <div className="bg-red-50 border border-red-200 rounded-lg p-3">
-                <p className="text-sm text-red-600">{authError}</p>
-              </div>
-            )}
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  First name
-                </label>
-                <Input
-                  type="text"
-                  placeholder="First name"
-                  value={registerFirstName}
-                  onChange={(e) => setRegisterFirstName(e.target.value)}
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">
-                  Last name
-                </label>
-                <Input
-                  type="text"
-                  placeholder="Last name"
-                  value={registerLastName}
-                  onChange={(e) => setRegisterLastName(e.target.value)}
-                />
-              </div>
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Email address
-              </label>
-              <Input
-                type="email"
-                placeholder="Enter your email address"
-                value={registerEmail}
-                onChange={(e) => setRegisterEmail(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Password
-              </label>
-              <Input
-                type="password"
-                placeholder="Create a password (8+ characters)"
-                value={registerPassword}
-                onChange={(e) => setRegisterPassword(e.target.value)}
-              />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm password
-              </label>
-              <Input
-                type="password"
-                placeholder="Confirm your password"
-                value={registerConfirmPassword}
-                onChange={(e) => setRegisterConfirmPassword(e.target.value)}
-              />
-            </div>
-
-            <Button
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
-              onClick={handleRegister}
-            >
-              Create account
-            </Button>
-
-            <div className="text-center">
-              <Button
-                variant="link"
-                onClick={() => {
-                  setShowRegister(false);
-                  setShowSignIn(true);
-                }}
-                className="text-blue-600 hover:text-blue-700"
-              >
-                Already have an account? Sign in here
-              </Button>
-            </div>
-          </div>
-        </DialogContent>
-      </Dialog>
+      {/* Authentication Modal - Now with Google OAuth */}
+      <AuthModal
+        isOpen={showRegister}
+        onClose={() => setShowRegister(false)}
+        initialMode="register"
+      />
 
       {/* Flight Details Modal */}
       <Dialog open={showFlightDetails} onOpenChange={setShowFlightDetails}>
