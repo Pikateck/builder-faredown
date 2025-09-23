@@ -158,23 +158,23 @@ export class OAuthService {
       console.log("🔵 Starting Google OAuth flow...");
 
       // Open popup window directly to /auth/google
-      const width = 500,
-        height = 600;
+      const width = 600,
+        height = 700;
       const left = window.screenX + (window.outerWidth - width) / 2;
       const top = window.screenY + (window.outerHeight - height) / 2;
 
       const popup = window.open(
         "/auth/google", // Backend route to start OAuth
         "oauth-google",
-        `width=${width},height=${height},left=${left},top=${top},resizable,scrollbars=yes`,
+        `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes,location=yes`,
       );
 
       if (!popup) {
-        reject(new Error("Failed to open popup window"));
+        reject(new Error("Failed to open popup window. Please check if popups are blocked."));
         return;
       }
 
-      console.log("🔵 Popup opened, waiting for success message...");
+      console.log("🔵 Popup opened successfully, waiting for auth completion...");
 
       let messageReceived = false;
 
