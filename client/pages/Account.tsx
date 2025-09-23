@@ -84,6 +84,7 @@ import {
   type AccountOverview,
 } from "@/services/accountService";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function Account() {
   const [searchParams] = useSearchParams();
@@ -92,8 +93,12 @@ export default function Account() {
   const [bookings, setBookings] = useState([]);
   const [accountOverview, setAccountOverview] =
     useState<AccountOverview | null>(null);
-  const [userName] = useState("Zubin Aibara");
+  const { user } = useAuth();
   const { formatPrice } = useCurrency();
+
+  // Use real user data from AuthContext, fallback to placeholder if not logged in
+  const userName = user?.name || "User";
+  const userEmail = user?.email || "user@example.com";
 
   // Determine if we're on a sub-page or the main account landing
   const isSubPage =

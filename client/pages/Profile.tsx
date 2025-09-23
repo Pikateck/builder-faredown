@@ -51,6 +51,7 @@ import {
 import { cn } from "@/lib/utils";
 import { CountrySelect } from "@/components/ui/country-select";
 import useCountries from "@/hooks/useCountries";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Check if offline mode is enabled
 const isOfflineMode = import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK === "true";
@@ -87,7 +88,28 @@ const profileAPI = {
     return await response.text();
   },
 
-  async fetchProfile() {
+  async fetchProfile(authUser = null) {
+    // If user is authenticated, use their real data
+    if (authUser) {
+      const firstName = authUser.name.split(' ')[0] || '';
+      const lastName = authUser.name.split(' ').slice(1).join(' ') || '';
+
+      return {
+        success: true,
+        profile: {
+          id: authUser.id,
+          first_name: firstName,
+          last_name: lastName,
+          email: authUser.email,
+          phone: "", // Will be filled by user if needed
+          email_verified: true,
+          nationality_iso2: "IN", // Default, user can change
+          date_of_birth: "", // User will fill this
+          gender: "", // User will fill this
+        },
+      };
+    }
+
     // Return mock data immediately if offline mode is enabled
     if (isOfflineMode) {
       return {
@@ -113,19 +135,40 @@ const profileAPI = {
       return await this.handleResponse(response);
     } catch (error) {
       console.error("fetchProfile error:", error);
-      // Return mock data for development
+      // Return auth user data if available, otherwise mock data
+      if (authUser) {
+        const firstName = authUser.name.split(' ')[0] || '';
+        const lastName = authUser.name.split(' ').slice(1).join(' ') || '';
+
+        return {
+          success: true,
+          profile: {
+            id: authUser.id,
+            first_name: firstName,
+            last_name: lastName,
+            email: authUser.email,
+            phone: "",
+            email_verified: true,
+            nationality_iso2: "IN",
+            date_of_birth: "",
+            gender: "",
+          },
+        };
+      }
+
+      // Fallback to mock data for development
       return {
         success: true,
         profile: {
           id: 1,
-          first_name: "Zubin",
-          last_name: "Aibara",
-          email: "zubin@example.com",
-          phone: "+91 9876543210",
-          email_verified: true,
+          first_name: "John",
+          last_name: "Doe",
+          email: "user@example.com",
+          phone: "",
+          email_verified: false,
           nationality_iso2: "IN",
-          date_of_birth: "1990-01-01",
-          gender: "male",
+          date_of_birth: "",
+          gender: "",
         },
       };
     }
