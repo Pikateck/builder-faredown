@@ -83,17 +83,52 @@ const db = require("./database/connection");
 const app = express();
 const PORT = process.env.PORT || 3001;
 
-// Security middleware - Modified for Builder.io iframe support
+// Security middleware - Modified for Builder.io iframe support and Google OAuth
 app.use(
   helmet({
     contentSecurityPolicy: {
       directives: {
         defaultSrc: ["'self'"],
-        styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-        fontSrc: ["'self'", "https://fonts.gstatic.com"],
-        imgSrc: ["'self'", "data:", "https:", "http:"],
-        scriptSrc: ["'self'"],
-        connectSrc: ["'self'", "https://api.exchangerate-api.com"],
+        styleSrc: [
+          "'self'",
+          "'unsafe-inline'",
+          "https://fonts.googleapis.com",
+          "https://accounts.google.com",
+          "https://ssl.gstatic.com"
+        ],
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com",
+          "https://ssl.gstatic.com"
+        ],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "https:",
+          "http:",
+          "https://ssl.gstatic.com",
+          "https://www.gstatic.com"
+        ],
+        scriptSrc: [
+          "'self'",
+          "'unsafe-inline'", // Required for Google OAuth
+          "https://accounts.google.com",
+          "https://apis.google.com",
+          "https://ssl.gstatic.com",
+          "https://www.gstatic.com"
+        ],
+        connectSrc: [
+          "'self'",
+          "https://api.exchangerate-api.com",
+          "https://accounts.google.com",
+          "https://oauth2.googleapis.com",
+          "https://www.googleapis.com"
+        ],
+        frameSrc: [
+          "'self'",
+          "https://accounts.google.com",
+          "https://content.googleapis.com"
+        ],
         // 🎯 BUILDER.IO IFRAME SUPPORT
         frameAncestors: [
           "'self'",
@@ -422,7 +457,7 @@ async function startServer() {
         initializeBargainHolds(db.pool);
       } catch (e) {
         console.warn(
-          "⚠️ Failed to initialize Bargain Holds with DB pool:",
+          "⚠�� Failed to initialize Bargain Holds with DB pool:",
           e.message,
         );
       }
