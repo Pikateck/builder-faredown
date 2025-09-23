@@ -124,6 +124,11 @@ function findOrCreateUser({ email, name, picture }) {
 router.get("/google", async (req, res) => {
   try {
     console.log("🔵 Starting Google OAuth...");
+    console.log("🔍 Request headers:", {
+      host: req.get('host'),
+      origin: req.get('origin'),
+      referer: req.get('referer')
+    });
 
     const state = crypto.randomUUID();
     putState(state);
@@ -135,12 +140,15 @@ router.get("/google", async (req, res) => {
       state,
     });
 
-    console.log(
-      `✅ Redirecting to Google with state: ${state.substring(0, 8)}...`,
-    );
+    console.log(`🔍 Generated OAuth URL: ${authUrl}`);
+    console.log(`🔍 State parameter: ${state}`);
+    console.log(`🔍 Client ID in URL: ${authUrl.includes(process.env.GOOGLE_CLIENT_ID) ? 'PRESENT' : 'MISSING'}`);
+    console.log(`✅ Redirecting to Google with state: ${state.substring(0, 8)}...`);
+
     res.redirect(authUrl);
   } catch (error) {
     console.error("🔴 OAuth start error:", error);
+    console.error("🔴 Error details:", error.message, error.stack);
     res.status(500).send("OAuth initialization failed");
   }
 });
