@@ -1065,10 +1065,10 @@ function PersonalDetailsTab({
         <Separator />
 
         <div>
-          <h3 className="text-lg font-semibold mb-4">Address</h3>
-          <div className="space-y-4">
-            <div>
-              <Label htmlFor="address1">Address line 1</Label>
+          <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4">Address</h3>
+          <div className="space-y-3 md:space-y-4">
+            <div className="space-y-2">
+              <Label htmlFor="address1" className="text-sm font-medium">Address line 1</Label>
               <Input
                 id="address1"
                 value={personalForm.line1 || ""}
@@ -1076,10 +1076,11 @@ function PersonalDetailsTab({
                   setPersonalForm({ ...personalForm, line1: e.target.value })
                 }
                 placeholder="Street address"
+                className="h-11"
               />
             </div>
-            <div>
-              <Label htmlFor="address2">Address line 2 (optional)</Label>
+            <div className="space-y-2">
+              <Label htmlFor="address2" className="text-sm font-medium">Address line 2 (optional)</Label>
               <Input
                 id="address2"
                 value={personalForm.line2 || ""}
@@ -1087,6 +1088,7 @@ function PersonalDetailsTab({
                   setPersonalForm({ ...personalForm, line2: e.target.value })
                 }
                 placeholder="Apartment, suite, etc."
+                className="h-11"
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
