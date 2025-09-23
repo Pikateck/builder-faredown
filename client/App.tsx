@@ -15,6 +15,7 @@ import { SearchProvider } from "./contexts/SearchContext";
 
 // Original pages
 import Index from "./pages/Index";
+import IndexSimple from "./pages/IndexSimple";
 import Flights from "./pages/Flights";
 import FlightResults from "./pages/FlightResults";
 import FlightDetails from "./pages/FlightDetails";
