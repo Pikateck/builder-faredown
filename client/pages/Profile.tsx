@@ -1092,8 +1092,8 @@ function PersonalDetailsTab({
               />
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
-              <div>
-                <Label htmlFor="city">City</Label>
+              <div className="space-y-2">
+                <Label htmlFor="city" className="text-sm font-medium">City</Label>
                 <Input
                   id="city"
                   value={personalForm.city || ""}
@@ -1101,10 +1101,11 @@ function PersonalDetailsTab({
                     setPersonalForm({ ...personalForm, city: e.target.value })
                   }
                   placeholder="City"
+                  className="h-11"
                 />
               </div>
-              <div>
-                <Label htmlFor="state">State/Province</Label>
+              <div className="space-y-2">
+                <Label htmlFor="state" className="text-sm font-medium">State/Province</Label>
                 <Input
                   id="state"
                   value={personalForm.state || ""}
@@ -1112,10 +1113,11 @@ function PersonalDetailsTab({
                     setPersonalForm({ ...personalForm, state: e.target.value })
                   }
                   placeholder="State"
+                  className="h-11"
                 />
               </div>
-              <div>
-                <Label htmlFor="postal">Postal code</Label>
+              <div className="space-y-2">
+                <Label htmlFor="postal" className="text-sm font-medium">Postal code</Label>
                 <Input
                   id="postal"
                   value={personalForm.postal_code || ""}
@@ -1126,11 +1128,12 @@ function PersonalDetailsTab({
                     })
                   }
                   placeholder="Postal code"
+                  className="h-11"
                 />
               </div>
             </div>
-            <div>
-              <Label htmlFor="country">Country</Label>
+            <div className="space-y-2">
+              <Label htmlFor="country" className="text-sm font-medium">Country</Label>
               <CountrySelect
                 value={personalForm.country_iso2 || ""}
                 onValueChange={(value) =>
@@ -1139,7 +1142,7 @@ function PersonalDetailsTab({
                 placeholder="Select country"
                 prioritizePopular={true}
                 showFlags={true}
-                className="w-full"
+                className="w-full h-11"
               />
             </div>
           </div>
