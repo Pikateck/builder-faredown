@@ -495,6 +495,9 @@ export default function Profile({
   const [paymentMethods, setPaymentMethods] = useState([]);
   const [preferences, setPreferences] = useState(null);
 
+  // Get authenticated user data
+  const { user } = useAuth();
+
   // Modal states
   const [showTravelerModal, setShowTravelerModal] = useState(false);
   const [showPassportModal, setShowPassportModal] = useState(false);
@@ -523,8 +526,8 @@ export default function Profile({
       // Load data sequentially to avoid potential race conditions
       console.log("Loading profile data...");
 
-      // Load profile first
-      const profileRes = await profileAPI.fetchProfile();
+      // Load profile first, passing authenticated user data
+      const profileRes = await profileAPI.fetchProfile(user);
       console.log("Profile loaded:", profileRes);
       setProfile(profileRes.profile || {});
       setPersonalForm(profileRes.profile || {});
@@ -566,17 +569,21 @@ export default function Profile({
       console.log("Profile data loading completed successfully");
     } catch (error) {
       console.error("Failed to load profile data:", error);
-      // Set default values on error
+      // Set default values on error, using authenticated user data if available
+      const firstName = user?.name.split(' ')[0] || "User";
+      const lastName = user?.name.split(' ').slice(1).join(' ') || "";
+      const email = user?.email || "user@example.com";
+
       setProfile({
-        first_name: "Zubin",
-        last_name: "Aibara",
-        email: "zubin@example.com",
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
         email_verified: true,
       });
       setPersonalForm({
-        first_name: "Zubin",
-        last_name: "Aibara",
-        email: "zubin@example.com",
+        first_name: firstName,
+        last_name: lastName,
+        email: email,
       });
       setTravelers([]);
       setPaymentMethods([]);
