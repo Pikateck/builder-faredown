@@ -525,15 +525,27 @@ export default function Account() {
                         <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
                           {booking.type === "flight" ? (
                             <Plane className="w-6 h-6 text-[#003580]" />
-                          ) : (
+                          ) : booking.type === "hotel" ? (
                             <Hotel className="w-6 h-6 text-[#003580]" />
+                          ) : booking.type === "sightseeing" ? (
+                            <Camera className="w-6 h-6 text-[#003580]" />
+                          ) : booking.type === "transfer" ? (
+                            <Car className="w-6 h-6 text-[#003580]" />
+                          ) : (
+                            <Plane className="w-6 h-6 text-[#003580]" />
                           )}
                         </div>
                         <div>
                           <h3 className="font-semibold text-[#1a1a1a]">
                             {booking.type === "flight"
                               ? "Flight Booking"
-                              : "Hotel Booking"}
+                              : booking.type === "hotel"
+                              ? "Hotel Booking"
+                              : booking.type === "sightseeing"
+                              ? "Sightseeing Booking"
+                              : booking.type === "transfer"
+                              ? "Transfer Booking"
+                              : "Flight Booking"}
                           </h3>
                           <p className="text-sm text-[#7a7a7a]">
                             {booking.bookingDetails.bookingRef}
