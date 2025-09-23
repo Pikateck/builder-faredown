@@ -105,12 +105,21 @@ export function OAuthTest() {
         )}
 
         <div className="mt-8">
-          <h2 className="text-lg font-semibold mb-4">Debug Instructions:</h2>
+          <h2 className="text-lg font-semibold mb-4">Debug Information:</h2>
+          <div className="bg-gray-100 p-4 rounded text-sm space-y-2">
+            <div>In iframe: {window.parent !== window ? 'YES' : 'NO'}</div>
+            <div>User Agent: {navigator.userAgent.substring(0, 50)}...</div>
+            <div>Current Origin: {window.location.origin}</div>
+            <div>Screen Size: {window.screen.width}x{window.screen.height}</div>
+          </div>
+
+          <h2 className="text-lg font-semibold mb-4 mt-6">Debug Instructions:</h2>
           <ol className="list-decimal list-inside space-y-2 text-sm">
-            <li>Click "Test Google OAuth" button</li>
-            <li>Complete Google sign-in in popup</li>
-            <li>Check console logs for detailed flow</li>
-            <li>Verify response data shows user information</li>
+            <li>Try "Test Direct Google OAuth" first (recommended)</li>
+            <li>If that fails, try "Test Google OAuth (Backend Route)"</li>
+            <li>Check browser console for detailed logs</li>
+            <li>Ensure popups are not blocked</li>
+            <li>Try clicking directly in the Google form input fields</li>
           </ol>
         </div>
       </div>
