@@ -140,12 +140,15 @@ router.get("/google", async (req, res) => {
     const state = crypto.randomUUID();
     putState(state);
 
+    // Get the configured redirect URI
+    const oauthRedirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.OAUTH_REDIRECT_BASE}/api/oauth/google/callback`;
+
     const authUrl = client.generateAuthUrl({
       access_type: "offline",
       scope: ["openid", "email", "profile"],
       prompt: "select_account",
       state,
-      redirect_uri: redirectUri,
+      redirect_uri: oauthRedirectUri,
     });
 
     console.log(`🔍 Generated OAuth URL: ${authUrl}`);
