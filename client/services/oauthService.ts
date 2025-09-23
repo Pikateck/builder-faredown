@@ -174,7 +174,14 @@ export class OAuthService {
         return;
       }
 
-      console.log("🔵 Popup opened successfully, waiting for auth completion...");
+      // Focus the popup window to ensure it's interactive
+      try {
+        popup.focus();
+      } catch (e) {
+        console.log("🔴 Could not focus popup window:", e);
+      }
+
+      console.log("🔵 Popup opened and focused, waiting for auth completion...");
 
       let messageReceived = false;
 
