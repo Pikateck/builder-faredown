@@ -998,7 +998,13 @@ export default function Account() {
                                   View{" "}
                                   {module.id === "flights"
                                     ? "Ticket"
-                                    : "Voucher"}
+                                    : module.id === "hotels"
+                                    ? "Voucher"
+                                    : module.id === "sightseeing"
+                                    ? "Experience Pass"
+                                    : module.id === "transfers"
+                                    ? "Transfer Voucher"
+                                    : "Booking"}
                                 </Button>
                                 <Button
                                   variant="outline"
