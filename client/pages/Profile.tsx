@@ -933,7 +933,7 @@ function PersonalDetailsTab({
         </CardTitle>
       </CardHeader>
       <CardContent className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div>
             <Label htmlFor="firstName">First name *</Label>
             <Input
