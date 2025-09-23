@@ -157,16 +157,16 @@ export class OAuthService {
     return new Promise((resolve, reject) => {
       console.log("🔵 Starting Google OAuth flow...");
 
-      // Open popup window directly to /auth/google
-      const width = 600,
-        height = 700;
+      // Open popup window directly to /auth/google with better parameters
+      const width = 500,
+        height = 650;
       const left = window.screenX + (window.outerWidth - width) / 2;
       const top = window.screenY + (window.outerHeight - height) / 2;
 
       const popup = window.open(
         "/auth/google", // Backend route to start OAuth
         "oauth-google",
-        `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes,location=yes`,
+        `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=no,location=no,toolbar=no,menubar=no,personalbar=no`,
       );
 
       if (!popup) {
