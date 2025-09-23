@@ -782,7 +782,7 @@ export default function Profile({
           </div>
 
           {/* Main Content */}
-          <div className="lg:w-3/4">
+          <div className="lg:w-3/4 min-w-0">
             {activeTab === "personal" && (
               <PersonalDetailsTab
                 profile={profile}
