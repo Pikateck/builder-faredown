@@ -70,6 +70,7 @@ import {
   Briefcase,
   DollarSign,
   TrendingUp,
+  RefreshCw,
 } from "lucide-react";
 
 // Use AdminUser type from service
