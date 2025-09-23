@@ -334,8 +334,16 @@ router.get("/google/callback", async (req, res) => {
           console.log('🔵 Window opener found, posting message...');
           const message = {
             type: 'oauth:success',
+            success: true,
+            message: 'Google authentication successful',
             timestamp: new Date().toISOString(),
-            user: ${JSON.stringify(user)}
+            user: {
+              id: '${user.id}',
+              username: '${user.name}',
+              email: '${user.email}',
+              role: 'user',
+              provider: 'google'
+            }
           };
           console.log('🔵 Posting message:', message);
 
