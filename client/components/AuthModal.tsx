@@ -223,7 +223,14 @@ export function AuthModal({
 
     try {
       console.log("🔵 Starting Google OAuth flow...");
-      const response = await oauthService.loginWithGoogle();
+      // Try direct method first, fallback to backend route
+      let response;
+      try {
+        response = await oauthService.loginWithGoogleDirect();
+      } catch (directError) {
+        console.log("🔵 Direct method failed, trying backend route...");
+        response = await oauthService.loginWithGoogle();
+      }
       console.log("🔵 Google OAuth response:", response);
 
       if (response.success && response.user) {
