@@ -106,13 +106,15 @@ import {
 
 // Mock data for demonstration
 const mockStats = {
-  totalBookings: 1247,
-  totalRevenue: 2847392,
+  totalBookings: 1586, // Updated to include all modules
+  totalRevenue: 3592847,
   successRate: 94.2,
   rewardsIssued: 85420,
   monthlyGrowth: 12.5,
   flightBookings: 728,
   hotelBookings: 519,
+  sightseeingBookings: 198,
+  transferBookings: 141,
   monthlyBookingData: [
     { month: "Jan", bookings: 185, revenue: 425000 },
     { month: "Feb", bookings: 220, revenue: 512000 },
@@ -140,6 +142,19 @@ const mockStats = {
     { city: "Goa", bookings: 76, revenue: 165000, avgRate: 2170 },
     { city: "Bangalore", bookings: 68, revenue: 148000, avgRate: 2176 },
     { city: "Singapore", bookings: 63, revenue: 189000, avgRate: 3000 },
+  ],
+  sightseeingCityBookings: [
+    { city: "Dubai", bookings: 45, revenue: 125000, avgRate: 2778 },
+    { city: "Mumbai", bookings: 38, revenue: 95000, avgRate: 2500 },
+    { city: "Delhi", bookings: 32, revenue: 78000, avgRate: 2437 },
+    { city: "Singapore", bookings: 28, revenue: 85000, avgRate: 3036 },
+    { city: "Bangkok", bookings: 25, revenue: 62000, avgRate: 2480 },
+    { city: "London", bookings: 30, revenue: 98000, avgRate: 3267 },
+  ],
+  transferVehicleBookings: [
+    { type: "Airport Transfer", bookings: 78, revenue: 156000, percentage: 55 },
+    { type: "City Transfer", bookings: 45, revenue: 89000, percentage: 32 },
+    { type: "Hourly Rental", bookings: 18, revenue: 45000, percentage: 13 },
   ],
 };
 
