@@ -517,9 +517,13 @@ export default function AdminDashboard() {
                 Flight Bookings by Cabin Class
               </div>
               <Badge variant="outline" className="text-xs">
-                {dateFilter === "today" ? "Today" :
-                 dateFilter === "week" ? "This Week" :
-                 dateFilter === "month" ? "This Month" : "This Year"}
+                {dateFilter === "today"
+                  ? "Today"
+                  : dateFilter === "week"
+                    ? "This Week"
+                    : dateFilter === "month"
+                      ? "This Month"
+                      : "This Year"}
               </Badge>
             </CardTitle>
           </CardHeader>
@@ -569,9 +573,13 @@ export default function AdminDashboard() {
                 Hotel Bookings by City
               </div>
               <Badge variant="outline" className="text-xs">
-                {dateFilter === "today" ? "Today" :
-                 dateFilter === "week" ? "This Week" :
-                 dateFilter === "month" ? "This Month" : "This Year"}
+                {dateFilter === "today"
+                  ? "Today"
+                  : dateFilter === "week"
+                    ? "This Week"
+                    : dateFilter === "month"
+                      ? "This Month"
+                      : "This Year"}
               </Badge>
             </CardTitle>
           </CardHeader>
@@ -618,9 +626,13 @@ export default function AdminDashboard() {
                 Sightseeing Bookings by City
               </div>
               <Badge variant="outline" className="text-xs">
-                {dateFilter === "today" ? "Today" :
-                 dateFilter === "week" ? "This Week" :
-                 dateFilter === "month" ? "This Month" : "This Year"}
+                {dateFilter === "today"
+                  ? "Today"
+                  : dateFilter === "week"
+                    ? "This Week"
+                    : dateFilter === "month"
+                      ? "This Month"
+                      : "This Year"}
               </Badge>
             </CardTitle>
           </CardHeader>
@@ -664,9 +676,13 @@ export default function AdminDashboard() {
                 Transfer Bookings by Type
               </div>
               <Badge variant="outline" className="text-xs">
-                {dateFilter === "today" ? "Today" :
-                 dateFilter === "week" ? "This Week" :
-                 dateFilter === "month" ? "This Month" : "This Year"}
+                {dateFilter === "today"
+                  ? "Today"
+                  : dateFilter === "week"
+                    ? "This Week"
+                    : dateFilter === "month"
+                      ? "This Month"
+                      : "This Year"}
               </Badge>
             </CardTitle>
           </CardHeader>
@@ -676,7 +692,9 @@ export default function AdminDashboard() {
                 <div key={transfer.type} className="space-y-2">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
-                      <span className="text-sm font-medium">{transfer.type}</span>
+                      <span className="text-sm font-medium">
+                        {transfer.type}
+                      </span>
                       <Badge variant="outline" className="ml-2">
                         {transfer.percentage}%
                       </Badge>
@@ -829,7 +847,9 @@ export default function AdminDashboard() {
                 <p className="text-sm font-medium text-gray-900">
                   {user?.username}
                 </p>
-                <p className="text-xs text-gray-600">{(user as any)?.role?.name ?? (user as any)?.role ?? ""}</p>
+                <p className="text-xs text-gray-600">
+                  {(user as any)?.role?.name ?? (user as any)?.role ?? ""}
+                </p>
               </div>
             </div>
           </div>
