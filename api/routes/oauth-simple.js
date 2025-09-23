@@ -127,6 +127,41 @@ function findOrCreateUser({ email, name, picture }) {
 
 // ===== ROUTES =====
 
+// Get Google OAuth URL (for frontend service compatibility)
+router.get("/google/url", async (req, res) => {
+  try {
+    console.log("🔵 Frontend requesting Google OAuth URL...");
+
+    const state = crypto.randomUUID();
+    putState(state);
+
+    const oauthRedirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.OAUTH_REDIRECT_BASE}/api/oauth/google/callback`;
+
+    const authUrl = client.generateAuthUrl({
+      access_type: "offline",
+      scope: ["openid", "email", "profile"],
+      prompt: "consent",
+      state,
+      redirect_uri: oauthRedirectUri,
+      include_granted_scopes: true,
+    });
+
+    console.log(`✅ Returning OAuth URL for frontend: ${authUrl.substring(0, 100)}...`);
+
+    res.json({
+      success: true,
+      url: authUrl,
+      state: state
+    });
+  } catch (error) {
+    console.error("🔴 OAuth URL generation error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to generate OAuth URL"
+    });
+  }
+});
+
 // Start OAuth (open this in the popup)
 router.get("/google", async (req, res) => {
   try {
