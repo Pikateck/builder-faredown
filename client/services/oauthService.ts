@@ -181,6 +181,13 @@ export class OAuthService {
         let messageReceived = false;
 
         function messageHandler(ev: MessageEvent) {
+          console.log("🔵 Raw message received:", {
+            origin: ev.origin,
+            data: ev.data,
+            type: typeof ev.data,
+            hasType: ev.data?.type
+          });
+
           const allowed = [
             "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev",
             "https://www.faredowntravels.com",
@@ -188,26 +195,39 @@ export class OAuthService {
           ];
 
           if (!allowed.includes(ev.origin)) {
-            console.log("🔴 Message from disallowed origin:", ev.origin);
+            console.log("🔴 Message from disallowed origin:", ev.origin, "- ignoring");
             return;
           }
 
-          console.log("🔵 Received message:", ev.data, "from origin:", ev.origin);
+          console.log("✅ Message from allowed origin:", ev.origin);
+          console.log("🔵 Message data:", ev.data);
 
           if (ev.data?.type === "oauth:success") {
+            console.log("✅ OAuth success message received!");
             messageReceived = true;
             window.removeEventListener("message", messageHandler);
             if (popup && !popup.closed) {
               popup.close();
             }
-            resolve(ev.data);
+
+            // Convert to expected format if needed
+            const response = {
+              success: ev.data.success || true,
+              message: ev.data.message || "Google authentication successful",
+              user: ev.data.user
+            };
+            console.log("🔵 Resolving with response:", response);
+            resolve(response);
           } else if (ev.data?.type === "oauth:error") {
+            console.log("🔴 OAuth error message received:", ev.data.error);
             messageReceived = true;
             window.removeEventListener("message", messageHandler);
             if (popup && !popup.closed) {
               popup.close();
             }
             reject(new Error(ev.data.error || "Authentication failed"));
+          } else {
+            console.log("🔵 Unrecognized message type:", ev.data?.type);
           }
         }
 
