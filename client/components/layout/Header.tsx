@@ -53,8 +53,8 @@ export function Header() {
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<"login" | "register">("login");
 
-  // User state
-  const userName = user?.name || "Zubin Aibara";
+  // User state - use OAuth user data when available
+  const userName = user?.name || (isLoggedIn ? "User" : "");
 
   // Get active tab from URL
   const getActiveTab = () => {
