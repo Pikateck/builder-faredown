@@ -6,6 +6,11 @@ export function OAuthTest() {
   const [result, setResult] = useState<any>(null);
   const [error, setError] = useState<string>('');
 
+  const testManualOAuth = () => {
+    console.log('🧪 Opening OAuth URL directly...');
+    window.open('/auth/google', '_blank', 'width=600,height=700');
+  };
+
   const testGoogleOAuth = async () => {
     setIsLoading(true);
     setError('');
