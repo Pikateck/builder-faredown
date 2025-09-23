@@ -703,7 +703,7 @@ export default function Profile({
 
   const languages = [
     { code: "en", name: "English" },
-    { code: "hi", name: "ह��न्दी" },
+    { code: "hi", name: "ह���न्दी" },
     { code: "es", name: "Español" },
     { code: "fr", name: "Français" },
     { code: "de", name: "Deutsch" },
@@ -934,8 +934,8 @@ function PersonalDetailsTab({
       </CardHeader>
       <CardContent className="space-y-4 md:space-y-6 p-4 md:p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <div>
-            <Label htmlFor="firstName">First name *</Label>
+          <div className="space-y-2">
+            <Label htmlFor="firstName" className="text-sm font-medium">First name *</Label>
             <Input
               id="firstName"
               value={personalForm.first_name || ""}
@@ -943,10 +943,11 @@ function PersonalDetailsTab({
                 setPersonalForm({ ...personalForm, first_name: e.target.value })
               }
               placeholder="Enter your first name"
+              className="h-11"
             />
           </div>
-          <div>
-            <Label htmlFor="lastName">Last name *</Label>
+          <div className="space-y-2">
+            <Label htmlFor="lastName" className="text-sm font-medium">Last name *</Label>
             <Input
               id="lastName"
               value={personalForm.last_name || ""}
@@ -954,12 +955,13 @@ function PersonalDetailsTab({
                 setPersonalForm({ ...personalForm, last_name: e.target.value })
               }
               placeholder="Enter your last name"
+              className="h-11"
             />
           </div>
         </div>
 
-        <div>
-          <Label htmlFor="displayName">Display name</Label>
+        <div className="space-y-2">
+          <Label htmlFor="displayName" className="text-sm font-medium">Display name</Label>
           <Input
             id="displayName"
             value={personalForm.display_name || ""}
@@ -967,12 +969,13 @@ function PersonalDetailsTab({
               setPersonalForm({ ...personalForm, display_name: e.target.value })
             }
             placeholder="How would you like to be addressed?"
+            className="h-11"
           />
         </div>
 
-        <div>
-          <Label htmlFor="email" className="flex items-center">
-            Email address
+        <div className="space-y-2">
+          <Label htmlFor="email" className="flex items-center text-sm font-medium">
+            Email address *
             {profile?.email_verified && (
               <CheckCircle className="w-4 h-4 text-green-600 ml-2" />
             )}
@@ -985,17 +988,18 @@ function PersonalDetailsTab({
               setPersonalForm({ ...personalForm, email: e.target.value })
             }
             placeholder="Enter your email address"
+            className="h-11"
           />
           {!profile?.email_verified && (
-            <p className="text-sm text-amber-600 mt-1">
+            <p className="text-xs md:text-sm text-amber-600 mt-1">
               <AlertCircle className="w-4 h-4 inline mr-1" />
               Email not verified. Click to verify.
             </p>
           )}
         </div>
 
-        <div>
-          <Label htmlFor="phone">Phone number</Label>
+        <div className="space-y-2">
+          <Label htmlFor="phone" className="text-sm font-medium">Phone number</Label>
           <Input
             id="phone"
             type="tel"
@@ -1004,6 +1008,7 @@ function PersonalDetailsTab({
               setPersonalForm({ ...personalForm, phone: e.target.value })
             }
             placeholder="Enter your phone number"
+            className="h-11"
           />
         </div>
 
