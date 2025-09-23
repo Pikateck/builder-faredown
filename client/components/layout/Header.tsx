@@ -50,7 +50,9 @@ export function Header() {
 
   // Auth modal state
   const [showAuthModal, setShowAuthModal] = useState(false);
-  const [authModalMode, setAuthModalMode] = useState<"login" | "register">("login");
+  const [authModalMode, setAuthModalMode] = useState<"login" | "register">(
+    "login",
+  );
 
   // User state - use OAuth user data when available
   const userName = user?.name || (isLoggedIn ? "User" : "");
@@ -383,7 +385,9 @@ export function Header() {
                             className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
                           >
                             <CreditCard className="w-5 h-5 text-[#003580]" />
-                            <span className="font-medium">Payment & Wallet</span>
+                            <span className="font-medium">
+                              Payment & Wallet
+                            </span>
                           </button>
 
                           <button
@@ -455,7 +459,9 @@ export function Header() {
                         </div>
                         <div className="flex items-center justify-between p-2 bg-white rounded border border-blue-200">
                           <div className="flex items-center space-x-2">
-                            <span className="text-lg">{selectedCurrency.flag}</span>
+                            <span className="text-lg">
+                              {selectedCurrency.flag}
+                            </span>
                             <span className="font-medium text-gray-900">
                               {selectedCurrency.name}
                             </span>
@@ -466,25 +472,34 @@ export function Header() {
                         </div>
 
                         <div className="mt-3">
-                          <div className="text-xs text-gray-600 mb-2">Change Currency:</div>
+                          <div className="text-xs text-gray-600 mb-2">
+                            Change Currency:
+                          </div>
                           <div className="space-y-1 max-h-24 overflow-y-auto">
-                            {currencies.filter(c => c.code !== selectedCurrency.code).slice(0, 3).map((currency) => (
-                              <button
-                                key={currency.code}
-                                onClick={() => {
-                                  setCurrency(currency);
-                                }}
-                                className="w-full text-left px-2 py-1 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors"
-                              >
-                                <div className="flex items-center space-x-2">
-                                  <span className="text-sm">{currency.flag}</span>
-                                  <span className="text-sm">{currency.name}</span>
-                                </div>
-                                <span className="text-xs font-medium">
-                                  {currency.symbol} {currency.code}
-                                </span>
-                              </button>
-                            ))}
+                            {currencies
+                              .filter((c) => c.code !== selectedCurrency.code)
+                              .slice(0, 3)
+                              .map((currency) => (
+                                <button
+                                  key={currency.code}
+                                  onClick={() => {
+                                    setCurrency(currency);
+                                  }}
+                                  className="w-full text-left px-2 py-1 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors"
+                                >
+                                  <div className="flex items-center space-x-2">
+                                    <span className="text-sm">
+                                      {currency.flag}
+                                    </span>
+                                    <span className="text-sm">
+                                      {currency.name}
+                                    </span>
+                                  </div>
+                                  <span className="text-xs font-medium">
+                                    {currency.symbol} {currency.code}
+                                  </span>
+                                </button>
+                              ))}
                           </div>
                         </div>
                       </div>
@@ -846,10 +861,7 @@ export function Header() {
                           </Link>
                         </DropdownMenuItem>
                         <DropdownMenuItem>
-                          <Link
-                            to="/help-center"
-                            className="flex items-center"
-                          >
+                          <Link to="/help-center" className="flex items-center">
                             <BookOpen className="w-4 h-4 mr-2" />
                             Help Centre
                           </Link>

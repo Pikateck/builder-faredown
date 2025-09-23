@@ -94,12 +94,12 @@ app.use(
           "'unsafe-inline'",
           "https://fonts.googleapis.com",
           "https://accounts.google.com",
-          "https://ssl.gstatic.com"
+          "https://ssl.gstatic.com",
         ],
         fontSrc: [
           "'self'",
           "https://fonts.gstatic.com",
-          "https://ssl.gstatic.com"
+          "https://ssl.gstatic.com",
         ],
         imgSrc: [
           "'self'",
@@ -107,7 +107,7 @@ app.use(
           "https:",
           "http:",
           "https://ssl.gstatic.com",
-          "https://www.gstatic.com"
+          "https://www.gstatic.com",
         ],
         scriptSrc: [
           "'self'",
@@ -115,19 +115,19 @@ app.use(
           "https://accounts.google.com",
           "https://apis.google.com",
           "https://ssl.gstatic.com",
-          "https://www.gstatic.com"
+          "https://www.gstatic.com",
         ],
         connectSrc: [
           "'self'",
           "https://api.exchangerate-api.com",
           "https://accounts.google.com",
           "https://oauth2.googleapis.com",
-          "https://www.googleapis.com"
+          "https://www.googleapis.com",
         ],
         frameSrc: [
           "'self'",
           "https://accounts.google.com",
-          "https://content.googleapis.com"
+          "https://content.googleapis.com",
         ],
         // 🎯 BUILDER.IO IFRAME SUPPORT
         frameAncestors: [

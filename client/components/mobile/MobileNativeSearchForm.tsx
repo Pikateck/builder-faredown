@@ -295,14 +295,13 @@ export function MobileNativeSearchForm({
       newParams.set("tripType", tripType);
       setUrlSearchParams(newParams, { replace: true });
 
-
       // Console log current URL for debugging (browser only)
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         console.log("Current URL with updated params:", window.location.href);
       }
 
       // Emit custom event for other components (browser only)
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         window.dispatchEvent(
           new CustomEvent("datesChanged", {
             detail: {

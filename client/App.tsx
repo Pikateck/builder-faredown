@@ -294,9 +294,18 @@ function App() {
                         <Route path="/my-trips" element={<MyTrips />} />
 
                         {/* OAuth Callback Routes */}
-                        <Route path="/oauth/google/callback" element={<GoogleCallback />} />
-                        <Route path="/oauth/facebook/callback" element={<FacebookCallback />} />
-                        <Route path="/oauth/apple/callback" element={<AppleCallback />} />
+                        <Route
+                          path="/oauth/google/callback"
+                          element={<GoogleCallback />}
+                        />
+                        <Route
+                          path="/oauth/facebook/callback"
+                          element={<FacebookCallback />}
+                        />
+                        <Route
+                          path="/oauth/apple/callback"
+                          element={<AppleCallback />}
+                        />
 
                         {/* Development/Testing Routes */}
                         <Route path="/footer-test" element={<FooterTest />} />
@@ -329,14 +338,8 @@ function App() {
                           path="/color-palette"
                           element={<FaredownColorPalette />}
                         />
-                        <Route
-                          path="/oauth-test"
-                          element={<OAuthTest />}
-                        />
-                        <Route
-                          path="/auth-test"
-                          element={<AuthTest />}
-                        />
+                        <Route path="/oauth-test" element={<OAuthTest />} />
+                        <Route path="/auth-test" element={<AuthTest />} />
                         <Route
                           path="/oauth-summary"
                           element={<OAuthImplementationSummary />}

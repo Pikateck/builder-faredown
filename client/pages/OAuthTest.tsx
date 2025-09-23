@@ -1,29 +1,29 @@
-import React, { useState } from 'react';
-import { oauthService } from '@/services/oauthService';
+import React, { useState } from "react";
+import { oauthService } from "@/services/oauthService";
 
 export function OAuthTest() {
   const [isLoading, setIsLoading] = useState(false);
   const [result, setResult] = useState<any>(null);
-  const [error, setError] = useState<string>('');
+  const [error, setError] = useState<string>("");
 
   const testManualOAuth = () => {
-    console.log('🧪 Opening OAuth URL directly...');
-    window.open('/auth/google', '_blank', 'width=600,height=700');
+    console.log("🧪 Opening OAuth URL directly...");
+    window.open("/auth/google", "_blank", "width=600,height=700");
   };
 
   const testDirectOAuth = async () => {
     setIsLoading(true);
-    setError('');
+    setError("");
     setResult(null);
 
     try {
-      console.log('🧪 Testing Direct Google OAuth...');
+      console.log("🧪 Testing Direct Google OAuth...");
       const response = await oauthService.loginWithGoogleDirect();
-      console.log('🧪 Direct OAuth Response:', response);
+      console.log("🧪 Direct OAuth Response:", response);
       setResult(response);
     } catch (err: any) {
-      console.error('🧪 Direct OAuth Error:', err);
-      setError(err.message || 'Direct OAuth failed');
+      console.error("🧪 Direct OAuth Error:", err);
+      setError(err.message || "Direct OAuth failed");
     } finally {
       setIsLoading(false);
     }
@@ -31,28 +31,30 @@ export function OAuthTest() {
 
   const testGoogleOAuth = async () => {
     setIsLoading(true);
-    setError('');
+    setError("");
     setResult(null);
 
     try {
-      console.log('🧪 Testing Google OAuth...');
-      console.log('🧪 Current URL:', window.location.href);
-      console.log('🧪 User Agent:', navigator.userAgent);
-      console.log('🧪 Popup blocker test...');
+      console.log("🧪 Testing Google OAuth...");
+      console.log("🧪 Current URL:", window.location.href);
+      console.log("🧪 User Agent:", navigator.userAgent);
+      console.log("🧪 Popup blocker test...");
 
       // Test if popups are blocked
-      const testPopup = window.open('', 'test', 'width=1,height=1');
+      const testPopup = window.open("", "test", "width=1,height=1");
       if (!testPopup) {
-        throw new Error('Popup blocked by browser. Please allow popups for this site.');
+        throw new Error(
+          "Popup blocked by browser. Please allow popups for this site.",
+        );
       }
       testPopup.close();
 
       const response = await oauthService.loginWithGoogle();
-      console.log('🧪 OAuth Response:', response);
+      console.log("🧪 OAuth Response:", response);
       setResult(response);
     } catch (err: any) {
-      console.error('🧪 OAuth Error:', err);
-      setError(err.message || 'OAuth failed');
+      console.error("🧪 OAuth Error:", err);
+      setError(err.message || "OAuth failed");
     } finally {
       setIsLoading(false);
     }
@@ -62,14 +64,14 @@ export function OAuthTest() {
     <div className="min-h-screen bg-gray-100 py-8">
       <div className="max-w-2xl mx-auto bg-white p-8 rounded-lg shadow">
         <h1 className="text-2xl font-bold mb-6">OAuth Debug Test</h1>
-        
+
         <div className="space-y-4">
           <button
             onClick={testGoogleOAuth}
             disabled={isLoading}
             className="bg-blue-500 text-white px-6 py-3 rounded-lg hover:bg-blue-600 disabled:opacity-50 w-full"
           >
-            {isLoading ? 'Testing...' : 'Test Google OAuth (Backend Route)'}
+            {isLoading ? "Testing..." : "Test Google OAuth (Backend Route)"}
           </button>
 
           <button
@@ -77,7 +79,9 @@ export function OAuthTest() {
             disabled={isLoading}
             className="bg-green-500 text-white px-6 py-3 rounded-lg hover:bg-green-600 disabled:opacity-50 w-full"
           >
-            {isLoading ? 'Testing...' : 'Test Direct Google OAuth (Recommended)'}
+            {isLoading
+              ? "Testing..."
+              : "Test Direct Google OAuth (Recommended)"}
           </button>
 
           <button
@@ -107,13 +111,17 @@ export function OAuthTest() {
         <div className="mt-8">
           <h2 className="text-lg font-semibold mb-4">Debug Information:</h2>
           <div className="bg-gray-100 p-4 rounded text-sm space-y-2">
-            <div>In iframe: {window.parent !== window ? 'YES' : 'NO'}</div>
+            <div>In iframe: {window.parent !== window ? "YES" : "NO"}</div>
             <div>User Agent: {navigator.userAgent.substring(0, 50)}...</div>
             <div>Current Origin: {window.location.origin}</div>
-            <div>Screen Size: {window.screen.width}x{window.screen.height}</div>
+            <div>
+              Screen Size: {window.screen.width}x{window.screen.height}
+            </div>
           </div>
 
-          <h2 className="text-lg font-semibold mb-4 mt-6">Debug Instructions:</h2>
+          <h2 className="text-lg font-semibold mb-4 mt-6">
+            Debug Instructions:
+          </h2>
           <ol className="list-decimal list-inside space-y-2 text-sm">
             <li>Try "Test Direct Google OAuth" first (recommended)</li>
             <li>If that fails, try "Test Google OAuth (Backend Route)"</li>

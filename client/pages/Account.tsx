@@ -359,7 +359,9 @@ export default function Account() {
                   </p>
                 </div>
                 <div className="w-8 h-8 md:w-12 md:h-12 bg-[#febb02] rounded-lg flex items-center justify-center shadow-sm border border-[#e6a602] flex-shrink-0 self-end md:self-center">
-                  <span className="text-[#1a1a1a] font-bold text-sm md:text-lg">G</span>
+                  <span className="text-[#1a1a1a] font-bold text-sm md:text-lg">
+                    G
+                  </span>
                 </div>
               </div>
             </CardContent>
@@ -543,12 +545,12 @@ export default function Account() {
                             {booking.type === "flight"
                               ? "Flight Booking"
                               : booking.type === "hotel"
-                              ? "Hotel Booking"
-                              : booking.type === "sightseeing"
-                              ? "Sightseeing Booking"
-                              : booking.type === "transfer"
-                              ? "Transfer Booking"
-                              : "Flight Booking"}
+                                ? "Hotel Booking"
+                                : booking.type === "sightseeing"
+                                  ? "Sightseeing Booking"
+                                  : booking.type === "transfer"
+                                    ? "Transfer Booking"
+                                    : "Flight Booking"}
                           </h3>
                           <p className="text-xs md:text-sm text-[#7a7a7a] truncate">
                             {booking.bookingDetails.bookingRef}
@@ -786,12 +788,12 @@ export default function Account() {
                                 {module.id === "flights"
                                   ? "Mumbai ⇄ Dubai"
                                   : module.id === "hotels"
-                                  ? "Hotel Booking"
-                                  : module.id === "sightseeing"
-                                  ? "Sightseeing Experience"
-                                  : module.id === "transfers"
-                                  ? "Transfer Service"
-                                  : "Booking"}
+                                    ? "Hotel Booking"
+                                    : module.id === "sightseeing"
+                                      ? "Sightseeing Experience"
+                                      : module.id === "transfers"
+                                        ? "Transfer Service"
+                                        : "Booking"}
                               </CardTitle>
                               <p className="text-sm text-[#7a7a7a]">
                                 Booking Reference:{" "}
@@ -823,12 +825,12 @@ export default function Account() {
                                   {module.id === "flights"
                                     ? "Flight Details"
                                     : module.id === "hotels"
-                                    ? "Hotel Details"
-                                    : module.id === "sightseeing"
-                                    ? "Experience Details"
-                                    : module.id === "transfers"
-                                    ? "Transfer Details"
-                                    : "Booking Details"}
+                                      ? "Hotel Details"
+                                      : module.id === "sightseeing"
+                                        ? "Experience Details"
+                                        : module.id === "transfers"
+                                          ? "Transfer Details"
+                                          : "Booking Details"}
                                 </h4>
                                 {module.id === "flights" ? (
                                   <>
@@ -914,10 +916,10 @@ export default function Account() {
                                 {module.id === "hotels"
                                   ? "Guest Details"
                                   : module.id === "sightseeing"
-                                  ? "Participant Details"
-                                  : module.id === "transfers"
-                                  ? "Passenger Details"
-                                  : "Passengers"}
+                                    ? "Participant Details"
+                                    : module.id === "transfers"
+                                      ? "Passenger Details"
+                                      : "Passengers"}
                               </h4>
                               <div className="space-y-2">
                                 {booking.bookingDetails?.passengers?.map(
@@ -1002,12 +1004,12 @@ export default function Account() {
                                   {module.id === "flights"
                                     ? "Ticket"
                                     : module.id === "hotels"
-                                    ? "Voucher"
-                                    : module.id === "sightseeing"
-                                    ? "Experience Pass"
-                                    : module.id === "transfers"
-                                    ? "Transfer Voucher"
-                                    : "Booking"}
+                                      ? "Voucher"
+                                      : module.id === "sightseeing"
+                                        ? "Experience Pass"
+                                        : module.id === "transfers"
+                                          ? "Transfer Voucher"
+                                          : "Booking"}
                                 </Button>
                                 <Button
                                   variant="outline"

@@ -91,8 +91,8 @@ const profileAPI = {
   async fetchProfile(authUser = null) {
     // If user is authenticated, use their real data
     if (authUser) {
-      const firstName = authUser.name.split(' ')[0] || '';
-      const lastName = authUser.name.split(' ').slice(1).join(' ') || '';
+      const firstName = authUser.name.split(" ")[0] || "";
+      const lastName = authUser.name.split(" ").slice(1).join(" ") || "";
 
       return {
         success: true,
@@ -137,8 +137,8 @@ const profileAPI = {
       console.error("fetchProfile error:", error);
       // Return auth user data if available, otherwise mock data
       if (authUser) {
-        const firstName = authUser.name.split(' ')[0] || '';
-        const lastName = authUser.name.split(' ').slice(1).join(' ') || '';
+        const firstName = authUser.name.split(" ")[0] || "";
+        const lastName = authUser.name.split(" ").slice(1).join(" ") || "";
 
         return {
           success: true,
@@ -522,18 +522,19 @@ export default function Profile({
   // Update form when user data changes (e.g., after Google OAuth login)
   useEffect(() => {
     if (user && (!personalForm.email || !personalForm.first_name)) {
-      const firstName = user.name?.split(' ')[0] || "";
-      const lastName = user.name?.split(' ').slice(1).join(' ') || "";
+      const firstName = user.name?.split(" ")[0] || "";
+      const lastName = user.name?.split(" ").slice(1).join(" ") || "";
 
-      setPersonalForm(prev => ({
+      setPersonalForm((prev) => ({
         ...prev,
         email: prev.email || user.email || "",
         first_name: prev.first_name || firstName,
         last_name: prev.last_name || lastName,
-        display_name: prev.display_name || `${firstName} ${lastName}`.trim() || "",
+        display_name:
+          prev.display_name || `${firstName} ${lastName}`.trim() || "",
       }));
 
-      setProfile(prev => ({
+      setProfile((prev) => ({
         ...prev,
         email: prev?.email || user.email || "",
         first_name: prev?.first_name || firstName,
@@ -560,8 +561,11 @@ export default function Profile({
         ...loadedProfile,
         // Explicitly set email if available from auth user
         email: loadedProfile.email || user?.email || "",
-        first_name: loadedProfile.first_name || user?.name?.split(' ')[0] || "",
-        last_name: loadedProfile.last_name || user?.name?.split(' ').slice(1).join(' ') || "",
+        first_name: loadedProfile.first_name || user?.name?.split(" ")[0] || "",
+        last_name:
+          loadedProfile.last_name ||
+          user?.name?.split(" ").slice(1).join(" ") ||
+          "",
       });
 
       // Load other data in parallel
@@ -602,8 +606,8 @@ export default function Profile({
     } catch (error) {
       console.error("Failed to load profile data:", error);
       // Set default values on error, using authenticated user data if available
-      const firstName = user?.name.split(' ')[0] || "User";
-      const lastName = user?.name.split(' ').slice(1).join(' ') || "";
+      const firstName = user?.name.split(" ")[0] || "User";
+      const lastName = user?.name.split(" ").slice(1).join(" ") || "";
       const email = user?.email || "user@example.com";
 
       setProfile({
@@ -810,7 +814,9 @@ export default function Profile({
                       )}
                     >
                       <item.icon className="w-4 h-4 md:w-5 md:h-5" />
-                      <span className="text-xs md:text-sm font-medium">{item.label}</span>
+                      <span className="text-xs md:text-sm font-medium">
+                        {item.label}
+                      </span>
                     </button>
                   ))}
                 </nav>
@@ -959,7 +965,11 @@ function PersonalDetailsTab({
       <CardHeader>
         <CardTitle className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 sm:gap-0">
           <span className="text-lg md:text-xl">Personal details</span>
-          <Button onClick={onSave} disabled={saving} className="self-start sm:self-center w-full sm:w-auto">
+          <Button
+            onClick={onSave}
+            disabled={saving}
+            className="self-start sm:self-center w-full sm:w-auto"
+          >
             {saving ? (
               <Loader2 className="w-4 h-4 animate-spin mr-2" />
             ) : (
@@ -972,7 +982,9 @@ function PersonalDetailsTab({
       <CardContent className="space-y-4 md:space-y-6 p-4 md:p-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="space-y-2">
-            <Label htmlFor="firstName" className="text-sm font-medium">First name *</Label>
+            <Label htmlFor="firstName" className="text-sm font-medium">
+              First name *
+            </Label>
             <Input
               id="firstName"
               value={personalForm.first_name || ""}
@@ -984,7 +996,9 @@ function PersonalDetailsTab({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="lastName" className="text-sm font-medium">Last name *</Label>
+            <Label htmlFor="lastName" className="text-sm font-medium">
+              Last name *
+            </Label>
             <Input
               id="lastName"
               value={personalForm.last_name || ""}
@@ -998,7 +1012,9 @@ function PersonalDetailsTab({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="displayName" className="text-sm font-medium">Display name</Label>
+          <Label htmlFor="displayName" className="text-sm font-medium">
+            Display name
+          </Label>
           <Input
             id="displayName"
             value={personalForm.display_name || ""}
@@ -1011,7 +1027,10 @@ function PersonalDetailsTab({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email" className="flex items-center text-sm font-medium">
+          <Label
+            htmlFor="email"
+            className="flex items-center text-sm font-medium"
+          >
             Email address *
             {profile?.email_verified && (
               <CheckCircle className="w-4 h-4 text-green-600 ml-2" />
@@ -1036,7 +1055,9 @@ function PersonalDetailsTab({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="phone" className="text-sm font-medium">Phone number</Label>
+          <Label htmlFor="phone" className="text-sm font-medium">
+            Phone number
+          </Label>
           <Input
             id="phone"
             type="tel"
@@ -1051,7 +1072,9 @@ function PersonalDetailsTab({
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
           <div className="space-y-2">
-            <Label htmlFor="dob" className="text-sm font-medium">Date of birth</Label>
+            <Label htmlFor="dob" className="text-sm font-medium">
+              Date of birth
+            </Label>
             <Input
               id="dob"
               type="date"
@@ -1063,7 +1086,9 @@ function PersonalDetailsTab({
             />
           </div>
           <div className="space-y-2">
-            <Label htmlFor="nationality" className="text-sm font-medium">Nationality</Label>
+            <Label htmlFor="nationality" className="text-sm font-medium">
+              Nationality
+            </Label>
             <CountrySelect
               value={personalForm.nationality_iso2 || ""}
               onValueChange={(value) =>
@@ -1078,7 +1103,9 @@ function PersonalDetailsTab({
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="gender" className="text-sm font-medium">Gender</Label>
+          <Label htmlFor="gender" className="text-sm font-medium">
+            Gender
+          </Label>
           <Select
             value={personalForm.gender || ""}
             onValueChange={(value) =>
@@ -1102,10 +1129,14 @@ function PersonalDetailsTab({
         <Separator />
 
         <div>
-          <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4">Address</h3>
+          <h3 className="text-base md:text-lg font-semibold mb-3 md:mb-4">
+            Address
+          </h3>
           <div className="space-y-3 md:space-y-4">
             <div className="space-y-2">
-              <Label htmlFor="address1" className="text-sm font-medium">Address line 1</Label>
+              <Label htmlFor="address1" className="text-sm font-medium">
+                Address line 1
+              </Label>
               <Input
                 id="address1"
                 value={personalForm.line1 || ""}
@@ -1117,7 +1148,9 @@ function PersonalDetailsTab({
               />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="address2" className="text-sm font-medium">Address line 2 (optional)</Label>
+              <Label htmlFor="address2" className="text-sm font-medium">
+                Address line 2 (optional)
+              </Label>
               <Input
                 id="address2"
                 value={personalForm.line2 || ""}
@@ -1130,7 +1163,9 @@ function PersonalDetailsTab({
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
               <div className="space-y-2">
-                <Label htmlFor="city" className="text-sm font-medium">City</Label>
+                <Label htmlFor="city" className="text-sm font-medium">
+                  City
+                </Label>
                 <Input
                   id="city"
                   value={personalForm.city || ""}
@@ -1142,7 +1177,9 @@ function PersonalDetailsTab({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="state" className="text-sm font-medium">State/Province</Label>
+                <Label htmlFor="state" className="text-sm font-medium">
+                  State/Province
+                </Label>
                 <Input
                   id="state"
                   value={personalForm.state || ""}
@@ -1154,7 +1191,9 @@ function PersonalDetailsTab({
                 />
               </div>
               <div className="space-y-2">
-                <Label htmlFor="postal" className="text-sm font-medium">Postal code</Label>
+                <Label htmlFor="postal" className="text-sm font-medium">
+                  Postal code
+                </Label>
                 <Input
                   id="postal"
                   value={personalForm.postal_code || ""}
@@ -1170,7 +1209,9 @@ function PersonalDetailsTab({
               </div>
             </div>
             <div className="space-y-2">
-              <Label htmlFor="country" className="text-sm font-medium">Country</Label>
+              <Label htmlFor="country" className="text-sm font-medium">
+                Country
+              </Label>
               <CountrySelect
                 value={personalForm.country_iso2 || ""}
                 onValueChange={(value) =>
@@ -1236,7 +1277,12 @@ function TravelersTab({
                         {traveler.first_name} {traveler.last_name}
                       </h3>
                       {traveler.is_primary && (
-                        <Badge variant="secondary" className="text-xs self-start sm:self-center">Primary</Badge>
+                        <Badge
+                          variant="secondary"
+                          className="text-xs self-start sm:self-center"
+                        >
+                          Primary
+                        </Badge>
                       )}
                     </div>
                     <div className="text-xs md:text-sm text-gray-600 space-y-1">
@@ -1729,10 +1775,18 @@ function TravelerModal({
         </div>
 
         <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2 pt-4">
-          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="w-full sm:w-auto"
+          >
             Cancel
           </Button>
-          <Button onClick={onSave} disabled={saving} className="w-full sm:w-auto">
+          <Button
+            onClick={onSave}
+            disabled={saving}
+            className="w-full sm:w-auto"
+          >
             {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             {traveler ? "Update" : "Add"} traveler
           </Button>
@@ -1861,10 +1915,18 @@ function PassportModal({
         </div>
 
         <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2 pt-4">
-          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="w-full sm:w-auto"
+          >
             Cancel
           </Button>
-          <Button onClick={onSave} disabled={saving} className="w-full sm:w-auto">
+          <Button
+            onClick={onSave}
+            disabled={saving}
+            className="w-full sm:w-auto"
+          >
             {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             Add passport
           </Button>
@@ -2038,10 +2100,18 @@ function PaymentMethodModal({
         </div>
 
         <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2 pt-4">
-          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
+          <Button
+            variant="outline"
+            onClick={onClose}
+            className="w-full sm:w-auto"
+          >
             Cancel
           </Button>
-          <Button onClick={onSave} disabled={saving} className="w-full sm:w-auto">
+          <Button
+            onClick={onSave}
+            disabled={saving}
+            className="w-full sm:w-auto"
+          >
             {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             Add payment method
           </Button>

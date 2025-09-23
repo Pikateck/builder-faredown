@@ -21,8 +21,16 @@ const ALLOWED_ORIGINS = [
 
 // Debug Google OAuth environment variables
 console.log("🔍 Google OAuth Environment Check:");
-console.log("  GOOGLE_CLIENT_ID:", process.env.GOOGLE_CLIENT_ID ? `${process.env.GOOGLE_CLIENT_ID.substring(0, 20)}...` : "NOT SET");
-console.log("  GOOGLE_CLIENT_SECRET:", process.env.GOOGLE_CLIENT_SECRET ? "SET" : "NOT SET");
+console.log(
+  "  GOOGLE_CLIENT_ID:",
+  process.env.GOOGLE_CLIENT_ID
+    ? `${process.env.GOOGLE_CLIENT_ID.substring(0, 20)}...`
+    : "NOT SET",
+);
+console.log(
+  "  GOOGLE_CLIENT_SECRET:",
+  process.env.GOOGLE_CLIENT_SECRET ? "SET" : "NOT SET",
+);
 console.log("  OAUTH_REDIRECT_BASE:", process.env.OAUTH_REDIRECT_BASE);
 console.log("  VITE_API_BASE_URL:", process.env.VITE_API_BASE_URL);
 
@@ -38,11 +46,13 @@ if (!process.env.GOOGLE_CLIENT_SECRET) {
 }
 
 // Use explicit redirect URI that matches Google Cloud Console setup
-const redirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.OAUTH_REDIRECT_BASE}/api/oauth/google/callback`;
+const redirectUri =
+  process.env.GOOGLE_REDIRECT_URI ||
+  `${process.env.OAUTH_REDIRECT_BASE}/api/oauth/google/callback`;
 console.log("🔍 OAuth Redirect URI:", redirectUri);
 
 // Validate redirect URI
-if (!redirectUri || redirectUri.includes('undefined')) {
+if (!redirectUri || redirectUri.includes("undefined")) {
   console.error("🔴 Invalid redirect URI:", redirectUri);
   throw new Error("Invalid OAuth redirect URI configuration");
 }
@@ -51,12 +61,17 @@ if (!redirectUri || redirectUri.includes('undefined')) {
 const client = new OAuth2Client(
   process.env.GOOGLE_CLIENT_ID,
   process.env.GOOGLE_CLIENT_SECRET,
-  redirectUri
+  redirectUri,
 );
 
 // Verify client configuration
-console.log("✅ Google OAuth client initialized with:")
-console.log("  Client ID:", process.env.GOOGLE_CLIENT_ID ? `${process.env.GOOGLE_CLIENT_ID.substring(0, 20)}...` : "MISSING");
+console.log("✅ Google OAuth client initialized with:");
+console.log(
+  "  Client ID:",
+  process.env.GOOGLE_CLIENT_ID
+    ? `${process.env.GOOGLE_CLIENT_ID.substring(0, 20)}...`
+    : "MISSING",
+);
 console.log("  Redirect URI:", redirectUri);
 
 // Tiny in-memory store for state (replace with Redis for production)
@@ -131,16 +146,18 @@ function findOrCreateUser({ email, name, picture }) {
 router.get("/status", (req, res) => {
   console.log("🔵 OAuth status check requested");
 
-  const googleConfigured = !!(process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET);
+  const googleConfigured = !!(
+    process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET
+  );
 
   res.json({
     success: true,
     oauth: {
       google: googleConfigured,
       facebook: false, // Not implemented in oauth-simple
-      apple: false     // Not implemented in oauth-simple
+      apple: false, // Not implemented in oauth-simple
     },
-    message: "OAuth status retrieved successfully"
+    message: "OAuth status retrieved successfully",
   });
 });
 
@@ -152,7 +169,9 @@ router.get("/google/url", async (req, res) => {
     const state = crypto.randomUUID();
     putState(state);
 
-    const oauthRedirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.OAUTH_REDIRECT_BASE}/api/oauth/google/callback`;
+    const oauthRedirectUri =
+      process.env.GOOGLE_REDIRECT_URI ||
+      `${process.env.OAUTH_REDIRECT_BASE}/api/oauth/google/callback`;
 
     const authUrl = client.generateAuthUrl({
       access_type: "offline",
@@ -163,18 +182,20 @@ router.get("/google/url", async (req, res) => {
       include_granted_scopes: true,
     });
 
-    console.log(`✅ Returning OAuth URL for frontend: ${authUrl.substring(0, 100)}...`);
+    console.log(
+      `✅ Returning OAuth URL for frontend: ${authUrl.substring(0, 100)}...`,
+    );
 
     res.json({
       success: true,
       url: authUrl,
-      state: state
+      state: state,
     });
   } catch (error) {
     console.error("🔴 OAuth URL generation error:", error);
     res.status(500).json({
       success: false,
-      message: "Failed to generate OAuth URL"
+      message: "Failed to generate OAuth URL",
     });
   }
 });
@@ -184,17 +205,19 @@ router.get("/google", async (req, res) => {
   try {
     console.log("🔵 Starting Google OAuth...");
     console.log("🔍 Request headers:", {
-      host: req.get('host'),
-      origin: req.get('origin'),
-      referer: req.get('referer'),
-      userAgent: req.get('user-agent')?.substring(0, 100) + "..."
+      host: req.get("host"),
+      origin: req.get("origin"),
+      referer: req.get("referer"),
+      userAgent: req.get("user-agent")?.substring(0, 100) + "...",
     });
 
     const state = crypto.randomUUID();
     putState(state);
 
     // Get the configured redirect URI
-    const oauthRedirectUri = process.env.GOOGLE_REDIRECT_URI || `${process.env.OAUTH_REDIRECT_BASE}/api/oauth/google/callback`;
+    const oauthRedirectUri =
+      process.env.GOOGLE_REDIRECT_URI ||
+      `${process.env.OAUTH_REDIRECT_BASE}/api/oauth/google/callback`;
 
     const authUrl = client.generateAuthUrl({
       access_type: "offline",
@@ -208,15 +231,19 @@ router.get("/google", async (req, res) => {
     console.log(`🔍 Generated OAuth URL (length: ${authUrl.length}):`, authUrl);
     console.log(`🔍 State parameter: ${state}`);
     console.log(`🔍 Redirect URI: ${oauthRedirectUri}`);
-    console.log(`🔍 Client ID in URL: ${authUrl.includes(process.env.GOOGLE_CLIENT_ID) ? 'PRESENT' : 'MISSING'}`);
+    console.log(
+      `🔍 Client ID in URL: ${authUrl.includes(process.env.GOOGLE_CLIENT_ID) ? "PRESENT" : "MISSING"}`,
+    );
     console.log(`🔍 OAuth URL components:`, {
-      client_id: authUrl.includes('client_id=') ? 'PRESENT' : 'MISSING',
-      redirect_uri: authUrl.includes('redirect_uri=') ? 'PRESENT' : 'MISSING',
-      scope: authUrl.includes('scope=') ? 'PRESENT' : 'MISSING',
-      state: authUrl.includes('state=') ? 'PRESENT' : 'MISSING',
-      prompt: authUrl.includes('prompt=') ? 'PRESENT' : 'MISSING'
+      client_id: authUrl.includes("client_id=") ? "PRESENT" : "MISSING",
+      redirect_uri: authUrl.includes("redirect_uri=") ? "PRESENT" : "MISSING",
+      scope: authUrl.includes("scope=") ? "PRESENT" : "MISSING",
+      state: authUrl.includes("state=") ? "PRESENT" : "MISSING",
+      prompt: authUrl.includes("prompt=") ? "PRESENT" : "MISSING",
     });
-    console.log(`✅ Redirecting to Google with state: ${state.substring(0, 8)}...`);
+    console.log(
+      `✅ Redirecting to Google with state: ${state.substring(0, 8)}...`,
+    );
 
     res.redirect(authUrl);
   } catch (error) {
@@ -232,10 +259,10 @@ router.get("/google/callback", async (req, res) => {
     console.log("🔵 Google OAuth callback received");
     console.log("🔵 Full query params:", req.query);
     console.log("🔵 Request headers:", {
-      host: req.get('host'),
-      origin: req.get('origin'),
-      referer: req.get('referer'),
-      userAgent: req.get('user-agent')?.substring(0, 50) + "..."
+      host: req.get("host"),
+      origin: req.get("origin"),
+      referer: req.get("referer"),
+      userAgent: req.get("user-agent")?.substring(0, 50) + "...",
     });
 
     const { code, state } = req.query;
@@ -438,7 +465,7 @@ router.post("/google/callback", async (req, res) => {
       console.error("🔴 Missing code or state in POST body");
       return res.status(400).json({
         success: false,
-        message: "Missing authorization code or state"
+        message: "Missing authorization code or state",
       });
     }
 
@@ -446,7 +473,7 @@ router.post("/google/callback", async (req, res) => {
       console.error("🔴 Invalid state parameter");
       return res.status(400).json({
         success: false,
-        message: "OAuth session expired. Please try again."
+        message: "OAuth session expired. Please try again.",
       });
     }
 
@@ -485,14 +512,14 @@ router.post("/google/callback", async (req, res) => {
         role: "user",
         provider: "google",
         firstName: user.name.split(" ")[0],
-        lastName: user.name.split(" ").slice(1).join(" ") || ""
-      }
+        lastName: user.name.split(" ").slice(1).join(" ") || "",
+      },
     });
   } catch (err) {
     console.error("🔴 POST OAuth callback error:", err?.message || err);
     res.status(500).json({
       success: false,
-      message: "Authentication failed. Please try again."
+      message: "Authentication failed. Please try again.",
     });
   }
 });

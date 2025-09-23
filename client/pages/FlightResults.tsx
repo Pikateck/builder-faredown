@@ -432,7 +432,8 @@ export default function FlightResults() {
 
     // Load traveler counts from URL parameters or sessionStorage fallback
     const adultsParam = urlSearchParams.get("adults") || lastSearch?.adults;
-    const childrenParam = urlSearchParams.get("children") || lastSearch?.children;
+    const childrenParam =
+      urlSearchParams.get("children") || lastSearch?.children;
     if (adultsParam || childrenParam) {
       setTravelers({
         adults: adultsParam ? parseInt(adultsParam) : 1,
@@ -1296,7 +1297,6 @@ export default function FlightResults() {
       setAuthError("Invalid email or password");
     }
   };
-
 
   // Handle filter updates and sync with URL
   const updateFiltersAndSearch = useCallback(

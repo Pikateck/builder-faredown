@@ -90,12 +90,12 @@ export function HotelSearchForm({
 
   useEffect(() => {
     const checkMobile = () => {
-      if (typeof window !== 'undefined') {
+      if (typeof window !== "undefined") {
         setIsMobile(window.innerWidth < 768);
       }
     };
     checkMobile();
-    if (typeof window !== 'undefined') {
+    if (typeof window !== "undefined") {
       window.addEventListener("resize", checkMobile);
       return () => window.removeEventListener("resize", checkMobile);
     }
@@ -107,7 +107,7 @@ export function HotelSearchForm({
       setIsDestinationOpen(false);
     };
 
-    if (typeof document !== 'undefined') {
+    if (typeof document !== "undefined") {
       document.addEventListener("click", handleClickOutside);
       return () => document.removeEventListener("click", handleClickOutside);
     }

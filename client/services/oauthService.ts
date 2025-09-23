@@ -172,7 +172,11 @@ export class OAuthService {
         );
 
         if (!popup) {
-          reject(new Error("Failed to open popup window. Please check if popups are blocked."));
+          reject(
+            new Error(
+              "Failed to open popup window. Please check if popups are blocked.",
+            ),
+          );
           return;
         }
 
@@ -185,7 +189,7 @@ export class OAuthService {
             origin: ev.origin,
             data: ev.data,
             type: typeof ev.data,
-            hasType: ev.data?.type
+            hasType: ev.data?.type,
           });
 
           const allowed = [
@@ -195,7 +199,11 @@ export class OAuthService {
           ];
 
           if (!allowed.includes(ev.origin)) {
-            console.log("🔴 Message from disallowed origin:", ev.origin, "- ignoring");
+            console.log(
+              "🔴 Message from disallowed origin:",
+              ev.origin,
+              "- ignoring",
+            );
             return;
           }
 
@@ -214,7 +222,7 @@ export class OAuthService {
             const response = {
               success: ev.data.success || true,
               message: ev.data.message || "Google authentication successful",
-              user: ev.data.user
+              user: ev.data.user,
             };
             console.log("🔵 Resolving with response:", response);
             resolve(response);
@@ -245,10 +253,12 @@ export class OAuthService {
             try {
               console.log("🔵 Popup status check:", {
                 closed: popup.closed,
-                location: popup.location?.href || "Cannot access location"
+                location: popup.location?.href || "Cannot access location",
               });
             } catch (e) {
-              console.log("🔵 Popup is on different origin (normal during OAuth flow)");
+              console.log(
+                "🔵 Popup is on different origin (normal during OAuth flow)",
+              );
             }
           }
         }, 2000);
@@ -260,7 +270,7 @@ export class OAuthService {
             console.log("🔵 Final popup state:", {
               closed: popup.closed,
               messageReceived,
-              popupExists: !!popup
+              popupExists: !!popup,
             });
             clearInterval(checkClosed);
             window.removeEventListener("message", messageHandler);
@@ -315,7 +325,11 @@ export class OAuthService {
       );
 
       if (!popup) {
-        reject(new Error("Failed to open popup window. Please check if popups are blocked."));
+        reject(
+          new Error(
+            "Failed to open popup window. Please check if popups are blocked.",
+          ),
+        );
         return;
       }
 
@@ -326,7 +340,9 @@ export class OAuthService {
         console.log("🔴 Could not focus popup window:", e);
       }
 
-      console.log("🔵 Popup opened and focused, waiting for auth completion...");
+      console.log(
+        "🔵 Popup opened and focused, waiting for auth completion...",
+      );
 
       let messageReceived = false;
 
@@ -335,7 +351,7 @@ export class OAuthService {
           origin: ev.origin,
           data: ev.data,
           type: typeof ev.data,
-          hasType: ev.data?.type
+          hasType: ev.data?.type,
         });
 
         const allowed = [
@@ -345,11 +361,17 @@ export class OAuthService {
         ];
 
         if (!allowed.includes(ev.origin)) {
-          console.log("🔴 [Regular OAuth] Message from disallowed origin:", ev.origin);
+          console.log(
+            "🔴 [Regular OAuth] Message from disallowed origin:",
+            ev.origin,
+          );
           return;
         }
 
-        console.log("✅ [Regular OAuth] Message from allowed origin:", ev.origin);
+        console.log(
+          "✅ [Regular OAuth] Message from allowed origin:",
+          ev.origin,
+        );
         console.log("🔵 [Regular OAuth] Message data:", ev.data);
 
         if (ev.data?.type === "oauth:success") {

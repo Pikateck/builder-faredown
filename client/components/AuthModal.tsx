@@ -240,7 +240,7 @@ export function AuthModal({
         // Use the exact format from successful OAuth response
         login({
           id: response.user.id,
-          name: response.user.username || response.user.email.split('@')[0],
+          name: response.user.username || response.user.email.split("@")[0],
           email: response.user.email,
           loyaltyLevel: 1,
         });

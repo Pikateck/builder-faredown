@@ -47,9 +47,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         const authData = JSON.parse(savedAuthState);
         if (authData.isLoggedIn && authData.user) {
           // Check if session is not too old (optional: expire after 7 days)
-          const loginTime = authData.loginTime ? new Date(authData.loginTime) : new Date();
+          const loginTime = authData.loginTime
+            ? new Date(authData.loginTime)
+            : new Date();
           const now = new Date();
-          const daysDiff = (now.getTime() - loginTime.getTime()) / (1000 * 3600 * 24);
+          const daysDiff =
+            (now.getTime() - loginTime.getTime()) / (1000 * 3600 * 24);
 
           if (daysDiff > 7) {
             console.log("🔴 AuthContext: Session expired, logging out");
@@ -57,7 +60,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             return;
           }
 
-          console.log("✅ AuthContext: Restoring user session:", authData.user.email);
+          console.log(
+            "✅ AuthContext: Restoring user session:",
+            authData.user.email,
+          );
           setIsLoggedIn(true);
           setUser(authData.user);
         }
@@ -80,7 +86,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       isLoggedIn: true,
       user: userData,
       loginTime: new Date().toISOString(),
-      provider: 'oauth' // Track if this was an OAuth login
+      provider: "oauth", // Track if this was an OAuth login
     };
     localStorage.setItem("faredown_auth", JSON.stringify(authData));
     console.log("�� AuthContext: User data saved to localStorage");
@@ -95,8 +101,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem("faredown_auth");
 
     // Clear any auth-related cookies
-    document.cookie = "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-    document.cookie = "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "session=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+    document.cookie =
+      "auth_token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 
     console.log("✅ AuthContext: User logged out and session cleaned");
   };
