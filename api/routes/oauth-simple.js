@@ -145,6 +145,7 @@ router.get("/google", async (req, res) => {
       scope: ["openid", "email", "profile"],
       prompt: "select_account",
       state,
+      redirect_uri: redirectUri,
     });
 
     console.log(`🔍 Generated OAuth URL: ${authUrl}`);
