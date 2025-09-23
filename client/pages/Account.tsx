@@ -54,6 +54,7 @@ import {
   Plus,
   Hotel,
   Camera,
+  Car,
   Search,
   Filter,
   Users,
