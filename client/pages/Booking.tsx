@@ -57,6 +57,7 @@ import {
   Navigation,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { AuthModal } from "@/components/AuthModal";
 
 // Flight data matching FlightResults.tsx
 const flightData = [
