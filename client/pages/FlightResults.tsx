@@ -451,11 +451,6 @@ export default function FlightResults() {
   // Auth form states
   const [loginEmail, setLoginEmail] = useState("");
   const [loginPassword, setLoginPassword] = useState("");
-  const [registerEmail, setRegisterEmail] = useState("");
-  const [registerPassword, setRegisterPassword] = useState("");
-  const [registerConfirmPassword, setRegisterConfirmPassword] = useState("");
-  const [registerFirstName, setRegisterFirstName] = useState("");
-  const [registerLastName, setRegisterLastName] = useState("");
   const [authError, setAuthError] = useState("");
 
   // Test credentials for demo
@@ -4480,7 +4475,7 @@ export default function FlightResults() {
                                           Airline fee:
                                         </span>
                                         <span className="text-gray-900 font-medium">
-                                          ₹0
+                                          ���0
                                         </span>
                                       </div>
                                       <div className="flex justify-between">
