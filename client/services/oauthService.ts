@@ -233,18 +233,35 @@ export class OAuthService {
 
         window.addEventListener("message", messageHandler);
 
-        // Check if popup was closed manually
+        // Monitor popup status
         const checkClosed = setInterval(() => {
           if (popup.closed && !messageReceived) {
+            console.log("🔴 Popup was closed manually");
             clearInterval(checkClosed);
             window.removeEventListener("message", messageHandler);
             reject(new Error("Authentication cancelled"));
+          } else if (!messageReceived) {
+            // Log popup status for debugging
+            try {
+              console.log("🔵 Popup status check:", {
+                closed: popup.closed,
+                location: popup.location?.href || "Cannot access location"
+              });
+            } catch (e) {
+              console.log("🔵 Popup is on different origin (normal during OAuth flow)");
+            }
           }
-        }, 1000);
+        }, 2000);
 
-        // Timeout after 60 seconds
-        setTimeout(() => {
+        // Timeout after 90 seconds (increased for slower connections)
+        const timeoutId = setTimeout(() => {
           if (!messageReceived) {
+            console.log("🔴 OAuth timeout reached");
+            console.log("🔵 Final popup state:", {
+              closed: popup.closed,
+              messageReceived,
+              popupExists: !!popup
+            });
             clearInterval(checkClosed);
             window.removeEventListener("message", messageHandler);
             if (popup && !popup.closed) {
@@ -252,7 +269,26 @@ export class OAuthService {
             }
             reject(new Error("Authentication timed out. Please try again."));
           }
-        }, 60000);
+        }, 90000);
+
+        // Cleanup function for success/error cases
+        const cleanup = () => {
+          clearInterval(checkClosed);
+          clearTimeout(timeoutId);
+          window.removeEventListener("message", messageHandler);
+        };
+
+        // Update resolve and reject to use cleanup
+        const originalResolve = resolve;
+        const originalReject = reject;
+        resolve = (value) => {
+          cleanup();
+          originalResolve(value);
+        };
+        reject = (error) => {
+          cleanup();
+          originalReject(error);
+        };
       } catch (error) {
         reject(error);
       }
@@ -302,7 +338,7 @@ export class OAuthService {
         ];
 
         if (!allowed.includes(ev.origin)) {
-          console.log("🔴 Message from disallowed origin:", ev.origin);
+          console.log("��� Message from disallowed origin:", ev.origin);
           return;
         }
 
