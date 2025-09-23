@@ -592,6 +592,11 @@ export default function Profile({
         first_name: firstName,
         last_name: lastName,
         email: email,
+        display_name: `${firstName} ${lastName}`.trim() || "",
+        phone: "",
+        dob: "",
+        nationality_iso2: "IN",
+        gender: "",
       });
       setTravelers([]);
       setPaymentMethods([]);
