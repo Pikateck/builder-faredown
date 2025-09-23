@@ -607,6 +607,107 @@ export default function AdminDashboard() {
           </CardContent>
         </Card>
       </div>
+
+      {/* Sightseeing and Transfers Bookings Analysis */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Camera className="w-5 h-5 mr-2" />
+                Sightseeing Bookings by City
+              </div>
+              <Badge variant="outline" className="text-xs">
+                {dateFilter === "today" ? "Today" :
+                 dateFilter === "week" ? "This Week" :
+                 dateFilter === "month" ? "This Month" : "This Year"}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3">
+              {mockStats.sightseeingCityBookings.map((sightseeing, index) => (
+                <div
+                  key={sightseeing.city}
+                  className="flex items-center justify-between"
+                >
+                  <div className="flex items-center">
+                    <span className="text-sm font-medium text-gray-700 w-4">
+                      {index + 1}.
+                    </span>
+                    <span className="text-sm ml-2">{sightseeing.city}</span>
+                  </div>
+                  <div className="text-right">
+                    <div className="flex items-center space-x-2">
+                      <Badge variant="secondary">
+                        {sightseeing.bookings} bookings
+                      </Badge>
+                      <Badge variant="outline" className="text-purple-600">
+                        ₹{sightseeing.avgRate}
+                      </Badge>
+                    </div>
+                    <div className="text-xs text-gray-600 mt-1">
+                      Revenue: ₹{sightseeing.revenue.toLocaleString()}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center justify-between">
+              <div className="flex items-center">
+                <Car className="w-5 h-5 mr-2" />
+                Transfer Bookings by Type
+              </div>
+              <Badge variant="outline" className="text-xs">
+                {dateFilter === "today" ? "Today" :
+                 dateFilter === "week" ? "This Week" :
+                 dateFilter === "month" ? "This Month" : "This Year"}
+              </Badge>
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              {mockStats.transferVehicleBookings.map((transfer, index) => (
+                <div key={transfer.type} className="space-y-2">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <span className="text-sm font-medium">{transfer.type}</span>
+                      <Badge variant="outline" className="ml-2">
+                        {transfer.percentage}%
+                      </Badge>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-sm font-semibold">
+                        {transfer.bookings} bookings
+                      </div>
+                      <div className="text-xs text-gray-600">
+                        ₹{transfer.revenue.toLocaleString()}
+                      </div>
+                    </div>
+                  </div>
+                  <div className="w-full h-3 bg-gray-200 rounded">
+                    <div
+                      className={`h-3 rounded ${
+                        transfer.type === "Airport Transfer"
+                          ? "bg-orange-600"
+                          : transfer.type === "City Transfer"
+                            ? "bg-yellow-600"
+                            : "bg-red-600"
+                      }`}
+                      style={{ width: `${transfer.percentage}%` }}
+                    ></div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
   );
 
