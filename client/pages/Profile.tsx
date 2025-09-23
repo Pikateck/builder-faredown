@@ -1812,11 +1812,11 @@ function PassportModal({
           </div>
         </div>
 
-        <div className="flex justify-end space-x-2 pt-4">
-          <Button variant="outline" onClick={onClose}>
+        <div className="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-2 pt-4">
+          <Button variant="outline" onClick={onClose} className="w-full sm:w-auto">
             Cancel
           </Button>
-          <Button onClick={onSave} disabled={saving}>
+          <Button onClick={onSave} disabled={saving} className="w-full sm:w-auto">
             {saving ? <Loader2 className="w-4 h-4 animate-spin mr-2" /> : null}
             Add passport
           </Button>
