@@ -344,7 +344,7 @@ export function Header() {
                         <div className="space-y-1">
                           <button
                             onClick={() => {
-                              handleNavigation("/account?tab=bookings");
+                              handleNavigation("/account/trips");
                               setShowMobileMenu(false);
                             }}
                             className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
@@ -355,7 +355,7 @@ export function Header() {
 
                           <button
                             onClick={() => {
-                              handleNavigation("/account?tab=profile");
+                              handleNavigation("/account/personal");
                               setShowMobileMenu(false);
                             }}
                             className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
@@ -366,7 +366,7 @@ export function Header() {
 
                           <button
                             onClick={() => {
-                              handleNavigation("/account?tab=loyalty");
+                              handleNavigation("/account/loyalty");
                               setShowMobileMenu(false);
                             }}
                             className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
@@ -377,7 +377,7 @@ export function Header() {
 
                           <button
                             onClick={() => {
-                              handleNavigation("/account?tab=payment");
+                              handleNavigation("/account/payment");
                               setShowMobileMenu(false);
                             }}
                             className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
@@ -388,7 +388,7 @@ export function Header() {
 
                           <button
                             onClick={() => {
-                              handleNavigation("/account?tab=settings");
+                              handleNavigation("/account/preferences");
                               setShowMobileMenu(false);
                             }}
                             className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
