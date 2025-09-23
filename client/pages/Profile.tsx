@@ -1083,7 +1083,7 @@ function PersonalDetailsTab({
                 placeholder="Apartment, suite, etc."
               />
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 md:gap-4">
               <div>
                 <Label htmlFor="city">City</Label>
                 <Input
