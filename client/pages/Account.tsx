@@ -255,7 +255,8 @@ export default function Account() {
                   </h1>
                   <div className="flex items-center space-x-2">
                     <Badge className="bg-[#febb02] text-[#1a1a1a] text-sm font-medium border border-[#e6a602] shadow-sm">
-                      👑 FaredownClub Gold
+                      <Award className="w-4 h-4 mr-1" />
+                      FaredownClub Gold
                     </Badge>
                     <span className="text-[#7a7a7a] text-sm">
                       Member since Dec 2024
@@ -351,7 +352,10 @@ export default function Account() {
                   <p className="text-[#7a7a7a] text-sm font-medium">
                     Current Tier
                   </p>
-                  <p className="text-lg font-bold text-[#003580]">👑 Gold</p>
+                  <p className="text-lg font-bold text-[#003580] flex items-center">
+                    <Award className="w-5 h-5 mr-1" />
+                    Gold
+                  </p>
                 </div>
                 <div className="w-12 h-12 bg-[#febb02] rounded-lg flex items-center justify-center shadow-sm border border-[#e6a602]">
                   <span className="text-[#1a1a1a] font-bold text-lg">G</span>
@@ -367,7 +371,7 @@ export default function Account() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
               <div className="flex items-center space-x-4">
                 <div className="w-16 h-16 bg-[#febb02] rounded-full flex items-center justify-center shadow-sm border border-[#e6a602]">
-                  <span className="text-[#1a1a1a] font-bold text-2xl">👑</span>
+                  <Award className="w-8 h-8 text-[#1a1a1a]" />
                 </div>
                 <div>
                   <h3 className="text-xl font-bold text-[#003580] flex items-center space-x-2">
