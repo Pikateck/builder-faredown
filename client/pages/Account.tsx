@@ -782,7 +782,13 @@ export default function Account() {
                               <CardTitle className="text-lg font-semibold text-[#003580]">
                                 {module.id === "flights"
                                   ? "Mumbai ⇄ Dubai"
-                                  : "Hotel Booking"}
+                                  : module.id === "hotels"
+                                  ? "Hotel Booking"
+                                  : module.id === "sightseeing"
+                                  ? "Sightseeing Experience"
+                                  : module.id === "transfers"
+                                  ? "Transfer Service"
+                                  : "Booking"}
                               </CardTitle>
                               <p className="text-sm text-[#7a7a7a]">
                                 Booking Reference:{" "}
@@ -813,7 +819,13 @@ export default function Account() {
                                 <h4 className="font-semibold text-[#003580] mb-2">
                                   {module.id === "flights"
                                     ? "Flight Details"
-                                    : "Hotel Details"}
+                                    : module.id === "hotels"
+                                    ? "Hotel Details"
+                                    : module.id === "sightseeing"
+                                    ? "Experience Details"
+                                    : module.id === "transfers"
+                                    ? "Transfer Details"
+                                    : "Booking Details"}
                                 </h4>
                                 {module.id === "flights" ? (
                                   <>
