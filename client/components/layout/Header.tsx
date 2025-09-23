@@ -312,131 +312,182 @@ export function Header() {
                 </div>
 
                 {/* Menu Items */}
-                <div className="flex-1 py-4">
-                  <nav className="space-y-1 px-4">
-                    {/* Account Section */}
-                    <div className="mb-6">
-                      <div className="text-xs font-semibold text-gray-500 px-4 py-2 mb-2 uppercase tracking-wider">
-                        My Account
+                <div className="flex-1 overflow-y-auto">
+                  {/* User Section First */}
+                  {isLoggedIn && (
+                    <div className="px-4 py-4 border-b border-gray-200">
+                      <div className="flex items-center space-x-3 mb-4">
+                        <div className="w-12 h-12 bg-[#003580] rounded-full flex items-center justify-center">
+                          <span className="text-white font-bold text-lg">
+                            {userName.charAt(0)}
+                          </span>
+                        </div>
+                        <div>
+                          <div className="font-semibold text-gray-900 text-lg">
+                            {userName}
+                          </div>
+                          <div className="text-sm text-gray-600">
+                            FaredownClub Gold
+                          </div>
+                        </div>
                       </div>
-
-                      <button
-                        onClick={() => {
-                          handleNavigation("/account?tab=bookings");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
-                      >
-                        <Plane className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">My Bookings</span>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          handleNavigation("/account?tab=profile");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
-                      >
-                        <User className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Profile</span>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          handleNavigation("/account?tab=loyalty");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
-                      >
-                        <Award className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Loyalty Program</span>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          handleNavigation("/account?tab=payment");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
-                      >
-                        <CreditCard className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Payment & Wallet</span>
-                      </button>
-
-                      <button
-                        onClick={() => {
-                          handleNavigation("/account?tab=settings");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
-                      >
-                        <Settings className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Settings</span>
-                      </button>
                     </div>
+                  )}
+
+                  <nav className="px-4 py-4">
+                    {/* Account Section */}
+                    {isLoggedIn && (
+                      <div className="mb-6">
+                        <div className="text-xs font-semibold text-gray-500 px-0 py-2 mb-3 uppercase tracking-wider">
+                          My Account
+                        </div>
+
+                        <div className="space-y-1">
+                          <button
+                            onClick={() => {
+                              handleNavigation("/account?tab=bookings");
+                              setShowMobileMenu(false);
+                            }}
+                            className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
+                          >
+                            <Plane className="w-5 h-5 text-[#003580]" />
+                            <span className="font-medium">My Bookings</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              handleNavigation("/account?tab=profile");
+                              setShowMobileMenu(false);
+                            }}
+                            className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
+                          >
+                            <User className="w-5 h-5 text-[#003580]" />
+                            <span className="font-medium">Profile</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              handleNavigation("/account?tab=loyalty");
+                              setShowMobileMenu(false);
+                            }}
+                            className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
+                          >
+                            <Award className="w-5 h-5 text-[#003580]" />
+                            <span className="font-medium">Loyalty Program</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              handleNavigation("/account?tab=payment");
+                              setShowMobileMenu(false);
+                            }}
+                            className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
+                          >
+                            <CreditCard className="w-5 h-5 text-[#003580]" />
+                            <span className="font-medium">Payment & Wallet</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              handleNavigation("/account?tab=settings");
+                              setShowMobileMenu(false);
+                            }}
+                            className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
+                          >
+                            <Settings className="w-5 h-5 text-[#003580]" />
+                            <span className="font-medium">Settings</span>
+                          </button>
+
+                          <button
+                            onClick={() => {
+                              handleNavigation("/help-center");
+                              setShowMobileMenu(false);
+                            }}
+                            className="flex items-center space-x-3 px-3 py-3 rounded-lg w-full text-left text-gray-700 hover:bg-gray-100"
+                          >
+                            <BookOpen className="w-5 h-5 text-[#003580]" />
+                            <span className="font-medium">Help Centre</span>
+                          </button>
+                        </div>
+                      </div>
+                    )}
 
                     {/* Other Services Section */}
-                    <div className="border-t border-gray-200 pt-4">
-                      <div className="text-xs font-semibold text-gray-500 px-4 py-2 mb-2 uppercase tracking-wider">
-                        Other Services
+                    <div className="mb-6">
+                      <div className="text-xs font-semibold text-gray-500 px-0 py-2 mb-3 uppercase tracking-wider">
+                        Services
                       </div>
 
-                      <button
-                        onClick={() => {
-                          handleNavigation("/saved");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left"
-                      >
-                        <Heart className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Saved</span>
-                      </button>
+                      <div className="space-y-1">
+                        <button
+                          onClick={() => {
+                            handleNavigation("/saved");
+                            setShowMobileMenu(false);
+                          }}
+                          className="flex items-center space-x-3 px-3 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left"
+                        >
+                          <Heart className="w-5 h-5 text-[#003580]" />
+                          <span className="font-medium">Saved</span>
+                        </button>
 
-
-                      <button
-                        onClick={() => {
-                          handleNavigation("/help-support");
-                          setShowMobileMenu(false);
-                        }}
-                        className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left"
-                      >
-                        <Headphones className="w-5 h-5 text-[#003580]" />
-                        <span className="font-medium">Help & Support</span>
-                      </button>
+                        <button
+                          onClick={() => {
+                            handleNavigation("/help-support");
+                            setShowMobileMenu(false);
+                          }}
+                          className="flex items-center space-x-3 px-3 py-3 text-gray-700 hover:bg-gray-100 rounded-lg w-full text-left"
+                        >
+                          <Headphones className="w-5 h-5 text-[#003580]" />
+                          <span className="font-medium">Help & Support</span>
+                        </button>
+                      </div>
                     </div>
 
-                    {/* Currency Selection Tab */}
-                    <div className="border-t border-gray-200 my-4"></div>
-                    <div className="px-4 py-2">
-                      <div className="text-xs font-semibold text-gray-700 px-0 py-1 mb-2 flex items-center">
+                    {/* Currency Section */}
+                    <div className="mb-6">
+                      <div className="text-xs font-semibold text-gray-500 px-0 py-2 mb-3 uppercase tracking-wider flex items-center">
                         <DollarSign className="w-4 h-4 mr-2 text-[#003580]" />
                         Currency
                       </div>
-                      <div className="space-y-1 max-h-32 overflow-y-auto">
-                        {currencies.map((currency) => (
-                          <button
-                            key={currency.code}
-                            onClick={() => {
-                              setCurrency(currency);
-                            }}
-                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded-lg text-sm flex items-center justify-between transition-colors ${
-                              selectedCurrency.code === currency.code
-                                ? "bg-blue-50 text-blue-600 border border-blue-200"
-                                : "text-gray-700"
-                            }`}
-                          >
-                            <div className="flex items-center space-x-2">
-                              <span className="text-base">{currency.flag}</span>
-                              <span className="font-medium">
-                                {currency.name}
-                              </span>
-                            </div>
-                            <span className="font-semibold text-xs">
-                              {currency.symbol} {currency.code}
+
+                      <div className="bg-gray-50 rounded-lg p-3">
+                        <div className="text-sm font-medium text-gray-700 mb-2">
+                          Selected Currency
+                        </div>
+                        <div className="flex items-center justify-between p-2 bg-white rounded border border-blue-200">
+                          <div className="flex items-center space-x-2">
+                            <span className="text-lg">{selectedCurrency.flag}</span>
+                            <span className="font-medium text-gray-900">
+                              {selectedCurrency.name}
                             </span>
-                          </button>
-                        ))}
+                          </div>
+                          <span className="font-semibold text-[#003580]">
+                            {selectedCurrency.symbol} {selectedCurrency.code}
+                          </span>
+                        </div>
+
+                        <div className="mt-3">
+                          <div className="text-xs text-gray-600 mb-2">Change Currency:</div>
+                          <div className="space-y-1 max-h-24 overflow-y-auto">
+                            {currencies.filter(c => c.code !== selectedCurrency.code).slice(0, 3).map((currency) => (
+                              <button
+                                key={currency.code}
+                                onClick={() => {
+                                  setCurrency(currency);
+                                }}
+                                className="w-full text-left px-2 py-1 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors"
+                              >
+                                <div className="flex items-center space-x-2">
+                                  <span className="text-sm">{currency.flag}</span>
+                                  <span className="text-sm">{currency.name}</span>
+                                </div>
+                                <span className="text-xs font-medium">
+                                  {currency.symbol} {currency.code}
+                                </span>
+                              </button>
+                            ))}
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </nav>
