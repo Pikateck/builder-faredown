@@ -516,30 +516,30 @@ export default function Account() {
           </div>
 
           {bookings.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
               {bookings.slice(0, 4).map((booking, index) => (
                 <Card
                   key={index}
                   className="bg-[#ffffff] border border-[#e5e5e5] hover:shadow-md transition-shadow"
                 >
-                  <CardContent className="p-6">
-                    <div className="flex items-center justify-between mb-4">
-                      <div className="flex items-center space-x-3">
-                        <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm">
+                  <CardContent className="p-4 md:p-6">
+                    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
+                      <div className="flex items-center space-x-3 min-w-0 flex-1">
+                        <div className="w-8 h-8 md:w-10 md:h-10 rounded-lg flex items-center justify-center bg-[#ffffff] border border-[#e5e5e5] shadow-sm flex-shrink-0">
                           {booking.type === "flight" ? (
-                            <Plane className="w-6 h-6 text-[#003580]" />
+                            <Plane className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                           ) : booking.type === "hotel" ? (
-                            <Hotel className="w-6 h-6 text-[#003580]" />
+                            <Hotel className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                           ) : booking.type === "sightseeing" ? (
-                            <Camera className="w-6 h-6 text-[#003580]" />
+                            <Camera className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                           ) : booking.type === "transfer" ? (
-                            <Car className="w-6 h-6 text-[#003580]" />
+                            <Car className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                           ) : (
-                            <Plane className="w-6 h-6 text-[#003580]" />
+                            <Plane className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                           )}
                         </div>
-                        <div>
-                          <h3 className="font-semibold text-[#1a1a1a]">
+                        <div className="min-w-0 flex-1">
+                          <h3 className="font-semibold text-[#1a1a1a] text-sm md:text-base truncate">
                             {booking.type === "flight"
                               ? "Flight Booking"
                               : booking.type === "hotel"
@@ -550,12 +550,12 @@ export default function Account() {
                               ? "Transfer Booking"
                               : "Flight Booking"}
                           </h3>
-                          <p className="text-sm text-[#7a7a7a]">
+                          <p className="text-xs md:text-sm text-[#7a7a7a] truncate">
                             {booking.bookingDetails.bookingRef}
                           </p>
                         </div>
                       </div>
-                      <Badge className="bg-[#febb02] text-[#1a1a1a] border border-[#e6a602]">
+                      <Badge className="bg-[#febb02] text-[#1a1a1a] border border-[#e6a602] text-xs self-start sm:self-center">
                         Confirmed
                       </Badge>
                     </div>
