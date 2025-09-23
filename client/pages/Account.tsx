@@ -683,6 +683,24 @@ export default function Account() {
         emptyMessage: "No hotel bookings found",
         searchLink: "/hotels",
       },
+      {
+        id: "sightseeing",
+        name: "Sightseeing",
+        icon: Camera,
+        color: "orange",
+        bookings: bookingsByModule.sightseeing,
+        emptyMessage: "No sightseeing bookings found",
+        searchLink: "/sightseeing",
+      },
+      {
+        id: "transfers",
+        name: "Transfers",
+        icon: Car,
+        color: "purple",
+        bookings: bookingsByModule.transfers,
+        emptyMessage: "No transfer bookings found",
+        searchLink: "/transfers",
+      },
     ];
 
     return (
