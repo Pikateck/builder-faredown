@@ -754,13 +754,13 @@ export default function Profile({
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col lg:flex-row gap-8">
+      <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 md:py-8">
+        <div className="flex flex-col lg:flex-row gap-4 md:gap-8">
           {/* Navigation Sidebar */}
           <div className="lg:w-1/4">
             <Card>
-              <CardContent className="p-6">
-                <nav className="space-y-2">
+              <CardContent className="p-4 md:p-6">
+                <nav className="space-y-1 md:space-y-2">
                   {navigationItems.map((item) => (
                     <button
                       key={item.id}
