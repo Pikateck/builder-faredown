@@ -168,9 +168,12 @@ router.get("/google", async (req, res) => {
 router.get("/google/callback", async (req, res) => {
   try {
     console.log("🔵 Google OAuth callback received");
-    console.log("🔵 Query params:", {
-      code: req.query.code?.substring(0, 20) + "...",
-      state: req.query.state?.substring(0, 8) + "...",
+    console.log("🔵 Full query params:", req.query);
+    console.log("🔵 Request headers:", {
+      host: req.get('host'),
+      origin: req.get('origin'),
+      referer: req.get('referer'),
+      userAgent: req.get('user-agent')?.substring(0, 50) + "..."
     });
 
     const { code, state } = req.query;
@@ -238,32 +241,60 @@ router.get("/google/callback", async (req, res) => {
           font-size: 1.25rem;
           margin-bottom: 1rem;
         }
+        .debug {
+          font-size: 0.8rem;
+          color: #666;
+          margin-top: 1rem;
+          max-width: 400px;
+        }
       </style>
       <div class="container">
         <div class="success">✓ Authentication Successful</div>
-        <div>Completing sign-in...</div>
+        <div>Welcome, ${user.name}!</div>
+        <div class="debug">
+          <div>Email: ${user.email}</div>
+          <div>User ID: ${user.id}</div>
+          <div>Closing popup in 3 seconds...</div>
+        </div>
       </div>
       <script>
         console.log('🔵 Bridge page loaded for user: ${user.email}');
-        
+        console.log('🔵 User data:', ${JSON.stringify(user)});
+
         // Determine parent origin by our own origin
         const parentOrigin = location.origin.includes('fly.dev')
           ? 'https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev'
           : 'https://www.faredowntravels.com';
-          
+
+        console.log('🔵 Detected parent origin:', parentOrigin);
+
         if (window.opener) {
-          const message = { type: 'oauth:success' };
-          console.log('🔵 Posting success message to parent:', parentOrigin);
+          console.log('🔵 Window opener found, posting message...');
+          const message = {
+            type: 'oauth:success',
+            timestamp: new Date().toISOString(),
+            user: ${JSON.stringify(user)}
+          };
+          console.log('🔵 Posting message:', message);
+
+          // Post to detected origin
           window.opener.postMessage(message, parentOrigin);
-          
+
           // Also try Builder.io origin
           window.opener.postMessage(message, 'https://builder.io');
+
+          // Try wildcard as fallback
+          window.opener.postMessage(message, '*');
+
+          console.log('🔵 Messages posted to parent');
+        } else {
+          console.log('🔴 No window opener found!');
         }
-        
+
         setTimeout(() => {
-          console.log('🔵 Closing popup');
+          console.log('🔵 Closing popup in 3...2...1...');
           window.close();
-        }, 200);
+        }, 3000);
       </script>`;
 
     res.status(200).send(bridgeHtml);
