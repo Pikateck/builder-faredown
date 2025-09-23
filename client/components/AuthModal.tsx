@@ -235,15 +235,17 @@ export function AuthModal({
 
       if (response.success && response.user) {
         console.log("🔵 Google OAuth success, updating auth context...");
+        console.log("🔵 User data received:", response.user);
+
+        // Use the exact format from successful OAuth response
         login({
           id: response.user.id,
-          name:
-            response.user.username ||
-            response.user.firstName + " " + response.user.lastName,
+          name: response.user.username || response.user.email.split('@')[0],
           email: response.user.email,
           loyaltyLevel: 1,
         });
 
+        console.log("✅ Auth context updated successfully");
         handleClose();
       } else {
         console.error("🔴 Google OAuth failed:", response);
