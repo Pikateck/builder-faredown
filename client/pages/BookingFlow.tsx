@@ -4576,6 +4576,13 @@ export default function BookingFlow() {
         </DialogContent>
       </Dialog>
 
+      {/* Authentication Modal - Now with Google OAuth */}
+      <AuthModal
+        isOpen={showRegister}
+        onClose={() => setShowRegister(false)}
+        initialMode="register"
+      />
+
       {/* Mobile Navigation */}
       <MobileNavigation />
     </div>
