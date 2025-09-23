@@ -46,13 +46,27 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       try {
         const authData = JSON.parse(savedAuthState);
         if (authData.isLoggedIn && authData.user) {
+          // Check if session is not too old (optional: expire after 7 days)
+          const loginTime = authData.loginTime ? new Date(authData.loginTime) : new Date();
+          const now = new Date();
+          const daysDiff = (now.getTime() - loginTime.getTime()) / (1000 * 3600 * 24);
+
+          if (daysDiff > 7) {
+            console.log("🔴 AuthContext: Session expired, logging out");
+            localStorage.removeItem("faredown_auth");
+            return;
+          }
+
+          console.log("✅ AuthContext: Restoring user session:", authData.user.email);
           setIsLoggedIn(true);
           setUser(authData.user);
         }
       } catch (error) {
-        console.error("Error loading auth state:", error);
+        console.error("🔴 AuthContext: Error loading auth state:", error);
         localStorage.removeItem("faredown_auth");
       }
+    } else {
+      console.log("🔵 AuthContext: No saved auth state found");
     }
   }, []);
 
@@ -69,7 +83,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       provider: 'oauth' // Track if this was an OAuth login
     };
     localStorage.setItem("faredown_auth", JSON.stringify(authData));
-    console.log("✅ AuthContext: User data saved to localStorage");
+    console.log("�� AuthContext: User data saved to localStorage");
   };
 
   const logout = () => {
