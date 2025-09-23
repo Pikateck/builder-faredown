@@ -134,7 +134,8 @@ router.get("/google", async (req, res) => {
     console.log("🔍 Request headers:", {
       host: req.get('host'),
       origin: req.get('origin'),
-      referer: req.get('referer')
+      referer: req.get('referer'),
+      userAgent: req.get('user-agent')?.substring(0, 100) + "..."
     });
 
     const state = crypto.randomUUID();
@@ -152,16 +153,24 @@ router.get("/google", async (req, res) => {
       include_granted_scopes: true,
     });
 
-    console.log(`🔍 Generated OAuth URL: ${authUrl}`);
+    console.log(`🔍 Generated OAuth URL (length: ${authUrl.length}):`, authUrl);
     console.log(`🔍 State parameter: ${state}`);
+    console.log(`🔍 Redirect URI: ${oauthRedirectUri}`);
     console.log(`🔍 Client ID in URL: ${authUrl.includes(process.env.GOOGLE_CLIENT_ID) ? 'PRESENT' : 'MISSING'}`);
+    console.log(`🔍 OAuth URL components:`, {
+      client_id: authUrl.includes('client_id=') ? 'PRESENT' : 'MISSING',
+      redirect_uri: authUrl.includes('redirect_uri=') ? 'PRESENT' : 'MISSING',
+      scope: authUrl.includes('scope=') ? 'PRESENT' : 'MISSING',
+      state: authUrl.includes('state=') ? 'PRESENT' : 'MISSING',
+      prompt: authUrl.includes('prompt=') ? 'PRESENT' : 'MISSING'
+    });
     console.log(`✅ Redirecting to Google with state: ${state.substring(0, 8)}...`);
 
     res.redirect(authUrl);
   } catch (error) {
     console.error("🔴 OAuth start error:", error);
     console.error("🔴 Error details:", error.message, error.stack);
-    res.status(500).send("OAuth initialization failed");
+    res.status(500).send(`OAuth initialization failed: ${error.message}`);
   }
 });
 
