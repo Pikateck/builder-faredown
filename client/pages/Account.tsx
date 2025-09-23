@@ -847,7 +847,7 @@ export default function Account() {
                                       </span>
                                     </div>
                                   </>
-                                ) : (
+                                ) : module.id === "hotels" ? (
                                   <>
                                     <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
                                       <MapPin className="w-4 h-4" />
@@ -858,6 +858,47 @@ export default function Account() {
                                       <span>
                                         Check-in: Aug 3 • Check-out: Aug 10
                                       </span>
+                                    </div>
+                                  </>
+                                ) : module.id === "sightseeing" ? (
+                                  <>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <MapPin className="w-4 h-4" />
+                                      <span>Dubai City Tour</span>
+                                    </div>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <Calendar className="w-4 h-4" />
+                                      <span>Aug 5 • 09:00 - 17:00</span>
+                                    </div>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <Camera className="w-4 h-4" />
+                                      <span>Group Tour • English Guide</span>
+                                    </div>
+                                  </>
+                                ) : module.id === "transfers" ? (
+                                  <>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <MapPin className="w-4 h-4" />
+                                      <span>Airport → Hotel</span>
+                                    </div>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <Calendar className="w-4 h-4" />
+                                      <span>Aug 3 • 14:30</span>
+                                    </div>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <Car className="w-4 h-4" />
+                                      <span>Private Car • 3 passengers</span>
+                                    </div>
+                                  </>
+                                ) : (
+                                  <>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <MapPin className="w-4 h-4" />
+                                      <span>Booking Location</span>
+                                    </div>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <Calendar className="w-4 h-4" />
+                                      <span>Service Date</span>
                                     </div>
                                   </>
                                 )}
