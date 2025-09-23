@@ -1297,39 +1297,6 @@ export default function FlightResults() {
     }
   };
 
-  const handleRegister = () => {
-    setAuthError("");
-    if (
-      registerEmail &&
-      registerPassword &&
-      registerConfirmPassword &&
-      registerFirstName &&
-      registerLastName
-    ) {
-      if (registerPassword.length < 8) {
-        setAuthError("Password must be at least 8 characters long");
-        return;
-      }
-      if (registerPassword !== registerConfirmPassword) {
-        setAuthError("Passwords do not match");
-        return;
-      }
-      login({
-        id: "1",
-        name: `${registerFirstName} ${registerLastName}`,
-        email: registerEmail,
-        loyaltyLevel: 1,
-      });
-      setShowRegister(false);
-      setRegisterEmail("");
-      setRegisterPassword("");
-      setRegisterConfirmPassword("");
-      setRegisterFirstName("");
-      setRegisterLastName("");
-    } else {
-      setAuthError("Please fill in all fields");
-    }
-  };
 
   // Handle filter updates and sync with URL
   const updateFiltersAndSearch = useCallback(
