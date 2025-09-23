@@ -401,6 +401,77 @@ router.get("/me", (req, res) => {
   }
 });
 
+// Handle OAuth callback via POST (for frontend service compatibility)
+router.post("/google/callback", async (req, res) => {
+  try {
+    console.log("🔵 POST Google OAuth callback received");
+    console.log("🔵 Request body:", req.body);
+
+    const { code, state } = req.body;
+
+    if (!code || !state) {
+      console.error("🔴 Missing code or state in POST body");
+      return res.status(400).json({
+        success: false,
+        message: "Missing authorization code or state"
+      });
+    }
+
+    if (!consumeState(state)) {
+      console.error("🔴 Invalid state parameter");
+      return res.status(400).json({
+        success: false,
+        message: "OAuth session expired. Please try again."
+      });
+    }
+
+    console.log("🔵 Exchanging code for tokens...");
+    const { tokens } = await client.getToken(String(code));
+    client.setCredentials(tokens);
+
+    // Get user profile
+    const ticket = await client.verifyIdToken({
+      idToken: tokens.id_token,
+      audience: process.env.GOOGLE_CLIENT_ID,
+    });
+    const payload = ticket.getPayload();
+    const email = payload.email;
+    const name = payload.name || email.split("@")[0];
+    const picture = payload.picture;
+
+    console.log("🔵 User authenticated:", { email, name });
+
+    const user = findOrCreateUser({ email, name, picture });
+
+    // Issue cookie
+    issueSessionCookie(res, user);
+
+    console.log("✅ POST OAuth callback successful, returning user data");
+
+    // Return response expected by frontend service
+    res.json({
+      success: true,
+      message: "Google authentication successful",
+      token: "session-cookie-auth", // We use cookies, but frontend expects a token field
+      user: {
+        id: user.id,
+        username: user.name,
+        email: user.email,
+        role: "user",
+        provider: "google",
+        firstName: user.name.split(" ")[0],
+        lastName: user.name.split(" ").slice(1).join(" ") || ""
+      }
+    });
+  } catch (err) {
+    console.error("🔴 POST OAuth callback error:", err?.message || err);
+    res.status(500).json({
+      success: false,
+      message: "Authentication failed. Please try again."
+    });
+  }
+});
+
 // Health check
 router.get("/health", (_, res) => res.json({ ok: true }));
 
