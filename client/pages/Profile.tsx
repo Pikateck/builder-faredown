@@ -519,6 +519,30 @@ export default function Profile({
     loadInitialData();
   }, []);
 
+  // Update form when user data changes (e.g., after Google OAuth login)
+  useEffect(() => {
+    if (user && (!personalForm.email || !personalForm.first_name)) {
+      const firstName = user.name?.split(' ')[0] || "";
+      const lastName = user.name?.split(' ').slice(1).join(' ') || "";
+
+      setPersonalForm(prev => ({
+        ...prev,
+        email: prev.email || user.email || "",
+        first_name: prev.first_name || firstName,
+        last_name: prev.last_name || lastName,
+        display_name: prev.display_name || `${firstName} ${lastName}`.trim() || "",
+      }));
+
+      setProfile(prev => ({
+        ...prev,
+        email: prev?.email || user.email || "",
+        first_name: prev?.first_name || firstName,
+        last_name: prev?.last_name || lastName,
+        email_verified: user.email ? true : prev?.email_verified || false,
+      }));
+    }
+  }, [user]);
+
   const loadInitialData = async () => {
     try {
       setLoading(true);
