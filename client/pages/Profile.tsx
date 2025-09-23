@@ -1153,16 +1153,16 @@ function TravelersTab({
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center justify-between">
+        <CardTitle className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <span>Other travelers</span>
-          <Button onClick={onAddNew}>
+          <Button onClick={onAddNew} className="self-start sm:self-center">
             <Plus className="w-4 h-4 mr-2" />
             Add traveler
           </Button>
         </CardTitle>
       </CardHeader>
-      <CardContent>
-        <p className="text-gray-600 mb-6">
+      <CardContent className="p-4 md:p-6">
+        <p className="text-gray-600 mb-4 md:mb-6 text-sm md:text-base">
           Save details about the people you're traveling with.
         </p>
 
