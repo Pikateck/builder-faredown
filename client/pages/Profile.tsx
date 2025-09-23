@@ -529,8 +529,16 @@ export default function Profile({
       // Load profile first, passing authenticated user data
       const profileRes = await profileAPI.fetchProfile(user);
       console.log("Profile loaded:", profileRes);
-      setProfile(profileRes.profile || {});
-      setPersonalForm(profileRes.profile || {});
+      const loadedProfile = profileRes.profile || {};
+      setProfile(loadedProfile);
+      // Ensure form is populated with Google OAuth data if available
+      setPersonalForm({
+        ...loadedProfile,
+        // Explicitly set email if available from auth user
+        email: loadedProfile.email || user?.email || "",
+        first_name: loadedProfile.first_name || user?.name?.split(' ')[0] || "",
+        last_name: loadedProfile.last_name || user?.name?.split(' ').slice(1).join(' ') || "",
+      });
 
       // Load other data in parallel
       const [travelersRes, paymentRes, preferencesRes] = await Promise.all([
