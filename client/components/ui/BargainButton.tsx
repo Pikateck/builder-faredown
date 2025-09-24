@@ -181,9 +181,14 @@ export function BargainButton({
       {/* Standard Authentication Modal */}
       <AuthModal
         isOpen={showBargainAuthModal}
-        onClose={() => setShowBargainAuthModal(false)}
+        onClose={() => {
+          setShowBargainAuthModal(false);
+          // Check if user is now authenticated and proceed with bargain
+          if (isAuthenticated && shouldShowModal && effectivePrice > 0) {
+            setTimeout(() => setIsBargainModalOpen(true), 100);
+          }
+        }}
         initialMode={authModalMode}
-        onAuthSuccess={onAuthenticationSuccess}
       />
 
       {/* Bargain Modal */}

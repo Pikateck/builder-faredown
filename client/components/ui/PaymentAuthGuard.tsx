@@ -98,9 +98,14 @@ export function PaymentAuthGuard({
         
         <AuthModal
           isOpen={showAuthModal}
-          onClose={() => setShowAuthModal(false)}
+          onClose={() => {
+            setShowAuthModal(false);
+            // Check if user is now authenticated and proceed with payment
+            if (isLoggedIn) {
+              handleAuthSuccess();
+            }
+          }}
           initialMode={authModalMode}
-          onAuthSuccess={handleAuthSuccess}
         />
       </div>
     );
@@ -149,9 +154,14 @@ export function PaymentAuthGuard({
       
       <AuthModal
         isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
+        onClose={() => {
+          setShowAuthModal(false);
+          // Check if user is now authenticated and proceed with payment
+          if (isLoggedIn) {
+            handleAuthSuccess();
+          }
+        }}
         initialMode={authModalMode}
-        onAuthSuccess={handleAuthSuccess}
       />
     </div>
   );
