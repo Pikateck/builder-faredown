@@ -129,7 +129,7 @@ export function PackagesSearchForm() {
       )}
 
       {/* Search Form */}
-      <div className="bg-white rounded-lg border-2 border-blue-500 p-4 md:p-6">
+      <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
           {/* Destination */}
           <div className="md:col-span-2">
@@ -140,7 +140,7 @@ export function PackagesSearchForm() {
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
+                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3"
                 >
                   <div className="flex items-center w-full">
                     <MapPin className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
@@ -215,7 +215,7 @@ export function PackagesSearchForm() {
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3"
+                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3"
                 >
                   <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span className="truncate text-xs sm:text-sm">
