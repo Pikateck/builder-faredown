@@ -97,6 +97,11 @@ import { OAuthTest } from "./pages/OAuthTest";
 import { AuthTest } from "./components/AuthTest";
 import { OAuthImplementationSummary } from "./components/OAuthImplementationSummary";
 
+// Authentication and Protected Routes
+import Login from "./pages/Login";
+import BargainPage from "./pages/BargainPage";
+import CheckoutPage from "./pages/CheckoutPage";
+
 function App() {
   return (
     <div className="App">
