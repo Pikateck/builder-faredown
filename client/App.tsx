@@ -261,6 +261,15 @@ function App() {
                           path="/sightseeing/booking/confirmation"
                           element={<SightseeingBookingConfirmation />}
                         />
+                        <Route path="/packages" element={<Packages />} />
+                        <Route
+                          path="/packages/results"
+                          element={<PackageResults />}
+                        />
+                        <Route
+                          path="/packages/:slug"
+                          element={<PackageDetails />}
+                        />
                         <Route path="/sports" element={<SportsEvents />} />
                         <Route
                           path="/sports-events"
