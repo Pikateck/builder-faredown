@@ -186,6 +186,12 @@ const adminModules = [
     icon: Car,
     color: "bg-orange-600",
   },
+  {
+    id: "packages",
+    name: "Package Management",
+    icon: Package,
+    color: "bg-emerald-600",
+  },
   { id: "vat", name: "VAT Management", icon: FileText, color: "bg-purple-600" },
   { id: "promos", name: "Promo Codes", icon: Ticket, color: "bg-cyan-500" },
   {
