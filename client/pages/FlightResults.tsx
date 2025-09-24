@@ -1,6 +1,7 @@
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 import React, { useState, useEffect, useCallback } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { useBookNowGuard, createBookingContext } from "@/hooks/useBookNowGuard";
 import { useSearch } from "@/contexts/SearchContext";
 import { getLastSearch } from "@/lib/searchParams";
 import { useAuth } from "@/contexts/AuthContext";
@@ -364,7 +365,7 @@ export default function FlightResults() {
     const returnDateParam = urlSearchParams.get("returnDate");
     const tripTypeParam = urlSearchParams.get("tripType");
 
-    console.log("🔄 Loading URL params:", {
+    console.log("��� Loading URL params:", {
       departureDateParam,
       returnDateParam,
       tripTypeParam,
