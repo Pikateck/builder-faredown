@@ -1,0 +1,453 @@
+/* Optimized Calendar Styles - Separated from component to prevent reinjection */
+
+.booking-calendar-optimized .rdrCalendarWrapper {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.12);
+  border: 1px solid #e5e7eb;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  overflow: visible;
+  width: 100%;
+  max-width: 700px;
+}
+
+.booking-calendar-optimized .rdrDateRangeWrapper {
+  margin: 0;
+}
+
+.booking-calendar-optimized .rdrDefinedRangesWrapper {
+  display: none;
+}
+
+.booking-calendar-optimized .rdrDateDisplayWrapper {
+  display: none;
+}
+
+.booking-calendar-optimized .rdrMonthAndYearWrapper {
+  padding: 16px 20px 12px;
+  position: relative;
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  border-bottom: 1px solid #e5e7eb;
+  min-height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.booking-calendar-optimized .rdrMonthAndYearPickers {
+  font-weight: 700;
+  color: #1f2937;
+  font-size: 18px;
+}
+
+.booking-calendar-optimized .rdrMonthPicker,
+.booking-calendar-optimized .rdrYearPicker {
+  display: none;
+}
+
+.booking-calendar-optimized .rdrNextPrevButton {
+  background: #ffffff;
+  border: 2px solid #e2e8f0;
+  color: #475569;
+  border-radius: 12px;
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.booking-calendar-optimized .rdrNextPrevButton:hover {
+  background: #003580;
+  border-color: #003580;
+  color: white;
+  box-shadow: 0 6px 20px rgba(0, 53, 128, 0.3);
+  transform: translateY(-1px);
+}
+
+.booking-calendar-optimized .rdrWeekDaysWrapper {
+  padding: 12px 16px 8px;
+  background: #f8fafc;
+}
+
+.booking-calendar-optimized .rdrWeekDay {
+  color: #1f2937;
+  font-weight: 600;
+  font-size: 13px;
+  text-transform: capitalize;
+}
+
+.booking-calendar-optimized .rdrDays {
+  padding: 12px 16px 16px;
+}
+
+.booking-calendar-optimized .rdrDayNumber {
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+  margin: 2px;
+}
+
+.booking-calendar-optimized .rdrDayToday .rdrDayNumber {
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.booking-calendar-optimized .rdrDayHovered .rdrDayNumber {
+  background: #e0e7ff;
+  color: #3730a3;
+}
+
+.booking-calendar-optimized .rdrDaySelected .rdrDayNumber {
+  background: #003580 !important;
+  color: white !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 53, 128, 0.4);
+}
+
+.booking-calendar-optimized .rdrInRange .rdrDayNumber {
+  background: #e0f2fe !important;
+  color: #0284c7 !important;
+}
+
+.booking-calendar-optimized .rdrStartEdge .rdrDayNumber,
+.booking-calendar-optimized .rdrEndEdge .rdrDayNumber {
+  background: #003580 !important;
+  color: white !important;
+  font-weight: 700;
+  box-shadow: 0 4px 12px rgba(0, 53, 128, 0.4);
+}
+
+.booking-calendar-optimized .rdrDayDisabled .rdrDayNumber {
+  color: #cbd5e1;
+  background: transparent;
+}
+
+.booking-calendar-optimized .rdrMonthWrapper {
+  padding: 0 16px 16px;
+}
+
+.booking-calendar-optimized .rdrDayNumber {
+  font-weight: 400;
+  color: #374151;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+
+.booking-calendar-optimized .rdrDay:hover .rdrDayNumber span {
+  background: #e6f3ff;
+  color: #0066cc;
+  border-radius: 3px;
+}
+
+.booking-calendar-optimized .rdrDayToday .rdrDayNumber span {
+  background: #eff6ff;
+  color: #2563eb;
+  font-weight: 700;
+  border: 2px solid #3b82f6;
+  box-shadow: 0 0 0 1px rgba(59, 130, 246, 0.1);
+}
+
+.booking-calendar-optimized .rdrDayStartOfRange .rdrDayNumber span,
+.booking-calendar-optimized .rdrDayEndOfRange .rdrDayNumber span {
+  background: #0066cc;
+  color: white;
+  font-weight: 600;
+}
+
+.booking-calendar-optimized .rdrDayInRange {
+  background: #e6f3ff;
+  color: #1f2937;
+}
+
+.booking-calendar-optimized .rdrDayInRange .rdrDayNumber span {
+  background: transparent;
+  color: #1f2937;
+}
+
+.booking-calendar-optimized .rdrDayDisabled {
+  background-color: #f9fafb;
+}
+
+.booking-calendar-optimized .rdrDayDisabled .rdrDayNumber span {
+  color: #d1d5db;
+}
+
+.booking-calendar-optimized .rdrWeekDay {
+  font-weight: 600;
+  color: #6b7280;
+  font-size: 11px;
+  text-transform: uppercase;
+  padding: 8px 0;
+  text-align: center;
+}
+
+.booking-calendar-optimized .rdrMonths {
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  width: 100%;
+}
+
+.booking-calendar-optimized .rdrMonth {
+  flex: 1;
+  min-width: 280px;
+  padding: 0;
+  margin: 0;
+}
+
+.booking-calendar-optimized .rdrDateRangeWrapper {
+  width: 100%;
+  background: white;
+  margin: 0;
+  padding: 0;
+}
+
+/* Mobile optimizations */
+@media (max-width: 768px) {
+  .booking-calendar-optimized {
+    height: auto;
+    max-height: none;
+    overflow: visible;
+  }
+
+  .booking-calendar-optimized .rdrMonths {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .booking-calendar-optimized .rdrMonth {
+    width: 100% !important;
+    padding: 0 !important;
+    min-width: auto !important;
+  }
+
+  .booking-calendar-optimized .rdrCalendarWrapper {
+    width: 100% !important;
+    border-radius: 8px;
+    overflow: visible;
+    height: auto;
+    max-width: 100%;
+  }
+
+  .booking-calendar-optimized .rdrMonthAndYearWrapper {
+    padding: 12px 16px 8px;
+    min-height: 50px;
+  }
+
+  .booking-calendar-optimized .rdrMonthWrapper {
+    padding: 0 8px 8px;
+  }
+
+  .booking-calendar-optimized .rdrNextPrevButton {
+    width: 32px;
+    height: 32px;
+  }
+
+  .booking-calendar-optimized .rdrDayNumber {
+    width: 32px;
+    height: 32px;
+    font-size: 13px;
+    margin: 1px;
+  }
+
+  .booking-calendar-optimized .rdrDays {
+    padding: 8px;
+  }
+
+  .booking-calendar-optimized .rdrWeekDaysWrapper {
+    padding: 8px;
+  }
+}
+
+/* Fast Calendar - Optimized for Performance */
+.fast-calendar {
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e5e7eb;
+  overflow: hidden;
+  width: 100%;
+  max-width: 680px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+.fast-calendar-header {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  padding: 16px 20px;
+  border-bottom: 1px solid #e5e7eb;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fast-calendar-nav {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.fast-calendar-nav-button {
+  background: white;
+  border: 2px solid #e2e8f0;
+  color: #475569;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.fast-calendar-nav-button:hover {
+  background: #003580;
+  border-color: #003580;
+  color: white;
+  transform: translateY(-1px);
+}
+
+.fast-calendar-nav-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.fast-calendar-months {
+  display: flex;
+  flex-direction: row;
+}
+
+.fast-calendar-month {
+  flex: 1;
+  padding: 16px;
+  border-right: 1px solid #e5e7eb;
+}
+
+.fast-calendar-month:last-child {
+  border-right: none;
+}
+
+.fast-calendar-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+  margin-bottom: 8px;
+}
+
+.fast-calendar-weekday {
+  padding: 8px 0;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 600;
+  color: #6b7280;
+  text-transform: uppercase;
+}
+
+.fast-calendar-days {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 2px;
+}
+
+.fast-calendar-day {
+  height: 32px;
+  width: 32px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 500;
+  color: #374151;
+  transition: all 0.1s ease;
+  margin: 1px;
+}
+
+.fast-calendar-day:hover:not(:disabled) {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.fast-calendar-day:disabled {
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.fast-calendar-day.selected {
+  background: #003580;
+  color: white;
+  font-weight: 700;
+}
+
+.fast-calendar-day.in-range {
+  background: #e0f2fe;
+  color: #0284c7;
+}
+
+.fast-calendar-day.today {
+  background: #dbeafe;
+  color: #1d4ed8;
+  font-weight: 700;
+}
+
+.fast-calendar-footer {
+  padding: 16px 20px;
+  border-top: 1px solid #e5e7eb;
+  background: #f8fafc;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.fast-calendar-summary {
+  text-align: center;
+  padding: 12px 20px;
+  background: #f0f9ff;
+  border-top: 1px solid #bae6fd;
+}
+
+/* Mobile responsive */
+@media (max-width: 768px) {
+  .fast-calendar {
+    max-width: 100%;
+    border-radius: 8px;
+  }
+  
+  .fast-calendar-months {
+    flex-direction: column;
+  }
+  
+  .fast-calendar-month {
+    border-right: none;
+    border-bottom: 1px solid #e5e7eb;
+    padding: 12px;
+  }
+  
+  .fast-calendar-month:last-child {
+    border-bottom: none;
+  }
+  
+  .fast-calendar-header {
+    padding: 12px 16px;
+  }
+  
+  .fast-calendar-footer {
+    padding: 12px 16px;
+  }
+}
