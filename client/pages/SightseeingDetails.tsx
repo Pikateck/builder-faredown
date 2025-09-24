@@ -1298,6 +1298,15 @@ export default function SightseeingDetails() {
                                   provider: "Local Tours",
                                   features: ticket.features?.slice(0, 5) || [],
                                 }}
+                                searchContext={{
+                                  module: "sightseeing",
+                                  attractionId: attraction.id,
+                                  ticketType: index.toString(),
+                                  selectedTime: selectedTime || "",
+                                  location: attraction.location,
+                                  totalPrice,
+                                  passengerQuantities
+                                }}
                                 onBargainSuccess={(finalPrice, savings) => {
                                   console.log(`Sightseeing Details Bargain success! Final price: ${finalPrice}, Savings: ${savings}`);
                                   // Navigate to booking with bargained price
