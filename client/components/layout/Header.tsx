@@ -643,6 +643,15 @@ export function Header() {
                   <span>Sightseeing</span>
                 </button>
                 <button
+                  onClick={() => handleTabChange("packages")}
+                  className={cn(
+                    "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
+                    activeTab === "packages" && "border-b-2 border-white",
+                  )}
+                >
+                  <span>Packages</span>
+                </button>
+                <button
                   onClick={() => handleTabChange("transfers")}
                   className={cn(
                     "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
