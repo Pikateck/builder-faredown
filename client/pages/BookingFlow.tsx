@@ -104,6 +104,7 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { formatPriceInWords } from "@/lib/numberToWords";
 import { AuthModal } from "@/components/AuthModal";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
+import PaymentAuthGuard from "@/components/ui/PaymentAuthGuard";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
@@ -3822,16 +3823,36 @@ export default function BookingFlow() {
                       Skip
                     </Button>
                   )}
-                  <Button
-                    onClick={handleNextStep}
-                    className="bg-[#003580] hover:bg-[#009fe3] text-white px-8 w-full sm:w-auto"
-                  >
-                    {currentStep === 5
-                      ? `Pay ${formatPrice(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}`
-                      : currentStep === 4
+                  {currentStep === 5 ? (
+                    <PaymentAuthGuard
+                      paymentAmount={formatPrice(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}
+                      onPaymentAuthorized={() => {
+                        // Handle payment authorization - proceed to actual payment
+                        console.log('Payment authorized, proceeding to payment gateway');
+                        // Here you would integrate with actual payment processing
+                        // For demo, we'll call the complete booking handler
+                        handleCompleteBooking();
+                      }}
+                    >
+                      <Button
+                        className="bg-green-600 hover:bg-green-700 text-white px-8 w-full sm:w-auto font-semibold shadow-lg transition-all duration-200"
+                      >
+                        <span className="flex items-center space-x-2">
+                          <CreditCard className="w-5 h-5" />
+                          <span>Complete Payment - {formatPrice(calculateBaseFareTotal() + calculateExtrasTotal() + getTotalSeatFees())}</span>
+                        </span>
+                      </Button>
+                    </PaymentAuthGuard>
+                  ) : (
+                    <Button
+                      onClick={handleNextStep}
+                      className="bg-[#003580] hover:bg-[#009fe3] text-white px-8 w-full sm:w-auto"
+                    >
+                      {currentStep === 4
                         ? "Proceed to Payment"
                         : "Next"}
-                  </Button>
+                    </Button>
+                  )}
                 </div>
               </div>
             </div>
