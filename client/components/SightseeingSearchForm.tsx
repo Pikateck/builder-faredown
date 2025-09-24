@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { FastCalendar } from "@/components/FastCalendar";
+import { StableBookingCalendar } from "@/components/StableBookingCalendar";
 import { format, addDays } from "date-fns";
 import { MapPin, CalendarIcon, Search, X, Camera } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
