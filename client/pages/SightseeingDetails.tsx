@@ -7,6 +7,7 @@ import { ErrorBanner } from "@/components/ErrorBanner";
 import { BargainButton } from "@/components/ui/BargainButton";
 import { MobileSightseeingBooking } from "@/components/mobile/MobileSightseeingBooking";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
+import { useBookNowGuard, createBookingContext } from "@/hooks/useBookNowGuard";
 import { sightseeingService } from "@/services/sightseeingService";
 import {
   AlertDialog,
