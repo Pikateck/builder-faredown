@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { StableBookingCalendar } from "@/components/StableBookingCalendar";
+import { FastCalendar } from "@/components/FastCalendar";
 import { format, addDays } from "date-fns";
 import { MapPin, CalendarIcon, Search, X, Camera } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
@@ -31,6 +31,7 @@ export function SightseeingSearchForm() {
   const [tourDate, setTourDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isCalendarLoading, setIsCalendarLoading] = useState(false);
 
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
@@ -326,7 +327,20 @@ export function SightseeingSearchForm() {
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Tour Dates
             </label>
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+            <Popover
+              open={isCalendarOpen}
+              onOpenChange={(open) => {
+                if (open) {
+                  setIsCalendarLoading(true);
+                  setTimeout(() => {
+                    setIsCalendarLoading(false);
+                    setIsCalendarOpen(true);
+                  }, 50);
+                } else {
+                  setIsCalendarOpen(false);
+                }
+              }}
+            >
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -361,7 +375,9 @@ export function SightseeingSearchForm() {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
-                <StableBookingCalendar
+                <FastCalendar
+                  bookingType="sightseeing"
+                  isLoading={isCalendarLoading}
                   initialRange={{
                     startDate: tourDate || new Date(),
                     endDate: endDate || addDays(tourDate || new Date(), 3),
