@@ -358,7 +358,7 @@ export default function PackageDetails() {
                       </ul>
                     </div>
                   )}
-                </div>
+                </CardContent>
               </Card>
 
               {/* Itinerary */}
