@@ -59,6 +59,7 @@ import {
 import { cn } from "@/lib/utils";
 import { AuthModal } from "@/components/AuthModal";
 import BookingSignInBanner from "@/components/ui/BookingSignInBanner";
+import PaymentAuthGuard from "@/components/ui/PaymentAuthGuard";
 import { useAuth } from "@/contexts/AuthContext";
 
 // Flight data matching FlightResults.tsx
@@ -1953,13 +1954,23 @@ export default function Booking() {
                     <Plane className="w-5 h-5" />
                     Continue to Extras
                   </Button>
-                  <Button
-                    variant="outline"
-                    className="w-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 font-bold py-4 text-lg"
-                    onClick={() => handleRazorpayPayment()}
+                  <PaymentAuthGuard
+                    paymentAmount={formatPrice(finalAmount)}
+                    onPaymentAuthorized={() => {
+                      // User is authenticated, proceed with payment
+                      handleRazorpayPayment();
+                    }}
                   >
-                    💳 Skip & Pay ₹{finalAmount.toLocaleString()} Now
-                  </Button>
+                    <Button
+                      variant="outline"
+                      className="w-full border-2 border-green-600 bg-green-600 text-white hover:bg-green-700 font-bold py-4 text-lg transition-all duration-200 shadow-lg"
+                    >
+                      <span className="flex items-center justify-center space-x-2">
+                        <CreditCard className="w-5 h-5" />
+                        <span>Complete Payment - ₹{finalAmount.toLocaleString()}</span>
+                      </span>
+                    </Button>
+                  </PaymentAuthGuard>
                   <div className="text-center">
                     <div className="flex items-center justify-center space-x-2 text-xs text-gray-500">
                       <Shield className="w-3 h-3" />
