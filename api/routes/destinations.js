@@ -501,8 +501,7 @@ router.post("/admin/countries", requireAdmin, async (req, res) => {
       name,
       region_id || null,
       currency,
-      calling_code,
-      is_active
+      calling_code
     ];
 
     const result = await pool.query(query, values);
