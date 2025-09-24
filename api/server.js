@@ -350,6 +350,13 @@ app.use(
   adminSightseeingRoutes,
 );
 app.use(
+  "/api/admin/packages",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminPackagesRoutes,
+);
+app.use(
   "/api/admin/transfers-markup",
   authenticateToken,
   requireAdmin,
