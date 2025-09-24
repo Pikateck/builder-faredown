@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 import { TrendingDown } from "lucide-react";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 import { useBargainAuthGuard } from "@/utils/enhancedAuthGuards";
-import BargainAuthModal from "@/components/ui/BargainAuthModal";
+import { AuthModal } from "@/components/AuthModal";
 import type { SearchContext } from "@/utils/authGuards";
 
 export interface BargainButtonProps {
@@ -96,6 +96,9 @@ export function BargainButton({
     handleAuthSuccess
   } = useBargainAuthGuard();
 
+  // Auth modal state
+  const [authModalMode, setAuthModalMode] = useState<"login" | "register">("login");
+
   // Use either useEnhancedModal or useBargainModal
   const shouldShowModal = useBargainModal || useEnhancedModal;
 
@@ -119,9 +122,14 @@ export function BargainButton({
         itemDetails
       };
 
-      // Require authentication before proceeding (using modal)
-      if (!requireBargainAuth(contextToUse)) {
-        return; // User will see auth modal
+      // Require authentication before proceeding (using standard auth modal)
+      if (!requireBargainAuth(contextToUse, {
+        onShowAuthModal: () => {
+          setAuthModalMode("login");
+          setShowBargainAuthModal(true);
+        }
+      })) {
+        return; // User will see standard auth modal
       }
     }
 
@@ -170,11 +178,12 @@ export function BargainButton({
         {children}
       </Button>
 
-      {/* Authentication Modal */}
-      <BargainAuthModal
+      {/* Standard Authentication Modal */}
+      <AuthModal
         isOpen={showBargainAuthModal}
         onClose={() => setShowBargainAuthModal(false)}
-        onSignInSuccess={onAuthenticationSuccess}
+        initialMode={authModalMode}
+        onAuthSuccess={onAuthenticationSuccess}
       />
 
       {/* Bargain Modal */}
