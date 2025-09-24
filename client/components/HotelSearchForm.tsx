@@ -9,7 +9,7 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { StableBookingCalendar } from "@/components/StableBookingCalendar";
+import { FastCalendar } from "@/components/FastCalendar";
 import { format, addDays } from "date-fns";
 import {
   MapPin,
@@ -70,6 +70,7 @@ export function HotelSearchForm({
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(undefined);
   const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(undefined);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
+  const [isCalendarLoading, setIsCalendarLoading] = useState(false);
 
   // Start with default guest configuration
   const [guests, setGuests] = useState<GuestConfig>({
@@ -568,7 +569,21 @@ export function HotelSearchForm({
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Dates
             </label>
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+            <Popover
+              open={isCalendarOpen}
+              onOpenChange={(open) => {
+                if (open) {
+                  setIsCalendarLoading(true);
+                  // Small delay to prevent flickering
+                  setTimeout(() => {
+                    setIsCalendarLoading(false);
+                    setIsCalendarOpen(true);
+                  }, 50);
+                } else {
+                  setIsCalendarOpen(false);
+                }
+              }}
+            >
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
@@ -594,8 +609,9 @@ export function HotelSearchForm({
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
-                <StableBookingCalendar
+                <FastCalendar
                   bookingType="hotel"
+                  isLoading={isCalendarLoading}
                   initialRange={{
                     startDate: checkInDate || new Date(),
                     endDate:
