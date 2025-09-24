@@ -13,43 +13,43 @@ async function seedSamplePackages() {
     {
       slug: 'europe-highlights-11d',
       title: 'Europe Highlights 10N/11D',
-      region: 'Europe',
       duration_days: 11,
+      duration_nights: 10,
       base_price_pp: 150000,
       currency: 'INR',
       overview: 'France • Switzerland • Italy. Iconic cities with guided sightseeing, visas support, and daily breakfast.',
       status: 'active',
-      supplier_source: 'manual'
+      category: 'cultural'
     },
     {
       slug: 'golden-triangle-7d',
       title: 'North India Golden Triangle 6N/7D',
-      region: 'India',
       duration_days: 7,
+      duration_nights: 6,
       base_price_pp: 55000,
       currency: 'INR',
       overview: 'Delhi • Agra • Jaipur. Guided monuments, sunrise Taj, Amber Fort with local experiences.',
       status: 'active',
-      supplier_source: 'manual'
+      category: 'cultural'
     },
     {
       slug: 'egypt-essentials-8d',
       title: 'Egypt Essentials 7N/8D',
-      region: 'Africa',
       duration_days: 8,
+      duration_nights: 7,
       base_price_pp: 98000,
       currency: 'INR',
       overview: 'Explore Cairo, Giza Pyramids, Luxor, Aswan and a 3N Nile Cruise. Includes flights, hotels, daily breakfast, and guided sightseeing.',
       status: 'active',
-      supplier_source: 'manual'
+      category: 'cultural'
     }
   ];
 
   for (const pkg of packages) {
     const insertSQL = `
       INSERT INTO packages (
-        slug, title, region, duration_days, base_price_pp, currency,
-        overview, status, supplier_source, created_at, updated_at
+        slug, title, duration_days, duration_nights, base_price_pp, currency,
+        overview, status, category, created_at, updated_at
       )
       VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NOW(), NOW())
       ON CONFLICT (slug) DO UPDATE SET
@@ -60,9 +60,9 @@ async function seedSamplePackages() {
     `;
 
     await pool.query(insertSQL, [
-      pkg.slug, pkg.title, pkg.region, pkg.duration_days,
+      pkg.slug, pkg.title, pkg.duration_days, pkg.duration_nights,
       pkg.base_price_pp, pkg.currency, pkg.overview,
-      pkg.status, pkg.supplier_source
+      pkg.status, pkg.category
     ]);
   }
 
