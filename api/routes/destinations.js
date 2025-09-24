@@ -237,9 +237,7 @@ router.get("/countries", async (req, res) => {
       queryParams.push(parseInt(region_id));
     }
 
-    if (active_only === 'true') {
-      whereConditions.push('c.is_active = TRUE');
-    }
+    // Countries table doesn't have is_active column, skip this filter
 
     const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
 
