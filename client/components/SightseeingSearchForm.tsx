@@ -31,7 +31,6 @@ export function SightseeingSearchForm() {
   const [tourDate, setTourDate] = useState<Date | undefined>(undefined);
   const [endDate, setEndDate] = useState<Date | undefined>(undefined);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [isCalendarLoading, setIsCalendarLoading] = useState(false);
 
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
