@@ -375,9 +375,8 @@ export function SightseeingSearchForm() {
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
-                <FastCalendar
+                <StableBookingCalendar
                   bookingType="sightseeing"
-                  isLoading={isCalendarLoading}
                   initialRange={{
                     startDate: tourDate || new Date(),
                     endDate: endDate || addDays(tourDate || new Date(), 3),
