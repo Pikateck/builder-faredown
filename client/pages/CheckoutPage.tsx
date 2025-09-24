@@ -3,6 +3,8 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import RequireAuth from "@/components/RequireAuth";
 import { getResumeContext, clearResumeContext, preflightCheckout } from "@/utils/authGuards";
+import { useBookingAuthGuard } from "@/utils/enhancedAuthGuards";
+import BookingSignInBanner from "@/components/ui/BookingSignInBanner";
 import type { Offer } from "@/utils/authGuards";
 import { useAuth } from "@/contexts/AuthContext";
 import { Loader2, AlertCircle, ShoppingCart } from "lucide-react";
@@ -22,8 +24,9 @@ export default function CheckoutPage() {
 function CheckoutPageContent() {
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, isLoggedIn } = useAuth();
   const { formatPrice } = useCurrency();
+  const { showInlineAuth, hideInlineAuth } = useBookingAuthGuard();
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [offer, setOffer] = useState<Offer | null>(null);
@@ -231,6 +234,18 @@ function CheckoutPageContent() {
               Your booking is confirmed and ready to proceed
             </p>
           </div>
+
+          {/* Inline Authentication Banner */}
+          {!isLoggedIn && (
+            <BookingSignInBanner
+              onSignInSuccess={() => {
+                console.log('User signed in successfully');
+                // Optionally refresh the page or update UI
+              }}
+              dismissible={true}
+              onDismiss={hideInlineAuth}
+            />
+          )}
 
           <Card className="mb-6">
             <CardHeader>
