@@ -80,11 +80,14 @@ export function BargainButton({
   productRef = "",
   itemDetails = {},
   onBargainSuccess,
+  searchContext,
+  requireAuth = true,
   id,
   "data-testid": dataTestId,
   "aria-label": ariaLabel,
 }: BargainButtonProps) {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
+  const { requireAuthForBargain, isAuthenticated } = useAuthGuard();
 
   // Use either useEnhancedModal or useBargainModal
   const shouldShowModal = useBargainModal || useEnhancedModal;
@@ -95,9 +98,28 @@ export function BargainButton({
   const handleClick = (e: React.MouseEvent) => {
     if (disabled || loading) return;
 
+    e.preventDefault();
+    e.stopPropagation();
+
+    // Check authentication if required
+    if (requireAuth) {
+      // Create search context if not provided
+      const contextToUse = searchContext || {
+        module: module as any,
+        itemName,
+        basePrice: effectivePrice,
+        productRef,
+        itemDetails
+      };
+
+      // Require authentication before proceeding
+      if (!requireAuthForBargain(contextToUse)) {
+        return; // User redirected to login
+      }
+    }
+
+    // User is authenticated (or auth not required), proceed with bargain
     if (shouldShowModal && effectivePrice > 0) {
-      e.preventDefault();
-      e.stopPropagation();
       setIsBargainModalOpen(true);
     } else {
       onClick?.(e);
