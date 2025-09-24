@@ -27,8 +27,8 @@ export const useEnhancedAuthGuard = () => {
   const [showBookingAuthBanner, setShowBookingAuthBanner] = useState(false);
 
   const requireAuth = useCallback((
-    intent: PostAuthIntent, 
-    payload: any, 
+    intent: PostAuthIntent,
+    payload: any,
     options: AuthGuardOptions = {}
   ) => {
     if (isLoggedIn && user) {
@@ -42,49 +42,32 @@ export const useEnhancedAuthGuard = () => {
       fallbackPath = '/'
     } = options;
 
-    // User not authenticated - handle based on flow type
+    // User not authenticated - store context for resume
     const contextId = createContextId();
     storeResumeContext(contextId, intent, payload);
-    
-    switch (flowType) {
-      case "modal":
-        // Show authentication modal (for bargain flow)
-        if (intent === 'BARGAIN') {
-          setShowBargainAuthModal(true);
-          onShowAuthModal?.();
-        } else {
-          // Fallback to redirect for non-bargain flows
-          redirectToLogin(intent, contextId, fallbackPath);
-        }
-        break;
-        
-      case "inline":
-        // Show inline authentication (for booking flow)
-        if (intent === 'CHECKOUT') {
-          setShowBookingAuthBanner(true);
-          onAuthRequired?.();
-        } else {
-          // Fallback to redirect for non-checkout flows
-          redirectToLogin(intent, contextId, fallbackPath);
-        }
-        break;
-        
-      case "redirect":
-      default:
-        // Traditional redirect flow
-        redirectToLogin(intent, contextId, fallbackPath);
-        break;
+
+    // Handle based on flow type
+    if (flowType === "modal" && intent === 'BARGAIN') {
+      // Call the external modal trigger
+      onShowAuthModal?.();
+    } else if (flowType === "inline" && intent === 'CHECKOUT') {
+      // Show inline authentication banner
+      setShowBookingAuthBanner(true);
+      onAuthRequired?.();
+    } else {
+      // Traditional redirect flow
+      redirectToLogin(intent, contextId, fallbackPath);
     }
 
     // Track analytics
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', `auth_required_${intent.toLowerCase()}`, {
         event_category: 'authentication',
-        event_label: `${intent}_${flowType}`,
-        flow_type: flowType
+        event_label: `${intent}_${flowType || 'redirect'}`,
+        flow_type: flowType || 'redirect'
       });
     }
-    
+
     return false;
   }, [isLoggedIn, user, navigate]);
 
