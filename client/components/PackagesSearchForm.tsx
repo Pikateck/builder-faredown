@@ -294,7 +294,7 @@ export function PackagesSearchForm() {
             <select
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              className="w-full h-10 sm:h-12 px-3 border-2 border-blue-400 rounded text-xs sm:text-sm focus:border-blue-500 focus:outline-none"
+              className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
             >
               <option value="any">All Types</option>
               <option value="cultural">Cultural & Heritage</option>
