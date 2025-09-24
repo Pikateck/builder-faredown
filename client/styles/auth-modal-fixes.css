@@ -1,0 +1,61 @@
+/* Authentication Modal Stability Fixes */
+
+/* Disable all animations and transitions for auth modals to prevent flickering */
+[data-radix-portal] [data-state="open"] {
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-radix-portal] [data-state="closed"] {
+  animation: none !important;  
+  transition: none !important;
+}
+
+/* Ensure auth modal renders immediately without delays */
+.auth-modal-content {
+  animation: none !important;
+  transition: none !important;
+  transform: translate(-50%, -50%) !important;
+}
+
+/* Prevent any overlay animations */
+.auth-modal-overlay {
+  animation: none !important;
+  transition: none !important;
+  opacity: 1 !important;
+}
+
+/* Ensure stable positioning for modal content */
+[data-radix-dialog-content] {
+  animation: none !important;
+  transition: none !important;
+}
+
+[data-radix-dialog-overlay] {
+  animation: none !important;
+  transition: none !important;
+}
+
+/* Force immediate visibility for auth components */
+.auth-modal-immediate {
+  visibility: visible !important;
+  opacity: 1 !important;
+  display: grid !important;
+}
+
+/* Prevent flickering during mode switches */
+.auth-modal-title {
+  transition: none !important;
+  animation: none !important;
+}
+
+.auth-modal-form {
+  transition: none !important;
+  animation: none !important;
+}
+
+/* Override any inherited animations from Tailwind or Radix */
+[data-radix-dialog-content] * {
+  animation-duration: 0ms !important;
+  transition-duration: 0ms !important;
+}
