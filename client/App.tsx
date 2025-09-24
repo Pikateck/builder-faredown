@@ -58,6 +58,11 @@ import NotFound from "./pages/NotFound";
 import MembershipCard from "./pages/MembershipCard";
 import FooterTest from "./pages/FooterTest";
 
+// Packages pages
+import Packages from "./pages/Packages";
+import PackageResults from "./pages/PackageResults";
+import PackageDetails from "./pages/PackageDetails";
+
 // Mobile pages
 import MobileSplash from "./pages/mobile/MobileSplash";
 import MobileHome from "./pages/mobile/MobileHome";
