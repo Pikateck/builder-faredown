@@ -22,6 +22,7 @@ import CurrencyManagement from "./CurrencyManagement";
 import ReportsAnalytics from "./ReportsAnalytics";
 import SupplierManagement from "./SupplierManagement";
 import LoyaltyManagement from "./LoyaltyManagement";
+import PackageManagement from "./PackageManagement";
 import AdminAuthHelper from "@/components/AdminAuthHelper";
 import AIBargainingDashboard from "./AIBargainingDashboard";
 import APITestingDashboard from "./APITestingDashboard";
