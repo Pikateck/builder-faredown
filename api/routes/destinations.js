@@ -302,7 +302,7 @@ router.get("/regions/:regionId/cities", async (req, res) => {
         jsonb_build_object(
           'id', co.id,
           'name', co.name,
-          'iso', co.iso_code
+          'iso', co.iso2
         ) as country
       FROM cities ci
       JOIN countries co ON co.id = ci.country_id
