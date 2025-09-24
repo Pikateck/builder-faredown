@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import BargainAuthModal from "@/components/ui/BargainAuthModal";
+import { AuthModal } from "@/components/AuthModal";
 import { Button } from "@/components/ui/button";
 import { Lock, Shield } from "lucide-react";
 
@@ -29,6 +29,7 @@ export function PaymentAuthGuard({
 }: PaymentAuthGuardProps) {
   const { isLoggedIn, user } = useAuth();
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [authModalMode, setAuthModalMode] = useState<"login" | "register">("login");
 
   // If user is logged in, render children normally
   if (isLoggedIn && user) {
@@ -50,8 +51,9 @@ export function PaymentAuthGuard({
   };
 
   const handleAuthRequired = () => {
+    setAuthModalMode("login");
     setShowAuthModal(true);
-    
+
     // Track payment authentication required
     if (typeof window !== 'undefined' && (window as any).gtag) {
       (window as any).gtag('event', 'payment_auth_required', {
@@ -94,10 +96,11 @@ export function PaymentAuthGuard({
           Sign In to Pay
         </Button>
         
-        <BargainAuthModal
+        <AuthModal
           isOpen={showAuthModal}
           onClose={() => setShowAuthModal(false)}
-          onSignInSuccess={handleAuthSuccess}
+          initialMode={authModalMode}
+          onAuthSuccess={handleAuthSuccess}
         />
       </div>
     );
@@ -144,10 +147,11 @@ export function PaymentAuthGuard({
         </div>
       </div>
       
-      <BargainAuthModal
+      <AuthModal
         isOpen={showAuthModal}
         onClose={() => setShowAuthModal(false)}
-        onSignInSuccess={handleAuthSuccess}
+        initialMode={authModalMode}
+        onAuthSuccess={handleAuthSuccess}
       />
     </div>
   );
