@@ -7,6 +7,7 @@
 @import "./styles/mobile-optimizations.css";
 @import "./styles/global-bargain-button.css";
 @import "./styles/booking-flight-search.css";
+@import "./styles/calendar-optimized.css";
 
 @tailwind base;
 @tailwind components;
