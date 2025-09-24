@@ -186,7 +186,7 @@ router.get("/regions", async (req, res) => {
         (
           SELECT COUNT(*)
           FROM countries c
-          WHERE c.region_id = r.id AND c.is_active = TRUE
+          WHERE c.region_id = r.id
         ) as countries_count
       FROM regions r
       LEFT JOIN regions pr ON r.parent_id = pr.id
