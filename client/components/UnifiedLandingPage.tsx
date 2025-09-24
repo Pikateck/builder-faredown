@@ -26,7 +26,7 @@ import { Input } from "@/components/ui/input";
 import { MobileNativeLandingPage } from "@/components/mobile/MobileNativeLandingPage";
 
 interface UnifiedLandingPageProps {
-  module: "flights" | "hotels" | "sightseeing" | "transfers";
+  module: "flights" | "hotels" | "sightseeing" | "transfers" | "packages";
   tagline: string;
   searchPanel: React.ReactNode;
 }
