@@ -162,6 +162,12 @@ router.get("/regions", async (req, res) => {
       queryParams.push(parseInt(level));
     }
 
+    if (q) {
+      paramCount++;
+      whereConditions.push(`name ILIKE $${paramCount}`);
+      queryParams.push(`%${q}%`);
+    }
+
     if (active_only === 'true') {
       whereConditions.push('is_active = TRUE');
     }
