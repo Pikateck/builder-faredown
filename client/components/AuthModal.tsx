@@ -26,6 +26,13 @@ export function AuthModal({
   const [mode, setMode] = useState<"login" | "register" | "forgot-password">(
     initialMode,
   );
+
+  // Update mode when initialMode changes to prevent flickering
+  useEffect(() => {
+    if (isOpen && initialMode) {
+      setMode(initialMode);
+    }
+  }, [isOpen, initialMode]);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isFacebookLoading, setIsFacebookLoading] = useState(false);
@@ -53,19 +60,27 @@ export function AuthModal({
     setError("");
     setSuccess("");
     setShowPassword(false);
+    // Reset mode to initialMode when form is reset
+    setMode(initialMode);
   };
 
   const handleClose = () => {
     resetForm();
-    onClose();
+    // Small delay to prevent flicker when reopening
+    setTimeout(() => {
+      onClose();
+    }, 50);
   };
 
   const handleModeSwitch = (
     newMode: "login" | "register" | "forgot-password",
   ) => {
-    setMode(newMode);
+    // Smooth mode transition to prevent flicker
     setError("");
     setSuccess("");
+    setTimeout(() => {
+      setMode(newMode);
+    }, 10);
   };
 
   const validateForm = () => {
