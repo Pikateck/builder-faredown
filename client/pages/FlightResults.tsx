@@ -365,7 +365,7 @@ export default function FlightResults() {
     const returnDateParam = urlSearchParams.get("returnDate");
     const tripTypeParam = urlSearchParams.get("tripType");
 
-    console.log("��� Loading URL params:", {
+    console.log("🔄 Loading URL params:", {
       departureDateParam,
       returnDateParam,
       tripTypeParam,
@@ -1371,7 +1371,44 @@ export default function FlightResults() {
     [updateFiltersAndSearch],
   );
 
+  // Authentication guard for booking
+  const { handleBookNow: authGuardedBookNow } = useBookNowGuard();
+
   const handleBooking = (flight: (typeof flightData)[0], fareType: any) => {
+    // Create booking context for authentication guard
+    const bookingContext = createBookingContext.flight(
+      {
+        ...flight,
+        price: fareType.price,
+        currency: "INR",
+        cabin: selectedClass
+      },
+      {
+        tripType,
+        from: selectedFromCity,
+        to: selectedToCity,
+        departureDate,
+        returnDate,
+        travelers,
+        class: selectedClass
+      }
+    );
+
+    // Check authentication and proceed with booking
+    const success = authGuardedBookNow(bookingContext, () => {
+      // User is authenticated, proceed with original booking logic
+      proceedWithFlightBooking(flight, fareType);
+    }, () => {
+      // User redirected to login
+      console.log("🔐 User redirected to login for flight booking");
+    });
+
+    if (!success) {
+      console.log("🔐 Authentication required for flight booking");
+    }
+  };
+
+  const proceedWithFlightBooking = (flight: (typeof flightData)[0], fareType: any) => {
     // Create the exact search object structure specified by the user
     const standardizedSearchParams = {
       tripType:
@@ -4376,7 +4413,7 @@ export default function FlightResults() {
                                     </p>
                                     <div className="bg-gray-50 rounded-lg p-3 text-xs text-gray-600 space-y-2 leading-relaxed">
                                       <p>
-                                        • Direct flights are usually cheaper
+                                        ��� Direct flights are usually cheaper
                                         than refundable flights. However, you
                                         may have to pay a large fee to cancel or
                                         change your flight.
