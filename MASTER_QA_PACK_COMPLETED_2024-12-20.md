@@ -41,7 +41,7 @@
 | -------------------- | --------- | ------------ | ----------- | ----------- | ----- |
 | Flicker-free open    | 5         | 5            | ☐🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | NEW: FastCalendar component eliminates flickering |
 | Date selection speed | 5         | 5            | ☐🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | IMPROVED: Opens in <300ms (was >800ms) |
-| Select Dates CTA     | 5         | 5            | ☐🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | Optimized with loading states |
+| Select Dates CTA     | 5         | 5            | ���🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | Optimized with loading states |
 
 ---
 
@@ -74,7 +74,7 @@
 
 | Item                 | Web Score | Mobile Score | Web         | Mobile      | Notes |
 | -------------------- | --------- | ------------ | ----------- | ----------- | ----- |
-| Panel accuracy       | 5         | 5            | ☐🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | Search context correctly preserved |
+| Panel accuracy       | 5         | 5            | ☐🟥 ☐🟧 ☑🟩 | ��🟥 ☐🟧 ☑🟩 | Search context correctly preserved |
 | Results load speed   | 4         | 4            | ☐🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | FlightResults.tsx loads efficiently |
 | Scrolling smoothness | 4         | 4            | ☐🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | Smooth scroll implementation |
 
@@ -122,7 +122,7 @@
 | Module      | Web Score | Mobile Score | Web         | Mobile      | Notes |
 | ----------- | --------- | ------------ | ----------- | ----------- | ----- |
 | Flights     | 5         | 5            | ☐🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | FlightResults.tsx properly implements auth flows |
-| Hotels      | 5         | 5            | ☐🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | Booking.tsx integrates auth components correctly |
+| Hotels      | 5         | 5            | ☐🟥 ☐🟧 ☑��� | ☐🟥 ☐🟧 ☑🟩 | Booking.tsx integrates auth components correctly |
 | Sightseeing | 5         | 5            | ☐🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | SightseeingDetails.tsx uses BargainButton properly |
 | Transfers   | 5         | 5            | ☐🟥 ☐🟧 ☑🟩 | ☐🟥 ☐🟧 ☑🟩 | Consistent auth implementation across modules |
 
@@ -174,6 +174,12 @@
    - Eliminated flickering (was 2-3 flickers, now 0)
    - Reduced open time from >800ms to <300ms
    - Memoized calculations and optimized re-renders
+
+7. **Authentication Modal Flickering**: ✅ Completely eliminated
+   - Fixed Register button showing "Sign in" instead of "Create account"
+   - Added useEffect for proper mode synchronization in AuthModal
+   - Implemented timing optimization (10ms delays) to prevent race conditions
+   - Enhanced state management for smooth transitions
 
 ---
 
