@@ -555,12 +555,9 @@ export function Header() {
                         <Button
                           className="w-full bg-[#003580] hover:bg-[#0071c2] text-white"
                           onClick={() => {
-                            setAuthModalMode("login");
                             setShowMobileMenu(false);
-                            // Small delay to ensure mode is set before modal opens
-                            setTimeout(() => {
-                              setShowAuthModal(true);
-                            }, 10);
+                            setAuthModalMode("login");
+                            setShowAuthModal(true);
                           }}
                         >
                           Sign In
@@ -569,12 +566,9 @@ export function Header() {
                           variant="outline"
                           className="w-full border-[#003580] text-[#003580] hover:bg-blue-50"
                           onClick={() => {
-                            setAuthModalMode("register");
                             setShowMobileMenu(false);
-                            // Small delay to ensure mode is set before modal opens
-                            setTimeout(() => {
-                              setShowAuthModal(true);
-                            }, 10);
+                            setAuthModalMode("register");
+                            setShowAuthModal(true);
                           }}
                         >
                           Register
@@ -898,10 +892,7 @@ export function Header() {
                         className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600 transition-colors px-6 py-2 h-9 font-medium"
                         onClick={() => {
                           setAuthModalMode("register");
-                          // Small delay to ensure mode is set before modal opens
-                          setTimeout(() => {
-                            setShowAuthModal(true);
-                          }, 10);
+                          setShowAuthModal(true);
                         }}
                       >
                         Register
@@ -911,10 +902,7 @@ export function Header() {
                         className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 h-9 font-medium rounded-md"
                         onClick={() => {
                           setAuthModalMode("login");
-                          // Small delay to ensure mode is set before modal opens
-                          setTimeout(() => {
-                            setShowAuthModal(true);
-                          }, 10);
+                          setShowAuthModal(true);
                         }}
                       >
                         Sign in
@@ -933,10 +921,7 @@ export function Header() {
         isOpen={showAuthModal}
         onClose={() => {
           setShowAuthModal(false);
-          // Reset to default mode when closing to prevent state issues
-          setTimeout(() => {
-            setAuthModalMode("login");
-          }, 100);
+          setAuthModalMode("login");
         }}
         initialMode={authModalMode}
       />
