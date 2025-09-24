@@ -781,7 +781,7 @@ router.get("/admin/stats", requireAdmin, async (req, res) => {
     const statsQuery = `
       SELECT 
         (SELECT COUNT(*) FROM regions WHERE is_active = TRUE) as active_regions,
-        (SELECT COUNT(*) FROM countries WHERE is_active = TRUE) as active_countries,
+        (SELECT COUNT(*) FROM countries) as active_countries,
         (SELECT COUNT(*) FROM cities WHERE is_active = TRUE) as active_cities,
         (SELECT COUNT(*) FROM packages WHERE region_id IS NOT NULL) as packages_with_regions,
         (SELECT COUNT(*) FROM packages WHERE country_id IS NOT NULL) as packages_with_countries,
