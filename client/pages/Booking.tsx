@@ -1298,6 +1298,18 @@ export default function Booking() {
           </div>
         </div>
 
+        {/* Inline Authentication Banner */}
+        {!isLoggedIn && (
+          <BookingSignInBanner
+            onSignInSuccess={() => {
+              console.log('User signed in successfully from booking page');
+              // The auth context will automatically update the local state
+            }}
+            dismissible={true}
+            message="Sign in to book with your saved details"
+          />
+        )}
+
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 md:gap-8">
           {/* Booking Form */}
           <div className="lg:col-span-2 space-y-6">
