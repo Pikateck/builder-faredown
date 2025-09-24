@@ -931,7 +931,13 @@ export function Header() {
       {/* Authentication Modal */}
       <AuthModal
         isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
+        onClose={() => {
+          setShowAuthModal(false);
+          // Reset to default mode when closing to prevent state issues
+          setTimeout(() => {
+            setAuthModalMode("login");
+          }, 100);
+        }}
         initialMode={authModalMode}
       />
     </>
