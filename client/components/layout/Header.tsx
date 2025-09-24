@@ -89,6 +89,9 @@ export function Header() {
       case "sightseeing":
         navigate("/sightseeing");
         break;
+      case "packages":
+        navigate("/packages");
+        break;
       case "transfers":
         navigate("/transfers");
         break;
