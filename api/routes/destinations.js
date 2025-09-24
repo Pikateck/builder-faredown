@@ -198,7 +198,15 @@ router.get("/regions", async (req, res) => {
 
     res.json({
       success: true,
-      data: result.rows
+      data: {
+        items: result.rows.map(row => ({
+          id: row.id,
+          name: row.name,
+          level: row.level,
+          parent_id: row.parent_id,
+          sort_order: row.sort_order
+        }))
+      }
     });
 
   } catch (error) {
