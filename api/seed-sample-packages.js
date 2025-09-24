@@ -72,11 +72,8 @@ async function seedSamplePackages() {
     
     // Verify the packages were created
     const checkQuery = `
-      SELECT p.slug, p.title, r.name as region_name, c.name as country_name, ci.name as city_name, p.base_price_pp
+      SELECT p.slug, p.title, p.category, p.base_price_pp, p.duration_days, p.status
       FROM packages p
-      LEFT JOIN regions r ON p.region_id = r.id
-      LEFT JOIN countries c ON p.country_id = c.id
-      LEFT JOIN cities ci ON p.city_id = ci.id
       WHERE p.slug IN ('europe-highlights-11d', 'golden-triangle-7d', 'egypt-essentials-8d')
     `;
     
