@@ -1146,7 +1146,9 @@ export function MobileNativeSearchForm({
                 ? "flight"
                 : module === "sightseeing"
                   ? "sightseeing"
-                  : "transfer"
+                  : module === "packages"
+                    ? "package"
+                    : "transfer"
           }
           initialTravelers={travelers}
           onSelect={handleTravelersSelect}
