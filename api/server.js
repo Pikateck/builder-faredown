@@ -242,6 +242,7 @@ app.get("/", (req, res) => {
       hotels: "/api/hotels",
       sightseeing: "/api/sightseeing",
       transfers: "/api/transfers",
+      packages: "/api/packages",
       transfersBargain: "/api/transfers-bargain",
       bargain: "/api/bargain",
       enhancedBargain: "/api/enhanced-bargain",
