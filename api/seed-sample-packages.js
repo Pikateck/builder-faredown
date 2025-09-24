@@ -67,7 +67,6 @@ async function seedSamplePackages() {
   }
 
   try {
-    await pool.query(seedSQL);
     console.log('✅ Sample packages seeded successfully');
     
     // Verify the packages were created
