@@ -5,6 +5,7 @@ import {
   Hotel,
   Camera,
   Car,
+  Package,
   Sparkles,
   Crown,
   Shield,
