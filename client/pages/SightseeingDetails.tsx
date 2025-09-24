@@ -6,6 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import { BargainButton } from "@/components/ui/BargainButton";
 import { MobileSightseeingBooking } from "@/components/mobile/MobileSightseeingBooking";
+import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 import { sightseeingService } from "@/services/sightseeingService";
 import {
   AlertDialog,
