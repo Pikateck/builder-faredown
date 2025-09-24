@@ -975,6 +975,8 @@ export default function AdminDashboard() {
               <SupplierManagement />
             ) : activeModule === "rewards" ? (
               <LoyaltyManagement />
+            ) : activeModule === "packages" ? (
+              <PackageManagement />
             ) : activeModule === "ai-bargaining" ? (
               <AIBargainingDashboard />
             ) : activeModule === "api-testing" ? (
