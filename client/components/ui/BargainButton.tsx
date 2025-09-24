@@ -3,6 +3,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { TrendingDown } from "lucide-react";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
+import { useAuthGuard } from "@/utils/authGuards";
+import type { SearchContext } from "@/utils/authGuards";
 
 export interface BargainButtonProps {
   children?: React.ReactNode;
