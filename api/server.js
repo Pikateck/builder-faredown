@@ -42,6 +42,7 @@ const testLiveHotelRoutes = require("./routes/test-live-hotel");
 const sightseeingRoutes = require("./routes/sightseeing");
 const transfersRoutes = require("./routes/transfers");
 const transfersBargainRoutes = require("./routes/transfers-bargain");
+const packagesRoutes = require("./routes/packages");
 const enhancedBargainRoutes = require("./routes/enhanced-bargain-engine");
 const featureFlagsRoutes = require("./routes/feature-flags");
 
