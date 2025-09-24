@@ -51,7 +51,7 @@ interface FlightLeg {
 }
 
 interface MobileNativeSearchFormProps {
-  module: "flights" | "hotels" | "sightseeing" | "transfers";
+  module: "flights" | "hotels" | "sightseeing" | "transfers" | "packages";
   transferType?: "airport-taxi" | "car-rentals";
 }
 
