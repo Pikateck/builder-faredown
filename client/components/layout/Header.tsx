@@ -48,11 +48,12 @@ export function Header() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
-  // Auth modal state
+  // Auth modal state with debouncing
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<"login" | "register">(
     "login",
   );
+  const [isModalTransitioning, setIsModalTransitioning] = useState(false);
 
   // User state - use OAuth user data when available
   const userName = user?.name || (isLoggedIn ? "User" : "");
@@ -555,9 +556,12 @@ export function Header() {
                         <Button
                           className="w-full bg-[#003580] hover:bg-[#0071c2] text-white"
                           onClick={() => {
+                            if (isModalTransitioning) return;
                             setShowMobileMenu(false);
+                            setIsModalTransitioning(true);
                             setAuthModalMode("login");
                             setShowAuthModal(true);
+                            setTimeout(() => setIsModalTransitioning(false), 200);
                           }}
                         >
                           Sign In
@@ -566,9 +570,12 @@ export function Header() {
                           variant="outline"
                           className="w-full border-[#003580] text-[#003580] hover:bg-blue-50"
                           onClick={() => {
+                            if (isModalTransitioning) return;
                             setShowMobileMenu(false);
+                            setIsModalTransitioning(true);
                             setAuthModalMode("register");
                             setShowAuthModal(true);
+                            setTimeout(() => setIsModalTransitioning(false), 200);
                           }}
                         >
                           Register
@@ -891,8 +898,11 @@ export function Header() {
                         size="sm"
                         className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600 transition-colors px-6 py-2 h-9 font-medium"
                         onClick={() => {
+                          if (isModalTransitioning) return;
+                          setIsModalTransitioning(true);
                           setAuthModalMode("register");
                           setShowAuthModal(true);
+                          setTimeout(() => setIsModalTransitioning(false), 200);
                         }}
                       >
                         Register
@@ -901,8 +911,11 @@ export function Header() {
                         size="sm"
                         className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 h-9 font-medium rounded-md"
                         onClick={() => {
+                          if (isModalTransitioning) return;
+                          setIsModalTransitioning(true);
                           setAuthModalMode("login");
                           setShowAuthModal(true);
+                          setTimeout(() => setIsModalTransitioning(false), 200);
                         }}
                       >
                         Sign in
@@ -922,6 +935,7 @@ export function Header() {
         onClose={() => {
           setShowAuthModal(false);
           setAuthModalMode("login");
+          setIsModalTransitioning(false);
         }}
         initialMode={authModalMode}
       />
