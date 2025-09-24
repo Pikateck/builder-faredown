@@ -570,18 +570,7 @@ export function HotelSearchForm({
             </label>
             <Popover
               open={isCalendarOpen}
-              onOpenChange={(open) => {
-                if (open) {
-                  setIsCalendarLoading(true);
-                  // Small delay to prevent flickering
-                  setTimeout(() => {
-                    setIsCalendarLoading(false);
-                    setIsCalendarOpen(true);
-                  }, 50);
-                } else {
-                  setIsCalendarOpen(false);
-                }
-              }}
+              onOpenChange={setIsCalendarOpen}
             >
               <PopoverTrigger asChild>
                 <Button
