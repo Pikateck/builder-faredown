@@ -262,6 +262,66 @@ router.get("/countries", async (req, res) => {
 });
 
 /**
+ * GET /api/destinations/regions/:regionId/cities
+ * Get cities for a specific region (as requested in user specs)
+ */
+router.get("/regions/:regionId/cities", async (req, res) => {
+  try {
+    const { regionId } = req.params;
+    const { q, limit = 50 } = req.query;
+
+    let whereConditions = ['ci.is_active = TRUE'];
+    let queryParams = [regionId];
+    let paramCount = 1;
+
+    // Add search filter if provided
+    if (q) {
+      paramCount++;
+      whereConditions.push(`ci.name ILIKE $${paramCount}`);
+      queryParams.push(`%${q}%`);
+    }
+
+    // Include cities that belong to countries under this region OR cities directly attached to this region
+    whereConditions.push(`(co.region_id = $1 OR ci.region_id = $1)`);
+
+    const query = `
+      SELECT
+        ci.id, ci.name, ci.code,
+        jsonb_build_object(
+          'id', co.id,
+          'name', co.name,
+          'iso', co.iso_code
+        ) as country
+      FROM cities ci
+      JOIN countries co ON co.id = ci.country_id
+      WHERE ${whereConditions.join(' AND ')}
+      ORDER BY ci.name
+      LIMIT $${paramCount + 1}
+    `;
+
+    queryParams.push(parseInt(limit));
+
+    const result = await pool.query(query, queryParams);
+
+    res.json({
+      success: true,
+      region_id: regionId,
+      data: {
+        items: result.rows
+      }
+    });
+
+  } catch (error) {
+    console.error('Error fetching cities for region:', error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch cities for region",
+      message: error.message
+    });
+  }
+});
+
+/**
  * GET /api/destinations/cities
  * Get cities with optional country/region filtering
  */
