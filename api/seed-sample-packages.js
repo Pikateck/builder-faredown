@@ -80,7 +80,7 @@ async function seedSamplePackages() {
     const result = await pool.query(checkQuery);
     console.log('📋 Created packages:');
     result.rows.forEach(pkg => {
-      console.log(`   - ${pkg.title} (${pkg.slug}) - ${pkg.region_name}/${pkg.country_name}/${pkg.city_name} - ₹${pkg.base_price_pp}`);
+      console.log(`   - ${pkg.title} (${pkg.slug}) - ${pkg.category} - ${pkg.duration_days}D - ₹${pkg.base_price_pp} - ${pkg.status}`);
     });
     
   } catch (error) {
