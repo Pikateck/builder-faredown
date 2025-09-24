@@ -1,9 +1,9 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 async function checkSchema() {
   const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false }
+    ssl: { rejectUnauthorized: false },
   });
 
   try {
@@ -13,14 +13,15 @@ async function checkSchema() {
       WHERE table_name = 'countries' 
       ORDER BY ordinal_position
     `);
-    
-    console.log('Countries table columns:');
-    result.rows.forEach(col => {
-      console.log(`- ${col.column_name}: ${col.data_type} (nullable: ${col.is_nullable})`);
+
+    console.log("Countries table columns:");
+    result.rows.forEach((col) => {
+      console.log(
+        `- ${col.column_name}: ${col.data_type} (nullable: ${col.is_nullable})`,
+      );
     });
-    
   } catch (error) {
-    console.error('Error:', error.message);
+    console.error("Error:", error.message);
   } finally {
     await pool.end();
   }

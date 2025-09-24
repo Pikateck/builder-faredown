@@ -53,7 +53,9 @@ export function PackagesSearchForm() {
   const [loadingCities, setLoadingCities] = useState(false);
 
   // Dates
-  const [departureDate, setDepartureDate] = useState<Date | undefined>(undefined);
+  const [departureDate, setDepartureDate] = useState<Date | undefined>(
+    undefined,
+  );
   const [returnDate, setReturnDate] = useState<Date | undefined>(undefined);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
@@ -85,12 +87,12 @@ export function PackagesSearchForm() {
     setLoadingRegions(true);
     try {
       const params = new URLSearchParams();
-      if (query) params.append('q', query);
-      
+      if (query) params.append("q", query);
+
       const response = await fetch(`/api/destinations/regions?${params}`, {
-        credentials: 'include'
+        credentials: "include",
       });
-      
+
       if (response.ok) {
         const result = await response.json();
         if (result.success) {
@@ -98,7 +100,7 @@ export function PackagesSearchForm() {
         }
       }
     } catch (error) {
-      console.error('Error loading regions:', error);
+      console.error("Error loading regions:", error);
     }
     setLoadingRegions(false);
   };
@@ -108,12 +110,15 @@ export function PackagesSearchForm() {
     setLoadingCities(true);
     try {
       const params = new URLSearchParams();
-      if (query) params.append('q', query);
-      
-      const response = await fetch(`/api/destinations/regions/${regionId}/cities?${params}`, {
-        credentials: 'include'
-      });
-      
+      if (query) params.append("q", query);
+
+      const response = await fetch(
+        `/api/destinations/regions/${regionId}/cities?${params}`,
+        {
+          credentials: "include",
+        },
+      );
+
       if (response.ok) {
         const result = await response.json();
         if (result.success) {
@@ -121,7 +126,7 @@ export function PackagesSearchForm() {
         }
       }
     } catch (error) {
-      console.error('Error loading cities:', error);
+      console.error("Error loading cities:", error);
     }
     setLoadingCities(false);
   };
@@ -145,12 +150,12 @@ export function PackagesSearchForm() {
     setSelectedRegion(region);
     setRegionInputValue(region.name);
     setIsRegionOpen(false);
-    
+
     // Clear city selection when region changes
     setSelectedCity(null);
     setCityInputValue("");
     setCities([]);
-    
+
     // Load cities for this region
     loadCitiesForRegion(region.id);
   };
@@ -201,12 +206,14 @@ export function PackagesSearchForm() {
       region_name: selectedRegion.name,
       city_id: selectedCity?.id,
       city_name: selectedCity?.name,
-      departure_date: departureDate ? format(departureDate, "yyyy-MM-dd") : undefined,
+      departure_date: departureDate
+        ? format(departureDate, "yyyy-MM-dd")
+        : undefined,
       return_date: returnDate ? format(returnDate, "yyyy-MM-dd") : undefined,
       duration,
       budget,
       category,
-      module: "packages"
+      module: "packages",
     };
 
     // Update search context
@@ -246,7 +253,9 @@ export function PackagesSearchForm() {
                     <Globe className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                     <div className="flex-1 min-w-0">
                       {selectedRegion ? (
-                        <span className="text-gray-900 truncate">{selectedRegion.name}</span>
+                        <span className="text-gray-900 truncate">
+                          {selectedRegion.name}
+                        </span>
                       ) : (
                         <span className="text-gray-500 truncate">
                           Select region...
@@ -279,9 +288,13 @@ export function PackagesSearchForm() {
                   </div>
                   <div className="mt-4 max-h-60 overflow-y-auto">
                     {loadingRegions ? (
-                      <div className="px-3 py-2 text-gray-500 text-sm">Loading regions...</div>
+                      <div className="px-3 py-2 text-gray-500 text-sm">
+                        Loading regions...
+                      </div>
                     ) : regions.length === 0 ? (
-                      <div className="px-3 py-2 text-gray-500 text-sm">No regions found</div>
+                      <div className="px-3 py-2 text-gray-500 text-sm">
+                        No regions found
+                      </div>
                     ) : (
                       regions.map((region) => (
                         <button
@@ -323,10 +336,14 @@ export function PackagesSearchForm() {
                     <MapPin className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                     <div className="flex-1 min-w-0">
                       {selectedCity ? (
-                        <span className="text-gray-900 truncate">{selectedCity.name}</span>
+                        <span className="text-gray-900 truncate">
+                          {selectedCity.name}
+                        </span>
                       ) : (
                         <span className="text-gray-500 truncate">
-                          {selectedRegion ? "Select city..." : "Select a region first"}
+                          {selectedRegion
+                            ? "Select city..."
+                            : "Select a region first"}
                         </span>
                       )}
                     </div>
@@ -356,10 +373,14 @@ export function PackagesSearchForm() {
                   </div>
                   <div className="mt-4 max-h-60 overflow-y-auto">
                     {loadingCities ? (
-                      <div className="px-3 py-2 text-gray-500 text-sm">Loading cities...</div>
+                      <div className="px-3 py-2 text-gray-500 text-sm">
+                        Loading cities...
+                      </div>
                     ) : cities.length === 0 ? (
                       <div className="px-3 py-2 text-gray-500 text-sm">
-                        {selectedRegion ? "No cities found in this region" : "Select a region first"}
+                        {selectedRegion
+                          ? "No cities found in this region"
+                          : "Select a region first"}
                       </div>
                     ) : (
                       cities.map((city) => (
@@ -399,11 +420,9 @@ export function PackagesSearchForm() {
                 >
                   <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                   <span className="truncate text-xs sm:text-sm">
-                    {departureDate ? (
-                      format(departureDate, "MMM d, yyyy")
-                    ) : (
-                      "Select date"
-                    )}
+                    {departureDate
+                      ? format(departureDate, "MMM d, yyyy")
+                      : "Select date"}
                   </span>
                 </Button>
               </PopoverTrigger>
@@ -412,7 +431,8 @@ export function PackagesSearchForm() {
                   bookingType="packages"
                   initialRange={{
                     startDate: departureDate || new Date(),
-                    endDate: returnDate || addDays(departureDate || new Date(), 7),
+                    endDate:
+                      returnDate || addDays(departureDate || new Date(), 7),
                   }}
                   onChange={(range) => {
                     setDepartureDate(range.startDate);
