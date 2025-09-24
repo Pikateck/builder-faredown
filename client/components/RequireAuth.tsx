@@ -1,40 +1,62 @@
 import React, { useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "@/contexts/AuthContext";
+import { useEnhancedAuthGuard } from "@/utils/enhancedAuthGuards";
 import { Loader2 } from "lucide-react";
 
 interface RequireAuthProps {
   children: React.ReactNode;
   redirectTo?: string;
   showLoading?: boolean;
+  /** Use inline authentication instead of redirect for certain flows */
+  useInlineAuth?: boolean;
+  /** Intent type for authentication tracking */
+  intent?: 'BARGAIN' | 'CHECKOUT';
 }
 
 export const RequireAuth: React.FC<RequireAuthProps> = ({
   children,
   redirectTo = "/login",
-  showLoading = true
+  showLoading = true,
+  useInlineAuth = false,
+  intent
 }) => {
   const { isLoggedIn, user } = useAuth();
+  const { showInlineAuth } = useEnhancedAuthGuard();
   const navigate = useNavigate();
   const location = useLocation();
 
   useEffect(() => {
     if (!isLoggedIn || !user) {
+      if (useInlineAuth && (intent === 'CHECKOUT' || intent === 'BARGAIN')) {
+        // For inline auth flows, don't redirect - let the component handle it
+        console.log(`Authentication required for ${intent}, using inline flow`);
+        return;
+      }
+      
       // User is not authenticated, redirect to login
       const next = encodeURIComponent(location.pathname + location.search);
-      const loginUrl = `${redirectTo}?next=${next}`;
+      const intentParam = intent ? `&intent=${intent}` : '';
+      const loginUrl = `${redirectTo}?next=${next}${intentParam}`;
       
       // Track analytics
       if (typeof window !== 'undefined' && (window as any).gtag) {
         (window as any).gtag('event', 'auth_redirect_required', {
           event_category: 'authentication',
-          event_label: location.pathname
+          event_label: location.pathname,
+          intent: intent || 'unknown'
         });
       }
       
       navigate(loginUrl, { replace: true });
     }
-  }, [isLoggedIn, user, navigate, location, redirectTo]);
+  }, [isLoggedIn, user, navigate, location, redirectTo, useInlineAuth, intent]);
+
+  // For inline auth flows, render children even if not authenticated
+  // The children components will handle showing auth banners/modals
+  if (!isLoggedIn && useInlineAuth && (intent === 'CHECKOUT' || intent === 'BARGAIN')) {
+    return <>{children}</>;
+  }
 
   // Show loading spinner while checking authentication
   if (!isLoggedIn || !user) {
