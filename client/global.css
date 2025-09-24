@@ -8,6 +8,7 @@
 @import "./styles/global-bargain-button.css";
 @import "./styles/booking-flight-search.css";
 @import "./styles/calendar-optimized.css";
+@import "./styles/auth-modal-fixes.css";
 
 @tailwind base;
 @tailwind components;
