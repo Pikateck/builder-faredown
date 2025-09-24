@@ -88,8 +88,8 @@ router.get("/hierarchy", async (req, res) => {
             )
             ORDER BY c.name
           )
-          FROM countries c 
-          WHERE c.region_id = rt.id AND c.is_active = TRUE
+          FROM countries c
+          WHERE c.region_id = rt.id
         ) as countries
       FROM region_tree rt
       ORDER BY rt.level, rt.sort_order, rt.name
