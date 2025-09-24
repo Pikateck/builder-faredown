@@ -459,6 +459,9 @@ export default function SightseeingDetails() {
     }
   };
 
+  // Authentication guard for booking
+  const { handleBookNow: authGuardedBookNow } = useBookNowGuard();
+
   // Navigation handlers
   const handleBookNow = (ticketIndex?: number) => {
     const ticketToBook =
@@ -477,28 +480,66 @@ export default function SightseeingDetails() {
       return;
     }
 
-    const params = new URLSearchParams(searchParams);
-    params.set("attractionId", attraction?.id || "");
-    params.set("ticketType", ticketToBook.toString());
-    params.set("selectedTime", selectedTime);
-    params.set("adults", (passengerQuantities?.adults || 1).toString());
-    params.set("children", (passengerQuantities?.children || 0).toString());
-    params.set("infants", (passengerQuantities?.infants || 0).toString());
-
-    // Add visitDate - use the current date if not already set
-    if (!params.get("visitDate")) {
-      params.set("visitDate", new Date().toISOString().split("T")[0]);
+    if (!attraction) {
+      console.log("❌ No attraction data");
+      return;
     }
 
-    const bookingUrl = `/sightseeing/booking?${params.toString()}`;
-    console.log("🚀 Navigating to:", bookingUrl);
+    // Get the selected ticket type
+    const selectedTicket = attraction.ticketTypes?.[ticketToBook];
+    if (!selectedTicket) {
+      console.log("❌ Invalid ticket type");
+      return;
+    }
 
-    try {
-      navigate(bookingUrl);
-      console.log("✅ Navigation successful");
-    } catch (error) {
-      console.error("❌ Navigation failed:", error);
-      alert("Navigation failed. Please try again.");
+    // Create booking context for authentication guard
+    const bookingContext = createBookingContext.sightseeing(
+      attraction,
+      selectedTicket,
+      {
+        attractionId: attraction.id,
+        ticketType: ticketToBook.toString(),
+        selectedTime,
+        adults: (passengerQuantities?.adults || 1).toString(),
+        children: (passengerQuantities?.children || 0).toString(),
+        infants: (passengerQuantities?.infants || 0).toString(),
+        visitDate: new Date().toISOString().split("T")[0]
+      }
+    );
+
+    // Check authentication and proceed with booking
+    const success = authGuardedBookNow(bookingContext, () => {
+      // User is authenticated, proceed with booking
+      const params = new URLSearchParams(searchParams);
+      params.set("attractionId", attraction.id || "");
+      params.set("ticketType", ticketToBook.toString());
+      params.set("selectedTime", selectedTime);
+      params.set("adults", (passengerQuantities?.adults || 1).toString());
+      params.set("children", (passengerQuantities?.children || 0).toString());
+      params.set("infants", (passengerQuantities?.infants || 0).toString());
+
+      // Add visitDate - use the current date if not already set
+      if (!params.get("visitDate")) {
+        params.set("visitDate", new Date().toISOString().split("T")[0]);
+      }
+
+      const bookingUrl = `/sightseeing/booking?${params.toString()}`;
+      console.log("🚀 Navigating to:", bookingUrl);
+
+      try {
+        navigate(bookingUrl);
+        console.log("✅ Navigation successful");
+      } catch (error) {
+        console.error("❌ Navigation failed:", error);
+        alert("Navigation failed. Please try again.");
+      }
+    }, () => {
+      // User redirected to login
+      console.log("🔐 User redirected to login for sightseeing booking");
+    });
+
+    if (!success) {
+      console.log("🔐 Authentication required for booking");
     }
   };
 
