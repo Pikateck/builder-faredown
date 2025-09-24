@@ -72,6 +72,16 @@ const moduleConfig = {
     accentColor: "from-purple-600 to-purple-700",
     iconBg: "bg-gradient-to-br from-purple-50 to-purple-100",
   },
+  packages: {
+    icon: Package,
+    primaryFeature: "Fixed Packages",
+    primaryDescription: "AI negotiates package deals",
+    upgradeType: "package upgrades",
+    serviceType: "packages",
+    howItWorksTitle: "AI Package Deals",
+    accentColor: "from-emerald-600 to-emerald-700",
+    iconBg: "bg-gradient-to-br from-emerald-50 to-emerald-100",
+  },
 };
 
 export function UnifiedLandingPage({
