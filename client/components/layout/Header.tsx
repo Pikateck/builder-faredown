@@ -892,7 +892,10 @@ export function Header() {
                         className="bg-transparent border-white text-white hover:bg-white hover:text-blue-600 transition-colors px-6 py-2 h-9 font-medium"
                         onClick={() => {
                           setAuthModalMode("register");
-                          setShowAuthModal(true);
+                          // Small delay to ensure mode is set before modal opens
+                          setTimeout(() => {
+                            setShowAuthModal(true);
+                          }, 10);
                         }}
                       >
                         Register
@@ -902,7 +905,10 @@ export function Header() {
                         className="bg-blue-500 hover:bg-blue-400 text-white px-6 py-2 h-9 font-medium rounded-md"
                         onClick={() => {
                           setAuthModalMode("login");
-                          setShowAuthModal(true);
+                          // Small delay to ensure mode is set before modal opens
+                          setTimeout(() => {
+                            setShowAuthModal(true);
+                          }, 10);
                         }}
                       >
                         Sign in
