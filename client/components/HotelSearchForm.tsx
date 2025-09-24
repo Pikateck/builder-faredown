@@ -609,9 +609,8 @@ export function HotelSearchForm({
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
-                <FastCalendar
+                <StableBookingCalendar
                   bookingType="hotel"
-                  isLoading={isCalendarLoading}
                   initialRange={{
                     startDate: checkInDate || new Date(),
                     endDate:
