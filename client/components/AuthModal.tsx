@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+  StableDialog,
+  StableDialogContent,
+  StableDialogHeader,
+  StableDialogTitle,
+} from "@/components/ui/stable-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Loader2, Eye, EyeOff, Mail, Lock, User } from "lucide-react";
@@ -26,13 +26,14 @@ export function AuthModal({
   const [mode, setMode] = useState<"login" | "register" | "forgot-password">(
     initialMode,
   );
+  const [isChangingMode, setIsChangingMode] = useState(false);
 
   // Update mode when initialMode changes to prevent flickering
   useEffect(() => {
-    if (isOpen) {
+    if (isOpen && !isChangingMode) {
       setMode(initialMode);
     }
-  }, [isOpen, initialMode]);
+  }, [isOpen, initialMode, isChangingMode]);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isFacebookLoading, setIsFacebookLoading] = useState(false);
@@ -63,16 +64,26 @@ export function AuthModal({
   };
 
   const handleClose = () => {
+    if (isChangingMode) return; // Prevent closing during mode changes
     resetForm();
+    setIsChangingMode(false);
     onClose();
   };
 
   const handleModeSwitch = (
     newMode: "login" | "register" | "forgot-password",
   ) => {
+    if (isChangingMode) return; // Prevent rapid changes
+
+    setIsChangingMode(true);
     setError("");
     setSuccess("");
     setMode(newMode);
+
+    // Reset the flag after a short delay
+    setTimeout(() => {
+      setIsChangingMode(false);
+    }, 100);
   };
 
   const validateForm = () => {
@@ -333,13 +344,13 @@ export function AuthModal({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
-      <DialogContent className="max-w-md">
-        <DialogHeader>
-          <DialogTitle className="text-xl font-semibold text-center text-gray-900">
+    <StableDialog open={isOpen} onOpenChange={handleClose}>
+      <StableDialogContent className="max-w-md">
+        <StableDialogHeader>
+          <StableDialogTitle className="text-xl font-semibold text-center text-gray-900">
             {getModalTitle()}
-          </DialogTitle>
-        </DialogHeader>
+          </StableDialogTitle>
+        </StableDialogHeader>
 
         <form onSubmit={handleSubmit} className="space-y-4 px-6 pb-6">
           {/* Error Message */}
@@ -606,7 +617,7 @@ export function AuthModal({
             </div>
           )}
         </form>
-      </DialogContent>
-    </Dialog>
+      </StableDialogContent>
+    </StableDialog>
   );
 }
