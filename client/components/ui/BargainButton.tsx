@@ -39,6 +39,12 @@ export interface BargainButtonProps {
 
   onBargainSuccess?: (finalPrice: number, orderRef: string) => void;
 
+  /** Search context for authentication guard (REQUIRED for auth) */
+  searchContext?: SearchContext;
+
+  /** Enforce authentication before allowing bargain (default: true) */
+  requireAuth?: boolean;
+
   /** Forwarded DOM props */
   id?: string;
   "data-testid"?: string;
