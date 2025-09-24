@@ -29,7 +29,7 @@ export function AuthModal({
 
   // Update mode when initialMode changes to prevent flickering
   useEffect(() => {
-    if (isOpen && initialMode) {
+    if (isOpen) {
       setMode(initialMode);
     }
   }, [isOpen, initialMode]);
@@ -60,27 +60,19 @@ export function AuthModal({
     setError("");
     setSuccess("");
     setShowPassword(false);
-    // Reset mode to initialMode when form is reset
-    setMode(initialMode);
   };
 
   const handleClose = () => {
     resetForm();
-    // Small delay to prevent flicker when reopening
-    setTimeout(() => {
-      onClose();
-    }, 50);
+    onClose();
   };
 
   const handleModeSwitch = (
     newMode: "login" | "register" | "forgot-password",
   ) => {
-    // Smooth mode transition to prevent flicker
     setError("");
     setSuccess("");
-    setTimeout(() => {
-      setMode(newMode);
-    }, 10);
+    setMode(newMode);
   };
 
   const validateForm = () => {
