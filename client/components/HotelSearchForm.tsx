@@ -70,7 +70,6 @@ export function HotelSearchForm({
   const [checkInDate, setCheckInDate] = useState<Date | undefined>(undefined);
   const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(undefined);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
-  const [isCalendarLoading, setIsCalendarLoading] = useState(false);
 
   // Start with default guest configuration
   const [guests, setGuests] = useState<GuestConfig>({
