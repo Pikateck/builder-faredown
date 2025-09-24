@@ -124,7 +124,7 @@ export function MobileNativeSearchForm({
   >(
     module === "hotels"
       ? "round-trip" // Hotels always need check-in AND check-out dates
-      : module === "sightseeing" || module === "transfers"
+      : module === "sightseeing" || module === "transfers" || module === "packages"
         ? "one-way"
         : "round-trip",
   );
