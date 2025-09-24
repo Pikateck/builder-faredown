@@ -3,7 +3,8 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { TrendingDown } from "lucide-react";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
-import { useAuthGuard } from "@/utils/authGuards";
+import { useBargainAuthGuard } from "@/utils/enhancedAuthGuards";
+import BargainAuthModal from "@/components/ui/BargainAuthModal";
 import type { SearchContext } from "@/utils/authGuards";
 
 export interface BargainButtonProps {
@@ -87,7 +88,13 @@ export function BargainButton({
   "aria-label": ariaLabel,
 }: BargainButtonProps) {
   const [isBargainModalOpen, setIsBargainModalOpen] = useState(false);
-  const { requireAuthForBargain, isAuthenticated } = useAuthGuard();
+  const {
+    requireBargainAuth,
+    isAuthenticated,
+    showBargainAuthModal,
+    setShowBargainAuthModal,
+    handleAuthSuccess
+  } = useBargainAuthGuard();
 
   // Use either useEnhancedModal or useBargainModal
   const shouldShowModal = useBargainModal || useEnhancedModal;
@@ -112,9 +119,9 @@ export function BargainButton({
         itemDetails
       };
 
-      // Require authentication before proceeding
-      if (!requireAuthForBargain(contextToUse)) {
-        return; // User redirected to login
+      // Require authentication before proceeding (using modal)
+      if (!requireBargainAuth(contextToUse)) {
+        return; // User will see auth modal
       }
     }
 
@@ -133,6 +140,14 @@ export function BargainButton({
 
   const handleBargainHold = (orderRef: string) => {
     setIsBargainModalOpen(false);
+  };
+
+  const handleAuthSuccess = () => {
+    // Close auth modal and proceed with bargain
+    handleAuthSuccess('BARGAIN');
+    if (shouldShowModal && effectivePrice > 0) {
+      setIsBargainModalOpen(true);
+    }
   };
 
   return (
@@ -155,6 +170,14 @@ export function BargainButton({
         {children}
       </Button>
 
+      {/* Authentication Modal */}
+      <BargainAuthModal
+        isOpen={showBargainAuthModal}
+        onClose={() => setShowBargainAuthModal(false)}
+        onSignInSuccess={handleAuthSuccess}
+      />
+
+      {/* Bargain Modal */}
       {shouldShowModal && (
         <ConversationalBargainModal
           isOpen={isBargainModalOpen}
