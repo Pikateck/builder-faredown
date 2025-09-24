@@ -254,7 +254,7 @@ export function PackagesSearchForm() {
             <select
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
-              className="w-full h-10 sm:h-12 px-3 border-2 border-blue-400 rounded text-xs sm:text-sm focus:border-blue-500 focus:outline-none"
+              className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
             >
               <option value="any">Any Duration</option>
               <option value="1-5">1-5 Days</option>
@@ -275,7 +275,7 @@ export function PackagesSearchForm() {
             <select
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
-              className="w-full h-10 sm:h-12 px-3 border-2 border-blue-400 rounded text-xs sm:text-sm focus:border-blue-500 focus:outline-none"
+              className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
             >
               <option value="any">Any Budget</option>
               <option value="0-50000">Under ₹50,000</option>
