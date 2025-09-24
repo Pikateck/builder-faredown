@@ -491,8 +491,8 @@ router.post("/admin/countries", requireAdmin, async (req, res) => {
     }
 
     const query = `
-      INSERT INTO countries (iso_code, name, region_id, currency, calling_code, is_active)
-      VALUES ($1, $2, $3, $4, $5, $6)
+      INSERT INTO countries (iso_code, name, region_id, currency, calling_code)
+      VALUES ($1, $2, $3, $4, $5)
       RETURNING *
     `;
 
