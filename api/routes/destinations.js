@@ -140,11 +140,11 @@ router.get("/hierarchy", async (req, res) => {
 
 /**
  * GET /api/destinations/regions
- * Get all regions with optional filtering
+ * Get all regions with optional filtering and search
  */
 router.get("/regions", async (req, res) => {
   try {
-    const { parent_id, level, active_only = true } = req.query;
+    const { parent_id, level, active_only = true, q } = req.query;
 
     let whereConditions = [];
     let queryParams = [];
