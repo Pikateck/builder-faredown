@@ -101,6 +101,7 @@ import { OAuthImplementationSummary } from "./components/OAuthImplementationSumm
 import Login from "./pages/Login";
 import BargainPage from "./pages/BargainPage";
 import CheckoutPage from "./pages/CheckoutPage";
+import RequireAuth from "./components/RequireAuth";
 
 function App() {
   return (
@@ -118,8 +119,22 @@ function App() {
                         <Route path="/login" element={<Login />} />
 
                         {/* Protected Routes */}
-                        <Route path="/bargain" element={<BargainPage />} />
-                        <Route path="/checkout" element={<CheckoutPage />} />
+                        <Route
+                          path="/bargain"
+                          element={
+                            <RequireAuth useInlineAuth={false} intent="BARGAIN">
+                              <BargainPage />
+                            </RequireAuth>
+                          }
+                        />
+                        <Route
+                          path="/checkout"
+                          element={
+                            <RequireAuth useInlineAuth={true} intent="CHECKOUT">
+                              <CheckoutPage />
+                            </RequireAuth>
+                          }
+                        />
 
                         {/* Original Web Routes */}
                         <Route path="/" element={<Index />} />
