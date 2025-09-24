@@ -58,6 +58,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { AuthModal } from "@/components/AuthModal";
+import BookingSignInBanner from "@/components/ui/BookingSignInBanner";
+import { useAuth } from "@/contexts/AuthContext";
 
 // Flight data matching FlightResults.tsx
 const flightData = [
@@ -186,9 +188,18 @@ export default function Booking() {
   const [isBusinessTravel, setIsBusinessTravel] = useState(false);
   const [showPaymentSuccess, setShowPaymentSuccess] = useState(false);
 
+  // Auth context
+  const { isLoggedIn: authIsLoggedIn, user: authUser } = useAuth();
+
   // Header states
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userName, setUserName] = useState("Zubin Aibara");
+  const [isLoggedIn, setIsLoggedIn] = useState(authIsLoggedIn);
+  const [userName, setUserName] = useState(authUser?.name || "Zubin Aibara");
+
+  // Update local state when auth context changes
+  React.useEffect(() => {
+    setIsLoggedIn(authIsLoggedIn);
+    setUserName(authUser?.name || "Zubin Aibara");
+  }, [authIsLoggedIn, authUser]);
   const [showSignIn, setShowSignIn] = useState(false);
   const [showRegister, setShowRegister] = useState(false);
   const [authError, setAuthError] = useState("");
