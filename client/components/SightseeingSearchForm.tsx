@@ -191,7 +191,7 @@ export function SightseeingSearchForm() {
       console.log("🎯 Navigating to sightseeing search:", url);
       navigate(url);
     } catch (error) {
-      console.error("🚨 Error in sightseeing search:", error);
+      console.error("���� Error in sightseeing search:", error);
       setErrorMessage("Search failed. Please try again.");
       setShowError(true);
     }
@@ -328,17 +328,7 @@ export function SightseeingSearchForm() {
             </label>
             <Popover
               open={isCalendarOpen}
-              onOpenChange={(open) => {
-                if (open) {
-                  setIsCalendarLoading(true);
-                  setTimeout(() => {
-                    setIsCalendarLoading(false);
-                    setIsCalendarOpen(true);
-                  }, 50);
-                } else {
-                  setIsCalendarOpen(false);
-                }
-              }}
+              onOpenChange={setIsCalendarOpen}
             >
               <PopoverTrigger asChild>
                 <Button
