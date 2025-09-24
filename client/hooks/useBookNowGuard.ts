@@ -1,6 +1,7 @@
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuthGuard, type Offer } from "@/utils/authGuards";
+import { useBookingAuthGuard, type Offer } from "@/utils/enhancedAuthGuards";
+import { type Offer as OriginalOffer } from "@/utils/authGuards";
 
 export interface BookNowContext {
   module: "flights" | "hotels" | "sightseeing" | "transfers";
@@ -18,7 +19,7 @@ export interface BookNowContext {
 }
 
 export const useBookNowGuard = () => {
-  const { requireAuthForCheckout, isAuthenticated } = useAuthGuard();
+  const { requireBookingAuth, isAuthenticated, showInlineAuth } = useBookingAuthGuard();
   const navigate = useNavigate();
 
   const handleBookNow = useCallback((
@@ -35,10 +36,14 @@ export const useBookNowGuard = () => {
       ...context.bookingData
     };
 
-    // Check authentication
-    if (!requireAuthForCheckout(offer)) {
-      // User was redirected to login
-      onAuthRequired?.();
+    // Check authentication (using inline auth banner)
+    if (!requireBookingAuth(offer, {
+      onAuthRequired: () => {
+        console.log('Authentication required for booking');
+        onAuthRequired?.();
+      }
+    })) {
+      // User will see inline auth banner
       return false;
     }
 
@@ -71,7 +76,8 @@ export const useBookNowGuard = () => {
   return {
     handleBookNow,
     createBookNowHandler,
-    isAuthenticated
+    isAuthenticated,
+    showInlineAuth
   };
 };
 
