@@ -142,7 +142,7 @@ export function BargainButton({
     setIsBargainModalOpen(false);
   };
 
-  const handleAuthSuccess = () => {
+  const onAuthenticationSuccess = () => {
     // Close auth modal and proceed with bargain
     handleAuthSuccess('BARGAIN');
     if (shouldShowModal && effectivePrice > 0) {
@@ -174,7 +174,7 @@ export function BargainButton({
       <BargainAuthModal
         isOpen={showBargainAuthModal}
         onClose={() => setShowBargainAuthModal(false)}
-        onSignInSuccess={handleAuthSuccess}
+        onSignInSuccess={onAuthenticationSuccess}
       />
 
       {/* Bargain Modal */}
