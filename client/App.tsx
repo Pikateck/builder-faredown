@@ -114,6 +114,13 @@ function App() {
                   <EnhancedBookingProvider>
                     <SearchProvider>
                       <Routes>
+                        {/* Authentication Routes */}
+                        <Route path="/login" element={<Login />} />
+
+                        {/* Protected Routes */}
+                        <Route path="/bargain" element={<BargainPage />} />
+                        <Route path="/checkout" element={<CheckoutPage />} />
+
                         {/* Original Web Routes */}
                         <Route path="/" element={<Index />} />
                         <Route path="/flights" element={<Flights />} />
