@@ -1076,6 +1076,63 @@ export function MobileNativeSearchForm({
         </div>
       </div>
 
+      {/* Sticky Bottom CTA for Packages */}
+      {module === "packages" && (
+        <div className="packages-cta-bar fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-20" style={{
+          paddingBottom: `calc(12px + env(safe-area-inset-bottom, 0px))`
+        }}>
+          <div className="px-4 py-3">
+            {/* Selection Summary */}
+            <div className="mb-2 text-center">
+              <div className="text-xs text-gray-600">
+                {fromCity ? (
+                  <span className="font-medium">{fromCity}</span>
+                ) : (
+                  <span>Choose destination</span>
+                )}
+                {budget !== "any" && (
+                  <span className="mx-1">•</span>
+                )}
+                {budget !== "any" && (
+                  <span>
+                    {budget === "0-50000" && "Under ₹50k"}
+                    {budget === "50000-100000" && "₹50k-₹1L"}
+                    {budget === "100000-200000" && "₹1L-₹2L"}
+                    {budget === "200000-500000" && "₹2L-₹5L"}
+                    {budget === "500000+" && "Above ₹5L"}
+                  </span>
+                )}
+                {category !== "any" && (
+                  <span className="mx-1">•</span>
+                )}
+                {category !== "any" && (
+                  <span className="capitalize">{category.replace("-", " ")}</span>
+                )}
+              </div>
+            </div>
+
+            {/* CTA Button */}
+            <Button
+              onClick={handleSearch}
+              disabled={!validateSearch().isValid}
+              className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2 transition-all duration-150 min-h-[44px] ${
+                !validateSearch().isValid
+                  ? "bg-gray-300 text-gray-500 cursor-not-allowed"
+                  : "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black"
+              }`}
+              title={!validateSearch().isValid ? "Choose a destination to search" : "Search packages"}
+            >
+              <Search className="w-5 h-5" />
+              <span>
+                {!validateSearch().isValid
+                  ? "Choose Destination"
+                  : "Search Packages"}
+              </span>
+            </Button>
+          </div>
+        </div>
+      )}
+
       {/* Smart Search for Hotels */}
       {showHotelSmartSearch && (
         <MobileHotelSmartSearch
