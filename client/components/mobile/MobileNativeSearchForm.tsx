@@ -1086,27 +1086,9 @@ export function MobileNativeSearchForm({
             <div className="mb-2 text-center">
               <div className="text-xs text-gray-600">
                 {fromCity ? (
-                  <span className="font-medium">{fromCity}</span>
+                  <span className="font-medium">{fromCity} • Ready to search</span>
                 ) : (
-                  <span>Choose destination</span>
-                )}
-                {budget !== "any" && (
-                  <span className="mx-1">•</span>
-                )}
-                {budget !== "any" && (
-                  <span>
-                    {budget === "0-50000" && "Under ₹50k"}
-                    {budget === "50000-100000" && "₹50k-₹1L"}
-                    {budget === "100000-200000" && "₹1L-₹2L"}
-                    {budget === "200000-500000" && "₹2L-₹5L"}
-                    {budget === "500000+" && "Above ₹5L"}
-                  </span>
-                )}
-                {category !== "any" && (
-                  <span className="mx-1">•</span>
-                )}
-                {category !== "any" && (
-                  <span className="capitalize">{category.replace("-", " ")}</span>
+                  <span>Choose destination to continue</span>
                 )}
               </div>
             </div>
