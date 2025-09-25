@@ -76,29 +76,27 @@ export default function PackageResults() {
     page: parseInt(searchParams.get("page") || "1"),
   };
 
-  const { makeRequest } = useApi();
-
   const fetchPackages = async () => {
     setLoading(true);
     setError("");
 
     try {
       const queryParams = new URLSearchParams();
-      
+
       Object.entries(currentFilters).forEach(([key, value]) => {
         if (value && value !== "" && value !== 0) {
           queryParams.append(key, value.toString());
         }
       });
 
-      const response = await makeRequest(`/api/packages?${queryParams.toString()}`);
-      
-      if (response.success) {
-        setPackages(response.data.packages);
-        setPagination(response.data.pagination);
-        setFacets(response.data.facets);
+      const response = await apiClient.get<PackageSearchResponse>(`/packages?${queryParams.toString()}`);
+
+      if (response.packages) {
+        setPackages(response.packages);
+        setPagination(response.pagination);
+        setFacets(response.facets);
       } else {
-        setError(response.error || "Failed to fetch packages");
+        setError("Failed to fetch packages");
       }
     } catch (err: any) {
       setError(err.message || "Failed to fetch packages");
