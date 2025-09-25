@@ -16,7 +16,7 @@ import { ErrorBanner } from "@/components/ErrorBanner";
 interface Region {
   id: string;
   name: string;
-  level: number;
+  level: string;
   parent_id: string | null;
   sort_order: number;
 }
