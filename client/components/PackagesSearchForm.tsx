@@ -253,14 +253,14 @@ export function PackagesSearchForm() {
             </Popover>
           </div>
 
-          {/* Search Button - Moved to end of form row */}
-          <div className="flex-shrink-0 w-full lg:w-auto">
+          {/* Search Button - At end of form row (matches SightseeingSearchForm pattern) */}
+          <div className="flex-shrink-0 w-full sm:w-auto">
             <Button
               type="submit"
               disabled={!isFormValid || isSubmitting}
               aria-disabled={!isFormValid || isSubmitting}
               className={
-                `h-10 sm:h-12 w-full lg:w-auto font-bold rounded px-6 sm:px-8 transition-all duration-150 min-w-[44px] ${
+                `h-10 sm:h-12 w-full sm:w-auto font-bold rounded px-6 sm:px-8 transition-all duration-150 ${
                   !isFormValid || isSubmitting
                     ? 'bg-gray-300 text-gray-500 cursor-not-allowed hover:bg-gray-300'
                     : 'bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black'
