@@ -2,9 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useSearchParams, Link } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import { PackageCard } from "@/components/PackageCard";
+import { PackageCardSimple } from "@/components/PackageCardSimple";
 import { PackageFilters } from "@/components/PackageFilters";
 import { Button } from "@/components/ui/button";
-import { Loader2, Filter, SortAsc, MapPin, Calendar } from "lucide-react";
+import { Loader2, Filter, SortAsc, MapPin, Calendar, Grid3X3, List } from "lucide-react";
 import { apiClient } from "@/lib/api";
 
 interface Package {
