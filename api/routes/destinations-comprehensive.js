@@ -311,90 +311,115 @@ router.get("/search", async (req, res) => {
     // PHASE 2: Execute database query
     const queryStart = Date.now();
 
-    // Simplified query for better performance
-    const searchQuery = `
-      SELECT * FROM (
-        (
-          SELECT
-            'city' as type,
-            ci.id,
-            ci.name || ', ' || co.name as label,
-            r.name as region_name,
-            co.name as country_name,
-            1 as type_priority,
-            CASE
-              WHEN ci.name ILIKE $3 THEN 1
-              WHEN ci.name ILIKE $1 THEN 2
-              ELSE 3
-            END as search_priority
-          FROM cities ci
-          JOIN countries co ON ci.country_id = co.id
-          JOIN regions r ON co.region_id = r.id
-          WHERE ci.is_active = TRUE
-            AND co.is_active = TRUE
-            AND r.is_active = TRUE
-            AND (
-              ci.name ILIKE $1
-              OR ($2 = ANY(ci.search_tokens))
-            )
-          ORDER BY search_priority, ci.name
-          LIMIT 8
+    // Optimized query: prioritize cities, then countries, then regions
+    // Separate queries with limits to reduce UNION overhead
+    let allResults = [];
+
+    // Search cities first (most common searches)
+    const cityQuery = `
+      SELECT
+        'city' as type,
+        ci.id,
+        ci.name || ', ' || co.name as label,
+        r.name as region_name,
+        co.name as country_name,
+        CASE
+          WHEN ci.name ILIKE $2 THEN 1
+          WHEN ci.name ILIKE $1 THEN 2
+          ELSE 3
+        END as search_priority
+      FROM cities ci
+      JOIN countries co ON ci.country_id = co.id
+      JOIN regions r ON co.region_id = r.id
+      WHERE ci.is_active = TRUE
+        AND co.is_active = TRUE
+        AND r.is_active = TRUE
+        AND (
+          ci.name ILIKE $1
+          OR ci.search_text ILIKE $1
+          OR COALESCE($3 = ANY(ci.search_tokens), false)
         )
-        UNION ALL
-        (
-          SELECT
-            'country' as type,
-            co.id,
-            co.name as label,
-            r.name as region_name,
-            co.name as country_name,
-            2 as type_priority,
-            CASE
-              WHEN co.name ILIKE $3 THEN 1
-              WHEN co.name ILIKE $1 THEN 2
-              ELSE 3
-            END as search_priority
-          FROM countries co
-          JOIN regions r ON co.region_id = r.id
-          WHERE co.is_active = TRUE
-            AND r.is_active = TRUE
-            AND (
-              co.name ILIKE $1
-              OR ($2 = ANY(co.search_tokens))
-            )
-          ORDER BY search_priority, co.name
-          LIMIT 4
-        )
-        UNION ALL
-        (
-          SELECT
-            'region' as type,
-            r.id,
-            r.name as label,
-            r.name as region_name,
-            NULL as country_name,
-            3 as type_priority,
-            CASE
-              WHEN r.name ILIKE $3 THEN 1
-              WHEN r.name ILIKE $1 THEN 2
-              ELSE 3
-            END as search_priority
-          FROM regions r
-          WHERE r.is_active = TRUE
-            AND (
-              r.name ILIKE $1
-              OR ($2 = ANY(r.search_tokens))
-            )
-          ORDER BY search_priority, r.name
-          LIMIT 3
-        )
-      ) combined_results
-      ORDER BY type_priority, search_priority, label
-      LIMIT $4
+      ORDER BY search_priority, ci.name
+      LIMIT 8
     `;
 
     const exactPattern = `${searchTerm}%`; // For prefix matching
-    const result = await pool.query(searchQuery, [searchPattern, searchTerm, exactPattern, parseInt(limit)]);
+    const cityResult = await pool.query(cityQuery, [searchPattern, exactPattern, searchTerm]);
+    allResults = [...cityResult.rows];
+
+    // Only search countries if we have room for more results
+    if (allResults.length < parseInt(limit)) {
+      const countryQuery = `
+        SELECT
+          'country' as type,
+          co.id,
+          co.name as label,
+          r.name as region_name,
+          co.name as country_name,
+          CASE
+            WHEN co.name ILIKE $2 THEN 1
+            WHEN co.name ILIKE $1 THEN 2
+            ELSE 3
+          END as search_priority
+        FROM countries co
+        JOIN regions r ON co.region_id = r.id
+        WHERE co.is_active = TRUE
+          AND r.is_active = TRUE
+          AND (
+            co.name ILIKE $1
+            OR co.search_text ILIKE $1
+            OR COALESCE($3 = ANY(co.search_tokens), false)
+          )
+        ORDER BY search_priority, co.name
+        LIMIT $4
+      `;
+
+      const countryResult = await pool.query(countryQuery, [searchPattern, exactPattern, searchTerm, Math.max(4, parseInt(limit) - allResults.length)]);
+      allResults = [...allResults, ...countryResult.rows];
+    }
+
+    // Only search regions if we still have room
+    if (allResults.length < parseInt(limit)) {
+      const regionQuery = `
+        SELECT
+          'region' as type,
+          r.id,
+          r.name as label,
+          r.name as region_name,
+          NULL as country_name,
+          CASE
+            WHEN r.name ILIKE $2 THEN 1
+            WHEN r.name ILIKE $1 THEN 2
+            ELSE 3
+          END as search_priority
+        FROM regions r
+        WHERE r.is_active = TRUE
+          AND (
+            r.name ILIKE $1
+            OR r.search_text ILIKE $1
+            OR COALESCE($3 = ANY(r.search_tokens), false)
+          )
+        ORDER BY search_priority, r.name
+        LIMIT $4
+      `;
+
+      const regionResult = await pool.query(regionQuery, [searchPattern, exactPattern, searchTerm, Math.max(3, parseInt(limit) - allResults.length)]);
+      allResults = [...allResults, ...regionResult.rows];
+    }
+
+    // Sort final results: cities first, then countries, then regions
+    allResults.sort((a, b) => {
+      const typeOrder = { city: 1, country: 2, region: 3 };
+      if (typeOrder[a.type] !== typeOrder[b.type]) {
+        return typeOrder[a.type] - typeOrder[b.type];
+      }
+      return a.search_priority - b.search_priority;
+    });
+
+    // Limit final results
+    allResults = allResults.slice(0, parseInt(limit));
+
+    const result = { rows: allResults };
     timings.query = Date.now() - queryStart;
 
     // PHASE 3: Rank and format results
