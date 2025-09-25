@@ -281,6 +281,110 @@ router.get("/countries/:countryId/cities", async (req, res) => {
 });
 
 /**
+ * GET /api/destinations/search
+ * Smart search across regions, countries, and cities with ranking
+ * This is the main endpoint for the single smart search box
+ * Query params: q (required), limit (default: 20)
+ */
+router.get("/search", async (req, res) => {
+  try {
+    const { q, limit = 20 } = req.query;
+
+    if (!q || q.trim().length === 0) {
+      return res.json([]);
+    }
+
+    const searchTerm = q.toLowerCase().trim();
+
+    const query = `
+      WITH q AS (SELECT $1::text AS q),
+
+      city_hits AS (
+        SELECT
+          'city'::text AS type,
+          ci.id,
+          ci.display_name AS label,
+          r.name AS region_name,
+          co.name AS country_name,
+          /* Score: prefix > trigram */
+          (CASE WHEN lower(ci.name) LIKE (SELECT q||'%' FROM q) THEN 1.0 ELSE 0 END) * 0.7 +
+          GREATEST(similarity(lower(ci.name), (SELECT q FROM q)), similarity(lower(ci.display_name), (SELECT q FROM q))) * 0.3
+          AS score
+        FROM cities ci
+        JOIN countries co ON co.id = ci.country_id
+        JOIN regions r ON r.id = co.region_id
+        WHERE ci.is_active = TRUE
+      ),
+
+      country_hits AS (
+        SELECT
+          'country'::text AS type,
+          co.id,
+          co.name AS label,
+          r.name AS region_name,
+          co.name AS country_name,
+          (CASE WHEN lower(co.name) LIKE (SELECT q||'%' FROM q) THEN 1.0 ELSE 0 END) * 0.6 +
+          similarity(lower(co.name), (SELECT q FROM q)) * 0.4 AS score
+        FROM countries co
+        JOIN regions r ON r.id = co.region_id
+        WHERE co.is_active = TRUE
+      ),
+
+      region_hits AS (
+        SELECT
+          'region'::text AS type,
+          r.id,
+          r.name AS label,
+          r.name AS region_name,
+          NULL::text AS country_name,
+          (CASE WHEN lower(r.name) LIKE (SELECT q||'%' FROM q) THEN 1.0 ELSE 0 END) * 0.5 +
+          similarity(lower(r.name), (SELECT q FROM q)) * 0.5 AS score
+        FROM regions r
+        WHERE r.is_active = TRUE
+      )
+
+      SELECT * FROM (
+        SELECT * FROM city_hits
+        UNION ALL
+        SELECT * FROM country_hits
+        UNION ALL
+        SELECT * FROM region_hits
+      ) u
+      WHERE score > 0.2  -- noise gate; tune as needed
+      ORDER BY
+        -- Type boost: cities (2) > countries (1) > regions (0)
+        CASE type WHEN 'city' THEN 2 WHEN 'country' THEN 1 ELSE 0 END DESC,
+        score DESC,
+        label ASC
+      LIMIT $2
+    `;
+
+    const result = await pool.query(query, [searchTerm, parseInt(limit)]);
+
+    // Set cache headers
+    res.set('Cache-Control', 'public, max-age=300, s-maxage=900, stale-while-revalidate=60');
+
+    const formattedResults = result.rows.map(r => ({
+      type: r.type,
+      id: r.id,
+      label: r.label,
+      region: r.region_name,
+      country: r.country_name,
+      score: r.score // Include score for debugging/optimization
+    }));
+
+    res.json(formattedResults);
+  } catch (error) {
+    console.error("Error in smart search:", error);
+    res.status(500).json({
+      success: false,
+      error: "Search failed",
+      message: error.message,
+    });
+  }
+});
+
+/**
  * GET /api/destinations/tree
  * Get destination tree for mega menu (hierarchical structure)
  * Query params: region_slug (default: 'world')
