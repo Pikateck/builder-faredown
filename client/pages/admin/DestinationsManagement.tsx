@@ -63,43 +63,35 @@ import { useToast } from "@/hooks/use-toast";
 
 interface Region {
   id: string;
+  code?: string;
   name: string;
   level: string;
-  parent_id?: string;
-  parent_name?: string;
-  slug: string;
   sort_order: number;
   is_active: boolean;
   created_at: string;
-  children_count: number;
-  countries_count: number;
 }
 
 interface Country {
   id: string;
   name: string;
-  iso_code: string;
-  region_id: string;
-  region_name: string;
-  slug: string;
+  iso2?: string;
+  iso3?: string;
+  region_name?: string;
+  region_code?: string;
   sort_order: number;
   is_active: boolean;
-  created_at: string;
-  cities_count: number;
 }
 
 interface City {
   id: string;
   name: string;
-  code?: string;
-  country_id: string;
   country_name: string;
-  region_id?: string;
+  country_code?: string;
   region_name?: string;
-  slug: string;
+  region_code?: string;
   sort_order: number;
   is_active: boolean;
-  created_at: string;
+  is_package_destination: boolean;
 }
 
 interface Alias {
