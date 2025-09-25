@@ -309,14 +309,20 @@ router.get("/search", async (req, res) => {
           END AS label,
           r.name AS region_name,
           co.name AS country_name,
-          /* Score: prefix > trigram */
-          (CASE WHEN lower(ci.name) LIKE (SELECT q||'%' FROM q) THEN 1.0 ELSE 0 END) * 0.7 +
-          GREATEST(similarity(lower(ci.name), (SELECT q FROM q)), similarity(lower(co.name), (SELECT q FROM q))) * 0.3
-          AS score
+          /* Score: exact > prefix > contains */
+          CASE
+            WHEN lower(ci.name) = (SELECT q FROM q) THEN 1.0
+            WHEN lower(ci.name) LIKE (SELECT q||'%' FROM q) THEN 0.8
+            WHEN lower(ci.name) LIKE (SELECT '%'||q||'%' FROM q) THEN 0.6
+            WHEN lower(co.name) LIKE (SELECT '%'||q||'%' FROM q) THEN 0.4
+            ELSE 0
+          END AS score
         FROM cities ci
         JOIN countries co ON co.id = ci.country_id
         JOIN regions r ON r.id = co.region_id
         WHERE ci.is_active = TRUE
+          AND (lower(ci.name) LIKE (SELECT '%'||q||'%' FROM q)
+               OR lower(co.name) LIKE (SELECT '%'||q||'%' FROM q))
       ),
 
       country_hits AS (
@@ -326,11 +332,16 @@ router.get("/search", async (req, res) => {
           co.name AS label,
           r.name AS region_name,
           co.name AS country_name,
-          (CASE WHEN lower(co.name) LIKE (SELECT q||'%' FROM q) THEN 1.0 ELSE 0 END) * 0.6 +
-          similarity(lower(co.name), (SELECT q FROM q)) * 0.4 AS score
+          CASE
+            WHEN lower(co.name) = (SELECT q FROM q) THEN 1.0
+            WHEN lower(co.name) LIKE (SELECT q||'%' FROM q) THEN 0.8
+            WHEN lower(co.name) LIKE (SELECT '%'||q||'%' FROM q) THEN 0.6
+            ELSE 0
+          END AS score
         FROM countries co
         JOIN regions r ON r.id = co.region_id
         WHERE co.is_active = TRUE
+          AND lower(co.name) LIKE (SELECT '%'||q||'%' FROM q)
       ),
 
       region_hits AS (
@@ -340,10 +351,15 @@ router.get("/search", async (req, res) => {
           r.name AS label,
           r.name AS region_name,
           NULL::text AS country_name,
-          (CASE WHEN lower(r.name) LIKE (SELECT q||'%' FROM q) THEN 1.0 ELSE 0 END) * 0.5 +
-          similarity(lower(r.name), (SELECT q FROM q)) * 0.5 AS score
+          CASE
+            WHEN lower(r.name) = (SELECT q FROM q) THEN 1.0
+            WHEN lower(r.name) LIKE (SELECT q||'%' FROM q) THEN 0.8
+            WHEN lower(r.name) LIKE (SELECT '%'||q||'%' FROM q) THEN 0.6
+            ELSE 0
+          END AS score
         FROM regions r
         WHERE r.is_active = TRUE
+          AND lower(r.name) LIKE (SELECT '%'||q||'%' FROM q)
       )
 
       SELECT * FROM (
@@ -353,7 +369,7 @@ router.get("/search", async (req, res) => {
         UNION ALL
         SELECT * FROM region_hits
       ) u
-      WHERE score > 0.2  -- noise gate; tune as needed
+      WHERE score > 0  -- accept any match
       ORDER BY
         -- Type boost: cities (2) > countries (1) > regions (0)
         CASE type WHEN 'city' THEN 2 WHEN 'country' THEN 1 ELSE 0 END DESC,
