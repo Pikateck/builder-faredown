@@ -298,85 +298,75 @@ router.get("/search", async (req, res) => {
 
     const searchTerm = q.toLowerCase().trim();
 
-    // Fast search using indexed columns with simple scoring
-    const query = `
-      SELECT * FROM (
-        SELECT
-          'city' as type,
-          ci.id,
-          ci.name || ', ' || co.name as label,
-          r.name as region_name,
-          co.name as country_name,
-          CASE
-            WHEN lower(ci.name) = $1 THEN 1.0
-            WHEN lower(ci.name) LIKE $1 || '%' THEN 0.9
-            WHEN $1 = ANY(ci.search_tokens) THEN 0.8
-            WHEN ci.search_text ILIKE '%' || $1 || '%' THEN 0.7
-            ELSE 0.6
-          END as score
-        FROM cities ci
-        JOIN countries co ON ci.country_id = co.id
-        JOIN regions r ON co.region_id = r.id
-        WHERE ci.is_active = TRUE
-          AND co.is_active = TRUE
-          AND r.is_active = TRUE
-          AND (
-            ci.search_text ILIKE '%' || $1 || '%'
-            OR $1 = ANY(ci.search_tokens)
-          )
-
-        UNION ALL
-
-        SELECT
-          'country' as type,
-          co.id,
-          co.name as label,
-          r.name as region_name,
-          co.name as country_name,
-          CASE
-            WHEN lower(co.name) = $1 THEN 1.0
-            WHEN lower(co.name) LIKE $1 || '%' THEN 0.9
-            WHEN $1 = ANY(co.search_tokens) THEN 0.8
-            WHEN co.search_text ILIKE '%' || $1 || '%' THEN 0.7
-            ELSE 0.6
-          END as score
-        FROM countries co
-        JOIN regions r ON co.region_id = r.id
-        WHERE co.is_active = TRUE
-          AND r.is_active = TRUE
-          AND (
-            co.search_text ILIKE '%' || $1 || '%'
-            OR $1 = ANY(co.search_tokens)
-          )
-
-        UNION ALL
-
-        SELECT
-          'region' as type,
-          r.id,
-          r.name as label,
-          r.name as region_name,
-          NULL as country_name,
-          CASE
-            WHEN lower(r.name) = $1 THEN 1.0
-            WHEN lower(r.name) LIKE $1 || '%' THEN 0.9
-            WHEN $1 = ANY(r.search_tokens) THEN 0.8
-            WHEN r.search_text ILIKE '%' || $1 || '%' THEN 0.7
-            ELSE 0.6
-          END as score
-        FROM regions r
-        WHERE r.is_active = TRUE
-          AND (
-            r.search_text ILIKE '%' || $1 || '%'
-            OR $1 = ANY(r.search_tokens)
-          )
-      ) search_results
-      ORDER BY
-        CASE type WHEN 'city' THEN 2 WHEN 'country' THEN 1 ELSE 0 END DESC,
-        score DESC,
-        label ASC
-      LIMIT $2
+    // Simplified search - use separate queries and combine in code for better performance
+    const cityQuery = `
+      SELECT
+        'city' as type,
+        ci.id,
+        ci.name || ', ' || co.name as label,
+        r.name as region_name,
+        co.name as country_name
+      FROM cities ci
+      JOIN countries co ON ci.country_id = co.id
+      JOIN regions r ON co.region_id = r.id
+      WHERE ci.is_active = TRUE
+        AND co.is_active = TRUE
+        AND r.is_active = TRUE
+        AND (
+          ci.search_text ILIKE $1
+          OR $2 = ANY(ci.search_tokens)
+        )
+      LIMIT 10
     `;
+
+    const countryQuery = `
+      SELECT
+        'country' as type,
+        co.id,
+        co.name as label,
+        r.name as region_name,
+        co.name as country_name
+      FROM countries co
+      JOIN regions r ON co.region_id = r.id
+      WHERE co.is_active = TRUE
+        AND r.is_active = TRUE
+        AND (
+          co.search_text ILIKE $1
+          OR $2 = ANY(co.search_tokens)
+        )
+      LIMIT 5
+    `;
+
+    const regionQuery = `
+      SELECT
+        'region' as type,
+        r.id,
+        r.name as label,
+        r.name as region_name,
+        NULL as country_name
+      FROM regions r
+      WHERE r.is_active = TRUE
+        AND (
+          r.search_text ILIKE $1
+          OR $2 = ANY(r.search_tokens)
+        )
+      LIMIT 5
+    `;
+
+    // Execute all queries in parallel
+    const searchPattern = `%${searchTerm}%`;
+    const [cityResults, countryResults, regionResults] = await Promise.all([
+      pool.query(cityQuery, [searchPattern, searchTerm]),
+      pool.query(countryQuery, [searchPattern, searchTerm]),
+      pool.query(regionQuery, [searchPattern, searchTerm])
+    ]);
+
+    // Combine and sort results (cities first, then countries, then regions)
+    const allResults = [
+      ...cityResults.rows,
+      ...countryResults.rows,
+      ...regionResults.rows
+    ];
 
     const result = await pool.query(query, [searchTerm, parseInt(limit)]);
     const responseTime = Date.now() - startTime;
