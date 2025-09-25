@@ -1229,6 +1229,211 @@ export class DevApiClient {
       };
     }
 
+    // Packages search endpoint
+    if (endpoint.includes("/packages")) {
+      return {
+        packages: [
+          {
+            id: 1,
+            slug: "dubai-luxury-package",
+            title: "Dubai Luxury Experience",
+            region_name: "Middle East",
+            country_name: "United Arab Emirates",
+            duration_days: 7,
+            duration_nights: 6,
+            from_price: 89999,
+            currency: "INR",
+            next_departure_date: "2025-10-15",
+            available_departures_count: 8,
+            hero_image_url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&h=300&fit=crop&auto=format",
+            rating: 4.8,
+            review_count: 156,
+            is_featured: true,
+            tags: ["luxury", "city-break", "shopping", "culture"],
+            highlights: [
+              "5-star hotel accommodation",
+              "Burj Khalifa and Dubai Mall visits",
+              "Desert safari with BBQ dinner",
+              "Dubai Marina cruise",
+              "Shopping at Gold Souk"
+            ],
+            category: "luxury"
+          },
+          {
+            id: 2,
+            slug: "paris-romance-package",
+            title: "Paris Romantic Getaway",
+            region_name: "Europe",
+            country_name: "France",
+            duration_days: 5,
+            duration_nights: 4,
+            from_price: 67500,
+            currency: "INR",
+            next_departure_date: "2025-10-22",
+            available_departures_count: 12,
+            hero_image_url: "https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=400&h=300&fit=crop&auto=format",
+            rating: 4.6,
+            review_count: 89,
+            is_featured: false,
+            tags: ["romance", "culture", "city-break", "museums"],
+            highlights: [
+              "Boutique hotel in Marais district",
+              "Eiffel Tower and Louvre Museum",
+              "Seine river cruise",
+              "Versailles day trip",
+              "French cuisine experiences"
+            ],
+            category: "honeymoon"
+          },
+          {
+            id: 3,
+            slug: "bali-family-adventure",
+            title: "Bali Family Adventure",
+            region_name: "Southeast Asia",
+            country_name: "Indonesia",
+            duration_days: 8,
+            duration_nights: 7,
+            from_price: 54999,
+            currency: "INR",
+            next_departure_date: "2025-11-05",
+            available_departures_count: 15,
+            hero_image_url: "https://images.unsplash.com/photo-1537953773345-d172ccf13cf1?w=400&h=300&fit=crop&auto=format",
+            rating: 4.5,
+            review_count: 203,
+            is_featured: true,
+            tags: ["family", "beach", "adventure", "culture"],
+            highlights: [
+              "Family-friendly resort with kids club",
+              "Ubud rice terraces and monkey forest",
+              "Tanah Lot temple visit",
+              "Water sports at Nusa Dua",
+              "Traditional Balinese cultural show"
+            ],
+            category: "family"
+          },
+          {
+            id: 4,
+            slug: "kerala-backwaters-culture",
+            title: "Kerala Backwaters & Culture",
+            region_name: "South India",
+            country_name: "India",
+            duration_days: 6,
+            duration_nights: 5,
+            from_price: 28999,
+            currency: "INR",
+            next_departure_date: "2025-10-30",
+            available_departures_count: 20,
+            hero_image_url: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&h=300&fit=crop&auto=format",
+            rating: 4.7,
+            review_count: 124,
+            is_featured: false,
+            tags: ["culture", "nature", "ayurveda", "backwaters"],
+            highlights: [
+              "Houseboat stay in Alleppey",
+              "Ayurvedic spa treatments",
+              "Periyar wildlife sanctuary",
+              "Spice plantation tours",
+              "Kathakali dance performance"
+            ],
+            category: "cultural"
+          },
+          {
+            id: 5,
+            slug: "maldives-beach-paradise",
+            title: "Maldives Beach Paradise",
+            region_name: "Indian Ocean",
+            country_name: "Maldives",
+            duration_days: 4,
+            duration_nights: 3,
+            from_price: 125000,
+            currency: "INR",
+            next_departure_date: "2025-11-10",
+            available_departures_count: 6,
+            hero_image_url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&auto=format",
+            rating: 4.9,
+            review_count: 78,
+            is_featured: true,
+            tags: ["beach", "luxury", "honeymoon", "water-sports"],
+            highlights: [
+              "Overwater villa accommodation",
+              "Snorkeling and diving",
+              "Sunset dolphin cruise",
+              "Spa treatments",
+              "Private beach dining"
+            ],
+            category: "beach"
+          },
+          {
+            id: 6,
+            slug: "himachal-adventure",
+            title: "Himachal Adventure Trek",
+            region_name: "North India",
+            country_name: "India",
+            duration_days: 10,
+            duration_nights: 9,
+            from_price: 35999,
+            currency: "INR",
+            next_departure_date: "2025-11-20",
+            available_departures_count: 10,
+            hero_image_url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&auto=format",
+            rating: 4.4,
+            review_count: 92,
+            is_featured: false,
+            tags: ["adventure", "mountains", "trekking", "nature"],
+            highlights: [
+              "Guided mountain trekking",
+              "Stay in mountain lodges",
+              "Visit to Rohtang Pass",
+              "River rafting in Kullu",
+              "Local Himachali cuisine"
+            ],
+            category: "adventure"
+          }
+        ],
+        pagination: {
+          page: 1,
+          page_size: 20,
+          total: 6,
+          total_pages: 1,
+          has_next: false,
+          has_prev: false
+        },
+        facets: {
+          regions: {
+            "Middle East": 1,
+            "Europe": 1,
+            "Southeast Asia": 1,
+            "South India": 1,
+            "Indian Ocean": 1,
+            "North India": 1
+          },
+          categories: {
+            "luxury": 2,
+            "honeymoon": 2,
+            "family": 1,
+            "cultural": 1,
+            "beach": 1,
+            "adventure": 1
+          },
+          tags: {
+            "culture": 3,
+            "luxury": 3,
+            "beach": 2,
+            "adventure": 2,
+            "honeymoon": 2,
+            "family": 1,
+            "nature": 2
+          },
+          price_ranges: {
+            min: 28999,
+            max: 125000,
+            avg: 67082
+          }
+        },
+        filters: params || {}
+      };
+    }
+
     // Default fallback
     return {
       success: false,
