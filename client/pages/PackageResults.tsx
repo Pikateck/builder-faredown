@@ -190,8 +190,31 @@ export default function PackageResults() {
               )}
             </div>
 
-            {/* Desktop Sort */}
+            {/* Desktop Sort and View Toggle */}
             <div className="hidden md:flex items-center space-x-4">
+              {/* View Toggle */}
+              <div className="flex items-center border border-gray-300 rounded-lg p-1">
+                <Button
+                  variant={viewMode === "list" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("list")}
+                  className={`px-3 py-1 ${viewMode === "list" ? "bg-blue-600 text-white" : "text-gray-600"}`}
+                >
+                  <List className="w-4 h-4 mr-1" />
+                  List
+                </Button>
+                <Button
+                  variant={viewMode === "grid" ? "default" : "ghost"}
+                  size="sm"
+                  onClick={() => setViewMode("grid")}
+                  className={`px-3 py-1 ${viewMode === "grid" ? "bg-blue-600 text-white" : "text-gray-600"}`}
+                >
+                  <Grid3X3 className="w-4 h-4 mr-1" />
+                  Grid
+                </Button>
+              </div>
+
+              {/* Sort Dropdown */}
               <select
                 value={currentFilters.sort}
                 onChange={(e) => changeSort(e.target.value)}
