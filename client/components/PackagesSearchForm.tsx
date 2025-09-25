@@ -254,7 +254,7 @@ export function PackagesSearchForm() {
           </div>
 
           {/* Search Button - At end of form row (matches SightseeingSearchForm pattern) */}
-          <div className="flex-shrink-0 w-full sm:w-auto">
+          <div className="flex-shrink-0 w-full md:w-auto mt-2 md:mt-0">
             <Button
               type="submit"
               disabled={!isFormValid || isSubmitting}
