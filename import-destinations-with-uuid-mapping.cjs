@@ -93,15 +93,18 @@ async function importDestinationsWithUUIDMapping() {
       
       const regionId = idMapping[country.region_id];
       
+      // Create unique slug by including country_id to handle duplicates like Egypt
+      const uniqueSlug = `${country.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${country.country_id.toLowerCase()}`;
+
       await client.query(`
-        INSERT INTO countries (id, name, iso_code, region_id, slug, search_tokens, search_text, is_active, sort_order) 
+        INSERT INTO countries (id, name, iso_code, region_id, slug, search_tokens, search_text, is_active, sort_order)
         VALUES ($1, $2, $3, $4, $5, $6, $7, TRUE, 10)
       `, [
         uuid,
         country.name,
         country.iso2,
         regionId,
-        country.name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+        uniqueSlug,
         searchTokens,
         searchTokens.join(' ')
       ]);
@@ -125,15 +128,18 @@ async function importDestinationsWithUUIDMapping() {
       const countryId = idMapping[city.country_id];
       const regionId = city.region_id ? idMapping[city.region_id] : null;
       
+      // Create unique slug by including city_id to handle potential duplicates
+      const uniqueSlug = `${city.name.toLowerCase().replace(/[^a-z0-9]/g, '-')}-${city.city_id.toLowerCase()}`;
+
       await client.query(`
-        INSERT INTO cities (id, name, country_id, region_id, slug, search_tokens, search_text, is_active, sort_order) 
+        INSERT INTO cities (id, name, country_id, region_id, slug, search_tokens, search_text, is_active, sort_order)
         VALUES ($1, $2, $3, $4, $5, $6, $7, TRUE, 10)
       `, [
         uuid,
         city.name,
         countryId,
         regionId,
-        city.name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
+        uniqueSlug,
         searchTokens,
         searchTokens.join(' ')
       ]);
