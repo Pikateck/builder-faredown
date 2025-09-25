@@ -69,9 +69,6 @@ export function PackagesSearchForm() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Form validation
-  const isFormValid = Boolean(selectedDestination?.name && selectedDestination?.code);
-  
   // Analytics tracking
   const trackSearchAttempt = useCallback((valid: boolean, missingFields: string[] = []) => {
     try {
@@ -154,11 +151,11 @@ export function PackagesSearchForm() {
 
   // Handle Enter key submission
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Enter' && isFormValid && !isSubmitting) {
+    if (e.key === 'Enter') {
       e.preventDefault();
       handleSearch();
     }
-  }, [handleSearch, isFormValid, isSubmitting]);
+  }, [handleSearch]);
 
   return (
     <div className="w-full">
@@ -172,7 +169,7 @@ export function PackagesSearchForm() {
         </div>
       )}
 
-      {/* Search Form - Enhanced with proper form semantics */}
+      {/* Search Form - All fields in one row, button below */}
       <form 
         onSubmit={handleSearch}
         onKeyDown={handleKeyDown}
@@ -180,21 +177,23 @@ export function PackagesSearchForm() {
         role="search"
         aria-label="Search packages form"
       >
-        {/* Main Search Form Row */}
-        <div className="flex flex-col lg:flex-row gap-2 mb-4">
+        {/* All Form Fields Row */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-2 mb-4">
           
-          {/* Destination Dropdown - Using Shared Component */}
-          <DestinationDropdown
-            value={selectedDestination}
-            onChange={setSelectedDestination}
-            placeholder="Where do you want to go?"
-            icon={<Globe className="w-4 h-4 text-gray-500 mr-2" />}
-            module="packages"
-            enableApiSearch={true}
-          />
+          {/* Destination Dropdown */}
+          <div className="lg:col-span-1">
+            <DestinationDropdown
+              value={selectedDestination}
+              onChange={setSelectedDestination}
+              placeholder="Where do you want to go?"
+              icon={<Globe className="w-4 h-4 text-gray-500 mr-2" />}
+              module="packages"
+              enableApiSearch={true}
+            />
+          </div>
 
           {/* Departure Date */}
-          <div className="flex-1 lg:max-w-[280px]">
+          <div className="lg:col-span-1">
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Package Dates
             </label>
@@ -253,35 +252,9 @@ export function PackagesSearchForm() {
             </Popover>
           </div>
 
-          {/* Search Button */}
-          <div className="flex-shrink-0 w-full sm:w-auto">
-            <Button
-              onClick={handleSearch}
-              disabled={!isFormValid}
-              className={`h-10 sm:h-12 w-full sm:w-auto font-bold rounded px-6 sm:px-8 transition-all duration-150 ${
-                !isFormValid
-                  ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
-                  : 'bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black'
-              }`}
-              title={!isFormValid ? "Choose a destination to search" : "Search packages"}
-            >
-              <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-sm sm:text-base">Search Packages</span>
-            </Button>
-            {!isFormValid && (
-              <div className="mt-1 flex items-center text-xs text-gray-500">
-                <AlertCircle className="w-3 h-3 mr-1" />
-                <span>Choose a destination to search</span>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Additional Filters Row */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Duration Filter */}
-          <div>
-            <label htmlFor="duration-select" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="lg:col-span-1">
+            <label htmlFor="duration-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Duration
             </label>
             <select
@@ -299,8 +272,8 @@ export function PackagesSearchForm() {
           </div>
 
           {/* Budget */}
-          <div>
-            <label htmlFor="budget-select" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="lg:col-span-1">
+            <label htmlFor="budget-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Budget (per person)
             </label>
             <select
@@ -319,8 +292,8 @@ export function PackagesSearchForm() {
           </div>
 
           {/* Category */}
-          <div>
-            <label htmlFor="category-select" className="block text-sm font-medium text-gray-700 mb-2">
+          <div className="lg:col-span-1">
+            <label htmlFor="category-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Package Type
             </label>
             <select
@@ -339,6 +312,18 @@ export function PackagesSearchForm() {
               <option value="budget">Budget</option>
             </select>
           </div>
+        </div>
+
+        {/* Search Button Row - Separate row, always active */}
+        <div className="flex justify-center mt-4">
+          <Button
+            type="submit"
+            onClick={handleSearch}
+            className="h-12 px-12 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded-lg text-base transition-all duration-150 min-w-[200px]"
+          >
+            <Search className="mr-2 h-5 w-5" />
+            <span>{isSubmitting ? 'Searching...' : 'Search Packages'}</span>
+          </Button>
         </div>
       </form>
     </div>
