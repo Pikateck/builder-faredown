@@ -43,7 +43,7 @@ const sightseeingRoutes = require("./routes/sightseeing");
 const transfersRoutes = require("./routes/transfers");
 const transfersBargainRoutes = require("./routes/transfers-bargain");
 const packagesRoutes = require("./routes/packages");
-const destinationsRoutes = require("./routes/destinations-comprehensive");
+const destinationsRoutes = require("./routes/destinations-v2");
 const enhancedBargainRoutes = require("./routes/enhanced-bargain-engine");
 const featureFlagsRoutes = require("./routes/feature-flags");
 
