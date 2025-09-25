@@ -755,6 +755,8 @@ export function MobileNativeSearchForm({
                 "Explore attractions & experiences with AI that bargains for you."}
               {module === "transfers" &&
                 "Ride in comfort for less — AI secures your best deal on every trip."}
+              {module === "packages" &&
+                "Discover amazing destinations with our curated fixed packages."}
             </h1>
           </div>
         </div>
