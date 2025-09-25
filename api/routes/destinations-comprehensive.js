@@ -298,24 +298,20 @@ router.get("/search", async (req, res) => {
 
     const searchTerm = q.toLowerCase().trim();
 
-    // Use the optimized search with trigram indexes and aliases
+    // Fast search using indexed columns with simple scoring
     const query = `
-      WITH search_query AS (SELECT $1::text AS q)
-
       SELECT
         'city' as type,
         ci.id,
         ci.name || ', ' || co.name as label,
         r.name as region_name,
         co.name as country_name,
-        -- Enhanced scoring: exact match > prefix > trigram similarity > alias match
         CASE
-          WHEN lower(ci.name) = (SELECT q FROM search_query) THEN 1.0
-          WHEN lower(ci.name) LIKE (SELECT q || '%' FROM search_query) THEN 0.9
-          WHEN ci.search_text % (SELECT q FROM search_query) THEN 0.8
-          WHEN (SELECT q FROM search_query) = ANY(ci.search_tokens) THEN 0.7
-          WHEN ci.search_text ILIKE (SELECT '%' || q || '%' FROM search_query) THEN 0.6
-          ELSE 0.5
+          WHEN lower(ci.name) = $1 THEN 1.0
+          WHEN lower(ci.name) LIKE $1 || '%' THEN 0.9
+          WHEN $1 = ANY(ci.search_tokens) THEN 0.8
+          WHEN ci.search_text ILIKE '%' || $1 || '%' THEN 0.7
+          ELSE 0.6
         END as score
       FROM cities ci
       JOIN countries co ON ci.country_id = co.id
@@ -324,9 +320,8 @@ router.get("/search", async (req, res) => {
         AND co.is_active = TRUE
         AND r.is_active = TRUE
         AND (
-          ci.search_text ILIKE (SELECT '%' || q || '%' FROM search_query)
-          OR (SELECT q FROM search_query) = ANY(ci.search_tokens)
-          OR ci.search_text % (SELECT q FROM search_query)
+          ci.search_text ILIKE '%' || $1 || '%'
+          OR $1 = ANY(ci.search_tokens)
         )
 
       UNION ALL
@@ -338,21 +333,19 @@ router.get("/search", async (req, res) => {
         r.name as region_name,
         co.name as country_name,
         CASE
-          WHEN lower(co.name) = (SELECT q FROM search_query) THEN 1.0
-          WHEN lower(co.name) LIKE (SELECT q || '%' FROM search_query) THEN 0.9
-          WHEN co.search_text % (SELECT q FROM search_query) THEN 0.8
-          WHEN (SELECT q FROM search_query) = ANY(co.search_tokens) THEN 0.7
-          WHEN co.search_text ILIKE (SELECT '%' || q || '%' FROM search_query) THEN 0.6
-          ELSE 0.5
+          WHEN lower(co.name) = $1 THEN 1.0
+          WHEN lower(co.name) LIKE $1 || '%' THEN 0.9
+          WHEN $1 = ANY(co.search_tokens) THEN 0.8
+          WHEN co.search_text ILIKE '%' || $1 || '%' THEN 0.7
+          ELSE 0.6
         END as score
       FROM countries co
       JOIN regions r ON co.region_id = r.id
       WHERE co.is_active = TRUE
         AND r.is_active = TRUE
         AND (
-          co.search_text ILIKE (SELECT '%' || q || '%' FROM search_query)
-          OR (SELECT q FROM search_query) = ANY(co.search_tokens)
-          OR co.search_text % (SELECT q FROM search_query)
+          co.search_text ILIKE '%' || $1 || '%'
+          OR $1 = ANY(co.search_tokens)
         )
 
       UNION ALL
@@ -364,23 +357,20 @@ router.get("/search", async (req, res) => {
         r.name as region_name,
         NULL as country_name,
         CASE
-          WHEN lower(r.name) = (SELECT q FROM search_query) THEN 1.0
-          WHEN lower(r.name) LIKE (SELECT q || '%' FROM search_query) THEN 0.9
-          WHEN r.search_text % (SELECT q FROM search_query) THEN 0.8
-          WHEN (SELECT q FROM search_query) = ANY(r.search_tokens) THEN 0.7
-          WHEN r.search_text ILIKE (SELECT '%' || q || '%' FROM search_query) THEN 0.6
-          ELSE 0.5
+          WHEN lower(r.name) = $1 THEN 1.0
+          WHEN lower(r.name) LIKE $1 || '%' THEN 0.9
+          WHEN $1 = ANY(r.search_tokens) THEN 0.8
+          WHEN r.search_text ILIKE '%' || $1 || '%' THEN 0.7
+          ELSE 0.6
         END as score
       FROM regions r
       WHERE r.is_active = TRUE
         AND (
-          r.search_text ILIKE (SELECT '%' || q || '%' FROM search_query)
-          OR (SELECT q FROM search_query) = ANY(r.search_tokens)
-          OR r.search_text % (SELECT q FROM search_query)
+          r.search_text ILIKE '%' || $1 || '%'
+          OR $1 = ANY(r.search_tokens)
         )
 
       ORDER BY
-        -- Type boost: cities (2) > countries (1) > regions (0)
         CASE type WHEN 'city' THEN 2 WHEN 'country' THEN 1 ELSE 0 END DESC,
         score DESC,
         label ASC
