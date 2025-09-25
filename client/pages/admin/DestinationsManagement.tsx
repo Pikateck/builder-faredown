@@ -689,9 +689,9 @@ export default function DestinationsManagement() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Name</TableHead>
-                    <TableHead>Code</TableHead>
+                    <TableHead>ISO Code</TableHead>
                     <TableHead>Region</TableHead>
-                    <TableHead>Cities</TableHead>
+                    <TableHead>Sort Order</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
@@ -701,10 +701,10 @@ export default function DestinationsManagement() {
                     <TableRow key={country.id}>
                       <TableCell className="font-medium">{country.name}</TableCell>
                       <TableCell>
-                        <Badge variant="secondary">{country.iso_code}</Badge>
+                        {country.iso2 && <Badge variant="secondary">{country.iso2}</Badge>}
                       </TableCell>
-                      <TableCell>{country.region_name}</TableCell>
-                      <TableCell>{country.cities_count}</TableCell>
+                      <TableCell>{country.region_name || "-"}</TableCell>
+                      <TableCell>{country.sort_order}</TableCell>
                       <TableCell>
                         <button
                           onClick={() => toggleActiveStatus('country', country.id, country.is_active)}
@@ -722,8 +722,8 @@ export default function DestinationsManagement() {
                           <Button variant="ghost" size="sm">
                             <Edit2 className="w-4 h-4" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="sm"
                             onClick={() => {
                               setItemToDelete(country);
