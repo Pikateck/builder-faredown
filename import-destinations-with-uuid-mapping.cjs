@@ -41,13 +41,32 @@ async function importDestinationsWithUUIDMapping() {
       
       const parentId = region.parent_region_id ? idMapping[region.parent_region_id] : null;
       
+      // Map CSV types to database enum values
+      let geoLevel;
+      switch (region.type) {
+        case 'world':
+          geoLevel = 'global';
+          break;
+        case 'country_region':
+          geoLevel = 'country';
+          break;
+        case 'subregion':
+          geoLevel = 'subregion';
+          break;
+        case 'state':
+          geoLevel = 'state';
+          break;
+        default:
+          geoLevel = 'region';
+      }
+
       await client.query(`
-        INSERT INTO regions (id, name, level, parent_id, slug, search_tokens, search_text, is_active, sort_order) 
+        INSERT INTO regions (id, name, level, parent_id, slug, search_tokens, search_text, is_active, sort_order)
         VALUES ($1, $2, $3, $4, $5, $6, $7, TRUE, $8)
       `, [
         uuid,
         region.name,
-        region.type || 'region',
+        geoLevel,
         parentId,
         region.name.toLowerCase().replace(/[^a-z0-9]/g, '-'),
         searchTokens,
