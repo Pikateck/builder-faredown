@@ -356,16 +356,25 @@ export default function DestinationsManagement() {
   // Test search functionality
   const testSearch = async () => {
     if (!searchTerm.trim()) return;
-    
+
     try {
       const response = await fetch(`/api/destinations/search?q=${encodeURIComponent(searchTerm)}&limit=10`);
       if (response.ok) {
         const results = await response.json();
         toast({
           title: "Search Test Results",
-          description: `Found ${results.length} results for "${searchTerm}"`,
+          description: `Found ${results.length} results for "${searchTerm}" in ${response.headers.get('X-Response-Time') || 'unknown'}`,
         });
-        console.log('Search results:', results);
+        console.log('🔍 Search test results:', results);
+
+        // Show results in a more detailed way
+        if (results.length > 0) {
+          const resultSummary = results.map(r => `${r.type}: ${r.label} (score: ${r.score})`).join('\n');
+          console.log('📊 Detailed results:\n', resultSummary);
+        }
+      } else {
+        const error = await response.json();
+        throw new Error(error.message || 'Search request failed');
       }
     } catch (error) {
       toast({
