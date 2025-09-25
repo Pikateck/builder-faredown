@@ -1049,27 +1049,29 @@ export function MobileNativeSearchForm({
               </div>
             )}
 
-            {/* Search Button */}
-            <Button
-              onClick={handleSearch}
-              className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2 mt-6 transition-all duration-150 ${
-                !validateSearch().isValid
-                  ? "bg-gray-400 cursor-not-allowed text-white"
-                  : "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black"
-              }`}
-              disabled={!validateSearch().isValid}
-            >
-              <Search className="w-5 h-5" />
-              <span>
-                {!validateSearch().isValid
-                  ? "Complete Required Fields"
-                  : module === "flights" && tripType === "multi-city"
-                    ? multiCityLegs.length < 2
-                      ? "Add Flight Segments"
-                      : "Search Multi-City"
-                    : "Search"}
-              </span>
-            </Button>
+            {/* Search Button - Hidden for packages (sticky CTA instead) */}
+            {module !== "packages" && (
+              <Button
+                onClick={handleSearch}
+                className={`w-full py-4 rounded-xl font-bold text-base flex items-center justify-center space-x-2 mt-6 transition-all duration-150 ${
+                  !validateSearch().isValid
+                    ? "bg-gray-400 cursor-not-allowed text-white"
+                    : "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black"
+                }`}
+                disabled={!validateSearch().isValid}
+              >
+                <Search className="w-5 h-5" />
+                <span>
+                  {!validateSearch().isValid
+                    ? "Complete Required Fields"
+                    : module === "flights" && tripType === "multi-city"
+                      ? multiCityLegs.length < 2
+                        ? "Add Flight Segments"
+                        : "Search Multi-City"
+                      : "Search"}
+                </span>
+              </Button>
+            )}
           </div>
         </div>
       </div>
