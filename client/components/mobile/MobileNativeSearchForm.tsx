@@ -763,7 +763,7 @@ export function MobileNativeSearchForm({
       </div>
 
       {/* Native Mobile Search Panel */}
-      <div className="bg-white border-b border-gray-200 shadow-sm">
+      <div className={`bg-white border-b border-gray-200 shadow-sm ${module === "packages" ? "mb-20" : ""}`}>
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4">
           {/* Trip Type Selection (for flights only) */}
           {module === "flights" && (
