@@ -23,8 +23,8 @@ async function completeKeyDestinations() {
     for (const city of missingCities) {
       // Check if city already exists
       const existingCheck = await pool.query(`
-        SELECT id FROM cities c 
-        JOIN countries co ON c.country_id = co.id 
+        SELECT c.id FROM cities c
+        JOIN countries co ON c.country_id = co.id
         WHERE c.name = $1 AND co.name = $2
       `, [city.name, city.country]);
 
