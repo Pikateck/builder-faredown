@@ -66,6 +66,7 @@ export function Header() {
     if (location.pathname.includes("/flights")) return "flights";
     if (location.pathname.includes("/sightseeing")) return "sightseeing";
     if (location.pathname.includes("/transfers")) return "transfers";
+    if (location.pathname.includes("/packages")) return "packages";
 
     // Fallback to query parameters for backward compatibility
     const searchParams = new URLSearchParams(location.search);
