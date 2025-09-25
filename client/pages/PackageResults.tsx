@@ -142,7 +142,7 @@ export default function PackageResults() {
 
   if (loading) {
     return (
-      <Layout>
+      <Layout showSearch={false}>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <Loader2 className="w-8 h-8 animate-spin mx-auto mb-4 text-blue-600" />
@@ -155,7 +155,7 @@ export default function PackageResults() {
 
   if (error) {
     return (
-      <Layout>
+      <Layout showSearch={false}>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <p className="text-red-600 mb-4">{error}</p>
@@ -169,7 +169,7 @@ export default function PackageResults() {
   }
 
   return (
-    <Layout>
+    <Layout showSearch={false}>
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Header */}
         <div className="mb-6">
