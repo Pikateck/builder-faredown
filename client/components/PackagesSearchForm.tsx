@@ -256,29 +256,12 @@ export function PackagesSearchForm() {
           {/* Search Button */}
           <div className="flex-shrink-0 w-full sm:w-auto">
             <Button
-              type="submit"
-              disabled={!isFormValid || isSubmitting}
-              aria-disabled={!isFormValid || isSubmitting}
-              className={
-                `h-10 sm:h-12 w-full sm:w-auto font-bold rounded px-6 sm:px-8 transition-all duration-150 ${
-                  !isFormValid || isSubmitting
-                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed hover:bg-gray-300'
-                    : 'bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black'
-                }`
-              }
-              title={!isFormValid ? "Choose a destination to search" : "Search packages"}
+              onClick={handleSearch}
+              className="h-10 sm:h-12 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
             >
               <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-sm sm:text-base">
-                {isSubmitting ? 'Searching...' : 'Search Packages'}
-              </span>
+              <span className="text-sm sm:text-base">Search Packages</span>
             </Button>
-            {!isFormValid && (
-              <div className="mt-1 flex items-center text-xs text-gray-500" role="status" aria-live="polite">
-                <AlertCircle className="w-3 h-3 mr-1" />
-                <span>Choose a destination to search</span>
-              </div>
-            )}
           </div>
         </div>
 
