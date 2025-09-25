@@ -1,8 +1,7 @@
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "@/contexts/SearchContext";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
 import {
   Popover,
   PopoverContent,
@@ -10,24 +9,14 @@ import {
 } from "@/components/ui/popover";
 import { StableBookingCalendar } from "@/components/StableBookingCalendar";
 import { format, addDays } from "date-fns";
-import { MapPin, CalendarIcon, Search, X, Globe, Building2 } from "lucide-react";
+import { CalendarIcon, Search, Globe } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
+import { DestinationDropdown } from "@/components/ui/DestinationDropdown";
 
-interface DestinationSearchResult {
-  type: 'region' | 'country' | 'city';
-  id: string;
-  label: string;
-  region: string;
-  country?: string;
-  score?: number;
-}
-
-interface SelectedDestination {
-  type: 'region' | 'country' | 'city';
-  id: string;
-  label: string;
-  region: string;
-  country?: string;
+interface DestinationOption {
+  name: string;
+  code: string;
+  type: 'city' | 'country' | 'region';
 }
 
 export function PackagesSearchForm() {
