@@ -756,9 +756,9 @@ export default function DestinationsManagement() {
                 <TableHeader>
                   <TableRow>
                     <TableHead>Name</TableHead>
-                    <TableHead>Code</TableHead>
                     <TableHead>Country</TableHead>
                     <TableHead>Region</TableHead>
+                    <TableHead>Package Dest</TableHead>
                     <TableHead>Status</TableHead>
                     <TableHead>Actions</TableHead>
                   </TableRow>
@@ -768,10 +768,17 @@ export default function DestinationsManagement() {
                     <TableRow key={city.id}>
                       <TableCell className="font-medium">{city.name}</TableCell>
                       <TableCell>
-                        {city.code && <Badge variant="secondary">{city.code}</Badge>}
+                        <div className="flex items-center space-x-2">
+                          <span>{city.country_name}</span>
+                          {city.country_code && <Badge variant="outline" className="text-xs">{city.country_code}</Badge>}
+                        </div>
                       </TableCell>
-                      <TableCell>{city.country_name}</TableCell>
                       <TableCell>{city.region_name || "-"}</TableCell>
+                      <TableCell>
+                        <Badge variant={city.is_package_destination ? "default" : "secondary"}>
+                          {city.is_package_destination ? "Yes" : "No"}
+                        </Badge>
+                      </TableCell>
                       <TableCell>
                         <button
                           onClick={() => toggleActiveStatus('city', city.id, city.is_active)}
@@ -789,8 +796,8 @@ export default function DestinationsManagement() {
                           <Button variant="ghost" size="sm">
                             <Edit2 className="w-4 h-4" />
                           </Button>
-                          <Button 
-                            variant="ghost" 
+                          <Button
+                            variant="ghost"
                             size="sm"
                             onClick={() => {
                               setItemToDelete(city);
