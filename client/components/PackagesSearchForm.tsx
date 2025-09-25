@@ -253,8 +253,8 @@ export function PackagesSearchForm() {
             </Popover>
           </div>
 
-          {/* Search Button - At end of form row (matches SightseeingSearchForm pattern) */}
-          <div className="flex-shrink-0 w-full md:w-auto mt-2 md:mt-0">
+          {/* Search Button */}
+          <div className="flex-shrink-0 w-full sm:w-auto">
             <Button
               type="submit"
               disabled={!isFormValid || isSubmitting}
