@@ -1229,6 +1229,394 @@ export class DevApiClient {
       };
     }
 
+    // Package details endpoint
+    if (endpoint.includes("/packages/") && !endpoint.includes("search") && !endpoint.includes("?")) {
+      const slug = endpoint.split("/packages/")[1];
+      console.log(`🔍 Getting fallback package details for: ${slug}`);
+
+      // Return detailed package information based on slug
+      let packageDetails;
+
+      if (slug === "dubai-luxury-package") {
+        packageDetails = {
+          id: 1,
+          slug: "dubai-luxury-package",
+          title: "Dubai Luxury Experience",
+          region_name: "Middle East",
+          country_name: "United Arab Emirates",
+          city_name: "Dubai",
+          duration_days: 7,
+          duration_nights: 6,
+          overview: "Experience the ultimate luxury in Dubai with this comprehensive package that combines modern marvels with traditional Arabian hospitality.",
+          description: "Immerse yourself in the glitz and glamour of Dubai, where cutting-edge architecture meets timeless desert beauty. This luxury package includes stays at the finest hotels, visits to iconic landmarks, and unforgettable experiences that showcase the best of this dynamic city. From the towering Burj Khalifa to the bustling Gold Souk, from desert adventures to world-class shopping, this package offers a perfect blend of excitement and relaxation.",
+          highlights: [
+            "5-star hotel accommodation at Burj Al Arab",
+            "Skip-the-line access to Burj Khalifa",
+            "Premium desert safari with falcon show",
+            "Dubai Marina luxury yacht cruise",
+            "Personal shopping guide at Dubai Mall",
+            "Helicopter tour over Palm Jumeirah",
+            "Fine dining at Michelin-starred restaurants"
+          ],
+          base_price_pp: 89999,
+          currency: "INR",
+          hero_image_url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop&auto=format",
+          gallery_images: [
+            "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop&auto=format",
+            "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&h=600&fit=crop&auto=format",
+            "https://images.unsplash.com/photo-1569197388202-9efe60c9e512?w=800&h=600&fit=crop&auto=format"
+          ],
+          rating: 4.8,
+          review_count: 156,
+          is_featured: true,
+          category: "luxury",
+          themes: ["luxury", "city-break", "shopping", "culture", "desert"],
+          inclusions: [
+            "6 nights accommodation in 5-star hotels",
+            "Daily breakfast and 3 dinners",
+            "Airport transfers in luxury vehicles",
+            "All sightseeing as per itinerary",
+            "English-speaking guide",
+            "Desert safari with BBQ dinner",
+            "Dubai Marina cruise",
+            "Burj Khalifa tickets (Level 124 & 125)"
+          ],
+          exclusions: [
+            "International flights",
+            "Visa fees",
+            "Personal expenses",
+            "Additional meals not mentioned",
+            "Tips and gratuities",
+            "Travel insurance"
+          ],
+          terms_conditions: "All bookings are subject to availability. Prices may vary during peak seasons. Cancellation charges apply as per our policy.",
+          cancellation_policy: "Free cancellation up to 15 days before departure. 50% charges for 7-15 days. No refund for cancellations within 7 days.",
+          visa_required: true,
+          passport_required: true,
+          minimum_age: 0,
+          maximum_group_size: 20,
+          itinerary: [
+            {
+              day_number: 1,
+              title: "Arrival in Dubai",
+              description: "Arrive at Dubai International Airport. Meet and greet by our representative. Transfer to your luxury hotel. Evening at leisure to explore nearby areas.",
+              cities: "Dubai",
+              meals_included: "Dinner",
+              accommodation: "Burj Al Arab",
+              activities: ["Airport transfer", "Hotel check-in", "Welcome dinner"],
+              transport: "Luxury vehicle"
+            },
+            {
+              day_number: 2,
+              title: "Dubai City Tour",
+              description: "Full day Dubai city tour including Burj Khalifa, Dubai Mall, and traditional souks. Experience the contrast between modern and traditional Dubai.",
+              cities: "Dubai",
+              meals_included: "Breakfast, Lunch",
+              accommodation: "Burj Al Arab",
+              activities: ["Burj Khalifa visit", "Dubai Mall shopping", "Gold Souk", "Spice Souk"],
+              transport: "Air-conditioned coach"
+            },
+            {
+              day_number: 3,
+              title: "Desert Safari Adventure",
+              description: "Thrilling desert safari with dune bashing, camel riding, falcon show, and traditional BBQ dinner under the stars.",
+              cities: "Dubai Desert",
+              meals_included: "Breakfast, BBQ Dinner",
+              accommodation: "Burj Al Arab",
+              activities: ["Dune bashing", "Camel riding", "Falcon show", "Henna painting", "BBQ dinner"],
+              transport: "4x4 vehicles"
+            }
+          ],
+          departures: [
+            {
+              id: 101,
+              departure_city_code: "BOM",
+              departure_city_name: "Mumbai",
+              departure_date: "2025-10-15",
+              return_date: "2025-10-21",
+              price_per_person: 89999,
+              single_supplement: 25000,
+              child_price: 67499,
+              currency: "INR",
+              available_seats: 12,
+              total_seats: 20,
+              is_guaranteed: true,
+              early_bird_discount: 5000,
+              early_bird_deadline: "2025-09-15"
+            },
+            {
+              id: 102,
+              departure_city_code: "DEL",
+              departure_city_name: "Delhi",
+              departure_date: "2025-10-22",
+              return_date: "2025-10-28",
+              price_per_person: 92999,
+              single_supplement: 25000,
+              child_price: 69749,
+              currency: "INR",
+              available_seats: 8,
+              total_seats: 20,
+              is_guaranteed: true
+            }
+          ],
+          tags: ["luxury", "city-break", "shopping", "culture", "desert"],
+          media: [
+            {
+              url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop&auto=format",
+              type: "image",
+              title: "Dubai Skyline",
+              alt_text: "Dubai luxury skyline with Burj Khalifa"
+            }
+          ],
+          reviews_summary: {
+            total_reviews: 156,
+            average_rating: 4.8,
+            five_star: 89,
+            four_star: 45,
+            three_star: 15,
+            two_star: 5,
+            one_star: 2
+          },
+          recent_reviews: [
+            {
+              rating: 5,
+              title: "Amazing luxury experience",
+              review_text: "Everything was perfect from start to finish. The hotel was incredible and the desert safari was unforgettable.",
+              reviewer_name: "Priya S.",
+              reviewer_location: "Mumbai",
+              travel_date: "2024-03-15",
+              traveler_type: "Couple",
+              created_at: "2024-03-20T10:30:00Z"
+            }
+          ]
+        };
+      } else if (slug === "paris-romance-package") {
+        packageDetails = {
+          id: 2,
+          slug: "paris-romance-package",
+          title: "Paris Romantic Getaway",
+          region_name: "Europe",
+          country_name: "France",
+          city_name: "Paris",
+          duration_days: 5,
+          duration_nights: 4,
+          overview: "Fall in love with the City of Light on this romantic getaway designed for couples seeking an unforgettable Parisian experience.",
+          description: "Experience the romance and charm of Paris with this specially curated package for couples. From intimate Seine river cruises to world-class museums, from charming bistros to luxury shopping, this package captures the essence of Parisian romance.",
+          highlights: [
+            "Boutique hotel in historic Marais district",
+            "Private Eiffel Tower dinner experience",
+            "Seine river sunset cruise",
+            "Skip-the-line Louvre and Musée d'Orsay",
+            "Day trip to Palace of Versailles",
+            "French cuisine cooking class for two"
+          ],
+          base_price_pp: 67500,
+          currency: "INR",
+          hero_image_url: "https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800&h=600&fit=crop&auto=format",
+          gallery_images: [
+            "https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800&h=600&fit=crop&auto=format",
+            "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&h=600&fit=crop&auto=format"
+          ],
+          rating: 4.6,
+          review_count: 89,
+          is_featured: false,
+          category: "honeymoon",
+          themes: ["romance", "culture", "city-break", "museums", "cuisine"],
+          inclusions: [
+            "4 nights in boutique hotel",
+            "Daily breakfast",
+            "Seine river cruise",
+            "Museum passes",
+            "Versailles day trip",
+            "Cooking class"
+          ],
+          exclusions: [
+            "International flights",
+            "Visa fees",
+            "Most meals",
+            "Personal expenses"
+          ],
+          terms_conditions: "Standard booking terms apply.",
+          cancellation_policy: "Free cancellation up to 10 days before departure.",
+          visa_required: false,
+          passport_required: true,
+          minimum_age: 0,
+          maximum_group_size: 16,
+          itinerary: [
+            {
+              day_number: 1,
+              title: "Arrival in Paris",
+              description: "Arrive in the City of Light and check into your charming boutique hotel in the Marais district.",
+              cities: "Paris",
+              meals_included: "Welcome dinner",
+              accommodation: "Boutique Hotel Marais",
+              activities: ["Airport transfer", "Hotel check-in", "Welcome dinner"]
+            }
+          ],
+          departures: [
+            {
+              id: 201,
+              departure_city_code: "BOM",
+              departure_city_name: "Mumbai",
+              departure_date: "2025-10-22",
+              return_date: "2025-10-26",
+              price_per_person: 67500,
+              single_supplement: 18000,
+              child_price: 50625,
+              currency: "INR",
+              available_seats: 15,
+              total_seats: 16,
+              is_guaranteed: true
+            }
+          ],
+          tags: ["romance", "culture", "city-break", "museums"],
+          media: [
+            {
+              url: "https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800&h=600&fit=crop&auto=format",
+              type: "image",
+              title: "Eiffel Tower",
+              alt_text: "Romantic view of Eiffel Tower"
+            }
+          ],
+          reviews_summary: {
+            total_reviews: 89,
+            average_rating: 4.6,
+            five_star: 56,
+            four_star: 25,
+            three_star: 6,
+            two_star: 2,
+            one_star: 0
+          },
+          recent_reviews: [
+            {
+              rating: 5,
+              title: "Perfect honeymoon",
+              review_text: "Paris was magical! The hotel was perfectly located and the experiences were unforgettable.",
+              reviewer_name: "Raj & Anjali",
+              reviewer_location: "Delhi",
+              travel_date: "2024-02-14",
+              traveler_type: "Couple",
+              created_at: "2024-02-20T15:45:00Z"
+            }
+          ]
+        };
+      } else {
+        // Default fallback for any unknown slug
+        packageDetails = {
+          id: 999,
+          slug: slug,
+          title: `Package: ${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`,
+          region_name: "International",
+          country_name: "Various",
+          city_name: "Multiple Cities",
+          duration_days: 5,
+          duration_nights: 4,
+          overview: "Discover amazing destinations with this thoughtfully crafted travel package.",
+          description: "Experience the best of travel with our carefully designed package that offers a perfect blend of sightseeing, culture, and relaxation.",
+          highlights: [
+            "Comfortable accommodation",
+            "Guided sightseeing tours",
+            "Cultural experiences",
+            "Local cuisine tasting",
+            "Professional guide services"
+          ],
+          base_price_pp: 45999,
+          currency: "INR",
+          hero_image_url: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop&auto=format",
+          gallery_images: [
+            "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop&auto=format"
+          ],
+          rating: 4.3,
+          review_count: 45,
+          is_featured: false,
+          category: "cultural",
+          themes: ["culture", "sightseeing", "relaxation"],
+          inclusions: [
+            "4 nights accommodation",
+            "Daily breakfast",
+            "Sightseeing tours",
+            "Local guide",
+            "Airport transfers"
+          ],
+          exclusions: [
+            "International flights",
+            "Visa fees",
+            "Personal expenses",
+            "Tips and gratuities"
+          ],
+          terms_conditions: "Standard booking terms apply.",
+          cancellation_policy: "Free cancellation up to 7 days before departure.",
+          visa_required: true,
+          passport_required: true,
+          minimum_age: 0,
+          maximum_group_size: 25,
+          itinerary: [
+            {
+              day_number: 1,
+              title: "Arrival",
+              description: "Arrive at destination and check into hotel.",
+              cities: "Destination City",
+              meals_included: "Dinner",
+              accommodation: "3-star Hotel",
+              activities: ["Airport transfer", "Hotel check-in"]
+            }
+          ],
+          departures: [
+            {
+              id: 901,
+              departure_city_code: "BOM",
+              departure_city_name: "Mumbai",
+              departure_date: "2025-11-01",
+              return_date: "2025-11-05",
+              price_per_person: 45999,
+              single_supplement: 12000,
+              child_price: 34499,
+              currency: "INR",
+              available_seats: 20,
+              total_seats: 25,
+              is_guaranteed: false
+            }
+          ],
+          tags: ["culture", "sightseeing"],
+          media: [
+            {
+              url: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop&auto=format",
+              type: "image",
+              title: "Travel Destination",
+              alt_text: "Beautiful travel destination"
+            }
+          ],
+          reviews_summary: {
+            total_reviews: 45,
+            average_rating: 4.3,
+            five_star: 22,
+            four_star: 15,
+            three_star: 6,
+            two_star: 2,
+            one_star: 0
+          },
+          recent_reviews: [
+            {
+              rating: 4,
+              title: "Good experience",
+              review_text: "Overall a nice package with good value for money.",
+              reviewer_name: "Traveler",
+              reviewer_location: "India",
+              travel_date: "2024-01-15",
+              traveler_type: "Solo",
+              created_at: "2024-01-20T12:00:00Z"
+            }
+          ]
+        };
+      }
+
+      return {
+        success: true,
+        data: packageDetails,
+        message: "Fallback package details (Live API unavailable)",
+      };
+    }
+
     // Packages search endpoint
     if (endpoint.includes("/packages")) {
       return {
