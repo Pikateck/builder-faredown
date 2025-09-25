@@ -287,7 +287,13 @@ router.get("/countries/:countryId/cities", async (req, res) => {
  * Query params: q (required), limit (default: 20)
  */
 router.get("/search", async (req, res) => {
-  const startTime = Date.now();
+  const timings = {
+    start: Date.now(),
+    parse: 0,
+    query: 0,
+    rank: 0,
+    respond: 0
+  };
 
   try {
     const { q, limit = 20 } = req.query;
@@ -296,84 +302,103 @@ router.get("/search", async (req, res) => {
       return res.json([]);
     }
 
+    // PHASE 1: Parse and prepare
+    const parseStart = Date.now();
     const searchTerm = q.toLowerCase().trim();
     const searchPattern = `%${searchTerm}%`;
+    timings.parse = Date.now() - parseStart;
 
-    // Simple, fast query that combines all searches in one go
+    // PHASE 2: Execute database query
+    const queryStart = Date.now();
+
+    // Simplified query for better performance
     const searchQuery = `
-      (
-        SELECT
-          'city' as type,
-          ci.id,
-          ci.name || ', ' || co.name as label,
-          r.name as region_name,
-          co.name as country_name,
-          1 as type_priority
-        FROM cities ci
-        JOIN countries co ON ci.country_id = co.id
-        JOIN regions r ON co.region_id = r.id
-        WHERE ci.is_active = TRUE
-          AND co.is_active = TRUE
-          AND r.is_active = TRUE
-          AND (
-            ci.name ILIKE $1
-            OR co.name ILIKE $1
-            OR ($2 = ANY(ci.search_tokens))
-          )
-        LIMIT 10
-      )
-      UNION ALL
-      (
-        SELECT
-          'country' as type,
-          co.id,
-          co.name as label,
-          r.name as region_name,
-          co.name as country_name,
-          2 as type_priority
-        FROM countries co
-        JOIN regions r ON co.region_id = r.id
-        WHERE co.is_active = TRUE
-          AND r.is_active = TRUE
-          AND (
-            co.name ILIKE $1
-            OR ($2 = ANY(co.search_tokens))
-          )
-        LIMIT 5
-      )
-      UNION ALL
-      (
-        SELECT
-          'region' as type,
-          r.id,
-          r.name as label,
-          r.name as region_name,
-          NULL as country_name,
-          3 as type_priority
-        FROM regions r
-        WHERE r.is_active = TRUE
-          AND (
-            r.name ILIKE $1
-            OR ($2 = ANY(r.search_tokens))
-          )
-        LIMIT 5
-      )
-      ORDER BY type_priority, label
-      LIMIT $3
+      SELECT * FROM (
+        (
+          SELECT
+            'city' as type,
+            ci.id,
+            ci.name || ', ' || co.name as label,
+            r.name as region_name,
+            co.name as country_name,
+            1 as type_priority,
+            CASE
+              WHEN ci.name ILIKE $3 THEN 1
+              WHEN ci.name ILIKE $1 THEN 2
+              ELSE 3
+            END as search_priority
+          FROM cities ci
+          JOIN countries co ON ci.country_id = co.id
+          JOIN regions r ON co.region_id = r.id
+          WHERE ci.is_active = TRUE
+            AND co.is_active = TRUE
+            AND r.is_active = TRUE
+            AND (
+              ci.name ILIKE $1
+              OR ($2 = ANY(ci.search_tokens))
+            )
+          ORDER BY search_priority, ci.name
+          LIMIT 8
+        )
+        UNION ALL
+        (
+          SELECT
+            'country' as type,
+            co.id,
+            co.name as label,
+            r.name as region_name,
+            co.name as country_name,
+            2 as type_priority,
+            CASE
+              WHEN co.name ILIKE $3 THEN 1
+              WHEN co.name ILIKE $1 THEN 2
+              ELSE 3
+            END as search_priority
+          FROM countries co
+          JOIN regions r ON co.region_id = r.id
+          WHERE co.is_active = TRUE
+            AND r.is_active = TRUE
+            AND (
+              co.name ILIKE $1
+              OR ($2 = ANY(co.search_tokens))
+            )
+          ORDER BY search_priority, co.name
+          LIMIT 4
+        )
+        UNION ALL
+        (
+          SELECT
+            'region' as type,
+            r.id,
+            r.name as label,
+            r.name as region_name,
+            NULL as country_name,
+            3 as type_priority,
+            CASE
+              WHEN r.name ILIKE $3 THEN 1
+              WHEN r.name ILIKE $1 THEN 2
+              ELSE 3
+            END as search_priority
+          FROM regions r
+          WHERE r.is_active = TRUE
+            AND (
+              r.name ILIKE $1
+              OR ($2 = ANY(r.search_tokens))
+            )
+          ORDER BY search_priority, r.name
+          LIMIT 3
+        )
+      ) combined_results
+      ORDER BY type_priority, search_priority, label
+      LIMIT $4
     `;
 
-    const result = await pool.query(searchQuery, [searchPattern, searchTerm, parseInt(limit)]);
-    const responseTime = Date.now() - startTime;
+    const exactPattern = `${searchTerm}%`; // For prefix matching
+    const result = await pool.query(searchQuery, [searchPattern, searchTerm, exactPattern, parseInt(limit)]);
+    timings.query = Date.now() - queryStart;
 
-    // Log slow queries for monitoring
-    if (responseTime > 300) {
-      console.warn(`⚠️  Slow search query: "${searchTerm}" took ${responseTime}ms`);
-    }
-
-    // Set optimized cache headers
-    res.set('Cache-Control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=300');
-    res.set('X-Response-Time', `${responseTime}ms`);
-
+    // PHASE 3: Rank and format results
+    const rankStart = Date.now();
     const formattedResults = result.rows.map(r => ({
       type: r.type,
       id: r.id,
@@ -381,18 +406,42 @@ router.get("/search", async (req, res) => {
       region: r.region_name,
       country: r.country_name
     }));
+    timings.rank = Date.now() - rankStart;
+
+    // PHASE 4: Respond
+    const respondStart = Date.now();
+    const totalTime = Date.now() - timings.start;
+    timings.respond = Date.now() - respondStart;
+
+    // Enhanced logging with phase breakdown
+    if (totalTime > 300) {
+      console.warn(`🐌 SLOW SEARCH: "${searchTerm}" took ${totalTime}ms`);
+      console.warn(`   📊 Breakdown: parse=${timings.parse}ms | query=${timings.query}ms | rank=${timings.rank}ms | respond=${timings.respond}ms`);
+      console.warn(`   📋 Results: ${formattedResults.length} items returned`);
+    } else {
+      console.log(`⚡ Fast search: "${searchTerm}" = ${totalTime}ms (${formattedResults.length} results)`);
+    }
+
+    // Set optimized cache headers
+    res.set('Cache-Control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=300');
+    res.set('X-Response-Time', `${totalTime}ms`);
+    res.set('X-Query-Time', `${timings.query}ms`);
+    res.set('X-Search-Phase-Times', JSON.stringify(timings));
 
     res.json(formattedResults);
 
   } catch (error) {
-    const responseTime = Date.now() - startTime;
-    console.error("Error in search:", error);
+    const totalTime = Date.now() - timings.start;
+    console.error(`❌ SEARCH ERROR: "${q}" failed after ${totalTime}ms`);
+    console.error(`   📊 Breakdown: parse=${timings.parse}ms | query=${timings.query}ms | rank=${timings.rank}ms`);
+    console.error("   🔥 Error:", error.message);
 
     res.status(500).json({
       success: false,
       error: "Search failed",
       message: error.message,
-      response_time: `${responseTime}ms`
+      response_time: `${totalTime}ms`,
+      phase_timings: timings
     });
   }
 });
