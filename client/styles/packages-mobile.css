@@ -1,0 +1,234 @@
+/* Packages Mobile Sticky CTA Styles */
+/* Optimized for mobile packages search experience */
+
+/* Sticky CTA Bar */
+.packages-cta-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--surface, white);
+  border-top: 1px solid var(--border, #e5e7eb);
+  padding: 12px;
+  /* Safe area handling for notched devices */
+  padding-bottom: calc(12px + env(safe-area-inset-bottom, 0px));
+  z-index: 20;
+  box-shadow: 0 -4px 6px -1px rgba(0, 0, 0, 0.1), 0 -2px 4px -1px rgba(0, 0, 0, 0.06);
+  
+  /* Prevent interaction when keyboard is visible */
+  transition: transform 0.2s ease-in-out;
+}
+
+/* Keyboard visible state - lift CTA above keyboard */
+@media screen and (max-width: 640px) {
+  .packages-cta-bar.keyboard-visible {
+    transform: translateY(calc(-1 * env(keyboard-inset-height, 0px)));
+  }
+  
+  /* Ensure CTA doesn't overlap keyboard */
+  .packages-cta-bar {
+    bottom: env(keyboard-inset-height, 0px);
+  }
+}
+
+/* CTA Button optimizations */
+.packages-cta-bar .packages-cta-button {
+  min-height: 44px; /* Minimum tap target size */
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+  font-size: 16px; /* Prevents zoom on iOS */
+  border-radius: 12px;
+  transition: all 0.15s ease-in-out;
+}
+
+/* Touch optimizations */
+.packages-cta-bar .packages-cta-button:active {
+  transform: scale(0.98);
+}
+
+/* Selection summary styling */
+.packages-selection-summary {
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Disabled state styling */
+.packages-cta-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Loading state */
+.packages-cta-button.loading {
+  position: relative;
+  color: transparent;
+}
+
+.packages-cta-button.loading::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  top: 50%;
+  left: 50%;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 2px solid #ffffff;
+  border-radius: 50%;
+  border-top-color: transparent;
+  animation: button-loading-spinner 1s ease infinite;
+}
+
+@keyframes button-loading-spinner {
+  from {
+    transform: rotate(0turn);
+  }
+  to {
+    transform: rotate(1turn);
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .packages-cta-bar {
+    border-top: 2px solid;
+  }
+  
+  .packages-cta-button {
+    border: 2px solid;
+  }
+}
+
+/* Dark mode support */
+@media (prefers-color-scheme: dark) {
+  .packages-cta-bar {
+    background-color: #1f2937;
+    border-top-color: #374151;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  .packages-cta-bar,
+  .packages-cta-button {
+    transition: none !important;
+    animation: none !important;
+  }
+  
+  .packages-cta-button:active {
+    transform: none;
+  }
+}
+
+/* Focus management */
+.packages-cta-button:focus-visible {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Ensure proper stacking context */
+.packages-cta-bar {
+  isolation: isolate;
+}
+
+/* Prevent text selection on CTA */
+.packages-cta-bar {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+/* Smooth scrolling when CTA is tapped and form scrolls */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Ensure form doesn't get hidden behind CTA */
+.packages-search-form {
+  padding-bottom: 100px; /* Space for sticky CTA */
+}
+
+/* Hide native browser autocomplete styling */
+.packages-cta-bar input,
+.packages-cta-bar select,
+.packages-cta-bar button {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+/* Performance optimizations */
+.packages-cta-bar {
+  contain: layout style paint;
+  will-change: transform;
+}
+
+/* Network status integration */
+.packages-cta-bar.offline {
+  background-color: #fee2e2;
+  border-top-color: #fecaca;
+}
+
+.packages-cta-bar.offline .packages-cta-button {
+  background-color: #9ca3af;
+  cursor: not-allowed;
+}
+
+/* Success state for completed searches */
+.packages-cta-bar.success {
+  background-color: #d1fae5;
+  border-top-color: #a7f3d0;
+}
+
+/* Error state */
+.packages-cta-bar.error {
+  background-color: #fee2e2;
+  border-top-color: #fecaca;
+  animation: shake 0.5s ease-in-out;
+}
+
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-5px); }
+  75% { transform: translateX(5px); }
+}
+
+/* Haptic feedback simulation */
+.packages-cta-button.haptic-feedback:active {
+  animation: haptic-pulse 0.1s ease-out;
+}
+
+@keyframes haptic-pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 320px) {
+  .packages-cta-bar {
+    padding: 8px;
+    padding-bottom: calc(8px + env(safe-area-inset-bottom, 0px));
+  }
+  
+  .packages-selection-summary {
+    font-size: 11px;
+  }
+}
+
+@media screen and (min-width: 641px) {
+  /* Hide sticky CTA on larger screens */
+  .packages-cta-bar {
+    display: none;
+  }
+}
+
+/* Print styles */
+@media print {
+  .packages-cta-bar {
+    display: none;
+  }
+}
