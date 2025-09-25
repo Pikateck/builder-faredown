@@ -308,7 +308,7 @@ export function PackagesSearchForm() {
                               {region.name}
                             </div>
                             <div className="text-sm text-gray-500">
-                              Level {region.level}
+                              {region.level.charAt(0).toUpperCase() + region.level.slice(1)}
                             </div>
                           </div>
                         </button>
