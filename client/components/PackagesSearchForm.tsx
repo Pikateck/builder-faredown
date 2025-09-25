@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "@/contexts/SearchContext";
 import { Button } from "@/components/ui/button";
@@ -9,9 +9,10 @@ import {
 } from "@/components/ui/popover";
 import { StableBookingCalendar } from "@/components/StableBookingCalendar";
 import { format, addDays } from "date-fns";
-import { CalendarIcon, Search, Globe } from "lucide-react";
+import { CalendarIcon, Search, Globe, AlertCircle } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import { DestinationDropdown } from "@/components/ui/DestinationDropdown";
+import { z } from "zod";
 
 interface DestinationOption {
   name: string;
@@ -19,11 +20,28 @@ interface DestinationOption {
   type: 'city' | 'country' | 'region';
 }
 
+// Form validation schema
+const packagesSearchSchema = z.object({
+  destination: z.object({
+    name: z.string().min(1, "Destination is required"),
+    code: z.string().min(1, "Destination code is required"),
+    type: z.enum(['city', 'country', 'region'])
+  }, { required_error: "Please select a destination" }),
+  departureDate: z.date().optional(),
+  returnDate: z.date().optional(),
+  duration: z.string(),
+  budget: z.string(),
+  category: z.string()
+});
+
+type PackagesSearchFormData = z.infer<typeof packagesSearchSchema>;
+
 export function PackagesSearchForm() {
   const navigate = useNavigate();
   const { updateSearchParams } = useSearch();
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Destination state using shared component
   const [selectedDestination, setSelectedDestination] = useState<DestinationOption | null>(null);
@@ -51,43 +69,96 @@ export function PackagesSearchForm() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  const handleSearch = () => {
-    // Validate form
-    if (!selectedDestination) {
-      setErrorMessage("Please select a destination");
-      setShowError(true);
-      return;
+  // Form validation
+  const isFormValid = Boolean(selectedDestination?.name && selectedDestination?.code);
+  
+  // Analytics tracking
+  const trackSearchAttempt = useCallback((valid: boolean, missingFields: string[] = []) => {
+    try {
+      // Track analytics event
+      if (typeof window !== 'undefined' && (window as any).gtag) {
+        (window as any).gtag('event', 'search_cta_click', {
+          module: 'packages',
+          form_valid: valid,
+          missing_fields: missingFields.join(','),
+          destination_type: selectedDestination?.type || 'none'
+        });
+      }
+    } catch (error) {
+      console.warn('Analytics tracking failed:', error);
     }
+  }, [selectedDestination]);
 
-    if (!departureDate) {
-      setErrorMessage("Please select departure date");
-      setShowError(true);
-      return;
-    }
-
-    // Clear any existing errors
+  const handleSearch = useCallback(async (e?: React.FormEvent) => {
+    e?.preventDefault();
+    
+    // Prevent double submission
+    if (isSubmitting) return;
+    
+    // Clear previous errors
     setShowError(false);
     setErrorMessage("");
 
-    // Build search parameters
-    const searchData: any = {
-      departure_date: departureDate ? format(departureDate, "yyyy-MM-dd") : undefined,
-      return_date: returnDate ? format(returnDate, "yyyy-MM-dd") : undefined,
+    // Validate form using Zod schema
+    const formData = {
+      destination: selectedDestination,
+      departureDate,
+      returnDate,
       duration,
       budget,
-      category,
-      module: "packages",
-      destination: selectedDestination.name,
-      destination_code: selectedDestination.code,
-      destination_type: selectedDestination.type,
+      category
     };
 
-    // Update search context
-    updateSearchParams(searchData);
+    const validation = packagesSearchSchema.safeParse(formData);
+    
+    if (!validation.success) {
+      const missingFields = [];
+      if (!selectedDestination) missingFields.push('destination');
+      
+      setErrorMessage(validation.error.errors[0]?.message || "Please select a destination");
+      setShowError(true);
+      trackSearchAttempt(false, missingFields);
+      return;
+    }
 
-    // Navigate to results page
-    navigate("/packages/results");
-  };
+    setIsSubmitting(true);
+    trackSearchAttempt(true);
+
+    try {
+      // Build search parameters
+      const searchData: any = {
+        departure_date: departureDate ? format(departureDate, "yyyy-MM-dd") : undefined,
+        return_date: returnDate ? format(returnDate, "yyyy-MM-dd") : undefined,
+        duration,
+        budget,
+        category,
+        module: "packages",
+        destination: selectedDestination!.name,
+        destination_code: selectedDestination!.code,
+        destination_type: selectedDestination!.type,
+      };
+
+      // Update search context
+      updateSearchParams(searchData);
+
+      // Navigate to results page
+      navigate("/packages/results");
+    } catch (error) {
+      console.error('Search navigation failed:', error);
+      setErrorMessage("Search failed. Please try again.");
+      setShowError(true);
+    } finally {
+      setIsSubmitting(false);
+    }
+  }, [selectedDestination, departureDate, returnDate, duration, budget, category, updateSearchParams, navigate, isSubmitting, trackSearchAttempt]);
+
+  // Handle Enter key submission
+  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && isFormValid && !isSubmitting) {
+      e.preventDefault();
+      handleSearch();
+    }
+  }, [handleSearch, isFormValid, isSubmitting]);
 
   return (
     <div className="w-full">
@@ -101,10 +172,16 @@ export function PackagesSearchForm() {
         </div>
       )}
 
-      {/* Search Form - Matching Sightseeing Layout */}
-      <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
+      {/* Search Form - Enhanced with proper form semantics */}
+      <form 
+        onSubmit={handleSearch}
+        onKeyDown={handleKeyDown}
+        className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200"
+        role="search"
+        aria-label="Search packages form"
+      >
         {/* Main Search Form Row */}
-        <div className="flex flex-col lg:flex-row gap-2 mb-4">
+        <div className="flex flex-col lg:flex-row gap-2 mb-4 lg:items-end">
           
           {/* Destination Dropdown - Using Shared Component */}
           <DestinationDropdown
@@ -124,6 +201,7 @@ export function PackagesSearchForm() {
             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
               <PopoverTrigger asChild>
                 <Button
+                  type="button"
                   variant="outline"
                   className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3"
                 >
@@ -175,15 +253,32 @@ export function PackagesSearchForm() {
             </Popover>
           </div>
 
-          {/* Search Button */}
-          <div className="flex-shrink-0 w-full sm:w-auto">
+          {/* Search Button - Moved to end of form row */}
+          <div className="flex-shrink-0 w-full lg:w-auto">
             <Button
-              onClick={handleSearch}
-              className="h-10 sm:h-12 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
+              type="submit"
+              disabled={!isFormValid || isSubmitting}
+              aria-disabled={!isFormValid || isSubmitting}
+              className={
+                `h-10 sm:h-12 w-full lg:w-auto font-bold rounded px-6 sm:px-8 transition-all duration-150 min-w-[44px] ${
+                  !isFormValid || isSubmitting
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed hover:bg-gray-300'
+                    : 'bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black'
+                }`
+              }
+              title={!isFormValid ? "Choose a destination to search" : "Search packages"}
             >
               <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-sm sm:text-base">Search Packages</span>
+              <span className="text-sm sm:text-base">
+                {isSubmitting ? 'Searching...' : 'Search Packages'}
+              </span>
             </Button>
+            {!isFormValid && (
+              <div className="mt-1 flex items-center text-xs text-gray-500" role="status" aria-live="polite">
+                <AlertCircle className="w-3 h-3 mr-1" />
+                <span>Choose a destination to search</span>
+              </div>
+            )}
           </div>
         </div>
 
@@ -191,10 +286,11 @@ export function PackagesSearchForm() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Duration Filter */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="duration-select" className="block text-sm font-medium text-gray-700 mb-2">
               Duration
             </label>
             <select
+              id="duration-select"
               value={duration}
               onChange={(e) => setDuration(e.target.value)}
               className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
@@ -209,10 +305,11 @@ export function PackagesSearchForm() {
 
           {/* Budget */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="budget-select" className="block text-sm font-medium text-gray-700 mb-2">
               Budget (per person)
             </label>
             <select
+              id="budget-select"
               value={budget}
               onChange={(e) => setBudget(e.target.value)}
               className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
@@ -228,10 +325,11 @@ export function PackagesSearchForm() {
 
           {/* Category */}
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
+            <label htmlFor="category-select" className="block text-sm font-medium text-gray-700 mb-2">
               Package Type
             </label>
             <select
+              id="category-select"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
               className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
@@ -247,7 +345,7 @@ export function PackagesSearchForm() {
             </select>
           </div>
         </div>
-      </div>
+      </form>
     </div>
   );
 }
