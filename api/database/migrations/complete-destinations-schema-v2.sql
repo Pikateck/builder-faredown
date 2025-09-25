@@ -73,7 +73,7 @@ SELECT
   CONCAT(c.name, ', ', co.name) AS label_with_country,
   co.name AS country,
   r.name AS region,
-  COALESCE(co.iso2, '') AS code,
+  COALESCE(co.iso2::TEXT, '') AS code,
   c.is_active AND co.is_active AND COALESCE(r.is_active, true) AS is_active,
   c.is_package_destination,
   c.sort_order
@@ -90,7 +90,7 @@ SELECT
   co.name,
   NULL AS country,
   r.name AS region,
-  COALESCE(co.iso2, '') AS code,
+  COALESCE(co.iso2::TEXT, '') AS code,
   co.is_active AND COALESCE(r.is_active, true),
   true AS is_package_destination,  -- countries are always package destinations
   co.sort_order
