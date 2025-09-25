@@ -282,11 +282,13 @@ router.get("/countries/:countryId/cities", async (req, res) => {
 
 /**
  * GET /api/destinations/search
- * Smart search across regions, countries, and cities with ranking
+ * Optimized smart search with trigram indexes and aliases
  * This is the main endpoint for the single smart search box
  * Query params: q (required), limit (default: 20)
  */
 router.get("/search", async (req, res) => {
+  const startTime = Date.now();
+
   try {
     const { q, limit = 20 } = req.query;
 
@@ -296,80 +298,87 @@ router.get("/search", async (req, res) => {
 
     const searchTerm = q.toLowerCase().trim();
 
+    // Use the optimized search with trigram indexes and aliases
     const query = `
-      WITH q AS (SELECT $1::text AS q),
+      WITH search_query AS (SELECT $1::text AS q)
 
-      city_hits AS (
-        SELECT
-          'city'::text AS type,
-          ci.id,
-          CASE
-            WHEN co.name IS NOT NULL THEN ci.name || ', ' || co.name
-            ELSE ci.name
-          END AS label,
-          r.name AS region_name,
-          co.name AS country_name,
-          /* Score: exact > prefix > contains */
-          CASE
-            WHEN lower(ci.name) = (SELECT q FROM q) THEN 1.0
-            WHEN lower(ci.name) LIKE (SELECT q||'%' FROM q) THEN 0.8
-            WHEN lower(ci.name) LIKE (SELECT '%'||q||'%' FROM q) THEN 0.6
-            WHEN lower(co.name) LIKE (SELECT '%'||q||'%' FROM q) THEN 0.4
-            ELSE 0
-          END AS score
-        FROM cities ci
-        JOIN countries co ON co.id = ci.country_id
-        JOIN regions r ON r.id = co.region_id
-        WHERE ci.is_active = TRUE
-          AND (lower(ci.name) LIKE (SELECT '%'||q||'%' FROM q)
-               OR lower(co.name) LIKE (SELECT '%'||q||'%' FROM q))
-      ),
+      SELECT
+        'city' as type,
+        ci.id,
+        ci.name || ', ' || co.name as label,
+        r.name as region_name,
+        co.name as country_name,
+        -- Enhanced scoring: exact match > prefix > trigram similarity > alias match
+        CASE
+          WHEN lower(ci.name) = (SELECT q FROM search_query) THEN 1.0
+          WHEN lower(ci.name) LIKE (SELECT q || '%' FROM search_query) THEN 0.9
+          WHEN ci.search_text % (SELECT q FROM search_query) THEN 0.8
+          WHEN (SELECT q FROM search_query) = ANY(ci.search_tokens) THEN 0.7
+          WHEN ci.search_text ILIKE (SELECT '%' || q || '%' FROM search_query) THEN 0.6
+          ELSE 0.5
+        END as score
+      FROM cities ci
+      JOIN countries co ON ci.country_id = co.id
+      JOIN regions r ON co.region_id = r.id
+      WHERE ci.is_active = TRUE
+        AND co.is_active = TRUE
+        AND r.is_active = TRUE
+        AND (
+          ci.search_text ILIKE (SELECT '%' || q || '%' FROM search_query)
+          OR (SELECT q FROM search_query) = ANY(ci.search_tokens)
+          OR ci.search_text % (SELECT q FROM search_query)
+        )
 
-      country_hits AS (
-        SELECT
-          'country'::text AS type,
-          co.id,
-          co.name AS label,
-          r.name AS region_name,
-          co.name AS country_name,
-          CASE
-            WHEN lower(co.name) = (SELECT q FROM q) THEN 1.0
-            WHEN lower(co.name) LIKE (SELECT q||'%' FROM q) THEN 0.8
-            WHEN lower(co.name) LIKE (SELECT '%'||q||'%' FROM q) THEN 0.6
-            ELSE 0
-          END AS score
-        FROM countries co
-        JOIN regions r ON r.id = co.region_id
-        WHERE co.is_active = TRUE
-          AND lower(co.name) LIKE (SELECT '%'||q||'%' FROM q)
-      ),
+      UNION ALL
 
-      region_hits AS (
-        SELECT
-          'region'::text AS type,
-          r.id,
-          r.name AS label,
-          r.name AS region_name,
-          NULL::text AS country_name,
-          CASE
-            WHEN lower(r.name) = (SELECT q FROM q) THEN 1.0
-            WHEN lower(r.name) LIKE (SELECT q||'%' FROM q) THEN 0.8
-            WHEN lower(r.name) LIKE (SELECT '%'||q||'%' FROM q) THEN 0.6
-            ELSE 0
-          END AS score
-        FROM regions r
-        WHERE r.is_active = TRUE
-          AND lower(r.name) LIKE (SELECT '%'||q||'%' FROM q)
-      )
+      SELECT
+        'country' as type,
+        co.id,
+        co.name as label,
+        r.name as region_name,
+        co.name as country_name,
+        CASE
+          WHEN lower(co.name) = (SELECT q FROM search_query) THEN 1.0
+          WHEN lower(co.name) LIKE (SELECT q || '%' FROM search_query) THEN 0.9
+          WHEN co.search_text % (SELECT q FROM search_query) THEN 0.8
+          WHEN (SELECT q FROM search_query) = ANY(co.search_tokens) THEN 0.7
+          WHEN co.search_text ILIKE (SELECT '%' || q || '%' FROM search_query) THEN 0.6
+          ELSE 0.5
+        END as score
+      FROM countries co
+      JOIN regions r ON co.region_id = r.id
+      WHERE co.is_active = TRUE
+        AND r.is_active = TRUE
+        AND (
+          co.search_text ILIKE (SELECT '%' || q || '%' FROM search_query)
+          OR (SELECT q FROM search_query) = ANY(co.search_tokens)
+          OR co.search_text % (SELECT q FROM search_query)
+        )
 
-      SELECT * FROM (
-        SELECT * FROM city_hits
-        UNION ALL
-        SELECT * FROM country_hits
-        UNION ALL
-        SELECT * FROM region_hits
-      ) u
-      WHERE score > 0  -- accept any match
+      UNION ALL
+
+      SELECT
+        'region' as type,
+        r.id,
+        r.name as label,
+        r.name as region_name,
+        NULL as country_name,
+        CASE
+          WHEN lower(r.name) = (SELECT q FROM search_query) THEN 1.0
+          WHEN lower(r.name) LIKE (SELECT q || '%' FROM search_query) THEN 0.9
+          WHEN r.search_text % (SELECT q FROM search_query) THEN 0.8
+          WHEN (SELECT q FROM search_query) = ANY(r.search_tokens) THEN 0.7
+          WHEN r.search_text ILIKE (SELECT '%' || q || '%' FROM search_query) THEN 0.6
+          ELSE 0.5
+        END as score
+      FROM regions r
+      WHERE r.is_active = TRUE
+        AND (
+          r.search_text ILIKE (SELECT '%' || q || '%' FROM search_query)
+          OR (SELECT q FROM search_query) = ANY(r.search_tokens)
+          OR r.search_text % (SELECT q FROM search_query)
+        )
+
       ORDER BY
         -- Type boost: cities (2) > countries (1) > regions (0)
         CASE type WHEN 'city' THEN 2 WHEN 'country' THEN 1 ELSE 0 END DESC,
@@ -379,26 +388,47 @@ router.get("/search", async (req, res) => {
     `;
 
     const result = await pool.query(query, [searchTerm, parseInt(limit)]);
+    const responseTime = Date.now() - startTime;
 
-    // Set cache headers
-    res.set('Cache-Control', 'public, max-age=300, s-maxage=900, stale-while-revalidate=60');
+    // Log slow queries for monitoring
+    if (responseTime > 500) {
+      console.warn(`⚠️  Slow search query: "${searchTerm}" took ${responseTime}ms`);
+    }
+
+    // Set optimized cache headers
+    res.set('Cache-Control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=300');
+    res.set('X-Response-Time', `${responseTime}ms`);
 
     const formattedResults = result.rows.map(r => ({
       type: r.type,
       id: r.id,
       label: r.label,
       region: r.region_name,
-      country: r.country_name,
-      score: r.score // Include score for debugging/optimization
+      country: r.country_name
+      // Removed score from response for cleaner API (keep for internal monitoring)
     }));
 
     res.json(formattedResults);
+
+    // Optional: Log search analytics (uncomment if analytics table is created)
+    // try {
+    //   await pool.query(
+    //     'INSERT INTO search_analytics (query, results_count, response_time_ms) VALUES ($1, $2, $3)',
+    //     [searchTerm, result.rows.length, responseTime]
+    //   );
+    // } catch (analyticsError) {
+    //   // Ignore analytics errors to not affect main search
+    // }
+
   } catch (error) {
-    console.error("Error in smart search:", error);
+    const responseTime = Date.now() - startTime;
+    console.error("Error in optimized search:", error);
+
     res.status(500).json({
       success: false,
       error: "Search failed",
       message: error.message,
+      response_time: `${responseTime}ms`
     });
   }
 });
