@@ -1,0 +1,14 @@
+region_id,name,parent_region_id,type,aliases
+REG-WORLD,World,,world,"globe,earth,planet"
+REG-AFRICA,Africa,REG-WORLD,region,
+REG-AMERICAS,America,REG-WORLD,region,Americas
+REG-ASIA,Asia,REG-WORLD,region,
+REG-ANZ,Australia & New Zealand,REG-WORLD,region,"ANZ,Australia and New Zealand,Oceania"
+REG-EUROPE,Europe,REG-WORLD,region,
+REG-MIDEAST,Middle East,REG-WORLD,region,"Gulf,Middle-East,West Asia"
+REG-ANTARCTICA,Antarctica,REG-WORLD,region,7th Continent
+REG-INDIA,India,REG-ASIA,country_region,
+REG-IND-NORTH,North India,REG-INDIA,subregion,
+REG-IND-SOUTH,South India,REG-INDIA,subregion,
+REG-IND-ENE,East & North East India,REG-INDIA,subregion,"ENE India,East and North East India"
+REG-IND-RWC,"Rajasthan, West & Central India",REG-INDIA,subregion,"Rajasthan West & Central India,West & Central India"
