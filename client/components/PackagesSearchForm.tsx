@@ -292,7 +292,7 @@ export function PackagesSearchForm() {
           </div>
 
           {/* Category */}
-          <div className="lg:col-span-1">
+          <div className="flex-1">
             <label htmlFor="category-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Package Type
             </label>
