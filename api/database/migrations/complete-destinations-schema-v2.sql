@@ -106,7 +106,7 @@ SELECT
   r.name,
   NULL,
   NULL,
-  COALESCE(r.code,'') AS code,
+  COALESCE(r.code::TEXT,'') AS code,
   r.is_active,
   true AS is_package_destination,  -- regions are always package destinations
   r.sort_order
