@@ -25,13 +25,8 @@ export function PackagesSearchForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
-  // Smart search state - matching Sightseeing UX
-  const [selectedDestination, setSelectedDestination] = useState<SelectedDestination | null>(null);
-  const [destinationInputValue, setDestinationInputValue] = useState("");
-  const [isDestinationOpen, setIsDestinationOpen] = useState(false);
-  const [searchResults, setSearchResults] = useState<DestinationSearchResult[]>([]);
-  const [loadingSearch, setLoadingSearch] = useState(false);
-  const [isUserTyping, setIsUserTyping] = useState(false);
+  // Destination state using shared component
+  const [selectedDestination, setSelectedDestination] = useState<DestinationOption | null>(null);
 
   // Dates
   const [departureDate, setDepartureDate] = useState<Date | undefined>(undefined);
