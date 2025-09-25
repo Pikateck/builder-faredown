@@ -272,7 +272,7 @@ export function PackagesSearchForm() {
           </div>
 
           {/* Budget */}
-          <div className="lg:col-span-1">
+          <div className="flex-1">
             <label htmlFor="budget-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Budget (per person)
             </label>
