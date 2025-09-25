@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSearch } from "@/contexts/SearchContext";
 import { Button } from "@/components/ui/button";
@@ -10,52 +10,42 @@ import {
 } from "@/components/ui/popover";
 import { StableBookingCalendar } from "@/components/StableBookingCalendar";
 import { format, addDays } from "date-fns";
-import { MapPin, CalendarIcon, Search, X, Users, Globe } from "lucide-react";
+import { MapPin, CalendarIcon, Search, X, Globe, Building2 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 
-interface Region {
+interface DestinationSearchResult {
+  type: 'region' | 'country' | 'city';
   id: string;
-  name: string;
-  level: string;
-  parent_id: string | null;
-  sort_order: number;
+  label: string;
+  region: string;
+  country?: string;
+  score?: number;
 }
 
-interface City {
+interface SelectedDestination {
+  type: 'region' | 'country' | 'city';
   id: string;
-  name: string;
-  code: string;
-  country: {
-    id: string;
-    name: string;
-    iso: string;
-  };
+  label: string;
+  region: string;
+  country?: string;
 }
 
 export function PackagesSearchForm() {
   const navigate = useNavigate();
-  const { updateSearchParams, getDisplayData, searchParams } = useSearch();
+  const { updateSearchParams } = useSearch();
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
-  // Region state
-  const [selectedRegion, setSelectedRegion] = useState<Region | null>(null);
-  const [regionInputValue, setRegionInputValue] = useState("");
-  const [isRegionOpen, setIsRegionOpen] = useState(false);
-  const [regions, setRegions] = useState<Region[]>([]);
-  const [loadingRegions, setLoadingRegions] = useState(false);
-
-  // City state
-  const [selectedCity, setSelectedCity] = useState<City | null>(null);
-  const [cityInputValue, setCityInputValue] = useState("");
-  const [isCityOpen, setIsCityOpen] = useState(false);
-  const [cities, setCities] = useState<City[]>([]);
-  const [loadingCities, setLoadingCities] = useState(false);
+  // Smart search state
+  const [selectedDestination, setSelectedDestination] = useState<SelectedDestination | null>(null);
+  const [destinationInputValue, setDestinationInputValue] = useState("");
+  const [isDestinationOpen, setIsDestinationOpen] = useState(false);
+  const [searchResults, setSearchResults] = useState<DestinationSearchResult[]>([]);
+  const [loadingSearch, setLoadingSearch] = useState(false);
+  const [isUserTyping, setIsUserTyping] = useState(false);
 
   // Dates
-  const [departureDate, setDepartureDate] = useState<Date | undefined>(
-    undefined,
-  );
+  const [departureDate, setDepartureDate] = useState<Date | undefined>(undefined);
   const [returnDate, setReturnDate] = useState<Date | undefined>(undefined);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
@@ -77,115 +67,107 @@ export function PackagesSearchForm() {
     return () => window.removeEventListener("resize", checkMobile);
   }, []);
 
-  // Load regions on component mount
-  useEffect(() => {
-    loadRegions();
-  }, []);
+  // Debounced search function
+  const debounceTimeout = React.useRef<NodeJS.Timeout | null>(null);
 
-  // Load regions
-  const loadRegions = async (query = "") => {
-    setLoadingRegions(true);
+  const performSearch = useCallback(async (query: string) => {
+    if (!query.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    setLoadingSearch(true);
     try {
-      const params = new URLSearchParams();
-      if (query) params.append("q", query);
-
-      const response = await fetch(`/api/destinations/regions?${params}`, {
+      const response = await fetch(`/api/destinations/search?q=${encodeURIComponent(query)}&limit=15`, {
         credentials: "include",
       });
 
       if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          setRegions(result.data.items || []);
-        }
+        const results = await response.json();
+        setSearchResults(Array.isArray(results) ? results : []);
+      } else {
+        console.error("Search failed:", response.status);
+        setSearchResults([]);
       }
     } catch (error) {
-      console.error("Error loading regions:", error);
+      console.error("Error searching destinations:", error);
+      setSearchResults([]);
     }
-    setLoadingRegions(false);
-  };
+    setLoadingSearch(false);
+  }, []);
 
-  // Load cities for selected region
-  const loadCitiesForRegion = async (regionId: string, query = "") => {
-    setLoadingCities(true);
-    try {
-      const params = new URLSearchParams();
-      if (query) params.append("q", query);
+  // Handle destination input change with debouncing
+  const handleDestinationInputChange = (value: string) => {
+    setDestinationInputValue(value);
+    setIsUserTyping(true);
 
-      const response = await fetch(
-        `/api/destinations/regions/${regionId}/cities?${params}`,
-        {
-          credentials: "include",
-        },
-      );
-
-      if (response.ok) {
-        const result = await response.json();
-        if (result.success) {
-          setCities(result.data.items || []);
-        }
-      }
-    } catch (error) {
-      console.error("Error loading cities:", error);
+    // Clear existing timeout
+    if (debounceTimeout.current) {
+      clearTimeout(debounceTimeout.current);
     }
-    setLoadingCities(false);
+
+    // Set new timeout for debounced search
+    debounceTimeout.current = setTimeout(() => {
+      setIsUserTyping(false);
+      performSearch(value);
+    }, 300); // 300ms debounce
   };
 
-  // Handle region input change
-  const handleRegionInputChange = (value: string) => {
-    setRegionInputValue(value);
-    loadRegions(value);
+  // Handle destination selection
+  const handleDestinationSelect = (destination: DestinationSearchResult) => {
+    const selected: SelectedDestination = {
+      type: destination.type,
+      id: destination.id,
+      label: destination.label,
+      region: destination.region,
+      country: destination.country,
+    };
+
+    setSelectedDestination(selected);
+    setDestinationInputValue(destination.label);
+    setIsDestinationOpen(false);
+    setSearchResults([]);
   };
 
-  // Handle city input change
-  const handleCityInputChange = (value: string) => {
-    setCityInputValue(value);
-    if (selectedRegion) {
-      loadCitiesForRegion(selectedRegion.id, value);
+  // Clear destination selection
+  const handleClearDestination = () => {
+    setSelectedDestination(null);
+    setDestinationInputValue("");
+    setSearchResults([]);
+  };
+
+  // Get icon for destination type
+  const getDestinationIcon = (type: string) => {
+    switch (type) {
+      case 'city':
+        return <Building2 className="h-4 w-4 text-blue-500" />;
+      case 'country':
+        return <MapPin className="h-4 w-4 text-green-500" />;
+      case 'region':
+        return <Globe className="h-4 w-4 text-purple-500" />;
+      default:
+        return <MapPin className="h-4 w-4 text-gray-500" />;
     }
   };
 
-  // Handle region selection
-  const handleRegionSelect = (region: Region) => {
-    setSelectedRegion(region);
-    setRegionInputValue(region.name);
-    setIsRegionOpen(false);
-
-    // Clear city selection when region changes
-    setSelectedCity(null);
-    setCityInputValue("");
-    setCities([]);
-
-    // Load cities for this region
-    loadCitiesForRegion(region.id);
-  };
-
-  // Handle city selection
-  const handleCitySelect = (city: City) => {
-    setSelectedCity(city);
-    setCityInputValue(city.name);
-    setIsCityOpen(false);
-  };
-
-  // Clear region selection
-  const handleClearRegion = () => {
-    setSelectedRegion(null);
-    setRegionInputValue("");
-    setSelectedCity(null);
-    setCityInputValue("");
-    setCities([]);
-  };
-
-  // Clear city selection
-  const handleClearCity = () => {
-    setSelectedCity(null);
-    setCityInputValue("");
+  // Get type label for display
+  const getTypeLabel = (type: string) => {
+    switch (type) {
+      case 'city':
+        return 'City';
+      case 'country':
+        return 'Country';
+      case 'region':
+        return 'Region';
+      default:
+        return '';
+    }
   };
 
   const handleSearch = () => {
     // Validate form
-    if (!selectedRegion) {
-      setErrorMessage("Please select a region");
+    if (!selectedDestination) {
+      setErrorMessage("Please select a destination");
       setShowError(true);
       return;
     }
@@ -200,15 +182,9 @@ export function PackagesSearchForm() {
     setShowError(false);
     setErrorMessage("");
 
-    // Build search parameters
-    const searchData = {
-      region_id: selectedRegion.id,
-      region_name: selectedRegion.name,
-      city_id: selectedCity?.id,
-      city_name: selectedCity?.name,
-      departure_date: departureDate
-        ? format(departureDate, "yyyy-MM-dd")
-        : undefined,
+    // Build search parameters based on destination type
+    const searchData: any = {
+      departure_date: departureDate ? format(departureDate, "yyyy-MM-dd") : undefined,
       return_date: returnDate ? format(returnDate, "yyyy-MM-dd") : undefined,
       duration,
       budget,
@@ -216,12 +192,36 @@ export function PackagesSearchForm() {
       module: "packages",
     };
 
+    // Set destination data based on type
+    if (selectedDestination.type === 'city') {
+      searchData.city_id = selectedDestination.id;
+      searchData.city_name = selectedDestination.label;
+      searchData.region_name = selectedDestination.region;
+      searchData.country_name = selectedDestination.country;
+    } else if (selectedDestination.type === 'country') {
+      searchData.country_id = selectedDestination.id;
+      searchData.country_name = selectedDestination.label;
+      searchData.region_name = selectedDestination.region;
+    } else if (selectedDestination.type === 'region') {
+      searchData.region_id = selectedDestination.id;
+      searchData.region_name = selectedDestination.label;
+    }
+
     // Update search context
     updateSearchParams(searchData);
 
     // Navigate to results page
     navigate("/packages/results");
   };
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (debounceTimeout.current) {
+        clearTimeout(debounceTimeout.current);
+      }
+    };
+  }, []);
 
   return (
     <div className="w-full">
@@ -237,37 +237,40 @@ export function PackagesSearchForm() {
 
       {/* Search Form */}
       <div className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Region */}
-          <div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {/* Smart Destination Search */}
+          <div className="md:col-span-1">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Region
+              Where do you want to go?
             </label>
-            <Popover open={isRegionOpen} onOpenChange={setIsRegionOpen}>
+            <Popover open={isDestinationOpen} onOpenChange={setIsDestinationOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"
                   className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3"
                 >
                   <div className="flex items-center w-full">
-                    <Globe className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
+                    <Search className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
                     <div className="flex-1 min-w-0">
-                      {selectedRegion ? (
-                        <span className="text-gray-900 truncate">
-                          {selectedRegion.name}
-                        </span>
+                      {selectedDestination ? (
+                        <div className="flex items-center">
+                          {getDestinationIcon(selectedDestination.type)}
+                          <span className="ml-2 text-gray-900 truncate">
+                            {selectedDestination.label}
+                          </span>
+                        </div>
                       ) : (
                         <span className="text-gray-500 truncate">
-                          Select region...
+                          Search destinations...
                         </span>
                       )}
                     </div>
-                    {selectedRegion && (
+                    {selectedDestination && (
                       <X
                         className="ml-2 h-4 w-4 text-gray-400 hover:text-gray-600 flex-shrink-0"
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleClearRegion();
+                          handleClearDestination();
                         }}
                       />
                     )}
@@ -279,127 +282,52 @@ export function PackagesSearchForm() {
                   <div className="relative">
                     <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
-                      placeholder="Search regions..."
-                      value={regionInputValue}
-                      onChange={(e) => handleRegionInputChange(e.target.value)}
+                      placeholder="Type region, country, or city..."
+                      value={destinationInputValue}
+                      onChange={(e) => handleDestinationInputChange(e.target.value)}
                       className="pl-10"
                       autoFocus
                     />
                   </div>
                   <div className="mt-4 max-h-60 overflow-y-auto">
-                    {loadingRegions ? (
+                    {loadingSearch || isUserTyping ? (
                       <div className="px-3 py-2 text-gray-500 text-sm">
-                        Loading regions...
+                        Searching destinations...
                       </div>
-                    ) : regions.length === 0 ? (
+                    ) : searchResults.length === 0 ? (
                       <div className="px-3 py-2 text-gray-500 text-sm">
-                        No regions found
-                      </div>
-                    ) : (
-                      regions.map((region) => (
-                        <button
-                          key={region.id}
-                          onClick={() => handleRegionSelect(region)}
-                          className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md flex items-center"
-                        >
-                          <Globe className="mr-3 h-4 w-4 text-gray-400" />
-                          <div>
-                            <div className="font-medium text-gray-900">
-                              {region.name}
-                            </div>
-                            <div className="text-sm text-gray-500">
-                              {region.level.charAt(0).toUpperCase() + region.level.slice(1)}
-                            </div>
-                          </div>
-                        </button>
-                      ))
-                    )}
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          {/* City */}
-          <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">
-              City
-            </label>
-            <Popover open={isCityOpen} onOpenChange={setIsCityOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  disabled={!selectedRegion}
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3 disabled:border-gray-300 disabled:bg-gray-50"
-                >
-                  <div className="flex items-center w-full">
-                    <MapPin className="mr-2 h-4 w-4 flex-shrink-0 text-gray-500" />
-                    <div className="flex-1 min-w-0">
-                      {selectedCity ? (
-                        <span className="text-gray-900 truncate">
-                          {selectedCity.name}
-                        </span>
-                      ) : (
-                        <span className="text-gray-500 truncate">
-                          {selectedRegion
-                            ? "Select city..."
-                            : "Select a region first"}
-                        </span>
-                      )}
-                    </div>
-                    {selectedCity && (
-                      <X
-                        className="ml-2 h-4 w-4 text-gray-400 hover:text-gray-600 flex-shrink-0"
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          handleClearCity();
-                        }}
-                      />
-                    )}
-                  </div>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 p-0" align="start">
-                <div className="p-4">
-                  <div className="relative">
-                    <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    <Input
-                      placeholder="Search cities..."
-                      value={cityInputValue}
-                      onChange={(e) => handleCityInputChange(e.target.value)}
-                      className="pl-10"
-                      autoFocus
-                    />
-                  </div>
-                  <div className="mt-4 max-h-60 overflow-y-auto">
-                    {loadingCities ? (
-                      <div className="px-3 py-2 text-gray-500 text-sm">
-                        Loading cities...
-                      </div>
-                    ) : cities.length === 0 ? (
-                      <div className="px-3 py-2 text-gray-500 text-sm">
-                        {selectedRegion
-                          ? "No cities found in this region"
-                          : "Select a region first"}
+                        {destinationInputValue.trim() 
+                          ? "No destinations found. Try searching for a city, country, or region."
+                          : "Start typing to search destinations..."}
                       </div>
                     ) : (
-                      cities.map((city) => (
-                        <button
-                          key={city.id}
-                          onClick={() => handleCitySelect(city)}
-                          className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md flex items-center"
-                        >
-                          <MapPin className="mr-3 h-4 w-4 text-gray-400" />
-                          <div>
-                            <div className="font-medium text-gray-900">
-                              {city.name} {city.code && `(${city.code})`}
+                      <div className="space-y-1">
+                        {searchResults.map((result, index) => (
+                          <button
+                            key={`${result.type}-${result.id}-${index}`}
+                            onClick={() => handleDestinationSelect(result)}
+                            className="w-full text-left px-3 py-2 hover:bg-gray-100 rounded-md flex items-center group"
+                          >
+                            <div className="mr-3 flex-shrink-0">
+                              {getDestinationIcon(result.type)}
                             </div>
-                            <div className="text-sm text-gray-500">
-                              {city.country.name}
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-gray-900 truncate">
+                                {result.label}
+                              </div>
+                              <div className="text-sm text-gray-500 flex items-center">
+                                <span className="inline-flex items-center px-2 py-1 rounded-full text-xs bg-gray-100 text-gray-600 mr-2">
+                                  {getTypeLabel(result.type)}
+                                </span>
+                                {result.country && result.country !== result.region && (
+                                  <span>{result.country} • </span>
+                                )}
+                                <span>{result.region}</span>
+                              </div>
                             </div>
-                          </div>
-                        </button>
-                      ))
+                          </button>
+                        ))}
+                      </div>
                     )}
                   </div>
                 </div>
