@@ -50,7 +50,7 @@ export const useBookNowGuard = () => {
     // User is authenticated, proceed with booking
     onSuccess?.();
     return true;
-  }, [requireAuthForCheckout]);
+  }, [requireBookingAuth]);
 
   const createBookNowHandler = useCallback((context: BookNowContext) => {
     return () => {
