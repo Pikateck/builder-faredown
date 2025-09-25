@@ -60,6 +60,7 @@ export default function PackageResults() {
   const [pagination, setPagination] = useState<any>(null);
   const [facets, setFacets] = useState<any>(null);
   const [showFilters, setShowFilters] = useState(false);
+  const [viewMode, setViewMode] = useState<"grid" | "list">("list"); // Default to list view
 
   // Current filters from URL
   const currentFilters = {
