@@ -4,10 +4,9 @@
  */
 
 const { Pool } = require("pg");
-require("dotenv").config();
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
+  connectionString: "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db",
   ssl: { rejectUnauthorized: false },
 });
 
