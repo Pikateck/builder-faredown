@@ -186,18 +186,10 @@ export default function DestinationsManagement() {
     setLoading(true);
     try {
       const [regionsRes, countriesRes, citiesRes, statsRes] = await Promise.all([
-        fetch('/api/destinations/admin/regions', { 
-          headers: { 'X-Admin-Key': 'admin-key-placeholder' }
-        }),
-        fetch('/api/destinations/admin/countries', { 
-          headers: { 'X-Admin-Key': 'admin-key-placeholder' }
-        }),
-        fetch('/api/destinations/admin/cities', { 
-          headers: { 'X-Admin-Key': 'admin-key-placeholder' }
-        }),
-        fetch('/api/destinations/admin/stats', { 
-          headers: { 'X-Admin-Key': 'admin-key-placeholder' }
-        })
+        fetch('/api/destinations/regions'),
+        fetch('/api/destinations/countries'),
+        fetch('/api/destinations/cities'),
+        fetch('/api/destinations/stats')
       ]);
 
       if (regionsRes.ok) {
