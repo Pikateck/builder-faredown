@@ -303,12 +303,15 @@ router.get("/search", async (req, res) => {
         SELECT
           'city'::text AS type,
           ci.id,
-          ci.display_name AS label,
+          CASE
+            WHEN co.name IS NOT NULL THEN ci.name || ', ' || co.name
+            ELSE ci.name
+          END AS label,
           r.name AS region_name,
           co.name AS country_name,
           /* Score: prefix > trigram */
           (CASE WHEN lower(ci.name) LIKE (SELECT q||'%' FROM q) THEN 1.0 ELSE 0 END) * 0.7 +
-          GREATEST(similarity(lower(ci.name), (SELECT q FROM q)), similarity(lower(ci.display_name), (SELECT q FROM q))) * 0.3
+          GREATEST(similarity(lower(ci.name), (SELECT q FROM q)), similarity(lower(co.name), (SELECT q FROM q))) * 0.3
           AS score
         FROM cities ci
         JOIN countries co ON co.id = ci.country_id
