@@ -194,7 +194,7 @@ export function PackagesSearchForm() {
           />
 
           {/* Departure Date */}
-          <div className="flex-1 md:max-w-[240px]">
+          <div className="flex-1 lg:max-w-[280px]">
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Package Dates
             </label>
