@@ -344,12 +344,20 @@ export default function PackageResults() {
               </div>
             ) : (
               <>
-                {/* Packages Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-                  {packages.map((pkg) => (
-                    <PackageCard key={pkg.id} package={pkg} />
-                  ))}
-                </div>
+                {/* Packages Results */}
+                {viewMode === "grid" ? (
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                    {packages.map((pkg) => (
+                      <PackageCard key={pkg.id} package={pkg} />
+                    ))}
+                  </div>
+                ) : (
+                  <div className="space-y-4 mb-8">
+                    {packages.map((pkg) => (
+                      <PackageCardSimple key={pkg.id} package={pkg} />
+                    ))}
+                  </div>
+                )}
 
                 {/* Pagination */}
                 {pagination && pagination.total_pages > 1 && (
