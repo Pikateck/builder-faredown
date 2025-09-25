@@ -282,7 +282,7 @@ router.get("/countries/:countryId/cities", async (req, res) => {
 
 /**
  * GET /api/destinations/search
- * Optimized smart search with trigram indexes and aliases
+ * Fast smart search with aliases support
  * This is the main endpoint for the single smart search box
  * Query params: q (required), limit (default: 20)
  */
@@ -297,84 +297,76 @@ router.get("/search", async (req, res) => {
     }
 
     const searchTerm = q.toLowerCase().trim();
-
-    // Simplified search - use separate queries and combine in code for better performance
-    const cityQuery = `
-      SELECT
-        'city' as type,
-        ci.id,
-        ci.name || ', ' || co.name as label,
-        r.name as region_name,
-        co.name as country_name
-      FROM cities ci
-      JOIN countries co ON ci.country_id = co.id
-      JOIN regions r ON co.region_id = r.id
-      WHERE ci.is_active = TRUE
-        AND co.is_active = TRUE
-        AND r.is_active = TRUE
-        AND (
-          ci.search_text ILIKE $1
-          OR $2 = ANY(ci.search_tokens)
-        )
-      LIMIT 10
-    `;
-
-    const countryQuery = `
-      SELECT
-        'country' as type,
-        co.id,
-        co.name as label,
-        r.name as region_name,
-        co.name as country_name
-      FROM countries co
-      JOIN regions r ON co.region_id = r.id
-      WHERE co.is_active = TRUE
-        AND r.is_active = TRUE
-        AND (
-          co.search_text ILIKE $1
-          OR $2 = ANY(co.search_tokens)
-        )
-      LIMIT 5
-    `;
-
-    const regionQuery = `
-      SELECT
-        'region' as type,
-        r.id,
-        r.name as label,
-        r.name as region_name,
-        NULL as country_name
-      FROM regions r
-      WHERE r.is_active = TRUE
-        AND (
-          r.search_text ILIKE $1
-          OR $2 = ANY(r.search_tokens)
-        )
-      LIMIT 5
-    `;
-
-    // Execute all queries in parallel
     const searchPattern = `%${searchTerm}%`;
-    const [cityResults, countryResults, regionResults] = await Promise.all([
-      pool.query(cityQuery, [searchPattern, searchTerm]),
-      pool.query(countryQuery, [searchPattern, searchTerm]),
-      pool.query(regionQuery, [searchPattern, searchTerm])
-    ]);
 
-    // Combine and sort results (cities first, then countries, then regions)
-    const allResults = [
-      ...cityResults.rows,
-      ...countryResults.rows,
-      ...regionResults.rows
-    ];
+    // Simple, fast query that combines all searches in one go
+    const searchQuery = `
+      (
+        SELECT
+          'city' as type,
+          ci.id,
+          ci.name || ', ' || co.name as label,
+          r.name as region_name,
+          co.name as country_name,
+          1 as type_priority
+        FROM cities ci
+        JOIN countries co ON ci.country_id = co.id
+        JOIN regions r ON co.region_id = r.id
+        WHERE ci.is_active = TRUE
+          AND co.is_active = TRUE
+          AND r.is_active = TRUE
+          AND (
+            ci.name ILIKE $1
+            OR co.name ILIKE $1
+            OR ($2 = ANY(ci.search_tokens))
+          )
+        LIMIT 10
+      )
+      UNION ALL
+      (
+        SELECT
+          'country' as type,
+          co.id,
+          co.name as label,
+          r.name as region_name,
+          co.name as country_name,
+          2 as type_priority
+        FROM countries co
+        JOIN regions r ON co.region_id = r.id
+        WHERE co.is_active = TRUE
+          AND r.is_active = TRUE
+          AND (
+            co.name ILIKE $1
+            OR ($2 = ANY(co.search_tokens))
+          )
+        LIMIT 5
+      )
+      UNION ALL
+      (
+        SELECT
+          'region' as type,
+          r.id,
+          r.name as label,
+          r.name as region_name,
+          NULL as country_name,
+          3 as type_priority
+        FROM regions r
+        WHERE r.is_active = TRUE
+          AND (
+            r.name ILIKE $1
+            OR ($2 = ANY(r.search_tokens))
+          )
+        LIMIT 5
+      )
+      ORDER BY type_priority, label
+      LIMIT $3
+    `;
 
-    // Take only the requested limit
-    const limitedResults = allResults.slice(0, parseInt(limit));
-
+    const result = await pool.query(searchQuery, [searchPattern, searchTerm, parseInt(limit)]);
     const responseTime = Date.now() - startTime;
 
     // Log slow queries for monitoring
-    if (responseTime > 500) {
+    if (responseTime > 300) {
       console.warn(`⚠️  Slow search query: "${searchTerm}" took ${responseTime}ms`);
     }
 
@@ -382,7 +374,7 @@ router.get("/search", async (req, res) => {
     res.set('Cache-Control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=300');
     res.set('X-Response-Time', `${responseTime}ms`);
 
-    const formattedResults = limitedResults.map(r => ({
+    const formattedResults = result.rows.map(r => ({
       type: r.type,
       id: r.id,
       label: r.label,
@@ -392,19 +384,9 @@ router.get("/search", async (req, res) => {
 
     res.json(formattedResults);
 
-    // Optional: Log search analytics (uncomment if analytics table is created)
-    // try {
-    //   await pool.query(
-    //     'INSERT INTO search_analytics (query, results_count, response_time_ms) VALUES ($1, $2, $3)',
-    //     [searchTerm, formattedResults.length, responseTime]
-    //   );
-    // } catch (analyticsError) {
-    //   // Ignore analytics errors to not affect main search
-    // }
-
   } catch (error) {
     const responseTime = Date.now() - startTime;
-    console.error("Error in optimized search:", error);
+    console.error("Error in search:", error);
 
     res.status(500).json({
       success: false,
