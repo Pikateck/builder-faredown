@@ -485,12 +485,12 @@ export default function DestinationsManagement() {
       {/* Search & Test Section */}
       <Card>
         <CardHeader>
-          <CardTitle className="text-lg">Search Test</CardTitle>
+          <CardTitle className="text-lg">Search Test & Diagnostics</CardTitle>
           <CardDescription>
-            Test the destinations search functionality
+            Test the destinations search functionality and run diagnostics
           </CardDescription>
         </CardHeader>
-        <CardContent>
+        <CardContent className="space-y-4">
           <div className="flex items-center space-x-2">
             <Input
               placeholder="Search destinations (e.g., Dubai, Paris, Europe, DXB)..."
@@ -503,6 +503,90 @@ export default function DestinationsManagement() {
               Test Search
             </Button>
           </div>
+
+          {/* Quick diagnostic tests */}
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearchTerm("dubai");
+                setTimeout(testSearch, 100);
+              }}
+            >
+              Test "Dubai"
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearchTerm("paris");
+                setTimeout(testSearch, 100);
+              }}
+            >
+              Test "Paris"
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearchTerm("europe");
+                setTimeout(testSearch, 100);
+              }}
+            >
+              Test "Europe"
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearchTerm("dxb");
+                setTimeout(testSearch, 100);
+              }}
+            >
+              Test "DXB" (alias)
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearchTerm("bombay");
+                setTimeout(testSearch, 100);
+              }}
+            >
+              Test "Bombay" (alias)
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => {
+                setSearchTerm("");
+                setTimeout(testSearch, 100);
+              }}
+            >
+              Test Popular Destinations
+            </Button>
+          </div>
+
+          {/* Performance indicators */}
+          {stats && (
+            <div className="text-sm text-gray-600 border-t pt-3">
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                <div>
+                  <span className="font-medium">Searchable Items:</span> {stats.searchable_items}
+                </div>
+                <div>
+                  <span className="font-medium">Total Cities:</span> {stats.total_cities}
+                </div>
+                <div>
+                  <span className="font-medium">Package Cities:</span> {stats.package_cities}
+                </div>
+                <div>
+                  <span className="font-medium">Active Aliases:</span> {stats.active_aliases}
+                </div>
+              </div>
+            </div>
+          )}
         </CardContent>
       </Card>
 
