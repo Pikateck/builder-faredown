@@ -368,7 +368,9 @@ router.get("/search", async (req, res) => {
       ...regionResults.rows
     ];
 
-    const result = await pool.query(query, [searchTerm, parseInt(limit)]);
+    // Take only the requested limit
+    const limitedResults = allResults.slice(0, parseInt(limit));
+
     const responseTime = Date.now() - startTime;
 
     // Log slow queries for monitoring
@@ -380,13 +382,12 @@ router.get("/search", async (req, res) => {
     res.set('Cache-Control', 'public, max-age=300, s-maxage=600, stale-while-revalidate=300');
     res.set('X-Response-Time', `${responseTime}ms`);
 
-    const formattedResults = result.rows.map(r => ({
+    const formattedResults = limitedResults.map(r => ({
       type: r.type,
       id: r.id,
       label: r.label,
       region: r.region_name,
       country: r.country_name
-      // Removed score from response for cleaner API (keep for internal monitoring)
     }));
 
     res.json(formattedResults);
