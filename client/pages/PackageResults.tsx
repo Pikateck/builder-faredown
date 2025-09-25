@@ -263,6 +263,32 @@ export default function PackageResults() {
           )}
         </div>
 
+        {/* Mobile View Toggle */}
+        <div className="md:hidden mb-4">
+          <div className="flex items-center justify-center">
+            <div className="flex items-center border border-gray-300 rounded-lg p-1">
+              <Button
+                variant={viewMode === "list" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("list")}
+                className={`px-3 py-1 ${viewMode === "list" ? "bg-blue-600 text-white" : "text-gray-600"}`}
+              >
+                <List className="w-4 h-4 mr-1" />
+                List
+              </Button>
+              <Button
+                variant={viewMode === "grid" ? "default" : "ghost"}
+                size="sm"
+                onClick={() => setViewMode("grid")}
+                className={`px-3 py-1 ${viewMode === "grid" ? "bg-blue-600 text-white" : "text-gray-600"}`}
+              >
+                <Grid3X3 className="w-4 h-4 mr-1" />
+                Grid
+              </Button>
+            </div>
+          </div>
+        </div>
+
         <div className="flex gap-6">
           {/* Mobile Filter Toggle */}
           <div className="md:hidden fixed bottom-4 left-4 z-10">
