@@ -69,7 +69,7 @@ export function PackagesSearchForm() {
     setShowError(false);
     setErrorMessage("");
 
-    // Build search parameters based on destination type
+    // Build search parameters
     const searchData: any = {
       departure_date: departureDate ? format(departureDate, "yyyy-MM-dd") : undefined,
       return_date: returnDate ? format(returnDate, "yyyy-MM-dd") : undefined,
@@ -77,22 +77,10 @@ export function PackagesSearchForm() {
       budget,
       category,
       module: "packages",
+      destination: selectedDestination.name,
+      destination_code: selectedDestination.code,
+      destination_type: selectedDestination.type,
     };
-
-    // Set destination data based on type
-    if (selectedDestination.type === 'city') {
-      searchData.city_id = selectedDestination.id;
-      searchData.city_name = selectedDestination.label;
-      searchData.region_name = selectedDestination.region;
-      searchData.country_name = selectedDestination.country;
-    } else if (selectedDestination.type === 'country') {
-      searchData.country_id = selectedDestination.id;
-      searchData.country_name = selectedDestination.label;
-      searchData.region_name = selectedDestination.region;
-    } else if (selectedDestination.type === 'region') {
-      searchData.region_id = selectedDestination.id;
-      searchData.region_name = selectedDestination.label;
-    }
 
     // Update search context
     updateSearchParams(searchData);
@@ -100,15 +88,6 @@ export function PackagesSearchForm() {
     // Navigate to results page
     navigate("/packages/results");
   };
-
-  // Cleanup timeout on unmount
-  useEffect(() => {
-    return () => {
-      if (debounceTimeout.current) {
-        clearTimeout(debounceTimeout.current);
-      }
-    };
-  }, []);
 
   return (
     <div className="w-full">
