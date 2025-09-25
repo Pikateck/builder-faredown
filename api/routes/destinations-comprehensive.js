@@ -396,7 +396,7 @@ router.get("/search", async (req, res) => {
     // try {
     //   await pool.query(
     //     'INSERT INTO search_analytics (query, results_count, response_time_ms) VALUES ($1, $2, $3)',
-    //     [searchTerm, result.rows.length, responseTime]
+    //     [searchTerm, formattedResults.length, responseTime]
     //   );
     // } catch (analyticsError) {
     //   // Ignore analytics errors to not affect main search
