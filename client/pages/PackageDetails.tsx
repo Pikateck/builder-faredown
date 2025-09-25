@@ -168,7 +168,7 @@ export default function PackageDetails() {
   }, []);
 
   // Book Now Guard
-  const { guardBookNow } = useBookNowGuard();
+  const { handleBookNow: guardBookNow } = useBookNowGuard();
 
   // Fetch package details
   useEffect(() => {
