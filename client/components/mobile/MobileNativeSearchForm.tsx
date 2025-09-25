@@ -1259,6 +1259,17 @@ export function MobileNativeSearchForm({
           onSelectClass={handleClassSelect}
         />
       )}
+
+      {/* Keyboard Detection for Mobile Packages */}
+      {module === "packages" && typeof window !== "undefined" && (
+        <div
+          className="sr-only"
+          aria-live="polite"
+          aria-atomic="true"
+        >
+          {!validateSearch().isValid ? "Form incomplete: Choose a destination to search packages" : "Form ready to submit"}
+        </div>
+      )}
     </div>
   );
 }
