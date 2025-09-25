@@ -184,7 +184,7 @@ export function DestinationDropdown({
 
   return (
     <div
-      className="relative flex-1 lg:min-w-[280px] lg:max-w-[320px] w-full"
+      className="relative flex-1 md:min-w-[240px] md:max-w-[280px] w-full"
       onClick={(e) => e.stopPropagation()}
     >
       <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
