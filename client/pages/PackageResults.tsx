@@ -5,7 +5,7 @@ import { PackageCard } from "@/components/PackageCard";
 import { PackageFilters } from "@/components/PackageFilters";
 import { Button } from "@/components/ui/button";
 import { Loader2, Filter, SortAsc, MapPin, Calendar } from "lucide-react";
-import { useApi } from "@/hooks/useApi";
+import { apiClient } from "@/lib/api";
 
 interface Package {
   id: number;
