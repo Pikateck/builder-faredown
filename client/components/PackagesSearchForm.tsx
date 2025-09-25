@@ -178,10 +178,10 @@ export function PackagesSearchForm() {
         aria-label="Search packages form"
       >
         {/* All Form Fields Row */}
-        <div className="grid grid-cols-1 lg:grid-cols-5 gap-2 mb-4">
-          
+        <div className="flex flex-col lg:flex-row gap-2 mb-4">
+
           {/* Destination Dropdown */}
-          <div className="lg:col-span-1">
+          <div className="flex-1">
             <DestinationDropdown
               value={selectedDestination}
               onChange={setSelectedDestination}
