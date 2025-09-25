@@ -181,7 +181,7 @@ export function PackagesSearchForm() {
         aria-label="Search packages form"
       >
         {/* Main Search Form Row */}
-        <div className="flex flex-col lg:flex-row gap-2 mb-4 lg:items-end">
+        <div className="flex flex-col lg:flex-row gap-2 mb-4 lg:items-end lg:flex-wrap">
           
           {/* Destination Dropdown - Using Shared Component */}
           <DestinationDropdown
