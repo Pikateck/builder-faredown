@@ -1614,6 +1614,43 @@ export default function BookingConfirmation() {
           </div>
         </div>
 
+        {/* Package Hero Image Section */}
+        {bookingType === "packages" && (booking.hero_image_url || booking.package?.hero_image_url) && (
+          <div className="relative h-48 md:h-64 bg-gradient-to-r from-blue-900 to-blue-600 rounded-xl overflow-hidden mb-8">
+            <img
+              src={booking.hero_image_url || booking.package?.hero_image_url}
+              alt={booking.title || booking.package_title || "Package"}
+              className="absolute inset-0 w-full h-full object-cover"
+            />
+            <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+
+            {/* Package Info Overlay */}
+            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
+              <h2 className="text-xl md:text-2xl font-bold mb-2">
+                {booking.title || booking.package_title || "Travel Package"}
+              </h2>
+
+              <div className="flex flex-wrap items-center gap-4 text-sm md:text-base">
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 mr-1" />
+                  {booking.departure_city || "Departure City"}
+                </div>
+
+                <div className="flex items-center">
+                  <Clock className="w-4 h-4 mr-1" />
+                  {booking.duration || "Multi-day Package"}
+                </div>
+
+                <div className="flex items-center">
+                  <Users className="w-4 h-4 mr-1" />
+                  {booking.adults || 2} Adults
+                  {booking.children > 0 && `, ${booking.children} Children`}
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* Booking Summary */}
         <div className="grid md:grid-cols-2 gap-8">
           {/* Details Section */}
