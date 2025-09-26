@@ -51,30 +51,33 @@ async function addDubaiPackages() {
     const regionResult = await pool.query(`SELECT * FROM regions WHERE name LIKE '%Middle%'`);
     console.log('Middle East regions:', regionResult.rows);
 
-    // Add Dubai City Explorer package
-    await pool.query(`
-      INSERT INTO packages (
-        slug, title, region_id, country_id, city_id, duration_days, duration_nights,
-        overview, base_price_pp, currency, category, status, is_featured,
-        inclusions, exclusions, highlights
-      ) VALUES (
-        'dubai-city-explorer-4-days',
-        'Dubai City Explorer',
-        (SELECT id FROM regions WHERE name = 'Middle East'),
-        (SELECT id FROM countries WHERE iso_code = 'AE'),
-        (SELECT id FROM cities WHERE name = 'Dubai'),
-        4, 3,
-        'Discover the best of Dubai in 4 days with modern attractions and traditional culture.',
-        85000, 'INR',
-        'cultural',
-        'active',
-        FALSE,
-        '["Return airfare from Mumbai/Delhi", "3 nights 4-star hotel accommodation", "Daily breakfast", "Airport transfers", "Half-day city tour", "Dubai Marina walk", "Local guide"]',
-        '["Lunch and dinner meals", "Visa fees", "Personal expenses", "Optional tours", "Tips and gratuities", "Travel insurance"]',
-        '["Explore Old Dubai heritage sites", "Visit Dubai Museum", "Walk through spice and gold souks", "Modern Dubai Marina area", "Traditional Arabic culture", "Stunning skyline views"]'
-      )
-      ON CONFLICT (slug) DO NOTHING
-    `);
+    // If everything looks good, let's try to add a simple Dubai package
+    if (dubaiResult.rows.length > 0 && uaeResult.rows.length > 0) {
+      console.log('✅ Required data exists, attempting to add Dubai package...');
+
+      const dubaiCity = dubaiResult.rows[0];
+      const uaeCountry = uaeResult.rows[0];
+
+      await pool.query(`
+        INSERT INTO packages (
+          slug, title, country_id, city_id, duration_days, duration_nights,
+          overview, base_price_pp, currency, category, status
+        ) VALUES (
+          'dubai-luxury-experience-5-days',
+          'Dubai Luxury Experience',
+          $1, $2, 5, 4,
+          'Experience the ultimate luxury in Dubai with 5-star accommodations, desert safari, and city tours.',
+          179998, 'INR',
+          'luxury',
+          'active'
+        )
+        ON CONFLICT (slug) DO NOTHING
+      `, [uaeCountry.id, dubaiCity.id]);
+
+      console.log('✅ Dubai package added successfully');
+    } else {
+      console.log('❌ Missing required data - need to create UAE/Dubai entries first');
+    }
 
     // Add departures for Dubai Luxury Experience
     await pool.query(`
