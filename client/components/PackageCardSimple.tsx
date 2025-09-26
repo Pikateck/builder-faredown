@@ -86,7 +86,11 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
           <img
             src={
               pkg.hero_image_url ||
-              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F881db137d4a54a489d3f0b62f595b6df?format=webp&width=400"
+              (pkg.title?.toLowerCase().includes('dubai') ?
+                "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400" :
+                pkg.title?.toLowerCase().includes('bali') ?
+                "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=400" :
+                "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400")
             }
             alt={pkg.title}
             className="w-full h-full object-cover"
