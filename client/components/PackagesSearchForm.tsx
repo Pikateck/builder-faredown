@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { StableBookingCalendar } from "@/components/StableBookingCalendar";
 import { format, addDays } from "date-fns";
-import { CalendarIcon, Search, Globe, AlertCircle } from "lucide-react";
+import { CalendarIcon, Search, Globe, AlertCircle, Users, Minus, Plus } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import { DestinationDropdown } from "@/components/ui/DestinationDropdown";
 import { z } from "zod";
