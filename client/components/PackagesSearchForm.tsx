@@ -108,8 +108,6 @@ export function PackagesSearchForm() {
       destination: selectedDestination,
       departureDate,
       returnDate,
-      duration,
-      budget,
       category,
       adults,
       children
