@@ -90,28 +90,14 @@ export function PackagesSearchForm() {
   }, [selectedDestination]);
 
   const handleSearch = useCallback(async (e?: React.FormEvent) => {
-    console.log('🔍 PackagesSearchForm: handleSearch called');
     e?.preventDefault();
 
     // Prevent double submission
-    if (isSubmitting) {
-      console.log('🔍 PackagesSearchForm: Already submitting, skipping');
-      return;
-    }
+    if (isSubmitting) return;
 
     // Clear previous errors
     setShowError(false);
     setErrorMessage("");
-
-    // Debug current form state
-    console.log('🔍 PackagesSearchForm: Current form state:', {
-      selectedDestination,
-      departureDate,
-      returnDate,
-      category,
-      adults,
-      children
-    });
 
     // Validate form using Zod schema
     const formData = {
@@ -126,7 +112,6 @@ export function PackagesSearchForm() {
     const validation = packagesSearchSchema.safeParse(formData);
 
     if (!validation.success) {
-      console.log('🔍 PackagesSearchForm: Validation failed:', validation.error.errors);
       const missingFields = [];
       if (!selectedDestination) missingFields.push('destination');
 
@@ -136,7 +121,6 @@ export function PackagesSearchForm() {
       return;
     }
 
-    console.log('🔍 PackagesSearchForm: Validation passed, proceeding with search');
     setIsSubmitting(true);
     trackSearchAttempt(true);
 
@@ -154,11 +138,8 @@ export function PackagesSearchForm() {
         destination_type: selectedDestination!.type,
       };
 
-      console.log('🔍 PackagesSearchForm: Built search data:', searchData);
-
       // Update search context
       updateSearchParams(searchData);
-      console.log('🔍 PackagesSearchForm: Updated search context');
 
       // Build URL with search parameters
       const urlParams = new URLSearchParams();
@@ -170,10 +151,9 @@ export function PackagesSearchForm() {
 
       // Navigate to results page with parameters
       const resultsUrl = `/packages/results?${urlParams.toString()}`;
-      console.log('🔍 PackagesSearchForm: Navigating to:', resultsUrl);
       navigate(resultsUrl);
     } catch (error) {
-      console.error('🔍 PackagesSearchForm: Search navigation failed:', error);
+      console.error('Search navigation failed:', error);
       setErrorMessage("Search failed. Please try again.");
       setShowError(true);
     } finally {
