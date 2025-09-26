@@ -131,8 +131,6 @@ export function PackagesSearchForm() {
       const searchData: any = {
         departure_date: departureDate ? format(departureDate, "yyyy-MM-dd") : undefined,
         return_date: returnDate ? format(returnDate, "yyyy-MM-dd") : undefined,
-        duration,
-        budget,
         category,
         adults,
         children,
