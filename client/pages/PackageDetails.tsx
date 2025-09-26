@@ -313,13 +313,18 @@ export default function PackageDetails() {
 
         {/* Hero Section */}
         <div className="relative h-64 md:h-96 bg-gradient-to-r from-blue-900 to-blue-600 rounded-xl overflow-hidden mb-6">
-          {packageData.hero_image_url && (
-            <img
-              src={packageData.hero_image_url}
-              alt={packageData.title}
-              className="absolute inset-0 w-full h-full object-cover"
-            />
-          )}
+          <img
+            src={
+              packageData.hero_image_url ||
+              packageData.media?.find(m => m.type === 'image')?.url ||
+              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800"
+            }
+            alt={packageData.title}
+            className="absolute inset-0 w-full h-full object-cover"
+            onError={(e) => {
+              e.currentTarget.src = "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800";
+            }}
+          />
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
 
           {/* Package Info Overlay */}
