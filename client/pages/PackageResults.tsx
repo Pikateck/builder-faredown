@@ -65,6 +65,9 @@ export default function PackageResults() {
   // Current filters from URL
   const currentFilters = {
     q: searchParams.get("q") || "",
+    destination: searchParams.get("destination") || "",
+    destination_code: searchParams.get("destination_code") || "",
+    destination_type: searchParams.get("destination_type") || "",
     region_id: searchParams.get("region_id") || "",
     country_id: searchParams.get("country_id") || "",
     category: searchParams.get("category") || "",
@@ -194,12 +197,42 @@ export default function PackageResults() {
                 Fixed Packages
               </h1>
               {pagination && (
-                <p className="text-gray-600">
-                  {pagination.total} packages found
-                  {currentFilters.q && (
-                    <span> for "{currentFilters.q}"</span>
+                <div className="text-gray-600">
+                  <p>
+                    {pagination.total} packages found
+                    {currentFilters.q && (
+                      <span> for "{currentFilters.q}"</span>
+                    )}
+                  </p>
+                  {/* Search Summary */}
+                  {(currentFilters.departure_date || currentFilters.destination || currentFilters.destination_code) && (
+                    <div className="text-sm text-gray-500 mt-1">
+                      {currentFilters.destination && (
+                        <span>Destination: {currentFilters.destination}</span>
+                      )}
+                      {currentFilters.departure_date && (
+                        <span className="ml-4">
+                          Departure: {new Date(currentFilters.departure_date).toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}
+                        </span>
+                      )}
+                      {currentFilters.return_date && (
+                        <span className="ml-2">
+                          - {new Date(currentFilters.return_date).toLocaleDateString('en-US', {
+                            weekday: 'short',
+                            month: 'short',
+                            day: 'numeric',
+                            year: 'numeric'
+                          })}
+                        </span>
+                      )}
+                    </div>
                   )}
-                </p>
+                </div>
               )}
             </div>
 
