@@ -351,8 +351,10 @@ export default function PackageManagement() {
         </CardHeader>
         <CardContent>
           <Tabs defaultValue="packages" className="w-full">
-            <TabsList className="grid w-full grid-cols-2">
+            <TabsList className="grid w-full grid-cols-4">
               <TabsTrigger value="packages">Packages</TabsTrigger>
+              <TabsTrigger value="markup">Markup</TabsTrigger>
+              <TabsTrigger value="bargain">Bargain</TabsTrigger>
               <TabsTrigger value="reports">Reports</TabsTrigger>
             </TabsList>
 
