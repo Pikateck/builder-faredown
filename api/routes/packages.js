@@ -131,8 +131,8 @@ router.get("/", async (req, res) => {
       queryParams.push(parseInt(city_id));
     }
 
-    // Category filter
-    if (category) {
+    // Category filter (ignore 'any' which means no category filter)
+    if (category && category !== 'any') {
       paramCount++;
       whereConditions.push(`p.category = $${paramCount}`);
       queryParams.push(category);
