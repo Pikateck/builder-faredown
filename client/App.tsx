@@ -62,6 +62,7 @@ import FooterTest from "./pages/FooterTest";
 import Packages from "./pages/Packages";
 import PackageResults from "./pages/PackageResults";
 import PackageDetails from "./pages/PackageDetails";
+import PackageBooking from "./pages/PackageBooking";
 
 // Mobile pages
 import MobileSplash from "./pages/mobile/MobileSplash";
@@ -269,6 +270,10 @@ function App() {
                         <Route
                           path="/packages/:slug"
                           element={<PackageDetails />}
+                        />
+                        <Route
+                          path="/packages/:slug/booking"
+                          element={<PackageBooking />}
                         />
                         <Route path="/sports" element={<SportsEvents />} />
                         <Route
