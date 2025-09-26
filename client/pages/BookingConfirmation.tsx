@@ -1618,9 +1618,16 @@ export default function BookingConfirmation() {
         {bookingType === "packages" && (booking.hero_image_url || booking.package?.hero_image_url) && (
           <div className="relative h-48 md:h-64 bg-gradient-to-r from-blue-900 to-blue-600 rounded-xl overflow-hidden mb-8">
             <img
-              src={booking.hero_image_url || booking.package?.hero_image_url}
+              src={
+                booking.hero_image_url ||
+                booking.package?.hero_image_url ||
+                "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800"
+              }
               alt={booking.title || booking.package_title || "Package"}
               className="absolute inset-0 w-full h-full object-cover"
+              onError={(e) => {
+                e.currentTarget.src = "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800";
+              }}
             />
             <div className="absolute inset-0 bg-black bg-opacity-40"></div>
 
