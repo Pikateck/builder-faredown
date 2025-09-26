@@ -420,7 +420,7 @@ ON CONFLICT (package_id, departure_city_code, departure_date) DO NOTHING;
 INSERT INTO package_departures (
     package_id, departure_city_code, departure_city_name, departure_date, return_date,
     total_seats, price_per_person, currency, is_guaranteed
-) VALUES 
+) VALUES
 (
     (SELECT id FROM packages WHERE slug = 'thailand-bangkok-phuket-7-days'),
     'BOM', 'Mumbai', '2025-02-20', '2025-02-26',
@@ -430,6 +430,50 @@ INSERT INTO package_departures (
     (SELECT id FROM packages WHERE slug = 'thailand-bangkok-phuket-7-days'),
     'DEL', 'Delhi', '2025-03-05', '2025-03-11',
     35, 87000, 'INR', TRUE
+)
+ON CONFLICT (package_id, departure_city_code, departure_date) DO NOTHING;
+
+-- Add sample departures for Dubai Luxury Experience package
+INSERT INTO package_departures (
+    package_id, departure_city_code, departure_city_name, departure_date, return_date,
+    total_seats, price_per_person, currency, is_guaranteed
+) VALUES
+(
+    (SELECT id FROM packages WHERE slug = 'dubai-luxury-experience-5-days'),
+    'BOM', 'Mumbai', '2025-10-01', '2025-10-05',
+    25, 179998, 'INR', TRUE
+),
+(
+    (SELECT id FROM packages WHERE slug = 'dubai-luxury-experience-5-days'),
+    'DEL', 'Delhi', '2025-10-01', '2025-10-05',
+    30, 185000, 'INR', TRUE
+),
+(
+    (SELECT id FROM packages WHERE slug = 'dubai-luxury-experience-5-days'),
+    'BLR', 'Bangalore', '2025-10-02', '2025-10-06',
+    20, 175000, 'INR', FALSE
+)
+ON CONFLICT (package_id, departure_city_code, departure_date) DO NOTHING;
+
+-- Add sample departures for Dubai City Explorer package
+INSERT INTO package_departures (
+    package_id, departure_city_code, departure_city_name, departure_date, return_date,
+    total_seats, price_per_person, currency, is_guaranteed
+) VALUES
+(
+    (SELECT id FROM packages WHERE slug = 'dubai-city-explorer-4-days'),
+    'BOM', 'Mumbai', '2025-10-01', '2025-10-04',
+    30, 109998, 'INR', TRUE
+),
+(
+    (SELECT id FROM packages WHERE slug = 'dubai-city-explorer-4-days'),
+    'DEL', 'Delhi', '2025-10-02', '2025-10-05',
+    25, 115000, 'INR', TRUE
+),
+(
+    (SELECT id FROM packages WHERE slug = 'dubai-city-explorer-4-days'),
+    'COK', 'Kochi', '2025-10-03', '2025-10-06',
+    15, 120000, 'INR', FALSE
 )
 ON CONFLICT (package_id, departure_city_code, departure_date) DO NOTHING;
 
