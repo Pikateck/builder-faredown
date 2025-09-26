@@ -54,6 +54,15 @@ router.get("/", async (req, res) => {
       page_size = 20
     } = req.query;
 
+    // Debug logging for destination filtering
+    if (destination || destination_code || destination_type) {
+      console.log('🔍 Packages API - Destination filtering:', {
+        destination,
+        destination_code,
+        destination_type
+      });
+    }
+
     // Build WHERE clause dynamically
     let whereConditions = ["p.status = 'active'"];
     let queryParams = [];
