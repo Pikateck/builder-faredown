@@ -87,7 +87,7 @@ interface Props {
   onAccept: (finalPrice: number, orderRef: string, holdData?: HoldData) => void;
   onHold: (orderRef: string) => void;
   userName?: string;
-  module?: "flights" | "hotels" | "sightseeing" | "transfers";
+  module?: "flights" | "hotels" | "sightseeing" | "transfers" | "packages";
   onBackToResults?: () => void;
   basePrice: number;
   productRef: string;
@@ -164,9 +164,15 @@ export function ConversationalBargainModal({
       subtitle: "Ground Transportation",
       supplierName: "Transfer Service",
     },
+    packages: {
+      icon: Star,
+      title: "Package Price Negotiation",
+      subtitle: "Travel Package",
+      supplierName: "Travel Provider",
+    },
   };
 
-  const config = moduleConfig[module];
+  const config = moduleConfig[module] || moduleConfig.sightseeing; // fallback to sightseeing
   const ModuleIcon = config.icon;
 
   // Initialize welcome message
