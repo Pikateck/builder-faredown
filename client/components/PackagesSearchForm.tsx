@@ -90,14 +90,28 @@ export function PackagesSearchForm() {
   }, [selectedDestination]);
 
   const handleSearch = useCallback(async (e?: React.FormEvent) => {
+    console.log('🔍 PackagesSearchForm: handleSearch called');
     e?.preventDefault();
-    
+
     // Prevent double submission
-    if (isSubmitting) return;
-    
+    if (isSubmitting) {
+      console.log('🔍 PackagesSearchForm: Already submitting, skipping');
+      return;
+    }
+
     // Clear previous errors
     setShowError(false);
     setErrorMessage("");
+
+    // Debug current form state
+    console.log('🔍 PackagesSearchForm: Current form state:', {
+      selectedDestination,
+      departureDate,
+      returnDate,
+      category,
+      adults,
+      children
+    });
 
     // Validate form using Zod schema
     const formData = {
@@ -110,11 +124,12 @@ export function PackagesSearchForm() {
     };
 
     const validation = packagesSearchSchema.safeParse(formData);
-    
+
     if (!validation.success) {
+      console.log('🔍 PackagesSearchForm: Validation failed:', validation.error.errors);
       const missingFields = [];
       if (!selectedDestination) missingFields.push('destination');
-      
+
       setErrorMessage(validation.error.errors[0]?.message || "Please select a destination");
       setShowError(true);
       trackSearchAttempt(false, missingFields);
