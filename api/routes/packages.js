@@ -292,18 +292,6 @@ router.get("/", async (req, res) => {
     const total = parseInt(countResult.rows[0].total);
     const totalPages = Math.ceil(total / limit);
 
-    // Debug logging for results
-    console.log('🔍 Query Results:', {
-      total,
-      packagesFound: packages.length,
-      packageTitles: packages.map(p => p.title),
-      firstPackageDetails: packages[0] ? {
-        title: packages[0].title,
-        region_name: packages[0].region_name,
-        country_name: packages[0].country_name,
-        city_name: packages[0].city_name
-      } : null
-    });
 
     // Get facets for filtering
     const facetsQuery = `
