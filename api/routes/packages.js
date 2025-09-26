@@ -80,7 +80,7 @@ router.get("/", async (req, res) => {
       queryParams.push(`%${q.trim()}%`);
     }
 
-    // Destination filter (from search form) - Handle both database references and title-based filtering
+    // Destination filter (from search form) - Use title-based filtering only
     if (destination && destination_type) {
       const destinationName = destination.split(',')[0].trim(); // Extract city name from "Dubai, United Arab Emirates"
 
@@ -91,19 +91,14 @@ router.get("/", async (req, res) => {
       });
 
       if (destination_type === 'city') {
-        // Try both database relationships and title-based filtering
+        // Use title-based filtering only (since foreign keys are not properly linked)
         paramCount++;
-        whereConditions.push(`(
-          LOWER(ci.name) = LOWER($${paramCount}) OR
-          LOWER(p.title) LIKE LOWER($${paramCount + 1})
-        )`);
-        queryParams.push(destinationName);
-        paramCount++;
+        whereConditions.push(`LOWER(p.title) LIKE LOWER($${paramCount})`);
         queryParams.push(`%${destinationName}%`);
 
         console.log('🔍 CITY FILTER APPLIED:', {
           condition: whereConditions[whereConditions.length - 1],
-          params: [destinationName, `%${destinationName}%`]
+          params: [`%${destinationName}%`]
         });
 
       } else if (destination_type === 'country') {
