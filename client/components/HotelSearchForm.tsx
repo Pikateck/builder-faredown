@@ -568,10 +568,7 @@ export function HotelSearchForm({
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Dates
             </label>
-            <Popover
-              open={isCalendarOpen}
-              onOpenChange={setIsCalendarOpen}
-            >
+            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
               <PopoverTrigger asChild>
                 <Button
                   variant="outline"

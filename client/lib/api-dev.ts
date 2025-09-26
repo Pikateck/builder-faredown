@@ -149,8 +149,18 @@ export class DevApiClient {
             "Airport Shuttle",
           ],
           rooms: [
-            { name: "Standard Room", price: 120, currency: "EUR", features: ["City View", "Free WiFi"] },
-            { name: "Deluxe Room", price: 160, currency: "EUR", features: ["Sea View", "Breakfast Included"] },
+            {
+              name: "Standard Room",
+              price: 120,
+              currency: "EUR",
+              features: ["City View", "Free WiFi"],
+            },
+            {
+              name: "Deluxe Room",
+              price: 160,
+              currency: "EUR",
+              features: ["Sea View", "Breakfast Included"],
+            },
           ],
           isLiveData: false,
           supplier: "fallback-system",
@@ -185,8 +195,18 @@ export class DevApiClient {
             "Free Parking",
           ],
           rooms: [
-            { name: "Garden View", price: 140, currency: "EUR", features: ["Garden View", "King Bed"] },
-            { name: "Ocean View", price: 185, currency: "EUR", features: ["Ocean View", "Balcony"] },
+            {
+              name: "Garden View",
+              price: 140,
+              currency: "EUR",
+              features: ["Garden View", "King Bed"],
+            },
+            {
+              name: "Ocean View",
+              price: 185,
+              currency: "EUR",
+              features: ["Ocean View", "Balcony"],
+            },
           ],
           isLiveData: false,
           supplier: "fallback-system",
@@ -822,7 +842,11 @@ export class DevApiClient {
     }
 
     // Unified Markups - List
-    if (endpoint.includes("/markups") && !endpoint.includes("test-apply") && (!params || params.module)) {
+    if (
+      endpoint.includes("/markups") &&
+      !endpoint.includes("test-apply") &&
+      (!params || params.module)
+    ) {
       const module = params?.module || "air";
       if (module === "air") {
         const items = [
@@ -874,7 +898,13 @@ export class DevApiClient {
             updated_at: new Date().toISOString(),
           },
         ];
-        return { success: true, items, total: items.length, page: 1, pageSize: items.length };
+        return {
+          success: true,
+          items,
+          total: items.length,
+          page: 1,
+          pageSize: items.length,
+        };
       }
       if (module === "hotel") {
         const items = [
@@ -904,7 +934,8 @@ export class DevApiClient {
             id: 2,
             module: "hotel",
             rule_name: "Hotelbeds Taj Mahal Palace Mumbai",
-            description: "Hotel Markup for Taj Mahal Palace Mumbai via Hotelbeds",
+            description:
+              "Hotel Markup for Taj Mahal Palace Mumbai via Hotelbeds",
             hotel_city: "Mumbai",
             hotel_star_min: 5,
             hotel_star_max: 5,
@@ -923,19 +954,35 @@ export class DevApiClient {
             updated_at: new Date().toISOString(),
           },
         ];
-        return { success: true, items, total: items.length, page: 1, pageSize: items.length };
+        return {
+          success: true,
+          items,
+          total: items.length,
+          page: 1,
+          pageSize: items.length,
+        };
       }
     }
 
     // Unified Markups - Create
     if (endpoint.endsWith("/markups") && params && params.module) {
       const now = new Date().toISOString();
-      const item = { id: Math.floor(Math.random() * 10000), created_at: now, updated_at: now, ...params };
+      const item = {
+        id: Math.floor(Math.random() * 10000),
+        created_at: now,
+        updated_at: now,
+        ...params,
+      };
       return { success: true, item } as ApiResponse<any>;
     }
 
     // Unified Markups - Update
-    if (endpoint.includes("/markups/") && params && !endpoint.endsWith("/status") && !endpoint.includes("test-apply")) {
+    if (
+      endpoint.includes("/markups/") &&
+      params &&
+      !endpoint.endsWith("/status") &&
+      !endpoint.includes("test-apply")
+    ) {
       const id = endpoint.split("/markups/")[1];
       const now = new Date().toISOString();
       const item = { id, updated_at: now, ...params };
@@ -945,11 +992,19 @@ export class DevApiClient {
     // Unified Markups - Toggle Status
     if (endpoint.endsWith("/status")) {
       const id = endpoint.split("/").slice(-2)[0];
-      return { success: true, item: { id, is_active: true, updated_at: new Date().toISOString() } } as ApiResponse<any>;
+      return {
+        success: true,
+        item: { id, is_active: true, updated_at: new Date().toISOString() },
+      } as ApiResponse<any>;
     }
 
     // Unified Markups - Delete
-    if (endpoint.includes("/markups/") && !params && !endpoint.endsWith("/status") && !endpoint.includes("test-apply")) {
+    if (
+      endpoint.includes("/markups/") &&
+      !params &&
+      !endpoint.endsWith("/status") &&
+      !endpoint.includes("test-apply")
+    ) {
       return { success: true } as ApiResponse<any>;
     }
 
@@ -1230,7 +1285,11 @@ export class DevApiClient {
     }
 
     // Package details endpoint
-    if (endpoint.includes("/packages/") && !endpoint.includes("search") && !endpoint.includes("?")) {
+    if (
+      endpoint.includes("/packages/") &&
+      !endpoint.includes("search") &&
+      !endpoint.includes("?")
+    ) {
       const slug = endpoint.split("/packages/")[1];
       console.log(`🔍 Getting fallback package details for: ${slug}`);
 
@@ -1247,8 +1306,10 @@ export class DevApiClient {
           city_name: "Dubai",
           duration_days: 7,
           duration_nights: 6,
-          overview: "Experience the ultimate luxury in Dubai with this comprehensive package that combines modern marvels with traditional Arabian hospitality.",
-          description: "Immerse yourself in the glitz and glamour of Dubai, where cutting-edge architecture meets timeless desert beauty. This luxury package includes stays at the finest hotels, visits to iconic landmarks, and unforgettable experiences that showcase the best of this dynamic city. From the towering Burj Khalifa to the bustling Gold Souk, from desert adventures to world-class shopping, this package offers a perfect blend of excitement and relaxation.",
+          overview:
+            "Experience the ultimate luxury in Dubai with this comprehensive package that combines modern marvels with traditional Arabian hospitality.",
+          description:
+            "Immerse yourself in the glitz and glamour of Dubai, where cutting-edge architecture meets timeless desert beauty. This luxury package includes stays at the finest hotels, visits to iconic landmarks, and unforgettable experiences that showcase the best of this dynamic city. From the towering Burj Khalifa to the bustling Gold Souk, from desert adventures to world-class shopping, this package offers a perfect blend of excitement and relaxation.",
           highlights: [
             "5-star hotel accommodation at Burj Al Arab",
             "Skip-the-line access to Burj Khalifa",
@@ -1256,15 +1317,16 @@ export class DevApiClient {
             "Dubai Marina luxury yacht cruise",
             "Personal shopping guide at Dubai Mall",
             "Helicopter tour over Palm Jumeirah",
-            "Fine dining at Michelin-starred restaurants"
+            "Fine dining at Michelin-starred restaurants",
           ],
           base_price_pp: 89999,
           currency: "INR",
-          hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800",
+          hero_image_url:
+            "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800",
           gallery_images: [
             "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800",
             "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&h=600&fit=crop&auto=format",
-            "https://images.unsplash.com/photo-1569197388202-9efe60c9e512?w=800&h=600&fit=crop&auto=format"
+            "https://images.unsplash.com/photo-1569197388202-9efe60c9e512?w=800&h=600&fit=crop&auto=format",
           ],
           rating: 4.8,
           review_count: 156,
@@ -1279,7 +1341,7 @@ export class DevApiClient {
             "English-speaking guide",
             "Desert safari with BBQ dinner",
             "Dubai Marina cruise",
-            "Burj Khalifa tickets (Level 124 & 125)"
+            "Burj Khalifa tickets (Level 124 & 125)",
           ],
           exclusions: [
             "International flights",
@@ -1287,10 +1349,12 @@ export class DevApiClient {
             "Personal expenses",
             "Additional meals not mentioned",
             "Tips and gratuities",
-            "Travel insurance"
+            "Travel insurance",
           ],
-          terms_conditions: "All bookings are subject to availability. Prices may vary during peak seasons. Cancellation charges apply as per our policy.",
-          cancellation_policy: "Free cancellation up to 15 days before departure. 50% charges for 7-15 days. No refund for cancellations within 7 days.",
+          terms_conditions:
+            "All bookings are subject to availability. Prices may vary during peak seasons. Cancellation charges apply as per our policy.",
+          cancellation_policy:
+            "Free cancellation up to 15 days before departure. 50% charges for 7-15 days. No refund for cancellations within 7 days.",
           visa_required: true,
           passport_required: true,
           minimum_age: 0,
@@ -1299,33 +1363,51 @@ export class DevApiClient {
             {
               day_number: 1,
               title: "Arrival in Dubai",
-              description: "Arrive at Dubai International Airport. Meet and greet by our representative. Transfer to your luxury hotel. Evening at leisure to explore nearby areas.",
+              description:
+                "Arrive at Dubai International Airport. Meet and greet by our representative. Transfer to your luxury hotel. Evening at leisure to explore nearby areas.",
               cities: "Dubai",
               meals_included: "Dinner",
               accommodation: "Burj Al Arab",
-              activities: ["Airport transfer", "Hotel check-in", "Welcome dinner"],
-              transport: "Luxury vehicle"
+              activities: [
+                "Airport transfer",
+                "Hotel check-in",
+                "Welcome dinner",
+              ],
+              transport: "Luxury vehicle",
             },
             {
               day_number: 2,
               title: "Dubai City Tour",
-              description: "Full day Dubai city tour including Burj Khalifa, Dubai Mall, and traditional souks. Experience the contrast between modern and traditional Dubai.",
+              description:
+                "Full day Dubai city tour including Burj Khalifa, Dubai Mall, and traditional souks. Experience the contrast between modern and traditional Dubai.",
               cities: "Dubai",
               meals_included: "Breakfast, Lunch",
               accommodation: "Burj Al Arab",
-              activities: ["Burj Khalifa visit", "Dubai Mall shopping", "Gold Souk", "Spice Souk"],
-              transport: "Air-conditioned coach"
+              activities: [
+                "Burj Khalifa visit",
+                "Dubai Mall shopping",
+                "Gold Souk",
+                "Spice Souk",
+              ],
+              transport: "Air-conditioned coach",
             },
             {
               day_number: 3,
               title: "Desert Safari Adventure",
-              description: "Thrilling desert safari with dune bashing, camel riding, falcon show, and traditional BBQ dinner under the stars.",
+              description:
+                "Thrilling desert safari with dune bashing, camel riding, falcon show, and traditional BBQ dinner under the stars.",
               cities: "Dubai Desert",
               meals_included: "Breakfast, BBQ Dinner",
               accommodation: "Burj Al Arab",
-              activities: ["Dune bashing", "Camel riding", "Falcon show", "Henna painting", "BBQ dinner"],
-              transport: "4x4 vehicles"
-            }
+              activities: [
+                "Dune bashing",
+                "Camel riding",
+                "Falcon show",
+                "Henna painting",
+                "BBQ dinner",
+              ],
+              transport: "4x4 vehicles",
+            },
           ],
           departures: [
             {
@@ -1342,7 +1424,7 @@ export class DevApiClient {
               total_seats: 20,
               is_guaranteed: true,
               early_bird_discount: 5000,
-              early_bird_deadline: "2025-09-15"
+              early_bird_deadline: "2025-09-15",
             },
             {
               id: 102,
@@ -1356,8 +1438,8 @@ export class DevApiClient {
               currency: "INR",
               available_seats: 8,
               total_seats: 20,
-              is_guaranteed: true
-            }
+              is_guaranteed: true,
+            },
           ],
           tags: ["luxury", "city-break", "shopping", "culture", "desert"],
           media: [
@@ -1365,8 +1447,9 @@ export class DevApiClient {
               url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800",
               type: "image",
               title: "Dubai Golden Hour Skyline",
-              alt_text: "Dubai skyline silhouette with Burj Khalifa during a vibrant golden sunset"
-            }
+              alt_text:
+                "Dubai skyline silhouette with Burj Khalifa during a vibrant golden sunset",
+            },
           ],
           reviews_summary: {
             total_reviews: 156,
@@ -1375,20 +1458,21 @@ export class DevApiClient {
             four_star: 45,
             three_star: 15,
             two_star: 5,
-            one_star: 2
+            one_star: 2,
           },
           recent_reviews: [
             {
               rating: 5,
               title: "Amazing luxury experience",
-              review_text: "Everything was perfect from start to finish. The hotel was incredible and the desert safari was unforgettable.",
+              review_text:
+                "Everything was perfect from start to finish. The hotel was incredible and the desert safari was unforgettable.",
               reviewer_name: "Priya S.",
               reviewer_location: "Mumbai",
               travel_date: "2024-03-15",
               traveler_type: "Couple",
-              created_at: "2024-03-20T10:30:00Z"
-            }
-          ]
+              created_at: "2024-03-20T10:30:00Z",
+            },
+          ],
         };
       } else if (slug === "paris-romance-package") {
         packageDetails = {
@@ -1400,25 +1484,28 @@ export class DevApiClient {
           city_name: "Paris",
           duration_days: 5,
           duration_nights: 4,
-          overview: "Fall in love with the City of Light on this romantic getaway designed for couples seeking an unforgettable Parisian experience.",
-          description: "Experience the romance and charm of Paris with this specially curated package for couples. From intimate Seine river cruises to world-class museums, from charming bistros to luxury shopping, this package captures the essence of Parisian romance.",
+          overview:
+            "Fall in love with the City of Light on this romantic getaway designed for couples seeking an unforgettable Parisian experience.",
+          description:
+            "Experience the romance and charm of Paris with this specially curated package for couples. From intimate Seine river cruises to world-class museums, from charming bistros to luxury shopping, this package captures the essence of Parisian romance.",
           highlights: [
             "Boutique hotel in historic Marais district",
             "Private Eiffel Tower dinner experience",
             "Seine river sunset cruise",
             "Skip-the-line Louvre and Musée d'Orsay",
             "Day trip to Palace of Versailles",
-            "French cuisine cooking class for two"
+            "French cuisine cooking class for two",
           ],
           base_price_pp: 67500,
           currency: "INR",
-          hero_image_url: "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800",
+          hero_image_url:
+            "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800",
           gallery_images: [
             "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800",
             "https://images.pexels.com/photos/17856787/pexels-photo-17856787.jpeg?auto=compress&cs=tinysrgb&w=800",
             "https://images.pexels.com/photos/2956952/pexels-photo-2956952.jpeg?auto=compress&cs=tinysrgb&w=800",
             "https://images.pexels.com/photos/2363/france-landmark-lights-night.jpg?auto=compress&cs=tinysrgb&w=800",
-            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F6ec88fa2abda46e79072794e8678eb5d?format=webp&width=800"
+            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F6ec88fa2abda46e79072794e8678eb5d?format=webp&width=800",
           ],
           rating: 4.6,
           review_count: 89,
@@ -1431,16 +1518,17 @@ export class DevApiClient {
             "Seine river cruise",
             "Museum passes",
             "Versailles day trip",
-            "Cooking class"
+            "Cooking class",
           ],
           exclusions: [
             "International flights",
             "Visa fees",
             "Most meals",
-            "Personal expenses"
+            "Personal expenses",
           ],
           terms_conditions: "Standard booking terms apply.",
-          cancellation_policy: "Free cancellation up to 10 days before departure.",
+          cancellation_policy:
+            "Free cancellation up to 10 days before departure.",
           visa_required: false,
           passport_required: true,
           minimum_age: 0,
@@ -1449,12 +1537,17 @@ export class DevApiClient {
             {
               day_number: 1,
               title: "Arrival in Paris",
-              description: "Arrive in the City of Light and check into your charming boutique hotel in the Marais district.",
+              description:
+                "Arrive in the City of Light and check into your charming boutique hotel in the Marais district.",
               cities: "Paris",
               meals_included: "Welcome dinner",
               accommodation: "Boutique Hotel Marais",
-              activities: ["Airport transfer", "Hotel check-in", "Welcome dinner"]
-            }
+              activities: [
+                "Airport transfer",
+                "Hotel check-in",
+                "Welcome dinner",
+              ],
+            },
           ],
           departures: [
             {
@@ -1469,8 +1562,8 @@ export class DevApiClient {
               currency: "INR",
               available_seats: 15,
               total_seats: 16,
-              is_guaranteed: true
-            }
+              is_guaranteed: true,
+            },
           ],
           tags: ["romance", "culture", "city-break", "museums"],
           media: [
@@ -1478,32 +1571,36 @@ export class DevApiClient {
               url: "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800",
               type: "image",
               title: "Paris Sunset with Eiffel Tower",
-              alt_text: "Romantic rooftop view of Paris skyline and Eiffel Tower at sunset"
+              alt_text:
+                "Romantic rooftop view of Paris skyline and Eiffel Tower at sunset",
             },
             {
               url: "https://images.pexels.com/photos/17856787/pexels-photo-17856787.jpeg?auto=compress&cs=tinysrgb&w=800",
               type: "image",
               title: "Seine River Evening",
-              alt_text: "Serene evening on the River Seine with historic Parisian architecture"
+              alt_text:
+                "Serene evening on the River Seine with historic Parisian architecture",
             },
             {
               url: "https://images.pexels.com/photos/2956952/pexels-photo-2956952.jpeg?auto=compress&cs=tinysrgb&w=800",
               type: "image",
               title: "Romantic Parisian Café",
-              alt_text: "Romantic scene at a Parisian café with red chairs and cozy ambiance"
+              alt_text:
+                "Romantic scene at a Parisian café with red chairs and cozy ambiance",
             },
             {
               url: "https://images.pexels.com/photos/2363/france-landmark-lights-night.jpg?auto=compress&cs=tinysrgb&w=800",
               type: "image",
               title: "Louvre at Night",
-              alt_text: "Stunning nighttime view of the illuminated Louvre Pyramid in Paris"
+              alt_text:
+                "Stunning nighttime view of the illuminated Louvre Pyramid in Paris",
             },
             {
               url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F6ec88fa2abda46e79072794e8678eb5d?format=webp&width=800",
               type: "image",
               title: "Paris Romantic Scene",
-              alt_text: "Beautiful romantic Paris scene"
-            }
+              alt_text: "Beautiful romantic Paris scene",
+            },
           ],
           reviews_summary: {
             total_reviews: 89,
@@ -1512,46 +1609,50 @@ export class DevApiClient {
             four_star: 25,
             three_star: 6,
             two_star: 2,
-            one_star: 0
+            one_star: 0,
           },
           recent_reviews: [
             {
               rating: 5,
               title: "Perfect honeymoon",
-              review_text: "Paris was magical! The hotel was perfectly located and the experiences were unforgettable.",
+              review_text:
+                "Paris was magical! The hotel was perfectly located and the experiences were unforgettable.",
               reviewer_name: "Raj & Anjali",
               reviewer_location: "Delhi",
               travel_date: "2024-02-14",
               traveler_type: "Couple",
-              created_at: "2024-02-20T15:45:00Z"
-            }
-          ]
+              created_at: "2024-02-20T15:45:00Z",
+            },
+          ],
         };
       } else {
         // Default fallback for any unknown slug
         packageDetails = {
           id: 999,
           slug: slug,
-          title: `Package: ${slug.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}`,
+          title: `Package: ${slug.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase())}`,
           region_name: "International",
           country_name: "Various",
           city_name: "Multiple Cities",
           duration_days: 5,
           duration_nights: 4,
-          overview: "Discover amazing destinations with this thoughtfully crafted travel package.",
-          description: "Experience the best of travel with our carefully designed package that offers a perfect blend of sightseeing, culture, and relaxation.",
+          overview:
+            "Discover amazing destinations with this thoughtfully crafted travel package.",
+          description:
+            "Experience the best of travel with our carefully designed package that offers a perfect blend of sightseeing, culture, and relaxation.",
           highlights: [
             "Comfortable accommodation",
             "Guided sightseeing tours",
             "Cultural experiences",
             "Local cuisine tasting",
-            "Professional guide services"
+            "Professional guide services",
           ],
           base_price_pp: 45999,
           currency: "INR",
-          hero_image_url: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop&auto=format",
+          hero_image_url:
+            "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop&auto=format",
           gallery_images: [
-            "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop&auto=format"
+            "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop&auto=format",
           ],
           rating: 4.3,
           review_count: 45,
@@ -1563,16 +1664,17 @@ export class DevApiClient {
             "Daily breakfast",
             "Sightseeing tours",
             "Local guide",
-            "Airport transfers"
+            "Airport transfers",
           ],
           exclusions: [
             "International flights",
             "Visa fees",
             "Personal expenses",
-            "Tips and gratuities"
+            "Tips and gratuities",
           ],
           terms_conditions: "Standard booking terms apply.",
-          cancellation_policy: "Free cancellation up to 7 days before departure.",
+          cancellation_policy:
+            "Free cancellation up to 7 days before departure.",
           visa_required: true,
           passport_required: true,
           minimum_age: 0,
@@ -1585,8 +1687,8 @@ export class DevApiClient {
               cities: "Destination City",
               meals_included: "Dinner",
               accommodation: "3-star Hotel",
-              activities: ["Airport transfer", "Hotel check-in"]
-            }
+              activities: ["Airport transfer", "Hotel check-in"],
+            },
           ],
           departures: [
             {
@@ -1601,8 +1703,8 @@ export class DevApiClient {
               currency: "INR",
               available_seats: 20,
               total_seats: 25,
-              is_guaranteed: false
-            }
+              is_guaranteed: false,
+            },
           ],
           tags: ["culture", "sightseeing"],
           media: [
@@ -1610,8 +1712,8 @@ export class DevApiClient {
               url: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=800&h=600&fit=crop&auto=format",
               type: "image",
               title: "Travel Destination",
-              alt_text: "Beautiful travel destination"
-            }
+              alt_text: "Beautiful travel destination",
+            },
           ],
           reviews_summary: {
             total_reviews: 45,
@@ -1620,7 +1722,7 @@ export class DevApiClient {
             four_star: 15,
             three_star: 6,
             two_star: 2,
-            one_star: 0
+            one_star: 0,
           },
           recent_reviews: [
             {
@@ -1631,9 +1733,9 @@ export class DevApiClient {
               reviewer_location: "India",
               travel_date: "2024-01-15",
               traveler_type: "Solo",
-              created_at: "2024-01-20T12:00:00Z"
-            }
-          ]
+              created_at: "2024-01-20T12:00:00Z",
+            },
+          ],
         };
       }
 
@@ -1660,7 +1762,8 @@ export class DevApiClient {
             currency: "INR",
             next_departure_date: "2025-10-15",
             available_departures_count: 8,
-            hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
+            hero_image_url:
+              "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
             rating: 4.8,
             review_count: 156,
             is_featured: true,
@@ -1670,9 +1773,9 @@ export class DevApiClient {
               "Burj Khalifa and Dubai Mall visits",
               "Desert safari with BBQ dinner",
               "Dubai Marina cruise",
-              "Shopping at Gold Souk"
+              "Shopping at Gold Souk",
             ],
-            category: "luxury"
+            category: "luxury",
           },
           {
             id: 2,
@@ -1686,7 +1789,8 @@ export class DevApiClient {
             currency: "INR",
             next_departure_date: "2025-10-22",
             available_departures_count: 12,
-            hero_image_url: "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=400",
+            hero_image_url:
+              "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=400",
             rating: 4.6,
             review_count: 89,
             is_featured: false,
@@ -1696,9 +1800,9 @@ export class DevApiClient {
               "Eiffel Tower and Louvre Museum",
               "Seine river cruise",
               "Versailles day trip",
-              "French cuisine experiences"
+              "French cuisine experiences",
             ],
-            category: "honeymoon"
+            category: "honeymoon",
           },
           {
             id: 3,
@@ -1712,7 +1816,8 @@ export class DevApiClient {
             currency: "INR",
             next_departure_date: "2025-11-05",
             available_departures_count: 15,
-            hero_image_url: "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=400",
+            hero_image_url:
+              "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=400",
             rating: 4.5,
             review_count: 203,
             is_featured: true,
@@ -1722,9 +1827,9 @@ export class DevApiClient {
               "Ubud rice terraces and monkey forest",
               "Tanah Lot temple visit",
               "Water sports at Nusa Dua",
-              "Traditional Balinese cultural show"
+              "Traditional Balinese cultural show",
             ],
-            category: "family"
+            category: "family",
           },
           {
             id: 4,
@@ -1738,7 +1843,8 @@ export class DevApiClient {
             currency: "INR",
             next_departure_date: "2025-10-30",
             available_departures_count: 20,
-            hero_image_url: "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&h=300&fit=crop&auto=format",
+            hero_image_url:
+              "https://images.unsplash.com/photo-1602216056096-3b40cc0c9944?w=400&h=300&fit=crop&auto=format",
             rating: 4.7,
             review_count: 124,
             is_featured: false,
@@ -1748,9 +1854,9 @@ export class DevApiClient {
               "Ayurvedic spa treatments",
               "Periyar wildlife sanctuary",
               "Spice plantation tours",
-              "Kathakali dance performance"
+              "Kathakali dance performance",
             ],
-            category: "cultural"
+            category: "cultural",
           },
           {
             id: 5,
@@ -1764,7 +1870,8 @@ export class DevApiClient {
             currency: "INR",
             next_departure_date: "2025-11-10",
             available_departures_count: 6,
-            hero_image_url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&auto=format",
+            hero_image_url:
+              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&auto=format",
             rating: 4.9,
             review_count: 78,
             is_featured: true,
@@ -1774,9 +1881,9 @@ export class DevApiClient {
               "Snorkeling and diving",
               "Sunset dolphin cruise",
               "Spa treatments",
-              "Private beach dining"
+              "Private beach dining",
             ],
-            category: "beach"
+            category: "beach",
           },
           {
             id: 6,
@@ -1790,7 +1897,8 @@ export class DevApiClient {
             currency: "INR",
             next_departure_date: "2025-11-20",
             available_departures_count: 10,
-            hero_image_url: "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&auto=format",
+            hero_image_url:
+              "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400&h=300&fit=crop&auto=format",
             rating: 4.4,
             review_count: 92,
             is_featured: false,
@@ -1800,10 +1908,10 @@ export class DevApiClient {
               "Stay in mountain lodges",
               "Visit to Rohtang Pass",
               "River rafting in Kullu",
-              "Local Himachali cuisine"
+              "Local Himachali cuisine",
             ],
-            category: "adventure"
-          }
+            category: "adventure",
+          },
         ],
         pagination: {
           page: 1,
@@ -1811,41 +1919,41 @@ export class DevApiClient {
           total: 6,
           total_pages: 1,
           has_next: false,
-          has_prev: false
+          has_prev: false,
         },
         facets: {
           regions: {
             "Middle East": 1,
-            "Europe": 1,
+            Europe: 1,
             "Southeast Asia": 1,
             "South India": 1,
             "Indian Ocean": 1,
-            "North India": 1
+            "North India": 1,
           },
           categories: {
-            "luxury": 2,
-            "honeymoon": 2,
-            "family": 1,
-            "cultural": 1,
-            "beach": 1,
-            "adventure": 1
+            luxury: 2,
+            honeymoon: 2,
+            family: 1,
+            cultural: 1,
+            beach: 1,
+            adventure: 1,
           },
           tags: {
-            "culture": 3,
-            "luxury": 3,
-            "beach": 2,
-            "adventure": 2,
-            "honeymoon": 2,
-            "family": 1,
-            "nature": 2
+            culture: 3,
+            luxury: 3,
+            beach: 2,
+            adventure: 2,
+            honeymoon: 2,
+            family: 1,
+            nature: 2,
           },
           price_ranges: {
             min: 28999,
             max: 125000,
-            avg: 67082
-          }
+            avg: 67082,
+          },
         },
-        filters: params || {}
+        filters: params || {},
       };
     }
 

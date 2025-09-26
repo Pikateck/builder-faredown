@@ -25,7 +25,8 @@ export default function Packages() {
                       Upgrade. Bargain. Book.
                     </h2>
                     <h1 className="text-lg sm:text-xl md:text-2xl font-semibold text-white leading-tight opacity-95">
-                      Discover amazing destinations with our curated fixed packages.
+                      Discover amazing destinations with our curated fixed
+                      packages.
                     </h1>
                   </div>
                 </div>

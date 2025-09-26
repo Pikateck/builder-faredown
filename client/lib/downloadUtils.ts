@@ -100,10 +100,15 @@ Please present this at the hotel during check-in.
     `;
 
     // Determine booking type
-    const bookingType = bookingData.module ||
-                       (bookingData.hotel ? "hotel" :
-                        bookingData.package_title ? "packages" :
-                        bookingData.flights ? "flight" : "hotel");
+    const bookingType =
+      bookingData.module ||
+      (bookingData.hotel
+        ? "hotel"
+        : bookingData.package_title
+          ? "packages"
+          : bookingData.flights
+            ? "flight"
+            : "hotel");
 
     let invoiceContent = "";
 

@@ -9,7 +9,15 @@ import {
 } from "@/components/ui/popover";
 import { StableBookingCalendar } from "@/components/StableBookingCalendar";
 import { format, addDays } from "date-fns";
-import { CalendarIcon, Search, Globe, AlertCircle, Users, Minus, Plus } from "lucide-react";
+import {
+  CalendarIcon,
+  Search,
+  Globe,
+  AlertCircle,
+  Users,
+  Minus,
+  Plus,
+} from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import { DestinationDropdown } from "@/components/ui/DestinationDropdown";
 import { z } from "zod";
@@ -17,21 +25,24 @@ import { z } from "zod";
 interface DestinationOption {
   name: string;
   code: string;
-  type: 'city' | 'country' | 'region';
+  type: "city" | "country" | "region";
 }
 
 // Form validation schema
 const packagesSearchSchema = z.object({
-  destination: z.object({
-    name: z.string().min(1, "Destination is required"),
-    code: z.string().min(1, "Destination code is required"),
-    type: z.enum(['city', 'country', 'region'])
-  }, { required_error: "Please select a destination" }),
+  destination: z.object(
+    {
+      name: z.string().min(1, "Destination is required"),
+      code: z.string().min(1, "Destination code is required"),
+      type: z.enum(["city", "country", "region"]),
+    },
+    { required_error: "Please select a destination" },
+  ),
   departureDate: z.date().optional(),
   returnDate: z.date().optional(),
   category: z.string(),
   adults: z.number().min(1, "At least 1 adult required"),
-  children: z.number().min(0, "Children cannot be negative")
+  children: z.number().min(0, "Children cannot be negative"),
 });
 
 type PackagesSearchFormData = z.infer<typeof packagesSearchSchema>;
@@ -44,10 +55,13 @@ export function PackagesSearchForm() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   // Destination state using shared component
-  const [selectedDestination, setSelectedDestination] = useState<DestinationOption | null>(null);
+  const [selectedDestination, setSelectedDestination] =
+    useState<DestinationOption | null>(null);
 
   // Dates
-  const [departureDate, setDepartureDate] = useState<Date | undefined>(undefined);
+  const [departureDate, setDepartureDate] = useState<Date | undefined>(
+    undefined,
+  );
   const [returnDate, setReturnDate] = useState<Date | undefined>(undefined);
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
@@ -73,101 +87,125 @@ export function PackagesSearchForm() {
   }, []);
 
   // Analytics tracking
-  const trackSearchAttempt = useCallback((valid: boolean, missingFields: string[] = []) => {
-    try {
-      // Track analytics event
-      if (typeof window !== 'undefined' && (window as any).gtag) {
-        (window as any).gtag('event', 'search_cta_click', {
-          module: 'packages',
-          form_valid: valid,
-          missing_fields: missingFields.join(','),
-          destination_type: selectedDestination?.type || 'none'
-        });
+  const trackSearchAttempt = useCallback(
+    (valid: boolean, missingFields: string[] = []) => {
+      try {
+        // Track analytics event
+        if (typeof window !== "undefined" && (window as any).gtag) {
+          (window as any).gtag("event", "search_cta_click", {
+            module: "packages",
+            form_valid: valid,
+            missing_fields: missingFields.join(","),
+            destination_type: selectedDestination?.type || "none",
+          });
+        }
+      } catch (error) {
+        console.warn("Analytics tracking failed:", error);
       }
-    } catch (error) {
-      console.warn('Analytics tracking failed:', error);
-    }
-  }, [selectedDestination]);
+    },
+    [selectedDestination],
+  );
 
-  const handleSearch = useCallback(async (e?: React.FormEvent) => {
-    e?.preventDefault();
+  const handleSearch = useCallback(
+    async (e?: React.FormEvent) => {
+      e?.preventDefault();
 
-    // Prevent double submission
-    if (isSubmitting) return;
+      // Prevent double submission
+      if (isSubmitting) return;
 
-    // Clear previous errors
-    setShowError(false);
-    setErrorMessage("");
+      // Clear previous errors
+      setShowError(false);
+      setErrorMessage("");
 
-    // Validate form using Zod schema
-    const formData = {
-      destination: selectedDestination,
-      departureDate,
-      returnDate,
-      category,
-      adults,
-      children
-    };
-
-    const validation = packagesSearchSchema.safeParse(formData);
-
-    if (!validation.success) {
-      const missingFields = [];
-      if (!selectedDestination) missingFields.push('destination');
-
-      setErrorMessage(validation.error.errors[0]?.message || "Please select a destination");
-      setShowError(true);
-      trackSearchAttempt(false, missingFields);
-      return;
-    }
-
-    setIsSubmitting(true);
-    trackSearchAttempt(true);
-
-    try {
-      // Build search parameters
-      const searchData: any = {
-        departure_date: departureDate ? format(departureDate, "yyyy-MM-dd") : undefined,
-        return_date: returnDate ? format(returnDate, "yyyy-MM-dd") : undefined,
+      // Validate form using Zod schema
+      const formData = {
+        destination: selectedDestination,
+        departureDate,
+        returnDate,
         category,
         adults,
         children,
-        module: "packages",
-        destination: selectedDestination!.name,
-        destination_code: selectedDestination!.code,
-        destination_type: selectedDestination!.type,
       };
 
-      // Update search context
-      updateSearchParams(searchData);
+      const validation = packagesSearchSchema.safeParse(formData);
 
-      // Build URL with search parameters
-      const urlParams = new URLSearchParams();
-      Object.entries(searchData).forEach(([key, value]) => {
-        if (value && value !== "" && value !== undefined) {
-          urlParams.append(key, value.toString());
-        }
-      });
+      if (!validation.success) {
+        const missingFields = [];
+        if (!selectedDestination) missingFields.push("destination");
 
-      // Navigate to results page with parameters
-      const resultsUrl = `/packages/results?${urlParams.toString()}`;
-      navigate(resultsUrl);
-    } catch (error) {
-      console.error('Search navigation failed:', error);
-      setErrorMessage("Search failed. Please try again.");
-      setShowError(true);
-    } finally {
-      setIsSubmitting(false);
-    }
-  }, [selectedDestination, departureDate, returnDate, category, updateSearchParams, navigate, isSubmitting, trackSearchAttempt]);
+        setErrorMessage(
+          validation.error.errors[0]?.message || "Please select a destination",
+        );
+        setShowError(true);
+        trackSearchAttempt(false, missingFields);
+        return;
+      }
+
+      setIsSubmitting(true);
+      trackSearchAttempt(true);
+
+      try {
+        // Build search parameters
+        const searchData: any = {
+          departure_date: departureDate
+            ? format(departureDate, "yyyy-MM-dd")
+            : undefined,
+          return_date: returnDate
+            ? format(returnDate, "yyyy-MM-dd")
+            : undefined,
+          category,
+          adults,
+          children,
+          module: "packages",
+          destination: selectedDestination!.name,
+          destination_code: selectedDestination!.code,
+          destination_type: selectedDestination!.type,
+        };
+
+        // Update search context
+        updateSearchParams(searchData);
+
+        // Build URL with search parameters
+        const urlParams = new URLSearchParams();
+        Object.entries(searchData).forEach(([key, value]) => {
+          if (value && value !== "" && value !== undefined) {
+            urlParams.append(key, value.toString());
+          }
+        });
+
+        // Navigate to results page with parameters
+        const resultsUrl = `/packages/results?${urlParams.toString()}`;
+        navigate(resultsUrl);
+      } catch (error) {
+        console.error("Search navigation failed:", error);
+        setErrorMessage("Search failed. Please try again.");
+        setShowError(true);
+      } finally {
+        setIsSubmitting(false);
+      }
+    },
+    [
+      selectedDestination,
+      departureDate,
+      returnDate,
+      category,
+      updateSearchParams,
+      navigate,
+      isSubmitting,
+      trackSearchAttempt,
+    ],
+  );
 
   // Handle Enter key submission
-  const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      e.preventDefault();
-      handleSearch();
-    }
-  }, [handleSearch]);
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === "Enter") {
+        e.preventDefault();
+        handleSearch();
+      }
+    },
+    [handleSearch],
+  );
 
   return (
     <div className="w-full">
@@ -193,7 +231,6 @@ export function PackagesSearchForm() {
         <div className="mb-8">
           {/* All Fields in One Row */}
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
-
             {/* Destination Dropdown */}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-700 block">
@@ -271,7 +308,10 @@ export function PackagesSearchForm() {
 
             {/* Category */}
             <div className="space-y-2">
-              <label htmlFor="category-select" className="text-sm font-semibold text-gray-700 block">
+              <label
+                htmlFor="category-select"
+                className="text-sm font-semibold text-gray-700 block"
+              >
                 Package Type
               </label>
               <select
@@ -305,9 +345,14 @@ export function PackagesSearchForm() {
                   >
                     <Users className="mr-2 h-4 w-4 flex-shrink-0" />
                     <span className="truncate text-xs sm:text-sm">
-                      {adults + children === 1 ? '1 Traveler' : `${adults + children} Travelers`}
+                      {adults + children === 1
+                        ? "1 Traveler"
+                        : `${adults + children} Travelers`}
                       <span className="hidden lg:inline text-gray-500 ml-1">
-                        • {adults} Adult{adults !== 1 ? 's' : ''}{children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}
+                        • {adults} Adult{adults !== 1 ? "s" : ""}
+                        {children > 0
+                          ? `, ${children} Child${children !== 1 ? "ren" : ""}`
+                          : ""}
                       </span>
                     </span>
                   </Button>
@@ -333,7 +378,9 @@ export function PackagesSearchForm() {
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
-                        <span className="w-8 text-center font-medium">{adults}</span>
+                        <span className="w-8 text-center font-medium">
+                          {adults}
+                        </span>
                         <Button
                           type="button"
                           variant="outline"
@@ -350,7 +397,9 @@ export function PackagesSearchForm() {
                     {/* Children */}
                     <div className="flex items-center justify-between">
                       <div>
-                        <div className="font-medium text-gray-900">Children</div>
+                        <div className="font-medium text-gray-900">
+                          Children
+                        </div>
                         <div className="text-sm text-gray-600">Ages 0-17</div>
                       </div>
                       <div className="flex items-center space-x-3">
@@ -364,7 +413,9 @@ export function PackagesSearchForm() {
                         >
                           <Minus className="h-4 w-4" />
                         </Button>
-                        <span className="w-8 text-center font-medium">{children}</span>
+                        <span className="w-8 text-center font-medium">
+                          {children}
+                        </span>
                         <Button
                           type="button"
                           variant="outline"
@@ -401,7 +452,7 @@ export function PackagesSearchForm() {
             className="h-12 px-16 bg-gradient-to-r from-[#febb02] to-[#f4b601] hover:from-[#e6a602] hover:to-[#e09f00] active:from-[#d19900] active:to-[#c99100] text-black font-bold rounded text-lg transition-all duration-200 min-w-[240px] shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             <Search className="mr-3 h-6 w-6" />
-            <span>{isSubmitting ? 'Searching...' : 'Search Packages'}</span>
+            <span>{isSubmitting ? "Searching..." : "Search Packages"}</span>
           </Button>
         </div>
       </form>

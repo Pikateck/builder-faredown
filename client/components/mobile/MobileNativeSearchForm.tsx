@@ -124,7 +124,9 @@ export function MobileNativeSearchForm({
   >(
     module === "hotels"
       ? "round-trip" // Hotels always need check-in AND check-out dates
-      : module === "sightseeing" || module === "transfers" || module === "packages"
+      : module === "sightseeing" ||
+          module === "transfers" ||
+          module === "packages"
         ? "one-way"
         : "round-trip",
   );
@@ -763,7 +765,9 @@ export function MobileNativeSearchForm({
       </div>
 
       {/* Native Mobile Search Panel */}
-      <div className={`bg-white border-b border-gray-200 shadow-sm ${module === "packages" ? "mb-20" : ""}`}>
+      <div
+        className={`bg-white border-b border-gray-200 shadow-sm ${module === "packages" ? "mb-20" : ""}`}
+      >
         <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4">
           {/* Trip Type Selection (for flights only) */}
           {module === "flights" && (
@@ -1078,15 +1082,20 @@ export function MobileNativeSearchForm({
 
       {/* Sticky Bottom CTA for Packages */}
       {module === "packages" && (
-        <div className="packages-cta-bar fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-20" style={{
-          paddingBottom: `calc(12px + env(safe-area-inset-bottom, 0px))`
-        }}>
+        <div
+          className="packages-cta-bar fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 shadow-lg z-20"
+          style={{
+            paddingBottom: `calc(12px + env(safe-area-inset-bottom, 0px))`,
+          }}
+        >
           <div className="px-4 py-3">
             {/* Selection Summary */}
             <div className="mb-2 text-center">
               <div className="text-xs text-gray-600">
                 {fromCity ? (
-                  <span className="font-medium">{fromCity} • Ready to search</span>
+                  <span className="font-medium">
+                    {fromCity} • Ready to search
+                  </span>
                 ) : (
                   <span>Choose destination to continue</span>
                 )}
@@ -1102,7 +1111,11 @@ export function MobileNativeSearchForm({
                   ? "bg-gray-300 text-gray-500 cursor-not-allowed"
                   : "bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black"
               }`}
-              title={!validateSearch().isValid ? "Choose a destination to search" : "Search packages"}
+              title={
+                !validateSearch().isValid
+                  ? "Choose a destination to search"
+                  : "Search packages"
+              }
             >
               <Search className="w-5 h-5" />
               <span>
@@ -1244,12 +1257,10 @@ export function MobileNativeSearchForm({
 
       {/* Keyboard Detection for Mobile Packages */}
       {module === "packages" && typeof window !== "undefined" && (
-        <div
-          className="sr-only"
-          aria-live="polite"
-          aria-atomic="true"
-        >
-          {!validateSearch().isValid ? "Form incomplete: Choose a destination to search packages" : "Form ready to submit"}
+        <div className="sr-only" aria-live="polite" aria-atomic="true">
+          {!validateSearch().isValid
+            ? "Form incomplete: Choose a destination to search packages"
+            : "Form ready to submit"}
         </div>
       )}
     </div>

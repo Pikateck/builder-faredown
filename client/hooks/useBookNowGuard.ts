@@ -19,65 +19,74 @@ export interface BookNowContext {
 }
 
 export const useBookNowGuard = () => {
-  const { requireBookingAuth, isAuthenticated, showInlineAuth } = useBookingAuthGuard();
+  const { requireBookingAuth, isAuthenticated, showInlineAuth } =
+    useBookingAuthGuard();
   const navigate = useNavigate();
 
-  const handleBookNow = useCallback((
-    context: BookNowContext,
-    onSuccess?: () => void,
-    onAuthRequired?: () => void
-  ) => {
-    // Create offer object for authentication guard
-    const offer: Offer = {
-      offerId: context.offerId,
-      module: context.module,
-      supplier: context.supplier || "default",
-      price: context.price,
-      ...context.bookingData
-    };
+  const handleBookNow = useCallback(
+    (
+      context: BookNowContext,
+      onSuccess?: () => void,
+      onAuthRequired?: () => void,
+    ) => {
+      // Create offer object for authentication guard
+      const offer: Offer = {
+        offerId: context.offerId,
+        module: context.module,
+        supplier: context.supplier || "default",
+        price: context.price,
+        ...context.bookingData,
+      };
 
-    // Check authentication (using inline auth banner)
-    if (!requireBookingAuth(offer, {
-      onAuthRequired: () => {
-        console.log('Authentication required for booking');
-        onAuthRequired?.();
+      // Check authentication (using inline auth banner)
+      if (
+        !requireBookingAuth(offer, {
+          onAuthRequired: () => {
+            console.log("Authentication required for booking");
+            onAuthRequired?.();
+          },
+        })
+      ) {
+        // User will see inline auth banner
+        return false;
       }
-    })) {
-      // User will see inline auth banner
-      return false;
-    }
 
-    // User is authenticated, proceed with booking
-    onSuccess?.();
-    return true;
-  }, [requireBookingAuth]);
+      // User is authenticated, proceed with booking
+      onSuccess?.();
+      return true;
+    },
+    [requireBookingAuth],
+  );
 
-  const createBookNowHandler = useCallback((context: BookNowContext) => {
-    return () => {
-      const success = handleBookNow(context, () => {
-        // Default booking flow - navigate to booking page
-        const bookingParams = new URLSearchParams({
-          module: context.module,
-          offerId: context.offerId,
-          price: context.price.amount.toString(),
-          currency: context.price.currency,
-          ...(context.searchParams || {})
+  const createBookNowHandler = useCallback(
+    (context: BookNowContext) => {
+      return () => {
+        const success = handleBookNow(context, () => {
+          // Default booking flow - navigate to booking page
+          const bookingParams = new URLSearchParams({
+            module: context.module,
+            offerId: context.offerId,
+            price: context.price.amount.toString(),
+            currency: context.price.currency,
+            ...(context.searchParams || {}),
+          });
+
+          navigate(`/booking?${bookingParams.toString()}`);
         });
 
-        navigate(`/booking?${bookingParams.toString()}`);
-      });
-
-      if (!success) {
-        console.log('User redirected to login for booking');
-      }
-    };
-  }, [handleBookNow, navigate]);
+        if (!success) {
+          console.log("User redirected to login for booking");
+        }
+      };
+    },
+    [handleBookNow, navigate],
+  );
 
   return {
     handleBookNow,
     createBookNowHandler,
     isAuthenticated,
-    showInlineAuth
+    showInlineAuth,
   };
 };
 
@@ -88,7 +97,7 @@ export const createBookingContext = {
     offerId: flight.id || `flight_${Date.now()}`,
     price: {
       currency: flight.currency || "INR",
-      amount: flight.price || 0
+      amount: flight.price || 0,
     },
     supplier: flight.airline || flight.supplier,
     itemName: `${flight.from} → ${flight.to}`,
@@ -102,8 +111,8 @@ export const createBookingContext = {
       departureTime: flight.departureTime,
       arrivalTime: flight.arrivalTime,
       duration: flight.duration,
-      cabin: flight.cabin || "economy"
-    }
+      cabin: flight.cabin || "economy",
+    },
   }),
 
   hotel: (hotel: any, searchParams?: any): BookNowContext => ({
@@ -111,7 +120,7 @@ export const createBookingContext = {
     offerId: hotel.id || `hotel_${Date.now()}`,
     price: {
       currency: hotel.currency || "INR",
-      amount: hotel.price || 0
+      amount: hotel.price || 0,
     },
     supplier: hotel.supplier || hotel.provider,
     itemName: hotel.name,
@@ -123,16 +132,20 @@ export const createBookingContext = {
       checkIn: hotel.checkIn,
       checkOut: hotel.checkOut,
       rating: hotel.rating,
-      roomType: hotel.roomType
-    }
+      roomType: hotel.roomType,
+    },
   }),
 
-  sightseeing: (attraction: any, ticketType?: any, searchParams?: any): BookNowContext => ({
+  sightseeing: (
+    attraction: any,
+    ticketType?: any,
+    searchParams?: any,
+  ): BookNowContext => ({
     module: "sightseeing" as const,
     offerId: attraction.id || `sightseeing_${Date.now()}`,
     price: {
       currency: ticketType?.currency || attraction.currency || "INR",
-      amount: ticketType?.price || attraction.price || 0
+      amount: ticketType?.price || attraction.price || 0,
     },
     supplier: attraction.supplier || attraction.provider,
     itemName: attraction.name,
@@ -144,8 +157,8 @@ export const createBookingContext = {
       date: attraction.date,
       duration: attraction.duration,
       ticketType: ticketType?.name,
-      description: attraction.description
-    }
+      description: attraction.description,
+    },
   }),
 
   transfer: (transfer: any, searchParams?: any): BookNowContext => ({
@@ -153,7 +166,7 @@ export const createBookingContext = {
     offerId: transfer.id || `transfer_${Date.now()}`,
     price: {
       currency: transfer.currency || "INR",
-      amount: transfer.price || 0
+      amount: transfer.price || 0,
     },
     supplier: transfer.supplier || transfer.provider,
     itemName: `${transfer.pickup} → ${transfer.dropoff}`,
@@ -165,17 +178,24 @@ export const createBookingContext = {
       date: transfer.date,
       time: transfer.time,
       vehicleType: transfer.vehicleType,
-      passengers: transfer.passengers
-    }
+      passengers: transfer.passengers,
+    },
   }),
 
-  package: (packageData: any, departure: any, travelers: any, searchParams?: any): BookNowContext => ({
+  package: (
+    packageData: any,
+    departure: any,
+    travelers: any,
+    searchParams?: any,
+  ): BookNowContext => ({
     module: "packages" as const,
     offerId: `package_${packageData.id}_departure_${departure.id}`,
     price: {
       currency: departure.currency || "INR",
-      amount: departure.price_per_person * travelers.adults +
-              (departure.child_price || departure.price_per_person * 0.75) * travelers.children
+      amount:
+        departure.price_per_person * travelers.adults +
+        (departure.child_price || departure.price_per_person * 0.75) *
+          travelers.children,
     },
     supplier: "Travel Provider",
     itemName: packageData.title,
@@ -194,7 +214,7 @@ export const createBookingContext = {
       pricePerPerson: departure.price_per_person,
       childPrice: departure.child_price,
       availableSeats: departure.available_seats,
-      totalSeats: departure.total_seats
-    }
-  })
+      totalSeats: departure.total_seats,
+    },
+  }),
 };

@@ -95,11 +95,13 @@ export function BargainButton({
     isAuthenticated,
     showBargainAuthModal,
     setShowBargainAuthModal,
-    handleAuthSuccess
+    handleAuthSuccess,
   } = useBargainAuthGuard();
 
   // Auth modal state
-  const [authModalMode, setAuthModalMode] = useState<"login" | "register">("login");
+  const [authModalMode, setAuthModalMode] = useState<"login" | "register">(
+    "login",
+  );
 
   // Use either useEnhancedModal or useBargainModal
   const shouldShowModal = useBargainModal || useEnhancedModal;
@@ -121,16 +123,18 @@ export function BargainButton({
         itemName,
         basePrice: effectivePrice,
         productRef,
-        itemDetails
+        itemDetails,
       };
 
       // Require authentication before proceeding (using standard auth modal)
-      if (!requireBargainAuth(contextToUse, {
-        onShowAuthModal: () => {
-          setAuthModalMode("login");
-          setShowBargainAuthModal(true);
-        }
-      })) {
+      if (
+        !requireBargainAuth(contextToUse, {
+          onShowAuthModal: () => {
+            setAuthModalMode("login");
+            setShowBargainAuthModal(true);
+          },
+        })
+      ) {
         return; // User will see standard auth modal
       }
     }
@@ -154,7 +158,7 @@ export function BargainButton({
 
   const onAuthenticationSuccess = () => {
     // Close auth modal and proceed with bargain
-    handleAuthSuccess('BARGAIN');
+    handleAuthSuccess("BARGAIN");
     if (shouldShowModal && effectivePrice > 0) {
       setIsBargainModalOpen(true);
     }

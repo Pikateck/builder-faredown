@@ -11,9 +11,10 @@ const crypto = require("crypto");
 
 // Database connection - Configure SSL properly for production databases
 const dbUrl = process.env.DATABASE_URL;
-const sslConfig = dbUrl && (dbUrl.includes('render.com') || dbUrl.includes('postgres://'))
-  ? { rejectUnauthorized: false }
-  : false;
+const sslConfig =
+  dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
+    ? { rejectUnauthorized: false }
+    : false;
 
 const pool = new Pool({
   connectionString: dbUrl,
@@ -29,7 +30,7 @@ function generateBookingRef() {
 
 // Helper function for SQL parameter placeholders
 function createPlaceholders(start, count) {
-  return Array.from({ length: count }, (_, i) => `$${start + i}`).join(', ');
+  return Array.from({ length: count }, (_, i) => `$${start + i}`).join(", ");
 }
 
 /**
@@ -56,9 +57,8 @@ router.get("/", async (req, res) => {
       month,
       sort = "popularity",
       page = 1,
-      page_size = 20
+      page_size = 20,
     } = req.query;
-
 
     // Build WHERE clause dynamically
     let whereConditions = ["p.status = 'active'"];
@@ -68,25 +68,26 @@ router.get("/", async (req, res) => {
     // Text search
     if (q.trim()) {
       paramCount++;
-      whereConditions.push(`(p.title ILIKE $${paramCount} OR p.overview ILIKE $${paramCount})`);
+      whereConditions.push(
+        `(p.title ILIKE $${paramCount} OR p.overview ILIKE $${paramCount})`,
+      );
       queryParams.push(`%${q.trim()}%`);
     }
 
     // Destination filter (from search form) - Use title-based filtering only
     if (destination && destination_type) {
-      const destinationName = destination.split(',')[0].trim(); // Extract city name from "Dubai, United Arab Emirates"
+      const destinationName = destination.split(",")[0].trim(); // Extract city name from "Dubai, United Arab Emirates"
 
-      if (destination_type === 'city') {
+      if (destination_type === "city") {
         // Use title-based filtering only (since foreign keys are not properly linked)
         paramCount++;
         whereConditions.push(`LOWER(p.title) LIKE LOWER($${paramCount})`);
         queryParams.push(`%${destinationName}%`);
-
-      } else if (destination_type === 'country') {
+      } else if (destination_type === "country") {
         paramCount++;
         whereConditions.push(`LOWER(p.title) LIKE LOWER($${paramCount})`);
         queryParams.push(`%${destination.trim()}%`);
-      } else if (destination_type === 'region') {
+      } else if (destination_type === "region") {
         paramCount++;
         whereConditions.push(`LOWER(p.title) LIKE LOWER($${paramCount})`);
         queryParams.push(`%${destination.trim()}%`);
@@ -113,7 +114,7 @@ router.get("/", async (req, res) => {
     }
 
     // Category filter (ignore 'any' which means no category filter)
-    if (category && category !== 'any') {
+    if (category && category !== "any") {
       paramCount++;
       whereConditions.push(`p.category = $${paramCount}`);
       queryParams.push(category);
@@ -121,7 +122,7 @@ router.get("/", async (req, res) => {
 
     // Tags filter
     if (tags) {
-      const tagList = tags.split(',').map(tag => tag.trim());
+      const tagList = tags.split(",").map((tag) => tag.trim());
       paramCount++;
       whereConditions.push(`EXISTS (
         SELECT 1 FROM package_tags pt 
@@ -202,7 +203,8 @@ router.get("/", async (req, res) => {
         break;
       case "popularity":
       default:
-        orderBy = "p.is_featured DESC, p.rating DESC, p.review_count DESC, p.created_at DESC";
+        orderBy =
+          "p.is_featured DESC, p.rating DESC, p.review_count DESC, p.created_at DESC";
         break;
     }
 
@@ -232,7 +234,7 @@ router.get("/", async (req, res) => {
         NULL as tags,
         NULL as images
       FROM packages p
-      WHERE ${whereConditions.join(' AND ')}
+      WHERE ${whereConditions.join(" AND ")}
       ORDER BY ${orderBy}
       LIMIT $${limitParam} OFFSET $${offsetParam}
     `;
@@ -241,20 +243,18 @@ router.get("/", async (req, res) => {
     const countQuery = `
       SELECT COUNT(*) as total
       FROM packages p
-      WHERE ${whereConditions.join(' AND ')}
+      WHERE ${whereConditions.join(" AND ")}
     `;
-
 
     // Execute queries
     const [mainResult, countResult] = await Promise.all([
       pool.query(mainQuery, queryParams),
-      pool.query(countQuery, queryParams.slice(0, -2)) // Remove limit and offset
+      pool.query(countQuery, queryParams.slice(0, -2)), // Remove limit and offset
     ]);
 
     const packages = mainResult.rows;
     const total = parseInt(countResult.rows[0].total);
     const totalPages = Math.ceil(total / limit);
-
 
     // Simplified facets - return empty facets for now to avoid query complexity
     const facets = {
@@ -264,8 +264,8 @@ router.get("/", async (req, res) => {
       price_ranges: {
         min: 0,
         max: 1000000,
-        avg: 150000
-      }
+        avg: 150000,
+      },
     };
 
     // Note: facets already defined above as static object
@@ -280,23 +280,32 @@ router.get("/", async (req, res) => {
           total,
           total_pages: totalPages,
           has_next: parseInt(page) < totalPages,
-          has_prev: parseInt(page) > 1
+          has_prev: parseInt(page) > 1,
         },
         facets,
         filters: {
-          q, region_id, country_id, city_id, category, tags,
-          price_min, price_max, duration_min, duration_max,
-          departure_city, month, sort
-        }
-      }
+          q,
+          region_id,
+          country_id,
+          city_id,
+          category,
+          tags,
+          price_min,
+          price_max,
+          duration_min,
+          duration_max,
+          departure_city,
+          month,
+          sort,
+        },
+      },
     });
-
   } catch (error) {
-    console.error('Error fetching packages:', error);
+    console.error("Error fetching packages:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch packages",
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -319,7 +328,7 @@ router.get("/:slug", async (req, res) => {
     if (result.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: "Package not found"
+        error: "Package not found",
       });
     }
 
@@ -341,7 +350,9 @@ router.get("/:slug", async (req, res) => {
       ORDER BY departure_date ASC
     `;
 
-    const departuresResult = await pool.query(departuresQuery, [packageData.id]);
+    const departuresResult = await pool.query(departuresQuery, [
+      packageData.id,
+    ]);
 
     // Get reviews summary
     const reviewsQuery = `
@@ -372,27 +383,28 @@ router.get("/:slug", async (req, res) => {
       LIMIT 5
     `;
 
-    const recentReviewsResult = await pool.query(recentReviewsQuery, [packageData.id]);
+    const recentReviewsResult = await pool.query(recentReviewsQuery, [
+      packageData.id,
+    ]);
 
     // Format response
     const response = {
       ...packageData,
       departures: departuresResult.rows,
       reviews_summary: reviewsResult.rows[0],
-      recent_reviews: recentReviewsResult.rows
+      recent_reviews: recentReviewsResult.rows,
     };
 
     res.json({
       success: true,
-      data: response
+      data: response,
     });
-
   } catch (error) {
-    console.error('Error fetching package details:', error);
+    console.error("Error fetching package details:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch package details",
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -413,7 +425,7 @@ router.get("/:slug/departures", async (req, res) => {
     if (packageResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: "Package not found"
+        error: "Package not found",
       });
     }
 
@@ -424,7 +436,7 @@ router.get("/:slug/departures", async (req, res) => {
       "package_id = $1",
       "is_active = TRUE",
       "departure_date >= CURRENT_DATE",
-      "available_seats > 0"
+      "available_seats > 0",
     ];
     let queryParams = [packageId];
     let paramCount = 1;
@@ -456,7 +468,7 @@ router.get("/:slug/departures", async (req, res) => {
         is_guaranteed, early_bird_discount, early_bird_deadline,
         special_notes
       FROM package_departures
-      WHERE ${whereConditions.join(' AND ')}
+      WHERE ${whereConditions.join(" AND ")}
       ORDER BY departure_date ASC
     `;
 
@@ -464,15 +476,14 @@ router.get("/:slug/departures", async (req, res) => {
 
     res.json({
       success: true,
-      data: result.rows
+      data: result.rows,
     });
-
   } catch (error) {
-    console.error('Error fetching departures:', error);
+    console.error("Error fetching departures:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch departures",
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -484,13 +495,14 @@ router.get("/:slug/departures", async (req, res) => {
 router.post("/:slug/enquire", async (req, res) => {
   try {
     const { slug } = req.params;
-    const { name, email, phone, departure_id, message, adults, children } = req.body;
+    const { name, email, phone, departure_id, message, adults, children } =
+      req.body;
 
     // Validate required fields
     if (!name || !email || !phone) {
       return res.status(400).json({
         success: false,
-        error: "Name, email, and phone are required"
+        error: "Name, email, and phone are required",
       });
     }
 
@@ -504,7 +516,7 @@ router.post("/:slug/enquire", async (req, res) => {
     if (packageResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: "Package not found"
+        error: "Package not found",
       });
     }
 
@@ -518,7 +530,10 @@ router.post("/:slug/enquire", async (req, res) => {
         FROM package_departures 
         WHERE id = $1 AND package_id = $2
       `;
-      const departureResult = await pool.query(departureQuery, [departure_id, packageData.id]);
+      const departureResult = await pool.query(departureQuery, [
+        departure_id,
+        packageData.id,
+      ]);
       if (departureResult.rows.length > 0) {
         departureData = departureResult.rows[0];
       }
@@ -535,12 +550,12 @@ router.post("/:slug/enquire", async (req, res) => {
       customer_phone: phone,
       adults_count: adults || 1,
       children_count: children || 0,
-      message: message || '',
-      created_at: new Date()
+      message: message || "",
+      created_at: new Date(),
     };
 
     // For now, just log the enquiry (implement your preferred storage/notification method)
-    console.log('Package Enquiry Received:', enquiryData);
+    console.log("Package Enquiry Received:", enquiryData);
 
     // Here you would typically:
     // 1. Store in database
@@ -553,16 +568,15 @@ router.post("/:slug/enquire", async (req, res) => {
       message: "Thank you for your enquiry. Our team will contact you shortly.",
       data: {
         package_title: packageData.title,
-        enquiry_ref: `ENQ${Date.now()}`
-      }
+        enquiry_ref: `ENQ${Date.now()}`,
+      },
     });
-
   } catch (error) {
-    console.error('Error submitting enquiry:', error);
+    console.error("Error submitting enquiry:", error);
     res.status(500).json({
       success: false,
       error: "Failed to submit enquiry",
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -579,20 +593,19 @@ router.get("/destinations", async (req, res) => {
     `;
 
     const result = await pool.query(query);
-    
+
     const destinations = result.rows[0]?.tree || [];
 
     res.json({
       success: true,
-      data: destinations
+      data: destinations,
     });
-
   } catch (error) {
-    console.error('Error fetching destinations:', error);
+    console.error("Error fetching destinations:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch destinations",
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -637,15 +650,14 @@ router.get("/featured", async (req, res) => {
 
     res.json({
       success: true,
-      data: result.rows
+      data: result.rows,
     });
-
   } catch (error) {
-    console.error('Error fetching featured packages:', error);
+    console.error("Error fetching featured packages:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch featured packages",
-      message: error.message
+      message: error.message,
     });
   }
 });

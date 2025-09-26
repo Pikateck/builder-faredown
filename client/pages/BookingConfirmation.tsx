@@ -40,7 +40,9 @@ export default function BookingConfirmation() {
   } = useEnhancedBooking();
   const { loadFromBookingData, getDisplayData } = useSearch();
   const [booking, setBooking] = useState<any>(null);
-  const [bookingType, setBookingType] = useState<"flight" | "hotel" | "packages">("flight");
+  const [bookingType, setBookingType] = useState<
+    "flight" | "hotel" | "packages"
+  >("flight");
   const [showVoucher, setShowVoucher] = useState(false);
   const [showInvoice, setShowInvoice] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -83,10 +85,14 @@ export default function BookingConfirmation() {
     }
 
     // Check for package booking data from location state
-    if (location.state?.bookingDetails || location.state?.module === "packages" || location.state?.package) {
+    if (
+      location.state?.bookingDetails ||
+      location.state?.module === "packages" ||
+      location.state?.package
+    ) {
       console.log(
         "📦 Using package booking data from location state",
-        location.state.bookingDetails || location.state
+        location.state.bookingDetails || location.state,
       );
 
       // Extract package data and merge with booking details
@@ -1325,8 +1331,8 @@ export default function BookingConfirmation() {
               {bookingType === "flight"
                 ? "FLIGHT BOOKING INVOICE"
                 : bookingType === "hotel"
-                ? "HOTEL BOOKING INVOICE"
-                : "PACKAGE BOOKING INVOICE"}
+                  ? "HOTEL BOOKING INVOICE"
+                  : "PACKAGE BOOKING INVOICE"}
             </h2>
             <p className="text-sm text-gray-500">
               Invoice Date:{" "}
@@ -1561,11 +1567,21 @@ export default function BookingConfirmation() {
             Booking Confirmed!
           </h1>
           <p className="text-gray-600 mb-4">
-            Your {bookingType === "flight" ? "flight ticket" : bookingType === "hotel" ? "hotel reservation" : "package booking"} has been
-            successfully confirmed. Here are your booking details:
+            Your{" "}
+            {bookingType === "flight"
+              ? "flight ticket"
+              : bookingType === "hotel"
+                ? "hotel reservation"
+                : "package booking"}{" "}
+            has been successfully confirmed. Here are your booking details:
           </p>
           <div className="border border-gray-300 text-gray-900 px-6 py-3 rounded-lg inline-block">
-            <span className="text-lg font-bold">Booking ID: {booking.booking_ref || booking.id || "PKG" + Date.now().toString().slice(-6)}</span>
+            <span className="text-lg font-bold">
+              Booking ID:{" "}
+              {booking.booking_ref ||
+                booking.id ||
+                "PKG" + Date.now().toString().slice(-6)}
+            </span>
           </div>
           {booking.bargained && (
             <div className="mt-4">
@@ -1573,7 +1589,10 @@ export default function BookingConfirmation() {
                 You saved ₹
                 {(
                   (booking.originalPrice || booking.original_total || 0) -
-                  (booking.final_amount || booking.agreed_total || booking.total || 0)
+                  (booking.final_amount ||
+                    booking.agreed_total ||
+                    booking.total ||
+                    0)
                 ).toLocaleString()}{" "}
                 with bargaining!
               </Badge>
@@ -1592,7 +1611,11 @@ export default function BookingConfirmation() {
               className="bg-blue-700 hover:bg-blue-800 flex items-center justify-center"
             >
               <Download className="w-4 h-4 mr-2" />
-              {bookingType === "flight" ? "Flight Ticket" : bookingType === "hotel" ? "Hotel Voucher" : "Package Itinerary"}
+              {bookingType === "flight"
+                ? "Flight Ticket"
+                : bookingType === "hotel"
+                  ? "Hotel Voucher"
+                  : "Package Itinerary"}
             </Button>
             <Button
               onClick={handleDownloadInvoice}
@@ -1615,55 +1638,59 @@ export default function BookingConfirmation() {
         </div>
 
         {/* Package Hero Image Section */}
-        {bookingType === "packages" && (booking.hero_image_url || booking.package?.hero_image_url) && (
-          <div className="relative h-48 md:h-64 bg-gradient-to-r from-blue-900 to-blue-600 rounded-xl overflow-hidden mb-8">
-            <img
-              src={
-                booking.hero_image_url ||
-                booking.package?.hero_image_url ||
-                (booking.title?.toLowerCase().includes('paris') || booking.package_title?.toLowerCase().includes('paris') ?
-                  "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800" :
-                  booking.title?.toLowerCase().includes('dubai') || booking.package_title?.toLowerCase().includes('dubai') ?
-                  "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800" :
-                  booking.title?.toLowerCase().includes('bali') || booking.package_title?.toLowerCase().includes('bali') ?
-                  "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=800" :
-                  "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=800"
-                )
-              }
-              alt={booking.title || booking.package_title || "Package"}
-              className="absolute inset-0 w-full h-full object-cover"
-              onError={(e) => {
-                e.currentTarget.src = "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800";
-              }}
-            />
-            <div className="absolute inset-0 bg-black bg-opacity-40"></div>
+        {bookingType === "packages" &&
+          (booking.hero_image_url || booking.package?.hero_image_url) && (
+            <div className="relative h-48 md:h-64 bg-gradient-to-r from-blue-900 to-blue-600 rounded-xl overflow-hidden mb-8">
+              <img
+                src={
+                  booking.hero_image_url ||
+                  booking.package?.hero_image_url ||
+                  (booking.title?.toLowerCase().includes("paris") ||
+                  booking.package_title?.toLowerCase().includes("paris")
+                    ? "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800"
+                    : booking.title?.toLowerCase().includes("dubai") ||
+                        booking.package_title?.toLowerCase().includes("dubai")
+                      ? "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800"
+                      : booking.title?.toLowerCase().includes("bali") ||
+                          booking.package_title?.toLowerCase().includes("bali")
+                        ? "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=800"
+                        : "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=800")
+                }
+                alt={booking.title || booking.package_title || "Package"}
+                className="absolute inset-0 w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src =
+                    "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800";
+                }}
+              />
+              <div className="absolute inset-0 bg-black bg-opacity-40"></div>
 
-            {/* Package Info Overlay */}
-            <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
-              <h2 className="text-xl md:text-2xl font-bold mb-2">
-                {booking.title || booking.package_title || "Travel Package"}
-              </h2>
+              {/* Package Info Overlay */}
+              <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
+                <h2 className="text-xl md:text-2xl font-bold mb-2">
+                  {booking.title || booking.package_title || "Travel Package"}
+                </h2>
 
-              <div className="flex flex-wrap items-center gap-4 text-sm md:text-base">
-                <div className="flex items-center">
-                  <MapPin className="w-4 h-4 mr-1" />
-                  {booking.departure_city || "Departure City"}
-                </div>
+                <div className="flex flex-wrap items-center gap-4 text-sm md:text-base">
+                  <div className="flex items-center">
+                    <MapPin className="w-4 h-4 mr-1" />
+                    {booking.departure_city || "Departure City"}
+                  </div>
 
-                <div className="flex items-center">
-                  <Clock className="w-4 h-4 mr-1" />
-                  {booking.duration || "Multi-day Package"}
-                </div>
+                  <div className="flex items-center">
+                    <Clock className="w-4 h-4 mr-1" />
+                    {booking.duration || "Multi-day Package"}
+                  </div>
 
-                <div className="flex items-center">
-                  <Users className="w-4 h-4 mr-1" />
-                  {booking.adults || 2} Adults
-                  {booking.children > 0 && `, ${booking.children} Children`}
+                  <div className="flex items-center">
+                    <Users className="w-4 h-4 mr-1" />
+                    {booking.adults || 2} Adults
+                    {booking.children > 0 && `, ${booking.children} Children`}
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-        )}
+          )}
 
         {/* Booking Summary */}
         <div className="grid md:grid-cols-2 gap-8">
@@ -1678,7 +1705,11 @@ export default function BookingConfirmation() {
                 <Star className="w-5 h-5 text-blue-700 mr-2" />
               )}
               <h2 className="text-xl font-bold text-gray-900">
-                {bookingType === "flight" ? "Flight Details" : bookingType === "hotel" ? "Hotel Details" : "Package Details"}
+                {bookingType === "flight"
+                  ? "Flight Details"
+                  : bookingType === "hotel"
+                    ? "Hotel Details"
+                    : "Package Details"}
               </h2>
             </div>
             {bookingType === "flight" ? (
@@ -1745,14 +1776,20 @@ export default function BookingConfirmation() {
                     src={
                       booking.hero_image_url ||
                       booking.package?.hero_image_url ||
-                      (booking.title?.toLowerCase().includes('paris') || booking.package_title?.toLowerCase().includes('paris') ?
-                        "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=80" :
-                        booking.title?.toLowerCase().includes('dubai') || booking.package_title?.toLowerCase().includes('dubai') ?
-                        "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=80" :
-                        booking.title?.toLowerCase().includes('bali') || booking.package_title?.toLowerCase().includes('bali') ?
-                        "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=80" :
-                        "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=80"
-                      )
+                      (booking.title?.toLowerCase().includes("paris") ||
+                      booking.package_title?.toLowerCase().includes("paris")
+                        ? "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=80"
+                        : booking.title?.toLowerCase().includes("dubai") ||
+                            booking.package_title
+                              ?.toLowerCase()
+                              .includes("dubai")
+                          ? "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=80"
+                          : booking.title?.toLowerCase().includes("bali") ||
+                              booking.package_title
+                                ?.toLowerCase()
+                                .includes("bali")
+                            ? "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=80"
+                            : "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=80")
                     }
                     alt={booking.package_title || booking.title || "Package"}
                     className="w-20 h-20 object-cover rounded-lg"
@@ -1776,7 +1813,9 @@ export default function BookingConfirmation() {
                   </div>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <h4 className="font-semibold text-gray-900 mb-2">Package Includes</h4>
+                  <h4 className="font-semibold text-gray-900 mb-2">
+                    Package Includes
+                  </h4>
                   <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
                     <div className="flex items-center">
                       <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
@@ -1860,7 +1899,11 @@ export default function BookingConfirmation() {
                 <MapPin className="w-5 h-5 text-blue-700 mr-2" />
               )}
               <h2 className="text-xl font-bold text-gray-900">
-                {bookingType === "flight" ? "Travel Details" : bookingType === "hotel" ? "Stay Details" : "Trip Details"}
+                {bookingType === "flight"
+                  ? "Travel Details"
+                  : bookingType === "hotel"
+                    ? "Stay Details"
+                    : "Trip Details"}
               </h2>
             </div>
             <div className="space-y-4">
@@ -1977,7 +2020,11 @@ export default function BookingConfirmation() {
                       <p className="font-bold">
                         {booking.return_date
                           ? formatDate(booking.return_date)
-                          : formatDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString())}
+                          : formatDate(
+                              new Date(
+                                Date.now() + 7 * 24 * 60 * 60 * 1000,
+                              ).toISOString(),
+                            )}
                       </p>
                       <p className="text-xs text-gray-500">
                         To {booking.departure_city || "Origin City"}
@@ -1986,9 +2033,7 @@ export default function BookingConfirmation() {
                   </div>
                   <div className="grid grid-cols-3 gap-3 text-center">
                     <div>
-                      <p className="text-lg font-bold">
-                        {booking.adults || 2}
-                      </p>
+                      <p className="text-lg font-bold">{booking.adults || 2}</p>
                       <p className="text-xs text-gray-600">adults</p>
                     </div>
                     <div>
@@ -2200,12 +2245,14 @@ export default function BookingConfirmation() {
               )}
             </div>
             <span className="text-3xl font-bold text-blue-700">
-              ₹{(
+              ₹
+              {(
                 booking.final_amount ||
                 booking.agreed_total ||
                 booking.total ||
-                (bookingType === "packages" ?
-                  (booking.base_total || booking.pricing?.final_amount || 89999) : 0)
+                (bookingType === "packages"
+                  ? booking.base_total || booking.pricing?.final_amount || 89999
+                  : 0)
               ).toLocaleString()}
             </span>
           </div>
@@ -2241,16 +2288,20 @@ export default function BookingConfirmation() {
             ) : bookingType === "packages" ? (
               <>
                 <p>
-                  • <strong>Free cancellation:</strong> Cancel up to 30 days before departure for full refund
+                  • <strong>Free cancellation:</strong> Cancel up to 30 days
+                  before departure for full refund
                 </p>
                 <p>
-                  • <strong>Partial cancellation:</strong> 15-30 days: 50% refund, 7-15 days: 25% refund
+                  • <strong>Partial cancellation:</strong> 15-30 days: 50%
+                  refund, 7-15 days: 25% refund
                 </p>
                 <p>
-                  • <strong>No refund:</strong> Less than 7 days before departure
+                  • <strong>No refund:</strong> Less than 7 days before
+                  departure
                 </p>
                 <p>
-                  • <strong>Medical emergencies:</strong> Refund possible with valid medical certificate
+                  • <strong>Medical emergencies:</strong> Refund possible with
+                  valid medical certificate
                 </p>
               </>
             ) : (
@@ -2295,9 +2346,13 @@ export default function BookingConfirmation() {
                 <li>
                   • Please carry a valid passport for international packages
                 </li>
-                <li>• Detailed itinerary will be sent 7 days before departure</li>
+                <li>
+                  • Detailed itinerary will be sent 7 days before departure
+                </li>
                 <li>• Travel insurance is highly recommended</li>
-                <li>• Visa requirements vary by destination - check before travel</li>
+                <li>
+                  • Visa requirements vary by destination - check before travel
+                </li>
                 <li>• Pack according to weather conditions at destination</li>
                 <li>• Contact our travel desk for any special requirements</li>
               </>

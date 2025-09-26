@@ -25,7 +25,7 @@ import {
   Church,
   MapPin,
   Globe,
-  Clock
+  Clock,
 } from "lucide-react";
 
 interface PackageFiltersProps {
@@ -56,7 +56,11 @@ interface PackageFiltersProps {
   onFiltersChange: (filters: any) => void;
 }
 
-export function PackageFilters({ filters, facets, onFiltersChange }: PackageFiltersProps) {
+export function PackageFilters({
+  filters,
+  facets,
+  onFiltersChange,
+}: PackageFiltersProps) {
   const [searchTerm, setSearchTerm] = useState(filters.q);
   const [priceRange, setPriceRange] = useState([
     parseInt(filters.price_min) || 0,
@@ -206,7 +210,11 @@ export function PackageFilters({ filters, facets, onFiltersChange }: PackageFilt
         </Button>
       </div>
 
-      <Accordion type="multiple" defaultValue={["category", "price", "duration"]} className="space-y-0">
+      <Accordion
+        type="multiple"
+        defaultValue={["category", "price", "duration"]}
+        className="space-y-0"
+      >
         {/* Category Filter */}
         <AccordionItem value="category" className="border-b border-gray-200">
           <AccordionTrigger className="py-4 text-sm font-medium text-gray-900">
@@ -287,8 +295,12 @@ export function PackageFilters({ filters, facets, onFiltersChange }: PackageFilt
                 />
               </div>
               <div className="flex justify-between text-sm text-gray-600">
-                <span>{durationRange[0]} day{durationRange[0] > 1 ? 's' : ''}</span>
-                <span>{durationRange[1]} day{durationRange[1] > 1 ? 's' : ''}</span>
+                <span>
+                  {durationRange[0]} day{durationRange[0] > 1 ? "s" : ""}
+                </span>
+                <span>
+                  {durationRange[1]} day{durationRange[1] > 1 ? "s" : ""}
+                </span>
               </div>
             </div>
           </AccordionContent>
@@ -334,7 +346,9 @@ export function PackageFilters({ filters, facets, onFiltersChange }: PackageFilt
           <AccordionContent className="pb-4">
             <select
               value={filters.month}
-              onChange={(e) => onFiltersChange({ month: e.target.value, page: 1 })}
+              onChange={(e) =>
+                onFiltersChange({ month: e.target.value, page: 1 })
+              }
               className="w-full border border-gray-300 rounded-md px-3 py-2 text-sm"
             >
               <option value="">Any Month</option>

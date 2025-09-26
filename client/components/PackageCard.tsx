@@ -47,7 +47,11 @@ interface PackageCardProps {
   children?: number;
 }
 
-export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageCardProps) {
+export function PackageCard({
+  package: pkg,
+  adults = 2,
+  children = 0,
+}: PackageCardProps) {
   const navigate = useNavigate();
 
   const handleViewDetails = (e: React.MouseEvent) => {
@@ -59,7 +63,7 @@ export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageC
   const handleBargainClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('Bargain clicked for package:', pkg.slug);
+    console.log("Bargain clicked for package:", pkg.slug);
   };
   const formatPrice = (price: number, currency: string = "INR") => {
     if (currency === "INR") {
@@ -70,7 +74,7 @@ export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageC
 
   // Calculate total price based on actual pax count
   const adultPrice = pkg.from_price * adults;
-  const childPrice = (pkg.from_price * 0.75) * children; // Children typically 75% of adult price
+  const childPrice = pkg.from_price * 0.75 * children; // Children typically 75% of adult price
   const totalPrice = adultPrice + childPrice;
   const pricePerPerson = pkg.from_price;
 
@@ -91,11 +95,11 @@ export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageC
             <img
               src={
                 pkg.hero_image_url ||
-                (pkg.title?.toLowerCase().includes('dubai') ?
-                  "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400" :
-                  pkg.title?.toLowerCase().includes('bali') ?
-                  "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=400" :
-                  "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400")
+                (pkg.title?.toLowerCase().includes("dubai")
+                  ? "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  : pkg.title?.toLowerCase().includes("bali")
+                    ? "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=400"
+                    : "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400")
               }
               alt={pkg.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
@@ -104,13 +108,25 @@ export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageC
                 e.currentTarget.style.opacity = "1";
               }}
               onError={(e) => {
-                console.log("Image load error for:", pkg.title, e.currentTarget.src);
+                console.log(
+                  "Image load error for:",
+                  pkg.title,
+                  e.currentTarget.src,
+                );
                 // First fallback
-                if (e.currentTarget.src !== "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400") {
-                  e.currentTarget.src = "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400";
-                } else if (e.currentTarget.src !== "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image") {
+                if (
+                  e.currentTarget.src !==
+                  "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400"
+                ) {
+                  e.currentTarget.src =
+                    "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400";
+                } else if (
+                  e.currentTarget.src !==
+                  "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image"
+                ) {
                   // Final fallback
-                  e.currentTarget.src = "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image";
+                  e.currentTarget.src =
+                    "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image";
                 }
               }}
               style={{ opacity: 0, transition: "opacity 0.3s ease" }}
@@ -283,7 +299,7 @@ export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageC
               gap: "6px",
               cursor: "pointer",
               boxShadow: "0 1px 3px rgba(0,53,128,0.15)",
-              transition: "all 0.2s ease"
+              transition: "all 0.2s ease",
             }}
             onMouseEnter={(e) => {
               e.currentTarget.style.backgroundColor = "#002a66";
@@ -310,9 +326,9 @@ export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageC
               provider: "Package Provider",
               features: pkg.highlights?.slice(0, 5) || [],
               duration: `${pkg.duration_days}D/${pkg.duration_nights}N`,
-              travelers: `${adults} Adult${adults !== 1 ? 's' : ''}${children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}`,
+              travelers: `${adults} Adult${adults !== 1 ? "s" : ""}${children > 0 ? `, ${children} Child${children !== 1 ? "ren" : ""}` : ""}`,
               basePrice: pkg.from_price,
-              totalTravelers: adults + children
+              totalTravelers: adults + children,
             }}
             style={{
               backgroundColor: "#febb02",
@@ -329,13 +345,12 @@ export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageC
               justifyContent: "center",
               gap: "6px",
               cursor: "pointer",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
             }}
           >
             Bargain
           </BargainButton>
         </div>
-
       </CardContent>
     </Card>
   );

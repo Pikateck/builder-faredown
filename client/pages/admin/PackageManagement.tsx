@@ -199,11 +199,14 @@ export default function PackageManagement() {
 
   const fetchDepartures = async (packageId: number) => {
     try {
-      const response = await makeRequest(`/api/admin/packages/${packageId}/departures`, {
-        headers: {
-          "X-Admin-Key": process.env.REACT_APP_ADMIN_API_KEY || "admin123",
+      const response = await makeRequest(
+        `/api/admin/packages/${packageId}/departures`,
+        {
+          headers: {
+            "X-Admin-Key": process.env.REACT_APP_ADMIN_API_KEY || "admin123",
+          },
         },
-      });
+      );
 
       if (response.success) {
         setDepartures(response.data);
@@ -221,8 +224,8 @@ export default function PackageManagement() {
   const handleSavePackage = async () => {
     try {
       const method = editingPackage.id ? "PUT" : "POST";
-      const url = editingPackage.id 
-        ? `/api/admin/packages/${editingPackage.id}` 
+      const url = editingPackage.id
+        ? `/api/admin/packages/${editingPackage.id}`
         : "/api/admin/packages";
 
       const response = await makeRequest(url, {
@@ -292,8 +295,12 @@ export default function PackageManagement() {
               <div className="flex items-center">
                 <Package className="h-8 w-8 text-blue-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Packages</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.total_packages}</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Total Packages
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stats.total_packages}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -304,8 +311,12 @@ export default function PackageManagement() {
               <div className="flex items-center">
                 <CheckCircle className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Active Packages</p>
-                  <p className="text-2xl font-bold text-gray-900">{stats.active_packages}</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Active Packages
+                  </p>
+                  <p className="text-2xl font-bold text-gray-900">
+                    {stats.active_packages}
+                  </p>
                 </div>
               </div>
             </CardContent>
@@ -316,7 +327,9 @@ export default function PackageManagement() {
               <div className="flex items-center">
                 <DollarSign className="h-8 w-8 text-green-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Total Revenue</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Total Revenue
+                  </p>
                   <p className="text-2xl font-bold text-gray-900">
                     {formatPrice(stats.total_revenue)}
                   </p>
@@ -330,7 +343,9 @@ export default function PackageManagement() {
               <div className="flex items-center">
                 <Star className="h-8 w-8 text-yellow-600" />
                 <div className="ml-4">
-                  <p className="text-sm font-medium text-gray-600">Avg Rating</p>
+                  <p className="text-sm font-medium text-gray-600">
+                    Avg Rating
+                  </p>
                   <p className="text-2xl font-bold text-gray-900">
                     {stats.avg_rating.toFixed(1)}
                   </p>
@@ -371,7 +386,7 @@ export default function PackageManagement() {
                       className="pl-8"
                     />
                   </div>
-                  
+
                   <Select value={statusFilter} onValueChange={setStatusFilter}>
                     <SelectTrigger className="w-32">
                       <SelectValue placeholder="Status" />
@@ -384,7 +399,10 @@ export default function PackageManagement() {
                     </SelectContent>
                   </Select>
 
-                  <Select value={categoryFilter} onValueChange={setCategoryFilter}>
+                  <Select
+                    value={categoryFilter}
+                    onValueChange={setCategoryFilter}
+                  >
                     <SelectTrigger className="w-32">
                       <SelectValue placeholder="Category" />
                     </SelectTrigger>
@@ -416,12 +434,12 @@ export default function PackageManagement() {
                     <Plus className="w-4 h-4 mr-2" />
                     Add Package
                   </Button>
-                  
+
                   <Button variant="outline">
                     <Upload className="w-4 h-4 mr-2" />
                     Import CSV
                   </Button>
-                  
+
                   <Button variant="outline">
                     <Download className="w-4 h-4 mr-2" />
                     Export
@@ -465,7 +483,9 @@ export default function PackageManagement() {
                               <div className="font-medium">{pkg.title}</div>
                               <div className="text-sm text-gray-500">
                                 {pkg.category && (
-                                  <span className="capitalize">{pkg.category}</span>
+                                  <span className="capitalize">
+                                    {pkg.category}
+                                  </span>
                                 )}
                                 {pkg.is_featured && (
                                   <Badge className="ml-2 bg-yellow-100 text-yellow-800">
@@ -475,7 +495,7 @@ export default function PackageManagement() {
                               </div>
                             </div>
                           </TableCell>
-                          
+
                           <TableCell>
                             <div className="flex items-center">
                               <MapPin className="w-4 h-4 mr-1 text-gray-400" />
@@ -485,33 +505,35 @@ export default function PackageManagement() {
                               </span>
                             </div>
                           </TableCell>
-                          
+
                           <TableCell>
                             <div className="flex items-center">
                               <Clock className="w-4 h-4 mr-1 text-gray-400" />
                               {pkg.duration_days}D/{pkg.duration_nights}N
                             </div>
                           </TableCell>
-                          
+
                           <TableCell>
                             {formatPrice(pkg.base_price_pp, pkg.currency)}
                           </TableCell>
-                          
+
                           <TableCell>{getStatusBadge(pkg.status)}</TableCell>
-                          
+
                           <TableCell>
                             <div className="text-center">
-                              <div className="font-medium">{pkg.total_bookings}</div>
+                              <div className="font-medium">
+                                {pkg.total_bookings}
+                              </div>
                               <div className="text-xs text-gray-500">
                                 {pkg.upcoming_departures} upcoming
                               </div>
                             </div>
                           </TableCell>
-                          
+
                           <TableCell>
                             {formatPrice(pkg.total_revenue, pkg.currency)}
                           </TableCell>
-                          
+
                           <TableCell>
                             <div className="flex items-center gap-2">
                               <Button
@@ -521,7 +543,7 @@ export default function PackageManagement() {
                               >
                                 <Calendar className="w-4 h-4" />
                               </Button>
-                              
+
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -529,7 +551,7 @@ export default function PackageManagement() {
                               >
                                 <Edit className="w-4 h-4" />
                               </Button>
-                              
+
                               <Button
                                 variant="ghost"
                                 size="sm"
@@ -557,11 +579,11 @@ export default function PackageManagement() {
                   >
                     Previous
                   </Button>
-                  
+
                   <span className="text-sm text-gray-600">
                     Page {currentPage} of {totalPages}
                   </span>
-                  
+
                   <Button
                     variant="outline"
                     disabled={currentPage === totalPages}
@@ -580,13 +602,19 @@ export default function PackageManagement() {
                   <CardHeader>
                     <CardTitle>Base Markup Configuration</CardTitle>
                     <CardDescription>
-                      Set default markup percentages for different package categories
+                      Set default markup percentages for different package
+                      categories
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     {categories.map((category) => (
-                      <div key={category} className="flex items-center justify-between">
-                        <Label className="capitalize">{category} Packages</Label>
+                      <div
+                        key={category}
+                        className="flex items-center justify-between"
+                      >
+                        <Label className="capitalize">
+                          {category} Packages
+                        </Label>
                         <div className="flex items-center gap-2">
                           <Input
                             type="number"
@@ -611,31 +639,50 @@ export default function PackageManagement() {
                   <CardHeader>
                     <CardTitle>Dynamic Pricing Rules</CardTitle>
                     <CardDescription>
-                      Configure markup based on demand, season, and booking patterns
+                      Configure markup based on demand, season, and booking
+                      patterns
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
                     <div className="space-y-2">
                       <Label>Peak Season Markup</Label>
                       <div className="flex items-center gap-2">
-                        <Input type="number" placeholder="15" className="flex-1" />
-                        <span className="text-sm text-gray-500">% additional</span>
+                        <Input
+                          type="number"
+                          placeholder="15"
+                          className="flex-1"
+                        />
+                        <span className="text-sm text-gray-500">
+                          % additional
+                        </span>
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label>Early Bird Discount</Label>
                       <div className="flex items-center gap-2">
-                        <Input type="number" placeholder="10" className="flex-1" />
-                        <span className="text-sm text-gray-500">% discount</span>
+                        <Input
+                          type="number"
+                          placeholder="10"
+                          className="flex-1"
+                        />
+                        <span className="text-sm text-gray-500">
+                          % discount
+                        </span>
                       </div>
                     </div>
 
                     <div className="space-y-2">
                       <Label>Last Minute Markup</Label>
                       <div className="flex items-center gap-2">
-                        <Input type="number" placeholder="20" className="flex-1" />
-                        <span className="text-sm text-gray-500">% additional</span>
+                        <Input
+                          type="number"
+                          placeholder="20"
+                          className="flex-1"
+                        />
+                        <span className="text-sm text-gray-500">
+                          % additional
+                        </span>
                       </div>
                     </div>
 
@@ -644,12 +691,20 @@ export default function PackageManagement() {
                       <div className="space-y-2">
                         <div className="flex items-center gap-2">
                           <span className="text-sm w-20">5+ travelers:</span>
-                          <Input type="number" placeholder="5" className="w-16" />
+                          <Input
+                            type="number"
+                            placeholder="5"
+                            className="w-16"
+                          />
                           <span className="text-sm text-gray-500">% off</span>
                         </div>
                         <div className="flex items-center gap-2">
                           <span className="text-sm w-20">10+ travelers:</span>
-                          <Input type="number" placeholder="10" className="w-16" />
+                          <Input
+                            type="number"
+                            placeholder="10"
+                            className="w-16"
+                          />
                           <span className="text-sm text-gray-500">% off</span>
                         </div>
                       </div>
@@ -679,7 +734,10 @@ export default function PackageManagement() {
                           </SelectTrigger>
                           <SelectContent>
                             {packages.map((pkg) => (
-                              <SelectItem key={pkg.id} value={pkg.id.toString()}>
+                              <SelectItem
+                                key={pkg.id}
+                                value={pkg.id.toString()}
+                              >
                                 {pkg.title}
                               </SelectItem>
                             ))}
@@ -706,7 +764,10 @@ export default function PackageManagement() {
                           </TableHeader>
                           <TableBody>
                             <TableRow>
-                              <TableCell colSpan={5} className="text-center py-8 text-gray-500">
+                              <TableCell
+                                colSpan={5}
+                                className="text-center py-8 text-gray-500"
+                              >
                                 No package-specific markups configured
                               </TableCell>
                             </TableRow>
@@ -743,7 +804,9 @@ export default function PackageManagement() {
                     <div className="space-y-2">
                       <Label>Bargain Success Rate</Label>
                       <Input type="number" placeholder="75" max="100" />
-                      <span className="text-xs text-gray-500">% of bargains that succeed</span>
+                      <span className="text-xs text-gray-500">
+                        % of bargains that succeed
+                      </span>
                     </div>
 
                     <div className="flex items-center space-x-2">
@@ -781,7 +844,10 @@ export default function PackageManagement() {
                         </TableHeader>
                         <TableBody>
                           <TableRow>
-                            <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                            <TableCell
+                              colSpan={6}
+                              className="text-center py-8 text-gray-500"
+                            >
                               No active bargain sessions
                             </TableCell>
                           </TableRow>
@@ -802,37 +868,67 @@ export default function PackageManagement() {
                   <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-blue-600">324</div>
-                        <div className="text-sm text-gray-600">Total Bargains</div>
+                        <div className="text-2xl font-bold text-blue-600">
+                          324
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Total Bargains
+                        </div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-green-600">68%</div>
-                        <div className="text-sm text-gray-600">Success Rate</div>
+                        <div className="text-2xl font-bold text-green-600">
+                          68%
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Success Rate
+                        </div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-orange-600">12.5%</div>
-                        <div className="text-sm text-gray-600">Avg Discount</div>
+                        <div className="text-2xl font-bold text-orange-600">
+                          12.5%
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Avg Discount
+                        </div>
                       </div>
                       <div className="text-center">
-                        <div className="text-2xl font-bold text-purple-600">₹2.4L</div>
-                        <div className="text-sm text-gray-600">Revenue Impact</div>
+                        <div className="text-2xl font-bold text-purple-600">
+                          ₹2.4L
+                        </div>
+                        <div className="text-sm text-gray-600">
+                          Revenue Impact
+                        </div>
                       </div>
                     </div>
 
                     <div className="border rounded-lg p-4 bg-gray-50">
-                      <h4 className="font-medium mb-2">Top Bargained Packages</h4>
+                      <h4 className="font-medium mb-2">
+                        Top Bargained Packages
+                      </h4>
                       <div className="space-y-2">
                         <div className="flex justify-between items-center">
-                          <span className="text-sm">Dubai Luxury Experience</span>
-                          <span className="text-sm font-medium">43 bargains</span>
+                          <span className="text-sm">
+                            Dubai Luxury Experience
+                          </span>
+                          <span className="text-sm font-medium">
+                            43 bargains
+                          </span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm">Bali Adventure Package</span>
-                          <span className="text-sm font-medium">38 bargains</span>
+                          <span className="text-sm">
+                            Bali Adventure Package
+                          </span>
+                          <span className="text-sm font-medium">
+                            38 bargains
+                          </span>
                         </div>
                         <div className="flex justify-between items-center">
-                          <span className="text-sm">Paris Romantic Getaway</span>
-                          <span className="text-sm font-medium">29 bargains</span>
+                          <span className="text-sm">
+                            Paris Romantic Getaway
+                          </span>
+                          <span className="text-sm font-medium">
+                            29 bargains
+                          </span>
                         </div>
                       </div>
                     </div>
@@ -848,9 +944,15 @@ export default function PackageManagement() {
                     <div className="flex items-center">
                       <Users className="h-8 w-8 text-blue-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-600">Total Bookings</p>
-                        <p className="text-2xl font-bold text-gray-900">1,234</p>
-                        <p className="text-xs text-green-600">+12% from last month</p>
+                        <p className="text-sm font-medium text-gray-600">
+                          Total Bookings
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          1,234
+                        </p>
+                        <p className="text-xs text-green-600">
+                          +12% from last month
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -861,9 +963,15 @@ export default function PackageManagement() {
                     <div className="flex items-center">
                       <DollarSign className="h-8 w-8 text-green-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-600">Revenue</p>
-                        <p className="text-2xl font-bold text-gray-900">₹45.6L</p>
-                        <p className="text-xs text-green-600">+18% from last month</p>
+                        <p className="text-sm font-medium text-gray-600">
+                          Revenue
+                        </p>
+                        <p className="text-2xl font-bold text-gray-900">
+                          ₹45.6L
+                        </p>
+                        <p className="text-xs text-green-600">
+                          +18% from last month
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -874,9 +982,13 @@ export default function PackageManagement() {
                     <div className="flex items-center">
                       <Star className="h-8 w-8 text-yellow-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-600">Avg Rating</p>
+                        <p className="text-sm font-medium text-gray-600">
+                          Avg Rating
+                        </p>
                         <p className="text-2xl font-bold text-gray-900">4.7</p>
-                        <p className="text-xs text-green-600">+0.2 from last month</p>
+                        <p className="text-xs text-green-600">
+                          +0.2 from last month
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -887,9 +999,13 @@ export default function PackageManagement() {
                     <div className="flex items-center">
                       <Calendar className="h-8 w-8 text-purple-600" />
                       <div className="ml-4">
-                        <p className="text-sm font-medium text-gray-600">Conversion Rate</p>
+                        <p className="text-sm font-medium text-gray-600">
+                          Conversion Rate
+                        </p>
                         <p className="text-2xl font-bold text-gray-900">3.4%</p>
-                        <p className="text-xs text-red-600">-0.5% from last month</p>
+                        <p className="text-xs text-red-600">
+                          -0.5% from last month
+                        </p>
                       </div>
                     </div>
                   </CardContent>
@@ -901,22 +1017,30 @@ export default function PackageManagement() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Top Performing Packages</CardTitle>
-                    <CardDescription>Based on bookings and revenue</CardDescription>
+                    <CardDescription>
+                      Based on bookings and revenue
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-medium">Dubai Luxury Experience</p>
-                          <p className="text-sm text-gray-600">89 bookings • ₹12.4L revenue</p>
+                          <p className="text-sm text-gray-600">
+                            89 bookings • ₹12.4L revenue
+                          </p>
                         </div>
-                        <Badge className="bg-green-100 text-green-800">Top</Badge>
+                        <Badge className="bg-green-100 text-green-800">
+                          Top
+                        </Badge>
                       </div>
 
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-medium">Bali Adventure Package</p>
-                          <p className="text-sm text-gray-600">76 bookings • ₹8.9L revenue</p>
+                          <p className="text-sm text-gray-600">
+                            76 bookings • ₹8.9L revenue
+                          </p>
                         </div>
                         <Badge className="bg-blue-100 text-blue-800">2nd</Badge>
                       </div>
@@ -924,15 +1048,21 @@ export default function PackageManagement() {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-medium">Paris Romantic Getaway</p>
-                          <p className="text-sm text-gray-600">65 bookings • ₹9.8L revenue</p>
+                          <p className="text-sm text-gray-600">
+                            65 bookings • ₹9.8L revenue
+                          </p>
                         </div>
-                        <Badge className="bg-orange-100 text-orange-800">3rd</Badge>
+                        <Badge className="bg-orange-100 text-orange-800">
+                          3rd
+                        </Badge>
                       </div>
 
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-medium">Thailand Explorer</p>
-                          <p className="text-sm text-gray-600">52 bookings • ₹6.2L revenue</p>
+                          <p className="text-sm text-gray-600">
+                            52 bookings • ₹6.2L revenue
+                          </p>
                         </div>
                         <Badge variant="outline">4th</Badge>
                       </div>
@@ -940,7 +1070,9 @@ export default function PackageManagement() {
                       <div className="flex items-center justify-between">
                         <div>
                           <p className="font-medium">Japan Cultural Tour</p>
-                          <p className="text-sm text-gray-600">44 bookings • ₹7.1L revenue</p>
+                          <p className="text-sm text-gray-600">
+                            44 bookings • ₹7.1L revenue
+                          </p>
                         </div>
                         <Badge variant="outline">5th</Badge>
                       </div>
@@ -952,48 +1084,72 @@ export default function PackageManagement() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Revenue Analytics</CardTitle>
-                    <CardDescription>Monthly trends and insights</CardDescription>
+                    <CardDescription>
+                      Monthly trends and insights
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       <div>
-                        <p className="text-sm font-medium mb-2">Revenue by Category</p>
+                        <p className="text-sm font-medium mb-2">
+                          Revenue by Category
+                        </p>
                         <div className="space-y-2">
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Luxury</span>
-                            <span className="text-sm font-medium">₹18.2L (40%)</span>
+                            <span className="text-sm font-medium">
+                              ₹18.2L (40%)
+                            </span>
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Adventure</span>
-                            <span className="text-sm font-medium">₹12.8L (28%)</span>
+                            <span className="text-sm font-medium">
+                              ₹12.8L (28%)
+                            </span>
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Cultural</span>
-                            <span className="text-sm font-medium">₹8.6L (19%)</span>
+                            <span className="text-sm font-medium">
+                              ₹8.6L (19%)
+                            </span>
                           </div>
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Beach</span>
-                            <span className="text-sm font-medium">₹6.0L (13%)</span>
+                            <span className="text-sm font-medium">
+                              ₹6.0L (13%)
+                            </span>
                           </div>
                         </div>
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium mb-2">Booking Trends</p>
+                        <p className="text-sm font-medium mb-2">
+                          Booking Trends
+                        </p>
                         <div className="grid grid-cols-2 gap-4">
                           <div className="text-center">
-                            <p className="text-lg font-bold text-blue-600">68%</p>
-                            <p className="text-xs text-gray-600">Mobile Bookings</p>
+                            <p className="text-lg font-bold text-blue-600">
+                              68%
+                            </p>
+                            <p className="text-xs text-gray-600">
+                              Mobile Bookings
+                            </p>
                           </div>
                           <div className="text-center">
-                            <p className="text-lg font-bold text-green-600">32%</p>
-                            <p className="text-xs text-gray-600">Desktop Bookings</p>
+                            <p className="text-lg font-bold text-green-600">
+                              32%
+                            </p>
+                            <p className="text-xs text-gray-600">
+                              Desktop Bookings
+                            </p>
                           </div>
                         </div>
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium mb-2">Peak Booking Times</p>
+                        <p className="text-sm font-medium mb-2">
+                          Peak Booking Times
+                        </p>
                         <div className="space-y-1">
                           <div className="flex justify-between text-sm">
                             <span>Weekend</span>
@@ -1017,12 +1173,16 @@ export default function PackageManagement() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Customer Insights</CardTitle>
-                    <CardDescription>Booking patterns and preferences</CardDescription>
+                    <CardDescription>
+                      Booking patterns and preferences
+                    </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
                       <div>
-                        <p className="text-sm font-medium mb-2">Average Group Size</p>
+                        <p className="text-sm font-medium mb-2">
+                          Average Group Size
+                        </p>
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
                             <span>Solo Travelers</span>
@@ -1044,7 +1204,9 @@ export default function PackageManagement() {
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium mb-2">Booking Lead Time</p>
+                        <p className="text-sm font-medium mb-2">
+                          Booking Lead Time
+                        </p>
                         <div className="space-y-2">
                           <div className="flex justify-between text-sm">
                             <span>1-7 days</span>
@@ -1066,10 +1228,16 @@ export default function PackageManagement() {
                       </div>
 
                       <div>
-                        <p className="text-sm font-medium mb-2">Repeat Customers</p>
+                        <p className="text-sm font-medium mb-2">
+                          Repeat Customers
+                        </p>
                         <div className="text-center">
-                          <p className="text-2xl font-bold text-purple-600">34%</p>
-                          <p className="text-sm text-gray-600">Return booking rate</p>
+                          <p className="text-2xl font-bold text-purple-600">
+                            34%
+                          </p>
+                          <p className="text-sm text-gray-600">
+                            Return booking rate
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -1080,7 +1248,9 @@ export default function PackageManagement() {
                 <Card>
                   <CardHeader>
                     <CardTitle>Export Reports</CardTitle>
-                    <CardDescription>Download detailed analytics and reports</CardDescription>
+                    <CardDescription>
+                      Download detailed analytics and reports
+                    </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-3">
                     <Button variant="outline" className="w-full justify-start">
@@ -1126,7 +1296,7 @@ export default function PackageManagement() {
               Manage package details, pricing, and availability
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
@@ -1135,11 +1305,14 @@ export default function PackageManagement() {
                   id="title"
                   value={editingPackage.title || ""}
                   onChange={(e) =>
-                    setEditingPackage({ ...editingPackage, title: e.target.value })
+                    setEditingPackage({
+                      ...editingPackage,
+                      title: e.target.value,
+                    })
                   }
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="category">Category</Label>
                 <Select
@@ -1177,7 +1350,7 @@ export default function PackageManagement() {
                   }
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="duration_nights">Duration (Nights)</Label>
                 <Input
@@ -1209,7 +1382,7 @@ export default function PackageManagement() {
                   }
                 />
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="status">Status</Label>
                 <Select
@@ -1236,7 +1409,10 @@ export default function PackageManagement() {
                 id="overview"
                 value={editingPackage.overview || ""}
                 onChange={(e) =>
-                  setEditingPackage({ ...editingPackage, overview: e.target.value })
+                  setEditingPackage({
+                    ...editingPackage,
+                    overview: e.target.value,
+                  })
                 }
                 rows={3}
               />
@@ -1253,7 +1429,7 @@ export default function PackageManagement() {
               <Label htmlFor="is_featured">Featured Package</Label>
             </div>
           </div>
-          
+
           <DialogFooter>
             <Button variant="outline" onClick={() => setShowEditDialog(false)}>
               Cancel
@@ -1266,17 +1442,18 @@ export default function PackageManagement() {
       </Dialog>
 
       {/* Departures Dialog */}
-      <Dialog open={showDeparturesDialog} onOpenChange={setShowDeparturesDialog}>
+      <Dialog
+        open={showDeparturesDialog}
+        onOpenChange={setShowDeparturesDialog}
+      >
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>
-              Departures - {selectedPackage?.title}
-            </DialogTitle>
+            <DialogTitle>Departures - {selectedPackage?.title}</DialogTitle>
             <DialogDescription>
               Manage departure dates and availability for this package
             </DialogDescription>
           </DialogHeader>
-          
+
           <div className="space-y-4">
             <div className="flex justify-between items-center">
               <h4 className="text-lg font-medium">Available Departures</h4>
@@ -1303,7 +1480,9 @@ export default function PackageManagement() {
                     <TableRow key={departure.id}>
                       <TableCell>{departure.departure_city_name}</TableCell>
                       <TableCell>
-                        {new Date(departure.departure_date).toLocaleDateString()}
+                        {new Date(
+                          departure.departure_date,
+                        ).toLocaleDateString()}
                       </TableCell>
                       <TableCell>
                         {formatPrice(departure.price_per_person)}
@@ -1313,9 +1492,13 @@ export default function PackageManagement() {
                       </TableCell>
                       <TableCell>
                         {departure.is_active ? (
-                          <Badge className="bg-green-100 text-green-800">Active</Badge>
+                          <Badge className="bg-green-100 text-green-800">
+                            Active
+                          </Badge>
                         ) : (
-                          <Badge className="bg-gray-100 text-gray-800">Inactive</Badge>
+                          <Badge className="bg-gray-100 text-gray-800">
+                            Inactive
+                          </Badge>
                         )}
                       </TableCell>
                       <TableCell>
@@ -1323,7 +1506,11 @@ export default function PackageManagement() {
                           <Button variant="ghost" size="sm">
                             <Edit className="w-4 h-4" />
                           </Button>
-                          <Button variant="ghost" size="sm" className="text-red-600">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="text-red-600"
+                          >
                             <Trash2 className="w-4 h-4" />
                           </Button>
                         </div>
@@ -1334,9 +1521,12 @@ export default function PackageManagement() {
               </Table>
             </div>
           </div>
-          
+
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowDeparturesDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowDeparturesDialog(false)}
+            >
               Close
             </Button>
           </DialogFooter>

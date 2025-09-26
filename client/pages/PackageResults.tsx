@@ -5,7 +5,15 @@ import { PackageCard } from "@/components/PackageCard";
 import { PackageCardSimple } from "@/components/PackageCardSimple";
 import { PackageFilters } from "@/components/PackageFilters";
 import { Button } from "@/components/ui/button";
-import { Loader2, Filter, SortAsc, MapPin, Calendar, Grid3X3, List } from "lucide-react";
+import {
+  Loader2,
+  Filter,
+  SortAsc,
+  MapPin,
+  Calendar,
+  Grid3X3,
+  List,
+} from "lucide-react";
 import { apiClient } from "@/lib/api";
 
 interface Package {
@@ -98,7 +106,9 @@ export default function PackageResults() {
         }
       });
 
-      const response = await apiClient.get<PackageSearchResponse>(`/packages?${queryParams.toString()}`);
+      const response = await apiClient.get<PackageSearchResponse>(
+        `/packages?${queryParams.toString()}`,
+      );
 
       if (response.packages) {
         setPackages(response.packages);
@@ -122,14 +132,14 @@ export default function PackageResults() {
   useEffect(() => {
     const timer = setTimeout(() => {
       // Force a re-render to ensure images are displayed
-      setPackages(prev => [...prev]);
+      setPackages((prev) => [...prev]);
     }, 100);
     return () => clearTimeout(timer);
   }, []);
 
   const updateFilters = (newFilters: any) => {
     const updatedParams = new URLSearchParams(searchParams);
-    
+
     Object.entries(newFilters).forEach(([key, value]) => {
       if (value && value !== "" && value !== "any") {
         updatedParams.set(key, value.toString());
@@ -177,9 +187,7 @@ export default function PackageResults() {
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <p className="text-red-600 mb-4">{error}</p>
-            <Button onClick={() => window.location.reload()}>
-              Try Again
-            </Button>
+            <Button onClick={() => window.location.reload()}>Try Again</Button>
           </div>
         </div>
       </Layout>
@@ -200,33 +208,39 @@ export default function PackageResults() {
                 <div className="text-gray-600">
                   <p>
                     {pagination.total} packages found
-                    {currentFilters.q && (
-                      <span> for "{currentFilters.q}"</span>
-                    )}
+                    {currentFilters.q && <span> for "{currentFilters.q}"</span>}
                   </p>
                   {/* Search Summary */}
-                  {(currentFilters.departure_date || currentFilters.destination || currentFilters.destination_code) && (
+                  {(currentFilters.departure_date ||
+                    currentFilters.destination ||
+                    currentFilters.destination_code) && (
                     <div className="text-sm text-gray-500 mt-1">
                       {currentFilters.destination && (
                         <span>Destination: {currentFilters.destination}</span>
                       )}
                       {currentFilters.departure_date && (
                         <span className="ml-4">
-                          Departure: {new Date(currentFilters.departure_date).toLocaleDateString('en-US', {
-                            weekday: 'short',
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric'
+                          Departure:{" "}
+                          {new Date(
+                            currentFilters.departure_date,
+                          ).toLocaleDateString("en-US", {
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
                           })}
                         </span>
                       )}
                       {currentFilters.return_date && (
                         <span className="ml-2">
-                          - {new Date(currentFilters.return_date).toLocaleDateString('en-US', {
-                            weekday: 'short',
-                            month: 'short',
-                            day: 'numeric',
-                            year: 'numeric'
+                          -{" "}
+                          {new Date(
+                            currentFilters.return_date,
+                          ).toLocaleDateString("en-US", {
+                            weekday: "short",
+                            month: "short",
+                            day: "numeric",
+                            year: "numeric",
                           })}
                         </span>
                       )}
@@ -274,7 +288,6 @@ export default function PackageResults() {
               </select>
             </div>
           </div>
-
         </div>
 
         {/* Mobile View Toggle */}
@@ -315,12 +328,14 @@ export default function PackageResults() {
           </div>
 
           {/* Filters Sidebar */}
-          <div className={`
-            ${showFilters ? 'block' : 'hidden'} md:block
+          <div
+            className={`
+            ${showFilters ? "block" : "hidden"} md:block
             fixed md:relative inset-0 md:inset-auto z-20 md:z-auto
             bg-white md:bg-transparent w-full md:w-80 h-full md:h-auto
             overflow-y-auto md:overflow-visible p-4 md:p-0
-          `}>
+          `}
+          >
             {showFilters && (
               <div className="md:hidden flex justify-between items-center mb-4 pb-4 border-b">
                 <h3 className="text-lg font-semibold">Filters</h3>
@@ -333,7 +348,7 @@ export default function PackageResults() {
                 </Button>
               </div>
             )}
-            
+
             <PackageFilters
               filters={currentFilters}
               facets={facets}
@@ -393,23 +408,26 @@ export default function PackageResults() {
                     >
                       Previous
                     </Button>
-                    
-                    {Array.from({ length: Math.min(5, pagination.total_pages) }, (_, i) => {
-                      const page = i + 1;
-                      const isActive = page === pagination.page;
-                      
-                      return (
-                        <Button
-                          key={page}
-                          variant={isActive ? "default" : "outline"}
-                          onClick={() => changePage(page)}
-                          className={isActive ? "bg-blue-600 text-white" : ""}
-                        >
-                          {page}
-                        </Button>
-                      );
-                    })}
-                    
+
+                    {Array.from(
+                      { length: Math.min(5, pagination.total_pages) },
+                      (_, i) => {
+                        const page = i + 1;
+                        const isActive = page === pagination.page;
+
+                        return (
+                          <Button
+                            key={page}
+                            variant={isActive ? "default" : "outline"}
+                            onClick={() => changePage(page)}
+                            className={isActive ? "bg-blue-600 text-white" : ""}
+                          >
+                            {page}
+                          </Button>
+                        );
+                      },
+                    )}
+
                     <Button
                       variant="outline"
                       disabled={!pagination.has_next}

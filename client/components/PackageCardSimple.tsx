@@ -45,7 +45,11 @@ interface PackageCardSimpleProps {
   children?: number;
 }
 
-export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: PackageCardSimpleProps) {
+export function PackageCardSimple({
+  package: pkg,
+  adults = 2,
+  children = 0,
+}: PackageCardSimpleProps) {
   const navigate = useNavigate();
 
   const handleViewDetails = (e: React.MouseEvent) => {
@@ -57,7 +61,7 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
   const handleBargainClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    console.log('Bargain clicked for package:', pkg.slug);
+    console.log("Bargain clicked for package:", pkg.slug);
   };
   const formatPrice = (price: number, currency: string = "INR") => {
     if (currency === "INR") {
@@ -68,7 +72,7 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
 
   // Calculate total price based on actual pax count
   const adultPrice = pkg.from_price * adults;
-  const childPrice = (pkg.from_price * 0.75) * children; // Children typically 75% of adult price
+  const childPrice = pkg.from_price * 0.75 * children; // Children typically 75% of adult price
   const totalPrice = adultPrice + childPrice;
   const pricePerPerson = pkg.from_price;
 
@@ -89,11 +93,11 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
           <img
             src={
               pkg.hero_image_url ||
-              (pkg.title?.toLowerCase().includes('dubai') ?
-                "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400" :
-                pkg.title?.toLowerCase().includes('bali') ?
-                "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=400" :
-                "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400")
+              (pkg.title?.toLowerCase().includes("dubai")
+                ? "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400"
+                : pkg.title?.toLowerCase().includes("bali")
+                  ? "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  : "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400")
             }
             alt={pkg.title}
             className="w-full h-full object-cover"
@@ -102,18 +106,30 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
               e.currentTarget.style.opacity = "1";
             }}
             onError={(e) => {
-              console.log("Image load error for:", pkg.title, e.currentTarget.src);
+              console.log(
+                "Image load error for:",
+                pkg.title,
+                e.currentTarget.src,
+              );
               // First fallback
-              if (e.currentTarget.src !== "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400") {
-                e.currentTarget.src = "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400";
-              } else if (e.currentTarget.src !== "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image") {
+              if (
+                e.currentTarget.src !==
+                "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400"
+              ) {
+                e.currentTarget.src =
+                  "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400";
+              } else if (
+                e.currentTarget.src !==
+                "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image"
+              ) {
                 // Final fallback
-                e.currentTarget.src = "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image";
+                e.currentTarget.src =
+                  "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image";
               }
             }}
             style={{ opacity: 0, transition: "opacity 0.3s ease" }}
           />
-          
+
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {pkg.is_featured && (
@@ -122,7 +138,10 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
               </Badge>
             )}
             {pkg.category && (
-              <Badge variant="secondary" className="text-xs px-2 py-1 capitalize">
+              <Badge
+                variant="secondary"
+                className="text-xs px-2 py-1 capitalize"
+              >
                 {pkg.category}
               </Badge>
             )}
@@ -149,19 +168,24 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
               {pkg.title}
             </h3>
           </Link>
-          
+
           <div className="flex items-center text-sm text-gray-600 mb-2">
             <MapPin className="w-4 h-4 mr-1" />
-            <span>{pkg.region_name}{pkg.country_name && ` • ${pkg.country_name}`}</span>
+            <span>
+              {pkg.region_name}
+              {pkg.country_name && ` • ${pkg.country_name}`}
+            </span>
           </div>
-          
+
           {pkg.rating > 0 && (
             <div className="flex items-center gap-2 mb-3">
               <div className="flex items-center bg-blue-600 text-white px-2 py-1 rounded text-sm">
                 <Star className="w-3 h-3 mr-1 fill-current" />
                 {pkg.rating}
               </div>
-              <span className="text-sm text-gray-600">{pkg.review_count} reviews</span>
+              <span className="text-sm text-gray-600">
+                {pkg.review_count} reviews
+              </span>
             </div>
           )}
 
@@ -169,13 +193,17 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
           <div className="grid grid-cols-2 gap-3 mb-4 text-sm text-gray-600">
             <div className="flex items-center">
               <Clock className="w-4 h-4 mr-2 text-blue-500" />
-              <span>{pkg.duration_days}D/{pkg.duration_nights}N</span>
+              <span>
+                {pkg.duration_days}D/{pkg.duration_nights}N
+              </span>
             </div>
-            
+
             {pkg.next_departure_date && (
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-2 text-green-500" />
-                <span className="truncate">{formatDate(pkg.next_departure_date)}</span>
+                <span className="truncate">
+                  {formatDate(pkg.next_departure_date)}
+                </span>
               </div>
             )}
           </div>
@@ -236,17 +264,19 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
                 gap: "6px",
                 cursor: "pointer",
                 boxShadow: "0 1px 3px rgba(0,53,128,0.15)",
-                transition: "all 0.2s ease"
+                transition: "all 0.2s ease",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#002a66";
                 e.currentTarget.style.transform = "translateY(-1px)";
-                e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,53,128,0.25)";
+                e.currentTarget.style.boxShadow =
+                  "0 2px 8px rgba(0,53,128,0.25)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "#003580";
                 e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,53,128,0.15)";
+                e.currentTarget.style.boxShadow =
+                  "0 1px 3px rgba(0,53,128,0.15)";
               }}
             >
               <Eye className="w-4 h-4" />
@@ -263,9 +293,9 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
                 provider: "Package Provider",
                 features: pkg.highlights?.slice(0, 5) || [],
                 duration: `${pkg.duration_days}D/${pkg.duration_nights}N`,
-                travelers: `${adults} Adult${adults !== 1 ? 's' : ''}${children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}`,
+                travelers: `${adults} Adult${adults !== 1 ? "s" : ""}${children > 0 ? `, ${children} Child${children !== 1 ? "ren" : ""}` : ""}`,
                 basePrice: pkg.from_price,
-                totalTravelers: adults + children
+                totalTravelers: adults + children,
               }}
               style={{
                 backgroundColor: "#febb02",
@@ -277,7 +307,7 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
                 fontSize: "13px",
                 minHeight: "40px",
                 width: "50%",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
               }}
             >
               Bargain
@@ -293,11 +323,11 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
           <img
             src={
               pkg.hero_image_url ||
-              (pkg.title?.toLowerCase().includes('dubai') ?
-                "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400" :
-                pkg.title?.toLowerCase().includes('bali') ?
-                "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=400" :
-                "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400")
+              (pkg.title?.toLowerCase().includes("dubai")
+                ? "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400"
+                : pkg.title?.toLowerCase().includes("bali")
+                  ? "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=400"
+                  : "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400")
             }
             alt={pkg.title}
             className="w-full h-full object-cover"
@@ -306,18 +336,30 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
               e.currentTarget.style.opacity = "1";
             }}
             onError={(e) => {
-              console.log("Image load error for:", pkg.title, e.currentTarget.src);
+              console.log(
+                "Image load error for:",
+                pkg.title,
+                e.currentTarget.src,
+              );
               // First fallback
-              if (e.currentTarget.src !== "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400") {
-                e.currentTarget.src = "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400";
-              } else if (e.currentTarget.src !== "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image") {
+              if (
+                e.currentTarget.src !==
+                "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400"
+              ) {
+                e.currentTarget.src =
+                  "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400";
+              } else if (
+                e.currentTarget.src !==
+                "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image"
+              ) {
                 // Final fallback
-                e.currentTarget.src = "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image";
+                e.currentTarget.src =
+                  "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image";
               }
             }}
             style={{ opacity: 0, transition: "opacity 0.3s ease" }}
           />
-          
+
           {/* Badges */}
           <div className="absolute top-3 left-3 flex flex-col gap-2">
             {pkg.is_featured && (
@@ -340,19 +382,24 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
                   {pkg.title}
                 </h3>
               </Link>
-              
+
               <div className="flex items-center text-sm text-gray-600 mb-2">
                 <MapPin className="w-4 h-4 mr-1" />
-                <span>{pkg.region_name}{pkg.country_name && ` • ${pkg.country_name}`}</span>
+                <span>
+                  {pkg.region_name}
+                  {pkg.country_name && ` • ${pkg.country_name}`}
+                </span>
               </div>
-              
+
               {pkg.rating > 0 && (
                 <div className="flex items-center gap-2 mb-3">
                   <div className="flex items-center bg-blue-600 text-white px-2 py-1 rounded text-sm">
                     <Star className="w-3 h-3 mr-1 fill-current" />
                     {pkg.rating}
                   </div>
-                  <span className="text-sm text-gray-600">{pkg.review_count} reviews</span>
+                  <span className="text-sm text-gray-600">
+                    {pkg.review_count} reviews
+                  </span>
                 </div>
               )}
             </div>
@@ -372,9 +419,11 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
           <div className="grid grid-cols-3 gap-4 mb-4 text-sm text-gray-600">
             <div className="flex items-center">
               <Clock className="w-4 h-4 mr-2 text-blue-500" />
-              <span>{pkg.duration_days}D/{pkg.duration_nights}N</span>
+              <span>
+                {pkg.duration_days}D/{pkg.duration_nights}N
+              </span>
             </div>
-            
+
             {pkg.next_departure_date && (
               <div className="flex items-center">
                 <Calendar className="w-4 h-4 mr-2 text-green-500" />
@@ -422,17 +471,19 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
                 gap: "6px",
                 cursor: "pointer",
                 boxShadow: "0 1px 3px rgba(0,53,128,0.15)",
-                transition: "all 0.2s ease"
+                transition: "all 0.2s ease",
               }}
               onMouseEnter={(e) => {
                 e.currentTarget.style.backgroundColor = "#002a66";
                 e.currentTarget.style.transform = "translateY(-1px)";
-                e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,53,128,0.25)";
+                e.currentTarget.style.boxShadow =
+                  "0 2px 8px rgba(0,53,128,0.25)";
               }}
               onMouseLeave={(e) => {
                 e.currentTarget.style.backgroundColor = "#003580";
                 e.currentTarget.style.transform = "translateY(0)";
-                e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,53,128,0.15)";
+                e.currentTarget.style.boxShadow =
+                  "0 1px 3px rgba(0,53,128,0.15)";
               }}
             >
               <Eye className="w-4 h-4" />
@@ -449,9 +500,9 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
                 provider: "Package Provider",
                 features: pkg.highlights?.slice(0, 5) || [],
                 duration: `${pkg.duration_days}D/${pkg.duration_nights}N`,
-                travelers: `${adults} Adult${adults !== 1 ? 's' : ''}${children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}`,
+                travelers: `${adults} Adult${adults !== 1 ? "s" : ""}${children > 0 ? `, ${children} Child${children !== 1 ? "ren" : ""}` : ""}`,
                 basePrice: pkg.from_price,
-                totalTravelers: adults + children
+                totalTravelers: adults + children,
               }}
               style={{
                 backgroundColor: "#febb02",
@@ -463,7 +514,7 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
                 fontSize: "13px",
                 minHeight: "40px",
                 width: "50%",
-                boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)",
               }}
             >
               Bargain

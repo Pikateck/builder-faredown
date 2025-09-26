@@ -5,7 +5,13 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useAuth } from "@/contexts/AuthContext";
@@ -87,9 +93,10 @@ export default function PackageBooking() {
   // Initialize additional guests based on traveler count
   useEffect(() => {
     if (bookingData) {
-      const totalGuests = bookingData.travelers.adults + bookingData.travelers.children - 1; // -1 for primary guest
+      const totalGuests =
+        bookingData.travelers.adults + bookingData.travelers.children - 1; // -1 for primary guest
       const guests: GuestDetails[] = [];
-      
+
       for (let i = 0; i < totalGuests; i++) {
         guests.push({
           title: "Mr",
@@ -97,18 +104,22 @@ export default function PackageBooking() {
           lastName: "",
         });
       }
-      
+
       setAdditionalGuests(guests);
     }
   }, [bookingData]);
 
-  const handleGuestChange = (index: number, field: keyof GuestDetails, value: string) => {
+  const handleGuestChange = (
+    index: number,
+    field: keyof GuestDetails,
+    value: string,
+  ) => {
     if (index === -1) {
       // Primary guest
-      setPrimaryGuest(prev => ({ ...prev, [field]: value }));
+      setPrimaryGuest((prev) => ({ ...prev, [field]: value }));
     } else {
       // Additional guest
-      setAdditionalGuests(prev => {
+      setAdditionalGuests((prev) => {
         const updated = [...prev];
         updated[index] = { ...updated[index], [field]: value };
         return updated;
@@ -118,37 +129,47 @@ export default function PackageBooking() {
 
   const calculateTotalPrice = () => {
     if (!bookingData) return 0;
-    
+
     // Use bargained price if available, otherwise calculate normal price
     if (bookingData.bargainedPrice) {
       return bookingData.bargainedPrice;
     }
-    
-    const adultPrice = bookingData.departure.price_per_person * bookingData.travelers.adults;
-    const childPrice = (bookingData.departure.child_price || bookingData.departure.price_per_person * 0.75) * bookingData.travelers.children;
-    
+
+    const adultPrice =
+      bookingData.departure.price_per_person * bookingData.travelers.adults;
+    const childPrice =
+      (bookingData.departure.child_price ||
+        bookingData.departure.price_per_person * 0.75) *
+      bookingData.travelers.children;
+
     return adultPrice + childPrice;
   };
 
   const handleBooking = async () => {
     if (!bookingData || !agreeToTerms) return;
-    
+
     setLoading(true);
     setError("");
-    
+
     try {
       // Validate required fields
-      if (!primaryGuest.firstName || !primaryGuest.lastName || !primaryGuest.email) {
+      if (
+        !primaryGuest.firstName ||
+        !primaryGuest.lastName ||
+        !primaryGuest.email
+      ) {
         setError("Please fill in all required fields for the primary guest");
         return;
       }
-      
+
       // Prepare guest details
       const guestDetails = {
         primary_guest: primaryGuest,
-        additional_guests: additionalGuests.filter(guest => guest.firstName && guest.lastName),
+        additional_guests: additionalGuests.filter(
+          (guest) => guest.firstName && guest.lastName,
+        ),
       };
-      
+
       // Submit booking
       const response = await apiClient.post(`/packages/${slug}/book`, {
         departure_id: bookingData.departure.id,
@@ -158,7 +179,7 @@ export default function PackageBooking() {
         bargain_session_id: bookingData.orderRef,
         special_requests: specialRequests,
       });
-      
+
       if (response.success) {
         // Store module info for header navigation
         localStorage.setItem("lastBookingModule", "packages");
@@ -187,9 +208,16 @@ export default function PackageBooking() {
         <Header />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Invalid Booking Request</h2>
-            <p className="text-gray-600 mb-6">Please return to the package details to start booking.</p>
-            <Button onClick={() => navigate(`/packages/${slug}`)} className="bg-blue-600 hover:bg-blue-700">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Invalid Booking Request
+            </h2>
+            <p className="text-gray-600 mb-6">
+              Please return to the package details to start booking.
+            </p>
+            <Button
+              onClick={() => navigate(`/packages/${slug}`)}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Package
             </Button>
@@ -205,14 +233,10 @@ export default function PackageBooking() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <div className="max-w-4xl mx-auto px-4 py-6">
         {/* Back Button */}
-        <Button
-          onClick={() => navigate(-1)}
-          variant="outline"
-          className="mb-6"
-        >
+        <Button onClick={() => navigate(-1)} variant="outline" className="mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Package
         </Button>
@@ -243,12 +267,17 @@ export default function PackageBooking() {
                     </div>
                     <div className="flex items-center text-gray-600 mt-1">
                       <Calendar className="w-4 h-4 mr-1" />
-                      {format(parseISO(departure.departure_date), "EEE, MMM d, yyyy")}
+                      {format(
+                        parseISO(departure.departure_date),
+                        "EEE, MMM d, yyyy",
+                      )}
                     </div>
                     <div className="flex items-center text-gray-600 mt-1">
                       <Users className="w-4 h-4 mr-1" />
-                      {travelers.adults} Adult{travelers.adults !== 1 ? 's' : ''}
-                      {travelers.children > 0 && `, ${travelers.children} Child${travelers.children !== 1 ? 'ren' : ''}`}
+                      {travelers.adults} Adult
+                      {travelers.adults !== 1 ? "s" : ""}
+                      {travelers.children > 0 &&
+                        `, ${travelers.children} Child${travelers.children !== 1 ? "ren" : ""}`}
                     </div>
                   </div>
                 </div>
@@ -258,11 +287,18 @@ export default function PackageBooking() {
             {/* Primary Guest Details */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">Primary Guest Details</h3>
+                <h3 className="text-lg font-semibold mb-4">
+                  Primary Guest Details
+                </h3>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="title">Title *</Label>
-                    <Select value={primaryGuest.title} onValueChange={(value) => handleGuestChange(-1, "title", value)}>
+                    <Select
+                      value={primaryGuest.title}
+                      onValueChange={(value) =>
+                        handleGuestChange(-1, "title", value)
+                      }
+                    >
                       <SelectTrigger className="border-2 border-[#003580] focus:ring-[#003580]">
                         <SelectValue />
                       </SelectTrigger>
@@ -274,51 +310,64 @@ export default function PackageBooking() {
                       </SelectContent>
                     </Select>
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="firstName">First Name *</Label>
                     <Input
                       id="firstName"
                       value={primaryGuest.firstName}
-                      onChange={(e) => handleGuestChange(-1, "firstName", e.target.value)}
+                      onChange={(e) =>
+                        handleGuestChange(-1, "firstName", e.target.value)
+                      }
                       placeholder="Enter first name"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="lastName">Last Name *</Label>
                     <Input
                       id="lastName"
                       value={primaryGuest.lastName}
-                      onChange={(e) => handleGuestChange(-1, "lastName", e.target.value)}
+                      onChange={(e) =>
+                        handleGuestChange(-1, "lastName", e.target.value)
+                      }
                       placeholder="Enter last name"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="email">Email *</Label>
                     <Input
                       id="email"
                       type="email"
                       value={primaryGuest.email}
-                      onChange={(e) => handleGuestChange(-1, "email", e.target.value)}
+                      onChange={(e) =>
+                        handleGuestChange(-1, "email", e.target.value)
+                      }
                       placeholder="Enter email address"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="phone">Phone Number</Label>
                     <Input
                       id="phone"
                       value={primaryGuest.phone}
-                      onChange={(e) => handleGuestChange(-1, "phone", e.target.value)}
+                      onChange={(e) =>
+                        handleGuestChange(-1, "phone", e.target.value)
+                      }
                       placeholder="Enter phone number"
                     />
                   </div>
-                  
+
                   <div>
                     <Label htmlFor="nationality">Nationality</Label>
-                    <Select value={primaryGuest.nationality || ""} onValueChange={(value) => handleGuestChange(-1, "nationality", value)}>
+                    <Select
+                      value={primaryGuest.nationality || ""}
+                      onValueChange={(value) =>
+                        handleGuestChange(-1, "nationality", value)
+                      }
+                    >
                       <SelectTrigger className="border-2 border-[#003580] focus:ring-[#003580]">
                         <SelectValue placeholder="Select nationality" />
                       </SelectTrigger>
@@ -342,14 +391,24 @@ export default function PackageBooking() {
             {additionalGuests.length > 0 && (
               <Card>
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">Additional Guests</h3>
+                  <h3 className="text-lg font-semibold mb-4">
+                    Additional Guests
+                  </h3>
                   {additionalGuests.map((guest, index) => (
-                    <div key={index} className="mb-6 p-4 border border-gray-200 rounded-lg">
+                    <div
+                      key={index}
+                      className="mb-6 p-4 border border-gray-200 rounded-lg"
+                    >
                       <h4 className="font-medium mb-3">Guest {index + 2}</h4>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <Label>Title</Label>
-                          <Select value={guest.title} onValueChange={(value) => handleGuestChange(index, "title", value)}>
+                          <Select
+                            value={guest.title}
+                            onValueChange={(value) =>
+                              handleGuestChange(index, "title", value)
+                            }
+                          >
                             <SelectTrigger className="border-2 border-[#003580] focus:ring-[#003580]">
                               <SelectValue />
                             </SelectTrigger>
@@ -361,34 +420,54 @@ export default function PackageBooking() {
                             </SelectContent>
                           </Select>
                         </div>
-                        
+
                         <div>
                           <Label>First Name</Label>
                           <Input
                             value={guest.firstName}
-                            onChange={(e) => handleGuestChange(index, "firstName", e.target.value)}
+                            onChange={(e) =>
+                              handleGuestChange(
+                                index,
+                                "firstName",
+                                e.target.value,
+                              )
+                            }
                             placeholder="Enter first name"
                           />
                         </div>
-                        
+
                         <div>
                           <Label>Last Name</Label>
                           <Input
                             value={guest.lastName}
-                            onChange={(e) => handleGuestChange(index, "lastName", e.target.value)}
+                            onChange={(e) =>
+                              handleGuestChange(
+                                index,
+                                "lastName",
+                                e.target.value,
+                              )
+                            }
                             placeholder="Enter last name"
                           />
                         </div>
-                        
+
                         <div>
                           <Label>Nationality</Label>
-                          <Select value={guest.nationality || ""} onValueChange={(value) => handleGuestChange(index, "nationality", value)}>
+                          <Select
+                            value={guest.nationality || ""}
+                            onValueChange={(value) =>
+                              handleGuestChange(index, "nationality", value)
+                            }
+                          >
                             <SelectTrigger className="border-2 border-[#003580] focus:ring-[#003580]">
                               <SelectValue placeholder="Select nationality" />
                             </SelectTrigger>
                             <SelectContent>
                               {countries.map((country) => (
-                                <SelectItem key={country.iso2} value={country.name}>
+                                <SelectItem
+                                  key={country.iso2}
+                                  value={country.name}
+                                >
                                   <div className="flex items-center space-x-2">
                                     <span>{country.flag}</span>
                                     <span>{country.name}</span>
@@ -409,7 +488,9 @@ export default function PackageBooking() {
             <Card>
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold mb-4">Special Requests</h3>
-                <Label htmlFor="specialRequests">Any special requests or requirements?</Label>
+                <Label htmlFor="specialRequests">
+                  Any special requests or requirements?
+                </Label>
                 <textarea
                   id="specialRequests"
                   value={specialRequests}
@@ -427,11 +508,26 @@ export default function PackageBooking() {
                   <Checkbox
                     id="terms"
                     checked={agreeToTerms}
-                    onCheckedChange={(checked) => setAgreeToTerms(checked as boolean)}
+                    onCheckedChange={(checked) =>
+                      setAgreeToTerms(checked as boolean)
+                    }
                   />
                   <div className="flex-1">
                     <Label htmlFor="terms" className="text-sm">
-                      I agree to the <a href="/terms-conditions" className="text-blue-600 hover:underline">Terms & Conditions</a> and <a href="/privacy-policy" className="text-blue-600 hover:underline">Privacy Policy</a>
+                      I agree to the{" "}
+                      <a
+                        href="/terms-conditions"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Terms & Conditions
+                      </a>{" "}
+                      and{" "}
+                      <a
+                        href="/privacy-policy"
+                        className="text-blue-600 hover:underline"
+                      >
+                        Privacy Policy
+                      </a>
                     </Label>
                   </div>
                 </div>
@@ -453,33 +549,57 @@ export default function PackageBooking() {
             <Card className="sticky top-4">
               <CardContent className="p-6">
                 <h3 className="text-lg font-semibold mb-4">Booking Summary</h3>
-                
+
                 {/* Price Breakdown */}
                 <div className="space-y-3 mb-6">
                   <div className="flex justify-between text-sm">
                     <span>Adults ({travelers.adults})</span>
-                    <span>{formatPrice(departure.price_per_person * travelers.adults, departure.currency)}</span>
+                    <span>
+                      {formatPrice(
+                        departure.price_per_person * travelers.adults,
+                        departure.currency,
+                      )}
+                    </span>
                   </div>
-                  
+
                   {travelers.children > 0 && (
                     <div className="flex justify-between text-sm">
                       <span>Children ({travelers.children})</span>
-                      <span>{formatPrice((departure.child_price || departure.price_per_person * 0.75) * travelers.children, departure.currency)}</span>
+                      <span>
+                        {formatPrice(
+                          (departure.child_price ||
+                            departure.price_per_person * 0.75) *
+                            travelers.children,
+                          departure.currency,
+                        )}
+                      </span>
                     </div>
                   )}
-                  
+
                   {bookingData.bargainedPrice && (
                     <div className="flex justify-between text-sm text-green-600">
                       <span>Bargain Discount</span>
-                      <span>-{formatPrice((departure.price_per_person * travelers.adults + (departure.child_price || departure.price_per_person * 0.75) * travelers.children) - bookingData.bargainedPrice, departure.currency)}</span>
+                      <span>
+                        -
+                        {formatPrice(
+                          departure.price_per_person * travelers.adults +
+                            (departure.child_price ||
+                              departure.price_per_person * 0.75) *
+                              travelers.children -
+                            bookingData.bargainedPrice,
+                          departure.currency,
+                        )}
+                      </span>
                     </div>
                   )}
-                  
+
                   <hr />
-                  
+
                   <div className="flex justify-between font-semibold text-lg">
                     <span>Total</span>
-                    <span className="text-blue-600">{formatPrice(totalPrice, departure.currency)}</span>
+                    <span className="text-blue-600">
+                      {formatPrice(totalPrice, departure.currency)}
+                    </span>
                   </div>
                 </div>
 

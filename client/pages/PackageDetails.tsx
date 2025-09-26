@@ -143,11 +143,12 @@ export default function PackageDetails() {
   const { slug } = useParams<{ slug: string }>();
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
-  
+
   const [packageData, setPackageData] = useState<PackageDetails | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
-  const [selectedDeparture, setSelectedDeparture] = useState<PackageDeparture | null>(null);
+  const [selectedDeparture, setSelectedDeparture] =
+    useState<PackageDeparture | null>(null);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [showGallery, setShowGallery] = useState(false);
   const [showBookingModal, setShowBookingModal] = useState(false);
@@ -212,7 +213,7 @@ export default function PackageDetails() {
       {
         slug,
         selectedDate: selectedDeparture.departure_date,
-      }
+      },
     );
 
     guardBookNow(bookingContext, () => {
@@ -236,7 +237,11 @@ export default function PackageDetails() {
     setShowBargainModal(true);
   };
 
-  const handleBargainAccept = (finalPrice: number, orderRef: string, holdData?: any) => {
+  const handleBargainAccept = (
+    finalPrice: number,
+    orderRef: string,
+    holdData?: any,
+  ) => {
     // Close the bargain modal
     setShowBargainModal(false);
 
@@ -262,8 +267,11 @@ export default function PackageDetails() {
     setShowBargainModal(false);
   };
 
-  const images = packageData?.media?.filter(m => m.type === 'image') || [];
-  const displayImages = images.length > 0 ? images : [{ url: packageData?.hero_image_url, alt_text: packageData?.title }];
+  const images = packageData?.media?.filter((m) => m.type === "image") || [];
+  const displayImages =
+    images.length > 0
+      ? images
+      : [{ url: packageData?.hero_image_url, alt_text: packageData?.title }];
 
   if (loading) {
     return (
@@ -285,9 +293,16 @@ export default function PackageDetails() {
         <Header />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
-            <h2 className="text-2xl font-bold text-gray-900 mb-4">Package Not Found</h2>
-            <p className="text-gray-600 mb-6">{error || "The package you're looking for doesn't exist."}</p>
-            <Button onClick={() => navigate("/packages")} className="bg-blue-600 hover:bg-blue-700">
+            <h2 className="text-2xl font-bold text-gray-900 mb-4">
+              Package Not Found
+            </h2>
+            <p className="text-gray-600 mb-6">
+              {error || "The package you're looking for doesn't exist."}
+            </p>
+            <Button
+              onClick={() => navigate("/packages")}
+              className="bg-blue-600 hover:bg-blue-700"
+            >
               Browse All Packages
             </Button>
           </div>
@@ -299,14 +314,10 @@ export default function PackageDetails() {
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
-      
+
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Back Button */}
-        <Button
-          onClick={() => navigate(-1)}
-          variant="outline"
-          className="mb-6"
-        >
+        <Button onClick={() => navigate(-1)} variant="outline" className="mb-6">
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to Results
         </Button>
@@ -316,20 +327,20 @@ export default function PackageDetails() {
           <img
             src={
               packageData.hero_image_url ||
-              packageData.media?.find(m => m.type === 'image')?.url ||
-              (packageData.slug?.includes('paris') ?
-                "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800" :
-                packageData.slug?.includes('dubai') ?
-                "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800" :
-                packageData.slug?.includes('bali') ?
-                "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=800" :
-                "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=800"
-              )
+              packageData.media?.find((m) => m.type === "image")?.url ||
+              (packageData.slug?.includes("paris")
+                ? "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800"
+                : packageData.slug?.includes("dubai")
+                  ? "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800"
+                  : packageData.slug?.includes("bali")
+                    ? "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=800"
+                    : "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=800")
             }
             alt={packageData.title}
             className="absolute inset-0 w-full h-full object-cover"
             onError={(e) => {
-              e.currentTarget.src = "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800";
+              e.currentTarget.src =
+                "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800";
             }}
           />
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
@@ -342,26 +353,31 @@ export default function PackageDetails() {
                   <Badge className="bg-yellow-500 text-black">Featured</Badge>
                 )}
                 {packageData.category && (
-                  <Badge variant="secondary" className="bg-white bg-opacity-20 text-white">
+                  <Badge
+                    variant="secondary"
+                    className="bg-white bg-opacity-20 text-white"
+                  >
                     {packageData.category}
                   </Badge>
                 )}
               </div>
-              
-              <h1 className="text-2xl md:text-4xl font-bold mb-2">{packageData.title}</h1>
-              
+
+              <h1 className="text-2xl md:text-4xl font-bold mb-2">
+                {packageData.title}
+              </h1>
+
               <div className="flex flex-wrap items-center gap-4 text-sm md:text-base">
                 <div className="flex items-center">
                   <MapPin className="w-4 h-4 mr-1" />
                   {packageData.region_name}
                   {packageData.country_name && ` • ${packageData.country_name}`}
                 </div>
-                
+
                 <div className="flex items-center">
                   <Clock className="w-4 h-4 mr-1" />
                   {packageData.duration_days}D/{packageData.duration_nights}N
                 </div>
-                
+
                 {packageData.rating > 0 && (
                   <div className="flex items-center">
                     <Star className="w-4 h-4 mr-1 fill-current text-yellow-400" />
@@ -380,21 +396,24 @@ export default function PackageDetails() {
             <Card>
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Package Overview</h2>
-                <p className="text-gray-700 leading-relaxed">{packageData.description}</p>
-                
-                {packageData.highlights && packageData.highlights.length > 0 && (
-                  <div className="mt-6">
-                    <h3 className="font-semibold mb-3">Highlights</h3>
-                    <ul className="space-y-2">
-                      {packageData.highlights.map((highlight, index) => (
-                        <li key={index} className="flex items-start">
-                          <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700">{highlight}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
+                <p className="text-gray-700 leading-relaxed">
+                  {packageData.description}
+                </p>
+
+                {packageData.highlights &&
+                  packageData.highlights.length > 0 && (
+                    <div className="mt-6">
+                      <h3 className="font-semibold mb-3">Highlights</h3>
+                      <ul className="space-y-2">
+                        {packageData.highlights.map((highlight, index) => (
+                          <li key={index} className="flex items-start">
+                            <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                            <span className="text-gray-700">{highlight}</span>
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                  )}
               </CardContent>
             </Card>
 
@@ -402,45 +421,58 @@ export default function PackageDetails() {
             {packageData.itinerary && packageData.itinerary.length > 0 && (
               <Card>
                 <CardContent className="p-6">
-                  <h2 className="text-xl font-semibold mb-4">Day-wise Itinerary</h2>
+                  <h2 className="text-xl font-semibold mb-4">
+                    Day-wise Itinerary
+                  </h2>
                   <div className="space-y-6">
                     {packageData.itinerary.map((day) => (
-                      <div key={day.day_number} className="border-l-2 border-blue-200 pl-4 pb-6 last:pb-0">
+                      <div
+                        key={day.day_number}
+                        className="border-l-2 border-blue-200 pl-4 pb-6 last:pb-0"
+                      >
                         <div className="flex items-center mb-2">
                           <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold -ml-6 mr-3">
                             {day.day_number}
                           </div>
                           <h3 className="font-semibold text-lg">{day.title}</h3>
                         </div>
-                        
+
                         <p className="text-gray-700 mb-3">{day.description}</p>
-                        
+
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
                           {day.cities && (
                             <div className="flex items-center">
                               <MapPin className="w-4 h-4 mr-2 text-blue-500" />
-                              <span><strong>Cities:</strong> {day.cities}</span>
+                              <span>
+                                <strong>Cities:</strong> {day.cities}
+                              </span>
                             </div>
                           )}
-                          
+
                           {day.meals_included && (
                             <div className="flex items-center">
                               <Utensils className="w-4 h-4 mr-2 text-orange-500" />
-                              <span><strong>Meals:</strong> {day.meals_included}</span>
+                              <span>
+                                <strong>Meals:</strong> {day.meals_included}
+                              </span>
                             </div>
                           )}
-                          
+
                           {day.accommodation && (
                             <div className="flex items-center">
                               <Hotel className="w-4 h-4 mr-2 text-purple-500" />
-                              <span><strong>Stay:</strong> {day.accommodation}</span>
+                              <span>
+                                <strong>Stay:</strong> {day.accommodation}
+                              </span>
                             </div>
                           )}
-                          
+
                           {day.transport && (
                             <div className="flex items-center">
                               <Bus className="w-4 h-4 mr-2 text-green-500" />
-                              <span><strong>Transport:</strong> {day.transport}</span>
+                              <span>
+                                <strong>Transport:</strong> {day.transport}
+                              </span>
                             </div>
                           )}
                         </div>
@@ -456,7 +488,9 @@ export default function PackageDetails() {
               {packageData.inclusions && packageData.inclusions.length > 0 && (
                 <Card>
                   <CardContent className="p-6">
-                    <h3 className="font-semibold mb-4 text-green-700">✓ Inclusions</h3>
+                    <h3 className="font-semibold mb-4 text-green-700">
+                      ✓ Inclusions
+                    </h3>
                     <ul className="space-y-2">
                       {packageData.inclusions.map((item, index) => (
                         <li key={index} className="flex items-start">
@@ -472,7 +506,9 @@ export default function PackageDetails() {
               {packageData.exclusions && packageData.exclusions.length > 0 && (
                 <Card>
                   <CardContent className="p-6">
-                    <h3 className="font-semibold mb-4 text-red-700">✗ Exclusions</h3>
+                    <h3 className="font-semibold mb-4 text-red-700">
+                      ✗ Exclusions
+                    </h3>
                     <ul className="space-y-2">
                       {packageData.exclusions.map((item, index) => (
                         <li key={index} className="flex items-start">
@@ -494,28 +530,31 @@ export default function PackageDetails() {
                   <div className="flex items-center">
                     <Shield className="w-4 h-4 mr-2 text-blue-500" />
                     <span>
-                      <strong>Visa Required:</strong> {packageData.visa_required ? "Yes" : "No"}
+                      <strong>Visa Required:</strong>{" "}
+                      {packageData.visa_required ? "Yes" : "No"}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center">
                     <Globe className="w-4 h-4 mr-2 text-green-500" />
                     <span>
-                      <strong>Passport Required:</strong> {packageData.passport_required ? "Yes" : "No"}
+                      <strong>Passport Required:</strong>{" "}
+                      {packageData.passport_required ? "Yes" : "No"}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center">
                     <Users className="w-4 h-4 mr-2 text-purple-500" />
                     <span>
                       <strong>Min Age:</strong> {packageData.minimum_age} years
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center">
                     <Award className="w-4 h-4 mr-2 text-orange-500" />
                     <span>
-                      <strong>Max Group:</strong> {packageData.maximum_group_size} people
+                      <strong>Max Group:</strong>{" "}
+                      {packageData.maximum_group_size} people
                     </span>
                   </div>
                 </div>
@@ -529,36 +568,54 @@ export default function PackageDetails() {
             <Card className="sticky top-4">
               <CardContent className="p-6">
                 <div className="text-center mb-6">
-                  <div className="text-sm text-gray-600 mb-1">Starting from</div>
+                  <div className="text-sm text-gray-600 mb-1">
+                    Starting from
+                  </div>
                   <div className="text-3xl font-bold text-blue-600">
-                    {formatPrice(selectedDeparture?.price_per_person || packageData.base_price_pp, packageData.currency)}
+                    {formatPrice(
+                      selectedDeparture?.price_per_person ||
+                        packageData.base_price_pp,
+                      packageData.currency,
+                    )}
                   </div>
                   <div className="text-sm text-gray-600">per person</div>
                 </div>
 
                 {/* Departure Selection */}
-                {packageData.departures && packageData.departures.length > 0 && (
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Select Departure
-                    </label>
-                    <select
-                      value={selectedDeparture?.id || ""}
-                      onChange={(e) => {
-                        const departure = packageData.departures.find(d => d.id === parseInt(e.target.value));
-                        setSelectedDeparture(departure || null);
-                      }}
-                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                    >
-                      {packageData.departures.map((departure) => (
-                        <option key={departure.id} value={departure.id}>
-                          {departure.departure_city_name} - {format(parseISO(departure.departure_date), "EEE, MMM d, yyyy")} 
-                          ({formatPrice(departure.price_per_person, departure.currency)})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
+                {packageData.departures &&
+                  packageData.departures.length > 0 && (
+                    <div className="mb-6">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
+                        Select Departure
+                      </label>
+                      <select
+                        value={selectedDeparture?.id || ""}
+                        onChange={(e) => {
+                          const departure = packageData.departures.find(
+                            (d) => d.id === parseInt(e.target.value),
+                          );
+                          setSelectedDeparture(departure || null);
+                        }}
+                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                      >
+                        {packageData.departures.map((departure) => (
+                          <option key={departure.id} value={departure.id}>
+                            {departure.departure_city_name} -{" "}
+                            {format(
+                              parseISO(departure.departure_date),
+                              "EEE, MMM d, yyyy",
+                            )}
+                            (
+                            {formatPrice(
+                              departure.price_per_person,
+                              departure.currency,
+                            )}
+                            )
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
 
                 {/* Travelers */}
                 <div className="mb-6">
@@ -567,26 +624,44 @@ export default function PackageDetails() {
                   </label>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-xs text-gray-600 mb-1">Adults</label>
+                      <label className="block text-xs text-gray-600 mb-1">
+                        Adults
+                      </label>
                       <select
                         value={travelers.adults}
-                        onChange={(e) => setTravelers(prev => ({ ...prev, adults: parseInt(e.target.value) }))}
+                        onChange={(e) =>
+                          setTravelers((prev) => ({
+                            ...prev,
+                            adults: parseInt(e.target.value),
+                          }))
+                        }
                         className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
                       >
-                        {[1,2,3,4,5,6].map(num => (
-                          <option key={num} value={num}>{num}</option>
+                        {[1, 2, 3, 4, 5, 6].map((num) => (
+                          <option key={num} value={num}>
+                            {num}
+                          </option>
                         ))}
                       </select>
                     </div>
                     <div>
-                      <label className="block text-xs text-gray-600 mb-1">Children</label>
+                      <label className="block text-xs text-gray-600 mb-1">
+                        Children
+                      </label>
                       <select
                         value={travelers.children}
-                        onChange={(e) => setTravelers(prev => ({ ...prev, children: parseInt(e.target.value) }))}
+                        onChange={(e) =>
+                          setTravelers((prev) => ({
+                            ...prev,
+                            children: parseInt(e.target.value),
+                          }))
+                        }
                         className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
                       >
-                        {[0,1,2,3,4].map(num => (
-                          <option key={num} value={num}>{num}</option>
+                        {[0, 1, 2, 3, 4].map((num) => (
+                          <option key={num} value={num}>
+                            {num}
+                          </option>
                         ))}
                       </select>
                     </div>
@@ -599,12 +674,25 @@ export default function PackageDetails() {
                     <div className="text-sm space-y-1">
                       <div className="flex justify-between">
                         <span>Adults ({travelers.adults})</span>
-                        <span>{formatPrice(selectedDeparture.price_per_person * travelers.adults, selectedDeparture.currency)}</span>
+                        <span>
+                          {formatPrice(
+                            selectedDeparture.price_per_person *
+                              travelers.adults,
+                            selectedDeparture.currency,
+                          )}
+                        </span>
                       </div>
                       {travelers.children > 0 && (
                         <div className="flex justify-between">
                           <span>Children ({travelers.children})</span>
-                          <span>{formatPrice((selectedDeparture.child_price || selectedDeparture.price_per_person * 0.75) * travelers.children, selectedDeparture.currency)}</span>
+                          <span>
+                            {formatPrice(
+                              (selectedDeparture.child_price ||
+                                selectedDeparture.price_per_person * 0.75) *
+                                travelers.children,
+                              selectedDeparture.currency,
+                            )}
+                          </span>
                         </div>
                       )}
                       <hr className="my-2" />
@@ -612,9 +700,12 @@ export default function PackageDetails() {
                         <span>Total</span>
                         <span className="text-blue-600">
                           {formatPrice(
-                            selectedDeparture.price_per_person * travelers.adults + 
-                            (selectedDeparture.child_price || selectedDeparture.price_per_person * 0.75) * travelers.children, 
-                            selectedDeparture.currency
+                            selectedDeparture.price_per_person *
+                              travelers.adults +
+                              (selectedDeparture.child_price ||
+                                selectedDeparture.price_per_person * 0.75) *
+                                travelers.children,
+                            selectedDeparture.currency,
                           )}
                         </span>
                       </div>
@@ -631,7 +722,7 @@ export default function PackageDetails() {
                   >
                     Book Now
                   </Button>
-                  
+
                   <BargainButton
                     onClick={handleStartBargain}
                     className="w-full"
@@ -653,7 +744,9 @@ export default function PackageDetails() {
                   <div className="flex items-center justify-center p-3 bg-blue-50 rounded-lg border border-blue-200">
                     <Phone className="w-4 h-4 text-blue-600 mr-2" />
                     <div className="text-center">
-                      <p className="text-xs text-gray-600 mb-1">Need Help? Call toll-free</p>
+                      <p className="text-xs text-gray-600 mb-1">
+                        Need Help? Call toll-free
+                      </p>
                       <a
                         href="tel:+18001234567"
                         className="text-lg font-bold text-blue-600 hover:text-blue-800 transition-colors"
@@ -687,8 +780,12 @@ export default function PackageDetails() {
             onHold={handleBargainHold}
             onBackToResults={handleBargainClose}
             module="packages"
-            basePrice={selectedDeparture.price_per_person * travelers.adults +
-                      (selectedDeparture.child_price || selectedDeparture.price_per_person * 0.75) * travelers.children}
+            basePrice={
+              selectedDeparture.price_per_person * travelers.adults +
+              (selectedDeparture.child_price ||
+                selectedDeparture.price_per_person * 0.75) *
+                travelers.children
+            }
             productRef={`package_${packageData.id}_departure_${selectedDeparture.id}`}
             userName={isAuthenticated ? undefined : "Guest"}
           />

@@ -64,9 +64,11 @@ export function Header() {
     if (location.pathname.includes("/booking-confirmation")) {
       const searchParams = new URLSearchParams(location.search);
       // Check if coming from package booking flow
-      if (searchParams.get("module") === "packages" ||
-          localStorage.getItem("lastBookingModule") === "packages" ||
-          location.state?.module === "packages") {
+      if (
+        searchParams.get("module") === "packages" ||
+        localStorage.getItem("lastBookingModule") === "packages" ||
+        location.state?.module === "packages"
+      ) {
         return "packages";
       }
     }
@@ -576,7 +578,10 @@ export function Header() {
                             setIsModalTransitioning(true);
                             setAuthModalMode("login");
                             setShowAuthModal(true);
-                            setTimeout(() => setIsModalTransitioning(false), 200);
+                            setTimeout(
+                              () => setIsModalTransitioning(false),
+                              200,
+                            );
                           }}
                         >
                           Sign In
@@ -590,7 +595,10 @@ export function Header() {
                             setIsModalTransitioning(true);
                             setAuthModalMode("register");
                             setShowAuthModal(true);
-                            setTimeout(() => setIsModalTransitioning(false), 200);
+                            setTimeout(
+                              () => setIsModalTransitioning(false),
+                              200,
+                            );
                           }}
                         >
                           Register

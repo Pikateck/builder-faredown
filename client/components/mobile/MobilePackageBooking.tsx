@@ -66,7 +66,8 @@ export function MobilePackageBooking({
 
   const totalPrice = departure
     ? departure.price_per_person * travelers.adults +
-      (departure.child_price || departure.price_per_person * 0.75) * travelers.children
+      (departure.child_price || departure.price_per_person * 0.75) *
+        travelers.children
     : 0;
 
   const handleProceedToBooking = () => {
@@ -115,7 +116,9 @@ export function MobilePackageBooking({
                   className="w-20 h-16 rounded-lg object-cover"
                 />
                 <div className="flex-1">
-                  <h3 className="font-semibold text-sm line-clamp-2">{pkg.title}</h3>
+                  <h3 className="font-semibold text-sm line-clamp-2">
+                    {pkg.title}
+                  </h3>
                   <div className="flex items-center text-xs text-gray-600 mt-1">
                     <MapPin className="w-3 h-3 mr-1" />
                     {pkg.region_name}
@@ -144,7 +147,9 @@ export function MobilePackageBooking({
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
                       <Plane className="w-4 h-4 mr-2 text-blue-500" />
-                      <span className="text-sm">From {departure.departure_city_name}</span>
+                      <span className="text-sm">
+                        From {departure.departure_city_name}
+                      </span>
                     </div>
                     {departure.is_guaranteed && (
                       <Badge className="bg-green-100 text-green-800 text-xs">
@@ -152,17 +157,27 @@ export function MobilePackageBooking({
                       </Badge>
                     )}
                   </div>
-                  
+
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-2 text-green-500" />
                     <span className="text-sm">
-                      {format(parseISO(departure.departure_date), "EEE, MMM d, yyyy")}
+                      {format(
+                        parseISO(departure.departure_date),
+                        "EEE, MMM d, yyyy",
+                      )}
                       {departure.return_date && (
-                        <span> - {format(parseISO(departure.return_date), "EEE, MMM d, yyyy")}</span>
+                        <span>
+                          {" "}
+                          -{" "}
+                          {format(
+                            parseISO(departure.return_date),
+                            "EEE, MMM d, yyyy",
+                          )}
+                        </span>
                       )}
                     </span>
                   </div>
-                  
+
                   <div className="flex items-center">
                     <Users className="w-4 h-4 mr-2 text-purple-500" />
                     <span className="text-sm">
@@ -216,24 +231,29 @@ export function MobilePackageBooking({
                   <div className="flex justify-between">
                     <span>Adults ({travelers.adults})</span>
                     <span>
-                      {formatPrice(departure.price_per_person * travelers.adults, departure.currency)}
+                      {formatPrice(
+                        departure.price_per_person * travelers.adults,
+                        departure.currency,
+                      )}
                     </span>
                   </div>
-                  
+
                   {travelers.children > 0 && (
                     <div className="flex justify-between">
                       <span>Children ({travelers.children})</span>
                       <span>
                         {formatPrice(
-                          (departure.child_price || departure.price_per_person * 0.75) * travelers.children,
-                          departure.currency
+                          (departure.child_price ||
+                            departure.price_per_person * 0.75) *
+                            travelers.children,
+                          departure.currency,
                         )}
                       </span>
                     </div>
                   )}
-                  
+
                   <hr className="my-2" />
-                  
+
                   <div className="flex justify-between font-semibold text-base">
                     <span>Total</span>
                     <span className="text-blue-600">
@@ -254,7 +274,7 @@ export function MobilePackageBooking({
             >
               Continue to Booking
             </Button>
-            
+
             <Button
               onClick={handleStartBargain}
               variant="outline"
