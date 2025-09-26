@@ -41,6 +41,7 @@ import {
   Bus,
   ArrowLeft,
   MessageSquare,
+  Phone,
   Info,
   Globe,
   Shield,
@@ -644,10 +645,19 @@ export default function PackageDetails() {
                 <p className="text-sm text-gray-600 mb-4">
                   Our travel experts are here to help you plan your perfect trip.
                 </p>
-                <Button variant="outline" className="w-full">
-                  <MessageSquare className="w-4 h-4 mr-2" />
-                  Chat with Expert
-                </Button>
+                <div className="flex items-center justify-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <Phone className="w-5 h-5 text-blue-600 mr-3" />
+                  <div className="text-center">
+                    <p className="text-sm text-gray-600 mb-1">Call us toll-free</p>
+                    <a
+                      href="tel:+18001234567"
+                      className="text-xl font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                    >
+                      1-800-123-4567
+                    </a>
+                    <p className="text-xs text-gray-500 mt-1">24/7 Customer Support</p>
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
