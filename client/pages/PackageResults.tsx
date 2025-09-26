@@ -241,14 +241,14 @@ export default function PackageResults() {
           </div>
 
           {/* Active Filters */}
-          {Object.entries(currentFilters).some(([key, value]) => 
-            value && value !== "" && value !== "popularity" && key !== "page"
+          {Object.entries(currentFilters).some(([key, value]) =>
+            value && value !== "" && value !== "popularity" && key !== "page" && key !== "adults" && key !== "children"
           ) && (
             <div className="flex flex-wrap items-center gap-2 mb-4">
               <span className="text-sm text-gray-600">Filters:</span>
               {Object.entries(currentFilters).map(([key, value]) => {
-                if (!value || value === "" || value === "popularity" || key === "page") return null;
-                
+                if (!value || value === "" || value === "popularity" || key === "page" || key === "adults" || key === "children") return null;
+
                 return (
                   <span
                     key={key}
