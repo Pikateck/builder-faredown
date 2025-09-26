@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useSearchParams, useNavigate } from "react-router-dom";
-import { Layout } from "@/components/layout/Layout";
+import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent } from "@/components/ui/card";
@@ -271,9 +271,19 @@ export default function PackageDetails() {
 
   return (
     <Layout>
-      <div className="min-h-screen bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Back Button */}
+        <Button
+          onClick={() => navigate(-1)}
+          variant="outline"
+          className="mb-6"
+        >
+          <ArrowLeft className="w-4 h-4 mr-2" />
+          Back to Results
+        </Button>
+
         {/* Hero Section */}
-        <div className="relative h-64 md:h-96 bg-gradient-to-r from-blue-900 to-blue-600">
+        <div className="relative h-64 md:h-96 bg-gradient-to-r from-blue-900 to-blue-600 rounded-xl overflow-hidden mb-6">
           {packageData.hero_image_url && (
             <img
               src={packageData.hero_image_url}
@@ -282,19 +292,6 @@ export default function PackageDetails() {
             />
           )}
           <div className="absolute inset-0 bg-black bg-opacity-40"></div>
-          
-          {/* Back Button */}
-          <div className="absolute top-4 left-4 z-10">
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => navigate(-1)}
-              className="bg-white bg-opacity-90 hover:bg-opacity-100 text-gray-900"
-            >
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Back
-            </Button>
-          </div>
 
           {/* Package Info Overlay */}
           <div className="absolute bottom-0 left-0 right-0 p-4 md:p-6 text-white">
