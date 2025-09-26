@@ -204,13 +204,15 @@ export default function PackageDetails() {
   const handleBookNow = () => {
     if (!packageData || !selectedDeparture) return;
 
-    const bookingContext = createBookingContext({
-      module: "packages",
-      packageId: packageData.id,
-      departureId: selectedDeparture.id,
+    const bookingContext = createBookingContext.package(
+      packageData,
+      selectedDeparture,
       travelers,
-      selectedDate: selectedDeparture.departure_date,
-    });
+      {
+        slug,
+        selectedDate: selectedDeparture.departure_date,
+      }
+    );
 
     guardBookNow(bookingContext, () => {
       if (isMobile) {
