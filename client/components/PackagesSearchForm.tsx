@@ -435,14 +435,15 @@ export function PackagesSearchForm() {
           </div>
         </div>
 
-        {/* Search Button Row - Separate row, always active */}
-        <div className="flex justify-center mt-4">
+        {/* Search Button Row - Prominent and centered */}
+        <div className="flex justify-center pt-2">
           <Button
             type="submit"
             onClick={handleSearch}
-            className="h-12 px-12 bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded-lg text-base transition-all duration-150 min-w-[200px]"
+            disabled={isSubmitting}
+            className="h-14 px-16 bg-gradient-to-r from-[#febb02] to-[#f4b601] hover:from-[#e6a602] hover:to-[#e09f00] active:from-[#d19900] active:to-[#c99100] text-black font-bold rounded-xl text-lg transition-all duration-200 min-w-[240px] shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
-            <Search className="mr-2 h-5 w-5" />
+            <Search className="mr-3 h-6 w-6" />
             <span>{isSubmitting ? 'Searching...' : 'Search Packages'}</span>
           </Button>
         </div>
