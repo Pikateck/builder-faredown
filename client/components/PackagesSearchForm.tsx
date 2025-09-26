@@ -184,7 +184,7 @@ export function PackagesSearchForm() {
       <form
         onSubmit={handleSearch}
         onKeyDown={handleKeyDown}
-        className="bg-white rounded-xl p-6 sm:p-8 shadow-xl max-w-7xl mx-auto border border-gray-100"
+        className="bg-white rounded p-6 sm:p-8 shadow-xl max-w-7xl mx-auto border-2 border-gray-200"
         role="search"
         aria-label="Search packages form"
       >
