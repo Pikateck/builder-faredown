@@ -40,7 +40,7 @@ export default function BookingConfirmation() {
   } = useEnhancedBooking();
   const { loadFromBookingData, getDisplayData } = useSearch();
   const [booking, setBooking] = useState<any>(null);
-  const [bookingType, setBookingType] = useState<"flight" | "hotel">("flight");
+  const [bookingType, setBookingType] = useState<"flight" | "hotel" | "packages">("flight");
   const [showVoucher, setShowVoucher] = useState(false);
   const [showInvoice, setShowInvoice] = useState(false);
   const [emailSent, setEmailSent] = useState(false);
@@ -79,6 +79,16 @@ export default function BookingConfirmation() {
       );
       setBooking(location.state.bookingData);
       setBookingType("flight");
+      return;
+    }
+
+    // Check for package booking data from location state
+    if (location.state?.bookingDetails || location.state?.module === "packages") {
+      console.log(
+        "📦 Using package booking data from location state",
+      );
+      setBooking(location.state.bookingDetails || location.state);
+      setBookingType("packages");
       return;
     }
 
@@ -1528,7 +1538,7 @@ export default function BookingConfirmation() {
           </h1>
           <p className="text-gray-600 mb-4">
             Your {bookingType}{" "}
-            {bookingType === "flight" ? "ticket" : "reservation"} has been
+            {bookingType === "flight" ? "ticket" : bookingType === "hotel" ? "reservation" : "package"} has been
             successfully confirmed. Here are your booking details:
           </p>
           <div className="border border-gray-300 text-gray-900 px-6 py-3 rounded-lg inline-block">
@@ -1558,7 +1568,7 @@ export default function BookingConfirmation() {
               className="bg-blue-700 hover:bg-blue-800 flex items-center justify-center"
             >
               <Download className="w-4 h-4 mr-2" />
-              {bookingType === "flight" ? "Flight Ticket" : "Hotel Voucher"}
+              {bookingType === "flight" ? "Flight Ticket" : bookingType === "hotel" ? "Hotel Voucher" : "Package Itinerary"}
             </Button>
             <Button
               onClick={handleDownloadInvoice}
@@ -1587,11 +1597,13 @@ export default function BookingConfirmation() {
             <div className="flex items-center mb-4">
               {bookingType === "flight" ? (
                 <Plane className="w-5 h-5 text-blue-700 mr-2" />
-              ) : (
+              ) : bookingType === "hotel" ? (
                 <Hotel className="w-5 h-5 text-blue-700 mr-2" />
+              ) : (
+                <Star className="w-5 h-5 text-blue-700 mr-2" />
               )}
               <h2 className="text-xl font-bold text-gray-900">
-                {bookingType === "flight" ? "Flight Details" : "Hotel Details"}
+                {bookingType === "flight" ? "Flight Details" : bookingType === "hotel" ? "Hotel Details" : "Package Details"}
               </h2>
             </div>
             {bookingType === "flight" ? (
