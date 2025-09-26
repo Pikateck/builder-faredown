@@ -75,24 +75,39 @@ router.get("/", async (req, res) => {
       queryParams.push(`%${q.trim()}%`);
     }
 
-    // Destination filter (from search form) - More precise matching
+    // Destination filter (from search form) - Handle both database references and title-based filtering
     if (destination && destination_type) {
-      if (destination_type === 'city') {
-        // For city destinations, match exactly by city name
-        const destinationName = destination.split(',')[0].trim(); // Extract city name from "Dubai, United Arab Emirates"
+      const destinationName = destination.split(',')[0].trim(); // Extract city name from "Dubai, United Arab Emirates"
 
+      if (destination_type === 'city') {
+        // Try both database relationships and title-based filtering
         paramCount++;
-        whereConditions.push(`LOWER(ci.name) = LOWER($${paramCount})`);
+        whereConditions.push(`(
+          LOWER(ci.name) = LOWER($${paramCount}) OR
+          LOWER(p.title) LIKE LOWER($${paramCount + 1})
+        )`);
         queryParams.push(destinationName);
+        paramCount++;
+        queryParams.push(`%${destinationName}%`);
 
       } else if (destination_type === 'country') {
         paramCount++;
-        whereConditions.push(`LOWER(c.name) = LOWER($${paramCount})`);
+        whereConditions.push(`(
+          LOWER(c.name) = LOWER($${paramCount}) OR
+          LOWER(p.title) LIKE LOWER($${paramCount + 1})
+        )`);
         queryParams.push(destination.trim());
+        paramCount++;
+        queryParams.push(`%${destination.trim()}%`);
       } else if (destination_type === 'region') {
         paramCount++;
-        whereConditions.push(`LOWER(r.name) = LOWER($${paramCount})`);
+        whereConditions.push(`(
+          LOWER(r.name) = LOWER($${paramCount}) OR
+          LOWER(p.title) LIKE LOWER($${paramCount + 1})
+        )`);
         queryParams.push(destination.trim());
+        paramCount++;
+        queryParams.push(`%${destination.trim()}%`);
       }
     }
 
