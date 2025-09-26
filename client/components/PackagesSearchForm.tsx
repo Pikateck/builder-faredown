@@ -301,7 +301,7 @@ export function PackagesSearchForm() {
                 id="budget-select"
                 value={budget}
                 onChange={(e) => setBudget(e.target.value)}
-                className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
+                className="w-full h-12 px-4 border-2 border-gray-200 hover:border-blue-500 focus:border-blue-500 rounded-lg text-sm focus:outline-none transition-colors bg-white"
               >
                 <option value="any">Any Budget</option>
                 <option value="0-50000">Under ₹50,000</option>
