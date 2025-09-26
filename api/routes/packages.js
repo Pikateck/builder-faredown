@@ -79,6 +79,12 @@ router.get("/", async (req, res) => {
     if (destination && destination_type) {
       const destinationName = destination.split(',')[0].trim(); // Extract city name from "Dubai, United Arab Emirates"
 
+      console.log('🔍 DESTINATION FILTER DEBUG:', {
+        original_destination: destination,
+        destination_type: destination_type,
+        extracted_name: destinationName
+      });
+
       if (destination_type === 'city') {
         // Try both database relationships and title-based filtering
         paramCount++;
@@ -89,6 +95,11 @@ router.get("/", async (req, res) => {
         queryParams.push(destinationName);
         paramCount++;
         queryParams.push(`%${destinationName}%`);
+
+        console.log('🔍 CITY FILTER APPLIED:', {
+          condition: whereConditions[whereConditions.length - 1],
+          params: [destinationName, `%${destinationName}%`]
+        });
 
       } else if (destination_type === 'country') {
         paramCount++;
