@@ -26,12 +26,7 @@ function testDubaiAPI() {
       try {
         const response = JSON.parse(data);
         console.log('🔍 Response Status:', res.statusCode);
-        console.log('🔍 Response Data:', {
-          success: response.success,
-          packages_count: response.packages?.length || 0,
-          package_titles: response.packages?.map(p => p.title) || [],
-          total: response.pagination?.total || 0
-        });
+    console.log('🔍 Full Response:', JSON.stringify(response, null, 2));
       } catch (error) {
         console.error('❌ Error parsing response:', error.message);
         console.log('Raw response:', data);
