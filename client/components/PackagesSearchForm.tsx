@@ -56,6 +56,11 @@ export function PackagesSearchForm() {
   const [budget, setBudget] = useState("any");
   const [category, setCategory] = useState("any");
 
+  // Pax selection
+  const [adults, setAdults] = useState(2);
+  const [children, setChildren] = useState(0);
+  const [isPaxOpen, setIsPaxOpen] = useState(false);
+
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
 
