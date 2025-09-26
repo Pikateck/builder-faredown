@@ -242,20 +242,22 @@ export default function PackageDetails() {
 
   if (loading) {
     return (
-      <Layout>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
             <p className="text-gray-600">Loading package details...</p>
           </div>
         </div>
-      </Layout>
+      </div>
     );
   }
 
   if (error || !packageData) {
     return (
-      <Layout>
+      <div className="min-h-screen bg-gray-50">
+        <Header />
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <h2 className="text-2xl font-bold text-gray-900 mb-4">Package Not Found</h2>
@@ -265,7 +267,7 @@ export default function PackageDetails() {
             </Button>
           </div>
         </div>
-      </Layout>
+      </div>
     );
   }
 
