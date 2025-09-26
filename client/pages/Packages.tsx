@@ -31,9 +31,9 @@ export default function Packages() {
                 </div>
               </div>
 
-              {/* Search Panel Section - Same design as other modules */}
-              <div className="bg-white border-b border-gray-200 shadow-sm">
-                <div className="max-w-7xl mx-auto px-3 sm:px-4 py-3 overflow-visible">
+              {/* Search Panel Section - Enhanced design */}
+              <div className="bg-gradient-to-b from-gray-50 to-white border-b border-gray-100 shadow-sm">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 py-6 overflow-visible">
                   <PackagesSearchForm />
                 </div>
               </div>
