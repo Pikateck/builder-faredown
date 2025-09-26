@@ -2150,6 +2150,21 @@ export default function BookingConfirmation() {
                   additional charges
                 </p>
               </>
+            ) : bookingType === "packages" ? (
+              <>
+                <p>
+                  • <strong>Free cancellation:</strong> Cancel up to 30 days before departure for full refund
+                </p>
+                <p>
+                  • <strong>Partial cancellation:</strong> 15-30 days: 50% refund, 7-15 days: 25% refund
+                </p>
+                <p>
+                  • <strong>No refund:</strong> Less than 7 days before departure
+                </p>
+                <p>
+                  • <strong>Medical emergencies:</strong> Refund possible with valid medical certificate
+                </p>
+              </>
             ) : (
               <p>
                 {booking.cancellation ||
@@ -2186,6 +2201,17 @@ export default function BookingConfirmation() {
                   • Present your e-ticket and booking confirmation at the
                   airport
                 </li>
+              </>
+            ) : bookingType === "packages" ? (
+              <>
+                <li>
+                  • Please carry a valid passport for international packages
+                </li>
+                <li>• Detailed itinerary will be sent 7 days before departure</li>
+                <li>• Travel insurance is highly recommended</li>
+                <li>• Visa requirements vary by destination - check before travel</li>
+                <li>• Pack according to weather conditions at destination</li>
+                <li>• Contact our travel desk for any special requirements</li>
               </>
             ) : (
               <>
