@@ -842,22 +842,271 @@ export default function PackageManagement() {
             </TabsContent>
 
             <TabsContent value="reports" className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 mb-6">
                 <Card>
-                  <CardHeader>
-                    <CardTitle>Top Performing Packages</CardTitle>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-gray-600">Package performance metrics coming soon...</p>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <Users className="h-8 w-8 text-blue-600" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Total Bookings</p>
+                        <p className="text-2xl font-bold text-gray-900">1,234</p>
+                        <p className="text-xs text-green-600">+12% from last month</p>
+                      </div>
+                    </div>
                   </CardContent>
                 </Card>
 
                 <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <DollarSign className="h-8 w-8 text-green-600" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Revenue</p>
+                        <p className="text-2xl font-bold text-gray-900">₹45.6L</p>
+                        <p className="text-xs text-green-600">+18% from last month</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <Star className="h-8 w-8 text-yellow-600" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Avg Rating</p>
+                        <p className="text-2xl font-bold text-gray-900">4.7</p>
+                        <p className="text-xs text-green-600">+0.2 from last month</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <Card>
+                  <CardContent className="p-6">
+                    <div className="flex items-center">
+                      <Calendar className="h-8 w-8 text-purple-600" />
+                      <div className="ml-4">
+                        <p className="text-sm font-medium text-gray-600">Conversion Rate</p>
+                        <p className="text-2xl font-bold text-gray-900">3.4%</p>
+                        <p className="text-xs text-red-600">-0.5% from last month</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                {/* Top Performing Packages */}
+                <Card>
                   <CardHeader>
-                    <CardTitle>Revenue Analytics</CardTitle>
+                    <CardTitle>Top Performing Packages</CardTitle>
+                    <CardDescription>Based on bookings and revenue</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <p className="text-gray-600">Revenue analytics coming soon...</p>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Dubai Luxury Experience</p>
+                          <p className="text-sm text-gray-600">89 bookings • ₹12.4L revenue</p>
+                        </div>
+                        <Badge className="bg-green-100 text-green-800">Top</Badge>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Bali Adventure Package</p>
+                          <p className="text-sm text-gray-600">76 bookings • ₹8.9L revenue</p>
+                        </div>
+                        <Badge className="bg-blue-100 text-blue-800">2nd</Badge>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Paris Romantic Getaway</p>
+                          <p className="text-sm text-gray-600">65 bookings • ₹9.8L revenue</p>
+                        </div>
+                        <Badge className="bg-orange-100 text-orange-800">3rd</Badge>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Thailand Explorer</p>
+                          <p className="text-sm text-gray-600">52 bookings • ₹6.2L revenue</p>
+                        </div>
+                        <Badge variant="outline">4th</Badge>
+                      </div>
+
+                      <div className="flex items-center justify-between">
+                        <div>
+                          <p className="font-medium">Japan Cultural Tour</p>
+                          <p className="text-sm text-gray-600">44 bookings • ₹7.1L revenue</p>
+                        </div>
+                        <Badge variant="outline">5th</Badge>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Revenue Trends */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Revenue Analytics</CardTitle>
+                    <CardDescription>Monthly trends and insights</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm font-medium mb-2">Revenue by Category</p>
+                        <div className="space-y-2">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Luxury</span>
+                            <span className="text-sm font-medium">₹18.2L (40%)</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Adventure</span>
+                            <span className="text-sm font-medium">₹12.8L (28%)</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Cultural</span>
+                            <span className="text-sm font-medium">₹8.6L (19%)</span>
+                          </div>
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm">Beach</span>
+                            <span className="text-sm font-medium">₹6.0L (13%)</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium mb-2">Booking Trends</p>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="text-center">
+                            <p className="text-lg font-bold text-blue-600">68%</p>
+                            <p className="text-xs text-gray-600">Mobile Bookings</p>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-lg font-bold text-green-600">32%</p>
+                            <p className="text-xs text-gray-600">Desktop Bookings</p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium mb-2">Peak Booking Times</p>
+                        <div className="space-y-1">
+                          <div className="flex justify-between text-sm">
+                            <span>Weekend</span>
+                            <span>45%</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span>Evening (6-9 PM)</span>
+                            <span>34%</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span>Lunch (12-2 PM)</span>
+                            <span>21%</span>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Customer Analytics */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Customer Insights</CardTitle>
+                    <CardDescription>Booking patterns and preferences</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div>
+                        <p className="text-sm font-medium mb-2">Average Group Size</p>
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span>Solo Travelers</span>
+                            <span>15%</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span>Couples (2 pax)</span>
+                            <span>42%</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span>Small Groups (3-4)</span>
+                            <span>28%</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span>Large Groups (5+)</span>
+                            <span>15%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium mb-2">Booking Lead Time</p>
+                        <div className="space-y-2">
+                          <div className="flex justify-between text-sm">
+                            <span>1-7 days</span>
+                            <span>12%</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span>1-4 weeks</span>
+                            <span>35%</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span>1-3 months</span>
+                            <span>41%</span>
+                          </div>
+                          <div className="flex justify-between text-sm">
+                            <span>3+ months</span>
+                            <span>12%</span>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p className="text-sm font-medium mb-2">Repeat Customers</p>
+                        <div className="text-center">
+                          <p className="text-2xl font-bold text-purple-600">34%</p>
+                          <p className="text-sm text-gray-600">Return booking rate</p>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Export Options */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Export Reports</CardTitle>
+                    <CardDescription>Download detailed analytics and reports</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <Button variant="outline" className="w-full justify-start">
+                      <Download className="w-4 h-4 mr-2" />
+                      Package Performance Report
+                    </Button>
+
+                    <Button variant="outline" className="w-full justify-start">
+                      <Download className="w-4 h-4 mr-2" />
+                      Revenue Analysis (CSV)
+                    </Button>
+
+                    <Button variant="outline" className="w-full justify-start">
+                      <Download className="w-4 h-4 mr-2" />
+                      Customer Booking Data
+                    </Button>
+
+                    <Button variant="outline" className="w-full justify-start">
+                      <Download className="w-4 h-4 mr-2" />
+                      Markup & Pricing Report
+                    </Button>
+
+                    <Button variant="outline" className="w-full justify-start">
+                      <Download className="w-4 h-4 mr-2" />
+                      Bargain Analytics Report
+                    </Button>
                   </CardContent>
                 </Card>
               </div>
