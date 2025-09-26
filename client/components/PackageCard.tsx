@@ -88,11 +88,20 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
             <img
               src={
                 pkg.hero_image_url ||
-                `https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=400&h=300&fit=crop&auto=format`
+                "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F881db137d4a54a489d3f0b62f595b6df?format=webp&width=400"
               }
               alt={pkg.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
               loading="lazy"
+              onError={(e) => {
+                // First fallback
+                if (e.currentTarget.src !== "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400") {
+                  e.currentTarget.src = "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400";
+                } else {
+                  // Final fallback
+                  e.currentTarget.src = "https://via.placeholder.com/400x300/e2e8f0/64748b?text=Package+Image";
+                }
+              }}
             />
           </div>
         </Link>
