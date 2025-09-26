@@ -225,7 +225,7 @@ export function PackageFilters({ filters, facets, onFiltersChange }: PackageFilt
                     htmlFor={category.id}
                     className="text-sm text-gray-700 flex items-center space-x-2 cursor-pointer"
                   >
-                    <span>{category.icon}</span>
+                    <category.icon className="w-4 h-4 text-gray-500" />
                     <span>{category.name}</span>
                     {facets?.categories?.[category.id] && (
                       <span className="text-xs text-gray-500">
@@ -310,9 +310,10 @@ export function PackageFilters({ filters, facets, onFiltersChange }: PackageFilt
                   />
                   <Label
                     htmlFor={`region-${region.id}`}
-                    className="text-sm text-gray-700 cursor-pointer flex-1"
+                    className="text-sm text-gray-700 cursor-pointer flex items-center space-x-2 flex-1"
                   >
-                    {region.name}
+                    <region.icon className="w-4 h-4 text-gray-500" />
+                    <span>{region.name}</span>
                     {facets?.regions?.[region.name] && (
                       <span className="text-xs text-gray-500 ml-2">
                         ({facets.regions[region.name]})
