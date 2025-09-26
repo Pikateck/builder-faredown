@@ -156,9 +156,9 @@ export function MobilePackageBooking({
                   <div className="flex items-center">
                     <Calendar className="w-4 h-4 mr-2 text-green-500" />
                     <span className="text-sm">
-                      {format(parseISO(departure.departure_date), "MMM d, yyyy")}
+                      {format(parseISO(departure.departure_date), "EEE, MMM d, yyyy")}
                       {departure.return_date && (
-                        <span> - {format(parseISO(departure.return_date), "MMM d, yyyy")}</span>
+                        <span> - {format(parseISO(departure.return_date), "EEE, MMM d, yyyy")}</span>
                       )}
                     </span>
                   </div>

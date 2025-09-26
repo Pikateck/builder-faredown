@@ -76,7 +76,7 @@ export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageC
 
   const formatDate = (dateString: string) => {
     try {
-      return format(new Date(dateString), "MMM d, yyyy");
+      return format(new Date(dateString), "EEE, MMM d, yyyy");
     } catch {
       return dateString;
     }

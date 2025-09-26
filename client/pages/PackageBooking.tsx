@@ -243,7 +243,7 @@ export default function PackageBooking() {
                     </div>
                     <div className="flex items-center text-gray-600 mt-1">
                       <Calendar className="w-4 h-4 mr-1" />
-                      {format(parseISO(departure.departure_date), "MMM d, yyyy")}
+                      {format(parseISO(departure.departure_date), "EEE, MMM d, yyyy")}
                     </div>
                     <div className="flex items-center text-gray-600 mt-1">
                       <Users className="w-4 h-4 mr-1" />
