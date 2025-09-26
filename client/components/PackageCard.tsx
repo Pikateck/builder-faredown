@@ -47,7 +47,7 @@ interface PackageCardProps {
   children?: number;
 }
 
-export function PackageCard({ package: pkg }: PackageCardProps) {
+export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageCardProps) {
   const navigate = useNavigate();
 
   const handleViewDetails = (e: React.MouseEvent) => {
