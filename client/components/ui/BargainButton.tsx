@@ -20,7 +20,7 @@ export interface BargainButtonProps {
   useBargainModal?: boolean;
   /** Enhanced modal variant (alias for useBargainModal) */
   useEnhancedModal?: boolean;
-  module?: "flights" | "hotels" | "sightseeing" | "transfers";
+  module?: "flights" | "hotels" | "sightseeing" | "transfers" | "packages";
   userName?: string;
 
   /** Context for the modal */
