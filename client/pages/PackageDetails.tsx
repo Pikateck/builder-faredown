@@ -9,7 +9,7 @@ import { BargainButton } from "@/components/ui/BargainButton";
 import { MobilePackageBooking } from "@/components/mobile/MobilePackageBooking";
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 import { useBookNowGuard, createBookingContext } from "@/hooks/useBookNowGuard";
-import { useApi } from "@/hooks/useApi";
+import { apiClient } from "@/lib/api";
 import {
   AlertDialog,
   AlertDialogAction,
