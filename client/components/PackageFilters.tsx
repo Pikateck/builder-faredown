@@ -147,13 +147,13 @@ export function PackageFilters({ filters, facets, onFiltersChange }: PackageFilt
   ];
 
   const regions = [
-    { id: "1", name: "Europe" },
-    { id: "2", name: "Asia" },
-    { id: "3", name: "North America" },
-    { id: "4", name: "South America" },
-    { id: "5", name: "Africa" },
-    { id: "6", name: "Australia & Oceania" },
-    { id: "7", name: "Middle East" },
+    { id: "1", name: "Europe", icon: Building2 },
+    { id: "2", name: "Asia", icon: Mountain },
+    { id: "3", name: "North America", icon: Camera },
+    { id: "4", name: "South America", icon: TreePine },
+    { id: "5", name: "Africa", icon: MapPin },
+    { id: "6", name: "Australia & Oceania", icon: Globe },
+    { id: "7", name: "Middle East", icon: Star },
   ];
 
   return (
