@@ -253,35 +253,19 @@ router.get("/", async (req, res) => {
     const offsetParam = paramCount;
     queryParams.push(offset);
 
-    // Main query using the listing view
+    // Main query using the actual packages table
     const mainQuery = `
-      SELECT 
+      SELECT
         p.*,
-        r.name as region_name,
-        c.name as country_name,
-        ci.name as city_name,
-        next_departure_date,
-        from_price,
-        available_departures_count,
-        (
-          SELECT json_agg(pt.tag)
-          FROM package_tags pt 
-          WHERE pt.package_id = p.id
-        ) as tags,
-        (
-          SELECT json_agg(
-            json_build_object(
-              'url', pm.url,
-              'type', pm.type,
-              'alt_text', pm.alt_text
-            )
-            ORDER BY pm.sort_order
-          )
-          FROM package_media pm 
-          WHERE pm.package_id = p.id AND pm.type = 'image'
-          LIMIT 3
-        ) as images
-      FROM v_packages_listing p
+        p.base_price_pp as from_price,
+        NULL as region_name,
+        NULL as country_name,
+        NULL as city_name,
+        NULL as next_departure_date,
+        0 as available_departures_count,
+        NULL as tags,
+        NULL as images
+      FROM packages p
       LEFT JOIN regions r ON p.region_id = r.id
       LEFT JOIN countries c ON p.country_id = c.id
       LEFT JOIN cities ci ON p.city_id = ci.id
@@ -293,7 +277,10 @@ router.get("/", async (req, res) => {
     // Count query for pagination
     const countQuery = `
       SELECT COUNT(*) as total
-      FROM v_packages_listing p
+      FROM packages p
+      LEFT JOIN regions r ON p.region_id = r.id
+      LEFT JOIN countries c ON p.country_id = c.id
+      LEFT JOIN cities ci ON p.city_id = ci.id
       WHERE ${whereConditions.join(' AND ')}
     `;
 
