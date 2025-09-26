@@ -208,7 +208,7 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
                 fontWeight: "600",
                 fontSize: "13px",
                 minHeight: "40px",
-                width: "40%",
+                width: "50%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
