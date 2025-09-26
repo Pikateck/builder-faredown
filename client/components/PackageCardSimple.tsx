@@ -13,6 +13,8 @@ import {
   Tag,
   TrendingDown,
   Eye,
+  CheckCircle,
+  Shield,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -48,6 +50,11 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
     }
     return `${currency} ${price.toLocaleString()}`;
   };
+
+  // Calculate total price and per person price (assuming 2 adults by default)
+  const adults = 2;
+  const totalPrice = pkg.from_price * adults;
+  const pricePerPerson = pkg.from_price;
 
   const formatDate = (dateString: string) => {
     try {
@@ -145,7 +152,7 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
               <ul className="text-sm text-gray-600 space-y-1">
                 {pkg.highlights.slice(0, 2).map((highlight, index) => (
                   <li key={index} className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                    <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5 mr-2" />
                     <span className="line-clamp-1">{highlight}</span>
                   </li>
                 ))}
@@ -153,20 +160,81 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
             </div>
           )}
 
+          {/* Features */}
+          <div className="space-y-2 mb-4">
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
+              <span>Free cancellation</span>
+            </div>
+            <div className="flex items-center gap-2 text-sm text-gray-600">
+              <Calendar className="w-4 h-4 text-blue-500 flex-shrink-0" />
+              <span>Reserve now, pay later</span>
+            </div>
+          </div>
+
+          {/* Pricing Display */}
+          <div className="mb-4 text-right">
+            <div className="text-xl font-bold text-gray-900 mb-1">
+              {formatPrice(totalPrice)}
+            </div>
+            <div className="text-sm text-gray-600">
+              {formatPrice(pricePerPerson)} per person
+            </div>
+          </div>
+
           {/* Action Buttons */}
           <div className="flex gap-2">
-            <Link to={`/packages/${pkg.slug}`} className="flex-1">
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                <Eye className="w-4 h-4 mr-2" />
-                View Details
-              </Button>
-            </Link>
             <BargainButton
-              className="flex-1 border-orange-500 text-orange-600 hover:bg-orange-50"
+              className="flex-1"
+              style={{
+                backgroundColor: "#febb02",
+                color: "#000000",
+                border: "none",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontWeight: "600",
+                fontSize: "13px",
+                minHeight: "40px"
+              }}
             >
               <TrendingDown className="w-4 h-4 mr-2" />
               Bargain
             </BargainButton>
+            <Link to={`/packages/${pkg.slug}`} className="flex-1">
+              <button
+                style={{
+                  backgroundColor: "#003580",
+                  color: "#ffffff",
+                  border: "1px solid #003580",
+                  borderRadius: "6px",
+                  padding: "10px 16px",
+                  fontWeight: "600",
+                  fontSize: "13px",
+                  minHeight: "40px",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                  cursor: "pointer",
+                  boxShadow: "0 1px 3px rgba(0,53,128,0.15)",
+                  transition: "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#002a66";
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,53,128,0.25)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#003580";
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,53,128,0.15)";
+                }}
+              >
+                <Eye className="w-4 h-4" />
+                View Details
+              </button>
+            </Link>
           </div>
         </div>
       </div>
@@ -224,13 +292,14 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
               )}
             </div>
 
-            {/* Price */}
+            {/* Pricing Display */}
             <div className="text-right ml-4">
-              <div className="text-sm text-gray-600">Starting from</div>
-              <div className="text-2xl font-bold text-blue-600">
-                {formatPrice(pkg.from_price, pkg.currency)}
+              <div className="text-2xl font-bold text-gray-900 mb-1">
+                {formatPrice(totalPrice)}
               </div>
-              <div className="text-sm text-gray-500">per person</div>
+              <div className="text-sm text-gray-600">
+                {formatPrice(pricePerPerson)} per person
+              </div>
             </div>
           </div>
 
@@ -260,7 +329,7 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
               <ul className="text-sm text-gray-600 space-y-1">
                 {pkg.highlights.slice(0, 3).map((highlight, index) => (
                   <li key={index} className="flex items-start">
-                    <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                    <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5 mr-2" />
                     <span className="line-clamp-1">{highlight}</span>
                   </li>
                 ))}
@@ -270,18 +339,57 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
 
           {/* Action Buttons */}
           <div className="flex gap-3 mt-auto">
-            <Link to={`/packages/${pkg.slug}`} className="flex-1">
-              <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-                <Eye className="w-4 h-4 mr-2" />
-                View Details
-              </Button>
-            </Link>
             <BargainButton
-              className="flex-1 border-orange-500 text-orange-600 hover:bg-orange-50"
+              className="flex-1"
+              style={{
+                backgroundColor: "#febb02",
+                color: "#000000",
+                border: "none",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontWeight: "600",
+                fontSize: "13px",
+                minHeight: "40px"
+              }}
             >
               <TrendingDown className="w-4 h-4 mr-2" />
               Bargain
             </BargainButton>
+            <Link to={`/packages/${pkg.slug}`} className="flex-1">
+              <button
+                style={{
+                  backgroundColor: "#003580",
+                  color: "#ffffff",
+                  border: "1px solid #003580",
+                  borderRadius: "6px",
+                  padding: "10px 16px",
+                  fontWeight: "600",
+                  fontSize: "13px",
+                  minHeight: "40px",
+                  width: "100%",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                  cursor: "pointer",
+                  boxShadow: "0 1px 3px rgba(0,53,128,0.15)",
+                  transition: "all 0.2s ease"
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = "#002a66";
+                  e.currentTarget.style.transform = "translateY(-1px)";
+                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,53,128,0.25)";
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = "#003580";
+                  e.currentTarget.style.transform = "translateY(0)";
+                  e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,53,128,0.15)";
+                }}
+              >
+                <Eye className="w-4 h-4" />
+                View Details
+              </button>
+            </Link>
           </div>
         </div>
       </div>
