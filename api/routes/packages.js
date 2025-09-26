@@ -35,6 +35,9 @@ router.get("/", async (req, res) => {
   try {
     const {
       q = "",
+      destination,
+      destination_code,
+      destination_type,
       region_id,
       country_id,
       city_id,
@@ -63,7 +66,31 @@ router.get("/", async (req, res) => {
       queryParams.push(`%${q.trim()}%`);
     }
 
-    // Region/Country/City filters
+    // Destination filter (from search form)
+    if (destination && destination_type) {
+      if (destination_type === 'city') {
+        // For city destinations, filter by region/country/city name
+        paramCount++;
+        whereConditions.push(`(
+          LOWER(r.name) LIKE LOWER($${paramCount}) OR
+          LOWER(c.name) LIKE LOWER($${paramCount}) OR
+          LOWER(ci.name) LIKE LOWER($${paramCount}) OR
+          LOWER(p.title) LIKE LOWER($${paramCount})
+        )`);
+        const destinationName = destination.split(',')[0].trim(); // Extract city name from "Dubai, United Arab Emirates"
+        queryParams.push(`%${destinationName}%`);
+      } else if (destination_type === 'country') {
+        paramCount++;
+        whereConditions.push(`LOWER(c.name) LIKE LOWER($${paramCount})`);
+        queryParams.push(`%${destination}%`);
+      } else if (destination_type === 'region') {
+        paramCount++;
+        whereConditions.push(`LOWER(r.name) LIKE LOWER($${paramCount})`);
+        queryParams.push(`%${destination}%`);
+      }
+    }
+
+    // Region/Country/City filters (for direct filtering)
     if (region_id) {
       paramCount++;
       whereConditions.push(`p.region_id = $${paramCount}`);
