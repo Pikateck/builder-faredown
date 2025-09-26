@@ -58,6 +58,7 @@ export default function PackageBooking() {
   const navigate = useNavigate();
   const { formatPrice } = useCurrency();
   const { user, isAuthenticated } = useAuth();
+  const { countries } = useCountries({ autoFetch: true });
 
   // Get booking data from navigation state
   const bookingData = location.state as BookingData;
