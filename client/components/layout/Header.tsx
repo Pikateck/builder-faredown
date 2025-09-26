@@ -60,6 +60,17 @@ export function Header() {
 
   // Get active tab from URL
   const getActiveTab = () => {
+    // Check for package booking confirmation
+    if (location.pathname.includes("/booking-confirmation")) {
+      const searchParams = new URLSearchParams(location.search);
+      // Check if coming from package booking flow
+      if (searchParams.get("module") === "packages" ||
+          localStorage.getItem("lastBookingModule") === "packages" ||
+          location.state?.module === "packages") {
+        return "packages";
+      }
+    }
+
     // Check actual route paths first
     if (location.pathname === "/" || location.pathname === "/hotels")
       return "hotels";
