@@ -303,7 +303,7 @@ export function PackagesSearchForm() {
           </div>
 
           {/* Category */}
-          <div className="flex-1">
+          <div className="xl:col-span-1">
             <label htmlFor="category-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Package Type
             </label>
@@ -325,7 +325,7 @@ export function PackagesSearchForm() {
           </div>
 
           {/* Passengers */}
-          <div className="flex-1">
+          <div className="xl:col-span-1">
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Travelers
             </label>
