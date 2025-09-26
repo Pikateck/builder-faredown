@@ -1875,6 +1875,54 @@ export default function BookingConfirmation() {
                     </div>
                   </div>
                 </>
+              ) : bookingType === "packages" ? (
+                <>
+                  {/* Package Travel Details */}
+                  <div className="grid grid-cols-2 gap-4">
+                    <div className="bg-gray-50 p-3 rounded-lg text-center">
+                      <p className="text-sm text-gray-600">Departure Date</p>
+                      <p className="font-bold">
+                        {booking.departure_date
+                          ? formatDate(booking.departure_date)
+                          : formatDate(new Date().toISOString())}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        From {booking.departure_city || "Origin City"}
+                      </p>
+                    </div>
+                    <div className="bg-gray-50 p-3 rounded-lg text-center">
+                      <p className="text-sm text-gray-600">Return Date</p>
+                      <p className="font-bold">
+                        {booking.return_date
+                          ? formatDate(booking.return_date)
+                          : formatDate(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString())}
+                      </p>
+                      <p className="text-xs text-gray-500">
+                        To {booking.departure_city || "Origin City"}
+                      </p>
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-3 gap-3 text-center">
+                    <div>
+                      <p className="text-lg font-bold">
+                        {booking.adults || 2}
+                      </p>
+                      <p className="text-xs text-gray-600">adults</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold">
+                        {booking.children || 0}
+                      </p>
+                      <p className="text-xs text-gray-600">children</p>
+                    </div>
+                    <div>
+                      <p className="text-lg font-bold">
+                        {booking.duration || "7D/6N"}
+                      </p>
+                      <p className="text-xs text-gray-600">duration</p>
+                    </div>
+                  </div>
+                </>
               ) : (
                 <>
                   {/* Hotel Travel Details */}
