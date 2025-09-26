@@ -1549,7 +1549,8 @@ export default function BookingConfirmation() {
               <Badge className="bg-gray-100 text-gray-800 px-4 py-2">
                 You saved ₹
                 {(
-                  (booking.originalPrice || 0) - (booking.total || 0)
+                  (booking.originalPrice || booking.original_total || 0) -
+                  (booking.final_amount || booking.agreed_total || booking.total || 0)
                 ).toLocaleString()}{" "}
                 with bargaining!
               </Badge>
@@ -2118,7 +2119,7 @@ export default function BookingConfirmation() {
               )}
             </div>
             <span className="text-3xl font-bold text-blue-700">
-              ₹{(booking.total || 0).toLocaleString()}
+              ₹{(booking.final_amount || booking.agreed_total || booking.total || 0).toLocaleString()}
             </span>
           </div>
           <p className="text-sm text-gray-600 mt-2">
