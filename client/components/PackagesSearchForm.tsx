@@ -160,9 +160,18 @@ export function PackagesSearchForm() {
       updateSearchParams(searchData);
       console.log('🔍 PackagesSearchForm: Updated search context');
 
-      // Navigate to results page
-      console.log('🔍 PackagesSearchForm: Navigating to /packages/results');
-      navigate("/packages/results");
+      // Build URL with search parameters
+      const urlParams = new URLSearchParams();
+      Object.entries(searchData).forEach(([key, value]) => {
+        if (value && value !== "" && value !== undefined) {
+          urlParams.append(key, value.toString());
+        }
+      });
+
+      // Navigate to results page with parameters
+      const resultsUrl = `/packages/results?${urlParams.toString()}`;
+      console.log('🔍 PackagesSearchForm: Navigating to:', resultsUrl);
+      navigate(resultsUrl);
     } catch (error) {
       console.error('🔍 PackagesSearchForm: Search navigation failed:', error);
       setErrorMessage("Search failed. Please try again.");
