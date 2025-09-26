@@ -10,6 +10,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useAuth } from "@/contexts/AuthContext";
 import { apiClient } from "@/lib/api";
+import useCountries from "@/hooks/useCountries";
 import {
   ArrowLeft,
   MapPin,
