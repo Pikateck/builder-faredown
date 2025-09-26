@@ -83,12 +83,33 @@ export default function BookingConfirmation() {
     }
 
     // Check for package booking data from location state
-    if (location.state?.bookingDetails || location.state?.module === "packages") {
+    if (location.state?.bookingDetails || location.state?.module === "packages" || location.state?.package) {
       console.log(
         "📦 Using package booking data from location state",
         location.state.bookingDetails || location.state
       );
-      setBooking(location.state.bookingDetails || location.state);
+
+      // Extract package data and merge with booking details
+      let packageBookingData = location.state.bookingDetails || location.state;
+
+      // If we have package data in state, merge it properly
+      if (location.state?.package) {
+        packageBookingData = {
+          ...packageBookingData,
+          package: location.state.package,
+          hero_image_url: location.state.package.hero_image_url,
+          package_title: location.state.package.title,
+          title: location.state.package.title,
+          duration: `${location.state.package.duration_days}D/${location.state.package.duration_nights}N`,
+          departure_city: location.state.departure?.departure_city_name,
+          departure_date: location.state.departure?.departure_date,
+          return_date: location.state.departure?.return_date,
+          adults: location.state.travelers?.adults || 2,
+          children: location.state.travelers?.children || 0,
+        };
+      }
+
+      setBooking(packageBookingData);
       setBookingType("packages");
       return;
     }
