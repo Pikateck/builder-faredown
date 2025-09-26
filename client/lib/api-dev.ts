@@ -1260,9 +1260,9 @@ export class DevApiClient {
           ],
           base_price_pp: 89999,
           currency: "INR",
-          hero_image_url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800",
+          hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800",
           gallery_images: [
-            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800",
+            "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800",
             "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&h=600&fit=crop&auto=format",
             "https://images.unsplash.com/photo-1569197388202-9efe60c9e512?w=800&h=600&fit=crop&auto=format"
           ],
