@@ -110,7 +110,9 @@ export function PackagesSearchForm() {
       returnDate,
       duration,
       budget,
-      category
+      category,
+      adults,
+      children
     };
 
     const validation = packagesSearchSchema.safeParse(formData);
