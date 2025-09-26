@@ -138,6 +138,8 @@ export function PackagesSearchForm() {
         duration,
         budget,
         category,
+        adults,
+        children,
         module: "packages",
         destination: selectedDestination!.name,
         destination_code: selectedDestination!.code,
