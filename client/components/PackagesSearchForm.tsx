@@ -188,239 +188,247 @@ export function PackagesSearchForm() {
         role="search"
         aria-label="Search packages form"
       >
-        {/* All Form Fields Grid - Better responsive wrapping */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-2 mb-4">
+        {/* Form Fields - Two Row Layout with Even Spacing */}
+        <div className="space-y-4 mb-4">
 
-          {/* Destination Dropdown */}
-          <div className="md:col-span-2 lg:col-span-1">
-            <DestinationDropdown
-              value={selectedDestination}
-              onChange={setSelectedDestination}
-              placeholder="Where do you want to go?"
-              icon={<Globe className="w-4 h-4 text-gray-500 mr-2" />}
-              module="packages"
-              enableApiSearch={true}
-            />
-          </div>
+          {/* First Row - Main Search Fields */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
 
-          {/* Departure Date */}
-          <div className="md:col-span-2 lg:col-span-1">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Package Dates
-            </label>
-            <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate text-xs sm:text-sm">
-                    {departureDate && returnDate ? (
-                      <>
-                        <span className="hidden md:inline">
-                          {format(departureDate, "EEE, MMM d")} to{" "}
-                          {format(returnDate, "EEE, MMM d")}
-                        </span>
-                        <span className="md:hidden">
-                          {format(departureDate, "d MMM")} -{" "}
-                          {format(returnDate, "d MMM")}
-                        </span>
-                      </>
-                    ) : departureDate ? (
-                      <>
-                        <span className="hidden md:inline">
-                          {format(departureDate, "EEE, MMM d")}
-                        </span>
-                        <span className="md:hidden">
-                          {format(departureDate, "d MMM")}
-                        </span>
-                      </>
-                    ) : (
-                      "Select dates"
-                    )}
-                  </span>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-auto p-0" align="start">
-                <StableBookingCalendar
-                  bookingType="packages"
-                  initialRange={{
-                    startDate: departureDate || new Date(),
-                    endDate:
-                      returnDate || addDays(departureDate || new Date(), 7),
-                  }}
-                  onChange={(range) => {
-                    setDepartureDate(range.startDate);
-                    setReturnDate(range.endDate);
-                    setIsCalendarOpen(false);
-                  }}
-                  onClose={() => setIsCalendarOpen(false)}
-                  className="w-full"
-                />
-              </PopoverContent>
-            </Popover>
-          </div>
+            {/* Destination Dropdown */}
+            <div>
+              <DestinationDropdown
+                value={selectedDestination}
+                onChange={setSelectedDestination}
+                placeholder="Where do you want to go?"
+                icon={<Globe className="w-4 h-4 text-gray-500 mr-2" />}
+                module="packages"
+                enableApiSearch={true}
+              />
+            </div>
 
-          {/* Duration Filter */}
-          <div className="lg:col-span-1">
-            <label htmlFor="duration-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Duration
-            </label>
-            <select
-              id="duration-select"
-              value={duration}
-              onChange={(e) => setDuration(e.target.value)}
-              className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
-            >
-              <option value="any">Any Duration</option>
-              <option value="1-5">1-5 Days</option>
-              <option value="6-10">6-10 Days</option>
-              <option value="11-15">11-15 Days</option>
-              <option value="16+">16+ Days</option>
-            </select>
-          </div>
-
-          {/* Budget */}
-          <div className="lg:col-span-1">
-            <label htmlFor="budget-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Budget (per person)
-            </label>
-            <select
-              id="budget-select"
-              value={budget}
-              onChange={(e) => setBudget(e.target.value)}
-              className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
-            >
-              <option value="any">Any Budget</option>
-              <option value="0-50000">Under ₹50,000</option>
-              <option value="50000-100000">₹50,000 - ₹1,00,000</option>
-              <option value="100000-200000">₹1,00,000 - ₹2,00,000</option>
-              <option value="200000-500000">₹2,00,000 - ₹5,00,000</option>
-              <option value="500000+">Above ₹5,00,000</option>
-            </select>
-          </div>
-
-          {/* Category */}
-          <div className="lg:col-span-1">
-            <label htmlFor="category-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Package Type
-            </label>
-            <select
-              id="category-select"
-              value={category}
-              onChange={(e) => setCategory(e.target.value)}
-              className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
-            >
-              <option value="any">All Types</option>
-              <option value="cultural">Cultural & Heritage</option>
-              <option value="beach">Beach & Islands</option>
-              <option value="adventure">Adventure</option>
-              <option value="honeymoon">Honeymoon</option>
-              <option value="family">Family</option>
-              <option value="luxury">Luxury</option>
-              <option value="budget">Budget</option>
-            </select>
-          </div>
-
-          {/* Passengers */}
-          <div className="lg:col-span-1">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Travelers
-            </label>
-            <Popover open={isPaxOpen} onOpenChange={setIsPaxOpen}>
-              <PopoverTrigger asChild>
-                <Button
-                  type="button"
-                  variant="outline"
-                  className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3"
-                >
-                  <Users className="mr-2 h-4 w-4 flex-shrink-0" />
-                  <span className="truncate text-xs sm:text-sm">
-                    {adults + children === 1 ? '1 Traveler' : `${adults + children} Travelers`}
-                    <span className="hidden md:inline text-gray-500 ml-1">
-                      • {adults} Adult{adults !== 1 ? 's' : ''}{children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}
-                    </span>
-                  </span>
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80 p-4" align="start">
-                <div className="space-y-4">
-                  <h4 className="font-semibold text-gray-900">Travelers</h4>
-
-                  {/* Adults */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-gray-900">Adults</div>
-                      <div className="text-sm text-gray-600">Ages 18+</div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setAdults(Math.max(1, adults - 1))}
-                        disabled={adults <= 1}
-                        className="h-8 w-8 p-0"
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">{adults}</span>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setAdults(Math.min(8, adults + 1))}
-                        disabled={adults >= 8}
-                        className="h-8 w-8 p-0"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-
-                  {/* Children */}
-                  <div className="flex items-center justify-between">
-                    <div>
-                      <div className="font-medium text-gray-900">Children</div>
-                      <div className="text-sm text-gray-600">Ages 0-17</div>
-                    </div>
-                    <div className="flex items-center space-x-3">
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setChildren(Math.max(0, children - 1))}
-                        disabled={children <= 0}
-                        className="h-8 w-8 p-0"
-                      >
-                        <Minus className="h-4 w-4" />
-                      </Button>
-                      <span className="w-8 text-center font-medium">{children}</span>
-                      <Button
-                        type="button"
-                        variant="outline"
-                        size="sm"
-                        onClick={() => setChildren(Math.min(6, children + 1))}
-                        disabled={children >= 6}
-                        className="h-8 w-8 p-0"
-                      >
-                        <Plus className="h-4 w-4" />
-                      </Button>
-                    </div>
-                  </div>
-
+            {/* Departure Date */}
+            <div>
+              <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+                Package Dates
+              </label>
+              <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
+                <PopoverTrigger asChild>
                   <Button
                     type="button"
-                    onClick={() => setIsPaxOpen(false)}
-                    className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                    variant="outline"
+                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3"
                   >
-                    Done
+                    <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
+                    <span className="truncate text-xs sm:text-sm">
+                      {departureDate && returnDate ? (
+                        <>
+                          <span className="hidden md:inline">
+                            {format(departureDate, "EEE, MMM d")} to{" "}
+                            {format(returnDate, "EEE, MMM d")}
+                          </span>
+                          <span className="md:hidden">
+                            {format(departureDate, "d MMM")} -{" "}
+                            {format(returnDate, "d MMM")}
+                          </span>
+                        </>
+                      ) : departureDate ? (
+                        <>
+                          <span className="hidden md:inline">
+                            {format(departureDate, "EEE, MMM d")}
+                          </span>
+                          <span className="md:hidden">
+                            {format(departureDate, "d MMM")}
+                          </span>
+                        </>
+                      ) : (
+                        "Select dates"
+                      )}
+                    </span>
                   </Button>
-                </div>
-              </PopoverContent>
-            </Popover>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0" align="start">
+                  <StableBookingCalendar
+                    bookingType="packages"
+                    initialRange={{
+                      startDate: departureDate || new Date(),
+                      endDate:
+                        returnDate || addDays(departureDate || new Date(), 7),
+                    }}
+                    onChange={(range) => {
+                      setDepartureDate(range.startDate);
+                      setReturnDate(range.endDate);
+                      setIsCalendarOpen(false);
+                    }}
+                    onClose={() => setIsCalendarOpen(false)}
+                    className="w-full"
+                  />
+                </PopoverContent>
+              </Popover>
+            </div>
+          </div>
+
+          {/* Second Row - Filter Boxes with Even Spacing */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+
+            {/* Duration Filter */}
+            <div>
+              <label htmlFor="duration-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+                Duration
+              </label>
+              <select
+                id="duration-select"
+                value={duration}
+                onChange={(e) => setDuration(e.target.value)}
+                className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
+              >
+                <option value="any">Any Duration</option>
+                <option value="1-5">1-5 Days</option>
+                <option value="6-10">6-10 Days</option>
+                <option value="11-15">11-15 Days</option>
+                <option value="16+">16+ Days</option>
+              </select>
+            </div>
+
+            {/* Budget */}
+            <div>
+              <label htmlFor="budget-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+                Budget (per person)
+              </label>
+              <select
+                id="budget-select"
+                value={budget}
+                onChange={(e) => setBudget(e.target.value)}
+                className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
+              >
+                <option value="any">Any Budget</option>
+                <option value="0-50000">Under ₹50,000</option>
+                <option value="50000-100000">₹50,000 - ₹1,00,000</option>
+                <option value="100000-200000">₹1,00,000 - ₹2,00,000</option>
+                <option value="200000-500000">₹2,00,000 - ₹5,00,000</option>
+                <option value="500000+">Above ₹5,00,000</option>
+              </select>
+            </div>
+
+            {/* Category */}
+            <div>
+              <label htmlFor="category-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+                Package Type
+              </label>
+              <select
+                id="category-select"
+                value={category}
+                onChange={(e) => setCategory(e.target.value)}
+                className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
+              >
+                <option value="any">All Types</option>
+                <option value="cultural">Cultural & Heritage</option>
+                <option value="beach">Beach & Islands</option>
+                <option value="adventure">Adventure</option>
+                <option value="honeymoon">Honeymoon</option>
+                <option value="family">Family</option>
+                <option value="luxury">Luxury</option>
+                <option value="budget">Budget</option>
+              </select>
+            </div>
+
+            {/* Passengers */}
+            <div>
+              <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+                Travelers
+              </label>
+              <Popover open={isPaxOpen} onOpenChange={setIsPaxOpen}>
+                <PopoverTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3"
+                  >
+                    <Users className="mr-2 h-4 w-4 flex-shrink-0" />
+                    <span className="truncate text-xs sm:text-sm">
+                      {adults + children === 1 ? '1 Traveler' : `${adults + children} Travelers`}
+                      <span className="hidden md:inline text-gray-500 ml-1">
+                        • {adults} Adult{adults !== 1 ? 's' : ''}{children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}
+                      </span>
+                    </span>
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 p-4" align="start">
+                  <div className="space-y-4">
+                    <h4 className="font-semibold text-gray-900">Travelers</h4>
+
+                    {/* Adults */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-gray-900">Adults</div>
+                        <div className="text-sm text-gray-600">Ages 18+</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setAdults(Math.max(1, adults - 1))}
+                          disabled={adults <= 1}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <span className="w-8 text-center font-medium">{adults}</span>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setAdults(Math.min(8, adults + 1))}
+                          disabled={adults >= 8}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    {/* Children */}
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <div className="font-medium text-gray-900">Children</div>
+                        <div className="text-sm text-gray-600">Ages 0-17</div>
+                      </div>
+                      <div className="flex items-center space-x-3">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setChildren(Math.max(0, children - 1))}
+                          disabled={children <= 0}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Minus className="h-4 w-4" />
+                        </Button>
+                        <span className="w-8 text-center font-medium">{children}</span>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          size="sm"
+                          onClick={() => setChildren(Math.min(6, children + 1))}
+                          disabled={children >= 6}
+                          className="h-8 w-8 p-0"
+                        >
+                          <Plus className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </div>
+
+                    <Button
+                      type="button"
+                      onClick={() => setIsPaxOpen(false)}
+                      className="w-full bg-blue-600 hover:bg-blue-700 text-white"
+                    >
+                      Done
+                    </Button>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
           </div>
         </div>
 
