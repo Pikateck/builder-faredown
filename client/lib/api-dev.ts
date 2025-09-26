@@ -1475,10 +1475,34 @@ export class DevApiClient {
           tags: ["romance", "culture", "city-break", "museums"],
           media: [
             {
-              url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F2ae9fcf39c73428481176753547bfc64?format=webp&width=800",
+              url: "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800",
               type: "image",
-              title: "Eiffel Tower",
-              alt_text: "Romantic view of Eiffel Tower"
+              title: "Paris Sunset with Eiffel Tower",
+              alt_text: "Romantic rooftop view of Paris skyline and Eiffel Tower at sunset"
+            },
+            {
+              url: "https://images.pexels.com/photos/17856787/pexels-photo-17856787.jpeg?auto=compress&cs=tinysrgb&w=800",
+              type: "image",
+              title: "Seine River Evening",
+              alt_text: "Serene evening on the River Seine with historic Parisian architecture"
+            },
+            {
+              url: "https://images.pexels.com/photos/2956952/pexels-photo-2956952.jpeg?auto=compress&cs=tinysrgb&w=800",
+              type: "image",
+              title: "Romantic Parisian Café",
+              alt_text: "Romantic scene at a Parisian café with red chairs and cozy ambiance"
+            },
+            {
+              url: "https://images.pexels.com/photos/2363/france-landmark-lights-night.jpg?auto=compress&cs=tinysrgb&w=800",
+              type: "image",
+              title: "Louvre at Night",
+              alt_text: "Stunning nighttime view of the illuminated Louvre Pyramid in Paris"
+            },
+            {
+              url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F6ec88fa2abda46e79072794e8678eb5d?format=webp&width=800",
+              type: "image",
+              title: "Paris Romantic Scene",
+              alt_text: "Beautiful romantic Paris scene"
             }
           ],
           reviews_summary: {
