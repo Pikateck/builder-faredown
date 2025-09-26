@@ -552,7 +552,7 @@ export default function PackageDetails() {
                     >
                       {packageData.departures.map((departure) => (
                         <option key={departure.id} value={departure.id}>
-                          {departure.departure_city_name} - {format(parseISO(departure.departure_date), "MMM d, yyyy")} 
+                          {departure.departure_city_name} - {format(parseISO(departure.departure_date), "EEE, MMM d, yyyy")} 
                           ({formatPrice(departure.price_per_person, departure.currency)})
                         </option>
                       ))}
