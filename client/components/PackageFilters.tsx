@@ -10,7 +10,23 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { Slider } from "@/components/ui/slider";
-import { Search, X, Filter } from "lucide-react";
+import {
+  Search,
+  X,
+  Filter,
+  Camera,
+  Building2,
+  Mountain,
+  Heart,
+  Users,
+  Star,
+  Wallet,
+  TreePine,
+  Church,
+  MapPin,
+  Globe,
+  Clock
+} from "lucide-react";
 
 interface PackageFiltersProps {
   filters: {
