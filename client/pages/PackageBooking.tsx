@@ -253,7 +253,7 @@ export default function PackageBooking() {
                   <div>
                     <Label htmlFor="title">Title *</Label>
                     <Select value={primaryGuest.title} onValueChange={(value) => handleGuestChange(-1, "title", value)}>
-                      <SelectTrigger>
+                      <SelectTrigger className="border-2 border-[#003580] focus:ring-[#003580]">
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent>
