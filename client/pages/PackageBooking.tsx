@@ -377,11 +377,21 @@ export default function PackageBooking() {
                         
                         <div>
                           <Label>Nationality</Label>
-                          <Input
-                            value={guest.nationality || ""}
-                            onChange={(e) => handleGuestChange(index, "nationality", e.target.value)}
-                            placeholder="Enter nationality"
-                          />
+                          <Select value={guest.nationality || ""} onValueChange={(value) => handleGuestChange(index, "nationality", value)}>
+                            <SelectTrigger className="border-2 border-[#003580] focus:ring-[#003580]">
+                              <SelectValue placeholder="Select nationality" />
+                            </SelectTrigger>
+                            <SelectContent>
+                              {countries.map((country) => (
+                                <SelectItem key={country.iso2} value={country.name}>
+                                  <div className="flex items-center space-x-2">
+                                    <span>{country.flag}</span>
+                                    <span>{country.name}</span>
+                                  </div>
+                                </SelectItem>
+                              ))}
+                            </SelectContent>
+                          </Select>
                         </div>
                       </div>
                     </div>
