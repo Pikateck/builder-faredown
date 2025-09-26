@@ -74,6 +74,8 @@ export default function PackageResults() {
     duration_max: searchParams.get("duration_max") || "",
     departure_city: searchParams.get("departure_city") || "",
     month: searchParams.get("month") || "",
+    adults: parseInt(searchParams.get("adults") || "2"),
+    children: parseInt(searchParams.get("children") || "0"),
     sort: searchParams.get("sort") || "popularity",
     page: parseInt(searchParams.get("page") || "1"),
   };
