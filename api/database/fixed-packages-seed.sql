@@ -321,6 +321,52 @@ INSERT INTO packages (
 )
 ON CONFLICT (slug) DO NOTHING;
 
+-- Sample Dubai package (UAE)
+INSERT INTO packages (
+    slug, title, region_id, country_id, city_id, duration_days, duration_nights,
+    overview, base_price_pp, currency, category, status, is_featured,
+    inclusions, exclusions, highlights
+) VALUES (
+    'dubai-luxury-experience-5-days',
+    'Dubai Luxury Experience',
+    (SELECT id FROM regions WHERE name = 'Middle East'),
+    (SELECT id FROM countries WHERE iso_code = 'AE'),
+    (SELECT id FROM cities WHERE name = 'Dubai'),
+    5, 4,
+    'Experience the ultimate luxury in Dubai with 5-star accommodations, desert safari, and city tours.',
+    125000, 'INR',
+    'luxury',
+    'active',
+    TRUE,
+    '["Return airfare from Mumbai/Delhi", "4 nights 5-star hotel accommodation", "Daily breakfast", "Airport transfers", "Desert safari with BBQ dinner", "Dubai city tour", "Burj Khalifa visit", "Local English-speaking guide"]',
+    '["Lunch and dinner (except BBQ)", "Visa fees", "Personal expenses", "Optional tours", "Tips and gratuities", "Travel insurance"]',
+    '["Visit iconic Burj Khalifa", "Explore Dubai Mall and Gold Souk", "Desert safari with camel riding", "Luxury shopping experience", "Traditional dhow cruise", "Modern architectural marvels"]'
+)
+ON CONFLICT (slug) DO NOTHING;
+
+-- Sample Dubai premium package
+INSERT INTO packages (
+    slug, title, region_id, country_id, city_id, duration_days, duration_nights,
+    overview, base_price_pp, currency, category, status, is_featured,
+    inclusions, exclusions, highlights
+) VALUES (
+    'dubai-city-explorer-4-days',
+    'Dubai City Explorer',
+    (SELECT id FROM regions WHERE name = 'Middle East'),
+    (SELECT id FROM countries WHERE iso_code = 'AE'),
+    (SELECT id FROM cities WHERE name = 'Dubai'),
+    4, 3,
+    'Discover the best of Dubai in 4 days with modern attractions and traditional culture.',
+    85000, 'INR',
+    'cultural',
+    'active',
+    FALSE,
+    '["Return airfare from Mumbai/Delhi", "3 nights 4-star hotel accommodation", "Daily breakfast", "Airport transfers", "Half-day city tour", "Dubai Marina walk", "Local guide"]',
+    '["Lunch and dinner meals", "Visa fees", "Personal expenses", "Optional tours", "Tips and gratuities", "Travel insurance"]',
+    '["Explore Old Dubai heritage sites", "Visit Dubai Museum", "Walk through spice and gold souks", "Modern Dubai Marina area", "Traditional Arabic culture", "Stunning skyline views"]'
+)
+ON CONFLICT (slug) DO NOTHING;
+
 -- Add sample departures for Spain Portugal package
 INSERT INTO package_departures (
     package_id, departure_city_code, departure_city_name, departure_date, return_date,
