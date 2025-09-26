@@ -188,8 +188,8 @@ export function PackagesSearchForm() {
         role="search"
         aria-label="Search packages form"
       >
-        {/* All Form Fields Row */}
-        <div className="flex flex-col lg:flex-row gap-2 mb-4">
+        {/* All Form Fields Grid - Better responsive wrapping */}
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-6 gap-2 mb-4">
 
           {/* Destination Dropdown */}
           <div className="flex-1">
