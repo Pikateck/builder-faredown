@@ -313,15 +313,15 @@ export function PackagesSearchForm() {
             </div>
 
             {/* Category */}
-            <div>
-              <label htmlFor="category-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+            <div className="space-y-2">
+              <label htmlFor="category-select" className="text-sm font-semibold text-gray-700 block">
                 Package Type
               </label>
               <select
                 id="category-select"
                 value={category}
                 onChange={(e) => setCategory(e.target.value)}
-                className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
+                className="w-full h-12 px-4 border-2 border-gray-200 hover:border-blue-500 focus:border-blue-500 rounded-lg text-sm focus:outline-none transition-colors bg-white"
               >
                 <option value="any">All Types</option>
                 <option value="cultural">Cultural & Heritage</option>
@@ -335,8 +335,8 @@ export function PackagesSearchForm() {
             </div>
 
             {/* Passengers */}
-            <div>
-              <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-700 block">
                 Travelers
               </label>
               <Popover open={isPaxOpen} onOpenChange={setIsPaxOpen}>
@@ -344,7 +344,7 @@ export function PackagesSearchForm() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3"
+                    className="w-full h-12 justify-start text-left font-medium bg-white border-2 border-gray-200 hover:border-blue-500 focus:border-blue-500 rounded-lg text-sm px-4 transition-colors"
                   >
                     <Users className="mr-2 h-4 w-4 flex-shrink-0" />
                     <span className="truncate text-xs sm:text-sm">
