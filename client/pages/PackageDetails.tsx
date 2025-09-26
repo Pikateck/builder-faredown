@@ -639,7 +639,7 @@ export default function PackageDetails() {
             </Card>
 
             {/* Quick Contact */}
-            <Card>
+            <Card className="sticky top-4 z-10">
               <CardContent className="p-6 text-center">
                 <h3 className="font-semibold mb-2">Need Help?</h3>
                 <p className="text-sm text-gray-600 mb-4">
