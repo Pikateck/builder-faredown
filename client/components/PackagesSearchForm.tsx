@@ -136,6 +136,7 @@ export function PackagesSearchForm() {
       return;
     }
 
+    console.log('🔍 PackagesSearchForm: Validation passed, proceeding with search');
     setIsSubmitting(true);
     trackSearchAttempt(true);
 
@@ -153,13 +154,17 @@ export function PackagesSearchForm() {
         destination_type: selectedDestination!.type,
       };
 
+      console.log('🔍 PackagesSearchForm: Built search data:', searchData);
+
       // Update search context
       updateSearchParams(searchData);
+      console.log('🔍 PackagesSearchForm: Updated search context');
 
       // Navigate to results page
+      console.log('🔍 PackagesSearchForm: Navigating to /packages/results');
       navigate("/packages/results");
     } catch (error) {
-      console.error('Search navigation failed:', error);
+      console.error('🔍 PackagesSearchForm: Search navigation failed:', error);
       setErrorMessage("Search failed. Please try again.");
       setShowError(true);
     } finally {
