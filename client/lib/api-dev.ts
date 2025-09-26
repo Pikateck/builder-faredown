@@ -1412,10 +1412,13 @@ export class DevApiClient {
           ],
           base_price_pp: 67500,
           currency: "INR",
-          hero_image_url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F2ae9fcf39c73428481176753547bfc64?format=webp&width=800",
+          hero_image_url: "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800",
           gallery_images: [
-            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F2ae9fcf39c73428481176753547bfc64?format=webp&width=800",
-            "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&h=600&fit=crop&auto=format"
+            "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800",
+            "https://images.pexels.com/photos/17856787/pexels-photo-17856787.jpeg?auto=compress&cs=tinysrgb&w=800",
+            "https://images.pexels.com/photos/2956952/pexels-photo-2956952.jpeg?auto=compress&cs=tinysrgb&w=800",
+            "https://images.pexels.com/photos/2363/france-landmark-lights-night.jpg?auto=compress&cs=tinysrgb&w=800",
+            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F6ec88fa2abda46e79072794e8678eb5d?format=webp&width=800"
           ],
           rating: 4.6,
           review_count: 89,
