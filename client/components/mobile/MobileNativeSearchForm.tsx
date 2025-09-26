@@ -392,7 +392,7 @@ export function MobileNativeSearchForm({
       return `${format(startDate, "EEE, MMM d")} - ${format(endDate, "EEE, MMM d")}`;
     }
 
-    return format(startDate, "MMM d") + " - Return";
+    return format(startDate, "EEE, MMM d") + " - Return";
   };
 
   // Format travelers display
