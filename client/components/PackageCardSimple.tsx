@@ -372,7 +372,7 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
                 fontWeight: "600",
                 fontSize: "13px",
                 minHeight: "40px",
-                width: "50%",
+                width: "40%",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -411,11 +411,12 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
                 color: "#000000",
                 border: "none",
                 borderRadius: "6px",
-                padding: "10px 16px",
+                padding: "14px 18px",
                 fontWeight: "600",
-                fontSize: "13px",
-                minHeight: "40px",
-                width: "50%"
+                fontSize: "14px",
+                minHeight: "44px",
+                width: "60%",
+                boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
               }}
             >
               Bargain
