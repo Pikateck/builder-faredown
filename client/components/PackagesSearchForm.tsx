@@ -188,11 +188,10 @@ export function PackagesSearchForm() {
         role="search"
         aria-label="Search packages form"
       >
-        {/* Form Fields - Two Row Layout with Even Spacing */}
-        <div className="space-y-6 mb-8">
-
-          {/* First Row - Main Search Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        {/* Form Fields - Single Row Layout */}
+        <div className="mb-8">
+          {/* All Fields in One Row */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 lg:gap-6">
 
             {/* Destination Dropdown */}
             <div className="space-y-2">
@@ -225,22 +224,22 @@ export function PackagesSearchForm() {
                     <span className="truncate text-xs sm:text-sm">
                       {departureDate && returnDate ? (
                         <>
-                          <span className="hidden md:inline">
-                            {format(departureDate, "EEE, MMM d")} to{" "}
-                            {format(returnDate, "EEE, MMM d")}
+                          <span className="hidden lg:inline">
+                            {format(departureDate, "MMM d")} to{" "}
+                            {format(returnDate, "MMM d")}
                           </span>
-                          <span className="md:hidden">
-                            {format(departureDate, "d MMM")} -{" "}
-                            {format(returnDate, "d MMM")}
+                          <span className="lg:hidden">
+                            {format(departureDate, "d/M")} -{" "}
+                            {format(returnDate, "d/M")}
                           </span>
                         </>
                       ) : departureDate ? (
                         <>
-                          <span className="hidden md:inline">
-                            {format(departureDate, "EEE, MMM d")}
+                          <span className="hidden lg:inline">
+                            {format(departureDate, "MMM d")}
                           </span>
-                          <span className="md:hidden">
-                            {format(departureDate, "d MMM")}
+                          <span className="lg:hidden">
+                            {format(departureDate, "d/M")}
                           </span>
                         </>
                       ) : (
@@ -267,49 +266,6 @@ export function PackagesSearchForm() {
                   />
                 </PopoverContent>
               </Popover>
-            </div>
-          </div>
-
-          {/* Second Row - Filter Boxes with Even Spacing */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
-
-            {/* Duration Filter */}
-            <div className="space-y-2">
-              <label htmlFor="duration-select" className="text-sm font-semibold text-gray-700 block">
-                Duration
-              </label>
-              <select
-                id="duration-select"
-                value={duration}
-                onChange={(e) => setDuration(e.target.value)}
-                className="w-full h-10 px-3 py-2 border-2 border-blue-500 hover:border-blue-600 focus:border-blue-600 rounded text-sm focus:outline-none transition-colors bg-white"
-              >
-                <option value="any">Any Duration</option>
-                <option value="1-5">1-5 Days</option>
-                <option value="6-10">6-10 Days</option>
-                <option value="11-15">11-15 Days</option>
-                <option value="16+">16+ Days</option>
-              </select>
-            </div>
-
-            {/* Budget */}
-            <div className="space-y-2">
-              <label htmlFor="budget-select" className="text-sm font-semibold text-gray-700 block">
-                Budget
-              </label>
-              <select
-                id="budget-select"
-                value={budget}
-                onChange={(e) => setBudget(e.target.value)}
-                className="w-full h-10 px-3 py-2 border-2 border-blue-500 hover:border-blue-600 focus:border-blue-600 rounded text-sm focus:outline-none transition-colors bg-white"
-              >
-                <option value="any">Any Budget</option>
-                <option value="0-50000">Under ₹50,000</option>
-                <option value="50000-100000">₹50,000 - ₹1,00,000</option>
-                <option value="100000-200000">₹1,00,000 - ₹2,00,000</option>
-                <option value="200000-500000">₹2,00,000 - ₹5,00,000</option>
-                <option value="500000+">Above ₹5,00,000</option>
-              </select>
             </div>
 
             {/* Category */}
@@ -349,7 +305,7 @@ export function PackagesSearchForm() {
                     <Users className="mr-2 h-4 w-4 flex-shrink-0" />
                     <span className="truncate text-xs sm:text-sm">
                       {adults + children === 1 ? '1 Traveler' : `${adults + children} Travelers`}
-                      <span className="hidden md:inline text-gray-500 ml-1">
+                      <span className="hidden lg:inline text-gray-500 ml-1">
                         • {adults} Adult{adults !== 1 ? 's' : ''}{children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}
                       </span>
                     </span>
