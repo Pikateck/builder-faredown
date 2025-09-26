@@ -253,13 +253,6 @@ router.get("/", async (req, res) => {
     `;
 
 
-    // Debug: Log final query before execution
-    console.log('🔍 FINAL QUERY DEBUG:', {
-      whereConditions: whereConditions,
-      queryParams: queryParams,
-      mainQuery: mainQuery.substring(0, 500) + '...'
-    });
-
     // Execute queries
     const [mainResult, countResult] = await Promise.all([
       pool.query(mainQuery, queryParams),
@@ -269,14 +262,6 @@ router.get("/", async (req, res) => {
     const packages = mainResult.rows;
     const total = parseInt(countResult.rows[0].total);
     const totalPages = Math.ceil(total / limit);
-
-    // Debug: Log results
-    console.log('🔍 QUERY RESULTS DEBUG:', {
-      total: total,
-      packages_found: packages.length,
-      package_titles: packages.map(p => p.title),
-      destination_filter_applied: !!(destination && destination_type)
-    });
 
 
     // Simplified facets - return empty facets for now to avoid query complexity
