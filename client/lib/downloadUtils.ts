@@ -99,7 +99,44 @@ Payment Status: ${bookingData.paymentStatus || "Confirmed"}
 Please present this at the hotel during check-in.
     `;
 
-    const invoice = `
+    // Determine booking type
+    const bookingType = bookingData.module ||
+                       (bookingData.hotel ? "hotel" :
+                        bookingData.package_title ? "packages" :
+                        bookingData.flights ? "flight" : "hotel");
+
+    let invoiceContent = "";
+
+    if (bookingType === "packages") {
+      invoiceContent = `
+PACKAGE BOOKING INVOICE
+faredown.com
+
+Invoice #: INV-${bookingData.booking_ref || bookingData.id || Date.now()}
+Date: ${new Date().toLocaleDateString()}
+
+Guest Information:
+Name: ${bookingData.primary_guest_name || "Guest Name"}
+Email: ${bookingData.primary_guest_email || "email@example.com"}
+Phone: ${bookingData.primary_guest_phone || "Phone Number"}
+
+Package Details:
+Package: ${bookingData.package_title || "Travel Package"}
+Departure: ${bookingData.departure_city || "N/A"}
+Departure Date: ${bookingData.departure_date || "N/A"}
+Return Date: ${bookingData.return_date || "N/A"}
+Duration: ${bookingData.duration || "N/A"}
+Adults: ${bookingData.adults || 1}
+Children: ${bookingData.children || 0}
+
+Amount: ₹${(bookingData.final_amount || bookingData.agreed_total || bookingData.total || 0).toLocaleString()}
+Payment Method: ${bookingData.paymentMethod || "Credit Card"}
+Status: ${bookingData.paymentStatus || "Confirmed"}
+
+Thank you for choosing faredown.com for your travel package!
+      `;
+    } else {
+      invoiceContent = `
 HOTEL BOOKING INVOICE
 faredown.com
 
@@ -123,7 +160,10 @@ Payment Method: ${bookingData.paymentMethod || "Credit Card"}
 Status: ${bookingData.paymentStatus || "Paid"}
 
 Thank you for choosing faredown.com!
-    `;
+      `;
+    }
+
+    const invoice = invoiceContent;
 
     const files: DownloadFile[] = [
       { name: "voucher.txt", content: voucher },
