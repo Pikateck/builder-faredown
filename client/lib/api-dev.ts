@@ -1362,10 +1362,10 @@ export class DevApiClient {
           tags: ["luxury", "city-break", "shopping", "culture", "desert"],
           media: [
             {
-              url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800",
+              url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800",
               type: "image",
-              title: "Dubai Skyline",
-              alt_text: "Dubai luxury skyline with Burj Khalifa"
+              title: "Dubai Golden Hour Skyline",
+              alt_text: "Dubai skyline silhouette with Burj Khalifa during a vibrant golden sunset"
             }
           ],
           reviews_summary: {
