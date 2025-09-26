@@ -255,13 +255,17 @@ export function PackageCardSimple({ package: pkg, adults = 2, children = 0 }: Pa
             <BargainButton
               onClick={handleBargainClick}
               useEnhancedModal={true}
-              module="sightseeing"
+              module="packages"
               itemName={pkg.title}
               supplierNetRate={totalPrice}
               itemDetails={{
                 location: `${pkg.region_name}, ${pkg.country_name}`,
                 provider: "Package Provider",
-                features: pkg.highlights?.slice(0, 5) || []
+                features: pkg.highlights?.slice(0, 5) || [],
+                duration: `${pkg.duration_days}D/${pkg.duration_nights}N`,
+                travelers: `${adults} Adult${adults !== 1 ? 's' : ''}${children > 0 ? `, ${children} Child${children !== 1 ? 'ren' : ''}` : ''}`,
+                basePrice: pkg.from_price,
+                totalTravelers: adults + children
               }}
               style={{
                 backgroundColor: "#febb02",
