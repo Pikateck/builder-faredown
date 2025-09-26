@@ -158,6 +158,9 @@ export default function PackageBooking() {
       });
       
       if (response.success) {
+        // Store module info for header navigation
+        localStorage.setItem("lastBookingModule", "packages");
+
         // Navigate to confirmation page
         navigate("/booking-confirmation", {
           state: {
