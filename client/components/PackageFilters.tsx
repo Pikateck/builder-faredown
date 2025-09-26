@@ -135,15 +135,15 @@ export function PackageFilters({ filters, facets, onFiltersChange }: PackageFilt
   };
 
   const categories = [
-    { id: "cultural", name: "Cultural & Heritage", icon: "🏛️" },
-    { id: "beach", name: "Beach & Islands", icon: "🏖️" },
-    { id: "adventure", name: "Adventure", icon: "🏔️" },
-    { id: "honeymoon", name: "Honeymoon", icon: "💕" },
-    { id: "family", name: "Family", icon: "👨‍👩‍👧‍👦" },
-    { id: "luxury", name: "Luxury", icon: "✨" },
-    { id: "budget", name: "Budget", icon: "💰" },
-    { id: "wildlife", name: "Wildlife", icon: "🦁" },
-    { id: "spiritual", name: "Spiritual", icon: "🙏" },
+    { id: "cultural", name: "Cultural & Heritage", icon: Building2 },
+    { id: "beach", name: "Beach & Islands", icon: Camera },
+    { id: "adventure", name: "Adventure", icon: Mountain },
+    { id: "honeymoon", name: "Honeymoon", icon: Heart },
+    { id: "family", name: "Family", icon: Users },
+    { id: "luxury", name: "Luxury", icon: Star },
+    { id: "budget", name: "Budget", icon: Wallet },
+    { id: "wildlife", name: "Wildlife", icon: TreePine },
+    { id: "spiritual", name: "Spiritual", icon: Church },
   ];
 
   const regions = [
