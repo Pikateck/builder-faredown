@@ -4,9 +4,18 @@
 
 const { Pool } = require("pg");
 
+// Configure SSL properly for production
+const dbUrl = process.env.DATABASE_URL;
+const sslConfig = dbUrl && (dbUrl.includes('render.com') || dbUrl.includes('postgres://'))
+  ? { rejectUnauthorized: false }
+  : false;
+
+console.log('Database URL configured:', !!dbUrl);
+console.log('SSL config:', sslConfig);
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes('postgres://') ? { rejectUnauthorized: false } : false,
+  connectionString: dbUrl,
+  ssl: sslConfig,
 });
 
 async function addDubaiPackages() {
