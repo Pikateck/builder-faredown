@@ -75,27 +75,37 @@ router.get("/", async (req, res) => {
       queryParams.push(`%${q.trim()}%`);
     }
 
-    // Destination filter (from search form)
+    // Destination filter (from search form) - More precise matching
     if (destination && destination_type) {
       if (destination_type === 'city') {
-        // For city destinations, filter by region/country/city name
-        paramCount++;
-        whereConditions.push(`(
-          LOWER(r.name) LIKE LOWER($${paramCount}) OR
-          LOWER(c.name) LIKE LOWER($${paramCount}) OR
-          LOWER(ci.name) LIKE LOWER($${paramCount}) OR
-          LOWER(p.title) LIKE LOWER($${paramCount})
-        )`);
-        const destinationName = destination.split(',')[0].trim(); // Extract city name from "Dubai, United Arab Emirates"
-        queryParams.push(`%${destinationName}%`);
+        // For city destinations, match exactly by city name or destination code
+        const destinationName = destination.split(',')[0].trim(); // Extract city name from "London, United Kingdom"
+
+        if (destination_code) {
+          // If we have a destination code (like LON), use exact matching
+          paramCount++;
+          whereConditions.push(`(
+            LOWER(ci.name) = LOWER($${paramCount}) OR
+            LOWER(c.name) = LOWER($${paramCount}) OR
+            p.destination_code = $${paramCount + 1}
+          )`);
+          queryParams.push(destinationName);
+          paramCount++;
+          queryParams.push(destination_code.toUpperCase());
+        } else {
+          // Otherwise, match city name exactly
+          paramCount++;
+          whereConditions.push(`LOWER(ci.name) = LOWER($${paramCount})`);
+          queryParams.push(destinationName);
+        }
       } else if (destination_type === 'country') {
         paramCount++;
-        whereConditions.push(`LOWER(c.name) LIKE LOWER($${paramCount})`);
-        queryParams.push(`%${destination}%`);
+        whereConditions.push(`LOWER(c.name) = LOWER($${paramCount})`);
+        queryParams.push(destination.trim());
       } else if (destination_type === 'region') {
         paramCount++;
-        whereConditions.push(`LOWER(r.name) LIKE LOWER($${paramCount})`);
-        queryParams.push(`%${destination}%`);
+        whereConditions.push(`LOWER(r.name) = LOWER($${paramCount})`);
+        queryParams.push(destination.trim());
       }
     }
 
