@@ -116,11 +116,9 @@ async function addDubaiPackages() {
 
     // Verify the packages were added
     const result = await pool.query(`
-      SELECT p.title, ci.name as city_name, c.name as country_name
-      FROM packages p
-      LEFT JOIN cities ci ON p.city_id = ci.id
-      LEFT JOIN countries c ON p.country_id = c.id
-      WHERE LOWER(ci.name) LIKE '%dubai%'
+      SELECT id, slug, title, category, base_price_pp, currency
+      FROM packages
+      WHERE slug LIKE '%dubai%'
     `);
 
     console.log('📦 Dubai packages in database:', result.rows);
