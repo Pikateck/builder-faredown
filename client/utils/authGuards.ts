@@ -3,7 +3,7 @@ import { useAuth } from "@/contexts/AuthContext";
 
 // Types for the redirect flow
 export type PostAuthIntent = "BARGAIN" | "CHECKOUT";
-export type ModuleType = "flights" | "hotels" | "sightseeing" | "transfers";
+export type ModuleType = "flights" | "hotels" | "sightseeing" | "transfers" | "packages";
 
 export interface SearchContext {
   module: ModuleType;
