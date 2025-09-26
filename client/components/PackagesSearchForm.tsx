@@ -189,7 +189,7 @@ export function PackagesSearchForm() {
         aria-label="Search packages form"
       >
         {/* Form Fields - Two Row Layout with Even Spacing */}
-        <div className="space-y-6 mb-6">
+        <div className="space-y-6 mb-8">
 
           {/* First Row - Main Search Fields */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
