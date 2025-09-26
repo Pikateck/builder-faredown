@@ -31,7 +31,9 @@ const packagesSearchSchema = z.object({
   returnDate: z.date().optional(),
   duration: z.string(),
   budget: z.string(),
-  category: z.string()
+  category: z.string(),
+  adults: z.number().min(1, "At least 1 adult required"),
+  children: z.number().min(0, "Children cannot be negative")
 });
 
 type PackagesSearchFormData = z.infer<typeof packagesSearchSchema>;
