@@ -1997,7 +1997,9 @@ export default function BookingConfirmation() {
               <h3 className="font-semibold text-gray-900 mb-2">
                 {bookingType === "flight"
                   ? "Primary Passenger"
-                  : "Primary Guest"}
+                  : bookingType === "packages"
+                    ? "Primary Traveler"
+                    : "Primary Guest"}
               </h3>
               <div className="space-y-1 text-sm">
                 <p>
