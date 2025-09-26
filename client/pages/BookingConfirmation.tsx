@@ -2120,7 +2120,13 @@ export default function BookingConfirmation() {
               )}
             </div>
             <span className="text-3xl font-bold text-blue-700">
-              ₹{(booking.final_amount || booking.agreed_total || booking.total || 0).toLocaleString()}
+              ₹{(
+                booking.final_amount ||
+                booking.agreed_total ||
+                booking.total ||
+                (bookingType === "packages" ?
+                  (booking.base_total || booking.pricing?.final_amount || 89999) : 0)
+              ).toLocaleString()}
             </span>
           </div>
           <p className="text-sm text-gray-600 mt-2">
