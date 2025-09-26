@@ -226,21 +226,21 @@ export function PackagesSearchForm() {
                       {departureDate && returnDate ? (
                         <>
                           <span className="hidden lg:inline">
-                            {format(departureDate, "EEE, MMM d")} to{" "}
-                            {format(returnDate, "EEE, MMM d")}
+                            {format(departureDate, "MMM d")} to{" "}
+                            {format(returnDate, "MMM d")}
                           </span>
                           <span className="lg:hidden">
-                            {format(departureDate, "EEE, d/M")} -{" "}
-                            {format(returnDate, "EEE, d/M")}
+                            {format(departureDate, "d/M")} -{" "}
+                            {format(returnDate, "d/M")}
                           </span>
                         </>
                       ) : departureDate ? (
                         <>
                           <span className="hidden lg:inline">
-                            {format(departureDate, "EEE, MMM d")}
+                            {format(departureDate, "MMM d")}
                           </span>
                           <span className="lg:hidden">
-                            {format(departureDate, "EEE, d/M")}
+                            {format(departureDate, "d/M")}
                           </span>
                         </>
                       ) : (
