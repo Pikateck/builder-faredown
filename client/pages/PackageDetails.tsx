@@ -154,7 +154,7 @@ export default function PackageDetails() {
   const [showBargainModal, setShowBargainModal] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
 
-  const { makeRequest } = useApi();
+  // Remove useApi hook - use apiClient directly
   const { formatPrice } = useCurrency();
   const { isAuthenticated } = useAuth();
   const { selectedDate } = useDateContext();
