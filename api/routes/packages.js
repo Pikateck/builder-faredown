@@ -238,7 +238,7 @@ router.get("/", async (req, res) => {
     const offsetParam = paramCount;
     queryParams.push(offset);
 
-    // Main query using the actual packages table
+    // Main query using the packages table only (no JOINs to avoid UUID/integer conflicts)
     const mainQuery = `
       SELECT
         p.*,
@@ -251,9 +251,6 @@ router.get("/", async (req, res) => {
         NULL as tags,
         NULL as images
       FROM packages p
-      LEFT JOIN regions r ON p.region_id = r.id
-      LEFT JOIN countries c ON p.country_id = c.id
-      LEFT JOIN cities ci ON p.city_id = ci.id
       WHERE ${whereConditions.join(' AND ')}
       ORDER BY ${orderBy}
       LIMIT $${limitParam} OFFSET $${offsetParam}
@@ -263,9 +260,6 @@ router.get("/", async (req, res) => {
     const countQuery = `
       SELECT COUNT(*) as total
       FROM packages p
-      LEFT JOIN regions r ON p.region_id = r.id
-      LEFT JOIN countries c ON p.country_id = c.id
-      LEFT JOIN cities ci ON p.city_id = ci.id
       WHERE ${whereConditions.join(' AND ')}
     `;
 
