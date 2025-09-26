@@ -1537,8 +1537,7 @@ export default function BookingConfirmation() {
             Booking Confirmed!
           </h1>
           <p className="text-gray-600 mb-4">
-            Your {bookingType}{" "}
-            {bookingType === "flight" ? "ticket" : bookingType === "hotel" ? "reservation" : "package"} has been
+            Your {bookingType === "flight" ? "flight ticket" : bookingType === "hotel" ? "hotel reservation" : "package booking"} has been
             successfully confirmed. Here are your booking details:
           </p>
           <div className="border border-gray-300 text-gray-900 px-6 py-3 rounded-lg inline-block">
