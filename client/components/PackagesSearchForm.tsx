@@ -181,10 +181,10 @@ export function PackagesSearchForm() {
       )}
 
       {/* Search Form - All fields in one row, button below */}
-      <form 
+      <form
         onSubmit={handleSearch}
         onKeyDown={handleKeyDown}
-        className="bg-white rounded-lg p-3 sm:p-4 shadow-lg max-w-6xl mx-auto border border-gray-200"
+        className="bg-white rounded-xl p-6 sm:p-8 shadow-xl max-w-7xl mx-auto border border-gray-100"
         role="search"
         aria-label="Search packages form"
       >
