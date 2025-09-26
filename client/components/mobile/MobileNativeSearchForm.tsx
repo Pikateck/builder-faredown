@@ -379,20 +379,20 @@ export function MobileNativeSearchForm({
     if (!startDate) return "Select dates";
 
     if (module === "hotels") {
-      const checkIn = format(startDate, "EEE, MMM d");
-      const checkOut = endDate ? format(endDate, "EEE, MMM d") : "Check-out";
+      const checkIn = format(startDate, "MMM d");
+      const checkOut = endDate ? format(endDate, "MMM d") : "Check-out";
       return `${checkIn} - ${checkOut}`;
     }
 
     if (tripType === "one-way" || module === "transfers") {
-      return format(startDate, "EEE, MMM d");
+      return format(startDate, "MMM d");
     }
 
     if (endDate) {
-      return `${format(startDate, "EEE, MMM d")} - ${format(endDate, "EEE, MMM d")}`;
+      return `${format(startDate, "MMM d")} - ${format(endDate, "MMM d")}`;
     }
 
-    return format(startDate, "EEE, MMM d") + " - Return";
+    return format(startDate, "MMM d") + " - Return";
   };
 
   // Format travelers display
