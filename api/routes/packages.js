@@ -78,26 +78,13 @@ router.get("/", async (req, res) => {
     // Destination filter (from search form) - More precise matching
     if (destination && destination_type) {
       if (destination_type === 'city') {
-        // For city destinations, match exactly by city name or destination code
-        const destinationName = destination.split(',')[0].trim(); // Extract city name from "London, United Kingdom"
+        // For city destinations, match exactly by city name
+        const destinationName = destination.split(',')[0].trim(); // Extract city name from "Dubai, United Arab Emirates"
 
-        if (destination_code) {
-          // If we have a destination code (like LON), use exact matching
-          paramCount++;
-          whereConditions.push(`(
-            LOWER(ci.name) = LOWER($${paramCount}) OR
-            LOWER(c.name) = LOWER($${paramCount}) OR
-            p.destination_code = $${paramCount + 1}
-          )`);
-          queryParams.push(destinationName);
-          paramCount++;
-          queryParams.push(destination_code.toUpperCase());
-        } else {
-          // Otherwise, match city name exactly
-          paramCount++;
-          whereConditions.push(`LOWER(ci.name) = LOWER($${paramCount})`);
-          queryParams.push(destinationName);
-        }
+        paramCount++;
+        whereConditions.push(`LOWER(ci.name) = LOWER($${paramCount})`);
+        queryParams.push(destinationName);
+
       } else if (destination_type === 'country') {
         paramCount++;
         whereConditions.push(`LOWER(c.name) = LOWER($${paramCount})`);
