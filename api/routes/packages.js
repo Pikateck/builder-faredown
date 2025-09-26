@@ -281,10 +281,6 @@ router.get("/", async (req, res) => {
       WHERE ${whereConditions.join(' AND ')}
     `;
 
-    // Debug logging
-    console.log('🔍 Final Query Parameters:', queryParams);
-    console.log('🔍 WHERE Conditions:', whereConditions);
-    console.log('🔍 Main Query:', mainQuery);
 
     // Execute queries
     const [mainResult, countResult] = await Promise.all([
