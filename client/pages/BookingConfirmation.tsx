@@ -86,6 +86,7 @@ export default function BookingConfirmation() {
     if (location.state?.bookingDetails || location.state?.module === "packages") {
       console.log(
         "📦 Using package booking data from location state",
+        location.state.bookingDetails || location.state
       );
       setBooking(location.state.bookingDetails || location.state);
       setBookingType("packages");
