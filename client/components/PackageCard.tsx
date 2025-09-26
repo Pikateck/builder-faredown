@@ -68,9 +68,10 @@ export function PackageCard({ package: pkg, adults = 2, children = 0 }: PackageC
     return `${currency} ${price.toLocaleString()}`;
   };
 
-  // Calculate total price and per person price (assuming 2 adults by default)
-  const adults = 2;
-  const totalPrice = pkg.from_price * adults;
+  // Calculate total price based on actual pax count
+  const adultPrice = pkg.from_price * adults;
+  const childPrice = (pkg.from_price * 0.75) * children; // Children typically 75% of adult price
+  const totalPrice = adultPrice + childPrice;
   const pricePerPerson = pkg.from_price;
 
   const formatDate = (dateString: string) => {
