@@ -22,30 +22,34 @@ async function addDubaiPackages() {
   try {
     console.log('Adding Dubai packages to database...');
 
-    // Add Dubai Luxury Experience package
-    await pool.query(`
-      INSERT INTO packages (
-        slug, title, region_id, country_id, city_id, duration_days, duration_nights,
-        overview, base_price_pp, currency, category, status, is_featured,
-        inclusions, exclusions, highlights
-      ) VALUES (
-        'dubai-luxury-experience-5-days',
-        'Dubai Luxury Experience',
-        (SELECT id FROM regions WHERE name = 'Middle East'),
-        (SELECT id FROM countries WHERE iso_code = 'AE'),
-        (SELECT id FROM cities WHERE name = 'Dubai'),
-        5, 4,
-        'Experience the ultimate luxury in Dubai with 5-star accommodations, desert safari, and city tours.',
-        125000, 'INR',
-        'luxury',
-        'active',
-        TRUE,
-        '["Return airfare from Mumbai/Delhi", "4 nights 5-star hotel accommodation", "Daily breakfast", "Airport transfers", "Desert safari with BBQ dinner", "Dubai city tour", "Burj Khalifa visit", "Local English-speaking guide"]',
-        '["Lunch and dinner (except BBQ)", "Visa fees", "Personal expenses", "Optional tours", "Tips and gratuities", "Travel insurance"]',
-        '["Visit iconic Burj Khalifa", "Explore Dubai Mall and Gold Souk", "Desert safari with camel riding", "Luxury shopping experience", "Traditional dhow cruise", "Modern architectural marvels"]'
-      )
-      ON CONFLICT (slug) DO NOTHING
+    // First, let's check what tables exist
+    const tablesResult = await pool.query(`
+      SELECT table_name
+      FROM information_schema.tables
+      WHERE table_schema = 'public'
+      AND table_name IN ('countries', 'cities', 'regions', 'packages')
     `);
+    console.log('Available tables:', tablesResult.rows);
+
+    // Check countries table structure
+    const countriesStructure = await pool.query(`
+      SELECT column_name, data_type
+      FROM information_schema.columns
+      WHERE table_name = 'countries'
+    `);
+    console.log('Countries table structure:', countriesStructure.rows);
+
+    // Check if UAE exists
+    const uaeResult = await pool.query(`SELECT * FROM countries WHERE name LIKE '%Arab%' OR name LIKE '%UAE%'`);
+    console.log('UAE/Arab countries:', uaeResult.rows);
+
+    // Check if Dubai city exists
+    const dubaiResult = await pool.query(`SELECT * FROM cities WHERE name LIKE '%Dubai%'`);
+    console.log('Dubai cities:', dubaiResult.rows);
+
+    // Check if Middle East region exists
+    const regionResult = await pool.query(`SELECT * FROM regions WHERE name LIKE '%Middle%'`);
+    console.log('Middle East regions:', regionResult.rows);
 
     // Add Dubai City Explorer package
     await pool.query(`
