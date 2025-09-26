@@ -230,28 +230,6 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
 
         {/* Action Buttons */}
         <div className="flex gap-2">
-          <button
-            style={{
-              backgroundColor: "#febb02",
-              color: "#000000",
-              border: "none",
-              borderRadius: "6px",
-              padding: "10px 16px",
-              fontWeight: "600",
-              fontSize: "13px",
-              minHeight: "40px",
-              width: "50%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-              gap: "6px",
-              cursor: "pointer",
-              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
-            }}
-          >
-            <TrendingDown className="w-4 h-4" />
-            Bargain
-          </button>
           <Link to={`/packages/${pkg.slug}`} className="flex-1">
             <button
               style={{
@@ -287,6 +265,27 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
               View Details
             </button>
           </Link>
+          <button
+            style={{
+              backgroundColor: "#febb02",
+              color: "#000000",
+              border: "none",
+              borderRadius: "6px",
+              padding: "10px 16px",
+              fontWeight: "600",
+              fontSize: "13px",
+              minHeight: "40px",
+              width: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              cursor: "pointer",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+            }}
+          >
+            Bargain
+          </button>
         </div>
 
       </CardContent>
