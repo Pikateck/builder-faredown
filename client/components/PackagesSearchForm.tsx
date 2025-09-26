@@ -344,7 +344,7 @@ export function PackagesSearchForm() {
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full h-12 justify-start text-left font-medium bg-white border-2 border-gray-200 hover:border-blue-500 focus:border-blue-500 rounded-lg text-sm px-4 transition-colors"
+                    className="w-full h-10 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 focus:border-blue-600 rounded text-sm px-3 py-2 transition-colors"
                   >
                     <Users className="mr-2 h-4 w-4 flex-shrink-0" />
                     <span className="truncate text-xs sm:text-sm">
