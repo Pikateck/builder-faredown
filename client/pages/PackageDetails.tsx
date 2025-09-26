@@ -230,11 +230,33 @@ export default function PackageDetails() {
 
   const handleStartBargain = () => {
     if (!packageData || !selectedDeparture) return;
-
-    const totalPrice = selectedDeparture.price_per_person * travelers.adults + 
-                     (selectedDeparture.child_price || selectedDeparture.price_per_person * 0.75) * travelers.children;
-
     setShowBargainModal(true);
+  };
+
+  const handleBargainAccept = (finalPrice: number, orderRef: string, holdData?: any) => {
+    // Close the bargain modal
+    setShowBargainModal(false);
+
+    // Navigate to booking with bargained price
+    navigate(`/packages/${slug}/booking`, {
+      state: {
+        package: packageData,
+        departure: selectedDeparture,
+        travelers,
+        bargainedPrice: finalPrice,
+        orderRef,
+        holdData,
+      },
+    });
+  };
+
+  const handleBargainHold = (orderRef: string) => {
+    // Handle price hold functionality
+    console.log(`Price held with order reference: ${orderRef}`);
+  };
+
+  const handleBargainClose = () => {
+    setShowBargainModal(false);
   };
 
   const images = packageData?.media?.filter(m => m.type === 'image') || [];
@@ -643,18 +665,15 @@ export default function PackageDetails() {
         {showBargainModal && selectedDeparture && (
           <ConversationalBargainModal
             isOpen={showBargainModal}
-            onClose={() => setShowBargainModal(false)}
+            onClose={handleBargainClose}
+            onAccept={handleBargainAccept}
+            onHold={handleBargainHold}
+            onBackToResults={handleBargainClose}
             module="packages"
-            itemId={packageData.id.toString()}
-            itemName={packageData.title}
-            originalPrice={selectedDeparture.price_per_person * travelers.adults + 
-                          (selectedDeparture.child_price || selectedDeparture.price_per_person * 0.75) * travelers.children}
-            currency={selectedDeparture.currency}
-            bookingDetails={{
-              package: packageData,
-              departure: selectedDeparture,
-              travelers,
-            }}
+            basePrice={selectedDeparture.price_per_person * travelers.adults +
+                      (selectedDeparture.child_price || selectedDeparture.price_per_person * 0.75) * travelers.children}
+            productRef={`package_${packageData.id}_departure_${selectedDeparture.id}`}
+            userName={isAuthenticated ? undefined : "Guest"}
           />
         )}
       </div>
