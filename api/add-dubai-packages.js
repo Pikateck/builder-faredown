@@ -79,65 +79,15 @@ async function addDubaiPackages() {
       console.log('❌ Missing required data - need to create UAE/Dubai entries first');
     }
 
-    // Add departures for Dubai Luxury Experience
-    await pool.query(`
-      INSERT INTO package_departures (
-        package_id, departure_city_code, departure_city_name, departure_date, return_date,
-        total_seats, price_per_person, currency, is_guaranteed
-      ) VALUES 
-      (
-        (SELECT id FROM packages WHERE slug = 'dubai-luxury-experience-5-days'),
-        'BOM', 'Mumbai', '2025-10-01', '2025-10-05',
-        25, 179998, 'INR', TRUE
-      ),
-      (
-        (SELECT id FROM packages WHERE slug = 'dubai-luxury-experience-5-days'),
-        'DEL', 'Delhi', '2025-10-01', '2025-10-05',
-        30, 185000, 'INR', TRUE
-      ),
-      (
-        (SELECT id FROM packages WHERE slug = 'dubai-luxury-experience-5-days'),
-        'BLR', 'Bangalore', '2025-10-02', '2025-10-06',
-        20, 175000, 'INR', FALSE
-      )
-      ON CONFLICT (package_id, departure_city_code, departure_date) DO NOTHING
-    `);
-
-    // Add departures for Dubai City Explorer
-    await pool.query(`
-      INSERT INTO package_departures (
-        package_id, departure_city_code, departure_city_name, departure_date, return_date,
-        total_seats, price_per_person, currency, is_guaranteed
-      ) VALUES 
-      (
-        (SELECT id FROM packages WHERE slug = 'dubai-city-explorer-4-days'),
-        'BOM', 'Mumbai', '2025-10-01', '2025-10-04',
-        30, 109998, 'INR', TRUE
-      ),
-      (
-        (SELECT id FROM packages WHERE slug = 'dubai-city-explorer-4-days'),
-        'DEL', 'Delhi', '2025-10-02', '2025-10-05',
-        25, 115000, 'INR', TRUE
-      ),
-      (
-        (SELECT id FROM packages WHERE slug = 'dubai-city-explorer-4-days'),
-        'COK', 'Kochi', '2025-10-03', '2025-10-06',
-        15, 120000, 'INR', FALSE
-      )
-      ON CONFLICT (package_id, departure_city_code, departure_date) DO NOTHING
-    `);
-
-    console.log('✅ Successfully added Dubai packages to database');
-    
     // Verify the packages were added
     const result = await pool.query(`
-      SELECT p.title, ci.name as city_name, c.name as country_name 
+      SELECT p.title, ci.name as city_name, c.name as country_name
       FROM packages p
       LEFT JOIN cities ci ON p.city_id = ci.id
       LEFT JOIN countries c ON p.country_id = c.id
-      WHERE LOWER(ci.name) = 'dubai'
+      WHERE LOWER(ci.name) LIKE '%dubai%'
     `);
-    
+
     console.log('📦 Dubai packages in database:', result.rows);
     
   } catch (error) {
