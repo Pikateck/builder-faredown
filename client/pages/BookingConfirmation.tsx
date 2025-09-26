@@ -1772,11 +1772,13 @@ export default function BookingConfirmation() {
             <div className="flex items-center mb-4">
               {bookingType === "flight" ? (
                 <Clock className="w-5 h-5 text-blue-700 mr-2" />
-              ) : (
+              ) : bookingType === "hotel" ? (
                 <Calendar className="w-5 h-5 text-blue-700 mr-2" />
+              ) : (
+                <MapPin className="w-5 h-5 text-blue-700 mr-2" />
               )}
               <h2 className="text-xl font-bold text-gray-900">
-                {bookingType === "flight" ? "Travel Details" : "Stay Details"}
+                {bookingType === "flight" ? "Travel Details" : bookingType === "hotel" ? "Stay Details" : "Trip Details"}
               </h2>
             </div>
             <div className="space-y-4">
