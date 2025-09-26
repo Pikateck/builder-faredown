@@ -179,11 +179,11 @@ export default function PackageDetails() {
       setError("");
 
       try {
-        const response = await makeRequest(`/api/packages/${slug}`);
-        
+        const response = await apiClient.get(`/packages/${slug}`);
+
         if (response.success) {
           setPackageData(response.data);
-          
+
           // Auto-select first available departure
           if (response.data.departures?.length > 0) {
             setSelectedDeparture(response.data.departures[0]);
