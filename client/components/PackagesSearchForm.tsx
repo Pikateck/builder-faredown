@@ -271,7 +271,7 @@ export function PackagesSearchForm() {
           </div>
 
           {/* Second Row - Filter Boxes with Even Spacing */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-6">
 
             {/* Duration Filter */}
             <div className="space-y-2">
