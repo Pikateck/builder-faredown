@@ -274,15 +274,15 @@ export function PackagesSearchForm() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
 
             {/* Duration Filter */}
-            <div>
-              <label htmlFor="duration-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+            <div className="space-y-2">
+              <label htmlFor="duration-select" className="text-sm font-semibold text-gray-700 block">
                 Duration
               </label>
               <select
                 id="duration-select"
                 value={duration}
                 onChange={(e) => setDuration(e.target.value)}
-                className="w-full h-10 sm:h-12 px-3 border-2 border-blue-500 rounded text-xs sm:text-sm focus:border-blue-600 focus:outline-none"
+                className="w-full h-12 px-4 border-2 border-gray-200 hover:border-blue-500 focus:border-blue-500 rounded-lg text-sm focus:outline-none transition-colors bg-white"
               >
                 <option value="any">Any Duration</option>
                 <option value="1-5">1-5 Days</option>
@@ -293,9 +293,9 @@ export function PackagesSearchForm() {
             </div>
 
             {/* Budget */}
-            <div>
-              <label htmlFor="budget-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                Budget (per person)
+            <div className="space-y-2">
+              <label htmlFor="budget-select" className="text-sm font-semibold text-gray-700 block">
+                Budget
               </label>
               <select
                 id="budget-select"
