@@ -111,6 +111,15 @@ export default function PackageResults() {
     fetchPackages();
   }, [searchParams]);
 
+  // Force refresh on mount to ensure images load
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      // Force a re-render to ensure images are displayed
+      setPackages(prev => [...prev]);
+    }, 100);
+    return () => clearTimeout(timer);
+  }, []);
+
   const updateFilters = (newFilters: any) => {
     const updatedParams = new URLSearchParams(searchParams);
     
