@@ -1660,7 +1660,7 @@ export class DevApiClient {
             currency: "INR",
             next_departure_date: "2025-10-15",
             available_departures_count: 8,
-            hero_image_url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=400&h=300&fit=crop&auto=format",
+            hero_image_url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=400",
             rating: 4.8,
             review_count: 156,
             is_featured: true,
