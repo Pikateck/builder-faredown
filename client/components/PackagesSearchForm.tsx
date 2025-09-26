@@ -264,7 +264,7 @@ export function PackagesSearchForm() {
           </div>
 
           {/* Duration Filter */}
-          <div className="flex-1">
+          <div className="xl:col-span-1">
             <label htmlFor="duration-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Duration
             </label>
@@ -283,7 +283,7 @@ export function PackagesSearchForm() {
           </div>
 
           {/* Budget */}
-          <div className="flex-1">
+          <div className="xl:col-span-1">
             <label htmlFor="budget-select" className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Budget (per person)
             </label>
