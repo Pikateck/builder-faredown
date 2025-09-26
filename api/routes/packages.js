@@ -290,43 +290,27 @@ router.get("/", async (req, res) => {
     });
 
 
-    // Get facets for filtering
+    // Get facets for filtering - use actual packages table
     const facetsQuery = `
-      SELECT 
+      SELECT
         json_build_object(
-          'regions', (
-            SELECT json_object_agg(r.name, region_counts.count)
-            FROM (
-              SELECT p.region_id, COUNT(*) as count
-              FROM v_packages_listing p
-              GROUP BY p.region_id
-              HAVING COUNT(*) > 0
-            ) region_counts
-            JOIN regions r ON r.id = region_counts.region_id
-          ),
+          'regions', NULL,
           'categories', (
             SELECT json_object_agg(p.category, COUNT(*))
-            FROM v_packages_listing p
-            WHERE p.category IS NOT NULL
+            FROM packages p
+            WHERE p.category IS NOT NULL AND p.status = 'active'
             GROUP BY p.category
             HAVING COUNT(*) > 0
           ),
-          'tags', (
-            SELECT json_object_agg(pt.tag, COUNT(*))
-            FROM package_tags pt
-            JOIN v_packages_listing p ON p.id = pt.package_id
-            GROUP BY pt.tag
-            HAVING COUNT(*) > 2
-            ORDER BY COUNT(*) DESC
-            LIMIT 20
-          ),
+          'tags', NULL,
           'price_ranges', (
             SELECT json_build_object(
               'min', MIN(p.base_price_pp),
               'max', MAX(p.base_price_pp),
               'avg', ROUND(AVG(p.base_price_pp), 0)
             )
-            FROM v_packages_listing p
+            FROM packages p
+            WHERE p.status = 'active'
           )
         ) as facets
     `;
