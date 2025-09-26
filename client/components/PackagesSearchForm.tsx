@@ -52,8 +52,6 @@ export function PackagesSearchForm() {
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
   // Filters
-  const [duration, setDuration] = useState("any");
-  const [budget, setBudget] = useState("any");
   const [category, setCategory] = useState("any");
 
   // Pax selection
