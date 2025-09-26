@@ -317,7 +317,10 @@ export default function PackageDetails() {
             src={
               packageData.hero_image_url ||
               packageData.media?.find(m => m.type === 'image')?.url ||
-              "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800"
+              (packageData.slug?.includes('paris') ?
+                "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800" :
+                "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800"
+              )
             }
             alt={packageData.title}
             className="absolute inset-0 w-full h-full object-cover"
