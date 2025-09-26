@@ -4,7 +4,7 @@ import { useBookingAuthGuard, type Offer } from "@/utils/enhancedAuthGuards";
 import { type Offer as OriginalOffer } from "@/utils/authGuards";
 
 export interface BookNowContext {
-  module: "flights" | "hotels" | "sightseeing" | "transfers";
+  module: "flights" | "hotels" | "sightseeing" | "transfers" | "packages";
   offerId: string;
   price: {
     currency: string;
@@ -166,6 +166,35 @@ export const createBookingContext = {
       time: transfer.time,
       vehicleType: transfer.vehicleType,
       passengers: transfer.passengers
+    }
+  }),
+
+  package: (packageData: any, departure: any, travelers: any, searchParams?: any): BookNowContext => ({
+    module: "packages" as const,
+    offerId: `package_${packageData.id}_departure_${departure.id}`,
+    price: {
+      currency: departure.currency || "INR",
+      amount: departure.price_per_person * travelers.adults +
+              (departure.child_price || departure.price_per_person * 0.75) * travelers.children
+    },
+    supplier: "Travel Provider",
+    itemName: packageData.title,
+    productRef: `package_${packageData.id}_departure_${departure.id}`,
+    searchParams,
+    bookingData: {
+      packageId: packageData.id,
+      packageTitle: packageData.title,
+      departureId: departure.id,
+      departureDate: departure.departure_date,
+      departureCity: departure.departure_city_name,
+      returnDate: departure.return_date,
+      duration: `${packageData.duration_days}D/${packageData.duration_nights}N`,
+      adults: travelers.adults,
+      children: travelers.children,
+      pricePerPerson: departure.price_per_person,
+      childPrice: departure.child_price,
+      availableSeats: departure.available_seats,
+      totalSeats: departure.total_seats
     }
   })
 };
