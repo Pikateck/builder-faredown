@@ -150,7 +150,7 @@ export function PackagesSearchForm() {
     } finally {
       setIsSubmitting(false);
     }
-  }, [selectedDestination, departureDate, returnDate, duration, budget, category, updateSearchParams, navigate, isSubmitting, trackSearchAttempt]);
+  }, [selectedDestination, departureDate, returnDate, category, updateSearchParams, navigate, isSubmitting, trackSearchAttempt]);
 
   // Handle Enter key submission
   const handleKeyDown = useCallback((e: React.KeyboardEvent) => {
