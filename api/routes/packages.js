@@ -302,8 +302,7 @@ router.get("/", async (req, res) => {
       }
     };
 
-    const facetsResult = await pool.query(facetsQuery);
-    const facets = facetsResult.rows[0].facets || {};
+    // Note: facets already defined above as static object
 
     res.json({
       success: true,
