@@ -59,62 +59,60 @@ async function addDubaiPackages() {
     `);
     console.log('Packages table structure:', packagesStructure.rows);
 
-    // If everything looks good, let's try to add a simple Dubai package
-    if (dubaiResult.rows.length > 0 && uaeResult.rows.length > 0) {
-      console.log('✅ Required data exists, attempting to add Dubai package...');
+    // Check for existing Dubai packages
+    const existingDubai = await pool.query(`
+      SELECT * FROM packages WHERE slug LIKE '%dubai%'
+    `);
+    console.log('Existing Dubai packages:', existingDubai.rows);
 
-      const dubaiCity = dubaiResult.rows[0];
-      const uaeCountry = uaeResult.rows[0];
-      const middleEastRegion = regionResult.rows[0];
+    // Check if there are any packages that reference these UUIDs
+    const packageSample = await pool.query(`
+      SELECT id, slug, title, country_id, city_id, region_id
+      FROM packages
+      LIMIT 3
+    `);
+    console.log('Sample packages with ID references:', packageSample.rows);
 
-      console.log('Using IDs:', {
-        country: uaeCountry.id,
-        city: dubaiCity.id,
-        region: middleEastRegion?.id
-      });
+    // Let's try a simple approach - just add the packages without foreign key references for now
+    console.log('Adding Dubai packages without foreign key constraints...');
 
-      // Add Dubai Luxury Experience package
-      await pool.query(`
-        INSERT INTO packages (
-          id, slug, title, country_id, city_id, region_id, duration_days, duration_nights,
-          overview, base_price, currency, category, status, is_featured
-        ) VALUES (
-          gen_random_uuid(),
-          'dubai-luxury-experience-5-days',
-          'Dubai Luxury Experience',
-          $1::uuid, $2::uuid, $3::uuid, 5, 4,
-          'Experience the ultimate luxury in Dubai with 5-star accommodations, desert safari, and city tours.',
-          179998, 'INR',
-          'luxury',
-          'active',
-          true
-        )
-        ON CONFLICT (slug) DO NOTHING
-      `, [uaeCountry.id, dubaiCity.id, middleEastRegion?.id]);
+    // Add Dubai Luxury Experience package
+    await pool.query(`
+      INSERT INTO packages (
+        slug, title, duration_days, duration_nights,
+        overview, base_price_pp, currency, category, status, is_featured
+      ) VALUES (
+        'dubai-luxury-experience-5-days',
+        'Dubai Luxury Experience',
+        5, 4,
+        'Experience the ultimate luxury in Dubai with 5-star accommodations, desert safari, and city tours.',
+        179998, 'INR',
+        'luxury',
+        'active',
+        true
+      )
+      ON CONFLICT (slug) DO NOTHING
+    `);
 
-      // Add Dubai City Explorer package
-      await pool.query(`
-        INSERT INTO packages (
-          id, slug, title, country_id, city_id, region_id, duration_days, duration_nights,
-          overview, base_price, currency, category, status, is_featured
-        ) VALUES (
-          gen_random_uuid(),
-          'dubai-city-explorer-4-days',
-          'Dubai City Explorer',
-          $1::uuid, $2::uuid, $3::uuid, 4, 3,
-          'Discover the best of Dubai in 4 days with modern attractions and traditional culture.',
-          109998, 'INR',
-          'cultural',
-          'active',
-          false
-        )
-        ON CONFLICT (slug) DO NOTHING
-      `, [uaeCountry.id, dubaiCity.id, middleEastRegion?.id]);
+    // Add Dubai City Explorer package
+    await pool.query(`
+      INSERT INTO packages (
+        slug, title, duration_days, duration_nights,
+        overview, base_price_pp, currency, category, status, is_featured
+      ) VALUES (
+        'dubai-city-explorer-4-days',
+        'Dubai City Explorer',
+        4, 3,
+        'Discover the best of Dubai in 4 days with modern attractions and traditional culture.',
+        109998, 'INR',
+        'cultural',
+        'active',
+        false
+      )
+      ON CONFLICT (slug) DO NOTHING
+    `);
 
-      console.log('✅ Dubai packages added successfully');
-    } else {
-      console.log('❌ Missing required data - need to create UAE/Dubai entries first');
-    }
+    console.log('✅ Dubai packages added successfully (without location references for now)');
 
     // Verify the packages were added
     const result = await pool.query(`
