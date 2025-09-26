@@ -272,7 +272,9 @@ export default function PackageDetails() {
   }
 
   return (
-    <Layout>
+    <div className="min-h-screen bg-gray-50">
+      <Header />
+      
       <div className="max-w-7xl mx-auto px-4 py-6">
         {/* Back Button */}
         <Button
@@ -334,299 +336,297 @@ export default function PackageDetails() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto px-4 py-6">
-          <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-            {/* Main Content */}
-            <div className="lg:col-span-2 space-y-6">
-              {/* Package Overview */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+          {/* Main Content */}
+          <div className="lg:col-span-2 space-y-6">
+            {/* Package Overview */}
+            <Card>
+              <CardContent className="p-6">
+                <h2 className="text-xl font-semibold mb-4">Package Overview</h2>
+                <p className="text-gray-700 leading-relaxed">{packageData.description}</p>
+                
+                {packageData.highlights && packageData.highlights.length > 0 && (
+                  <div className="mt-6">
+                    <h3 className="font-semibold mb-3">Highlights</h3>
+                    <ul className="space-y-2">
+                      {packageData.highlights.map((highlight, index) => (
+                        <li key={index} className="flex items-start">
+                          <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                          <span className="text-gray-700">{highlight}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Itinerary */}
+            {packageData.itinerary && packageData.itinerary.length > 0 && (
               <Card>
                 <CardContent className="p-6">
-                  <h2 className="text-xl font-semibold mb-4">Package Overview</h2>
-                  <p className="text-gray-700 leading-relaxed">{packageData.description}</p>
-                  
-                  {packageData.highlights && packageData.highlights.length > 0 && (
-                    <div className="mt-6">
-                      <h3 className="font-semibold mb-3">Highlights</h3>
-                      <ul className="space-y-2">
-                        {packageData.highlights.map((highlight, index) => (
-                          <li key={index} className="flex items-start">
-                            <CheckCircle className="w-5 h-5 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                            <span className="text-gray-700">{highlight}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  )}
+                  <h2 className="text-xl font-semibold mb-4">Day-wise Itinerary</h2>
+                  <div className="space-y-6">
+                    {packageData.itinerary.map((day) => (
+                      <div key={day.day_number} className="border-l-2 border-blue-200 pl-4 pb-6 last:pb-0">
+                        <div className="flex items-center mb-2">
+                          <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold -ml-6 mr-3">
+                            {day.day_number}
+                          </div>
+                          <h3 className="font-semibold text-lg">{day.title}</h3>
+                        </div>
+                        
+                        <p className="text-gray-700 mb-3">{day.description}</p>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                          {day.cities && (
+                            <div className="flex items-center">
+                              <MapPin className="w-4 h-4 mr-2 text-blue-500" />
+                              <span><strong>Cities:</strong> {day.cities}</span>
+                            </div>
+                          )}
+                          
+                          {day.meals_included && (
+                            <div className="flex items-center">
+                              <Utensils className="w-4 h-4 mr-2 text-orange-500" />
+                              <span><strong>Meals:</strong> {day.meals_included}</span>
+                            </div>
+                          )}
+                          
+                          {day.accommodation && (
+                            <div className="flex items-center">
+                              <Hotel className="w-4 h-4 mr-2 text-purple-500" />
+                              <span><strong>Stay:</strong> {day.accommodation}</span>
+                            </div>
+                          )}
+                          
+                          {day.transport && (
+                            <div className="flex items-center">
+                              <Bus className="w-4 h-4 mr-2 text-green-500" />
+                              <span><strong>Transport:</strong> {day.transport}</span>
+                            </div>
+                          )}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
                 </CardContent>
               </Card>
+            )}
 
-              {/* Itinerary */}
-              {packageData.itinerary && packageData.itinerary.length > 0 && (
+            {/* Inclusions & Exclusions */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+              {packageData.inclusions && packageData.inclusions.length > 0 && (
                 <Card>
                   <CardContent className="p-6">
-                    <h2 className="text-xl font-semibold mb-4">Day-wise Itinerary</h2>
-                    <div className="space-y-6">
-                      {packageData.itinerary.map((day) => (
-                        <div key={day.day_number} className="border-l-2 border-blue-200 pl-4 pb-6 last:pb-0">
-                          <div className="flex items-center mb-2">
-                            <div className="bg-blue-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm font-semibold -ml-6 mr-3">
-                              {day.day_number}
-                            </div>
-                            <h3 className="font-semibold text-lg">{day.title}</h3>
-                          </div>
-                          
-                          <p className="text-gray-700 mb-3">{day.description}</p>
-                          
-                          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                            {day.cities && (
-                              <div className="flex items-center">
-                                <MapPin className="w-4 h-4 mr-2 text-blue-500" />
-                                <span><strong>Cities:</strong> {day.cities}</span>
-                              </div>
-                            )}
-                            
-                            {day.meals_included && (
-                              <div className="flex items-center">
-                                <Utensils className="w-4 h-4 mr-2 text-orange-500" />
-                                <span><strong>Meals:</strong> {day.meals_included}</span>
-                              </div>
-                            )}
-                            
-                            {day.accommodation && (
-                              <div className="flex items-center">
-                                <Hotel className="w-4 h-4 mr-2 text-purple-500" />
-                                <span><strong>Stay:</strong> {day.accommodation}</span>
-                              </div>
-                            )}
-                            
-                            {day.transport && (
-                              <div className="flex items-center">
-                                <Bus className="w-4 h-4 mr-2 text-green-500" />
-                                <span><strong>Transport:</strong> {day.transport}</span>
-                              </div>
-                            )}
-                          </div>
-                        </div>
+                    <h3 className="font-semibold mb-4 text-green-700">✓ Inclusions</h3>
+                    <ul className="space-y-2">
+                      {packageData.inclusions.map((item, index) => (
+                        <li key={index} className="flex items-start">
+                          <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{item}</span>
+                        </li>
                       ))}
-                    </div>
+                    </ul>
                   </CardContent>
                 </Card>
               )}
 
-              {/* Inclusions & Exclusions */}
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {packageData.inclusions && packageData.inclusions.length > 0 && (
-                  <Card>
-                    <CardContent className="p-6">
-                      <h3 className="font-semibold mb-4 text-green-700">✓ Inclusions</h3>
-                      <ul className="space-y-2">
-                        {packageData.inclusions.map((item, index) => (
-                          <li key={index} className="flex items-start">
-                            <CheckCircle className="w-4 h-4 text-green-500 mr-2 mt-0.5 flex-shrink-0" />
-                            <span className="text-sm text-gray-700">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                )}
-
-                {packageData.exclusions && packageData.exclusions.length > 0 && (
-                  <Card>
-                    <CardContent className="p-6">
-                      <h3 className="font-semibold mb-4 text-red-700">✗ Exclusions</h3>
-                      <ul className="space-y-2">
-                        {packageData.exclusions.map((item, index) => (
-                          <li key={index} className="flex items-start">
-                            <X className="w-4 h-4 text-red-500 mr-2 mt-0.5 flex-shrink-0" />
-                            <span className="text-sm text-gray-700">{item}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </CardContent>
-                  </Card>
-                )}
-              </div>
-
-              {/* Important Information */}
-              <Card>
-                <CardContent className="p-6">
-                  <h3 className="font-semibold mb-4">Important Information</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-                    <div className="flex items-center">
-                      <Shield className="w-4 h-4 mr-2 text-blue-500" />
-                      <span>
-                        <strong>Visa Required:</strong> {packageData.visa_required ? "Yes" : "No"}
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Globe className="w-4 h-4 mr-2 text-green-500" />
-                      <span>
-                        <strong>Passport Required:</strong> {packageData.passport_required ? "Yes" : "No"}
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Users className="w-4 h-4 mr-2 text-purple-500" />
-                      <span>
-                        <strong>Min Age:</strong> {packageData.minimum_age} years
-                      </span>
-                    </div>
-                    
-                    <div className="flex items-center">
-                      <Award className="w-4 h-4 mr-2 text-orange-500" />
-                      <span>
-                        <strong>Max Group:</strong> {packageData.maximum_group_size} people
-                      </span>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+              {packageData.exclusions && packageData.exclusions.length > 0 && (
+                <Card>
+                  <CardContent className="p-6">
+                    <h3 className="font-semibold mb-4 text-red-700">✗ Exclusions</h3>
+                    <ul className="space-y-2">
+                      {packageData.exclusions.map((item, index) => (
+                        <li key={index} className="flex items-start">
+                          <X className="w-4 h-4 text-red-500 mr-2 mt-0.5 flex-shrink-0" />
+                          <span className="text-sm text-gray-700">{item}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </CardContent>
+                </Card>
+              )}
             </div>
 
-            {/* Booking Sidebar */}
-            <div className="space-y-6">
-              {/* Price & Booking Card */}
-              <Card className="sticky top-4">
-                <CardContent className="p-6">
-                  <div className="text-center mb-6">
-                    <div className="text-sm text-gray-600 mb-1">Starting from</div>
-                    <div className="text-3xl font-bold text-blue-600">
-                      {formatPrice(selectedDeparture?.price_per_person || packageData.base_price_pp, packageData.currency)}
-                    </div>
-                    <div className="text-sm text-gray-600">per person</div>
+            {/* Important Information */}
+            <Card>
+              <CardContent className="p-6">
+                <h3 className="font-semibold mb-4">Important Information</h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
+                  <div className="flex items-center">
+                    <Shield className="w-4 h-4 mr-2 text-blue-500" />
+                    <span>
+                      <strong>Visa Required:</strong> {packageData.visa_required ? "Yes" : "No"}
+                    </span>
                   </div>
+                  
+                  <div className="flex items-center">
+                    <Globe className="w-4 h-4 mr-2 text-green-500" />
+                    <span>
+                      <strong>Passport Required:</strong> {packageData.passport_required ? "Yes" : "No"}
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <Users className="w-4 h-4 mr-2 text-purple-500" />
+                    <span>
+                      <strong>Min Age:</strong> {packageData.minimum_age} years
+                    </span>
+                  </div>
+                  
+                  <div className="flex items-center">
+                    <Award className="w-4 h-4 mr-2 text-orange-500" />
+                    <span>
+                      <strong>Max Group:</strong> {packageData.maximum_group_size} people
+                    </span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
 
-                  {/* Departure Selection */}
-                  {packageData.departures && packageData.departures.length > 0 && (
-                    <div className="mb-6">
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Select Departure
-                      </label>
+          {/* Booking Sidebar */}
+          <div className="space-y-6">
+            {/* Price & Booking Card */}
+            <Card className="sticky top-4">
+              <CardContent className="p-6">
+                <div className="text-center mb-6">
+                  <div className="text-sm text-gray-600 mb-1">Starting from</div>
+                  <div className="text-3xl font-bold text-blue-600">
+                    {formatPrice(selectedDeparture?.price_per_person || packageData.base_price_pp, packageData.currency)}
+                  </div>
+                  <div className="text-sm text-gray-600">per person</div>
+                </div>
+
+                {/* Departure Selection */}
+                {packageData.departures && packageData.departures.length > 0 && (
+                  <div className="mb-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      Select Departure
+                    </label>
+                    <select
+                      value={selectedDeparture?.id || ""}
+                      onChange={(e) => {
+                        const departure = packageData.departures.find(d => d.id === parseInt(e.target.value));
+                        setSelectedDeparture(departure || null);
+                      }}
+                      className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                    >
+                      {packageData.departures.map((departure) => (
+                        <option key={departure.id} value={departure.id}>
+                          {departure.departure_city_name} - {format(parseISO(departure.departure_date), "MMM d, yyyy")} 
+                          ({formatPrice(departure.price_per_person, departure.currency)})
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
+                {/* Travelers */}
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Travelers
+                  </label>
+                  <div className="grid grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-xs text-gray-600 mb-1">Adults</label>
                       <select
-                        value={selectedDeparture?.id || ""}
-                        onChange={(e) => {
-                          const departure = packageData.departures.find(d => d.id === parseInt(e.target.value));
-                          setSelectedDeparture(departure || null);
-                        }}
-                        className="w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
+                        value={travelers.adults}
+                        onChange={(e) => setTravelers(prev => ({ ...prev, adults: parseInt(e.target.value) }))}
+                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
                       >
-                        {packageData.departures.map((departure) => (
-                          <option key={departure.id} value={departure.id}>
-                            {departure.departure_city_name} - {format(parseISO(departure.departure_date), "MMM d, yyyy")} 
-                            ({formatPrice(departure.price_per_person, departure.currency)})
-                          </option>
+                        {[1,2,3,4,5,6].map(num => (
+                          <option key={num} value={num}>{num}</option>
                         ))}
                       </select>
                     </div>
-                  )}
-
-                  {/* Travelers */}
-                  <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-2">
-                      Travelers
-                    </label>
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-xs text-gray-600 mb-1">Adults</label>
-                        <select
-                          value={travelers.adults}
-                          onChange={(e) => setTravelers(prev => ({ ...prev, adults: parseInt(e.target.value) }))}
-                          className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
-                        >
-                          {[1,2,3,4,5,6].map(num => (
-                            <option key={num} value={num}>{num}</option>
-                          ))}
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-xs text-gray-600 mb-1">Children</label>
-                        <select
-                          value={travelers.children}
-                          onChange={(e) => setTravelers(prev => ({ ...prev, children: parseInt(e.target.value) }))}
-                          className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
-                        >
-                          {[0,1,2,3,4].map(num => (
-                            <option key={num} value={num}>{num}</option>
-                          ))}
-                        </select>
-                      </div>
+                    <div>
+                      <label className="block text-xs text-gray-600 mb-1">Children</label>
+                      <select
+                        value={travelers.children}
+                        onChange={(e) => setTravelers(prev => ({ ...prev, children: parseInt(e.target.value) }))}
+                        className="w-full border border-gray-300 rounded px-2 py-1 text-sm"
+                      >
+                        {[0,1,2,3,4].map(num => (
+                          <option key={num} value={num}>{num}</option>
+                        ))}
+                      </select>
                     </div>
                   </div>
+                </div>
 
-                  {/* Total Price */}
-                  {selectedDeparture && (
-                    <div className="mb-6 p-4 bg-blue-50 rounded-lg">
-                      <div className="text-sm space-y-1">
+                {/* Total Price */}
+                {selectedDeparture && (
+                  <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+                    <div className="text-sm space-y-1">
+                      <div className="flex justify-between">
+                        <span>Adults ({travelers.adults})</span>
+                        <span>{formatPrice(selectedDeparture.price_per_person * travelers.adults, selectedDeparture.currency)}</span>
+                      </div>
+                      {travelers.children > 0 && (
                         <div className="flex justify-between">
-                          <span>Adults ({travelers.adults})</span>
-                          <span>{formatPrice(selectedDeparture.price_per_person * travelers.adults, selectedDeparture.currency)}</span>
+                          <span>Children ({travelers.children})</span>
+                          <span>{formatPrice((selectedDeparture.child_price || selectedDeparture.price_per_person * 0.75) * travelers.children, selectedDeparture.currency)}</span>
                         </div>
-                        {travelers.children > 0 && (
-                          <div className="flex justify-between">
-                            <span>Children ({travelers.children})</span>
-                            <span>{formatPrice((selectedDeparture.child_price || selectedDeparture.price_per_person * 0.75) * travelers.children, selectedDeparture.currency)}</span>
-                          </div>
-                        )}
-                        <hr className="my-2" />
-                        <div className="flex justify-between font-semibold">
-                          <span>Total</span>
-                          <span className="text-blue-600">
-                            {formatPrice(
-                              selectedDeparture.price_per_person * travelers.adults + 
-                              (selectedDeparture.child_price || selectedDeparture.price_per_person * 0.75) * travelers.children, 
-                              selectedDeparture.currency
-                            )}
-                          </span>
-                        </div>
+                      )}
+                      <hr className="my-2" />
+                      <div className="flex justify-between font-semibold">
+                        <span>Total</span>
+                        <span className="text-blue-600">
+                          {formatPrice(
+                            selectedDeparture.price_per_person * travelers.adults + 
+                            (selectedDeparture.child_price || selectedDeparture.price_per_person * 0.75) * travelers.children, 
+                            selectedDeparture.currency
+                          )}
+                        </span>
                       </div>
                     </div>
-                  )}
-
-                  {/* Action Buttons */}
-                  <div className="space-y-3">
-                    <Button
-                      onClick={handleBookNow}
-                      className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
-                      disabled={!selectedDeparture}
-                    >
-                      Book Now
-                    </Button>
-                    
-                    <BargainButton
-                      onClick={handleStartBargain}
-                      className="w-full"
-                      disabled={!selectedDeparture}
-                    >
-                      <TrendingDown className="w-4 h-4 mr-2" />
-                      Start Bargaining
-                    </BargainButton>
                   </div>
+                )}
 
-                  {/* Quick Info */}
-                  <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-600 space-y-1">
-                    <div>✓ Free cancellation up to 24 hours</div>
-                    <div>✓ Instant confirmation</div>
-                    <div>✓ 24/7 customer support</div>
-                  </div>
-                </CardContent>
-              </Card>
-
-              {/* Quick Contact */}
-              <Card>
-                <CardContent className="p-6 text-center">
-                  <h3 className="font-semibold mb-2">Need Help?</h3>
-                  <p className="text-sm text-gray-600 mb-4">
-                    Our travel experts are here to help you plan your perfect trip.
-                  </p>
-                  <Button variant="outline" className="w-full">
-                    <MessageSquare className="w-4 h-4 mr-2" />
-                    Chat with Expert
+                {/* Action Buttons */}
+                <div className="space-y-3">
+                  <Button
+                    onClick={handleBookNow}
+                    className="w-full bg-blue-600 hover:bg-blue-700 text-white py-3"
+                    disabled={!selectedDeparture}
+                  >
+                    Book Now
                   </Button>
-                </CardContent>
-              </Card>
-            </div>
+                  
+                  <BargainButton
+                    onClick={handleStartBargain}
+                    className="w-full"
+                    disabled={!selectedDeparture}
+                  >
+                    <TrendingDown className="w-4 h-4 mr-2" />
+                    Start Bargaining
+                  </BargainButton>
+                </div>
+
+                {/* Quick Info */}
+                <div className="mt-4 pt-4 border-t border-gray-200 text-xs text-gray-600 space-y-1">
+                  <div>✓ Free cancellation up to 24 hours</div>
+                  <div>✓ Instant confirmation</div>
+                  <div>✓ 24/7 customer support</div>
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Quick Contact */}
+            <Card>
+              <CardContent className="p-6 text-center">
+                <h3 className="font-semibold mb-2">Need Help?</h3>
+                <p className="text-sm text-gray-600 mb-4">
+                  Our travel experts are here to help you plan your perfect trip.
+                </p>
+                <Button variant="outline" className="w-full">
+                  <MessageSquare className="w-4 h-4 mr-2" />
+                  Chat with Expert
+                </Button>
+              </CardContent>
+            </Card>
           </div>
         </div>
 
@@ -659,6 +659,6 @@ export default function PackageDetails() {
           />
         )}
       </div>
-    </Layout>
+    </div>
   );
 }
