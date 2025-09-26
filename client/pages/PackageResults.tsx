@@ -275,38 +275,6 @@ export default function PackageResults() {
             </div>
           </div>
 
-          {/* Active Filters */}
-          {Object.entries(currentFilters).some(([key, value]) =>
-            value && value !== "" && value !== "popularity" && key !== "page" && key !== "adults" && key !== "children"
-          ) && (
-            <div className="flex flex-wrap items-center gap-2 mb-4">
-              <span className="text-sm text-gray-600">Filters:</span>
-              {Object.entries(currentFilters).map(([key, value]) => {
-                if (!value || value === "" || value === "popularity" || key === "page" || key === "adults" || key === "children") return null;
-
-                return (
-                  <span
-                    key={key}
-                    className="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800"
-                  >
-                    {key}: {value}
-                    <button
-                      onClick={() => updateFilters({ [key]: "" })}
-                      className="ml-2 hover:text-blue-600"
-                    >
-                      ×
-                    </button>
-                  </span>
-                );
-              })}
-              <button
-                onClick={clearAllFilters}
-                className="text-xs text-blue-600 hover:text-blue-800 underline"
-              >
-                Clear all
-              </button>
-            </div>
-          )}
         </div>
 
         {/* Mobile View Toggle */}
