@@ -184,22 +184,6 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
 
           {/* Action Buttons */}
           <div className="flex gap-2">
-            <BargainButton
-              className="flex-1"
-              style={{
-                backgroundColor: "#febb02",
-                color: "#000000",
-                border: "none",
-                borderRadius: "6px",
-                padding: "10px 16px",
-                fontWeight: "600",
-                fontSize: "13px",
-                minHeight: "40px"
-              }}
-            >
-              <TrendingDown className="w-4 h-4 mr-2" />
-              Bargain
-            </BargainButton>
             <Link to={`/packages/${pkg.slug}`} className="flex-1">
               <button
                 style={{
@@ -235,6 +219,21 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
                 View Details
               </button>
             </Link>
+            <BargainButton
+              className="flex-1"
+              style={{
+                backgroundColor: "#febb02",
+                color: "#000000",
+                border: "none",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontWeight: "600",
+                fontSize: "13px",
+                minHeight: "40px"
+              }}
+            >
+              Bargain
+            </BargainButton>
           </div>
         </div>
       </div>
@@ -339,22 +338,6 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
 
           {/* Action Buttons */}
           <div className="flex gap-3 mt-auto">
-            <BargainButton
-              className="flex-1"
-              style={{
-                backgroundColor: "#febb02",
-                color: "#000000",
-                border: "none",
-                borderRadius: "6px",
-                padding: "10px 16px",
-                fontWeight: "600",
-                fontSize: "13px",
-                minHeight: "40px"
-              }}
-            >
-              <TrendingDown className="w-4 h-4 mr-2" />
-              Bargain
-            </BargainButton>
             <Link to={`/packages/${pkg.slug}`} className="flex-1">
               <button
                 style={{
@@ -390,6 +373,21 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
                 View Details
               </button>
             </Link>
+            <BargainButton
+              className="flex-1"
+              style={{
+                backgroundColor: "#febb02",
+                color: "#000000",
+                border: "none",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontWeight: "600",
+                fontSize: "13px",
+                minHeight: "40px"
+              }}
+            >
+              Bargain
+            </BargainButton>
           </div>
         </div>
       </div>
