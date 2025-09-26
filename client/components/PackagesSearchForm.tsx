@@ -441,7 +441,7 @@ export function PackagesSearchForm() {
             type="submit"
             onClick={handleSearch}
             disabled={isSubmitting}
-            className="h-14 px-16 bg-gradient-to-r from-[#febb02] to-[#f4b601] hover:from-[#e6a602] hover:to-[#e09f00] active:from-[#d19900] active:to-[#c99100] text-black font-bold rounded-xl text-lg transition-all duration-200 min-w-[240px] shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
+            className="h-12 px-16 bg-gradient-to-r from-[#febb02] to-[#f4b601] hover:from-[#e6a602] hover:to-[#e09f00] active:from-[#d19900] active:to-[#c99100] text-black font-bold rounded text-lg transition-all duration-200 min-w-[240px] shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
           >
             <Search className="mr-3 h-6 w-6" />
             <span>{isSubmitting ? 'Searching...' : 'Search Packages'}</span>
