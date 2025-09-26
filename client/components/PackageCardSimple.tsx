@@ -247,11 +247,11 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
                 color: "#000000",
                 border: "none",
                 borderRadius: "6px",
-                padding: "14px 18px",
+                padding: "10px 16px",
                 fontWeight: "600",
-                fontSize: "14px",
-                minHeight: "44px",
-                width: "60%",
+                fontSize: "13px",
+                minHeight: "40px",
+                width: "50%",
                 boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
               }}
             >
