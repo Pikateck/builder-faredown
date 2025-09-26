@@ -573,6 +573,274 @@ export default function PackageManagement() {
               )}
             </TabsContent>
 
+            <TabsContent value="markup" className="space-y-4">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                {/* Base Markup Settings */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Base Markup Configuration</CardTitle>
+                    <CardDescription>
+                      Set default markup percentages for different package categories
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    {categories.map((category) => (
+                      <div key={category} className="flex items-center justify-between">
+                        <Label className="capitalize">{category} Packages</Label>
+                        <div className="flex items-center gap-2">
+                          <Input
+                            type="number"
+                            placeholder="0"
+                            className="w-20 text-right"
+                            min="0"
+                            max="100"
+                          />
+                          <span className="text-sm text-gray-500">%</span>
+                        </div>
+                      </div>
+                    ))}
+                    <Button className="w-full mt-4">
+                      <DollarSign className="w-4 h-4 mr-2" />
+                      Update Markup Settings
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Dynamic Pricing Rules */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Dynamic Pricing Rules</CardTitle>
+                    <CardDescription>
+                      Configure markup based on demand, season, and booking patterns
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Peak Season Markup</Label>
+                      <div className="flex items-center gap-2">
+                        <Input type="number" placeholder="15" className="flex-1" />
+                        <span className="text-sm text-gray-500">% additional</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Early Bird Discount</Label>
+                      <div className="flex items-center gap-2">
+                        <Input type="number" placeholder="10" className="flex-1" />
+                        <span className="text-sm text-gray-500">% discount</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Last Minute Markup</Label>
+                      <div className="flex items-center gap-2">
+                        <Input type="number" placeholder="20" className="flex-1" />
+                        <span className="text-sm text-gray-500">% additional</span>
+                      </div>
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Group Size Discounts</Label>
+                      <div className="space-y-2">
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm w-20">5+ travelers:</span>
+                          <Input type="number" placeholder="5" className="w-16" />
+                          <span className="text-sm text-gray-500">% off</span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className="text-sm w-20">10+ travelers:</span>
+                          <Input type="number" placeholder="10" className="w-16" />
+                          <span className="text-sm text-gray-500">% off</span>
+                        </div>
+                      </div>
+                    </div>
+
+                    <Button className="w-full">
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      Save Pricing Rules
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Package-Specific Markup */}
+                <Card className="md:col-span-2">
+                  <CardHeader>
+                    <CardTitle>Package-Specific Markup</CardTitle>
+                    <CardDescription>
+                      Override default markup for individual packages
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="space-y-4">
+                      <div className="flex gap-4">
+                        <Select>
+                          <SelectTrigger className="w-64">
+                            <SelectValue placeholder="Select package" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {packages.map((pkg) => (
+                              <SelectItem key={pkg.id} value={pkg.id.toString()}>
+                                {pkg.title}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                        <Input
+                          type="number"
+                          placeholder="Markup %"
+                          className="w-32"
+                        />
+                        <Button>Apply Markup</Button>
+                      </div>
+
+                      <div className="border rounded-lg">
+                        <Table>
+                          <TableHeader>
+                            <TableRow>
+                              <TableHead>Package</TableHead>
+                              <TableHead>Base Price</TableHead>
+                              <TableHead>Markup %</TableHead>
+                              <TableHead>Final Price</TableHead>
+                              <TableHead>Actions</TableHead>
+                            </TableRow>
+                          </TableHeader>
+                          <TableBody>
+                            <TableRow>
+                              <TableCell colSpan={5} className="text-center py-8 text-gray-500">
+                                No package-specific markups configured
+                              </TableCell>
+                            </TableRow>
+                          </TableBody>
+                        </Table>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="bargain" className="space-y-4">
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* Bargain Settings */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Bargain Settings</CardTitle>
+                    <CardDescription>
+                      Configure bargain parameters for packages
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Maximum Discount %</Label>
+                      <Input type="number" placeholder="15" max="50" />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Minimum Discount %</Label>
+                      <Input type="number" placeholder="5" max="25" />
+                    </div>
+
+                    <div className="space-y-2">
+                      <Label>Bargain Success Rate</Label>
+                      <Input type="number" placeholder="75" max="100" />
+                      <span className="text-xs text-gray-500">% of bargains that succeed</span>
+                    </div>
+
+                    <div className="flex items-center space-x-2">
+                      <Switch id="auto_bargain" />
+                      <Label htmlFor="auto_bargain">Enable Auto-Bargain</Label>
+                    </div>
+
+                    <Button className="w-full">
+                      <CheckCircle className="w-4 h-4 mr-2" />
+                      Save Settings
+                    </Button>
+                  </CardContent>
+                </Card>
+
+                {/* Active Bargains */}
+                <Card className="lg:col-span-2">
+                  <CardHeader>
+                    <CardTitle>Active Bargain Sessions</CardTitle>
+                    <CardDescription>
+                      Monitor and manage ongoing bargain negotiations
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="border rounded-lg">
+                      <Table>
+                        <TableHeader>
+                          <TableRow>
+                            <TableHead>Package</TableHead>
+                            <TableHead>Customer</TableHead>
+                            <TableHead>Original Price</TableHead>
+                            <TableHead>Offer</TableHead>
+                            <TableHead>Status</TableHead>
+                            <TableHead>Actions</TableHead>
+                          </TableRow>
+                        </TableHeader>
+                        <TableBody>
+                          <TableRow>
+                            <TableCell colSpan={6} className="text-center py-8 text-gray-500">
+                              No active bargain sessions
+                            </TableCell>
+                          </TableRow>
+                        </TableBody>
+                      </Table>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Bargain Analytics */}
+                <Card className="lg:col-span-3">
+                  <CardHeader>
+                    <CardTitle>Bargain Analytics</CardTitle>
+                    <CardDescription>
+                      Track bargain performance and conversion rates
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-blue-600">324</div>
+                        <div className="text-sm text-gray-600">Total Bargains</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-green-600">68%</div>
+                        <div className="text-sm text-gray-600">Success Rate</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-orange-600">12.5%</div>
+                        <div className="text-sm text-gray-600">Avg Discount</div>
+                      </div>
+                      <div className="text-center">
+                        <div className="text-2xl font-bold text-purple-600">₹2.4L</div>
+                        <div className="text-sm text-gray-600">Revenue Impact</div>
+                      </div>
+                    </div>
+
+                    <div className="border rounded-lg p-4 bg-gray-50">
+                      <h4 className="font-medium mb-2">Top Bargained Packages</h4>
+                      <div className="space-y-2">
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Dubai Luxury Experience</span>
+                          <span className="text-sm font-medium">43 bargains</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Bali Adventure Package</span>
+                          <span className="text-sm font-medium">38 bargains</span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-sm">Paris Romantic Getaway</span>
+                          <span className="text-sm font-medium">29 bargains</span>
+                        </div>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+
             <TabsContent value="reports" className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <Card>
