@@ -208,7 +208,7 @@ export function PackagesSearchForm() {
             {/* Destination Dropdown */}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-700 block">
-                Destination {selectedDestination ? <span className="text-green-600 text-xs">✓ Selected</span> : <span className="text-red-500 text-xs">⚠ Required</span>}
+                Destination
               </label>
               <DestinationDropdown
                 value={selectedDestination}
