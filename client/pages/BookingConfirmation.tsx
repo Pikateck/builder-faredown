@@ -1662,6 +1662,59 @@ export default function BookingConfirmation() {
                   </div>
                 </div>
               </div>
+            ) : bookingType === "packages" ? (
+              // Package Details
+              <div className="space-y-4">
+                <div className="flex gap-4 mb-4">
+                  <img
+                    src={
+                      booking.package_title ?
+                        "https://images.unsplash.com/photo-1488646953014-85cb44e25828?w=80&h=80&fit=crop&auto=format" :
+                        "https://via.placeholder.com/80x80?text=Package"
+                    }
+                    alt={booking.package_title || "Package"}
+                    className="w-20 h-20 object-cover rounded-lg"
+                  />
+                  <div className="flex-1">
+                    <h3 className="font-bold text-lg text-gray-900">
+                      {booking.package_title || "Travel Package"}
+                    </h3>
+                    <div className="flex items-center mb-2">
+                      <MapPin className="w-4 h-4 text-gray-500 mr-1" />
+                      <span className="text-sm text-gray-600">
+                        {booking.departure_city || "Departure City"}
+                      </span>
+                    </div>
+                    <div className="flex items-center">
+                      <Clock className="w-4 h-4 text-gray-500 mr-1" />
+                      <span className="text-sm text-gray-600">
+                        {booking.duration || "Multi-day Package"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <h4 className="font-semibold text-gray-900 mb-2">Package Includes</h4>
+                  <div className="grid grid-cols-2 gap-2 text-sm text-gray-600">
+                    <div className="flex items-center">
+                      <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                      <span>Accommodation</span>
+                    </div>
+                    <div className="flex items-center">
+                      <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                      <span>Meals as per itinerary</span>
+                    </div>
+                    <div className="flex items-center">
+                      <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                      <span>Transportation</span>
+                    </div>
+                    <div className="flex items-center">
+                      <CheckCircle className="w-4 h-4 text-green-500 mr-2" />
+                      <span>Sightseeing</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             ) : (
               // Hotel Details
               <>
