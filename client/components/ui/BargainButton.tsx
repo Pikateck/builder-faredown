@@ -13,6 +13,7 @@ export interface BargainButtonProps {
   disabled?: boolean;
   loading?: boolean;
   className?: string;
+  style?: React.CSSProperties;
   size?: "sm" | "md" | "lg";
 
   /** Use the conversational bargain modal instead of plain onClick */
@@ -70,6 +71,7 @@ export function BargainButton({
   disabled = false,
   loading = false,
   className,
+  style,
   size = "md",
   useBargainModal = false,
   useEnhancedModal = false,
@@ -164,6 +166,7 @@ export function BargainButton({
         onClick={handleClick}
         disabled={disabled || loading}
         className={cn(buttonClasses, className)}
+        style={style}
         id={id}
         data-testid={dataTestId}
         aria-label={
