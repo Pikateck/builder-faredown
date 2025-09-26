@@ -44,6 +44,19 @@ interface PackageCardSimpleProps {
 }
 
 export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
+  const navigate = useNavigate();
+
+  const handleViewDetails = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    navigate(`/packages/${pkg.slug}`);
+  };
+
+  const handleBargainClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    console.log('Bargain clicked for package:', pkg.slug);
+  };
   const formatPrice = (price: number, currency: string = "INR") => {
     if (currency === "INR") {
       return `₹${price.toLocaleString()}`;
