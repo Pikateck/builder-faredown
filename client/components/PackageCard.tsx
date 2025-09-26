@@ -12,6 +12,10 @@ import {
   Plane,
   Heart,
   Tag,
+  Eye,
+  TrendingDown,
+  CheckCircle,
+  Shield,
 } from "lucide-react";
 import { format } from "date-fns";
 
@@ -47,6 +51,11 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
     }
     return `${currency} ${price.toLocaleString()}`;
   };
+
+  // Calculate total price and per person price (assuming 2 adults by default)
+  const adults = 2;
+  const totalPrice = pkg.from_price * adults;
+  const pricePerPerson = pkg.from_price;
 
   const formatDate = (dateString: string) => {
     try {
@@ -96,11 +105,12 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
         {/* Price Badge */}
         <div className="absolute bottom-3 right-3 bg-white rounded-lg px-3 py-2 shadow-lg">
           <div className="text-right">
-            <div className="text-xs text-gray-600">Starting from</div>
-            <div className="text-lg font-bold text-blue-600">
-              {formatPrice(pkg.from_price, pkg.currency)}
+            <div className="text-lg font-bold text-gray-900 mb-1">
+              {formatPrice(totalPrice)}
             </div>
-            <div className="text-xs text-gray-500">per person</div>
+            <div className="text-xs text-gray-600">
+              {formatPrice(pricePerPerson)} per person
+            </div>
           </div>
         </div>
       </div>
@@ -175,13 +185,25 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
             <ul className="text-sm text-gray-600 space-y-1">
               {pkg.highlights.slice(0, 3).map((highlight, index) => (
                 <li key={index} className="flex items-start">
-                  <span className="w-1.5 h-1.5 bg-blue-500 rounded-full mt-2 mr-2 flex-shrink-0"></span>
+                  <CheckCircle className="w-3 h-3 text-green-500 flex-shrink-0 mt-0.5 mr-2" />
                   <span className="line-clamp-1">{highlight}</span>
                 </li>
               ))}
             </ul>
           </div>
         )}
+
+        {/* Features */}
+        <div className="space-y-2 mb-4">
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Shield className="w-4 h-4 text-green-500 flex-shrink-0" />
+            <span>Free cancellation</span>
+          </div>
+          <div className="flex items-center gap-2 text-sm text-gray-600">
+            <Calendar className="w-4 h-4 text-blue-500 flex-shrink-0" />
+            <span>Reserve now, pay later</span>
+          </div>
+        </div>
 
         {/* Tags */}
         {pkg.tags && pkg.tags.length > 0 && (
@@ -208,26 +230,65 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
 
         {/* Action Buttons */}
         <div className="flex gap-2">
-          <Link to={`/packages/${pkg.slug}`} className="flex-1">
-            <Button className="w-full bg-blue-600 hover:bg-blue-700 text-white">
-              View Details
-            </Button>
-          </Link>
-          <Button
-            variant="outline"
-            className="px-4 border-orange-500 text-orange-600 hover:bg-orange-50"
+          <button
+            style={{
+              backgroundColor: "#febb02",
+              color: "#000000",
+              border: "none",
+              borderRadius: "6px",
+              padding: "10px 16px",
+              fontWeight: "600",
+              fontSize: "13px",
+              minHeight: "40px",
+              width: "50%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              gap: "6px",
+              cursor: "pointer",
+              boxShadow: "0 2px 4px rgba(0,0,0,0.1)"
+            }}
           >
-            <Tag className="w-4 h-4" />
-          </Button>
+            <TrendingDown className="w-4 h-4" />
+            Bargain
+          </button>
+          <Link to={`/packages/${pkg.slug}`} className="flex-1">
+            <button
+              style={{
+                backgroundColor: "#003580",
+                color: "#ffffff",
+                border: "1px solid #003580",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontWeight: "600",
+                fontSize: "13px",
+                minHeight: "40px",
+                width: "100%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                cursor: "pointer",
+                boxShadow: "0 1px 3px rgba(0,53,128,0.15)",
+                transition: "all 0.2s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#002a66";
+                e.currentTarget.style.transform = "translateY(-1px)";
+                e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,53,128,0.25)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#003580";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,53,128,0.15)";
+              }}
+            >
+              <Eye className="w-4 h-4" />
+              View Details
+            </button>
+          </Link>
         </div>
 
-        {/* Quick Info */}
-        <div className="mt-3 pt-3 border-t border-gray-100">
-          <div className="flex justify-between items-center text-xs text-gray-500">
-            <span>Free cancellation</span>
-            <span>Instant confirmation</span>
-          </div>
-        </div>
       </CardContent>
     </Card>
   );
