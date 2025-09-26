@@ -1621,7 +1621,10 @@ export default function BookingConfirmation() {
               src={
                 booking.hero_image_url ||
                 booking.package?.hero_image_url ||
-                "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800"
+                (booking.title?.toLowerCase().includes('paris') || booking.package_title?.toLowerCase().includes('paris') ?
+                  "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800" :
+                  "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800"
+                )
               }
               alt={booking.title || booking.package_title || "Package"}
               className="absolute inset-0 w-full h-full object-cover"
