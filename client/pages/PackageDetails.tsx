@@ -600,7 +600,6 @@ export default function PackageDetails() {
                     className="w-full"
                     disabled={!selectedDeparture}
                   >
-                    <TrendingDown className="w-4 h-4 mr-2" />
                     Start Bargaining
                   </BargainButton>
                 </div>

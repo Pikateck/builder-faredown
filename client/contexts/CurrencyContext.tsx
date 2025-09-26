@@ -561,16 +561,7 @@ export function CurrencyProvider({ children }: CurrencyProviderProps) {
 
   const formatINR = (amount: number): string => {
     const roundedAmount = Math.round(amount);
-
-    if (roundedAmount >= 10000000) {
-      const crores = roundedAmount / 10000000;
-      return `₹${crores.toFixed(2)} Cr`;
-    } else if (roundedAmount >= 100000) {
-      const lakhs = roundedAmount / 100000;
-      return `₹${lakhs.toFixed(2)} L`;
-    } else {
-      return `₹${roundedAmount.toLocaleString("en-IN")}`;
-    }
+    return `₹${roundedAmount.toLocaleString("en-IN")}`;
   };
 
   const value: CurrencyContextType = {
