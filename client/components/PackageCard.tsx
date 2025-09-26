@@ -43,6 +43,8 @@ interface Package {
 
 interface PackageCardProps {
   package: Package;
+  adults?: number;
+  children?: number;
 }
 
 export function PackageCard({ package: pkg }: PackageCardProps) {
