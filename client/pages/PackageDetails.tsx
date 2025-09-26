@@ -199,7 +199,7 @@ export default function PackageDetails() {
     };
 
     fetchPackageDetails();
-  }, [slug, makeRequest]);
+  }, [slug]);
 
   const handleBookNow = () => {
     if (!packageData || !selectedDeparture) return;
