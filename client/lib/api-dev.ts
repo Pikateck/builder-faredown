@@ -1712,7 +1712,7 @@ export class DevApiClient {
             currency: "INR",
             next_departure_date: "2025-11-05",
             available_departures_count: 15,
-            hero_image_url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F881db137d4a54a489d3f0b62f595b6df?format=webp&width=400",
+            hero_image_url: "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=400",
             rating: 4.5,
             review_count: 203,
             is_featured: true,
