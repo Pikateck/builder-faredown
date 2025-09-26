@@ -582,8 +582,8 @@ export function HotelSearchForm({
                     {checkInDate && checkOutDate ? (
                       <>
                         <span className="hidden md:inline">
-                          {format(checkInDate, "EEE, MMM d")} to{" "}
-                          {format(checkOutDate, "EEE, MMM d")}
+                          {format(checkInDate, "MMM d")} to{" "}
+                          {format(checkOutDate, "MMM d")}
                         </span>
                         <span className="md:hidden">
                           {format(checkInDate, "d MMM")} -{" "}
