@@ -84,7 +84,7 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
       {/* Image Section */}
       <div className="relative">
         <Link to={`/packages/${pkg.slug}`}>
-          <div className="aspect-[4/3] overflow-hidden">
+          <div className="aspect-[4/3] overflow-hidden bg-gray-100">
             <img
               src={
                 pkg.hero_image_url ||
@@ -92,16 +92,21 @@ export function PackageCard({ package: pkg }: PackageCardProps) {
               }
               alt={pkg.title}
               className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              loading="lazy"
+              loading="eager"
+              onLoad={(e) => {
+                e.currentTarget.style.opacity = "1";
+              }}
               onError={(e) => {
+                console.log("Image load error for:", pkg.title, e.currentTarget.src);
                 // First fallback
                 if (e.currentTarget.src !== "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400") {
                   e.currentTarget.src = "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=400";
-                } else {
+                } else if (e.currentTarget.src !== "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image") {
                   // Final fallback
-                  e.currentTarget.src = "https://via.placeholder.com/400x300/e2e8f0/64748b?text=Package+Image";
+                  e.currentTarget.src = "https://via.placeholder.com/400x300/3b82f6/ffffff?text=Package+Image";
                 }
               }}
+              style={{ opacity: 0, transition: "opacity 0.3s ease" }}
             />
           </div>
         </Link>
