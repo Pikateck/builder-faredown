@@ -103,21 +103,11 @@ router.get("/", async (req, res) => {
 
       } else if (destination_type === 'country') {
         paramCount++;
-        whereConditions.push(`(
-          LOWER(c.name) = LOWER($${paramCount}) OR
-          LOWER(p.title) LIKE LOWER($${paramCount + 1})
-        )`);
-        queryParams.push(destination.trim());
-        paramCount++;
+        whereConditions.push(`LOWER(p.title) LIKE LOWER($${paramCount})`);
         queryParams.push(`%${destination.trim()}%`);
       } else if (destination_type === 'region') {
         paramCount++;
-        whereConditions.push(`(
-          LOWER(r.name) = LOWER($${paramCount}) OR
-          LOWER(p.title) LIKE LOWER($${paramCount + 1})
-        )`);
-        queryParams.push(destination.trim());
-        paramCount++;
+        whereConditions.push(`LOWER(p.title) LIKE LOWER($${paramCount})`);
         queryParams.push(`%${destination.trim()}%`);
       }
     }
