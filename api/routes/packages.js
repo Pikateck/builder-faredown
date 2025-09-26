@@ -9,10 +9,15 @@ const router = express.Router();
 const { Pool } = require("pg");
 const crypto = require("crypto");
 
-// Database connection
+// Database connection - Configure SSL properly for production databases
+const dbUrl = process.env.DATABASE_URL;
+const sslConfig = dbUrl && (dbUrl.includes('render.com') || dbUrl.includes('postgres://'))
+  ? { rejectUnauthorized: false }
+  : false;
+
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
+  connectionString: dbUrl,
+  ssl: sslConfig,
 });
 
 // Helper function to generate booking reference
