@@ -203,7 +203,7 @@ export function PackagesSearchForm() {
             {/* Departure Date */}
             <div className="space-y-2">
               <label className="text-sm font-semibold text-gray-700 block">
-                Travel Dates
+                Package Dates
               </label>
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
