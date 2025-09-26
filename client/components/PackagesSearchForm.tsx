@@ -211,15 +211,15 @@ export function PackagesSearchForm() {
 
             {/* Departure Date */}
             <div className="space-y-2">
-              <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-                Package Dates
+              <label className="text-sm font-semibold text-gray-700 block">
+                Travel Dates
               </label>
               <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     type="button"
                     variant="outline"
-                    className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-500 hover:border-blue-600 rounded text-xs sm:text-sm px-2 sm:px-3"
+                    className="w-full h-12 justify-start text-left font-medium bg-white border-2 border-gray-200 hover:border-blue-500 focus:border-blue-500 rounded-lg text-sm px-4 transition-colors"
                   >
                     <CalendarIcon className="mr-2 h-4 w-4 flex-shrink-0" />
                     <span className="truncate text-xs sm:text-sm">
