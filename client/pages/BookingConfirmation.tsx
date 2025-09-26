@@ -1302,7 +1302,9 @@ export default function BookingConfirmation() {
             <h2 className="text-xl font-bold text-gray-900">
               {bookingType === "flight"
                 ? "FLIGHT BOOKING INVOICE"
-                : "HOTEL BOOKING INVOICE"}
+                : bookingType === "hotel"
+                ? "HOTEL BOOKING INVOICE"
+                : "PACKAGE BOOKING INVOICE"}
             </h2>
             <p className="text-sm text-gray-500">
               Invoice Date:{" "}
