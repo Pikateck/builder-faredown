@@ -245,6 +245,11 @@ export default function PackageBooking() {
                       <Calendar className="w-4 h-4 mr-1" />
                       {format(parseISO(departure.departure_date), "MMM d, yyyy")}
                     </div>
+                    <div className="flex items-center text-gray-600 mt-1">
+                      <Users className="w-4 h-4 mr-1" />
+                      {travelers.adults} Adult{travelers.adults !== 1 ? 's' : ''}
+                      {travelers.children > 0 && `, ${travelers.children} Child${travelers.children !== 1 ? 'ren' : ''}`}
+                    </div>
                   </div>
                 </div>
               </CardContent>
