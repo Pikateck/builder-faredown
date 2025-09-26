@@ -635,27 +635,20 @@ export default function PackageDetails() {
                   <div>✓ Instant confirmation</div>
                   <div>✓ 24/7 customer support</div>
                 </div>
-              </CardContent>
-            </Card>
 
-            {/* Quick Contact */}
-            <Card className="sticky top-4 z-10">
-              <CardContent className="p-6 text-center">
-                <h3 className="font-semibold mb-2">Need Help?</h3>
-                <p className="text-sm text-gray-600 mb-4">
-                  Our travel experts are here to help you plan your perfect trip.
-                </p>
-                <div className="flex items-center justify-center p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <Phone className="w-5 h-5 text-blue-600 mr-3" />
-                  <div className="text-center">
-                    <p className="text-sm text-gray-600 mb-1">Call us toll-free</p>
-                    <a
-                      href="tel:+18001234567"
-                      className="text-xl font-bold text-blue-600 hover:text-blue-800 transition-colors"
-                    >
-                      1-800-123-4567
-                    </a>
-                    <p className="text-xs text-gray-500 mt-1">24/7 Customer Support</p>
+                {/* Always Visible Contact Info */}
+                <div className="mt-4 pt-4 border-t border-gray-200">
+                  <div className="flex items-center justify-center p-3 bg-blue-50 rounded-lg border border-blue-200">
+                    <Phone className="w-4 h-4 text-blue-600 mr-2" />
+                    <div className="text-center">
+                      <p className="text-xs text-gray-600 mb-1">Need Help? Call toll-free</p>
+                      <a
+                        href="tel:+18001234567"
+                        className="text-lg font-bold text-blue-600 hover:text-blue-800 transition-colors"
+                      >
+                        1-800-123-4567
+                      </a>
+                    </div>
                   </div>
                 </div>
               </CardContent>
