@@ -189,13 +189,16 @@ export function PackagesSearchForm() {
         aria-label="Search packages form"
       >
         {/* Form Fields - Two Row Layout with Even Spacing */}
-        <div className="space-y-4 mb-4">
+        <div className="space-y-6 mb-6">
 
           {/* First Row - Main Search Fields */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {/* Destination Dropdown */}
-            <div>
+            <div className="space-y-2">
+              <label className="text-sm font-semibold text-gray-700 block">
+                Destination
+              </label>
               <DestinationDropdown
                 value={selectedDestination}
                 onChange={setSelectedDestination}
@@ -207,7 +210,7 @@ export function PackagesSearchForm() {
             </div>
 
             {/* Departure Date */}
-            <div>
+            <div className="space-y-2">
               <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
                 Package Dates
               </label>
