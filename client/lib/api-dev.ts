@@ -1260,9 +1260,9 @@ export class DevApiClient {
           ],
           base_price_pp: 89999,
           currency: "INR",
-          hero_image_url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop&auto=format",
+          hero_image_url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800",
           gallery_images: [
-            "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop&auto=format",
+            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800",
             "https://images.unsplash.com/photo-1518684079-3c830dcef090?w=800&h=600&fit=crop&auto=format",
             "https://images.unsplash.com/photo-1569197388202-9efe60c9e512?w=800&h=600&fit=crop&auto=format"
           ],
@@ -1362,7 +1362,7 @@ export class DevApiClient {
           tags: ["luxury", "city-break", "shopping", "culture", "desert"],
           media: [
             {
-              url: "https://images.unsplash.com/photo-1512453979798-5ea266f8880c?w=800&h=600&fit=crop&auto=format",
+              url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800",
               type: "image",
               title: "Dubai Skyline",
               alt_text: "Dubai luxury skyline with Burj Khalifa"
@@ -1412,9 +1412,9 @@ export class DevApiClient {
           ],
           base_price_pp: 67500,
           currency: "INR",
-          hero_image_url: "https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800&h=600&fit=crop&auto=format",
+          hero_image_url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F2ae9fcf39c73428481176753547bfc64?format=webp&width=800",
           gallery_images: [
-            "https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800&h=600&fit=crop&auto=format",
+            "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F2ae9fcf39c73428481176753547bfc64?format=webp&width=800",
             "https://images.unsplash.com/photo-1499856871958-5b9627545d1a?w=800&h=600&fit=crop&auto=format"
           ],
           rating: 4.6,
@@ -1472,7 +1472,7 @@ export class DevApiClient {
           tags: ["romance", "culture", "city-break", "museums"],
           media: [
             {
-              url: "https://images.unsplash.com/photo-1502602898536-47ad22581b52?w=800&h=600&fit=crop&auto=format",
+              url: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F2ae9fcf39c73428481176753547bfc64?format=webp&width=800",
               type: "image",
               title: "Eiffel Tower",
               alt_text: "Romantic view of Eiffel Tower"
