@@ -197,43 +197,51 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
 
           {/* Action Buttons */}
           <div className="flex gap-2">
-            <Link to={`/packages/${pkg.slug}`} className="flex-1">
-              <button
-                style={{
-                  backgroundColor: "#003580",
-                  color: "#ffffff",
-                  border: "1px solid #003580",
-                  borderRadius: "6px",
-                  padding: "10px 16px",
-                  fontWeight: "600",
-                  fontSize: "13px",
-                  minHeight: "40px",
-                  width: "100%",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  cursor: "pointer",
-                  boxShadow: "0 1px 3px rgba(0,53,128,0.15)",
-                  transition: "all 0.2s ease"
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = "#002a66";
-                  e.currentTarget.style.transform = "translateY(-1px)";
-                  e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,53,128,0.25)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = "#003580";
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,53,128,0.15)";
-                }}
-              >
-                <Eye className="w-4 h-4" />
-                View Details
-              </button>
-            </Link>
+            <button
+              onClick={handleViewDetails}
+              style={{
+                backgroundColor: "#003580",
+                color: "#ffffff",
+                border: "1px solid #003580",
+                borderRadius: "6px",
+                padding: "10px 16px",
+                fontWeight: "600",
+                fontSize: "13px",
+                minHeight: "40px",
+                width: "50%",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "6px",
+                cursor: "pointer",
+                boxShadow: "0 1px 3px rgba(0,53,128,0.15)",
+                transition: "all 0.2s ease"
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = "#002a66";
+                e.currentTarget.style.transform = "translateY(-1px)";
+                e.currentTarget.style.boxShadow = "0 2px 8px rgba(0,53,128,0.25)";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = "#003580";
+                e.currentTarget.style.transform = "translateY(0)";
+                e.currentTarget.style.boxShadow = "0 1px 3px rgba(0,53,128,0.15)";
+              }}
+            >
+              <Eye className="w-4 h-4" />
+              View Details
+            </button>
             <BargainButton
-              className="flex-1"
+              onClick={handleBargainClick}
+              useEnhancedModal={true}
+              module="sightseeing"
+              itemName={pkg.title}
+              supplierNetRate={totalPrice}
+              itemDetails={{
+                location: `${pkg.region_name}, ${pkg.country_name}`,
+                provider: "Package Provider",
+                features: pkg.highlights?.slice(0, 5) || []
+              }}
               style={{
                 backgroundColor: "#febb02",
                 color: "#000000",
@@ -242,7 +250,8 @@ export function PackageCardSimple({ package: pkg }: PackageCardSimpleProps) {
                 padding: "10px 16px",
                 fontWeight: "600",
                 fontSize: "13px",
-                minHeight: "40px"
+                minHeight: "40px",
+                width: "50%"
               }}
             >
               Bargain
