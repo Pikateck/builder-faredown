@@ -319,7 +319,11 @@ export default function PackageDetails() {
               packageData.media?.find(m => m.type === 'image')?.url ||
               (packageData.slug?.includes('paris') ?
                 "https://images.pexels.com/photos/2564066/pexels-photo-2564066.jpeg?auto=compress&cs=tinysrgb&w=800" :
-                "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F7456191e08dd4de1a7a13f9d335b9417?format=webp&width=800"
+                packageData.slug?.includes('dubai') ?
+                "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800" :
+                packageData.slug?.includes('bali') ?
+                "https://images.pexels.com/photos/6965513/pexels-photo-6965513.jpeg?auto=compress&cs=tinysrgb&w=800" :
+                "https://images.pexels.com/photos/1659438/pexels-photo-1659438.jpeg?auto=compress&cs=tinysrgb&w=800"
               )
             }
             alt={packageData.title}
