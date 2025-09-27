@@ -196,6 +196,14 @@ class AccountService {
         status: "confirmed",
       },
       {
+        booking_ref: "FD-PK-005",
+        module: "package",
+        title: "Dubai Complete Package",
+        date: "2024-01-19",
+        amount: 85000,
+        status: "confirmed",
+      },
+      {
         booking_ref: "FD-SG-003",
         module: "sightseeing",
         title: "Dubai City Tour",
@@ -230,6 +238,15 @@ class AccountService {
         amount: 12000,
         status: "confirmed",
         payment_id: "pay_demo98765",
+      },
+      {
+        booking_ref: "FD-PK-005",
+        module: "package",
+        title: "Dubai Complete Package",
+        date: "2024-01-19",
+        amount: 85000,
+        status: "confirmed",
+        payment_id: "pay_demo33333",
       },
       {
         booking_ref: "FD-SG-003",
