@@ -10,7 +10,7 @@ const queryParams = new URLSearchParams({
 
 const options = {
   hostname: 'localhost',
-  port: 8000,
+  port: 8080,
   path: `/api/packages?${queryParams.toString()}`,
   method: 'GET',
   headers: {
