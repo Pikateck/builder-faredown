@@ -537,7 +537,7 @@ export default function PromoCodeManager() {
         </div>
 
         {/* Flight-specific fields */}
-        {(formData.category === "flight" || formData.category === "both") && (
+        {(formData.category === "flight" || formData.category === "all") && (
           <div className="space-y-4 border-l-4 border-blue-500 pl-4">
             <h4 className="font-medium text-blue-700">Flight Details</h4>
 
