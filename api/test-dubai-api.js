@@ -1,10 +1,17 @@
 const http = require('http');
 
 // Test URL for Dubai packages
+const queryParams = new URLSearchParams({
+  destination: 'Dubai, United Arab Emirates',
+  destination_type: 'city',
+  page: '1',
+  page_size: '20'
+});
+
 const options = {
   hostname: 'localhost',
   port: 8000,
-  path: '/api/packages?destination=Dubai, United Arab Emirates&destination_type=city&page=1&page_size=20',
+  path: `/api/packages?${queryParams.toString()}`,
   method: 'GET',
   headers: {
     'Content-Type': 'application/json'
