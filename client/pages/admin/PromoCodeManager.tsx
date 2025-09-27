@@ -452,30 +452,77 @@ export default function PromoCodeManager() {
       setSaving(true);
       setError(null);
 
-      if (selectedPromoCode) {
-        // Update existing promo code
-        await promoCodeService.updatePromoCode(
-          selectedPromoCode.id,
-          formData as Partial<CreatePromoCodeRequest>,
-        );
-        setIsEditDialogOpen(false);
-      } else {
-        // Create new promo code
-        if (!formData.code || !formData.description) {
-          setError("Code and description are required");
-          return;
-        }
-
-        await promoCodeService.createPromoCode(
-          formData as CreatePromoCodeRequest,
-        );
-        setIsCreateDialogOpen(false);
-        // Switch back to list tab after successful creation
-        setActiveTab("list");
+      if (!formData.code || !formData.description) {
+        setError("Code and description are required");
+        return;
       }
 
-      // Reload promo codes to reflect changes
-      await loadPromoCodes();
+      try {
+        if (selectedPromoCode) {
+          // Update existing promo code
+          await promoCodeService.updatePromoCode(
+            selectedPromoCode.id,
+            formData as Partial<CreatePromoCodeRequest>,
+          );
+          setIsEditDialogOpen(false);
+        } else {
+          // Create new promo code
+          await promoCodeService.createPromoCode(
+            formData as CreatePromoCodeRequest,
+          );
+          setIsCreateDialogOpen(false);
+          // Switch back to list tab after successful creation
+          setActiveTab("list");
+        }
+
+        // Reload promo codes to reflect changes
+        await loadPromoCodes();
+      } catch (apiError) {
+        console.warn("API save failed, updating mock data:", apiError);
+
+        // Fallback to mock data update
+        const newPromoCode = {
+          id: selectedPromoCode?.id || `mock_${Date.now()}`,
+          code: formData.code!.toUpperCase(),
+          description: formData.description!,
+          category: formData.category || "flight",
+          discountType: formData.discountType || "percentage",
+          discountMinValue: formData.discountMinValue || 10,
+          discountMaxValue: formData.discountMaxValue || 1000,
+          minimumFareAmount: formData.minimumFareAmount || 5000,
+          marketingBudget: formData.marketingBudget || 50000,
+          expiryDate: formData.expiryDate || "2024-12-31",
+          promoCodeImage: formData.promoCodeImage || "",
+          displayOnHomePage: formData.displayOnHomePage || "no",
+          status: formData.status || "pending",
+          createdOn: selectedPromoCode?.createdOn || new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0],
+          updatedOn: new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0],
+          module: formData.category === 'all' ? 'all' : formData.category || "flight",
+          validityType: formData.validityType || "unlimited",
+          usageCount: selectedPromoCode?.usageCount || 0,
+          maxUsage: formData.maxUsage || null,
+          ...formData // Include all other fields
+        } as PromoCode;
+
+        if (selectedPromoCode) {
+          // Update existing in mock data
+          const index = mockPromoCodes.findIndex(p => p.id === selectedPromoCode.id);
+          if (index !== -1) {
+            mockPromoCodes[index] = newPromoCode;
+          }
+          setIsEditDialogOpen(false);
+        } else {
+          // Add new to mock data
+          mockPromoCodes.unshift(newPromoCode);
+          setIsCreateDialogOpen(false);
+          setActiveTab("list");
+        }
+
+        // Update local state
+        await loadPromoCodes();
+        setError("Saved to demo data - backend connection not available");
+      }
+
       setFormData({});
       setSelectedPromoCode(null);
     } catch (err) {
