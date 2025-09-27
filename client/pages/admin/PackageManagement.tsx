@@ -129,7 +129,16 @@ export default function PackageManagement() {
   const [showEditDialog, setShowEditDialog] = useState(false);
   const [showDeparturesDialog, setShowDeparturesDialog] = useState(false);
   const [editingPackage, setEditingPackage] = useState<Partial<Package>>({});
-  const [stats, setStats] = useState<PackageStats | null>(null);
+  const [stats, setStats] = useState<PackageStats>({
+    total_packages: 0,
+    active_packages: 0,
+    draft_packages: 0,
+    total_departures: 0,
+    upcoming_departures: 0,
+    total_bookings: 0,
+    total_revenue: 0,
+    avg_rating: 0,
+  });
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
