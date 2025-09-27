@@ -520,6 +520,8 @@ class AccountService {
           return this.mockData.flightDetail;
         } else if (bookingRef.includes("HT")) {
           return this.mockData.hotelDetail;
+        } else if (bookingRef.includes("PK")) {
+          return this.mockData.packageDetail;
         }
 
         return null;
@@ -534,6 +536,8 @@ class AccountService {
         return this.mockData.flightDetail;
       } else if (bookingRef.includes("HT")) {
         return this.mockData.hotelDetail;
+      } else if (bookingRef.includes("PK")) {
+        return this.mockData.packageDetail;
       }
 
       return null;
@@ -554,6 +558,8 @@ class AccountService {
           return this.mockData.flightDetail.ticket.eticket_pdf_url;
         } else if (bookingRef.includes("HT")) {
           return this.mockData.hotelDetail.voucher.voucher_pdf_url;
+        } else if (bookingRef.includes("PK")) {
+          return this.mockData.packageDetail.package_voucher.voucher_pdf_url;
         } else if (bookingRef.includes("SG") || bookingRef.includes("SS")) {
           // Sightseeing booking
           return "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
@@ -573,6 +579,8 @@ class AccountService {
         return this.mockData.flightDetail.ticket.eticket_pdf_url;
       } else if (bookingRef.includes("HT")) {
         return this.mockData.hotelDetail.voucher.voucher_pdf_url;
+      } else if (bookingRef.includes("PK")) {
+        return this.mockData.packageDetail.package_voucher.voucher_pdf_url;
       } else if (bookingRef.includes("SG") || bookingRef.includes("SS")) {
         // Sightseeing booking
         return "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
@@ -599,6 +607,8 @@ class AccountService {
           return this.mockData.flightDetail.invoice.pdf_url;
         } else if (bookingRef.includes("HT")) {
           return this.mockData.hotelDetail.invoice.pdf_url;
+        } else if (bookingRef.includes("PK")) {
+          return this.mockData.packageDetail.invoice.pdf_url;
         } else if (bookingRef.includes("SG") || bookingRef.includes("SS")) {
           // Sightseeing booking
           return "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
@@ -618,6 +628,8 @@ class AccountService {
         return this.mockData.flightDetail.invoice.pdf_url;
       } else if (bookingRef.includes("HT")) {
         return this.mockData.hotelDetail.invoice.pdf_url;
+      } else if (bookingRef.includes("PK")) {
+        return this.mockData.packageDetail.invoice.pdf_url;
       } else if (bookingRef.includes("SG") || bookingRef.includes("SS")) {
         // Sightseeing booking
         return "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
