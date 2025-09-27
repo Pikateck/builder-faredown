@@ -23,6 +23,8 @@ import ReportsAnalytics from "./ReportsAnalytics";
 import SupplierManagement from "./SupplierManagement";
 import LoyaltyManagement from "./LoyaltyManagement";
 import PackageManagement from "./PackageManagement";
+import MarkupManagementPackages from "./MarkupManagementPackages";
+import ExtranetInventory from "./ExtranetInventory";
 import AdminAuthHelper from "@/components/AdminAuthHelper";
 import AIBargainingDashboard from "./AIBargainingDashboard";
 import APITestingDashboard from "./APITestingDashboard";
