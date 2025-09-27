@@ -591,7 +591,45 @@ export function ConversationalBargainModal({
             });
           }, 1500);
         } else {
-          throw new Error("Failed to create price hold");
+          // Check if it's a server unavailable error
+          const errorText = await holdResponse.text();
+          console.warn("Hold creation failed:", holdResponse.status, errorText);
+
+          if (holdResponse.status === 503 || errorText.includes("API server unavailable")) {
+            // Server is offline - proceed with graceful fallback
+            addMessage(
+              "agent",
+              `✅ Great! Proceeding with your booking at ${formatPrice(finalOffer)}. Please complete your booking quickly to secure this price.`,
+            );
+          } else {
+            addMessage(
+              "agent",
+              `⚠️ Unable to hold the price temporarily. You can still proceed at ${formatPrice(finalOffer)}, but please complete your booking quickly.`,
+            );
+          }
+
+          // Proceed without hold but with success messaging
+          const entityId = productRef || `${module}_${Date.now()}`;
+          const savings = basePrice - finalOffer;
+          chatAnalyticsService
+            .trackAccepted(module, entityId, finalOffer, savings)
+            .catch(console.warn);
+
+          if (isMobileDevice()) {
+            hapticFeedback("medium");
+          }
+
+          setTimeout(() => {
+            onAccept(finalOffer, orderRef, {
+              isHeld: false,
+              originalPrice: basePrice,
+              savings: savings,
+              module,
+              productRef,
+              warning: holdResponse.status === 503 ? "Service temporarily unavailable" : "Price not held - complete booking quickly",
+            });
+          }, 1500);
+          return; // Don't throw error, handle gracefully
         }
       } catch (error) {
         console.error("Hold creation failed:", error);
