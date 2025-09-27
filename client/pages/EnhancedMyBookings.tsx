@@ -206,8 +206,15 @@ export default function EnhancedMyBookings() {
     }
   };
 
-  // Filter bookings based on search query
+  // Filter bookings based on search query and URL booking parameter
   const filteredBookings = bookings.filter((booking) => {
+    // Check for specific booking parameter first
+    const specificBooking = searchParams.get("booking");
+    if (specificBooking) {
+      return booking.booking_ref === specificBooking;
+    }
+
+    // If no specific booking, apply search query filter
     if (!searchQuery.trim()) return true;
 
     const query = searchQuery.toLowerCase();
