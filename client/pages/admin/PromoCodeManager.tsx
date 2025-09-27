@@ -381,11 +381,28 @@ export default function PromoCodeManager() {
       promoCodeImage: "",
       displayOnHomePage: "yes",
       status: "pending",
+      // Flight fields
       origin: "ALL",
       destination: "ALL",
       carrierCode: "ALL",
       cabinClass: "ALL",
       flightBy: "",
+      // Hotel fields
+      hotelCity: "ALL",
+      hotelName: "",
+      // Sightseeing fields
+      tourType: "ALL",
+      tourCity: "ALL",
+      tourDuration: "",
+      // Transfer fields
+      vehicleType: "ALL",
+      transferRoute: "",
+      pickupLocation: "",
+      dropLocation: "",
+      // Package fields
+      packageCategory: "ALL",
+      packageDuration: "",
+      packageRegion: "",
       validityType: "unlimited",
     });
     setIsCreateDialogOpen(true);
