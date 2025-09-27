@@ -32,11 +32,10 @@ async function addMorePackages() {
     // Add one more Dubai package (3rd Dubai package)
     const dubaiPackage = `
       INSERT INTO packages (
-        id, slug, title, duration_days, duration_nights, overview, 
-        base_price_pp, currency, category, status, is_featured, 
+        slug, title, duration_days, duration_nights, overview,
+        base_price_pp, currency, category, status, is_featured,
         rating, review_count, created_at, updated_at
       ) VALUES (
-        gen_random_uuid(), 
         'dubai-adventure-weekender-3-days',
         'Dubai Adventure Weekender',
         3,
@@ -57,11 +56,10 @@ async function addMorePackages() {
     // Add 2 more Europe packages (currently has 1)
     const europePackage1 = `
       INSERT INTO packages (
-        id, slug, title, duration_days, duration_nights, overview, 
-        base_price_pp, currency, category, status, is_featured, 
+        slug, title, duration_days, duration_nights, overview,
+        base_price_pp, currency, category, status, is_featured,
         rating, review_count, created_at, updated_at
       ) VALUES (
-        gen_random_uuid(), 
         'paris-romantic-getaway-5-days',
         'Paris Romantic Getaway',
         5,
@@ -81,11 +79,10 @@ async function addMorePackages() {
     
     const europePackage2 = `
       INSERT INTO packages (
-        id, slug, title, duration_days, duration_nights, overview, 
-        base_price_pp, currency, category, status, is_featured, 
+        slug, title, duration_days, duration_nights, overview,
+        base_price_pp, currency, category, status, is_featured,
         rating, review_count, created_at, updated_at
       ) VALUES (
-        gen_random_uuid(), 
         'swiss-alps-adventure-6-days',
         'Swiss Alps Adventure',
         6,
@@ -106,11 +103,10 @@ async function addMorePackages() {
     // Add 2 more Southeast Asia packages (to go with potential Bali/similar)
     const seAsiaPackage1 = `
       INSERT INTO packages (
-        id, slug, title, duration_days, duration_nights, overview, 
-        base_price_pp, currency, category, status, is_featured, 
+        slug, title, duration_days, duration_nights, overview,
+        base_price_pp, currency, category, status, is_featured,
         rating, review_count, created_at, updated_at
       ) VALUES (
-        gen_random_uuid(), 
         'bali-family-adventure-7-days',
         'Bali Family Adventure',
         7,
@@ -130,11 +126,10 @@ async function addMorePackages() {
     
     const seAsiaPackage2 = `
       INSERT INTO packages (
-        id, slug, title, duration_days, duration_nights, overview, 
-        base_price_pp, currency, category, status, is_featured, 
+        slug, title, duration_days, duration_nights, overview,
+        base_price_pp, currency, category, status, is_featured,
         rating, review_count, created_at, updated_at
       ) VALUES (
-        gen_random_uuid(), 
         'thailand-beach-bliss-8-days',
         'Thailand Beach Bliss',
         8,
@@ -155,11 +150,10 @@ async function addMorePackages() {
     // Add 1 more South India package (to go with existing Kerala-style package)
     const southIndiaPackage1 = `
       INSERT INTO packages (
-        id, slug, title, duration_days, duration_nights, overview, 
-        base_price_pp, currency, category, status, is_featured, 
+        slug, title, duration_days, duration_nights, overview,
+        base_price_pp, currency, category, status, is_featured,
         rating, review_count, created_at, updated_at
       ) VALUES (
-        gen_random_uuid(), 
         'kerala-backwaters-culture-6-days',
         'Kerala Backwaters & Culture',
         6,
@@ -179,11 +173,10 @@ async function addMorePackages() {
     
     const southIndiaPackage2 = `
       INSERT INTO packages (
-        id, slug, title, duration_days, duration_nights, overview, 
-        base_price_pp, currency, category, status, is_featured, 
+        slug, title, duration_days, duration_nights, overview,
+        base_price_pp, currency, category, status, is_featured,
         rating, review_count, created_at, updated_at
       ) VALUES (
-        gen_random_uuid(), 
         'goa-beach-paradise-5-days',
         'Goa Beach Paradise',
         5,
@@ -204,11 +197,10 @@ async function addMorePackages() {
     // Add 1 more Maldives-style package
     const maldivesPackage = `
       INSERT INTO packages (
-        id, slug, title, duration_days, duration_nights, overview, 
-        base_price_pp, currency, category, status, is_featured, 
+        slug, title, duration_days, duration_nights, overview,
+        base_price_pp, currency, category, status, is_featured,
         rating, review_count, created_at, updated_at
       ) VALUES (
-        gen_random_uuid(), 
         'maldives-beach-paradise-6-days',
         'Maldives Beach Paradise',
         6,
@@ -229,11 +221,10 @@ async function addMorePackages() {
     // Add 1 more Himalayan package (to go with existing mountain packages)
     const himalayanPackage = `
       INSERT INTO packages (
-        id, slug, title, duration_days, duration_nights, overview, 
-        base_price_pp, currency, category, status, is_featured, 
+        slug, title, duration_days, duration_nights, overview,
+        base_price_pp, currency, category, status, is_featured,
         rating, review_count, created_at, updated_at
       ) VALUES (
-        gen_random_uuid(), 
         'himachal-adventure-trek-7-days',
         'Himachal Adventure Trek',
         7,
