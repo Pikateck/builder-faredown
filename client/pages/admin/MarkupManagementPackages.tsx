@@ -919,16 +919,16 @@ export default function MarkupManagementPackages() {
 
                       <TableCell>
                         <div className="font-medium">
-                          {rule.ruleType === "percentage" 
-                            ? `${rule.value}%`
+                          {rule.ruleType === "percentage"
+                            ? `${rule.value || 0}%`
                             : rule.ruleType === "fixed"
-                              ? formatPrice(rule.value)
+                              ? formatPrice(rule.value || 0)
                               : "Tiered"
                           }
                         </div>
                         {rule.maxValue && (
                           <div className="text-xs text-gray-500">
-                            Cap: {formatPrice(rule.maxValue)}
+                            Cap: {formatPrice(rule.maxValue || 0)}
                           </div>
                         )}
                       </TableCell>
