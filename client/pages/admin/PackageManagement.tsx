@@ -164,7 +164,7 @@ export default function PackageManagement() {
         ...(categoryFilter !== "all" && { category: categoryFilter }),
       });
 
-      const response = await apiClient.get(`/admin/packages?${params}`);
+      const response = await apiClient.get(`/api/admin/packages?${params}`);
 
       if (response.success) {
         setPackages(response.data.packages);
@@ -179,7 +179,7 @@ export default function PackageManagement() {
 
   const fetchStats = async () => {
     try {
-      const response = await apiClient.get("/admin/packages/stats");
+      const response = await apiClient.get("/api/admin/packages/stats");
 
       if (response.success) {
         setStats(response.data);
@@ -192,7 +192,7 @@ export default function PackageManagement() {
   const fetchDepartures = async (packageId: number) => {
     try {
       const response = await apiClient.get(
-        `/admin/packages/${packageId}/departures`,
+        `/api/admin/packages/${packageId}/departures`,
       );
 
       if (response.success) {
@@ -216,8 +216,8 @@ export default function PackageManagement() {
         : "/api/admin/packages";
 
       const response = method === "POST"
-        ? await apiClient.post("/admin/packages", editingPackage)
-        : await apiClient.put(`/admin/packages/${editingPackage.id}`, editingPackage);
+        ? await apiClient.post("/api/admin/packages", editingPackage)
+        : await apiClient.put(`/api/admin/packages/${editingPackage.id}`, editingPackage);
 
       if (response.success) {
         setShowEditDialog(false);
@@ -233,7 +233,7 @@ export default function PackageManagement() {
     if (!confirm("Are you sure you want to delete this package?")) return;
 
     try {
-      const response = await apiClient.delete(`/admin/packages/${packageId}`);
+      const response = await apiClient.delete(`/api/admin/packages/${packageId}`);
 
       if (response.success) {
         fetchPackages();
@@ -1087,7 +1087,7 @@ export default function PackageManagement() {
                           <div className="flex justify-between items-center">
                             <span className="text-sm">Cultural</span>
                             <span className="text-sm font-medium">
-                              ₹8.6L (19%)
+                              ���8.6L (19%)
                             </span>
                           </div>
                           <div className="flex justify-between items-center">
