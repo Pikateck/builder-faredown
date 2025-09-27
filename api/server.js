@@ -397,6 +397,7 @@ app.use(
   auditLogger,
   adminMarkupPackagesRoutes,
 );
+app.use("/api/pricing", pricingEngineRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
