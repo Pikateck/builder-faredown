@@ -948,7 +948,7 @@ export default function MarkupManagementPackages() {
                           )}
                           {rule.conditions?.priceRange && (
                             <div className="text-xs text-gray-600">
-                              Price: {formatPrice(rule.conditions.priceRange.min || 0)} - {formatPrice(rule.conditions.priceRange.max || 999999)}
+                              Price: {formatPrice((rule.conditions?.priceRange?.min || 0))} - {formatPrice((rule.conditions?.priceRange?.max || 999999))}
                             </div>
                           )}
                         </div>
