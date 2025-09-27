@@ -382,6 +382,20 @@ app.use(
   auditLogger,
   adminProfilesRoutes,
 );
+app.use(
+  "/api/admin/extranet",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminExtranetRoutes,
+);
+app.use(
+  "/api/admin/markup/packages",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminMarkupPackagesRoutes,
+);
 
 // Error handling middleware
 app.use((err, req, res, next) => {
