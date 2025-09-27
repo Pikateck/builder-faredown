@@ -4,6 +4,7 @@
  */
 
 import { apiClient } from "@/lib/api";
+import { getAdminHeaders } from "@/utils/adminEnv";
 
 export interface AdminUser {
   id: string;
@@ -70,6 +71,9 @@ class UserManagementService {
 
       const response = await apiClient.get(
         `${this.baseUrl}?${params.toString()}`,
+        {
+          headers: getAdminHeaders(),
+        },
       );
 
       if (response.ok) {
@@ -88,7 +92,7 @@ class UserManagementService {
    */
   async createUser(userData: CreateUserRequest): Promise<AdminUser> {
     try {
-      const response = await apiClient.post(this.baseUrl, userData);
+      const response = await apiClient.post(this.baseUrl, userData, getAdminHeaders());
 
       if (response.ok) {
         return response.data.user;
@@ -112,6 +116,7 @@ class UserManagementService {
       const response = await apiClient.put(
         `${this.baseUrl}/${userId}`,
         userData,
+        getAdminHeaders(),
       );
 
       if (response.ok) {
