@@ -324,7 +324,7 @@ export default function PackageManagement() {
                     Avg Rating
                   </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {stats.avg_rating.toFixed(1)}
+                    {stats?.avg_rating?.toFixed(1) || "0.0"}
                   </p>
                 </div>
               </div>
