@@ -66,9 +66,9 @@ import {
   Hotel,
   Camera,
 } from "lucide-react";
-import { useApi } from "../../hooks/useApi";
 import { useCurrency } from "../../contexts/CurrencyContext";
 import { getAdminApiKey } from "../../utils/adminEnv";
+import { apiClient } from "../../lib/api";
 
 interface Package {
   id: number;
@@ -133,7 +133,6 @@ export default function PackageManagement() {
   const [currentPage, setCurrentPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
 
-  const { makeRequest } = useApi();
   const { formatPrice } = useCurrency();
 
   // Categories
@@ -165,11 +164,7 @@ export default function PackageManagement() {
         ...(categoryFilter !== "all" && { category: categoryFilter }),
       });
 
-      const response = await makeRequest(`/api/admin/packages?${params}`, {
-        headers: {
-          "X-Admin-Key": getAdminApiKey(),
-        },
-      });
+      const response = await apiClient.get(`/admin/packages?${params}`);
 
       if (response.success) {
         setPackages(response.data.packages);
@@ -184,11 +179,7 @@ export default function PackageManagement() {
 
   const fetchStats = async () => {
     try {
-      const response = await makeRequest("/api/admin/packages/stats", {
-        headers: {
-          "X-Admin-Key": getAdminApiKey(),
-        },
-      });
+      const response = await apiClient.get("/admin/packages/stats");
 
       if (response.success) {
         setStats(response.data);
@@ -200,13 +191,8 @@ export default function PackageManagement() {
 
   const fetchDepartures = async (packageId: number) => {
     try {
-      const response = await makeRequest(
-        `/api/admin/packages/${packageId}/departures`,
-        {
-          headers: {
-            "X-Admin-Key": getAdminApiKey(),
-          },
-        },
+      const response = await apiClient.get(
+        `/admin/packages/${packageId}/departures`,
       );
 
       if (response.success) {
@@ -252,12 +238,7 @@ export default function PackageManagement() {
     if (!confirm("Are you sure you want to delete this package?")) return;
 
     try {
-      const response = await makeRequest(`/api/admin/packages/${packageId}`, {
-        method: "DELETE",
-        headers: {
-          "X-Admin-Key": getAdminApiKey(),
-        },
-      });
+      const response = await apiClient.delete(`/admin/packages/${packageId}`);
 
       if (response.success) {
         fetchPackages();
