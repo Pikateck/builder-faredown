@@ -520,7 +520,7 @@ export default function Account() {
 
           {bookings.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6">
-              {bookings.slice(0, 4).map((booking, index) => (
+              {bookings.slice(0, 6).map((booking, index) => (
                 <Card
                   key={index}
                   className="bg-[#ffffff] border border-[#e5e5e5] hover:shadow-md transition-shadow"
