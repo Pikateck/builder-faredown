@@ -638,7 +638,11 @@ export default function EnhancedMyBookings() {
                               <Download className="w-4 h-4 mr-2" />
                               {booking.module === "flight"
                                 ? "Ticket"
-                                : "Voucher"}
+                                : booking.module === "hotel"
+                                ? "Voucher"
+                                : booking.module === "package"
+                                ? "Package"
+                                : "Document"}
                             </Button>
                             <Button
                               variant="outline"
