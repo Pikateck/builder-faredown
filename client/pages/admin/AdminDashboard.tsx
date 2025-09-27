@@ -25,6 +25,7 @@ import LoyaltyManagement from "./LoyaltyManagement";
 import PackageManagement from "./PackageManagement";
 import MarkupManagementPackages from "./MarkupManagementPackages";
 import ExtranetInventory from "./ExtranetInventory";
+import SystemStatus from "./SystemStatus";
 import AdminAuthHelper from "@/components/AdminAuthHelper";
 import AIBargainingDashboard from "./AIBargainingDashboard";
 import APITestingDashboard from "./APITestingDashboard";
