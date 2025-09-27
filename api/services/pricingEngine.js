@@ -1,609 +1,625 @@
 /**
- * Complete Pricing Engine Service
- * Handles markup application, promo codes, bargaining logic, and booking confirmation
- * Supports Air, Hotel, Sightseeing, and Transfer modules
+ * Comprehensive Pricing Engine for Faredown Platform
+ * Handles markup, promo codes, taxes, payment gateway charges, and currency conversion
+ * Works across all modules: Flights, Hotels, Sightseeing, Transfers, Packages
  */
 
-const { Pool } = require("pg");
+const { currencyService } = require('./currencyService');
 
 class PricingEngine {
-  constructor(dbPool) {
-    this.pool = dbPool;
+  constructor() {
+    // Default configuration - can be overridden by admin settings
+    this.config = {
+      taxRates: {
+        default: 12.0, // 12% GST for India
+        regions: {
+          'India': 12.0,
+          'UAE': 5.0, // VAT
+          'Europe': 20.0, // Average VAT
+          'USA': 8.5, // Average sales tax
+          'Singapore': 7.0, // GST
+        }
+      },
+      paymentGateway: {
+        percentage: 2.5, // 2.5% PG charges
+        fixedAmount: 20, // ₹20 fixed charges
+        currency: 'INR'
+      },
+      currency: {
+        baseCurrency: 'INR',
+        exchangeRates: {}, // Will be populated from currency service
+        roundingPolicy: 'up' // 'up', 'down', 'nearest'
+      }
+    };
   }
 
   /**
-   * Get applicable markup rule for a booking
+   * Calculate final price with all business logic applied
+   * @param {Object} params - Pricing parameters
+   * @returns {Object} - Complete pricing breakdown
    */
-  async getApplicableMarkupRule(params) {
+  async calculateFinalPrice(params) {
     const {
-      module,
-      origin = null,
-      destination = null,
-      serviceClass = null,
-      hotelCategory = null,
-      serviceType = null,
-      airlineCode = null,
-      userType = "all",
-    } = params;
-
-    // Build dynamic WHERE clause for rule matching
-    let whereConditions = [
-      "status = $1",
-      "module = $2",
-      "(valid_from IS NULL OR valid_from <= CURRENT_DATE)",
-      "(valid_to IS NULL OR valid_to >= CURRENT_DATE)",
-    ];
-
-    let queryParams = ["active", module];
-    let paramIndex = 3;
-
-    // Add specific matching conditions (more specific rules win)
-    const specificityScore = [];
-
-    if (serviceClass) {
-      whereConditions.push(
-        `(service_class = $${paramIndex} OR service_class IS NULL)`,
-      );
-      queryParams.push(serviceClass);
-      specificityScore.push(
-        `CASE WHEN service_class = $${paramIndex} THEN 1 ELSE 0 END`,
-      );
-      paramIndex++;
-    }
-
-    if (hotelCategory) {
-      whereConditions.push(
-        `(hotel_category = $${paramIndex} OR hotel_category IS NULL)`,
-      );
-      queryParams.push(hotelCategory);
-      specificityScore.push(
-        `CASE WHEN hotel_category = $${paramIndex} THEN 1 ELSE 0 END`,
-      );
-      paramIndex++;
-    }
-
-    if (serviceType) {
-      whereConditions.push(
-        `(service_type = $${paramIndex} OR service_type IS NULL)`,
-      );
-      queryParams.push(serviceType);
-      specificityScore.push(
-        `CASE WHEN service_type = $${paramIndex} THEN 1 ELSE 0 END`,
-      );
-      paramIndex++;
-    }
-
-    if (origin) {
-      whereConditions.push(
-        `(origin = $${paramIndex} OR origin IS NULL OR origin = 'ALL')`,
-      );
-      queryParams.push(origin);
-      specificityScore.push(
-        `CASE WHEN origin = $${paramIndex} THEN 1 ELSE 0 END`,
-      );
-      paramIndex++;
-    }
-
-    if (destination) {
-      whereConditions.push(
-        `(destination = $${paramIndex} OR destination IS NULL OR destination = 'ALL')`,
-      );
-      queryParams.push(destination);
-      specificityScore.push(
-        `CASE WHEN destination = $${paramIndex} THEN 1 ELSE 0 END`,
-      );
-      paramIndex++;
-    }
-
-    if (airlineCode) {
-      whereConditions.push(
-        `(airline_code = $${paramIndex} OR airline_code IS NULL)`,
-      );
-      queryParams.push(airlineCode);
-      specificityScore.push(
-        `CASE WHEN airline_code = $${paramIndex} THEN 1 ELSE 0 END`,
-      );
-      paramIndex++;
-    }
-
-    // Build specificity calculation
-    const specificityCalc =
-      specificityScore.length > 0 ? specificityScore.join(" + ") : "0";
-
-    const query = `
-      SELECT *,
-             (${specificityCalc}) as specificity_score
-      FROM markup_rules 
-      WHERE ${whereConditions.join(" AND ")}
-      ORDER BY priority DESC, specificity_score DESC, created_at ASC
-      LIMIT 1
-    `;
-
-    const result = await this.pool.query(query, queryParams);
-    return result.rows[0] || null;
-  }
-
-  /**
-   * Validate and get promo code
-   */
-  async validatePromoCode(promoCode, params) {
-    if (!promoCode) return null;
-
-    const {
-      module,
-      fareAmount,
-      serviceClass = null,
-      hotelCategory = null,
-      serviceType = null,
-    } = params;
-
-    const query = `
-      SELECT * FROM promo_codes 
-      WHERE code = $1 
-        AND module = $2 
-        AND status = 'active'
-        AND (expires_on IS NULL OR expires_on >= CURRENT_DATE)
-        AND marketing_budget > budget_spent
-        AND $3 >= min_fare_amount
-        AND (service_class IS NULL OR service_class = $4)
-        AND (hotel_category IS NULL OR hotel_category = $5)
-        AND (service_type IS NULL OR service_type = $6)
-    `;
-
-    const result = await this.pool.query(query, [
-      promoCode,
-      module,
-      fareAmount,
-      serviceClass,
-      hotelCategory,
-      serviceType,
-    ]);
-
-    return result.rows[0] || null;
-  }
-
-  /**
-   * Calculate markup value
-   */
-  calculateMarkup(baseAmount, markupRule) {
-    if (!markupRule) return 0;
-
-    if (markupRule.markup_type === "percent") {
-      return baseAmount * (markupRule.markup_value / 100);
-    } else {
-      return markupRule.markup_value;
-    }
-  }
-
-  /**
-   * Calculate promo discount
-   */
-  calculatePromoDiscount(grossAmount, promoRule) {
-    if (!promoRule) return 0;
-
-    // Use random value between min and max for variety
-    const discountPercent =
-      promoRule.discount_min +
-      Math.random() * (promoRule.discount_max - promoRule.discount_min);
-
-    if (promoRule.discount_type === "percent") {
-      return grossAmount * (discountPercent / 100);
-    } else {
-      return discountPercent; // Fixed amount
-    }
-  }
-
-  /**
-   * Generate pricing quote
-   */
-  async generateQuote(params) {
-    const {
-      module,
-      baseNetAmount,
-      origin,
-      destination,
-      serviceClass,
-      hotelCategory,
-      serviceType,
-      airlineCode,
-      userType = "all",
+      module, // 'flights', 'hotels', 'sightseeing', 'transfers', 'packages'
+      basePrice,
+      baseCurrency = 'INR',
+      targetCurrency = 'INR',
+      item = {}, // Item details for rule matching
+      customer = {}, // Customer details
+      booking = {}, // Booking details
       promoCode = null,
+      region = 'India',
+      quantity = 1
     } = params;
 
     try {
-      // 1. Get applicable markup rule
-      const markupRule = await this.getApplicableMarkupRule({
-        module,
-        origin,
-        destination,
-        serviceClass,
-        hotelCategory,
-        serviceType,
-        airlineCode,
-        userType,
-      });
-
-      if (!markupRule) {
-        throw new Error(`No markup rule found for ${module} module`);
+      // Step 1: Validate inputs
+      if (!module || !basePrice || basePrice <= 0) {
+        throw new Error('Invalid pricing parameters: module and positive basePrice are required');
       }
 
-      // 2. Calculate markup
-      const markupValue = this.calculateMarkup(baseNetAmount, markupRule);
-      const grossBeforePromo = baseNetAmount + markupValue;
+      // Step 2: Apply markup rules
+      const markupResult = await this.applyMarkupRules(module, basePrice, item, booking);
+      
+      // Step 3: Apply promo code discounts
+      const promoResult = await this.applyPromoCode(module, markupResult.finalPrice, promoCode, item, customer);
+      
+      // Step 4: Calculate taxes
+      const taxResult = this.calculateTaxes(promoResult.finalPrice, region, item);
+      
+      // Step 5: Apply payment gateway charges
+      const pgResult = this.calculatePaymentGatewayCharges(taxResult.finalPrice);
+      
+      // Step 6: Apply currency conversion
+      const currencyResult = await this.convertCurrency(
+        pgResult.finalPrice, 
+        baseCurrency, 
+        targetCurrency
+      );
 
-      // 3. Validate and apply promo if provided
-      let promoRule = null;
-      let promoDiscount = 0;
+      // Step 7: Apply quantity multiplier
+      const quantityResult = this.applyQuantity(currencyResult.finalPrice, quantity);
 
-      if (promoCode) {
-        promoRule = await this.validatePromoCode(promoCode, {
-          module,
-          fareAmount: grossBeforePromo,
-          serviceClass,
-          hotelCategory,
-          serviceType,
-        });
+      // Step 8: Compile complete breakdown
+      const breakdown = {
+        basePrice: this.roundPrice(basePrice, targetCurrency),
+        quantity,
+        
+        // Markup details
+        markup: {
+          amount: this.roundPrice(markupResult.markupAmount, targetCurrency),
+          percentage: markupResult.markupPercentage,
+          rules: markupResult.appliedRules,
+          priceAfterMarkup: this.roundPrice(markupResult.finalPrice, targetCurrency)
+        },
+        
+        // Promo details
+        promo: {
+          code: promoResult.promoCode,
+          discount: this.roundPrice(promoResult.discountAmount, targetCurrency),
+          percentage: promoResult.discountPercentage,
+          savings: this.roundPrice(promoResult.discountAmount, targetCurrency),
+          priceAfterPromo: this.roundPrice(promoResult.finalPrice, targetCurrency)
+        },
+        
+        // Tax details
+        taxes: {
+          rate: taxResult.taxRate,
+          amount: this.roundPrice(taxResult.taxAmount, targetCurrency),
+          region: region,
+          priceAfterTax: this.roundPrice(taxResult.finalPrice, targetCurrency)
+        },
+        
+        // Payment gateway details
+        paymentGateway: {
+          percentage: pgResult.percentage,
+          fixedAmount: this.roundPrice(pgResult.fixedAmount, targetCurrency),
+          totalCharges: this.roundPrice(pgResult.totalCharges, targetCurrency),
+          priceAfterPG: this.roundPrice(pgResult.finalPrice, targetCurrency)
+        },
+        
+        // Currency conversion details
+        currency: {
+          baseCurrency,
+          targetCurrency,
+          exchangeRate: currencyResult.exchangeRate,
+          conversionApplied: baseCurrency !== targetCurrency
+        },
+        
+        // Final pricing
+        subtotal: this.roundPrice(promoResult.finalPrice, targetCurrency), // After markup and promo
+        totalTaxes: this.roundPrice(taxResult.taxAmount, targetCurrency),
+        totalCharges: this.roundPrice(pgResult.totalCharges, targetCurrency),
+        finalPrice: this.roundPrice(quantityResult.finalPrice, targetCurrency),
+        totalSavings: this.roundPrice(promoResult.discountAmount * quantity, targetCurrency),
+        
+        // Per unit prices
+        pricePerUnit: this.roundPrice(currencyResult.finalPrice, targetCurrency),
+        
+        // Metadata
+        calculatedAt: new Date().toISOString(),
+        module,
+        region
+      };
 
-        if (promoRule) {
-          promoDiscount = this.calculatePromoDiscount(
-            grossBeforePromo,
-            promoRule,
-          );
+      return {
+        success: true,
+        data: breakdown,
+        summary: {
+          basePrice: this.roundPrice(basePrice * quantity, targetCurrency),
+          finalPrice: breakdown.finalPrice,
+          totalSavings: breakdown.totalSavings,
+          currency: targetCurrency
+        }
+      };
+
+    } catch (error) {
+      console.error('Pricing calculation error:', error);
+      return {
+        success: false,
+        error: error.message,
+        fallback: {
+          basePrice: this.roundPrice(basePrice * quantity, targetCurrency),
+          finalPrice: this.roundPrice(basePrice * quantity, targetCurrency),
+          currency: targetCurrency
+        }
+      };
+    }
+  }
+
+  /**
+   * Apply markup rules based on module and conditions
+   */
+  async applyMarkupRules(module, basePrice, item, booking) {
+    // Mock markup rules - in real implementation, fetch from database
+    const markupRules = await this.getMarkupRules(module);
+    
+    let appliedRules = [];
+    let markupAmount = 0;
+    let markupPercentage = 0;
+
+    // Find applicable rules sorted by priority
+    const applicableRules = markupRules
+      .filter(rule => rule.isActive && this.matchesRuleConditions(rule, item, booking))
+      .sort((a, b) => a.priority - b.priority);
+
+    if (applicableRules.length > 0) {
+      const rule = applicableRules[0]; // Take highest priority rule
+
+      if (rule.ruleType === 'percentage') {
+        markupAmount = (basePrice * rule.value) / 100;
+        if (rule.maxValue && markupAmount > rule.maxValue) {
+          markupAmount = rule.maxValue;
+        }
+        if (rule.minValue && markupAmount < rule.minValue) {
+          markupAmount = rule.minValue;
+        }
+      } else if (rule.ruleType === 'fixed') {
+        markupAmount = rule.value;
+      } else if (rule.ruleType === 'tiered' && rule.tieredMarkups) {
+        const tier = rule.tieredMarkups.find(t => 
+          basePrice >= t.minPrice && basePrice <= t.maxPrice
+        );
+        if (tier) {
+          markupAmount = (basePrice * tier.markupPercentage) / 100;
         }
       }
 
-      const grossBeforeBargain = grossBeforePromo - promoDiscount;
-
-      // 4. Calculate current fare range for display
-      const currentFareMin =
-        baseNetAmount * (1 + markupRule.current_min_pct / 100);
-      const currentFareMax =
-        baseNetAmount * (1 + markupRule.current_max_pct / 100);
-
-      // 5. Calculate bargain range
-      const bargainFareMin =
-        baseNetAmount * (1 + markupRule.bargain_min_pct / 100);
-      const bargainFareMax =
-        baseNetAmount * (1 + markupRule.bargain_max_pct / 100);
-
-      // 6. Generate temporary quote ID
-      const tempId = `quote_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-
-      // 7. Store temporary quote
-      await this.pool.query(
-        `
-        INSERT INTO pricing_quotes (
-          temp_id, module, base_net_amount, markup_rule_id, markup_value,
-          promo_code_id, promo_discount, gross_before_bargain, quote_details
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-      `,
-        [
-          tempId,
-          module,
-          baseNetAmount,
-          markupRule.id,
-          markupValue,
-          promoRule?.id || null,
-          promoDiscount,
-          grossBeforeBargain,
-          JSON.stringify({
-            ...params,
-            currentFareRange: { min: currentFareMin, max: currentFareMax },
-          }),
-        ],
-      );
-
-      return {
-        tempId,
-        baseNetAmount,
-        markupRule: {
-          id: markupRule.id,
-          name: markupRule.rule_name,
-          value: markupValue,
-          percentage: markupRule.markup_value,
-        },
-        promoCode: promoRule
-          ? {
-              id: promoRule.id,
-              code: promoRule.code,
-              discount: promoDiscount,
-            }
-          : null,
-        grossBeforePromo,
-        promoDiscount,
-        grossBeforeBargain,
-        currentFareRange: { min: currentFareMin, max: currentFareMax },
-        bargainRange: { min: bargainFareMin, max: bargainFareMax },
-        finalPrice: grossBeforeBargain,
-      };
-    } catch (error) {
-      console.error("Error generating quote:", error);
-      throw error;
+      markupPercentage = (markupAmount / basePrice) * 100;
+      appliedRules.push({
+        ruleId: rule.id,
+        ruleName: rule.name,
+        ruleType: rule.ruleType,
+        value: rule.value,
+        markupAmount,
+        markupPercentage
+      });
     }
+
+    return {
+      finalPrice: basePrice + markupAmount,
+      markupAmount,
+      markupPercentage,
+      appliedRules
+    };
   }
 
   /**
-   * Process bargain offer
+   * Apply promo code discounts
    */
-  async processBargainOffer(tempId, offeredPrice, userId = null) {
-    try {
-      // Get the quote
-      const quoteResult = await this.pool.query(
-        "SELECT * FROM pricing_quotes WHERE temp_id = $1 AND expires_at > CURRENT_TIMESTAMP",
-        [tempId],
-      );
-
-      const quote = quoteResult.rows[0];
-      if (!quote) {
-        throw new Error("Quote not found or expired");
-      }
-
-      // Get markup rule to check bargain range
-      const markupResult = await this.pool.query(
-        "SELECT * FROM markup_rules WHERE id = $1",
-        [quote.markup_rule_id],
-      );
-
-      const markupRule = markupResult.rows[0];
-      const bargainMin =
-        quote.base_net_amount * (1 + markupRule.bargain_min_pct / 100);
-      const bargainMax =
-        quote.base_net_amount * (1 + markupRule.bargain_max_pct / 100);
-
-      let accepted = false;
-      let counterOffer = null;
-      let finalPrice = offeredPrice;
-
-      // Check if offer is within acceptable range
-      if (offeredPrice >= bargainMin && offeredPrice <= bargainMax) {
-        accepted = true;
-      } else if (offeredPrice < bargainMin) {
-        // Counter-offer at minimum acceptable price
-        counterOffer = bargainMin;
-        finalPrice = bargainMin;
-      } else {
-        // Offer too high, accept it
-        accepted = true;
-      }
-
-      // Log bargain event
-      await this.pool.query(
-        `
-        INSERT INTO bargain_events (booking_id, user_id, offered_price, engine_counter_offer, accepted, metadata)
-        VALUES (NULL, $1, $2, $3, $4, $5)
-      `,
-        [
-          userId,
-          offeredPrice,
-          counterOffer,
-          accepted,
-          JSON.stringify({
-            temp_id: tempId,
-            bargain_range: { min: bargainMin, max: bargainMax },
-          }),
-        ],
-      );
-
-      // Update quote with bargain details
-      const bargainDiscount = quote.gross_before_bargain - finalPrice;
-      await this.pool.query(
-        `
-        UPDATE pricing_quotes 
-        SET quote_details = quote_details || $1
-        WHERE temp_id = $2
-      `,
-        [
-          JSON.stringify({
-            bargain_offer: offeredPrice,
-            bargain_discount: bargainDiscount,
-            final_price: finalPrice,
-            accepted: accepted,
-            counter_offer: counterOffer,
-          }),
-          tempId,
-        ],
-      );
-
+  async applyPromoCode(module, price, promoCode, item, customer) {
+    if (!promoCode) {
       return {
-        accepted,
-        counterOffer,
-        finalPrice,
-        bargainDiscount,
-        message: accepted
-          ? "Offer accepted!"
-          : `Your offer is below our minimum. We can offer ${counterOffer.toFixed(2)} instead.`,
+        finalPrice: price,
+        discountAmount: 0,
+        discountPercentage: 0,
+        promoCode: null
       };
-    } catch (error) {
-      console.error("Error processing bargain offer:", error);
-      throw error;
     }
+
+    // Mock promo validation - in real implementation, fetch from database
+    const promo = await this.validatePromoCode(promoCode, module);
+    
+    if (!promo || !promo.isValid) {
+      return {
+        finalPrice: price,
+        discountAmount: 0,
+        discountPercentage: 0,
+        promoCode: promoCode,
+        error: 'Invalid or expired promo code'
+      };
+    }
+
+    let discountAmount = 0;
+
+    if (promo.discountType === 'percentage') {
+      discountAmount = (price * promo.discountMinValue) / 100;
+      if (promo.discountMaxValue && discountAmount > promo.discountMaxValue) {
+        discountAmount = promo.discountMaxValue;
+      }
+    } else if (promo.discountType === 'fixed') {
+      discountAmount = promo.discountMinValue;
+    }
+
+    // Check minimum fare amount
+    if (price < promo.minimumFareAmount) {
+      return {
+        finalPrice: price,
+        discountAmount: 0,
+        discountPercentage: 0,
+        promoCode: promoCode,
+        error: `Minimum fare amount ₹${promo.minimumFareAmount} required`
+      };
+    }
+
+    const discountPercentage = (discountAmount / price) * 100;
+
+    return {
+      finalPrice: Math.max(0, price - discountAmount),
+      discountAmount,
+      discountPercentage,
+      promoCode: promoCode
+    };
   }
 
   /**
-   * Confirm booking
+   * Calculate taxes based on region and item type
    */
-  async confirmBooking(tempId, paymentReference, userId = null) {
-    const client = await this.pool.connect();
+  calculateTaxes(price, region, item) {
+    const taxRate = this.config.taxRates.regions[region] || this.config.taxRates.default;
+    const taxAmount = (price * taxRate) / 100;
+
+    return {
+      finalPrice: price + taxAmount,
+      taxAmount,
+      taxRate,
+      region
+    };
+  }
+
+  /**
+   * Calculate payment gateway charges
+   */
+  calculatePaymentGatewayCharges(price) {
+    const percentage = this.config.paymentGateway.percentage;
+    const fixedAmount = this.config.paymentGateway.fixedAmount;
+    
+    const percentageCharges = (price * percentage) / 100;
+    const totalCharges = percentageCharges + fixedAmount;
+
+    return {
+      finalPrice: price + totalCharges,
+      percentageCharges,
+      fixedAmount,
+      totalCharges,
+      percentage
+    };
+  }
+
+  /**
+   * Convert currency using exchange rates
+   */
+  async convertCurrency(amount, fromCurrency, toCurrency) {
+    if (fromCurrency === toCurrency) {
+      return {
+        finalPrice: amount,
+        exchangeRate: 1,
+        fromCurrency,
+        toCurrency
+      };
+    }
 
     try {
-      await client.query("BEGIN");
-
-      // Get the quote with all details
-      const quoteResult = await client.query(
-        "SELECT * FROM pricing_quotes WHERE temp_id = $1 AND expires_at > CURRENT_TIMESTAMP",
-        [tempId],
-      );
-
-      const quote = quoteResult.rows[0];
-      if (!quote) {
-        throw new Error("Quote not found or expired");
-      }
-
-      const quoteDetails = quote.quote_details || {};
-      const finalPrice = quoteDetails.final_price || quote.gross_before_bargain;
-      const bargainDiscount = quoteDetails.bargain_discount || 0;
-
-      // Generate booking reference
-      const bookingReference = `BK${Date.now()}${Math.random().toString(36).substr(2, 4).toUpperCase()}`;
-
-      // Never-loss check
-      const neverLossPass = finalPrice >= quote.base_net_amount;
-      const safetyAdjustedPrice = neverLossPass
-        ? finalPrice
-        : quote.base_net_amount;
-
-      // Create booking record
-      const bookingResult = await client.query(
-        `
-        INSERT INTO bookings (
-          module, base_net_amount, applied_markup_rule_id, applied_markup_value,
-          promo_code_id, promo_discount_value, bargain_discount_value,
-          gross_before_bargain, gross_after_bargain, final_payable,
-          never_loss_pass, user_id, booking_reference, payment_reference,
-          origin, destination, class, hotel_category, service_type
-        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)
-        RETURNING *
-      `,
-        [
-          quote.module,
-          quote.base_net_amount,
-          quote.markup_rule_id,
-          quote.markup_value,
-          quote.promo_code_id,
-          quote.promo_discount,
-          bargainDiscount,
-          quote.gross_before_bargain,
-          finalPrice,
-          safetyAdjustedPrice,
-          neverLossPass,
-          userId,
-          bookingReference,
-          paymentReference,
-          quoteDetails.origin,
-          quoteDetails.destination,
-          quoteDetails.serviceClass,
-          quoteDetails.hotelCategory,
-          quoteDetails.serviceType,
-        ],
-      );
-
-      const booking = bookingResult.rows[0];
-
-      // Update promo code budget if used
-      if (quote.promo_code_id) {
-        await client.query(
-          `
-          UPDATE promo_codes 
-          SET budget_spent = budget_spent + $1 
-          WHERE id = $2
-        `,
-          [quote.promo_discount, quote.promo_code_id],
-        );
-      }
-
-      // Update bargain events with booking ID
-      await client.query(
-        `
-        UPDATE bargain_events 
-        SET booking_id = $1 
-        WHERE metadata->>'temp_id' = $2
-      `,
-        [booking.id, tempId],
-      );
-
-      // Clean up the quote
-      await client.query("DELETE FROM pricing_quotes WHERE temp_id = $1", [
-        tempId,
-      ]);
-
-      await client.query("COMMIT");
+      const exchangeRate = await this.getExchangeRate(fromCurrency, toCurrency);
+      const convertedAmount = amount * exchangeRate;
 
       return {
-        bookingId: booking.id,
-        bookingReference: booking.booking_reference,
-        finalAmount: booking.final_payable,
-        neverLossTriggered: !neverLossPass,
-        breakdown: {
-          baseNet: booking.base_net_amount,
-          markup: booking.applied_markup_value,
-          promoDiscount: booking.promo_discount_value,
-          bargainDiscount: booking.bargain_discount_value,
-          finalPayable: booking.final_payable,
-        },
+        finalPrice: convertedAmount,
+        exchangeRate,
+        fromCurrency,
+        toCurrency
       };
     } catch (error) {
-      await client.query("ROLLBACK");
-      console.error("Error confirming booking:", error);
-      throw error;
-    } finally {
-      client.release();
+      console.error('Currency conversion error:', error);
+      // Fallback to original amount
+      return {
+        finalPrice: amount,
+        exchangeRate: 1,
+        fromCurrency,
+        toCurrency,
+        error: 'Currency conversion failed'
+      };
     }
   }
 
   /**
-   * Get booking details
+   * Apply quantity multiplier
    */
-  async getBookingDetails(bookingId) {
-    const query = `
-      SELECT * FROM v_bookings_report 
-      WHERE booking_id = $1
-    `;
-
-    const result = await this.pool.query(query, [bookingId]);
-    return result.rows[0] || null;
+  applyQuantity(pricePerUnit, quantity) {
+    return {
+      finalPrice: pricePerUnit * quantity,
+      pricePerUnit,
+      quantity
+    };
   }
 
   /**
-   * Get analytics data
+   * Round price based on currency and rounding policy
    */
-  async getAnalytics(module = null, startDate = null, endDate = null) {
-    const conditions = [];
-    const params = [];
-    let paramIndex = 1;
+  roundPrice(amount, currency = 'INR') {
+    const decimals = ['JPY', 'KRW'].includes(currency) ? 0 : 2;
+    
+    switch (this.config.currency.roundingPolicy) {
+      case 'up':
+        return Math.ceil(amount * Math.pow(10, decimals)) / Math.pow(10, decimals);
+      case 'down':
+        return Math.floor(amount * Math.pow(10, decimals)) / Math.pow(10, decimals);
+      case 'nearest':
+      default:
+        return Math.round(amount * Math.pow(10, decimals)) / Math.pow(10, decimals);
+    }
+  }
 
-    if (module) {
-      conditions.push(`module = $${paramIndex}`);
-      params.push(module);
-      paramIndex++;
+  /**
+   * Check if item matches rule conditions
+   */
+  matchesRuleConditions(rule, item, booking) {
+    const conditions = rule.conditions || {};
+
+    // Check package category
+    if (conditions.packageCategory && conditions.packageCategory.length > 0) {
+      if (!item.category || !conditions.packageCategory.includes(item.category)) {
+        return false;
+      }
     }
 
-    if (startDate) {
-      conditions.push(`created_at >= $${paramIndex}`);
-      params.push(startDate);
-      paramIndex++;
+    // Check price range
+    if (conditions.priceRange) {
+      if (conditions.priceRange.min && item.basePrice < conditions.priceRange.min) {
+        return false;
+      }
+      if (conditions.priceRange.max && item.basePrice > conditions.priceRange.max) {
+        return false;
+      }
     }
 
-    if (endDate) {
-      conditions.push(`created_at <= $${paramIndex}`);
-      params.push(endDate);
-      paramIndex++;
+    // Check seasonality
+    if (conditions.seasonality && booking.seasonality !== conditions.seasonality) {
+      return false;
     }
 
-    const whereClause =
-      conditions.length > 0 ? `WHERE ${conditions.join(" AND ")}` : "";
+    // Check advance booking
+    if (conditions.advanceBooking) {
+      const bookingDate = new Date(booking.travelDate);
+      const today = new Date();
+      const daysDiff = Math.ceil((bookingDate - today) / (1000 * 60 * 60 * 24));
+      if (daysDiff < conditions.advanceBooking) {
+        return false;
+      }
+    }
 
-    const query = `
-      SELECT 
-        module,
-        COUNT(*) as total_bookings,
-        SUM(base_net_amount) as total_net,
-        SUM(applied_markup_value) as total_markup,
-        SUM(promo_discount_value) as total_promo_discounts,
-        SUM(bargain_discount_value) as total_bargain_discounts,
-        SUM(final_payable) as total_revenue,
-        AVG(applied_markup_pct) as avg_markup_pct,
-        COUNT(CASE WHEN promo_code IS NOT NULL THEN 1 END) as bookings_with_promo,
-        COUNT(CASE WHEN bargain_discount_value > 0 THEN 1 END) as bookings_with_bargain,
-        COUNT(CASE WHEN never_loss_pass = false THEN 1 END) as never_loss_triggers
-      FROM v_bookings_report
-      ${whereClause}
-      GROUP BY module
-      ORDER BY total_revenue DESC
-    `;
+    // Check group size
+    if (conditions.groupSize) {
+      if (conditions.groupSize.min && booking.passengers < conditions.groupSize.min) {
+        return false;
+      }
+      if (conditions.groupSize.max && booking.passengers > conditions.groupSize.max) {
+        return false;
+      }
+    }
 
-    const result = await this.pool.query(query, params);
-    return result.rows;
+    // Check region
+    if (conditions.region && conditions.region.length > 0) {
+      if (!item.region || !conditions.region.includes(item.region)) {
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  /**
+   * Get markup rules for a specific module
+   */
+  async getMarkupRules(module) {
+    // Mock implementation - in real app, fetch from database
+    const mockRules = {
+      flights: [
+        {
+          id: 'flight_rule_1',
+          name: 'International Flight Markup',
+          ruleType: 'percentage',
+          value: 15,
+          maxValue: 5000,
+          priority: 1,
+          isActive: true,
+          conditions: {
+            region: ['International']
+          }
+        }
+      ],
+      hotels: [
+        {
+          id: 'hotel_rule_1',
+          name: 'Luxury Hotel Markup',
+          ruleType: 'percentage',
+          value: 20,
+          maxValue: 8000,
+          priority: 1,
+          isActive: true,
+          conditions: {
+            packageCategory: ['luxury']
+          }
+        }
+      ],
+      packages: [
+        {
+          id: 'package_rule_1',
+          name: 'Package Markup',
+          ruleType: 'percentage',
+          value: 18,
+          maxValue: 15000,
+          priority: 1,
+          isActive: true,
+          conditions: {}
+        }
+      ],
+      sightseeing: [
+        {
+          id: 'sight_rule_1',
+          name: 'Sightseeing Markup',
+          ruleType: 'percentage',
+          value: 12,
+          maxValue: 2000,
+          priority: 1,
+          isActive: true,
+          conditions: {}
+        }
+      ],
+      transfers: [
+        {
+          id: 'transfer_rule_1',
+          name: 'Transfer Markup',
+          ruleType: 'percentage',
+          value: 10,
+          maxValue: 1000,
+          priority: 1,
+          isActive: true,
+          conditions: {}
+        }
+      ]
+    };
+
+    return mockRules[module] || [];
+  }
+
+  /**
+   * Validate promo code
+   */
+  async validatePromoCode(promoCode, module) {
+    // Mock implementation - in real app, fetch from database
+    const mockPromos = {
+      'FAREDOWN20': {
+        id: 'promo_1',
+        code: 'FAREDOWN20',
+        discountType: 'percentage',
+        discountMinValue: 20,
+        discountMaxValue: 5000,
+        minimumFareAmount: 10000,
+        module: ['all'],
+        isValid: true,
+        expiryDate: '2024-12-31'
+      },
+      'SAVE1000': {
+        id: 'promo_2',
+        code: 'SAVE1000',
+        discountType: 'fixed',
+        discountMinValue: 1000,
+        discountMaxValue: 1000,
+        minimumFareAmount: 5000,
+        module: ['all'],
+        isValid: true,
+        expiryDate: '2024-12-31'
+      }
+    };
+
+    const promo = mockPromos[promoCode.toUpperCase()];
+    if (!promo) {
+      return { isValid: false, error: 'Promo code not found' };
+    }
+
+    // Check if promo applies to module
+    if (!promo.module.includes('all') && !promo.module.includes(module)) {
+      return { isValid: false, error: 'Promo code not valid for this service' };
+    }
+
+    // Check expiry
+    const today = new Date();
+    const expiry = new Date(promo.expiryDate);
+    if (today > expiry) {
+      return { isValid: false, error: 'Promo code has expired' };
+    }
+
+    return promo;
+  }
+
+  /**
+   * Get exchange rate between currencies
+   */
+  async getExchangeRate(fromCurrency, toCurrency) {
+    // Mock implementation - in real app, use currency service
+    const mockRates = {
+      'USD_INR': 83.0,
+      'EUR_INR': 89.5,
+      'GBP_INR': 105.2,
+      'AED_INR': 22.6,
+      'SGD_INR': 62.3,
+      'INR_USD': 0.012,
+      'INR_EUR': 0.011,
+      'INR_GBP': 0.0095,
+      'INR_AED': 0.044,
+      'INR_SGD': 0.016
+    };
+
+    const rateKey = `${fromCurrency}_${toCurrency}`;
+    const rate = mockRates[rateKey];
+    
+    if (!rate) {
+      // If direct rate not available, try reverse
+      const reverseKey = `${toCurrency}_${fromCurrency}`;
+      const reverseRate = mockRates[reverseKey];
+      if (reverseRate) {
+        return 1 / reverseRate;
+      }
+      throw new Error(`Exchange rate not available for ${fromCurrency} to ${toCurrency}`);
+    }
+
+    return rate;
+  }
+
+  /**
+   * Get pricing summary for display
+   */
+  async getPricingSummary(pricingResult) {
+    if (!pricingResult.success) {
+      return pricingResult.fallback;
+    }
+
+    const data = pricingResult.data;
+    return {
+      basePrice: data.basePrice,
+      finalPrice: data.finalPrice,
+      savings: data.totalSavings,
+      currency: data.currency.targetCurrency,
+      breakdown: {
+        markup: data.markup.amount,
+        discount: data.promo.discount,
+        taxes: data.taxes.amount,
+        charges: data.paymentGateway.totalCharges
+      }
+    };
   }
 }
 
-module.exports = PricingEngine;
+// Export singleton instance
+module.exports = new PricingEngine();
