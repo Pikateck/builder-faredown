@@ -1028,7 +1028,11 @@ export default function EnhancedMyBookings() {
                         Download{" "}
                         {selectedBooking.module === "flight"
                           ? "Ticket"
-                          : "Voucher"}
+                          : selectedBooking.module === "hotel"
+                          ? "Voucher"
+                          : selectedBooking.module === "package"
+                          ? "Package Details"
+                          : "Document"}
                       </Button>
                     </div>
 
