@@ -52,8 +52,8 @@ async function testApiCallWithAuth(path, token) {
       path: path,
       method: 'GET',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`,
+        'content-type': 'application/json',
+        'authorization': `Bearer ${token}`,
       }
     };
 
