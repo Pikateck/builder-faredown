@@ -29,11 +29,15 @@ async function testAdminUserEndpointsWithAuth() {
   const adminToken = createAdminToken();
   console.log('🔑 Generated admin JWT token for testing');
   
+  // Test 0: Test basic admin dashboard endpoint first
+  console.log('\n0️⃣ Testing GET /api/admin/dashboard (basic admin test)');
+  await testApiCallWithAuth('/api/admin/dashboard', adminToken);
+
   // Test 1: Get users endpoint
   console.log('\n1️⃣ Testing GET /api/admin/users');
   await testApiCallWithAuth('/api/admin/users?page=1&limit=10', adminToken);
-  
-  // Test 2: Get user stats endpoint  
+
+  // Test 2: Get user stats endpoint
   console.log('\n2️⃣ Testing GET /api/admin/users/stats');
   await testApiCallWithAuth('/api/admin/users/stats', adminToken);
   
