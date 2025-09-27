@@ -398,6 +398,10 @@ app.use(
   auditLogger,
   adminMarkupPackagesRoutes,
 );
+app.use(
+  "/api/promo",
+  adminPromoRoutes,
+);
 app.use("/api/pricing", pricingEngineRoutes);
 
 // Error handling middleware
@@ -519,7 +523,7 @@ async function startServer() {
       console.log("\n🚀 Faredown API Server Started (Fallback Mode)");
       console.log("================================");
       console.log(`📍 Server URL: http://localhost:${PORT}`);
-      console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
+      console.log(`���� Health Check: http://localhost:${PORT}/health`);
       console.log(`���️  Database: Offline (using in-memory storage)`);
       console.log("================================\n");
     });
