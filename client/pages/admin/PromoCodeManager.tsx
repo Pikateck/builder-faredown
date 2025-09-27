@@ -144,6 +144,35 @@ const CITIES = [
   "Los Angeles",
 ];
 
+const VEHICLE_TYPES = [
+  { value: "ALL", label: "All Vehicles" },
+  { value: "sedan", label: "Sedan" },
+  { value: "suv", label: "SUV" },
+  { value: "luxury", label: "Luxury Car" },
+  { value: "van", label: "Van" },
+  { value: "bus", label: "Mini Bus" },
+];
+
+const TOUR_TYPES = [
+  { value: "ALL", label: "All Tours" },
+  { value: "city_tour", label: "City Tour" },
+  { value: "cultural", label: "Cultural Tour" },
+  { value: "adventure", label: "Adventure Tour" },
+  { value: "heritage", label: "Heritage Tour" },
+  { value: "nature", label: "Nature Tour" },
+];
+
+const PACKAGE_CATEGORIES = [
+  { value: "ALL", label: "All Categories" },
+  { value: "cultural", label: "Cultural" },
+  { value: "beach", label: "Beach" },
+  { value: "adventure", label: "Adventure" },
+  { value: "honeymoon", label: "Honeymoon" },
+  { value: "family", label: "Family" },
+  { value: "luxury", label: "Luxury" },
+  { value: "budget", label: "Budget" },
+];
+
 // Mock data based on the screenshots
 const mockPromoCodes: PromoCode[] = [
   {
