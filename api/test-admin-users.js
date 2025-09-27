@@ -25,6 +25,7 @@ async function testApiCall(path) {
       headers: {
         'Content-Type': 'application/json',
         'X-Admin-Key': 'admin123', // Add admin key for testing
+        'Authorization': 'Bearer mock-admin-token', // Mock auth token for testing
       }
     };
 
