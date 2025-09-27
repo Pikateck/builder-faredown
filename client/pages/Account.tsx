@@ -63,6 +63,7 @@ import {
   ChevronRight,
   Wallet,
   Globe,
+  Package,
 } from "lucide-react";
 import {
   DropdownMenu,
@@ -532,6 +533,8 @@ export default function Account() {
                             <Plane className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                           ) : booking.type === "hotel" ? (
                             <Hotel className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
+                          ) : booking.type === "package" ? (
+                            <Package className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                           ) : booking.type === "sightseeing" ? (
                             <Camera className="w-4 h-4 md:w-6 md:h-6 text-[#003580]" />
                           ) : booking.type === "transfer" ? (
@@ -546,11 +549,13 @@ export default function Account() {
                               ? "Flight Booking"
                               : booking.type === "hotel"
                                 ? "Hotel Booking"
-                                : booking.type === "sightseeing"
-                                  ? "Sightseeing Booking"
-                                  : booking.type === "transfer"
-                                    ? "Transfer Booking"
-                                    : "Flight Booking"}
+                                : booking.type === "package"
+                                  ? "Package Booking"
+                                  : booking.type === "sightseeing"
+                                    ? "Sightseeing Booking"
+                                    : booking.type === "transfer"
+                                      ? "Transfer Booking"
+                                      : "Flight Booking"}
                           </h3>
                           <p className="text-xs md:text-sm text-[#7a7a7a] truncate">
                             {booking.bookingDetails.bookingRef}
@@ -677,6 +682,7 @@ export default function Account() {
     const bookingsByModule = {
       flights: filteredBookings.filter((b) => b.type === "flight" || !b.type),
       hotels: filteredBookings.filter((b) => b.type === "hotel"),
+      packages: filteredBookings.filter((b) => b.type === "package"),
       sightseeing: filteredBookings.filter((b) => b.type === "sightseeing"),
       transfers: filteredBookings.filter((b) => b.type === "transfer"),
     };
@@ -699,6 +705,15 @@ export default function Account() {
         bookings: bookingsByModule.hotels,
         emptyMessage: "No hotel bookings found",
         searchLink: "/hotels",
+      },
+      {
+        id: "packages",
+        name: "Packages",
+        icon: Package,
+        color: "teal",
+        bookings: bookingsByModule.packages,
+        emptyMessage: "No package bookings found",
+        searchLink: "/packages",
       },
       {
         id: "sightseeing",
@@ -789,11 +804,13 @@ export default function Account() {
                                   ? "Mumbai ⇄ Dubai"
                                   : module.id === "hotels"
                                     ? "Hotel Booking"
-                                    : module.id === "sightseeing"
-                                      ? "Sightseeing Experience"
-                                      : module.id === "transfers"
-                                        ? "Transfer Service"
-                                        : "Booking"}
+                                    : module.id === "packages"
+                                      ? "Travel Package"
+                                      : module.id === "sightseeing"
+                                        ? "Sightseeing Experience"
+                                        : module.id === "transfers"
+                                          ? "Transfer Service"
+                                          : "Booking"}
                               </CardTitle>
                               <p className="text-sm text-[#7a7a7a]">
                                 Booking Reference:{" "}
@@ -826,11 +843,13 @@ export default function Account() {
                                     ? "Flight Details"
                                     : module.id === "hotels"
                                       ? "Hotel Details"
-                                      : module.id === "sightseeing"
-                                        ? "Experience Details"
-                                        : module.id === "transfers"
-                                          ? "Transfer Details"
-                                          : "Booking Details"}
+                                      : module.id === "packages"
+                                        ? "Package Details"
+                                        : module.id === "sightseeing"
+                                          ? "Experience Details"
+                                          : module.id === "transfers"
+                                            ? "Transfer Details"
+                                            : "Booking Details"}
                                 </h4>
                                 {module.id === "flights" ? (
                                   <>
@@ -880,6 +899,21 @@ export default function Account() {
                                       <span>Group Tour • English Guide</span>
                                     </div>
                                   </>
+                                ) : module.id === "packages" ? (
+                                  <>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <MapPin className="w-4 h-4" />
+                                      <span>Dubai Complete Package</span>
+                                    </div>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <Calendar className="w-4 h-4" />
+                                      <span>Aug 3 - Aug 10 • 7 Days 6 Nights</span>
+                                    </div>
+                                    <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
+                                      <Package className="w-4 h-4" />
+                                      <span>Flight + Hotel + Transfers + Tours</span>
+                                    </div>
+                                  </>
                                 ) : module.id === "transfers" ? (
                                   <>
                                     <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
@@ -915,11 +949,13 @@ export default function Account() {
                               <h4 className="font-semibold text-[#003580] mb-2">
                                 {module.id === "hotels"
                                   ? "Guest Details"
-                                  : module.id === "sightseeing"
-                                    ? "Participant Details"
-                                    : module.id === "transfers"
-                                      ? "Passenger Details"
-                                      : "Passengers"}
+                                  : module.id === "packages"
+                                    ? "Traveler Details"
+                                    : module.id === "sightseeing"
+                                      ? "Participant Details"
+                                      : module.id === "transfers"
+                                        ? "Passenger Details"
+                                        : "Passengers"}
                               </h4>
                               <div className="space-y-2">
                                 {booking.bookingDetails?.passengers?.map(
@@ -1005,11 +1041,13 @@ export default function Account() {
                                     ? "Ticket"
                                     : module.id === "hotels"
                                       ? "Voucher"
-                                      : module.id === "sightseeing"
-                                        ? "Experience Pass"
-                                        : module.id === "transfers"
-                                          ? "Transfer Voucher"
-                                          : "Booking"}
+                                      : module.id === "packages"
+                                        ? "Package Details"
+                                        : module.id === "sightseeing"
+                                          ? "Experience Pass"
+                                          : module.id === "transfers"
+                                            ? "Transfer Voucher"
+                                            : "Booking"}
                                 </Button>
                                 <Button
                                   variant="outline"
