@@ -215,14 +215,9 @@ export default function PackageManagement() {
         ? `/api/admin/packages/${editingPackage.id}`
         : "/api/admin/packages";
 
-      const response = await makeRequest(url, {
-        method,
-        headers: {
-          "Content-Type": "application/json",
-          "X-Admin-Key": getAdminApiKey(),
-        },
-        body: JSON.stringify(editingPackage),
-      });
+      const response = method === "POST"
+        ? await apiClient.post("/admin/packages", editingPackage)
+        : await apiClient.put(`/admin/packages/${editingPackage.id}`, editingPackage);
 
       if (response.success) {
         setShowEditDialog(false);
