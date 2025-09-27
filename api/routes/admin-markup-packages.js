@@ -211,7 +211,7 @@ router.get('/stats', requireAdmin, async (req, res) => {
  * @desc Create new package markup rule
  * @access Admin
  */
-router.post('/', requireAdmin, async (req, res, next) => { await audit.adminAction(req, 'markup_create', {}); next(); }, async (req, res) => {
+router.post('/', requireAdmin, auditLog('markup_create'), async (req, res) => {
   try {
     const {
       name,
