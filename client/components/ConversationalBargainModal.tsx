@@ -559,6 +559,11 @@ export function ConversationalBargainModal({
           }),
         });
 
+        // Additional safety check
+        if (!holdResponse) {
+          throw new Error("Network request failed");
+        }
+
         if (holdResponse.ok) {
           const holdData = await holdResponse.json();
 
