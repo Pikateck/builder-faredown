@@ -1192,6 +1192,7 @@ export class DevApiClient {
 
     // Promo Code endpoints
     if (
+      endpoint.includes("/admin/promo") ||
       endpoint.includes("/promo/admin/all") ||
       endpoint.includes("/promo/logs")
     ) {
