@@ -962,7 +962,7 @@ export default function MarkupManagementPackages() {
 
                       <TableCell>
                         <div className="text-center">
-                          <div className="font-medium">{rule.usage.totalApplications}</div>
+                          <div className="font-medium">{rule.usage?.totalApplications || 0}</div>
                           <div className="text-xs text-gray-500">applications</div>
                           <div className="text-xs text-green-600">
                             {formatPrice(rule.usage?.revenue || 0)}
