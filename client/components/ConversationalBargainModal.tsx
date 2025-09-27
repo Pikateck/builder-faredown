@@ -564,9 +564,22 @@ export function ConversationalBargainModal({
           throw new Error("Network request failed");
         }
 
-        if (holdResponse.ok) {
-          const holdData = await holdResponse.json();
+        // Read response once and handle based on status
+        let responseData;
+        let errorText = "";
 
+        try {
+          if (holdResponse.ok) {
+            responseData = await holdResponse.json();
+          } else {
+            errorText = await holdResponse.text();
+          }
+        } catch (parseError) {
+          console.warn("Failed to parse response:", parseError);
+          errorText = "Invalid response format";
+        }
+
+        if (holdResponse.ok && responseData) {
           addMessage(
             "agent",
             `📌 Price locked for 15 minutes! Reference: ${orderRef}. Redirecting to booking...`,
@@ -587,8 +600,8 @@ export function ConversationalBargainModal({
           setTimeout(() => {
             onAccept(finalOffer, orderRef, {
               isHeld: true,
-              holdId: holdData.holdId,
-              expiresAt: holdData.expiresAt,
+              holdId: responseData.holdId,
+              expiresAt: responseData.expiresAt,
               originalPrice: basePrice,
               savings: savings,
               module,
@@ -597,7 +610,6 @@ export function ConversationalBargainModal({
           }, 1500);
         } else {
           // Check if it's a server unavailable error
-          const errorText = await holdResponse.text();
           console.warn("Hold creation failed:", holdResponse.status, errorText);
 
           if (holdResponse.status === 503 || errorText.includes("API server unavailable")) {
