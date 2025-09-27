@@ -73,6 +73,8 @@ const {
   initializeBargainHolds,
 } = require("./routes/bargain-holds");
 const adminReportsRoutes = require("./routes/admin-reports");
+const adminExtranetRoutes = require("./routes/admin-extranet");
+const adminMarkupPackagesRoutes = require("./routes/admin-markup-packages");
 
 // Import middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
