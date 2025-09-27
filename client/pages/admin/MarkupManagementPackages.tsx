@@ -765,7 +765,7 @@ export default function MarkupManagementPackages() {
               <TrendingUp className="h-8 w-8 text-purple-600" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Avg Markup</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.avgMarkupPercentage.toFixed(1)}%</p>
+                <p className="text-2xl font-bold text-gray-900">{(stats.avgMarkupPercentage || 0).toFixed(1)}%</p>
               </div>
             </div>
           </CardContent>
