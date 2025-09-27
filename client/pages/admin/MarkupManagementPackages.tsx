@@ -212,13 +212,23 @@ export default function MarkupManagementPackages() {
   const fetchStats = async () => {
     try {
       const response = await apiClient.get("/api/admin/markup/packages/stats");
-      
-      if (response.success) {
-        setStats(response.data);
+
+      if (response.success && response.data) {
+        // Ensure all required fields are present with fallback values
+        setStats({
+          totalRules: response.data.totalRules || 0,
+          activeRules: response.data.activeRules || 0,
+          totalRevenue: response.data.totalRevenue || 0,
+          avgMarkupPercentage: response.data.avgMarkupPercentage || 0,
+          topPerformingRule: response.data.topPerformingRule || "None",
+          recentApplications: response.data.recentApplications || 0,
+        });
+      } else {
+        throw new Error("Invalid response structure");
       }
     } catch (error) {
       console.error("Error fetching stats:", error);
-      // Use mock stats
+      // Use mock stats as fallback
       setStats({
         totalRules: 12,
         activeRules: 8,
