@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { requireAdmin } = require('../middleware/auth');
-const { auditLog } = require('../middleware/audit');
+const { audit } = require('../middleware/audit');
 
 // Load comprehensive seed data
 const { loadSeedData } = require('../scripts/seed-admin-data');
@@ -316,7 +316,7 @@ router.get('/stats', requireAdmin, async (req, res) => {
  * @desc Create new promo code
  * @access Admin
  */
-router.post('/', requireAdmin, auditLog('promo_create'), async (req, res) => {
+router.post('/', requireAdmin, audit.adminAction, async (req, res) => {
   try {
     const {
       code,
@@ -399,7 +399,7 @@ router.post('/', requireAdmin, auditLog('promo_create'), async (req, res) => {
  * @desc Update promo code
  * @access Admin
  */
-router.put('/:id', requireAdmin, auditLog('promo_update'), async (req, res) => {
+router.put('/:id', requireAdmin, audit.adminAction, async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
@@ -463,7 +463,7 @@ router.put('/:id', requireAdmin, auditLog('promo_update'), async (req, res) => {
  * @desc Delete promo code
  * @access Admin
  */
-router.delete('/:id', requireAdmin, auditLog('promo_delete'), async (req, res) => {
+router.delete('/:id', requireAdmin, audit.adminAction, async (req, res) => {
   try {
     const { id } = req.params;
     
@@ -498,7 +498,7 @@ router.delete('/:id', requireAdmin, auditLog('promo_delete'), async (req, res) =
  * @desc Toggle promo code status (active/pending)
  * @access Admin
  */
-router.post('/:id/toggle-status', requireAdmin, auditLog('promo_toggle'), async (req, res) => {
+router.post('/:id/toggle-status', requireAdmin, audit.adminAction, async (req, res) => {
   try {
     const { id } = req.params;
     
