@@ -3,6 +3,17 @@ const router = express.Router();
 const { requireAdmin } = require('../middleware/auth');
 const { audit } = require('../middleware/audit');
 
+// Wrapper function for backward compatibility
+const auditLog = (action) => async (req, res, next) => {
+  try {
+    await audit.adminAction(req, action, {});
+    next();
+  } catch (error) {
+    console.error('Audit logging error:', error);
+    next(); // Continue even if audit fails
+  }
+};
+
 // Load comprehensive seed data
 const { loadSeedData } = require('../scripts/seed-admin-data');
 const seedData = loadSeedData();
