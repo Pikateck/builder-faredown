@@ -925,7 +925,7 @@ router.get("/users", async (req, res) => {
         (user) =>
           user.firstName.toLowerCase().includes(searchLower) ||
           user.lastName.toLowerCase().includes(searchLower) ||
-          user.email.toLowerCase().includes(searchLower)
+          user.email.toLowerCase().includes(searchLower),
       );
     }
 

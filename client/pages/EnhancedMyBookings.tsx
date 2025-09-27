@@ -639,10 +639,10 @@ export default function EnhancedMyBookings() {
                               {booking.module === "flight"
                                 ? "Ticket"
                                 : booking.module === "hotel"
-                                ? "Voucher"
-                                : booking.module === "package"
-                                ? "Package"
-                                : "Document"}
+                                  ? "Voucher"
+                                  : booking.module === "package"
+                                    ? "Package"
+                                    : "Document"}
                             </Button>
                             <Button
                               variant="outline"
@@ -937,22 +937,40 @@ export default function EnhancedMyBookings() {
                       </h4>
                       <div className="space-y-2 text-sm">
                         <p>
-                          <strong>Package:</strong> {selectedBooking.package_details.package_name}
+                          <strong>Package:</strong>{" "}
+                          {selectedBooking.package_details.package_name}
                         </p>
                         <p>
-                          <strong>Destination:</strong> {selectedBooking.package_details.destination}
+                          <strong>Destination:</strong>{" "}
+                          {selectedBooking.package_details.destination}
                         </p>
                         <p>
-                          <strong>Duration:</strong> {selectedBooking.package_details.duration}
+                          <strong>Duration:</strong>{" "}
+                          {selectedBooking.package_details.duration}
                         </p>
                         <p>
-                          <strong>Travel Dates:</strong> {formatAppDate(selectedBooking.package_details.travel_dates.start_date)} - {formatAppDate(selectedBooking.package_details.travel_dates.end_date)}
+                          <strong>Travel Dates:</strong>{" "}
+                          {formatAppDate(
+                            selectedBooking.package_details.travel_dates
+                              .start_date,
+                          )}{" "}
+                          -{" "}
+                          {formatAppDate(
+                            selectedBooking.package_details.travel_dates
+                              .end_date,
+                          )}
                         </p>
                         <p>
-                          <strong>Includes:</strong> {selectedBooking.package_details.includes.join(" + ")}
+                          <strong>Includes:</strong>{" "}
+                          {selectedBooking.package_details.includes.join(" + ")}
                         </p>
                         <p>
-                          <strong>Travelers:</strong> {selectedBooking.package_details.travelers_count} Adult{selectedBooking.package_details.travelers_count > 1 ? 's' : ''}
+                          <strong>Travelers:</strong>{" "}
+                          {selectedBooking.package_details.travelers_count}{" "}
+                          Adult
+                          {selectedBooking.package_details.travelers_count > 1
+                            ? "s"
+                            : ""}
                         </p>
                       </div>
                     </div>
@@ -965,9 +983,13 @@ export default function EnhancedMyBookings() {
                       {selectedBooking.travelers.map((traveler, index) => (
                         <div key={index} className="space-y-1 text-sm mb-3">
                           <p>
-                            <strong>{traveler.title} {traveler.name}</strong>
+                            <strong>
+                              {traveler.title} {traveler.name}
+                            </strong>
                           </p>
-                          <p className="text-gray-600">{traveler.type} {index + 1}</p>
+                          <p className="text-gray-600">
+                            {traveler.type} {index + 1}
+                          </p>
                           <p className="flex items-center">
                             <Mail className="w-3 h-3 mr-1" />
                             {traveler.email}
@@ -995,19 +1017,19 @@ export default function EnhancedMyBookings() {
                         {selectedBooking.module === "flight"
                           ? "E-Ticket"
                           : selectedBooking.module === "hotel"
-                          ? "Hotel Voucher"
-                          : selectedBooking.module === "package"
-                          ? "Package Details"
-                          : "Booking Voucher"}
+                            ? "Hotel Voucher"
+                            : selectedBooking.module === "package"
+                              ? "Package Details"
+                              : "Booking Voucher"}
                       </h5>
                       <p className="text-sm text-gray-600 mb-3">
                         {selectedBooking.module === "flight"
                           ? `Ticket No: ${selectedBooking.ticket.ticket_no}`
                           : selectedBooking.module === "hotel"
-                          ? `Voucher No: ${selectedBooking.voucher.voucher_no}`
-                          : selectedBooking.module === "package"
-                          ? `Voucher No: ${selectedBooking.package_voucher.voucher_no}`
-                          : `Booking Ref: ${selectedBooking.booking_ref}`}
+                            ? `Voucher No: ${selectedBooking.voucher.voucher_no}`
+                            : selectedBooking.module === "package"
+                              ? `Voucher No: ${selectedBooking.package_voucher.voucher_no}`
+                              : `Booking Ref: ${selectedBooking.booking_ref}`}
                       </p>
                       <Button
                         size="sm"
@@ -1021,10 +1043,10 @@ export default function EnhancedMyBookings() {
                         {selectedBooking.module === "flight"
                           ? "Ticket"
                           : selectedBooking.module === "hotel"
-                          ? "Voucher"
-                          : selectedBooking.module === "package"
-                          ? "Package Details"
-                          : "Document"}
+                            ? "Voucher"
+                            : selectedBooking.module === "package"
+                              ? "Package Details"
+                              : "Document"}
                       </Button>
                     </div>
 

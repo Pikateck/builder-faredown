@@ -104,11 +104,15 @@ export function useCountries(options: UseCountriesOptions = {}) {
           if (response.status === 429) {
             console.warn("Countries API rate limited, using fallback data");
           } else if (response.status === 503) {
-            console.warn("Countries API temporarily unavailable, using fallback data");
+            console.warn(
+              "Countries API temporarily unavailable, using fallback data",
+            );
           } else if (response.status >= 500) {
             console.warn("Countries API server error, using fallback data");
           } else {
-            console.warn(`Countries API error (${response.status}), using fallback data`);
+            console.warn(
+              `Countries API error (${response.status}), using fallback data`,
+            );
           }
 
           const fallbackData = getFallbackCountries(popularOnly);
@@ -140,17 +144,23 @@ export function useCountries(options: UseCountriesOptions = {}) {
           err instanceof Error ? err.message : "Unknown error occurred";
 
         // Check if it's a network/connectivity error
-        const isNetworkError = errorMessage.includes("ECONNREFUSED") ||
-                               errorMessage.includes("Failed to fetch") ||
-                               errorMessage.includes("API server unavailable") ||
-                               errorMessage.includes("Network request failed");
+        const isNetworkError =
+          errorMessage.includes("ECONNREFUSED") ||
+          errorMessage.includes("Failed to fetch") ||
+          errorMessage.includes("API server unavailable") ||
+          errorMessage.includes("Network request failed");
 
         if (isNetworkError) {
-          console.warn("Countries API unavailable, using offline fallback data");
+          console.warn(
+            "Countries API unavailable, using offline fallback data",
+          );
           // Don't set error state for network issues since we have fallback data
           setError(null);
         } else {
-          console.warn("Countries API error, using fallback data:", errorMessage);
+          console.warn(
+            "Countries API error, using fallback data:",
+            errorMessage,
+          );
           // Set a more user-friendly error message but still continue with fallback
           setError("Using offline country data");
         }
@@ -209,16 +219,22 @@ export function useCountries(options: UseCountriesOptions = {}) {
           err instanceof Error ? err.message : "Search failed";
 
         // Check if it's a network/connectivity error
-        const isNetworkError = errorMessage.includes("ECONNREFUSED") ||
-                               errorMessage.includes("Failed to fetch") ||
-                               errorMessage.includes("API server unavailable");
+        const isNetworkError =
+          errorMessage.includes("ECONNREFUSED") ||
+          errorMessage.includes("Failed to fetch") ||
+          errorMessage.includes("API server unavailable");
 
         if (isNetworkError) {
-          console.warn("Countries search API unavailable, using client-side filtering");
+          console.warn(
+            "Countries search API unavailable, using client-side filtering",
+          );
           // Don't set error for network issues since client-side filtering works
           setError(null);
         } else {
-          console.warn("Countries search failed, using client-side filtering:", errorMessage);
+          console.warn(
+            "Countries search failed, using client-side filtering:",
+            errorMessage,
+          );
           // Set a milder error message
           setError(null); // Clear error since we have a working fallback
         }

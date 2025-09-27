@@ -10,20 +10,20 @@
 export function getAdminApiKey(): string {
   // Try to get from Vite environment first
   const viteAdminKey = import.meta.env.VITE_ADMIN_API_KEY;
-  
+
   if (viteAdminKey) {
     return viteAdminKey;
   }
-  
+
   // Fallback for development
   if (import.meta.env.DEV) {
-    console.warn('VITE_ADMIN_API_KEY not found, using development fallback');
-    return 'admin123';
+    console.warn("VITE_ADMIN_API_KEY not found, using development fallback");
+    return "admin123";
   }
-  
+
   // Production fallback
-  console.error('VITE_ADMIN_API_KEY not configured in production environment');
-  return 'admin123';
+  console.error("VITE_ADMIN_API_KEY not configured in production environment");
+  return "admin123";
 }
 
 /**
@@ -31,8 +31,8 @@ export function getAdminApiKey(): string {
  */
 export function getAdminHeaders(): Record<string, string> {
   return {
-    'Content-Type': 'application/json',
-    'X-Admin-Key': getAdminApiKey(),
+    "Content-Type": "application/json",
+    "X-Admin-Key": getAdminApiKey(),
   };
 }
 

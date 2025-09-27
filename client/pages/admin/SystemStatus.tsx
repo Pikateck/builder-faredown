@@ -21,14 +21,14 @@ import {
   Settings,
   TrendingUp,
   Users,
-  Globe
+  Globe,
 } from "lucide-react";
 import { apiClient } from "@/lib/api";
 
 interface ModuleStatus {
   name: string;
   icon: React.ComponentType<any>;
-  status: 'online' | 'offline' | 'warning';
+  status: "online" | "offline" | "warning";
   endpoint: string;
   description: string;
   dataCount?: number;
@@ -45,83 +45,135 @@ export default function SystemStatus() {
     {
       name: "Promo Codes",
       icon: Ticket,
-      status: 'offline',
-      endpoint: '/api/promo',
-      description: 'Manage promo codes for all modules with discounts and conditions',
-      features: ['Create/Edit Promo Codes', 'Module-specific validation', 'Usage tracking', 'Discount calculation']
+      status: "offline",
+      endpoint: "/api/promo",
+      description:
+        "Manage promo codes for all modules with discounts and conditions",
+      features: [
+        "Create/Edit Promo Codes",
+        "Module-specific validation",
+        "Usage tracking",
+        "Discount calculation",
+      ],
     },
     {
       name: "Extranet Inventory",
       icon: Package,
-      status: 'offline', 
-      endpoint: '/api/admin/extranet/inventory',
-      description: 'Offline inventory management for all travel modules',
-      features: ['Flight inventory', 'Hotel inventory', 'Sightseeing tours', 'Transfer services', 'Package deals']
+      status: "offline",
+      endpoint: "/api/admin/extranet/inventory",
+      description: "Offline inventory management for all travel modules",
+      features: [
+        "Flight inventory",
+        "Hotel inventory",
+        "Sightseeing tours",
+        "Transfer services",
+        "Package deals",
+      ],
     },
     {
       name: "Markup Management",
       icon: DollarSign,
-      status: 'offline',
-      endpoint: '/api/admin/markup/packages',
-      description: 'Dynamic pricing rules and markup configuration',
-      features: ['Percentage markup', 'Fixed amount markup', 'Tiered pricing', 'Conditional rules']
+      status: "offline",
+      endpoint: "/api/admin/markup/packages",
+      description: "Dynamic pricing rules and markup configuration",
+      features: [
+        "Percentage markup",
+        "Fixed amount markup",
+        "Tiered pricing",
+        "Conditional rules",
+      ],
     },
     {
       name: "Pricing Engine",
       icon: TrendingUp,
-      status: 'offline',
-      endpoint: '/api/pricing/calculate',
-      description: 'Comprehensive pricing calculation with all business logic',
-      features: ['Markup application', 'Promo code discounts', 'Tax calculation', 'Currency conversion']
+      status: "offline",
+      endpoint: "/api/pricing/calculate",
+      description: "Comprehensive pricing calculation with all business logic",
+      features: [
+        "Markup application",
+        "Promo code discounts",
+        "Tax calculation",
+        "Currency conversion",
+      ],
     },
     {
-      name: "Flight Management", 
+      name: "Flight Management",
       icon: Plane,
-      status: 'offline',
-      endpoint: '/api/admin/extranet/inventory?module=flights',
-      description: 'Flight inventory and booking management',
-      features: ['Flight search', 'Pricing rules', 'Cabin class management', 'Route optimization']
+      status: "offline",
+      endpoint: "/api/admin/extranet/inventory?module=flights",
+      description: "Flight inventory and booking management",
+      features: [
+        "Flight search",
+        "Pricing rules",
+        "Cabin class management",
+        "Route optimization",
+      ],
     },
     {
       name: "Hotel Management",
-      icon: Hotel, 
-      status: 'offline',
-      endpoint: '/api/admin/extranet/inventory?module=hotels',
-      description: 'Hotel inventory and reservation system',
-      features: ['Room availability', 'Property management', 'Amenity tracking', 'Rate management']
+      icon: Hotel,
+      status: "offline",
+      endpoint: "/api/admin/extranet/inventory?module=hotels",
+      description: "Hotel inventory and reservation system",
+      features: [
+        "Room availability",
+        "Property management",
+        "Amenity tracking",
+        "Rate management",
+      ],
     },
     {
       name: "Sightseeing",
       icon: Camera,
-      status: 'offline',
-      endpoint: '/api/admin/extranet/inventory?module=sightseeing', 
-      description: 'Tour and activity management system',
-      features: ['Tour packages', 'Activity booking', 'Guide assignment', 'Group management']
+      status: "offline",
+      endpoint: "/api/admin/extranet/inventory?module=sightseeing",
+      description: "Tour and activity management system",
+      features: [
+        "Tour packages",
+        "Activity booking",
+        "Guide assignment",
+        "Group management",
+      ],
     },
     {
       name: "Transfers",
       icon: Car,
-      status: 'offline',
-      endpoint: '/api/admin/extranet/inventory?module=transfers',
-      description: 'Transfer and transportation services',
-      features: ['Vehicle booking', 'Route planning', 'Driver assignment', 'Fleet management']
+      status: "offline",
+      endpoint: "/api/admin/extranet/inventory?module=transfers",
+      description: "Transfer and transportation services",
+      features: [
+        "Vehicle booking",
+        "Route planning",
+        "Driver assignment",
+        "Fleet management",
+      ],
     },
     {
       name: "Package Management",
       icon: Package,
-      status: 'offline', 
-      endpoint: '/api/admin/packages',
-      description: 'Holiday package creation and management',
-      features: ['Package builder', 'Itinerary management', 'Bundle pricing', 'Departure management']
+      status: "offline",
+      endpoint: "/api/admin/packages",
+      description: "Holiday package creation and management",
+      features: [
+        "Package builder",
+        "Itinerary management",
+        "Bundle pricing",
+        "Departure management",
+      ],
     },
     {
       name: "User Management",
       icon: Users,
-      status: 'offline',
-      endpoint: '/api/admin/users',
-      description: 'Admin user and customer management',
-      features: ['User roles', 'Permission management', 'Profile management', 'Activity tracking']
-    }
+      status: "offline",
+      endpoint: "/api/admin/users",
+      description: "Admin user and customer management",
+      features: [
+        "User roles",
+        "Permission management",
+        "Profile management",
+        "Activity tracking",
+      ],
+    },
   ];
 
   useEffect(() => {
@@ -131,26 +183,33 @@ export default function SystemStatus() {
   const checkSystemStatus = async () => {
     setLoading(true);
     const updatedModules = [...moduleConfigs];
-    
+
     for (let i = 0; i < updatedModules.length; i++) {
       const module = updatedModules[i];
       try {
         const response = await apiClient.get(module.endpoint);
         if (response.success || response.ok) {
-          module.status = 'online';
-          module.dataCount = response.data?.total || response.data?.length || response.data?.promoCodes?.length || 0;
+          module.status = "online";
+          module.dataCount =
+            response.data?.total ||
+            response.data?.length ||
+            response.data?.promoCodes?.length ||
+            0;
           module.lastUpdated = new Date().toLocaleTimeString();
         } else {
-          module.status = 'warning';
+          module.status = "warning";
         }
       } catch (error) {
-        console.log(`Module ${module.name} using fallback data:`, error.message);
-        module.status = 'warning';
+        console.log(
+          `Module ${module.name} using fallback data:`,
+          error.message,
+        );
+        module.status = "warning";
         module.dataCount = getFallbackDataCount(module.name);
-        module.lastUpdated = 'Using demo data';
+        module.lastUpdated = "Using demo data";
       }
     }
-    
+
     setModules(updatedModules);
     setLastCheck(new Date().toLocaleTimeString());
     setLoading(false);
@@ -158,27 +217,27 @@ export default function SystemStatus() {
 
   const getFallbackDataCount = (moduleName: string): number => {
     const fallbackCounts = {
-      'Promo Codes': 6,
-      'Extranet Inventory': 10,
-      'Markup Management': 4,
-      'Flight Management': 2,
-      'Hotel Management': 2,
-      'Sightseeing': 2,
-      'Transfers': 2,
-      'Package Management': 2,
-      'User Management': 0,
-      'Pricing Engine': 0
+      "Promo Codes": 6,
+      "Extranet Inventory": 10,
+      "Markup Management": 4,
+      "Flight Management": 2,
+      "Hotel Management": 2,
+      Sightseeing: 2,
+      Transfers: 2,
+      "Package Management": 2,
+      "User Management": 0,
+      "Pricing Engine": 0,
     };
     return fallbackCounts[moduleName] || 0;
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'online':
+      case "online":
         return <CheckCircle className="w-5 h-5 text-green-600" />;
-      case 'warning':
+      case "warning":
         return <AlertCircle className="w-5 h-5 text-yellow-600" />;
-      case 'offline':
+      case "offline":
         return <XCircle className="w-5 h-5 text-red-600" />;
       default:
         return <RefreshCw className="w-5 h-5 text-gray-400 animate-spin" />;
@@ -187,23 +246,28 @@ export default function SystemStatus() {
 
   const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'online':
+      case "online":
         return <Badge className="bg-green-100 text-green-800">Online</Badge>;
-      case 'warning':
-        return <Badge className="bg-yellow-100 text-yellow-800">Demo Data</Badge>;
-      case 'offline':
+      case "warning":
+        return (
+          <Badge className="bg-yellow-100 text-yellow-800">Demo Data</Badge>
+        );
+      case "offline":
         return <Badge className="bg-red-100 text-red-800">Offline</Badge>;
       default:
         return <Badge className="bg-gray-100 text-gray-800">Checking...</Badge>;
     }
   };
 
-  const overallStatus = modules.length > 0 ? {
-    online: modules.filter(m => m.status === 'online').length,
-    warning: modules.filter(m => m.status === 'warning').length,
-    offline: modules.filter(m => m.status === 'offline').length,
-    total: modules.length
-  } : { online: 0, warning: 0, offline: 0, total: 0 };
+  const overallStatus =
+    modules.length > 0
+      ? {
+          online: modules.filter((m) => m.status === "online").length,
+          warning: modules.filter((m) => m.status === "warning").length,
+          offline: modules.filter((m) => m.status === "offline").length,
+          total: modules.length,
+        }
+      : { online: 0, warning: 0, offline: 0, total: 0 };
 
   return (
     <div className="space-y-6">
@@ -220,39 +284,47 @@ export default function SystemStatus() {
             <div className="flex items-center gap-3 p-3 bg-green-50 rounded-lg">
               <CheckCircle className="w-8 h-8 text-green-600" />
               <div>
-                <p className="text-2xl font-bold text-green-800">{overallStatus.online}</p>
+                <p className="text-2xl font-bold text-green-800">
+                  {overallStatus.online}
+                </p>
                 <p className="text-sm text-green-600">Online</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3 p-3 bg-yellow-50 rounded-lg">
               <AlertCircle className="w-8 h-8 text-yellow-600" />
               <div>
-                <p className="text-2xl font-bold text-yellow-800">{overallStatus.warning}</p>
+                <p className="text-2xl font-bold text-yellow-800">
+                  {overallStatus.warning}
+                </p>
                 <p className="text-sm text-yellow-600">Demo Data</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3 p-3 bg-red-50 rounded-lg">
               <XCircle className="w-8 h-8 text-red-600" />
               <div>
-                <p className="text-2xl font-bold text-red-800">{overallStatus.offline}</p>
+                <p className="text-2xl font-bold text-red-800">
+                  {overallStatus.offline}
+                </p>
                 <p className="text-sm text-red-600">Offline</p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3 p-3 bg-blue-50 rounded-lg">
               <Database className="w-8 h-8 text-blue-600" />
               <div>
-                <p className="text-2xl font-bold text-blue-800">{overallStatus.total}</p>
+                <p className="text-2xl font-bold text-blue-800">
+                  {overallStatus.total}
+                </p>
                 <p className="text-sm text-blue-600">Total Modules</p>
               </div>
             </div>
           </div>
-          
+
           <div className="flex items-center justify-between">
             <p className="text-sm text-gray-600">
-              Last checked: {lastCheck || 'Never'}
+              Last checked: {lastCheck || "Never"}
             </p>
             <Button onClick={checkSystemStatus} disabled={loading} size="sm">
               {loading ? (
@@ -284,7 +356,7 @@ export default function SystemStatus() {
             </CardHeader>
             <CardContent>
               <p className="text-gray-600 mb-4">{module.description}</p>
-              
+
               {module.dataCount !== undefined && (
                 <div className="flex items-center gap-2 mb-3">
                   <Database className="w-4 h-4 text-gray-500" />
@@ -298,9 +370,11 @@ export default function SystemStatus() {
                   )}
                 </div>
               )}
-              
+
               <div>
-                <p className="text-sm font-medium text-gray-700 mb-2">Features:</p>
+                <p className="text-sm font-medium text-gray-700 mb-2">
+                  Features:
+                </p>
                 <div className="grid grid-cols-2 gap-1">
                   {module.features.map((feature, idx) => (
                     <div key={idx} className="flex items-center gap-2">
@@ -310,7 +384,7 @@ export default function SystemStatus() {
                   ))}
                 </div>
               </div>
-              
+
               <div className="mt-4 pt-3 border-t">
                 <div className="flex items-center gap-2 text-xs text-gray-500">
                   <Globe className="w-3 h-3" />
@@ -335,23 +409,29 @@ export default function SystemStatus() {
               <CheckCircle className="w-5 h-5 text-green-600" />
               <div>
                 <p className="font-medium text-green-800">Online</p>
-                <p className="text-sm text-green-600">Module is fully functional with live data</p>
+                <p className="text-sm text-green-600">
+                  Module is fully functional with live data
+                </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
               <AlertCircle className="w-5 h-5 text-yellow-600" />
               <div>
                 <p className="font-medium text-yellow-800">Demo Data</p>
-                <p className="text-sm text-yellow-600">Module is functional with sample data</p>
+                <p className="text-sm text-yellow-600">
+                  Module is functional with sample data
+                </p>
               </div>
             </div>
-            
+
             <div className="flex items-center gap-3">
               <XCircle className="w-5 h-5 text-red-600" />
               <div>
                 <p className="font-medium text-red-800">Offline</p>
-                <p className="text-sm text-red-600">Module is not responding or has errors</p>
+                <p className="text-sm text-red-600">
+                  Module is not responding or has errors
+                </p>
               </div>
             </div>
           </div>
@@ -389,7 +469,7 @@ export default function SystemStatus() {
                 </div>
               </div>
             </div>
-            
+
             <div>
               <h4 className="font-medium mb-3">Frontend Components</h4>
               <div className="space-y-2 text-sm">

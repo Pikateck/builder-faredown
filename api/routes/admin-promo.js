@@ -1,7 +1,7 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { requireAdmin } = require('../middleware/auth');
-const { audit } = require('../middleware/audit');
+const { requireAdmin } = require("../middleware/auth");
+const { audit } = require("../middleware/audit");
 
 // Wrapper function for backward compatibility
 const auditLog = (action) => async (req, res, next) => {
@@ -9,13 +9,13 @@ const auditLog = (action) => async (req, res, next) => {
     await audit.adminAction(req, action, {});
     next();
   } catch (error) {
-    console.error('Audit logging error:', error);
+    console.error("Audit logging error:", error);
     next(); // Continue even if audit fails
   }
 };
 
 // Load comprehensive seed data
-const { loadSeedData } = require('../scripts/seed-admin-data');
+const { loadSeedData } = require("../scripts/seed-admin-data");
 const seedData = loadSeedData();
 
 // Mock database for promo codes - In production, replace with actual database
@@ -25,7 +25,8 @@ let promoCodes = seedData.promoCodes || [
     code: "FAREDOWNHOTEL",
     description: "Hotel booking discount for loyal customers",
     category: "hotel",
-    image: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F57003a8eaa4240e5a35dce05a23e72f5?format=webp&width=800",
+    image:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F57003a8eaa4240e5a35dce05a23e72f5?format=webp&width=800",
     discountType: "percentage",
     discountMinValue: 15,
     discountMaxValue: 5000,
@@ -43,14 +44,15 @@ let promoCodes = seedData.promoCodes || [
     validityType: "unlimited",
     usageCount: 67,
     maxUsage: null,
-    totalSavings: 234500
+    totalSavings: 234500,
   },
   {
     id: "promo_002",
     code: "FAREDOWNFLIGHT",
     description: "Flight discount promo for domestic and international routes",
     category: "flight",
-    image: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8542893d1c0b422f87eee4c35e5441ae?format=webp&width=800",
+    image:
+      "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8542893d1c0b422f87eee4c35e5441ae?format=webp&width=800",
     discountType: "fixed",
     discountMinValue: 1500,
     discountMaxValue: 3000,
@@ -71,7 +73,7 @@ let promoCodes = seedData.promoCodes || [
     validityType: "limited",
     usageCount: 45,
     maxUsage: 100,
-    totalSavings: 127500
+    totalSavings: 127500,
   },
   {
     id: "promo_003",
@@ -96,7 +98,7 @@ let promoCodes = seedData.promoCodes || [
     validityType: "unlimited",
     usageCount: 89,
     maxUsage: null,
-    totalSavings: 178000
+    totalSavings: 178000,
   },
   {
     id: "promo_004",
@@ -122,7 +124,7 @@ let promoCodes = seedData.promoCodes || [
     validityType: "unlimited",
     usageCount: 34,
     maxUsage: null,
-    totalSavings: 51000
+    totalSavings: 51000,
   },
   {
     id: "promo_005",
@@ -147,7 +149,7 @@ let promoCodes = seedData.promoCodes || [
     validityType: "limited",
     usageCount: 23,
     maxUsage: 200,
-    totalSavings: 115000
+    totalSavings: 115000,
   },
   {
     id: "promo_006",
@@ -169,7 +171,7 @@ let promoCodes = seedData.promoCodes || [
     validityType: "unlimited",
     usageCount: 156,
     maxUsage: null,
-    totalSavings: 468000
+    totalSavings: 468000,
   },
   {
     id: "promo_007",
@@ -194,24 +196,24 @@ let promoCodes = seedData.promoCodes || [
     validityType: "limited",
     usageCount: 0,
     maxUsage: 500,
-    totalSavings: 0
-  }
+    totalSavings: 0,
+  },
 ];
 
 let promoStats = {
   totalCodes: promoCodes.length,
-  activeCodes: promoCodes.filter(p => p.status === 'active').length,
+  activeCodes: promoCodes.filter((p) => p.status === "active").length,
   totalUsage: promoCodes.reduce((sum, p) => sum + p.usageCount, 0),
   totalSavings: promoCodes.reduce((sum, p) => sum + p.totalSavings, 0),
-  topPerformingCode: 'WELCOME10',
+  topPerformingCode: "WELCOME10",
   moduleBreakdown: {
-    flight: promoCodes.filter(p => p.module === 'flight').length,
-    hotel: promoCodes.filter(p => p.module === 'hotel').length,
-    sightseeing: promoCodes.filter(p => p.module === 'sightseeing').length,
-    transfers: promoCodes.filter(p => p.module === 'transfers').length,
-    packages: promoCodes.filter(p => p.module === 'packages').length,
-    all: promoCodes.filter(p => p.module === 'all').length
-  }
+    flight: promoCodes.filter((p) => p.module === "flight").length,
+    hotel: promoCodes.filter((p) => p.module === "hotel").length,
+    sightseeing: promoCodes.filter((p) => p.module === "sightseeing").length,
+    transfers: promoCodes.filter((p) => p.module === "transfers").length,
+    packages: promoCodes.filter((p) => p.module === "packages").length,
+    all: promoCodes.filter((p) => p.module === "all").length,
+  },
 };
 
 /**
@@ -219,54 +221,57 @@ let promoStats = {
  * @desc Get all promo codes with filtering
  * @access Admin
  */
-router.get('/', requireAdmin, async (req, res) => {
+router.get("/", requireAdmin, async (req, res) => {
   try {
     const { search, module, status, page = 1, limit = 10 } = req.query;
-    
+
     let filteredCodes = [...promoCodes];
-    
+
     // Filter by search term
     if (search) {
       const searchLower = search.toLowerCase();
-      filteredCodes = filteredCodes.filter(code => 
-        code.code.toLowerCase().includes(searchLower) ||
-        code.description.toLowerCase().includes(searchLower)
+      filteredCodes = filteredCodes.filter(
+        (code) =>
+          code.code.toLowerCase().includes(searchLower) ||
+          code.description.toLowerCase().includes(searchLower),
       );
     }
-    
+
     // Filter by module
-    if (module && module !== 'all') {
-      filteredCodes = filteredCodes.filter(code => code.module === module || code.module === 'all');
+    if (module && module !== "all") {
+      filteredCodes = filteredCodes.filter(
+        (code) => code.module === module || code.module === "all",
+      );
     }
-    
+
     // Filter by status
-    if (status && status !== 'all') {
-      filteredCodes = filteredCodes.filter(code => code.status === status);
+    if (status && status !== "all") {
+      filteredCodes = filteredCodes.filter((code) => code.status === status);
     }
-    
+
     // Sort by creation date (newest first)
     filteredCodes.sort((a, b) => new Date(b.createdOn) - new Date(a.createdOn));
-    
+
     // Pagination
     const startIndex = (page - 1) * limit;
     const endIndex = startIndex + parseInt(limit);
     const paginatedCodes = filteredCodes.slice(startIndex, endIndex);
-    
+
     res.json({
       success: true,
       data: {
         promoCodes: paginatedCodes,
         total: filteredCodes.length,
         page: parseInt(page),
-        totalPages: Math.ceil(filteredCodes.length / limit)
-      }
+        totalPages: Math.ceil(filteredCodes.length / limit),
+      },
     });
   } catch (error) {
-    console.error('Error fetching promo codes:', error);
+    console.error("Error fetching promo codes:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch promo codes',
-      error: error.message
+      message: "Failed to fetch promo codes",
+      error: error.message,
     });
   }
 });
@@ -276,48 +281,55 @@ router.get('/', requireAdmin, async (req, res) => {
  * @desc Get promo code statistics
  * @access Admin
  */
-router.get('/stats', requireAdmin, async (req, res) => {
+router.get("/stats", requireAdmin, async (req, res) => {
   try {
     // Recalculate stats
     const stats = {
       totalCodes: promoCodes.length,
-      activeCodes: promoCodes.filter(p => p.status === 'active').length,
-      pendingCodes: promoCodes.filter(p => p.status === 'pending').length,
+      activeCodes: promoCodes.filter((p) => p.status === "active").length,
+      pendingCodes: promoCodes.filter((p) => p.status === "pending").length,
       totalUsage: promoCodes.reduce((sum, p) => sum + p.usageCount, 0),
       totalSavings: promoCodes.reduce((sum, p) => sum + p.totalSavings, 0),
-      avgSavingsPerCode: promoCodes.length > 0 ? 
-        promoCodes.reduce((sum, p) => sum + p.totalSavings, 0) / promoCodes.length : 0,
-      topPerformingCode: promoCodes.reduce((top, current) => 
-        current.totalSavings > (top?.totalSavings || 0) ? current : top, null
-      )?.code || 'None',
+      avgSavingsPerCode:
+        promoCodes.length > 0
+          ? promoCodes.reduce((sum, p) => sum + p.totalSavings, 0) /
+            promoCodes.length
+          : 0,
+      topPerformingCode:
+        promoCodes.reduce(
+          (top, current) =>
+            current.totalSavings > (top?.totalSavings || 0) ? current : top,
+          null,
+        )?.code || "None",
       moduleBreakdown: {
-        flight: promoCodes.filter(p => p.module === 'flight').length,
-        hotel: promoCodes.filter(p => p.module === 'hotel').length,
-        sightseeing: promoCodes.filter(p => p.module === 'sightseeing').length,
-        transfers: promoCodes.filter(p => p.module === 'transfers').length,
-        packages: promoCodes.filter(p => p.module === 'packages').length,
-        all: promoCodes.filter(p => p.module === 'all').length
+        flight: promoCodes.filter((p) => p.module === "flight").length,
+        hotel: promoCodes.filter((p) => p.module === "hotel").length,
+        sightseeing: promoCodes.filter((p) => p.module === "sightseeing")
+          .length,
+        transfers: promoCodes.filter((p) => p.module === "transfers").length,
+        packages: promoCodes.filter((p) => p.module === "packages").length,
+        all: promoCodes.filter((p) => p.module === "all").length,
       },
       recentActivity: promoCodes
         .sort((a, b) => new Date(b.updatedOn) - new Date(a.updatedOn))
         .slice(0, 5)
-        .map(p => ({
+        .map((p) => ({
           code: p.code,
-          action: 'Updated',
-          date: p.updatedOn
-        }))
+          action: "Updated",
+          date: p.updatedOn,
+        })),
     };
-    
+
     res.json({
       success: true,
-      data: stats
+      data: stats,
     });
   } catch (error) {
-    console.error('Error fetching promo stats:', error);
+    console.error("Error fetching promo stats:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch promo statistics',
-      error: error.message
+      message: "Failed to fetch promo statistics",
+      error: error.message,
     });
   }
 });
@@ -327,7 +339,7 @@ router.get('/stats', requireAdmin, async (req, res) => {
  * @desc Create new promo code
  * @access Admin
  */
-router.post('/', requireAdmin, audit.adminAction, async (req, res) => {
+router.post("/", requireAdmin, audit.adminAction, async (req, res) => {
   try {
     const {
       code,
@@ -346,24 +358,27 @@ router.post('/', requireAdmin, audit.adminAction, async (req, res) => {
       // Module-specific fields
       ...moduleFields
     } = req.body;
-    
+
     // Validation
     if (!code || !description || !category || !discountType) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required fields: code, description, category, discountType'
+        message:
+          "Missing required fields: code, description, category, discountType",
       });
     }
-    
+
     // Check for duplicate code
-    const existingCode = promoCodes.find(p => p.code.toLowerCase() === code.toLowerCase());
+    const existingCode = promoCodes.find(
+      (p) => p.code.toLowerCase() === code.toLowerCase(),
+    );
     if (existingCode) {
       return res.status(400).json({
         success: false,
-        message: 'Promo code already exists'
+        message: "Promo code already exists",
       });
     }
-    
+
     const newPromo = {
       id: `promo_${Date.now()}`,
       code: code.toUpperCase(),
@@ -382,25 +397,31 @@ router.post('/', requireAdmin, audit.adminAction, async (req, res) => {
       maxUsage: maxUsage ? parseInt(maxUsage) : null,
       usageCount: 0,
       totalSavings: 0,
-      createdOn: new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0],
-      updatedOn: new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0],
-      module: category === 'all' ? 'all' : category,
-      ...moduleFields
+      createdOn:
+        new Date().toISOString().split("T")[0] +
+        " " +
+        new Date().toTimeString().split(" ")[0],
+      updatedOn:
+        new Date().toISOString().split("T")[0] +
+        " " +
+        new Date().toTimeString().split(" ")[0],
+      module: category === "all" ? "all" : category,
+      ...moduleFields,
     };
-    
+
     promoCodes.push(newPromo);
-    
+
     res.status(201).json({
       success: true,
       data: { promoCode: newPromo },
-      message: 'Promo code created successfully'
+      message: "Promo code created successfully",
     });
   } catch (error) {
-    console.error('Error creating promo code:', error);
+    console.error("Error creating promo code:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to create promo code',
-      error: error.message
+      message: "Failed to create promo code",
+      error: error.message,
     });
   }
 });
@@ -410,34 +431,35 @@ router.post('/', requireAdmin, audit.adminAction, async (req, res) => {
  * @desc Update promo code
  * @access Admin
  */
-router.put('/:id', requireAdmin, audit.adminAction, async (req, res) => {
+router.put("/:id", requireAdmin, audit.adminAction, async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
-    
-    const promoIndex = promoCodes.findIndex(p => p.id === id);
+
+    const promoIndex = promoCodes.findIndex((p) => p.id === id);
     if (promoIndex === -1) {
       return res.status(404).json({
         success: false,
-        message: 'Promo code not found'
+        message: "Promo code not found",
       });
     }
-    
+
     const currentPromo = promoCodes[promoIndex];
-    
+
     // Check for duplicate code if code is being changed
     if (updateData.code && updateData.code !== currentPromo.code) {
-      const existingCode = promoCodes.find(p => 
-        p.id !== id && p.code.toLowerCase() === updateData.code.toLowerCase()
+      const existingCode = promoCodes.find(
+        (p) =>
+          p.id !== id && p.code.toLowerCase() === updateData.code.toLowerCase(),
       );
       if (existingCode) {
         return res.status(400).json({
           success: false,
-          message: 'Promo code already exists'
+          message: "Promo code already exists",
         });
       }
     }
-    
+
     const updatedPromo = {
       ...currentPromo,
       ...updateData,
@@ -445,26 +467,29 @@ router.put('/:id', requireAdmin, audit.adminAction, async (req, res) => {
       usageCount: currentPromo.usageCount, // Preserve usage stats
       totalSavings: currentPromo.totalSavings,
       createdOn: currentPromo.createdOn, // Preserve creation date
-      updatedOn: new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0]
+      updatedOn:
+        new Date().toISOString().split("T")[0] +
+        " " +
+        new Date().toTimeString().split(" ")[0],
     };
-    
+
     if (updateData.code) {
       updatedPromo.code = updateData.code.toUpperCase();
     }
-    
+
     promoCodes[promoIndex] = updatedPromo;
-    
+
     res.json({
       success: true,
       data: { promoCode: updatedPromo },
-      message: 'Promo code updated successfully'
+      message: "Promo code updated successfully",
     });
   } catch (error) {
-    console.error('Error updating promo code:', error);
+    console.error("Error updating promo code:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to update promo code',
-      error: error.message
+      message: "Failed to update promo code",
+      error: error.message,
     });
   }
 });
@@ -474,32 +499,32 @@ router.put('/:id', requireAdmin, audit.adminAction, async (req, res) => {
  * @desc Delete promo code
  * @access Admin
  */
-router.delete('/:id', requireAdmin, audit.adminAction, async (req, res) => {
+router.delete("/:id", requireAdmin, audit.adminAction, async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const promoIndex = promoCodes.findIndex(p => p.id === id);
+
+    const promoIndex = promoCodes.findIndex((p) => p.id === id);
     if (promoIndex === -1) {
       return res.status(404).json({
         success: false,
-        message: 'Promo code not found'
+        message: "Promo code not found",
       });
     }
-    
+
     const deletedPromo = promoCodes[promoIndex];
     promoCodes.splice(promoIndex, 1);
-    
+
     res.json({
       success: true,
-      message: 'Promo code deleted successfully',
-      data: { deletedCode: deletedPromo.code }
+      message: "Promo code deleted successfully",
+      data: { deletedCode: deletedPromo.code },
     });
   } catch (error) {
-    console.error('Error deleting promo code:', error);
+    console.error("Error deleting promo code:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to delete promo code',
-      error: error.message
+      message: "Failed to delete promo code",
+      error: error.message,
     });
   }
 });
@@ -509,64 +534,72 @@ router.delete('/:id', requireAdmin, audit.adminAction, async (req, res) => {
  * @desc Toggle promo code status (active/pending)
  * @access Admin
  */
-router.post('/:id/toggle-status', requireAdmin, audit.adminAction, async (req, res) => {
-  try {
-    const { id } = req.params;
-    
-    const promoIndex = promoCodes.findIndex(p => p.id === id);
-    if (promoIndex === -1) {
-      return res.status(404).json({
+router.post(
+  "/:id/toggle-status",
+  requireAdmin,
+  audit.adminAction,
+  async (req, res) => {
+    try {
+      const { id } = req.params;
+
+      const promoIndex = promoCodes.findIndex((p) => p.id === id);
+      if (promoIndex === -1) {
+        return res.status(404).json({
+          success: false,
+          message: "Promo code not found",
+        });
+      }
+
+      const promo = promoCodes[promoIndex];
+      promo.status = promo.status === "active" ? "pending" : "active";
+      promo.updatedOn =
+        new Date().toISOString().split("T")[0] +
+        " " +
+        new Date().toTimeString().split(" ")[0];
+
+      res.json({
+        success: true,
+        data: { promoCode: promo },
+        message: `Promo code ${promo.status === "active" ? "activated" : "deactivated"} successfully`,
+      });
+    } catch (error) {
+      console.error("Error toggling promo status:", error);
+      res.status(500).json({
         success: false,
-        message: 'Promo code not found'
+        message: "Failed to toggle promo code status",
+        error: error.message,
       });
     }
-    
-    const promo = promoCodes[promoIndex];
-    promo.status = promo.status === 'active' ? 'pending' : 'active';
-    promo.updatedOn = new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0];
-    
-    res.json({
-      success: true,
-      data: { promoCode: promo },
-      message: `Promo code ${promo.status === 'active' ? 'activated' : 'deactivated'} successfully`
-    });
-  } catch (error) {
-    console.error('Error toggling promo status:', error);
-    res.status(500).json({
-      success: false,
-      message: 'Failed to toggle promo code status',
-      error: error.message
-    });
-  }
-});
+  },
+);
 
 /**
  * @route GET /api/promo/:id
  * @desc Get single promo code
  * @access Admin
  */
-router.get('/:id', requireAdmin, async (req, res) => {
+router.get("/:id", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const promo = promoCodes.find(p => p.id === id);
+
+    const promo = promoCodes.find((p) => p.id === id);
     if (!promo) {
       return res.status(404).json({
         success: false,
-        message: 'Promo code not found'
+        message: "Promo code not found",
       });
     }
-    
+
     res.json({
       success: true,
-      data: promo
+      data: promo,
     });
   } catch (error) {
-    console.error('Error fetching promo code:', error);
+    console.error("Error fetching promo code:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch promo code',
-      error: error.message
+      message: "Failed to fetch promo code",
+      error: error.message,
     });
   }
 });
@@ -576,32 +609,33 @@ router.get('/:id', requireAdmin, async (req, res) => {
  * @desc Validate promo code for booking
  * @access Public
  */
-router.post('/validate', async (req, res) => {
+router.post("/validate", async (req, res) => {
   try {
     const { code, amount, category, ...bookingDetails } = req.body;
-    
+
     if (!code || !amount || !category) {
       return res.status(400).json({
         success: false,
         valid: false,
-        message: 'Code, amount, and category are required'
+        message: "Code, amount, and category are required",
       });
     }
-    
-    const promo = promoCodes.find(p => 
-      p.code.toLowerCase() === code.toLowerCase() && 
-      p.status === 'active' &&
-      (p.module === category || p.module === 'all')
+
+    const promo = promoCodes.find(
+      (p) =>
+        p.code.toLowerCase() === code.toLowerCase() &&
+        p.status === "active" &&
+        (p.module === category || p.module === "all"),
     );
-    
+
     if (!promo) {
       return res.json({
         success: true,
         valid: false,
-        message: 'Invalid or expired promo code'
+        message: "Invalid or expired promo code",
       });
     }
-    
+
     // Check expiry date
     const today = new Date();
     const expiry = new Date(promo.expiryDate);
@@ -609,54 +643,54 @@ router.post('/validate', async (req, res) => {
       return res.json({
         success: true,
         valid: false,
-        message: 'Promo code has expired'
+        message: "Promo code has expired",
       });
     }
-    
+
     // Check minimum fare
     if (amount < promo.minimumFareAmount) {
       return res.json({
         success: true,
         valid: false,
-        message: `Minimum fare of ₹${promo.minimumFareAmount} required`
+        message: `Minimum fare of ₹${promo.minimumFareAmount} required`,
       });
     }
-    
+
     // Check usage limit
     if (promo.maxUsage && promo.usageCount >= promo.maxUsage) {
       return res.json({
         success: true,
         valid: false,
-        message: 'Promo code usage limit exceeded'
+        message: "Promo code usage limit exceeded",
       });
     }
-    
+
     // Calculate discount
     let discount = 0;
-    if (promo.discountType === 'percentage') {
+    if (promo.discountType === "percentage") {
       discount = (amount * promo.discountMinValue) / 100;
       if (promo.discountMaxValue && discount > promo.discountMaxValue) {
         discount = promo.discountMaxValue;
       }
-    } else if (promo.discountType === 'fixed') {
+    } else if (promo.discountType === "fixed") {
       discount = promo.discountMinValue;
     }
-    
+
     const finalAmount = Math.max(0, amount - discount);
-    
+
     res.json({
       success: true,
       valid: true,
       discount: Math.round(discount * 100) / 100,
       finalAmount: Math.round(finalAmount * 100) / 100,
-      message: `₹${discount} discount applied successfully`
+      message: `₹${discount} discount applied successfully`,
     });
   } catch (error) {
-    console.error('Error validating promo code:', error);
+    console.error("Error validating promo code:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to validate promo code',
-      error: error.message
+      message: "Failed to validate promo code",
+      error: error.message,
     });
   }
 });
@@ -666,41 +700,46 @@ router.post('/validate', async (req, res) => {
  * @desc Apply promo code to booking
  * @access Public
  */
-router.post('/apply', async (req, res) => {
+router.post("/apply", async (req, res) => {
   try {
     const { code, originalAmount, category } = req.body;
-    
-    const validation = await router.handle({ body: { code, amount: originalAmount, category } }, {
-      json: (data) => data
-    });
-    
+
+    const validation = await router.handle(
+      { body: { code, amount: originalAmount, category } },
+      {
+        json: (data) => data,
+      },
+    );
+
     if (!validation.valid) {
       return res.json({
         success: false,
-        message: validation.message
+        message: validation.message,
       });
     }
-    
+
     // Update usage count (in real implementation, this would be atomic)
-    const promo = promoCodes.find(p => p.code.toLowerCase() === code.toLowerCase());
+    const promo = promoCodes.find(
+      (p) => p.code.toLowerCase() === code.toLowerCase(),
+    );
     if (promo) {
       promo.usageCount++;
       promo.totalSavings += validation.discount;
     }
-    
+
     res.json({
       success: true,
       discount: validation.discount,
       finalAmount: validation.finalAmount,
       message: `Promo code applied successfully`,
-      promoCodeId: promo?.id
+      promoCodeId: promo?.id,
     });
   } catch (error) {
-    console.error('Error applying promo code:', error);
+    console.error("Error applying promo code:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to apply promo code',
-      error: error.message
+      message: "Failed to apply promo code",
+      error: error.message,
     });
   }
 });
@@ -710,41 +749,54 @@ router.post('/apply', async (req, res) => {
  * @desc Get promo code usage statistics
  * @access Admin
  */
-router.get('/:id/stats', requireAdmin, async (req, res) => {
+router.get("/:id/stats", requireAdmin, async (req, res) => {
   try {
     const { id } = req.params;
-    
-    const promo = promoCodes.find(p => p.id === id);
+
+    const promo = promoCodes.find((p) => p.id === id);
     if (!promo) {
       return res.status(404).json({
         success: false,
-        message: 'Promo code not found'
+        message: "Promo code not found",
       });
     }
-    
+
     const stats = {
       totalUsage: promo.usageCount,
-      remainingUsage: promo.maxUsage ? promo.maxUsage - promo.usageCount : 'Unlimited',
+      remainingUsage: promo.maxUsage
+        ? promo.maxUsage - promo.usageCount
+        : "Unlimited",
       totalSavings: promo.totalSavings,
-      avgSavingsPerUse: promo.usageCount > 0 ? promo.totalSavings / promo.usageCount : 0,
+      avgSavingsPerUse:
+        promo.usageCount > 0 ? promo.totalSavings / promo.usageCount : 0,
       recentUsage: [
         // Mock recent usage data
-        { date: '2024-02-15', bookingId: 'BK001', amount: 12000, discount: 1800 },
-        { date: '2024-02-14', bookingId: 'BK002', amount: 8500, discount: 850 },
-        { date: '2024-02-13', bookingId: 'BK003', amount: 15000, discount: 2250 }
-      ]
+        {
+          date: "2024-02-15",
+          bookingId: "BK001",
+          amount: 12000,
+          discount: 1800,
+        },
+        { date: "2024-02-14", bookingId: "BK002", amount: 8500, discount: 850 },
+        {
+          date: "2024-02-13",
+          bookingId: "BK003",
+          amount: 15000,
+          discount: 2250,
+        },
+      ],
     };
-    
+
     res.json({
       success: true,
-      data: stats
+      data: stats,
     });
   } catch (error) {
-    console.error('Error fetching promo stats:', error);
+    console.error("Error fetching promo stats:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch promo statistics',
-      error: error.message
+      message: "Failed to fetch promo statistics",
+      error: error.message,
     });
   }
 });

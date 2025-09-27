@@ -3,9 +3,9 @@
  * Provides easy access to the bargain test page
  */
 
-import React from 'react';
-import { Link } from 'react-router-dom';
-import { TestTube } from 'lucide-react';
+import React from "react";
+import { Link } from "react-router-dom";
+import { TestTube } from "lucide-react";
 
 export default function TestPageLink() {
   return (

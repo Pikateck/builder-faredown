@@ -3,8 +3,8 @@
  * Populates all modules with realistic sample data
  */
 
-const fs = require('fs');
-const path = require('path');
+const fs = require("fs");
+const path = require("path");
 
 // Seed data for all modules
 const seedData = {
@@ -15,7 +15,8 @@ const seedData = {
       code: "FAREDOWNHOTEL",
       description: "Exclusive hotel booking discount for premium properties",
       category: "hotel",
-      image: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F57003a8eaa4240e5a35dce05a23e72f5?format=webp&width=800",
+      image:
+        "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F57003a8eaa4240e5a35dce05a23e72f5?format=webp&width=800",
       discountType: "percentage",
       discountMinValue: 15,
       discountMaxValue: 5000,
@@ -33,14 +34,15 @@ const seedData = {
       validityType: "unlimited",
       usageCount: 67,
       maxUsage: null,
-      totalSavings: 234500
+      totalSavings: 234500,
     },
     {
       id: "promo_002",
       code: "FLYSMART",
       description: "Smart flight deals for domestic and international routes",
       category: "flight",
-      image: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8542893d1c0b422f87eee4c35e5441ae?format=webp&width=800",
+      image:
+        "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8542893d1c0b422f87eee4c35e5441ae?format=webp&width=800",
       discountType: "fixed",
       discountMinValue: 2000,
       discountMaxValue: 5000,
@@ -61,7 +63,7 @@ const seedData = {
       validityType: "limited",
       usageCount: 123,
       maxUsage: 500,
-      totalSavings: 246000
+      totalSavings: 246000,
     },
     {
       id: "promo_003",
@@ -86,7 +88,7 @@ const seedData = {
       validityType: "unlimited",
       usageCount: 89,
       maxUsage: null,
-      totalSavings: 178000
+      totalSavings: 178000,
     },
     {
       id: "promo_004",
@@ -112,7 +114,7 @@ const seedData = {
       validityType: "unlimited",
       usageCount: 54,
       maxUsage: null,
-      totalSavings: 81000
+      totalSavings: 81000,
     },
     {
       id: "promo_005",
@@ -137,7 +139,7 @@ const seedData = {
       validityType: "limited",
       usageCount: 34,
       maxUsage: 200,
-      totalSavings: 272000
+      totalSavings: 272000,
     },
     {
       id: "promo_006",
@@ -159,8 +161,8 @@ const seedData = {
       validityType: "unlimited",
       usageCount: 267,
       maxUsage: null,
-      totalSavings: 534000
-    }
+      totalSavings: 534000,
+    },
   ],
 
   // Extranet Inventory for all modules
@@ -170,43 +172,87 @@ const seedData = {
       id: "flight_001",
       module: "flights",
       title: "Mumbai to Dubai - Premium Direct Flight",
-      description: "Comfortable direct flight with excellent service and amenities. Perfect for business and leisure travelers.",
+      description:
+        "Comfortable direct flight with excellent service and amenities. Perfect for business and leisure travelers.",
       location: { city: "Mumbai", country: "India", region: "South Asia" },
       pricing: { basePrice: 28000, currency: "INR", priceType: "per_person" },
-      availability: { status: "active", capacity: 180, availableSlots: 95, startDate: "2024-03-01", endDate: "2024-12-31" },
+      availability: {
+        status: "active",
+        capacity: 180,
+        availableSlots: 95,
+        startDate: "2024-03-01",
+        endDate: "2024-12-31",
+      },
       details: {
         duration: "3h 30m",
-        includes: ["Meals", "Baggage 20kg", "Seat Selection", "Priority Boarding"],
+        includes: [
+          "Meals",
+          "Baggage 20kg",
+          "Seat Selection",
+          "Priority Boarding",
+        ],
         excludes: ["Airport Transfers", "Travel Insurance", "Visa Assistance"],
-        highlights: ["Premium Service", "On-time Performance", "Comfortable Seating", "Entertainment System"]
+        highlights: [
+          "Premium Service",
+          "On-time Performance",
+          "Comfortable Seating",
+          "Entertainment System",
+        ],
       },
-      metadata: { created_at: "2024-01-15T10:30:00Z", updated_at: "2024-02-10T14:45:00Z", created_by: "admin", source: "extranet" },
+      metadata: {
+        created_at: "2024-01-15T10:30:00Z",
+        updated_at: "2024-02-10T14:45:00Z",
+        created_by: "admin",
+        source: "extranet",
+      },
       origin: "Mumbai",
       destination: "Dubai",
       airline: "Faredown Airways",
       cabin_class: "Economy",
-      flight_duration: "3h 30m"
+      flight_duration: "3h 30m",
     },
     {
-      id: "flight_002", 
+      id: "flight_002",
       module: "flights",
       title: "Delhi to London - Business Class",
-      description: "Luxury business class experience with lie-flat seats and premium dining.",
+      description:
+        "Luxury business class experience with lie-flat seats and premium dining.",
       location: { city: "Delhi", country: "India", region: "South Asia" },
       pricing: { basePrice: 95000, currency: "INR", priceType: "per_person" },
-      availability: { status: "active", capacity: 40, availableSlots: 18, startDate: "2024-03-01", endDate: "2024-12-31" },
+      availability: {
+        status: "active",
+        capacity: 40,
+        availableSlots: 18,
+        startDate: "2024-03-01",
+        endDate: "2024-12-31",
+      },
       details: {
         duration: "8h 45m",
-        includes: ["Gourmet Meals", "Baggage 30kg", "Lounge Access", "Lie-flat Seats"],
+        includes: [
+          "Gourmet Meals",
+          "Baggage 30kg",
+          "Lounge Access",
+          "Lie-flat Seats",
+        ],
         excludes: ["Airport Transfers", "Travel Insurance"],
-        highlights: ["Business Class", "Premium Lounge", "Priority Check-in", "Extra Legroom"]
+        highlights: [
+          "Business Class",
+          "Premium Lounge",
+          "Priority Check-in",
+          "Extra Legroom",
+        ],
       },
-      metadata: { created_at: "2024-01-18T09:15:00Z", updated_at: "2024-02-08T11:30:00Z", created_by: "admin", source: "extranet" },
+      metadata: {
+        created_at: "2024-01-18T09:15:00Z",
+        updated_at: "2024-02-08T11:30:00Z",
+        created_by: "admin",
+        source: "extranet",
+      },
       origin: "Delhi",
       destination: "London",
       airline: "British Airways",
       cabin_class: "Business",
-      flight_duration: "8h 45m"
+      flight_duration: "8h 45m",
     },
 
     // Hotels
@@ -214,37 +260,90 @@ const seedData = {
       id: "hotel_001",
       module: "hotels",
       title: "Luxury Beach Resort - Goa",
-      description: "5-star beachfront resort with stunning ocean views, world-class spa, and multiple dining options.",
+      description:
+        "5-star beachfront resort with stunning ocean views, world-class spa, and multiple dining options.",
       location: { city: "Goa", country: "India", region: "South Asia" },
       pricing: { basePrice: 15000, currency: "INR", priceType: "per_room" },
-      availability: { status: "active", capacity: 120, availableSlots: 67, startDate: "2024-03-01", endDate: "2024-12-31" },
-      details: {
-        includes: ["Breakfast", "WiFi", "Pool Access", "Beach Access", "Gym", "Spa Discount"],
-        excludes: ["Airport Transfers", "Spa Services", "Minibar", "Room Service"],
-        highlights: ["Beachfront Location", "Ocean View", "Multiple Pools", "Kids Club", "24/7 Room Service"]
+      availability: {
+        status: "active",
+        capacity: 120,
+        availableSlots: 67,
+        startDate: "2024-03-01",
+        endDate: "2024-12-31",
       },
-      metadata: { created_at: "2024-01-20T11:45:00Z", updated_at: "2024-02-05T16:20:00Z", created_by: "admin", source: "extranet" },
+      details: {
+        includes: [
+          "Breakfast",
+          "WiFi",
+          "Pool Access",
+          "Beach Access",
+          "Gym",
+          "Spa Discount",
+        ],
+        excludes: [
+          "Airport Transfers",
+          "Spa Services",
+          "Minibar",
+          "Room Service",
+        ],
+        highlights: [
+          "Beachfront Location",
+          "Ocean View",
+          "Multiple Pools",
+          "Kids Club",
+          "24/7 Room Service",
+        ],
+      },
+      metadata: {
+        created_at: "2024-01-20T11:45:00Z",
+        updated_at: "2024-02-05T16:20:00Z",
+        created_by: "admin",
+        source: "extranet",
+      },
       room_type: "Ocean View Suite",
       star_rating: "5",
-      amenities: "Pool, Spa, Gym, Restaurant, Beach Access, WiFi, Kids Club"
+      amenities: "Pool, Spa, Gym, Restaurant, Beach Access, WiFi, Kids Club",
     },
     {
       id: "hotel_002",
-      module: "hotels", 
+      module: "hotels",
       title: "Downtown Business Hotel - Mumbai",
-      description: "Modern business hotel in the heart of Mumbai's financial district with executive facilities.",
+      description:
+        "Modern business hotel in the heart of Mumbai's financial district with executive facilities.",
       location: { city: "Mumbai", country: "India", region: "South Asia" },
       pricing: { basePrice: 8500, currency: "INR", priceType: "per_room" },
-      availability: { status: "active", capacity: 200, availableSlots: 123, startDate: "2024-03-01", endDate: "2024-12-31" },
-      details: {
-        includes: ["Breakfast", "WiFi", "Business Center", "Gym", "Airport Shuttle"],
-        excludes: ["Minibar", "Laundry", "Spa Services"],
-        highlights: ["Central Location", "Business Facilities", "Metro Connectivity", "24/7 Front Desk"]
+      availability: {
+        status: "active",
+        capacity: 200,
+        availableSlots: 123,
+        startDate: "2024-03-01",
+        endDate: "2024-12-31",
       },
-      metadata: { created_at: "2024-01-22T14:30:00Z", updated_at: "2024-02-07T09:15:00Z", created_by: "admin", source: "extranet" },
+      details: {
+        includes: [
+          "Breakfast",
+          "WiFi",
+          "Business Center",
+          "Gym",
+          "Airport Shuttle",
+        ],
+        excludes: ["Minibar", "Laundry", "Spa Services"],
+        highlights: [
+          "Central Location",
+          "Business Facilities",
+          "Metro Connectivity",
+          "24/7 Front Desk",
+        ],
+      },
+      metadata: {
+        created_at: "2024-01-22T14:30:00Z",
+        updated_at: "2024-02-07T09:15:00Z",
+        created_by: "admin",
+        source: "extranet",
+      },
       room_type: "Executive Room",
       star_rating: "4",
-      amenities: "Business Center, Gym, Restaurant, WiFi, Conference Rooms"
+      amenities: "Business Center, Gym, Restaurant, WiFi, Conference Rooms",
     },
 
     // Sightseeing
@@ -252,43 +351,90 @@ const seedData = {
       id: "sight_001",
       module: "sightseeing",
       title: "Taj Mahal Sunrise Tour - Agra",
-      description: "Experience the breathtaking beauty of Taj Mahal at sunrise with expert guide and transportation.",
+      description:
+        "Experience the breathtaking beauty of Taj Mahal at sunrise with expert guide and transportation.",
       location: { city: "Agra", country: "India", region: "North India" },
       pricing: { basePrice: 4500, currency: "INR", priceType: "per_person" },
-      availability: { status: "active", capacity: 25, availableSlots: 12, startDate: "2024-03-01", endDate: "2024-12-31" },
+      availability: {
+        status: "active",
+        capacity: 25,
+        availableSlots: 12,
+        startDate: "2024-03-01",
+        endDate: "2024-12-31",
+      },
       details: {
         duration: "6 hours",
-        includes: ["Expert Guide", "Transportation", "Entry Tickets", "Breakfast", "Water"],
+        includes: [
+          "Expert Guide",
+          "Transportation",
+          "Entry Tickets",
+          "Breakfast",
+          "Water",
+        ],
         excludes: ["Personal Expenses", "Tips", "Additional Meals"],
-        highlights: ["Sunrise Experience", "Professional Photography", "Historical Insights", "Small Group"]
+        highlights: [
+          "Sunrise Experience",
+          "Professional Photography",
+          "Historical Insights",
+          "Small Group",
+        ],
       },
-      metadata: { created_at: "2024-01-25T08:00:00Z", updated_at: "2024-02-03T12:45:00Z", created_by: "admin", source: "extranet" },
+      metadata: {
+        created_at: "2024-01-25T08:00:00Z",
+        updated_at: "2024-02-03T12:45:00Z",
+        created_by: "admin",
+        source: "extranet",
+      },
       tour_type: "cultural",
       tour_duration: "6 hours",
       group_size: "25",
       difficulty_level: "easy",
-      languages: "English, Hindi"
+      languages: "English, Hindi",
     },
     {
       id: "sight_002",
       module: "sightseeing",
       title: "Dubai City Tour with Burj Khalifa",
-      description: "Comprehensive Dubai city tour including Burj Khalifa observation deck and major attractions.",
+      description:
+        "Comprehensive Dubai city tour including Burj Khalifa observation deck and major attractions.",
       location: { city: "Dubai", country: "UAE", region: "Middle East" },
       pricing: { basePrice: 12000, currency: "INR", priceType: "per_person" },
-      availability: { status: "active", capacity: 35, availableSlots: 21, startDate: "2024-03-01", endDate: "2024-12-31" },
+      availability: {
+        status: "active",
+        capacity: 35,
+        availableSlots: 21,
+        startDate: "2024-03-01",
+        endDate: "2024-12-31",
+      },
       details: {
         duration: "8 hours",
-        includes: ["Guide", "Transportation", "Burj Khalifa Tickets", "Dubai Mall Visit", "Lunch"],
+        includes: [
+          "Guide",
+          "Transportation",
+          "Burj Khalifa Tickets",
+          "Dubai Mall Visit",
+          "Lunch",
+        ],
         excludes: ["Personal Shopping", "Additional Attractions", "Dinner"],
-        highlights: ["Burj Khalifa 124th Floor", "Dubai Mall", "Dubai Fountain", "Gold Souk", "Modern Architecture"]
+        highlights: [
+          "Burj Khalifa 124th Floor",
+          "Dubai Mall",
+          "Dubai Fountain",
+          "Gold Souk",
+          "Modern Architecture",
+        ],
       },
-      metadata: { created_at: "2024-01-28T10:15:00Z", updated_at: "2024-02-01T15:30:00Z", created_by: "admin", source: "extranet" },
+      metadata: {
+        created_at: "2024-01-28T10:15:00Z",
+        updated_at: "2024-02-01T15:30:00Z",
+        created_by: "admin",
+        source: "extranet",
+      },
       tour_type: "city_tour",
-      tour_duration: "8 hours", 
+      tour_duration: "8 hours",
       group_size: "35",
       difficulty_level: "easy",
-      languages: "English, Arabic"
+      languages: "English, Arabic",
     },
 
     // Transfers
@@ -296,41 +442,89 @@ const seedData = {
       id: "transfer_001",
       module: "transfers",
       title: "Mumbai Airport to City - Luxury Sedan",
-      description: "Comfortable luxury sedan transfer from Mumbai airport to city hotels with professional driver.",
+      description:
+        "Comfortable luxury sedan transfer from Mumbai airport to city hotels with professional driver.",
       location: { city: "Mumbai", country: "India", region: "West India" },
       pricing: { basePrice: 2500, currency: "INR", priceType: "per_vehicle" },
-      availability: { status: "active", capacity: 50, availableSlots: 32, startDate: "2024-03-01", endDate: "2024-12-31" },
-      details: {
-        includes: ["Professional Driver", "Fuel", "Tolls", "Airport Pickup", "60min Wait Time"],
-        excludes: ["Tips", "Additional Stops", "Excess Luggage Charges"],
-        highlights: ["Luxury Vehicle", "Professional Driver", "24/7 Service", "Flight Tracking", "Meet & Greet"]
+      availability: {
+        status: "active",
+        capacity: 50,
+        availableSlots: 32,
+        startDate: "2024-03-01",
+        endDate: "2024-12-31",
       },
-      metadata: { created_at: "2024-02-01T07:30:00Z", updated_at: "2024-02-08T14:15:00Z", created_by: "admin", source: "extranet" },
+      details: {
+        includes: [
+          "Professional Driver",
+          "Fuel",
+          "Tolls",
+          "Airport Pickup",
+          "60min Wait Time",
+        ],
+        excludes: ["Tips", "Additional Stops", "Excess Luggage Charges"],
+        highlights: [
+          "Luxury Vehicle",
+          "Professional Driver",
+          "24/7 Service",
+          "Flight Tracking",
+          "Meet & Greet",
+        ],
+      },
+      metadata: {
+        created_at: "2024-02-01T07:30:00Z",
+        updated_at: "2024-02-08T14:15:00Z",
+        created_by: "admin",
+        source: "extranet",
+      },
       vehicle_type: "luxury",
       pickup_location: "Mumbai Airport",
       drop_location: "City Hotels",
       journey_time: "45-60 minutes",
-      vehicle_capacity: "4"
+      vehicle_capacity: "4",
     },
     {
       id: "transfer_002",
       module: "transfers",
       title: "Dubai City Transfer - Premium SUV",
-      description: "Spacious premium SUV for comfortable city transfers in Dubai with experienced local driver.",
+      description:
+        "Spacious premium SUV for comfortable city transfers in Dubai with experienced local driver.",
       location: { city: "Dubai", country: "UAE", region: "Middle East" },
       pricing: { basePrice: 8000, currency: "INR", priceType: "per_vehicle" },
-      availability: { status: "active", capacity: 30, availableSlots: 18, startDate: "2024-03-01", endDate: "2024-12-31" },
-      details: {
-        includes: ["Premium SUV", "Professional Driver", "Fuel", "Tolls", "Water Bottles"],
-        excludes: ["Tips", "Parking Fees", "Additional Waiting"],
-        highlights: ["Premium SUV", "Local Expert Driver", "Climate Control", "Spacious Interior", "City Knowledge"]
+      availability: {
+        status: "active",
+        capacity: 30,
+        availableSlots: 18,
+        startDate: "2024-03-01",
+        endDate: "2024-12-31",
       },
-      metadata: { created_at: "2024-02-03T09:45:00Z", updated_at: "2024-02-06T11:20:00Z", created_by: "admin", source: "extranet" },
+      details: {
+        includes: [
+          "Premium SUV",
+          "Professional Driver",
+          "Fuel",
+          "Tolls",
+          "Water Bottles",
+        ],
+        excludes: ["Tips", "Parking Fees", "Additional Waiting"],
+        highlights: [
+          "Premium SUV",
+          "Local Expert Driver",
+          "Climate Control",
+          "Spacious Interior",
+          "City Knowledge",
+        ],
+      },
+      metadata: {
+        created_at: "2024-02-03T09:45:00Z",
+        updated_at: "2024-02-06T11:20:00Z",
+        created_by: "admin",
+        source: "extranet",
+      },
       vehicle_type: "suv",
       pickup_location: "Any Dubai Location",
       drop_location: "Any Dubai Location",
       journey_time: "Variable",
-      vehicle_capacity: "6"
+      vehicle_capacity: "6",
     },
 
     // Packages
@@ -338,40 +532,101 @@ const seedData = {
       id: "package_001",
       module: "packages",
       title: "Golden Triangle Tour - 6 Days",
-      description: "Classic India tour covering Delhi, Agra, and Jaipur with luxury accommodations and guided experiences.",
+      description:
+        "Classic India tour covering Delhi, Agra, and Jaipur with luxury accommodations and guided experiences.",
       location: { city: "Delhi", country: "India", region: "North India" },
       pricing: { basePrice: 45000, currency: "INR", priceType: "per_person" },
-      availability: { status: "active", capacity: 20, availableSlots: 8, startDate: "2024-03-01", endDate: "2024-12-31" },
+      availability: {
+        status: "active",
+        capacity: 20,
+        availableSlots: 8,
+        startDate: "2024-03-01",
+        endDate: "2024-12-31",
+      },
       details: {
         duration: "6 Days 5 Nights",
-        includes: ["5-star Hotels", "All Meals", "Transportation", "Guide", "Entry Tickets", "Airport Transfers"],
-        excludes: ["International Flights", "Personal Expenses", "Tips", "Travel Insurance"],
-        highlights: ["Taj Mahal", "Red Fort", "Amber Fort", "City Palace", "Luxury Hotels", "Expert Guides"]
+        includes: [
+          "5-star Hotels",
+          "All Meals",
+          "Transportation",
+          "Guide",
+          "Entry Tickets",
+          "Airport Transfers",
+        ],
+        excludes: [
+          "International Flights",
+          "Personal Expenses",
+          "Tips",
+          "Travel Insurance",
+        ],
+        highlights: [
+          "Taj Mahal",
+          "Red Fort",
+          "Amber Fort",
+          "City Palace",
+          "Luxury Hotels",
+          "Expert Guides",
+        ],
       },
-      metadata: { created_at: "2024-02-05T12:00:00Z", updated_at: "2024-02-09T16:45:00Z", created_by: "admin", source: "extranet" },
+      metadata: {
+        created_at: "2024-02-05T12:00:00Z",
+        updated_at: "2024-02-09T16:45:00Z",
+        created_by: "admin",
+        source: "extranet",
+      },
       package_category: "cultural",
       package_duration: "6 Days 5 Nights",
-      package_inclusions: "Hotels, Meals, Transportation, Guide, Tickets"
+      package_inclusions: "Hotels, Meals, Transportation, Guide, Tickets",
     },
     {
       id: "package_002",
       module: "packages",
       title: "Dubai Luxury Experience - 4 Days",
-      description: "Premium Dubai experience with luxury hotels, desert safari, and exclusive dining experiences.",
+      description:
+        "Premium Dubai experience with luxury hotels, desert safari, and exclusive dining experiences.",
       location: { city: "Dubai", country: "UAE", region: "Middle East" },
       pricing: { basePrice: 85000, currency: "INR", priceType: "per_person" },
-      availability: { status: "active", capacity: 15, availableSlots: 5, startDate: "2024-03-01", endDate: "2024-12-31" },
+      availability: {
+        status: "active",
+        capacity: 15,
+        availableSlots: 5,
+        startDate: "2024-03-01",
+        endDate: "2024-12-31",
+      },
       details: {
         duration: "4 Days 3 Nights",
-        includes: ["5-star Hotel", "Desert Safari", "Burj Khalifa", "Dubai Mall", "Fine Dining", "Transfers"],
-        excludes: ["International Flights", "Personal Shopping", "Spa Services", "Travel Insurance"],
-        highlights: ["Burj Al Arab View", "Desert Experience", "Luxury Shopping", "Fine Dining", "Premium Hotels"]
+        includes: [
+          "5-star Hotel",
+          "Desert Safari",
+          "Burj Khalifa",
+          "Dubai Mall",
+          "Fine Dining",
+          "Transfers",
+        ],
+        excludes: [
+          "International Flights",
+          "Personal Shopping",
+          "Spa Services",
+          "Travel Insurance",
+        ],
+        highlights: [
+          "Burj Al Arab View",
+          "Desert Experience",
+          "Luxury Shopping",
+          "Fine Dining",
+          "Premium Hotels",
+        ],
       },
-      metadata: { created_at: "2024-02-07T14:30:00Z", updated_at: "2024-02-10T10:15:00Z", created_by: "admin", source: "extranet" },
+      metadata: {
+        created_at: "2024-02-07T14:30:00Z",
+        updated_at: "2024-02-10T10:15:00Z",
+        created_by: "admin",
+        source: "extranet",
+      },
       package_category: "luxury",
       package_duration: "4 Days 3 Nights",
-      package_inclusions: "Luxury Hotels, Safari, Attractions, Dining"
-    }
+      package_inclusions: "Luxury Hotels, Safari, Attractions, Dining",
+    },
   ],
 
   // Markup Rules for all modules
@@ -389,11 +644,11 @@ const seedData = {
       priority: 1,
       isActive: true,
       appliesTo: "all",
-      usage: { totalApplications: 234, revenue: 1876000, avgMarkup: 17.2 }
+      usage: { totalApplications: 234, revenue: 1876000, avgMarkup: 17.2 },
     },
     {
       id: "markup_flight_002",
-      module: "flights", 
+      module: "flights",
       name: "Domestic Economy Base",
       description: "Standard markup for domestic economy flights",
       ruleType: "percentage",
@@ -403,14 +658,14 @@ const seedData = {
       priority: 2,
       isActive: true,
       appliesTo: "all",
-      usage: { totalApplications: 567, revenue: 2134000, avgMarkup: 11.8 }
+      usage: { totalApplications: 567, revenue: 2134000, avgMarkup: 11.8 },
     },
 
     // Hotel Markup Rules
     {
       id: "markup_hotel_001",
       module: "hotels",
-      name: "Luxury Hotel Premium", 
+      name: "Luxury Hotel Premium",
       description: "Premium markup for 5-star luxury properties",
       ruleType: "percentage",
       value: 22,
@@ -419,10 +674,10 @@ const seedData = {
       priority: 1,
       isActive: true,
       appliesTo: "all",
-      usage: { totalApplications: 189, revenue: 2567000, avgMarkup: 20.5 }
+      usage: { totalApplications: 189, revenue: 2567000, avgMarkup: 20.5 },
     },
     {
-      id: "markup_hotel_002", 
+      id: "markup_hotel_002",
       module: "hotels",
       name: "Business Hotel Standard",
       description: "Standard markup for business hotels",
@@ -432,8 +687,8 @@ const seedData = {
       conditions: { starRating: ["3", "4"], category: "business" },
       priority: 2,
       isActive: true,
-      appliesTo: "all", 
-      usage: { totalApplications: 345, revenue: 1789000, avgMarkup: 14.3 }
+      appliesTo: "all",
+      usage: { totalApplications: 345, revenue: 1789000, avgMarkup: 14.3 },
     },
 
     // Sightseeing Markup Rules
@@ -449,21 +704,21 @@ const seedData = {
       priority: 1,
       isActive: true,
       appliesTo: "all",
-      usage: { totalApplications: 156, revenue: 467000, avgMarkup: 23.8 }
+      usage: { totalApplications: 156, revenue: 467000, avgMarkup: 23.8 },
     },
     {
       id: "markup_sight_002",
       module: "sightseeing",
       name: "Standard Group Tours",
       description: "Standard markup for regular group sightseeing tours",
-      ruleType: "percentage", 
+      ruleType: "percentage",
       value: 15,
       maxValue: 1500,
       conditions: { tourType: ["group", "standard"] },
       priority: 2,
       isActive: true,
       appliesTo: "all",
-      usage: { totalApplications: 289, revenue: 578000, avgMarkup: 14.2 }
+      usage: { totalApplications: 289, revenue: 578000, avgMarkup: 14.2 },
     },
 
     // Transfer Markup Rules
@@ -479,7 +734,7 @@ const seedData = {
       priority: 1,
       isActive: true,
       appliesTo: "all",
-      usage: { totalApplications: 134, revenue: 267000, avgMarkup: 18.9 }
+      usage: { totalApplications: 134, revenue: 267000, avgMarkup: 18.9 },
     },
     {
       id: "markup_transfer_002",
@@ -493,7 +748,7 @@ const seedData = {
       priority: 2,
       isActive: true,
       appliesTo: "all",
-      usage: { totalApplications: 423, revenue: 456000, avgMarkup: 11.5 }
+      usage: { totalApplications: 423, revenue: 456000, avgMarkup: 11.5 },
     },
 
     // Package Markup Rules
@@ -509,11 +764,11 @@ const seedData = {
       priority: 1,
       isActive: true,
       appliesTo: "all",
-      usage: { totalApplications: 78, revenue: 2184000, avgMarkup: 26.3 }
+      usage: { totalApplications: 78, revenue: 2184000, avgMarkup: 26.3 },
     },
     {
       id: "markup_package_002",
-      module: "packages", 
+      module: "packages",
       name: "Standard Package Base",
       description: "Standard markup for regular holiday packages",
       ruleType: "percentage",
@@ -523,8 +778,8 @@ const seedData = {
       priority: 2,
       isActive: true,
       appliesTo: "all",
-      usage: { totalApplications: 167, revenue: 1345000, avgMarkup: 17.1 }
-    }
+      usage: { totalApplications: 167, revenue: 1345000, avgMarkup: 17.1 },
+    },
   ],
 
   // Statistics for dashboard
@@ -535,58 +790,62 @@ const seedData = {
       activePromoCodes: 6,
       totalSavings: 1489500,
       averageOrderValue: 23400,
-      conversionRate: 3.4
+      conversionRate: 3.4,
     },
     moduleBreakdown: {
       flights: { bookings: 1245, revenue: 6234000, avgPrice: 28500 },
       hotels: { bookings: 896, revenue: 4567000, avgPrice: 15800 },
       packages: { bookings: 234, revenue: 2890000, avgPrice: 65400 },
       sightseeing: { bookings: 345, revenue: 567000, avgPrice: 4200 },
-      transfers: { bookings: 127, revenue: 309000, avgPrice: 2800 }
+      transfers: { bookings: 127, revenue: 309000, avgPrice: 2800 },
     },
     recentActivity: [
       { type: "booking", module: "flight", amount: 32000, time: "5 min ago" },
       { type: "promo", code: "WELCOME10", used: true, time: "12 min ago" },
       { type: "booking", module: "hotel", amount: 18500, time: "18 min ago" },
-      { type: "booking", module: "package", amount: 75000, time: "25 min ago" }
-    ]
-  }
+      { type: "booking", module: "package", amount: 75000, time: "25 min ago" },
+    ],
+  },
 };
 
 // Function to save seed data to files for easy import
 function generateSeedFiles() {
-  const outputDir = path.join(__dirname, '../data/seed');
-  
+  const outputDir = path.join(__dirname, "../data/seed");
+
   // Create directory if it doesn't exist
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir, { recursive: true });
   }
 
   // Save each data type to separate files
-  Object.keys(seedData).forEach(dataType => {
+  Object.keys(seedData).forEach((dataType) => {
     const filePath = path.join(outputDir, `${dataType}.json`);
     fs.writeFileSync(filePath, JSON.stringify(seedData[dataType], null, 2));
     console.log(`Generated: ${filePath}`);
   });
 
   // Create combined file
-  const combinedPath = path.join(outputDir, 'complete-seed-data.json');
+  const combinedPath = path.join(outputDir, "complete-seed-data.json");
   fs.writeFileSync(combinedPath, JSON.stringify(seedData, null, 2));
   console.log(`Generated: ${combinedPath}`);
 
-  console.log('\n✅ Seed data files generated successfully!');
-  console.log('Files created:');
+  console.log("\n✅ Seed data files generated successfully!");
+  console.log("Files created:");
   console.log(`- promoCodes.json (${seedData.promoCodes.length} promo codes)`);
-  console.log(`- extranetInventory.json (${seedData.extranetInventory.length} inventory items)`);
-  console.log(`- markupRules.json (${seedData.markupRules.length} markup rules)`);
-  console.log('- dashboardStats.json (dashboard statistics)');
-  console.log('- complete-seed-data.json (all data combined)');
+  console.log(
+    `- extranetInventory.json (${seedData.extranetInventory.length} inventory items)`,
+  );
+  console.log(
+    `- markupRules.json (${seedData.markupRules.length} markup rules)`,
+  );
+  console.log("- dashboardStats.json (dashboard statistics)");
+  console.log("- complete-seed-data.json (all data combined)");
 }
 
 // Function to populate in-memory data for APIs
 function loadSeedData() {
-  console.log('Loading seed data into application...');
-  
+  console.log("Loading seed data into application...");
+
   // This would be used by the API routes to populate their mock data
   return seedData;
 }
@@ -595,11 +854,13 @@ function loadSeedData() {
 module.exports = {
   seedData,
   generateSeedFiles,
-  loadSeedData
+  loadSeedData,
 };
 
 // Run if called directly
 if (require.main === module) {
-  console.log('🌱 Generating comprehensive seed data for Faredown Admin Panel...\n');
+  console.log(
+    "🌱 Generating comprehensive seed data for Faredown Admin Panel...\n",
+  );
   generateSeedFiles();
 }

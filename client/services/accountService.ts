@@ -158,7 +158,10 @@ export interface PackageBookingDetail {
   };
 }
 
-export type BookingDetail = FlightBookingDetail | HotelBookingDetail | PackageBookingDetail;
+export type BookingDetail =
+  | FlightBookingDetail
+  | HotelBookingDetail
+  | PackageBookingDetail;
 
 class AccountService {
   private baseUrl = "/api/account";
@@ -393,10 +396,10 @@ class AccountService {
         duration: "7 Days 6 Nights",
         travel_dates: {
           start_date: "2025-08-03",
-          end_date: "2025-08-10"
+          end_date: "2025-08-10",
         },
         includes: ["Flight", "Hotel", "Transfers", "Tours", "Breakfast"],
-        travelers_count: 2
+        travelers_count: 2,
       },
       travelers: [
         {
@@ -404,28 +407,28 @@ class AccountService {
           title: "Mr",
           type: "Adult",
           email: "john@example.com",
-          phone: "+91 9876543210"
+          phone: "+91 9876543210",
         },
         {
           name: "Jane Doe",
           title: "Mrs",
           type: "Adult",
           email: "jane@example.com",
-          phone: "+91 9876543211"
-        }
+          phone: "+91 9876543211",
+        },
       ],
       package_voucher: {
         voucher_no: "PKG-005-789456123",
         issue_date: "2024-01-19",
-        voucher_pdf_url: "https://cdn.faredown.com/docs/FD-PK-005-package.pdf"
+        voucher_pdf_url: "https://cdn.faredown.com/docs/FD-PK-005-package.pdf",
       },
       invoice: {
         invoice_no: "INV-PK-005",
         issued_at: "2024-01-19",
         amount: 85000,
         currency: "INR",
-        pdf_url: "https://cdn.faredown.com/docs/FD-PK-005-invoice.pdf"
-      }
+        pdf_url: "https://cdn.faredown.com/docs/FD-PK-005-invoice.pdf",
+      },
     },
   };
 

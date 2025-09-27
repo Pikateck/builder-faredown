@@ -612,7 +612,10 @@ export function ConversationalBargainModal({
           // Check if it's a server unavailable error
           console.warn("Hold creation failed:", holdResponse.status, errorText);
 
-          if (holdResponse.status === 503 || errorText.includes("API server unavailable")) {
+          if (
+            holdResponse.status === 503 ||
+            errorText.includes("API server unavailable")
+          ) {
             // Server is offline - proceed with graceful fallback
             addMessage(
               "agent",
@@ -643,7 +646,10 @@ export function ConversationalBargainModal({
               savings: savings,
               module,
               productRef,
-              warning: holdResponse.status === 503 ? "Service temporarily unavailable" : "Price not held - complete booking quickly",
+              warning:
+                holdResponse.status === 503
+                  ? "Service temporarily unavailable"
+                  : "Price not held - complete booking quickly",
             });
           }, 1500);
           return; // Don't throw error, handle gracefully
@@ -652,10 +658,11 @@ export function ConversationalBargainModal({
         console.error("Hold creation failed:", error);
 
         // Check if it's a network/server error
-        const isNetworkError = error instanceof Error &&
+        const isNetworkError =
+          error instanceof Error &&
           (error.message.includes("ECONNREFUSED") ||
-           error.message.includes("Failed to fetch") ||
-           error.message.includes("API server unavailable"));
+            error.message.includes("Failed to fetch") ||
+            error.message.includes("API server unavailable"));
 
         if (isNetworkError) {
           addMessage(
@@ -688,7 +695,9 @@ export function ConversationalBargainModal({
             savings: savings,
             module,
             productRef,
-            warning: isNetworkError ? "Service temporarily unavailable" : "Price not held - complete booking quickly",
+            warning: isNetworkError
+              ? "Service temporarily unavailable"
+              : "Price not held - complete booking quickly",
           });
         }, 1500);
       }
@@ -1060,7 +1069,8 @@ export function ConversationalBargainModal({
                               });
                             } else {
                               // Handle API errors gracefully
-                              const entityId = productRef || `${module}_${Date.now()}`;
+                              const entityId =
+                                productRef || `${module}_${Date.now()}`;
                               const savings = basePrice - price;
                               chatAnalyticsService
                                 .trackAccepted(module, entityId, price, savings)
@@ -1071,12 +1081,17 @@ export function ConversationalBargainModal({
                                 savings,
                                 module,
                                 productRef,
-                                warning: "Service temporarily unavailable - complete booking quickly",
+                                warning:
+                                  "Service temporarily unavailable - complete booking quickly",
                               });
                             }
                           } catch (e) {
-                            console.warn("Hold creation failed in onAcceptPrevious:", e);
-                            const entityId = productRef || `${module}_${Date.now()}`;
+                            console.warn(
+                              "Hold creation failed in onAcceptPrevious:",
+                              e,
+                            );
+                            const entityId =
+                              productRef || `${module}_${Date.now()}`;
                             const savings = basePrice - price;
                             chatAnalyticsService
                               .trackAccepted(module, entityId, price, savings)
@@ -1087,7 +1102,8 @@ export function ConversationalBargainModal({
                               savings,
                               module,
                               productRef,
-                              warning: "Service temporarily unavailable - complete booking quickly",
+                              warning:
+                                "Service temporarily unavailable - complete booking quickly",
                             });
                           }
                         })();

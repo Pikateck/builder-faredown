@@ -110,12 +110,16 @@ class PromoCodeService {
       console.error("Error fetching promo codes:", error);
 
       // Check if this is a server unavailable error - use fallback data
-      if (error instanceof Error &&
-          (error.message.includes("API server offline") ||
-           error.message.includes("API server unavailable") ||
-           error.message.includes("ECONNREFUSED") ||
-           error.message.includes("Failed to fetch"))) {
-        console.log("🔄 Using fallback promo code data due to API unavailability");
+      if (
+        error instanceof Error &&
+        (error.message.includes("API server offline") ||
+          error.message.includes("API server unavailable") ||
+          error.message.includes("ECONNREFUSED") ||
+          error.message.includes("Failed to fetch"))
+      ) {
+        console.log(
+          "🔄 Using fallback promo code data due to API unavailability",
+        );
 
         // Return mock data that matches the expected structure
         return {
@@ -125,7 +129,8 @@ class PromoCodeService {
               code: "FAREDOWNHOTEL",
               description: "Hotel booking discount for loyal customers",
               category: "hotel",
-              image: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F57003a8eaa4240e5a35dce05a23e72f5?format=webp&width=800",
+              image:
+                "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F57003a8eaa4240e5a35dce05a23e72f5?format=webp&width=800",
               discountType: "percentage",
               discountMinValue: 15,
               discountMaxValue: 5000,
@@ -147,9 +152,11 @@ class PromoCodeService {
             {
               id: "promo_002",
               code: "FAREDOWNFLIGHT",
-              description: "Flight discount promo for domestic and international routes",
+              description:
+                "Flight discount promo for domestic and international routes",
               category: "flight",
-              image: "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8542893d1c0b422f87eee4c35e5441ae?format=webp&width=800",
+              image:
+                "https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2F8542893d1c0b422f87eee4c35e5441ae?format=webp&width=800",
               discountType: "fixed",
               discountMinValue: 1500,
               discountMaxValue: 3000,
@@ -170,11 +177,11 @@ class PromoCodeService {
               validityType: "limited",
               usageCount: 45,
               maxUsage: 100,
-            }
+            },
           ],
           total: 2,
           page: 1,
-          totalPages: 1
+          totalPages: 1,
         };
       }
 

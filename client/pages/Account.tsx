@@ -907,11 +907,15 @@ export default function Account() {
                                     </div>
                                     <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
                                       <Calendar className="w-4 h-4" />
-                                      <span>Aug 3 - Aug 10 • 7 Days 6 Nights</span>
+                                      <span>
+                                        Aug 3 - Aug 10 • 7 Days 6 Nights
+                                      </span>
                                     </div>
                                     <div className="flex items-center space-x-2 text-sm text-[#7a7a7a]">
                                       <Package className="w-4 h-4" />
-                                      <span>Flight + Hotel + Transfers + Tours</span>
+                                      <span>
+                                        Flight + Hotel + Transfers + Tours
+                                      </span>
                                     </div>
                                   </>
                                 ) : module.id === "transfers" ? (

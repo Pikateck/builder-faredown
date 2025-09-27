@@ -76,7 +76,13 @@ interface PromoCode {
   id: string;
   code: string;
   description: string;
-  category: "flight" | "hotel" | "sightseeing" | "transfers" | "packages" | "all";
+  category:
+    | "flight"
+    | "hotel"
+    | "sightseeing"
+    | "transfers"
+    | "packages"
+    | "all";
   image?: string;
   discountType: "percentage" | "fixed";
   discountMinValue: number;
@@ -363,20 +369,23 @@ export default function PromoCodeManager() {
       // Apply filters to mock data
       if (searchTerm) {
         const searchLower = searchTerm.toLowerCase();
-        filteredMockData = filteredMockData.filter(code =>
-          code.code.toLowerCase().includes(searchLower) ||
-          code.description.toLowerCase().includes(searchLower)
+        filteredMockData = filteredMockData.filter(
+          (code) =>
+            code.code.toLowerCase().includes(searchLower) ||
+            code.description.toLowerCase().includes(searchLower),
         );
       }
 
-      if (selectedModule && selectedModule !== 'all') {
-        filteredMockData = filteredMockData.filter(code =>
-          code.module === selectedModule || code.module === 'all'
+      if (selectedModule && selectedModule !== "all") {
+        filteredMockData = filteredMockData.filter(
+          (code) => code.module === selectedModule || code.module === "all",
         );
       }
 
-      if (selectedStatus && selectedStatus !== 'all') {
-        filteredMockData = filteredMockData.filter(code => code.status === selectedStatus);
+      if (selectedStatus && selectedStatus !== "all") {
+        filteredMockData = filteredMockData.filter(
+          (code) => code.status === selectedStatus,
+        );
       }
 
       // Pagination for mock data
@@ -495,18 +504,28 @@ export default function PromoCodeManager() {
           promoCodeImage: formData.promoCodeImage || "",
           displayOnHomePage: formData.displayOnHomePage || "no",
           status: formData.status || "pending",
-          createdOn: selectedPromoCode?.createdOn || new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0],
-          updatedOn: new Date().toISOString().split('T')[0] + ' ' + new Date().toTimeString().split(' ')[0],
-          module: formData.category === 'all' ? 'all' : formData.category || "flight",
+          createdOn:
+            selectedPromoCode?.createdOn ||
+            new Date().toISOString().split("T")[0] +
+              " " +
+              new Date().toTimeString().split(" ")[0],
+          updatedOn:
+            new Date().toISOString().split("T")[0] +
+            " " +
+            new Date().toTimeString().split(" ")[0],
+          module:
+            formData.category === "all" ? "all" : formData.category || "flight",
           validityType: formData.validityType || "unlimited",
           usageCount: selectedPromoCode?.usageCount || 0,
           maxUsage: formData.maxUsage || null,
-          ...formData // Include all other fields
+          ...formData, // Include all other fields
         } as PromoCode;
 
         if (selectedPromoCode) {
           // Update existing in mock data
-          const index = mockPromoCodes.findIndex(p => p.id === selectedPromoCode.id);
+          const index = mockPromoCodes.findIndex(
+            (p) => p.id === selectedPromoCode.id,
+          );
           if (index !== -1) {
             mockPromoCodes[index] = newPromoCode;
           }
@@ -786,7 +805,8 @@ export default function PromoCodeManager() {
         )}
 
         {/* Sightseeing-specific fields */}
-        {(formData.category === "sightseeing" || formData.category === "all") && (
+        {(formData.category === "sightseeing" ||
+          formData.category === "all") && (
           <div className="space-y-4 border-l-4 border-purple-500 pl-4">
             <h4 className="font-medium text-purple-700">Sightseeing Details</h4>
 
@@ -950,7 +970,10 @@ export default function PromoCodeManager() {
                   id="packageDuration"
                   value={formData.packageDuration || ""}
                   onChange={(e) =>
-                    setFormData({ ...formData, packageDuration: e.target.value })
+                    setFormData({
+                      ...formData,
+                      packageDuration: e.target.value,
+                    })
                   }
                   placeholder="e.g., 5 Days 4 Nights"
                 />

@@ -1,41 +1,48 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const pricingEngine = require('../services/pricingEngine');
-const { authenticateToken } = require('../middleware/auth');
+const pricingEngine = require("../services/pricingEngine");
+const { authenticateToken } = require("../middleware/auth");
 
 /**
  * @route POST /api/pricing/calculate
  * @desc Calculate final price with markup, promo, taxes, and currency conversion
  * @access Public (but can be restricted with auth if needed)
  */
-router.post('/calculate', async (req, res) => {
+router.post("/calculate", async (req, res) => {
   try {
     const {
       module,
       basePrice,
-      baseCurrency = 'INR',
-      targetCurrency = 'INR',
+      baseCurrency = "INR",
+      targetCurrency = "INR",
       item = {},
       customer = {},
       booking = {},
       promoCode = null,
-      region = 'India',
-      quantity = 1
+      region = "India",
+      quantity = 1,
     } = req.body;
 
     // Validation
     if (!module || !basePrice || basePrice <= 0) {
       return res.status(400).json({
         success: false,
-        message: 'Missing required fields: module and positive basePrice are required'
+        message:
+          "Missing required fields: module and positive basePrice are required",
       });
     }
 
-    const validModules = ['flights', 'hotels', 'sightseeing', 'transfers', 'packages'];
+    const validModules = [
+      "flights",
+      "hotels",
+      "sightseeing",
+      "transfers",
+      "packages",
+    ];
     if (!validModules.includes(module)) {
       return res.status(400).json({
         success: false,
-        message: `Invalid module. Must be one of: ${validModules.join(', ')}`
+        message: `Invalid module. Must be one of: ${validModules.join(", ")}`,
       });
     }
 
@@ -50,16 +57,16 @@ router.post('/calculate', async (req, res) => {
       booking,
       promoCode,
       region,
-      quantity: parseInt(quantity) || 1
+      quantity: parseInt(quantity) || 1,
     });
 
     res.json(result);
   } catch (error) {
-    console.error('Pricing calculation error:', error);
+    console.error("Pricing calculation error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to calculate pricing',
-      error: error.message
+      message: "Failed to calculate pricing",
+      error: error.message,
     });
   }
 });
@@ -69,14 +76,14 @@ router.post('/calculate', async (req, res) => {
  * @desc Validate promo code for a specific module
  * @access Public
  */
-router.post('/validate-promo', async (req, res) => {
+router.post("/validate-promo", async (req, res) => {
   try {
     const { promoCode, module, basePrice = 0 } = req.body;
 
     if (!promoCode || !module) {
       return res.status(400).json({
         success: false,
-        message: 'Promo code and module are required'
+        message: "Promo code and module are required",
       });
     }
 
@@ -87,19 +94,19 @@ router.post('/validate-promo', async (req, res) => {
       return res.json({
         success: false,
         valid: false,
-        message: promo.error || 'Invalid promo code'
+        message: promo.error || "Invalid promo code",
       });
     }
 
     // Calculate potential discount
     let estimatedDiscount = 0;
     if (basePrice > 0) {
-      if (promo.discountType === 'percentage') {
+      if (promo.discountType === "percentage") {
         estimatedDiscount = Math.min(
           (basePrice * promo.discountMinValue) / 100,
-          promo.discountMaxValue || Infinity
+          promo.discountMaxValue || Infinity,
         );
-      } else if (promo.discountType === 'fixed') {
+      } else if (promo.discountType === "fixed") {
         estimatedDiscount = promo.discountMinValue;
       }
     }
@@ -113,16 +120,16 @@ router.post('/validate-promo', async (req, res) => {
         discountValue: promo.discountMinValue,
         maxDiscount: promo.discountMaxValue,
         minimumFare: promo.minimumFareAmount,
-        estimatedDiscount: Math.round(estimatedDiscount * 100) / 100
+        estimatedDiscount: Math.round(estimatedDiscount * 100) / 100,
       },
-      message: 'Promo code is valid'
+      message: "Promo code is valid",
     });
   } catch (error) {
-    console.error('Promo validation error:', error);
+    console.error("Promo validation error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to validate promo code',
-      error: error.message
+      message: "Failed to validate promo code",
+      error: error.message,
     });
   }
 });
@@ -132,22 +139,25 @@ router.post('/validate-promo', async (req, res) => {
  * @desc Get current exchange rates
  * @access Public
  */
-router.get('/exchange-rates', async (req, res) => {
+router.get("/exchange-rates", async (req, res) => {
   try {
-    const { from = 'INR', to } = req.query;
+    const { from = "INR", to } = req.query;
 
     const rates = {
-      'USD': await pricingEngine.getExchangeRate(from, 'USD').catch(() => null),
-      'EUR': await pricingEngine.getExchangeRate(from, 'EUR').catch(() => null),
-      'GBP': await pricingEngine.getExchangeRate(from, 'GBP').catch(() => null),
-      'AED': await pricingEngine.getExchangeRate(from, 'AED').catch(() => null),
-      'SGD': await pricingEngine.getExchangeRate(from, 'SGD').catch(() => null),
-      'INR': from === 'INR' ? 1 : await pricingEngine.getExchangeRate(from, 'INR').catch(() => null)
+      USD: await pricingEngine.getExchangeRate(from, "USD").catch(() => null),
+      EUR: await pricingEngine.getExchangeRate(from, "EUR").catch(() => null),
+      GBP: await pricingEngine.getExchangeRate(from, "GBP").catch(() => null),
+      AED: await pricingEngine.getExchangeRate(from, "AED").catch(() => null),
+      SGD: await pricingEngine.getExchangeRate(from, "SGD").catch(() => null),
+      INR:
+        from === "INR"
+          ? 1
+          : await pricingEngine.getExchangeRate(from, "INR").catch(() => null),
     };
 
     // Filter out null values
     const validRates = Object.fromEntries(
-      Object.entries(rates).filter(([, rate]) => rate !== null)
+      Object.entries(rates).filter(([, rate]) => rate !== null),
     );
 
     if (to) {
@@ -158,8 +168,8 @@ router.get('/exchange-rates', async (req, res) => {
           from,
           to,
           rate: specificRate,
-          timestamp: new Date().toISOString()
-        }
+          timestamp: new Date().toISOString(),
+        },
       });
     } else {
       res.json({
@@ -167,16 +177,16 @@ router.get('/exchange-rates', async (req, res) => {
         data: {
           baseCurrency: from,
           rates: validRates,
-          timestamp: new Date().toISOString()
-        }
+          timestamp: new Date().toISOString(),
+        },
       });
     }
   } catch (error) {
-    console.error('Exchange rate error:', error);
+    console.error("Exchange rate error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch exchange rates',
-      error: error.message
+      message: "Failed to fetch exchange rates",
+      error: error.message,
     });
   }
 });
@@ -186,10 +196,10 @@ router.get('/exchange-rates', async (req, res) => {
  * @desc Get detailed pricing breakdown for transparency
  * @access Public
  */
-router.post('/breakdown', async (req, res) => {
+router.post("/breakdown", async (req, res) => {
   try {
     const result = await pricingEngine.calculateFinalPrice(req.body);
-    
+
     if (!result.success) {
       return res.status(400).json(result);
     }
@@ -198,32 +208,34 @@ router.post('/breakdown', async (req, res) => {
     const breakdown = {
       itemPrice: result.data.basePrice,
       markup: {
-        description: 'Service charges and processing fees',
+        description: "Service charges and processing fees",
         amount: result.data.markup.amount,
-        percentage: `${result.data.markup.percentage.toFixed(1)}%`
+        percentage: `${result.data.markup.percentage.toFixed(1)}%`,
       },
       discount: {
-        description: result.data.promo.code ? `Promo code: ${result.data.promo.code}` : 'No discount applied',
+        description: result.data.promo.code
+          ? `Promo code: ${result.data.promo.code}`
+          : "No discount applied",
         amount: -result.data.promo.discount,
-        savings: result.data.promo.discount
+        savings: result.data.promo.discount,
       },
       subtotal: result.data.subtotal,
       taxes: {
         description: `${result.data.taxes.region} taxes (${result.data.taxes.rate}%)`,
         amount: result.data.taxes.amount,
-        rate: `${result.data.taxes.rate}%`
+        rate: `${result.data.taxes.rate}%`,
       },
       paymentCharges: {
-        description: 'Payment gateway charges',
+        description: "Payment gateway charges",
         amount: result.data.paymentGateway.totalCharges,
         breakdown: {
           percentage: `${result.data.paymentGateway.percentage}%`,
-          fixed: result.data.paymentGateway.fixedAmount
-        }
+          fixed: result.data.paymentGateway.fixedAmount,
+        },
       },
       totalAmount: result.data.finalPrice,
       currency: result.data.currency.targetCurrency,
-      quantity: result.data.quantity
+      quantity: result.data.quantity,
     };
 
     res.json({
@@ -232,15 +244,15 @@ router.post('/breakdown', async (req, res) => {
       metadata: {
         calculatedAt: result.data.calculatedAt,
         module: result.data.module,
-        currencyConversion: result.data.currency.conversionApplied
-      }
+        currencyConversion: result.data.currency.conversionApplied,
+      },
     });
   } catch (error) {
-    console.error('Pricing breakdown error:', error);
+    console.error("Pricing breakdown error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to generate pricing breakdown',
-      error: error.message
+      message: "Failed to generate pricing breakdown",
+      error: error.message,
     });
   }
 });
@@ -250,17 +262,17 @@ router.post('/breakdown', async (req, res) => {
  * @desc Get tax rates by region
  * @access Public
  */
-router.get('/tax-rates', (req, res) => {
+router.get("/tax-rates", (req, res) => {
   try {
     const { region } = req.query;
 
     const taxRates = {
-      'India': 12.0,
-      'UAE': 5.0,
-      'Europe': 20.0,
-      'USA': 8.5,
-      'Singapore': 7.0,
-      'default': 12.0
+      India: 12.0,
+      UAE: 5.0,
+      Europe: 20.0,
+      USA: 8.5,
+      Singapore: 7.0,
+      default: 12.0,
     };
 
     if (region) {
@@ -270,30 +282,30 @@ router.get('/tax-rates', (req, res) => {
         data: {
           region,
           taxRate: rate,
-          description: `${rate}% tax rate for ${region}`
-        }
+          description: `${rate}% tax rate for ${region}`,
+        },
       });
     } else {
       res.json({
         success: true,
         data: {
           regions: Object.entries(taxRates)
-            .filter(([key]) => key !== 'default')
+            .filter(([key]) => key !== "default")
             .map(([region, rate]) => ({
               region,
               taxRate: rate,
-              description: `${rate}% tax rate for ${region}`
+              description: `${rate}% tax rate for ${region}`,
             })),
-          defaultRate: taxRates.default
-        }
+          defaultRate: taxRates.default,
+        },
       });
     }
   } catch (error) {
-    console.error('Tax rates error:', error);
+    console.error("Tax rates error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to fetch tax rates',
-      error: error.message
+      message: "Failed to fetch tax rates",
+      error: error.message,
     });
   }
 });
@@ -303,21 +315,21 @@ router.get('/tax-rates', (req, res) => {
  * @desc Calculate pricing for multiple items at once
  * @access Public
  */
-router.post('/bulk-calculate', async (req, res) => {
+router.post("/bulk-calculate", async (req, res) => {
   try {
     const { items } = req.body;
 
     if (!Array.isArray(items) || items.length === 0) {
       return res.status(400).json({
         success: false,
-        message: 'Items array is required and must not be empty'
+        message: "Items array is required and must not be empty",
       });
     }
 
     if (items.length > 50) {
       return res.status(400).json({
         success: false,
-        message: 'Maximum 50 items allowed per bulk calculation'
+        message: "Maximum 50 items allowed per bulk calculation",
       });
     }
 
@@ -328,17 +340,19 @@ router.post('/bulk-calculate', async (req, res) => {
       try {
         const item = items[i];
         const result = await pricingEngine.calculateFinalPrice(item);
-        
+
         results.push({
           index: i,
           itemId: item.itemId || i,
-          result: result.success ? await pricingEngine.getPricingSummary(result) : result
+          result: result.success
+            ? await pricingEngine.getPricingSummary(result)
+            : result,
         });
       } catch (error) {
         errors.push({
           index: i,
           itemId: items[i].itemId || i,
-          error: error.message
+          error: error.message,
         });
       }
     }
@@ -351,16 +365,16 @@ router.post('/bulk-calculate', async (req, res) => {
         summary: {
           totalItems: items.length,
           successful: results.length,
-          failed: errors.length
-        }
-      }
+          failed: errors.length,
+        },
+      },
     });
   } catch (error) {
-    console.error('Bulk pricing error:', error);
+    console.error("Bulk pricing error:", error);
     res.status(500).json({
       success: false,
-      message: 'Failed to calculate bulk pricing',
-      error: error.message
+      message: "Failed to calculate bulk pricing",
+      error: error.message,
     });
   }
 });

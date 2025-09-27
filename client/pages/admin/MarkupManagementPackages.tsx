@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
@@ -100,17 +106,31 @@ interface PackageMarkupStats {
 }
 
 const PACKAGE_CATEGORIES = [
-  "cultural", "beach", "adventure", "honeymoon", "family", "luxury", "budget", "wildlife", "spiritual"
+  "cultural",
+  "beach",
+  "adventure",
+  "honeymoon",
+  "family",
+  "luxury",
+  "budget",
+  "wildlife",
+  "spiritual",
 ];
 
 const REGIONS = [
-  "South Asia", "Southeast Asia", "Middle East", "Europe", "North America", "Australia", "Africa"
+  "South Asia",
+  "Southeast Asia",
+  "Middle East",
+  "Europe",
+  "North America",
+  "Australia",
+  "Africa",
 ];
 
 const SEASONALITY_OPTIONS = [
   { value: "regular", label: "Regular Season" },
   { value: "peak", label: "Peak Season" },
-  { value: "off_peak", label: "Off Peak Season" }
+  { value: "off_peak", label: "Off Peak Season" },
 ];
 
 export default function MarkupManagementPackages() {
@@ -150,8 +170,10 @@ export default function MarkupManagementPackages() {
         ...(statusFilter !== "all" && { status: statusFilter }),
       });
 
-      const response = await apiClient.get(`/api/admin/markup/packages?${params}`);
-      
+      const response = await apiClient.get(
+        `/api/admin/markup/packages?${params}`,
+      );
+
       if (response.success) {
         setMarkupRules(response.data.rules);
       }
@@ -283,9 +305,10 @@ export default function MarkupManagementPackages() {
         ...(editingRule.ruleType === "tiered" && { tieredMarkups }),
       };
 
-      const response = method === "POST"
-        ? await apiClient.post(url, payload)
-        : await apiClient.put(url, payload);
+      const response =
+        method === "POST"
+          ? await apiClient.post(url, payload)
+          : await apiClient.put(url, payload);
 
       if (response.success) {
         setShowCreateDialog(false);
@@ -304,8 +327,10 @@ export default function MarkupManagementPackages() {
     if (!confirm("Are you sure you want to delete this markup rule?")) return;
 
     try {
-      const response = await apiClient.delete(`/api/admin/markup/packages/${ruleId}`);
-      
+      const response = await apiClient.delete(
+        `/api/admin/markup/packages/${ruleId}`,
+      );
+
       if (response.success) {
         fetchMarkupRules();
         fetchStats();
@@ -317,8 +342,10 @@ export default function MarkupManagementPackages() {
 
   const toggleRuleStatus = async (ruleId: string) => {
     try {
-      const response = await apiClient.patch(`/api/admin/markup/packages/${ruleId}/toggle`);
-      
+      const response = await apiClient.patch(
+        `/api/admin/markup/packages/${ruleId}/toggle`,
+      );
+
       if (response.success) {
         fetchMarkupRules();
         fetchStats();
@@ -338,7 +365,11 @@ export default function MarkupManagementPackages() {
     setTieredMarkups([...tieredMarkups, newTier]);
   };
 
-  const updateTieredMarkup = (index: number, field: keyof TieredMarkup, value: number) => {
+  const updateTieredMarkup = (
+    index: number,
+    field: keyof TieredMarkup,
+    value: number,
+  ) => {
     const updated = [...tieredMarkups];
     updated[index] = { ...updated[index], [field]: value };
     setTieredMarkups(updated);
@@ -364,7 +395,7 @@ export default function MarkupManagementPackages() {
     };
 
     const { color, icon: Icon } = config[ruleType] || config.percentage;
-    
+
     return (
       <Badge className={`${color} flex items-center gap-1`}>
         <Icon className="w-3 h-3" />
@@ -378,12 +409,14 @@ export default function MarkupManagementPackages() {
       {/* Basic Information */}
       <div className="space-y-4">
         <h4 className="font-medium">Basic Information</h4>
-        
+
         <div>
           <Label>Rule Name*</Label>
           <Input
             value={editingRule.name || ""}
-            onChange={(e) => setEditingRule({ ...editingRule, name: e.target.value })}
+            onChange={(e) =>
+              setEditingRule({ ...editingRule, name: e.target.value })
+            }
             placeholder="Enter rule name"
           />
         </div>
@@ -392,7 +425,9 @@ export default function MarkupManagementPackages() {
           <Label>Description*</Label>
           <Textarea
             value={editingRule.description || ""}
-            onChange={(e) => setEditingRule({ ...editingRule, description: e.target.value })}
+            onChange={(e) =>
+              setEditingRule({ ...editingRule, description: e.target.value })
+            }
             placeholder="Describe when this markup rule applies"
             rows={2}
           />
@@ -403,7 +438,9 @@ export default function MarkupManagementPackages() {
             <Label>Rule Type*</Label>
             <Select
               value={editingRule.ruleType}
-              onValueChange={(value) => setEditingRule({ ...editingRule, ruleType: value as any })}
+              onValueChange={(value) =>
+                setEditingRule({ ...editingRule, ruleType: value as any })
+              }
             >
               <SelectTrigger>
                 <SelectValue />
@@ -423,7 +460,12 @@ export default function MarkupManagementPackages() {
               min="1"
               max="10"
               value={editingRule.priority || 1}
-              onChange={(e) => setEditingRule({ ...editingRule, priority: parseInt(e.target.value) })}
+              onChange={(e) =>
+                setEditingRule({
+                  ...editingRule,
+                  priority: parseInt(e.target.value),
+                })
+              }
               placeholder="1 = highest priority"
             />
           </div>
@@ -434,13 +476,17 @@ export default function MarkupManagementPackages() {
             <Label>Applies To*</Label>
             <Select
               value={editingRule.appliesTo}
-              onValueChange={(value) => setEditingRule({ ...editingRule, appliesTo: value as any })}
+              onValueChange={(value) =>
+                setEditingRule({ ...editingRule, appliesTo: value as any })
+              }
             >
               <SelectTrigger>
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All Packages (Online + Offline)</SelectItem>
+                <SelectItem value="all">
+                  All Packages (Online + Offline)
+                </SelectItem>
                 <SelectItem value="online">Online Packages Only</SelectItem>
                 <SelectItem value="offline">Offline/Extranet Only</SelectItem>
               </SelectContent>
@@ -450,7 +496,9 @@ export default function MarkupManagementPackages() {
           <div className="flex items-center space-x-2 pt-6">
             <Switch
               checked={editingRule.isActive || false}
-              onCheckedChange={(checked) => setEditingRule({ ...editingRule, isActive: checked })}
+              onCheckedChange={(checked) =>
+                setEditingRule({ ...editingRule, isActive: checked })
+              }
             />
             <Label>Active</Label>
           </div>
@@ -461,7 +509,7 @@ export default function MarkupManagementPackages() {
       {editingRule.ruleType !== "tiered" && (
         <div className="space-y-4">
           <h4 className="font-medium">Markup Configuration</h4>
-          
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <Label>
@@ -473,8 +521,15 @@ export default function MarkupManagementPackages() {
                 step={editingRule.ruleType === "percentage" ? "0.1" : "1"}
                 min="0"
                 value={editingRule.value || ""}
-                onChange={(e) => setEditingRule({ ...editingRule, value: parseFloat(e.target.value) || 0 })}
-                placeholder={editingRule.ruleType === "percentage" ? "10.0" : "1000"}
+                onChange={(e) =>
+                  setEditingRule({
+                    ...editingRule,
+                    value: parseFloat(e.target.value) || 0,
+                  })
+                }
+                placeholder={
+                  editingRule.ruleType === "percentage" ? "10.0" : "1000"
+                }
               />
             </div>
 
@@ -484,7 +539,12 @@ export default function MarkupManagementPackages() {
                 <Input
                   type="number"
                   value={editingRule.maxValue || ""}
-                  onChange={(e) => setEditingRule({ ...editingRule, maxValue: parseFloat(e.target.value) || undefined })}
+                  onChange={(e) =>
+                    setEditingRule({
+                      ...editingRule,
+                      maxValue: parseFloat(e.target.value) || undefined,
+                    })
+                  }
                   placeholder="Optional maximum amount"
                 />
               </div>
@@ -503,16 +563,25 @@ export default function MarkupManagementPackages() {
               Add Tier
             </Button>
           </div>
-          
+
           <div className="space-y-3">
             {tieredMarkups.map((tier, index) => (
-              <div key={tier.id} className="grid grid-cols-4 gap-2 items-center p-3 border rounded">
+              <div
+                key={tier.id}
+                className="grid grid-cols-4 gap-2 items-center p-3 border rounded"
+              >
                 <div>
                   <Label className="text-xs">Min Price (₹)</Label>
                   <Input
                     type="number"
                     value={tier.minPrice}
-                    onChange={(e) => updateTieredMarkup(index, "minPrice", parseFloat(e.target.value) || 0)}
+                    onChange={(e) =>
+                      updateTieredMarkup(
+                        index,
+                        "minPrice",
+                        parseFloat(e.target.value) || 0,
+                      )
+                    }
                     className="h-8"
                   />
                 </div>
@@ -521,7 +590,13 @@ export default function MarkupManagementPackages() {
                   <Input
                     type="number"
                     value={tier.maxPrice}
-                    onChange={(e) => updateTieredMarkup(index, "maxPrice", parseFloat(e.target.value) || 0)}
+                    onChange={(e) =>
+                      updateTieredMarkup(
+                        index,
+                        "maxPrice",
+                        parseFloat(e.target.value) || 0,
+                      )
+                    }
                     className="h-8"
                   />
                 </div>
@@ -531,7 +606,13 @@ export default function MarkupManagementPackages() {
                     type="number"
                     step="0.1"
                     value={tier.markupPercentage}
-                    onChange={(e) => updateTieredMarkup(index, "markupPercentage", parseFloat(e.target.value) || 0)}
+                    onChange={(e) =>
+                      updateTieredMarkup(
+                        index,
+                        "markupPercentage",
+                        parseFloat(e.target.value) || 0,
+                      )
+                    }
                     className="h-8"
                   />
                 </div>
@@ -552,7 +633,7 @@ export default function MarkupManagementPackages() {
       {/* Conditions */}
       <div className="space-y-4">
         <h4 className="font-medium">Conditions (Optional)</h4>
-        
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label>Package Categories</Label>
@@ -562,20 +643,31 @@ export default function MarkupManagementPackages() {
                   <input
                     type="checkbox"
                     id={`category-${category}`}
-                    checked={editingRule.conditions?.packageCategory?.includes(category) || false}
+                    checked={
+                      editingRule.conditions?.packageCategory?.includes(
+                        category,
+                      ) || false
+                    }
                     onChange={(e) => {
-                      const categories = editingRule.conditions?.packageCategory || [];
+                      const categories =
+                        editingRule.conditions?.packageCategory || [];
                       const updated = e.target.checked
                         ? [...categories, category]
-                        : categories.filter(c => c !== category);
+                        : categories.filter((c) => c !== category);
                       setEditingRule({
                         ...editingRule,
-                        conditions: { ...editingRule.conditions, packageCategory: updated }
+                        conditions: {
+                          ...editingRule.conditions,
+                          packageCategory: updated,
+                        },
                       });
                     }}
                     className="rounded"
                   />
-                  <Label htmlFor={`category-${category}`} className="text-sm capitalize">
+                  <Label
+                    htmlFor={`category-${category}`}
+                    className="text-sm capitalize"
+                  >
                     {category}
                   </Label>
                 </div>
@@ -591,15 +683,20 @@ export default function MarkupManagementPackages() {
                   <input
                     type="checkbox"
                     id={`region-${region}`}
-                    checked={editingRule.conditions?.region?.includes(region) || false}
+                    checked={
+                      editingRule.conditions?.region?.includes(region) || false
+                    }
                     onChange={(e) => {
                       const regions = editingRule.conditions?.region || [];
                       const updated = e.target.checked
                         ? [...regions, region]
-                        : regions.filter(r => r !== region);
+                        : regions.filter((r) => r !== region);
                       setEditingRule({
                         ...editingRule,
-                        conditions: { ...editingRule.conditions, region: updated }
+                        conditions: {
+                          ...editingRule.conditions,
+                          region: updated,
+                        },
                       });
                     }}
                     className="rounded"
@@ -621,31 +718,35 @@ export default function MarkupManagementPackages() {
                 type="number"
                 placeholder="Min price"
                 value={editingRule.conditions?.priceRange?.min || ""}
-                onChange={(e) => setEditingRule({
-                  ...editingRule,
-                  conditions: {
-                    ...editingRule.conditions,
-                    priceRange: {
-                      ...editingRule.conditions?.priceRange,
-                      min: parseFloat(e.target.value) || 0
-                    }
-                  }
-                })}
+                onChange={(e) =>
+                  setEditingRule({
+                    ...editingRule,
+                    conditions: {
+                      ...editingRule.conditions,
+                      priceRange: {
+                        ...editingRule.conditions?.priceRange,
+                        min: parseFloat(e.target.value) || 0,
+                      },
+                    },
+                  })
+                }
               />
               <Input
                 type="number"
                 placeholder="Max price"
                 value={editingRule.conditions?.priceRange?.max || ""}
-                onChange={(e) => setEditingRule({
-                  ...editingRule,
-                  conditions: {
-                    ...editingRule.conditions,
-                    priceRange: {
-                      ...editingRule.conditions?.priceRange,
-                      max: parseFloat(e.target.value) || 0
-                    }
-                  }
-                })}
+                onChange={(e) =>
+                  setEditingRule({
+                    ...editingRule,
+                    conditions: {
+                      ...editingRule.conditions,
+                      priceRange: {
+                        ...editingRule.conditions?.priceRange,
+                        max: parseFloat(e.target.value) || 0,
+                      },
+                    },
+                  })
+                }
               />
             </div>
           </div>
@@ -654,17 +755,22 @@ export default function MarkupManagementPackages() {
             <Label>Seasonality</Label>
             <Select
               value={editingRule.conditions?.seasonality || ""}
-              onValueChange={(value) => setEditingRule({
-                ...editingRule,
-                conditions: { ...editingRule.conditions, seasonality: value as any }
-              })}
+              onValueChange={(value) =>
+                setEditingRule({
+                  ...editingRule,
+                  conditions: {
+                    ...editingRule.conditions,
+                    seasonality: value as any,
+                  },
+                })
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Any season" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="">Any Season</SelectItem>
-                {SEASONALITY_OPTIONS.map(option => (
+                {SEASONALITY_OPTIONS.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
@@ -681,10 +787,15 @@ export default function MarkupManagementPackages() {
               type="number"
               min="0"
               value={editingRule.conditions?.advanceBooking || ""}
-              onChange={(e) => setEditingRule({
-                ...editingRule,
-                conditions: { ...editingRule.conditions, advanceBooking: parseInt(e.target.value) || undefined }
-              })}
+              onChange={(e) =>
+                setEditingRule({
+                  ...editingRule,
+                  conditions: {
+                    ...editingRule.conditions,
+                    advanceBooking: parseInt(e.target.value) || undefined,
+                  },
+                })
+              }
               placeholder="Minimum advance booking days"
             />
           </div>
@@ -696,31 +807,35 @@ export default function MarkupManagementPackages() {
                 type="number"
                 placeholder="Min size"
                 value={editingRule.conditions?.groupSize?.min || ""}
-                onChange={(e) => setEditingRule({
-                  ...editingRule,
-                  conditions: {
-                    ...editingRule.conditions,
-                    groupSize: {
-                      ...editingRule.conditions?.groupSize,
-                      min: parseInt(e.target.value) || 0
-                    }
-                  }
-                })}
+                onChange={(e) =>
+                  setEditingRule({
+                    ...editingRule,
+                    conditions: {
+                      ...editingRule.conditions,
+                      groupSize: {
+                        ...editingRule.conditions?.groupSize,
+                        min: parseInt(e.target.value) || 0,
+                      },
+                    },
+                  })
+                }
               />
               <Input
                 type="number"
                 placeholder="Max size"
                 value={editingRule.conditions?.groupSize?.max || ""}
-                onChange={(e) => setEditingRule({
-                  ...editingRule,
-                  conditions: {
-                    ...editingRule.conditions,
-                    groupSize: {
-                      ...editingRule.conditions?.groupSize,
-                      max: parseInt(e.target.value) || 0
-                    }
-                  }
-                })}
+                onChange={(e) =>
+                  setEditingRule({
+                    ...editingRule,
+                    conditions: {
+                      ...editingRule.conditions,
+                      groupSize: {
+                        ...editingRule.conditions?.groupSize,
+                        max: parseInt(e.target.value) || 0,
+                      },
+                    },
+                  })
+                }
               />
             </div>
           </div>
@@ -739,7 +854,9 @@ export default function MarkupManagementPackages() {
               <Settings className="h-8 w-8 text-blue-600" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Rules</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalRules || 0}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.totalRules || 0}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -750,8 +867,12 @@ export default function MarkupManagementPackages() {
             <div className="flex items-center">
               <CheckCircle className="h-8 w-8 text-green-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active Rules</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.activeRules || 0}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Active Rules
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.activeRules || 0}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -762,8 +883,12 @@ export default function MarkupManagementPackages() {
             <div className="flex items-center">
               <DollarSign className="h-8 w-8 text-green-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">{formatPrice(stats.totalRevenue || 0)}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Revenue
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {formatPrice(stats.totalRevenue || 0)}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -775,7 +900,9 @@ export default function MarkupManagementPackages() {
               <TrendingUp className="h-8 w-8 text-purple-600" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Avg Markup</p>
-                <p className="text-2xl font-bold text-gray-900">{(stats.avgMarkupPercentage || 0).toFixed(1)}%</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {(stats.avgMarkupPercentage || 0).toFixed(1)}%
+                </p>
               </div>
             </div>
           </CardContent>
@@ -790,7 +917,8 @@ export default function MarkupManagementPackages() {
             Markup Management - Packages
           </CardTitle>
           <CardDescription>
-            Configure markup rules for package pricing. Rules apply to both online supplier content and offline extranet inventory.
+            Configure markup rules for package pricing. Rules apply to both
+            online supplier content and offline extranet inventory.
           </CardDescription>
         </CardHeader>
         <CardContent>
@@ -813,7 +941,7 @@ export default function MarkupManagementPackages() {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">All Categories</SelectItem>
-                  {PACKAGE_CATEGORIES.map(category => (
+                  {PACKAGE_CATEGORIES.map((category) => (
                     <SelectItem key={category} value={category}>
                       {category.charAt(0).toUpperCase() + category.slice(1)}
                     </SelectItem>
@@ -854,11 +982,14 @@ export default function MarkupManagementPackages() {
             <div className="flex items-start gap-3">
               <Info className="w-5 h-5 text-blue-600 mt-0.5" />
               <div>
-                <h4 className="font-medium text-blue-900">Markup Application Logic</h4>
+                <h4 className="font-medium text-blue-900">
+                  Markup Application Logic
+                </h4>
                 <p className="text-sm text-blue-800 mt-1">
-                  Rules are applied in priority order (1 = highest). First matching rule wins. 
-                  Markup applies to both online supplier inventory and offline extranet inventory.
-                  Final pricing: Base Price + Markup + Taxes + Payment Gateway Charges.
+                  Rules are applied in priority order (1 = highest). First
+                  matching rule wins. Markup applies to both online supplier
+                  inventory and offline extranet inventory. Final pricing: Base
+                  Price + Markup + Taxes + Payment Gateway Charges.
                 </p>
               </div>
             </div>
@@ -893,7 +1024,10 @@ export default function MarkupManagementPackages() {
                       <div className="flex flex-col items-center gap-2">
                         <Calculator className="w-12 h-12 text-gray-400" />
                         <p className="text-gray-500">No markup rules found</p>
-                        <p className="text-sm text-gray-400">Create your first markup rule to start configuring package pricing</p>
+                        <p className="text-sm text-gray-400">
+                          Create your first markup rule to start configuring
+                          package pricing
+                        </p>
                       </div>
                     </TableCell>
                   </TableRow>
@@ -923,8 +1057,7 @@ export default function MarkupManagementPackages() {
                             ? `${rule.value || 0}%`
                             : rule.ruleType === "fixed"
                               ? formatPrice(rule.value || 0)
-                              : "Tiered"
-                          }
+                              : "Tiered"}
                         </div>
                         {rule.maxValue && (
                           <div className="text-xs text-gray-500">
@@ -935,20 +1068,33 @@ export default function MarkupManagementPackages() {
 
                       <TableCell>
                         <div className="space-y-1">
-                          {rule.conditions?.packageCategory && rule.conditions.packageCategory.length > 0 && (
-                            <div className="text-xs text-gray-600">
-                              Categories: {rule.conditions.packageCategory.slice(0, 2).join(", ")}
-                              {rule.conditions.packageCategory.length > 2 && " +more"}
-                            </div>
-                          )}
+                          {rule.conditions?.packageCategory &&
+                            rule.conditions.packageCategory.length > 0 && (
+                              <div className="text-xs text-gray-600">
+                                Categories:{" "}
+                                {rule.conditions.packageCategory
+                                  .slice(0, 2)
+                                  .join(", ")}
+                                {rule.conditions.packageCategory.length > 2 &&
+                                  " +more"}
+                              </div>
+                            )}
                           {rule.conditions?.seasonality && (
                             <div className="text-xs text-gray-600">
-                              Season: {rule.conditions.seasonality.replace("_", " ")}
+                              Season:{" "}
+                              {rule.conditions.seasonality.replace("_", " ")}
                             </div>
                           )}
                           {rule.conditions?.priceRange && (
                             <div className="text-xs text-gray-600">
-                              Price: {formatPrice((rule.conditions?.priceRange?.min || 0))} - {formatPrice((rule.conditions?.priceRange?.max || 999999))}
+                              Price:{" "}
+                              {formatPrice(
+                                rule.conditions?.priceRange?.min || 0,
+                              )}{" "}
+                              -{" "}
+                              {formatPrice(
+                                rule.conditions?.priceRange?.max || 999999,
+                              )}
                             </div>
                           )}
                         </div>
@@ -962,15 +1108,21 @@ export default function MarkupManagementPackages() {
 
                       <TableCell>
                         <div className="text-center">
-                          <div className="font-medium">{rule.usage?.totalApplications || 0}</div>
-                          <div className="text-xs text-gray-500">applications</div>
+                          <div className="font-medium">
+                            {rule.usage?.totalApplications || 0}
+                          </div>
+                          <div className="text-xs text-gray-500">
+                            applications
+                          </div>
                           <div className="text-xs text-green-600">
                             {formatPrice(rule.usage?.revenue || 0)}
                           </div>
                         </div>
                       </TableCell>
 
-                      <TableCell>{getStatusBadge(rule.isActive || false)}</TableCell>
+                      <TableCell>
+                        {getStatusBadge(rule.isActive || false)}
+                      </TableCell>
 
                       <TableCell>
                         <div className="flex items-center gap-2">
@@ -1019,17 +1171,21 @@ export default function MarkupManagementPackages() {
           <DialogHeader>
             <DialogTitle>Create New Markup Rule</DialogTitle>
             <DialogDescription>
-              Configure a new markup rule for package pricing with specific conditions and priorities.
+              Configure a new markup rule for package pricing with specific
+              conditions and priorities.
             </DialogDescription>
           </DialogHeader>
 
           <MarkupRuleForm isEdit={false} />
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowCreateDialog(false)}
+            >
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={handleSaveRule}
               disabled={!editingRule.name || !editingRule.description}
             >
@@ -1055,7 +1211,7 @@ export default function MarkupManagementPackages() {
             <Button variant="outline" onClick={() => setShowEditDialog(false)}>
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={handleSaveRule}
               disabled={!editingRule.name || !editingRule.description}
             >

@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from "react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -108,7 +114,13 @@ const MODULE_CONFIG = {
     name: "Flights",
     icon: Plane,
     color: "bg-blue-600",
-    fields: ["origin", "destination", "airline", "cabin_class", "flight_duration"],
+    fields: [
+      "origin",
+      "destination",
+      "airline",
+      "cabin_class",
+      "flight_duration",
+    ],
   },
   hotels: {
     name: "Hotels",
@@ -120,35 +132,91 @@ const MODULE_CONFIG = {
     name: "Sightseeing",
     icon: Camera,
     color: "bg-purple-600",
-    fields: ["tour_type", "duration", "group_size", "difficulty_level", "languages"],
+    fields: [
+      "tour_type",
+      "duration",
+      "group_size",
+      "difficulty_level",
+      "languages",
+    ],
   },
   transfers: {
     name: "Transfers",
     icon: Car,
     color: "bg-orange-600",
-    fields: ["vehicle_type", "pickup_location", "drop_location", "journey_time", "capacity"],
+    fields: [
+      "vehicle_type",
+      "pickup_location",
+      "drop_location",
+      "journey_time",
+      "capacity",
+    ],
   },
   packages: {
     name: "Packages",
     icon: Package,
     color: "bg-emerald-600",
-    fields: ["package_type", "duration_days", "duration_nights", "inclusions", "category"],
+    fields: [
+      "package_type",
+      "duration_days",
+      "duration_nights",
+      "inclusions",
+      "category",
+    ],
   },
 };
 
 const CITIES = [
-  "Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata", "Hyderabad", "Pune", "Ahmedabad",
-  "Dubai", "Singapore", "Bangkok", "Kuala Lumpur", "London", "Paris", "New York", "Los Angeles",
-  "Goa", "Jaipur", "Agra", "Udaipur", "Kochi", "Mysore", "Manali", "Shimla", "Darjeeling",
+  "Mumbai",
+  "Delhi",
+  "Bangalore",
+  "Chennai",
+  "Kolkata",
+  "Hyderabad",
+  "Pune",
+  "Ahmedabad",
+  "Dubai",
+  "Singapore",
+  "Bangkok",
+  "Kuala Lumpur",
+  "London",
+  "Paris",
+  "New York",
+  "Los Angeles",
+  "Goa",
+  "Jaipur",
+  "Agra",
+  "Udaipur",
+  "Kochi",
+  "Mysore",
+  "Manali",
+  "Shimla",
+  "Darjeeling",
 ];
 
 const COUNTRIES = [
-  "India", "UAE", "Thailand", "Singapore", "Malaysia", "UK", "France", "USA", "Australia",
-  "Japan", "South Korea", "China", "Indonesia", "Philippines", "Vietnam", "Nepal", "Sri Lanka",
+  "India",
+  "UAE",
+  "Thailand",
+  "Singapore",
+  "Malaysia",
+  "UK",
+  "France",
+  "USA",
+  "Australia",
+  "Japan",
+  "South Korea",
+  "China",
+  "Indonesia",
+  "Philippines",
+  "Vietnam",
+  "Nepal",
+  "Sri Lanka",
 ];
 
 export default function ExtranetInventory() {
-  const [activeModule, setActiveModule] = useState<keyof typeof MODULE_CONFIG>("flights");
+  const [activeModule, setActiveModule] =
+    useState<keyof typeof MODULE_CONFIG>("flights");
   const [inventory, setInventory] = useState<InventoryItem[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
@@ -181,8 +249,10 @@ export default function ExtranetInventory() {
         ...(statusFilter !== "all" && { status: statusFilter }),
       });
 
-      const response = await apiClient.get(`/api/admin/extranet/inventory?${params}`);
-      
+      const response = await apiClient.get(
+        `/api/admin/extranet/inventory?${params}`,
+      );
+
       if (response.success) {
         setInventory(response.data.items);
       }
@@ -197,8 +267,10 @@ export default function ExtranetInventory() {
 
   const fetchStats = async () => {
     try {
-      const response = await apiClient.get(`/api/admin/extranet/stats?module=${activeModule}`);
-      
+      const response = await apiClient.get(
+        `/api/admin/extranet/stats?module=${activeModule}`,
+      );
+
       if (response.success) {
         setStats(response.data);
       }
@@ -261,9 +333,10 @@ export default function ExtranetInventory() {
         ? `/api/admin/extranet/inventory/${editingItem.id}`
         : "/api/admin/extranet/inventory";
 
-      const response = method === "POST"
-        ? await apiClient.post(url, editingItem)
-        : await apiClient.put(url, editingItem);
+      const response =
+        method === "POST"
+          ? await apiClient.post(url, editingItem)
+          : await apiClient.put(url, editingItem);
 
       if (response.success) {
         setShowCreateDialog(false);
@@ -281,8 +354,10 @@ export default function ExtranetInventory() {
     if (!confirm("Are you sure you want to delete this item?")) return;
 
     try {
-      const response = await apiClient.delete(`/api/admin/extranet/inventory/${itemId}`);
-      
+      const response = await apiClient.delete(
+        `/api/admin/extranet/inventory/${itemId}`,
+      );
+
       if (response.success) {
         fetchInventory();
         fetchStats();
@@ -294,8 +369,10 @@ export default function ExtranetInventory() {
 
   const toggleItemStatus = async (itemId: string) => {
     try {
-      const response = await apiClient.patch(`/api/admin/extranet/inventory/${itemId}/toggle-status`);
-      
+      const response = await apiClient.patch(
+        `/api/admin/extranet/inventory/${itemId}/toggle-status`,
+      );
+
       if (response.success) {
         fetchInventory();
         fetchStats();
@@ -320,7 +397,7 @@ export default function ExtranetInventory() {
 
   const renderModuleSpecificFields = () => {
     const moduleConfig = MODULE_CONFIG[activeModule];
-    
+
     switch (activeModule) {
       case "flights":
         return (
@@ -329,14 +406,18 @@ export default function ExtranetInventory() {
               <Label>Origin</Label>
               <Select
                 value={editingItem.origin || ""}
-                onValueChange={(value) => setEditingItem({ ...editingItem, origin: value })}
+                onValueChange={(value) =>
+                  setEditingItem({ ...editingItem, origin: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select origin" />
                 </SelectTrigger>
                 <SelectContent>
-                  {CITIES.map(city => (
-                    <SelectItem key={city} value={city}>{city}</SelectItem>
+                  {CITIES.map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -345,14 +426,18 @@ export default function ExtranetInventory() {
               <Label>Destination</Label>
               <Select
                 value={editingItem.destination || ""}
-                onValueChange={(value) => setEditingItem({ ...editingItem, destination: value })}
+                onValueChange={(value) =>
+                  setEditingItem({ ...editingItem, destination: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select destination" />
                 </SelectTrigger>
                 <SelectContent>
-                  {CITIES.map(city => (
-                    <SelectItem key={city} value={city}>{city}</SelectItem>
+                  {CITIES.map((city) => (
+                    <SelectItem key={city} value={city}>
+                      {city}
+                    </SelectItem>
                   ))}
                 </SelectContent>
               </Select>
@@ -361,7 +446,9 @@ export default function ExtranetInventory() {
               <Label>Airline</Label>
               <Input
                 value={editingItem.airline || ""}
-                onChange={(e) => setEditingItem({ ...editingItem, airline: e.target.value })}
+                onChange={(e) =>
+                  setEditingItem({ ...editingItem, airline: e.target.value })
+                }
                 placeholder="Enter airline name"
               />
             </div>
@@ -369,7 +456,9 @@ export default function ExtranetInventory() {
               <Label>Cabin Class</Label>
               <Select
                 value={editingItem.cabin_class || ""}
-                onValueChange={(value) => setEditingItem({ ...editingItem, cabin_class: value })}
+                onValueChange={(value) =>
+                  setEditingItem({ ...editingItem, cabin_class: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select cabin class" />
@@ -391,7 +480,9 @@ export default function ExtranetInventory() {
               <Label>Room Type</Label>
               <Input
                 value={editingItem.room_type || ""}
-                onChange={(e) => setEditingItem({ ...editingItem, room_type: e.target.value })}
+                onChange={(e) =>
+                  setEditingItem({ ...editingItem, room_type: e.target.value })
+                }
                 placeholder="e.g., Deluxe Room, Suite"
               />
             </div>
@@ -399,7 +490,9 @@ export default function ExtranetInventory() {
               <Label>Star Rating</Label>
               <Select
                 value={editingItem.star_rating || ""}
-                onValueChange={(value) => setEditingItem({ ...editingItem, star_rating: value })}
+                onValueChange={(value) =>
+                  setEditingItem({ ...editingItem, star_rating: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select rating" />
@@ -416,7 +509,9 @@ export default function ExtranetInventory() {
               <Label>Amenities</Label>
               <Textarea
                 value={editingItem.amenities || ""}
-                onChange={(e) => setEditingItem({ ...editingItem, amenities: e.target.value })}
+                onChange={(e) =>
+                  setEditingItem({ ...editingItem, amenities: e.target.value })
+                }
                 placeholder="List hotel amenities (WiFi, Pool, Spa, etc.)"
                 rows={2}
               />
@@ -431,7 +526,9 @@ export default function ExtranetInventory() {
               <Label>Tour Type</Label>
               <Select
                 value={editingItem.tour_type || ""}
-                onValueChange={(value) => setEditingItem({ ...editingItem, tour_type: value })}
+                onValueChange={(value) =>
+                  setEditingItem({ ...editingItem, tour_type: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select tour type" />
@@ -449,7 +546,9 @@ export default function ExtranetInventory() {
               <Label>Duration</Label>
               <Input
                 value={editingItem.duration || ""}
-                onChange={(e) => setEditingItem({ ...editingItem, duration: e.target.value })}
+                onChange={(e) =>
+                  setEditingItem({ ...editingItem, duration: e.target.value })
+                }
                 placeholder="e.g., 4 hours, Full day"
               />
             </div>
@@ -458,7 +557,9 @@ export default function ExtranetInventory() {
               <Input
                 type="number"
                 value={editingItem.group_size || ""}
-                onChange={(e) => setEditingItem({ ...editingItem, group_size: e.target.value })}
+                onChange={(e) =>
+                  setEditingItem({ ...editingItem, group_size: e.target.value })
+                }
                 placeholder="Maximum group size"
               />
             </div>
@@ -466,7 +567,9 @@ export default function ExtranetInventory() {
               <Label>Difficulty Level</Label>
               <Select
                 value={editingItem.difficulty_level || ""}
-                onValueChange={(value) => setEditingItem({ ...editingItem, difficulty_level: value })}
+                onValueChange={(value) =>
+                  setEditingItem({ ...editingItem, difficulty_level: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select difficulty" />
@@ -488,7 +591,9 @@ export default function ExtranetInventory() {
               <Label>Vehicle Type</Label>
               <Select
                 value={editingItem.vehicle_type || ""}
-                onValueChange={(value) => setEditingItem({ ...editingItem, vehicle_type: value })}
+                onValueChange={(value) =>
+                  setEditingItem({ ...editingItem, vehicle_type: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select vehicle" />
@@ -507,7 +612,12 @@ export default function ExtranetInventory() {
               <Input
                 type="number"
                 value={editingItem.vehicle_capacity || ""}
-                onChange={(e) => setEditingItem({ ...editingItem, vehicle_capacity: e.target.value })}
+                onChange={(e) =>
+                  setEditingItem({
+                    ...editingItem,
+                    vehicle_capacity: e.target.value,
+                  })
+                }
                 placeholder="Number of passengers"
               />
             </div>
@@ -515,7 +625,12 @@ export default function ExtranetInventory() {
               <Label>Pickup Location</Label>
               <Input
                 value={editingItem.pickup_location || ""}
-                onChange={(e) => setEditingItem({ ...editingItem, pickup_location: e.target.value })}
+                onChange={(e) =>
+                  setEditingItem({
+                    ...editingItem,
+                    pickup_location: e.target.value,
+                  })
+                }
                 placeholder="Pickup address/location"
               />
             </div>
@@ -523,7 +638,12 @@ export default function ExtranetInventory() {
               <Label>Drop Location</Label>
               <Input
                 value={editingItem.drop_location || ""}
-                onChange={(e) => setEditingItem({ ...editingItem, drop_location: e.target.value })}
+                onChange={(e) =>
+                  setEditingItem({
+                    ...editingItem,
+                    drop_location: e.target.value,
+                  })
+                }
                 placeholder="Drop address/location"
               />
             </div>
@@ -537,7 +657,9 @@ export default function ExtranetInventory() {
               <Label>Package Category</Label>
               <Select
                 value={editingItem.package_category || ""}
-                onValueChange={(value) => setEditingItem({ ...editingItem, package_category: value })}
+                onValueChange={(value) =>
+                  setEditingItem({ ...editingItem, package_category: value })
+                }
               >
                 <SelectTrigger>
                   <SelectValue placeholder="Select category" />
@@ -557,7 +679,12 @@ export default function ExtranetInventory() {
               <Label>Duration</Label>
               <Input
                 value={editingItem.package_duration || ""}
-                onChange={(e) => setEditingItem({ ...editingItem, package_duration: e.target.value })}
+                onChange={(e) =>
+                  setEditingItem({
+                    ...editingItem,
+                    package_duration: e.target.value,
+                  })
+                }
                 placeholder="e.g., 5 Days 4 Nights"
               />
             </div>
@@ -565,7 +692,12 @@ export default function ExtranetInventory() {
               <Label>Inclusions</Label>
               <Textarea
                 value={editingItem.package_inclusions || ""}
-                onChange={(e) => setEditingItem({ ...editingItem, package_inclusions: e.target.value })}
+                onChange={(e) =>
+                  setEditingItem({
+                    ...editingItem,
+                    package_inclusions: e.target.value,
+                  })
+                }
                 placeholder="List what's included in the package"
                 rows={2}
               />
@@ -583,12 +715,14 @@ export default function ExtranetInventory() {
       {/* Basic Information */}
       <div className="space-y-4">
         <h4 className="font-medium">Basic Information</h4>
-        
+
         <div>
           <Label>Title*</Label>
           <Input
             value={editingItem.title || ""}
-            onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
+            onChange={(e) =>
+              setEditingItem({ ...editingItem, title: e.target.value })
+            }
             placeholder="Enter item title"
           />
         </div>
@@ -597,7 +731,9 @@ export default function ExtranetInventory() {
           <Label>Description*</Label>
           <Textarea
             value={editingItem.description || ""}
-            onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
+            onChange={(e) =>
+              setEditingItem({ ...editingItem, description: e.target.value })
+            }
             placeholder="Enter detailed description"
             rows={3}
           />
@@ -608,17 +744,21 @@ export default function ExtranetInventory() {
             <Label>City*</Label>
             <Select
               value={editingItem.location?.city || ""}
-              onValueChange={(value) => setEditingItem({
-                ...editingItem,
-                location: { ...editingItem.location, city: value }
-              })}
+              onValueChange={(value) =>
+                setEditingItem({
+                  ...editingItem,
+                  location: { ...editingItem.location, city: value },
+                })
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select city" />
               </SelectTrigger>
               <SelectContent>
-                {CITIES.map(city => (
-                  <SelectItem key={city} value={city}>{city}</SelectItem>
+                {CITIES.map((city) => (
+                  <SelectItem key={city} value={city}>
+                    {city}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -628,17 +768,21 @@ export default function ExtranetInventory() {
             <Label>Country*</Label>
             <Select
               value={editingItem.location?.country || ""}
-              onValueChange={(value) => setEditingItem({
-                ...editingItem,
-                location: { ...editingItem.location, country: value }
-              })}
+              onValueChange={(value) =>
+                setEditingItem({
+                  ...editingItem,
+                  location: { ...editingItem.location, country: value },
+                })
+              }
             >
               <SelectTrigger>
                 <SelectValue placeholder="Select country" />
               </SelectTrigger>
               <SelectContent>
-                {COUNTRIES.map(country => (
-                  <SelectItem key={country} value={country}>{country}</SelectItem>
+                {COUNTRIES.map((country) => (
+                  <SelectItem key={country} value={country}>
+                    {country}
+                  </SelectItem>
                 ))}
               </SelectContent>
             </Select>
@@ -648,24 +792,31 @@ export default function ExtranetInventory() {
 
       {/* Module-specific fields */}
       <div className="space-y-4">
-        <h4 className="font-medium">{MODULE_CONFIG[activeModule].name} Details</h4>
+        <h4 className="font-medium">
+          {MODULE_CONFIG[activeModule].name} Details
+        </h4>
         {renderModuleSpecificFields()}
       </div>
 
       {/* Pricing */}
       <div className="space-y-4">
         <h4 className="font-medium">Pricing</h4>
-        
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label>Base Price*</Label>
             <Input
               type="number"
               value={editingItem.pricing?.basePrice || ""}
-              onChange={(e) => setEditingItem({
-                ...editingItem,
-                pricing: { ...editingItem.pricing, basePrice: parseFloat(e.target.value) || 0 }
-              })}
+              onChange={(e) =>
+                setEditingItem({
+                  ...editingItem,
+                  pricing: {
+                    ...editingItem.pricing,
+                    basePrice: parseFloat(e.target.value) || 0,
+                  },
+                })
+              }
               placeholder="Enter base price"
             />
           </div>
@@ -674,10 +825,12 @@ export default function ExtranetInventory() {
             <Label>Price Type*</Label>
             <Select
               value={editingItem.pricing?.priceType || "per_person"}
-              onValueChange={(value) => setEditingItem({
-                ...editingItem,
-                pricing: { ...editingItem.pricing, priceType: value }
-              })}
+              onValueChange={(value) =>
+                setEditingItem({
+                  ...editingItem,
+                  pricing: { ...editingItem.pricing, priceType: value },
+                })
+              }
             >
               <SelectTrigger>
                 <SelectValue />
@@ -696,16 +849,18 @@ export default function ExtranetInventory() {
       {/* Availability */}
       <div className="space-y-4">
         <h4 className="font-medium">Availability</h4>
-        
+
         <div className="grid grid-cols-2 gap-4">
           <div>
             <Label>Status*</Label>
             <Select
               value={editingItem.availability?.status || "draft"}
-              onValueChange={(value) => setEditingItem({
-                ...editingItem,
-                availability: { ...editingItem.availability, status: value }
-              })}
+              onValueChange={(value) =>
+                setEditingItem({
+                  ...editingItem,
+                  availability: { ...editingItem.availability, status: value },
+                })
+              }
             >
               <SelectTrigger>
                 <SelectValue />
@@ -723,10 +878,15 @@ export default function ExtranetInventory() {
             <Input
               type="number"
               value={editingItem.availability?.capacity || ""}
-              onChange={(e) => setEditingItem({
-                ...editingItem,
-                availability: { ...editingItem.availability, capacity: parseInt(e.target.value) || 0 }
-              })}
+              onChange={(e) =>
+                setEditingItem({
+                  ...editingItem,
+                  availability: {
+                    ...editingItem.availability,
+                    capacity: parseInt(e.target.value) || 0,
+                  },
+                })
+              }
               placeholder="Maximum capacity"
             />
           </div>
@@ -738,10 +898,15 @@ export default function ExtranetInventory() {
             <Input
               type="date"
               value={editingItem.availability?.startDate || ""}
-              onChange={(e) => setEditingItem({
-                ...editingItem,
-                availability: { ...editingItem.availability, startDate: e.target.value }
-              })}
+              onChange={(e) =>
+                setEditingItem({
+                  ...editingItem,
+                  availability: {
+                    ...editingItem.availability,
+                    startDate: e.target.value,
+                  },
+                })
+              }
             />
           </div>
 
@@ -750,10 +915,15 @@ export default function ExtranetInventory() {
             <Input
               type="date"
               value={editingItem.availability?.endDate || ""}
-              onChange={(e) => setEditingItem({
-                ...editingItem,
-                availability: { ...editingItem.availability, endDate: e.target.value }
-              })}
+              onChange={(e) =>
+                setEditingItem({
+                  ...editingItem,
+                  availability: {
+                    ...editingItem.availability,
+                    endDate: e.target.value,
+                  },
+                })
+              }
             />
           </div>
         </div>
@@ -771,7 +941,9 @@ export default function ExtranetInventory() {
               <Package className="h-8 w-8 text-blue-600" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Items</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.total_items}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.total_items}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -782,8 +954,12 @@ export default function ExtranetInventory() {
             <div className="flex items-center">
               <CheckCircle className="h-8 w-8 text-green-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Active Items</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.active_items}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Active Items
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.active_items}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -794,8 +970,12 @@ export default function ExtranetInventory() {
             <div className="flex items-center">
               <DollarSign className="h-8 w-8 text-green-600" />
               <div className="ml-4">
-                <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">{formatPrice(stats.total_revenue)}</p>
+                <p className="text-sm font-medium text-gray-600">
+                  Total Revenue
+                </p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {formatPrice(stats.total_revenue)}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -807,7 +987,9 @@ export default function ExtranetInventory() {
               <Star className="h-8 w-8 text-yellow-600" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Avg Rating</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.avg_rating.toFixed(1)}</p>
+                <p className="text-2xl font-bold text-gray-900">
+                  {stats.avg_rating.toFixed(1)}
+                </p>
               </div>
             </div>
           </CardContent>
@@ -819,15 +1001,25 @@ export default function ExtranetInventory() {
         <CardHeader>
           <CardTitle>Extranet Inventory Management</CardTitle>
           <CardDescription>
-            Manage offline inventory for all modules. Add, edit, and publish inventory that appears alongside online supplier content.
+            Manage offline inventory for all modules. Add, edit, and publish
+            inventory that appears alongside online supplier content.
           </CardDescription>
         </CardHeader>
         <CardContent>
           {/* Module Tabs */}
-          <Tabs value={activeModule} onValueChange={(value) => setActiveModule(value as keyof typeof MODULE_CONFIG)}>
+          <Tabs
+            value={activeModule}
+            onValueChange={(value) =>
+              setActiveModule(value as keyof typeof MODULE_CONFIG)
+            }
+          >
             <TabsList className="grid w-full grid-cols-5">
               {Object.entries(MODULE_CONFIG).map(([key, config]) => (
-                <TabsTrigger key={key} value={key} className="flex items-center gap-2">
+                <TabsTrigger
+                  key={key}
+                  value={key}
+                  className="flex items-center gap-2"
+                >
                   <config.icon className="w-4 h-4" />
                   {config.name}
                 </TabsTrigger>
@@ -835,7 +1027,11 @@ export default function ExtranetInventory() {
             </TabsList>
 
             {Object.entries(MODULE_CONFIG).map(([moduleKey, config]) => (
-              <TabsContent key={moduleKey} value={moduleKey} className="space-y-4">
+              <TabsContent
+                key={moduleKey}
+                value={moduleKey}
+                className="space-y-4"
+              >
                 {/* Filters and Actions */}
                 <div className="flex flex-col md:flex-row gap-4 items-center justify-between">
                   <div className="flex flex-1 gap-4 w-full md:w-auto">
@@ -849,7 +1045,10 @@ export default function ExtranetInventory() {
                       />
                     </div>
 
-                    <Select value={statusFilter} onValueChange={setStatusFilter}>
+                    <Select
+                      value={statusFilter}
+                      onValueChange={setStatusFilter}
+                    >
                       <SelectTrigger className="w-32">
                         <SelectValue placeholder="Status" />
                       </SelectTrigger>
@@ -904,8 +1103,13 @@ export default function ExtranetInventory() {
                           <TableCell colSpan={7} className="text-center py-8">
                             <div className="flex flex-col items-center gap-2">
                               <config.icon className="w-12 h-12 text-gray-400" />
-                              <p className="text-gray-500">No {config.name.toLowerCase()} found</p>
-                              <p className="text-sm text-gray-400">Create your first {config.name.toLowerCase()} item to get started</p>
+                              <p className="text-gray-500">
+                                No {config.name.toLowerCase()} found
+                              </p>
+                              <p className="text-sm text-gray-400">
+                                Create your first {config.name.toLowerCase()}{" "}
+                                item to get started
+                              </p>
                             </div>
                           </TableCell>
                         </TableRow>
@@ -924,33 +1128,44 @@ export default function ExtranetInventory() {
                             <TableCell>
                               <div className="flex items-center">
                                 <MapPin className="w-4 h-4 mr-1 text-gray-400" />
-                                <span>{item.location.city}, {item.location.country}</span>
+                                <span>
+                                  {item.location.city}, {item.location.country}
+                                </span>
                               </div>
                             </TableCell>
 
                             <TableCell>
                               <div>
                                 <div className="font-medium">
-                                  {formatPrice(item.pricing.basePrice, item.pricing.currency)}
+                                  {formatPrice(
+                                    item.pricing.basePrice,
+                                    item.pricing.currency,
+                                  )}
                                 </div>
                                 <div className="text-sm text-gray-500">
-                                  {item.pricing.priceType.replace('_', ' ')}
+                                  {item.pricing.priceType.replace("_", " ")}
                                 </div>
                               </div>
                             </TableCell>
 
-                            <TableCell>{getStatusBadge(item.availability.status)}</TableCell>
+                            <TableCell>
+                              {getStatusBadge(item.availability.status)}
+                            </TableCell>
 
                             <TableCell>
                               <div className="text-center">
                                 <div className="font-medium">0</div>
-                                <div className="text-xs text-gray-500">bookings</div>
+                                <div className="text-xs text-gray-500">
+                                  bookings
+                                </div>
                               </div>
                             </TableCell>
 
                             <TableCell>
                               <div className="text-sm">
-                                {new Date(item.metadata.created_at).toLocaleDateString()}
+                                {new Date(
+                                  item.metadata.created_at,
+                                ).toLocaleDateString()}
                               </div>
                             </TableCell>
 
@@ -1002,19 +1217,25 @@ export default function ExtranetInventory() {
       <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
         <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle>Add New {MODULE_CONFIG[activeModule].name}</DialogTitle>
+            <DialogTitle>
+              Add New {MODULE_CONFIG[activeModule].name}
+            </DialogTitle>
             <DialogDescription>
-              Create a new {MODULE_CONFIG[activeModule].name.toLowerCase()} item for offline inventory.
+              Create a new {MODULE_CONFIG[activeModule].name.toLowerCase()} item
+              for offline inventory.
             </DialogDescription>
           </DialogHeader>
 
           <ItemFormDialog isEdit={false} />
 
           <DialogFooter>
-            <Button variant="outline" onClick={() => setShowCreateDialog(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setShowCreateDialog(false)}
+            >
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={handleSaveItem}
               disabled={!editingItem.title || !editingItem.description}
             >
@@ -1030,7 +1251,8 @@ export default function ExtranetInventory() {
           <DialogHeader>
             <DialogTitle>Edit {MODULE_CONFIG[activeModule].name}</DialogTitle>
             <DialogDescription>
-              Update {MODULE_CONFIG[activeModule].name.toLowerCase()} item details and settings.
+              Update {MODULE_CONFIG[activeModule].name.toLowerCase()} item
+              details and settings.
             </DialogDescription>
           </DialogHeader>
 
@@ -1040,7 +1262,7 @@ export default function ExtranetInventory() {
             <Button variant="outline" onClick={() => setShowEditDialog(false)}>
               Cancel
             </Button>
-            <Button 
+            <Button
               onClick={handleSaveItem}
               disabled={!editingItem.title || !editingItem.description}
             >

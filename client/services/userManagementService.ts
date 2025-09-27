@@ -89,7 +89,11 @@ class UserManagementService {
    */
   async createUser(userData: CreateUserRequest): Promise<AdminUser> {
     try {
-      const response = await apiClient.post(this.baseUrl, userData, getAdminHeaders());
+      const response = await apiClient.post(
+        this.baseUrl,
+        userData,
+        getAdminHeaders(),
+      );
 
       if (response.ok) {
         return response.data.user;

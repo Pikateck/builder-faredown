@@ -3,25 +3,25 @@
  * Tests the useCountries hook graceful fallback when API is offline
  */
 
-import React from 'react';
-import { Globe, CheckCircle, AlertCircle, Loader } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import useCountries from '@/hooks/useCountries';
+import React from "react";
+import { Globe, CheckCircle, AlertCircle, Loader } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
+import useCountries from "@/hooks/useCountries";
 
 export default function CountriesErrorTest() {
-  const { 
-    countries, 
-    popularCountries, 
-    loading, 
-    error, 
-    refresh, 
+  const {
+    countries,
+    popularCountries,
+    loading,
+    error,
+    refresh,
     searchCountries,
     isLoading,
     hasError,
     isEmpty,
-    count 
+    count,
   } = useCountries({ autoFetch: true });
 
   const [searchResults, setSearchResults] = React.useState<any[]>([]);
@@ -32,13 +32,13 @@ export default function CountriesErrorTest() {
       setSearchResults([]);
       return;
     }
-    
+
     setSearchLoading(true);
     try {
       const results = await searchCountries(query);
       setSearchResults(results);
     } catch (err) {
-      console.error('Search error:', err);
+      console.error("Search error:", err);
     } finally {
       setSearchLoading(false);
     }
@@ -78,9 +78,7 @@ export default function CountriesErrorTest() {
           {/* Error Message (if any) */}
           {error && (
             <div className="p-3 bg-yellow-50 border border-yellow-200 rounded-lg">
-              <p className="text-sm text-yellow-800">
-                ⚠️ {error}
-              </p>
+              <p className="text-sm text-yellow-800">⚠️ {error}</p>
             </div>
           )}
 
@@ -90,7 +88,8 @@ export default function CountriesErrorTest() {
               <span className="font-medium">Total Countries:</span> {count}
             </div>
             <div>
-              <span className="font-medium">Popular Countries:</span> {popularCountries.length}
+              <span className="font-medium">Popular Countries:</span>{" "}
+              {popularCountries.length}
             </div>
           </div>
 
@@ -118,7 +117,11 @@ export default function CountriesErrorTest() {
                 Found {searchResults.length} countries:
                 <div className="mt-1 flex flex-wrap gap-1">
                   {searchResults.slice(0, 5).map((country) => (
-                    <Badge key={country.iso2} variant="outline" className="text-xs">
+                    <Badge
+                      key={country.iso2}
+                      variant="outline"
+                      className="text-xs"
+                    >
                       {country.flag_emoji} {country.display_name}
                     </Badge>
                   ))}
@@ -134,7 +137,9 @@ export default function CountriesErrorTest() {
 
           {/* Popular Countries Display */}
           <div className="space-y-2">
-            <h4 className="text-sm font-medium">Popular Countries ({popularCountries.length}):</h4>
+            <h4 className="text-sm font-medium">
+              Popular Countries ({popularCountries.length}):
+            </h4>
             <div className="flex flex-wrap gap-1">
               {popularCountries.map((country) => (
                 <Badge key={country.iso2} variant="outline" className="text-xs">
@@ -146,7 +151,9 @@ export default function CountriesErrorTest() {
 
           {/* Expected Behavior */}
           <div className="p-4 bg-green-50 border border-green-200 rounded-lg">
-            <h4 className="font-semibold text-green-900 mb-2">Expected Behavior (API Offline):</h4>
+            <h4 className="font-semibold text-green-900 mb-2">
+              Expected Behavior (API Offline):
+            </h4>
             <ul className="list-disc list-inside text-green-800 text-sm space-y-1">
               <li>✅ Should show countries from fallback data (not empty)</li>
               <li>✅ Should NOT show "Failed to fetch countries" error</li>
@@ -158,20 +165,26 @@ export default function CountriesErrorTest() {
 
           {/* Debug Info */}
           <details className="text-sm">
-            <summary className="cursor-pointer text-gray-600">Debug Info</summary>
+            <summary className="cursor-pointer text-gray-600">
+              Debug Info
+            </summary>
             <pre className="mt-2 p-2 bg-gray-100 rounded text-xs overflow-auto">
-              {JSON.stringify({
-                count,
-                hasError,
-                error,
-                isLoading,
-                isEmpty,
-                sampleCountries: countries.slice(0, 3).map(c => ({ 
-                  iso2: c.iso2, 
-                  name: c.display_name,
-                  popular: c.popular 
-                }))
-              }, null, 2)}
+              {JSON.stringify(
+                {
+                  count,
+                  hasError,
+                  error,
+                  isLoading,
+                  isEmpty,
+                  sampleCountries: countries.slice(0, 3).map((c) => ({
+                    iso2: c.iso2,
+                    name: c.display_name,
+                    popular: c.popular,
+                  })),
+                },
+                null,
+                2,
+              )}
             </pre>
           </details>
         </CardContent>

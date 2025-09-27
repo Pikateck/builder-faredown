@@ -1,10 +1,11 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 // Database connection - Configure SSL properly for production databases
 const dbUrl = process.env.DATABASE_URL;
-const sslConfig = dbUrl && (dbUrl.includes('render.com') || dbUrl.includes('postgres://'))
-  ? { rejectUnauthorized: false }
-  : false;
+const sslConfig =
+  dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
+    ? { rejectUnauthorized: false }
+    : false;
 
 const pool = new Pool({
   connectionString: dbUrl,
@@ -13,8 +14,8 @@ const pool = new Pool({
 
 async function addMorePackages() {
   try {
-    console.log('🚀 Adding more packages to achieve 3 packages per region...');
-    
+    console.log("🚀 Adding more packages to achieve 3 packages per region...");
+
     // Check current packages
     const currentQuery = `
       SELECT id, title, base_price_pp, category
@@ -22,13 +23,15 @@ async function addMorePackages() {
       WHERE status = 'active'
       ORDER BY title
     `;
-    
+
     const currentResult = await pool.query(currentQuery);
-    console.log('\n📦 Current packages:');
+    console.log("\n📦 Current packages:");
     currentResult.rows.forEach((pkg, index) => {
-      console.log(`  ${index + 1}. ${pkg.title} - ${pkg.base_price_pp} INR - ${pkg.category}`);
+      console.log(
+        `  ${index + 1}. ${pkg.title} - ${pkg.base_price_pp} INR - ${pkg.category}`,
+      );
     });
-    
+
     // Add one more Dubai package (3rd Dubai package)
     const dubaiPackage = `
       INSERT INTO packages (
@@ -52,7 +55,7 @@ async function addMorePackages() {
         NOW()
       )
     `;
-    
+
     // Add 2 more Europe packages (currently has 1)
     const europePackage1 = `
       INSERT INTO packages (
@@ -76,7 +79,7 @@ async function addMorePackages() {
         NOW()
       )
     `;
-    
+
     const europePackage2 = `
       INSERT INTO packages (
         slug, title, duration_days, duration_nights, overview,
@@ -99,7 +102,7 @@ async function addMorePackages() {
         NOW()
       )
     `;
-    
+
     // Add 2 more Southeast Asia packages (to go with potential Bali/similar)
     const seAsiaPackage1 = `
       INSERT INTO packages (
@@ -123,7 +126,7 @@ async function addMorePackages() {
         NOW()
       )
     `;
-    
+
     const seAsiaPackage2 = `
       INSERT INTO packages (
         slug, title, duration_days, duration_nights, overview,
@@ -146,7 +149,7 @@ async function addMorePackages() {
         NOW()
       )
     `;
-    
+
     // Add 1 more South India package (to go with existing Kerala-style package)
     const southIndiaPackage1 = `
       INSERT INTO packages (
@@ -170,7 +173,7 @@ async function addMorePackages() {
         NOW()
       )
     `;
-    
+
     const southIndiaPackage2 = `
       INSERT INTO packages (
         slug, title, duration_days, duration_nights, overview,
@@ -193,7 +196,7 @@ async function addMorePackages() {
         NOW()
       )
     `;
-    
+
     // Add 1 more Maldives-style package
     const maldivesPackage = `
       INSERT INTO packages (
@@ -217,7 +220,7 @@ async function addMorePackages() {
         NOW()
       )
     `;
-    
+
     // Add 1 more Himalayan package (to go with existing mountain packages)
     const himalayanPackage = `
       INSERT INTO packages (
@@ -241,28 +244,28 @@ async function addMorePackages() {
         NOW()
       )
     `;
-    
+
     // Execute all insertions
     const insertQueries = [
       dubaiPackage,
-      europePackage1, 
+      europePackage1,
       europePackage2,
       seAsiaPackage1,
       seAsiaPackage2,
       southIndiaPackage1,
       southIndiaPackage2,
       maldivesPackage,
-      himalayanPackage
+      himalayanPackage,
     ];
-    
-    console.log('\n🔨 Adding new packages...');
-    
+
+    console.log("\n🔨 Adding new packages...");
+
     for (const query of insertQueries) {
       await pool.query(query);
     }
-    
-    console.log('✅ Successfully added 9 new packages!');
-    
+
+    console.log("✅ Successfully added 9 new packages!");
+
     // Check final count
     const finalQuery = `
       SELECT COUNT(*) as total, 
@@ -270,15 +273,14 @@ async function addMorePackages() {
       FROM packages 
       WHERE status = 'active'
     `;
-    
+
     const finalResult = await pool.query(finalQuery);
-    console.log('\n📊 Final package count:', finalResult.rows[0].total);
-    console.log('📝 All packages:', finalResult.rows[0].all_titles);
-    
+    console.log("\n📊 Final package count:", finalResult.rows[0].total);
+    console.log("📝 All packages:", finalResult.rows[0].all_titles);
+
     await pool.end();
-    
   } catch (error) {
-    console.error('❌ Error adding packages:', error);
+    console.error("❌ Error adding packages:", error);
     await pool.end();
   }
 }
