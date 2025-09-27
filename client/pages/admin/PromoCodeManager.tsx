@@ -1110,6 +1110,9 @@ export default function PromoCodeManager() {
                         <SelectItem value="all">All Modules</SelectItem>
                         <SelectItem value="flight">Flight</SelectItem>
                         <SelectItem value="hotel">Hotel</SelectItem>
+                        <SelectItem value="sightseeing">Sightseeing</SelectItem>
+                        <SelectItem value="transfers">Transfers</SelectItem>
+                        <SelectItem value="packages">Packages</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
