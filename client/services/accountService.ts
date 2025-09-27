@@ -119,7 +119,46 @@ export interface HotelBookingDetail {
   };
 }
 
-export type BookingDetail = FlightBookingDetail | HotelBookingDetail;
+export interface PackageBookingDetail {
+  booking_ref: string;
+  module: "package";
+  status: string;
+  booked_on: string;
+  total_paid: number;
+  payment_id: string;
+  package_details: {
+    package_name: string;
+    destination: string;
+    duration: string;
+    travel_dates: {
+      start_date: string;
+      end_date: string;
+    };
+    includes: string[];
+    travelers_count: number;
+  };
+  travelers: Array<{
+    name: string;
+    title: string;
+    type: string;
+    email: string;
+    phone: string;
+  }>;
+  package_voucher: {
+    voucher_no: string;
+    issue_date: string;
+    voucher_pdf_url: string;
+  };
+  invoice: {
+    invoice_no: string;
+    issued_at: string;
+    amount: number;
+    currency: string;
+    pdf_url: string;
+  };
+}
+
+export type BookingDetail = FlightBookingDetail | HotelBookingDetail | PackageBookingDetail;
 
 class AccountService {
   private baseUrl = "/api/account";
@@ -340,6 +379,53 @@ class AccountService {
         currency: "INR",
         pdf_url: "https://cdn.faredown.com/docs/FD-HT-002-invoice.pdf",
       },
+    },
+    packageDetail: {
+      booking_ref: "FD-PK-005",
+      module: "package" as const,
+      status: "confirmed",
+      booked_on: "2024-01-19",
+      total_paid: 85000,
+      payment_id: "pay_demo33333",
+      package_details: {
+        package_name: "Dubai Complete Package",
+        destination: "Dubai, UAE",
+        duration: "7 Days 6 Nights",
+        travel_dates: {
+          start_date: "2025-08-03",
+          end_date: "2025-08-10"
+        },
+        includes: ["Flight", "Hotel", "Transfers", "Tours", "Breakfast"],
+        travelers_count: 2
+      },
+      travelers: [
+        {
+          name: "John Doe",
+          title: "Mr",
+          type: "Adult",
+          email: "john@example.com",
+          phone: "+91 9876543210"
+        },
+        {
+          name: "Jane Doe",
+          title: "Mrs",
+          type: "Adult",
+          email: "jane@example.com",
+          phone: "+91 9876543211"
+        }
+      ],
+      package_voucher: {
+        voucher_no: "PKG-005-789456123",
+        issue_date: "2024-01-19",
+        voucher_pdf_url: "https://cdn.faredown.com/docs/FD-PK-005-package.pdf"
+      },
+      invoice: {
+        invoice_no: "INV-PK-005",
+        issued_at: "2024-01-19",
+        amount: 85000,
+        currency: "INR",
+        pdf_url: "https://cdn.faredown.com/docs/FD-PK-005-invoice.pdf"
+      }
     },
   };
 
