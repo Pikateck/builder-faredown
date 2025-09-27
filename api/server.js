@@ -75,6 +75,7 @@ const {
 const adminReportsRoutes = require("./routes/admin-reports");
 const adminExtranetRoutes = require("./routes/admin-extranet");
 const adminMarkupPackagesRoutes = require("./routes/admin-markup-packages");
+const pricingEngineRoutes = require("./routes/pricing-engine");
 
 // Import middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
