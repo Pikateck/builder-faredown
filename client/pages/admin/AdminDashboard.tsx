@@ -189,6 +189,12 @@ const adminModules = [
     color: "bg-orange-600",
   },
   {
+    id: "markup-packages",
+    name: "Markup Management (Packages)",
+    icon: Package,
+    color: "bg-emerald-600",
+  },
+  {
     id: "packages",
     name: "Package Management",
     icon: Package,
