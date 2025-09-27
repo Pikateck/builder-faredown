@@ -252,8 +252,8 @@ const adminModules = [
     color: "bg-pink-500",
   },
   {
-    id: "inventory",
-    name: "Inventory/Extranet",
+    id: "extranet",
+    name: "Extranet Inventory",
     icon: Package,
     color: "bg-orange-500",
   },
