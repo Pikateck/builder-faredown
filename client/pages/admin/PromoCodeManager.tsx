@@ -355,10 +355,43 @@ export default function PromoCodeManager() {
         total: result.total,
       });
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to load promo codes",
-      );
-      console.error("Error loading promo codes:", err);
+      console.warn("API not available, using mock data:", err);
+
+      // Use mock data as fallback
+      let filteredMockData = [...mockPromoCodes];
+
+      // Apply filters to mock data
+      if (searchTerm) {
+        const searchLower = searchTerm.toLowerCase();
+        filteredMockData = filteredMockData.filter(code =>
+          code.code.toLowerCase().includes(searchLower) ||
+          code.description.toLowerCase().includes(searchLower)
+        );
+      }
+
+      if (selectedModule && selectedModule !== 'all') {
+        filteredMockData = filteredMockData.filter(code =>
+          code.module === selectedModule || code.module === 'all'
+        );
+      }
+
+      if (selectedStatus && selectedStatus !== 'all') {
+        filteredMockData = filteredMockData.filter(code => code.status === selectedStatus);
+      }
+
+      // Pagination for mock data
+      const startIndex = (pagination.page - 1) * 10;
+      const endIndex = startIndex + 10;
+      const paginatedMockData = filteredMockData.slice(startIndex, endIndex);
+
+      setPromoCodes(paginatedMockData);
+      setPagination({
+        page: pagination.page,
+        totalPages: Math.ceil(filteredMockData.length / 10),
+        total: filteredMockData.length,
+      });
+
+      setError("Using demo data - backend connection not available");
     } finally {
       setLoading(false);
     }
