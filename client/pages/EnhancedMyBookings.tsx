@@ -937,22 +937,22 @@ export default function EnhancedMyBookings() {
                       </h4>
                       <div className="space-y-2 text-sm">
                         <p>
-                          <strong>Package:</strong> Dubai Complete Package
+                          <strong>Package:</strong> {selectedBooking.package_details.package_name}
                         </p>
                         <p>
-                          <strong>Destination:</strong> Dubai, UAE
+                          <strong>Destination:</strong> {selectedBooking.package_details.destination}
                         </p>
                         <p>
-                          <strong>Duration:</strong> 7 Days 6 Nights
+                          <strong>Duration:</strong> {selectedBooking.package_details.duration}
                         </p>
                         <p>
-                          <strong>Travel Dates:</strong> Aug 3 - Aug 10, 2025
+                          <strong>Travel Dates:</strong> {formatAppDate(selectedBooking.package_details.travel_dates.start_date)} - {formatAppDate(selectedBooking.package_details.travel_dates.end_date)}
                         </p>
                         <p>
-                          <strong>Includes:</strong> Flight + Hotel + Transfers + Tours
+                          <strong>Includes:</strong> {selectedBooking.package_details.includes.join(" + ")}
                         </p>
                         <p>
-                          <strong>Travelers:</strong> 2 Adults
+                          <strong>Travelers:</strong> {selectedBooking.package_details.travelers_count} Adult{selectedBooking.package_details.travelers_count > 1 ? 's' : ''}
                         </p>
                       </div>
                     </div>
@@ -962,34 +962,22 @@ export default function EnhancedMyBookings() {
                         <Users className="w-5 h-5 mr-2 text-teal-600" />
                         Traveler Details
                       </h4>
-                      <div className="space-y-1 text-sm mb-3">
-                        <p>
-                          <strong>Mr. John Doe</strong>
-                        </p>
-                        <p className="text-gray-600">Adult 1</p>
-                        <p className="flex items-center">
-                          <Mail className="w-3 h-3 mr-1" />
-                          john@example.com
-                        </p>
-                        <p className="flex items-center">
-                          <Phone className="w-3 h-3 mr-1" />
-                          +91 9876543210
-                        </p>
-                      </div>
-                      <div className="space-y-1 text-sm">
-                        <p>
-                          <strong>Mrs. Jane Doe</strong>
-                        </p>
-                        <p className="text-gray-600">Adult 2</p>
-                        <p className="flex items-center">
-                          <Mail className="w-3 h-3 mr-1" />
-                          jane@example.com
-                        </p>
-                        <p className="flex items-center">
-                          <Phone className="w-3 h-3 mr-1" />
-                          +91 9876543211
-                        </p>
-                      </div>
+                      {selectedBooking.travelers.map((traveler, index) => (
+                        <div key={index} className="space-y-1 text-sm mb-3">
+                          <p>
+                            <strong>{traveler.title} {traveler.name}</strong>
+                          </p>
+                          <p className="text-gray-600">{traveler.type} {index + 1}</p>
+                          <p className="flex items-center">
+                            <Mail className="w-3 h-3 mr-1" />
+                            {traveler.email}
+                          </p>
+                          <p className="flex items-center">
+                            <Phone className="w-3 h-3 mr-1" />
+                            {traveler.phone}
+                          </p>
+                        </div>
+                      ))}
                     </div>
                   </div>
                 )}
