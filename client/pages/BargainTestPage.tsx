@@ -7,6 +7,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import BargainErrorTest from '@/components/BargainErrorTest';
+import CountriesErrorTest from '@/components/CountriesErrorTest';
 
 export default function BargainTestPage() {
   return (
@@ -25,19 +26,20 @@ export default function BargainTestPage() {
           </div>
           
           <h1 className="text-2xl font-bold text-gray-900">
-            Bargain Modal Test
+            API Error Handling Tests
           </h1>
           <p className="text-gray-600 mt-2">
-            Test the ConversationalBargainModal error handling and offline fallback functionality.
+            Test various components' error handling and offline fallback functionality when the backend API is unavailable.
           </p>
         </div>
 
-        {/* Test Component */}
+        {/* Bargain Test Component */}
         <div className="bg-white rounded-lg shadow-sm p-6">
+          <h2 className="text-xl font-semibold mb-4">Bargain Modal Test</h2>
           <BargainErrorTest />
-          
+
           <div className="mt-6 p-4 bg-blue-50 rounded-lg">
-            <h3 className="font-semibold text-blue-900 mb-2">Test Instructions:</h3>
+            <h3 className="font-semibold text-blue-900 mb-2">Bargain Test Instructions:</h3>
             <ol className="list-decimal list-inside text-blue-800 space-y-1">
               <li>Click the "Test Bargain Modal" button above</li>
               <li>Enter a price lower than ₹5,000 (e.g., ₹4,000)</li>
@@ -56,6 +58,13 @@ export default function BargainTestPage() {
               <li>✅ Should include warning about service being temporarily unavailable</li>
             </ul>
           </div>
+        </div>
+
+        {/* Countries Test Component */}
+        <div className="bg-white rounded-lg shadow-sm p-6">
+          <h2 className="text-xl font-semibold mb-4">Countries API Test</h2>
+          <CountriesErrorTest />
+          
         </div>
       </div>
     </div>
