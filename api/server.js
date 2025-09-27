@@ -399,7 +399,10 @@ app.use(
   adminMarkupPackagesRoutes,
 );
 app.use(
-  "/api/promo",
+  "/api/admin/promo",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
   adminPromoRoutes,
 );
 app.use("/api/pricing", pricingEngineRoutes);
