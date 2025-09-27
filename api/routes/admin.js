@@ -820,4 +820,411 @@ router.get(
   },
 );
 
+/**
+ * @api {get} /api/admin/users Get All Users
+ * @apiName GetUsers
+ * @apiGroup AdminUsers
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiQuery {String} [search] Search by name or email
+ * @apiQuery {String} [role] Filter by role
+ * @apiQuery {String} [status] Filter by status
+ * @apiQuery {Number} [page=1] Page number
+ * @apiQuery {Number} [limit=10] Items per page
+ *
+ * @apiSuccess {Array} users List of users
+ * @apiSuccess {Object} pagination Pagination info
+ */
+router.get("/users", async (req, res) => {
+  try {
+    const { search, role, status, page = 1, limit = 10 } = req.query;
+
+    // Mock users data - In production, query from database
+    const mockUsers = [
+      {
+        id: "1",
+        title: "Mr",
+        firstName: "Zubin",
+        lastName: "Aibara",
+        email: "zubin@faredown.com",
+        phone: "+91 9876543210",
+        address: "Mumbai, India",
+        dateOfBirth: "1985-05-15",
+        countryCode: "+91",
+        role: "super_admin",
+        status: "active",
+        lastLogin: new Date().toISOString(),
+        createdAt: "2023-01-01T00:00:00Z",
+        permissions: ["all"],
+      },
+      {
+        id: "2",
+        title: "Ms",
+        firstName: "Sarah",
+        lastName: "Johnson",
+        email: "sarah@faredown.com",
+        phone: "+91 9876543211",
+        address: "Delhi, India",
+        dateOfBirth: "1990-08-22",
+        countryCode: "+91",
+        role: "finance",
+        status: "active",
+        lastLogin: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+        createdAt: "2023-02-15T00:00:00Z",
+        permissions: ["finance_view", "reports_view"],
+      },
+      {
+        id: "3",
+        title: "Mr",
+        firstName: "John",
+        lastName: "Smith",
+        email: "john@faredown.com",
+        phone: "+91 9876543212",
+        address: "Bangalore, India",
+        dateOfBirth: "1988-12-10",
+        countryCode: "+91",
+        role: "sales",
+        status: "active",
+        lastLogin: new Date(Date.now() - 2 * 60 * 60 * 1000).toISOString(),
+        createdAt: "2023-03-01T00:00:00Z",
+        permissions: ["bookings_view", "customers_manage"],
+      },
+      {
+        id: "4",
+        title: "Ms",
+        firstName: "Emily",
+        lastName: "Davis",
+        email: "emily@faredown.com",
+        phone: "+91 9876543213",
+        address: "Chennai, India",
+        dateOfBirth: "1992-04-18",
+        countryCode: "+91",
+        role: "marketing",
+        status: "inactive",
+        lastLogin: new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString(),
+        createdAt: "2023-04-10T00:00:00Z",
+        permissions: ["content_manage", "analytics_view"],
+      },
+    ];
+
+    // Apply filters
+    let filteredUsers = mockUsers;
+
+    if (search) {
+      const searchLower = search.toLowerCase();
+      filteredUsers = filteredUsers.filter(
+        (user) =>
+          user.firstName.toLowerCase().includes(searchLower) ||
+          user.lastName.toLowerCase().includes(searchLower) ||
+          user.email.toLowerCase().includes(searchLower)
+      );
+    }
+
+    if (role && role !== "all") {
+      filteredUsers = filteredUsers.filter((user) => user.role === role);
+    }
+
+    if (status && status !== "all") {
+      filteredUsers = filteredUsers.filter((user) => user.status === status);
+    }
+
+    // Apply pagination
+    const pageNum = parseInt(page);
+    const limitNum = parseInt(limit);
+    const startIndex = (pageNum - 1) * limitNum;
+    const endIndex = startIndex + limitNum;
+    const paginatedUsers = filteredUsers.slice(startIndex, endIndex);
+
+    // Calculate pagination info
+    const total = filteredUsers.length;
+    const totalPages = Math.ceil(total / limitNum);
+
+    res.json({
+      success: true,
+      data: {
+        users: paginatedUsers,
+        total,
+        page: pageNum,
+        totalPages,
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch users",
+    });
+  }
+});
+
+/**
+ * @api {post} /api/admin/users Create User
+ * @apiName CreateUser
+ * @apiGroup AdminUsers
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiParam {String} title User title
+ * @apiParam {String} firstName First name
+ * @apiParam {String} lastName Last name
+ * @apiParam {String} email Email address
+ * @apiParam {String} phone Phone number
+ * @apiParam {String} address Address
+ * @apiParam {String} dateOfBirth Date of birth
+ * @apiParam {String} countryCode Country code
+ * @apiParam {String} role User role
+ * @apiParam {String} status User status
+ * @apiParam {String} password Password
+ *
+ * @apiSuccess {Object} user Created user data
+ */
+router.post("/users", async (req, res) => {
+  try {
+    const userData = req.body;
+
+    // In production, validate data and save to database
+    const newUser = {
+      id: Date.now().toString(),
+      ...userData,
+      createdAt: new Date().toISOString(),
+      lastLogin: null,
+      permissions: getRolePermissions(userData.role),
+    };
+
+    // Remove password from response
+    const { password, ...userResponse } = newUser;
+
+    await audit.adminAction(req, "user_create", { userId: newUser.id });
+
+    res.json({
+      success: true,
+      data: { user: userResponse },
+      message: "User created successfully",
+    });
+  } catch (error) {
+    console.error("Error creating user:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to create user",
+    });
+  }
+});
+
+/**
+ * @api {put} /api/admin/users/:id Update User
+ * @apiName UpdateUser
+ * @apiGroup AdminUsers
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiParam {String} id User ID
+ * @apiParam {Object} userData Updated user data
+ *
+ * @apiSuccess {Object} user Updated user data
+ */
+router.put("/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userData = req.body;
+
+    // In production, update user in database
+    const updatedUser = {
+      id,
+      ...userData,
+      updatedAt: new Date().toISOString(),
+    };
+
+    // Remove password from response
+    const { password, ...userResponse } = updatedUser;
+
+    await audit.adminAction(req, "user_update", { userId: id });
+
+    res.json({
+      success: true,
+      data: { user: userResponse },
+      message: "User updated successfully",
+    });
+  } catch (error) {
+    console.error("Error updating user:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update user",
+    });
+  }
+});
+
+/**
+ * @api {delete} /api/admin/users/:id Delete User
+ * @apiName DeleteUser
+ * @apiGroup AdminUsers
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiParam {String} id User ID
+ *
+ * @apiSuccess {String} message Success message
+ */
+router.delete("/users/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // In production, delete user from database
+    await audit.adminAction(req, "user_delete", { userId: id });
+
+    res.json({
+      success: true,
+      message: "User deleted successfully",
+    });
+  } catch (error) {
+    console.error("Error deleting user:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to delete user",
+    });
+  }
+});
+
+/**
+ * @api {post} /api/admin/users/:id/toggle-status Toggle User Status
+ * @apiName ToggleUserStatus
+ * @apiGroup AdminUsers
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiParam {String} id User ID
+ *
+ * @apiSuccess {Object} user Updated user data
+ */
+router.post("/users/:id/toggle-status", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    // In production, toggle user status in database
+    const updatedUser = {
+      id,
+      status: "active", // This would be toggled based on current status
+      updatedAt: new Date().toISOString(),
+    };
+
+    await audit.adminAction(req, "user_status_toggle", { userId: id });
+
+    res.json({
+      success: true,
+      data: { user: updatedUser },
+      message: "User status updated successfully",
+    });
+  } catch (error) {
+    console.error("Error toggling user status:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to toggle user status",
+    });
+  }
+});
+
+/**
+ * @api {post} /api/admin/users/:id/reset-password Reset User Password
+ * @apiName ResetUserPassword
+ * @apiGroup AdminUsers
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiParam {String} id User ID
+ * @apiParam {String} password New password
+ *
+ * @apiSuccess {String} message Success message
+ */
+router.post("/users/:id/reset-password", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { password } = req.body;
+
+    if (!password) {
+      return res.status(400).json({
+        success: false,
+        message: "Password is required",
+      });
+    }
+
+    // In production, hash password and save to database
+    await audit.adminAction(req, "user_password_reset", { userId: id });
+
+    res.json({
+      success: true,
+      message: "Password reset successfully",
+    });
+  } catch (error) {
+    console.error("Error resetting password:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to reset password",
+    });
+  }
+});
+
+/**
+ * @api {get} /api/admin/users/stats User Statistics
+ * @apiName GetUserStats
+ * @apiGroup AdminUsers
+ * @apiVersion 1.0.0
+ *
+ * @apiHeader {String} Authorization Bearer token
+ * @apiPermission admin
+ *
+ * @apiSuccess {Object} stats User statistics
+ */
+router.get("/users/stats", async (req, res) => {
+  try {
+    // In production, calculate from database
+    const stats = {
+      totalUsers: 4,
+      activeUsers: 3,
+      inactiveUsers: 1,
+      pendingUsers: 0,
+      roleDistribution: {
+        super_admin: 1,
+        finance: 1,
+        sales: 1,
+        marketing: 1,
+      },
+    };
+
+    res.json({
+      success: true,
+      data: stats,
+    });
+  } catch (error) {
+    console.error("Error fetching user stats:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch user statistics",
+    });
+  }
+});
+
+// Helper function to get role permissions
+function getRolePermissions(role) {
+  const rolePermissions = {
+    super_admin: ["all"],
+    finance: ["finance_view", "reports_view", "payments_manage"],
+    sales: ["bookings_view", "customers_manage", "quotations_manage"],
+    marketing: ["content_manage", "analytics_view", "campaigns_manage"],
+  };
+
+  return rolePermissions[role] || [];
+}
+
 module.exports = router;
