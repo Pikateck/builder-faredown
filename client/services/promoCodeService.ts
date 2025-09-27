@@ -75,7 +75,7 @@ export interface PromoCodeFilters {
 }
 
 class PromoCodeService {
-  private baseUrl = "/api/promo";
+  private baseUrl = "/api/admin/promo";
 
   /**
    * Get all promo codes with optional filters
