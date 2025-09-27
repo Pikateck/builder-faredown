@@ -739,7 +739,7 @@ export default function MarkupManagementPackages() {
               <Settings className="h-8 w-8 text-blue-600" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Rules</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.totalRules}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.totalRules || 0}</p>
               </div>
             </div>
           </CardContent>
@@ -751,7 +751,7 @@ export default function MarkupManagementPackages() {
               <CheckCircle className="h-8 w-8 text-green-600" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Active Rules</p>
-                <p className="text-2xl font-bold text-gray-900">{stats.activeRules}</p>
+                <p className="text-2xl font-bold text-gray-900">{stats.activeRules || 0}</p>
               </div>
             </div>
           </CardContent>
@@ -763,7 +763,7 @@ export default function MarkupManagementPackages() {
               <DollarSign className="h-8 w-8 text-green-600" />
               <div className="ml-4">
                 <p className="text-sm font-medium text-gray-600">Total Revenue</p>
-                <p className="text-2xl font-bold text-gray-900">{formatPrice(stats.totalRevenue)}</p>
+                <p className="text-2xl font-bold text-gray-900">{formatPrice(stats.totalRevenue || 0)}</p>
               </div>
             </div>
           </CardContent>
