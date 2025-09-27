@@ -156,6 +156,13 @@ class AccountService {
           status: "confirmed",
         },
         {
+          booking_ref: "FD-PK-005",
+          module: "package",
+          date: "2024-01-19",
+          amount: 85000,
+          status: "confirmed",
+        },
+        {
           booking_ref: "FD-SG-003",
           module: "sightseeing",
           date: "2024-01-17",
