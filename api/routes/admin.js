@@ -999,7 +999,7 @@ router.post("/users", async (req, res) => {
     // Remove password from response
     const { password, ...userResponse } = newUser;
 
-    await audit.adminAction(req, "user_create", { userId: newUser.id });
+    await audit.systemAction(req, "user_create", { userId: newUser.id });
 
     res.json({
       success: true,
@@ -1044,7 +1044,7 @@ router.put("/users/:id", async (req, res) => {
     // Remove password from response
     const { password, ...userResponse } = updatedUser;
 
-    await audit.adminAction(req, "user_update", { userId: id });
+    await audit.systemAction(req, "user_update", { userId: id });
 
     res.json({
       success: true,
@@ -1078,7 +1078,7 @@ router.delete("/users/:id", async (req, res) => {
     const { id } = req.params;
 
     // In production, delete user from database
-    await audit.adminAction(req, "user_delete", { userId: id });
+    await audit.systemAction(req, "user_delete", { userId: id });
 
     res.json({
       success: true,
@@ -1117,7 +1117,7 @@ router.post("/users/:id/toggle-status", async (req, res) => {
       updatedAt: new Date().toISOString(),
     };
 
-    await audit.adminAction(req, "user_status_toggle", { userId: id });
+    await audit.systemAction(req, "user_status_toggle", { userId: id });
 
     res.json({
       success: true,
@@ -1160,7 +1160,7 @@ router.post("/users/:id/reset-password", async (req, res) => {
     }
 
     // In production, hash password and save to database
-    await audit.adminAction(req, "user_password_reset", { userId: id });
+    await audit.systemAction(req, "user_password_reset", { userId: id });
 
     res.json({
       success: true,
