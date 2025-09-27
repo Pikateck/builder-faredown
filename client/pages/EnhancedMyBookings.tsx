@@ -1006,7 +1006,7 @@ export default function EnhancedMyBookings() {
                           : selectedBooking.module === "hotel"
                           ? `Voucher No: ${selectedBooking.voucher.voucher_no}`
                           : selectedBooking.module === "package"
-                          ? `Package Ref: ${selectedBooking.booking_ref}`
+                          ? `Voucher No: ${selectedBooking.package_voucher.voucher_no}`
                           : `Booking Ref: ${selectedBooking.booking_ref}`}
                       </p>
                       <Button
