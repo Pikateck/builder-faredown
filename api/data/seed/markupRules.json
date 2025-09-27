@@ -1,0 +1,238 @@
+[
+  {
+    "id": "markup_flight_001",
+    "module": "flights",
+    "name": "International Flight Premium",
+    "description": "Premium markup for international flight routes",
+    "ruleType": "percentage",
+    "value": 18,
+    "maxValue": 8000,
+    "conditions": {
+      "route": "international",
+      "cabinClass": [
+        "Business",
+        "First"
+      ]
+    },
+    "priority": 1,
+    "isActive": true,
+    "appliesTo": "all",
+    "usage": {
+      "totalApplications": 234,
+      "revenue": 1876000,
+      "avgMarkup": 17.2
+    }
+  },
+  {
+    "id": "markup_flight_002",
+    "module": "flights",
+    "name": "Domestic Economy Base",
+    "description": "Standard markup for domestic economy flights",
+    "ruleType": "percentage",
+    "value": 12,
+    "maxValue": 3000,
+    "conditions": {
+      "route": "domestic",
+      "cabinClass": [
+        "Economy"
+      ]
+    },
+    "priority": 2,
+    "isActive": true,
+    "appliesTo": "all",
+    "usage": {
+      "totalApplications": 567,
+      "revenue": 2134000,
+      "avgMarkup": 11.8
+    }
+  },
+  {
+    "id": "markup_hotel_001",
+    "module": "hotels",
+    "name": "Luxury Hotel Premium",
+    "description": "Premium markup for 5-star luxury properties",
+    "ruleType": "percentage",
+    "value": 22,
+    "maxValue": 12000,
+    "conditions": {
+      "starRating": "5",
+      "category": "luxury"
+    },
+    "priority": 1,
+    "isActive": true,
+    "appliesTo": "all",
+    "usage": {
+      "totalApplications": 189,
+      "revenue": 2567000,
+      "avgMarkup": 20.5
+    }
+  },
+  {
+    "id": "markup_hotel_002",
+    "module": "hotels",
+    "name": "Business Hotel Standard",
+    "description": "Standard markup for business hotels",
+    "ruleType": "percentage",
+    "value": 15,
+    "maxValue": 5000,
+    "conditions": {
+      "starRating": [
+        "3",
+        "4"
+      ],
+      "category": "business"
+    },
+    "priority": 2,
+    "isActive": true,
+    "appliesTo": "all",
+    "usage": {
+      "totalApplications": 345,
+      "revenue": 1789000,
+      "avgMarkup": 14.3
+    }
+  },
+  {
+    "id": "markup_sight_001",
+    "module": "sightseeing",
+    "name": "Premium Experience Tours",
+    "description": "Premium markup for exclusive and luxury tour experiences",
+    "ruleType": "percentage",
+    "value": 25,
+    "maxValue": 3000,
+    "conditions": {
+      "tourType": [
+        "luxury",
+        "exclusive"
+      ],
+      "groupSize": {
+        "max": 15
+      }
+    },
+    "priority": 1,
+    "isActive": true,
+    "appliesTo": "all",
+    "usage": {
+      "totalApplications": 156,
+      "revenue": 467000,
+      "avgMarkup": 23.8
+    }
+  },
+  {
+    "id": "markup_sight_002",
+    "module": "sightseeing",
+    "name": "Standard Group Tours",
+    "description": "Standard markup for regular group sightseeing tours",
+    "ruleType": "percentage",
+    "value": 15,
+    "maxValue": 1500,
+    "conditions": {
+      "tourType": [
+        "group",
+        "standard"
+      ]
+    },
+    "priority": 2,
+    "isActive": true,
+    "appliesTo": "all",
+    "usage": {
+      "totalApplications": 289,
+      "revenue": 578000,
+      "avgMarkup": 14.2
+    }
+  },
+  {
+    "id": "markup_transfer_001",
+    "module": "transfers",
+    "name": "Luxury Vehicle Premium",
+    "description": "Premium markup for luxury and premium vehicle transfers",
+    "ruleType": "percentage",
+    "value": 20,
+    "maxValue": 2000,
+    "conditions": {
+      "vehicleType": [
+        "luxury",
+        "premium"
+      ]
+    },
+    "priority": 1,
+    "isActive": true,
+    "appliesTo": "all",
+    "usage": {
+      "totalApplications": 134,
+      "revenue": 267000,
+      "avgMarkup": 18.9
+    }
+  },
+  {
+    "id": "markup_transfer_002",
+    "module": "transfers",
+    "name": "Standard Transfer Base",
+    "description": "Base markup for standard transfer services",
+    "ruleType": "percentage",
+    "value": 12,
+    "maxValue": 800,
+    "conditions": {
+      "vehicleType": [
+        "sedan",
+        "suv"
+      ]
+    },
+    "priority": 2,
+    "isActive": true,
+    "appliesTo": "all",
+    "usage": {
+      "totalApplications": 423,
+      "revenue": 456000,
+      "avgMarkup": 11.5
+    }
+  },
+  {
+    "id": "markup_package_001",
+    "module": "packages",
+    "name": "Luxury Package Premium",
+    "description": "Premium markup for luxury holiday packages",
+    "ruleType": "percentage",
+    "value": 28,
+    "maxValue": 25000,
+    "conditions": {
+      "packageCategory": [
+        "luxury"
+      ],
+      "priceRange": {
+        "min": 50000
+      }
+    },
+    "priority": 1,
+    "isActive": true,
+    "appliesTo": "all",
+    "usage": {
+      "totalApplications": 78,
+      "revenue": 2184000,
+      "avgMarkup": 26.3
+    }
+  },
+  {
+    "id": "markup_package_002",
+    "module": "packages",
+    "name": "Standard Package Base",
+    "description": "Standard markup for regular holiday packages",
+    "ruleType": "percentage",
+    "value": 18,
+    "maxValue": 10000,
+    "conditions": {
+      "packageCategory": [
+        "cultural",
+        "adventure",
+        "family"
+      ]
+    },
+    "priority": 2,
+    "isActive": true,
+    "appliesTo": "all",
+    "usage": {
+      "totalApplications": 167,
+      "revenue": 1345000,
+      "avgMarkup": 17.1
+    }
+  }
+]

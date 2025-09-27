@@ -1,0 +1,63 @@
+{
+  "overview": {
+    "totalBookings": 2847,
+    "totalRevenue": 14567000,
+    "activePromoCodes": 6,
+    "totalSavings": 1489500,
+    "averageOrderValue": 23400,
+    "conversionRate": 3.4
+  },
+  "moduleBreakdown": {
+    "flights": {
+      "bookings": 1245,
+      "revenue": 6234000,
+      "avgPrice": 28500
+    },
+    "hotels": {
+      "bookings": 896,
+      "revenue": 4567000,
+      "avgPrice": 15800
+    },
+    "packages": {
+      "bookings": 234,
+      "revenue": 2890000,
+      "avgPrice": 65400
+    },
+    "sightseeing": {
+      "bookings": 345,
+      "revenue": 567000,
+      "avgPrice": 4200
+    },
+    "transfers": {
+      "bookings": 127,
+      "revenue": 309000,
+      "avgPrice": 2800
+    }
+  },
+  "recentActivity": [
+    {
+      "type": "booking",
+      "module": "flight",
+      "amount": 32000,
+      "time": "5 min ago"
+    },
+    {
+      "type": "promo",
+      "code": "WELCOME10",
+      "used": true,
+      "time": "12 min ago"
+    },
+    {
+      "type": "booking",
+      "module": "hotel",
+      "amount": 18500,
+      "time": "18 min ago"
+    },
+    {
+      "type": "booking",
+      "module": "package",
+      "amount": 75000,
+      "time": "25 min ago"
+    }
+  ]
+}
