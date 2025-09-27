@@ -285,7 +285,7 @@ export default function PackageManagement() {
                     Total Packages
                   </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {stats?.total_packages || 0}
+                    {stats.total_packages}
                   </p>
                 </div>
               </div>
@@ -301,7 +301,7 @@ export default function PackageManagement() {
                     Active Packages
                   </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {stats?.active_packages || 0}
+                    {stats.active_packages}
                   </p>
                 </div>
               </div>
@@ -317,7 +317,7 @@ export default function PackageManagement() {
                     Total Revenue
                   </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {formatPrice(stats?.total_revenue || 0)}
+                    {formatPrice(stats.total_revenue)}
                   </p>
                 </div>
               </div>
@@ -333,7 +333,7 @@ export default function PackageManagement() {
                     Avg Rating
                   </p>
                   <p className="text-2xl font-bold text-gray-900">
-                    {stats?.avg_rating?.toFixed(1) || "0.0"}
+                    {stats.avg_rating.toFixed(1)}
                   </p>
                 </div>
               </div>
