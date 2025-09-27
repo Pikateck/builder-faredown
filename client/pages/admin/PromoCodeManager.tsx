@@ -76,7 +76,7 @@ interface PromoCode {
   id: string;
   code: string;
   description: string;
-  category: "flight" | "hotel" | "both";
+  category: "flight" | "hotel" | "sightseeing" | "transfers" | "packages" | "all";
   image?: string;
   discountType: "percentage" | "fixed";
   discountMinValue: number;
@@ -99,9 +99,25 @@ interface PromoCode {
   hotelCity?: string;
   hotelName?: string;
 
+  // Sightseeing-specific fields
+  tourType?: string;
+  tourCity?: string;
+  tourDuration?: string;
+
+  // Transfer-specific fields
+  vehicleType?: string;
+  transferRoute?: string;
+  pickupLocation?: string;
+  dropLocation?: string;
+
+  // Package-specific fields
+  packageCategory?: string;
+  packageDuration?: string;
+  packageRegion?: string;
+
   createdOn: string;
   updatedOn: string;
-  module: "flight" | "hotel";
+  module: "flight" | "hotel" | "sightseeing" | "transfers" | "packages";
   validityType: "unlimited" | "limited";
   usageCount?: number;
   maxUsage?: number;
