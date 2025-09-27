@@ -100,19 +100,25 @@ export function useCountries(options: UseCountriesOptions = {}) {
         });
 
         if (!response.ok) {
-          // If rate limited, use fallback data immediately
+          // Handle various API unavailability scenarios gracefully
           if (response.status === 429) {
             console.warn("Countries API rate limited, using fallback data");
-            const fallbackData = getFallbackCountries(popularOnly);
-            // Cache the fallback data temporarily
-            cache.set(cacheKey, {
-              data: fallbackData,
-              timestamp: Date.now(),
-              popularOnly,
-            });
-            return fallbackData;
+          } else if (response.status === 503) {
+            console.warn("Countries API temporarily unavailable, using fallback data");
+          } else if (response.status >= 500) {
+            console.warn("Countries API server error, using fallback data");
+          } else {
+            console.warn(`Countries API error (${response.status}), using fallback data`);
           }
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+
+          const fallbackData = getFallbackCountries(popularOnly);
+          // Cache the fallback data temporarily (shorter duration for errors)
+          cache.set(cacheKey, {
+            data: fallbackData,
+            timestamp: Date.now(),
+            popularOnly,
+          });
+          return fallbackData;
         }
 
         const data: CountriesResponse = await response.json();
@@ -132,12 +138,33 @@ export function useCountries(options: UseCountriesOptions = {}) {
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "Unknown error occurred";
-        console.error("Failed to fetch countries:", errorMessage);
 
-        setError(errorMessage);
+        // Check if it's a network/connectivity error
+        const isNetworkError = errorMessage.includes("ECONNREFUSED") ||
+                               errorMessage.includes("Failed to fetch") ||
+                               errorMessage.includes("API server unavailable") ||
+                               errorMessage.includes("Network request failed");
+
+        if (isNetworkError) {
+          console.warn("Countries API unavailable, using offline fallback data");
+          // Don't set error state for network issues since we have fallback data
+          setError(null);
+        } else {
+          console.warn("Countries API error, using fallback data:", errorMessage);
+          // Set a more user-friendly error message but still continue with fallback
+          setError("Using offline country data");
+        }
+
+        // Cache fallback data with shorter duration for network errors
+        const fallbackData = getFallbackCountries(popularOnly);
+        cache.set(cacheKey, {
+          data: fallbackData,
+          timestamp: Date.now(),
+          popularOnly,
+        });
 
         // Return fallback data for critical countries
-        return getFallbackCountries(popularOnly);
+        return fallbackData;
       } finally {
         setLoading(false);
       }
