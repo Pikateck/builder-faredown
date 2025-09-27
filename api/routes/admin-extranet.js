@@ -223,7 +223,7 @@ router.get('/stats', requireAdmin, async (req, res) => {
  * @desc Create new extranet inventory item
  * @access Admin
  */
-router.post('/inventory', requireAdmin, auditLog('extranet_create'), async (req, res) => {
+router.post('/inventory', requireAdmin, async (req, res, next) => { await audit.adminAction(req, 'extranet_create', {}); next(); }, async (req, res) => {
   try {
     const {
       module,
