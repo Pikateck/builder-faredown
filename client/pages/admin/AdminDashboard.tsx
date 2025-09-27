@@ -280,6 +280,12 @@ const adminModules = [
     color: "bg-gray-500",
   },
   {
+    id: "system-status",
+    name: "System Status",
+    icon: Activity,
+    color: "bg-green-500",
+  },
+  {
     id: "auth-helper",
     name: "Auth Helper",
     icon: Key,
