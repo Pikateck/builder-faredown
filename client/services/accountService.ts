@@ -138,7 +138,7 @@ class AccountService {
         required_bookings: 15,
         remaining: 10,
       },
-      total_bookings: 4,
+      total_bookings: 5,
       countries_visited: 2,
       recent_activity: [
         {
