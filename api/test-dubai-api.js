@@ -1,9 +1,7 @@
 const http = require('http');
 
-// Test URL for Dubai packages
+// Test URL without filters to see default behavior
 const queryParams = new URLSearchParams({
-  destination: 'Dubai, United Arab Emirates',
-  destination_type: 'city',
   page: '1',
   page_size: '20'
 });
