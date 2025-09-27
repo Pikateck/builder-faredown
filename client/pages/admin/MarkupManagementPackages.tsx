@@ -970,7 +970,7 @@ export default function MarkupManagementPackages() {
                         </div>
                       </TableCell>
 
-                      <TableCell>{getStatusBadge(rule.isActive)}</TableCell>
+                      <TableCell>{getStatusBadge(rule.isActive || false)}</TableCell>
 
                       <TableCell>
                         <div className="flex items-center gap-2">
