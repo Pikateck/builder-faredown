@@ -3,8 +3,12 @@ const router = express.Router();
 const { requireAdmin } = require('../middleware/auth');
 const { auditLog } = require('../middleware/audit');
 
+// Load comprehensive seed data
+const { loadSeedData } = require('../scripts/seed-admin-data');
+const seedData = loadSeedData();
+
 // Mock database - in real implementation, use proper database
-let inventory = [
+let inventory = seedData.extranetInventory || [
   {
     id: "inv_001",
     module: "flights",
