@@ -924,6 +924,72 @@ export default function EnhancedMyBookings() {
                   </div>
                 )}
 
+                {selectedBooking.module === "package" && (
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div>
+                      <h4 className="font-semibold mb-3 flex items-center">
+                        <Package className="w-5 h-5 mr-2 text-teal-600" />
+                        Package Details
+                      </h4>
+                      <div className="space-y-2 text-sm">
+                        <p>
+                          <strong>Package:</strong> Dubai Complete Package
+                        </p>
+                        <p>
+                          <strong>Destination:</strong> Dubai, UAE
+                        </p>
+                        <p>
+                          <strong>Duration:</strong> 7 Days 6 Nights
+                        </p>
+                        <p>
+                          <strong>Travel Dates:</strong> Aug 3 - Aug 10, 2025
+                        </p>
+                        <p>
+                          <strong>Includes:</strong> Flight + Hotel + Transfers + Tours
+                        </p>
+                        <p>
+                          <strong>Travelers:</strong> 2 Adults
+                        </p>
+                      </div>
+                    </div>
+
+                    <div>
+                      <h4 className="font-semibold mb-3 flex items-center">
+                        <Users className="w-5 h-5 mr-2 text-teal-600" />
+                        Traveler Details
+                      </h4>
+                      <div className="space-y-1 text-sm mb-3">
+                        <p>
+                          <strong>Mr. John Doe</strong>
+                        </p>
+                        <p className="text-gray-600">Adult 1</p>
+                        <p className="flex items-center">
+                          <Mail className="w-3 h-3 mr-1" />
+                          john@example.com
+                        </p>
+                        <p className="flex items-center">
+                          <Phone className="w-3 h-3 mr-1" />
+                          +91 9876543210
+                        </p>
+                      </div>
+                      <div className="space-y-1 text-sm">
+                        <p>
+                          <strong>Mrs. Jane Doe</strong>
+                        </p>
+                        <p className="text-gray-600">Adult 2</p>
+                        <p className="flex items-center">
+                          <Mail className="w-3 h-3 mr-1" />
+                          jane@example.com
+                        </p>
+                        <p className="flex items-center">
+                          <Phone className="w-3 h-3 mr-1" />
+                          +91 9876543211
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+
                 {/* Documents Section */}
                 <div>
                   <h4 className="font-semibold mb-3 flex items-center">
