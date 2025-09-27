@@ -3,8 +3,12 @@ const router = express.Router();
 const { requireAdmin } = require('../middleware/auth');
 const { auditLog } = require('../middleware/audit');
 
+// Load comprehensive seed data
+const { loadSeedData } = require('../scripts/seed-admin-data');
+const seedData = loadSeedData();
+
 // Mock database for markup rules
-let markupRules = [
+let markupRules = seedData.markupRules.filter(rule => rule.module === 'packages') || [
   {
     id: "rule_001",
     name: "Luxury Package Markup",
