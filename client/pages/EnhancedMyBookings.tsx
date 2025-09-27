@@ -27,6 +27,7 @@ import {
   Hotel,
   Camera,
   Car,
+  Package,
   Search,
   Filter,
   Download,
@@ -117,6 +118,13 @@ export default function EnhancedMyBookings() {
       icon: Hotel,
       color: "text-green-600",
       bgColor: "bg-green-100",
+    },
+    {
+      id: "package",
+      name: "Packages",
+      icon: Package,
+      color: "text-teal-600",
+      bgColor: "bg-teal-100",
     },
     {
       id: "sightseeing",
