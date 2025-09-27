@@ -646,7 +646,7 @@ export default function PromoCodeManager() {
         )}
 
         {/* Hotel-specific fields */}
-        {(formData.category === "hotel" || formData.category === "both") && (
+        {(formData.category === "hotel" || formData.category === "all") && (
           <div className="space-y-4 border-l-4 border-green-500 pl-4">
             <h4 className="font-medium text-green-700">Hotel Details</h4>
 
@@ -684,6 +684,192 @@ export default function PromoCodeManager() {
                   placeholder="Enter hotel name or 'ALL' for all hotels"
                 />
               </div>
+            </div>
+          </div>
+        )}
+
+        {/* Sightseeing-specific fields */}
+        {(formData.category === "sightseeing" || formData.category === "all") && (
+          <div className="space-y-4 border-l-4 border-purple-500 pl-4">
+            <h4 className="font-medium text-purple-700">Sightseeing Details</h4>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="tourType">Tour Type</Label>
+                <Select
+                  value={formData.tourType}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, tourType: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select tour type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {TOUR_TYPES.map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="tourCity">Tour City</Label>
+                <Select
+                  value={formData.tourCity}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, tourCity: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select city" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="ALL">All Cities</SelectItem>
+                    {CITIES.map((city) => (
+                      <SelectItem key={city} value={city}>
+                        {city}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="tourDuration">Tour Duration</Label>
+              <Input
+                id="tourDuration"
+                value={formData.tourDuration || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, tourDuration: e.target.value })
+                }
+                placeholder="e.g., Half Day, Full Day, 2 Hours"
+              />
+            </div>
+          </div>
+        )}
+
+        {/* Transfer-specific fields */}
+        {(formData.category === "transfers" || formData.category === "all") && (
+          <div className="space-y-4 border-l-4 border-orange-500 pl-4">
+            <h4 className="font-medium text-orange-700">Transfer Details</h4>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="vehicleType">Vehicle Type</Label>
+                <Select
+                  value={formData.vehicleType}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, vehicleType: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select vehicle type" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {VEHICLE_TYPES.map((type) => (
+                      <SelectItem key={type.value} value={type.value}>
+                        {type.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="transferRoute">Transfer Route</Label>
+                <Input
+                  id="transferRoute"
+                  value={formData.transferRoute || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, transferRoute: e.target.value })
+                  }
+                  placeholder="e.g., Airport, City Transfer, Hourly"
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="pickupLocation">Pickup Location</Label>
+                <Input
+                  id="pickupLocation"
+                  value={formData.pickupLocation || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, pickupLocation: e.target.value })
+                  }
+                  placeholder="Enter pickup location or 'ALL'"
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="dropLocation">Drop Location</Label>
+                <Input
+                  id="dropLocation"
+                  value={formData.dropLocation || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, dropLocation: e.target.value })
+                  }
+                  placeholder="Enter drop location or 'ALL'"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Package-specific fields */}
+        {(formData.category === "packages" || formData.category === "all") && (
+          <div className="space-y-4 border-l-4 border-emerald-500 pl-4">
+            <h4 className="font-medium text-emerald-700">Package Details</h4>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                <Label htmlFor="packageCategory">Package Category</Label>
+                <Select
+                  value={formData.packageCategory}
+                  onValueChange={(value) =>
+                    setFormData({ ...formData, packageCategory: value })
+                  }
+                >
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {PACKAGE_CATEGORIES.map((category) => (
+                      <SelectItem key={category.value} value={category.value}>
+                        {category.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+
+              <div>
+                <Label htmlFor="packageDuration">Package Duration</Label>
+                <Input
+                  id="packageDuration"
+                  value={formData.packageDuration || ""}
+                  onChange={(e) =>
+                    setFormData({ ...formData, packageDuration: e.target.value })
+                  }
+                  placeholder="e.g., 5 Days 4 Nights"
+                />
+              </div>
+            </div>
+
+            <div>
+              <Label htmlFor="packageRegion">Package Region</Label>
+              <Input
+                id="packageRegion"
+                value={formData.packageRegion || ""}
+                onChange={(e) =>
+                  setFormData({ ...formData, packageRegion: e.target.value })
+                }
+                placeholder="e.g., Southeast Asia, Europe, Middle East"
+              />
             </div>
           </div>
         )}
