@@ -20,6 +20,7 @@ interface ImportMetaEnv {
   readonly VITE_ENABLE_PWA: string;
   readonly VITE_ENABLE_HTTPS: string;
   readonly VITE_CSRF_TOKEN_HEADER: string;
+  readonly VITE_ADMIN_API_KEY: string;
 }
 
 interface ImportMeta {
