@@ -71,9 +71,6 @@ class UserManagementService {
 
       const response = await apiClient.get(
         `${this.baseUrl}?${params.toString()}`,
-        {
-          headers: getAdminHeaders(),
-        },
       );
 
       if (response.ok) {
@@ -135,9 +132,7 @@ class UserManagementService {
    */
   async deleteUser(userId: string): Promise<void> {
     try {
-      const response = await apiClient.delete(`${this.baseUrl}/${userId}`, {
-        headers: getAdminHeaders(),
-      });
+      const response = await apiClient.delete(`${this.baseUrl}/${userId}`);
 
       if (!response.ok) {
         throw new Error(response.error || "Failed to delete user");
@@ -203,9 +198,7 @@ class UserManagementService {
     roleDistribution: Record<string, number>;
   }> {
     try {
-      const response = await apiClient.get(`${this.baseUrl}/stats`, {
-        headers: getAdminHeaders(),
-      });
+      const response = await apiClient.get(`${this.baseUrl}/stats`);
 
       if (response.ok) {
         return response.data;
