@@ -1002,12 +1002,20 @@ export default function EnhancedMyBookings() {
                       <h5 className="font-medium mb-2">
                         {selectedBooking.module === "flight"
                           ? "E-Ticket"
-                          : "Hotel Voucher"}
+                          : selectedBooking.module === "hotel"
+                          ? "Hotel Voucher"
+                          : selectedBooking.module === "package"
+                          ? "Package Details"
+                          : "Booking Voucher"}
                       </h5>
                       <p className="text-sm text-gray-600 mb-3">
                         {selectedBooking.module === "flight"
                           ? `Ticket No: ${selectedBooking.ticket.ticket_no}`
-                          : `Voucher No: ${selectedBooking.voucher.voucher_no}`}
+                          : selectedBooking.module === "hotel"
+                          ? `Voucher No: ${selectedBooking.voucher.voucher_no}`
+                          : selectedBooking.module === "package"
+                          ? `Package Ref: ${selectedBooking.booking_ref}`
+                          : `Booking Ref: ${selectedBooking.booking_ref}`}
                       </p>
                       <Button
                         size="sm"
