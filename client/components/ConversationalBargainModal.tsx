@@ -1041,10 +1041,36 @@ export function ConversationalBargainModal({
                                 module,
                                 productRef,
                               });
+                            } else {
+                              // Handle API errors gracefully
+                              const entityId = productRef || `${module}_${Date.now()}`;
+                              const savings = basePrice - price;
+                              chatAnalyticsService
+                                .trackAccepted(module, entityId, price, savings)
+                                .catch(console.warn);
+                              onAccept(price, orderRef, {
+                                isHeld: false,
+                                originalPrice: basePrice,
+                                savings,
+                                module,
+                                productRef,
+                                warning: "Service temporarily unavailable - complete booking quickly",
+                              });
                             }
                           } catch (e) {
-                            onAccept(previousOfferPrice, orderRef, {
+                            console.warn("Hold creation failed in onAcceptPrevious:", e);
+                            const entityId = productRef || `${module}_${Date.now()}`;
+                            const savings = basePrice - price;
+                            chatAnalyticsService
+                              .trackAccepted(module, entityId, price, savings)
+                              .catch(console.warn);
+                            onAccept(price, orderRef, {
                               isHeld: false,
+                              originalPrice: basePrice,
+                              savings,
+                              module,
+                              productRef,
+                              warning: "Service temporarily unavailable - complete booking quickly",
                             });
                           }
                         })();
