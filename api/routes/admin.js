@@ -840,6 +840,12 @@ router.get(
  */
 router.get("/users", async (req, res) => {
   try {
+    // Debug logging
+    console.log("🔍 DEBUG - Admin Users Route Hit");
+    console.log("🔍 Headers:", JSON.stringify(req.headers, null, 2));
+    console.log("🔍 Authorization Header:", req.headers.authorization);
+    console.log("🔍 User from middleware:", req.user);
+
     const { search, role, status, page = 1, limit = 10 } = req.query;
 
     // Mock users data - In production, query from database
