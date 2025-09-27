@@ -166,7 +166,7 @@ export default function PackageManagement() {
 
       const response = await makeRequest(`/api/admin/packages?${params}`, {
         headers: {
-          "X-Admin-Key": process.env.REACT_APP_ADMIN_API_KEY || "admin123",
+          "X-Admin-Key": import.meta.env.VITE_ADMIN_API_KEY || "admin123",
         },
       });
 
@@ -185,7 +185,7 @@ export default function PackageManagement() {
     try {
       const response = await makeRequest("/api/admin/packages/stats", {
         headers: {
-          "X-Admin-Key": process.env.REACT_APP_ADMIN_API_KEY || "admin123",
+          "X-Admin-Key": import.meta.env.VITE_ADMIN_API_KEY || "admin123",
         },
       });
 
@@ -203,7 +203,7 @@ export default function PackageManagement() {
         `/api/admin/packages/${packageId}/departures`,
         {
           headers: {
-            "X-Admin-Key": process.env.REACT_APP_ADMIN_API_KEY || "admin123",
+            "X-Admin-Key": import.meta.env.VITE_ADMIN_API_KEY || "admin123",
           },
         },
       );
@@ -232,7 +232,7 @@ export default function PackageManagement() {
         method,
         headers: {
           "Content-Type": "application/json",
-          "X-Admin-Key": process.env.REACT_APP_ADMIN_API_KEY || "admin123",
+          "X-Admin-Key": import.meta.env.VITE_ADMIN_API_KEY || "admin123",
         },
         body: JSON.stringify(editingPackage),
       });
@@ -254,7 +254,7 @@ export default function PackageManagement() {
       const response = await makeRequest(`/api/admin/packages/${packageId}`, {
         method: "DELETE",
         headers: {
-          "X-Admin-Key": process.env.REACT_APP_ADMIN_API_KEY || "admin123",
+          "X-Admin-Key": import.meta.env.VITE_ADMIN_API_KEY || "admin123",
         },
       });
 
