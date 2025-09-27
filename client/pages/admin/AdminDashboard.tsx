@@ -1000,6 +1000,8 @@ export default function AdminDashboard() {
               <AIBargainingDashboard />
             ) : activeModule === "api-testing" ? (
               <APITestingDashboard />
+            ) : activeModule === "system-status" ? (
+              <SystemStatus />
             ) : activeModule === "auth-helper" ? (
               <div>
                 <h2 className="text-2xl font-bold mb-4">
