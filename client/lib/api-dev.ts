@@ -1747,37 +1747,133 @@ export class DevApiClient {
       };
     }
 
-    // Packages search endpoint
+    // Packages search endpoint - **CRITICAL FIX** for Dubai destination filtering
     if (endpoint.includes("/packages")) {
+      const destinationParam = params?.destination?.toLowerCase() || "";
+      const destinationType = params?.destination_type || "city";
+
+      console.log(`🎯 FALLBACK PACKAGES: Checking destination "${destinationParam}" (type: ${destinationType})`);
+
+      // **CRITICAL**: Only show Dubai packages when Dubai is searched
+      if (destinationParam.includes('dubai') || destinationParam.includes('united arab emirates')) {
+        console.log('✅ DUBAI SEARCH DETECTED - Returning only Dubai packages from fallback');
+
+        return {
+          success: true,
+          data: {
+            packages: [
+              {
+                id: 1,
+                slug: "dubai-luxury-experience",
+                title: "Dubai Luxury Experience",
+                region_name: "Middle East",
+                country_name: "United Arab Emirates",
+                city_name: "Dubai",
+                duration_days: 7,
+                duration_nights: 6,
+                from_price: 179998,
+                base_price_pp: 179998,
+                currency: "INR",
+                next_departure_date: "2025-10-15",
+                available_departures_count: 8,
+                hero_image_url:
+                  "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
+                rating: 4.8,
+                review_count: 156,
+                is_featured: true,
+                tags: ["luxury", "city-break", "shopping", "culture"],
+                highlights: [
+                  "5-star hotel accommodation",
+                  "Burj Khalifa and Dubai Mall visits",
+                  "Desert safari with BBQ dinner",
+                  "Dubai Marina cruise",
+                  "Shopping at Gold Souk",
+                ],
+                category: "luxury",
+                package_category: "luxury",
+              },
+              {
+                id: 8,
+                slug: "dubai-city-explorer",
+                title: "Dubai City Explorer",
+                region_name: "Middle East",
+                country_name: "United Arab Emirates",
+                city_name: "Dubai",
+                duration_days: 5,
+                duration_nights: 4,
+                from_price: 109998,
+                base_price_pp: 109998,
+                currency: "INR",
+                next_departure_date: "2025-10-03",
+                available_departures_count: 4,
+                hero_image_url:
+                  "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
+                rating: 4.6,
+                review_count: 98,
+                is_featured: false,
+                tags: ["city-break", "culture", "sightseeing"],
+                highlights: [
+                  "4-star hotel accommodation",
+                  "Dubai Museum and Heritage Village",
+                  "Dubai Mall and Gold Souk tours",
+                ],
+                category: "explorer",
+                package_category: "explorer",
+              },
+              {
+                id: 11,
+                slug: "dubai-adventure-weekender",
+                title: "Dubai Adventure Weekender",
+                region_name: "Middle East",
+                country_name: "United Arab Emirates",
+                city_name: "Dubai",
+                duration_days: 4,
+                duration_nights: 3,
+                from_price: 89998,
+                base_price_pp: 89998,
+                currency: "INR",
+                next_departure_date: "2025-10-01",
+                available_departures_count: 4,
+                hero_image_url:
+                  "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
+                rating: 4.4,
+                review_count: 73,
+                is_featured: false,
+                tags: ["adventure", "desert", "weekend-getaway"],
+                highlights: [
+                  "3-star hotel accommodation",
+                  "Desert safari and dune bashing",
+                  "Quad biking experience",
+                ],
+                category: "adventure",
+                package_category: "adventure",
+              }
+            ],
+            pagination: {
+              page: 1,
+              page_size: 20,
+              total: 3,
+              total_pages: 1,
+              has_next: false,
+              has_prev: false,
+            },
+            facets: {
+              regions: { "Middle East": 3 },
+              categories: { luxury: 1, explorer: 1, adventure: 1 },
+              countries: { "United Arab Emirates": 3 },
+              price_ranges: { min: 89998, max: 179998, avg: 126664 },
+            },
+            filters: params,
+          },
+          message: "✅ FALLBACK: Dubai packages only (API offline - destination filtering applied)",
+        };
+      }
+
+      // For non-Dubai searches, return all packages
+      console.log('📦 NON-DUBAI SEARCH - Returning all fallback packages');
+
       return {
         packages: [
-          {
-            id: 1,
-            slug: "dubai-luxury-package",
-            title: "Dubai Luxury Experience",
-            region_name: "Middle East",
-            country_name: "United Arab Emirates",
-            duration_days: 7,
-            duration_nights: 6,
-            from_price: 89999,
-            currency: "INR",
-            next_departure_date: "2025-10-15",
-            available_departures_count: 8,
-            hero_image_url:
-              "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
-            rating: 4.8,
-            review_count: 156,
-            is_featured: true,
-            tags: ["luxury", "city-break", "shopping", "culture"],
-            highlights: [
-              "5-star hotel accommodation",
-              "Burj Khalifa and Dubai Mall visits",
-              "Desert safari with BBQ dinner",
-              "Dubai Marina cruise",
-              "Shopping at Gold Souk",
-            ],
-            category: "luxury",
-          },
           {
             id: 2,
             slug: "paris-romance-package",
