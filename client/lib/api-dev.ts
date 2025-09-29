@@ -36,7 +36,10 @@ export class DevApiClient {
     console.log(
       `🔄 FALLBACK: ${endpoint} (Live API unavailable - using mock data)`,
     );
-    return this.getFallbackData(endpoint, params) as T;
+    console.log('🚨 DEBUGGING: Params received by DevApiClient:', JSON.stringify(params, null, 2));
+    const result = this.getFallbackData(endpoint, params) as T;
+    console.log('🚨 DEBUGGING: Result returned by DevApiClient:', JSON.stringify(result, null, 2));
+    return result;
   }
 
   async post<T>(endpoint: string, data?: any): Promise<T> {
