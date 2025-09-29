@@ -66,27 +66,28 @@ async function handleDestinationsAPI(req, res) {
     }
 
     const destinationsQuery = `
-      SELECT
-        'city' as type,
-        ci.name,
-        co.name as country,
-        ci.name || ', ' || co.name as display_name,
-        'city_' || ci.id as id
-      FROM cities ci
-      JOIN countries co ON ci.country_id = co.id
-      WHERE ci.name ILIKE $1 OR co.name ILIKE $1
+      (
+        SELECT
+          'city' as type,
+          ci.name,
+          co.name as country,
+          ci.name || ', ' || co.name as display_name,
+          'city_' || ci.id as id
+        FROM cities ci
+        JOIN countries co ON ci.country_id = co.id
+        WHERE ci.name ILIKE $1 OR co.name ILIKE $1
 
-      UNION ALL
+        UNION ALL
 
-      SELECT
-        'country' as type,
-        co.name,
-        co.name as country,
-        co.name as display_name,
-        'country_' || co.id as id
-      FROM countries co
-      WHERE co.name ILIKE $1
-
+        SELECT
+          'country' as type,
+          co.name,
+          co.name as country,
+          co.name as display_name,
+          'country_' || co.id as id
+        FROM countries co
+        WHERE co.name ILIKE $1
+      )
       ORDER BY
         CASE WHEN LOWER(name) = $2 THEN 1 ELSE 2 END,
         name ASC
