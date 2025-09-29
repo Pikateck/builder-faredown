@@ -57,11 +57,11 @@ async function handleAuthAPI(req, res) {
     console.log("🔐 Auth API Request:", req.originalUrl);
 
     // Handle /api/auth/me - get current user
-    if (req.originalUrl.includes('/auth/me')) {
+    if (req.originalUrl.includes("/auth/me")) {
       // For development, return a mock user or null if not authenticated
       return res.json({
         success: true,
-        data: null // No user authenticated in dev mode
+        data: null, // No user authenticated in dev mode
       });
     }
 
@@ -69,9 +69,8 @@ async function handleAuthAPI(req, res) {
     return res.json({
       success: true,
       message: "Auth endpoint",
-      data: null
+      data: null,
     });
-
   } catch (error) {
     console.error("❌ Auth API error:", error);
     return res.status(500).json({
@@ -89,19 +88,42 @@ async function handleCurrencyAPI(req, res) {
 
     // Mock currency data for development
     const currencies = [
-      { code: "INR", name: "Indian Rupee", symbol: "₹", rate: 1.0, default: true },
-      { code: "USD", name: "US Dollar", symbol: "$", rate: 0.012, default: false },
+      {
+        code: "INR",
+        name: "Indian Rupee",
+        symbol: "₹",
+        rate: 1.0,
+        default: true,
+      },
+      {
+        code: "USD",
+        name: "US Dollar",
+        symbol: "$",
+        rate: 0.012,
+        default: false,
+      },
       { code: "EUR", name: "Euro", symbol: "€", rate: 0.011, default: false },
-      { code: "GBP", name: "British Pound", symbol: "£", rate: 0.0095, default: false },
-      { code: "AED", name: "UAE Dirham", symbol: "د.إ", rate: 0.044, default: false }
+      {
+        code: "GBP",
+        name: "British Pound",
+        symbol: "£",
+        rate: 0.0095,
+        default: false,
+      },
+      {
+        code: "AED",
+        name: "UAE Dirham",
+        symbol: "د.إ",
+        rate: 0.044,
+        default: false,
+      },
     ];
 
     return res.json({
       success: true,
       currencies: currencies,
-      default_currency: "INR"
+      default_currency: "INR",
     });
-
   } catch (error) {
     console.error("❌ Currency API error:", error);
     return res.status(500).json({
@@ -118,7 +140,7 @@ async function handleLoyaltyAPI(req, res) {
     console.log("🎯 Loyalty API Request:", req.originalUrl);
 
     // Handle /api/loyalty/me - user loyalty profile
-    if (req.originalUrl.includes('/loyalty/me')) {
+    if (req.originalUrl.includes("/loyalty/me")) {
       // Mock loyalty data for development
       const loyaltyData = {
         user_id: "dev_user_123",
@@ -131,7 +153,7 @@ async function handleLoyaltyAPI(req, res) {
           current_tier: "Silver",
           next_tier: "Gold",
           points_needed: 2500,
-          current_year_points: 2500
+          current_year_points: 2500,
         },
         recent_transactions: [
           {
@@ -140,7 +162,7 @@ async function handleLoyaltyAPI(req, res) {
             points: 500,
             description: "London Royal Experience booking",
             date: "2025-09-25",
-            booking_reference: "LON001"
+            booking_reference: "LON001",
           },
           {
             id: 2,
@@ -148,20 +170,20 @@ async function handleLoyaltyAPI(req, res) {
             points: 300,
             description: "Hotel booking bonus",
             date: "2025-09-20",
-            booking_reference: "HTL002"
-          }
+            booking_reference: "HTL002",
+          },
         ],
         benefits: [
           "Priority customer support",
           "10% bonus points on all bookings",
           "Free upgrades (subject to availability)",
-          "Extended cancellation period"
-        ]
+          "Extended cancellation period",
+        ],
       };
 
       return res.json({
         success: true,
-        data: loyaltyData
+        data: loyaltyData,
       });
     }
 
@@ -169,9 +191,8 @@ async function handleLoyaltyAPI(req, res) {
     return res.json({
       success: true,
       message: "Loyalty API endpoint",
-      data: {}
+      data: {},
     });
-
   } catch (error) {
     console.error("❌ Loyalty API error:", error);
     return res.status(500).json({
