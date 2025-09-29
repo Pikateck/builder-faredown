@@ -22,7 +22,7 @@ async function applyCountriesData() {
     console.log('🌍 Starting comprehensive countries data import...');
     
     // Read the SQL file
-    const sqlFilePath = path.join(__dirname, 'comprehensive-countries-seed.sql');
+    const sqlFilePath = path.join(__dirname, 'comprehensive-countries-seed-updated.sql');
     const sqlContent = fs.readFileSync(sqlFilePath, 'utf8');
     
     // Execute the SQL
@@ -33,7 +33,7 @@ async function applyCountriesData() {
     const result = await client.query('SELECT COUNT(*) as total, COUNT(*) FILTER (WHERE popular = TRUE) as popular FROM countries');
     const { total, popular } = result.rows[0];
     
-    console.log('�� Countries data import completed successfully!');
+    console.log('✅ Countries data import completed successfully!');
     console.log(`📊 Total countries: ${total}`);
     console.log(`🌟 Popular destinations: ${popular}`);
     
