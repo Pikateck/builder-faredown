@@ -287,9 +287,14 @@ export default function PackageBooking() {
             {/* Primary Guest Details */}
             <Card>
               <CardContent className="p-6">
-                <h3 className="text-lg font-semibold mb-4">
-                  Primary Guest Details
-                </h3>
+                <div className="flex items-center mb-4">
+                  <h3 className="text-lg font-semibold mr-3">
+                    Primary Guest Details
+                  </h3>
+                  <span className="bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded">
+                    Adult 1
+                  </span>
+                </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="title">Title *</Label>
