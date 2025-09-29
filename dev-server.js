@@ -149,7 +149,7 @@ async function handlePackagesAPI(req, res) {
       },
     });
   } catch (error) {
-    console.error("❌ Direct packages API error:", error);
+    console.error("��� Direct packages API error:", error);
     return res.status(500).json({
       success: false,
       error: "Failed to fetch packages",
@@ -160,8 +160,8 @@ async function handlePackagesAPI(req, res) {
 
 // Helper function for API proxying
 async function proxyToAPI(req, res, routeType = "API") {
-  // Direct packages API handler
-  if (req.path === "/api/packages") {
+  // Direct packages API handler (match originalUrl because this proxy is mounted at /api)
+  if (req.originalUrl.startsWith("/api/packages")) {
     return handlePackagesAPI(req, res);
   }
 
