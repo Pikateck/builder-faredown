@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Dubai Package Filtering</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .test-case { border: 1px solid #ccc; margin: 10px 0; padding: 15px; }
+        .result { background: #f0f0f0; padding: 10px; margin: 10px 0; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>Testing Dubai Package Filtering</h1>
+    <p>This page tests the URL parameter handling for Dubai packages on October 1-5, 2025</p>
+    
+    <div class="test-case">
+        <h3>Test 1: Dubai City Selection</h3>
+        <p><strong>Expected URL:</strong> /packages/results?destination=Dubai%2C%20United%20Arab%20Emirates&destination_type=city&departure_date=2025-10-01&return_date=2025-10-05</p>
+        <div class="result">
+            <p>This should show:</p>
+            <ul>
+                <li>✅ Only Dubai packages (3 packages)</li>
+                <li>✅ Packages with departures between Oct 1-5, 2025</li>
+                <li>✅ Different package categories (luxury, explorer, adventure)</li>
+                <li>❌ No packages from Paris, Bali, or other regions</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="test-case">
+        <h3>Test 2: URL Parameter Parsing</h3>
+        <div class="result">
+            <script>
+                // Simulate the URL parameters that should be passed
+                const testParams = new URLSearchParams();
+                testParams.set('destination', 'Dubai, United Arab Emirates');
+                testParams.set('destination_type', 'city');
+                testParams.set('departure_date', '2025-10-01');
+                testParams.set('return_date', '2025-10-05');
+                testParams.set('adults', '2');
+                testParams.set('children', '0');
+                
+                document.write('<p><strong>Parsed Parameters:</strong></p>');
+                document.write('<ul>');
+                for (let [key, value] of testParams) {
+                    document.write(`<li>${key}: ${value}</li>`);
+                }
+                document.write('</ul>');
+                
+                // Show the API query that should be built
+                const queryParams = new URLSearchParams();
+                queryParams.set('destination', 'Dubai, United Arab Emirates');
+                queryParams.set('destination_type', 'city');
+                queryParams.set('departure_date', '2025-10-01');
+                queryParams.set('return_date', '2025-10-05');
+                
+                document.write(`<p><strong>API Query:</strong> /packages?${queryParams.toString()}</p>`);
+            </script>
+        </div>
+    </div>
+    
+    <div class="test-case">
+        <h3>Test 3: Expected Filter Results</h3>
+        <div class="result">
+            <p><strong>Header should show:</strong></p>
+            <ul>
+                <li>Fixed Packages – 3 packages found</li>
+                <li>Destination: Dubai, United Arab Emirates</li>
+                <li>Departure: Wed, Oct 1, 2025 – Sun, Oct 5, 2025</li>
+            </ul>
+            
+            <p><strong>Package cards should show:</strong></p>
+            <ul>
+                <li>Dubai Luxury Experience (₹179,998)</li>
+                <li>Dubai City Explorer (₹109,998)</li>
+                <li>Dubai Adventure Weekender (₹89,998)</li>
+            </ul>
+            
+            <p><strong>Should NOT show:</strong></p>
+            <ul>
+                <li>❌ Paris Romantic Getaway</li>
+                <li>❌ Bali Family Adventure</li>
+                <li>❌ Kerala Backwaters</li>
+                <li>❌ Any non-Dubai packages</li>
+            </ul>
+        </div>
+    </div>
+    
+    <div class="test-case">
+        <h3>Test 4: Frontend Component Behavior</h3>
+        <div class="result">
+            <p><strong>PackageResults.tsx should:</strong></p>
+            <ol>
+                <li>Read URL parameters correctly from useSearchParams()</li>
+                <li>Pass destination and date filters to API</li>
+                <li>Display filtered results only</li>
+                <li>Show correct counts in header</li>
+                <li>Update facets based on filtered results</li>
+            </ol>
+            
+            <p><strong>Key checks:</strong></p>
+            <ul>
+                <li>currentFilters.destination = "Dubai, United Arab Emirates"</li>
+                <li>currentFilters.destination_type = "city"</li>
+                <li>currentFilters.departure_date = "2025-10-01"</li>
+                <li>currentFilters.return_date = "2025-10-05"</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script>
+        // Test the date formatting logic
+        function testDateFormatting() {
+            const departureDate = '2025-10-01';
+            const returnDate = '2025-10-05';
+            
+            const depFormatted = new Date(departureDate).toLocaleDateString("en-US", {
+                weekday: "short",
+                month: "short", 
+                day: "numeric",
+                year: "numeric",
+            });
+            
+            const retFormatted = new Date(returnDate).toLocaleDateString("en-US", {
+                weekday: "short",
+                month: "short",
+                day: "numeric", 
+                year: "numeric",
+            });
+            
+            document.write(`<div class="test-case">`);
+            document.write(`<h3>Test 5: Date Formatting</h3>`);
+            document.write(`<div class="result">`);
+            document.write(`<p><strong>Input:</strong> ${departureDate} to ${returnDate}</p>`);
+            document.write(`<p><strong>Formatted:</strong> ${depFormatted} – ${retFormatted}</p>`);
+            document.write(`<p><strong>Expected:</strong> Wed, Oct 1, 2025 – Sun, Oct 5, 2025</p>`);
+            document.write(`</div></div>`);
+        }
+        
+        testDateFormatting();
+    </script>
+    
+    <div class="test-case">
+        <h3>Summary</h3>
+        <div class="result">
+            <p>The user's issue is that when selecting <strong>Dubai, 01–05 Oct 2025</strong>, they see packages from other regions instead of only Dubai packages. The fix requires:</p>
+            <ol>
+                <li>✅ Database schema with proper foreign keys (COMPLETED)</li>
+                <li>✅ API endpoints that filter by destination and date (COMPLETED)</li>
+                <li>🔄 Frontend to properly pass filter parameters (IN PROGRESS)</li>
+                <li>⏳ Ensure no fallback to mixed-region mock data</li>
+            </ol>
+        </div>
+    </div>
+</body>
+</html>
