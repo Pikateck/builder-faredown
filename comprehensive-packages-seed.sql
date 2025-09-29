@@ -422,9 +422,9 @@ BEGIN
             INSERT INTO package_departures (
                 package_id, departure_city_code, departure_city_name,
                 departure_date, return_date, price_per_person, child_price,
-                currency, available_seats, total_seats, is_guaranteed
-            ) 
-            SELECT 
+                currency, total_seats, is_guaranteed
+            )
+            SELECT
                 pkg.id,
                 'BOM',
                 'Mumbai',
@@ -433,7 +433,6 @@ BEGIN
                 pkg.base_price_pp + 5000,
                 (pkg.base_price_pp + 5000) * 0.75,
                 'INR',
-                15,
                 20,
                 TRUE;
         END IF;
