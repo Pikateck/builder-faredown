@@ -396,9 +396,12 @@ export default function PackageBooking() {
             {additionalGuests.length > 0 && (
               <Card>
                 <CardContent className="p-6">
-                  <h3 className="text-lg font-semibold mb-4">
+                  <h3 className="text-lg font-semibold mb-2">
                     Additional Guests
                   </h3>
+                  <p className="text-sm text-gray-600 mb-4">
+                    Please provide details for all travelers. Adult forms are marked in blue, child forms are marked in green.
+                  </p>
                   {additionalGuests.map((guest, index) => {
                     // Calculate if this guest is an adult or child
                     // Primary guest is Adult 1, so remaining adults start from index 0
