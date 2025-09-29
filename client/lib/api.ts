@@ -154,8 +154,14 @@ const logApiEvent = (
     // Tag for monitoring systems
     console[level](`[FAREDOWN_API] ${message}`, logData);
   } else {
-    // Development: Detailed console logging
-    console[level](`🌐 ${message}`, logData);
+    // Development: Detailed console logging with proper error formatting
+    const formattedData = logData instanceof Error
+      ? { error: logData.message, stack: logData.stack, ...logData }
+      : typeof logData === 'object' && logData !== null
+        ? JSON.stringify(logData, null, 2)
+        : logData;
+
+    console[level](`🌐 ${message}`, formattedData);
   }
 };
 
