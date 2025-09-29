@@ -218,30 +218,32 @@ export default function PackageResults() {
                       {currentFilters.destination && (
                         <span>Destination: {currentFilters.destination}</span>
                       )}
-                      {currentFilters.departure_date && (
+                      {(currentFilters.departure_date || currentFilters.return_date) && (
                         <span className="ml-4">
                           Departure:{" "}
-                          {new Date(
-                            currentFilters.departure_date,
-                          ).toLocaleDateString("en-US", {
-                            weekday: "short",
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
-                        </span>
-                      )}
-                      {currentFilters.return_date && (
-                        <span className="ml-2">
-                          -{" "}
-                          {new Date(
-                            currentFilters.return_date,
-                          ).toLocaleDateString("en-US", {
-                            weekday: "short",
-                            month: "short",
-                            day: "numeric",
-                            year: "numeric",
-                          })}
+                          {currentFilters.departure_date &&
+                            new Date(
+                              currentFilters.departure_date,
+                            ).toLocaleDateString("en-US", {
+                              weekday: "short",
+                              month: "short",
+                              day: "numeric",
+                              year: "numeric",
+                            })
+                          }
+                          {currentFilters.return_date && (
+                            <span>
+                              {" – "}
+                              {new Date(
+                                currentFilters.return_date,
+                              ).toLocaleDateString("en-US", {
+                                weekday: "short",
+                                month: "short",
+                                day: "numeric",
+                                year: "numeric",
+                              })}
+                            </span>
+                          )}
                         </span>
                       )}
                     </div>
