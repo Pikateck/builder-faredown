@@ -154,6 +154,7 @@ app.use("*", (req, res) => {
     error: "Not found",
     message: `Route ${req.originalUrl} not found`,
     availableRoutes: [
+      "/api/packages",
       "/api/pricing/quote",
       "/api/pricing/test-quote",
       "/api/pricing/markup-rules",
