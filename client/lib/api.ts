@@ -325,7 +325,7 @@ export class ApiClient {
       return countriesData as T;
     }
 
-    if (endpoint.includes('/packages')) {
+    if (endpoint.includes('/packages') && false) {
       console.log('🚨🚨🚨 NUCLEAR FIX ACTIVATED: Forcing Dubai packages only 🚨🚨🚨');
       console.log('📋 Endpoint:', endpoint, 'Params:', params);
 
