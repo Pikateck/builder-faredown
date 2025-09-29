@@ -484,6 +484,7 @@ export class ApiClient {
         if (error.name === "AbortError") {
           logApiEvent("warn", `Request timeout for ${endpoint}`, {
             timeout: this.timeout,
+            error: error.message,
           });
         } else if (
           error.name === "TypeError" ||
@@ -495,16 +496,25 @@ export class ApiClient {
           logApiEvent("warn", `Network unavailable for ${endpoint}`, {
             error: error.message,
             errorType: error.name,
+            stack: error.stack,
           });
         } else if (error instanceof ApiError && error.status === 503) {
           logApiEvent("warn", `Backend server unavailable for ${endpoint}`, {
             error: error.message,
+            status: error.status,
           });
         } else {
-          logApiEvent("error", `Request failed for ${endpoint}`, {
+          logApiEvent("error", `API request failed for ${endpoint}`, {
             error: error.message,
+            errorType: error.name,
+            stack: error.stack,
           });
         }
+      } else {
+        logApiEvent("error", `Unknown error for ${endpoint}`, {
+          error: String(error),
+          errorType: typeof error,
+        });
       }
 
       // CRITICAL FIX: Never fallback for packages - show real errors instead
