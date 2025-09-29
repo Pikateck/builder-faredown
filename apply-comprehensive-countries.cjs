@@ -22,7 +22,7 @@ async function applyCountriesData() {
     console.log('🌍 Starting comprehensive countries data import...');
     
     // Read the SQL file
-    const sqlFilePath = path.join(__dirname, 'comprehensive-countries-seed-updated.sql');
+    const sqlFilePath = path.join(__dirname, 'simple-countries-insert.sql');
     const sqlContent = fs.readFileSync(sqlFilePath, 'utf8');
     
     // Execute the SQL
