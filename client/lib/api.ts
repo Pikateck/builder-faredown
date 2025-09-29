@@ -501,7 +501,13 @@ export class ApiClient {
         }
       }
 
-      // Fallback handling - always try fallback for common error scenarios
+      // CRITICAL FIX: Never fallback for packages - show real errors instead
+      if (endpoint.includes('/packages')) {
+        console.log('🚨 PACKAGES API ERROR - NOT USING FALLBACK:', error);
+        throw error; // Show real error for packages, don't use fallback
+      }
+
+      // Fallback handling - always try fallback for common error scenarios (except packages)
       if (
         API_CONFIG.OFFLINE_FALLBACK_ENABLED ||
         (error instanceof Error &&
