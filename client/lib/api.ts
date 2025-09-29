@@ -301,41 +301,37 @@ export class ApiClient {
       console.log('📋 Endpoint:', endpoint, 'Params:', params);
 
       const dubaiPackagesOnly = {
-        success: true,
-        data: {
-          packages: [
-            {
-              id: 1, slug: "dubai-luxury-experience", title: "Dubai Luxury Experience",
-              region_name: "Middle East", country_name: "United Arab Emirates", city_name: "Dubai",
-              duration_days: 7, duration_nights: 6, from_price: 179998, currency: "INR",
-              next_departure_date: "2025-10-15", available_departures_count: 8,
-              hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
-              rating: 4.8, review_count: 156, is_featured: true, category: "luxury",
-              tags: ["luxury", "city-break"], highlights: ["5-star hotel accommodation", "Burj Khalifa visits"]
-            },
-            {
-              id: 8, slug: "dubai-city-explorer", title: "Dubai City Explorer",
-              region_name: "Middle East", country_name: "United Arab Emirates", city_name: "Dubai",
-              duration_days: 5, duration_nights: 4, from_price: 109998, currency: "INR",
-              next_departure_date: "2025-10-03", available_departures_count: 4,
-              hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
-              rating: 4.6, review_count: 98, is_featured: false, category: "explorer",
-              tags: ["city-break", "culture"], highlights: ["4-star hotel", "Dubai Museum tours"]
-            },
-            {
-              id: 11, slug: "dubai-adventure-weekender", title: "Dubai Adventure Weekender",
-              region_name: "Middle East", country_name: "United Arab Emirates", city_name: "Dubai",
-              duration_days: 4, duration_nights: 3, from_price: 89998, currency: "INR",
-              next_departure_date: "2025-10-01", available_departures_count: 4,
-              hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
-              rating: 4.4, review_count: 73, is_featured: false, category: "adventure",
-              tags: ["adventure", "desert"], highlights: ["3-star hotel", "Desert safari"]
-            }
-          ],
-          pagination: { page: 1, page_size: 20, total: 3, total_pages: 1, has_next: false, has_prev: false },
-          facets: { regions: { "Middle East": 3 }, categories: { luxury: 1, explorer: 1, adventure: 1 } }
-        },
-        message: "🚨 NUCLEAR FIX: Dubai packages only (forced override)"
+        packages: [
+          {
+            id: 1, slug: "dubai-luxury-experience", title: "Dubai Luxury Experience",
+            region_name: "Middle East", country_name: "United Arab Emirates", city_name: "Dubai",
+            duration_days: 7, duration_nights: 6, from_price: 179998, currency: "INR",
+            next_departure_date: "2025-10-15", available_departures_count: 8,
+            hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
+            rating: 4.8, review_count: 156, is_featured: true, category: "luxury",
+            tags: ["luxury", "city-break"], highlights: ["5-star hotel accommodation", "Burj Khalifa visits"]
+          },
+          {
+            id: 8, slug: "dubai-city-explorer", title: "Dubai City Explorer",
+            region_name: "Middle East", country_name: "United Arab Emirates", city_name: "Dubai",
+            duration_days: 5, duration_nights: 4, from_price: 109998, currency: "INR",
+            next_departure_date: "2025-10-03", available_departures_count: 4,
+            hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
+            rating: 4.6, review_count: 98, is_featured: false, category: "explorer",
+            tags: ["city-break", "culture"], highlights: ["4-star hotel", "Dubai Museum tours"]
+          },
+          {
+            id: 11, slug: "dubai-adventure-weekender", title: "Dubai Adventure Weekender",
+            region_name: "Middle East", country_name: "United Arab Emirates", city_name: "Dubai",
+            duration_days: 4, duration_nights: 3, from_price: 89998, currency: "INR",
+            next_departure_date: "2025-10-01", available_departures_count: 4,
+            hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
+            rating: 4.4, review_count: 73, is_featured: false, category: "adventure",
+            tags: ["adventure", "desert"], highlights: ["3-star hotel", "Desert safari"]
+          }
+        ],
+        pagination: { page: 1, page_size: 20, total: 3, total_pages: 1, has_next: false, has_prev: false },
+        facets: { regions: { "Middle East": 3 }, categories: { luxury: 1, explorer: 1, adventure: 1 } }
       };
 
       console.log('✅ NUCLEAR FIX: Returning hardcoded Dubai packages');
