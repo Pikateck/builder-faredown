@@ -36,7 +36,8 @@ app.use((req, res, next) => {
 });
 
 // Add packages API logic directly to dev server
-const { Pool } = require("pg");
+const pg = await import("pg");
+const { Pool } = pg;
 
 // Database connection for packages API
 const dbUrl = process.env.DATABASE_URL;
