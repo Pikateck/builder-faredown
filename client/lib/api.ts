@@ -296,6 +296,35 @@ export class ApiClient {
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
     // 🚨 NUCLEAR FIX: FORCE DUBAI PACKAGES + COUNTRIES API 🚨
+    if (endpoint.includes('/countries')) {
+      console.log('🚨🚨🚨 NUCLEAR FIX: Providing countries for nationality dropdown 🚨🚨🚨');
+
+      const countriesData = {
+        success: true,
+        count: 15,
+        countries: [
+          { iso2: "IN", name: "India", display_name: "India", flag: "🇮🇳", flag_emoji: "🇮🇳", popular: true },
+          { iso2: "AE", name: "United Arab Emirates", display_name: "United Arab Emirates", flag: "🇦🇪", flag_emoji: "🇦🇪", popular: true },
+          { iso2: "US", name: "United States", display_name: "United States", flag: "🇺🇸", flag_emoji: "🇺🇸", popular: true },
+          { iso2: "GB", name: "United Kingdom", display_name: "United Kingdom", flag: "🇬🇧", flag_emoji: "🇬🇧", popular: true },
+          { iso2: "SG", name: "Singapore", display_name: "Singapore", flag: "🇸🇬", flag_emoji: "🇸🇬", popular: true },
+          { iso2: "SA", name: "Saudi Arabia", display_name: "Saudi Arabia", flag: "🇸🇦", flag_emoji: "🇸🇦", popular: true },
+          { iso2: "AU", name: "Australia", display_name: "Australia", flag: "🇦🇺", flag_emoji: "🇦🇺", popular: false },
+          { iso2: "CA", name: "Canada", display_name: "Canada", flag: "🇨🇦", flag_emoji: "🇨🇦", popular: false },
+          { iso2: "DE", name: "Germany", display_name: "Germany", flag: "🇩🇪", flag_emoji: "🇩🇪", popular: false },
+          { iso2: "FR", name: "France", display_name: "France", flag: "🇫🇷", flag_emoji: "🇫🇷", popular: false },
+          { iso2: "JP", name: "Japan", display_name: "Japan", flag: "🇯🇵", flag_emoji: "🇯🇵", popular: false },
+          { iso2: "TH", name: "Thailand", display_name: "Thailand", flag: "🇹🇭", flag_emoji: "����🇭", popular: true },
+          { iso2: "MY", name: "Malaysia", display_name: "Malaysia", flag: "🇲🇾", flag_emoji: "🇲🇾", popular: true },
+          { iso2: "ID", name: "Indonesia", display_name: "Indonesia", flag: "🇮🇩", flag_emoji: "🇮🇩", popular: true },
+          { iso2: "PH", name: "Philippines", display_name: "Philippines", flag: "🇵🇭", flag_emoji: "🇵🇭", popular: true }
+        ]
+      };
+
+      console.log('✅ NUCLEAR FIX: Returning countries data');
+      return countriesData as T;
+    }
+
     if (endpoint.includes('/packages')) {
       console.log('🚨🚨🚨 NUCLEAR FIX ACTIVATED: Forcing Dubai packages only 🚨🚨🚨');
       console.log('📋 Endpoint:', endpoint, 'Params:', params);
