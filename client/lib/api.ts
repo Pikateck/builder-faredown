@@ -295,7 +295,7 @@ export class ApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
-    // 🚨 NUCLEAR FIX: FORCE DUBAI PACKAGES ONLY FOR ALL /packages CALLS 🚨
+    // 🚨 NUCLEAR FIX: FORCE DUBAI PACKAGES + COUNTRIES API 🚨
     if (endpoint.includes('/packages')) {
       console.log('🚨🚨🚨 NUCLEAR FIX ACTIVATED: Forcing Dubai packages only 🚨🚨🚨');
       console.log('📋 Endpoint:', endpoint, 'Params:', params);
