@@ -117,6 +117,13 @@ export default function PackageResults() {
 
       console.log('🚨🚨🚨 PACKAGE RESULTS: API Response received 🚨🚨🚨');
       console.log('📋 Response:', JSON.stringify(response, null, 2));
+      console.log('📋 Response type:', typeof response);
+      console.log('📋 Response.packages exists?', !!response.packages);
+      console.log('📋 Response.data exists?', !!response.data);
+      console.log('📋 Response.data.packages exists?', !!response.data?.packages);
+      if (response.data?.packages) {
+        console.log('📋 Response.data.packages length:', response.data.packages.length);
+      }
 
       if (response.packages) {
         console.log('📦 Packages from response:', response.packages.map(p => ({ id: p.id, title: p.title, city: p.region_name })));
