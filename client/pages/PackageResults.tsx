@@ -106,18 +106,33 @@ export default function PackageResults() {
         }
       });
 
+      console.log('🚨🚨🚨 PACKAGE RESULTS: About to call API 🚨🚨🚨');
+      console.log('📋 Current filters:', currentFilters);
+      console.log('📋 Query params:', queryParams.toString());
+      console.log('📋 Destination from params:', currentFilters.destination);
+
       const response = await apiClient.get<PackageSearchResponse>(
         `/packages?${queryParams.toString()}`,
       );
 
+      console.log('🚨🚨🚨 PACKAGE RESULTS: API Response received 🚨🚨🚨');
+      console.log('📋 Response:', JSON.stringify(response, null, 2));
+
       if (response.packages) {
+        console.log('📦 Packages from response:', response.packages.map(p => ({ id: p.id, title: p.title, city: p.region_name })));
         setPackages(response.packages);
         setPagination(response.pagination);
         setFacets(response.facets);
+      } else if (response.data?.packages) {
+        console.log('📦 Packages from response.data:', response.data.packages.map(p => ({ id: p.id, title: p.title, city: p.region_name })));
+        setPackages(response.data.packages);
+        setPagination(response.data.pagination);
+        setFacets(response.data.facets);
       } else {
         setError("Failed to fetch packages");
       }
     } catch (err: any) {
+      console.error('🚨 PACKAGE RESULTS: API Error:', err);
       setError(err.message || "Failed to fetch packages");
     } finally {
       setLoading(false);
