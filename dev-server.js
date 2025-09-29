@@ -50,6 +50,78 @@ const pool = new Pool({
   ssl: sslConfig,
 });
 
+// Countries API handler
+async function handleCountriesAPI(req, res) {
+  try {
+    console.log("🌍 Countries API Request");
+
+    const countriesQuery = `
+      SELECT
+        iso2, name as display_name, name,
+        CASE
+          WHEN iso2 IN ('IN', 'AE', 'US', 'GB', 'SG', 'SA', 'TH', 'MY', 'ID', 'PH') THEN true
+          ELSE false
+        END as popular,
+        CASE iso2
+          WHEN 'IN' THEN '🇮🇳'
+          WHEN 'AE' THEN '🇦🇪'
+          WHEN 'US' THEN '🇺🇸'
+          WHEN 'GB' THEN '🇬🇧'
+          WHEN 'SG' THEN '🇸🇬'
+          WHEN 'SA' THEN '🇸🇦'
+          WHEN 'AU' THEN '🇦🇺'
+          WHEN 'CA' THEN '🇨🇦'
+          WHEN 'DE' THEN '🇩🇪'
+          WHEN 'FR' THEN '🇫🇷'
+          WHEN 'JP' THEN '🇯🇵'
+          WHEN 'TH' THEN '🇹🇭'
+          WHEN 'MY' THEN '🇲🇾'
+          WHEN 'ID' THEN '🇮🇩'
+          WHEN 'PH' THEN '🇵🇭'
+          ELSE '🌍'
+        END as flag_emoji,
+        CASE iso2
+          WHEN 'IN' THEN '🇮🇳'
+          WHEN 'AE' THEN '🇦🇪'
+          WHEN 'US' THEN '🇺🇸'
+          WHEN 'GB' THEN '🇬🇧'
+          WHEN 'SG' THEN '🇸🇬'
+          WHEN 'SA' THEN '🇸🇦'
+          WHEN 'AU' THEN '🇦🇺'
+          WHEN 'CA' THEN '🇨🇦'
+          WHEN 'DE' THEN '🇩🇪'
+          WHEN 'FR' THEN '🇫🇷'
+          WHEN 'JP' THEN '🇯🇵'
+          WHEN 'TH' THEN '🇹🇭'
+          WHEN 'MY' THEN '🇲🇾'
+          WHEN 'ID' THEN '🇮🇩'
+          WHEN 'PH' THEN '🇵🇭'
+          ELSE '🌍'
+        END as flag
+      FROM countries
+      ORDER BY popular DESC, name ASC
+    `;
+
+    const result = await pool.query(countriesQuery);
+    const countries = result.rows;
+
+    console.log(`✅ Countries API found ${countries.length} countries`);
+
+    return res.json({
+      success: true,
+      count: countries.length,
+      countries: countries
+    });
+  } catch (error) {
+    console.error("❌ Countries API error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to fetch countries",
+      message: error.message,
+    });
+  }
+}
+
 // Direct packages endpoint handler
 async function handlePackagesAPI(req, res) {
   try {
@@ -214,6 +286,11 @@ async function proxyToAPI(req, res, routeType = "API") {
   // Direct packages API handler (match originalUrl because this proxy is mounted at /api)
   if (req.originalUrl.startsWith("/api/packages")) {
     return handlePackagesAPI(req, res);
+  }
+
+  // Countries API handler
+  if (req.originalUrl.startsWith("/api/countries")) {
+    return handleCountriesAPI(req, res);
   }
 
   // Special case for frontend health check
