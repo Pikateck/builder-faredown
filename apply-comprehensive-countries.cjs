@@ -30,25 +30,25 @@ async function applyCountriesData() {
     await client.query(sqlContent);
     
     // Get final count
-    const result = await client.query('SELECT COUNT(*) as total, COUNT(*) FILTER (WHERE popular = TRUE) as popular FROM countries');
+    const result = await client.query('SELECT COUNT(*) as total, COUNT(*) FILTER (WHERE sort_order < 100) as popular FROM countries');
     const { total, popular } = result.rows[0];
-    
+
     console.log('✅ Countries data import completed successfully!');
     console.log(`📊 Total countries: ${total}`);
     console.log(`🌟 Popular destinations: ${popular}`);
-    
+
     // Show some sample countries
     const sampleResult = await client.query(`
-      SELECT code, name, flag_emoji, currency_code, popular 
-      FROM countries 
-      WHERE popular = TRUE 
-      ORDER BY name 
+      SELECT iso2, iso3, name, sort_order
+      FROM countries
+      WHERE sort_order < 100
+      ORDER BY sort_order
       LIMIT 10
     `);
-    
+
     console.log('\n🌟 Sample popular countries:');
     sampleResult.rows.forEach(country => {
-      console.log(`${country.flag_emoji} ${country.code}: ${country.name} (${country.currency_code})`);
+      console.log(`${country.iso2}: ${country.name} (priority: ${country.sort_order})`);
     });
     
     return { success: true, total, popular };
