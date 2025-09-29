@@ -520,7 +520,18 @@ export class ApiClient {
       // CRITICAL FIX: Never fallback for packages - show real errors instead
       if (endpoint.includes('/packages')) {
         console.log('🚨 PACKAGES API ERROR - NOT USING FALLBACK:', error);
-        throw error; // Show real error for packages, don't use fallback
+        // Create user-friendly error message
+        const errorMessage = error instanceof Error
+          ? error.message
+          : typeof error === 'string'
+            ? error
+            : 'Unknown API error occurred';
+
+        throw new ApiError(
+          `Failed to load package data: ${errorMessage}`,
+          error instanceof ApiError ? error.status : 500,
+          error
+        );
       }
 
       // Fallback handling - always try fallback for common error scenarios (except packages)
