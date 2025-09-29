@@ -399,12 +399,31 @@ export default function PackageBooking() {
                   <h3 className="text-lg font-semibold mb-4">
                     Additional Guests
                   </h3>
-                  {additionalGuests.map((guest, index) => (
-                    <div
-                      key={index}
-                      className="mb-6 p-4 border border-gray-200 rounded-lg"
-                    >
-                      <h4 className="font-medium mb-3">Guest {index + 2}</h4>
+                  {additionalGuests.map((guest, index) => {
+                    // Calculate if this guest is an adult or child
+                    // Primary guest is Adult 1, so remaining adults start from index 0
+                    const remainingAdults = travelers.adults - 1; // -1 for primary guest
+                    const isAdult = index < remainingAdults;
+                    const guestType = isAdult ? "Adult" : "Child";
+                    const guestNumber = isAdult ? index + 2 : index - remainingAdults + 1;
+
+                    return (
+                      <div
+                        key={index}
+                        className="mb-6 p-4 border border-gray-200 rounded-lg"
+                      >
+                        <div className="flex items-center mb-3">
+                          <h4 className="font-medium mr-3">
+                            Guest {index + 2}
+                          </h4>
+                          <span className={`text-xs font-medium px-2.5 py-0.5 rounded ${
+                            isAdult
+                              ? 'bg-blue-100 text-blue-800'
+                              : 'bg-green-100 text-green-800'
+                          }`}>
+                            {guestType} {guestNumber}
+                          </span>
+                        </div>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <Label>Title</Label>
@@ -483,8 +502,9 @@ export default function PackageBooking() {
                           </Select>
                         </div>
                       </div>
-                    </div>
-                  ))}
+                      </div>
+                    );
+                  })}
                 </CardContent>
               </Card>
             )}
