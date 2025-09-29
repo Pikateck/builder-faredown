@@ -118,6 +118,15 @@ app.use("/api/pricing", pricingRoutes);
 // Price diff debugging endpoint
 app.get("/api/pricing/diff", (req, res) => createDiffEndpoint(pool)(req, res));
 
+// Packages routes
+try {
+  const packagesRoutes = require("./routes/packages");
+  app.use("/api/packages", packagesRoutes);
+  console.log("✅ Packages routes mounted successfully");
+} catch (e) {
+  console.warn("⚠️ Packages routes not mounted:", e?.message);
+}
+
 // Unified markups routes (for Admin CMS)
 try {
   const markupsRoutes = require("./routes/markups-unified");
