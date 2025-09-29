@@ -8,7 +8,7 @@ try {
   await import("./api/server.js");
   console.log("✅ API server bootstrapped alongside dev server");
 } catch (e) {
-  console.warn("⚠️ Failed to bootstrap API server:", e.message);
+  console.warn("⚠�� Failed to bootstrap API server:", e.message);
 }
 
 // Create Express app
@@ -53,6 +53,32 @@ const pool = new Pool({
 // Direct packages endpoint handler
 async function handlePackagesAPI(req, res) {
   try {
+    // Support single package by slug: /api/packages/:slug
+    const slugMatch = req.originalUrl.match(/^\/api\/packages\/([^?]+)/);
+    if (slugMatch && slugMatch[1]) {
+      const slug = decodeURIComponent(slugMatch[1]);
+      const detailsQuery = `
+        SELECT
+          p.*,
+          r.name as region_name,
+          c.name as country_name,
+          ci.name as city_name,
+          p.base_price_pp as from_price,
+          ARRAY[p.hero_image_url] as images
+        FROM packages p
+        LEFT JOIN regions r ON p.region_id = r.id
+        LEFT JOIN countries c ON p.country_id = c.id
+        LEFT JOIN cities ci ON p.city_id = ci.id
+        WHERE p.slug = $1 AND p.status = 'active'
+        LIMIT 1
+      `;
+      const result = await pool.query(detailsQuery, [slug]);
+      if (result.rows.length === 0) {
+        return res.status(404).json({ success: false, error: "Package not found" });
+      }
+      return res.json({ success: true, data: result.rows[0] });
+    }
+
     const {
       q = "",
       destination,
@@ -149,7 +175,7 @@ async function handlePackagesAPI(req, res) {
       },
     });
   } catch (error) {
-    console.error("��� Direct packages API error:", error);
+    console.error("❌ Direct packages API error:", error);
     return res.status(500).json({
       success: false,
       error: "Failed to fetch packages",
@@ -250,6 +276,6 @@ const port = 8080;
 app.listen(port, "0.0.0.0", () => {
   console.log(`🚀 Faredown Dev Server: http://localhost:${port}`);
   console.log(`📱 Frontend: / → React app (HTML)`);
-  console.log(`🔧 API: /api/* → JSON endpoints`);
+  console.log(`���� API: /api/* → JSON endpoints`);
   console.log(`✅ Ready for preview`);
 });
