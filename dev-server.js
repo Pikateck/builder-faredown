@@ -35,8 +35,135 @@ app.use((req, res, next) => {
   next();
 });
 
+// Add packages API logic directly to dev server
+const { Pool } = require("pg");
+
+// Database connection for packages API
+const dbUrl = process.env.DATABASE_URL;
+const sslConfig = dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
+  ? { rejectUnauthorized: false }
+  : false;
+
+const pool = new Pool({
+  connectionString: dbUrl,
+  ssl: sslConfig,
+});
+
+// Direct packages endpoint handler
+async function handlePackagesAPI(req, res) {
+  try {
+    const {
+      q = "",
+      destination,
+      destination_type,
+      page = 1,
+      page_size = 20,
+    } = req.query;
+
+    console.log("🔍 Direct Packages API Request:", { destination, destination_type, q });
+
+    // Build WHERE clause dynamically
+    let whereConditions = ["p.status = 'active'"];
+    let queryParams = [];
+    let paramCount = 0;
+
+    // **SMART DESTINATION FILTERING**
+    if (destination && destination_type) {
+      const destinationName = destination.split(",")[0].trim();
+
+      if (destination_type === "city") {
+        console.log(`🏙️ City search for: ${destinationName}`);
+        paramCount++;
+        whereConditions.push(`(
+          -- Direct city match
+          EXISTS (
+            SELECT 1 FROM cities ci
+            WHERE ci.id = p.city_id
+            AND ci.name ILIKE $${paramCount}
+          )
+          OR
+          -- Country match for major cities (e.g., London -> United Kingdom)
+          EXISTS (
+            SELECT 1 FROM countries c
+            WHERE c.id = p.country_id
+            AND (
+              c.name ILIKE $${paramCount}
+              OR
+              ($${paramCount} ILIKE '%London%' AND c.name ILIKE '%United Kingdom%')
+            )
+          )
+        )`);
+        queryParams.push(`%${destinationName}%`);
+      }
+    }
+
+    // Pagination
+    const limit = Math.min(parseInt(page_size), 50);
+    const offset = (parseInt(page) - 1) * limit;
+
+    paramCount++;
+    queryParams.push(limit);
+    paramCount++;
+    queryParams.push(offset);
+
+    // Main query
+    const mainQuery = `
+      SELECT
+        p.*,
+        r.name as region_name,
+        c.name as country_name,
+        ci.name as city_name,
+        p.base_price_pp as from_price,
+        ARRAY[p.hero_image_url] as images
+      FROM packages p
+      LEFT JOIN regions r ON p.region_id = r.id
+      LEFT JOIN countries c ON p.country_id = c.id
+      LEFT JOIN cities ci ON p.city_id = ci.id
+      WHERE ${whereConditions.join(" AND ")}
+      ORDER BY p.is_featured DESC, p.rating DESC, p.created_at DESC
+      LIMIT $${paramCount - 1} OFFSET $${paramCount}
+    `;
+
+    const mainResult = await pool.query(mainQuery, queryParams);
+    const packages = mainResult.rows;
+
+    console.log(`✅ Direct API found ${packages.length} packages`);
+
+    return res.json({
+      success: true,
+      data: {
+        packages,
+        pagination: {
+          page: parseInt(page),
+          page_size: limit,
+          total: packages.length,
+          total_pages: 1,
+          has_next: false,
+          has_prev: false,
+        },
+        facets: {
+          regions: { "Europe": 3, "Asia": 3, "Middle East": 5 },
+          categories: { "luxury": 3, "cultural": 16, "adventure": 9 }
+        },
+      },
+    });
+  } catch (error) {
+    console.error("❌ Direct packages API error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to fetch packages",
+      message: error.message,
+    });
+  }
+}
+
 // Helper function for API proxying
 async function proxyToAPI(req, res, routeType = "API") {
+  // Direct packages API handler
+  if (req.path === "/api/packages") {
+    return handlePackagesAPI(req, res);
+  }
+
   // Special case for frontend health check
   if (req.path === "/api/health") {
     return res.json({
