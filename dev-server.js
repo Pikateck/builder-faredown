@@ -51,6 +51,67 @@ const pool = new Pool({
   ssl: sslConfig,
 });
 
+// Auth API handler
+async function handleAuthAPI(req, res) {
+  try {
+    console.log("🔐 Auth API Request:", req.originalUrl);
+
+    // Handle /api/auth/me - get current user
+    if (req.originalUrl.includes('/auth/me')) {
+      // For development, return a mock user or null if not authenticated
+      return res.json({
+        success: true,
+        data: null // No user authenticated in dev mode
+      });
+    }
+
+    // Handle other auth endpoints
+    return res.json({
+      success: true,
+      message: "Auth endpoint",
+      data: null
+    });
+
+  } catch (error) {
+    console.error("❌ Auth API error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to fetch auth data",
+      message: error.message,
+    });
+  }
+}
+
+// Currency API handler
+async function handleCurrencyAPI(req, res) {
+  try {
+    console.log("💱 Currency API Request:", req.originalUrl);
+
+    // Mock currency data for development
+    const currencies = [
+      { code: "INR", name: "Indian Rupee", symbol: "₹", rate: 1.0, default: true },
+      { code: "USD", name: "US Dollar", symbol: "$", rate: 0.012, default: false },
+      { code: "EUR", name: "Euro", symbol: "€", rate: 0.011, default: false },
+      { code: "GBP", name: "British Pound", symbol: "£", rate: 0.0095, default: false },
+      { code: "AED", name: "UAE Dirham", symbol: "د.إ", rate: 0.044, default: false }
+    ];
+
+    return res.json({
+      success: true,
+      currencies: currencies,
+      default_currency: "INR"
+    });
+
+  } catch (error) {
+    console.error("❌ Currency API error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to fetch currency data",
+      message: error.message,
+    });
+  }
+}
+
 // Loyalty API handler
 async function handleLoyaltyAPI(req, res) {
   try {
@@ -436,6 +497,16 @@ async function proxyToAPI(req, res, routeType = "API") {
   // Loyalty API handler
   if (req.originalUrl.startsWith("/api/loyalty")) {
     return handleLoyaltyAPI(req, res);
+  }
+
+  // Auth API handler
+  if (req.originalUrl.startsWith("/api/auth")) {
+    return handleAuthAPI(req, res);
+  }
+
+  // Currency API handler
+  if (req.originalUrl.startsWith("/api/currency")) {
+    return handleCurrencyAPI(req, res);
   }
 
   // Special case for frontend health check
