@@ -8,7 +8,7 @@ try {
   await import("./api/server.js");
   console.log("✅ API server bootstrapped alongside dev server");
 } catch (e) {
-  console.warn("⚠�� Failed to bootstrap API server:", e.message);
+  console.warn("⚠️ Failed to bootstrap API server:", e.message);
 }
 
 // Create Express app
@@ -57,6 +57,8 @@ async function handlePackagesAPI(req, res) {
     const slugMatch = req.originalUrl.match(/^\/api\/packages\/([^?]+)/);
     if (slugMatch && slugMatch[1]) {
       const slug = decodeURIComponent(slugMatch[1]);
+
+      // Get package details
       const detailsQuery = `
         SELECT
           p.*,
@@ -76,7 +78,30 @@ async function handlePackagesAPI(req, res) {
       if (result.rows.length === 0) {
         return res.status(404).json({ success: false, error: "Package not found" });
       }
-      return res.json({ success: true, data: result.rows[0] });
+
+      const packageData = result.rows[0];
+
+      // Get departures for this package
+      const departuresQuery = `
+        SELECT
+          id, package_id, departure_date, return_date,
+          departure_city_code, departure_city_name,
+          price_per_person, child_price, single_supplement,
+          currency, available_seats, total_seats,
+          is_active, is_guaranteed
+        FROM package_departures
+        WHERE package_id = $1 AND is_active = true
+        AND departure_date >= CURRENT_DATE
+        ORDER BY departure_date ASC
+      `;
+      const departuresResult = await pool.query(departuresQuery, [packageData.id]);
+
+      // Add departures to package data
+      packageData.departures = departuresResult.rows;
+
+      console.log(`✅ Package ${slug} loaded with ${departuresResult.rows.length} departures`);
+
+      return res.json({ success: true, data: packageData });
     }
 
     const {
@@ -276,6 +301,6 @@ const port = 8080;
 app.listen(port, "0.0.0.0", () => {
   console.log(`🚀 Faredown Dev Server: http://localhost:${port}`);
   console.log(`📱 Frontend: / → React app (HTML)`);
-  console.log(`���� API: /api/* → JSON endpoints`);
+  console.log(`🔧 API: /api/* → JSON endpoints`);
   console.log(`✅ Ready for preview`);
 });
