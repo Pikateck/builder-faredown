@@ -51,6 +51,76 @@ const pool = new Pool({
   ssl: sslConfig,
 });
 
+// Loyalty API handler
+async function handleLoyaltyAPI(req, res) {
+  try {
+    console.log("🎯 Loyalty API Request:", req.originalUrl);
+
+    // Handle /api/loyalty/me - user loyalty profile
+    if (req.originalUrl.includes('/loyalty/me')) {
+      // Mock loyalty data for development
+      const loyaltyData = {
+        user_id: "dev_user_123",
+        membership_tier: "Silver",
+        points_balance: 2500,
+        total_lifetime_points: 8750,
+        points_expiring_soon: 500,
+        expiry_date: "2025-12-31",
+        tier_progress: {
+          current_tier: "Silver",
+          next_tier: "Gold",
+          points_needed: 2500,
+          current_year_points: 2500
+        },
+        recent_transactions: [
+          {
+            id: 1,
+            type: "earned",
+            points: 500,
+            description: "London Royal Experience booking",
+            date: "2025-09-25",
+            booking_reference: "LON001"
+          },
+          {
+            id: 2,
+            type: "earned",
+            points: 300,
+            description: "Hotel booking bonus",
+            date: "2025-09-20",
+            booking_reference: "HTL002"
+          }
+        ],
+        benefits: [
+          "Priority customer support",
+          "10% bonus points on all bookings",
+          "Free upgrades (subject to availability)",
+          "Extended cancellation period"
+        ]
+      };
+
+      return res.json({
+        success: true,
+        data: loyaltyData
+      });
+    }
+
+    // Handle other loyalty endpoints
+    return res.json({
+      success: true,
+      message: "Loyalty API endpoint",
+      data: {}
+    });
+
+  } catch (error) {
+    console.error("❌ Loyalty API error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to fetch loyalty data",
+      message: error.message,
+    });
+  }
+}
+
 // Destinations search API handler
 async function handleDestinationsAPI(req, res) {
   try {
@@ -361,6 +431,11 @@ async function proxyToAPI(req, res, routeType = "API") {
   // Destinations search handler
   if (req.originalUrl.startsWith("/api/destinations")) {
     return handleDestinationsAPI(req, res);
+  }
+
+  // Loyalty API handler
+  if (req.originalUrl.startsWith("/api/loyalty")) {
+    return handleLoyaltyAPI(req, res);
   }
 
   // Special case for frontend health check
