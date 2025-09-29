@@ -50,6 +50,68 @@ const pool = new Pool({
   ssl: sslConfig,
 });
 
+// Destinations search API handler
+async function handleDestinationsAPI(req, res) {
+  try {
+    const { q = "" } = req.query;
+    console.log("🗺️ Destinations search API Request:", { q });
+
+    const searchTerm = q.trim().toLowerCase();
+
+    if (!searchTerm) {
+      return res.json({
+        success: true,
+        destinations: []
+      });
+    }
+
+    const destinationsQuery = `
+      SELECT
+        'city' as type,
+        ci.name,
+        co.name as country,
+        ci.name || ', ' || co.name as display_name,
+        'city_' || ci.id as id
+      FROM cities ci
+      JOIN countries co ON ci.country_id = co.id
+      WHERE ci.name ILIKE $1 OR co.name ILIKE $1
+
+      UNION ALL
+
+      SELECT
+        'country' as type,
+        co.name,
+        co.name as country,
+        co.name as display_name,
+        'country_' || co.id as id
+      FROM countries co
+      WHERE co.name ILIKE $1
+
+      ORDER BY
+        CASE WHEN LOWER(name) = $2 THEN 1 ELSE 2 END,
+        name ASC
+      LIMIT 10
+    `;
+
+    const result = await pool.query(destinationsQuery, [`%${searchTerm}%`, searchTerm]);
+    const destinations = result.rows;
+
+    console.log(`✅ Destinations search found ${destinations.length} results for "${q}"`);
+
+    return res.json({
+      success: true,
+      destinations: destinations
+    });
+  } catch (error) {
+    console.error("❌ Destinations API error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to search destinations",
+      message: error.message,
+    });
+  }
+}
+
 // Countries API handler
 async function handleCountriesAPI(req, res) {
   try {
@@ -291,6 +353,11 @@ async function proxyToAPI(req, res, routeType = "API") {
   // Countries API handler
   if (req.originalUrl.startsWith("/api/countries")) {
     return handleCountriesAPI(req, res);
+  }
+
+  // Destinations search handler
+  if (req.originalUrl.startsWith("/api/destinations")) {
+    return handleDestinationsAPI(req, res);
   }
 
   // Special case for frontend health check
