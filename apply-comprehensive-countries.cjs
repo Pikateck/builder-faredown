@@ -10,7 +10,9 @@ const path = require('path');
 // Database configuration
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL || `postgresql://${process.env.DB_USER}:${process.env.DB_PASSWORD}@${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`,
-  ssl: process.env.NODE_ENV === 'production' ? { rejectUnauthorized: false } : false
+  ssl: {
+    rejectUnauthorized: false
+  }
 });
 
 async function applyCountriesData() {
@@ -31,7 +33,7 @@ async function applyCountriesData() {
     const result = await client.query('SELECT COUNT(*) as total, COUNT(*) FILTER (WHERE popular = TRUE) as popular FROM countries');
     const { total, popular } = result.rows[0];
     
-    console.log('✅ Countries data import completed successfully!');
+    console.log('�� Countries data import completed successfully!');
     console.log(`📊 Total countries: ${total}`);
     console.log(`🌟 Popular destinations: ${popular}`);
     
