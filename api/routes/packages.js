@@ -72,25 +72,55 @@ router.get("/", async (req, res) => {
       queryParams.push(`%${q.trim()}%`);
     }
 
-    // **IMPROVED DESTINATION FILTERING** - Now uses proper foreign keys
+    // **SMART DESTINATION FILTERING** - Handles city-country fallback
     if (destination && destination_type) {
       const destinationName = destination.split(",")[0].trim();
-      
+
       if (destination_type === "city") {
-        // Use city-based filtering with proper foreign key
+        // Smart city search: Check both city-level AND country-level packages
+        // This handles cases like "London" where packages might be stored at country level
         paramCount++;
-        whereConditions.push(`EXISTS (
-          SELECT 1 FROM cities ci 
-          WHERE ci.id = p.city_id 
-          AND ci.name ILIKE $${paramCount}
+        whereConditions.push(`(
+          -- Direct city match
+          EXISTS (
+            SELECT 1 FROM cities ci
+            WHERE ci.id = p.city_id
+            AND ci.name ILIKE $${paramCount}
+          )
+          OR
+          -- Country match for major cities (e.g., London -> United Kingdom)
+          EXISTS (
+            SELECT 1 FROM countries c
+            WHERE c.id = p.country_id
+            AND (
+              -- Direct country name match
+              c.name ILIKE $${paramCount}
+              OR
+              -- Major city to country mapping
+              (
+                ($${paramCount} ILIKE '%London%' AND c.name ILIKE '%United Kingdom%') OR
+                ($${paramCount} ILIKE '%Paris%' AND c.name ILIKE '%France%') OR
+                ($${paramCount} ILIKE '%Tokyo%' AND c.name ILIKE '%Japan%') OR
+                ($${paramCount} ILIKE '%Sydney%' AND c.name ILIKE '%Australia%') OR
+                ($${paramCount} ILIKE '%New York%' AND c.name ILIKE '%United States%') OR
+                ($${paramCount} ILIKE '%Dubai%' AND c.name ILIKE '%United Arab Emirates%') OR
+                ($${paramCount} ILIKE '%Bangkok%' AND c.name ILIKE '%Thailand%') OR
+                ($${paramCount} ILIKE '%Singapore%' AND c.name ILIKE '%Singapore%') OR
+                ($${paramCount} ILIKE '%Rome%' AND c.name ILIKE '%Italy%') OR
+                ($${paramCount} ILIKE '%Madrid%' AND c.name ILIKE '%Spain%') OR
+                ($${paramCount} ILIKE '%Berlin%' AND c.name ILIKE '%Germany%') OR
+                ($${paramCount} ILIKE '%Amsterdam%' AND c.name ILIKE '%Netherlands%')
+              )
+            )
+          )
         )`);
         queryParams.push(`%${destinationName}%`);
       } else if (destination_type === "country") {
         // Use country-based filtering
         paramCount++;
         whereConditions.push(`EXISTS (
-          SELECT 1 FROM countries c 
-          WHERE c.id = p.country_id 
+          SELECT 1 FROM countries c
+          WHERE c.id = p.country_id
           AND c.name ILIKE $${paramCount}
         )`);
         queryParams.push(`%${destinationName}%`);
@@ -98,8 +128,8 @@ router.get("/", async (req, res) => {
         // Use region-based filtering
         paramCount++;
         whereConditions.push(`EXISTS (
-          SELECT 1 FROM regions r 
-          WHERE r.id = p.region_id 
+          SELECT 1 FROM regions r
+          WHERE r.id = p.region_id
           AND r.name ILIKE $${paramCount}
         )`);
         queryParams.push(`%${destinationName}%`);
