@@ -372,20 +372,27 @@ export class ApiClient {
       if (slugMatch) {
         const requestedSlug = slugMatch[1];
         console.log('🎯 NUCLEAR FIX: Single package request for slug:', requestedSlug);
+        console.log('🎯 NUCLEAR FIX: Available packages:', dubaiPackages.map(p => p.slug));
 
         const foundPackage = dubaiPackages.find(pkg => pkg.slug === requestedSlug);
         if (foundPackage) {
-          console.log('✅ NUCLEAR FIX: Returning single Dubai package:', foundPackage.title);
-          return {
+          console.log('✅ NUCLEAR FIX: Found package:', foundPackage.title);
+          const response = {
             success: true,
             data: foundPackage
-          } as T;
+          };
+          console.log('✅ NUCLEAR FIX: Returning response:', JSON.stringify(response, null, 2));
+          return response as T;
         } else {
-          console.log('❌ NUCLEAR FIX: Slug not found, returning first Dubai package');
-          return {
+          console.log('❌ NUCLEAR FIX: Slug not found, available slugs:', dubaiPackages.map(p => p.slug));
+          console.log('❌ NUCLEAR FIX: Requested slug:', requestedSlug);
+          console.log('❌ NUCLEAR FIX: Returning first Dubai package as fallback');
+          const fallbackResponse = {
             success: true,
             data: dubaiPackages[0]
-          } as T;
+          };
+          console.log('❌ NUCLEAR FIX: Fallback response:', JSON.stringify(fallbackResponse, null, 2));
+          return fallbackResponse as T;
         }
       }
 
