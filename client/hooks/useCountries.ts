@@ -116,21 +116,7 @@ export function useCountries(options: UseCountriesOptions = {}) {
           });
           return response;
         } else {
-          // Handle various API unavailability scenarios gracefully
-          if (response.status === 429) {
-            console.warn("Countries API rate limited, using fallback data");
-          } else if (response.status === 503) {
-            console.warn(
-              "Countries API temporarily unavailable, using fallback data",
-            );
-          } else if (response.status >= 500) {
-            console.warn("Countries API server error, using fallback data");
-          } else {
-            console.warn(
-              `Countries API error (${response.status}), using fallback data`,
-            );
-          }
-
+          console.warn("Countries API error, using fallback data");
           const fallbackData = getFallbackCountries(popularOnly);
           // Cache the fallback data temporarily (shorter duration for errors)
           cache.set(cacheKey, {
@@ -140,21 +126,6 @@ export function useCountries(options: UseCountriesOptions = {}) {
           });
           return fallbackData;
         }
-
-        const data: CountriesResponse = await response.json();
-
-        if (!data.success) {
-          throw new Error(data.error || "Failed to fetch countries");
-        }
-
-        // Cache the result
-        cache.set(cacheKey, {
-          data: data.countries,
-          timestamp: Date.now(),
-          popularOnly,
-        });
-
-        return data.countries;
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "Unknown error occurred";
@@ -209,27 +180,22 @@ export function useCountries(options: UseCountriesOptions = {}) {
       setError(null);
 
       try {
-        const response = await fetch(
-          `/api/countries/search?q=${encodeURIComponent(query)}`,
-          {
-            headers: {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-            },
-          },
+        const response = await apiClient.get(`/countries/search`, { q: query });
+
+        if (response.success && response.countries) {
+          return response.countries;
+        }
+
+        // Fallback to local search if API fails
+        console.warn("Countries search API failed, using client-side filtering");
+        const searchTerm = query.toLowerCase();
+        return countries.filter(
+          (country) =>
+            country.display_name.toLowerCase().includes(searchTerm) ||
+            country.iso2.toLowerCase().includes(searchTerm) ||
+            (country.iso3_code &&
+              country.iso3_code.toLowerCase().includes(searchTerm)),
         );
-
-        if (!response.ok) {
-          throw new Error(`HTTP ${response.status}: ${response.statusText}`);
-        }
-
-        const data = await response.json();
-
-        if (!data.success) {
-          throw new Error(data.error || "Failed to search countries");
-        }
-
-        return data.countries;
       } catch (err) {
         const errorMessage =
           err instanceof Error ? err.message : "Search failed";
@@ -420,7 +386,7 @@ function getFallbackCountries(popularOnly: boolean): CountryOption[] {
       continent: "Asia",
       currency_code: "MYR",
       phone_prefix: "+60",
-      flag_emoji: "🇲🇾",
+      flag_emoji: "���🇾",
       popular: true,
     },
     {
