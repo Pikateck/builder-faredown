@@ -436,8 +436,11 @@ export class ApiClient {
       return dubaiPackagesOnly as T;
     }
 
-    // Use fallback immediately if forced or offline mode disabled in production
-    if (
+    // CRITICAL FIX: Never use fallback for packages - always try real API first
+    if (endpoint.includes('/packages')) {
+      console.log('🚨 FORCING REAL API FOR PACKAGES - NO FALLBACK');
+      // Skip fallback logic for packages - always try real API
+    } else if (
       this.forceFallback ||
       (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)
     ) {
