@@ -4,9 +4,10 @@ const { Pool } = require("pg");
 
 // Database connection
 const dbUrl = process.env.DATABASE_URL;
-const sslConfig = dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
-  ? { rejectUnauthorized: false }
-  : false;
+const sslConfig =
+  dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
+    ? { rejectUnauthorized: false }
+    : false;
 
 const pool = new Pool({
   connectionString: dbUrl,
@@ -44,20 +45,25 @@ async function checkLondonDepartures() {
       ORDER BY departure_date
     `;
     const departuresResult = await pool.query(departuresQuery, [packageId]);
-    
+
     console.log(`📅 Departures found: ${departuresResult.rows.length}`);
-    
+
     if (departuresResult.rows.length === 0) {
       console.log("❌ No departures found for London Royal Experience!");
-      console.log("💡 This is why the buttons are disabled - need to add departure data");
+      console.log(
+        "💡 This is why the buttons are disabled - need to add departure data",
+      );
     } else {
       console.log("✅ Departures data:");
-      departuresResult.rows.forEach(dep => {
-        console.log(`   - ${dep.departure_date} from ${dep.departure_city_name} (${dep.departure_city_code})`);
-        console.log(`     Price: ${dep.price_per_person} ${dep.currency}, Seats: ${dep.available_seats}/${dep.total_seats}`);
+      departuresResult.rows.forEach((dep) => {
+        console.log(
+          `   - ${dep.departure_date} from ${dep.departure_city_name} (${dep.departure_city_code})`,
+        );
+        console.log(
+          `     Price: ${dep.price_per_person} ${dep.currency}, Seats: ${dep.available_seats}/${dep.total_seats}`,
+        );
       });
     }
-
   } catch (error) {
     console.error("❌ Error checking departures:", error);
   } finally {

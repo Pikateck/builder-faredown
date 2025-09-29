@@ -41,9 +41,10 @@ const { Pool } = pg;
 
 // Database connection for packages API
 const dbUrl = process.env.DATABASE_URL;
-const sslConfig = dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
-  ? { rejectUnauthorized: false }
-  : false;
+const sslConfig =
+  dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
+    ? { rejectUnauthorized: false }
+    : false;
 
 const pool = new Pool({
   connectionString: dbUrl,
@@ -61,7 +62,7 @@ async function handleDestinationsAPI(req, res) {
     if (!searchTerm) {
       return res.json({
         success: true,
-        destinations: []
+        destinations: [],
       });
     }
 
@@ -80,14 +81,19 @@ async function handleDestinationsAPI(req, res) {
       LIMIT 10
     `;
 
-    const result = await pool.query(destinationsQuery, [`%${searchTerm}%`, searchTerm]);
+    const result = await pool.query(destinationsQuery, [
+      `%${searchTerm}%`,
+      searchTerm,
+    ]);
     const destinations = result.rows;
 
-    console.log(`✅ Destinations search found ${destinations.length} results for "${q}"`);
+    console.log(
+      `✅ Destinations search found ${destinations.length} results for "${q}"`,
+    );
 
     return res.json({
       success: true,
-      destinations: destinations
+      destinations: destinations,
     });
   } catch (error) {
     console.error("❌ Destinations API error:", error);
@@ -159,7 +165,7 @@ async function handleCountriesAPI(req, res) {
     return res.json({
       success: true,
       count: countries.length,
-      countries: countries
+      countries: countries,
     });
   } catch (error) {
     console.error("❌ Countries API error:", error);
@@ -197,7 +203,9 @@ async function handlePackagesAPI(req, res) {
       `;
       const result = await pool.query(detailsQuery, [slug]);
       if (result.rows.length === 0) {
-        return res.status(404).json({ success: false, error: "Package not found" });
+        return res
+          .status(404)
+          .json({ success: false, error: "Package not found" });
       }
 
       const packageData = result.rows[0];
@@ -215,12 +223,16 @@ async function handlePackagesAPI(req, res) {
         AND departure_date >= CURRENT_DATE
         ORDER BY departure_date ASC
       `;
-      const departuresResult = await pool.query(departuresQuery, [packageData.id]);
+      const departuresResult = await pool.query(departuresQuery, [
+        packageData.id,
+      ]);
 
       // Add departures to package data
       packageData.departures = departuresResult.rows;
 
-      console.log(`✅ Package ${slug} loaded with ${departuresResult.rows.length} departures`);
+      console.log(
+        `✅ Package ${slug} loaded with ${departuresResult.rows.length} departures`,
+      );
 
       return res.json({ success: true, data: packageData });
     }
@@ -233,7 +245,11 @@ async function handlePackagesAPI(req, res) {
       page_size = 20,
     } = req.query;
 
-    console.log("🔍 Direct Packages API Request:", { destination, destination_type, q });
+    console.log("🔍 Direct Packages API Request:", {
+      destination,
+      destination_type,
+      q,
+    });
 
     // Build WHERE clause dynamically
     let whereConditions = ["p.status = 'active'"];
@@ -315,8 +331,8 @@ async function handlePackagesAPI(req, res) {
           has_prev: false,
         },
         facets: {
-          regions: { "Europe": 3, "Asia": 3, "Middle East": 5 },
-          categories: { "luxury": 3, "cultural": 16, "adventure": 9 }
+          regions: { Europe: 3, Asia: 3, "Middle East": 5 },
+          categories: { luxury: 3, cultural: 16, adventure: 9 },
         },
       },
     });

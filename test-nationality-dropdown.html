@@ -1,69 +1,86 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Test Nationality Dropdown</title>
     <style>
-        body { font-family: Arial, sans-serif; padding: 20px; }
-        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
-        .success { color: green; }
-        .error { color: red; }
-        .loading { color: blue; }
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      .test-section {
+        margin: 20px 0;
+        padding: 15px;
+        border: 1px solid #ccc;
+      }
+      .success {
+        color: green;
+      }
+      .error {
+        color: red;
+      }
+      .loading {
+        color: blue;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🧪 Testing Nationality Dropdown API</h1>
-    
+
     <div class="test-section">
-        <h2>Countries API Test</h2>
-        <div id="api-status" class="loading">Testing API...</div>
-        <div id="countries-count"></div>
-        <div id="sample-countries"></div>
+      <h2>Countries API Test</h2>
+      <div id="api-status" class="loading">Testing API...</div>
+      <div id="countries-count"></div>
+      <div id="sample-countries"></div>
     </div>
 
     <script>
-        async function testCountriesAPI() {
-            try {
-                console.log('🔍 Testing countries API...');
-                
-                // Test the exact URL that useCountries hook would call
-                const response = await fetch('/api/countries', {
-                    headers: {
-                        'Accept': 'application/json',
-                        'Content-Type': 'application/json'
-                    }
-                });
-                
-                console.log('📋 Response status:', response.status);
-                console.log('📋 Response headers:', response.headers);
-                
-                const data = await response.json();
-                console.log('📋 Response data:', data);
-                
-                if (data.success && data.countries) {
-                    document.getElementById('api-status').innerHTML = 
-                        '<span class="success">✅ Countries API working!</span>';
-                    document.getElementById('countries-count').innerHTML = 
-                        `Found ${data.countries.length} countries`;
-                    
-                    // Show first 5 countries as sample
-                    const sample = data.countries.slice(0, 5).map(c => 
-                        `${c.flag || c.flag_emoji || '🏴'} ${c.name || c.display_name}`
-                    ).join(', ');
-                    document.getElementById('sample-countries').innerHTML = 
-                        `Sample: ${sample}`;
-                } else {
-                    document.getElementById('api-status').innerHTML = 
-                        '<span class="error">❌ API returned unexpected format</span>';
-                }
-            } catch (error) {
-                console.error('❌ Countries API test failed:', error);
-                document.getElementById('api-status').innerHTML = 
-                    `<span class="error">❌ API Error: ${error.message}</span>`;
-            }
+      async function testCountriesAPI() {
+        try {
+          console.log("🔍 Testing countries API...");
+
+          // Test the exact URL that useCountries hook would call
+          const response = await fetch("/api/countries", {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+          });
+
+          console.log("📋 Response status:", response.status);
+          console.log("📋 Response headers:", response.headers);
+
+          const data = await response.json();
+          console.log("📋 Response data:", data);
+
+          if (data.success && data.countries) {
+            document.getElementById("api-status").innerHTML =
+              '<span class="success">✅ Countries API working!</span>';
+            document.getElementById("countries-count").innerHTML =
+              `Found ${data.countries.length} countries`;
+
+            // Show first 5 countries as sample
+            const sample = data.countries
+              .slice(0, 5)
+              .map(
+                (c) =>
+                  `${c.flag || c.flag_emoji || "🏴"} ${c.name || c.display_name}`,
+              )
+              .join(", ");
+            document.getElementById("sample-countries").innerHTML =
+              `Sample: ${sample}`;
+          } else {
+            document.getElementById("api-status").innerHTML =
+              '<span class="error">❌ API returned unexpected format</span>';
+          }
+        } catch (error) {
+          console.error("❌ Countries API test failed:", error);
+          document.getElementById("api-status").innerHTML =
+            `<span class="error">❌ API Error: ${error.message}</span>`;
         }
-        
-        // Run test when page loads
-        testCountriesAPI();
+      }
+
+      // Run test when page loads
+      testCountriesAPI();
     </script>
-</body>
+  </body>
 </html>

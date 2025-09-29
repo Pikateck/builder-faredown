@@ -7,17 +7,24 @@ export class DevApiClient {
   async get(endpoint: string) {
     // Handle packages endpoint with proper Dubai filtering
     if (endpoint.includes("/packages")) {
-      const url = new URL(endpoint.startsWith("http") ? endpoint : `http://localhost${endpoint}`);
+      const url = new URL(
+        endpoint.startsWith("http") ? endpoint : `http://localhost${endpoint}`,
+      );
       const params = new URLSearchParams(url.search);
-      
+
       // Get query parameters
       const destination = params.get("destination");
       const destinationType = params.get("destination_type");
       const departureDate = params.get("departure_date");
       const returnDate = params.get("return_date");
-      
-      console.log("DevAPI filtering:", { destination, destinationType, departureDate, returnDate });
-      
+
+      console.log("DevAPI filtering:", {
+        destination,
+        destinationType,
+        departureDate,
+        returnDate,
+      });
+
       // Dubai packages with proper filtering for October 1-5, 2025
       const allPackages = [
         {
@@ -54,7 +61,7 @@ export class DevApiClient {
           slug: "dubai-city-explorer",
           title: "Dubai City Explorer",
           region_name: "Middle East",
-          country_name: "United Arab Emirates", 
+          country_name: "United Arab Emirates",
           city_name: "Dubai",
           duration_days: 5,
           duration_nights: 4,
@@ -84,7 +91,7 @@ export class DevApiClient {
           title: "Dubai Adventure Weekender",
           region_name: "Middle East",
           country_name: "United Arab Emirates",
-          city_name: "Dubai", 
+          city_name: "Dubai",
           duration_days: 4,
           duration_nights: 3,
           from_price: 89998,
@@ -106,73 +113,85 @@ export class DevApiClient {
           ],
           category: "adventure",
           package_category: "adventure",
-        }
+        },
       ];
-      
+
       // Filter packages based on destination and date
       let filteredPackages = allPackages;
-      
+
       // Filter by destination
       if (destination && destinationType) {
         const destName = destination.split(",")[0].trim().toLowerCase();
-        
+
         if (destinationType === "city") {
-          filteredPackages = filteredPackages.filter(pkg => 
-            pkg.city_name && pkg.city_name.toLowerCase().includes(destName)
+          filteredPackages = filteredPackages.filter(
+            (pkg) =>
+              pkg.city_name && pkg.city_name.toLowerCase().includes(destName),
           );
         } else if (destinationType === "country") {
-          filteredPackages = filteredPackages.filter(pkg => 
-            pkg.country_name && pkg.country_name.toLowerCase().includes(destName)
+          filteredPackages = filteredPackages.filter(
+            (pkg) =>
+              pkg.country_name &&
+              pkg.country_name.toLowerCase().includes(destName),
           );
         } else if (destinationType === "region") {
-          filteredPackages = filteredPackages.filter(pkg => 
-            pkg.region_name && pkg.region_name.toLowerCase().includes(destName)
+          filteredPackages = filteredPackages.filter(
+            (pkg) =>
+              pkg.region_name &&
+              pkg.region_name.toLowerCase().includes(destName),
           );
         }
       }
-      
+
       // Filter by date range (October 1-5, 2025)
       if (departureDate || returnDate) {
         // For demo purposes, ensure we only show packages with departures in the specified date range
         const departure = departureDate ? new Date(departureDate) : null;
         const returnD = returnDate ? new Date(returnDate) : null;
-        
-        filteredPackages = filteredPackages.filter(pkg => {
+
+        filteredPackages = filteredPackages.filter((pkg) => {
           const pkgDate = new Date(pkg.next_departure_date);
-          
+
           if (departure && pkgDate < departure) return false;
           if (returnD && pkgDate > returnD) return false;
-          
+
           return true;
         });
       }
-      
+
       // Generate facets based on filtered packages
       const facets = {
         regions: {},
         categories: {},
         price_ranges: {
-          min: Math.min(...filteredPackages.map(p => p.from_price)),
-          max: Math.max(...filteredPackages.map(p => p.from_price)),
-          avg: Math.round(filteredPackages.reduce((sum, p) => sum + p.from_price, 0) / filteredPackages.length)
-        }
+          min: Math.min(...filteredPackages.map((p) => p.from_price)),
+          max: Math.max(...filteredPackages.map((p) => p.from_price)),
+          avg: Math.round(
+            filteredPackages.reduce((sum, p) => sum + p.from_price, 0) /
+              filteredPackages.length,
+          ),
+        },
       };
-      
+
       // Calculate facets
-      filteredPackages.forEach(pkg => {
+      filteredPackages.forEach((pkg) => {
         // Region facets
         if (pkg.region_name) {
-          facets.regions[pkg.region_name] = (facets.regions[pkg.region_name] || 0) + 1;
+          facets.regions[pkg.region_name] =
+            (facets.regions[pkg.region_name] || 0) + 1;
         }
-        
+
         // Category facets
         if (pkg.package_category) {
-          facets.categories[pkg.package_category] = (facets.categories[pkg.package_category] || 0) + 1;
+          facets.categories[pkg.package_category] =
+            (facets.categories[pkg.package_category] || 0) + 1;
         }
       });
-      
-      console.log(`DevAPI: Returning ${filteredPackages.length} packages for ${destination || 'all destinations'}`);
-      
+
+      console.log(
+        `DevAPI: Returning ${filteredPackages.length} packages for ${destination || "all destinations"}`,
+      );
+
       return {
         success: true,
         packages: filteredPackages,
@@ -189,19 +208,19 @@ export class DevApiClient {
           destination,
           destination_type: destinationType,
           departure_date: departureDate,
-          return_date: returnDate
-        }
+          return_date: returnDate,
+        },
       };
     }
-    
+
     // Handle package details endpoint
     if (endpoint.includes("/packages/") && !endpoint.includes("/packages?")) {
       const slug = endpoint.split("/packages/")[1];
-      
+
       const packageDetails = {
         "dubai-luxury-experience": {
           id: 1,
-          slug: "dubai-luxury-experience", 
+          slug: "dubai-luxury-experience",
           title: "Dubai Luxury Experience",
           region_name: "Middle East",
           country_name: "United Arab Emirates",
@@ -211,17 +230,15 @@ export class DevApiClient {
           base_price_pp: 179998,
           currency: "INR",
           overview: "Experience the best of Dubai with our luxury package",
-          description: "A luxury travel experience showcasing Dubai's highlights",
+          description:
+            "A luxury travel experience showcasing Dubai's highlights",
           inclusions: [
             "5-star hotel accommodation",
             "Airport transfers",
             "City tours",
-            "Desert safari"
+            "Desert safari",
           ],
-          exclusions: [
-            "International flights",
-            "Personal expenses"
-          ],
+          exclusions: ["International flights", "Personal expenses"],
           departures: [
             {
               id: 1,
@@ -229,15 +246,15 @@ export class DevApiClient {
               return_date: "2025-10-07",
               price_per_person: 179998,
               available_seats: 20,
-              departure_city_name: "Mumbai"
+              departure_city_name: "Mumbai",
             },
             {
               id: 2,
               departure_date: "2025-10-03",
-              return_date: "2025-10-09", 
+              return_date: "2025-10-09",
               price_per_person: 179998,
               available_seats: 20,
-              departure_city_name: "Mumbai"
+              departure_city_name: "Mumbai",
             },
             {
               id: 3,
@@ -245,14 +262,14 @@ export class DevApiClient {
               return_date: "2025-10-11",
               price_per_person: 179998,
               available_seats: 20,
-              departure_city_name: "Mumbai"
-            }
-          ]
+              departure_city_name: "Mumbai",
+            },
+          ],
         },
         "dubai-city-explorer": {
           id: 2,
           slug: "dubai-city-explorer",
-          title: "Dubai City Explorer", 
+          title: "Dubai City Explorer",
           region_name: "Middle East",
           country_name: "United Arab Emirates",
           city_name: "Dubai",
@@ -264,14 +281,11 @@ export class DevApiClient {
           description: "A comprehensive city exploration package",
           inclusions: [
             "4-star hotel accommodation",
-            "Airport transfers", 
+            "Airport transfers",
             "City tours",
-            "Desert safari"
+            "Desert safari",
           ],
-          exclusions: [
-            "International flights",
-            "Personal expenses"
-          ],
+          exclusions: ["International flights", "Personal expenses"],
           departures: [
             {
               id: 4,
@@ -279,7 +293,7 @@ export class DevApiClient {
               return_date: "2025-10-05",
               price_per_person: 109998,
               available_seats: 20,
-              departure_city_name: "Mumbai"
+              departure_city_name: "Mumbai",
             },
             {
               id: 5,
@@ -287,7 +301,7 @@ export class DevApiClient {
               return_date: "2025-10-07",
               price_per_person: 109998,
               available_seats: 20,
-              departure_city_name: "Mumbai"
+              departure_city_name: "Mumbai",
             },
             {
               id: 6,
@@ -295,15 +309,15 @@ export class DevApiClient {
               return_date: "2025-10-09",
               price_per_person: 109998,
               available_seats: 20,
-              departure_city_name: "Mumbai"
-            }
-          ]
+              departure_city_name: "Mumbai",
+            },
+          ],
         },
         "dubai-adventure-weekender": {
           id: 3,
           slug: "dubai-adventure-weekender",
           title: "Dubai Adventure Weekender",
-          region_name: "Middle East", 
+          region_name: "Middle East",
           country_name: "United Arab Emirates",
           city_name: "Dubai",
           duration_days: 4,
@@ -316,12 +330,9 @@ export class DevApiClient {
             "3-star hotel accommodation",
             "Airport transfers",
             "Adventure activities",
-            "Desert safari"
+            "Desert safari",
           ],
-          exclusions: [
-            "International flights", 
-            "Personal expenses"
-          ],
+          exclusions: ["International flights", "Personal expenses"],
           departures: [
             {
               id: 7,
@@ -329,7 +340,7 @@ export class DevApiClient {
               return_date: "2025-10-04",
               price_per_person: 89998,
               available_seats: 20,
-              departure_city_name: "Mumbai"
+              departure_city_name: "Mumbai",
             },
             {
               id: 8,
@@ -337,7 +348,7 @@ export class DevApiClient {
               return_date: "2025-10-06",
               price_per_person: 89998,
               available_seats: 20,
-              departure_city_name: "Mumbai"
+              departure_city_name: "Mumbai",
             },
             {
               id: 9,
@@ -345,26 +356,26 @@ export class DevApiClient {
               return_date: "2025-10-08",
               price_per_person: 89998,
               available_seats: 20,
-              departure_city_name: "Mumbai"
-            }
-          ]
-        }
+              departure_city_name: "Mumbai",
+            },
+          ],
+        },
       };
-      
+
       const packageDetail = packageDetails[slug];
       if (packageDetail) {
         return {
           success: true,
-          data: packageDetail
+          data: packageDetail,
         };
       } else {
         return {
           success: false,
-          error: "Package not found"
+          error: "Package not found",
         };
       }
     }
-    
+
     // ... rest of existing DevApiClient methods
     return { success: false, error: "Endpoint not implemented in dev mode" };
   }

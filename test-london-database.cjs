@@ -4,9 +4,10 @@ const { Pool } = require("pg");
 
 // Database connection
 const dbUrl = process.env.DATABASE_URL;
-const sslConfig = dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
-  ? { rejectUnauthorized: false }
-  : false;
+const sslConfig =
+  dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
+    ? { rejectUnauthorized: false }
+    : false;
 
 const pool = new Pool({
   connectionString: dbUrl,
@@ -33,24 +34,30 @@ async function testLondonPackages() {
 
     // 3. Check packages with London in city_id
     if (londonCities.rows.length > 0) {
-      const londonCityPackages = await pool.query(`
+      const londonCityPackages = await pool.query(
+        `
         SELECT p.id, p.title, p.city_id, c.name as city_name
         FROM packages p
         LEFT JOIN cities c ON p.city_id = c.id
         WHERE p.city_id = ANY($1)
-      `, [londonCities.rows.map(row => row.id)]);
+      `,
+        [londonCities.rows.map((row) => row.id)],
+      );
       console.log("📦 Packages with London city_id:", londonCityPackages.rows);
     }
 
     // 4. Check packages with UK country_id
     if (ukCountries.rows.length > 0) {
-      const ukCountryPackages = await pool.query(`
+      const ukCountryPackages = await pool.query(
+        `
         SELECT p.id, p.title, p.country_id, co.name as country_name, p.city_id, ci.name as city_name
         FROM packages p
         LEFT JOIN countries co ON p.country_id = co.id
         LEFT JOIN cities ci ON p.city_id = ci.id
         WHERE p.country_id = ANY($1)
-      `, [ukCountries.rows.map(row => row.id)]);
+      `,
+        [ukCountries.rows.map((row) => row.id)],
+      );
       console.log("🏴󠁧󠁢󠁥󠁮󠁧󠁿 Packages with UK country_id:", ukCountryPackages.rows);
     }
 
@@ -60,7 +67,10 @@ async function testLondonPackages() {
       FROM packages p
       WHERE p.title ILIKE '%London%' OR p.overview ILIKE '%London%'
     `);
-    console.log("🔍 Packages with 'London' in title/overview:", londonTitlePackages.rows);
+    console.log(
+      "🔍 Packages with 'London' in title/overview:",
+      londonTitlePackages.rows,
+    );
 
     // 6. Test the exact API filtering logic
     console.log("\n🧪 Testing exact API filtering logic...");
@@ -95,10 +105,9 @@ async function testLondonPackages() {
         )
       )
     `;
-    
+
     const testResult = await pool.query(testQuery, [`%${destinationName}%`]);
     console.log("✅ API Logic Test Result:", testResult.rows);
-
   } catch (error) {
     console.error("❌ Error testing London packages:", error);
   } finally {

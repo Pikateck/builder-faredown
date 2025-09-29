@@ -106,32 +106,52 @@ export default function PackageResults() {
         }
       });
 
-      console.log('🚨🚨🚨 PACKAGE RESULTS: About to call API 🚨🚨🚨');
-      console.log('📋 Current filters:', currentFilters);
-      console.log('📋 Query params:', queryParams.toString());
-      console.log('📋 Destination from params:', currentFilters.destination);
+      console.log("🚨🚨🚨 PACKAGE RESULTS: About to call API 🚨🚨🚨");
+      console.log("📋 Current filters:", currentFilters);
+      console.log("📋 Query params:", queryParams.toString());
+      console.log("📋 Destination from params:", currentFilters.destination);
 
       const response = await apiClient.get<PackageSearchResponse>(
         `/packages?${queryParams.toString()}`,
       );
 
-      console.log('🚨🚨🚨 PACKAGE RESULTS: API Response received 🚨🚨🚨');
-      console.log('📋 Response:', JSON.stringify(response, null, 2));
-      console.log('📋 Response type:', typeof response);
-      console.log('📋 Response.packages exists?', !!response.packages);
-      console.log('📋 Response.data exists?', !!response.data);
-      console.log('📋 Response.data.packages exists?', !!response.data?.packages);
+      console.log("🚨🚨🚨 PACKAGE RESULTS: API Response received 🚨🚨🚨");
+      console.log("📋 Response:", JSON.stringify(response, null, 2));
+      console.log("📋 Response type:", typeof response);
+      console.log("📋 Response.packages exists?", !!response.packages);
+      console.log("📋 Response.data exists?", !!response.data);
+      console.log(
+        "📋 Response.data.packages exists?",
+        !!response.data?.packages,
+      );
       if (response.data?.packages) {
-        console.log('📋 Response.data.packages length:', response.data.packages.length);
+        console.log(
+          "📋 Response.data.packages length:",
+          response.data.packages.length,
+        );
       }
 
       if (response.packages) {
-        console.log('📦 Packages from response:', response.packages.map(p => ({ id: p.id, title: p.title, city: p.region_name })));
+        console.log(
+          "📦 Packages from response:",
+          response.packages.map((p) => ({
+            id: p.id,
+            title: p.title,
+            city: p.region_name,
+          })),
+        );
         setPackages(response.packages);
         setPagination(response.pagination);
         setFacets(response.facets);
       } else if (response.data?.packages) {
-        console.log('📦 Packages from response.data:', response.data.packages.map(p => ({ id: p.id, title: p.title, city: p.region_name })));
+        console.log(
+          "📦 Packages from response.data:",
+          response.data.packages.map((p) => ({
+            id: p.id,
+            title: p.title,
+            city: p.region_name,
+          })),
+        );
         setPackages(response.data.packages);
         setPagination(response.data.pagination);
         setFacets(response.data.facets);
@@ -139,7 +159,7 @@ export default function PackageResults() {
         setError("Failed to fetch packages");
       }
     } catch (err: any) {
-      console.error('🚨 PACKAGE RESULTS: API Error:', err);
+      console.error("🚨 PACKAGE RESULTS: API Error:", err);
       setError(err.message || "Failed to fetch packages");
     } finally {
       setLoading(false);
@@ -240,7 +260,8 @@ export default function PackageResults() {
                       {currentFilters.destination && (
                         <span>Destination: {currentFilters.destination}</span>
                       )}
-                      {(currentFilters.departure_date || currentFilters.return_date) && (
+                      {(currentFilters.departure_date ||
+                        currentFilters.return_date) && (
                         <span className="ml-4">
                           Departure:{" "}
                           {currentFilters.departure_date &&
@@ -251,8 +272,7 @@ export default function PackageResults() {
                               month: "short",
                               day: "numeric",
                               year: "numeric",
-                            })
-                          }
+                            })}
                           {currentFilters.return_date && (
                             <span>
                               {" – "}

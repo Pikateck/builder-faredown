@@ -3,20 +3,20 @@
  * Test the exact SQL query that should find London packages
  */
 
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 async function testLondonQuery() {
   try {
-    console.log('🧪 Testing London search query logic...');
-    
+    console.log("🧪 Testing London search query logic...");
+
     // Test the query logic from the updated API
-    const destinationName = 'London';
-    
+    const destinationName = "London";
+
     // This is the smart query from my fix
     const smartQuery = `
       SELECT 
@@ -64,14 +64,18 @@ async function testLondonQuery() {
         )
       )
     `;
-    
+
     const result = await pool.query(smartQuery, [`%${destinationName}%`]);
-    
-    console.log(`✅ Smart query found ${result.rows.length} packages for "${destinationName}"`);
-    result.rows.forEach(pkg => {
-      console.log(`- ${pkg.title} (${pkg.country_name}) - ₹${pkg.base_price_pp?.toLocaleString()}`);
+
+    console.log(
+      `✅ Smart query found ${result.rows.length} packages for "${destinationName}"`,
+    );
+    result.rows.forEach((pkg) => {
+      console.log(
+        `- ${pkg.title} (${pkg.country_name}) - ₹${pkg.base_price_pp?.toLocaleString()}`,
+      );
     });
-    
+
     // Test simpler query to verify UK packages exist
     const simpleQuery = `
       SELECT 
@@ -83,15 +87,18 @@ async function testLondonQuery() {
       WHERE p.status = 'active'
       AND c.name ILIKE '%United Kingdom%'
     `;
-    
+
     const simpleResult = await pool.query(simpleQuery);
-    console.log(`\n📋 Simple UK query found ${simpleResult.rows.length} packages:`);
-    simpleResult.rows.forEach(pkg => {
-      console.log(`- ${pkg.title} (${pkg.country_name}) - ₹${pkg.base_price_pp?.toLocaleString()}`);
+    console.log(
+      `\n📋 Simple UK query found ${simpleResult.rows.length} packages:`,
+    );
+    simpleResult.rows.forEach((pkg) => {
+      console.log(
+        `- ${pkg.title} (${pkg.country_name}) - ₹${pkg.base_price_pp?.toLocaleString()}`,
+      );
     });
-    
   } catch (err) {
-    console.error('❌ Error:', err.message);
+    console.error("❌ Error:", err.message);
   } finally {
     await pool.end();
   }

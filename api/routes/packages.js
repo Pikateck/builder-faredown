@@ -139,26 +139,26 @@ router.get("/", async (req, res) => {
     // **NEW: DATE RANGE FILTERING** - Filter packages with departures in specified date range
     if (departure_date || return_date) {
       let dateConditions = [];
-      
+
       if (departure_date) {
         paramCount++;
         dateConditions.push(`pd.departure_date >= $${paramCount}`);
         queryParams.push(departure_date);
       }
-      
+
       if (return_date) {
         paramCount++;
         dateConditions.push(`pd.departure_date <= $${paramCount}`);
         queryParams.push(return_date);
       }
-      
+
       if (dateConditions.length > 0) {
         whereConditions.push(`EXISTS (
           SELECT 1 FROM package_departures pd 
           WHERE pd.package_id = p.id 
           AND pd.is_active = TRUE 
           AND pd.available_seats > 0
-          AND ${dateConditions.join(' AND ')}
+          AND ${dateConditions.join(" AND ")}
         )`);
       }
     }
@@ -239,7 +239,8 @@ router.get("/", async (req, res) => {
         break;
       case "popularity":
       default:
-        orderBy = "p.is_featured DESC, p.rating DESC, p.review_count DESC, p.created_at DESC";
+        orderBy =
+          "p.is_featured DESC, p.rating DESC, p.review_count DESC, p.created_at DESC";
         break;
     }
 
@@ -349,7 +350,7 @@ router.get("/", async (req, res) => {
     `;
 
     const facetsResult = await pool.query(facetsQuery);
-    
+
     // Organize facets by type
     const facets = {
       regions: {},
@@ -362,7 +363,7 @@ router.get("/", async (req, res) => {
       },
     };
 
-    facetsResult.rows.forEach(row => {
+    facetsResult.rows.forEach((row) => {
       if (facets[row.type]) {
         facets[row.type][row.name] = parseInt(row.count);
       }
@@ -460,7 +461,9 @@ router.get("/:slug", async (req, res) => {
       ORDER BY departure_date ASC
     `;
 
-    const departuresResult = await pool.query(departuresQuery, [packageData.id]);
+    const departuresResult = await pool.query(departuresQuery, [
+      packageData.id,
+    ]);
 
     // Format response with destination information
     const response = {
@@ -561,7 +564,7 @@ router.get("/:slug/departures", async (req, res) => {
 });
 
 /**
- * **NEW ENDPOINT** 
+ * **NEW ENDPOINT**
  * GET /api/packages/by-destination
  * Specifically for filtering packages by destination and date range
  */
@@ -573,13 +576,13 @@ router.get("/by-destination", async (req, res) => {
       departure_date,
       return_date,
       package_types = 3, // Number of package types to return per region
-      limit = 20
+      limit = 20,
     } = req.query;
 
     if (!destination) {
       return res.status(400).json({
         success: false,
-        error: "Destination parameter is required"
+        error: "Destination parameter is required",
       });
     }
 
@@ -611,14 +614,14 @@ router.get("/by-destination", async (req, res) => {
     // Add date filtering if provided
     let dateJoin = "";
     let dateCondition = "";
-    
+
     if (departure_date || return_date) {
       dateJoin = `
         JOIN package_departures pd ON p.id = pd.package_id 
         AND pd.is_active = TRUE 
         AND pd.available_seats > 0
       `;
-      
+
       let dateConditions = [];
       if (departure_date) {
         paramCount++;
@@ -630,8 +633,8 @@ router.get("/by-destination", async (req, res) => {
         dateConditions.push(`pd.departure_date <= $${paramCount}`);
         queryParams.push(return_date);
       }
-      
-      dateCondition = `AND ${dateConditions.join(' AND ')}`;
+
+      dateCondition = `AND ${dateConditions.join(" AND ")}`;
     }
 
     paramCount++;
@@ -651,8 +654,8 @@ router.get("/by-destination", async (req, res) => {
             AND pd2.is_active = TRUE 
             AND pd2.departure_date >= CURRENT_DATE
             AND pd2.available_seats > 0
-            ${departure_date ? `AND pd2.departure_date >= '${departure_date}'` : ''}
-            ${return_date ? `AND pd2.departure_date <= '${return_date}'` : ''}
+            ${departure_date ? `AND pd2.departure_date >= '${departure_date}'` : ""}
+            ${return_date ? `AND pd2.departure_date <= '${return_date}'` : ""}
         ) as available_departures_count
       FROM packages p
       LEFT JOIN regions r ON p.region_id = r.id
@@ -680,11 +683,10 @@ router.get("/by-destination", async (req, res) => {
         destination_type: destination_type,
         departure_date: departure_date,
         return_date: return_date,
-        total: result.rows.length
+        total: result.rows.length,
       },
-      message: `Found ${result.rows.length} packages for ${destination}`
+      message: `Found ${result.rows.length} packages for ${destination}`,
     });
-
   } catch (error) {
     console.error("Error fetching packages by destination:", error);
     res.status(500).json({
@@ -700,7 +702,7 @@ router.post("/:slug/enquire", async (req, res) => {
   // ... existing enquiry endpoint code
   res.json({
     success: true,
-    message: "Enquiry endpoint - implementation unchanged"
+    message: "Enquiry endpoint - implementation unchanged",
   });
 });
 

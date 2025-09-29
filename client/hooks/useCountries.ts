@@ -90,13 +90,11 @@ export function useCountries(options: UseCountriesOptions = {}) {
       setError(null);
 
       try {
-        const endpoint = popularOnly
-          ? "/countries/popular"
-          : "/countries";
+        const endpoint = popularOnly ? "/countries/popular" : "/countries";
 
-        console.log('🔍 useCountries: Fetching from endpoint:', endpoint);
+        console.log("🔍 useCountries: Fetching from endpoint:", endpoint);
         const response = await apiClient.get(endpoint);
-        console.log('🔍 useCountries: Response received:', response);
+        console.log("🔍 useCountries: Response received:", response);
 
         // Handle response format from apiClient
         if (response.success && response.countries) {
@@ -187,7 +185,9 @@ export function useCountries(options: UseCountriesOptions = {}) {
         }
 
         // Fallback to local search if API fails
-        console.warn("Countries search API failed, using client-side filtering");
+        console.warn(
+          "Countries search API failed, using client-side filtering",
+        );
         const searchTerm = query.toLowerCase();
         return countries.filter(
           (country) =>

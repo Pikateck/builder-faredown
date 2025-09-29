@@ -155,11 +155,12 @@ const logApiEvent = (
     console[level](`[FAREDOWN_API] ${message}`, logData);
   } else {
     // Development: Detailed console logging with proper error formatting
-    const formattedData = logData instanceof Error
-      ? { error: logData.message, stack: logData.stack, ...logData }
-      : typeof logData === 'object' && logData !== null
-        ? JSON.stringify(logData, null, 2)
-        : logData;
+    const formattedData =
+      logData instanceof Error
+        ? { error: logData.message, stack: logData.stack, ...logData }
+        : typeof logData === "object" && logData !== null
+          ? JSON.stringify(logData, null, 2)
+          : logData;
 
     console[level](`🌐 ${message}`, formattedData);
   }
@@ -302,131 +303,391 @@ export class ApiClient {
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
     // 🚨 NUCLEAR FIX: FORCE DUBAI PACKAGES + COUNTRIES API 🚨
-    if (endpoint.includes('/countries')) {
-      console.log('🚨🚨🚨 NUCLEAR FIX: Providing countries for nationality dropdown 🚨🚨🚨');
+    if (endpoint.includes("/countries")) {
+      console.log(
+        "🚨🚨🚨 NUCLEAR FIX: Providing countries for nationality dropdown 🚨🚨🚨",
+      );
 
       const countriesData = {
         success: true,
         count: 15,
         countries: [
-          { iso2: "IN", name: "India", display_name: "India", flag: "🇮🇳", flag_emoji: "🇮🇳", popular: true },
-          { iso2: "AE", name: "United Arab Emirates", display_name: "United Arab Emirates", flag: "🇦🇪", flag_emoji: "🇦🇪", popular: true },
-          { iso2: "US", name: "United States", display_name: "United States", flag: "🇺🇸", flag_emoji: "🇺🇸", popular: true },
-          { iso2: "GB", name: "United Kingdom", display_name: "United Kingdom", flag: "🇬🇧", flag_emoji: "🇬🇧", popular: true },
-          { iso2: "SG", name: "Singapore", display_name: "Singapore", flag: "🇸🇬", flag_emoji: "🇸🇬", popular: true },
-          { iso2: "SA", name: "Saudi Arabia", display_name: "Saudi Arabia", flag: "🇸🇦", flag_emoji: "🇸🇦", popular: true },
-          { iso2: "AU", name: "Australia", display_name: "Australia", flag: "🇦🇺", flag_emoji: "🇦🇺", popular: false },
-          { iso2: "CA", name: "Canada", display_name: "Canada", flag: "🇨🇦", flag_emoji: "🇨🇦", popular: false },
-          { iso2: "DE", name: "Germany", display_name: "Germany", flag: "🇩🇪", flag_emoji: "🇩🇪", popular: false },
-          { iso2: "FR", name: "France", display_name: "France", flag: "🇫🇷", flag_emoji: "🇫🇷", popular: false },
-          { iso2: "JP", name: "Japan", display_name: "Japan", flag: "🇯🇵", flag_emoji: "🇯🇵", popular: false },
-          { iso2: "TH", name: "Thailand", display_name: "Thailand", flag: "🇹🇭", flag_emoji: "����🇭", popular: true },
-          { iso2: "MY", name: "Malaysia", display_name: "Malaysia", flag: "🇲🇾", flag_emoji: "🇲🇾", popular: true },
-          { iso2: "ID", name: "Indonesia", display_name: "Indonesia", flag: "🇮🇩", flag_emoji: "🇮🇩", popular: true },
-          { iso2: "PH", name: "Philippines", display_name: "Philippines", flag: "🇵🇭", flag_emoji: "🇵🇭", popular: true }
-        ]
+          {
+            iso2: "IN",
+            name: "India",
+            display_name: "India",
+            flag: "🇮🇳",
+            flag_emoji: "🇮🇳",
+            popular: true,
+          },
+          {
+            iso2: "AE",
+            name: "United Arab Emirates",
+            display_name: "United Arab Emirates",
+            flag: "🇦🇪",
+            flag_emoji: "🇦🇪",
+            popular: true,
+          },
+          {
+            iso2: "US",
+            name: "United States",
+            display_name: "United States",
+            flag: "🇺🇸",
+            flag_emoji: "🇺🇸",
+            popular: true,
+          },
+          {
+            iso2: "GB",
+            name: "United Kingdom",
+            display_name: "United Kingdom",
+            flag: "🇬🇧",
+            flag_emoji: "🇬🇧",
+            popular: true,
+          },
+          {
+            iso2: "SG",
+            name: "Singapore",
+            display_name: "Singapore",
+            flag: "🇸🇬",
+            flag_emoji: "🇸🇬",
+            popular: true,
+          },
+          {
+            iso2: "SA",
+            name: "Saudi Arabia",
+            display_name: "Saudi Arabia",
+            flag: "🇸🇦",
+            flag_emoji: "🇸🇦",
+            popular: true,
+          },
+          {
+            iso2: "AU",
+            name: "Australia",
+            display_name: "Australia",
+            flag: "🇦🇺",
+            flag_emoji: "🇦🇺",
+            popular: false,
+          },
+          {
+            iso2: "CA",
+            name: "Canada",
+            display_name: "Canada",
+            flag: "🇨🇦",
+            flag_emoji: "🇨🇦",
+            popular: false,
+          },
+          {
+            iso2: "DE",
+            name: "Germany",
+            display_name: "Germany",
+            flag: "🇩🇪",
+            flag_emoji: "🇩🇪",
+            popular: false,
+          },
+          {
+            iso2: "FR",
+            name: "France",
+            display_name: "France",
+            flag: "🇫🇷",
+            flag_emoji: "🇫🇷",
+            popular: false,
+          },
+          {
+            iso2: "JP",
+            name: "Japan",
+            display_name: "Japan",
+            flag: "🇯🇵",
+            flag_emoji: "🇯🇵",
+            popular: false,
+          },
+          {
+            iso2: "TH",
+            name: "Thailand",
+            display_name: "Thailand",
+            flag: "🇹🇭",
+            flag_emoji: "����🇭",
+            popular: true,
+          },
+          {
+            iso2: "MY",
+            name: "Malaysia",
+            display_name: "Malaysia",
+            flag: "🇲🇾",
+            flag_emoji: "🇲🇾",
+            popular: true,
+          },
+          {
+            iso2: "ID",
+            name: "Indonesia",
+            display_name: "Indonesia",
+            flag: "🇮🇩",
+            flag_emoji: "🇮🇩",
+            popular: true,
+          },
+          {
+            iso2: "PH",
+            name: "Philippines",
+            display_name: "Philippines",
+            flag: "🇵🇭",
+            flag_emoji: "🇵🇭",
+            popular: true,
+          },
+        ],
       };
 
-      console.log('✅ NUCLEAR FIX: Returning countries data');
+      console.log("✅ NUCLEAR FIX: Returning countries data");
       return countriesData as T;
     }
 
-    if (endpoint.includes('/packages') && false) {
-      console.log('🚨🚨🚨 NUCLEAR FIX ACTIVATED: Forcing Dubai packages only 🚨🚨🚨');
-      console.log('📋 Endpoint:', endpoint, 'Params:', params);
+    if (endpoint.includes("/packages") && false) {
+      console.log(
+        "🚨🚨🚨 NUCLEAR FIX ACTIVATED: Forcing Dubai packages only 🚨🚨🚨",
+      );
+      console.log("📋 Endpoint:", endpoint, "Params:", params);
 
       // Define Dubai packages data
       const dubaiPackages = [
         {
-          id: 1, slug: "dubai-luxury-experience", title: "Dubai Luxury Experience",
-          region_name: "Middle East", country_name: "United Arab Emirates", city_name: "Dubai",
-          duration_days: 7, duration_nights: 6, from_price: 179998, base_price_pp: 179998, currency: "INR",
-          next_departure_date: "2025-10-15", available_departures_count: 8,
-          hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
-          rating: 4.8, review_count: 156, is_featured: true, category: "luxury", package_category: "luxury",
+          id: 1,
+          slug: "dubai-luxury-experience",
+          title: "Dubai Luxury Experience",
+          region_name: "Middle East",
+          country_name: "United Arab Emirates",
+          city_name: "Dubai",
+          duration_days: 7,
+          duration_nights: 6,
+          from_price: 179998,
+          base_price_pp: 179998,
+          currency: "INR",
+          next_departure_date: "2025-10-15",
+          available_departures_count: 8,
+          hero_image_url:
+            "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
+          rating: 4.8,
+          review_count: 156,
+          is_featured: true,
+          category: "luxury",
+          package_category: "luxury",
           tags: ["luxury", "city-break", "shopping", "culture"],
-          highlights: ["5-star hotel accommodation at Burj Al Arab", "Skip-the-line access to Burj Khalifa", "Premium desert safari with falcon show", "Dubai Marina luxury yacht cruise"],
-          overview: "Experience the ultimate luxury in Dubai with this comprehensive package that combines modern marvels with traditional Arabian hospitality.",
-          description: "Immerse yourself in the glitz and glamour of Dubai, where cutting-edge architecture meets timeless desert beauty. This luxury package includes stays at the finest hotels, visits to iconic landmarks, and unforgettable experiences.",
-          inclusions: ["6 nights accommodation in 5-star hotels", "Daily breakfast and 3 dinners", "Airport transfers in luxury vehicles", "All sightseeing as per itinerary"],
-          exclusions: ["International flights", "Visa fees", "Personal expenses", "Travel insurance"],
-          visa_required: true, passport_required: true, minimum_age: 0, maximum_group_size: 20,
-          departures: [{
-            id: 101, departure_city_code: "BOM", departure_city_name: "Mumbai",
-            departure_date: "2025-10-15", return_date: "2025-10-21", price_per_person: 179998,
-            single_supplement: 25000, child_price: 134999, currency: "INR",
-            available_seats: 12, total_seats: 20, is_guaranteed: true
-          }]
+          highlights: [
+            "5-star hotel accommodation at Burj Al Arab",
+            "Skip-the-line access to Burj Khalifa",
+            "Premium desert safari with falcon show",
+            "Dubai Marina luxury yacht cruise",
+          ],
+          overview:
+            "Experience the ultimate luxury in Dubai with this comprehensive package that combines modern marvels with traditional Arabian hospitality.",
+          description:
+            "Immerse yourself in the glitz and glamour of Dubai, where cutting-edge architecture meets timeless desert beauty. This luxury package includes stays at the finest hotels, visits to iconic landmarks, and unforgettable experiences.",
+          inclusions: [
+            "6 nights accommodation in 5-star hotels",
+            "Daily breakfast and 3 dinners",
+            "Airport transfers in luxury vehicles",
+            "All sightseeing as per itinerary",
+          ],
+          exclusions: [
+            "International flights",
+            "Visa fees",
+            "Personal expenses",
+            "Travel insurance",
+          ],
+          visa_required: true,
+          passport_required: true,
+          minimum_age: 0,
+          maximum_group_size: 20,
+          departures: [
+            {
+              id: 101,
+              departure_city_code: "BOM",
+              departure_city_name: "Mumbai",
+              departure_date: "2025-10-15",
+              return_date: "2025-10-21",
+              price_per_person: 179998,
+              single_supplement: 25000,
+              child_price: 134999,
+              currency: "INR",
+              available_seats: 12,
+              total_seats: 20,
+              is_guaranteed: true,
+            },
+          ],
         },
         {
-          id: 8, slug: "dubai-city-explorer", title: "Dubai City Explorer",
-          region_name: "Middle East", country_name: "United Arab Emirates", city_name: "Dubai",
-          duration_days: 5, duration_nights: 4, from_price: 109998, base_price_pp: 109998, currency: "INR",
-          next_departure_date: "2025-10-03", available_departures_count: 4,
-          hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
-          rating: 4.6, review_count: 98, is_featured: false, category: "explorer", package_category: "explorer",
+          id: 8,
+          slug: "dubai-city-explorer",
+          title: "Dubai City Explorer",
+          region_name: "Middle East",
+          country_name: "United Arab Emirates",
+          city_name: "Dubai",
+          duration_days: 5,
+          duration_nights: 4,
+          from_price: 109998,
+          base_price_pp: 109998,
+          currency: "INR",
+          next_departure_date: "2025-10-03",
+          available_departures_count: 4,
+          hero_image_url:
+            "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
+          rating: 4.6,
+          review_count: 98,
+          is_featured: false,
+          category: "explorer",
+          package_category: "explorer",
           tags: ["city-break", "culture", "sightseeing"],
-          highlights: ["4-star hotel accommodation", "Dubai Museum and Heritage Village", "Dubai Mall and Gold Souk tours", "Traditional dhow cruise"],
-          overview: "Discover the cultural heart of Dubai with this explorer package designed for curious travelers.",
-          description: "Experience both modern and traditional Dubai with guided tours, cultural experiences, and authentic local interactions.",
-          inclusions: ["4 nights accommodation", "Daily breakfast", "City tours with guide", "Dhow cruise dinner"],
-          exclusions: ["International flights", "Visa fees", "Personal expenses", "Optional activities"],
-          visa_required: true, passport_required: true, minimum_age: 0, maximum_group_size: 25,
-          departures: [{
-            id: 108, departure_city_code: "DEL", departure_city_name: "Delhi",
-            departure_date: "2025-10-03", return_date: "2025-10-07", price_per_person: 109998,
-            single_supplement: 15000, child_price: 82499, currency: "INR",
-            available_seats: 8, total_seats: 20, is_guaranteed: true
-          }]
+          highlights: [
+            "4-star hotel accommodation",
+            "Dubai Museum and Heritage Village",
+            "Dubai Mall and Gold Souk tours",
+            "Traditional dhow cruise",
+          ],
+          overview:
+            "Discover the cultural heart of Dubai with this explorer package designed for curious travelers.",
+          description:
+            "Experience both modern and traditional Dubai with guided tours, cultural experiences, and authentic local interactions.",
+          inclusions: [
+            "4 nights accommodation",
+            "Daily breakfast",
+            "City tours with guide",
+            "Dhow cruise dinner",
+          ],
+          exclusions: [
+            "International flights",
+            "Visa fees",
+            "Personal expenses",
+            "Optional activities",
+          ],
+          visa_required: true,
+          passport_required: true,
+          minimum_age: 0,
+          maximum_group_size: 25,
+          departures: [
+            {
+              id: 108,
+              departure_city_code: "DEL",
+              departure_city_name: "Delhi",
+              departure_date: "2025-10-03",
+              return_date: "2025-10-07",
+              price_per_person: 109998,
+              single_supplement: 15000,
+              child_price: 82499,
+              currency: "INR",
+              available_seats: 8,
+              total_seats: 20,
+              is_guaranteed: true,
+            },
+          ],
         },
         {
-          id: 11, slug: "dubai-adventure-weekender", title: "Dubai Adventure Weekender",
-          region_name: "Middle East", country_name: "United Arab Emirates", city_name: "Dubai",
-          duration_days: 4, duration_nights: 3, from_price: 89998, base_price_pp: 89998, currency: "INR",
-          next_departure_date: "2025-10-01", available_departures_count: 4,
-          hero_image_url: "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
-          rating: 4.4, review_count: 73, is_featured: false, category: "adventure", package_category: "adventure",
+          id: 11,
+          slug: "dubai-adventure-weekender",
+          title: "Dubai Adventure Weekender",
+          region_name: "Middle East",
+          country_name: "United Arab Emirates",
+          city_name: "Dubai",
+          duration_days: 4,
+          duration_nights: 3,
+          from_price: 89998,
+          base_price_pp: 89998,
+          currency: "INR",
+          next_departure_date: "2025-10-01",
+          available_departures_count: 4,
+          hero_image_url:
+            "https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=400",
+          rating: 4.4,
+          review_count: 73,
+          is_featured: false,
+          category: "adventure",
+          package_category: "adventure",
           tags: ["adventure", "desert", "weekend-getaway"],
-          highlights: ["3-star hotel accommodation", "Desert safari and dune bashing", "Quad biking experience", "Camel riding"],
-          overview: "Perfect weekend getaway for adventure seekers looking to experience Dubai's thrilling desert activities.",
-          description: "Pack your weekend with adrenaline-pumping activities in Dubai's stunning desert landscape.",
-          inclusions: ["3 nights accommodation", "Breakfast daily", "Desert safari", "Adventure activities"],
-          exclusions: ["International flights", "Visa fees", "Lunch and dinner", "Personal expenses"],
-          visa_required: true, passport_required: true, minimum_age: 12, maximum_group_size: 30,
-          departures: [{
-            id: 111, departure_city_code: "BOM", departure_city_name: "Mumbai",
-            departure_date: "2025-10-01", return_date: "2025-10-04", price_per_person: 89998,
-            single_supplement: 12000, child_price: 67499, currency: "INR",
-            available_seats: 15, total_seats: 20, is_guaranteed: true
-          }]
-        }
+          highlights: [
+            "3-star hotel accommodation",
+            "Desert safari and dune bashing",
+            "Quad biking experience",
+            "Camel riding",
+          ],
+          overview:
+            "Perfect weekend getaway for adventure seekers looking to experience Dubai's thrilling desert activities.",
+          description:
+            "Pack your weekend with adrenaline-pumping activities in Dubai's stunning desert landscape.",
+          inclusions: [
+            "3 nights accommodation",
+            "Breakfast daily",
+            "Desert safari",
+            "Adventure activities",
+          ],
+          exclusions: [
+            "International flights",
+            "Visa fees",
+            "Lunch and dinner",
+            "Personal expenses",
+          ],
+          visa_required: true,
+          passport_required: true,
+          minimum_age: 12,
+          maximum_group_size: 30,
+          departures: [
+            {
+              id: 111,
+              departure_city_code: "BOM",
+              departure_city_name: "Mumbai",
+              departure_date: "2025-10-01",
+              return_date: "2025-10-04",
+              price_per_person: 89998,
+              single_supplement: 12000,
+              child_price: 67499,
+              currency: "INR",
+              available_seats: 15,
+              total_seats: 20,
+              is_guaranteed: true,
+            },
+          ],
+        },
       ];
 
       // Check if this is a single package request (has slug in endpoint)
       const slugMatch = endpoint.match(/\/packages\/([^?]+)/);
       if (slugMatch) {
         const requestedSlug = slugMatch[1];
-        console.log('🎯 NUCLEAR FIX: Single package request for slug:', requestedSlug);
-        console.log('🎯 NUCLEAR FIX: Available packages:', dubaiPackages.map(p => p.slug));
+        console.log(
+          "🎯 NUCLEAR FIX: Single package request for slug:",
+          requestedSlug,
+        );
+        console.log(
+          "🎯 NUCLEAR FIX: Available packages:",
+          dubaiPackages.map((p) => p.slug),
+        );
 
-        const foundPackage = dubaiPackages.find(pkg => pkg.slug === requestedSlug);
+        const foundPackage = dubaiPackages.find(
+          (pkg) => pkg.slug === requestedSlug,
+        );
         if (foundPackage) {
-          console.log('✅ NUCLEAR FIX: Found package:', foundPackage.title);
+          console.log("✅ NUCLEAR FIX: Found package:", foundPackage.title);
           const response = {
             success: true,
-            data: foundPackage
+            data: foundPackage,
           };
-          console.log('✅ NUCLEAR FIX: Returning response:', JSON.stringify(response, null, 2));
+          console.log(
+            "✅ NUCLEAR FIX: Returning response:",
+            JSON.stringify(response, null, 2),
+          );
           return response as T;
         } else {
-          console.log('❌ NUCLEAR FIX: Slug not found, available slugs:', dubaiPackages.map(p => p.slug));
-          console.log('❌ NUCLEAR FIX: Requested slug:', requestedSlug);
-          console.log('❌ NUCLEAR FIX: Returning first Dubai package as fallback');
+          console.log(
+            "❌ NUCLEAR FIX: Slug not found, available slugs:",
+            dubaiPackages.map((p) => p.slug),
+          );
+          console.log("❌ NUCLEAR FIX: Requested slug:", requestedSlug);
+          console.log(
+            "❌ NUCLEAR FIX: Returning first Dubai package as fallback",
+          );
           const fallbackResponse = {
             success: true,
-            data: dubaiPackages[0]
+            data: dubaiPackages[0],
           };
-          console.log('❌ NUCLEAR FIX: Fallback response:', JSON.stringify(fallbackResponse, null, 2));
+          console.log(
+            "❌ NUCLEAR FIX: Fallback response:",
+            JSON.stringify(fallbackResponse, null, 2),
+          );
           return fallbackResponse as T;
         }
       }
@@ -434,17 +695,27 @@ export class ApiClient {
       // Package list request
       const dubaiPackagesOnly = {
         packages: dubaiPackages,
-        pagination: { page: 1, page_size: 20, total: 3, total_pages: 1, has_next: false, has_prev: false },
-        facets: { regions: { "Middle East": 3 }, categories: { luxury: 1, explorer: 1, adventure: 1 } }
+        pagination: {
+          page: 1,
+          page_size: 20,
+          total: 3,
+          total_pages: 1,
+          has_next: false,
+          has_prev: false,
+        },
+        facets: {
+          regions: { "Middle East": 3 },
+          categories: { luxury: 1, explorer: 1, adventure: 1 },
+        },
       };
 
-      console.log('✅ NUCLEAR FIX: Returning hardcoded Dubai packages list');
+      console.log("✅ NUCLEAR FIX: Returning hardcoded Dubai packages list");
       return dubaiPackagesOnly as T;
     }
 
     // CRITICAL FIX: Never use fallback for packages - always try real API first
-    if (endpoint.includes('/packages')) {
-      console.log('🚨 FORCING REAL API FOR PACKAGES - NO FALLBACK');
+    if (endpoint.includes("/packages")) {
+      console.log("🚨 FORCING REAL API FOR PACKAGES - NO FALLBACK");
       // Skip fallback logic for packages - always try real API
     } else if (
       this.forceFallback ||
@@ -518,19 +789,20 @@ export class ApiClient {
       }
 
       // CRITICAL FIX: Never fallback for packages - show real errors instead
-      if (endpoint.includes('/packages')) {
-        console.log('🚨 PACKAGES API ERROR - NOT USING FALLBACK:', error);
+      if (endpoint.includes("/packages")) {
+        console.log("🚨 PACKAGES API ERROR - NOT USING FALLBACK:", error);
         // Create user-friendly error message
-        const errorMessage = error instanceof Error
-          ? error.message
-          : typeof error === 'string'
-            ? error
-            : 'Unknown API error occurred';
+        const errorMessage =
+          error instanceof Error
+            ? error.message
+            : typeof error === "string"
+              ? error
+              : "Unknown API error occurred";
 
         throw new ApiError(
           `Failed to load package data: ${errorMessage}`,
           error instanceof ApiError ? error.status : 500,
-          error
+          error,
         );
       }
 

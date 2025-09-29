@@ -1,16 +1,17 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('render.com') 
-    ? { rejectUnauthorized: false } 
-    : false
+  ssl:
+    process.env.DATABASE_URL && process.env.DATABASE_URL.includes("render.com")
+      ? { rejectUnauthorized: false }
+      : false,
 });
 
 async function verifyFinalSetup() {
   try {
-    console.log('🔍 Verifying final database setup...\n');
-    
+    console.log("🔍 Verifying final database setup...\n");
+
     // Check packages table structure
     const packagesStructure = await pool.query(`
       SELECT column_name, data_type 
@@ -18,24 +19,26 @@ async function verifyFinalSetup() {
       WHERE table_name = 'packages' AND column_name IN ('id', 'region_id', 'country_id', 'city_id')
       ORDER BY column_name
     `);
-    
-    console.log('PACKAGES TABLE KEY COLUMNS:');
-    packagesStructure.rows.forEach(row => {
+
+    console.log("PACKAGES TABLE KEY COLUMNS:");
+    packagesStructure.rows.forEach((row) => {
       console.log(`- ${row.column_name}: ${row.data_type}`);
     });
-    
+
     // Check package_departures structure
     const departuresStructure = await pool.query(`
       SELECT column_name, data_type 
       FROM information_schema.columns 
       WHERE table_name = 'package_departures' AND column_name = 'package_id'
     `);
-    
-    console.log('\nPACKAGE_DEPARTURES TABLE:');
-    console.log(`- package_id: ${departuresStructure.rows[0]?.data_type || 'NOT FOUND'}`);
-    
+
+    console.log("\nPACKAGE_DEPARTURES TABLE:");
+    console.log(
+      `- package_id: ${departuresStructure.rows[0]?.data_type || "NOT FOUND"}`,
+    );
+
     // Check Dubai packages with proper destinations
-    console.log('\n🏙️ Dubai Packages Status:');
+    console.log("\n🏙️ Dubai Packages Status:");
     const dubaiPackages = await pool.query(`
       SELECT 
         p.id,
@@ -53,21 +56,23 @@ async function verifyFinalSetup() {
       WHERE LOWER(p.title) LIKE '%dubai%' OR ci.name = 'Dubai'
       ORDER BY p.package_category
     `);
-    
+
     if (dubaiPackages.rows.length > 0) {
-      dubaiPackages.rows.forEach(row => {
+      dubaiPackages.rows.forEach((row) => {
         console.log(`✅ ${row.title} (${row.package_category})`);
-        console.log(`   Location: ${row.city_name || 'N/A'}, ${row.country_name || 'N/A'} (${row.region_name || 'N/A'})`);
+        console.log(
+          `   Location: ${row.city_name || "N/A"}, ${row.country_name || "N/A"} (${row.region_name || "N/A"})`,
+        );
         console.log(`   Price: ₹${row.base_price_pp} | Status: ${row.status}`);
-        console.log('');
+        console.log("");
       });
     } else {
-      console.log('⚠️ No Dubai packages found');
+      console.log("⚠️ No Dubai packages found");
     }
-    
+
     // Test the filtering query that the API will use
-    console.log('🧪 Testing API filtering query for Dubai, October 1-5, 2025:');
-    
+    console.log("🧪 Testing API filtering query for Dubai, October 1-5, 2025:");
+
     try {
       const testQuery = `
         SELECT 
@@ -86,17 +91,21 @@ async function verifyFinalSetup() {
           AND ci.name = 'Dubai'
         ORDER BY p.package_category
       `;
-      
+
       const filterTest = await pool.query(testQuery);
-      
-      console.log(`✅ Found ${filterTest.rows.length} Dubai packages that can be filtered:`);
-      filterTest.rows.forEach(row => {
-        console.log(`- ${row.title} (${row.package_category}) - ₹${row.base_price_pp}`);
+
+      console.log(
+        `✅ Found ${filterTest.rows.length} Dubai packages that can be filtered:`,
+      );
+      filterTest.rows.forEach((row) => {
+        console.log(
+          `- ${row.title} (${row.package_category}) - ₹${row.base_price_pp}`,
+        );
       });
-      
+
       // Test date-specific filtering (this will be used by the API)
-      console.log('\n📅 Testing date filtering (departures in October 1-5):');
-      
+      console.log("\n📅 Testing date filtering (departures in October 1-5):");
+
       const dateFilterTest = await pool.query(`
         SELECT 
           p.title,
@@ -112,32 +121,39 @@ async function verifyFinalSetup() {
           AND pd.is_active = TRUE
         ORDER BY p.package_category, pd.departure_date
       `);
-      
-      console.log(`✅ Found ${dateFilterTest.rows.length} departures for Dubai Oct 1-5:`);
-      dateFilterTest.rows.forEach(row => {
-        console.log(`- ${row.title} (${row.package_category}) - ${row.departure_date} - ₹${row.price_per_person}`);
+
+      console.log(
+        `✅ Found ${dateFilterTest.rows.length} departures for Dubai Oct 1-5:`,
+      );
+      dateFilterTest.rows.forEach((row) => {
+        console.log(
+          `- ${row.title} (${row.package_category}) - ${row.departure_date} - ₹${row.price_per_person}`,
+        );
       });
-      
     } catch (err) {
-      console.log('❌ Filtering test failed:', err.message);
-      
+      console.log("❌ Filtering test failed:", err.message);
+
       // Try a simpler approach
-      console.log('\n🔧 Trying simplified filtering...');
+      console.log("\n🔧 Trying simplified filtering...");
       const simpleTest = await pool.query(`
         SELECT title, package_category, base_price_pp
         FROM packages 
         WHERE status = 'active' AND LOWER(title) LIKE '%dubai%'
         ORDER BY package_category
       `);
-      
-      console.log(`✅ Found ${simpleTest.rows.length} Dubai packages (title-based):`);
-      simpleTest.rows.forEach(row => {
-        console.log(`- ${row.title} (${row.package_category}) - ₹${row.base_price_pp}`);
+
+      console.log(
+        `✅ Found ${simpleTest.rows.length} Dubai packages (title-based):`,
+      );
+      simpleTest.rows.forEach((row) => {
+        console.log(
+          `- ${row.title} (${row.package_category}) - ₹${row.base_price_pp}`,
+        );
       });
     }
-    
+
     // Check overall package distribution
-    console.log('\n📊 Overall Package Distribution:');
+    console.log("\n📊 Overall Package Distribution:");
     const distribution = await pool.query(`
       SELECT 
         COALESCE(r.name, 'Unassigned') as region_name,
@@ -149,15 +165,16 @@ async function verifyFinalSetup() {
       GROUP BY r.id, r.name
       ORDER BY package_count DESC
     `);
-    
-    distribution.rows.forEach(row => {
-      console.log(`- ${row.region_name}: ${row.package_count} packages (${row.category_varieties} categories)`);
+
+    distribution.rows.forEach((row) => {
+      console.log(
+        `- ${row.region_name}: ${row.package_count} packages (${row.category_varieties} categories)`,
+      );
     });
-    
-    console.log('\n✅ Database setup verification completed!');
-    
+
+    console.log("\n✅ Database setup verification completed!");
   } catch (error) {
-    console.error('❌ Error verifying setup:', error.message);
+    console.error("❌ Error verifying setup:", error.message);
   } finally {
     await pool.end();
   }

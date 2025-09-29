@@ -400,7 +400,8 @@ export default function PackageBooking() {
                     Additional Guests
                   </h3>
                   <p className="text-sm text-gray-600 mb-4">
-                    Please provide details for all travelers. Adult forms are marked in blue, child forms are marked in green.
+                    Please provide details for all travelers. Adult forms are
+                    marked in blue, child forms are marked in green.
                   </p>
                   {additionalGuests.map((guest, index) => {
                     // Calculate if this guest is an adult or child
@@ -408,7 +409,9 @@ export default function PackageBooking() {
                     const remainingAdults = travelers.adults - 1; // -1 for primary guest
                     const isAdult = index < remainingAdults;
                     const guestType = isAdult ? "Adult" : "Child";
-                    const guestNumber = isAdult ? index + 2 : index - remainingAdults + 1;
+                    const guestNumber = isAdult
+                      ? index + 2
+                      : index - remainingAdults + 1;
 
                     return (
                       <div
@@ -419,92 +422,94 @@ export default function PackageBooking() {
                           <h4 className="font-medium mr-3">
                             Guest {index + 2}
                           </h4>
-                          <span className={`text-xs font-medium px-2.5 py-0.5 rounded ${
-                            isAdult
-                              ? 'bg-blue-100 text-blue-800'
-                              : 'bg-green-100 text-green-800'
-                          }`}>
+                          <span
+                            className={`text-xs font-medium px-2.5 py-0.5 rounded ${
+                              isAdult
+                                ? "bg-blue-100 text-blue-800"
+                                : "bg-green-100 text-green-800"
+                            }`}
+                          >
                             {guestType} {guestNumber}
                           </span>
                         </div>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
-                          <Label>Title</Label>
-                          <Select
-                            value={guest.title}
-                            onValueChange={(value) =>
-                              handleGuestChange(index, "title", value)
-                            }
-                          >
-                            <SelectTrigger className="border-2 border-[#003580] focus:ring-[#003580]">
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Mr">Mr</SelectItem>
-                              <SelectItem value="Mrs">Mrs</SelectItem>
-                              <SelectItem value="Ms">Ms</SelectItem>
-                              <SelectItem value="Dr">Dr</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <div>
+                            <Label>Title</Label>
+                            <Select
+                              value={guest.title}
+                              onValueChange={(value) =>
+                                handleGuestChange(index, "title", value)
+                              }
+                            >
+                              <SelectTrigger className="border-2 border-[#003580] focus:ring-[#003580]">
+                                <SelectValue />
+                              </SelectTrigger>
+                              <SelectContent>
+                                <SelectItem value="Mr">Mr</SelectItem>
+                                <SelectItem value="Mrs">Mrs</SelectItem>
+                                <SelectItem value="Ms">Ms</SelectItem>
+                                <SelectItem value="Dr">Dr</SelectItem>
+                              </SelectContent>
+                            </Select>
+                          </div>
 
-                        <div>
-                          <Label>First Name</Label>
-                          <Input
-                            value={guest.firstName}
-                            onChange={(e) =>
-                              handleGuestChange(
-                                index,
-                                "firstName",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="Enter first name"
-                          />
-                        </div>
+                          <div>
+                            <Label>First Name</Label>
+                            <Input
+                              value={guest.firstName}
+                              onChange={(e) =>
+                                handleGuestChange(
+                                  index,
+                                  "firstName",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Enter first name"
+                            />
+                          </div>
 
-                        <div>
-                          <Label>Last Name</Label>
-                          <Input
-                            value={guest.lastName}
-                            onChange={(e) =>
-                              handleGuestChange(
-                                index,
-                                "lastName",
-                                e.target.value,
-                              )
-                            }
-                            placeholder="Enter last name"
-                          />
-                        </div>
+                          <div>
+                            <Label>Last Name</Label>
+                            <Input
+                              value={guest.lastName}
+                              onChange={(e) =>
+                                handleGuestChange(
+                                  index,
+                                  "lastName",
+                                  e.target.value,
+                                )
+                              }
+                              placeholder="Enter last name"
+                            />
+                          </div>
 
-                        <div>
-                          <Label>Nationality</Label>
-                          <Select
-                            value={guest.nationality || ""}
-                            onValueChange={(value) =>
-                              handleGuestChange(index, "nationality", value)
-                            }
-                          >
-                            <SelectTrigger className="border-2 border-[#003580] focus:ring-[#003580]">
-                              <SelectValue placeholder="Select nationality" />
-                            </SelectTrigger>
-                            <SelectContent>
-                              {countries.map((country) => (
-                                <SelectItem
-                                  key={country.iso2}
-                                  value={country.name}
-                                >
-                                  <div className="flex items-center space-x-2">
-                                    <span>{country.flag}</span>
-                                    <span>{country.name}</span>
-                                  </div>
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
+                          <div>
+                            <Label>Nationality</Label>
+                            <Select
+                              value={guest.nationality || ""}
+                              onValueChange={(value) =>
+                                handleGuestChange(index, "nationality", value)
+                              }
+                            >
+                              <SelectTrigger className="border-2 border-[#003580] focus:ring-[#003580]">
+                                <SelectValue placeholder="Select nationality" />
+                              </SelectTrigger>
+                              <SelectContent>
+                                {countries.map((country) => (
+                                  <SelectItem
+                                    key={country.iso2}
+                                    value={country.name}
+                                  >
+                                    <div className="flex items-center space-x-2">
+                                      <span>{country.flag}</span>
+                                      <span>{country.name}</span>
+                                    </div>
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          </div>
                         </div>
-                      </div>
                       </div>
                     );
                   })}

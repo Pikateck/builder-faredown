@@ -36,9 +36,15 @@ export class DevApiClient {
     console.log(
       `🔄 FALLBACK: ${endpoint} (Live API unavailable - using mock data)`,
     );
-    console.log('🚨 DEBUGGING: Params received by DevApiClient:', JSON.stringify(params, null, 2));
+    console.log(
+      "🚨 DEBUGGING: Params received by DevApiClient:",
+      JSON.stringify(params, null, 2),
+    );
     const result = this.getFallbackData(endpoint, params) as T;
-    console.log('🚨 DEBUGGING: Result returned by DevApiClient:', JSON.stringify(result, null, 2));
+    console.log(
+      "🚨 DEBUGGING: Result returned by DevApiClient:",
+      JSON.stringify(result, null, 2),
+    );
     return result;
   }
 
@@ -1752,22 +1758,25 @@ export class DevApiClient {
 
     // Packages search endpoint - **URGENT FIX** for Dubai destination filtering
     if (endpoint.includes("/packages")) {
-      console.log('🚨 FALLBACK TRIGGERED for /packages endpoint');
-      console.log('📋 Received params:', JSON.stringify(params, null, 2));
+      console.log("🚨 FALLBACK TRIGGERED for /packages endpoint");
+      console.log("📋 Received params:", JSON.stringify(params, null, 2));
 
       const destinationParam = params?.destination?.toLowerCase() || "";
       const destinationType = params?.destination_type || "city";
       const destinationCode = params?.destination_code?.toLowerCase() || "";
 
-      console.log(`🎯 FALLBACK PACKAGES: Destination="${destinationParam}", Type="${destinationType}", Code="${destinationCode}"`);
+      console.log(
+        `🎯 FALLBACK PACKAGES: Destination="${destinationParam}", Type="${destinationType}", Code="${destinationCode}"`,
+      );
 
       // **CRITICAL FIX**: FORCE Dubai-only packages when Dubai is anywhere in the search
-      if (destinationParam.includes('dubai') ||
-          destinationParam.includes('united arab emirates') ||
-          destinationCode.includes('dxb') ||
-          (params && JSON.stringify(params).toLowerCase().includes('dubai'))) {
-
-        console.log('🎯 DUBAI SEARCH CONFIRMED - Forcing Dubai packages only');
+      if (
+        destinationParam.includes("dubai") ||
+        destinationParam.includes("united arab emirates") ||
+        destinationCode.includes("dxb") ||
+        (params && JSON.stringify(params).toLowerCase().includes("dubai"))
+      ) {
+        console.log("🎯 DUBAI SEARCH CONFIRMED - Forcing Dubai packages only");
 
         const dubaiPackages = [
           {
@@ -1853,7 +1862,7 @@ export class DevApiClient {
             ],
             category: "adventure",
             package_category: "adventure",
-          }
+          },
         ];
 
         return {
@@ -1876,12 +1885,15 @@ export class DevApiClient {
             },
             filters: params,
           },
-          message: "🎯 FALLBACK: Dubai packages only (API offline - destination filtering applied)",
+          message:
+            "🎯 FALLBACK: Dubai packages only (API offline - destination filtering applied)",
         };
       }
 
       // **CRITICAL FIX**: DISABLE ALL NON-DUBAI PACKAGES until API is fixed
-      console.log('❌ NON-DUBAI SEARCH - Returning empty result to force Dubai-only behavior');
+      console.log(
+        "❌ NON-DUBAI SEARCH - Returning empty result to force Dubai-only behavior",
+      );
 
       return {
         success: true,
@@ -1903,7 +1915,8 @@ export class DevApiClient {
           },
           filters: params,
         },
-        message: "❌ FALLBACK: Please select a specific destination to view packages",
+        message:
+          "❌ FALLBACK: Please select a specific destination to view packages",
       };
     }
 

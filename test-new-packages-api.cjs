@@ -1,19 +1,20 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL && process.env.DATABASE_URL.includes('render.com') 
-    ? { rejectUnauthorized: false } 
-    : false
+  ssl:
+    process.env.DATABASE_URL && process.env.DATABASE_URL.includes("render.com")
+      ? { rejectUnauthorized: false }
+      : false,
 });
 
 async function testPackagesAPI() {
   try {
-    console.log('🧪 Testing New Packages API Logic...\n');
-    
+    console.log("🧪 Testing New Packages API Logic...\n");
+
     // Test 1: Basic packages listing with destination filtering
-    console.log('1️⃣ Test: Basic Dubai packages filtering');
-    
+    console.log("1️⃣ Test: Basic Dubai packages filtering");
+
     const dubaiQuery = `
       SELECT
         p.*,
@@ -41,20 +42,28 @@ async function testPackagesAPI() {
         )
       ORDER BY p.package_category, p.base_price_pp ASC
     `;
-    
+
     const dubaiResult = await pool.query(dubaiQuery);
-    
+
     console.log(`✅ Found ${dubaiResult.rows.length} Dubai packages:`);
-    dubaiResult.rows.forEach(pkg => {
-      console.log(`- ${pkg.title} (${pkg.package_category}) - ₹${pkg.from_price}`);
-      console.log(`  📍 ${pkg.city_name}, ${pkg.country_name} (${pkg.region_name})`);
-      console.log(`  🗓️ Available departures: ${pkg.available_departures_count}`);
-      console.log('');
+    dubaiResult.rows.forEach((pkg) => {
+      console.log(
+        `- ${pkg.title} (${pkg.package_category}) - ₹${pkg.from_price}`,
+      );
+      console.log(
+        `  📍 ${pkg.city_name}, ${pkg.country_name} (${pkg.region_name})`,
+      );
+      console.log(
+        `  🗓️ Available departures: ${pkg.available_departures_count}`,
+      );
+      console.log("");
     });
-    
+
     // Test 2: Date range filtering
-    console.log('2️⃣ Test: Dubai packages with October 1-5, 2025 date filtering');
-    
+    console.log(
+      "2️⃣ Test: Dubai packages with October 1-5, 2025 date filtering",
+    );
+
     const dateFilterQuery = `
       SELECT
         p.title,
@@ -73,18 +82,22 @@ async function testPackagesAPI() {
         AND pd.available_seats > 0
       ORDER BY p.package_category, pd.departure_date
     `;
-    
+
     const dateFilterResult = await pool.query(dateFilterQuery);
-    
-    console.log(`✅ Found ${dateFilterResult.rows.length} Dubai departures for Oct 1-5, 2025:`);
-    dateFilterResult.rows.forEach(departure => {
+
+    console.log(
+      `✅ Found ${dateFilterResult.rows.length} Dubai departures for Oct 1-5, 2025:`,
+    );
+    dateFilterResult.rows.forEach((departure) => {
       console.log(`- ${departure.title} (${departure.package_category})`);
-      console.log(`  📅 ${departure.departure_date} - ₹${departure.price_per_person}`);
+      console.log(
+        `  📅 ${departure.departure_date} - ₹${departure.price_per_person}`,
+      );
     });
-    
+
     // Test 3: Package variety by category
-    console.log('\n3️⃣ Test: Dubai package variety by category');
-    
+    console.log("\n3️⃣ Test: Dubai package variety by category");
+
     const varietyQuery = `
       SELECT 
         p.package_category,
@@ -98,18 +111,22 @@ async function testPackagesAPI() {
       GROUP BY p.package_category
       ORDER BY avg_price DESC
     `;
-    
+
     const varietyResult = await pool.query(varietyQuery);
-    
-    console.log('✅ Dubai package categories:');
-    varietyResult.rows.forEach(category => {
-      console.log(`- ${category.package_category}: ${category.package_count} packages`);
-      console.log(`  💰 Price range: ₹${category.min_price} - ₹${category.max_price} (avg: ₹${Math.round(category.avg_price)})`);
+
+    console.log("✅ Dubai package categories:");
+    varietyResult.rows.forEach((category) => {
+      console.log(
+        `- ${category.package_category}: ${category.package_count} packages`,
+      );
+      console.log(
+        `  💰 Price range: ₹${category.min_price} - ₹${category.max_price} (avg: ₹${Math.round(category.avg_price)})`,
+      );
     });
-    
+
     // Test 4: Facets generation
-    console.log('\n4️⃣ Test: Generate facets for filtering');
-    
+    console.log("\n4️⃣ Test: Generate facets for filtering");
+
     const facetsQuery = `
       SELECT 
         'regions' as type,
@@ -130,23 +147,35 @@ async function testPackagesAPI() {
       WHERE p.status = 'active' AND p.package_category IS NOT NULL
       GROUP BY p.package_category
     `;
-    
+
     const facetsResult = await pool.query(facetsQuery);
-    
+
     const facets = { regions: {}, categories: {} };
-    facetsResult.rows.forEach(row => {
+    facetsResult.rows.forEach((row) => {
       if (facets[row.type]) {
         facets[row.type][row.name] = parseInt(row.count);
       }
     });
-    
-    console.log('✅ Generated facets:');
-    console.log('Regions:', Object.entries(facets.regions).map(([name, count]) => `${name}(${count})`).join(', '));
-    console.log('Categories:', Object.entries(facets.categories).map(([name, count]) => `${name}(${count})`).join(', '));
-    
+
+    console.log("✅ Generated facets:");
+    console.log(
+      "Regions:",
+      Object.entries(facets.regions)
+        .map(([name, count]) => `${name}(${count})`)
+        .join(", "),
+    );
+    console.log(
+      "Categories:",
+      Object.entries(facets.categories)
+        .map(([name, count]) => `${name}(${count})`)
+        .join(", "),
+    );
+
     // Test 5: Check if we have the 3+ package types requirement
-    console.log('\n5️⃣ Test: Verify 3+ package types per region (Dubai/Middle East)');
-    
+    console.log(
+      "\n5️⃣ Test: Verify 3+ package types per region (Dubai/Middle East)",
+    );
+
     const requirementCheck = await pool.query(`
       SELECT 
         r.name as region_name,
@@ -159,20 +188,21 @@ async function testPackagesAPI() {
       HAVING COUNT(DISTINCT p.package_category) >= 3
       ORDER BY category_count DESC
     `);
-    
-    console.log('✅ Regions with 3+ package types:');
-    requirementCheck.rows.forEach(region => {
-      console.log(`- ${region.region_name}: ${region.category_count} types (${region.categories.join(', ')})`);
+
+    console.log("✅ Regions with 3+ package types:");
+    requirementCheck.rows.forEach((region) => {
+      console.log(
+        `- ${region.region_name}: ${region.category_count} types (${region.categories.join(", ")})`,
+      );
     });
-    
-    console.log('\n🎉 API Testing Complete!');
-    console.log('✅ Database structure supports proper destination filtering');
-    console.log('✅ Date range filtering works correctly');
-    console.log('✅ Multiple package types per region requirement is met');
-    console.log('✅ Facets generation works for dynamic filtering');
-    
+
+    console.log("\n🎉 API Testing Complete!");
+    console.log("✅ Database structure supports proper destination filtering");
+    console.log("✅ Date range filtering works correctly");
+    console.log("✅ Multiple package types per region requirement is met");
+    console.log("✅ Facets generation works for dynamic filtering");
   } catch (error) {
-    console.error('❌ Error testing packages API:', error);
+    console.error("❌ Error testing packages API:", error);
   } finally {
     await pool.end();
   }

@@ -32,9 +32,10 @@ app.use(cors(corsOptions));
 
 // Database connection
 const dbUrl = process.env.DATABASE_URL;
-const sslConfig = dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
-  ? { rejectUnauthorized: false }
-  : false;
+const sslConfig =
+  dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
+    ? { rejectUnauthorized: false }
+    : false;
 
 const pool = new Pool({
   connectionString: dbUrl,
@@ -73,7 +74,11 @@ app.get("/packages", async (req, res) => {
       page_size = 20,
     } = req.query;
 
-    console.log("🔍 Packages API Request:", { destination, destination_type, q });
+    console.log("🔍 Packages API Request:", {
+      destination,
+      destination_type,
+      q,
+    });
 
     // Build WHERE clause dynamically
     let whereConditions = ["p.status = 'active'"];
@@ -204,8 +209,8 @@ app.get("/packages", async (req, res) => {
           has_prev: parseInt(page) > 1,
         },
         facets: {
-          regions: { "Europe": 3, "Asia": 3, "Middle East": 5 },
-          categories: { "luxury": 3, "cultural": 16, "adventure": 9 }
+          regions: { Europe: 3, Asia: 3, "Middle East": 5 },
+          categories: { luxury: 3, cultural: 16, adventure: 9 },
         },
         filters: {
           q,

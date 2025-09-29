@@ -1,15 +1,17 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 async function verifyDubaiPackages() {
-  const pool = new Pool({ 
+  const pool = new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: process.env.DATABASE_URL.includes('render.com') ? { rejectUnauthorized: false } : false
+    ssl: process.env.DATABASE_URL.includes("render.com")
+      ? { rejectUnauthorized: false }
+      : false,
   });
 
   try {
-    console.log('🔍 STAGING VALIDATION: DUBAI PACKAGES DATABASE QUERY');
-    console.log('==================================================');
-    
+    console.log("🔍 STAGING VALIDATION: DUBAI PACKAGES DATABASE QUERY");
+    console.log("==================================================");
+
     // Query for Dubai packages with Oct 1-10, 2025 departures
     const dubaiQuery = `
       SELECT 
@@ -31,22 +33,28 @@ async function verifyDubaiPackages() {
         AND pd.available_seats > 0
       ORDER BY p.package_category, pd.departure_date;
     `;
-    
+
     const dubaiResult = await pool.query(dubaiQuery);
-    
+
     console.log(`✅ DUBAI PACKAGES FOUND: ${dubaiResult.rows.length}`);
-    console.log('');
-    
+    console.log("");
+
     dubaiResult.rows.forEach((row, index) => {
       console.log(`${index + 1}. 📦 ${row.title} (${row.package_category})`);
-      console.log(`   🏙️ Location: ${row.city_name}, ${row.country_name} (${row.region_name})`);
-      console.log(`   💰 Price: ₹${row.base_price_pp?.toLocaleString() || 'N/A'} per person`);
-      console.log(`   📅 Departure: ${row.departure_date} - Return: ${row.return_date}`);
+      console.log(
+        `   🏙️ Location: ${row.city_name}, ${row.country_name} (${row.region_name})`,
+      );
+      console.log(
+        `   💰 Price: ₹${row.base_price_pp?.toLocaleString() || "N/A"} per person`,
+      );
+      console.log(
+        `   📅 Departure: ${row.departure_date} - Return: ${row.return_date}`,
+      );
       console.log(`   💺 Available Seats: ${row.available_seats}`);
       console.log(`   🆔 Package ID: ${row.id}`);
-      console.log('');
+      console.log("");
     });
-    
+
     // Query for NON-Dubai packages to verify they should NOT appear
     const nonDubaiQuery = `
       SELECT 
@@ -68,30 +76,34 @@ async function verifyDubaiPackages() {
       GROUP BY p.id, p.title, p.package_category, r.name, c.name, ci.name
       ORDER BY ci.name, p.title;
     `;
-    
+
     const nonDubaiResult = await pool.query(nonDubaiQuery);
-    
-    console.log('🚫 NON-DUBAI PACKAGES (SHOULD NOT APPEAR IN DUBAI SEARCH):');
-    console.log('====================================================');
+
+    console.log("🚫 NON-DUBAI PACKAGES (SHOULD NOT APPEAR IN DUBAI SEARCH):");
+    console.log("====================================================");
     console.log(`Found: ${nonDubaiResult.rows.length} non-Dubai packages`);
-    console.log('');
-    
+    console.log("");
+
     nonDubaiResult.rows.slice(0, 5).forEach((row, index) => {
       console.log(`${index + 1}. ❌ ${row.title} (${row.package_category})`);
-      console.log(`   🏙️ Location: ${row.city_name}, ${row.country_name} (${row.region_name})`);
+      console.log(
+        `   🏙️ Location: ${row.city_name}, ${row.country_name} (${row.region_name})`,
+      );
       console.log(`   📅 Departures in range: ${row.departure_count}`);
-      console.log('');
+      console.log("");
     });
-    
+
     if (nonDubaiResult.rows.length > 5) {
-      console.log(`... and ${nonDubaiResult.rows.length - 5} more non-Dubai packages`);
-      console.log('');
+      console.log(
+        `... and ${nonDubaiResult.rows.length - 5} more non-Dubai packages`,
+      );
+      console.log("");
     }
-    
+
     // Test the exact API call that should be made
-    console.log('🧪 API TEST: Simulating frontend API call');
-    console.log('========================================');
-    
+    console.log("🧪 API TEST: Simulating frontend API call");
+    console.log("========================================");
+
     const apiTestQuery = `
       SELECT DISTINCT
         p.*,
@@ -130,37 +142,53 @@ async function verifyDubaiPackages() {
         p.base_price_pp ASC
       LIMIT 20;
     `;
-    
+
     const apiTestResult = await pool.query(apiTestQuery);
-    
-    console.log(`✅ API SIMULATION RESULT: ${apiTestResult.rows.length} packages should be returned`);
-    console.log('');
-    
+
+    console.log(
+      `✅ API SIMULATION RESULT: ${apiTestResult.rows.length} packages should be returned`,
+    );
+    console.log("");
+
     apiTestResult.rows.forEach((row, index) => {
       console.log(`${index + 1}. ✅ ${row.title} (${row.package_category})`);
-      console.log(`   🏙️ ${row.city_name}, ${row.country_name} (${row.region_name})`);
-      console.log(`   💰 ₹${row.base_price_pp?.toLocaleString() || 'N/A'} per person`);
-      console.log(`   📅 Available departures: ${row.available_departures_count}`);
-      console.log('');
+      console.log(
+        `   🏙️ ${row.city_name}, ${row.country_name} (${row.region_name})`,
+      );
+      console.log(
+        `   💰 ₹${row.base_price_pp?.toLocaleString() || "N/A"} per person`,
+      );
+      console.log(
+        `   📅 Available departures: ${row.available_departures_count}`,
+      );
+      console.log("");
     });
-    
-    console.log('🏁 VALIDATION SUMMARY:');
-    console.log('====================');
+
+    console.log("🏁 VALIDATION SUMMARY:");
+    console.log("====================");
     console.log(`✅ Dubai packages in DB: ${dubaiResult.rows.length}`);
     console.log(`❌ Non-Dubai packages in DB: ${nonDubaiResult.rows.length}`);
-    console.log(`🧪 API should return: ${apiTestResult.rows.length} Dubai packages only`);
-    console.log('');
-    
-    if (apiTestResult.rows.length > 0 && apiTestResult.rows.every(pkg => pkg.city_name === 'Dubai')) {
-      console.log('✅ DATABASE IS CORRECT: Only Dubai packages match the criteria');
+    console.log(
+      `🧪 API should return: ${apiTestResult.rows.length} Dubai packages only`,
+    );
+    console.log("");
+
+    if (
+      apiTestResult.rows.length > 0 &&
+      apiTestResult.rows.every((pkg) => pkg.city_name === "Dubai")
+    ) {
+      console.log(
+        "✅ DATABASE IS CORRECT: Only Dubai packages match the criteria",
+      );
     } else {
-      console.log('❌ DATABASE ISSUE: Non-Dubai packages are matching Dubai search');
+      console.log(
+        "❌ DATABASE ISSUE: Non-Dubai packages are matching Dubai search",
+      );
     }
-    
+
     await pool.end();
-    
   } catch (error) {
-    console.error('❌ Database verification failed:', error.message);
+    console.error("❌ Database verification failed:", error.message);
     await pool.end();
     process.exit(1);
   }
