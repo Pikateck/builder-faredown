@@ -1,4 +1,5 @@
 import { useEffect, useState, useCallback, useMemo } from "react";
+import { apiClient } from "@/lib/api";
 
 export type CountryOption = {
   iso2: string;
@@ -90,16 +91,31 @@ export function useCountries(options: UseCountriesOptions = {}) {
 
       try {
         const endpoint = popularOnly
-          ? "/api/countries/popular"
-          : "/api/countries";
-        const response = await fetch(endpoint, {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-        });
+          ? "/countries/popular"
+          : "/countries";
 
-        if (!response.ok) {
+        console.log('🔍 useCountries: Fetching from endpoint:', endpoint);
+        const response = await apiClient.get(endpoint);
+        console.log('🔍 useCountries: Response received:', response);
+
+        // Handle response format from apiClient
+        if (response.success && response.countries) {
+          // Cache the result
+          cache.set(cacheKey, {
+            data: response.countries,
+            timestamp: Date.now(),
+            popularOnly,
+          });
+          return response.countries;
+        } else if (response && Array.isArray(response)) {
+          // Direct array response
+          cache.set(cacheKey, {
+            data: response,
+            timestamp: Date.now(),
+            popularOnly,
+          });
+          return response;
+        } else {
           // Handle various API unavailability scenarios gracefully
           if (response.status === 429) {
             console.warn("Countries API rate limited, using fallback data");
