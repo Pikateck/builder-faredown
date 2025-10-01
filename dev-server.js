@@ -179,6 +179,135 @@ price_rules:
   }
 }
 
+// Admin Airports API handler
+async function handleAdminAirportsAPI(req, res) {
+  try {
+    console.log("✈️ Admin Airports API Request:", req.originalUrl, req.query);
+
+    const url = new URL(req.originalUrl, 'http://localhost');
+    const q = url.searchParams.get('q') || '';
+    const limit = Math.min(parseInt(url.searchParams.get('limit') || '50'), 200);
+    const offset = parseInt(url.searchParams.get('offset') || '0');
+
+    // If we have a database connection, try to use it
+    if (pool) {
+      try {
+        const searchQuery = q.trim();
+        let searchResult, countResult;
+
+        if (searchQuery) {
+          // Search airports with query
+          searchResult = await pool.query(
+            `SELECT iata, name, city, country
+             FROM airport_master
+             WHERE is_active = true
+               AND (name ILIKE $1 OR iata ILIKE $1 OR city ILIKE $1 OR country ILIKE $1)
+             ORDER BY
+               CASE WHEN iata ILIKE $1 THEN 1 ELSE 2 END,
+               name
+             LIMIT $2 OFFSET $3`,
+            [`%${searchQuery}%`, limit, offset]
+          );
+
+          countResult = await pool.query(
+            `SELECT COUNT(*)::int as total
+             FROM airport_master
+             WHERE is_active = true
+               AND (name ILIKE $1 OR iata ILIKE $1 OR city ILIKE $1 OR country ILIKE $1)`,
+            [`%${searchQuery}%`]
+          );
+        } else {
+          // Get all airports (common ones first)
+          searchResult = await pool.query(
+            `SELECT iata, name, city, country
+             FROM airport_master
+             WHERE is_active = true
+             ORDER BY
+               CASE
+                 WHEN iata IN ('BOM', 'DEL', 'DXB', 'LHR', 'JFK', 'SIN', 'CDG', 'SYD', 'LAX', 'FRA') THEN 1
+                 ELSE 2
+               END,
+               name
+             LIMIT $1 OFFSET $2`,
+            [limit, offset]
+          );
+
+          countResult = await pool.query(
+            `SELECT COUNT(*)::int as total FROM airport_master WHERE is_active = true`
+          );
+        }
+
+        const items = searchResult.rows;
+        const total = countResult.rows[0]?.total || 0;
+
+        console.log(`✅ Found ${items.length} airports (total: ${total})`);
+
+        return res.json({
+          items,
+          total,
+          query: q,
+          limit,
+          offset
+        });
+
+      } catch (dbError) {
+        console.warn("⚠️ Database query failed, falling back to mock data:", dbError.message);
+        // Fall through to mock data
+      }
+    }
+
+    // Mock airport data for development
+    const mockAirports = [
+      { iata: 'BOM', name: 'Chhatrapati Shivaji Maharaj International', city: 'Mumbai', country: 'India' },
+      { iata: 'DEL', name: 'Indira Gandhi International', city: 'Delhi', country: 'India' },
+      { iata: 'DXB', name: 'Dubai International', city: 'Dubai', country: 'UAE' },
+      { iata: 'LHR', name: 'London Heathrow', city: 'London', country: 'United Kingdom' },
+      { iata: 'JFK', name: 'John F. Kennedy International', city: 'New York', country: 'United States' },
+      { iata: 'SIN', name: 'Singapore Changi', city: 'Singapore', country: 'Singapore' },
+      { iata: 'CDG', name: 'Charles de Gaulle', city: 'Paris', country: 'France' },
+      { iata: 'SYD', name: 'Sydney Kingsford Smith', city: 'Sydney', country: 'Australia' },
+      { iata: 'LAX', name: 'Los Angeles International', city: 'Los Angeles', country: 'United States' },
+      { iata: 'FRA', name: 'Frankfurt am Main', city: 'Frankfurt', country: 'Germany' },
+      { iata: 'BLR', name: 'Kempegowda International', city: 'Bangalore', country: 'India' },
+      { iata: 'MAA', name: 'Chennai International', city: 'Chennai', country: 'India' },
+      { iata: 'CCU', name: 'Netaji Subhas Chandra Bose International', city: 'Kolkata', country: 'India' },
+      { iata: 'HYD', name: 'Rajiv Gandhi International', city: 'Hyderabad', country: 'India' },
+      { iata: 'AMD', name: 'Sardar Vallabhbhai Patel International', city: 'Ahmedabad', country: 'India' },
+    ];
+
+    // Filter based on search query
+    let filteredAirports = mockAirports;
+    if (q) {
+      const searchTerm = q.toLowerCase();
+      filteredAirports = mockAirports.filter(airport =>
+        airport.iata.toLowerCase().includes(searchTerm) ||
+        airport.name.toLowerCase().includes(searchTerm) ||
+        airport.city.toLowerCase().includes(searchTerm) ||
+        airport.country.toLowerCase().includes(searchTerm)
+      );
+    }
+
+    // Apply pagination
+    const paginatedResults = filteredAirports.slice(offset, offset + limit);
+
+    return res.json({
+      items: paginatedResults,
+      total: filteredAirports.length,
+      query: q,
+      limit,
+      offset
+    });
+
+  } catch (error) {
+    console.error("❌ Admin Airports API error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to fetch airports",
+      message: error.message,
+    });
+  }
+}
+
 // Loyalty API handler
 async function handleLoyaltyAPI(req, res) {
   try {
@@ -578,6 +707,11 @@ async function proxyToAPI(req, res, routeType = "API") {
   // Admin AI Policies API handler
   if (req.originalUrl.startsWith("/api/admin/ai/policies")) {
     return handleAdminAIPoliciesAPI(req, res);
+  }
+
+  // Admin Airports API handler
+  if (req.originalUrl.startsWith("/api/admin/airports")) {
+    return handleAdminAirportsAPI(req, res);
   }
 
   // Special case for frontend health check
