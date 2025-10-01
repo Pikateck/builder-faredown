@@ -347,6 +347,7 @@ app.use("/api/profile", profileRoutes);
 app.use(reviewsRoutes); // Reviews routes (includes both public and admin endpoints)
 app.use("/api/admin/bookings", adminBookingsRoutes);
 app.use("/api/admin/ai", adminAiRoutes);
+app.use("/api/admin/airports", adminAirportsRoutes);
 app.use("/api/db-test", dbTestRoutes);
 app.use(
   "/api/admin/sightseeing",
