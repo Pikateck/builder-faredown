@@ -134,6 +134,51 @@ async function handleCurrencyAPI(req, res) {
   }
 }
 
+// Admin AI Policies API handler
+async function handleAdminAIPoliciesAPI(req, res) {
+  try {
+    console.log("🤖 Admin AI Policies API Request:", req.originalUrl);
+
+    const mockPolicies = [
+      {
+        id: 1,
+        version: "v1.0.0",
+        dsl_yaml: `version: v1.0.0
+global:
+  currency_base: USD
+  exploration_pct: 0.08
+  max_rounds: 3
+  response_budget_ms: 300
+  never_loss: true
+price_rules:
+  flight:
+    min_margin_usd: 6.0
+    max_discount_pct: 0.15
+    hold_minutes: 10
+  hotel:
+    min_margin_usd: 4.0
+    max_discount_pct: 0.20
+    hold_minutes: 15`,
+        active: true,
+        created_at: new Date().toISOString(),
+      },
+    ];
+
+    return res.json({
+      success: true,
+      policies: mockPolicies,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    console.error("❌ Admin AI Policies API error:", error);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to fetch policies",
+      message: error.message,
+    });
+  }
+}
+
 // Loyalty API handler
 async function handleLoyaltyAPI(req, res) {
   try {
@@ -528,6 +573,11 @@ async function proxyToAPI(req, res, routeType = "API") {
   // Currency API handler
   if (req.originalUrl.startsWith("/api/currency")) {
     return handleCurrencyAPI(req, res);
+  }
+
+  // Admin AI Policies API handler
+  if (req.originalUrl.startsWith("/api/admin/ai/policies")) {
+    return handleAdminAIPoliciesAPI(req, res);
   }
 
   // Special case for frontend health check
