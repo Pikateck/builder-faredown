@@ -61,23 +61,23 @@ const rateLimitMiddleware = (req, res, next) => {
   next();
 };
 
-// Mock airport data for development fallback
+// Mock airport data for development fallback - standardized country names
 const mockAirports = [
-  { iata: 'BOM', name: 'Chhatrapati Shivaji Maharaj International', city: 'Mumbai', country: 'India' },
-  { iata: 'DEL', name: 'Indira Gandhi International', city: 'Delhi', country: 'India' },
-  { iata: 'DXB', name: 'Dubai International', city: 'Dubai', country: 'UAE' },
-  { iata: 'LHR', name: 'London Heathrow', city: 'London', country: 'United Kingdom' },
-  { iata: 'JFK', name: 'John F. Kennedy International', city: 'New York', country: 'United States' },
-  { iata: 'SIN', name: 'Singapore Changi', city: 'Singapore', country: 'Singapore' },
-  { iata: 'CDG', name: 'Charles de Gaulle', city: 'Paris', country: 'France' },
-  { iata: 'SYD', name: 'Sydney Kingsford Smith', city: 'Sydney', country: 'Australia' },
-  { iata: 'LAX', name: 'Los Angeles International', city: 'Los Angeles', country: 'United States' },
-  { iata: 'FRA', name: 'Frankfurt am Main', city: 'Frankfurt', country: 'Germany' },
-  { iata: 'BLR', name: 'Kempegowda International', city: 'Bangalore', country: 'India' },
-  { iata: 'MAA', name: 'Chennai International', city: 'Chennai', country: 'India' },
-  { iata: 'CCU', name: 'Netaji Subhas Chandra Bose International', city: 'Kolkata', country: 'India' },
-  { iata: 'HYD', name: 'Rajiv Gandhi International', city: 'Hyderabad', country: 'India' },
-  { iata: 'AMD', name: 'Sardar Vallabhbhai Patel International', city: 'Ahmedabad', country: 'India' },
+  { iata: 'BOM', name: 'Chhatrapati Shivaji Maharaj International', city: 'Mumbai', country: 'India', iso_country: 'IN' },
+  { iata: 'DEL', name: 'Indira Gandhi International', city: 'Delhi', country: 'India', iso_country: 'IN' },
+  { iata: 'DXB', name: 'Dubai International', city: 'Dubai', country: 'United Arab Emirates', iso_country: 'AE' },
+  { iata: 'LHR', name: 'London Heathrow', city: 'London', country: 'United Kingdom', iso_country: 'GB' },
+  { iata: 'JFK', name: 'John F. Kennedy International', city: 'New York', country: 'United States', iso_country: 'US' },
+  { iata: 'SIN', name: 'Singapore Changi', city: 'Singapore', country: 'Singapore', iso_country: 'SG' },
+  { iata: 'CDG', name: 'Charles de Gaulle', city: 'Paris', country: 'France', iso_country: 'FR' },
+  { iata: 'SYD', name: 'Sydney Kingsford Smith', city: 'Sydney', country: 'Australia', iso_country: 'AU' },
+  { iata: 'LAX', name: 'Los Angeles International', city: 'Los Angeles', country: 'United States', iso_country: 'US' },
+  { iata: 'FRA', name: 'Frankfurt am Main', city: 'Frankfurt', country: 'Germany', iso_country: 'DE' },
+  { iata: 'BLR', name: 'Kempegowda International', city: 'Bangalore', country: 'India', iso_country: 'IN' },
+  { iata: 'MAA', name: 'Chennai International', city: 'Chennai', country: 'India', iso_country: 'IN' },
+  { iata: 'CCU', name: 'Netaji Subhas Chandra Bose International', city: 'Kolkata', country: 'India', iso_country: 'IN' },
+  { iata: 'HYD', name: 'Rajiv Gandhi International', city: 'Hyderabad', country: 'India', iso_country: 'IN' },
+  { iata: 'AMD', name: 'Sardar Vallabhbhai Patel International', city: 'Ahmedabad', country: 'India', iso_country: 'IN' },
 ];
 
 /**
@@ -126,18 +126,19 @@ router.get("/", rateLimitMiddleware, async (req, res) => {
           // Check if search_airports function exists, fallback to direct query
           try {
             searchResult = await db.query(
-              'SELECT iata, name, city, country FROM search_airports($1, $2, $3)',
+              'SELECT iata, name, city, country, iso_country FROM search_airports($1, $2, $3)',
               [q, limit, offset]
             );
           } catch (funcError) {
             console.log("📝 search_airports function not found, using direct query");
-            // Fallback to direct table query
+            // Fallback to direct table query with standardized country names
             searchResult = await db.query(
-              `SELECT iata, name, city, country 
-               FROM airport_master 
-               WHERE is_active = true 
+              `SELECT iata, name, city, country,
+                      COALESCE(iso_country, country_code) as iso_country
+               FROM airport_master
+               WHERE is_active = true
                  AND (name ILIKE $1 OR iata ILIKE $1 OR city ILIKE $1 OR country ILIKE $1)
-               ORDER BY 
+               ORDER BY
                  CASE WHEN iata ILIKE $1 THEN 1 ELSE 2 END,
                  name
                LIMIT $2 OFFSET $3`,
@@ -153,15 +154,16 @@ router.get("/", rateLimitMiddleware, async (req, res) => {
             [`%${q}%`]
           );
         } else {
-          // Get all airports (common ones first)
+          // Get all airports (common ones first) with ISO country codes
           searchResult = await db.query(
-            `SELECT iata, name, city, country 
-             FROM airport_master 
-             WHERE is_active = true 
-             ORDER BY 
-               CASE 
-                 WHEN iata IN ('BOM', 'DEL', 'DXB', 'LHR', 'JFK', 'SIN', 'CDG', 'SYD', 'LAX', 'FRA') THEN 1 
-                 ELSE 2 
+            `SELECT iata, name, city, country,
+                    COALESCE(iso_country, country_code) as iso_country
+             FROM airport_master
+             WHERE is_active = true
+             ORDER BY
+               CASE
+                 WHEN iata IN ('BOM', 'DEL', 'DXB', 'LHR', 'JFK', 'SIN', 'CDG', 'SYD', 'LAX', 'FRA') THEN 1
+                 ELSE 2
                END,
                name
              LIMIT $1 OFFSET $2`,
