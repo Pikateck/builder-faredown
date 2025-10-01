@@ -443,7 +443,7 @@ export default function MarkupManagementAir() {
                   origin_iata: value === "ALL" ? null : value,
                   route: {
                     ...formData.route,
-                    from: value === "ALL" ? null : value
+                    from: value === "ALL" ? null : value,
                   },
                 })
               }
@@ -463,7 +463,7 @@ export default function MarkupManagementAir() {
                   dest_iata: value === "ALL" ? null : value,
                   route: {
                     ...formData.route,
-                    to: value === "ALL" ? null : value
+                    to: value === "ALL" ? null : value,
                   },
                 })
               }
@@ -473,7 +473,6 @@ export default function MarkupManagementAir() {
             />
           </div>
         </div>
-
       </div>
 
       {/* Markup Configuration */}
@@ -849,7 +848,9 @@ export default function MarkupManagementAir() {
                   <SelectContent>
                     <SelectItem value="all">All Classes</SelectItem>
                     <SelectItem value="economy">Economy</SelectItem>
-                    <SelectItem value="premium-economy">Premium Economy</SelectItem>
+                    <SelectItem value="premium-economy">
+                      Premium Economy
+                    </SelectItem>
                     <SelectItem value="business">Business</SelectItem>
                     <SelectItem value="first">First Class</SelectItem>
                   </SelectContent>
@@ -910,7 +911,8 @@ export default function MarkupManagementAir() {
                             <div className="space-y-1">
                               <div className="flex items-center text-sm">
                                 <MapPin className="w-3 h-3 mr-1" />
-                                {markup.route.from || "All"} → {markup.route.to || "All"}
+                                {markup.route.from || "All"} →{" "}
+                                {markup.route.to || "All"}
                               </div>
                               <div className="flex items-center text-sm text-gray-600">
                                 <Plane className="w-3 h-3 mr-1" />

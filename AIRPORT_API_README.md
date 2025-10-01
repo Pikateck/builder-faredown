@@ -24,23 +24,26 @@ Search and retrieve airport data for admin forms.
 **Authentication:** Admin JWT token required
 
 **Parameters:**
+
 - `q` (optional): Search query (minimum 2 characters)
-- `limit` (optional): Results limit (default: 50, max: 200) 
+- `limit` (optional): Results limit (default: 50, max: 200)
 - `offset` (optional): Pagination offset (default: 0, must be ≥ 0)
 
 **Example Request:**
+
 ```bash
 curl -H "Authorization: Bearer <admin-token>" \
   "https://your-domain.com/api/admin/airports?q=dub&limit=20&offset=0"
 ```
 
 **Example Response:**
+
 ```json
 {
   "items": [
     {
       "iata": "DXB",
-      "name": "Dubai International", 
+      "name": "Dubai International",
       "city": "Dubai",
       "country": "UAE"
     }
@@ -57,6 +60,7 @@ curl -H "Authorization: Bearer <admin-token>" \
 Health check endpoint for the airport service.
 
 **Example Response:**
+
 ```json
 {
   "status": "ok",
@@ -70,18 +74,19 @@ Health check endpoint for the airport service.
 
 The API reads from the `public.airport_master` table with the following requirements:
 
-- **Table:** `airport_master` 
+- **Table:** `airport_master`
 - **Required columns:** `iata`, `name`, `city`, `country`, `is_active`
 - **Filtering:** Only returns airports where `is_active = true`
 - **Search function:** Attempts to use `search_airports(query, limit, offset)` if available, falls back to direct table queries
 
 **Expected SQL Schema:**
+
 ```sql
 CREATE TABLE airport_master (
   id SERIAL PRIMARY KEY,
   iata VARCHAR(3) UNIQUE NOT NULL,
   name VARCHAR(255) NOT NULL,
-  city VARCHAR(255) NOT NULL, 
+  city VARCHAR(255) NOT NULL,
   country VARCHAR(255) NOT NULL,
   is_active BOOLEAN DEFAULT true,
   created_at TIMESTAMP DEFAULT NOW(),
@@ -100,24 +105,26 @@ CREATE INDEX idx_airport_master_search ON airport_master USING gin(to_tsvector('
 **Location:** `client/components/ui/airport-select.tsx`
 
 **Usage:**
+
 ```tsx
 import { AirportSelect } from "@/components/ui/airport-select";
 
 <AirportSelect
   value={formData.origin || "ALL"}
-  onValueChange={(value) => 
-    setFormData({ 
-      ...formData, 
-      origin: value === "ALL" ? null : value 
+  onValueChange={(value) =>
+    setFormData({
+      ...formData,
+      origin: value === "ALL" ? null : value,
     })
   }
   placeholder="Select origin airport"
   includeAll={true}
   allLabel="All Origins"
-/>
+/>;
 ```
 
 **Props:**
+
 - `value`: Current selected value (IATA code or "ALL")
 - `onValueChange`: Callback when selection changes
 - `placeholder`: Input placeholder text
@@ -138,19 +145,23 @@ import { AirportSelect } from "@/components/ui/airport-select";
 ## Security & Performance
 
 ### Rate Limiting
+
 - **Limit:** 60 requests per minute per IP address
 - **Response:** HTTP 429 with retry-after header when exceeded
 
 ### Input Validation
+
 - **Query length:** Minimum 2 characters if provided
 - **Limit clamping:** Maximum 200 results per request
 - **Offset validation:** Must be non-negative integer
 
 ### Caching
+
 - **Headers:** `Cache-Control: private, max-age=60` on successful responses
 - **Client-side:** 200ms debounced search queries
 
 ### Production Safeguards
+
 - **Mock data:** Disabled in production (`USE_MOCK_AIRPORTS=false`)
 - **Database errors:** Returns HTTP 503 instead of silent fallback
 - **Authentication:** Admin JWT required for all endpoints
@@ -164,6 +175,7 @@ node test-airport-api.cjs
 ```
 
 **Test Coverage:**
+
 - Health check endpoint
 - Search functionality (Dubai, Mumbai, exact IATA)
 - Input validation (minimum query length, limit clamping)

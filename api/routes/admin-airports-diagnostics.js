@@ -70,14 +70,17 @@ router.get("/", async (req, res) => {
             AND table_name = 'airport_master'
           ) as table_exists
         `);
-        diagnostics.database.airportMasterExists = tableCheck.rows[0].table_exists;
+        diagnostics.database.airportMasterExists =
+          tableCheck.rows[0].table_exists;
 
         if (tableCheck.rows[0].table_exists) {
           // Get row count
           const countResult = await db.query(
-            "SELECT COUNT(*) as total FROM airport_master WHERE is_active = true"
+            "SELECT COUNT(*) as total FROM airport_master WHERE is_active = true",
           );
-          diagnostics.database.activeAirportsCount = parseInt(countResult.rows[0].total);
+          diagnostics.database.activeAirportsCount = parseInt(
+            countResult.rows[0].total,
+          );
 
           // Check if search_airports function exists
           const functionCheck = await db.query(`
@@ -87,7 +90,8 @@ router.get("/", async (req, res) => {
               WHERE n.nspname = 'public' AND p.proname = 'search_airports'
             ) as function_exists
           `);
-          diagnostics.database.searchFunctionExists = functionCheck.rows[0].function_exists;
+          diagnostics.database.searchFunctionExists =
+            functionCheck.rows[0].function_exists;
 
           // Run sample search for 'dub'
           try {
@@ -95,7 +99,7 @@ router.get("/", async (req, res) => {
             if (functionCheck.rows[0].function_exists) {
               searchResult = await db.query(
                 "SELECT iata, name, city, country, iso_country FROM search_airports($1, $2, $3)",
-                ["dub", 10, 0]
+                ["dub", 10, 0],
               );
             } else {
               searchResult = await db.query(
@@ -108,7 +112,7 @@ router.get("/", async (req, res) => {
                    CASE WHEN iata ILIKE $1 THEN 1 ELSE 2 END,
                    name
                  LIMIT $2 OFFSET $3`,
-                ["%dub%", 10, 0]
+                ["%dub%", 10, 0],
               );
             }
             diagnostics.sampleData.dublinSearch = {
@@ -125,10 +129,10 @@ router.get("/", async (req, res) => {
           if (functionCheck.rows[0].function_exists) {
             try {
               const explainResult = await db.query(
-                "EXPLAIN ANALYZE SELECT iata, name, city, country FROM search_airports('dub', 50, 0)"
+                "EXPLAIN ANALYZE SELECT iata, name, city, country FROM search_airports('dub', 50, 0)",
               );
               diagnostics.performance.explainAnalyze = explainResult.rows.map(
-                (row) => row["QUERY PLAN"]
+                (row) => row["QUERY PLAN"],
               );
             } catch (explainError) {
               diagnostics.performance.explainAnalyze = {
@@ -150,7 +154,7 @@ router.get("/", async (req, res) => {
                 LIMIT 50 OFFSET 0
               `);
               diagnostics.performance.explainAnalyze = explainResult.rows.map(
-                (row) => row["QUERY PLAN"]
+                (row) => row["QUERY PLAN"],
               );
             } catch (explainError) {
               diagnostics.performance.explainAnalyze = {

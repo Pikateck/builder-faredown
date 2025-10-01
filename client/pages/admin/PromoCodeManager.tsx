@@ -148,7 +148,6 @@ const CABIN_CLASSES = [
   { value: "First", label: "First Class" },
 ];
 
-
 const VEHICLE_TYPES = [
   { value: "ALL", label: "All Vehicles" },
   { value: "sedan", label: "Sedan" },
@@ -670,7 +669,7 @@ export default function PromoCodeManager() {
                   onValueChange={(value) =>
                     setFormData({
                       ...formData,
-                      destination: value === "ALL" ? null : value
+                      destination: value === "ALL" ? null : value,
                     })
                   }
                   placeholder="Select destination airport"

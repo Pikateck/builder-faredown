@@ -179,7 +179,6 @@ price_rules:
   }
 }
 
-
 // Loyalty API handler
 async function handleLoyaltyAPI(req, res) {
   try {
@@ -580,7 +579,6 @@ async function proxyToAPI(req, res, routeType = "API") {
   if (req.originalUrl.startsWith("/api/admin/ai/policies")) {
     return handleAdminAIPoliciesAPI(req, res);
   }
-
 
   // Special case for frontend health check
   if (req.path === "/api/health") {

@@ -3,11 +3,13 @@
 ## Issue Identified
 
 **Current DATABASE_URL in staging environment:**
+
 ```
 postgresql://faredown_user:***@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db
 ```
 
 **Expected hostname mentioned:**
+
 ```
 dpg-d2806mdniese739731t0-a.singapore-postgres.render.com
 ```
@@ -18,6 +20,7 @@ dpg-d2806mdniese739731t0-a.singapore-postgres.render.com
 **Expected:** `dpg-d2806mdniese739731t0-a`
 
 The differences:
+
 - `d2086mn` vs `d2806md` (different instance ID)
 - `diees` vs `niese` (different suffix)
 
@@ -30,6 +33,7 @@ The differences:
 ## Code Confirmation
 
 ✅ **No hard-coded hostnames found** in airport API implementation:
+
 - `api/routes/admin-airports.js` - Uses `process.env.DATABASE_URL`
 - `api/database/connection.js` - Uses `process.env.DATABASE_URL`
 - All database queries use environment-based connection

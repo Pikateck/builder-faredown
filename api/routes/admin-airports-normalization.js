@@ -23,10 +23,14 @@ function normalizeAirportField(value) {
 function normalizeMarkupData(markupData) {
   return {
     ...markupData,
-    origin_iata: normalizeAirportField(markupData.origin_iata || markupData.origin),
-    dest_iata: normalizeAirportField(markupData.dest_iata || markupData.destination),
+    origin_iata: normalizeAirportField(
+      markupData.origin_iata || markupData.origin,
+    ),
+    dest_iata: normalizeAirportField(
+      markupData.dest_iata || markupData.destination,
+    ),
     origin: normalizeAirportField(markupData.origin),
-    destination: normalizeAirportField(markupData.destination)
+    destination: normalizeAirportField(markupData.destination),
   };
 }
 
@@ -39,12 +43,12 @@ function normalizePromoCodeData(promoData) {
   return {
     ...promoData,
     origin: normalizeAirportField(promoData.origin),
-    destination: normalizeAirportField(promoData.destination)
+    destination: normalizeAirportField(promoData.destination),
   };
 }
 
 module.exports = {
   normalizeAirportField,
   normalizeMarkupData,
-  normalizePromoCodeData
+  normalizePromoCodeData,
 };

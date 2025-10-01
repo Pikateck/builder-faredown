@@ -202,7 +202,10 @@ class MarkupService {
       name: row.rule_name || "",
       description: row.description || "",
       airline: row.airline_code || "ALL",
-      route: { from: row.origin_iata || row.route_from || null, to: row.dest_iata || row.route_to || null },
+      route: {
+        from: row.origin_iata || row.route_from || null,
+        to: row.dest_iata || row.route_to || null,
+      },
       origin_iata: row.origin_iata || null,
       dest_iata: row.dest_iata || null,
       class: (row.booking_class || "all").toLowerCase(),
@@ -311,8 +314,10 @@ class MarkupService {
     try {
       const params: Record<string, any> = { module: "hotel" };
       if (filters.search) params.search = filters.search;
-      if (filters.city && filters.city !== "all") params.hotel_city = filters.city;
-      if (filters.status && filters.status !== "all") params.status = filters.status;
+      if (filters.city && filters.city !== "all")
+        params.hotel_city = filters.city;
+      if (filters.status && filters.status !== "all")
+        params.status = filters.status;
       if (filters.page) params.page = filters.page;
       if (filters.limit) params.limit = filters.limit;
 
@@ -423,26 +428,47 @@ class MarkupService {
     try {
       const payload: any = {};
       if (markupData.name !== undefined) payload.rule_name = markupData.name;
-      if (markupData.description !== undefined) payload.description = markupData.description;
-      if (markupData.airline !== undefined) payload.airline_code = markupData.airline;
-      if (markupData.origin_iata !== undefined) payload.origin_iata = markupData.origin_iata;
-      if (markupData.dest_iata !== undefined) payload.dest_iata = markupData.dest_iata;
-      if (markupData.route?.from !== undefined) payload.route_from = markupData.route.from;
-      if (markupData.route?.to !== undefined) payload.route_to = markupData.route.to;
-      if (markupData.class !== undefined) payload.booking_class = markupData.class;
-      if (markupData.markupType !== undefined) payload.m_type = markupData.markupType;
-      if (markupData.markupValue !== undefined) payload.m_value = markupData.markupValue;
-      if (markupData.currentFareMin !== undefined) payload.current_min_pct = markupData.currentFareMin;
-      if (markupData.currentFareMax !== undefined) payload.current_max_pct = markupData.currentFareMax;
-      if (markupData.bargainFareMin !== undefined) payload.bargain_min_pct = markupData.bargainFareMin;
-      if (markupData.bargainFareMax !== undefined) payload.bargain_max_pct = markupData.bargainFareMax;
-      if (markupData.validFrom !== undefined) payload.valid_from = markupData.validFrom;
-      if (markupData.validTo !== undefined) payload.valid_to = markupData.validTo;
-      if (markupData.priority !== undefined) payload.priority = markupData.priority;
-      if (markupData.userType !== undefined) payload.user_type = markupData.userType;
-      if (markupData.status !== undefined) payload.is_active = markupData.status === "active";
+      if (markupData.description !== undefined)
+        payload.description = markupData.description;
+      if (markupData.airline !== undefined)
+        payload.airline_code = markupData.airline;
+      if (markupData.origin_iata !== undefined)
+        payload.origin_iata = markupData.origin_iata;
+      if (markupData.dest_iata !== undefined)
+        payload.dest_iata = markupData.dest_iata;
+      if (markupData.route?.from !== undefined)
+        payload.route_from = markupData.route.from;
+      if (markupData.route?.to !== undefined)
+        payload.route_to = markupData.route.to;
+      if (markupData.class !== undefined)
+        payload.booking_class = markupData.class;
+      if (markupData.markupType !== undefined)
+        payload.m_type = markupData.markupType;
+      if (markupData.markupValue !== undefined)
+        payload.m_value = markupData.markupValue;
+      if (markupData.currentFareMin !== undefined)
+        payload.current_min_pct = markupData.currentFareMin;
+      if (markupData.currentFareMax !== undefined)
+        payload.current_max_pct = markupData.currentFareMax;
+      if (markupData.bargainFareMin !== undefined)
+        payload.bargain_min_pct = markupData.bargainFareMin;
+      if (markupData.bargainFareMax !== undefined)
+        payload.bargain_max_pct = markupData.bargainFareMax;
+      if (markupData.validFrom !== undefined)
+        payload.valid_from = markupData.validFrom;
+      if (markupData.validTo !== undefined)
+        payload.valid_to = markupData.validTo;
+      if (markupData.priority !== undefined)
+        payload.priority = markupData.priority;
+      if (markupData.userType !== undefined)
+        payload.user_type = markupData.userType;
+      if (markupData.status !== undefined)
+        payload.is_active = markupData.status === "active";
 
-      const response: any = await apiClient.put(`${this.baseUrl}/${markupId}`, payload);
+      const response: any = await apiClient.put(
+        `${this.baseUrl}/${markupId}`,
+        payload,
+      );
       if (response && response.success) {
         return this.mapAirRow(response.item);
       }
@@ -463,25 +489,41 @@ class MarkupService {
     try {
       const payload: any = {};
       if (markupData.name !== undefined) payload.rule_name = markupData.name;
-      if (markupData.description !== undefined) payload.description = markupData.description;
+      if (markupData.description !== undefined)
+        payload.description = markupData.description;
       if (markupData.city !== undefined) payload.hotel_city = markupData.city;
       if (markupData.starRating !== undefined) {
         const sr = parseInt(String(markupData.starRating), 10);
-        payload.hotel_star_min = sr; payload.hotel_star_max = sr;
+        payload.hotel_star_min = sr;
+        payload.hotel_star_max = sr;
       }
-      if (markupData.markupType !== undefined) payload.m_type = markupData.markupType;
-      if (markupData.markupValue !== undefined) payload.m_value = markupData.markupValue;
-      if (markupData.currentFareMin !== undefined) payload.current_min_pct = markupData.currentFareMin;
-      if (markupData.currentFareMax !== undefined) payload.current_max_pct = markupData.currentFareMax;
-      if (markupData.bargainFareMin !== undefined) payload.bargain_min_pct = markupData.bargainFareMin;
-      if (markupData.bargainFareMax !== undefined) payload.bargain_max_pct = markupData.bargainFareMax;
-      if (markupData.validFrom !== undefined) payload.valid_from = markupData.validFrom;
-      if (markupData.validTo !== undefined) payload.valid_to = markupData.validTo;
-      if (markupData.priority !== undefined) payload.priority = markupData.priority;
-      if (markupData.userType !== undefined) payload.user_type = markupData.userType;
-      if (markupData.status !== undefined) payload.is_active = markupData.status === "active";
+      if (markupData.markupType !== undefined)
+        payload.m_type = markupData.markupType;
+      if (markupData.markupValue !== undefined)
+        payload.m_value = markupData.markupValue;
+      if (markupData.currentFareMin !== undefined)
+        payload.current_min_pct = markupData.currentFareMin;
+      if (markupData.currentFareMax !== undefined)
+        payload.current_max_pct = markupData.currentFareMax;
+      if (markupData.bargainFareMin !== undefined)
+        payload.bargain_min_pct = markupData.bargainFareMin;
+      if (markupData.bargainFareMax !== undefined)
+        payload.bargain_max_pct = markupData.bargainFareMax;
+      if (markupData.validFrom !== undefined)
+        payload.valid_from = markupData.validFrom;
+      if (markupData.validTo !== undefined)
+        payload.valid_to = markupData.validTo;
+      if (markupData.priority !== undefined)
+        payload.priority = markupData.priority;
+      if (markupData.userType !== undefined)
+        payload.user_type = markupData.userType;
+      if (markupData.status !== undefined)
+        payload.is_active = markupData.status === "active";
 
-      const response: any = await apiClient.put(`${this.baseUrl}/${markupId}`, payload);
+      const response: any = await apiClient.put(
+        `${this.baseUrl}/${markupId}`,
+        payload,
+      );
       if (response && response.success) {
         return this.mapHotelRow(response.item);
       }
@@ -497,7 +539,9 @@ class MarkupService {
    */
   async deleteAirMarkup(markupId: string): Promise<void> {
     try {
-      const response: any = await apiClient.delete(`${this.baseUrl}/${markupId}`);
+      const response: any = await apiClient.delete(
+        `${this.baseUrl}/${markupId}`,
+      );
       if (response && response.success === false) {
         throw new Error(response.error || "Failed to delete air markup");
       }
@@ -512,7 +556,9 @@ class MarkupService {
    */
   async deleteHotelMarkup(markupId: string): Promise<void> {
     try {
-      const response: any = await apiClient.delete(`${this.baseUrl}/${markupId}`);
+      const response: any = await apiClient.delete(
+        `${this.baseUrl}/${markupId}`,
+      );
       if (response && response.success === false) {
         throw new Error(response.error || "Failed to delete hotel markup");
       }
@@ -551,7 +597,9 @@ class MarkupService {
       if (response && response.success) {
         return this.mapHotelRow(response.item);
       }
-      throw new Error(response?.error || "Failed to toggle hotel markup status");
+      throw new Error(
+        response?.error || "Failed to toggle hotel markup status",
+      );
     } catch (error) {
       console.error("Error toggling hotel markup status:", error);
       throw error;
@@ -588,17 +636,26 @@ class MarkupService {
       console.log("🔍 Attempting to calculate markup via API...");
 
       const payload: any = {
-        module: bookingDetails.type === "air" ? "air" : bookingDetails.type === "hotel" ? "hotel" : "sightseeing",
+        module:
+          bookingDetails.type === "air"
+            ? "air"
+            : bookingDetails.type === "hotel"
+              ? "hotel"
+              : "sightseeing",
         base_amount: bookingDetails.basePrice,
       };
       if (bookingDetails.type === "air") {
-        if (bookingDetails.airline) payload.airline_code = bookingDetails.airline;
-        if (bookingDetails.route?.from) payload.route_from = bookingDetails.route.from;
-        if (bookingDetails.route?.to) payload.route_to = bookingDetails.route.to;
+        if (bookingDetails.airline)
+          payload.airline_code = bookingDetails.airline;
+        if (bookingDetails.route?.from)
+          payload.route_from = bookingDetails.route.from;
+        if (bookingDetails.route?.to)
+          payload.route_to = bookingDetails.route.to;
         if (bookingDetails.class) payload.booking_class = bookingDetails.class;
       } else if (bookingDetails.type === "hotel") {
         if (bookingDetails.city) payload.hotel_city = bookingDetails.city;
-        if (bookingDetails.starRating) payload.hotel_star_min = parseInt(bookingDetails.starRating, 10);
+        if (bookingDetails.starRating)
+          payload.hotel_star_min = parseInt(bookingDetails.starRating, 10);
       }
 
       const response: any = await apiClient.post(
@@ -607,7 +664,8 @@ class MarkupService {
       );
 
       if (response && response.success) {
-        const markupAmount = Number(response.final_amount) - Number(response.base_amount);
+        const markupAmount =
+          Number(response.final_amount) - Number(response.base_amount);
         const selectedMarkup = {
           id: String(response.matched_rule_id || ""),
           name: "Applied Markup",
@@ -624,7 +682,9 @@ class MarkupService {
           bargainFareMin: 0,
           bargainFareMax: 0,
           validFrom: new Date().toISOString(),
-          validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          validTo: new Date(
+            Date.now() + 365 * 24 * 60 * 60 * 1000,
+          ).toISOString(),
           status: "active" as const,
           priority: 0,
           userType: "all" as const,

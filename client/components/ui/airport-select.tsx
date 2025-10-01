@@ -76,7 +76,7 @@ export function AirportSelect({
         limit: "50",
         offset: "0",
       });
-      
+
       if (query.trim()) {
         params.append("q", query.trim());
       }
@@ -85,7 +85,7 @@ export function AirportSelect({
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
-      
+
       const data = await response.json();
       setAirports(data.items || []);
     } catch (error) {
@@ -100,7 +100,7 @@ export function AirportSelect({
     if (!value) {
       return placeholder;
     }
-    
+
     if (value === "ALL") {
       return allLabel;
     }
@@ -109,7 +109,7 @@ export function AirportSelect({
     if (airport) {
       return `${airport.name} (${airport.iata})`;
     }
-    
+
     return value; // Fallback to raw value if airport not found
   };
 
@@ -165,7 +165,7 @@ export function AirportSelect({
                     <Check
                       className={cn(
                         "mr-2 h-4 w-4",
-                        value === "ALL" ? "opacity-100" : "opacity-0"
+                        value === "ALL" ? "opacity-100" : "opacity-0",
                       )}
                     />
                     <div>
@@ -176,10 +176,12 @@ export function AirportSelect({
                     </div>
                   </CommandItem>
                 )}
-                
+
                 {airports.length === 0 && !loading ? (
                   <div className="py-6 text-center text-sm text-muted-foreground">
-                    {searchQuery ? "No airports found" : "No airports available"}
+                    {searchQuery
+                      ? "No airports found"
+                      : "No airports available"}
                   </div>
                 ) : (
                   airports.map((airport) => (
@@ -195,7 +197,7 @@ export function AirportSelect({
                       <Check
                         className={cn(
                           "mr-2 h-4 w-4",
-                          value === airport.iata ? "opacity-100" : "opacity-0"
+                          value === airport.iata ? "opacity-100" : "opacity-0",
                         )}
                       />
                       <div>
