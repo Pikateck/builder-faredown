@@ -48,10 +48,12 @@ const rateLimitMiddleware = (req, res, next) => {
   }
   
   if (ipData.count >= RATE_LIMIT_MAX_REQUESTS) {
+    const retryAfterSeconds = Math.ceil((RATE_LIMIT_WINDOW - (now - ipData.firstRequest)) / 1000);
+    res.set('Retry-After', retryAfterSeconds.toString());
     return res.status(429).json({
       error: "Rate limit exceeded",
       message: `Maximum ${RATE_LIMIT_MAX_REQUESTS} requests per minute allowed`,
-      retryAfter: Math.ceil((RATE_LIMIT_WINDOW - (now - ipData.firstRequest)) / 1000)
+      retryAfter: retryAfterSeconds
     });
   }
   
@@ -102,15 +104,13 @@ router.get("/", rateLimitMiddleware, async (req, res) => {
       });
     }
 
-    // Minimum query length validation
+    // Minimum query length validation - return 400 for short queries
     if (q && q.length < AIRPORTS_MIN_QUERY) {
-      return res.status(200).json({
-        items: [],
-        total: 0,
+      return res.status(400).json({
+        error: "Query too short",
+        message: `Query must be at least ${AIRPORTS_MIN_QUERY} characters`,
         query: q,
-        limit,
-        offset,
-        message: `Query must be at least ${AIRPORTS_MIN_QUERY} characters`
+        minLength: AIRPORTS_MIN_QUERY
       });
     }
 
