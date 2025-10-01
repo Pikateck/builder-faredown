@@ -11,10 +11,12 @@ export interface AirMarkup {
   description: string;
   airline: string;
   route: {
-    from: string;
-    to: string;
+    from: string | null;
+    to: string | null;
   };
-  class: "economy" | "business" | "first" | "all";
+  origin_iata: string | null;
+  dest_iata: string | null;
+  class: "economy" | "premium-economy" | "business" | "first" | "all";
   markupType: "percentage" | "fixed";
   markupValue: number;
   minAmount: number;
@@ -73,10 +75,12 @@ export interface CreateAirMarkupRequest {
   description: string;
   airline: string;
   route: {
-    from: string;
-    to: string;
+    from: string | null;
+    to: string | null;
   };
-  class: "economy" | "business" | "first" | "all";
+  origin_iata: string | null;
+  dest_iata: string | null;
+  class: "economy" | "premium-economy" | "business" | "first" | "all";
   markupType: "percentage" | "fixed";
   markupValue: number;
   minAmount: number;
@@ -198,7 +202,9 @@ class MarkupService {
       name: row.rule_name || "",
       description: row.description || "",
       airline: row.airline_code || "ALL",
-      route: { from: row.route_from || "ALL", to: row.route_to || "ALL" },
+      route: { from: row.origin_iata || row.route_from || null, to: row.dest_iata || row.route_to || null },
+      origin_iata: row.origin_iata || null,
+      dest_iata: row.dest_iata || null,
       class: (row.booking_class || "all").toLowerCase(),
       markupType: (row.m_type || "percentage").toLowerCase(),
       markupValue: Number(row.m_value || 0),
@@ -342,6 +348,8 @@ class MarkupService {
         rule_name: markupData.name,
         description: markupData.description,
         airline_code: markupData.airline,
+        origin_iata: markupData.origin_iata,
+        dest_iata: markupData.dest_iata,
         route_from: markupData.route?.from,
         route_to: markupData.route?.to,
         booking_class: markupData.class,
@@ -417,6 +425,8 @@ class MarkupService {
       if (markupData.name !== undefined) payload.rule_name = markupData.name;
       if (markupData.description !== undefined) payload.description = markupData.description;
       if (markupData.airline !== undefined) payload.airline_code = markupData.airline;
+      if (markupData.origin_iata !== undefined) payload.origin_iata = markupData.origin_iata;
+      if (markupData.dest_iata !== undefined) payload.dest_iata = markupData.dest_iata;
       if (markupData.route?.from !== undefined) payload.route_from = markupData.route.from;
       if (markupData.route?.to !== undefined) payload.route_to = markupData.route.to;
       if (markupData.class !== undefined) payload.booking_class = markupData.class;
