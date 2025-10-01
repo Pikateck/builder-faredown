@@ -8,6 +8,10 @@ const router = express.Router();
 const db = require("../database/connection");
 const { authenticateToken, requireAdmin } = require("../middleware/auth");
 
+// Mount diagnostics sub-route
+const diagnosticsRouter = require("./admin-airports-diagnostics");
+router.use("/diagnostics", diagnosticsRouter);
+
 // Environment configuration
 const USE_MOCK_AIRPORTS = process.env.USE_MOCK_AIRPORTS === "true";
 const AIRPORTS_MAX_LIMIT = parseInt(process.env.AIRPORTS_MAX_LIMIT) || 200;
