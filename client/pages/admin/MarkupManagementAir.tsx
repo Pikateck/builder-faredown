@@ -75,7 +75,7 @@ interface AirMarkup {
     from: string;
     to: string;
   };
-  class: "economy" | "business" | "first" | "all";
+  class: "economy" | "premium-economy" | "business" | "first" | "all";
   markupType: "percentage" | "fixed";
   markupValue: number;
   minAmount: number;
@@ -117,6 +117,7 @@ const POPULAR_ROUTES = [
 const CLASS_OPTIONS = [
   { value: "all", label: "All Classes" },
   { value: "economy", label: "Economy" },
+  { value: "premium-economy", label: "Premium Economy" },
   { value: "business", label: "Business" },
   { value: "first", label: "First Class" },
 ];
@@ -850,6 +851,7 @@ export default function MarkupManagementAir() {
                   <SelectContent>
                     <SelectItem value="all">All Classes</SelectItem>
                     <SelectItem value="economy">Economy</SelectItem>
+                    <SelectItem value="premium-economy">Premium Economy</SelectItem>
                     <SelectItem value="business">Business</SelectItem>
                     <SelectItem value="first">First Class</SelectItem>
                   </SelectContent>
