@@ -683,24 +683,18 @@ export default function PromoCodeManager() {
 
               <div>
                 <Label htmlFor="destination">Destination</Label>
-                <Select
-                  value={formData.destination}
+                <AirportSelect
+                  value={formData.destination || "ALL"}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, destination: value })
+                    setFormData({
+                      ...formData,
+                      destination: value === "ALL" ? null : value
+                    })
                   }
-                >
-                  <SelectTrigger>
-                    <SelectValue placeholder="All" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ALL">All</SelectItem>
-                    {CITIES.map((city) => (
-                      <SelectItem key={city} value={city}>
-                        {city}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
+                  placeholder="Select destination airport"
+                  includeAll={true}
+                  allLabel="All Destinations"
+                />
               </div>
             </div>
 
