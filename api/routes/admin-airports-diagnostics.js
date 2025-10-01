@@ -1,6 +1,9 @@
 /**
  * Admin Airports Diagnostics API
  * Provides diagnostic information for staging verification
+ *
+ * SECURITY: Admin-only, rate-limited, env-flag gated
+ * Only enabled in staging with AIRPORTS_DIAGNOSTICS_ENABLED=true
  */
 
 const express = require("express");
@@ -8,15 +11,60 @@ const router = express.Router();
 const db = require("../database/connection");
 const { authenticateToken, requireAdmin } = require("../middleware/auth");
 
-// Apply authentication middleware
+// Environment flag - MUST be explicitly enabled (staging only)
+const DIAGNOSTICS_ENABLED = process.env.AIRPORTS_DIAGNOSTICS_ENABLED === "true";
+
+// Apply authentication middleware (admin JWT required)
 router.use(authenticateToken);
 router.use(requireAdmin);
+
+// Rate limiting for diagnostics (stricter than main API)
+const diagnosticsRateLimitStore = new Map();
+const DIAGNOSTICS_RATE_LIMIT = 10; // 10 requests per minute
+const DIAGNOSTICS_WINDOW = 60000; // 1 minute
+
+const diagnosticsRateLimitMiddleware = (req, res, next) => {
+  const ip = req.ip || req.connection.remoteAddress;
+  const now = Date.now();
+
+  let ipData = diagnosticsRateLimitStore.get(ip);
+
+  if (!ipData || now - ipData.firstRequest > DIAGNOSTICS_WINDOW) {
+    ipData = { count: 1, firstRequest: now };
+    diagnosticsRateLimitStore.set(ip, ipData);
+    return next();
+  }
+
+  ipData.count++;
+
+  if (ipData.count > DIAGNOSTICS_RATE_LIMIT) {
+    const retryAfterSeconds = Math.ceil((DIAGNOSTICS_WINDOW - (now - ipData.firstRequest)) / 1000);
+    res.set('Retry-After', retryAfterSeconds.toString());
+    return res.status(429).json({
+      error: "Rate limit exceeded",
+      message: `Maximum ${DIAGNOSTICS_RATE_LIMIT} diagnostics requests per minute allowed`,
+      retryAfter: retryAfterSeconds
+    });
+  }
+
+  next();
+};
 
 /**
  * GET /api/admin/airports/diagnostics
  * Returns comprehensive diagnostic information for staging verification
+ *
+ * REQUIRES: AIRPORTS_DIAGNOSTICS_ENABLED=true environment variable
+ * Returns 404 if not enabled (production safety)
  */
-router.get("/", async (req, res) => {
+router.get("/", diagnosticsRateLimitMiddleware, async (req, res) => {
+  // Security gate: Return 404 if not explicitly enabled
+  if (!DIAGNOSTICS_ENABLED) {
+    return res.status(404).json({
+      error: "Not Found",
+      message: "Diagnostics endpoint is disabled"
+    });
+  }
   try {
     const diagnostics = {
       timestamp: new Date().toISOString(),
@@ -42,13 +90,15 @@ router.get("/", async (req, res) => {
       },
     };
 
-    // Extract database connection info (redact credentials)
+    // Extract database connection info (credentials fully redacted)
     if (process.env.DATABASE_URL) {
       try {
         const url = new URL(process.env.DATABASE_URL);
         diagnostics.database.host = url.hostname;
         diagnostics.database.port = url.port || "5432";
         diagnostics.database.database = url.pathname.slice(1);
+        // Never expose username or password
+        diagnostics.database.username = "[REDACTED]";
       } catch (err) {
         diagnostics.database.error = "Failed to parse DATABASE_URL";
       }
