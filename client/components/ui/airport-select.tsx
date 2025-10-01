@@ -46,21 +46,24 @@ export function AirportSelect({
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const debounceRef = useRef<NodeJS.Timeout>();
+  const isInitialMount = useRef(true);
 
-  // Load initial airports on mount
+  // Debounced search - only trigger on search query changes
   useEffect(() => {
-    loadAirports("");
-  }, []);
+    // Skip initial mount to prevent double loading
+    if (isInitialMount.current) {
+      isInitialMount.current = false;
+      loadAirports(""); // Load initial airports once
+      return;
+    }
 
-  // Debounced search
-  useEffect(() => {
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
     }
 
     debounceRef.current = setTimeout(() => {
       loadAirports(searchQuery);
-    }, 200);
+    }, 300); // Increased debounce time to reduce flickering
 
     return () => {
       if (debounceRef.current) {
@@ -87,22 +90,21 @@ export function AirportSelect({
       }
 
       const data = await response.json();
+
+      // Batch state update to prevent flickering
       setAirports(data.items || []);
+      setLoading(false);
     } catch (error) {
       console.error("Failed to load airports:", error);
       setAirports([]);
-    } finally {
       setLoading(false);
     }
   };
 
-  const getDisplayValue = () => {
-    if (!value) {
-      return placeholder;
-    }
-
-    if (value === "ALL") {
-      return allLabel;
+  // Memoize display value to prevent unnecessary recalculations
+  const displayValue = React.useMemo(() => {
+    if (!value || value === "ALL") {
+      return value === "ALL" ? allLabel : placeholder;
     }
 
     const airport = airports.find((a) => a.iata === value);
@@ -111,7 +113,7 @@ export function AirportSelect({
     }
 
     return value; // Fallback to raw value if airport not found
-  };
+  }, [value, airports, allLabel, placeholder]);
 
   const formatAirportLabel = (airport: Airport) => {
     return `${airport.name} (${airport.iata})`;
@@ -131,7 +133,7 @@ export function AirportSelect({
           className={cn("w-full justify-between", className)}
           disabled={disabled}
         >
-          <span className="truncate">{getDisplayValue()}</span>
+          <span className="truncate">{displayValue}</span>
           <ChevronDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
         </Button>
       </PopoverTrigger>
@@ -158,6 +160,7 @@ export function AirportSelect({
                     value="ALL"
                     onSelect={() => {
                       onValueChange?.("ALL");
+                      setSearchQuery(""); // Reset search
                       setOpen(false);
                     }}
                     className="cursor-pointer"
@@ -190,6 +193,7 @@ export function AirportSelect({
                       value={airport.iata}
                       onSelect={() => {
                         onValueChange?.(airport.iata);
+                        setSearchQuery(""); // Reset search
                         setOpen(false);
                       }}
                       className="cursor-pointer"
