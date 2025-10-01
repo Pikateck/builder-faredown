@@ -41,6 +41,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { AirportSelect } from "@/components/ui/airport-select";
 import {
   Ticket,
   Plus,
@@ -95,8 +96,8 @@ interface PromoCode {
   status: "pending" | "active";
 
   // Flight-specific fields
-  origin?: string;
-  destination?: string;
+  origin?: string | null;
+  destination?: string | null;
   carrierCode?: string;
   cabinClass?: string;
   flightBy?: string;
@@ -236,8 +237,8 @@ const mockPromoCodes: PromoCode[] = [
     promoCodeImage: "",
     displayOnHomePage: "no",
     status: "active",
-    origin: "ALL",
-    destination: "ALL",
+    origin: null,
+    destination: null,
     carrierCode: "ALL",
     cabinClass: "ALL",
     flightBy: "",
@@ -424,8 +425,8 @@ export default function PromoCodeManager() {
       displayOnHomePage: "yes",
       status: "pending",
       // Flight fields
-      origin: "ALL",
-      destination: "ALL",
+      origin: null,
+      destination: null,
       carrierCode: "ALL",
       cabinClass: "ALL",
       flightBy: "",
