@@ -7,11 +7,13 @@ The diagnostics endpoint provides comprehensive verification data for the airpor
 ## Security Requirements
 
 ### Authentication
+
 - **Admin JWT required** - Must have valid admin token
 - **Role check** - Must have admin privileges
 - **Rate limited** - Maximum 10 requests per minute (stricter than main API)
 
 ### Environment Gating
+
 ```bash
 # Staging only - MUST be explicitly enabled
 AIRPORTS_DIAGNOSTICS_ENABLED=true
@@ -21,10 +23,12 @@ AIRPORTS_DIAGNOSTICS_ENABLED=false
 ```
 
 **Behavior:**
+
 - When `false` or unset: Returns HTTP 404 "Diagnostics endpoint is disabled"
 - When `true`: Returns diagnostic data (admin-only, rate-limited)
 
 ### Data Security
+
 - **No credentials exposed** - Database username/password redacted
 - **No JWT secrets** - Authentication tokens not included
 - **No API keys** - Third-party keys not exposed
@@ -36,6 +40,7 @@ AIRPORTS_DIAGNOSTICS_ENABLED=false
 **Method:** `GET`
 
 **Headers:**
+
 ```http
 Authorization: Bearer <admin-jwt-token>
 ```
@@ -121,6 +126,7 @@ curl -H "Authorization: Bearer <admin-token>" \
 ### Error Responses
 
 **404 - Disabled:**
+
 ```json
 {
   "error": "Not Found",
@@ -129,6 +135,7 @@ curl -H "Authorization: Bearer <admin-token>" \
 ```
 
 **429 - Rate Limited:**
+
 ```http
 HTTP/1.1 429 Too Many Requests
 Retry-After: 45
@@ -141,6 +148,7 @@ Retry-After: 45
 ```
 
 **401 - Unauthorized:**
+
 ```json
 {
   "error": "Unauthorized",
@@ -149,6 +157,7 @@ Retry-After: 45
 ```
 
 **403 - Forbidden:**
+
 ```json
 {
   "error": "Forbidden",
@@ -159,6 +168,7 @@ Retry-After: 45
 ## Deployment Checklist
 
 ### Staging Deployment
+
 - [ ] Set `AIRPORTS_DIAGNOSTICS_ENABLED=true`
 - [ ] Deploy code
 - [ ] Verify endpoint returns diagnostics data
@@ -166,12 +176,14 @@ Retry-After: 45
 - [ ] Capture evidence for sign-off
 
 ### Production Deployment
+
 - [ ] Set `AIRPORTS_DIAGNOSTICS_ENABLED=false` (or leave unset)
 - [ ] Deploy code
 - [ ] Verify endpoint returns 404
 - [ ] Confirm no diagnostic data exposed
 
 ### Post Sign-Off Cleanup
+
 - [ ] Set `AIRPORTS_DIAGNOSTICS_ENABLED=false` on staging
 - [ ] Keep endpoint code in place (for future debugging)
 - [ ] Keep test suite and README

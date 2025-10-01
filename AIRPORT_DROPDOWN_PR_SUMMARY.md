@@ -11,17 +11,20 @@ Complete implementation of airport dropdown for admin markup and promo code mana
 ## Files Changed
 
 ### API Implementation
+
 - ✅ `api/routes/admin-airports.js` - Main airport API route
 - ✅ `api/routes/admin-airports-diagnostics.js` - Diagnostics endpoint (staging-only)
 - ✅ `api/routes/admin-airports-normalization.js` - Server-side field normalization
 - ✅ `api/server.js` - Route registration
 
 ### Frontend Components
+
 - ✅ `client/components/ui/airport-select.tsx` - Reusable airport dropdown component
 - ✅ `client/pages/admin/MarkupManagementAir.tsx` - Airport integration in markup
 - ✅ `client/pages/admin/PromoCodeManager.tsx` - Airport integration in promo codes
 
 ### Configuration
+
 - ✅ `.env.production` - DATABASE_URL hostname fix
 - ✅ Environment variables added:
   - `USE_MOCK_AIRPORTS=false`
@@ -30,12 +33,14 @@ Complete implementation of airport dropdown for admin markup and promo code mana
   - `AIRPORTS_DIAGNOSTICS_ENABLED=true` (staging only)
 
 ### Documentation
+
 - ✅ `AIRPORT_API_README.md` - Main API documentation
 - ✅ `AIRPORT_DIAGNOSTICS_README.md` - Diagnostics endpoint guide
 - ✅ `STAGING_VERIFICATION_CHECKLIST.md` - Manual testing guide
 - ✅ `DATABASE_HOST_VERIFICATION.md` - DB hostname fix documentation
 
 ### Testing
+
 - ✅ `test-airport-api.cjs` - Integration test suite
 
 ## Commit History
@@ -63,11 +68,13 @@ f1039f33 - Remove airport handler from dev-server.js
 ## Security Requirements ✅
 
 ### Authentication
+
 - ✅ Admin JWT required (`authenticateToken` middleware)
 - ✅ Admin role check (`requireAdmin` middleware)
 - ✅ Rate limiting: 60 requests/minute (main API), 10 requests/minute (diagnostics)
 
 ### Environment Gating
+
 ```bash
 # Diagnostics endpoint - staging only
 AIRPORTS_DIAGNOSTICS_ENABLED=true   # staging
@@ -75,10 +82,12 @@ AIRPORTS_DIAGNOSTICS_ENABLED=false  # production (default)
 ```
 
 **Behavior:**
+
 - When `false` or unset → Returns HTTP 404
 - When `true` → Returns diagnostic data (admin-only, rate-limited)
 
 ### Data Security
+
 - ✅ No credentials exposed (username/password redacted)
 - ✅ No JWT secrets in output
 - ✅ No API keys exposed
@@ -89,6 +98,7 @@ AIRPORTS_DIAGNOSTICS_ENABLED=false  # production (default)
 ### Main Endpoint: `/api/admin/airports`
 
 **Features:**
+
 - ✅ Search by IATA code, city, country, airport name
 - ✅ Country normalization (full names + ISO codes)
 - ✅ Pagination with limit clamping (max 200)
@@ -99,6 +109,7 @@ AIRPORTS_DIAGNOSTICS_ENABLED=false  # production (default)
 - ✅ Graceful degradation (503 on DB failure)
 
 **Sample Response:**
+
 ```json
 {
   "items": [
@@ -120,6 +131,7 @@ AIRPORTS_DIAGNOSTICS_ENABLED=false  # production (default)
 ### Diagnostics Endpoint: `/api/admin/airports/diagnostics`
 
 **Features:**
+
 - ✅ Admin-only with stricter rate limiting
 - ✅ Environment flag gating (staging only)
 - ✅ Returns DB connection info (credentials redacted)
@@ -134,6 +146,7 @@ AIRPORTS_DIAGNOSTICS_ENABLED=false  # production (default)
 ### AirportSelect Component
 
 **Features:**
+
 - ✅ Searchable dropdown with debouncing
 - ✅ "All" option support
 - ✅ Real-time search (300ms debounce)
@@ -143,13 +156,14 @@ AIRPORTS_DIAGNOSTICS_ENABLED=false  # production (default)
 - ✅ No flickering (optimized state management)
 
 **Usage:**
+
 ```tsx
 <AirportSelect
   value={formData.origin || "ALL"}
-  onValueChange={(value) => 
-    setFormData({ 
-      ...formData, 
-      origin: value === "ALL" ? null : value 
+  onValueChange={(value) =>
+    setFormData({
+      ...formData,
+      origin: value === "ALL" ? null : value,
     })
   }
   includeAll={true}
@@ -160,10 +174,12 @@ AIRPORTS_DIAGNOSTICS_ENABLED=false  # production (default)
 ### Persistence Semantics
 
 **Markup Management (`origin_iata`, `dest_iata`):**
+
 - "All" → `NULL`
 - Specific airport → IATA code (e.g., "BOM", "DXB")
 
 **Promo Codes (`origin`, `destination`):**
+
 - "All" → `NULL`
 - Specific airport → IATA code
 
@@ -172,6 +188,7 @@ AIRPORTS_DIAGNOSTICS_ENABLED=false  # production (default)
 ## Database
 
 **Current Configuration:**
+
 ```
 Host: dpg-d2806mdniese739731t0-a.singapore-postgres.render.com
 Port: 5432
@@ -181,15 +198,18 @@ Database: faredown_booking_db
 **Fixed:** DATABASE_URL hostname corrected from `dpg-d2086mndiees...` to `dpg-d2806mdniese...`
 
 **Tables Used:**
+
 - `airport_master` - Main airport data
 - `search_airports(query, limit, offset)` - Optimized search function (optional)
 
 ## Testing
 
 ### Automated Tests
+
 Run: `node test-airport-api.cjs`
 
 **Coverage:**
+
 - ✅ Authentication required
 - ✅ Rate limiting enforcement
 - ✅ Input validation (min query, limit clamping, offset validation)
@@ -197,9 +217,11 @@ Run: `node test-airport-api.cjs`
 - ✅ Error handling
 
 ### Manual Verification Checklist
+
 See: `STAGING_VERIFICATION_CHECKLIST.md`
 
 **Tests:**
+
 1. Effective DB host verification
 2. Live API sample with country normalization
 3. 429 rate limit response with `Retry-After` header
@@ -212,6 +234,7 @@ See: `STAGING_VERIFICATION_CHECKLIST.md`
 ### Staging Deployment
 
 1. **Set environment variables:**
+
    ```bash
    USE_MOCK_AIRPORTS=false
    AIRPORTS_MAX_LIMIT=200
@@ -223,6 +246,7 @@ See: `STAGING_VERIFICATION_CHECKLIST.md`
 2. **Deploy commits to staging**
 
 3. **Run diagnostics endpoint:**
+
    ```bash
    curl -H "Authorization: Bearer <admin-token>" \
      "https://staging.example.com/api/admin/airports/diagnostics"
@@ -239,6 +263,7 @@ See: `STAGING_VERIFICATION_CHECKLIST.md`
 ### Production Deployment
 
 1. **Set environment variables:**
+
    ```bash
    USE_MOCK_AIRPORTS=false
    AIRPORTS_MAX_LIMIT=200
@@ -259,6 +284,7 @@ See: `STAGING_VERIFICATION_CHECKLIST.md`
 ### Post Sign-Off Cleanup
 
 1. **Disable diagnostics on staging:**
+
    ```bash
    AIRPORTS_DIAGNOSTICS_ENABLED=false
    ```

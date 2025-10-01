@@ -38,12 +38,14 @@ const diagnosticsRateLimitMiddleware = (req, res, next) => {
   ipData.count++;
 
   if (ipData.count > DIAGNOSTICS_RATE_LIMIT) {
-    const retryAfterSeconds = Math.ceil((DIAGNOSTICS_WINDOW - (now - ipData.firstRequest)) / 1000);
-    res.set('Retry-After', retryAfterSeconds.toString());
+    const retryAfterSeconds = Math.ceil(
+      (DIAGNOSTICS_WINDOW - (now - ipData.firstRequest)) / 1000,
+    );
+    res.set("Retry-After", retryAfterSeconds.toString());
     return res.status(429).json({
       error: "Rate limit exceeded",
       message: `Maximum ${DIAGNOSTICS_RATE_LIMIT} diagnostics requests per minute allowed`,
-      retryAfter: retryAfterSeconds
+      retryAfter: retryAfterSeconds,
     });
   }
 
@@ -62,7 +64,7 @@ router.get("/", diagnosticsRateLimitMiddleware, async (req, res) => {
   if (!DIAGNOSTICS_ENABLED) {
     return res.status(404).json({
       error: "Not Found",
-      message: "Diagnostics endpoint is disabled"
+      message: "Diagnostics endpoint is disabled",
     });
   }
   try {
