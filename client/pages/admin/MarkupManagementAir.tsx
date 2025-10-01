@@ -41,6 +41,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { AirportSelect } from "@/components/ui/airport-select";
 import {
   Plane,
   Plus,
@@ -72,9 +73,12 @@ interface AirMarkup {
   description: string;
   airline: string;
   route: {
-    from: string;
-    to: string;
+    from: string | null;
+    to: string | null;
   };
+  // New database fields
+  origin_iata: string | null;
+  dest_iata: string | null;
   class: "economy" | "premium-economy" | "business" | "first" | "all";
   markupType: "percentage" | "fixed";
   markupValue: number;
@@ -235,7 +239,9 @@ export default function MarkupManagementAir() {
       name: "",
       description: "",
       airline: "",
-      route: { from: "", to: "" },
+      route: { from: null, to: null },
+      origin_iata: null,
+      dest_iata: null,
       class: "economy",
       markupType: "percentage",
       markupValue: 5.0, // Default with decimal precision
@@ -425,31 +431,41 @@ export default function MarkupManagementAir() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <Label htmlFor="from">From (Origin)</Label>
-            <Input
-              id="from"
-              value={formData.route?.from || ""}
-              onChange={(e) =>
+            <AirportSelect
+              value={formData.origin_iata || "ALL"}
+              onValueChange={(value) =>
                 setFormData({
                   ...formData,
-                  route: { ...formData.route, from: e.target.value },
+                  origin_iata: value === "ALL" ? null : value,
+                  route: {
+                    ...formData.route,
+                    from: value === "ALL" ? null : value
+                  },
                 })
               }
-              placeholder="Airport code (e.g., BOM)"
+              placeholder="Select origin airport"
+              includeAll={true}
+              allLabel="All Origins"
             />
           </div>
 
           <div>
             <Label htmlFor="to">To (Destination)</Label>
-            <Input
-              id="to"
-              value={formData.route?.to || ""}
-              onChange={(e) =>
+            <AirportSelect
+              value={formData.dest_iata || "ALL"}
+              onValueChange={(value) =>
                 setFormData({
                   ...formData,
-                  route: { ...formData.route, to: e.target.value },
+                  dest_iata: value === "ALL" ? null : value,
+                  route: {
+                    ...formData.route,
+                    to: value === "ALL" ? null : value
+                  },
                 })
               }
-              placeholder="Airport code (e.g., DXB)"
+              placeholder="Select destination airport"
+              includeAll={true}
+              allLabel="All Destinations"
             />
           </div>
         </div>
@@ -912,7 +928,7 @@ export default function MarkupManagementAir() {
                             <div className="space-y-1">
                               <div className="flex items-center text-sm">
                                 <MapPin className="w-3 h-3 mr-1" />
-                                {markup.route.from} → {markup.route.to}
+                                {markup.route.from || "All"} → {markup.route.to || "All"}
                               </div>
                               <div className="flex items-center text-sm text-gray-600">
                                 <Plane className="w-3 h-3 mr-1" />
