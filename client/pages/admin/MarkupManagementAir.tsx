@@ -134,6 +134,8 @@ const mockMarkups: AirMarkup[] = [
     description: "Standard markup for Mumbai to Dubai economy flights",
     airline: "EK",
     route: { from: "BOM", to: "DXB" },
+    origin_iata: "BOM",
+    dest_iata: "DXB",
     class: "economy",
     markupType: "percentage",
     markupValue: 5.5,
@@ -154,6 +156,8 @@ const mockMarkups: AirMarkup[] = [
     description: "Premium markup for Delhi to London business class",
     airline: "BA",
     route: { from: "DEL", to: "LHR" },
+    origin_iata: "DEL",
+    dest_iata: "LHR",
     class: "business",
     markupType: "fixed",
     markupValue: 15000,
@@ -470,28 +474,6 @@ export default function MarkupManagementAir() {
           </div>
         </div>
 
-        {/* Quick Route Selection */}
-        <div>
-          <Label>Popular Routes (Quick Select)</Label>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-2">
-            {POPULAR_ROUTES.map((route) => (
-              <Button
-                key={`${route.from}-${route.to}`}
-                variant="outline"
-                size="sm"
-                onClick={() =>
-                  setFormData({
-                    ...formData,
-                    route: { from: route.from, to: route.to },
-                  })
-                }
-                className="text-xs"
-              >
-                {route.route}
-              </Button>
-            ))}
-          </div>
-        </div>
       </div>
 
       {/* Markup Configuration */}
