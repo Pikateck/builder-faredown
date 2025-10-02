@@ -1,141 +1,83 @@
-/**
- * Fix the search function to work with the current schema
- */
-
-const { Pool } = require("pg");
+const { Pool } = require('pg');
 
 const pool = new Pool({
-  connectionString: "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db",
-  ssl: { rejectUnauthorized: false },
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false }
 });
 
-async function fixSearchFunction() {
-  console.log("🔧 Fixing search function to work with current schema...");
+async function fixFunction() {
+  const client = await pool.connect();
   
   try {
-    // Drop the existing function
-    await pool.query(`DROP FUNCTION IF EXISTS search_destinations(text, int, text[], boolean)`);
+    console.log('🔧 Dropping old search function...');
+    await client.query('DROP FUNCTION IF EXISTS search_airports(TEXT, INTEGER, INTEGER)');
     
-    // Create a simplified search function that works with the materialized view
-    await pool.query(`
-      CREATE OR REPLACE FUNCTION search_destinations(
-        query_text TEXT,
-        result_limit INT DEFAULT 20,
-        types_filter TEXT[] DEFAULT ARRAY['city', 'country', 'region'],
-        only_active BOOLEAN DEFAULT true
+    console.log('🔍 Creating new search function...');
+    await client.query(`
+      CREATE FUNCTION search_airports(
+        search_query TEXT,
+        result_limit INTEGER DEFAULT 50,
+        result_offset INTEGER DEFAULT 0
       )
       RETURNS TABLE (
-        type TEXT,
-        entity_id UUID,
-        label TEXT,
-        label_with_country TEXT,
+        iata VARCHAR(3),
+        name TEXT,
+        city TEXT,
         country TEXT,
-        region TEXT,
-        code TEXT,
-        score FLOAT,
-        source TEXT
-      ) 
-      LANGUAGE plpgsql AS $$
-      DECLARE
-        normalized_query TEXT;
-        alias_matches TEXT[];
+        iso_country VARCHAR(2)
+      ) AS $$
       BEGIN
-        -- Normalize query
-        normalized_query := LOWER(TRIM(unaccent(query_text)));
-        
-        -- Step 1: Find matching aliases
-        SELECT ARRAY_AGG(DISTINCT LOWER(alias))
-        INTO alias_matches
-        FROM destination_aliases da
-        WHERE LOWER(unaccent(da.alias)) LIKE '%' || normalized_query || '%'
-          AND da.is_active = true;
-        
-        -- Step 2: Return results from materialized view
         RETURN QUERY
         SELECT 
-          mv.type,
-          mv.entity_id,
-          mv.label,
-          mv.label_with_country,
-          mv.country,
-          mv.region,
-          mv.code,
-          CASE
-            -- Exact match
-            WHEN LOWER(unaccent(mv.label)) = normalized_query THEN 1.0
-            -- Prefix match
-            WHEN LOWER(unaccent(mv.label)) LIKE normalized_query || '%' THEN 0.9
-            -- Contains match
-            WHEN LOWER(unaccent(mv.label)) LIKE '%' || normalized_query || '%' THEN 0.7
-            -- Label with country match
-            WHEN LOWER(unaccent(COALESCE(mv.label_with_country, mv.label))) LIKE '%' || normalized_query || '%' THEN 0.6
-            -- Code match
-            WHEN LOWER(unaccent(mv.code)) LIKE '%' || normalized_query || '%' THEN 0.8
-            -- Fuzzy match
-            ELSE GREATEST(
-              similarity(LOWER(unaccent(mv.label)), normalized_query) * 0.6,
-              similarity(LOWER(unaccent(COALESCE(mv.label_with_country, mv.label))), normalized_query) * 0.4
-            )
-          END AS score,
-          CASE
-            WHEN alias_matches IS NOT NULL AND ARRAY_LENGTH(alias_matches, 1) > 0 THEN 'alias'
-            ELSE 'direct'
-          END AS source
-        FROM destinations_search_mv mv
-        WHERE 
-          (NOT only_active OR mv.is_active = true)
-          AND mv.type = ANY(types_filter)
+          a.iata::VARCHAR(3),
+          a.name,
+          COALESCE(a.city, '')::TEXT,
+          COALESCE(a.country, '')::TEXT,
+          COALESCE(a.iso_country, '')::VARCHAR(2)
+        FROM airport_master a
+        WHERE a.is_active = true
           AND (
-            -- Direct text match
-            LOWER(unaccent(mv.label)) LIKE '%' || normalized_query || '%'
-            OR LOWER(unaccent(COALESCE(mv.label_with_country, mv.label))) LIKE '%' || normalized_query || '%'
-            OR LOWER(unaccent(mv.code)) LIKE '%' || normalized_query || '%'
-            -- Fuzzy match
-            OR similarity(LOWER(unaccent(mv.label)), normalized_query) > 0.25
-            OR similarity(LOWER(unaccent(COALESCE(mv.label_with_country, mv.label))), normalized_query) > 0.25
+            a.name ILIKE '%' || search_query || '%'
+            OR a.iata ILIKE '%' || search_query || '%'
+            OR COALESCE(a.city, '') ILIKE '%' || search_query || '%'
+            OR COALESCE(a.country, '') ILIKE '%' || search_query || '%'
           )
         ORDER BY 
-          score DESC,
-          CASE mv.type 
-            WHEN 'city' THEN 1 
-            WHEN 'country' THEN 2 
-            WHEN 'region' THEN 3 
+          CASE 
+            WHEN a.iata ILIKE search_query THEN 1
+            WHEN a.iata ILIKE search_query || '%' THEN 2
+            WHEN a.city ILIKE search_query || '%' THEN 3
+            ELSE 4
           END,
-          mv.sort_order ASC,
-          mv.label ASC
-        LIMIT result_limit;
-      END $$;
+          a.name
+        LIMIT result_limit
+        OFFSET result_offset;
+      END;
+      $$ LANGUAGE plpgsql;
     `);
     
-    console.log("✅ Search function updated successfully");
+    console.log('✅ Search function created successfully');
     
-    // Test the function
-    console.log("\n🧪 Testing search function...");
-    const testQueries = ['dubai', 'paris', 'europe', 'dxb'];
+    // Test searches
+    console.log('\n🧪 Testing searches:');
     
-    for (const testQuery of testQueries) {
-      try {
-        const result = await pool.query(`
-          SELECT type, label, score, source 
-          FROM search_destinations($1, 5) 
-        `, [testQuery]);
-        
-        console.log(`   "${testQuery}": ${result.rows.length} results`);
-        result.rows.forEach(row => {
-          console.log(`      ${row.type}: ${row.label} (score: ${row.score})`);
-        });
-      } catch (error) {
-        console.log(`   "${testQuery}": Error - ${error.message}`);
-      }
+    const tests = ['dub', 'mum', 'United Arab'];
+    for (const query of tests) {
+      const result = await client.query("SELECT * FROM search_airports($1, 3, 0)", [query]);
+      console.log(`\n   Search "${query}" (${result.rows.length} results):`);
+      result.rows.forEach(row => {
+        console.log(`      ${row.iata}: ${row.name}, ${row.city}, ${row.country} (${row.iso_country})`);
+      });
     }
     
-    console.log("\n🎉 Search function fixed and tested!");
+    console.log('\n✅ Airport search is working! The API should work now.');
     
   } catch (error) {
-    console.error("❌ Failed to fix search function:", error.message);
+    console.error('❌ Error:', error.message);
   } finally {
+    client.release();
     await pool.end();
   }
 }
 
-fixSearchFunction().catch(console.error);
+fixFunction().catch(console.error);
