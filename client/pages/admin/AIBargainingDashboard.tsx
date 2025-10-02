@@ -76,6 +76,18 @@ const AIBargainingDashboard: React.FC = () => {
   const [liveData, setLiveData] = useState<any>(null);
   const [autoRefresh, setAutoRefresh] = useState(true);
 
+  // Helper function to get authenticated headers
+  const getAuthHeaders = (): HeadersInit => {
+    const token = localStorage.getItem("auth_token");
+    const headers: HeadersInit = {
+      "Content-Type": "application/json",
+    };
+    if (token) {
+      headers["Authorization"] = `Bearer ${token}`;
+    }
+    return headers;
+  };
+
   // Policy editor
   const [policyYaml, setPolicyYaml] = useState("");
   const [policyValidation, setPolicyValidation] = useState<any>(null);
