@@ -58,7 +58,9 @@ export default function AdminLogin() {
         candidates.unshift(decoded);
       }
     } catch (err) {
-      console.warn("Redirect decode failed", err);
+      if (!import.meta.env.PROD) {
+        console.warn("Redirect decode failed", err);
+      }
     }
 
     const resolved = candidates.find((candidate) => candidate.startsWith("/"));
