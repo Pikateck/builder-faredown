@@ -27,7 +27,11 @@ import {
   CheckCircle,
   LogIn,
 } from "lucide-react";
-import { adminAuthService, DEPARTMENTS } from "@/services/adminAuthService";
+import {
+  adminAuthService,
+  DEPARTMENTS,
+  type AdminLoginRequest,
+} from "@/services/adminAuthService";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
