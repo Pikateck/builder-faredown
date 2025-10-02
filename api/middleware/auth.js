@@ -297,9 +297,13 @@ const requireAdmin = (req, res, next) => {
     ROLES.SUPPORT,
     ROLES.ACCOUNTS,
     ROLES.MARKETING,
+    "super_admin", // Support string format from mock tokens
+    "admin",
+    "sales_manager",
   ];
 
   if (!adminRoles.includes(req.user.role)) {
+    console.warn("⚠️ User role not in admin roles:", req.user.role);
     return res.status(403).json({
       error: "Access denied",
       message: "Admin privileges required",
