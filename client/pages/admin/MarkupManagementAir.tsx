@@ -240,34 +240,71 @@ export default function MarkupManagementAir() {
   // Use server-filtered markups directly
   const filteredMarkups = markups;
 
-  const handleCreateMarkup = () => {
-    setFormData({
-      name: "",
-      description: "",
-      airline: "",
-      route: { from: null, to: null },
-      origin_iata: null,
-      dest_iata: null,
-      class: "economy",
-      markupType: "percentage",
-      markupValue: 5.0, // Default with decimal precision
-      minAmount: 100,
-      maxAmount: 5000,
-      // Current Fare Range defaults
-      currentFareMin: 10.0, // 10% minimum markup for user-visible fare
-      currentFareMax: 15.0, // 15% maximum markup for user-visible fare
-      // Bargain Fare Range defaults
-      bargainFareMin: 5.0, // 5% minimum acceptable bargain
-      bargainFareMax: 15.0, // 15% maximum acceptable bargain
-      validFrom: "",
-      validTo: "",
-      status: "active",
-      priority: 1,
-      userType: "all",
-      specialConditions: "",
-    });
-    setIsCreateDialogOpen(true);
-  };
+  const handleCreateMarkup = useCallback(
+    (overrides: Partial<AirMarkup> = {}) => {
+      const normalizeIata = (code: string | null | undefined) => {
+        if (!code) {
+          return null;
+        }
+
+        const trimmed = code.trim();
+        if (!trimmed) {
+          return null;
+        }
+
+        return trimmed.slice(0, 3).toUpperCase();
+      };
+
+      const originCode = normalizeIata(
+        overrides.origin_iata ?? overrides.route?.from ?? null,
+      );
+      const destinationCode = normalizeIata(
+        overrides.dest_iata ?? overrides.route?.to ?? null,
+      );
+
+      const baseData: Partial<AirMarkup> = {
+        name: "",
+        description: "",
+        airline: "",
+        route: { from: originCode, to: destinationCode },
+        origin_iata: originCode,
+        dest_iata: destinationCode,
+        class: "economy",
+        markupType: "percentage",
+        markupValue: 5.0, // Default with decimal precision
+        minAmount: 100,
+        maxAmount: 5000,
+        // Current Fare Range defaults
+        currentFareMin: 10.0, // 10% minimum markup for user-visible fare
+        currentFareMax: 15.0, // 15% maximum markup for user-visible fare
+        // Bargain Fare Range defaults
+        bargainFareMin: 5.0, // 5% minimum acceptable bargain
+        bargainFareMax: 15.0, // 15% maximum acceptable bargain
+        validFrom: "",
+        validTo: "",
+        status: "active",
+        priority: 1,
+        userType: "all",
+        specialConditions: "",
+      };
+
+      const mergedData: Partial<AirMarkup> = {
+        ...baseData,
+        ...overrides,
+        origin_iata: originCode,
+        dest_iata: destinationCode,
+        route: {
+          from: originCode,
+          to: destinationCode,
+        },
+      };
+
+      setSelectedMarkup(null);
+      setFormData(mergedData);
+      setIsCreateDialogOpen(true);
+    },
+    [setFormData, setIsCreateDialogOpen, setSelectedMarkup],
+  );
 
   const handleEditMarkup = (markup: AirMarkup) => {
     setSelectedMarkup(markup);
