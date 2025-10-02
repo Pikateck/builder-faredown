@@ -85,7 +85,7 @@ export function AirportSelect({
       }
 
       // Get auth token from localStorage
-      const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+      const token = localStorage.getItem("auth_token");
 
       const headers: HeadersInit = {
         "Content-Type": "application/json",
