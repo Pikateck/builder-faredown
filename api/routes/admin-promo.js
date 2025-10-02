@@ -339,7 +339,7 @@ router.get("/stats", requireAdmin, async (req, res) => {
  * @desc Create new promo code
  * @access Admin
  */
-router.post("/", requireAdmin, audit.adminAction, async (req, res) => {
+router.post("/", requireAdmin, auditLog("create_promo"), async (req, res) => {
   try {
     const {
       code,
