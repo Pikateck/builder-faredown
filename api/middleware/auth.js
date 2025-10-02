@@ -7,6 +7,8 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const JWT_SECRET = process.env.JWT_SECRET || "faredown-secret-key-2025";
+const ADMIN_JWT_SECRET =
+  process.env.ADMIN_JWT_SECRET || "your-super-secret-admin-jwt-key";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
 // User roles and permissions
@@ -214,26 +216,60 @@ const generateToken = (user) => {
 /**
  * Verify JWT token
  */
-const verifyToken = (token) => {
+const verifyToken = (token = "") => {
   // Allow mock tokens in development/demo mode
-  if (token.startsWith("mock-token-")) {
-    console.log("⚠️ Mock token detected - bypassing JWT verification (dev mode)");
-    // Parse mock token to extract timestamp and generate mock user
-    return {
-      id: "mock-admin-1",
-      username: "admin",
-      email: "admin@faredown.com",
-      firstName: "Demo",
-      lastName: "Admin",
-      role: "super_admin",
-      department: "Management",
-      permissions: Object.values(PERMISSIONS),
-    };
+  const isMockEnvironment =
+    process.env.NODE_ENV !== "production" || process.env.ENABLE_MOCK_DATA === "true";
+
+  if (isMockEnvironment) {
+    if (
+      token.startsWith("mock-token-") ||
+      token.startsWith("mock-admin-token")
+    ) {
+      console.log(
+        "⚠️ Admin mock token detected - bypassing JWT verification (dev mode)",
+      );
+      return {
+        id: "mock-admin-1",
+        username: "admin",
+        email: "admin@faredown.com",
+        firstName: "Demo",
+        lastName: "Admin",
+        role: "super_admin",
+        department: "Management",
+        permissions: Object.values(PERMISSIONS),
+      };
+    }
+
+    if (token.startsWith("mock-user-token-")) {
+      console.log(
+        "⚠️ General mock token detected - granting elevated access for dev mode",
+      );
+      return {
+        id: "mock-admin-2",
+        username: "admin",
+        email: "admin@faredown.com",
+        firstName: "Demo",
+        lastName: "Admin",
+        role: "super_admin",
+        department: "Management",
+        permissions: Object.values(PERMISSIONS),
+      };
+    }
   }
 
   try {
     return jwt.verify(token, JWT_SECRET);
-  } catch (error) {
+  } catch (primaryError) {
+    // Attempt verification with admin-specific secret (used by TypeScript admin server)
+    if (ADMIN_JWT_SECRET && ADMIN_JWT_SECRET !== JWT_SECRET) {
+      try {
+        return jwt.verify(token, ADMIN_JWT_SECRET);
+      } catch (adminError) {
+        // fall through to throw below
+      }
+    }
+
     throw new Error("Invalid token");
   }
 };
