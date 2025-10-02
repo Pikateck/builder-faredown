@@ -306,6 +306,34 @@ export default function MarkupManagementAir() {
     [setFormData, setIsCreateDialogOpen, setSelectedMarkup],
   );
 
+  useEffect(() => {
+    const action = searchParams.get("action");
+    if (action !== "create" || isCreateDialogOpen) {
+      return;
+    }
+
+    const fromParam = searchParams.get("from");
+    const toParam = searchParams.get("to");
+
+    handleCreateMarkup({
+      origin_iata: fromParam ?? undefined,
+      dest_iata: toParam ?? undefined,
+    });
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("action");
+    if (fromParam) {
+      nextParams.delete("from");
+    }
+    if (toParam) {
+      nextParams.delete("to");
+    }
+
+    if (nextParams.toString() !== searchParams.toString()) {
+      setSearchParams(nextParams, { replace: true });
+    }
+  }, [searchParams, handleCreateMarkup, isCreateDialogOpen, setSearchParams]);
+
   const handleEditMarkup = (markup: AirMarkup) => {
     setSelectedMarkup(markup);
     setFormData({ ...markup });
