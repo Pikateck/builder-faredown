@@ -84,7 +84,18 @@ export function AirportSelect({
         params.append("q", query.trim());
       }
 
-      const response = await fetch(`/api/admin/airports?${params}`);
+      // Get auth token from localStorage
+      const token = localStorage.getItem("adminToken") || localStorage.getItem("token");
+
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      };
+
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
+      const response = await fetch(`/api/admin/airports?${params}`, { headers });
       if (!response.ok) {
         throw new Error(`HTTP ${response.status}`);
       }
