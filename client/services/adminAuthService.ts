@@ -403,13 +403,21 @@ export class AdminAuthService {
    * Get current admin user
    */
   async getCurrentUser(): Promise<AdminUser> {
+    // CRITICAL: First check if we have a valid auth token
+    const token = localStorage.getItem("auth_token");
+    if (!token) {
+      console.warn("⚠️ No auth token found - clearing stale user data");
+      this.clearAdminAuth();
+      throw new Error("No authenticated admin user found");
+    }
+
     if (this.currentUser) {
       return this.currentUser;
     }
 
     // Try to get user from localStorage first (for mock auth)
     const storedUser = this.getStoredUser();
-    if (storedUser) {
+    if (storedUser && token) {
       this.currentUser = storedUser;
       return storedUser;
     }
@@ -427,6 +435,7 @@ export class AdminAuthService {
       }
     } catch (error) {
       console.log("Failed to get user from backend, user needs to login again");
+      this.clearAdminAuth();
     }
 
     throw new Error("No authenticated admin user found");
