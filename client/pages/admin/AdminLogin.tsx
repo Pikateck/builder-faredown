@@ -175,7 +175,7 @@ export default function AdminLogin() {
         setIsLoading(false);
       }
     })();
-  }, [searchParams, navigate, setSearchParams]);
+  }, [searchParams, navigate, setSearchParams, redirectTarget]);
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 flex items-center justify-center p-4">
