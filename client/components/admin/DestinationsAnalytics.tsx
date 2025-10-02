@@ -52,8 +52,18 @@ export function DestinationsAnalytics() {
       setError(null);
       console.log(`📊 Loading destination analytics for ${days} days...`);
 
+      // Get auth token from localStorage
+      const token = localStorage.getItem("auth_token");
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       const response = await fetch(
         `/api/admin/destinations/analytics?days=${days}`,
+        { headers },
       );
 
       if (!response.ok) {
@@ -82,8 +92,18 @@ export function DestinationsAnalytics() {
       setCleaningCache(true);
       console.log("🧹 Cleaning expired cache entries...");
 
+      // Get auth token from localStorage
+      const token = localStorage.getItem("auth_token");
+      const headers: HeadersInit = {
+        "Content-Type": "application/json",
+      };
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
+
       const response = await fetch("/api/admin/hotels/cache/cleanup", {
         method: "POST",
+        headers,
       });
 
       if (!response.ok) {
