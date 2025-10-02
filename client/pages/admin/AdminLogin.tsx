@@ -79,8 +79,8 @@ export default function AdminLogin() {
       });
 
       console.log("Login successful, redirecting to dashboard");
-      // Redirect to admin dashboard
-      navigate("/admin/dashboard");
+      // Redirect to admin dashboard or requested path
+      navigate(redirectTarget);
     } catch (error: any) {
       console.error("Login error:", error);
       setError(error.message || "Login failed. Please check your credentials.");
