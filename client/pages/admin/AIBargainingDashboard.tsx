@@ -102,7 +102,9 @@ const AIBargainingDashboard: React.FC = () => {
   useEffect(() => {
     const fetchLiveData = async () => {
       try {
-        const response = await fetch("/api/admin/ai/live");
+        const response = await fetch("/api/admin/ai/live", {
+          headers: getAuthHeaders(),
+        });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
@@ -158,6 +160,7 @@ const AIBargainingDashboard: React.FC = () => {
             try {
               const airlineResponse = await fetch(
                 "/api/admin/ai/reports/airline-route",
+                { headers: getAuthHeaders() },
               );
               if (airlineResponse.ok) {
                 const airlineResult = await airlineResponse.json();
@@ -192,6 +195,7 @@ const AIBargainingDashboard: React.FC = () => {
             try {
               const hotelResponse = await fetch(
                 "/api/admin/ai/reports/hotel-city",
+                { headers: getAuthHeaders() },
               );
               if (hotelResponse.ok) {
                 const hotelResult = await hotelResponse.json();
@@ -226,6 +230,7 @@ const AIBargainingDashboard: React.FC = () => {
             try {
               const elasticityResponse = await fetch(
                 "/api/admin/ai/elasticity?product_type=flight",
+                { headers: getAuthHeaders() },
               );
               if (elasticityResponse.ok) {
                 const elasticityResult = await elasticityResponse.json();
@@ -250,6 +255,7 @@ const AIBargainingDashboard: React.FC = () => {
             try {
               const promoResponse = await fetch(
                 "/api/admin/ai/reports/promo-effectiveness",
+                { headers: getAuthHeaders() },
               );
               if (promoResponse.ok) {
                 const promoResult = await promoResponse.json();
@@ -285,7 +291,9 @@ const AIBargainingDashboard: React.FC = () => {
   useEffect(() => {
     const fetchPolicy = async () => {
       try {
-        const response = await fetch("/api/admin/ai/policies");
+        const response = await fetch("/api/admin/ai/policies", {
+          headers: getAuthHeaders(),
+        });
         if (!response.ok) {
           throw new Error(`HTTP ${response.status}`);
         }
@@ -342,7 +350,7 @@ price_rules:
     try {
       const response = await fetch("/api/admin/ai/policies/validate", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({ dsl_yaml: policyYaml }),
       });
 
@@ -366,7 +374,7 @@ price_rules:
     try {
       const response = await fetch("/api/admin/ai/policies", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: getAuthHeaders(),
         body: JSON.stringify({
           version: `v${Date.now()}`,
           dsl_yaml: policyYaml,
