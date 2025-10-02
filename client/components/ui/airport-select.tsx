@@ -45,17 +45,21 @@ export function AirportSelect({
   const [airports, setAirports] = useState<Airport[]>([]);
   const [loading, setLoading] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
+  const [error, setError] = useState<string | null>(null);
   const debounceRef = useRef<NodeJS.Timeout>();
-  const isInitialMount = useRef(true);
+  const hasLoadedOnce = useRef(false);
 
-  // Debounced search - only trigger on search query changes
+  // Load airports when dropdown opens for the first time
   useEffect(() => {
-    // Skip initial mount to prevent double loading
-    if (isInitialMount.current) {
-      isInitialMount.current = false;
-      loadAirports(""); // Load initial airports once
-      return;
+    if (open && !hasLoadedOnce.current) {
+      hasLoadedOnce.current = true;
+      loadAirports("");
     }
+  }, [open]);
+
+  // Debounced search - only trigger on search query changes when dropdown is open
+  useEffect(() => {
+    if (!open) return; // Don't search when dropdown is closed
 
     if (debounceRef.current) {
       clearTimeout(debounceRef.current);
@@ -63,18 +67,19 @@ export function AirportSelect({
 
     debounceRef.current = setTimeout(() => {
       loadAirports(searchQuery);
-    }, 300); // Increased debounce time to reduce flickering
+    }, 300);
 
     return () => {
       if (debounceRef.current) {
         clearTimeout(debounceRef.current);
       }
     };
-  }, [searchQuery]);
+  }, [searchQuery, open]);
 
   const loadAirports = async (query: string) => {
     try {
       setLoading(true);
+      setError(null);
       const params = new URLSearchParams({
         limit: "50",
         offset: "0",
@@ -87,16 +92,26 @@ export function AirportSelect({
       // Get auth token from localStorage
       const token = localStorage.getItem("auth_token");
 
+      if (!token) {
+        console.warn("⚠️ No authentication token found. Please log in to the admin panel.");
+        setError("Not authenticated. Please log in first.");
+        setAirports([]);
+        setLoading(false);
+        return;
+      }
+
       const headers: HeadersInit = {
         "Content-Type": "application/json",
+        "Authorization": `Bearer ${token}`,
       };
-
-      if (token) {
-        headers["Authorization"] = `Bearer ${token}`;
-      }
 
       const response = await fetch(`/api/admin/airports?${params}`, { headers });
       if (!response.ok) {
+        if (response.status === 401) {
+          setError("Session expired. Please log in again.");
+        } else {
+          setError(`Error loading airports (HTTP ${response.status})`);
+        }
         throw new Error(`HTTP ${response.status}`);
       }
 
@@ -107,6 +122,9 @@ export function AirportSelect({
       setLoading(false);
     } catch (error) {
       console.error("Failed to load airports:", error);
+      if (!error) {
+        setError("Failed to load airports. Please try again.");
+      }
       setAirports([]);
       setLoading(false);
     }
@@ -164,6 +182,15 @@ export function AirportSelect({
               <div className="py-6 text-center text-sm text-muted-foreground">
                 Searching airports...
               </div>
+            ) : error ? (
+              <div className="py-6 px-4 text-center">
+                <p className="text-sm text-red-600 mb-2">{error}</p>
+                <p className="text-xs text-muted-foreground">
+                  {error.includes("authenticated") || error.includes("Session")
+                    ? "Go to Admin Login to authenticate"
+                    : "Try again or contact support"}
+                </p>
+              </div>
             ) : (
               <CommandGroup>
                 {includeAll && (
@@ -191,7 +218,7 @@ export function AirportSelect({
                   </CommandItem>
                 )}
 
-                {airports.length === 0 && !loading ? (
+                {airports.length === 0 && !loading && !error ? (
                   <div className="py-6 text-center text-sm text-muted-foreground">
                     {searchQuery
                       ? "No airports found"
