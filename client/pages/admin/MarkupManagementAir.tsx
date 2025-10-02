@@ -194,6 +194,7 @@ export default function MarkupManagementAir() {
     totalPages: 1,
     total: 0,
   });
+  const [searchParams, setSearchParams] = useSearchParams();
 
   // Load markups on component mount and when filters change
   useEffect(() => {
