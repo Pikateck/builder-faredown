@@ -74,6 +74,86 @@ export default function AdminLogin() {
     setError(""); // Clear error when user types
   };
 
+  useEffect(() => {
+    if (import.meta.env.PROD) {
+      return;
+    }
+
+    if (autoLoginTriggeredRef.current) {
+      return;
+    }
+
+    const autoKeyRaw = searchParams.get("auto");
+    if (!autoKeyRaw) {
+      return;
+    }
+
+    const autoKey = autoKeyRaw.toLowerCase();
+    const autoLoginProfiles: Record<string, AdminLoginRequest> = {
+      admin: {
+        username: "admin",
+        password: "admin123",
+        department: DEPARTMENTS.MANAGEMENT,
+      },
+      "super-admin": {
+        username: "admin",
+        password: "admin123",
+        department: DEPARTMENTS.MANAGEMENT,
+      },
+      "superadmin": {
+        username: "admin",
+        password: "admin123",
+        department: DEPARTMENTS.MANAGEMENT,
+      },
+      sales: {
+        username: "sales",
+        password: "sales123",
+        department: DEPARTMENTS.SALES,
+      },
+      accounts: {
+        username: "accounts",
+        password: "acc123",
+        department: DEPARTMENTS.ACCOUNTS,
+      },
+    };
+
+    const profile = autoLoginProfiles[autoKey];
+    if (!profile) {
+      return;
+    }
+
+    autoLoginTriggeredRef.current = true;
+    setIsLoading(true);
+    setError("");
+    setFormData({
+      username: profile.username,
+      password: profile.password,
+      department: profile.department ?? "",
+    });
+
+    const clearAutoParam = () => {
+      const nextParams = new URLSearchParams(searchParams);
+      nextParams.delete("auto");
+      if (nextParams.toString() !== searchParams.toString()) {
+        setSearchParams(nextParams, { replace: true });
+      }
+    };
+
+    (async () => {
+      try {
+        await adminAuthService.login(profile);
+        clearAutoParam();
+        navigate("/admin/dashboard");
+      } catch (err: any) {
+        clearAutoParam();
+        setError(err?.message || "Automatic login failed. Please sign in manually.");
+        autoLoginTriggeredRef.current = false;
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, [searchParams, navigate, setSearchParams]);
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-900 via-blue-800 to-blue-700 flex items-center justify-center p-4">
       <div className="w-full max-w-md">
