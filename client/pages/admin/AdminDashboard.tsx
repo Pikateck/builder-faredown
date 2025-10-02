@@ -942,7 +942,7 @@ export default function AdminDashboard() {
             {filteredModules.map((module) => (
               <button
                 key={module.id}
-                onClick={() => setActiveModule(module.id)}
+                onClick={() => handleModuleSelect(module.id)}
                 className={`w-full flex items-center px-3 py-2 text-sm font-medium rounded-lg transition-colors ${
                   activeModule === module.id
                     ? "bg-blue-50 text-blue-700 border border-blue-200"
