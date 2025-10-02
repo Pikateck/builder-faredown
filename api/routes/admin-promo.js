@@ -431,7 +431,7 @@ router.post("/", requireAdmin, auditLog("create_promo"), async (req, res) => {
  * @desc Update promo code
  * @access Admin
  */
-router.put("/:id", requireAdmin, audit.adminAction, async (req, res) => {
+router.put("/:id", requireAdmin, auditLog("update_promo"), async (req, res) => {
   try {
     const { id } = req.params;
     const updateData = req.body;
@@ -499,7 +499,7 @@ router.put("/:id", requireAdmin, audit.adminAction, async (req, res) => {
  * @desc Delete promo code
  * @access Admin
  */
-router.delete("/:id", requireAdmin, audit.adminAction, async (req, res) => {
+router.delete("/:id", requireAdmin, auditLog("delete_promo"), async (req, res) => {
   try {
     const { id } = req.params;
 
@@ -537,7 +537,7 @@ router.delete("/:id", requireAdmin, audit.adminAction, async (req, res) => {
 router.post(
   "/:id/toggle-status",
   requireAdmin,
-  audit.adminAction,
+  auditLog("toggle_promo_status"),
   async (req, res) => {
     try {
       const { id } = req.params;
