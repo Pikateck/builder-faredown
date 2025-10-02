@@ -304,6 +304,53 @@ export default function AdminDashboard() {
   const [searchTerm, setSearchTerm] = useState("");
   const [dateFilter, setDateFilter] = useState("month"); // today, week, month, year
 
+  const handleModuleSelect = (moduleId: string) => {
+    setActiveModule(moduleId);
+    const nextParams = new URLSearchParams(searchParams);
+
+    if (moduleId === "dashboard") {
+      nextParams.delete("module");
+    } else {
+      nextParams.set("module", moduleId);
+    }
+
+    setSearchParams(nextParams, { replace: true });
+    setIsMobileMenuOpen(false);
+  };
+
+  useEffect(() => {
+    const moduleParam = searchParams.get("module");
+
+    if (!moduleParam) {
+      if (activeModule !== "dashboard") {
+        setActiveModule("dashboard");
+      }
+      return;
+    }
+
+    if (moduleParam === activeModule) {
+      return;
+    }
+
+    const moduleExists = adminModules.some((module) => module.id === moduleParam);
+
+    if (moduleExists) {
+      setActiveModule(moduleParam);
+      return;
+    }
+
+    const nextParams = new URLSearchParams(searchParams);
+    nextParams.delete("module");
+
+    if (nextParams.toString() !== searchParams.toString()) {
+      setSearchParams(nextParams, { replace: true });
+    }
+
+    if (activeModule !== "dashboard") {
+      setActiveModule("dashboard");
+    }
+  }, [searchParams, activeModule, setSearchParams]);
+
   useEffect(() => {
     checkAuth();
     loadSupplierAnalytics();
