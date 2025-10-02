@@ -365,6 +365,10 @@ export class AdminAuthService {
 
     // Store auth data
     apiClient.setAuthToken(mockResponse.accessToken);
+
+    // IMPORTANT: Also store token directly in localStorage for components that read it directly
+    localStorage.setItem("auth_token", mockResponse.accessToken);
+
     this.currentUser = mockResponse.user;
     localStorage.setItem("admin_user", JSON.stringify(mockResponse.user));
     localStorage.setItem(
@@ -372,6 +376,8 @@ export class AdminAuthService {
       JSON.stringify(mockResponse.permissions),
     );
     localStorage.setItem("admin_refresh_token", mockResponse.refreshToken);
+
+    console.log("✅ Admin token stored in localStorage as 'auth_token'");
 
     return mockResponse;
   }
