@@ -166,7 +166,7 @@ export default function AdminLogin() {
       try {
         await adminAuthService.login(profile);
         clearAutoParam();
-        navigate("/admin/dashboard");
+        navigate(redirectTarget);
       } catch (err: any) {
         clearAutoParam();
         setError(err?.message || "Automatic login failed. Please sign in manually.");
