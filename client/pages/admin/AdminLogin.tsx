@@ -45,6 +45,25 @@ export default function AdminLogin() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const autoLoginTriggeredRef = useRef(false);
+  const redirectTarget = useMemo(() => {
+    const redirectParam = searchParams.get("redirect");
+    if (!redirectParam) {
+      return "/admin/dashboard";
+    }
+
+    const candidates = [redirectParam];
+    try {
+      const decoded = decodeURIComponent(redirectParam);
+      if (decoded) {
+        candidates.unshift(decoded);
+      }
+    } catch (err) {
+      console.warn("Redirect decode failed", err);
+    }
+
+    const resolved = candidates.find((candidate) => candidate.startsWith("/"));
+    return resolved || "/admin/dashboard";
+  }, [searchParams]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
