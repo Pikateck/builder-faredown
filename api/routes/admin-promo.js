@@ -499,35 +499,40 @@ router.put("/:id", requireAdmin, auditLog("update_promo"), async (req, res) => {
  * @desc Delete promo code
  * @access Admin
  */
-router.delete("/:id", requireAdmin, auditLog("delete_promo"), async (req, res) => {
-  try {
-    const { id } = req.params;
+router.delete(
+  "/:id",
+  requireAdmin,
+  auditLog("delete_promo"),
+  async (req, res) => {
+    try {
+      const { id } = req.params;
 
-    const promoIndex = promoCodes.findIndex((p) => p.id === id);
-    if (promoIndex === -1) {
-      return res.status(404).json({
+      const promoIndex = promoCodes.findIndex((p) => p.id === id);
+      if (promoIndex === -1) {
+        return res.status(404).json({
+          success: false,
+          message: "Promo code not found",
+        });
+      }
+
+      const deletedPromo = promoCodes[promoIndex];
+      promoCodes.splice(promoIndex, 1);
+
+      res.json({
+        success: true,
+        message: "Promo code deleted successfully",
+        data: { deletedCode: deletedPromo.code },
+      });
+    } catch (error) {
+      console.error("Error deleting promo code:", error);
+      res.status(500).json({
         success: false,
-        message: "Promo code not found",
+        message: "Failed to delete promo code",
+        error: error.message,
       });
     }
-
-    const deletedPromo = promoCodes[promoIndex];
-    promoCodes.splice(promoIndex, 1);
-
-    res.json({
-      success: true,
-      message: "Promo code deleted successfully",
-      data: { deletedCode: deletedPromo.code },
-    });
-  } catch (error) {
-    console.error("Error deleting promo code:", error);
-    res.status(500).json({
-      success: false,
-      message: "Failed to delete promo code",
-      error: error.message,
-    });
-  }
-});
+  },
+);
 
 /**
  * @route POST /api/promo/:id/toggle-status

@@ -1,18 +1,20 @@
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 async function fixFunction() {
   const client = await pool.connect();
-  
+
   try {
-    console.log('🔧 Dropping old search function...');
-    await client.query('DROP FUNCTION IF EXISTS search_airports(TEXT, INTEGER, INTEGER)');
-    
-    console.log('🔍 Creating new search function...');
+    console.log("🔧 Dropping old search function...");
+    await client.query(
+      "DROP FUNCTION IF EXISTS search_airports(TEXT, INTEGER, INTEGER)",
+    );
+
+    console.log("🔍 Creating new search function...");
     await client.query(`
       CREATE FUNCTION search_airports(
         search_query TEXT,
@@ -55,25 +57,29 @@ async function fixFunction() {
       END;
       $$ LANGUAGE plpgsql;
     `);
-    
-    console.log('✅ Search function created successfully');
-    
+
+    console.log("✅ Search function created successfully");
+
     // Test searches
-    console.log('\n🧪 Testing searches:');
-    
-    const tests = ['dub', 'mum', 'United Arab'];
+    console.log("\n🧪 Testing searches:");
+
+    const tests = ["dub", "mum", "United Arab"];
     for (const query of tests) {
-      const result = await client.query("SELECT * FROM search_airports($1, 3, 0)", [query]);
+      const result = await client.query(
+        "SELECT * FROM search_airports($1, 3, 0)",
+        [query],
+      );
       console.log(`\n   Search "${query}" (${result.rows.length} results):`);
-      result.rows.forEach(row => {
-        console.log(`      ${row.iata}: ${row.name}, ${row.city}, ${row.country} (${row.iso_country})`);
+      result.rows.forEach((row) => {
+        console.log(
+          `      ${row.iata}: ${row.name}, ${row.city}, ${row.country} (${row.iso_country})`,
+        );
       });
     }
-    
-    console.log('\n✅ Airport search is working! The API should work now.');
-    
+
+    console.log("\n✅ Airport search is working! The API should work now.");
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error("❌ Error:", error.message);
   } finally {
     client.release();
     await pool.end();

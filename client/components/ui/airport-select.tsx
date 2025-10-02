@@ -93,7 +93,9 @@ export function AirportSelect({
       const token = localStorage.getItem("auth_token");
 
       if (!token) {
-        console.warn("⚠️ No authentication token found. Please log in to the admin panel.");
+        console.warn(
+          "⚠️ No authentication token found. Please log in to the admin panel.",
+        );
         setError("Not authenticated. Please log in first.");
         setAirports([]);
         setLoading(false);
@@ -102,10 +104,12 @@ export function AirportSelect({
 
       const headers: HeadersInit = {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${token}`,
+        Authorization: `Bearer ${token}`,
       };
 
-      const response = await fetch(`/api/admin/airports?${params}`, { headers });
+      const response = await fetch(`/api/admin/airports?${params}`, {
+        headers,
+      });
       if (!response.ok) {
         if (response.status === 401) {
           setError("Session expired. Please log in again.");

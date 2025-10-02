@@ -219,7 +219,8 @@ const generateToken = (user) => {
 const verifyToken = (token = "") => {
   // Allow mock tokens in development/demo mode
   const isMockEnvironment =
-    process.env.NODE_ENV !== "production" || process.env.ENABLE_MOCK_DATA === "true";
+    process.env.NODE_ENV !== "production" ||
+    process.env.ENABLE_MOCK_DATA === "true";
 
   if (isMockEnvironment) {
     if (

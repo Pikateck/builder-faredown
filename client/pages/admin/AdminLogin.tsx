@@ -125,7 +125,7 @@ export default function AdminLogin() {
         password: "admin123",
         department: DEPARTMENTS.MANAGEMENT,
       },
-      "superadmin": {
+      superadmin: {
         username: "admin",
         password: "admin123",
         department: DEPARTMENTS.MANAGEMENT,
@@ -171,7 +171,9 @@ export default function AdminLogin() {
         navigate(redirectTarget);
       } catch (err: any) {
         clearAutoParam();
-        setError(err?.message || "Automatic login failed. Please sign in manually.");
+        setError(
+          err?.message || "Automatic login failed. Please sign in manually.",
+        );
         autoLoginTriggeredRef.current = false;
       } finally {
         setIsLoading(false);

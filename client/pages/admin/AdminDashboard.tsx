@@ -332,7 +332,9 @@ export default function AdminDashboard() {
       return;
     }
 
-    const moduleExists = adminModules.some((module) => module.id === moduleParam);
+    const moduleExists = adminModules.some(
+      (module) => module.id === moduleParam,
+    );
 
     if (moduleExists) {
       setActiveModule(moduleParam);
