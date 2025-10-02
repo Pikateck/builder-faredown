@@ -295,6 +295,7 @@ const adminModules = [
 
 export default function AdminDashboard() {
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
   const [user, setUser] = useState(null);
   const [supplierAnalytics, setSupplierAnalytics] = useState(null);
   const [activeModule, setActiveModule] = useState("dashboard");
