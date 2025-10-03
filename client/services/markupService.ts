@@ -782,10 +782,13 @@ class MarkupService {
           currentFareMax: 0,
           bargainFareMin: 0,
           bargainFareMax: 0,
-          validFrom: new Date().toISOString(),
-          validTo: new Date(
-            Date.now() + 365 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
+          validFrom: this.toDisplayDate(
+            response.valid_from || new Date().toISOString(),
+          ),
+          validTo: this.toDisplayDate(
+            response.valid_to ||
+              new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          ),
           status: "active" as const,
           priority: 0,
           userType: "all" as const,
@@ -1178,10 +1181,13 @@ class MarkupService {
           currentFareMax: 0,
           bargainFareMin: 0,
           bargainFareMax: 0,
-          validFrom: new Date().toISOString(),
-          validTo: new Date(
-            Date.now() + 365 * 24 * 60 * 60 * 1000,
-          ).toISOString(),
+          validFrom: this.toDisplayDate(
+            response.valid_from || new Date().toISOString(),
+          ),
+          validTo: this.toDisplayDate(
+            response.valid_to ||
+              new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+          ),
           status: data.is_active ? "active" : "inactive",
           priority: 50,
           userType: "all",
