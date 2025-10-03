@@ -657,10 +657,10 @@ export default function MarkupManagementAir() {
               onValueChange={(value) =>
                 setFormData({
                   ...formData,
-                  origin_iata: value === "ALL" ? null : value,
+                  origin_iata: value,
                   route: {
                     ...formData.route,
-                    from: value === "ALL" ? null : value,
+                    from: value,
                   },
                 })
               }
@@ -677,10 +677,10 @@ export default function MarkupManagementAir() {
               onValueChange={(value) =>
                 setFormData({
                   ...formData,
-                  dest_iata: value === "ALL" ? null : value,
+                  dest_iata: value,
                   route: {
                     ...formData.route,
-                    to: value === "ALL" ? null : value,
+                    to: value,
                   },
                 })
               }
