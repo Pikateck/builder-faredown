@@ -188,6 +188,29 @@ export default function MarkupManagementHotel() {
     loadMarkups();
   }, [searchTerm, selectedCity, selectedStatus]);
 
+  const handleExport = async () => {
+    try {
+      setExporting(true);
+      setError(null);
+
+      const csvContent = await markupService.exportHotelMarkups({
+        search: searchTerm,
+        city: selectedCity,
+        status: selectedStatus,
+      });
+
+      const timestamp = new Date().toISOString().split("T")[0];
+      downloadTextFile(csvContent, `hotel-markups-${timestamp}.csv`, "text/csv");
+    } catch (err) {
+      console.error("Failed to export hotel markups:", err);
+      setError(
+        err instanceof Error ? err.message : "Failed to export hotel markups",
+      );
+    } finally {
+      setExporting(false);
+    }
+  };
+
   // Filter markups
   const filteredMarkups = markups.filter((markup) => {
     const matchesSearch =
