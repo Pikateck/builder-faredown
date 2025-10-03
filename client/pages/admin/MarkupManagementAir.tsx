@@ -186,10 +186,153 @@ export default function MarkupManagementAir() {
         total: result.total,
       });
     } catch (err) {
-      setError(
-        err instanceof Error ? err.message : "Failed to load air markups",
-      );
-      console.error("Error loading air markups:", err);
+      console.warn("API unavailable, using sample class-specific markup data:", err);
+
+      // Sample data demonstrating 4 distinct cabin class markup records
+      const sampleMarkups: AirMarkup[] = [
+        {
+          id: "1",
+          name: "Mumbai-Dubai Economy Markup",
+          description: "Economy class markup for Mumbai to Dubai route",
+          airline: "ALL",
+          route: { from: "BOM", to: "DXB" },
+          origin_iata: "BOM",
+          dest_iata: "DXB",
+          class: "economy",
+          markupType: "percentage",
+          markupValue: 15.0,
+          minAmount: 500,
+          maxAmount: 5000,
+          currentFareMin: 12.0,
+          currentFareMax: 18.0,
+          bargainFareMin: 8.0,
+          bargainFareMax: 15.0,
+          validFrom: "01-Jan-2024",
+          validTo: "31-Dec-2024",
+          status: "active",
+          priority: 1,
+          userType: "all",
+          specialConditions: "",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: "2",
+          name: "Mumbai-Dubai Premium Economy Markup",
+          description: "Premium Economy class markup for Mumbai to Dubai route",
+          airline: "ALL",
+          route: { from: "BOM", to: "DXB" },
+          origin_iata: "BOM",
+          dest_iata: "DXB",
+          class: "premium-economy",
+          markupType: "percentage",
+          markupValue: 12.0,
+          minAmount: 800,
+          maxAmount: 8000,
+          currentFareMin: 10.0,
+          currentFareMax: 15.0,
+          bargainFareMin: 7.0,
+          bargainFareMax: 12.0,
+          validFrom: "01-Jan-2024",
+          validTo: "31-Dec-2024",
+          status: "active",
+          priority: 2,
+          userType: "all",
+          specialConditions: "",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: "3",
+          name: "Mumbai-Dubai Business Class Markup",
+          description: "Business class markup for Mumbai to Dubai route",
+          airline: "ALL",
+          route: { from: "BOM", to: "DXB" },
+          origin_iata: "BOM",
+          dest_iata: "DXB",
+          class: "business",
+          markupType: "percentage",
+          markupValue: 10.0,
+          minAmount: 1000,
+          maxAmount: 10000,
+          currentFareMin: 8.0,
+          currentFareMax: 12.0,
+          bargainFareMin: 5.0,
+          bargainFareMax: 10.0,
+          validFrom: "01-Jan-2024",
+          validTo: "31-Dec-2024",
+          status: "active",
+          priority: 3,
+          userType: "all",
+          specialConditions: "",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+        {
+          id: "4",
+          name: "Mumbai-Dubai First Class Markup",
+          description: "First class markup for Mumbai to Dubai route",
+          airline: "ALL",
+          route: { from: "BOM", to: "DXB" },
+          origin_iata: "BOM",
+          dest_iata: "DXB",
+          class: "first",
+          markupType: "percentage",
+          markupValue: 8.0,
+          minAmount: 1500,
+          maxAmount: 15000,
+          currentFareMin: 6.0,
+          currentFareMax: 10.0,
+          bargainFareMin: 4.0,
+          bargainFareMax: 8.0,
+          validFrom: "01-Jan-2024",
+          validTo: "31-Dec-2024",
+          status: "active",
+          priority: 4,
+          userType: "all",
+          specialConditions: "",
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString(),
+        },
+      ];
+
+      // Apply filters to sample data
+      let filteredSampleData = [...sampleMarkups];
+
+      if (searchTerm) {
+        const searchLower = searchTerm.toLowerCase();
+        filteredSampleData = filteredSampleData.filter(
+          (markup) =>
+            markup.name.toLowerCase().includes(searchLower) ||
+            markup.description.toLowerCase().includes(searchLower)
+        );
+      }
+
+      if (selectedAirline && selectedAirline !== "all") {
+        filteredSampleData = filteredSampleData.filter(
+          (markup) => markup.airline === selectedAirline
+        );
+      }
+
+      if (selectedClass && selectedClass !== "all") {
+        filteredSampleData = filteredSampleData.filter(
+          (markup) => markup.class === selectedClass
+        );
+      }
+
+      if (selectedStatus && selectedStatus !== "all") {
+        filteredSampleData = filteredSampleData.filter(
+          (markup) => markup.status === selectedStatus
+        );
+      }
+
+      setMarkups(filteredSampleData);
+      setPagination({
+        page: 1,
+        totalPages: 1,
+        total: filteredSampleData.length,
+      });
+      setError("Using sample data - API connection unavailable");
     } finally {
       setLoading(false);
     }
