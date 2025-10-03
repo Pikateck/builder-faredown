@@ -210,9 +210,11 @@ router.get("/hotel", async (req, res) => {
     );
 
     res.json({
-      markups: data.rows.map(mapHotelRowToClient),
+      success: true,
+      items: data.rows.map(mapHotelRowToClient),
       total,
       page: parseInt(page),
+      pageSize: parseInt(limit),
       totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (err) {
