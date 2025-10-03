@@ -103,7 +103,7 @@ export default function MarkupManagementAir() {
   const [markups, setMarkups] = useState<AirMarkup[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedAirline, setSelectedAirline] = useState<string>("all");
-  const [selectedClass, setSelectedClass] = useState<string>("");
+  const [selectedClass, setSelectedClass] = useState<string>("all");
   const [selectedStatus, setSelectedStatus] = useState<string>("all");
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false);
