@@ -703,6 +703,7 @@ class MarkupService {
               : "sightseeing",
         base_amount: bookingDetails.basePrice,
       };
+      const normalizedBookingClass = normalizeCabinClass(bookingDetails.class);
       if (bookingDetails.type === "air") {
         if (bookingDetails.airline)
           payload.airline_code = bookingDetails.airline;
@@ -710,7 +711,8 @@ class MarkupService {
           payload.route_from = bookingDetails.route.from;
         if (bookingDetails.route?.to)
           payload.route_to = bookingDetails.route.to;
-        if (bookingDetails.class) payload.booking_class = bookingDetails.class;
+        if (normalizedBookingClass)
+          payload.booking_class = normalizedBookingClass;
       } else if (bookingDetails.type === "hotel") {
         if (bookingDetails.city) payload.hotel_city = bookingDetails.city;
         if (bookingDetails.starRating)
