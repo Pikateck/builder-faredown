@@ -214,7 +214,8 @@ class PromoCodeService {
 
     const normalizedPromoCodes = (promoCodes as any[]).map((code) => ({
       ...code,
-      cabinClass: normalizeCabinClass(code.cabinClass) ?? null,
+      // Handle both cabinClass (frontend) and service_class (database) fields
+      cabinClass: normalizeCabinClass(code.cabinClass || code.service_class) ?? null,
     }));
 
     const totalCandidates = [
