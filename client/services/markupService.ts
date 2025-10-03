@@ -343,6 +343,52 @@ class MarkupService {
     }
   }
 
+  async exportMarkups(
+    module: MarkupModule,
+    filters: MarkupFilters = {},
+  ): Promise<string> {
+    try {
+      const params: Record<string, any> = { module, format: "csv" };
+
+      if (filters.search) params.search = filters.search;
+      if (filters.airline && filters.airline !== "all")
+        params.airline_code = filters.airline;
+      if (filters.class && filters.class !== "all")
+        params.booking_class = filters.class;
+      if (filters.status && filters.status !== "all")
+        params.status = filters.status;
+      if (filters.city && filters.city !== "all") params.hotel_city = filters.city;
+      if (filters.starRating && filters.starRating !== "all") {
+        const ratingNumber = Number(filters.starRating);
+        if (!Number.isNaN(ratingNumber)) {
+          params.hotel_star_min = ratingNumber;
+        }
+      }
+
+      const response = await apiClient.get<string>(
+        `${this.baseUrl}/export`,
+        params,
+      );
+
+      if (typeof response !== "string") {
+        throw new Error("Invalid export response received from server");
+      }
+
+      return response;
+    } catch (error) {
+      console.error(`Error exporting ${module} markups:`, error);
+      throw error;
+    }
+  }
+
+  exportAirMarkups(filters: MarkupFilters = {}): Promise<string> {
+    return this.exportMarkups("air", filters);
+  }
+
+  exportHotelMarkups(filters: MarkupFilters = {}): Promise<string> {
+    return this.exportMarkups("hotel", filters);
+  }
+
   /**
    * Create a new air markup
    */
