@@ -402,7 +402,12 @@ export default function PromoCodeManager() {
       const endIndex = startIndex + 10;
       const paginatedMockData = filteredMockData.slice(startIndex, endIndex);
 
-      setPromoCodes(paginatedMockData);
+      setPromoCodes(
+        paginatedMockData.map((promo) => ({
+          ...promo,
+          cabinClass: normalizeCabinClass(promo.cabinClass) ?? null,
+        })),
+      );
       setPagination({
         page: pagination.page,
         totalPages: Math.ceil(filteredMockData.length / 10),
