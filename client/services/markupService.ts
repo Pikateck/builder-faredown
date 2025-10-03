@@ -204,6 +204,9 @@ class MarkupService {
   private baseUrl = "/api/markups";
 
   private mapAirRow(row: any): AirMarkup {
+    const normalizedClass =
+      normalizeCabinClass(row.booking_class || row.class) ?? "economy";
+
     return {
       id: String(row.id),
       name: row.rule_name || "",
@@ -215,7 +218,7 @@ class MarkupService {
       },
       origin_iata: row.origin_iata || null,
       dest_iata: row.dest_iata || null,
-      class: (row.booking_class || "all").toLowerCase(),
+      class: normalizedClass,
       markupType: (row.m_type || "percentage").toLowerCase(),
       markupValue: Number(row.m_value || 0),
       minAmount: 0,
