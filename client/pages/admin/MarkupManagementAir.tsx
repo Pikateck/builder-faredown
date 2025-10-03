@@ -140,7 +140,7 @@ export default function MarkupManagementAir() {
       const result = await markupService.getAirMarkups({
         search: searchTerm || undefined,
         airline: selectedAirline,
-        class: selectedClass || undefined,
+        class: selectedClass,
         status: selectedStatus,
         page: pagination.page,
         limit: 10,
@@ -170,7 +170,7 @@ export default function MarkupManagementAir() {
       const csvContent = await markupService.exportAirMarkups({
         search: searchTerm,
         airline: selectedAirline,
-        class: selectedClass || undefined,
+        class: selectedClass,
         status: selectedStatus,
       });
 
@@ -525,7 +525,7 @@ export default function MarkupManagementAir() {
           <div>
             <Label htmlFor="markupValue">
               Markup Value{" "}
-              {formData.markupType === "percentage" ? "(%)" : "(₹)"}
+              {formData.markupType === "percentage" ? "(%)" : "(��)"}
             </Label>
             <Input
               id="markupValue"
