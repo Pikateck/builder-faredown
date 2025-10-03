@@ -1,4 +1,4 @@
-const CACHE_NAME = "faredown-mobile-v1";
+const CACHE_NAME = "faredown-mobile-v2-markup-fix";
 const STATIC_CACHE_URLS = [
   "/",
   "/mobile",
