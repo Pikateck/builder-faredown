@@ -75,33 +75,6 @@ import {
   RefreshCw,
 } from "lucide-react";
 
-interface AirMarkup {
-  id: string;
-  name: string;
-  description: string;
-  airline: string;
-  route: {
-    from: string | null;
-    to: string | null;
-  };
-  // New database fields
-  origin_iata: string | null;
-  dest_iata: string | null;
-  class: "economy" | "premium-economy" | "business" | "first" | "all";
-  markupType: "percentage" | "fixed";
-  markupValue: number;
-  minAmount: number;
-  maxAmount: number;
-  validFrom: string;
-  validTo: string;
-  status: "active" | "inactive" | "expired";
-  priority: number;
-  userType: "all" | "b2c" | "b2b";
-  specialConditions: string;
-  createdAt: string;
-  updatedAt: string;
-}
-
 const AIRLINES = [
   { code: "AI", name: "Air India", country: "India" },
   { code: "UK", name: "Vistara", country: "India" },
@@ -124,62 +97,6 @@ const POPULAR_ROUTES = [
   { from: "BOM", to: "LAX", route: "Mumbai → Los Angeles" },
   { from: "DEL", to: "CDG", route: "Delhi → Paris" },
   { from: "BOM", to: "SYD", route: "Mumbai → Sydney" },
-];
-
-const CLASS_OPTIONS = [
-  { value: "all", label: "All Classes" },
-  { value: "economy", label: "Economy" },
-  { value: "premium-economy", label: "Premium Economy" },
-  { value: "business", label: "Business" },
-  { value: "first", label: "First Class" },
-];
-
-// Mock data
-const mockMarkups: AirMarkup[] = [
-  {
-    id: "1",
-    name: "Mumbai-Dubai Economy Markup",
-    description: "Standard markup for Mumbai to Dubai economy flights",
-    airline: "EK",
-    route: { from: "BOM", to: "DXB" },
-    origin_iata: "BOM",
-    dest_iata: "DXB",
-    class: "economy",
-    markupType: "percentage",
-    markupValue: 5.5,
-    minAmount: 500,
-    maxAmount: 2000,
-    validFrom: "2024-01-01",
-    validTo: "2024-12-31",
-    status: "active",
-    priority: 1,
-    userType: "all",
-    specialConditions: "Valid for advance bookings only",
-    createdAt: "2024-01-15T10:00:00Z",
-    updatedAt: "2024-01-20T15:30:00Z",
-  },
-  {
-    id: "2",
-    name: "Delhi-London Business Markup",
-    description: "Premium markup for Delhi to London business class",
-    airline: "BA",
-    route: { from: "DEL", to: "LHR" },
-    origin_iata: "DEL",
-    dest_iata: "LHR",
-    class: "business",
-    markupType: "fixed",
-    markupValue: 15000,
-    minAmount: 10000,
-    maxAmount: 50000,
-    validFrom: "2024-02-01",
-    validTo: "2024-11-30",
-    status: "active",
-    priority: 2,
-    userType: "b2c",
-    specialConditions: "Applies to direct flights only",
-    createdAt: "2024-01-10T09:00:00Z",
-    updatedAt: "2024-01-18T12:15:00Z",
-  },
 ];
 
 export default function MarkupManagementAir() {
