@@ -802,10 +802,7 @@ class MarkupService {
 
     if (bookingDetails.type === "air") {
       // Flight markup logic
-      if (
-        bookingDetails.class === "business" ||
-        bookingDetails.class === "first"
-      ) {
+      if (normalizedClass === "business" || normalizedClass === "first") {
         baseMarkupMin = 8;
         baseMarkupMax = 18;
         selectedMarkupPercentage = 12;
