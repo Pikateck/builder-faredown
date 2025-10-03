@@ -185,17 +185,17 @@ async function seedClassSpecificPromos() {
 
       const result = await client.query(insertQuery, values);
       const inserted = result.rows[0];
-      
-      const classLabel = inserted.cabin_class === 'economy' ? 'Economy' :
-                        inserted.cabin_class === 'premium-economy' ? 'Premium Economy' :
-                        inserted.cabin_class === 'business' ? 'Business' :
-                        inserted.cabin_class === 'first' ? 'First' : inserted.cabin_class;
-      
+
+      const classLabel = inserted.service_class === 'economy' ? 'Economy' :
+                        inserted.service_class === 'premium-economy' ? 'Premium Economy' :
+                        inserted.service_class === 'business' ? 'Business' :
+                        inserted.service_class === 'first' ? 'First' : inserted.service_class;
+
       console.log(`✅ Created: ${inserted.code}`);
       console.log(`   ID: ${inserted.id}`);
       console.log(`   Class: All – ${classLabel} Class`);
-      console.log(`   Discount: ${promo.discount_min_value}% - ${promo.discount_max_value}%`);
-      console.log(`   Min Fare: ₹${promo.minimum_fare_amount}`);
+      console.log(`   Discount: ${promo.discount_min}% - ${promo.discount_max}%`);
+      console.log(`   Min Fare: ₹${promo.min_fare_amount}`);
       console.log(`   Budget: ₹${promo.marketing_budget}\n`);
       
       insertedCount++;
@@ -235,7 +235,7 @@ async function seedClassSpecificPromos() {
       console.log(`   Status: ${row.status === 'active' ? 'Active ✅' : 'Inactive ❌'}\n`);
     });
 
-    console.log('═══════════════════════════════════════════════════════');
+    console.log('═══════════════════════════════════════════���═══════════');
     console.log('🎉 Class-specific promo code seeding completed!');
     console.log('═══════════════════════════════════════════════════════');
     console.log('\nNext steps:');
