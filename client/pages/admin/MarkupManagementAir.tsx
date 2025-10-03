@@ -245,6 +245,13 @@ export default function MarkupManagementAir() {
         overrides.dest_iata ?? overrides.route?.to ?? null,
       );
 
+      const normalizedValidFrom = overrides.validFrom
+        ? normalizeDisplayDate(overrides.validFrom)
+        : getCurrentDateFormatted();
+      const normalizedValidTo = overrides.validTo
+        ? normalizeDisplayDate(overrides.validTo)
+        : "";
+
       const baseData: Partial<AirMarkup> = {
         name: "",
         description: "",
@@ -263,8 +270,8 @@ export default function MarkupManagementAir() {
         // Bargain Fare Range defaults
         bargainFareMin: 5.0, // 5% minimum acceptable bargain
         bargainFareMax: 15.0, // 15% maximum acceptable bargain
-        validFrom: "",
-        validTo: "",
+        validFrom: normalizedValidFrom,
+        validTo: normalizedValidTo,
         status: "active",
         priority: 1,
         userType: "all",
@@ -274,6 +281,12 @@ export default function MarkupManagementAir() {
       const mergedData: Partial<AirMarkup> = {
         ...baseData,
         ...overrides,
+        validFrom: normalizeDisplayDate(
+          overrides.validFrom ?? baseData.validFrom ?? "",
+        ),
+        validTo: normalizeDisplayDate(
+          overrides.validTo ?? baseData.validTo ?? "",
+        ),
         origin_iata: originCode,
         dest_iata: destinationCode,
         route: {
