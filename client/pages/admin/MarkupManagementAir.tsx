@@ -91,7 +91,7 @@ const AIRLINES = [
 const POPULAR_ROUTES = [
   { from: "BOM", to: "DEL", route: "Mumbai → Delhi" },
   { from: "BOM", to: "DXB", route: "Mumbai → Dubai" },
-  { from: "DEL", to: "LHR", route: "Delhi ��� London" },
+  { from: "DEL", to: "LHR", route: "Delhi → London" },
   { from: "BOM", to: "SIN", route: "Mumbai → Singapore" },
   { from: "DEL", to: "JFK", route: "Delhi → New York" },
   { from: "BOM", to: "LAX", route: "Mumbai → Los Angeles" },
@@ -170,7 +170,7 @@ export default function MarkupManagementAir() {
       const csvContent = await markupService.exportAirMarkups({
         search: searchTerm,
         airline: selectedAirline,
-        class: selectedClass,
+        class: selectedClass || undefined,
         status: selectedStatus,
       });
 
