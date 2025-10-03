@@ -438,7 +438,7 @@ export default function PromoCodeManager() {
       origin: null,
       destination: null,
       carrierCode: "ALL",
-      cabinClass: "ALL",
+      cabinClass: "economy",
       flightBy: "",
       // Hotel fields
       hotelCity: "ALL",
