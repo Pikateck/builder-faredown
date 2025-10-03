@@ -239,6 +239,30 @@ export default function MarkupManagementAir() {
     }
   };
 
+  const handleExport = async () => {
+    try {
+      setExporting(true);
+      setError(null);
+
+      const csvContent = await markupService.exportAirMarkups({
+        search: searchTerm,
+        airline: selectedAirline,
+        class: selectedClass,
+        status: selectedStatus,
+      });
+
+      const timestamp = new Date().toISOString().split("T")[0];
+      downloadTextFile(csvContent, `air-markups-${timestamp}.csv`, "text/csv");
+    } catch (err) {
+      console.error("Failed to export air markups:", err);
+      setError(
+        err instanceof Error ? err.message : "Failed to export air markups",
+      );
+    } finally {
+      setExporting(false);
+    }
+  };
+
   // Use server-filtered markups directly
   const filteredMarkups = markups;
 
