@@ -3,7 +3,9 @@
 ## Issue Identified & Fixed
 
 ### Problem
+
 The admin panel was not displaying markup data because:
+
 1. **Backend API** was returning `markups` key but frontend expected `items`
 2. **Response structure** was missing required fields (`success`, `pageSize`)
 3. **Class values** were being incorrectly converted to lowercase
@@ -13,6 +15,7 @@ The admin panel was not displaying markup data because:
 #### Backend API Fix (`api/routes/markup.js`)
 
 **Changed Response Structure:**
+
 ```javascript
 // BEFORE (incorrect)
 res.json({
@@ -34,6 +37,7 @@ res.json({
 ```
 
 **Fixed Class Value Mapping:**
+
 ```javascript
 // BEFORE (incorrect - forced lowercase)
 class: (row.booking_class || "all").toLowerCase(),
@@ -47,6 +51,7 @@ class: row.booking_class || "economy",
 ## ✅ Verification Results
 
 ### Database Records (4 Markup Rules)
+
 ```
 1. Mumbai-Dubai Economy Markup
    - booking_class: "economy"
@@ -78,6 +83,7 @@ class: row.booking_class || "economy",
 ```
 
 ### API Response (Verified)
+
 ```json
 {
   "success": true,
@@ -119,12 +125,13 @@ class: row.booking_class || "economy",
 ```
 
 ### Frontend Label Mapping (Verified)
-| Class Value | Frontend Label |
-|-------------|----------------|
-| `economy` | **All – Economy Class** |
+
+| Class Value       | Frontend Label                  |
+| ----------------- | ------------------------------- |
+| `economy`         | **All – Economy Class**         |
 | `premium-economy` | **All – Premium Economy Class** |
-| `business` | **All – Business Class** |
-| `first` | **All – First Class** |
+| `business`        | **All – Business Class**        |
+| `first`           | **All – First Class**           |
 
 ---
 
@@ -133,19 +140,24 @@ class: row.booking_class || "economy",
 Since the admin panel requires authentication:
 
 ### Step 1: Login
+
 Go to: https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/admin/dashboard
 
 **Use Demo Credentials:**
+
 - **Super Admin:** `admin` / `admin123`
 - **Sales Manager:** `sales` / `sales123`
 - **Finance Team:** `accounts` / `acc123`
 
 ### Step 2: Navigate to Markup Management
+
 1. After login, click **"Markup Management (Air)"** from the sidebar
 2. Or go directly to: `/admin/dashboard?module=markup-air`
 
 ### Step 3: Verify Display
+
 You should now see:
+
 - ✅ **4 markup records** in the table
 - ✅ **Correct class labels**: "All – Economy Class", "All – Premium Economy Class", etc.
 - ✅ **Proper route display**: BOM → DXB
@@ -158,17 +170,20 @@ You should now see:
 ## 🎯 What Was Fixed
 
 ### 1. API Response Structure ✅
+
 - Changed `markups` → `items`
 - Added `success: true` flag
 - Added `pageSize` field
 - Fixed for both `/api/markup/air` and `/api/markup/hotel`
 
 ### 2. Class Value Handling ✅
+
 - Removed incorrect `.toLowerCase()` conversion
 - Preserved original database values (`economy`, `premium-economy`, `business`, `first`)
 - Frontend normalization now works correctly with `getCabinClassLabel()`
 
 ### 3. Database Records ✅
+
 - Seeded 4 distinct markup records
 - Seeded 4 distinct promo codes
 - Cleaned up old duplicate records
@@ -178,14 +193,14 @@ You should now see:
 
 ## 📊 Test Results Summary
 
-| Test | Status | Details |
-|------|--------|---------|
-| Database Records | ✅ Pass | 4 class-specific markups exist |
+| Test                   | Status  | Details                                    |
+| ---------------------- | ------- | ------------------------------------------ |
+| Database Records       | ✅ Pass | 4 class-specific markups exist             |
 | API Response Structure | ✅ Pass | Returns `items` array with `success: true` |
-| Class Values | ✅ Pass | All values match expected format |
-| Label Mapping | ✅ Pass | Frontend will display correct labels |
-| Promo Codes | ✅ Pass | 4 class-specific codes created |
-| Data Cleanup | ✅ Pass | Old duplicates removed |
+| Class Values           | ✅ Pass | All values match expected format           |
+| Label Mapping          | ✅ Pass | Frontend will display correct labels       |
+| Promo Codes            | ✅ Pass | 4 class-specific codes created             |
+| Data Cleanup           | ✅ Pass | Old duplicates removed                     |
 
 ---
 
@@ -211,6 +226,7 @@ You should now see:
 ## ✨ Summary
 
 **The markup system is now fully functional:**
+
 - ✅ Database has all 4 class-specific markup records
 - ✅ API returns data in correct structure
 - ✅ Frontend will display proper class labels

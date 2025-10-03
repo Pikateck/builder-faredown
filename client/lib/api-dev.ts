@@ -258,24 +258,102 @@ export class DevApiClient {
     }
 
     // Admin airports API
-    if (endpoint.includes("/admin/airports") || endpoint.includes("/airports")) {
+    if (
+      endpoint.includes("/admin/airports") ||
+      endpoint.includes("/airports")
+    ) {
       const query = params?.q?.toLowerCase() || "";
       const airports = [
-        { iata: "BOM", name: "Chhatrapati Shivaji Maharaj International Airport", city: "Mumbai", country: "India" },
-        { iata: "DEL", name: "Indira Gandhi International Airport", city: "Delhi", country: "India" },
-        { iata: "DXB", name: "Dubai International Airport", city: "Dubai", country: "United Arab Emirates" },
-        { iata: "LHR", name: "London Heathrow Airport", city: "London", country: "United Kingdom" },
-        { iata: "JFK", name: "John F. Kennedy International Airport", city: "New York", country: "United States" },
-        { iata: "CDG", name: "Charles de Gaulle Airport", city: "Paris", country: "France" },
-        { iata: "SIN", name: "Singapore Changi Airport", city: "Singapore", country: "Singapore" },
-        { iata: "HKG", name: "Hong Kong International Airport", city: "Hong Kong", country: "Hong Kong" },
-        { iata: "SYD", name: "Sydney Kingsford Smith Airport", city: "Sydney", country: "Australia" },
-        { iata: "LAX", name: "Los Angeles International Airport", city: "Los Angeles", country: "United States" },
-        { iata: "NRT", name: "Narita International Airport", city: "Tokyo", country: "Japan" },
-        { iata: "AUH", name: "Abu Dhabi International Airport", city: "Abu Dhabi", country: "United Arab Emirates" },
-        { iata: "DOH", name: "Hamad International Airport", city: "Doha", country: "Qatar" },
-        { iata: "BLR", name: "Kempegowda International Airport", city: "Bangalore", country: "India" },
-        { iata: "MAA", name: "Chennai International Airport", city: "Chennai", country: "India" },
+        {
+          iata: "BOM",
+          name: "Chhatrapati Shivaji Maharaj International Airport",
+          city: "Mumbai",
+          country: "India",
+        },
+        {
+          iata: "DEL",
+          name: "Indira Gandhi International Airport",
+          city: "Delhi",
+          country: "India",
+        },
+        {
+          iata: "DXB",
+          name: "Dubai International Airport",
+          city: "Dubai",
+          country: "United Arab Emirates",
+        },
+        {
+          iata: "LHR",
+          name: "London Heathrow Airport",
+          city: "London",
+          country: "United Kingdom",
+        },
+        {
+          iata: "JFK",
+          name: "John F. Kennedy International Airport",
+          city: "New York",
+          country: "United States",
+        },
+        {
+          iata: "CDG",
+          name: "Charles de Gaulle Airport",
+          city: "Paris",
+          country: "France",
+        },
+        {
+          iata: "SIN",
+          name: "Singapore Changi Airport",
+          city: "Singapore",
+          country: "Singapore",
+        },
+        {
+          iata: "HKG",
+          name: "Hong Kong International Airport",
+          city: "Hong Kong",
+          country: "Hong Kong",
+        },
+        {
+          iata: "SYD",
+          name: "Sydney Kingsford Smith Airport",
+          city: "Sydney",
+          country: "Australia",
+        },
+        {
+          iata: "LAX",
+          name: "Los Angeles International Airport",
+          city: "Los Angeles",
+          country: "United States",
+        },
+        {
+          iata: "NRT",
+          name: "Narita International Airport",
+          city: "Tokyo",
+          country: "Japan",
+        },
+        {
+          iata: "AUH",
+          name: "Abu Dhabi International Airport",
+          city: "Abu Dhabi",
+          country: "United Arab Emirates",
+        },
+        {
+          iata: "DOH",
+          name: "Hamad International Airport",
+          city: "Doha",
+          country: "Qatar",
+        },
+        {
+          iata: "BLR",
+          name: "Kempegowda International Airport",
+          city: "Bangalore",
+          country: "India",
+        },
+        {
+          iata: "MAA",
+          name: "Chennai International Airport",
+          city: "Chennai",
+          country: "India",
+        },
       ];
 
       const filtered = query
@@ -929,7 +1007,8 @@ export class DevApiClient {
             id: "cda1b1b5-543e-43b8-84c9-d4f777e61bb6",
             module: "air",
             rule_name: "All Sectors Routes – Premium Economy Class Markup",
-            description: "Global markup rule for Premium Economy class on all routes",
+            description:
+              "Global markup rule for Premium Economy class on all routes",
             airline_code: "ALL",
             route_from: "ALL",
             route_to: "ALL",

@@ -1,4 +1,8 @@
-export type CabinClassValue = "economy" | "premium-economy" | "business" | "first";
+export type CabinClassValue =
+  | "economy"
+  | "premium-economy"
+  | "business"
+  | "first";
 
 type CabinClassAliasMap = Record<string, CabinClassValue>;
 
@@ -13,7 +17,7 @@ const CABIN_CLASS_ALIASES: CabinClassAliasMap = {
   "premium economy": "premium-economy",
   premiumeconomy: "premium-economy",
   premium: "premium-economy",
-  "premium_economy": "premium-economy",
+  premium_economy: "premium-economy",
   pe: "premium-economy",
   w: "premium-economy",
   business: "business",
@@ -33,7 +37,10 @@ export const CABIN_CLASS_LABELS: Record<CabinClassValue, string> = {
   first: "All – First Class",
 };
 
-export const CABIN_CLASS_OPTIONS: Array<{ value: CabinClassValue; label: string }> = (
+export const CABIN_CLASS_OPTIONS: Array<{
+  value: CabinClassValue;
+  label: string;
+}> = (
   Object.entries(CABIN_CLASS_LABELS) as Array<[CabinClassValue, string]>
 ).map(([value, label]) => ({ value, label }));
 

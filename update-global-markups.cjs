@@ -1,6 +1,6 @@
 /**
  * Update Air Markup Records to Global Scope
- * 
+ *
  * Changes:
  * 1. Route: BOM→DXB to ALL→ALL (global)
  * 2. Airline: EK to ALL
@@ -11,64 +11,64 @@ const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 const globalMarkups = [
   {
-    old_class: 'economy',
-    new_name: 'All Sectors Routes – Economy Class Markup',
-    description: 'Global markup rule for Economy class on all routes',
+    old_class: "economy",
+    new_name: "All Sectors Routes – Economy Class Markup",
+    description: "Global markup rule for Economy class on all routes",
     m_value: 15.0,
     current_min_pct: 12.0,
     current_max_pct: 18.0,
     bargain_min_pct: 8.0,
     bargain_max_pct: 15.0,
-    priority: 1
+    priority: 1,
   },
   {
-    old_class: 'premium-economy',
-    new_name: 'All Sectors Routes – Premium Economy Class Markup',
-    description: 'Global markup rule for Premium Economy class on all routes',
+    old_class: "premium-economy",
+    new_name: "All Sectors Routes – Premium Economy Class Markup",
+    description: "Global markup rule for Premium Economy class on all routes",
     m_value: 12.0,
     current_min_pct: 10.0,
     current_max_pct: 15.0,
     bargain_min_pct: 7.0,
     bargain_max_pct: 12.0,
-    priority: 2
+    priority: 2,
   },
   {
-    old_class: 'business',
-    new_name: 'All Sectors Routes – Business Class Markup',
-    description: 'Global markup rule for Business class on all routes',
+    old_class: "business",
+    new_name: "All Sectors Routes – Business Class Markup",
+    description: "Global markup rule for Business class on all routes",
     m_value: 10.0,
     current_min_pct: 8.0,
     current_max_pct: 12.0,
     bargain_min_pct: 5.0,
     bargain_max_pct: 10.0,
-    priority: 3
+    priority: 3,
   },
   {
-    old_class: 'first',
-    new_name: 'All Sectors Routes – First Class Markup',
-    description: 'Global markup rule for First class on all routes',
+    old_class: "first",
+    new_name: "All Sectors Routes – First Class Markup",
+    description: "Global markup rule for First class on all routes",
     m_value: 8.0,
     current_min_pct: 6.0,
     current_max_pct: 10.0,
     bargain_min_pct: 4.0,
     bargain_max_pct: 8.0,
-    priority: 4
-  }
+    priority: 4,
+  },
 ];
 
 async function updateToGlobalScope() {
   const client = await pool.connect();
-  
-  try {
-    console.log('🔄 Updating Air Markup Records to Global Scope\n');
-    console.log('═══════════════════════════════════════════════════════\n');
 
-    await client.query('BEGIN');
+  try {
+    console.log("🔄 Updating Air Markup Records to Global Scope\n");
+    console.log("═══════════════════════════════════════════════════════\n");
+
+    await client.query("BEGIN");
 
     for (const markup of globalMarkups) {
       const updateQuery = `
@@ -103,11 +103,11 @@ async function updateToGlobalScope() {
         markup.bargain_min_pct,
         markup.bargain_max_pct,
         markup.priority,
-        markup.old_class
+        markup.old_class,
       ];
 
       const result = await client.query(updateQuery, values);
-      
+
       if (result.rowCount > 0) {
         const updated = result.rows[0];
         console.log(`✅ Updated: ${updated.rule_name}`);
@@ -120,10 +120,10 @@ async function updateToGlobalScope() {
       }
     }
 
-    await client.query('COMMIT');
+    await client.query("COMMIT");
 
-    console.log('═══════════════════════════════════════════════════════');
-    console.log('📊 Verification - Updated Global Markup Records:\n');
+    console.log("═══════════════════════════════════════════════════════");
+    console.log("📊 Verification - Updated Global Markup Records:\n");
 
     const verifyQuery = await client.query(`
       SELECT id, rule_name, booking_class, airline_code, route_from, route_to, 
@@ -135,27 +135,36 @@ async function updateToGlobalScope() {
     `);
 
     verifyQuery.rows.forEach((row, index) => {
-      const classLabel = row.booking_class === 'economy' ? 'Economy' :
-                        row.booking_class === 'premium-economy' ? 'Premium Economy' :
-                        row.booking_class === 'business' ? 'Business' :
-                        row.booking_class === 'first' ? 'First' : row.booking_class;
+      const classLabel =
+        row.booking_class === "economy"
+          ? "Economy"
+          : row.booking_class === "premium-economy"
+            ? "Premium Economy"
+            : row.booking_class === "business"
+              ? "Business"
+              : row.booking_class === "first"
+                ? "First"
+                : row.booking_class;
 
       console.log(`${index + 1}. ${row.rule_name}`);
       console.log(`   Class: All – ${classLabel} Class`);
-      console.log(`   Route & Airline: ${row.route_from} → ${row.route_to} | ${row.airline_code}`);
+      console.log(
+        `   Route & Airline: ${row.route_from} → ${row.route_to} | ${row.airline_code}`,
+      );
       console.log(`   Markup: ${row.m_value}%`);
-      console.log(`   Status: ${row.is_active ? 'Active ✅' : 'Inactive ❌'}\n`);
+      console.log(
+        `   Status: ${row.is_active ? "Active ✅" : "Inactive ❌"}\n`,
+      );
     });
 
-    console.log('═══════════════════════════════════════════════════════');
-    console.log('✅ Global Scope Update Complete!\n');
-    console.log('Expected display in Admin Panel:');
+    console.log("═══════════════════════════════════════════════════════");
+    console.log("✅ Global Scope Update Complete!\n");
+    console.log("Expected display in Admin Panel:");
     console.log('  Route & Airline column: "All → All | All Airlines"\n');
-
   } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('❌ Error updating to global scope:', error);
-    console.error('\nError details:', error.message);
+    await client.query("ROLLBACK");
+    console.error("❌ Error updating to global scope:", error);
+    console.error("\nError details:", error.message);
     throw error;
   } finally {
     client.release();
@@ -165,10 +174,10 @@ async function updateToGlobalScope() {
 
 updateToGlobalScope()
   .then(() => {
-    console.log('✅ Script completed successfully');
+    console.log("✅ Script completed successfully");
     process.exit(0);
   })
   .catch((error) => {
-    console.error('❌ Script failed:', error.message);
+    console.error("❌ Script failed:", error.message);
     process.exit(1);
   });

@@ -2,7 +2,7 @@ const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 (async () => {
@@ -14,17 +14,17 @@ const pool = new Pool({
       WHERE module = 'air'
       ORDER BY rule_name, created_at DESC;
     `);
-    
-    console.log('Total Air Markups:', result.rows.length, '\n');
-    
+
+    console.log("Total Air Markups:", result.rows.length, "\n");
+
     result.rows.forEach((row, index) => {
       console.log(`${index + 1}. ${row.rule_name}`);
       console.log(`   ID: ${row.id}`);
       console.log(`   Markup: ${row.m_value}%`);
-      console.log(`   Class: ${row.booking_class || 'null'}`);
+      console.log(`   Class: ${row.booking_class || "null"}`);
       console.log(`   Active: ${row.is_active}`);
       console.log(`   Created: ${row.created_at}`);
-      console.log('');
+      console.log("");
     });
   } finally {
     client.release();

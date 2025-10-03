@@ -600,9 +600,7 @@ export default function MarkupManagementTransfer() {
                     </TableCell>
                     <TableCell>
                       <div className="text-sm">
-                        <div>
-                          {displayDate(markup.validFrom)}
-                        </div>
+                        <div>{displayDate(markup.validFrom)}</div>
                         <div className="text-gray-500">
                           to {displayDate(markup.validTo)}
                         </div>

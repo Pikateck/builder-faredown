@@ -2,14 +2,14 @@ const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 async function checkAllMarkups() {
   const client = await pool.connect();
-  
+
   try {
-    console.log('🔍 Checking ALL markup records in database\n');
+    console.log("🔍 Checking ALL markup records in database\n");
 
     const result = await client.query(`
       SELECT id, rule_name, booking_class, airline_code, route_from, route_to, 
@@ -30,7 +30,7 @@ async function checkAllMarkups() {
       console.log(`   Markup: ${row.m_value}%`);
       console.log(`   Active: ${row.is_active}`);
       console.log(`   Created: ${row.created_at}`);
-      console.log('');
+      console.log("");
     });
 
     // Check BOM-DXB specifically
@@ -48,7 +48,7 @@ async function checkAllMarkups() {
         END;
     `);
 
-    console.log('\n═══════════════════════════════════════════════════════');
+    console.log("\n═══════════════════════════════════════════════════════");
     console.log(`BOM → DXB Markups: ${bomDxb.rows.length}\n`);
 
     bomDxb.rows.forEach((row, index) => {
@@ -56,9 +56,8 @@ async function checkAllMarkups() {
       console.log(`   Markup: ${row.m_value}%`);
       console.log(`   Active: ${row.is_active}`);
     });
-
   } catch (error) {
-    console.error('❌ Error:', error.message);
+    console.error("❌ Error:", error.message);
   } finally {
     client.release();
     await pool.end();

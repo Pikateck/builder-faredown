@@ -51,7 +51,10 @@ self.addEventListener("fetch", (event) => {
   // Handle API requests with network-first strategy
   if (event.request.url.includes("/api/")) {
     // Skip caching for admin/markup APIs to always get fresh data
-    if (event.request.url.includes("/api/markup") || event.request.url.includes("/api/admin")) {
+    if (
+      event.request.url.includes("/api/markup") ||
+      event.request.url.includes("/api/admin")
+    ) {
       event.respondWith(fetch(event.request));
       return;
     }

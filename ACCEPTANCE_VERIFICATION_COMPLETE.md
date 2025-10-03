@@ -7,23 +7,27 @@
 ## 📋 Requirements Checklist
 
 ### 1. Scope ✅
+
 - [x] Origin: **ALL** (not BOM)
-- [x] Destination: **ALL** (not DXB)  
+- [x] Destination: **ALL** (not DXB)
 - [x] Airline: **ALL** (not EK)
 - [x] All database fields updated correctly
 
 ### 2. Naming ✅
+
 - [x] All Sectors Routes – Economy Class Markup
 - [x] All Sectors Routes – Premium Economy Class Markup
 - [x] All Sectors Routes – Business Class Markup
 - [x] All Sectors Routes – First Class Markup
 
 ### 3. Display ✅
+
 - [x] Route & Airline column shows: **"All → All | All Airlines"**
 - [x] Class column shows: **"All – [Class Name] Class"**
 - [x] Date format: **DD-MMM-YYYY** (01-Jan-2024 to 31-Dec-2024)
 
 ### 4. Functionality ✅
+
 - [x] Edit modal preserves ALL values
 - [x] Bargain logic reads global rules for any route
 - [x] No design changes (only data/labels)
@@ -33,22 +37,23 @@
 ## 🔍 Database Verification
 
 ### Query Results:
+
 ```sql
-SELECT rule_name, airline_code, route_from, route_to, 
+SELECT rule_name, airline_code, route_from, route_to,
        origin_iata, dest_iata, booking_class, m_value
 FROM markup_rules
-WHERE module = 'air' 
+WHERE module = 'air'
   AND booking_class IN ('economy', 'premium-economy', 'business', 'first');
 ```
 
 ### Results:
 
-| Rule Name | Airline | From | To | Origin | Dest | Class | Markup |
-|-----------|---------|------|-----|--------|------|-------|--------|
-| All Sectors Routes – Economy Class Markup | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | economy | 15% |
-| All Sectors Routes – Premium Economy Class Markup | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | premium-economy | 12% |
-| All Sectors Routes – Business Class Markup | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | business | 10% |
-| All Sectors Routes – First Class Markup | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | first | 8% |
+| Rule Name                                         | Airline | From   | To     | Origin | Dest   | Class           | Markup |
+| ------------------------------------------------- | ------- | ------ | ------ | ------ | ------ | --------------- | ------ |
+| All Sectors Routes – Economy Class Markup         | ALL ✅  | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | economy         | 15%    |
+| All Sectors Routes – Premium Economy Class Markup | ALL ✅  | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | premium-economy | 12%    |
+| All Sectors Routes – Business Class Markup        | ALL ✅  | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | business        | 10%    |
+| All Sectors Routes – First Class Markup           | ALL ✅  | ALL ✅ | ALL ✅ | ALL ✅ | ALL ✅ | first           | 8%     |
 
 **✅ ALL RECORDS HAVE GLOBAL SCOPE (ALL → ALL | ALL)**
 
@@ -59,6 +64,7 @@ WHERE module = 'air'
 ### Admin Panel List View
 
 **Verified Elements:**
+
 - ✅ 4 rows displayed
 - ✅ Correct naming: "All Sectors Routes – [Class] Markup"
 - ✅ Route & Airline: "All → All | All Airlines"
@@ -70,12 +76,14 @@ WHERE module = 'air'
 ### Display Format Verification
 
 **Route & Airline Column:**
+
 ```
 📍 All → All
 ✈️ All Airlines
 ```
 
 **Class Column:**
+
 ```
 All – Economy Class
 All – Premium Economy Class
@@ -112,14 +120,16 @@ All – First Class
 ## ✅ Acceptance Criteria Met
 
 ### Scope Verification
+
 ```
 ✅ Origin = ALL
-✅ Destination = ALL  
+✅ Destination = ALL
 ✅ Airline = ALL
 ✅ No city pairs (e.g., BOM-DXB) in scope
 ```
 
 ### Naming Verification
+
 ```
 ✅ "All Sectors Routes – Economy Class Markup"
 ✅ "All Sectors Routes – Premium Economy Class Markup"
@@ -128,6 +138,7 @@ All – First Class
 ```
 
 ### Display Verification
+
 ```
 ✅ Route & Airline: "All → All | All Airlines"
 ✅ Class: "All – [Class Name] Class"
@@ -136,6 +147,7 @@ All – First Class
 ```
 
 ### Functional Verification
+
 ```
 ✅ Edit modal shows ALL/ALL/ALL scope
 ✅ Dropdown values preserved on save
@@ -156,6 +168,7 @@ All – First Class
 5. **Bargain range:** 5-10% discount from current fare
 
 ### Route Priority (Future):
+
 - Global rules: `ALL ��� ALL` (Priority 1-4)
 - Specific routes: `BOM → DXB` (Higher priority, overrides global)
 
@@ -164,16 +177,19 @@ All – First Class
 ## 📝 Next Steps (Optional)
 
 ### 1. Test Bargain Flow
+
 - Search any route (e.g., BOM → SIN)
 - Select any cabin class
 - Verify correct global markup applies
 
 ### 2. Add Route-Specific Rules
+
 - Create: "Mumbai-Dubai – Economy Class Markup"
 - Set higher priority to override global
 - Maintains global rules for other routes
 
 ### 3. Promo Code Alignment
+
 - Ensure promo codes also use global scope
 - Link to correct cabin class markups
 
@@ -190,7 +206,7 @@ All – First Class
 ✅ **No Design Changes:** Only data/labels updated  
 ✅ **Edit Modal:** Shows ALL/ALL/ALL scope correctly  
 ✅ **Database:** All fields verified  
-✅ **Bargain Logic:** Ready for integration  
+✅ **Bargain Logic:** Ready for integration
 
 ---
 
@@ -198,7 +214,7 @@ All – First Class
 
 **Status:** ✅ **VERIFIED & READY**  
 **Date:** 2025-10-03  
-**Verified By:** Database query + UI screenshot + Functional testing  
+**Verified By:** Database query + UI screenshot + Functional testing
 
 **The Air Markup module now has 4 global class-wide rules that will apply to any route, any airline, for the specified cabin class.**
 
@@ -217,12 +233,14 @@ All corrections have been implemented as requested:
 5. **✅ Database:** All fields verified (origin_iata, dest_iata, route_from, route_to, airline_code = ALL)
 
 **Screenshot Evidence:**
+
 - Admin list shows 4 rows with correct global scope display
-- Each row shows "All → All | All Airlines" 
+- Each row shows "All → All | All Airlines"
 - Class tags show correct labels
 - Date format is DD-MMM-YYYY
 
 **Database Verification:**
+
 - All records confirmed with `airline_code = 'ALL'`, `route_from = 'ALL'`, `route_to = 'ALL'`
 - Bargain and Promo logic will correctly read these global rules for any route
 

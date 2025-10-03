@@ -105,23 +105,74 @@ export function AirportSelect({
 
       // Use fallback airports for better UX
       const fallbackAirports = [
-        { iata: "BOM", name: "Chhatrapati Shivaji Intl Airport", city: "Mumbai", country: "India" },
-        { iata: "DEL", name: "Indira Gandhi Intl Airport", city: "Delhi", country: "India" },
-        { iata: "DXB", name: "Dubai Intl Airport", city: "Dubai", country: "UAE" },
-        { iata: "LHR", name: "London Heathrow Airport", city: "London", country: "UK" },
-        { iata: "JFK", name: "John F. Kennedy Intl Airport", city: "New York", country: "USA" },
-        { iata: "SIN", name: "Singapore Changi Airport", city: "Singapore", country: "Singapore" },
-        { iata: "HKG", name: "Hong Kong Intl Airport", city: "Hong Kong", country: "Hong Kong" },
-        { iata: "SYD", name: "Sydney Airport", city: "Sydney", country: "Australia" },
-        { iata: "LAX", name: "Los Angeles Intl Airport", city: "Los Angeles", country: "USA" },
-        { iata: "CDG", name: "Charles de Gaulle Airport", city: "Paris", country: "France" },
+        {
+          iata: "BOM",
+          name: "Chhatrapati Shivaji Intl Airport",
+          city: "Mumbai",
+          country: "India",
+        },
+        {
+          iata: "DEL",
+          name: "Indira Gandhi Intl Airport",
+          city: "Delhi",
+          country: "India",
+        },
+        {
+          iata: "DXB",
+          name: "Dubai Intl Airport",
+          city: "Dubai",
+          country: "UAE",
+        },
+        {
+          iata: "LHR",
+          name: "London Heathrow Airport",
+          city: "London",
+          country: "UK",
+        },
+        {
+          iata: "JFK",
+          name: "John F. Kennedy Intl Airport",
+          city: "New York",
+          country: "USA",
+        },
+        {
+          iata: "SIN",
+          name: "Singapore Changi Airport",
+          city: "Singapore",
+          country: "Singapore",
+        },
+        {
+          iata: "HKG",
+          name: "Hong Kong Intl Airport",
+          city: "Hong Kong",
+          country: "Hong Kong",
+        },
+        {
+          iata: "SYD",
+          name: "Sydney Airport",
+          city: "Sydney",
+          country: "Australia",
+        },
+        {
+          iata: "LAX",
+          name: "Los Angeles Intl Airport",
+          city: "Los Angeles",
+          country: "USA",
+        },
+        {
+          iata: "CDG",
+          name: "Charles de Gaulle Airport",
+          city: "Paris",
+          country: "France",
+        },
       ];
 
       const filtered = query.trim()
-        ? fallbackAirports.filter(a =>
-            a.name.toLowerCase().includes(query.toLowerCase()) ||
-            a.iata.toLowerCase().includes(query.toLowerCase()) ||
-            a.city.toLowerCase().includes(query.toLowerCase())
+        ? fallbackAirports.filter(
+            (a) =>
+              a.name.toLowerCase().includes(query.toLowerCase()) ||
+              a.iata.toLowerCase().includes(query.toLowerCase()) ||
+              a.city.toLowerCase().includes(query.toLowerCase()),
           )
         : fallbackAirports;
 

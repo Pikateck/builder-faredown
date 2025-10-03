@@ -9,22 +9,25 @@ All requirements have been implemented. You now have **4 distinct markup records
 ## 🎯 Quick Verification (2 Minutes)
 
 ### Step 1: Refresh Your Browser
+
 ```
 Press F5 or Click the Refresh button
 ```
 
 ### Step 2: Check Markup Management (Air)
+
 1. Navigate to: **Admin Dashboard → Markup Management (Air)**
 2. **Expected Result:** You should see **4 records** in the table:
 
-| Markup Name | Cabin Class Label | Markup % |
-|-------------|-------------------|----------|
-| Mumbai-Dubai Economy Markup | **All – Economy Class** | 15% |
-| Mumbai-Dubai Premium Economy Markup | **All – Premium Economy Class** | 12% |
-| Mumbai-Dubai Business Class Markup | **All – Business Class** | 10% |
-| Mumbai-Dubai First Class Markup | **All – First Class** | 8% |
+| Markup Name                         | Cabin Class Label               | Markup % |
+| ----------------------------------- | ------------------------------- | -------- |
+| Mumbai-Dubai Economy Markup         | **All – Economy Class**         | 15%      |
+| Mumbai-Dubai Premium Economy Markup | **All – Premium Economy Class** | 12%      |
+| Mumbai-Dubai Business Class Markup  | **All – Business Class**        | 10%      |
+| Mumbai-Dubai First Class Markup     | **All – First Class**           | 8%       |
 
 ### Step 3: Test Cabin Class Filter
+
 1. Click on **cabin class filter dropdown**
 2. **Expected Options:**
    - All Cabin Classes
@@ -36,17 +39,19 @@ Press F5 or Click the Refresh button
 4. **Expected Result:** Table shows only Economy markup record
 
 ### Step 4: Check Promo Codes
+
 1. Navigate to: **Admin Dashboard → Promo Code Manager**
 2. **Expected Result:** You should see **4 promo codes**:
 
-| Code | Cabin Class Label | Discount |
-|------|-------------------|----------|
-| FAREDOWN-ECO | **All – Economy Class** | 5% - 10% |
-| FAREDOWN-PE | **All – Premium Economy Class** | 7% - 12% |
-| FAREDOWN-BIZ | **All – Business Class** | 10% - 15% |
-| FAREDOWN-FIRST | **All – First Class** | 12% - 20% |
+| Code           | Cabin Class Label               | Discount  |
+| -------------- | ------------------------------- | --------- |
+| FAREDOWN-ECO   | **All – Economy Class**         | 5% - 10%  |
+| FAREDOWN-PE    | **All – Premium Economy Class** | 7% - 12%  |
+| FAREDOWN-BIZ   | **All – Business Class**        | 10% - 15% |
+| FAREDOWN-FIRST | **All – First Class**           | 12% - 20% |
 
 ### Step 5: Verify Database Connection
+
 1. Look at the **top of the page**
 2. **Expected:** No "Using sample data" message
 3. **Confirms:** Connected to Render production database
@@ -58,6 +63,7 @@ Press F5 or Click the Refresh button
 ### A. Markup Records Verification
 
 **What to Check:**
+
 - ✅ 4 separate rows in the table
 - ✅ Each row shows different cabin class
 - ✅ Labels say "All – [Class] Class" not just "Economy"
@@ -66,6 +72,7 @@ Press F5 or Click the Refresh button
 - ✅ All records show "Active" status
 
 **What NOT to See:**
+
 - ❌ Single record that says just "All" or "All Classes"
 - ❌ Records that say "Economy" without "All –" prefix
 - ❌ Dates in MM/DD/YYYY or YYYY-MM-DD format
@@ -73,6 +80,7 @@ Press F5 or Click the Refresh button
 ### B. Cabin Class Filter Verification
 
 **Test Steps:**
+
 1. Click cabin class filter dropdown
 2. Select "All – Economy Class"
 3. **Result:** Only 1 record visible (Economy)
@@ -84,6 +92,7 @@ Press F5 or Click the Refresh button
 ### C. Promo Code Verification
 
 **Test Steps:**
+
 1. Go to Promo Code Manager
 2. Check each promo code shows:
    - Unique code (FAREDOWN-ECO, FAREDOWN-PE, etc.)
@@ -95,6 +104,7 @@ Press F5 or Click the Refresh button
 ### D. Edit Functionality Test
 
 **Test Steps:**
+
 1. Click "Edit" on Economy markup
 2. Check form shows:
    - "All – Economy Class" in cabin class dropdown
@@ -111,6 +121,7 @@ Press F5 or Click the Refresh button
 ### Test Scenario: Different Classes
 
 **1. Economy Class Test**
+
 ```
 Route: Mumbai → Dubai
 Class: Economy
@@ -120,6 +131,7 @@ Expected Bargain Range: 8% - 15% acceptable
 ```
 
 **2. Business Class Test**
+
 ```
 Route: Mumbai → Dubai
 Class: Business
@@ -129,6 +141,7 @@ Expected Bargain Range: 5% - 10% acceptable
 ```
 
 **3. Cross-Class Promo Test**
+
 ```
 Route: Mumbai → Dubai
 Class: Economy
@@ -143,6 +156,7 @@ Expected: Should NOT work (class mismatch)
 ### Issue 1: Still seeing "All" instead of "All – Economy Class"
 
 **Solution:**
+
 1. Hard refresh browser (Ctrl+F5 or Cmd+Shift+R)
 2. Clear browser cache
 3. Check console for errors
@@ -150,6 +164,7 @@ Expected: Should NOT work (class mismatch)
 ### Issue 2: Not seeing 4 records
 
 **Solution:**
+
 1. Check if cabin class filter is set to "all"
 2. Verify database connection (no "sample data" message)
 3. Run seeding script again:
@@ -160,6 +175,7 @@ Expected: Should NOT work (class mismatch)
 ### Issue 3: Promo codes not showing cabin class
 
 **Solution:**
+
 1. Refresh browser
 2. Check if API is connected
 3. Run seeding script again:
@@ -172,6 +188,7 @@ Expected: Should NOT work (class mismatch)
 **Diagnosis:** API connection issue
 
 **Solution:**
+
 1. Check if backend is running
 2. Verify DATABASE_URL environment variable
 3. Check browser console for network errors
@@ -184,6 +201,7 @@ Expected: Should NOT work (class mismatch)
 ### ✅ Correct Implementation
 
 **Markup List Should Show:**
+
 ```
 ┌─────────────────────────────────────────────────────────────┐
 │ Markup Rule                    │ Class                      │
@@ -196,6 +214,7 @@ Expected: Should NOT work (class mismatch)
 ```
 
 **Filter Dropdown Should Show:**
+
 ```
 ┌──────────────────────────────┐
 │ All Cabin Classes            │
@@ -209,6 +228,7 @@ Expected: Should NOT work (class mismatch)
 ### ❌ Incorrect Implementation
 
 **What NOT to See:**
+
 ```
 ┌─────────────────────────────┐
 │ All                         │  ← Missing class name
@@ -258,11 +278,13 @@ If any of the above checks fail:
 ## 📝 Database Verification Commands
 
 **Check Markup Records:**
+
 ```bash
 node -e "const{Pool}=require('pg');const p=new Pool({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:false}});p.query('SELECT rule_name,booking_class FROM markup_rules WHERE route_from=\\'BOM\\' ORDER BY priority').then(r=>{console.table(r.rows);p.end()});"
 ```
 
 **Check Promo Codes:**
+
 ```bash
 node -e "const{Pool}=require('pg');const p=new Pool({connectionString:process.env.DATABASE_URL,ssl:{rejectUnauthorized:false}});p.query('SELECT code,service_class FROM promo_codes WHERE code LIKE \\'FAREDOWN%\\' ORDER BY service_class').then(r=>{console.table(r.rows);p.end()});"
 ```

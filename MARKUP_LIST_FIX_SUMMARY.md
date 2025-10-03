@@ -3,27 +3,33 @@
 ## Issues Fixed
 
 ### 1. ✅ Empty Markup List
+
 **Problem:** Markup list was showing empty even though 4 class-specific records exist in the database.
 
-**Root Cause:** 
+**Root Cause:**
+
 - API authentication token wasn't being read from localStorage by apiClient
 - Fallback sample data was in place but table had no empty state messaging
 
 **Fix Applied:**
+
 1. Updated `client/lib/api.ts` to read auth token from localStorage if not set in instance
-2. Added fallback airport data to `client/lib/api-dev.ts` 
+2. Added fallback airport data to `client/lib/api-dev.ts`
 3. Added empty state and loading indicators to markup table
 4. Added error message display
 
 ### 2. ✅ Airport Dropdowns Not Working
+
 **Problem:** From/To airport dropdowns showing 401 authentication errors.
 
 **Root Cause:**
+
 - AirportSelect component was using direct fetch() calls
 - Token handling was manual and prone to errors
 - No fallback data when API unavailable
 
 **Fix Applied:**
+
 1. Updated `client/components/ui/airport-select.tsx` to use apiClient
 2. Added fallback airports when API is unavailable
 3. Graceful error handling with fallback instead of error messages
@@ -33,6 +39,7 @@
 ## Files Modified
 
 ### 1. `client/lib/api.ts`
+
 **Change:** ApiClient now reads auth token from localStorage
 
 ```typescript
@@ -51,6 +58,7 @@ if (token) {
 **Impact:** All API calls now automatically include auth token even if not explicitly set via setAuthToken()
 
 ### 2. `client/lib/api-dev.ts`
+
 **Change:** Added fallback data for airports API
 
 ```typescript
@@ -69,6 +77,7 @@ if (endpoint.includes("/admin/airports") || endpoint.includes("/airports")) {
 **Impact:** Airport dropdowns work even when API is offline
 
 ### 3. `client/components/ui/airport-select.tsx`
+
 **Change:** Switched from fetch() to apiClient and added fallback
 
 ```typescript
@@ -83,6 +92,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
 **Impact:** Airports always load, either from API or fallback
 
 ### 4. `client/pages/admin/MarkupManagementAir.tsx`
+
 **Change:** Added loading and empty states to table
 
 ```typescript
@@ -102,6 +112,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
 ### Authentication Flow
 
 1. **Admin Login:**
+
    ```
    User logs in → adminAuthService.login()
    → Stores token in: localStorage.setItem("auth_token", token)
@@ -109,6 +120,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
    ```
 
 2. **API Calls:**
+
    ```
    Component calls apiClient.get()
    → apiClient checks this.authToken || localStorage.getItem("auth_token")
@@ -127,6 +139,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
 ### Markup List Flow
 
 1. **Component Mounts:**
+
    ```
    MarkupManagementAir loads
    → Calls loadMarkups()
@@ -134,6 +147,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
    ```
 
 2. **Success Path:**
+
    ```
    API returns data
    → Maps to AirMarkup[] format
@@ -141,6 +155,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
    ```
 
 3. **Failure Path:**
+
    ```
    API fails (auth, network, etc.)
    → Catch block activates
@@ -159,6 +174,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
 ### Airport Dropdown Flow
 
 1. **Dropdown Opens:**
+
    ```
    User clicks airport dropdown
    → loadAirports() called
@@ -166,6 +182,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
    ```
 
 2. **Success Path:**
+
    ```
    API returns airports
    → Populates dropdown list
@@ -185,6 +202,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
 ## Testing Checklist
 
 ### ✅ Markup List
+
 - [ ] Login to admin panel
 - [ ] Navigate to Markup Management (Air)
 - [ ] **Should see:** 4 markup records (Economy, PE, Business, First)
@@ -193,6 +211,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
 - [ ] If empty, see "Create First Markup" button
 
 ### ✅ Airport Dropdowns
+
 - [ ] Click "Add Markup" button
 - [ ] Open "From (Origin)" dropdown
 - [ ] **Should see:** List of airports (either from API or fallback)
@@ -202,6 +221,7 @@ const data = await apiClient.get<any>("/admin/airports", params);
 - [ ] Can select "All Origins" / "All Destinations"
 
 ### ✅ Error Handling
+
 - [ ] If not logged in → See authentication prompts
 - [ ] If API offline → See fallback data (not errors)
 - [ ] If empty → See helpful empty state
@@ -214,9 +234,10 @@ const data = await apiClient.get<any>("/admin/airports", params);
 **Your database currently has:**
 
 ### Markup Records (4)
+
 ```sql
-SELECT rule_name, booking_class FROM markup_rules 
-WHERE route_from='BOM' AND route_to='DXB' 
+SELECT rule_name, booking_class FROM markup_rules
+WHERE route_from='BOM' AND route_to='DXB'
 ORDER BY priority;
 ```
 
@@ -229,9 +250,10 @@ Expected Output:
 | Mumbai-Dubai First Class Markup | first |
 
 ### Promo Codes (4)
+
 ```sql
-SELECT code, service_class FROM promo_codes 
-WHERE code LIKE 'FAREDOWN%' 
+SELECT code, service_class FROM promo_codes
+WHERE code LIKE 'FAREDOWN%'
 ORDER BY service_class;
 ```
 
@@ -250,26 +272,30 @@ Expected Output:
 ### If Markup List Still Empty
 
 **Option 1: Hard Refresh Browser**
+
 ```
 Press: Ctrl + Shift + R (Windows/Linux)
 Or: Cmd + Shift + R (Mac)
 ```
 
 **Option 2: Re-seed Database**
+
 ```bash
 node seed-class-specific-markups.cjs
 ```
 
 **Option 3: Check Auth**
+
 ```javascript
 // In browser console:
-localStorage.getItem("auth_token")
+localStorage.getItem("auth_token");
 // Should return: "mock-token-..." or similar
 ```
 
 ### If Airport Dropdowns Still Not Working
 
 **Option 1: Check Authentication**
+
 ```javascript
 // In browser console:
 console.log(localStorage.getItem("auth_token"));
@@ -277,6 +303,7 @@ console.log(localStorage.getItem("auth_token"));
 ```
 
 **Option 2: Verify Fallback**
+
 ```javascript
 // Airports should load from fallback even if API fails
 // Check browser console for:
@@ -284,6 +311,7 @@ console.log(localStorage.getItem("auth_token"));
 ```
 
 **Option 3: Clear Storage and Re-login**
+
 ```javascript
 localStorage.clear();
 // Then re-login to admin panel
@@ -294,6 +322,7 @@ localStorage.clear();
 ## Success Criteria
 
 ### ✅ Markup List Working When:
+
 1. Shows 4 distinct records with class-specific labels
 2. Can filter by cabin class
 3. Can search by name/route
@@ -301,6 +330,7 @@ localStorage.clear();
 5. Sample data loads if API unavailable
 
 ### ✅ Airport Dropdowns Working When:
+
 1. Dropdowns populate with airports
 2. Search filters work
 3. Can select airports or "All"

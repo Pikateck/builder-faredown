@@ -215,7 +215,8 @@ class PromoCodeService {
     const normalizedPromoCodes = (promoCodes as any[]).map((code) => ({
       ...code,
       // Handle both cabinClass (frontend) and service_class (database) fields
-      cabinClass: normalizeCabinClass(code.cabinClass || code.service_class) ?? null,
+      cabinClass:
+        normalizeCabinClass(code.cabinClass || code.service_class) ?? null,
     }));
 
     const totalCandidates = [
@@ -235,8 +236,7 @@ class PromoCodeService {
       payload?.pagination?.page,
       payload?.data?.pagination?.page,
     ];
-    const page =
-      pageCandidates.find((value) => typeof value === "number") ?? 1;
+    const page = pageCandidates.find((value) => typeof value === "number") ?? 1;
 
     const pageSizeCandidates = [
       payload?.limit,

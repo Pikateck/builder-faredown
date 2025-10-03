@@ -2,7 +2,10 @@ const express = require("express");
 const { Pool } = require("pg");
 
 const router = express.Router();
-const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
 
 // Helpers
 function mapAirRowToClient(row) {
@@ -68,21 +71,48 @@ function mapHotelRowToClient(row) {
 // ===== AIR MARKUP ROUTES =====
 router.get("/air", async (req, res) => {
   try {
-    const { search, airline, class: cabinClass, status, page = 1, limit = 10 } = req.query;
-    const where = ["module = 'air'"]; const params = []; let i = 1;
-    if (status && status !== "all") { where.push(`is_active = $${i++}`); params.push(status === "active"); }
-    if (airline && airline !== "all") { where.push(`airline_code = $${i++}`); params.push(airline); }
-    if (cabinClass && cabinClass !== "all") { where.push(`LOWER(booking_class) = LOWER($${i++})`); params.push(cabinClass); }
-    if (search) { where.push(`(LOWER(rule_name) LIKE $${i} OR LOWER(description) LIKE $${i})`); params.push(`%${String(search).toLowerCase()}%`); i++; }
+    const {
+      search,
+      airline,
+      class: cabinClass,
+      status,
+      page = 1,
+      limit = 10,
+    } = req.query;
+    const where = ["module = 'air'"];
+    const params = [];
+    let i = 1;
+    if (status && status !== "all") {
+      where.push(`is_active = $${i++}`);
+      params.push(status === "active");
+    }
+    if (airline && airline !== "all") {
+      where.push(`airline_code = $${i++}`);
+      params.push(airline);
+    }
+    if (cabinClass && cabinClass !== "all") {
+      where.push(`LOWER(booking_class) = LOWER($${i++})`);
+      params.push(cabinClass);
+    }
+    if (search) {
+      where.push(
+        `(LOWER(rule_name) LIKE $${i} OR LOWER(description) LIKE $${i})`,
+      );
+      params.push(`%${String(search).toLowerCase()}%`);
+      i++;
+    }
     const whereSql = `WHERE ${where.join(" AND ")}`;
 
-    const count = await pool.query(`SELECT COUNT(*)::int AS total FROM markup_rules ${whereSql}`, params);
+    const count = await pool.query(
+      `SELECT COUNT(*)::int AS total FROM markup_rules ${whereSql}`,
+      params,
+    );
     const total = count.rows[0].total;
 
     const offset = (parseInt(page) - 1) * parseInt(limit);
     const data = await pool.query(
       `SELECT * FROM markup_rules ${whereSql} ORDER BY priority ASC, updated_at DESC LIMIT $${i} OFFSET $${i + 1}`,
-      [...params, parseInt(limit), offset]
+      [...params, parseInt(limit), offset],
     );
 
     res.json({
@@ -111,7 +141,7 @@ router.post("/air", async (req, res) => {
       b.route?.from || null,
       b.route?.to || null,
       b.class || null,
-      (b.markupType === "fixed" ? "flat" : "percentage"),
+      b.markupType === "fixed" ? "flat" : "percentage",
       b.markupValue || 0,
       b.currentFareMin || null,
       b.currentFareMax || null,
@@ -135,7 +165,8 @@ router.put("/air/:id", async (req, res) => {
   try {
     const b = req.body || {};
     const updates = [];
-    const params = []; let i = 1;
+    const params = [];
+    let i = 1;
     const map = {
       rule_name: b.name,
       description: b.description,
@@ -143,7 +174,11 @@ router.put("/air/:id", async (req, res) => {
       route_from: b.route?.from,
       route_to: b.route?.to,
       booking_class: b.class,
-      m_type: b.markupType ? (b.markupType === "fixed" ? "flat" : "percentage") : undefined,
+      m_type: b.markupType
+        ? b.markupType === "fixed"
+          ? "flat"
+          : "percentage"
+        : undefined,
       m_value: b.markupValue,
       current_min_pct: b.currentFareMin,
       current_max_pct: b.currentFareMax,
@@ -153,12 +188,22 @@ router.put("/air/:id", async (req, res) => {
       valid_to: b.validTo,
       priority: b.priority,
       user_type: b.userType,
-      is_active: typeof b.status === "string" ? b.status === "active" : undefined,
+      is_active:
+        typeof b.status === "string" ? b.status === "active" : undefined,
     };
-    Object.entries(map).forEach(([k,v])=>{ if (v !== undefined) { updates.push(`${k} = $${i++}`); params.push(v); }});
-    if (!updates.length) return res.status(400).json({ error: "No fields to update" });
+    Object.entries(map).forEach(([k, v]) => {
+      if (v !== undefined) {
+        updates.push(`${k} = $${i++}`);
+        params.push(v);
+      }
+    });
+    if (!updates.length)
+      return res.status(400).json({ error: "No fields to update" });
     params.push(req.params.id);
-    const r = await pool.query(`UPDATE markup_rules SET ${updates.join(", ")}, updated_at = now() WHERE id = $${i} AND module = 'air' RETURNING *`, params);
+    const r = await pool.query(
+      `UPDATE markup_rules SET ${updates.join(", ")}, updated_at = now() WHERE id = $${i} AND module = 'air' RETURNING *`,
+      params,
+    );
     if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
     res.json({ markup: mapAirRowToClient(r.rows[0]) });
   } catch (err) {
@@ -169,7 +214,10 @@ router.put("/air/:id", async (req, res) => {
 
 router.delete("/air/:id", async (req, res) => {
   try {
-    const r = await pool.query("DELETE FROM markup_rules WHERE id = $1 AND module = 'air'", [req.params.id]);
+    const r = await pool.query(
+      "DELETE FROM markup_rules WHERE id = $1 AND module = 'air'",
+      [req.params.id],
+    );
     if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
     res.json({ message: "Air markup deleted successfully" });
   } catch (err) {
@@ -180,7 +228,10 @@ router.delete("/air/:id", async (req, res) => {
 
 router.post("/air/:id/toggle-status", async (req, res) => {
   try {
-    const r = await pool.query("UPDATE markup_rules SET is_active = NOT is_active, updated_at = now() WHERE id = $1 AND module = 'air' RETURNING *", [req.params.id]);
+    const r = await pool.query(
+      "UPDATE markup_rules SET is_active = NOT is_active, updated_at = now() WHERE id = $1 AND module = 'air' RETURNING *",
+      [req.params.id],
+    );
     if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
     res.json({ markup: mapAirRowToClient(r.rows[0]) });
   } catch (err) {
@@ -192,21 +243,48 @@ router.post("/air/:id/toggle-status", async (req, res) => {
 // ===== HOTEL MARKUP ROUTES =====
 router.get("/hotel", async (req, res) => {
   try {
-    const { search, city, starRating, status, page = 1, limit = 10 } = req.query;
-    const where = ["module = 'hotel'"]; const params = []; let i = 1;
-    if (status && status !== "all") { where.push(`is_active = $${i++}`); params.push(status === "active"); }
-    if (city && city !== "all") { where.push(`hotel_city ILIKE $${i++}`); params.push(`%${city}%`); }
-    if (starRating && starRating !== "all") { where.push(`hotel_star_min >= $${i++}`); params.push(parseInt(starRating)); }
-    if (search) { where.push(`(LOWER(rule_name) LIKE $${i} OR LOWER(description) LIKE $${i})`); params.push(`%${String(search).toLowerCase()}%`); i++; }
+    const {
+      search,
+      city,
+      starRating,
+      status,
+      page = 1,
+      limit = 10,
+    } = req.query;
+    const where = ["module = 'hotel'"];
+    const params = [];
+    let i = 1;
+    if (status && status !== "all") {
+      where.push(`is_active = $${i++}`);
+      params.push(status === "active");
+    }
+    if (city && city !== "all") {
+      where.push(`hotel_city ILIKE $${i++}`);
+      params.push(`%${city}%`);
+    }
+    if (starRating && starRating !== "all") {
+      where.push(`hotel_star_min >= $${i++}`);
+      params.push(parseInt(starRating));
+    }
+    if (search) {
+      where.push(
+        `(LOWER(rule_name) LIKE $${i} OR LOWER(description) LIKE $${i})`,
+      );
+      params.push(`%${String(search).toLowerCase()}%`);
+      i++;
+    }
     const whereSql = `WHERE ${where.join(" AND ")}`;
 
-    const count = await pool.query(`SELECT COUNT(*)::int AS total FROM markup_rules ${whereSql}`, params);
+    const count = await pool.query(
+      `SELECT COUNT(*)::int AS total FROM markup_rules ${whereSql}`,
+      params,
+    );
     const total = count.rows[0].total;
 
     const offset = (parseInt(page) - 1) * parseInt(limit);
     const data = await pool.query(
       `SELECT * FROM markup_rules ${whereSql} ORDER BY priority ASC, updated_at DESC LIMIT $${i} OFFSET $${i + 1}`,
-      [...params, parseInt(limit), offset]
+      [...params, parseInt(limit), offset],
     );
 
     res.json({
@@ -234,7 +312,7 @@ router.post("/hotel", async (req, res) => {
       b.city || null,
       b.starRating ? parseInt(b.starRating) : null,
       null,
-      (b.markupType === "fixed" ? "flat" : "percentage"),
+      b.markupType === "fixed" ? "flat" : "percentage",
       b.markupValue || 0,
       b.currentFareMin || null,
       b.currentFareMax || null,
@@ -258,13 +336,18 @@ router.put("/hotel/:id", async (req, res) => {
   try {
     const b = req.body || {};
     const updates = [];
-    const params = []; let i = 1;
+    const params = [];
+    let i = 1;
     const map = {
       rule_name: b.name,
       description: b.description,
       hotel_city: b.city,
       hotel_star_min: b.starRating ? parseInt(b.starRating) : undefined,
-      m_type: b.markupType ? (b.markupType === "fixed" ? "flat" : "percentage") : undefined,
+      m_type: b.markupType
+        ? b.markupType === "fixed"
+          ? "flat"
+          : "percentage"
+        : undefined,
       m_value: b.markupValue,
       current_min_pct: b.currentFareMin,
       current_max_pct: b.currentFareMax,
@@ -274,12 +357,22 @@ router.put("/hotel/:id", async (req, res) => {
       valid_to: b.validTo,
       priority: b.priority,
       user_type: b.userType,
-      is_active: typeof b.status === "string" ? b.status === "active" : undefined,
+      is_active:
+        typeof b.status === "string" ? b.status === "active" : undefined,
     };
-    Object.entries(map).forEach(([k,v])=>{ if (v !== undefined) { updates.push(`${k} = $${i++}`); params.push(v); }});
-    if (!updates.length) return res.status(400).json({ error: "No fields to update" });
+    Object.entries(map).forEach(([k, v]) => {
+      if (v !== undefined) {
+        updates.push(`${k} = $${i++}`);
+        params.push(v);
+      }
+    });
+    if (!updates.length)
+      return res.status(400).json({ error: "No fields to update" });
     params.push(req.params.id);
-    const r = await pool.query(`UPDATE markup_rules SET ${updates.join(", ")}, updated_at = now() WHERE id = $${i} AND module = 'hotel' RETURNING *`, params);
+    const r = await pool.query(
+      `UPDATE markup_rules SET ${updates.join(", ")}, updated_at = now() WHERE id = $${i} AND module = 'hotel' RETURNING *`,
+      params,
+    );
     if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
     res.json({ markup: mapHotelRowToClient(r.rows[0]) });
   } catch (err) {
@@ -290,7 +383,10 @@ router.put("/hotel/:id", async (req, res) => {
 
 router.delete("/hotel/:id", async (req, res) => {
   try {
-    const r = await pool.query("DELETE FROM markup_rules WHERE id = $1 AND module = 'hotel'", [req.params.id]);
+    const r = await pool.query(
+      "DELETE FROM markup_rules WHERE id = $1 AND module = 'hotel'",
+      [req.params.id],
+    );
     if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
     res.json({ message: "Hotel markup deleted successfully" });
   } catch (err) {
@@ -301,7 +397,10 @@ router.delete("/hotel/:id", async (req, res) => {
 
 router.post("/hotel/:id/toggle-status", async (req, res) => {
   try {
-    const r = await pool.query("UPDATE markup_rules SET is_active = NOT is_active, updated_at = now() WHERE id = $1 AND module = 'hotel' RETURNING *", [req.params.id]);
+    const r = await pool.query(
+      "UPDATE markup_rules SET is_active = NOT is_active, updated_at = now() WHERE id = $1 AND module = 'hotel' RETURNING *",
+      [req.params.id],
+    );
     if (!r.rowCount) return res.status(404).json({ error: "Markup not found" });
     res.json({ markup: mapHotelRowToClient(r.rows[0]) });
   } catch (err) {

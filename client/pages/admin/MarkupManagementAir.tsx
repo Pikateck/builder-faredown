@@ -186,7 +186,10 @@ export default function MarkupManagementAir() {
         total: result.total,
       });
     } catch (err) {
-      console.warn("API unavailable, using sample class-specific markup data:", err);
+      console.warn(
+        "API unavailable, using sample class-specific markup data:",
+        err,
+      );
 
       // Sample data demonstrating 4 distinct cabin class markup records
       const sampleMarkups: AirMarkup[] = [
@@ -304,25 +307,25 @@ export default function MarkupManagementAir() {
         filteredSampleData = filteredSampleData.filter(
           (markup) =>
             markup.name.toLowerCase().includes(searchLower) ||
-            markup.description.toLowerCase().includes(searchLower)
+            markup.description.toLowerCase().includes(searchLower),
         );
       }
 
       if (selectedAirline && selectedAirline !== "all") {
         filteredSampleData = filteredSampleData.filter(
-          (markup) => markup.airline === selectedAirline
+          (markup) => markup.airline === selectedAirline,
         );
       }
 
       if (selectedClass && selectedClass !== "all") {
         filteredSampleData = filteredSampleData.filter(
-          (markup) => markup.class === selectedClass
+          (markup) => markup.class === selectedClass,
         );
       }
 
       if (selectedStatus && selectedStatus !== "all") {
         filteredSampleData = filteredSampleData.filter(
-          (markup) => markup.status === selectedStatus
+          (markup) => markup.status === selectedStatus,
         );
       }
 
@@ -1152,14 +1155,18 @@ export default function MarkupManagementAir() {
                       <TableRow>
                         <TableCell colSpan={7} className="text-center py-8">
                           <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2" />
-                          <p className="text-sm text-gray-600">Loading markups...</p>
+                          <p className="text-sm text-gray-600">
+                            Loading markups...
+                          </p>
                         </TableCell>
                       </TableRow>
                     ) : filteredMarkups.length === 0 ? (
                       <TableRow>
                         <TableCell colSpan={7} className="text-center py-8">
                           <AlertCircle className="w-6 h-6 mx-auto mb-2 text-gray-400" />
-                          <p className="text-sm text-gray-600 mb-2">No markup rules found</p>
+                          <p className="text-sm text-gray-600 mb-2">
+                            No markup rules found
+                          </p>
                           <Button
                             variant="outline"
                             size="sm"
@@ -1170,122 +1177,133 @@ export default function MarkupManagementAir() {
                           </Button>
                         </TableCell>
                       </TableRow>
-                    ) : filteredMarkups.map((markup) => {
-                      const airline = AIRLINES.find(
-                        (a) => a.code === markup.airline,
-                      );
+                    ) : (
+                      filteredMarkups.map((markup) => {
+                        const airline = AIRLINES.find(
+                          (a) => a.code === markup.airline,
+                        );
 
-                      return (
-                        <TableRow key={markup.id}>
-                          <TableCell>
-                            <div>
-                              <p className="font-medium">{markup.name}</p>
-                              <p className="text-sm text-gray-600 truncate max-w-48">
-                                {markup.description}
-                              </p>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center text-sm">
-                                <MapPin className="w-3 h-3 mr-1" />
-                                {(markup.route.from === "ALL" || markup.route.from === "All") &&
-                                 (markup.route.to === "ALL" || markup.route.to === "All")
-                                  ? "All → All"
-                                  : `${markup.route.from || "All"} → ${markup.route.to || "All"}`}
+                        return (
+                          <TableRow key={markup.id}>
+                            <TableCell>
+                              <div>
+                                <p className="font-medium">{markup.name}</p>
+                                <p className="text-sm text-gray-600 truncate max-w-48">
+                                  {markup.description}
+                                </p>
                               </div>
-                              <div className="flex items-center text-sm text-gray-600">
-                                <Plane className="w-3 h-3 mr-1" />
-                                {markup.airline === "ALL" || markup.airline === "All"
-                                  ? "All Airlines"
-                                  : airline
-                                    ? `${airline.code} - ${airline.name}`
-                                    : markup.airline}
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <div className="flex items-center text-sm">
+                                  <MapPin className="w-3 h-3 mr-1" />
+                                  {(markup.route.from === "ALL" ||
+                                    markup.route.from === "All") &&
+                                  (markup.route.to === "ALL" ||
+                                    markup.route.to === "All")
+                                    ? "All → All"
+                                    : `${markup.route.from || "All"} → ${markup.route.to || "All"}`}
+                                </div>
+                                <div className="flex items-center text-sm text-gray-600">
+                                  <Plane className="w-3 h-3 mr-1" />
+                                  {markup.airline === "ALL" ||
+                                  markup.airline === "All"
+                                    ? "All Airlines"
+                                    : airline
+                                      ? `${airline.code} - ${airline.name}`
+                                      : markup.airline}
+                                </div>
                               </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <Badge variant="outline">
-                              {getCabinClassLabel(markup.class)}
-                            </Badge>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center text-sm font-medium">
-                                {markup.markupType === "percentage" ? (
-                                  <Percent className="w-3 h-3 mr-1" />
-                                ) : (
-                                  <DollarSign className="w-3 h-3 mr-1" />
-                                )}
-                                {markup.markupValue}
-                                {markup.markupType === "percentage" ? "%" : "₹"}
-                              </div>
-                              <div className="text-xs text-gray-600">
-                                Min: ₹{markup.minAmount} | Max: ₹
-                                {markup.maxAmount}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <div className="space-y-1">
-                              <div className="flex items-center text-sm">
-                                <Calendar className="w-3 h-3 mr-1" />
-                                {displayDate(markup.validFrom)}
-                              </div>
-                              <div className="text-xs text-gray-600">
-                                to {displayDate(markup.validTo)}
-                              </div>
-                            </div>
-                          </TableCell>
-                          <TableCell>
-                            <StatusBadge status={markup.status} />
-                          </TableCell>
-                          <TableCell>
-                            <DropdownMenu>
-                              <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="sm">
-                                  <MoreVertical className="w-4 h-4" />
-                                </Button>
-                              </DropdownMenuTrigger>
-                              <DropdownMenuContent align="end">
-                                <DropdownMenuItem
-                                  onClick={() => handleEditMarkup(markup)}
-                                >
-                                  <Edit className="w-4 h-4 mr-2" />
-                                  Edit Markup
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => toggleMarkupStatus(markup.id)}
-                                >
-                                  {markup.status === "active" ? (
-                                    <>
-                                      <AlertCircle className="w-4 h-4 mr-2" />
-                                      Deactivate
-                                    </>
+                            </TableCell>
+                            <TableCell>
+                              <Badge variant="outline">
+                                {getCabinClassLabel(markup.class)}
+                              </Badge>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <div className="flex items-center text-sm font-medium">
+                                  {markup.markupType === "percentage" ? (
+                                    <Percent className="w-3 h-3 mr-1" />
                                   ) : (
-                                    <>
-                                      <CheckCircle className="w-4 h-4 mr-2" />
-                                      Activate
-                                    </>
+                                    <DollarSign className="w-3 h-3 mr-1" />
                                   )}
-                                </DropdownMenuItem>
-                                <DropdownMenuItem>
-                                  <Activity className="w-4 h-4 mr-2" />
-                                  View Stats
-                                </DropdownMenuItem>
-                                <DropdownMenuItem
-                                  onClick={() => handleDeleteMarkup(markup.id)}
-                                  className="text-red-600"
-                                >
-                                  <Trash2 className="w-4 h-4 mr-2" />
-                                  Delete Markup
-                                </DropdownMenuItem>
-                              </DropdownMenuContent>
-                            </DropdownMenu>
-                          </TableCell>
-                        </TableRow>
-                      );
-                    })}
+                                  {markup.markupValue}
+                                  {markup.markupType === "percentage"
+                                    ? "%"
+                                    : "₹"}
+                                </div>
+                                <div className="text-xs text-gray-600">
+                                  Min: ₹{markup.minAmount} | Max: ₹
+                                  {markup.maxAmount}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <div className="space-y-1">
+                                <div className="flex items-center text-sm">
+                                  <Calendar className="w-3 h-3 mr-1" />
+                                  {displayDate(markup.validFrom)}
+                                </div>
+                                <div className="text-xs text-gray-600">
+                                  to {displayDate(markup.validTo)}
+                                </div>
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              <StatusBadge status={markup.status} />
+                            </TableCell>
+                            <TableCell>
+                              <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                  <Button variant="ghost" size="sm">
+                                    <MoreVertical className="w-4 h-4" />
+                                  </Button>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent align="end">
+                                  <DropdownMenuItem
+                                    onClick={() => handleEditMarkup(markup)}
+                                  >
+                                    <Edit className="w-4 h-4 mr-2" />
+                                    Edit Markup
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      toggleMarkupStatus(markup.id)
+                                    }
+                                  >
+                                    {markup.status === "active" ? (
+                                      <>
+                                        <AlertCircle className="w-4 h-4 mr-2" />
+                                        Deactivate
+                                      </>
+                                    ) : (
+                                      <>
+                                        <CheckCircle className="w-4 h-4 mr-2" />
+                                        Activate
+                                      </>
+                                    )}
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem>
+                                    <Activity className="w-4 h-4 mr-2" />
+                                    View Stats
+                                  </DropdownMenuItem>
+                                  <DropdownMenuItem
+                                    onClick={() =>
+                                      handleDeleteMarkup(markup.id)
+                                    }
+                                    className="text-red-600"
+                                  >
+                                    <Trash2 className="w-4 h-4 mr-2" />
+                                    Delete Markup
+                                  </DropdownMenuItem>
+                                </DropdownMenuContent>
+                              </DropdownMenu>
+                            </TableCell>
+                          </TableRow>
+                        );
+                      })
+                    )}
                   </TableBody>
                 </Table>
               </div>

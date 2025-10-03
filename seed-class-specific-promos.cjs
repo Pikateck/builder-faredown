@@ -1,9 +1,9 @@
 /**
  * Seed Class-Specific Promo Codes
- * 
+ *
  * This script creates class-specific promo codes,
  * one for each cabin class: Economy, Premium Economy, Business, First
- * 
+ *
  * Run with: node seed-class-specific-promos.cjs
  */
 
@@ -11,85 +11,85 @@ const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 const classSpecificPromos = [
   {
-    code: 'FAREDOWN-ECO',
-    description: 'Special discount for Economy class flights',
-    module: 'air',
-    discount_type: 'percent',
+    code: "FAREDOWN-ECO",
+    description: "Special discount for Economy class flights",
+    module: "air",
+    discount_type: "percent",
     discount_min: 5,
     discount_max: 10,
     min_fare_amount: 5000,
     marketing_budget: 50000,
-    expires_on: '2024-12-31',
+    expires_on: "2024-12-31",
     show_on_home: true,
-    status: 'active',
-    service_class: 'economy',
-    airline_code: 'ALL',
+    status: "active",
+    service_class: "economy",
+    airline_code: "ALL",
     origin: null,
-    destination: null
+    destination: null,
   },
   {
-    code: 'FAREDOWN-PE',
-    description: 'Special discount for Premium Economy class flights',
-    module: 'air',
-    discount_type: 'percent',
+    code: "FAREDOWN-PE",
+    description: "Special discount for Premium Economy class flights",
+    module: "air",
+    discount_type: "percent",
     discount_min: 7,
     discount_max: 12,
     min_fare_amount: 8000,
     marketing_budget: 75000,
-    expires_on: '2024-12-31',
+    expires_on: "2024-12-31",
     show_on_home: true,
-    status: 'active',
-    service_class: 'premium-economy',
-    airline_code: 'ALL',
+    status: "active",
+    service_class: "premium-economy",
+    airline_code: "ALL",
     origin: null,
-    destination: null
+    destination: null,
   },
   {
-    code: 'FAREDOWN-BIZ',
-    description: 'Special discount for Business class flights',
-    module: 'air',
-    discount_type: 'percent',
+    code: "FAREDOWN-BIZ",
+    description: "Special discount for Business class flights",
+    module: "air",
+    discount_type: "percent",
     discount_min: 10,
     discount_max: 15,
     min_fare_amount: 15000,
     marketing_budget: 100000,
-    expires_on: '2024-12-31',
+    expires_on: "2024-12-31",
     show_on_home: true,
-    status: 'active',
-    service_class: 'business',
-    airline_code: 'ALL',
+    status: "active",
+    service_class: "business",
+    airline_code: "ALL",
     origin: null,
-    destination: null
+    destination: null,
   },
   {
-    code: 'FAREDOWN-FIRST',
-    description: 'Special discount for First class flights',
-    module: 'air',
-    discount_type: 'percent',
+    code: "FAREDOWN-FIRST",
+    description: "Special discount for First class flights",
+    module: "air",
+    discount_type: "percent",
     discount_min: 12,
     discount_max: 20,
     min_fare_amount: 25000,
     marketing_budget: 150000,
-    expires_on: '2024-12-31',
+    expires_on: "2024-12-31",
     show_on_home: true,
-    status: 'active',
-    service_class: 'first',
-    airline_code: 'ALL',
+    status: "active",
+    service_class: "first",
+    airline_code: "ALL",
     origin: null,
-    destination: null
-  }
+    destination: null,
+  },
 ];
 
 async function seedClassSpecificPromos() {
   const client = await pool.connect();
-  
+
   try {
-    console.log('🎫 Starting class-specific promo code seeding...\n');
+    console.log("🎫 Starting class-specific promo code seeding...\n");
 
     // Check if promo_codes table exists
     const tableCheck = await client.query(`
@@ -100,8 +100,8 @@ async function seedClassSpecificPromos() {
     `);
 
     if (!tableCheck.rows[0].exists) {
-      console.log('⚠️  promo_codes table does not exist. Creating it...\n');
-      
+      console.log("⚠️  promo_codes table does not exist. Creating it...\n");
+
       await client.query(`
         CREATE TABLE IF NOT EXISTS promo_codes (
           id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -132,12 +132,12 @@ async function seedClassSpecificPromos() {
           max_usage INTEGER
         );
       `);
-      
-      console.log('✅ promo_codes table created successfully\n');
+
+      console.log("✅ promo_codes table created successfully\n");
     }
 
     // Begin transaction
-    await client.query('BEGIN');
+    await client.query("BEGIN");
 
     // Delete existing class-specific promo codes to avoid duplicates
     const deleteResult = await client.query(`
@@ -145,14 +145,16 @@ async function seedClassSpecificPromos() {
       WHERE code IN ('FAREDOWN-ECO', 'FAREDOWN-PE', 'FAREDOWN-BIZ', 'FAREDOWN-FIRST')
       RETURNING code;
     `);
-    
+
     if (deleteResult.rowCount > 0) {
-      console.log(`🗑️  Removed ${deleteResult.rowCount} existing promo code(s)\n`);
+      console.log(
+        `🗑️  Removed ${deleteResult.rowCount} existing promo code(s)\n`,
+      );
     }
 
     // Insert the class-specific promo codes
     let insertedCount = 0;
-    
+
     for (const promo of classSpecificPromos) {
       const insertQuery = `
         INSERT INTO promo_codes (
@@ -180,33 +182,43 @@ async function seedClassSpecificPromos() {
         promo.service_class,
         promo.airline_code,
         promo.origin,
-        promo.destination
+        promo.destination,
       ];
 
       const result = await client.query(insertQuery, values);
       const inserted = result.rows[0];
 
-      const classLabel = inserted.service_class === 'economy' ? 'Economy' :
-                        inserted.service_class === 'premium-economy' ? 'Premium Economy' :
-                        inserted.service_class === 'business' ? 'Business' :
-                        inserted.service_class === 'first' ? 'First' : inserted.service_class;
+      const classLabel =
+        inserted.service_class === "economy"
+          ? "Economy"
+          : inserted.service_class === "premium-economy"
+            ? "Premium Economy"
+            : inserted.service_class === "business"
+              ? "Business"
+              : inserted.service_class === "first"
+                ? "First"
+                : inserted.service_class;
 
       console.log(`✅ Created: ${inserted.code}`);
       console.log(`   ID: ${inserted.id}`);
       console.log(`   Class: All – ${classLabel} Class`);
-      console.log(`   Discount: ${promo.discount_min}% - ${promo.discount_max}%`);
+      console.log(
+        `   Discount: ${promo.discount_min}% - ${promo.discount_max}%`,
+      );
       console.log(`   Min Fare: ₹${promo.min_fare_amount}`);
       console.log(`   Budget: ₹${promo.marketing_budget}\n`);
-      
+
       insertedCount++;
     }
 
     // Commit transaction
-    await client.query('COMMIT');
+    await client.query("COMMIT");
 
-    console.log('═══════════════════════════════════════════════════════');
-    console.log(`✨ SUCCESS! Created ${insertedCount} class-specific promo codes`);
-    console.log('═══════════════════════════════════════════════════════\n');
+    console.log("═══════════════════════════════════════════════════════");
+    console.log(
+      `✨ SUCCESS! Created ${insertedCount} class-specific promo codes`,
+    );
+    console.log("═══════════════════════════════════════════════════════\n");
 
     // Verify the records
     const verifyQuery = await client.query(`
@@ -222,34 +234,43 @@ async function seedClassSpecificPromos() {
         END;
     `);
 
-    console.log('📊 Verification - Class-specific promo codes:\n');
+    console.log("📊 Verification - Class-specific promo codes:\n");
     verifyQuery.rows.forEach((row, index) => {
-      const classLabel = row.service_class === 'economy' ? 'Economy' :
-                        row.service_class === 'premium-economy' ? 'Premium Economy' :
-                        row.service_class === 'business' ? 'Business' :
-                        row.service_class === 'first' ? 'First' : row.service_class;
+      const classLabel =
+        row.service_class === "economy"
+          ? "Economy"
+          : row.service_class === "premium-economy"
+            ? "Premium Economy"
+            : row.service_class === "business"
+              ? "Business"
+              : row.service_class === "first"
+                ? "First"
+                : row.service_class;
 
       console.log(`${index + 1}. ${row.code}`);
       console.log(`   Class: All – ${classLabel} Class`);
       console.log(`   Discount: ${row.discount_min}% - ${row.discount_max}%`);
-      console.log(`   Status: ${row.status === 'active' ? 'Active ✅' : 'Inactive ❌'}\n`);
+      console.log(
+        `   Status: ${row.status === "active" ? "Active ✅" : "Inactive ❌"}\n`,
+      );
     });
 
-    console.log('═══════════════════════════════════════════════════════');
-    console.log('🎉 Class-specific promo code seeding completed!');
-    console.log('═══════════════════════════════════════════════════════');
-    console.log('\nNext steps:');
-    console.log('1. Refresh the admin panel (F5)');
-    console.log('2. Navigate to Promo Code Manager');
-    console.log('3. You should see 4 distinct promo codes for each cabin class');
+    console.log("═══════════════════════════════════════════════════════");
+    console.log("🎉 Class-specific promo code seeding completed!");
+    console.log("═══════════════════════════════════════════════════════");
+    console.log("\nNext steps:");
+    console.log("1. Refresh the admin panel (F5)");
+    console.log("2. Navigate to Promo Code Manager");
+    console.log(
+      "3. You should see 4 distinct promo codes for each cabin class",
+    );
     console.log('4. Each code shows "All – [Class Name] Class" label');
-    console.log('5. Test filtering by cabin class');
-    console.log('6. Test applying promo codes in bargain flow\n');
-
+    console.log("5. Test filtering by cabin class");
+    console.log("6. Test applying promo codes in bargain flow\n");
   } catch (error) {
-    await client.query('ROLLBACK');
-    console.error('❌ Error seeding class-specific promo codes:', error);
-    console.error('\nError details:', error.message);
+    await client.query("ROLLBACK");
+    console.error("❌ Error seeding class-specific promo codes:", error);
+    console.error("\nError details:", error.message);
     throw error;
   } finally {
     client.release();
@@ -260,10 +281,10 @@ async function seedClassSpecificPromos() {
 // Run the seeding
 seedClassSpecificPromos()
   .then(() => {
-    console.log('\n✅ Script completed successfully');
+    console.log("\n✅ Script completed successfully");
     process.exit(0);
   })
   .catch((error) => {
-    console.error('\n❌ Script failed:', error.message);
+    console.error("\n❌ Script failed:", error.message);
     process.exit(1);
   });

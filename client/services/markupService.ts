@@ -405,7 +405,8 @@ class MarkupService {
         params.booking_class = filters.class;
       if (filters.status && filters.status !== "all")
         params.status = filters.status;
-      if (filters.city && filters.city !== "all") params.hotel_city = filters.city;
+      if (filters.city && filters.city !== "all")
+        params.hotel_city = filters.city;
       if (filters.starRating && filters.starRating !== "all") {
         const ratingNumber = Number(filters.starRating);
         if (!Number.isNaN(ratingNumber)) {

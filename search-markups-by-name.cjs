@@ -2,7 +2,7 @@ const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 (async () => {
@@ -14,7 +14,7 @@ const pool = new Pool({
       WHERE rule_name LIKE '%Mumbai-Dubai%' OR rule_name LIKE '%Amadeus%' OR rule_name LIKE '%BOM%'
       ORDER BY rule_name
     `);
-    console.log('Found markups:', result.rows.length);
+    console.log("Found markups:", result.rows.length);
     console.log(JSON.stringify(result.rows, null, 2));
   } finally {
     client.release();

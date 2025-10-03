@@ -1,7 +1,7 @@
-const { Pool } = require('pg');
-const pool = new Pool({ 
-  connectionString: process.env.DATABASE_URL, 
-  ssl: { rejectUnauthorized: false } 
+const { Pool } = require("pg");
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
 
 (async () => {
@@ -15,10 +15,10 @@ const pool = new Pool({
       WHERE conrelid = 'promo_codes'::regclass
         AND contype = 'c';
     `);
-    
-    console.log('Promo Codes Check Constraints:');
-    console.log('==============================\n');
-    result.rows.forEach(row => {
+
+    console.log("Promo Codes Check Constraints:");
+    console.log("==============================\n");
+    result.rows.forEach((row) => {
       console.log(`${row.constraint_name}:`);
       console.log(`  ${row.constraint_definition}\n`);
     });

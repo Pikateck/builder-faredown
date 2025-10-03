@@ -234,7 +234,11 @@ export default function MarkupManagementHotel() {
       });
 
       const timestamp = new Date().toISOString().split("T")[0];
-      downloadTextFile(csvContent, `hotel-markups-${timestamp}.csv`, "text/csv");
+      downloadTextFile(
+        csvContent,
+        `hotel-markups-${timestamp}.csv`,
+        "text/csv",
+      );
     } catch (err) {
       console.error("Failed to export hotel markups:", err);
       setError(

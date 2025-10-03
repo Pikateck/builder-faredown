@@ -1,6 +1,6 @@
 /**
  * Test Markup API Response Structure
- * 
+ *
  * This script tests the markup API to verify it returns the correct structure
  * and class labels for all cabin classes
  */
@@ -9,15 +9,15 @@ const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: { rejectUnauthorized: false }
+  ssl: { rejectUnauthorized: false },
 });
 
 async function testMarkupAPI() {
   const client = await pool.connect();
-  
+
   try {
-    console.log('🧪 Testing Markup API Response Structure\n');
-    console.log('═══════════════════════════════════════════════════════\n');
+    console.log("🧪 Testing Markup API Response Structure\n");
+    console.log("═══════════════════════════════════════════════════════\n");
 
     // Query the database directly (simulating API route logic)
     const query = `
@@ -50,14 +50,14 @@ async function testMarkupAPI() {
       console.log(`   bargain_min_pct: ${row.bargain_min_pct}%`);
       console.log(`   bargain_max_pct: ${row.bargain_max_pct}%`);
       console.log(`   is_active: ${row.is_active}`);
-      console.log('');
+      console.log("");
     });
 
     // Simulate the API mapping function
-    console.log('═══════════════════════════════════════════════════════');
-    console.log('🔄 Simulating API Response Mapping\n');
+    console.log("═══════════════════════════════════════════════════════");
+    console.log("🔄 Simulating API Response Mapping\n");
 
-    const mappedItems = result.rows.map(row => ({
+    const mappedItems = result.rows.map((row) => ({
       id: String(row.id),
       name: row.rule_name,
       description: row.description || "",
@@ -82,41 +82,40 @@ async function testMarkupAPI() {
       totalPages: 1,
     };
 
-    console.log('API Response Structure:');
+    console.log("API Response Structure:");
     console.log(JSON.stringify(apiResponse, null, 2));
 
-    console.log('\n═══════════════════════════════════════════════════════');
-    console.log('✅ API Response Test Complete\n');
+    console.log("\n═══════════════════════════════════════════════════════");
+    console.log("✅ API Response Test Complete\n");
 
     // Expected Class Labels (from frontend normalization)
-    console.log('📋 Expected Frontend Labels:');
+    console.log("📋 Expected Frontend Labels:");
     console.log('   economy → "All – Economy Class"');
     console.log('   premium-economy → "All – Premium Economy Class"');
     console.log('   business → "All – Business Class"');
     console.log('   first → "All – First Class"');
-    console.log('');
+    console.log("");
 
     // Verify each class value
-    console.log('✅ Class Value Verification:');
+    console.log("✅ Class Value Verification:");
     mappedItems.forEach((item, index) => {
       const expectedLabels = {
-        'economy': 'All – Economy Class',
-        'premium-economy': 'All – Premium Economy Class',
-        'business': 'All – Business Class',
-        'first': 'All – First Class',
+        economy: "All – Economy Class",
+        "premium-economy": "All – Premium Economy Class",
+        business: "All – Business Class",
+        first: "All – First Class",
       };
 
       const expectedLabel = expectedLabels[item.class];
       console.log(`   ${index + 1}. ${item.name}`);
       console.log(`      class value: "${item.class}"`);
       console.log(`      expected label: "${expectedLabel}"`);
-      console.log(`      ✅ ${expectedLabel ? 'VALID' : 'INVALID'}`);
-      console.log('');
+      console.log(`      ✅ ${expectedLabel ? "VALID" : "INVALID"}`);
+      console.log("");
     });
-
   } catch (error) {
-    console.error('❌ Error testing markup API:', error);
-    console.error('\nError details:', error.message);
+    console.error("❌ Error testing markup API:", error);
+    console.error("\nError details:", error.message);
     throw error;
   } finally {
     client.release();
@@ -127,10 +126,10 @@ async function testMarkupAPI() {
 // Run the test
 testMarkupAPI()
   .then(() => {
-    console.log('✅ Test completed successfully');
+    console.log("✅ Test completed successfully");
     process.exit(0);
   })
   .catch((error) => {
-    console.error('❌ Test failed:', error.message);
+    console.error("❌ Test failed:", error.message);
     process.exit(1);
   });
