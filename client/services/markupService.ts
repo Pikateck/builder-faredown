@@ -921,8 +921,10 @@ class MarkupService {
       currentFareMax: baseMarkupMax,
       bargainFareMin: Math.max(baseMarkupMin - 5, 5),
       bargainFareMax: baseMarkupMax + 5,
-      validFrom: new Date().toISOString(),
-      validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+      validFrom: this.toDisplayDate(new Date().toISOString()),
+      validTo: this.toDisplayDate(
+        new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+      ),
       status: "active" as const,
       priority: 1,
       userType: "all" as const,
