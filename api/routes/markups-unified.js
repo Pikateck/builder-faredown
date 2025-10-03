@@ -198,4 +198,73 @@ router.post("/test-apply", async (req, res) => {
   }
 });
 
+router.get("/export", async (req, res) => {
+  try {
+    const format = String(req.query.format || "csv").toLowerCase();
+    const limitParam = parseInt(String(req.query.limit || "5000"), 10);
+    const resolvedLimit = Number.isFinite(limitParam) && limitParam > 0
+      ? Math.min(limitParam, 10000)
+      : 5000;
+
+    const { where, params } = buildWhere(req.query);
+    const queryParams = [...params];
+    let query = `SELECT * FROM markup_rules ${where} ORDER BY module, priority ASC, updated_at DESC`;
+
+    if (resolvedLimit > 0) {
+      query += ` LIMIT $${queryParams.length + 1}`;
+      queryParams.push(resolvedLimit);
+    }
+
+    const result = await pool.query(query, queryParams);
+    const rows = result.rows;
+
+    if (format === "json") {
+      return res.json({
+        success: true,
+        items: rows,
+        total: rows.length,
+        exportDate: new Date().toISOString(),
+      });
+    }
+
+    const columnHeaders = EXPORT_COLUMNS;
+    const headerRow = columnHeaders.map((col) => `"${col}"`).join(",");
+    const csvRows = rows.map((row) =>
+      columnHeaders
+        .map((column) => {
+          const value = row[column];
+          if (value === null || typeof value === "undefined") {
+            return "";
+          }
+          if (value instanceof Date) {
+            return `"${value.toISOString()}"`;
+          }
+          if (typeof value === "object") {
+            const serialized = JSON.stringify(value);
+            return `"${serialized.replace(/"/g, '""')}"`;
+          }
+          const stringValue = String(value);
+          return `"${stringValue.replace(/"/g, '""')}"`;
+        })
+        .join(","),
+    );
+
+    const csvContent = [headerRow, ...csvRows].join("\n");
+
+    res.setHeader("Content-Type", "text/csv");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="markups_export_${new Date().toISOString().split("T")[0]}.csv"`,
+    );
+    res.send(csvContent);
+  } catch (error) {
+    console.error("❌ Export markups error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to export markups",
+      message: error instanceof Error ? error.message : "Unknown error",
+    });
+  }
+});
+
 module.exports = router;
