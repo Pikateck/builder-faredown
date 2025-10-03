@@ -193,6 +193,8 @@ export interface MarkupFilters {
   limit?: number;
 }
 
+type MarkupModule = "air" | "hotel" | "transfer" | "packages" | "sightseeing";
+
 class MarkupService {
   private baseUrl = "/api/markups";
 
