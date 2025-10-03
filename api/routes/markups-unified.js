@@ -4,6 +4,39 @@ const { Pool } = require("pg");
 const router = express.Router();
 const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 
+const EXPORT_COLUMNS = [
+  "id",
+  "module",
+  "rule_name",
+  "description",
+  "airline_code",
+  "origin_iata",
+  "dest_iata",
+  "route_from",
+  "route_to",
+  "booking_class",
+  "hotel_city",
+  "hotel_star_min",
+  "hotel_star_max",
+  "supplier_id",
+  "product_code",
+  "vehicle_type",
+  "transfer_kind",
+  "m_type",
+  "m_value",
+  "current_min_pct",
+  "current_max_pct",
+  "bargain_min_pct",
+  "bargain_max_pct",
+  "valid_from",
+  "valid_to",
+  "priority",
+  "user_type",
+  "is_active",
+  "created_at",
+  "updated_at",
+];
+
 function buildWhere(query) {
   const { module, airline_code, route_from, route_to, booking_class, status, search, hotel_city, supplier_id, product_code, vehicle_type, transfer_kind } = query;
   const where = [];
