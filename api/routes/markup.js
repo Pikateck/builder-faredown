@@ -12,7 +12,7 @@ function mapAirRowToClient(row) {
     description: row.description || "",
     airline: row.airline_code || "ALL",
     route: { from: row.route_from || "ALL", to: row.route_to || "ALL" },
-    class: (row.booking_class || "all").toLowerCase(),
+    class: row.booking_class || "economy",
     markupType: row.m_type === "flat" ? "fixed" : "percentage",
     markupValue: Number(row.m_value || 0),
     minAmount: 0,
