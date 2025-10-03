@@ -210,11 +210,11 @@ async function seedClassSpecificPromos() {
 
     // Verify the records
     const verifyQuery = await client.query(`
-      SELECT id, code, cabin_class, discount_min_value, discount_max_value, status
+      SELECT id, code, service_class, discount_min, discount_max, status
       FROM promo_codes
       WHERE code IN ('FAREDOWN-ECO', 'FAREDOWN-PE', 'FAREDOWN-BIZ', 'FAREDOWN-FIRST')
-      ORDER BY 
-        CASE cabin_class
+      ORDER BY
+        CASE service_class
           WHEN 'economy' THEN 1
           WHEN 'premium-economy' THEN 2
           WHEN 'business' THEN 3
@@ -224,18 +224,18 @@ async function seedClassSpecificPromos() {
 
     console.log('📊 Verification - Class-specific promo codes:\n');
     verifyQuery.rows.forEach((row, index) => {
-      const classLabel = row.cabin_class === 'economy' ? 'Economy' :
-                        row.cabin_class === 'premium-economy' ? 'Premium Economy' :
-                        row.cabin_class === 'business' ? 'Business' :
-                        row.cabin_class === 'first' ? 'First' : row.cabin_class;
-      
+      const classLabel = row.service_class === 'economy' ? 'Economy' :
+                        row.service_class === 'premium-economy' ? 'Premium Economy' :
+                        row.service_class === 'business' ? 'Business' :
+                        row.service_class === 'first' ? 'First' : row.service_class;
+
       console.log(`${index + 1}. ${row.code}`);
       console.log(`   Class: All – ${classLabel} Class`);
-      console.log(`   Discount: ${row.discount_min_value}% - ${row.discount_max_value}%`);
+      console.log(`   Discount: ${row.discount_min}% - ${row.discount_max}%`);
       console.log(`   Status: ${row.status === 'active' ? 'Active ✅' : 'Inactive ❌'}\n`);
     });
 
-    console.log('═══════════════════════════════════════════���═══════════');
+    console.log('═══════════════════════════════════════════════════════');
     console.log('🎉 Class-specific promo code seeding completed!');
     console.log('═══════════════════════════════════════════════════════');
     console.log('\nNext steps:');
