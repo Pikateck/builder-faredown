@@ -431,16 +431,16 @@ export default function MarkupManagementAir() {
           <div>
             <Label htmlFor="class">Class</Label>
             <Select
-              value={formData.class}
+              value={normalizeCabinClass(formData.class) || ""}
               onValueChange={(value) =>
                 setFormData({ ...formData, class: value as AirMarkup["class"] })
               }
             >
               <SelectTrigger>
-                <SelectValue />
+                <SelectValue placeholder="Select cabin class" />
               </SelectTrigger>
               <SelectContent>
-                {CLASS_OPTIONS.map((option) => (
+                {CABIN_CLASS_OPTIONS.map((option) => (
                   <SelectItem key={option.value} value={option.value}>
                     {option.label}
                   </SelectItem>
