@@ -43,6 +43,11 @@ import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { downloadTextFile } from "@/lib/downloadUtils";
 import {
+  formatDateToDDMMMYYYY,
+  formatDateToDisplayString,
+  getCurrentDateFormatted,
+} from "@/lib/dateUtils";
+import {
   Hotel,
   Plus,
   Edit,
@@ -76,6 +81,34 @@ import {
 // Local type extensions for UI
 type UIHotelMarkup = HotelMarkup & {
   checkInDays?: string[];
+};
+
+const displayDate = (value?: string | null): string => {
+  const formatted = formatDateToDisplayString(value ?? "");
+  return formatted || "-";
+};
+
+const normalizeDisplayDate = (value: string): string => {
+  const trimmed = value?.trim() ?? "";
+  if (!trimmed) {
+    return "";
+  }
+
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(trimmed)) {
+    const [day, month, year] = trimmed.split("/");
+    const isoCandidate = `${year}-${month}-${day}`;
+    const formatted = formatDateToDDMMMYYYY(isoCandidate);
+    if (formatted) {
+      return formatted;
+    }
+  }
+
+  const formatted = formatDateToDDMMMYYYY(trimmed);
+  if (formatted) {
+    return formatted;
+  }
+
+  return trimmed;
 };
 
 const POPULAR_CITIES = [
@@ -250,7 +283,7 @@ export default function MarkupManagementHotel() {
       // Bargain Fare Range defaults for hotels
       bargainFareMin: 5.0, // 5% minimum acceptable hotel bargain
       bargainFareMax: 15.0, // 15% maximum acceptable hotel bargain
-      validFrom: "",
+      validFrom: getCurrentDateFormatted(),
       validTo: "",
       seasonType: "Regular",
       applicableDays: [],
@@ -268,6 +301,8 @@ export default function MarkupManagementHotel() {
     setSelectedMarkup(markup);
     setFormData({
       ...markup,
+      validFrom: normalizeDisplayDate(markup.validFrom || ""),
+      validTo: normalizeDisplayDate(markup.validTo || ""),
       applicableDays: markup.checkInDays || markup.applicableDays || [],
     });
     setIsEditDialogOpen(true);
@@ -717,10 +752,20 @@ export default function MarkupManagementHotel() {
             <Label htmlFor="validFrom">Valid From</Label>
             <Input
               id="validFrom"
-              type="date"
+              type="text"
+              placeholder="DD-MMM-YYYY"
               value={formData.validFrom || ""}
               onChange={(e) =>
-                setFormData({ ...formData, validFrom: e.target.value })
+                setFormData((prev) => ({
+                  ...prev,
+                  validFrom: normalizeDisplayDate(e.target.value),
+                }))
+              }
+              onBlur={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  validFrom: normalizeDisplayDate(e.target.value),
+                }))
               }
             />
           </div>
@@ -729,10 +774,20 @@ export default function MarkupManagementHotel() {
             <Label htmlFor="validTo">Valid To</Label>
             <Input
               id="validTo"
-              type="date"
+              type="text"
+              placeholder="DD-MMM-YYYY"
               value={formData.validTo || ""}
               onChange={(e) =>
-                setFormData({ ...formData, validTo: e.target.value })
+                setFormData((prev) => ({
+                  ...prev,
+                  validTo: normalizeDisplayDate(e.target.value),
+                }))
+              }
+              onBlur={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  validTo: normalizeDisplayDate(e.target.value),
+                }))
               }
             />
           </div>
