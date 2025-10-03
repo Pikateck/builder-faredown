@@ -87,29 +87,21 @@ class PromoCodeService {
     totalPages: number;
   }> {
     try {
-      const params = new URLSearchParams();
+      const params: Record<string, any> = {};
 
-      if (filters.search) params.append("search", filters.search);
+      if (filters.search) params.search = filters.search;
       if (filters.module && filters.module !== "all")
-        params.append("module", filters.module);
+        params.module = filters.module;
       if (filters.status && filters.status !== "all")
-        params.append("status", filters.status);
-      if (filters.page) params.append("page", filters.page.toString());
-      if (filters.limit) params.append("limit", filters.limit.toString());
+        params.status = filters.status;
+      if (filters.page) params.page = filters.page;
+      if (filters.limit) params.limit = filters.limit;
 
-      const response = await apiClient.get(
-        `${this.baseUrl}?${params.toString()}`,
-      );
-
-      if (response.ok) {
-        return response.data;
-      } else {
-        throw new Error(response.error || "Failed to fetch promo codes");
-      }
+      const response = await apiClient.get<any>(this.baseUrl, params);
+      return this.normalizePromoCodeResponse(response);
     } catch (error) {
       console.error("Error fetching promo codes:", error);
 
-      // Check if this is a server unavailable error - use fallback data
       if (
         error instanceof Error &&
         (error.message.includes("API server offline") ||
@@ -121,7 +113,6 @@ class PromoCodeService {
           "🔄 Using fallback promo code data due to API unavailability",
         );
 
-        // Return mock data that matches the expected structure
         return {
           promoCodes: [
             {
@@ -187,6 +178,84 @@ class PromoCodeService {
 
       throw error;
     }
+  }
+
+  private normalizePromoCodeResponse(raw: any): {
+    promoCodes: PromoCode[];
+    total: number;
+    page: number;
+    totalPages: number;
+  } {
+    if (!raw) {
+      throw new Error("Empty promo code response");
+    }
+
+    let payload = raw;
+    if (typeof raw === "string") {
+      try {
+        payload = JSON.parse(raw);
+      } catch (parseError) {
+        throw new Error("Invalid promo code response format");
+      }
+    }
+
+    const candidateArrays = [
+      payload?.promoCodes,
+      payload?.data?.promoCodes,
+      payload?.data?.items,
+      payload?.items,
+    ];
+    const promoCodes = candidateArrays.find(Array.isArray) || [];
+
+    if (!Array.isArray(promoCodes)) {
+      throw new Error("Promo code response missing items array");
+    }
+
+    const totalCandidates = [
+      payload?.total,
+      payload?.data?.total,
+      payload?.pagination?.total,
+      payload?.data?.pagination?.total,
+      typeof payload?.count === "number" ? payload.count : undefined,
+    ];
+    const total =
+      totalCandidates.find((value) => typeof value === "number") ??
+      promoCodes.length;
+
+    const pageCandidates = [
+      payload?.page,
+      payload?.data?.page,
+      payload?.pagination?.page,
+      payload?.data?.pagination?.page,
+    ];
+    const page =
+      pageCandidates.find((value) => typeof value === "number") ?? 1;
+
+    const pageSizeCandidates = [
+      payload?.limit,
+      payload?.data?.limit,
+      payload?.pagination?.limit,
+      payload?.data?.pagination?.limit,
+    ];
+    const pageSize =
+      pageSizeCandidates.find((value) => typeof value === "number") ?? 10;
+
+    const totalPageCandidates = [
+      payload?.totalPages,
+      payload?.data?.totalPages,
+      payload?.pagination?.pages,
+      payload?.data?.pagination?.pages,
+    ];
+    const totalPages =
+      totalPageCandidates.find((value) => typeof value === "number") ??
+      Math.max(1, Math.ceil(total / pageSize));
+
+    return {
+      promoCodes: promoCodes as PromoCode[],
+      total,
+      page,
+      totalPages,
+    };
   }
 
   /**
