@@ -81,6 +81,34 @@ import {
   RefreshCw,
 } from "lucide-react";
 
+const displayDate = (value?: string | null): string => {
+  const formatted = formatDateToDisplayString(value ?? "");
+  return formatted || "-";
+};
+
+const normalizeDisplayDate = (value: string): string => {
+  const trimmed = value?.trim() ?? "";
+  if (!trimmed) {
+    return "";
+  }
+
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(trimmed)) {
+    const [day, month, year] = trimmed.split("/");
+    const isoCandidate = `${year}-${month}-${day}`;
+    const formatted = formatDateToDDMMMYYYY(isoCandidate);
+    if (formatted) {
+      return formatted;
+    }
+  }
+
+  const formatted = formatDateToDDMMMYYYY(trimmed);
+  if (formatted) {
+    return formatted;
+  }
+
+  return trimmed;
+};
+
 const AIRLINES = [
   { code: "AI", name: "Air India", country: "India" },
   { code: "UK", name: "Vistara", country: "India" },
