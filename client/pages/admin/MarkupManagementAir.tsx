@@ -915,10 +915,7 @@ export default function MarkupManagementAir() {
                   </SelectTrigger>
                   <SelectContent>
                     {CABIN_CLASS_FILTER_OPTIONS.map((option) => (
-                      <SelectItem
-                        key={option.value ?? "all"}
-                        value={option.value ?? "all"}
-                      >
+                      <SelectItem key={option.value} value={option.value}>
                         {option.label}
                       </SelectItem>
                     ))}
