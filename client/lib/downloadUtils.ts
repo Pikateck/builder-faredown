@@ -6,9 +6,13 @@ export interface DownloadFile {
   type?: string;
 }
 
-export const downloadTextFile = (content: string, filename: string): void => {
+export const downloadTextFile = (
+  content: string,
+  filename: string,
+  mimeType: string = "text/plain",
+): void => {
   try {
-    const blob = new Blob([content], { type: "text/plain" });
+    const blob = new Blob([content], { type: mimeType });
     const url = window.URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
