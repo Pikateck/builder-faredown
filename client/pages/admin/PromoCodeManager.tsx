@@ -147,13 +147,6 @@ const AIRLINES = [
   { code: "QR", name: "Qatar Airways" },
 ];
 
-const CABIN_CLASSES = [
-  { value: "ALL", label: "All Classes" },
-  { value: "Economy", label: "Economy" },
-  { value: "Business", label: "Business" },
-  { value: "First", label: "First Class" },
-];
-
 const CITIES = [
   "Dubai",
   "Abu Dhabi",
