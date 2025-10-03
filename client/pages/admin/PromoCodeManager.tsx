@@ -358,7 +358,12 @@ export default function PromoCodeManager() {
         limit: 10,
       });
 
-      setPromoCodes(result.promoCodes);
+      setPromoCodes(
+        result.promoCodes.map((promo) => ({
+          ...promo,
+          cabinClass: normalizeCabinClass(promo.cabinClass) ?? null,
+        })),
+      );
       setPagination({
         page: result.page,
         totalPages: result.totalPages,
