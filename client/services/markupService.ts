@@ -793,6 +793,8 @@ class MarkupService {
   }) {
     console.log("🔄 Using fallback markup calculation");
 
+    const normalizedClass = normalizeCabinClass(bookingDetails.class);
+
     // Define default markup ranges based on type and other factors
     let baseMarkupMin = 10;
     let baseMarkupMax = 25;
