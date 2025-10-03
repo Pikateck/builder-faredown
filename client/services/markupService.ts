@@ -863,7 +863,12 @@ class MarkupService {
       name: `Fallback ${bookingDetails.type.charAt(0).toUpperCase() + bookingDetails.type.slice(1)} Markup`,
       description: "Default markup used when API is unavailable",
       airline: bookingDetails.airline || "",
-      route: bookingDetails.route || { from: "", to: "" },
+      origin_iata: bookingDetails.route?.from ?? null,
+      dest_iata: bookingDetails.route?.to ?? null,
+      route: {
+        from: bookingDetails.route?.from ?? null,
+        to: bookingDetails.route?.to ?? null,
+      },
       class: normalizedClass ?? "economy",
       markupType: "percentage" as const,
       markupValue: selectedMarkupPercentage,
