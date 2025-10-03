@@ -81,7 +81,17 @@ export const normalizeCabinClass = (
 export const getCabinClassLabel = (input?: string | null): string => {
   const normalized = normalizeCabinClass(input);
   if (!normalized) {
-    return input ?? "";
+    if (!input) {
+      return "";
+    }
+    const trimmed = input.trim();
+    if (!trimmed) {
+      return "";
+    }
+    if (trimmed.toLowerCase() === "all") {
+      return "All Cabin Classes";
+    }
+    return trimmed;
   }
   return CABIN_CLASS_LABELS[normalized];
 };
