@@ -148,6 +148,29 @@ const CABIN_CLASSES = [
   { value: "First", label: "First Class" },
 ];
 
+const CITIES = [
+  "Dubai",
+  "Abu Dhabi",
+  "Sharjah",
+  "Ras Al Khaimah",
+  "Mumbai",
+  "Delhi",
+  "Bengaluru",
+  "Chennai",
+  "Hyderabad",
+  "Goa",
+  "Singapore",
+  "Bangkok",
+  "Kuala Lumpur",
+  "London",
+  "New York",
+  "Paris",
+  "Sydney",
+  "Doha",
+  "Jeddah",
+  "Istanbul",
+];
+
 const VEHICLE_TYPES = [
   { value: "ALL", label: "All Vehicles" },
   { value: "sedan", label: "Sedan" },
