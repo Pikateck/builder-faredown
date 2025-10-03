@@ -85,7 +85,7 @@ export interface CreateAirMarkupRequest {
   };
   origin_iata: string | null;
   dest_iata: string | null;
-  class: "economy" | "premium-economy" | "business" | "first" | "all";
+  class: CabinClassValue;
   markupType: "percentage" | "fixed";
   markupValue: number;
   minAmount: number;
