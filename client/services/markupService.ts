@@ -551,9 +551,9 @@ class MarkupService {
       if (markupData.bargainFareMax !== undefined)
         payload.bargain_max_pct = markupData.bargainFareMax;
       if (markupData.validFrom !== undefined)
-        payload.valid_from = markupData.validFrom;
+        payload.valid_from = this.toApiDate(markupData.validFrom);
       if (markupData.validTo !== undefined)
-        payload.valid_to = markupData.validTo;
+        payload.valid_to = this.toApiDate(markupData.validTo);
       if (markupData.priority !== undefined)
         payload.priority = markupData.priority;
       if (markupData.userType !== undefined)
@@ -606,9 +606,9 @@ class MarkupService {
       if (markupData.bargainFareMax !== undefined)
         payload.bargain_max_pct = markupData.bargainFareMax;
       if (markupData.validFrom !== undefined)
-        payload.valid_from = markupData.validFrom;
+        payload.valid_from = this.toApiDate(markupData.validFrom);
       if (markupData.validTo !== undefined)
-        payload.valid_to = markupData.validTo;
+        payload.valid_to = this.toApiDate(markupData.validTo);
       if (markupData.priority !== undefined)
         payload.priority = markupData.priority;
       if (markupData.userType !== undefined)
