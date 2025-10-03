@@ -987,9 +987,23 @@ export default function MarkupManagementHotel() {
                   </SelectContent>
                 </Select>
 
-                <Button variant="outline">
-                  <Download className="w-4 h-4 mr-2" />
-                  Export
+                <Button
+                  variant="outline"
+                  onClick={handleExport}
+                  disabled={exporting}
+                  className="flex items-center"
+                >
+                  {exporting ? (
+                    <>
+                      <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                      Exporting...
+                    </>
+                  ) : (
+                    <>
+                      <Download className="w-4 h-4 mr-2" />
+                      Export
+                    </>
+                  )}
                 </Button>
               </div>
 
