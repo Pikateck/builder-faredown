@@ -30,7 +30,7 @@ export interface PromoCode {
   origin?: string;
   destination?: string;
   carrierCode?: string;
-  cabinClass?: string;
+  cabinClass?: CabinClassValue | null;
   flightBy?: string;
 
   // Hotel-specific fields
@@ -63,7 +63,7 @@ export interface CreatePromoCodeRequest {
   origin?: string;
   destination?: string;
   carrierCode?: string;
-  cabinClass?: string;
+  cabinClass?: CabinClassValue | null;
   flightBy?: string;
   hotelCity?: string;
   hotelName?: string;
