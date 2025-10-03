@@ -729,18 +729,21 @@ export default function PromoCodeManager() {
               <div>
                 <Label htmlFor="cabinClass">Cabin Class</Label>
                 <Select
-                  value={formData.cabinClass}
+                  value={normalizeCabinClass(formData.cabinClass) || ""}
                   onValueChange={(value) =>
-                    setFormData({ ...formData, cabinClass: value })
+                    setFormData({
+                      ...formData,
+                      cabinClass: value as CabinClassValue,
+                    })
                   }
                 >
                   <SelectTrigger>
-                    <SelectValue placeholder="All" />
+                    <SelectValue placeholder="Select cabin class" />
                   </SelectTrigger>
                   <SelectContent>
-                    {CABIN_CLASSES.map((cabin) => (
-                      <SelectItem key={cabin.value} value={cabin.value}>
-                        {cabin.label}
+                    {CABIN_CLASS_OPTIONS.map((option) => (
+                      <SelectItem key={option.value} value={option.value}>
+                        {option.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
