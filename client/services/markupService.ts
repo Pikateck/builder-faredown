@@ -204,6 +204,42 @@ type MarkupModule = "air" | "hotel" | "transfer" | "packages" | "sightseeing";
 class MarkupService {
   private baseUrl = "/api/markups";
 
+  private toDisplayDate(value?: string | null): string {
+    if (!value) {
+      return "";
+    }
+
+    const formatted = formatDateToDDMMMYYYY(value);
+    if (formatted) {
+      return formatted;
+    }
+
+    return String(value);
+  }
+
+  private toApiDate(value?: string | null): string | null {
+    if (!value) {
+      return null;
+    }
+
+    const trimmed = value.trim();
+    if (!trimmed) {
+      return null;
+    }
+
+    const fromDisplay = convertToInputDate(trimmed);
+    if (fromDisplay) {
+      return fromDisplay;
+    }
+
+    const parsed = new Date(trimmed);
+    if (!isNaN(parsed.getTime())) {
+      return parsed.toISOString().split("T")[0];
+    }
+
+    return trimmed;
+  }
+
   private mapAirRow(row: any): AirMarkup {
     const normalizedClass =
       normalizeCabinClass(row.booking_class || row.class) ?? "economy";
