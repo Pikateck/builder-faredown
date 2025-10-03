@@ -261,7 +261,7 @@ class PromoCodeService {
       Math.max(1, Math.ceil(total / pageSize));
 
     return {
-      promoCodes: promoCodes as PromoCode[],
+      promoCodes: normalizedPromoCodes as PromoCode[],
       total,
       page,
       totalPages,
