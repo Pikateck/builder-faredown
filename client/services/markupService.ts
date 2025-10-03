@@ -219,7 +219,10 @@ class MarkupService {
       origin_iata: row.origin_iata || null,
       dest_iata: row.dest_iata || null,
       class: normalizedClass,
-      markupType: (row.m_type || "percentage").toLowerCase(),
+      markupType:
+        (row.m_type || "percentage").toLowerCase() === "flat"
+          ? "fixed"
+          : "percentage",
       markupValue: Number(row.m_value || 0),
       minAmount: 0,
       maxAmount: 999999,
