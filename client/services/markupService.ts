@@ -4,6 +4,11 @@
  */
 
 import { apiClient } from "@/lib/api";
+import {
+  CABIN_CLASS_LABELS,
+  type CabinClassValue,
+  normalizeCabinClass,
+} from "@/lib/cabinClasses";
 
 export interface AirMarkup {
   id: string;
