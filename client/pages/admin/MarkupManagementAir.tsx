@@ -45,6 +45,12 @@ import { Textarea } from "@/components/ui/textarea";
 import { AirportSelect } from "@/components/ui/airport-select";
 import { downloadTextFile } from "@/lib/downloadUtils";
 import {
+  CABIN_CLASS_FILTER_OPTIONS,
+  CABIN_CLASS_OPTIONS,
+  getCabinClassLabel,
+  normalizeCabinClass,
+} from "@/lib/cabinClasses";
+import {
   Plane,
   Plus,
   Edit,
