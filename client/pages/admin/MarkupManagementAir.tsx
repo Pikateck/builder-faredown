@@ -1182,14 +1182,18 @@ export default function MarkupManagementAir() {
                             <div className="space-y-1">
                               <div className="flex items-center text-sm">
                                 <MapPin className="w-3 h-3 mr-1" />
-                                {markup.route.from || "All"} →{" "}
-                                {markup.route.to || "All"}
+                                {(markup.route.from === "ALL" || markup.route.from === "All") &&
+                                 (markup.route.to === "ALL" || markup.route.to === "All")
+                                  ? "All → All"
+                                  : `${markup.route.from || "All"} → ${markup.route.to || "All"}`}
                               </div>
                               <div className="flex items-center text-sm text-gray-600">
                                 <Plane className="w-3 h-3 mr-1" />
-                                {airline
-                                  ? `${airline.code} - ${airline.name}`
-                                  : markup.airline}
+                                {markup.airline === "ALL" || markup.airline === "All"
+                                  ? "All Airlines"
+                                  : airline
+                                    ? `${airline.code} - ${airline.name}`
+                                    : markup.airline}
                               </div>
                             </div>
                           </TableCell>
