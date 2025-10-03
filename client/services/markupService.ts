@@ -190,7 +190,7 @@ export interface CreateTransferMarkupRequest {
 export interface MarkupFilters {
   search?: string;
   airline?: string;
-  class?: string;
+  class?: CabinClassValue;
   status?: string;
   city?: string;
   starRating?: string;
