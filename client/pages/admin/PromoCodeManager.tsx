@@ -105,7 +105,7 @@ interface PromoCode {
   origin?: string | null;
   destination?: string | null;
   carrierCode?: string;
-  cabinClass?: string;
+  cabinClass?: CabinClassValue | null;
   flightBy?: string;
 
   // Hotel-specific fields
