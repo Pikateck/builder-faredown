@@ -755,10 +755,20 @@ export default function MarkupManagementAir() {
             <Label htmlFor="validFrom">Valid From</Label>
             <Input
               id="validFrom"
-              type="date"
+              type="text"
+              placeholder="DD-MMM-YYYY"
               value={formData.validFrom || ""}
               onChange={(e) =>
-                setFormData({ ...formData, validFrom: e.target.value })
+                setFormData((prev) => ({
+                  ...prev,
+                  validFrom: normalizeDisplayDate(e.target.value),
+                }))
+              }
+              onBlur={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  validFrom: normalizeDisplayDate(e.target.value),
+                }))
               }
             />
           </div>
@@ -767,10 +777,20 @@ export default function MarkupManagementAir() {
             <Label htmlFor="validTo">Valid To</Label>
             <Input
               id="validTo"
-              type="date"
+              type="text"
+              placeholder="DD-MMM-YYYY"
               value={formData.validTo || ""}
               onChange={(e) =>
-                setFormData({ ...formData, validTo: e.target.value })
+                setFormData((prev) => ({
+                  ...prev,
+                  validTo: normalizeDisplayDate(e.target.value),
+                }))
+              }
+              onBlur={(e) =>
+                setFormData((prev) => ({
+                  ...prev,
+                  validTo: normalizeDisplayDate(e.target.value),
+                }))
               }
             />
           </div>
