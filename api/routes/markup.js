@@ -86,9 +86,11 @@ router.get("/air", async (req, res) => {
     );
 
     res.json({
-      markups: data.rows.map(mapAirRowToClient),
+      success: true,
+      items: data.rows.map(mapAirRowToClient),
       total,
       page: parseInt(page),
+      pageSize: parseInt(limit),
       totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (err) {
