@@ -158,6 +158,7 @@ export default function MarkupManagementHotel() {
     {},
   );
   const [activeTab, setActiveTab] = useState("list");
+  const [exporting, setExporting] = useState(false);
 
   // Load markups from API
   const loadMarkups = async () => {
