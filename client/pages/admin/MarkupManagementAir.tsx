@@ -43,6 +43,7 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import { AirportSelect } from "@/components/ui/airport-select";
+import { downloadTextFile } from "@/lib/downloadUtils";
 import {
   Plane,
   Plus,
