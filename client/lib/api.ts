@@ -226,8 +226,10 @@ export class ApiClient {
       ...customHeaders,
     };
 
-    if (this.authToken) {
-      headers.Authorization = `Bearer ${this.authToken}`;
+    // Check instance token first, then fall back to localStorage
+    const token = this.authToken || localStorage.getItem("auth_token");
+    if (token) {
+      headers.Authorization = `Bearer ${token}`;
     }
 
     // Add correlation ID for request tracking
