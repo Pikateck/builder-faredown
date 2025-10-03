@@ -729,7 +729,7 @@ export default function PromoCodeManager() {
               <div>
                 <Label htmlFor="cabinClass">Cabin Class</Label>
                 <Select
-                  value={normalizeCabinClass(formData.cabinClass) || ""}
+                  value={normalizeCabinClass(formData.cabinClass) || "economy"}
                   onValueChange={(value) =>
                     setFormData({
                       ...formData,
