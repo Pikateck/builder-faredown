@@ -733,7 +733,7 @@ class MarkupService {
           description: "",
           airline: bookingDetails.airline || "",
           route: bookingDetails.route || { from: "", to: "" },
-          class: bookingDetails.class || "all",
+          class: normalizedBookingClass ?? "economy",
           markupType: response.markup_type,
           markupValue: Number(response.markup_value || 0),
           minAmount: 0,
