@@ -91,7 +91,7 @@ const AIRLINES = [
 const POPULAR_ROUTES = [
   { from: "BOM", to: "DEL", route: "Mumbai → Delhi" },
   { from: "BOM", to: "DXB", route: "Mumbai → Dubai" },
-  { from: "DEL", to: "LHR", route: "Delhi → London" },
+  { from: "DEL", to: "LHR", route: "Delhi ��� London" },
   { from: "BOM", to: "SIN", route: "Mumbai → Singapore" },
   { from: "DEL", to: "JFK", route: "Delhi → New York" },
   { from: "BOM", to: "LAX", route: "Mumbai → Los Angeles" },
@@ -140,7 +140,7 @@ export default function MarkupManagementAir() {
       const result = await markupService.getAirMarkups({
         search: searchTerm || undefined,
         airline: selectedAirline,
-        class: selectedClass,
+        class: selectedClass || undefined,
         status: selectedStatus,
         page: pagination.page,
         limit: 10,
