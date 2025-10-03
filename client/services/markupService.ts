@@ -1182,10 +1182,11 @@ class MarkupService {
           bargainFareMin: 0,
           bargainFareMax: 0,
           validFrom: this.toDisplayDate(
-            response.valid_from || new Date().toISOString(),
+            data.valid_from || data.validFrom || new Date().toISOString(),
           ),
           validTo: this.toDisplayDate(
-            response.valid_to ||
+            data.valid_to ||
+              data.validTo ||
               new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
           ),
           status: data.is_active ? "active" : "inactive",
