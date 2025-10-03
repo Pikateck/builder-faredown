@@ -156,31 +156,31 @@ async function seedClassSpecificPromos() {
     for (const promo of classSpecificPromos) {
       const insertQuery = `
         INSERT INTO promo_codes (
-          code, description, category, discount_type,
-          discount_min_value, discount_max_value, minimum_fare_amount,
-          marketing_budget, expiry_date, display_on_home_page,
-          status, cabin_class, carrier_code, module, validity_type
+          code, description, module, discount_type,
+          discount_min, discount_max, min_fare_amount,
+          marketing_budget, expires_on, show_on_home,
+          status, service_class, airline_code, origin, destination
         ) VALUES (
           $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15
-        ) RETURNING id, code, cabin_class;
+        ) RETURNING id, code, service_class;
       `;
 
       const values = [
         promo.code,
         promo.description,
-        promo.category,
-        promo.discount_type,
-        promo.discount_min_value,
-        promo.discount_max_value,
-        promo.minimum_fare_amount,
-        promo.marketing_budget,
-        promo.expiry_date,
-        promo.display_on_home_page,
-        promo.status,
-        promo.cabin_class,
-        promo.carrier_code,
         promo.module,
-        promo.validity_type
+        promo.discount_type,
+        promo.discount_min,
+        promo.discount_max,
+        promo.min_fare_amount,
+        promo.marketing_budget,
+        promo.expires_on,
+        promo.show_on_home,
+        promo.status,
+        promo.service_class,
+        promo.airline_code,
+        promo.origin,
+        promo.destination
       ];
 
       const result = await client.query(insertQuery, values);
@@ -237,7 +237,7 @@ async function seedClassSpecificPromos() {
 
     console.log('═══════════════════════════════════════════════════════');
     console.log('🎉 Class-specific promo code seeding completed!');
-    console.log('══════════════════��════════════════════════════════════');
+    console.log('═══════════════════════════════════════════════════════');
     console.log('\nNext steps:');
     console.log('1. Refresh the admin panel (F5)');
     console.log('2. Navigate to Promo Code Manager');
