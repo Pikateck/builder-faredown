@@ -257,6 +257,47 @@ export class DevApiClient {
       };
     }
 
+    // Admin airports API
+    if (endpoint.includes("/admin/airports") || endpoint.includes("/airports")) {
+      const query = params?.q?.toLowerCase() || "";
+      const airports = [
+        { iata: "BOM", name: "Chhatrapati Shivaji Maharaj International Airport", city: "Mumbai", country: "India" },
+        { iata: "DEL", name: "Indira Gandhi International Airport", city: "Delhi", country: "India" },
+        { iata: "DXB", name: "Dubai International Airport", city: "Dubai", country: "United Arab Emirates" },
+        { iata: "LHR", name: "London Heathrow Airport", city: "London", country: "United Kingdom" },
+        { iata: "JFK", name: "John F. Kennedy International Airport", city: "New York", country: "United States" },
+        { iata: "CDG", name: "Charles de Gaulle Airport", city: "Paris", country: "France" },
+        { iata: "SIN", name: "Singapore Changi Airport", city: "Singapore", country: "Singapore" },
+        { iata: "HKG", name: "Hong Kong International Airport", city: "Hong Kong", country: "Hong Kong" },
+        { iata: "SYD", name: "Sydney Kingsford Smith Airport", city: "Sydney", country: "Australia" },
+        { iata: "LAX", name: "Los Angeles International Airport", city: "Los Angeles", country: "United States" },
+        { iata: "NRT", name: "Narita International Airport", city: "Tokyo", country: "Japan" },
+        { iata: "AUH", name: "Abu Dhabi International Airport", city: "Abu Dhabi", country: "United Arab Emirates" },
+        { iata: "DOH", name: "Hamad International Airport", city: "Doha", country: "Qatar" },
+        { iata: "BLR", name: "Kempegowda International Airport", city: "Bangalore", country: "India" },
+        { iata: "MAA", name: "Chennai International Airport", city: "Chennai", country: "India" },
+      ];
+
+      const filtered = query
+        ? airports.filter(
+            (a) =>
+              a.name.toLowerCase().includes(query) ||
+              a.iata.toLowerCase().includes(query) ||
+              a.city.toLowerCase().includes(query) ||
+              a.country.toLowerCase().includes(query),
+          )
+        : airports.slice(0, 50);
+
+      return {
+        success: true,
+        items: filtered,
+        total: filtered.length,
+        page: 1,
+        totalPages: 1,
+        message: "Fallback airports (API offline)",
+      };
+    }
+
     // Flight search
     if (endpoint.includes("/flights/search")) {
       return {
