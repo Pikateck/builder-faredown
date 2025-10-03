@@ -288,7 +288,7 @@ class MarkupService {
       if (filters.search) params.search = filters.search;
       if (filters.airline && filters.airline !== "all")
         params.airline_code = filters.airline;
-      if (filters.class && filters.class !== "all")
+      if (filters.class)
         params.booking_class = filters.class;
       if (filters.status && filters.status !== "all")
         params.status = filters.status;
@@ -364,7 +364,7 @@ class MarkupService {
       if (filters.search) params.search = filters.search;
       if (filters.airline && filters.airline !== "all")
         params.airline_code = filters.airline;
-      if (filters.class && filters.class !== "all")
+      if (filters.class)
         params.booking_class = filters.class;
       if (filters.status && filters.status !== "all")
         params.status = filters.status;
