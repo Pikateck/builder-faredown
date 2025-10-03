@@ -479,6 +479,13 @@ export default function MarkupManagementAir() {
       class: normalizeCabinClass(markup.class) || markup.class,
       validFrom: normalizeDisplayDate(markup.validFrom || ""),
       validTo: normalizeDisplayDate(markup.validTo || ""),
+      // Ensure ALL values are preserved
+      origin_iata: markup.origin_iata === "ALL" ? "ALL" : markup.origin_iata,
+      dest_iata: markup.dest_iata === "ALL" ? "ALL" : markup.dest_iata,
+      route: {
+        from: markup.route?.from === "ALL" ? "ALL" : markup.route?.from || null,
+        to: markup.route?.to === "ALL" ? "ALL" : markup.route?.to || null,
+      },
     });
     setIsEditDialogOpen(true);
   };
