@@ -18,70 +18,70 @@ const classSpecificPromos = [
   {
     code: 'FAREDOWN-ECO',
     description: 'Special discount for Economy class flights',
-    category: 'flight',
-    discount_type: 'percentage',
-    discount_min_value: 5,
-    discount_max_value: 10,
-    minimum_fare_amount: 5000,
-    marketing_budget: 50000,
-    expiry_date: '2024-12-31',
-    display_on_home_page: 'yes',
-    status: 'active',
-    cabin_class: 'economy',
-    carrier_code: 'ALL',
     module: 'flight',
-    validity_type: 'unlimited'
+    discount_type: 'percentage',
+    discount_min: 5,
+    discount_max: 10,
+    min_fare_amount: 5000,
+    marketing_budget: 50000,
+    expires_on: '2024-12-31',
+    show_on_home: true,
+    status: 'active',
+    service_class: 'economy',
+    airline_code: 'ALL',
+    origin: null,
+    destination: null
   },
   {
     code: 'FAREDOWN-PE',
     description: 'Special discount for Premium Economy class flights',
-    category: 'flight',
-    discount_type: 'percentage',
-    discount_min_value: 7,
-    discount_max_value: 12,
-    minimum_fare_amount: 8000,
-    marketing_budget: 75000,
-    expiry_date: '2024-12-31',
-    display_on_home_page: 'yes',
-    status: 'active',
-    cabin_class: 'premium-economy',
-    carrier_code: 'ALL',
     module: 'flight',
-    validity_type: 'unlimited'
+    discount_type: 'percentage',
+    discount_min: 7,
+    discount_max: 12,
+    min_fare_amount: 8000,
+    marketing_budget: 75000,
+    expires_on: '2024-12-31',
+    show_on_home: true,
+    status: 'active',
+    service_class: 'premium-economy',
+    airline_code: 'ALL',
+    origin: null,
+    destination: null
   },
   {
     code: 'FAREDOWN-BIZ',
     description: 'Special discount for Business class flights',
-    category: 'flight',
-    discount_type: 'percentage',
-    discount_min_value: 10,
-    discount_max_value: 15,
-    minimum_fare_amount: 15000,
-    marketing_budget: 100000,
-    expiry_date: '2024-12-31',
-    display_on_home_page: 'yes',
-    status: 'active',
-    cabin_class: 'business',
-    carrier_code: 'ALL',
     module: 'flight',
-    validity_type: 'unlimited'
+    discount_type: 'percentage',
+    discount_min: 10,
+    discount_max: 15,
+    min_fare_amount: 15000,
+    marketing_budget: 100000,
+    expires_on: '2024-12-31',
+    show_on_home: true,
+    status: 'active',
+    service_class: 'business',
+    airline_code: 'ALL',
+    origin: null,
+    destination: null
   },
   {
     code: 'FAREDOWN-FIRST',
     description: 'Special discount for First class flights',
-    category: 'flight',
-    discount_type: 'percentage',
-    discount_min_value: 12,
-    discount_max_value: 20,
-    minimum_fare_amount: 25000,
-    marketing_budget: 150000,
-    expiry_date: '2024-12-31',
-    display_on_home_page: 'yes',
-    status: 'active',
-    cabin_class: 'first',
-    carrier_code: 'ALL',
     module: 'flight',
-    validity_type: 'unlimited'
+    discount_type: 'percentage',
+    discount_min: 12,
+    discount_max: 20,
+    min_fare_amount: 25000,
+    marketing_budget: 150000,
+    expires_on: '2024-12-31',
+    show_on_home: true,
+    status: 'active',
+    service_class: 'first',
+    airline_code: 'ALL',
+    origin: null,
+    destination: null
   }
 ];
 
@@ -237,7 +237,7 @@ async function seedClassSpecificPromos() {
 
     console.log('═══════════════════════════════════════════════════════');
     console.log('🎉 Class-specific promo code seeding completed!');
-    console.log('═══════════════════════════════════════════════════════');
+    console.log('══════════════════��════════════════════════════════════');
     console.log('\nNext steps:');
     console.log('1. Refresh the admin panel (F5)');
     console.log('2. Navigate to Promo Code Manager');
