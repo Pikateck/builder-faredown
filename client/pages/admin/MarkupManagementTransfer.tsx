@@ -42,6 +42,11 @@ import {
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  formatDateToDDMMMYYYY,
+  formatDateToDisplayString,
+  getCurrentDateFormatted,
+} from "@/lib/dateUtils";
+import {
   Car,
   Plus,
   Edit,
@@ -125,6 +130,34 @@ const CITIES = [
   { value: "ALL", label: "All Cities" },
 ];
 
+const displayDate = (value?: string | null): string => {
+  const formatted = formatDateToDisplayString(value ?? "");
+  return formatted || "-";
+};
+
+const normalizeDisplayDate = (value: string): string => {
+  const trimmed = value?.trim() ?? "";
+  if (!trimmed) {
+    return "";
+  }
+
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(trimmed)) {
+    const [day, month, year] = trimmed.split("/");
+    const isoCandidate = `${year}-${month}-${day}`;
+    const formatted = formatDateToDDMMMYYYY(isoCandidate);
+    if (formatted) {
+      return formatted;
+    }
+  }
+
+  const formatted = formatDateToDDMMMYYYY(trimmed);
+  if (formatted) {
+    return formatted;
+  }
+
+  return trimmed;
+};
+
 export default function MarkupManagementTransfer() {
   const [markups, setMarkups] = useState<TransferMarkup[]>([]);
   const [loading, setLoading] = useState(true);
@@ -155,10 +188,8 @@ export default function MarkupManagementTransfer() {
     currentFareMax: 25,
     bargainFareMin: 10,
     bargainFareMax: 20,
-    validFrom: new Date().toISOString().split("T")[0],
-    validTo: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000)
-      .toISOString()
-      .split("T")[0],
+    validFrom: getCurrentDateFormatted(),
+    validTo: "",
     status: "active",
     priority: 1,
     userType: "all",
@@ -570,10 +601,10 @@ export default function MarkupManagementTransfer() {
                     <TableCell>
                       <div className="text-sm">
                         <div>
-                          {new Date(markup.validFrom).toLocaleDateString()}
+                          {displayDate(markup.validFrom)}
                         </div>
                         <div className="text-gray-500">
-                          to {new Date(markup.validTo).toLocaleDateString()}
+                          to {displayDate(markup.validTo)}
                         </div>
                       </div>
                     </TableCell>
@@ -865,10 +896,20 @@ export default function MarkupManagementTransfer() {
                 <Label htmlFor="validFrom">Valid From</Label>
                 <Input
                   id="validFrom"
-                  type="date"
+                  type="text"
+                  placeholder="DD-MMM-YYYY"
                   value={formData.validFrom}
                   onChange={(e) =>
-                    setFormData({ ...formData, validFrom: e.target.value })
+                    setFormData((prev) => ({
+                      ...prev,
+                      validFrom: normalizeDisplayDate(e.target.value),
+                    }))
+                  }
+                  onBlur={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      validFrom: normalizeDisplayDate(e.target.value),
+                    }))
                   }
                 />
               </div>
@@ -876,10 +917,20 @@ export default function MarkupManagementTransfer() {
                 <Label htmlFor="validTo">Valid To</Label>
                 <Input
                   id="validTo"
-                  type="date"
+                  type="text"
+                  placeholder="DD-MMM-YYYY"
                   value={formData.validTo}
                   onChange={(e) =>
-                    setFormData({ ...formData, validTo: e.target.value })
+                    setFormData((prev) => ({
+                      ...prev,
+                      validTo: normalizeDisplayDate(e.target.value),
+                    }))
+                  }
+                  onBlur={(e) =>
+                    setFormData((prev) => ({
+                      ...prev,
+                      validTo: normalizeDisplayDate(e.target.value),
+                    }))
                   }
                 />
               </div>
