@@ -862,16 +862,17 @@ export default function MarkupManagementAir() {
 
                 <Select value={selectedClass} onValueChange={setSelectedClass}>
                   <SelectTrigger className="w-full md:w-48">
-                    <SelectValue placeholder="Filter by class" />
+                    <SelectValue placeholder="All Cabin Classes" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="all">All Classes</SelectItem>
-                    <SelectItem value="economy">Economy</SelectItem>
-                    <SelectItem value="premium-economy">
-                      Premium Economy
-                    </SelectItem>
-                    <SelectItem value="business">Business</SelectItem>
-                    <SelectItem value="first">First Class</SelectItem>
+                    {CABIN_CLASS_FILTER_OPTIONS.map((option) => (
+                      <SelectItem
+                        key={option.value || "all"}
+                        value={option.value}
+                      >
+                        {option.label}
+                      </SelectItem>
+                    ))}
                   </SelectContent>
                 </Select>
 
