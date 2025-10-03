@@ -335,6 +335,8 @@ export default function MarkupManagementAir() {
     setFormData({
       ...markup,
       class: normalizeCabinClass(markup.class) || markup.class,
+      validFrom: normalizeDisplayDate(markup.validFrom || ""),
+      validTo: normalizeDisplayDate(markup.validTo || ""),
     });
     setIsEditDialogOpen(true);
   };
