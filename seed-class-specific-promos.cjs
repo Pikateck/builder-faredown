@@ -18,8 +18,8 @@ const classSpecificPromos = [
   {
     code: 'FAREDOWN-ECO',
     description: 'Special discount for Economy class flights',
-    module: 'flight',
-    discount_type: 'percentage',
+    module: 'air',
+    discount_type: 'percent',
     discount_min: 5,
     discount_max: 10,
     min_fare_amount: 5000,
@@ -35,8 +35,8 @@ const classSpecificPromos = [
   {
     code: 'FAREDOWN-PE',
     description: 'Special discount for Premium Economy class flights',
-    module: 'flight',
-    discount_type: 'percentage',
+    module: 'air',
+    discount_type: 'percent',
     discount_min: 7,
     discount_max: 12,
     min_fare_amount: 8000,
@@ -52,8 +52,8 @@ const classSpecificPromos = [
   {
     code: 'FAREDOWN-BIZ',
     description: 'Special discount for Business class flights',
-    module: 'flight',
-    discount_type: 'percentage',
+    module: 'air',
+    discount_type: 'percent',
     discount_min: 10,
     discount_max: 15,
     min_fare_amount: 15000,
@@ -69,8 +69,8 @@ const classSpecificPromos = [
   {
     code: 'FAREDOWN-FIRST',
     description: 'Special discount for First class flights',
-    module: 'flight',
-    discount_type: 'percentage',
+    module: 'air',
+    discount_type: 'percent',
     discount_min: 12,
     discount_max: 20,
     min_fare_amount: 25000,
