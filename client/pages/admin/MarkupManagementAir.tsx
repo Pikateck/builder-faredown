@@ -1048,13 +1048,10 @@ export default function MarkupManagementAir() {
                             <div className="space-y-1">
                               <div className="flex items-center text-sm">
                                 <Calendar className="w-3 h-3 mr-1" />
-                                {new Date(
-                                  markup.validFrom,
-                                ).toLocaleDateString()}
+                                {displayDate(markup.validFrom)}
                               </div>
                               <div className="text-xs text-gray-600">
-                                to{" "}
-                                {new Date(markup.validTo).toLocaleDateString()}
+                                to {displayDate(markup.validTo)}
                               </div>
                             </div>
                           </TableCell>
