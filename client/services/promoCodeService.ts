@@ -4,6 +4,11 @@
  */
 
 import { apiClient } from "@/lib/api";
+import {
+  getCabinClassLabel,
+  normalizeCabinClass,
+  type CabinClassValue,
+} from "@/lib/cabinClasses";
 
 export interface PromoCode {
   id: string;
