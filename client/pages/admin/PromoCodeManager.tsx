@@ -456,7 +456,10 @@ export default function PromoCodeManager() {
 
   const handleEditPromoCode = (promo: PromoCode) => {
     setSelectedPromoCode(promo);
-    setFormData({ ...promo });
+    setFormData({
+      ...promo,
+      cabinClass: normalizeCabinClass(promo.cabinClass) ?? null,
+    });
     setIsEditDialogOpen(true);
   };
 
