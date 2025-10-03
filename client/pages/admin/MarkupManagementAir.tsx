@@ -1119,6 +1119,13 @@ export default function MarkupManagementAir() {
                 </Button>
               </div>
 
+              {/* Error Message */}
+              {error && (
+                <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded-md">
+                  <p className="text-sm text-yellow-800">{error}</p>
+                </div>
+              )}
+
               {/* Markups Table */}
               <div className="overflow-x-auto">
                 <Table>
@@ -1134,7 +1141,29 @@ export default function MarkupManagementAir() {
                     </TableRow>
                   </TableHeader>
                   <TableBody>
-                    {filteredMarkups.map((markup) => {
+                    {loading ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center py-8">
+                          <RefreshCw className="w-6 h-6 animate-spin mx-auto mb-2" />
+                          <p className="text-sm text-gray-600">Loading markups...</p>
+                        </TableCell>
+                      </TableRow>
+                    ) : filteredMarkups.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center py-8">
+                          <AlertCircle className="w-6 h-6 mx-auto mb-2 text-gray-400" />
+                          <p className="text-sm text-gray-600 mb-2">No markup rules found</p>
+                          <Button
+                            variant="outline"
+                            size="sm"
+                            onClick={handleCreateMarkup}
+                          >
+                            <Plus className="w-4 h-4 mr-2" />
+                            Create First Markup
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ) : filteredMarkups.map((markup) => {
                       const airline = AIRLINES.find(
                         (a) => a.code === markup.airline,
                       );
