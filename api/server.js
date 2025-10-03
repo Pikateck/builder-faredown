@@ -340,6 +340,7 @@ app.use("/api/destinations", destinationsRoutes);
 app.use("/api/enhanced-bargain", enhancedBargainRoutes);
 
 // New admin module routes
+app.use("/api/markups", authenticateToken, markupsUnifiedRoutes);
 app.use("/api/markup", authenticateToken, markupRoutes);
 app.use("/api/vat", authenticateToken, vatRoutes);
 app.use("/api/reports", authenticateToken, reportsRoutes);
