@@ -13,6 +13,7 @@ import {
   CABIN_CLASS_OPTIONS,
   getCabinClassLabel,
   normalizeCabinClass,
+  type CabinClassValue,
 } from "@/lib/cabinClasses";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import {
