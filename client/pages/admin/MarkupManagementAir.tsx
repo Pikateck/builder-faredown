@@ -285,7 +285,10 @@ export default function MarkupManagementAir() {
 
   const handleEditMarkup = (markup: AirMarkup) => {
     setSelectedMarkup(markup);
-    setFormData({ ...markup });
+    setFormData({
+      ...markup,
+      class: normalizeCabinClass(markup.class) || markup.class,
+    });
     setIsEditDialogOpen(true);
   };
 
