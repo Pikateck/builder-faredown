@@ -41,6 +41,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Switch } from "@/components/ui/switch";
 import { Textarea } from "@/components/ui/textarea";
+import { downloadTextFile } from "@/lib/downloadUtils";
 import {
   Hotel,
   Plus,
