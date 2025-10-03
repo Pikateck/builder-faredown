@@ -243,7 +243,7 @@ const mockPromoCodes: PromoCode[] = [
     origin: null,
     destination: null,
     carrierCode: "ALL",
-    cabinClass: "ALL",
+    cabinClass: "economy",
     flightBy: "",
     createdOn: "2024-01-10 09:15",
     updatedOn: "2024-01-15 16:45",
