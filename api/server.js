@@ -50,6 +50,7 @@ const featureFlagsRoutes = require("./routes/feature-flags");
 // New admin module routes
 const usersAdminRoutes = require("./routes/users");
 const markupRoutes = require("./routes/markup");
+const markupsUnifiedRoutes = require("./routes/markups-unified");
 const adminPackagesRoutes = require("./routes/admin-packages");
 const vatRoutes = require("./routes/vat");
 const currencyAdminRoutes = require("./routes/currency");
