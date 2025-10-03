@@ -517,7 +517,7 @@ export default function MarkupManagementAir() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="percentage">Percentage (%)</SelectItem>
-                <SelectItem value="fixed">Fixed Amount (��)</SelectItem>
+                <SelectItem value="fixed">Fixed Amount (₹)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -867,8 +867,8 @@ export default function MarkupManagementAir() {
                   <SelectContent>
                     {CABIN_CLASS_FILTER_OPTIONS.map((option) => (
                       <SelectItem
-                        key={option.value || "all"}
-                        value={option.value}
+                        key={option.value ?? "all"}
+                        value={option.value ?? "all"}
                       >
                         {option.label}
                       </SelectItem>
