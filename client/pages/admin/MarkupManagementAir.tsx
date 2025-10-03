@@ -517,7 +517,7 @@ export default function MarkupManagementAir() {
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="percentage">Percentage (%)</SelectItem>
-                <SelectItem value="fixed">Fixed Amount (₹)</SelectItem>
+                <SelectItem value="fixed">Fixed Amount (��)</SelectItem>
               </SelectContent>
             </Select>
           </div>
@@ -957,8 +957,8 @@ export default function MarkupManagementAir() {
                             </div>
                           </TableCell>
                           <TableCell>
-                            <Badge variant="outline" className="capitalize">
-                              {markup.class}
+                            <Badge variant="outline">
+                              {getCabinClassLabel(markup.class)}
                             </Badge>
                           </TableCell>
                           <TableCell>
