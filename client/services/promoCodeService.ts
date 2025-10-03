@@ -216,6 +216,11 @@ class PromoCodeService {
       throw new Error("Promo code response missing items array");
     }
 
+    const normalizedPromoCodes = (promoCodes as any[]).map((code) => ({
+      ...code,
+      cabinClass: normalizeCabinClass(code.cabinClass) ?? null,
+    }));
+
     const totalCandidates = [
       payload?.total,
       payload?.data?.total,
