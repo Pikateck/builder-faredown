@@ -139,6 +139,8 @@ const DAYS_OF_WEEK = [
 
 // Service integration - no more mock data
 
+import { downloadTextFile } from "@/lib/downloadUtils";
+
 export default function MarkupManagementHotel() {
   const [markups, setMarkups] = useState<UIHotelMarkup[]>([]);
   const [loading, setLoading] = useState(false);
