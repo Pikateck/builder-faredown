@@ -11,7 +11,6 @@ import { Label } from "@/components/ui/label";
 import { Badge } from "@/components/ui/badge";
 import {
   CABIN_CLASS_OPTIONS,
-  getCabinClassLabel,
   normalizeCabinClass,
   type CabinClassValue,
 } from "@/lib/cabinClasses";
