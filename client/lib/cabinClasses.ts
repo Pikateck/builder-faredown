@@ -38,9 +38,9 @@ export const CABIN_CLASS_OPTIONS: Array<{ value: CabinClassValue; label: string 
 ).map(([value, label]) => ({ value, label }));
 
 export const CABIN_CLASS_FILTER_OPTIONS: Array<{
-  value: "" | CabinClassValue;
+  value: "all" | CabinClassValue;
   label: string;
-}> = [{ value: "", label: "All Cabin Classes" }, ...CABIN_CLASS_OPTIONS];
+}> = [{ value: "all", label: "All Cabin Classes" }, ...CABIN_CLASS_OPTIONS];
 
 /**
  * Normalize any cabin class input from UI, API, or supplier data to the canonical values
