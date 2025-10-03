@@ -734,7 +734,10 @@ class MarkupService {
           airline: bookingDetails.airline || "",
           route: bookingDetails.route || { from: "", to: "" },
           class: normalizedBookingClass ?? "economy",
-          markupType: response.markup_type,
+          markupType:
+            String(response.markup_type).toLowerCase() === "flat"
+              ? "fixed"
+              : "percentage",
           markupValue: Number(response.markup_value || 0),
           minAmount: 0,
           maxAmount: 999999,
