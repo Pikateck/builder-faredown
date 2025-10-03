@@ -188,6 +188,7 @@ export default function MarkupManagementAir() {
   const [formData, setFormData] = useState<Partial<AirMarkup>>({});
   const [activeTab, setActiveTab] = useState("list");
   const [loading, setLoading] = useState(true);
+  const [exporting, setExporting] = useState(false);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pagination, setPagination] = useState({
