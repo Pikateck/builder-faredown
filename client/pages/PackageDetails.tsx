@@ -397,7 +397,7 @@ export default function PackageDetails() {
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Package Overview</h2>
                 <p className="text-gray-700 leading-relaxed">
-                  {packageData.description}
+                  {packageData.description || packageData.overview}
                 </p>
 
                 {packageData.highlights &&
