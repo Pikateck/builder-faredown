@@ -461,7 +461,10 @@ export default function PackageDetails() {
                             <div className="flex items-center">
                               <MapPin className="w-4 h-4 mr-2 text-blue-500" />
                               <span>
-                                <strong>Cities:</strong> {day.cities}
+                                <strong>Cities:</strong>{" "}
+                                {Array.isArray(day.cities)
+                                  ? day.cities.join(", ")
+                                  : day.cities}
                               </span>
                             </div>
                           )}
@@ -470,7 +473,10 @@ export default function PackageDetails() {
                             <div className="flex items-center">
                               <Utensils className="w-4 h-4 mr-2 text-orange-500" />
                               <span>
-                                <strong>Meals:</strong> {day.meals_included}
+                                <strong>Meals:</strong>{" "}
+                                {Array.isArray(day.meals_included)
+                                  ? day.meals_included.join(", ")
+                                  : day.meals_included}
                               </span>
                             </div>
                           )}
