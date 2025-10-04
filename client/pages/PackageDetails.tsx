@@ -194,7 +194,11 @@ export default function PackageDetails() {
             highlightsLength: response.data.highlights?.length || 0,
             highlights: response.data.highlights,
             inclusionsLength: response.data.inclusions?.length || 0,
-            exclusionsLength: response.data.exclusions?.length || 0
+            exclusionsLength: response.data.exclusions?.length || 0,
+            hasItinerary: !!response.data.itinerary,
+            itineraryLength: response.data.itinerary?.length || 0,
+            itineraryType: typeof response.data.itinerary,
+            itinerary: response.data.itinerary
           });
 
           setPackageData(response.data);
