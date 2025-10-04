@@ -184,6 +184,19 @@ export default function PackageDetails() {
         const response = await apiClient.get(`/packages/${slug}`);
 
         if (response.success) {
+          console.log('📦 Package data received:', {
+            title: response.data.title,
+            hasDescription: !!response.data.description,
+            hasOverview: !!response.data.overview,
+            descriptionLength: response.data.description?.length || 0,
+            overviewLength: response.data.overview?.length || 0,
+            highlightsType: typeof response.data.highlights,
+            highlightsLength: response.data.highlights?.length || 0,
+            highlights: response.data.highlights,
+            inclusionsLength: response.data.inclusions?.length || 0,
+            exclusionsLength: response.data.exclusions?.length || 0
+          });
+
           setPackageData(response.data);
 
           // Auto-select first available departure
