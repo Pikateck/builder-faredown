@@ -390,7 +390,24 @@ async function handlePackagesAPI(req, res) {
           c.name as country_name,
           ci.name as city_name,
           p.base_price_pp as from_price,
-          ARRAY[p.hero_image_url] as images
+          ARRAY[p.hero_image_url] as images,
+          (
+            SELECT json_agg(
+              json_build_object(
+                'day_number', pid.day_number,
+                'title', pid.title,
+                'description', pid.description,
+                'cities', pid.cities,
+                'meals_included', pid.meals_included,
+                'accommodation', pid.accommodation,
+                'activities', pid.activities,
+                'transport', pid.transport
+              )
+              ORDER BY pid.day_number
+            )
+            FROM package_itinerary_days pid
+            WHERE pid.package_id = p.id
+          ) as itinerary
         FROM packages p
         LEFT JOIN regions r ON p.region_id = r.id
         LEFT JOIN countries c ON p.country_id = c.id
