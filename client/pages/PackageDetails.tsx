@@ -184,7 +184,7 @@ export default function PackageDetails() {
         const response = await apiClient.get(`/packages/${slug}`);
 
         if (response.success) {
-          console.log('📦 Package data received:', {
+          console.log("📦 Package data received:", {
             title: response.data.title,
             hasDescription: !!response.data.description,
             hasOverview: !!response.data.overview,
@@ -198,7 +198,7 @@ export default function PackageDetails() {
             hasItinerary: !!response.data.itinerary,
             itineraryLength: response.data.itinerary?.length || 0,
             itineraryType: typeof response.data.itinerary,
-            itinerary: response.data.itinerary
+            itinerary: response.data.itinerary,
           });
 
           setPackageData(response.data);
@@ -413,12 +413,14 @@ export default function PackageDetails() {
             <Card>
               <CardContent className="p-6">
                 <h2 className="text-xl font-semibold mb-4">Package Overview</h2>
-                {(packageData.description || packageData.overview) ? (
+                {packageData.description || packageData.overview ? (
                   <p className="text-gray-700 leading-relaxed">
                     {packageData.description || packageData.overview}
                   </p>
                 ) : (
-                  <p className="text-gray-500 italic">Package description will be available soon.</p>
+                  <p className="text-gray-500 italic">
+                    Package description will be available soon.
+                  </p>
                 )}
 
                 {packageData.highlights &&
