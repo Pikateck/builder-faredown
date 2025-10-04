@@ -22,8 +22,7 @@ async function updateDubaiPackages() {
         highlights = $1,
         inclusions = $2,
         exclusions = $3,
-        tags = $4,
-        gallery_images = $5
+        gallery_images = $4
       WHERE slug = 'dubai-luxury-experience'
     `, [
       JSON.stringify([
@@ -50,7 +49,6 @@ async function updateDubaiPackages() {
         'Lunch (except where specified)',
         'Tips and gratuities'
       ]),
-      JSON.stringify(['luxury', 'best-seller', 'popular']),
       JSON.stringify([
         'https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800',
         'https://images.pexels.com/photos/1470502/pexels-photo-1470502.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -169,8 +167,7 @@ async function updateDubaiPackages() {
         description = 'Pack your weekend with adrenaline-pumping activities in Dubai stunning desert landscape. Perfect for adventure seekers looking for thrilling experiences.',
         highlights = $1,
         inclusions = $2,
-        exclusions = $3,
-        tags = $4
+        exclusions = $3
       WHERE slug = 'dubai-adventure-weekender'
     `, [
       JSON.stringify([
@@ -192,8 +189,7 @@ async function updateDubaiPackages() {
         'Visa fees',
         'Lunch and dinner (except safari BBQ)',
         'Personal expenses'
-      ]),
-      JSON.stringify(['adventure', 'weekend-special'])
+      ])
     ]);
 
     // Update Dubai Standard Package
@@ -202,8 +198,7 @@ async function updateDubaiPackages() {
         description = 'Experience the essential highlights of Dubai with this well-balanced package offering the perfect blend of culture, adventure, and leisure.',
         highlights = $1,
         inclusions = $2,
-        exclusions = $3,
-        tags = $4
+        exclusions = $3
       WHERE slug = 'dubai-standard-package'
     `, [
       JSON.stringify([
@@ -225,8 +220,7 @@ async function updateDubaiPackages() {
         'Lunches and dinners (except mentioned)',
         'Optional tours',
         'Personal expenses'
-      ]),
-      JSON.stringify(['value-for-money', 'popular'])
+      ])
     ]);
     
     await client.query('COMMIT');
