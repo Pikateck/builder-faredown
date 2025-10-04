@@ -423,11 +423,28 @@ router.get("/:slug", async (req, res) => {
     const { slug } = req.params;
 
     const query = `
-      SELECT 
+      SELECT
         p.*,
         r.name as region_name,
         c.name as country_name,
-        ci.name as city_name
+        ci.name as city_name,
+        (
+          SELECT json_agg(
+            json_build_object(
+              'day_number', pid.day_number,
+              'title', pid.title,
+              'description', pid.description,
+              'cities', pid.cities,
+              'meals_included', pid.meals_included,
+              'accommodation', pid.accommodation,
+              'activities', pid.activities,
+              'transport', pid.transport
+            )
+            ORDER BY pid.day_number
+          )
+          FROM package_itinerary_days pid
+          WHERE pid.package_id = p.id
+        ) as itinerary
       FROM packages p
       LEFT JOIN regions r ON p.region_id = r.id
       LEFT JOIN countries c ON p.country_id = c.id
@@ -448,15 +465,15 @@ router.get("/:slug", async (req, res) => {
 
     // Get available departures
     const departuresQuery = `
-      SELECT 
+      SELECT
         id, departure_city_code, departure_city_name,
         departure_date, return_date, price_per_person,
         single_supplement, child_price, infant_price,
         currency, available_seats, total_seats,
         is_guaranteed, special_notes
       FROM package_departures
-      WHERE package_id = $1 
-        AND is_active = TRUE 
+      WHERE package_id = $1
+        AND is_active = TRUE
         AND departure_date >= CURRENT_DATE
       ORDER BY departure_date ASC
     `;
@@ -469,6 +486,25 @@ router.get("/:slug", async (req, res) => {
     const response = {
       ...packageData,
       departures: departuresResult.rows,
+      // Ensure arrays are returned even if null
+      highlights: packageData.highlights || [],
+      inclusions: packageData.inclusions || [],
+      exclusions: packageData.exclusions || [],
+      themes: packageData.themes || [],
+      tags: packageData.tags || [],
+      gallery_images: packageData.gallery_images || [],
+      itinerary: packageData.itinerary || [],
+      // Add reviews structure if not present
+      reviews_summary: packageData.reviews_summary || {
+        total_reviews: 0,
+        average_rating: 0,
+        five_star: 0,
+        four_star: 0,
+        three_star: 0,
+        two_star: 0,
+        one_star: 0,
+      },
+      recent_reviews: packageData.recent_reviews || [],
     };
 
     res.json({
