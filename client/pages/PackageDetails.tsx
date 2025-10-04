@@ -101,10 +101,8 @@ interface PackageDetails {
   rating: number;
   review_count: number;
   is_featured: boolean;
-  category: string;
-  themes: string[];
-  inclusions: string[];
-  exclusions: string[];
+  category?: string;
+  themes?: string[];
   terms_conditions: string;
   cancellation_policy: string;
   visa_required: boolean;
