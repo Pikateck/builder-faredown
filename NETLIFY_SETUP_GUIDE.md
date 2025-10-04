@@ -1,6 +1,7 @@
 # 🚀 Netlify Setup Guide for builder-faredown
 
 ## Current Issue
+
 Your GitHub repo `Pikateck/builder-faredown` is **NOT connected to Netlify**, so pushes don't trigger deployments.
 
 ## Solution: Connect Netlify to Your GitHub Repo
@@ -59,6 +60,7 @@ netlify deploy --prod
 ## After Setup
 
 Once connected, every `git push` to `main` will automatically:
+
 1. ✅ Trigger Netlify build
 2. ✅ Run `npm run build:client`
 3. ✅ Deploy to production
@@ -80,13 +82,16 @@ netlify open
 ## Troubleshooting
 
 **Q: I don't see my site in Netlify dashboard**
+
 - A: You need to create it first using Option 1 or 2 above
 
 **Q: Changes aren't deploying**
+
 - A: Check Netlify → Deploys tab to see build logs
 - A: Ensure auto-publishing is ON in site settings
 
 **Q: Build fails**
+
 - A: Check build logs for errors
 - A: Ensure all dependencies are in package.json
 - A: Verify build command is correct
