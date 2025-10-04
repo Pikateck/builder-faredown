@@ -22,9 +22,8 @@ async function updateDubaiPackages() {
         highlights = $1,
         inclusions = $2,
         exclusions = $3,
-        themes = $4,
-        tags = $5,
-        gallery_images = $6
+        tags = $4,
+        gallery_images = $5
       WHERE slug = 'dubai-luxury-experience'
     `, [
       JSON.stringify([
@@ -51,7 +50,6 @@ async function updateDubaiPackages() {
         'Lunch (except where specified)',
         'Tips and gratuities'
       ]),
-      JSON.stringify(['luxury', 'city-break', 'culture', 'shopping']),
       JSON.stringify(['luxury', 'best-seller', 'popular']),
       JSON.stringify([
         'https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800',
@@ -172,8 +170,7 @@ async function updateDubaiPackages() {
         highlights = $1,
         inclusions = $2,
         exclusions = $3,
-        themes = $4,
-        tags = $5
+        tags = $4
       WHERE slug = 'dubai-adventure-weekender'
     `, [
       JSON.stringify([
@@ -196,19 +193,17 @@ async function updateDubaiPackages() {
         'Lunch and dinner (except safari BBQ)',
         'Personal expenses'
       ]),
-      JSON.stringify(['adventure', 'desert', 'weekend']),
       JSON.stringify(['adventure', 'weekend-special'])
     ]);
-    
-    // Update Dubai Standard Package  
+
+    // Update Dubai Standard Package
     await client.query(`
       UPDATE packages SET
         description = 'Experience the essential highlights of Dubai with this well-balanced package offering the perfect blend of culture, adventure, and leisure.',
         highlights = $1,
         inclusions = $2,
         exclusions = $3,
-        themes = $4,
-        tags = $5
+        tags = $4
       WHERE slug = 'dubai-standard-package'
     `, [
       JSON.stringify([
@@ -231,7 +226,6 @@ async function updateDubaiPackages() {
         'Optional tours',
         'Personal expenses'
       ]),
-      JSON.stringify(['standard', 'culture', 'city']),
       JSON.stringify(['value-for-money', 'popular'])
     ]);
     
