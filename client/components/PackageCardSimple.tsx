@@ -206,6 +206,16 @@ export function PackageCardSimple({
                 </span>
               </div>
             )}
+
+            <div className="flex items-center">
+              <Plane className="w-4 h-4 mr-2 text-purple-500" />
+              <span>{pkg.available_departures_count} departures</span>
+            </div>
+
+            <div className="flex items-center">
+              <Users className="w-4 h-4 mr-2 text-orange-500" />
+              <span>Group tour</span>
+            </div>
           </div>
 
           {/* Highlights */}
@@ -416,7 +426,7 @@ export function PackageCardSimple({
           </div>
 
           {/* Package Details */}
-          <div className="grid grid-cols-3 gap-4 mb-4 text-sm text-gray-600">
+          <div className="grid grid-cols-2 gap-4 mb-4 text-sm text-gray-600">
             <div className="flex items-center">
               <Clock className="w-4 h-4 mr-2 text-blue-500" />
               <span>
@@ -434,6 +444,11 @@ export function PackageCardSimple({
             <div className="flex items-center">
               <Plane className="w-4 h-4 mr-2 text-purple-500" />
               <span>{pkg.available_departures_count} departures</span>
+            </div>
+
+            <div className="flex items-center">
+              <Users className="w-4 h-4 mr-2 text-orange-500" />
+              <span>Group tour</span>
             </div>
           </div>
 
