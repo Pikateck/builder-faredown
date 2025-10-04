@@ -130,15 +130,14 @@ async function updateDubaiPackages() {
       for (const day of itinerary) {
         await client.query(`
           INSERT INTO package_itinerary_days (
-            package_id, day_number, title, description, cities,
+            package_id, day_number, title, description,
             meals_included, accommodation, transport
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7)
         `, [
           packageId,
           day.day_number,
           day.title,
           day.description,
-          day.cities,
           day.meals_included,
           day.accommodation,
           day.transport
