@@ -22,7 +22,7 @@ async function updateDubaiPackages() {
         highlights = $1,
         inclusions = $2,
         exclusions = $3
-      WHERE slug = 'dubai-luxury-experience'
+      WHERE slug = 'dubai-luxury-experience-5-days'
     `, [
       JSON.stringify([
         '5-star hotel accommodation at Burj Al Arab',
