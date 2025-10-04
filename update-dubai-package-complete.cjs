@@ -79,7 +79,6 @@ async function updateDubaiPackages() {
           cities: 'Dubai',
           meals_included: 'Breakfast, Dinner',
           accommodation: 'Burj Al Arab - Royal Suite',
-          activities: JSON.stringify(['City sightseeing', 'Burj Khalifa visit', 'Traditional souks']),
           transport: 'Private air-conditioned vehicle'
         },
         {
@@ -89,7 +88,6 @@ async function updateDubaiPackages() {
           cities: 'Dubai Desert',
           meals_included: 'Breakfast, BBQ Dinner',
           accommodation: 'Burj Al Arab - Royal Suite',
-          activities: JSON.stringify(['Dune bashing', 'Camel riding', 'Falcon show', 'Henna painting', 'Belly dancing']),
           transport: '4x4 Desert Safari vehicle'
         },
         {
@@ -99,7 +97,6 @@ async function updateDubaiPackages() {
           cities: 'Dubai',
           meals_included: 'Breakfast, Lunch',
           accommodation: 'Burj Al Arab - Royal Suite',
-          activities: JSON.stringify(['Yacht cruise', 'Palm Jumeirah tour', 'Atlantis visit', 'Beach time']),
           transport: 'Private yacht & car'
         },
         {
@@ -109,7 +106,6 @@ async function updateDubaiPackages() {
           cities: 'Dubai',
           meals_included: 'Breakfast',
           accommodation: 'Burj Al Arab - Royal Suite',
-          activities: JSON.stringify(['Shopping', 'Dubai Aquarium', 'Fountain show', 'Personal shopper service']),
           transport: 'Private car with driver'
         },
         {
@@ -119,7 +115,6 @@ async function updateDubaiPackages() {
           cities: 'Abu Dhabi',
           meals_included: 'Breakfast, Lunch',
           accommodation: 'Burj Al Arab - Royal Suite',
-          activities: JSON.stringify(['Grand Mosque', 'Emirates Palace', 'Louvre Museum', 'Corniche drive']),
           transport: 'Private luxury car'
         },
         {
@@ -135,9 +130,9 @@ async function updateDubaiPackages() {
       for (const day of itinerary) {
         await client.query(`
           INSERT INTO package_itinerary_days (
-            package_id, day_number, title, description, cities, 
-            meals_included, accommodation, activities, transport
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
+            package_id, day_number, title, description, cities,
+            meals_included, accommodation, transport
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
         `, [
           packageId,
           day.day_number,
@@ -146,7 +141,6 @@ async function updateDubaiPackages() {
           day.cities,
           day.meals_included,
           day.accommodation,
-          day.activities,
           day.transport
         ]);
       }
