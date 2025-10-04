@@ -21,8 +21,7 @@ async function updateDubaiPackages() {
         description = 'Immerse yourself in the glitz and glamour of Dubai, where cutting-edge architecture meets timeless desert beauty. This luxury package includes stays at the finest hotels, visits to iconic landmarks, and unforgettable experiences that showcase the best of this magnificent city.',
         highlights = $1,
         inclusions = $2,
-        exclusions = $3,
-        gallery_images = $4
+        exclusions = $3
       WHERE slug = 'dubai-luxury-experience'
     `, [
       JSON.stringify([
@@ -48,12 +47,6 @@ async function updateDubaiPackages() {
         'Travel insurance',
         'Lunch (except where specified)',
         'Tips and gratuities'
-      ]),
-      JSON.stringify([
-        'https://images.pexels.com/photos/19894545/pexels-photo-19894545.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/1470502/pexels-photo-1470502.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/161815/dubai-tower-arab-khalifa-161815.jpeg?auto=compress&cs=tinysrgb&w=800',
-        'https://images.pexels.com/photos/2044434/pexels-photo-2044434.jpeg?auto=compress&cs=tinysrgb&w=800'
       ])
     ]);
     
