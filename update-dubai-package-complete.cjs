@@ -1,9 +1,10 @@
 const { Pool } = require('pg');
-require('dotenv').config();
+
+const dbUrl = process.env.DATABASE_URL || 'postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db';
 
 const pool = new Pool({
-  connectionString: process.env.DATABASE_URL,
-  ssl: process.env.DATABASE_URL?.includes('render.com') ? { rejectUnauthorized: false } : false
+  connectionString: dbUrl,
+  ssl: dbUrl?.includes('render.com') ? { rejectUnauthorized: false } : false
 });
 
 async function updateDubaiPackages() {
