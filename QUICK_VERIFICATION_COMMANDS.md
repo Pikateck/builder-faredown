@@ -1,4 +1,5 @@
 # Quick Verification Commands
+
 ## Run These to Independently Verify Your System
 
 **Purpose**: Copy-paste these commands to verify your technical baseline without waiting for Builder.
@@ -8,6 +9,7 @@
 ## 1. DATABASE VERIFICATION
 
 ### Connect to Database
+
 ```bash
 # Using psql
 psql "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db"
@@ -17,6 +19,7 @@ psql $DATABASE_URL
 ```
 
 ### List All Tables
+
 ```sql
 \dt
 
@@ -28,6 +31,7 @@ ORDER BY table_name;
 ```
 
 ### Expected Tables (45+)
+
 ```
 users, markup_rules, promo_codes, tax_policies, price_checkpoints,
 hotel_bookings, payments, vouchers, suppliers, bargain_sessions,
@@ -37,20 +41,21 @@ faredown.travelers, faredown.passports, faredown.payment_methods, etc.
 ```
 
 ### Check Table Counts
+
 ```sql
-SELECT 
+SELECT
   'users' AS table, COUNT(*) AS count FROM users
-UNION ALL 
+UNION ALL
   SELECT 'markup_rules', COUNT(*) FROM markup_rules
-UNION ALL 
+UNION ALL
   SELECT 'promo_codes', COUNT(*) FROM promo_codes
-UNION ALL 
+UNION ALL
   SELECT 'hotel_bookings', COUNT(*) FROM hotel_bookings
-UNION ALL 
+UNION ALL
   SELECT 'payments', COUNT(*) FROM payments
-UNION ALL 
+UNION ALL
   SELECT 'vouchers', COUNT(*) FROM vouchers
-UNION ALL 
+UNION ALL
   SELECT 'bargain_sessions', COUNT(*) FROM bargain_sessions
 UNION ALL
   SELECT 'countries', COUNT(*) FROM countries
@@ -59,35 +64,36 @@ UNION ALL
 ```
 
 ### Sample Admin-Created Data
+
 ```sql
 -- Check markup rules
-SELECT 
-  id, module, rule_name, m_type, m_value, 
-  priority, is_active, created_at 
-FROM markup_rules 
+SELECT
+  id, module, rule_name, m_type, m_value,
+  priority, is_active, created_at
+FROM markup_rules
 WHERE created_at > '2025-01-01'
 LIMIT 5;
 
 -- Check promo codes
-SELECT 
-  id, code, type, value, module, 
-  usage_count, valid_from, valid_to 
-FROM promo_codes 
+SELECT
+  id, code, type, value, module,
+  usage_count, valid_from, valid_to
+FROM promo_codes
 WHERE is_active = true
 LIMIT 5;
 
 -- Check user signups
-SELECT 
-  id, email, 
+SELECT
+  id, email,
   CASE WHEN google_id IS NOT NULL THEN 'Google' ELSE 'Email' END as signup_method,
-  created_at 
-FROM users 
-ORDER BY created_at DESC 
+  created_at
+FROM users
+ORDER BY created_at DESC
 LIMIT 10;
 
 -- Check bookings with payments
-SELECT 
-  hb.id, hb.booking_ref, hb.gateway, 
+SELECT
+  hb.id, hb.booking_ref, hb.gateway,
   hb.total_amount, hb.status as booking_status,
   p.gateway_payment_id, p.status as payment_status,
   hb.created_at
@@ -98,6 +104,7 @@ LIMIT 5;
 ```
 
 ### Verify Foreign Keys
+
 ```sql
 SELECT
   tc.table_name,
@@ -121,36 +128,43 @@ ORDER BY tc.table_name, kcu.column_name;
 ### Test Core Endpoints
 
 #### Health Check
+
 ```bash
 curl https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/health-check
 ```
 
 #### OAuth Status
+
 ```bash
 curl https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/oauth/status
 ```
 
 #### Google OAuth URL
+
 ```bash
 curl https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/oauth/google/url
 ```
 
 #### Search Destinations
+
 ```bash
 curl "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/destinations/search?q=dubai"
 ```
 
 #### List Countries
+
 ```bash
 curl https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/countries
 ```
 
 #### List Packages
+
 ```bash
 curl https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/packages
 ```
 
 #### Hotel Search
+
 ```bash
 curl -X POST https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/hotels-live/search \
   -H "Content-Type: application/json" \
@@ -166,6 +180,7 @@ curl -X POST https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.
 ### Test Protected Endpoints (Need Token)
 
 #### Admin Login (Get Token)
+
 ```bash
 curl -X POST https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/admin/auth/login \
   -H "Content-Type: application/json" \
@@ -176,6 +191,7 @@ curl -X POST https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.
 ```
 
 #### Use Token to Access Admin Endpoints
+
 ```bash
 # Replace YOUR_TOKEN with actual token from login
 TOKEN="YOUR_TOKEN"
@@ -198,6 +214,7 @@ curl https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/
 ## 3. ENVIRONMENT VARIABLES CHECK
 
 ### On Render
+
 ```bash
 # Via Render CLI (if installed)
 render env list
@@ -207,6 +224,7 @@ render env list
 ```
 
 ### Critical Env Vars Checklist
+
 ```bash
 # Database
 ✅ DATABASE_URL
@@ -241,28 +259,32 @@ render env list
 ## 4. INTEGRATION VERIFICATION
 
 ### Razorpay Test
+
 ```bash
 # Check Razorpay service
 node api/test-razorpay.js
 ```
 
 ### Hotelbeds Test
+
 ```bash
 curl https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/test-hotelbeds
 ```
 
 ### Amadeus Test
+
 ```bash
 curl https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/api/test-amadeus-auth
 ```
 
 ### Check Razorpay Mode
+
 ```sql
 -- Check if any real payments exist
-SELECT 
-  gateway, 
-  gateway_payment_id, 
-  amount, 
+SELECT
+  gateway,
+  gateway_payment_id,
+  amount,
   currency,
   method,
   status,
@@ -283,6 +305,7 @@ LIMIT 5;
 ## 5. FILE STORAGE CHECK
 
 ### Verify Voucher Storage
+
 ```bash
 # SSH into Render instance (if possible) or check locally
 ls -lh vouchers/sightseeing/
@@ -291,7 +314,7 @@ ls -lh vouchers/sightseeing/
 ```
 
 ```sql
-SELECT 
+SELECT
   id,
   booking_id,
   pdf_path,
@@ -306,11 +329,12 @@ LIMIT 10;
 ```
 
 ### Check if PDFs are Local or S3
+
 ```sql
 -- If pdf_path starts with 'vouchers/' = local
 -- If pdf_path starts with 'https://s3' or 'https://' = cloud storage
-SELECT 
-  CASE 
+SELECT
+  CASE
     WHEN pdf_path LIKE 'vouchers/%' THEN 'Local Filesystem'
     WHEN pdf_path LIKE 'https://%' THEN 'Cloud Storage (S3/CDN)'
     ELSE 'Unknown'
@@ -326,6 +350,7 @@ GROUP BY storage_type;
 ## 6. BACKUP VERIFICATION
 
 ### Check Render Backups
+
 1. Go to Render Dashboard
 2. Navigate to your database
 3. Click "Backups" tab
@@ -335,6 +360,7 @@ GROUP BY storage_type;
    - Retention period
 
 ### Test Backup Restore (Safe Test)
+
 ```bash
 # Download latest backup
 # Restore to a TEST database (NOT production)
@@ -349,27 +375,30 @@ psql test_db -c "\dt" | wc -l
 ## 7. MONITORING & LOGS
 
 ### Check Sentry (if configured)
+
 1. Visit: https://sentry.io
 2. Check if project exists
 3. Verify recent errors are being captured
 
 ### API Logs via Render
+
 ```bash
 # Via Render dashboard:
 # https://dashboard.render.com/web/[service-id]/logs
 
 # Look for:
 - 🔵 OAuth flows
-- 🟢 Payment success/failures  
+- 🟢 Payment success/failures
 - 🔴 Errors and stack traces
 - 📊 Database queries
 ```
 
 ### Check Recent API Errors
+
 ```sql
 -- If you have error logging table
-SELECT * FROM error_logs 
-ORDER BY created_at DESC 
+SELECT * FROM error_logs
+ORDER BY created_at DESC
 LIMIT 10;
 
 -- Or check application logs table if it exists
@@ -386,8 +415,9 @@ LIMIT 20;
 ### Verify Admin Panel Data
 
 #### Markup Rules Created via Admin
+
 ```sql
-SELECT 
+SELECT
   id,
   module,
   rule_name,
@@ -406,8 +436,9 @@ LIMIT 10;
 ```
 
 #### Active Promo Codes
+
 ```sql
-SELECT 
+SELECT
   code,
   type,
   value,
@@ -415,7 +446,7 @@ SELECT
   usage_count || '/' || usage_limit as usage,
   valid_from,
   valid_to,
-  CASE 
+  CASE
     WHEN valid_to < NOW() THEN 'Expired'
     WHEN usage_count >= usage_limit THEN 'Limit Reached'
     ELSE 'Active'
@@ -426,8 +457,9 @@ ORDER BY created_at DESC;
 ```
 
 #### Google Login Users
+
 ```sql
-SELECT 
+SELECT
   id,
   email,
   first_name || ' ' || last_name as name,
@@ -441,8 +473,9 @@ LIMIT 10;
 ```
 
 #### Recent Bookings with Payment Info
+
 ```sql
-SELECT 
+SELECT
   b.booking_ref,
   b.total_amount,
   b.currency,
@@ -464,6 +497,7 @@ LIMIT 10;
 ## 9. QUICK AUDIT REPORT GENERATION
 
 ### Run Complete Audit
+
 ```sql
 -- Save this as audit_report.sql and run it
 
@@ -471,8 +505,8 @@ LIMIT 10;
 \echo ''
 
 \echo '1. TABLE COUNT:'
-SELECT COUNT(*) as total_tables 
-FROM information_schema.tables 
+SELECT COUNT(*) as total_tables
+FROM information_schema.tables
 WHERE table_schema = 'public' AND table_type = 'BASE TABLE';
 
 \echo ''
@@ -489,13 +523,13 @@ UNION ALL SELECT 'cities', COUNT(*) FROM cities;
 
 \echo ''
 \echo '3. RECENT ACTIVITY (Last 7 Days):'
-SELECT 
+SELECT
   'New Users' as metric,
   COUNT(*) as count
-FROM users 
+FROM users
 WHERE created_at > NOW() - INTERVAL '7 days'
 UNION ALL
-SELECT 
+SELECT
   'New Bookings',
   COUNT(*)
 FROM hotel_bookings
@@ -510,7 +544,7 @@ WHERE status = 'success'
 
 \echo ''
 \echo '4. ACTIVE CONFIGURATIONS:'
-SELECT 
+SELECT
   'Active Markup Rules' as config,
   COUNT(*) as count
 FROM markup_rules
@@ -528,6 +562,7 @@ WHERE is_active = true
 ```
 
 ### Run the Audit
+
 ```bash
 psql "$DATABASE_URL" -f audit_report.sql > system_audit_$(date +%Y%m%d).txt
 ```
@@ -537,6 +572,7 @@ psql "$DATABASE_URL" -f audit_report.sql > system_audit_$(date +%Y%m%d).txt
 ## 10. NETLIFY VERIFICATION (If Deploying)
 
 ### Check Netlify Build
+
 ```bash
 # Check build status
 netlify status
@@ -549,6 +585,7 @@ curl https://spontaneous-biscotti-da44bc.netlify.app/api/health-check
 ```
 
 ### Verify Google OAuth on Netlify
+
 ```bash
 # Test OAuth URL generation
 curl https://spontaneous-biscotti-da44bc.netlify.app/api/oauth/google/url
@@ -566,6 +603,7 @@ curl https://spontaneous-biscotti-da44bc.netlify.app/api/oauth/google/url
 Run these in order to verify everything:
 
 ### ✅ Database (5 minutes)
+
 ```bash
 # 1. Connect and list tables
 psql "$DATABASE_URL" -c "\dt"
@@ -580,6 +618,7 @@ psql "$DATABASE_URL" -c "SELECT * FROM users WHERE google_id IS NOT NULL LIMIT 3
 ```
 
 ### ✅ APIs (3 minutes)
+
 ```bash
 # Test public endpoints
 curl https://.../api/health-check
@@ -591,6 +630,7 @@ curl https://.../api/oauth/google/url
 ```
 
 ### ✅ Integrations (2 minutes)
+
 ```bash
 # Test external services
 curl https://.../api/test-hotelbeds
@@ -598,6 +638,7 @@ curl https://.../api/test-amadeus-auth
 ```
 
 ### ✅ Files & Backups (2 minutes)
+
 ```bash
 # Check voucher storage
 psql "$DATABASE_URL" -c "SELECT pdf_path FROM vouchers LIMIT 5;"

@@ -23,18 +23,21 @@ Please provide ALL of the following in a **single consolidated document** with s
 **Format**: SQL export or pgAdmin screenshots
 
 ✅ **Full list of PostgreSQL tables** (expect 45+ tables)
+
 - Table name
-- Purpose/description  
+- Purpose/description
 - Primary key
 - Foreign key relationships
 
 ✅ **Schema structure for EACH table**:
+
 - Column names
 - Data types
 - Constraints (NOT NULL, UNIQUE, etc.)
 - Indexes
 
 ✅ **Sample data** (3-5 rows) from these critical tables:
+
 - `users` (including Google OAuth signups)
 - `markup_rules` (created via Admin Panel)
 - `promo_codes` (active codes)
@@ -47,6 +50,7 @@ Please provide ALL of the following in a **single consolidated document** with s
 **Evidence Required**: Screenshots from pgAdmin OR raw SQL output
 
 **Reference SQL Queries** (run these and share output):
+
 ```sql
 -- List all tables
 SELECT table_name
@@ -83,6 +87,7 @@ ORDER BY tc.table_name;
 ✅ **Complete endpoint list** (expect 500+ endpoints)
 
 For each endpoint provide:
+
 - Full URL path (e.g., `/api/admin/markup/packages`)
 - HTTP method (GET/POST/PUT/DELETE)
 - Authentication required (Public / Bearer Token / Admin)
@@ -96,8 +101,9 @@ For each endpoint provide:
 | `/api/bookings/hotels/confirm` | POST | Token | hotel_bookings, payments | Confirm booking |
 
 ✅ **Mapping**: Which tables are linked to:
+
 - Builder Frontend (user actions)
-- Admin Panel (CMS operations)  
+- Admin Panel (CMS operations)
 - Render APIs (backend services)
 - Netlify Functions (if applicable)
 
@@ -109,18 +115,19 @@ For each endpoint provide:
 
 ✅ **System Status Matrix**:
 
-| Component | Status | Evidence/Notes |
-|-----------|--------|----------------|
-| Frontend (Builder) | ✅ / ❌ | Screenshot of live site |
-| Backend APIs (Render) | ✅ / ❌ | API health check response |
-| Admin Panel | ✅ / ❌ | Screenshot + DB entries |
-| Google OAuth | ✅ / ❌ | User entries with google_id |
-| Email Login | ✅ / ❌ | User entries without google_id |
-| Payment Gateway | ✅ / ❌ | Successful payment records |
-| Invoice/Voucher Generation | ✅ / ❌ | PDF paths in vouchers table |
-| Mobile Responsive | ✅ / ❌ | Mobile preview screenshot |
+| Component                  | Status  | Evidence/Notes                 |
+| -------------------------- | ------- | ------------------------------ |
+| Frontend (Builder)         | ✅ / ❌ | Screenshot of live site        |
+| Backend APIs (Render)      | ✅ / ❌ | API health check response      |
+| Admin Panel                | ✅ / ❌ | Screenshot + DB entries        |
+| Google OAuth               | ✅ / ❌ | User entries with google_id    |
+| Email Login                | ✅ / ❌ | User entries without google_id |
+| Payment Gateway            | ✅ / ❌ | Successful payment records     |
+| Invoice/Voucher Generation | ✅ / ❌ | PDF paths in vouchers table    |
+| Mobile Responsive          | ✅ / ❌ | Mobile preview screenshot      |
 
 ✅ **Data Evidence** (screenshots or SQL exports):
+
 - Markup rules created via Admin Panel
 - Active promo codes with usage stats
 - User signups (both email and Google)
@@ -135,22 +142,26 @@ For each endpoint provide:
 
 ✅ **Provider**: Razorpay / Stripe / Other?
 
-✅ **Mode**: 
+✅ **Mode**:
+
 - ⚠️ Test/Sandbox
 - ✅ Production/Live
 
 ✅ **Webhook Configuration**:
+
 - Webhook URL (e.g., `https://.../api/payments/webhook`)
 - Webhook secret
 - Events subscribed to
 - Screenshot from payment gateway dashboard
 
 ✅ **Refund/Cancellation Flow**:
+
 - Is refund logic implemented?
 - Which DB table stores refund records?
 - Test refund transaction proof
 
 ✅ **Transaction Logs**:
+
 - Which table stores payment logs? (`payments` table?)
 - Sample successful transaction (screenshot with gateway_payment_id)
 
@@ -161,24 +172,28 @@ For each endpoint provide:
 For EACH service, provide:
 
 ✅ **Hotelbeds (Hotels)**:
+
 - API Key (first/last 4 chars only)
 - Environment: Test or Production?
 - Sample successful API call log
 - Which tables store hotel data?
 
 ✅ **Amadeus (Flights)**:
-- API Key (first/last 4 chars only)  
+
+- API Key (first/last 4 chars only)
 - Environment: Test or Production?
 - Sample successful API call log
 - Which tables store flight data?
 
 ✅ **SendGrid (Email)**:
+
 - API Key (first/last 4 chars only)
 - Email delivery success rate
 - Screenshot of recent sent emails
 - Which table stores email logs?
 
 ✅ **Google OAuth**:
+
 - Client ID (confirm it matches our records)
 - **Authorized Redirect URIs** configured in Google Console (screenshot)
 - Must include BOTH:
@@ -196,23 +211,29 @@ For EACH service, provide:
 **Critical variables checklist** (confirm these are set):
 
 **Database**:
+
 - `DATABASE_URL`
 - `DB_HOST`, `DB_USER`, `DB_PASSWORD`, `DB_NAME`, `DB_PORT`
 
 **External APIs**:
+
 - `HOTELBEDS_API_KEY`, `HOTELBEDS_API_SECRET`
 - `AMADEUS_API_KEY`, `AMADEUS_API_SECRET`
 
 **OAuth**:
+
 - `GOOGLE_CLIENT_ID`, `GOOGLE_CLIENT_SECRET`, `GOOGLE_REDIRECT_URI`
 
 **Payment**:
+
 - `RAZORPAY_KEY_ID`, `RAZORPAY_KEY_SECRET`
 
 **Email**:
+
 - `SENDGRID_API_KEY`, `EMAIL_FROM`
 
 **Security**:
+
 - `JWT_SECRET`, `SESSION_JWT_SECRET`
 
 ✅ **Screenshot**: Render dashboard env vars (redact secrets but show variable names exist)
@@ -222,17 +243,20 @@ For EACH service, provide:
 ### 7. Backup & Recovery Policy
 
 ✅ **Render Database Backups**:
+
 - Backup frequency (daily/weekly/hourly?)
 - Retention period (how long are backups kept?)
 - Last successful backup timestamp
 - Screenshot from Render backup dashboard
 
 ✅ **Recovery Procedure**:
+
 - Step-by-step process to restore from backup
 - Estimated recovery time
 - Has recovery been tested? (yes/no)
 
 ✅ **Disaster Recovery Plan**:
+
 - What happens if Render goes down?
 - Failover strategy?
 - Data loss tolerance (RPO/RTO)?
@@ -242,17 +266,20 @@ For EACH service, provide:
 ### 8. Monitoring & Error Tracking
 
 ✅ **Sentry (Error Tracking)**:
+
 - Is Sentry configured and active? (yes/no)
 - Sentry DSN (first/last 4 chars)
 - Screenshot of Sentry dashboard showing recent errors
 - Access credentials for Sentry project
 
 ✅ **Logging**:
+
 - Where are API logs stored/viewable?
 - How long are logs retained?
 - Screenshot of recent API logs
 
 ✅ **Performance Metrics**:
+
 - Current API response time (avg)
 - Database query performance
 - Any bottlenecks identified?
@@ -297,6 +324,7 @@ FAREDOWN_TECHNICAL_AUDIT_REPORT.pdf
 ```
 
 **Attachments**:
+
 - SQL dump of schema structure
 - Postman collection (if available)
 - Screenshots folder (organized by section)
@@ -311,8 +339,9 @@ FAREDOWN_TECHNICAL_AUDIT_REPORT.pdf
 We will immediately pause all development work and conduct our own independent audit before proceeding. This may delay the project timeline significantly.
 
 **Why this is critical**:
+
 - We need to verify database integrity before production deployment
-- Payment gateway must be properly configured to avoid transaction issues  
+- Payment gateway must be properly configured to avoid transaction issues
 - Backup/recovery must be validated to prevent data loss
 - All integrations must be documented for ongoing maintenance
 
@@ -325,6 +354,7 @@ If you have ANY questions about what's required, please ask immediately. Do not 
 We've attached our **independent technical baseline report** (TECHNICAL_BASELINE_AUDIT_REPORT.md) which shows what we expect to see. Your submission should match or exceed this level of detail.
 
 **Reference documents attached**:
+
 1. `TECHNICAL_BASELINE_AUDIT_REPORT.md` - Our independent baseline
 2. `QUICK_VERIFICATION_COMMANDS.md` - SQL queries you should run
 3. This email as `EMAIL_TO_BUILDER_TEMPLATE.md`
@@ -346,6 +376,7 @@ Best regards,
 ---
 
 ## Attachments
+
 - [ ] TECHNICAL_BASELINE_AUDIT_REPORT.md (860 lines, comprehensive reference)
 - [ ] QUICK_VERIFICATION_COMMANDS.md (609 lines, copy-paste SQL queries)
 - [ ] EMAIL_TO_BUILDER_TEMPLATE.md (this document)

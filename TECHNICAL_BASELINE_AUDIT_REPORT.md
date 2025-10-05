@@ -1,4 +1,5 @@
 # Independent Technical Baseline Audit Report
+
 ## Faredown Platform - Generated: October 2025
 
 > **Purpose**: This is YOUR independent technical baseline. Use it to verify Builder's audit submission and ensure nothing is missed or misrepresented.
@@ -18,27 +19,30 @@
 ## 1. API ENDPOINT INVENTORY
 
 ### 1.1 Core Authentication & OAuth
-| Endpoint | Method | Auth Required | Purpose |
-|----------|--------|---------------|---------|
-| `/api/auth/login` | POST | Public | User login |
-| `/api/auth/logout` | POST | ✅ Token | Logout |
-| `/api/oauth/google` | GET | Public | Start Google OAuth |
-| `/api/oauth/google/callback` | GET/POST | Public | OAuth callback |
-| `/api/oauth/google/url` | GET | Public | Get OAuth URL |
+
+| Endpoint                     | Method   | Auth Required | Purpose            |
+| ---------------------------- | -------- | ------------- | ------------------ |
+| `/api/auth/login`            | POST     | Public        | User login         |
+| `/api/auth/logout`           | POST     | ✅ Token      | Logout             |
+| `/api/oauth/google`          | GET      | Public        | Start Google OAuth |
+| `/api/oauth/google/callback` | GET/POST | Public        | OAuth callback     |
+| `/api/oauth/google/url`      | GET      | Public        | Get OAuth URL      |
 
 ### 1.2 Admin Panel APIs
+
 **Base**: `/api/admin/*` - All require `authenticateToken + requireAdmin`
 
-| Endpoint | Method | Permissions | Purpose |
-|----------|--------|-------------|---------|
-| `/api/admin/dashboard` | GET | ADMIN_DASHBOARD | Dashboard summary |
-| `/api/admin/users` | GET/POST/PUT/DELETE | ADMIN_MANAGE | User management |
-| `/api/admin/bookings` | GET | ADMIN_BOOKINGS | Booking list |
-| `/api/admin/markup/packages` | GET/POST/PUT/DELETE | ADMIN_MANAGE | Package markup rules |
-| `/api/admin/promo` | GET/POST/PUT/DELETE | ADMIN_MANAGE | Promo code management |
-| `/api/admin/reports` | GET | REPORTS_GENERATE | Analytics reports |
+| Endpoint                     | Method              | Permissions      | Purpose               |
+| ---------------------------- | ------------------- | ---------------- | --------------------- |
+| `/api/admin/dashboard`       | GET                 | ADMIN_DASHBOARD  | Dashboard summary     |
+| `/api/admin/users`           | GET/POST/PUT/DELETE | ADMIN_MANAGE     | User management       |
+| `/api/admin/bookings`        | GET                 | ADMIN_BOOKINGS   | Booking list          |
+| `/api/admin/markup/packages` | GET/POST/PUT/DELETE | ADMIN_MANAGE     | Package markup rules  |
+| `/api/admin/promo`           | GET/POST/PUT/DELETE | ADMIN_MANAGE     | Promo code management |
+| `/api/admin/reports`         | GET                 | REPORTS_GENERATE | Analytics reports     |
 
 **Admin Subroutes** (from `server/routes/admin/`):
+
 - `/api/admin/auth/login` - Admin login
 - `/api/admin/dashboard/summary` - Real-time metrics
 - `/api/admin/payments` - Payment reconciliation
@@ -47,59 +51,66 @@
 - `/api/admin/inventory` - Inventory management
 
 ### 1.3 Booking & Payments
-| Endpoint | Method | Auth | Purpose |
-|----------|--------|------|---------|
-| `/api/bookings/hotels/pre-book` | POST | ✅ | Create pre-booking |
-| `/api/bookings/hotels/confirm` | POST | ✅ | Confirm booking |
-| `/api/bookings/hotels/:bookingRef` | GET | ✅ | Get booking details |
-| `/api/payments/create-order` | POST | ✅ | Create Razorpay order |
-| `/api/payments/verify` | POST | ✅ | Verify payment signature |
+
+| Endpoint                           | Method | Auth | Purpose                  |
+| ---------------------------------- | ------ | ---- | ------------------------ |
+| `/api/bookings/hotels/pre-book`    | POST   | ✅   | Create pre-booking       |
+| `/api/bookings/hotels/confirm`     | POST   | ✅   | Confirm booking          |
+| `/api/bookings/hotels/:bookingRef` | GET    | ✅   | Get booking details      |
+| `/api/payments/create-order`       | POST   | ✅   | Create Razorpay order    |
+| `/api/payments/verify`             | POST   | ✅   | Verify payment signature |
 
 ### 1.4 Flights (Amadeus Integration)
-| Endpoint | Method | Auth | Purpose |
-|----------|--------|------|---------|
-| `/api/flights/search` | GET | Public | Search flights |
-| `/api/flights/:flightId` | GET | Public | Flight details |
-| `/api/flights/book` | POST | ✅ | Book flight |
-| `/api/flights/airports/search` | GET | Public | Airport search |
+
+| Endpoint                       | Method | Auth   | Purpose        |
+| ------------------------------ | ------ | ------ | -------------- |
+| `/api/flights/search`          | GET    | Public | Search flights |
+| `/api/flights/:flightId`       | GET    | Public | Flight details |
+| `/api/flights/book`            | POST   | ✅     | Book flight    |
+| `/api/flights/airports/search` | GET    | Public | Airport search |
 
 ### 1.5 Hotels (Hotelbeds Integration)
-| Endpoint | Method | Auth | Purpose |
-|----------|--------|------|---------|
-| `/api/hotels/search` | GET | Public | Search hotels |
-| `/api/hotels-live/search` | GET | Public | Live hotel search |
-| `/api/hotels-live/destinations/search` | GET | Public | Destination search |
+
+| Endpoint                               | Method | Auth   | Purpose            |
+| -------------------------------------- | ------ | ------ | ------------------ |
+| `/api/hotels/search`                   | GET    | Public | Search hotels      |
+| `/api/hotels-live/search`              | GET    | Public | Live hotel search  |
+| `/api/hotels-live/destinations/search` | GET    | Public | Destination search |
 
 ### 1.6 Bargain Engine (AI)
-| Endpoint | Method | Auth | Purpose |
-|----------|--------|------|---------|
-| `/api/ai-bargains/quote` | POST | Public | Get AI quote |
-| `/api/ai-bargains/hold` | POST | ✅ | Hold bargain price |
-| `/api/ai-bargains/hold/:holdId/book` | PUT | ✅ | Book held price |
-| `/api/ai-bargains/session/:sessionId` | GET | Public | Get session |
+
+| Endpoint                              | Method | Auth   | Purpose            |
+| ------------------------------------- | ------ | ------ | ------------------ |
+| `/api/ai-bargains/quote`              | POST   | Public | Get AI quote       |
+| `/api/ai-bargains/hold`               | POST   | ✅     | Hold bargain price |
+| `/api/ai-bargains/hold/:holdId/book`  | PUT    | ✅     | Book held price    |
+| `/api/ai-bargains/session/:sessionId` | GET    | Public | Get session        |
 
 ### 1.7 Transfers & Sightseeing
-| Endpoint | Method | Auth | Purpose |
-|----------|--------|------|---------|
-| `/api/transfers/search` | POST | Public | Search transfers |
-| `/api/transfers/checkout/book` | POST | ✅ | Book transfer |
-| `/api/sightseeing/search` | GET | Public | Search activities |
-| `/api/sightseeing/details/:activityCode` | GET | Public | Activity details |
+
+| Endpoint                                 | Method | Auth   | Purpose           |
+| ---------------------------------------- | ------ | ------ | ----------------- |
+| `/api/transfers/search`                  | POST   | Public | Search transfers  |
+| `/api/transfers/checkout/book`           | POST   | ✅     | Book transfer     |
+| `/api/sightseeing/search`                | GET    | Public | Search activities |
+| `/api/sightseeing/details/:activityCode` | GET    | Public | Activity details  |
 
 ### 1.8 Vouchers & Invoices
-| Endpoint | Method | Auth | Purpose |
-|----------|--------|------|---------|
-| `/api/vouchers/hotel/:bookingRef` | GET | ✅ | Get hotel voucher PDF |
-| `/api/vouchers/invoice/:bookingRef` | GET | ✅ | Get invoice PDF |
-| `/api/vouchers/hotel/:bookingRef/email` | POST | ✅ | Email voucher |
+
+| Endpoint                                | Method | Auth | Purpose               |
+| --------------------------------------- | ------ | ---- | --------------------- |
+| `/api/vouchers/hotel/:bookingRef`       | GET    | ✅   | Get hotel voucher PDF |
+| `/api/vouchers/invoice/:bookingRef`     | GET    | ✅   | Get invoice PDF       |
+| `/api/vouchers/hotel/:bookingRef/email` | POST   | ✅   | Email voucher         |
 
 ### 1.9 Destinations & Master Data
-| Endpoint | Method | Auth | Purpose |
-|----------|--------|------|---------|
-| `/api/destinations/search` | GET | Public | Search destinations |
-| `/api/countries` | GET | Public | List countries |
-| `/api/packages` | GET | Public | List packages |
-| `/api/packages/:slug` | GET | Public | Package details |
+
+| Endpoint                   | Method | Auth   | Purpose             |
+| -------------------------- | ------ | ------ | ------------------- |
+| `/api/destinations/search` | GET    | Public | Search destinations |
+| `/api/countries`           | GET    | Public | List countries      |
+| `/api/packages`            | GET    | Public | List packages       |
+| `/api/packages/:slug`      | GET    | Public | Package details     |
 
 ---
 
@@ -108,6 +119,7 @@
 ### 2.1 Core Tables (from migrations)
 
 #### Authentication & Users
+
 ```sql
 -- users (from setup-database.sql)
 - id (UUID/SERIAL PK)
@@ -119,6 +131,7 @@
 ```
 
 #### Markup & Pricing System
+
 ```sql
 -- markup_rules (V2025_09_01_markup_system.sql)
 - id (BIGSERIAL PK)
@@ -160,6 +173,7 @@
 ```
 
 #### Bookings & Payments
+
 ```sql
 -- hotel_bookings (setup-database.sql)
 - id (SERIAL/UUID PK)
@@ -198,6 +212,7 @@
 ```
 
 #### AI Bargain System
+
 ```sql
 -- bargain_sessions (01_ai_bargain_tables.sql)
 - id (UUID PK)
@@ -226,6 +241,7 @@
 ```
 
 #### Profile System (Booking.com style)
+
 ```sql
 -- faredown.travelers
 - id (UUID PK)
@@ -256,6 +272,7 @@
 ```
 
 #### Loyalty Program
+
 ```sql
 -- loyalty_members
 - user_id (FK -> users.id, PK)
@@ -281,6 +298,7 @@
 ```
 
 #### Destinations & Master Data
+
 ```sql
 -- regions (comprehensive-destinations-schema.sql)
 - id (UUID PK)
@@ -306,6 +324,7 @@
 ```
 
 #### Suppliers
+
 ```sql
 -- suppliers (database-suppliers-migration.sql)
 - id (SERIAL PK)
@@ -318,6 +337,7 @@
 ```
 
 #### Recent Searches
+
 ```sql
 -- recent_searches (V2025_09_19_recent_searches.sql)
 - id (BIGSERIAL PK)
@@ -331,6 +351,7 @@
 ```
 
 ### 2.2 Migration Files Location
+
 ```
 api/database/migrations/
 ├── 01_ai_bargain_tables.sql ✅
@@ -355,6 +376,7 @@ Other Schema Files:
 ## 3. ENVIRONMENT VARIABLES MAPPING
 
 ### 3.1 Database
+
 ```bash
 DATABASE_URL=postgresql://...  # Primary connection string
 DB_HOST=dpg-d2086mndiees739731t0-a.singapore-postgres.render.com
@@ -365,6 +387,7 @@ DB_PORT=5432
 ```
 
 ### 3.2 External APIs
+
 ```bash
 # Hotelbeds (Hotels)
 HOTELBEDS_API_KEY=YOUR_HOTELBEDS_API_KEY
@@ -380,6 +403,7 @@ AMADEUS_BASE_URL=https://test.api.amadeus.com
 ```
 
 ### 3.3 OAuth & Authentication
+
 ```bash
 # Google OAuth
 GOOGLE_CLIENT_ID=832664905965-h8qjvsjm5bbb6g21iug8hmm4f46c2n5u.apps.googleusercontent.com
@@ -402,6 +426,7 @@ APPLE_SERVICE_ID=your-apple-service-id
 ```
 
 ### 3.4 Payment Gateways
+
 ```bash
 # Razorpay (ACTIVE)
 RAZORPAY_KEY_ID=<actual_key>
@@ -414,6 +439,7 @@ VITE_STRIPE_PUBLISHABLE_KEY=<not_implemented>
 ```
 
 ### 3.5 Email Services
+
 ```bash
 # SendGrid (primary)
 SENDGRID_API_KEY=<key>
@@ -426,6 +452,7 @@ EMAIL_PROVIDER=sendgrid  # or smtp, postmark
 ```
 
 ### 3.6 Frontend (Vite)
+
 ```bash
 VITE_API_BASE_URL=https://.../api
 VITE_ADMIN_API_BASE_URL=https://.../api/admin
@@ -435,6 +462,7 @@ VITE_GOOGLE_CLIENT_ID=<client_id>
 ```
 
 ### 3.7 Monitoring & Infrastructure
+
 ```bash
 SENTRY_DSN=https://...@sentry.io/...
 REDIS_HOST=localhost
@@ -449,7 +477,9 @@ PORT=3000
 ## 4. EXTERNAL INTEGRATIONS
 
 ### 4.1 Razorpay (Payment Gateway) ✅ ACTIVE
+
 **Implementation**:
+
 - File: `api/services/razorpayService.js`
 - Routes: `api/routes/payments.js`
 - Capabilities:
@@ -460,31 +490,38 @@ PORT=3000
   - ✅ Refund support
 
 **Configuration Required**:
+
 ```bash
 RAZORPAY_KEY_ID=<key_id>
 RAZORPAY_KEY_SECRET=<key_secret>
 ```
 
 **Transaction Storage**:
+
 - Table: `payments` (api/models/Payment.js)
 - Columns: `gateway_payment_id`, `gateway_order_id`, `gateway_response` (JSONB)
 
-**MISSING**: 
+**MISSING**:
+
 - ⚠️ Webhook endpoint `/api/payments/webhook` (signature validator exists but route not implemented)
 - ⚠️ Production webhook URL not configured in Razorpay dashboard
 
 ### 4.2 Stripe ❌ NOT ACTIVE
+
 - Mentioned in docs and admin config
 - No SDK integration found
 - No server-side implementation
 
 ### 4.3 Hotelbeds (Hotels) ✅ ACTIVE
+
 **Implementation**:
+
 - Files: `server/index.ts`, `api/services/hotelbeds/*`
 - Adapters: `api/services/adapters/hotelbedsAdapter.js`
 - Routes: `api/routes/hotels-live.js`
 
 **Configuration**:
+
 ```bash
 HOTELBEDS_API_KEY=<key>
 HOTELBEDS_API_SECRET=<secret>
@@ -494,12 +531,15 @@ HOTELBEDS_BASE_URL=https://api.test.hotelbeds.com
 **Mode**: Test/Sandbox
 
 ### 4.4 Amadeus (Flights) ✅ ACTIVE
+
 **Implementation**:
+
 - Files: `server/index.ts` (token management)
 - Adapters: `api/services/adapters/amadeusAdapter.js`
 - Routes: `api/routes/flights.js`, `server/routes/flights.ts`
 
 **Configuration**:
+
 ```bash
 AMADEUS_API_KEY=6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv
 AMADEUS_API_SECRET=2eVYfPeZVxmvbjRm
@@ -508,11 +548,14 @@ AMADEUS_API_SECRET=2eVYfPeZVxmvbjRm
 **Mode**: Test/Sandbox
 
 ### 4.5 SendGrid (Email) ✅ ACTIVE
+
 **Implementation**:
+
 - Files: `api/services/enhancedEmailService.js`, `api/services/emailService.js`
 - Features: Email with PDF attachments (vouchers)
 
 **Configuration**:
+
 ```bash
 SENDGRID_API_KEY=<key>
 EMAIL_FROM=noreply@faredowntravels.com
@@ -522,21 +565,26 @@ EMAIL_PROVIDER=sendgrid
 **Fallback**: SMTP via nodemailer
 
 ### 4.6 Invoice/Voucher Generation ✅ ACTIVE
+
 **Implementation**:
+
 - Files: `api/services/voucherService.js`, `api/services/sightseeingVoucherService.js`
 - Libraries: `pdfkit`, `qrcode`
 - Routes: `api/routes/vouchers.js`
 
 **Storage**:
+
 - Current: Local filesystem (`vouchers/sightseeing/`)
 - DB: `vouchers` table stores `pdf_path`, `email_sent` status
 - Recommended: Migrate to S3/CloudFront (documented in deployment guides)
 
 ### 4.7 Google OAuth ✅ ACTIVE
+
 - Implementation: `api/routes/oauth-simple.js`, `api/routes/oauth.js`
 - Client callbacks: `client/pages/oauth/GoogleCallback.tsx`
 
 ### 4.8 Monitoring Webhooks ✅ ACTIVE
+
 - File: `api/middleware/priceEcho.js`
 - Purpose: Price mismatch alerts
 - Configuration: `PRICE_ALERT_WEBHOOK`, `SLACK_WEBHOOK_URL`
@@ -546,31 +594,40 @@ EMAIL_PROVIDER=sendgrid
 ## 5. CRITICAL GAPS & MISSING IMPLEMENTATIONS
 
 ### 5.1 Payment Gateway Issues
-❌ **Razorpay Webhook**: 
+
+❌ **Razorpay Webhook**:
+
 - Signature validator exists (`validateWebhookSignature`)
 - **Route `/api/payments/webhook` NOT implemented**
 - Cannot receive server-to-server payment notifications
 - **ACTION**: Implement webhook route + configure in Razorpay dashboard
 
-❌ **Stripe**: 
+❌ **Stripe**:
+
 - Mentioned in docs, not implemented
 - No SDK, no routes
 
 ### 5.2 File Storage
+
 ⚠️ **Local Storage Only**:
+
 - Vouchers saved to `vouchers/sightseeing/` (local filesystem)
 - No S3/CloudFront integration (only documented)
 - **Risk**: Files lost on container restart/redeploy
 - **ACTION**: Migrate to object storage
 
 ### 5.3 Backup & Recovery
+
 ❓ **Database Backups**:
+
 - Render may have automated backups
 - No explicit backup policy found in code
 - **ACTION**: Verify Render backup frequency + test recovery
 
 ### 5.4 Error Tracking
+
 ⚠️ **Sentry**:
+
 - `SENTRY_DSN` configured in env vars
 - Integration status unknown (not verified in code)
 - **ACTION**: Confirm Sentry is active and receiving errors
@@ -582,6 +639,7 @@ EMAIL_PROVIDER=sendgrid
 Run these on your Postgres database to verify data exists:
 
 ### 6.1 List All Tables
+
 ```sql
 SELECT table_name
 FROM information_schema.tables
@@ -590,6 +648,7 @@ ORDER BY table_name;
 ```
 
 ### 6.2 Check Key Tables Structure
+
 ```sql
 -- Markup rules
 SELECT column_name, data_type, is_nullable
@@ -609,6 +668,7 @@ WHERE table_name = 'payments';
 ```
 
 ### 6.3 Verify Foreign Keys
+
 ```sql
 SELECT
   tc.table_name AS table,
@@ -625,6 +685,7 @@ ORDER BY tc.table_name;
 ```
 
 ### 6.4 Data Volume Check
+
 ```sql
 SELECT 'users' AS table, COUNT(*) FROM users
 UNION ALL SELECT 'markup_rules', COUNT(*) FROM markup_rules
@@ -636,6 +697,7 @@ UNION ALL SELECT 'bargain_sessions', COUNT(*) FROM bargain_sessions;
 ```
 
 ### 6.5 Sample Data from Key Tables
+
 ```sql
 -- Check admin-created markup entries
 SELECT * FROM markup_rules LIMIT 3;
@@ -647,21 +709,21 @@ SELECT * FROM promo_codes WHERE is_active = true LIMIT 3;
 SELECT id, email, google_id, created_at FROM users LIMIT 5;
 
 -- Check bookings with payment info
-SELECT 
-  id, booking_ref, gateway, gateway_payment_id, 
-  total_amount, status, created_at 
+SELECT
+  id, booking_ref, gateway, gateway_payment_id,
+  total_amount, status, created_at
 FROM hotel_bookings LIMIT 3;
 
 -- Check payments
-SELECT 
-  id, gateway, gateway_payment_id, amount, 
-  status, created_at 
+SELECT
+  id, gateway, gateway_payment_id, amount,
+  status, created_at
 FROM payments LIMIT 3;
 
 -- Check vouchers
-SELECT 
-  id, booking_id, pdf_path, email_sent, 
-  email_delivery_status 
+SELECT
+  id, booking_id, pdf_path, email_sent,
+  email_delivery_status
 FROM vouchers LIMIT 3;
 ```
 
@@ -670,6 +732,7 @@ FROM vouchers LIMIT 3;
 ## 7. DEPLOYMENT ARCHITECTURE
 
 ### Current Setup
+
 ```
 ┌─────────────────────────────────────────────┐
 │          Builder.io (Frontend)              │
@@ -705,6 +768,7 @@ External Services:
 ```
 
 ### Netlify Deployment (New)
+
 ```
 ┌─────────────────────────────────────────────┐
 │  Netlify (spontaneous-biscotti-da44bc)      │
@@ -722,18 +786,21 @@ External Services:
 Use this to verify their submission:
 
 ### ✅ Database Tables
+
 - [ ] Provided list of ALL tables (expect 45+)
 - [ ] Schema structure for each table (columns, types, PKs, FKs)
 - [ ] Sample rows (3-5) from key tables
 - [ ] Screenshot/export from pgAdmin or SQL output
 
 ### ✅ API Endpoints
+
 - [ ] Complete endpoint list (expect 500+ endpoints)
 - [ ] Authentication requirements per endpoint
 - [ ] Postman collection or OpenAPI/Swagger docs
 - [ ] Mapping: endpoint → DB table(s) used
 
 ### ✅ Data Validation
+
 - [ ] Evidence of markup rules created via Admin Panel
 - [ ] Active promo codes in DB
 - [ ] User signup entries (including Google OAuth users)
@@ -741,6 +808,7 @@ Use this to verify their submission:
 - [ ] Invoice/voucher files (PDF paths in DB)
 
 ### ✅ Integration Verification
+
 - [ ] Razorpay: Mode (test/live), webhook URL, refund flow
 - [ ] Hotelbeds: API key, mode (test/live)
 - [ ] Amadeus: API key, mode (test/live)
@@ -748,18 +816,21 @@ Use this to verify their submission:
 - [ ] Google OAuth: Redirect URIs, client ID/secret
 
 ### ✅ Environment Variables
+
 - [ ] Complete list of env vars (expect 80+)
 - [ ] Render dashboard screenshots
 - [ ] Netlify env vars (if deploying there)
 - [ ] Secrets properly secured (not in code)
 
 ### ✅ Backup & Recovery
+
 - [ ] Render backup frequency (daily/weekly?)
 - [ ] Backup retention policy
 - [ ] Recovery procedure documented
 - [ ] Last successful backup timestamp
 
 ### ✅ Monitoring & Logs
+
 - [ ] Sentry DSN active and receiving errors
 - [ ] Access to Sentry dashboard
 - [ ] API error rate metrics
@@ -808,26 +879,31 @@ Use this to verify their submission:
 ## 10. RED FLAGS TO WATCH FOR
 
 🚩 **Database Issues**:
+
 - Tables missing from their list vs our migrations
 - No foreign key relationships shown
 - Sample data looks dummy/hardcoded (e.g., "Test User", "Sample Promo")
 
 🚩 **Integration Issues**:
+
 - Payment gateway in test mode but claiming "production ready"
 - No webhook URLs configured
 - API keys are example/dummy values
 
 🚩 **Data Issues**:
+
 - Zero bookings in production DB
 - No real user signups (only test accounts)
 - Empty promo_codes or markup_rules tables
 
 🚩 **Deployment Issues**:
+
 - No backup strategy
 - Secrets exposed in code/logs
 - Missing critical env vars
 
 🚩 **Documentation Issues**:
+
 - Vague responses without proof
 - Screenshots that don't match their claims
 - Inability to run verification SQL queries
@@ -837,6 +913,7 @@ Use this to verify their submission:
 ## SUMMARY
 
 **You now have**:
+
 1. ✅ Complete API endpoint inventory (500+ endpoints mapped)
 2. ✅ Full database schema (45+ tables documented)
 3. ✅ Environment variables catalog (80+ vars)
@@ -846,12 +923,14 @@ Use this to verify their submission:
 7. ✅ Red flags guide
 
 **Use this to**:
+
 - Cross-check Builder's audit submission
 - Identify gaps or misrepresentations
 - Ensure nothing critical is missing
 - Make informed decisions about deployment
 
 **Next Steps**:
+
 1. Share this with Builder as the **expected baseline**
 2. Request their audit matches this structure
 3. Run the SQL queries yourself to verify data
