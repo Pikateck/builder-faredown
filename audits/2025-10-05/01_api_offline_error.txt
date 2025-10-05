@@ -1,0 +1,9 @@
+Invoke-WebRequest : Cannot bind parameter 'Uri'. Cannot convert value "https://<YOUR_API_BASE>/health" to type 
+"System.Uri". Error: "Invalid URI: The hostname could not be parsed."
+At line:3 char:53
++   Invoke-WebRequest -UseBasicParsing -TimeoutSec 10 $api |
++                                                     ~~~~
+    + CategoryInfo          : InvalidArgument: (:) [Invoke-WebRequest], ParameterBindingException
+    + FullyQualifiedErrorId : CannotConvertArgumentNoMessage,Microsoft.PowerShell.Commands.InvokeWebRequestCommand
+ 
+
