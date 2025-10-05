@@ -1,0 +1,6 @@
+SELECT 'users' AS table, COUNT(*) FROM users
+UNION ALL SELECT 'promo_codes', COUNT(*) FROM promo_codes
+UNION ALL SELECT 'markup_rules', COUNT(*) FROM markup_rules
+UNION ALL SELECT 'bookings', COUNT(*) FROM bookings
+UNION ALL SELECT 'payments', COUNT(*) FROM payments
+UNION ALL SELECT 'invoices', COUNT(*) FROM invoices;

@@ -1,0 +1,6 @@
+﻿- invoices table: NOT FOUND in public schema
+- users: 0 rows
+- bookings: 0 rows
+- payments: 0 rows
+- promo_codes: 11 rows
+- markup_rules: 14 rows

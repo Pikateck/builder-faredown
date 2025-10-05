@@ -1,0 +1,5 @@
+SELECT table_name, column_name, data_type, is_nullable
+FROM information_schema.columns
+WHERE table_schema='public'
+  AND table_name IN ('users','promo_codes','markup_rules','bookings','payments','invoices')
+ORDER BY table_name, ordinal_position;
