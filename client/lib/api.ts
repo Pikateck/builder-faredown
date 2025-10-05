@@ -73,7 +73,8 @@ const getOfflineFallbackEnabled = () => {
     window.location.hostname.includes("builder.codes") ||
     window.location.hostname.includes("fly.dev")
   ) {
-    return envFlag !== "false"; // Default to true unless explicitly disabled
+    // Only enable fallback when explicitly requested to avoid masking live API issues
+    return envFlag === "true";
   }
 
   // Production: disabled unless explicitly enabled
