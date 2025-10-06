@@ -3,18 +3,25 @@
   functions = "netlify/functions"
   publish = "dist/spa"
 
-
 [functions]
   external_node_modules = ["express"]
   node_bundler = "esbuild"
-  
-[[redirects]]
-  force = true
-  from = "/api/*"
-  status = 200
-  to = "/.netlify/functions/api/:splat"
 
-# SPA fallback - handle client-side routing
+# Redirect /auth/* → Render backend
+[[redirects]]
+  from = "/auth/*"
+  to = "https://builder-faredown-pricing.onrender.com/auth/:splat"
+  status = 200
+  force = true
+
+# Redirect /api/* → Render backend
+[[redirects]]
+  from = "/api/*"
+  to = "https://builder-faredown-pricing.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# SPA fallback (must always be LAST)
 [[redirects]]
   from = "/*"
   to = "/index.html"
