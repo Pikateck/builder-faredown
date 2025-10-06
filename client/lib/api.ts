@@ -26,15 +26,20 @@ const getBackendUrl = () => {
     return import.meta.env.VITE_API_BASE_URL;
   }
 
-  // Builder.codes and fly.dev environments - use proxy
+  // Builder.codes and fly.dev environments
   if (
     window.location.hostname.includes("builder.codes") ||
     window.location.hostname.includes("fly.dev")
   ) {
+    if (import.meta.env.VITE_API_BASE_URL) {
+      return import.meta.env.VITE_API_BASE_URL;
+    }
+
+    // Default to Render API when env override not provided
     console.log(
-      "🌐 Detected Builder.codes/fly.dev environment, using origin proxy",
+      "🌐 Detected Builder.codes/fly.dev environment, using Render API base URL",
     );
-    return window.location.origin + "/api";
+    return "https://builder-faredown-pricing.onrender.com/api";
   }
 
   // Production environments (non-localhost) - use proxy
