@@ -106,14 +106,7 @@ app.use(
           "https://ssl.gstatic.com",
         ],
         fontSrc: ["'self'", "https://fonts.gstatic.com", "https://ssl.gstatic.com"],
-        imgSrc: [
-          "'self'",
-          "data:",
-          "https:",
-          "http:",
-          "https://ssl.gstatic.com",
-          "https://www.gstatic.com",
-        ],
+        imgSrc: ["'self'", "data:", "https:", "http:", "https://ssl.gstatic.com", "https://www.gstatic.com"],
         scriptSrc: [
           "'self'",
           "'unsafe-inline'",
@@ -143,36 +136,33 @@ const limiter = rateLimit({
   max: 500,
   message: { error: "Too many requests from this IP", retryAfter: "15 minutes" },
 });
-
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
   message: { error: "Too many authentication attempts", retryAfter: "15 minutes" },
 });
 
-// Core middleware (order matters)
+// Core middleware
 app.use(compression());
 app.use(morgan("combined"));
 app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// CORS — use env var(s) so Netlify/preview/local can be allowed
-// Render env example: CORS_ORIGIN="https://spontaneous-biscotti-da44bc.netlify.app,http://localhost:5173"
+// CORS — allow your UI origins + Builder preview
 const allowed = (process.env.CORS_ORIGIN || "")
   .split(",")
   .map(s => s.trim())
   .filter(Boolean);
-
-// Always allow Builder.io iframe usage
 const builderPattern = /^https:\/\/([a-z0-9-]+\.)*builder\.io$/i;
+const flyPattern = /^https:\/\/([a-z0-9-]+\.)*fly\.dev$/i;
 
 app.use(
   cors({
     origin: (origin, cb) => {
-      if (!origin) return cb(null, true); // non-browser/curl
+      if (!origin) return cb(null, true);
       if (allowed.includes(origin)) return cb(null, true);
-      if (builderPattern.test(origin)) return cb(null, true);
+      if (builderPattern.test(origin) || flyPattern.test(origin)) return cb(null, true);
       return cb(new Error("Not allowed by CORS"));
     },
     credentials: true,
@@ -221,6 +211,8 @@ app.get("/", (req, res) => {
     description: "Node.js API for Faredown travel booking platform",
     endpoints: {
       auth: "/api/auth",
+      oauth: "/api/oauth",
+      oauthGoogleUrl: "/api/oauth/google/url",
       admin: "/api/admin",
       bookings: "/api/bookings",
       users: "/api/users",
@@ -229,44 +221,26 @@ app.get("/", (req, res) => {
       sightseeing: "/api/sightseeing",
       transfers: "/api/transfers",
       packages: "/api/packages",
-      transfersBargain: "/api/transfers-bargain",
-      bargain: "/api/bargain",
-      enhancedBargain: "/api/enhanced-bargain",
-      aiBargains: "/api/ai-bargains",
-      currency: "/api/currency",
-      countries: "/api/countries",
-      promo: "/api/promo",
-      recentSearches: "/api/recent-searches",
+      pricing: "/api/pricing",
       healthCheck: "/api/health-check",
-      analytics: "/api/analytics",
-      payments: "/api/payments",
-      cms: "/api/cms",
-      markup: "/api/markup",
-      vat: "/api/vat",
-      reports: "/api/reports",
-      suppliers: "/api/suppliers",
-      vouchers: "/api/vouchers",
-      profile: "/api/profile",
-      reviews: "/api/properties/:id/reviews",
-      testHotelbeds: "/api/test-hotelbeds",
     },
     documentation: "/api/docs",
     health: "/health",
   });
 });
 
-// Apply auth limiter to auth routes
-app.use("/api/auth", authLimiter);
-
-// Route mounts
-app.use("/api/auth", authRoutes);
+// --- Auth/OAuth mounts ---
+app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/oauth", oauthRoutes);
 app.use("/api/oauth", oauthStatusRoutes);
 
-// Simplified popup flow under /auth (kept for legacy; Netlify rewrites /auth/* → /api/auth/*)
-app.use("/auth", oauthRoutes);
-app.use("/api", oauthRoutes);
+// 🔁 SHIMS so older frontends keep working
+// 307 redirect preserves method & signals clearly in DevTools
+app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
+  res.redirect(307, "/api/oauth/google/url");
+});
 
+// Other product routes
 app.use("/api/admin", authenticateToken, requireAdmin, auditLogger, adminRoutes);
 app.use("/api/admin-dashboard", adminDashboardRoutes);
 app.use("/api/bookings", authenticateToken, bookingRoutes);
@@ -288,20 +262,6 @@ app.use("/api/payments", authenticateToken, paymentRoutes);
 app.use("/api/cms", cmsRoutes);
 app.use("/api/test-live", testLiveRoutes);
 app.use("/api/test-hotelbeds", testHotelbedsRoutes);
-
-// Pricing routes (legacy create function support)
-try {
-  const createPricingRoutes = pricingRoutesLegacy;
-  if (typeof createPricingRoutes === "function") {
-    const pricingRoutes = createPricingRoutes(db.pool);
-    app.use("/api/pricing", pricingRoutes);
-    console.log("✅ Pricing routes mounted");
-  }
-} catch (error) {
-  console.error("❌ Failed to mount pricing routes:", error.message);
-  console.log("💡 Ensure ./routes/pricing.js exports a function");
-}
-
 app.use("/api/test-live-hotel", testLiveHotelRoutes);
 app.use("/api/sightseeing", sightseeingRoutes);
 app.use("/api/sightseeing-search", sightseeingSearchRoutes);
@@ -332,7 +292,19 @@ app.use("/api/admin/profiles", authenticateToken, requireAdmin, auditLogger, adm
 app.use("/api/admin/extranet", authenticateToken, requireAdmin, auditLogger, adminExtranetRoutes);
 app.use("/api/admin/markup/packages", authenticateToken, requireAdmin, auditLogger, adminMarkupPackagesRoutes);
 app.use("/api/admin/promo", authenticateToken, requireAdmin, auditLogger, adminPromoRoutes);
-app.use("/api/pricing", pricingEngineRoutes);
+
+// Pricing routes (legacy create function support)
+try {
+  const createPricingRoutes = pricingRoutesLegacy;
+  if (typeof createPricingRoutes === "function") {
+    const pricingRoutes = createPricingRoutes(db.pool);
+    app.use("/api/pricing", pricingRoutes);
+    console.log("✅ Pricing routes mounted");
+  }
+} catch (error) {
+  console.error("❌ Failed to mount pricing routes:", error.message);
+  console.log("💡 Ensure ./routes/pricing.js exports a function");
+}
 
 // Error handler
 app.use((err, req, res, next) => {
@@ -361,36 +333,21 @@ app.use("*", (req, res) => {
     error: "Not found",
     message: `Route ${req.originalUrl} not found`,
     availableRoutes: [
-      "/api/auth",
-      "/api/admin",
-      "/api/bookings",
-      "/api/users",
-      "/api/flights",
-      "/api/hotels",
-      "/api/bargain",
-      "/api/currency",
-      "/api/countries",
-      "/api/promo",
-      "/api/analytics",
-      "/api/payments",
-      "/api/cms",
-      "/api/health-check",
+      "/api/oauth/google/url",
+      "/api/pricing/quote",
+      "/api/pricing/test-quote",
+      "/api/pricing/markup-rules",
+      "/api/pricing/promo-codes",
+      "/api/health",
+      "/health",
     ],
   });
 });
 
 // Graceful shutdown
 let server;
-
-process.on("SIGTERM", () => {
-  console.log("SIGTERM received, shutting down gracefully");
-  if (server) server.close(() => console.log("Process terminated"));
-});
-
-process.on("SIGINT", () => {
-  console.log("SIGINT received, shutting down gracefully");
-  if (server) server.close(() => console.log("Process terminated"));
-});
+process.on("SIGTERM", () => { if (server) server.close(() => console.log("Process terminated")); });
+process.on("SIGINT", () => { if (server) server.close(() => console.log("Process terminated")); });
 
 // Init DB then start
 async function startServer() {
@@ -401,11 +358,8 @@ async function startServer() {
 
     const { initializeBargainHolds } = require("./routes/bargain-holds");
     if (initializeBargainHolds && db.pool) {
-      try {
-        initializeBargainHolds(db.pool);
-      } catch (e) {
-        console.warn("⚠️ Failed to initialize Bargain Holds with DB pool:", e.message);
-      }
+      try { initializeBargainHolds(db.pool); }
+      catch (e) { console.warn("⚠️ Failed to initialize Bargain Holds with DB pool:", e.message); }
     }
     console.log("✅ Database connected and schema ready");
 
@@ -414,7 +368,6 @@ async function startServer() {
       console.log("================================");
       console.log(`📍 Server URL: http://localhost:${PORT}`);
       console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
-      console.log(`📚 API Docs: http://localhost:${PORT}/api/docs`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
       console.log("================================\n");
     });
@@ -422,8 +375,6 @@ async function startServer() {
     return server;
   } catch (error) {
     console.error("❌ Failed to start server:", error);
-    console.log("🛠️  Starting server without database (fallback mode)");
-
     server = app.listen(PORT, () => {
       console.log("\n🚀 Fallback Mode: DB offline");
       console.log("================================");
@@ -431,11 +382,9 @@ async function startServer() {
       console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
       console.log("================================\n");
     });
-
     return server;
   }
 }
-
 startServer();
 
 module.exports = app;
