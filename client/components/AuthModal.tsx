@@ -1,5 +1,4 @@
-import React, { useState, useEffect } from "react";
-import { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import {
   StableDialog,
   StableDialogContent,
@@ -198,7 +197,7 @@ export function AuthModal({
           password: formData.password,
         });
 
-        console.log("🔵 Login response:", response);
+        console.log("��� Login response:", response);
 
         // Update AuthContext
         login({
