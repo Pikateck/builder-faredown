@@ -41,17 +41,15 @@ const auditLogger = winston.createLogger({
   transports: fileTransports,
 });
 
-// Also log to console in development
-if (process.env.NODE_ENV !== "production") {
-  auditLogger.add(
-    new winston.transports.Console({
-      format: winston.format.combine(
-        winston.format.colorize(),
-        winston.format.simple(),
-      ),
-    }),
-  );
-}
+// Always add console transport to guarantee logging
+auditLogger.add(
+  new winston.transports.Console({
+    format: winston.format.combine(
+      winston.format.colorize({ all: process.env.NODE_ENV !== "production" }),
+      winston.format.simple(),
+    ),
+  }),
+);
 
 // In-memory audit trail for quick access (last 1000 entries)
 const auditTrail = [];
