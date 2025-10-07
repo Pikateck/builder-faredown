@@ -156,6 +156,68 @@ const DAYS_OF_WEEK = [
   { value: "sunday", label: "Sunday" },
 ];
 
+const GLOBAL_CITY_VALUE = "ALL";
+
+const normalizeCityValue = (value?: string | null) => (value ?? "").trim();
+
+const isGlobalCityValue = (value?: string | null) => {
+  const normalized = normalizeCityValue(value).toUpperCase();
+  return (
+    normalized === "ALL" ||
+    normalized === "GLOBAL" ||
+    normalized === "ALL CITIES" ||
+    normalized === "GLOBAL (ALL CITIES)"
+  );
+};
+
+const findDestinationForValue = (value: string) => {
+  const normalized = normalizeCityValue(value).toLowerCase();
+  if (!normalized) {
+    return undefined;
+  }
+
+  return MASTER_DESTINATIONS.find(
+    (dest) =>
+      dest.code.toLowerCase() === normalized ||
+      dest.name.toLowerCase() === normalized,
+  );
+};
+
+const getCityDisplayInfo = (value?: string | null) => {
+  if (isGlobalCityValue(value)) {
+    return {
+      cityCode: GLOBAL_CITY_VALUE,
+      cityName: GLOBAL_CITY_VALUE,
+      cityLabel: "Global (All Cities)",
+    };
+  }
+
+  const destination = value ? findDestinationForValue(value) : undefined;
+
+  if (destination) {
+    return {
+      cityCode: destination.code,
+      cityName: destination.name,
+      cityLabel: `${destination.name}, ${destination.country}`,
+    };
+  }
+
+  const normalized = normalizeCityValue(value);
+  if (!normalized) {
+    return {
+      cityCode: "",
+      cityName: "",
+      cityLabel: "Unspecified",
+    };
+  }
+
+  return {
+    cityCode: normalized,
+    cityName: normalized,
+    cityLabel: normalized,
+  };
+};
+
 // Service integration - no more mock data
 
 export default function MarkupManagementHotel() {
