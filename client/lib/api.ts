@@ -22,8 +22,21 @@ const getBackendUrl = () => {
   }
 
   // Client-side: try environment variable first
-  if (import.meta.env.VITE_API_BASE_URL) {
-    return import.meta.env.VITE_API_BASE_URL;
+  const envBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  if (envBaseUrl) {
+    const normalizedEnvBase = envBaseUrl.trim();
+
+    if (
+      normalizedEnvBase &&
+      (window.location.hostname.includes("builder.codes") ||
+        window.location.hostname.includes("fly.dev")) &&
+      normalizedEnvBase.includes("fly.dev")
+    ) {
+      // Force direct Render API usage to avoid proxy loops
+      return "https://builder-faredown-pricing.onrender.com/api";
+    }
+
+    return normalizedEnvBase;
   }
 
   // Builder.codes and fly.dev environments
