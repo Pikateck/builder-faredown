@@ -51,8 +51,15 @@ router.post("/login", validate.login, async (req, res) => {
 
     // Get user from database - try email first, then username
     let user = getUserByEmail(loginIdentifier);
+    if (!user) {
+      user = await getUserByEmailFromDb(loginIdentifier);
+    }
+
     if (!user && username) {
       user = getUserByUsername(username);
+      if (!user) {
+        user = await getUserByEmailFromDb(username);
+      }
     }
 
     if (!user) {
