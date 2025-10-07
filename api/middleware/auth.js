@@ -494,20 +494,23 @@ const getUserById = (id) => {
 const createUser = async (userData) => {
   console.log("🔵 Creating user with data:", userData);
 
+  const normalizedEmail = normalizeEmail(userData.email);
+
   try {
     const hashedPassword = await hashPassword(userData.password);
     console.log("🔵 Password hashed successfully");
 
     const user = {
-      id: userData.email.split("@")[0] + "_" + Date.now(), // Generate unique ID
+      id: `${normalizedEmail.split("@")[0]}_${Date.now()}`,
       firstName: userData.firstName,
       lastName: userData.lastName,
-      email: userData.email,
+      email: normalizedEmail,
       password: hashedPassword,
       role: userData.role || ROLES.USER,
-      department: userData.department,
+      department: userData.department || null,
       isActive: true,
       createdAt: new Date(),
+      updatedAt: new Date(),
       lastLogin: null,
     };
 
@@ -517,9 +520,44 @@ const createUser = async (userData) => {
       role: user.role,
     });
 
-    // Store user in the users Map
-    users.set(user.email, user); // Use email as the key
-    console.log("🔵 User stored in database, total users:", users.size);
+    if (db && db.isConnected) {
+      try {
+        const result = await db.query(
+          `INSERT INTO users (email, first_name, last_name, password_hash, is_active)
+           VALUES ($1, $2, $3, $4, $5)
+           ON CONFLICT (email) DO NOTHING
+           RETURNING id, email, first_name, last_name, password_hash, is_active, created_at, updated_at`,
+          [
+            normalizedEmail,
+            user.firstName,
+            user.lastName,
+            hashedPassword,
+            true,
+          ],
+        );
+
+        if (result.rows.length === 0) {
+          throw new Error("User already exists");
+        }
+
+        const row = result.rows[0];
+        user.id = row.id ? String(row.id) : user.id;
+        user.email = row.email || normalizedEmail;
+        user.firstName = row.first_name || user.firstName;
+        user.lastName = row.last_name || user.lastName;
+        user.isActive = row.is_active !== false;
+        user.createdAt = row.created_at ? new Date(row.created_at) : user.createdAt;
+        user.updatedAt = row.updated_at ? new Date(row.updated_at) : user.updatedAt;
+      } catch (dbError) {
+        console.error("🔴 Error persisting user to database:", dbError);
+        if (dbError.message && dbError.message.includes("already exists")) {
+          throw dbError;
+        }
+      }
+    }
+
+    users.set(normalizedEmail, user);
+    console.log("🔵 User stored in auth cache, total users:", users.size);
 
     return user;
   } catch (error) {
