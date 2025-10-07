@@ -104,11 +104,11 @@ export const API_CONFIG = {
 };
 
 const FALLBACK_EXCLUSION_PATTERNS: RegExp[] = [
-  /^\/api\/auth\//,
-  /^\/api\/users/,
-  /^\/api\/bookings/,
-  /^\/api\/payments/,
-  /^\/api\/invoices/,
+  /^\/(?:api\/)?auth\//,
+  /^\/(?:api\/)?users/,
+  /^\/(?:api\/)?bookings/,
+  /^\/(?:api\/)?payments/,
+  /^\/(?:api\/)?invoices/,
 ];
 
 // API Response Types
