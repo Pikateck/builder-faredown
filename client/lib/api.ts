@@ -322,6 +322,8 @@ export class ApiClient {
   }
 
   async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+    const canUseFallback = !this.shouldBypassFallback(endpoint);
+
     // 🚨 NUCLEAR FIX: FORCE DUBAI PACKAGES + COUNTRIES API 🚨
     if (endpoint.includes("/countries")) {
       console.log(
@@ -344,7 +346,7 @@ export class ApiClient {
             iso2: "AE",
             name: "United Arab Emirates",
             display_name: "United Arab Emirates",
-            flag: "🇦🇪",
+            flag: "����🇪",
             flag_emoji: "🇦🇪",
             popular: true,
           },
@@ -432,7 +434,7 @@ export class ApiClient {
             iso2: "MY",
             name: "Malaysia",
             display_name: "Malaysia",
-            flag: "🇲����",
+            flag: "🇲🇾",
             flag_emoji: "🇲����",
             popular: true,
           },
