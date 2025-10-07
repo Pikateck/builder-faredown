@@ -1,9 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import {
   markupService,
   type HotelMarkup,
   type CreateHotelMarkupRequest,
 } from "@/services/markupService";
+import { MASTER_DESTINATIONS } from "@shared/destinations";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -110,23 +111,6 @@ const normalizeDisplayDate = (value: string): string => {
 
   return trimmed;
 };
-
-const POPULAR_CITIES = [
-  { code: "BOM", name: "Mumbai", country: "India" },
-  { code: "DEL", name: "Delhi", country: "India" },
-  { code: "BLR", name: "Bangalore", country: "India" },
-  { code: "MAA", name: "Chennai", country: "India" },
-  { code: "CCU", name: "Kolkata", country: "India" },
-  { code: "GOI", name: "Goa", country: "India" },
-  { code: "DXB", name: "Dubai", country: "UAE" },
-  { code: "AUH", name: "Abu Dhabi", country: "UAE" },
-  { code: "SIN", name: "Singapore", country: "Singapore" },
-  { code: "BKK", name: "Bangkok", country: "Thailand" },
-  { code: "KUL", name: "Kuala Lumpur", country: "Malaysia" },
-  { code: "LHR", name: "London", country: "UK" },
-  { code: "CDG", name: "Paris", country: "France" },
-  { code: "JFK", name: "New York", country: "USA" },
-];
 
 const HOTEL_CHAINS = [
   "Marriott",
