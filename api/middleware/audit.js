@@ -268,7 +268,11 @@ const auditMiddleware = (req, res, next) => {
     };
 
     // Log the complete request-response cycle
-    auditLogger.info("API Request Completed", responseEntry);
+    try {
+      auditLogger.info("API Request Completed", responseEntry);
+    } catch (error) {
+      console.warn("⚠️ Failed to write audit completion log:", error.message);
+    }
     addToMemoryTrail(responseEntry);
 
     // Call original json method
