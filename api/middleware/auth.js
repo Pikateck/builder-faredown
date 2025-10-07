@@ -466,8 +466,9 @@ const getUserByEmailFromDb = async (email) => {
  */
 const getUserByUsername = (username) => {
   // For backward compatibility, try to find by email if username looks like email
+  if (!username) return null;
   if (username.includes("@")) {
-    return users.get(username);
+    return users.get(normalizeEmail(username));
   }
 
   // Otherwise search by username in user data
