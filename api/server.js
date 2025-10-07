@@ -175,7 +175,10 @@ const isOriginAllowed = origin => {
 const corsOptions = {
   origin: (origin, cb) => {
     if (isOriginAllowed(origin)) {
-      return cb(null, true);
+      if (!origin) {
+        return cb(null, true);
+      }
+      return cb(null, origin);
     }
 
     console.warn("🚫 CORS blocked origin:", origin);
