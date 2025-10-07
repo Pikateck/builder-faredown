@@ -3,7 +3,7 @@
  * Handles user authentication, registration, and session management
  */
 
-import { apiClient, ApiResponse } from "@/lib/api";
+import { apiClient, ApiResponse, API_CONFIG } from "@/lib/api";
 
 // Types
 export interface User {
