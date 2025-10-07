@@ -154,22 +154,42 @@ const allowed = (process.env.CORS_ORIGIN || "")
   .split(",")
   .map(s => s.trim())
   .filter(Boolean);
-const builderPattern = /^https:\/\/([a-z0-9-]+\.)*builder\.io$/i;
-const flyPattern = /^https:\/\/([a-z0-9-]+\.)*fly\.dev$/i;
 
-app.use(
-  cors({
-    origin: (origin, cb) => {
-      if (!origin) return cb(null, true);
-      if (allowed.includes(origin)) return cb(null, true);
-      if (builderPattern.test(origin) || flyPattern.test(origin)) return cb(null, true);
-      return cb(new Error("Not allowed by CORS"));
-    },
-    credentials: true,
-    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-    allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-  })
-);
+const corsPatterns = [
+  /^https?:\/\/localhost(:\d+)?$/i,
+  /^https:\/\/([a-z0-9-]+\.)*builder\.io$/i,
+  /^https:\/\/([a-z0-9-]+\.)*projects\.builder\.my$/i,
+  /^https:\/\/([a-z0-9-]+\.)*projects\.builder\.codes$/i,
+  /^https:\/\/([a-z0-9-]+\.)*fly\.dev$/i,
+  /^https:\/\/([a-z0-9-]+\.)*netlify\.app$/i,
+  /^https:\/\/builder-faredown-pricing\.onrender\.com$/i,
+  /^https:\/\/faredown\.com$/i,
+];
+
+const isOriginAllowed = origin => {
+  if (!origin) return true;
+  if (allowed.includes(origin)) return true;
+  return corsPatterns.some(pattern => pattern.test(origin));
+};
+
+const corsOptions = {
+  origin: (origin, cb) => {
+    if (isOriginAllowed(origin)) {
+      return cb(null, true);
+    }
+
+    console.warn("🚫 CORS blocked origin:", origin);
+    return cb(new Error(`Not allowed by CORS: ${origin || "unknown"}`));
+  },
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  exposedHeaders: ["Set-Cookie"],
+  maxAge: 600,
+};
+
+app.use(cors(corsOptions));
+app.options("*", cors(corsOptions));
 
 app.use(limiter);
 
