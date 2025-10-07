@@ -9,6 +9,7 @@ const {
   generateToken,
   comparePassword,
   getUserByEmail,
+  getUserByEmailFromDb,
   getUserByUsername,
   createUser,
   authenticateToken,
