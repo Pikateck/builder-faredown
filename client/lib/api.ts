@@ -376,7 +376,7 @@ export class ApiClient {
             iso2: "SA",
             name: "Saudi Arabia",
             display_name: "Saudi Arabia",
-            flag: "����🇦",
+            flag: "🇸🇦",
             flag_emoji: "🇸🇦",
             popular: true,
           },
@@ -432,7 +432,7 @@ export class ApiClient {
             iso2: "MY",
             name: "Malaysia",
             display_name: "Malaysia",
-            flag: "🇲🇾",
+            flag: "🇲����",
             flag_emoji: "🇲����",
             popular: true,
           },
@@ -971,9 +971,12 @@ export class ApiClient {
   }
 
   async delete<T>(endpoint: string): Promise<T> {
+    const canUseFallback = !this.shouldBypassFallback(endpoint);
+
     if (
-      this.forceFallback ||
-      (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)
+      canUseFallback &&
+      (this.forceFallback ||
+        (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL))
     ) {
       return this.devClient.get<T>(endpoint);
     }
@@ -993,7 +996,7 @@ export class ApiClient {
     } catch (error) {
       clearTimeout(timeoutId);
 
-      if (API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
+      if (canUseFallback && API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
         try {
           return this.devClient.get<T>(endpoint);
         } catch {
@@ -1001,7 +1004,7 @@ export class ApiClient {
         }
       }
 
-      if (API_CONFIG.IS_PRODUCTION) {
+      if (!canUseFallback || API_CONFIG.IS_PRODUCTION) {
         throw error;
       }
 
