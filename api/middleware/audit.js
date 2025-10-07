@@ -5,6 +5,29 @@
 
 const winston = require("winston");
 const path = require("path");
+const fs = require("fs");
+
+const logsDir = path.join(__dirname, "../logs");
+let fileTransports = [];
+
+try {
+  fs.mkdirSync(logsDir, { recursive: true });
+  fileTransports = [
+    new winston.transports.File({
+      filename: path.join(logsDir, "audit.log"),
+      maxsize: 5242880, // 5MB
+      maxFiles: 10,
+    }),
+    new winston.transports.File({
+      filename: path.join(logsDir, "error.log"),
+      level: "error",
+      maxsize: 5242880, // 5MB
+      maxFiles: 5,
+    }),
+  ];
+} catch (error) {
+  console.warn("⚠️ Audit logger falling back to console only:", error.message);
+}
 
 // Configure Winston logger for audit logs
 const auditLogger = winston.createLogger({
@@ -15,21 +38,7 @@ const auditLogger = winston.createLogger({
     winston.format.json(),
   ),
   defaultMeta: { service: "faredown-audit" },
-  transports: [
-    // Write all audit logs to audit.log file
-    new winston.transports.File({
-      filename: path.join(__dirname, "../logs/audit.log"),
-      maxsize: 5242880, // 5MB
-      maxFiles: 10,
-    }),
-    // Write errors to separate error log
-    new winston.transports.File({
-      filename: path.join(__dirname, "../logs/error.log"),
-      level: "error",
-      maxsize: 5242880, // 5MB
-      maxFiles: 5,
-    }),
-  ],
+  transports: fileTransports,
 });
 
 // Also log to console in development
