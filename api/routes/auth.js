@@ -167,7 +167,10 @@ router.post("/register", validate.register, async (req, res) => {
 
     console.log("🔵 Checking if user already exists...");
     // Check if user already exists
-    const existingUser = getUserByEmail(email);
+    let existingUser = getUserByEmail(email);
+    if (!existingUser) {
+      existingUser = await getUserByEmailFromDb(email);
+    }
 
     if (existingUser) {
       console.log("🔴 User already exists:", email);
