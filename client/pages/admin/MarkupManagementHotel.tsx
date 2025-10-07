@@ -82,6 +82,8 @@ import {
 // Local type extensions for UI
 type UIHotelMarkup = HotelMarkup & {
   checkInDays?: string[];
+  cityCode?: string;
+  cityDisplay?: string;
 };
 
 const displayDate = (value?: string | null): string => {
