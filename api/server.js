@@ -188,12 +188,16 @@ const isOriginAllowed = origin => {
 
 const corsOptions = {
   origin: (origin, cb) => {
-    if (isOriginAllowed(origin)) {
+    if (!origin) {
       return cb(null, true);
     }
 
+    if (isOriginAllowed(origin)) {
+      return cb(null, origin);
+    }
+
     console.warn("🚫 CORS blocked origin:", origin);
-    return cb(new Error(`Not allowed by CORS: ${origin || "unknown"}`));
+    return cb(new Error(`Not allowed by CORS: ${origin}`));
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
@@ -204,9 +208,25 @@ const corsOptions = {
   optionsSuccessStatus: 204,
 };
 
-const corsMiddleware = cors(corsOptions);
-app.use(corsMiddleware);
-app.options("*", corsMiddleware);
+const baseCorsMiddleware = cors(corsOptions);
+const applyCors = (req, res, next) => {
+  baseCorsMiddleware(req, res, err => {
+    if (err) {
+      return next(err);
+    }
+
+    if (req.headers.origin) {
+      const existingVary = res.getHeader("Vary");
+      res.setHeader("Vary", existingVary ? `${existingVary}, Origin` : "Origin");
+    }
+
+    return next();
+  });
+};
+
+app.use(applyCors);
+app.options("*", applyCors);
+app.options("/api/auth/register", applyCors);
 
 app.use(limiter);
 
