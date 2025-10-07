@@ -242,7 +242,108 @@ export default function MarkupManagementHotel() {
   const [activeTab, setActiveTab] = useState("list");
   const [exporting, setExporting] = useState(false);
 
-  // Load markups from API
+  const normalizeMarkupForDisplay = useCallback(
+    (markup: HotelMarkup): UIHotelMarkup => {
+      const cityInfo = getCityDisplayInfo(markup.city);
+      return {
+        ...markup,
+        city: cityInfo.cityName,
+        cityCode: cityInfo.cityCode,
+        cityDisplay: cityInfo.cityLabel,
+        checkInDays: markup.applicableDays || [],
+      };
+    },
+    [],
+  );
+
+  const cityOptions = useMemo(() => {
+    const optionsMap = new Map<
+      string,
+      { value: string; name: string; label: string }
+    >();
+
+    MASTER_DESTINATIONS.forEach((dest) => {
+      if (["city", "region", "island", "district"].includes(dest.type)) {
+        const key = dest.code.toUpperCase();
+        optionsMap.set(key, {
+          value: dest.code,
+          name: dest.name,
+          label: `${dest.name}, ${dest.country}`,
+        });
+      }
+    });
+
+    markups.forEach((markup) => {
+      const info = getCityDisplayInfo(markup.cityCode || markup.city);
+      const code = normalizeCityValue(info.cityCode).toUpperCase();
+      if (code && code !== GLOBAL_CITY_VALUE) {
+        if (!optionsMap.has(code)) {
+          optionsMap.set(code, {
+            value: code,
+            name: info.cityName || info.cityLabel || code,
+            label: info.cityLabel || info.cityName || code,
+          });
+        }
+      } else {
+        const label = info.cityLabel || info.cityName;
+        if (label) {
+          const key = label.toUpperCase();
+          if (!optionsMap.has(key)) {
+            optionsMap.set(key, {
+              value: label,
+              name: info.cityName || label,
+              label,
+            });
+          }
+        }
+      }
+    });
+
+    return Array.from(optionsMap.values()).sort((a, b) =>
+      a.label.localeCompare(b.label),
+    );
+  }, [markups]);
+
+  const selectedCityOption = useMemo(() => {
+    if (selectedCity === "all" || selectedCity === GLOBAL_CITY_VALUE) {
+      return undefined;
+    }
+
+    return cityOptions.find(
+      (option) => option.value.toLowerCase() === selectedCity.toLowerCase(),
+    );
+  }, [selectedCity, cityOptions]);
+
+  const resolveCityForApi = useCallback(
+    (cityValue?: string) => {
+      if (!cityValue) {
+        return "";
+      }
+
+      if (isGlobalCityValue(cityValue)) {
+        return "ALL";
+      }
+
+      const destination = findDestinationForValue(cityValue);
+      if (destination) {
+        return destination.name;
+      }
+
+      const option = cityOptions.find(
+        (opt) =>
+          opt.value.toLowerCase() === cityValue.toLowerCase() ||
+          opt.name.toLowerCase() === cityValue.toLowerCase(),
+      );
+
+      if (option) {
+        return option.name;
+      }
+
+      return cityValue;
+    },
+    [cityOptions],
+  );
+
   const loadMarkups = async () => {
     try {
       setLoading(true);
