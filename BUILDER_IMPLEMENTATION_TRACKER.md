@@ -2,7 +2,7 @@
 
 | Task | Description | Status | Evidence Received |
 |------|-------------|--------|--------------------|
-| ENV-0 | Render environment variables validated and screenshot committed to `/audits/2025-10-08/00_env_vars.png` | ☐ | ☐ |
+| ENV-0 | Render environment variables validated and screenshot committed to `/audits/2025-10-08/00_env_vars.png` | ✅ | ✅ |
 | DB-1 | Users path writes to `users` table (UI screenshot + `01_users_*.csv`) | ☐ | ☐ |
 | DB-2 | Bookings path writes to `bookings` table (UI screenshot + `02_bookings_*.csv`) | ☐ | ☐ |
 | DB-3 | Payments webhook and persistence (`03_payments_*.csv` + webhook logs) | ☐ | ☐ |
