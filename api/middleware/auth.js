@@ -5,6 +5,7 @@
 
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const db = require("../database/connection");
 
 const JWT_SECRET = process.env.JWT_SECRET || "faredown-secret-key-2025";
 const ADMIN_JWT_SECRET =
