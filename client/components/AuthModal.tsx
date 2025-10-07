@@ -76,6 +76,19 @@ export function AuthModal({
     lastName: "",
   });
 
+  const passwordChecks = useMemo(() => {
+    return PASSWORD_REQUIREMENTS.map((requirement) => ({
+      id: requirement.id,
+      label: requirement.label,
+      satisfied: requirement.test(formData.password),
+    }));
+  }, [formData.password]);
+
+  const isPasswordStrong = useMemo(
+    () => passwordChecks.every((check) => check.satisfied),
+    [passwordChecks],
+  );
+
   const resetForm = () => {
     setFormData({
       email: "",
