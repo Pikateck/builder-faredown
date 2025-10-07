@@ -492,6 +492,10 @@ export function AuthModal({
                   onChange={(e) =>
                     handleInputChange("password", e.target.value)
                   }
+                  onFocus={() => setPasswordFocused(true)}
+                  onBlur={() =>
+                    setPasswordFocused(formData.password.length > 0)
+                  }
                   required
                   className="h-12 pr-10"
                   autoComplete={
@@ -510,6 +514,37 @@ export function AuthModal({
                   )}
                 </button>
               </div>
+
+              {mode === "register" && (passwordFocused || formData.password) && (
+                <div className="mt-3 rounded-md border border-gray-200 bg-gray-50 p-3">
+                  <p className="text-xs font-medium text-gray-600">
+                    Password must include all of the following:
+                  </p>
+                  <ul className="mt-2 space-y-1">
+                    {passwordChecks.map((check) => (
+                      <li
+                        key={check.id}
+                        className="flex items-center gap-2 text-sm"
+                      >
+                        {check.satisfied ? (
+                          <Check className="h-4 w-4 text-green-600" />
+                        ) : (
+                          <X className="h-4 w-4 text-gray-400" />
+                        )}
+                        <span
+                          className={
+                            check.satisfied
+                              ? "text-sm text-green-700"
+                              : "text-sm text-gray-600"
+                          }
+                        >
+                          {check.label}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
           )}
 
