@@ -151,8 +151,10 @@ export function AuthModal({
         return false;
       }
 
-      if (formData.password.length < 8) {
-        setError("Password must be at least 8 characters long");
+      if (!isPasswordStrong) {
+        setError(
+          "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
+        );
         return false;
       }
     }
