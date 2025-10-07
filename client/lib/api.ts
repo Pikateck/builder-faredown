@@ -868,9 +868,12 @@ export class ApiClient {
     data?: any,
     customHeaders?: Record<string, string>,
   ): Promise<T> {
+    const canUseFallback = !this.shouldBypassFallback(endpoint);
+
     if (
-      this.forceFallback ||
-      (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)
+      canUseFallback &&
+      (this.forceFallback ||
+        (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL))
     ) {
       return this.devClient.post<T>(endpoint, data);
     }
@@ -898,7 +901,7 @@ export class ApiClient {
         });
       }
 
-      if (API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
+      if (canUseFallback && API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
         try {
           return this.devClient.post<T>(endpoint, data);
         } catch (fallbackError) {
@@ -908,7 +911,7 @@ export class ApiClient {
         }
       }
 
-      if (API_CONFIG.IS_PRODUCTION) {
+      if (!canUseFallback || API_CONFIG.IS_PRODUCTION) {
         throw error;
       }
 
