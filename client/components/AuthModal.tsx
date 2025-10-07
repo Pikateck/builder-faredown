@@ -271,6 +271,9 @@ export function AuthModal({
 
   const handleInputChange = (field: string, value: string) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
+    if (field === "password") {
+      setPasswordFocused(true);
+    }
     setError(""); // Clear error when user starts typing
     setSuccess(""); // Clear success when user starts typing
   };
