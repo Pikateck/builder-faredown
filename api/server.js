@@ -198,12 +198,20 @@ const baseCorsOptions = {
 
 const corsOptionsDelegate = (req, callback) => {
   const origin = req.headers.origin;
+  const allowed = isOriginAllowed(origin);
+
+  console.log("CORS check", {
+    method: req.method,
+    path: req.originalUrl,
+    origin: origin || "<none>",
+    allowed,
+  });
 
   if (!origin) {
     return callback(null, { ...baseCorsOptions, origin: false });
   }
 
-  if (isOriginAllowed(origin)) {
+  if (allowed) {
     return callback(null, { ...baseCorsOptions, origin });
   }
 
