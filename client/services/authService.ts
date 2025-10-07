@@ -48,7 +48,7 @@ export interface PasswordResetConfirm {
 
 // Auth Service Class
 export class AuthService {
-  private readonly baseUrl = "/api/auth";
+  private readonly baseUrl = "/auth";
 
   /**
    * Login user with email and password
