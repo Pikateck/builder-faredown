@@ -579,6 +579,7 @@ module.exports = {
   requirePermission,
   requireRole,
   getUserByEmail,
+  getUserByEmailFromDb,
   getUserByUsername, // Legacy support
   getUserById,
   createUser,
