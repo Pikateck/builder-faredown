@@ -220,6 +220,35 @@ const corsOptionsDelegate = (req, callback) => {
   return callback(new Error(`Not allowed by CORS: ${origin}`), { ...baseCorsOptions, origin: false });
 };
 
+const ensureCorsHeaders = (req, res, next) => {
+  const origin = req.headers.origin;
+  const allowed = isOriginAllowed(origin);
+
+  if (origin && allowed) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
+    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+    res.setHeader(
+      "Access-Control-Allow-Headers",
+      "Content-Type, content-type, Authorization, X-Requested-With"
+    );
+    const varyHeader = res.getHeader("Vary");
+    res.setHeader("Vary", varyHeader ? `${varyHeader}, Origin` : "Origin");
+
+    if (req.method === "OPTIONS") {
+      res.status(204).end();
+      return;
+    }
+  } else if (req.method === "OPTIONS") {
+    res.status(403).end();
+    return;
+  }
+
+  next();
+};
+
+app.use(ensureCorsHeaders);
+
 app.use((req, res, next) => {
   const existingVary = res.getHeader("Vary");
   res.setHeader("Vary", existingVary ? `${existingVary}, Origin` : "Origin");
