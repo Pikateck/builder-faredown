@@ -103,6 +103,14 @@ export const API_CONFIG = {
   OFFLINE_FALLBACK_ENABLED: getOfflineFallbackEnabled(),
 };
 
+const FALLBACK_EXCLUSION_PATTERNS: RegExp[] = [
+  /^\/api\/auth\//,
+  /^\/api\/users/,
+  /^\/api\/bookings/,
+  /^\/api\/payments/,
+  /^\/api\/invoices/,
+];
+
 // API Response Types
 export interface ApiResponse<T = any> {
   success: boolean;
@@ -333,7 +341,7 @@ export class ApiClient {
             name: "United Arab Emirates",
             display_name: "United Arab Emirates",
             flag: "🇦🇪",
-            flag_emoji: "🇦🇪",
+            flag_emoji: "🇦��",
             popular: true,
           },
           {
