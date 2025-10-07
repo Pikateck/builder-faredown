@@ -19,6 +19,29 @@ interface AuthModalProps {
   initialMode?: "login" | "register" | "forgot-password";
 }
 
+const PASSWORD_REQUIREMENTS = [
+  {
+    id: "length",
+    label: "At least 8 characters",
+    test: (password: string) => password.length >= 8,
+  },
+  {
+    id: "uppercase",
+    label: "One uppercase letter",
+    test: (password: string) => /[A-Z]/.test(password),
+  },
+  {
+    id: "number",
+    label: "One number",
+    test: (password: string) => /\d/.test(password),
+  },
+  {
+    id: "special",
+    label: "One special character",
+    test: (password: string) => /[!@#$%^&*(),.?":{}|<>\-_/\\\[\]+=]/.test(password),
+  },
+] as const;
+
 export function AuthModal({
   isOpen,
   onClose,
