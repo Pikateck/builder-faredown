@@ -134,21 +134,51 @@ export class AuthService {
    * Register new user
    */
   async register(userData: RegisterRequest): Promise<AuthResponse> {
+    const baseUrl = (API_CONFIG.BASE_URL || "").replace(/\/+$/, "");
+    const endpoint = `${baseUrl}${this.baseUrl}/register`;
+
     try {
-      const response = await apiClient.post<AuthResponse>(
-        `${this.baseUrl}/register`,
-        userData,
-      );
+      const response = await fetch(endpoint, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Accept: "application/json",
+        },
+        credentials: "include",
+        body: JSON.stringify(userData),
+      });
 
-      if (response && response.success) {
-        // Store user data
-        localStorage.setItem("user", JSON.stringify(response.user));
-
-        // Note: Register endpoint doesn't return token, user needs to login
-        return response;
+      let payload: any = null;
+      const contentType = response.headers.get("content-type") || "";
+      if (contentType.includes("application/json")) {
+        payload = await response.json();
       }
 
-      throw new Error("Registration failed: No data received");
+      if (!response.ok || !payload) {
+        const message =
+          payload?.message ||
+          `Registration failed with status ${response.status}`;
+        const error: any = new Error(message);
+        error.response = {
+          status: response.status,
+          data: payload,
+        };
+        throw error;
+      }
+
+      if (!payload.success) {
+        const error: any = new Error(
+          payload.message || "Registration failed",
+        );
+        error.response = {
+          status: response.status,
+          data: payload,
+        };
+        throw error;
+      }
+
+      localStorage.setItem("user", JSON.stringify(payload.user));
+      return payload as AuthResponse;
     } catch (error) {
       console.error("Registration error:", error);
       throw error;
