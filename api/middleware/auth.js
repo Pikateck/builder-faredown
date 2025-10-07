@@ -405,10 +405,60 @@ const requireRole = (roles) => {
 };
 
 /**
- * Get user by email
+ * Get user by email (cache)
  */
 const getUserByEmail = (email) => {
-  return users.get(email);
+  if (!email) return null;
+  return users.get(normalizeEmail(email));
+};
+
+/**
+ * Load user from database and cache it
+ */
+const getUserByEmailFromDb = async (email) => {
+  if (!email) return null;
+
+  const normalizedEmail = normalizeEmail(email);
+  const cached = users.get(normalizedEmail);
+  if (cached) return cached;
+
+  if (!db || !db.isConnected) {
+    return null;
+  }
+
+  try {
+    const result = await db.query(
+      `SELECT id, email, first_name, last_name, password_hash, is_active, created_at, updated_at
+       FROM users
+       WHERE lower(email) = $1
+       LIMIT 1`,
+      [normalizedEmail],
+    );
+
+    if (result.rows.length === 0) {
+      return null;
+    }
+
+    const row = result.rows[0];
+    const hydratedUser = {
+      id: row.id ? String(row.id) : `${normalizedEmail}_${Date.now()}`,
+      firstName: row.first_name || "",
+      lastName: row.last_name || "",
+      email: row.email || normalizedEmail,
+      password: row.password_hash,
+      role: ROLES.USER,
+      department: null,
+      isActive: row.is_active !== false,
+      createdAt: row.created_at ? new Date(row.created_at) : new Date(),
+      lastLogin: null,
+    };
+
+    users.set(normalizedEmail, hydratedUser);
+    return hydratedUser;
+  } catch (error) {
+    console.error("🔴 Failed to load user from database:", error);
+    return null;
+  }
 };
 
 /**
