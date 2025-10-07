@@ -217,14 +217,12 @@ const corsOptionsDelegate = (req, callback) => {
   }
 
   console.warn("🚫 CORS blocked origin:", origin);
-  return callback(new Error(`Not allowed by CORS: ${origin}`), { ...baseCorsOptions, origin: false });
+  return callback(null, { ...baseCorsOptions, origin: false });
 };
 
 const ensureCorsHeaders = (req, res, next) => {
   const origin = req.headers.origin;
-  const allowed = isOriginAllowed(origin);
-
-  if (origin && allowed) {
+  if (origin && isOriginAllowed(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
@@ -234,13 +232,10 @@ const ensureCorsHeaders = (req, res, next) => {
     );
     const varyHeader = res.getHeader("Vary");
     res.setHeader("Vary", varyHeader ? `${varyHeader}, Origin` : "Origin");
+  }
 
-    if (req.method === "OPTIONS") {
-      res.status(204).end();
-      return;
-    }
-  } else if (req.method === "OPTIONS") {
-    res.status(403).end();
+  if (req.method === "OPTIONS") {
+    res.status(204).end();
     return;
   }
 
@@ -248,13 +243,6 @@ const ensureCorsHeaders = (req, res, next) => {
 };
 
 app.use(ensureCorsHeaders);
-
-app.use((req, res, next) => {
-  const existingVary = res.getHeader("Vary");
-  res.setHeader("Vary", existingVary ? `${existingVary}, Origin` : "Origin");
-  next();
-});
-
 app.use(cors(corsOptionsDelegate));
 app.options("*", cors(corsOptionsDelegate));
 
