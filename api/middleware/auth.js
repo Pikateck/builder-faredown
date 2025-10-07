@@ -135,7 +135,7 @@ const ROLE_PERMISSIONS = {
 // Mock user database (replace with real database) - using email as key
 const users = new Map([
   [
-    "admin@faredown.com",
+    normalizeEmail("admin@faredown.com"),
     {
       id: "admin",
       firstName: "Admin",
@@ -150,7 +150,7 @@ const users = new Map([
     },
   ],
   [
-    "sales@faredown.com",
+    normalizeEmail("sales@faredown.com"),
     {
       id: "sales",
       firstName: "Sales",
@@ -165,7 +165,7 @@ const users = new Map([
     },
   ],
   [
-    "support@faredown.com",
+    normalizeEmail("support@faredown.com"),
     {
       id: "support",
       firstName: "Support",
@@ -180,7 +180,7 @@ const users = new Map([
     },
   ],
   [
-    "demo@faredown.com",
+    normalizeEmail("demo@faredown.com"),
     {
       id: "demo",
       firstName: "Demo",
