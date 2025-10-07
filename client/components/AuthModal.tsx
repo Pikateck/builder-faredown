@@ -53,10 +53,9 @@ export function AuthModal({
 
   // Update mode when initialMode changes to prevent flickering
   useEffect(() => {
-    if (isOpen && !isChangingMode) {
-      setMode(initialMode);
-    }
-  }, [isOpen, initialMode, isChangingMode]);
+    if (!isOpen) return;
+    setMode(initialMode);
+  }, [isOpen, initialMode]);
   const [isLoading, setIsLoading] = useState(false);
   const [isGoogleLoading, setIsGoogleLoading] = useState(false);
   const [isFacebookLoading, setIsFacebookLoading] = useState(false);
