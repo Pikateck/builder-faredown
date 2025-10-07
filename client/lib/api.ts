@@ -232,6 +232,10 @@ export class ApiClient {
     });
   }
 
+  private shouldBypassFallback(endpoint: string): boolean {
+    return FALLBACK_EXCLUSION_PATTERNS.some((pattern) => pattern.test(endpoint));
+  }
+
   private getHeaders(
     customHeaders: Record<string, string> = {},
   ): Record<string, string> {
@@ -341,7 +345,7 @@ export class ApiClient {
             name: "United Arab Emirates",
             display_name: "United Arab Emirates",
             flag: "🇦🇪",
-            flag_emoji: "🇦��",
+            flag_emoji: "🇦🇪",
             popular: true,
           },
           {
@@ -429,7 +433,7 @@ export class ApiClient {
             name: "Malaysia",
             display_name: "Malaysia",
             flag: "🇲🇾",
-            flag_emoji: "🇲🇾",
+            flag_emoji: "🇲����",
             popular: true,
           },
           {
