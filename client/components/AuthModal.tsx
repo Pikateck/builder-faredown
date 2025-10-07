@@ -66,19 +66,6 @@ export function AuthModal({
   const [showPassword, setShowPassword] = useState(false);
   const [passwordFocused, setPasswordFocused] = useState(false);
 
-  const passwordChecks = useMemo(() => {
-    return PASSWORD_REQUIREMENTS.map((requirement) => ({
-      id: requirement.id,
-      label: requirement.label,
-      satisfied: requirement.test(formData.password),
-    }));
-  }, [formData.password]);
-
-  const isPasswordStrong = useMemo(
-    () => passwordChecks.every((check) => check.satisfied),
-    [passwordChecks],
-  );
-
   const { login } = useAuth();
 
   // Simplified form states - email is the identifier like Booking.com
