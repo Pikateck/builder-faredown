@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   StableDialog,
   StableDialogContent,
@@ -7,7 +8,7 @@ import {
 } from "@/components/ui/stable-dialog";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Loader2, Eye, EyeOff, Mail, Lock, User } from "lucide-react";
+import { Loader2, Eye, EyeOff, Mail, Lock, User, Check, X } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { authService } from "@/services/authService";
 import { oauthService } from "@/services/oauthService";
