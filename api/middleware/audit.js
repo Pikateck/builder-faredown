@@ -221,7 +221,11 @@ const logAuditEvent = (actionType, req, additionalData = {}) => {
   const entry = createAuditEntry(actionType, req, additionalData);
 
   // Log to Winston
-  auditLogger.info("Audit Event", entry);
+  try {
+    auditLogger.info("Audit Event", entry);
+  } catch (error) {
+    console.warn("⚠️ Failed to write audit event:", error.message);
+  }
 
   // Add to memory trail
   addToMemoryTrail(entry);
