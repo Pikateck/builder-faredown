@@ -346,7 +346,7 @@ export class ApiClient {
             iso2: "AE",
             name: "United Arab Emirates",
             display_name: "United Arab Emirates",
-            flag: "����🇪",
+            flag: "🇦🇪",
             flag_emoji: "🇦🇪",
             popular: true,
           },
@@ -740,8 +740,9 @@ export class ApiClient {
       console.log("🚨 FORCING REAL API FOR PACKAGES - NO FALLBACK");
       // Skip fallback logic for packages - always try real API
     } else if (
-      this.forceFallback ||
-      (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL)
+      canUseFallback &&
+      (this.forceFallback ||
+        (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL))
     ) {
       logApiEvent("info", `Using fallback data for ${endpoint}`);
       return this.devClient.get<T>(endpoint, params);
