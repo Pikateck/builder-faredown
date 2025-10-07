@@ -150,12 +150,25 @@ app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
 // CORS — allow your UI origins + Builder preview
-const allowed = (process.env.CORS_ORIGIN || "")
+const envAllowedOrigins = (process.env.CORS_ORIGIN || "")
   .split(",")
-  .map(s => s.trim())
+  .map(origin => origin.trim())
   .filter(Boolean);
 
-const corsPatterns = [
+const staticAllowedOrigins = [
+  "http://localhost:3000",
+  "http://localhost:4173",
+  "http://localhost:5173",
+  "http://127.0.0.1:3000",
+  "http://127.0.0.1:4173",
+  "http://127.0.0.1:5173",
+  "https://builder.io",
+  "https://cdn.builder.io",
+];
+
+const corsMatchers = [
+  ...envAllowedOrigins,
+  ...staticAllowedOrigins,
   /^https?:\/\/localhost(:\d+)?$/i,
   /^https:\/\/([a-z0-9-]+\.)*builder\.io$/i,
   /^https:\/\/([a-z0-9-]+\.)*projects\.builder\.my$/i,
@@ -168,17 +181,15 @@ const corsPatterns = [
 
 const isOriginAllowed = origin => {
   if (!origin) return true;
-  if (allowed.includes(origin)) return true;
-  return corsPatterns.some(pattern => pattern.test(origin));
+  return corsMatchers.some(matcher =>
+    typeof matcher === "string" ? matcher === origin : matcher.test(origin)
+  );
 };
 
 const corsOptions = {
   origin: (origin, cb) => {
     if (isOriginAllowed(origin)) {
-      if (!origin) {
-        return cb(null, true);
-      }
-      return cb(null, origin);
+      return cb(null, true);
     }
 
     console.warn("🚫 CORS blocked origin:", origin);
@@ -186,13 +197,16 @@ const corsOptions = {
   },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
+  allowedHeaders: ["Content-Type", "content-type", "Authorization", "X-Requested-With"],
   exposedHeaders: ["Set-Cookie"],
   maxAge: 600,
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
 };
 
-app.use(cors(corsOptions));
-app.options("*", cors(corsOptions));
+const corsMiddleware = cors(corsOptions);
+app.use(corsMiddleware);
+app.options("*", corsMiddleware);
 
 app.use(limiter);
 
