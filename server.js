@@ -1,94 +1,112 @@
+// server.js
 import express from "express";
 import cors from "cors";
 import path from "path";
 import { fileURLToPath } from "url";
+import fetch from "node-fetch";
 
+// __dirname for ESM
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
 const app = express();
+const PORT = process.env.PORT || 8080;
 
-// Enable CORS
-app.use(cors());
+// Trust Render/Netlify proxies so secure cookies & IPs work
+app.set("trust proxy", 1);
+
+// Global middleware
+app.use(
+  cors({
+    origin: (origin, cb) => cb(null, true),
+    credentials: true,
+  })
+);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
-// 🎯 BUILDER.IO IFRAME SUPPORT - Add headers for Builder.io preview
+// Builder.io iframe support & cookie hinting
 app.use((req, res, next) => {
-  // Remove X-Frame-Options to allow embedding
   res.removeHeader("X-Frame-Options");
-
-  // Add CSP to allow Builder.io iframes
   res.setHeader(
     "Content-Security-Policy",
-    "frame-ancestors 'self' https://builder.io https://*.builder.io",
+    "frame-ancestors 'self' https://builder.io https://*.builder.io"
   );
-
-  // Configure cookies for cross-site context
-  res.setHeader("Set-Cookie", "SameSite=None; Secure");
-
+  res.setHeader("Set-Cookie", "preview=1; Path=/; SameSite=None; Secure");
   next();
 });
 
-// API proxy to external API server
-app.use("/api", async (req, res) => {
-  if (req.path === "/api/health") {
+// =====================
+// API proxy middleware
+// =====================
+const API_BASE = process.env.API_SERVER_URL || "http://localhost:3001";
+
+const proxyToApi = async (req, res) => {
+  // Health for this static host (note: path under /api or /auth)
+  if (req.path === "/health") {
     return res.json({
       status: "healthy",
       timestamp: new Date().toISOString(),
       frontend: "connected",
-      message: "Faredown system operational",
+      service: "faredown-pricing-proxy",
+      version: "1.0.0",
     });
   }
 
-  const apiServerUrl = process.env.API_SERVER_URL || "http://localhost:3001";
-  const targetUrl = `${apiServerUrl}${req.originalUrl}`;
-
+  const targetUrl = `${API_BASE}${req.originalUrl}`;
   try {
-    const fetch = (await import("node-fetch")).default;
+    const headers = {
+      "Content-Type": req.headers["content-type"] || "application/json",
+      Accept: req.headers.accept || "application/json",
+      ...(req.headers.cookie ? { Cookie: req.headers.cookie } : {}),
+      ...(req.headers.authorization ? { Authorization: req.headers.authorization } : {}),
+      ...(req.headers["user-agent"] ? { "User-Agent": req.headers["user-agent"] } : {}),
+      ...(req.headers.origin ? { Origin: req.headers.origin } : {}),
+    };
+
+    const hasBody = !["GET", "HEAD"].includes(req.method);
     const response = await fetch(targetUrl, {
       method: req.method,
-      headers: {
-        "Content-Type": "application/json",
-        Accept: "application/json",
-        ...(req.headers["user-agent"] && {
-          "User-Agent": req.headers["user-agent"],
-        }),
-      },
-      body:
-        req.method !== "GET" && req.method !== "HEAD"
-          ? JSON.stringify(req.body)
-          : undefined,
+      headers,
+      body: hasBody ? (typeof req.body === "string" ? req.body : JSON.stringify(req.body)) : undefined,
+      redirect: "manual",
     });
 
-    const data = await response.text();
-    res.status(response.status);
+    // forward cookies + content type + status
+    const setCookie = response.headers.raw()["set-cookie"];
+    if (setCookie) res.set("Set-Cookie", setCookie);
 
-    const contentType =
-      response.headers.get("content-type") || "application/json";
-    res.setHeader("Content-Type", contentType);
-    res.send(data);
-  } catch (error) {
-    console.error(`API proxy error for ${req.originalUrl}:`, error);
+    res.status(response.status);
+    res.set("Content-Type", response.headers.get("content-type") || "application/json");
+    const body = await response.text();
+    res.send(body);
+  } catch (err) {
+    console.error(`API proxy error for ${req.originalUrl}:`, err.message);
     res.status(503).json({
       error: "API server unavailable",
       path: req.originalUrl,
-      message: error.message,
+      message: err.message,
     });
   }
-});
+};
 
-// Serve static files from dist
+// Mount proxy handlers (both API and OAuth routes)
+app.use("/api", proxyToApi);
+app.use("/auth", proxyToApi);
+
+// =====================
+// Static SPA hosting
+// =====================
 app.use(express.static(path.join(__dirname, "dist/spa")));
 
-// Handle React Router (SPA) - serve index.html for all non-API routes
+// SPA fallback
 app.get("*", (req, res) => {
   res.sendFile(path.join(__dirname, "dist/spa", "index.html"));
 });
 
-const port = process.env.PORT || 8080;
-app.listen(port, "0.0.0.0", () => {
-  console.log(`🚀 Faredown Production Server: http://localhost:${port}`);
-  console.log(`📱 Frontend: Static files from dist/spa`);
-  console.log(`🔧 API: /api/* → Proxy to external API`);
-  console.log(`✅ Production ready`);
+// Start server
+app.listen(PORT, "0.0.0.0", () => {
+  console.log(`🚀 Faredown Production Server: http://localhost:${PORT}`);
+  console.log(`📦 Serving: dist/spa`);
+  console.log(`🔀 Proxying to: ${API_BASE}`);
 });

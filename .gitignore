@@ -24,3 +24,5 @@ dist-ssr
 *.sw?
 
 .config/
+airports.csv
+builder-faredown/

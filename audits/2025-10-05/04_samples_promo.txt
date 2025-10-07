@@ -1,0 +1,1 @@
+SELECT * FROM promo_codes LIMIT 3;
