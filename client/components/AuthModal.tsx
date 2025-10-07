@@ -99,6 +99,7 @@ export function AuthModal({
     setError("");
     setSuccess("");
     setShowPassword(false);
+    setPasswordFocused(false);
   };
 
   const handleClose = () => {
