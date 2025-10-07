@@ -12,6 +12,9 @@ const ADMIN_JWT_SECRET =
   process.env.ADMIN_JWT_SECRET || "your-super-secret-admin-jwt-key";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
+// Helpers
+const normalizeEmail = email => (email || "").trim().toLowerCase();
+
 // User roles and permissions
 const ROLES = {
   SUPER_ADMIN: "super_admin",
