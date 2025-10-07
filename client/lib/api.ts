@@ -831,13 +831,14 @@ export class ApiClient {
 
       // Fallback handling - always try fallback for common error scenarios (except packages)
       if (
-        API_CONFIG.OFFLINE_FALLBACK_ENABLED ||
-        (error instanceof Error &&
-          (error.name === "TypeError" ||
-            error.message.includes("Failed to fetch") ||
-            error.message.includes("ECONNREFUSED") ||
-            error.message.includes("Service unavailable") ||
-            (error instanceof ApiError && error.status === 503)))
+        canUseFallback &&
+        (API_CONFIG.OFFLINE_FALLBACK_ENABLED ||
+          (error instanceof Error &&
+            (error.name === "TypeError" ||
+              error.message.includes("Failed to fetch") ||
+              error.message.includes("ECONNREFUSED") ||
+              error.message.includes("Service unavailable") ||
+              (error instanceof ApiError && error.status === 503))))
       ) {
         try {
           logApiEvent(
@@ -852,8 +853,7 @@ export class ApiClient {
         }
       }
 
-      // Production: don't silently swallow errors unless using fallback
-      if (API_CONFIG.IS_PRODUCTION && !API_CONFIG.OFFLINE_FALLBACK_ENABLED) {
+      if (!canUseFallback || API_CONFIG.IS_PRODUCTION) {
         throw error;
       }
 
