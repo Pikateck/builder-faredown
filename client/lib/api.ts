@@ -781,7 +781,7 @@ export class ApiClient {
     try {
       const response = await fetch(url.toString(), {
         method: "GET",
-        headers: this.getHeaders(),
+        headers: this.getHeaders(customHeaders),
         signal: controller.signal,
       });
 
