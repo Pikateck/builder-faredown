@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { BuilderComponent, builder } from "@builder.io/react";
+import { BuilderComponent } from "@builder.io/react";
 import { initBuilder } from "@/lib/builder";
 
 export default function CmsPage() {
@@ -37,65 +37,6 @@ export default function CmsPage() {
 
     return rawPath.startsWith("/") ? rawPath : `/${rawPath}`;
   }, [location.pathname]);
-
-  const builderPreviewUrl = useMemo(() => {
-    if (typeof window === "undefined") {
-      return builderUrlPath;
-    }
-
-    const origin = window.location.origin;
-    const search = window.location.search;
-    const hash = window.location.hash;
-
-    return `${origin}${builderUrlPath}${search}${hash}`;
-  }, [builderUrlPath]);
-
-  useEffect(() => {
-    if (!isBuilderReady) {
-      return;
-    }
-
-    let cancelled = false;
-
-    builder
-      .get("page", {
-        url: builderPreviewUrl,
-        userAttributes: {
-          url: builderPreviewUrl,
-          urlPath: builderUrlPath,
-        },
-        options: {
-          includeRefs: true,
-          preview: true,
-        },
-      })
-      .toPromise()
-      .then(result => {
-        if (cancelled) {
-          return;
-        }
-
-        if (!result) {
-          setError(
-            "No Builder content found for this path. Publish the page or adjust the targeting URL in Builder.io to match."
-          );
-        } else {
-          setError(null);
-        }
-      })
-      .catch(err => {
-        if (cancelled) {
-          return;
-        }
-
-        console.error("Failed to fetch Builder content:", err);
-        setError("Unable to load Builder content. Check console for details.");
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, [builderPreviewUrl, builderUrlPath, isBuilderReady]);
 
   if (error) {
     return (
