@@ -76,6 +76,7 @@ const adminExtranetRoutes = require("./routes/admin-extranet");
 const adminMarkupPackagesRoutes = require("./routes/admin-markup-packages");
 const adminPromoRoutes = require("./routes/admin-promo");
 const pricingEngineRoutes = require("./routes/pricing-engine");
+const adminUsersVerifyRoutes = require("./routes/admin-users-verify");
 
 // Middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
@@ -367,6 +368,7 @@ app.use("/api/admin/profiles", authenticateToken, requireAdmin, auditLogger, adm
 app.use("/api/admin/extranet", authenticateToken, requireAdmin, auditLogger, adminExtranetRoutes);
 app.use("/api/admin/markup/packages", authenticateToken, requireAdmin, auditLogger, adminMarkupPackagesRoutes);
 app.use("/api/admin/promo", authenticateToken, requireAdmin, auditLogger, adminPromoRoutes);
+app.use("/api/admin/users", adminUsersVerifyRoutes);
 
 // Pricing routes (legacy create function support)
 try {
