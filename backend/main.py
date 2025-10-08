@@ -11,18 +11,130 @@ import uvicorn
 import os
 from datetime import datetime
 
-# Import routers
-from app.routers import (
-    admin, users, bookings, airlines, hotels, 
-    bargain, promo, currency, vat, cms, 
-    extranet, ai, reports, auth
-)
+# Import database components
 from app.database import engine, get_db
-from app.models import Base
 from app.core.config import settings
 
+# Import models first to register them with Base
+try:
+    from app import models
+    print("✅ Models imported successfully")
+except Exception as e:
+    print(f"❌ Error importing models: {e}")
+    import traceback
+    traceback.print_exc()
+
+from app.models.base import Base
+
+# Import routers with error handling
+routers_to_import = []
+
+try:
+    from app.routers import auth
+    routers_to_import.append(("auth", auth))
+    print("✅ Auth router imported")
+except Exception as e:
+    print(f"❌ Failed to import auth router: {e}")
+
+try:
+    from app.routers import admin
+    routers_to_import.append(("admin", admin))
+    print("✅ Admin router imported")
+except Exception as e:
+    print(f"❌ Failed to import admin router: {e}")
+
+try:
+    from app.routers import users
+    routers_to_import.append(("users", users))
+    print("✅ Users router imported")
+except Exception as e:
+    print(f"❌ Failed to import users router: {e}")
+
+try:
+    from app.routers import bookings
+    routers_to_import.append(("bookings", bookings))
+    print("✅ Bookings router imported")
+except Exception as e:
+    print(f"❌ Failed to import bookings router: {e}")
+
+try:
+    from app.routers import airlines
+    routers_to_import.append(("airlines", airlines))
+    print("✅ Airlines router imported")
+except Exception as e:
+    print(f"❌ Failed to import airlines router: {e}")
+
+try:
+    from app.routers import hotels
+    routers_to_import.append(("hotels", hotels))
+    print("✅ Hotels router imported")
+except Exception as e:
+    print(f"❌ Failed to import hotels router: {e}")
+
+try:
+    from app.routers import bargain
+    routers_to_import.append(("bargain", bargain))
+    print("✅ Bargain router imported")
+except Exception as e:
+    print(f"❌ Failed to import bargain router: {e}")
+
+try:
+    from app.routers import promo
+    routers_to_import.append(("promo", promo))
+    print("✅ Promo router imported")
+except Exception as e:
+    print(f"❌ Failed to import promo router: {e}")
+
+try:
+    from app.routers import currency
+    routers_to_import.append(("currency", currency))
+    print("✅ Currency router imported")
+except Exception as e:
+    print(f"❌ Failed to import currency router: {e}")
+
+try:
+    from app.routers import vat
+    routers_to_import.append(("vat", vat))
+    print("✅ VAT router imported")
+except Exception as e:
+    print(f"❌ Failed to import vat router: {e}")
+
+try:
+    from app.routers import cms
+    routers_to_import.append(("cms", cms))
+    print("✅ CMS router imported")
+except Exception as e:
+    print(f"❌ Failed to import cms router: {e}")
+
+try:
+    from app.routers import extranet
+    routers_to_import.append(("extranet", extranet))
+    print("✅ Extranet router imported")
+except Exception as e:
+    print(f"❌ Failed to import extranet router: {e}")
+
+try:
+    from app.routers import ai
+    routers_to_import.append(("ai", ai))
+    print("✅ AI router imported")
+except Exception as e:
+    print(f"❌ Failed to import ai router: {e}")
+
+try:
+    from app.routers import reports
+    routers_to_import.append(("reports", reports))
+    print("✅ Reports router imported")
+except Exception as e:
+    print(f"❌ Failed to import reports router: {e}")
+
 # Create database tables
-Base.metadata.create_all(bind=engine)
+try:
+    Base.metadata.create_all(bind=engine)
+    print("✅ Database tables created/verified")
+except Exception as e:
+    print(f"❌ Error creating database tables: {e}")
+    import traceback
+    traceback.print_exc()
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -65,7 +177,7 @@ async def root():
             "✅ Extranet Deal System",
             "✅ Advanced Analytics & Reporting",
             "✅ Multi-currency Support",
-            "✅ CMS Integration"
+            "�� CMS Integration"
         ],
         "timestamp": datetime.now().isoformat()
     }

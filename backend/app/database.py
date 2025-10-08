@@ -4,7 +4,6 @@ PostgreSQL database setup with SQLAlchemy
 """
 
 from sqlalchemy import create_engine, MetaData
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.pool import StaticPool
 from app.core.config import settings
@@ -33,8 +32,8 @@ engine = create_engine(settings.DATABASE_URL, **engine_kwargs)
 # Create session factory
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
-# Create declarative base for models
-Base = declarative_base()
+# Import Base from models to avoid duplication
+from app.models.base import Base
 
 # Metadata for database operations
 metadata = MetaData()
