@@ -246,6 +246,82 @@ router.post("/register", validate.register, async (req, res) => {
   }
 });
 
+router.get("/verify-email", async (req, res) => {
+  const { token } = req.query;
+
+  if (!token || typeof token !== "string") {
+    return res.status(400).send({
+      success: false,
+      message: "Verification token is required",
+    });
+  }
+
+  try {
+    const result = await db.query(
+      `UPDATE users
+         SET is_verified = true,
+             is_active = true,
+             verified_at = NOW(),
+             verification_token = NULL,
+             verification_token_expires_at = NULL
+       WHERE verification_token = $1
+         AND (verification_token_expires_at IS NULL OR verification_token_expires_at > NOW())
+       RETURNING id, email, first_name, last_name`,
+      [token],
+    );
+
+    if (result.rows.length === 0) {
+      const errorMessage = "Invalid or expired verification link";
+      if (req.accepts("html")) {
+        return res
+          .status(400)
+          .send(`<html><body><h2>${errorMessage}</h2><p>Please request a new verification email.</p></body></html>`);
+      }
+
+      return res.status(400).json({
+        success: false,
+        message: errorMessage,
+      });
+    }
+
+    const user = result.rows[0];
+    const successMessage = "Email verified successfully. You can now log in.";
+
+    if (req.accepts("html")) {
+      const redirectUrl =
+        process.env.APP_PUBLIC_URL ||
+        process.env.OAUTH_REDIRECT_BASE ||
+        "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev";
+      return res.send(`
+        <html>
+          <body style="font-family: Arial, sans-serif; max-width: 480px; margin: 40px auto; text-align: center;">
+            <h2>🎉 Email Verified</h2>
+            <p>${successMessage}</p>
+            <a href="${redirectUrl}" style="display:inline-block;padding:10px 16px;background:#003580;color:#fff;border-radius:6px;text-decoration:none;margin-top:20px;">Go to Faredown</a>
+          </body>
+        </html>
+      `);
+    }
+
+    return res.json({
+      success: true,
+      message: successMessage,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.first_name,
+        lastName: user.last_name,
+      },
+    });
+  } catch (error) {
+    console.error("🔴 Email verification error:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to verify email",
+    });
+  }
+});
+
 /**
  * @api {post} /api/auth/logout User Logout
  * @apiName LogoutUser
