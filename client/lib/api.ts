@@ -21,38 +21,24 @@ const getBackendUrl = () => {
     return serverUrl || "http://localhost:3001/api";
   }
 
-  // Client-side: try environment variable first
-  const envBaseUrl = import.meta.env.VITE_API_BASE_URL;
-  if (envBaseUrl) {
-    const normalizedEnvBase = envBaseUrl.trim();
-
-    if (
-      normalizedEnvBase &&
-      (window.location.hostname.includes("builder.codes") ||
-        window.location.hostname.includes("fly.dev")) &&
-      normalizedEnvBase.includes("fly.dev")
-    ) {
-      // Force direct Render API usage to avoid proxy loops
-      return "https://builder-faredown-pricing.onrender.com/api";
-    }
-
-    return normalizedEnvBase;
-  }
-
-  // Builder.codes and fly.dev environments
+  // CRITICAL: Builder.io preview environments (fly.dev/builder.codes) must ALWAYS use Render API
+  // This prevents the preview from trying to call itself as an API
   if (
     window.location.hostname.includes("builder.codes") ||
     window.location.hostname.includes("fly.dev")
   ) {
-    if (import.meta.env.VITE_API_BASE_URL) {
-      return import.meta.env.VITE_API_BASE_URL;
-    }
-
-    // Default to Render API when env override not provided
     console.log(
-      "🌐 Detected Builder.codes/fly.dev environment, using Render API base URL",
+      "🌐 Builder.io preview detected, forcing Render API:",
+      "https://builder-faredown-pricing.onrender.com/api",
     );
     return "https://builder-faredown-pricing.onrender.com/api";
+  }
+
+  // Client-side: try environment variable for other environments
+  const envBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  if (envBaseUrl) {
+    const normalizedEnvBase = envBaseUrl.trim();
+    return normalizedEnvBase;
   }
 
   // Production environments (non-localhost) - use proxy
