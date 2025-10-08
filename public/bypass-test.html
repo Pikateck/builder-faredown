@@ -1,67 +1,95 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
+  <head>
     <title>Direct API Test - Bypass All Caching</title>
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <meta
+      http-equiv="Cache-Control"
+      content="no-cache, no-store, must-revalidate"
+    />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
     <style>
-        body { font-family: monospace; background: #000; color: #0f0; padding: 20px; }
-        .success { color: #0f0; }
-        .error { color: #f00; }
-        button { background: #0f0; color: #000; border: none; padding: 10px 20px; font-size: 16px; cursor: pointer; }
-        pre { background: #111; padding: 15px; overflow-x: auto; }
+      body {
+        font-family: monospace;
+        background: #000;
+        color: #0f0;
+        padding: 20px;
+      }
+      .success {
+        color: #0f0;
+      }
+      .error {
+        color: #f00;
+      }
+      button {
+        background: #0f0;
+        color: #000;
+        border: none;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+      pre {
+        background: #111;
+        padding: 15px;
+        overflow-x: auto;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🔥 Direct API Test (No React/Vite/Cache)</h1>
     <button onclick="testAPI()">TEST ADMIN API NOW</button>
     <div id="result"></div>
 
     <script>
-        async function testAPI() {
-            const result = document.getElementById('result');
-            result.innerHTML = '<p>Testing...</p>';
-            
-            const API_URL = 'https://builder-faredown-pricing.onrender.com/api/admin/users';
-            const ADMIN_KEY = '8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1';
-            
-            try {
-                console.log('Calling:', API_URL);
-                
-                const response = await fetch(API_URL + '?limit=1&_nocache=' + Date.now(), {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Admin-Key': ADMIN_KEY
-                    },
-                    cache: 'no-store',
-                    credentials: 'omit',
-                    mode: 'cors'
-                });
-                
-                console.log('Status:', response.status);
-                console.log('Headers:', [...response.headers.entries()]);
-                
-                const data = await response.json();
-                
-                if (response.ok) {
-                    result.innerHTML = `
+      async function testAPI() {
+        const result = document.getElementById("result");
+        result.innerHTML = "<p>Testing...</p>";
+
+        const API_URL =
+          "https://builder-faredown-pricing.onrender.com/api/admin/users";
+        const ADMIN_KEY =
+          "8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1";
+
+        try {
+          console.log("Calling:", API_URL);
+
+          const response = await fetch(
+            API_URL + "?limit=1&_nocache=" + Date.now(),
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Admin-Key": ADMIN_KEY,
+              },
+              cache: "no-store",
+              credentials: "omit",
+              mode: "cors",
+            },
+          );
+
+          console.log("Status:", response.status);
+          console.log("Headers:", [...response.headers.entries()]);
+
+          const data = await response.json();
+
+          if (response.ok) {
+            result.innerHTML = `
                         <h2 class="success">✅ SUCCESS!</h2>
                         <p>Status: ${response.status}</p>
                         <p>Users found: ${data.users?.length || 0}</p>
                         <pre>${JSON.stringify(data, null, 2)}</pre>
                         <h3>Now refresh the admin panel - it should work!</h3>
                     `;
-                } else {
-                    result.innerHTML = `
+          } else {
+            result.innerHTML = `
                         <h2 class="error">❌ API Error</h2>
                         <p>Status: ${response.status}</p>
                         <pre>${JSON.stringify(data, null, 2)}</pre>
                     `;
-                }
-            } catch (error) {
-                result.innerHTML = `
+          }
+        } catch (error) {
+          result.innerHTML = `
                     <h2 class="error">❌ NETWORK ERROR</h2>
                     <p>${error.message}</p>
                     <pre>${error.stack}</pre>
@@ -73,14 +101,14 @@
                         <li>OR Render service is down</li>
                     </ul>
                 `;
-                console.error('Error:', error);
-            }
+          console.error("Error:", error);
         }
-        
-        // Auto-run if ?auto in URL
-        if (window.location.search.includes('auto')) {
-            setTimeout(testAPI, 500);
-        }
+      }
+
+      // Auto-run if ?auto in URL
+      if (window.location.search.includes("auto")) {
+        setTimeout(testAPI, 500);
+      }
     </script>
-</body>
+  </body>
 </html>
