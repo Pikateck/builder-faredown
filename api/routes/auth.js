@@ -184,19 +184,38 @@ router.post("/register", validate.register, async (req, res) => {
     }
 
     console.log("🔵 Creating new user...");
-    // Create new user
+
+    const verificationToken = crypto.randomBytes(32).toString("hex");
+    const verificationExpiresAt = new Date(Date.now() + 24 * 60 * 60 * 1000);
+    const verificationSentAt = new Date();
+
     const newUser = await createUser({
       email,
       password,
       firstName,
       lastName,
       role: role || "user",
+      isActive: false,
+      isVerified: false,
+      verificationToken,
+      verificationTokenExpiresAt: verificationExpiresAt,
+      verificationSentAt,
     });
 
     console.log("🔵 User created successfully:", {
       id: newUser.id,
       email: newUser.email,
     });
+
+    try {
+      await emailService.sendEmailVerification(
+        email,
+        verificationToken,
+        firstName || "there",
+      );
+    } catch (emailError) {
+      console.error("⚠️ Verification email failed:", emailError.message);
+    }
 
     // Log user creation
     try {
@@ -206,14 +225,16 @@ router.post("/register", validate.register, async (req, res) => {
       // Don't fail the registration if audit fails
     }
 
-    // Return success response (without password)
-    const { password: _, ...userResponse } = newUser;
+    const { password: _, verificationToken: __, verificationTokenExpiresAt: ___, ...userResponse } = newUser;
 
     console.log("✅ Registration completed successfully");
     res.status(201).json({
       success: true,
-      message: "User registered successfully",
-      user: userResponse,
+      message: "Account created. Please verify your email to activate your account.",
+      user: {
+        ...userResponse,
+        status: "pending_verification",
+      },
     });
   } catch (error) {
     console.error("🔴 Registration error:", error);
