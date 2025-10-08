@@ -13,7 +13,7 @@ async function checkUser(email) {
 
   try {
     const result = await pool.query(
-      `SELECT id, email, first_name, last_name, is_active, is_verified, created_at, updated_at
+      `SELECT *
        FROM users
        WHERE LOWER(email) = LOWER($1)
        ORDER BY created_at DESC
