@@ -64,6 +64,11 @@ export default defineConfig(({ command }) => {
         "@radix-ui/react-toast",
       ],
       exclude: ["@react-three/fiber", "@react-three/drei", "three"],
+      esbuildOptions: {
+        define: {
+          "process.env.NODE_ENV": JSON.stringify(nodeEnv),
+        },
+      },
     },
     define: {
       "process.env.NODE_ENV": JSON.stringify(nodeEnv),
