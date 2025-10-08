@@ -60,7 +60,7 @@ export default defineConfig({
   },
   define: {
     // Replace process.env.NODE_ENV with actual values
-    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "production"),
+    "process.env.NODE_ENV": JSON.stringify(process.env.NODE_ENV || "development"),
     // Enable dead code elimination for offline fallback in production
     "process.env.ENABLE_OFFLINE_FALLBACK": JSON.stringify(process.env.ENABLE_OFFLINE_FALLBACK || "false"),
     "import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK": JSON.stringify(process.env.VITE_ENABLE_OFFLINE_FALLBACK || "false"),
