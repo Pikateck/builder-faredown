@@ -50,7 +50,7 @@ export interface UserFilters {
 }
 
 class UserManagementService {
-  private baseUrl = "/api/admin/users";
+  private baseUrl = "/admin/users";
 
   /**
    * Get all users with optional filters
