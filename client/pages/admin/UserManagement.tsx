@@ -540,19 +540,34 @@ export default function UserManagement() {
   );
 
   const StatusBadge = ({ status }: { status: User["status"] }) => {
-    const statusConfig = {
-      active: { color: "bg-green-100 text-green-800", icon: CheckCircle },
-      inactive: { color: "bg-red-100 text-red-800", icon: XCircle },
-      pending: { color: "bg-yellow-100 text-yellow-800", icon: Clock },
+    const statusConfig: Record<
+      User["status"],
+      { color: string; icon: typeof CheckCircle; label: string }
+    > = {
+      active: {
+        color: "bg-green-100 text-green-800",
+        icon: CheckCircle,
+        label: "Active",
+      },
+      inactive: {
+        color: "bg-red-100 text-red-800",
+        icon: XCircle,
+        label: "Inactive",
+      },
+      pending: {
+        color: "bg-yellow-100 text-yellow-800",
+        icon: Clock,
+        label: "Pending Verification",
+      },
     };
 
-    const config = statusConfig[status];
+    const config = statusConfig[status] ?? statusConfig.pending;
     const Icon = config.icon;
 
     return (
       <Badge className={`${config.color} flex items-center gap-1`}>
         <Icon className="w-3 h-3" />
-        {status.charAt(0).toUpperCase() + status.slice(1)}
+        {config.label}
       </Badge>
     );
   };
