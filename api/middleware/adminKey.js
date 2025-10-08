@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 function resolveAdminKey() {
-  return (process.env.ADMIN_API_KEY || '').trim();
+  return (process.env.ADMIN_API_KEY || "").trim();
 }
 
 function adminKeyMiddleware(req, res, next) {
@@ -10,16 +10,20 @@ function adminKeyMiddleware(req, res, next) {
   if (!configuredKey) {
     return res.status(500).json({
       success: false,
-      message: 'Admin API key is not configured',
+      message: "Admin API key is not configured",
     });
   }
 
-  const providedKey = (req.get('x-admin-key') || req.query.admin_key || '').trim();
+  const providedKey = (
+    req.get("x-admin-key") ||
+    req.query.admin_key ||
+    ""
+  ).trim();
 
   if (!providedKey || providedKey !== configuredKey) {
     return res.status(401).json({
       success: false,
-      message: 'Access denied: invalid admin key',
+      message: "Access denied: invalid admin key",
     });
   }
 
