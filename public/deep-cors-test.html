@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Deep CORS Diagnostic</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1e1e1e; color: #d4d4d4; }
+        .test { background: #252526; padding: 15px; margin: 10px 0; border-left: 3px solid #007acc; }
+        .success { border-color: #4ec9b0; }
+        .error { border-color: #f48771; }
+        .warning { border-color: #dcdcaa; }
+        pre { background: #1e1e1e; padding: 10px; overflow-x: auto; }
+        button { background: #007acc; color: white; border: none; padding: 8px 16px; cursor: pointer; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Deep CORS Diagnostic</h1>
+    <button onclick="runAllTests()">Run All Tests</button>
+    <div id="results"></div>
+
+    <script>
+        const API_BASE = 'https://builder-faredown-pricing.onrender.com';
+        const ADMIN_KEY = '8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1';
+        const resultsDiv = document.getElementById('results');
+
+        function log(className, title, content) {
+            const div = document.createElement('div');
+            div.className = `test ${className}`;
+            div.innerHTML = `<h3>${title}</h3><pre>${content}</pre>`;
+            resultsDiv.appendChild(div);
+        }
+
+        async function test1_Preflight() {
+            log('warning', 'Test 1: OPTIONS Preflight Request', 'Testing...');
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/users`, {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': window.location.origin,
+                        'Access-Control-Request-Method': 'GET',
+                        'Access-Control-Request-Headers': 'x-admin-key,content-type'
+                    }
+                });
+
+                const headers = {};
+                response.headers.forEach((value, key) => {
+                    if (key.toLowerCase().includes('access-control')) {
+                        headers[key] = value;
+                    }
+                });
+
+                log('success', 'Test 1: OPTIONS Preflight', 
+                    `Status: ${response.status}\n` +
+                    `CORS Headers:\n${JSON.stringify(headers, null, 2)}`
+                );
+            } catch (error) {
+                log('error', 'Test 1: OPTIONS Preflight Failed', error.message);
+            }
+        }
+
+        async function test2_SimpleGET() {
+            log('warning', 'Test 2: Simple GET (no headers)', 'Testing...');
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const data = await response.json();
+                
+                const corsHeader = response.headers.get('access-control-allow-origin');
+                
+                log(corsHeader ? 'success' : 'warning', 'Test 2: Simple GET',
+                    `Status: ${response.status}\n` +
+                    `CORS Header: ${corsHeader || 'MISSING!'}\n` +
+                    `Response: ${JSON.stringify(data, null, 2)}`
+                );
+            } catch (error) {
+                log('error', 'Test 2: Simple GET Failed', error.message);
+            }
+        }
+
+        async function test3_WithAdminKey() {
+            log('warning', 'Test 3: GET with X-Admin-Key header', 'Testing...');
+            try {
+                const response = await fetch(`${API_BASE}/api/admin/users?limit=1`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Admin-Key': ADMIN_KEY
+                    }
+                });
+
+                const corsHeader = response.headers.get('access-control-allow-origin');
+                const data = await response.json();
+                
+                log(response.ok ? 'success' : 'error', 'Test 3: Admin API Call',
+                    `Status: ${response.status}\n` +
+                    `CORS Header: ${corsHeader || 'MISSING!'}\n` +
+                    `Response: ${JSON.stringify(data, null, 2).substring(0, 200)}...`
+                );
+            } catch (error) {
+                log('error', 'Test 3: Admin API Failed', 
+                    `Error: ${error.message}\n` +
+                    `Name: ${error.name}\n` +
+                    `Stack: ${error.stack}`
+                );
+            }
+        }
+
+        async function test4_CSPCheck() {
+            log('warning', 'Test 4: Check CSP Headers', 'Testing...');
+            try {
+                const response = await fetch(`${API_BASE}/api/health`);
+                const csp = response.headers.get('content-security-policy');
+                const coep = response.headers.get('cross-origin-embedder-policy');
+                const coop = response.headers.get('cross-origin-opener-policy');
+                const corp = response.headers.get('cross-origin-resource-policy');
+                
+                log('success', 'Test 4: Security Headers',
+                    `CSP: ${csp || 'none'}\n` +
+                    `COEP: ${coep || 'none'}\n` +
+                    `COOP: ${coop || 'none'}\n` +
+                    `CORP: ${corp || 'none'}`
+                );
+            } catch (error) {
+                log('error', 'Test 4: CSP Check Failed', error.message);
+            }
+        }
+
+        async function test5_OriginCheck() {
+            log('warning', 'Test 5: Origin and Referrer Check', 'Testing...');
+            
+            const info = {
+                'Current Origin': window.location.origin,
+                'Current Host': window.location.hostname,
+                'Protocol': window.location.protocol,
+                'Referrer': document.referrer || 'none',
+                'User Agent': navigator.userAgent.substring(0, 80) + '...'
+            };
+            
+            log('success', 'Test 5: Browser Context', JSON.stringify(info, null, 2));
+        }
+
+        async function test6_DirectXHR() {
+            log('warning', 'Test 6: XMLHttpRequest (bypassing fetch)', 'Testing...');
+            
+            return new Promise((resolve) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('GET', `${API_BASE}/api/admin/users?limit=1`);
+                xhr.setRequestHeader('X-Admin-Key', ADMIN_KEY);
+                xhr.setRequestHeader('Content-Type', 'application/json');
+                
+                xhr.onload = function() {
+                    const corsHeader = xhr.getResponseHeader('access-control-allow-origin');
+                    log('success', 'Test 6: XHR Request',
+                        `Status: ${xhr.status}\n` +
+                        `CORS Header: ${corsHeader || 'MISSING!'}\n` +
+                        `Response: ${xhr.responseText.substring(0, 200)}...`
+                    );
+                    resolve();
+                };
+                
+                xhr.onerror = function() {
+                    log('error', 'Test 6: XHR Failed',
+                        `Status: ${xhr.status}\n` +
+                        `ReadyState: ${xhr.readyState}\n` +
+                        `StatusText: ${xhr.statusText}`
+                    );
+                    resolve();
+                };
+                
+                xhr.send();
+            });
+        }
+
+        async function test7_NetworkTimeline() {
+            log('warning', 'Test 7: Performance Timeline Check', 'Checking...');
+            
+            const entries = performance.getEntriesByType('resource')
+                .filter(e => e.name.includes('builder-faredown-pricing'))
+                .slice(-5);
+            
+            if (entries.length > 0) {
+                const info = entries.map(e => ({
+                    name: e.name.split('/').slice(-2).join('/'),
+                    duration: e.duration.toFixed(2) + 'ms',
+                    transferSize: e.transferSize || 0
+                }));
+                
+                log('success', 'Test 7: Recent API Calls', JSON.stringify(info, null, 2));
+            } else {
+                log('warning', 'Test 7: Network Timeline', 'No recent API calls found');
+            }
+        }
+
+        async function runAllTests() {
+            resultsDiv.innerHTML = '';
+            
+            await test5_OriginCheck();
+            await test1_Preflight();
+            await test2_SimpleGET();
+            await test4_CSPCheck();
+            await test3_WithAdminKey();
+            await test6_DirectXHR();
+            await test7_NetworkTimeline();
+            
+            log('success', '✅ Diagnostic Complete', 'Check results above for CORS issues');
+        }
+
+        // Auto-run on load
+        window.onload = () => {
+            if (window.location.search.includes('auto')) {
+                runAllTests();
+            }
+        };
+    </script>
+</body>
+</html>
