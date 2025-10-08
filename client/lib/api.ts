@@ -334,7 +334,11 @@ export class ApiClient {
     }
   }
 
-  async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+  async get<T>(
+    endpoint: string,
+    params?: Record<string, any>,
+    customHeaders?: Record<string, string>,
+  ): Promise<T> {
     const canUseFallback = !this.shouldBypassFallback(endpoint);
 
     // 🚨 NUCLEAR FIX: FORCE DUBAI PACKAGES + COUNTRIES API 🚨
