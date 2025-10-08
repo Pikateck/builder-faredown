@@ -7,7 +7,7 @@
 ### What Was Happening:
 
 1. ✅ CORS_ORIGIN environment variable was correct
-2. ✅ CORS patterns matched fly.dev  
+2. ✅ CORS patterns matched fly.dev
 3. ✅ CORS headers were being set (`Access-Control-Allow-Origin`)
 4. ❌ **BUT Helmet was adding `cross-origin-resource-policy: same-origin`**
 5. ❌ This CORP header **overrides CORS and blocks cross-origin requests**
@@ -31,7 +31,7 @@ This header tells browsers: "Block any cross-origin requests to this resource" -
 app.use(
   helmet({
     // ... other config ...
-    crossOriginResourcePolicy: false,  // <-- CRITICAL FIX
+    crossOriginResourcePolicy: false, // <-- CRITICAL FIX
   }),
 );
 ```
@@ -68,6 +68,7 @@ Browser just showed "Failed to fetch" without specifying it was CORP blocking, n
 - **CORP** (Cross-Origin Resource Policy): Additional security layer that can BLOCK even CORS-allowed requests
 
 CORP values:
+
 - `same-origin`: Block ALL cross-origin (what was set)
 - `same-site`: Allow same-site only
 - `cross-origin`: Allow cross-origin (what we need)
@@ -84,12 +85,15 @@ Helmet sets `cross-origin-resource-policy: same-origin` by default for security.
 After deploy, run this in browser console:
 
 ```javascript
-fetch('https://builder-faredown-pricing.onrender.com/api/admin/users', {
-  headers: {'X-Admin-Key': '8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1'}
+fetch("https://builder-faredown-pricing.onrender.com/api/admin/users", {
+  headers: {
+    "X-Admin-Key":
+      "8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1",
+  },
 })
-.then(r => r.json())
-.then(console.log)  // Should show users!
-.catch(console.error);  // Should NOT fail
+  .then((r) => r.json())
+  .then(console.log) // Should show users!
+  .catch(console.error); // Should NOT fail
 ```
 
 ---
