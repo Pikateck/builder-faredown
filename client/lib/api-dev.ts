@@ -31,7 +31,11 @@ export class DevApiClient {
     }
   }
 
-  async get<T>(endpoint: string, params?: Record<string, any>): Promise<T> {
+  async get<T>(
+    endpoint: string,
+    params?: Record<string, any>,
+    _customHeaders?: Record<string, string>,
+  ): Promise<T> {
     // DevApiClient always uses fallback data to avoid fetch errors
     console.log(
       `🔄 FALLBACK: ${endpoint} (Live API unavailable - using mock data)`,
