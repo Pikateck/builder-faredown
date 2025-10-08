@@ -23,7 +23,7 @@ The fix is in `api/server.js` which is the **backend** running on Render, NOT Ne
 ### Option 2: Manual Deploy
 
 1. Go to: **https://dashboard.render.com/**
-2. Open: **builder-faredown-pricing** service  
+2. Open: **builder-faredown-pricing** service
 3. Click: **Manual Deploy** dropdown (top right)
 4. Select: **Deploy latest commit** or **Clear build cache & deploy**
 5. Wait 3-5 minutes for deployment

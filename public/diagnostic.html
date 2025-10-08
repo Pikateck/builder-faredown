@@ -1,145 +1,197 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Admin API Diagnostic</title>
     <style>
-        body { font-family: monospace; background: #000; color: #0f0; padding: 20px; }
-        button { background: #0f0; color: #000; border: none; padding: 15px 30px; font-size: 18px; cursor: pointer; margin: 10px; }
-        .error { color: #f00; }
-        .success { color: #0f0; }
-        pre { background: #111; padding: 15px; white-space: pre-wrap; word-wrap: break-word; }
-        h2 { color: #ff0; }
+      body {
+        font-family: monospace;
+        background: #000;
+        color: #0f0;
+        padding: 20px;
+      }
+      button {
+        background: #0f0;
+        color: #000;
+        border: none;
+        padding: 15px 30px;
+        font-size: 18px;
+        cursor: pointer;
+        margin: 10px;
+      }
+      .error {
+        color: #f00;
+      }
+      .success {
+        color: #0f0;
+      }
+      pre {
+        background: #111;
+        padding: 15px;
+        white-space: pre-wrap;
+        word-wrap: break-word;
+      }
+      h2 {
+        color: #ff0;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🔍 Admin API Diagnostic</h1>
     <p>This will test the EXACT request the admin panel makes.</p>
-    
+
     <button onclick="runDiagnostic()">RUN DIAGNOSTIC</button>
-    
+
     <div id="results"></div>
 
     <script>
-        async function runDiagnostic() {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '<h2>Running diagnostic...</h2>';
-            
-            const API_URL = 'https://builder-faredown-pricing.onrender.com/api/admin/users';
-            const ADMIN_KEY = '8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1';
-            
-            let output = '';
-            
-            // Test 1: Check environment
-            output += '<h2>1. Environment Check</h2>';
-            output += '<pre>';
-            output += 'Current URL: ' + window.location.href + '\n';
-            output += 'Origin: ' + window.location.origin + '\n';
-            output += 'Protocol: ' + window.location.protocol + '\n';
-            output += '</pre>';
-            
-            // Test 2: Simple fetch to backend health endpoint
-            output += '<h2>2. Backend Health Check (no auth)</h2>';
-            try {
-                const healthResponse = await fetch('https://builder-faredown-pricing.onrender.com/api/health');
-                output += '<pre class="success">';
-                output += 'Health Status: ' + healthResponse.status + '\n';
-                output += 'CORS Header: ' + (healthResponse.headers.get('access-control-allow-origin') || 'MISSING!') + '\n';
-                const healthData = await healthResponse.json();
-                output += 'Response: ' + JSON.stringify(healthData, null, 2) + '\n';
-                output += '</pre>';
-            } catch (error) {
-                output += '<pre class="error">';
-                output += 'Health check failed: ' + error.message + '\n';
-                output += 'Error type: ' + error.name + '\n';
-                output += '</pre>';
-            }
-            
-            // Test 3: Admin API with key
-            output += '<h2>3. Admin API Request (with X-Admin-Key)</h2>';
-            output += '<p>Calling: ' + API_URL + '</p>';
-            
-            try {
-                const startTime = performance.now();
-                
-                const response = await fetch(API_URL + '?limit=1&_v=diagnostic_' + Date.now(), {
-                    method: 'GET',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-Admin-Key': ADMIN_KEY
-                    },
-                    cache: 'no-store',
-                    credentials: 'omit',
-                    mode: 'cors'
-                });
-                
-                const endTime = performance.now();
-                const duration = (endTime - startTime).toFixed(2);
-                
-                output += '<pre class="success">';
-                output += 'Status: ' + response.status + ' ' + response.statusText + '\n';
-                output += 'Duration: ' + duration + 'ms\n';
-                output += 'Type: ' + response.type + '\n';
-                output += '\nResponse Headers:\n';
-                
-                response.headers.forEach((value, key) => {
-                    if (key.includes('access-control') || key.includes('cors') || key.includes('origin')) {
-                        output += '  ' + key + ': ' + value + '\n';
-                    }
-                });
-                
-                const data = await response.json();
-                output += '\nResponse Body:\n';
-                output += JSON.stringify(data, null, 2).substring(0, 500) + '...\n';
-                output += '</pre>';
-                
-                if (response.ok && data.users) {
-                    output += '<h2 class="success">✅ SUCCESS! Admin API is working!</h2>';
-                    output += '<p>The admin panel should work. If it doesn\'t, there\'s a bug in the React code.</p>';
-                } else {
-                    output += '<h2 class="error">❌ API returned error</h2>';
-                    output += '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
-                }
-                
-            } catch (error) {
-                output += '<pre class="error">';
-                output += '❌ FETCH FAILED\n\n';
-                output += 'Error: ' + error.message + '\n';
-                output += 'Name: ' + error.name + '\n';
-                output += 'Stack: ' + error.stack + '\n\n';
-                
-                output += '🔍 What this means:\n\n';
-                
-                if (error.message.includes('Failed to fetch')) {
-                    output += '1. CORS is blocking the request\n';
-                    output += '2. Network/firewall blocking Render\n';
-                    output += '3. Render service is down\n';
-                    output += '4. CSP policy blocking the request\n\n';
-                    output += 'Check browser DevTools Network tab for exact error.\n';
-                } else if (error.message.includes('network')) {
-                    output += 'Network error - Render might be unreachable from this location.\n';
-                } else {
-                    output += 'Unknown error type.\n';
-                }
-                output += '</pre>';
-            }
-            
-            // Test 4: Check browser capabilities
-            output += '<h2>4. Browser Capabilities</h2>';
-            output += '<pre>';
-            output += 'Fetch API: ' + (typeof fetch === 'function' ? 'Yes ✅' : 'No ❌') + '\n';
-            output += 'Promise: ' + (typeof Promise === 'function' ? 'Yes ✅' : 'No ❌') + '\n';
-            output += 'CORS support: ' + ('withCredentials' in new XMLHttpRequest() ? 'Yes ✅' : 'No ❌') + '\n';
-            output += 'User Agent: ' + navigator.userAgent.substring(0, 80) + '...\n';
-            output += '</pre>';
-            
-            resultsDiv.innerHTML = output;
+      async function runDiagnostic() {
+        const resultsDiv = document.getElementById("results");
+        resultsDiv.innerHTML = "<h2>Running diagnostic...</h2>";
+
+        const API_URL =
+          "https://builder-faredown-pricing.onrender.com/api/admin/users";
+        const ADMIN_KEY =
+          "8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1";
+
+        let output = "";
+
+        // Test 1: Check environment
+        output += "<h2>1. Environment Check</h2>";
+        output += "<pre>";
+        output += "Current URL: " + window.location.href + "\n";
+        output += "Origin: " + window.location.origin + "\n";
+        output += "Protocol: " + window.location.protocol + "\n";
+        output += "</pre>";
+
+        // Test 2: Simple fetch to backend health endpoint
+        output += "<h2>2. Backend Health Check (no auth)</h2>";
+        try {
+          const healthResponse = await fetch(
+            "https://builder-faredown-pricing.onrender.com/api/health",
+          );
+          output += '<pre class="success">';
+          output += "Health Status: " + healthResponse.status + "\n";
+          output +=
+            "CORS Header: " +
+            (healthResponse.headers.get("access-control-allow-origin") ||
+              "MISSING!") +
+            "\n";
+          const healthData = await healthResponse.json();
+          output += "Response: " + JSON.stringify(healthData, null, 2) + "\n";
+          output += "</pre>";
+        } catch (error) {
+          output += '<pre class="error">';
+          output += "Health check failed: " + error.message + "\n";
+          output += "Error type: " + error.name + "\n";
+          output += "</pre>";
         }
-        
-        // Auto-run if ?auto in URL
-        if (window.location.search.includes('auto')) {
-            setTimeout(runDiagnostic, 500);
+
+        // Test 3: Admin API with key
+        output += "<h2>3. Admin API Request (with X-Admin-Key)</h2>";
+        output += "<p>Calling: " + API_URL + "</p>";
+
+        try {
+          const startTime = performance.now();
+
+          const response = await fetch(
+            API_URL + "?limit=1&_v=diagnostic_" + Date.now(),
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+                "X-Admin-Key": ADMIN_KEY,
+              },
+              cache: "no-store",
+              credentials: "omit",
+              mode: "cors",
+            },
+          );
+
+          const endTime = performance.now();
+          const duration = (endTime - startTime).toFixed(2);
+
+          output += '<pre class="success">';
+          output +=
+            "Status: " + response.status + " " + response.statusText + "\n";
+          output += "Duration: " + duration + "ms\n";
+          output += "Type: " + response.type + "\n";
+          output += "\nResponse Headers:\n";
+
+          response.headers.forEach((value, key) => {
+            if (
+              key.includes("access-control") ||
+              key.includes("cors") ||
+              key.includes("origin")
+            ) {
+              output += "  " + key + ": " + value + "\n";
+            }
+          });
+
+          const data = await response.json();
+          output += "\nResponse Body:\n";
+          output += JSON.stringify(data, null, 2).substring(0, 500) + "...\n";
+          output += "</pre>";
+
+          if (response.ok && data.users) {
+            output +=
+              '<h2 class="success">✅ SUCCESS! Admin API is working!</h2>';
+            output +=
+              "<p>The admin panel should work. If it doesn't, there's a bug in the React code.</p>";
+          } else {
+            output += '<h2 class="error">❌ API returned error</h2>';
+            output += "<pre>" + JSON.stringify(data, null, 2) + "</pre>";
+          }
+        } catch (error) {
+          output += '<pre class="error">';
+          output += "❌ FETCH FAILED\n\n";
+          output += "Error: " + error.message + "\n";
+          output += "Name: " + error.name + "\n";
+          output += "Stack: " + error.stack + "\n\n";
+
+          output += "🔍 What this means:\n\n";
+
+          if (error.message.includes("Failed to fetch")) {
+            output += "1. CORS is blocking the request\n";
+            output += "2. Network/firewall blocking Render\n";
+            output += "3. Render service is down\n";
+            output += "4. CSP policy blocking the request\n\n";
+            output += "Check browser DevTools Network tab for exact error.\n";
+          } else if (error.message.includes("network")) {
+            output +=
+              "Network error - Render might be unreachable from this location.\n";
+          } else {
+            output += "Unknown error type.\n";
+          }
+          output += "</pre>";
         }
+
+        // Test 4: Check browser capabilities
+        output += "<h2>4. Browser Capabilities</h2>";
+        output += "<pre>";
+        output +=
+          "Fetch API: " +
+          (typeof fetch === "function" ? "Yes ✅" : "No ❌") +
+          "\n";
+        output +=
+          "Promise: " +
+          (typeof Promise === "function" ? "Yes ✅" : "No ❌") +
+          "\n";
+        output +=
+          "CORS support: " +
+          ("withCredentials" in new XMLHttpRequest() ? "Yes ✅" : "No ❌") +
+          "\n";
+        output +=
+          "User Agent: " + navigator.userAgent.substring(0, 80) + "...\n";
+        output += "</pre>";
+
+        resultsDiv.innerHTML = output;
+      }
+
+      // Auto-run if ?auto in URL
+      if (window.location.search.includes("auto")) {
+        setTimeout(runDiagnostic, 500);
+      }
     </script>
-</body>
+  </body>
 </html>
