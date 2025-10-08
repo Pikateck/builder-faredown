@@ -182,6 +182,71 @@ class EmailService {
     }
   }
 
+  async sendEmailVerification(email, token, firstName = "there") {
+    try {
+      const baseUrl =
+        process.env.APP_PUBLIC_URL ||
+        process.env.OAUTH_REDIRECT_BASE ||
+        process.env.API_SERVER_URL ||
+        process.env.API_BASE_URL?.replace(/\/?api$/, "") ||
+        "https://builder-faredown-pricing.onrender.com";
+
+      const verifyUrl = `${baseUrl.replace(/\/$/, "")}/api/auth/verify-email?token=${token}`;
+      const subject = "Verify your Faredown account";
+      const htmlContent = this.generateVerificationHTML(firstName, verifyUrl);
+      const textContent = this.generateVerificationText(firstName, verifyUrl);
+
+      const mailOptions = {
+        from: {
+          name: this.companyDetails.name + " Support",
+          address: this.companyDetails.email,
+        },
+        to: email,
+        subject,
+        html: htmlContent,
+        text: textContent,
+      };
+
+      const result = await this.transporter.sendMail(mailOptions);
+      console.log("Verification email sent:", result.messageId);
+      return {
+        success: true,
+        messageId: result.messageId,
+        recipient: email,
+      };
+    } catch (error) {
+      console.error("Verification email error:", error);
+      throw new Error(`Failed to send verification email: ${error.message}`);
+    }
+  }
+
+  generateVerificationHTML(firstName, verifyUrl) {
+    return `
+      <div style="font-family: Arial, sans-serif; color: #1a1a1a;">
+        <h2>Welcome to Faredown, ${firstName}!</h2>
+        <p>Thanks for creating an account with us. Please verify your email address to unlock your account and start managing your bookings.</p>
+        <p style="margin: 24px 0;">
+          <a href="${verifyUrl}" style="background-color: #003580; color: #ffffff; padding: 12px 20px; border-radius: 6px; text-decoration: none; font-weight: bold;">Verify Email Address</a>
+        </p>
+        <p>If the button doesn't work, copy and paste this link into your browser:</p>
+        <p style="word-break: break-all;">${verifyUrl}</p>
+        <hr style="margin: 24px 0; border: none; border-top: 1px solid #e5e5e5;" />
+        <p style="font-size: 14px; color: #555;">
+          This link will expire in 24 hours. If you didn't sign up for Faredown, you can safely ignore this email.
+        </p>
+      </div>
+    `;
+  }
+
+  generateVerificationText(firstName, verifyUrl) {
+    return `Welcome to Faredown, ${firstName}!
+
+Please verify your email address by visiting the link below:
+${verifyUrl}
+
+This link will expire in 24 hours. If you did not create this account, you can ignore this email.`;
+  }
+
   /**
    * Send booking cancellation email
    */
