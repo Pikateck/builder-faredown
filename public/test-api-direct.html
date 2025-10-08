@@ -1,244 +1,276 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Direct API Test - Admin Users</title>
     <style>
-        body {
-            font-family: monospace;
-            max-width: 900px;
-            margin: 20px auto;
-            padding: 20px;
-            background: #1a1a1a;
-            color: #00ff00;
-        }
-        .section {
-            background: #2a2a2a;
-            padding: 20px;
-            margin: 20px 0;
-            border: 1px solid #00ff00;
-            border-radius: 4px;
-        }
-        button {
-            background: #00ff00;
-            color: #000;
-            border: none;
-            padding: 15px 30px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            margin: 10px 5px;
-            border-radius: 4px;
-        }
-        button:hover {
-            background: #00cc00;
-        }
-        .error {
-            color: #ff0000;
-        }
-        .success {
-            color: #00ff00;
-        }
-        .info {
-            color: #00aaff;
-        }
-        pre {
-            background: #000;
-            padding: 15px;
-            overflow-x: auto;
-            border: 1px solid #333;
-        }
-        .header-item {
-            margin: 5px 0;
-            padding: 5px;
-            background: #000;
-        }
+      body {
+        font-family: monospace;
+        max-width: 900px;
+        margin: 20px auto;
+        padding: 20px;
+        background: #1a1a1a;
+        color: #00ff00;
+      }
+      .section {
+        background: #2a2a2a;
+        padding: 20px;
+        margin: 20px 0;
+        border: 1px solid #00ff00;
+        border-radius: 4px;
+      }
+      button {
+        background: #00ff00;
+        color: #000;
+        border: none;
+        padding: 15px 30px;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        margin: 10px 5px;
+        border-radius: 4px;
+      }
+      button:hover {
+        background: #00cc00;
+      }
+      .error {
+        color: #ff0000;
+      }
+      .success {
+        color: #00ff00;
+      }
+      .info {
+        color: #00aaff;
+      }
+      pre {
+        background: #000;
+        padding: 15px;
+        overflow-x: auto;
+        border: 1px solid #333;
+      }
+      .header-item {
+        margin: 5px 0;
+        padding: 5px;
+        background: #000;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <h1>🔍 Direct API Diagnostic Test</h1>
-    
+
     <div class="section">
-        <h2>Configuration</h2>
-        <div id="config"></div>
+      <h2>Configuration</h2>
+      <div id="config"></div>
     </div>
 
     <div class="section">
-        <h2>Run Tests</h2>
-        <button onclick="testWithoutCORS()">Test WITHOUT mode: 'cors'</button>
-        <button onclick="testWithCORS()">Test WITH mode: 'cors'</button>
-        <button onclick="testFromCode()">Test Using Actual Frontend Code</button>
+      <h2>Run Tests</h2>
+      <button onclick="testWithoutCORS()">Test WITHOUT mode: 'cors'</button>
+      <button onclick="testWithCORS()">Test WITH mode: 'cors'</button>
+      <button onclick="testFromCode()">Test Using Actual Frontend Code</button>
     </div>
 
     <div class="section">
-        <h2>Test Results</h2>
-        <div id="results"></div>
+      <h2>Test Results</h2>
+      <div id="results"></div>
     </div>
 
     <script>
-        const API_URL = 'https://builder-faredown-pricing.onrender.com/api/admin/users';
-        const ADMIN_KEY = '8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1';
-        
-        function log(message, type = 'info') {
-            const results = document.getElementById('results');
-            const div = document.createElement('div');
-            div.className = type;
-            div.innerHTML = message;
-            results.appendChild(div);
-        }
+      const API_URL =
+        "https://builder-faredown-pricing.onrender.com/api/admin/users";
+      const ADMIN_KEY =
+        "8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1";
 
-        function showConfig() {
-            const config = document.getElementById('config');
-            config.innerHTML = `
+      function log(message, type = "info") {
+        const results = document.getElementById("results");
+        const div = document.createElement("div");
+        div.className = type;
+        div.innerHTML = message;
+        results.appendChild(div);
+      }
+
+      function showConfig() {
+        const config = document.getElementById("config");
+        config.innerHTML = `
                 <div class="header-item"><strong>API URL:</strong> ${API_URL}</div>
                 <div class="header-item"><strong>Admin Key:</strong> ${ADMIN_KEY.substring(0, 20)}...</div>
                 <div class="header-item"><strong>Current Origin:</strong> ${window.location.origin}</div>
                 <div class="header-item"><strong>User Agent:</strong> ${navigator.userAgent.substring(0, 80)}...</div>
             `;
-        }
+      }
 
-        async function testWithoutCORS() {
-            const results = document.getElementById('results');
-            results.innerHTML = '';
-            
-            log('<h3>🧪 TEST 1: Fetch WITHOUT mode: "cors"</h3>');
-            
+      async function testWithoutCORS() {
+        const results = document.getElementById("results");
+        results.innerHTML = "";
+
+        log('<h3>🧪 TEST 1: Fetch WITHOUT mode: "cors"</h3>');
+
+        try {
+          log("📤 Sending request...");
+          const response = await fetch(
+            API_URL + "?limit=1&_test=" + Date.now(),
+            {
+              method: "GET",
+              headers: {
+                "X-Admin-Key": ADMIN_KEY,
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+              },
+              cache: "no-store",
+              credentials: "omit",
+              // NO mode: 'cors'
+            },
+          );
+
+          log(
+            `✅ Response Status: ${response.status} ${response.statusText}`,
+            "success",
+          );
+
+          // Show response headers
+          log("<h4>Response Headers:</h4>");
+          for (const [key, value] of response.headers.entries()) {
+            log(`<div class="header-item">${key}: ${value}</div>`);
+          }
+
+          const data = await response.json();
+          log("<h4>Response Data:</h4>");
+          log(`<pre>${JSON.stringify(data, null, 2)}</pre>`, "success");
+        } catch (error) {
+          log(`❌ ERROR: ${error.message}`, "error");
+          log(`<pre>${JSON.stringify(error, null, 2)}</pre>`, "error");
+        }
+      }
+
+      async function testWithCORS() {
+        const results = document.getElementById("results");
+        results.innerHTML = "";
+
+        log('<h3>🧪 TEST 2: Fetch WITH mode: "cors"</h3>');
+
+        try {
+          log("📤 Sending request with CORS mode...");
+          const response = await fetch(
+            API_URL + "?limit=1&_test=" + Date.now(),
+            {
+              method: "GET",
+              headers: {
+                "X-Admin-Key": ADMIN_KEY,
+                "Content-Type": "application/json",
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+              },
+              cache: "no-store",
+              credentials: "omit",
+              mode: "cors", // WITH CORS MODE
+            },
+          );
+
+          log(
+            `✅ Response Status: ${response.status} ${response.statusText}`,
+            "success",
+          );
+
+          // Show response headers
+          log("<h4>Response Headers:</h4>");
+          for (const [key, value] of response.headers.entries()) {
+            log(`<div class="header-item">${key}: ${value}</div>`);
+          }
+
+          const data = await response.json();
+          log("<h4>Response Data:</h4>");
+          log(`<pre>${JSON.stringify(data, null, 2)}</pre>`, "success");
+        } catch (error) {
+          log(`❌ ERROR: ${error.message}`, "error");
+          log(`<pre>${JSON.stringify(error, null, 2)}</pre>`, "error");
+        }
+      }
+
+      async function testFromCode() {
+        const results = document.getElementById("results");
+        results.innerHTML = "";
+
+        log("<h3>🧪 TEST 3: Using Actual Frontend API Client</h3>");
+
+        try {
+          // Try to use the actual apiClient if available
+          if (window.apiClient) {
+            log("📤 Using window.apiClient...");
+            const response = await window.apiClient.get(
+              "/admin/users",
+              { limit: 1 },
+              { "X-Admin-Key": ADMIN_KEY },
+            );
+            log(
+              "<pre>" + JSON.stringify(response, null, 2) + "</pre>",
+              "success",
+            );
+          } else {
+            log(
+              "⚠️ window.apiClient not available, importing module...",
+              "error",
+            );
+
+            // Try dynamic import
             try {
-                log('📤 Sending request...');
-                const response = await fetch(API_URL + '?limit=1&_test=' + Date.now(), {
-                    method: 'GET',
-                    headers: {
-                        'X-Admin-Key': ADMIN_KEY,
-                        'Content-Type': 'application/json',
-                        'Cache-Control': 'no-cache, no-store, must-revalidate'
-                    },
-                    cache: 'no-store',
-                    credentials: 'omit'
-                    // NO mode: 'cors'
-                });
+              const { apiClient } = await import("/src/lib/api.ts");
+              log("📤 Imported apiClient, making request...");
+              const response = await apiClient.get(
+                "/admin/users",
+                { limit: 1 },
+                { "X-Admin-Key": ADMIN_KEY },
+              );
+              log(
+                "<pre>" + JSON.stringify(response, null, 2) + "</pre>",
+                "success",
+              );
+            } catch (importError) {
+              log(`❌ Import failed: ${importError.message}`, "error");
+              log(
+                "Falling back to manual fetch with exact frontend settings...",
+                "info",
+              );
 
-                log(`✅ Response Status: ${response.status} ${response.statusText}`, 'success');
-                
-                // Show response headers
-                log('<h4>Response Headers:</h4>');
-                for (const [key, value] of response.headers.entries()) {
-                    log(`<div class="header-item">${key}: ${value}</div>`);
-                }
+              // Replicate the exact settings from client/lib/api.ts
+              const url = new URL(API_URL);
+              url.searchParams.append("limit", "1");
+              url.searchParams.append("_v", "fix_" + Date.now());
+              url.searchParams.append("_nocache", "1");
 
-                const data = await response.json();
-                log('<h4>Response Data:</h4>');
-                log(`<pre>${JSON.stringify(data, null, 2)}</pre>`, 'success');
-                
-            } catch (error) {
-                log(`❌ ERROR: ${error.message}`, 'error');
-                log(`<pre>${JSON.stringify(error, null, 2)}</pre>`, 'error');
+              const response = await fetch(url.toString(), {
+                method: "GET",
+                headers: {
+                  "X-Admin-Key": ADMIN_KEY,
+                  "Content-Type": "application/json",
+                  "Cache-Control": "no-cache, no-store, must-revalidate",
+                  Pragma: "no-cache",
+                  Expires: "0",
+                },
+                cache: "no-store",
+                credentials: "omit",
+                mode: "cors",
+              });
+
+              log(
+                `Status: ${response.status}`,
+                response.ok ? "success" : "error",
+              );
+              const data = await response.json();
+              log(
+                "<pre>" + JSON.stringify(data, null, 2) + "</pre>",
+                response.ok ? "success" : "error",
+              );
             }
+          }
+        } catch (error) {
+          log(`❌ ERROR: ${error.message}`, "error");
+          log(`<pre>${error.stack}</pre>`, "error");
         }
+      }
 
-        async function testWithCORS() {
-            const results = document.getElementById('results');
-            results.innerHTML = '';
-            
-            log('<h3>🧪 TEST 2: Fetch WITH mode: "cors"</h3>');
-            
-            try {
-                log('📤 Sending request with CORS mode...');
-                const response = await fetch(API_URL + '?limit=1&_test=' + Date.now(), {
-                    method: 'GET',
-                    headers: {
-                        'X-Admin-Key': ADMIN_KEY,
-                        'Content-Type': 'application/json',
-                        'Cache-Control': 'no-cache, no-store, must-revalidate'
-                    },
-                    cache: 'no-store',
-                    credentials: 'omit',
-                    mode: 'cors' // WITH CORS MODE
-                });
-
-                log(`✅ Response Status: ${response.status} ${response.statusText}`, 'success');
-                
-                // Show response headers
-                log('<h4>Response Headers:</h4>');
-                for (const [key, value] of response.headers.entries()) {
-                    log(`<div class="header-item">${key}: ${value}</div>`);
-                }
-
-                const data = await response.json();
-                log('<h4>Response Data:</h4>');
-                log(`<pre>${JSON.stringify(data, null, 2)}</pre>`, 'success');
-                
-            } catch (error) {
-                log(`❌ ERROR: ${error.message}`, 'error');
-                log(`<pre>${JSON.stringify(error, null, 2)}</pre>`, 'error');
-            }
-        }
-
-        async function testFromCode() {
-            const results = document.getElementById('results');
-            results.innerHTML = '';
-            
-            log('<h3>🧪 TEST 3: Using Actual Frontend API Client</h3>');
-            
-            try {
-                // Try to use the actual apiClient if available
-                if (window.apiClient) {
-                    log('📤 Using window.apiClient...');
-                    const response = await window.apiClient.get('/admin/users', 
-                        { limit: 1 }, 
-                        { 'X-Admin-Key': ADMIN_KEY }
-                    );
-                    log('<pre>' + JSON.stringify(response, null, 2) + '</pre>', 'success');
-                } else {
-                    log('⚠️ window.apiClient not available, importing module...', 'error');
-                    
-                    // Try dynamic import
-                    try {
-                        const { apiClient } = await import('/src/lib/api.ts');
-                        log('📤 Imported apiClient, making request...');
-                        const response = await apiClient.get('/admin/users', 
-                            { limit: 1 }, 
-                            { 'X-Admin-Key': ADMIN_KEY }
-                        );
-                        log('<pre>' + JSON.stringify(response, null, 2) + '</pre>', 'success');
-                    } catch (importError) {
-                        log(`❌ Import failed: ${importError.message}`, 'error');
-                        log('Falling back to manual fetch with exact frontend settings...', 'info');
-                        
-                        // Replicate the exact settings from client/lib/api.ts
-                        const url = new URL(API_URL);
-                        url.searchParams.append('limit', '1');
-                        url.searchParams.append('_v', 'fix_' + Date.now());
-                        url.searchParams.append('_nocache', '1');
-                        
-                        const response = await fetch(url.toString(), {
-                            method: 'GET',
-                            headers: {
-                                'X-Admin-Key': ADMIN_KEY,
-                                'Content-Type': 'application/json',
-                                'Cache-Control': 'no-cache, no-store, must-revalidate',
-                                'Pragma': 'no-cache',
-                                'Expires': '0'
-                            },
-                            cache: 'no-store',
-                            credentials: 'omit',
-                            mode: 'cors'
-                        });
-                        
-                        log(`Status: ${response.status}`, response.ok ? 'success' : 'error');
-                        const data = await response.json();
-                        log('<pre>' + JSON.stringify(data, null, 2) + '</pre>', response.ok ? 'success' : 'error');
-                    }
-                }
-            } catch (error) {
-                log(`❌ ERROR: ${error.message}`, 'error');
-                log(`<pre>${error.stack}</pre>`, 'error');
-            }
-        }
-
-        // Initialize
-        showConfig();
-        log('ℹ️ Ready to run tests. Click a button above.', 'info');
+      // Initialize
+      showConfig();
+      log("ℹ️ Ready to run tests. Click a button above.", "info");
     </script>
-</body>
+  </body>
 </html>

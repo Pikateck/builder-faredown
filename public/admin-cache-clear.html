@@ -1,185 +1,199 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Admin Cache Clear - Faredown</title>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            max-width: 600px;
-            margin: 50px auto;
-            padding: 20px;
-            background: #f5f5f5;
+      body {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+        max-width: 600px;
+        margin: 50px auto;
+        padding: 20px;
+        background: #f5f5f5;
+      }
+      .container {
+        background: white;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+      }
+      h1 {
+        color: #2563eb;
+        margin-bottom: 10px;
+      }
+      .warning {
+        background: #fef3c7;
+        border-left: 4px solid #f59e0b;
+        padding: 15px;
+        margin: 20px 0;
+      }
+      button {
+        background: #dc2626;
+        color: white;
+        border: none;
+        padding: 15px 30px;
+        font-size: 16px;
+        font-weight: 600;
+        border-radius: 6px;
+        cursor: pointer;
+        width: 100%;
+        margin: 10px 0;
+      }
+      button:hover {
+        background: #b91c1c;
+      }
+      .success {
+        background: #d1fae5;
+        border-left: 4px solid #10b981;
+        padding: 15px;
+        margin: 20px 0;
+        display: none;
+      }
+      .step {
+        background: #f3f4f6;
+        padding: 10px;
+        margin: 5px 0;
+        border-radius: 4px;
+        font-family: "Courier New", monospace;
+        font-size: 14px;
+      }
+      .loader {
+        display: none;
+        text-align: center;
+        margin: 20px 0;
+      }
+      .spinner {
+        border: 3px solid #f3f4f6;
+        border-top: 3px solid #2563eb;
+        border-radius: 50%;
+        width: 40px;
+        height: 40px;
+        animation: spin 1s linear infinite;
+        margin: 0 auto;
+      }
+      @keyframes spin {
+        0% {
+          transform: rotate(0deg);
         }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        100% {
+          transform: rotate(360deg);
         }
-        h1 {
-            color: #2563eb;
-            margin-bottom: 10px;
-        }
-        .warning {
-            background: #fef3c7;
-            border-left: 4px solid #f59e0b;
-            padding: 15px;
-            margin: 20px 0;
-        }
-        button {
-            background: #dc2626;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 16px;
-            font-weight: 600;
-            border-radius: 6px;
-            cursor: pointer;
-            width: 100%;
-            margin: 10px 0;
-        }
-        button:hover {
-            background: #b91c1c;
-        }
-        .success {
-            background: #d1fae5;
-            border-left: 4px solid #10b981;
-            padding: 15px;
-            margin: 20px 0;
-            display: none;
-        }
-        .step {
-            background: #f3f4f6;
-            padding: 10px;
-            margin: 5px 0;
-            border-radius: 4px;
-            font-family: 'Courier New', monospace;
-            font-size: 14px;
-        }
-        .loader {
-            display: none;
-            text-align: center;
-            margin: 20px 0;
-        }
-        .spinner {
-            border: 3px solid #f3f4f6;
-            border-top: 3px solid #2563eb;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>🚨 Emergency Cache Clear</h1>
-        <p>This will completely clear your browser cache and reload the admin panel with fresh code.</p>
+      <h1>🚨 Emergency Cache Clear</h1>
+      <p>
+        This will completely clear your browser cache and reload the admin panel
+        with fresh code.
+      </p>
 
-        <div class="warning">
-            <strong>⚠️ Important:</strong> This will:
-            <ul>
-                <li>Unregister all service workers</li>
-                <li>Clear all browser caches</li>
-                <li>Clear local storage</li>
-                <li>Force reload with latest code</li>
-            </ul>
-        </div>
+      <div class="warning">
+        <strong>⚠️ Important:</strong> This will:
+        <ul>
+          <li>Unregister all service workers</li>
+          <li>Clear all browser caches</li>
+          <li>Clear local storage</li>
+          <li>Force reload with latest code</li>
+        </ul>
+      </div>
 
-        <button onclick="emergencyClear()">🔥 CLEAR EVERYTHING & RELOAD</button>
+      <button onclick="emergencyClear()">🔥 CLEAR EVERYTHING & RELOAD</button>
 
-        <div class="loader" id="loader">
-            <div class="spinner"></div>
-            <p>Clearing cache...</p>
-        </div>
+      <div class="loader" id="loader">
+        <div class="spinner"></div>
+        <p>Clearing cache...</p>
+      </div>
 
-        <div class="success" id="success">
-            <strong>✅ Success!</strong> Redirecting to admin panel...
-        </div>
+      <div class="success" id="success">
+        <strong>✅ Success!</strong> Redirecting to admin panel...
+      </div>
 
-        <div id="steps"></div>
+      <div id="steps"></div>
     </div>
 
     <script>
-        function addStep(message) {
-            const steps = document.getElementById('steps');
-            const step = document.createElement('div');
-            step.className = 'step';
-            step.textContent = message;
-            steps.appendChild(step);
+      function addStep(message) {
+        const steps = document.getElementById("steps");
+        const step = document.createElement("div");
+        step.className = "step";
+        step.textContent = message;
+        steps.appendChild(step);
+      }
+
+      async function emergencyClear() {
+        const loader = document.getElementById("loader");
+        const success = document.getElementById("success");
+
+        loader.style.display = "block";
+        addStep("🔄 Starting emergency cache clear...");
+
+        try {
+          // 1. Unregister ALL service workers
+          const registrations =
+            await navigator.serviceWorker.getRegistrations();
+          for (const registration of registrations) {
+            await registration.unregister();
+            addStep(`✅ Unregistered service worker: ${registration.scope}`);
+          }
+
+          // 2. Clear ALL caches
+          const cacheNames = await caches.keys();
+          for (const cacheName of cacheNames) {
+            await caches.delete(cacheName);
+            addStep(`✅ Deleted cache: ${cacheName}`);
+          }
+
+          // 3. Clear localStorage
+          localStorage.clear();
+          addStep("✅ Cleared localStorage");
+
+          // 4. Clear sessionStorage
+          sessionStorage.clear();
+          addStep("✅ Cleared sessionStorage");
+
+          // 5. Clear cookies
+          document.cookie.split(";").forEach((cookie) => {
+            document.cookie = cookie
+              .replace(/^ +/, "")
+              .replace(
+                /=.*/,
+                "=;expires=" + new Date().toUTCString() + ";path=/",
+              );
+          });
+          addStep("✅ Cleared cookies");
+
+          loader.style.display = "none";
+          success.style.display = "block";
+          addStep("🎉 All caches cleared successfully!");
+          addStep("⏳ Redirecting in 2 seconds...");
+
+          // Force hard reload after 2 seconds
+          setTimeout(() => {
+            window.location.href = "/admin/dashboard?_nocache=" + Date.now();
+          }, 2000);
+        } catch (error) {
+          addStep("❌ Error: " + error.message);
+          loader.style.display = "none";
         }
+      }
 
-        async function emergencyClear() {
-            const loader = document.getElementById('loader');
-            const success = document.getElementById('success');
-            
-            loader.style.display = 'block';
-            addStep('🔄 Starting emergency cache clear...');
+      // Show current cache status on load
+      window.addEventListener("load", async () => {
+        const registrations = await navigator.serviceWorker.getRegistrations();
+        const cacheNames = await caches.keys();
 
-            try {
-                // 1. Unregister ALL service workers
-                const registrations = await navigator.serviceWorker.getRegistrations();
-                for (const registration of registrations) {
-                    await registration.unregister();
-                    addStep(`✅ Unregistered service worker: ${registration.scope}`);
-                }
-
-                // 2. Clear ALL caches
-                const cacheNames = await caches.keys();
-                for (const cacheName of cacheNames) {
-                    await caches.delete(cacheName);
-                    addStep(`✅ Deleted cache: ${cacheName}`);
-                }
-
-                // 3. Clear localStorage
-                localStorage.clear();
-                addStep('✅ Cleared localStorage');
-
-                // 4. Clear sessionStorage
-                sessionStorage.clear();
-                addStep('✅ Cleared sessionStorage');
-
-                // 5. Clear cookies
-                document.cookie.split(";").forEach(cookie => {
-                    document.cookie = cookie.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-                });
-                addStep('✅ Cleared cookies');
-
-                loader.style.display = 'none';
-                success.style.display = 'block';
-                addStep('🎉 All caches cleared successfully!');
-                addStep('⏳ Redirecting in 2 seconds...');
-
-                // Force hard reload after 2 seconds
-                setTimeout(() => {
-                    window.location.href = '/admin/dashboard?_nocache=' + Date.now();
-                }, 2000);
-
-            } catch (error) {
-                addStep('❌ Error: ' + error.message);
-                loader.style.display = 'none';
-            }
+        if (registrations.length > 0 || cacheNames.length > 0) {
+          addStep(
+            `⚠️ Found ${registrations.length} service worker(s) and ${cacheNames.length} cache(s)`,
+          );
+          addStep("📝 Click button above to clear everything");
+        } else {
+          addStep("✅ No active caches found");
         }
-
-        // Show current cache status on load
-        window.addEventListener('load', async () => {
-            const registrations = await navigator.serviceWorker.getRegistrations();
-            const cacheNames = await caches.keys();
-            
-            if (registrations.length > 0 || cacheNames.length > 0) {
-                addStep(`⚠️ Found ${registrations.length} service worker(s) and ${cacheNames.length} cache(s)`);
-                addStep('📝 Click button above to clear everything');
-            } else {
-                addStep('✅ No active caches found');
-            }
-        });
+      });
     </script>
-</body>
+  </body>
 </html>
