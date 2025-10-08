@@ -88,7 +88,9 @@ class UserManagementService {
         };
       } else {
         throw new Error(
-          (response as any)?.message || (response as any)?.error || "Failed to fetch users",
+          (response as any)?.message ||
+            (response as any)?.error ||
+            "Failed to fetch users",
         );
       }
     } catch (error) {

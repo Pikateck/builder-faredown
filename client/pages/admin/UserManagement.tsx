@@ -650,7 +650,9 @@ export default function UserManagement() {
                     <SelectItem value="all">All Status</SelectItem>
                     <SelectItem value="active">Active</SelectItem>
                     <SelectItem value="inactive">Inactive</SelectItem>
-                    <SelectItem value="pending">Pending Verification</SelectItem>
+                    <SelectItem value="pending">
+                      Pending Verification
+                    </SelectItem>
                   </SelectContent>
                 </Select>
 
@@ -711,24 +713,30 @@ export default function UserManagement() {
                       </TableRow>
                     ) : (
                       filteredUsers.map((user) => {
-                        const roleConfig =
-                          ROLES[user.role as keyof typeof ROLES] || {
-                            name: "User",
-                            color: "bg-gray-100 text-gray-800",
-                            icon: Users,
-                            permissions: [],
-                          };
+                        const roleConfig = ROLES[
+                          user.role as keyof typeof ROLES
+                        ] || {
+                          name: "User",
+                          color: "bg-gray-100 text-gray-800",
+                          icon: Users,
+                          permissions: [],
+                        };
                         const RoleIcon = roleConfig.icon || Users;
-                        const initials = `${(user.firstName || user.email || "?")
+                        const initials = `${(
+                          user.firstName ||
+                          user.email ||
+                          "?"
+                        )
                           .charAt(0)
                           .toUpperCase()}${(user.lastName || "")
                           .charAt(0)
                           .toUpperCase()}`;
-                        const displayName = `${user.title ? `${user.title} ` : ""}${
-                          user.firstName || ""
-                        } ${user.lastName || ""}`
-                          .trim()
-                          .replace(/\s+/g, " ") || user.email;
+                        const displayName =
+                          `${user.title ? `${user.title} ` : ""}${
+                            user.firstName || ""
+                          } ${user.lastName || ""}`
+                            .trim()
+                            .replace(/\s+/g, " ") || user.email;
 
                         return (
                           <TableRow key={user.id}>

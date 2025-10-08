@@ -107,8 +107,19 @@ app.use(
           "https://accounts.google.com",
           "https://ssl.gstatic.com",
         ],
-        fontSrc: ["'self'", "https://fonts.gstatic.com", "https://ssl.gstatic.com"],
-        imgSrc: ["'self'", "data:", "https:", "http:", "https://ssl.gstatic.com", "https://www.gstatic.com"],
+        fontSrc: [
+          "'self'",
+          "https://fonts.gstatic.com",
+          "https://ssl.gstatic.com",
+        ],
+        imgSrc: [
+          "'self'",
+          "data:",
+          "https:",
+          "http:",
+          "https://ssl.gstatic.com",
+          "https://www.gstatic.com",
+        ],
         scriptSrc: [
           "'self'",
           "'unsafe-inline'",
@@ -124,24 +135,38 @@ app.use(
           "https://oauth2.googleapis.com",
           "https://www.googleapis.com",
         ],
-        frameSrc: ["'self'", "https://accounts.google.com", "https://content.googleapis.com"],
-        frameAncestors: ["'self'", "https://builder.io", "https://*.builder.io"],
+        frameSrc: [
+          "'self'",
+          "https://accounts.google.com",
+          "https://content.googleapis.com",
+        ],
+        frameAncestors: [
+          "'self'",
+          "https://builder.io",
+          "https://*.builder.io",
+        ],
       },
     },
     frameguard: false,
-  })
+  }),
 );
 
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 500,
-  message: { error: "Too many requests from this IP", retryAfter: "15 minutes" },
+  message: {
+    error: "Too many requests from this IP",
+    retryAfter: "15 minutes",
+  },
 });
 const authLimiter = rateLimit({
   windowMs: 15 * 60 * 1000,
   max: 5,
-  message: { error: "Too many authentication attempts", retryAfter: "15 minutes" },
+  message: {
+    error: "Too many authentication attempts",
+    retryAfter: "15 minutes",
+  },
 });
 
 // Core middleware
@@ -154,7 +179,7 @@ app.use(cookieParser());
 // CORS — allow your UI origins + Builder preview
 const envAllowedOrigins = (process.env.CORS_ORIGIN || "")
   .split(",")
-  .map(origin => origin.trim())
+  .map((origin) => origin.trim())
   .filter(Boolean);
 
 const staticAllowedOrigins = [
@@ -182,17 +207,22 @@ const corsMatchers = [
   /^https:\/\/faredown\.com$/i,
 ];
 
-const isOriginAllowed = origin => {
+const isOriginAllowed = (origin) => {
   if (!origin) return true;
-  return corsMatchers.some(matcher =>
-    typeof matcher === "string" ? matcher === origin : matcher.test(origin)
+  return corsMatchers.some((matcher) =>
+    typeof matcher === "string" ? matcher === origin : matcher.test(origin),
   );
 };
 
 const baseCorsOptions = {
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "content-type", "Authorization", "X-Requested-With"],
+  allowedHeaders: [
+    "Content-Type",
+    "content-type",
+    "Authorization",
+    "X-Requested-With",
+  ],
   exposedHeaders: ["Set-Cookie"],
   maxAge: 600,
   preflightContinue: false,
@@ -227,10 +257,13 @@ const ensureCorsHeaders = (req, res, next) => {
   if (origin && isOriginAllowed(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
     res.setHeader("Access-Control-Allow-Credentials", "true");
-    res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
+    res.setHeader(
+      "Access-Control-Allow-Methods",
+      "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+    );
     res.setHeader(
       "Access-Control-Allow-Headers",
-      "Content-Type, content-type, Authorization, X-Requested-With"
+      "Content-Type, content-type, Authorization, X-Requested-With",
     );
     const varyHeader = res.getHeader("Vary");
     res.setHeader("Vary", varyHeader ? `${varyHeader}, Origin` : "Origin");
@@ -274,7 +307,11 @@ app.get("/health", async (req, res) => {
       version: "1.0.0",
       environment: process.env.NODE_ENV || "development",
       uptime: process.uptime(),
-      services: { database: "offline", cache: "connected", external_apis: "operational" },
+      services: {
+        database: "offline",
+        cache: "connected",
+        external_apis: "operational",
+      },
       error: error.message,
     });
   }
@@ -319,7 +356,13 @@ app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
 
 // Other product routes
 app.get("/api/admin/users", adminUsersPublic.listUsers);
-app.use("/api/admin", authenticateToken, requireAdmin, auditLogger, adminRoutes);
+app.use(
+  "/api/admin",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminRoutes,
+);
 app.use("/api/admin-dashboard", adminDashboardRoutes);
 app.use("/api/bookings", authenticateToken, bookingRoutes);
 app.use("/api/users", authenticateToken, usersAdminRoutes);
@@ -362,14 +405,62 @@ app.use("/api/admin/bookings", adminBookingsRoutes);
 app.use("/api/admin/ai", adminAiRoutes);
 app.use("/api/admin/airports", adminAirportsRoutes);
 app.use("/api/db-test", dbTestRoutes);
-app.use("/api/admin/sightseeing", authenticateToken, requireAdmin, auditLogger, adminSightseeingRoutes);
-app.use("/api/admin/packages", authenticateToken, requireAdmin, auditLogger, adminPackagesRoutes);
-app.use("/api/admin/transfers-markup", authenticateToken, requireAdmin, auditLogger, transfersMarkupRoutes);
-app.use("/api/admin/reports", authenticateToken, requireAdmin, auditLogger, adminReportsRoutes);
-app.use("/api/admin/profiles", authenticateToken, requireAdmin, auditLogger, adminProfilesRoutes);
-app.use("/api/admin/extranet", authenticateToken, requireAdmin, auditLogger, adminExtranetRoutes);
-app.use("/api/admin/markup/packages", authenticateToken, requireAdmin, auditLogger, adminMarkupPackagesRoutes);
-app.use("/api/admin/promo", authenticateToken, requireAdmin, auditLogger, adminPromoRoutes);
+app.use(
+  "/api/admin/sightseeing",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminSightseeingRoutes,
+);
+app.use(
+  "/api/admin/packages",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminPackagesRoutes,
+);
+app.use(
+  "/api/admin/transfers-markup",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  transfersMarkupRoutes,
+);
+app.use(
+  "/api/admin/reports",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminReportsRoutes,
+);
+app.use(
+  "/api/admin/profiles",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminProfilesRoutes,
+);
+app.use(
+  "/api/admin/extranet",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminExtranetRoutes,
+);
+app.use(
+  "/api/admin/markup/packages",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminMarkupPackagesRoutes,
+);
+app.use(
+  "/api/admin/promo",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminPromoRoutes,
+);
 // Public endpoint for evidence collection (must be before /api/admin catch-all)
 app.use("/api/verify-users", adminUsersVerifyRoutes);
 
@@ -391,18 +482,37 @@ app.use((err, req, res, next) => {
   console.error("Error:", err);
 
   if (err.name === "JsonWebTokenError") {
-    return res.status(401).json({ error: "Invalid token", message: "Authentication token is invalid" });
+    return res
+      .status(401)
+      .json({
+        error: "Invalid token",
+        message: "Authentication token is invalid",
+      });
   }
   if (err.name === "TokenExpiredError") {
-    return res.status(401).json({ error: "Token expired", message: "Authentication token has expired" });
+    return res
+      .status(401)
+      .json({
+        error: "Token expired",
+        message: "Authentication token has expired",
+      });
   }
   if (err.name === "ValidationError") {
-    return res.status(400).json({ error: "Validation failed", message: err.message, details: err.details });
+    return res
+      .status(400)
+      .json({
+        error: "Validation failed",
+        message: err.message,
+        details: err.details,
+      });
   }
 
   res.status(err.status || 500).json({
     error: "Internal server error",
-    message: process.env.NODE_ENV === "production" ? "Something went wrong" : err.message,
+    message:
+      process.env.NODE_ENV === "production"
+        ? "Something went wrong"
+        : err.message,
     ...(process.env.NODE_ENV !== "production" && { stack: err.stack }),
   });
 });
@@ -426,8 +536,12 @@ app.use("*", (req, res) => {
 
 // Graceful shutdown
 let server;
-process.on("SIGTERM", () => { if (server) server.close(() => console.log("Process terminated")); });
-process.on("SIGINT", () => { if (server) server.close(() => console.log("Process terminated")); });
+process.on("SIGTERM", () => {
+  if (server) server.close(() => console.log("Process terminated"));
+});
+process.on("SIGINT", () => {
+  if (server) server.close(() => console.log("Process terminated"));
+});
 
 // Init DB then start
 async function startServer() {
@@ -438,8 +552,14 @@ async function startServer() {
 
     const { initializeBargainHolds } = require("./routes/bargain-holds");
     if (initializeBargainHolds && db.pool) {
-      try { initializeBargainHolds(db.pool); }
-      catch (e) { console.warn("⚠️ Failed to initialize Bargain Holds with DB pool:", e.message); }
+      try {
+        initializeBargainHolds(db.pool);
+      } catch (e) {
+        console.warn(
+          "⚠️ Failed to initialize Bargain Holds with DB pool:",
+          e.message,
+        );
+      }
     }
     console.log("✅ Database connected and schema ready");
 

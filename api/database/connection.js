@@ -296,7 +296,10 @@ class DatabaseConnection {
         );
       }
     } catch (error) {
-      console.error("❌ Failed ensuring user verification columns:", error.message);
+      console.error(
+        "❌ Failed ensuring user verification columns:",
+        error.message,
+      );
     }
   }
 

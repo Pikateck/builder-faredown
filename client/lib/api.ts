@@ -246,7 +246,9 @@ export class ApiClient {
   }
 
   private shouldBypassFallback(endpoint: string): boolean {
-    return FALLBACK_EXCLUSION_PATTERNS.some((pattern) => pattern.test(endpoint));
+    return FALLBACK_EXCLUSION_PATTERNS.some((pattern) =>
+      pattern.test(endpoint),
+    );
   }
 
   private getHeaders(

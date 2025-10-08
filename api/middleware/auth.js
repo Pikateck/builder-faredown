@@ -13,7 +13,7 @@ const ADMIN_JWT_SECRET =
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "7d";
 
 // Helpers
-const normalizeEmail = email => (email || "").trim().toLowerCase();
+const normalizeEmail = (email) => (email || "").trim().toLowerCase();
 
 // User roles and permissions
 const ROLES = {
@@ -602,9 +602,15 @@ const createUser = async (userData) => {
         user.verificationSentAt = row.verification_sent_at
           ? new Date(row.verification_sent_at)
           : verificationSentAt;
-        user.verifiedAt = row.verified_at ? new Date(row.verified_at) : verifiedAt;
-        user.createdAt = row.created_at ? new Date(row.created_at) : user.createdAt;
-        user.updatedAt = row.updated_at ? new Date(row.updated_at) : user.updatedAt;
+        user.verifiedAt = row.verified_at
+          ? new Date(row.verified_at)
+          : verifiedAt;
+        user.createdAt = row.created_at
+          ? new Date(row.created_at)
+          : user.createdAt;
+        user.updatedAt = row.updated_at
+          ? new Date(row.updated_at)
+          : user.updatedAt;
       } catch (dbError) {
         console.error("🔴 Error persisting user to database:", dbError);
         if (dbError.message && dbError.message.includes("already exists")) {

@@ -50,8 +50,10 @@ async function listUsers(req, res) {
     return;
   }
 
-  const search = typeof req.query.search === "string" ? req.query.search.trim() : "";
-  const status = typeof req.query.status === "string" ? req.query.status.trim() : "";
+  const search =
+    typeof req.query.search === "string" ? req.query.search.trim() : "";
+  const status =
+    typeof req.query.status === "string" ? req.query.status.trim() : "";
   const role = typeof req.query.role === "string" ? req.query.role.trim() : "";
   const page = Math.max(parseInt(req.query.page, 10) || 1, 1);
   const limit = Math.min(Math.max(parseInt(req.query.limit, 10) || 10, 1), 100);
@@ -79,13 +81,17 @@ async function listUsers(req, res) {
     if (status === "pending") {
       conditions.push(`(is_verified IS DISTINCT FROM TRUE)`);
     } else if (status === "active") {
-      conditions.push(`(is_verified = TRUE AND (is_active IS DISTINCT FROM FALSE))`);
+      conditions.push(
+        `(is_verified = TRUE AND (is_active IS DISTINCT FROM FALSE))`,
+      );
     } else if (status === "inactive") {
       conditions.push(`(is_active = FALSE)`);
     }
   }
 
-  const whereClause = conditions.length ? `WHERE ${conditions.join(" AND ")}` : "";
+  const whereClause = conditions.length
+    ? `WHERE ${conditions.join(" AND ")}`
+    : "";
 
   try {
     const countResult = await db.query(

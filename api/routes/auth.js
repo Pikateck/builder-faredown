@@ -226,12 +226,18 @@ router.post("/register", validate.register, async (req, res) => {
       // Don't fail the registration if audit fails
     }
 
-    const { password: _, verificationToken: __, verificationTokenExpiresAt: ___, ...userResponse } = newUser;
+    const {
+      password: _,
+      verificationToken: __,
+      verificationTokenExpiresAt: ___,
+      ...userResponse
+    } = newUser;
 
     console.log("✅ Registration completed successfully");
     res.status(201).json({
       success: true,
-      message: "Account created. Please verify your email to activate your account.",
+      message:
+        "Account created. Please verify your email to activate your account.",
       user: {
         ...userResponse,
         status: "pending_verification",
@@ -276,7 +282,9 @@ router.get("/verify-email", async (req, res) => {
       if (req.accepts("html")) {
         return res
           .status(400)
-          .send(`<html><body><h2>${errorMessage}</h2><p>Please request a new verification email.</p></body></html>`);
+          .send(
+            `<html><body><h2>${errorMessage}</h2><p>Please request a new verification email.</p></body></html>`,
+          );
       }
 
       return res.status(400).json({
