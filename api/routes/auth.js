@@ -288,6 +288,10 @@ router.get("/verify-email", async (req, res) => {
     const user = result.rows[0];
     const successMessage = "Email verified successfully. You can now log in.";
 
+    if (users && typeof users.delete === "function") {
+      users.delete((user.email || "").trim().toLowerCase());
+    }
+
     if (req.accepts("html")) {
       const redirectUrl =
         process.env.APP_PUBLIC_URL ||
