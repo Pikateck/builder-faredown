@@ -243,6 +243,61 @@ async def get_user_analytics(
         user_locations=user_locations
     )
 
+@router.get("/users")
+async def get_all_users(
+    page: int = Query(1, ge=1),
+    limit: int = Query(50, ge=1, le=100),
+    search: Optional[str] = None,
+    admin_user: User = Depends(get_admin_user),
+    db: Session = Depends(get_db)
+):
+    """Get all users with pagination and search"""
+
+    # Base query
+    query = db.query(User)
+
+    # Apply search filter
+    if search:
+        search_filter = or_(
+            User.email.ilike(f"%{search}%"),
+            User.first_name.ilike(f"%{search}%"),
+            User.last_name.ilike(f"%{search}%")
+        )
+        query = query.filter(search_filter)
+
+    # Get total count
+    total = query.count()
+
+    # Apply pagination
+    offset = (page - 1) * limit
+    users = query.order_by(desc(User.created_at)).offset(offset).limit(limit).all()
+
+    # Format response
+    users_data = [
+        {
+            "id": user.id,
+            "email": user.email,
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "phone": user.phone,
+            "is_active": user.is_active,
+            "is_verified": user.is_verified,
+            "is_premium": user.is_premium,
+            "preferred_currency": user.preferred_currency,
+            "created_at": user.created_at.isoformat() if user.created_at else None,
+            "last_login": user.last_login.isoformat() if user.last_login else None,
+        }
+        for user in users
+    ]
+
+    return {
+        "users": users_data,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "total_pages": (total + limit - 1) // limit
+    }
+
 @router.get("/bargain/analytics", response_model=BargainAnalytics)
 async def get_bargain_analytics(
     days: int = Query(30, ge=1, le=365),
@@ -250,20 +305,20 @@ async def get_bargain_analytics(
     db: Session = Depends(get_db)
 ):
     """Get bargain engine analytics"""
-    
+
     start_date = datetime.utcnow() - timedelta(days=days)
-    
+
     # Total sessions in period
     total_sessions = db.query(BargainSession).filter(
         BargainSession.created_at >= start_date
     ).count()
-    
+
     # Successful sessions
     successful_sessions = db.query(BargainSession).filter(
         BargainSession.created_at >= start_date,
         BargainSession.status == BargainStatus.ACCEPTED
     ).count()
-    
+
     # Average savings
     savings_query = db.query(
         func.avg(BargainSession.base_price - BargainSession.agreed_price)
@@ -272,9 +327,9 @@ async def get_bargain_analytics(
         BargainSession.status == BargainStatus.ACCEPTED,
         BargainSession.agreed_price.isnot(None)
     ).scalar()
-    
+
     average_savings = float(savings_query or 0)
-    
+
     # Strategy performance (mock data based on AI strategies)
     strategy_performance = {
         "aggressive": {
@@ -293,7 +348,7 @@ async def get_bargain_analytics(
             "avg_savings": 520.0
         }
     }
-    
+
     return BargainAnalytics(
         total_sessions=total_sessions,
         successful_sessions=successful_sessions,
