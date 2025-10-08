@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin API Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #1a1a1a; color: #0f0; }
+        button { background: #0f0; color: #000; padding: 15px 30px; font-size: 18px; cursor: pointer; border: none; margin: 10px; }
+        pre { background: #000; padding: 15px; overflow-x: auto; white-space: pre-wrap; }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+        .info { color: #00aaff; }
+    </style>
+</head>
+<body>
+    <h1>🔍 Admin API Direct Test</h1>
+    <p class="info">Testing: https://builder-faredown-pricing.onrender.com/api/admin/users</p>
+    <p class="info">Admin Key: 8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1</p>
+    
+    <button onclick="testAPI()">🚀 TEST API NOW</button>
+    <button onclick="testWithWrongKey()">❌ TEST WITH WRONG KEY</button>
+    
+    <div id="result"></div>
+
+    <script>
+        const API_URL = 'https://builder-faredown-pricing.onrender.com/api/admin/users';
+        const CORRECT_KEY = '8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1';
+        const WRONG_KEY = 'admin123';
+
+        function log(msg, className = 'info') {
+            const div = document.createElement('div');
+            div.className = className;
+            div.innerHTML = msg;
+            document.getElementById('result').appendChild(div);
+        }
+
+        function clearResults() {
+            document.getElementById('result').innerHTML = '';
+        }
+
+        async function testAPI() {
+            clearResults();
+            log('<h2>Testing with CORRECT API Key...</h2>');
+            
+            try {
+                log('📡 Sending request to: ' + API_URL);
+                log('🔑 Using Admin Key: ' + CORRECT_KEY.substring(0, 20) + '...');
+                
+                const response = await fetch(API_URL + '?limit=1&_test=' + Date.now(), {
+                    method: 'GET',
+                    headers: {
+                        'X-Admin-Key': CORRECT_KEY,
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    },
+                    cache: 'no-store',
+                    credentials: 'omit',
+                    mode: 'cors'
+                });
+
+                log(`<h3>Response Status: ${response.status} ${response.statusText}</h3>`, 
+                    response.ok ? 'success' : 'error');
+
+                if (response.ok) {
+                    const data = await response.json();
+                    log('<h3>✅ SUCCESS! Data received:</h3>', 'success');
+                    log('<pre>' + JSON.stringify(data, null, 2) + '</pre>', 'success');
+                } else {
+                    const text = await response.text();
+                    log('<h3>❌ API Error:</h3>', 'error');
+                    log('<pre>' + text + '</pre>', 'error');
+                }
+            } catch (error) {
+                log('<h3>❌ NETWORK/FETCH ERROR:</h3>', 'error');
+                log('<pre>' + error.message + '</pre>', 'error');
+                log('<pre>' + error.stack + '</pre>', 'error');
+                log('<p>This usually means CORS is blocking the request or the server is down.</p>', 'error');
+            }
+        }
+
+        async function testWithWrongKey() {
+            clearResults();
+            log('<h2>Testing with WRONG API Key (should fail with 401)...</h2>');
+            
+            try {
+                const response = await fetch(API_URL + '?limit=1&_test=' + Date.now(), {
+                    method: 'GET',
+                    headers: {
+                        'X-Admin-Key': WRONG_KEY,
+                        'Content-Type': 'application/json'
+                    },
+                    cache: 'no-store',
+                    credentials: 'omit',
+                    mode: 'cors'
+                });
+
+                log(`<h3>Response Status: ${response.status} ${response.statusText}</h3>`, 
+                    response.status === 401 ? 'info' : 'error');
+
+                if (response.status === 401) {
+                    log('<p>✅ Correct behavior: Wrong key rejected with 401</p>', 'info');
+                }
+            } catch (error) {
+                log('<h3>❌ ERROR:</h3>', 'error');
+                log('<pre>' + error.message + '</pre>', 'error');
+            }
+        }
+
+        // Auto-run test on load
+        window.addEventListener('load', () => {
+            log('<p>Page loaded. Click button above to test API.</p>');
+        });
+    </script>
+</body>
+</html>
