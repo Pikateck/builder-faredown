@@ -4,6 +4,7 @@
  */
 
 import { DevApiClient } from "./api-dev";
+import "./api-version";
 
 // Enhanced backend URL detection with server-side support
 const getBackendUrl = () => {
@@ -463,7 +464,7 @@ export class ApiClient {
             iso2: "PH",
             name: "Philippines",
             display_name: "Philippines",
-            flag: "🇵🇭",
+            flag: "���🇭",
             flag_emoji: "🇵🇭",
             popular: true,
           },
