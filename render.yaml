@@ -4,7 +4,7 @@ services:
     name: faredown-backend
     env: python
     buildCommand: "cd backend && pip install -r requirements.txt"
-    startCommand: "cd backend && python main.py"
+    startCommand: "cd backend && bash start.sh"
     plan: free
     envVars:
       - key: DEBUG
