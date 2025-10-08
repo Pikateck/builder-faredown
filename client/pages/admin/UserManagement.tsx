@@ -703,8 +703,24 @@ export default function UserManagement() {
                       </TableRow>
                     ) : (
                       filteredUsers.map((user) => {
-                        const roleConfig = ROLES[user.role];
-                        const RoleIcon = roleConfig.icon;
+                        const roleConfig =
+                          ROLES[user.role as keyof typeof ROLES] || {
+                            name: "User",
+                            color: "bg-gray-100 text-gray-800",
+                            icon: Users,
+                            permissions: [],
+                          };
+                        const RoleIcon = roleConfig.icon || Users;
+                        const initials = `${(user.firstName || user.email || "?")
+                          .charAt(0)
+                          .toUpperCase()}${(user.lastName || "")
+                          .charAt(0)
+                          .toUpperCase()}`;
+                        const displayName = `${user.title ? `${user.title} ` : ""}${
+                          user.firstName || ""
+                        } ${user.lastName || ""}`
+                          .trim()
+                          .replace(/\s+/g, " ") || user.email;
 
                         return (
                           <TableRow key={user.id}>
@@ -712,15 +728,11 @@ export default function UserManagement() {
                               <div className="flex items-center space-x-3">
                                 <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
                                   <span className="text-blue-600 font-medium">
-                                    {user.firstName.charAt(0)}
-                                    {user.lastName.charAt(0)}
+                                    {initials}
                                   </span>
                                 </div>
                                 <div>
-                                  <p className="font-medium">
-                                    {user.title} {user.firstName}{" "}
-                                    {user.lastName}
-                                  </p>
+                                  <p className="font-medium">{displayName}</p>
                                   <p className="text-sm text-gray-600">
                                     {user.email}
                                   </p>
