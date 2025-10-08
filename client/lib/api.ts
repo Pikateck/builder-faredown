@@ -256,6 +256,13 @@ export class ApiClient {
     headers["X-Request-ID"] =
       `faredown_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
+    // CRITICAL: Force no-cache for admin requests to bypass all caching
+    if (customHeaders["X-Admin-Key"]) {
+      headers["Cache-Control"] = "no-cache, no-store, must-revalidate";
+      headers["Pragma"] = "no-cache";
+      headers["Expires"] = "0";
+    }
+
     return headers;
   }
 
@@ -762,6 +769,11 @@ export class ApiClient {
           url.searchParams.append(key, String(params[key]));
         }
       });
+    }
+
+    // CRITICAL: Add cache buster for admin routes to force fresh requests
+    if (endpoint.includes("/admin")) {
+      url.searchParams.append("_t", Date.now().toString());
     }
 
     console.log("🔍 API GET Request:", {
