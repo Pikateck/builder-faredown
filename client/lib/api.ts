@@ -764,6 +764,13 @@ export class ApiClient {
       });
     }
 
+    console.log("🔍 API GET Request:", {
+      baseURL: this.baseURL,
+      endpoint,
+      fullURL: url.toString(),
+      hostname: typeof window !== "undefined" ? window.location.hostname : "server",
+    });
+
     const controller = new AbortController();
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
