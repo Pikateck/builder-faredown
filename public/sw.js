@@ -1,4 +1,4 @@
-const CACHE_NAME = "faredown-v4-cors-fix-" + Date.now();
+const CACHE_NAME = "faredown-v5-final-cors-fix-" + Date.now();
 const STATIC_CACHE_URLS = [
   "/",
   "/mobile",
