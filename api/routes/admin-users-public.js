@@ -105,7 +105,7 @@ async function listUsers(req, res) {
           NULL::text AS address,
           NULL::text AS date_of_birth,
           nationality_iso2 AS country_code,
-          COALESCE(role, 'user') AS role,
+          'user'::text AS role,
           is_active,
           is_verified,
           created_at,
