@@ -428,7 +428,9 @@ const getUserByEmailFromDb = async (email) => {
 
   try {
     const result = await db.query(
-      `SELECT id, email, first_name, last_name, password_hash, is_active, created_at, updated_at
+      `SELECT id, email, first_name, last_name, password_hash, is_active, is_verified,
+              verification_token, verification_token_expires_at, verification_sent_at, verified_at,
+              created_at, updated_at
        FROM users
        WHERE lower(email) = $1
        LIMIT 1`,
@@ -449,7 +451,17 @@ const getUserByEmailFromDb = async (email) => {
       role: ROLES.USER,
       department: null,
       isActive: row.is_active !== false,
+      isVerified: row.is_verified === true,
+      verificationToken: row.verification_token || null,
+      verificationTokenExpiresAt: row.verification_token_expires_at
+        ? new Date(row.verification_token_expires_at)
+        : null,
+      verificationSentAt: row.verification_sent_at
+        ? new Date(row.verification_sent_at)
+        : null,
+      verifiedAt: row.verified_at ? new Date(row.verified_at) : null,
       createdAt: row.created_at ? new Date(row.created_at) : new Date(),
+      updatedAt: row.updated_at ? new Date(row.updated_at) : null,
       lastLogin: null,
     };
 
