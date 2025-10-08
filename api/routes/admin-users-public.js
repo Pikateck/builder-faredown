@@ -1,20 +1,8 @@
 const db = require("../database/connection");
 
-function getAdminKey() {
-  return process.env.ADMIN_API_KEY || "admin123";
-}
+'use strict';
 
-function validateAdminKey(req, res) {
-  const adminKey = req.headers["x-admin-key"] || req.query.admin_key;
-  if (!adminKey || adminKey !== getAdminKey()) {
-    res.status(401).json({
-      success: false,
-      message: "Invalid or missing admin key",
-    });
-    return false;
-  }
-  return true;
-}
+const db = require("../database/connection");
 
 function mapStatus(row) {
   if (row.is_verified !== true) {
@@ -46,10 +34,6 @@ function mapUser(row) {
 }
 
 async function listUsers(req, res) {
-  if (!validateAdminKey(req, res)) {
-    return;
-  }
-
   const search =
     typeof req.query.search === "string" ? req.query.search.trim() : "";
   const status =
