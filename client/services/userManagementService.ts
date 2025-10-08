@@ -71,12 +71,22 @@ class UserManagementService {
 
       const response = await apiClient.get(
         `${this.baseUrl}?${params.toString()}`,
+        undefined,
+        getAdminHeaders(),
       );
 
-      if (response.ok) {
-        return response.data;
+      if (response && (response as any).success !== false) {
+        const data = response as any;
+        return {
+          users: data.users || [],
+          total: data.total ?? data.pagination?.total ?? 0,
+          page: data.page ?? data.pagination?.page ?? 1,
+          totalPages: data.totalPages ?? data.pagination?.totalPages ?? 1,
+        };
       } else {
-        throw new Error(response.error || "Failed to fetch users");
+        throw new Error(
+          (response as any)?.message || (response as any)?.error || "Failed to fetch users",
+        );
       }
     } catch (error) {
       console.error("Error fetching users:", error);
