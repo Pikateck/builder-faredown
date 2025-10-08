@@ -16,11 +16,14 @@ export interface AdminUser {
   address: string;
   dateOfBirth: string;
   countryCode: string;
-  role: "super_admin" | "finance" | "sales" | "marketing";
+  role: "super_admin" | "finance" | "sales" | "marketing" | "user";
   status: "active" | "inactive" | "pending";
-  lastLogin: string;
+  lastLogin: string | null;
   createdAt: string;
   permissions: string[];
+  isVerified?: boolean;
+  isActive?: boolean;
+  verifiedAt?: string | null;
   password?: string;
 }
 
