@@ -96,9 +96,25 @@ async function listUsers(req, res) {
 
     const dataParams = [...params, limit, offset];
     const dataResult = await db.query(
-      `SELECT id, email, first_name, last_name, phone, address, date_of_birth, country_code,
-              role, is_active, is_verified, created_at, updated_at, last_login,
-              verification_token, verification_token_expires_at, verification_sent_at, verified_at
+      `SELECT
+          id,
+          email,
+          first_name,
+          last_name,
+          phone,
+          NULL::text AS address,
+          NULL::text AS date_of_birth,
+          nationality_iso2 AS country_code,
+          COALESCE(role, 'user') AS role,
+          is_active,
+          is_verified,
+          created_at,
+          updated_at,
+          NULL::timestamp AS last_login,
+          verification_token,
+          verification_token_expires_at,
+          verification_sent_at,
+          verified_at
        FROM users
        ${whereClause}
        ORDER BY created_at DESC
