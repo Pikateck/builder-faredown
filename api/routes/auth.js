@@ -4,6 +4,7 @@
  */
 
 const express = require("express");
+const crypto = require("crypto");
 const router = express.Router();
 const {
   generateToken,
@@ -16,6 +17,8 @@ const {
 } = require("../middleware/auth");
 const { validate } = require("../middleware/validation");
 const { audit } = require("../middleware/audit");
+const db = require("../database/connection");
+const emailService = require("../services/emailService");
 
 /**
  * @api {post} /api/auth/login User Login
