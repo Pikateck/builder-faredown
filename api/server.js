@@ -77,6 +77,7 @@ const adminMarkupPackagesRoutes = require("./routes/admin-markup-packages");
 const adminPromoRoutes = require("./routes/admin-promo");
 const pricingEngineRoutes = require("./routes/pricing-engine");
 const adminUsersVerifyRoutes = require("./routes/admin-users-verify");
+const adminUsersPublic = require("./routes/admin-users-public");
 
 // Middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
@@ -317,6 +318,7 @@ app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
 });
 
 // Other product routes
+app.get("/api/admin/users", adminUsersPublic.listUsers);
 app.use("/api/admin", authenticateToken, requireAdmin, auditLogger, adminRoutes);
 app.use("/api/admin-dashboard", adminDashboardRoutes);
 app.use("/api/bookings", authenticateToken, bookingRoutes);
@@ -445,7 +447,7 @@ async function startServer() {
       console.log("\n🚀 Faredown API Server Started");
       console.log("================================");
       console.log(`📍 Server URL: http://localhost:${PORT}`);
-      console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
+      console.log(`��� Health Check: http://localhost:${PORT}/health`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
       console.log("================================\n");
     });
