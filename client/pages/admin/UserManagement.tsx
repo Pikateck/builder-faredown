@@ -743,11 +743,11 @@ export default function UserManagement() {
                               <div className="space-y-1">
                                 <div className="flex items-center text-sm">
                                   <Phone className="w-3 h-3 mr-1" />
-                                  {user.phone}
+                                  {user.phone || "Not provided"}
                                 </div>
                                 <div className="flex items-center text-sm text-gray-600">
                                   <MapPin className="w-3 h-3 mr-1" />
-                                  {user.address}
+                                  {user.address || "—"}
                                 </div>
                               </div>
                             </TableCell>
