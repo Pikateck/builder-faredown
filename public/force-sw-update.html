@@ -1,121 +1,140 @@
-<!DOCTYPE html>
+<!doctype html>
 <html>
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Force Update - Unregister Service Worker</title>
     <style>
-        body { 
-            font-family: system-ui; 
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            background: rgba(255,255,255,0.1);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 600px;
-            text-align: center;
-        }
-        h1 { margin-top: 0; font-size: 32px; }
-        button { 
-            background: white;
-            color: #667eea;
-            border: none;
-            padding: 15px 40px;
-            border-radius: 10px;
-            font-size: 18px;
-            font-weight: 600;
-            cursor: pointer;
-            margin: 10px;
-        }
-        button:hover { transform: scale(1.05); }
-        .status { 
-            background: rgba(0,0,0,0.3);
-            padding: 20px;
-            border-radius: 10px;
-            margin-top: 20px;
-            text-align: left;
-            font-family: monospace;
-        }
-        .success { color: #4ade80; }
-        .error { color: #f87171; }
+      body {
+        font-family: system-ui;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 20px;
+      }
+      .container {
+        background: rgba(255, 255, 255, 0.1);
+        backdrop-filter: blur(10px);
+        border-radius: 20px;
+        padding: 40px;
+        max-width: 600px;
+        text-align: center;
+      }
+      h1 {
+        margin-top: 0;
+        font-size: 32px;
+      }
+      button {
+        background: white;
+        color: #667eea;
+        border: none;
+        padding: 15px 40px;
+        border-radius: 10px;
+        font-size: 18px;
+        font-weight: 600;
+        cursor: pointer;
+        margin: 10px;
+      }
+      button:hover {
+        transform: scale(1.05);
+      }
+      .status {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 20px;
+        border-radius: 10px;
+        margin-top: 20px;
+        text-align: left;
+        font-family: monospace;
+      }
+      .success {
+        color: #4ade80;
+      }
+      .error {
+        color: #f87171;
+      }
     </style>
-</head>
-<body>
+  </head>
+  <body>
     <div class="container">
-        <h1>🔄 Force Admin Panel Update</h1>
-        <p>This will unregister the service worker and clear all caches to force load the latest code.</p>
-        
-        <button onclick="forceUpdate()">FORCE UPDATE NOW</button>
-        
-        <div id="status"></div>
+      <h1>🔄 Force Admin Panel Update</h1>
+      <p>
+        This will unregister the service worker and clear all caches to force
+        load the latest code.
+      </p>
+
+      <button onclick="forceUpdate()">FORCE UPDATE NOW</button>
+
+      <div id="status"></div>
     </div>
 
     <script>
-        async function forceUpdate() {
-            const statusDiv = document.getElementById('status');
-            statusDiv.innerHTML = '<div class="status">🔄 Forcing update...</div>';
-            
-            let steps = [];
-            
-            // Step 1: Unregister all service workers
-            try {
-                const registrations = await navigator.serviceWorker.getRegistrations();
-                for (let registration of registrations) {
-                    await registration.unregister();
-                }
-                steps.push(`<div class="success">✓ Unregistered ${registrations.length} service worker(s)</div>`);
-            } catch (e) {
-                steps.push(`<div class="error">✗ Service worker error: ${e.message}</div>`);
-            }
-            
-            // Step 2: Clear all caches
-            try {
-                const cacheNames = await caches.keys();
-                for (let name of cacheNames) {
-                    await caches.delete(name);
-                }
-                steps.push(`<div class="success">✓ Cleared ${cacheNames.length} cache(s)</div>`);
-            } catch (e) {
-                steps.push(`<div class="error">✗ Cache error: ${e.message}</div>`);
-            }
-            
-            // Step 3: Clear local/session storage
-            try {
-                localStorage.clear();
-                sessionStorage.clear();
-                steps.push(`<div class="success">✓ Cleared browser storage</div>`);
-            } catch (e) {
-                steps.push(`<div class="error">✗ Storage error: ${e.message}</div>`);
-            }
-            
-            // Step 4: Show results
-            statusDiv.innerHTML = `
+      async function forceUpdate() {
+        const statusDiv = document.getElementById("status");
+        statusDiv.innerHTML = '<div class="status">🔄 Forcing update...</div>';
+
+        let steps = [];
+
+        // Step 1: Unregister all service workers
+        try {
+          const registrations =
+            await navigator.serviceWorker.getRegistrations();
+          for (let registration of registrations) {
+            await registration.unregister();
+          }
+          steps.push(
+            `<div class="success">✓ Unregistered ${registrations.length} service worker(s)</div>`,
+          );
+        } catch (e) {
+          steps.push(
+            `<div class="error">✗ Service worker error: ${e.message}</div>`,
+          );
+        }
+
+        // Step 2: Clear all caches
+        try {
+          const cacheNames = await caches.keys();
+          for (let name of cacheNames) {
+            await caches.delete(name);
+          }
+          steps.push(
+            `<div class="success">✓ Cleared ${cacheNames.length} cache(s)</div>`,
+          );
+        } catch (e) {
+          steps.push(`<div class="error">✗ Cache error: ${e.message}</div>`);
+        }
+
+        // Step 3: Clear local/session storage
+        try {
+          localStorage.clear();
+          sessionStorage.clear();
+          steps.push(`<div class="success">✓ Cleared browser storage</div>`);
+        } catch (e) {
+          steps.push(`<div class="error">✗ Storage error: ${e.message}</div>`);
+        }
+
+        // Step 4: Show results
+        statusDiv.innerHTML = `
                 <div class="status">
-                    ${steps.join('\n')}
+                    ${steps.join("\n")}
                     <div class="success" style="margin-top: 20px; font-size: 18px;">
                         ✓ Update complete! Redirecting to admin panel in 3 seconds...
                     </div>
                 </div>
             `;
-            
-            // Step 5: Redirect to admin panel
-            setTimeout(() => {
-                window.location.href = '/admin/dashboard?_force=' + Date.now();
-            }, 3000);
-        }
-        
-        // Auto-run if ?auto in URL
-        if (window.location.search.includes('auto')) {
-            setTimeout(forceUpdate, 500);
-        }
+
+        // Step 5: Redirect to admin panel
+        setTimeout(() => {
+          window.location.href = "/admin/dashboard?_force=" + Date.now();
+        }, 3000);
+      }
+
+      // Auto-run if ?auto in URL
+      if (window.location.search.includes("auto")) {
+        setTimeout(forceUpdate, 500);
+      }
     </script>
-</body>
+  </body>
 </html>
