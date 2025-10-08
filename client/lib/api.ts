@@ -980,6 +980,9 @@ export class ApiClient {
         headers: this.getHeaders({ "Content-Type": "application/json" }),
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
+        cache: "no-store",
+        credentials: "omit",
+        mode: "cors",
       });
 
       clearTimeout(timeoutId);
@@ -1026,6 +1029,9 @@ export class ApiClient {
         method: "DELETE",
         headers: this.getHeaders(),
         signal: controller.signal,
+        cache: "no-store",
+        credentials: "omit",
+        mode: "cors",
       });
 
       clearTimeout(timeoutId);
