@@ -1,4 +1,4 @@
-const CACHE_NAME = "faredown-mobile-v2-markup-fix";
+const CACHE_NAME = "faredown-mobile-v3-admin-fix-2025";
 const STATIC_CACHE_URLS = [
   "/",
   "/mobile",
@@ -48,16 +48,18 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  // Handle API requests with network-first strategy
+  // CRITICAL: Completely bypass service worker for admin routes - no caching at all
+  if (
+    event.request.url.includes("/api/admin") ||
+    event.request.url.includes("/api/markup") ||
+    event.request.url.includes("/admin")
+  ) {
+    // Don't use respondWith - just return to let browser handle normally
+    return;
+  }
+
+  // Handle other API requests with network-first strategy
   if (event.request.url.includes("/api/")) {
-    // Skip caching for admin/markup APIs to always get fresh data
-    if (
-      event.request.url.includes("/api/markup") ||
-      event.request.url.includes("/api/admin")
-    ) {
-      event.respondWith(fetch(event.request));
-      return;
-    }
 
     event.respondWith(
       fetch(event.request)
