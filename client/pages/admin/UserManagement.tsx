@@ -535,6 +535,7 @@ export default function UserManagement() {
               <SelectItem value="finance">Finance</SelectItem>
               <SelectItem value="sales">Sales</SelectItem>
               <SelectItem value="marketing">Marketing</SelectItem>
+              <SelectItem value="user">Registered User</SelectItem>
               {formData.role === "super_admin" && (
                 <SelectItem value="super_admin">Super Admin</SelectItem>
               )}
