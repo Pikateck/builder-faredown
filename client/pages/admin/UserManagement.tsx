@@ -635,6 +635,7 @@ export default function UserManagement() {
                     <SelectItem value="finance">Finance</SelectItem>
                     <SelectItem value="sales">Sales</SelectItem>
                     <SelectItem value="marketing">Marketing</SelectItem>
+                    <SelectItem value="user">Registered User</SelectItem>
                   </SelectContent>
                 </Select>
 
