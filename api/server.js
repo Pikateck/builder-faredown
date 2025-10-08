@@ -81,7 +81,7 @@ const adminUsersPublic = require("./routes/admin-users-public");
 
 // Middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
-const { adminKeyMiddleware } = require("./middleware/admin-key");
+const adminKeyMiddleware = require("./middleware/adminKey");
 const { validateRequest } = require("./middleware/validation");
 const { auditLogger } = require("./middleware/audit");
 
@@ -357,7 +357,7 @@ app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
 });
 
 // Other product routes
-app.get("/api/admin/users", adminKeyMiddleware, adminUsersPublic.listUsers);
+app.use("/api/admin/users", adminKeyMiddleware, adminUsersPublic);
 app.use(
   "/api/admin",
   authenticateToken,
