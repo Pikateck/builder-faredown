@@ -368,6 +368,7 @@ app.use("/api/admin/profiles", authenticateToken, requireAdmin, auditLogger, adm
 app.use("/api/admin/extranet", authenticateToken, requireAdmin, auditLogger, adminExtranetRoutes);
 app.use("/api/admin/markup/packages", authenticateToken, requireAdmin, auditLogger, adminMarkupPackagesRoutes);
 app.use("/api/admin/promo", authenticateToken, requireAdmin, auditLogger, adminPromoRoutes);
+// Public endpoint for evidence collection
 app.use("/api/admin/users", adminUsersVerifyRoutes);
 
 // Pricing routes (legacy create function support)
