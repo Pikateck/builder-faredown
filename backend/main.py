@@ -132,9 +132,7 @@ try:
     Base.metadata.create_all(bind=engine)
     print("✅ Database tables created/verified")
 except Exception as e:
-    print(f"❌ Error creating database tables: {e}")
-    import traceback
-    traceback.print_exc()
+    print(f"⚠️  Warning creating database tables (continuing...): {e}")
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
