@@ -81,6 +81,7 @@ const adminUsersPublic = require("./routes/admin-users-public");
 
 // Middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
+const { adminKeyMiddleware } = require("./middleware/admin-key");
 const { validateRequest } = require("./middleware/validation");
 const { auditLogger } = require("./middleware/audit");
 
@@ -222,6 +223,7 @@ const baseCorsOptions = {
     "content-type",
     "Authorization",
     "X-Requested-With",
+    "X-Admin-Key",
   ],
   exposedHeaders: ["Set-Cookie"],
   maxAge: 600,
@@ -263,7 +265,7 @@ const ensureCorsHeaders = (req, res, next) => {
     );
     res.setHeader(
       "Access-Control-Allow-Headers",
-      "Content-Type, content-type, Authorization, X-Requested-With",
+      "Content-Type, content-type, Authorization, X-Requested-With, X-Admin-Key",
     );
     const varyHeader = res.getHeader("Vary");
     res.setHeader("Vary", varyHeader ? `${varyHeader}, Origin` : "Origin");
@@ -355,7 +357,11 @@ app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
 });
 
 // Other product routes
-app.get("/api/admin/users", adminUsersPublic.listUsers);
+app.get(
+  "/api/admin/users",
+  adminKeyMiddleware,
+  adminUsersPublic.listUsers,
+);
 app.use(
   "/api/admin",
   authenticateToken,
