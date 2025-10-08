@@ -9,7 +9,8 @@ export default defineConfig(({ command }) => {
   const isBuild = command === "build";
   const nodeEnv: ViteMode = isBuild ? "production" : "development";
   const enableOfflineFallback = process.env.ENABLE_OFFLINE_FALLBACK ?? "false";
-  const viteOfflineFallback = process.env.VITE_ENABLE_OFFLINE_FALLBACK ?? "false";
+  const viteOfflineFallback =
+    process.env.VITE_ENABLE_OFFLINE_FALLBACK ?? "false";
 
   return {
     plugins: [react()],
@@ -30,7 +31,11 @@ export default defineConfig(({ command }) => {
           manualChunks: {
             vendor: ["react", "react-dom"],
             router: ["react-router-dom"],
-            ui: ["@radix-ui/react-dialog", "@radix-ui/react-dropdown-menu", "@radix-ui/react-toast"],
+            ui: [
+              "@radix-ui/react-dialog",
+              "@radix-ui/react-dropdown-menu",
+              "@radix-ui/react-toast",
+            ],
             forms: ["react-hook-form", "@hookform/resolvers"],
             icons: ["lucide-react"],
             charts: ["recharts"],
@@ -72,8 +77,11 @@ export default defineConfig(({ command }) => {
     },
     define: {
       "process.env.NODE_ENV": JSON.stringify(nodeEnv),
-      "process.env.ENABLE_OFFLINE_FALLBACK": JSON.stringify(enableOfflineFallback),
-      "import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK": JSON.stringify(viteOfflineFallback),
+      "process.env.ENABLE_OFFLINE_FALLBACK": JSON.stringify(
+        enableOfflineFallback,
+      ),
+      "import.meta.env.VITE_ENABLE_OFFLINE_FALLBACK":
+        JSON.stringify(viteOfflineFallback),
     },
   };
 });

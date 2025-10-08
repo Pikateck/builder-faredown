@@ -46,7 +46,9 @@ export default function CmsPage() {
             CMS Preview Error
           </h1>
           <p className="text-gray-600 mb-4">{error}</p>
-          <p className="text-sm text-gray-500">Requested path: {builderUrlPath}</p>
+          <p className="text-sm text-gray-500">
+            Requested path: {builderUrlPath}
+          </p>
         </div>
       </div>
     );
@@ -58,7 +60,9 @@ export default function CmsPage() {
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading CMS content...</p>
-          <p className="text-sm text-gray-500 mt-2">Requested path: {builderUrlPath}</p>
+          <p className="text-sm text-gray-500 mt-2">
+            Requested path: {builderUrlPath}
+          </p>
         </div>
       </div>
     );
