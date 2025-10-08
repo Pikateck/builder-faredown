@@ -20,7 +20,7 @@ try:
     from app import models
     print("✅ Models imported successfully")
 except Exception as e:
-    print(f"❌ Error importing models: {e}")
+    print(f"�� Error importing models: {e}")
     import traceback
     traceback.print_exc()
 
@@ -177,7 +177,7 @@ async def root():
             "✅ Extranet Deal System",
             "✅ Advanced Analytics & Reporting",
             "✅ Multi-currency Support",
-            "�� CMS Integration"
+            "✅ CMS Integration"
         ],
         "timestamp": datetime.now().isoformat()
     }
@@ -190,21 +190,32 @@ async def health_check():
         "timestamp": datetime.now().isoformat()
     }
 
-# Include all API routers
-app.include_router(auth.router, prefix="/api/auth", tags=["Authentication"])
-app.include_router(admin.router, prefix="/api/admin", tags=["Admin Dashboard"])
-app.include_router(users.router, prefix="/api/users", tags=["User Management"])
-app.include_router(bookings.router, prefix="/api/bookings", tags=["Booking Management"])
-app.include_router(airlines.router, prefix="/api/airlines", tags=["Airlines & Flights"])
-app.include_router(hotels.router, prefix="/api/hotels", tags=["Hotels & Accommodation"])
-app.include_router(bargain.router, prefix="/api/bargain", tags=["Bargain Engine"])
-app.include_router(promo.router, prefix="/api/promo", tags=["Promo Codes"])
-app.include_router(currency.router, prefix="/api/currency", tags=["Currency Management"])
-app.include_router(vat.router, prefix="/api/vat", tags=["VAT & Fees"])
-app.include_router(cms.router, prefix="/api/cms", tags=["Content Management"])
-app.include_router(extranet.router, prefix="/api/extranet", tags=["Extranet System"])
-app.include_router(ai.router, prefix="/api/ai", tags=["AI Engine"])
-app.include_router(reports.router, prefix="/api/reports", tags=["Analytics & Reports"])
+# Include all API routers that were successfully imported
+router_config = {
+    "auth": ("/api/auth", ["Authentication"]),
+    "admin": ("/api/admin", ["Admin Dashboard"]),
+    "users": ("/api/users", ["User Management"]),
+    "bookings": ("/api/bookings", ["Booking Management"]),
+    "airlines": ("/api/airlines", ["Airlines & Flights"]),
+    "hotels": ("/api/hotels", ["Hotels & Accommodation"]),
+    "bargain": ("/api/bargain", ["Bargain Engine"]),
+    "promo": ("/api/promo", ["Promo Codes"]),
+    "currency": ("/api/currency", ["Currency Management"]),
+    "vat": ("/api/vat", ["VAT & Fees"]),
+    "cms": ("/api/cms", ["Content Management"]),
+    "extranet": ("/api/extranet", ["Extranet System"]),
+    "ai": ("/api/ai", ["AI Engine"]),
+    "reports": ("/api/reports", ["Analytics & Reports"]),
+}
+
+for name, router_module in routers_to_import:
+    if name in router_config:
+        prefix, tags = router_config[name]
+        try:
+            app.include_router(router_module.router, prefix=prefix, tags=tags)
+            print(f"✅ Mounted {name} router at {prefix}")
+        except Exception as e:
+            print(f"❌ Failed to mount {name} router: {e}")
 
 # Global exception handler
 @app.exception_handler(HTTPException)
