@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fix Admin Panel - Clear Cache</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .card {
+            background: white;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 { color: #1a73e8; margin-top: 0; }
+        button {
+            background: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover { background: #1557b0; }
+        .success { color: #0f9d58; margin: 10px 0; }
+        .error { color: #d93025; margin: 10px 0; }
+        .info { color: #666; margin: 10px 0; font-size: 14px; }
+        .step { 
+            background: #f8f9fa; 
+            padding: 15px; 
+            margin: 15px 0; 
+            border-radius: 6px;
+            border-left: 4px solid #1a73e8;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>🔧 Fix Admin Panel</h1>
+        <p>This will clear all browser caches and service workers to fix the "Failed to fetch" error.</p>
+        
+        <div class="step">
+            <h3>Step 1: Unregister Service Worker</h3>
+            <button onclick="unregisterServiceWorker()">Unregister Service Worker</button>
+            <div id="sw-status"></div>
+        </div>
+
+        <div class="step">
+            <h3>Step 2: Clear All Caches</h3>
+            <button onclick="clearAllCaches()">Clear All Caches</button>
+            <div id="cache-status"></div>
+        </div>
+
+        <div class="step">
+            <h3>Step 3: Clear Local Storage</h3>
+            <button onclick="clearLocalStorage()">Clear Local Storage</button>
+            <div id="storage-status"></div>
+        </div>
+
+        <div class="step">
+            <h3>Step 4: Test Admin API</h3>
+            <button onclick="testAdminAPI()">Test Admin API</button>
+            <div id="api-status"></div>
+        </div>
+
+        <div class="step">
+            <h3>Step 5: Reload Page</h3>
+            <button onclick="hardReload()">Hard Reload</button>
+            <p class="info">This will reload the page and clear browser cache</p>
+        </div>
+    </div>
+
+    <script>
+        async function unregisterServiceWorker() {
+            const status = document.getElementById('sw-status');
+            try {
+                const registrations = await navigator.serviceWorker.getRegistrations();
+                if (registrations.length === 0) {
+                    status.innerHTML = '<p class="info">No service workers registered</p>';
+                    return;
+                }
+                
+                for (let registration of registrations) {
+                    await registration.unregister();
+                }
+                status.innerHTML = '<p class="success">✓ All service workers unregistered!</p>';
+            } catch (error) {
+                status.innerHTML = '<p class="error">✗ Error: ' + error.message + '</p>';
+            }
+        }
+
+        async function clearAllCaches() {
+            const status = document.getElementById('cache-status');
+            try {
+                const cacheNames = await caches.keys();
+                if (cacheNames.length === 0) {
+                    status.innerHTML = '<p class="info">No caches found</p>';
+                    return;
+                }
+                
+                await Promise.all(cacheNames.map(name => caches.delete(name)));
+                status.innerHTML = '<p class="success">✓ Cleared ' + cacheNames.length + ' cache(s): ' + cacheNames.join(', ') + '</p>';
+            } catch (error) {
+                status.innerHTML = '<p class="error">✗ Error: ' + error.message + '</p>';
+            }
+        }
+
+        function clearLocalStorage() {
+            const status = document.getElementById('storage-status');
+            try {
+                const itemCount = localStorage.length;
+                localStorage.clear();
+                sessionStorage.clear();
+                status.innerHTML = '<p class="success">✓ Cleared ' + itemCount + ' localStorage items and sessionStorage</p>';
+            } catch (error) {
+                status.innerHTML = '<p class="error">✗ Error: ' + error.message + '</p>';
+            }
+        }
+
+        async function testAdminAPI() {
+            const status = document.getElementById('api-status');
+            const adminKey = '8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1';
+            
+            try {
+                status.innerHTML = '<p class="info">Testing API...</p>';
+                
+                const response = await fetch('https://builder-faredown-pricing.onrender.com/api/admin/users?limit=1', {
+                    headers: {
+                        'X-Admin-Key': adminKey,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    status.innerHTML = '<p class="success">✓ API Working! Status: ' + response.status + '<br>Users found: ' + (data.users?.length || 0) + '</p>';
+                } else {
+                    status.innerHTML = '<p class="error">✗ API Error: ' + (data.message || response.statusText) + '</p>';
+                }
+            } catch (error) {
+                status.innerHTML = '<p class="error">✗ Network Error: ' + error.message + '</p>';
+            }
+        }
+
+        function hardReload() {
+            window.location.reload(true);
+        }
+
+        // Auto-run on load
+        window.onload = () => {
+            console.log('Admin Panel Fix Tool Loaded');
+        };
+    </script>
+</body>
+</html>
