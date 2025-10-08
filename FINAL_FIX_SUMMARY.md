@@ -1,28 +1,34 @@
 # ✅ ADMIN PANEL FIX - FINAL SOLUTION
 
 ## Issue Summary
+
 The admin panel shows "Failed to fetch" because your browser cached old JavaScript that calls the wrong API URL.
 
 ## What Was Fixed in the Code
 
 ### 1. ✅ API Endpoint Path
+
 - **Before**: `/api/admin/users` (double /api)
 - **After**: `/admin/users` (correct)
 
-### 2. ✅ API Base URL  
+### 2. ✅ API Base URL
+
 - **Before**: Points to fly.dev preview (wrong - that's the frontend!)
 - **After**: Points to Render backend: `https://builder-faredown-pricing.onrender.com/api`
 
 ### 3. ✅ Admin API Key
+
 - **Local**: `ADMIN_API_KEY` set ✓
 - **Frontend**: `VITE_ADMIN_API_KEY` set ✓
 - **Backend (Render)**: Verified working with correct key ✓
 
 ### 4. ✅ Service Worker
+
 - Updated to bypass ALL admin route caching
 - Cache name bumped to force refresh
 
 ### 5. ✅ CORS Configuration
+
 - Render backend already includes fly.dev in allowed origins ✓
 
 ## IMMEDIATE ACTION REQUIRED (Choose One Method)
@@ -30,13 +36,15 @@ The admin panel shows "Failed to fetch" because your browser cached old JavaScri
 ### 🚀 Method 1: Automated Fix (EASIEST - 30 seconds)
 
 **Go to this URL in your browser:**
+
 ```
 https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/clear-cache.html?autoclear
 ```
 
 This will automatically:
+
 1. Clear service workers
-2. Clear all caches  
+2. Clear all caches
 3. Clear localStorage
 4. Redirect to admin panel
 
@@ -51,11 +59,13 @@ Done! ✅
 3. Paste this code and press Enter:
 
 ```javascript
-navigator.serviceWorker.getRegistrations().then(r => r.forEach(x => x.unregister()));
-caches.keys().then(k => k.forEach(n => caches.delete(n)));
+navigator.serviceWorker
+  .getRegistrations()
+  .then((r) => r.forEach((x) => x.unregister()));
+caches.keys().then((k) => k.forEach((n) => caches.delete(n)));
 localStorage.clear();
 sessionStorage.clear();
-setTimeout(() => location.href = '/admin/dashboard?module=users', 1000);
+setTimeout(() => (location.href = "/admin/dashboard?module=users"), 1000);
 ```
 
 Done! ✅

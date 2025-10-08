@@ -34,6 +34,7 @@ https://spontaneous-biscotti-da44bc.netlify.app,http://localhost:5173,https://55
 ### Step 4: Verify Deployment
 
 After deploy completes, test this URL:
+
 ```
 https://builder-faredown-pricing.onrender.com/health
 ```
@@ -56,6 +57,7 @@ Should return JSON with status "healthy".
 After Render redeploys, the admin panel will work immediately. No browser cache clearing needed.
 
 Test by visiting:
+
 ```
 https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev/admin/dashboard?module=users
 ```

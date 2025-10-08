@@ -11,18 +11,21 @@
 ## ✅ What's Working
 
 1. **Backend API** - ✅ Responds correctly (tested: 200 OK)
+
    ```
    https://builder-faredown-pricing.onrender.com/api/admin/users
    ```
 
 2. **Admin Key** - ✅ Correct and validated
+
    ```
    8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1
    ```
 
 3. **CORS Regex Pattern** - ✅ Matches fly.dev URL
+
    ```javascript
-   /^https:\/\/([a-z0-9-]+\.)*fly\.dev$/i
+   /^https:\/\/([a-z0-9-]+\.)*fly\.dev$/i;
    // ✓ Matches: https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev
    ```
 
@@ -40,7 +43,7 @@
 ### Evidence:
 
 1. **Direct fetch test fails** - Even pure JavaScript (no React/Vite) gets "Failed to fetch"
-   - Page: `/admin-direct.html` 
+   - Page: `/admin-direct.html`
    - Error: "Failed to fetch" from browser
    - This proves it's NOT a caching/React issue
 
@@ -60,12 +63,14 @@
 ### On Render Dashboard:
 
 1. **Verify Environment Variable**
+
    ```
    Variable: CORS_ORIGIN
    Value must include: https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev
    ```
 
 2. **Full CORS_ORIGIN Value Should Be**:
+
    ```
    https://spontaneous-biscotti-da44bc.netlify.app,http://localhost:5173,https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev
    ```
@@ -84,6 +89,7 @@
 ## 📊 Technical Flow
 
 ### Current (Broken):
+
 ```
 Browser (fly.dev)
   → OPTIONS preflight to Render
@@ -95,6 +101,7 @@ Browser (fly.dev)
 ```
 
 ### After Fix:
+
 ```
 Browser (fly.dev)
   → OPTIONS preflight to Render

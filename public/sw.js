@@ -60,7 +60,6 @@ self.addEventListener("fetch", (event) => {
 
   // Handle other API requests with network-first strategy
   if (event.request.url.includes("/api/")) {
-
     event.respondWith(
       fetch(event.request)
         .then((response) => {

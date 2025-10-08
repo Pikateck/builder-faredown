@@ -781,7 +781,8 @@ export class ApiClient {
       baseURL: this.baseURL,
       endpoint,
       fullURL: url.toString(),
-      hostname: typeof window !== "undefined" ? window.location.hostname : "server",
+      hostname:
+        typeof window !== "undefined" ? window.location.hostname : "server",
     });
 
     const controller = new AbortController();
