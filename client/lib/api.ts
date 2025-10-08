@@ -796,6 +796,7 @@ export class ApiClient {
         signal: controller.signal,
         cache: "no-store",
         credentials: "omit",
+        mode: "cors",
       });
 
       clearTimeout(timeoutId);
@@ -920,6 +921,9 @@ export class ApiClient {
         headers: this.getHeaders(customHeaders),
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
+        cache: "no-store",
+        credentials: "omit",
+        mode: "cors",
       });
 
       clearTimeout(timeoutId);
