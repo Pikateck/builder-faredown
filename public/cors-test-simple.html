@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Simple CORS Test</title>
+    <style>
+        body { font-family: monospace; padding: 20px; background: #000; color: #0f0; }
+        button { background: #0f0; color: #000; padding: 10px 20px; margin: 10px; border: none; cursor: pointer; }
+        pre { background: #222; padding: 10px; overflow-x: auto; }
+        .error { color: #f00; }
+        .success { color: #0f0; }
+    </style>
+</head>
+<body>
+    <h1>Simple CORS Test</h1>
+    <button onclick="testAPI()">Test Admin API</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            const result = document.getElementById('result');
+            result.innerHTML = '<p>Testing...</p>';
+            
+            const API_URL = 'https://builder-faredown-pricing.onrender.com/api/admin/users';
+            const ADMIN_KEY = '8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1';
+            
+            try {
+                console.log('Calling API:', API_URL);
+                
+                const response = await fetch(API_URL + '?limit=1&_test=' + Date.now(), {
+                    method: 'GET',
+                    headers: {
+                        'X-Admin-Key': ADMIN_KEY,
+                        'Content-Type': 'application/json',
+                        'Cache-Control': 'no-cache'
+                    },
+                    cache: 'no-store',
+                    credentials: 'omit',
+                    mode: 'cors'
+                });
+
+                console.log('Response:', response.status, response.statusText);
+                
+                if (response.ok) {
+                    const data = await response.json();
+                    result.innerHTML = `
+                        <p class="success">✅ SUCCESS! Status: ${response.status}</p>
+                        <p>Users found: ${data.users ? data.users.length : 0}</p>
+                        <pre>${JSON.stringify(data, null, 2).substring(0, 500)}</pre>
+                    `;
+                } else {
+                    result.innerHTML = `
+                        <p class="error">❌ HTTP Error: ${response.status} ${response.statusText}</p>
+                    `;
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                result.innerHTML = `
+                    <p class="error">❌ FETCH ERROR: ${error.message}</p>
+                    <pre>${error.stack}</pre>
+                    <p>Check browser console (F12) for details</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
