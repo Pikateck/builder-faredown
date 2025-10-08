@@ -118,6 +118,7 @@ export const API_CONFIG = {
 
 const FALLBACK_EXCLUSION_PATTERNS: RegExp[] = [
   /^\/(?:api\/)?auth\//,
+  /^\/(?:api\/)?admin/,
   /^\/(?:api\/)?users/,
   /^\/(?:api\/)?bookings/,
   /^\/(?:api\/)?payments/,
