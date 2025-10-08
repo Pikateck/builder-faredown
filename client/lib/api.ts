@@ -772,9 +772,10 @@ export class ApiClient {
       });
     }
 
-    // CRITICAL: Add cache buster for admin routes to force fresh requests
+    // CRITICAL: Force cache bypass with unique version parameter
     if (endpoint.includes("/admin")) {
-      url.searchParams.append("_t", Date.now().toString());
+      url.searchParams.append("_v", "fix_" + Date.now().toString());
+      url.searchParams.append("_nocache", "1");
     }
 
     console.log("🔍 API GET Request:", {
@@ -793,6 +794,8 @@ export class ApiClient {
         method: "GET",
         headers: this.getHeaders(customHeaders),
         signal: controller.signal,
+        cache: "no-store",
+        credentials: "omit",
       });
 
       clearTimeout(timeoutId);
