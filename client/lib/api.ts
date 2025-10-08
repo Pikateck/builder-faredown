@@ -452,7 +452,7 @@ export class ApiClient {
             name: "Malaysia",
             display_name: "Malaysia",
             flag: "🇲🇾",
-            flag_emoji: "🇲������",
+            flag_emoji: "🇲����",
             popular: true,
           },
           {
@@ -862,7 +862,7 @@ export class ApiClient {
             "info",
             `Using fallback data for ${endpoint} due to error: ${error instanceof Error ? error.message : "Unknown error"}`,
           );
-          return this.devClient.get<T>(endpoint, params);
+          return this.devClient.get<T>(endpoint, params, customHeaders);
         } catch (fallbackError) {
           logApiEvent("error", `Fallback also failed for ${endpoint}`, {
             error: fallbackError,
