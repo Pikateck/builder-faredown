@@ -1,7 +1,7 @@
-'use strict';
+"use strict";
 
 function resolveAdminKey() {
-  const configuredKey = (process.env.ADMIN_API_KEY || '').trim();
+  const configuredKey = (process.env.ADMIN_API_KEY || "").trim();
   return configuredKey;
 }
 
@@ -14,7 +14,11 @@ function adminKeyMiddleware(req, res, next) {
     });
   }
 
-  const providedKey = (req.get("x-admin-key") || req.query.admin_key || '').trim();
+  const providedKey = (
+    req.get("x-admin-key") ||
+    req.query.admin_key ||
+    ""
+  ).trim();
 
   if (!providedKey || providedKey !== configuredKey) {
     return res.status(401).json({

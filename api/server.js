@@ -357,11 +357,7 @@ app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
 });
 
 // Other product routes
-app.get(
-  "/api/admin/users",
-  adminKeyMiddleware,
-  adminUsersPublic.listUsers,
-);
+app.get("/api/admin/users", adminKeyMiddleware, adminUsersPublic.listUsers);
 app.use(
   "/api/admin",
   authenticateToken,
@@ -488,29 +484,23 @@ app.use((err, req, res, next) => {
   console.error("Error:", err);
 
   if (err.name === "JsonWebTokenError") {
-    return res
-      .status(401)
-      .json({
-        error: "Invalid token",
-        message: "Authentication token is invalid",
-      });
+    return res.status(401).json({
+      error: "Invalid token",
+      message: "Authentication token is invalid",
+    });
   }
   if (err.name === "TokenExpiredError") {
-    return res
-      .status(401)
-      .json({
-        error: "Token expired",
-        message: "Authentication token has expired",
-      });
+    return res.status(401).json({
+      error: "Token expired",
+      message: "Authentication token has expired",
+    });
   }
   if (err.name === "ValidationError") {
-    return res
-      .status(400)
-      .json({
-        error: "Validation failed",
-        message: err.message,
-        details: err.details,
-      });
+    return res.status(400).json({
+      error: "Validation failed",
+      message: err.message,
+      details: err.details,
+    });
   }
 
   res.status(err.status || 500).json({

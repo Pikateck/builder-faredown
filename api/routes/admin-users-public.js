@@ -1,6 +1,6 @@
 const db = require("../database/connection");
 
-'use strict';
+("use strict");
 
 const db = require("../database/connection");
 
