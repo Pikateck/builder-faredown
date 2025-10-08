@@ -240,9 +240,63 @@ class DatabaseConnection {
       } else {
         console.log("✅ Database schema already exists");
       }
+
+      await this.ensureUserVerificationColumns();
     } catch (error) {
       console.error("❌ Failed to initialize schema:", error);
       throw error;
+    }
+  }
+
+  async ensureUserVerificationColumns() {
+    try {
+      const result = await this.query(
+        `SELECT column_name FROM information_schema.columns WHERE table_name = 'users'`,
+      );
+      const columns = new Set(result.rows.map((row) => row.column_name));
+      const alterations = [];
+
+      if (!columns.has("is_verified")) {
+        alterations.push(
+          "ALTER TABLE users ADD COLUMN IF NOT EXISTS is_verified BOOLEAN DEFAULT false",
+        );
+      }
+      if (!columns.has("verification_token")) {
+        alterations.push(
+          "ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token VARCHAR(255)",
+        );
+      }
+      if (!columns.has("verification_token_expires_at")) {
+        alterations.push(
+          "ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_token_expires_at TIMESTAMP WITH TIME ZONE",
+        );
+      }
+      if (!columns.has("verification_sent_at")) {
+        alterations.push(
+          "ALTER TABLE users ADD COLUMN IF NOT EXISTS verification_sent_at TIMESTAMP WITH TIME ZONE",
+        );
+      }
+      if (!columns.has("verified_at")) {
+        alterations.push(
+          "ALTER TABLE users ADD COLUMN IF NOT EXISTS verified_at TIMESTAMP WITH TIME ZONE",
+        );
+      }
+
+      for (const statement of alterations) {
+        try {
+          await this.query(statement);
+        } catch (error) {
+          console.warn("⚠️  Column alteration warning:", error.message);
+        }
+      }
+
+      if (alterations.length > 0) {
+        await this.query(
+          "UPDATE users SET is_verified = COALESCE(is_verified, false) WHERE is_verified IS NULL",
+        );
+      }
+    } catch (error) {
+      console.error("❌ Failed ensuring user verification columns:", error.message);
     }
   }
 
