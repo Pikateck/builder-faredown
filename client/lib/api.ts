@@ -452,7 +452,7 @@ export class ApiClient {
             name: "Malaysia",
             display_name: "Malaysia",
             flag: "🇲🇾",
-            flag_emoji: "🇲����",
+            flag_emoji: "🇲������",
             popular: true,
           },
           {
@@ -762,7 +762,7 @@ export class ApiClient {
         (!API_CONFIG.OFFLINE_FALLBACK_ENABLED && !this.baseURL))
     ) {
       logApiEvent("info", `Using fallback data for ${endpoint}`);
-      return this.devClient.get<T>(endpoint, params);
+      return this.devClient.get<T>(endpoint, params, customHeaders);
     }
 
     const url = new URL(`${this.baseURL}${endpoint}`);
