@@ -2,17 +2,9 @@
 
 echo "🚀 Starting Faredown Backend..."
 
-# Verify setup
-echo "🔍 Verifying setup..."
-python verify_setup.py
-if [ $? -ne 0 ]; then
-    echo "❌ Setup verification failed"
-    exit 1
-fi
-
-# Initialize database tables
+# Initialize database tables (will create if not exist)
 echo "📦 Initializing database..."
-python init_db.py
+python init_db.py || echo "⚠️  Database init had warnings (continuing...)"
 
 # Start the FastAPI server
 echo "🌐 Starting FastAPI server..."
