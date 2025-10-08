@@ -149,6 +149,8 @@ app.use(
       },
     },
     frameguard: false,
+    // CRITICAL FIX: Disable CORP to allow cross-origin API requests
+    crossOriginResourcePolicy: false,
   }),
 );
 
