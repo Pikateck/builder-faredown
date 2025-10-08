@@ -417,7 +417,7 @@ export class ApiClient {
             name: "Germany",
             display_name: "Germany",
             flag: "🇩🇪",
-            flag_emoji: "🇩🇪",
+            flag_emoji: "🇩��",
             popular: false,
           },
           {
@@ -464,7 +464,7 @@ export class ApiClient {
             iso2: "PH",
             name: "Philippines",
             display_name: "Philippines",
-            flag: "���🇭",
+            flag: "�����🇭",
             flag_emoji: "🇵🇭",
             popular: true,
           },
@@ -922,7 +922,7 @@ export class ApiClient {
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
         cache: "no-store",
-        credentials: "omit",
+        credentials: "include",
         mode: "cors",
       });
 
@@ -981,7 +981,7 @@ export class ApiClient {
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
         cache: "no-store",
-        credentials: "omit",
+        credentials: "include",
         mode: "cors",
       });
 
@@ -1030,7 +1030,7 @@ export class ApiClient {
         headers: this.getHeaders(),
         signal: controller.signal,
         cache: "no-store",
-        credentials: "omit",
+        credentials: "include",
         mode: "cors",
       });
 
