@@ -111,6 +111,12 @@ const ROLES = {
     icon: Briefcase,
     permissions: ["manage_promos", "view_reports", "manage_content"],
   },
+  user: {
+    name: "Registered User",
+    color: "bg-gray-100 text-gray-800",
+    icon: Users,
+    permissions: [],
+  },
 };
 
 const PERMISSIONS = [
