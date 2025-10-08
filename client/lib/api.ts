@@ -795,7 +795,7 @@ export class ApiClient {
         headers: this.getHeaders(customHeaders),
         signal: controller.signal,
         cache: "no-store",
-        credentials: "omit",
+        credentials: "include",
         mode: "cors",
       });
 
