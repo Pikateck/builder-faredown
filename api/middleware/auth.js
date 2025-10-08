@@ -512,6 +512,17 @@ const createUser = async (userData) => {
     const hashedPassword = await hashPassword(userData.password);
     console.log("🔵 Password hashed successfully");
 
+    const isActive =
+      typeof userData.isActive === "boolean" ? userData.isActive : false;
+    const isVerified =
+      typeof userData.isVerified === "boolean" ? userData.isVerified : false;
+    const verificationToken = userData.verificationToken || null;
+    const verificationTokenExpiresAt =
+      userData.verificationTokenExpiresAt || null;
+    const verificationSentAt =
+      userData.verificationSentAt || (verificationToken ? new Date() : null);
+    const verifiedAt = userData.verifiedAt || (isVerified ? new Date() : null);
+
     const user = {
       id: `${normalizedEmail.split("@")[0]}_${Date.now()}`,
       firstName: userData.firstName,
@@ -520,7 +531,12 @@ const createUser = async (userData) => {
       password: hashedPassword,
       role: userData.role || ROLES.USER,
       department: userData.department || null,
-      isActive: true,
+      isActive,
+      isVerified,
+      verificationToken,
+      verificationTokenExpiresAt,
+      verificationSentAt,
+      verifiedAt,
       createdAt: new Date(),
       updatedAt: new Date(),
       lastLogin: null,
@@ -530,21 +546,41 @@ const createUser = async (userData) => {
       id: user.id,
       email: user.email,
       role: user.role,
+      isActive: user.isActive,
+      isVerified: user.isVerified,
     });
 
     if (db && db.isConnected) {
       try {
         const result = await db.query(
-          `INSERT INTO users (email, first_name, last_name, password_hash, is_active)
-           VALUES ($1, $2, $3, $4, $5)
+          `INSERT INTO users (
+             email,
+             first_name,
+             last_name,
+             password_hash,
+             is_active,
+             is_verified,
+             verification_token,
+             verification_token_expires_at,
+             verification_sent_at,
+             verified_at
+           )
+           VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)
            ON CONFLICT (email) DO NOTHING
-           RETURNING id, email, first_name, last_name, password_hash, is_active, created_at, updated_at`,
+           RETURNING id, email, first_name, last_name, password_hash, is_active, is_verified,
+                     verification_token, verification_token_expires_at, verification_sent_at, verified_at,
+                     created_at, updated_at`,
           [
             normalizedEmail,
             user.firstName,
             user.lastName,
             hashedPassword,
-            true,
+            isActive,
+            isVerified,
+            verificationToken,
+            verificationTokenExpiresAt,
+            verificationSentAt,
+            verifiedAt,
           ],
         );
 
@@ -558,6 +594,15 @@ const createUser = async (userData) => {
         user.firstName = row.first_name || user.firstName;
         user.lastName = row.last_name || user.lastName;
         user.isActive = row.is_active !== false;
+        user.isVerified = row.is_verified === true;
+        user.verificationToken = row.verification_token || verificationToken;
+        user.verificationTokenExpiresAt = row.verification_token_expires_at
+          ? new Date(row.verification_token_expires_at)
+          : verificationTokenExpiresAt;
+        user.verificationSentAt = row.verification_sent_at
+          ? new Date(row.verification_sent_at)
+          : verificationSentAt;
+        user.verifiedAt = row.verified_at ? new Date(row.verified_at) : verifiedAt;
         user.createdAt = row.created_at ? new Date(row.created_at) : user.createdAt;
         user.updatedAt = row.updated_at ? new Date(row.updated_at) : user.updatedAt;
       } catch (dbError) {
