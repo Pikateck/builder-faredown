@@ -14,6 +14,7 @@ const {
   getUserByUsername,
   createUser,
   authenticateToken,
+  users,
 } = require("../middleware/auth");
 const { validate } = require("../middleware/validation");
 const { audit } = require("../middleware/audit");
