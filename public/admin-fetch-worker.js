@@ -28,10 +28,12 @@ self.addEventListener("fetch", (event) => {
   event.respondWith(
     (async () => {
       try {
-        const requestUrl = event.request.url.replace(
-          url.origin,
-          ADMIN_API_BASE,
-        );
+        const backendBase = new URL(ADMIN_API_BASE);
+        const baseUrl = `${backendBase.origin}${backendBase.pathname.replace(/\/$/, "")}`;
+        const relativePath = url.pathname.startsWith("/api/")
+          ? url.pathname.slice(5)
+          : url.pathname.replace(/^\//, "");
+        const requestUrl = `${baseUrl}/${relativePath}${url.search}`;
 
         const headers = new Headers(event.request.headers);
         headers.set("X-Admin-Key", ADMIN_API_KEY);
