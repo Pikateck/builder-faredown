@@ -355,6 +355,15 @@ export default function AdminDashboard() {
   }, [searchParams, activeModule, setSearchParams]);
 
   useEffect(() => {
+    // Register service worker to bypass FullStory for admin API calls
+    registerAdminWorker().then(success => {
+      if (success) {
+        console.log('✅ Admin Service Worker ready - FullStory bypass active');
+      } else {
+        console.warn('⚠️ Admin Service Worker failed - may encounter FullStory issues');
+      }
+    });
+
     checkAuth();
     loadSupplierAnalytics();
   }, []);
