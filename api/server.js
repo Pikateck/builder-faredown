@@ -275,7 +275,10 @@ const ensureCorsHeaders = (req, res, next) => {
     res.setHeader("Access-Control-Allow-Credentials", "false");
   } else {
     res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Credentials", allowed ? "true" : "false");
+    res.setHeader(
+      "Access-Control-Allow-Credentials",
+      allowed ? "true" : "false",
+    );
   }
 
   res.setHeader("Access-Control-Allow-Methods", ACCESS_CONTROL_ALLOW_METHODS);

@@ -28,9 +28,14 @@ export async function registerAdminWorker(): Promise<boolean> {
 
     const readyRegistration = await navigator.serviceWorker.ready;
     if (readyRegistration.active) {
-      console.log("✅ Admin Service Worker active:", readyRegistration.active.state);
+      console.log(
+        "✅ Admin Service Worker active:",
+        readyRegistration.active.state,
+      );
     } else {
-      console.warn("⚠️ Admin Service Worker ready but no active worker detected");
+      console.warn(
+        "⚠️ Admin Service Worker ready but no active worker detected",
+      );
     }
 
     return true;

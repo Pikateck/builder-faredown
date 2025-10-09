@@ -202,10 +202,13 @@ export class ApiClient {
         const baseOrigin = new URL(this.baseURL, window.location.href).origin;
         this.includeCredentials = baseOrigin === window.location.origin;
       } catch (error) {
-        console.warn("⚠️ Could not determine API origin, disabling credentials", {
-          baseURL: this.baseURL,
-          error,
-        });
+        console.warn(
+          "⚠️ Could not determine API origin, disabling credentials",
+          {
+            baseURL: this.baseURL,
+            error,
+          },
+        );
         this.includeCredentials = false;
       }
     }

@@ -41,7 +41,8 @@ self.addEventListener("fetch", (event) => {
         headers.set("X-Admin-Key", ADMIN_API_KEY);
 
         const method = event.request.method || "GET";
-        const hasBody = method !== "GET" && method !== "HEAD" && method !== "OPTIONS";
+        const hasBody =
+          method !== "GET" && method !== "HEAD" && method !== "OPTIONS";
 
         if (hasBody && !headers.has("Content-Type")) {
           headers.set("Content-Type", "application/json");
