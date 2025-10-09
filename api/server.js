@@ -266,22 +266,6 @@ const corsOptionsDelegate = (req, callback) => {
   return callback(null, { ...baseCorsOptions, origin, credentials: false });
 };
 
-const ACCESS_CONTROL_ALLOW_HEADERS = [
-  "Content-Type",
-  "content-type",
-  "Authorization",
-  "authorization",
-  "X-Admin-Key",
-  "x-admin-key",
-  "X-Requested-With",
-  "Accept",
-  "accept",
-  "Origin",
-  "origin",
-].join(", ");
-
-const ACCESS_CONTROL_ALLOW_METHODS = "GET,POST,PUT,PATCH,DELETE,OPTIONS";
-
 const ensureCorsHeaders = (req, res, next) => {
   const origin = req.headers.origin || "*";
   const allowed = isOriginAllowed(req.headers.origin);
