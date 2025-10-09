@@ -13,10 +13,12 @@ export default defineConfig(({ command }) => {
 
   return {
     plugins: [react()],
+    publicDir: "public", // Ensure public files (including Service Worker) are copied
     build: {
       outDir: "dist/spa",
       sourcemap: false,
       emptyOutDir: true,
+      copyPublicDir: true, // Explicitly copy public directory
       minify: "terser",
       terserOptions: {
         compress: {
