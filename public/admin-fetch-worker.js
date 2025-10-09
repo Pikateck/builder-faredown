@@ -54,7 +54,9 @@ self.addEventListener("fetch", (event) => {
           headers.delete("x-request-id");
         }
 
-        console.log("[SW] intercept", requestUrl, {
+        console.log("[SW] intercept", {
+          original: event.request.url,
+          rewritten: requestUrl,
           method,
           hasAdminKey: headers.has("X-Admin-Key"),
           outgoingHeaders: Array.from(headers.keys()),
