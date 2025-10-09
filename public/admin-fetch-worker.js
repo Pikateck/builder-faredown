@@ -20,8 +20,13 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   const url = new URL(event.request.url);
 
-  // Only intercept admin API calls
-  if (!url.pathname.includes("/admin")) {
+  // Ignore navigation/asset requests
+  if (event.request.mode === "navigate" || event.request.destination === "document") {
+    return;
+  }
+
+  // Only intercept API calls under /api/admin
+  if (!url.pathname.startsWith("/api/admin")) {
     return;
   }
 
