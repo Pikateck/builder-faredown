@@ -5,6 +5,7 @@
 
 import { DevApiClient } from "./api-dev";
 import "./api-version";
+import { xhrFetch } from "./xhr-fetch-polyfill";
 
 // Enhanced backend URL detection with server-side support
 const getBackendUrl = () => {
@@ -814,14 +815,14 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      // CRITICAL: Use native fetch to bypass FullStory for admin calls
-      const fetchFn = endpoint.includes('/admin') ? this.getNativeFetch() : fetch;
+      // CRITICAL: Use XHR-based fetch for admin calls to completely bypass FullStory
+      const isAdminEndpoint = endpoint.includes('/admin');
+      const fetchFn = isAdminEndpoint ? xhrFetch : fetch;
 
       console.log('🔍 FETCH DEBUG:', {
         endpoint,
         fullURL: url.toString(),
-        usingNativeFetch: endpoint.includes('/admin'),
-        nativeFetchAvailable: !!(window as any).__NATIVE_FETCH__,
+        usingXHRFetch: isAdminEndpoint,
         headers: this.getHeaders(customHeaders)
       });
 
@@ -829,9 +830,7 @@ export class ApiClient {
         method: "GET",
         headers: this.getHeaders(customHeaders),
         signal: controller.signal,
-        cache: "no-store",
         credentials: "include",
-        mode: "cors",
       });
 
       console.log('✅ FETCH SUCCESS:', { endpoint, status: response.status });
@@ -964,17 +963,16 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      // CRITICAL: Use native fetch to bypass FullStory for admin calls
-      const fetchFn = endpoint.includes('/admin') ? this.getNativeFetch() : fetch;
+      // CRITICAL: Use XHR-based fetch for admin calls to completely bypass FullStory
+      const isAdminEndpoint = endpoint.includes('/admin');
+      const fetchFn = isAdminEndpoint ? xhrFetch : fetch;
 
       const response = await fetchFn(`${this.baseURL}${endpoint}`, {
         method: "POST",
         headers: this.getHeaders(customHeaders),
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
-        cache: "no-store",
         credentials: "include",
-        mode: "cors",
       });
 
       clearTimeout(timeoutId);
@@ -1026,17 +1024,16 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      // CRITICAL: Use native fetch to bypass FullStory for admin calls
-      const fetchFn = endpoint.includes('/admin') ? this.getNativeFetch() : fetch;
+      // CRITICAL: Use XHR-based fetch for admin calls to completely bypass FullStory
+      const isAdminEndpoint = endpoint.includes('/admin');
+      const fetchFn = isAdminEndpoint ? xhrFetch : fetch;
 
       const response = await fetchFn(`${this.baseURL}${endpoint}`, {
         method: "PUT",
         headers: this.getHeaders({ "Content-Type": "application/json" }),
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
-        cache: "no-store",
         credentials: "include",
-        mode: "cors",
       });
 
       clearTimeout(timeoutId);
@@ -1079,16 +1076,15 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      // CRITICAL: Use native fetch to bypass FullStory for admin calls
-      const fetchFn = endpoint.includes('/admin') ? this.getNativeFetch() : fetch;
+      // CRITICAL: Use XHR-based fetch for admin calls to completely bypass FullStory
+      const isAdminEndpoint = endpoint.includes('/admin');
+      const fetchFn = isAdminEndpoint ? xhrFetch : fetch;
 
       const response = await fetchFn(`${this.baseURL}${endpoint}`, {
         method: "DELETE",
         headers: this.getHeaders(),
         signal: controller.signal,
-        cache: "no-store",
         credentials: "include",
-        mode: "cors",
       });
 
       clearTimeout(timeoutId);
