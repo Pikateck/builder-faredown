@@ -8,6 +8,7 @@ import React, { useState, useEffect } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { adminAuthService, PERMISSIONS } from "@/services/adminAuthService";
+import { registerAdminWorker } from "@/lib/register-admin-worker";
 import { currencyService } from "@/services/currencyService";
 import PromoCodeManager from "./PromoCodeManager";
 import UserManagement from "./UserManagement";
