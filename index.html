@@ -33,6 +33,8 @@
   </head>
   <body>
     <div id="root"></div>
+    <!-- CRITICAL: Load BEFORE main.tsx to capture native fetch before FullStory wraps it -->
+    <script src="/native-fetch-guard.js"></script>
     <script type="module" src="/client/main.tsx"></script>
   </body>
 </html>

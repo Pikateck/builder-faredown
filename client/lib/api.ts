@@ -331,6 +331,14 @@ export class ApiClient {
     }
   }
 
+  private getNativeFetch(): typeof fetch {
+    // CRITICAL: Use native fetch to bypass FullStory wrapper
+    if (typeof window !== 'undefined' && (window as any).__NATIVE_FETCH__) {
+      return (window as any).__NATIVE_FETCH__;
+    }
+    return fetch;
+  }
+
   async get<T>(
     endpoint: string,
     params?: Record<string, any>,
@@ -790,7 +798,10 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      const response = await fetch(url.toString(), {
+      // CRITICAL: Use native fetch to bypass FullStory for admin calls
+      const fetchFn = endpoint.includes('/admin') ? this.getNativeFetch() : fetch;
+
+      const response = await fetchFn(url.toString(), {
         method: "GET",
         headers: this.getHeaders(customHeaders),
         signal: controller.signal,
@@ -916,7 +927,10 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
+      // CRITICAL: Use native fetch to bypass FullStory for admin calls
+      const fetchFn = endpoint.includes('/admin') ? this.getNativeFetch() : fetch;
+
+      const response = await fetchFn(`${this.baseURL}${endpoint}`, {
         method: "POST",
         headers: this.getHeaders(customHeaders),
         body: data ? JSON.stringify(data) : undefined,
@@ -975,7 +989,10 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
+      // CRITICAL: Use native fetch to bypass FullStory for admin calls
+      const fetchFn = endpoint.includes('/admin') ? this.getNativeFetch() : fetch;
+
+      const response = await fetchFn(`${this.baseURL}${endpoint}`, {
         method: "PUT",
         headers: this.getHeaders({ "Content-Type": "application/json" }),
         body: data ? JSON.stringify(data) : undefined,
@@ -1025,7 +1042,10 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      const response = await fetch(`${this.baseURL}${endpoint}`, {
+      // CRITICAL: Use native fetch to bypass FullStory for admin calls
+      const fetchFn = endpoint.includes('/admin') ? this.getNativeFetch() : fetch;
+
+      const response = await fetchFn(`${this.baseURL}${endpoint}`, {
         method: "DELETE",
         headers: this.getHeaders(),
         signal: controller.signal,
