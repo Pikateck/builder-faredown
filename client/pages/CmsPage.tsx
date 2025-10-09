@@ -10,21 +10,13 @@ export default function CmsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function loadBuilder() {
-      try {
-        // Dynamically import Builder registry only for CMS pages
-        // This prevents Builder.io SDK from loading on admin routes (which causes CSP errors)
-        await import("@/builder/registry");
-
-        initBuilder();
-        setIsBuilderReady(true);
-      } catch (err) {
-        console.error("Builder initialization failed:", err);
-        setError("Failed to initialize Builder.io");
-      }
+    try {
+      initBuilder();
+      setIsBuilderReady(true);
+    } catch (err) {
+      console.error("Builder initialization failed:", err);
+      setError("Failed to initialize Builder.io");
     }
-
-    loadBuilder();
   }, []);
 
   const builderUrlPath = useMemo(() => {
