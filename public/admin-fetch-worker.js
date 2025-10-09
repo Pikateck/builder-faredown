@@ -25,18 +25,14 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  console.log("🔧 Service Worker intercepting admin request:", url.pathname);
-
   event.respondWith(
     (async () => {
       try {
-        // Clone the request
         const requestUrl = event.request.url.replace(
           url.origin,
           ADMIN_API_BASE,
         );
 
-        // Create new request with admin key
         const headers = new Headers(event.request.headers);
         headers.set("X-Admin-Key", ADMIN_API_KEY);
 
@@ -47,6 +43,20 @@ self.addEventListener("fetch", (event) => {
         if (hasBody && !headers.has("Content-Type")) {
           headers.set("Content-Type", "application/json");
         }
+
+        // Remove request-id style headers that Chrome injects (avoid CORS issues)
+        if (headers.has("request-id")) {
+          headers.delete("request-id");
+        }
+        if (headers.has("x-request-id")) {
+          headers.delete("x-request-id");
+        }
+
+        console.log("[SW] intercept", requestUrl, {
+          method,
+          hasAdminKey: headers.has("X-Admin-Key"),
+          outgoingHeaders: Array.from(headers.keys()),
+        });
 
         const requestInit = {
           method,
@@ -60,16 +70,9 @@ self.addEventListener("fetch", (event) => {
           requestInit.body = await event.request.text();
         }
 
-        console.log("🚀 Service Worker making request:", {
-          url: requestUrl,
-          method: event.request.method,
-          headers: Object.fromEntries(headers.entries()),
-        });
-
-        // Make the actual fetch - this bypasses FullStory completely
         const response = await fetch(requestUrl, requestInit);
 
-        console.log("✅ Service Worker received response:", {
+        console.log("[SW] response", requestUrl, {
           status: response.status,
           statusText: response.statusText,
         });
