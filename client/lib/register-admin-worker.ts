@@ -19,7 +19,6 @@ export async function registerAdminWorker(): Promise<boolean> {
       }
     }
 
-    // Register new worker
     const registration = await navigator.serviceWorker.register(
       "/admin-fetch-worker.js",
       { scope: "/" },
@@ -27,9 +26,12 @@ export async function registerAdminWorker(): Promise<boolean> {
 
     console.log("✅ Admin Service Worker registered:", registration.scope);
 
-    // Wait for worker to be ready
-    await navigator.serviceWorker.ready;
-    console.log("✅ Admin Service Worker ready");
+    const readyRegistration = await navigator.serviceWorker.ready;
+    if (readyRegistration.active) {
+      console.log("✅ Admin Service Worker active:", readyRegistration.active.state);
+    } else {
+      console.warn("⚠️ Admin Service Worker ready but no active worker detected");
+    }
 
     return true;
   } catch (error) {
