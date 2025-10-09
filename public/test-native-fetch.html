@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Native Fetch Test - FullStory Bypass</title>
+    <script src="/native-fetch-guard.js"></script>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 10px 10px 0;
+        }
+        button:hover { background: #2563eb; }
+        .success { color: #059669; font-weight: 600; }
+        .error { color: #dc2626; font-weight: 600; }
+        .info { color: #0284c7; }
+        pre {
+            background: #f3f4f6;
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        .status {
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-weight: 500;
+        }
+        .status.ok { background: #d1fae5; color: #059669; }
+        .status.fail { background: #fee2e2; color: #dc2626; }
+    </style>
+</head>
+<body>
+    <h1>🔬 Native Fetch Test - FullStory Bypass</h1>
+    
+    <div class="test-box">
+        <h2>Step 1: Check Native Fetch Guard</h2>
+        <div id="guard-status"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Step 2: Test Admin API with Native Fetch</h2>
+        <button onclick="testNativeFetch()">🧪 Test Native Fetch</button>
+        <button onclick="testRegularFetch()">🔄 Test Regular Fetch</button>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Console Logs</h2>
+        <pre id="console-logs"></pre>
+    </div>
+
+    <script>
+        const API_URL = 'https://builder-faredown-pricing.onrender.com/api/admin/users';
+        const ADMIN_KEY = '8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1';
+        
+        let logs = [];
+        
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+            logs.push(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
+            document.getElementById('console-logs').textContent = logs.join('\n');
+        }
+
+        // Override console methods to capture logs
+        const originalLog = console.log;
+        const originalWarn = console.warn;
+        const originalError = console.error;
+        
+        console.log = function(...args) {
+            addLog(args.join(' '), 'info');
+            originalLog.apply(console, args);
+        };
+        
+        console.warn = function(...args) {
+            addLog(args.join(' '), 'warn');
+            originalWarn.apply(console, args);
+        };
+        
+        console.error = function(...args) {
+            addLog(args.join(' '), 'error');
+            originalError.apply(console, args);
+        };
+
+        // Check guard status
+        window.addEventListener('load', () => {
+            const guardStatus = document.getElementById('guard-status');
+            
+            if (window.__NATIVE_FETCH__) {
+                guardStatus.innerHTML = `
+                    <div class="status ok">✅ Native fetch guard ACTIVE</div>
+                    <p class="info">window.__NATIVE_FETCH__ is available and will bypass FullStory</p>
+                `;
+                addLog('Native fetch guard successfully loaded', 'success');
+            } else {
+                guardStatus.innerHTML = `
+                    <div class="status fail">❌ Native fetch guard MISSING</div>
+                    <p class="error">window.__NATIVE_FETCH__ is not available</p>
+                `;
+                addLog('Native fetch guard NOT loaded - FullStory may block requests', 'error');
+            }
+        });
+
+        async function testNativeFetch() {
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = '<p class="info">Testing with NATIVE fetch (bypassing FullStory)...</p>';
+            
+            try {
+                addLog('Starting native fetch test', 'info');
+                
+                if (!window.__NATIVE_FETCH__) {
+                    throw new Error('Native fetch not available!');
+                }
+                
+                const nativeFetch = window.__NATIVE_FETCH__;
+                addLog('Using native fetch function', 'info');
+                
+                const response = await nativeFetch(API_URL + '?limit=1&_test=' + Date.now(), {
+                    method: 'GET',
+                    headers: {
+                        'X-Admin-Key': ADMIN_KEY,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include',
+                    mode: 'cors',
+                    cache: 'no-store'
+                });
+                
+                addLog(`Native fetch response status: ${response.status}`, 'info');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                addLog('Native fetch successful!', 'success');
+                
+                resultsDiv.innerHTML = `
+                    <div class="status ok">✅ NATIVE FETCH SUCCESS</div>
+                    <p class="success">Admin API accessible using native fetch (FullStory bypassed)</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                addLog(`Native fetch error: ${error.message}`, 'error');
+                resultsDiv.innerHTML = `
+                    <div class="status fail">❌ NATIVE FETCH FAILED</div>
+                    <p class="error">${error.message}</p>
+                `;
+            }
+        }
+
+        async function testRegularFetch() {
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = '<p class="info">Testing with REGULAR fetch (may be wrapped by FullStory)...</p>';
+            
+            try {
+                addLog('Starting regular fetch test', 'info');
+                
+                const response = await fetch(API_URL + '?limit=1&_test=' + Date.now(), {
+                    method: 'GET',
+                    headers: {
+                        'X-Admin-Key': ADMIN_KEY,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include',
+                    mode: 'cors',
+                    cache: 'no-store'
+                });
+                
+                addLog(`Regular fetch response status: ${response.status}`, 'info');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                addLog('Regular fetch successful!', 'success');
+                
+                resultsDiv.innerHTML = `
+                    <div class="status ok">✅ REGULAR FETCH SUCCESS</div>
+                    <p class="success">Admin API accessible (FullStory not blocking)</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                addLog(`Regular fetch error: ${error.message}`, 'error');
+                resultsDiv.innerHTML = `
+                    <div class="status fail">❌ REGULAR FETCH BLOCKED</div>
+                    <p class="error">FullStory or another wrapper is blocking: ${error.message}</p>
+                    <p class="info">This is why we need native fetch bypass!</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
