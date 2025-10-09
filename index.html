@@ -33,11 +33,11 @@
 
     <!-- CRITICAL: Load native fetch guard FIRST in HEAD before any other scripts -->
     <script>
-      (function() {
-        if (typeof window !== 'undefined' && typeof fetch === 'function') {
+      (function () {
+        if (typeof window !== "undefined" && typeof fetch === "function") {
           window.__NATIVE_FETCH__ = window.fetch.bind(window);
           window.__NATIVE_XHR__ = window.XMLHttpRequest;
-          console.log('✅ Native fetch captured in HEAD before FullStory');
+          console.log("✅ Native fetch captured in HEAD before FullStory");
         }
       })();
     </script>

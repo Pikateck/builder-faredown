@@ -13,10 +13,12 @@ export default defineConfig(({ command }) => {
 
   return {
     plugins: [react()],
+    publicDir: "public", // Ensure public files (including Service Worker) are copied
     build: {
       outDir: "dist/spa",
       sourcemap: false,
       emptyOutDir: true,
+      copyPublicDir: true, // Explicitly copy public directory
       minify: "terser",
       terserOptions: {
         compress: {
@@ -67,7 +69,13 @@ export default defineConfig(({ command }) => {
         "@radix-ui/react-dropdown-menu",
         "@radix-ui/react-toast",
       ],
-      exclude: ["@react-three/fiber", "@react-three/drei", "three", "react/jsx-dev-runtime", "react/jsx-runtime"],
+      exclude: [
+        "@react-three/fiber",
+        "@react-three/drei",
+        "three",
+        "react/jsx-dev-runtime",
+        "react/jsx-runtime",
+      ],
       esbuildOptions: {
         define: {
           "process.env.NODE_ENV": JSON.stringify(nodeEnv),

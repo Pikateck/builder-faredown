@@ -32,6 +32,7 @@ import {
   DEPARTMENTS,
   type AdminLoginRequest,
 } from "@/services/adminAuthService";
+import { registerAdminWorker } from "@/lib/register-admin-worker";
 
 export default function AdminLogin() {
   const navigate = useNavigate();
@@ -98,6 +99,18 @@ export default function AdminLogin() {
     }));
     setError(""); // Clear error when user types
   };
+
+  // Register Service Worker for admin API calls
+  useEffect(() => {
+    console.log("🔧 AdminLogin: Registering Service Worker...");
+    registerAdminWorker().then((success) => {
+      if (success) {
+        console.log("✅ AdminLogin: Service Worker registered successfully");
+      } else {
+        console.warn("⚠️ AdminLogin: Service Worker registration failed");
+      }
+    });
+  }, []);
 
   useEffect(() => {
     if (import.meta.env.PROD) {

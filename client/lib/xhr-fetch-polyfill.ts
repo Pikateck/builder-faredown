@@ -5,105 +5,112 @@
 
 export function xhrFetch(
   url: string,
-  options: RequestInit = {}
+  options: RequestInit = {},
 ): Promise<Response> {
   return new Promise((resolve, reject) => {
     const xhr = new XMLHttpRequest();
-    const method = options.method || 'GET';
-    
-    console.log('🔧 Using XHR-based fetch to bypass FullStory:', { url, method });
-    
+    const method = options.method || "GET";
+
+    console.log("🔧 Using XHR-based fetch to bypass FullStory:", {
+      url,
+      method,
+    });
+
     xhr.open(method, url);
 
     // Debug logging
     xhr.onloadstart = () => {
-      console.log('🔄 XHR loadstart:', { url, readyState: xhr.readyState });
+      console.log("🔄 XHR loadstart:", { url, readyState: xhr.readyState });
     };
 
     xhr.onreadystatechange = () => {
-      console.log('🔄 XHR readyState change:', {
+      console.log("🔄 XHR readyState change:", {
         readyState: xhr.readyState,
         status: xhr.status,
-        url
+        url,
       });
     };
 
     // Set headers
     if (options.headers) {
       const headers = options.headers as Record<string, string>;
-      Object.keys(headers).forEach(key => {
+      Object.keys(headers).forEach((key) => {
         xhr.setRequestHeader(key, headers[key]);
       });
     }
-    
+
     // Set credentials
-    if (options.credentials === 'include') {
+    if (options.credentials === "include") {
       xhr.withCredentials = true;
     }
-    
+
     // Handle timeout
     if (options.signal) {
       const controller = options.signal as AbortSignal;
-      controller.addEventListener('abort', () => {
+      controller.addEventListener("abort", () => {
         xhr.abort();
-        reject(new DOMException('Aborted', 'AbortError'));
+        reject(new DOMException("Aborted", "AbortError"));
       });
     }
-    
+
     xhr.onload = () => {
       // Create a Response-like object
       const headers = new Headers();
-      const headerLines = xhr.getAllResponseHeaders().split('\r\n');
-      headerLines.forEach(line => {
-        const parts = line.split(': ');
+      const headerLines = xhr.getAllResponseHeaders().split("\r\n");
+      headerLines.forEach((line) => {
+        const parts = line.split(": ");
         if (parts.length === 2) {
           headers.append(parts[0], parts[1]);
         }
       });
-      
+
       const responseInit: ResponseInit = {
         status: xhr.status,
         statusText: xhr.statusText,
-        headers: headers
+        headers: headers,
       };
-      
+
       // Create response with proper body
       const response = new Response(xhr.responseText, responseInit);
-      
-      console.log('✅ XHR-based fetch succeeded:', {
+
+      console.log("✅ XHR-based fetch succeeded:", {
         url,
         status: xhr.status,
-        statusText: xhr.statusText
+        statusText: xhr.statusText,
       });
-      
+
       resolve(response);
     };
-    
+
     xhr.onerror = (event) => {
-      console.error('❌ XHR-based fetch failed:', {
+      console.error("❌ XHR-based fetch failed:", {
         url,
         status: xhr.status,
         statusText: xhr.statusText,
         readyState: xhr.readyState,
         responseText: xhr.responseText,
         event: event,
-        errorType: 'Likely CORS issue - XHR blocked by browser'
+        errorType: "Likely CORS issue - XHR blocked by browser",
       });
-      reject(new TypeError(`Network request failed: XHR error (status: ${xhr.status}, readyState: ${xhr.readyState})`));
+      reject(
+        new TypeError(
+          `Network request failed: XHR error (status: ${xhr.status}, readyState: ${xhr.readyState})`,
+        ),
+      );
     };
-    
+
     xhr.ontimeout = () => {
-      console.error('❌ XHR-based fetch timeout:', { url });
-      reject(new TypeError('Network request timeout'));
+      console.error("❌ XHR-based fetch timeout:", { url });
+      reject(new TypeError("Network request timeout"));
     };
-    
+
     // Send request
-    console.log('🚀 About to send XHR:', {
+    console.log("🚀 About to send XHR:", {
       method,
       url,
       hasBody: !!options.body,
       withCredentials: xhr.withCredentials,
-      readyState: xhr.readyState
+      readyState: xhr.readyState,
     });
 
     try {
@@ -112,9 +119,12 @@ export function xhrFetch(
       } else {
         xhr.send();
       }
-      console.log('✅ XHR.send() called successfully, readyState:', xhr.readyState);
+      console.log(
+        "✅ XHR.send() called successfully, readyState:",
+        xhr.readyState,
+      );
     } catch (sendError) {
-      console.error('❌ XHR.send() threw error:', sendError);
+      console.error("❌ XHR.send() threw error:", sendError);
       reject(sendError);
     }
   });
