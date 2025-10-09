@@ -252,26 +252,40 @@ const corsOptionsDelegate = (req, callback) => {
     return callback(null, { ...baseCorsOptions, origin });
   }
 
-  console.warn("🚫 CORS blocked origin:", origin);
-  return callback(null, { ...baseCorsOptions, origin: false });
+  console.warn("⚠️ CORS fallback allowing unlisted origin:", origin);
+  return callback(null, { ...baseCorsOptions, origin, credentials: false });
 };
 
 const ensureCorsHeaders = (req, res, next) => {
   const origin = req.headers.origin;
-  if (origin && isOriginAllowed(origin)) {
+  const allowed = isOriginAllowed(origin);
+
+  if (origin) {
+    if (!allowed) {
+      console.warn("⚠️ Applying relaxed CORS headers for origin:", origin);
+    }
+
     res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader("Access-Control-Allow-Credentials", "true");
     res.setHeader(
-      "Access-Control-Allow-Methods",
-      "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+      "Access-Control-Allow-Credentials",
+      allowed ? "true" : "false",
     );
-    res.setHeader(
-      "Access-Control-Allow-Headers",
-      "Content-Type, content-type, Authorization, X-Requested-With, X-Admin-Key",
-    );
-    const varyHeader = res.getHeader("Vary");
-    res.setHeader("Vary", varyHeader ? `${varyHeader}, Origin` : "Origin");
+  } else {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Credentials", "false");
   }
+
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET,POST,PUT,PATCH,DELETE,OPTIONS",
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "Content-Type, content-type, Authorization, X-Requested-With, X-Admin-Key, Accept, Origin",
+  );
+
+  const varyHeader = res.getHeader("Vary");
+  res.setHeader("Vary", varyHeader ? `${varyHeader}, Origin` : "Origin");
 
   if (req.method === "OPTIONS") {
     res.status(204).end();
