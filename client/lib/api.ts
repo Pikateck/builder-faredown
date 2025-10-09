@@ -334,8 +334,10 @@ export class ApiClient {
   private getNativeFetch(): typeof fetch {
     // CRITICAL: Use native fetch to bypass FullStory wrapper
     if (typeof window !== 'undefined' && (window as any).__NATIVE_FETCH__) {
+      console.log('✅ Using NATIVE fetch (bypassing FullStory wrapper)');
       return (window as any).__NATIVE_FETCH__;
     }
+    console.warn('⚠️ Native fetch not available, using regular fetch');
     return fetch;
   }
 
