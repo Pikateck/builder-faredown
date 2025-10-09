@@ -221,31 +221,39 @@ export default function UserManagement() {
     total: 0,
   });
 
+  const [serviceWorkerReady, setServiceWorkerReady] = useState(false);
+
   // Initialize Service Worker for admin API calls
   useEffect(() => {
     console.log("🔧 UserManagement: Registering Service Worker...");
     registerAdminWorker().then((success) => {
       if (success) {
         console.log("✅ UserManagement: Service Worker registered successfully");
+        setServiceWorkerReady(true);
       } else {
-        console.warn("⚠️ UserManagement: Service Worker registration failed");
+        console.warn("⚠️ UserManagement: Service Worker registration failed, proceeding anyway");
+        // Proceed even if Service Worker fails - iframe fetch will be used as fallback
+        setServiceWorkerReady(true);
       }
     });
   }, []);
 
   // Reset to page 1 when filters change
   useEffect(() => {
+    if (!serviceWorkerReady) return; // Wait for Service Worker
+
     if (pagination.page !== 1) {
       setPagination((prev) => ({ ...prev, page: 1 }));
     } else {
       loadUsers();
     }
-  }, [searchTerm, selectedRole, selectedStatus]);
+  }, [searchTerm, selectedRole, selectedStatus, serviceWorkerReady]);
 
   // Load users when page changes
   useEffect(() => {
+    if (!serviceWorkerReady) return; // Wait for Service Worker
     loadUsers();
-  }, [pagination.page]);
+  }, [pagination.page, serviceWorkerReady]);
 
   const loadUsers = async () => {
     try {
