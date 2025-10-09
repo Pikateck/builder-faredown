@@ -219,15 +219,9 @@ const isOriginAllowed = (origin) => {
 
 const baseCorsOptions = {
   credentials: true,
-  methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-  allowedHeaders: [
-    "Content-Type",
-    "content-type",
-    "Authorization",
-    "X-Requested-With",
-    "X-Admin-Key",
-  ],
-  exposedHeaders: ["Set-Cookie"],
+  methods: ACCESS_CONTROL_ALLOW_METHODS.split(","),
+  allowedHeaders: ACCESS_CONTROL_ALLOW_HEADERS.split(/,\s*/),
+  exposedHeaders: ["Set-Cookie", "X-Request-ID"],
   maxAge: 600,
   preflightContinue: false,
   optionsSuccessStatus: 204,
