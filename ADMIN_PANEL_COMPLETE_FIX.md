@@ -35,6 +35,7 @@ The Service Worker (`admin-fetch-worker.js`) was created to bypass FullStory and
 **File:** `client/pages/admin/UserManagement.tsx`
 
 **Changes:**
+
 ```typescript
 // Added Service Worker registration
 import { registerAdminWorker } from "@/lib/register-admin-worker";
@@ -50,7 +51,9 @@ useEffect(() => {
       console.log("✅ UserManagement: Service Worker registered successfully");
       setServiceWorkerReady(true);
     } else {
-      console.warn("⚠️ UserManagement: Service Worker registration failed, proceeding anyway");
+      console.warn(
+        "⚠️ UserManagement: Service Worker registration failed, proceeding anyway",
+      );
       setServiceWorkerReady(true);
     }
   });
@@ -68,6 +71,7 @@ useEffect(() => {
 **File:** `client/pages/admin/AdminLogin.tsx`
 
 **Changes:**
+
 ```typescript
 // Added Service Worker registration
 import { registerAdminWorker } from "@/lib/register-admin-worker";
@@ -88,12 +92,14 @@ useEffect(() => {
 ### 3. Existing Service Worker Features
 
 **File:** `public/admin-fetch-worker.js`
+
 - Intercepts all `/admin` API calls
 - Adds `X-Admin-Key` header automatically
 - Bypasses FullStory and other network interceptors
 - Forces cache-busting with unique timestamps
 
 **File:** `client/lib/api.ts`
+
 - Iframe-based fetch isolation for admin endpoints
 - Cache-busting with `_v` and `_nocache` parameters
 - Proper CORS and credentials handling
@@ -103,6 +109,7 @@ useEffect(() => {
 ### On Netlify Deployment
 
 1. **Open Netlify Admin URL:**
+
    ```
    https://spontaneous-biscotti-da44bc.netlify.app/admin/login
    ```
@@ -110,6 +117,7 @@ useEffect(() => {
 2. **Open Browser DevTools (F12) → Console**
 
 3. **You should see:**
+
    ```
    🔧 AdminLogin: Registering Service Worker...
    ✅ Admin Fetch Worker installed
@@ -125,6 +133,7 @@ useEffect(() => {
 5. **Navigate to User Management**
 
 6. **Console should show:**
+
    ```
    🔧 UserManagement: Registering Service Worker...
    ✅ UserManagement: Service Worker registered successfully
@@ -139,6 +148,7 @@ useEffect(() => {
 ### On Builder.io Preview
 
 1. **Open Builder Preview URL:**
+
    ```
    https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev
    ```
@@ -150,6 +160,7 @@ useEffect(() => {
 ## Files Modified
 
 ### Critical Files
+
 1. ✅ `client/pages/admin/UserManagement.tsx` - Added Service Worker registration and readiness check
 2. ✅ `client/pages/admin/AdminLogin.tsx` - Added Service Worker registration on mount
 3. ✅ `public/admin-fetch-worker.js` - Already exists, working correctly
@@ -157,6 +168,7 @@ useEffect(() => {
 5. ✅ `vite.config.ts` - Already configured to copy Service Worker to build
 
 ### Supporting Files
+
 6. ✅ `client/lib/api.ts` - Iframe fetch isolation for admin endpoints
 7. ✅ `client/services/userManagementService.ts` - Uses correct admin headers
 8. ✅ `client/utils/adminEnv.ts` - Provides X-Admin-Key header
@@ -168,12 +180,14 @@ npm run build
 ```
 
 **Expected output:**
+
 ```
 ✓ built in 17.00s
 dist/spa/admin-fetch-worker.js - Service Worker included ✅
 ```
 
 **Service Worker in build:**
+
 ```bash
 ls -la dist/spa/admin-fetch-worker.js
 -rw-r--r-- 1 root root 2530 Oct  9 05:20 dist/spa/admin-fetch-worker.js ✅
@@ -186,6 +200,7 @@ ls -la dist/spa/admin-fetch-worker.js
 The fixes are complete and built. To deploy:
 
 1. **Commit the changes** (if using Git):
+
    ```bash
    git add .
    git commit -m "fix: Register Service Worker in admin components before API calls"

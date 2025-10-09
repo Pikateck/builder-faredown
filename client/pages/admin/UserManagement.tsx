@@ -228,10 +228,14 @@ export default function UserManagement() {
     console.log("🔧 UserManagement: Registering Service Worker...");
     registerAdminWorker().then((success) => {
       if (success) {
-        console.log("✅ UserManagement: Service Worker registered successfully");
+        console.log(
+          "✅ UserManagement: Service Worker registered successfully",
+        );
         setServiceWorkerReady(true);
       } else {
-        console.warn("⚠️ UserManagement: Service Worker registration failed, proceeding anyway");
+        console.warn(
+          "⚠️ UserManagement: Service Worker registration failed, proceeding anyway",
+        );
         // Proceed even if Service Worker fails - iframe fetch will be used as fallback
         setServiceWorkerReady(true);
       }
