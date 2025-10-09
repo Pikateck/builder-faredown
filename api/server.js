@@ -217,6 +217,22 @@ const isOriginAllowed = (origin) => {
   );
 };
 
+const ACCESS_CONTROL_ALLOW_HEADERS = [
+  "Content-Type",
+  "content-type",
+  "Authorization",
+  "authorization",
+  "X-Admin-Key",
+  "x-admin-key",
+  "X-Requested-With",
+  "Accept",
+  "accept",
+  "Origin",
+  "origin",
+].join(", ");
+
+const ACCESS_CONTROL_ALLOW_METHODS = "GET,POST,PUT,PATCH,DELETE,OPTIONS";
+
 const baseCorsOptions = {
   credentials: true,
   methods: ACCESS_CONTROL_ALLOW_METHODS.split(","),
