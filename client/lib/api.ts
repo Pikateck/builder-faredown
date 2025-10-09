@@ -5,7 +5,6 @@
 
 import { DevApiClient } from "./api-dev";
 import "./api-version";
-import { xhrFetch } from "./xhr-fetch-polyfill";
 
 // Enhanced backend URL detection with server-side support
 const getBackendUrl = () => {
@@ -332,27 +331,45 @@ export class ApiClient {
     }
   }
 
-  private getNativeFetch(): typeof fetch {
-    // CRITICAL: Use native fetch to bypass FullStory wrapper
-    if (typeof window !== 'undefined') {
-      const nativeFetch = (window as any).__NATIVE_FETCH__;
-      const hasNative = !!nativeFetch;
-      const fetchesAreSame = nativeFetch === window.fetch;
-
-      console.log('🔍 NATIVE FETCH CHECK:', {
-        hasNativeFetch: hasNative,
-        fetchesAreSame: fetchesAreSame,
-        windowFetchType: typeof window.fetch,
-        nativeFetchType: typeof nativeFetch
-      });
-
-      if (hasNative) {
-        console.log('✅ Using NATIVE fetch (bypassing FullStory wrapper)');
-        return nativeFetch;
-      }
+  private async getIsolatedFetch(): Promise<typeof fetch> {
+    // CRITICAL: Create isolated iframe to get unwrapped fetch
+    if (typeof window === 'undefined') {
+      return fetch;
     }
 
-    console.warn('⚠️ Native fetch not available, using regular fetch (may be wrapped by FullStory)');
+    // Check if we already have isolated fetch cached
+    if ((window as any).__ISOLATED_FETCH__) {
+      console.log('✅ Using cached isolated fetch');
+      return (window as any).__ISOLATED_FETCH__;
+    }
+
+    try {
+      // Create hidden iframe to get clean fetch
+      const iframe = document.createElement('iframe');
+      iframe.style.display = 'none';
+      document.body.appendChild(iframe);
+
+      const iframeFetch = iframe.contentWindow?.fetch;
+
+      if (iframeFetch) {
+        // Bind to iframe window context
+        const isolatedFetch = iframeFetch.bind(iframe.contentWindow);
+        (window as any).__ISOLATED_FETCH__ = isolatedFetch;
+        console.log('✅ Created isolated fetch from iframe (bypasses FullStory)');
+
+        // Keep iframe alive but hidden
+        return isolatedFetch;
+      }
+    } catch (error) {
+      console.warn('⚠️ Could not create isolated fetch:', error);
+    }
+
+    // Fallback to native fetch if available
+    if ((window as any).__NATIVE_FETCH__) {
+      return (window as any).__NATIVE_FETCH__;
+    }
+
+    console.warn('⚠️ Using regular fetch (may be wrapped)');
     return fetch;
   }
 
@@ -815,14 +832,14 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      // CRITICAL: Use XHR-based fetch for admin calls to completely bypass FullStory
+      // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
       const isAdminEndpoint = endpoint.includes('/admin');
-      const fetchFn = isAdminEndpoint ? xhrFetch : fetch;
+      const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
 
       console.log('🔍 FETCH DEBUG:', {
         endpoint,
         fullURL: url.toString(),
-        usingXHRFetch: isAdminEndpoint,
+        usingIsolatedFetch: isAdminEndpoint,
         headers: this.getHeaders(customHeaders)
       });
 
@@ -830,7 +847,9 @@ export class ApiClient {
         method: "GET",
         headers: this.getHeaders(customHeaders),
         signal: controller.signal,
+        cache: "no-store",
         credentials: "include",
+        mode: "cors",
       });
 
       console.log('✅ FETCH SUCCESS:', { endpoint, status: response.status });
@@ -963,16 +982,18 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      // CRITICAL: Use XHR-based fetch for admin calls to completely bypass FullStory
+      // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
       const isAdminEndpoint = endpoint.includes('/admin');
-      const fetchFn = isAdminEndpoint ? xhrFetch : fetch;
+      const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
 
       const response = await fetchFn(`${this.baseURL}${endpoint}`, {
         method: "POST",
         headers: this.getHeaders(customHeaders),
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
+        cache: "no-store",
         credentials: "include",
+        mode: "cors",
       });
 
       clearTimeout(timeoutId);
@@ -1024,16 +1045,18 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      // CRITICAL: Use XHR-based fetch for admin calls to completely bypass FullStory
+      // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
       const isAdminEndpoint = endpoint.includes('/admin');
-      const fetchFn = isAdminEndpoint ? xhrFetch : fetch;
+      const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
 
       const response = await fetchFn(`${this.baseURL}${endpoint}`, {
         method: "PUT",
         headers: this.getHeaders({ "Content-Type": "application/json" }),
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
+        cache: "no-store",
         credentials: "include",
+        mode: "cors",
       });
 
       clearTimeout(timeoutId);
@@ -1076,15 +1099,17 @@ export class ApiClient {
     const timeoutId = setTimeout(() => controller.abort(), this.timeout);
 
     try {
-      // CRITICAL: Use XHR-based fetch for admin calls to completely bypass FullStory
+      // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
       const isAdminEndpoint = endpoint.includes('/admin');
-      const fetchFn = isAdminEndpoint ? xhrFetch : fetch;
+      const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
 
       const response = await fetchFn(`${this.baseURL}${endpoint}`, {
         method: "DELETE",
         headers: this.getHeaders(),
         signal: controller.signal,
+        cache: "no-store",
         credentials: "include",
+        mode: "cors",
       });
 
       clearTimeout(timeoutId);
