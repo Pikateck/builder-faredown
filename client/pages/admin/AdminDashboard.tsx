@@ -356,11 +356,13 @@ export default function AdminDashboard() {
 
   useEffect(() => {
     // Register service worker to bypass FullStory for admin API calls
-    registerAdminWorker().then(success => {
+    registerAdminWorker().then((success) => {
       if (success) {
-        console.log('✅ Admin Service Worker ready - FullStory bypass active');
+        console.log("✅ Admin Service Worker ready - FullStory bypass active");
       } else {
-        console.warn('⚠️ Admin Service Worker failed - may encounter FullStory issues');
+        console.warn(
+          "⚠️ Admin Service Worker failed - may encounter FullStory issues",
+        );
       }
     });
 

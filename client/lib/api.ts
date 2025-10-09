@@ -333,20 +333,20 @@ export class ApiClient {
 
   private async getIsolatedFetch(): Promise<typeof fetch> {
     // CRITICAL: Create isolated iframe to get unwrapped fetch
-    if (typeof window === 'undefined') {
+    if (typeof window === "undefined") {
       return fetch;
     }
 
     // Check if we already have isolated fetch cached
     if ((window as any).__ISOLATED_FETCH__) {
-      console.log('✅ Using cached isolated fetch');
+      console.log("✅ Using cached isolated fetch");
       return (window as any).__ISOLATED_FETCH__;
     }
 
     try {
       // Create hidden iframe to get clean fetch
-      const iframe = document.createElement('iframe');
-      iframe.style.display = 'none';
+      const iframe = document.createElement("iframe");
+      iframe.style.display = "none";
       document.body.appendChild(iframe);
 
       const iframeFetch = iframe.contentWindow?.fetch;
@@ -355,13 +355,15 @@ export class ApiClient {
         // Bind to iframe window context
         const isolatedFetch = iframeFetch.bind(iframe.contentWindow);
         (window as any).__ISOLATED_FETCH__ = isolatedFetch;
-        console.log('✅ Created isolated fetch from iframe (bypasses FullStory)');
+        console.log(
+          "✅ Created isolated fetch from iframe (bypasses FullStory)",
+        );
 
         // Keep iframe alive but hidden
         return isolatedFetch;
       }
     } catch (error) {
-      console.warn('⚠️ Could not create isolated fetch:', error);
+      console.warn("⚠️ Could not create isolated fetch:", error);
     }
 
     // Fallback to native fetch if available
@@ -369,7 +371,7 @@ export class ApiClient {
       return (window as any).__NATIVE_FETCH__;
     }
 
-    console.warn('⚠️ Using regular fetch (may be wrapped)');
+    console.warn("⚠️ Using regular fetch (may be wrapped)");
     return fetch;
   }
 
@@ -833,14 +835,14 @@ export class ApiClient {
 
     try {
       // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
-      const isAdminEndpoint = endpoint.includes('/admin');
+      const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
 
-      console.log('🔍 FETCH DEBUG:', {
+      console.log("🔍 FETCH DEBUG:", {
         endpoint,
         fullURL: url.toString(),
         usingIsolatedFetch: isAdminEndpoint,
-        headers: this.getHeaders(customHeaders)
+        headers: this.getHeaders(customHeaders),
       });
 
       const response = await fetchFn(url.toString(), {
@@ -852,22 +854,22 @@ export class ApiClient {
         mode: "cors",
       });
 
-      console.log('✅ FETCH SUCCESS:', { endpoint, status: response.status });
+      console.log("✅ FETCH SUCCESS:", { endpoint, status: response.status });
       clearTimeout(timeoutId);
       return this.handleResponse<T>(response);
     } catch (error) {
       clearTimeout(timeoutId);
 
       // CRITICAL DEBUG: Log full error details
-      console.error('❌ FETCH FAILED:', {
+      console.error("❌ FETCH FAILED:", {
         endpoint,
         url: url.toString(),
         error,
-        errorName: error instanceof Error ? error.name : 'Unknown',
+        errorName: error instanceof Error ? error.name : "Unknown",
         errorMessage: error instanceof Error ? error.message : String(error),
         errorStack: error instanceof Error ? error.stack : undefined,
         nativeFetchAvailable: !!(window as any).__NATIVE_FETCH__,
-        fetchFunction: endpoint.includes('/admin') ? 'NATIVE' : 'REGULAR'
+        fetchFunction: endpoint.includes("/admin") ? "NATIVE" : "REGULAR",
       });
 
       // Enhanced error handling with production safety
@@ -983,7 +985,7 @@ export class ApiClient {
 
     try {
       // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
-      const isAdminEndpoint = endpoint.includes('/admin');
+      const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
 
       const response = await fetchFn(`${this.baseURL}${endpoint}`, {
@@ -1046,7 +1048,7 @@ export class ApiClient {
 
     try {
       // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
-      const isAdminEndpoint = endpoint.includes('/admin');
+      const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
 
       const response = await fetchFn(`${this.baseURL}${endpoint}`, {
@@ -1100,7 +1102,7 @@ export class ApiClient {
 
     try {
       // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
-      const isAdminEndpoint = endpoint.includes('/admin');
+      const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
 
       const response = await fetchFn(`${this.baseURL}${endpoint}`, {

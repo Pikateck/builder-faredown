@@ -4,8 +4,8 @@
  */
 
 export async function registerAdminWorker(): Promise<boolean> {
-  if (!('serviceWorker' in navigator)) {
-    console.warn('⚠️ Service Worker not supported');
+  if (!("serviceWorker" in navigator)) {
+    console.warn("⚠️ Service Worker not supported");
     return false;
   }
 
@@ -13,27 +13,27 @@ export async function registerAdminWorker(): Promise<boolean> {
     // Unregister any existing workers
     const registrations = await navigator.serviceWorker.getRegistrations();
     for (const registration of registrations) {
-      if (registration.active?.scriptURL.includes('admin-fetch-worker')) {
+      if (registration.active?.scriptURL.includes("admin-fetch-worker")) {
         await registration.unregister();
-        console.log('🗑️ Unregistered old admin worker');
+        console.log("🗑️ Unregistered old admin worker");
       }
     }
 
     // Register new worker
     const registration = await navigator.serviceWorker.register(
-      '/admin-fetch-worker.js',
-      { scope: '/' }
+      "/admin-fetch-worker.js",
+      { scope: "/" },
     );
 
-    console.log('✅ Admin Service Worker registered:', registration.scope);
+    console.log("✅ Admin Service Worker registered:", registration.scope);
 
     // Wait for worker to be ready
     await navigator.serviceWorker.ready;
-    console.log('✅ Admin Service Worker ready');
+    console.log("✅ Admin Service Worker ready");
 
     return true;
   } catch (error) {
-    console.error('❌ Admin Service Worker registration failed:', error);
+    console.error("❌ Admin Service Worker registration failed:", error);
     return false;
   }
 }
@@ -44,9 +44,9 @@ export async function registerAdminWorker(): Promise<boolean> {
 export async function unregisterAdminWorker(): Promise<void> {
   const registrations = await navigator.serviceWorker.getRegistrations();
   for (const registration of registrations) {
-    if (registration.active?.scriptURL.includes('admin-fetch-worker')) {
+    if (registration.active?.scriptURL.includes("admin-fetch-worker")) {
       await registration.unregister();
-      console.log('🗑️ Unregistered admin worker');
+      console.log("🗑️ Unregistered admin worker");
     }
   }
 }

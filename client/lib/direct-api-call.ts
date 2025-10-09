@@ -9,19 +9,19 @@ export async function directApiCall<T = any>(
     method?: string;
     headers?: Record<string, string>;
     body?: any;
-  } = {}
+  } = {},
 ): Promise<T> {
-  const method = options.method || 'GET';
-  
-  console.log('🔧 Direct API call:', { url, method });
+  const method = options.method || "GET";
+
+  console.log("🔧 Direct API call:", { url, method });
 
   // For GET requests, use JSONP-like callback approach
-  if (method === 'GET') {
+  if (method === "GET") {
     return new Promise((resolve, reject) => {
       const callbackName = `apiCallback_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
       const timeoutId = setTimeout(() => {
         cleanup();
-        reject(new Error('Request timeout'));
+        reject(new Error("Request timeout"));
       }, 10000);
 
       const cleanup = () => {
@@ -35,27 +35,27 @@ export async function directApiCall<T = any>(
       // Create callback
       (window as any)[callbackName] = (data: any) => {
         cleanup();
-        console.log('✅ Direct API call success:', data);
+        console.log("✅ Direct API call success:", data);
         resolve(data);
       };
 
       // Add callback parameter to URL
-      const separator = url.includes('?') ? '&' : '?';
+      const separator = url.includes("?") ? "&" : "?";
       const callbackUrl = `${url}${separator}callback=${callbackName}`;
 
       // Add headers as URL parameters
       if (options.headers) {
-        Object.keys(options.headers).forEach(key => {
-          const paramName = key.toLowerCase().replace(/-/g, '_');
+        Object.keys(options.headers).forEach((key) => {
+          const paramName = key.toLowerCase().replace(/-/g, "_");
           callbackUrl += `&${paramName}=${encodeURIComponent(options.headers![key])}`;
         });
       }
 
-      const script = document.createElement('script');
+      const script = document.createElement("script");
       script.src = callbackUrl;
       script.onerror = () => {
         cleanup();
-        reject(new Error('Script load failed'));
+        reject(new Error("Script load failed"));
       };
 
       document.body.appendChild(script);
@@ -66,23 +66,26 @@ export async function directApiCall<T = any>(
   // Create a form with a hidden iframe target
   return new Promise((resolve, reject) => {
     const iframeName = `apiFrame_${Date.now()}`;
-    const iframe = document.createElement('iframe');
+    const iframe = document.createElement("iframe");
     iframe.name = iframeName;
-    iframe.style.display = 'none';
+    iframe.style.display = "none";
     document.body.appendChild(iframe);
 
-    const form = document.createElement('form');
+    const form = document.createElement("form");
     form.method = method;
     form.action = url;
     form.target = iframeName;
-    form.style.display = 'none';
+    form.style.display = "none";
 
     // Add body data as form fields
     if (options.body) {
-      const data = typeof options.body === 'string' ? JSON.parse(options.body) : options.body;
-      Object.keys(data).forEach(key => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
+      const data =
+        typeof options.body === "string"
+          ? JSON.parse(options.body)
+          : options.body;
+      Object.keys(data).forEach((key) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
         input.name = key;
         input.value = data[key];
         form.appendChild(input);
@@ -91,9 +94,9 @@ export async function directApiCall<T = any>(
 
     // Add headers as hidden fields
     if (options.headers) {
-      Object.keys(options.headers).forEach(key => {
-        const input = document.createElement('input');
-        input.type = 'hidden';
+      Object.keys(options.headers).forEach((key) => {
+        const input = document.createElement("input");
+        input.type = "hidden";
         input.name = `_header_${key}`;
         input.value = options.headers![key];
         form.appendChild(input);
@@ -104,7 +107,7 @@ export async function directApiCall<T = any>(
 
     const timeoutId = setTimeout(() => {
       cleanup();
-      reject(new Error('Request timeout'));
+      reject(new Error("Request timeout"));
     }, 10000);
 
     iframe.onload = () => {
@@ -114,7 +117,7 @@ export async function directApiCall<T = any>(
         if (response) {
           resolve(JSON.parse(response));
         } else {
-          reject(new Error('Empty response'));
+          reject(new Error("Empty response"));
         }
       } catch (error) {
         cleanup();
