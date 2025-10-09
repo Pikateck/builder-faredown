@@ -39,18 +39,23 @@ self.addEventListener("fetch", (event) => {
         // Create new request with admin key
         const headers = new Headers(event.request.headers);
         headers.set("X-Admin-Key", ADMIN_API_KEY);
-        headers.set("Content-Type", "application/json");
+
+        const method = event.request.method || "GET";
+        const hasBody = method !== "GET" && method !== "HEAD" && method !== "OPTIONS";
+
+        if (hasBody && !headers.has("Content-Type")) {
+          headers.set("Content-Type", "application/json");
+        }
 
         const requestInit = {
-          method: event.request.method,
-          headers: headers,
-          credentials: "include",
+          method,
+          headers,
+          credentials: "omit",
           mode: "cors",
           cache: "no-store",
         };
 
-        // Add body for POST/PUT
-        if (event.request.method !== "GET" && event.request.method !== "HEAD") {
+        if (hasBody) {
           requestInit.body = await event.request.text();
         }
 
