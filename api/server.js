@@ -217,28 +217,22 @@ const isOriginAllowed = (origin) => {
   );
 };
 
-const ACCESS_CONTROL_ALLOW_HEADERS = [
+const ACCESS_CONTROL_ALLOW_METHODS = "GET,POST,PUT,PATCH,DELETE,OPTIONS";
+const ACCESS_CONTROL_FALLBACK_HEADERS = [
   "Content-Type",
-  "content-type",
   "Authorization",
-  "authorization",
   "X-Admin-Key",
-  "x-admin-key",
   "X-Requested-With",
   "Accept",
-  "accept",
   "Origin",
-  "origin",
 ].join(", ");
-
-const ACCESS_CONTROL_ALLOW_METHODS = "GET,POST,PUT,PATCH,DELETE,OPTIONS";
 
 const baseCorsOptions = {
   credentials: true,
   methods: ACCESS_CONTROL_ALLOW_METHODS.split(","),
-  allowedHeaders: ACCESS_CONTROL_ALLOW_HEADERS.split(/,\s*/),
+  allowedHeaders: ACCESS_CONTROL_FALLBACK_HEADERS.split(/,\s*/),
   exposedHeaders: ["Set-Cookie", "X-Request-ID"],
-  maxAge: 600,
+  maxAge: 86400,
   preflightContinue: false,
   optionsSuccessStatus: 204,
 };
@@ -269,24 +263,34 @@ const corsOptionsDelegate = (req, callback) => {
 const ensureCorsHeaders = (req, res, next) => {
   const origin = req.headers.origin || "*";
   const allowed = isOriginAllowed(req.headers.origin);
+  const requestedHeaders = req.headers["access-control-request-headers"];
 
   if (origin === "*") {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Credentials", "false");
+  } else if (allowed) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", "true");
   } else {
     res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader(
-      "Access-Control-Allow-Credentials",
-      allowed ? "true" : "false",
-    );
+    res.setHeader("Access-Control-Allow-Credentials", "false");
   }
 
   res.setHeader("Access-Control-Allow-Methods", ACCESS_CONTROL_ALLOW_METHODS);
-  res.setHeader("Access-Control-Allow-Headers", ACCESS_CONTROL_ALLOW_HEADERS);
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    requestedHeaders || ACCESS_CONTROL_FALLBACK_HEADERS,
+  );
   res.setHeader("Access-Control-Expose-Headers", "Set-Cookie, X-Request-ID");
+  res.setHeader("Access-Control-Max-Age", "86400");
 
   const varyHeader = res.getHeader("Vary");
-  res.setHeader("Vary", varyHeader ? `${varyHeader}, Origin` : "Origin");
+  const varyValue = varyHeader ? `${varyHeader}, Origin` : "Origin";
+  res.setHeader("Vary", varyValue);
+
+  if (requestedHeaders) {
+    res.setHeader("Vary", `${varyValue}, Access-Control-Request-Headers`);
+  }
 
   if (req.method === "OPTIONS") {
     res.status(204).end();
