@@ -14,7 +14,20 @@ export function xhrFetch(
     console.log('🔧 Using XHR-based fetch to bypass FullStory:', { url, method });
     
     xhr.open(method, url);
-    
+
+    // Debug logging
+    xhr.onloadstart = () => {
+      console.log('🔄 XHR loadstart:', { url, readyState: xhr.readyState });
+    };
+
+    xhr.onreadystatechange = () => {
+      console.log('🔄 XHR readyState change:', {
+        readyState: xhr.readyState,
+        status: xhr.status,
+        url
+      });
+    };
+
     // Set headers
     if (options.headers) {
       const headers = options.headers as Record<string, string>;
@@ -66,14 +79,17 @@ export function xhrFetch(
       resolve(response);
     };
     
-    xhr.onerror = () => {
+    xhr.onerror = (event) => {
       console.error('❌ XHR-based fetch failed:', {
         url,
         status: xhr.status,
         statusText: xhr.statusText,
-        readyState: xhr.readyState
+        readyState: xhr.readyState,
+        responseText: xhr.responseText,
+        event: event,
+        errorType: 'Likely CORS issue - XHR blocked by browser'
       });
-      reject(new TypeError('Network request failed'));
+      reject(new TypeError(`Network request failed: XHR error (status: ${xhr.status}, readyState: ${xhr.readyState})`));
     };
     
     xhr.ontimeout = () => {
