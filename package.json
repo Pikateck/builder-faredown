@@ -25,7 +25,8 @@
     "start:prod": "node dist/server/node-build.mjs",
     "test": "npx vitest --run",
     "format.fix": "prettier --write .",
-    "typecheck": "npx tsc"
+    "typecheck": "npx tsc",
+    "monitor:admin-api": "node scripts/admin-api-monitor.mjs"
   },
   "dependencies": {
     "@builder.io/react": "^5.0.0",
