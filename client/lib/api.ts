@@ -333,11 +333,25 @@ export class ApiClient {
 
   private getNativeFetch(): typeof fetch {
     // CRITICAL: Use native fetch to bypass FullStory wrapper
-    if (typeof window !== 'undefined' && (window as any).__NATIVE_FETCH__) {
-      console.log('✅ Using NATIVE fetch (bypassing FullStory wrapper)');
-      return (window as any).__NATIVE_FETCH__;
+    if (typeof window !== 'undefined') {
+      const nativeFetch = (window as any).__NATIVE_FETCH__;
+      const hasNative = !!nativeFetch;
+      const fetchesAreSame = nativeFetch === window.fetch;
+
+      console.log('🔍 NATIVE FETCH CHECK:', {
+        hasNativeFetch: hasNative,
+        fetchesAreSame: fetchesAreSame,
+        windowFetchType: typeof window.fetch,
+        nativeFetchType: typeof nativeFetch
+      });
+
+      if (hasNative) {
+        console.log('✅ Using NATIVE fetch (bypassing FullStory wrapper)');
+        return nativeFetch;
+      }
     }
-    console.warn('⚠️ Native fetch not available, using regular fetch');
+
+    console.warn('⚠️ Native fetch not available, using regular fetch (may be wrapped by FullStory)');
     return fetch;
   }
 
