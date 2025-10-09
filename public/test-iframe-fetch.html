@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iframe Isolated Fetch Test</title>
+    <style>
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 10px 10px 0;
+        }
+        button:hover { background: #2563eb; }
+        .success { color: #059669; font-weight: 600; }
+        .error { color: #dc2626; font-weight: 600; }
+        .info { color: #0284c7; }
+        pre {
+            background: #f3f4f6;
+            padding: 12px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 14px;
+        }
+        .status {
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin: 8px 0;
+            font-weight: 500;
+        }
+        .status.ok { background: #d1fae5; color: #059669; }
+        .status.fail { background: #fee2e2; color: #dc2626; }
+    </style>
+</head>
+<body>
+    <h1>🔬 Iframe Isolated Fetch Test</h1>
+    <p class="info">This test creates a hidden iframe and uses its fetch to bypass FullStory</p>
+    
+    <div class="test-box">
+        <h2>Test Admin API</h2>
+        <button onclick="testIframeFetch()">🧪 Test Iframe Isolated Fetch</button>
+        <button onclick="testRegularFetch()">🔄 Test Regular Fetch</button>
+        <div id="test-results"></div>
+    </div>
+
+    <div class="test-box">
+        <h2>Console Logs</h2>
+        <pre id="console-logs"></pre>
+    </div>
+
+    <script>
+        const API_URL = 'https://builder-faredown-pricing.onrender.com/api/admin/users';
+        const ADMIN_KEY = '8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1';
+        
+        let logs = [];
+        
+        function addLog(message, type = 'info') {
+            const timestamp = new Date().toISOString().split('T')[1].split('.')[0];
+            logs.push(`[${timestamp}] ${type.toUpperCase()}: ${message}`);
+            document.getElementById('console-logs').textContent = logs.join('\n');
+        }
+
+        // Get isolated fetch from iframe
+        async function getIsolatedFetch() {
+            if (window.__ISOLATED_FETCH__) {
+                addLog('Using cached isolated fetch', 'info');
+                return window.__ISOLATED_FETCH__;
+            }
+
+            try {
+                addLog('Creating hidden iframe...', 'info');
+                const iframe = document.createElement('iframe');
+                iframe.style.display = 'none';
+                document.body.appendChild(iframe);
+                
+                const iframeFetch = iframe.contentWindow?.fetch;
+                
+                if (iframeFetch) {
+                    const isolatedFetch = iframeFetch.bind(iframe.contentWindow);
+                    window.__ISOLATED_FETCH__ = isolatedFetch;
+                    addLog('✅ Isolated fetch created from iframe', 'success');
+                    return isolatedFetch;
+                }
+            } catch (error) {
+                addLog(`❌ Error creating isolated fetch: ${error.message}`, 'error');
+            }
+
+            addLog('⚠️ Falling back to regular fetch', 'warn');
+            return fetch;
+        }
+
+        async function testIframeFetch() {
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = '<p class="info">Testing with iframe-isolated fetch...</p>';
+            logs = [];
+            
+            try {
+                addLog('Starting iframe isolated fetch test', 'info');
+                
+                const fetchFn = await getIsolatedFetch();
+                addLog(`Fetch function type: ${typeof fetchFn}`, 'info');
+                
+                const response = await fetchFn(API_URL + '?limit=1&_test=' + Date.now(), {
+                    method: 'GET',
+                    headers: {
+                        'X-Admin-Key': ADMIN_KEY,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include',
+                    mode: 'cors',
+                    cache: 'no-store'
+                });
+                
+                addLog(`Response status: ${response.status}`, 'info');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                addLog('Iframe isolated fetch successful!', 'success');
+                
+                resultsDiv.innerHTML = `
+                    <div class="status ok">✅ IFRAME FETCH SUCCESS</div>
+                    <p class="success">Admin API accessible using iframe-isolated fetch (FullStory bypassed)</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                addLog(`Iframe fetch error: ${error.message}`, 'error');
+                addLog(`Error stack: ${error.stack}`, 'error');
+                resultsDiv.innerHTML = `
+                    <div class="status fail">❌ IFRAME FETCH FAILED</div>
+                    <p class="error">${error.message}</p>
+                    <p class="info">Check console logs above for details</p>
+                `;
+            }
+        }
+
+        async function testRegularFetch() {
+            const resultsDiv = document.getElementById('test-results');
+            resultsDiv.innerHTML = '<p class="info">Testing with regular fetch...</p>';
+            logs = [];
+            
+            try {
+                addLog('Starting regular fetch test', 'info');
+                
+                const response = await fetch(API_URL + '?limit=1&_test=' + Date.now(), {
+                    method: 'GET',
+                    headers: {
+                        'X-Admin-Key': ADMIN_KEY,
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
+                    },
+                    credentials: 'include',
+                    mode: 'cors',
+                    cache: 'no-store'
+                });
+                
+                addLog(`Response status: ${response.status}`, 'info');
+                
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+                
+                const data = await response.json();
+                addLog('Regular fetch successful!', 'success');
+                
+                resultsDiv.innerHTML = `
+                    <div class="status ok">✅ REGULAR FETCH SUCCESS</div>
+                    <p class="success">Admin API accessible (FullStory not blocking)</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                addLog(`Regular fetch error: ${error.message}`, 'error');
+                resultsDiv.innerHTML = `
+                    <div class="status fail">❌ REGULAR FETCH BLOCKED</div>
+                    <p class="error">FullStory blocked: ${error.message}</p>
+                    <p class="success">But iframe-isolated fetch should work!</p>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>
