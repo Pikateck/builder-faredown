@@ -803,6 +803,14 @@ export class ApiClient {
       // CRITICAL: Use native fetch to bypass FullStory for admin calls
       const fetchFn = endpoint.includes('/admin') ? this.getNativeFetch() : fetch;
 
+      console.log('🔍 FETCH DEBUG:', {
+        endpoint,
+        fullURL: url.toString(),
+        usingNativeFetch: endpoint.includes('/admin'),
+        nativeFetchAvailable: !!(window as any).__NATIVE_FETCH__,
+        headers: this.getHeaders(customHeaders)
+      });
+
       const response = await fetchFn(url.toString(), {
         method: "GET",
         headers: this.getHeaders(customHeaders),
@@ -812,10 +820,23 @@ export class ApiClient {
         mode: "cors",
       });
 
+      console.log('✅ FETCH SUCCESS:', { endpoint, status: response.status });
       clearTimeout(timeoutId);
       return this.handleResponse<T>(response);
     } catch (error) {
       clearTimeout(timeoutId);
+
+      // CRITICAL DEBUG: Log full error details
+      console.error('❌ FETCH FAILED:', {
+        endpoint,
+        url: url.toString(),
+        error,
+        errorName: error instanceof Error ? error.name : 'Unknown',
+        errorMessage: error instanceof Error ? error.message : String(error),
+        errorStack: error instanceof Error ? error.stack : undefined,
+        nativeFetchAvailable: !!(window as any).__NATIVE_FETCH__,
+        fetchFunction: endpoint.includes('/admin') ? 'NATIVE' : 'REGULAR'
+      });
 
       // Enhanced error handling with production safety
       if (error instanceof Error) {
