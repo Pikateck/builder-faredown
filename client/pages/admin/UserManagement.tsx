@@ -4,6 +4,7 @@ import {
   type AdminUser,
   type CreateUserRequest,
 } from "@/services/userManagementService";
+import { registerAdminWorker } from "@/lib/register-admin-worker";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -219,6 +220,18 @@ export default function UserManagement() {
     totalPages: 1,
     total: 0,
   });
+
+  // Initialize Service Worker for admin API calls
+  useEffect(() => {
+    console.log("🔧 UserManagement: Registering Service Worker...");
+    registerAdminWorker().then((success) => {
+      if (success) {
+        console.log("✅ UserManagement: Service Worker registered successfully");
+      } else {
+        console.warn("⚠️ UserManagement: Service Worker registration failed");
+      }
+    });
+  }, []);
 
   // Reset to page 1 when filters change
   useEffect(() => {
