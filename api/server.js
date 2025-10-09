@@ -256,33 +256,37 @@ const corsOptionsDelegate = (req, callback) => {
   return callback(null, { ...baseCorsOptions, origin, credentials: false });
 };
 
+const ACCESS_CONTROL_ALLOW_HEADERS = [
+  "Content-Type",
+  "content-type",
+  "Authorization",
+  "authorization",
+  "X-Admin-Key",
+  "x-admin-key",
+  "X-Requested-With",
+  "Accept",
+  "accept",
+  "Origin",
+  "origin",
+].join(", ");
+
+const ACCESS_CONTROL_ALLOW_METHODS = "GET,POST,PUT,PATCH,DELETE,OPTIONS";
+
 const ensureCorsHeaders = (req, res, next) => {
-  const origin = req.headers.origin;
-  const allowed = isOriginAllowed(origin);
+  const origin = req.headers.origin || "*";
+  const allowed = isOriginAllowed(req.headers.origin);
 
-  if (origin) {
-    if (!allowed) {
-      console.warn("⚠️ Applying relaxed CORS headers for origin:", origin);
-    }
-
-    res.setHeader("Access-Control-Allow-Origin", origin);
-    res.setHeader(
-      "Access-Control-Allow-Credentials",
-      allowed ? "true" : "false",
-    );
-  } else {
+  if (origin === "*") {
     res.setHeader("Access-Control-Allow-Origin", "*");
     res.setHeader("Access-Control-Allow-Credentials", "false");
+  } else {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+    res.setHeader("Access-Control-Allow-Credentials", allowed ? "true" : "false");
   }
 
-  res.setHeader(
-    "Access-Control-Allow-Methods",
-    "GET,POST,PUT,PATCH,DELETE,OPTIONS",
-  );
-  res.setHeader(
-    "Access-Control-Allow-Headers",
-    "Content-Type, content-type, Authorization, X-Requested-With, X-Admin-Key, Accept, Origin",
-  );
+  res.setHeader("Access-Control-Allow-Methods", ACCESS_CONTROL_ALLOW_METHODS);
+  res.setHeader("Access-Control-Allow-Headers", ACCESS_CONTROL_ALLOW_HEADERS);
+  res.setHeader("Access-Control-Expose-Headers", "Set-Cookie, X-Request-ID");
 
   const varyHeader = res.getHeader("Vary");
   res.setHeader("Vary", varyHeader ? `${varyHeader}, Origin` : "Origin");
