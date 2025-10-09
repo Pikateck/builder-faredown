@@ -188,6 +188,7 @@ export class ApiClient {
   private authToken: string | null;
   private devClient: DevApiClient;
   private forceFallback: boolean = false;
+  private includeCredentials: boolean = true;
 
   constructor(config: typeof API_CONFIG) {
     this.baseURL = config.BASE_URL || "";
@@ -195,6 +196,19 @@ export class ApiClient {
     this.authToken =
       typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
     this.devClient = new DevApiClient(this.baseURL);
+
+    if (typeof window !== "undefined" && this.baseURL) {
+      try {
+        const baseOrigin = new URL(this.baseURL, window.location.href).origin;
+        this.includeCredentials = baseOrigin === window.location.origin;
+      } catch (error) {
+        console.warn("⚠️ Could not determine API origin, disabling credentials", {
+          baseURL: this.baseURL,
+          error,
+        });
+        this.includeCredentials = false;
+      }
+    }
 
     // Force fallback if no valid base URL or explicitly disabled
     if (!this.baseURL || this.baseURL === "null") {
@@ -850,7 +864,7 @@ export class ApiClient {
         headers: this.getHeaders(customHeaders),
         signal: controller.signal,
         cache: "no-store",
-        credentials: "include",
+        credentials: this.includeCredentials ? "include" : "omit",
         mode: "cors",
       });
 
@@ -994,7 +1008,7 @@ export class ApiClient {
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
         cache: "no-store",
-        credentials: "include",
+        credentials: this.includeCredentials ? "include" : "omit",
         mode: "cors",
       });
 
@@ -1057,7 +1071,7 @@ export class ApiClient {
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
         cache: "no-store",
-        credentials: "include",
+        credentials: this.includeCredentials ? "include" : "omit",
         mode: "cors",
       });
 
@@ -1110,7 +1124,7 @@ export class ApiClient {
         headers: this.getHeaders(),
         signal: controller.signal,
         cache: "no-store",
-        credentials: "include",
+        credentials: this.includeCredentials ? "include" : "omit",
         mode: "cors",
       });
 
