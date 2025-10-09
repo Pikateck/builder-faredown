@@ -23,7 +23,7 @@ function mapUser(row) {
     dateOfBirth: row.date_of_birth || "",
     countryCode: row.country_code || "",
     role: row.role || "user",
-    status: mapStatus(row),
+    status: row.status || mapStatus(row),
     lastLogin: row.last_login || null,
     createdAt: row.created_at,
     permissions: [],
@@ -50,26 +50,24 @@ router.get("/", async (req, res) => {
   if (search) {
     params.push(`%${search.toLowerCase()}%`);
     conditions.push(
-      `(LOWER(email) LIKE $${paramIndex} OR LOWER(first_name) LIKE $${paramIndex} OR LOWER(last_name) LIKE $${paramIndex})`,
+      `(LOWER(u.email) LIKE $${paramIndex} OR LOWER(u.first_name) LIKE $${paramIndex} OR LOWER(u.last_name) LIKE $${paramIndex})`,
     );
     paramIndex += 1;
   }
 
   if (role && role !== "all") {
     params.push(role.toLowerCase());
-    conditions.push(`LOWER(role) = $${paramIndex}`);
+    conditions.push(`LOWER(u.role) = $${paramIndex}`);
     paramIndex += 1;
   }
 
   if (status && status !== "all") {
     if (status === "pending") {
-      conditions.push(`(is_verified IS DISTINCT FROM TRUE)`);
+      conditions.push(`(v.status = 'pending')`);
     } else if (status === "active") {
-      conditions.push(
-        `(is_verified = TRUE AND (is_active IS DISTINCT FROM FALSE))`,
-      );
+      conditions.push(`(v.status = 'active')`);
     } else if (status === "inactive") {
-      conditions.push(`(is_active = FALSE)`);
+      conditions.push(`(v.status = 'inactive')`);
     }
   }
 
@@ -79,7 +77,10 @@ router.get("/", async (req, res) => {
 
   try {
     const countResult = await dbConn.query(
-      `SELECT COUNT(*) AS total FROM users ${whereClause}`,
+      `SELECT COUNT(*) AS total
+         FROM public.admin_users_v v
+         JOIN users u ON u.id = v.id
+         ${whereClause}`,
       params,
     );
     const total = parseInt(countResult.rows[0].total, 10) || 0;
@@ -87,27 +88,29 @@ router.get("/", async (req, res) => {
     const dataParams = [...params, limit, offset];
     const dataResult = await dbConn.query(
       `SELECT
-          id,
-          email,
-          first_name,
-          last_name,
-          phone,
+          u.id,
+          u.email,
+          u.first_name,
+          u.last_name,
+          u.phone,
           NULL::text AS address,
           NULL::text AS date_of_birth,
-          nationality_iso2 AS country_code,
+          u.nationality_iso2 AS country_code,
           'user'::text AS role,
-          is_active,
-          is_verified,
-          created_at,
-          updated_at,
+          v.is_active,
+          v.is_verified,
+          v.status,
+          v.created_at,
+          u.updated_at,
           NULL::timestamp AS last_login,
-          verification_token,
-          verification_token_expires_at,
-          verification_sent_at,
-          verified_at
-       FROM users
+          u.verification_token,
+          u.verification_token_expires_at,
+          u.verification_sent_at,
+          v.verified_at
+       FROM public.admin_users_v v
+       JOIN users u ON u.id = v.id
        ${whereClause}
-       ORDER BY created_at DESC
+       ORDER BY v.created_at DESC
        LIMIT $${paramIndex}
        OFFSET $${paramIndex + 1}`,
       dataParams,
