@@ -98,10 +98,24 @@ export function xhrFetch(
     };
     
     // Send request
-    if (options.body) {
-      xhr.send(options.body as string);
-    } else {
-      xhr.send();
+    console.log('🚀 About to send XHR:', {
+      method,
+      url,
+      hasBody: !!options.body,
+      withCredentials: xhr.withCredentials,
+      readyState: xhr.readyState
+    });
+
+    try {
+      if (options.body) {
+        xhr.send(options.body as string);
+      } else {
+        xhr.send();
+      }
+      console.log('✅ XHR.send() called successfully, readyState:', xhr.readyState);
+    } catch (sendError) {
+      console.error('❌ XHR.send() threw error:', sendError);
+      reject(sendError);
     }
   });
 }
