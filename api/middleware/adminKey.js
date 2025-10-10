@@ -46,6 +46,16 @@ function adminKeyMiddleware(req, res, next) {
   }
 
   console.log("✅ Admin Key Middleware - Authentication successful");
+
+  // Set req.user for compatibility with other middleware
+  req.user = {
+    id: "admin-api-key",
+    username: "admin-api",
+    email: "admin-api@faredown.com",
+    role: "super_admin",
+    permissions: [], // Will be populated by subsequent middleware if needed
+  };
+
   req.adminAccess = {
     ...(req.adminAccess || {}),
     viaKey: true,
