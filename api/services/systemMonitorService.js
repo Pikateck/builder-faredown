@@ -1,4 +1,3 @@
-const cron = require("node-cron");
 const os = require("os");
 const nodemailer = require("nodemailer");
 const fetch = require("node-fetch");
@@ -6,9 +5,14 @@ const db = require("../database/connection");
 
 const SUCCESS_STATUSES = new Set(["connected", "configured", "set", "healthy"]);
 const ALERT_COMPONENTS = ["frontend", "backend", "database"];
-const ALERT_THRESHOLD = 3;
-const RETENTION_DAYS = 7;
+const ALERT_THRESHOLD = Number(process.env.SYSTEM_MONITOR_ALERT_THRESHOLD || 3);
+const ALERT_COOLDOWN_MINUTES = Number(process.env.SYSTEM_MONITOR_ALERT_COOLDOWN_MINUTES || 15);
+const RETENTION_DAYS = Number(process.env.SYSTEM_MONITOR_RETENTION_DAYS || 7);
+const RETENTION_INTERVAL_MINUTES = Number(process.env.SYSTEM_MONITOR_RETENTION_INTERVAL_MINUTES || 30);
+
 let retentionScheduled = false;
+let retentionTimer = null;
+const lastAlertAt = new Map();
 
 function formatDetail(detail) {
   if (!detail || Object.keys(detail).length === 0) {
@@ -34,7 +38,11 @@ async function logStatus(component, status, latencyMs, detail = {}) {
       [component, status, latencyMs ?? null, formatDetail(detail)],
     );
   } catch (error) {
-    console.error("systemMonitor: failed to log status", { component, status, error: error.message });
+    console.error("systemMonitor: failed to log status", {
+      component,
+      status,
+      error: error.message,
+    });
   }
 }
 
@@ -55,30 +63,132 @@ function initializeRetentionSchedule() {
 
   retentionScheduled = true;
 
-  cron.schedule("30 2 * * *", async () => {
-    console.log("[system-monitor] running retention cleanup");
-    await pruneOldLogs();
-  });
+  const intervalMinutes = Math.max(RETENTION_INTERVAL_MINUTES, 5);
+  const intervalMs = intervalMinutes * 60 * 1000;
+
+  retentionTimer = setInterval(() => {
+    pruneOldLogs().catch((error) => {
+      console.error("systemMonitor: scheduled retention failed", error.message);
+    });
+  }, intervalMs);
+
+  if (typeof retentionTimer.unref === "function") {
+    retentionTimer.unref();
+  }
 }
+
+process.on("exit", () => {
+  if (retentionTimer) {
+    clearInterval(retentionTimer);
+  }
+});
 
 async function getRecentStatuses(component, limit) {
   const result = await db.query(
-    `SELECT status FROM system_monitor_logs
-     WHERE component = $1
-     ORDER BY checked_at DESC
-     LIMIT $2`,
+    `SELECT status, detail, checked_at
+       FROM system_monitor_logs
+      WHERE component = $1
+      ORDER BY checked_at DESC
+      LIMIT $2`,
     [component, limit],
   );
 
   return result.rows;
 }
 
-async function hasConsecutiveFailures(component, limit = ALERT_THRESHOLD) {
-  const rows = await getRecentStatuses(component, limit);
-  if (rows.length < limit) {
-    return false;
+function extractError(detail) {
+  if (!detail) {
+    return null;
   }
-  return rows.every((row) => (row.status || "").toLowerCase() === "disconnected");
+  if (typeof detail === "string") {
+    return detail;
+  }
+  if (detail.error) {
+    return detail.error;
+  }
+  if (detail.message) {
+    return detail.message;
+  }
+  if (typeof detail === "object") {
+    const values = Object.values(detail);
+    const firstString = values.find((value) => typeof value === "string" && value);
+    if (firstString) {
+      return firstString;
+    }
+  }
+  return null;
+}
+
+async function maybeSendAlerts(componentStatuses) {
+  if (!Array.isArray(componentStatuses) || componentStatuses.length === 0) {
+    return;
+  }
+
+  const now = Date.now();
+  const cooldownMs = ALERT_COOLDOWN_MINUTES * 60 * 1000;
+  const actionableFailures = [];
+
+  for (const status of componentStatuses) {
+    if (
+      !status ||
+      !ALERT_COMPONENTS.includes(status.component) ||
+      status.status !== "disconnected"
+    ) {
+      continue;
+    }
+
+    const recentRows = await getRecentStatuses(status.component, ALERT_THRESHOLD);
+    if (recentRows.length < ALERT_THRESHOLD) {
+      continue;
+    }
+
+    const allDisconnected = recentRows.every(
+      (row) => (row.status || "").toLowerCase() === "disconnected",
+    );
+
+    if (!allDisconnected) {
+      continue;
+    }
+
+    const lastAlertTime = lastAlertAt.get(status.component) || 0;
+    if (now - lastAlertTime < cooldownMs) {
+      continue;
+    }
+
+    const latest = recentRows[0];
+    const errorMessage =
+      extractError(latest?.detail) ||
+      extractError(status.detail) ||
+      "Unknown failure";
+
+    actionableFailures.push({
+      component: status.component,
+      name: status.name || status.component,
+      target: status.detail?.url || status.target || null,
+      lastChecked: latest?.checked_at || new Date().toISOString(),
+      error: errorMessage,
+    });
+
+    lastAlertAt.set(status.component, now);
+  }
+
+  if (!actionableFailures.length) {
+    return;
+  }
+
+  const message =
+    `⚠️ System Monitor Alert (${new Date().toISOString()})\n` +
+    actionableFailures
+      .map((failure) => {
+        const targetLine = failure.target ? `Target: ${failure.target}` : "Target: n/a";
+        return `• ${failure.name} (${failure.component})\n  ${targetLine}\n  Last error: ${failure.error}\n  Checked: ${new Date(failure.lastChecked).toISOString()}`;
+      })
+      .join("\n");
+
+  await Promise.all([
+    sendEmailAlert("Faredown Monitor Alert", message),
+    sendSlackAlert(message),
+  ]);
 }
 
 function createEmailTransport() {
@@ -140,29 +250,64 @@ async function sendSlackAlert(text) {
   }
 }
 
-async function maybeSendAlerts(componentStatuses) {
-  const failures = [];
+async function verifySmtpConnectivity(timeoutMs = 5000) {
+  if (!process.env.SMTP_HOST) {
+    return {
+      ok: false,
+      status: null,
+      latencyMs: null,
+      error: "smtp-not-configured",
+    };
+  }
 
-  for (const status of componentStatuses) {
-    if (
-      ALERT_COMPONENTS.includes(status.component) &&
-      status.status === "disconnected" &&
-      (await hasConsecutiveFailures(status.component, ALERT_THRESHOLD))
-    ) {
-      failures.push(status);
+  const transporter = createEmailTransport();
+  if (!transporter) {
+    return {
+      ok: false,
+      status: null,
+      latencyMs: null,
+      error: "smtp-transport-unavailable",
+    };
+  }
+
+  const start = Date.now();
+  let timeoutId;
+
+  try {
+    await Promise.race([
+      transporter.verify(),
+      new Promise((_, reject) => {
+        timeoutId = setTimeout(() => reject(new Error("smtp-verify-timeout")), timeoutMs);
+      }),
+    ]);
+
+    return {
+      ok: true,
+      status: 200,
+      latencyMs: Date.now() - start,
+    };
+  } catch (error) {
+    return {
+      ok: false,
+      status: null,
+      latencyMs: Date.now() - start,
+      error: error?.message || String(error),
+    };
+  } finally {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    try {
+      if (typeof transporter.close === "function") {
+        transporter.close();
+      }
+    } catch (closeError) {
+      console.warn(
+        "systemMonitor: failed to close SMTP transport",
+        closeError.message,
+      );
     }
   }
-
-  if (!failures.length) {
-    return;
-  }
-
-  const message = `⚠️ System Monitor Alert (${new Date().toISOString()})\n` +
-    failures
-      .map((failure) => `• ${failure.name} is disconnected (target: ${failure.target || "n/a"})`)
-      .join("\n");
-
-  await Promise.all([sendEmailAlert("Faredown Monitor Alert", message), sendSlackAlert(message)]);
 }
 
 async function getUptimeSummary(component, hours) {
@@ -236,7 +381,11 @@ function buildEnvSnapshot() {
     SUPABASE_URL: process.env.SUPABASE_URL || null,
     GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL || null,
     SMTP_HOST: process.env.SMTP_HOST || null,
-    ALERT_EMAIL_TO: process.env.ALERT_EMAIL_TO ? sanitizeEnvValue(process.env.ALERT_EMAIL_TO, true) : null,
+    SMTP_PORT: process.env.SMTP_PORT || null,
+    SMTP_USER: process.env.SMTP_USER ? sanitizeEnvValue(process.env.SMTP_USER, true) : null,
+    ALERT_EMAIL_TO: process.env.ALERT_EMAIL_TO
+      ? sanitizeEnvValue(process.env.ALERT_EMAIL_TO, true)
+      : null,
   };
 }
 
@@ -244,6 +393,26 @@ function buildMeta() {
   return {
     checkedAt: new Date().toISOString(),
     server: os.hostname(),
+  };
+}
+
+function analyzeCorsConfig(rawOrigins, appUrl) {
+  const origins = (rawOrigins || "")
+    .split(",")
+    .map((origin) => origin.trim())
+    .filter(Boolean)
+    .map((origin) => origin.replace(/\/+$/, ""));
+
+  const wildcard = origins.includes("*");
+  const normalizedAppUrl = appUrl ? appUrl.replace(/\/+$/, "") : null;
+  const hasAppOrigin =
+    wildcard || !normalizedAppUrl || origins.includes(normalizedAppUrl);
+
+  return {
+    origins,
+    wildcard,
+    hasAppOrigin,
+    appUrl: normalizedAppUrl,
   };
 }
 
@@ -256,4 +425,6 @@ module.exports = {
   getUptimeSummary,
   buildEnvSnapshot,
   buildMeta,
+  verifySmtpConnectivity,
+  analyzeCorsConfig,
 };
