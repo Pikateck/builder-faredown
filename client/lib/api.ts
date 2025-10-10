@@ -470,7 +470,7 @@ export class ApiClient {
             name: "Canada",
             display_name: "Canada",
             flag: "🇨🇦",
-            flag_emoji: "🇨🇦",
+            flag_emoji: "���🇦",
             popular: false,
           },
           {
@@ -823,7 +823,23 @@ export class ApiClient {
       return this.devClient.get<T>(endpoint, params, customHeaders);
     }
 
-    const url = new URL(`${this.baseURL}${endpoint}`);
+    const trimmedBase = (this.baseURL || "").replace(/\/+$/, "");
+    let normalizedEndpoint = endpoint.startsWith("/")
+      ? endpoint
+      : `/${endpoint}`;
+
+    // Avoid double /api prefixes when base URL already includes /api
+    if (
+      trimmedBase.toLowerCase().endsWith("/api") &&
+      normalizedEndpoint.toLowerCase().startsWith("/api/")
+    ) {
+      normalizedEndpoint = normalizedEndpoint.slice(4);
+      if (!normalizedEndpoint.startsWith("/")) {
+        normalizedEndpoint = `/${normalizedEndpoint}`;
+      }
+    }
+
+    const url = new URL(`${trimmedBase}${normalizedEndpoint}`);
 
     if (params) {
       Object.keys(params).forEach((key) => {
