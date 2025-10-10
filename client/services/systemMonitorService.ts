@@ -1,5 +1,3 @@
-import { apiClient } from "@/lib/api";
-
 import { apiClient as coreApiClient } from "@/lib/api";
 import { getAdminHeaders } from "@/utils/adminEnv";
 
@@ -26,6 +24,7 @@ export interface ComponentStatus {
   httpStatus: number | null;
   checkedAt: string;
   uptime: ComponentUptime;
+  detail?: Record<string, unknown> | null;
 }
 
 export interface SystemMonitorResponse {
