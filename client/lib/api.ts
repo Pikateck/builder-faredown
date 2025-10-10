@@ -1028,8 +1028,9 @@ export class ApiClient {
       // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
       const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
+      const url = this.buildUrl(endpoint);
 
-      const response = await fetchFn(`${this.baseURL}${endpoint}`, {
+      const response = await fetchFn(url, {
         method: "POST",
         headers: this.getHeaders(customHeaders),
         body: data ? JSON.stringify(data) : undefined,
@@ -1091,8 +1092,9 @@ export class ApiClient {
       // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
       const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
+      const url = this.buildUrl(endpoint);
 
-      const response = await fetchFn(`${this.baseURL}${endpoint}`, {
+      const response = await fetchFn(url, {
         method: "PUT",
         headers: this.getHeaders({ "Content-Type": "application/json" }),
         body: data ? JSON.stringify(data) : undefined,
@@ -1145,8 +1147,9 @@ export class ApiClient {
       // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
       const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
+      const url = this.buildUrl(endpoint);
 
-      const response = await fetchFn(`${this.baseURL}${endpoint}`, {
+      const response = await fetchFn(url, {
         method: "DELETE",
         headers: this.getHeaders(),
         signal: controller.signal,
