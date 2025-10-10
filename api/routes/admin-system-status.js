@@ -1,7 +1,6 @@
 const express = require("express");
 const fetch = require("node-fetch");
 const { URL } = require("url");
-const os = require("os");
 const adminKeyMiddleware = require("../middleware/adminKey");
 const db = require("../database/connection");
 const {
