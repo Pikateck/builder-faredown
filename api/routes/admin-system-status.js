@@ -15,12 +15,6 @@ const {
   analyzeCorsConfig,
 } = require("../services/systemMonitorService");
 
-try {
-  initializeRetentionSchedule();
-} catch (error) {
-  console.warn("systemMonitor: failed to schedule retention", error.message);
-}
-
 const router = express.Router();
 router.use(adminKeyMiddleware);
 
