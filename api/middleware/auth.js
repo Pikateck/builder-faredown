@@ -141,7 +141,8 @@ const users = new Map([
       firstName: "Admin",
       lastName: "User",
       email: "admin@faredown.com",
-      password: "$2a$10$N9qo8uLOickgx2ZMRZoMye.IIZKr3LNlLdDKQg7xWJ0PnP6LO7O1a", // admin123
+      username: "admin",
+      password: "$2a$10$XAg3Py7PSaQT9dNQSnHsSeTUAFG8LSnUL7wwsynrEjb3RtHW/LNxy", // admin123
       role: ROLES.SUPER_ADMIN,
       department: "administration",
       isActive: true,
@@ -156,7 +157,8 @@ const users = new Map([
       firstName: "Sales",
       lastName: "Manager",
       email: "sales@faredown.com",
-      password: "$2a$10$fK8QQCjQRjKJG5zPQrZhJOVqO8YzZjYOVqO8YzZjYOVqO8YzZjYO", // sales123
+      username: "sales",
+      password: "$2a$10$PZO9iIFIvocJ.dy75dAOFOM5zCWMrOUxonwJIbl5OWx4tL63E4iQO", // sales123
       role: ROLES.SALES_MANAGER,
       department: "sales",
       isActive: true,
@@ -171,7 +173,8 @@ const users = new Map([
       firstName: "Support",
       lastName: "Team",
       email: "support@faredown.com",
-      password: "$2a$10$gL9RRDkRSkkSK6zQQsZiKPWrP9ZaAkAkPWrP9ZaAkAkPWrP9ZaAk", // support123
+      username: "support",
+      password: "$2a$10$pTmy3aIFrM9lSqVvKws5W.97O7gKaphG4DrwVxbgtAmMGtFSz.Vau", // support123
       role: ROLES.SUPPORT,
       department: "customer_support",
       isActive: true,
@@ -186,7 +189,8 @@ const users = new Map([
       firstName: "Demo",
       lastName: "User",
       email: "demo@faredown.com",
-      password: "$2a$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi", // password123
+      username: "demo",
+      password: "$2a$10$ZP3Jid1zvRV405GeJTm9C.7g2MjJ2ikoaPMQBvy7mQ8S8yjWduo2G", // password123
       role: ROLES.USER,
       department: null,
       isActive: true,
