@@ -9,9 +9,18 @@ The System Connectivity Monitor was showing a "Token is not valid" error (403 st
 The issue was caused by **conflicting middleware** in the Express.js routing:
 
 1. **Specific routes** (lines 384, 386-389 in `api/server.js`):
+
    ```javascript
-   app.use("/api/admin/system-status", adminKeyMiddleware, adminSystemStatusRoutes);
-   app.use("/api/admin/system-monitor/history", adminKeyMiddleware, adminSystemMonitorHistoryRoutes);
+   app.use(
+     "/api/admin/system-status",
+     adminKeyMiddleware,
+     adminSystemStatusRoutes,
+   );
+   app.use(
+     "/api/admin/system-monitor/history",
+     adminKeyMiddleware,
+     adminSystemMonitorHistoryRoutes,
+   );
    ```
 
 2. **Global admin route** (lines 391-397 in `api/server.js`):
@@ -45,11 +54,13 @@ const authenticateToken = (req, res, next) => {
   // skip token validation to prevent conflicts with /api/admin global middleware
   if (req.adminAccess && req.adminAccess.viaKey && req.user) {
     if (process.env.NODE_ENV !== "production") {
-      console.log("✅ Token middleware: Admin already authenticated via key, skipping token check");
+      console.log(
+        "✅ Token middleware: Admin already authenticated via key, skipping token check",
+      );
     }
     return next();
   }
-  
+
   // ... rest of token validation logic
 };
 ```
@@ -76,6 +87,7 @@ req.adminAccess = {
 ### 3. Added Debug Logging (Development Only)
 
 Added conditional logging to help debug authentication issues in development:
+
 - `api/middleware/adminKey.js` - logs key validation steps
 - `api/middleware/auth.js` - logs when skipping token check
 - `client/utils/adminEnv.ts` - logs admin headers being sent
@@ -115,6 +127,7 @@ The fix has been applied locally. When you access the System Monitor page, you s
 To deploy this fix to Render:
 
 1. Commit the changes:
+
    ```bash
    git add .
    git commit -m "Fix: System Monitor admin key authentication conflict"

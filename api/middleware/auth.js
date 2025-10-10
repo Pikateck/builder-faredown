@@ -308,7 +308,9 @@ const authenticateToken = (req, res, next) => {
   // skip token validation to prevent conflicts with /api/admin global middleware
   if (req.adminAccess && req.adminAccess.viaKey && req.user) {
     if (process.env.NODE_ENV !== "production") {
-      console.log("✅ Token middleware: Admin already authenticated via key, skipping token check");
+      console.log(
+        "✅ Token middleware: Admin already authenticated via key, skipping token check",
+      );
     }
     return next();
   }

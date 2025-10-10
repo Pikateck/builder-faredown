@@ -5,9 +5,13 @@ const db = require("../database/connection");
 const SUCCESS_STATUSES = new Set(["connected", "configured", "set", "healthy"]);
 const ALERT_COMPONENTS = ["frontend", "backend", "database"];
 const ALERT_THRESHOLD = Number(process.env.SYSTEM_MONITOR_ALERT_THRESHOLD || 3);
-const ALERT_COOLDOWN_MINUTES = Number(process.env.SYSTEM_MONITOR_ALERT_COOLDOWN_MINUTES || 15);
+const ALERT_COOLDOWN_MINUTES = Number(
+  process.env.SYSTEM_MONITOR_ALERT_COOLDOWN_MINUTES || 15,
+);
 const RETENTION_DAYS = Number(process.env.SYSTEM_MONITOR_RETENTION_DAYS || 7);
-const RETENTION_INTERVAL_MINUTES = Number(process.env.SYSTEM_MONITOR_RETENTION_INTERVAL_MINUTES || 30);
+const RETENTION_INTERVAL_MINUTES = Number(
+  process.env.SYSTEM_MONITOR_RETENTION_INTERVAL_MINUTES || 30,
+);
 
 let retentionScheduled = false;
 let retentionTimer = null;
@@ -110,7 +114,9 @@ function extractError(detail) {
   }
   if (typeof detail === "object") {
     const values = Object.values(detail);
-    const firstString = values.find((value) => typeof value === "string" && value);
+    const firstString = values.find(
+      (value) => typeof value === "string" && value,
+    );
     if (firstString) {
       return firstString;
     }
@@ -136,7 +142,10 @@ async function maybeSendAlerts(componentStatuses) {
       continue;
     }
 
-    const recentRows = await getRecentStatuses(status.component, ALERT_THRESHOLD);
+    const recentRows = await getRecentStatuses(
+      status.component,
+      ALERT_THRESHOLD,
+    );
     if (recentRows.length < ALERT_THRESHOLD) {
       continue;
     }
@@ -166,7 +175,8 @@ async function maybeSendAlerts(componentStatuses) {
       target: status.detail?.url || status.target || null,
       lastChecked: latest?.checked_at || new Date().toISOString(),
       error: errorMessage,
-      httpStatus: status.detail?.httpStatus ?? latest?.detail?.httpStatus ?? null,
+      httpStatus:
+        status.detail?.httpStatus ?? latest?.detail?.httpStatus ?? null,
     });
 
     lastAlertAt.set(status.component, now);
@@ -180,7 +190,9 @@ async function maybeSendAlerts(componentStatuses) {
     `⚠️ System Monitor Alert (${new Date().toISOString()})\n` +
     actionableFailures
       .map((failure) => {
-        const targetLine = failure.target ? `Target: ${failure.target}` : "Target: n/a";
+        const targetLine = failure.target
+          ? `Target: ${failure.target}`
+          : "Target: n/a";
         const httpLine = failure.httpStatus
           ? `HTTP status: ${failure.httpStatus}\n`
           : "";
@@ -203,7 +215,9 @@ function createEmailTransport() {
     return nodemailer.createTransport({
       host: process.env.SMTP_HOST,
       port: process.env.SMTP_PORT ? Number(process.env.SMTP_PORT) : 587,
-      secure: process.env.SMTP_SECURE === "true" || Number(process.env.SMTP_PORT) === 465,
+      secure:
+        process.env.SMTP_SECURE === "true" ||
+        Number(process.env.SMTP_PORT) === 465,
       auth:
         process.env.SMTP_USER && process.env.SMTP_PASS
           ? {
@@ -213,14 +227,21 @@ function createEmailTransport() {
           : undefined,
     });
   } catch (error) {
-    console.error("systemMonitor: failed to create SMTP transport", error.message);
+    console.error(
+      "systemMonitor: failed to create SMTP transport",
+      error.message,
+    );
     return null;
   }
 }
 
 async function sendEmailAlert(subject, text) {
   const transporter = createEmailTransport();
-  if (!transporter || !process.env.ALERT_EMAIL_TO || !process.env.ALERT_EMAIL_FROM) {
+  if (
+    !transporter ||
+    !process.env.ALERT_EMAIL_TO ||
+    !process.env.ALERT_EMAIL_FROM
+  ) {
     return;
   }
 
@@ -280,7 +301,10 @@ async function verifySmtpConnectivity(timeoutMs = 5000) {
     await Promise.race([
       transporter.verify(),
       new Promise((_, reject) => {
-        timeoutId = setTimeout(() => reject(new Error("smtp-verify-timeout")), timeoutMs);
+        timeoutId = setTimeout(
+          () => reject(new Error("smtp-verify-timeout")),
+          timeoutMs,
+        );
       }),
     ]);
 
@@ -326,7 +350,8 @@ async function getUptimeSummary(component, hours) {
   const row = result.rows[0];
   const total = Number(row?.total || 0);
   const healthy = Number(row?.healthy || 0);
-  const uptimePct = total > 0 ? Math.round((healthy / total) * 1000) / 10 : null;
+  const uptimePct =
+    total > 0 ? Math.round((healthy / total) * 1000) / 10 : null;
 
   return { total, healthy, uptimePct };
 }
@@ -385,7 +410,9 @@ function buildEnvSnapshot() {
     GOOGLE_CALLBACK_URL: process.env.GOOGLE_CALLBACK_URL || null,
     SMTP_HOST: process.env.SMTP_HOST || null,
     SMTP_PORT: process.env.SMTP_PORT || null,
-    SMTP_USER: process.env.SMTP_USER ? sanitizeEnvValue(process.env.SMTP_USER, true) : null,
+    SMTP_USER: process.env.SMTP_USER
+      ? sanitizeEnvValue(process.env.SMTP_USER, true)
+      : null,
     ALERT_EMAIL_TO: process.env.ALERT_EMAIL_TO
       ? sanitizeEnvValue(process.env.ALERT_EMAIL_TO, true)
       : null,

@@ -7,12 +7,7 @@ import {
 } from "@/services/systemMonitorService";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
   TableBody,
@@ -29,12 +24,7 @@ import {
   SheetTrigger,
   SheetDescription,
 } from "@/components/ui/sheet";
-import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "@/components/ui/tabs";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Activity,
@@ -129,7 +119,9 @@ function getStatusConfig(status: string) {
   );
 }
 
-function extractDetailError(detail: Record<string, unknown> | null | undefined) {
+function extractDetailError(
+  detail: Record<string, unknown> | null | undefined,
+) {
   if (!detail) {
     return null;
   }
@@ -151,14 +143,25 @@ type HistoryRange = "24" | "168";
 
 export default function SystemMonitor() {
   const [components, setComponents] = useState<ComponentStatus[]>([]);
-  const [summary, setSummary] = useState({ healthy: 0, warning: 0, failing: 0, total: 0 });
+  const [summary, setSummary] = useState({
+    healthy: 0,
+    warning: 0,
+    failing: 0,
+    total: 0,
+  });
   const [meta, setMeta] = useState({ checkedAt: "", server: "" });
-  const [envSnapshot, setEnvSnapshot] = useState<Record<string, string | null>>({});
+  const [envSnapshot, setEnvSnapshot] = useState<Record<string, string | null>>(
+    {},
+  );
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [historyOpen, setHistoryOpen] = useState(false);
-  const [historyTarget, setHistoryTarget] = useState<ComponentStatus | null>(null);
-  const [historyData, setHistoryData] = useState<MonitorHistoryResponse | null>(null);
+  const [historyTarget, setHistoryTarget] = useState<ComponentStatus | null>(
+    null,
+  );
+  const [historyData, setHistoryData] = useState<MonitorHistoryResponse | null>(
+    null,
+  );
   const [historyRange, setHistoryRange] = useState<HistoryRange>("24");
   const [historyLoading, setHistoryLoading] = useState(false);
 
@@ -182,7 +185,10 @@ export default function SystemMonitor() {
     async (component: ComponentStatus, range: HistoryRange) => {
       try {
         setHistoryLoading(true);
-        const data = await fetchComponentHistory(component.component, Number(range));
+        const data = await fetchComponentHistory(
+          component.component,
+          Number(range),
+        );
         setHistoryData(data);
       } catch (err: any) {
         setHistoryData(null);
@@ -244,7 +250,10 @@ export default function SystemMonitor() {
       return [];
     }
     return historyData.points.map((point) => ({
-      time: new Date(point.checkedAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      time: new Date(point.checkedAt).toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
       latency: point.latencyMs ?? 0,
       status: point.status,
     }));
@@ -267,20 +276,50 @@ export default function SystemMonitor() {
         <CardHeader className="flex flex-row items-center justify-between">
           <div className="flex items-center gap-3">
             {overallState.icon && <overallState.icon className="h-6 w-6" />}
-            <CardTitle className="text-lg">System Connectivity &amp; Environment Monitor</CardTitle>
+            <CardTitle className="text-lg">
+              System Connectivity &amp; Environment Monitor
+            </CardTitle>
           </div>
-          <Button variant="outline" size="sm" onClick={loadStatus} disabled={loading}>
-            <RefreshCcw className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`} />
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={loadStatus}
+            disabled={loading}
+          >
+            <RefreshCcw
+              className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`}
+            />
             Refresh All
           </Button>
         </CardHeader>
         <CardContent className="grid gap-4 md:grid-cols-4">
-          <SummaryMetric label="Healthy" value={summary.healthy} tone="text-emerald-700" icon={CheckCircle2} />
-          <SummaryMetric label="Warnings" value={summary.warning} tone="text-yellow-700" icon={AlertTriangle} />
-          <SummaryMetric label="Failing" value={summary.failing} tone="text-red-700" icon={ShieldAlert} />
+          <SummaryMetric
+            label="Healthy"
+            value={summary.healthy}
+            tone="text-emerald-700"
+            icon={CheckCircle2}
+          />
+          <SummaryMetric
+            label="Warnings"
+            value={summary.warning}
+            tone="text-yellow-700"
+            icon={AlertTriangle}
+          />
+          <SummaryMetric
+            label="Failing"
+            value={summary.failing}
+            tone="text-red-700"
+            icon={ShieldAlert}
+          />
           <SummaryMetric
             label="Last Checked"
-            value={meta.checkedAt ? formatDistanceToNow(new Date(meta.checkedAt), { addSuffix: true }) : "—"}
+            value={
+              meta.checkedAt
+                ? formatDistanceToNow(new Date(meta.checkedAt), {
+                    addSuffix: true,
+                  })
+                : "—"
+            }
             tone="text-slate-700"
             icon={Clock3}
           />
@@ -310,12 +349,17 @@ export default function SystemMonitor() {
               <TableBody>
                 {components.map((component) => (
                   <TableRow key={component.component}>
-                    <TableCell className="font-medium">{component.name}</TableCell>
+                    <TableCell className="font-medium">
+                      {component.name}
+                    </TableCell>
                     <TableCell>
                       {component.target ? (
                         <div className="flex items-center gap-2 text-sm text-blue-600">
                           <Globe className="h-4 w-4 text-blue-500" />
-                          <span className="truncate max-w-[320px]" title={component.target}>
+                          <span
+                            className="truncate max-w-[320px]"
+                            title={component.target}
+                          >
                             {component.target}
                           </span>
                         </div>
@@ -324,26 +368,41 @@ export default function SystemMonitor() {
                       )}
                     </TableCell>
                     <TableCell>
-                      <StatusBadge status={component.status} reason={extractDetailError(component.detail)} />
+                      <StatusBadge
+                        status={component.status}
+                        reason={extractDetailError(component.detail)}
+                      />
                     </TableCell>
                     <TableCell>{formatLatency(component.latencyMs)}</TableCell>
                     <TableCell className="text-sm text-slate-600">
                       {component.checkedAt
-                        ? formatDistanceToNow(new Date(component.checkedAt), { addSuffix: true })
+                        ? formatDistanceToNow(new Date(component.checkedAt), {
+                            addSuffix: true,
+                          })
                         : "—"}
                     </TableCell>
                     <TableCell className="text-sm text-slate-600">
                       <div className="flex flex-col gap-1">
                         <span>
-                          24h: {component.uptime.last24h !== null ? `${component.uptime.last24h.toFixed(1)}%` : "—"}
+                          24h:{" "}
+                          {component.uptime.last24h !== null
+                            ? `${component.uptime.last24h.toFixed(1)}%`
+                            : "—"}
                         </span>
                         <span>
-                          7d: {component.uptime.last7d !== null ? `${component.uptime.last7d.toFixed(1)}%` : "—"}
+                          7d:{" "}
+                          {component.uptime.last7d !== null
+                            ? `${component.uptime.last7d.toFixed(1)}%`
+                            : "—"}
                         </span>
                       </div>
                     </TableCell>
                     <TableCell className="text-right">
-                      <Button variant="ghost" size="sm" onClick={() => handleOpenHistory(component)}>
+                      <Button
+                        variant="ghost"
+                        size="sm"
+                        onClick={() => handleOpenHistory(component)}
+                      >
                         <BarChart3 className="mr-2 h-4 w-4" /> History
                       </Button>
                     </TableCell>
@@ -372,14 +431,21 @@ export default function SystemMonitor() {
         <SheetContent className="w-full sm:max-w-xl">
           <SheetHeader>
             <SheetTitle>
-              {historyTarget ? `${historyTarget.name} • History` : "Component History"}
+              {historyTarget
+                ? `${historyTarget.name} • History`
+                : "Component History"}
             </SheetTitle>
             <SheetDescription>
-              {historyTarget?.target ? `Target: ${historyTarget.target}` : "Connectivity history"}
+              {historyTarget?.target
+                ? `Target: ${historyTarget.target}`
+                : "Connectivity history"}
             </SheetDescription>
           </SheetHeader>
           <div className="mt-4 space-y-4">
-            <Tabs value={historyRange} onValueChange={(value) => setHistoryRange(value as HistoryRange)}>
+            <Tabs
+              value={historyRange}
+              onValueChange={(value) => setHistoryRange(value as HistoryRange)}
+            >
               <TabsList className="grid grid-cols-2">
                 <TabsTrigger value="24">Last 24h</TabsTrigger>
                 <TabsTrigger value="168">Last 7d</TabsTrigger>
@@ -387,7 +453,9 @@ export default function SystemMonitor() {
               <TabsContent value={historyRange} className="mt-4">
                 <Card>
                   <CardHeader className="pb-2">
-                    <CardTitle className="text-base">Latency &amp; Uptime</CardTitle>
+                    <CardTitle className="text-base">
+                      Latency &amp; Uptime
+                    </CardTitle>
                     <div className="text-sm text-slate-500">{uptimeLabel}</div>
                   </CardHeader>
                   <CardContent className="pt-0">
@@ -399,14 +467,30 @@ export default function SystemMonitor() {
                       ) : historyChartData.length ? (
                         <ResponsiveContainer width="100%" height="100%">
                           <LineChart data={historyChartData}>
-                            <CartesianGrid strokeDasharray="3 3" stroke="#e2e8f0" />
-                            <XAxis dataKey="time" tick={{ fontSize: 12 }} minTickGap={24} />
+                            <CartesianGrid
+                              strokeDasharray="3 3"
+                              stroke="#e2e8f0"
+                            />
+                            <XAxis
+                              dataKey="time"
+                              tick={{ fontSize: 12 }}
+                              minTickGap={24}
+                            />
                             <YAxis tick={{ fontSize: 12 }} width={48} />
                             <Tooltip
                               labelFormatter={(value) => `Time: ${value}`}
-                              formatter={(value: number) => [`${value} ms`, "Latency"]}
+                              formatter={(value: number) => [
+                                `${value} ms`,
+                                "Latency",
+                              ]}
                             />
-                            <Line type="monotone" dataKey="latency" stroke="#2563eb" strokeWidth={2} dot={false} />
+                            <Line
+                              type="monotone"
+                              dataKey="latency"
+                              stroke="#2563eb"
+                              strokeWidth={2}
+                              dot={false}
+                            />
                           </LineChart>
                         </ResponsiveContainer>
                       ) : (
@@ -444,11 +528,18 @@ export default function SystemMonitor() {
                                 Latency: {formatLatency(point.latencyMs)}
                               </div>
                             </div>
-                            <StatusBadge status={point.status} reason={extractDetailError(point.detail as Record<string, unknown> | null)} />
+                            <StatusBadge
+                              status={point.status}
+                              reason={extractDetailError(
+                                point.detail as Record<string, unknown> | null,
+                              )}
+                            />
                           </div>
                         ))
                     ) : (
-                      <div className="text-sm text-slate-500">No history available.</div>
+                      <div className="text-sm text-slate-500">
+                        No history available.
+                      </div>
                     )}
                   </div>
                 </ScrollArea>
@@ -470,10 +561,19 @@ export default function SystemMonitor() {
   );
 }
 
-function StatusBadge({ status, reason }: { status: string; reason?: string | null }) {
+function StatusBadge({
+  status,
+  reason,
+}: {
+  status: string;
+  reason?: string | null;
+}) {
   const config = getStatusConfig(status);
   return (
-    <Badge className={`${config.className} flex items-center gap-1`} title={reason || undefined}>
+    <Badge
+      className={`${config.className} flex items-center gap-1`}
+      title={reason || undefined}
+    >
       <config.icon className="h-3.5 w-3.5" />
       {config.label}
     </Badge>
@@ -502,7 +602,13 @@ function SummaryMetric({
   );
 }
 
-function EnvSnapshot({ env, server }: { env: Record<string, string | null>; server: string }) {
+function EnvSnapshot({
+  env,
+  server,
+}: {
+  env: Record<string, string | null>;
+  server: string;
+}) {
   const entries = Object.entries(env || {});
   return (
     <Card>
@@ -537,7 +643,10 @@ function EnvRow({
         <Icon className="h-4 w-4 text-slate-500" />
         {label}
       </div>
-      <span className="max-w-[220px] truncate text-xs text-slate-500" title={value}>
+      <span
+        className="max-w-[220px] truncate text-xs text-slate-500"
+        title={value}
+      >
         {value}
       </span>
     </div>
@@ -564,12 +673,18 @@ function ComponentCard({
       </CardHeader>
       <CardContent className="space-y-3">
         <InfoRow label="Target" value={component.target || "—"} icon={Globe} />
-        <InfoRow label="Latency" value={formatLatency(component.latencyMs)} icon={Wifi} />
+        <InfoRow
+          label="Latency"
+          value={formatLatency(component.latencyMs)}
+          icon={Wifi}
+        />
         <InfoRow
           label="Last Checked"
           value={
             component.checkedAt
-              ? formatDistanceToNow(new Date(component.checkedAt), { addSuffix: true })
+              ? formatDistanceToNow(new Date(component.checkedAt), {
+                  addSuffix: true,
+                })
               : "—"
           }
           icon={Clock3}
@@ -580,8 +695,18 @@ function ComponentCard({
             <span>Uptime</span>
           </div>
           <div className="mt-2 grid grid-cols-2 gap-2 text-xs">
-            <span>24h: {component.uptime.last24h !== null ? `${component.uptime.last24h.toFixed(1)}%` : "—"}</span>
-            <span>7d: {component.uptime.last7d !== null ? `${component.uptime.last7d.toFixed(1)}%` : "—"}</span>
+            <span>
+              24h:{" "}
+              {component.uptime.last24h !== null
+                ? `${component.uptime.last24h.toFixed(1)}%`
+                : "—"}
+            </span>
+            <span>
+              7d:{" "}
+              {component.uptime.last7d !== null
+                ? `${component.uptime.last7d.toFixed(1)}%`
+                : "—"}
+            </span>
           </div>
         </div>
         {errorDetail ? (
@@ -590,7 +715,12 @@ function ComponentCard({
             <div className="mt-1 whitespace-pre-line">{errorDetail}</div>
           </div>
         ) : null}
-        <Button variant="outline" size="sm" className="w-full" onClick={onHistory}>
+        <Button
+          variant="outline"
+          size="sm"
+          className="w-full"
+          onClick={onHistory}
+        >
           <BarChart3 className="mr-2 h-4 w-4" /> View History
         </Button>
       </CardContent>

@@ -89,7 +89,9 @@ const { auditLogger } = require("./middleware/audit");
 
 // DB
 const db = require("./database/connection");
-const { initializeRetentionSchedule } = require("./services/systemMonitorService");
+const {
+  initializeRetentionSchedule,
+} = require("./services/systemMonitorService");
 
 // Initialize Express
 const app = express();
@@ -381,7 +383,11 @@ app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
 });
 
 // Other product routes
-app.use("/api/admin/system-status", adminKeyMiddleware, adminSystemStatusRoutes);
+app.use(
+  "/api/admin/system-status",
+  adminKeyMiddleware,
+  adminSystemStatusRoutes,
+);
 app.use(
   "/api/admin/system-monitor/history",
   adminKeyMiddleware,
@@ -592,7 +598,10 @@ async function startServer() {
     try {
       initializeRetentionSchedule();
     } catch (scheduleError) {
-      console.warn("⚠️ Failed to schedule system monitor retention", scheduleError.message);
+      console.warn(
+        "⚠️ Failed to schedule system monitor retention",
+        scheduleError.message,
+      );
     }
 
     server = app.listen(PORT, () => {

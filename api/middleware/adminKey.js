@@ -17,7 +17,9 @@ function adminKeyMiddleware(req, res, next) {
   const configuredKey = resolveAdminKey();
 
   if (!configuredKey) {
-    console.error("❌ Admin Key Middleware - No ADMIN_API_KEY configured in environment");
+    console.error(
+      "❌ Admin Key Middleware - No ADMIN_API_KEY configured in environment",
+    );
     return res.status(500).json({
       success: false,
       message: "Admin API key is not configured",

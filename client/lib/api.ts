@@ -408,7 +408,8 @@ export class ApiClient {
       }
     }
 
-    const baseForUrl = trimmedBase ||
+    const baseForUrl =
+      trimmedBase ||
       (typeof window !== "undefined"
         ? window.location.origin
         : "http://localhost");

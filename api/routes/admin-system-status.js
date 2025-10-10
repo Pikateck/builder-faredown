@@ -102,7 +102,10 @@ function normalizeUrl(base, path) {
       return url.href;
     }
 
-    if (url.pathname === normalizedPath || url.pathname.endsWith(normalizedPath)) {
+    if (
+      url.pathname === normalizedPath ||
+      url.pathname.endsWith(normalizedPath)
+    ) {
       return url.href;
     }
 
@@ -186,7 +189,11 @@ function classifyStatus({ component, result, latencyMs, target, detail }) {
       return "connected";
     }
     case "cors": {
-      if (!detail || !Array.isArray(detail.origins) || detail.origins.length === 0) {
+      if (
+        !detail ||
+        !Array.isArray(detail.origins) ||
+        detail.origins.length === 0
+      ) {
         return "missing";
       }
       if (detail.hasAppOrigin === false) {
@@ -216,7 +223,9 @@ function classifyStatus({ component, result, latencyMs, target, detail }) {
 }
 
 async function evaluateComponent(definition, checkedAt) {
-  const baseTarget = definition.resolveTarget ? definition.resolveTarget() : null;
+  const baseTarget = definition.resolveTarget
+    ? definition.resolveTarget()
+    : null;
   let detail = { target: baseTarget };
   let result = { ok: false, status: null, latencyMs: null, error: null };
 
@@ -227,7 +236,11 @@ async function evaluateComponent(definition, checkedAt) {
     }
     case "http": {
       const url = normalizeUrl(baseTarget, definition.healthPath);
-      result = await timedFetch(url, {}, definition.timeoutMs || DEFAULT_TIMEOUT_MS);
+      result = await timedFetch(
+        url,
+        {},
+        definition.timeoutMs || DEFAULT_TIMEOUT_MS,
+      );
       detail = { ...detail, url };
       break;
     }
@@ -235,17 +248,26 @@ async function evaluateComponent(definition, checkedAt) {
       const url = normalizeUrl(baseTarget, definition.healthPath);
       result =
         url !== null
-          ? await timedFetch(url, {}, definition.timeoutMs || DEFAULT_TIMEOUT_MS)
+          ? await timedFetch(
+              url,
+              {},
+              definition.timeoutMs || DEFAULT_TIMEOUT_MS,
+            )
           : { ok: false, status: null, latencyMs: null, error: "missing-url" };
       detail = { ...detail, url };
       break;
     }
     case "email": {
-      result = await verifySmtpConnectivity(definition.timeoutMs || DEFAULT_TIMEOUT_MS);
+      result = await verifySmtpConnectivity(
+        definition.timeoutMs || DEFAULT_TIMEOUT_MS,
+      );
       break;
     }
     case "cors": {
-      const analysis = analyzeCorsConfig(baseTarget, process.env.APP_PUBLIC_URL || null);
+      const analysis = analyzeCorsConfig(
+        baseTarget,
+        process.env.APP_PUBLIC_URL || null,
+      );
       result = {
         ok: analysis.hasAppOrigin && analysis.origins.length > 0,
         status: analysis.origins.length > 0 ? 200 : null,
@@ -331,7 +353,10 @@ router.get("/", async (req, res) => {
 
   try {
     for (const definition of COMPONENT_DEFINITIONS) {
-      const componentStatus = await evaluateComponent(definition, meta.checkedAt);
+      const componentStatus = await evaluateComponent(
+        definition,
+        meta.checkedAt,
+      );
       components.push(componentStatus);
     }
 
@@ -340,7 +365,11 @@ router.get("/", async (req, res) => {
 
     const healthyStatuses = new Set(["connected", "configured", "set"]);
     const warningStatuses = new Set(["warning"]);
-    const failingStatuses = new Set(["disconnected", "not_configured", "missing"]);
+    const failingStatuses = new Set([
+      "disconnected",
+      "not_configured",
+      "missing",
+    ]);
 
     const summary = components.reduce(
       (acc, component) => {
