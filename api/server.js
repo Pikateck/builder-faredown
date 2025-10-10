@@ -78,6 +78,8 @@ const adminPromoRoutes = require("./routes/admin-promo");
 const pricingEngineRoutes = require("./routes/pricing-engine");
 const adminUsersVerifyRoutes = require("./routes/admin-users-verify");
 const adminUsersPublic = require("./routes/admin-users-public");
+const adminSystemStatusRoutes = require("./routes/admin-system-status");
+const adminSystemMonitorHistoryRoutes = require("./routes/admin-system-monitor-history");
 
 // Middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
@@ -87,6 +89,7 @@ const { auditLogger } = require("./middleware/audit");
 
 // DB
 const db = require("./database/connection");
+const { initializeRetentionSchedule } = require("./services/systemMonitorService");
 
 // Initialize Express
 const app = express();
@@ -378,6 +381,8 @@ app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
 });
 
 // Other product routes
+app.use("/api/admin/system-status", adminSystemStatusRoutes);
+app.use("/api/admin/system-monitor/history", adminSystemMonitorHistoryRoutes);
 app.use("/api/admin/users", adminKeyMiddleware, adminUsersPublic);
 app.use(
   "/api/admin",
@@ -579,6 +584,12 @@ async function startServer() {
       }
     }
     console.log("✅ Database connected and schema ready");
+
+    try {
+      initializeRetentionSchedule();
+    } catch (scheduleError) {
+      console.warn("⚠️ Failed to schedule system monitor retention", scheduleError.message);
+    }
 
     server = app.listen(PORT, () => {
       console.log("\n🚀 Faredown API Server Started");
