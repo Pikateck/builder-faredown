@@ -35,21 +35,15 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import {
-  ChartContainer,
-  ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart";
+import { ChartTooltipContent } from "@/components/ui/chart";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Activity,
   AlertTriangle,
-  ArrowUpRight,
   BarChart3,
   CheckCircle2,
   Clock3,
   Database,
-  Download,
   Globe,
   Mail,
   RefreshCcw,
@@ -62,8 +56,6 @@ import {
 } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import {
-  Area,
-  AreaChart,
   CartesianGrid,
   Line,
   LineChart,
