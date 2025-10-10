@@ -30,9 +30,18 @@ export function getAdminApiKey(): string {
  * Get common admin headers for API requests
  */
 export function getAdminHeaders(): Record<string, string> {
+  const adminKey = getAdminApiKey();
+
+  console.log("🔑 Client Admin Headers", {
+    hasAdminKey: !!adminKey,
+    keyLength: adminKey.length,
+    keyFirst10: adminKey.substring(0, 10),
+    viteAdminKey: import.meta.env.VITE_ADMIN_API_KEY,
+  });
+
   return {
     "Content-Type": "application/json",
-    "X-Admin-Key": getAdminApiKey(),
+    "X-Admin-Key": adminKey,
   };
 }
 
