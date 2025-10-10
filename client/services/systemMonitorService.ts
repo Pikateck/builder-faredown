@@ -1,6 +1,6 @@
 import { apiClient } from "@/lib/api";
 
-import { apiClient } from "@/lib/api";
+import { apiClient as coreApiClient } from "@/lib/api";
 import { getAdminHeaders } from "@/utils/adminEnv";
 
 export type MonitorStatus =
@@ -58,7 +58,7 @@ export interface MonitorHistoryResponse {
 }
 
 export async function fetchSystemStatus() {
-  return apiClient.get<SystemMonitorResponse>(
+  return coreApiClient.get<SystemMonitorResponse>(
     "/api/admin/system-status",
     undefined,
     getAdminHeaders(),
@@ -66,7 +66,7 @@ export async function fetchSystemStatus() {
 }
 
 export async function fetchComponentHistory(component: string, hours: number) {
-  return apiClient.get<MonitorHistoryResponse>(
+  return coreApiClient.get<MonitorHistoryResponse>(
     "/api/admin/system-monitor/history",
     { component, hours },
     getAdminHeaders(),
