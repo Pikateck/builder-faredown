@@ -129,6 +129,24 @@ function getStatusConfig(status: string) {
   );
 }
 
+function extractDetailError(detail: Record<string, unknown> | null | undefined) {
+  if (!detail) {
+    return null;
+  }
+
+  const info = detail as { error?: unknown; message?: unknown };
+
+  if (typeof info.error === "string" && info.error.trim().length > 0) {
+    return info.error;
+  }
+
+  if (typeof info.message === "string" && info.message.trim().length > 0) {
+    return info.message;
+  }
+
+  return null;
+}
+
 type HistoryRange = "24" | "168";
 
 export default function SystemMonitor() {
@@ -306,7 +324,7 @@ export default function SystemMonitor() {
                       )}
                     </TableCell>
                     <TableCell>
-                      <StatusBadge status={component.status} />
+                      <StatusBadge status={component.status} reason={extractDetailError(component.detail)} />
                     </TableCell>
                     <TableCell>{formatLatency(component.latencyMs)}</TableCell>
                     <TableCell className="text-sm text-slate-600">
@@ -426,7 +444,7 @@ export default function SystemMonitor() {
                                 Latency: {formatLatency(point.latencyMs)}
                               </div>
                             </div>
-                            <StatusBadge status={point.status} />
+                            <StatusBadge status={point.status} reason={extractDetailError(point.detail as Record<string, unknown> | null)} />
                           </div>
                         ))
                     ) : (
@@ -452,10 +470,10 @@ export default function SystemMonitor() {
   );
 }
 
-function StatusBadge({ status }: { status: string }) {
+function StatusBadge({ status, reason }: { status: string; reason?: string | null }) {
   const config = getStatusConfig(status);
   return (
-    <Badge className={`${config.className} flex items-center gap-1`}>
+    <Badge className={`${config.className} flex items-center gap-1`} title={reason || undefined}>
       <config.icon className="h-3.5 w-3.5" />
       {config.label}
     </Badge>
@@ -541,7 +559,7 @@ function ComponentCard({
           <Icon className="h-5 w-5 text-blue-600" />
           <CardTitle className="text-base">{component.name}</CardTitle>
         </div>
-        <StatusBadge status={component.status} />
+        <StatusBadge status={component.status} reason={extractDetailError(component.detail)} />
       </CardHeader>
       <CardContent className="space-y-3">
         <InfoRow label="Target" value={component.target || "—"} icon={Globe} />
@@ -565,6 +583,19 @@ function ComponentCard({
             <span>7d: {component.uptime.last7d !== null ? `${component.uptime.last7d.toFixed(1)}%` : "—"}</span>
           </div>
         </div>
+        {(() => {
+          const errorDetail = extractDetailError(component.detail);
+          if (!errorDetail) {
+            return null;
+          }
+
+          return (
+            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+              <div className="font-semibold">Last error</div>
+              <div className="mt-1 whitespace-pre-line">{errorDetail}</div>
+            </div>
+          );
+        })()}
         <Button variant="outline" size="sm" className="w-full" onClick={onHistory}>
           <BarChart3 className="mr-2 h-4 w-4" /> View History
         </Button>
