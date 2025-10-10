@@ -304,6 +304,13 @@ const comparePassword = async (password, hashedPassword) => {
 const getAdminApiKey = () => (process.env.ADMIN_API_KEY || "").trim();
 
 const authenticateToken = (req, res, next) => {
+  // CRITICAL FIX: If admin access was already granted via admin key middleware,
+  // skip token validation to prevent conflicts with /api/admin global middleware
+  if (req.adminAccess && req.adminAccess.viaKey && req.user) {
+    console.log("✅ Token middleware: Admin already authenticated via key, skipping token check");
+    return next();
+  }
+
   const adminKey = (req.get("x-admin-key") || req.query.admin_key || "").trim();
   const configuredKey = getAdminApiKey();
 
