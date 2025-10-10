@@ -470,7 +470,7 @@ export class ApiClient {
             name: "Canada",
             display_name: "Canada",
             flag: "🇨🇦",
-            flag_emoji: "���🇦",
+            flag_emoji: "🇨🇦",
             popular: false,
           },
           {
@@ -839,7 +839,12 @@ export class ApiClient {
       }
     }
 
-    const url = new URL(`${trimmedBase}${normalizedEndpoint}`);
+    const baseForUrl = trimmedBase ||
+      (typeof window !== "undefined"
+        ? window.location.origin
+        : "http://localhost");
+
+    const url = new URL(`${baseForUrl}${normalizedEndpoint}`);
 
     if (params) {
       Object.keys(params).forEach((key) => {
