@@ -392,6 +392,30 @@ export class ApiClient {
     return fetch;
   }
 
+  private buildUrl(endpoint: string): string {
+    const trimmedBase = (this.baseURL || "").replace(/\/+$/, "");
+    let normalizedEndpoint = endpoint.startsWith("/")
+      ? endpoint
+      : `/${endpoint}`;
+
+    if (
+      trimmedBase.toLowerCase().endsWith("/api") &&
+      normalizedEndpoint.toLowerCase().startsWith("/api/")
+    ) {
+      normalizedEndpoint = normalizedEndpoint.slice(4);
+      if (!normalizedEndpoint.startsWith("/")) {
+        normalizedEndpoint = `/${normalizedEndpoint}`;
+      }
+    }
+
+    const baseForUrl = trimmedBase ||
+      (typeof window !== "undefined"
+        ? window.location.origin
+        : "http://localhost");
+
+    return `${baseForUrl}${normalizedEndpoint}`;
+  }
+
   async get<T>(
     endpoint: string,
     params?: Record<string, any>,
