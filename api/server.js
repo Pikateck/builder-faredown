@@ -381,8 +381,12 @@ app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
 });
 
 // Other product routes
-app.use("/api/admin/system-status", adminSystemStatusRoutes);
-app.use("/api/admin/system-monitor/history", adminSystemMonitorHistoryRoutes);
+app.use("/api/admin/system-status", adminKeyMiddleware, adminSystemStatusRoutes);
+app.use(
+  "/api/admin/system-monitor/history",
+  adminKeyMiddleware,
+  adminSystemMonitorHistoryRoutes,
+);
 app.use("/api/admin/users", adminKeyMiddleware, adminUsersPublic);
 app.use(
   "/api/admin",
