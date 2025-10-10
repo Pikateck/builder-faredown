@@ -14,8 +14,6 @@ const {
 } = require("../services/systemMonitorService");
 
 const router = express.Router();
-initializeRetentionSchedule();
-
 router.use(adminKeyMiddleware);
 
 const COMPONENT_DEFINITIONS = [
