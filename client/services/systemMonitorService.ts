@@ -1,5 +1,8 @@
 import { apiClient } from "@/lib/api";
 
+import { apiClient } from "@/lib/api";
+import { getAdminHeaders } from "@/utils/adminEnv";
+
 export type MonitorStatus =
   | "connected"
   | "warning"
@@ -55,11 +58,17 @@ export interface MonitorHistoryResponse {
 }
 
 export async function fetchSystemStatus() {
-  return apiClient.get<SystemMonitorResponse>("/api/admin/system-status");
+  return apiClient.get<SystemMonitorResponse>(
+    "/api/admin/system-status",
+    undefined,
+    getAdminHeaders(),
+  );
 }
 
 export async function fetchComponentHistory(component: string, hours: number) {
   return apiClient.get<MonitorHistoryResponse>(
-    `/api/admin/system-monitor/history?component=${encodeURIComponent(component)}&hours=${hours}`,
+    "/api/admin/system-monitor/history",
+    { component, hours },
+    getAdminHeaders(),
   );
 }
