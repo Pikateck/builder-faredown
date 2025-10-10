@@ -35,7 +35,6 @@ import {
   TabsList,
   TabsTrigger,
 } from "@/components/ui/tabs";
-import { ChartTooltipContent } from "@/components/ui/chart";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import {
   Activity,
@@ -386,7 +385,6 @@ export default function SystemMonitor() {
                             <XAxis dataKey="time" tick={{ fontSize: 12 }} minTickGap={24} />
                             <YAxis tick={{ fontSize: 12 }} width={48} />
                             <Tooltip
-                              content={<ChartTooltipContent />}
                               labelFormatter={(value) => `Time: ${value}`}
                               formatter={(value: number) => [`${value} ms`, "Latency"]}
                             />
