@@ -166,6 +166,7 @@ async function maybeSendAlerts(componentStatuses) {
       target: status.detail?.url || status.target || null,
       lastChecked: latest?.checked_at || new Date().toISOString(),
       error: errorMessage,
+      httpStatus: status.detail?.httpStatus ?? latest?.detail?.httpStatus ?? null,
     });
 
     lastAlertAt.set(status.component, now);
@@ -180,7 +181,10 @@ async function maybeSendAlerts(componentStatuses) {
     actionableFailures
       .map((failure) => {
         const targetLine = failure.target ? `Target: ${failure.target}` : "Target: n/a";
-        return `• ${failure.name} (${failure.component})\n  ${targetLine}\n  Last error: ${failure.error}\n  Checked: ${new Date(failure.lastChecked).toISOString()}`;
+        const httpLine = failure.httpStatus
+          ? `HTTP status: ${failure.httpStatus}\n`
+          : "";
+        return `• ${failure.name} (${failure.component})\n  ${targetLine}\n  ${httpLine}Last error: ${failure.error}\n  Checked: ${new Date(failure.lastChecked).toISOString()}`;
       })
       .join("\n");
 
