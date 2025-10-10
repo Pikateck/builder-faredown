@@ -15,11 +15,15 @@ function formatDetail(detail) {
     return null;
   }
 
-  try {
-    return JSON.stringify(detail);
-  } catch (error) {
-    return JSON.stringify({ message: "Failed to stringify detail", error: error.message });
+  if (detail instanceof Error) {
+    return {
+      message: detail.message,
+      stack: detail.stack,
+      name: detail.name,
+    };
   }
+
+  return detail;
 }
 
 async function logStatus(component, status, latencyMs, detail = {}) {
