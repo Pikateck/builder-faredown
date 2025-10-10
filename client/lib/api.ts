@@ -847,28 +847,7 @@ export class ApiClient {
       return this.devClient.get<T>(endpoint, params, customHeaders);
     }
 
-    const trimmedBase = (this.baseURL || "").replace(/\/+$/, "");
-    let normalizedEndpoint = endpoint.startsWith("/")
-      ? endpoint
-      : `/${endpoint}`;
-
-    // Avoid double /api prefixes when base URL already includes /api
-    if (
-      trimmedBase.toLowerCase().endsWith("/api") &&
-      normalizedEndpoint.toLowerCase().startsWith("/api/")
-    ) {
-      normalizedEndpoint = normalizedEndpoint.slice(4);
-      if (!normalizedEndpoint.startsWith("/")) {
-        normalizedEndpoint = `/${normalizedEndpoint}`;
-      }
-    }
-
-    const baseForUrl = trimmedBase ||
-      (typeof window !== "undefined"
-        ? window.location.origin
-        : "http://localhost");
-
-    const url = new URL(`${baseForUrl}${normalizedEndpoint}`);
+    const url = new URL(this.buildUrl(endpoint));
 
     if (params) {
       Object.keys(params).forEach((key) => {
