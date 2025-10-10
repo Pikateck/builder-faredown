@@ -21,6 +21,13 @@
   status = 200
   force = true
 
+# Netlify health endpoint
+[[redirects]]
+  from = "/health"
+  to = "/.netlify/functions/health"
+  status = 200
+  force = true
+
 # SPA fallback (must always be LAST)
 [[redirects]]
   from = "/*"
