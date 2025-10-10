@@ -94,6 +94,7 @@ import PaymentDashboard from "./pages/admin/PaymentDashboard";
 import AdminTestingDashboard from "./pages/admin/AdminTestingDashboard";
 import AIBargainingDashboard from "./pages/admin/AIBargainingDashboard";
 import APITestingDashboard from "./pages/admin/APITestingDashboard";
+import SystemMonitor from "./pages/admin/SystemMonitor";
 
 // OAuth Callback Components
 import GoogleCallback from "./pages/oauth/GoogleCallback";
@@ -438,6 +439,10 @@ function App() {
                         <Route
                           path="/admin/APITestingDashboard"
                           element={<APITestingDashboard />}
+                        />
+                        <Route
+                          path="/admin/system-monitor"
+                          element={<SystemMonitor />}
                         />
 
                         {/* Mobile App Routes */}
