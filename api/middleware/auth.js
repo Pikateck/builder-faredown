@@ -301,7 +301,27 @@ const comparePassword = async (password, hashedPassword) => {
 /**
  * Authentication middleware
  */
+const getAdminApiKey = () => (process.env.ADMIN_API_KEY || "").trim();
+
 const authenticateToken = (req, res, next) => {
+  const adminKey = (req.get("x-admin-key") || req.query.admin_key || "").trim();
+  const configuredKey = getAdminApiKey();
+
+  if (configuredKey && adminKey && adminKey === configuredKey) {
+    req.user = {
+      id: "admin-api-key",
+      username: "admin-api",
+      email: "admin-api@faredown.com",
+      role: ROLES.SUPER_ADMIN,
+      permissions: Object.values(PERMISSIONS),
+    };
+    req.adminAccess = {
+      ...(req.adminAccess || {}),
+      viaKey: true,
+    };
+    return next();
+  }
+
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1]; // Bearer TOKEN
 
