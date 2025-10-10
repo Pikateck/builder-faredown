@@ -5,17 +5,19 @@ function resolveAdminKey() {
 }
 
 function adminKeyMiddleware(req, res, next) {
-  console.log("🔑 Admin Key Middleware - Checking authentication", {
-    url: req.originalUrl,
-    method: req.method,
-    hasXAdminKey: !!req.get("x-admin-key"),
-    hasQueryKey: !!req.query.admin_key,
-  });
+  if (process.env.NODE_ENV !== "production") {
+    console.log("🔑 Admin Key Middleware - Checking authentication", {
+      url: req.originalUrl,
+      method: req.method,
+      hasXAdminKey: !!req.get("x-admin-key"),
+      hasQueryKey: !!req.query.admin_key,
+    });
+  }
 
   const configuredKey = resolveAdminKey();
 
   if (!configuredKey) {
-    console.error("❌ Admin Key Middleware - No ADMIN_API_KEY configured");
+    console.error("❌ Admin Key Middleware - No ADMIN_API_KEY configured in environment");
     return res.status(500).json({
       success: false,
       message: "Admin API key is not configured",
@@ -28,24 +30,30 @@ function adminKeyMiddleware(req, res, next) {
     ""
   ).trim();
 
-  console.log("🔑 Admin Key Middleware - Key comparison", {
-    hasProvidedKey: !!providedKey,
-    providedKeyLength: providedKey.length,
-    configuredKeyLength: configuredKey.length,
-    providedKeyFirst10: providedKey.substring(0, 10),
-    configuredKeyFirst10: configuredKey.substring(0, 10),
-    keysMatch: providedKey === configuredKey,
-  });
+  if (process.env.NODE_ENV !== "production") {
+    console.log("🔑 Admin Key Middleware - Key comparison", {
+      hasProvidedKey: !!providedKey,
+      providedKeyLength: providedKey.length,
+      configuredKeyLength: configuredKey.length,
+      providedKeyFirst10: providedKey.substring(0, 10),
+      configuredKeyFirst10: configuredKey.substring(0, 10),
+      keysMatch: providedKey === configuredKey,
+    });
+  }
 
   if (!providedKey || providedKey !== configuredKey) {
-    console.error("❌ Admin Key Middleware - Invalid or missing key");
+    if (process.env.NODE_ENV !== "production") {
+      console.error("❌ Admin Key Middleware - Invalid or missing key");
+    }
     return res.status(401).json({
       success: false,
       message: "Access denied: invalid admin key",
     });
   }
 
-  console.log("✅ Admin Key Middleware - Authentication successful");
+  if (process.env.NODE_ENV !== "production") {
+    console.log("✅ Admin Key Middleware - Authentication successful");
+  }
 
   // Set req.user for compatibility with other middleware
   req.user = {
