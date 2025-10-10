@@ -17,16 +17,15 @@
   },
   "scripts": {
     "dev": "node dev-server.js",
-    "build": "npx vite build",
-    "build:client": "npx vite build",
-    "build:server": "echo 'Server build skipped for production'",
-    "preview": "npx vite preview",
+    "build": "vite build",
+    "build:client": "vite build",
+    "build:server": "echo Server build skipped for production",
+    "preview": "vite preview",
     "start": "node server.js",
     "start:prod": "node dist/server/node-build.mjs",
-    "test": "npx vitest --run",
+    "test": "vitest --run",
     "format.fix": "prettier --write .",
-    "typecheck": "npx tsc",
-    "monitor:admin-api": "node scripts/admin-api-monitor.mjs"
+    "typecheck": "tsc"
   },
   "dependencies": {
     "@builder.io/react": "^5.0.0",
