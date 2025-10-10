@@ -186,6 +186,12 @@ router.get("/", async (req, res) => {
         target,
       });
 
+      await logStatus(definition.component, status, checkResult.latencyMs, {
+        target,
+        httpStatus: checkResult.status,
+        error: checkResult.error,
+      });
+
       const uptime24h = await getUptimeSummary(definition.component, 24);
       const uptime7d = await getUptimeSummary(definition.component, 168);
 
@@ -204,12 +210,6 @@ router.get("/", async (req, res) => {
       };
 
       components.push(componentStatus);
-
-      await logStatus(definition.component, status, checkResult.latencyMs, {
-        target,
-        httpStatus: checkResult.status,
-        error: checkResult.error,
-      });
     }
 
     await pruneOldLogs();
