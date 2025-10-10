@@ -242,6 +242,7 @@ class DatabaseConnection {
       }
 
       await this.ensureUserVerificationColumns();
+      await this.ensureSystemMonitorTable();
     } catch (error) {
       console.error("❌ Failed to initialize schema:", error);
       throw error;
@@ -300,6 +301,33 @@ class DatabaseConnection {
         "❌ Failed ensuring user verification columns:",
         error.message,
       );
+    }
+  }
+
+  async ensureSystemMonitorTable() {
+    try {
+      await this.query(
+        `CREATE TABLE IF NOT EXISTS system_monitor_logs (
+          id BIGSERIAL PRIMARY KEY,
+          component VARCHAR(64) NOT NULL,
+          status VARCHAR(32) NOT NULL,
+          latency_ms INTEGER,
+          detail JSONB,
+          checked_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )`,
+      );
+
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_system_monitor_checked_at
+          ON system_monitor_logs (checked_at DESC)`,
+      );
+
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_system_monitor_component
+          ON system_monitor_logs (component)`,
+      );
+    } catch (error) {
+      console.error("❌ Failed to ensure system monitor table:", error.message);
     }
   }
 
