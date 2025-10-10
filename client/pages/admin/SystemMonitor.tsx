@@ -552,6 +552,7 @@ function ComponentCard({
   onHistory: () => void;
 }) {
   const Icon = getComponentIcon(component.component);
+  const errorDetail = extractDetailError(component.detail);
   return (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between">
@@ -559,7 +560,7 @@ function ComponentCard({
           <Icon className="h-5 w-5 text-blue-600" />
           <CardTitle className="text-base">{component.name}</CardTitle>
         </div>
-        <StatusBadge status={component.status} reason={extractDetailError(component.detail)} />
+        <StatusBadge status={component.status} reason={errorDetail} />
       </CardHeader>
       <CardContent className="space-y-3">
         <InfoRow label="Target" value={component.target || "—"} icon={Globe} />
@@ -583,19 +584,12 @@ function ComponentCard({
             <span>7d: {component.uptime.last7d !== null ? `${component.uptime.last7d.toFixed(1)}%` : "—"}</span>
           </div>
         </div>
-        {(() => {
-          const errorDetail = extractDetailError(component.detail);
-          if (!errorDetail) {
-            return null;
-          }
-
-          return (
-            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700">
-              <div className="font-semibold">Last error</div>
-              <div className="mt-1 whitespace-pre-line">{errorDetail}</div>
-            </div>
-          );
-        })()}
+        {errorDetail ? (
+          <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-xs text-red-700">
+            <div className="font-semibold">Last error</div>
+            <div className="mt-1 whitespace-pre-line">{errorDetail}</div>
+          </div>
+        ) : null}
         <Button variant="outline" size="sm" className="w-full" onClick={onHistory}>
           <BarChart3 className="mr-2 h-4 w-4" /> View History
         </Button>
