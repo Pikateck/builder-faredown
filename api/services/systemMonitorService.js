@@ -1,6 +1,5 @@
 const os = require("os");
 const nodemailer = require("nodemailer");
-const fetch = require("node-fetch");
 const db = require("../database/connection");
 
 const SUCCESS_STATUSES = new Set(["connected", "configured", "set", "healthy"]);
