@@ -177,20 +177,69 @@ export default function SystemMonitor() {
   const latestDataRef = useRef<SystemMonitorResponse | null>(null);
 
   const loadCachedData = useCallback(() => {
+    if (typeof window === "undefined") {
+      return false;
+    }
+    try {
+      const raw = window.localStorage.getItem(CACHE_KEY);
+      if (!raw) {
+        return false;
+      }
+      const cached: CachedMonitorPayload = JSON.parse(raw);
+      if (!cached?.data) {
+        return false;
+      }
+      const { data } = cached;
+      latestDataRef.current = data;
+      setComponents(data.components);
+      setSummary(data.summary);
+      setMeta(data.meta);
+      setEnvSnapshot(data.env);
+      setIsStale(true);
+      return true;
+    } catch (cacheError) {
+      console.warn("Failed to load system monitor cache", cacheError);
+      return false;
+    }
+  }, []);
+
+  const persistCache = useCallback((data: SystemMonitorResponse) => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    try {
+      const payload: CachedMonitorPayload = {
+        timestamp: new Date().toISOString(),
+        data,
+      };
+      window.localStorage.setItem(CACHE_KEY, JSON.stringify(payload));
+    } catch (persistError) {
+      console.warn("Failed to persist system monitor cache", persistError);
+    }
+  }, []);
+
+  const loadStatus = useCallback(async () => {
     try {
       setLoading(true);
       setError(null);
       const response = await fetchSystemStatus();
+      latestDataRef.current = response;
       setComponents(response.components);
       setSummary(response.summary);
       setMeta(response.meta);
       setEnvSnapshot(response.env);
+      setIsStale(false);
+      persistCache(response);
     } catch (err: any) {
+      console.error("systemMonitor: failed to load status", err);
       setError(err?.message || "Failed to load system status");
+      if (latestDataRef.current) {
+        setIsStale(true);
+      }
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [persistCache]);
 
   const loadHistory = useCallback(
     async (component: ComponentStatus, range: HistoryRange) => {
