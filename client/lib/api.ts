@@ -271,6 +271,39 @@ export class ApiClient {
     );
   }
 
+  private resolveAndCacheAdminKey(): string | null {
+    if (this.adminApiKey && this.adminApiKey.trim().length > 0) {
+      return this.adminApiKey;
+    }
+
+    const resolved = resolveAdminApiKey();
+    this.adminApiKey = resolved;
+    return resolved;
+  }
+
+  private withAdminHeaders(
+    endpoint: string,
+    headers: Record<string, string> = {},
+  ): Record<string, string> {
+    if (!endpoint.toLowerCase().includes("/admin")) {
+      return headers;
+    }
+
+    if (headers["X-Admin-Key"]) {
+      return headers;
+    }
+
+    const adminKey = this.resolveAndCacheAdminKey();
+    if (!adminKey) {
+      return headers;
+    }
+
+    return {
+      ...headers,
+      "X-Admin-Key": adminKey,
+    };
+  }
+
   private getHeaders(
     customHeaders: Record<string, string> = {},
   ): Record<string, string> {
@@ -533,7 +566,7 @@ export class ApiClient {
             iso2: "JP",
             name: "Japan",
             display_name: "Japan",
-            flag: "🇯🇵",
+            flag: "����🇵",
             flag_emoji: "🇯🇵",
             popular: false,
           },
