@@ -311,6 +311,42 @@ app.options("*", cors(corsOptionsDelegate));
 
 app.use(limiter);
 
+// Health check (Render expects /api/health)
+app.get("/api/health", async (req, res) => {
+  try {
+    const dbHealth = await db.healthCheck();
+    res.json({
+      status: dbHealth.healthy ? "healthy" : "degraded",
+      timestamp: new Date().toISOString(),
+      service: "faredown-backend",
+      version: "1.0.0",
+      environment: process.env.NODE_ENV || "development",
+      uptime: process.uptime(),
+      services: {
+        database: dbHealth.healthy ? "connected" : "offline",
+        cache: "connected",
+        external_apis: "operational",
+      },
+      database: dbHealth,
+    });
+  } catch (error) {
+    res.status(500).json({
+      status: "unhealthy",
+      timestamp: new Date().toISOString(),
+      service: "faredown-backend",
+      version: "1.0.0",
+      environment: process.env.NODE_ENV || "development",
+      uptime: process.uptime(),
+      services: {
+        database: "offline",
+        cache: "connected",
+        external_apis: "operational",
+      },
+      error: error.message,
+    });
+  }
+});
+
 // Health check (platform-level)
 app.get("/health", async (req, res) => {
   try {
