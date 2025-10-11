@@ -361,9 +361,13 @@ async function evaluateComponent(definition, checkedAt) {
 router.get("/", async (req, res) => {
   const meta = buildMeta();
   const components = [];
+  const definitionsToEvaluate =
+    ACTIVE_COMPONENT_DEFINITIONS.length > 0
+      ? ACTIVE_COMPONENT_DEFINITIONS
+      : COMPONENT_DEFINITIONS;
 
   try {
-    for (const definition of COMPONENT_DEFINITIONS) {
+    for (const definition of definitionsToEvaluate) {
       const componentStatus = await evaluateComponent(
         definition,
         meta.checkedAt,
