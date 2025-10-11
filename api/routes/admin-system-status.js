@@ -76,6 +76,17 @@ const COMPONENT_DEFINITIONS = [
   },
 ];
 
+const DISABLED_COMPONENTS = new Set(
+  (process.env.SYSTEM_MONITOR_DISABLED_COMPONENTS || "")
+    .split(",")
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean),
+);
+
+const ACTIVE_COMPONENT_DEFINITIONS = COMPONENT_DEFINITIONS.filter(
+  (definition) => !DISABLED_COMPONENTS.has(definition.component.toLowerCase()),
+);
+
 function ensureProtocol(value) {
   if (!value) {
     return value;
