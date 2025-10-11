@@ -351,9 +351,12 @@ export default function SystemMonitor() {
       return null;
     }
     if (isStale && meta.checkedAt) {
-      return `${error} • Showing cached results from ${formatDistanceToNow(new Date(meta.checkedAt), {
-        addSuffix: true,
-      })}`;
+      return `${error} • Showing cached results from ${formatDistanceToNow(
+        new Date(meta.checkedAt),
+        {
+          addSuffix: true,
+        },
+      )}`;
     }
     return error;
   }, [error, isStale, meta.checkedAt]);
@@ -389,7 +392,10 @@ export default function SystemMonitor() {
             </CardHeader>
             <CardContent className="space-y-2">
               {Array.from({ length: 3 }).map((_, index) => (
-                <Skeleton key={`env-skeleton-${index}`} className="h-10 w-full" />
+                <Skeleton
+                  key={`env-skeleton-${index}`}
+                  className="h-10 w-full"
+                />
               ))}
             </CardContent>
           </Card>
@@ -400,7 +406,10 @@ export default function SystemMonitor() {
             </CardHeader>
             <CardContent className="space-y-3">
               {Array.from({ length: 5 }).map((_, index) => (
-                <Skeleton key={`table-skeleton-${index}`} className="h-12 w-full" />
+                <Skeleton
+                  key={`table-skeleton-${index}`}
+                  className="h-12 w-full"
+                />
               ))}
             </CardContent>
           </Card>
@@ -518,12 +527,17 @@ export default function SystemMonitor() {
                             reason={extractDetailError(component.detail)}
                           />
                         </TableCell>
-                        <TableCell>{formatLatency(component.latencyMs)}</TableCell>
+                        <TableCell>
+                          {formatLatency(component.latencyMs)}
+                        </TableCell>
                         <TableCell className="text-sm text-slate-600">
                           {component.checkedAt
-                            ? formatDistanceToNow(new Date(component.checkedAt), {
-                                addSuffix: true,
-                              })
+                            ? formatDistanceToNow(
+                                new Date(component.checkedAt),
+                                {
+                                  addSuffix: true,
+                                },
+                              )
                             : "—"}
                         </TableCell>
                         <TableCell className="text-sm text-slate-600">
@@ -589,7 +603,9 @@ export default function SystemMonitor() {
               <div className="mt-4 space-y-4">
                 <Tabs
                   value={historyRange}
-                  onValueChange={(value) => setHistoryRange(value as HistoryRange)}
+                  onValueChange={(value) =>
+                    setHistoryRange(value as HistoryRange)
+                  }
                 >
                   <TabsList className="grid grid-cols-2">
                     <TabsTrigger value="24">Last 24h</TabsTrigger>
@@ -678,7 +694,10 @@ export default function SystemMonitor() {
                                 <StatusBadge
                                   status={point.status}
                                   reason={extractDetailError(
-                                    point.detail as Record<string, unknown> | null,
+                                    point.detail as Record<
+                                      string,
+                                      unknown
+                                    > | null,
                                   )}
                                 />
                               </div>
