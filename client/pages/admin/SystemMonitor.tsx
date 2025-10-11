@@ -362,288 +362,346 @@ export default function SystemMonitor() {
 
   return (
     <div className="space-y-6">
-      <Card className={`border ${overallState.tone}`}>
-        <CardHeader className="flex flex-row items-center justify-between">
-          <div className="flex items-center gap-3">
-            {overallState.icon && <overallState.icon className="h-6 w-6" />}
-            <CardTitle className="text-lg">
-              System Connectivity &amp; Environment Monitor
-            </CardTitle>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={loadStatus}
-            disabled={loading}
-          >
-            <RefreshCcw
-              className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`}
-            />
-            Refresh All
-          </Button>
-        </CardHeader>
-        <CardContent className="grid gap-4 md:grid-cols-4">
-          <SummaryMetric
-            label="Healthy"
-            value={summary.healthy}
-            tone="text-emerald-700"
-            icon={CheckCircle2}
-          />
-          <SummaryMetric
-            label="Warnings"
-            value={summary.warning}
-            tone="text-yellow-700"
-            icon={AlertTriangle}
-          />
-          <SummaryMetric
-            label="Failing"
-            value={summary.failing}
-            tone="text-red-700"
-            icon={ShieldAlert}
-          />
-          <SummaryMetric
-            label="Last Checked"
-            value={
-              meta.checkedAt
-                ? formatDistanceToNow(new Date(meta.checkedAt), {
-                    addSuffix: true,
-                  })
-                : "—"
-            }
-            tone="text-slate-700"
-            icon={Clock3}
-          />
-        </CardContent>
-      </Card>
+      {showSkeleton ? (
+        <>
+          <Card className="border">
+            <CardHeader className="space-y-3">
+              <Skeleton className="h-6 w-64" />
+              <Skeleton className="h-4 w-32" />
+            </CardHeader>
+            <CardContent className="grid gap-4 md:grid-cols-4">
+              {Array.from({ length: 4 }).map((_, index) => (
+                <div
+                  key={`summary-skeleton-${index}`}
+                  className="flex flex-col gap-3 rounded-lg border border-slate-100 bg-white p-4 shadow-sm"
+                >
+                  <Skeleton className="h-5 w-24" />
+                  <Skeleton className="h-6 w-28" />
+                </div>
+              ))}
+            </CardContent>
+          </Card>
 
-      <EnvSnapshot env={envSnapshot} server={meta.server} />
+          <Card>
+            <CardHeader className="space-y-2">
+              <Skeleton className="h-5 w-48" />
+              <Skeleton className="h-4 w-32" />
+            </CardHeader>
+            <CardContent className="space-y-2">
+              {Array.from({ length: 3 }).map((_, index) => (
+                <Skeleton key={`env-skeleton-${index}`} className="h-10 w-full" />
+              ))}
+            </CardContent>
+          </Card>
 
-      <div className="hidden xl:block">
-        <Card>
-          <CardHeader>
-            <CardTitle>Live Connectivity Status</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Component</TableHead>
-                  <TableHead>URL / Variable</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Latency</TableHead>
-                  <TableHead>Last Checked</TableHead>
-                  <TableHead>Uptime</TableHead>
-                  <TableHead className="text-right">Action</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {components.map((component) => (
-                  <TableRow key={component.component}>
-                    <TableCell className="font-medium">
-                      {component.name}
-                    </TableCell>
-                    <TableCell>
-                      {component.target ? (
-                        <div className="flex items-center gap-2 text-sm text-blue-600">
-                          <Globe className="h-4 w-4 text-blue-500" />
-                          <span
-                            className="truncate max-w-[320px]"
-                            title={component.target}
-                          >
-                            {component.target}
-                          </span>
-                        </div>
-                      ) : (
-                        <span className="text-sm text-slate-500">—</span>
-                      )}
-                    </TableCell>
-                    <TableCell>
-                      <StatusBadge
-                        status={component.status}
-                        reason={extractDetailError(component.detail)}
-                      />
-                    </TableCell>
-                    <TableCell>{formatLatency(component.latencyMs)}</TableCell>
-                    <TableCell className="text-sm text-slate-600">
-                      {component.checkedAt
-                        ? formatDistanceToNow(new Date(component.checkedAt), {
-                            addSuffix: true,
-                          })
-                        : "—"}
-                    </TableCell>
-                    <TableCell className="text-sm text-slate-600">
-                      <div className="flex flex-col gap-1">
-                        <span>
-                          24h:{" "}
-                          {component.uptime.last24h !== null
-                            ? `${component.uptime.last24h.toFixed(1)}%`
-                            : "—"}
-                        </span>
-                        <span>
-                          7d:{" "}
-                          {component.uptime.last7d !== null
-                            ? `${component.uptime.last7d.toFixed(1)}%`
-                            : "—"}
-                        </span>
-                      </div>
-                    </TableCell>
-                    <TableCell className="text-right">
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={() => handleOpenHistory(component)}
-                      >
-                        <BarChart3 className="mr-2 h-4 w-4" /> History
-                      </Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </CardContent>
-        </Card>
-      </div>
+          <Card>
+            <CardHeader>
+              <Skeleton className="h-5 w-56" />
+            </CardHeader>
+            <CardContent className="space-y-3">
+              {Array.from({ length: 5 }).map((_, index) => (
+                <Skeleton key={`table-skeleton-${index}`} className="h-12 w-full" />
+              ))}
+            </CardContent>
+          </Card>
+        </>
+      ) : (
+        <>
+          <Card className={`border ${overallState.tone}`}>
+            <CardHeader className="flex flex-row items-center justify-between">
+              <div className="flex items-center gap-3">
+                {overallState.icon && <overallState.icon className="h-6 w-6" />}
+                <CardTitle className="text-lg">
+                  System Connectivity &amp; Environment Monitor
+                </CardTitle>
+              </div>
+              <div className="flex items-center gap-2">
+                {staleLabel && (
+                  <Badge
+                    variant="outline"
+                    className="bg-yellow-50 text-yellow-700 border-yellow-200 text-xs"
+                  >
+                    {staleLabel}
+                  </Badge>
+                )}
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={loadStatus}
+                  disabled={loading}
+                >
+                  <RefreshCcw
+                    className={`mr-2 h-4 w-4 ${loading ? "animate-spin" : ""}`}
+                  />
+                  Refresh All
+                </Button>
+              </div>
+            </CardHeader>
+            <CardContent className="grid gap-4 md:grid-cols-4">
+              <SummaryMetric
+                label="Healthy"
+                value={summary.healthy}
+                tone="text-emerald-700"
+                icon={CheckCircle2}
+              />
+              <SummaryMetric
+                label="Warnings"
+                value={summary.warning}
+                tone="text-yellow-700"
+                icon={AlertTriangle}
+              />
+              <SummaryMetric
+                label="Failing"
+                value={summary.failing}
+                tone="text-red-700"
+                icon={ShieldAlert}
+              />
+              <SummaryMetric
+                label="Last Checked"
+                value={
+                  meta.checkedAt
+                    ? formatDistanceToNow(new Date(meta.checkedAt), {
+                        addSuffix: true,
+                      })
+                    : "—"
+                }
+                tone="text-slate-700"
+                icon={Clock3}
+              />
+            </CardContent>
+          </Card>
 
-      <div className="grid gap-4 xl:hidden">
-        {components.map((component) => (
-          <ComponentCard
-            key={component.component}
-            component={component}
-            onHistory={() => handleOpenHistory(component)}
-          />
-        ))}
-      </div>
+          <EnvSnapshot env={envSnapshot} server={meta.server} />
 
-      <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
-        <SheetTrigger asChild>
-          <span />
-        </SheetTrigger>
-        <SheetContent className="w-full sm:max-w-xl">
-          <SheetHeader>
-            <SheetTitle>
-              {historyTarget
-                ? `${historyTarget.name} • History`
-                : "Component History"}
-            </SheetTitle>
-            <SheetDescription>
-              {historyTarget?.target
-                ? `Target: ${historyTarget.target}`
-                : "Connectivity history"}
-            </SheetDescription>
-          </SheetHeader>
-          <div className="mt-4 space-y-4">
-            <Tabs
-              value={historyRange}
-              onValueChange={(value) => setHistoryRange(value as HistoryRange)}
-            >
-              <TabsList className="grid grid-cols-2">
-                <TabsTrigger value="24">Last 24h</TabsTrigger>
-                <TabsTrigger value="168">Last 7d</TabsTrigger>
-              </TabsList>
-              <TabsContent value={historyRange} className="mt-4">
-                <Card>
-                  <CardHeader className="pb-2">
-                    <CardTitle className="text-base">
-                      Latency &amp; Uptime
-                    </CardTitle>
-                    <div className="text-sm text-slate-500">{uptimeLabel}</div>
-                  </CardHeader>
-                  <CardContent className="pt-0">
-                    <div className="h-64">
-                      {historyLoading ? (
-                        <div className="flex h-full items-center justify-center text-slate-500">
-                          Loading history…
-                        </div>
-                      ) : historyChartData.length ? (
-                        <ResponsiveContainer width="100%" height="100%">
-                          <LineChart data={historyChartData}>
-                            <CartesianGrid
-                              strokeDasharray="3 3"
-                              stroke="#e2e8f0"
-                            />
-                            <XAxis
-                              dataKey="time"
-                              tick={{ fontSize: 12 }}
-                              minTickGap={24}
-                            />
-                            <YAxis tick={{ fontSize: 12 }} width={48} />
-                            <Tooltip
-                              labelFormatter={(value) => `Time: ${value}`}
-                              formatter={(value: number) => [
-                                `${value} ms`,
-                                "Latency",
-                              ]}
-                            />
-                            <Line
-                              type="monotone"
-                              dataKey="latency"
-                              stroke="#2563eb"
-                              strokeWidth={2}
-                              dot={false}
-                            />
-                          </LineChart>
-                        </ResponsiveContainer>
-                      ) : (
-                        <div className="flex h-full items-center justify-center text-slate-400">
-                          No samples available
-                        </div>
-                      )}
-                    </div>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-
+          <div className="hidden xl:block">
             <Card>
               <CardHeader>
-                <CardTitle className="text-base">Recent Checks</CardTitle>
+                <CardTitle>Live Connectivity Status</CardTitle>
               </CardHeader>
               <CardContent>
-                <ScrollArea className="h-64 pr-3">
-                  <div className="space-y-3">
-                    {historyData?.points?.length ? (
-                      historyData.points
-                        .slice()
-                        .reverse()
-                        .map((point, index) => (
-                          <div
-                            key={`${point.checkedAt}-${index}`}
-                            className="flex items-start justify-between rounded-lg border border-slate-200 p-3"
-                          >
-                            <div>
-                              <div className="text-sm font-medium">
-                                {new Date(point.checkedAt).toLocaleString()}
-                              </div>
-                              <div className="text-xs text-slate-500">
-                                Latency: {formatLatency(point.latencyMs)}
-                              </div>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Component</TableHead>
+                      <TableHead>URL / Variable</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead>Latency</TableHead>
+                      <TableHead>Last Checked</TableHead>
+                      <TableHead>Uptime</TableHead>
+                      <TableHead className="text-right">Action</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {components.map((component) => (
+                      <TableRow key={component.component}>
+                        <TableCell className="font-medium">
+                          {component.name}
+                        </TableCell>
+                        <TableCell>
+                          {component.target ? (
+                            <div className="flex items-center gap-2 text-sm text-blue-600">
+                              <Globe className="h-4 w-4 text-blue-500" />
+                              <span
+                                className="truncate max-w-[320px]"
+                                title={component.target}
+                              >
+                                {component.target}
+                              </span>
                             </div>
-                            <StatusBadge
-                              status={point.status}
-                              reason={extractDetailError(
-                                point.detail as Record<string, unknown> | null,
-                              )}
-                            />
+                          ) : (
+                            <span className="text-sm text-slate-500">—</span>
+                          )}
+                        </TableCell>
+                        <TableCell>
+                          <StatusBadge
+                            status={component.status}
+                            reason={extractDetailError(component.detail)}
+                          />
+                        </TableCell>
+                        <TableCell>{formatLatency(component.latencyMs)}</TableCell>
+                        <TableCell className="text-sm text-slate-600">
+                          {component.checkedAt
+                            ? formatDistanceToNow(new Date(component.checkedAt), {
+                                addSuffix: true,
+                              })
+                            : "—"}
+                        </TableCell>
+                        <TableCell className="text-sm text-slate-600">
+                          <div className="flex flex-col gap-1">
+                            <span>
+                              24h:{" "}
+                              {component.uptime.last24h !== null
+                                ? `${component.uptime.last24h.toFixed(1)}%`
+                                : "—"}
+                            </span>
+                            <span>
+                              7d:{" "}
+                              {component.uptime.last7d !== null
+                                ? `${component.uptime.last7d.toFixed(1)}%`
+                                : "—"}
+                            </span>
                           </div>
-                        ))
-                    ) : (
-                      <div className="text-sm text-slate-500">
-                        No history available.
-                      </div>
-                    )}
-                  </div>
-                </ScrollArea>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => handleOpenHistory(component)}
+                          >
+                            <BarChart3 className="mr-2 h-4 w-4" /> History
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
               </CardContent>
             </Card>
           </div>
-        </SheetContent>
-      </Sheet>
 
-      {error && (
+          <div className="grid gap-4 xl:hidden">
+            {components.map((component) => (
+              <ComponentCard
+                key={component.component}
+                component={component}
+                onHistory={() => handleOpenHistory(component)}
+              />
+            ))}
+          </div>
+
+          <Sheet open={historyOpen} onOpenChange={setHistoryOpen}>
+            <SheetTrigger asChild>
+              <span />
+            </SheetTrigger>
+            <SheetContent className="w-full sm:max-w-xl">
+              <SheetHeader>
+                <SheetTitle>
+                  {historyTarget
+                    ? `${historyTarget.name} • History`
+                    : "Component History"}
+                </SheetTitle>
+                <SheetDescription>
+                  {historyTarget?.target
+                    ? `Target: ${historyTarget.target}`
+                    : "Connectivity history"}
+                </SheetDescription>
+              </SheetHeader>
+              <div className="mt-4 space-y-4">
+                <Tabs
+                  value={historyRange}
+                  onValueChange={(value) => setHistoryRange(value as HistoryRange)}
+                >
+                  <TabsList className="grid grid-cols-2">
+                    <TabsTrigger value="24">Last 24h</TabsTrigger>
+                    <TabsTrigger value="168">Last 7d</TabsTrigger>
+                  </TabsList>
+                  <TabsContent value={historyRange} className="mt-4">
+                    <Card>
+                      <CardHeader className="pb-2">
+                        <CardTitle className="text-base">
+                          Latency &amp; Uptime
+                        </CardTitle>
+                        <div className="text-sm text-slate-500">
+                          {uptimeLabel}
+                        </div>
+                      </CardHeader>
+                      <CardContent className="pt-0">
+                        <div className="h-64">
+                          {historyLoading ? (
+                            <div className="flex h-full items-center justify-center text-slate-500">
+                              Loading history…
+                            </div>
+                          ) : historyChartData.length ? (
+                            <ResponsiveContainer width="100%" height="100%">
+                              <LineChart data={historyChartData}>
+                                <CartesianGrid
+                                  strokeDasharray="3 3"
+                                  stroke="#e2e8f0"
+                                />
+                                <XAxis
+                                  dataKey="time"
+                                  tick={{ fontSize: 12 }}
+                                  minTickGap={24}
+                                />
+                                <YAxis tick={{ fontSize: 12 }} width={48} />
+                                <Tooltip
+                                  labelFormatter={(value) => `Time: ${value}`}
+                                  formatter={(value: number) => [
+                                    `${value} ms`,
+                                    "Latency",
+                                  ]}
+                                />
+                                <Line
+                                  type="monotone"
+                                  dataKey="latency"
+                                  stroke="#2563eb"
+                                  strokeWidth={2}
+                                  dot={false}
+                                />
+                              </LineChart>
+                            </ResponsiveContainer>
+                          ) : (
+                            <div className="flex h-full items-center justify-center text-slate-400">
+                              No samples available
+                            </div>
+                          )}
+                        </div>
+                      </CardContent>
+                    </Card>
+                  </TabsContent>
+                </Tabs>
+
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="text-base">Recent Checks</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ScrollArea className="h-64 pr-3">
+                      <div className="space-y-3">
+                        {historyData?.points?.length ? (
+                          historyData.points
+                            .slice()
+                            .reverse()
+                            .map((point, index) => (
+                              <div
+                                key={`${point.checkedAt}-${index}`}
+                                className="flex items-start justify-between rounded-lg border border-slate-200 p-3"
+                              >
+                                <div>
+                                  <div className="text-sm font-medium">
+                                    {new Date(point.checkedAt).toLocaleString()}
+                                  </div>
+                                  <div className="text-xs text-slate-500">
+                                    Latency: {formatLatency(point.latencyMs)}
+                                  </div>
+                                </div>
+                                <StatusBadge
+                                  status={point.status}
+                                  reason={extractDetailError(
+                                    point.detail as Record<string, unknown> | null,
+                                  )}
+                                />
+                              </div>
+                            ))
+                        ) : (
+                          <div className="text-sm text-slate-500">
+                            No history available.
+                          </div>
+                        )}
+                      </div>
+                    </ScrollArea>
+                  </CardContent>
+                </Card>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </>
+      )}
+      {displayError && (
         <Card className="border border-red-200 bg-red-50 text-red-700">
           <CardContent className="flex items-center gap-3 py-4">
             <AlertTriangle className="h-5 w-5" />
-            <span>{error}</span>
+            <span>{displayError}</span>
           </CardContent>
         </Card>
       )}
