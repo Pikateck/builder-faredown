@@ -260,6 +260,10 @@ export default function SystemMonitor() {
   );
 
   useEffect(() => {
+    loadCachedData();
+  }, [loadCachedData]);
+
+  useEffect(() => {
     loadStatus();
   }, [loadStatus]);
 
