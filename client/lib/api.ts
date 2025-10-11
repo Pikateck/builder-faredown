@@ -210,6 +210,7 @@ export class ApiClient {
     this.authToken =
       typeof window !== "undefined" ? localStorage.getItem("auth_token") : null;
     this.devClient = new DevApiClient(this.baseURL);
+    this.adminApiKey = resolveAdminApiKey();
 
     if (typeof window !== "undefined" && this.baseURL) {
       try {
