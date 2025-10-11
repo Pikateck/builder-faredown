@@ -566,7 +566,7 @@ export class ApiClient {
             iso2: "JP",
             name: "Japan",
             display_name: "Japan",
-            flag: "����🇵",
+            flag: "🇯🇵",
             flag_emoji: "🇯🇵",
             popular: false,
           },
@@ -927,17 +927,20 @@ export class ApiClient {
       // CRITICAL: Use isolated iframe fetch for admin calls to bypass FullStory
       const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
+      const adminAwareHeaders = this.withAdminHeaders(endpoint, customHeaders);
+      const requestHeaders = this.getHeaders(adminAwareHeaders);
 
       console.log("🔍 FETCH DEBUG:", {
         endpoint,
         fullURL: url.toString(),
         usingIsolatedFetch: isAdminEndpoint,
-        headers: this.getHeaders(customHeaders),
+        headerKeys: Object.keys(requestHeaders),
+        adminKeyAttached: Boolean(adminAwareHeaders["X-Admin-Key"]),
       });
 
       const response = await fetchFn(url.toString(), {
         method: "GET",
-        headers: this.getHeaders(customHeaders),
+        headers: requestHeaders,
         signal: controller.signal,
         cache: "no-store",
         credentials: this.includeCredentials ? "include" : "omit",
