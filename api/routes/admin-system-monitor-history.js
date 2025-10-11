@@ -2,6 +2,13 @@ const express = require("express");
 const adminKeyMiddleware = require("../middleware/adminKey");
 const { getHistory } = require("../services/systemMonitorService");
 
+const DISABLED_COMPONENTS = new Set(
+  (process.env.SYSTEM_MONITOR_DISABLED_COMPONENTS || "")
+    .split(",")
+    .map((value) => value.trim().toLowerCase())
+    .filter(Boolean),
+);
+
 const router = express.Router();
 router.use(adminKeyMiddleware);
 
