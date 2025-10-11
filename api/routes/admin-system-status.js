@@ -360,6 +360,7 @@ async function evaluateComponent(definition, checkedAt) {
 
 router.get("/", async (req, res) => {
   const meta = buildMeta();
+  const disabledComponents = Array.from(DISABLED_COMPONENTS);
   const components = [];
   const definitionsToEvaluate =
     ACTIVE_COMPONENT_DEFINITIONS.length > 0
