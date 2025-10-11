@@ -475,7 +475,7 @@ export class ApiClient {
     // 🚨 NUCLEAR FIX: FORCE DUBAI PACKAGES + COUNTRIES API 🚨
     if (endpoint.includes("/countries")) {
       console.log(
-        "🚨🚨🚨 NUCLEAR FIX: Providing countries for nationality dropdown 🚨🚨🚨",
+        "���🚨🚨 NUCLEAR FIX: Providing countries for nationality dropdown 🚨🚨🚨",
       );
 
       const countriesData = {
@@ -1205,10 +1205,12 @@ export class ApiClient {
       const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
       const url = this.buildUrl(endpoint);
+      const adminAwareHeaders = this.withAdminHeaders(endpoint);
+      const requestHeaders = this.getHeaders(adminAwareHeaders);
 
       const response = await fetchFn(url, {
         method: "DELETE",
-        headers: this.getHeaders(),
+        headers: requestHeaders,
         signal: controller.signal,
         cache: "no-store",
         credentials: this.includeCredentials ? "include" : "omit",
