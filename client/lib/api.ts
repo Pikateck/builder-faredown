@@ -202,6 +202,7 @@ export class ApiClient {
   private devClient: DevApiClient;
   private forceFallback: boolean = false;
   private includeCredentials: boolean = true;
+  private adminApiKey: string | null;
 
   constructor(config: typeof API_CONFIG) {
     this.baseURL = config.BASE_URL || "";
