@@ -16,6 +16,14 @@ router.get("/", async (req, res) => {
   const component = (req.query.component || "backend").toString().toLowerCase();
   const hours = req.query.hours || 24;
 
+  if (DISABLED_COMPONENTS.has(component)) {
+    return res.status(404).json({
+      error: "component-disabled",
+      message: `Component "${component}" monitoring is disabled`,
+      component,
+    });
+  }
+
   try {
     const history = await getHistory(component, hours);
     res.json(history);
