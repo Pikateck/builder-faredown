@@ -1081,10 +1081,12 @@ export class ApiClient {
       const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
       const url = this.buildUrl(endpoint);
+      const adminAwareHeaders = this.withAdminHeaders(endpoint, customHeaders);
+      const requestHeaders = this.getHeaders(adminAwareHeaders);
 
       const response = await fetchFn(url, {
         method: "POST",
-        headers: this.getHeaders(customHeaders),
+        headers: requestHeaders,
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
         cache: "no-store",
