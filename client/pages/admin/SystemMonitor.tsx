@@ -173,8 +173,10 @@ export default function SystemMonitor() {
   );
   const [historyRange, setHistoryRange] = useState<HistoryRange>("24");
   const [historyLoading, setHistoryLoading] = useState(false);
+  const [isStale, setIsStale] = useState(false);
+  const latestDataRef = useRef<SystemMonitorResponse | null>(null);
 
-  const loadStatus = useCallback(async () => {
+  const loadCachedData = useCallback(() => {
     try {
       setLoading(true);
       setError(null);
