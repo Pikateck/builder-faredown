@@ -334,6 +334,32 @@ export default function SystemMonitor() {
     return `${pct.toFixed(1)}% uptime`;
   }, [historyData]);
 
+  const staleLabel = useMemo(() => {
+    if (!isStale) {
+      return null;
+    }
+    if (!meta.checkedAt) {
+      return "Showing cached data";
+    }
+    return `Cached ${formatDistanceToNow(new Date(meta.checkedAt), {
+      addSuffix: true,
+    })}`;
+  }, [isStale, meta.checkedAt]);
+
+  const displayError = useMemo(() => {
+    if (!error) {
+      return null;
+    }
+    if (isStale && meta.checkedAt) {
+      return `${error} • Showing cached results from ${formatDistanceToNow(new Date(meta.checkedAt), {
+        addSuffix: true,
+      })}`;
+    }
+    return error;
+  }, [error, isStale, meta.checkedAt]);
+
+  const showSkeleton = loading && !latestDataRef.current;
+
   return (
     <div className="space-y-6">
       <Card className={`border ${overallState.tone}`}>
