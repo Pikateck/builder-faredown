@@ -56,6 +56,13 @@ import {
   YAxis,
 } from "recharts";
 
+const CACHE_KEY = "faredown-system-monitor-cache";
+
+interface CachedMonitorPayload {
+  timestamp: string;
+  data: SystemMonitorResponse;
+}
+
 const STATUS_CONFIG: Record<
   string,
   {
