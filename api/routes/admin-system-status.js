@@ -402,7 +402,7 @@ router.get("/", async (req, res) => {
     );
 
     res.json({
-      meta,
+      meta: { ...meta, disabledComponents },
       summary,
       components,
       env: buildEnvSnapshot(),
@@ -412,7 +412,7 @@ router.get("/", async (req, res) => {
     res.status(500).json({
       error: "system-status-failed",
       message: error.message,
-      meta,
+      meta: { ...meta, disabledComponents },
       components,
       env: buildEnvSnapshot(),
     });
