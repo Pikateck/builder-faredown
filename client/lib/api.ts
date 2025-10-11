@@ -112,6 +112,19 @@ const FALLBACK_EXCLUSION_PATTERNS: RegExp[] = [
   /^\/(?:api\/)?invoices/,
 ];
 
+const resolveAdminApiKey = (): string | null => {
+  if (typeof window === "undefined") {
+    if (typeof process !== "undefined" && process.env) {
+      return (
+        process.env.ADMIN_API_KEY || process.env.VITE_ADMIN_API_KEY || null
+      );
+    }
+    return null;
+  }
+
+  return import.meta.env?.VITE_ADMIN_API_KEY || null;
+};
+
 // API Response Types
 export interface ApiResponse<T = any> {
   success: boolean;
