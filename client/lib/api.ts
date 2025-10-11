@@ -1147,10 +1147,13 @@ export class ApiClient {
       const isAdminEndpoint = endpoint.includes("/admin");
       const fetchFn = isAdminEndpoint ? await this.getIsolatedFetch() : fetch;
       const url = this.buildUrl(endpoint);
+      const baseHeaders = { "Content-Type": "application/json" };
+      const adminAwareHeaders = this.withAdminHeaders(endpoint, baseHeaders);
+      const requestHeaders = this.getHeaders(adminAwareHeaders);
 
       const response = await fetchFn(url, {
         method: "PUT",
-        headers: this.getHeaders({ "Content-Type": "application/json" }),
+        headers: requestHeaders,
         body: data ? JSON.stringify(data) : undefined,
         signal: controller.signal,
         cache: "no-store",
