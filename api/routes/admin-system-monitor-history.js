@@ -1,5 +1,4 @@
 const express = require("express");
-const express = require("express");
 const adminKeyMiddleware = require("../middleware/adminKey");
 const { getHistory } = require("../services/systemMonitorService");
 
