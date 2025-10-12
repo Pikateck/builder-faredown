@@ -21,9 +21,10 @@ export function Layout({
   useScrollToTop();
 
   const safeAreaInset = "env(safe-area-inset-bottom, 0px)";
+  const defaultContainerPadding = "4rem";
   const containerPadding = showMobileNav
-    ? `calc(4rem + ${safeAreaInset})`
-    : undefined;
+    ? `calc(${defaultContainerPadding} + ${safeAreaInset})`
+    : defaultContainerPadding;
   const mainPadding = showMobileNav
     ? `calc(6rem + ${safeAreaInset})`
     : undefined;
