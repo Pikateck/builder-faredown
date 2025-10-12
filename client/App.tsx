@@ -173,6 +173,7 @@ function App() {
                           element={<Account />}
                         />
                         <Route path="/account/payment" element={<Account />} />
+                        <Route path="/account/loyalty" element={<Account />} />
                         <Route path="/account/privacy" element={<Account />} />
                         <Route path="/account/trips" element={<Account />} />
                         <Route path="/profile" element={<Profile />} />
