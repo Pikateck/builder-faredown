@@ -43,6 +43,34 @@ export function Header() {
   const location = useLocation();
   const { isLoggedIn, user, logout } = useAuth();
   const { selectedCurrency, currencies, setCurrency } = useCurrency();
+  const [isDesktop, setIsDesktop] = useState(
+    typeof window !== "undefined" ? window.innerWidth >= 768 : false,
+  );
+
+  useEffect(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+
+    const mediaQuery = window.matchMedia("(min-width: 768px)");
+    const handleChange = (event: MediaQueryListEvent) => {
+      setIsDesktop(event.matches);
+    };
+
+    setIsDesktop(mediaQuery.matches);
+
+    if (typeof mediaQuery.addEventListener === "function") {
+      mediaQuery.addEventListener("change", handleChange);
+      return () => mediaQuery.removeEventListener("change", handleChange);
+    }
+
+    if (typeof mediaQuery.addListener === "function") {
+      mediaQuery.addListener(handleChange);
+      return () => mediaQuery.removeListener(handleChange);
+    }
+
+    return () => undefined;
+  }, []);
 
   // State for dropdowns and mobile menu
   const [showCurrencyDropdown, setShowCurrencyDropdown] = useState(false);
