@@ -21,17 +21,16 @@ export function Layout({
   useScrollToTop();
 
   const safeAreaInset = "env(safe-area-inset-bottom, 0px)";
-  const defaultContainerPadding = "4rem";
   const containerPadding = showMobileNav
-    ? `calc(${defaultContainerPadding} + ${safeAreaInset})`
-    : defaultContainerPadding;
+    ? `calc(4rem + ${safeAreaInset})`
+    : undefined;
   const mainPadding = showMobileNav
     ? `calc(6rem + ${safeAreaInset})`
     : undefined;
 
   return (
     <div
-      className="min-h-screen bg-gray-50 flex flex-col md:pb-0"
+      className="min-h-screen bg-gray-50 flex flex-col pb-16 md:pb-0"
       style={{ paddingBottom: containerPadding }}
     >
       <Header />
