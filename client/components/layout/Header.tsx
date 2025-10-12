@@ -990,8 +990,8 @@ export function Header() {
               </div>
             </div>
           </div>
-        </header>
-      </div>
+          </header>
+        </div>
       )}
 
       {/* Authentication Modal */}
