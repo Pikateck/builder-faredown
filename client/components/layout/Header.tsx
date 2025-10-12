@@ -648,7 +648,7 @@ export function Header() {
       {isDesktop && (
         <div className="hidden md:block">
           {/* Desktop Header */}
-        <header className="text-white" style={{ backgroundColor: "#003580" }}>
+          <header className="text-white" style={{ backgroundColor: "#003580" }}>
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
             <div className="flex items-center justify-between">
               {/* Logo */}
