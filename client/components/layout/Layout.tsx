@@ -20,11 +20,27 @@ export function Layout({
 }: LayoutProps) {
   useScrollToTop();
 
+  const safeAreaInset = "env(safe-area-inset-bottom, 0px)";
+  const containerPadding = showMobileNav
+    ? `calc(4rem + ${safeAreaInset})`
+    : undefined;
+  const mainPadding = showMobileNav
+    ? `calc(6rem + ${safeAreaInset})`
+    : undefined;
+
   return (
-    <div className="min-h-screen bg-gray-50 flex flex-col pb-16 md:pb-0">
+    <div
+      className="min-h-screen bg-gray-50 flex flex-col md:pb-0"
+      style={{ paddingBottom: containerPadding }}
+    >
       <Header />
       {showSearch && <SearchPanel />}
-      <main className={`flex-1 ${className}`}>{children}</main>
+      <main
+        className={`flex-1 ${className}`}
+        style={{ paddingBottom: mainPadding }}
+      >
+        {children}
+      </main>
       <Footer />
       {showMobileNav && <MobileBottomNav />}
     </div>
