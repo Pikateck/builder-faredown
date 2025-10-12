@@ -158,8 +158,9 @@ export function Header() {
   return (
     <>
       {/* Mobile Layout (≤768px) */}
-      <div className="md:hidden">
-        {/* Mobile Header */}
+      {!isDesktop && (
+        <div className="md:hidden">
+          {/* Mobile Header */}
         <header className="bg-[#003580] text-white">
           <div className="px-4 py-3">
             <div className="flex items-center justify-between">
@@ -641,10 +642,12 @@ export function Header() {
           </div>
         )}
       </div>
+      )}
 
       {/* Desktop Layout (≥769px) */}
-      <div className="hidden md:block">
-        {/* Desktop Header */}
+      {isDesktop && (
+        <div className="hidden md:block">
+          {/* Desktop Header */}
         <header className="text-white" style={{ backgroundColor: "#003580" }}>
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
             <div className="flex items-center justify-between">
@@ -989,6 +992,7 @@ export function Header() {
           </div>
         </header>
       </div>
+      )}
 
       {/* Authentication Modal */}
       <AuthModal
