@@ -6,6 +6,7 @@ import { Plane, Hotel, Camera, Car, User } from "lucide-react";
 export function MobileBottomNav() {
   const location = useLocation();
   const navigate = useNavigate();
+  const safeAreaInset = "env(safe-area-inset-bottom, 0px)";
 
   // Get active tab from URL
   const getActiveTab = () => {
@@ -48,8 +49,14 @@ export function MobileBottomNav() {
   };
 
   return (
-    <div className="block md:hidden bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0 z-50">
-      <div className="grid grid-cols-5 h-16">
+    <div
+      className="block md:hidden bg-white border-t border-gray-200 fixed bottom-0 left-0 right-0 z-50"
+      style={{ paddingBottom: safeAreaInset }}
+    >
+      <div
+        className="grid grid-cols-5"
+        style={{ minHeight: `calc(4rem + ${safeAreaInset})` }}
+      >
         <button
           onClick={() => handleTabChange("hotels")}
           className="flex flex-col items-center justify-center space-y-1 touch-manipulation min-h-[48px] w-full"
