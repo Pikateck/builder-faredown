@@ -161,7 +161,7 @@ export function Header() {
       {!isDesktop && (
         <div className="md:hidden">
           {/* Mobile Header */}
-        <header className="bg-[#003580] text-white">
+          <header className="bg-[#003580] text-white">
           <div className="px-4 py-3">
             <div className="flex items-center justify-between">
               <div className="flex items-center space-x-2">
