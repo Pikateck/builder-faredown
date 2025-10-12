@@ -203,7 +203,7 @@ export function Header() {
               </div>
             </div>
           </div>
-        </header>
+          </header>
 
         {/* Mobile Notifications Panel */}
         {showNotifications && (
