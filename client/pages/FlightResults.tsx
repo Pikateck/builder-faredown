@@ -1381,7 +1381,7 @@ export default function FlightResults() {
         ...flight,
         price: fareType.price,
         currency: "INR",
-        cabin: selectedClass
+        cabin: selectedClass,
       },
       {
         tripType,
@@ -1390,25 +1390,32 @@ export default function FlightResults() {
         departureDate,
         returnDate,
         travelers,
-        class: selectedClass
-      }
+        class: selectedClass,
+      },
     );
 
     // Check authentication and proceed with booking
-    const success = authGuardedBookNow(bookingContext, () => {
-      // User is authenticated, proceed with original booking logic
-      proceedWithFlightBooking(flight, fareType);
-    }, () => {
-      // User redirected to login
-      console.log("🔐 User redirected to login for flight booking");
-    });
+    const success = authGuardedBookNow(
+      bookingContext,
+      () => {
+        // User is authenticated, proceed with original booking logic
+        proceedWithFlightBooking(flight, fareType);
+      },
+      () => {
+        // User redirected to login
+        console.log("🔐 User redirected to login for flight booking");
+      },
+    );
 
     if (!success) {
       console.log("🔐 Authentication required for flight booking");
     }
   };
 
-  const proceedWithFlightBooking = (flight: (typeof flightData)[0], fareType: any) => {
+  const proceedWithFlightBooking = (
+    flight: (typeof flightData)[0],
+    fareType: any,
+  ) => {
     // Create the exact search object structure specified by the user
     const standardizedSearchParams = {
       tripType:

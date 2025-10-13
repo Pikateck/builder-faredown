@@ -3,11 +3,13 @@
 ## ✅ Fixes Applied
 
 ### 1. Calendar Consistency Fixed
+
 - **Changed**: FlightResults now uses `StableBookingCalendar` (same as main page)
 - **Before**: Used `BookingCalendar` which looked different
 - **Result**: Consistent calendar appearance across all pages
 
-### 2. Modify Search Button Fixed  
+### 2. Modify Search Button Fixed
+
 - **Changed**: Modal only shows on mobile devices (`md:hidden`)
 - **Before**: Opened mobile-style modal on desktop
 - **Result**: Desktop users keep using the visible filter panel
@@ -19,14 +21,16 @@
 ### Recommended Test Routes for TBO:
 
 **Domestic India (High TBO Coverage):**
+
 ```
 Mumbai (BOM) → Delhi (DEL)
-Delhi (DEL) → Bangalore (BLR)  
+Delhi (DEL) → Bangalore (BLR)
 Mumbai (BOM) → Chennai (MAA)
 Delhi (DEL) → Hyderabad (HYD)
 ```
 
 **International from India (TBO Active):**
+
 ```
 Mumbai (BOM) → Dubai (DXB)
 Delhi (DEL) → Singapore (SIN)
@@ -35,6 +39,7 @@ Delhi (DEL) → Bangkok (BKK)
 ```
 
 **Best for Testing:**
+
 - **BOM → DEL** (highest availability, fastest response)
 - **DEL → DXB** (international, good prices)
 
@@ -60,6 +65,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/flights/search?origin=BO
 ```
 
 **Look for in response:**
+
 ```json
 {
   "meta": {
@@ -73,12 +79,12 @@ curl "https://builder-faredown-pricing.onrender.com/api/flights/search?origin=BO
 
 ### Check 3: Common Issues
 
-| Issue | Solution |
-|-------|----------|
+| Issue                        | Solution                                                    |
+| ---------------------------- | ----------------------------------------------------------- |
 | **"Initialized 1 supplier"** | TBO_AGENCY_ID not set on Render → Add environment variables |
-| **TBO returns 0 results** | Route not available → Try BOM→DEL or DEL→DXB |
-| **Authentication error** | TBO credentials wrong → Verify TBO_USERNAME, TBO_PASSWORD |
-| **Fallback data shown** | API timeout or error → Check Render logs for TBO errors |
+| **TBO returns 0 results**    | Route not available → Try BOM→DEL or DEL→DXB                |
+| **Authentication error**     | TBO credentials wrong → Verify TBO_USERNAME, TBO_PASSWORD   |
+| **Fallback data shown**      | API timeout or error → Check Render logs for TBO errors     |
 
 ---
 
@@ -129,17 +135,20 @@ SELECT * FROM supplier_master WHERE code = 'tbo';
 ### Working TBO Integration Shows:
 
 ✅ **Search Results Page:**
+
 - Results from BOTH Amadeus and TBO
 - Mixed airlines in results list
 - Different price points
 - `supplier` field in flight data
 
 ✅ **API Response:**
+
 - `meta.suppliers` shows 2 suppliers
 - Both have `success: true`
 - Both have `resultCount > 0`
 
 ✅ **Render Logs:**
+
 ```
 [ADAPTER_MANAGER] TBO adapter initialized
 [ADAPTER_MANAGER] Amadeus adapter initialized
