@@ -80,12 +80,23 @@ export function Header() {
 
     const disposers: Array<() => void> = [];
 
+    // Initial update
+    updateViewport();
+
+    // Check for viewport changes every 100ms in Builder iframes
+    const isBuilderIframe = window.parent !== window;
+    if (isBuilderIframe) {
+      const intervalId = setInterval(() => {
+        updateViewport();
+      }, 100);
+      disposers.push(() => clearInterval(intervalId));
+    }
+
+    // Standard media query detection
     const mediaQuery = window.matchMedia("(min-width: 768px)");
     const handleMediaChange = (event: MediaQueryListEvent) => {
       setIsDesktop(event.matches);
     };
-
-    updateViewport();
 
     if (typeof mediaQuery.addEventListener === "function") {
       mediaQuery.addEventListener("change", handleMediaChange);
@@ -95,6 +106,7 @@ export function Header() {
       disposers.push(() => mediaQuery.removeListener(handleMediaChange));
     }
 
+    // ResizeObserver for better detection
     if ("ResizeObserver" in window) {
       const observer = new ResizeObserver((entries) => {
         if (entries.length > 0) {
