@@ -1,11 +1,11 @@
 /**
  * Test TBO Authentication
- * Run: node test-tbo-auth.js
+ * Run: node test-tbo-auth.cjs
  */
 
 const axios = require("axios");
-require("dotenv").config();
 
+// Use environment variables directly (already set in the environment)
 const TBO_SEARCH_URL = process.env.TBO_SEARCH_URL || "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest";
 const TBO_CLIENT_ID = process.env.TBO_CLIENT_ID || process.env.TBO_AGENCY_ID;
 const TBO_USERNAME = process.env.TBO_USERNAME;
@@ -24,7 +24,7 @@ async function testTBOAuth() {
   console.log("");
 
   if (!TBO_CLIENT_ID || !TBO_USERNAME || !TBO_PASSWORD) {
-    console.error("❌ Missing TBO credentials. Please check your .env file.");
+    console.error("❌ Missing TBO credentials. Please check your environment variables.");
     console.error("Required variables: TBO_CLIENT_ID, TBO_USERNAME, TBO_PASSWORD");
     process.exit(1);
   }
