@@ -75,10 +75,14 @@ class TBOAdapter extends BaseSupplierAdapter {
           EndUserIp: this.config.endUserIp,
         };
 
+        this.logger.info(`TBO Auth Request: ClientId=${authRequest.ClientId}, UserName=${authRequest.UserName}, EndUserIp=${authRequest.EndUserIp}`);
+
         const response = await this.httpClient.post(
           "/Authenticate",
           authRequest,
         );
+
+        this.logger.info(`TBO Auth Response: Status=${response.data.Status}, HasToken=${!!response.data.TokenId}`);
 
         if (response.data.Status === 1 && response.data.TokenId) {
           this.tokenId = response.data.TokenId;
@@ -91,9 +95,9 @@ class TBOAdapter extends BaseSupplierAdapter {
           this.logger.info("TBO authentication successful");
           return this.tokenId;
         } else {
-          throw new Error(
-            `TBO authentication failed: ${response.data.Error || "Unknown error"}`,
-          );
+          const errorMsg = `TBO authentication failed: ${response.data.Error?.ErrorMessage || response.data.Error || JSON.stringify(response.data)}`;
+          this.logger.error(errorMsg);
+          throw new Error(errorMsg);
         }
       } else {
         // Static mode: use pre-configured token
@@ -102,11 +106,13 @@ class TBOAdapter extends BaseSupplierAdapter {
         return this.tokenId;
       }
     } catch (error) {
+      const errorDetails = error.response?.data || error.message;
       this.logger.error(
         "Failed to get TBO token:",
-        error.response?.data || error.message,
+        JSON.stringify(errorDetails, null, 2),
       );
-      throw new Error("Authentication failed with TBO API");
+      this.logger.error("TBO Auth Error Stack:", error.stack);
+      throw new Error(`Authentication failed with TBO API: ${JSON.stringify(errorDetails)}`);
     }
   }
 
