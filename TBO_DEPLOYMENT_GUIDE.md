@@ -27,12 +27,12 @@
 Add these variables to your Render dashboard (Environment section):
 
 ```bash
-# TBO Configuration - DUAL URLs
+# TBO Configuration - DUAL REST URLs
 # Search/Pricing Operations (Search, FareQuote, FareRule, SSR, CalendarFare)
-TBO_SEARCH_URL=https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc
+TBO_SEARCH_URL=https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest
 
 # Booking Operations (Book, Ticket, GetBookingDetails, SendChangeRequest)
-TBO_BOOKING_URL=https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc
+TBO_BOOKING_URL=https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest
 
 # Credentials
 TBO_AGENCY_ID=BOMF145
@@ -49,8 +49,9 @@ FLIGHTS_SUPPLIERS=AMADEUS,TBO
 
 **Important Notes:**
 - TBO uses **two different base URLs**: one for search/pricing, one for booking
+- **REST API requires `/rest` in the path** (per official TBO documentation)
+- Example endpoint: `https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search`
 - Credentials are the same for both endpoints
-- Do NOT add `/rest` suffix to the URLs
 
 ### Step 2: Run Database Migration
 

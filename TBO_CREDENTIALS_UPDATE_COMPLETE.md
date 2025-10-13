@@ -12,13 +12,14 @@ baseUrl: "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest
 
 #### New Configuration (CORRECT):
 ```javascript
-searchUrl: "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc"
-bookingUrl: "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc"
+searchUrl: "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest"
+bookingUrl: "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest"
 ```
 
-**Reason**: TBO separates operations across two domains:
-- **Search Domain** (`tboapi.travelboutiqueonline.com`): Search, FareQuote, FareRule, SSR, CalendarFare
-- **Booking Domain** (`booking.travelboutiqueonline.com`): Book, Ticket, GetBookingDetails, SendChangeRequest
+**Reason**: TBO separates operations across two domains with REST endpoints:
+- **Search Domain** (`tboapi.travelboutiqueonline.com/rest`): Search, FareQuote, FareRule, SSR, CalendarFare
+- **Booking Domain** (`booking.travelboutiqueonline.com/rest`): Book, Ticket, GetBookingDetails, SendChangeRequest
+- **REST path required**: All endpoints use `/rest` as per official TBO documentation
 
 ### 2. Dual HTTP Clients Created
 ```javascript
@@ -49,8 +50,8 @@ Password: travel/live-18@@
 
 **Environment Variables Set:**
 ```bash
-TBO_SEARCH_URL=https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc
-TBO_BOOKING_URL=https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc
+TBO_SEARCH_URL=https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest
+TBO_BOOKING_URL=https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest
 TBO_AGENCY_ID=BOMF145
 TBO_CLIENT_ID=BOMF145
 TBO_USERNAME=BOMF145
@@ -71,8 +72,8 @@ Go to Render Dashboard → Your Service → Environment
 
 | Variable | Value |
 |----------|-------|
-| `TBO_SEARCH_URL` | `https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc` |
-| `TBO_BOOKING_URL` | `https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc` |
+| `TBO_SEARCH_URL` | `https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest` |
+| `TBO_BOOKING_URL` | `https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest` |
 | `TBO_AGENCY_ID` | `BOMF145` |
 | `TBO_CLIENT_ID` | `BOMF145` |
 | `TBO_USERNAME` | `BOMF145` |
@@ -197,21 +198,23 @@ curl "https://builder-faredown-pricing.onrender.com/api/flights/search?origin=BO
 
 | Aspect | Old (WRONG) | New (CORRECT) |
 |--------|-------------|---------------|
-| **Base URL** | Single URL with `/rest` | Dual URLs, no `/rest` |
-| **Search Endpoint** | `tboapi.../rest/Search` | `tboapi.../Search` |
-| **Booking Endpoint** | `tboapi.../rest/Book` | `booking.../Book` |
+| **Base URL** | Single URL | Dual URLs with `/rest` |
+| **Search Endpoint** | Single domain | `tboapi.../rest/Search` |
+| **Booking Endpoint** | Single domain | `booking.../rest/Book` |
 | **Client Structure** | Single `httpClient` | `searchClient` + `bookingClient` |
 | **Credentials** | Placeholder values | Actual: BOMF145 / travel/live-18@@ |
+| **REST Path** | Missing | Required `/rest` per docs |
 
 ---
 
 ## ⚠️ Critical Notes
 
-1. **NO `/rest` suffix**: TBO API does NOT use `/rest` in the path
+1. **`/rest` IS REQUIRED**: TBO REST API requires `/rest` in the path (per official documentation)
 2. **Two domains**: Search and Booking use different base URLs
 3. **Same credentials**: Both endpoints use the same User ID and Password
 4. **Runtime authentication**: Token is fetched dynamically using `/Authenticate`
 5. **Token caching**: Tokens stored in `tbo_token_cache` table for reuse
+6. **Official docs**: https://apidoc.tektravels.com/flight/NewReleases2025.aspx
 
 ---
 
@@ -264,9 +267,9 @@ WHERE table_name = 'bookings' AND column_name IN ('supplier', 'supplier_pnr');
 3. Ensure `TBO_CREDENTIAL_MODE=runtime`
 
 ### Issue: "404 Not Found" on TBO endpoints
-**Solution**: Check URLs do NOT have `/rest` suffix:
-- ✅ Correct: `https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/Search`
-- ❌ Wrong: `https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search`
+**Solution**: Verify URLs INCLUDE `/rest` suffix (per official TBO documentation):
+- ✅ Correct: `https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search`
+- ❌ Wrong: `https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/Search`
 
 ### Issue: Booking fails but search works
 **Solution**: Verify `TBO_BOOKING_URL` points to `booking.travelboutiqueonline.com` (not `tboapi`)

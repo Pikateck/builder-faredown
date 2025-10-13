@@ -94,9 +94,9 @@ All code changes for TBO supplier integration are **COMPLETE** and ready for dep
 Add to Render Dashboard → Environment:
 
 ```bash
-# TBO API Configuration - DUAL URLs
-TBO_SEARCH_URL=https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc
-TBO_BOOKING_URL=https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc
+# TBO API Configuration - DUAL REST URLs
+TBO_SEARCH_URL=https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest
+TBO_BOOKING_URL=https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest
 
 # Credentials
 TBO_AGENCY_ID=BOMF145
@@ -110,6 +110,8 @@ TBO_TIMEOUT_MS=15000
 # Multi-Supplier Configuration
 FLIGHTS_SUPPLIERS=AMADEUS,TBO
 ```
+
+**Note**: URLs include `/rest` as per TBO official documentation
 
 **Reference:** See `.env.tbo.example` for full configuration
 

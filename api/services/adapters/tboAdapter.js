@@ -13,10 +13,10 @@ class TBOAdapter extends BaseSupplierAdapter {
     super("TBO", {
       searchUrl:
         process.env.TBO_SEARCH_URL ||
-        "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc",
+        "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest",
       bookingUrl:
         process.env.TBO_BOOKING_URL ||
-        "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc",
+        "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest",
       agencyId: process.env.TBO_AGENCY_ID,
       endUserIp: process.env.TBO_END_USER_IP || "192.168.5.56",
       credentialMode: process.env.TBO_CREDENTIAL_MODE || "runtime",
