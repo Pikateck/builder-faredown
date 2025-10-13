@@ -57,9 +57,11 @@ export function useViewportClass() {
       if (nowMobile) {
         root.classList.add("viewport-mobile");
         root.classList.remove("viewport-desktop");
+        console.log(`[Viewport] Mobile detected (width: ${width}px)`);
       } else {
         root.classList.add("viewport-desktop");
         root.classList.remove("viewport-mobile");
+        console.log(`[Viewport] Desktop detected (width: ${width}px)`);
       }
     };
 
