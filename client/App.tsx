@@ -112,6 +112,8 @@ import CheckoutPage from "./pages/CheckoutPage";
 import RequireAuth from "./components/RequireAuth";
 
 function App() {
+  useViewportClass();
+
   return (
     <div className="App">
       <AuthProvider>
