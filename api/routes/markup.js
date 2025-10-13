@@ -76,6 +76,7 @@ router.get("/air", async (req, res) => {
       airline,
       class: cabinClass,
       status,
+      supplier,
       page = 1,
       limit = 10,
     } = req.query;
@@ -93,6 +94,10 @@ router.get("/air", async (req, res) => {
     if (cabinClass && cabinClass !== "all") {
       where.push(`LOWER(booking_class) = LOWER($${i++})`);
       params.push(cabinClass);
+    }
+    if (supplier && supplier !== "all") {
+      where.push(`(supplier_scope = $${i++} OR supplier_scope = 'all')`);
+      params.push(supplier.toLowerCase());
     }
     if (search) {
       where.push(
@@ -132,8 +137,8 @@ router.get("/air", async (req, res) => {
 router.post("/air", async (req, res) => {
   try {
     const b = req.body || {};
-    const q = `INSERT INTO markup_rules(module, rule_name, description, airline_code, route_from, route_to, booking_class, m_type, m_value, current_min_pct, current_max_pct, bargain_min_pct, bargain_max_pct, valid_from, valid_to, priority, user_type, is_active)
-               VALUES('air',$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING *`;
+    const q = `INSERT INTO markup_rules(module, rule_name, description, airline_code, route_from, route_to, booking_class, m_type, m_value, current_min_pct, current_max_pct, bargain_min_pct, bargain_max_pct, valid_from, valid_to, priority, user_type, is_active, supplier_scope)
+               VALUES('air',$1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17,$18) RETURNING *`;
     const vals = [
       b.name,
       b.description || null,
@@ -152,6 +157,7 @@ router.post("/air", async (req, res) => {
       b.priority || 1,
       b.userType || "all",
       b.status ? b.status === "active" : true,
+      b.supplierScope || "all",
     ];
     const r = await pool.query(q, vals);
     res.status(201).json({ markup: mapAirRowToClient(r.rows[0]) });
@@ -188,6 +194,7 @@ router.put("/air/:id", async (req, res) => {
       valid_to: b.validTo,
       priority: b.priority,
       user_type: b.userType,
+      supplier_scope: b.supplierScope,
       is_active:
         typeof b.status === "string" ? b.status === "active" : undefined,
     };

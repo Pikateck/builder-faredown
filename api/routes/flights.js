@@ -57,21 +57,22 @@ async function getAmadeusAccessToken() {
 }
 
 /**
- * Get markup for airline and route combination
+ * Get markup for airline, route combination and supplier
  */
-async function getMarkupData(airline, route, cabinClass) {
+async function getMarkupData(supplier, airline, route, cabinClass) {
   try {
     const query = `
-      SELECT markup_percentage, markup_type, base_markup 
-      FROM airline_markups 
-      WHERE airline_code = $1 
-      AND (route = $2 OR route = 'ALL') 
-      AND cabin_class = $3 
-      ORDER BY route DESC 
+      SELECT markup_percentage, markup_type, base_markup
+      FROM airline_markups
+      WHERE airline_code = $1
+      AND (route = $2 OR route = 'ALL')
+      AND cabin_class = $3
+      AND (supplier_scope = $4 OR supplier_scope = 'all')
+      ORDER BY route DESC
       LIMIT 1
     `;
 
-    const result = await db.query(query, [airline, route, cabinClass]);
+    const result = await db.query(query, [airline, route, cabinClass, (supplier || 'all').toLowerCase()]);
 
     if (result.rows && result.rows.length > 0) {
       return result.rows[0];
@@ -111,20 +112,21 @@ function applyMarkup(basePrice, markupData) {
 /**
  * Apply promo code discount
  */
-async function applyPromoCode(price, promoCode, userId = null) {
+async function applyPromoCode(price, promoCode, userId = null, supplier = null) {
   if (!promoCode)
     return { finalPrice: price, discount: 0, promoApplied: false };
 
   try {
     const query = `
-      SELECT * FROM promo_codes 
-      WHERE code = $1 
-      AND is_active = true 
+      SELECT * FROM promo_codes
+      WHERE code = $1
+      AND is_active = true
       AND (expiry_date IS NULL OR expiry_date > NOW())
       AND (usage_limit IS NULL OR usage_count < usage_limit)
+      AND (supplier_scope = $2 OR supplier_scope = 'all')
     `;
 
-    const result = await db.query(query, [promoCode]);
+    const result = await db.query(query, [promoCode, (supplier || 'all').toLowerCase()]);
 
     if (result.rows && result.rows.length > 0) {
       const promo = result.rows[0];
