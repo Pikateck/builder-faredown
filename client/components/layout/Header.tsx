@@ -75,9 +75,8 @@ export function Header() {
       return;
     }
 
-    const updateViewport = (width?: number) => {
-      const nextWidth = width ?? getViewportWidth();
-      setIsDesktop(nextWidth >= 768);
+    const updateViewport = () => {
+      setIsDesktop(getViewportWidth() >= 768);
     };
 
     const disposers: Array<() => void> = [];
@@ -85,16 +84,14 @@ export function Header() {
     // Initial update
     updateViewport();
 
-    // Check for viewport changes every 100ms in Builder iframes
+    // Check for viewport changes every 100ms in Builder iframes (lightweight polling)
     const isBuilderIframe = window.parent !== window;
     if (isBuilderIframe) {
-      const intervalId = setInterval(() => {
-        updateViewport();
-      }, 100);
+      const intervalId = setInterval(updateViewport, 100);
       disposers.push(() => clearInterval(intervalId));
     }
 
-    // Standard media query detection
+    // Standard media query detection for normal browsers
     const mediaQuery = window.matchMedia("(min-width: 768px)");
     const handleMediaChange = (event: MediaQueryListEvent) => {
       setIsDesktop(event.matches);
@@ -108,27 +105,10 @@ export function Header() {
       disposers.push(() => mediaQuery.removeListener(handleMediaChange));
     }
 
-    // ResizeObserver for better detection
-    if ("ResizeObserver" in window) {
-      const observer = new ResizeObserver((entries) => {
-        if (entries.length > 0) {
-          updateViewport(entries[0].contentRect.width);
-        }
-      });
-      const rootElement = document.documentElement;
-      if (rootElement) {
-        observer.observe(rootElement);
-        disposers.push(() => observer.disconnect());
-      } else {
-        const handleResize = () => updateViewport();
-        window.addEventListener("resize", handleResize);
-        disposers.push(() => window.removeEventListener("resize", handleResize));
-      }
-    } else {
-      const handleResize = () => updateViewport();
-      window.addEventListener("resize", handleResize);
-      disposers.push(() => window.removeEventListener("resize", handleResize));
-    }
+    // Window resize as fallback (no ResizeObserver to avoid conflicts)
+    const handleResize = () => updateViewport();
+    window.addEventListener("resize", handleResize);
+    disposers.push(() => window.removeEventListener("resize", handleResize));
 
     return () => {
       disposers.forEach((dispose) => dispose());
