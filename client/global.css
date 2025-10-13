@@ -699,29 +699,6 @@
   }
 }
 
-/* Viewport-based responsive overrides for Builder.io iframe support */
-/* Mobile viewport: show mobile, hide desktop */
-html.viewport-mobile .md\:hidden,
-html.viewport-mobile .block.md\:hidden {
-  display: block !important;
-}
-
-html.viewport-mobile .md\:block,
-html.viewport-mobile .hidden.md\:block {
-  display: none !important;
-}
-
-/* Desktop viewport: hide mobile, show desktop */
-html.viewport-desktop .md\:hidden,
-html.viewport-desktop .block.md\:hidden {
-  display: none !important;
-}
-
-html.viewport-desktop .md\:block,
-html.viewport-desktop .hidden.md\:block {
-  display: block !important;
-}
-
 /* Mobile optimizations for BargainButton */
 @media (max-width: 640px) {
   .bargain-button-locked {
