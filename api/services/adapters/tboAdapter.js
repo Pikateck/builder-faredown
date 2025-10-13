@@ -258,14 +258,18 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       const response = await this.httpClient.post("/Search", searchRequest);
 
+      this.logger.info(`TBO Search Response: Status=${response.data.Status}, HasResults=${!!response.data.Response?.Results}`);
+
       if (response.data.Status !== 1) {
-        throw new Error(
-          `TBO search failed: ${response.data.Error || "Unknown error"}`,
-        );
+        const errorMsg = `TBO search failed: ${response.data.Error?.ErrorMessage || response.data.Error || JSON.stringify(response.data)}`;
+        this.logger.error(errorMsg);
+        throw new Error(errorMsg);
       }
 
       const results = response.data.Response?.Results || [[]];
       const flightOffers = results[0] || [];
+
+      this.logger.info(`TBO returned ${flightOffers.length} flight offers`);
 
       // Transform TBO response to our standard format
       const normalizedFlights = flightOffers
