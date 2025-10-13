@@ -1604,7 +1604,7 @@ export default function FlightResults() {
                         .concat(multiCityLegs[multiCityLegs.length - 1].toCode)
                         .join(" → ")} • `
                     : selectedFromCity && selectedToCity
-                      ? `${cityData[selectedFromCity]?.code || ""} → ${cityData[selectedToCity]?.code || ""} • `
+                      ? `${cityData[selectedFromCity]?.code || ""} �� ${cityData[selectedToCity]?.code || ""} • `
                       : "Search Results • "}
                   {tripType === "one-way"
                     ? "One way"
@@ -5270,7 +5270,7 @@ export default function FlightResults() {
 
       {/* Search Edit Modal - Exact Functional Specifications */}
       {showSearchEdit && (
-        <>
+        <div className="md:hidden">
           {/* Overlay */}
           <div
             className="fixed inset-0 bg-black bg-opacity-50 z-40"
@@ -5544,7 +5544,7 @@ export default function FlightResults() {
               </div>
             </div>
           </div>
-        </>
+        </div>
       )}
 
       {/* Enhanced AI Bargain Modal */}
