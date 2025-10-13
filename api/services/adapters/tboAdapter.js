@@ -162,7 +162,11 @@ class TBOAdapter extends BaseSupplierAdapter {
       );
       this.logger.info("TBO token cached successfully");
     } catch (error) {
-      this.logger.error("Failed to cache TBO token:", error);
+      this.logger.error("Failed to cache TBO token:", error.message);
+      if (error.code === '42P01') {
+        this.logger.error("Table tbo_token_cache does not exist. Continuing without caching.");
+      }
+      // Don't throw - caching failure shouldn't prevent search
     }
   }
 
