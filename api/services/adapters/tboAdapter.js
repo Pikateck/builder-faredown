@@ -77,7 +77,7 @@ class TBOAdapter extends BaseSupplierAdapter {
 
         const response = await this.httpClient.post(
           "/Authenticate",
-          authRequest
+          authRequest,
         );
 
         if (response.data.Status === 1 && response.data.TokenId) {
@@ -92,7 +92,7 @@ class TBOAdapter extends BaseSupplierAdapter {
           return this.tokenId;
         } else {
           throw new Error(
-            `TBO authentication failed: ${response.data.Error || "Unknown error"}`
+            `TBO authentication failed: ${response.data.Error || "Unknown error"}`,
           );
         }
       } else {
@@ -104,7 +104,7 @@ class TBOAdapter extends BaseSupplierAdapter {
     } catch (error) {
       this.logger.error(
         "Failed to get TBO token:",
-        error.response?.data || error.message
+        error.response?.data || error.message,
       );
       throw new Error("Authentication failed with TBO API");
     }
@@ -122,7 +122,7 @@ class TBOAdapter extends BaseSupplierAdapter {
            AND expires_at > NOW()
          ORDER BY created_at DESC 
          LIMIT 1`,
-        [this.config.agencyId]
+        [this.config.agencyId],
       );
 
       if (result.rows.length > 0) {
@@ -147,7 +147,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       await pool.query(
         `INSERT INTO tbo_token_cache (token_id, agency_id, expires_at)
          VALUES ($1, $2, $3)`,
-        [tokenId, this.config.agencyId, new Date(expiresAt)]
+        [tokenId, this.config.agencyId, new Date(expiresAt)],
       );
       this.logger.info("TBO token cached successfully");
     } catch (error) {
@@ -167,10 +167,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         EndUserIp: this.config.endUserIp,
       };
 
-      const response = await this.httpClient.post(
-        "/GetAgencyBalance",
-        request
-      );
+      const response = await this.httpClient.post("/GetAgencyBalance", request);
 
       if (response.data.Status === 1) {
         return {
@@ -181,7 +178,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       throw new Error(
-        `Failed to get TBO balance: ${response.data.Error || "Unknown error"}`
+        `Failed to get TBO balance: ${response.data.Error || "Unknown error"}`,
       );
     });
   }
@@ -257,7 +254,7 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       if (response.data.Status !== 1) {
         throw new Error(
-          `TBO search failed: ${response.data.Error || "Unknown error"}`
+          `TBO search failed: ${response.data.Error || "Unknown error"}`,
         );
       }
 
@@ -273,7 +270,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       await this.storeProductsAndSnapshots(normalizedFlights, "flight");
 
       this.logger.info(
-        `Retrieved ${normalizedFlights.length} flight offers from TBO`
+        `Retrieved ${normalizedFlights.length} flight offers from TBO`,
       );
 
       return normalizedFlights;
@@ -301,7 +298,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       throw new Error(
-        `TBO FareQuote failed: ${response.data.Error || "Unknown error"}`
+        `TBO FareQuote failed: ${response.data.Error || "Unknown error"}`,
       );
     });
   }
@@ -327,7 +324,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       throw new Error(
-        `TBO FareRule failed: ${response.data.Error || "Unknown error"}`
+        `TBO FareRule failed: ${response.data.Error || "Unknown error"}`,
       );
     });
   }
@@ -357,7 +354,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       throw new Error(
-        `TBO SSR failed: ${response.data.Error || "Unknown error"}`
+        `TBO SSR failed: ${response.data.Error || "Unknown error"}`,
       );
     });
   }
@@ -423,7 +420,7 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       if (response.data.Status !== 1) {
         throw new Error(
-          `TBO booking failed: ${response.data.Error || "Unknown error"}`
+          `TBO booking failed: ${response.data.Error || "Unknown error"}`,
         );
       }
 
@@ -481,7 +478,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       throw new Error(
-        `TBO ticketing failed: ${response.data.Error || "Unknown error"}`
+        `TBO ticketing failed: ${response.data.Error || "Unknown error"}`,
       );
     });
   }
@@ -502,7 +499,7 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       const response = await this.bookingClient.post(
         "/GetBookingDetails",
-        request
+        request,
       );
 
       if (response.data.Status === 1) {
@@ -510,7 +507,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       throw new Error(
-        `Failed to get TBO booking details: ${response.data.Error || "Unknown error"}`
+        `Failed to get TBO booking details: ${response.data.Error || "Unknown error"}`,
       );
     });
   }
@@ -533,7 +530,7 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       const response = await this.bookingClient.post(
         "/SendChangeRequest",
-        request
+        request,
       );
 
       if (response.data.Status === 1) {
@@ -554,7 +551,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       throw new Error(
-        `TBO cancellation failed: ${response.data.Error || "Unknown error"}`
+        `TBO cancellation failed: ${response.data.Error || "Unknown error"}`,
       );
     });
   }
@@ -591,7 +588,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       throw new Error(
-        `TBO CalendarFare failed: ${response.data.Error || "Unknown error"}`
+        `TBO CalendarFare failed: ${response.data.Error || "Unknown error"}`,
       );
     });
   }
@@ -617,7 +614,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         arrivalTime: lastSegment?.Destination?.ArrTime || "",
         durationMinutes: offer.Segments?.[0]?.reduce(
           (acc, seg) => acc + (seg.Duration || 0),
-          0
+          0,
         ),
         stops: segments.length - 1,
         class: this.mapTBOCabinClass(firstSegment?.CabinClass || 1),

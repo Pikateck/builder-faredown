@@ -99,7 +99,9 @@ export function Header() {
 
     if (typeof mediaQuery.addEventListener === "function") {
       mediaQuery.addEventListener("change", handleMediaChange);
-      disposers.push(() => mediaQuery.removeEventListener("change", handleMediaChange));
+      disposers.push(() =>
+        mediaQuery.removeEventListener("change", handleMediaChange),
+      );
     } else if (typeof mediaQuery.addListener === "function") {
       mediaQuery.addListener(handleMediaChange);
       disposers.push(() => mediaQuery.removeListener(handleMediaChange));

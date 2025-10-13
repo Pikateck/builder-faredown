@@ -47,9 +47,7 @@ class SupplierAdapterManager {
         this.adapters.set("TBO", new TBOAdapter());
         this.logger.info("TBO adapter initialized");
       } else {
-        this.logger.warn(
-          "TBO credentials not found, adapter not initialized",
-        );
+        this.logger.warn("TBO credentials not found, adapter not initialized");
       }
 
       // Initialize Hotelbeds adapter

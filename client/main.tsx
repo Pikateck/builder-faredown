@@ -9,10 +9,7 @@ import { registerAdminWorker } from "@/lib/register-admin-worker";
 // Suppress benign ResizeObserver errors (they don't affect functionality)
 const originalConsoleError = console.error;
 console.error = (...args: any[]) => {
-  if (
-    typeof args[0] === "string" &&
-    args[0].includes("ResizeObserver loop")
-  ) {
+  if (typeof args[0] === "string" && args[0].includes("ResizeObserver loop")) {
     return;
   }
   originalConsoleError.apply(console, args);

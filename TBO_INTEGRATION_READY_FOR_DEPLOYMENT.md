@@ -9,34 +9,42 @@ All code changes for TBO supplier integration are **COMPLETE** and ready for dep
 ## ✅ Completed Implementation
 
 ### 1. Supplier-Aware Markup Logic ✅
+
 **File:** `api/routes/markup.js`
 
 **Changes:**
+
 - Added `supplier` query parameter to `GET /api/markup/air`
 - Added `supplierScope` field to `POST /api/markup/air` and `PUT /api/markup/air/:id`
 - Markup rules now filter by `supplier_scope IN ('all', 'amadeus', 'tbo')`
 - Admin can create supplier-specific or universal markup rules
 
 **Impact:**
+
 - Markups now apply based on flight supplier
 - Example: "10% markup on TBO flights only" or "15% markup on all suppliers"
 
 ### 2. Supplier-Aware Promo Code Logic ✅
+
 **File:** `api/routes/promo.js` (via `api/routes/flights.js`)
 
 **Changes:**
+
 - Updated `applyPromoCode(price, promoCode, userId, supplier)` signature
 - Promo codes now filter by `supplier_scope IN ('all', 'amadeus', 'tbo')`
 - Promos validate against flight supplier before applying
 
 **Impact:**
+
 - Promo codes can be restricted to specific suppliers
 - Example: "TBOSPECIAL" only works on TBO flights
 
 ### 3. Flight Search Aggregation ✅
+
 **File:** `api/routes/flights.js`
 
 **Changes:**
+
 - **REPLACED** direct Amadeus API call with `supplierAdapterManager.searchAllFlights()`
 - Now searches **AMADEUS** and **TBO** in parallel
 - Results are aggregated, deduplicated, and sorted by price
@@ -44,18 +52,22 @@ All code changes for TBO supplier integration are **COMPLETE** and ready for dep
 - Applies supplier-specific markup and promo to each result
 
 **Impact:**
+
 - Users see combined results from both suppliers
 - Best pricing across all available suppliers
 - Full supplier transparency in bookings and analytics
 
 ### 4. Updated `getMarkupData()` Function ✅
+
 **File:** `api/routes/flights.js`
 
 **Changes:**
+
 ```javascript
 // OLD: getMarkupData(airline, route, cabinClass)
 // NEW: getMarkupData(supplier, airline, route, cabinClass)
 ```
+
 - Now queries markup rules filtered by supplier
 - Ensures correct markup applies to each supplier's flights
 
@@ -66,6 +78,7 @@ All code changes for TBO supplier integration are **COMPLETE** and ready for dep
 **Migration File:** `api/database/migrations/20250315_add_tbo_supplier_integration.sql`
 
 **Schema Updates:**
+
 1. **New Tables:**
    - `tbo_token_cache` - TBO authentication token caching
    - `supplier_master` - Supplier configuration and health
@@ -120,17 +133,21 @@ FLIGHTS_SUPPLIERS=AMADEUS,TBO
 ## 📋 Deployment Checklist
 
 ### Pre-Deployment
+
 - [ ] Obtain TBO API credentials (Agency ID, Client ID, Username, Password)
 - [ ] Add TBO environment variables to Render
 - [ ] Review `TBO_DEPLOYMENT_GUIDE.md` for full deployment steps
 
 ### Deployment Steps
+
 1. [ ] **Run database migration**
+
    ```bash
    psql $DATABASE_URL -f api/database/migrations/20250315_add_tbo_supplier_integration.sql
    ```
 
 2. [ ] **Deploy code to Render**
+
    ```bash
    git push origin main
    ```
@@ -140,6 +157,7 @@ FLIGHTS_SUPPLIERS=AMADEUS,TBO
    - Look for: `[ADAPTER_MANAGER] Initialized 2 supplier adapters`
 
 ### Post-Deployment Verification
+
 - [ ] Test flight search returns results from both suppliers
 - [ ] Verify Admin → Supplier Master shows TBO
 - [ ] Verify Admin → Markup Management has supplier dropdown
@@ -153,21 +171,27 @@ FLIGHTS_SUPPLIERS=AMADEUS,TBO
 ## 🧪 Quick Verification Tests
 
 ### Test 1: Search Aggregation
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/flights/search?origin=BOM&destination=DXB&departureDate=2025-04-01&adults=1"
 ```
+
 **Expected:** Results from both AMADEUS and TBO, each tagged with `supplier` field
 
 ### Test 2: Supplier Health
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/admin/suppliers
 ```
+
 **Expected:** Both amadeus and tbo with `health: "healthy"`
 
 ### Test 3: Markup Filtering
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/markup/air?supplier=tbo"
 ```
+
 **Expected:** Only markups with `supplier_scope = 'tbo'` or `'all'`
 
 ---
@@ -231,15 +255,15 @@ After deployment, the following should be true:
 
 ## 🚀 Deployment Timeline
 
-| Step | Action | Duration | Owner |
-|------|--------|----------|-------|
-| 1 | Obtain TBO credentials | 15 min | Zubin |
-| 2 | Add env vars to Render | 5 min | Zubin |
-| 3 | Run database migration | 2 min | Dev Team |
-| 4 | Deploy code to production | 5 min | Auto (Render) |
-| 5 | Verify initialization | 5 min | Dev Team |
-| 6 | Run verification tests | 10 min | Dev Team |
-| 7 | Monitor logs & metrics | 30 min | Dev Team |
+| Step | Action                    | Duration | Owner         |
+| ---- | ------------------------- | -------- | ------------- |
+| 1    | Obtain TBO credentials    | 15 min   | Zubin         |
+| 2    | Add env vars to Render    | 5 min    | Zubin         |
+| 3    | Run database migration    | 2 min    | Dev Team      |
+| 4    | Deploy code to production | 5 min    | Auto (Render) |
+| 5    | Verify initialization     | 5 min    | Dev Team      |
+| 6    | Run verification tests    | 10 min   | Dev Team      |
+| 7    | Monitor logs & metrics    | 30 min   | Dev Team      |
 
 **Total Estimated Time:** ~1 hour
 
@@ -259,6 +283,7 @@ After deployment, the following should be true:
 ## 🎉 Ready for Production
 
 All code changes are **COMPLETE** and **TESTED** locally. The system is ready for:
+
 1. Environment variable configuration
 2. Database migration execution
 3. Production deployment

@@ -26,7 +26,7 @@ const getActualViewportWidth = (): number => {
 
 export function useViewportClass() {
   const [isMobile, setIsMobile] = useState(
-    () => getActualViewportWidth() < 768
+    () => getActualViewportWidth() < 768,
   );
 
   useEffect(() => {

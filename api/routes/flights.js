@@ -75,7 +75,12 @@ async function getMarkupData(supplier, airline, route, cabinClass) {
       LIMIT 1
     `;
 
-    const result = await db.query(query, [airline, route, cabinClass, (supplier || 'all').toLowerCase()]);
+    const result = await db.query(query, [
+      airline,
+      route,
+      cabinClass,
+      (supplier || "all").toLowerCase(),
+    ]);
 
     if (result.rows && result.rows.length > 0) {
       return result.rows[0];
@@ -115,7 +120,12 @@ function applyMarkup(basePrice, markupData) {
 /**
  * Apply promo code discount
  */
-async function applyPromoCode(price, promoCode, userId = null, supplier = null) {
+async function applyPromoCode(
+  price,
+  promoCode,
+  userId = null,
+  supplier = null,
+) {
   if (!promoCode)
     return { finalPrice: price, discount: 0, promoApplied: false };
 
@@ -129,7 +139,10 @@ async function applyPromoCode(price, promoCode, userId = null, supplier = null) 
       AND (supplier_scope = $2 OR supplier_scope = 'all')
     `;
 
-    const result = await db.query(query, [promoCode, (supplier || 'all').toLowerCase()]);
+    const result = await db.query(query, [
+      promoCode,
+      (supplier || "all").toLowerCase(),
+    ]);
 
     if (result.rows && result.rows.length > 0) {
       const promo = result.rows[0];
@@ -526,7 +539,9 @@ router.get("/search", async (req, res) => {
       .split(",")
       .map((s) => s.trim().toUpperCase());
 
-    console.log(`📡 Searching across suppliers: ${enabledSuppliers.join(", ")}`);
+    console.log(
+      `📡 Searching across suppliers: ${enabledSuppliers.join(", ")}`,
+    );
 
     // Execute parallel search across all enabled suppliers
     const aggregatedResults = await supplierAdapterManager.searchAllFlights(
@@ -541,7 +556,11 @@ router.get("/search", async (req, res) => {
     // Apply supplier-aware markup and promo to each result
     const transformedFlights = await Promise.all(
       aggregatedResults.products.map(async (product) => {
-        const supplier = (product.supplier || product.supplierCode || "AMADEUS").toLowerCase();
+        const supplier = (
+          product.supplier ||
+          product.supplierCode ||
+          "AMADEUS"
+        ).toLowerCase();
 
         // Get supplier-specific markup
         const route = `${product.origin || origin}-${product.destination || destination}`;
@@ -553,7 +572,8 @@ router.get("/search", async (req, res) => {
         );
 
         // Apply markup
-        const basePrice = product.price?.total || product.price?.amount || product.price || 0;
+        const basePrice =
+          product.price?.total || product.price?.amount || product.price || 0;
         const markedUpPrice = applyMarkup(basePrice, markupData);
 
         // Apply supplier-specific promo if provided

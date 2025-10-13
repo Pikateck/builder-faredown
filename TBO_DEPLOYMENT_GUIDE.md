@@ -3,16 +3,19 @@
 ## ✅ Completed Code Changes
 
 ### 1. Supplier-Aware Markup Logic (`api/routes/markup.js`)
+
 - ✅ Updated `GET /api/markup/air` to filter by `supplier_scope`
 - ✅ Updated `POST /api/markup/air` to accept `supplierScope` parameter
 - ✅ Updated `PUT /api/markup/air/:id` to update `supplier_scope`
 - ✅ Markup rules now apply based on supplier (amadeus/tbo/all)
 
 ### 2. Supplier-Aware Promo Code Logic (`api/routes/promo.js`)
+
 - ✅ Updated `applyPromoCode()` to filter by `supplier_scope`
 - ✅ Promo codes now validate against supplier
 
 ### 3. Flight Search Aggregation (`api/routes/flights.js`)
+
 - ✅ Replaced direct Amadeus API call with `supplierAdapterManager.searchAllFlights()`
 - ✅ Now searches both **AMADEUS** and **TBO** in parallel
 - ✅ Applies supplier-specific markups and promos
@@ -48,6 +51,7 @@ FLIGHTS_SUPPLIERS=AMADEUS,TBO
 ```
 
 **Important Notes:**
+
 - TBO uses **two different base URLs**: one for search/pricing, one for booking
 - **REST API requires `/rest` in the path** (per official TBO documentation)
 - Example endpoint: `https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest/Search`
@@ -56,11 +60,13 @@ FLIGHTS_SUPPLIERS=AMADEUS,TBO
 ### Step 2: Run Database Migration
 
 **Option A: Using psql (Recommended)**
+
 ```bash
 psql $DATABASE_URL -f api/database/migrations/20250315_add_tbo_supplier_integration.sql
 ```
 
 **Option B: Using Node.js**
+
 ```bash
 node -e "
 const pool = require('./api/database/connection');
@@ -74,6 +80,7 @@ pool.query(sql)
 ```
 
 **Option C: Manual SQL Execution**
+
 1. Connect to your PostgreSQL database
 2. Copy and paste the SQL from `api/database/migrations/20250315_add_tbo_supplier_integration.sql`
 3. Execute it
@@ -84,19 +91,19 @@ Check that the following changes were applied:
 
 ```sql
 -- 1. Check TBO token cache table exists
-SELECT table_name FROM information_schema.tables 
+SELECT table_name FROM information_schema.tables
 WHERE table_name = 'tbo_token_cache';
 
 -- 2. Check supplier_scope column added to markup_rules
-SELECT column_name FROM information_schema.columns 
+SELECT column_name FROM information_schema.columns
 WHERE table_name = 'markup_rules' AND column_name = 'supplier_scope';
 
 -- 3. Check supplier column added to bookings
-SELECT column_name FROM information_schema.columns 
+SELECT column_name FROM information_schema.columns
 WHERE table_name = 'bookings' AND column_name = 'supplier';
 
 -- 4. Check supplier_master table exists
-SELECT table_name FROM information_schema.tables 
+SELECT table_name FROM information_schema.tables
 WHERE table_name = 'supplier_master';
 
 -- 5. Verify initial supplier data
@@ -126,9 +133,11 @@ Watch for these log messages in Render:
 ```
 
 If you see warnings about missing credentials:
+
 ```
 ⚠️ [ADAPTER_MANAGER] TBO credentials not found, adapter not initialized
 ```
+
 → Check that `TBO_AGENCY_ID` environment variable is set correctly.
 
 ---
@@ -138,11 +147,13 @@ If you see warnings about missing credentials:
 ### Test 1: Verify Supplier Initialization
 
 **API Call:**
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/admin/suppliers
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -168,11 +179,13 @@ curl https://builder-faredown-pricing.onrender.com/api/admin/suppliers
 ### Test 2: Flight Search Aggregation
 
 **API Call:**
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/flights/search?origin=BOM&destination=DXB&departureDate=2025-04-01&adults=1&cabinClass=ECONOMY"
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -214,6 +227,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/flights/search?origin=BO
 ### Test 3: Supplier-Scoped Markup
 
 **Create TBO-Only Markup:**
+
 ```bash
 curl -X POST https://builder-faredown-pricing.onrender.com/api/markup/air \
   -H "Content-Type: application/json" \
@@ -228,6 +242,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/markup/air \
 ```
 
 **Verify Filtering:**
+
 ```bash
 # Should return TBO markup
 curl "https://builder-faredown-pricing.onrender.com/api/markup/air?supplier=tbo"
@@ -239,6 +254,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/markup/air?supplier=amad
 ### Test 4: Supplier-Scoped Promo Code
 
 **API Call:**
+
 ```bash
 curl -X POST https://builder-faredown-pricing.onrender.com/api/promo/apply \
   -H "Content-Type: application/json" \
@@ -252,6 +268,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/promo/apply \
 ```
 
 **Expected Behavior:**
+
 - ✅ Valid for TBO flights
 - ❌ Invalid for Amadeus flights (if `supplier_scope = 'tbo'`)
 
@@ -282,8 +299,9 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/promo/apply \
 ## 📊 Database Queries for Verification
 
 ### Check Applied Markups by Supplier
+
 ```sql
-SELECT 
+SELECT
   supplier,
   COUNT(*) as total_markups,
   SUM(applied_amount) as total_markup_revenue
@@ -293,8 +311,9 @@ ORDER BY total_markup_revenue DESC;
 ```
 
 ### Check Bookings by Supplier
+
 ```sql
-SELECT 
+SELECT
   supplier,
   COUNT(*) as total_bookings,
   SUM(total_amount) as total_revenue
@@ -304,12 +323,14 @@ GROUP BY supplier;
 ```
 
 ### Check Supplier Performance
+
 ```sql
 SELECT * FROM supplier_performance
 WHERE search_date >= CURRENT_DATE - 7;
 ```
 
 ### Check Supplier Search Stats
+
 ```sql
 SELECT * FROM supplier_search_stats
 WHERE stat_date >= CURRENT_DATE - 7
@@ -321,17 +342,21 @@ ORDER BY stat_date DESC, supplier;
 ## 🐛 Troubleshooting
 
 ### Issue: TBO Adapter Not Initialized
+
 **Symptoms:** Logs show "TBO credentials not found"
 
 **Solutions:**
+
 1. Verify `TBO_AGENCY_ID` is set in Render environment
 2. Check other TBO credentials (CLIENT_ID, USERNAME, PASSWORD)
 3. Restart the Render service after adding variables
 
 ### Issue: TBO Authentication Failing
+
 **Symptoms:** "Authentication failed with TBO API"
 
 **Solutions:**
+
 1. Verify `TBO_CREDENTIAL_MODE=runtime`
 2. Check credentials are correct
 3. Try static mode if runtime fails:
@@ -341,18 +366,22 @@ ORDER BY stat_date DESC, supplier;
    ```
 
 ### Issue: No TBO Results in Search
+
 **Symptoms:** Only Amadeus results returned
 
 **Solutions:**
+
 1. Check supplier_master: `SELECT * FROM supplier_master WHERE code='tbo';`
 2. Ensure `enabled = true` for TBO
 3. Check TBO health: `GET /api/admin/suppliers/tbo/health`
 4. Review logs for TBO errors
 
 ### Issue: Markup Not Applying to TBO Flights
+
 **Symptoms:** TBO flights show no markup
 
 **Solutions:**
+
 1. Check markup rules have `supplier_scope = 'tbo'` or `'all'`
 2. Verify `getMarkupData()` is called with correct supplier parameter
 3. Check logs for markup application errors
