@@ -75,14 +75,18 @@ class TBOAdapter extends BaseSupplierAdapter {
           EndUserIp: this.config.endUserIp,
         };
 
-        this.logger.info(`TBO Auth Request: ClientId=${authRequest.ClientId}, UserName=${authRequest.UserName}, EndUserIp=${authRequest.EndUserIp}`);
+        this.logger.info(
+          `TBO Auth Request: ClientId=${authRequest.ClientId}, UserName=${authRequest.UserName}, EndUserIp=${authRequest.EndUserIp}`,
+        );
 
         const response = await this.httpClient.post(
           "/Authenticate",
           authRequest,
         );
 
-        this.logger.info(`TBO Auth Response: Status=${response.data.Status}, HasToken=${!!response.data.TokenId}`);
+        this.logger.info(
+          `TBO Auth Response: Status=${response.data.Status}, HasToken=${!!response.data.TokenId}`,
+        );
 
         if (response.data.Status === 1 && response.data.TokenId) {
           this.tokenId = response.data.TokenId;
@@ -112,7 +116,9 @@ class TBOAdapter extends BaseSupplierAdapter {
         JSON.stringify(errorDetails, null, 2),
       );
       this.logger.error("TBO Auth Error Stack:", error.stack);
-      throw new Error(`Authentication failed with TBO API: ${JSON.stringify(errorDetails)}`);
+      throw new Error(
+        `Authentication failed with TBO API: ${JSON.stringify(errorDetails)}`,
+      );
     }
   }
 
@@ -132,19 +138,25 @@ class TBOAdapter extends BaseSupplierAdapter {
       );
 
       if (result.rows.length > 0) {
-        this.logger.info(`Found cached TBO token for agency ${this.config.agencyId}`);
+        this.logger.info(
+          `Found cached TBO token for agency ${this.config.agencyId}`,
+        );
         return {
           token_id: result.rows[0].token_id,
           expires_at: new Date(result.rows[0].expires_at).getTime(),
         };
       }
 
-      this.logger.info(`No cached TBO token found for agency ${this.config.agencyId}`);
+      this.logger.info(
+        `No cached TBO token found for agency ${this.config.agencyId}`,
+      );
       return null;
     } catch (error) {
       this.logger.error("Failed to get cached TBO token:", error.message);
-      if (error.code === '42P01') {
-        this.logger.error("Table tbo_token_cache does not exist. Please run the migration script.");
+      if (error.code === "42P01") {
+        this.logger.error(
+          "Table tbo_token_cache does not exist. Please run the migration script.",
+        );
       }
       return null;
     }
@@ -163,8 +175,10 @@ class TBOAdapter extends BaseSupplierAdapter {
       this.logger.info("TBO token cached successfully");
     } catch (error) {
       this.logger.error("Failed to cache TBO token:", error.message);
-      if (error.code === '42P01') {
-        this.logger.error("Table tbo_token_cache does not exist. Continuing without caching.");
+      if (error.code === "42P01") {
+        this.logger.error(
+          "Table tbo_token_cache does not exist. Continuing without caching.",
+        );
       }
       // Don't throw - caching failure shouldn't prevent search
     }
@@ -267,7 +281,9 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       const response = await this.httpClient.post("/Search", searchRequest);
 
-      this.logger.info(`TBO Search Response: Status=${response.data.Status}, HasResults=${!!response.data.Response?.Results}`);
+      this.logger.info(
+        `TBO Search Response: Status=${response.data.Status}, HasResults=${!!response.data.Response?.Results}`,
+      );
 
       if (response.data.Status !== 1) {
         const errorMsg = `TBO search failed: ${response.data.Error?.ErrorMessage || response.data.Error || JSON.stringify(response.data)}`;

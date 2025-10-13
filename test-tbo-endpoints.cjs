@@ -5,7 +5,8 @@
 
 const axios = require("axios");
 
-const TBO_CLIENT_ID = process.env.TBO_CLIENT_ID || process.env.TBO_AGENCY_ID || "BOMF145";
+const TBO_CLIENT_ID =
+  process.env.TBO_CLIENT_ID || process.env.TBO_AGENCY_ID || "BOMF145";
 const TBO_USERNAME = process.env.TBO_USERNAME || "BOMF145";
 const TBO_PASSWORD = process.env.TBO_PASSWORD || "travel/live-18@@";
 const TBO_END_USER_IP = process.env.TBO_END_USER_IP || "192.168.5.56";
@@ -29,17 +30,13 @@ async function testEndpoint(baseUrl) {
     };
 
     console.log(`\n Testing: ${baseUrl}/Authenticate`);
-    
-    const response = await axios.post(
-      `${baseUrl}/Authenticate`,
-      authRequest,
-      {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        timeout: 10000,
-      }
-    );
+
+    const response = await axios.post(`${baseUrl}/Authenticate`, authRequest, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+      timeout: 10000,
+    });
 
     if (response.data.Status === 1 && response.data.TokenId) {
       console.log(`✅ SUCCESS! Token: ${response.data.TokenId}`);
@@ -47,13 +44,17 @@ async function testEndpoint(baseUrl) {
       console.log(`   Agency: ${response.data.Member?.AgencyName}`);
       return baseUrl;
     } else {
-      console.log(`❌ Auth failed: ${response.data.Error?.ErrorMessage || response.data.Error}`);
+      console.log(
+        `❌ Auth failed: ${response.data.Error?.ErrorMessage || response.data.Error}`,
+      );
       return null;
     }
   } catch (error) {
     if (error.response) {
-      console.log(`❌ HTTP ${error.response.status}: ${error.response.statusText}`);
-    } else if (error.code === 'ECONNABORTED') {
+      console.log(
+        `❌ HTTP ${error.response.status}: ${error.response.statusText}`,
+      );
+    } else if (error.code === "ECONNABORTED") {
       console.log(`❌ Timeout`);
     } else {
       console.log(`❌ ${error.message}`);
@@ -64,10 +65,12 @@ async function testEndpoint(baseUrl) {
 
 async function main() {
   console.log("🔍 Testing TBO API Endpoints...");
-  console.log(`Using credentials: ClientId=${TBO_CLIENT_ID}, Username=${TBO_USERNAME}\n`);
+  console.log(
+    `Using credentials: ClientId=${TBO_CLIENT_ID}, Username=${TBO_USERNAME}\n`,
+  );
 
   const workingEndpoint = null;
-  
+
   for (const endpoint of endpoints) {
     const result = await testEndpoint(endpoint);
     if (result) {

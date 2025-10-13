@@ -554,15 +554,21 @@ router.get("/search", async (req, res) => {
     );
 
     // Log supplier metrics for debugging
-    console.log("📊 Supplier Metrics:", JSON.stringify(aggregatedResults.supplierMetrics, null, 2));
-
-    // Check if all suppliers failed
-    const allSuppliersFailed = Object.values(aggregatedResults.supplierMetrics).every(
-      (metric) => !metric.success,
+    console.log(
+      "📊 Supplier Metrics:",
+      JSON.stringify(aggregatedResults.supplierMetrics, null, 2),
     );
 
+    // Check if all suppliers failed
+    const allSuppliersFailed = Object.values(
+      aggregatedResults.supplierMetrics,
+    ).every((metric) => !metric.success);
+
     if (allSuppliersFailed) {
-      console.error("❌ All suppliers failed:", aggregatedResults.supplierMetrics);
+      console.error(
+        "❌ All suppliers failed:",
+        aggregatedResults.supplierMetrics,
+      );
       // Return fallback data when all suppliers fail
       const fallbackFlights = getFallbackFlightData(req.query);
       await logFlightSearch(req, searchParams, fallbackFlights);

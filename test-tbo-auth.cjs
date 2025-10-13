@@ -6,7 +6,9 @@
 const axios = require("axios");
 
 // Use environment variables directly (already set in the environment)
-const TBO_SEARCH_URL = process.env.TBO_SEARCH_URL || "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest";
+const TBO_SEARCH_URL =
+  process.env.TBO_SEARCH_URL ||
+  "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest";
 const TBO_CLIENT_ID = process.env.TBO_CLIENT_ID || process.env.TBO_AGENCY_ID;
 const TBO_USERNAME = process.env.TBO_USERNAME;
 const TBO_PASSWORD = process.env.TBO_PASSWORD;
@@ -14,7 +16,7 @@ const TBO_END_USER_IP = process.env.TBO_END_USER_IP || "192.168.5.56";
 
 async function testTBOAuth() {
   console.log("\n🔐 Testing TBO Authentication...\n");
-  
+
   console.log("Configuration:");
   console.log("- Search URL:", TBO_SEARCH_URL);
   console.log("- Client ID:", TBO_CLIENT_ID);
@@ -24,8 +26,12 @@ async function testTBOAuth() {
   console.log("");
 
   if (!TBO_CLIENT_ID || !TBO_USERNAME || !TBO_PASSWORD) {
-    console.error("❌ Missing TBO credentials. Please check your environment variables.");
-    console.error("Required variables: TBO_CLIENT_ID, TBO_USERNAME, TBO_PASSWORD");
+    console.error(
+      "❌ Missing TBO credentials. Please check your environment variables.",
+    );
+    console.error(
+      "Required variables: TBO_CLIENT_ID, TBO_USERNAME, TBO_PASSWORD",
+    );
     process.exit(1);
   }
 
@@ -49,7 +55,7 @@ async function testTBOAuth() {
           "Content-Type": "application/json",
         },
         timeout: 30000,
-      }
+      },
     );
 
     console.log("📥 Response received:");
@@ -62,7 +68,7 @@ async function testTBOAuth() {
       console.log("Token ID:", response.data.TokenId);
       console.log("Member ID:", response.data.Member?.MemberId);
       console.log("Agency Name:", response.data.Member?.AgencyName);
-      
+
       // Test balance check
       console.log("\n💰 Testing balance check...");
       const balanceRequest = {
@@ -78,7 +84,7 @@ async function testTBOAuth() {
             "Content-Type": "application/json",
           },
           timeout: 30000,
-        }
+        },
       );
 
       if (balanceResponse.data.Status === 1) {
@@ -88,7 +94,7 @@ async function testTBOAuth() {
       } else {
         console.log("⚠️  Balance check failed:", balanceResponse.data.Error);
       }
-      
+
       process.exit(0);
     } else {
       console.error("❌ TBO Authentication FAILED!");
@@ -98,17 +104,20 @@ async function testTBOAuth() {
   } catch (error) {
     console.error("❌ Authentication request failed:");
     console.error("Error:", error.message);
-    
+
     if (error.response) {
       console.error("Response Status:", error.response.status);
-      console.error("Response Data:", JSON.stringify(error.response.data, null, 2));
+      console.error(
+        "Response Data:",
+        JSON.stringify(error.response.data, null, 2),
+      );
     } else if (error.request) {
       console.error("No response received. Please check:");
       console.error("1. Network connectivity");
       console.error("2. TBO API URL is correct");
       console.error("3. Firewall/proxy settings");
     }
-    
+
     process.exit(1);
   }
 }
