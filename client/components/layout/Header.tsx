@@ -73,7 +73,7 @@ export function Header() {
       setIsDesktop(event.matches);
     };
 
-    updateViewport(mediaQuery.matches ? 768 : mediaQuery.matches ? 768 : undefined);
+    updateViewport();
 
     if (typeof mediaQuery.addEventListener === "function") {
       mediaQuery.addEventListener("change", handleMediaChange);
