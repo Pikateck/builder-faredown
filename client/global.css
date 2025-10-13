@@ -699,6 +699,48 @@
   }
 }
 
+/* ============================================================================
+   VIEWPORT CLASS OVERRIDES - MUST BE LAST FOR BUILDER.IO IFRAME SUPPORT
+   ============================================================================
+   These rules override Tailwind's responsive utilities when viewport classes
+   are applied to <html>. They enable mobile previews in Builder.io iframes.
+   DO NOT MOVE OR MODIFY - MUST STAY AT END OF FILE FOR PROPER CASCADE
+   ============================================================================ */
+
+/* Mobile viewport (<768px): Force mobile layouts */
+html.viewport-mobile .md\:hidden {
+  display: block !important;
+}
+
+html.viewport-mobile .md\:block {
+  display: none !important;
+}
+
+html.viewport-mobile .hidden.md\:block {
+  display: none !important;
+}
+
+html.viewport-mobile .block.md\:hidden {
+  display: block !important;
+}
+
+/* Desktop viewport (≥768px): Force desktop layouts */
+html.viewport-desktop .md\:hidden {
+  display: none !important;
+}
+
+html.viewport-desktop .md\:block {
+  display: block !important;
+}
+
+html.viewport-desktop .hidden.md\:block {
+  display: block !important;
+}
+
+html.viewport-desktop .block.md\:hidden {
+  display: none !important;
+}
+
 /* Mobile optimizations for BargainButton */
 @media (max-width: 640px) {
   .bargain-button-locked {
