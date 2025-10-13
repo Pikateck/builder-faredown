@@ -41,6 +41,18 @@ const getViewportWidth = () => {
   if (typeof window === "undefined") {
     return 1024;
   }
+
+  // Check if we're in a Builder.io iframe
+  const isBuilderIframe = window.parent !== window && window.frameElement;
+
+  if (isBuilderIframe) {
+    // In Builder iframe, use the actual rendered width
+    const frameWidth = window.frameElement?.getBoundingClientRect?.()?.width;
+    if (frameWidth && frameWidth > 0) {
+      return frameWidth;
+    }
+  }
+
   return (
     window.innerWidth ||
     document.documentElement?.clientWidth ||
