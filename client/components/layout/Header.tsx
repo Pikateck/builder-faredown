@@ -89,8 +89,11 @@ export function Header() {
           updateViewport(entries[0].contentRect.width);
         }
       });
-      observer.observe(document.documentElement);
-      disposers.push(() => observer.disconnect());
+      const rootElement = document.documentElement;
+      if (rootElement) {
+        observer.observe(rootElement);
+        disposers.push(() => observer.disconnect());
+      }
     } else {
       const handleResize = () => updateViewport();
       window.addEventListener("resize", handleResize);
