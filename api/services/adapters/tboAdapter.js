@@ -419,7 +419,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         passengerCount: passengers.length,
       });
 
-      const response = await this.httpClient.post("/Book", bookingRequest);
+      const response = await this.bookingClient.post("/Book", bookingRequest);
 
       if (response.data.Status !== 1) {
         throw new Error(
@@ -461,7 +461,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         PNR: pnr,
       };
 
-      const response = await this.httpClient.post("/Ticket", request);
+      const response = await this.bookingClient.post("/Ticket", request);
 
       if (response.data.Status === 1) {
         this.logger.info("TBO ticketing successful", {
@@ -500,7 +500,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         PNR: pnr,
       };
 
-      const response = await this.httpClient.post(
+      const response = await this.bookingClient.post(
         "/GetBookingDetails",
         request
       );
@@ -531,7 +531,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         Sectors: [],
       };
 
-      const response = await this.httpClient.post(
+      const response = await this.bookingClient.post(
         "/SendChangeRequest",
         request
       );
