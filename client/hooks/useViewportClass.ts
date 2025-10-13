@@ -62,13 +62,26 @@ export function useViewportClass() {
     }
 
     if ("ResizeObserver" in window) {
+      let rafId: number | null = null;
       const observer = new ResizeObserver(() => {
-        updateViewportClass();
+        // Debounce with requestAnimationFrame to avoid ResizeObserver errors
+        if (rafId !== null) {
+          cancelAnimationFrame(rafId);
+        }
+        rafId = requestAnimationFrame(() => {
+          updateViewportClass();
+          rafId = null;
+        });
       });
       const rootElement = document.documentElement;
       if (rootElement) {
         observer.observe(rootElement);
-        disposers.push(() => observer.disconnect());
+        disposers.push(() => {
+          if (rafId !== null) {
+            cancelAnimationFrame(rafId);
+          }
+          observer.disconnect();
+        });
       }
     } else {
       const handleResize = () => updateViewportClass();
