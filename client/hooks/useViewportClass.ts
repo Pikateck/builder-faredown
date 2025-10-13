@@ -1,5 +1,19 @@
 import { useEffect, useState } from "react";
 
+// Suppress ResizeObserver loop errors (they're benign)
+if (typeof window !== "undefined") {
+  const resizeObserverErr = window.console.error;
+  window.console.error = (...args: any[]) => {
+    if (
+      typeof args[0] === "string" &&
+      args[0].includes("ResizeObserver loop")
+    ) {
+      return;
+    }
+    resizeObserverErr(...args);
+  };
+}
+
 const getActualViewportWidth = (): number => {
   if (typeof window === "undefined") {
     return 1024;
