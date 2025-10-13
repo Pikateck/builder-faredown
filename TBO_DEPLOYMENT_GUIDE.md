@@ -27,25 +27,30 @@
 Add these variables to your Render dashboard (Environment section):
 
 ```bash
-# TBO Configuration
-TBO_BASE_URL=https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest
-TBO_AGENCY_ID=<YOUR_TBO_AGENCY_ID>
+# TBO Configuration - DUAL URLs
+# Search/Pricing Operations (Search, FareQuote, FareRule, SSR, CalendarFare)
+TBO_SEARCH_URL=https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc
+
+# Booking Operations (Book, Ticket, GetBookingDetails, SendChangeRequest)
+TBO_BOOKING_URL=https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc
+
+# Credentials
+TBO_AGENCY_ID=BOMF145
+TBO_CLIENT_ID=BOMF145
+TBO_USERNAME=BOMF145
+TBO_PASSWORD=travel/live-18@@
 TBO_END_USER_IP=192.168.5.56
 TBO_CREDENTIAL_MODE=runtime
-TBO_CLIENT_ID=<YOUR_TBO_CLIENT_ID>
-TBO_USERNAME=<YOUR_TBO_USERNAME>
-TBO_PASSWORD=<YOUR_TBO_PASSWORD>
 TBO_TIMEOUT_MS=15000
 
 # Multi-Supplier Configuration
 FLIGHTS_SUPPLIERS=AMADEUS,TBO
 ```
 
-**Note**: If using static token mode instead of runtime:
-```bash
-TBO_CREDENTIAL_MODE=static
-TBO_TOKEN_ID=<YOUR_STATIC_TOKEN>
-```
+**Important Notes:**
+- TBO uses **two different base URLs**: one for search/pricing, one for booking
+- Credentials are the same for both endpoints
+- Do NOT add `/rest` suffix to the URLs
 
 ### Step 2: Run Database Migration
 

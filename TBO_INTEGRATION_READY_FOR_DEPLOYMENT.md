@@ -94,14 +94,17 @@ All code changes for TBO supplier integration are **COMPLETE** and ready for dep
 Add to Render Dashboard → Environment:
 
 ```bash
-# TBO API Configuration
-TBO_BASE_URL=https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest
-TBO_AGENCY_ID=<YOUR_TBO_AGENCY_ID>
+# TBO API Configuration - DUAL URLs
+TBO_SEARCH_URL=https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc
+TBO_BOOKING_URL=https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc
+
+# Credentials
+TBO_AGENCY_ID=BOMF145
+TBO_CLIENT_ID=BOMF145
+TBO_USERNAME=BOMF145
+TBO_PASSWORD=travel/live-18@@
 TBO_END_USER_IP=192.168.5.56
 TBO_CREDENTIAL_MODE=runtime
-TBO_CLIENT_ID=<YOUR_TBO_CLIENT_ID>
-TBO_USERNAME=<YOUR_TBO_USERNAME>
-TBO_PASSWORD=<YOUR_TBO_PASSWORD>
 TBO_TIMEOUT_MS=15000
 
 # Multi-Supplier Configuration
