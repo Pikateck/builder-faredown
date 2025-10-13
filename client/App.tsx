@@ -12,6 +12,7 @@ import { LoyaltyProvider } from "./contexts/LoyaltyContext";
 import { BookingProvider } from "./contexts/BookingContext";
 import { EnhancedBookingProvider } from "./contexts/EnhancedBookingContext";
 import { SearchProvider } from "./contexts/SearchContext";
+import { useViewportClass } from "./hooks/useViewportClass";
 
 // Original pages
 import Index from "./pages/Index";
