@@ -37,38 +37,69 @@ import {
   CreditCard,
 } from "lucide-react";
 
+const getViewportWidth = () => {
+  if (typeof window === "undefined") {
+    return 1024;
+  }
+  return (
+    window.innerWidth ||
+    document.documentElement?.clientWidth ||
+    document.body?.clientWidth ||
+    1024
+  );
+};
+
 export function Header() {
   const navigate = useNavigate();
   const location = useLocation();
   const { isLoggedIn, user, logout } = useAuth();
   const { selectedCurrency, currencies, setCurrency } = useCurrency();
-  const [isDesktop, setIsDesktop] = useState(
-    typeof window !== "undefined" ? window.innerWidth >= 768 : false,
-  );
+  const [isDesktop, setIsDesktop] = useState(() => getViewportWidth() >= 768);
 
   useEffect(() => {
     if (typeof window === "undefined") {
       return;
     }
 
+    const updateViewport = (width?: number) => {
+      const nextWidth = width ?? getViewportWidth();
+      setIsDesktop(nextWidth >= 768);
+    };
+
+    const disposers: Array<() => void> = [];
+
     const mediaQuery = window.matchMedia("(min-width: 768px)");
-    const handleChange = (event: MediaQueryListEvent) => {
+    const handleMediaChange = (event: MediaQueryListEvent) => {
       setIsDesktop(event.matches);
     };
 
-    setIsDesktop(mediaQuery.matches);
+    updateViewport(mediaQuery.matches ? 768 : mediaQuery.matches ? 768 : undefined);
 
     if (typeof mediaQuery.addEventListener === "function") {
-      mediaQuery.addEventListener("change", handleChange);
-      return () => mediaQuery.removeEventListener("change", handleChange);
+      mediaQuery.addEventListener("change", handleMediaChange);
+      disposers.push(() => mediaQuery.removeEventListener("change", handleMediaChange));
+    } else if (typeof mediaQuery.addListener === "function") {
+      mediaQuery.addListener(handleMediaChange);
+      disposers.push(() => mediaQuery.removeListener(handleMediaChange));
     }
 
-    if (typeof mediaQuery.addListener === "function") {
-      mediaQuery.addListener(handleChange);
-      return () => mediaQuery.removeListener(handleChange);
+    if ("ResizeObserver" in window) {
+      const observer = new ResizeObserver((entries) => {
+        if (entries.length > 0) {
+          updateViewport(entries[0].contentRect.width);
+        }
+      });
+      observer.observe(document.documentElement);
+      disposers.push(() => observer.disconnect());
+    } else {
+      const handleResize = () => updateViewport();
+      window.addEventListener("resize", handleResize);
+      disposers.push(() => window.removeEventListener("resize", handleResize));
     }
 
-    return () => undefined;
+    return () => {
+      disposers.forEach((dispose) => dispose());
+    };
   }, []);
 
   // State for dropdowns and mobile menu
