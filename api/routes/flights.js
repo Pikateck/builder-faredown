@@ -505,61 +505,105 @@ router.get("/search", async (req, res) => {
       });
     }
 
-    // Get Amadeus access token
-    const accessToken = await getAmadeusAccessToken();
+    // Initialize supplier adapter manager
+    const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
 
-    // Build Amadeus API request
-    const amadeusParams = {
-      originLocationCode: origin,
-      destinationLocationCode: destination,
-      departureDate: departureDate,
+    // Build unified search params
+    const searchParams = {
+      origin,
+      destination,
+      departureDate,
+      returnDate: tripType === "round_trip" ? returnDate : null,
       adults: parseInt(adults),
+      children: parseInt(children),
+      infants: 0,
       travelClass: cabinClass,
-      nonStop: false,
-      max: 50, // Get more results for better selection
+      maxResults: 50,
     };
 
-    // Add return date for round trip
-    if (tripType === "round_trip" && returnDate) {
-      amadeusParams.returnDate = returnDate;
-    }
+    // Get enabled suppliers (default: AMADEUS, TBO)
+    const enabledSuppliers = (process.env.FLIGHTS_SUPPLIERS || "AMADEUS,TBO")
+      .split(",")
+      .map((s) => s.trim().toUpperCase());
 
-    // Add children if specified
-    if (children && parseInt(children) > 0) {
-      amadeusParams.children = parseInt(children);
-    }
+    console.log(`📡 Searching across suppliers: ${enabledSuppliers.join(", ")}`);
 
-    console.log("���� Calling Amadeus API with params:", amadeusParams);
-
-    // Call Amadeus Flight Offers Search API
-    const amadeusResponse = await axios.get(
-      `${AMADEUS_BASE_URL}/v2/shopping/flight-offers`,
-      {
-        params: amadeusParams,
-        headers: {
-          Authorization: `Bearer ${accessToken}`,
-          "Content-Type": "application/json",
-        },
-        timeout: 30000,
-      },
+    // Execute parallel search across all enabled suppliers
+    const aggregatedResults = await supplierAdapterManager.searchAllFlights(
+      searchParams,
+      enabledSuppliers,
     );
 
     console.log(
-      `✅ Amadeus API returned ${amadeusResponse.data?.data?.length || 0} flight offers`,
+      `✅ Aggregated ${aggregatedResults.totalResults} results from ${Object.keys(aggregatedResults.supplierMetrics).length} suppliers`,
     );
 
-    // Transform Amadeus data to our format with markup and promo codes
-    const searchParams = { ...req.query, cabinClass, tripType };
-    const transformedFlights = await transformAmadeusFlightData(
-      amadeusResponse.data,
-      searchParams,
+    // Apply supplier-aware markup and promo to each result
+    const transformedFlights = await Promise.all(
+      aggregatedResults.products.map(async (product) => {
+        const supplier = (product.supplier || product.supplierCode || "AMADEUS").toLowerCase();
+
+        // Get supplier-specific markup
+        const route = `${product.origin || origin}-${product.destination || destination}`;
+        const markupData = await getMarkupData(
+          supplier,
+          product.airlineCode || product.airline,
+          route,
+          cabinClass,
+        );
+
+        // Apply markup
+        const basePrice = product.price?.total || product.price?.amount || product.price || 0;
+        const markedUpPrice = applyMarkup(basePrice, markupData);
+
+        // Apply supplier-specific promo if provided
+        let finalPrice = markedUpPrice;
+        let promoResult = { promoApplied: false, discount: 0 };
+
+        if (promoCode) {
+          promoResult = await applyPromoCode(
+            markedUpPrice,
+            promoCode,
+            userId,
+            supplier,
+          );
+          finalPrice = promoResult.finalPrice;
+        }
+
+        return {
+          ...product,
+          supplier,
+          price: {
+            original: basePrice,
+            markedUp: markedUpPrice,
+            final: finalPrice,
+            currency: product.price?.currency || "INR",
+            breakdown: {
+              base: basePrice * 0.8,
+              taxes: basePrice * 0.15,
+              fees: basePrice * 0.05,
+              markup: markedUpPrice - basePrice,
+              discount: promoResult.discount,
+              total: finalPrice,
+            },
+          },
+          markupApplied: markupData,
+          promoApplied: promoResult.promoApplied,
+          promoDetails: promoResult.promoDetails,
+        };
+      }),
     );
 
-    // Save search to database
-    await saveSearchToDatabase(searchParams, transformedFlights);
+    // Save search with supplier tags
+    const fullSearchParams = {
+      ...req.query,
+      cabinClass,
+      tripType,
+      suppliers: enabledSuppliers,
+    };
 
-    // Log search for debugging airport selection (per developer note)
-    await logFlightSearch(req, searchParams, transformedFlights);
+    await saveSearchToDatabase(fullSearchParams, transformedFlights);
+    await logFlightSearch(req, fullSearchParams, transformedFlights);
 
     // Return results
     res.json({
@@ -567,8 +611,9 @@ router.get("/search", async (req, res) => {
       data: transformedFlights,
       meta: {
         totalResults: transformedFlights.length,
-        searchParams: searchParams,
-        source: "amadeus_live",
+        searchParams: fullSearchParams,
+        suppliers: aggregatedResults.supplierMetrics,
+        source: "multi_supplier",
         timestamp: new Date().toISOString(),
       },
     });
