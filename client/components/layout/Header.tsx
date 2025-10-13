@@ -93,6 +93,10 @@ export function Header() {
       if (rootElement) {
         observer.observe(rootElement);
         disposers.push(() => observer.disconnect());
+      } else {
+        const handleResize = () => updateViewport();
+        window.addEventListener("resize", handleResize);
+        disposers.push(() => window.removeEventListener("resize", handleResize));
       }
     } else {
       const handleResize = () => updateViewport();
