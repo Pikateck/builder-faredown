@@ -122,25 +122,30 @@ class TBOAdapter extends BaseSupplierAdapter {
   async getCachedToken() {
     try {
       const result = await pool.query(
-        `SELECT token_id, agency_id, expires_at 
-         FROM tbo_token_cache 
-         WHERE agency_id = $1 
+        `SELECT token_id, agency_id, expires_at
+         FROM tbo_token_cache
+         WHERE agency_id = $1
            AND expires_at > NOW()
-         ORDER BY created_at DESC 
+         ORDER BY created_at DESC
          LIMIT 1`,
         [this.config.agencyId],
       );
 
       if (result.rows.length > 0) {
+        this.logger.info(`Found cached TBO token for agency ${this.config.agencyId}`);
         return {
           token_id: result.rows[0].token_id,
           expires_at: new Date(result.rows[0].expires_at).getTime(),
         };
       }
 
+      this.logger.info(`No cached TBO token found for agency ${this.config.agencyId}`);
       return null;
     } catch (error) {
-      this.logger.error("Failed to get cached TBO token:", error);
+      this.logger.error("Failed to get cached TBO token:", error.message);
+      if (error.code === '42P01') {
+        this.logger.error("Table tbo_token_cache does not exist. Please run the migration script.");
+      }
       return null;
     }
   }
