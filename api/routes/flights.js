@@ -553,6 +553,34 @@ router.get("/search", async (req, res) => {
       `✅ Aggregated ${aggregatedResults.totalResults} results from ${Object.keys(aggregatedResults.supplierMetrics).length} suppliers`,
     );
 
+    // Log supplier metrics for debugging
+    console.log("📊 Supplier Metrics:", JSON.stringify(aggregatedResults.supplierMetrics, null, 2));
+
+    // Check if all suppliers failed
+    const allSuppliersFailed = Object.values(aggregatedResults.supplierMetrics).every(
+      (metric) => !metric.success,
+    );
+
+    if (allSuppliersFailed) {
+      console.error("❌ All suppliers failed:", aggregatedResults.supplierMetrics);
+      // Return fallback data when all suppliers fail
+      const fallbackFlights = getFallbackFlightData(req.query);
+      await logFlightSearch(req, searchParams, fallbackFlights);
+
+      return res.json({
+        success: true,
+        data: fallbackFlights,
+        meta: {
+          totalResults: fallbackFlights.length,
+          searchParams: req.query,
+          source: "fallback",
+          warning: "All suppliers unavailable, showing sample data",
+          supplierErrors: aggregatedResults.supplierMetrics,
+          timestamp: new Date().toISOString(),
+        },
+      });
+    }
+
     // Apply supplier-aware markup and promo to each result
     const transformedFlights = await Promise.all(
       aggregatedResults.products.map(async (product) => {
