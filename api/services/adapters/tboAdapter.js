@@ -11,9 +11,12 @@ const pool = require("../../database/connection");
 class TBOAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
     super("TBO", {
-      baseUrl:
-        process.env.TBO_BASE_URL ||
-        "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest",
+      searchUrl:
+        process.env.TBO_SEARCH_URL ||
+        "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc",
+      bookingUrl:
+        process.env.TBO_BOOKING_URL ||
+        "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc",
       agencyId: process.env.TBO_AGENCY_ID,
       endUserIp: process.env.TBO_END_USER_IP || "192.168.5.56",
       credentialMode: process.env.TBO_CREDENTIAL_MODE || "runtime",
@@ -25,15 +28,27 @@ class TBOAdapter extends BaseSupplierAdapter {
     this.tokenId = null;
     this.tokenExpiry = null;
 
-    // Initialize HTTP client
-    this.httpClient = axios.create({
-      baseURL: this.config.baseUrl,
+    // Initialize HTTP clients for both endpoints
+    this.searchClient = axios.create({
+      baseURL: this.config.searchUrl,
       timeout: this.config.timeout,
       headers: {
         "Content-Type": "application/json",
         "User-Agent": "Faredown-AI-Bargaining/1.0",
       },
     });
+
+    this.bookingClient = axios.create({
+      baseURL: this.config.bookingUrl,
+      timeout: this.config.timeout,
+      headers: {
+        "Content-Type": "application/json",
+        "User-Agent": "Faredown-AI-Bargaining/1.0",
+      },
+    });
+
+    // Keep backward compatibility
+    this.httpClient = this.searchClient;
   }
 
   /**
