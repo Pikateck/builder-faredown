@@ -43,14 +43,16 @@ const getViewportWidth = () => {
   }
 
   // Check if we're in a Builder.io iframe
-  const isBuilderIframe = window.parent !== window && window.frameElement;
-
-  if (isBuilderIframe) {
-    // In Builder iframe, use the actual rendered width
-    const frameWidth = window.frameElement?.getBoundingClientRect?.()?.width;
-    if (frameWidth && frameWidth > 0) {
-      return frameWidth;
+  try {
+    if (window.parent !== window && window.frameElement) {
+      // In Builder iframe, use the actual rendered width
+      const frameWidth = window.frameElement?.getBoundingClientRect?.()?.width;
+      if (frameWidth && frameWidth > 0) {
+        return frameWidth;
+      }
     }
+  } catch (e) {
+    // Cross-origin iframe, can't access frameElement
   }
 
   return (
