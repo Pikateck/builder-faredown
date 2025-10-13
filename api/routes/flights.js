@@ -4,6 +4,9 @@ const crypto = require("crypto");
 const db = require("../database/connection");
 const router = express.Router();
 
+// Initialize supplier adapter manager at startup
+const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
+
 // Amadeus API Configuration
 const AMADEUS_API_KEY =
   process.env.AMADEUS_API_KEY || "6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv";
@@ -504,9 +507,6 @@ router.get("/search", async (req, res) => {
           "Missing required parameters: origin, destination, departureDate",
       });
     }
-
-    // Initialize supplier adapter manager
-    const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
 
     // Build unified search params
     const searchParams = {
