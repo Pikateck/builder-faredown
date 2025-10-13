@@ -4,6 +4,7 @@
  */
 
 const AmadeusAdapter = require("./amadeusAdapter");
+const TBOAdapter = require("./tboAdapter");
 const HotelbedsAdapter = require("./hotelbedsAdapter");
 const redisService = require("../redisService");
 const cpoRepository = require("../cpoRepository");
@@ -38,6 +39,16 @@ class SupplierAdapterManager {
       } else {
         this.logger.warn(
           "Amadeus credentials not found, adapter not initialized",
+        );
+      }
+
+      // Initialize TBO adapter
+      if (process.env.TBO_AGENCY_ID) {
+        this.adapters.set("TBO", new TBOAdapter());
+        this.logger.info("TBO adapter initialized");
+      } else {
+        this.logger.warn(
+          "TBO credentials not found, adapter not initialized",
         );
       }
 
@@ -77,9 +88,14 @@ class SupplierAdapterManager {
   getAdaptersByProductType(productType) {
     switch (productType.toLowerCase()) {
       case "flight":
-        return this.adapters.has("AMADEUS")
-          ? [this.adapters.get("AMADEUS")]
-          : [];
+        const flightAdapters = [];
+        if (this.adapters.has("AMADEUS")) {
+          flightAdapters.push(this.adapters.get("AMADEUS"));
+        }
+        if (this.adapters.has("TBO")) {
+          flightAdapters.push(this.adapters.get("TBO"));
+        }
+        return flightAdapters;
       case "hotel":
         return this.adapters.has("HOTELBEDS")
           ? [this.adapters.get("HOTELBEDS")]
@@ -100,7 +116,7 @@ class SupplierAdapterManager {
   /**
    * Search across all flight suppliers
    */
-  async searchAllFlights(searchParams, suppliers = ["AMADEUS"]) {
+  async searchAllFlights(searchParams, suppliers = ["AMADEUS", "TBO"]) {
     const results = await this.executeParallelSearch(
       "flight",
       searchParams,
