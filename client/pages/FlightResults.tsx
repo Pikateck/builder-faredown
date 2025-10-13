@@ -29,7 +29,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { cn } from "@/lib/utils";
-import { BookingCalendar } from "@/components/BookingCalendar";
+import { StableBookingCalendar } from "@/components/StableBookingCalendar";
 import { AuthModal } from "@/components/AuthModal";
 import {
   Popover,
@@ -1462,7 +1462,7 @@ export default function FlightResults() {
     };
 
     console.log(
-      "🔍 Standardized Search Object being passed to booking:",
+      "�� Standardized Search Object being passed to booking:",
       standardizedSearchParams,
     );
 
@@ -1882,7 +1882,7 @@ export default function FlightResults() {
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
                       { code: "ja", name: "日本語", flag: "🇯🇵" },
-                      { code: "ko", name: "한국어", flag: "🇰🇷" },
+                      { code: "ko", name: "한국어", flag: "🇰���" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
                       <DropdownMenuItem
@@ -2351,7 +2351,7 @@ export default function FlightResults() {
                   </button>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <BookingCalendar
+                  <StableBookingCalendar
                     bookingType="flight"
                     initialRange={{
                       startDate: departureDate || new Date(),
@@ -2359,12 +2359,9 @@ export default function FlightResults() {
                         returnDate || addDays(departureDate || new Date(), 7),
                     }}
                     onChange={(range) => {
-                      console.log(
-                        "Flight results calendar range selected:",
-                        range,
-                      );
-                      // Note: DateContext will handle the date updates
-                      // This is mainly for local display purposes
+                      setDepartureDate(range.startDate);
+                      setReturnDate(range.endDate);
+                      setShowCalendar(false);
                     }}
                     onClose={() => setShowCalendar(false)}
                     className="w-full"
