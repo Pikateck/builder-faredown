@@ -517,9 +517,14 @@ router.get("/search", async (req, res) => {
 
     const {
       destination,
+      destinationCode,
       checkIn,
       checkOut,
-      rooms = "2",
+      rooms = "1",
+      roomCount,
+      adults,
+      children,
+      childAges,
       currency = "USD",
       promoCode,
       userId,
@@ -528,24 +533,93 @@ router.get("/search", async (req, res) => {
     } = req.query;
 
     // Validate required parameters
-    if (!destination || !checkIn || !checkOut) {
+    if (!destination && !destinationCode) {
       return res.status(400).json({
         success: false,
-        error: "Missing required parameters: destination, checkIn, checkOut",
+        error: "Missing required parameter: destination",
       });
     }
 
-    // Parse rooms
-    const roomsArray = [{ adults: parseInt(rooms) || 2, children: 0 }];
+    if (!checkIn || !checkOut) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required parameters: checkIn, checkOut",
+      });
+    }
+
+    const parsedRoomsCount = (() => {
+      const value = parseInt(roomCount || rooms, 10);
+      return Number.isFinite(value) && value > 0 ? value : 1;
+    })();
+
+    const totalAdults = (() => {
+      const value = parseInt(Array.isArray(adults) ? adults[0] : adults, 10);
+      return Number.isFinite(value) && value > 0 ? value : 2;
+    })();
+
+    const totalChildren = (() => {
+      const value = parseInt(Array.isArray(children) ? children[0] : children, 10);
+      return Number.isFinite(value) && value > 0 ? value : 0;
+    })();
+
+    const parsedChildAges = (() => {
+      if (Array.isArray(childAges)) {
+        return childAges
+          .map((age) => parseInt(age, 10))
+          .filter((age) => Number.isFinite(age) && age >= 0);
+      }
+
+      if (typeof childAges === "string" && childAges.trim().length > 0) {
+        return childAges
+          .split(/[;,]/)
+          .map((age) => parseInt(age.trim(), 10))
+          .filter((age) => Number.isFinite(age) && age >= 0);
+      }
+
+      return [];
+    })();
+
+    let remainingAdults = totalAdults;
+    let remainingChildren = totalChildren;
+
+    const roomsArray = Array.from({ length: parsedRoomsCount }, (_, index) => {
+      const roomsLeft = parsedRoomsCount - index;
+      const adultsForRoom = Math.max(
+        1,
+        Math.round(remainingAdults / roomsLeft) || 1,
+      );
+      remainingAdults -= adultsForRoom;
+
+      const childrenForRoom = Math.max(
+        0,
+        Math.floor(remainingChildren / roomsLeft),
+      );
+      remainingChildren -= childrenForRoom;
+
+      return {
+        adults: adultsForRoom,
+        children: childrenForRoom,
+        childAges: parsedChildAges.slice(0, childrenForRoom) || parsedChildAges,
+      };
+    });
+
+    const resolvedDestination = destinationCode || destination;
 
     // Build search params
     const searchParams = {
-      destination,
+      destination: resolvedDestination,
+      destinationName: destination,
       checkIn,
       checkOut,
       rooms: roomsArray,
       currency,
       maxResults: 50,
+      adults: totalAdults,
+      children: totalChildren,
+      roomsCount: parsedRoomsCount,
+      childAges: parsedChildAges,
+      destinationCode: destinationCode || null,
+      rawDestination: destination,
     };
 
     // Get enabled hotel suppliers from database
