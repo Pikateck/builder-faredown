@@ -19,26 +19,14 @@ router.use(adminAuth);
 router.get("/", async (req, res) => {
   try {
     const result = await db.query(`
-      SELECT 
+      SELECT
         s.*,
         COUNT(DISTINCT b.id) as total_bookings,
-        COUNT(DISTINCT CASE WHEN b.created_at > NOW() - INTERVAL '24 hours' THEN b.id END) as bookings_24h,
-        (
-          SELECT SUM(success_count) 
-          FROM supplier_health_metrics 
-          WHERE supplier_code = s.code 
-          AND metric_hour > NOW() - INTERVAL '24 hours'
-        ) as success_calls_24h,
-        (
-          SELECT SUM(error_count) 
-          FROM supplier_health_metrics 
-          WHERE supplier_code = s.code 
-          AND metric_hour > NOW() - INTERVAL '24 hours'
-        ) as error_calls_24h
-      FROM suppliers s
-      LEFT JOIN bookings b ON b.supplier_code = s.code
+        COUNT(DISTINCT CASE WHEN b.created_at > NOW() - INTERVAL '24 hours' THEN b.id END) as bookings_24h
+      FROM supplier_master s
+      LEFT JOIN bookings b ON b.supplier = s.code
       GROUP BY s.id
-      ORDER BY s.product_type, s.name
+      ORDER BY s.enabled DESC, s.weight DESC, s.name
     `);
 
     res.json({
@@ -83,12 +71,12 @@ router.get("/:code", async (req, res) => {
 
     const result = await db.query(
       `
-      SELECT 
+      SELECT
         s.*,
         COUNT(DISTINCT b.id) as total_bookings,
         COUNT(DISTINCT CASE WHEN b.created_at > NOW() - INTERVAL '24 hours' THEN b.id END) as bookings_24h
-      FROM suppliers s
-      LEFT JOIN bookings b ON b.supplier_code = s.code
+      FROM supplier_master s
+      LEFT JOIN bookings b ON b.supplier = s.code
       WHERE s.code = $1
       GROUP BY s.id
     `,
@@ -125,15 +113,14 @@ router.put("/:code", async (req, res) => {
 
     const result = await db.query(
       `
-      UPDATE suppliers 
-      SET 
-        is_enabled = COALESCE($2, is_enabled),
-        environment = COALESCE($3, environment),
+      UPDATE supplier_master
+      SET
+        enabled = COALESCE($2, enabled),
         updated_at = NOW()
       WHERE code = $1
       RETURNING *
     `,
-      [code, is_enabled, environment],
+      [code, is_enabled],
     );
 
     if (result.rows.length === 0) {
