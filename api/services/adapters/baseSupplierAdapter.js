@@ -278,7 +278,8 @@ class BaseSupplierAdapter {
         );
       }
 
-      throw error;
+      // Throw a clean error without circular references from axios
+      throw new Error(error.message || `${this.supplierCode} request failed`);
     }
   }
 
@@ -320,7 +321,8 @@ class BaseSupplierAdapter {
         return await this.executeWithCircuitBreaker(operation);
       } catch (error) {
         if (attempt === retries) {
-          throw error;
+          // Throw clean error without circular references
+          throw new Error(error.message || `${this.supplierCode} request failed after ${retries} retries`);
         }
 
         // Exponential backoff
