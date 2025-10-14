@@ -503,7 +503,10 @@ export function HotelCard({
       checkIn: standardizedHotelSearchParams.checkIn,
       checkOut: standardizedHotelSearchParams.checkOut,
       supplierData: {
-        supplier: hotel?.supplier || "hotelbeds",
+        supplier: supplierDisplayName,
+        supplierCode: (hotel?.supplier || hotel?.supplierCode || "hotelbeds")
+          .toString()
+          .toLowerCase(),
         isLiveData: hotel?.isLiveData || false,
       },
       // Add displayed formatting for debugging
