@@ -5,7 +5,9 @@
 ### What Was Fixed ✅
 
 #### 1. Admin Suppliers Route (`/api/admin/suppliers`)
+
 **Fixed:** Updated SQL queries to use correct table and column names
+
 - Changed `suppliers` table → `supplier_master` table
 - Removed broken JOIN with bookings table (column mismatch)
 - Query now returns supplier data correctly
@@ -13,6 +15,7 @@
 **File Modified:** `api/routes/admin-suppliers.js`
 
 **Changes:**
+
 ```javascript
 // OLD (broken):
 FROM suppliers s
@@ -24,9 +27,11 @@ FROM supplier_master s
 ```
 
 #### 2. Admin Suppliers Health Route (`/api/admin/suppliers/health`)
+
 **Status:** ✅ **WORKING** (verified live)
 
 **Test Result:**
+
 ```bash
 curl -H "X-Admin-Key: 8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1" \
   "https://builder-faredown-pricing.onrender.com/api/admin/suppliers/health"
@@ -35,6 +40,7 @@ curl -H "X-Admin-Key: 8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -60,9 +66,11 @@ curl -H "X-Admin-Key: 8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b
 ```
 
 #### 3. Admin Authentication Flow
+
 **Status:** ✅ Fixed
 
 The apiClient correctly:
+
 - Loads VITE_ADMIN_API_KEY from environment
 - Attaches X-Admin-Key header for `/api/admin/*` routes
 - Handles token-based auth for regular routes
@@ -78,6 +86,7 @@ The apiClient correctly:
 **Issue:** Code changes are deployed but not loaded by the running API server
 
 **Evidence:**
+
 ```bash
 # Test shows OLD code still running:
 curl .../api/admin/suppliers
@@ -86,12 +95,14 @@ curl .../api/admin/suppliers
 ```
 
 **Action Required:**
+
 1. Go to Render Dashboard
 2. Select `builder-faredown-pricing` service
 3. Click "Manual Deploy" → "Clear build cache & deploy"
 4. OR: Click "Settings" → "Restart Service"
 
 **Expected After Restart:**
+
 ```bash
 curl -H "X-Admin-Key: ..." .../api/admin/suppliers
 # Should return HTTP 200 with supplier list
@@ -102,6 +113,7 @@ curl -H "X-Admin-Key: ..." .../api/admin/suppliers
 #### 2. RateHawk Circuit Breaker - OPEN State
 
 **Current Status:**
+
 ```json
 {
   "supplier": "RATEHAWK",
@@ -115,17 +127,20 @@ curl -H "X-Admin-Key: ..." .../api/admin/suppliers
 **Root Cause:** RateHawk adapter failed 5+ times, triggering circuit breaker
 
 **Why It Failed:**
+
 - Missing or incorrect environment variables
 - API credentials not loaded
 - Authorization header malformed
 
 **Fix Applied:**
+
 - Created `reset-ratehawk-circuit.cjs` script
 - RateHawk adapter already has correct Basic Auth implementation
 
 **Verification Needed:**
 
 1. **Check Render Environment Variables:**
+
    ```bash
    RATEHAWK_API_ID=3635
    RATEHAWK_API_KEY=d020d57a-b31d-4696-bc9a-3b90dc84239f
@@ -134,6 +149,7 @@ curl -H "X-Admin-Key: ..." .../api/admin/suppliers
    ```
 
 2. **Verify Basic Auth Header:**
+
    ```javascript
    // api/services/adapters/ratehawkAdapter.js (line 52-56)
    createBasicAuth() {
@@ -144,10 +160,11 @@ curl -H "X-Admin-Key: ..." .../api/admin/suppliers
    ```
 
 3. **Test After Restart:**
+
    ```bash
    curl "https://builder-faredown-pricing.onrender.com/api/hotels/search?\
    destination=Dubai&checkIn=2025-12-01&checkOut=2025-12-05"
-   
+
    # Check response for:
    "RATEHAWK": {
      "success": true,
@@ -160,6 +177,7 @@ curl -H "X-Admin-Key: ..." .../api/admin/suppliers
 #### 3. Amadeus Circuit Breaker - OPEN State
 
 **Current Status:**
+
 ```json
 {
   "supplier": "AMADEUS",
@@ -172,7 +190,9 @@ curl -H "X-Admin-Key: ..." .../api/admin/suppliers
 **Likely Cause:** Token expired or invalid credentials
 
 **Fix:**
+
 1. Verify env vars:
+
    ```
    AMADEUS_API_KEY=6H8SAsHAPdGAlWFYWNKgxQetHgeGCeNv
    AMADEUS_API_SECRET=2eVYfPeZVxmvbjRm
@@ -186,9 +206,11 @@ curl -H "X-Admin-Key: ..." .../api/admin/suppliers
 ### Database Schema Status
 
 #### supplier_master Table ✅
+
 **Status:** Exists and populated
 
 **Verified:**
+
 ```sql
 SELECT code, name, enabled, weight FROM supplier_master;
 
@@ -199,11 +221,13 @@ tbo      | TBO (Travel Boutique Online)   | true    | 90
 ```
 
 #### bookings Table ⚠️
+
 **Status:** Column mismatch issue
 
 **Issue:** Table has `supplier` column but queries expect `supplier_code`
 
 **Migration Needed:**
+
 ```sql
 -- Option 1: Rename column
 ALTER TABLE bookings RENAME COLUMN supplier TO supplier_code;
@@ -220,6 +244,7 @@ UPDATE bookings SET supplier_code = supplier;
 ## Immediate Action Plan (In Order)
 
 ### Step 1: Restart Render Service ⚡
+
 **Priority:** CRITICAL
 **Time:** 2-3 minutes
 
@@ -233,6 +258,7 @@ UPDATE bookings SET supplier_code = supplier;
 ---
 
 ### Step 2: Verify Environment Variables 🔑
+
 **Priority:** HIGH
 **Time:** 5 minutes
 
@@ -264,6 +290,7 @@ ADMIN_API_KEY=8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1
 ---
 
 ### Step 3: Test All Endpoints 🧪
+
 **Priority:** MEDIUM
 **Time:** 10 minutes
 
@@ -281,6 +308,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/hotels/search?destinatio
 ```
 
 **Expected Results:**
+
 - All return HTTP 200
 - RateHawk shows `success: true`
 - Amadeus shows `success: true`
@@ -288,6 +316,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/hotels/search?destinatio
 ---
 
 ### Step 4: Admin UI Verification 🖥️
+
 **Priority:** MEDIUM
 **Time:** 5 minutes
 
@@ -366,6 +395,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/hotels/search?destinatio
 Once all checks pass:
 
 1. **Optional:** Fix bookings table column
+
    ```sql
    ALTER TABLE bookings ADD COLUMN IF NOT EXISTS supplier_code TEXT;
    UPDATE bookings SET supplier_code = supplier WHERE supplier_code IS NULL;
@@ -385,12 +415,14 @@ Once all checks pass:
 ## Support Commands
 
 ### Quick Health Check
+
 ```bash
 curl -H "X-Admin-Key: 8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1" \
   https://builder-faredown-pricing.onrender.com/api/admin/suppliers/health
 ```
 
 ### Force Circuit Breaker Reset
+
 ```bash
 # Restart Render service via dashboard
 # Or use reset script:
@@ -398,6 +430,7 @@ node reset-ratehawk-circuit.cjs
 ```
 
 ### Check Environment Variables (Render Dashboard)
+
 1. Go to service settings
 2. Scroll to Environment
 3. Verify all RateHawk/Amadeus vars present
