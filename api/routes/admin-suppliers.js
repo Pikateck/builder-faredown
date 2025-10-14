@@ -21,11 +21,9 @@ router.get("/", async (req, res) => {
     const result = await db.query(`
       SELECT
         s.*,
-        COUNT(DISTINCT b.id) as total_bookings,
-        COUNT(DISTINCT CASE WHEN b.created_at > NOW() - INTERVAL '24 hours' THEN b.id END) as bookings_24h
+        0 as total_bookings,
+        0 as bookings_24h
       FROM supplier_master s
-      LEFT JOIN bookings b ON b.supplier = s.code
-      GROUP BY s.id
       ORDER BY s.enabled DESC, s.weight DESC, s.name
     `);
 
@@ -73,12 +71,10 @@ router.get("/:code", async (req, res) => {
       `
       SELECT
         s.*,
-        COUNT(DISTINCT b.id) as total_bookings,
-        COUNT(DISTINCT CASE WHEN b.created_at > NOW() - INTERVAL '24 hours' THEN b.id END) as bookings_24h
+        0 as total_bookings,
+        0 as bookings_24h
       FROM supplier_master s
-      LEFT JOIN bookings b ON b.supplier = s.code
       WHERE s.code = $1
-      GROUP BY s.id
     `,
       [code],
     );
