@@ -106,9 +106,14 @@ class SupplierAdapterManager {
         }
         return flightAdapters;
       case "hotel":
-        return this.adapters.has("HOTELBEDS")
-          ? [this.adapters.get("HOTELBEDS")]
-          : [];
+        const hotelAdapters = [];
+        if (this.adapters.has("HOTELBEDS")) {
+          hotelAdapters.push(this.adapters.get("HOTELBEDS"));
+        }
+        if (this.adapters.has("RATEHAWK")) {
+          hotelAdapters.push(this.adapters.get("RATEHAWK"));
+        }
+        return hotelAdapters;
       case "sightseeing":
         return this.adapters.has("HOTELBEDS")
           ? [this.adapters.get("HOTELBEDS")]
