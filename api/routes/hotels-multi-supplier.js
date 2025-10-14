@@ -24,7 +24,15 @@ async function getSupplierMarkup(
   try {
     const result = await db.query(
       `SELECT * FROM get_effective_supplier_markup($1, $2, $3, $4, $5, $6, $7)`,
-      [supplierCode, productType, market, currency, hotelId, destination, channel],
+      [
+        supplierCode,
+        productType,
+        market,
+        currency,
+        hotelId,
+        destination,
+        channel,
+      ],
     );
 
     if (result.rows.length > 0) {
@@ -62,7 +70,12 @@ function applyMarkup(basePrice, markup) {
 /**
  * Apply promo code discount for hotels
  */
-async function applyPromoCode(price, promoCode, userId = null, supplier = null) {
+async function applyPromoCode(
+  price,
+  promoCode,
+  userId = null,
+  supplier = null,
+) {
   if (!promoCode)
     return { finalPrice: price, discount: 0, promoApplied: false };
 
@@ -179,14 +192,21 @@ router.get("/search", async (req, res) => {
       ORDER BY code
     `);
 
-    const enabledSuppliers = suppliersResult.rows.map((row) => row.code.toUpperCase());
+    const enabledSuppliers = suppliersResult.rows.map((row) =>
+      row.code.toUpperCase(),
+    );
 
     // Fallback to env if no DB suppliers
-    const suppliersToUse = enabledSuppliers.length > 0 
-      ? enabledSuppliers 
-      : (process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK").split(",").map((s) => s.trim().toUpperCase());
+    const suppliersToUse =
+      enabledSuppliers.length > 0
+        ? enabledSuppliers
+        : (process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK")
+            .split(",")
+            .map((s) => s.trim().toUpperCase());
 
-    console.log(`📡 Searching across hotel suppliers: ${suppliersToUse.join(", ")}`);
+    console.log(
+      `📡 Searching across hotel suppliers: ${suppliersToUse.join(", ")}`,
+    );
 
     // Execute parallel search across all enabled suppliers
     const aggregatedResults = await supplierAdapterManager.searchAllHotels(
@@ -199,15 +219,21 @@ router.get("/search", async (req, res) => {
     );
 
     // Log supplier metrics
-    console.log("📊 Supplier Metrics:", JSON.stringify(aggregatedResults.supplierMetrics, null, 2));
-
-    // Check if all suppliers failed
-    const allSuppliersFailed = Object.values(aggregatedResults.supplierMetrics).every(
-      (metric) => !metric.success,
+    console.log(
+      "📊 Supplier Metrics:",
+      JSON.stringify(aggregatedResults.supplierMetrics, null, 2),
     );
 
+    // Check if all suppliers failed
+    const allSuppliersFailed = Object.values(
+      aggregatedResults.supplierMetrics,
+    ).every((metric) => !metric.success);
+
     if (allSuppliersFailed) {
-      console.error("❌ All hotel suppliers failed:", aggregatedResults.supplierMetrics);
+      console.error(
+        "❌ All hotel suppliers failed:",
+        aggregatedResults.supplierMetrics,
+      );
       return res.json({
         success: true,
         data: [],
@@ -225,7 +251,11 @@ router.get("/search", async (req, res) => {
     // Apply supplier-scoped markup and promo to each result
     const transformedHotels = await Promise.all(
       aggregatedResults.products.map(async (hotel) => {
-        const supplier = (hotel.supplier || hotel.supplierCode || "HOTELBEDS").toLowerCase();
+        const supplier = (
+          hotel.supplier ||
+          hotel.supplierCode ||
+          "HOTELBEDS"
+        ).toLowerCase();
 
         // Get supplier-specific markup
         const markup = await getSupplierMarkup(
@@ -301,7 +331,9 @@ router.get("/search", async (req, res) => {
     transformedHotels.sort((a, b) => a.price.final - b.price.final);
 
     // Update supplier metrics
-    for (const [supplier, metrics] of Object.entries(aggregatedResults.supplierMetrics)) {
+    for (const [supplier, metrics] of Object.entries(
+      aggregatedResults.supplierMetrics,
+    )) {
       if (metrics.success) {
         await db.query(
           `UPDATE suppliers SET 

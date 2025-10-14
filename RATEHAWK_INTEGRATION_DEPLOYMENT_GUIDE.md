@@ -20,6 +20,7 @@ Successfully integrated **RateHawk** as a second hotel supplier alongside **Hote
 **File:** `api/database/migrations/20250320_ratehawk_supplier_integration.sql`
 
 **Tables Created:**
+
 - `suppliers` - Master supplier registry
 - `supplier_credentials` - Optional credential storage
 - `supplier_markups` - Hierarchical markup rules (supplier → market → currency → hotel → channel)
@@ -29,6 +30,7 @@ Successfully integrated **RateHawk** as a second hotel supplier alongside **Hote
 - `supplier_health_metrics` - Hourly health metrics
 
 **Key Function:**
+
 - `get_effective_supplier_markup()` - Evaluates markup based on hierarchy with priority
 
 ### 2. RateHawk Adapter (✅ Created)
@@ -36,6 +38,7 @@ Successfully integrated **RateHawk** as a second hotel supplier alongside **Hote
 **File:** `api/services/adapters/ratehawkAdapter.js`
 
 **Features:**
+
 - HTTP Basic Auth (base64 encoded)
 - Per-endpoint rate limiters:
   - `search_serp_hotels`: 150/60s
@@ -46,6 +49,7 @@ Successfully integrated **RateHawk** as a second hotel supplier alongside **Hote
 - Full booking flow support
 
 **Methods Implemented:**
+
 - `searchHotels()` - SERP search
 - `getHotelDetails()` - Hotel info
 - `getBookingForm()` - Pre-booking validation
@@ -63,6 +67,7 @@ Successfully integrated **RateHawk** as a second hotel supplier alongside **Hote
 **File:** `api/services/adapters/supplierAdapterManager.js`
 
 **Changes:**
+
 - Added RateHawk to `initializeAdapters()`
 - Updated `searchAllHotels()` default suppliers to `["HOTELBEDS", "RATEHAWK"]`
 - Automatic adapter initialization based on env vars
@@ -72,6 +77,7 @@ Successfully integrated **RateHawk** as a second hotel supplier alongside **Hote
 **File:** `api/routes/hotels-multi-supplier.js`
 
 **Features:**
+
 - Parallel supplier search with aggregation
 - Supplier-scoped markup evaluation
 - Promo code support per supplier
@@ -80,6 +86,7 @@ Successfully integrated **RateHawk** as a second hotel supplier alongside **Hote
 - Fallback when all suppliers fail
 
 **Endpoints:**
+
 - `GET /api/hotels/search` - Multi-supplier search
 - `GET /api/hotels/:hotelId?supplier=ratehawk` - Supplier-aware hotel details
 
@@ -88,6 +95,7 @@ Successfully integrated **RateHawk** as a second hotel supplier alongside **Hote
 **File:** `api/routes/admin-suppliers.js`
 
 **Endpoints:**
+
 - `GET /api/admin/suppliers` - List all suppliers with stats
 - `GET /api/admin/suppliers/health` - Real-time health check
 - `GET /api/admin/suppliers/:code` - Get supplier details
@@ -106,6 +114,7 @@ Successfully integrated **RateHawk** as a second hotel supplier alongside **Hote
 **File:** `api/server.js`
 
 **Changes:**
+
 ```javascript
 // Added imports
 const adminSuppliersRoutes = require("./routes/admin-suppliers");
@@ -122,6 +131,7 @@ app.use("/api/admin/suppliers", adminSuppliersRoutes);
 ## 🔧 Environment Variables
 
 ### Local Development (.env)
+
 ```bash
 # RateHawk Sandbox Credentials
 RATEHAWK_API_ID=3635
@@ -138,7 +148,9 @@ RATEHAWK_TIMEOUT_MS=30000
 ```
 
 ### Production (Render)
+
 Same as above, but:
+
 1. Use production credentials after sandbox certification
 2. Update `RATEHAWK_BASE_URL` to production endpoint
 3. Consider webhook secret: `RATEHAWK_WEBHOOK_SECRET=<generate>`
@@ -152,6 +164,7 @@ Same as above, but:
 ### Step 1: Run Database Migration
 
 **Option A: Using pgAdmin4 (Recommended for Render Postgres)**
+
 1. Connect to Render Postgres database in pgAdmin4
 2. Open Query Tool
 3. Copy contents of `api/database/migrations/20250320_ratehawk_supplier_integration.sql`
@@ -163,6 +176,7 @@ Same as above, but:
    ```
 
 **Option B: Using psql CLI**
+
 ```bash
 psql $DATABASE_URL -f api/database/migrations/20250320_ratehawk_supplier_integration.sql
 ```
@@ -193,11 +207,13 @@ psql $DATABASE_URL -f api/database/migrations/20250320_ratehawk_supplier_integra
 ### Step 4: Verify Integration
 
 **Test Supplier Health:**
+
 ```bash
 curl https://your-api.onrender.com/api/admin/suppliers/health
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -219,11 +235,13 @@ curl https://your-api.onrender.com/api/admin/suppliers/health
 ```
 
 **Test Hotel Search:**
+
 ```bash
 curl "https://your-api.onrender.com/api/hotels/search?destination=1&checkIn=2025-04-01&checkOut=2025-04-03&rooms=2&currency=USD"
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -248,6 +266,7 @@ curl "https://your-api.onrender.com/api/hotels/search?destination=1&checkIn=2025
 **Location:** `client/pages/admin/SupplierManagement.tsx`
 
 **Features to Implement:**
+
 1. **Supplier Cards**
    - Toggle enable/disable
    - Show environment (sandbox/production)
@@ -272,30 +291,31 @@ curl "https://your-api.onrender.com/api/hotels/search?destination=1&checkIn=2025
    - Download sync reports
 
 **Example API Calls from Admin UI:**
+
 ```typescript
 // Get suppliers
-const response = await fetch('/api/admin/suppliers');
+const response = await fetch("/api/admin/suppliers");
 
 // Create markup
-await fetch('/api/admin/suppliers/ratehawk/markups', {
-  method: 'POST',
+await fetch("/api/admin/suppliers/ratehawk/markups", {
+  method: "POST",
   body: JSON.stringify({
-    product_type: 'hotels',
-    market: 'IN',
-    value_type: 'PERCENT',
+    product_type: "hotels",
+    market: "IN",
+    value_type: "PERCENT",
     value: 15.0,
-    priority: 90
-  })
+    priority: 90,
+  }),
 });
 
 // Preview markup
-await fetch('/api/admin/suppliers/ratehawk/markups/preview', {
-  method: 'POST',
+await fetch("/api/admin/suppliers/ratehawk/markups/preview", {
+  method: "POST",
   body: JSON.stringify({
-    product_type: 'hotels',
-    market: 'IN',
-    base_price: 10000
-  })
+    product_type: "hotels",
+    market: "IN",
+    base_price: 10000,
+  }),
 });
 ```
 
@@ -313,17 +333,18 @@ The system evaluates markups in this order (highest specificity wins):
 6. **Priority value** (lower number = higher priority)
 
 **Example:**
+
 ```sql
 -- Global RateHawk markup (lowest priority)
-INSERT INTO supplier_markups VALUES 
+INSERT INTO supplier_markups VALUES
   ('ratehawk', 'hotels', 'ALL', 'ALL', 'ALL', 'ALL', 'ALL', 'PERCENT', 18.0, 100);
 
 -- India market markup (higher priority)
-INSERT INTO supplier_markups VALUES 
+INSERT INTO supplier_markups VALUES
   ('ratehawk', 'hotels', 'IN', 'ALL', 'ALL', 'ALL', 'ALL', 'PERCENT', 15.0, 90);
 
 -- Specific hotel in India (highest priority)
-INSERT INTO supplier_markups VALUES 
+INSERT INTO supplier_markups VALUES
   ('ratehawk', 'hotels', 'IN', 'INR', '12345', 'ALL', 'ALL', 'PERCENT', 12.0, 80);
 ```
 
@@ -369,15 +390,16 @@ INSERT INTO supplier_markups VALUES
 
 ### RateHawk Limits (Per Endpoint)
 
-| Endpoint | Limit | Implementation |
-|----------|-------|----------------|
+| Endpoint             | Limit   | Implementation        |
+| -------------------- | ------- | --------------------- |
 | `search/serp/hotels` | 150/60s | Token bucket + jitter |
-| `search/serp/region` | 10/60s | Token bucket + jitter |
-| `search/serp/geo` | 10/60s | Token bucket + jitter |
-| `hotel/static` | 100/day | Token bucket |
-| `hotel/info/dump` | 100/day | Token bucket |
+| `search/serp/region` | 10/60s  | Token bucket + jitter |
+| `search/serp/geo`    | 10/60s  | Token bucket + jitter |
+| `hotel/static`       | 100/day | Token bucket          |
+| `hotel/info/dump`    | 100/day | Token bucket          |
 
 **How It Works:**
+
 1. Adapter tracks request timestamps per endpoint
 2. Before each request, checks if limit reached
 3. If at limit, waits until window expires (with random jitter)
@@ -391,6 +413,7 @@ INSERT INTO supplier_markups VALUES
 ### Issue: "No hotels found" despite suppliers enabled
 
 **Check:**
+
 1. Environment variables set on Render
 2. Database migration ran successfully
 3. Suppliers enabled in `suppliers` table:
@@ -403,6 +426,7 @@ INSERT INTO supplier_markups VALUES
    ```
 
 **Fix:**
+
 - Restart Render service after env vars change
 - Verify credentials are correct
 - Check supplier health: `GET /api/admin/suppliers/health`
@@ -410,10 +434,12 @@ INSERT INTO supplier_markups VALUES
 ### Issue: Rate limit errors
 
 **Check:**
+
 - `rateLimiters` state in health response
 - Error logs for "Rate limit reached"
 
 **Fix:**
+
 - Increase cache TTL to reduce duplicate requests
 - Adjust limits in env vars
 - Implement request queue for burst traffic
@@ -421,11 +447,13 @@ INSERT INTO supplier_markups VALUES
 ### Issue: Booking fails
 
 **Check:**
+
 1. Sandbox can only book test hotels
 2. `book_hash` (rate key) must be from recent search
 3. Guest data format matches RateHawk schema
 
 **Fix:**
+
 - Use test hotel IDs provided by RateHawk
 - Ensure rate key from SERP response
 - Validate guest data structure
@@ -435,18 +463,21 @@ INSERT INTO supplier_markups VALUES
 ## 📈 Next Steps
 
 ### Phase 1: Admin UI (Current Priority)
+
 1. Create `SupplierManagement.tsx` admin page
 2. Add supplier toggle controls
 3. Implement markup preview UI
 4. Add sync job triggers
 
 ### Phase 2: Content Sync Jobs
+
 1. Create nightly cron for static data
 2. Implement incremental sync
 3. Track sync metrics
 4. Alert on sync failures
 
 ### Phase 3: Production Deployment
+
 1. Get production credentials from RateHawk
 2. Update env vars
 3. Run certification tests
@@ -454,6 +485,7 @@ INSERT INTO supplier_markups VALUES
 5. Gradual rollout (A/B testing)
 
 ### Phase 4: Advanced Features
+
 1. Webhook support for booking updates
 2. Real-time rate updates
 3. Machine learning for supplier selection
@@ -468,6 +500,7 @@ INSERT INTO supplier_markups VALUES
 **Endpoint:** `GET /api/hotels/search`
 
 **Query Parameters:**
+
 - `destination` (required) - Region ID or code
 - `checkIn` (required) - YYYY-MM-DD
 - `checkOut` (required) - YYYY-MM-DD
@@ -479,6 +512,7 @@ INSERT INTO supplier_markups VALUES
 - `userId` (optional) - User ID for promo validation
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -546,13 +580,14 @@ The RateHawk integration is **complete and functional** at the backend level. Al
 ✅ **Database:** Schema created, suppliers registered  
 ✅ **API:** All endpoints ready and tested  
 ✅ **Config:** Env vars set, routes registered  
-⏳ **Admin UI:** Next step - create supplier management interface  
+⏳ **Admin UI:** Next step - create supplier management interface
 
 **Ready for:** Sandbox testing → Admin UI → Production deployment
 
 ---
 
 For questions or issues, refer to:
+
 - RateHawk API Docs: https://worldota.net/documentation/
 - Supplier Adapter Code: `api/services/adapters/ratehawkAdapter.js`
 - Multi-Supplier Routes: `api/routes/hotels-multi-supplier.js`

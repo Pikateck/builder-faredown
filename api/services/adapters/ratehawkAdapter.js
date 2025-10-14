@@ -12,8 +12,7 @@ class RateHawkAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
     super("RATEHAWK", {
       baseUrl:
-        process.env.RATEHAWK_BASE_URL ||
-        "https://api.worldota.net/api/b2b/v3/",
+        process.env.RATEHAWK_BASE_URL || "https://api.worldota.net/api/b2b/v3/",
       keyId: process.env.RATEHAWK_API_ID || "3635",
       apiKey:
         process.env.RATEHAWK_API_KEY || "d020d57a-b31d-4696-bc9a-3b90dc84239f",
@@ -74,7 +73,9 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       const oldestRequest = limiter.requests[0];
       const waitTime = oldestRequest + limiter.window - now;
 
-      this.logger.warn(`Rate limit reached for ${endpoint}, waiting ${waitTime}ms`);
+      this.logger.warn(
+        `Rate limit reached for ${endpoint}, waiting ${waitTime}ms`,
+      );
 
       // Wait with jitter
       const jitter = Math.random() * 1000;
@@ -486,24 +487,33 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         })),
         price: {
           amount: firstRate.payment_options?.payment_types?.[0]?.amount || 0,
-          currency: firstRate.payment_options?.payment_types?.[0]?.currency_code || "USD",
-          originalAmount: firstRate.payment_options?.payment_types?.[0]?.amount || 0,
+          currency:
+            firstRate.payment_options?.payment_types?.[0]?.currency_code ||
+            "USD",
+          originalAmount:
+            firstRate.payment_options?.payment_types?.[0]?.amount || 0,
         },
         rates: rates.map((rate) => ({
           rateKey: rate.book_hash,
           roomType: rate.room_name || "Standard Room",
           boardType: rate.meal || "Room Only",
-          cancellationPolicy: rate.payment_options?.cancellation_penalties || [],
+          cancellationPolicy:
+            rate.payment_options?.cancellation_penalties || [],
           isRefundable: !rate.payment_options?.cancellation_penalties?.some(
             (p) => p.amount > 0,
           ),
           price: rate.payment_options?.payment_types?.[0]?.amount || 0,
-          currency: rate.payment_options?.payment_types?.[0]?.currency_code || "USD",
+          currency:
+            rate.payment_options?.payment_types?.[0]?.currency_code || "USD",
         })),
         checkIn,
         checkOut,
-        amenities: hotel.amenity_groups?.flatMap((g) => g.amenities || []) || [],
-        description: hotel.description_struct?.map((d) => d.paragraphs?.join(" ")).join("\n") || "",
+        amenities:
+          hotel.amenity_groups?.flatMap((g) => g.amenities || []) || [],
+        description:
+          hotel.description_struct
+            ?.map((d) => d.paragraphs?.join(" "))
+            .join("\n") || "",
         supplier: "RATEHAWK",
         supplierHotelId: hotel.id.toString(),
         supplierCode: "ratehawk",
@@ -542,16 +552,13 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         healthy: true,
         supplier: "RATEHAWK",
         regionsAvailable: regions.length,
-        rateLimiterState: Object.keys(this.rateLimiters).reduce(
-          (acc, key) => {
-            acc[key] = {
-              current: this.rateLimiters[key].requests.length,
-              max: this.rateLimiters[key].max,
-            };
-            return acc;
-          },
-          {},
-        ),
+        rateLimiterState: Object.keys(this.rateLimiters).reduce((acc, key) => {
+          acc[key] = {
+            current: this.rateLimiters[key].requests.length,
+            max: this.rateLimiters[key].max,
+          };
+          return acc;
+        }, {}),
         timestamp: new Date().toISOString(),
       };
     } catch (error) {

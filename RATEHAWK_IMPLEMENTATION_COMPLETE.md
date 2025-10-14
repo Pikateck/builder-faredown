@@ -9,6 +9,7 @@ The RateHawk hotel supplier has been **successfully integrated** alongside Hotel
 ## 📦 What Was Built
 
 ### 1. Database Schema ✅
+
 **File:** `api/database/migrations/20250320_ratehawk_supplier_integration.sql`
 
 - `suppliers` - Master registry (Hotelbeds, RateHawk, Amadeus, TBO)
@@ -20,6 +21,7 @@ The RateHawk hotel supplier has been **successfully integrated** alongside Hotel
 - `supplier_health_metrics` - Hourly metrics
 
 ### 2. RateHawk Adapter ✅
+
 **File:** `api/services/adapters/ratehawkAdapter.js`
 
 - HTTP Basic Auth (base64 encoded)
@@ -35,6 +37,7 @@ The RateHawk hotel supplier has been **successfully integrated** alongside Hotel
   - ✅ `downloadInvoice()` - PDF download
 
 ### 3. Multi-Supplier Routes ✅
+
 **File:** `api/routes/hotels-multi-supplier.js`
 
 - Parallel supplier search
@@ -45,9 +48,11 @@ The RateHawk hotel supplier has been **successfully integrated** alongside Hotel
 - Fallback when suppliers fail
 
 ### 4. Admin Supplier API ✅
+
 **File:** `api/routes/admin-suppliers.js`
 
 **Endpoints:**
+
 - `GET /api/admin/suppliers` - List all
 - `GET /api/admin/suppliers/health` - Health check
 - `PUT /api/admin/suppliers/:code` - Toggle enable/disable
@@ -58,6 +63,7 @@ The RateHawk hotel supplier has been **successfully integrated** alongside Hotel
 - `DELETE /api/admin/suppliers/:code/markups/:id` - Delete markup
 
 ### 5. Admin UI ✅
+
 **File:** `client/pages/admin/SupplierManagement.tsx`
 
 - Supplier cards with toggle
@@ -68,7 +74,9 @@ The RateHawk hotel supplier has been **successfully integrated** alongside Hotel
 - Supplier-specific rules
 
 ### 6. Environment Configuration ✅
+
 **Already Set Locally:**
+
 ```bash
 RATEHAWK_API_ID=3635
 RATEHAWK_API_KEY=d020d57a-b31d-4696-bc9a-3b90dc84239f
@@ -77,9 +85,11 @@ HOTELS_SUPPLIERS=HOTELBEDS,RATEHAWK
 ```
 
 ### 7. Testing Tools ✅
+
 **File:** `test-ratehawk-integration.cjs`
 
 Comprehensive test suite covering:
+
 - Supplier listing
 - Health checks
 - Multi-supplier search
@@ -96,6 +106,7 @@ Comprehensive test suite covering:
 You need to run the migration on your Render Postgres database:
 
 **Option A: pgAdmin4 (Recommended)**
+
 1. Open pgAdmin4
 2. Connect to: `dpg-d2086mndiees739731t0-a.singapore-postgres.render.com`
 3. Open Query Tool
@@ -107,6 +118,7 @@ You need to run the migration on your Render Postgres database:
    ```
 
 **Option B: psql CLI**
+
 ```bash
 psql postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db -f api/database/migrations/20250320_ratehawk_supplier_integration.sql
 ```
@@ -114,6 +126,7 @@ psql postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiee
 ### **STEP 2: Add Environment Variables to Render**
 
 Go to Render Dashboard → Environment and add:
+
 ```
 RATEHAWK_API_ID=3635
 RATEHAWK_API_KEY=d020d57a-b31d-4696-bc9a-3b90dc84239f
@@ -130,6 +143,7 @@ Render will auto-deploy when changes are pushed.
 ### **STEP 4: Verify Deployment**
 
 **Check Render Logs:**
+
 ```
 ✅ RateHawk adapter initialized
 ✅ Hotelbeds adapter initialized
@@ -137,11 +151,13 @@ Render will auto-deploy when changes are pushed.
 ```
 
 **Test Health:**
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/admin/suppliers/health
 ```
 
 **Test Search:**
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/hotels/search?destination=1&checkIn=2025-04-15&checkOut=2025-04-18&rooms=2&currency=USD"
 ```
@@ -151,6 +167,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/hotels/search?destinatio
 ## 🧪 Testing
 
 ### Local Testing
+
 ```bash
 # Run integration tests
 node test-ratehawk-integration.cjs
@@ -163,6 +180,7 @@ curl "http://localhost:3000/api/hotels/search?destination=1&checkIn=2025-04-15&c
 ```
 
 ### Admin UI Testing
+
 1. Go to `/admin/supplier-management`
 2. Verify Hotelbeds and RateHawk cards appear
 3. Toggle RateHawk on/off
@@ -184,17 +202,18 @@ Markups are evaluated in this order (highest specificity wins):
 6. **Priority** (lower number = higher priority)
 
 **Example:**
+
 ```sql
 -- Global: 18% for all RateHawk hotels
-INSERT INTO supplier_markups VALUES 
+INSERT INTO supplier_markups VALUES
   ('ratehawk', 'hotels', 'ALL', 'ALL', 'ALL', 'ALL', 'ALL', 'PERCENT', 18.0, 100);
 
 -- India market: 15% for Indian customers
-INSERT INTO supplier_markups VALUES 
+INSERT INTO supplier_markups VALUES
   ('ratehawk', 'hotels', 'IN', 'ALL', 'ALL', 'ALL', 'ALL', 'PERCENT', 15.0, 90);
 
 -- Specific hotel: 12% for hotel #12345
-INSERT INTO supplier_markups VALUES 
+INSERT INTO supplier_markups VALUES
   ('ratehawk', 'hotels', 'IN', 'INR', '12345', 'ALL', 'ALL', 'PERCENT', 12.0, 80);
 ```
 
@@ -204,15 +223,16 @@ INSERT INTO supplier_markups VALUES
 
 RateHawk enforces per-endpoint limits:
 
-| Endpoint | Limit | Window |
-|----------|-------|--------|
+| Endpoint             | Limit        | Window     |
+| -------------------- | ------------ | ---------- |
 | `search/serp/hotels` | 150 requests | 60 seconds |
-| `search/serp/region` | 10 requests | 60 seconds |
-| `search/serp/geo` | 10 requests | 60 seconds |
-| `hotel/static` | 100 requests | 24 hours |
-| `hotel/info/dump` | 100 requests | 24 hours |
+| `search/serp/region` | 10 requests  | 60 seconds |
+| `search/serp/geo`    | 10 requests  | 60 seconds |
+| `hotel/static`       | 100 requests | 24 hours   |
+| `hotel/info/dump`    | 100 requests | 24 hours   |
 
 **Implementation:**
+
 - Token bucket algorithm
 - Automatic wait with jitter when limit reached
 - No 429 errors exposed to users
@@ -250,16 +270,16 @@ RateHawk enforces per-endpoint limits:
 
 ## 📁 Key Files Reference
 
-| File | Purpose |
-|------|---------|
-| `api/database/migrations/20250320_ratehawk_supplier_integration.sql` | Database schema |
-| `api/services/adapters/ratehawkAdapter.js` | RateHawk adapter |
-| `api/services/adapters/supplierAdapterManager.js` | Supplier orchestration |
-| `api/routes/hotels-multi-supplier.js` | Multi-supplier search API |
-| `api/routes/admin-suppliers.js` | Admin supplier management API |
-| `client/pages/admin/SupplierManagement.tsx` | Admin UI |
-| `RATEHAWK_INTEGRATION_DEPLOYMENT_GUIDE.md` | Full deployment guide |
-| `test-ratehawk-integration.cjs` | Integration test suite |
+| File                                                                 | Purpose                       |
+| -------------------------------------------------------------------- | ----------------------------- |
+| `api/database/migrations/20250320_ratehawk_supplier_integration.sql` | Database schema               |
+| `api/services/adapters/ratehawkAdapter.js`                           | RateHawk adapter              |
+| `api/services/adapters/supplierAdapterManager.js`                    | Supplier orchestration        |
+| `api/routes/hotels-multi-supplier.js`                                | Multi-supplier search API     |
+| `api/routes/admin-suppliers.js`                                      | Admin supplier management API |
+| `client/pages/admin/SupplierManagement.tsx`                          | Admin UI                      |
+| `RATEHAWK_INTEGRATION_DEPLOYMENT_GUIDE.md`                           | Full deployment guide         |
+| `test-ratehawk-integration.cjs`                                      | Integration test suite        |
 
 ---
 
@@ -286,12 +306,14 @@ RateHawk enforces per-endpoint limits:
 ### Sandbox vs Production
 
 **Current Setup: SANDBOX**
+
 - Can only search real hotels
 - Can only **book test hotels** (special IDs provided by RateHawk)
 - Bookings need **manual cancellation**
 - No real charges
 
 **Production Setup (After Certification):**
+
 1. Get production credentials from RateHawk
 2. Update `RATEHAWK_BASE_URL` to production endpoint
 3. Update `RATEHAWK_API_KEY` and `RATEHAWK_API_ID`
@@ -303,6 +325,7 @@ RateHawk enforces per-endpoint limits:
 The original "no flights found" issue was due to **invalid TBO credentials**. This is separate from the RateHawk integration.
 
 **TBO Status:**
+
 - ❌ Current credentials don't work
 - ✅ Fallback data will show when suppliers fail
 - 🔧 Need valid credentials from TBO support
@@ -333,7 +356,7 @@ When deployment is successful, you should see:
 ✅ Toggle suppliers on/off works  
 ✅ Health status shows green  
 ✅ No 429 rate limit errors  
-✅ Booking flow completes (sandbox test hotels)  
+✅ Booking flow completes (sandbox test hotels)
 
 ---
 
@@ -347,4 +370,4 @@ When deployment is successful, you should see:
 
 **Built with ❤️ for Faredown**
 
-*Multi-supplier hotel integration complete - ready for production deployment*
+_Multi-supplier hotel integration complete - ready for production deployment_

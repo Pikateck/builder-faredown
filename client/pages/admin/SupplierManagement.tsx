@@ -302,7 +302,13 @@ export default function SupplierManagement() {
             <div className="space-y-2 mb-4">
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">Environment:</span>
-                <Badge variant={supplier.environment === "production" ? "default" : "secondary"}>
+                <Badge
+                  variant={
+                    supplier.environment === "production"
+                      ? "default"
+                      : "secondary"
+                  }
+                >
                   {supplier.environment}
                 </Badge>
               </div>
@@ -327,13 +333,16 @@ export default function SupplierManagement() {
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">Calls (24h):</span>
                 <span className="font-medium">
-                  {supplier.success_calls_24h || 0} / {supplier.total_bookings || 0}
+                  {supplier.success_calls_24h || 0} /{" "}
+                  {supplier.total_bookings || 0}
                 </span>
               </div>
 
               <div className="flex items-center justify-between text-sm">
                 <span className="text-gray-600">Bookings (24h):</span>
-                <span className="font-medium">{supplier.bookings_24h || 0}</span>
+                <span className="font-medium">
+                  {supplier.bookings_24h || 0}
+                </span>
               </div>
             </div>
 
@@ -351,7 +360,10 @@ export default function SupplierManagement() {
 
       {/* Markup Management Dialog */}
       {selectedSupplier && (
-        <Dialog open={!!selectedSupplier} onOpenChange={() => setSelectedSupplier(null)}>
+        <Dialog
+          open={!!selectedSupplier}
+          onOpenChange={() => setSelectedSupplier(null)}
+        >
           <DialogContent className="max-w-4xl max-h-[80vh] overflow-y-auto">
             <DialogHeader>
               <DialogTitle>
@@ -527,7 +539,9 @@ export default function SupplierManagement() {
                       </TableCell>
                       <TableCell>{markup.priority}</TableCell>
                       <TableCell>
-                        <Badge variant={markup.is_active ? "default" : "secondary"}>
+                        <Badge
+                          variant={markup.is_active ? "default" : "secondary"}
+                        >
                           {markup.is_active ? "Active" : "Inactive"}
                         </Badge>
                       </TableCell>

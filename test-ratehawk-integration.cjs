@@ -7,7 +7,8 @@
 const axios = require("axios");
 
 const API_BASE_URL = process.env.API_BASE_URL || "http://localhost:3000";
-const ADMIN_API_KEY = process.env.ADMIN_API_KEY || process.env.VITE_ADMIN_API_KEY;
+const ADMIN_API_KEY =
+  process.env.ADMIN_API_KEY || process.env.VITE_ADMIN_API_KEY;
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -23,7 +24,7 @@ async function testSuppliersList() {
 
   try {
     const response = await api.get("/api/admin/suppliers");
-    
+
     if (response.data.success) {
       console.log("✅ Suppliers loaded successfully");
       response.data.data.forEach((supplier) => {
@@ -36,15 +37,15 @@ async function testSuppliersList() {
      Calls (24h): ${supplier.success_calls_24h || 0}
         `);
       });
-      
+
       // Check if RateHawk is present
-      const ratehawk = response.data.data.find(s => s.code === 'ratehawk');
+      const ratehawk = response.data.data.find((s) => s.code === "ratehawk");
       if (ratehawk) {
         console.log("✅ RateHawk supplier found and registered");
       } else {
         console.log("❌ RateHawk supplier not found in database");
       }
-      
+
       return true;
     } else {
       console.log("❌ Failed to load suppliers");
@@ -62,7 +63,7 @@ async function testSupplierHealth() {
 
   try {
     const response = await api.get("/api/admin/suppliers/health");
-    
+
     if (response.data.success) {
       console.log("✅ Health check successful");
       response.data.data.forEach((health) => {
@@ -99,8 +100,10 @@ async function testMultiSupplierSearch() {
 
     console.log("Search params:", searchParams);
 
-    const response = await api.get("/api/hotels/search", { params: searchParams });
-    
+    const response = await api.get("/api/hotels/search", {
+      params: searchParams,
+    });
+
     if (response.data.success) {
       console.log("✅ Search successful");
       console.log(`
@@ -110,15 +113,17 @@ async function testMultiSupplierSearch() {
       `);
 
       // Show supplier breakdown
-      Object.entries(response.data.meta.suppliers).forEach(([supplier, metrics]) => {
-        console.log(`
+      Object.entries(response.data.meta.suppliers).forEach(
+        ([supplier, metrics]) => {
+          console.log(`
   📡 ${supplier}:
      Success: ${metrics.success ? "✅" : "❌"}
      Results: ${metrics.resultCount || 0}
      Response Time: ${metrics.responseTime || "N/A"}ms
      ${metrics.error ? `Error: ${metrics.error}` : ""}
         `);
-      });
+        },
+      );
 
       // Show sample hotels
       console.log("\n🏨 Sample Hotels:");
@@ -150,21 +155,21 @@ async function testSupplierMarkups() {
   try {
     // Get RateHawk markups
     const response = await api.get("/api/admin/suppliers/ratehawk/markups");
-    
+
     if (response.data.success) {
       console.log("✅ Markups loaded successfully");
       console.log(`   Found ${response.data.data.length} markup rules`);
-      
+
       response.data.data.slice(0, 3).forEach((markup, index) => {
         console.log(`
-  ${index + 1}. ${markup.value_type} ${markup.value}${markup.value_type === 'PERCENT' ? '%' : ''}
+  ${index + 1}. ${markup.value_type} ${markup.value}${markup.value_type === "PERCENT" ? "%" : ""}
      Market: ${markup.market}
      Currency: ${markup.currency}
      Priority: ${markup.priority}
      Active: ${markup.is_active ? "✅" : "❌"}
         `);
       });
-      
+
       return true;
     } else {
       console.log("❌ Failed to load markups");
@@ -191,11 +196,15 @@ async function testMarkupPreview() {
       base_price: 10000,
     };
 
-    const response = await api.post("/api/admin/suppliers/ratehawk/markups/preview", previewData);
-    
+    const response = await api.post(
+      "/api/admin/suppliers/ratehawk/markups/preview",
+      previewData,
+    );
+
     if (response.data.success) {
-      const { basePrice, finalPrice, markup, increase, increasePercent } = response.data.data;
-      
+      const { basePrice, finalPrice, markup, increase, increasePercent } =
+        response.data.data;
+
       console.log("✅ Markup preview calculated");
       console.log(`
   💵 Price Breakdown:
@@ -205,10 +214,10 @@ async function testMarkupPreview() {
      
   📋 Applied Markup:
      Type: ${markup?.value_type || "None"}
-     Value: ${markup?.value || 0}${markup?.value_type === 'PERCENT' ? '%' : ''}
+     Value: ${markup?.value || 0}${markup?.value_type === "PERCENT" ? "%" : ""}
      Priority: ${markup?.priority || "N/A"}
       `);
-      
+
       return true;
     } else {
       console.log("❌ Preview failed");
@@ -234,18 +243,23 @@ async function testCreateMarkup() {
       priority: 85,
     };
 
-    const response = await api.post("/api/admin/suppliers/ratehawk/markups", markupData);
-    
+    const response = await api.post(
+      "/api/admin/suppliers/ratehawk/markups",
+      markupData,
+    );
+
     if (response.data.success) {
       console.log("✅ Markup created successfully");
       console.log(`   ID: ${response.data.data.id}`);
       console.log(`   Market: ${response.data.data.market}`);
       console.log(`   Value: ${response.data.data.value}%`);
-      
+
       // Clean up - delete the test markup
-      await api.delete(`/api/admin/suppliers/ratehawk/markups/${response.data.data.id}`);
+      await api.delete(
+        `/api/admin/suppliers/ratehawk/markups/${response.data.data.id}`,
+      );
       console.log("   ✅ Test markup cleaned up");
-      
+
       return true;
     } else {
       console.log("❌ Failed to create markup");
@@ -265,8 +279,10 @@ async function testToggleSupplier() {
     // Get current status
     const getResponse = await api.get("/api/admin/suppliers/ratehawk");
     const currentStatus = getResponse.data.data.is_enabled;
-    
-    console.log(`   Current status: ${currentStatus ? "Enabled ✅" : "Disabled ❌"}`);
+
+    console.log(
+      `   Current status: ${currentStatus ? "Enabled ✅" : "Disabled ❌"}`,
+    );
 
     // Toggle off
     const toggleOffResponse = await api.put("/api/admin/suppliers/ratehawk", {
@@ -278,7 +294,7 @@ async function testToggleSupplier() {
     }
 
     // Wait a moment
-    await new Promise(resolve => setTimeout(resolve, 500));
+    await new Promise((resolve) => setTimeout(resolve, 500));
 
     // Toggle back on
     const toggleOnResponse = await api.put("/api/admin/suppliers/ratehawk", {
@@ -318,7 +334,7 @@ async function runAllTests() {
   console.log("📊 Test Results Summary");
   console.log("=".repeat(50));
 
-  const passedTests = Object.values(results).filter(r => r === true).length;
+  const passedTests = Object.values(results).filter((r) => r === true).length;
   const totalTests = Object.keys(results).length;
 
   Object.entries(results).forEach(([test, passed]) => {
@@ -329,7 +345,9 @@ async function runAllTests() {
   console.log(`Final Score: ${passedTests}/${totalTests} tests passed`);
 
   if (passedTests === totalTests) {
-    console.log("\n🎉 All tests passed! RateHawk integration is working correctly.");
+    console.log(
+      "\n🎉 All tests passed! RateHawk integration is working correctly.",
+    );
   } else {
     console.log("\n⚠️  Some tests failed. Please review the errors above.");
   }
