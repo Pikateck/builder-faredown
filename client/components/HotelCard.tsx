@@ -759,7 +759,7 @@ export function HotelCard({
                   basePrice={totalPriceInclusiveTaxes}
                   itemDetails={{
                     location: hotelLocation,
-                    provider: "Hotelbeds",
+                    provider: supplierDisplayName,
                     features: hotel.features || hotelAmenities,
                   }}
                   onBargainSuccess={(finalPrice, savings) => {
@@ -910,7 +910,7 @@ export function HotelCard({
                   basePrice={totalPriceInclusiveTaxes}
                   itemDetails={{
                     location: hotelLocation,
-                    provider: "Hotelbeds",
+                    provider: supplierDisplayName,
                     features: hotel.features || hotelAmenities,
                   }}
                   onBargainSuccess={(finalPrice, savings) => {
