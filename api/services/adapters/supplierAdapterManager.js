@@ -6,6 +6,7 @@
 const AmadeusAdapter = require("./amadeusAdapter");
 const TBOAdapter = require("./tboAdapter");
 const HotelbedsAdapter = require("./hotelbedsAdapter");
+const RateHawkAdapter = require("./ratehawkAdapter");
 const redisService = require("../redisService");
 const cpoRepository = require("../cpoRepository");
 const winston = require("winston");
@@ -57,6 +58,16 @@ class SupplierAdapterManager {
       } else {
         this.logger.warn(
           "Hotelbeds credentials not found, adapter not initialized",
+        );
+      }
+
+      // Initialize RateHawk adapter
+      if (process.env.RATEHAWK_API_ID && process.env.RATEHAWK_API_KEY) {
+        this.adapters.set("RATEHAWK", new RateHawkAdapter());
+        this.logger.info("RateHawk adapter initialized");
+      } else {
+        this.logger.warn(
+          "RateHawk credentials not found, adapter not initialized",
         );
       }
 
@@ -130,7 +141,7 @@ class SupplierAdapterManager {
   /**
    * Search across all hotel suppliers
    */
-  async searchAllHotels(searchParams, suppliers = ["HOTELBEDS"]) {
+  async searchAllHotels(searchParams, suppliers = ["HOTELBEDS", "RATEHAWK"]) {
     const results = await this.executeParallelSearch(
       "hotel",
       searchParams,
