@@ -80,6 +80,8 @@ const adminUsersVerifyRoutes = require("./routes/admin-users-verify");
 const adminUsersPublic = require("./routes/admin-users-public");
 const adminSystemStatusRoutes = require("./routes/admin-system-status");
 const adminSystemMonitorHistoryRoutes = require("./routes/admin-system-monitor-history");
+const adminSuppliersRoutes = require("./routes/admin-suppliers");
+const hotelsMultiSupplierRoutes = require("./routes/hotels-multi-supplier");
 
 // Middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth");
@@ -441,7 +443,8 @@ app.use("/api/admin-dashboard", adminDashboardRoutes);
 app.use("/api/bookings", authenticateToken, bookingRoutes);
 app.use("/api/users", authenticateToken, usersAdminRoutes);
 app.use("/api/flights", flightRoutes);
-app.use("/api/hotels", hotelRoutes);
+app.use("/api/hotels", hotelsMultiSupplierRoutes); // Multi-supplier (Hotelbeds + RateHawk)
+app.use("/api/hotels-legacy", hotelRoutes); // Legacy Hotelbeds-only route
 app.use("/api/hotels-live", hotelsLiveRoutes);
 app.use("/api/bargain", bargainRoutes);
 app.use("/api/bargain/v1", bargainV1Routes);
@@ -474,10 +477,7 @@ app.use("/api/reports", authenticateToken, reportsRoutes);
 app.use("/api/suppliers", authenticateToken, suppliersRoutes);
 app.use(
   "/api/admin/suppliers",
-  authenticateToken,
-  requireAdmin,
-  auditLogger,
-  suppliersRoutes,
+  adminSuppliersRoutes, // New multi-supplier management
 );
 app.use("/api/vouchers", voucherRoutes);
 app.use("/api/profile", profileRoutes);
