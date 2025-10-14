@@ -686,8 +686,8 @@ router.get("/search", async (req, res) => {
       });
     }
 
-    // Apply supplier-scoped markup and promo to each result
-    const transformedHotels = await Promise.all(
+    // Apply supplier-scoped markup, promo, and normalize structure
+    const standardizedHotels = await Promise.all(
       aggregatedResults.products.map(async (hotel) => {
         const supplier = (
           hotel.supplier ||
@@ -695,7 +695,6 @@ router.get("/search", async (req, res) => {
           "HOTELBEDS"
         ).toLowerCase();
 
-        // Get supplier-specific markup
         const markup = await getSupplierMarkup(
           supplier,
           "hotels",
@@ -706,67 +705,50 @@ router.get("/search", async (req, res) => {
           channel,
         );
 
-        // Apply markup to each rate
-        const ratesWithMarkup = (hotel.rates || []).map((rate) => {
-          const basePrice = rate.price || rate.amount || 0;
-          const markedUpPrice = applyMarkup(basePrice, markup);
+        const ratesWithMarkup = buildRatesWithMarkup(hotel, markup);
+        const bestRate = selectBestRate(ratesWithMarkup);
 
-          return {
-            ...rate,
-            originalPrice: basePrice,
-            markedUpPrice,
-            markup: markup,
-          };
-        });
+        const promoResult = promoCode
+          ? await applyPromoCode(
+              bestRate.markedUpPrice,
+              promoCode,
+              userId,
+              supplier,
+            )
+          : { finalPrice: bestRate.markedUpPrice, discount: 0, promoApplied: false };
 
-        // Get best rate for main price
-        const bestRate = ratesWithMarkup.reduce(
-          (best, rate) =>
-            rate.markedUpPrice < best.markedUpPrice ? rate : best,
-          ratesWithMarkup[0] || { markedUpPrice: 0 },
+        const bestRateWithPromo = {
+          ...bestRate,
+          markedUpPrice: promoResult.finalPrice ?? bestRate.markedUpPrice,
+        };
+
+        const ratesForFrontend = ratesWithMarkup.map((rate) =>
+          rate.rateKey === bestRate.rateKey
+            ? { ...rate, markedUpPrice: bestRateWithPromo.markedUpPrice }
+            : rate,
         );
 
-        // Apply promo if provided
-        let finalPrice = bestRate.markedUpPrice;
-        let promoResult = { promoApplied: false, discount: 0 };
-
-        if (promoCode) {
-          promoResult = await applyPromoCode(
-            bestRate.markedUpPrice,
-            promoCode,
-            userId,
-            supplier,
-          );
-          finalPrice = promoResult.finalPrice;
-        }
-
-        return {
-          ...hotel,
+        return transformHotelForFrontend({
+          hotel,
           supplier,
-          rates: ratesWithMarkup,
-          price: {
-            original: bestRate.originalPrice,
-            markedUp: bestRate.markedUpPrice,
-            final: finalPrice,
-            currency: hotel.price?.currency || currency,
-            breakdown: {
-              base: bestRate.originalPrice * 0.8,
-              taxes: bestRate.originalPrice * 0.15,
-              fees: bestRate.originalPrice * 0.05,
-              markup: bestRate.markedUpPrice - bestRate.originalPrice,
-              discount: promoResult.discount,
-              total: finalPrice,
-            },
-          },
-          markupApplied: markup,
-          promoApplied: promoResult.promoApplied,
-          promoDetails: promoResult.promoDetails,
-        };
+          markup,
+          promoResult,
+          ratesWithMarkup: ratesForFrontend,
+          bestRate: bestRateWithPromo,
+          destination,
+          checkIn,
+          checkOut,
+          currency,
+          market,
+          channel,
+        });
       }),
     );
 
-    // Sort by final price
-    transformedHotels.sort((a, b) => a.price.final - b.price.final);
+    // Sort by total price for consistent ordering
+    standardizedHotels.sort(
+      (a, b) => (a.totalPrice || 0) - (b.totalPrice || 0),
+    );
 
     // Update supplier metrics
     for (const [supplier, metrics] of Object.entries(
@@ -774,7 +756,7 @@ router.get("/search", async (req, res) => {
     )) {
       if (metrics.success) {
         await db.query(
-          `UPDATE suppliers SET 
+          `UPDATE suppliers SET
             last_success_at = NOW(),
             total_calls_24h = total_calls_24h + 1,
             updated_at = NOW()
@@ -783,7 +765,7 @@ router.get("/search", async (req, res) => {
         );
       } else {
         await db.query(
-          `UPDATE suppliers SET 
+          `UPDATE suppliers SET
             last_error_at = NOW(),
             last_error_msg = $2,
             total_calls_24h = total_calls_24h + 1,
@@ -794,17 +776,19 @@ router.get("/search", async (req, res) => {
       }
     }
 
-    // Return results
     res.json({
       success: true,
-      data: transformedHotels,
+      data: standardizedHotels,
       meta: {
-        totalResults: transformedHotels.length,
+        totalResults: standardizedHotels.length,
         searchParams: {
-          destination,
+          destination: destination || destinationCode,
+          destinationCode: destinationCode || null,
           checkIn,
           checkOut,
           rooms: roomsArray,
+          adults: totalAdults,
+          children: totalChildren,
           currency,
         },
         suppliers: aggregatedResults.supplierMetrics,
