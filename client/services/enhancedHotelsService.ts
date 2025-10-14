@@ -4,6 +4,7 @@
  */
 
 import { EnhancedApiService } from "../lib/enhancedApiWrapper";
+import { apiClient } from "../lib/api";
 
 export interface Hotel {
   id: string;
@@ -52,7 +53,7 @@ export interface HotelBookingData {
 
 class EnhancedHotelsService extends EnhancedApiService {
   constructor() {
-    super("hotels", "/hotels-live");
+    super("hotels", "/hotels");
   }
 
   private createFallbackHotels(
@@ -134,7 +135,45 @@ class EnhancedHotelsService extends EnhancedApiService {
     );
 
     try {
-      return await this.safeGet("/search", normalizedParams, fallbackData);
+      const aggregatedResults = await this.safeGet(
+        "/search",
+        normalizedParams,
+        fallbackData,
+      );
+
+      const hasLiveData = Array.isArray(aggregatedResults)
+        ? aggregatedResults.some((hotel: any) => hotel?.isLiveData)
+        : false;
+
+      if (Array.isArray(aggregatedResults) && hasLiveData) {
+        return aggregatedResults;
+      }
+
+      try {
+        const legacyResponse = await apiClient.get<any>(
+          "/hotels-live/search",
+          normalizedParams,
+        );
+
+        if (legacyResponse?.success && Array.isArray(legacyResponse.data)) {
+          return legacyResponse.data;
+        }
+
+        if (Array.isArray(legacyResponse)) {
+          return legacyResponse;
+        }
+      } catch (legacyError) {
+        this.logServiceEvent("warn", "Legacy hotel fallback failed", {
+          error:
+            legacyError instanceof Error
+              ? legacyError.message
+              : legacyError,
+        });
+      }
+
+      return Array.isArray(aggregatedResults)
+        ? aggregatedResults
+        : fallbackData;
     } catch (error) {
       // If API fails, return fallback data directly
       console.log("🔄 Hotel search failed, using fallback data");
