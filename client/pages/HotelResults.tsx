@@ -431,75 +431,85 @@ export default function HotelResults() {
 
   // Transform Hotelbeds API data to frontend format
   const transformHotelbedsData = (hotelbedsData: any[]): Hotel[] => {
-    return hotelbedsData.map((hotel, index) => ({
-      id: hotel.id || hotel.code || `hotel-${index}`,
-      name: hotel.name || `Hotel ${destination}`,
-      location: hotel.address?.street
-        ? `${hotel.address.street}, ${hotel.address.city || destination}, ${hotel.address.country || "United Arab Emirates"}`
-        : `${hotel.address?.city || destination}, ${hotel.address?.country || "United Arab Emirates"}`,
-      images: transformHotelImages(hotel.images),
-      rating: hotel.rating || hotel.reviewScore || 4.0,
-      reviews: hotel.reviewCount || 150,
-      originalPrice:
-        hotel.originalPrice || Math.round((hotel.currentPrice || 120) * 1.3), // 30% higher original price
-      currentPrice: hotel.currentPrice || 120,
-      description: hotel.description || `Experience luxury at ${hotel.name}`,
-      amenities: hotel.amenities || ["WiFi", "Pool", "Restaurant"],
-      features: hotel.features || ["City View", "Business Center"],
-      roomTypes: hotel.rooms
-        ? hotel.rooms.map((room: any) => ({
-            name: room.name || "Standard Room",
-            price: room.price || hotel.currentPrice || 120,
-            features: room.features || ["Double Bed", "City View"],
-          }))
-        : [
-            {
-              name: "Standard Room",
-              price: hotel.currentPrice || 120,
-              features: ["Double Bed", "City View"],
-            },
-          ],
-      // Additional fields for compatibility
-      address: hotel.address || {
-        street: `Near ${destination} City Center`,
-        city: destination || "Dubai",
-        country: "United Arab Emirates",
-        postalCode: "00000",
-      },
-      starRating: hotel.rating || 4,
-      reviewCount: hotel.reviewCount || 150,
-      contact: {
-        phone: "+1234567890",
-        email: "info@hotel.com",
-      },
-      priceRange: {
-        min: hotel.currentPrice || 120,
-        max:
-          hotel.originalPrice || Math.round((hotel.currentPrice || 120) * 1.25),
-        currency: hotel.currency || selectedCurrency?.code || "INR",
-      },
-      policies: {
-        checkIn: "15:00",
-        checkOut: "11:00",
-        cancellation: "Free cancellation until 24 hours",
-        children: "Children welcome",
-        pets: "Pets not allowed",
-        smoking: "Non-smoking",
-      },
-      // Add breakfast information
-      breakfastIncluded: hotel.breakfastIncluded || Math.random() > 0.5, // Random for demo
-      breakfastType:
-        hotel.breakfastType ||
-        (Math.random() > 0.5 ? "Continental Buffet" : "American Breakfast"),
-      // Add room information for live data
-      availableRoom: hotel.availableRoom || {
-        type: "1 X Standard Room",
-        bedType: "Double bed",
-        rateType: "Flexible Rate",
-        paymentTerms: "No prepayment needed",
-        cancellationPolicy: "Free cancellation",
-      },
-    }));
+    return hotelbedsData.map((hotel, index) => {
+      const supplierCode = (hotel.supplierCode || hotel.supplier || "hotelbeds")
+        .toString()
+        .toLowerCase();
+
+      return {
+        id: hotel.id || hotel.code || `hotel-${index}`,
+        name: hotel.name || `Hotel ${destination}`,
+        location: hotel.address?.street
+          ? `${hotel.address.street}, ${hotel.address.city || destination}, ${hotel.address.country || "United Arab Emirates"}`
+          : `${hotel.address?.city || destination}, ${hotel.address?.country || "United Arab Emirates"}`,
+        images: transformHotelImages(hotel.images),
+        rating: hotel.rating || hotel.reviewScore || 4.0,
+        reviews: hotel.reviewCount || 150,
+        originalPrice:
+          hotel.originalPrice || Math.round((hotel.currentPrice || 120) * 1.3),
+        currentPrice: hotel.currentPrice || 120,
+        description: hotel.description || `Experience luxury at ${hotel.name}`,
+        amenities: hotel.amenities || ["WiFi", "Pool", "Restaurant"],
+        features: hotel.features || ["City View", "Business Center"],
+        roomTypes: hotel.rooms
+          ? hotel.rooms.map((room: any) => ({
+              name: room.name || "Standard Room",
+              price: room.price || hotel.currentPrice || 120,
+              features: room.features || ["Double Bed", "City View"],
+            }))
+          : [
+              {
+                name: "Standard Room",
+                price: hotel.currentPrice || 120,
+                features: ["Double Bed", "City View"],
+              },
+            ],
+        address: hotel.address || {
+          street: `Near ${destination} City Center`,
+          city: destination || "Dubai",
+          country: "United Arab Emirates",
+          postalCode: "00000",
+        },
+        starRating: hotel.rating || 4,
+        reviewCount: hotel.reviewCount || 150,
+        contact: {
+          phone: "+1234567890",
+          email: "info@hotel.com",
+        },
+        priceRange: {
+          min: hotel.currentPrice || 120,
+          max:
+            hotel.originalPrice ||
+            Math.round((hotel.currentPrice || 120) * 1.25),
+          currency: hotel.currency || selectedCurrency?.code || "INR",
+        },
+        policies: {
+          checkIn: "15:00",
+          checkOut: "11:00",
+          cancellation: "Free cancellation until 24 hours",
+          children: "Children welcome",
+          pets: "Pets not allowed",
+          smoking: "Non-smoking",
+        },
+        breakfastIncluded: hotel.breakfastIncluded || Math.random() > 0.5,
+        breakfastType:
+          hotel.breakfastType ||
+          (Math.random() > 0.5 ? "Continental Buffet" : "American Breakfast"),
+        availableRoom: hotel.availableRoom || {
+          type: "1 X Standard Room",
+          bedType: "Double bed",
+          rateType: "Flexible Rate",
+          paymentTerms: "No prepayment needed",
+          cancellationPolicy: "Free cancellation",
+        },
+        supplier: supplierCode.toUpperCase(),
+        supplierCode,
+        isLiveData: hotel.isLiveData ?? false,
+        priceBreakdown: hotel.priceBreakdown || hotel.price?.breakdown || null,
+        markupApplied: hotel.markupApplied,
+        promoApplied: hotel.promoApplied,
+      };
+    });
   };
 
   // Handle search function
