@@ -583,23 +583,23 @@ router.get("/search", async (req, res) => {
     let remainingChildren = totalChildren;
 
     const roomsArray = Array.from({ length: parsedRoomsCount }, (_, index) => {
-      const roomsLeft = parsedRoomsCount - index;
+      const roomsLeft = parsedRoomsCount - index || 1;
       const adultsForRoom = Math.max(
         1,
-        Math.round(remainingAdults / roomsLeft) || 1,
+        Math.ceil(remainingAdults / roomsLeft) || 1,
       );
-      remainingAdults -= adultsForRoom;
+      remainingAdults = Math.max(0, remainingAdults - adultsForRoom);
 
       const childrenForRoom = Math.max(
         0,
         Math.floor(remainingChildren / roomsLeft),
       );
-      remainingChildren -= childrenForRoom;
+      remainingChildren = Math.max(0, remainingChildren - childrenForRoom);
 
       return {
         adults: adultsForRoom,
         children: childrenForRoom,
-        childAges: parsedChildAges.slice(0, childrenForRoom) || parsedChildAges,
+        childAges: parsedChildAges.slice(0, childrenForRoom),
       };
     });
 
