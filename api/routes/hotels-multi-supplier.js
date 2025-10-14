@@ -735,7 +735,7 @@ router.get("/search", async (req, res) => {
           promoResult,
           ratesWithMarkup: ratesForFrontend,
           bestRate: bestRateWithPromo,
-          destination,
+          destination: resolvedDestination,
           checkIn,
           checkOut,
           currency,
@@ -782,8 +782,9 @@ router.get("/search", async (req, res) => {
       meta: {
         totalResults: standardizedHotels.length,
         searchParams: {
-          destination: destination || destinationCode,
+          destination: resolvedDestination,
           destinationCode: destinationCode || null,
+          destinationName: destination,
           checkIn,
           checkOut,
           rooms: roomsArray,
