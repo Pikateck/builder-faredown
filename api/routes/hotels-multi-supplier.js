@@ -81,9 +81,9 @@ async function applyPromoCode(
 
   try {
     const query = `
-      SELECT * FROM promo_codes 
-      WHERE code = $1 
-      AND is_active = true 
+      SELECT * FROM promo_codes
+      WHERE code = $1
+      AND is_active = true
       AND (applicable_to = 'hotels' OR applicable_to = 'all')
       AND (expiry_date IS NULL OR expiry_date > NOW())
       AND (usage_limit IS NULL OR usage_count < usage_limit)
@@ -142,6 +142,370 @@ async function applyPromoCode(
       error: "Promo code application failed",
     };
   }
+}
+
+function calculateStayNights(checkIn, checkOut) {
+  const start = new Date(checkIn);
+  const end = new Date(checkOut);
+
+  if (Number.isNaN(start.getTime()) || Number.isNaN(end.getTime())) {
+    return 1;
+  }
+
+  const diff = end.getTime() - start.getTime();
+  const nights = Math.round(diff / (1000 * 60 * 60 * 24));
+
+  return Math.max(1, nights);
+}
+
+function toArray(value) {
+  if (!value) return [];
+  return Array.isArray(value) ? value : [value];
+}
+
+function extractImageUrls(hotel) {
+  const urls = new Set();
+
+  if (Array.isArray(hotel.images)) {
+    hotel.images.forEach((img) => {
+      if (!img) return;
+      if (typeof img === "string") {
+        const normalized = img.startsWith("http")
+          ? img
+          : `https://photos.hotelbeds.com/giata/original/${img}`;
+        urls.add(normalized);
+      } else if (img.url) {
+        urls.add(img.url);
+      } else if (img.thumbnail) {
+        urls.add(img.thumbnail);
+      } else if (img.path) {
+        urls.add(`https://photos.hotelbeds.com/giata/original/${img.path}`);
+      } else if (img.full) {
+        urls.add(img.full);
+      }
+    });
+  }
+
+  if (urls.size === 0 && hotel.media?.images) {
+    hotel.media.images.forEach((img) => {
+      if (img?.url) urls.add(img.url);
+    });
+  }
+
+  if (urls.size === 0) {
+    urls.add("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&auto=format");
+    urls.add("https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop&auto=format");
+  }
+
+  return Array.from(urls).slice(0, 6);
+}
+
+function normalizeAmenitiesList(rawAmenities, fallback = []) {
+  const normalized = new Set();
+  const source = Array.isArray(rawAmenities) && rawAmenities.length > 0 ? rawAmenities : fallback;
+
+  source.forEach((amenity) => {
+    if (!amenity) return;
+    if (typeof amenity === "string") {
+      normalized.add(amenity);
+    } else if (amenity.name) {
+      normalized.add(amenity.name);
+    } else if (amenity.description) {
+      normalized.add(amenity.description);
+    }
+  });
+
+  return Array.from(normalized).slice(0, 12);
+}
+
+function buildRatesWithMarkup(hotel, markup) {
+  const rawRates = Array.isArray(hotel.rates) ? hotel.rates : [];
+
+  if (rawRates.length === 0) {
+    const fallbackPrice =
+      hotel.price?.amount ??
+      hotel.price?.final ??
+      hotel.price?.markedUp ??
+      hotel.price ??
+      hotel.totalPrice ??
+      hotel.currentPrice ??
+      hotel.netPrice ??
+      0;
+
+    const fallbackCurrency =
+      hotel.price?.currency || hotel.currency || "USD";
+
+    const markedUpPrice = applyMarkup(fallbackPrice, markup);
+
+    return [
+      {
+        rateKey:
+          hotel.rateKey || `${hotel.hotelId || hotel.id || "hotel"}_default`,
+        roomType: hotel.roomName || hotel.room_type || "Standard Room",
+        boardType: hotel.boardType || hotel.board_type || "Room Only",
+        originalPrice: fallbackPrice,
+        price: fallbackPrice,
+        markedUpPrice,
+        currency: fallbackCurrency,
+        cancellationPolicy: hotel.cancellationPolicy || [],
+        isRefundable:
+          hotel.policyFlags?.refundable !== undefined
+            ? hotel.policyFlags.refundable
+            : true,
+        extras: hotel.features || [],
+      },
+    ];
+  }
+
+  return rawRates.map((rate, index) => {
+    const paymentType =
+      rate.payment_options?.payment_types?.[0] || rate.paymentType || {};
+
+    const basePrice =
+      rate.price ??
+      rate.amount ??
+      rate.netPrice ??
+      rate.originalPrice ??
+      paymentType.amount ??
+      0;
+
+    const originalPrice =
+      typeof rate.originalPrice === "number" ? rate.originalPrice : basePrice;
+
+    const currency =
+      rate.currency ||
+      rate.currencyCode ||
+      rate.currency_code ||
+      paymentType.currency_code ||
+      hotel.price?.currency ||
+      hotel.currency ||
+      "USD";
+
+    const cancellationPolicies =
+      rate.cancellationPolicy ||
+      rate.cancellationPolicies ||
+      paymentType.cancellation_policies ||
+      [];
+
+    const markedUpPrice = applyMarkup(basePrice, markup);
+
+    const isRefundable =
+      typeof rate.isRefundable === "boolean"
+        ? rate.isRefundable
+        : !toArray(cancellationPolicies).some(
+            (policy) =>
+              policy &&
+              typeof policy.amount === "number" &&
+              policy.amount > 0,
+          );
+
+    return {
+      rateKey:
+        rate.rateKey ||
+        rate.book_hash ||
+        rate.id ||
+        `${hotel.hotelId || hotel.id || "hotel"}_${index}`,
+      roomType: rate.roomType || rate.room_name || rate.name || "Standard Room",
+      boardType:
+        rate.boardType ||
+        rate.board_type ||
+        rate.boardName ||
+        rate.board ||
+        rate.meal ||
+        "Room Only",
+      originalPrice,
+      price: basePrice,
+      markedUpPrice,
+      currency,
+      cancellationPolicy: toArray(cancellationPolicies),
+      isRefundable,
+      extras: rate.includedBoard || rate.inclusions || [],
+    };
+  });
+}
+
+function selectBestRate(rates) {
+  if (!rates.length) {
+    return {
+      originalPrice: 0,
+      markedUpPrice: 0,
+      currency: "USD",
+      rateKey: null,
+      roomType: "Standard Room",
+    };
+  }
+
+  return rates.reduce((best, rate) =>
+    rate.markedUpPrice < (best.markedUpPrice ?? Infinity) ? rate : best,
+  );
+}
+
+function buildRoomTypes(rates, nights, fallbackCurrency) {
+  return rates.map((rate) => {
+    const currency = rate.currency || fallbackCurrency;
+    const perNight = rate.markedUpPrice / nights;
+
+    return {
+      name: rate.roomType || "Standard Room",
+      price: perNight,
+      pricePerNight: perNight,
+      totalPrice: rate.markedUpPrice,
+      board: rate.boardType || "Room Only",
+      boardType: rate.boardType || "Room Only",
+      cancellationPolicy: rate.cancellationPolicy,
+      refundable: rate.isRefundable,
+      rateKey: rate.rateKey,
+      currency,
+      markup: rate.markedUpPrice - rate.originalPrice,
+      supplierNetRate: rate.originalPrice,
+    };
+  });
+}
+
+function buildAvailableRoom(roomTypes, hotel) {
+  const primaryRoom = roomTypes[0];
+
+  return {
+    type: primaryRoom?.name || hotel.roomName || "Standard Room",
+    bedType: hotel.bedType || "Double bed",
+    rateType: primaryRoom?.board || primaryRoom?.boardType || "Flexible Rate",
+    paymentTerms:
+      hotel.paymentTerms ||
+      (primaryRoom?.refundable ? "Pay at property" : "Prepayment required"),
+    cancellationPolicy:
+      primaryRoom?.refundable ? "Free cancellation" : "Non refundable",
+  };
+}
+
+function buildPriceBreakdown(bestRate, finalPrice, nights, promoResult) {
+  const base = bestRate.originalPrice ?? finalPrice;
+  const markupAmount = finalPrice - base;
+  const perNight = finalPrice / nights;
+
+  return {
+    base,
+    markup: markupAmount,
+    taxes: bestRate.taxes || 0,
+    fees: bestRate.fees || 0,
+    discount: promoResult?.discount || 0,
+    perNight,
+    total: finalPrice,
+  };
+}
+
+function buildAddress(hotel, fallbackDestination) {
+  if (hotel.address && typeof hotel.address === "object") {
+    return {
+      street:
+        hotel.address.street ||
+        hotel.address.address ||
+        hotel.address.line1 ||
+        fallbackDestination ||
+        "",
+      city: hotel.address.city || hotel.city || fallbackDestination || "",
+      country: hotel.address.country || hotel.country || "United Arab Emirates",
+      postalCode: hotel.address.postalCode || hotel.address.zip || "",
+    };
+  }
+
+  return {
+    street: hotel.location?.address || fallbackDestination || "",
+    city: hotel.location?.city || fallbackDestination || "",
+    country: hotel.location?.country || "United Arab Emirates",
+    postalCode: "",
+  };
+}
+
+function transformHotelForFrontend({
+  hotel,
+  supplier,
+  markup,
+  promoResult,
+  ratesWithMarkup,
+  bestRate,
+  destination,
+  checkIn,
+  checkOut,
+  currency,
+  market,
+  channel,
+}) {
+  const nights = calculateStayNights(checkIn, checkOut);
+  const finalPrice = bestRate.markedUpPrice ?? 0;
+  const perNightPrice = finalPrice / nights;
+  const currencyCode = bestRate.currency || currency || "USD";
+
+  const roomTypes = buildRoomTypes(ratesWithMarkup, nights, currencyCode);
+  const availableRoom = buildAvailableRoom(roomTypes, hotel);
+  const images = extractImageUrls(hotel);
+  const amenities = normalizeAmenitiesList(
+    hotel.amenities || hotel.facilities,
+    ["WiFi", "Parking", "Restaurant", "Pool"],
+  );
+  const features = normalizeAmenitiesList(
+    hotel.features,
+    amenities.slice(0, 4),
+  );
+  const address = buildAddress(hotel, destination);
+  const priceBreakdown = buildPriceBreakdown(
+    bestRate,
+    finalPrice,
+    nights,
+    promoResult,
+  );
+
+  const supplierHotelId =
+    hotel.hotelId || hotel.hotelCode || hotel.id || hotel.code || null;
+
+  return {
+    id: supplierHotelId || `${supplier}_${Date.now()}`,
+    code: supplierHotelId,
+    name: hotel.name || hotel.hotelName || "Hotel",
+    description:
+      hotel.description ||
+      `Experience ${hotel.name || "this hotel"} in ${destination || "Dubai"}.`,
+    destinationName: hotel.destination || destination,
+    location: address.street
+      ? `${address.street}, ${address.city}`
+      : `${address.city}, ${address.country}`,
+    address,
+    images,
+    amenities,
+    features,
+    currentPrice: Number(perNightPrice.toFixed(2)),
+    originalPrice: Number(
+      ((bestRate.originalPrice || finalPrice) / nights).toFixed(2),
+    ),
+    totalPrice: Number(finalPrice.toFixed(2)),
+    currency: currencyCode,
+    rating: hotel.rating || hotel.starRating || 4.2,
+    starRating: hotel.starRating || hotel.rating || 4,
+    reviews: hotel.reviewCount || hotel.reviews || 0,
+    reviewScore: hotel.reviewScore || null,
+    available: true,
+    lastRoom: hotel.lastRoom || false,
+    rateKey: bestRate.rateKey,
+    supplier: supplier,
+    supplierCode: supplier,
+    supplierHotelId,
+    supplierRateKey: bestRate.rateKey,
+    markupApplied: markup,
+    promoApplied: promoResult?.promoApplied || false,
+    promoDetails: promoResult?.promoApplied ? promoResult?.promoDetails : undefined,
+    priceBreakdown,
+    roomTypes,
+    availableRoom,
+    policyFlags: hotel.policyFlags || {},
+    cancellationPolicy:
+      bestRate.cancellationPolicy || hotel.cancellationPolicy || [],
+    extras: hotel.extras || [],
+    isLiveData: true,
+    channel,
+    market,
+    supplierMeta: {
+      responseTimeMs: hotel.responseTime,
+    },
+  };
 }
 
 /**
