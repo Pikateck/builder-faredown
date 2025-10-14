@@ -28,7 +28,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { apiRequest } from "@/lib/api";
+import { apiClient } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import {
   CheckCircle,
@@ -117,7 +117,7 @@ export default function SupplierManagement() {
 
   const loadSuppliers = async () => {
     try {
-      const response = await apiRequest("/api/admin/suppliers");
+      const response = await apiClient.get<any>("/api/admin/suppliers");
       if (response.success) {
         setSuppliers(response.data);
       }
@@ -135,7 +135,7 @@ export default function SupplierManagement() {
 
   const loadHealth = async () => {
     try {
-      const response = await apiRequest("/api/admin/suppliers/health");
+      const response = await apiClient.get<any>("/api/admin/suppliers/health");
       if (response.success) {
         setHealthData(response.data);
       }
@@ -146,7 +146,7 @@ export default function SupplierManagement() {
 
   const loadMarkups = async (supplierCode: string) => {
     try {
-      const response = await apiRequest(
+      const response = await apiClient.get<any>(
         `/api/admin/suppliers/${supplierCode}/markups`,
       );
       if (response.success) {
@@ -159,12 +159,9 @@ export default function SupplierManagement() {
 
   const toggleSupplier = async (supplier: Supplier) => {
     try {
-      const response = await apiRequest(
+      const response = await apiClient.put<any>(
         `/api/admin/suppliers/${supplier.code}`,
-        {
-          method: "PUT",
-          body: JSON.stringify({ is_enabled: !supplier.is_enabled }),
-        },
+        { is_enabled: !supplier.is_enabled },
       );
 
       if (response.success) {
@@ -188,12 +185,9 @@ export default function SupplierManagement() {
     if (!selectedSupplier) return;
 
     try {
-      const response = await apiRequest(
+      const response = await apiClient.post<any>(
         `/api/admin/suppliers/${selectedSupplier.code}/markups`,
-        {
-          method: "POST",
-          body: JSON.stringify(newMarkup),
-        },
+        newMarkup,
       );
 
       if (response.success) {
@@ -228,11 +222,8 @@ export default function SupplierManagement() {
     if (!selectedSupplier) return;
 
     try {
-      const response = await apiRequest(
+      const response = await apiClient.delete<any>(
         `/api/admin/suppliers/${selectedSupplier.code}/markups/${markupId}`,
-        {
-          method: "DELETE",
-        },
       );
 
       if (response.success) {
@@ -256,14 +247,11 @@ export default function SupplierManagement() {
     if (!selectedSupplier) return;
 
     try {
-      const response = await apiRequest(
+      const response = await apiClient.post<any>(
         `/api/admin/suppliers/${selectedSupplier.code}/markups/preview`,
         {
-          method: "POST",
-          body: JSON.stringify({
-            ...newMarkup,
-            base_price: previewPrice.basePrice,
-          }),
+          ...newMarkup,
+          base_price: previewPrice.basePrice,
         },
       );
 
