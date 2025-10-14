@@ -234,7 +234,9 @@ export function HotelCard({
   const currentPrice = getHotelPrice();
   const hotelAmenities = getHotelAmenities();
   const supplierDisplayName = (
-    hotel.supplier || hotel.supplierCode || "hotelbeds"
+    hotel.supplier ||
+    hotel.supplierCode ||
+    "hotelbeds"
   )
     .toString()
     .toUpperCase();

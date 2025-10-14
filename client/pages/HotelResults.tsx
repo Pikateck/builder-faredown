@@ -758,7 +758,9 @@ export default function HotelResults() {
       {/* Mobile-First Layout */}
       <div className="md:hidden">
         <MobileNavBar
-          title={urlSearchParams.get("destinationName") || destination || "Dubai"}
+          title={
+            urlSearchParams.get("destinationName") || destination || "Dubai"
+          }
           subtitle={`${filteredAndSortedHotels.length} hotels found`}
           onBack={() => navigate("/hotels")}
           showLogo={true}
@@ -1249,7 +1251,9 @@ export default function HotelResults() {
               <span>🌍 Global</span>
               <span className="mx-2">•</span>
               <span>
-                {urlSearchParams.get("destinationName") || destination || "Dubai"}
+                {urlSearchParams.get("destinationName") ||
+                  destination ||
+                  "Dubai"}
               </span>
               <span className="mx-2">›</span>
               <span className="text-gray-900 font-medium">

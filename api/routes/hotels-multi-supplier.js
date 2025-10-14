@@ -193,8 +193,12 @@ function extractImageUrls(hotel) {
   }
 
   if (urls.size === 0) {
-    urls.add("https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&auto=format");
-    urls.add("https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop&auto=format");
+    urls.add(
+      "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop&auto=format",
+    );
+    urls.add(
+      "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=800&h=600&fit=crop&auto=format",
+    );
   }
 
   return Array.from(urls).slice(0, 6);
@@ -202,7 +206,10 @@ function extractImageUrls(hotel) {
 
 function normalizeAmenitiesList(rawAmenities, fallback = []) {
   const normalized = new Set();
-  const source = Array.isArray(rawAmenities) && rawAmenities.length > 0 ? rawAmenities : fallback;
+  const source =
+    Array.isArray(rawAmenities) && rawAmenities.length > 0
+      ? rawAmenities
+      : fallback;
 
   source.forEach((amenity) => {
     if (!amenity) return;
@@ -232,8 +239,7 @@ function buildRatesWithMarkup(hotel, markup) {
       hotel.netPrice ??
       0;
 
-    const fallbackCurrency =
-      hotel.price?.currency || hotel.currency || "USD";
+    const fallbackCurrency = hotel.price?.currency || hotel.currency || "USD";
 
     const markedUpPrice = applyMarkup(fallbackPrice, markup);
 
@@ -294,9 +300,7 @@ function buildRatesWithMarkup(hotel, markup) {
         ? rate.isRefundable
         : !toArray(cancellationPolicies).some(
             (policy) =>
-              policy &&
-              typeof policy.amount === "number" &&
-              policy.amount > 0,
+              policy && typeof policy.amount === "number" && policy.amount > 0,
           );
 
     return {
@@ -372,8 +376,9 @@ function buildAvailableRoom(roomTypes, hotel) {
     paymentTerms:
       hotel.paymentTerms ||
       (primaryRoom?.refundable ? "Pay at property" : "Prepayment required"),
-    cancellationPolicy:
-      primaryRoom?.refundable ? "Free cancellation" : "Non refundable",
+    cancellationPolicy: primaryRoom?.refundable
+      ? "Free cancellation"
+      : "Non refundable",
   };
 }
 
@@ -491,7 +496,9 @@ function transformHotelForFrontend({
     supplierRateKey: bestRate.rateKey,
     markupApplied: markup,
     promoApplied: promoResult?.promoApplied || false,
-    promoDetails: promoResult?.promoApplied ? promoResult?.promoDetails : undefined,
+    promoDetails: promoResult?.promoApplied
+      ? promoResult?.promoDetails
+      : undefined,
     priceBreakdown,
     roomTypes,
     availableRoom,
@@ -558,7 +565,10 @@ router.get("/search", async (req, res) => {
     })();
 
     const totalChildren = (() => {
-      const value = parseInt(Array.isArray(children) ? children[0] : children, 10);
+      const value = parseInt(
+        Array.isArray(children) ? children[0] : children,
+        10,
+      );
       return Number.isFinite(value) && value > 0 ? value : 0;
     })();
 
@@ -715,7 +725,11 @@ router.get("/search", async (req, res) => {
               userId,
               supplier,
             )
-          : { finalPrice: bestRate.markedUpPrice, discount: 0, promoApplied: false };
+          : {
+              finalPrice: bestRate.markedUpPrice,
+              discount: 0,
+              promoApplied: false,
+            };
 
         const bestRateWithPromo = {
           ...bestRate,

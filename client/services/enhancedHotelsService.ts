@@ -165,9 +165,7 @@ class EnhancedHotelsService extends EnhancedApiService {
       } catch (legacyError) {
         this.logServiceEvent("warn", "Legacy hotel fallback failed", {
           error:
-            legacyError instanceof Error
-              ? legacyError.message
-              : legacyError,
+            legacyError instanceof Error ? legacyError.message : legacyError,
         });
       }
 
