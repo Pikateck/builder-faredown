@@ -233,6 +233,11 @@ export function HotelCard({
   const hotelLocation = getHotelLocation();
   const currentPrice = getHotelPrice();
   const hotelAmenities = getHotelAmenities();
+  const supplierDisplayName = (
+    hotel.supplier || hotel.supplierCode || "hotelbeds"
+  )
+    .toString()
+    .toUpperCase();
 
   // Debug logging for price calculations
   console.log(`[HOTEL CARD ${hotel.id}] Price Calculation:`, {
