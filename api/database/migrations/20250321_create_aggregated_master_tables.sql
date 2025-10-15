@@ -35,7 +35,7 @@ CREATE TABLE IF NOT EXISTS hotels_inventory_master (
 CREATE INDEX IF NOT EXISTS idx_hotels_inventory_search ON hotels_inventory_master(search_id);
 CREATE INDEX IF NOT EXISTS idx_hotels_inventory_canonical ON hotels_inventory_master(canonical_hotel_id);
 CREATE INDEX IF NOT EXISTS idx_hotels_inventory_supplier ON hotels_inventory_master(supplier_code, supplier_hotel_id);
-CREATE INDEX IF NOT EXISTS idx_hotels_inventory_pricing_hash ON hotels_inventory_master(pricing_hash);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_hotels_inventory_pricing_hash ON hotels_inventory_master(pricing_hash);
 
 CREATE TABLE IF NOT EXISTS flight_searches (
   id UUID PRIMARY KEY,
