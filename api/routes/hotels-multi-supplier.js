@@ -435,7 +435,6 @@ function transformHotelForFrontend({
 }) {
   const nights = calculateStayNights(checkIn, checkOut);
   const finalPrice = bestRate.markedUpPrice ?? 0;
-  const perNightPrice = finalPrice / nights;
   const currencyCode = bestRate.currency || currency || "USD";
 
   const roomTypes = buildRoomTypes(ratesWithMarkup, nights, currencyCode);
@@ -450,12 +449,15 @@ function transformHotelForFrontend({
     amenities.slice(0, 4),
   );
   const address = buildAddress(hotel, destination);
-  const priceBreakdown = buildPriceBreakdown(
+  const priceSummary = buildPriceBreakdown(
     bestRate,
     finalPrice,
     nights,
     promoResult,
+    currencyCode,
   );
+  const perNightPrice = priceSummary.perNight;
+  const pricingBreakdown = priceSummary.pricing;
 
   const supplierHotelId =
     hotel.hotelId || hotel.hotelCode || hotel.id || hotel.code || null;
