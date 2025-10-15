@@ -993,6 +993,7 @@ router.get("/search", async (req, res) => {
       success: true,
       data: standardizedHotels,
       meta: {
+        searchId,
         totalResults: standardizedHotels.length,
         searchParams: {
           destination: resolvedDestination,
