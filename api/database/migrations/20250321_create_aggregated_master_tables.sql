@@ -66,7 +66,7 @@ CREATE TABLE IF NOT EXISTS flights_inventory_master (
 
 CREATE INDEX IF NOT EXISTS idx_flights_inventory_search ON flights_inventory_master(search_id);
 CREATE INDEX IF NOT EXISTS idx_flights_inventory_canonical ON flights_inventory_master(canonical_itinerary_id);
-CREATE INDEX IF NOT EXISTS idx_flights_inventory_pricing_hash ON flights_inventory_master(pricing_hash);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_flights_inventory_pricing_hash ON flights_inventory_master(pricing_hash);
 
 -- Optional activity searches/master tables (created if needed later)
 CREATE TABLE IF NOT EXISTS activity_searches (
