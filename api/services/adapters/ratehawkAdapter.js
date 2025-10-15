@@ -361,20 +361,39 @@ class RateHawkAdapter extends BaseSupplierAdapter {
   async searchRegions(query, language = "en") {
     await this.checkRateLimit("search_serp_region");
 
-    const response = await this.executeWithRetry(async () => {
-      return await this.httpClient.get("search/serp/region/", {
-        params: {
+    try {
+      const response = await this.httpClient.post("search/serp/region/", {
+        query,
+        language,
+      });
+
+      if (response.data.status !== "ok") {
+        this.logger.warn("RateHawk region search returned non-ok status", {
           query,
           language,
-        },
-      });
-    });
+          status: response.data.status,
+          error: response.data.error,
+        });
+        return [];
+      }
 
-    if (response.data.status !== "ok") {
+      const regions =
+        response.data.data?.regions ||
+        response.data.data?.items ||
+        response.data.data ||
+        [];
+
+      return Array.isArray(regions) ? regions : [];
+    } catch (error) {
+      this.logger.warn("RateHawk region search failed", {
+        query,
+        language,
+        status: error.response?.status,
+        error: error.message,
+        details: error.response?.data?.error || error.response?.data,
+      });
       return [];
     }
-
-    return response.data.data?.regions || [];
   }
 
   /**
