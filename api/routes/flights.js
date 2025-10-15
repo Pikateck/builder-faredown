@@ -535,6 +535,9 @@ router.get("/search", async (req, res) => {
       infants: 0,
       travelClass: cabinClass,
       maxResults: 50,
+      currency: req.query.currency || "INR",
+      market: req.query.market || "GLOBAL",
+      channel: req.query.channel || "web",
     };
 
     // Get enabled suppliers (default: AMADEUS, TBO)
