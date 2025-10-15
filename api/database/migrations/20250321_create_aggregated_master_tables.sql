@@ -126,4 +126,4 @@ CREATE TABLE IF NOT EXISTS transfers_inventory_master (
 
 CREATE INDEX IF NOT EXISTS idx_transfers_inventory_search ON transfers_inventory_master(search_id);
 CREATE INDEX IF NOT EXISTS idx_transfers_inventory_canonical ON transfers_inventory_master(canonical_transfer_id);
-CREATE INDEX IF NOT EXISTS idx_transfers_inventory_pricing_hash ON transfers_inventory_master(pricing_hash);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_transfers_inventory_pricing_hash ON transfers_inventory_master(pricing_hash);
