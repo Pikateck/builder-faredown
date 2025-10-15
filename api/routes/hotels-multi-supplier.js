@@ -221,7 +221,10 @@ function buildRatesWithMarkup(hotel, markup) {
 
     const fallbackCurrency = hotel.price?.currency || hotel.currency || "USD";
 
-    const markedUpPrice = applyMarkup(fallbackPrice, markup);
+    const { finalAmount, markupAmount } = applyMarkupToAmount(
+      fallbackPrice,
+      markup,
+    );
 
     return [
       {
@@ -231,7 +234,8 @@ function buildRatesWithMarkup(hotel, markup) {
         boardType: hotel.boardType || hotel.board_type || "Room Only",
         originalPrice: fallbackPrice,
         price: fallbackPrice,
-        markedUpPrice,
+        markedUpPrice: finalAmount,
+        markupAmount,
         currency: fallbackCurrency,
         cancellationPolicy: hotel.cancellationPolicy || [],
         isRefundable:
@@ -273,7 +277,10 @@ function buildRatesWithMarkup(hotel, markup) {
       paymentType.cancellation_policies ||
       [];
 
-    const markedUpPrice = applyMarkup(basePrice, markup);
+    const { finalAmount: markedUpPrice, markupAmount } = applyMarkupToAmount(
+      basePrice,
+      markup,
+    );
 
     const isRefundable =
       typeof rate.isRefundable === "boolean"
@@ -304,6 +311,7 @@ function buildRatesWithMarkup(hotel, markup) {
       cancellationPolicy: toArray(cancellationPolicies),
       isRefundable,
       extras: rate.includedBoard || rate.inclusions || [],
+      markupAmount,
     };
   });
 }
@@ -643,7 +651,7 @@ router.get("/search", async (req, res) => {
             .map((s) => s.trim().toUpperCase());
 
     console.log(
-      `���� Searching across hotel suppliers: ${suppliersToUse.join(", ")}`,
+      `📡 Searching across hotel suppliers: ${suppliersToUse.join(", ")}`,
     );
 
     // Execute parallel search across all enabled suppliers
