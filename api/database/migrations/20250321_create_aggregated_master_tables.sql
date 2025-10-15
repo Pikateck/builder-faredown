@@ -97,6 +97,7 @@ CREATE TABLE IF NOT EXISTS activities_inventory_master (
 
 CREATE INDEX IF NOT EXISTS idx_activities_inventory_search ON activities_inventory_master(search_id);
 CREATE INDEX IF NOT EXISTS idx_activities_inventory_canonical ON activities_inventory_master(canonical_activity_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_activities_inventory_pricing_hash ON activities_inventory_master(pricing_hash);
 
 CREATE TABLE IF NOT EXISTS transfer_searches (
   id UUID PRIMARY KEY,
