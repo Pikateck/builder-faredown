@@ -42,8 +42,8 @@ describe("supplierMarkupService", () => {
       });
 
       expect(db.query).toHaveBeenCalledWith(
-        expect.stringContaining("get_effective_supplier_markup"),
-        ["ratehawk", "hotels", "IN", "AED", "123", "DXB", "web"],
+        expect.stringContaining("pick_markup_rule"),
+        ["ratehawk", "hotels", "IN", "AED", "web", "123", "DXB"],
       );
       expect(rule).toEqual({ value_type: "PERCENT", value: 12, priority: 5 });
     });
