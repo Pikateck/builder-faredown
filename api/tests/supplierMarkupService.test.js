@@ -24,9 +24,11 @@ describe("supplierMarkupService", () => {
       db.query.mockResolvedValue({
         rows: [
           {
-            value_type: "PERCENT",
-            value: 12,
-            priority: 5,
+            markup: {
+              type: "percent",
+              value: 12,
+              priority: 4,
+            },
           },
         ],
       });
@@ -43,9 +45,9 @@ describe("supplierMarkupService", () => {
 
       expect(db.query).toHaveBeenCalledWith(
         expect.stringContaining("pick_markup_rule"),
-        ["ratehawk", "hotels", "IN", "AED", "web", "123", "DXB"],
+        ["ratehawk", "hotels", "IN", "web", "AED"],
       );
-      expect(rule).toEqual({ value_type: "PERCENT", value: 12, priority: 5 });
+      expect(rule).toEqual({ value_type: "PERCENT", value: 12, priority: 4 });
     });
 
     test("falls back to default rule when no data", async () => {
