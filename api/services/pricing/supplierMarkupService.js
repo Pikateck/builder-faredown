@@ -109,7 +109,11 @@ function buildPricingBreakdown({
     discount: Number(discount || 0),
   };
   const total =
-    breakdown.base + breakdown.taxes + breakdown.fees + breakdown.markup - breakdown.discount;
+    breakdown.base +
+    breakdown.taxes +
+    breakdown.fees +
+    breakdown.markup -
+    breakdown.discount;
 
   return {
     final_price: {

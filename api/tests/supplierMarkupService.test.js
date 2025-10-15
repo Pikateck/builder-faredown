@@ -63,13 +63,19 @@ describe("supplierMarkupService", () => {
 
   describe("applyMarkupToAmount", () => {
     test("applies percentage markup", () => {
-      const result = applyMarkupToAmount(100, { value_type: "PERCENT", value: 10 });
+      const result = applyMarkupToAmount(100, {
+        value_type: "PERCENT",
+        value: 10,
+      });
       expect(result.finalAmount).toBe(110);
       expect(result.markupAmount).toBe(10);
     });
 
     test("applies flat markup", () => {
-      const result = applyMarkupToAmount(200, { value_type: "FLAT", value: 25 });
+      const result = applyMarkupToAmount(200, {
+        value_type: "FLAT",
+        value: 25,
+      });
       expect(result.finalAmount).toBe(225);
       expect(result.markupAmount).toBe(25);
     });

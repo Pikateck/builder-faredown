@@ -106,7 +106,8 @@ async function getMarkupData(
  */
 function applyMarkup(basePrice, markupData) {
   const { finalAmount, markupAmount } = applyMarkupToAmount(basePrice, {
-    value_type: markupData.value_type ||
+    value_type:
+      markupData.value_type ||
       (markupData.markup_type === "fixed" ? "FLAT" : "PERCENT"),
     value:
       markupData.value !== undefined
@@ -641,7 +642,11 @@ router.get("/search", async (req, res) => {
           markupData,
         );
 
-        let promoResult = { promoApplied: false, discount: 0, finalPrice: markedUpPrice };
+        let promoResult = {
+          promoApplied: false,
+          discount: 0,
+          finalPrice: markedUpPrice,
+        };
         if (promoCode) {
           promoResult = await applyPromoCode(
             markedUpPrice,
@@ -698,7 +703,8 @@ router.get("/search", async (req, res) => {
 
         const pricingHash = buildPricingHash({
           supplier,
-          supplier_reference: product.id || product.offerId || canonicalItineraryId,
+          supplier_reference:
+            product.id || product.offerId || canonicalItineraryId,
           total: pricing.final_price.amount,
           currency,
           departure: departureDate,

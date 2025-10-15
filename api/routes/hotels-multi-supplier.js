@@ -362,7 +362,13 @@ function buildAvailableRoom(roomTypes, hotel) {
   };
 }
 
-function buildPriceBreakdown(bestRate, finalPrice, nights, promoResult, currency) {
+function buildPriceBreakdown(
+  bestRate,
+  finalPrice,
+  nights,
+  promoResult,
+  currency,
+) {
   const base = Number(bestRate.originalPrice ?? bestRate.price ?? finalPrice);
   const taxes = Number(bestRate.taxes || 0);
   const fees = Number(bestRate.fees || 0);
@@ -377,7 +383,10 @@ function buildPriceBreakdown(bestRate, finalPrice, nights, promoResult, currency
     currency,
   });
 
-  const perNight = nights > 0 ? pricing.final_price.amount / nights : pricing.final_price.amount;
+  const perNight =
+    nights > 0
+      ? pricing.final_price.amount / nights
+      : pricing.final_price.amount;
 
   return {
     ...pricing.breakdown,
@@ -799,14 +808,14 @@ router.get("/search", async (req, res) => {
           frontend.supplierHotelId || frontend.code || frontend.id;
 
         const canonicalHotelId = `canon:hotel:${(
-          supplierHotelId ||
-          `${supplier}_${frontend.id}`
+          supplierHotelId || `${supplier}_${frontend.id}`
         )
           .toString()
           .toLowerCase()}`;
 
         const locationSource = hotel.location || hotel.geo || {};
-        const coordinates = locationSource.coordinates || locationSource.geo || {};
+        const coordinates =
+          locationSource.coordinates || locationSource.geo || {};
 
         const normalizedRecord = {
           id: crypto.randomUUID(),
