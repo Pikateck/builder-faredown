@@ -131,13 +131,19 @@ class SupplierAdapterManager {
    * Search across all flight suppliers
    */
   async searchAllFlights(searchParams, suppliers = ["AMADEUS", "TBO"]) {
+    const cached = await this.getCachedSearchResults("flight", searchParams);
+    if (cached?.results) {
+      this.logger.info("Returning cached flight search results");
+      const aggregated = this.aggregateResults(cached.results);
+      return { ...aggregated, cacheHit: true };
+    }
+
     const results = await this.executeParallelSearch(
       "flight",
       searchParams,
       suppliers,
     );
 
-    // Cache and store results
     await this.cacheSearchResults("flight", searchParams, results);
 
     return this.aggregateResults(results);
@@ -147,13 +153,19 @@ class SupplierAdapterManager {
    * Search across all hotel suppliers
    */
   async searchAllHotels(searchParams, suppliers = ["HOTELBEDS", "RATEHAWK"]) {
+    const cached = await this.getCachedSearchResults("hotel", searchParams);
+    if (cached?.results) {
+      this.logger.info("Returning cached hotel search results");
+      const aggregated = this.aggregateResults(cached.results);
+      return { ...aggregated, cacheHit: true };
+    }
+
     const results = await this.executeParallelSearch(
       "hotel",
       searchParams,
       suppliers,
     );
 
-    // Cache and store results
     await this.cacheSearchResults("hotel", searchParams, results);
 
     return this.aggregateResults(results);
@@ -163,13 +175,22 @@ class SupplierAdapterManager {
    * Search across all sightseeing suppliers
    */
   async searchAllSightseeing(searchParams, suppliers = ["HOTELBEDS"]) {
+    const cached = await this.getCachedSearchResults(
+      "sightseeing",
+      searchParams,
+    );
+    if (cached?.results) {
+      this.logger.info("Returning cached sightseeing search results");
+      const aggregated = this.aggregateResults(cached.results);
+      return { ...aggregated, cacheHit: true };
+    }
+
     const results = await this.executeParallelSearch(
       "sightseeing",
       searchParams,
       suppliers,
     );
 
-    // Cache and store results
     await this.cacheSearchResults("sightseeing", searchParams, results);
 
     return this.aggregateResults(results);
