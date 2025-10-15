@@ -40,9 +40,7 @@ async function resolveSupplierMarkup({
 
     if (markup) {
       const normalizedType =
-        typeof markup.type === "string"
-          ? markup.type.toUpperCase()
-          : "PERCENT";
+        typeof markup.type === "string" ? markup.type.toUpperCase() : "PERCENT";
       const numericValue = Number(markup.value);
       const markupValue = Number.isFinite(numericValue)
         ? numericValue
