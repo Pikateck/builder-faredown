@@ -225,6 +225,90 @@ class RateHawkAdapter extends BaseSupplierAdapter {
     });
   }
 
+  normalizeRegionId(value) {
+    if (value === null || value === undefined) {
+      return null;
+    }
+
+    if (typeof value === "number" && Number.isFinite(value)) {
+      return value;
+    }
+
+    const parsed = Number(String(value).trim());
+    return Number.isFinite(parsed) ? parsed : null;
+  }
+
+  createRegionCacheKey(candidate, language) {
+    return `${(language || "en").toLowerCase()}|${String(candidate)
+      .trim()
+      .toLowerCase()}`;
+  }
+
+  async resolveRegionId(candidate, language = "en") {
+    if (candidate === null || candidate === undefined) {
+      return null;
+    }
+
+    const numericCandidate = this.normalizeRegionId(candidate);
+    if (numericCandidate) {
+      return numericCandidate;
+    }
+
+    const candidateString = String(candidate).trim();
+    if (!candidateString) {
+      return null;
+    }
+
+    const cacheKey = this.createRegionCacheKey(candidateString, language);
+    if (this.regionCache.has(cacheKey)) {
+      return this.regionCache.get(cacheKey);
+    }
+
+    try {
+      const regions = await this.searchRegions(candidateString, language);
+      if (!Array.isArray(regions) || regions.length === 0) {
+        return null;
+      }
+
+      const normalizedCandidate = candidateString.toLowerCase();
+
+      const matchByCode = regions.find((region) => {
+        const codes = [
+          region.code,
+          region.iata,
+          region.city_code,
+          region.city_iata,
+          region.country_code,
+        ]
+          .filter(Boolean)
+          .map((value) => String(value).toLowerCase());
+
+        return codes.includes(normalizedCandidate);
+      });
+
+      const matchByName = regions.find((region) =>
+        region.name
+          ? String(region.name).toLowerCase().includes(normalizedCandidate)
+          : false,
+      );
+
+      const selected = matchByCode || matchByName || regions[0];
+      const regionId = this.normalizeRegionId(selected?.id);
+
+      if (regionId) {
+        this.regionCache.set(cacheKey, regionId);
+        return regionId;
+      }
+    } catch (error) {
+      this.logger.warn("Failed to resolve RateHawk region ID", {
+        candidate: candidateString,
+        error: error.message,
+      });
+    }
+
+    return null;
+  }
+
   /**
    * Get hotel details
    */
