@@ -30,15 +30,15 @@ async function resolveSupplierMarkup({
 
   try {
     const result = await db.query(
-      `SELECT * FROM get_effective_supplier_markup($1, $2, $3, $4, $5, $6, $7)`,
+      `SELECT * FROM pick_markup_rule($1, $2, $3, $4, $5, $6, $7)`,
       [
         supplier,
         productModule,
         resolvedMarket,
         resolvedCurrency,
+        resolvedChannel,
         resolvedHotelId,
         resolvedDestination,
-        resolvedChannel,
       ],
     );
 
