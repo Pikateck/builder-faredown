@@ -415,18 +415,47 @@ class BaseSupplierAdapter {
     this.config = { ...this.config, ...newConfig };
 
     if (newConfig.requestsPerSecond) {
-      this.rateLimit.requestsPerSecond = newConfig.requestsPerSecond;
+      const parsed = Number(newConfig.requestsPerSecond);
+      if (Number.isFinite(parsed) && parsed > 0) {
+        this.rateLimit.requestsPerSecond = parsed;
+      }
     }
 
     if (newConfig.maxRetries) {
-      this.rateLimit.maxRetries = newConfig.maxRetries;
+      const parsed = Number(newConfig.maxRetries);
+      if (Number.isFinite(parsed) && parsed > 0) {
+        this.rateLimit.maxRetries = parsed;
+      }
     }
 
     if (newConfig.retryDelay) {
-      this.rateLimit.retryDelay = newConfig.retryDelay;
+      const parsed = Number(newConfig.retryDelay);
+      if (Number.isFinite(parsed) && parsed >= 0) {
+        this.rateLimit.retryDelay = parsed;
+      }
     }
 
-    this.logger.info("Adapter configuration updated", newConfig);
+    if (newConfig.failureThreshold) {
+      const parsed = Number(newConfig.failureThreshold);
+      if (Number.isFinite(parsed) && parsed > 0) {
+        this.circuitBreaker.failureThreshold = parsed;
+      }
+    }
+
+    if (newConfig.recoveryTimeout) {
+      const parsed = Number(newConfig.recoveryTimeout);
+      if (Number.isFinite(parsed) && parsed >= 0) {
+        this.circuitBreaker.recoveryTimeout = parsed;
+      }
+    }
+
+    this.logger.info("Adapter configuration updated", {
+      requestsPerSecond: this.rateLimit.requestsPerSecond,
+      maxRetries: this.rateLimit.maxRetries,
+      retryDelay: this.rateLimit.retryDelay,
+      failureThreshold: this.circuitBreaker.failureThreshold,
+      recoveryTimeout: this.circuitBreaker.recoveryTimeout,
+    });
   }
 }
 
