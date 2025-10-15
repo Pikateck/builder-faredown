@@ -175,9 +175,12 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         language: languageCode,
         guests: occupancy,
         region_id: resolvedRegionId,
-        ids: hotelIds || null,
         currency: currency,
       };
+
+      if (hotelIds && Array.isArray(hotelIds) && hotelIds.length > 0) {
+        requestPayload.ids = hotelIds;
+      }
 
       this.logger.info("Searching RateHawk hotels", {
         destination,
@@ -187,10 +190,20 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         checkIn,
         checkOut,
         rooms: rooms.length,
+        payload: requestPayload,
       });
 
       const response = await this.executeWithRetry(async () => {
         return await this.httpClient.post("search/serp/hotels/", requestPayload);
+      }, {
+        onError: (error) => {
+          this.logger.error("RateHawk hotel search error details", {
+            status: error.response?.status,
+            statusText: error.response?.statusText,
+            data: error.response?.data,
+            payload: requestPayload,
+          });
+        },
       });
 
       if (response.data.status !== "ok") {
