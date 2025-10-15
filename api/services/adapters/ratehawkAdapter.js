@@ -525,7 +525,7 @@ class RateHawkAdapter extends BaseSupplierAdapter {
     } catch (error) {
       this.logger.error("Failed to transform RateHawk hotel:", {
         message: error.message,
-        hotelId: hotel?.id
+        hotelId: hotel?.id,
       });
       throw new Error(error.message || "Failed to transform hotel data");
     }
@@ -571,7 +571,7 @@ class RateHawkAdapter extends BaseSupplierAdapter {
     } catch (error) {
       this.logger.error("RateHawk health check failed:", {
         message: error.message,
-        code: error.code
+        code: error.code,
       });
       return {
         healthy: false,

@@ -9,16 +9,19 @@ RateHawk adapter was throwing: `Converting circular structure to JSON`
 ## Issues Fixed
 
 ### 1. ✅ Unwrapped HTTP Calls
+
 **Before:** Direct `httpClient.post()` and `httpClient.get()` calls threw raw axios errors
+
 ```javascript
 // ❌ Line 155 - Direct call
 const response = await this.httpClient.post("search/serp/hotels/", requestPayload);
 
-// ❌ Line 246 - Direct call  
+// ❌ Line 246 - Direct call
 const response = await this.httpClient.get("search/serp/region/", { params: {...} });
 ```
 
 **After:** All HTTP calls wrapped in `executeWithRetry` for proper error handling
+
 ```javascript
 // ✅ Line 155-160 - Wrapped with retry/circuit breaker
 const response = await this.executeWithRetry(async () => {
@@ -32,7 +35,9 @@ const response = await this.executeWithRetry(async () => {
 ```
 
 ### 2. ✅ Safe Error Logging
+
 **Before:** Full error objects logged (circular references)
+
 ```javascript
 // ❌ Line 522
 this.logger.error("Failed to transform RateHawk hotel:", error);
@@ -42,18 +47,19 @@ this.logger.error("RateHawk health check failed:", error);
 ```
 
 **After:** Only safe properties extracted before logging
+
 ```javascript
 // ✅ Line 526-529
 this.logger.error("Failed to transform RateHawk hotel:", {
   message: error.message,
-  hotelId: hotel?.id
+  hotelId: hotel?.id,
 });
 throw new Error(error.message || "Failed to transform hotel data");
 
 // ✅ Line 564-567
 this.logger.error("RateHawk health check failed:", {
   message: error.message,
-  code: error.code
+  code: error.code,
 });
 ```
 
@@ -68,12 +74,15 @@ this.logger.error("RateHawk health check failed:", {
 ## How the Fix Works
 
 ### executeWithRetry Protection
+
 When wrapped in `executeWithRetry`:
+
 1. **Circuit Breaker**: Prevents repeated failures
 2. **Retry Logic**: Exponential backoff (3 attempts by default)
 3. **Clean Errors**: Converts axios errors to simple Error objects with just `.message`
 
 ### Error Flow (Fixed)
+
 ```
 Axios Error (circular refs)
   ↓
@@ -89,6 +98,7 @@ No circular refs ✅
 ## Next Steps
 
 ### 1. Deploy to Render
+
 ```bash
 git add api/services/adapters/ratehawkAdapter.js
 git commit -m "fix: RateHawk circular JSON error - wrap HTTP calls and fix error logging"
@@ -98,12 +108,15 @@ git push origin main
 Render will auto-deploy in ~2 minutes.
 
 ### 2. Verify Fix
+
 After deployment, run:
+
 ```bash
 node reset-circuit-breakers.cjs
 ```
 
 **Expected Output:**
+
 ```
 ✅ RATEHAWK: CLOSED (healthy)
    No circular JSON error
@@ -111,6 +124,7 @@ node reset-circuit-breakers.cjs
 ```
 
 ### 3. Test RateHawk Hotels
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/hotels/search?\
 destination=Dubai&checkIn=2025-12-20&checkOut=2025-12-25&\
@@ -118,13 +132,14 @@ rooms=%5B%7B%22adults%22%3A2%7D%5D"
 ```
 
 Look for:
+
 ```json
 {
   "meta": {
     "suppliers": {
       "RATEHAWK": {
         "success": true,
-        "resultCount": 15  // Should have real results
+        "resultCount": 15 // Should have real results
       }
     }
   }
