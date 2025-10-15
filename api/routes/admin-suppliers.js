@@ -61,6 +61,179 @@ router.get("/health", async (req, res) => {
 });
 
 /**
+ * Get adapter metrics snapshot
+ */
+router.get("/metrics", async (req, res) => {
+  try {
+    const metrics = supplierAdapterManager.getAdapterMetrics();
+
+    res.json({
+      success: true,
+      data: metrics,
+    });
+  } catch (error) {
+    console.error("Error fetching supplier metrics:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+/**
+ * Reset supplier circuit breaker
+ */
+router.post("/:code/circuit/reset", async (req, res) => {
+  try {
+    const normalizedCode = String(req.params.code || "").toUpperCase();
+
+    const reset = supplierAdapterManager.resetAdapterCircuitBreaker(
+      normalizedCode,
+    );
+
+    if (!reset) {
+      return res.status(404).json({
+        success: false,
+        error: `Adapter not found for supplier: ${normalizedCode}`,
+      });
+    }
+
+    const metrics =
+      supplierAdapterManager.getAdapterMetrics().adapters[normalizedCode] ||
+      null;
+
+    res.json({
+      success: true,
+      data: {
+        supplier: normalizedCode,
+        circuitBreaker: metrics?.circuit_breaker || {
+          state: "CLOSED",
+          failures: 0,
+          last_failure: null,
+        },
+      },
+    });
+  } catch (error) {
+    console.error("Error resetting circuit breaker:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+/**
+ * Update supplier circuit breaker configuration
+ */
+router.post("/:code/circuit/config", async (req, res) => {
+  try {
+    const normalizedCode = String(req.params.code || "").toUpperCase();
+    const {
+      failureThreshold,
+      recoveryTimeout,
+      requestsPerSecond,
+      maxRetries,
+      retryDelay,
+    } = req.body || {};
+
+    const configUpdates = {};
+
+    if (failureThreshold !== undefined) {
+      const value = Number(failureThreshold);
+      if (!Number.isFinite(value) || value <= 0) {
+        return res.status(400).json({
+          success: false,
+          error: "failureThreshold must be a positive number",
+        });
+      }
+      configUpdates.failureThreshold = value;
+    }
+
+    if (recoveryTimeout !== undefined) {
+      const value = Number(recoveryTimeout);
+      if (!Number.isFinite(value) || value < 0) {
+        return res.status(400).json({
+          success: false,
+          error: "recoveryTimeout must be zero or a positive number",
+        });
+      }
+      configUpdates.recoveryTimeout = value;
+    }
+
+    if (requestsPerSecond !== undefined) {
+      const value = Number(requestsPerSecond);
+      if (!Number.isFinite(value) || value <= 0) {
+        return res.status(400).json({
+          success: false,
+          error: "requestsPerSecond must be a positive number",
+        });
+      }
+      configUpdates.requestsPerSecond = value;
+    }
+
+    if (maxRetries !== undefined) {
+      const value = Number(maxRetries);
+      if (!Number.isFinite(value) || value <= 0) {
+        return res.status(400).json({
+          success: false,
+          error: "maxRetries must be a positive number",
+        });
+      }
+      configUpdates.maxRetries = value;
+    }
+
+    if (retryDelay !== undefined) {
+      const value = Number(retryDelay);
+      if (!Number.isFinite(value) || value < 0) {
+        return res.status(400).json({
+          success: false,
+          error: "retryDelay must be zero or a positive number",
+        });
+      }
+      configUpdates.retryDelay = value;
+    }
+
+    if (Object.keys(configUpdates).length === 0) {
+      return res.status(400).json({
+        success: false,
+        error: "No configuration values provided",
+      });
+    }
+
+    const updated = supplierAdapterManager.updateAdapterConfig(
+      normalizedCode,
+      configUpdates,
+    );
+
+    if (!updated) {
+      return res.status(404).json({
+        success: false,
+        error: `Adapter not found for supplier: ${normalizedCode}`,
+      });
+    }
+
+    const metrics =
+      supplierAdapterManager.getAdapterMetrics().adapters[normalizedCode];
+
+    res.json({
+      success: true,
+      data: {
+        supplier: normalizedCode,
+        circuitBreaker: metrics.circuit_breaker,
+        rateLimit: metrics.rate_limit,
+        configuration: metrics.configuration,
+      },
+    });
+  } catch (error) {
+    console.error("Error updating circuit configuration:", error);
+    res.status(500).json({
+      success: false,
+      error: error.message,
+    });
+  }
+});
+
+/**
  * Get supplier by code
  */
 router.get("/:code", async (req, res) => {
