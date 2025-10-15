@@ -4,8 +4,15 @@
  */
 
 const express = require("express");
+const crypto = require("crypto");
 const db = require("../database/connection");
 const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
+const {
+  resolveSupplierMarkup,
+  applyMarkupToAmount,
+  buildPricingBreakdown,
+  buildPricingHash,
+} = require("../services/pricing/supplierMarkupService");
 
 const router = express.Router();
 
@@ -21,50 +28,23 @@ async function getSupplierMarkup(
   destination = "ALL",
   channel = "ALL",
 ) {
-  try {
-    const result = await db.query(
-      `SELECT * FROM get_effective_supplier_markup($1, $2, $3, $4, $5, $6, $7)`,
-      [
-        supplierCode,
-        productType,
-        market,
-        currency,
-        hotelId,
-        destination,
-        channel,
-      ],
-    );
-
-    if (result.rows.length > 0) {
-      return result.rows[0];
-    }
-
-    // Default markup if none found
-    return {
-      value_type: "PERCENT",
-      value: supplierCode === "ratehawk" ? 18.0 : 20.0,
-      priority: 999,
-    };
-  } catch (error) {
-    console.error("Error getting supplier markup:", error);
-    return {
-      value_type: "PERCENT",
-      value: 20.0,
-      priority: 999,
-    };
-  }
+  return resolveSupplierMarkup({
+    supplierCode,
+    module: productType,
+    market,
+    currency,
+    hotelId,
+    destination,
+    channel,
+  });
 }
 
 /**
  * Apply markup to hotel price
  */
 function applyMarkup(basePrice, markup) {
-  if (markup.value_type === "PERCENT") {
-    return basePrice * (1 + markup.value / 100);
-  } else if (markup.value_type === "FLAT") {
-    return basePrice + markup.value;
-  }
-  return basePrice;
+  const { finalAmount } = applyMarkupToAmount(Number(basePrice || 0), markup);
+  return finalAmount;
 }
 
 /**
@@ -382,19 +362,29 @@ function buildAvailableRoom(roomTypes, hotel) {
   };
 }
 
-function buildPriceBreakdown(bestRate, finalPrice, nights, promoResult) {
-  const base = bestRate.originalPrice ?? finalPrice;
-  const markupAmount = finalPrice - base;
-  const perNight = finalPrice / nights;
+function buildPriceBreakdown(bestRate, finalPrice, nights, promoResult, currency) {
+  const base = Number(bestRate.originalPrice ?? bestRate.price ?? finalPrice);
+  const taxes = Number(bestRate.taxes || 0);
+  const fees = Number(bestRate.fees || 0);
+  const rawMarkup = finalPrice - (base + taxes + fees);
+  const discount = Number(promoResult?.discount || 0);
+  const pricing = buildPricingBreakdown({
+    base,
+    taxes,
+    fees,
+    markup: rawMarkup,
+    discount,
+    currency,
+  });
+
+  const perNight = nights > 0 ? pricing.final_price.amount / nights : pricing.final_price.amount;
 
   return {
-    base,
-    markup: markupAmount,
-    taxes: bestRate.taxes || 0,
-    fees: bestRate.fees || 0,
-    discount: promoResult?.discount || 0,
+    ...pricing.breakdown,
     perNight,
-    total: finalPrice,
+    total: pricing.final_price.amount,
+    currency: pricing.final_price.currency,
+    pricing,
   };
 }
 
@@ -653,7 +643,7 @@ router.get("/search", async (req, res) => {
             .map((s) => s.trim().toUpperCase());
 
     console.log(
-      `📡 Searching across hotel suppliers: ${suppliersToUse.join(", ")}`,
+      `���� Searching across hotel suppliers: ${suppliersToUse.join(", ")}`,
     );
 
     // Execute parallel search across all enabled suppliers
