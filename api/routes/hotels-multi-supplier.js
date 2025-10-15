@@ -706,8 +706,23 @@ router.get("/search", async (req, res) => {
       });
     }
 
-    // Apply supplier-scoped markup, promo, and normalize structure
-    const standardizedHotels = await Promise.all(
+    const searchId = crypto.randomUUID();
+
+    const searchRecord = {
+      id: searchId,
+      destination: {
+        code: resolvedDestination,
+        name: destination,
+      },
+      check_in: checkIn,
+      check_out: checkOut,
+      rooms: roomsArray,
+      currency,
+      channel,
+      locale: req.query.locale || "en",
+    };
+
+    const processedHotels = await Promise.all(
       aggregatedResults.products.map(async (hotel) => {
         const supplier = (
           hotel.supplier ||
@@ -752,7 +767,7 @@ router.get("/search", async (req, res) => {
             : rate,
         );
 
-        return transformHotelForFrontend({
+        const frontend = transformHotelForFrontend({
           hotel,
           supplier,
           markup,
@@ -766,13 +781,187 @@ router.get("/search", async (req, res) => {
           market,
           channel,
         });
+
+        const priceBreakdown = frontend.priceBreakdown || {
+          base: 0,
+          taxes: 0,
+          fees: 0,
+          markup: 0,
+          discount: 0,
+          total: frontend.totalPrice || 0,
+          currency: frontend.currency || currency,
+        };
+
+        const pricingPayload =
+          frontend.pricingBreakdown ||
+          buildPricingBreakdown({
+            base: priceBreakdown.base,
+            taxes: priceBreakdown.taxes,
+            fees: priceBreakdown.fees,
+            markup: priceBreakdown.markup,
+            discount: priceBreakdown.discount,
+            currency: priceBreakdown.currency || currency,
+          });
+
+        const supplierHotelId =
+          frontend.supplierHotelId || frontend.code || frontend.id;
+
+        const canonicalHotelId = `canon:hotel:${(
+          supplierHotelId ||
+          `${supplier}_${frontend.id}`
+        )
+          .toString()
+          .toLowerCase()}`;
+
+        const locationSource = hotel.location || hotel.geo || {};
+        const coordinates = locationSource.coordinates || locationSource.geo || {};
+
+        const normalizedRecord = {
+          id: crypto.randomUUID(),
+          search_id: searchId,
+          canonical_hotel_id: canonicalHotelId,
+          name: frontend.name,
+          location: {
+            address: frontend.address,
+            destination: frontend.destinationName || destination,
+            geo: {
+              lat:
+                locationSource.latitude ||
+                locationSource.lat ||
+                coordinates.lat ||
+                null,
+              lng:
+                locationSource.longitude ||
+                locationSource.lon ||
+                coordinates.lon ||
+                coordinates.lng ||
+                null,
+            },
+          },
+          stars: frontend.starRating || null,
+          supplier_code: supplier,
+          supplier_hotel_id: supplierHotelId,
+          room: {
+            rate_key: frontend.rateKey,
+            room_types: frontend.roomTypes,
+            available_room: frontend.availableRoom,
+            nights: calculateStayNights(checkIn, checkOut),
+            promo_applied: frontend.promoApplied,
+          },
+          raw_price: Number(
+            (
+              Number(priceBreakdown.base || 0) +
+              Number(priceBreakdown.taxes || 0) +
+              Number(priceBreakdown.fees || 0)
+            ).toFixed(2),
+          ),
+          raw_currency: frontend.currency || currency,
+          priced: pricingPayload,
+          pricing_hash: buildPricingHash({
+            supplier,
+            supplier_hotel_id: supplierHotelId,
+            rate_key: frontend.rateKey,
+            check_in: checkIn,
+            check_out: checkOut,
+            total: pricingPayload.final_price.amount,
+            currency: pricingPayload.final_price.currency,
+          }),
+          ttl_expires_at: new Date(Date.now() + 60 * 60 * 1000).toISOString(),
+        };
+
+        return {
+          frontend,
+          normalized: normalizedRecord,
+        };
       }),
     );
+
+    const standardizedHotels = processedHotels.map((item) => item.frontend);
+    const normalizedRows = processedHotels.map((item) => item.normalized);
 
     // Sort by total price for consistent ordering
     standardizedHotels.sort(
       (a, b) => (a.totalPrice || 0) - (b.totalPrice || 0),
     );
+
+    await db.transaction(async (client) => {
+      await client.query(
+        `INSERT INTO hotel_searches (id, destination, check_in, check_out, rooms, currency, channel, locale)
+         VALUES ($1, $2::jsonb, $3, $4, $5::jsonb, $6, $7, $8)
+         ON CONFLICT (id) DO NOTHING`,
+        [
+          searchRecord.id,
+          JSON.stringify(searchRecord.destination),
+          searchRecord.check_in,
+          searchRecord.check_out,
+          JSON.stringify(searchRecord.rooms),
+          searchRecord.currency,
+          searchRecord.channel,
+          searchRecord.locale,
+        ],
+      );
+
+      for (const row of normalizedRows) {
+        await client.query(
+          `INSERT INTO hotels_inventory_master (
+            id,
+            search_id,
+            canonical_hotel_id,
+            name,
+            location,
+            stars,
+            supplier_code,
+            supplier_hotel_id,
+            room,
+            raw_price,
+            raw_currency,
+            priced,
+            pricing_hash,
+            ttl_expires_at
+          ) VALUES (
+            $1,
+            $2,
+            $3,
+            $4,
+            $5::jsonb,
+            $6,
+            $7,
+            $8,
+            $9::jsonb,
+            $10,
+            $11,
+            $12::jsonb,
+            $13,
+            $14
+          )
+          ON CONFLICT (pricing_hash) DO UPDATE SET
+            search_id = EXCLUDED.search_id,
+            name = EXCLUDED.name,
+            location = EXCLUDED.location,
+            stars = EXCLUDED.stars,
+            raw_price = EXCLUDED.raw_price,
+            raw_currency = EXCLUDED.raw_currency,
+            priced = EXCLUDED.priced,
+            ttl_expires_at = EXCLUDED.ttl_expires_at;`,
+          [
+            row.id,
+            row.search_id,
+            row.canonical_hotel_id,
+            row.name,
+            JSON.stringify(row.location),
+            row.stars,
+            row.supplier_code,
+            row.supplier_hotel_id,
+            JSON.stringify(row.room),
+            row.raw_price,
+            row.raw_currency,
+            JSON.stringify(row.priced),
+            row.pricing_hash,
+            row.ttl_expires_at,
+          ],
+        );
+      }
+    });
 
     // Update supplier metrics
     for (const [supplier, metrics] of Object.entries(
