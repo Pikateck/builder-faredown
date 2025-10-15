@@ -499,7 +499,17 @@ function transformHotelForFrontend({
     promoDetails: promoResult?.promoApplied
       ? promoResult?.promoDetails
       : undefined,
-    priceBreakdown,
+    priceBreakdown: {
+      base: priceSummary.base,
+      markup: priceSummary.markup,
+      taxes: priceSummary.taxes,
+      fees: priceSummary.fees,
+      discount: priceSummary.discount,
+      perNight: priceSummary.perNight,
+      total: priceSummary.total,
+      currency: priceSummary.currency,
+    },
+    pricingBreakdown,
     roomTypes,
     availableRoom,
     policyFlags: hotel.policyFlags || {},
