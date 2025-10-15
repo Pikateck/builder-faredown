@@ -197,8 +197,12 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       try {
         response = await this.executeWithRetry(async () => {
           try {
+            const endpoint = hotelIds && hotelIds.length > 0
+              ? "search/serp/hotels/"
+              : "search/serp/region/";
+
             const axiosResponse = await this.httpClient.post(
-              "search/serp/hotels/",
+              endpoint,
               requestPayload,
             );
             return axiosResponse;
