@@ -193,25 +193,47 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         payload: requestPayload,
       });
 
-      const response = await this.executeWithRetry(async () => {
-        return await this.httpClient.post("search/serp/hotels/", requestPayload);
-      }, {
-        onError: (error) => {
-          this.logger.error("RateHawk hotel search error details", {
-            status: error.response?.status,
-            statusText: error.response?.statusText,
-            data: error.response?.data,
-            payload: requestPayload,
-          });
-        },
-      });
+      let response;
+      try {
+        response = await this.executeWithRetry(async () => {
+          try {
+            const axiosResponse = await this.httpClient.post(
+              "search/serp/hotels/",
+              requestPayload,
+            );
+            return axiosResponse;
+          } catch (axiosError) {
+            this.logger.error("RateHawk API error", {
+              status: axiosError.response?.status,
+              statusText: axiosError.response?.statusText,
+              errorData: axiosError.response?.data,
+              requestPayload,
+            });
+            throw axiosError;
+          }
+        });
+      } catch (error) {
+        this.logger.error("RateHawk search failed after retries", {
+          error: error.message,
+          payload: requestPayload,
+        });
+        return [];
+      }
+
+      if (!response || !response.data) {
+        this.logger.warn("RateHawk returned invalid response structure");
+        return [];
+      }
 
       if (response.data.status !== "ok") {
         const message =
           response.data.error?.message ||
           response.data.error ||
           "Unknown error";
-        throw new Error(`RateHawk search failed: ${message}`);
+        this.logger.error(`RateHawk search failed: ${message}`, {
+          responseData: response.data,
+        });
+        return [];
       }
 
       const hotels = response.data.data?.hotels || [];
