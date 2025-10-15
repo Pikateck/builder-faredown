@@ -40,14 +40,6 @@ async function getSupplierMarkup(
 }
 
 /**
- * Apply markup to hotel price
- */
-function applyMarkup(basePrice, markup) {
-  const { finalAmount } = applyMarkupToAmount(Number(basePrice || 0), markup);
-  return finalAmount;
-}
-
-/**
  * Apply promo code discount for hotels
  */
 async function applyPromoCode(
