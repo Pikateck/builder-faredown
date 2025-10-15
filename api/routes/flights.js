@@ -3,6 +3,12 @@ const axios = require("axios");
 const crypto = require("crypto");
 const db = require("../database/connection");
 const router = express.Router();
+const {
+  resolveSupplierMarkup,
+  applyMarkupToAmount,
+  buildPricingBreakdown,
+  buildPricingHash,
+} = require("../services/pricing/supplierMarkupService");
 
 // Initialize supplier adapter manager at startup
 const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
@@ -62,59 +68,56 @@ async function getAmadeusAccessToken() {
 /**
  * Get markup for airline, route combination and supplier
  */
-async function getMarkupData(supplier, airline, route, cabinClass) {
-  try {
-    const query = `
-      SELECT markup_percentage, markup_type, base_markup
-      FROM airline_markups
-      WHERE airline_code = $1
-      AND (route = $2 OR route = 'ALL')
-      AND cabin_class = $3
-      AND (supplier_scope = $4 OR supplier_scope = 'all')
-      ORDER BY route DESC
-      LIMIT 1
-    `;
+async function getMarkupData(
+  supplier,
+  airline,
+  route,
+  cabinClass,
+  currency = "ALL",
+  market = "GLOBAL",
+) {
+  const resolvedSupplier = supplier || "amadeus";
+  const resolvedAirline = airline || "ALL";
+  const resolvedRoute = route || "ALL";
 
-    const result = await db.query(query, [
-      airline,
-      route,
-      cabinClass,
-      (supplier || "all").toLowerCase(),
-    ]);
+  const markup = await resolveSupplierMarkup({
+    supplierCode: resolvedSupplier,
+    module: "flights",
+    market,
+    currency,
+    hotelId: resolvedAirline.toLowerCase(),
+    destination: resolvedRoute,
+    channel: "web",
+  });
 
-    if (result.rows && result.rows.length > 0) {
-      return result.rows[0];
-    }
-
-    // Default markup if none found
-    return {
-      markup_percentage: 15.0,
-      markup_type: "percentage",
-      base_markup: 0,
-    };
-  } catch (error) {
-    console.error("Error getting markup data:", error);
-    return {
-      markup_percentage: 15.0,
-      markup_type: "percentage",
-      base_markup: 0,
-    };
+  if (markup.value_type) {
+    return markup;
   }
+
+  return {
+    value_type: "PERCENT",
+    value: 12,
+    priority: 999,
+  };
 }
 
 /**
  * Apply markup to flight price
  */
 function applyMarkup(basePrice, markupData) {
-  const { markup_percentage, markup_type, base_markup } = markupData;
+  const { finalAmount, markupAmount } = applyMarkupToAmount(basePrice, {
+    value_type: markupData.value_type ||
+      (markupData.markup_type === "fixed" ? "FLAT" : "PERCENT"),
+    value:
+      markupData.value !== undefined
+        ? markupData.value
+        : markupData.markup_percentage || markupData.base_markup || 0,
+  });
 
-  if (markup_type === "percentage") {
-    return basePrice * (1 + markup_percentage / 100);
-  } else if (markup_type === "fixed") {
-    return basePrice + base_markup;
-  }
-
-  return basePrice;
+  return {
+    finalAmount,
+    markupAmount,
+  };
 }
 
 /**
