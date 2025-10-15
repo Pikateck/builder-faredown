@@ -356,13 +356,13 @@ class RateHawkAdapter extends BaseSupplierAdapter {
   }
 
   /**
-   * Search regions for autocomplete
+   * Search regions for autocomplete using multicomplete endpoint
    */
   async searchRegions(query, language = "en") {
     await this.checkRateLimit("search_serp_region");
 
     try {
-      const response = await this.httpClient.post("search/serp/region/", {
+      const response = await this.httpClient.post("search/multicomplete/", {
         query,
         language,
       });
@@ -377,11 +377,7 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         return [];
       }
 
-      const regions =
-        response.data.data?.regions ||
-        response.data.data?.items ||
-        response.data.data ||
-        [];
+      const regions = response.data.data?.regions || [];
 
       return Array.isArray(regions) ? regions : [];
     } catch (error) {
