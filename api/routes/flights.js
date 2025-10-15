@@ -590,8 +590,29 @@ router.get("/search", async (req, res) => {
       });
     }
 
-    // Apply supplier-aware markup and promo to each result
-    const transformedFlights = await Promise.all(
+    const currency = req.query.currency || "INR";
+    const market = req.query.market || "GLOBAL";
+    const channel = req.query.channel || "web";
+
+    const searchId = crypto.randomUUID();
+    const searchRecord = {
+      id: searchId,
+      origin,
+      destination,
+      depart_date: departureDate,
+      return_date: tripType === "round_trip" ? returnDate : null,
+      pax: {
+        adults: parseInt(adults, 10) || 1,
+        children: parseInt(children, 10) || 0,
+        infants: 0,
+      },
+      cabin: cabinClass,
+      currency,
+      channel,
+      locale: req.query.locale || "en",
+    };
+
+    const processedFlights = await Promise.all(
       aggregatedResults.products.map(async (product) => {
         const supplier = (
           product.supplier ||
@@ -599,24 +620,25 @@ router.get("/search", async (req, res) => {
           "AMADEUS"
         ).toLowerCase();
 
-        // Get supplier-specific markup
         const route = `${product.origin || origin}-${product.destination || destination}`;
         const markupData = await getMarkupData(
           supplier,
           product.airlineCode || product.airline,
           route,
           cabinClass,
+          currency,
+          market,
         );
 
-        // Apply markup
-        const basePrice =
-          product.price?.total || product.price?.amount || product.price || 0;
-        const markedUpPrice = applyMarkup(basePrice, markupData);
+        const basePrice = Number(
+          product.price?.total || product.price?.amount || product.price || 0,
+        );
+        const { finalAmount: markedUpPrice, markupAmount } = applyMarkup(
+          basePrice,
+          markupData,
+        );
 
-        // Apply supplier-specific promo if provided
-        let finalPrice = markedUpPrice;
-        let promoResult = { promoApplied: false, discount: 0 };
-
+        let promoResult = { promoApplied: false, discount: 0, finalPrice: markedUpPrice };
         if (promoCode) {
           promoResult = await applyPromoCode(
             markedUpPrice,
@@ -624,49 +646,195 @@ router.get("/search", async (req, res) => {
             userId,
             supplier,
           );
-          finalPrice = promoResult.finalPrice;
         }
 
-        return {
+        const pricing = buildPricingBreakdown({
+          base: basePrice,
+          taxes: Number(product.price?.taxes || 0),
+          fees: Number(product.price?.fees || 0),
+          markup: markupAmount,
+          discount: promoResult.discount || 0,
+          currency,
+        });
+
+        const finalPrice = pricing.final_price.amount;
+
+        const transformed = {
           ...product,
           supplier,
           price: {
             original: basePrice,
             markedUp: markedUpPrice,
             final: finalPrice,
-            currency: product.price?.currency || "INR",
+            currency,
             breakdown: {
-              base: basePrice * 0.8,
-              taxes: basePrice * 0.15,
-              fees: basePrice * 0.05,
-              markup: markedUpPrice - basePrice,
-              discount: promoResult.discount,
-              total: finalPrice,
+              base: pricing.breakdown.base,
+              taxes: pricing.breakdown.taxes,
+              fees: pricing.breakdown.fees,
+              markup: pricing.breakdown.markup,
+              discount: pricing.breakdown.discount,
+              total: pricing.final_price.amount,
             },
           },
+          pricingBreakdown: pricing,
           markupApplied: markupData,
           promoApplied: promoResult.promoApplied,
           promoDetails: promoResult.promoDetails,
         };
+
+        const segmentData = product.segments || product.segment || [];
+        const itineraryHashBase = buildPricingHash({
+          supplier,
+          origin: product.origin || origin,
+          destination: product.destination || destination,
+          departure: product.departureTime || departureDate,
+          arrival: product.arrivalTime || returnDate,
+          flightNumber: product.flightNumber,
+        });
+        const canonicalItineraryId = `canon:flight:${itineraryHashBase}`;
+
+        const pricingHash = buildPricingHash({
+          supplier,
+          supplier_reference: product.id || product.offerId || canonicalItineraryId,
+          total: pricing.final_price.amount,
+          currency,
+          departure: departureDate,
+          origin,
+          destination,
+        });
+
+        const normalized = {
+          id: crypto.randomUUID(),
+          search_id: searchId,
+          canonical_itinerary_id: canonicalItineraryId,
+          supplier_code: supplier,
+          supplier_reference: product.id || product.offerId || null,
+          segment: Array.isArray(segmentData)
+            ? segmentData
+            : [segmentData].filter(Boolean),
+          fare: {
+            base: pricing.breakdown.base,
+            taxes: pricing.breakdown.taxes,
+            fees: pricing.breakdown.fees,
+            currency,
+          },
+          priced: pricing,
+          pricing_hash: pricingHash,
+        };
+
+        return {
+          frontend: transformed,
+          normalized,
+        };
       }),
     );
 
-    // Save search with supplier tags
+    const transformedFlights = processedFlights.map((item) => item.frontend);
+    const normalizedRows = processedFlights.map((item) => item.normalized);
+
+    await db.transaction(async (client) => {
+      await client.query(
+        `INSERT INTO flight_searches (
+          id,
+          origin,
+          destination,
+          depart_date,
+          return_date,
+          pax,
+          cabin,
+          currency,
+          channel,
+          locale
+        ) VALUES (
+          $1,
+          $2,
+          $3,
+          $4,
+          $5,
+          $6::jsonb,
+          $7,
+          $8,
+          $9,
+          $10
+        ) ON CONFLICT (id) DO NOTHING`,
+        [
+          searchRecord.id,
+          searchRecord.origin,
+          searchRecord.destination,
+          searchRecord.depart_date,
+          searchRecord.return_date,
+          JSON.stringify(searchRecord.pax),
+          searchRecord.cabin,
+          searchRecord.currency,
+          searchRecord.channel,
+          searchRecord.locale,
+        ],
+      );
+
+      for (const row of normalizedRows) {
+        await client.query(
+          `INSERT INTO flights_inventory_master (
+            id,
+            search_id,
+            canonical_itinerary_id,
+            supplier_code,
+            supplier_reference,
+            segment,
+            fare,
+            priced,
+            pricing_hash
+          ) VALUES (
+            $1,
+            $2,
+            $3,
+            $4,
+            $5,
+            $6::jsonb,
+            $7::jsonb,
+            $8::jsonb,
+            $9
+          )
+          ON CONFLICT (pricing_hash) DO UPDATE SET
+            search_id = EXCLUDED.search_id,
+            supplier_code = EXCLUDED.supplier_code,
+            supplier_reference = EXCLUDED.supplier_reference,
+            segment = EXCLUDED.segment,
+            fare = EXCLUDED.fare,
+            priced = EXCLUDED.priced;`,
+          [
+            row.id,
+            row.search_id,
+            row.canonical_itinerary_id,
+            row.supplier_code,
+            row.supplier_reference,
+            JSON.stringify(row.segment),
+            JSON.stringify(row.fare),
+            JSON.stringify(row.priced),
+            row.pricing_hash,
+          ],
+        );
+      }
+    });
+
     const fullSearchParams = {
       ...req.query,
+      currency,
+      market,
+      channel,
       cabinClass,
       tripType,
       suppliers: enabledSuppliers,
+      searchId,
     };
 
     await saveSearchToDatabase(fullSearchParams, transformedFlights);
     await logFlightSearch(req, fullSearchParams, transformedFlights);
 
-    // Return results
     res.json({
       success: true,
       data: transformedFlights,
       meta: {
+        searchId,
         totalResults: transformedFlights.length,
         searchParams: fullSearchParams,
         suppliers: aggregatedResults.supplierMetrics,
