@@ -152,10 +152,12 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         rooms: rooms.length,
       });
 
-      const response = await this.httpClient.post(
-        "search/serp/hotels/",
-        requestPayload,
-      );
+      const response = await this.executeWithRetry(async () => {
+        return await this.httpClient.post(
+          "search/serp/hotels/",
+          requestPayload,
+        );
+      });
 
       if (response.data.status !== "ok") {
         throw new Error(
@@ -243,11 +245,13 @@ class RateHawkAdapter extends BaseSupplierAdapter {
   async searchRegions(query, language = "en") {
     await this.checkRateLimit("search_serp_region");
 
-    const response = await this.httpClient.get("search/serp/region/", {
-      params: {
-        query,
-        language,
-      },
+    const response = await this.executeWithRetry(async () => {
+      return await this.httpClient.get("search/serp/region/", {
+        params: {
+          query,
+          language,
+        },
+      });
     });
 
     if (response.data.status !== "ok") {
@@ -519,8 +523,11 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         supplierCode: "ratehawk",
       };
     } catch (error) {
-      this.logger.error("Failed to transform RateHawk hotel:", error);
-      throw error;
+      this.logger.error("Failed to transform RateHawk hotel:", {
+        message: error.message,
+        hotelId: hotel?.id
+      });
+      throw new Error(error.message || "Failed to transform hotel data");
     }
   }
 
@@ -562,7 +569,10 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         timestamp: new Date().toISOString(),
       };
     } catch (error) {
-      this.logger.error("RateHawk health check failed:", error);
+      this.logger.error("RateHawk health check failed:", {
+        message: error.message,
+        code: error.code
+      });
       return {
         healthy: false,
         supplier: "RATEHAWK",
