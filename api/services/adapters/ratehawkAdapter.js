@@ -99,6 +99,9 @@ class RateHawkAdapter extends BaseSupplierAdapter {
     return await this.executeWithRetry(async () => {
       const {
         destination,
+        destinationCode,
+        destinationName,
+        rawDestination,
         checkIn,
         checkOut,
         rooms = [{ adults: 2, children: 0 }],
@@ -109,9 +112,8 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         hotelIds,
       } = searchParams;
 
-      // Check cache first
       const cacheKey = JSON.stringify({
-        destination,
+        destination: destination || destinationCode || destinationName || rawDestination,
         checkIn,
         checkOut,
         rooms,
@@ -124,11 +126,9 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         return cached.results;
       }
 
-      // Check rate limit
       await this.checkRateLimit("search_serp_hotels");
 
-      // Build occupancy array
-      const occupancy = rooms.map((room, index) => ({
+      const occupancy = rooms.map((room) => ({
         adults: room.adults,
         children:
           room.children > 0 && room.childAges
@@ -136,60 +136,89 @@ class RateHawkAdapter extends BaseSupplierAdapter {
             : [],
       }));
 
-      // Build request payload
+      const languageCode = typeof language === "string" ? language : "en";
+
+      let resolvedRegionId = this.normalizeRegionId(regionId);
+      if (!resolvedRegionId) {
+        const candidates = [
+          destination,
+          destinationCode,
+          destinationName,
+          rawDestination,
+        ];
+
+        for (const candidate of candidates) {
+          const candidateRegionId = await this.resolveRegionId(
+            candidate,
+            languageCode,
+          );
+          if (candidateRegionId) {
+            resolvedRegionId = candidateRegionId;
+            break;
+          }
+        }
+      }
+
+      if (!resolvedRegionId) {
+        this.logger.warn("RateHawk region ID could not be resolved", {
+          destination,
+          destinationCode,
+          destinationName,
+        });
+        return [];
+      }
+
       const requestPayload = {
         checkin: checkIn,
         checkout: checkOut,
-        residency: "in", // Guest residency (adjust based on user)
-        language: language,
+        residency: "in",
+        language: languageCode,
         guests: occupancy,
-        region_id: regionId || parseInt(destination) || null,
+        region_id: resolvedRegionId,
         ids: hotelIds || null,
         currency: currency,
       };
 
       this.logger.info("Searching RateHawk hotels", {
         destination,
+        destinationCode,
+        destinationName,
+        resolvedRegionId,
         checkIn,
         checkOut,
         rooms: rooms.length,
       });
 
       const response = await this.executeWithRetry(async () => {
-        return await this.httpClient.post(
-          "search/serp/hotels/",
-          requestPayload,
-        );
+        return await this.httpClient.post("search/serp/hotels/", requestPayload);
       });
 
       if (response.data.status !== "ok") {
-        throw new Error(
-          `RateHawk search failed: ${response.data.error || "Unknown error"}`,
-        );
+        const message =
+          response.data.error?.message ||
+          response.data.error ||
+          "Unknown error";
+        throw new Error(`RateHawk search failed: ${message}`);
       }
 
       const hotels = response.data.data?.hotels || [];
 
       this.logger.info(`RateHawk returned ${hotels.length} hotels`);
 
-      // Transform to our standard format
       const normalizedHotels = hotels
         .slice(0, maxResults)
         .map((hotel) => this.transformRateHawkHotel(hotel, checkIn, checkOut));
 
-      // Cache results
       this.searchCache.set(cacheKey, {
         results: normalizedHotels,
         timestamp: Date.now(),
       });
 
-      // Clean old cache entries
       if (this.searchCache.size > 100) {
         const oldestKeys = Array.from(this.searchCache.keys()).slice(0, 50);
         oldestKeys.forEach((key) => this.searchCache.delete(key));
       }
 
-      // Store in repository
       await this.storeProductsAndSnapshots(normalizedHotels, "hotel");
 
       return normalizedHotels;
