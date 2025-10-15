@@ -955,6 +955,10 @@ router.get("/search", async (req, res) => {
       }
     });
 
+    console.log(
+      `🗃️ Stored ${normalizedRows.length} hotel rows for search ${searchId} (currency: ${searchRecord.currency})`,
+    );
+
     // Update supplier metrics
     for (const [supplier, metrics] of Object.entries(
       aggregatedResults.supplierMetrics,
