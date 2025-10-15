@@ -819,6 +819,10 @@ router.get("/search", async (req, res) => {
       }
     });
 
+    console.log(
+      `🛫 Stored ${normalizedRows.length} flight itineraries for search ${searchId}`,
+    );
+
     const fullSearchParams = {
       ...req.query,
       currency,
