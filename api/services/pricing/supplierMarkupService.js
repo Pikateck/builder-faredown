@@ -16,34 +16,45 @@ async function resolveSupplierMarkup({
   module,
   market,
   currency,
-  hotelId,
-  destination,
   channel,
 }) {
   const supplier = normalizeContextValue(supplierCode).toLowerCase();
   const productModule = normalizeContextValue(module).toLowerCase();
   const resolvedMarket = normalizeContextValue(market);
-  const resolvedCurrency = normalizeContextValue(currency);
-  const resolvedHotelId = normalizeContextValue(hotelId);
-  const resolvedDestination = normalizeContextValue(destination);
   const resolvedChannel = normalizeContextValue(channel);
+  const resolvedCurrency = normalizeContextValue(currency);
 
   try {
     const result = await db.query(
-      `SELECT * FROM pick_markup_rule($1, $2, $3, $4, $5, $6, $7)`,
+      `SELECT pick_markup_rule($1, $2, $3, $4, $5) AS markup`,
       [
         supplier,
         productModule,
         resolvedMarket,
-        resolvedCurrency,
         resolvedChannel,
-        resolvedHotelId,
-        resolvedDestination,
+        resolvedCurrency,
       ],
     );
 
-    if (result.rows.length > 0) {
-      return result.rows[0];
+    const markup = result.rows[0]?.markup;
+
+    if (markup) {
+      const normalizedType =
+        typeof markup.type === "string"
+          ? markup.type.toUpperCase()
+          : "PERCENT";
+      const numericValue = Number(markup.value);
+      const markupValue = Number.isFinite(numericValue)
+        ? numericValue
+        : DEFAULT_MARKUP_PERCENT;
+      const numericPriority = Number(markup.priority);
+      const priority = Number.isFinite(numericPriority) ? numericPriority : 999;
+
+      return {
+        value_type: normalizedType,
+        value: markupValue,
+        priority,
+      };
     }
   } catch (error) {
     console.error("resolveSupplierMarkup failed", {
