@@ -4,23 +4,19 @@ const RateHawkAdapter = require("./services/adapters/ratehawkAdapter");
   const adapter = new RateHawkAdapter();
   try {
     const staticData = await adapter.getHotelStatic(3, 0);
-    const hotels = Array.isArray(staticData)
-      ? staticData
-      : Array.isArray(staticData?.hotels)
-        ? staticData.hotels
-        : Array.isArray(staticData?.data)
-          ? staticData.data
-          : [];
-
-    console.log("Hotel count:", hotels.length);
-    hotels.slice(0, 3).forEach((hotel, index) => {
-      console.log(`\nHotel #${index + 1}`);
-      console.log("ID:", hotel?.id);
-      console.log("Region ID:", hotel?.region_id);
-      console.log("City ID:", hotel?.city_id);
-      console.log("Country ID:", hotel?.country_id);
-      console.log("Name EN:", hotel?.name?.find?.((n) => n.lang === "en")?.value);
-    });
+    console.log("Static data type:", typeof staticData);
+    console.log("Keys:", staticData && typeof staticData === "object" ? Object.keys(staticData) : null);
+    if (staticData?.hotels) {
+      console.log("hotels length:", staticData.hotels.length);
+      console.log("Sample hotel keys:", Object.keys(staticData.hotels[0] || {}));
+      console.log("Sample hotel region:", staticData.hotels[0]?.region_id);
+    } else if (Array.isArray(staticData)) {
+      console.log("Array length:", staticData.length);
+      console.log("Sample keys:", Object.keys(staticData[0] || {}));
+      console.log("Sample region:", staticData[0]?.region_id);
+    } else {
+      console.log(JSON.stringify(staticData, null, 2));
+    }
   } catch (error) {
     console.error("Failed to fetch static data", error.response?.data || error);
   } finally {
