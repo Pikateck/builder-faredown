@@ -44,6 +44,9 @@ class RateHawkAdapter extends BaseSupplierAdapter {
     // Short-TTL cache for identical queries
     this.searchCache = new Map();
     this.cacheTTL = 300000; // 5 minutes
+
+    // Cache for resolved region identifiers
+    this.regionCache = new Map();
   }
 
   /**
