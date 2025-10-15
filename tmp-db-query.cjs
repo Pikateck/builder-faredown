@@ -12,12 +12,12 @@ const { Client } = require('pg');
     await client.connect();
 
     const searchResult = await client.query(
-      "SELECT COUNT(*)::int AS count FROM hotel_searches WHERE id = $1",
+      'SELECT COUNT(*)::int AS count FROM hotel_searches WHERE id = $1',
       [searchId],
     );
 
     const inventoryResult = await client.query(
-      "SELECT COUNT(*)::int AS count FROM hotels_inventory_master WHERE search_id = $1",
+      'SELECT COUNT(*)::int AS count FROM hotels_inventory_master WHERE search_id = $1',
       [searchId],
     );
 
