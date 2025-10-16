@@ -7,6 +7,8 @@
 const BaseSupplierAdapter = require("./baseSupplierAdapter");
 const axios = require("axios");
 const pool = require("../../database/connection");
+const HotelNormalizer = require("../normalization/hotelNormalizer");
+const HotelDedupAndMergeUnified = require("../merging/hotelDedupAndMergeUnified");
 
 class TBOAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
@@ -704,11 +706,114 @@ class TBOAdapter extends BaseSupplierAdapter {
   }
 
   /**
-   * Hotel search (TBO supports hotels, but not implementing here)
+   * Hotel search using TBO Hotel API
+   * Note: This is a stub implementation for Phase 3
+   * TBO requires separate hotel search credentials
    */
   async searchHotels(searchParams) {
-    this.logger.warn("Hotel search not implemented for TBO adapter yet");
-    return [];
+    try {
+      this.logger.info("TBO hotel search initiated", {
+        destination: searchParams.destination,
+        checkIn: searchParams.checkIn,
+        checkOut: searchParams.checkOut,
+      });
+
+      // For Phase 3, TBO hotel search would require:
+      // 1. Separate hotel API credentials
+      // 2. Hotel-specific search endpoint
+      // 3. Different authentication than flights
+
+      // For now, return empty array with log (can be enabled when TBO hotel creds available)
+      this.logger.warn("Hotel search not fully implemented for TBO (requires hotel-specific credentials)");
+      return [];
+    } catch (error) {
+      this.logger.error("TBO hotel search failed", {
+        error: error.message,
+        destination: searchParams.destination,
+      });
+      return [];
+    }
+  }
+
+  /**
+   * Normalize and persist TBO results to unified master hotel schema (Phase 3)
+   * Note: TBO hotel data structure (when available)
+   */
+  async persistToMasterSchema(hotels, searchContext = {}) {
+    try {
+      if (!hotels || hotels.length === 0) {
+        return { hotelsInserted: 0, offersInserted: 0 };
+      }
+
+      // Normalize hotels to TBO-based schema
+      const normalizedHotels = hotels.map((hotel) => {
+        const normalized = HotelNormalizer.normalizeTBOHotel(hotel, "TBO");
+        return {
+          ...normalized,
+          rawHotel: hotel, // Keep raw for accessing rates
+        };
+      });
+
+      // Extract rates/offers from each hotel
+      const normalizedOffers = [];
+      for (const hotelNorm of normalizedHotels) {
+        const hotel = hotelNorm.rawHotel;
+        const hotelId = hotel.HotelCode || hotel.Id;
+
+        // TBO: hotel.Rooms[].Rates[]
+        const rooms = hotel.Rooms || [];
+        for (const room of rooms) {
+          const rates = room.Rates || [];
+          for (const rate of rates) {
+            const offer = HotelNormalizer.normalizeTBORoomOffer(
+              rate,
+              hotelNorm.hotelMasterData.property_id,
+              "TBO",
+              {
+                checkin: searchContext.checkin,
+                checkout: searchContext.checkout,
+                adults: searchContext.adults,
+                children: searchContext.children,
+                currency: searchContext.currency,
+              },
+            );
+
+            if (offer) {
+              offer.supplier_hotel_id = hotelId;
+              // Add denormalized fields for easy querying
+              offer.hotel_name = hotel.HotelName || hotelNorm.hotelMasterData.hotel_name;
+              offer.city = searchContext.destination || hotelNorm.hotelMasterData.city;
+              normalizedOffers.push(offer);
+            }
+          }
+        }
+      }
+
+      this.logger.info("Extracted rates from TBO hotels", {
+        totalHotels: hotels.length,
+        totalOffers: normalizedOffers.length,
+      });
+
+      // Merge into unified Phase 3 tables with dedup logic
+      const mergeResult = await HotelDedupAndMergeUnified.mergeNormalizedResults(
+        normalizedHotels.map((h) => h.hotelMasterData),
+        normalizedOffers,
+        "TBO",
+      );
+
+      this.logger.info("Persisted TBO results to unified schema", {
+        hotelsInserted: mergeResult.hotelsInserted,
+        offersInserted: mergeResult.offersInserted,
+      });
+
+      return mergeResult;
+    } catch (error) {
+      this.logger.error("Error persisting TBO to unified schema", {
+        error: error.message,
+        stack: error.stack,
+      });
+      return { hotelsInserted: 0, offersInserted: 0, error: error.message };
+    }
   }
 
   /**
