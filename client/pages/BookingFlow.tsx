@@ -1016,7 +1016,7 @@ export default function BookingFlow() {
     updateTravellers,
     updateContactDetails,
     updateExtras,
-    setCurrentStep,
+    setCurrentStep: setLegacyCurrentStep,
     completeBooking,
     generateBookingData,
   } = useBooking();
@@ -1608,7 +1608,7 @@ export default function BookingFlow() {
     console.log("handleNextStep called, currentStep:", currentStep);
     if (currentStep < 5) {
       console.log("Moving to next step:", currentStep + 1);
-      setCurrentStep(currentStep + 1);
+      setEnhancedCurrentStep(currentStep + 1);
       // Scroll to top of page when navigating between steps
       window.scrollTo({ top: 0, behavior: "smooth" });
     } else if (currentStep === 5) {
@@ -3805,7 +3805,7 @@ export default function BookingFlow() {
                     if (currentStep === 1) {
                       navigate(-1); // Go back to previous page (flight results)
                     } else {
-                      setCurrentStep(Math.max(1, currentStep - 1));
+                      setEnhancedCurrentStep(Math.max(1, currentStep - 1));
                     }
                   }}
                   className="flex items-center justify-center w-full sm:w-auto"
