@@ -450,8 +450,7 @@ class RateHawkAdapter extends BaseSupplierAdapter {
   }
 
   /**
-   * Normalize and persist RateHawk results to master hotel schema
-   * Phase 1: Write to both old and new tables in parallel
+   * Normalize and persist RateHawk results to unified master hotel schema (Phase 1)
    */
   async persistToMasterSchema(hotels, rooms, searchContext = {}) {
     try {
@@ -468,6 +467,8 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       for (let i = 0; i < rooms.length; i++) {
         const room = rooms[i];
         const hotelId = room.hotel_id || hotels[i]?.id;
+        const hotelData = hotels[i];
+
         const hotel = normalizedHotels.find(
           (h) =>
             h &&
@@ -483,26 +484,29 @@ class RateHawkAdapter extends BaseSupplierAdapter {
           );
           if (offer) {
             offer.supplier_hotel_id = hotelId;
+            // Add denormalized fields for easy querying
+            offer.hotel_name = hotelData?.name || hotel.hotelMasterData.hotel_name;
+            offer.city = hotelData?.city || hotel.hotelMasterData.city;
             normalizedOffers.push(offer);
           }
         }
       }
 
-      // Merge into master tables with dedup logic
-      const mergeResult = await HotelDedupAndMerge.mergeNormalizedResults(
+      // Merge into unified Phase 1 tables with dedup logic
+      const mergeResult = await HotelDedupAndMergeUnified.mergeNormalizedResults(
         normalizedHotels.map((h) => h.hotelMasterData),
         normalizedOffers,
         "RATEHAWK",
       );
 
-      this.logger.info("Persisted RateHawk results to master schema", {
+      this.logger.info("Persisted RateHawk results to unified schema", {
         hotelsInserted: mergeResult.hotelsInserted,
         offersInserted: mergeResult.offersInserted,
       });
 
       return mergeResult;
     } catch (error) {
-      this.logger.error("Error persisting to master schema", {
+      this.logger.error("Error persisting to unified schema", {
         error: error.message,
       });
       return { hotelsInserted: 0, offersInserted: 0, error: error.message };
