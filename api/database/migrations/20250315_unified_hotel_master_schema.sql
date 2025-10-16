@@ -62,7 +62,7 @@ CREATE TABLE IF NOT EXISTS hotel_master (
 CREATE INDEX IF NOT EXISTS idx_hotel_giata ON hotel_master(giata_id);
 CREATE INDEX IF NOT EXISTS idx_hotel_chain_brand ON hotel_master(chain_code, brand_code);
 CREATE INDEX IF NOT EXISTS idx_hotel_city_country ON hotel_master(city, country);
-CREATE INDEX IF NOT EXISTS idx_hotel_geo ON hotel_master USING GIST (ll_to_earth(lat, lng));
+CREATE INDEX IF NOT EXISTS idx_hotel_coordinates ON hotel_master(lat, lng);
 
 -- 3. Supplier Mapping Table (bridge: our properties ↔ supplier IDs)
 CREATE TABLE IF NOT EXISTS hotel_supplier_map (
