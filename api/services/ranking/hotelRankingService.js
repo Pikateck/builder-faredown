@@ -18,9 +18,9 @@ class HotelRankingService {
           bed_type, refundable, free_cancellation, occupancy_adults,
           occupancy_children, inclusions_json, currency, price_total,
           price_per_night, rate_key_or_token, availability_count
-         FROM room_offer
+         FROM room_offer_unified
          WHERE property_id = $1
-         AND expires_at IS NULL OR expires_at > NOW()
+         AND (expires_at IS NULL OR expires_at > NOW())
          ORDER BY price_total ASC`,
         [propertyId],
       );
@@ -90,7 +90,7 @@ class HotelRankingService {
             ro.occupancy_children,
             ro.currency,
             ro.rate_key_or_token
-          FROM room_offer ro
+          FROM room_offer_unified ro
           WHERE 1 = 1
       `;
 
@@ -144,7 +144,7 @@ class HotelRankingService {
           COUNT(DISTINCT ro.offer_id) as offers_count,
           MIN(ro.price_total) as cheapest_price,
           MIN(ro.supplier_code) as cheapest_supplier
-        FROM hotel_master hm
+        FROM hotel_unified hm
         LEFT JOIN filtered_offers ro ON hm.property_id = ro.property_id
         WHERE hm.city = $${paramIndex} OR hm.country = $${paramIndex + 1}
       `;
