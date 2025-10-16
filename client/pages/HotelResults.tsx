@@ -412,7 +412,7 @@ export default function HotelResults() {
       };
 
       console.log(
-        "🔴 Searching live Hotelbeds API with params:",
+        "🏨 Searching multi-supplier hotel API with params:",
         searchRequest,
       );
 
@@ -421,6 +421,15 @@ export default function HotelResults() {
 
       if (results.length > 0) {
         console.log("✅ Hotels loaded successfully:", results.length, "hotels");
+
+        // Log supplier breakdown for debugging
+        const supplierCounts: Record<string, number> = {};
+        results.forEach((hotel) => {
+          const supplier = (hotel.supplierCode || hotel.supplier || "HOTELBEDS").toUpperCase();
+          supplierCounts[supplier] = (supplierCounts[supplier] || 0) + 1;
+        });
+        console.log("📊 Supplier breakdown:", supplierCounts);
+
         setHotels(transformHotelbedsData(results));
         setTotalResults(results.length);
         setIsLiveData(true); // The service handles live vs fallback internally
