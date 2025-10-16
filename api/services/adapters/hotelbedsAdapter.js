@@ -6,6 +6,8 @@
 const BaseSupplierAdapter = require("./baseSupplierAdapter");
 const axios = require("axios");
 const crypto = require("crypto");
+const HotelNormalizer = require("../normalization/hotelNormalizer");
+const HotelDedupAndMergeUnified = require("../merging/hotelDedupAndMergeUnified");
 
 class HotelbedsAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
@@ -369,6 +371,87 @@ class HotelbedsAdapter extends BaseSupplierAdapter {
 
       throw new Error("Invalid booking response from Hotelbeds");
     });
+  }
+
+  /**
+   * Normalize and persist Hotelbeds results to unified master hotel schema (Phase 2)
+   * Note: Hotelbeds returns hotels with nested rooms and rates
+   */
+  async persistToMasterSchema(hotels, searchContext = {}) {
+    try {
+      if (!hotels || hotels.length === 0) {
+        return { hotelsInserted: 0, offersInserted: 0 };
+      }
+
+      // Normalize hotels to TBO-based schema
+      const normalizedHotels = hotels.map((hotel) => {
+        const normalized = HotelNormalizer.normalizeHotelbedsHotel(hotel, "HOTELBEDS");
+        return {
+          ...normalized,
+          rawHotel: hotel, // Keep raw for accessing rates
+        };
+      });
+
+      // Extract rates/offers from each hotel
+      const normalizedOffers = [];
+      for (const hotelNorm of normalizedHotels) {
+        const hotel = hotelNorm.rawHotel;
+        const hotelId = hotel.code;
+
+        // Hotelbeds: hotel.rooms[].rates[]
+        const rooms = hotel.rooms || [];
+        for (const room of rooms) {
+          const rates = room.rates || [];
+          for (const rate of rates) {
+            const offer = HotelNormalizer.normalizeHotelbedsRoomOffer(
+              rate,
+              hotelNorm.hotelMasterData.property_id,
+              "HOTELBEDS",
+              {
+                checkin: searchContext.checkin,
+                checkout: searchContext.checkout,
+                adults: searchContext.adults,
+                children: searchContext.children,
+                currency: searchContext.currency,
+              },
+            );
+
+            if (offer) {
+              offer.supplier_hotel_id = hotelId;
+              // Add denormalized fields for easy querying
+              offer.hotel_name = hotel.name || hotelNorm.hotelMasterData.hotel_name;
+              offer.city = searchContext.destination || hotelNorm.hotelMasterData.city;
+              normalizedOffers.push(offer);
+            }
+          }
+        }
+      }
+
+      this.logger.info("Extracted rates from Hotelbeds hotels", {
+        totalHotels: hotels.length,
+        totalOffers: normalizedOffers.length,
+      });
+
+      // Merge into unified Phase 1 tables with dedup logic
+      const mergeResult = await HotelDedupAndMergeUnified.mergeNormalizedResults(
+        normalizedHotels.map((h) => h.hotelMasterData),
+        normalizedOffers,
+        "HOTELBEDS",
+      );
+
+      this.logger.info("Persisted Hotelbeds results to unified schema", {
+        hotelsInserted: mergeResult.hotelsInserted,
+        offersInserted: mergeResult.offersInserted,
+      });
+
+      return mergeResult;
+    } catch (error) {
+      this.logger.error("Error persisting Hotelbeds to unified schema", {
+        error: error.message,
+        stack: error.stack,
+      });
+      return { hotelsInserted: 0, offersInserted: 0, error: error.message };
+    }
   }
 
   /**
