@@ -52,7 +52,7 @@ const { Client } = require("pg");
     // 3. Sample hotels
     console.log("4️⃣  Sample hotels from hotel_unified (first 5):\n");
     const sampleHotels = await client.query(
-      `SELECT property_id, hotel_name, star_rating, review_score, price_total FROM hotel_unified WHERE city = 'Dubai'
+      `SELECT property_id, hotel_name, star_rating, review_score FROM hotel_unified WHERE city = 'Dubai'
        ORDER BY created_at DESC LIMIT 5`,
     );
 
