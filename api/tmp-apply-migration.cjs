@@ -6,7 +6,7 @@ const db = require("./database/connection");
     console.log("Applying Phase 1 master schema migration...\n");
 
     const migrationSQL = fs.readFileSync(
-      "./database/migrations/20250315_unified_hotel_master_schema.sql",
+      require("path").join(__dirname, "database/migrations/20250315_unified_hotel_master_schema.sql"),
       "utf-8",
     );
 
