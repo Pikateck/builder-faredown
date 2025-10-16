@@ -1334,7 +1334,7 @@ export default function HotelResults() {
                     {isLiveData && (
                       <div className="flex items-center gap-1 bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
                         <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                        🔴 LIVE HOTELBEDS
+                        🔴 LIVE {getActiveSuppliers()}
                       </div>
                     )}
                     {!isLiveData && filteredAndSortedHotels.length > 0 && (
@@ -1346,7 +1346,7 @@ export default function HotelResults() {
                   </div>
                   <p className="text-gray-600 mt-1 text-sm sm:text-base">
                     {isLiveData
-                      ? "Real-time hotel data from Hotelbeds API with live pricing"
+                      ? getSupplierDescription()
                       : "Enhanced mock data with realistic hotel information"}
                   </p>
                 </div>
