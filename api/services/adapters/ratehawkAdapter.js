@@ -8,7 +8,7 @@ const BaseSupplierAdapter = require("./baseSupplierAdapter");
 const axios = require("axios");
 const pool = require("../../database/connection");
 const HotelNormalizer = require("../normalization/hotelNormalizer");
-const HotelDedupAndMerge = require("../merging/hotelDedupAndMerge");
+const HotelDedupAndMergeUnified = require("../merging/hotelDedupAndMergeUnified");
 
 class RateHawkAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
