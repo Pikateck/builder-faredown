@@ -138,6 +138,9 @@ ON CONFLICT (supplier_code) DO NOTHING;
 -- Update Hotelbeds if already exists
 UPDATE supplier_master SET enabled = true WHERE supplier_code = 'HOTELBEDS';
 
+-- Update TBO if already exists
+UPDATE supplier_master SET enabled = true WHERE supplier_code = 'TBO';
+
 -- Initialize field mapping for RateHawk
 INSERT INTO supplier_field_mapping (supplier_code, tbo_field, supplier_field, transform_rule)
 VALUES
@@ -188,6 +191,32 @@ VALUES
   ('HOTELBEDS', 'price_per_night', 'pricePerNight', NULL),
   ('HOTELBEDS', 'free_cancellation', 'cancellationPolicies.refundable', NULL),
   ('HOTELBEDS', 'inclusions_json', 'inclusions', NULL)
+ON CONFLICT (supplier_code, tbo_field) DO NOTHING;
+
+-- Initialize field mapping for TBO
+INSERT INTO supplier_field_mapping (supplier_code, tbo_field, supplier_field, transform_rule)
+VALUES
+  ('TBO', 'hotel_name', 'HotelName', NULL),
+  ('TBO', 'address', 'Address', NULL),
+  ('TBO', 'city', 'CityName', NULL),
+  ('TBO', 'country', 'CountryCode', NULL),
+  ('TBO', 'postal_code', 'PostalCode', NULL),
+  ('TBO', 'lat', 'Latitude', NULL),
+  ('TBO', 'lng', 'Longitude', NULL),
+  ('TBO', 'star_rating', 'StarRating', NULL),
+  ('TBO', 'review_score', 'ReviewScore', NULL),
+  ('TBO', 'review_count', 'ReviewCount', NULL),
+  ('TBO', 'giata_id', 'GiataId', NULL),
+  ('TBO', 'thumbnail_url', 'ImageUrl', NULL),
+  ('TBO', 'room_name', 'RoomName', NULL),
+  ('TBO', 'board_basis', 'MealType', NULL),
+  ('TBO', 'bed_type', 'BedType', NULL),
+  ('TBO', 'price_base', 'BasePrice', NULL),
+  ('TBO', 'price_taxes', 'Taxes', NULL),
+  ('TBO', 'price_total', 'TotalPrice', NULL),
+  ('TBO', 'price_per_night', 'PricePerNight', NULL),
+  ('TBO', 'free_cancellation', 'IsRefundable', NULL),
+  ('TBO', 'inclusions_json', 'Inclusions', NULL)
 ON CONFLICT (supplier_code, tbo_field) DO NOTHING;
 
 COMMIT;
