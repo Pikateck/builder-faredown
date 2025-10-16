@@ -243,8 +243,9 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       }
 
       const hotels = response.data.data?.hotels || [];
+      const rooms = response.data.data?.rooms || [];
 
-      this.logger.info(`RateHawk returned ${hotels.length} hotels`);
+      this.logger.info(`RateHawk returned ${hotels.length} hotels and ${rooms.length} room offers`);
 
       const normalizedHotels = hotels
         .slice(0, maxResults)
@@ -261,6 +262,21 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       }
 
       await this.storeProductsAndSnapshots(normalizedHotels, "hotel");
+
+      // Phase 1: Persist to master schema in parallel (non-blocking)
+      try {
+        await this.persistToMasterSchema(hotels, rooms, {
+          checkin: checkIn,
+          checkout: checkOut,
+          adults: rooms[0]?.occupancy?.adults || rooms[0]?.adults || 2,
+          children: rooms[0]?.occupancy?.children?.length || 0,
+          currency,
+        });
+      } catch (error) {
+        this.logger.warn("Error persisting to master schema (non-blocking)", {
+          error: error.message,
+        });
+      }
 
       return normalizedHotels;
     });
