@@ -134,24 +134,48 @@ const { Client } = require("pg");
         ON CONFLICT (supplier_code) DO NOTHING`,
       },
       {
-        name: "Create indexes on hotel_master",
-        sql: `CREATE INDEX IF NOT EXISTS idx_hotel_giata ON hotel_master(giata_id);
-        CREATE INDEX IF NOT EXISTS idx_hotel_chain_brand ON hotel_master(chain_code, brand_code);
-        CREATE INDEX IF NOT EXISTS idx_hotel_city_country ON hotel_master(city, country);
-        CREATE INDEX IF NOT EXISTS idx_hotel_coordinates ON hotel_master(lat, lng)`,
+        name: "Create index: idx_hotel_giata",
+        sql: `CREATE INDEX IF NOT EXISTS idx_hotel_giata ON hotel_master(giata_id)`,
       },
       {
-        name: "Create indexes on hotel_supplier_map",
-        sql: `CREATE INDEX IF NOT EXISTS idx_map_property_id ON hotel_supplier_map(property_id);
-        CREATE INDEX IF NOT EXISTS idx_map_supplier_code ON hotel_supplier_map(supplier_code)`,
+        name: "Create index: idx_hotel_chain_brand",
+        sql: `CREATE INDEX IF NOT EXISTS idx_hotel_chain_brand ON hotel_master(chain_code, brand_code)`,
       },
       {
-        name: "Create indexes on room_offer",
-        sql: `CREATE INDEX IF NOT EXISTS idx_offer_property ON room_offer(property_id);
-        CREATE INDEX IF NOT EXISTS idx_offer_price ON room_offer(price_total, currency);
-        CREATE INDEX IF NOT EXISTS idx_offer_supplier ON room_offer(supplier_code);
-        CREATE INDEX IF NOT EXISTS idx_offer_expires ON room_offer(expires_at);
-        CREATE INDEX IF NOT EXISTS idx_offer_search ON room_offer(search_checkin, search_checkout)`,
+        name: "Create index: idx_hotel_city_country",
+        sql: `CREATE INDEX IF NOT EXISTS idx_hotel_city_country ON hotel_master(city, country)`,
+      },
+      {
+        name: "Create index: idx_hotel_coordinates",
+        sql: `CREATE INDEX IF NOT EXISTS idx_hotel_coordinates ON hotel_master(lat, lng)`,
+      },
+      {
+        name: "Create index: idx_map_property_id",
+        sql: `CREATE INDEX IF NOT EXISTS idx_map_property_id ON hotel_supplier_map(property_id)`,
+      },
+      {
+        name: "Create index: idx_map_supplier_code",
+        sql: `CREATE INDEX IF NOT EXISTS idx_map_supplier_code ON hotel_supplier_map(supplier_code)`,
+      },
+      {
+        name: "Create index: idx_offer_property",
+        sql: `CREATE INDEX IF NOT EXISTS idx_offer_property ON room_offer(property_id)`,
+      },
+      {
+        name: "Create index: idx_offer_price",
+        sql: `CREATE INDEX IF NOT EXISTS idx_offer_price ON room_offer(price_total, currency)`,
+      },
+      {
+        name: "Create index: idx_offer_supplier",
+        sql: `CREATE INDEX IF NOT EXISTS idx_offer_supplier ON room_offer(supplier_code)`,
+      },
+      {
+        name: "Create index: idx_offer_expires",
+        sql: `CREATE INDEX IF NOT EXISTS idx_offer_expires ON room_offer(expires_at)`,
+      },
+      {
+        name: "Create index: idx_offer_search",
+        sql: `CREATE INDEX IF NOT EXISTS idx_offer_search ON room_offer(search_checkin, search_checkout)`,
       },
     ];
 
