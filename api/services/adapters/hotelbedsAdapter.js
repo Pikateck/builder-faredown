@@ -140,6 +140,23 @@ class HotelbedsAdapter extends BaseSupplierAdapter {
       this.logger.info(
         `Retrieved ${normalizedHotels.length} hotel offers from Hotelbeds`,
       );
+
+      // Phase 2: Persist to master schema in parallel (non-blocking)
+      try {
+        await this.persistToMasterSchema(hotels, {
+          checkin: searchParams.checkIn,
+          checkout: searchParams.checkOut,
+          adults: searchParams.rooms?.[0]?.adults || 2,
+          children: searchParams.rooms?.[0]?.children || 0,
+          currency: searchParams.currency,
+          destination: searchParams.destination,
+        });
+      } catch (error) {
+        this.logger.warn("Error persisting Hotelbeds to master schema (non-blocking)", {
+          error: error.message,
+        });
+      }
+
       return normalizedHotels;
     });
   }
