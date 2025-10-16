@@ -17,7 +17,7 @@ const { Client } = require("pg");
     console.log("Applying Phase 1 master schema migration...\n");
 
     const migrationSQL = fs.readFileSync(
-      require("path").join(__dirname, "database/migrations/20250315_unified_hotel_master_schema.sql"),
+      require("path").join(__dirname, "database/migrations/20250315_unified_hotel_master_schema_v2.sql"),
       "utf-8",
     );
 
