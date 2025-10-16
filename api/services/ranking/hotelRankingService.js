@@ -218,7 +218,7 @@ class HotelRankingService {
 
       let query = `
         SELECT COUNT(DISTINCT hm.property_id) as total
-        FROM hotel_master hm
+        FROM hotel_unified hm
         WHERE (hm.city = $1 OR hm.country = $2)
       `;
       const params = [city, country];
@@ -251,7 +251,7 @@ class HotelRankingService {
           occupancy_adults, occupancy_children, inclusions_json,
           currency, price_base, price_taxes, price_total, price_per_night,
           rate_key_or_token, availability_count, created_at
-         FROM room_offer
+         FROM room_offer_unified
          WHERE property_id = $1
          AND (expires_at IS NULL OR expires_at > NOW())
          ORDER BY price_total ASC`,
