@@ -104,7 +104,6 @@ import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { formatPriceInWords } from "@/lib/numberToWords";
 import { AuthModal } from "@/components/AuthModal";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
-import PaymentAuthGuard from "@/components/ui/PaymentAuthGuard";
 
 // Airline Logo Mapping - Professional Logos
 const airlineLogos = {
