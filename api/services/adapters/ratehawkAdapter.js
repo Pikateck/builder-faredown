@@ -115,7 +115,8 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       } = searchParams;
 
       const cacheKey = JSON.stringify({
-        destination: destination || destinationCode || destinationName || rawDestination,
+        destination:
+          destination || destinationCode || destinationName || rawDestination,
         checkIn,
         checkOut,
         rooms,
@@ -199,9 +200,10 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       try {
         response = await this.executeWithRetry(async () => {
           try {
-            const endpoint = hotelIds && hotelIds.length > 0
-              ? "search/serp/hotels/"
-              : "search/serp/region/";
+            const endpoint =
+              hotelIds && hotelIds.length > 0
+                ? "search/serp/hotels/"
+                : "search/serp/region/";
 
             const axiosResponse = await this.httpClient.post(
               endpoint,
@@ -245,7 +247,9 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       const hotels = response.data.data?.hotels || [];
       const responseRooms = response.data.data?.rooms || [];
 
-      this.logger.info(`RateHawk returned ${hotels.length} hotels and ${responseRooms.length} room offers`);
+      this.logger.info(
+        `RateHawk returned ${hotels.length} hotels and ${responseRooms.length} room offers`,
+      );
 
       const normalizedHotels = hotels
         .slice(0, maxResults)
@@ -461,7 +465,10 @@ class RateHawkAdapter extends BaseSupplierAdapter {
 
       // Normalize hotels to TBO-based schema
       const normalizedHotels = hotels.map((hotel) => {
-        const normalized = HotelNormalizer.normalizeRateHawkHotel(hotel, "RATEHAWK");
+        const normalized = HotelNormalizer.normalizeRateHawkHotel(
+          hotel,
+          "RATEHAWK",
+        );
         return {
           ...normalized,
           rawHotel: hotel, // Keep raw for accessing rates
@@ -486,7 +493,8 @@ class RateHawkAdapter extends BaseSupplierAdapter {
           if (offer) {
             offer.supplier_hotel_id = hotelId;
             // Add denormalized fields for easy querying
-            offer.hotel_name = hotel.name || hotelNorm.hotelMasterData.hotel_name;
+            offer.hotel_name =
+              hotel.name || hotelNorm.hotelMasterData.hotel_name;
             offer.city = hotel.region?.name || hotelNorm.hotelMasterData.city;
             normalizedOffers.push(offer);
           }
@@ -499,11 +507,12 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       });
 
       // Merge into unified Phase 1 tables with dedup logic
-      const mergeResult = await HotelDedupAndMergeUnified.mergeNormalizedResults(
-        normalizedHotels.map((h) => h.hotelMasterData),
-        normalizedOffers,
-        "RATEHAWK",
-      );
+      const mergeResult =
+        await HotelDedupAndMergeUnified.mergeNormalizedResults(
+          normalizedHotels.map((h) => h.hotelMasterData),
+          normalizedOffers,
+          "RATEHAWK",
+        );
 
       this.logger.info("Persisted RateHawk results to unified schema", {
         hotelsInserted: mergeResult.hotelsInserted,

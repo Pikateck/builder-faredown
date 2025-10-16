@@ -4,7 +4,9 @@ const HotelRankingService = require("./services/ranking/hotelRankingService");
 
 (async () => {
   try {
-    console.log("\n=== PHASE 1 VERIFICATION: Unified Master Hotel Schema ===\n");
+    console.log(
+      "\n=== PHASE 1 VERIFICATION: Unified Master Hotel Schema ===\n",
+    );
 
     // 1. Reset RateHawk circuit breaker
     console.log("1. Resetting RateHawk circuit breaker...");
@@ -45,7 +47,9 @@ const HotelRankingService = require("./services/ranking/hotelRankingService");
     );
     console.log("   Suppliers:");
     suppliers.rows.forEach((row) => {
-      console.log(`   - ${row.supplier_code}: ${row.name} (enabled: ${row.enabled})`);
+      console.log(
+        `   - ${row.supplier_code}: ${row.name} (enabled: ${row.enabled})`,
+      );
     });
 
     // 5. Count hotels in hotel_master
@@ -100,7 +104,9 @@ const HotelRankingService = require("./services/ranking/hotelRankingService");
     );
     priceStats.rows.forEach((row) => {
       console.log(`   Currency: ${row.currency}`);
-      console.log(`   - Min: ${row.min_price}, Avg: ${row.avg_price}, Max: ${row.max_price}`);
+      console.log(
+        `   - Min: ${row.min_price}, Avg: ${row.avg_price}, Max: ${row.max_price}`,
+      );
       console.log(`   - Total offers: ${row.total}`);
     });
 
@@ -166,9 +172,7 @@ const HotelRankingService = require("./services/ranking/hotelRankingService");
 
     // 12. SQL verification queries
     console.log("\n12. SQL verification queries (copy-paste ready):");
-    console.log(
-      `\nSELECT COUNT(*) FROM hotel_master WHERE city = 'Dubai';`,
-    );
+    console.log(`\nSELECT COUNT(*) FROM hotel_master WHERE city = 'Dubai';`);
     console.log(
       `SELECT COUNT(*) FROM room_offer ro JOIN hotel_master hm ON ro.property_id = hm.property_id WHERE hm.city = 'Dubai';`,
     );

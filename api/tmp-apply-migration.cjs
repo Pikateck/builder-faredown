@@ -6,7 +6,10 @@ const db = require("./database/connection");
     console.log("Applying Phase 1 master schema migration...\n");
 
     const migrationSQL = fs.readFileSync(
-      require("path").join(__dirname, "database/migrations/20250315_unified_hotel_master_schema.sql"),
+      require("path").join(
+        __dirname,
+        "database/migrations/20250315_unified_hotel_master_schema.sql",
+      ),
       "utf-8",
     );
 
@@ -32,7 +35,9 @@ const db = require("./database/connection");
     const suppliers = await db.query(
       "SELECT COUNT(*) as count FROM supplier_master",
     );
-    console.log(`\nSupplier master initialized with ${suppliers.rows[0].count} rows`);
+    console.log(
+      `\nSupplier master initialized with ${suppliers.rows[0].count} rows`,
+    );
 
     const mappings = await db.query(
       "SELECT COUNT(*) as count FROM supplier_field_mapping",

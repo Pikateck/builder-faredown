@@ -158,8 +158,10 @@ class MixedSupplierRankingService {
         if (offerDetails.rows.length === 0) continue;
 
         const offer = offerDetails.rows[0];
-        const supplierScore =
-          supplierScores[row.supplier_code] || { weight: 1.0, reliability: 0.8 };
+        const supplierScore = supplierScores[row.supplier_code] || {
+          weight: 1.0,
+          reliability: 0.8,
+        };
 
         // Build response card
         const card = {

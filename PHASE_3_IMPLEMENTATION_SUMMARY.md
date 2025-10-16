@@ -1,4 +1,5 @@
 # Phase 3 Implementation Summary
+
 ## TBO Integration & Real-Time Synchronization
 
 **Status:** ✅ COMPLETE & PRODUCTION READY
@@ -91,6 +92,7 @@ FRONTEND
 ### 1. TBO Adapter Enhancement (api/services/adapters/tboAdapter.js)
 
 **New Method Added:**
+
 ```javascript
 async persistToMasterSchema(hotels, searchContext)
 ```
@@ -102,6 +104,7 @@ async persistToMasterSchema(hotels, searchContext)
 - Ready for TBO hotel API implementation
 
 **Integration Point:**
+
 ```javascript
 // In searchHotels() method after response transform:
 await this.persistToMasterSchema(hotels, {
@@ -117,11 +120,13 @@ await this.persistToMasterSchema(hotels, {
 ### 2. Database Configuration Updates
 
 **supplier_master Updates:**
+
 ```sql
 UPDATE supplier_master SET enabled = true WHERE supplier_code = 'TBO';
 ```
 
 **TBO Field Mappings (New):**
+
 ```sql
 INSERT INTO supplier_field_mapping (supplier_code, tbo_field, supplier_field)
 VALUES
@@ -135,6 +140,7 @@ VALUES
 ```
 
 **Impact:**
+
 - Zero schema changes (additive only)
 - No breaking migrations
 - All Phase 1 & 2 data preserved
@@ -147,6 +153,7 @@ VALUES
 **Core Features:**
 
 #### Non-Blocking Async Architecture
+
 ```javascript
 // Each supplier runs independently in background
 startAllSyncJobs() {
@@ -157,6 +164,7 @@ startAllSyncJobs() {
 ```
 
 #### Stale Offer Detection
+
 ```javascript
 async getStaleOffers(supplierCode, maxAgeMs) {
   // Finds offers older than 2 hours
@@ -166,6 +174,7 @@ async getStaleOffers(supplierCode, maxAgeMs) {
 ```
 
 #### Graceful Failure Handling
+
 ```javascript
 // Each supplier sync runs independently
 // If RateHawk fails → Hotelbeds/TBO continue
@@ -174,6 +183,7 @@ async getStaleOffers(supplierCode, maxAgeMs) {
 ```
 
 #### Rate Soft Expiration
+
 ```javascript
 // Old rates marked as expired
 // Not deleted (audit trail preserved)
@@ -182,6 +192,7 @@ async getStaleOffers(supplierCode, maxAgeMs) {
 ```
 
 **Methods:**
+
 - `startAllSyncJobs()` - Initialize all supplier syncs
 - `startSupplierSync(code)` - Start single supplier sync
 - `syncSupplierRates(code)` - Perform rate refresh
@@ -191,12 +202,13 @@ async getStaleOffers(supplierCode, maxAgeMs) {
 - `getSupplierSyncStatus()` - Health/status check
 
 **Configuration:**
+
 ```javascript
 syncConfig = {
   RATEHAWK: { intervalMs: 3600000, maxAge: 7200000 }, // 1hr sync, 2hr max
   HOTELBEDS: { intervalMs: 3600000, maxAge: 7200000 },
   TBO: { intervalMs: 3600000, maxAge: 7200000 },
-}
+};
 ```
 
 ### 4. Multi-Supplier Ranking (Existing, Now 3-Supplier Ready)
@@ -204,12 +216,14 @@ syncConfig = {
 **File:** `api/services/ranking/mixedSupplierRankingService.js`
 
 **Enhanced for Phase 3:**
+
 - Supports all 3 suppliers in single ranking query
 - Maintains cheapest-price-first ranking
 - Deduplication works across all suppliers
 - Supplier alternatives show all 3 options
 
 **Key Methods:**
+
 - `searchMultiSupplier()` - Rank across all suppliers
 - `getPropertySupplierAlternatives()` - Show all 3 supplier prices
 - `getSupplierMetrics()` - Track each supplier's performance
@@ -219,6 +233,7 @@ syncConfig = {
 **File:** `api/services/normalization/hotelNormalizer.js`
 
 **Methods (Already Implemented):**
+
 ```javascript
 static normalizeTBOHotel(rawHotel) { }
 static normalizeTBORoomOffer(rawOffer, propertyId, searchContext) { }
@@ -239,6 +254,7 @@ static normalizeTBORoomOffer(rawOffer, propertyId, searchContext) { }
 ## Data Flow (3-Supplier Example)
 
 ### 1. Search Initiated
+
 ```
 POST /api/hotels/search
 {
@@ -251,20 +267,23 @@ POST /api/hotels/search
 ```
 
 ### 2. Adapter Manager Orchestrates
+
 ```javascript
 Promise.all([
-  ratehawkAdapter.searchHotels(params),    // 2.2s
-  hotelbedsAdapter.searchHotels(params),   // 2.1s
-  tboAdapter.searchHotels(params)          // 2.3s
-])
+  ratehawkAdapter.searchHotels(params), // 2.2s
+  hotelbedsAdapter.searchHotels(params), // 2.1s
+  tboAdapter.searchHotels(params), // 2.3s
+]);
 ```
 
 ### 3. Each Adapter Normalizes
+
 - RateHawk: 189 hotels → 567 offers
 - Hotelbeds: 156 hotels → 312 offers
 - TBO: 145 hotels → 289 offers (when available)
 
 ### 4. Persist in Parallel (Non-Blocking)
+
 ```javascript
 // Each adapter calls in background
 // Searches return immediately
@@ -275,6 +294,7 @@ persistToMasterSchema() → mergeNormalizedResults()
 ```
 
 ### 5. Unified Tables Updated
+
 ```sql
 hotel_unified:           +236 new hotels (from 3 suppliers)
 room_offer_unified:      +1,168 new offers (from 3 suppliers)
@@ -282,23 +302,25 @@ hotel_supplier_map_unified: +263 new mappings
 ```
 
 ### 6. Frontend Calls Ranking
+
 ```
 GET /api/hotels/search/ranked?city=Dubai&suppliers=RATEHAWK,HOTELBEDS,TBO
 ```
 
 ### 7. Ranking Returns Sorted Results
+
 ```json
 [
   {
     "hotel_name": "Hotel A",
     "price": 1500,
-    "supplier": "HOTELBEDS",  // Cheapest
-    "alternatives": true      // Also available on RateHawk/TBO
+    "supplier": "HOTELBEDS", // Cheapest
+    "alternatives": true // Also available on RateHawk/TBO
   },
   {
     "hotel_name": "Hotel B",
     "price": 1800,
-    "supplier": "RATEHAWK",   // Cheapest
+    "supplier": "RATEHAWK", // Cheapest
     "alternatives": false
   }
 ]
@@ -536,15 +558,17 @@ Before deploying Phase 3 to production:
 ## Schema Deltas
 
 ### Changes Made
+
 ```sql
 ✅ supplier_master
    - TBO: enabled = false → true
-   
+
 ✅ supplier_field_mapping
    - Added 21 TBO field mappings (new rows only)
 ```
 
 ### No Breaking Changes
+
 - All Phase 1 & 2 tables unchanged
 - All existing data preserved
 - Zero schema modifications needed
@@ -555,11 +579,13 @@ Before deploying Phase 3 to production:
 ## Known Limitations & Future Work
 
 ### Current Limitations
+
 1. **TBO Hotel Search:** Requires separate hotel API credentials (not yet available)
 2. **Supplier Weighting:** Simple priority-based (can be user-configurable in Phase 4)
 3. **Rate Caching:** No client-side cache yet (can add in Phase 4)
 
 ### Phase 4 Opportunities
+
 1. **Advanced Supplier Weighting** - User preferences per supplier
 2. **Machine Learning Ranking** - Price prediction + value scoring
 3. **Rate Alerts** - Notify users of price drops
@@ -585,20 +611,24 @@ Phase 3 successfully extends the unified master hotel schema to support three su
 ## Quick Reference
 
 ### Files Modified (2)
+
 - ✅ `api/services/adapters/tboAdapter.js` - Added persistence layer
 - ✅ `api/database/migrations/20250315_unified_hotel_master_schema_v2.sql` - TBO config
 
 ### Files Created (2)
+
 - ✅ `api/services/sync/realtimeSyncService.js` - Sync engine (391 lines)
 - ✅ `api/tmp-phase3-dubai-test.cjs` - Verification script (307 lines)
 
 ### Test Command
+
 ```bash
 cd api
 node tmp-phase3-dubai-test.cjs
 ```
 
 ### Expected Output
+
 - 3 suppliers running in parallel
 - ~354 unique hotels after dedup
 - ~1,168 total offers across all suppliers

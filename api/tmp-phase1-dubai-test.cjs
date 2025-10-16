@@ -8,14 +8,18 @@ const { Client } = require("pg");
   });
 
   try {
-    console.log("\n=== PHASE 1: DUBAI HOTEL SEARCH & UNIFIED MASTER TABLE VERIFICATION ===\n");
+    console.log(
+      "\n=== PHASE 1: DUBAI HOTEL SEARCH & UNIFIED MASTER TABLE VERIFICATION ===\n",
+    );
 
     await client.connect();
 
     // 1. Run Dubai search
-    console.log("1️⃣  Running Dubai hotel search (RateHawk, Jan 12-15, 2026, 2 adults)...\n");
+    console.log(
+      "1️⃣  Running Dubai hotel search (RateHawk, Jan 12-15, 2026, 2 adults)...\n",
+    );
     supplierAdapterManager.resetAdapterCircuitBreaker("RATEHAWK");
-    
+
     const searchResult = await supplierAdapterManager.searchAllHotels(
       {
         destination: "DXB",
@@ -36,7 +40,10 @@ const { Client } = require("pg");
     );
 
     console.log(`Total results from aggregator: ${searchResult.totalResults}`);
-    console.log(`Supplier metrics: `, JSON.stringify(searchResult.supplierMetrics, null, 2));
+    console.log(
+      `Supplier metrics: `,
+      JSON.stringify(searchResult.supplierMetrics, null, 2),
+    );
 
     // Wait for master table writes
     console.log("\n2️⃣  Waiting for master table writes (3s)...");
@@ -57,8 +64,10 @@ const { Client } = require("pg");
     );
 
     if (sampleHotels.rows.length === 0) {
-      console.log("   (No hotels found in hotel_unified - checking room_offer_unified instead)\n");
-      
+      console.log(
+        "   (No hotels found in hotel_unified - checking room_offer_unified instead)\n",
+      );
+
       // Maybe hotels are in room_offer, let's check that
       const offers = await client.query(
         `SELECT property_id, hotel_name, price_total, currency, supplier_code
@@ -66,16 +75,22 @@ const { Client } = require("pg");
          WHERE city = 'Dubai' 
          ORDER BY created_at DESC LIMIT 5`,
       );
-      
+
       if (offers.rows.length > 0) {
         offers.rows.forEach((offer, idx) => {
-          console.log(`   ${idx + 1}. ${offer.hotel_name} | ${offer.currency} ${offer.price_total} | ${offer.supplier_code}`);
+          console.log(
+            `   ${idx + 1}. ${offer.hotel_name} | ${offer.currency} ${offer.price_total} | ${offer.supplier_code}`,
+          );
         });
       }
     } else {
       sampleHotels.rows.forEach((hotel, idx) => {
-        console.log(`   ${idx + 1}. ${hotel.hotel_name} (ID: ${hotel.property_id.substring(0, 8)}...)`);
-        console.log(`      Rating: ${hotel.star_rating}★ | Score: ${hotel.review_score}`);
+        console.log(
+          `   ${idx + 1}. ${hotel.hotel_name} (ID: ${hotel.property_id.substring(0, 8)}...)`,
+        );
+        console.log(
+          `      Rating: ${hotel.star_rating}★ | Score: ${hotel.review_score}`,
+        );
       });
     }
 
@@ -184,13 +199,17 @@ const { Client } = require("pg");
     console.log("\n9️⃣  SQL Verification Queries (copy-paste ready):\n");
     console.log("-- Count hotels in Dubai");
     console.log("SELECT COUNT(*) FROM hotel_unified WHERE city = 'Dubai';\n");
-    
+
     console.log("-- Count room offers in Dubai");
-    console.log("SELECT COUNT(*) FROM room_offer_unified WHERE city = 'Dubai';\n");
-    
+    console.log(
+      "SELECT COUNT(*) FROM room_offer_unified WHERE city = 'Dubai';\n",
+    );
+
     console.log("-- View sample data");
-    console.log("SELECT property_id, hotel_name, price_total, currency FROM room_offer_unified WHERE city = 'Dubai' LIMIT 10;\n");
-    
+    console.log(
+      "SELECT property_id, hotel_name, price_total, currency FROM room_offer_unified WHERE city = 'Dubai' LIMIT 10;\n",
+    );
+
     console.log("-- Cheapest hotels (ranked)");
     console.log(
       `SELECT DISTINCT ON (property_id) hu.hotel_name, ru.price_total, ru.currency, ru.supplier_code

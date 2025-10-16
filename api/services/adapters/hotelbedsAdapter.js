@@ -152,9 +152,12 @@ class HotelbedsAdapter extends BaseSupplierAdapter {
           destination: searchParams.destination,
         });
       } catch (error) {
-        this.logger.warn("Error persisting Hotelbeds to master schema (non-blocking)", {
-          error: error.message,
-        });
+        this.logger.warn(
+          "Error persisting Hotelbeds to master schema (non-blocking)",
+          {
+            error: error.message,
+          },
+        );
       }
 
       return normalizedHotels;
@@ -402,7 +405,10 @@ class HotelbedsAdapter extends BaseSupplierAdapter {
 
       // Normalize hotels to TBO-based schema
       const normalizedHotels = hotels.map((hotel) => {
-        const normalized = HotelNormalizer.normalizeHotelbedsHotel(hotel, "HOTELBEDS");
+        const normalized = HotelNormalizer.normalizeHotelbedsHotel(
+          hotel,
+          "HOTELBEDS",
+        );
         return {
           ...normalized,
           rawHotel: hotel, // Keep raw for accessing rates
@@ -436,8 +442,10 @@ class HotelbedsAdapter extends BaseSupplierAdapter {
             if (offer) {
               offer.supplier_hotel_id = hotelId;
               // Add denormalized fields for easy querying
-              offer.hotel_name = hotel.name || hotelNorm.hotelMasterData.hotel_name;
-              offer.city = searchContext.destination || hotelNorm.hotelMasterData.city;
+              offer.hotel_name =
+                hotel.name || hotelNorm.hotelMasterData.hotel_name;
+              offer.city =
+                searchContext.destination || hotelNorm.hotelMasterData.city;
               normalizedOffers.push(offer);
             }
           }
@@ -450,11 +458,12 @@ class HotelbedsAdapter extends BaseSupplierAdapter {
       });
 
       // Merge into unified Phase 1 tables with dedup logic
-      const mergeResult = await HotelDedupAndMergeUnified.mergeNormalizedResults(
-        normalizedHotels.map((h) => h.hotelMasterData),
-        normalizedOffers,
-        "HOTELBEDS",
-      );
+      const mergeResult =
+        await HotelDedupAndMergeUnified.mergeNormalizedResults(
+          normalizedHotels.map((h) => h.hotelMasterData),
+          normalizedOffers,
+          "HOTELBEDS",
+        );
 
       this.logger.info("Persisted Hotelbeds results to unified schema", {
         hotelsInserted: mergeResult.hotelsInserted,

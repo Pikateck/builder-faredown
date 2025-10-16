@@ -105,14 +105,19 @@ class RealTimeSyncService {
 
       // Get stale offers (older than max age)
       const config = this.syncConfig[supplierCode];
-      const staleOffers = await this.getStaleOffers(supplierCode, config.maxAge);
+      const staleOffers = await this.getStaleOffers(
+        supplierCode,
+        config.maxAge,
+      );
 
       if (staleOffers.length === 0) {
         this.logger.debug(`No stale offers to sync for ${supplierCode}`);
         return;
       }
 
-      this.logger.info(`Found ${staleOffers.length} stale offers for ${supplierCode}`);
+      this.logger.info(
+        `Found ${staleOffers.length} stale offers for ${supplierCode}`,
+      );
 
       // Group by property and search context
       const syncBatches = this.groupOffersBySyncContext(staleOffers);
@@ -239,7 +244,9 @@ class RealTimeSyncService {
         maxResults: 100,
       };
 
-      this.logger.debug(`Resyncing ${batch.properties.length} properties for ${supplierCode}`);
+      this.logger.debug(
+        `Resyncing ${batch.properties.length} properties for ${supplierCode}`,
+      );
 
       // Call adapter (will persist via persistToMasterSchema)
       const results = await adapter.searchHotels(searchParams);

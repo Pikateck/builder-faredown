@@ -185,12 +185,14 @@ class HotelRankingService {
           badges: {
             breakfastIncluded:
               offers?.cheapest_offer?.board_basis !== "RO" || false,
-            freeCancellation: offers?.cheapest_offer?.free_cancellation || false,
+            freeCancellation:
+              offers?.cheapest_offer?.free_cancellation || false,
           },
           price: {
             currency: offers?.cheapest_offer?.currency || currency,
             total: parseFloat(offers?.cheapest_offer?.price_total) || 0,
-            perNight: parseFloat(offers?.cheapest_offer?.price_per_night) || null,
+            perNight:
+              parseFloat(offers?.cheapest_offer?.price_per_night) || null,
           },
           cheapest_supplier: offers?.cheapest_offer?.supplier_code,
           offers_count: offers?.total_offers || 0,

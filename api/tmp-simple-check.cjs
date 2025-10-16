@@ -24,7 +24,9 @@ const { Client } = require("pg");
     const mapCount = await client.query(
       "SELECT COUNT(*) as count FROM hotel_supplier_map_unified",
     );
-    console.log(`hotel_supplier_map_unified total rows: ${mapCount.rows[0].count}`);
+    console.log(
+      `hotel_supplier_map_unified total rows: ${mapCount.rows[0].count}`,
+    );
 
     if (hotelCount.rows[0].count > 0) {
       console.log("\nSample hotels:");
@@ -43,7 +45,7 @@ const { Client } = require("pg");
       );
       offers.rows.forEach((o, i) => {
         console.log(
-          `  ${i + 1}. ${o.hotel_name} | ${o.currency} ${o.price_total}`
+          `  ${i + 1}. ${o.hotel_name} | ${o.currency} ${o.price_total}`,
         );
       });
     }

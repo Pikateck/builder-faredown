@@ -125,7 +125,9 @@ class HotelDedupAndMergeUnified {
             offer.free_cancellation,
             offer.occupancy_adults,
             offer.occupancy_children,
-            offer.inclusions_json ? JSON.stringify(offer.inclusions_json) : null,
+            offer.inclusions_json
+              ? JSON.stringify(offer.inclusions_json)
+              : null,
             offer.currency,
             offer.price_base,
             offer.price_taxes,

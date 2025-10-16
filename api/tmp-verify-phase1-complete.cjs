@@ -36,7 +36,9 @@ const { Client } = require("pg");
     });
 
     if (tables.rows.length < 4) {
-      console.log("\n⚠️  WARNING: Missing some Phase 1 tables. Running schema creation...");
+      console.log(
+        "\n⚠️  WARNING: Missing some Phase 1 tables. Running schema creation...",
+      );
       const createScript = require("./tmp-create-phase1-schema.cjs");
     }
 
@@ -55,7 +57,7 @@ const { Client } = require("pg");
     // 3. Data population check
     console.log("\n3. DATA POPULATION STATUS");
     console.log("-".repeat(80));
-    
+
     const hotelCount = await client.query(`
       SELECT COUNT(*) as count, COUNT(DISTINCT city) as cities, COUNT(DISTINCT supplier_code) as suppliers 
       FROM hotel_unified
@@ -148,10 +150,14 @@ const { Client } = require("pg");
       topHotels.rows.forEach((hotel, idx) => {
         const stars = hotel.star_rating ? `${hotel.star_rating}★` : "N/A";
         console.log(`  ${idx + 1}. ${hotel.hotel_name} (${stars})`);
-        console.log(`     Price: ${hotel.currency} ${hotel.price_total} | Room: ${hotel.room_name} | Supplier: ${hotel.supplier_code}`);
+        console.log(
+          `     Price: ${hotel.currency} ${hotel.price_total} | Room: ${hotel.room_name} | Supplier: ${hotel.supplier_code}`,
+        );
       });
     } else {
-      console.log("  (No hotels found in Dubai - Phase 1 data not yet populated)");
+      console.log(
+        "  (No hotels found in Dubai - Phase 1 data not yet populated)",
+      );
     }
 
     // 6. Schema validation
@@ -180,9 +186,16 @@ const { Client } = require("pg");
       ORDER BY ordinal_position
     `);
 
-    console.log(`\n  room_offer_unified columns (${offerColumns.rows.length}):`);
+    console.log(
+      `\n  room_offer_unified columns (${offerColumns.rows.length}):`,
+    );
     offerColumns.rows.forEach((col) => {
-      const isCritical = ["offer_id", "property_id", "price_total", "currency"].includes(col.column_name);
+      const isCritical = [
+        "offer_id",
+        "property_id",
+        "price_total",
+        "currency",
+      ].includes(col.column_name);
       const marker = isCritical ? "★" : " ";
       console.log(`    ${marker} ${col.column_name}: ${col.data_type}`);
     });
@@ -248,10 +261,20 @@ const { Client } = require("pg");
 
     const status = {
       schema_created: tables.rows.length >= 4 ? "✓ COMPLETE" : "✗ PENDING",
-      suppliers_configured: suppliers.rows.length >= 3 ? "✓ COMPLETE" : "✗ PENDING",
-      ratehawk_enabled: suppliers.rows.some((s) => s.supplier_code === "RATEHAWK" && s.enabled) ? "✓ YES" : "✗ NO",
-      hotelbeds_enabled: suppliers.rows.some((s) => s.supplier_code === "HOTELBEDS" && s.enabled) ? "✓ YES" : "✗ NO",
-      data_persisting: dubaiHotels.rows[0].count > 0 ? "✓ YES" : "✗ NO (not yet)",
+      suppliers_configured:
+        suppliers.rows.length >= 3 ? "✓ COMPLETE" : "✗ PENDING",
+      ratehawk_enabled: suppliers.rows.some(
+        (s) => s.supplier_code === "RATEHAWK" && s.enabled,
+      )
+        ? "✓ YES"
+        : "✗ NO",
+      hotelbeds_enabled: suppliers.rows.some(
+        (s) => s.supplier_code === "HOTELBEDS" && s.enabled,
+      )
+        ? "✓ YES"
+        : "✗ NO",
+      data_persisting:
+        dubaiHotels.rows[0].count > 0 ? "✓ YES" : "✗ NO (not yet)",
       normalization: hotelCount.rows[0].count > 0 ? "✓ WORKING" : "✗ PENDING",
       ranking_logic: "✓ READY",
     };

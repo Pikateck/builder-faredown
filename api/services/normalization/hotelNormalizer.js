@@ -110,8 +110,10 @@ class HotelNormalizer {
         refundable: rawOffer.refundable === true,
         cancellable_until: rawOffer.cancellable_until || null,
         free_cancellation: rawOffer.free_cancellation === true,
-        occupancy_adults: rawOffer.occupancy?.adults || searchContext.adults || 0,
-        occupancy_children: rawOffer.occupancy?.children?.length || searchContext.children || 0,
+        occupancy_adults:
+          rawOffer.occupancy?.adults || searchContext.adults || 0,
+        occupancy_children:
+          rawOffer.occupancy?.children?.length || searchContext.children || 0,
         inclusions_json: rawOffer.inclusions || null,
         currency: rawOffer.currency || searchContext.currency || "USD",
         price_base:
@@ -213,12 +215,16 @@ class HotelNormalizer {
         free_cancellation:
           rawOffer.cancellationPolicies?.[0]?.refundable === true,
         occupancy_adults: rawOffer.pax?.adults || searchContext.adults || 0,
-        occupancy_children: rawOffer.pax?.children?.length || searchContext.children || 0,
+        occupancy_children:
+          rawOffer.pax?.children?.length || searchContext.children || 0,
         inclusions_json: rawOffer.inclusions || null,
         currency: rawOffer.currency || searchContext.currency || "USD",
         price_base: parseFloat(rawOffer.net) || null,
         price_taxes: parseFloat(rawOffer.taxes) || null,
-        price_total: parseFloat(rawOffer.allotment?.price) || parseFloat(rawOffer.price) || 0,
+        price_total:
+          parseFloat(rawOffer.allotment?.price) ||
+          parseFloat(rawOffer.price) ||
+          0,
         price_per_night: parseFloat(rawOffer.pricePerNight) || null,
         rate_key_or_token: rawOffer.rateKey || null,
         availability_count: parseInt(rawOffer.avail) || null,
@@ -300,8 +306,10 @@ class HotelNormalizer {
         bed_type: rawOffer.BedType || null,
         refundable: rawOffer.IsRefundable === true,
         free_cancellation: rawOffer.IsRefundable === true,
-        occupancy_adults: rawOffer.Occupancy?.Adults || searchContext.adults || 0,
-        occupancy_children: rawOffer.Occupancy?.Children?.length || searchContext.children || 0,
+        occupancy_adults:
+          rawOffer.Occupancy?.Adults || searchContext.adults || 0,
+        occupancy_children:
+          rawOffer.Occupancy?.Children?.length || searchContext.children || 0,
         inclusions_json: rawOffer.Inclusions || null,
         currency: rawOffer.Currency || searchContext.currency || "USD",
         price_base: parseFloat(rawOffer.BasePrice) || null,

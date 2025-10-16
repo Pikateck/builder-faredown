@@ -41,7 +41,12 @@ class HotelDedupAndMerge {
       hotel1.city === hotel2.city &&
       hotel1.country === hotel2.country
     ) {
-      const dist = this.geoDistance(hotel1.lat, hotel1.lng, hotel2.lat, hotel2.lng);
+      const dist = this.geoDistance(
+        hotel1.lat,
+        hotel1.lng,
+        hotel2.lat,
+        hotel2.lng,
+      );
       if (dist <= minGeoDist) {
         score += 1.0 * geoWeight; // perfect geo match within threshold
       } else {
@@ -295,9 +300,7 @@ class HotelDedupAndMerge {
 
       // 2. Upsert room offers (link to resolved property_id)
       for (const offer of normalizedOffers) {
-        const propertyId = insertedProperties.get(
-          offer.supplier_hotel_id,
-        );
+        const propertyId = insertedProperties.get(offer.supplier_hotel_id);
         if (!propertyId) continue;
 
         await db.query(

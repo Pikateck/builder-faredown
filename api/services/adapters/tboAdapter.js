@@ -724,7 +724,9 @@ class TBOAdapter extends BaseSupplierAdapter {
       // 3. Different authentication than flights
 
       // For now, return empty array with log (can be enabled when TBO hotel creds available)
-      this.logger.warn("Hotel search not fully implemented for TBO (requires hotel-specific credentials)");
+      this.logger.warn(
+        "Hotel search not fully implemented for TBO (requires hotel-specific credentials)",
+      );
       return [];
     } catch (error) {
       this.logger.error("TBO hotel search failed", {
@@ -781,8 +783,10 @@ class TBOAdapter extends BaseSupplierAdapter {
             if (offer) {
               offer.supplier_hotel_id = hotelId;
               // Add denormalized fields for easy querying
-              offer.hotel_name = hotel.HotelName || hotelNorm.hotelMasterData.hotel_name;
-              offer.city = searchContext.destination || hotelNorm.hotelMasterData.city;
+              offer.hotel_name =
+                hotel.HotelName || hotelNorm.hotelMasterData.hotel_name;
+              offer.city =
+                searchContext.destination || hotelNorm.hotelMasterData.city;
               normalizedOffers.push(offer);
             }
           }
@@ -795,11 +799,12 @@ class TBOAdapter extends BaseSupplierAdapter {
       });
 
       // Merge into unified Phase 3 tables with dedup logic
-      const mergeResult = await HotelDedupAndMergeUnified.mergeNormalizedResults(
-        normalizedHotels.map((h) => h.hotelMasterData),
-        normalizedOffers,
-        "TBO",
-      );
+      const mergeResult =
+        await HotelDedupAndMergeUnified.mergeNormalizedResults(
+          normalizedHotels.map((h) => h.hotelMasterData),
+          normalizedOffers,
+          "TBO",
+        );
 
       this.logger.info("Persisted TBO results to unified schema", {
         hotelsInserted: mergeResult.hotelsInserted,

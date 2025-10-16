@@ -16,7 +16,9 @@ const { Client } = require("pg");
 
   try {
     console.log("\n" + "=".repeat(90));
-    console.log("PHASE 3 VERIFICATION: MULTI-SUPPLIER INTEGRATION (3 Suppliers)");
+    console.log(
+      "PHASE 3 VERIFICATION: MULTI-SUPPLIER INTEGRATION (3 Suppliers)",
+    );
     console.log("=".repeat(90) + "\n");
 
     await client.connect();
@@ -40,9 +42,15 @@ const { Client } = require("pg");
 
     console.log("1️⃣  TEST PARAMETERS");
     console.log("-".repeat(90));
-    console.log(`   Destination: ${searchParams.destinationName} (${searchParams.destinationCode})`);
-    console.log(`   Dates: ${searchParams.checkIn} to ${searchParams.checkOut}`);
-    console.log(`   Occupancy: ${searchParams.adults} adults, ${searchParams.children} children`);
+    console.log(
+      `   Destination: ${searchParams.destinationName} (${searchParams.destinationCode})`,
+    );
+    console.log(
+      `   Dates: ${searchParams.checkIn} to ${searchParams.checkOut}`,
+    );
+    console.log(
+      `   Occupancy: ${searchParams.adults} adults, ${searchParams.children} children`,
+    );
     console.log(`   Currency: ${searchParams.currency}`);
     console.log(`   Max Results: ${searchParams.maxResults}\n`);
 
@@ -61,11 +69,10 @@ const { Client } = require("pg");
     console.log("   ├─ Starting Hotelbeds search...");
     console.log("   ├─ Starting TBO search...");
 
-    const searchResult = await supplierAdapterManager.searchAllHotels(searchParams, [
-      "RATEHAWK",
-      "HOTELBEDS",
-      "TBO",
-    ]);
+    const searchResult = await supplierAdapterManager.searchAllHotels(
+      searchParams,
+      ["RATEHAWK", "HOTELBEDS", "TBO"],
+    );
 
     const searchDuration = Date.now() - searchStartTime;
 
@@ -76,8 +83,12 @@ const { Client } = require("pg");
     console.log(`   └─ Supplier Breakdown:`);
 
     if (searchResult.supplierMetrics) {
-      for (const [supplier, metrics] of Object.entries(searchResult.supplierMetrics)) {
-        console.log(`      ├─ ${supplier}: ${metrics.results} results, Latency: ${metrics.latency}ms`);
+      for (const [supplier, metrics] of Object.entries(
+        searchResult.supplierMetrics,
+      )) {
+        console.log(
+          `      ├─ ${supplier}: ${metrics.results} results, Latency: ${metrics.latency}ms`,
+        );
       }
     }
 
@@ -119,7 +130,9 @@ const { Client } = require("pg");
     offerStats.rows.forEach((row) => {
       console.log(`   ├─ ${row.supplier_code}:`);
       console.log(`   │  ├─ Offers: ${row.count}`);
-      console.log(`   │  ├─ Price Range: AED ${row.min_price} - ${row.max_price}`);
+      console.log(
+        `   │  ├─ Price Range: AED ${row.min_price} - ${row.max_price}`,
+      );
       console.log(`   │  └─ Average: AED ${row.avg_price}`);
     });
 
@@ -131,16 +144,18 @@ const { Client } = require("pg");
 
     const rankingStartTime = Date.now();
 
-    const rankedResults = await MixedSupplierRankingService.searchMultiSupplier({
-      city: "Dubai",
-      checkIn: searchParams.checkIn,
-      checkOut: searchParams.checkOut,
-      adults: searchParams.adults,
-      children: searchParams.children,
-      currency: searchParams.currency,
-      preferredSuppliers: ["RATEHAWK", "HOTELBEDS", "TBO"],
-      limit: 15,
-    });
+    const rankedResults = await MixedSupplierRankingService.searchMultiSupplier(
+      {
+        city: "Dubai",
+        checkIn: searchParams.checkIn,
+        checkOut: searchParams.checkOut,
+        adults: searchParams.adults,
+        children: searchParams.children,
+        currency: searchParams.currency,
+        preferredSuppliers: ["RATEHAWK", "HOTELBEDS", "TBO"],
+        limit: 15,
+      },
+    );
 
     const rankingDuration = Date.now() - rankingStartTime;
     console.log(`   Ranking completed in ${rankingDuration}ms\n`);
@@ -149,11 +164,17 @@ const { Client } = require("pg");
 
     rankedResults.slice(0, 15).forEach((hotel, idx) => {
       const stars = hotel.star_rating ? `${hotel.star_rating}★` : "N/A";
-      const alternatives = hotel.alternatives ? " [Alternatives Available]" : "";
+      const alternatives = hotel.alternatives
+        ? " [Alternatives Available]"
+        : "";
       const supplier = `[${hotel.supplier.code}]`;
 
-      console.log(`   ${idx + 1}. ${hotel.hotel_name} ${stars} ${supplier}${alternatives}`);
-      console.log(`      Price: AED ${hotel.price.total} | Rooms: ${hotel.room_name}`);
+      console.log(
+        `   ${idx + 1}. ${hotel.hotel_name} ${stars} ${supplier}${alternatives}`,
+      );
+      console.log(
+        `      Price: AED ${hotel.price.total} | Rooms: ${hotel.room_name}`,
+      );
     });
 
     console.log();
@@ -164,9 +185,10 @@ const { Client } = require("pg");
 
     if (rankedResults.length > 0) {
       const topHotel = rankedResults[0];
-      const alternatives = await MixedSupplierRankingService.getPropertySupplierAlternatives(
-        topHotel.property_id,
-      );
+      const alternatives =
+        await MixedSupplierRankingService.getPropertySupplierAlternatives(
+          topHotel.property_id,
+        );
 
       console.log(`   Hotel: ${topHotel.hotel_name}\n`);
       console.log("   Price Comparison Across Suppliers:");
@@ -177,9 +199,7 @@ const { Client } = require("pg");
           console.log(
             `   ├─ ${alt.supplier_code}: AED ${alt.price_range.min} - ${alt.price_range.max} (Avg: ${alt.price_range.average})`,
           );
-          console.log(
-            `   │  ├─ Available Rooms: ${alt.available_rooms}`,
-          );
+          console.log(`   │  ├─ Available Rooms: ${alt.available_rooms}`);
           console.log(
             `   │  └─ Free Cancellation Options: ${alt.free_cancellation_options}`,
           );
@@ -195,15 +215,20 @@ const { Client } = require("pg");
 
     const suppliers = ["RATEHAWK", "HOTELBEDS", "TBO"];
     for (const supplier of suppliers) {
-      const metrics = await MixedSupplierRankingService.getSupplierMetrics(supplier);
+      const metrics =
+        await MixedSupplierRankingService.getSupplierMetrics(supplier);
 
       if (metrics) {
         console.log(`   ${supplier}:`);
         console.log(`   ├─ Unique Hotels: ${metrics.unique_hotels}`);
         console.log(`   ├─ Total Offers: ${metrics.total_offers}`);
         console.log(`   ├─ Avg Price: AED ${metrics.avg_price}`);
-        console.log(`   ├─ Price Range: AED ${metrics.min_price} - ${metrics.max_price}`);
-        console.log(`   ├─ Free Cancellation: ${metrics.free_cancellation_percentage}%`);
+        console.log(
+          `   ├─ Price Range: AED ${metrics.min_price} - ${metrics.max_price}`,
+        );
+        console.log(
+          `   ├─ Free Cancellation: ${metrics.free_cancellation_percentage}%`,
+        );
         console.log(`   ├─ USD Offers: ${metrics.usd_offers}`);
         console.log(`   └─ AED Offers: ${metrics.aed_offers}\n`);
       }
@@ -273,7 +298,9 @@ const { Client } = require("pg");
     console.log(`   Ranking Latency: ${rankingDuration}ms`);
     console.log(`   Total API Response: ${totalDuration}ms`);
     console.log(`   SLA Target: <10,000ms`);
-    console.log(`   Status: ${totalDuration < 10000 ? "✅ PASS" : "⚠️  EXCEEDS SLA"}\n`);
+    console.log(
+      `   Status: ${totalDuration < 10000 ? "✅ PASS" : "⚠️  EXCEEDS SLA"}\n`,
+    );
 
     // 10. Verification Summary
     console.log("✅ PHASE 3 VERIFICATION COMPLETE");

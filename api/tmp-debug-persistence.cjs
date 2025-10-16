@@ -27,13 +27,18 @@ const supplierAdapterManager = require("./services/adapters/supplierAdapterManag
 
     console.log("Search completed!");
     console.log("Total results:", searchResult.totalResults);
-    console.log("Metrics:", JSON.stringify(searchResult.supplierMetrics, null, 2));
+    console.log(
+      "Metrics:",
+      JSON.stringify(searchResult.supplierMetrics, null, 2),
+    );
 
     // Wait for any async operations
     console.log("\nWaiting 5s for persistence operations...");
     await new Promise((resolve) => setTimeout(resolve, 5000));
 
-    console.log("✓ Done. Check unified tables with: node api/tmp-simple-check.cjs");
+    console.log(
+      "✓ Done. Check unified tables with: node api/tmp-simple-check.cjs",
+    );
 
     process.exitCode = 0;
   } catch (error) {

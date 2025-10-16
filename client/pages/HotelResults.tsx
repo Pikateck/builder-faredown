@@ -234,8 +234,8 @@ export default function HotelResults() {
 
     const suppliers = new Set(
       hotels.map((hotel) =>
-        (hotel.supplierCode || hotel.supplier || "HOTELBEDS").toUpperCase()
-      )
+        (hotel.supplierCode || hotel.supplier || "HOTELBEDS").toUpperCase(),
+      ),
     );
 
     const suppliersArray = Array.from(suppliers).sort();
@@ -247,8 +247,8 @@ export default function HotelResults() {
 
     const suppliers = new Set(
       hotels.map((hotel) =>
-        (hotel.supplierCode || hotel.supplier || "HOTELBEDS").toUpperCase()
-      )
+        (hotel.supplierCode || hotel.supplier || "HOTELBEDS").toUpperCase(),
+      ),
     );
 
     const suppliersArray = Array.from(suppliers).sort();
@@ -425,7 +425,11 @@ export default function HotelResults() {
         // Log supplier breakdown for debugging
         const supplierCounts: Record<string, number> = {};
         results.forEach((hotel) => {
-          const supplier = (hotel.supplierCode || hotel.supplier || "HOTELBEDS").toUpperCase();
+          const supplier = (
+            hotel.supplierCode ||
+            hotel.supplier ||
+            "HOTELBEDS"
+          ).toUpperCase();
           supplierCounts[supplier] = (supplierCounts[supplier] || 0) + 1;
         });
         console.log("📊 Supplier breakdown:", supplierCounts);

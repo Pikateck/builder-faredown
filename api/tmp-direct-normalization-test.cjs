@@ -113,7 +113,9 @@ const sampleHotel = {
       console.log(
         `\n  ${idx + 1}. ${offer.room_name} | ${offer.board_basis} | ${offer.currency} ${offer.price_total}`,
       );
-      console.log(`     Refundable: ${offer.refundable} | Free Cancel: ${offer.free_cancellation}`);
+      console.log(
+        `     Refundable: ${offer.refundable} | Free Cancel: ${offer.free_cancellation}`,
+      );
     });
 
     console.log("\n3️⃣  Testing merge into unified tables...\n");

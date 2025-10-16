@@ -1,4 +1,5 @@
 # Phase 2 Implementation Summary
+
 ## Hotelbeds Integration & Mixed-Supplier Ranking
 
 **Status:** ✅ COMPLETE
@@ -136,30 +137,32 @@ await this.persistToMasterSchema(hotels, {
 
 **Data Mapping Example:**
 
-| TBO Field | Hotelbeds Field | Notes |
-|-----------|-----------------|-------|
-| hotel_name | name | Direct mapping |
-| address | address.street | Nested object |
-| city | address.city | Nested object |
-| lat | coordinates.latitude | Convert to float |
-| lng | coordinates.longitude | Convert to float |
-| star_rating | category.code | Parse first digit |
-| giata_id | giataCode | Direct mapping |
-| price_total | allotment.price OR price | Fallback chain |
-| board_basis | boardName | Meal plan type |
-| free_cancellation | cancellationPolicies.refundable | Boolean logic |
+| TBO Field         | Hotelbeds Field                 | Notes             |
+| ----------------- | ------------------------------- | ----------------- |
+| hotel_name        | name                            | Direct mapping    |
+| address           | address.street                  | Nested object     |
+| city              | address.city                    | Nested object     |
+| lat               | coordinates.latitude            | Convert to float  |
+| lng               | coordinates.longitude           | Convert to float  |
+| star_rating       | category.code                   | Parse first digit |
+| giata_id          | giataCode                       | Direct mapping    |
+| price_total       | allotment.price OR price        | Fallback chain    |
+| board_basis       | boardName                       | Meal plan type    |
+| free_cancellation | cancellationPolicies.refundable | Boolean logic     |
 
 ### 3. Mixed-Supplier Ranking Service (api/services/ranking/mixedSupplierRankingService.js)
 
 **Core Methods:**
 
 #### `searchMultiSupplier(searchParams)`
+
 - Query all suppliers simultaneously
 - Rank by: price (primary) → supplier score (tiebreaker)
 - Return cheapest per property with supplier info
 - Include multi-supplier badge for properties with alternatives
 
 **Response Format:**
+
 ```json
 {
   "property_id": "uuid-123",
@@ -186,12 +189,14 @@ await this.persistToMasterSchema(hotels, {
 ```
 
 #### `getPropertySupplierAlternatives(propertyId)`
+
 - Get all available suppliers for a property
 - Compare prices across suppliers
 - Show free cancellation availability by supplier
 - Enable price comparison UI
 
 **Response Format:**
+
 ```json
 {
   "property_id": "uuid-123",
@@ -223,6 +228,7 @@ await this.persistToMasterSchema(hotels, {
 ```
 
 #### `getSupplierMetrics(supplierCode)`
+
 - Track supplier performance over time
 - Monitor average pricing trends
 - Measure free cancellation availability
@@ -231,27 +237,32 @@ await this.persistToMasterSchema(hotels, {
 ### 4. Unified Master Tables (Updated)
 
 #### `supplier_master` - New Fields
+
 ```sql
 UPDATE supplier_master SET enabled = true WHERE supplier_code = 'HOTELBEDS';
 ```
 
 #### `hotel_unified`
+
 - Stores canonical property data from all suppliers
 - Deduplication via GIATA ID (primary key)
 - No supplier-specific data (pure canonical)
 
 #### `room_offer_unified`
+
 - Stores all rates/offers from all suppliers
 - Denormalized: includes `hotel_name` and `city` for fast queries
 - `supplier_code` links to offering supplier
 - Enables price comparison without joins
 
 #### `hotel_supplier_map_unified`
+
 - Bridge table for deduplication
 - Tracks which supplier provided which property ID
 - Maintains confidence scores
 
 #### `supplier_field_mapping`
+
 - Updated with Hotelbeds → TBO field mappings
 - Enables normalization without hardcoding
 
@@ -260,6 +271,7 @@ UPDATE supplier_master SET enabled = true WHERE supplier_code = 'HOTELBEDS';
 ## Data Flow
 
 ### 1. Search Initiated (Frontend)
+
 ```javascript
 // Client: POST /api/hotels/search
 {
@@ -272,15 +284,14 @@ UPDATE supplier_master SET enabled = true WHERE supplier_code = 'HOTELBEDS';
 ```
 
 ### 2. Adapter Manager Orchestrates (Backend)
+
 ```javascript
 // supplierAdapterManager.searchAllHotels() calls:
-[
-  ratehawkAdapter.searchHotels(params),
-  hotelbedsAdapter.searchHotels(params)
-]
+[ratehawkAdapter.searchHotels(params), hotelbedsAdapter.searchHotels(params)];
 ```
 
 ### 3. Each Adapter Normalizes & Persists
+
 ```javascript
 // RateHawk Adapter:
 1. API Call → Get hotels + rates
@@ -298,6 +309,7 @@ UPDATE supplier_master SET enabled = true WHERE supplier_code = 'HOTELBEDS';
 ```
 
 ### 4. Unified Tables Populated
+
 ```sql
 -- hotel_unified grows with both suppliers' properties
 INSERT INTO hotel_unified (...) VALUES (...)
@@ -309,17 +321,19 @@ INSERT INTO room_offer_unified (...) VALUES (...)
 ```
 
 ### 5. Frontend Calls Ranking Service
+
 ```javascript
 // GET /api/hotels/search/ranked
 searchMultiSupplier({
   city: "Dubai",
   checkIn: "2026-01-12",
   checkOut: "2026-01-15",
-  preferredSuppliers: ["RATEHAWK", "HOTELBEDS"]
-})
+  preferredSuppliers: ["RATEHAWK", "HOTELBEDS"],
+});
 ```
 
 ### 6. Ranking Service Returns Sorted Results
+
 ```json
 [
   {
@@ -342,10 +356,11 @@ searchMultiSupplier({
 ## Supplier Configuration
 
 ### Schema Migration Updates
+
 ```sql
 -- supplier_master seeding
 INSERT INTO supplier_master (supplier_code, name, enabled, priority)
-VALUES 
+VALUES
   ('RATEHAWK', 'RateHawk (WorldOTA)', true, 100),
   ('HOTELBEDS', 'Hotelbeds', true, 90),
   ('TBO', 'Travel Boutique Online', false, 80);
@@ -362,6 +377,7 @@ VALUES
 ```
 
 ### Enabling/Disabling Suppliers
+
 ```sql
 -- Enable Hotelbeds
 UPDATE supplier_master SET enabled = true WHERE supplier_code = 'HOTELBEDS';
@@ -378,6 +394,7 @@ UPDATE supplier_master SET priority = 85 WHERE supplier_code = 'HOTELBEDS';
 ## Verification Output
 
 ### Phase 1 Verification (Dubai, Jan 12-15, 2026)
+
 ```
 ✓ Schema Created:     4/4 tables
 ✓ Suppliers Configured: 3 active
@@ -397,6 +414,7 @@ Sample Hotels (Cheapest):
 ```
 
 ### Mixed-Supplier Ranking Results
+
 ```
 Property: Burj Khalifa Hotel
 ├─ RATEHAWK:  AED 1,600 (3 rooms available)
@@ -416,12 +434,14 @@ Property: Emirates Palace
 ### Key Log Entries
 
 **1. Adapter Initialization:**
+
 ```
 [INFO] Hotelbeds adapter initialized
 [INFO] RateHawk adapter initialized
 ```
 
 **2. Search Execution:**
+
 ```
 [INFO] Searching Hotelbeds hotels with destination=DXB
 [INFO] Retrieved 245 hotel offers from Hotelbeds
@@ -429,12 +449,14 @@ Property: Emirates Palace
 ```
 
 **3. Persistence:**
+
 ```
 [INFO] Persisted RateHawk results to unified schema: hotelsInserted=189, offersInserted=567
 [INFO] Persisted Hotelbeds results to unified schema: hotelsInserted=156, offersInserted=312
 ```
 
 **4. Ranking:**
+
 ```
 [INFO] Multi-supplier search for Dubai: 2,450 unique hotels, 3 suppliers
 [INFO] Returned 50 ranked hotels with supplier comparison data
@@ -445,16 +467,19 @@ Property: Emirates Palace
 ## Schema Deltas from Phase 1
 
 ### New Database Objects
+
 1. **supplier_field_mapping** - Added Hotelbeds mappings (20 new rows)
 2. **Hotelbeds field mapping schema** - Complete mapping table
 
 ### No Breaking Changes
+
 - All Phase 1 tables remain unchanged
 - New functionality is additive only
 - Existing APIs continue to work
 - Migration is backward compatible
 
 ### New Indexes (Implicit)
+
 - Existing indexes on `hotel_unified` and `room_offer_unified` support multi-supplier queries efficiently
 
 ---
@@ -480,6 +505,7 @@ Property: Emirates Palace
 ## API Contracts (Phase 2 Ready)
 
 ### Hotel Search (Returns Both Suppliers)
+
 ```
 GET /api/hotels/search?destination=DXB&checkIn=2026-01-12&checkOut=2026-01-15
 
@@ -497,6 +523,7 @@ Response:
 ```
 
 ### Supplier Alternatives
+
 ```
 GET /api/hotels/{propertyId}/alternatives
 
@@ -510,6 +537,7 @@ Response:
 ```
 
 ### Supplier Metrics
+
 ```
 GET /api/suppliers/{supplierCode}/metrics
 
@@ -529,12 +557,14 @@ Response:
 ## Known Limitations & Future Work
 
 ### Current Limitations
+
 1. **No price parity enforcement** - Same hotel may have different canonical prices
 2. **No real-time rate optimization** - Uses first stored rate per property
 3. **No supplier dispute resolution** - Conflicting data isn't reconciled
 4. **TBO supplier not integrated** - Phase 3 work
 
 ### Next Phase (Phase 3)
+
 1. **TBO Integration** - Add Travel Boutique Online supplier
 2. **Real-time Rate Sync** - Periodic updates from all suppliers
 3. **Advanced Deduplication** - Fuzzy matching for similar properties
@@ -547,21 +577,27 @@ Response:
 ## Troubleshooting
 
 ### Issue: No Hotelbeds Data in Unified Tables
+
 **Solution:**
+
 1. Verify `HOTELBEDS` is enabled: `SELECT enabled FROM supplier_master WHERE supplier_code = 'HOTELBEDS'`
 2. Check adapter initialization: `HOTELBEDS_API_KEY` and `HOTELBEDS_SECRET` in env
 3. Review adapter logs for API errors
 4. Verify field mappings exist: `SELECT COUNT(*) FROM supplier_field_mapping WHERE supplier_code = 'HOTELBEDS'`
 
 ### Issue: Ranking Service Returns No Results
+
 **Solution:**
+
 1. Verify data exists: `SELECT COUNT(*) FROM hotel_unified WHERE city = 'Dubai'`
 2. Check offer availability: `SELECT COUNT(*) FROM room_offer_unified WHERE city = 'Dubai'`
 3. Review search parameters (currency, price range, dates)
 4. Check unified table indexes are created
 
 ### Issue: Missing Properties After Merge
+
 **Solution:**
+
 1. Verify GIATA ID deduplication logic
 2. Check for duplicate entries across suppliers
 3. Review supplier field mapping accuracy
