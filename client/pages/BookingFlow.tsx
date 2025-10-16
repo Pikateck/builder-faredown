@@ -3824,36 +3824,22 @@ export default function BookingFlow() {
                     </Button>
                   )}
                   {currentStep === 5 ? (
-                    <PaymentAuthGuard
-                      paymentAmount={formatPrice(
-                        calculateBaseFareTotal() +
-                          calculateExtrasTotal() +
-                          getTotalSeatFees(),
-                      )}
-                      onPaymentAuthorized={() => {
-                        // Handle payment authorization - proceed to actual payment
-                        console.log(
-                          "Payment authorized, proceeding to payment gateway",
-                        );
-                        // Here you would integrate with actual payment processing
-                        // For demo, we'll call the complete booking handler
-                        handleCompleteBooking();
-                      }}
+                    <Button
+                      onClick={handleCompleteBooking}
+                      className="bg-green-600 hover:bg-green-700 text-white px-8 w-full sm:w-auto font-semibold shadow-lg transition-all duration-200"
                     >
-                      <Button className="bg-green-600 hover:bg-green-700 text-white px-8 w-full sm:w-auto font-semibold shadow-lg transition-all duration-200">
-                        <span className="flex items-center space-x-2">
-                          <CreditCard className="w-5 h-5" />
-                          <span>
-                            Complete Payment -{" "}
-                            {formatPrice(
-                              calculateBaseFareTotal() +
-                                calculateExtrasTotal() +
-                                getTotalSeatFees(),
-                            )}
-                          </span>
+                      <span className="flex items-center space-x-2">
+                        <CreditCard className="w-5 h-5" />
+                        <span>
+                          Complete Payment -{" "}
+                          {formatPrice(
+                            calculateBaseFareTotal() +
+                              calculateExtrasTotal() +
+                              getTotalSeatFees(),
+                          )}
                         </span>
-                      </Button>
-                    </PaymentAuthGuard>
+                      </span>
+                    </Button>
                   ) : (
                     <Button
                       onClick={handleNextStep}
