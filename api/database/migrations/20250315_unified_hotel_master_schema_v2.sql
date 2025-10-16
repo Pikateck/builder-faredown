@@ -128,12 +128,15 @@ CREATE TABLE IF NOT EXISTS hotel_dedup_audit (
 );
 
 -- Seed supplier_master with initial suppliers
-INSERT INTO supplier_master (supplier_code, name, enabled, priority) 
-VALUES 
+INSERT INTO supplier_master (supplier_code, name, enabled, priority)
+VALUES
   ('RATEHAWK', 'RateHawk (WorldOTA)', true, 100),
-  ('HOTELBEDS', 'Hotelbeds', false, 90),
+  ('HOTELBEDS', 'Hotelbeds', true, 90),
   ('TBO', 'Travel Boutique Online', false, 80)
 ON CONFLICT (supplier_code) DO NOTHING;
+
+-- Update Hotelbeds if already exists
+UPDATE supplier_master SET enabled = true WHERE supplier_code = 'HOTELBEDS';
 
 -- Initialize field mapping for RateHawk
 INSERT INTO supplier_field_mapping (supplier_code, tbo_field, supplier_field, transform_rule)
