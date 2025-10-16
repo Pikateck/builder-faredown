@@ -228,6 +228,39 @@ export default function HotelResults() {
     },
   };
 
+  // Helper functions to dynamically determine active suppliers
+  const getActiveSuppliers = (): string => {
+    if (hotels.length === 0) return "CHECKING...";
+
+    const suppliers = new Set(
+      hotels.map((hotel) =>
+        (hotel.supplierCode || hotel.supplier || "HOTELBEDS").toUpperCase()
+      )
+    );
+
+    const suppliersArray = Array.from(suppliers).sort();
+    return suppliersArray.join(" + ");
+  };
+
+  const getSupplierDescription = (): string => {
+    if (hotels.length === 0) return "Real-time hotel data with live pricing";
+
+    const suppliers = new Set(
+      hotels.map((hotel) =>
+        (hotel.supplierCode || hotel.supplier || "HOTELBEDS").toUpperCase()
+      )
+    );
+
+    const suppliersArray = Array.from(suppliers).sort();
+    const suppliersList = suppliersArray.join(", ");
+
+    if (suppliersArray.length === 1) {
+      return `Real-time hotel data from ${suppliersList} API with live pricing`;
+    } else {
+      return `Real-time hotel data aggregated from ${suppliersArray.length} suppliers (${suppliersList}) with live pricing`;
+    }
+  };
+
   // Initialize edit states from current search params
   React.useEffect(() => {
     setEditDestination(
