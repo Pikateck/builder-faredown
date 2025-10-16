@@ -434,6 +434,66 @@ class RateHawkAdapter extends BaseSupplierAdapter {
   }
 
   /**
+   * Normalize and persist RateHawk results to master hotel schema
+   * Phase 1: Write to both old and new tables in parallel
+   */
+  async persistToMasterSchema(hotels, rooms, searchContext = {}) {
+    try {
+      if (!hotels || hotels.length === 0) {
+        return { hotelsInserted: 0, offersInserted: 0 };
+      }
+
+      // Normalize hotels and rooms to TBO-based schema
+      const normalizedHotels = hotels.map((hotel) =>
+        HotelNormalizer.normalizeRateHawkHotel(hotel, "RATEHAWK"),
+      );
+
+      const normalizedOffers = [];
+      for (let i = 0; i < rooms.length; i++) {
+        const room = rooms[i];
+        const hotelId = room.hotel_id || hotels[i]?.id;
+        const hotel = normalizedHotels.find(
+          (h) =>
+            h &&
+            h.supplierMapData.supplier_hotel_id === hotelId,
+        );
+
+        if (hotel) {
+          const offer = HotelNormalizer.normalizeRateHawkRoomOffer(
+            room,
+            hotel.hotelMasterData.property_id,
+            "RATEHAWK",
+            searchContext,
+          );
+          if (offer) {
+            offer.supplier_hotel_id = hotelId;
+            normalizedOffers.push(offer);
+          }
+        }
+      }
+
+      // Merge into master tables with dedup logic
+      const mergeResult = await HotelDedupAndMerge.mergeNormalizedResults(
+        normalizedHotels.map((h) => h.hotelMasterData),
+        normalizedOffers,
+        "RATEHAWK",
+      );
+
+      this.logger.info("Persisted RateHawk results to master schema", {
+        hotelsInserted: mergeResult.hotelsInserted,
+        offersInserted: mergeResult.offersInserted,
+      });
+
+      return mergeResult;
+    } catch (error) {
+      this.logger.error("Error persisting to master schema", {
+        error: error.message,
+      });
+      return { hotelsInserted: 0, offersInserted: 0, error: error.message };
+    }
+  }
+
+  /**
    * Get booking form (pre-booking validation)
    */
   async getBookingForm(rateKey, language = "en") {
