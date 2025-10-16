@@ -164,4 +164,30 @@ VALUES
   ('RATEHAWK', 'inclusions_json', 'inclusions', NULL)
 ON CONFLICT (supplier_code, tbo_field) DO NOTHING;
 
+-- Initialize field mapping for Hotelbeds
+INSERT INTO supplier_field_mapping (supplier_code, tbo_field, supplier_field, transform_rule)
+VALUES
+  ('HOTELBEDS', 'hotel_name', 'name', NULL),
+  ('HOTELBEDS', 'address', 'address.street', NULL),
+  ('HOTELBEDS', 'city', 'address.city', NULL),
+  ('HOTELBEDS', 'country', 'address.country', NULL),
+  ('HOTELBEDS', 'postal_code', 'address.postalCode', NULL),
+  ('HOTELBEDS', 'lat', 'coordinates.latitude', NULL),
+  ('HOTELBEDS', 'lng', 'coordinates.longitude', NULL),
+  ('HOTELBEDS', 'star_rating', 'category.code', NULL),
+  ('HOTELBEDS', 'review_score', 'review.score', NULL),
+  ('HOTELBEDS', 'review_count', 'review.reviewCount', NULL),
+  ('HOTELBEDS', 'giata_id', 'giataCode', NULL),
+  ('HOTELBEDS', 'thumbnail_url', 'image.url', NULL),
+  ('HOTELBEDS', 'room_name', 'roomName', NULL),
+  ('HOTELBEDS', 'board_basis', 'boardName', NULL),
+  ('HOTELBEDS', 'bed_type', 'room.type', NULL),
+  ('HOTELBEDS', 'price_base', 'net', NULL),
+  ('HOTELBEDS', 'price_taxes', 'taxes', NULL),
+  ('HOTELBEDS', 'price_total', 'allotment.price', NULL),
+  ('HOTELBEDS', 'price_per_night', 'pricePerNight', NULL),
+  ('HOTELBEDS', 'free_cancellation', 'cancellationPolicies.refundable', NULL),
+  ('HOTELBEDS', 'inclusions_json', 'inclusions', NULL)
+ON CONFLICT (supplier_code, tbo_field) DO NOTHING;
+
 COMMIT;
