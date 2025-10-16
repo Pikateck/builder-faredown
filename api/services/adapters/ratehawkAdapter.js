@@ -451,6 +451,7 @@ class RateHawkAdapter extends BaseSupplierAdapter {
 
   /**
    * Normalize and persist RateHawk results to unified master hotel schema (Phase 1)
+   * Note: RateHawk embeds rates within each hotel object, not as separate array
    */
   async persistToMasterSchema(hotels, rooms, searchContext = {}) {
     try {
@@ -458,39 +459,44 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         return { hotelsInserted: 0, offersInserted: 0 };
       }
 
-      // Normalize hotels and rooms to TBO-based schema
-      const normalizedHotels = hotels.map((hotel) =>
-        HotelNormalizer.normalizeRateHawkHotel(hotel, "RATEHAWK"),
-      );
+      // Normalize hotels to TBO-based schema
+      const normalizedHotels = hotels.map((hotel) => {
+        const normalized = HotelNormalizer.normalizeRateHawkHotel(hotel, "RATEHAWK");
+        return {
+          ...normalized,
+          rawHotel: hotel, // Keep raw for accessing rates
+        };
+      });
 
+      // Extract rates/offers from each hotel
       const normalizedOffers = [];
-      for (let i = 0; i < rooms.length; i++) {
-        const room = rooms[i];
-        const hotelId = room.hotel_id || hotels[i]?.id;
-        const hotelData = hotels[i];
+      for (const hotelNorm of normalizedHotels) {
+        const hotel = hotelNorm.rawHotel;
+        const hotelId = hotel.id;
+        const rates = hotel.rates || [];
 
-        const hotel = normalizedHotels.find(
-          (h) =>
-            h &&
-            h.supplierMapData.supplier_hotel_id === hotelId,
-        );
-
-        if (hotel) {
+        for (const rate of rates) {
           const offer = HotelNormalizer.normalizeRateHawkRoomOffer(
-            room,
-            hotel.hotelMasterData.property_id,
+            rate,
+            hotelNorm.hotelMasterData.property_id,
             "RATEHAWK",
             searchContext,
           );
+
           if (offer) {
             offer.supplier_hotel_id = hotelId;
             // Add denormalized fields for easy querying
-            offer.hotel_name = hotelData?.name || hotel.hotelMasterData.hotel_name;
-            offer.city = hotelData?.city || hotel.hotelMasterData.city;
+            offer.hotel_name = hotel.name || hotelNorm.hotelMasterData.hotel_name;
+            offer.city = hotel.region?.name || hotelNorm.hotelMasterData.city;
             normalizedOffers.push(offer);
           }
         }
       }
+
+      this.logger.info("Extracted rates from RateHawk hotels", {
+        totalHotels: hotels.length,
+        totalOffers: normalizedOffers.length,
+      });
 
       // Merge into unified Phase 1 tables with dedup logic
       const mergeResult = await HotelDedupAndMergeUnified.mergeNormalizedResults(
@@ -508,6 +514,7 @@ class RateHawkAdapter extends BaseSupplierAdapter {
     } catch (error) {
       this.logger.error("Error persisting to unified schema", {
         error: error.message,
+        stack: error.stack,
       });
       return { hotelsInserted: 0, offersInserted: 0, error: error.message };
     }
