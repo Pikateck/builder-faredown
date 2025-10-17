@@ -126,6 +126,8 @@ class EnhancedHotelsService extends EnhancedApiService {
       children: params.children || params.guests?.children || 0,
       rooms: params.rooms || params.guests?.rooms || 1,
       currencyCode: params.currencyCode || "INR",
+      // Ensure server route receives expected 'currency' query param
+      currency: (params as any).currency || params.currencyCode || "INR",
     };
 
     const fallbackData = this.createFallbackHotels(
