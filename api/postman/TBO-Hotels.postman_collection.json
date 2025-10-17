@@ -54,6 +54,15 @@
       }
     },
     {
+      "name": "Cancel Booking",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"BookingId\": \"{{BookingId}}\",\n  \"booking_ref\": \"{{BookingRef}}\"\n}"},
+        "url": "{{API_BASE}}/api/tbo-hotels/booking/cancel"
+      }
+    },
+    {
       "name": "Get Booking By Ref (persisted + optional live)",
       "request": {
         "method": "GET",
