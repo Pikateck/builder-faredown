@@ -223,8 +223,8 @@ class MixedSupplierRankingService {
   static async getSupplierScores(supplierCodes = []) {
     try {
       const result = await db.query(
-        `SELECT code, enabled, weight FROM supplier_master
-         WHERE code = ANY($1)
+        `SELECT COALESCE(code, supplier_code) AS code, enabled, weight FROM supplier_master
+         WHERE COALESCE(code, supplier_code) = ANY($1)
          ORDER BY weight DESC`,
         [supplierCodes],
       );
