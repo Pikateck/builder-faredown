@@ -900,18 +900,70 @@ class TBOAdapter extends BaseSupplierAdapter {
         this.logger.warn("TBO persistToMasterSchema failed", { error: e.message }),
       );
 
-      // Map to lightweight aggregator results
-      const results = hotels.slice(0, 20).map((h) => ({
-        hotelId: String(h.HotelCode || h.HotelId || h.Id || ""),
-        name: h.HotelName || h.Name || "",
-        city: destination,
-        price: parseFloat(h.Price?.PublishedPrice) || parseFloat(h.MinPrice) || 0,
-        currency: currency,
-        supplier: "TBO",
-        checkIn,
-        checkOut,
-        roomCode: h.Rooms?.[0]?.RoomTypeCode || "",
-      }));
+      // Map to aggregator format and enrich with rates/images/amenities
+      const results = hotels.slice(0, 50).map((h) => {
+        const hotelId = String(h.HotelCode || h.HotelId || h.Id || "");
+        // Build rates from Rooms[].Rates[]
+        const rawRates = [];
+        const roomsArr = Array.isArray(h.Rooms) ? h.Rooms : [];
+        for (const room of roomsArr) {
+          const rates = Array.isArray(room.Rates) ? room.Rates : [];
+          for (const r of rates) {
+            const base = parseFloat(r.NetFare || r.BasePrice || 0) || 0;
+            const total = parseFloat(r.PublishedPrice || r.TotalPrice || base) || base;
+            const refundable = !(r.IsNonRefundable === true);
+            const policies = Array.isArray(r.CancellationPolicies)
+              ? r.CancellationPolicies
+              : r.CancellationPolicy
+                ? [r.CancellationPolicy]
+                : [];
+            rawRates.push({
+              rateKey: r.RateKey || r.Token || `${hotelId}_${room.RoomTypeCode || room.RoomTypeName || "room"}`,
+              roomType: room.RoomTypeName || room.RoomType || r.RoomName || "Room",
+              boardType: r.MealType || r.BoardType || r.Board || "Room Only",
+              originalPrice: base,
+              price: total,
+              markedUpPrice: total, // markup applied later
+              currency: r.Currency || currency,
+              cancellationPolicy: policies,
+              isRefundable: refundable,
+              inclusions: r.Inclusions || r.Included || [],
+            });
+          }
+        }
+
+        // Images & amenities
+        const images = [];
+        if (Array.isArray(h.Images)) {
+          h.Images.forEach((img) => {
+            if (typeof img === "string" && img) images.push(img);
+            else if (img?.Url) images.push(img.Url);
+            else if (img?.url) images.push(img.url);
+          });
+        }
+        if (h.ImageUrl) images.push(h.ImageUrl);
+        if (h.ThumbnailUrl) images.push(h.ThumbnailUrl);
+
+        const amenities = h.Amenities || h.Facilities || h.HotelFacilities || [];
+
+        return {
+          hotelId,
+          name: h.HotelName || h.Name || "",
+          city: destination,
+          price: parseFloat(h.Price?.PublishedPrice) || parseFloat(h.MinPrice) || (rawRates[0]?.price || 0),
+          currency,
+          supplier: "TBO",
+          checkIn,
+          checkOut,
+          roomCode: h.Rooms?.[0]?.RoomTypeCode || "",
+          rates: rawRates,
+          images,
+          amenities,
+          starRating: parseFloat(h.StarRating) || undefined,
+          reviewCount: h.ReviewCount || undefined,
+          reviewScore: h.ReviewScore || undefined,
+        };
+      });
 
       return results;
     } catch (error) {
