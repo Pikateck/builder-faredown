@@ -1187,6 +1187,25 @@ class TBOAdapter extends BaseSupplierAdapter {
   }
 
   /**
+   * Cancel hotel booking (SendChangeRequest)
+   */
+  async cancelHotelBooking(params) {
+    const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
+    try {
+      const tokenId = await this.getHotelToken();
+      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, RequestType: 1, Remarks: "User cancellation", ...params };
+      const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/SendChangeRequest", payload));
+      if (res.data?.Status === 1) {
+        return res.data;
+      }
+      throw mapFromResponse(res);
+    } catch (e) {
+      if (!e.code) throw mapFromAxiosError(e);
+      throw e;
+    }
+  }
+
+  /**
    * Health check
    */
   async performHealthCheck() {
