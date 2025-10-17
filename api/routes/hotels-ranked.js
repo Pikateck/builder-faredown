@@ -89,4 +89,30 @@ router.get("/search", async (req, res) => {
   }
 });
 
+// Get supplier alternatives for a property (price comparison across suppliers)
+router.get("/property/:propertyId/alternatives", async (req, res) => {
+  try {
+    const { propertyId } = req.params;
+    if (!propertyId) return res.status(400).json({ success: false, error: "propertyId is required" });
+    const data = await MixedSupplierRankingService.getPropertySupplierAlternatives(propertyId);
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Alternatives fetch error", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// Get supplier metrics summary
+router.get("/suppliers/:code/metrics", async (req, res) => {
+  try {
+    const code = String(req.params.code || "").toUpperCase();
+    const days = req.query.days ? Number(req.query.days) : 7;
+    const data = await MixedSupplierRankingService.getSupplierMetrics(code, days);
+    res.json({ success: true, data });
+  } catch (error) {
+    console.error("Supplier metrics error", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;
