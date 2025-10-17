@@ -280,4 +280,63 @@ router.post("/booking/details", async (req, res) => {
   }
 });
 
+// QA: list unified hotels for TBO by city
+router.get("/unified/hotels", async (req, res) => {
+  try {
+    const db = require("../database/connection");
+    const { city } = req.query;
+    const params = [];
+    let where = "WHERE supplier_code = 'TBO'";
+    if (city) {
+      params.push(String(city));
+      where += ` AND LOWER(city) = LOWER($${params.length})`;
+    }
+    const rows = (
+      await db.query(
+        `SELECT property_id, supplier_hotel_id, hotel_name, city, country, star_rating
+         FROM hotel_unified ${where} ORDER BY hotel_name LIMIT 200`,
+        params,
+      )
+    ).rows;
+    res.json({ success: true, data: rows });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+// QA: list unified room offers for TBO filtered by city and dates
+router.get("/unified/offers", async (req, res) => {
+  try {
+    const db = require("../database/connection");
+    const { city, checkin, checkout } = req.query;
+    const params = [];
+    let where = "WHERE supplier_code = 'TBO'";
+    if (city) {
+      params.push(String(city));
+      where += ` AND LOWER(city) = LOWER($${params.length})`;
+    }
+    if (checkin) {
+      params.push(String(checkin));
+      where += ` AND search_checkin = $${params.length}`;
+    }
+    if (checkout) {
+      params.push(String(checkout));
+      where += ` AND search_checkout = $${params.length}`;
+    }
+    const rows = (
+      await db.query(
+        `SELECT offer_id, property_id, room_name, board_basis, refundable, cancellable_until,
+                currency, price_total, price_per_night, availability_count, city, search_checkin, search_checkout
+         FROM room_offer_unified ${where}
+         ORDER BY price_total ASC
+         LIMIT 200`,
+        params,
+      )
+    ).rows;
+    res.json({ success: true, data: rows });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 module.exports = router;
