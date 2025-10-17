@@ -59,6 +59,20 @@
         "method": "GET",
         "url": "{{API_BASE}}/api/tbo-hotels/booking/{{BookingRef}}?live=1"
       }
+    },
+    {
+      "name": "Unified Hotels (TBO)",
+      "request": {
+        "method": "GET",
+        "url": "{{API_BASE}}/api/tbo-hotels/unified/hotels?city={{City}}"
+      }
+    },
+    {
+      "name": "Unified Offers (TBO)",
+      "request": {
+        "method": "GET",
+        "url": "{{API_BASE}}/api/tbo-hotels/unified/offers?city={{City}}&checkin={{CheckIn}}&checkout={{CheckOut}}"
+      }
     }
   ],
   "variable": [
