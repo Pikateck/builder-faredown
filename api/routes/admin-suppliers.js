@@ -20,7 +20,13 @@ router.get("/", async (req, res) => {
   try {
     const result = await db.query(`
       SELECT
-        s.*,
+        s.id,
+        s.code,
+        s.name,
+        s.enabled AS is_enabled,
+        s.weight,
+        NULL::text AS environment,
+        'hotels'::text AS product_type,
         0 as total_bookings,
         0 as bookings_24h
       FROM supplier_master s
