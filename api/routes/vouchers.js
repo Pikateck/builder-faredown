@@ -4,9 +4,33 @@ const voucherService = require("../services/voucherService");
 const hotelBookingService = require("../services/hotelBookingService");
 const EnhancedEmailService = require("../services/enhancedEmailService");
 const { authenticateToken } = require("../middleware/auth");
+const HotelBooking = require("../models/HotelBooking");
 
 // Initialize enhanced email service
 const emailService = new EnhancedEmailService();
+
+// Helper: get booking from in-memory service, fallback to DB (supports TBO persisted bookings)
+async function getBookingWithDbFallback(bookingRef) {
+  const mem = hotelBookingService.getBooking(bookingRef);
+  if (mem) return mem;
+  const dbResult = await HotelBooking.findByReference(bookingRef);
+  if (dbResult.success && dbResult.data) {
+    const row = dbResult.data;
+    return {
+      bookingRef: row.booking_ref,
+      hotelbedsDetails: { hotel: { name: row.hotel_name, address: row.hotel_address || "" } },
+      guestDetails: row.guest_details || { primaryGuest: {} },
+      roomDetails: { name: row.room_name || row.room_type || "Room" },
+      checkIn: row.check_in_date,
+      checkOut: row.check_out_date,
+      totalAmount: row.total_amount,
+      currency: row.currency,
+      paymentDetails: {},
+      specialRequests: row.special_requests,
+    };
+  }
+  return null;
+}
 
 /**
  * Generate hotel booking voucher
@@ -17,7 +41,7 @@ router.get("/hotel/:bookingRef", async (req, res) => {
     const { bookingRef } = req.params;
 
     // Get booking details
-    const booking = hotelBookingService.getBooking(bookingRef);
+    const booking = await getBookingWithDbFallback(bookingRef);
     if (!booking) {
       return res.status(404).json({
         success: false,
@@ -76,7 +100,7 @@ router.get("/invoice/:bookingRef", async (req, res) => {
     const { bookingRef } = req.params;
 
     // Get booking details
-    const booking = hotelBookingService.getBooking(bookingRef);
+    const booking = await getBookingWithDbFallback(bookingRef);
     if (!booking) {
       return res.status(404).json({
         success: false,
@@ -137,7 +161,7 @@ router.get("/hotel/:bookingRef/preview", async (req, res) => {
     const { bookingRef } = req.params;
 
     // Get booking details
-    const booking = hotelBookingService.getBooking(bookingRef);
+    const booking = await getBookingWithDbFallback(bookingRef);
     if (!booking) {
       return res.status(404).json({
         success: false,
@@ -196,7 +220,7 @@ router.post("/hotel/:bookingRef/email", async (req, res) => {
     const { email, additionalEmails = [] } = req.body;
 
     // Get booking details
-    const booking = hotelBookingService.getBooking(bookingRef);
+    const booking = await getBookingWithDbFallback(bookingRef);
     if (!booking) {
       return res.status(404).json({
         success: false,
