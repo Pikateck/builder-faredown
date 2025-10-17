@@ -49,7 +49,7 @@ class MixedSupplierRankingService {
             ro.currency,
             ro.rate_key_or_token
           FROM room_offer_unified ro
-          WHERE 1 = 1
+          WHERE (ro.expires_at IS NULL OR ro.expires_at > NOW())
       `;
 
       const params = [];
