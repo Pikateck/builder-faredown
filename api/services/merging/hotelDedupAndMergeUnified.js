@@ -102,6 +102,20 @@ class HotelDedupAndMergeUnified {
         const propertyId = insertedProperties.get(offer.supplier_hotel_id);
         if (!propertyId) continue;
 
+        // Compute expiry: at checkout end-of-day or 24h from now
+        let expiresAt = null;
+        if (offer.search_checkout) {
+          const outD = new Date(offer.search_checkout);
+          if (!isNaN(outD.getTime())) {
+            outD.setHours(23, 59, 59, 999);
+            expiresAt = outD.toISOString();
+          }
+        }
+        if (!expiresAt) {
+          const d = new Date(Date.now() + 24 * 60 * 60 * 1000);
+          expiresAt = d.toISOString();
+        }
+
         await db.query(
           `INSERT INTO room_offer_unified (
             offer_id, property_id, supplier_code,
@@ -110,8 +124,8 @@ class HotelDedupAndMergeUnified {
             occupancy_adults, occupancy_children, inclusions_json,
             currency, price_base, price_taxes, price_total, price_per_night,
             rate_key_or_token, availability_count,
-            search_checkin, search_checkout, hotel_name, city
-          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23)
+            search_checkin, search_checkout, hotel_name, city, expires_at
+          ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20, $21, $22, $23, $24)
           ON CONFLICT DO NOTHING`,
           [
             offer.offer_id,
@@ -139,6 +153,7 @@ class HotelDedupAndMergeUnified {
             offer.search_checkout,
             offer.hotel_name, // Add from offer for denormalization
             offer.city, // Add from offer for denormalization
+            expiresAt,
           ],
         );
 
