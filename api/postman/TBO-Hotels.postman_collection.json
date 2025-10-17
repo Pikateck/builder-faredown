@@ -52,6 +52,13 @@
         "body": {"mode":"raw","raw":"{\n  \"BookingId\": \"{{BookingId}}\"\n}"},
         "url": "{{API_BASE}}/api/tbo-hotels/booking/details"
       }
+    },
+    {
+      "name": "Get Booking By Ref (persisted + optional live)",
+      "request": {
+        "method": "GET",
+        "url": "{{API_BASE}}/api/tbo-hotels/booking/{{BookingRef}}?live=1"
+      }
     }
   ],
   "variable": [
