@@ -47,7 +47,7 @@ export const SUBDOMAIN_API_CONFIG = {
   BASE_URL: getSubdomainApiUrl(),
   IS_ADMIN: isAdminContext(),
   ADMIN_BASE_URL: import.meta.env.VITE_ADMIN_API_BASE_URL || 'https://admin.faredown.com/api',
-  LIVE_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://api.faredown.com',
+  LIVE_BASE_URL: import.meta.env.VITE_API_BASE_URL || 'https://builder-faredown-pricing.onrender.com/api',
 };
 
 /**
