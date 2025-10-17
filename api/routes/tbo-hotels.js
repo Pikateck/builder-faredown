@@ -331,6 +331,17 @@ router.post("/booking/cancel", async (req, res) => {
     const db = require("../database/connection");
     const HotelBooking = require("../models/HotelBooking");
 
+    // Idempotency for cancel
+    const redis = require("../services/redisService");
+    const idemKey = req.header("Idempotency-Key");
+    const idemCacheKey = idemKey ? `idem:tbo:cancel:${idemKey}` : null;
+    if (idemCacheKey) {
+      const existing = await redis.get(idemCacheKey);
+      if (existing?.data) {
+        return res.json({ success: true, data: existing.data });
+      }
+    }
+
     const supplierRes = await adapter.cancelHotelBooking(req.body || {});
 
     // If booking_ref provided, update DB status to cancelled
@@ -349,6 +360,11 @@ router.post("/booking/cancel", async (req, res) => {
           );
         } catch {}
       }
+    }
+
+    // Cache idempotent response for 10 minutes
+    if (idemCacheKey) {
+      await redis.setIfNotExists(idemCacheKey, { data: supplierRes }, 600);
     }
 
     res.json({ success: true, data: supplierRes });
