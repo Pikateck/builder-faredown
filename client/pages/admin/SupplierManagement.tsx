@@ -49,6 +49,7 @@ interface Supplier {
   product_type: string;
   is_enabled: boolean;
   environment: string;
+  weight?: number;
   last_success_at: string | null;
   last_error_at: string | null;
   last_error_msg: string | null;
