@@ -459,6 +459,23 @@ class RedisService {
       return false;
     }
   }
+
+  /**
+   * Set if not exists with TTL (idempotency helper)
+   */
+  async setIfNotExists(key, value, ttlSeconds) {
+    if (!this.isConnected()) return false;
+    try {
+      const res = await this.client.set(key, JSON.stringify(value), {
+        NX: true,
+        EX: ttlSeconds,
+      });
+      return res === "OK";
+    } catch (error) {
+      this.logger.error("Failed to set NX key:", error);
+      return false;
+    }
+  }
 }
 
 // Export singleton instance
