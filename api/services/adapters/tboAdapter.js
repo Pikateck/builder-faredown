@@ -928,6 +928,58 @@ class TBOAdapter extends BaseSupplierAdapter {
   }
 
   /**
+   * PreBook hotel
+   */
+  async preBookHotel(params) {
+    const tokenId = await this.getHotelToken();
+    const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+    const res = await this.hotelSearchClient.post("/PreBook", payload);
+    if (res.data?.Status === 1 || res.data?.IsPriceChanged !== undefined) {
+      return res.data;
+    }
+    throw new Error(res.data?.Error?.ErrorMessage || "TBO PreBook failed");
+  }
+
+  /**
+   * Book hotel
+   */
+  async bookHotel(params) {
+    const tokenId = await this.getHotelToken();
+    const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+    const res = await this.hotelBookingClient.post("/Book", payload);
+    if (res.data?.Status === 1 || res.data?.BookingId || res.data?.ConfirmationNo) {
+      return res.data;
+    }
+    throw new Error(res.data?.Error?.ErrorMessage || "TBO Book failed");
+  }
+
+  /**
+   * Generate voucher
+   */
+  async generateHotelVoucher(params) {
+    const tokenId = await this.getHotelToken();
+    const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+    const res = await this.hotelBookingClient.post("/GenerateVoucher", payload);
+    if (res.data?.Status === 1 || res.data?.VoucherNo) {
+      return res.data;
+    }
+    throw new Error(res.data?.Error?.ErrorMessage || "TBO Voucher failed");
+  }
+
+  /**
+   * Get booking details
+   */
+  async getHotelBookingDetails(params) {
+    const tokenId = await this.getHotelToken();
+    const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+    const res = await this.hotelBookingClient.post("/GetBookingDetail", payload);
+    if (res.data?.Status === 1) {
+      return res.data;
+    }
+    throw new Error(res.data?.Error?.ErrorMessage || "TBO GetBookingDetails failed");
+  }
+
+  /**
    * Health check
    */
   async performHealthCheck() {
