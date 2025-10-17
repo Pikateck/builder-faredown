@@ -927,6 +927,113 @@ class TBOAdapter extends BaseSupplierAdapter {
   }
 
   /**
+   * Static data: Country list
+   */
+  async getCountryList(force = false) {
+    try {
+      const redis = require("../redisService");
+      const cacheKey = "tbo:static:countries";
+      if (!force) {
+        const cached = await redis.get(cacheKey);
+        if (cached) return cached;
+      }
+      const res = await this.executeWithRetry(() =>
+        this.hotelStaticClient.post("/CountryList", {
+          UserName: this.config.staticUserName?.trim(),
+          Password: this.config.staticPassword,
+        }),
+      );
+      const data = res.data?.CountryList || res.data?.Result || [];
+      await (require("../redisService").set(cacheKey, data, 24 * 60 * 60));
+      return data;
+    } catch (e) {
+      this.logger.error("TBO static CountryList failed", { error: e.message });
+      return [];
+    }
+  }
+
+  /**
+   * Static data: City list for a country
+   */
+  async getCityList(countryCode, force = false) {
+    try {
+      const redis = require("../redisService");
+      const cacheKey = `tbo:static:cities:${countryCode}`;
+      if (!force) {
+        const cached = await redis.get(cacheKey);
+        if (cached) return cached;
+      }
+      const res = await this.executeWithRetry(() =>
+        this.hotelStaticClient.post("/CityList", {
+          UserName: this.config.staticUserName?.trim(),
+          Password: this.config.staticPassword,
+          CountryCode: countryCode,
+        }),
+      );
+      const data = res.data?.CityList || res.data?.Result || [];
+      await (require("../redisService").set(cacheKey, data, 24 * 60 * 60));
+      return data;
+    } catch (e) {
+      this.logger.error("TBO static CityList failed", { error: e.message });
+      return [];
+    }
+  }
+
+  /**
+   * Static data: Hotel codes in a city
+   */
+  async getHotelCodes(cityCode, force = false) {
+    try {
+      const redis = require("../redisService");
+      const cacheKey = `tbo:static:hotelcodes:${cityCode}`;
+      if (!force) {
+        const cached = await redis.get(cacheKey);
+        if (cached) return cached;
+      }
+      const res = await this.executeWithRetry(() =>
+        this.hotelStaticClient.post("/HotelCodesList", {
+          UserName: this.config.staticUserName?.trim(),
+          Password: this.config.staticPassword,
+          CityCode: cityCode,
+        }),
+      );
+      const data = res.data?.HotelCodes || res.data?.Result || [];
+      await (require("../redisService").set(cacheKey, data, 24 * 60 * 60));
+      return data;
+    } catch (e) {
+      this.logger.error("TBO static HotelCodesList failed", { error: e.message });
+      return [];
+    }
+  }
+
+  /**
+   * Static data: Hotel details by code
+   */
+  async getHotelDetails(hotelCode, force = false) {
+    try {
+      const redis = require("../redisService");
+      const cacheKey = `tbo:static:hotel:${hotelCode}`;
+      if (!force) {
+        const cached = await redis.get(cacheKey);
+        if (cached) return cached;
+      }
+      const res = await this.executeWithRetry(() =>
+        this.hotelStaticClient.post("/HotelDetails", {
+          UserName: this.config.staticUserName?.trim(),
+          Password: this.config.staticPassword,
+          HotelCode: hotelCode,
+        }),
+      );
+      const data = res.data?.Hotel || res.data?.Result || null;
+      await (require("../redisService").set(cacheKey, data, 24 * 60 * 60));
+      return data;
+    } catch (e) {
+      this.logger.error("TBO static HotelDetails failed", { error: e.message });
+      return null;
+    }
+  }
+
+  /**
    * Sightseeing search (TBO doesn't provide sightseeing)
    */
   async searchSightseeing(searchParams) {
