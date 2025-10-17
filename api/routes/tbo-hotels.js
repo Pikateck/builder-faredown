@@ -463,4 +463,60 @@ router.get("/unified/offers", async (req, res) => {
   }
 });
 
+// Hotel Info
+router.post("/info", async (req, res) => {
+  try {
+    const adapter = getTboAdapter();
+    if (typeof adapter.getHotelInfo !== "function") {
+      return res.status(501).json({ success: false, error: "HotelInfo not implemented" });
+    }
+    const data = await adapter.getHotelInfo(req.body || {});
+    res.json({ success: true, data });
+  } catch (e) {
+    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+  }
+});
+
+// Hotel Room
+router.post("/room", async (req, res) => {
+  try {
+    const adapter = getTboAdapter();
+    if (typeof adapter.getHotelRoom !== "function") {
+      return res.status(501).json({ success: false, error: "HotelRoom not implemented" });
+    }
+    const data = await adapter.getHotelRoom(req.body || {});
+    res.json({ success: true, data });
+  } catch (e) {
+    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+  }
+});
+
+// Change Request Status
+router.post("/change/status", async (req, res) => {
+  try {
+    const adapter = getTboAdapter();
+    if (typeof adapter.getChangeRequestStatus !== "function") {
+      return res.status(501).json({ success: false, error: "Change status not implemented" });
+    }
+    const data = await adapter.getChangeRequestStatus(req.body || {});
+    res.json({ success: true, data });
+  } catch (e) {
+    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+  }
+});
+
+// Logout (best-effort)
+router.post("/logout", async (req, res) => {
+  try {
+    const adapter = getTboAdapter();
+    if (typeof adapter.logoutAll !== "function") {
+      return res.status(501).json({ success: false, error: "Logout not implemented" });
+    }
+    const data = await adapter.logoutAll();
+    res.json({ success: true, data });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 module.exports = router;
