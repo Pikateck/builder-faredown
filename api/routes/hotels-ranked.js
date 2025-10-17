@@ -33,11 +33,30 @@ router.get("/search", async (req, res) => {
       offset,
     } = req.query || {};
 
-    const preferredSuppliers = Array.isArray(suppliers)
+    let preferredSuppliers = Array.isArray(suppliers)
       ? suppliers.map((s) => String(s).toUpperCase())
       : typeof suppliers === "string" && suppliers.length > 0
         ? suppliers.split(",").map((s) => s.trim().toUpperCase())
-        : undefined; // let service use its default (includes TBO)
+        : undefined; // fallback to DB
+
+    if (!preferredSuppliers) {
+      try {
+        const db = require("../database/connection");
+        const result = await db.query(
+          `SELECT COALESCE(code, supplier_code) AS code
+           FROM supplier_master
+           WHERE enabled = TRUE
+             AND LOWER(COALESCE(code, supplier_code)) IN ('ratehawk','hotelbeds','tbo')
+           ORDER BY weight DESC, COALESCE(code, supplier_code) ASC`
+        );
+        preferredSuppliers = result.rows.map((r) => String(r.code || "").toUpperCase());
+        if (preferredSuppliers.length === 0) {
+          preferredSuppliers = ["RATEHAWK", "HOTELBEDS", "TBO"];
+        }
+      } catch (e) {
+        preferredSuppliers = ["RATEHAWK", "HOTELBEDS", "TBO"];
+      }
+    }
 
     const searchParams = {
       city: city || null,
