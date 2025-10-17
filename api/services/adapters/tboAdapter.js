@@ -1114,52 +1114,76 @@ class TBOAdapter extends BaseSupplierAdapter {
    * PreBook hotel
    */
   async preBookHotel(params) {
-    const tokenId = await this.getHotelToken();
-    const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-    const res = await this.executeWithRetry(() => this.hotelSearchClient.post("/PreBook", payload));
-    if (res.data?.Status === 1 || res.data?.IsPriceChanged !== undefined) {
-      return res.data;
+    const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
+    try {
+      const tokenId = await this.getHotelToken();
+      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+      const res = await this.executeWithRetry(() => this.hotelSearchClient.post("/PreBook", payload));
+      if (res.data?.Status === 1 || res.data?.IsPriceChanged !== undefined) {
+        return res.data;
+      }
+      throw mapFromResponse(res);
+    } catch (e) {
+      if (!e.code) throw mapFromAxiosError(e);
+      throw e;
     }
-    throw new Error(res.data?.Error?.ErrorMessage || "TBO PreBook failed");
   }
 
   /**
    * Book hotel
    */
   async bookHotel(params) {
-    const tokenId = await this.getHotelToken();
-    const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-    const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/Book", payload));
-    if (res.data?.Status === 1 || res.data?.BookingId || res.data?.ConfirmationNo) {
-      return res.data;
+    const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
+    try {
+      const tokenId = await this.getHotelToken();
+      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+      const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/Book", payload));
+      if (res.data?.Status === 1 || res.data?.BookingId || res.data?.ConfirmationNo) {
+        return res.data;
+      }
+      throw mapFromResponse(res);
+    } catch (e) {
+      if (!e.code) throw mapFromAxiosError(e);
+      throw e;
     }
-    throw new Error(res.data?.Error?.ErrorMessage || "TBO Book failed");
   }
 
   /**
    * Generate voucher
    */
   async generateHotelVoucher(params) {
-    const tokenId = await this.getHotelToken();
-    const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-    const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/GenerateVoucher", payload));
-    if (res.data?.Status === 1 || res.data?.VoucherNo) {
-      return res.data;
+    const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
+    try {
+      const tokenId = await this.getHotelToken();
+      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+      const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/GenerateVoucher", payload), 5);
+      if (res.data?.Status === 1 || res.data?.VoucherNo) {
+        return res.data;
+      }
+      throw mapFromResponse(res);
+    } catch (e) {
+      if (!e.code) throw mapFromAxiosError(e);
+      throw e;
     }
-    throw new Error(res.data?.Error?.ErrorMessage || "TBO Voucher failed");
   }
 
   /**
    * Get booking details
    */
   async getHotelBookingDetails(params) {
-    const tokenId = await this.getHotelToken();
-    const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-    const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/GetBookingDetail", payload));
-    if (res.data?.Status === 1) {
-      return res.data;
+    const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
+    try {
+      const tokenId = await this.getHotelToken();
+      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+      const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/GetBookingDetail", payload));
+      if (res.data?.Status === 1) {
+        return res.data;
+      }
+      throw mapFromResponse(res);
+    } catch (e) {
+      if (!e.code) throw mapFromAxiosError(e);
+      throw e;
     }
-    throw new Error(res.data?.Error?.ErrorMessage || "TBO GetBookingDetails failed");
   }
 
   /**
