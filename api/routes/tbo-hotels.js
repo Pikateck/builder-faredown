@@ -57,6 +57,17 @@ router.post("/book", async (req, res) => {
       return res.status(501).json({ success: false, error: "Book not implemented" });
     }
 
+    // Idempotency
+    const redis = require("../services/redisService");
+    const idemKey = req.header("Idempotency-Key");
+    const idemCacheKey = idemKey ? `idem:tbo:book:${idemKey}` : null;
+    if (idemCacheKey) {
+      const existing = await redis.get(idemCacheKey);
+      if (existing?.bookingRef) {
+        return res.json({ success: true, data: existing });
+      }
+    }
+
     const bookingRes = await adapter.bookHotel(req.body || {});
 
     // Persist booking (best-effort mapping)
