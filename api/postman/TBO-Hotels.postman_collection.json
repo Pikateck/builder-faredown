@@ -1,0 +1,60 @@
+{
+  "info": {
+    "name": "Faredown - TBO Hotels (Live)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "Health",
+      "request": {"method": "GET", "url": "{{API_BASE}}/api/tbo-hotels/health"}
+    },
+    {
+      "name": "Search (DXB sample)",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"destination\": \"DXB\",\n  \"checkIn\": \"2026-01-12\",\n  \"checkOut\": \"2026-01-15\",\n  \"adults\": 2,\n  \"children\": 0,\n  \"currency\": \"INR\"\n}"},
+        "url": "{{API_BASE}}/api/tbo-hotels/search"
+      }
+    },
+    {
+      "name": "PreBook",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"HotelCode\": \"{{HotelCode}}\",\n  \"RatePlanCode\": \"{{RatePlanCode}}\",\n  \"RoomTypeCode\": \"{{RoomTypeCode}}\",\n  \"RateKey\": \"{{RateKey}}\"\n}"},
+        "url": "{{API_BASE}}/api/tbo-hotels/prebook"
+      }
+    },
+    {
+      "name": "Book",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"BookingId\": \"{{PreBookId}}\",\n  \"PassengerDetails\": {\n    \"Title\": \"Mr\",\n    \"FirstName\": \"Test\",\n    \"LastName\": \"User\"\n  }\n}"},
+        "url": "{{API_BASE}}/api/tbo-hotels/book"
+      }
+    },
+    {
+      "name": "Generate Voucher",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"BookingId\": \"{{BookingId}}\"\n}"},
+        "url": "{{API_BASE}}/api/tbo-hotels/voucher"
+      }
+    },
+    {
+      "name": "Get Booking Details",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"BookingId\": \"{{BookingId}}\"\n}"},
+        "url": "{{API_BASE}}/api/tbo-hotels/booking/details"
+      }
+    }
+  ],
+  "variable": [
+    {"key":"API_BASE","value":"https://builder-faredown-pricing.onrender.com"}
+  ]
+}
