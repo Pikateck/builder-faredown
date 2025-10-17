@@ -63,7 +63,7 @@ router.post("/book", async (req, res) => {
     const idemCacheKey = idemKey ? `idem:tbo:book:${idemKey}` : null;
     if (idemCacheKey) {
       const existing = await redis.get(idemCacheKey);
-      if (existing?.bookingRef) {
+      if (existing?.bookingRef && existing?.booking) {
         return res.json({ success: true, data: existing });
       }
     }
@@ -88,6 +88,21 @@ router.post("/book", async (req, res) => {
     const stay = bookingRes.Stay || {}; // CheckIn/CheckOut if present
     const price = bookingRes.Price || {};
 
+    // Compute nights if possible
+    const checkInVal = stay.CheckIn || req.body.CheckIn || req.body.checkIn || null;
+    const checkOutVal = stay.CheckOut || req.body.CheckOut || req.body.checkOut || null;
+    let nights = null;
+    if (checkInVal && checkOutVal) {
+      const inD = new Date(checkInVal);
+      const outD = new Date(checkOutVal);
+      const diffMs = outD - inD;
+      if (!isNaN(diffMs) && diffMs > 0) nights = Math.round(diffMs / (1000 * 60 * 60 * 24));
+    }
+
+    const childrenAges = Array.isArray(req.body.RoomGuests)
+      ? req.body.RoomGuests.flatMap((rg) => Array.isArray(rg.ChildAge) ? rg.ChildAge : [])
+      : Array.isArray(req.body.childrenAges) ? req.body.childrenAges : [];
+
     const payload = {
       booking_ref: bookingRef,
       supplier_id: supplierId,
@@ -104,13 +119,13 @@ router.post("/book", async (req, res) => {
       giata_room_type: null,
       max_occupancy: null,
       guest_details: req.body.GuestDetails || { primaryGuest: req.body.PassengerDetails || {} },
-      check_in_date: stay.CheckIn || req.body.CheckIn || req.body.checkIn || null,
-      check_out_date: stay.CheckOut || req.body.CheckOut || req.body.checkOut || null,
-      nights: null,
+      check_in_date: checkInVal,
+      check_out_date: checkOutVal,
+      nights,
       rooms_count: Array.isArray(req.body.RoomGuests) ? req.body.RoomGuests.length : 1,
       adults_count: (req.body.RoomGuests || []).reduce((s,r)=>s+(r.NoOfAdults||0),0) || (req.body.adults||0) || null,
       children_count: (req.body.RoomGuests || []).reduce((s,r)=>s+(r.NoOfChild||0),0) || (req.body.children||0) || 0,
-      children_ages: [],
+      children_ages: childrenAges,
       base_price: price.NetFare || price.BasePrice || null,
       markup_amount: null,
       markup_percentage: null,
@@ -125,25 +140,25 @@ router.post("/book", async (req, res) => {
       internal_notes: null,
     };
 
-    const voucherSaved = await Voucher.create({
-      booking_id: bookingRow.id,
-      voucher_type: "hotel",
-      voucher_number: voucherNumber,
-      pdf_path: null, // Placeholder, PDF generation would be a separate step
-      pdf_size_bytes: null,
-      email_address: bookingRow.guest_details?.contactInfo?.email || null,
-    });
+    const created = await HotelBooking.create(payload);
 
     // Cache idempotent response for 10 minutes
+    const responsePayload = {
+      bookingRef,
+      supplier: "TBO",
+      booking: created.success ? created.data : null,
+      supplierResponse: bookingRes,
+    };
+
     if (idemCacheKey) {
-      await redis.setIfNotExists(
-        idemCacheKey,
-        { bookingRef, supplier: "TBO", booking: created.data, supplierResponse: bookingRes, voucher: voucherSaved?.data || null },
-        600,
-      );
+      await redis.setIfNotExists(idemCacheKey, responsePayload, 600);
     }
 
-    res.json({ success: true, data: { bookingRef, supplier: "TBO", booking: created.data, supplierResponse: bookingRes, voucher: voucherSaved?.data || null } });
+    if (!created.success) {
+      return res.status(500).json({ success: false, error: created.error || "Failed to persist booking", data: responsePayload });
+    }
+
+    res.json({ success: true, data: responsePayload });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
   }
