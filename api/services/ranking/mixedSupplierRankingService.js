@@ -25,7 +25,7 @@ class MixedSupplierRankingService {
         freeCancellationOnly = false,
         minStarRating = 0,
         currency = "USD",
-        preferredSuppliers = ["RATEHAWK", "HOTELBEDS"],
+        preferredSuppliers = ["RATEHAWK", "HOTELBEDS", "TBO"],
         limit = 50,
         offset = 0,
       } = searchParams;
