@@ -113,6 +113,10 @@ class SupplierAdapterManager {
         if (this.adapters.has("RATEHAWK")) {
           hotelAdapters.push(this.adapters.get("RATEHAWK"));
         }
+        // Include TBO adapter for hotels when available (adapter implements searchHotels)
+        if (this.adapters.has("TBO")) {
+          hotelAdapters.push(this.adapters.get("TBO"));
+        }
         return hotelAdapters;
       case "sightseeing":
         return this.adapters.has("HOTELBEDS")
