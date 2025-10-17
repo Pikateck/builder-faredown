@@ -1298,6 +1298,105 @@ class TBOAdapter extends BaseSupplierAdapter {
       };
     }
   }
+  /**
+   * Get detailed hotel info (HOTEL INFO)
+   */
+  async getHotelInfo(params) {
+    const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
+    try {
+      const tokenId = await this.getHotelToken();
+      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+      const res = await this.executeWithRetry(() => this.hotelSearchClient.post("/HotelInfo", payload));
+      if (res.data?.Status === 1) return res.data;
+      throw mapFromResponse(res);
+    } catch (e) {
+      if (!e.code) throw mapFromAxiosError(e);
+      throw e;
+    }
+  }
+
+  /**
+   * Get room details/pricing for a specific selection (HOTEL ROOM)
+   */
+  async getHotelRoom(params) {
+    const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
+    try {
+      const tokenId = await this.getHotelToken();
+      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+      const res = await this.executeWithRetry(() => this.hotelSearchClient.post("/HotelRoom", payload));
+      if (res.data?.Status === 1) return res.data;
+      throw mapFromResponse(res);
+    } catch (e) {
+      if (!e.code) throw mapFromAxiosError(e);
+      throw e;
+    }
+  }
+
+  /**
+   * Static data: Top Destinations (popular cities)
+   */
+  async getTopDestinations(force = false) {
+    try {
+      const redis = require("../redisService");
+      const cacheKey = `tbo:static:topdestinations`;
+      if (!force) {
+        const cached = await redis.get(cacheKey);
+        if (cached) return cached;
+      }
+      const res = await this.executeWithRetry(() =>
+        this.hotelStaticClient.post("/TopDestinations", {
+          UserName: this.config.staticUserName?.trim(),
+          Password: this.config.staticPassword,
+        }),
+      );
+      const data = res.data?.CityList || res.data?.Result || [];
+      await (require("../redisService").set(cacheKey, data, 24 * 60 * 60));
+      return data;
+    } catch (e) {
+      this.logger.error("TBO static TopDestinations failed", { error: e.message });
+      return [];
+    }
+  }
+
+  /**
+   * Get status of a previously submitted change/cancel request
+   */
+  async getChangeRequestStatus(params) {
+    const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
+    try {
+      const tokenId = await this.getHotelToken();
+      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
+      const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/GetChangeRequestStatus", payload));
+      if (res.data?.Status === 1) return res.data;
+      throw mapFromResponse(res);
+    } catch (e) {
+      if (!e.code) throw mapFromAxiosError(e);
+      throw e;
+    }
+  }
+
+  /**
+   * Logout tokens (best-effort)
+   */
+  async logoutAll() {
+    try {
+      // Flight token logout
+      if (this.tokenId) {
+        try {
+          await this.httpClient.post("/Logout", { TokenId: this.tokenId, EndUserIp: this.config.endUserIp });
+        } catch {}
+      }
+      // Hotel token logout
+      if (this.hotelTokenId) {
+        try {
+          await this.hotelAuthClient.post("/Logout", { TokenId: this.hotelTokenId, EndUserIp: this.config.endUserIp });
+        } catch {}
+      }
+      return { success: true };
+    } catch (e) {
+      return { success: false, error: e.message };
+    }
+  }
 }
 
 module.exports = TBOAdapter;
