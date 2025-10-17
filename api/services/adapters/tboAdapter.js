@@ -43,6 +43,8 @@ class TBOAdapter extends BaseSupplierAdapter {
 
     this.tokenId = null;
     this.tokenExpiry = null;
+    this.hotelTokenId = null;
+    this.hotelTokenExpiry = null;
 
     // Initialize HTTP clients for both endpoints (flights)
     this.searchClient = axios.create({
