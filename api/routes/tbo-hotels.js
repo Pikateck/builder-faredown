@@ -159,6 +159,19 @@ router.post("/book", async (req, res) => {
 
     const created = await HotelBooking.create(payload);
 
+    // Write booking audit log
+    if (created.success && created.data?.id) {
+      try {
+        await db.query(
+          `INSERT INTO booking_audit_log (booking_id, action, changed_by, change_reason)
+           VALUES ($1, $2, $3, $4)`,
+          [created.data.id, "created", "system", "TBO booking confirmed"],
+        );
+      } catch (e) {
+        console.warn("Booking audit log insert failed", e.message);
+      }
+    }
+
     // Cache idempotent response for 10 minutes
     const responsePayload = {
       bookingRef,
@@ -187,6 +200,17 @@ router.post("/voucher", async (req, res) => {
     const adapter = getTboAdapter();
     if (typeof adapter.generateHotelVoucher !== "function") {
       return res.status(501).json({ success: false, error: "Voucher not implemented" });
+    }
+
+    // Idempotency for voucher generation
+    const redis = require("../services/redisService");
+    const idemKey = req.header("Idempotency-Key");
+    const idemCacheKey = idemKey ? `idem:tbo:voucher:${idemKey}` : null;
+    if (idemCacheKey) {
+      const existing = await redis.get(idemCacheKey);
+      if (existing?.persistedVoucher || existing?.supplierResponse) {
+        return res.json({ success: true, data: existing });
+      }
     }
 
     const db = require("../database/connection");
@@ -232,9 +256,22 @@ router.post("/voucher", async (req, res) => {
         pdf_size_bytes: null,
         email_address: bookingRow.guest_details?.contactInfo?.email || null,
       });
+      // Audit: voucher created
+      try {
+        await db.query(
+          `INSERT INTO booking_audit_log (booking_id, action, changed_by, change_reason)
+           VALUES ($1, $2, $3, $4)`,
+          [bookingRow.id, "updated", "system", "TBO voucher generated"],
+        );
+      } catch {}
     }
 
-    res.json({ success: true, data: { supplierResponse: data, persistedVoucher: voucherSaved?.data || null } });
+    const payload = { supplierResponse: data, persistedVoucher: voucherSaved?.data || null };
+    if (idemCacheKey) {
+      await redis.setIfNotExists(idemCacheKey, payload, 600);
+    }
+
+    res.json({ success: true, data: payload });
   } catch (e) {
     res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
   }
