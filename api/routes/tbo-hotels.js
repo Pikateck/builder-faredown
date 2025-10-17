@@ -127,6 +127,15 @@ router.post("/book", async (req, res) => {
 
     const created = await HotelBooking.create(payload);
 
+    // Cache idempotent response for 10 minutes
+    if (idemCacheKey) {
+      await redis.setIfNotExists(
+        idemCacheKey,
+        { bookingRef, supplier: "TBO", booking: created.data, supplierResponse: bookingRes },
+        600,
+      );
+    }
+
     res.json({ success: true, data: { bookingRef, supplier: "TBO", booking: created.data, supplierResponse: bookingRes } });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
