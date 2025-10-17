@@ -136,6 +136,9 @@ class BackgroundJobsService {
       // 5. Cleanup old snapshots
       await this.cleanupOldSnapshots();
 
+      // 6. Refresh TBO static data caches
+      await this.refreshTboStaticData();
+
       this.updateJobStatus(
         jobId,
         "completed",
@@ -145,6 +148,45 @@ class BackgroundJobsService {
     } catch (error) {
       this.updateJobStatus(jobId, "failed", error.message);
       this.logger.error("Nightly jobs failed:", error);
+    }
+  }
+
+  /**
+   * Refresh TBO static data caches
+   */
+  async refreshTboStaticData() {
+    try {
+      const adapter = supplierAdapterManager.getAdapter("TBO");
+      if (!adapter) {
+        this.logger.warn("TBO adapter not initialized; skipping static data refresh");
+        return;
+      }
+
+      this.logger.info("Refreshing TBO static data caches...");
+
+      const countries = (process.env.TBO_STATIC_COUNTRIES || "AE,IN,GB").split(",").map((c) => c.trim());
+      const cityByCountry = {
+        AE: ["DXB", "AUH"],
+        IN: ["BOM", "DEL", "BLR"],
+        GB: ["LON"],
+      };
+
+      // Countries
+      await adapter.getCountryList(true);
+
+      for (const cc of countries) {
+        // Cities per country
+        await adapter.getCityList(cc, true);
+        const cities = cityByCountry[cc] || [];
+        for (const city of cities) {
+          // Hotel codes + one sample detail to keep caches fresh
+          await adapter.getHotelCodes(city, true);
+        }
+      }
+
+      this.logger.info("TBO static data refresh completed");
+    } catch (error) {
+      this.logger.warn("TBO static data refresh failed", { error: error.message });
     }
   }
 
