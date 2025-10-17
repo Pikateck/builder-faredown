@@ -54,6 +54,63 @@
       }
     },
     {
+      "name": "Hotel Info",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"HotelCode\": \"{{HotelCode}}\"\n}"},
+        "url": "{{API_BASE}}/api/tbo-hotels/info"
+      }
+    },
+    {
+      "name": "Hotel Room",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"RateKey\": \"{{RateKey}}\"\n}"},
+        "url": "{{API_BASE}}/api/tbo-hotels/room"
+      }
+    },
+    {
+      "name": "Change Request Status",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"ChangeRequestId\": \"{{ChangeRequestId}}\",\n  \"BookingId\": \"{{BookingId}}\"\n}"},
+        "url": "{{API_BASE}}/api/tbo-hotels/change/status"
+      }
+    },
+    {
+      "name": "Top Destinations (Static)",
+      "request": {
+        "method": "GET",
+        "url": "{{API_BASE}}/api/tbo-hotels-static/top-destinations"
+      }
+    },
+    {
+      "name": "Agency Balance",
+      "request": {
+        "method": "GET",
+        "url": "{{API_BASE}}/api/tbo-hotels/balance"
+      }
+    },
+    {
+      "name": "Validate Payload (server-side)",
+      "request": {
+        "method": "POST",
+        "header": [{"key":"Content-Type","value":"application/json"}],
+        "body": {"mode":"raw","raw":"{\n  \"HotelCode\": \"{{HotelCode}}\",\n  \"RateKey\": \"{{RateKey}}\"\n}"},
+        "url": "{{API_BASE}}/api/tbo-hotels/validate?type=prebook"
+      }
+    },
+    {
+      "name": "Logout",
+      "request": {
+        "method": "POST",
+        "url": "{{API_BASE}}/api/tbo-hotels/logout"
+      }
+    },
+    {
       "name": "Cancel Booking",
       "request": {
         "method": "POST",
