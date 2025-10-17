@@ -747,10 +747,20 @@ class TBOAdapter extends BaseSupplierAdapter {
    * Get/refresh Hotel token (separate from flight token)
    */
   async getHotelToken() {
-    // Return cached token if valid
+    // Return cached token if valid in-memory
     if (this.hotelTokenId && this.hotelTokenExpiry && Date.now() < this.hotelTokenExpiry) {
       return this.hotelTokenId;
     }
+
+    // Try DB cache
+    try {
+      const cached = await this.getCachedHotelToken();
+      if (cached && Date.now() < cached.expires_at) {
+        this.hotelTokenId = cached.token_id;
+        this.hotelTokenExpiry = cached.expires_at;
+        return this.hotelTokenId;
+      }
+    } catch {}
 
     return await this.executeWithRetry(async () => {
       const authRequest = {
@@ -761,15 +771,58 @@ class TBOAdapter extends BaseSupplierAdapter {
       };
       const response = await this.hotelAuthClient.post("/Authenticate", authRequest);
       if (response.data?.Status === 1 && response.data?.TokenId) {
-        // Cache token ~55 minutes
+        // Cache token ~55 minutes (memory + DB)
         this.hotelTokenId = response.data.TokenId;
         this.hotelTokenExpiry = Date.now() + 55 * 60 * 1000;
+        await this.cacheHotelToken(this.hotelTokenId, this.hotelTokenExpiry);
         return this.hotelTokenId;
       }
       throw new Error(
         `TBO Hotel auth failed: ${response.data?.Error?.ErrorMessage || JSON.stringify(response.data)}`,
       );
     });
+  }
+
+  /**
+   * Get cached HOTEL token from database
+   */
+  async getCachedHotelToken() {
+    try {
+      const result = await pool.query(
+        `SELECT token_id, agency_id, expires_at
+         FROM tbo_token_cache
+         WHERE agency_id = $1
+           AND expires_at > NOW()
+         ORDER BY created_at DESC
+         LIMIT 1`,
+        [this.config.hotelClientId],
+      );
+      if (result.rows.length > 0) {
+        return {
+          token_id: result.rows[0].token_id,
+          expires_at: new Date(result.rows[0].expires_at).getTime(),
+        };
+      }
+      return null;
+    } catch (error) {
+      this.logger.warn("Hotel token cache lookup failed", { error: error.message });
+      return null;
+    }
+  }
+
+  /**
+   * Cache HOTEL token in database
+   */
+  async cacheHotelToken(tokenId, expiresAt) {
+    try {
+      await pool.query(
+        `INSERT INTO tbo_token_cache (token_id, agency_id, expires_at)
+         VALUES ($1, $2, $3)`,
+        [tokenId, this.config.hotelClientId, new Date(expiresAt)],
+      );
+    } catch (error) {
+      this.logger.warn("Hotel token cache insert failed", { error: error.message });
+    }
   }
 
   /**
