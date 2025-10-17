@@ -171,9 +171,7 @@ router.post("/voucher", async (req, res) => {
     if (typeof adapter.generateHotelVoucher !== "function") {
       return res.status(501).json({ success: false, error: "Voucher not implemented" });
     }
-    const data = await adapter.generateHotelVoucher(req.body || {});
 
-    // Link to our booking and persist voucher
     const db = require("../database/connection");
     const Voucher = require("../models/Voucher");
     const HotelBooking = require("../models/HotelBooking");
@@ -184,14 +182,27 @@ router.post("/voucher", async (req, res) => {
       const found = await HotelBooking.findByReference(req.body.booking_ref);
       if (found.success) bookingRow = found.data;
     }
-    if (!bookingRow && (req.body?.BookingId || data?.BookingId || data?.ConfirmationNo)) {
-      const supplierRef = req.body.BookingId || data.BookingId || data.ConfirmationNo;
+
+    // If not provided by ref, attempt lookup by supplier reference on request
+    if (!bookingRow && (req.body?.BookingId || req.body?.ConfirmationNo)) {
+      const supplierRef = req.body.BookingId || req.body.ConfirmationNo;
       const result = await db.query(
         "SELECT * FROM hotel_bookings WHERE supplier_booking_ref = $1 ORDER BY created_at DESC LIMIT 1",
         [String(supplierRef)],
       );
       bookingRow = result.rows?.[0] || null;
     }
+
+    // Idempotency: if we already have a latest voucher for this booking, return it
+    if (bookingRow) {
+      const latest = await Voucher.findLatestByBookingId(bookingRow.id);
+      if (latest.success && latest.data) {
+        return res.json({ success: true, data: { supplierResponse: null, persistedVoucher: latest.data } });
+      }
+    }
+
+    // Generate supplier voucher now
+    const data = await adapter.generateHotelVoucher(req.body || {});
 
     let voucherSaved = null;
     if (bookingRow) {
@@ -207,6 +218,49 @@ router.post("/voucher", async (req, res) => {
     }
 
     res.json({ success: true, data: { supplierResponse: data, persistedVoucher: voucherSaved?.data || null } });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+// Get booking by booking_ref (with optional live supplier details)
+router.get("/booking/:bookingRef", async (req, res) => {
+  try {
+    const HotelBooking = require("../models/HotelBooking");
+    const Voucher = require("../models/Voucher");
+    const adapter = getTboAdapter();
+
+    const bookingRef = req.params.bookingRef;
+    const includeLive = req.query.live !== "0";
+
+    const bookingResult = await HotelBooking.findByReference(bookingRef);
+    if (!bookingResult.success || !bookingResult.data) {
+      return res.status(404).json({ success: false, error: "Booking not found" });
+    }
+
+    const booking = bookingResult.data;
+
+    // Latest voucher if any
+    let latestVoucher = null;
+    try {
+      const v = await Voucher.findLatestByBookingId(booking.id);
+      if (v.success) latestVoucher = v.data;
+    } catch {}
+
+    // Optional live details from supplier
+    let liveDetails = null;
+    if (includeLive && booking.supplier_booking_ref) {
+      try {
+        // Prefer BookingId; if not numeric, try ConfirmationNo
+        const ref = booking.supplier_booking_ref;
+        const params = /^\d+$/.test(String(ref)) ? { BookingId: ref } : { ConfirmationNo: ref };
+        liveDetails = await adapter.getHotelBookingDetails(params);
+      } catch (e) {
+        liveDetails = { error: e.message };
+      }
+    }
+
+    res.json({ success: true, data: { booking, latestVoucher, liveDetails } });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
   }
