@@ -643,25 +643,25 @@ router.get("/search", async (req, res) => {
       rawDestination: destination,
     };
 
-    // Get enabled hotel suppliers from database
-    const suppliersResult = await db.query(`
-      SELECT code FROM suppliers 
-      WHERE product_type = 'hotels' 
-      AND is_enabled = TRUE
-      ORDER BY code
-    `);
+    // Get enabled hotel suppliers from database (supplier_master)
+  const suppliersResult = await db.query(`
+    SELECT code FROM supplier_master
+    WHERE enabled = TRUE
+    AND (code IN ('hotelbeds','ratehawk','tbo'))
+    ORDER BY code
+  `);
 
-    const enabledSuppliers = suppliersResult.rows.map((row) =>
-      row.code.toUpperCase(),
-    );
+  const enabledSuppliers = suppliersResult.rows.map((row) =>
+    row.code.toUpperCase(),
+  );
 
-    // Fallback to env if no DB suppliers
-    const suppliersToUse =
-      enabledSuppliers.length > 0
-        ? enabledSuppliers
-        : (process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK")
-            .split(",")
-            .map((s) => s.trim().toUpperCase());
+  // Fallback to env if no DB suppliers
+  const suppliersToUse =
+    enabledSuppliers.length > 0
+      ? enabledSuppliers
+      : (process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK,TBO")
+          .split(",")
+          .map((s) => s.trim().toUpperCase());
 
     console.log(
       `📡 Searching across hotel suppliers: ${suppliersToUse.join(", ")}`,
