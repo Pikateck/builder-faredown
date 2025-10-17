@@ -742,9 +742,31 @@ class TBOAdapter extends BaseSupplierAdapter {
   }
 
   /**
-   * Hotel search using TBO Hotel API
-   * Note: This is a stub implementation for Phase 3
-   * TBO requires separate hotel search credentials
+   * Get/refresh Hotel token (separate from flight token)
+   */
+  async getHotelToken() {
+    try {
+      const authRequest = {
+        ClientId: this.config.hotelClientId,
+        UserName: this.config.hotelUserId,
+        Password: this.config.hotelPassword,
+        EndUserIp: this.config.endUserIp,
+      };
+      const response = await this.hotelAuthClient.post("/Authenticate", authRequest);
+      if (response.data?.Status === 1 && response.data?.TokenId) {
+        return response.data.TokenId;
+      }
+      throw new Error(
+        `TBO Hotel auth failed: ${response.data?.Error?.ErrorMessage || JSON.stringify(response.data)}`,
+      );
+    } catch (error) {
+      this.logger.error("TBO Hotel auth error", { error: error.message });
+      throw error;
+    }
+  }
+
+  /**
+   * Hotel search using TBO Hotel API (scaffold)
    */
   async searchHotels(searchParams) {
     try {
@@ -754,16 +776,56 @@ class TBOAdapter extends BaseSupplierAdapter {
         checkOut: searchParams.checkOut,
       });
 
-      // For Phase 3, TBO hotel search would require:
-      // 1. Separate hotel API credentials
-      // 2. Hotel-specific search endpoint
-      // 3. Different authentication than flights
+      const tokenId = await this.getHotelToken();
 
-      // For now, return empty array with log (can be enabled when TBO hotel creds available)
-      this.logger.warn(
-        "Hotel search not fully implemented for TBO (requires hotel-specific credentials)",
-      );
-      return [];
+      const {
+        destination,
+        checkIn,
+        checkOut,
+        adults = 2,
+        children = 0,
+        currency = "INR",
+        rooms = 1,
+      } = searchParams;
+
+      // Minimal payload per TBO docs (exact fields may vary; keep resilient)
+      const payload = {
+        TokenId: tokenId,
+        CheckIn: checkIn,
+        CheckOut: checkOut,
+        NoOfRooms: rooms,
+        GuestNationality: "IN",
+        City: destination,
+        IsNearBySearchAllowed: true,
+        RoomGuests: [
+          { NoOfAdults: adults, NoOfChild: children, ChildAge: [] },
+        ],
+        PreferredCurrency: currency,
+        EndUserIp: this.config.endUserIp,
+      };
+
+      let results = [];
+      try {
+        const res = await this.hotelSearchClient.post("/Search", payload);
+        const hotels = res.data?.HotelResult || res.data?.Hotels || [];
+        // Map to lightweight result for aggregation; full normalization later
+        results = hotels.slice(0, 20).map((h) => ({
+          hotelId: String(h.HotelCode || h.HotelId || h.Id || ""),
+          name: h.HotelName || h.Name || "",
+          city: destination,
+          price: parseFloat(h.Price?.PublishedPrice) || parseFloat(h.MinPrice) || 0,
+          currency: currency,
+          supplier: "TBO",
+          checkIn,
+          checkOut,
+          roomCode: h.Rooms?.[0]?.RoomTypeCode || "",
+        }));
+      } catch (apiErr) {
+        this.logger.error("TBO hotel search API error", { error: apiErr.message });
+        return [];
+      }
+
+      return results;
     } catch (error) {
       this.logger.error("TBO hotel search failed", {
         error: error.message,
