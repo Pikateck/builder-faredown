@@ -89,6 +89,13 @@
         "method": "GET",
         "url": "{{API_BASE}}/api/hotels-ranked/search?city={{City}}&checkIn={{CheckIn}}&checkOut={{CheckOut}}&suppliers=RATEHAWK,HOTELBEDS,TBO&currency=INR&limit=20"
       }
+    },
+    {
+      "name": "Multi-Supplier Hotels (Transformed)",
+      "request": {
+        "method": "GET",
+        "url": "{{API_BASE}}/api/hotels/search?destination={{City}}&checkIn={{CheckIn}}&checkOut={{CheckOut}}&adults=2&children=0&rooms=1&currency=INR"
+      }
     }
   ],
   "variable": [
