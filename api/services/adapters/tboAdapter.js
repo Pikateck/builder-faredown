@@ -903,10 +903,16 @@ class TBOAdapter extends BaseSupplierAdapter {
         totalOffers: normalizedOffers.length,
       });
 
+      // Prepare hotels for merge (include supplier_hotel_id)
+      const hotelsForMerge = normalizedHotels.map((h) => ({
+        ...h.hotelMasterData,
+        supplier_hotel_id: h.supplierMapData?.supplier_hotel_id || (h.rawHotel?.HotelCode || h.rawHotel?.Id ? String(h.rawHotel.HotelCode || h.rawHotel.Id) : null),
+      }));
+
       // Merge into unified Phase 3 tables with dedup logic
       const mergeResult =
         await HotelDedupAndMergeUnified.mergeNormalizedResults(
-          normalizedHotels.map((h) => h.hotelMasterData),
+          hotelsForMerge,
           normalizedOffers,
           "TBO",
         );
