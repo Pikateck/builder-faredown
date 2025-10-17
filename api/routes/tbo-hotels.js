@@ -125,18 +125,25 @@ router.post("/book", async (req, res) => {
       internal_notes: null,
     };
 
-    const created = await HotelBooking.create(payload);
+    const voucherSaved = await Voucher.create({
+      booking_id: bookingRow.id,
+      voucher_type: "hotel",
+      voucher_number: voucherNumber,
+      pdf_path: null, // Placeholder, PDF generation would be a separate step
+      pdf_size_bytes: null,
+      email_address: bookingRow.guest_details?.contactInfo?.email || null,
+    });
 
     // Cache idempotent response for 10 minutes
     if (idemCacheKey) {
       await redis.setIfNotExists(
         idemCacheKey,
-        { bookingRef, supplier: "TBO", booking: created.data, supplierResponse: bookingRes },
+        { bookingRef, supplier: "TBO", booking: created.data, supplierResponse: bookingRes, voucher: voucherSaved?.data || null },
         600,
       );
     }
 
-    res.json({ success: true, data: { bookingRef, supplier: "TBO", booking: created.data, supplierResponse: bookingRes } });
+    res.json({ success: true, data: { bookingRef, supplier: "TBO", booking: created.data, supplierResponse: bookingRes, voucher: voucherSaved?.data || null } });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
   }
