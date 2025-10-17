@@ -156,7 +156,13 @@ class SupplierAdapterManager {
   /**
    * Search across all hotel suppliers
    */
-  async searchAllHotels(searchParams, suppliers = ["HOTELBEDS", "RATEHAWK"]) {
+  async searchAllHotels(searchParams, suppliers = null) {
+    const defaultSuppliers = (process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK,TBO")
+      .split(",")
+      .map((s) => s.trim().toUpperCase())
+      .filter(Boolean);
+    const supplierList = Array.isArray(suppliers) && suppliers.length > 0 ? suppliers : defaultSuppliers;
+
     const cached = await this.getCachedSearchResults("hotel", searchParams);
     if (cached?.results) {
       this.logger.info("Returning cached hotel search results");
@@ -167,7 +173,7 @@ class SupplierAdapterManager {
     const results = await this.executeParallelSearch(
       "hotel",
       searchParams,
-      suppliers,
+      supplierList,
     );
 
     await this.cacheSearchResults("hotel", searchParams, results);
