@@ -645,10 +645,10 @@ router.get("/search", async (req, res) => {
 
     // Get enabled hotel suppliers from database (supplier_master)
   const suppliersResult = await db.query(`
-    SELECT code, weight FROM supplier_master
+    SELECT COALESCE(code, supplier_code) AS code, weight FROM supplier_master
     WHERE enabled = TRUE
-      AND (code IN ('hotelbeds','ratehawk','tbo'))
-    ORDER BY weight DESC, code ASC
+      AND LOWER(COALESCE(code, supplier_code)) IN ('hotelbeds','ratehawk','tbo')
+    ORDER BY weight DESC, COALESCE(code, supplier_code) ASC
   `);
 
   const enabledSuppliers = suppliersResult.rows.map((row) =>
