@@ -195,7 +195,7 @@ router.post("/voucher", async (req, res) => {
 
     let voucherSaved = null;
     if (bookingRow) {
-      const voucherNumber = (new Voucher()).generateVoucherNumber(bookingRow.booking_ref, "hotel");
+      const voucherNumber = Voucher.generateVoucherNumber(bookingRow.booking_ref, "hotel");
       voucherSaved = await Voucher.create({
         booking_id: bookingRow.id,
         voucher_type: "hotel",
