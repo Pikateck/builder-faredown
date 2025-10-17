@@ -87,7 +87,21 @@
       "name": "Ranked Multi-Supplier Hotels",
       "request": {
         "method": "GET",
-        "url": "{{API_BASE}}/api/hotels-ranked/search?city={{City}}&checkIn={{CheckIn}}&checkOut={{CheckOut}}&suppliers=RATEHAWK,HOTELBEDS,TBO&currency=INR&limit=20"
+        "url": "{{API_BASE}}/api/hotels-ranked/search?city={{City}}&checkIn={{CheckIn}}&checkOut={{CheckOut}}&currency=INR&limit=20"
+      }
+    },
+    {
+      "name": "Ranked: Property Alternatives",
+      "request": {
+        "method": "GET",
+        "url": "{{API_BASE}}/api/hotels-ranked/property/{{PropertyId}}/alternatives"
+      }
+    },
+    {
+      "name": "Ranked: Supplier Metrics",
+      "request": {
+        "method": "GET",
+        "url": "{{API_BASE}}/api/hotels-ranked/suppliers/{{Supplier}}/metrics?days=7"
       }
     },
     {
