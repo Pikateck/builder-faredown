@@ -20,7 +20,7 @@ router.get("/health", async (req, res) => {
     const status = await adapter.performHealthCheck();
     res.json({ success: true, data: status });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -31,7 +31,7 @@ router.post("/search", async (req, res) => {
     const results = await adapter.searchHotels(req.body || {});
     res.json({ success: true, data: results });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -45,7 +45,7 @@ router.post("/prebook", async (req, res) => {
     const data = await adapter.preBookHotel(req.body || {});
     res.json({ success: true, data });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -160,7 +160,7 @@ router.post("/book", async (req, res) => {
 
     res.json({ success: true, data: responsePayload });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -219,7 +219,7 @@ router.post("/voucher", async (req, res) => {
 
     res.json({ success: true, data: { supplierResponse: data, persistedVoucher: voucherSaved?.data || null } });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -262,7 +262,7 @@ router.get("/booking/:bookingRef", async (req, res) => {
 
     res.json({ success: true, data: { booking, latestVoucher, liveDetails } });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -276,7 +276,7 @@ router.post("/booking/details", async (req, res) => {
     const data = await adapter.getHotelBookingDetails(req.body || {});
     res.json({ success: true, data });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -300,7 +300,7 @@ router.get("/unified/hotels", async (req, res) => {
     ).rows;
     res.json({ success: true, data: rows });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -335,7 +335,7 @@ router.get("/unified/offers", async (req, res) => {
     ).rows;
     res.json({ success: true, data: rows });
   } catch (e) {
-    res.status(500).json({ success: false, error: e.message });
+    res.status(500).json({ success: false, error: e.message, code: e.code });
   }
 });
 
