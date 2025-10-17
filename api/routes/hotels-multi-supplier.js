@@ -645,14 +645,14 @@ router.get("/search", async (req, res) => {
 
     // Get enabled hotel suppliers from database (supplier_master)
   const suppliersResult = await db.query(`
-    SELECT code FROM supplier_master
+    SELECT code, weight FROM supplier_master
     WHERE enabled = TRUE
-    AND (code IN ('hotelbeds','ratehawk','tbo'))
-    ORDER BY code
+      AND (code IN ('hotelbeds','ratehawk','tbo'))
+    ORDER BY weight DESC, code ASC
   `);
 
   const enabledSuppliers = suppliersResult.rows.map((row) =>
-    row.code.toUpperCase(),
+    String(row.code || "").toUpperCase(),
   );
 
   // Fallback to env if no DB suppliers
