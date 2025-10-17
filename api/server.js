@@ -446,6 +446,7 @@ app.use("/api/flights", flightRoutes);
 app.use("/api/hotels", hotelsMultiSupplierRoutes); // Multi-supplier (Hotelbeds + RateHawk)
 app.use("/api/hotels-legacy", hotelRoutes); // Legacy Hotelbeds-only route
 app.use("/api/hotels-live", hotelsLiveRoutes);
+app.use("/api/tbo-hotels", require("./routes/tbo-hotels"));
 app.use("/api/bargain", bargainRoutes);
 app.use("/api/bargain/v1", bargainV1Routes);
 app.use("/api/ai-bargains", aiBargainRoutes);
