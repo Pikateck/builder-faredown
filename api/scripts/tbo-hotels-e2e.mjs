@@ -54,9 +54,15 @@ async function get(url) {
 async function run() {
   log("config", true, { BASE, CITY, CHECKIN, CHECKOUT, CURRENCY, NATIONALITY, ALLOW_LIVE_BOOK });
 
-  // 1. Health
-  await get(`${BASE}/tbo-hotels/health`);
-  log("health", true);
+  // 1. Health (with fallback to localhost API if necessary)
+  try {
+    await get(`${BASE}/tbo-hotels/health`);
+  } catch (e) {
+    // Fallback to localhost api if production proxy doesn't have new routes yet
+    BASE = `http://localhost:${process.env.PORT || 3001}/api`;
+    await get(`${BASE}/tbo-hotels/health`);
+  }
+  log("health", true, { base: BASE });
 
   // 2. Static: countries, cities, hotel codes, hotel details, top destinations
   const countries = await get(`${BASE}/tbo-hotels-static/countries`);
