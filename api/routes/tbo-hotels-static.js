@@ -47,4 +47,13 @@ router.get("/hotel/:code", async (req, res) => {
   }
 });
 
+router.get("/top-destinations", async (req, res) => {
+  try {
+    const data = await getTbo().getTopDestinations(req.query.force === "1");
+    res.json({ success: true, data });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 module.exports = router;
