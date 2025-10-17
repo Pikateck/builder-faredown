@@ -967,7 +967,7 @@ router.get("/search", async (req, res) => {
     });
 
     console.log(
-      `🗃️ Stored ${normalizedRows.length} hotel rows for search ${searchId} (currency: ${searchRecord.currency})`,
+      `��️ Stored ${normalizedRows.length} hotel rows for search ${searchId} (currency: ${searchRecord.currency})`,
     );
 
     // Update supplier metrics
@@ -1014,6 +1014,8 @@ router.get("/search", async (req, res) => {
           currency,
         },
         suppliers: aggregatedResults.supplierMetrics,
+        suppliersUsed: suppliersToUse,
+        supplierWeights: (await db.query(`SELECT COALESCE(code, supplier_code) AS code, weight FROM supplier_master WHERE COALESCE(code, supplier_code) = ANY($1)`, [suppliersToUse.map((s)=>s.toLowerCase())])).rows,
         source: "multi_supplier",
         timestamp: new Date().toISOString(),
       },
