@@ -223,18 +223,18 @@ class MixedSupplierRankingService {
   static async getSupplierScores(supplierCodes = []) {
     try {
       const result = await db.query(
-        `SELECT supplier_code, enabled, priority FROM supplier_master 
-         WHERE supplier_code = ANY($1)
-         ORDER BY priority DESC`,
+        `SELECT code, enabled, weight FROM supplier_master
+         WHERE code = ANY($1)
+         ORDER BY weight DESC`,
         [supplierCodes],
       );
 
       const scores = {};
       for (const row of result.rows) {
-        // Priority is inverse: higher priority number = lower rank (lower weight)
-        // So we invert it: weight = 100 / priority
-        scores[row.supplier_code] = {
-          weight: 100 / (row.priority || 100),
+        // Higher weight = higher preference
+        const normalizedWeight = Number(row.weight) || 100;
+        scores[row.code.toUpperCase()] = {
+          weight: normalizedWeight / 100,
           reliability: row.enabled ? 0.9 : 0.5,
         };
       }
