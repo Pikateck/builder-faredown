@@ -846,19 +846,37 @@ class TBOAdapter extends BaseSupplierAdapter {
         children = 0,
         currency = "INR",
         rooms = 1,
+        childAges = [],
+        guestNationality = "IN",
       } = searchParams;
+
+      // Build RoomGuests payload supporting both numeric rooms and per-room array
+      let roomGuests = [];
+      if (Array.isArray(rooms)) {
+        roomGuests = rooms.map((r) => ({
+          NoOfAdults: Number(r.adults) || 1,
+          NoOfChild: Number(r.children) || 0,
+          ChildAge: Array.isArray(r.childAges) ? r.childAges.map((a) => Number(a) || 0) : [],
+        }));
+      } else {
+        roomGuests = [
+          {
+            NoOfAdults: Number(adults) || 1,
+            NoOfChild: Number(children) || 0,
+            ChildAge: Array.isArray(childAges) ? childAges.map((a) => Number(a) || 0) : [],
+          },
+        ];
+      }
 
       const payload = {
         TokenId: tokenId,
         CheckIn: checkIn,
         CheckOut: checkOut,
-        NoOfRooms: rooms,
-        GuestNationality: "IN",
+        NoOfRooms: Array.isArray(rooms) ? rooms.length : Number(rooms) || 1,
+        GuestNationality: guestNationality,
         City: destination,
         IsNearBySearchAllowed: true,
-        RoomGuests: [
-          { NoOfAdults: adults, NoOfChild: children, ChildAge: [] },
-        ],
+        RoomGuests: roomGuests,
         PreferredCurrency: currency,
         EndUserIp: this.config.endUserIp,
       };
