@@ -130,7 +130,41 @@ router.post("/voucher", async (req, res) => {
       return res.status(501).json({ success: false, error: "Voucher not implemented" });
     }
     const data = await adapter.generateHotelVoucher(req.body || {});
-    res.json({ success: true, data });
+
+    // Link to our booking and persist voucher
+    const db = require("../database/connection");
+    const Voucher = require("../models/Voucher");
+    const HotelBooking = require("../models/HotelBooking");
+
+    // Try to locate booking by booking_ref from body or supplier ref
+    let bookingRow = null;
+    if (req.body?.booking_ref) {
+      const found = await HotelBooking.findByReference(req.body.booking_ref);
+      if (found.success) bookingRow = found.data;
+    }
+    if (!bookingRow && (req.body?.BookingId || data?.BookingId || data?.ConfirmationNo)) {
+      const supplierRef = req.body.BookingId || data.BookingId || data.ConfirmationNo;
+      const result = await db.query(
+        "SELECT * FROM hotel_bookings WHERE supplier_booking_ref = $1 ORDER BY created_at DESC LIMIT 1",
+        [String(supplierRef)],
+      );
+      bookingRow = result.rows?.[0] || null;
+    }
+
+    let voucherSaved = null;
+    if (bookingRow) {
+      const voucherNumber = (new Voucher()).generateVoucherNumber(bookingRow.booking_ref, "hotel");
+      voucherSaved = await Voucher.create({
+        booking_id: bookingRow.id,
+        voucher_type: "hotel",
+        voucher_number: voucherNumber,
+        pdf_path: null,
+        pdf_size_bytes: null,
+        email_address: bookingRow.guest_details?.contactInfo?.email || null,
+      });
+    }
+
+    res.json({ success: true, data: { supplierResponse: data, persistedVoucher: voucherSaved?.data || null } });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
   }
