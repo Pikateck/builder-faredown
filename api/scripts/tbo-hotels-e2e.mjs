@@ -16,7 +16,7 @@ import fetch from "node-fetch";
 
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 const API_BASE = process.env.API_BASE || process.env.API_SERVER_URL || "https://builder-faredown-pricing.onrender.com";
-const BASE = `${API_BASE}/api`;
+let BASE = `${API_BASE}/api`;
 const CITY = process.env.CITY || "DXB";
 const CHECKIN = process.env.CHECKIN || "2026-01-12";
 const CHECKOUT = process.env.CHECKOUT || "2026-01-15";
