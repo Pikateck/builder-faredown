@@ -44,7 +44,7 @@ class TBOAdapter extends BaseSupplierAdapter {
     this.tokenId = null;
     this.tokenExpiry = null;
 
-    // Initialize HTTP clients for both endpoints
+    // Initialize HTTP clients for both endpoints (flights)
     this.searchClient = axios.create({
       baseURL: this.config.searchUrl,
       timeout: this.config.timeout,
@@ -61,6 +61,28 @@ class TBOAdapter extends BaseSupplierAdapter {
         "Content-Type": "application/json",
         "User-Agent": "Faredown-AI-Bargaining/1.0",
       },
+    });
+
+    // Hotel-specific HTTP clients
+    this.hotelAuthClient = axios.create({
+      baseURL: this.config.hotelAuthBase,
+      timeout: this.config.timeout,
+      headers: { "Content-Type": "application/json" },
+    });
+    this.hotelStaticClient = axios.create({
+      baseURL: this.config.hotelStaticBase,
+      timeout: this.config.timeout,
+      headers: { "Content-Type": "application/json" },
+    });
+    this.hotelSearchClient = axios.create({
+      baseURL: this.config.hotelSearchBase,
+      timeout: this.config.timeout,
+      headers: { "Content-Type": "application/json" },
+    });
+    this.hotelBookingClient = axios.create({
+      baseURL: this.config.hotelBookingBase,
+      timeout: this.config.timeout,
+      headers: { "Content-Type": "application/json" },
     });
 
     // Keep backward compatibility
