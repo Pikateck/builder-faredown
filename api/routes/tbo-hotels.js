@@ -519,4 +519,53 @@ router.post("/logout", async (req, res) => {
   }
 });
 
+// Get Agency Balance (dedicated)
+router.get("/balance", async (req, res) => {
+  try {
+    const adapter = getTboAdapter();
+    const data = await adapter.getAgencyBalance();
+    res.json({ success: true, data });
+  } catch (e) {
+    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+  }
+});
+
+// HOTEL VALIDATION (server-side request validation)
+router.post("/validate", async (req, res) => {
+  try {
+    const { type = "prebook" } = req.query;
+    const body = req.body || {};
+    const errors = [];
+
+    const has = (k) => body[k] !== undefined && body[k] !== null && String(body[k]).length > 0;
+
+    if (type === "prebook") {
+      if (!has("HotelCode")) errors.push("HotelCode is required");
+      if (!(has("RateKey") || has("RatePlanCode"))) errors.push("RateKey or RatePlanCode is required");
+      if (!has("RoomTypeCode") && !has("RoomType")) errors.push("RoomTypeCode or RoomType is required");
+    } else if (type === "book") {
+      if (!(has("BookingId") || has("PreBookId") || has("ConfirmationNo"))) errors.push("BookingId/PreBookId/ConfirmationNo required");
+      if (!has("PassengerDetails") && !has("GuestDetails")) errors.push("PassengerDetails or GuestDetails required");
+    } else if (type === "voucher") {
+      if (!(has("BookingId") || has("ConfirmationNo"))) errors.push("BookingId or ConfirmationNo required");
+    } else if (type === "cancel") {
+      if (!(has("BookingId") || has("ConfirmationNo"))) errors.push("BookingId or ConfirmationNo required");
+    } else if (type === "info") {
+      if (!has("HotelCode")) errors.push("HotelCode is required");
+    } else if (type === "room") {
+      if (!(has("RateKey") || (has("HotelCode") && (has("RoomTypeCode") || has("RoomType"))))) {
+        errors.push("RateKey or (HotelCode and RoomTypeCode/RoomType) required");
+      }
+    } else if (type === "change_status") {
+      if (!has("ChangeRequestId") && !(has("BookingId") || has("ConfirmationNo"))) {
+        errors.push("ChangeRequestId or BookingId/ConfirmationNo required");
+      }
+    }
+
+    res.json({ success: errors.length === 0, errors });
+  } catch (e) {
+    res.status(400).json({ success: false, error: e.message });
+  }
+});
+
 module.exports = router;
