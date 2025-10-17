@@ -975,17 +975,22 @@ export function HotelCard({
                   {hotelLocation}
                 </span>
               </div>
-              <div className="flex items-center ml-2">
-                <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
-                <span className="text-sm font-medium text-yellow-700 mr-1">
-                  {hotel.rating}
-                </span>
-                <button
-                  onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
-                  className="text-xs text-blue-600 hover:underline whitespace-nowrap"
-                >
-                  ({hotel.reviewCount || hotel.reviews || 0})
-                </button>
+              <div className="flex items-center ml-2 gap-2">
+                <div className="flex items-center">
+                  <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
+                  <span className="text-sm font-medium text-yellow-700 mr-1">
+                    {hotel.rating}
+                  </span>
+                  <button
+                    onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
+                    className="text-xs text-blue-600 hover:underline whitespace-nowrap"
+                  >
+                    ({hotel.reviewCount || hotel.reviews || 0})
+                  </button>
+                </div>
+                <Badge variant="secondary" className="text-[10px] px-2 py-0.5 uppercase tracking-wide">
+                  {supplierDisplayName}
+                </Badge>
               </div>
             </div>
           </div>
@@ -1063,7 +1068,7 @@ export function HotelCard({
                 basePrice={totalPriceInclusiveTaxes}
                 itemDetails={{
                   location: hotelLocation,
-                  provider: "Hotelbeds",
+                  provider: supplierDisplayName,
                   features: hotel.features || hotelAmenities,
                 }}
                 onBargainSuccess={(finalPrice, savings) => {
