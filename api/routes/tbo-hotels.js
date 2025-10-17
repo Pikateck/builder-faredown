@@ -59,7 +59,24 @@ router.post("/prebook", async (req, res) => {
     if (typeof adapter.preBookHotel !== "function") {
       return res.status(501).json({ success: false, error: "PreBook not implemented" });
     }
+
+    // Idempotency for prebook
+    const redis = require("../services/redisService");
+    const idemKey = req.header("Idempotency-Key");
+    const idemCacheKey = idemKey ? `idem:tbo:prebook:${idemKey}` : null;
+    if (idemCacheKey) {
+      const existing = await redis.get(idemCacheKey);
+      if (existing?.data) {
+        return res.json({ success: true, data: existing.data });
+      }
+    }
+
     const data = await adapter.preBookHotel(req.body || {});
+
+    if (idemCacheKey) {
+      await redis.setIfNotExists(idemCacheKey, { data }, 600);
+    }
+
     res.json({ success: true, data });
   } catch (e) {
     res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
