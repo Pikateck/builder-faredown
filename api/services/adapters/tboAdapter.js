@@ -747,6 +747,11 @@ class TBOAdapter extends BaseSupplierAdapter {
    * Get/refresh Hotel token (separate from flight token)
    */
   async getHotelToken() {
+    // Return cached token if valid
+    if (this.hotelTokenId && this.hotelTokenExpiry && Date.now() < this.hotelTokenExpiry) {
+      return this.hotelTokenId;
+    }
+
     return await this.executeWithRetry(async () => {
       const authRequest = {
         ClientId: this.config.hotelClientId,
@@ -756,7 +761,10 @@ class TBOAdapter extends BaseSupplierAdapter {
       };
       const response = await this.hotelAuthClient.post("/Authenticate", authRequest);
       if (response.data?.Status === 1 && response.data?.TokenId) {
-        return response.data.TokenId;
+        // Cache token ~55 minutes
+        this.hotelTokenId = response.data.TokenId;
+        this.hotelTokenExpiry = Date.now() + 55 * 60 * 1000;
+        return this.hotelTokenId;
       }
       throw new Error(
         `TBO Hotel auth failed: ${response.data?.Error?.ErrorMessage || JSON.stringify(response.data)}`,
