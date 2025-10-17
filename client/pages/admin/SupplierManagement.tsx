@@ -83,6 +83,7 @@ export default function SupplierManagement() {
   const [markups, setMarkups] = useState<SupplierMarkup[]>([]);
   const [loading, setLoading] = useState(true);
   const [healthData, setHealthData] = useState<any>(null);
+  const [weightEdits, setWeightEdits] = useState<Record<string, number>>({});
   const { toast } = useToast();
 
   // New markup form state
@@ -263,6 +264,23 @@ export default function SupplierManagement() {
     }
   };
 
+  const updateSupplierWeight = async (supplier: Supplier, newWeight: number) => {
+    try {
+      const response = await apiClient.put<any>(
+        `/api/admin/suppliers/${supplier.code}`,
+        { weight: newWeight },
+      );
+      if (response.success) {
+        toast({ title: "Updated", description: `Weight set to ${newWeight}` });
+        setWeightEdits((prev) => ({ ...prev, [supplier.code]: newWeight }));
+        await loadSuppliers();
+      }
+    } catch (error) {
+      console.error("Error updating weight:", error);
+      toast({ title: "Error", description: "Failed to update weight", variant: "destructive" });
+    }
+  };
+
   if (loading) {
     return (
       <div className="flex items-center justify-center h-screen">
@@ -311,6 +329,39 @@ export default function SupplierManagement() {
                 >
                   {supplier.environment}
                 </Badge>
+              </div>
+
+              <div className="flex items-center justify-between text-sm">
+                <span className="text-gray-600">Weight (priority)</span>
+                <div className="flex items-center gap-2">
+                  <Input
+                    type="number"
+                    className="w-24 h-8"
+                    value={
+                      weightEdits[supplier.code] !== undefined
+                        ? weightEdits[supplier.code]
+                        : (typeof supplier.weight === "number" ? supplier.weight : 100)
+                    }
+                    onChange={(e) =>
+                      setWeightEdits((prev) => ({
+                        ...prev,
+                        [supplier.code]: parseInt(e.target.value || "0"),
+                      }))
+                    }
+                  />
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    onClick={() =>
+                      updateSupplierWeight(
+                        supplier,
+                        weightEdits[supplier.code] ?? (supplier.weight || 100),
+                      )
+                    }
+                  >
+                    Save
+                  </Button>
+                </div>
               </div>
 
               <div className="flex items-center justify-between text-sm">
