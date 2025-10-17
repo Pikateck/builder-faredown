@@ -700,6 +700,8 @@ router.get("/search", async (req, res) => {
           totalResults: 0,
           searchParams: req.query,
           source: "multi_supplier",
+          suppliersUsed: suppliersToUse,
+          supplierWeights: (await db.query(`SELECT COALESCE(code, supplier_code) AS code, weight FROM supplier_master WHERE COALESCE(code, supplier_code) = ANY($1)`, [suppliersToUse.map((s)=>s.toLowerCase())])).rows,
           warning: "All suppliers unavailable",
           supplierErrors: aggregatedResults.supplierMetrics,
           timestamp: new Date().toISOString(),
