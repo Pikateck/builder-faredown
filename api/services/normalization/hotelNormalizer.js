@@ -249,28 +249,40 @@ class HotelNormalizer {
     try {
       const propertyId = uuidv4();
 
+      const lat = parseFloat(rawHotel.Latitude || rawHotel.lat || rawHotel.Geo?.Lat);
+      const lng = parseFloat(rawHotel.Longitude || rawHotel.lng || rawHotel.Geo?.Long);
+
+      const amenities = rawHotel.Amenities || rawHotel.Facilities || rawHotel.HotelFacilities || null;
+      const thumb = rawHotel.ImageUrl || rawHotel.ThumbnailUrl || (Array.isArray(rawHotel.Images) && rawHotel.Images[0]?.Url) || null;
+
       const hotelMasterData = {
         property_id: propertyId,
-        hotel_name: rawHotel.HotelName || "",
-        address: rawHotel.Address || null,
-        city: rawHotel.CityName || null,
-        country: rawHotel.CountryCode || null,
+        hotel_name: rawHotel.HotelName || rawHotel.Name || "",
+        address: rawHotel.Address || rawHotel.Location || null,
+        city: rawHotel.CityName || rawHotel.City || null,
+        country: rawHotel.CountryCode || rawHotel.Country || null,
         postal_code: rawHotel.PostalCode || null,
-        lat: parseFloat(rawHotel.Latitude) || null,
-        lng: parseFloat(rawHotel.Longitude) || null,
-        star_rating: parseFloat(rawHotel.StarRating) || null,
+        lat: isNaN(lat) ? null : lat,
+        lng: isNaN(lng) ? null : lng,
+        star_rating: parseFloat(rawHotel.StarRating || rawHotel.Category) || null,
         review_score: parseFloat(rawHotel.ReviewScore) || null,
         review_count: parseInt(rawHotel.ReviewCount) || null,
         chain_code: rawHotel.ChainCode || null,
         brand_code: rawHotel.BrandCode || null,
-        giata_id: rawHotel.GiataId || null,
-        thumbnail_url: rawHotel.ImageUrl || null,
+        giata_id: rawHotel.GiataId || rawHotel.GIATA || null,
+        thumbnail_url: thumb,
+        district: rawHotel.District || null,
+        zone: rawHotel.Zone || null,
+        neighborhood: rawHotel.Neighborhood || null,
+        amenities_json: amenities || null,
+        checkin_from: rawHotel.CheckInTime || rawHotel.CheckIn || null,
+        checkout_until: rawHotel.CheckOutTime || rawHotel.CheckOut || null,
       };
 
       const supplierMapData = {
         property_id: propertyId,
         supplier_code: supplierCode,
-        supplier_hotel_id: String(rawHotel.HotelCode || rawHotel.Id),
+        supplier_hotel_id: String(rawHotel.HotelCode || rawHotel.HotelId || rawHotel.Id || ""),
         confidence_score: 1.0,
         matched_on: "raw_insertion",
       };
@@ -297,27 +309,70 @@ class HotelNormalizer {
     try {
       const offerId = uuidv4();
 
+      const meal = rawOffer.MealType || rawOffer.BoardType || rawOffer.Board || "RO";
+      const bed = rawOffer.BedType || rawOffer.Bedding || null;
+      const isNonRefundable = rawOffer.IsNonRefundable === true || (rawOffer.CancellationPolicy && rawOffer.CancellationPolicy.toString().toLowerCase().includes("non refundable"));
+      const isRefundableFlag = rawOffer.IsRefundable === true || (!isNonRefundable);
+
+      // Derive cancellable_until
+      let cancellableUntil = null;
+      const freeTill = rawOffer.FreeCancellationTill || rawOffer.FreeCancelTill || null;
+      if (freeTill) {
+        const dt = new Date(freeTill);
+        if (!isNaN(dt.getTime())) cancellableUntil = dt.toISOString();
+      } else if (Array.isArray(rawOffer.CancellationPolicies) && rawOffer.CancellationPolicies.length > 0) {
+        // Pick the latest date with zero charge or earliest policy threshold
+        const zeroCharge = rawOffer.CancellationPolicies.find((p) => parseFloat(p.CancellationCharge || p.Charge || 0) === 0 && p.FromDate);
+        const dateStr = zeroCharge?.FromDate || rawOffer.CancellationPolicies[0]?.FromDate || null;
+        if (dateStr) {
+          const dt = new Date(dateStr);
+          if (!isNaN(dt.getTime())) cancellableUntil = dt.toISOString();
+        }
+      }
+
+      const currency = rawOffer.Currency || rawOffer.RateCurrency || searchContext.currency || "USD";
+      const total = parseFloat(rawOffer.TotalPrice || rawOffer.PublishedPrice || rawOffer.Price || 0) || 0;
+      const base = parseFloat(rawOffer.BasePrice || rawOffer.NetFare || rawOffer.Net || 0) || null;
+      const taxes = parseFloat(rawOffer.Taxes || rawOffer.TotalTax || rawOffer.Tax || 0) || null;
+
+      let pricePerNight = parseFloat(rawOffer.PricePerNight || rawOffer.PerNightPrice || 0);
+      if ((!pricePerNight || isNaN(pricePerNight)) && searchContext.checkin && searchContext.checkout && total) {
+        const inD = new Date(searchContext.checkin);
+        const outD = new Date(searchContext.checkout);
+        const diff = outD - inD;
+        if (!isNaN(diff) && diff > 0) {
+          const nights = Math.round(diff / (1000 * 60 * 60 * 24));
+          if (nights > 0) pricePerNight = parseFloat((total / nights).toFixed(2));
+        }
+      }
+
+      const availability = parseInt(rawOffer.Availability || rawOffer.RoomsLeft || rawOffer.RemainingRooms || 0) || null;
+      const adults = rawOffer.Occupancy?.Adults || rawOffer.Adults || searchContext.adults || 0;
+      const children = (rawOffer.Occupancy?.Children && rawOffer.Occupancy.Children.length) || rawOffer.Children || searchContext.children || 0;
+
+      const inclusions = rawOffer.Inclusions || rawOffer.Included || rawOffer.Amenities || null;
+      const rateKey = rawOffer.RateKey || rawOffer.RateKeyToken || rawOffer.Token || null;
+
       const roomOfferData = {
         offer_id: offerId,
         property_id: propertyId,
         supplier_code: supplierCode,
-        room_name: rawOffer.RoomName || "",
-        board_basis: rawOffer.MealType || "RO",
-        bed_type: rawOffer.BedType || null,
-        refundable: rawOffer.IsRefundable === true,
-        free_cancellation: rawOffer.IsRefundable === true,
-        occupancy_adults:
-          rawOffer.Occupancy?.Adults || searchContext.adults || 0,
-        occupancy_children:
-          rawOffer.Occupancy?.Children?.length || searchContext.children || 0,
-        inclusions_json: rawOffer.Inclusions || null,
-        currency: rawOffer.Currency || searchContext.currency || "USD",
-        price_base: parseFloat(rawOffer.BasePrice) || null,
-        price_taxes: parseFloat(rawOffer.Taxes) || null,
-        price_total: parseFloat(rawOffer.TotalPrice) || 0,
-        price_per_night: parseFloat(rawOffer.PricePerNight) || null,
-        rate_key_or_token: rawOffer.RateKey || null,
-        availability_count: parseInt(rawOffer.Availability) || null,
+        room_name: rawOffer.RoomName || rawOffer.RoomTypeName || rawOffer.Room || "",
+        board_basis: meal,
+        bed_type: bed,
+        refundable: !!isRefundableFlag,
+        cancellable_until: cancellableUntil,
+        free_cancellation: !!cancellableUntil,
+        occupancy_adults: adults,
+        occupancy_children: children,
+        inclusions_json: inclusions || null,
+        currency,
+        price_base: base,
+        price_taxes: taxes,
+        price_total: total,
+        price_per_night: pricePerNight || null,
+        rate_key_or_token: rateKey,
+        availability_count: availability,
         search_checkin: searchContext.checkin || null,
         search_checkout: searchContext.checkout || null,
       };
