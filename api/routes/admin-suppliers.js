@@ -278,18 +278,19 @@ router.get("/:code", async (req, res) => {
 router.put("/:code", async (req, res) => {
   try {
     const { code } = req.params;
-    const { is_enabled, environment } = req.body;
+    const { is_enabled, environment, weight } = req.body || {};
 
     const result = await db.query(
       `
       UPDATE supplier_master
       SET
         enabled = COALESCE($2, enabled),
+        weight = COALESCE($3, weight),
         updated_at = NOW()
       WHERE code = $1
       RETURNING *
     `,
-      [code, is_enabled],
+      [code, is_enabled, weight],
     );
 
     if (result.rows.length === 0) {
