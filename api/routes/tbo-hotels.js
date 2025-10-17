@@ -320,6 +320,43 @@ router.get("/booking/:bookingRef", async (req, res) => {
   }
 });
 
+// Booking cancel
+router.post("/booking/cancel", async (req, res) => {
+  try {
+    const adapter = getTboAdapter();
+    if (typeof adapter.cancelHotelBooking !== "function") {
+      return res.status(501).json({ success: false, error: "Cancel not implemented" });
+    }
+
+    const db = require("../database/connection");
+    const HotelBooking = require("../models/HotelBooking");
+
+    const supplierRes = await adapter.cancelHotelBooking(req.body || {});
+
+    // If booking_ref provided, update DB status to cancelled
+    if (req.body?.booking_ref) {
+      const upd = await HotelBooking.updateStatus(req.body.booking_ref, "cancelled", {
+        supplier_response: supplierRes,
+      });
+      if (!upd.success) {
+        console.warn("Cancel status update failed", upd.error);
+      } else if (upd.data?.id) {
+        try {
+          await db.query(
+            `INSERT INTO booking_audit_log (booking_id, action, changed_by, change_reason)
+             VALUES ($1, $2, $3, $4)`,
+            [upd.data.id, "cancelled", "system", "TBO cancellation requested"],
+          );
+        } catch {}
+      }
+    }
+
+    res.json({ success: true, data: supplierRes });
+  } catch (e) {
+    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+  }
+});
+
 // Booking details
 router.post("/booking/details", async (req, res) => {
   try {
