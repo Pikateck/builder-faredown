@@ -20,8 +20,8 @@ router.get("/", async (req, res) => {
   try {
     const result = await db.query(`
       SELECT
-        s.id,
-        s.code,
+        COALESCE(s.id, 0) AS id,
+        COALESCE(s.code, s.supplier_code) AS code,
         s.name,
         s.enabled AS is_enabled,
         s.weight,
@@ -31,7 +31,7 @@ router.get("/", async (req, res) => {
         0 as bookings_24h
       FROM supplier_master s
       ORDER BY s.enabled DESC, s.weight DESC, s.name
-    `);
+    `, []);
 
     res.json({
       success: true,
@@ -249,8 +249,8 @@ router.get("/:code", async (req, res) => {
     const result = await db.query(
       `
       SELECT
-        s.id,
-        s.code,
+        COALESCE(s.id, 0) AS id,
+        COALESCE(s.code, s.supplier_code) AS code,
         s.name,
         s.enabled AS is_enabled,
         s.weight,
@@ -259,7 +259,7 @@ router.get("/:code", async (req, res) => {
         0 as total_bookings,
         0 as bookings_24h
       FROM supplier_master s
-      WHERE s.code = $1
+      WHERE COALESCE(s.code, s.supplier_code) = $1
     `,
       [code],
     );
@@ -299,7 +299,7 @@ router.put("/:code", async (req, res) => {
         enabled = COALESCE($2, enabled),
         weight = COALESCE($3, weight),
         updated_at = NOW()
-      WHERE code = $1
+      WHERE COALESCE(code, supplier_code) = $1
       RETURNING *
     `,
       [code, is_enabled, weight],
