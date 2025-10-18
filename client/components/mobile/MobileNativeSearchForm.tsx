@@ -651,14 +651,46 @@ export function MobileNativeSearchForm({
       timestamp: new Date().toISOString(),
     });
 
-    const searchParams = new URLSearchParams({
-      from: fromCode,
-      to: toCode,
-      departureDate: dateContext.departureDate!.toISOString(),
-      adults: travelers.adults.toString(),
-      children: (travelers.children || 0).toString(),
-      tripType,
-    });
+    // Build URL params per module. Hotels must send destinationCode + checkIn/checkOut
+    const searchParams = new URLSearchParams();
+
+    if (module === "hotels") {
+      const destCode = (selectedHotelResult?.code || fromCode || "HTL").toString();
+      const destName = selectedHotelResult?.location || fromCity || "";
+
+      searchParams.set("destination", destCode);
+      searchParams.set("destinationCode", destCode);
+      if (destName) searchParams.set("destinationName", destName);
+
+      // Dates
+      if (dateContext.departureDate) {
+        searchParams.set("checkIn", dateContext.departureDate.toISOString());
+      }
+      if (dateContext.returnDate) {
+        searchParams.set("checkOut", dateContext.returnDate.toISOString());
+      }
+
+      // Pax/rooms
+      searchParams.set("adults", travelers.adults.toString());
+      searchParams.set("children", (travelers.children || 0).toString());
+      if (travelers.rooms) searchParams.set("rooms", travelers.rooms.toString());
+      if (travelers.childAges && travelers.childAges.length > 0) {
+        searchParams.set("childAges", JSON.stringify(travelers.childAges));
+      }
+
+      // Live search metadata
+      searchParams.set("searchType", "live");
+      searchParams.set("searchId", Date.now().toString());
+    } else {
+      // Flights, transfers, packages, sightseeing retain existing schema
+      searchParams.set("from", fromCode);
+      if (toCode) searchParams.set("to", toCode);
+      if (dateContext.departureDate)
+        searchParams.set("departureDate", dateContext.departureDate.toISOString());
+      searchParams.set("adults", travelers.adults.toString());
+      searchParams.set("children", (travelers.children || 0).toString());
+      searchParams.set("tripType", tripType);
+    }
 
     // Add multi-city legs data
     if (module === "flights" && tripType === "multi-city") {
