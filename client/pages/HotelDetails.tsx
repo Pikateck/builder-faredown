@@ -1293,7 +1293,7 @@ export default function HotelDetails() {
           <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-blue-600 mx-auto mb-4"></div>
           <p className="text-gray-600">Loading hotel details...</p>
           <p className="text-sm text-gray-500 mt-2">
-            Fetching live data from Hotelbeds
+            Fetching live hotel data...
           </p>
         </div>
       </div>
