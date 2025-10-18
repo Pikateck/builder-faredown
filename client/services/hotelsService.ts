@@ -36,7 +36,7 @@ export class HotelsService {
   }
 
   async getHotelDetails(hotelId: string, searchParams?: any) {
-    return enhancedHotelsService.getHotelDetails(hotelId);
+    return enhancedHotelsService.getHotelDetails(hotelId, searchParams);
   }
 
   async searchDestinations(query: string) {
