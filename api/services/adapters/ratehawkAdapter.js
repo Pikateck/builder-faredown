@@ -41,6 +41,8 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       search_serp_geo: { max: 10, window: 60000, requests: [] },
       hotel_static: { max: 100, window: 86400000, requests: [] },
       hotel_info: { max: 100, window: 86400000, requests: [] },
+      region_dump: { max: 10, window: 3600000, requests: [] },
+      hotel_info_dump: { max: 10, window: 3600000, requests: [] },
     };
 
     // Short-TTL cache for identical queries
