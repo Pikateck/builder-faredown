@@ -110,7 +110,11 @@ export function ComprehensiveFilters({
   const supplierItems: FilterItem[] = supplierCounts
     ? Object.entries(supplierCounts)
         .sort((a, b) => b[1] - a[1])
-        .map(([name, count]) => ({ id: name.toUpperCase(), label: name.toUpperCase(), count }))
+        .map(([name, count]) => ({
+          id: name.toUpperCase(),
+          label: name.toUpperCase(),
+          count,
+        }))
     : [];
 
   const filterCategories: FilterCategory[] = [
