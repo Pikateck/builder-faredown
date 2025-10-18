@@ -192,7 +192,7 @@ const logApiEvent = (
           ? JSON.stringify(logData, null, 2)
           : logData;
 
-    console[level](`🌐 ${message}`, formattedData);
+    console[level](`���� ${message}`, formattedData);
   }
 };
 
@@ -243,13 +243,14 @@ export class ApiClient {
     if (
       typeof window !== "undefined" &&
       (window.location.hostname.includes("builder.codes") ||
-        window.location.hostname.includes("fly.dev"))
+        window.location.hostname.includes("fly.dev") ||
+        window.location.hostname.includes("projects.builder.my"))
     ) {
-      // In builder.codes / fly.dev preview environments, default to fallback unless explicitly disabled
-      this.forceFallback = config.OFFLINE_FALLBACK_ENABLED !== false;
+      // In Builder previews, only enable fallback when explicitly turned on
+      this.forceFallback = !!config.OFFLINE_FALLBACK_ENABLED;
       logApiEvent(
         "info",
-        `${window.location.hostname.includes("builder.codes") ? "Builder.codes" : "fly.dev"} environment detected, fallback mode ${this.forceFallback ? "enabled" : "disabled"}`,
+        `${window.location.hostname.includes("builder.codes") ? "Builder.codes" : window.location.hostname.includes("projects.builder.my") ? "projects.builder.my" : "fly.dev"} environment detected, fallback mode ${this.forceFallback ? "enabled" : "disabled"}`,
         {
           hostname: window.location.hostname,
           offlineFallbackEnabled: config.OFFLINE_FALLBACK_ENABLED,
