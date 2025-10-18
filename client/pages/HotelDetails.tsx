@@ -306,7 +306,11 @@ export default function HotelDetails() {
               rooms: parseInt(roomsParam || "1"),
               adults: parseInt(adultsParam || "2"),
               children: parseInt(childrenParam || "0"),
-              supplier: (location.state as any)?.preselectRate?.supplierData?.supplierCode || new URLSearchParams(window.location.search).get("supplier") || undefined,
+              supplier:
+                (location.state as any)?.preselectRate?.supplierData
+                  ?.supplierCode ||
+                new URLSearchParams(window.location.search).get("supplier") ||
+                undefined,
             };
 
             console.log(
@@ -731,20 +735,26 @@ export default function HotelDetails() {
   // Generate room types from live data, snapshot from navigation, or fallback
   const roomsSnapshot: any[] = (location.state as any)?.roomsSnapshot || [];
   const roomTypes = (() => {
-    const sourceRooms = hotelData && hotelData.roomTypes && hotelData.roomTypes.length > 0
-      ? hotelData.roomTypes
-      : (Array.isArray(roomsSnapshot) && roomsSnapshot.length > 0 ? roomsSnapshot : null);
+    const sourceRooms =
+      hotelData && hotelData.roomTypes && hotelData.roomTypes.length > 0
+        ? hotelData.roomTypes
+        : Array.isArray(roomsSnapshot) && roomsSnapshot.length > 0
+          ? roomsSnapshot
+          : null;
 
     if (sourceRooms) {
       const mapped = sourceRooms.map((room: any, index: number) => ({
         id: room.rateKey || room.id || `live-room-${index}`,
         name: room.name || `Room Type ${index + 1}`,
         type: room.name || `1 X ${room.name || "Standard"}`,
-        details: (room.features || room.inclusions)
-          ? (room.features || room.inclusions)
-              .map((f: any) => (typeof f === "string" ? f : f?.name || "Feature"))
-              .join(", ")
-          : "Standard accommodations",
+        details:
+          room.features || room.inclusions
+            ? (room.features || room.inclusions)
+                .map((f: any) =>
+                  typeof f === "string" ? f : f?.name || "Feature",
+                )
+                .join(", ")
+            : "Standard accommodations",
         pricePerNight:
           room.pricePerNight || room.price || hotelData?.currentPrice || 167,
         status: index === 0 ? "Best Value - Start Here!" : `Available`,

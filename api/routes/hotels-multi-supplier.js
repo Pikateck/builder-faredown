@@ -631,8 +631,14 @@ router.get("/search", async (req, res) => {
 
     // Pagination math
     const parsedPage = Math.max(1, parseInt(String(page), 10) || 1);
-    const parsedPageSize = Math.max(1, Math.min(100, parseInt(String(pageSize), 10) || 20));
-    const requestedMax = Math.min(parseInt(String(maxResultsQuery || "200"), 10) || 200, 500);
+    const parsedPageSize = Math.max(
+      1,
+      Math.min(100, parseInt(String(pageSize), 10) || 20),
+    );
+    const requestedMax = Math.min(
+      parseInt(String(maxResultsQuery || "200"), 10) || 200,
+      500,
+    );
     const supplierMax = Math.min(requestedMax, parsedPage * parsedPageSize);
 
     // Build search params

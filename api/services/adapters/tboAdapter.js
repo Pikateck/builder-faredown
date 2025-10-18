@@ -25,15 +25,20 @@ class TBOAdapter extends BaseSupplierAdapter {
       timeout: parseInt(process.env.TBO_TIMEOUT_MS || "15000"),
       requestsPerSecond: 10,
       // Hotel API specific configuration (live)
-      hotelAuthBase: process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION ||
+      hotelAuthBase:
+        process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION ||
         "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc",
-      hotelStaticBase: process.env.TBO_HOTEL_STATIC_DATA ||
+      hotelStaticBase:
+        process.env.TBO_HOTEL_STATIC_DATA ||
         "https://apiwr.tboholidays.com/HotelAPI/",
-      hotelSearchBase: process.env.TBO_HOTEL_SEARCH_PREBOOK ||
+      hotelSearchBase:
+        process.env.TBO_HOTEL_SEARCH_PREBOOK ||
         "https://affiliate.travelboutiqueonline.com/HotelAPI/",
-      hotelBookingBase: process.env.TBO_HOTEL_BOOKING ||
+      hotelBookingBase:
+        process.env.TBO_HOTEL_BOOKING ||
         "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
-      hotelClientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID,
+      hotelClientId:
+        process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID,
       hotelUserId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_USERNAME,
       hotelPassword: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_PASSWORD,
       staticUserName: process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME,
@@ -748,7 +753,11 @@ class TBOAdapter extends BaseSupplierAdapter {
    */
   async getHotelToken() {
     // Return cached token if valid in-memory
-    if (this.hotelTokenId && this.hotelTokenExpiry && Date.now() < this.hotelTokenExpiry) {
+    if (
+      this.hotelTokenId &&
+      this.hotelTokenExpiry &&
+      Date.now() < this.hotelTokenExpiry
+    ) {
       return this.hotelTokenId;
     }
 
@@ -769,7 +778,10 @@ class TBOAdapter extends BaseSupplierAdapter {
         Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
       };
-      const response = await this.hotelAuthClient.post("/Authenticate", authRequest);
+      const response = await this.hotelAuthClient.post(
+        "/Authenticate",
+        authRequest,
+      );
       if (response.data?.Status === 1 && response.data?.TokenId) {
         // Cache token ~55 minutes (memory + DB)
         this.hotelTokenId = response.data.TokenId;
@@ -805,7 +817,9 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
       return null;
     } catch (error) {
-      this.logger.warn("Hotel token cache lookup failed", { error: error.message });
+      this.logger.warn("Hotel token cache lookup failed", {
+        error: error.message,
+      });
       return null;
     }
   }
@@ -821,7 +835,9 @@ class TBOAdapter extends BaseSupplierAdapter {
         [tokenId, this.config.hotelClientId, new Date(expiresAt)],
       );
     } catch (error) {
-      this.logger.warn("Hotel token cache insert failed", { error: error.message });
+      this.logger.warn("Hotel token cache insert failed", {
+        error: error.message,
+      });
     }
   }
 
@@ -856,14 +872,18 @@ class TBOAdapter extends BaseSupplierAdapter {
         roomGuests = rooms.map((r) => ({
           NoOfAdults: Number(r.adults) || 1,
           NoOfChild: Number(r.children) || 0,
-          ChildAge: Array.isArray(r.childAges) ? r.childAges.map((a) => Number(a) || 0) : [],
+          ChildAge: Array.isArray(r.childAges)
+            ? r.childAges.map((a) => Number(a) || 0)
+            : [],
         }));
       } else {
         roomGuests = [
           {
             NoOfAdults: Number(adults) || 1,
             NoOfChild: Number(children) || 0,
-            ChildAge: Array.isArray(childAges) ? childAges.map((a) => Number(a) || 0) : [],
+            ChildAge: Array.isArray(childAges)
+              ? childAges.map((a) => Number(a) || 0)
+              : [],
           },
         ];
       }
@@ -897,7 +917,9 @@ class TBOAdapter extends BaseSupplierAdapter {
         destination,
       };
       this.persistToMasterSchema(hotels, searchContext).catch((e) =>
-        this.logger.warn("TBO persistToMasterSchema failed", { error: e.message }),
+        this.logger.warn("TBO persistToMasterSchema failed", {
+          error: e.message,
+        }),
       );
 
       // Determine requested max results
@@ -915,7 +937,8 @@ class TBOAdapter extends BaseSupplierAdapter {
           const rates = Array.isArray(room.Rates) ? room.Rates : [];
           for (const r of rates) {
             const base = parseFloat(r.NetFare || r.BasePrice || 0) || 0;
-            const total = parseFloat(r.PublishedPrice || r.TotalPrice || base) || base;
+            const total =
+              parseFloat(r.PublishedPrice || r.TotalPrice || base) || base;
             const refundable = !(r.IsNonRefundable === true);
             const policies = Array.isArray(r.CancellationPolicies)
               ? r.CancellationPolicies
@@ -923,8 +946,12 @@ class TBOAdapter extends BaseSupplierAdapter {
                 ? [r.CancellationPolicy]
                 : [];
             rawRates.push({
-              rateKey: r.RateKey || r.Token || `${hotelId}_${room.RoomTypeCode || room.RoomTypeName || "room"}`,
-              roomType: room.RoomTypeName || room.RoomType || r.RoomName || "Room",
+              rateKey:
+                r.RateKey ||
+                r.Token ||
+                `${hotelId}_${room.RoomTypeCode || room.RoomTypeName || "room"}`,
+              roomType:
+                room.RoomTypeName || room.RoomType || r.RoomName || "Room",
               boardType: r.MealType || r.BoardType || r.Board || "Room Only",
               originalPrice: base,
               price: total,
@@ -949,13 +976,18 @@ class TBOAdapter extends BaseSupplierAdapter {
         if (h.ImageUrl) images.push(h.ImageUrl);
         if (h.ThumbnailUrl) images.push(h.ThumbnailUrl);
 
-        const amenities = h.Amenities || h.Facilities || h.HotelFacilities || [];
+        const amenities =
+          h.Amenities || h.Facilities || h.HotelFacilities || [];
 
         return {
           hotelId,
           name: h.HotelName || h.Name || "",
           city: destination,
-          price: parseFloat(h.Price?.PublishedPrice) || parseFloat(h.MinPrice) || (rawRates[0]?.price || 0),
+          price:
+            parseFloat(h.Price?.PublishedPrice) ||
+            parseFloat(h.MinPrice) ||
+            rawRates[0]?.price ||
+            0,
           currency,
           supplier: "TBO",
           checkIn,
@@ -1044,7 +1076,11 @@ class TBOAdapter extends BaseSupplierAdapter {
       // Prepare hotels for merge (include supplier_hotel_id)
       const hotelsForMerge = normalizedHotels.map((h) => ({
         ...h.hotelMasterData,
-        supplier_hotel_id: h.supplierMapData?.supplier_hotel_id || (h.rawHotel?.HotelCode || h.rawHotel?.Id ? String(h.rawHotel.HotelCode || h.rawHotel.Id) : null),
+        supplier_hotel_id:
+          h.supplierMapData?.supplier_hotel_id ||
+          (h.rawHotel?.HotelCode || h.rawHotel?.Id
+            ? String(h.rawHotel.HotelCode || h.rawHotel.Id)
+            : null),
       }));
 
       // Merge into unified Phase 3 tables with dedup logic
@@ -1088,7 +1124,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         }),
       );
       const data = res.data?.CountryList || res.data?.Result || [];
-      await (require("../redisService").set(cacheKey, data, 24 * 60 * 60));
+      await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
       return data;
     } catch (e) {
       this.logger.error("TBO static CountryList failed", { error: e.message });
@@ -1115,7 +1151,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         }),
       );
       const data = res.data?.CityList || res.data?.Result || [];
-      await (require("../redisService").set(cacheKey, data, 24 * 60 * 60));
+      await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
       return data;
     } catch (e) {
       this.logger.error("TBO static CityList failed", { error: e.message });
@@ -1142,10 +1178,12 @@ class TBOAdapter extends BaseSupplierAdapter {
         }),
       );
       const data = res.data?.HotelCodes || res.data?.Result || [];
-      await (require("../redisService").set(cacheKey, data, 24 * 60 * 60));
+      await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
       return data;
     } catch (e) {
-      this.logger.error("TBO static HotelCodesList failed", { error: e.message });
+      this.logger.error("TBO static HotelCodesList failed", {
+        error: e.message,
+      });
       return [];
     }
   }
@@ -1169,7 +1207,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         }),
       );
       const data = res.data?.Hotel || res.data?.Result || null;
-      await (require("../redisService").set(cacheKey, data, 24 * 60 * 60));
+      await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
       return data;
     } catch (e) {
       this.logger.error("TBO static HotelDetails failed", { error: e.message });
@@ -1192,8 +1230,14 @@ class TBOAdapter extends BaseSupplierAdapter {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
       const tokenId = await this.getHotelToken();
-      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-      const res = await this.executeWithRetry(() => this.hotelSearchClient.post("/PreBook", payload));
+      const payload = {
+        TokenId: tokenId,
+        EndUserIp: this.config.endUserIp,
+        ...params,
+      };
+      const res = await this.executeWithRetry(() =>
+        this.hotelSearchClient.post("/PreBook", payload),
+      );
       if (res.data?.Status === 1 || res.data?.IsPriceChanged !== undefined) {
         return res.data;
       }
@@ -1211,9 +1255,19 @@ class TBOAdapter extends BaseSupplierAdapter {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
       const tokenId = await this.getHotelToken();
-      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-      const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/Book", payload));
-      if (res.data?.Status === 1 || res.data?.BookingId || res.data?.ConfirmationNo) {
+      const payload = {
+        TokenId: tokenId,
+        EndUserIp: this.config.endUserIp,
+        ...params,
+      };
+      const res = await this.executeWithRetry(() =>
+        this.hotelBookingClient.post("/Book", payload),
+      );
+      if (
+        res.data?.Status === 1 ||
+        res.data?.BookingId ||
+        res.data?.ConfirmationNo
+      ) {
         return res.data;
       }
       throw mapFromResponse(res);
@@ -1230,8 +1284,15 @@ class TBOAdapter extends BaseSupplierAdapter {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
       const tokenId = await this.getHotelToken();
-      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-      const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/GenerateVoucher", payload), 5);
+      const payload = {
+        TokenId: tokenId,
+        EndUserIp: this.config.endUserIp,
+        ...params,
+      };
+      const res = await this.executeWithRetry(
+        () => this.hotelBookingClient.post("/GenerateVoucher", payload),
+        5,
+      );
       if (res.data?.Status === 1 || res.data?.VoucherNo) {
         return res.data;
       }
@@ -1249,8 +1310,14 @@ class TBOAdapter extends BaseSupplierAdapter {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
       const tokenId = await this.getHotelToken();
-      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-      const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/GetBookingDetail", payload));
+      const payload = {
+        TokenId: tokenId,
+        EndUserIp: this.config.endUserIp,
+        ...params,
+      };
+      const res = await this.executeWithRetry(() =>
+        this.hotelBookingClient.post("/GetBookingDetail", payload),
+      );
       if (res.data?.Status === 1) {
         return res.data;
       }
@@ -1268,8 +1335,16 @@ class TBOAdapter extends BaseSupplierAdapter {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
       const tokenId = await this.getHotelToken();
-      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, RequestType: 1, Remarks: "User cancellation", ...params };
-      const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/SendChangeRequest", payload));
+      const payload = {
+        TokenId: tokenId,
+        EndUserIp: this.config.endUserIp,
+        RequestType: 1,
+        Remarks: "User cancellation",
+        ...params,
+      };
+      const res = await this.executeWithRetry(() =>
+        this.hotelBookingClient.post("/SendChangeRequest", payload),
+      );
       if (res.data?.Status === 1) {
         return res.data;
       }
@@ -1310,8 +1385,14 @@ class TBOAdapter extends BaseSupplierAdapter {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
       const tokenId = await this.getHotelToken();
-      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-      const res = await this.executeWithRetry(() => this.hotelSearchClient.post("/HotelInfo", payload));
+      const payload = {
+        TokenId: tokenId,
+        EndUserIp: this.config.endUserIp,
+        ...params,
+      };
+      const res = await this.executeWithRetry(() =>
+        this.hotelSearchClient.post("/HotelInfo", payload),
+      );
       if (res.data?.Status === 1) return res.data;
       throw mapFromResponse(res);
     } catch (e) {
@@ -1327,8 +1408,14 @@ class TBOAdapter extends BaseSupplierAdapter {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
       const tokenId = await this.getHotelToken();
-      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-      const res = await this.executeWithRetry(() => this.hotelSearchClient.post("/HotelRoom", payload));
+      const payload = {
+        TokenId: tokenId,
+        EndUserIp: this.config.endUserIp,
+        ...params,
+      };
+      const res = await this.executeWithRetry(() =>
+        this.hotelSearchClient.post("/HotelRoom", payload),
+      );
       if (res.data?.Status === 1) return res.data;
       throw mapFromResponse(res);
     } catch (e) {
@@ -1355,10 +1442,12 @@ class TBOAdapter extends BaseSupplierAdapter {
         }),
       );
       const data = res.data?.CityList || res.data?.Result || [];
-      await (require("../redisService").set(cacheKey, data, 24 * 60 * 60));
+      await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
       return data;
     } catch (e) {
-      this.logger.error("TBO static TopDestinations failed", { error: e.message });
+      this.logger.error("TBO static TopDestinations failed", {
+        error: e.message,
+      });
       return [];
     }
   }
@@ -1370,8 +1459,14 @@ class TBOAdapter extends BaseSupplierAdapter {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
       const tokenId = await this.getHotelToken();
-      const payload = { TokenId: tokenId, EndUserIp: this.config.endUserIp, ...params };
-      const res = await this.executeWithRetry(() => this.hotelBookingClient.post("/GetChangeRequestStatus", payload));
+      const payload = {
+        TokenId: tokenId,
+        EndUserIp: this.config.endUserIp,
+        ...params,
+      };
+      const res = await this.executeWithRetry(() =>
+        this.hotelBookingClient.post("/GetChangeRequestStatus", payload),
+      );
       if (res.data?.Status === 1) return res.data;
       throw mapFromResponse(res);
     } catch (e) {
@@ -1388,13 +1483,19 @@ class TBOAdapter extends BaseSupplierAdapter {
       // Flight token logout
       if (this.tokenId) {
         try {
-          await this.httpClient.post("/Logout", { TokenId: this.tokenId, EndUserIp: this.config.endUserIp });
+          await this.httpClient.post("/Logout", {
+            TokenId: this.tokenId,
+            EndUserIp: this.config.endUserIp,
+          });
         } catch {}
       }
       // Hotel token logout
       if (this.hotelTokenId) {
         try {
-          await this.hotelAuthClient.post("/Logout", { TokenId: this.hotelTokenId, EndUserIp: this.config.endUserIp });
+          await this.hotelAuthClient.post("/Logout", {
+            TokenId: this.hotelTokenId,
+            EndUserIp: this.config.endUserIp,
+          });
         } catch {}
       }
       return { success: true };

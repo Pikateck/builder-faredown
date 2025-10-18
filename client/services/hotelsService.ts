@@ -3,14 +3,14 @@
  * Replaces the old service with comprehensive fallback support
  */
 
-import { enhancedHotelsService } from './enhancedHotelsService';
+import { enhancedHotelsService } from "./enhancedHotelsService";
 
 // Re-export all types from enhanced service
 export type {
   Hotel,
   HotelSearchParams,
-  HotelBookingData
-} from './enhancedHotelsService';
+  HotelBookingData,
+} from "./enhancedHotelsService";
 
 // Re-export enhanced service as default hotels service
 export const hotelsService = enhancedHotelsService;
@@ -28,8 +28,8 @@ export class HotelsService {
       guests: {
         adults: searchParams.adults || 2,
         children: searchParams.children || 0,
-        rooms: searchParams.rooms || 1
-      }
+        rooms: searchParams.rooms || 1,
+      },
     };
 
     return enhancedHotelsService.searchHotels(enhancedParams);
@@ -40,11 +40,13 @@ export class HotelsService {
   }
 
   async searchDestinations(query: string) {
-    return enhancedHotelsService.getDestinations().then(destinations => 
-      destinations.filter(dest => 
-        dest.name.toLowerCase().includes(query.toLowerCase())
-      )
-    );
+    return enhancedHotelsService
+      .getDestinations()
+      .then((destinations) =>
+        destinations.filter((dest) =>
+          dest.name.toLowerCase().includes(query.toLowerCase()),
+        ),
+      );
   }
 
   async getPopularDestinations() {
@@ -58,16 +60,23 @@ export class HotelsService {
       date: bookingData.checkIn,
       guestDetails: bookingData.guestDetails,
       paymentDetails: bookingData.paymentDetails || {
-        method: 'card',
+        method: "card",
         amount: bookingData.totalPrice || 0,
-        currency: 'INR'
-      }
+        currency: "INR",
+      },
     };
 
     return enhancedHotelsService.bookHotel(enhancedBookingData);
   }
 
-  async getRoomAvailability(hotelId: string, checkIn: string, checkOut: string, rooms: number, adults: number, children: number) {
+  async getRoomAvailability(
+    hotelId: string,
+    checkIn: string,
+    checkOut: string,
+    rooms: number,
+    adults: number,
+    children: number,
+  ) {
     // This method is now handled by the enhanced service internally
     const hotel = await enhancedHotelsService.getHotelDetails(hotelId);
     return hotel.roomTypes || [];
@@ -81,8 +90,8 @@ export class HotelsService {
         page,
         limit,
         total: 0,
-        pages: 0
-      }
+        pages: 0,
+      },
     };
   }
 
@@ -91,7 +100,10 @@ export class HotelsService {
   }
 
   async cancelBooking(bookingRef: string) {
-    return enhancedHotelsService.cancelBooking(bookingRef, 'User requested cancellation');
+    return enhancedHotelsService.cancelBooking(
+      bookingRef,
+      "User requested cancellation",
+    );
   }
 
   async getHotelReviews(hotelId: string, page: number = 1, limit: number = 10) {
@@ -99,23 +111,23 @@ export class HotelsService {
     return {
       data: [
         {
-          id: '1',
-          userId: 'user1',
-          userName: 'John D.',
+          id: "1",
+          userId: "user1",
+          userName: "John D.",
           rating: 4.5,
-          title: 'Great stay!',
-          comment: 'Excellent service and clean rooms.',
+          title: "Great stay!",
+          comment: "Excellent service and clean rooms.",
           stayDate: new Date().toISOString(),
           createdAt: new Date().toISOString(),
-          helpful: 12
-        }
+          helpful: 12,
+        },
       ],
       pagination: {
         page,
         limit,
         total: 1,
-        pages: 1
-      }
+        pages: 1,
+      },
     };
   }
 
@@ -124,10 +136,10 @@ export class HotelsService {
     return {
       id: Date.now().toString(),
       ...review,
-      userId: 'current_user',
-      userName: 'Guest User',
+      userId: "current_user",
+      userName: "Guest User",
       createdAt: new Date().toISOString(),
-      helpful: 0
+      helpful: 0,
     };
   }
 
@@ -147,14 +159,17 @@ export class HotelsService {
   getStaticMockHotels(searchParams: any) {
     // Delegate to enhanced service fallback
     return enhancedHotelsService.searchHotels({
-      destination: searchParams.destination || 'Fallback City',
-      checkInDate: searchParams.checkIn || new Date().toISOString().split('T')[0],
-      checkOutDate: searchParams.checkOut || new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+      destination: searchParams.destination || "Fallback City",
+      checkInDate:
+        searchParams.checkIn || new Date().toISOString().split("T")[0],
+      checkOutDate:
+        searchParams.checkOut ||
+        new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       guests: {
         adults: searchParams.adults || 2,
         children: searchParams.children || 0,
-        rooms: searchParams.rooms || 1
-      }
+        rooms: searchParams.rooms || 1,
+      },
     });
   }
 

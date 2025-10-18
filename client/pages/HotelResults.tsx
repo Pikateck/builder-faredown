@@ -468,7 +468,9 @@ export default function HotelResults() {
         setPriceRange([0, roundedMax]);
       }
 
-      setTotalResults((prev) => (append ? prev + transformed.length : transformed.length));
+      setTotalResults((prev) =>
+        append ? prev + transformed.length : transformed.length,
+      );
 
       const hasMoreNow = transformed.length === pageSizeRef.current;
       setHasMore(hasMoreNow);
@@ -538,21 +540,22 @@ export default function HotelResults() {
         description: hotel.description || `Experience luxury at ${hotel.name}`,
         amenities: hotel.amenities || ["WiFi", "Pool", "Restaurant"],
         features: hotel.features || ["City View", "Business Center"],
-        roomTypes: Array.isArray(hotel.roomTypes) && hotel.roomTypes.length > 0
-          ? hotel.roomTypes
-          : hotel.rooms
-            ? hotel.rooms.map((room: any) => ({
-                name: room.name || "Standard Room",
-                price: room.price || hotel.currentPrice || 120,
-                features: room.features || ["Double Bed", "City View"],
-              }))
-            : [
-                {
-                  name: "Standard Room",
-                  price: hotel.currentPrice || 120,
-                  features: ["Double Bed", "City View"],
-                },
-              ],
+        roomTypes:
+          Array.isArray(hotel.roomTypes) && hotel.roomTypes.length > 0
+            ? hotel.roomTypes
+            : hotel.rooms
+              ? hotel.rooms.map((room: any) => ({
+                  name: room.name || "Standard Room",
+                  price: room.price || hotel.currentPrice || 120,
+                  features: room.features || ["Double Bed", "City View"],
+                }))
+              : [
+                  {
+                    name: "Standard Room",
+                    price: hotel.currentPrice || 120,
+                    features: ["Double Bed", "City View"],
+                  },
+                ],
         address: hotel.address || {
           street: `Near ${destination} City Center`,
           city: destination || "Dubai",
@@ -818,15 +821,21 @@ export default function HotelResults() {
       case "price-low":
         filtered.sort(
           (a, b) =>
-            (a.totalPrice || (a.currentPrice || a.priceRange?.min || 0) * Math.max(1, nights)) -
-            (b.totalPrice || (b.currentPrice || b.priceRange?.min || 0) * Math.max(1, nights)),
+            (a.totalPrice ||
+              (a.currentPrice || a.priceRange?.min || 0) *
+                Math.max(1, nights)) -
+            (b.totalPrice ||
+              (b.currentPrice || b.priceRange?.min || 0) * Math.max(1, nights)),
         );
         break;
       case "price-high":
         filtered.sort(
           (a, b) =>
-            (b.totalPrice || (b.currentPrice || b.priceRange?.min || 0) * Math.max(1, nights)) -
-            (a.totalPrice || (a.currentPrice || a.priceRange?.min || 0) * Math.max(1, nights)),
+            (b.totalPrice ||
+              (b.currentPrice || b.priceRange?.min || 0) *
+                Math.max(1, nights)) -
+            (a.totalPrice ||
+              (a.currentPrice || a.priceRange?.min || 0) * Math.max(1, nights)),
         );
         break;
       case "rating":
@@ -1536,7 +1545,9 @@ export default function HotelResults() {
                       ? getSupplierDescription()
                       : "Enhanced mock data with realistic hotel information"}
                   </p>
-                  {Object.values(selectedFilters).some((arr) => arr.length > 0) && (
+                  {Object.values(selectedFilters).some(
+                    (arr) => arr.length > 0,
+                  ) && (
                     <div className="mt-2 flex flex-wrap gap-2">
                       {Object.entries(selectedFilters).flatMap(([cat, items]) =>
                         items.map((id) => (

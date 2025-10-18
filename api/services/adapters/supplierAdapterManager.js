@@ -157,11 +157,16 @@ class SupplierAdapterManager {
    * Search across all hotel suppliers
    */
   async searchAllHotels(searchParams, suppliers = null) {
-    const defaultSuppliers = (process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK,TBO")
+    const defaultSuppliers = (
+      process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK,TBO"
+    )
       .split(",")
       .map((s) => s.trim().toUpperCase())
       .filter(Boolean);
-    const supplierList = Array.isArray(suppliers) && suppliers.length > 0 ? suppliers : defaultSuppliers;
+    const supplierList =
+      Array.isArray(suppliers) && suppliers.length > 0
+        ? suppliers
+        : defaultSuppliers;
 
     const cached = await this.getCachedSearchResults("hotel", searchParams);
     if (cached?.results) {
