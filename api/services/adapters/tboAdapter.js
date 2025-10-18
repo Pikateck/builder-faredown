@@ -900,8 +900,13 @@ class TBOAdapter extends BaseSupplierAdapter {
         this.logger.warn("TBO persistToMasterSchema failed", { error: e.message }),
       );
 
+      // Determine requested max results
+      const maxResults = Number.isFinite(parseInt(searchParams.maxResults, 10))
+        ? Math.max(1, Math.min(parseInt(searchParams.maxResults, 10), 500))
+        : 50;
+
       // Map to aggregator format and enrich with rates/images/amenities
-      const results = hotels.slice(0, 50).map((h) => {
+      const results = hotels.slice(0, maxResults).map((h) => {
         const hotelId = String(h.HotelCode || h.HotelId || h.Id || "");
         // Build rates from Rooms[].Rates[]
         const rawRates = [];
@@ -923,7 +928,7 @@ class TBOAdapter extends BaseSupplierAdapter {
               boardType: r.MealType || r.BoardType || r.Board || "Room Only",
               originalPrice: base,
               price: total,
-              markedUpPrice: total, // markup applied later
+              markedUpPrice: total,
               currency: r.Currency || currency,
               cancellationPolicy: policies,
               isRefundable: refundable,
