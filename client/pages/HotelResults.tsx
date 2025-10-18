@@ -683,7 +683,7 @@ export default function HotelResults() {
         },
         {
           name: "Beach Villa",
-          price: 195, // ��195 per night (upgrade option)
+          price: 195, // ₹195 per night (upgrade option)
           features: ["Private Beach Access", "Outdoor Shower", "Terrace"],
         },
       ],
@@ -1385,6 +1385,7 @@ export default function HotelResults() {
                     onClearFilters={handleClearFilters}
                     className="h-full border-0"
                     priceMax={priceBounds.max}
+                    supplierCounts={supplierCounts}
                   />
                 </div>
 
