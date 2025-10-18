@@ -26,7 +26,8 @@ const getBackendUrl = () => {
   // This prevents the preview from trying to call itself as an API
   if (
     window.location.hostname.includes("builder.codes") ||
-    window.location.hostname.includes("fly.dev")
+    window.location.hostname.includes("fly.dev") ||
+    window.location.hostname.includes("projects.builder.my")
   ) {
     console.log(
       "🌐 Builder.io preview detected, forcing Render API:",
@@ -76,7 +77,8 @@ const getOfflineFallbackEnabled = () => {
   // Builder.codes and fly.dev environments: enable fallback by default due to potential backend unavailability
   if (
     window.location.hostname.includes("builder.codes") ||
-    window.location.hostname.includes("fly.dev")
+    window.location.hostname.includes("fly.dev") ||
+    window.location.hostname.includes("projects.builder.my")
   ) {
     // Only enable fallback when explicitly requested to avoid masking live API issues
     return envFlag === "true";
