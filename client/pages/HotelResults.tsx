@@ -751,15 +751,60 @@ export default function HotelResults() {
     return () => io.disconnect();
   }, [loadMoreRef, loading, loadingMore, hasMore, page]);
 
-  // Compute supplier counts for filter display
+  // Compute supplier counts for filter display (dynamic, respects current filters except supplier)
   const supplierCounts = React.useMemo(() => {
+    const q = nameQuery.trim().toLowerCase();
+    const filteredForCounts = hotels.filter((hotel) => {
+      if (q && !hotel.name.toLowerCase().includes(q)) return false;
+      const price = hotel.currentPrice || hotel.priceRange?.min || hotel.roomTypes?.[0]?.pricePerNight || 0;
+      if (price < priceRange[0] || price > priceRange[1]) return false;
+
+      for (const [categoryId, filterIds] of Object.entries(selectedFilters)) {
+        if (categoryId === "suppliers" || filterIds.length === 0) continue;
+        if (categoryId === "review-score") {
+          const rating = Math.floor(hotel.rating);
+          const match = filterIds.some((fid) =>
+            (fid === "wonderful-9" && rating >= 9) ||
+            (fid === "very-good-8" && rating >= 8) ||
+            (fid === "good-7" && rating >= 7) ||
+            (fid === "pleasant-6" && rating >= 6),
+          );
+          if (!match) return false;
+        }
+        if (categoryId === "facilities" || categoryId === "popular") {
+          const hotelAmenities = hotel.amenities?.map((a) => (typeof a === "string" ? a : a.name)) || [];
+          const amenityMap: Record<string, string> = {
+            "swimming-pool": "Pool",
+            "free-wifi": "WiFi",
+            parking: "Parking",
+            restaurant: "Restaurant",
+            "fitness-center": "Gym",
+            spa: "Spa",
+            bar: "Bar",
+          };
+          const hasAmenity = filterIds.some((fid) => hotelAmenities.includes(amenityMap[fid] || fid));
+          if (!hasAmenity) return false;
+        }
+        if (categoryId === "property-rating") {
+          const stars = Math.floor(hotel.rating);
+          const match = filterIds.some((fid) =>
+            (fid === "5-stars" && stars === 5) ||
+            (fid === "4-stars" && stars === 4) ||
+            (fid === "3-stars" && stars === 3),
+          );
+          if (!match) return false;
+        }
+      }
+      return true;
+    });
+
     const counts: Record<string, number> = {};
-    hotels.forEach((h) => {
+    filteredForCounts.forEach((h) => {
       const key = (h.supplier || h.supplierCode || "HOTELBEDS").toString().toUpperCase();
       counts[key] = (counts[key] || 0) + 1;
     });
     return counts;
-  }, [hotels]);
+  }, [hotels, nameQuery, priceRange, selectedFilters]);
 
   // Filter and sort hotels
   const filteredAndSortedHotels = React.useMemo(() => {
