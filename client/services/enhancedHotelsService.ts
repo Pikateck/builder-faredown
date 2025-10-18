@@ -140,45 +140,27 @@ class EnhancedHotelsService extends EnhancedApiService {
     );
 
     try {
-      const aggregatedResults = await this.safeGet(
+      // Prefer multi-supplier endpoint (includes RateHawk + Hotelbeds)
+      const multiSupplier = await apiClient.get<any>(
+        "/hotels-multi-supplier/search",
+        normalizedParams,
+      );
+
+      if (multiSupplier?.success && Array.isArray(multiSupplier.data)) {
+        return multiSupplier.data;
+      }
+      if (Array.isArray(multiSupplier)) {
+        return multiSupplier;
+      }
+
+      // Fallback to hotels-live (Hotelbeds-only) if multi-supplier not available
+      const liveResponse = await this.safeGet(
         "/search",
         normalizedParams,
         fallbackData,
       );
-
-      const hasLiveData = Array.isArray(aggregatedResults)
-        ? aggregatedResults.some((hotel: any) => hotel?.isLiveData)
-        : false;
-
-      if (Array.isArray(aggregatedResults) && hasLiveData) {
-        return aggregatedResults;
-      }
-
-      try {
-        const legacyResponse = await apiClient.get<any>(
-          "/hotels-live/search",
-          normalizedParams,
-        );
-
-        if (legacyResponse?.success && Array.isArray(legacyResponse.data)) {
-          return legacyResponse.data;
-        }
-
-        if (Array.isArray(legacyResponse)) {
-          return legacyResponse;
-        }
-      } catch (legacyError) {
-        this.logServiceEvent("warn", "Legacy hotel fallback failed", {
-          error:
-            legacyError instanceof Error ? legacyError.message : legacyError,
-        });
-      }
-
-      return Array.isArray(aggregatedResults)
-        ? aggregatedResults
-        : fallbackData;
+      return Array.isArray(liveResponse) ? liveResponse : fallbackData;
     } catch (error) {
-      // If API fails, return fallback data directly
       console.log("🔄 Hotel search failed, using fallback data");
       return fallbackData;
     }
@@ -192,7 +174,16 @@ class EnhancedHotelsService extends EnhancedApiService {
     fallbackHotel.id = hotelId;
 
     try {
-      // Always use enhanced live details endpoint; backend ignores unknown params
+      // If supplier is RateHawk (or any non-Hotelbeds), use supplier-aware route
+      if (params?.supplier && params.supplier.toLowerCase() !== "hotelbeds") {
+        const query = { supplier: params.supplier, checkIn: params.checkIn, checkOut: params.checkOut } as any;
+        const res = await apiClient.get<any>(
+          `/hotels-multi-supplier/${hotelId}`,
+          query,
+        );
+        if (res?.success && res.data) return res.data;
+      }
+      // Default to enhanced Hotelbeds details
       return await this.safeGet(`/hotel/${hotelId}`, params, fallbackHotel);
     } catch (error) {
       console.log(
