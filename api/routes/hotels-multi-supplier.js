@@ -644,24 +644,24 @@ router.get("/search", async (req, res) => {
     };
 
     // Get enabled hotel suppliers from database (supplier_master)
-  const suppliersResult = await db.query(`
+    const suppliersResult = await db.query(`
     SELECT COALESCE(code, supplier_code) AS code, weight FROM supplier_master
     WHERE enabled = TRUE
       AND LOWER(COALESCE(code, supplier_code)) IN ('hotelbeds','ratehawk','tbo')
     ORDER BY weight DESC, COALESCE(code, supplier_code) ASC
   `);
 
-  const enabledSuppliers = suppliersResult.rows.map((row) =>
-    String(row.code || "").toUpperCase(),
-  );
+    const enabledSuppliers = suppliersResult.rows.map((row) =>
+      String(row.code || "").toUpperCase(),
+    );
 
-  // Fallback to env if no DB suppliers
-  const suppliersToUse =
-    enabledSuppliers.length > 0
-      ? enabledSuppliers
-      : (process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK,TBO")
-          .split(",")
-          .map((s) => s.trim().toUpperCase());
+    // Fallback to env if no DB suppliers
+    const suppliersToUse =
+      enabledSuppliers.length > 0
+        ? enabledSuppliers
+        : (process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK,TBO")
+            .split(",")
+            .map((s) => s.trim().toUpperCase());
 
     console.log(
       `📡 Searching across hotel suppliers: ${suppliersToUse.join(", ")}`,
@@ -701,7 +701,12 @@ router.get("/search", async (req, res) => {
           searchParams: req.query,
           source: "multi_supplier",
           suppliersUsed: suppliersToUse,
-          supplierWeights: (await db.query(`SELECT COALESCE(code, supplier_code) AS code, weight FROM supplier_master WHERE COALESCE(code, supplier_code) = ANY($1)`, [suppliersToUse.map((s)=>s.toLowerCase())])).rows,
+          supplierWeights: (
+            await db.query(
+              `SELECT COALESCE(code, supplier_code) AS code, weight FROM supplier_master WHERE COALESCE(code, supplier_code) = ANY($1)`,
+              [suppliersToUse.map((s) => s.toLowerCase())],
+            )
+          ).rows,
           warning: "All suppliers unavailable",
           supplierErrors: aggregatedResults.supplierMetrics,
           timestamp: new Date().toISOString(),
@@ -968,7 +973,10 @@ router.get("/search", async (req, res) => {
         }
       });
     } catch (persistErr) {
-      console.warn("⚠️ Hotel search persistence skipped:", persistErr?.message || persistErr);
+      console.warn(
+        "⚠️ Hotel search persistence skipped:",
+        persistErr?.message || persistErr,
+      );
     }
 
     console.log(
@@ -1020,7 +1028,12 @@ router.get("/search", async (req, res) => {
         },
         suppliers: aggregatedResults.supplierMetrics,
         suppliersUsed: suppliersToUse,
-        supplierWeights: (await db.query(`SELECT COALESCE(code, supplier_code) AS code, weight FROM supplier_master WHERE COALESCE(code, supplier_code) = ANY($1)`, [suppliersToUse.map((s)=>s.toLowerCase())])).rows,
+        supplierWeights: (
+          await db.query(
+            `SELECT COALESCE(code, supplier_code) AS code, weight FROM supplier_master WHERE COALESCE(code, supplier_code) = ANY($1)`,
+            [suppliersToUse.map((s) => s.toLowerCase())],
+          )
+        ).rows,
         source: "multi_supplier",
         timestamp: new Date().toISOString(),
       },
