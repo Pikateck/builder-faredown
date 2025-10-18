@@ -1748,7 +1748,7 @@ export default function HotelResults() {
                 <div className="text-center py-8 sm:py-12 px-4">
                   <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#003580] mx-auto"></div>
                   <p className="text-gray-600 text-sm sm:text-base mt-4">
-                    🔍 Searching live Hotelbeds API for hotels...
+                    Searching hotels...
                   </p>
                   <p className="text-gray-500 text-xs mt-2">
                     Getting real-time availability and pricing
