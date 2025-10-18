@@ -805,6 +805,8 @@ export default function HotelResults() {
     setPriceRange([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
     setSelectedFilters({});
     setSortBy("recommended");
+    // Re-run the search to ensure fresh, unfiltered data view
+    loadHotels();
   };
 
   return (
@@ -1412,7 +1414,7 @@ export default function HotelResults() {
                     {isLiveData && (
                       <div className="flex items-center gap-1 bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
                         <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                        🔴 LIVE {getActiveSuppliers()}
+                        ��� LIVE {getActiveSuppliers()}
                       </div>
                     )}
                     {!isLiveData && filteredAndSortedHotels.length > 0 && (
