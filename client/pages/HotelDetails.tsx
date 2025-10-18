@@ -306,6 +306,7 @@ export default function HotelDetails() {
               rooms: parseInt(roomsParam || "1"),
               adults: parseInt(adultsParam || "2"),
               children: parseInt(childrenParam || "0"),
+              supplier: (location.state as any)?.preselectRate?.supplierData?.supplierCode || new URLSearchParams(window.location.search).get("supplier") || undefined,
             };
 
             console.log(
