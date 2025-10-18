@@ -107,7 +107,16 @@ export function ComprehensiveFilters({
     { value: "distance", label: "Distance from downtown" },
   ];
 
+  const supplierItems: FilterItem[] = supplierCounts
+    ? Object.entries(supplierCounts)
+        .sort((a, b) => b[1] - a[1])
+        .map(([name, count]) => ({ id: name.toUpperCase(), label: name.toUpperCase(), count }))
+    : [];
+
   const filterCategories: FilterCategory[] = [
+    ...(supplierItems.length
+      ? [{ id: "suppliers", title: "Suppliers", items: supplierItems }]
+      : []),
     {
       id: "deals",
       title: "Deals",
