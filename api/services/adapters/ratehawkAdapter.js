@@ -121,6 +121,7 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         checkOut,
         rooms,
         currency,
+        maxResults,
       });
 
       const cached = this.searchCache.get(cacheKey);
