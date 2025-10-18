@@ -82,7 +82,7 @@ export default function HotelResults() {
       loadFromUrlParams(urlSearchParams);
     }
   }, [urlSearchParams, loadFromUrlParams]);
-  const [sortBy, setSortBy] = useState("recommended");
+  const [sortBy, setSortBy] = useState("price-low");
   const [priceRange, setPriceRange] = useState([0, 25000]);
   const [priceBounds, setPriceBounds] = useState<{ min: number; max: number }>({
     min: 0,
@@ -538,19 +538,21 @@ export default function HotelResults() {
         description: hotel.description || `Experience luxury at ${hotel.name}`,
         amenities: hotel.amenities || ["WiFi", "Pool", "Restaurant"],
         features: hotel.features || ["City View", "Business Center"],
-        roomTypes: hotel.rooms
-          ? hotel.rooms.map((room: any) => ({
-              name: room.name || "Standard Room",
-              price: room.price || hotel.currentPrice || 120,
-              features: room.features || ["Double Bed", "City View"],
-            }))
-          : [
-              {
-                name: "Standard Room",
-                price: hotel.currentPrice || 120,
-                features: ["Double Bed", "City View"],
-              },
-            ],
+        roomTypes: Array.isArray(hotel.roomTypes) && hotel.roomTypes.length > 0
+          ? hotel.roomTypes
+          : hotel.rooms
+            ? hotel.rooms.map((room: any) => ({
+                name: room.name || "Standard Room",
+                price: room.price || hotel.currentPrice || 120,
+                features: room.features || ["Double Bed", "City View"],
+              }))
+            : [
+                {
+                  name: "Standard Room",
+                  price: hotel.currentPrice || 120,
+                  features: ["Double Bed", "City View"],
+                },
+              ],
         address: hotel.address || {
           street: `Near ${destination} City Center`,
           city: destination || "Dubai",
@@ -816,15 +818,15 @@ export default function HotelResults() {
       case "price-low":
         filtered.sort(
           (a, b) =>
-            (a.currentPrice || a.priceRange?.min || 0) -
-            (b.currentPrice || b.priceRange?.min || 0),
+            (a.totalPrice || (a.currentPrice || a.priceRange?.min || 0) * Math.max(1, nights)) -
+            (b.totalPrice || (b.currentPrice || b.priceRange?.min || 0) * Math.max(1, nights)),
         );
         break;
       case "price-high":
         filtered.sort(
           (a, b) =>
-            (b.currentPrice || b.priceRange?.min || 0) -
-            (a.currentPrice || a.priceRange?.min || 0),
+            (b.totalPrice || (b.currentPrice || b.priceRange?.min || 0) * Math.max(1, nights)) -
+            (a.totalPrice || (a.currentPrice || a.priceRange?.min || 0) * Math.max(1, nights)),
         );
         break;
       case "rating":
