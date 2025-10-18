@@ -1460,6 +1460,7 @@ export default function HotelResults() {
                   setSortBy={setSortBy}
                   onClearFilters={handleClearFilters}
                   className="h-full border-0"
+                  priceMax={priceBounds.max}
                 />
               </div>
             </div>
