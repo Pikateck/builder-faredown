@@ -75,6 +75,7 @@ interface ComprehensiveFiltersProps {
   onClearFilters: () => void;
   className?: string;
   priceMax?: number;
+  supplierCounts?: Record<string, number>;
 }
 
 export function ComprehensiveFilters({
@@ -87,6 +88,7 @@ export function ComprehensiveFilters({
   onClearFilters,
   className,
   priceMax,
+  supplierCounts,
 }: ComprehensiveFiltersProps) {
   const { selectedCurrency } = useCurrency();
   const [expandedSections, setExpandedSections] = useState<string[]>([
