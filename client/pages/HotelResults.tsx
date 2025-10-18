@@ -780,6 +780,12 @@ export default function HotelResults() {
       for (const [categoryId, filterIds] of Object.entries(selectedFilters)) {
         if (filterIds.length === 0) continue;
 
+        if (categoryId === "suppliers") {
+          const hotelSupplier = (hotel.supplier || hotel.supplierCode || "HOTELBEDS").toString().toUpperCase();
+          const supplierMatch = filterIds.some((id) => id.toUpperCase() === hotelSupplier);
+          if (!supplierMatch) return false;
+        }
+
         if (categoryId === "review-score") {
           const hasMatchingRating = filterIds.some((filterId) => {
             const rating = Math.floor(hotel.rating);
