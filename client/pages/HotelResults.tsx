@@ -1280,17 +1280,24 @@ export default function HotelResults() {
                   <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
                     <div className="text-xs text-gray-600">Current search</div>
                     <div className="mt-1 text-sm font-medium text-gray-900">
-                      {(urlSearchParams.get("destinationName") || destination || "Dubai")}
+                      {urlSearchParams.get("destinationName") ||
+                        destination ||
+                        "Dubai"}
                     </div>
                     <div className="text-xs text-gray-600 mt-1">
                       {(() => {
-                        const inD = departureDate || (checkIn ? new Date(checkIn) : null);
-                        const outD = returnDate || (checkOut ? new Date(checkOut) : null);
-                        if (inD && outD) return `${formatDisplayDate(inD)} - ${formatDisplayDate(outD)}`;
+                        const inD =
+                          departureDate || (checkIn ? new Date(checkIn) : null);
+                        const outD =
+                          returnDate || (checkOut ? new Date(checkOut) : null);
+                        if (inD && outD)
+                          return `${formatDisplayDate(inD)} - ${formatDisplayDate(outD)}`;
                         return "Select dates";
                       })()}
                       {` • ${adults} adult${parseInt(adults) > 1 ? "s" : ""}`}
-                      {parseInt(children) > 0 ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}` : ""}
+                      {parseInt(children) > 0
+                        ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}`
+                        : ""}
                       {`, ${rooms} room${parseInt(rooms) > 1 ? "s" : ""}`}
                     </div>
                   </div>
@@ -1407,17 +1414,24 @@ export default function HotelResults() {
                 <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
                   <div className="text-xs text-gray-600">Current search</div>
                   <div className="mt-1 text-sm font-medium text-gray-900">
-                    {(urlSearchParams.get("destinationName") || destination || "Dubai")}
+                    {urlSearchParams.get("destinationName") ||
+                      destination ||
+                      "Dubai"}
                   </div>
                   <div className="text-xs text-gray-600 mt-1">
                     {(() => {
-                      const inD = departureDate || (checkIn ? new Date(checkIn) : null);
-                      const outD = returnDate || (checkOut ? new Date(checkOut) : null);
-                      if (inD && outD) return `${formatDisplayDate(inD)} - ${formatDisplayDate(outD)}`;
+                      const inD =
+                        departureDate || (checkIn ? new Date(checkIn) : null);
+                      const outD =
+                        returnDate || (checkOut ? new Date(checkOut) : null);
+                      if (inD && outD)
+                        return `${formatDisplayDate(inD)} - ${formatDisplayDate(outD)}`;
                       return "Select dates";
                     })()}
                     {` • ${adults} adult${parseInt(adults) > 1 ? "s" : ""}`}
-                    {parseInt(children) > 0 ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}` : ""}
+                    {parseInt(children) > 0
+                      ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}`
+                      : ""}
                     {`, ${rooms} room${parseInt(rooms) > 1 ? "s" : ""}`}
                   </div>
                 </div>
