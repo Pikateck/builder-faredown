@@ -648,10 +648,10 @@ export default function HotelDetails() {
           );
         })(),
         image:
-          hotelData.images && hotelData.images.length > 0
-            ? typeof hotelData.images[0] === "string"
-              ? hotelData.images[0]
-              : hotelData.images[0].url
+          Array.isArray(hotelData?.images) && hotelData!.images.length > 0
+            ? typeof hotelData!.images[0] === "string"
+              ? (hotelData!.images[0] as string)
+              : (hotelData!.images[0] as any).url
             : // Hotel-specific fallback images
               (() => {
                 const hotelCode = hotelId || "htl-DXB-003";
@@ -669,7 +669,7 @@ export default function HotelDetails() {
                   fallbackImages[hotelCode] || fallbackImages["htl-DXB-003"]
                 );
               })(),
-        images: hotelData.images || [],
+        images: hotelData?.images || [],
         rating: hotelData.rating || 4.5,
         reviews: hotelData.reviews || hotelData.reviewCount || 1247,
         checkIn: checkInDate.toISOString().split("T")[0],
