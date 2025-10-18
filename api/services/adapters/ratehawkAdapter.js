@@ -51,6 +51,10 @@ class RateHawkAdapter extends BaseSupplierAdapter {
 
     // Cache for resolved region identifiers
     this.regionCache = new Map();
+
+    // Long-TTL cache for static dumps (24h)
+    this.staticCache = new Map();
+    this.staticTTL = 24 * 60 * 60 * 1000;
   }
 
   /**
