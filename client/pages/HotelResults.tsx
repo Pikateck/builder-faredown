@@ -903,6 +903,14 @@ export default function HotelResults() {
             <Filter className="w-4 h-4" />
             Filter Hotels
           </Button>
+          <div className="mt-2 text-center">
+            <button
+              onClick={handleClearFilters}
+              className="text-xs text-blue-600 hover:text-blue-700 underline"
+            >
+              Clear filters
+            </button>
+          </div>
         </div>
 
         {/* Mobile Sort Bar */}
@@ -1302,7 +1310,7 @@ export default function HotelResults() {
         <div className="bg-gray-50 border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2">
             <div className="flex items-center text-sm text-gray-600">
-              <span>��� Global</span>
+              <span>🌍 Global</span>
               <span className="mx-2">•</span>
               <span>
                 {urlSearchParams.get("destinationName") ||
