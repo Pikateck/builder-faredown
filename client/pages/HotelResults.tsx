@@ -439,9 +439,12 @@ export default function HotelResults() {
         });
         console.log("📊 Supplier breakdown:", supplierCounts);
 
-        setHotels(transformHotelbedsData(results));
-        setTotalResults(results.length);
-        setIsLiveData(true); // The service handles live vs fallback internally
+        const transformed = transformHotelbedsData(results);
+        setHotels(transformed);
+        setTotalResults(transformed.length);
+        // Mark LIVE only if any result is flagged as live by API
+        const hasLive = transformed.some((h: any) => h?.isLiveData === true);
+        setIsLiveData(hasLive);
       } else {
         // If no results from API, use static mock data as last resort
         console.log("🔄 Using static mock data as fallback");
@@ -1299,7 +1302,7 @@ export default function HotelResults() {
         <div className="bg-gray-50 border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2">
             <div className="flex items-center text-sm text-gray-600">
-              <span>🌍 Global</span>
+              <span>��� Global</span>
               <span className="mx-2">•</span>
               <span>
                 {urlSearchParams.get("destinationName") ||
