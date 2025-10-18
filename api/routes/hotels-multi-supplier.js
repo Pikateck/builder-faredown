@@ -1119,4 +1119,213 @@ router.get("/:hotelId", async (req, res) => {
   }
 });
 
+/**
+ * Supplier-aware booking for non-Hotelbeds (e.g., RateHawk)
+ * POST /api/hotels/book
+ */
+router.post("/book", async (req, res) => {
+  try {
+    const {
+      supplier,
+      rateKey,
+      partnerOrderId,
+      language = "en",
+      user,
+      guests = [],
+      bookingData = {},
+    } = req.body || {};
+
+    if (!supplier || !rateKey) {
+      return res.status(400).json({
+        success: false,
+        error: "supplier and rateKey are required",
+      });
+    }
+
+    const supplierCode = String(supplier).toUpperCase();
+
+    // Route non-Hotelbeds bookings via supplier adapters
+    if (supplierCode === "HOTELBEDS") {
+      return res.status(400).json({
+        success: false,
+        error: "Use /api/hotels-live/book for Hotelbeds bookings",
+      });
+    }
+
+    const adapter = supplierAdapterManager.getAdapter(supplierCode);
+    if (!adapter) {
+      return res.status(404).json({
+        success: false,
+        error: `Supplier ${supplier} not found`,
+      });
+    }
+
+    // Normalize booking payload for RateHawk bookHotel()
+    const payload = {
+      rateKey,
+      partnerOrderId: partnerOrderId || `fd_${Date.now()}`,
+      language,
+      user: user || bookingData.user || {},
+      guests: Array.isArray(guests) ? guests : bookingData.guests || [],
+    };
+
+    const result = await supplierAdapterManager.bookProduct(
+      "hotel",
+      supplierCode,
+      payload,
+    );
+
+    return res.json({ success: true, data: result });
+  } catch (error) {
+    console.error("Supplier-aware booking error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * Get order info
+ * GET /api/hotels/order/:orderId
+ */
+router.get("/order/:orderId", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { supplier = "ratehawk", language = "en" } = req.query;
+    const supplierCode = String(supplier).toUpperCase();
+
+    if (supplierCode === "HOTELBEDS") {
+      return res.status(400).json({
+        success: false,
+        error: "Order info via Hotelbeds not supported on this route",
+      });
+    }
+
+    const adapter = supplierAdapterManager.getAdapter(supplierCode);
+    if (!adapter?.getOrderInfo) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+
+    const info = await adapter.getOrderInfo(orderId, language);
+    return res.json({ success: true, data: info });
+  } catch (error) {
+    console.error("Get order info error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * Get booking status
+ * GET /api/hotels/order/:orderId/status
+ */
+router.get("/order/:orderId/status", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { supplier = "ratehawk" } = req.query;
+    const supplierCode = String(supplier).toUpperCase();
+
+    if (supplierCode === "HOTELBEDS") {
+      return res.status(400).json({
+        success: false,
+        error: "Booking status via Hotelbeds not supported on this route",
+      });
+    }
+
+    const adapter = supplierAdapterManager.getAdapter(supplierCode);
+    if (!adapter?.getBookingStatus) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+
+    const status = await adapter.getBookingStatus(orderId);
+    return res.json({ success: true, data: status });
+  } catch (error) {
+    console.error("Get booking status error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * Cancel booking
+ * POST /api/hotels/order/:orderId/cancel
+ */
+router.post("/order/:orderId/cancel", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { supplier = "ratehawk" } = req.query;
+    const supplierCode = String(supplier).toUpperCase();
+
+    if (supplierCode === "HOTELBEDS") {
+      return res.status(400).json({
+        success: false,
+        error: "Booking cancellation via Hotelbeds not supported on this route",
+      });
+    }
+
+    const adapter = supplierAdapterManager.getAdapter(supplierCode);
+    if (!adapter?.cancelBooking) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+
+    const result = await adapter.cancelBooking(orderId);
+    return res.json({ success: true, data: result });
+  } catch (error) {
+    console.error("Cancel booking error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * Download voucher PDF
+ * GET /api/hotels/order/:orderId/voucher
+ */
+router.get("/order/:orderId/voucher", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { supplier = "ratehawk" } = req.query;
+    const supplierCode = String(supplier).toUpperCase();
+
+    const adapter = supplierAdapterManager.getAdapter(supplierCode);
+    if (!adapter?.downloadVoucher) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+
+    const file = await adapter.downloadVoucher(orderId);
+    res.setHeader("Content-Type", file.contentType || "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${file.fileName || `voucher_${orderId}.pdf`}"`,
+    );
+    return res.send(file.data);
+  } catch (error) {
+    console.error("Download voucher error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * Download invoice PDF
+ * GET /api/hotels/order/:orderId/invoice
+ */
+router.get("/order/:orderId/invoice", async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { supplier = "ratehawk" } = req.query;
+    const supplierCode = String(supplier).toUpperCase();
+
+    const adapter = supplierAdapterManager.getAdapter(supplierCode);
+    if (!adapter?.downloadInvoice) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+
+    const file = await adapter.downloadInvoice(orderId);
+    res.setHeader("Content-Type", file.contentType || "application/pdf");
+    res.setHeader(
+      "Content-Disposition",
+      `attachment; filename="${file.fileName || `invoice_${orderId}.pdf`}"`,
+    );
+    return res.send(file.data);
+  } catch (error) {
+    console.error("Download invoice error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;
