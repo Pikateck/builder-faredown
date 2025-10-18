@@ -128,6 +128,8 @@ class EnhancedHotelsService extends EnhancedApiService {
       currencyCode: params.currencyCode || "INR",
       // Ensure server route receives expected 'currency' query param
       currency: (params as any).currency || params.currencyCode || "INR",
+      page: (params as any).page || 1,
+      pageSize: (params as any).pageSize || 20,
     };
 
     const fallbackData = this.createFallbackHotels(
