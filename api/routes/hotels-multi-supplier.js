@@ -548,6 +548,9 @@ router.get("/search", async (req, res) => {
       userId,
       market = "IN",
       channel = "web",
+      page = "1",
+      pageSize = "20",
+      maxResults: maxResultsQuery,
     } = req.query;
 
     // Validate required parameters
@@ -626,6 +629,12 @@ router.get("/search", async (req, res) => {
 
     const resolvedDestination = destinationCode || destination;
 
+    // Pagination math
+    const parsedPage = Math.max(1, parseInt(String(page), 10) || 1);
+    const parsedPageSize = Math.max(1, Math.min(100, parseInt(String(pageSize), 10) || 20));
+    const requestedMax = Math.min(parseInt(String(maxResultsQuery || "200"), 10) || 200, 500);
+    const supplierMax = Math.min(requestedMax, parsedPage * parsedPageSize);
+
     // Build search params
     const searchParams = {
       destination: resolvedDestination,
@@ -634,7 +643,7 @@ router.get("/search", async (req, res) => {
       checkOut,
       rooms: roomsArray,
       currency,
-      maxResults: Math.min(parseInt(req.query.maxResults || "200", 10) || 200, 500),
+      maxResults: supplierMax,
       adults: totalAdults,
       children: totalChildren,
       roomsCount: parsedRoomsCount,
@@ -1014,12 +1023,21 @@ router.get("/search", async (req, res) => {
       }
     }
 
+    // Apply pagination to standardized list
+    const totalCount = standardizedHotels.length;
+    const start = (parsedPage - 1) * parsedPageSize;
+    const end = Math.min(start + parsedPageSize, totalCount);
+    const pageItems = standardizedHotels.slice(start, end);
+
     res.json({
       success: true,
-      data: standardizedHotels,
+      data: pageItems,
       meta: {
         searchId,
-        totalResults: standardizedHotels.length,
+        totalResults: totalCount,
+        page: parsedPage,
+        pageSize: parsedPageSize,
+        hasMore: end < totalCount,
         searchParams: {
           destination: resolvedDestination,
           destinationCode: destinationCode || null,
