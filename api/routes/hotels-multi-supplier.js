@@ -1123,6 +1123,28 @@ router.get("/:hotelId", async (req, res) => {
  * Supplier-aware booking for non-Hotelbeds (e.g., RateHawk)
  * POST /api/hotels/book
  */
+router.post("/booking/form", async (req, res) => {
+  try {
+    const { supplier = "ratehawk", rateKey, language = "en" } = req.body || {};
+    if (!rateKey) {
+      return res.status(400).json({ success: false, error: "rateKey is required" });
+    }
+    const supplierCode = String(supplier).toUpperCase();
+    if (supplierCode === "HOTELBEDS") {
+      return res.status(400).json({ success: false, error: "Use /api/hotels-live/checkrate for Hotelbeds" });
+    }
+    const adapter = supplierAdapterManager.getAdapter(supplierCode);
+    if (!adapter?.getBookingForm) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+    const form = await adapter.getBookingForm(rateKey, language);
+    return res.json({ success: true, data: form });
+  } catch (error) {
+    console.error("Booking form error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 router.post("/book", async (req, res) => {
   try {
     const {
