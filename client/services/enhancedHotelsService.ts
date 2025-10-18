@@ -201,6 +201,18 @@ class EnhancedHotelsService extends EnhancedApiService {
       confirmationNumber: `CONF${Date.now()}`,
     };
 
+    // If booking specifies a non-Hotelbeds supplier, use multi-supplier route
+    if (
+      bookingData?.supplier &&
+      String(bookingData.supplier).toLowerCase() !== "hotelbeds"
+    ) {
+      try {
+        return await apiClient.post<any>("/hotels/book", bookingData);
+      } catch (e) {
+        // Fallback to live endpoint structure on failure
+      }
+    }
+
     return this.safePost("/book", bookingData, fallbackBooking);
   }
 
