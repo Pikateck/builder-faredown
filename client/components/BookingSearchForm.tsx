@@ -337,9 +337,20 @@ export function BookingSearchForm() {
         searchId: Date.now().toString(), // Unique search identifier
       });
 
-      // Only add destination if it exists
-      if (destination && destinationCode) {
-        searchParams.set("destination", destinationCode);
+      // Add destination. If user didn't pick from dropdown, derive a code.
+      if (destination) {
+        let code = destinationCode;
+        if (!code) {
+          try {
+            const matches = await hotelsService.searchDestinations(destination);
+            if (Array.isArray(matches) && matches.length > 0) {
+              code = (matches[0] as any).code || (matches[0] as any).id || code;
+            }
+          } catch {}
+        }
+        const finalCode = (code || "DXB").toUpperCase();
+        searchParams.set("destination", finalCode);
+        searchParams.set("destinationCode", finalCode);
         searchParams.set("destinationName", destination);
       }
 
