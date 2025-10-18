@@ -683,7 +683,7 @@ export default function HotelResults() {
         },
         {
           name: "Beach Villa",
-          price: 195, // ₹195 per night (upgrade option)
+          price: 195, // ��195 per night (upgrade option)
           features: ["Private Beach Access", "Outdoor Shower", "Terrace"],
         },
       ],
@@ -750,6 +750,16 @@ export default function HotelResults() {
     io.observe(el);
     return () => io.disconnect();
   }, [loadMoreRef, loading, loadingMore, hasMore, page]);
+
+  // Compute supplier counts for filter display
+  const supplierCounts = React.useMemo(() => {
+    const counts: Record<string, number> = {};
+    hotels.forEach((h) => {
+      const key = (h.supplier || h.supplierCode || "HOTELBEDS").toString().toUpperCase();
+      counts[key] = (counts[key] || 0) + 1;
+    });
+    return counts;
+  }, [hotels]);
 
   // Filter and sort hotels
   const filteredAndSortedHotels = React.useMemo(() => {
