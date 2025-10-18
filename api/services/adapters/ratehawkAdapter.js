@@ -418,6 +418,58 @@ class RateHawkAdapter extends BaseSupplierAdapter {
   }
 
   /**
+   * Dump regions (static)
+   */
+  async getRegionDump(limit = 1000, offset = 0) {
+    await this.checkRateLimit("region_dump");
+    const response = await this.httpClient.get("hotel/region/dump/", {
+      params: { limit, offset },
+    });
+    if (response.data.status !== "ok") {
+      throw new Error(
+        `RateHawk region dump failed: ${response.data.error || "Unknown error"}`,
+      );
+    }
+    return response.data.data || [];
+  }
+
+  /**
+   * Hotel info dump (full)
+   */
+  async getHotelInfoDump(limit = 1000, offset = 0) {
+    await this.checkRateLimit("hotel_info_dump");
+    const response = await this.httpClient.get("hotel/info/dump/", {
+      params: { limit, offset },
+    });
+    if (response.data.status !== "ok") {
+      throw new Error(
+        `RateHawk hotel info dump failed: ${response.data.error || "Unknown error"}`,
+      );
+    }
+    return response.data.data || [];
+  }
+
+  /**
+   * Hotel info incremental dump from timestamp
+   */
+  async getHotelInfoIncrementalDump(fromTimestamp, limit = 1000, offset = 0) {
+    if (!fromTimestamp) throw new Error("fromTimestamp required");
+    await this.checkRateLimit("hotel_info_dump");
+    const response = await this.httpClient.get(
+      "hotel/info/incremental_dump/",
+      {
+        params: { from: fromTimestamp, limit, offset },
+      },
+    );
+    if (response.data.status !== "ok") {
+      throw new Error(
+        `RateHawk hotel info incremental dump failed: ${response.data.error || "Unknown error"}`,
+      );
+    }
+    return response.data.data || [];
+  }
+
+  /**
    * Search regions for autocomplete using multicomplete endpoint
    */
   async searchRegions(query, language = "en") {
