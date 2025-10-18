@@ -1328,4 +1328,110 @@ router.get("/order/:orderId/invoice", async (req, res) => {
   }
 });
 
+/**
+ * Region search (supplier-aware for RateHawk)
+ * GET /api/hotels/regions/search?q=Dubai&supplier=ratehawk
+ */
+router.get("/regions/search", async (req, res) => {
+  try {
+    const { q, query, supplier = "ratehawk", language = "en" } = req.query;
+    const term = String(q || query || "").trim();
+    if (term.length < 2) {
+      return res.json({ success: true, data: [] });
+    }
+    const adapter = supplierAdapterManager.getAdapter(String(supplier).toUpperCase());
+    if (!adapter?.searchRegions) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+    const regions = await adapter.searchRegions(term, language);
+    return res.json({ success: true, data: regions });
+  } catch (error) {
+    console.error("Region search error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * Static hotels list (paginated)
+ * GET /api/hotels/static/hotels?limit=1000&offset=0&supplier=ratehawk
+ */
+router.get("/static/hotels", async (req, res) => {
+  try {
+    const { limit = "1000", offset = "0", supplier = "ratehawk" } = req.query;
+    const adapter = supplierAdapterManager.getAdapter(String(supplier).toUpperCase());
+    if (!adapter?.getHotelStatic) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+    const data = await adapter.getHotelStatic(parseInt(String(limit), 10), parseInt(String(offset), 10));
+    return res.json({ success: true, count: Array.isArray(data) ? data.length : 0, data });
+  } catch (error) {
+    console.error("Static hotels error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * Region dump (paginated)
+ * GET /api/hotels/static/regions?limit=1000&offset=0&supplier=ratehawk
+ */
+router.get("/static/regions", async (req, res) => {
+  try {
+    const { limit = "1000", offset = "0", supplier = "ratehawk" } = req.query;
+    const adapter = supplierAdapterManager.getAdapter(String(supplier).toUpperCase());
+    if (!adapter?.getRegionDump) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+    const data = await adapter.getRegionDump(parseInt(String(limit), 10), parseInt(String(offset), 10));
+    return res.json({ success: true, count: Array.isArray(data) ? data.length : 0, data });
+  } catch (error) {
+    console.error("Region dump error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * Hotel info dump (paginated)
+ * GET /api/hotels/static/hotel-info?limit=1000&offset=0&supplier=ratehawk
+ */
+router.get("/static/hotel-info", async (req, res) => {
+  try {
+    const { limit = "1000", offset = "0", supplier = "ratehawk" } = req.query;
+    const adapter = supplierAdapterManager.getAdapter(String(supplier).toUpperCase());
+    if (!adapter?.getHotelInfoDump) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+    const data = await adapter.getHotelInfoDump(parseInt(String(limit), 10), parseInt(String(offset), 10));
+    return res.json({ success: true, count: Array.isArray(data) ? data.length : 0, data });
+  } catch (error) {
+    console.error("Hotel info dump error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+/**
+ * Hotel info incremental dump
+ * GET /api/hotels/static/hotel-info-incremental?from=2025-01-01T00:00:00Z&limit=1000&offset=0&supplier=ratehawk
+ */
+router.get("/static/hotel-info-incremental", async (req, res) => {
+  try {
+    const { from, limit = "1000", offset = "0", supplier = "ratehawk" } = req.query;
+    if (!from) {
+      return res.status(400).json({ success: false, error: "from is required (ISO timestamp)" });
+    }
+    const adapter = supplierAdapterManager.getAdapter(String(supplier).toUpperCase());
+    if (!adapter?.getHotelInfoIncrementalDump) {
+      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+    }
+    const data = await adapter.getHotelInfoIncrementalDump(
+      String(from),
+      parseInt(String(limit), 10),
+      parseInt(String(offset), 10),
+    );
+    return res.json({ success: true, count: Array.isArray(data) ? data.length : 0, data });
+  } catch (error) {
+    console.error("Hotel info incremental dump error:", error);
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;
