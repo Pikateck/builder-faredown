@@ -554,11 +554,16 @@ export function HotelCard({
     detailParams.set("rooms", standardizedHotelSearchParams.rooms.toString());
     detailParams.set("currency", standardizedHotelSearchParams.currency);
 
+    // Include supplier in query for supplier-aware backend details
+    const supplierCodeLower = (hotel?.supplier || hotel?.supplierCode || "hotelbeds").toString().toLowerCase();
+    detailParams.set("supplier", supplierCodeLower);
+
     // Navigate with complete state for immediate availability and URL persistence
     navigate(`/hotels/${hotel.id}?${detailParams.toString()}`, {
       state: {
         preselectRate,
         searchParams: standardizedHotelSearchParams,
+        roomsSnapshot: hotel?.roomTypes || [],
       },
     });
   };
