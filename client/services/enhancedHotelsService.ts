@@ -176,11 +176,12 @@ class EnhancedHotelsService extends EnhancedApiService {
     try {
       // If supplier is RateHawk (or any non-Hotelbeds), use supplier-aware route
       if (params?.supplier && params.supplier.toLowerCase() !== "hotelbeds") {
-        const query = { supplier: params.supplier, checkIn: params.checkIn, checkOut: params.checkOut } as any;
-        const res = await apiClient.get<any>(
-          `/hotels/${hotelId}`,
-          query,
-        );
+        const query = {
+          supplier: params.supplier,
+          checkIn: params.checkIn,
+          checkOut: params.checkOut,
+        } as any;
+        const res = await apiClient.get<any>(`/hotels/${hotelId}`, query);
         if (res?.success && res.data) return res.data;
       }
       // Default to enhanced Hotelbeds details
