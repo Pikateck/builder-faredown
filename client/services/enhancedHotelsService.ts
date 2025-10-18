@@ -183,18 +183,19 @@ class EnhancedHotelsService extends EnhancedApiService {
     }
   }
 
-  async getHotelDetails(hotelId: string) {
+  async getHotelDetails(hotelId: string, params?: { supplier?: string }) {
     const fallbackHotel = this.createFallbackHotels()[0];
     fallbackHotel.id = hotelId;
 
     try {
-      // Use the correct server endpoint path for hotel details
+      // If supplier is provided, use supplier-aware multi-supplier endpoint
+      if (params?.supplier) {
+        return await this.safeGet(`/${hotelId}`, { supplier: params.supplier }, fallbackHotel);
+      }
+      // Default to enhanced live details endpoint
       return await this.safeGet(`/hotel/${hotelId}`, undefined, fallbackHotel);
     } catch (error) {
-      // If API fails, return fallback data directly
-      console.log(
-        `🔄 Hotel details failed for ${hotelId}, using fallback data`,
-      );
+      console.log(`🔄 Hotel details failed for ${hotelId}, using fallback data`);
       return fallbackHotel;
     }
   }
