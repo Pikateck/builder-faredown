@@ -1520,6 +1520,7 @@ export default function HotelResults() {
                   onClearFilters={handleClearFilters}
                   className="h-full border-0"
                   priceMax={priceBounds.max}
+                  supplierCounts={supplierCounts}
                 />
               </div>
             </div>
