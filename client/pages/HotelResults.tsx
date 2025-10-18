@@ -721,7 +721,11 @@ export default function HotelResults() {
 
   // Filter and sort hotels
   const filteredAndSortedHotels = React.useMemo(() => {
+    const q = nameQuery.trim().toLowerCase();
     let filtered = hotels.filter((hotel) => {
+      // Name filter
+      if (q && !hotel.name.toLowerCase().includes(q)) return false;
+
       // Price range filter - use currentPrice which is available in mock data
       const price =
         hotel.currentPrice ||
@@ -734,7 +738,6 @@ export default function HotelResults() {
       for (const [categoryId, filterIds] of Object.entries(selectedFilters)) {
         if (filterIds.length === 0) continue;
 
-        // Example filter logic - you can expand this based on your needs
         if (categoryId === "review-score") {
           const hasMatchingRating = filterIds.some((filterId) => {
             const rating = Math.floor(hotel.rating);
@@ -752,7 +755,6 @@ export default function HotelResults() {
             hotel.amenities?.map((a) => (typeof a === "string" ? a : a.name)) ||
             [];
           const hasMatchingAmenity = filterIds.some((filterId) => {
-            // Map filter IDs to amenity names
             const amenityMap: Record<string, string> = {
               "swimming-pool": "Pool",
               "free-wifi": "WiFi",
