@@ -102,6 +102,9 @@ export default function HotelResults() {
   const [isLiveData, setIsLiveData] = useState(false);
   const [showSearchEdit, setShowSearchEdit] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  const [nameQuery, setNameQuery] = useState("");
+  const [visibleCount, setVisibleCount] = useState(20);
+  const loadMoreRef = React.useRef<HTMLDivElement | null>(null);
 
   // Edit modal states
   const [editDestination, setEditDestination] = useState("Dubai");
