@@ -142,7 +142,7 @@ class EnhancedHotelsService extends EnhancedApiService {
     try {
       // Prefer multi-supplier endpoint (includes RateHawk + Hotelbeds)
       const multiSupplier = await apiClient.get<any>(
-        "/hotels-multi-supplier/search",
+        "/hotels/search",
         normalizedParams,
       );
 
@@ -178,7 +178,7 @@ class EnhancedHotelsService extends EnhancedApiService {
       if (params?.supplier && params.supplier.toLowerCase() !== "hotelbeds") {
         const query = { supplier: params.supplier, checkIn: params.checkIn, checkOut: params.checkOut } as any;
         const res = await apiClient.get<any>(
-          `/hotels-multi-supplier/${hotelId}`,
+          `/hotels/${hotelId}`,
           query,
         );
         if (res?.success && res.data) return res.data;
