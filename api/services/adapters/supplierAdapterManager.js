@@ -311,8 +311,18 @@ class SupplierAdapterManager {
       }
     }
 
-    // Sort by price ascending
-    allResults.sort((a, b) => (a.price || 0) - (b.price || 0));
+    // Sort by price ascending (handle numeric, object, or missing)
+    const getNumericPrice = (p) => {
+      if (typeof p.price === "number") return p.price;
+      if (p && p.price && typeof p.price === "object") {
+        const v = p.price.amount ?? p.price.final ?? p.price.markedUp ?? p.price.originalAmount;
+        if (typeof v === "number") return v;
+      }
+      if (typeof p.totalPrice === "number") return p.totalPrice;
+      if (typeof p.currentPrice === "number") return p.currentPrice;
+      return 0;
+    };
+    allResults.sort((a, b) => getNumericPrice(a) - getNumericPrice(b));
 
     return {
       products: allResults,
