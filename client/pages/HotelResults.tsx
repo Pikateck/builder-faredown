@@ -1499,6 +1499,27 @@ export default function HotelResults() {
                       ? getSupplierDescription()
                       : "Enhanced mock data with realistic hotel information"}
                   </p>
+                  {Object.values(selectedFilters).some((arr) => arr.length > 0) && (
+                    <div className="mt-2 flex flex-wrap gap-2">
+                      {Object.entries(selectedFilters).flatMap(([cat, items]) =>
+                        items.map((id) => (
+                          <span
+                            key={`${cat}-${id}`}
+                            className="inline-flex items-center text-xs bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-2 py-1"
+                          >
+                            {id}
+                          </span>
+                        )),
+                      )}
+                      <button
+                        onClick={handleClearFilters}
+                        className="text-xs underline text-blue-600"
+                        title="Clear filters"
+                      >
+                        Clear all
+                      </button>
+                    </div>
+                  )}
                 </div>
 
                 {/* View Mode Toggle - Hidden on mobile, shown on tablet+ */}
