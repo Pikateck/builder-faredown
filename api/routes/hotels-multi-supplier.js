@@ -634,7 +634,7 @@ router.get("/search", async (req, res) => {
       checkOut,
       rooms: roomsArray,
       currency,
-      maxResults: 50,
+      maxResults: Math.min(parseInt(req.query.maxResults || "200", 10) || 200, 500),
       adults: totalAdults,
       children: totalChildren,
       roomsCount: parsedRoomsCount,
