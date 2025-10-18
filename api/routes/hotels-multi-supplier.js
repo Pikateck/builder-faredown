@@ -887,84 +887,89 @@ router.get("/search", async (req, res) => {
       (a, b) => (a.totalPrice || 0) - (b.totalPrice || 0),
     );
 
-    await db.transaction(async (client) => {
-      await client.query(
-        `INSERT INTO hotel_searches (id, destination, check_in, check_out, rooms, currency, channel, locale)
-         VALUES ($1, $2::jsonb, $3, $4, $5::jsonb, $6, $7, $8)
-         ON CONFLICT (id) DO NOTHING`,
-        [
-          searchRecord.id,
-          JSON.stringify(searchRecord.destination),
-          searchRecord.check_in,
-          searchRecord.check_out,
-          JSON.stringify(searchRecord.rooms),
-          searchRecord.currency,
-          searchRecord.channel,
-          searchRecord.locale,
-        ],
-      );
-
-      for (const row of normalizedRows) {
+    // Best-effort persistence: never block results due to schema mismatches
+    try {
+      await db.transaction(async (client) => {
         await client.query(
-          `INSERT INTO hotels_inventory_master (
-            id,
-            search_id,
-            canonical_hotel_id,
-            name,
-            location,
-            stars,
-            supplier_code,
-            supplier_hotel_id,
-            room,
-            raw_price,
-            raw_currency,
-            priced,
-            pricing_hash,
-            ttl_expires_at
-          ) VALUES (
-            $1,
-            $2,
-            $3,
-            $4,
-            $5::jsonb,
-            $6,
-            $7,
-            $8,
-            $9::jsonb,
-            $10,
-            $11,
-            $12::jsonb,
-            $13,
-            $14
-          )
-          ON CONFLICT (pricing_hash) DO UPDATE SET
-            search_id = EXCLUDED.search_id,
-            name = EXCLUDED.name,
-            location = EXCLUDED.location,
-            stars = EXCLUDED.stars,
-            raw_price = EXCLUDED.raw_price,
-            raw_currency = EXCLUDED.raw_currency,
-            priced = EXCLUDED.priced,
-            ttl_expires_at = EXCLUDED.ttl_expires_at;`,
+          `INSERT INTO hotel_searches (id, destination, check_in, check_out, rooms, currency, channel, locale)
+           VALUES ($1, $2::jsonb, $3, $4, $5::jsonb, $6, $7, $8)
+           ON CONFLICT (id) DO NOTHING`,
           [
-            row.id,
-            row.search_id,
-            row.canonical_hotel_id,
-            row.name,
-            JSON.stringify(row.location),
-            row.stars,
-            row.supplier_code,
-            row.supplier_hotel_id,
-            JSON.stringify(row.room),
-            row.raw_price,
-            row.raw_currency,
-            JSON.stringify(row.priced),
-            row.pricing_hash,
-            row.ttl_expires_at,
+            searchRecord.id,
+            JSON.stringify(searchRecord.destination),
+            searchRecord.check_in,
+            searchRecord.check_out,
+            JSON.stringify(searchRecord.rooms),
+            searchRecord.currency,
+            searchRecord.channel,
+            searchRecord.locale,
           ],
         );
-      }
-    });
+
+        for (const row of normalizedRows) {
+          await client.query(
+            `INSERT INTO hotels_inventory_master (
+              id,
+              search_id,
+              canonical_hotel_id,
+              name,
+              location,
+              stars,
+              supplier_code,
+              supplier_hotel_id,
+              room,
+              raw_price,
+              raw_currency,
+              priced,
+              pricing_hash,
+              ttl_expires_at
+            ) VALUES (
+              $1,
+              $2,
+              $3,
+              $4,
+              $5::jsonb,
+              $6,
+              $7,
+              $8,
+              $9::jsonb,
+              $10,
+              $11,
+              $12::jsonb,
+              $13,
+              $14
+            )
+            ON CONFLICT (pricing_hash) DO UPDATE SET
+              search_id = EXCLUDED.search_id,
+              name = EXCLUDED.name,
+              location = EXCLUDED.location,
+              stars = EXCLUDED.stars,
+              raw_price = EXCLUDED.raw_price,
+              raw_currency = EXCLUDED.raw_currency,
+              priced = EXCLUDED.priced,
+              ttl_expires_at = EXCLUDED.ttl_expires_at;`,
+            [
+              row.id,
+              row.search_id,
+              row.canonical_hotel_id,
+              row.name,
+              JSON.stringify(row.location),
+              row.stars,
+              row.supplier_code,
+              row.supplier_hotel_id,
+              JSON.stringify(row.room),
+              row.raw_price,
+              row.raw_currency,
+              JSON.stringify(row.priced),
+              row.pricing_hash,
+              row.ttl_expires_at,
+            ],
+          );
+        }
+      });
+    } catch (persistErr) {
+      console.warn("⚠️ Hotel search persistence skipped:", persistErr?.message || persistErr);
+    }
 
     console.log(
       `��️ Stored ${normalizedRows.length} hotel rows for search ${searchId} (currency: ${searchRecord.currency})`,
