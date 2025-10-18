@@ -407,11 +407,14 @@ class RateHawkAdapter extends BaseSupplierAdapter {
   async getHotelStatic(limit = 1000, offset = 0) {
     await this.checkRateLimit("hotel_static");
 
+    const cacheKey = `hotel_static:${limit}:${offset}`;
+    const cached = this.staticCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < this.staticTTL) {
+      return cached.data;
+    }
+
     const response = await this.httpClient.get("hotel/static/", {
-      params: {
-        limit,
-        offset,
-      },
+      params: { limit, offset },
     });
 
     if (response.data.status !== "ok") {
@@ -420,7 +423,9 @@ class RateHawkAdapter extends BaseSupplierAdapter {
       );
     }
 
-    return response.data.data || [];
+    const data = response.data.data || [];
+    this.staticCache.set(cacheKey, { data, timestamp: Date.now() });
+    return data;
   }
 
   /**
@@ -428,6 +433,13 @@ class RateHawkAdapter extends BaseSupplierAdapter {
    */
   async getRegionDump(limit = 1000, offset = 0) {
     await this.checkRateLimit("region_dump");
+
+    const cacheKey = `region_dump:${limit}:${offset}`;
+    const cached = this.staticCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < this.staticTTL) {
+      return cached.data;
+    }
+
     const response = await this.httpClient.get("hotel/region/dump/", {
       params: { limit, offset },
     });
@@ -436,7 +448,9 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         `RateHawk region dump failed: ${response.data.error || "Unknown error"}`,
       );
     }
-    return response.data.data || [];
+    const data = response.data.data || [];
+    this.staticCache.set(cacheKey, { data, timestamp: Date.now() });
+    return data;
   }
 
   /**
@@ -444,6 +458,13 @@ class RateHawkAdapter extends BaseSupplierAdapter {
    */
   async getHotelInfoDump(limit = 1000, offset = 0) {
     await this.checkRateLimit("hotel_info_dump");
+
+    const cacheKey = `hotel_info_dump:${limit}:${offset}`;
+    const cached = this.staticCache.get(cacheKey);
+    if (cached && Date.now() - cached.timestamp < this.staticTTL) {
+      return cached.data;
+    }
+
     const response = await this.httpClient.get("hotel/info/dump/", {
       params: { limit, offset },
     });
@@ -452,7 +473,9 @@ class RateHawkAdapter extends BaseSupplierAdapter {
         `RateHawk hotel info dump failed: ${response.data.error || "Unknown error"}`,
       );
     }
-    return response.data.data || [];
+    const data = response.data.data || [];
+    this.staticCache.set(cacheKey, { data, timestamp: Date.now() });
+    return data;
   }
 
   /**
