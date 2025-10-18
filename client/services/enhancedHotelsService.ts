@@ -53,7 +53,8 @@ export interface HotelBookingData {
 
 class EnhancedHotelsService extends EnhancedApiService {
   constructor() {
-    super("hotels", "/hotels");
+    // Use the enhanced live hotels API
+    super("hotels-live", "/hotels-live");
   }
 
   private createFallbackHotels(
