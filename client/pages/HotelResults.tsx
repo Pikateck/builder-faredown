@@ -84,7 +84,10 @@ export default function HotelResults() {
   }, [urlSearchParams, loadFromUrlParams]);
   const [sortBy, setSortBy] = useState("recommended");
   const [priceRange, setPriceRange] = useState([0, 25000]);
-  const [priceBounds, setPriceBounds] = useState<{ min: number; max: number }>({ min: 0, max: 25000 });
+  const [priceBounds, setPriceBounds] = useState<{ min: number; max: number }>({
+    min: 0,
+    max: 25000,
+  });
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, string[]>
   >({});
@@ -451,7 +454,7 @@ export default function HotelResults() {
           50000,
           ...transformed
             .map(extract)
-            .filter((n: any) => typeof n === "number" && isFinite(n))
+            .filter((n: any) => typeof n === "number" && isFinite(n)),
         );
         const roundedMax = Math.ceil(maxPrice / 100) * 100;
         setPriceBounds({ min: 0, max: roundedMax });
