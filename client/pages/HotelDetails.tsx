@@ -740,13 +740,13 @@ export default function HotelDetails() {
         id: room.rateKey || room.id || `live-room-${index}`,
         name: room.name || `Room Type ${index + 1}`,
         type: room.name || `1 X ${room.name || "Standard"}`,
-        details: room.features
-          ? room.features
-              .map((f) => (typeof f === "string" ? f : f?.name || "Feature"))
+        details: (room.features || room.inclusions)
+          ? (room.features || room.inclusions)
+              .map((f: any) => (typeof f === "string" ? f : f?.name || "Feature"))
               .join(", ")
           : "Standard accommodations",
         pricePerNight:
-          room.price || room.pricePerNight || hotelData.currentPrice || 167,
+          room.pricePerNight || room.price || hotelData?.currentPrice || 167,
         status: index === 0 ? "Best Value - Start Here!" : `Available`,
         statusColor: index === 0 ? "green" : "blue",
         nonRefundable: true,
@@ -2216,7 +2216,7 @@ export default function HotelDetails() {
                               )}
                             </div>
                             <div className="text-sm text-gray-600">
-                              {room.type} �� {room.details}
+                              {room.type} • {room.details}
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
