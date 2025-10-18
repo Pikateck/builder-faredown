@@ -1360,8 +1360,17 @@ export default function HotelResults() {
                     <Filter className="w-5 h-5 mr-2 text-[#febb02]" />
                     <h2 className="text-lg font-semibold">Filter Hotels</h2>
                   </div>
-                  <div className="text-sm bg-white/20 px-2 py-1 rounded-lg">
-                    {filteredAndSortedHotels.length}
+                  <div className="flex items-center gap-3">
+                    <button
+                      onClick={handleClearFilters}
+                      className="text-xs underline hover:text-yellow-200"
+                      title="Clear all filters"
+                    >
+                      Clear
+                    </button>
+                    <div className="text-sm bg-white/20 px-2 py-1 rounded-lg">
+                      {filteredAndSortedHotels.length}
+                    </div>
                   </div>
                 </div>
               </div>
