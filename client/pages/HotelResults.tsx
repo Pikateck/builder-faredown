@@ -1252,6 +1252,13 @@ export default function HotelResults() {
                       <h2 className="text-lg font-bold">Filter Hotels</h2>
                     </div>
                     <div className="flex items-center gap-3">
+                      <button
+                        onClick={handleClearFilters}
+                        className="text-xs underline hover:text-yellow-200"
+                        title="Clear all filters"
+                      >
+                        Clear
+                      </button>
                       <div className="text-sm font-normal opacity-90 bg-white/10 px-2 py-1 rounded-lg">
                         {filteredAndSortedHotels.length} found
                       </div>
