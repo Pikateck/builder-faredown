@@ -728,12 +728,16 @@ export default function HotelDetails() {
     return breakdown.total;
   };
 
-  // Generate room types from live data or use mock data
+  // Generate room types from live data, snapshot from navigation, or fallback
+  const roomsSnapshot: any[] = (location.state as any)?.roomsSnapshot || [];
   const roomTypes = (() => {
-    if (hotelData && hotelData.roomTypes && hotelData.roomTypes.length > 0) {
-      // Use live room data from Hotelbeds
-      const mapped = hotelData.roomTypes.map((room: any, index: number) => ({
-        id: `live-room-${index}`,
+    const sourceRooms = hotelData && hotelData.roomTypes && hotelData.roomTypes.length > 0
+      ? hotelData.roomTypes
+      : (Array.isArray(roomsSnapshot) && roomsSnapshot.length > 0 ? roomsSnapshot : null);
+
+    if (sourceRooms) {
+      const mapped = sourceRooms.map((room: any, index: number) => ({
+        id: room.rateKey || room.id || `live-room-${index}`,
         name: room.name || `Room Type ${index + 1}`,
         type: room.name || `1 X ${room.name || "Standard"}`,
         details: room.features
@@ -2212,7 +2216,7 @@ export default function HotelDetails() {
                               )}
                             </div>
                             <div className="text-sm text-gray-600">
-                              {room.type} • {room.details}
+                              {room.type} �� {room.details}
                             </div>
                           </div>
                           <div className="flex items-center gap-4">
