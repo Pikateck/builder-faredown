@@ -107,20 +107,22 @@ export function ComprehensiveFilters({
     { value: "distance", label: "Distance from downtown" },
   ];
 
-  const supplierItems: FilterItem[] = supplierCounts
-    ? Object.entries(supplierCounts)
-        .sort((a, b) => b[1] - a[1])
-        .map(([name, count]) => ({
-          id: name.toUpperCase(),
-          label: name.toUpperCase(),
-          count,
-        }))
-    : [];
+  const DEFAULT_SUPPLIERS = ["HOTELBEDS", "RATEHAWK", "TBO"];
+  const supplierItems: FilterItem[] = (() => {
+    const merged: Record<string, number> = {};
+    DEFAULT_SUPPLIERS.forEach((s) => (merged[s] = 0));
+    if (supplierCounts) {
+      Object.entries(supplierCounts).forEach(([k, v]) => {
+        merged[k.toUpperCase()] = v;
+      });
+    }
+    return Object.entries(merged)
+      .sort((a, b) => b[1] - a[1])
+      .map(([name, count]) => ({ id: name, label: name, count }));
+  })();
 
   const filterCategories: FilterCategory[] = [
-    ...(supplierItems.length
-      ? [{ id: "suppliers", title: "Suppliers", items: supplierItems }]
-      : []),
+    { id: "suppliers", title: "Suppliers", items: supplierItems },
     {
       id: "deals",
       title: "Deals",
