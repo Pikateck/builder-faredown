@@ -443,6 +443,20 @@ export default function HotelResults() {
         const transformed = transformHotelbedsData(results);
         setHotels(transformed);
         setTotalResults(transformed.length);
+
+        // Dynamic price bounds from dataset
+        const extract = (h: any) =>
+          h.currentPrice || h.priceRange?.min || h.roomTypes?.[0]?.price || 0;
+        const maxPrice = Math.max(
+          50000,
+          ...transformed
+            .map(extract)
+            .filter((n: any) => typeof n === "number" && isFinite(n))
+        );
+        const roundedMax = Math.ceil(maxPrice / 100) * 100;
+        setPriceBounds({ min: 0, max: roundedMax });
+        setPriceRange([0, roundedMax]);
+
         // Mark LIVE only if any result is flagged as live by API
         const hasLive = transformed.some((h: any) => h?.isLiveData === true);
         setIsLiveData(hasLive);
