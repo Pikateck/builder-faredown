@@ -271,7 +271,8 @@ export function HotelSearchForm({
 
       // Only add destination if it exists
       if (destination) {
-        const code = destinationCode || (selectedResult?.code as string) || "HTL";
+        const code =
+          destinationCode || (selectedResult?.code as string) || "HTL";
         searchParams.set("destination", code); // use code for backend search
         searchParams.set("destinationCode", code);
         searchParams.set("destinationName", destination);

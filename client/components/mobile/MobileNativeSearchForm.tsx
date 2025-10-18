@@ -655,7 +655,11 @@ export function MobileNativeSearchForm({
     const searchParams = new URLSearchParams();
 
     if (module === "hotels") {
-      const destCode = (selectedHotelResult?.code || fromCode || "HTL").toString();
+      const destCode = (
+        selectedHotelResult?.code ||
+        fromCode ||
+        "HTL"
+      ).toString();
       const destName = selectedHotelResult?.location || fromCity || "";
 
       searchParams.set("destination", destCode);
@@ -673,7 +677,8 @@ export function MobileNativeSearchForm({
       // Pax/rooms
       searchParams.set("adults", travelers.adults.toString());
       searchParams.set("children", (travelers.children || 0).toString());
-      if (travelers.rooms) searchParams.set("rooms", travelers.rooms.toString());
+      if (travelers.rooms)
+        searchParams.set("rooms", travelers.rooms.toString());
       if (travelers.childAges && travelers.childAges.length > 0) {
         searchParams.set("childAges", JSON.stringify(travelers.childAges));
       }
@@ -686,7 +691,10 @@ export function MobileNativeSearchForm({
       searchParams.set("from", fromCode);
       if (toCode) searchParams.set("to", toCode);
       if (dateContext.departureDate)
-        searchParams.set("departureDate", dateContext.departureDate.toISOString());
+        searchParams.set(
+          "departureDate",
+          dateContext.departureDate.toISOString(),
+        );
       searchParams.set("adults", travelers.adults.toString());
       searchParams.set("children", (travelers.children || 0).toString());
       searchParams.set("tripType", tripType);

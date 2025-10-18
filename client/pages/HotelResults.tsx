@@ -398,7 +398,8 @@ export default function HotelResults() {
 
       const destCode =
         urlSearchParams.get("destinationCode") ||
-        (urlSearchParams.get("destination") || "DXB");
+        urlSearchParams.get("destination") ||
+        "DXB";
 
       const searchRequest = {
         destination: destCode, // always use code for backend search
