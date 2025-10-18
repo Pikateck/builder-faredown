@@ -374,8 +374,8 @@ class SupplierAdapterManager {
    * Generate cache key for search parameters
    */
   generateSearchCacheKey(productType, searchParams) {
+    // Include maxResults so increasing it yields a different cache entry
     const keyParams = { ...searchParams };
-    delete keyParams.maxResults; // Don't include in cache key
 
     const paramString = JSON.stringify(
       keyParams,
