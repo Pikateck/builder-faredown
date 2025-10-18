@@ -83,7 +83,8 @@ export default function HotelResults() {
     }
   }, [urlSearchParams, loadFromUrlParams]);
   const [sortBy, setSortBy] = useState("recommended");
-  const [priceRange, setPriceRange] = useState([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
+  const [priceRange, setPriceRange] = useState([0, 25000]);
+  const [priceBounds, setPriceBounds] = useState<{ min: number; max: number }>({ min: 0, max: 25000 });
   const [selectedFilters, setSelectedFilters] = useState<
     Record<string, string[]>
   >({});
