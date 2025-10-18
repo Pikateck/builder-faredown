@@ -396,8 +396,12 @@ export default function HotelResults() {
       setLoading(true);
       setError(null);
 
+      const destCode =
+        urlSearchParams.get("destinationCode") ||
+        (urlSearchParams.get("destination") || "DXB");
+
       const searchRequest = {
-        destination: destination || "DXB", // Use destination code
+        destination: destCode, // always use code for backend search
         checkIn: departureDate
           ? departureDate.toISOString()
           : checkIn || new Date().toISOString(),
