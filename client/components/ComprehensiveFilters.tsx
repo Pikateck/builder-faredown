@@ -74,6 +74,7 @@ interface ComprehensiveFiltersProps {
   setSortBy: (sort: string) => void;
   onClearFilters: () => void;
   className?: string;
+  priceMax?: number;
 }
 
 export function ComprehensiveFilters({
@@ -85,6 +86,7 @@ export function ComprehensiveFilters({
   setSortBy,
   onClearFilters,
   className,
+  priceMax,
 }: ComprehensiveFiltersProps) {
   const { selectedCurrency } = useCurrency();
   const [expandedSections, setExpandedSections] = useState<string[]>([
@@ -633,7 +635,7 @@ export function ComprehensiveFilters({
             <Slider
               value={priceRange}
               onValueChange={setPriceRange}
-              max={50000}
+              max={priceMax ?? Math.max(50000, priceRange[1])}
               min={0}
               step={500}
               className="w-full"
