@@ -621,6 +621,7 @@ router.get("/hotel/:code", async (req, res) => {
         totalPrice: availabilityData.totalPrice,
         available: true,
         availableRooms: availabilityData.availableRooms,
+        roomTypes: availabilityData.roomTypes,
         rateKey: availabilityData.rateKey,
       }),
       // Ensure compatibility fields
