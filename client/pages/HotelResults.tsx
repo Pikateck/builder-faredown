@@ -1102,14 +1102,17 @@ export default function HotelResults() {
               </p>
             </div>
           ) : (
-            filteredAndSortedHotels.map((hotel) => (
-              <HotelCard
-                key={hotel.id}
-                hotel={hotel}
-                onBargainClick={handleBargainClick}
-                viewMode="list"
-              />
-            ))
+            <>
+              {filteredAndSortedHotels.slice(0, visibleCount).map((hotel) => (
+                <HotelCard
+                  key={hotel.id}
+                  hotel={hotel}
+                  onBargainClick={handleBargainClick}
+                  viewMode="list"
+                />
+              ))}
+              <div ref={loadMoreRef} className="h-10" />
+            </>
           )}
         </div>
 
