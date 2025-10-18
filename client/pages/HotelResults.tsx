@@ -817,10 +817,9 @@ export default function HotelResults() {
   };
 
   const handleClearFilters = () => {
-    setPriceRange([0, 25000]); // Appropriate range for INR (₹0 - ₹25,000)
     setSelectedFilters({});
     setSortBy("recommended");
-    // Re-run the search to ensure fresh, unfiltered data view
+    setPriceRange([priceBounds.min, priceBounds.max]);
     loadHotels();
   };
 
