@@ -484,12 +484,9 @@ class RateHawkAdapter extends BaseSupplierAdapter {
   async getHotelInfoIncrementalDump(fromTimestamp, limit = 1000, offset = 0) {
     if (!fromTimestamp) throw new Error("fromTimestamp required");
     await this.checkRateLimit("hotel_info_dump");
-    const response = await this.httpClient.get(
-      "hotel/info/incremental_dump/",
-      {
-        params: { from: fromTimestamp, limit, offset },
-      },
-    );
+    const response = await this.httpClient.get("hotel/info/incremental_dump/", {
+      params: { from: fromTimestamp, limit, offset },
+    });
     if (response.data.status !== "ok") {
       throw new Error(
         `RateHawk hotel info incremental dump failed: ${response.data.error || "Unknown error"}`,

@@ -1127,15 +1127,24 @@ router.post("/booking/form", async (req, res) => {
   try {
     const { supplier = "ratehawk", rateKey, language = "en" } = req.body || {};
     if (!rateKey) {
-      return res.status(400).json({ success: false, error: "rateKey is required" });
+      return res
+        .status(400)
+        .json({ success: false, error: "rateKey is required" });
     }
     const supplierCode = String(supplier).toUpperCase();
     if (supplierCode === "HOTELBEDS") {
-      return res.status(400).json({ success: false, error: "Use /api/hotels-live/checkrate for Hotelbeds" });
+      return res
+        .status(400)
+        .json({
+          success: false,
+          error: "Use /api/hotels-live/checkrate for Hotelbeds",
+        });
     }
     const adapter = supplierAdapterManager.getAdapter(supplierCode);
     if (!adapter?.getBookingForm) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
     const form = await adapter.getBookingForm(rateKey, language);
     return res.json({ success: true, data: form });
@@ -1223,7 +1232,9 @@ router.get("/order/:orderId", async (req, res) => {
 
     const adapter = supplierAdapterManager.getAdapter(supplierCode);
     if (!adapter?.getOrderInfo) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
 
     const info = await adapter.getOrderInfo(orderId, language);
@@ -1253,7 +1264,9 @@ router.get("/order/:orderId/status", async (req, res) => {
 
     const adapter = supplierAdapterManager.getAdapter(supplierCode);
     if (!adapter?.getBookingStatus) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
 
     const status = await adapter.getBookingStatus(orderId);
@@ -1283,7 +1296,9 @@ router.post("/order/:orderId/cancel", async (req, res) => {
 
     const adapter = supplierAdapterManager.getAdapter(supplierCode);
     if (!adapter?.cancelBooking) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
 
     const result = await adapter.cancelBooking(orderId);
@@ -1306,7 +1321,9 @@ router.get("/order/:orderId/voucher", async (req, res) => {
 
     const adapter = supplierAdapterManager.getAdapter(supplierCode);
     if (!adapter?.downloadVoucher) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
 
     const file = await adapter.downloadVoucher(orderId);
@@ -1334,7 +1351,9 @@ router.get("/order/:orderId/invoice", async (req, res) => {
 
     const adapter = supplierAdapterManager.getAdapter(supplierCode);
     if (!adapter?.downloadInvoice) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
 
     const file = await adapter.downloadInvoice(orderId);
@@ -1361,9 +1380,13 @@ router.get("/regions/search", async (req, res) => {
     if (term.length < 2) {
       return res.json({ success: true, data: [] });
     }
-    const adapter = supplierAdapterManager.getAdapter(String(supplier).toUpperCase());
+    const adapter = supplierAdapterManager.getAdapter(
+      String(supplier).toUpperCase(),
+    );
     if (!adapter?.searchRegions) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
     const regions = await adapter.searchRegions(term, language);
     return res.json({ success: true, data: regions });
@@ -1380,12 +1403,23 @@ router.get("/regions/search", async (req, res) => {
 router.get("/static/hotels", async (req, res) => {
   try {
     const { limit = "1000", offset = "0", supplier = "ratehawk" } = req.query;
-    const adapter = supplierAdapterManager.getAdapter(String(supplier).toUpperCase());
+    const adapter = supplierAdapterManager.getAdapter(
+      String(supplier).toUpperCase(),
+    );
     if (!adapter?.getHotelStatic) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
-    const data = await adapter.getHotelStatic(parseInt(String(limit), 10), parseInt(String(offset), 10));
-    return res.json({ success: true, count: Array.isArray(data) ? data.length : 0, data });
+    const data = await adapter.getHotelStatic(
+      parseInt(String(limit), 10),
+      parseInt(String(offset), 10),
+    );
+    return res.json({
+      success: true,
+      count: Array.isArray(data) ? data.length : 0,
+      data,
+    });
   } catch (error) {
     console.error("Static hotels error:", error);
     return res.status(500).json({ success: false, error: error.message });
@@ -1399,12 +1433,23 @@ router.get("/static/hotels", async (req, res) => {
 router.get("/static/regions", async (req, res) => {
   try {
     const { limit = "1000", offset = "0", supplier = "ratehawk" } = req.query;
-    const adapter = supplierAdapterManager.getAdapter(String(supplier).toUpperCase());
+    const adapter = supplierAdapterManager.getAdapter(
+      String(supplier).toUpperCase(),
+    );
     if (!adapter?.getRegionDump) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
-    const data = await adapter.getRegionDump(parseInt(String(limit), 10), parseInt(String(offset), 10));
-    return res.json({ success: true, count: Array.isArray(data) ? data.length : 0, data });
+    const data = await adapter.getRegionDump(
+      parseInt(String(limit), 10),
+      parseInt(String(offset), 10),
+    );
+    return res.json({
+      success: true,
+      count: Array.isArray(data) ? data.length : 0,
+      data,
+    });
   } catch (error) {
     console.error("Region dump error:", error);
     return res.status(500).json({ success: false, error: error.message });
@@ -1418,12 +1463,23 @@ router.get("/static/regions", async (req, res) => {
 router.get("/static/hotel-info", async (req, res) => {
   try {
     const { limit = "1000", offset = "0", supplier = "ratehawk" } = req.query;
-    const adapter = supplierAdapterManager.getAdapter(String(supplier).toUpperCase());
+    const adapter = supplierAdapterManager.getAdapter(
+      String(supplier).toUpperCase(),
+    );
     if (!adapter?.getHotelInfoDump) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
-    const data = await adapter.getHotelInfoDump(parseInt(String(limit), 10), parseInt(String(offset), 10));
-    return res.json({ success: true, count: Array.isArray(data) ? data.length : 0, data });
+    const data = await adapter.getHotelInfoDump(
+      parseInt(String(limit), 10),
+      parseInt(String(offset), 10),
+    );
+    return res.json({
+      success: true,
+      count: Array.isArray(data) ? data.length : 0,
+      data,
+    });
   } catch (error) {
     console.error("Hotel info dump error:", error);
     return res.status(500).json({ success: false, error: error.message });
@@ -1436,20 +1492,35 @@ router.get("/static/hotel-info", async (req, res) => {
  */
 router.get("/static/hotel-info-incremental", async (req, res) => {
   try {
-    const { from, limit = "1000", offset = "0", supplier = "ratehawk" } = req.query;
+    const {
+      from,
+      limit = "1000",
+      offset = "0",
+      supplier = "ratehawk",
+    } = req.query;
     if (!from) {
-      return res.status(400).json({ success: false, error: "from is required (ISO timestamp)" });
+      return res
+        .status(400)
+        .json({ success: false, error: "from is required (ISO timestamp)" });
     }
-    const adapter = supplierAdapterManager.getAdapter(String(supplier).toUpperCase());
+    const adapter = supplierAdapterManager.getAdapter(
+      String(supplier).toUpperCase(),
+    );
     if (!adapter?.getHotelInfoIncrementalDump) {
-      return res.status(404).json({ success: false, error: "Supplier not found or unsupported" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found or unsupported" });
     }
     const data = await adapter.getHotelInfoIncrementalDump(
       String(from),
       parseInt(String(limit), 10),
       parseInt(String(offset), 10),
     );
-    return res.json({ success: true, count: Array.isArray(data) ? data.length : 0, data });
+    return res.json({
+      success: true,
+      count: Array.isArray(data) ? data.length : 0,
+      data,
+    });
   } catch (error) {
     console.error("Hotel info incremental dump error:", error);
     return res.status(500).json({ success: false, error: error.message });

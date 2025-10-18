@@ -315,7 +315,11 @@ class SupplierAdapterManager {
     const getNumericPrice = (p) => {
       if (typeof p.price === "number") return p.price;
       if (p && p.price && typeof p.price === "object") {
-        const v = p.price.amount ?? p.price.final ?? p.price.markedUp ?? p.price.originalAmount;
+        const v =
+          p.price.amount ??
+          p.price.final ??
+          p.price.markedUp ??
+          p.price.originalAmount;
         if (typeof v === "number") return v;
       }
       if (typeof p.totalPrice === "number") return p.totalPrice;
