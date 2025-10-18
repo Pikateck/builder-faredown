@@ -656,12 +656,17 @@ router.get("/search", async (req, res) => {
     );
 
     // Fallback to env if no DB suppliers
-    const suppliersToUse =
+    let suppliersToUse =
       enabledSuppliers.length > 0
         ? enabledSuppliers
         : (process.env.HOTELS_SUPPLIERS || "HOTELBEDS,RATEHAWK,TBO")
             .split(",")
             .map((s) => s.trim().toUpperCase());
+
+    // Prioritize TBO inventory when available
+    suppliersToUse = suppliersToUse.sort((a, b) =>
+      a === "TBO" ? -1 : b === "TBO" ? 1 : 0,
+    );
 
     console.log(
       `📡 Searching across hotel suppliers: ${suppliersToUse.join(", ")}`,
