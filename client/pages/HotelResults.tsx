@@ -103,7 +103,10 @@ export default function HotelResults() {
   const [showSearchEdit, setShowSearchEdit] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [nameQuery, setNameQuery] = useState("");
-  const [visibleCount, setVisibleCount] = useState(20);
+  const [page, setPage] = useState(1);
+  const pageSizeRef = React.useRef(20);
+  const [hasMore, setHasMore] = useState(true);
+  const [loadingMore, setLoadingMore] = useState(false);
   const loadMoreRef = React.useRef<HTMLDivElement | null>(null);
 
   // Edit modal states
@@ -613,7 +616,7 @@ export default function HotelResults() {
       roomTypes: [
         {
           name: "Standard Room",
-          price: 138, // ₹138 per night (matches currentPrice)
+          price: 138, // ��138 per night (matches currentPrice)
           features: ["King Bed", "City View", "Free WiFi"],
         },
         {
