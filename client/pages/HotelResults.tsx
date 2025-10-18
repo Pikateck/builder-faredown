@@ -401,9 +401,10 @@ export default function HotelResults() {
     return processedImages.slice(0, 6); // Limit to 6 images max
   };
 
-  const loadHotels = async () => {
+  const fetchHotelsPage = async (pageToLoad: number, append: boolean) => {
     try {
-      setLoading(true);
+      if (append) setLoadingMore(true);
+      if (!append) setLoading(true);
       setError(null);
 
       const destCode =
@@ -412,7 +413,7 @@ export default function HotelResults() {
         "DXB";
 
       const searchRequest = {
-        destination: destCode, // always use code for backend search
+        destination: destCode,
         checkIn: departureDate
           ? departureDate.toISOString()
           : checkIn || new Date().toISOString(),
@@ -424,35 +425,35 @@ export default function HotelResults() {
         adults: parseInt(adults) || 2,
         children: parseInt(children) || 0,
         currencyCode: selectedCurrency?.code || "INR",
+        page: pageToLoad,
+        pageSize: pageSizeRef.current,
       };
 
-      console.log(
-        "🏨 Searching multi-supplier hotel API with params:",
-        searchRequest,
-      );
+      console.log("🏨 Searching hotels (paged)", searchRequest);
 
-      // Search hotels using the proper method with fallback
       const results = await hotelsService.searchHotels(searchRequest);
 
-      if (results.length > 0) {
-        console.log("✅ Hotels loaded successfully:", results.length, "hotels");
-
-        // Log supplier breakdown for debugging
-        const supplierCounts: Record<string, number> = {};
-        results.forEach((hotel) => {
-          const supplier = (
-            hotel.supplierCode ||
-            hotel.supplier ||
-            "HOTELBEDS"
-          ).toUpperCase();
-          supplierCounts[supplier] = (supplierCounts[supplier] || 0) + 1;
+      const transformed = transformHotelbedsData(results);
+      if (append) {
+        setHotels((prev) => {
+          const merged = [...prev, ...transformed];
+          // Update bounds with merged data
+          const extract = (h: any) =>
+            h.currentPrice || h.priceRange?.min || h.roomTypes?.[0]?.price || 0;
+          const maxPrice = Math.max(
+            50000,
+            ...merged
+              .map(extract)
+              .filter((n: any) => typeof n === "number" && isFinite(n)),
+          );
+          const roundedMax = Math.ceil(maxPrice / 100) * 100;
+          setPriceBounds({ min: 0, max: roundedMax });
+          return merged;
         });
-        console.log("📊 Supplier breakdown:", supplierCounts);
-
-        const transformed = transformHotelbedsData(results);
+        setPage(pageToLoad);
+      } else {
         setHotels(transformed);
-        setTotalResults(transformed.length);
-
+        setPage(pageToLoad);
         // Dynamic price bounds from dataset
         const extract = (h: any) =>
           h.currentPrice || h.priceRange?.min || h.roomTypes?.[0]?.price || 0;
@@ -465,19 +466,18 @@ export default function HotelResults() {
         const roundedMax = Math.ceil(maxPrice / 100) * 100;
         setPriceBounds({ min: 0, max: roundedMax });
         setPriceRange([0, roundedMax]);
-
-        // Mark LIVE only if any result is flagged as live by API
-        const hasLive = transformed.some((h: any) => h?.isLiveData === true);
-        setIsLiveData(hasLive);
-      } else {
-        // If no results from API, use static mock data as last resort
-        console.log("🔄 Using static mock data as fallback");
-        setHotels(getMockHotels());
-        setTotalResults(getMockHotels().length);
-        setIsLiveData(false);
       }
+
+      setTotalResults((prev) => (append ? prev + transformed.length : transformed.length));
+
+      const hasMoreNow = transformed.length === pageSizeRef.current;
+      setHasMore(hasMoreNow);
+
+      const hasLive = (append ? hotels : transformed).some(
+        (h: any) => (h as any)?.isLiveData === true,
+      );
+      setIsLiveData(hasLive);
     } catch (err) {
-      // Handle different types of errors gracefully
       if (err instanceof Error) {
         if (err.name === "AbortError") {
           console.log("⏰ Hotel search was aborted");
@@ -487,7 +487,7 @@ export default function HotelResults() {
           err.name === "TypeError"
         ) {
           console.log("🌐 Network connectivity issue - using mock data");
-          setError(null); // Don't show error for network issues
+          setError(null);
         } else {
           console.error("Hotel search error:", err.message);
           setError("Unable to search hotels at the moment");
@@ -497,14 +497,23 @@ export default function HotelResults() {
         setError("An unexpected error occurred");
       }
 
-      // Always provide fallback data regardless of error type
-      console.log("🔄 Using emergency fallback data");
-      setHotels(getMockHotels());
-      setTotalResults(getMockHotels().length);
-      setIsLiveData(false);
+      if (!append) {
+        console.log("🔄 Using emergency fallback data");
+        const fallback = getMockHotels();
+        setHotels(fallback);
+        setTotalResults(fallback.length);
+        setIsLiveData(false);
+        setHasMore(false);
+      }
     } finally {
-      setLoading(false);
+      if (append) setLoadingMore(false);
+      if (!append) setLoading(false);
     }
+  };
+
+  const loadHotels = async () => {
+    setHasMore(true);
+    await fetchHotelsPage(1, false);
   };
 
   // Transform Hotelbeds API data to frontend format
@@ -616,7 +625,7 @@ export default function HotelResults() {
       roomTypes: [
         {
           name: "Standard Room",
-          price: 138, // ��138 per night (matches currentPrice)
+          price: 138, // ₹138 per night (matches currentPrice)
           features: ["King Bed", "City View", "Free WiFi"],
         },
         {
@@ -722,18 +731,20 @@ export default function HotelResults() {
     },
   ];
 
-  // Infinite scroll: observe sentinel
+  // Infinite scroll: observe sentinel and fetch next page
   useEffect(() => {
     const el = loadMoreRef.current;
     if (!el) return;
     const io = new IntersectionObserver((entries) => {
       if (entries.some((e) => e.isIntersecting)) {
-        setVisibleCount((c) => c + 20);
+        if (!loading && !loadingMore && hasMore) {
+          fetchHotelsPage(page + 1, true);
+        }
       }
     });
     io.observe(el);
     return () => io.disconnect();
-  }, [loadMoreRef]);
+  }, [loadMoreRef, loading, loadingMore, hasMore, page]);
 
   // Filter and sort hotels
   const filteredAndSortedHotels = React.useMemo(() => {
@@ -1106,7 +1117,7 @@ export default function HotelResults() {
             </div>
           ) : (
             <>
-              {filteredAndSortedHotels.slice(0, visibleCount).map((hotel) => (
+              {filteredAndSortedHotels.map((hotel) => (
                 <HotelCard
                   key={hotel.id}
                   hotel={hotel}
@@ -1553,7 +1564,6 @@ export default function HotelResults() {
                     value={nameQuery}
                     onChange={(e) => {
                       setNameQuery(e.target.value);
-                      setVisibleCount(20);
                     }}
                     placeholder="Search hotel name"
                     className="w-full md:w-64 h-10 px-3 border border-gray-300 rounded"
