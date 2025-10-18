@@ -719,6 +719,19 @@ export default function HotelResults() {
     },
   ];
 
+  // Infinite scroll: observe sentinel
+  useEffect(() => {
+    const el = loadMoreRef.current;
+    if (!el) return;
+    const io = new IntersectionObserver((entries) => {
+      if (entries.some((e) => e.isIntersecting)) {
+        setVisibleCount((c) => c + 20);
+      }
+    });
+    io.observe(el);
+    return () => io.disconnect();
+  }, [loadMoreRef]);
+
   // Filter and sort hotels
   const filteredAndSortedHotels = React.useMemo(() => {
     const q = nameQuery.trim().toLowerCase();
