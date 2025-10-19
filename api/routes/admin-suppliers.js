@@ -753,4 +753,21 @@ router.post("/:code/markup", async (req, res) => {
   }
 });
 
+/**
+ * Supplier audit log
+ */
+router.get("/:code/audit", async (req, res) => {
+  try {
+    const code = String(req.params.code || "").toUpperCase();
+    const r = await db.query(
+      `SELECT * FROM markup_audit_log WHERE entity_type = 'supplier' AND entity_id = $1 ORDER BY acted_at DESC LIMIT 200`,
+      [code],
+    );
+    res.json({ success: true, data: r.rows });
+  } catch (error) {
+    console.error("Error fetching supplier audit:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;
