@@ -85,6 +85,13 @@ export default function SupplierManagement() {
   const [loading, setLoading] = useState(true);
   const [healthData, setHealthData] = useState<any>(null);
   const [weightEdits, setWeightEdits] = useState<Record<string, number>>({});
+
+  // Filters state for list view
+  const [search, setSearch] = useState("");
+  const [moduleFilter, setModuleFilter] = useState<string>("all");
+  const [statusFilter, setStatusFilter] = useState<string>("all");
+  const [envFilter, setEnvFilter] = useState<string>("all");
+
   const { toast } = useToast();
 
   // New markup form state
@@ -290,125 +297,178 @@ export default function SupplierManagement() {
     );
   }
 
+  // Compute filtered list
+  const normalized = (v: string | null | undefined) => (v || "").toLowerCase();
+  const filteredSuppliers = suppliers
+    .filter((s) => {
+      if (search.trim().length > 0) {
+        const q = normalized(search);
+        const hit =
+          normalized(s.name).includes(q) ||
+          normalized(s.code).includes(q) ||
+          normalized(s.product_type).includes(q);
+        if (!hit) return false;
+      }
+      if (moduleFilter !== "all") {
+        const pt = normalized(s.product_type);
+        if (pt !== normalized(moduleFilter)) return false;
+      }
+      if (statusFilter !== "all") {
+        const enabled = s.is_enabled ? "enabled" : "disabled";
+        if (enabled !== statusFilter) return false;
+      }
+      if (envFilter !== "all") {
+        if (normalized(s.environment) !== normalized(envFilter)) return false;
+      }
+      return true;
+    })
+    .sort((a, b) => a.name.localeCompare(b.name));
+
   return (
     <div className="container mx-auto p-6">
-      <div className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">
-          Supplier Management
-        </h1>
-        <p className="text-gray-600 mt-2">
-          Manage hotel and flight suppliers, markups, and integrations
-        </p>
+      <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Supplier Management</h1>
+          <p className="text-gray-600 mt-2">Manage hotel and flight suppliers, markups, and integrations</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <Button variant="outline" onClick={() => { setLoading(true); Promise.all([loadSuppliers(), loadHealth()]).finally(() => setLoading(false)); }}>
+            <RefreshCw className="h-4 w-4 mr-2" /> Refresh Data
+          </Button>
+        </div>
       </div>
 
-      {/* Suppliers Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-        {suppliers.map((supplier) => (
-          <Card key={supplier.id} className="p-6">
-            <div className="flex items-start justify-between mb-4">
-              <div>
-                <h3 className="text-xl font-semibold">{supplier.name}</h3>
-                <p className="text-sm text-gray-500 uppercase">
-                  {supplier.code} • {supplier.product_type}
-                </p>
-              </div>
-              <Switch
-                checked={supplier.is_enabled}
-                onCheckedChange={() => toggleSupplier(supplier)}
-              />
-            </div>
+      {/* Filters */}
+      <Card className="p-4 mb-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
+          <div className="flex flex-col gap-1">
+            <Label>Search</Label>
+            <Input placeholder="Search suppliers or codes" value={search} onChange={(e) => setSearch(e.target.value)} />
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label>Module</Label>
+            <Select value={moduleFilter} onValueChange={setModuleFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="All Modules" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All Modules</SelectItem>
+                <SelectItem value="flights">Flights</SelectItem>
+                <SelectItem value="hotels">Hotels</SelectItem>
+                <SelectItem value="transfers">Transfers</SelectItem>
+                <SelectItem value="packages">Packages</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label>Status</Label>
+            <Select value={statusFilter} onValueChange={setStatusFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="enabled">Enabled</SelectItem>
+                <SelectItem value="disabled">Disabled</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+          <div className="flex flex-col gap-1">
+            <Label>Environment</Label>
+            <Select value={envFilter} onValueChange={setEnvFilter}>
+              <SelectTrigger>
+                <SelectValue placeholder="All" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="production">Production</SelectItem>
+                <SelectItem value="sandbox">Sandbox</SelectItem>
+                <SelectItem value="staging">Staging</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+      </Card>
 
-            <div className="space-y-2 mb-4">
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Environment:</span>
-                <Badge
-                  variant={
-                    supplier.environment === "production"
-                      ? "default"
-                      : "secondary"
-                  }
-                >
-                  {supplier.environment}
-                </Badge>
-              </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Weight (priority)</span>
-                <div className="flex items-center gap-2">
-                  <Input
-                    type="number"
-                    className="w-24 h-8"
-                    value={
-                      weightEdits[supplier.code] !== undefined
-                        ? weightEdits[supplier.code]
-                        : (typeof supplier.weight === "number" ? supplier.weight : 100)
-                    }
-                    onChange={(e) =>
-                      setWeightEdits((prev) => ({
-                        ...prev,
-                        [supplier.code]: parseInt(e.target.value || "0"),
-                      }))
-                    }
-                  />
-                  <Button
-                    size="sm"
-                    variant="outline"
-                    onClick={() =>
-                      updateSupplierWeight(
-                        supplier,
-                        weightEdits[supplier.code] ?? (supplier.weight || 100),
-                      )
-                    }
-                  >
-                    Save
-                  </Button>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Status:</span>
-                {supplier.last_success_at ? (
-                  <div className="flex items-center gap-1 text-green-600">
-                    <CheckCircle className="h-4 w-4" />
-                    <span>Healthy</span>
-                  </div>
-                ) : supplier.last_error_at ? (
-                  <div className="flex items-center gap-1 text-red-600">
-                    <XCircle className="h-4 w-4" />
-                    <span>Error</span>
-                  </div>
-                ) : (
-                  <span className="text-gray-400">Unknown</span>
-                )}
-              </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Calls (24h):</span>
-                <span className="font-medium">
-                  {supplier.success_calls_24h || 0} /{" "}
-                  {supplier.total_bookings || 0}
-                </span>
-              </div>
-
-              <div className="flex items-center justify-between text-sm">
-                <span className="text-gray-600">Bookings (24h):</span>
-                <span className="font-medium">
-                  {supplier.bookings_24h || 0}
-                </span>
-              </div>
-            </div>
-
-            <Button
-              variant="outline"
-              className="w-full"
-              onClick={() => setSelectedSupplier(supplier)}
-            >
-              <Settings className="h-4 w-4 mr-2" />
-              Manage Markups
-            </Button>
-          </Card>
-        ))}
-      </div>
+      {/* Suppliers List Table */}
+      <Card className="overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[28%]">Supplier</TableHead>
+              <TableHead className="w-[10%]">Code</TableHead>
+              <TableHead className="w-[12%]">Module</TableHead>
+              <TableHead className="w-[12%]">Environment</TableHead>
+              <TableHead className="w-[10%]">Enabled</TableHead>
+              <TableHead className="w-[16%]">Weight</TableHead>
+              <TableHead className="w-[12%]">Health</TableHead>
+              <TableHead className="w-[12%]">Calls 24h</TableHead>
+              <TableHead className="w-[12%]">Bookings 24h</TableHead>
+              <TableHead className="w-[14%]">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredSuppliers.map((supplier) => {
+              const health = supplier.last_success_at
+                ? { label: "Healthy", color: "text-green-600", Icon: CheckCircle }
+                : supplier.last_error_at
+                  ? { label: "Error", color: "text-red-600", Icon: XCircle }
+                  : { label: "Unknown", color: "text-gray-400", Icon: Activity };
+              return (
+                <TableRow key={supplier.id}>
+                  <TableCell className="font-medium">{supplier.name}</TableCell>
+                  <TableCell className="uppercase text-gray-600">{supplier.code}</TableCell>
+                  <TableCell className="capitalize">{supplier.product_type}</TableCell>
+                  <TableCell>
+                    <Badge variant={supplier.environment === "production" ? "default" : "secondary"}>{supplier.environment}</Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Switch checked={supplier.is_enabled} onCheckedChange={() => toggleSupplier(supplier)} />
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <Input
+                        type="number"
+                        className="w-24 h-8"
+                        value={
+                          weightEdits[supplier.code] !== undefined
+                            ? weightEdits[supplier.code]
+                            : (typeof supplier.weight === "number" ? supplier.weight : 100)
+                        }
+                        onChange={(e) =>
+                          setWeightEdits((prev) => ({
+                            ...prev,
+                            [supplier.code]: parseInt(e.target.value || "0"),
+                          }))
+                        }
+                      />
+                      <Button size="sm" variant="outline" onClick={() => updateSupplierWeight(supplier, weightEdits[supplier.code] ?? (supplier.weight || 100))}>Save</Button>
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <div className={`flex items-center gap-1 ${health.color}`}>
+                      <health.Icon className="h-4 w-4" />
+                      <span>{health.label}</span>
+                    </div>
+                  </TableCell>
+                  <TableCell>{supplier.success_calls_24h || 0} / {supplier.total_bookings || 0}</TableCell>
+                  <TableCell>{supplier.bookings_24h || 0}</TableCell>
+                  <TableCell>
+                    <Button variant="outline" size="sm" onClick={() => setSelectedSupplier(supplier)}>
+                      <Settings className="h-4 w-4 mr-2" /> Manage Markups
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+            {filteredSuppliers.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={10} className="text-center text-gray-500 py-8">No suppliers match your filters.</TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </Card>
 
       {/* Markup Management Dialog */}
       {selectedSupplier && (
