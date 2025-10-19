@@ -161,9 +161,8 @@ export default function SupplierManagement() {
       const load = async () => {
         try {
           setLoadingLogs(true);
-          const r = await apiClient.get<any>("/api/markups", { entity_type: "supplier", entity_id: supplierCode, _audit: 1 });
-          // Fallback: fetch directly via SQL-backed endpoint if present later; for now, filter when server returns items
-          const items = r.items || r.data || [];
+          const r = await apiClient.get<any>(`/api/admin/suppliers/${supplierCode}/audit`);
+          const items = r.data || [];
           setLogs(Array.isArray(items) ? items : []);
         } catch {
           setLogs([]);
