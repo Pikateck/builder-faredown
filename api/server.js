@@ -482,6 +482,8 @@ app.use("/api/markup", authenticateToken, markupRoutes);
 app.use("/api/vat", authenticateToken, vatRoutes);
 app.use("/api/reports", authenticateToken, reportsRoutes);
 app.use("/api/suppliers", authenticateToken, suppliersRoutes);
+app.use("/api/suppliers", require("./routes/suppliers-master"));
+app.use("/api/admin/markups", require("./routes/admin-module-markups"));
 app.use(
   "/api/admin/suppliers",
   adminSuppliersRoutes, // New multi-supplier management
