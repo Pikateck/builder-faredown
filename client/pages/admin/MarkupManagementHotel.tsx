@@ -135,6 +135,24 @@ const HOTEL_CHAINS = [
   "Zostel",
 ];
 
+// Popular hotel destination cities used by the Hotel Markup form
+// Keep this in sync with enhancedHotelsService.getDestinations fallback
+const POPULAR_CITIES: { code: string; name: string; country: string }[] = [
+  { code: "DXB", name: "Dubai", country: "United Arab Emirates" },
+  { code: "BOM", name: "Mumbai", country: "India" },
+  { code: "DEL", name: "Delhi", country: "India" },
+  { code: "SIN", name: "Singapore", country: "Singapore" },
+  { code: "BKK", name: "Bangkok", country: "Thailand" },
+  { code: "LON", name: "London", country: "United Kingdom" },
+  { code: "PAR", name: "Paris", country: "France" },
+  { code: "NYC", name: "New York", country: "United States" },
+  { code: "ROM", name: "Rome", country: "Italy" },
+  { code: "TYO", name: "Tokyo", country: "Japan" },
+  { code: "SYD", name: "Sydney", country: "Australia" },
+  { code: "DOH", name: "Doha", country: "Qatar" },
+  { code: "KUL", name: "Kuala Lumpur", country: "Malaysia" },
+];
+
 const ROOM_CATEGORIES = [
   { value: "all", label: "All Room Types" },
   { value: "standard", label: "Standard Room" },
