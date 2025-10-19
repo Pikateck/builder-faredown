@@ -709,4 +709,48 @@ router.post("/:code/sync", async (req, res) => {
   }
 });
 
+/**
+ * Update supplier base currency/markup/hedge/validity and status
+ */
+router.post("/:code/markup", async (req, res) => {
+  try {
+    const code = String(req.params.code || "").toUpperCase();
+    const { base_currency, base_markup, hedge_buffer, valid_from, valid_to, enabled, acted_by } = req.body || {};
+
+    const before = await db.query(`SELECT * FROM supplier_master WHERE COALESCE(code, supplier_code) = $1`, [code]);
+
+    const sets = [];
+    const params = [];
+    let i = 1;
+    const set = (col, val) => { sets.push(`${col} = $${i++}`); params.push(val); };
+
+    if (base_currency) set("base_currency", String(base_currency).toUpperCase());
+    if (base_markup !== undefined) set("base_markup", Number(base_markup));
+    if (hedge_buffer !== undefined) set("hedge_buffer", Number(hedge_buffer));
+    if (valid_from !== undefined) set("valid_from", valid_from ? new Date(valid_from) : null);
+    if (valid_to !== undefined) set("valid_to", valid_to ? new Date(valid_to) : null);
+    if (enabled !== undefined) set("enabled", !!enabled);
+    set("last_updated_by", acted_by || "admin");
+    set("updated_at", new Date());
+
+    if (!sets.length) {
+      return res.status(400).json({ success: false, error: "No fields provided" });
+    }
+
+    params.push(code);
+    const q = `UPDATE supplier_master SET ${sets.join(", ")} WHERE COALESCE(code, supplier_code) = $${i} RETURNING *`;
+    const result = await db.query(q, params);
+
+    await db.query(
+      `INSERT INTO markup_audit_log(entity_type, entity_id, before_json, after_json, action, acted_by) VALUES($1,$2,$3,$4,$5,$6)`,
+      ["supplier", code, JSON.stringify(before.rows[0] || null), JSON.stringify(result.rows[0] || null), "update", acted_by || "admin"],
+    );
+
+    res.json({ success: true, data: result.rows[0] });
+  } catch (error) {
+    console.error("Error updating supplier markup base:", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;
