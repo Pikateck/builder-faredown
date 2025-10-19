@@ -95,7 +95,13 @@ export default function SupplierManagement() {
   const { toast } = useToast();
 
   // Inline components for Preview Price and Audit Log
-  const PreviewPriceForm = ({ supplierCode, baseCurrency }: { supplierCode: string; baseCurrency: string }) => {
+  const PreviewPriceForm = ({
+    supplierCode,
+    baseCurrency,
+  }: {
+    supplierCode: string;
+    baseCurrency: string;
+  }) => {
     const [amount, setAmount] = useState<number>(100);
     const [displayCurrency, setDisplayCurrency] = useState<string>("INR");
     const [result, setResult] = useState<any>(null);
@@ -113,7 +119,11 @@ export default function SupplierManagement() {
         });
         setResult(r.breakdown || r.data || r);
       } catch (e) {
-        toast({ title: "Preview failed", description: String((e as any)?.message || e), variant: "destructive" });
+        toast({
+          title: "Preview failed",
+          description: String((e as any)?.message || e),
+          variant: "destructive",
+        });
       } finally {
         setLoadingPreview(false);
       }
@@ -124,7 +134,11 @@ export default function SupplierManagement() {
         <div className="grid grid-cols-2 gap-3">
           <div>
             <Label>Net Amount ({baseCurrency})</Label>
-            <Input type="number" value={amount} onChange={(e) => setAmount(parseFloat(e.target.value || "0"))} />
+            <Input
+              type="number"
+              value={amount}
+              onChange={(e) => setAmount(parseFloat(e.target.value || "0"))}
+            />
           </div>
           <div>
             <Label>Display Currency</Label>
@@ -141,12 +155,18 @@ export default function SupplierManagement() {
             </Select>
           </div>
         </div>
-        <Button onClick={runPreview} disabled={loadingPreview}>{loadingPreview ? "Calculating..." : "Preview"}</Button>
+        <Button onClick={runPreview} disabled={loadingPreview}>
+          {loadingPreview ? "Calculating..." : "Preview"}
+        </Button>
         {result && (
           <div className="text-sm text-gray-700 space-y-1 border rounded p-3">
-            <div>USD after supplier markup: {result.usd_after_supplier_markup}</div>
+            <div>
+              USD after supplier markup: {result.usd_after_supplier_markup}
+            </div>
             <div>Module markup %: {result.module_markup_percent}</div>
-            <div>Output: {result.output?.amount} {result.output?.currency}</div>
+            <div>
+              Output: {result.output?.amount} {result.output?.currency}
+            </div>
           </div>
         )}
       </div>
@@ -161,7 +181,9 @@ export default function SupplierManagement() {
       const load = async () => {
         try {
           setLoadingLogs(true);
-          const r = await apiClient.get<any>(`/api/admin/suppliers/${supplierCode}/audit`);
+          const r = await apiClient.get<any>(
+            `/api/admin/suppliers/${supplierCode}/audit`,
+          );
           const items = r.data || [];
           setLogs(Array.isArray(items) ? items : []);
         } catch {
@@ -174,14 +196,22 @@ export default function SupplierManagement() {
     }, [supplierCode]);
 
     if (loadingLogs) return <div className="text-sm">Loading...</div>;
-    if (!logs.length) return <div className="text-sm text-gray-500">No audit entries.</div>;
+    if (!logs.length)
+      return <div className="text-sm text-gray-500">No audit entries.</div>;
 
     return (
       <div className="max-h-80 overflow-y-auto text-sm">
         {logs.map((l, i) => (
           <div key={i} className="border-b py-2">
-            <div className="flex justify-between"><span>{new Date(l.acted_at || l.updated_at || Date.now()).toLocaleString()}</span><span>{l.acted_by || '-'}</span></div>
-            <div className="text-gray-600">{l.action || 'update'}</div>
+            <div className="flex justify-between">
+              <span>
+                {new Date(
+                  l.acted_at || l.updated_at || Date.now(),
+                ).toLocaleString()}
+              </span>
+              <span>{l.acted_by || "-"}</span>
+            </div>
+            <div className="text-gray-600">{l.action || "update"}</div>
           </div>
         ))}
       </div>
@@ -366,7 +396,10 @@ export default function SupplierManagement() {
     }
   };
 
-  const updateSupplierWeight = async (supplier: Supplier, newWeight: number) => {
+  const updateSupplierWeight = async (
+    supplier: Supplier,
+    newWeight: number,
+  ) => {
     try {
       const response = await apiClient.put<any>(
         `/api/admin/suppliers/${supplier.code}`,
@@ -379,7 +412,11 @@ export default function SupplierManagement() {
       }
     } catch (error) {
       console.error("Error updating weight:", error);
-      toast({ title: "Error", description: "Failed to update weight", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "Failed to update weight",
+        variant: "destructive",
+      });
     }
   };
 
@@ -422,11 +459,23 @@ export default function SupplierManagement() {
     <div className="container mx-auto p-6">
       <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Supplier Management</h1>
-          <p className="text-gray-600 mt-2">Manage hotel and flight suppliers, markups, and integrations</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Supplier Management
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Manage hotel and flight suppliers, markups, and integrations
+          </p>
         </div>
         <div className="flex items-center gap-2">
-          <Button variant="outline" onClick={() => { setLoading(true); Promise.all([loadSuppliers(), loadHealth()]).finally(() => setLoading(false)); }}>
+          <Button
+            variant="outline"
+            onClick={() => {
+              setLoading(true);
+              Promise.all([loadSuppliers(), loadHealth()]).finally(() =>
+                setLoading(false),
+              );
+            }}
+          >
             <RefreshCw className="h-4 w-4 mr-2" /> Refresh Data
           </Button>
         </div>
@@ -437,7 +486,11 @@ export default function SupplierManagement() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
           <div className="flex flex-col gap-1">
             <Label>Search</Label>
-            <Input placeholder="Search suppliers or codes" value={search} onChange={(e) => setSearch(e.target.value)} />
+            <Input
+              placeholder="Search suppliers or codes"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
           </div>
           <div className="flex flex-col gap-1">
             <Label>Module</Label>
@@ -503,46 +556,84 @@ export default function SupplierManagement() {
           </TableHeader>
           <TableBody>
             {filteredSuppliers.map((supplier) => {
-              const validity = supplier.valid_from || supplier.valid_to
-                ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
-                : "-";
+              const validity =
+                supplier.valid_from || supplier.valid_to
+                  ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
+                  : "-";
               return (
                 <TableRow key={supplier.id}>
                   <TableCell className="font-medium">{supplier.name}</TableCell>
-                  <TableCell className="uppercase text-gray-600">{supplier.code}</TableCell>
-                  <TableCell className="capitalize">{Array.isArray(supplier.modules) ? supplier.modules.join(", ") : (supplier.product_type || "-")}</TableCell>
-                  <TableCell className="uppercase">{supplier.base_currency || "USD"}</TableCell>
-                  <TableCell>{typeof supplier.base_markup === "number" ? `${supplier.base_markup}%` : "-"}</TableCell>
-                  <TableCell>{typeof supplier.hedge_buffer === "number" ? `${supplier.hedge_buffer}%` : "-"}</TableCell>
+                  <TableCell className="uppercase text-gray-600">
+                    {supplier.code}
+                  </TableCell>
+                  <TableCell className="capitalize">
+                    {Array.isArray(supplier.modules)
+                      ? supplier.modules.join(", ")
+                      : supplier.product_type || "-"}
+                  </TableCell>
+                  <TableCell className="uppercase">
+                    {supplier.base_currency || "USD"}
+                  </TableCell>
+                  <TableCell>
+                    {typeof supplier.base_markup === "number"
+                      ? `${supplier.base_markup}%`
+                      : "-"}
+                  </TableCell>
+                  <TableCell>
+                    {typeof supplier.hedge_buffer === "number"
+                      ? `${supplier.hedge_buffer}%`
+                      : "-"}
+                  </TableCell>
                   <TableCell>{validity}</TableCell>
                   <TableCell>{supplier.last_updated_by || "-"}</TableCell>
                   <TableCell>
-                    <Switch checked={supplier.is_enabled} onCheckedChange={() => toggleSupplier(supplier)} />
+                    <Switch
+                      checked={supplier.is_enabled}
+                      onCheckedChange={() => toggleSupplier(supplier)}
+                    />
                   </TableCell>
                   <TableCell>
                     <div className="flex flex-wrap gap-2">
-                      <Button variant="outline" size="sm" onClick={() => setSelectedSupplier(supplier)}>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setSelectedSupplier(supplier)}
+                      >
                         <Settings className="h-4 w-4 mr-2" /> Manage Markups
                       </Button>
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button size="sm" variant="outline"><Activity className="h-4 w-4 mr-2" /> Preview Price</Button>
+                          <Button size="sm" variant="outline">
+                            <Activity className="h-4 w-4 mr-2" /> Preview Price
+                          </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-md">
                           <DialogHeader>
-                            <DialogTitle>Preview Price — {supplier.name}</DialogTitle>
-                            <DialogDescription>Test the USD normalization, hedge and base markup, converted to display currency.</DialogDescription>
+                            <DialogTitle>
+                              Preview Price — {supplier.name}
+                            </DialogTitle>
+                            <DialogDescription>
+                              Test the USD normalization, hedge and base markup,
+                              converted to display currency.
+                            </DialogDescription>
                           </DialogHeader>
-                          <PreviewPriceForm supplierCode={supplier.code} baseCurrency={supplier.base_currency || "USD"} />
+                          <PreviewPriceForm
+                            supplierCode={supplier.code}
+                            baseCurrency={supplier.base_currency || "USD"}
+                          />
                         </DialogContent>
                       </Dialog>
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button size="sm" variant="outline"><Activity className="h-4 w-4 mr-2" /> Audit Log</Button>
+                          <Button size="sm" variant="outline">
+                            <Activity className="h-4 w-4 mr-2" /> Audit Log
+                          </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-2xl">
                           <DialogHeader>
-                            <DialogTitle>Audit Log — {supplier.name}</DialogTitle>
+                            <DialogTitle>
+                              Audit Log — {supplier.name}
+                            </DialogTitle>
                           </DialogHeader>
                           <AuditLogList supplierCode={supplier.code} />
                         </DialogContent>
@@ -554,7 +645,12 @@ export default function SupplierManagement() {
             })}
             {filteredSuppliers.length === 0 && (
               <TableRow>
-                <TableCell colSpan={10} className="text-center text-gray-500 py-8">No suppliers match your filters.</TableCell>
+                <TableCell
+                  colSpan={10}
+                  className="text-center text-gray-500 py-8"
+                >
+                  No suppliers match your filters.
+                </TableCell>
               </TableRow>
             )}
           </TableBody>

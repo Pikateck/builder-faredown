@@ -1176,11 +1176,13 @@ export default function MarkupManagementHotel() {
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="all">All Cities</SelectItem>
-                    {MASTER_DESTINATIONS.filter((d) => d.type === "city").map((city) => (
-                      <SelectItem key={city.code} value={city.name}>
-                        {city.name}
-                      </SelectItem>
-                    ))}
+                    {MASTER_DESTINATIONS.filter((d) => d.type === "city").map(
+                      (city) => (
+                        <SelectItem key={city.code} value={city.name}>
+                          {city.name}
+                        </SelectItem>
+                      ),
+                    )}
                   </SelectContent>
                 </Select>
 

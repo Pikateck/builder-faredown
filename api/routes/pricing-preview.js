@@ -5,7 +5,10 @@ const { authenticateToken } = require("../middleware/auth");
 
 const router = express.Router();
 
-const norm = (s = "") => String(s || "").trim().toUpperCase();
+const norm = (s = "") =>
+  String(s || "")
+    .trim()
+    .toUpperCase();
 
 async function getRateToUSD(cur) {
   const c = norm(cur);
@@ -50,11 +53,18 @@ router.post("/preview", authenticateToken, async (req, res) => {
 
     const amount = Number(net_amount || 0);
     if (!supplier_code || !Number.isFinite(amount) || amount <= 0) {
-      return res.status(400).json({ success: false, error: "supplier_code and positive net_amount required" });
+      return res
+        .status(400)
+        .json({
+          success: false,
+          error: "supplier_code and positive net_amount required",
+        });
     }
 
     const supplier = await getSupplierRow(supplier_code);
-    const supCurrency = norm(supplier_currency || supplier?.base_currency || "USD");
+    const supCurrency = norm(
+      supplier_currency || supplier?.base_currency || "USD",
+    );
 
     // Supplier -> USD
     const toUSD = await getRateToUSD(supCurrency);
@@ -78,10 +88,15 @@ router.post("/preview", authenticateToken, async (req, res) => {
         [mod],
       );
       if (r.rows[0]) {
-        moduleMarkupPct = r.rows[0].m_type === "percentage" ? Number(r.rows[0].m_value || 0) : 0;
+        moduleMarkupPct =
+          r.rows[0].m_type === "percentage"
+            ? Number(r.rows[0].m_value || 0)
+            : 0;
         if (r.rows[0].m_type === "fixed") {
           // treat fixed as % of amount in preview context (approx)
-          moduleMarkupPct = (Number(r.rows[0].m_value || 0) / Math.max(1, usd_after_markup)) * 100.0;
+          moduleMarkupPct =
+            (Number(r.rows[0].m_value || 0) / Math.max(1, usd_after_markup)) *
+            100.0;
         }
       }
     }
@@ -93,7 +108,7 @@ router.post("/preview", authenticateToken, async (req, res) => {
     const display_amount = usd_after_module * fromUSD;
 
     // Bargain floor: net in USD after hedge, converted to display currency (no markups)
-    const floor_display = (usd * fromUSD);
+    const floor_display = usd * fromUSD;
 
     res.json({
       success: true,
@@ -108,13 +123,21 @@ router.post("/preview", authenticateToken, async (req, res) => {
         usd_after_supplier_markup: Number(usd_after_markup.toFixed(6)),
         usd_after_module_markup: Number(usd_after_module.toFixed(6)),
         usd_to_display_rate: fromUSD,
-        output: { amount: Number(display_amount.toFixed(2)), currency: norm(display_currency) },
-        bargain_floor: { amount: Number(floor_display.toFixed(2)), currency: norm(display_currency) }
+        output: {
+          amount: Number(display_amount.toFixed(2)),
+          currency: norm(display_currency),
+        },
+        bargain_floor: {
+          amount: Number(floor_display.toFixed(2)),
+          currency: norm(display_currency),
+        },
       },
     });
   } catch (error) {
     console.error("/api/pricing/preview error", error);
-    res.status(500).json({ success: false, error: error.message || "Preview error" });
+    res
+      .status(500)
+      .json({ success: false, error: error.message || "Preview error" });
   }
 });
 

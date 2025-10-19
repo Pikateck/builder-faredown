@@ -291,12 +291,7 @@ export class ApiClient {
     const ep = endpoint.toLowerCase();
 
     // Endpoints that are protected by authenticateToken on the server, but are admin-only in the app
-    const adminishPatterns = [
-      "/admin",
-      "/markups",
-      "/markup",
-      "/reports",
-    ];
+    const adminishPatterns = ["/admin", "/markups", "/markup", "/reports"];
 
     const needsAdminKey = adminishPatterns.some((p) => ep.includes(p));
     if (!needsAdminKey) {

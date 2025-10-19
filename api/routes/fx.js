@@ -6,7 +6,10 @@ const { authenticateToken } = require("../middleware/auth");
 const router = express.Router();
 
 // Normalize currency codes
-const norm = (c = "") => String(c || "").trim().toUpperCase();
+const norm = (c = "") =>
+  String(c || "")
+    .trim()
+    .toUpperCase();
 
 async function getRateToUSD(from) {
   const f = norm(from);
@@ -51,7 +54,8 @@ router.get("/convert", authenticateToken, async (req, res) => {
     const from = norm(req.query.from || "USD");
     const to = norm(req.query.to || "USD");
     const supplier = req.query.supplier ? norm(req.query.supplier) : null;
-    const includeHedge = String(req.query.includeHedge || "true").toLowerCase() !== "false";
+    const includeHedge =
+      String(req.query.includeHedge || "true").toLowerCase() !== "false";
 
     if (!Number.isFinite(amount)) {
       return res.status(400).json({ success: false, error: "Invalid amount" });
@@ -85,7 +89,9 @@ router.get("/convert", authenticateToken, async (req, res) => {
     });
   } catch (error) {
     console.error("/api/fx/convert error", error);
-    res.status(500).json({ success: false, error: error.message || "FX error" });
+    res
+      .status(500)
+      .json({ success: false, error: error.message || "FX error" });
   }
 });
 
