@@ -20,17 +20,23 @@ router.get("/", async (req, res) => {
   try {
     const result = await db.query(`
       SELECT
-        COALESCE(s.id, 0) AS id,
+        COALESCE(s.id::text, gen_random_uuid()::text) AS id,
         COALESCE(s.code, s.supplier_code) AS code,
         s.name,
         s.enabled AS is_enabled,
         s.weight,
-        NULL::text AS environment,
+        s.base_currency,
+        s.base_markup,
+        s.hedge_buffer,
+        s.valid_from,
+        s.valid_to,
+        s.last_updated_by,
+        s.module as modules,
         'hotels'::text AS product_type,
         0 as total_bookings,
         0 as bookings_24h
       FROM supplier_master s
-      ORDER BY s.enabled DESC, s.weight DESC, s.name
+      ORDER BY s.enabled DESC, (s.weight IS NULL) ASC, s.weight DESC, s.name
     `, []);
 
     res.json({
