@@ -94,6 +94,101 @@ export default function SupplierManagement() {
 
   const { toast } = useToast();
 
+  // Inline components for Preview Price and Audit Log
+  const PreviewPriceForm = ({ supplierCode, baseCurrency }: { supplierCode: string; baseCurrency: string }) => {
+    const [amount, setAmount] = useState<number>(100);
+    const [displayCurrency, setDisplayCurrency] = useState<string>("INR");
+    const [result, setResult] = useState<any>(null);
+    const [loadingPreview, setLoadingPreview] = useState(false);
+
+    const runPreview = async () => {
+      try {
+        setLoadingPreview(true);
+        const r = await apiClient.post<any>("/api/pricing/preview", {
+          supplier_code: supplierCode,
+          net_amount: amount,
+          supplier_currency: baseCurrency,
+          display_currency: displayCurrency,
+          module: "hotels",
+        });
+        setResult(r.breakdown || r.data || r);
+      } catch (e) {
+        toast({ title: "Preview failed", description: String((e as any)?.message || e), variant: "destructive" });
+      } finally {
+        setLoadingPreview(false);
+      }
+    };
+
+    return (
+      <div className="space-y-3">
+        <div className="grid grid-cols-2 gap-3">
+          <div>
+            <Label>Net Amount ({baseCurrency})</Label>
+            <Input type="number" value={amount} onChange={(e) => setAmount(parseFloat(e.target.value || "0"))} />
+          </div>
+          <div>
+            <Label>Display Currency</Label>
+            <Select value={displayCurrency} onValueChange={setDisplayCurrency}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="INR">INR</SelectItem>
+                <SelectItem value="USD">USD</SelectItem>
+                <SelectItem value="AED">AED</SelectItem>
+                <SelectItem value="EUR">EUR</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+        <Button onClick={runPreview} disabled={loadingPreview}>{loadingPreview ? "Calculating..." : "Preview"}</Button>
+        {result && (
+          <div className="text-sm text-gray-700 space-y-1 border rounded p-3">
+            <div>USD after supplier markup: {result.usd_after_supplier_markup}</div>
+            <div>Module markup %: {result.module_markup_percent}</div>
+            <div>Output: {result.output?.amount} {result.output?.currency}</div>
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const AuditLogList = ({ supplierCode }: { supplierCode: string }) => {
+    const [logs, setLogs] = useState<any[]>([]);
+    const [loadingLogs, setLoadingLogs] = useState(false);
+
+    useEffect(() => {
+      const load = async () => {
+        try {
+          setLoadingLogs(true);
+          const r = await apiClient.get<any>("/api/markups", { entity_type: "supplier", entity_id: supplierCode, _audit: 1 });
+          // Fallback: fetch directly via SQL-backed endpoint if present later; for now, filter when server returns items
+          const items = r.items || r.data || [];
+          setLogs(Array.isArray(items) ? items : []);
+        } catch {
+          setLogs([]);
+        } finally {
+          setLoadingLogs(false);
+        }
+      };
+      load();
+    }, [supplierCode]);
+
+    if (loadingLogs) return <div className="text-sm">Loading...</div>;
+    if (!logs.length) return <div className="text-sm text-gray-500">No audit entries.</div>;
+
+    return (
+      <div className="max-h-80 overflow-y-auto text-sm">
+        {logs.map((l, i) => (
+          <div key={i} className="border-b py-2">
+            <div className="flex justify-between"><span>{new Date(l.acted_at || l.updated_at || Date.now()).toLocaleString()}</span><span>{l.acted_by || '-'}</span></div>
+            <div className="text-gray-600">{l.action || 'update'}</div>
+          </div>
+        ))}
+      </div>
+    );
+  };
+
   // New markup form state
   const [newMarkup, setNewMarkup] = useState({
     product_type: "hotels",
@@ -395,68 +490,65 @@ export default function SupplierManagement() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[28%]">Supplier</TableHead>
+              <TableHead className="w-[20%]">Supplier</TableHead>
               <TableHead className="w-[10%]">Code</TableHead>
-              <TableHead className="w-[12%]">Module</TableHead>
-              <TableHead className="w-[12%]">Environment</TableHead>
-              <TableHead className="w-[10%]">Enabled</TableHead>
-              <TableHead className="w-[16%]">Weight</TableHead>
-              <TableHead className="w-[12%]">Health</TableHead>
-              <TableHead className="w-[12%]">Calls 24h</TableHead>
-              <TableHead className="w-[12%]">Bookings 24h</TableHead>
-              <TableHead className="w-[14%]">Actions</TableHead>
+              <TableHead className="w-[14%]">Modules</TableHead>
+              <TableHead className="w-[8%]">Currency</TableHead>
+              <TableHead className="w-[10%]">Base Markup</TableHead>
+              <TableHead className="w-[10%]">Hedge</TableHead>
+              <TableHead className="w-[16%]">Validity</TableHead>
+              <TableHead className="w-[12%]">Last Updated By</TableHead>
+              <TableHead className="w-[8%]">Active</TableHead>
+              <TableHead className="w-[18%]">Actions</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
             {filteredSuppliers.map((supplier) => {
-              const health = supplier.last_success_at
-                ? { label: "Healthy", color: "text-green-600", Icon: CheckCircle }
-                : supplier.last_error_at
-                  ? { label: "Error", color: "text-red-600", Icon: XCircle }
-                  : { label: "Unknown", color: "text-gray-400", Icon: Activity };
+              const validity = supplier.valid_from || supplier.valid_to
+                ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
+                : "-";
               return (
                 <TableRow key={supplier.id}>
                   <TableCell className="font-medium">{supplier.name}</TableCell>
                   <TableCell className="uppercase text-gray-600">{supplier.code}</TableCell>
-                  <TableCell className="capitalize">{supplier.product_type}</TableCell>
-                  <TableCell>
-                    <Badge variant={supplier.environment === "production" ? "default" : "secondary"}>{supplier.environment}</Badge>
-                  </TableCell>
+                  <TableCell className="capitalize">{Array.isArray(supplier.modules) ? supplier.modules.join(", ") : (supplier.product_type || "-")}</TableCell>
+                  <TableCell className="uppercase">{supplier.base_currency || "USD"}</TableCell>
+                  <TableCell>{typeof supplier.base_markup === "number" ? `${supplier.base_markup}%` : "-"}</TableCell>
+                  <TableCell>{typeof supplier.hedge_buffer === "number" ? `${supplier.hedge_buffer}%` : "-"}</TableCell>
+                  <TableCell>{validity}</TableCell>
+                  <TableCell>{supplier.last_updated_by || "-"}</TableCell>
                   <TableCell>
                     <Switch checked={supplier.is_enabled} onCheckedChange={() => toggleSupplier(supplier)} />
                   </TableCell>
                   <TableCell>
-                    <div className="flex items-center gap-2">
-                      <Input
-                        type="number"
-                        className="w-24 h-8"
-                        value={
-                          weightEdits[supplier.code] !== undefined
-                            ? weightEdits[supplier.code]
-                            : (typeof supplier.weight === "number" ? supplier.weight : 100)
-                        }
-                        onChange={(e) =>
-                          setWeightEdits((prev) => ({
-                            ...prev,
-                            [supplier.code]: parseInt(e.target.value || "0"),
-                          }))
-                        }
-                      />
-                      <Button size="sm" variant="outline" onClick={() => updateSupplierWeight(supplier, weightEdits[supplier.code] ?? (supplier.weight || 100))}>Save</Button>
+                    <div className="flex flex-wrap gap-2">
+                      <Button variant="outline" size="sm" onClick={() => setSelectedSupplier(supplier)}>
+                        <Settings className="h-4 w-4 mr-2" /> Manage Markups
+                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button size="sm" variant="outline"><Activity className="h-4 w-4 mr-2" /> Preview Price</Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-md">
+                          <DialogHeader>
+                            <DialogTitle>Preview Price — {supplier.name}</DialogTitle>
+                            <DialogDescription>Test the USD normalization, hedge and base markup, converted to display currency.</DialogDescription>
+                          </DialogHeader>
+                          <PreviewPriceForm supplierCode={supplier.code} baseCurrency={supplier.base_currency || "USD"} />
+                        </DialogContent>
+                      </Dialog>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button size="sm" variant="outline"><Activity className="h-4 w-4 mr-2" /> Audit Log</Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                          <DialogHeader>
+                            <DialogTitle>Audit Log — {supplier.name}</DialogTitle>
+                          </DialogHeader>
+                          <AuditLogList supplierCode={supplier.code} />
+                        </DialogContent>
+                      </Dialog>
                     </div>
-                  </TableCell>
-                  <TableCell>
-                    <div className={`flex items-center gap-1 ${health.color}`}>
-                      <health.Icon className="h-4 w-4" />
-                      <span>{health.label}</span>
-                    </div>
-                  </TableCell>
-                  <TableCell>{supplier.success_calls_24h || 0} / {supplier.total_bookings || 0}</TableCell>
-                  <TableCell>{supplier.bookings_24h || 0}</TableCell>
-                  <TableCell>
-                    <Button variant="outline" size="sm" onClick={() => setSelectedSupplier(supplier)}>
-                      <Settings className="h-4 w-4 mr-2" /> Manage Markups
-                    </Button>
                   </TableCell>
                 </TableRow>
               );
