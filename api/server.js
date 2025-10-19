@@ -472,6 +472,10 @@ app.use("/api/packages", packagesRoutes);
 app.use("/api/destinations", destinationsRoutes);
 app.use("/api/enhanced-bargain", enhancedBargainRoutes);
 
+// FX + Pricing utilities
+app.use("/api/fx", require("./routes/fx"));
+app.use("/api/pricing", require("./routes/pricing-preview"));
+
 // Admin modules
 app.use("/api/markups", authenticateToken, markupsUnifiedRoutes);
 app.use("/api/markup", authenticateToken, markupRoutes);
