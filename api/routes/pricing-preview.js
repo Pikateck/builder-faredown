@@ -91,19 +91,24 @@ router.post("/preview", authenticateToken, async (req, res) => {
     const fromUSD = await getRateFromUSD(display_currency);
     const display_amount = usd_after_module * fromUSD;
 
+    // Bargain floor: net in USD after hedge, converted to display currency (no markups)
+    const floor_display = (usd * fromUSD);
+
     res.json({
       success: true,
       breakdown: {
         supplier_code: norm(supplier_code),
         module: mod || null,
         input: { net_amount: amount, currency: supCurrency },
-        fx_to_usd: toUSD,
-        hedge_percent: hedgePct,
+        fx_supplier_to_usd: toUSD,
+        hedge_applied_percent: hedgePct,
         supplier_base_markup_percent: baseMarkupPct,
         module_markup_percent: moduleMarkupPct,
         usd_after_supplier_markup: Number(usd_after_markup.toFixed(6)),
         usd_after_module_markup: Number(usd_after_module.toFixed(6)),
+        usd_to_display_rate: fromUSD,
         output: { amount: Number(display_amount.toFixed(2)), currency: norm(display_currency) },
+        bargain_floor: { amount: Number(floor_display.toFixed(2)), currency: norm(display_currency) }
       },
     });
   } catch (error) {
