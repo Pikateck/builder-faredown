@@ -1,5 +1,4 @@
 const express = require("express");
-const express = require("express");
 const db = require("../database/connection");
 const { authenticateToken } = require("../middleware/auth");
 
