@@ -288,7 +288,18 @@ export class ApiClient {
     endpoint: string,
     headers: Record<string, string> = {},
   ): Record<string, string> {
-    if (!endpoint.toLowerCase().includes("/admin")) {
+    const ep = endpoint.toLowerCase();
+
+    // Endpoints that are protected by authenticateToken on the server, but are admin-only in the app
+    const adminishPatterns = [
+      "/admin",
+      "/markups",
+      "/markup",
+      "/reports",
+    ];
+
+    const needsAdminKey = adminishPatterns.some((p) => ep.includes(p));
+    if (!needsAdminKey) {
       return headers;
     }
 
@@ -616,7 +627,7 @@ export class ApiClient {
       console.log(
         "🚨🚨🚨 NUCLEAR FIX ACTIVATED: Forcing Dubai packages only 🚨🚨🚨",
       );
-      console.log("📋 Endpoint:", endpoint, "Params:", params);
+      console.log("��� Endpoint:", endpoint, "Params:", params);
 
       // Define Dubai packages data
       const dubaiPackages = [
