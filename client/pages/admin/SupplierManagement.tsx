@@ -446,30 +446,45 @@ export default function SupplierManagement() {
 
   // Compute filtered list
   const normalized = (v: string | null | undefined) => (v || "").toLowerCase();
-  const filteredSuppliers = suppliers
-    .filter((s) => {
-      if (search.trim().length > 0) {
-        const q = normalized(search);
-        const hit =
-          normalized(s.name).includes(q) ||
-          normalized(s.code).includes(q) ||
-          normalized(s.product_type).includes(q);
-        if (!hit) return false;
-      }
-      if (moduleFilter !== "all") {
-        const pt = normalized(s.product_type);
-        if (pt !== normalized(moduleFilter)) return false;
-      }
-      if (statusFilter !== "all") {
-        const enabled = s.is_enabled ? "enabled" : "disabled";
-        if (enabled !== statusFilter) return false;
-      }
-      if (envFilter !== "all") {
-        if (normalized(s.environment) !== normalized(envFilter)) return false;
-      }
-      return true;
-    })
-    .sort((a, b) => a.name.localeCompare(b.name));
+  const filteredSuppliers = useMemo(() => {
+    const q = debouncedSearch.trim().toLowerCase();
+    const list = suppliers
+      .filter((s) => {
+        if (q.length > 0) {
+          const hit =
+            normalized(s.name).includes(q) ||
+            normalized(s.code).includes(q) ||
+            normalized(s.product_type).includes(q);
+          if (!hit) return false;
+        }
+        if (moduleFilter !== "all") {
+          const pt = normalized(s.product_type);
+          if (pt !== normalized(moduleFilter)) return false;
+        }
+        if (statusFilter !== "all") {
+          const enabled = s.is_enabled ? "enabled" : "disabled";
+          if (enabled !== statusFilter) return false;
+        }
+        if (envFilter !== "all") {
+          if (normalized(s.environment) !== normalized(envFilter)) return false;
+        }
+        return true;
+      })
+      .sort((a, b) => a.name.localeCompare(b.name));
+    return list;
+  }, [suppliers, debouncedSearch, moduleFilter, statusFilter, envFilter]);
+
+  const useVirtualization = filteredSuppliers.length > 200;
+  const totalHeight = filteredSuppliers.length * ROW_HEIGHT;
+  const startIndex = useMemo(() => {
+    return useVirtualization ? Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - 5) : 0;
+  }, [scrollTop, useVirtualization]);
+  const endIndex = useMemo(() => {
+    if (!useVirtualization) return filteredSuppliers.length;
+    const visible = Math.ceil(viewportH / ROW_HEIGHT) + 10;
+    return Math.min(filteredSuppliers.length, startIndex + visible);
+  }, [viewportH, startIndex, filteredSuppliers.length, useVirtualization]);
+  const visibleRows = useMemo(() => filteredSuppliers.slice(startIndex, endIndex), [filteredSuppliers, startIndex, endIndex]);
 
   return (
     <div className="container mx-auto p-6">
