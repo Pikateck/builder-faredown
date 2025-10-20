@@ -714,21 +714,7 @@ export default function SupplierManagement() {
                       </TableCell>
                       <TableCell className="px-3 py-2">
                         <div className="w-full flex items-center justify-center">
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <div className="p-1 ml-2 inline-flex cursor-pointer focus:ring-1 focus:ring-[#003580]/40 rounded">
-                                  <VerticalOnOff
-                                      checked={supplier.is_enabled}
-                                      onChange={() => toggleSupplier(supplier)}
-                                    />
-                                </div>
-                              </TooltipTrigger>
-                              <TooltipContent>
-                                {supplier.is_enabled ? "Active" : "Inactive"}
-                              </TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
+                          <OnOffToggle size="sm" checked={supplier.is_enabled} onChange={() => toggleSupplier(supplier)} />
                         </div>
                       </TableCell>
                       <TableCell className="px-3 py-2">
@@ -841,22 +827,8 @@ export default function SupplierManagement() {
                         </TableCell>
                         <TableCell className="px-3 py-2">
                           <div className="w-full flex items-center justify-center">
-                            <TooltipProvider>
-                              <Tooltip>
-                                <TooltipTrigger asChild>
-                                  <div className="p-1 ml-2 inline-flex cursor-pointer focus:ring-1 focus:ring-[#003580]/40 rounded">
-                                    <VerticalOnOff
-                                      checked={supplier.is_enabled}
-                                      onChange={() => toggleSupplier(supplier)}
-                                    />
-                                  </div>
-                                </TooltipTrigger>
-                                <TooltipContent>
-                                  {supplier.is_enabled ? "Active" : "Inactive"}
-                                </TooltipContent>
-                              </Tooltip>
-                            </TooltipProvider>
-                          </div>
+                          <OnOffToggle size="sm" checked={supplier.is_enabled} onChange={() => toggleSupplier(supplier)} />
+                        </div>
                         </TableCell>
                         <TableCell className="px-3 py-2">
                           <DropdownMenu>
