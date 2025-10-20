@@ -664,7 +664,7 @@ export default function SupplierManagement() {
                               <Activity className="h-4 w-4 mr-2" /> Preview price
                               <DropdownMenuShortcut>P</DropdownMenuShortcut>
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+                            <DropdownMenuItem onClick={() => setAuditSupplier(supplier)}>
                               <History className="h-4 w-4 mr-2" /> Audit log
                               <DropdownMenuShortcut>A</DropdownMenuShortcut>
                             </DropdownMenuItem>
@@ -761,10 +761,10 @@ export default function SupplierManagement() {
                               <Activity className="h-4 w-4 mr-2" /> Preview price
                               <DropdownMenuShortcut>P</DropdownMenuShortcut>
                             </DropdownMenuItem>
-                              <DropdownMenuItem onClick={(e) => e.preventDefault()}>
-                                <History className="h-4 w-4 mr-2" /> Audit log
-                                <DropdownMenuShortcut>A</DropdownMenuShortcut>
-                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => setAuditSupplier(supplier)}>
+                              <History className="h-4 w-4 mr-2" /> Audit log
+                              <DropdownMenuShortcut>A</DropdownMenuShortcut>
+                            </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
