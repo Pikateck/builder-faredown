@@ -39,15 +39,11 @@ export default function AdminAuthHelper() {
   };
 
   const testAuth = async () => {
-    if (!token) {
-      setMessage("❌ No token available. Generate a test token first.");
-      return;
-    }
-
     try {
+      const adminKey = import.meta.env.VITE_ADMIN_API_KEY;
       const response = await fetch("/api/admin/suppliers/analytics", {
         headers: {
-          Authorization: `Bearer ${token}`,
+          "x-admin-key": adminKey,
         },
       });
 
@@ -55,15 +51,15 @@ export default function AdminAuthHelper() {
 
       if (response.ok && data.success) {
         setMessage(
-          "✅ Authentication test successful! Admin APIs are working.",
+          "✅ Admin key authentication successful! Admin APIs are working.",
         );
       } else {
         setMessage(
-          `❌ Authentication test failed: ${data.error?.message || "Unknown error"}`,
+          `❌ Authentication test failed: ${data.error?.message || data.message || "Unknown error"}`,
         );
       }
     } catch (error) {
-      setMessage("❌ Test request failed: " + error.message);
+      setMessage("❌ Test request failed: " + (error as Error).message);
     }
   };
 
