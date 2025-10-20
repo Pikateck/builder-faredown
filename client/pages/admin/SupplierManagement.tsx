@@ -511,7 +511,7 @@ export default function SupplierManagement() {
           <div className="flex flex-col gap-1">
             <Label>Status</Label>
             <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger>
+              <SelectTrigger className="h-9 text-sm">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
