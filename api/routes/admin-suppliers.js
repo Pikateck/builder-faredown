@@ -313,39 +313,63 @@ router.get("/:code", async (req, res) => {
  */
 router.put("/:code", async (req, res) => {
   try {
-    const { code } = req.params;
+    const raw = req.params.code || "";
+    const normalizedCode = String(raw).toUpperCase();
     const { is_enabled, environment, weight } = req.body || {};
 
-    const result = await db.query(
+    // Try legacy supplier_master (case-insensitive on code/supplier_code)
+    const legacy = await db.query(
       `
       UPDATE supplier_master
       SET
         enabled = COALESCE($2, enabled),
         weight = COALESCE($3, weight),
         updated_at = NOW()
-      WHERE COALESCE(code, supplier_code) = $1
+      WHERE UPPER(COALESCE(code, supplier_code)) = $1
       RETURNING *
     `,
-      [code, is_enabled, weight],
+      [normalizedCode, is_enabled, weight],
     );
 
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        success: false,
-        error: "Supplier not found",
+    if (legacy.rows.length > 0) {
+      return res.json({ success: true, data: legacy.rows[0] });
+    }
+
+    // Fallback: unified suppliers_master (status column, key is supplier_name)
+    const unified = await db.query(
+      `
+      UPDATE suppliers_master
+      SET
+        status = COALESCE($2, status),
+        updated_at = NOW()
+      WHERE UPPER(supplier_name) = $1
+      RETURNING *
+    `,
+      [normalizedCode, is_enabled],
+    );
+
+    if (unified.rows.length > 0) {
+      // Shape response similar to legacy
+      const row = unified.rows[0];
+      return res.json({
+        success: true,
+        data: {
+          id: row.id,
+          code: row.supplier_name,
+          name: row.supplier_name,
+          enabled: row.status,
+          base_currency: row.base_currency,
+          base_markup_pct: row.base_markup_pct,
+          hedge_buffer_pct: row.hedge_buffer_pct,
+          updated_at: row.updated_at,
+        },
       });
     }
 
-    res.json({
-      success: true,
-      data: result.rows[0],
-    });
+    return res.status(404).json({ success: false, error: "Supplier not found" });
   } catch (error) {
     console.error("Error updating supplier:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
