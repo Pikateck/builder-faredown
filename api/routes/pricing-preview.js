@@ -91,12 +91,10 @@ router.post("/preview", authenticateToken, async (req, res) => {
 
     const amount = Number(net_amount || 0);
     if (!supplier_code || !Number.isFinite(amount) || amount <= 0) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: "supplier_code and positive net_amount required",
-        });
+      return res.status(400).json({
+        success: false,
+        error: "supplier_code and positive net_amount required",
+      });
     }
 
     const supplier = await getSupplierSettings(supplier_code);
