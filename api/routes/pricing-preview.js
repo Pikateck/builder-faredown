@@ -30,12 +30,51 @@ async function getRateFromUSD(cur) {
   return Number(r.rows[0].rate);
 }
 
-async function getSupplierRow(code) {
-  const q = await db.query(
-    `SELECT COALESCE(code, supplier_code) AS code, base_currency, hedge_buffer, base_markup FROM supplier_master WHERE COALESCE(code, supplier_code) = $1`,
-    [norm(code)],
-  );
-  return q.rows[0] || null;
+async function getSupplierSettings(code) {
+  const key = norm(code);
+  // 1) Try new unified table
+  try {
+    const q1 = await db.query(
+      `SELECT base_currency, hedge_buffer_pct, base_markup_pct
+       FROM suppliers_master
+       WHERE lower(supplier_name) = lower($1)
+       LIMIT 1`,
+      [key],
+    );
+    if (q1.rows[0]) {
+      const r = q1.rows[0];
+      return {
+        base_currency: r.base_currency || "USD",
+        hedge_pct: Number(r.hedge_buffer_pct || 0),
+        base_markup_pct: Number(r.base_markup_pct || 0),
+      };
+    }
+  } catch (e) {
+    // ignore and try legacy
+  }
+
+  // 2) Fallback to legacy supplier_master (if present)
+  try {
+    const q2 = await db.query(
+      `SELECT base_currency, hedge_buffer, base_markup
+       FROM supplier_master
+       WHERE COALESCE(code, supplier_code) = $1
+       LIMIT 1`,
+      [key],
+    );
+    if (q2.rows[0]) {
+      const r = q2.rows[0];
+      return {
+        base_currency: r.base_currency || "USD",
+        hedge_pct: Number(r.hedge_buffer || 0),
+        base_markup_pct: Number(r.base_markup || 0),
+      };
+    }
+  } catch (e) {
+    // ignore
+  }
+
+  return { base_currency: "USD", hedge_pct: 0, base_markup_pct: 0 };
 }
 
 // POST /api/pricing/preview
@@ -60,7 +99,7 @@ router.post("/preview", authenticateToken, async (req, res) => {
         });
     }
 
-    const supplier = await getSupplierRow(supplier_code);
+    const supplier = await getSupplierSettings(supplier_code);
     const supCurrency = norm(
       supplier_currency || supplier?.base_currency || "USD",
     );
@@ -70,11 +109,11 @@ router.post("/preview", authenticateToken, async (req, res) => {
     let usd = amount * toUSD;
 
     // Hedge
-    const hedgePct = Number(supplier?.hedge_buffer || 0);
+    const hedgePct = Number(supplier?.hedge_pct || 0);
     if (hedgePct > 0) usd *= 1 + hedgePct / 100.0;
 
     // Supplier base markup (profit)
-    const baseMarkupPct = Number(supplier?.base_markup || 0);
+    const baseMarkupPct = Number(supplier?.base_markup_pct || 0);
     let usd_after_markup = usd * (1 + baseMarkupPct / 100.0);
 
     // Module-level markup preview (pull best rule if exists)
