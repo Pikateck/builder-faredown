@@ -496,7 +496,7 @@ export default function SupplierManagement() {
           <div className="flex flex-col gap-1">
             <Label>Module</Label>
             <Select value={moduleFilter} onValueChange={setModuleFilter}>
-              <SelectTrigger>
+              <SelectTrigger className="h-9 text-sm">
                 <SelectValue placeholder="All Modules" />
               </SelectTrigger>
               <SelectContent>
