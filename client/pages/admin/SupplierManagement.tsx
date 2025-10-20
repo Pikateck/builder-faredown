@@ -66,6 +66,14 @@ interface Supplier {
   bookings_24h: number;
   success_calls_24h: number;
   error_calls_24h: number;
+  // Optional fields from unified suppliers_master
+  base_currency?: string;
+  base_markup?: number;
+  hedge_buffer?: number;
+  valid_from?: string | null;
+  valid_to?: string | null;
+  last_updated_by?: string | null;
+  modules?: string[];
 }
 
 interface SupplierMarkup {
