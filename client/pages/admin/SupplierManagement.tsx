@@ -615,16 +615,9 @@ export default function SupplierManagement() {
                 <TableHead className="px-3 py-2.5 w-[120px]">Code</TableHead>
                 <TableHead className="px-3 py-2.5 w-[140px]">Modules</TableHead>
                 <TableHead className="px-3 py-2.5 w-[80px]">Currency</TableHead>
-                <TableHead className="px-3 py-2.5 w-[110px]">
-                  Base Markup
-                </TableHead>
-                <TableHead className="px-3 py-2.5 w-[90px]">Hedge</TableHead>
-                <TableHead className="px-3 py-2.5 w-[140px]">
-                  Validity
-                </TableHead>
-                <TableHead className="px-3 py-2.5 w-[140px] xl:table-cell hidden">
-                  Last Updated By
-                </TableHead>
+                <TableHead className="px-3 py-2.5 w-[110px]">Total Markup</TableHead>
+                <TableHead className="px-3 py-2.5 w-[140px]">Validity</TableHead>
+                <TableHead className="px-3 py-2.5 w-[140px] xl:table-cell hidden">Last Updated</TableHead>
                 <TableHead className="px-3 py-2.5 w-[80px]">Active</TableHead>
                 <TableHead className="px-3 py-2.5 min-w-[120px]">
                   Actions
