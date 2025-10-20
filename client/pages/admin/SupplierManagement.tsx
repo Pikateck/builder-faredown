@@ -1,4 +1,10 @@
-import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
+import React, {
+  useState,
+  useEffect,
+  useMemo,
+  useRef,
+  useCallback,
+} from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,7 +34,12 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -478,14 +489,19 @@ export default function SupplierManagement() {
   const useVirtualization = filteredSuppliers.length > 200;
   const totalHeight = filteredSuppliers.length * ROW_HEIGHT;
   const startIndex = useMemo(() => {
-    return useVirtualization ? Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - 5) : 0;
+    return useVirtualization
+      ? Math.max(0, Math.floor(scrollTop / ROW_HEIGHT) - 5)
+      : 0;
   }, [scrollTop, useVirtualization]);
   const endIndex = useMemo(() => {
     if (!useVirtualization) return filteredSuppliers.length;
     const visible = Math.ceil(viewportH / ROW_HEIGHT) + 10;
     return Math.min(filteredSuppliers.length, startIndex + visible);
   }, [viewportH, startIndex, filteredSuppliers.length, useVirtualization]);
-  const visibleRows = useMemo(() => filteredSuppliers.slice(startIndex, endIndex), [filteredSuppliers, startIndex, endIndex]);
+  const visibleRows = useMemo(
+    () => filteredSuppliers.slice(startIndex, endIndex),
+    [filteredSuppliers, startIndex, endIndex],
+  );
 
   if (loading) {
     return (
@@ -499,15 +515,21 @@ export default function SupplierManagement() {
     <div className="container mx-auto p-6">
       <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">Supplier Management</h1>
-          <p className="text-gray-600 mt-2">Manage hotel and flight suppliers, markups, and integrations</p>
+          <h1 className="text-3xl font-bold text-gray-900">
+            Supplier Management
+          </h1>
+          <p className="text-gray-600 mt-2">
+            Manage hotel and flight suppliers, markups, and integrations
+          </p>
         </div>
         <div className="ml-auto">
           <Button
             variant="outline"
             onClick={() => {
               setLoading(true);
-              Promise.all([loadSuppliers(), loadHealth()]).finally(() => setLoading(false));
+              Promise.all([loadSuppliers(), loadHealth()]).finally(() =>
+                setLoading(false),
+              );
             }}
           >
             <RefreshCw className="h-4 w-4 mr-2" /> Refresh Data
@@ -585,16 +607,26 @@ export default function SupplierManagement() {
           <Table className="text-sm">
             <TableHeader className="text-xs uppercase tracking-wide">
               <TableRow className="border-b border-slate-300">
-                <TableHead className="px-3 py-2.5 w-[220px]">Supplier</TableHead>
+                <TableHead className="px-3 py-2.5 w-[220px]">
+                  Supplier
+                </TableHead>
                 <TableHead className="px-3 py-2.5 w-[120px]">Code</TableHead>
                 <TableHead className="px-3 py-2.5 w-[140px]">Modules</TableHead>
                 <TableHead className="px-3 py-2.5 w-[80px]">Currency</TableHead>
-                <TableHead className="px-3 py-2.5 w-[110px]">Base Markup</TableHead>
+                <TableHead className="px-3 py-2.5 w-[110px]">
+                  Base Markup
+                </TableHead>
                 <TableHead className="px-3 py-2.5 w-[90px]">Hedge</TableHead>
-                <TableHead className="px-3 py-2.5 w-[140px]">Validity</TableHead>
-                <TableHead className="px-3 py-2.5 w-[140px] xl:table-cell hidden">Last Updated By</TableHead>
+                <TableHead className="px-3 py-2.5 w-[140px]">
+                  Validity
+                </TableHead>
+                <TableHead className="px-3 py-2.5 w-[140px] xl:table-cell hidden">
+                  Last Updated By
+                </TableHead>
                 <TableHead className="px-3 py-2.5 w-[80px]">Active</TableHead>
-                <TableHead className="px-3 py-2.5 min-w-[120px]">Actions</TableHead>
+                <TableHead className="px-3 py-2.5 min-w-[120px]">
+                  Actions
+                </TableHead>
               </TableRow>
             </TableHeader>
             <TableBody className="text-sm">
@@ -604,37 +636,56 @@ export default function SupplierManagement() {
                     supplier.valid_from || supplier.valid_to
                       ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
                       : "-";
-                  const modules: string[] = Array.isArray((supplier as any).modules)
+                  const modules: string[] = Array.isArray(
+                    (supplier as any).modules,
+                  )
                     ? (supplier as any).modules
-                    : [supplier.product_type].filter(Boolean) as string[];
+                    : ([supplier.product_type].filter(Boolean) as string[]);
                   return (
                     <TableRow
                       key={supplier.id}
                       tabIndex={0}
                       className={`odd:bg-white even:bg-slate-50 hover:bg-slate-100 border-b border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300 h-[60px]`}
                     >
-                      <TableCell className="px-3 py-2 font-medium leading-tight truncate" title={supplier.name}>
+                      <TableCell
+                        className="px-3 py-2 font-medium leading-tight truncate"
+                        title={supplier.name}
+                      >
                         {supplier.name}
                       </TableCell>
-                      <TableCell className="px-3 py-2 uppercase text-slate-600 leading-tight">{supplier.code}</TableCell>
+                      <TableCell className="px-3 py-2 uppercase text-slate-600 leading-tight">
+                        {supplier.code}
+                      </TableCell>
                       <TableCell className="px-3 py-2">
                         <div className="flex flex-wrap gap-1">
                           {modules.map((m, i) => (
-                            <span key={i} className="inline-flex items-center text-[11px] px-2 py-0.5 rounded-full bg-slate-100">
+                            <span
+                              key={i}
+                              className="inline-flex items-center text-[11px] px-2 py-0.5 rounded-full bg-slate-100"
+                            >
                               {String(m || "-").toUpperCase()}
                             </span>
                           ))}
                         </div>
                       </TableCell>
-                      <TableCell className="px-3 py-2 uppercase">{(supplier as any).base_currency || "USD"}</TableCell>
-                      <TableCell className="px-3 py-2 text-slate-600">
-                        {typeof (supplier as any).base_markup === "number" ? `${(supplier as any).base_markup}%` : "-"}
+                      <TableCell className="px-3 py-2 uppercase">
+                        {(supplier as any).base_currency || "USD"}
                       </TableCell>
                       <TableCell className="px-3 py-2 text-slate-600">
-                        {typeof (supplier as any).hedge_buffer === "number" ? `${(supplier as any).hedge_buffer}%` : "-"}
+                        {typeof (supplier as any).base_markup === "number"
+                          ? `${(supplier as any).base_markup}%`
+                          : "-"}
+                      </TableCell>
+                      <TableCell className="px-3 py-2 text-slate-600">
+                        {typeof (supplier as any).hedge_buffer === "number"
+                          ? `${(supplier as any).hedge_buffer}%`
+                          : "-"}
                       </TableCell>
                       <TableCell className="px-3 py-2">{validity}</TableCell>
-                      <TableCell className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden" title={(supplier as any).last_updated_by || "-"}>
+                      <TableCell
+                        className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden"
+                        title={(supplier as any).last_updated_by || "-"}
+                      >
                         {(supplier as any).last_updated_by || "-"}
                       </TableCell>
                       <TableCell className="px-3 py-2">
@@ -646,12 +697,16 @@ export default function SupplierManagement() {
                                   <Switch
                                     className="h-5 w-9 data-[state=checked]:bg-[#003580]"
                                     checked={supplier.is_enabled}
-                                    onCheckedChange={() => toggleSupplier(supplier)}
+                                    onCheckedChange={() =>
+                                      toggleSupplier(supplier)
+                                    }
                                     aria-label="Toggle supplier active state"
                                   />
                                 </div>
                               </TooltipTrigger>
-                              <TooltipContent>{supplier.is_enabled ? "Active" : "Inactive"}</TooltipContent>
+                              <TooltipContent>
+                                {supplier.is_enabled ? "Active" : "Inactive"}
+                              </TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
                         </div>
@@ -659,21 +714,36 @@ export default function SupplierManagement() {
                       <TableCell className="px-3 py-2">
                         <DropdownMenu>
                           <DropdownMenuTrigger asChild>
-                            <Button variant="outline" size="sm" className="h-8 px-2">
-                              <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+                            <Button
+                              variant="outline"
+                              size="sm"
+                              className="h-8 px-2"
+                            >
+                              <MoreHorizontal
+                                className="h-4 w-4"
+                                aria-hidden="true"
+                              />
                               <span className="sr-only">Actions</span>
                             </Button>
                           </DropdownMenuTrigger>
                           <DropdownMenuContent align="end">
-                            <DropdownMenuItem onClick={() => setSelectedSupplier(supplier)}>
-                              <Settings className="h-4 w-4 mr-2" /> Manage markups
+                            <DropdownMenuItem
+                              onClick={() => setSelectedSupplier(supplier)}
+                            >
+                              <Settings className="h-4 w-4 mr-2" /> Manage
+                              markups
                               <DropdownMenuShortcut>M</DropdownMenuShortcut>
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setPreviewSupplier(supplier)}>
-                              <Activity className="h-4 w-4 mr-2" /> Preview price
+                            <DropdownMenuItem
+                              onClick={() => setPreviewSupplier(supplier)}
+                            >
+                              <Activity className="h-4 w-4 mr-2" /> Preview
+                              price
                               <DropdownMenuShortcut>P</DropdownMenuShortcut>
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={() => setAuditSupplier(supplier)}>
+                            <DropdownMenuItem
+                              onClick={() => setAuditSupplier(supplier)}
+                            >
                               <History className="h-4 w-4 mr-2" /> Audit log
                               <DropdownMenuShortcut>A</DropdownMenuShortcut>
                             </DropdownMenuItem>
@@ -697,79 +767,117 @@ export default function SupplierManagement() {
                       (supplier as any).valid_from || (supplier as any).valid_to
                         ? `${(supplier as any).valid_from ? new Date((supplier as any).valid_from).toLocaleDateString() : "-"} → ${(supplier as any).valid_to ? new Date((supplier as any).valid_to).toLocaleDateString() : "-"}`
                         : "-";
-                    const modules: string[] = Array.isArray((supplier as any).modules)
+                    const modules: string[] = Array.isArray(
+                      (supplier as any).modules,
+                    )
                       ? (supplier as any).modules
-                      : [supplier.product_type].filter(Boolean) as string[];
+                      : ([supplier.product_type].filter(Boolean) as string[]);
                     return (
                       <TableRow
                         key={supplier.id}
                         tabIndex={0}
                         className={`hover:bg-slate-100 border-b border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300 h-[60px] ${idx % 2 === 0 ? "bg-white" : "bg-slate-50"}`}
                       >
-                        <TableCell className="px-3 py-2 font-medium leading-tight truncate" title={supplier.name}>
+                        <TableCell
+                          className="px-3 py-2 font-medium leading-tight truncate"
+                          title={supplier.name}
+                        >
                           {supplier.name}
                         </TableCell>
-                        <TableCell className="px-3 py-2 uppercase text-slate-600 leading-tight">{supplier.code}</TableCell>
+                        <TableCell className="px-3 py-2 uppercase text-slate-600 leading-tight">
+                          {supplier.code}
+                        </TableCell>
                         <TableCell className="px-3 py-2">
                           <div className="flex flex-wrap gap-1">
                             {modules.map((m, i) => (
-                              <span key={i} className="inline-flex items-center text-[11px] px-2 py-0.5 rounded-full bg-slate-100">
+                              <span
+                                key={i}
+                                className="inline-flex items-center text-[11px] px-2 py-0.5 rounded-full bg-slate-100"
+                              >
                                 {String(m || "-").toUpperCase()}
                               </span>
                             ))}
                           </div>
                         </TableCell>
-                        <TableCell className="px-3 py-2 uppercase">{(supplier as any).base_currency || "USD"}</TableCell>
-                        <TableCell className="px-3 py-2 text-slate-600">
-                          {typeof (supplier as any).base_markup === "number" ? `${(supplier as any).base_markup}%` : "-"}
+                        <TableCell className="px-3 py-2 uppercase">
+                          {(supplier as any).base_currency || "USD"}
                         </TableCell>
                         <TableCell className="px-3 py-2 text-slate-600">
-                          {typeof (supplier as any).hedge_buffer === "number" ? `${(supplier as any).hedge_buffer}%` : "-"}
+                          {typeof (supplier as any).base_markup === "number"
+                            ? `${(supplier as any).base_markup}%`
+                            : "-"}
+                        </TableCell>
+                        <TableCell className="px-3 py-2 text-slate-600">
+                          {typeof (supplier as any).hedge_buffer === "number"
+                            ? `${(supplier as any).hedge_buffer}%`
+                            : "-"}
                         </TableCell>
                         <TableCell className="px-3 py-2">{validity}</TableCell>
-                        <TableCell className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden" title={(supplier as any).last_updated_by || "-"}>
+                        <TableCell
+                          className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden"
+                          title={(supplier as any).last_updated_by || "-"}
+                        >
                           {(supplier as any).last_updated_by || "-"}
                         </TableCell>
                         <TableCell className="px-3 py-2">
-                        <div className="w-full flex items-center justify-center">
-                          <TooltipProvider>
-                            <Tooltip>
-                              <TooltipTrigger asChild>
-                                <div className="p-1 ml-2 inline-flex cursor-pointer focus:ring-1 focus:ring-[#003580]/40 rounded">
-                                  <Switch
-                                    className="h-5 w-9 data-[state=checked]:bg-[#003580]"
-                                    checked={supplier.is_enabled}
-                                    onCheckedChange={() => toggleSupplier(supplier)}
-                                    aria-label="Toggle supplier active state"
-                                  />
-                                </div>
-                              </TooltipTrigger>
-                              <TooltipContent>{supplier.is_enabled ? "Active" : "Inactive"}</TooltipContent>
-                            </Tooltip>
-                          </TooltipProvider>
-                        </div>
-                      </TableCell>
+                          <div className="w-full flex items-center justify-center">
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <div className="p-1 ml-2 inline-flex cursor-pointer focus:ring-1 focus:ring-[#003580]/40 rounded">
+                                    <Switch
+                                      className="h-5 w-9 data-[state=checked]:bg-[#003580]"
+                                      checked={supplier.is_enabled}
+                                      onCheckedChange={() =>
+                                        toggleSupplier(supplier)
+                                      }
+                                      aria-label="Toggle supplier active state"
+                                    />
+                                  </div>
+                                </TooltipTrigger>
+                                <TooltipContent>
+                                  {supplier.is_enabled ? "Active" : "Inactive"}
+                                </TooltipContent>
+                              </Tooltip>
+                            </TooltipProvider>
+                          </div>
+                        </TableCell>
                         <TableCell className="px-3 py-2">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
-                              <Button variant="outline" size="sm" className="h-8 px-2">
-                                <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+                              <Button
+                                variant="outline"
+                                size="sm"
+                                className="h-8 px-2"
+                              >
+                                <MoreHorizontal
+                                  className="h-4 w-4"
+                                  aria-hidden="true"
+                                />
                                 <span className="sr-only">Actions</span>
                               </Button>
                             </DropdownMenuTrigger>
                             <DropdownMenuContent align="end">
-                              <DropdownMenuItem onClick={() => setSelectedSupplier(supplier)}>
-                                <Settings className="h-4 w-4 mr-2" /> Manage markups
+                              <DropdownMenuItem
+                                onClick={() => setSelectedSupplier(supplier)}
+                              >
+                                <Settings className="h-4 w-4 mr-2" /> Manage
+                                markups
                                 <DropdownMenuShortcut>M</DropdownMenuShortcut>
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => setPreviewSupplier(supplier)}>
-                              <Activity className="h-4 w-4 mr-2" /> Preview price
-                              <DropdownMenuShortcut>P</DropdownMenuShortcut>
-                            </DropdownMenuItem>
-                              <DropdownMenuItem onClick={() => setAuditSupplier(supplier)}>
-                              <History className="h-4 w-4 mr-2" /> Audit log
-                              <DropdownMenuShortcut>A</DropdownMenuShortcut>
-                            </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => setPreviewSupplier(supplier)}
+                              >
+                                <Activity className="h-4 w-4 mr-2" /> Preview
+                                price
+                                <DropdownMenuShortcut>P</DropdownMenuShortcut>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem
+                                onClick={() => setAuditSupplier(supplier)}
+                              >
+                                <History className="h-4 w-4 mr-2" /> Audit log
+                                <DropdownMenuShortcut>A</DropdownMenuShortcut>
+                              </DropdownMenuItem>
                             </DropdownMenuContent>
                           </DropdownMenu>
                         </TableCell>
@@ -778,7 +886,9 @@ export default function SupplierManagement() {
                   })}
                   <TableRow className="h-0">
                     <TableCell colSpan={10} className="p-0">
-                      <div style={{ height: totalHeight - endIndex * ROW_HEIGHT }} />
+                      <div
+                        style={{ height: totalHeight - endIndex * ROW_HEIGHT }}
+                      />
                     </TableCell>
                   </TableRow>
                 </>
@@ -786,7 +896,10 @@ export default function SupplierManagement() {
 
               {filteredSuppliers.length === 0 && (
                 <TableRow>
-                  <TableCell colSpan={10} className="text-center text-gray-500 py-8">
+                  <TableCell
+                    colSpan={10}
+                    className="text-center text-gray-500 py-8"
+                  >
                     No suppliers match your filters.
                   </TableCell>
                 </TableRow>
@@ -798,22 +911,32 @@ export default function SupplierManagement() {
 
       {/* Preview Price Dialog */}
       {previewSupplier && (
-        <Dialog open={!!previewSupplier} onOpenChange={() => setPreviewSupplier(null)}>
+        <Dialog
+          open={!!previewSupplier}
+          onOpenChange={() => setPreviewSupplier(null)}
+        >
           <DialogContent className="max-w-md">
             <DialogHeader>
               <DialogTitle>Preview Price — {previewSupplier.name}</DialogTitle>
               <DialogDescription>
-                Test the USD normalization, hedge and base markup, converted to display currency.
+                Test the USD normalization, hedge and base markup, converted to
+                display currency.
               </DialogDescription>
             </DialogHeader>
-            <PreviewPriceForm supplierCode={previewSupplier.code} baseCurrency={(previewSupplier as any).base_currency || "USD"} />
+            <PreviewPriceForm
+              supplierCode={previewSupplier.code}
+              baseCurrency={(previewSupplier as any).base_currency || "USD"}
+            />
           </DialogContent>
         </Dialog>
       )}
 
       {/* Audit Log Dialog */}
       {auditSupplier && (
-        <Dialog open={!!auditSupplier} onOpenChange={() => setAuditSupplier(null)}>
+        <Dialog
+          open={!!auditSupplier}
+          onOpenChange={() => setAuditSupplier(null)}
+        >
           <DialogContent className="max-w-2xl">
             <DialogHeader>
               <DialogTitle>Audit Log — {auditSupplier.name}</DialogTitle>
