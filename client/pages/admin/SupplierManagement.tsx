@@ -541,22 +541,22 @@ export default function SupplierManagement() {
       {/* Suppliers List (Compact Card Grid) */}
       {/* Suppliers List Table (restored, compact actions at bottom) */}
       <Card className="overflow-hidden">
-        <Table>
-          <TableHeader>
+        <Table className="text-sm">
+          <TableHeader className="text-sm">
             <TableRow>
-              <TableHead className="w-[20%]">Supplier</TableHead>
-              <TableHead className="w-[10%]">Code</TableHead>
-              <TableHead className="w-[14%]">Modules</TableHead>
-              <TableHead className="w-[8%]">Currency</TableHead>
-              <TableHead className="w-[10%]">Base Markup</TableHead>
-              <TableHead className="w-[10%]">Hedge</TableHead>
-              <TableHead className="w-[16%]">Validity</TableHead>
-              <TableHead className="w-[12%]">Last Updated By</TableHead>
-              <TableHead className="w-[8%]">Active</TableHead>
-              <TableHead className="w-[18%]">Actions</TableHead>
+              <TableHead>Supplier</TableHead>
+              <TableHead>Code</TableHead>
+              <TableHead>Modules</TableHead>
+              <TableHead>Currency</TableHead>
+              <TableHead>Base Markup</TableHead>
+              <TableHead>Hedge</TableHead>
+              <TableHead>Validity</TableHead>
+              <TableHead>Last Updated By</TableHead>
+              <TableHead>Active</TableHead>
+              <TableHead>Actions</TableHead>
             </TableRow>
           </TableHeader>
-          <TableBody>
+          <TableBody className="text-sm">
             {filteredSuppliers.map((supplier) => {
               const validity =
                 supplier.valid_from || supplier.valid_to
