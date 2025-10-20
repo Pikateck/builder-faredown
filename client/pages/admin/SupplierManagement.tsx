@@ -668,11 +668,6 @@ export default function SupplierManagement() {
                           ? `${(supplier as any).base_markup}%`
                           : "-"}
                       </TableCell>
-                      <TableCell className="px-3 py-2 text-slate-600">
-                        {typeof (supplier as any).hedge_buffer === "number"
-                          ? `${(supplier as any).hedge_buffer}%`
-                          : "-"}
-                      </TableCell>
                       <TableCell className="px-3 py-2">{validity}</TableCell>
                       <TableCell
                         className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden"
@@ -779,11 +774,6 @@ export default function SupplierManagement() {
                         <TableCell className="px-3 py-2 text-slate-600">
                           {typeof (supplier as any).base_markup === "number"
                             ? `${(supplier as any).base_markup}%`
-                            : "-"}
-                        </TableCell>
-                        <TableCell className="px-3 py-2 text-slate-600">
-                          {typeof (supplier as any).hedge_buffer === "number"
-                            ? `${(supplier as any).hedge_buffer}%`
                             : "-"}
                         </TableCell>
                         <TableCell className="px-3 py-2">{validity}</TableCell>
