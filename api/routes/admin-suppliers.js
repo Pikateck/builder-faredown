@@ -247,10 +247,34 @@ router.post("/:code/circuit/config", async (req, res) => {
 /**
  * Get supplier by code
  */
+// Simple analytics/test endpoint (used by AdminAuthHelper)
+router.get("/analytics", async (_req, res) => {
+  try {
+    const total = await db.query("SELECT COUNT(*)::int AS c FROM suppliers_master");
+    res.json({ success: true, data: { suppliers: total.rows[0]?.c || 0 } });
+  } catch (e) {
+    res.json({ success: true, data: { suppliers: 0 } });
+  }
+});
+
 router.get("/:code", async (req, res) => {
   try {
     const { code } = req.params;
 
+    // Try unified table by supplier_name
+    const r1 = await db.query(
+      `SELECT id::text AS id, UPPER(supplier_name) AS code, supplier_name AS name, status AS is_enabled,
+              NULL::text AS environment, LOWER(COALESCE(module[1],'HOTELS')) AS product_type,
+              0 AS total_bookings, 0 AS bookings_24h
+       FROM suppliers_master WHERE UPPER(supplier_name) = UPPER($1) LIMIT 1`,
+      [code],
+    );
+
+    if (r1.rows[0]) {
+      return res.json({ success: true, data: r1.rows[0] });
+    }
+
+    // Fallback to legacy table by code
     const result = await db.query(
       `
       SELECT
@@ -264,28 +288,19 @@ router.get("/:code", async (req, res) => {
         0 as total_bookings,
         0 as bookings_24h
       FROM supplier_master s
-      WHERE COALESCE(s.code, s.supplier_code) = $1
+      WHERE UPPER(COALESCE(s.code, s.supplier_code)) = UPPER($1)
     `,
       [code],
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({
-        success: false,
-        error: "Supplier not found",
-      });
+      return res.status(404).json({ success: false, error: "Supplier not found" });
     }
 
-    res.json({
-      success: true,
-      data: result.rows[0],
-    });
+    res.json({ success: true, data: result.rows[0] });
   } catch (error) {
     console.error("Error fetching supplier:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
@@ -758,6 +773,20 @@ router.post("/:code/markup", async (req, res) => {
     params.push(code);
     const q = `UPDATE supplier_master SET ${sets.join(", ")} WHERE COALESCE(code, supplier_code) = $${i} RETURNING *`;
     const result = await db.query(q, params);
+
+    // Also reflect currency/markup/hedge changes into unified table when present
+    try {
+      await db.query(
+        `UPDATE suppliers_master
+         SET base_currency = COALESCE($1, base_currency),
+             base_markup_pct = COALESCE($2, base_markup_pct),
+             hedge_buffer_pct = COALESCE($3, hedge_buffer_pct),
+             last_updated_by = COALESCE($4, last_updated_by),
+             updated_at = NOW()
+         WHERE UPPER(supplier_name) = UPPER($5)`,
+        [base_currency || null, base_markup || null, hedge_buffer || null, acted_by || null, code],
+      );
+    } catch (_) {}
 
     await db.query(
       `INSERT INTO markup_audit_log(entity_type, entity_id, before_json, after_json, action, acted_by) VALUES($1,$2,$3,$4,$5,$6)`,
