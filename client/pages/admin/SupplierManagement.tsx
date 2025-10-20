@@ -703,7 +703,7 @@ export default function SupplierManagement() {
                       <TableRow
                         key={supplier.id}
                         tabIndex={0}
-                        className={`odd:bg-white even:bg-slate-50 hover:bg-slate-100 border-b border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300 h-[60px] ${idx % 2 === 0 ? "odd" : "even"}`}
+                        className={`hover:bg-slate-100 border-b border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300 h-[60px] ${idx % 2 === 0 ? "bg-white" : "bg-slate-50"}`}
                       >
                         <TableCell className="px-3 py-2 font-medium leading-tight truncate" title={supplier.name}>
                           {supplier.name}
