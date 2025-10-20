@@ -581,20 +581,20 @@ export default function SupplierManagement() {
                   <TableCell className="py-2">
                     <Switch checked={supplier.is_enabled} onCheckedChange={() => toggleSupplier(supplier)} />
                   </TableCell>
-                  <TableCell>
-                    {/* footer-like compact actions */}
-                    <div className="mt-1 pt-1 border-t flex flex-wrap gap-1 items-center">
+                  <TableCell className="py-2">
+                    {/* vertical compact actions */}
+                    <div className="flex flex-col gap-1">
                       <Button
                         variant="outline"
                         size="sm"
-                        className="h-8 px-2"
+                        className="h-8 px-2 justify-start"
                         onClick={() => setSelectedSupplier(supplier)}
                       >
                         <Settings className="h-4 w-4 mr-1" /> Manage Markups
                       </Button>
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button size="sm" variant="outline" className="h-8 px-2">
+                          <Button size="sm" variant="outline" className="h-8 px-2 justify-start">
                             <Activity className="h-4 w-4 mr-1" /> Preview Price
                           </Button>
                         </DialogTrigger>
@@ -610,7 +610,7 @@ export default function SupplierManagement() {
                       </Dialog>
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button size="sm" variant="outline" className="h-8 px-2">
+                          <Button size="sm" variant="outline" className="h-8 px-2 justify-start">
                             <Activity className="h-4 w-4 mr-1" /> Audit Log
                           </Button>
                         </DialogTrigger>
