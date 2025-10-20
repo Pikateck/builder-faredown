@@ -3,7 +3,7 @@ const crypto = require("crypto");
 const { Pool } = require("pg");
 const { v4: uuidv4 } = require("uuid");
 
-const router = express.Router();
+const router = require("express").Router();
 
 // Use existing database connection
 const pool = require("../database/connection");

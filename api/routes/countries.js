@@ -1,6 +1,6 @@
 const express = require("express");
 const { pool } = require("../database/connection");
-const router = express.Router();
+const router = require("express").Router();
 
 /**
  * GET /api/countries

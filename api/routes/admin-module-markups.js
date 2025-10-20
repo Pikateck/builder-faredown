@@ -2,7 +2,7 @@ const express = require("express");
 const db = require("../database/connection");
 const { authenticateToken, requireAdmin } = require("../middleware/auth");
 
-const router = express.Router();
+const router = require("express").Router();
 router.use(authenticateToken, requireAdmin);
 
 // Helper to build precedence ORDER BY (newest first when ties)

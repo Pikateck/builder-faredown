@@ -2,7 +2,7 @@ const express = require("express");
 const db = require("../database/connection");
 const { authenticateToken } = require("../middleware/auth");
 
-const router = express.Router();
+const router = require("express").Router();
 
 // GET /api/suppliers — list with per-module rule counts
 router.get("/", authenticateToken, async (req, res) => {

@@ -14,7 +14,7 @@ const {
   analyzeCorsConfig,
 } = require("../services/systemMonitorService");
 
-const router = express.Router();
+const router = require("express").Router();
 router.use(adminKeyMiddleware);
 
 const DEFAULT_TIMEOUT_MS = 5000;

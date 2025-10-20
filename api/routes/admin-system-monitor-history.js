@@ -9,7 +9,7 @@ const DISABLED_COMPONENTS = new Set(
     .filter(Boolean),
 );
 
-const router = express.Router();
+const router = require("express").Router();
 router.use(adminKeyMiddleware);
 
 router.get("/", async (req, res) => {

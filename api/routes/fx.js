@@ -2,7 +2,7 @@ const express = require("express");
 const db = require("../database/connection");
 const { authenticateToken } = require("../middleware/auth");
 
-const router = express.Router();
+const router = require("express").Router();
 
 // Normalize currency codes
 const norm = (c = "") =>
