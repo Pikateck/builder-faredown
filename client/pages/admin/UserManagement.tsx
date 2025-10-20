@@ -303,7 +303,8 @@ export default function UserManagement() {
       status: "active",
       permissions: [],
     });
-    setIsCreateDialogOpen(true);
+    // Switch to the Create tab so the form becomes visible
+    setActiveTab("create");
   };
 
   const handleEditUser = (user: User) => {
@@ -339,6 +340,8 @@ export default function UserManagement() {
       await loadUsers();
       setFormData({});
       setSelectedUser(null);
+      // Return to list view after saving
+      setActiveTab("list");
     } catch (err) {
       setError(err instanceof Error ? err.message : "Failed to save user");
     } finally {
