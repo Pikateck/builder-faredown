@@ -563,7 +563,7 @@ export default function SupplierManagement() {
                   ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
                   : "-";
               return (
-                <TableRow key={supplier.id} className="align-top">
+                <TableRow key={supplier.id} className={`align-top ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
                   <TableCell className="font-medium leading-tight">{supplier.name}</TableCell>
                   <TableCell className="uppercase text-gray-600 leading-tight">{supplier.code}</TableCell>
                   <TableCell className="capitalize leading-tight">
