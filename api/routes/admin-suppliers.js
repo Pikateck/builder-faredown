@@ -18,40 +18,37 @@ router.use(adminAuth);
  */
 router.get("/", async (req, res) => {
   try {
+    // Prefer unified suppliers_master; left join legacy supplier_master for weight/enabled if present
     const result = await db.query(
       `
       SELECT
-        COALESCE(s.id::text, gen_random_uuid()::text) AS id,
-        COALESCE(s.code, s.supplier_code) AS code,
-        s.name,
-        s.enabled AS is_enabled,
-        s.weight,
-        s.base_currency,
-        s.base_markup,
-        s.hedge_buffer,
-        s.valid_from,
-        s.valid_to,
-        s.last_updated_by,
-        s.module as modules,
-        'hotels'::text AS product_type,
-        0 as total_bookings,
-        0 as bookings_24h
-      FROM supplier_master s
-      ORDER BY s.enabled DESC, (s.weight IS NULL) ASC, s.weight DESC, s.name
-    `,
+        sm.id::text AS id,
+        UPPER(sm.supplier_name) AS code,
+        sm.supplier_name AS name,
+        COALESCE(sm.status, true) AS is_enabled,
+        legacy.weight,
+        sm.base_currency,
+        sm.base_markup_pct AS base_markup,
+        sm.hedge_buffer_pct AS hedge_buffer,
+        sm.valid_from,
+        sm.valid_to,
+        sm.last_updated_by,
+        sm.module AS modules,
+        LOWER(COALESCE(sm.module[1], 'HOTELS')) AS product_type,
+        0 AS total_bookings,
+        0 AS bookings_24h
+      FROM suppliers_master sm
+      LEFT JOIN supplier_master legacy
+        ON UPPER(COALESCE(legacy.code, legacy.supplier_code)) = UPPER(sm.supplier_name)
+      ORDER BY sm.status DESC, sm.updated_at DESC, sm.supplier_name
+      `,
       [],
     );
 
-    res.json({
-      success: true,
-      data: result.rows,
-    });
+    res.json({ success: true, data: result.rows });
   } catch (error) {
     console.error("Error fetching suppliers:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-    });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 
