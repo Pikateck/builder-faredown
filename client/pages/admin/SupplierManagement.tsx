@@ -695,7 +695,7 @@ export default function SupplierManagement() {
                               <TooltipTrigger asChild>
                                 <div className="p-1 ml-2 inline-flex cursor-pointer focus:ring-1 focus:ring-[#003580]/40 rounded">
                                   <Switch
-                                    className="h-5 w-9 data-[state=checked]:bg-[#003580]"
+                                    className="data-[state=checked]:bg-[#003580]" size="sm"
                                     checked={supplier.is_enabled}
                                     onCheckedChange={() =>
                                       toggleSupplier(supplier)
@@ -826,7 +826,7 @@ export default function SupplierManagement() {
                                 <TooltipTrigger asChild>
                                   <div className="p-1 ml-2 inline-flex cursor-pointer focus:ring-1 focus:ring-[#003580]/40 rounded">
                                     <Switch
-                                      className="h-5 w-9 data-[state=checked]:bg-[#003580]"
+                                      className="data-[state=checked]:bg-[#003580]" size="sm"
                                       checked={supplier.is_enabled}
                                       onCheckedChange={() =>
                                         toggleSupplier(supplier)
