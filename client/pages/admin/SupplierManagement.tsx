@@ -330,21 +330,46 @@ export default function SupplierManagement() {
 
   const toggleSupplier = async (supplier: Supplier) => {
     const code = String(supplier.code || "").toUpperCase();
-    setSuppliers((prev) => prev.map((s) => (s.code === code ? { ...s, is_enabled: !s.is_enabled } : s)));
+    setSuppliers((prev) =>
+      prev.map((s) =>
+        s.code === code ? { ...s, is_enabled: !s.is_enabled } : s,
+      ),
+    );
     setUpdating((u) => ({ ...u, [code]: true }));
     try {
-      const response = await apiClient.put<any>(`/api/admin/suppliers/${code}`, { is_enabled: !supplier.is_enabled });
+      const response = await apiClient.put<any>(
+        `/api/admin/suppliers/${code}`,
+        { is_enabled: !supplier.is_enabled },
+      );
       if (response.success) {
-        const newEnabled = (response as any).data?.is_enabled ?? (response as any).data?.enabled ?? !supplier.is_enabled;
-        setSuppliers((prev) => prev.map((s) => (s.code === code ? { ...s, is_enabled: newEnabled } : s)));
-        toast({ title: "Success", description: `${supplier.name} ${newEnabled ? "enabled" : "disabled"}` });
+        const newEnabled =
+          (response as any).data?.is_enabled ??
+          (response as any).data?.enabled ??
+          !supplier.is_enabled;
+        setSuppliers((prev) =>
+          prev.map((s) =>
+            s.code === code ? { ...s, is_enabled: newEnabled } : s,
+          ),
+        );
+        toast({
+          title: "Success",
+          description: `${supplier.name} ${newEnabled ? "enabled" : "disabled"}`,
+        });
       } else {
         throw new Error("API failed");
       }
     } catch (error) {
-      setSuppliers((prev) => prev.map((s) => (s.code === code ? { ...s, is_enabled: supplier.is_enabled } : s)));
+      setSuppliers((prev) =>
+        prev.map((s) =>
+          s.code === code ? { ...s, is_enabled: supplier.is_enabled } : s,
+        ),
+      );
       console.error("Error toggling supplier:", error);
-      toast({ title: "Error", description: "Failed to update supplier", variant: "destructive" });
+      toast({
+        title: "Error",
+        description: "Failed to update supplier",
+        variant: "destructive",
+      });
     } finally {
       setUpdating((u) => ({ ...u, [code]: false }));
     }
@@ -626,9 +651,15 @@ export default function SupplierManagement() {
                 <TableHead className="px-3 py-2.5 w-[120px]">Code</TableHead>
                 <TableHead className="px-3 py-2.5 w-[140px]">Modules</TableHead>
                 <TableHead className="px-3 py-2.5 w-[80px]">Currency</TableHead>
-                <TableHead className="px-3 py-2.5 w-[110px]">Total Markup</TableHead>
-                <TableHead className="px-3 py-2.5 w-[140px]">Validity</TableHead>
-                <TableHead className="px-3 py-2.5 w-[140px] xl:table-cell hidden">Last Updated</TableHead>
+                <TableHead className="px-3 py-2.5 w-[110px]">
+                  Total Markup
+                </TableHead>
+                <TableHead className="px-3 py-2.5 w-[140px]">
+                  Validity
+                </TableHead>
+                <TableHead className="px-3 py-2.5 w-[140px] xl:table-cell hidden">
+                  Last Updated
+                </TableHead>
                 <TableHead className="px-3 py-2.5 w-[80px]">Active</TableHead>
                 <TableHead className="px-3 py-2.5 min-w-[120px]">
                   Actions
@@ -680,10 +711,24 @@ export default function SupplierManagement() {
                           : "-"}
                       </TableCell>
                       <TableCell className="px-3 py-2">{validity}</TableCell>
-                      <TableCell className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden" title="19-Oct-2025">19-Oct-2025</TableCell>
+                      <TableCell
+                        className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden"
+                        title="19-Oct-2025"
+                      >
+                        19-Oct-2025
+                      </TableCell>
                       <TableCell className="px-3 py-2">
                         <div className="w-full flex items-center justify-center">
-                          <OnOffToggle size="sm" checked={supplier.is_enabled} disabled={!!updating[String(supplier.code || "").toUpperCase()]} onChange={() => toggleSupplier(supplier)} />
+                          <OnOffToggle
+                            size="sm"
+                            checked={supplier.is_enabled}
+                            disabled={
+                              !!updating[
+                                String(supplier.code || "").toUpperCase()
+                              ]
+                            }
+                            onChange={() => toggleSupplier(supplier)}
+                          />
                         </div>
                       </TableCell>
                       <TableCell className="px-3 py-2">
@@ -783,11 +828,25 @@ export default function SupplierManagement() {
                             : "-"}
                         </TableCell>
                         <TableCell className="px-3 py-2">{validity}</TableCell>
-                        <TableCell className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden" title="19-Oct-2025">19-Oct-2025</TableCell>
+                        <TableCell
+                          className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden"
+                          title="19-Oct-2025"
+                        >
+                          19-Oct-2025
+                        </TableCell>
                         <TableCell className="px-3 py-2">
                           <div className="w-full flex items-center justify-center">
-                          <OnOffToggle size="sm" checked={supplier.is_enabled} disabled={!!updating[String(supplier.code || "").toUpperCase()]} onChange={() => toggleSupplier(supplier)} />
-                        </div>
+                            <OnOffToggle
+                              size="sm"
+                              checked={supplier.is_enabled}
+                              disabled={
+                                !!updating[
+                                  String(supplier.code || "").toUpperCase()
+                                ]
+                              }
+                              onChange={() => toggleSupplier(supplier)}
+                            />
+                          </div>
                         </TableCell>
                         <TableCell className="px-3 py-2">
                           <DropdownMenu>

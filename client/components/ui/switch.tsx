@@ -3,7 +3,9 @@ import * as SwitchPrimitives from "@radix-ui/react-switch";
 
 import { cn } from "@/lib/utils";
 
-type SwitchProps = React.ComponentPropsWithoutRef<typeof SwitchPrimitives.Root> & {
+type SwitchProps = React.ComponentPropsWithoutRef<
+  typeof SwitchPrimitives.Root
+> & {
   size?: "sm" | "md";
   thumbClassName?: string;
 };
@@ -14,7 +16,10 @@ const Switch = React.forwardRef<
 >(({ className, size = "md", thumbClassName, ...props }, ref) => {
   const rootSize = size === "sm" ? "h-5 w-9" : "h-6 w-11";
   const thumbSize = size === "sm" ? "h-4 w-4" : "h-5 w-5";
-  const thumbTranslateChecked = size === "sm" ? "data-[state=checked]:translate-x-4" : "data-[state=checked]:translate-x-5";
+  const thumbTranslateChecked =
+    size === "sm"
+      ? "data-[state=checked]:translate-x-4"
+      : "data-[state=checked]:translate-x-5";
   return (
     <SwitchPrimitives.Root
       className={cn(

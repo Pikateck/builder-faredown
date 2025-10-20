@@ -366,7 +366,9 @@ router.put("/:code", async (req, res) => {
       });
     }
 
-    return res.status(404).json({ success: false, error: "Supplier not found" });
+    return res
+      .status(404)
+      .json({ success: false, error: "Supplier not found" });
   } catch (error) {
     console.error("Error updating supplier:", error);
     res.status(500).json({ success: false, error: error.message });
