@@ -250,7 +250,9 @@ router.post("/:code/circuit/config", async (req, res) => {
 // Simple analytics/test endpoint (used by AdminAuthHelper)
 router.get("/analytics", async (_req, res) => {
   try {
-    const total = await db.query("SELECT COUNT(*)::int AS c FROM suppliers_master");
+    const total = await db.query(
+      "SELECT COUNT(*)::int AS c FROM suppliers_master",
+    );
     res.json({ success: true, data: { suppliers: total.rows[0]?.c || 0 } });
   } catch (e) {
     res.json({ success: true, data: { suppliers: 0 } });
@@ -294,7 +296,9 @@ router.get("/:code", async (req, res) => {
     );
 
     if (result.rows.length === 0) {
-      return res.status(404).json({ success: false, error: "Supplier not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Supplier not found" });
     }
 
     res.json({ success: true, data: result.rows[0] });
@@ -784,7 +788,13 @@ router.post("/:code/markup", async (req, res) => {
              last_updated_by = COALESCE($4, last_updated_by),
              updated_at = NOW()
          WHERE UPPER(supplier_name) = UPPER($5)`,
-        [base_currency || null, base_markup || null, hedge_buffer || null, acted_by || null, code],
+        [
+          base_currency || null,
+          base_markup || null,
+          hedge_buffer || null,
+          acted_by || null,
+          code,
+        ],
       );
     } catch (_) {}
 
