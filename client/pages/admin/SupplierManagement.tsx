@@ -49,31 +49,8 @@ import {
 import { apiClient } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useDebounce } from "@/hooks/useDebounce";
+import OnOffToggle from "@/components/ui/OnOffToggle";
 
-// Small rectangular ON/OFF button used in Active column (horizontal)
-interface VSwitchProps { checked: boolean; onChange: (next: boolean) => void; className?: string }
-const VerticalOnOff: React.FC<VSwitchProps> = ({ checked, onChange, className }) => (
-  <button
-    type="button"
-    role="switch"
-    aria-checked={checked}
-    onClick={() => onChange(!checked)}
-    onKeyDown={(e) => {
-      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onChange(!checked); }
-    }}
-    title={checked ? "Active" : "Inactive"}
-    className={[
-      "inline-flex items-center justify-center select-none",
-      "h-[22px] w-[48px] text-[10px] font-semibold uppercase",
-      "rounded-sm border border-slate-300",
-      "transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-green-300",
-      checked ? "bg-green-600 text-white hover:bg-green-700" : "bg-slate-200 text-slate-700 hover:bg-slate-300",
-      className || "",
-    ].join(" ")}
-  >
-    {checked ? "ON" : "OFF"}
-  </button>
-);
 import {
   Activity,
   Settings,
