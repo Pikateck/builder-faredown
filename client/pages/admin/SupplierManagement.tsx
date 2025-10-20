@@ -573,12 +573,12 @@ export default function SupplierManagement() {
                   <TableCell className="leading-tight py-2">
                     {typeof supplier.base_markup === "number" ? `${supplier.base_markup}%` : "-"}
                   </TableCell>
-                  <TableCell className="leading-tight">
+                  <TableCell className="leading-tight py-2">
                     {typeof supplier.hedge_buffer === "number" ? `${supplier.hedge_buffer}%` : "-"}
                   </TableCell>
-                  <TableCell className="leading-tight">{validity}</TableCell>
-                  <TableCell className="leading-tight">{supplier.last_updated_by || "-"}</TableCell>
-                  <TableCell>
+                  <TableCell className="leading-tight py-2">{validity}</TableCell>
+                  <TableCell className="leading-tight py-2">{supplier.last_updated_by || "-"}</TableCell>
+                  <TableCell className="py-2">
                     <Switch checked={supplier.is_enabled} onCheckedChange={() => toggleSupplier(supplier)} />
                   </TableCell>
                   <TableCell>
