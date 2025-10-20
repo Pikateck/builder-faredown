@@ -29,7 +29,7 @@ export default function OnOffToggle({ checked, onChange, size = "md", disabled, 
         }
       }}
       className={cn(
-        "relative inline-flex items-center justify-start rounded-full border transition-all duration-200",
+        "relative inline-flex items-center justify-start rounded-sm border transition-all duration-200",
         "focus:outline-none focus:ring-2 focus:ring-emerald-300",
         checked ? "bg-emerald-500" : "bg-slate-200",
         "border-slate-300",
