@@ -564,9 +564,9 @@ export default function SupplierManagement() {
                   : "-";
               return (
                 <TableRow key={supplier.id} className={`align-top ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
-                  <TableCell className="font-medium leading-tight">{supplier.name}</TableCell>
-                  <TableCell className="uppercase text-gray-600 leading-tight">{supplier.code}</TableCell>
-                  <TableCell className="capitalize leading-tight">
+                  <TableCell className="font-medium leading-tight py-2">{supplier.name}</TableCell>
+                  <TableCell className="uppercase text-gray-600 leading-tight py-2">{supplier.code}</TableCell>
+                  <TableCell className="capitalize leading-tight py-2">
                     {Array.isArray(supplier.modules) ? supplier.modules.join(", ") : supplier.product_type || "-"}
                   </TableCell>
                   <TableCell className="uppercase leading-tight py-2">{supplier.base_currency || "USD"}</TableCell>
