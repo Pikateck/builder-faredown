@@ -1,6 +1,6 @@
 const express = require("express");
 const promClient = require("prom-client");
-const router = express.Router();
+const router = require("express").Router();
 
 const collectDefaultMetrics = promClient.collectDefaultMetrics;
 collectDefaultMetrics({ timeout: 5000 });
