@@ -1,5 +1,5 @@
 const express = require("express");
-const router = express.Router();
+const router = require("express").Router();
 
 // Simple database validation endpoint
 router.get("/ai-tables-check", async (req, res) => {
