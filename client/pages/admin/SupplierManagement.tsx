@@ -487,6 +487,7 @@ export default function SupplierManagement() {
           <div className="flex flex-col gap-1">
             <Label>Search</Label>
             <Input
+              className="h-9 text-sm"
               placeholder="Search suppliers or codes"
               value={search}
               onChange={(e) => setSearch(e.target.value)}
