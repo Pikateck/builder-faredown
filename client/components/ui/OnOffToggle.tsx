@@ -29,27 +29,27 @@ export default function OnOffToggle({ checked, onChange, size = "md", disabled, 
         }
       }}
       className={cn(
-        "relative inline-flex items-center rounded-full border transition-colors duration-200",
-        "focus:outline-none focus:ring-2 focus:ring-emerald-300",
-        checked ? "bg-emerald-500" : "bg-slate-300",
-        "border-slate-300",
+        "relative inline-flex items-center border-2 transition-colors duration-200 rounded-xl",
+        // Match Refresh Data outline button shape but smaller
+        checked ? "bg-[#0071c2] border-[#0071c2]" : "bg-white border-gray-200",
         dims.track,
         disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer",
+        "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
         className,
       )}
       title={checked ? "ON" : "OFF"}
     >
-      {/* Labels: left=ON, right=OFF, kept above thumb for readability */}
-      <span className={cn("relative z-20 flex w-full items-center justify-between px-1 select-none uppercase font-semibold", dims.text)}>
-        <span className={cn(checked ? "text-white" : "text-white/70")}>On</span>
-        <span className={cn(checked ? "text-emerald-100/0" : "text-slate-700")}>Off</span>
+      {/* Labels */}
+      <span className={cn("relative z-20 flex w-full items-center justify-between px-2 select-none font-semibold", dims.text)}>
+        <span className={cn(checked ? "text-white" : "text-[#003580]")}>On</span>
+        <span className={cn(checked ? "text-white/0" : "text-[#003580]")}>Off</span>
       </span>
 
       {/* Thumb */}
       <span
         aria-hidden="true"
         className={cn(
-          "absolute left-0.5 top-1/2 -translate-y-1/2 rounded-full bg-white shadow transition-transform duration-200 z-10",
+          "absolute left-0.5 top-1/2 -translate-y-1/2 rounded-lg bg-white shadow transition-transform duration-200 z-10",
           dims.thumb,
           checked ? dims.translate : "translate-x-0",
         )}
