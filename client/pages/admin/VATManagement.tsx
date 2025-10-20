@@ -276,7 +276,7 @@ export default function VATManagement() {
       specialConditions: "",
     });
     setSelectedCountryStates([]);
-    setIsCreateDialogOpen(true);
+    setActiveTab("create");
   };
 
   const handleEditVATRule = (rule: VATRule) => {
@@ -292,7 +292,6 @@ export default function VATManagement() {
 
   const handleSaveVATRule = () => {
     if (selectedVATRule) {
-      // Update existing rule
       setVATRules(
         vatRules.map((r) =>
           r.id === selectedVATRule.id
@@ -302,7 +301,6 @@ export default function VATManagement() {
       );
       setIsEditDialogOpen(false);
     } else {
-      // Create new rule
       const newRule: VATRule = {
         ...(formData as VATRule),
         id: Date.now().toString(),
@@ -310,7 +308,7 @@ export default function VATManagement() {
         updatedAt: new Date().toISOString(),
       };
       setVATRules([...vatRules, newRule]);
-      setIsCreateDialogOpen(false);
+      setActiveTab("list");
     }
     setFormData({});
     setSelectedVATRule(null);
