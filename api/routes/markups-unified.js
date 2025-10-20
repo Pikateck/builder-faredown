@@ -2,7 +2,10 @@ const express = require("express");
 const { Pool } = require("pg");
 
 const router = require("express").Router();
-const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
+});
 
 const EXPORT_COLUMNS = [
   "id",
@@ -38,24 +41,73 @@ const EXPORT_COLUMNS = [
 ];
 
 function buildWhere(query) {
-  const { module, airline_code, route_from, route_to, booking_class, status, search, hotel_city, supplier_id, product_code, vehicle_type, transfer_kind } = query;
+  const {
+    module,
+    airline_code,
+    route_from,
+    route_to,
+    booking_class,
+    status,
+    search,
+    hotel_city,
+    supplier_id,
+    product_code,
+    vehicle_type,
+    transfer_kind,
+  } = query;
   const where = [];
   const params = [];
   let i = 1;
-  if (module) { where.push(`module = $${i++}`); params.push(module); }
-  if (status) { where.push(`is_active = $${i++}`); params.push(status === "active" || status === true || status === "true"); }
-  if (airline_code) { where.push(`airline_code = $${i++}`); params.push(airline_code); }
-  if (route_from) { where.push(`route_from = $${i++}`); params.push(route_from); }
-  if (route_to) { where.push(`route_to = $${i++}`); params.push(route_to); }
-  if (booking_class) { where.push(`booking_class = $${i++}`); params.push(booking_class); }
-  if (hotel_city) { where.push(`hotel_city = $${i++}`); params.push(hotel_city); }
-  if (supplier_id) { where.push(`supplier_id = $${i++}`); params.push(supplier_id); }
-  if (product_code) { where.push(`product_code = $${i++}`); params.push(product_code); }
-  if (vehicle_type) { where.push(`vehicle_type = $${i++}`); params.push(vehicle_type); }
-  if (transfer_kind) { where.push(`transfer_kind = $${i++}`); params.push(transfer_kind); }
+  if (module) {
+    where.push(`module = $${i++}`);
+    params.push(module);
+  }
+  if (status) {
+    where.push(`is_active = $${i++}`);
+    params.push(status === "active" || status === true || status === "true");
+  }
+  if (airline_code) {
+    where.push(`airline_code = $${i++}`);
+    params.push(airline_code);
+  }
+  if (route_from) {
+    where.push(`route_from = $${i++}`);
+    params.push(route_from);
+  }
+  if (route_to) {
+    where.push(`route_to = $${i++}`);
+    params.push(route_to);
+  }
+  if (booking_class) {
+    where.push(`booking_class = $${i++}`);
+    params.push(booking_class);
+  }
+  if (hotel_city) {
+    where.push(`hotel_city = $${i++}`);
+    params.push(hotel_city);
+  }
+  if (supplier_id) {
+    where.push(`supplier_id = $${i++}`);
+    params.push(supplier_id);
+  }
+  if (product_code) {
+    where.push(`product_code = $${i++}`);
+    params.push(product_code);
+  }
+  if (vehicle_type) {
+    where.push(`vehicle_type = $${i++}`);
+    params.push(vehicle_type);
+  }
+  if (transfer_kind) {
+    where.push(`transfer_kind = $${i++}`);
+    params.push(transfer_kind);
+  }
   if (search) {
-    where.push(`(LOWER(rule_name) LIKE $${i} OR LOWER(description) LIKE $${i})`);
-    params.push(`%${search.toLowerCase()}%`); i++;
+    where.push(
+      `(LOWER(rule_name) LIKE $${i} OR LOWER(description) LIKE $${i})`,
+    );
+    params.push(`%${search.toLowerCase()}%`);
+    i++;
   }
   return { where: where.length ? `WHERE ${where.join(" AND ")}` : "", params };
 }
@@ -69,12 +121,15 @@ router.get("/", async (req, res) => {
 
     const { where, params } = buildWhere(req.query);
 
-    const count = await pool.query(`SELECT COUNT(*)::int AS total FROM markup_rules ${where}`, params);
+    const count = await pool.query(
+      `SELECT COUNT(*)::int AS total FROM markup_rules ${where}`,
+      params,
+    );
     const total = count.rows[0]?.total || 0;
 
     const data = await pool.query(
       `SELECT * FROM markup_rules ${where} ORDER BY module, priority ASC, updated_at DESC LIMIT $${params.length + 1} OFFSET $${params.length + 2}`,
-      [...params, limit, offset]
+      [...params, limit, offset],
     );
 
     res.json({ success: true, items: data.rows, total, page, pageSize: limit });
@@ -88,7 +143,31 @@ router.get("/", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const fields = [
-      "module","rule_name","description","airline_code","booking_class","route_from","route_to","hotel_city","hotel_star_min","hotel_star_max","supplier_id","product_code","vehicle_type","transfer_kind","m_type","m_value","current_min_pct","current_max_pct","bargain_min_pct","bargain_max_pct","valid_from","valid_to","priority","user_type","is_active"
+      "module",
+      "rule_name",
+      "description",
+      "airline_code",
+      "booking_class",
+      "route_from",
+      "route_to",
+      "hotel_city",
+      "hotel_star_min",
+      "hotel_star_max",
+      "supplier_id",
+      "product_code",
+      "vehicle_type",
+      "transfer_kind",
+      "m_type",
+      "m_value",
+      "current_min_pct",
+      "current_max_pct",
+      "bargain_min_pct",
+      "bargain_max_pct",
+      "valid_from",
+      "valid_to",
+      "priority",
+      "user_type",
+      "is_active",
     ];
     const values = fields.map((k) => req.body[k] ?? null);
     const idx = values.map((_, i) => `$${i + 1}`).join(",");
@@ -105,17 +184,49 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const updatable = [
-      "rule_name","description","airline_code","booking_class","route_from","route_to","hotel_city","hotel_star_min","hotel_star_max","supplier_id","product_code","vehicle_type","transfer_kind","m_type","m_value","current_min_pct","current_max_pct","bargain_min_pct","bargain_max_pct","valid_from","valid_to","priority","user_type","is_active"
+      "rule_name",
+      "description",
+      "airline_code",
+      "booking_class",
+      "route_from",
+      "route_to",
+      "hotel_city",
+      "hotel_star_min",
+      "hotel_star_max",
+      "supplier_id",
+      "product_code",
+      "vehicle_type",
+      "transfer_kind",
+      "m_type",
+      "m_value",
+      "current_min_pct",
+      "current_max_pct",
+      "bargain_min_pct",
+      "bargain_max_pct",
+      "valid_from",
+      "valid_to",
+      "priority",
+      "user_type",
+      "is_active",
     ];
     const sets = [];
     const params = [];
     let i = 1;
-    updatable.forEach((k) => { if (k in req.body) { sets.push(`${k} = $${i++}`); params.push(req.body[k]); } });
-    if (!sets.length) return res.status(400).json({ success:false, error:"No fields to update"});
+    updatable.forEach((k) => {
+      if (k in req.body) {
+        sets.push(`${k} = $${i++}`);
+        params.push(req.body[k]);
+      }
+    });
+    if (!sets.length)
+      return res
+        .status(400)
+        .json({ success: false, error: "No fields to update" });
     params.push(req.params.id);
     const q = `UPDATE markup_rules SET ${sets.join(", ")}, updated_at = now() WHERE id = $${i} RETURNING *`;
     const result = await pool.query(q, params);
-    if (!result.rowCount) return res.status(404).json({ success:false, error:"Not found"});
+    if (!result.rowCount)
+      return res.status(404).json({ success: false, error: "Not found" });
     res.json({ success: true, item: result.rows[0] });
   } catch (err) {
     console.error("/api/markups update error", err);
@@ -130,11 +241,18 @@ router.patch("/:id/status", async (req, res) => {
     let result;
     if (typeof is_active === "undefined") {
       // Toggle when no explicit value is provided
-      result = await pool.query("UPDATE markup_rules SET is_active = NOT is_active, updated_at = now() WHERE id = $1 RETURNING *", [req.params.id]);
+      result = await pool.query(
+        "UPDATE markup_rules SET is_active = NOT is_active, updated_at = now() WHERE id = $1 RETURNING *",
+        [req.params.id],
+      );
     } else {
-      result = await pool.query("UPDATE markup_rules SET is_active = $1, updated_at = now() WHERE id = $2 RETURNING *", [is_active, req.params.id]);
+      result = await pool.query(
+        "UPDATE markup_rules SET is_active = $1, updated_at = now() WHERE id = $2 RETURNING *",
+        [is_active, req.params.id],
+      );
     }
-    if (!result.rowCount) return res.status(404).json({ success:false, error:"Not found"});
+    if (!result.rowCount)
+      return res.status(404).json({ success: false, error: "Not found" });
     res.json({ success: true, item: result.rows[0] });
   } catch (err) {
     console.error("/api/markups status error", err);
@@ -145,8 +263,11 @@ router.patch("/:id/status", async (req, res) => {
 // DELETE /api/markups/:id
 router.delete("/:id", async (req, res) => {
   try {
-    const result = await pool.query("DELETE FROM markup_rules WHERE id = $1", [req.params.id]);
-    if (!result.rowCount) return res.status(404).json({ success:false, error:"Not found"});
+    const result = await pool.query("DELETE FROM markup_rules WHERE id = $1", [
+      req.params.id,
+    ]);
+    if (!result.rowCount)
+      return res.status(404).json({ success: false, error: "Not found" });
     res.json({ success: true });
   } catch (err) {
     console.error("/api/markups delete error", err);
@@ -159,7 +280,9 @@ router.post("/test-apply", async (req, res) => {
   try {
     const { module, base_amount, currency = "INR" } = req.body;
     if (!module || base_amount == null) {
-      return res.status(400).json({ success:false, error:"module and base_amount are required"});
+      return res
+        .status(400)
+        .json({ success: false, error: "module and base_amount are required" });
     }
 
     // find best rule
@@ -185,16 +308,40 @@ router.post("/test-apply", async (req, res) => {
     const snap = await pool.query(
       `INSERT INTO pricing_quotes(module, rule_id, request_ref, base_amount, currency, markup_type, markup_value, final_amount, route_from, route_to, airline_code, booking_class, hotel_city, vehicle_type, transfer_kind, supplier_id, product_code)
        VALUES($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12,$13,$14,$15,$16,$17) RETURNING id`,
-      [module, rule?.id || null, req.body.request_ref || null, base_amount, currency, markupType, rule?.m_value || 0, final,
-       req.body.route_from || null, req.body.route_to || null, req.body.airline_code || null, req.body.booking_class || null,
-       req.body.hotel_city || null, req.body.vehicle_type || null, req.body.transfer_kind || null, req.body.supplier_id || null,
-       req.body.product_code || null]
+      [
+        module,
+        rule?.id || null,
+        req.body.request_ref || null,
+        base_amount,
+        currency,
+        markupType,
+        rule?.m_value || 0,
+        final,
+        req.body.route_from || null,
+        req.body.route_to || null,
+        req.body.airline_code || null,
+        req.body.booking_class || null,
+        req.body.hotel_city || null,
+        req.body.vehicle_type || null,
+        req.body.transfer_kind || null,
+        req.body.supplier_id || null,
+        req.body.product_code || null,
+      ],
     );
 
-    res.json({ success:true, matched_rule_id: rule?.id || null, base_amount: Number(base_amount), markup_type: markupType, markup_value: rule?.m_value || 0, final_amount: final, currency, quote_id: snap.rows[0].id });
+    res.json({
+      success: true,
+      matched_rule_id: rule?.id || null,
+      base_amount: Number(base_amount),
+      markup_type: markupType,
+      markup_value: rule?.m_value || 0,
+      final_amount: final,
+      currency,
+      quote_id: snap.rows[0].id,
+    });
   } catch (err) {
     console.error("/api/markups/test-apply error", err);
-    res.status(500).json({ success:false, error: "Failed to test apply"});
+    res.status(500).json({ success: false, error: "Failed to test apply" });
   }
 });
 
@@ -202,9 +349,10 @@ router.get("/export", async (req, res) => {
   try {
     const format = String(req.query.format || "csv").toLowerCase();
     const limitParam = parseInt(String(req.query.limit || "5000"), 10);
-    const resolvedLimit = Number.isFinite(limitParam) && limitParam > 0
-      ? Math.min(limitParam, 10000)
-      : 5000;
+    const resolvedLimit =
+      Number.isFinite(limitParam) && limitParam > 0
+        ? Math.min(limitParam, 10000)
+        : 5000;
 
     const { where, params } = buildWhere(req.query);
     const queryParams = [...params];

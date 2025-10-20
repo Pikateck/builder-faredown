@@ -56,12 +56,10 @@ router.post("/:id/markup", authenticateToken, async (req, res) => {
     } = req.body || {};
 
     if (!module || !markup_type || markup_value == null) {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: "module, markup_type, markup_value required",
-        });
+      return res.status(400).json({
+        success: false,
+        error: "module, markup_type, markup_value required",
+      });
     }
 
     const ins = await db.query(
