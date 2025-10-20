@@ -50,7 +50,7 @@ import { apiClient } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
 import { useDebounce } from "@/hooks/useDebounce";
 
-// Small vertical ON/OFF button used in Active column
+// Small rectangular ON/OFF button used in Active column (horizontal)
 interface VSwitchProps { checked: boolean; onChange: (next: boolean) => void; className?: string }
 const VerticalOnOff: React.FC<VSwitchProps> = ({ checked, onChange, className }) => (
   <button
@@ -63,15 +63,15 @@ const VerticalOnOff: React.FC<VSwitchProps> = ({ checked, onChange, className })
     }}
     title={checked ? "Active" : "Inactive"}
     className={[
-      "inline-flex flex-col justify-between items-center",
-      "h-10 w-7 rounded-md border border-slate-300 overflow-hidden",
-      "focus:outline-none focus:ring-2 focus:ring-emerald-300",
-      "transition-all duration-200",
+      "inline-flex items-center justify-center select-none",
+      "h-[22px] w-[48px] text-[10px] font-semibold uppercase",
+      "rounded-sm border border-slate-300",
+      "transition-all duration-150 focus:outline-none focus:ring-2 focus:ring-green-300",
+      checked ? "bg-green-600 text-white hover:bg-green-700" : "bg-slate-200 text-slate-700 hover:bg-slate-300",
       className || "",
     ].join(" ")}
   >
-    <span className={["w-full text-[10px] leading-[18px] text-center select-none", checked ? "bg-emerald-500 text-white" : "bg-slate-200 text-slate-700"].join(" ")}>ON</span>
-    <span className={["w-full text-[10px] leading-[18px] text-center select-none", checked ? "bg-slate-200 text-slate-700" : "bg-slate-400 text-white"].join(" ")}>OFF</span>
+    {checked ? "ON" : "OFF"}
   </button>
 );
 import {
