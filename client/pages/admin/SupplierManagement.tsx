@@ -569,8 +569,8 @@ export default function SupplierManagement() {
                   <TableCell className="capitalize leading-tight">
                     {Array.isArray(supplier.modules) ? supplier.modules.join(", ") : supplier.product_type || "-"}
                   </TableCell>
-                  <TableCell className="uppercase leading-tight">{supplier.base_currency || "USD"}</TableCell>
-                  <TableCell className="leading-tight">
+                  <TableCell className="uppercase leading-tight py-2">{supplier.base_currency || "USD"}</TableCell>
+                  <TableCell className="leading-tight py-2">
                     {typeof supplier.base_markup === "number" ? `${supplier.base_markup}%` : "-"}
                   </TableCell>
                   <TableCell className="leading-tight">
