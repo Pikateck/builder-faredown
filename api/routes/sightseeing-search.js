@@ -2,7 +2,7 @@ const express = require("express");
 const axios = require("axios");
 const crypto = require("crypto");
 const db = require("../database/connection");
-const router = express.Router();
+const router = require("express").Router();
 
 // Hotelbeds Activities API Configuration
 const HOTELBEDS_API_KEY =
