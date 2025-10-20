@@ -1,7 +1,7 @@
 const express = require("express");
 const { body, validationResult, query } = require("express-validator");
 const { pool } = require("../database/connection");
-const router = express.Router();
+const router = require("express").Router();
 
 // Middleware for authentication (adjust based on your auth system)
 const requireAuth = (req, res, next) => {
