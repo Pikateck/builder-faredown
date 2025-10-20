@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useRef, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -28,18 +28,27 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Switch } from "@/components/ui/switch";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuShortcut,
+} from "@/components/ui/dropdown-menu";
 import { apiClient } from "@/lib/api";
 import { useToast } from "@/hooks/use-toast";
+import { useDebounce } from "@/hooks/useDebounce";
 import {
-  CheckCircle,
-  XCircle,
   Activity,
   Settings,
   Plus,
   Trash2,
-  Edit,
   RefreshCw,
   DollarSign,
+  Eye,
+  History,
+  MoreHorizontal,
 } from "lucide-react";
 
 interface Supplier {
