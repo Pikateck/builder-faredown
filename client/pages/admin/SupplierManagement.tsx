@@ -670,12 +670,6 @@ export default function SupplierManagement() {
                             </DropdownMenuItem>
                           </DropdownMenuContent>
                         </DropdownMenu>
-                        {/* Modals triggered conditionally below for Preview/Audit */}
-                        <Dialog>
-                          <DialogTrigger asChild>
-                            <span className="hidden" />
-                          </DialogTrigger>
-                        </Dialog>
                       </TableCell>
                     </TableRow>
                   );
