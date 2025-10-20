@@ -30,8 +30,8 @@ export default function OnOffToggle({ checked, onChange, size = "md", disabled, 
       }}
       className={cn(
         "relative inline-flex items-center border-2 transition-colors duration-200 rounded-xl",
-        // Match Refresh Data outline button shape but smaller
-        checked ? "bg-[#0071c2] border-[#0071c2]" : "bg-white border-gray-200",
+        // Green when ON, Red when OFF
+        checked ? "bg-emerald-600 border-emerald-600" : "bg-red-600 border-red-600",
         dims.track,
         disabled ? "opacity-60 cursor-not-allowed" : "cursor-pointer",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
@@ -40,9 +40,9 @@ export default function OnOffToggle({ checked, onChange, size = "md", disabled, 
       title={checked ? "ON" : "OFF"}
     >
       {/* Labels */}
-      <span className={cn("relative z-20 flex w-full items-center justify-between px-2 select-none font-semibold", dims.text)}>
-        <span className={cn(checked ? "text-white" : "text-[#003580]")}>On</span>
-        <span className={cn(checked ? "text-white/0" : "text-[#003580]")}>Off</span>
+      <span className={cn("relative z-20 flex w-full items-center justify-between px-2 select-none font-semibold uppercase", dims.text)}>
+        <span className={cn(checked ? "text-white" : "text-white/0")}>On</span>
+        <span className={cn(checked ? "text-white/0" : "text-white")}>Off</span>
       </span>
 
       {/* Thumb */}
