@@ -100,6 +100,13 @@ export default function SupplierManagement() {
   const [moduleFilter, setModuleFilter] = useState<string>("all");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [envFilter, setEnvFilter] = useState<string>("all");
+  const debouncedSearch = useDebounce(search, 250);
+
+  // Virtualization state
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const [scrollTop, setScrollTop] = useState(0);
+  const [viewportH, setViewportH] = useState(640);
+  const ROW_HEIGHT = 60; // px target per spec
 
   const { toast } = useToast();
 
