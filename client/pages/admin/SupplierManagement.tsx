@@ -638,21 +638,23 @@ export default function SupplierManagement() {
                         {(supplier as any).last_updated_by || "-"}
                       </TableCell>
                       <TableCell className="px-3 py-2">
-                        <TooltipProvider>
-                          <Tooltip>
-                            <TooltipTrigger asChild>
-                              <div className="p-1 inline-flex">
-                                <Switch
-                                  className="h-5 w-9"
-                                  checked={supplier.is_enabled}
-                                  onCheckedChange={() => toggleSupplier(supplier)}
-                                  aria-label={`Toggle ${supplier.name}`}
-                                />
-                              </div>
-                            </TooltipTrigger>
-                            <TooltipContent>Toggle active</TooltipContent>
-                          </Tooltip>
-                        </TooltipProvider>
+                        <div className="w-full flex items-center justify-center">
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className="p-1 ml-2 inline-flex cursor-pointer focus:ring-1 focus:ring-[#003580]/40 rounded">
+                                  <Switch
+                                    className="h-5 w-9 data-[state=checked]:bg-[#003580]"
+                                    checked={supplier.is_enabled}
+                                    onCheckedChange={() => toggleSupplier(supplier)}
+                                    aria-label="Toggle supplier active state"
+                                  />
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>{supplier.is_enabled ? "Active" : "Inactive"}</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </div>
                       </TableCell>
                       <TableCell className="px-3 py-2">
                         <DropdownMenu>
@@ -729,22 +731,24 @@ export default function SupplierManagement() {
                           {(supplier as any).last_updated_by || "-"}
                         </TableCell>
                         <TableCell className="px-3 py-2">
+                        <div className="w-full flex items-center justify-center">
                           <TooltipProvider>
                             <Tooltip>
                               <TooltipTrigger asChild>
-                                <div className="p-1 inline-flex">
+                                <div className="p-1 ml-2 inline-flex cursor-pointer focus:ring-1 focus:ring-[#003580]/40 rounded">
                                   <Switch
-                                    className="h-5 w-9"
+                                    className="h-5 w-9 data-[state=checked]:bg-[#003580]"
                                     checked={supplier.is_enabled}
                                     onCheckedChange={() => toggleSupplier(supplier)}
-                                    aria-label={`Toggle ${supplier.name}`}
+                                    aria-label="Toggle supplier active state"
                                   />
                                 </div>
                               </TooltipTrigger>
-                              <TooltipContent>Toggle active</TooltipContent>
+                              <TooltipContent>{supplier.is_enabled ? "Active" : "Inactive"}</TooltipContent>
                             </Tooltip>
                           </TooltipProvider>
-                        </TableCell>
+                        </div>
+                      </TableCell>
                         <TableCell className="px-3 py-2">
                           <DropdownMenu>
                             <DropdownMenuTrigger asChild>
