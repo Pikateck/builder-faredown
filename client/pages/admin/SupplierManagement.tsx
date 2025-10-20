@@ -694,14 +694,10 @@ export default function SupplierManagement() {
                             <Tooltip>
                               <TooltipTrigger asChild>
                                 <div className="p-1 ml-2 inline-flex cursor-pointer focus:ring-1 focus:ring-[#003580]/40 rounded">
-                                  <Switch
-                                    className="h-[18px] w-[30px] data-[state=checked]:bg-[#003580] transition-all duration-200" thumbClassName="h-[14px] w-[14px] translate-x-[2px] data-[state=checked]:translate-x-[16px]"
-                                    checked={supplier.is_enabled}
-                                    onCheckedChange={() =>
-                                      toggleSupplier(supplier)
-                                    }
-                                    aria-label="Toggle supplier active state"
-                                  />
+                                  <VerticalOnOff
+                                      checked={supplier.is_enabled}
+                                      onChange={() => toggleSupplier(supplier)}
+                                    />
                                 </div>
                               </TooltipTrigger>
                               <TooltipContent>
@@ -825,13 +821,9 @@ export default function SupplierManagement() {
                               <Tooltip>
                                 <TooltipTrigger asChild>
                                   <div className="p-1 ml-2 inline-flex cursor-pointer focus:ring-1 focus:ring-[#003580]/40 rounded">
-                                    <Switch
-                                      className="h-[18px] w-[30px] data-[state=checked]:bg-[#003580] transition-all duration-200" thumbClassName="h-[14px] w-[14px] translate-x-[2px] data-[state=checked]:translate-x-[16px]"
+                                    <VerticalOnOff
                                       checked={supplier.is_enabled}
-                                      onCheckedChange={() =>
-                                        toggleSupplier(supplier)
-                                      }
-                                      aria-label="Toggle supplier active state"
+                                      onChange={() => toggleSupplier(supplier)}
                                     />
                                   </div>
                                 </TooltipTrigger>
