@@ -660,7 +660,7 @@ export default function SupplierManagement() {
                               <Settings className="h-4 w-4 mr-2" /> Manage markups
                               <DropdownMenuShortcut>M</DropdownMenuShortcut>
                             </DropdownMenuItem>
-                            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+                            <DropdownMenuItem onClick={() => setPreviewSupplier(supplier)}>
                               <Activity className="h-4 w-4 mr-2" /> Preview price
                               <DropdownMenuShortcut>P</DropdownMenuShortcut>
                             </DropdownMenuItem>
@@ -757,10 +757,10 @@ export default function SupplierManagement() {
                                 <Settings className="h-4 w-4 mr-2" /> Manage markups
                                 <DropdownMenuShortcut>M</DropdownMenuShortcut>
                               </DropdownMenuItem>
-                              <DropdownMenuItem onClick={(e) => e.preventDefault()}>
-                                <Activity className="h-4 w-4 mr-2" /> Preview price
-                                <DropdownMenuShortcut>P</DropdownMenuShortcut>
-                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={() => setPreviewSupplier(supplier)}>
+                              <Activity className="h-4 w-4 mr-2" /> Preview price
+                              <DropdownMenuShortcut>P</DropdownMenuShortcut>
+                            </DropdownMenuItem>
                               <DropdownMenuItem onClick={(e) => e.preventDefault()}>
                                 <History className="h-4 w-4 mr-2" /> Audit log
                                 <DropdownMenuShortcut>A</DropdownMenuShortcut>
