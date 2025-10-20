@@ -445,14 +445,6 @@ export default function SupplierManagement() {
     }
   };
 
-  if (loading) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
-      </div>
-    );
-  }
-
   // Compute filtered list
   const normalized = (v: string | null | undefined) => (v || "").toLowerCase();
   const filteredSuppliers = useMemo(() => {
