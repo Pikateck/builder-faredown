@@ -465,7 +465,7 @@ export default function MarkupManagementHotel() {
       userType: "all",
       specialConditions: "",
     });
-    setIsCreateDialogOpen(true);
+    setActiveTab("create");
   };
 
   const handleEditMarkup = (markup: UIHotelMarkup) => {
