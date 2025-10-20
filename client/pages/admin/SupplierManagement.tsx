@@ -489,6 +489,12 @@ export default function SupplierManagement() {
         if (envFilter !== "all") {
           if (normalized(s.environment) !== normalized(envFilter)) return false;
         }
+        const pt = (s.product_type || "").toLowerCase();
+        const code = String(s.code || "").toUpperCase();
+        if (allow[pt] && !allow[pt].includes(code)) return false;
+        const key = `${pt}|${code}`;
+        if (seen.has(key)) return false;
+        seen.add(key);
         return true;
       })
       .sort((a, b) => a.name.localeCompare(b.name));
