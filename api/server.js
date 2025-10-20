@@ -457,6 +457,7 @@ app.use("/api/countries", countriesRoutes);
 app.use("/api/promo", promoRoutes);
 app.use("/api/feature-flags", featureFlagsRoutes);
 app.use("/api/recent-searches", recentSearchesRoutes);
+app.use("/api/loyalty", require("./routes/loyalty"));
 app.use("/api/health-check", healthCheckRoutes);
 app.use("/api/analytics", analyticsRoutes);
 app.use("/api/payments", authenticateToken, paymentRoutes);
