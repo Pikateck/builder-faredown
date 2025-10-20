@@ -54,7 +54,7 @@ export default function OnOffToggle({ checked, onChange, size = "md", disabled, 
       <span
         aria-hidden="true"
         className={cn(
-          "absolute left-1 rounded-full bg-white shadow-sm transition-transform duration-200",
+          "absolute left-0.5 rounded-full bg-white shadow transition-transform duration-200",
           dims.thumb,
           checked ? dims.translate : "translate-x-0",
         )}
