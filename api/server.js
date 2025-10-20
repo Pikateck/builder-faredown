@@ -481,8 +481,10 @@ app.use("/api/markups", authenticateToken, markupsUnifiedRoutes);
 app.use("/api/markup", authenticateToken, markupRoutes);
 app.use("/api/vat", authenticateToken, vatRoutes);
 app.use("/api/reports", authenticateToken, reportsRoutes);
-app.use("/api/suppliers", authenticateToken, suppliersRoutes);
+// Unified suppliers master first
 app.use("/api/suppliers", require("./routes/suppliers-master"));
+// Legacy mock suppliers kept on separate path for backward compatibility
+app.use("/api/suppliers-legacy", authenticateToken, suppliersRoutes);
 app.use("/api/admin/markups", require("./routes/admin-module-markups"));
 app.use(
   "/api/admin/suppliers",
