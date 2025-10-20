@@ -335,9 +335,10 @@ export default function SupplierManagement() {
       );
 
       if (response.success) {
+        const newEnabled = (response as any).data?.is_enabled ?? (response as any).data?.enabled ?? !supplier.is_enabled;
         toast({
           title: "Success",
-          description: `${supplier.name} ${response.data.is_enabled ? "enabled" : "disabled"}`,
+          description: `${supplier.name} ${newEnabled ? "enabled" : "disabled"}`,
         });
         loadSuppliers();
       }
