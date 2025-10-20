@@ -487,6 +487,14 @@ export default function SupplierManagement() {
   }, [viewportH, startIndex, filteredSuppliers.length, useVirtualization]);
   const visibleRows = useMemo(() => filteredSuppliers.slice(startIndex, endIndex), [filteredSuppliers, startIndex, endIndex]);
 
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-screen">
+        <RefreshCw className="h-8 w-8 animate-spin text-blue-600" />
+      </div>
+    );
+  }
+
   return (
     <div className="container mx-auto p-6">
       <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
