@@ -557,51 +557,29 @@ export default function SupplierManagement() {
             </TableRow>
           </TableHeader>
           <TableBody className="text-sm">
-            {filteredSuppliers.map((supplier) => {
+            {filteredSuppliers.map((supplier, idx) => {
               const validity =
                 supplier.valid_from || supplier.valid_to
                   ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
                   : "-";
               return (
-                <TableRow
-                  key={supplier.id}
-                  className={`align-top ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
-                >
-                  <TableCell className="font-medium leading-tight py-2">
-                    {supplier.name}
-                  </TableCell>
-                  <TableCell className="uppercase text-gray-600 leading-tight py-2">
-                    {supplier.code}
-                  </TableCell>
+                <TableRow key={supplier.id} className={`align-top ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
+                  <TableCell className="font-medium leading-tight py-2">{supplier.name}</TableCell>
+                  <TableCell className="uppercase text-gray-600 leading-tight py-2">{supplier.code}</TableCell>
                   <TableCell className="capitalize leading-tight py-2">
-                    {Array.isArray(supplier.modules)
-                      ? supplier.modules.join(", ")
-                      : supplier.product_type || "-"}
+                    {Array.isArray(supplier.modules) ? supplier.modules.join(", ") : supplier.product_type || "-"}
                   </TableCell>
-                  <TableCell className="uppercase leading-tight py-2">
-                    {supplier.base_currency || "USD"}
+                  <TableCell className="uppercase leading-tight py-2">{supplier.base_currency || "USD"}</TableCell>
+                  <TableCell className="leading-tight py-2">
+                    {typeof supplier.base_markup === "number" ? `${supplier.base_markup}%` : "-"}
                   </TableCell>
                   <TableCell className="leading-tight py-2">
-                    {typeof supplier.base_markup === "number"
-                      ? `${supplier.base_markup}%`
-                      : "-"}
+                    {typeof supplier.hedge_buffer === "number" ? `${supplier.hedge_buffer}%` : "-"}
                   </TableCell>
-                  <TableCell className="leading-tight py-2">
-                    {typeof supplier.hedge_buffer === "number"
-                      ? `${supplier.hedge_buffer}%`
-                      : "-"}
-                  </TableCell>
-                  <TableCell className="leading-tight py-2">
-                    {validity}
-                  </TableCell>
-                  <TableCell className="leading-tight py-2">
-                    {supplier.last_updated_by || "-"}
-                  </TableCell>
+                  <TableCell className="leading-tight py-2">{validity}</TableCell>
+                  <TableCell className="leading-tight py-2">{supplier.last_updated_by || "-"}</TableCell>
                   <TableCell className="py-2">
-                    <Switch
-                      checked={supplier.is_enabled}
-                      onCheckedChange={() => toggleSupplier(supplier)}
-                    />
+                    <Switch checked={supplier.is_enabled} onCheckedChange={() => toggleSupplier(supplier)} />
                   </TableCell>
                   <TableCell className="py-2">
                     {/* vertical compact actions */}
@@ -616,45 +594,29 @@ export default function SupplierManagement() {
                       </Button>
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-8 px-2 justify-start"
-                          >
+                          <Button size="sm" variant="outline" className="h-8 px-2 justify-start">
                             <Activity className="h-4 w-4 mr-1" /> Preview Price
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-md">
                           <DialogHeader>
-                            <DialogTitle>
-                              Preview Price — {supplier.name}
-                            </DialogTitle>
+                            <DialogTitle>Preview Price — {supplier.name}</DialogTitle>
                             <DialogDescription>
-                              Test the USD normalization, hedge and base markup,
-                              converted to display currency.
+                              Test the USD normalization, hedge and base markup, converted to display currency.
                             </DialogDescription>
                           </DialogHeader>
-                          <PreviewPriceForm
-                            supplierCode={supplier.code}
-                            baseCurrency={supplier.base_currency || "USD"}
-                          />
+                          <PreviewPriceForm supplierCode={supplier.code} baseCurrency={supplier.base_currency || "USD"} />
                         </DialogContent>
                       </Dialog>
                       <Dialog>
                         <DialogTrigger asChild>
-                          <Button
-                            size="sm"
-                            variant="outline"
-                            className="h-8 px-2 justify-start"
-                          >
+                          <Button size="sm" variant="outline" className="h-8 px-2 justify-start">
                             <Activity className="h-4 w-4 mr-1" /> Audit Log
                           </Button>
                         </DialogTrigger>
                         <DialogContent className="max-w-2xl">
                           <DialogHeader>
-                            <DialogTitle>
-                              Audit Log — {supplier.name}
-                            </DialogTitle>
+                            <DialogTitle>Audit Log — {supplier.name}</DialogTitle>
                           </DialogHeader>
                           <AuditLogList supplierCode={supplier.code} />
                         </DialogContent>
@@ -666,10 +628,7 @@ export default function SupplierManagement() {
             })}
             {filteredSuppliers.length === 0 && (
               <TableRow>
-                <TableCell
-                  colSpan={10}
-                  className="text-center text-gray-500 py-8"
-                >
+                <TableCell colSpan={10} className="text-center text-gray-500 py-8">
                   No suppliers match your filters.
                 </TableCell>
               </TableRow>
