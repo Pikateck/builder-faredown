@@ -46,7 +46,6 @@ import {
   Trash2,
   RefreshCw,
   DollarSign,
-  Eye,
   History,
   MoreHorizontal,
 } from "lucide-react";
