@@ -29,12 +29,11 @@ export default function OnOffToggle({ checked, onChange, size = "md", disabled, 
         }
       }}
       className={cn(
-        "relative inline-flex items-center rounded-full border border-slate-300 transition-colors duration-200",
+        "relative inline-flex items-center justify-start rounded-full border transition-all duration-200",
         "focus:outline-none focus:ring-2 focus:ring-emerald-300",
+        checked ? "bg-emerald-500 border-emerald-600" : "bg-slate-200 border-slate-300",
         dims.track,
-        checked ? "bg-emerald-500" : "bg-slate-200",
-        disabled && "opacity-50 cursor-not-allowed",
-        !disabled && "cursor-pointer",
+        disabled ? "opacity-50 cursor-not-allowed" : "cursor-pointer",
         className,
       )}
       title={checked ? "ON" : "OFF"}
