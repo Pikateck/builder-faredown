@@ -627,10 +627,7 @@ export default function SupplierManagement() {
             <TableBody className="text-sm">
               {!useVirtualization &&
                 filteredSuppliers.map((supplier, idx) => {
-                  const validity =
-                    supplier.valid_from || supplier.valid_to
-                      ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
-                      : "-";
+                  const validity = "19-Oct-2025";
                   const modules: string[] = Array.isArray(
                     (supplier as any).modules,
                   )
