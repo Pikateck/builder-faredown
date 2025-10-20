@@ -34,16 +34,44 @@ async function getRateFromUSD(to) {
 
 async function getSupplierAdjustments(supplierCode) {
   if (!supplierCode) return { hedge: 0, baseMarkup: 0, currency: "USD" };
-  const q = await db.query(
-    `SELECT base_currency, hedge_buffer, base_markup FROM supplier_master WHERE COALESCE(code, supplier_code) = $1`,
-    [norm(supplierCode)],
-  );
-  const row = q.rows[0] || {};
-  return {
-    hedge: Number(row.hedge_buffer || 0),
-    baseMarkup: Number(row.base_markup || 0),
-    currency: row.base_currency || "USD",
-  };
+  const key = norm(supplierCode);
+
+  // 1) Try unified suppliers_master
+  try {
+    const q1 = await db.query(
+      `SELECT base_currency, hedge_buffer_pct, base_markup_pct
+       FROM suppliers_master
+       WHERE lower(supplier_name) = lower($1)
+       LIMIT 1`,
+      [key],
+    );
+    if (q1.rows[0]) {
+      const r = q1.rows[0];
+      return {
+        hedge: Number(r.hedge_buffer_pct || 0),
+        baseMarkup: Number(r.base_markup_pct || 0),
+        currency: r.base_currency || "USD",
+      };
+    }
+  } catch (_) {}
+
+  // 2) Fallback to legacy supplier_master
+  try {
+    const q2 = await db.query(
+      `SELECT base_currency, hedge_buffer, base_markup FROM supplier_master WHERE COALESCE(code, supplier_code) = $1 LIMIT 1`,
+      [key],
+    );
+    const r = q2.rows[0];
+    if (r) {
+      return {
+        hedge: Number(r.hedge_buffer || 0),
+        baseMarkup: Number(r.base_markup || 0),
+        currency: r.base_currency || "USD",
+      };
+    }
+  } catch (_) {}
+
+  return { hedge: 0, baseMarkup: 0, currency: "USD" };
 }
 
 // GET /api/fx/convert?amount=100&from=AED&to=INR&supplier=tbo&includeHedge=true
