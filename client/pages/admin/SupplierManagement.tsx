@@ -462,6 +462,13 @@ export default function SupplierManagement() {
   const normalized = (v: string | null | undefined) => (v || "").toLowerCase();
   const filteredSuppliers = useMemo(() => {
     const q = debouncedSearch.trim().toLowerCase();
+    const seen = new Set<string>();
+    const allow: Record<string, string[]> = {
+      flights: ["AMADEUS", "TBO"],
+      hotels: ["TBO", "RATEHAWK", "HOTELBEDS"],
+      transfers: ["HOTELBEDS"],
+      sightseeing: ["HOTELBEDS"],
+    };
     const list = suppliers
       .filter((s) => {
         if (q.length > 0) {
@@ -875,7 +882,7 @@ export default function SupplierManagement() {
         >
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Audit Log ��� {auditSupplier.name}</DialogTitle>
+              <DialogTitle>Audit Log — {auditSupplier.name}</DialogTitle>
             </DialogHeader>
             <AuditLogList supplierCode={auditSupplier.code} />
           </DialogContent>
