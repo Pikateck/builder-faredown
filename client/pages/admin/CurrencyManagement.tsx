@@ -304,6 +304,10 @@ export default function CurrencyManagement() {
   const [lastRateUpdate, setLastRateUpdate] = useState(
     new Date().toISOString(),
   );
+  const [convAmount, setConvAmount] = useState<number>(0);
+  const [convFrom, setConvFrom] = useState<string>("");
+  const [convTo, setConvTo] = useState<string>("");
+  const [convResult, setConvResult] = useState<string>("");
 
   // Filter currencies
   const filteredCurrencies = currencies.filter((currency) => {
@@ -395,7 +399,7 @@ export default function CurrencyManagement() {
       maxAmount: 100000,
       source: "Manual",
     });
-    setIsCreateDialogOpen(true);
+    setActiveTab("create");
   };
 
   const handleEditCurrency = (currency: Currency) => {
@@ -406,7 +410,6 @@ export default function CurrencyManagement() {
 
   const handleSaveCurrency = () => {
     if (selectedCurrency) {
-      // Update existing currency
       setCurrencies(
         currencies.map((c) =>
           c.id === selectedCurrency.id
@@ -416,7 +419,6 @@ export default function CurrencyManagement() {
       );
       setIsEditDialogOpen(false);
     } else {
-      // Create new currency
       const newCurrency: Currency = {
         ...(formData as Currency),
         id: Date.now().toString(),
@@ -425,7 +427,7 @@ export default function CurrencyManagement() {
         change24h: 0,
       };
       setCurrencies([...currencies, newCurrency]);
-      setIsCreateDialogOpen(false);
+      setActiveTab("list");
     }
     setFormData({});
     setSelectedCurrency(null);
@@ -480,6 +482,9 @@ export default function CurrencyManagement() {
       setFormData({ ...formData, code });
     }
   };
+
+  const getCurrencyByCode = (code: string) =>
+    currencies.find((c) => c.code === code);
 
   const StatusBadge = ({ status }: { status: Currency["status"] }) => {
     const statusConfig = {
@@ -1033,11 +1038,13 @@ export default function CurrencyManagement() {
                       type="number"
                       placeholder="Enter amount"
                       className="text-lg"
+                      value={Number.isFinite(convAmount) && convAmount !== 0 ? convAmount : ""}
+                      onChange={(e) => setConvAmount(parseFloat(e.target.value) || 0)}
                     />
                   </div>
                   <div>
                     <Label>From Currency</Label>
-                    <Select>
+                    <Select value={convFrom} onValueChange={setConvFrom}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select currency" />
                       </SelectTrigger>
@@ -1054,7 +1061,7 @@ export default function CurrencyManagement() {
                   </div>
                   <div>
                     <Label>To Currency</Label>
-                    <Select>
+                    <Select value={convTo} onValueChange={setConvTo}>
                       <SelectTrigger>
                         <SelectValue placeholder="Select currency" />
                       </SelectTrigger>
@@ -1072,7 +1079,24 @@ export default function CurrencyManagement() {
                 </div>
 
                 <div className="text-center">
-                  <Button size="lg">
+                  <Button
+                    size="lg"
+                    onClick={() => {
+                      const from = getCurrencyByCode(convFrom);
+                      const to = getCurrencyByCode(convTo);
+                      if (!from || !to || !convAmount) {
+                        setConvResult("Please enter amount and select both currencies");
+                        return;
+                      }
+                      const inrPerUnitFrom = from.exchangeRate || 1; // INR per 1 unit of 'from'
+                      const inrAmount = convFrom === "INR" ? convAmount : convAmount * inrPerUnitFrom;
+                      const inrPerUnitTo = to.exchangeRate || 1; // INR per 1 unit of 'to'
+                      const result = convTo === "INR" ? inrAmount : inrAmount / inrPerUnitTo;
+                      setConvResult(
+                        `${convAmount.toFixed(2)} ${from.code} ≈ ${result.toFixed(2)} ${to.code}`,
+                      );
+                    }}
+                  >
                     <Calculator className="w-4 h-4 mr-2" />
                     Convert
                   </Button>
@@ -1080,11 +1104,13 @@ export default function CurrencyManagement() {
 
                 <div className="bg-gray-50 p-6 rounded-lg text-center">
                   <p className="text-2xl font-bold text-gray-900">
-                    Result will appear here
+                    {convResult || "Result will appear here"}
                   </p>
-                  <p className="text-sm text-gray-600 mt-2">
-                    Enter amount and select currencies to convert
-                  </p>
+                  {!convResult && (
+                    <p className="text-sm text-gray-600 mt-2">
+                      Enter amount and select currencies to convert
+                    </p>
+                  )}
                 </div>
               </div>
             </CardContent>
