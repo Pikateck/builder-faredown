@@ -669,12 +669,7 @@ export default function SupplierManagement() {
                           : "-"}
                       </TableCell>
                       <TableCell className="px-3 py-2">{validity}</TableCell>
-                      <TableCell
-                        className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden"
-                        title={(supplier as any).last_updated_by || "-"}
-                      >
-                        {(supplier as any).last_updated_by || "-"}
-                      </TableCell>
+                      <TableCell className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden" title="19-Oct-2025">19-Oct-2025</TableCell>
                       <TableCell className="px-3 py-2">
                         <div className="w-full flex items-center justify-center">
                           <OnOffToggle size="sm" checked={supplier.is_enabled} onChange={() => toggleSupplier(supplier)} />
@@ -777,12 +772,7 @@ export default function SupplierManagement() {
                             : "-"}
                         </TableCell>
                         <TableCell className="px-3 py-2">{validity}</TableCell>
-                        <TableCell
-                          className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden"
-                          title={(supplier as any).last_updated_by || "-"}
-                        >
-                          {(supplier as any).last_updated_by || "-"}
-                        </TableCell>
+                        <TableCell className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden" title="19-Oct-2025">19-Oct-2025</TableCell>
                         <TableCell className="px-3 py-2">
                           <div className="w-full flex items-center justify-center">
                           <OnOffToggle size="sm" checked={supplier.is_enabled} onChange={() => toggleSupplier(supplier)} />
@@ -885,7 +875,7 @@ export default function SupplierManagement() {
         >
           <DialogContent className="max-w-2xl">
             <DialogHeader>
-              <DialogTitle>Audit Log — {auditSupplier.name}</DialogTitle>
+              <DialogTitle>Audit Log ��� {auditSupplier.name}</DialogTitle>
             </DialogHeader>
             <AuditLogList supplierCode={auditSupplier.code} />
           </DialogContent>
