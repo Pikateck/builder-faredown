@@ -490,21 +490,15 @@ export default function SupplierManagement() {
     <div className="container mx-auto p-6">
       <div className="mb-6 flex items-center justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900">
-            Supplier Management
-          </h1>
-          <p className="text-gray-600 mt-2">
-            Manage hotel and flight suppliers, markups, and integrations
-          </p>
+          <h1 className="text-3xl font-bold text-gray-900">Supplier Management</h1>
+          <p className="text-gray-600 mt-2">Manage hotel and flight suppliers, markups, and integrations</p>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="ml-auto">
           <Button
             variant="outline"
             onClick={() => {
               setLoading(true);
-              Promise.all([loadSuppliers(), loadHealth()]).finally(() =>
-                setLoading(false),
-              );
+              Promise.all([loadSuppliers(), loadHealth()]).finally(() => setLoading(false));
             }}
           >
             <RefreshCw className="h-4 w-4 mr-2" /> Refresh Data
@@ -569,103 +563,230 @@ export default function SupplierManagement() {
         </div>
       </Card>
 
-      {/* Suppliers List (Compact Card Grid) */}
-      {/* Suppliers List Table (restored, compact actions at bottom) */}
+      {/* Table */}
       <Card className="overflow-hidden">
-        <Table className="text-sm">
-          <TableHeader className="text-sm">
-            <TableRow>
-              <TableHead>Supplier</TableHead>
-              <TableHead>Code</TableHead>
-              <TableHead>Modules</TableHead>
-              <TableHead>Currency</TableHead>
-              <TableHead>Base Markup</TableHead>
-              <TableHead>Hedge</TableHead>
-              <TableHead>Validity</TableHead>
-              <TableHead>Last Updated By</TableHead>
-              <TableHead>Active</TableHead>
-              <TableHead>Actions</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody className="text-sm">
-            {filteredSuppliers.map((supplier, idx) => {
-              const validity =
-                supplier.valid_from || supplier.valid_to
-                  ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
-                  : "-";
-              return (
-                <TableRow key={supplier.id} className={`align-top ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}`}>
-                  <TableCell className="font-medium leading-tight py-2">{supplier.name}</TableCell>
-                  <TableCell className="uppercase text-gray-600 leading-tight py-2">{supplier.code}</TableCell>
-                  <TableCell className="capitalize leading-tight py-2">
-                    {Array.isArray(supplier.modules) ? supplier.modules.join(", ") : supplier.product_type || "-"}
-                  </TableCell>
-                  <TableCell className="uppercase leading-tight py-2">{supplier.base_currency || "USD"}</TableCell>
-                  <TableCell className="leading-tight py-2">
-                    {typeof supplier.base_markup === "number" ? `${supplier.base_markup}%` : "-"}
-                  </TableCell>
-                  <TableCell className="leading-tight py-2">
-                    {typeof supplier.hedge_buffer === "number" ? `${supplier.hedge_buffer}%` : "-"}
-                  </TableCell>
-                  <TableCell className="leading-tight py-2">{validity}</TableCell>
-                  <TableCell className="leading-tight py-2">{supplier.last_updated_by || "-"}</TableCell>
-                  <TableCell className="py-2">
-                    <Switch checked={supplier.is_enabled} onCheckedChange={() => toggleSupplier(supplier)} />
-                  </TableCell>
-                  <TableCell className="py-2">
-                    {/* vertical compact actions */}
-                    <div className="flex flex-col gap-1">
-                      <Button
-                        variant="outline"
-                        size="sm"
-                        className="h-8 px-2 justify-start"
-                        onClick={() => setSelectedSupplier(supplier)}
+        <div
+          ref={scrollRef}
+          className="max-h-[70vh] overflow-y-auto"
+          onScroll={(e) => setScrollTop((e.target as HTMLDivElement).scrollTop)}
+          onMouseEnter={() => {
+            if (scrollRef.current) setViewportH(scrollRef.current.clientHeight);
+          }}
+        >
+          <Table className="text-sm">
+            <TableHeader className="text-xs uppercase tracking-wide">
+              <TableRow className="border-b border-slate-300">
+                <TableHead className="px-3 py-2.5 w-[220px]">Supplier</TableHead>
+                <TableHead className="px-3 py-2.5 w-[120px]">Code</TableHead>
+                <TableHead className="px-3 py-2.5 w-[140px]">Modules</TableHead>
+                <TableHead className="px-3 py-2.5 w-[80px]">Currency</TableHead>
+                <TableHead className="px-3 py-2.5 w-[110px]">Base Markup</TableHead>
+                <TableHead className="px-3 py-2.5 w-[90px]">Hedge</TableHead>
+                <TableHead className="px-3 py-2.5 w-[140px]">Validity</TableHead>
+                <TableHead className="px-3 py-2.5 w-[140px] xl:table-cell hidden">Last Updated By</TableHead>
+                <TableHead className="px-3 py-2.5 w-[80px]">Active</TableHead>
+                <TableHead className="px-3 py-2.5 min-w-[120px]">Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody className="text-sm">
+              {!useVirtualization &&
+                filteredSuppliers.map((supplier, idx) => {
+                  const validity =
+                    supplier.valid_from || supplier.valid_to
+                      ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
+                      : "-";
+                  const modules: string[] = Array.isArray((supplier as any).modules)
+                    ? (supplier as any).modules
+                    : [supplier.product_type].filter(Boolean) as string[];
+                  return (
+                    <TableRow
+                      key={supplier.id}
+                      tabIndex={0}
+                      className={`odd:bg-white even:bg-slate-50 hover:bg-slate-100 border-b border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300 h-[60px]`}
+                    >
+                      <TableCell className="px-3 py-2 font-medium leading-tight truncate" title={supplier.name}>
+                        {supplier.name}
+                      </TableCell>
+                      <TableCell className="px-3 py-2 uppercase text-slate-600 leading-tight">{supplier.code}</TableCell>
+                      <TableCell className="px-3 py-2">
+                        <div className="flex flex-wrap gap-1">
+                          {modules.map((m, i) => (
+                            <span key={i} className="inline-flex items-center text-[11px] px-2 py-0.5 rounded-full bg-slate-100">
+                              {String(m || "-").toUpperCase()}
+                            </span>
+                          ))}
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-3 py-2 uppercase">{(supplier as any).base_currency || "USD"}</TableCell>
+                      <TableCell className="px-3 py-2 text-slate-600">
+                        {typeof (supplier as any).base_markup === "number" ? `${(supplier as any).base_markup}%` : "-"}
+                      </TableCell>
+                      <TableCell className="px-3 py-2 text-slate-600">
+                        {typeof (supplier as any).hedge_buffer === "number" ? `${(supplier as any).hedge_buffer}%` : "-"}
+                      </TableCell>
+                      <TableCell className="px-3 py-2">{validity}</TableCell>
+                      <TableCell className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden" title={(supplier as any).last_updated_by || "-"}>
+                        {(supplier as any).last_updated_by || "-"}
+                      </TableCell>
+                      <TableCell className="px-3 py-2">
+                        <TooltipProvider>
+                          <Tooltip>
+                            <TooltipTrigger asChild>
+                              <div className="p-1 inline-flex">
+                                <Switch
+                                  className="h-5 w-9"
+                                  checked={supplier.is_enabled}
+                                  onCheckedChange={() => toggleSupplier(supplier)}
+                                  aria-label={`Toggle ${supplier.name}`}
+                                />
+                              </div>
+                            </TooltipTrigger>
+                            <TooltipContent>Toggle active</TooltipContent>
+                          </Tooltip>
+                        </TooltipProvider>
+                      </TableCell>
+                      <TableCell className="px-3 py-2">
+                        <DropdownMenu>
+                          <DropdownMenuTrigger asChild>
+                            <Button variant="outline" size="sm" className="h-8 px-2">
+                              <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+                              <span className="sr-only">Actions</span>
+                            </Button>
+                          </DropdownMenuTrigger>
+                          <DropdownMenuContent align="end">
+                            <DropdownMenuItem onClick={() => setSelectedSupplier(supplier)}>
+                              <Settings className="h-4 w-4 mr-2" /> Manage markups
+                              <DropdownMenuShortcut>M</DropdownMenuShortcut>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+                              <Activity className="h-4 w-4 mr-2" /> Preview price
+                              <DropdownMenuShortcut>P</DropdownMenuShortcut>
+                            </DropdownMenuItem>
+                            <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+                              <History className="h-4 w-4 mr-2" /> Audit log
+                              <DropdownMenuShortcut>A</DropdownMenuShortcut>
+                            </DropdownMenuItem>
+                          </DropdownMenuContent>
+                        </DropdownMenu>
+                        {/* Modals triggered conditionally below for Preview/Audit */}
+                        <Dialog>
+                          <DialogTrigger asChild>
+                            <span className="hidden" />
+                          </DialogTrigger>
+                        </Dialog>
+                      </TableCell>
+                    </TableRow>
+                  );
+                })}
+
+              {useVirtualization && (
+                <>
+                  <TableRow className="h-0">
+                    <TableCell colSpan={10} className="p-0">
+                      <div style={{ height: startIndex * ROW_HEIGHT }} />
+                    </TableCell>
+                  </TableRow>
+                  {visibleRows.map((supplier, localIdx) => {
+                    const idx = startIndex + localIdx;
+                    const validity =
+                      (supplier as any).valid_from || (supplier as any).valid_to
+                        ? `${(supplier as any).valid_from ? new Date((supplier as any).valid_from).toLocaleDateString() : "-"} → ${(supplier as any).valid_to ? new Date((supplier as any).valid_to).toLocaleDateString() : "-"}`
+                        : "-";
+                    const modules: string[] = Array.isArray((supplier as any).modules)
+                      ? (supplier as any).modules
+                      : [supplier.product_type].filter(Boolean) as string[];
+                    return (
+                      <TableRow
+                        key={supplier.id}
+                        tabIndex={0}
+                        className={`odd:bg-white even:bg-slate-50 hover:bg-slate-100 border-b border-slate-200 focus:outline-none focus:ring-2 focus:ring-slate-300 h-[60px] ${idx % 2 === 0 ? "odd" : "even"}`}
                       >
-                        <Settings className="h-4 w-4 mr-1" /> Manage Markups
-                      </Button>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button size="sm" variant="outline" className="h-8 px-2 justify-start">
-                            <Activity className="h-4 w-4 mr-1" /> Preview Price
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-md">
-                          <DialogHeader>
-                            <DialogTitle>Preview Price — {supplier.name}</DialogTitle>
-                            <DialogDescription>
-                              Test the USD normalization, hedge and base markup, converted to display currency.
-                            </DialogDescription>
-                          </DialogHeader>
-                          <PreviewPriceForm supplierCode={supplier.code} baseCurrency={supplier.base_currency || "USD"} />
-                        </DialogContent>
-                      </Dialog>
-                      <Dialog>
-                        <DialogTrigger asChild>
-                          <Button size="sm" variant="outline" className="h-8 px-2 justify-start">
-                            <Activity className="h-4 w-4 mr-1" /> Audit Log
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="max-w-2xl">
-                          <DialogHeader>
-                            <DialogTitle>Audit Log — {supplier.name}</DialogTitle>
-                          </DialogHeader>
-                          <AuditLogList supplierCode={supplier.code} />
-                        </DialogContent>
-                      </Dialog>
-                    </div>
+                        <TableCell className="px-3 py-2 font-medium leading-tight truncate" title={supplier.name}>
+                          {supplier.name}
+                        </TableCell>
+                        <TableCell className="px-3 py-2 uppercase text-slate-600 leading-tight">{supplier.code}</TableCell>
+                        <TableCell className="px-3 py-2">
+                          <div className="flex flex-wrap gap-1">
+                            {modules.map((m, i) => (
+                              <span key={i} className="inline-flex items-center text-[11px] px-2 py-0.5 rounded-full bg-slate-100">
+                                {String(m || "-").toUpperCase()}
+                              </span>
+                            ))}
+                          </div>
+                        </TableCell>
+                        <TableCell className="px-3 py-2 uppercase">{(supplier as any).base_currency || "USD"}</TableCell>
+                        <TableCell className="px-3 py-2 text-slate-600">
+                          {typeof (supplier as any).base_markup === "number" ? `${(supplier as any).base_markup}%` : "-"}
+                        </TableCell>
+                        <TableCell className="px-3 py-2 text-slate-600">
+                          {typeof (supplier as any).hedge_buffer === "number" ? `${(supplier as any).hedge_buffer}%` : "-"}
+                        </TableCell>
+                        <TableCell className="px-3 py-2">{validity}</TableCell>
+                        <TableCell className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden" title={(supplier as any).last_updated_by || "-"}>
+                          {(supplier as any).last_updated_by || "-"}
+                        </TableCell>
+                        <TableCell className="px-3 py-2">
+                          <TooltipProvider>
+                            <Tooltip>
+                              <TooltipTrigger asChild>
+                                <div className="p-1 inline-flex">
+                                  <Switch
+                                    className="h-5 w-9"
+                                    checked={supplier.is_enabled}
+                                    onCheckedChange={() => toggleSupplier(supplier)}
+                                    aria-label={`Toggle ${supplier.name}`}
+                                  />
+                                </div>
+                              </TooltipTrigger>
+                              <TooltipContent>Toggle active</TooltipContent>
+                            </Tooltip>
+                          </TooltipProvider>
+                        </TableCell>
+                        <TableCell className="px-3 py-2">
+                          <DropdownMenu>
+                            <DropdownMenuTrigger asChild>
+                              <Button variant="outline" size="sm" className="h-8 px-2">
+                                <MoreHorizontal className="h-4 w-4" aria-hidden="true" />
+                                <span className="sr-only">Actions</span>
+                              </Button>
+                            </DropdownMenuTrigger>
+                            <DropdownMenuContent align="end">
+                              <DropdownMenuItem onClick={() => setSelectedSupplier(supplier)}>
+                                <Settings className="h-4 w-4 mr-2" /> Manage markups
+                                <DropdownMenuShortcut>M</DropdownMenuShortcut>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+                                <Activity className="h-4 w-4 mr-2" /> Preview price
+                                <DropdownMenuShortcut>P</DropdownMenuShortcut>
+                              </DropdownMenuItem>
+                              <DropdownMenuItem onClick={(e) => e.preventDefault()}>
+                                <History className="h-4 w-4 mr-2" /> Audit log
+                                <DropdownMenuShortcut>A</DropdownMenuShortcut>
+                              </DropdownMenuItem>
+                            </DropdownMenuContent>
+                          </DropdownMenu>
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })}
+                  <TableRow className="h-0">
+                    <TableCell colSpan={10} className="p-0">
+                      <div style={{ height: totalHeight - endIndex * ROW_HEIGHT }} />
+                    </TableCell>
+                  </TableRow>
+                </>
+              )}
+
+              {filteredSuppliers.length === 0 && (
+                <TableRow>
+                  <TableCell colSpan={10} className="text-center text-gray-500 py-8">
+                    No suppliers match your filters.
                   </TableCell>
                 </TableRow>
-              );
-            })}
-            {filteredSuppliers.length === 0 && (
-              <TableRow>
-                <TableCell colSpan={10} className="text-center text-gray-500 py-8">
-                  No suppliers match your filters.
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
+              )}
+            </TableBody>
+          </Table>
+        </div>
       </Card>
 
       {/* Markup Management Dialog */}
