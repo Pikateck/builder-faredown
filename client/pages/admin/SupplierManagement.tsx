@@ -524,7 +524,7 @@ export default function SupplierManagement() {
           <div className="flex flex-col gap-1">
             <Label>Environment</Label>
             <Select value={envFilter} onValueChange={setEnvFilter}>
-              <SelectTrigger>
+              <SelectTrigger className="h-9 text-sm">
                 <SelectValue placeholder="All" />
               </SelectTrigger>
               <SelectContent>
