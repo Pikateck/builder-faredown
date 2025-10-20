@@ -115,6 +115,7 @@ export default function SupplierManagement() {
   const [weightEdits, setWeightEdits] = useState<Record<string, number>>({});
   const [previewSupplier, setPreviewSupplier] = useState<Supplier | null>(null);
   const [auditSupplier, setAuditSupplier] = useState<Supplier | null>(null);
+  const [updating, setUpdating] = useState<Record<string, boolean>>({});
 
   // Filters state for list view
   const [search, setSearch] = useState("");
@@ -328,27 +329,24 @@ export default function SupplierManagement() {
   };
 
   const toggleSupplier = async (supplier: Supplier) => {
+    const code = String(supplier.code || "").toUpperCase();
+    setSuppliers((prev) => prev.map((s) => (s.code === code ? { ...s, is_enabled: !s.is_enabled } : s)));
+    setUpdating((u) => ({ ...u, [code]: true }));
     try {
-      const response = await apiClient.put<any>(
-        `/api/admin/suppliers/${supplier.code}`,
-        { is_enabled: !supplier.is_enabled },
-      );
-
+      const response = await apiClient.put<any>(`/api/admin/suppliers/${code}`, { is_enabled: !supplier.is_enabled });
       if (response.success) {
         const newEnabled = (response as any).data?.is_enabled ?? (response as any).data?.enabled ?? !supplier.is_enabled;
-        toast({
-          title: "Success",
-          description: `${supplier.name} ${newEnabled ? "enabled" : "disabled"}`,
-        });
-        loadSuppliers();
+        setSuppliers((prev) => prev.map((s) => (s.code === code ? { ...s, is_enabled: newEnabled } : s)));
+        toast({ title: "Success", description: `${supplier.name} ${newEnabled ? "enabled" : "disabled"}` });
+      } else {
+        throw new Error("API failed");
       }
     } catch (error) {
+      setSuppliers((prev) => prev.map((s) => (s.code === code ? { ...s, is_enabled: supplier.is_enabled } : s)));
       console.error("Error toggling supplier:", error);
-      toast({
-        title: "Error",
-        description: "Failed to update supplier",
-        variant: "destructive",
-      });
+      toast({ title: "Error", description: "Failed to update supplier", variant: "destructive" });
+    } finally {
+      setUpdating((u) => ({ ...u, [code]: false }));
     }
   };
 
@@ -685,7 +683,7 @@ export default function SupplierManagement() {
                       <TableCell className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden" title="19-Oct-2025">19-Oct-2025</TableCell>
                       <TableCell className="px-3 py-2">
                         <div className="w-full flex items-center justify-center">
-                          <OnOffToggle size="sm" checked={supplier.is_enabled} onChange={() => toggleSupplier(supplier)} />
+                          <OnOffToggle size="sm" checked={supplier.is_enabled} disabled={!!updating[String(supplier.code || "").toUpperCase()]} onChange={() => toggleSupplier(supplier)} />
                         </div>
                       </TableCell>
                       <TableCell className="px-3 py-2">
@@ -788,7 +786,7 @@ export default function SupplierManagement() {
                         <TableCell className="px-3 py-2 text-slate-600 truncate xl:table-cell hidden" title="19-Oct-2025">19-Oct-2025</TableCell>
                         <TableCell className="px-3 py-2">
                           <div className="w-full flex items-center justify-center">
-                          <OnOffToggle size="sm" checked={supplier.is_enabled} onChange={() => toggleSupplier(supplier)} />
+                          <OnOffToggle size="sm" checked={supplier.is_enabled} disabled={!!updating[String(supplier.code || "").toUpperCase()]} onChange={() => toggleSupplier(supplier)} />
                         </div>
                         </TableCell>
                         <TableCell className="px-3 py-2">
