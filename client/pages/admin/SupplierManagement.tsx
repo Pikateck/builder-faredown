@@ -94,6 +94,8 @@ export default function SupplierManagement() {
   const [loading, setLoading] = useState(true);
   const [healthData, setHealthData] = useState<any>(null);
   const [weightEdits, setWeightEdits] = useState<Record<string, number>>({});
+  const [previewSupplier, setPreviewSupplier] = useState<Supplier | null>(null);
+  const [auditSupplier, setAuditSupplier] = useState<Supplier | null>(null);
 
   // Filters state for list view
   const [search, setSearch] = useState("");
@@ -935,7 +937,7 @@ export default function SupplierManagement() {
                 <div className="mt-4 p-3 bg-blue-50 rounded">
                   <p className="text-sm font-semibold mb-1">Price Preview:</p>
                   <p className="text-sm">
-                    Base: ₹{previewPrice.result.basePrice} → Final: ₹
+                    Base: ₹{previewPrice.result.basePrice} �� Final: ₹
                     {previewPrice.result.finalPrice.toFixed(2)} (+
                     {previewPrice.result.increasePercent.toFixed(1)}%)
                   </p>
