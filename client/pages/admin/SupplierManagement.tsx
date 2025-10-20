@@ -5,6 +5,14 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
+import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -530,104 +538,103 @@ export default function SupplierManagement() {
       </Card>
 
       {/* Suppliers List (Compact Card Grid) */}
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
-        {filteredSuppliers.map((supplier) => {
-          const validity =
-            supplier.valid_from || supplier.valid_to
-              ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
-              : "-";
-          const modules = Array.isArray(supplier.modules)
-            ? supplier.modules.join(", ")
-            : supplier.product_type || "-";
-          return (
-            <Card key={supplier.id} className="p-4 flex flex-col h-full">
-              <div className="flex items-start justify-between gap-3">
-                <div>
-                  <div className="text-base font-semibold leading-tight">
-                    {supplier.name}
-                  </div>
-                  <div className="text-xs text-gray-500 uppercase">{supplier.code}</div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="text-[11px] px-2 py-0.5 rounded bg-gray-100 capitalize">
-                    {modules}
-                  </span>
-                  <Switch
-                    checked={supplier.is_enabled}
-                    onCheckedChange={() => toggleSupplier(supplier)}
-                  />
-                </div>
-              </div>
-
-              <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-1 text-xs text-gray-700">
-                <div>
-                  <span className="text-gray-500">Currency:</span>
-                  <span className="ml-1 uppercase">{supplier.base_currency || "USD"}</span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Base Markup:</span>
-                  <span className="ml-1">{typeof supplier.base_markup === "number" ? `${supplier.base_markup}%` : "-"}</span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Hedge:</span>
-                  <span className="ml-1">{typeof supplier.hedge_buffer === "number" ? `${supplier.hedge_buffer}%` : "-"}</span>
-                </div>
-                <div>
-                  <span className="text-gray-500">Validity:</span>
-                  <span className="ml-1">{validity}</span>
-                </div>
-                <div className="col-span-2 text-gray-500">
-                  Last Updated By: <span className="text-gray-800">{supplier.last_updated_by || "-"}</span>
-                </div>
-              </div>
-
-              {/* Footer actions */}
-              <div className="mt-3 pt-3 border-t flex flex-wrap gap-2">
-                <Button variant="outline" size="sm" onClick={() => setSelectedSupplier(supplier)}>
-                  <Settings className="h-4 w-4 mr-2" /> Manage Markups
-                </Button>
-
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size="sm" variant="outline">
-                      <Activity className="h-4 w-4 mr-2" /> Preview Price
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-md">
-                    <DialogHeader>
-                      <DialogTitle>Preview Price — {supplier.name}</DialogTitle>
-                      <DialogDescription>
-                        Test USD normalization, hedge and base markup, converted to display currency.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <PreviewPriceForm
-                      supplierCode={supplier.code}
-                      baseCurrency={supplier.base_currency || "USD"}
-                    />
-                  </DialogContent>
-                </Dialog>
-
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button size="sm" variant="outline">
-                      <Activity className="h-4 w-4 mr-2" /> Audit Log
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="max-w-2xl">
-                    <DialogHeader>
-                      <DialogTitle>Audit Log — {supplier.name}</DialogTitle>
-                    </DialogHeader>
-                    <AuditLogList supplierCode={supplier.code} />
-                  </DialogContent>
-                </Dialog>
-              </div>
-            </Card>
-          );
-        })}
-        {filteredSuppliers.length === 0 && (
-          <Card className="p-6 text-center text-gray-500">No suppliers match your filters.</Card>
-        )}
-      </div>
+      {/* Suppliers List Table (restored, compact actions at bottom) */}
+      <Card className="overflow-hidden">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead className="w-[20%]">Supplier</TableHead>
+              <TableHead className="w-[10%]">Code</TableHead>
+              <TableHead className="w-[14%]">Modules</TableHead>
+              <TableHead className="w-[8%]">Currency</TableHead>
+              <TableHead className="w-[10%]">Base Markup</TableHead>
+              <TableHead className="w-[10%]">Hedge</TableHead>
+              <TableHead className="w-[16%]">Validity</TableHead>
+              <TableHead className="w-[12%]">Last Updated By</TableHead>
+              <TableHead className="w-[8%]">Active</TableHead>
+              <TableHead className="w-[18%]">Actions</TableHead>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {filteredSuppliers.map((supplier) => {
+              const validity =
+                supplier.valid_from || supplier.valid_to
+                  ? `${supplier.valid_from ? new Date(supplier.valid_from).toLocaleDateString() : "-"} → ${supplier.valid_to ? new Date(supplier.valid_to).toLocaleDateString() : "-"}`
+                  : "-";
+              return (
+                <TableRow key={supplier.id} className="align-top">
+                  <TableCell className="font-medium leading-tight">{supplier.name}</TableCell>
+                  <TableCell className="uppercase text-gray-600 leading-tight">{supplier.code}</TableCell>
+                  <TableCell className="capitalize leading-tight">
+                    {Array.isArray(supplier.modules) ? supplier.modules.join(", ") : supplier.product_type || "-"}
+                  </TableCell>
+                  <TableCell className="uppercase leading-tight">{supplier.base_currency || "USD"}</TableCell>
+                  <TableCell className="leading-tight">
+                    {typeof supplier.base_markup === "number" ? `${supplier.base_markup}%` : "-"}
+                  </TableCell>
+                  <TableCell className="leading-tight">
+                    {typeof supplier.hedge_buffer === "number" ? `${supplier.hedge_buffer}%` : "-"}
+                  </TableCell>
+                  <TableCell className="leading-tight">{validity}</TableCell>
+                  <TableCell className="leading-tight">{supplier.last_updated_by || "-"}</TableCell>
+                  <TableCell>
+                    <Switch checked={supplier.is_enabled} onCheckedChange={() => toggleSupplier(supplier)} />
+                  </TableCell>
+                  <TableCell>
+                    {/* footer-like compact actions */}
+                    <div className="mt-1 pt-1 border-t flex flex-wrap gap-1 items-center">
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        className="h-8 px-2"
+                        onClick={() => setSelectedSupplier(supplier)}
+                      >
+                        <Settings className="h-4 w-4 mr-1" /> Manage Markups
+                      </Button>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button size="sm" variant="outline" className="h-8 px-2">
+                            <Activity className="h-4 w-4 mr-1" /> Preview Price
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-md">
+                          <DialogHeader>
+                            <DialogTitle>Preview Price — {supplier.name}</DialogTitle>
+                            <DialogDescription>
+                              Test the USD normalization, hedge and base markup, converted to display currency.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <PreviewPriceForm supplierCode={supplier.code} baseCurrency={supplier.base_currency || "USD"} />
+                        </DialogContent>
+                      </Dialog>
+                      <Dialog>
+                        <DialogTrigger asChild>
+                          <Button size="sm" variant="outline" className="h-8 px-2">
+                            <Activity className="h-4 w-4 mr-1" /> Audit Log
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="max-w-2xl">
+                          <DialogHeader>
+                            <DialogTitle>Audit Log — {supplier.name}</DialogTitle>
+                          </DialogHeader>
+                          <AuditLogList supplierCode={supplier.code} />
+                        </DialogContent>
+                      </Dialog>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+            {filteredSuppliers.length === 0 && (
+              <TableRow>
+                <TableCell colSpan={10} className="text-center text-gray-500 py-8">
+                  No suppliers match your filters.
+                </TableCell>
+              </TableRow>
+            )}
+          </TableBody>
+        </Table>
+      </Card>
 
       {/* Markup Management Dialog */}
       {selectedSupplier && (
