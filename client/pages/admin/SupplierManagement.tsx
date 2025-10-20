@@ -785,6 +785,33 @@ export default function SupplierManagement() {
         </div>
       </Card>
 
+      {/* Preview Price Dialog */}
+      {previewSupplier && (
+        <Dialog open={!!previewSupplier} onOpenChange={() => setPreviewSupplier(null)}>
+          <DialogContent className="max-w-md">
+            <DialogHeader>
+              <DialogTitle>Preview Price — {previewSupplier.name}</DialogTitle>
+              <DialogDescription>
+                Test the USD normalization, hedge and base markup, converted to display currency.
+              </DialogDescription>
+            </DialogHeader>
+            <PreviewPriceForm supplierCode={previewSupplier.code} baseCurrency={(previewSupplier as any).base_currency || "USD"} />
+          </DialogContent>
+        </Dialog>
+      )}
+
+      {/* Audit Log Dialog */}
+      {auditSupplier && (
+        <Dialog open={!!auditSupplier} onOpenChange={() => setAuditSupplier(null)}>
+          <DialogContent className="max-w-2xl">
+            <DialogHeader>
+              <DialogTitle>Audit Log — {auditSupplier.name}</DialogTitle>
+            </DialogHeader>
+            <AuditLogList supplierCode={auditSupplier.code} />
+          </DialogContent>
+        </Dialog>
+      )}
+
       {/* Markup Management Dialog */}
       {selectedSupplier && (
         <Dialog
