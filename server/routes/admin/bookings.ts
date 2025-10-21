@@ -80,8 +80,8 @@ router.get(
         
         -- Supplier details
         s.name as supplier_name,
-        s.code as supplier_code,
-        
+        COALESCE(hb.supplier_code, s.code) as supplier_code,
+
         -- Payment status
         p.status as payment_status,
         p.gateway_payment_id,
@@ -111,7 +111,7 @@ router.get(
       }
 
       if (supplier) {
-        whereConditions.push(`s.code = $${paramIndex}`);
+        whereConditions.push(`COALESCE(hb.supplier_code, s.code) = $${paramIndex}`);
         queryParams.push(supplier);
         paramIndex++;
       }
@@ -302,7 +302,7 @@ router.get(
         u.email,
         u.phone,
         s.name as supplier_name,
-        s.code as supplier_code,
+        COALESCE(hb.supplier_code, s.code) as supplier_code,
         s.type as supplier_type
       FROM hotel_bookings hb
       LEFT JOIN users u ON hb.user_id = u.id
