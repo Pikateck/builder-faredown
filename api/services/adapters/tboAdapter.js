@@ -132,7 +132,7 @@ class TBOAdapter extends BaseSupplierAdapter {
           `TBO Auth Request: ClientId=${authRequest.ClientId}, UserName=${authRequest.UserName}, EndUserIp=${authRequest.EndUserIp}`,
         );
 
-        const response = await this.httpClient.post(
+        const response = await this.authClient.post(
           "/Authenticate",
           authRequest,
         );
