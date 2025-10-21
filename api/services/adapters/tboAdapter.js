@@ -59,7 +59,9 @@ class TBOAdapter extends BaseSupplierAdapter {
         process.env.TBO_HOTEL_BOOKING ||
         "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
       hotelClientId:
-        process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID || process.env.TBO_AGENCY_ID,
+        process.env.TBO_HOTEL_CLIENT_ID ||
+        process.env.TBO_CLIENT_ID ||
+        process.env.TBO_AGENCY_ID,
       hotelUserId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_USERNAME,
       hotelPassword: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_PASSWORD,
       staticUserName: process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME,
@@ -152,7 +154,8 @@ class TBOAdapter extends BaseSupplierAdapter {
 
         // Some TBO envs return HTML on auth failure; detect and surface clearly
         if (typeof response.data === "string" && /<html/i.test(response.data)) {
-          const errorMsg = "TBO authentication returned HTML (likely wrong endpoint or missing /rest).";
+          const errorMsg =
+            "TBO authentication returned HTML (likely wrong endpoint or missing /rest).";
           this.logger.error(errorMsg, { baseURL: this.config.searchUrl });
           throw new Error(errorMsg);
         }
