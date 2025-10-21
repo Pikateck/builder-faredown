@@ -39,14 +39,60 @@ export class HotelsService {
     return enhancedHotelsService.getHotelDetails(hotelId, searchParams);
   }
 
-  async searchDestinations(query: string) {
-    return enhancedHotelsService
-      .getDestinations()
-      .then((destinations) =>
-        destinations.filter((dest) =>
-          dest.name.toLowerCase().includes(query.toLowerCase()),
+  async searchDestinations(query: string, limit: number = 10, popular: boolean = false) {
+    try {
+      // Popular list via TBO TopDestinations
+      if (!query || query.trim().length === 0) {
+        const top = await enhancedHotelsService.getTboTopDestinations();
+        return (top || []).slice(0, limit).map((c: any) => ({
+          id: c.code,
+          name: c.name,
+          country: c.country || "",
+          type: "city",
+        }));
+      }
+
+      const q = query.trim().toLowerCase();
+      const countries = await enhancedHotelsService.getTboCountries();
+      // Match up to 3 countries, then fetch their cities
+      const matchedCountries = countries
+        .filter((c: any) => c.name.toLowerCase().includes(q) || c.code.toLowerCase().includes(q))
+        .slice(0, 3);
+
+      const cityBatches = await Promise.all(
+        (matchedCountries.length ? matchedCountries : countries.slice(0, 5)).map((c: any) =>
+          enhancedHotelsService.getTboCities(c.code).then((cities: any[]) =>
+            cities.map((city: any) => ({ ...city, countryName: c.name })),
+          ),
         ),
       );
+      const allCities = cityBatches.flat();
+      const filtered = allCities
+        .filter(
+          (c: any) =>
+            c.name.toLowerCase().includes(q) ||
+            c.code.toLowerCase().includes(q) ||
+            (c.countryName || "").toLowerCase().includes(q),
+        )
+        .slice(0, limit)
+        .map((c: any) => ({
+          id: c.code,
+          name: c.name,
+          country: c.countryName || "",
+          type: "city",
+        }));
+
+      return filtered;
+    } catch (e) {
+      // Fallback to existing destinations list if TBO static fails
+      return enhancedHotelsService
+        .getDestinations()
+        .then((destinations) =>
+          destinations
+            .filter((dest) => dest.name.toLowerCase().includes(query.toLowerCase()))
+            .slice(0, limit),
+        );
+    }
   }
 
   async getPopularDestinations() {
