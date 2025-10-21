@@ -132,38 +132,43 @@ class TBOAdapter extends BaseSupplierAdapter {
           `TBO Auth Request: ClientId=${authRequest.ClientId}, UserName=${authRequest.UserName}, EndUserIp=${authRequest.EndUserIp}`,
         );
 
-        const response = await this.authClient.post(
+        const tryPaths = [
           "/Authenticate",
-          authRequest,
-        );
-
-        // Some TBO envs return HTML on auth failure; detect and surface clearly
-        if (typeof response.data === "string" && /<html/i.test(response.data)) {
-          const errorMsg =
-            "TBO authentication returned HTML (endpoint mismatch).";
-          this.logger.error(errorMsg, { baseURL: this.config.searchUrl });
-          throw new Error(errorMsg);
+          "/Authenticate/",
+          "/rest/Authenticate",
+        ];
+        let lastErr;
+        for (const p of tryPaths) {
+          try {
+            this.logger.info(`TBO Auth attempt -> ${this.config.hotelAuthBase}${p}`);
+            const res = await this.authClient.post(p, authRequest);
+            // HTML guard
+            if (typeof res.data === "string" && /<html/i.test(res.data)) {
+              throw new Error("HTML page returned");
+            }
+            if (res.data?.Status === 1 && res.data?.TokenId) {
+              this.tokenId = res.data.TokenId;
+              this.tokenExpiry = Date.now() + 55 * 60 * 1000;
+              await this.cacheToken(this.tokenId, this.tokenExpiry);
+              this.logger.info("TBO authentication successful");
+              return this.tokenId;
+            }
+            lastErr = new Error(
+              `Auth failed: ${res.data?.Error?.ErrorMessage || JSON.stringify(res.data)}`,
+            );
+          } catch (e) {
+            lastErr = e;
+            const status = e.response?.status;
+            const body = e.response?.data;
+            this.logger.error("TBO Auth attempt failed", {
+              url: `${this.config.hotelAuthBase}${p}`,
+              status,
+              body: typeof body === "string" ? body.slice(0, 200) : JSON.stringify(body)?.slice(0, 200),
+            });
+            continue;
+          }
         }
-
-        this.logger.info(
-          `TBO Auth Response: Status=${response.data.Status}, HasToken=${!!response.data.TokenId}`,
-        );
-
-        if (response.data.Status === 1 && response.data.TokenId) {
-          this.tokenId = response.data.TokenId;
-          // TBO tokens typically expire in 1 hour, set expiry to 55 minutes for safety
-          this.tokenExpiry = Date.now() + 55 * 60 * 1000;
-
-          // Cache the token in database
-          await this.cacheToken(this.tokenId, this.tokenExpiry);
-
-          this.logger.info("TBO authentication successful");
-          return this.tokenId;
-        } else {
-          const errorMsg = `TBO authentication failed: ${response.data.Error?.ErrorMessage || response.data.Error || JSON.stringify(response.data)}`;
-          this.logger.error(errorMsg);
-          throw new Error(errorMsg);
-        }
+        throw lastErr || new Error("TBO authentication failed");
       } else {
         // Static mode: use pre-configured token
         this.tokenId = process.env.TBO_TOKEN_ID;
