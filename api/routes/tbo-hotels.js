@@ -43,6 +43,17 @@ router.get("/health", async (req, res) => {
   }
 });
 
+// Egress IP helper (for TBO whitelist)
+router.get("/egress-ip", async (req, res) => {
+  try {
+    const axios = require("axios");
+    const r = await axios.get("https://api.ipify.org?format=json", { timeout: 5000 });
+    res.json({ success: true, ip: r.data?.ip });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 // Reset circuit breaker (diagnostics)
 router.post("/circuit/reset", async (req, res) => {
   try {
