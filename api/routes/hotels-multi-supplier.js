@@ -529,6 +529,81 @@ function transformHotelForFrontend({
 /**
  * Multi-Supplier Hotel Search
  */
+// POST variant for body-based search, primarily for TBO
+router.post("/search", async (req, res) => {
+  try {
+    const db = require("../database/connection");
+    const startTime = Date.now();
+
+    const {
+      city,
+      destination,
+      checkin,
+      checkout,
+      adults = 2,
+      rooms = 1,
+      children = 0,
+      childAges = [],
+      currency = "INR",
+      supplier = "tbo",
+      market = "IN",
+      channel = "web",
+    } = req.body || {};
+
+    const dest = String(destination || city || "").trim();
+    if (!dest || !checkin || !checkout) {
+      return res.status(400).json({
+        success: false,
+        error: "city/destination, checkin and checkout are required",
+      });
+    }
+
+    // Normalize rooms payload
+    const roomsArray = Array.isArray(rooms)
+      ? rooms
+      : [{ adults: Number(adults) || 1, children: Number(children) || 0, childAges }];
+
+    // Use requested supplier, default TBO
+    const supplierCode = String(supplier).toUpperCase();
+    const adapter = require("../services/adapters/supplierAdapterManager").getAdapter(
+      supplierCode,
+    );
+    if (!adapter || typeof adapter.searchHotels !== "function") {
+      return res.status(404).json({ success: false, error: `Supplier ${supplierCode} not available` });
+    }
+
+    const results = await adapter.searchHotels({
+      destination: dest,
+      checkIn: checkin,
+      checkOut: checkout,
+      adults,
+      children,
+      rooms: roomsArray,
+      childAges,
+      currency,
+      market,
+      channel,
+      maxResults: 100,
+    });
+
+    const duration = Date.now() - startTime;
+    // Best-effort search_logs insert
+    try {
+      await db.query(
+        `INSERT INTO search_logs (search_type, destination, adults, children, result_count, response_time_ms, supplier, created_at)
+         VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())`,
+        ["hotel", dest, Number(adults) || 0, Number(children) || 0, Array.isArray(results) ? results.length : 0, duration, supplierCode.toLowerCase()],
+      );
+    } catch (e) {
+      console.warn("search_logs insert skipped:", e.message);
+    }
+
+    return res.json({ success: true, data: Array.isArray(results) ? results : [] });
+  } catch (error) {
+    return res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 router.get("/search", async (req, res) => {
   try {
     console.log("🏨 Multi-supplier hotel search request:", req.query);
