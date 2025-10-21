@@ -81,18 +81,27 @@ class TBOAdapter extends BaseSupplierAdapter {
     this.authClient = axios.create({
       baseURL: this.config.hotelAuthBase,
       timeout: this.config.timeout,
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
     });
     // Hotel-specific HTTP clients
     this.hotelStaticClient = axios.create({
       baseURL: this.config.hotelStaticBase,
       timeout: this.config.timeout,
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
     });
     this.hotelSearchClient = axios.create({
       baseURL: this.config.hotelSearchBase,
       timeout: this.config.timeout,
-      headers: { "Content-Type": "application/json", Accept: "application/json" },
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
     });
     this.hotelBookingClient = axios.create({
       baseURL: this.config.hotelBookingBase,
