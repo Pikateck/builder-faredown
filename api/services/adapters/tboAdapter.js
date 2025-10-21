@@ -140,7 +140,9 @@ class TBOAdapter extends BaseSupplierAdapter {
         let lastErr;
         for (const p of tryPaths) {
           try {
-            this.logger.info(`TBO Auth attempt -> ${this.config.hotelAuthBase}${p}`);
+            this.logger.info(
+              `TBO Auth attempt -> ${this.config.hotelAuthBase}${p}`,
+            );
             const res = await this.authClient.post(p, authRequest);
             // HTML guard
             if (typeof res.data === "string" && /<html/i.test(res.data)) {
@@ -163,7 +165,10 @@ class TBOAdapter extends BaseSupplierAdapter {
             this.logger.error("TBO Auth attempt failed", {
               url: `${this.config.hotelAuthBase}${p}`,
               status,
-              body: typeof body === "string" ? body.slice(0, 200) : JSON.stringify(body)?.slice(0, 200),
+              body:
+                typeof body === "string"
+                  ? body.slice(0, 200)
+                  : JSON.stringify(body)?.slice(0, 200),
             });
             continue;
           }
@@ -803,16 +808,24 @@ class TBOAdapter extends BaseSupplierAdapter {
       let lastErr;
       for (const p of paths) {
         try {
-          this.logger.info(`TBO Hotel Auth attempt -> ${this.config.hotelAuthBase}${p}`);
+          this.logger.info(
+            `TBO Hotel Auth attempt -> ${this.config.hotelAuthBase}${p}`,
+          );
           const response = await this.hotelAuthClient.post(p, authRequest);
-          if (typeof response.data === "string" && /<html/i.test(response.data)) {
+          if (
+            typeof response.data === "string" &&
+            /<html/i.test(response.data)
+          ) {
             throw new Error("HTML page returned");
           }
           if (response.data?.Status === 1 && response.data?.TokenId) {
             // Cache token ~55 minutes (memory + DB)
             this.hotelTokenId = response.data.TokenId;
             this.hotelTokenExpiry = Date.now() + 55 * 60 * 1000;
-            await this.cacheHotelToken(this.hotelTokenId, this.hotelTokenExpiry);
+            await this.cacheHotelToken(
+              this.hotelTokenId,
+              this.hotelTokenExpiry,
+            );
             return this.hotelTokenId;
           }
           lastErr = new Error(
@@ -825,7 +838,10 @@ class TBOAdapter extends BaseSupplierAdapter {
           this.logger.error("TBO Hotel Auth attempt failed", {
             url: `${this.config.hotelAuthBase}${p}`,
             status,
-            body: typeof body === "string" ? body.slice(0, 200) : JSON.stringify(body)?.slice(0, 200),
+            body:
+              typeof body === "string"
+                ? body.slice(0, 200)
+                : JSON.stringify(body)?.slice(0, 200),
           });
           continue;
         }
