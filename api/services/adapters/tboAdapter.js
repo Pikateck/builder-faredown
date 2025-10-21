@@ -150,6 +150,13 @@ class TBOAdapter extends BaseSupplierAdapter {
           authRequest,
         );
 
+        // Some TBO envs return HTML on auth failure; detect and surface clearly
+        if (typeof response.data === "string" && /<html/i.test(response.data)) {
+          const errorMsg = "TBO authentication returned HTML (likely wrong endpoint or missing /rest).";
+          this.logger.error(errorMsg, { baseURL: this.config.searchUrl });
+          throw new Error(errorMsg);
+        }
+
         this.logger.info(
           `TBO Auth Response: Status=${response.data.Status}, HasToken=${!!response.data.TokenId}`,
         );
