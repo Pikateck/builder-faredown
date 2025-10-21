@@ -676,6 +676,7 @@ router.post("/logout", async (req, res) => {
 router.get("/balance", async (req, res) => {
   try {
     const adapter = getTboAdapter();
+    if (typeof adapter.resetCircuitBreaker === "function") adapter.resetCircuitBreaker();
     const data = await adapter.getAgencyBalance();
     res.json({ success: true, data });
   } catch (e) {
