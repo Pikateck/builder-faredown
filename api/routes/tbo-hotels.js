@@ -43,7 +43,18 @@ router.get("/health", async (req, res) => {
   }
 });
 
-// Search
+// Reset circuit breaker (diagnostics)
+router.post("/circuit/reset", async (req, res) => {
+  try {
+    const adapter = getTboAdapter();
+    if (typeof adapter.resetCircuitBreaker === "function") adapter.resetCircuitBreaker();
+    res.json({ success: true, data: { reset: true } });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+// Search (POST)
 router.post("/search", async (req, res) => {
   const start = Date.now();
   try {
@@ -77,6 +88,28 @@ router.post("/search", async (req, res) => {
     res
       .status(statusFromErrorCode(e.code))
       .json({ success: false, error: e.message, code: e.code });
+  }
+});
+
+// Search (GET convenience for diagnostics)
+router.get("/search", async (req, res) => {
+  try {
+    const adapter = getTboAdapter();
+    const {
+      destination, checkin, checkout, adults = 2, children = 0, rooms = 1, currency = "INR",
+    } = req.query;
+    const data = await adapter.searchHotels({
+      destination,
+      checkIn: checkin,
+      checkOut: checkout,
+      adults: Number(adults),
+      children: Number(children),
+      rooms: Number(rooms),
+      currency,
+    });
+    res.json({ success: true, data });
+  } catch (e) {
+    res.status(400).json({ success: false, error: e.message });
   }
 });
 
