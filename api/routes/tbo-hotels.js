@@ -47,7 +47,8 @@ router.get("/health", async (req, res) => {
 router.post("/circuit/reset", async (req, res) => {
   try {
     const adapter = getTboAdapter();
-    if (typeof adapter.resetCircuitBreaker === "function") adapter.resetCircuitBreaker();
+    if (typeof adapter.resetCircuitBreaker === "function")
+      adapter.resetCircuitBreaker();
     res.json({ success: true, data: { reset: true } });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
@@ -96,7 +97,13 @@ router.get("/search", async (req, res) => {
   try {
     const adapter = getTboAdapter();
     const {
-      destination, checkin, checkout, adults = 2, children = 0, rooms = 1, currency = "INR",
+      destination,
+      checkin,
+      checkout,
+      adults = 2,
+      children = 0,
+      rooms = 1,
+      currency = "INR",
     } = req.query;
     const data = await adapter.searchHotels({
       destination,
@@ -676,7 +683,8 @@ router.post("/logout", async (req, res) => {
 router.get("/balance", async (req, res) => {
   try {
     const adapter = getTboAdapter();
-    if (typeof adapter.resetCircuitBreaker === "function") adapter.resetCircuitBreaker();
+    if (typeof adapter.resetCircuitBreaker === "function")
+      adapter.resetCircuitBreaker();
     const data = await adapter.getAgencyBalance();
     res.json({ success: true, data });
   } catch (e) {
