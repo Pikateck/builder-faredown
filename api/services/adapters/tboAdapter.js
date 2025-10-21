@@ -12,22 +12,41 @@ const HotelDedupAndMergeUnified = require("../merging/hotelDedupAndMergeUnified"
 
 class TBOAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
+    // Normalize helper to ensure '/rest' suffix where required (TBO REST endpoints)
+    const ensureRest = (u) => {
+      try {
+        if (!u) return u;
+        const lower = String(u).toLowerCase();
+        if (lower.includes("/rest")) return u;
+        if (lower.endsWith(".svc") || lower.endsWith(".svc/")) {
+          return `${String(u).replace(/\/$/, "")}/rest`;
+        }
+        return u;
+      } catch {
+        return u;
+      }
+    };
+
+    const searchUrlRaw =
+      process.env.TBO_SEARCH_URL ||
+      "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest";
+    const bookingUrlRaw =
+      process.env.TBO_BOOKING_URL ||
+      "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest";
+    const hotelAuthBaseRaw =
+      process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION ||
+      "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc";
+
     super("TBO", {
-      searchUrl:
-        process.env.TBO_SEARCH_URL ||
-        "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest",
-      bookingUrl:
-        process.env.TBO_BOOKING_URL ||
-        "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest",
+      searchUrl: ensureRest(searchUrlRaw),
+      bookingUrl: ensureRest(bookingUrlRaw),
       agencyId: process.env.TBO_AGENCY_ID,
       endUserIp: process.env.TBO_END_USER_IP || "192.168.5.56",
       credentialMode: process.env.TBO_CREDENTIAL_MODE || "runtime",
       timeout: parseInt(process.env.TBO_TIMEOUT_MS || "15000"),
       requestsPerSecond: 10,
       // Hotel API specific configuration (live)
-      hotelAuthBase:
-        process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION ||
-        "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc",
+      hotelAuthBase: ensureRest(hotelAuthBaseRaw),
       hotelStaticBase:
         process.env.TBO_HOTEL_STATIC_DATA ||
         "https://apiwr.tboholidays.com/HotelAPI/",
