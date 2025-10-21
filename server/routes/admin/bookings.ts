@@ -111,7 +111,9 @@ router.get(
       }
 
       if (supplier) {
-        whereConditions.push(`COALESCE(hb.supplier_code, s.code) = $${paramIndex}`);
+        whereConditions.push(
+          `COALESCE(hb.supplier_code, s.code) = $${paramIndex}`,
+        );
         queryParams.push(supplier);
         paramIndex++;
       }

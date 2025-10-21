@@ -37,7 +37,9 @@ router.get("/health", async (req, res) => {
     const status = await adapter.performHealthCheck();
     res.json({ success: true, data: status });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -48,7 +50,9 @@ router.post("/search", async (req, res) => {
     const results = await adapter.searchHotels(req.body || {});
     res.json({ success: true, data: results });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -57,7 +61,9 @@ router.post("/prebook", async (req, res) => {
   try {
     const adapter = getTboAdapter();
     if (typeof adapter.preBookHotel !== "function") {
-      return res.status(501).json({ success: false, error: "PreBook not implemented" });
+      return res
+        .status(501)
+        .json({ success: false, error: "PreBook not implemented" });
     }
 
     // Idempotency for prebook
@@ -79,7 +85,9 @@ router.post("/prebook", async (req, res) => {
 
     res.json({ success: true, data });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -88,7 +96,9 @@ router.post("/book", async (req, res) => {
   try {
     const adapter = getTboAdapter();
     if (typeof adapter.bookHotel !== "function") {
-      return res.status(501).json({ success: false, error: "Book not implemented" });
+      return res
+        .status(501)
+        .json({ success: false, error: "Book not implemented" });
     }
 
     // Idempotency
@@ -123,19 +133,26 @@ router.post("/book", async (req, res) => {
     const price = bookingRes.Price || {};
 
     // Compute nights if possible
-    const checkInVal = stay.CheckIn || req.body.CheckIn || req.body.checkIn || null;
-    const checkOutVal = stay.CheckOut || req.body.CheckOut || req.body.checkOut || null;
+    const checkInVal =
+      stay.CheckIn || req.body.CheckIn || req.body.checkIn || null;
+    const checkOutVal =
+      stay.CheckOut || req.body.CheckOut || req.body.checkOut || null;
     let nights = null;
     if (checkInVal && checkOutVal) {
       const inD = new Date(checkInVal);
       const outD = new Date(checkOutVal);
       const diffMs = outD - inD;
-      if (!isNaN(diffMs) && diffMs > 0) nights = Math.round(diffMs / (1000 * 60 * 60 * 24));
+      if (!isNaN(diffMs) && diffMs > 0)
+        nights = Math.round(diffMs / (1000 * 60 * 60 * 24));
     }
 
     const childrenAges = Array.isArray(req.body.RoomGuests)
-      ? req.body.RoomGuests.flatMap((rg) => Array.isArray(rg.ChildAge) ? rg.ChildAge : [])
-      : Array.isArray(req.body.childrenAges) ? req.body.childrenAges : [];
+      ? req.body.RoomGuests.flatMap((rg) =>
+          Array.isArray(rg.ChildAge) ? rg.ChildAge : [],
+        )
+      : Array.isArray(req.body.childrenAges)
+        ? req.body.childrenAges
+        : [];
 
     const payload = {
       booking_ref: bookingRef,
@@ -153,23 +170,46 @@ router.post("/book", async (req, res) => {
       room_code: h.RoomTypeCode || req.body.RoomTypeCode || "",
       giata_room_type: null,
       max_occupancy: null,
-      guest_details: req.body.GuestDetails || { primaryGuest: req.body.PassengerDetails || {} },
+      guest_details: req.body.GuestDetails || {
+        primaryGuest: req.body.PassengerDetails || {},
+      },
       check_in_date: checkInVal,
       check_out_date: checkOutVal,
       nights,
-      rooms_count: Array.isArray(req.body.RoomGuests) ? req.body.RoomGuests.length : 1,
-      adults_count: (req.body.RoomGuests || []).reduce((s,r)=>s+(r.NoOfAdults||0),0) || (req.body.adults||0) || null,
-      children_count: (req.body.RoomGuests || []).reduce((s,r)=>s+(r.NoOfChild||0),0) || (req.body.children||0) || 0,
+      rooms_count: Array.isArray(req.body.RoomGuests)
+        ? req.body.RoomGuests.length
+        : 1,
+      adults_count:
+        (req.body.RoomGuests || []).reduce(
+          (s, r) => s + (r.NoOfAdults || 0),
+          0,
+        ) ||
+        req.body.adults ||
+        0 ||
+        null,
+      children_count:
+        (req.body.RoomGuests || []).reduce(
+          (s, r) => s + (r.NoOfChild || 0),
+          0,
+        ) ||
+        req.body.children ||
+        0 ||
+        0,
       children_ages: childrenAges,
       base_price: price.NetFare || price.BasePrice || null,
       markup_amount: null,
       markup_percentage: null,
       taxes: price.Taxes || null,
       fees: null,
-      total_amount: price.PublishedPrice || price.TotalPrice || req.body.TotalAmount || null,
+      total_amount:
+        price.PublishedPrice ||
+        price.TotalPrice ||
+        req.body.TotalAmount ||
+        null,
       currency: price.Currency || req.body.Currency || "INR",
       status: "confirmed",
-      supplier_booking_ref: bookingRes.BookingId || bookingRes.ConfirmationNo || null,
+      supplier_booking_ref:
+        bookingRes.BookingId || bookingRes.ConfirmationNo || null,
       supplier_response: bookingRes,
       special_requests: req.body.SpecialRequests || null,
       internal_notes: null,
@@ -203,12 +243,20 @@ router.post("/book", async (req, res) => {
     }
 
     if (!created.success) {
-      return res.status(500).json({ success: false, error: created.error || "Failed to persist booking", data: responsePayload });
+      return res
+        .status(500)
+        .json({
+          success: false,
+          error: created.error || "Failed to persist booking",
+          data: responsePayload,
+        });
     }
 
     res.json({ success: true, data: responsePayload });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -217,7 +265,9 @@ router.post("/voucher", async (req, res) => {
   try {
     const adapter = getTboAdapter();
     if (typeof adapter.generateHotelVoucher !== "function") {
-      return res.status(501).json({ success: false, error: "Voucher not implemented" });
+      return res
+        .status(501)
+        .json({ success: false, error: "Voucher not implemented" });
     }
 
     // Idempotency for voucher generation
@@ -256,7 +306,10 @@ router.post("/voucher", async (req, res) => {
     if (bookingRow) {
       const latest = await Voucher.findLatestByBookingId(bookingRow.id);
       if (latest.success && latest.data) {
-        return res.json({ success: true, data: { supplierResponse: null, persistedVoucher: latest.data } });
+        return res.json({
+          success: true,
+          data: { supplierResponse: null, persistedVoucher: latest.data },
+        });
       }
     }
 
@@ -265,7 +318,10 @@ router.post("/voucher", async (req, res) => {
 
     let voucherSaved = null;
     if (bookingRow) {
-      const voucherNumber = new Voucher().generateVoucherNumber(bookingRow.booking_ref, "hotel");
+      const voucherNumber = new Voucher().generateVoucherNumber(
+        bookingRow.booking_ref,
+        "hotel",
+      );
       voucherSaved = await Voucher.create({
         booking_id: bookingRow.id,
         voucher_type: "hotel",
@@ -284,14 +340,19 @@ router.post("/voucher", async (req, res) => {
       } catch {}
     }
 
-    const payload = { supplierResponse: data, persistedVoucher: voucherSaved?.data || null };
+    const payload = {
+      supplierResponse: data,
+      persistedVoucher: voucherSaved?.data || null,
+    };
     if (idemCacheKey) {
       await redis.setIfNotExists(idemCacheKey, payload, 600);
     }
 
     res.json({ success: true, data: payload });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -307,7 +368,9 @@ router.get("/booking/:bookingRef", async (req, res) => {
 
     const bookingResult = await HotelBooking.findByReference(bookingRef);
     if (!bookingResult.success || !bookingResult.data) {
-      return res.status(404).json({ success: false, error: "Booking not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Booking not found" });
     }
 
     const booking = bookingResult.data;
@@ -325,7 +388,9 @@ router.get("/booking/:bookingRef", async (req, res) => {
       try {
         // Prefer BookingId; if not numeric, try ConfirmationNo
         const ref = booking.supplier_booking_ref;
-        const params = /^\d+$/.test(String(ref)) ? { BookingId: ref } : { ConfirmationNo: ref };
+        const params = /^\d+$/.test(String(ref))
+          ? { BookingId: ref }
+          : { ConfirmationNo: ref };
         liveDetails = await adapter.getHotelBookingDetails(params);
       } catch (e) {
         liveDetails = { error: e.message };
@@ -334,7 +399,9 @@ router.get("/booking/:bookingRef", async (req, res) => {
 
     res.json({ success: true, data: { booking, latestVoucher, liveDetails } });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -343,7 +410,9 @@ router.post("/booking/cancel", async (req, res) => {
   try {
     const adapter = getTboAdapter();
     if (typeof adapter.cancelHotelBooking !== "function") {
-      return res.status(501).json({ success: false, error: "Cancel not implemented" });
+      return res
+        .status(501)
+        .json({ success: false, error: "Cancel not implemented" });
     }
 
     const db = require("../database/connection");
@@ -364,9 +433,13 @@ router.post("/booking/cancel", async (req, res) => {
 
     // If booking_ref provided, update DB status to cancelled
     if (req.body?.booking_ref) {
-      const upd = await HotelBooking.updateStatus(req.body.booking_ref, "cancelled", {
-        supplier_response: supplierRes,
-      });
+      const upd = await HotelBooking.updateStatus(
+        req.body.booking_ref,
+        "cancelled",
+        {
+          supplier_response: supplierRes,
+        },
+      );
       if (!upd.success) {
         console.warn("Cancel status update failed", upd.error);
       } else if (upd.data?.id) {
@@ -387,7 +460,9 @@ router.post("/booking/cancel", async (req, res) => {
 
     res.json({ success: true, data: supplierRes });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -396,12 +471,16 @@ router.post("/booking/details", async (req, res) => {
   try {
     const adapter = getTboAdapter();
     if (typeof adapter.getHotelBookingDetails !== "function") {
-      return res.status(501).json({ success: false, error: "Booking details not implemented" });
+      return res
+        .status(501)
+        .json({ success: false, error: "Booking details not implemented" });
     }
     const data = await adapter.getHotelBookingDetails(req.body || {});
     res.json({ success: true, data });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -425,7 +504,9 @@ router.get("/unified/hotels", async (req, res) => {
     ).rows;
     res.json({ success: true, data: rows });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -460,7 +541,9 @@ router.get("/unified/offers", async (req, res) => {
     ).rows;
     res.json({ success: true, data: rows });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -469,12 +552,16 @@ router.post("/info", async (req, res) => {
   try {
     const adapter = getTboAdapter();
     if (typeof adapter.getHotelInfo !== "function") {
-      return res.status(501).json({ success: false, error: "HotelInfo not implemented" });
+      return res
+        .status(501)
+        .json({ success: false, error: "HotelInfo not implemented" });
     }
     const data = await adapter.getHotelInfo(req.body || {});
     res.json({ success: true, data });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -483,12 +570,16 @@ router.post("/room", async (req, res) => {
   try {
     const adapter = getTboAdapter();
     if (typeof adapter.getHotelRoom !== "function") {
-      return res.status(501).json({ success: false, error: "HotelRoom not implemented" });
+      return res
+        .status(501)
+        .json({ success: false, error: "HotelRoom not implemented" });
     }
     const data = await adapter.getHotelRoom(req.body || {});
     res.json({ success: true, data });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -497,12 +588,16 @@ router.post("/change/status", async (req, res) => {
   try {
     const adapter = getTboAdapter();
     if (typeof adapter.getChangeRequestStatus !== "function") {
-      return res.status(501).json({ success: false, error: "Change status not implemented" });
+      return res
+        .status(501)
+        .json({ success: false, error: "Change status not implemented" });
     }
     const data = await adapter.getChangeRequestStatus(req.body || {});
     res.json({ success: true, data });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -511,7 +606,9 @@ router.post("/logout", async (req, res) => {
   try {
     const adapter = getTboAdapter();
     if (typeof adapter.logoutAll !== "function") {
-      return res.status(501).json({ success: false, error: "Logout not implemented" });
+      return res
+        .status(501)
+        .json({ success: false, error: "Logout not implemented" });
     }
     const data = await adapter.logoutAll();
     res.json({ success: true, data });
@@ -527,7 +624,9 @@ router.get("/balance", async (req, res) => {
     const data = await adapter.getAgencyBalance();
     res.json({ success: true, data });
   } catch (e) {
-    res.status(statusFromErrorCode(e.code)).json({ success: false, error: e.message, code: e.code });
+    res
+      .status(statusFromErrorCode(e.code))
+      .json({ success: false, error: e.message, code: e.code });
   }
 });
 
@@ -538,27 +637,44 @@ router.post("/validate", async (req, res) => {
     const body = req.body || {};
     const errors = [];
 
-    const has = (k) => body[k] !== undefined && body[k] !== null && String(body[k]).length > 0;
+    const has = (k) =>
+      body[k] !== undefined && body[k] !== null && String(body[k]).length > 0;
 
     if (type === "prebook") {
       if (!has("HotelCode")) errors.push("HotelCode is required");
-      if (!(has("RateKey") || has("RatePlanCode"))) errors.push("RateKey or RatePlanCode is required");
-      if (!has("RoomTypeCode") && !has("RoomType")) errors.push("RoomTypeCode or RoomType is required");
+      if (!(has("RateKey") || has("RatePlanCode")))
+        errors.push("RateKey or RatePlanCode is required");
+      if (!has("RoomTypeCode") && !has("RoomType"))
+        errors.push("RoomTypeCode or RoomType is required");
     } else if (type === "book") {
-      if (!(has("BookingId") || has("PreBookId") || has("ConfirmationNo"))) errors.push("BookingId/PreBookId/ConfirmationNo required");
-      if (!has("PassengerDetails") && !has("GuestDetails")) errors.push("PassengerDetails or GuestDetails required");
+      if (!(has("BookingId") || has("PreBookId") || has("ConfirmationNo")))
+        errors.push("BookingId/PreBookId/ConfirmationNo required");
+      if (!has("PassengerDetails") && !has("GuestDetails"))
+        errors.push("PassengerDetails or GuestDetails required");
     } else if (type === "voucher") {
-      if (!(has("BookingId") || has("ConfirmationNo"))) errors.push("BookingId or ConfirmationNo required");
+      if (!(has("BookingId") || has("ConfirmationNo")))
+        errors.push("BookingId or ConfirmationNo required");
     } else if (type === "cancel") {
-      if (!(has("BookingId") || has("ConfirmationNo"))) errors.push("BookingId or ConfirmationNo required");
+      if (!(has("BookingId") || has("ConfirmationNo")))
+        errors.push("BookingId or ConfirmationNo required");
     } else if (type === "info") {
       if (!has("HotelCode")) errors.push("HotelCode is required");
     } else if (type === "room") {
-      if (!(has("RateKey") || (has("HotelCode") && (has("RoomTypeCode") || has("RoomType"))))) {
-        errors.push("RateKey or (HotelCode and RoomTypeCode/RoomType) required");
+      if (
+        !(
+          has("RateKey") ||
+          (has("HotelCode") && (has("RoomTypeCode") || has("RoomType")))
+        )
+      ) {
+        errors.push(
+          "RateKey or (HotelCode and RoomTypeCode/RoomType) required",
+        );
       }
     } else if (type === "change_status") {
-      if (!has("ChangeRequestId") && !(has("BookingId") || has("ConfirmationNo"))) {
+      if (
+        !has("ChangeRequestId") &&
+        !(has("BookingId") || has("ConfirmationNo"))
+      ) {
         errors.push("ChangeRequestId or BookingId/ConfirmationNo required");
       }
     }

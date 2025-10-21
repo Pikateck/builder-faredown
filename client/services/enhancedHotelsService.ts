@@ -75,7 +75,8 @@ class EnhancedHotelsService extends EnhancedApiService {
   }
 
   async getTboCities(countryCode: string, force: boolean = false) {
-    if (!countryCode) return [] as { code: string; name: string; countryCode: string }[];
+    if (!countryCode)
+      return [] as { code: string; name: string; countryCode: string }[];
     try {
       const url = force
         ? `/tbo-hotels/static/cities/${encodeURIComponent(countryCode)}?force=1`
@@ -111,16 +112,29 @@ class EnhancedHotelsService extends EnhancedApiService {
   }
 
   // ---------- TBO Hotel Live Search/Book/Voucher ----------
-  private mapTboHotelsToFrontend(hotels: any[], destination: string, currency: string) {
+  private mapTboHotelsToFrontend(
+    hotels: any[],
+    destination: string,
+    currency: string,
+  ) {
     return (hotels || []).map((h: any, index: number) => {
-      const hotelId = String(h.hotelId || h.HotelId || h.HotelCode || h.id || index);
+      const hotelId = String(
+        h.hotelId || h.HotelId || h.HotelCode || h.id || index,
+      );
       const rates = Array.isArray(h.rates) ? h.rates : [];
       const best = rates.reduce(
-        (acc: any, r: any) => (acc && acc.price <= (r.price || r.markedUpPrice || r.originalPrice || 0) ? acc : r),
+        (acc: any, r: any) =>
+          acc &&
+          acc.price <= (r.price || r.markedUpPrice || r.originalPrice || 0)
+            ? acc
+            : r,
         rates[0],
       );
       const price = Number(
-        (best && (best.markedUpPrice || best.price || best.originalPrice)) || h.price || h.totalPrice || 0,
+        (best && (best.markedUpPrice || best.price || best.originalPrice)) ||
+          h.price ||
+          h.totalPrice ||
+          0,
       );
       const images: string[] = Array.isArray(h.images) ? h.images : [];
       const amenities: string[] = Array.isArray(h.amenities) ? h.amenities : [];
@@ -148,8 +162,14 @@ class EnhancedHotelsService extends EnhancedApiService {
           type: (rates?.[0]?.roomType as string) || "Standard Room",
           bedType: "Double bed",
           rateType: (rates?.[0]?.boardType as string) || "Flexible Rate",
-          paymentTerms: (rates?.[0]?.isRefundable ?? true) ? "Pay at property" : "Prepayment required",
-          cancellationPolicy: (rates?.[0]?.isRefundable ?? true) ? "Free cancellation" : "Non refundable",
+          paymentTerms:
+            (rates?.[0]?.isRefundable ?? true)
+              ? "Pay at property"
+              : "Prepayment required",
+          cancellationPolicy:
+            (rates?.[0]?.isRefundable ?? true)
+              ? "Free cancellation"
+              : "Non refundable",
         },
         address: {
           street: "",
@@ -184,8 +204,16 @@ class EnhancedHotelsService extends EnhancedApiService {
     } as any;
 
     const res = await apiClient.post<any>("/tbo-hotels/search", payload);
-    const data = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
-    return this.mapTboHotelsToFrontend(data, payload.destination, payload.currency);
+    const data = Array.isArray(res?.data)
+      ? res.data
+      : Array.isArray(res)
+        ? res
+        : [];
+    return this.mapTboHotelsToFrontend(
+      data,
+      payload.destination,
+      payload.currency,
+    );
   }
 
   async prebookTboHotel(body: any) {

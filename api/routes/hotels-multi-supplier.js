@@ -561,15 +561,27 @@ router.post("/search", async (req, res) => {
     // Normalize rooms payload
     const roomsArray = Array.isArray(rooms)
       ? rooms
-      : [{ adults: Number(adults) || 1, children: Number(children) || 0, childAges }];
+      : [
+          {
+            adults: Number(adults) || 1,
+            children: Number(children) || 0,
+            childAges,
+          },
+        ];
 
     // Use requested supplier, default TBO
     const supplierCode = String(supplier).toUpperCase();
-    const adapter = require("../services/adapters/supplierAdapterManager").getAdapter(
-      supplierCode,
-    );
+    const adapter =
+      require("../services/adapters/supplierAdapterManager").getAdapter(
+        supplierCode,
+      );
     if (!adapter || typeof adapter.searchHotels !== "function") {
-      return res.status(404).json({ success: false, error: `Supplier ${supplierCode} not available` });
+      return res
+        .status(404)
+        .json({
+          success: false,
+          error: `Supplier ${supplierCode} not available`,
+        });
     }
 
     const results = await adapter.searchHotels({
@@ -592,13 +604,24 @@ router.post("/search", async (req, res) => {
       await db.query(
         `INSERT INTO search_logs (search_type, destination, adults, children, result_count, response_time_ms, supplier, created_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, NOW())`,
-        ["hotel", dest, Number(adults) || 0, Number(children) || 0, Array.isArray(results) ? results.length : 0, duration, supplierCode.toLowerCase()],
+        [
+          "hotel",
+          dest,
+          Number(adults) || 0,
+          Number(children) || 0,
+          Array.isArray(results) ? results.length : 0,
+          duration,
+          supplierCode.toLowerCase(),
+        ],
       );
     } catch (e) {
       console.warn("search_logs insert skipped:", e.message);
     }
 
-    return res.json({ success: true, data: Array.isArray(results) ? results : [] });
+    return res.json({
+      success: true,
+      data: Array.isArray(results) ? results : [],
+    });
   } catch (error) {
     return res.status(500).json({ success: false, error: error.message });
   }
@@ -1208,12 +1231,10 @@ router.post("/booking/form", async (req, res) => {
     }
     const supplierCode = String(supplier).toUpperCase();
     if (supplierCode === "HOTELBEDS") {
-      return res
-        .status(400)
-        .json({
-          success: false,
-          error: "Use /api/hotels-live/checkrate for Hotelbeds",
-        });
+      return res.status(400).json({
+        success: false,
+        error: "Use /api/hotels-live/checkrate for Hotelbeds",
+      });
     }
     const adapter = supplierAdapterManager.getAdapter(supplierCode);
     if (!adapter?.getBookingForm) {
