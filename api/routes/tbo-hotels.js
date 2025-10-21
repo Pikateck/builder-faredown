@@ -267,13 +267,11 @@ router.post("/book", async (req, res) => {
     }
 
     if (!created.success) {
-      return res
-        .status(500)
-        .json({
-          success: false,
-          error: created.error || "Failed to persist booking",
-          data: responsePayload,
-        });
+      return res.status(500).json({
+        success: false,
+        error: created.error || "Failed to persist booking",
+        data: responsePayload,
+      });
     }
 
     res.json({ success: true, data: responsePayload });
