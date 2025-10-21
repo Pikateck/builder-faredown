@@ -77,12 +77,13 @@ class TBOAdapter extends BaseSupplierAdapter {
       },
     });
 
-    // Hotel-specific HTTP clients
-    this.hotelAuthClient = axios.create({
+    // Auth client (SharedAPI /SharedData.svc)
+    this.authClient = axios.create({
       baseURL: this.config.hotelAuthBase,
       timeout: this.config.timeout,
       headers: { "Content-Type": "application/json" },
     });
+    // Hotel-specific HTTP clients
     this.hotelStaticClient = axios.create({
       baseURL: this.config.hotelStaticBase,
       timeout: this.config.timeout,
