@@ -140,6 +140,7 @@ router.post("/book", async (req, res) => {
     const payload = {
       booking_ref: bookingRef,
       supplier_id: supplierId,
+      supplier_code: "tbo",
       user_id: null,
       hotel_code: String(h.HotelCode || h.Id || req.body.HotelCode || ""),
       hotel_name: h.HotelName || h.Name || "",
