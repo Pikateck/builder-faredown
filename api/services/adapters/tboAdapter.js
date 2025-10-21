@@ -41,6 +41,8 @@ class TBOAdapter extends BaseSupplierAdapter {
       searchUrl: ensureRest(searchUrlRaw),
       bookingUrl: ensureRest(bookingUrlRaw),
       agencyId: process.env.TBO_AGENCY_ID,
+      // Explicit API key used for flight auth; fall back to agency id when unset
+      apiKey: process.env.TBO_CLIENT_ID || process.env.TBO_AGENCY_ID,
       endUserIp: process.env.TBO_END_USER_IP || "192.168.5.56",
       credentialMode: process.env.TBO_CREDENTIAL_MODE || "runtime",
       timeout: parseInt(process.env.TBO_TIMEOUT_MS || "15000"),
@@ -57,7 +59,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         process.env.TBO_HOTEL_BOOKING ||
         "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
       hotelClientId:
-        process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID,
+        process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID || process.env.TBO_AGENCY_ID,
       hotelUserId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_USERNAME,
       hotelPassword: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_PASSWORD,
       staticUserName: process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME,
