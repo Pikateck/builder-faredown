@@ -17,6 +17,7 @@ class HotelBooking {
     const {
       booking_ref,
       supplier_id,
+      supplier_code,
       user_id,
       hotel_code,
       hotel_name,
@@ -59,11 +60,11 @@ class HotelBooking {
         nights, rooms_count, adults_count, children_count, children_ages,
         base_price, markup_amount, markup_percentage, taxes, fees, total_amount,
         currency, status, supplier_booking_ref, supplier_response,
-        special_requests, internal_notes
+        special_requests, internal_notes, supplier_code
       )
       VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17,
-        $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34
+        $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35
       )
       RETURNING *
     `;
@@ -103,6 +104,7 @@ class HotelBooking {
       JSON.stringify(supplier_response),
       special_requests,
       internal_notes,
+      supplier_code || null,
     ];
 
     try {
