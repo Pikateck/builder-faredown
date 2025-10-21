@@ -126,6 +126,7 @@ class TBOAdapter extends BaseSupplierAdapter {
           UserName: process.env.TBO_USERNAME,
           Password: process.env.TBO_PASSWORD,
           EndUserIp: this.config.endUserIp,
+          AgencyId: this.config.agencyId || process.env.TBO_AGENCY_ID,
         };
 
         this.logger.info(
