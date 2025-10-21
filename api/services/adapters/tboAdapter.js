@@ -799,20 +799,38 @@ class TBOAdapter extends BaseSupplierAdapter {
         Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
       };
-      const response = await this.hotelAuthClient.post(
-        "/Authenticate",
-        authRequest,
-      );
-      if (response.data?.Status === 1 && response.data?.TokenId) {
-        // Cache token ~55 minutes (memory + DB)
-        this.hotelTokenId = response.data.TokenId;
-        this.hotelTokenExpiry = Date.now() + 55 * 60 * 1000;
-        await this.cacheHotelToken(this.hotelTokenId, this.hotelTokenExpiry);
-        return this.hotelTokenId;
+      const paths = ["/Authenticate", "/Authenticate/", "/rest/Authenticate"];
+      let lastErr;
+      for (const p of paths) {
+        try {
+          this.logger.info(`TBO Hotel Auth attempt -> ${this.config.hotelAuthBase}${p}`);
+          const response = await this.hotelAuthClient.post(p, authRequest);
+          if (typeof response.data === "string" && /<html/i.test(response.data)) {
+            throw new Error("HTML page returned");
+          }
+          if (response.data?.Status === 1 && response.data?.TokenId) {
+            // Cache token ~55 minutes (memory + DB)
+            this.hotelTokenId = response.data.TokenId;
+            this.hotelTokenExpiry = Date.now() + 55 * 60 * 1000;
+            await this.cacheHotelToken(this.hotelTokenId, this.hotelTokenExpiry);
+            return this.hotelTokenId;
+          }
+          lastErr = new Error(
+            `TBO Hotel auth failed: ${response.data?.Error?.ErrorMessage || JSON.stringify(response.data)}`,
+          );
+        } catch (e) {
+          lastErr = e;
+          const status = e.response?.status;
+          const body = e.response?.data;
+          this.logger.error("TBO Hotel Auth attempt failed", {
+            url: `${this.config.hotelAuthBase}${p}`,
+            status,
+            body: typeof body === "string" ? body.slice(0, 200) : JSON.stringify(body)?.slice(0, 200),
+          });
+          continue;
+        }
       }
-      throw new Error(
-        `TBO Hotel auth failed: ${response.data?.Error?.ErrorMessage || JSON.stringify(response.data)}`,
-      );
+      throw lastErr || new Error("TBO Hotel auth failed");
     });
   }
 
