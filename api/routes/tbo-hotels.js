@@ -45,9 +45,33 @@ router.get("/health", async (req, res) => {
 
 // Search
 router.post("/search", async (req, res) => {
+  const start = Date.now();
   try {
     const adapter = getTboAdapter();
     const results = await adapter.searchHotels(req.body || {});
+    const duration = Date.now() - start;
+
+    // Best-effort search_logs insert for TBO route
+    try {
+      const db = require("../database/connection");
+      const b = req.body || {};
+      await db.query(
+        `INSERT INTO search_logs (search_type, destination, adults, children, result_count, response_time_ms, supplier, created_at)
+         VALUES ($1,$2,$3,$4,$5,$6,$7,NOW())`,
+        [
+          "hotel",
+          b.destination || b.City || b.city || null,
+          Number(b.adults || b.Adults || 0),
+          Number(b.children || b.Children || 0),
+          Array.isArray(results) ? results.length : 0,
+          duration,
+          "tbo",
+        ],
+      );
+    } catch (logErr) {
+      console.warn("search_logs insert skipped (tbo-hotels):", logErr.message);
+    }
+
     res.json({ success: true, data: results });
   } catch (e) {
     res
