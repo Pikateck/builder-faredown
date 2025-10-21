@@ -804,6 +804,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         UserName: this.config.hotelUserId,
         Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
+        AgencyId: this.config.agencyId || process.env.TBO_AGENCY_ID,
       };
       const paths = ["/Authenticate", "/Authenticate/", "/rest/Authenticate"];
       let lastErr;
