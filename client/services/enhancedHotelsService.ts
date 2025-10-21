@@ -57,6 +57,149 @@ class EnhancedHotelsService extends EnhancedApiService {
     super("hotels-live", "/hotels-live");
   }
 
+  // ---------- TBO Static Endpoints ----------
+  async getTboCountries(force: boolean = false) {
+    try {
+      const url = force
+        ? "/tbo-hotels/static/countries?force=1"
+        : "/tbo-hotels/static/countries";
+      const res = await apiClient.get<any>(url);
+      const list = (res?.data || res || []).map((c: any) => ({
+        code: c.CountryCode || c.Code || c.code || "",
+        name: c.CountryName || c.Name || c.name || "",
+      }));
+      return list.filter((c: any) => c.code && c.name);
+    } catch (e) {
+      return [] as { code: string; name: string }[];
+    }
+  }
+
+  async getTboCities(countryCode: string, force: boolean = false) {
+    if (!countryCode) return [] as { code: string; name: string; countryCode: string }[];
+    try {
+      const url = force
+        ? `/tbo-hotels/static/cities/${encodeURIComponent(countryCode)}?force=1`
+        : `/tbo-hotels/static/cities/${encodeURIComponent(countryCode)}`;
+      const res = await apiClient.get<any>(url);
+      const list = (res?.data || res || []).map((c: any) => ({
+        code: c.CityCode || c.Code || c.code || "",
+        name: c.CityName || c.Name || c.name || "",
+        countryCode,
+      }));
+      return list.filter((c: any) => c.code && c.name);
+    } catch (e) {
+      return [] as { code: string; name: string; countryCode: string }[];
+    }
+  }
+
+  async getTboTopDestinations(force: boolean = false) {
+    try {
+      const url = force
+        ? "/tbo-hotels/static/top-destinations?force=1"
+        : "/tbo-hotels/static/top-destinations";
+      const res = await apiClient.get<any>(url);
+      const list = (res?.data || res || []).map((c: any) => ({
+        code: c.CityCode || c.Code || c.code || "",
+        name: c.CityName || c.Name || c.name || "",
+        country: c.CountryName || c.Country || c.country || "",
+        type: "city",
+      }));
+      return list.filter((c: any) => c.code && c.name);
+    } catch (e) {
+      return [] as any[];
+    }
+  }
+
+  // ---------- TBO Hotel Live Search/Book/Voucher ----------
+  private mapTboHotelsToFrontend(hotels: any[], destination: string, currency: string) {
+    return (hotels || []).map((h: any, index: number) => {
+      const hotelId = String(h.hotelId || h.HotelId || h.HotelCode || h.id || index);
+      const rates = Array.isArray(h.rates) ? h.rates : [];
+      const best = rates.reduce(
+        (acc: any, r: any) => (acc && acc.price <= (r.price || r.markedUpPrice || r.originalPrice || 0) ? acc : r),
+        rates[0],
+      );
+      const price = Number(
+        (best && (best.markedUpPrice || best.price || best.originalPrice)) || h.price || h.totalPrice || 0,
+      );
+      const images: string[] = Array.isArray(h.images) ? h.images : [];
+      const amenities: string[] = Array.isArray(h.amenities) ? h.amenities : [];
+
+      return {
+        id: hotelId,
+        code: hotelId,
+        name: h.name || h.HotelName || `Hotel ${destination}`,
+        images,
+        rating: Number(h.starRating || h.rating || 4),
+        reviewCount: Number(h.reviewCount || 0),
+        currentPrice: price,
+        totalPrice: price,
+        currency: h.currency || currency || "INR",
+        amenities,
+        roomTypes: (rates || []).map((r: any) => ({
+          name: r.roomType || "Standard Room",
+          price: Number(r.markedUpPrice || r.price || r.originalPrice || price),
+          features: r.inclusions || [],
+          board: r.boardType || "Room Only",
+          boardType: r.boardType || "Room Only",
+          rateKey: r.rateKey,
+        })),
+        availableRoom: {
+          type: (rates?.[0]?.roomType as string) || "Standard Room",
+          bedType: "Double bed",
+          rateType: (rates?.[0]?.boardType as string) || "Flexible Rate",
+          paymentTerms: (rates?.[0]?.isRefundable ?? true) ? "Pay at property" : "Prepayment required",
+          cancellationPolicy: (rates?.[0]?.isRefundable ?? true) ? "Free cancellation" : "Non refundable",
+        },
+        address: {
+          street: "",
+          city: destination,
+          country: "",
+          postalCode: "",
+        },
+        supplier: "TBO",
+        supplierCode: "tbo",
+        isLiveData: true,
+      };
+    });
+  }
+
+  async searchTboHotels(params: {
+    destination: string;
+    checkIn?: string;
+    checkOut?: string;
+    adults?: number;
+    children?: number;
+    rooms?: number;
+    currency?: string;
+  }) {
+    const payload = {
+      destination: params.destination,
+      checkIn: params.checkIn || params["checkInDate" as any],
+      checkOut: params.checkOut || params["checkOutDate" as any],
+      rooms: params.rooms || 1,
+      adults: params.adults || 2,
+      children: params.children || 0,
+      currency: params.currency || "INR",
+    } as any;
+
+    const res = await apiClient.post<any>("/tbo-hotels/search", payload);
+    const data = Array.isArray(res?.data) ? res.data : Array.isArray(res) ? res : [];
+    return this.mapTboHotelsToFrontend(data, payload.destination, payload.currency);
+  }
+
+  async prebookTboHotel(body: any) {
+    return apiClient.post<any>("/tbo-hotels/prebook", body);
+  }
+
+  async bookTboHotel(body: any) {
+    return apiClient.post<any>("/tbo-hotels/book", body);
+  }
+
+  async voucherTboHotel(body: any) {
+    return apiClient.post<any>("/tbo-hotels/voucher", body);
+  }
+
   private createFallbackHotels(
     destination?: string,
     checkIn?: string,
@@ -131,7 +274,7 @@ class EnhancedHotelsService extends EnhancedApiService {
       currency: (params as any).currency || params.currencyCode || "INR",
       page: (params as any).page || 1,
       pageSize: (params as any).pageSize || 20,
-    };
+    } as any;
 
     const fallbackData = this.createFallbackHotels(
       normalizedParams.destination,
@@ -140,7 +283,19 @@ class EnhancedHotelsService extends EnhancedApiService {
     );
 
     try {
-      // Prefer multi-supplier endpoint (includes RateHawk + Hotelbeds)
+      // Force TBO-only first for live pricing
+      const tbo = await this.searchTboHotels({
+        destination: normalizedParams.destination,
+        checkIn: normalizedParams.checkIn,
+        checkOut: normalizedParams.checkOut,
+        adults: normalizedParams.adults,
+        children: normalizedParams.children,
+        rooms: normalizedParams.rooms,
+        currency: normalizedParams.currency,
+      });
+      if (Array.isArray(tbo) && tbo.length > 0) return tbo;
+
+      // Fallback to multi-supplier endpoint
       const multiSupplier = await apiClient.get<any>(
         "/hotels/search",
         normalizedParams,
@@ -153,7 +308,7 @@ class EnhancedHotelsService extends EnhancedApiService {
         return multiSupplier;
       }
 
-      // Fallback to hotels-live (Hotelbeds-only) if multi-supplier not available
+      // Fallback to hotels-live (Hotelbeds-only)
       const liveResponse = await this.safeGet(
         "/search",
         normalizedParams,
