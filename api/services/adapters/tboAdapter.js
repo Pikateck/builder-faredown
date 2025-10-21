@@ -12,57 +12,27 @@ const HotelDedupAndMergeUnified = require("../merging/hotelDedupAndMergeUnified"
 
 class TBOAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
-    // Normalize helper to ensure '/rest' suffix where required (TBO REST endpoints)
-    const ensureRest = (u) => {
-      try {
-        if (!u) return u;
-        const lower = String(u).toLowerCase();
-        if (lower.includes("/rest")) return u;
-        if (lower.endsWith(".svc") || lower.endsWith(".svc/")) {
-          return `${String(u).replace(/\/$/, "")}/rest`;
-        }
-        return u;
-      } catch {
-        return u;
-      }
-    };
-
     const searchUrlRaw =
       process.env.TBO_SEARCH_URL ||
-      "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest";
+      "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc";
     const bookingUrlRaw =
       process.env.TBO_BOOKING_URL ||
-      "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc/rest";
+      "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc";
     const hotelAuthBaseRaw =
       process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION ||
       "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc";
 
-    // Prefer real agency/user code over placeholder client ids
-    const normId = (v) => {
-      if (!v) return null;
-      const s = String(v).trim().toLowerCase();
-      if (s === "tboprod" || s === "prod" || s === "production") return null;
-      return v;
-    };
-    const agencyOrUser = process.env.TBO_AGENCY_ID || process.env.TBO_USERNAME;
-    const resolvedFlightClientId = normId(process.env.TBO_CLIENT_ID) || agencyOrUser;
-    const resolvedHotelClientId =
-      normId(process.env.TBO_HOTEL_CLIENT_ID) ||
-      normId(process.env.TBO_CLIENT_ID) ||
-      agencyOrUser;
-
     super("TBO", {
-      searchUrl: ensureRest(searchUrlRaw),
-      bookingUrl: ensureRest(bookingUrlRaw),
+      searchUrl: searchUrlRaw,
+      bookingUrl: bookingUrlRaw,
       agencyId: process.env.TBO_AGENCY_ID,
-      // Explicit API key used for flight auth; prefer agency/user when client id is placeholder
-      apiKey: resolvedFlightClientId,
+      apiKey: process.env.TBO_CLIENT_ID || process.env.TBO_AGENCY_ID,
       endUserIp: process.env.TBO_END_USER_IP || "192.168.5.56",
       credentialMode: process.env.TBO_CREDENTIAL_MODE || "runtime",
       timeout: parseInt(process.env.TBO_TIMEOUT_MS || "15000"),
       requestsPerSecond: 10,
       // Hotel API specific configuration (live)
-      hotelAuthBase: ensureRest(hotelAuthBaseRaw),
+      hotelAuthBase: hotelAuthBaseRaw,
       hotelStaticBase:
         process.env.TBO_HOTEL_STATIC_DATA ||
         "https://apiwr.tboholidays.com/HotelAPI/",
@@ -72,7 +42,8 @@ class TBOAdapter extends BaseSupplierAdapter {
       hotelBookingBase:
         process.env.TBO_HOTEL_BOOKING ||
         "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
-      hotelClientId: resolvedHotelClientId,
+      hotelClientId:
+        process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID || process.env.TBO_AGENCY_ID,
       hotelUserId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_USERNAME,
       hotelPassword: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_PASSWORD,
       staticUserName: process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME,
