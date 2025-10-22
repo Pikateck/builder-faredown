@@ -1077,7 +1077,7 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       // Use retry wrapper
       const res = await this.executeWithRetry(() =>
-        this.hotelSearchClient.post("/Search", payload),
+        tboRequest(`${this.config.hotelSearchBase}/Search`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
       );
       const hotels = res.data?.HotelResult || res.data?.Hotels || [];
 
