@@ -898,8 +898,8 @@ class TBOAdapter extends BaseSupplierAdapter {
         try {
           const egress = await this._getEgressIp();
           const url = `${this.config.hotelAuthBase}${p}`;
-          this.logger.info(`TBO Hotel Auth attempt -> ${url}`);
-          const response = await this.hotelAuthClient.post(p, authRequest);
+          this.logger.info("TBO Hotel Auth attempt", { url, via: tboVia() });
+          const response = await tboRequest(url, { method: "POST", data: authRequest, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } });
           if (
             typeof response.data === "string" &&
             /<html/i.test(response.data)
