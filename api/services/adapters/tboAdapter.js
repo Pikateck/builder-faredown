@@ -1597,10 +1597,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         if (cached) return cached;
       }
       const res = await this.executeWithRetry(() =>
-        this.hotelStaticClient.post("/TopDestinations", {
-          UserName: this.config.staticUserName?.trim(),
-          Password: this.config.staticPassword,
-        }),
+        tboRequest(`${this.config.hotelStaticBase}/TopDestinations`, { method: "POST", data: { UserName: this.config.staticUserName?.trim(), Password: this.config.staticPassword }, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
       );
       const data = res.data?.CityList || res.data?.Result || [];
       await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
