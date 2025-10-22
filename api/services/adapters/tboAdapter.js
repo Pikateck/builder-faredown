@@ -1650,10 +1650,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       // Hotel token logout
       if (this.hotelTokenId) {
         try {
-          await this.hotelAuthClient.post("/Logout", {
-            TokenId: this.hotelTokenId,
-            EndUserIp: this.config.endUserIp,
-          });
+          await tboRequest(`${this.config.hotelAuthBase}/Logout`, { method: "POST", data: { TokenId: this.hotelTokenId, EndUserIp: this.config.endUserIp }, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } });
         } catch {}
       }
       return { success: true };
