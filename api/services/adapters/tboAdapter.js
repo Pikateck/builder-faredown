@@ -77,8 +77,17 @@ class TBOAdapter extends BaseSupplierAdapter {
       },
     });
 
-    // Auth client (SharedAPI /SharedData.svc)
+    // Auth client (SharedAPI /SharedData.svc) - used for flight token
     this.authClient = axios.create({
+      baseURL: this.config.hotelAuthBase,
+      timeout: this.config.timeout,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+    // Separate hotel auth client to avoid accidental header/base mutations
+    this.hotelAuthClient = axios.create({
       baseURL: this.config.hotelAuthBase,
       timeout: this.config.timeout,
       headers: {
