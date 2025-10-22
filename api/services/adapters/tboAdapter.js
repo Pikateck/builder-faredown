@@ -1449,7 +1449,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         ...params,
       };
       const res = await this.executeWithRetry(
-        () => this.hotelBookingClient.post("/GenerateVoucher", payload),
+        () => tboRequest(`${this.config.hotelBookingBase}/GenerateVoucher`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
         5,
       );
       if (res.data?.Status === 1 || res.data?.VoucherNo) {
