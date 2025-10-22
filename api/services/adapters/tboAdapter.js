@@ -120,6 +120,38 @@ class TBOAdapter extends BaseSupplierAdapter {
 
     // Keep backward compatibility
     this.httpClient = this.searchClient;
+
+    // Diagnostics: in-memory ring buffer for recent auth attempts
+    this._authAttempts = [];
+    this._egressIp = null;
+    this._egressCheckedAt = 0;
+  }
+
+  // Diagnostics helpers
+  async _getEgressIp(force = false) {
+    try {
+      const now = Date.now();
+      if (!force && this._egressIp && now - this._egressCheckedAt < 10 * 60 * 1000) {
+        return this._egressIp;
+      }
+      const { data } = await axios.get("https://api.ipify.org?format=json", { timeout: 4000 });
+      this._egressIp = data?.ip || null;
+      this._egressCheckedAt = now;
+      return this._egressIp;
+    } catch {
+      return this._egressIp;
+    }
+  }
+  _recordAuthAttempt(entry) {
+    try {
+      const item = {
+        ts: new Date().toISOString(),
+        supplier: "TBO",
+        ...entry,
+      };
+      this._authAttempts.push(item);
+      if (this._authAttempts.length > 50) this._authAttempts.shift();
+    } catch {}
   }
 
   /**
@@ -159,9 +191,9 @@ class TBOAdapter extends BaseSupplierAdapter {
         let lastErr;
         for (const p of tryPaths) {
           try {
-            this.logger.info(
-              `TBO Auth attempt -> ${this.config.hotelAuthBase}${p}`,
-            );
+            const egress = await this._getEgressIp();
+            const url = `${this.config.hotelAuthBase}${p}`;
+            this.logger.info(`TBO Auth attempt -> ${url}`);
             const res = await this.authClient.post(p, authRequest);
             // HTML guard
             if (typeof res.data === "string" && /<html/i.test(res.data)) {
@@ -171,18 +203,23 @@ class TBOAdapter extends BaseSupplierAdapter {
               this.tokenId = res.data.TokenId;
               this.tokenExpiry = Date.now() + 55 * 60 * 1000;
               await this.cacheToken(this.tokenId, this.tokenExpiry);
+              this._recordAuthAttempt({ url, method: "POST", status: res.status || 200, bodySnippet: JSON.stringify(res.data).slice(0, 200), egressIp: egress });
               this.logger.info("TBO authentication successful");
               return this.tokenId;
             }
             lastErr = new Error(
               `Auth failed: ${res.data?.Error?.ErrorMessage || JSON.stringify(res.data)}`,
             );
+            this._recordAuthAttempt({ url, method: "POST", status: res.status || 200, bodySnippet: JSON.stringify(res.data).slice(0, 200), egressIp: egress });
           } catch (e) {
             lastErr = e;
             const status = e.response?.status;
             const body = e.response?.data;
+            const egress = await this._getEgressIp();
+            const url = `${this.config.hotelAuthBase}${p}`;
+            this._recordAuthAttempt({ url, method: "POST", status: status || null, bodySnippet: (typeof body === "string" ? body : JSON.stringify(body))?.slice(0, 200) || String(e.message).slice(0,200), egressIp: egress });
             this.logger.error("TBO Auth attempt failed", {
-              url: `${this.config.hotelAuthBase}${p}`,
+              url,
               status,
               body:
                 typeof body === "string"
@@ -828,9 +865,9 @@ class TBOAdapter extends BaseSupplierAdapter {
       let lastErr;
       for (const p of paths) {
         try {
-          this.logger.info(
-            `TBO Hotel Auth attempt -> ${this.config.hotelAuthBase}${p}`,
-          );
+          const egress = await this._getEgressIp();
+          const url = `${this.config.hotelAuthBase}${p}`;
+          this.logger.info(`TBO Hotel Auth attempt -> ${url}`);
           const response = await this.hotelAuthClient.post(p, authRequest);
           if (
             typeof response.data === "string" &&
@@ -846,17 +883,22 @@ class TBOAdapter extends BaseSupplierAdapter {
               this.hotelTokenId,
               this.hotelTokenExpiry,
             );
+            this._recordAuthAttempt({ url, method: "POST", status: response.status || 200, bodySnippet: JSON.stringify(response.data).slice(0, 200), egressIp: egress, hotel: true });
             return this.hotelTokenId;
           }
           lastErr = new Error(
             `TBO Hotel auth failed: ${response.data?.Error?.ErrorMessage || JSON.stringify(response.data)}`,
           );
+          this._recordAuthAttempt({ url, method: "POST", status: response.status || 200, bodySnippet: JSON.stringify(response.data).slice(0, 200), egressIp: egress, hotel: true });
         } catch (e) {
           lastErr = e;
           const status = e.response?.status;
           const body = e.response?.data;
+          const egress = await this._getEgressIp();
+          const url = `${this.config.hotelAuthBase}${p}`;
+          this._recordAuthAttempt({ url, method: "POST", status: status || null, bodySnippet: (typeof body === "string" ? body : JSON.stringify(body))?.slice(0, 200) || String(e.message).slice(0,200), egressIp: egress, hotel: true });
           this.logger.error("TBO Hotel Auth attempt failed", {
-            url: `${this.config.hotelAuthBase}${p}`,
+            url,
             status,
             body:
               typeof body === "string"
@@ -1445,10 +1487,12 @@ class TBOAdapter extends BaseSupplierAdapter {
       };
     } catch (error) {
       this.logger.error("TBO health check failed:", error);
+      const last = this._authAttempts[this._authAttempts.length - 1] || null;
       return {
         healthy: false,
         supplier: "TBO",
         error: error.message,
+        last_auth_attempt: last,
         timestamp: new Date().toISOString(),
       };
     }
