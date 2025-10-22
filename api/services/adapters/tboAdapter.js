@@ -7,6 +7,8 @@
 const BaseSupplierAdapter = require("./baseSupplierAdapter");
 const axios = require("axios");
 const pool = require("../../database/connection");
+const { tboRequest, tboVia } = require("../../lib/tboRequest");
+const { agentFor, proxyMode } = require("../../lib/proxy");
 const HotelNormalizer = require("../normalization/hotelNormalizer");
 const HotelDedupAndMergeUnified = require("../merging/hotelDedupAndMergeUnified");
 
