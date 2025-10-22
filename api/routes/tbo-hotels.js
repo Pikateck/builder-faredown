@@ -61,7 +61,9 @@ router.get("/diagnostics/auth", async (req, res) => {
 router.get("/egress-ip", async (req, res) => {
   try {
     const axios = require("axios");
-    const r = await axios.get("https://api.ipify.org?format=json", { timeout: 5000 });
+    const r = await axios.get("https://api.ipify.org?format=json", {
+      timeout: 5000,
+    });
     res.json({ success: true, ip: r.data?.ip });
   } catch (e) {
     res.status(500).json({ success: false, error: e.message });
