@@ -251,6 +251,7 @@ class TBOAdapter extends BaseSupplierAdapter {
             this.logger.error("TBO Auth attempt failed", {
               url,
               status,
+              via: tboVia(),
               body:
                 typeof body === "string"
                   ? body.slice(0, 200)
