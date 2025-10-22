@@ -43,6 +43,20 @@ router.get("/health", async (req, res) => {
   }
 });
 
+// Diagnostics: last auth attempts
+router.get("/diagnostics/auth", async (req, res) => {
+  try {
+    const adapter = getTboAdapter();
+    const attempts = Array.isArray(adapter._authAttempts)
+      ? adapter._authAttempts.slice(-20)
+      : [];
+    const egressIp = await adapter._getEgressIp().catch(() => null);
+    res.json({ success: true, data: { egressIp, attempts } });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 // Egress IP helper (for TBO whitelist)
 router.get("/egress-ip", async (req, res) => {
   try {
