@@ -479,7 +479,12 @@ try {
   const { agentFor } = require("./lib/proxy");
   app.get("/ops/egress-ip", async (_req, res) => {
     try {
-      const { data } = await axios({ url: "https://ifconfig.me", method: "GET", timeout: 8000, ...agentFor("https://ifconfig.me") });
+      const { data } = await axios({
+        url: "https://ifconfig.me",
+        method: "GET",
+        timeout: 8000,
+        ...agentFor("https://ifconfig.me"),
+      });
       res.send(String(data).trim());
     } catch (e) {
       res.status(500).send("error");

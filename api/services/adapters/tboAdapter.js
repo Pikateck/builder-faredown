@@ -202,7 +202,15 @@ class TBOAdapter extends BaseSupplierAdapter {
             const egress = await this._getEgressIp();
             const url = `${this.config.hotelAuthBase}${p}`;
             this.logger.info("TBO Auth attempt", { url, via: tboVia() });
-            const res = await tboRequest(url, { method: "POST", data: authRequest, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } });
+            const res = await tboRequest(url, {
+              method: "POST",
+              data: authRequest,
+              timeout: this.config.timeout,
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+              },
+            });
             // HTML guard
             if (typeof res.data === "string" && /<html/i.test(res.data)) {
               throw new Error("HTML page returned");
@@ -899,7 +907,15 @@ class TBOAdapter extends BaseSupplierAdapter {
           const egress = await this._getEgressIp();
           const url = `${this.config.hotelAuthBase}${p}`;
           this.logger.info("TBO Hotel Auth attempt", { url, via: tboVia() });
-          const response = await tboRequest(url, { method: "POST", data: authRequest, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } });
+          const response = await tboRequest(url, {
+            method: "POST",
+            data: authRequest,
+            timeout: this.config.timeout,
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          });
           if (
             typeof response.data === "string" &&
             /<html/i.test(response.data)
@@ -1077,7 +1093,15 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       // Use retry wrapper
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelSearchBase}/Search`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelSearchBase}/Search`, {
+          method: "POST",
+          data: payload,
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       const hotels = res.data?.HotelResult || res.data?.Hotels || [];
 
@@ -1292,7 +1316,18 @@ class TBOAdapter extends BaseSupplierAdapter {
         if (cached) return cached;
       }
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelStaticBase}/CountryList`, { method: "POST", data: { UserName: this.config.staticUserName?.trim(), Password: this.config.staticPassword }, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelStaticBase}/CountryList`, {
+          method: "POST",
+          data: {
+            UserName: this.config.staticUserName?.trim(),
+            Password: this.config.staticPassword,
+          },
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       const data = res.data?.CountryList || res.data?.Result || [];
       await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
@@ -1315,7 +1350,19 @@ class TBOAdapter extends BaseSupplierAdapter {
         if (cached) return cached;
       }
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelStaticBase}/CityList`, { method: "POST", data: { UserName: this.config.staticUserName?.trim(), Password: this.config.staticPassword, CountryCode: countryCode }, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelStaticBase}/CityList`, {
+          method: "POST",
+          data: {
+            UserName: this.config.staticUserName?.trim(),
+            Password: this.config.staticPassword,
+            CountryCode: countryCode,
+          },
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       const data = res.data?.CityList || res.data?.Result || [];
       await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
@@ -1338,7 +1385,19 @@ class TBOAdapter extends BaseSupplierAdapter {
         if (cached) return cached;
       }
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelStaticBase}/HotelCodesList`, { method: "POST", data: { UserName: this.config.staticUserName?.trim(), Password: this.config.staticPassword, CityCode: cityCode }, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelStaticBase}/HotelCodesList`, {
+          method: "POST",
+          data: {
+            UserName: this.config.staticUserName?.trim(),
+            Password: this.config.staticPassword,
+            CityCode: cityCode,
+          },
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       const data = res.data?.HotelCodes || res.data?.Result || [];
       await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
@@ -1363,7 +1422,19 @@ class TBOAdapter extends BaseSupplierAdapter {
         if (cached) return cached;
       }
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelStaticBase}/HotelDetails`, { method: "POST", data: { UserName: this.config.staticUserName?.trim(), Password: this.config.staticPassword, HotelCode: hotelCode }, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelStaticBase}/HotelDetails`, {
+          method: "POST",
+          data: {
+            UserName: this.config.staticUserName?.trim(),
+            Password: this.config.staticPassword,
+            HotelCode: hotelCode,
+          },
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       const data = res.data?.Hotel || res.data?.Result || null;
       await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
@@ -1395,7 +1466,15 @@ class TBOAdapter extends BaseSupplierAdapter {
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelSearchBase}/PreBook`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelSearchBase}/PreBook`, {
+          method: "POST",
+          data: payload,
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       if (res.data?.Status === 1 || res.data?.IsPriceChanged !== undefined) {
         return res.data;
@@ -1420,7 +1499,15 @@ class TBOAdapter extends BaseSupplierAdapter {
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelBookingBase}/Book`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelBookingBase}/Book`, {
+          method: "POST",
+          data: payload,
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       if (
         res.data?.Status === 1 ||
@@ -1449,7 +1536,16 @@ class TBOAdapter extends BaseSupplierAdapter {
         ...params,
       };
       const res = await this.executeWithRetry(
-        () => tboRequest(`${this.config.hotelBookingBase}/GenerateVoucher`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        () =>
+          tboRequest(`${this.config.hotelBookingBase}/GenerateVoucher`, {
+            method: "POST",
+            data: payload,
+            timeout: this.config.timeout,
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }),
         5,
       );
       if (res.data?.Status === 1 || res.data?.VoucherNo) {
@@ -1475,7 +1571,15 @@ class TBOAdapter extends BaseSupplierAdapter {
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelBookingBase}/GetBookingDetail`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelBookingBase}/GetBookingDetail`, {
+          method: "POST",
+          data: payload,
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       if (res.data?.Status === 1) {
         return res.data;
@@ -1502,7 +1606,15 @@ class TBOAdapter extends BaseSupplierAdapter {
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelBookingBase}/SendChangeRequest`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelBookingBase}/SendChangeRequest`, {
+          method: "POST",
+          data: payload,
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       if (res.data?.Status === 1) {
         return res.data;
@@ -1552,7 +1664,15 @@ class TBOAdapter extends BaseSupplierAdapter {
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelSearchBase}/HotelInfo`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelSearchBase}/HotelInfo`, {
+          method: "POST",
+          data: payload,
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       if (res.data?.Status === 1) return res.data;
       throw mapFromResponse(res);
@@ -1575,7 +1695,15 @@ class TBOAdapter extends BaseSupplierAdapter {
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelSearchBase}/HotelRoom`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelSearchBase}/HotelRoom`, {
+          method: "POST",
+          data: payload,
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       if (res.data?.Status === 1) return res.data;
       throw mapFromResponse(res);
@@ -1597,7 +1725,18 @@ class TBOAdapter extends BaseSupplierAdapter {
         if (cached) return cached;
       }
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelStaticBase}/TopDestinations`, { method: "POST", data: { UserName: this.config.staticUserName?.trim(), Password: this.config.staticPassword }, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelStaticBase}/TopDestinations`, {
+          method: "POST",
+          data: {
+            UserName: this.config.staticUserName?.trim(),
+            Password: this.config.staticPassword,
+          },
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       const data = res.data?.CityList || res.data?.Result || [];
       await require("../redisService").set(cacheKey, data, 24 * 60 * 60);
@@ -1623,7 +1762,15 @@ class TBOAdapter extends BaseSupplierAdapter {
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelBookingBase}/GetChangeRequestStatus`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
+        tboRequest(`${this.config.hotelBookingBase}/GetChangeRequestStatus`, {
+          method: "POST",
+          data: payload,
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
       );
       if (res.data?.Status === 1) return res.data;
       throw mapFromResponse(res);
@@ -1650,7 +1797,18 @@ class TBOAdapter extends BaseSupplierAdapter {
       // Hotel token logout
       if (this.hotelTokenId) {
         try {
-          await tboRequest(`${this.config.hotelAuthBase}/Logout`, { method: "POST", data: { TokenId: this.hotelTokenId, EndUserIp: this.config.endUserIp }, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } });
+          await tboRequest(`${this.config.hotelAuthBase}/Logout`, {
+            method: "POST",
+            data: {
+              TokenId: this.hotelTokenId,
+              EndUserIp: this.config.endUserIp,
+            },
+            timeout: this.config.timeout,
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          });
         } catch {}
       }
       return { success: true };
