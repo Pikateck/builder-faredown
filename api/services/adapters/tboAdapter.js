@@ -1475,7 +1475,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        this.hotelBookingClient.post("/GetBookingDetail", payload),
+        tboRequest(`${this.config.hotelBookingBase}/GetBookingDetail`, { method: "POST", data: payload, timeout: this.config.timeout, headers: { "Content-Type": "application/json", Accept: "application/json" } }),
       );
       if (res.data?.Status === 1) {
         return res.data;
