@@ -460,7 +460,7 @@ const validateBookingData = (req, res, next) => {
   next();
 };
 
-export default {
+module.exports = {
   schemas,
   validateRequest,
   validate,
