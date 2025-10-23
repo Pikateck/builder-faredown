@@ -81,29 +81,28 @@ router.get("/stats", async (req, res) => {
         today_bookings: 0,
         week_bookings: 0,
         total_revenue: 0,
-        today_revenue: 0
+        today_revenue: 0,
       },
       users: userStats.rows[0] || {
         total_users: 0,
         new_users_today: 0,
         new_users_week: 0,
-        active_users_today: 0
+        active_users_today: 0,
       },
       popularDestinations: popularDestinations.rows || [],
       recentActivity: recentActivity.rows || [],
-      lastUpdated: new Date().toISOString()
+      lastUpdated: new Date().toISOString(),
     };
 
     res.json({
       success: true,
       data: stats,
       source: "PostgreSQL Database",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("âŒ Admin dashboard stats error:", error);
-    
+
     // Return fallback data if database is unavailable
     res.json({
       success: true,
@@ -115,28 +114,50 @@ router.get("/stats", async (req, res) => {
           cancelled_bookings: 6,
           today_bookings: 12,
           week_bookings: 89,
-          total_revenue: 45670.50,
-          today_revenue: 3240.75
+          total_revenue: 45670.5,
+          today_revenue: 3240.75,
         },
         users: {
           total_users: 1247,
           new_users_today: 23,
           new_users_week: 187,
-          active_users_today: 89
+          active_users_today: 89,
         },
         popularDestinations: [
-          { destination_code: 'DXB', destination_name: 'Dubai', booking_count: 45, total_revenue: 15670.25 },
-          { destination_code: 'BKK', destination_name: 'Bangkok', booking_count: 32, total_revenue: 8950.50 },
-          { destination_code: 'SIN', destination_name: 'Singapore', booking_count: 28, total_revenue: 12340.75 }
+          {
+            destination_code: "DXB",
+            destination_name: "Dubai",
+            booking_count: 45,
+            total_revenue: 15670.25,
+          },
+          {
+            destination_code: "BKK",
+            destination_name: "Bangkok",
+            booking_count: 32,
+            total_revenue: 8950.5,
+          },
+          {
+            destination_code: "SIN",
+            destination_name: "Singapore",
+            booking_count: 28,
+            total_revenue: 12340.75,
+          },
         ],
         recentActivity: [
-          { type: 'booking', reference: 'HB-DXB-001', customer_name: 'John Doe', total_amount: 450.00, status: 'confirmed', created_at: new Date().toISOString() }
+          {
+            type: "booking",
+            reference: "HB-DXB-001",
+            customer_name: "John Doe",
+            total_amount: 450.0,
+            status: "confirmed",
+            created_at: new Date().toISOString(),
+          },
         ],
-        lastUpdated: new Date().toISOString()
+        lastUpdated: new Date().toISOString(),
       },
       fallback: true,
       source: "Fallback Data (Database Unavailable)",
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
   }
 });
@@ -147,7 +168,14 @@ router.get("/stats", async (req, res) => {
  */
 router.get("/bookings", async (req, res) => {
   try {
-    const { page = 1, limit = 20, status, search, dateFrom, dateTo } = req.query;
+    const {
+      page = 1,
+      limit = 20,
+      status,
+      search,
+      dateFrom,
+      dateTo,
+    } = req.query;
     const offset = (page - 1) * limit;
 
     let whereConditions = [];
@@ -155,13 +183,15 @@ router.get("/bookings", async (req, res) => {
     let paramCount = 0;
 
     // Add filters
-    if (status && status !== 'all') {
+    if (status && status !== "all") {
       whereConditions.push(`status = $${++paramCount}`);
       queryParams.push(status);
     }
 
     if (search) {
-      whereConditions.push(`(customer_name ILIKE $${++paramCount} OR booking_reference ILIKE $${++paramCount} OR customer_email ILIKE $${++paramCount})`);
+      whereConditions.push(
+        `(customer_name ILIKE $${++paramCount} OR booking_reference ILIKE $${++paramCount} OR customer_email ILIKE $${++paramCount})`,
+      );
       queryParams.push(`%${search}%`, `%${search}%`, `%${search}%`);
       paramCount += 2;
     }
@@ -176,7 +206,10 @@ router.get("/bookings", async (req, res) => {
       queryParams.push(dateTo);
     }
 
-    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+    const whereClause =
+      whereConditions.length > 0
+        ? `WHERE ${whereConditions.join(" AND ")}`
+        : "";
 
     // Get bookings with pagination
     const bookingsQuery = `
@@ -207,7 +240,7 @@ router.get("/bookings", async (req, res) => {
 
     const [bookingsResult, countResult] = await Promise.all([
       db.query(bookingsQuery, queryParams),
-      db.query(countQuery, countParams)
+      db.query(countQuery, countParams),
     ]);
 
     const totalBookings = parseInt(countResult.rows[0].count);
@@ -222,18 +255,17 @@ router.get("/bookings", async (req, res) => {
         total: totalBookings,
         totalPages: totalPages,
         hasNext: page < totalPages,
-        hasPrev: page > 1
+        hasPrev: page > 1,
       },
       filters: { status, search, dateFrom, dateTo },
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("âŒ Admin bookings fetch error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch bookings",
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -244,30 +276,30 @@ router.get("/bookings", async (req, res) => {
  */
 router.get("/revenue", async (req, res) => {
   try {
-    const { period = '30d' } = req.query;
-    
+    const { period = "30d" } = req.query;
+
     let dateInterval;
     let groupBy;
-    
+
     switch (period) {
-      case '7d':
-        dateInterval = '7 days';
+      case "7d":
+        dateInterval = "7 days";
         groupBy = "DATE_TRUNC('day', created_at)";
         break;
-      case '30d':
-        dateInterval = '30 days';
+      case "30d":
+        dateInterval = "30 days";
         groupBy = "DATE_TRUNC('day', created_at)";
         break;
-      case '3m':
-        dateInterval = '3 months';
+      case "3m":
+        dateInterval = "3 months";
         groupBy = "DATE_TRUNC('week', created_at)";
         break;
-      case '1y':
-        dateInterval = '1 year';
+      case "1y":
+        dateInterval = "1 year";
         groupBy = "DATE_TRUNC('month', created_at)";
         break;
       default:
-        dateInterval = '30 days';
+        dateInterval = "30 days";
         groupBy = "DATE_TRUNC('day', created_at)";
     }
 
@@ -290,15 +322,14 @@ router.get("/revenue", async (req, res) => {
       success: true,
       data: result.rows,
       period: period,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("âŒ Revenue analytics error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch revenue analytics",
-      message: error.message
+      message: error.message,
     });
   }
 });
@@ -327,15 +358,14 @@ router.get("/destinations", async (req, res) => {
     res.json({
       success: true,
       data: destinationStats.rows,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     });
-
   } catch (error) {
     console.error("âŒ Destination analytics error:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch destination analytics", 
-      message: error.message
+      error: "Failed to fetch destination analytics",
+      message: error.message,
     });
   }
 });
@@ -346,13 +376,13 @@ router.get("/destinations", async (req, res) => {
  */
 router.get("/export/bookings", async (req, res) => {
   try {
-    const { format = 'csv', dateFrom, dateTo, status } = req.query;
+    const { format = "csv", dateFrom, dateTo, status } = req.query;
 
     let whereConditions = [];
     let queryParams = [];
     let paramCount = 0;
 
-    if (status && status !== 'all') {
+    if (status && status !== "all") {
       whereConditions.push(`status = $${++paramCount}`);
       queryParams.push(status);
     }
@@ -367,7 +397,10 @@ router.get("/export/bookings", async (req, res) => {
       queryParams.push(dateTo);
     }
 
-    const whereClause = whereConditions.length > 0 ? `WHERE ${whereConditions.join(' AND ')}` : '';
+    const whereClause =
+      whereConditions.length > 0
+        ? `WHERE ${whereConditions.join(" AND ")}`
+        : "";
 
     const exportQuery = `
       SELECT 
@@ -389,16 +422,21 @@ router.get("/export/bookings", async (req, res) => {
 
     const result = await db.query(exportQuery, queryParams);
 
-    if (format === 'csv') {
+    if (format === "csv") {
       // Convert to CSV format
       const headers = Object.keys(result.rows[0] || {});
       const csvContent = [
-        headers.join(','),
-        ...result.rows.map(row => headers.map(header => `"${row[header] || ''}"`).join(','))
-      ].join('\n');
+        headers.join(","),
+        ...result.rows.map((row) =>
+          headers.map((header) => `"${row[header] || ""}"`).join(","),
+        ),
+      ].join("\n");
 
-      res.setHeader('Content-Type', 'text/csv');
-      res.setHeader('Content-Disposition', `attachment; filename="bookings_export_${new Date().toISOString().split('T')[0]}.csv"`);
+      res.setHeader("Content-Type", "text/csv");
+      res.setHeader(
+        "Content-Disposition",
+        `attachment; filename="bookings_export_${new Date().toISOString().split("T")[0]}.csv"`,
+      );
       res.send(csvContent);
     } else {
       // Return JSON
@@ -406,16 +444,15 @@ router.get("/export/bookings", async (req, res) => {
         success: true,
         data: result.rows,
         totalRecords: result.rows.length,
-        exportDate: new Date().toISOString()
+        exportDate: new Date().toISOString(),
       });
     }
-
   } catch (error) {
     console.error("âŒ Export bookings error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to export bookings",
-      message: error.message
+      message: error.message,
     });
   }
 });

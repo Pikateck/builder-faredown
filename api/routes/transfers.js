@@ -34,7 +34,10 @@ try {
 const validateBookingData = (req, res, next) => next(); // Placeholder middleware
 const { auditLogger } = require("../middleware/audit");
 const auditRequest = auditLogger;
-const { authenticateToken: requireAuth, requireAdmin } = require("../middleware/auth");
+const {
+  authenticateToken: requireAuth,
+  requireAdmin,
+} = require("../middleware/auth");
 const winston = require("winston");
 
 const router = express.Router();
@@ -289,146 +292,137 @@ router.post("/checkout/price", auditRequest, async (req, res) => {
  * @desc Book transfer with payment processing
  * @access Private (requires authentication)
  */
-router.post(
-  "/checkout/book",
-  async (req, res) => {
-    try {
-      const {
-        offerId,
-        guestDetails,
-        contactDetails,
-        flightDetails,
-        specialRequests,
-        promoCode,
-        bargainAmount,
-        paymentMethod = "online",
-        currency = "INR",
-      } = req.body;
+router.post("/checkout/book", async (req, res) => {
+  try {
+    const {
+      offerId,
+      guestDetails,
+      contactDetails,
+      flightDetails,
+      specialRequests,
+      promoCode,
+      bargainAmount,
+      paymentMethod = "online",
+      currency = "INR",
+    } = req.body;
 
-      if (!offerId || !guestDetails || !contactDetails) {
-        return res.status(400).json({
-          success: false,
-          error:
-            "Missing required fields: offerId, guestDetails, contactDetails",
-        });
-      }
-
-      const bookingData = {
-        offerId,
-        guestDetails,
-        contactDetails,
-        flightDetails,
-        specialRequests,
-        promoCode,
-        bargainAmount,
-        paymentMethod,
-        currency,
-        userId: req.user?.id,
-        userAgent: req.headers["user-agent"],
-        ipAddress: req.ip,
-        sessionId: req.sessionID,
-      };
-
-      logger.info("Transfer booking initiated", {
-        offerId,
-        userId: req.user?.id,
-        paymentMethod,
-        guestEmail: guestDetails.email,
-      });
-
-      const booking = await transfersService.createBooking(bookingData);
-
-      if (!booking.success) {
-        logger.error("Transfer booking failed", {
-          offerId,
-          userId: req.user?.id,
-          error: booking.error,
-        });
-        return res.status(400).json({
-          success: false,
-          error: booking.error || "Booking failed",
-        });
-      }
-
-      logger.info("Transfer booking successful", {
-        bookingId: booking.data.id,
-        bookingRef: booking.data.reference,
-        userId: req.user?.id,
-      });
-
-      res.json({
-        success: true,
-        data: booking.data,
-        timestamp: new Date().toISOString(),
-      });
-    } catch (error) {
-      logger.error("Transfer booking error", {
-        error: error.message,
-        userId: req.user?.id,
-      });
-      res.status(500).json({
+    if (!offerId || !guestDetails || !contactDetails) {
+      return res.status(400).json({
         success: false,
-        error: error.message || "Internal server error",
+        error: "Missing required fields: offerId, guestDetails, contactDetails",
       });
     }
-  },
-);
+
+    const bookingData = {
+      offerId,
+      guestDetails,
+      contactDetails,
+      flightDetails,
+      specialRequests,
+      promoCode,
+      bargainAmount,
+      paymentMethod,
+      currency,
+      userId: req.user?.id,
+      userAgent: req.headers["user-agent"],
+      ipAddress: req.ip,
+      sessionId: req.sessionID,
+    };
+
+    logger.info("Transfer booking initiated", {
+      offerId,
+      userId: req.user?.id,
+      paymentMethod,
+      guestEmail: guestDetails.email,
+    });
+
+    const booking = await transfersService.createBooking(bookingData);
+
+    if (!booking.success) {
+      logger.error("Transfer booking failed", {
+        offerId,
+        userId: req.user?.id,
+        error: booking.error,
+      });
+      return res.status(400).json({
+        success: false,
+        error: booking.error || "Booking failed",
+      });
+    }
+
+    logger.info("Transfer booking successful", {
+      bookingId: booking.data.id,
+      bookingRef: booking.data.reference,
+      userId: req.user?.id,
+    });
+
+    res.json({
+      success: true,
+      data: booking.data,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    logger.error("Transfer booking error", {
+      error: error.message,
+      userId: req.user?.id,
+    });
+    res.status(500).json({
+      success: false,
+      error: error.message || "Internal server error",
+    });
+  }
+});
 
 /**
  * @route GET /api/transfers/booking/:id
  * @desc Get booking details
  * @access Private (user's own bookings or admin)
  */
-router.get(
-  "/booking/:id",
-  requireAuth,
-  auditRequest,
-  async (req, res) => {
-    try {
-      const { id } = req.params;
-      const userId = req.user?.id;
-      const isAdmin = req.user?.role === "admin";
+router.get("/booking/:id", requireAuth, auditRequest, async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user?.id;
+    const isAdmin = req.user?.role === "admin";
 
-      logger.info("Transfer booking details requested", {
+    logger.info("Transfer booking details requested", {
+      bookingId: id,
+      userId,
+      isAdmin,
+    });
+
+    const booking = await transfersService.getBooking(id, {
+      userId,
+      isAdmin,
+    });
+
+    if (!booking.success) {
+      logger.error("Transfer booking not found", {
         bookingId: id,
         userId,
-        isAdmin,
+        error: booking.error,
       });
-
-      const booking = await transfersService.getBooking(id, {
-        userId,
-        isAdmin,
-      });
-
-      if (!booking.success) {
-        logger.error("Transfer booking not found", {
-          bookingId: id,
-          userId,
-          error: booking.error,
-        });
-        return res.status(404).json({
-          success: false,
-          error: "Booking not found",
-        });
-      }
-
-      res.json({
-        success: true,
-        data: booking.data,
-        timestamp: new Date().toISOString(),
-      });
-    } catch (error) {
-      logger.error("Transfer booking details error", {
-        error: error.message,
-        bookingId: req.params.id,
-      });
-      res.status(500).json({
+      return res.status(404).json({
         success: false,
-        error: error.message || "Internal server error",
+        error: "Booking not found",
       });
     }
-  },
-);
+
+    res.json({
+      success: true,
+      data: booking.data,
+      timestamp: new Date().toISOString(),
+    });
+  } catch (error) {
+    logger.error("Transfer booking details error", {
+      error: error.message,
+      bookingId: req.params.id,
+    });
+    res.status(500).json({
+      success: false,
+      error: error.message || "Internal server error",
+    });
+  }
+});
 
 /**
  * @route POST /api/transfers/booking/:id/cancel

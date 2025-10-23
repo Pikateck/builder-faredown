@@ -19,7 +19,10 @@ try {
     database: process.env.DB_NAME || "faredown_booking_db",
     user: process.env.DB_USER || "postgres",
     password: process.env.DB_PASSWORD,
-    ssl: process.env.DB_HOST && process.env.DB_HOST.includes('render.com') ? { rejectUnauthorized: false } : false,
+    ssl:
+      process.env.DB_HOST && process.env.DB_HOST.includes("render.com")
+        ? { rejectUnauthorized: false }
+        : false,
     max: 20,
     idleTimeoutMillis: 30000,
     connectionTimeoutMillis: 2000,
@@ -32,30 +35,39 @@ try {
 const ROUND_MESSAGES = {
   1: {
     type: "best_offer",
-    checking: "Let me check with the {module} provider about your offer of {userPrice}â€¦",
+    checking:
+      "Let me check with the {module} provider about your offer of {userPrice}â€¦",
     success: "Good news! We can offer you {bargainPrice} for this booking.",
-    warning: "This is a special price â€” it may not be available again if you continue bargaining.",
-    matched: "Congratulations! Your price of {userPrice} is matched. You can book right now."
+    warning:
+      "This is a special price â€” it may not be available again if you continue bargaining.",
+    matched:
+      "Congratulations! Your price of {userPrice} is matched. You can book right now.",
   },
   2: {
-    type: "risk_round", 
-    warning_before: "Are you sure you want to try again? This offer may not be better than the previous one.",
+    type: "risk_round",
+    warning_before:
+      "Are you sure you want to try again? This offer may not be better than the previous one.",
     checking: "Rechecking with the {module} provider at {userPrice}â€¦",
     success: "We can offer {bargainPrice} this time.",
-    additional: "Remember, the first price is usually the best â€” this one might not last long.",
-    matched: "Congratulations! Your price of {userPrice} is matched. You can book right now."
+    additional:
+      "Remember, the first price is usually the best â€” this one might not last long.",
+    matched:
+      "Congratulations! Your price of {userPrice} is matched. You can book right now.",
   },
   3: {
     type: "final_chance",
-    warning_before: "This is your last round. The price could be better, the same, or even higher.",
+    warning_before:
+      "This is your last round. The price could be better, the same, or even higher.",
     checking: "Final check with the {module} provider at {userPrice}â€¦",
     success: "Great news! We can offer {bargainPrice} for this booking.",
-    urgency: "You have **30 seconds** to book at this price, or the offer will expire.",
-    matched: "Congratulations! Your price of {userPrice} is matched. Book now."
+    urgency:
+      "You have **30 seconds** to book at this price, or the offer will expire.",
+    matched: "Congratulations! Your price of {userPrice} is matched. Book now.",
   },
   expired: {
-    message: "The special offer has expired. You can try again or book at the original price of {originalPrice}."
-  }
+    message:
+      "The special offer has expired. You can try again or book at the original price of {originalPrice}.",
+  },
 };
 
 /**
@@ -68,31 +80,32 @@ router.post("/start", async (req, res) => {
   try {
     const {
       user_id,
-      module,  // 'flights', 'hotels', 'sightseeing', 'transfers'
+      module, // 'flights', 'hotels', 'sightseeing', 'transfers'
       product_id,
       supplier_net_rate,
       product_details = {},
-      promo_code = null
+      promo_code = null,
     } = req.body;
 
     // Validate required fields
     if (!user_id || !module || !product_id || !supplier_net_rate) {
       return res.status(400).json({
         success: false,
-        error: "Missing required fields: user_id, module, product_id, supplier_net_rate"
+        error:
+          "Missing required fields: user_id, module, product_id, supplier_net_rate",
       });
     }
 
     // Get module ID
     const moduleResult = await pgPool.query(
       "SELECT id FROM modules WHERE name = $1 AND active = true",
-      [module]
+      [module],
     );
 
     if (moduleResult.rows.length === 0) {
       return res.status(400).json({
         success: false,
-        error: `Invalid module: ${module}`
+        error: `Invalid module: ${module}`,
       });
     }
 
@@ -101,31 +114,34 @@ router.post("/start", async (req, res) => {
     // Calculate initial bargain pricing using the database function
     const pricingResult = await pgPool.query(
       "SELECT * FROM calculate_enhanced_bargain_price($1, $2, $3)",
-      [supplier_net_rate, module, promo_code]
+      [supplier_net_rate, module, promo_code],
     );
 
     const pricing = pricingResult.rows[0];
 
     // Create bargain session
     const sessionId = crypto.randomUUID();
-    await pgPool.query(`
+    await pgPool.query(
+      `
       INSERT INTO bargain_sessions (
         id, user_id, module_id, product_ref, base_price, status, 
         max_attempts, ai_personality, user_context
       ) VALUES ($1, $2, $3, $4, $5, 'active', 3, 'enhanced', $6)
-    `, [
-      sessionId,
-      user_id,
-      module_id,
-      product_id,
-      supplier_net_rate,
-      JSON.stringify({
-        product_details,
-        promo_code,
+    `,
+      [
+        sessionId,
+        user_id,
+        module_id,
+        product_id,
         supplier_net_rate,
-        pricing
-      })
-    ]);
+        JSON.stringify({
+          product_details,
+          promo_code,
+          supplier_net_rate,
+          pricing,
+        }),
+      ],
+    );
 
     // Calculate display price with markup (this is what customer sees initially)
     const display_price = Math.round(supplier_net_rate + pricing.markup_amount);
@@ -138,27 +154,31 @@ router.post("/start", async (req, res) => {
       display_price: Math.round(display_price),
       bargain_range: {
         min: Math.round(pricing.bargain_range_min),
-        max: Math.round(pricing.bargain_range_max)
+        max: Math.round(pricing.bargain_range_max),
       },
       total_discount_available: Math.round(pricing.total_discount),
       markup_details: {
         amount: Math.round(pricing.markup_amount),
-        percentage: ((pricing.markup_amount / supplier_net_rate) * 100).toFixed(1)
+        percentage: ((pricing.markup_amount / supplier_net_rate) * 100).toFixed(
+          1,
+        ),
       },
-      promo_details: promo_code ? {
-        code: promo_code,
-        discount: Math.round(pricing.promo_discount)
-      } : null,
+      promo_details: promo_code
+        ? {
+            code: promo_code,
+            discount: Math.round(pricing.promo_discount),
+          }
+        : null,
       recommended_target: Math.round(pricing.final_price),
-      instructions: "Enter your target price to start the AI bargain process. The first round typically offers the best deals!"
+      instructions:
+        "Enter your target price to start the AI bargain process. The first round typically offers the best deals!",
     });
-
   } catch (error) {
     console.error("Enhanced bargain start error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to start bargain session",
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -171,51 +191,51 @@ router.post("/start", async (req, res) => {
  */
 router.post("/offer", async (req, res) => {
   try {
-    const {
-      session_id,
-      user_target_price,
-      round_number = 1
-    } = req.body;
+    const { session_id, user_target_price, round_number = 1 } = req.body;
 
     // Validate inputs
     if (!session_id || !user_target_price) {
       return res.status(400).json({
         success: false,
-        error: "Missing required fields: session_id, user_target_price"
+        error: "Missing required fields: session_id, user_target_price",
       });
     }
 
     if (round_number < 1 || round_number > 3) {
       return res.status(400).json({
         success: false,
-        error: "Invalid round_number. Must be between 1 and 3"
+        error: "Invalid round_number. Must be between 1 and 3",
       });
     }
 
     // Get session details
-    const sessionResult = await pgPool.query(`
+    const sessionResult = await pgPool.query(
+      `
       SELECT bs.*, m.name as module_name
       FROM bargain_sessions bs
       JOIN modules m ON bs.module_id = m.id
       WHERE bs.id = $1 AND bs.status = 'active'
-    `, [session_id]);
+    `,
+      [session_id],
+    );
 
     if (sessionResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: "Bargain session not found or inactive"
+        error: "Bargain session not found or inactive",
       });
     }
 
     const session = sessionResult.rows[0];
     const user_context = session.user_context || {};
-    const supplier_net_rate = user_context.supplier_net_rate || session.base_price;
+    const supplier_net_rate =
+      user_context.supplier_net_rate || session.base_price;
     const promo_code = user_context.promo_code;
 
     // Recalculate pricing for this round
     const pricingResult = await pgPool.query(
       "SELECT * FROM calculate_enhanced_bargain_price($1, $2, $3)",
-      [supplier_net_rate, session.module_name, promo_code]
+      [supplier_net_rate, session.module_name, promo_code],
     );
 
     const pricing = pricingResult.rows[0];
@@ -223,7 +243,7 @@ router.post("/offer", async (req, res) => {
     // Check if user target price matches the total discount range (Price Match Logic)
     const price_matched = await pgPool.query(
       "SELECT check_enhanced_price_match($1, $2, $3, $4) as is_match",
-      [user_target_price, pricing.total_discount, supplier_net_rate, 0.02]  // 2% tolerance
+      [user_target_price, pricing.total_discount, supplier_net_rate, 0.02], // 2% tolerance
     );
 
     const is_price_matched = price_matched.rows[0].is_match;
@@ -238,53 +258,71 @@ router.post("/offer", async (req, res) => {
       // User price matches! Accept it
       round_status = "matched";
       ai_counter_price = user_target_price;
-      ai_message = ROUND_MESSAGES[round_number].matched
-        .replace("{userPrice}", `â‚¹${user_target_price.toLocaleString()}`);
+      ai_message = ROUND_MESSAGES[round_number].matched.replace(
+        "{userPrice}",
+        `â‚¹${user_target_price.toLocaleString()}`,
+      );
     } else {
       // Generate counter-offer based on round
       round_status = "completed";
-      
+
       if (round_number === 1) {
         // Round 1: Best offer (slightly below the calculated price)
         const tilt_factor = 0.995; // 0.5% better than calculated
         ai_counter_price = Math.round(pricing.final_price * tilt_factor);
-        
-        ai_message = ROUND_MESSAGES[1].checking
-          .replace("{module}", session.module_name)
-          .replace("{userPrice}", `â‚¹${user_target_price.toLocaleString()}`) +
+
+        ai_message =
+          ROUND_MESSAGES[1].checking
+            .replace("{module}", session.module_name)
+            .replace(
+              "{userPrice}",
+              `â‚¹${user_target_price.toLocaleString()}`,
+            ) +
           " " +
-          ROUND_MESSAGES[1].success
-          .replace("{bargainPrice}", `â‚¹${ai_counter_price.toLocaleString()}`) +
+          ROUND_MESSAGES[1].success.replace(
+            "{bargainPrice}",
+            `â‚¹${ai_counter_price.toLocaleString()}`,
+          ) +
           " " +
           ROUND_MESSAGES[1].warning;
-          
       } else if (round_number === 2) {
         // Round 2: Risk round (randomize around calculated price Â±2%)
-        const risk_factor = 0.98 + (Math.random() * 0.04); // Between 98% and 102%
+        const risk_factor = 0.98 + Math.random() * 0.04; // Between 98% and 102%
         ai_counter_price = Math.round(pricing.final_price * risk_factor);
-        
+
         warning_message = ROUND_MESSAGES[2].warning_before;
-        ai_message = ROUND_MESSAGES[2].checking
-          .replace("{module}", session.module_name)
-          .replace("{userPrice}", `â‚¹${user_target_price.toLocaleString()}`) +
+        ai_message =
+          ROUND_MESSAGES[2].checking
+            .replace("{module}", session.module_name)
+            .replace(
+              "{userPrice}",
+              `â‚¹${user_target_price.toLocaleString()}`,
+            ) +
           " " +
-          ROUND_MESSAGES[2].success
-          .replace("{bargainPrice}", `â‚¹${ai_counter_price.toLocaleString()}`) +
+          ROUND_MESSAGES[2].success.replace(
+            "{bargainPrice}",
+            `â‚¹${ai_counter_price.toLocaleString()}`,
+          ) +
           " " +
           ROUND_MESSAGES[2].additional;
-          
       } else {
         // Round 3: Final chance (could be better/same/worse; time-boxed)
-        const final_factor = 0.97 + (Math.random() * 0.06); // Between 97% and 103%
+        const final_factor = 0.97 + Math.random() * 0.06; // Between 97% and 103%
         ai_counter_price = Math.round(pricing.final_price * final_factor);
-        
+
         warning_message = ROUND_MESSAGES[3].warning_before;
-        ai_message = ROUND_MESSAGES[3].checking
-          .replace("{module}", session.module_name)
-          .replace("{userPrice}", `â‚¹${user_target_price.toLocaleString()}`) +
+        ai_message =
+          ROUND_MESSAGES[3].checking
+            .replace("{module}", session.module_name)
+            .replace(
+              "{userPrice}",
+              `â‚¹${user_target_price.toLocaleString()}`,
+            ) +
           " " +
-          ROUND_MESSAGES[3].success
-          .replace("{bargainPrice}", `â‚¹${ai_counter_price.toLocaleString()}`) +
+          ROUND_MESSAGES[3].success.replace(
+            "{bargainPrice}",
+            `â‚¹${ai_counter_price.toLocaleString()}`,
+          ) +
           " " +
           ROUND_MESSAGES[3].urgency;
       }
@@ -295,31 +333,34 @@ router.post("/offer", async (req, res) => {
     ai_counter_price = Math.max(ai_counter_price, minimum_price);
 
     // Create bargain round record
-    await pgPool.query(`
+    await pgPool.query(
+      `
       INSERT INTO bargain_rounds (
         session_id, round_number, user_target_price, ai_counter_price, round_status,
         supplier_net_price, markup_amount, promo_discount, total_discount,
         ai_message, warning_message, round_type
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
-    `, [
-      session_id,
-      round_number,
-      user_target_price,
-      ai_counter_price,
-      round_status,
-      supplier_net_rate,
-      pricing.markup_amount,
-      pricing.promo_discount,
-      pricing.total_discount,
-      ai_message,
-      warning_message,
-      ROUND_MESSAGES[round_number].type
-    ]);
+    `,
+      [
+        session_id,
+        round_number,
+        user_target_price,
+        ai_counter_price,
+        round_status,
+        supplier_net_rate,
+        pricing.markup_amount,
+        pricing.promo_discount,
+        pricing.total_discount,
+        ai_message,
+        warning_message,
+        ROUND_MESSAGES[round_number].type,
+      ],
+    );
 
     // Update session attempt count
     await pgPool.query(
       "UPDATE bargain_sessions SET attempt_count = $1 WHERE id = $2",
-      [round_number, session_id]
+      [round_number, session_id],
     );
 
     // Create response
@@ -338,11 +379,16 @@ router.post("/offer", async (req, res) => {
         promo_discount: Math.round(pricing.promo_discount),
         total_discount: Math.round(pricing.total_discount),
         display_price: Math.round(supplier_net_rate + pricing.markup_amount),
-        your_savings: Math.max(0, Math.round((supplier_net_rate + pricing.markup_amount) - ai_counter_price))
+        your_savings: Math.max(
+          0,
+          Math.round(
+            supplier_net_rate + pricing.markup_amount - ai_counter_price,
+          ),
+        ),
       },
       is_price_matched,
       can_continue: round_number < 3 && !is_price_matched,
-      next_round: round_number < 3 ? round_number + 1 : null
+      next_round: round_number < 3 ? round_number + 1 : null,
     };
 
     // Add warning message for rounds 2 & 3
@@ -353,47 +399,49 @@ router.post("/offer", async (req, res) => {
     // If price is matched or it's round 3, create a hold
     if (is_price_matched || round_number === 3) {
       const hold_expires_at = new Date(Date.now() + 30000); // 30 seconds from now
-      
-      const holdResult = await pgPool.query(`
+
+      const holdResult = await pgPool.query(
+        `
         INSERT INTO bargain_holds_enhanced (
           session_id, module_id, product_id, original_price, supplier_net_price,
           markup_amount, promo_discount, total_discount, final_hold_price,
           expires_at, promo_code_id, markup_rule_id, status
         ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, 'active')
         RETURNING id, expires_at
-      `, [
-        session_id,
-        session.module_id,
-        session.product_ref,
-        supplier_net_rate + pricing.markup_amount,
-        supplier_net_rate,
-        pricing.markup_amount,
-        pricing.promo_discount,
-        pricing.total_discount,
-        ai_counter_price,
-        hold_expires_at,
-        null, // promo_code_id (would need to be resolved from promo_codes_enhanced)
-        null  // markup_rule_id (would need to be resolved)
-      ]);
+      `,
+        [
+          session_id,
+          session.module_id,
+          session.product_ref,
+          supplier_net_rate + pricing.markup_amount,
+          supplier_net_rate,
+          pricing.markup_amount,
+          pricing.promo_discount,
+          pricing.total_discount,
+          ai_counter_price,
+          hold_expires_at,
+          null, // promo_code_id (would need to be resolved from promo_codes_enhanced)
+          null, // markup_rule_id (would need to be resolved)
+        ],
+      );
 
       response.hold = {
         id: holdResult.rows[0].id,
         expires_at: holdResult.rows[0].expires_at,
         duration_seconds: 30,
-        message: is_price_matched 
+        message: is_price_matched
           ? "Your price is held for 30 seconds. Book now!"
-          : "Final offer held for 30 seconds. Decide quickly!"
+          : "Final offer held for 30 seconds. Decide quickly!",
       };
     }
 
     res.json(response);
-
   } catch (error) {
     console.error("Enhanced bargain offer error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to process bargain offer",
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -411,12 +459,13 @@ router.post("/accept", async (req, res) => {
     if (!session_id) {
       return res.status(400).json({
         success: false,
-        error: "Missing required field: session_id"
+        error: "Missing required field: session_id",
       });
     }
 
     // Get active hold
-    const holdResult = await pgPool.query(`
+    const holdResult = await pgPool.query(
+      `
       SELECT bh.*, bs.user_id, bs.product_ref, m.name as module_name
       FROM bargain_holds_enhanced bh
       JOIN bargain_sessions bs ON bh.session_id = bs.id
@@ -426,12 +475,14 @@ router.post("/accept", async (req, res) => {
         AND bh.expires_at > NOW()
       ORDER BY bh.created_at DESC
       LIMIT 1
-    `, [session_id]);
+    `,
+      [session_id],
+    );
 
     if (holdResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: "No active hold found or hold has expired"
+        error: "No active hold found or hold has expired",
       });
     }
 
@@ -443,13 +494,13 @@ router.post("/accept", async (req, res) => {
     // Update hold status to consumed
     await pgPool.query(
       "UPDATE bargain_holds_enhanced SET status = 'consumed', consumed_at = NOW(), booking_reference = $1 WHERE id = $2",
-      [booking_reference, hold.id]
+      [booking_reference, hold.id],
     );
 
     // Update session status to completed
     await pgPool.query(
       "UPDATE bargain_sessions SET status = 'completed', final_price = $1 WHERE id = $2",
-      [hold.final_hold_price, session_id]
+      [hold.final_hold_price, session_id],
     );
 
     res.json({
@@ -466,21 +517,20 @@ router.post("/accept", async (req, res) => {
         markup_amount: hold.markup_amount,
         promo_discount: hold.promo_discount,
         total_discount: hold.total_discount,
-        final_price: hold.final_hold_price
+        final_price: hold.final_hold_price,
       },
       next_steps: {
         message: "Proceed to booking with this confirmed price",
         expires_in_minutes: 15,
-        booking_reference
-      }
+        booking_reference,
+      },
     });
-
   } catch (error) {
     console.error("Enhanced bargain accept error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to accept bargain offer",
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -496,7 +546,8 @@ router.get("/session/:id", async (req, res) => {
     const { id } = req.params;
 
     // Get session with rounds
-    const sessionResult = await pgPool.query(`
+    const sessionResult = await pgPool.query(
+      `
       SELECT 
         bs.*,
         m.name as module_name,
@@ -518,24 +569,29 @@ router.get("/session/:id", async (req, res) => {
       LEFT JOIN bargain_rounds br ON bs.id = br.session_id
       WHERE bs.id = $1
       GROUP BY bs.id, m.name, m.display_name
-    `, [id]);
+    `,
+      [id],
+    );
 
     if (sessionResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: "Bargain session not found"
+        error: "Bargain session not found",
       });
     }
 
     const session = sessionResult.rows[0];
 
     // Get active hold if any
-    const holdResult = await pgPool.query(`
+    const holdResult = await pgPool.query(
+      `
       SELECT * FROM bargain_holds_enhanced
       WHERE session_id = $1 AND status = 'active' AND expires_at > NOW()
       ORDER BY created_at DESC
       LIMIT 1
-    `, [id]);
+    `,
+      [id],
+    );
 
     const active_hold = holdResult.rows.length > 0 ? holdResult.rows[0] : null;
 
@@ -555,16 +611,15 @@ router.get("/session/:id", async (req, res) => {
         created_at: session.created_at,
         expires_at: session.expires_at,
         rounds: session.rounds || [],
-        active_hold
-      }
+        active_hold,
+      },
     });
-
   } catch (error) {
     console.error("Get bargain session error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to get bargain session",
-      details: error.message
+      details: error.message,
     });
   }
 });
@@ -577,21 +632,22 @@ router.get("/session/:id", async (req, res) => {
  */
 router.post("/cleanup", async (req, res) => {
   try {
-    const result = await pgPool.query("SELECT cleanup_expired_bargain_holds() as expired_count");
+    const result = await pgPool.query(
+      "SELECT cleanup_expired_bargain_holds() as expired_count",
+    );
     const expired_count = result.rows[0].expired_count;
 
     res.json({
       success: true,
       message: `Cleaned up ${expired_count} expired holds`,
-      expired_count
+      expired_count,
     });
-
   } catch (error) {
     console.error("Cleanup expired holds error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to cleanup expired holds",
-      details: error.message
+      details: error.message,
     });
   }
 });
