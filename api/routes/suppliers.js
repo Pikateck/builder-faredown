@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const hotelbedsService = require("../services/hotelbedsService");
 const markupService = require("../services/markupService");
@@ -203,5 +204,4 @@ router.get("/analytics", (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

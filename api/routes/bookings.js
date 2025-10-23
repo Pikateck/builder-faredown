@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const hotelBookingService = require("../services/hotelBookingService");
 const hotelbedsService = require("../services/hotelbedsService");
@@ -404,5 +405,4 @@ router.post("/hotels/cleanup", (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+﻿#!/usr/bin/env node
 
 /**
  * Faredown Node.js API Startup Script
@@ -26,12 +26,12 @@ const colors = {
  * Print colored console messages
  */
 const log = {
-  info: (msg) => console.log(`${colors.blue}ℹ ${msg}${colors.reset}`),
-  success: (msg) => console.log(`${colors.green}✅ ${msg}${colors.reset}`),
-  warning: (msg) => console.log(`${colors.yellow}⚠️ ${msg}${colors.reset}`),
-  error: (msg) => console.log(`${colors.red}❌ ${msg}${colors.reset}`),
+  info: (msg) => console.log(`${colors.blue}â„¹ ${msg}${colors.reset}`),
+  success: (msg) => console.log(`${colors.green}âœ… ${msg}${colors.reset}`),
+  warning: (msg) => console.log(`${colors.yellow}âš ï¸ ${msg}${colors.reset}`),
+  error: (msg) => console.log(`${colors.red}âŒ ${msg}${colors.reset}`),
   header: (msg) =>
-    console.log(`${colors.cyan}${colors.bright}🎯 ${msg}${colors.reset}`),
+    console.log(`${colors.cyan}${colors.bright}ðŸŽ¯ ${msg}${colors.reset}`),
   divider: () => console.log(`${colors.cyan}${"=".repeat(50)}${colors.reset}`),
 };
 
@@ -151,14 +151,14 @@ function displayBanner() {
   log.header("FAREDOWN NODE.JS API");
   log.divider();
   console.log(
-    `${colors.magenta}🚀 Starting Faredown API Server...${colors.reset}`,
+    `${colors.magenta}ðŸš€ Starting Faredown API Server...${colors.reset}`,
   );
-  console.log(`${colors.yellow}📅 ${new Date().toISOString()}${colors.reset}`);
+  console.log(`${colors.yellow}ðŸ“… ${new Date().toISOString()}${colors.reset}`);
   console.log(
-    `${colors.blue}🌍 Environment: ${process.env.NODE_ENV || "development"}${colors.reset}`,
+    `${colors.blue}ðŸŒ Environment: ${process.env.NODE_ENV || "development"}${colors.reset}`,
   );
   console.log(
-    `${colors.green}📍 Port: ${process.env.PORT || 3001}${colors.reset}`,
+    `${colors.green}ðŸ“ Port: ${process.env.PORT || 3001}${colors.reset}`,
   );
   log.divider();
 }
@@ -169,25 +169,25 @@ function displayBanner() {
 function displayServerInfo() {
   const port = process.env.PORT || 3001;
 
-  console.log("\n🎉 Server started successfully!");
+  console.log("\nðŸŽ‰ Server started successfully!");
   log.divider();
   console.log(
-    `${colors.green}📍 Server URL: http://localhost:${port}${colors.reset}`,
+    `${colors.green}ðŸ“ Server URL: http://localhost:${port}${colors.reset}`,
   );
   console.log(
-    `${colors.blue}🏥 Health Check: http://localhost:${port}/health${colors.reset}`,
+    `${colors.blue}ðŸ¥ Health Check: http://localhost:${port}/health${colors.reset}`,
   );
-  console.log(`${colors.cyan}📚 API Routes:${colors.reset}`);
-  console.log(`   • Auth: http://localhost:${port}/api/auth`);
-  console.log(`   • Admin: http://localhost:${port}/api/admin`);
-  console.log(`   • Bookings: http://localhost:${port}/api/bookings`);
-  console.log(`   • Users: http://localhost:${port}/api/users`);
-  console.log(`   • Flights: http://localhost:${port}/api/flights`);
-  console.log(`   • Hotels: http://localhost:${port}/api/hotels`);
+  console.log(`${colors.cyan}ðŸ“š API Routes:${colors.reset}`);
+  console.log(`   â€¢ Auth: http://localhost:${port}/api/auth`);
+  console.log(`   â€¢ Admin: http://localhost:${port}/api/admin`);
+  console.log(`   â€¢ Bookings: http://localhost:${port}/api/bookings`);
+  console.log(`   â€¢ Users: http://localhost:${port}/api/users`);
+  console.log(`   â€¢ Flights: http://localhost:${port}/api/flights`);
+  console.log(`   â€¢ Hotels: http://localhost:${port}/api/hotels`);
   log.divider();
-  console.log(`${colors.magenta}🔑 Test Credentials:${colors.reset}`);
-  console.log(`   • Admin: admin / admin123`);
-  console.log(`   • Sales: sales / sales123`);
+  console.log(`${colors.magenta}ðŸ”‘ Test Credentials:${colors.reset}`);
+  console.log(`   â€¢ Admin: admin / admin123`);
+  console.log(`   â€¢ Sales: sales / sales123`);
   log.divider();
   console.log(
     `${colors.yellow}Press Ctrl+C to stop the server${colors.reset}\n`,
@@ -235,12 +235,12 @@ async function startServer() {
  */
 function setupGracefulShutdown() {
   process.on("SIGTERM", () => {
-    console.log("\n🛑 SIGTERM received, shutting down gracefully...");
+    console.log("\nðŸ›‘ SIGTERM received, shutting down gracefully...");
     process.exit(0);
   });
 
   process.on("SIGINT", () => {
-    console.log("\n🛑 SIGINT received, shutting down gracefully...");
+    console.log("\nðŸ›‘ SIGINT received, shutting down gracefully...");
     process.exit(0);
   });
 
@@ -264,4 +264,4 @@ if (require.main === module) {
   startServer();
 }
 
-module.exports = { startServer };
+export default { startServer };

@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Admin Packages API Routes
  * Handles all admin operations for packages - CRUD, bulk operations, reporting
  * Requires admin authentication
  */
 
-const express = require("express");
 const router = express.Router();
 const { Pool } = require("pg");
 const multer = require("multer");
@@ -759,5 +759,4 @@ router.get("/stats", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

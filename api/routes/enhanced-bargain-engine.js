@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Enhanced Bargain Engine API
  * Implements comprehensive bargain logic with proper formula and round-specific messaging
- * Formula: Final bargain price = Supplier Net Rate – (Markup Amount + Promo Code Discount)
+ * Formula: Final bargain price = Supplier Net Rate â€“ (Markup Amount + Promo Code Discount)
  */
 
-const express = require("express");
 const { Client } = require("pg");
 const crypto = require("crypto");
 const router = express.Router();
@@ -25,30 +25,30 @@ try {
     connectionTimeoutMillis: 2000,
   });
 } catch (error) {
-  console.error("❌ Database pool initialization failed:", error);
+  console.error("âŒ Database pool initialization failed:", error);
 }
 
 // Round-specific messaging templates
 const ROUND_MESSAGES = {
   1: {
     type: "best_offer",
-    checking: "Let me check with the {module} provider about your offer of {userPrice}…",
+    checking: "Let me check with the {module} provider about your offer of {userPrice}â€¦",
     success: "Good news! We can offer you {bargainPrice} for this booking.",
-    warning: "This is a special price — it may not be available again if you continue bargaining.",
+    warning: "This is a special price â€” it may not be available again if you continue bargaining.",
     matched: "Congratulations! Your price of {userPrice} is matched. You can book right now."
   },
   2: {
     type: "risk_round", 
     warning_before: "Are you sure you want to try again? This offer may not be better than the previous one.",
-    checking: "Rechecking with the {module} provider at {userPrice}…",
+    checking: "Rechecking with the {module} provider at {userPrice}â€¦",
     success: "We can offer {bargainPrice} this time.",
-    additional: "Remember, the first price is usually the best — this one might not last long.",
+    additional: "Remember, the first price is usually the best â€” this one might not last long.",
     matched: "Congratulations! Your price of {userPrice} is matched. You can book right now."
   },
   3: {
     type: "final_chance",
     warning_before: "This is your last round. The price could be better, the same, or even higher.",
-    checking: "Final check with the {module} provider at {userPrice}…",
+    checking: "Final check with the {module} provider at {userPrice}â€¦",
     success: "Great news! We can offer {bargainPrice} for this booking.",
     urgency: "You have **30 seconds** to book at this price, or the offer will expire.",
     matched: "Congratulations! Your price of {userPrice} is matched. Book now."
@@ -239,7 +239,7 @@ router.post("/offer", async (req, res) => {
       round_status = "matched";
       ai_counter_price = user_target_price;
       ai_message = ROUND_MESSAGES[round_number].matched
-        .replace("{userPrice}", `₹${user_target_price.toLocaleString()}`);
+        .replace("{userPrice}", `â‚¹${user_target_price.toLocaleString()}`);
     } else {
       // Generate counter-offer based on round
       round_status = "completed";
@@ -251,25 +251,25 @@ router.post("/offer", async (req, res) => {
         
         ai_message = ROUND_MESSAGES[1].checking
           .replace("{module}", session.module_name)
-          .replace("{userPrice}", `₹${user_target_price.toLocaleString()}`) +
+          .replace("{userPrice}", `â‚¹${user_target_price.toLocaleString()}`) +
           " " +
           ROUND_MESSAGES[1].success
-          .replace("{bargainPrice}", `₹${ai_counter_price.toLocaleString()}`) +
+          .replace("{bargainPrice}", `â‚¹${ai_counter_price.toLocaleString()}`) +
           " " +
           ROUND_MESSAGES[1].warning;
           
       } else if (round_number === 2) {
-        // Round 2: Risk round (randomize around calculated price ±2%)
+        // Round 2: Risk round (randomize around calculated price Â±2%)
         const risk_factor = 0.98 + (Math.random() * 0.04); // Between 98% and 102%
         ai_counter_price = Math.round(pricing.final_price * risk_factor);
         
         warning_message = ROUND_MESSAGES[2].warning_before;
         ai_message = ROUND_MESSAGES[2].checking
           .replace("{module}", session.module_name)
-          .replace("{userPrice}", `₹${user_target_price.toLocaleString()}`) +
+          .replace("{userPrice}", `â‚¹${user_target_price.toLocaleString()}`) +
           " " +
           ROUND_MESSAGES[2].success
-          .replace("{bargainPrice}", `₹${ai_counter_price.toLocaleString()}`) +
+          .replace("{bargainPrice}", `â‚¹${ai_counter_price.toLocaleString()}`) +
           " " +
           ROUND_MESSAGES[2].additional;
           
@@ -281,10 +281,10 @@ router.post("/offer", async (req, res) => {
         warning_message = ROUND_MESSAGES[3].warning_before;
         ai_message = ROUND_MESSAGES[3].checking
           .replace("{module}", session.module_name)
-          .replace("{userPrice}", `₹${user_target_price.toLocaleString()}`) +
+          .replace("{userPrice}", `â‚¹${user_target_price.toLocaleString()}`) +
           " " +
           ROUND_MESSAGES[3].success
-          .replace("{bargainPrice}", `₹${ai_counter_price.toLocaleString()}`) +
+          .replace("{bargainPrice}", `â‚¹${ai_counter_price.toLocaleString()}`) +
           " " +
           ROUND_MESSAGES[3].urgency;
       }
@@ -595,5 +595,4 @@ router.post("/cleanup", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

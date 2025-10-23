@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const { requireAdmin } = require("../middleware/auth");
 const { audit } = require("../middleware/audit");
@@ -654,5 +655,4 @@ router.post(
     }
   },
 );
-
-module.exports = router;
+export default router;

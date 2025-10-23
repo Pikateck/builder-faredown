@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Bargain API v1 Routes
  * /api/bargain/v1/* endpoints for AI bargaining platform
  */
 
-const express = require("express");
 const rateLimit = require("express-rate-limit");
 const bargainController = require("../services/bargainController");
 const auth = require("../middleware/auth");
@@ -301,5 +301,4 @@ router.use((error, req, res, next) => {
     ...(isDevelopment && { stack: error.stack }),
   });
 });
-
-module.exports = router;
+export default router;

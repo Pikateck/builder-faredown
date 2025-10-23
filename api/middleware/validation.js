@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Request Validation Middleware
  * Joi-based validation for API requests
  */
@@ -460,7 +460,7 @@ const validateBookingData = (req, res, next) => {
   next();
 };
 
-module.exports = {
+export default {
   schemas,
   validateRequest,
   validate,

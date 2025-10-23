@@ -6,117 +6,58 @@
 import express from "express";
 import cors from "cors";
 import { Pool } from "pg";
+import dotenv from "dotenv";
 
-// Initialize Express app
-const app = express();
-const PORT = process.env.PORT || 3001;
-
-// Middleware
-app.use(express.json({ limit: "10mb" }));
-app.use(express.urlencoded({ extended: true }));
-
-// CORS configuration
-const corsOptions = {
-  origin: [
-    "https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev",
-    "http://localhost:3000",
-    "http://localhost:5173",
-    "http://localhost:8080",
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-};
-
-app.use(cors(corsOptions));
-
-// Database connection
-const pool = new Pool({
-  connectionString:
-    process.env.DATABASE_URL ||
-    "postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db",
-  ssl: { rejectUnauthorized: false },
-});
+dotenv.config();
 
 // Import pricing components
 import createPricingRoutes from "./routes/pricing.js";
 import { priceEcho, createDiffEndpoint } from "./middleware/priceEcho.js";
 
-// Initialize Price Echo middleware
-const priceEchoMiddleware = priceEcho({
-  pool,
-  stepHeader: "x-fd-step",
-  journeyHeader: "x-fd-journey",
-  webhookUrl: process.env.PRICE_ALERT_WEBHOOK || null,
-  enabled: process.env.PRICE_ECHO_ENABLED !== "false",
+const app = express();
+const PORT = process.env.PORT || 3002;
+
+// Middleware
+app.use(cors());
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
+
+// Database pool
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
 
-// Apply Price Echo middleware before pricing routes
-app.use(priceEchoMiddleware);
-
-// Health check endpoint for Render
-app.get("/api/health", async (req, res) => {
-  try {
-    // Check database health
-    const result = await pool.query("SELECT 1");
-
-    res.json({
-      status: "healthy",
-      timestamp: new Date().toISOString(),
-      service: "faredown-pricing",
-      database: "connected",
-      version: "1.0.0",
-    });
-  } catch (error) {
-    res.status(500).json({
-      status: "unhealthy",
-      timestamp: new Date().toISOString(),
-      service: "faredown-pricing",
-      database: "offline",
-      error: error.message,
-    });
-  }
-});
-
-// Legacy health endpoint (keeping for backward compatibility)
+// Health check
 app.get("/health", async (req, res) => {
   try {
-    const result = await pool.query("SELECT 1");
-    res.json({
-      status: "healthy",
-      timestamp: new Date().toISOString(),
-      database: "connected",
-      tables_check: "ok",
-    });
+    await pool.query("SELECT 1");
+    res.json({ status: "ok", service: "pricing-api" });
   } catch (error) {
-    res.status(500).json({
-      status: "degraded",
-      timestamp: new Date().toISOString(),
-      database: "offline",
-      error: error.message,
-    });
+    res.status(503).json({ status: "error", message: error.message });
   }
 });
 
-// API information endpoint
-app.get("/", (req, res) => {
-  res.json({
-    name: "Faredown Pricing API",
-    version: "1.0.0",
-    description: "Pricing Engine API for markup and bargain management",
-    endpoints: {
-      pricing: "/api/pricing",
-      health: "/health",
-    },
-  });
-});
+// Create pricing routes
+try {
+  const pricingRoutes = createPricingRoutes();
+  app.use("/api/pricing", pricingRoutes);
+  console.log("✅ Pricing routes mounted successfully");
+} catch (e) {
+  console.warn("⚠️ Pricing routes not mounted:", e?.message);
+}
 
-// Pricing routes - create with database pool
-const pricingRoutes = createPricingRoutes(pool);
-app.use("/api/pricing", pricingRoutes);
-
-// Price diff debugging endpoint
-app.get("/api/pricing/diff", (req, res) => createDiffEndpoint(pool)(req, res));
+// Price echo middleware for tracking
+app.use(
+  priceEcho({
+    pool,
+    stepHeader: "x-fd-step",
+    journeyHeader: "x-fd-journey",
+    currencyField: "totalFare",
+    webhookUrl: process.env.PRICE_MISMATCH_WEBHOOK,
+    enabled: process.env.PRICE_ECHO_ENABLED === "true",
+  }),
+);
 
 // Packages routes
 try {
@@ -135,80 +76,61 @@ try {
   console.warn("⚠️ Markups routes not mounted:", e?.message);
 }
 
-// Error handling middleware
+// Price diff endpoint
+app.get("/api/pricing/diff", async (req, res) => {
+  try {
+    const diffEndpoint = await createDiffEndpoint(pool);
+    await diffEndpoint(req, res);
+  } catch (error) {
+    res.status(500).json({
+      error: "Failed to get price diff",
+      message: error.message,
+    });
+  }
+});
+
+// Error handler
 app.use((err, req, res, next) => {
   console.error("Error:", err);
-
-  res.status(err.status || 500).json({
+  res.status(500).json({
     error: "Internal server error",
-    message:
-      process.env.NODE_ENV === "production"
-        ? "Something went wrong"
-        : err.message,
+    message: process.env.NODE_ENV === "production" ? undefined : err.message,
   });
 });
 
 // 404 handler
-app.use("*", (req, res) => {
+app.use((req, res) => {
   res.status(404).json({
     error: "Not found",
-    message: `Route ${req.originalUrl} not found`,
-    availableRoutes: [
-      "/api/packages",
-      "/api/pricing/quote",
-      "/api/pricing/test-quote",
-      "/api/pricing/markup-rules",
-      "/api/pricing/promo-codes",
-      "/api/health",
-      "/health",
-    ],
+    path: req.originalUrl,
   });
 });
 
-// Initialize database and start server
+// Graceful shutdown
+let server;
+process.on("SIGTERM", () => {
+  console.log("SIGTERM received, shutting down gracefully...");
+  if (server) {
+    server.close(() => {
+      console.log("Server closed");
+      process.exit(0);
+    });
+  }
+});
+
+// Start server
 async function startServer() {
   try {
-    // Test database connection
-    console.log("🔌 Testing database connection...");
-    await pool.query("SELECT 1");
-    console.log("✅ Database connected successfully");
-
-    // Test if our new tables exist
-    const tablesResult = await pool.query(`
-      SELECT table_name 
-      FROM information_schema.tables 
-      WHERE table_schema = 'public' 
-      AND table_name IN ('markup_rules', 'promo_codes', 'bookings', 'bargain_events', 'pricing_quotes')
-    `);
-
-    console.log(`✅ Found ${tablesResult.rows.length}/5 pricing tables`);
-    tablesResult.rows.forEach((row) => {
-      console.log(`   - ${row.table_name}`);
+    server = app.listen(PORT, () => {
+      console.log(`🚀 Pricing API Server running on port ${PORT}`);
+      console.log(`📊 Health check: http://localhost:${PORT}/health`);
     });
-
-    // Start server - MUST bind to 0.0.0.0 for Render
-    const server = app.listen(PORT, "0.0.0.0", () => {
-      console.log("\n🚀 Faredown Pricing API Server Started");
-      console.log("================================");
-      console.log(`📍 Server URL: http://0.0.0.0:${PORT}`);
-      console.log(`🏥 Health Check: http://0.0.0.0:${PORT}/api/health`);
-      console.log(
-        `🧪 Test Endpoint: http://0.0.0.0:${PORT}/api/pricing/test-quote`,
-      );
-      console.log(`��� Environment: ${process.env.NODE_ENV || "development"}`);
-      console.log(`🗄️  Database: Connected to PostgreSQL`);
-      console.log(`🔗 Render Compatible: ✅`);
-      console.log("================================\n");
-    });
-
-    return server;
   } catch (error) {
     console.error("❌ Failed to start server:", error);
     process.exit(1);
   }
 }
 
-// Start the server
 startServer();
 
 export default app;

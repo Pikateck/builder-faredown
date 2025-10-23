@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Transfers Bargain API - AI-Powered Negotiation for Transfer Services
  * Handles bargain sessions specifically for transfers with real pricing data
  */
 
-const express = require("express");
 const { Client } = require("pg");
 const crypto = require("crypto");
 const winston = require("winston");
@@ -108,7 +108,7 @@ class TransfersBargainEngine {
       return {
         decision: "counter",
         counterPrice: finalCounterOffer,
-        message: `This is our absolute final price of ₹${finalCounterOffer}. It covers all operational costs and ensures quality service with fair driver compensation.`,
+        message: `This is our absolute final price of â‚¹${finalCounterOffer}. It covers all operational costs and ensures quality service with fair driver compensation.`,
         savings: displayedPrice - finalCounterOffer,
         acceptanceProbability: 0.95,
         isFinalOffer: true,
@@ -250,7 +250,7 @@ router.post("/session/start", async (req, res) => {
 
     // Generate initial AI response
     const initialPrice = pricing.displayedPrice;
-    const initialMessage = `Welcome to our AI price negotiator! Our current rate for the ${transferData.vehicleName} is ₹${Math.round(initialPrice)}. This includes professional driver service, vehicle insurance, and our quality guarantee. What price would you like to pay?`;
+    const initialMessage = `Welcome to our AI price negotiator! Our current rate for the ${transferData.vehicleName} is â‚¹${Math.round(initialPrice)}. This includes professional driver service, vehicle insurance, and our quality guarantee. What price would you like to pay?`;
 
     logger.info("Transfers bargain session started", {
       sessionId,
@@ -266,7 +266,7 @@ router.post("/session/start", async (req, res) => {
         id: transferData.id,
         name: transferData.vehicleName,
         type: `${transferData.vehicleClass} ${transferData.vehicleType}`,
-        route: `${sessionData.pickupLocation} → ${sessionData.dropoffLocation}`,
+        route: `${sessionData.pickupLocation} â†’ ${sessionData.dropoffLocation}`,
         maxPassengers: transferData.maxPassengers,
         estimatedDuration: transferData.estimatedDuration,
       },
@@ -525,7 +525,7 @@ router.get("/session/:sessionId", async (req, res) => {
         sessionId: sessionData.sessionId,
         transferId: sessionData.transferId,
         vehicleName: sessionData.vehicleName,
-        route: `${sessionData.pickupLocation} → ${sessionData.dropoffLocation}`,
+        route: `${sessionData.pickupLocation} â†’ ${sessionData.dropoffLocation}`,
         status: sessionData.status,
         rounds: sessionData.rounds,
         pricing: sessionData.pricing,
@@ -553,5 +553,4 @@ router.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
-
-module.exports = router;
+export default router;

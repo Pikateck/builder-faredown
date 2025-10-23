@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 
 // Mock database for reports
@@ -612,5 +613,4 @@ router.post("/custom", authenticateToken, (req, res) => {
     res.status(500).json({ error: "Failed to generate custom report" });
   }
 });
-
-module.exports = router;
+export default router;

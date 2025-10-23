@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 
 // Mock database
@@ -45,7 +46,7 @@ let vatRules = [
     isDefault: true,
     status: "active",
     priority: 1,
-    specialConditions: "Applicable for hotel bookings above ₹1000",
+    specialConditions: "Applicable for hotel bookings above â‚¹1000",
     createdAt: "2024-01-01T00:00:00Z",
     updatedAt: "2024-01-15T10:00:00Z",
   },
@@ -415,5 +416,4 @@ router.get("/default/:serviceType/:country", (req, res) => {
     res.status(500).json({ error: "Failed to fetch default VAT rule" });
   }
 });
-
-module.exports = router;
+export default router;

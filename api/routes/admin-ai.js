@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 
 // Mock data for development - replace with real database queries later
@@ -348,5 +349,4 @@ router.post("/models/deploy", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

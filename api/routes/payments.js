@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const razorpayService = require("../services/razorpayService");
 const hotelBookingService = require("../services/hotelBookingService");
@@ -206,5 +207,4 @@ router.post("/process", (req, res) => {
     },
   });
 });
-
-module.exports = router;
+export default router;

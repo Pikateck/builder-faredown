@@ -1,5 +1,6 @@
-const express = require("express");
-const router = require("express").Router();
+import express from "express";
+
+const router = express.Router();
 
 // Simple database validation endpoint
 router.get("/ai-tables-check", async (req, res) => {
@@ -24,53 +25,17 @@ router.get("/ai-tables-check", async (req, res) => {
       WHERE table_schema = 'ai'
     `);
 
-    // List all AI tables
-    const tableList = await pool.query(`
-      SELECT table_name 
-      FROM information_schema.tables 
-      WHERE table_schema = 'ai' 
-      ORDER BY table_name
-    `);
-
-    // Check specific important tables
-    const importantTables = [
-      "suppliers",
-      "policies",
-      "bargain_sessions",
-      "bargain_events",
-      "supplier_rates",
-    ];
-    const tableChecks = {};
-
-    for (const tableName of importantTables) {
-      const result = await pool.query(
-        `
-        SELECT EXISTS (
-          SELECT 1 FROM information_schema.tables 
-          WHERE table_schema = 'ai' AND table_name = $1
-        )
-      `,
-        [tableName],
-      );
-      tableChecks[tableName] = result.rows[0].exists;
-    }
-
-    res.json({
-      success: true,
+    const result = {
       ai_schema_exists: schemaCheck.rows.length > 0,
-      total_ai_tables: parseInt(tableCount.rows[0].table_count),
-      ai_tables: tableList.rows.map((row) => row.table_name),
-      important_tables_check: tableChecks,
-      timestamp: new Date().toISOString(),
-    });
+      ai_table_count: parseInt(tableCount.rows[0]?.table_count || 0),
+    };
+
+    res.json({ success: true, data: result });
   } catch (error) {
-    console.error("Database check error:", error);
-    res.status(500).json({
-      success: false,
-      error: error.message,
-      timestamp: new Date().toISOString(),
-    });
+    res
+      .status(500)
+      .json({ success: false, error: error.message });
   }
 });
 
-module.exports = router;
+export default router;

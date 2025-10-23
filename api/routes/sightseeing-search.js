@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const axios = require("axios");
 const crypto = require("crypto");
 const db = require("../database/connection");
@@ -326,7 +327,7 @@ async function saveSightseeingSearchToDatabase(searchParams, results) {
 
     const result = await db.query(searchQuery, searchValues);
     console.log(
-      `💾 Sightseeing search saved to database with ID: ${result.rows[0].id}`,
+      `ðŸ’¾ Sightseeing search saved to database with ID: ${result.rows[0].id}`,
     );
 
     return result.rows[0].id;
@@ -341,7 +342,7 @@ async function saveSightseeingSearchToDatabase(searchParams, results) {
  */
 router.get("/search", async (req, res) => {
   try {
-    console.log("🎯 Sightseeing search request received:", req.query);
+    console.log("ðŸŽ¯ Sightseeing search request received:", req.query);
 
     const {
       destination,
@@ -405,7 +406,7 @@ router.get("/search", async (req, res) => {
     }
 
     console.log(
-      "📡 Calling Hotelbeds Activities API with request:",
+      "ðŸ“¡ Calling Hotelbeds Activities API with request:",
       JSON.stringify(activitiesRequest, null, 2),
     );
 
@@ -420,7 +421,7 @@ router.get("/search", async (req, res) => {
     );
 
     console.log(
-      `✅ Hotelbeds Activities API returned ${activitiesResponse.data?.activities?.length || 0} activities`,
+      `âœ… Hotelbeds Activities API returned ${activitiesResponse.data?.activities?.length || 0} activities`,
     );
 
     // Transform Activities data to our format with markup and promo codes
@@ -445,7 +446,7 @@ router.get("/search", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("❌ Sightseeing search error:", error.message);
+    console.error("âŒ Sightseeing search error:", error.message);
 
     // Return fallback data on API failure
     const fallbackActivities = getFallbackSightseeingData(req.query);
@@ -471,7 +472,7 @@ router.get("/details/:activityCode", async (req, res) => {
   try {
     const { activityCode } = req.params;
 
-    console.log(`🎯 Activity details request for: ${activityCode}`);
+    console.log(`ðŸŽ¯ Activity details request for: ${activityCode}`);
 
     // Call Hotelbeds Activity Details API
     const activitiesResponse = await axios.get(
@@ -490,7 +491,7 @@ router.get("/details/:activityCode", async (req, res) => {
       source: "hotelbeds_activities_live",
     });
   } catch (error) {
-    console.error("❌ Activity details error:", error.message);
+    console.error("âŒ Activity details error:", error.message);
 
     res.status(500).json({
       success: false,
@@ -570,5 +571,4 @@ function getFallbackSightseeingData(searchParams) {
     },
   ];
 }
-
-module.exports = router;
+export default router;

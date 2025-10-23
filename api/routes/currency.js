@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const axios = require("axios");
 
@@ -8,7 +9,7 @@ let currencies = [
     id: "1",
     code: "INR",
     name: "Indian Rupee",
-    symbol: "₹",
+    symbol: "â‚¹",
     country: "India",
     exchangeRate: 1.0,
     baseRate: 1.0,
@@ -534,7 +535,7 @@ router.get("/rates/history/:code", authenticateToken, (req, res) => {
       date.setDate(date.getDate() - i);
 
       // Generate slight variations around current rate
-      const variation = (Math.random() - 0.5) * 0.1; // ±5% variation
+      const variation = (Math.random() - 0.5) * 0.1; // Â±5% variation
       const rate = currentRate * (1 + variation);
 
       history.push({
@@ -560,5 +561,4 @@ router.get("/rates/history/:code", authenticateToken, (req, res) => {
     res.status(500).json({ error: "Failed to fetch rate history" });
   }
 });
-
-module.exports = router;
+export default router;

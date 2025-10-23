@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Admin Airports API Routes
  * Provides airport master data for admin dropdowns and forms
  */
 
-const express = require("express");
 const router = express.Router();
 const db = require("../database/connection");
 const { authenticateToken, requireAdmin } = require("../middleware/auth");
@@ -182,7 +182,7 @@ const mockAirports = [
  */
 router.get("/", rateLimitMiddleware, async (req, res) => {
   try {
-    console.log("✈️ Admin Airports API Request:", req.query);
+    console.log("âœˆï¸ Admin Airports API Request:", req.query);
 
     // Input validation
     const q = req.query.q ? req.query.q.toString().trim() : "";
@@ -227,7 +227,7 @@ router.get("/", rateLimitMiddleware, async (req, res) => {
             );
           } catch (funcError) {
             console.log(
-              "📝 search_airports function not found, using direct query",
+              "ðŸ“ search_airports function not found, using direct query",
             );
             // Fallback to direct table query with standardized country names
             searchResult = await db.query(
@@ -277,7 +277,7 @@ router.get("/", rateLimitMiddleware, async (req, res) => {
         const total = countResult.rows[0]?.total || 0;
 
         console.log(
-          `✅ Found ${items.length} airports from database (total: ${total})`,
+          `âœ… Found ${items.length} airports from database (total: ${total})`,
         );
 
         return res.json({
@@ -288,7 +288,7 @@ router.get("/", rateLimitMiddleware, async (req, res) => {
           offset,
         });
       } catch (dbError) {
-        console.error("❌ Database query failed:", dbError.message);
+        console.error("âŒ Database query failed:", dbError.message);
 
         // In production, fail fast - don't return mock data
         if (process.env.NODE_ENV === "production" || !USE_MOCK_AIRPORTS) {
@@ -299,14 +299,14 @@ router.get("/", rateLimitMiddleware, async (req, res) => {
           });
         }
 
-        console.warn("⚠️ Falling back to mock data (development only)");
+        console.warn("âš ï¸ Falling back to mock data (development only)");
         // Fall through to mock data in development
       }
     }
 
     // Mock data fallback (development only)
     if (USE_MOCK_AIRPORTS || process.env.NODE_ENV !== "production") {
-      console.log("🔄 Using mock airport data");
+      console.log("ðŸ”„ Using mock airport data");
 
       let filteredAirports = mockAirports;
       if (q) {
@@ -340,7 +340,7 @@ router.get("/", rateLimitMiddleware, async (req, res) => {
       });
     }
   } catch (error) {
-    console.error("❌ Admin Airports API error:", error);
+    console.error("âŒ Admin Airports API error:", error);
     return res.status(500).json({
       error: "Internal server error",
       message: "Failed to fetch airports",
@@ -381,5 +381,4 @@ router.get("/health", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

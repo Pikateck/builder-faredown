@@ -1,4 +1,5 @@
-const express = require("express");
+import express from "express";
+
 const axios = require("axios");
 const crypto = require("crypto");
 const db = require("../database/connection");
@@ -33,7 +34,7 @@ async function getAmadeusAccessToken() {
   }
 
   try {
-    console.log("🔑 Getting new Amadeus access token...");
+    console.log("ðŸ”‘ Getting new Amadeus access token...");
 
     const formData = new URLSearchParams();
     formData.append("grant_type", "client_credentials");
@@ -54,13 +55,13 @@ async function getAmadeusAccessToken() {
     if (response.data && response.data.access_token) {
       amadeusAccessToken = response.data.access_token;
       tokenExpiryTime = Date.now() + response.data.expires_in * 1000;
-      console.log("✅ Amadeus token acquired successfully");
+      console.log("âœ… Amadeus token acquired successfully");
       return amadeusAccessToken;
     } else {
       throw new Error("No access token in response");
     }
   } catch (error) {
-    console.error("❌ Amadeus authentication failed:", error.message);
+    console.error("âŒ Amadeus authentication failed:", error.message);
     throw new Error("Failed to authenticate with Amadeus API");
   }
 }
@@ -451,7 +452,7 @@ async function logFlightSearch(req, searchParams, results) {
     }
 
     console.log(
-      `🔍 Flight search logged: ${legs.length} leg(s) for session ${sessionId}`,
+      `ðŸ” Flight search logged: ${legs.length} leg(s) for session ${sessionId}`,
     );
   } catch (error) {
     console.error("Error logging flight search:", error);
@@ -487,7 +488,7 @@ async function saveSearchToDatabase(searchParams, results) {
     ];
 
     const result = await db.query(searchQuery, searchValues);
-    console.log(`💾 Search saved to database with ID: ${result.rows[0].id}`);
+    console.log(`ðŸ’¾ Search saved to database with ID: ${result.rows[0].id}`);
 
     return result.rows[0].id;
   } catch (error) {
@@ -501,7 +502,7 @@ async function saveSearchToDatabase(searchParams, results) {
  */
 router.get("/search", async (req, res) => {
   try {
-    console.log("🔍 Flight search request received:", req.query);
+    console.log("ðŸ” Flight search request received:", req.query);
 
     const {
       origin,
@@ -856,7 +857,7 @@ router.get("/search", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("❌ Flight search error:", error.message);
+    console.error("âŒ Flight search error:", error.message);
 
     // Return fallback data on API failure
     const fallbackFlights = getFallbackFlightData(req.query);
@@ -1073,5 +1074,4 @@ function getFallbackFlightData(searchParams) {
     },
   ];
 }
-
-module.exports = router;
+export default router;

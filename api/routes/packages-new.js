@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Updated Fixed Packages API Routes
  * Now uses proper foreign key relationships for destination filtering
  * Supports filtering by destination and date range as requested
  */
 
-const express = require("express");
 const router = express.Router();
 const { Pool } = require("pg");
 const crypto = require("crypto");
@@ -673,5 +673,4 @@ router.post("/:slug/enquire", async (req, res) => {
     message: "Enquiry endpoint - implementation unchanged"
   });
 });
-
-module.exports = router;
+export default router;

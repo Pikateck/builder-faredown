@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const { body, validationResult, query } = require("express-validator");
 const { pool } = require("../database/connection");
 const router = require("express").Router();
@@ -831,5 +832,4 @@ router.get("/api/admin/reviews/stats", requireAdmin, async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

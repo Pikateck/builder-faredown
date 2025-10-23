@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const { Pool } = require("pg");
 
 const router = require("express").Router();
@@ -415,5 +416,4 @@ router.post("/hotel/:id/toggle-status", async (req, res) => {
     res.status(500).json({ error: "Failed to toggle hotel markup status" });
   }
 });
-
-module.exports = router;
+export default router;

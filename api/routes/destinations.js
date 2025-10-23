@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Destinations API Routes
  * Handles regions, countries, cities hierarchy for packages
  * Provides both public and admin endpoints
  */
 
-const express = require("express");
 const router = express.Router();
 const { Pool } = require("pg");
 const csvParser = require("csv-parser");
@@ -821,5 +821,4 @@ router.get("/admin/stats", requireAdmin, async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

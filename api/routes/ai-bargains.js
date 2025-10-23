@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * AI Bargain Routes
  * Handles conversational bargaining logic with PostgreSQL persistence
  */
 
-const express = require("express");
 const { v4: uuidv4 } = require("uuid");
 const router = express.Router();
 const db = require("../database/connection");
@@ -167,9 +167,9 @@ router.post("/quote", async (req, res) => {
         ],
       );
 
-      console.log(`✅ Bargain event logged: ${eventResult.rows[0].id}`);
+      console.log(`âœ… Bargain event logged: ${eventResult.rows[0].id}`);
     } catch (dbError) {
-      console.error("❌ Failed to log bargain event:", dbError);
+      console.error("âŒ Failed to log bargain event:", dbError);
       // Continue without failing the request
     }
 
@@ -190,7 +190,7 @@ router.post("/quote", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Bargain quote error:", error);
+    console.error("âŒ Bargain quote error:", error);
     res.status(500).json({
       error: "Internal server error during bargain processing",
       code: "PROCESSING_ERROR",
@@ -241,7 +241,7 @@ router.post("/hold", async (req, res) => {
       [holdId, sessionId, finalPrice, holdSeconds, expiresAt],
     );
 
-    console.log(`✅ Bargain hold created: ${holdId} for ${finalPrice}`);
+    console.log(`âœ… Bargain hold created: ${holdId} for ${finalPrice}`);
 
     res.json({
       success: true,
@@ -253,7 +253,7 @@ router.post("/hold", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Hold creation error:", error);
+    console.error("âŒ Hold creation error:", error);
     res.status(500).json({
       error: "Failed to create price hold",
       code: "HOLD_ERROR",
@@ -307,7 +307,7 @@ router.put("/hold/:holdId/book", async (req, res) => {
     );
 
     console.log(
-      `✅ Bargain hold converted to booking: ${holdId} -> ${orderRef}`,
+      `âœ… Bargain hold converted to booking: ${holdId} -> ${orderRef}`,
     );
 
     res.json({
@@ -318,7 +318,7 @@ router.put("/hold/:holdId/book", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Booking conversion error:", error);
+    console.error("âŒ Booking conversion error:", error);
     res.status(500).json({
       error: "Failed to convert hold to booking",
       code: "BOOKING_ERROR",
@@ -371,7 +371,7 @@ router.get("/session/:sessionId", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Session history error:", error);
+    console.error("âŒ Session history error:", error);
     res.status(500).json({
       error: "Failed to retrieve session history",
       code: "SESSION_ERROR",
@@ -473,7 +473,7 @@ router.get("/analytics", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Analytics error:", error);
+    console.error("âŒ Analytics error:", error);
     res.status(500).json({
       error: "Failed to retrieve analytics",
       code: "ANALYTICS_ERROR",
@@ -496,7 +496,7 @@ router.delete("/cleanup", async (req, res) => {
     `);
 
     const expiredCount = result.rows.length;
-    console.log(`✅ Cleaned up ${expiredCount} expired holds`);
+    console.log(`âœ… Cleaned up ${expiredCount} expired holds`);
 
     res.json({
       success: true,
@@ -504,7 +504,7 @@ router.delete("/cleanup", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Cleanup error:", error);
+    console.error("âŒ Cleanup error:", error);
     res.status(500).json({
       error: "Failed to cleanup expired holds",
       code: "CLEANUP_ERROR",
@@ -523,5 +523,4 @@ router.get("/health", (req, res) => {
     version: "1.0.0",
   });
 });
-
-module.exports = router;
+export default router;

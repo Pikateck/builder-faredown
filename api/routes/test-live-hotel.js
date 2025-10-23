@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Test Live Hotel Data Endpoint
  * Shows exactly what data we get from Hotelbeds for a specific hotel
  */
 
-const express = require("express");
 const router = express.Router();
 const contentService = require("../services/hotelbeds/contentService");
 const bookingService = require("../services/hotelbeds/bookingService");
@@ -14,7 +14,7 @@ const bookingService = require("../services/hotelbeds/bookingService");
  */
 router.get("/dubai", async (req, res) => {
   try {
-    console.log("🔍 Testing live Dubai hotel search...");
+    console.log("ðŸ” Testing live Dubai hotel search...");
     
     // Search for availability in Dubai
     const searchParams = {
@@ -125,7 +125,7 @@ router.get("/dubai", async (req, res) => {
     }
     
   } catch (error) {
-    console.error("❌ Test error:", error);
+    console.error("âŒ Test error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -142,7 +142,7 @@ router.get("/dubai", async (req, res) => {
 router.get("/hotel/:code", async (req, res) => {
   try {
     const { code } = req.params;
-    console.log(`🏨 Testing specific hotel: ${code}`);
+    console.log(`ðŸ¨ Testing specific hotel: ${code}`);
     
     // Get content data for this hotel
     const contentData = await contentService.getHotels([code]);
@@ -176,7 +176,7 @@ router.get("/hotel/:code", async (req, res) => {
     }
     
   } catch (error) {
-    console.error("❌ Hotel test error:", error);
+    console.error("âŒ Hotel test error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -191,7 +191,7 @@ router.get("/hotel/:code", async (req, res) => {
  */
 router.get("/images", async (req, res) => {
   try {
-    console.log("🖼️ Testing image availability...");
+    console.log("ðŸ–¼ï¸ Testing image availability...");
     
     // Test a few known hotel codes
     const testCodes = ['123456', '789012', '345678']; // Common test hotel codes
@@ -234,7 +234,7 @@ router.get("/images", async (req, res) => {
     });
     
   } catch (error) {
-    console.error("❌ Image test error:", error);
+    console.error("âŒ Image test error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -242,5 +242,4 @@ router.get("/images", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

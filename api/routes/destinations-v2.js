@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Destinations API v2
  * Uses materialized view and search function for fast, comprehensive search
  * Implements the complete specification for destination master
  */
 
-const express = require("express");
 const router = express.Router();
 const { Pool } = require("pg");
 
@@ -152,11 +152,11 @@ router.get("/search", async (req, res) => {
 
     // Enhanced logging with performance breakdown
     if (totalTime > 300) {
-      console.warn(`🐌 SLOW SEARCH v2: "${queryText}" took ${totalTime}ms`);
-      console.warn(`   📊 Breakdown: cache=${timings.cache}ms | parse=${timings.parse}ms | query=${timings.query}ms | rank=${timings.rank}ms | respond=${timings.respond}ms`);
-      console.warn(`   📋 Results: ${formattedResults.length} items, types: ${typesFilter.join(',')}`);
+      console.warn(`ðŸŒ SLOW SEARCH v2: "${queryText}" took ${totalTime}ms`);
+      console.warn(`   ðŸ“Š Breakdown: cache=${timings.cache}ms | parse=${timings.parse}ms | query=${timings.query}ms | rank=${timings.rank}ms | respond=${timings.respond}ms`);
+      console.warn(`   ðŸ“‹ Results: ${formattedResults.length} items, types: ${typesFilter.join(',')}`);
     } else {
-      console.log(`⚡ Fast search v2: "${queryText}" = ${totalTime}ms (${formattedResults.length} results)`);
+      console.log(`âš¡ Fast search v2: "${queryText}" = ${totalTime}ms (${formattedResults.length} results)`);
     }
 
     // Set optimized cache headers
@@ -170,9 +170,9 @@ router.get("/search", async (req, res) => {
 
   } catch (error) {
     const totalTime = Date.now() - timings.start;
-    console.error(`❌ SEARCH ERROR v2: "${q}" failed after ${totalTime}ms`);
-    console.error(`   📊 Breakdown: cache=${timings.cache}ms | parse=${timings.parse}ms | query=${timings.query}ms`);
-    console.error("   🔥 Error:", error.message);
+    console.error(`âŒ SEARCH ERROR v2: "${q}" failed after ${totalTime}ms`);
+    console.error(`   ðŸ“Š Breakdown: cache=${timings.cache}ms | parse=${timings.parse}ms | query=${timings.query}ms`);
+    console.error("   ðŸ”¥ Error:", error.message);
 
     res.status(500).json({
       success: false,
@@ -552,7 +552,7 @@ router.get("/health", async (req, res) => {
 router.post("/cache/clear", (req, res) => {
   try {
     searchCache.clear();
-    console.log("🗑️  Search cache cleared");
+    console.log("ðŸ—‘ï¸  Search cache cleared");
     
     res.json({
       success: true,
@@ -567,5 +567,4 @@ router.post("/cache/clear", (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

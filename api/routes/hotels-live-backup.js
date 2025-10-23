@@ -1,8 +1,8 @@
+﻿import express from "express";
 /**
  * Live Hotel Search Routes (bypasses fallback for testing)
  */
 
-const express = require("express");
 const router = express.Router();
 const hotelbedsService = require("../services/hotelbedsService");
 const giataService = require("../services/giataService");
@@ -25,7 +25,7 @@ router.get("/search", async (req, res) => {
       destinationCode,
     } = req.query;
 
-    console.log("🔴 LIVE API CALL - Bypassing fallback mode");
+    console.log("ðŸ”´ LIVE API CALL - Bypassing fallback mode");
 
     // Validate required parameters
     if (!checkIn || !checkOut) {
@@ -38,13 +38,13 @@ router.get("/search", async (req, res) => {
     // Search for destinations if destinationCode not provided
     let destCode = destinationCode;
     if (!destCode && destination) {
-      console.log(`🔍 Searching destinations for: ${destination}`);
+      console.log(`ðŸ” Searching destinations for: ${destination}`);
       const destinations =
         await hotelbedsService.searchDestinations(destination);
       if (destinations.length > 0) {
         destCode = destinations[0].code;
         console.log(
-          `✅ Found destination code: ${destCode} for ${destinations[0].name}`,
+          `âœ… Found destination code: ${destCode} for ${destinations[0].name}`,
         );
       }
     }
@@ -66,10 +66,10 @@ router.get("/search", async (req, res) => {
       children: parseInt(children),
     };
 
-    console.log("🏨 Searching hotels with params:", searchParams);
+    console.log("ðŸ¨ Searching hotels with params:", searchParams);
     const hotelResults =
       await hotelbedsService.searchAvailability(searchParams);
-    console.log(`📊 Found ${hotelResults.length} hotels from Hotelbeds API`);
+    console.log(`ðŸ“Š Found ${hotelResults.length} hotels from Hotelbeds API`);
 
     if (hotelResults.length === 0) {
       return res.json({
@@ -193,10 +193,10 @@ router.get("/destinations/search", async (req, res) => {
       });
     }
 
-    console.log(`🔴 LIVE DESTINATIONS SEARCH: ${query}`);
+    console.log(`ðŸ”´ LIVE DESTINATIONS SEARCH: ${query}`);
     const destinations = await hotelbedsService.searchDestinations(query);
     console.log(
-      `📍 Found ${destinations.length} destinations from Hotelbeds API`,
+      `ðŸ“ Found ${destinations.length} destinations from Hotelbeds API`,
     );
 
     const formattedDestinations = destinations.map((dest) => ({
@@ -222,5 +222,4 @@ router.get("/destinations/search", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

@@ -1,5 +1,5 @@
-// Quick test to verify transfers bargain logic
-const express = require("express");
+﻿// Quick test to verify transfers bargain logic
+
 const app = express();
 app.use(express.json());
 
@@ -27,11 +27,11 @@ const testSearchDetails = {
 
 // Test function
 async function testTransfersBargain() {
-  console.log("\n🚀 Testing Transfers Bargain Logic\n");
+  console.log("\nðŸš€ Testing Transfers Bargain Logic\n");
 
   try {
     // Test 1: Start bargain session
-    console.log("1️⃣ Starting bargain session...");
+    console.log("1ï¸âƒ£ Starting bargain session...");
     const startResponse = await fetch(
       "http://localhost:3000/api/transfers-bargain/session/start",
       {
@@ -46,19 +46,19 @@ async function testTransfersBargain() {
     );
 
     if (!startResponse.ok) {
-      console.log("❌ API not available, testing fallback logic instead...");
+      console.log("âŒ API not available, testing fallback logic instead...");
       testFallbackLogic();
       return;
     }
 
     const startData = await startResponse.json();
-    console.log("✅ Session started:", {
+    console.log("âœ… Session started:", {
       sessionId: startData.sessionId,
       displayedPrice: startData.pricing.displayedPrice,
     });
 
     // Test 2: Very low offer (should get counter offer, not rejection)
-    console.log("\n2️⃣ Testing very low offer (₹800)...");
+    console.log("\n2ï¸âƒ£ Testing very low offer (â‚¹800)...");
     const lowOfferResponse = await fetch(
       "http://localhost:3000/api/transfers-bargain/session/offer",
       {
@@ -67,7 +67,7 @@ async function testTransfersBargain() {
         body: JSON.stringify({
           sessionId: startData.sessionId,
           userOffer: 800,
-          message: "I want to pay only ₹800",
+          message: "I want to pay only â‚¹800",
         }),
       },
     );
@@ -81,14 +81,14 @@ async function testTransfersBargain() {
 
     if (lowOfferData.aiResponse.decision === "reject") {
       console.log(
-        "❌ PROBLEM: Still rejecting offers instead of providing counter offers!",
+        "âŒ PROBLEM: Still rejecting offers instead of providing counter offers!",
       );
     } else {
-      console.log("✅ GOOD: Providing counter offer instead of rejection");
+      console.log("âœ… GOOD: Providing counter offer instead of rejection");
     }
 
     // Test 3: Reasonable offer (should get acceptance or counter)
-    console.log("\n3️⃣ Testing reasonable offer (₹2200)...");
+    console.log("\n3ï¸âƒ£ Testing reasonable offer (â‚¹2200)...");
     const reasonableOfferResponse = await fetch(
       "http://localhost:3000/api/transfers-bargain/session/offer",
       {
@@ -97,7 +97,7 @@ async function testTransfersBargain() {
         body: JSON.stringify({
           sessionId: startData.sessionId,
           userOffer: 2200,
-          message: "How about ₹2200?",
+          message: "How about â‚¹2200?",
         }),
       },
     );
@@ -110,16 +110,16 @@ async function testTransfersBargain() {
       savings: reasonableOfferData.aiResponse.savings,
     });
 
-    console.log("\n✅ Transfers bargain test completed successfully!");
+    console.log("\nâœ… Transfers bargain test completed successfully!");
   } catch (error) {
-    console.log("❌ API test failed:", error.message);
+    console.log("âŒ API test failed:", error.message);
     console.log("Testing fallback logic instead...");
     testFallbackLogic();
   }
 }
 
 function testFallbackLogic() {
-  console.log("\n🔄 Testing Fallback Logic (Frontend Intelligence)\n");
+  console.log("\nðŸ”„ Testing Fallback Logic (Frontend Intelligence)\n");
 
   const originalTotalPrice = 2500;
   const costPrice = originalTotalPrice * 0.7; // 1750
@@ -135,34 +135,34 @@ function testFallbackLogic() {
 
   // Test very low offer
   const veryLowOffer = 800;
-  console.log(`\nTesting very low offer (₹${veryLowOffer}):`);
+  console.log(`\nTesting very low offer (â‚¹${veryLowOffer}):`);
   if (veryLowOffer < minSellingPrice) {
     const finalCounterOffer = Math.round(minSellingPrice * 1.05);
     console.log(
-      "✅ Result: Counter offer at ₹" + finalCounterOffer + " (no rejection!)",
+      "âœ… Result: Counter offer at â‚¹" + finalCounterOffer + " (no rejection!)",
     );
   }
 
   // Test reasonable offer
   const reasonableOffer = 2200;
-  console.log(`\nTesting reasonable offer (₹${reasonableOffer}):`);
+  console.log(`\nTesting reasonable offer (â‚¹${reasonableOffer}):`);
   if (
     reasonableOffer >= minSellingPrice &&
     reasonableOffer >= originalTotalPrice * 0.85
   ) {
-    console.log("✅ Result: Accept offer (good profit margin)");
+    console.log("âœ… Result: Accept offer (good profit margin)");
   } else if (reasonableOffer >= minSellingPrice) {
     const counterOffer = Math.round(
       originalTotalPrice * (0.88 + Math.random() * 0.07),
     );
     console.log(
-      "✅ Result: Counter offer at ₹" +
+      "âœ… Result: Counter offer at â‚¹" +
         counterOffer +
         " (profitable but room for negotiation)",
     );
   }
 
-  console.log("\n✅ Fallback logic test completed - always provides a fare!");
+  console.log("\nâœ… Fallback logic test completed - always provides a fare!");
 }
 
 // Run test if this file is executed directly
@@ -170,4 +170,4 @@ if (require.main === module) {
   testTransfersBargain();
 }
 
-module.exports = { testTransfersBargain };
+export default { testTransfersBargain };

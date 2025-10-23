@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Admin Profile Management Routes
  * Admin endpoints for managing customer profiles, travelers, and bookings
  */
 
-const express = require("express");
 const router = express.Router();
 const { Pool } = require("pg");
 const { requirePermission, PERMISSIONS } = require("../middleware/auth");
@@ -518,5 +518,4 @@ router.get("/stats/overview", requirePermission("view_dashboard"), async (req, r
     if (client) client.release();
   }
 });
-
-module.exports = router;
+export default router;

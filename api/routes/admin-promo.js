@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const { requireAdmin } = require("../middleware/auth");
 const { audit } = require("../middleware/audit");
@@ -657,7 +658,7 @@ router.post("/validate", async (req, res) => {
       return res.json({
         success: true,
         valid: false,
-        message: `Minimum fare of ₹${promo.minimumFareAmount} required`,
+        message: `Minimum fare of â‚¹${promo.minimumFareAmount} required`,
       });
     }
 
@@ -688,7 +689,7 @@ router.post("/validate", async (req, res) => {
       valid: true,
       discount: Math.round(discount * 100) / 100,
       finalAmount: Math.round(finalAmount * 100) / 100,
-      message: `₹${discount} discount applied successfully`,
+      message: `â‚¹${discount} discount applied successfully`,
     });
   } catch (error) {
     console.error("Error validating promo code:", error);
@@ -805,5 +806,4 @@ router.get("/:id/stats", requireAdmin, async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

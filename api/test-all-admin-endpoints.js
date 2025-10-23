@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Test script to verify all admin endpoints are working properly
  */
 
@@ -116,7 +116,7 @@ function makeRequest(endpoint) {
 }
 
 async function testAllEndpoints() {
-  console.log("🧪 Testing all admin endpoints...\n");
+  console.log("ðŸ§ª Testing all admin endpoints...\n");
 
   const results = [];
 
@@ -126,7 +126,7 @@ async function testAllEndpoints() {
       const result = await makeRequest(endpoint);
 
       if (result.status >= 200 && result.status < 300) {
-        console.log(`✅ ${endpoint.name}: ${result.status}`);
+        console.log(`âœ… ${endpoint.name}: ${result.status}`);
         if (result.data.success) {
           const dataSize = result.data.data
             ? Array.isArray(result.data.data)
@@ -135,12 +135,12 @@ async function testAllEndpoints() {
                 result.data.data.items?.length ||
                 Object.keys(result.data.data).length
             : 0;
-          console.log(`   📊 Data: ${dataSize} records`);
+          console.log(`   ðŸ“Š Data: ${dataSize} records`);
         }
       } else {
-        console.log(`⚠️  ${endpoint.name}: ${result.status}`);
+        console.log(`âš ï¸  ${endpoint.name}: ${result.status}`);
         if (result.data.message) {
-          console.log(`   📝 Message: ${result.data.message}`);
+          console.log(`   ðŸ“ Message: ${result.data.message}`);
         }
       }
 
@@ -151,7 +151,7 @@ async function testAllEndpoints() {
         hasData: result.data.success && result.data.data,
       });
     } catch (error) {
-      console.log(`❌ ${endpoint.name}: ${error.error}`);
+      console.log(`âŒ ${endpoint.name}: ${error.error}`);
       results.push({
         endpoint: endpoint.name,
         status: "ERROR",
@@ -164,19 +164,19 @@ async function testAllEndpoints() {
     await new Promise((resolve) => setTimeout(resolve, 100));
   }
 
-  console.log("\n📊 Test Summary:");
+  console.log("\nðŸ“Š Test Summary:");
   console.log("==================");
 
   const successful = results.filter((r) => r.success).length;
   const total = results.length;
 
-  console.log(`✅ Successful: ${successful}/${total}`);
-  console.log(`❌ Failed: ${total - successful}/${total}`);
+  console.log(`âœ… Successful: ${successful}/${total}`);
+  console.log(`âŒ Failed: ${total - successful}/${total}`);
 
   if (successful === total) {
-    console.log("\n🎉 All endpoints are working correctly!");
+    console.log("\nðŸŽ‰ All endpoints are working correctly!");
   } else {
-    console.log("\n⚠️  Some endpoints need attention:");
+    console.log("\nâš ï¸  Some endpoints need attention:");
     results
       .filter((r) => !r.success)
       .forEach((r) => {
@@ -184,11 +184,11 @@ async function testAllEndpoints() {
       });
   }
 
-  console.log("\n📋 Functional modules:");
+  console.log("\nðŸ“‹ Functional modules:");
   results
     .filter((r) => r.success && r.hasData)
     .forEach((r) => {
-      console.log(`   ✓ ${r.endpoint}`);
+      console.log(`   âœ“ ${r.endpoint}`);
     });
 }
 
@@ -197,4 +197,4 @@ if (require.main === module) {
   testAllEndpoints().catch(console.error);
 }
 
-module.exports = { testAllEndpoints };
+export default { testAllEndpoints };

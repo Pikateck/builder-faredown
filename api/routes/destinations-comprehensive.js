@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Comprehensive Destinations API Routes
  * Implements the full specification with hierarchical regions, countries, cities
  * Supports India subregions + World destinations with UUID-based schema
  */
 
-const express = require("express");
 const router = express.Router();
 const { Pool } = require("pg");
 const csvParser = require("csv-parser");
@@ -440,11 +440,11 @@ router.get("/search", async (req, res) => {
 
     // Enhanced logging with phase breakdown
     if (totalTime > 300) {
-      console.warn(`🐌 SLOW SEARCH: "${searchTerm}" took ${totalTime}ms`);
-      console.warn(`   📊 Breakdown: parse=${timings.parse}ms | query=${timings.query}ms | rank=${timings.rank}ms | respond=${timings.respond}ms`);
-      console.warn(`   📋 Results: ${formattedResults.length} items returned`);
+      console.warn(`ðŸŒ SLOW SEARCH: "${searchTerm}" took ${totalTime}ms`);
+      console.warn(`   ðŸ“Š Breakdown: parse=${timings.parse}ms | query=${timings.query}ms | rank=${timings.rank}ms | respond=${timings.respond}ms`);
+      console.warn(`   ðŸ“‹ Results: ${formattedResults.length} items returned`);
     } else {
-      console.log(`⚡ Fast search: "${searchTerm}" = ${totalTime}ms (${formattedResults.length} results)`);
+      console.log(`âš¡ Fast search: "${searchTerm}" = ${totalTime}ms (${formattedResults.length} results)`);
     }
 
     // Set optimized cache headers
@@ -457,9 +457,9 @@ router.get("/search", async (req, res) => {
 
   } catch (error) {
     const totalTime = Date.now() - timings.start;
-    console.error(`❌ SEARCH ERROR: "${q}" failed after ${totalTime}ms`);
-    console.error(`   📊 Breakdown: parse=${timings.parse}ms | query=${timings.query}ms | rank=${timings.rank}ms`);
-    console.error("   🔥 Error:", error.message);
+    console.error(`âŒ SEARCH ERROR: "${q}" failed after ${totalTime}ms`);
+    console.error(`   ðŸ“Š Breakdown: parse=${timings.parse}ms | query=${timings.query}ms | rank=${timings.rank}ms`);
+    console.error("   ðŸ”¥ Error:", error.message);
 
     res.status(500).json({
       success: false,
@@ -1030,5 +1030,4 @@ router.get("/admin/stats", requireAdmin, async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Admin Dashboard API Routes
  * Provides live data from database for admin analytics and management
  */
 
-const express = require("express");
 const router = express.Router();
 const db = require("../database/connection");
 const { authenticateToken, requireAdmin } = require("../middleware/auth");
@@ -18,7 +18,7 @@ router.use(requireAdmin);
  */
 router.get("/stats", async (req, res) => {
   try {
-    console.log("📊 Fetching admin dashboard statistics");
+    console.log("ðŸ“Š Fetching admin dashboard statistics");
 
     // Get booking statistics
     const bookingStats = await db.query(`
@@ -102,7 +102,7 @@ router.get("/stats", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("❌ Admin dashboard stats error:", error);
+    console.error("âŒ Admin dashboard stats error:", error);
     
     // Return fallback data if database is unavailable
     res.json({
@@ -229,7 +229,7 @@ router.get("/bookings", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("❌ Admin bookings fetch error:", error);
+    console.error("âŒ Admin bookings fetch error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch bookings",
@@ -294,7 +294,7 @@ router.get("/revenue", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("❌ Revenue analytics error:", error);
+    console.error("âŒ Revenue analytics error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch revenue analytics",
@@ -331,7 +331,7 @@ router.get("/destinations", async (req, res) => {
     });
 
   } catch (error) {
-    console.error("❌ Destination analytics error:", error);
+    console.error("âŒ Destination analytics error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch destination analytics", 
@@ -411,7 +411,7 @@ router.get("/export/bookings", async (req, res) => {
     }
 
   } catch (error) {
-    console.error("❌ Export bookings error:", error);
+    console.error("âŒ Export bookings error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to export bookings",
@@ -419,5 +419,4 @@ router.get("/export/bookings", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

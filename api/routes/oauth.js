@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * OAuth Authentication Routes
  * Handles Google, Facebook, and Apple social login
  * Updated for iframe compatibility and proper session management
  */
 
-const express = require("express");
 const session = require("express-session");
 const { OAuth2Client } = require("google-auth-library");
 const axios = require("axios");
@@ -30,7 +30,7 @@ setInterval(
 
     expiredStates.forEach((state) => oauthStateStore.delete(state));
     if (expiredStates.length > 0) {
-      console.log(`🧹 Cleaned up ${expiredStates.length} expired OAuth states`);
+      console.log(`ðŸ§¹ Cleaned up ${expiredStates.length} expired OAuth states`);
     }
   },
   5 * 60 * 1000,
@@ -39,27 +39,27 @@ setInterval(
 // Helper functions for state management
 const storeState = (state) => {
   oauthStateStore.set(state, { created: Date.now() });
-  console.log(`🔵 Stored OAuth state: ${state.substring(0, 8)}...`);
+  console.log(`ðŸ”µ Stored OAuth state: ${state.substring(0, 8)}...`);
 };
 
 const validateAndConsumeState = (state) => {
   const data = oauthStateStore.get(state);
   if (!data) {
-    console.log(`🔴 OAuth state not found: ${state?.substring(0, 8)}...`);
+    console.log(`ðŸ”´ OAuth state not found: ${state?.substring(0, 8)}...`);
     return false;
   }
 
   const now = Date.now();
   if (now - data.created > 10 * 60 * 1000) {
     // 10 minutes
-    console.log(`🔴 OAuth state expired: ${state.substring(0, 8)}...`);
+    console.log(`ðŸ”´ OAuth state expired: ${state.substring(0, 8)}...`);
     oauthStateStore.delete(state);
     return false;
   }
 
   oauthStateStore.delete(state);
   console.log(
-    `✅ OAuth state validated and consumed: ${state.substring(0, 8)}...`,
+    `âœ… OAuth state validated and consumed: ${state.substring(0, 8)}...`,
   );
   return true;
 };
@@ -109,13 +109,13 @@ if (isGoogleConfigured) {
     redirectUri,
   );
   console.log(
-    "✅ Google OAuth client initialized with redirect URI:",
+    "âœ… Google OAuth client initialized with redirect URI:",
     redirectUri,
   );
-  console.log("📋 Configured redirect URIs should include:", redirectUris);
+  console.log("ðŸ“‹ Configured redirect URIs should include:", redirectUris);
 } else {
   console.log(
-    "⚠️ Google OAuth not configured - missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET",
+    "âš ï¸ Google OAuth not configured - missing GOOGLE_CLIENT_ID or GOOGLE_CLIENT_SECRET",
   );
 }
 
@@ -136,20 +136,20 @@ const generateToken = (user) => {
 
 // Helper function to create or get user
 const createOrGetSocialUser = async (profile, provider) => {
-  console.log("🔵 Creating social user with profile:", profile);
+  console.log("ðŸ”µ Creating social user with profile:", profile);
 
   // Check if user already exists by email
   const { getUserByEmail } = require("../middleware/auth");
   let existingUser = getUserByEmail(profile.email);
 
   if (existingUser) {
-    console.log("🔵 Found existing user:", existingUser.email);
+    console.log("ðŸ”µ Found existing user:", existingUser.email);
     // Update last login
     existingUser.lastLogin = new Date();
     return existingUser;
   }
 
-  console.log("🔵 Creating new social user");
+  console.log("ðŸ”µ Creating new social user");
   // Create new user with email-based structure
   const user = {
     id: `${provider}_${profile.id}`,
@@ -171,7 +171,7 @@ const createOrGetSocialUser = async (profile, provider) => {
   const users = require("../middleware/auth").users || new Map();
   users.set(profile.email, user);
 
-  console.log("✅ Social user created:", { id: user.id, email: user.email });
+  console.log("âœ… Social user created:", { id: user.id, email: user.email });
   return user;
 };
 
@@ -185,11 +185,11 @@ const createOrGetSocialUser = async (profile, provider) => {
  */
 router.get("/google/url", (req, res) => {
   try {
-    console.log("🔵 Generating Google OAuth URL...");
+    console.log("ðŸ”µ Generating Google OAuth URL...");
 
     // Check if Google OAuth is configured
     if (!isGoogleConfigured || !googleClient) {
-      console.log("🔴 Google OAuth not configured");
+      console.log("ðŸ”´ Google OAuth not configured");
       return res.status(503).json({
         success: false,
         message:
@@ -216,7 +216,7 @@ router.get("/google/url", (req, res) => {
     storeState(state);
 
     console.log(
-      `✅ Generated Google OAuth URL with state: ${state.substring(0, 8)}...`,
+      `âœ… Generated Google OAuth URL with state: ${state.substring(0, 8)}...`,
     );
 
     res.json({
@@ -225,7 +225,7 @@ router.get("/google/url", (req, res) => {
       state: state,
     });
   } catch (error) {
-    console.error("🔴 Google OAuth URL generation error:", error);
+    console.error("ðŸ”´ Google OAuth URL generation error:", error);
     res.status(500).json({
       success: false,
       message: "Failed to generate Google OAuth URL",
@@ -246,15 +246,15 @@ router.get("/google/url", (req, res) => {
  */
 router.get("/google/callback", async (req, res) => {
   try {
-    console.log("🔵 Google OAuth GET callback received");
-    console.log("🔵 Query params:", {
+    console.log("ðŸ”µ Google OAuth GET callback received");
+    console.log("ðŸ”µ Query params:", {
       code: req.query.code?.substring(0, 20) + "...",
       state: req.query.state,
     });
 
     // Check if Google OAuth is configured
     if (!isGoogleConfigured || !googleClient) {
-      console.error("🔴 Google OAuth not configured");
+      console.error("ðŸ”´ Google OAuth not configured");
       return res.status(503).json({
         success: false,
         message: "Google OAuth is not configured",
@@ -265,18 +265,18 @@ router.get("/google/callback", async (req, res) => {
     const { code, state } = req.query;
 
     if (!code) {
-      console.error("🔴 Missing authorization code");
+      console.error("ðŸ”´ Missing authorization code");
       return res.status(400).json({
         success: false,
         message: "Authorization code is required",
       });
     }
 
-    console.log("🔵 Validating OAuth state:", state?.substring(0, 8) + "...");
+    console.log("ðŸ”µ Validating OAuth state:", state?.substring(0, 8) + "...");
 
     // Verify state for CSRF protection
     if (!state) {
-      console.error("🔴 No state parameter provided");
+      console.error("ðŸ”´ No state parameter provided");
       return res.status(400).json({
         success: false,
         message: "Missing state parameter. Please try again.",
@@ -284,24 +284,24 @@ router.get("/google/callback", async (req, res) => {
     }
 
     if (!validateAndConsumeState(state)) {
-      console.error("🔴 Invalid or expired OAuth state");
+      console.error("ðŸ”´ Invalid or expired OAuth state");
       return res.status(400).json({
         success: false,
         message: "OAuth session expired or invalid. Please try again.",
       });
     }
 
-    console.log("🔵 Exchanging code for tokens...");
+    console.log("ðŸ”µ Exchanging code for tokens...");
     // Exchange code for tokens
     const { tokens } = await googleClient.getToken(code);
-    console.log("🔵 Tokens received:", {
+    console.log("ðŸ”µ Tokens received:", {
       id_token: !!tokens.id_token,
       access_token: !!tokens.access_token,
     });
 
     googleClient.setCredentials(tokens);
 
-    console.log("🔵 Verifying ID token...");
+    console.log("ðŸ”µ Verifying ID token...");
     // Get user info
     const ticket = await googleClient.verifyIdToken({
       idToken: tokens.id_token,
@@ -309,14 +309,14 @@ router.get("/google/callback", async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-    console.log("🔵 User payload:", {
+    console.log("ðŸ”µ User payload:", {
       sub: payload.sub,
       email: payload.email,
       name: payload.name,
       email_verified: payload.email_verified,
     });
 
-    console.log("🔵 Creating/getting social user...");
+    console.log("ðŸ”µ Creating/getting social user...");
     // Create or get user
     const user = await createOrGetSocialUser(
       {
@@ -331,12 +331,12 @@ router.get("/google/callback", async (req, res) => {
       "google",
     );
 
-    console.log("🔵 User created/retrieved:", {
+    console.log("ðŸ”µ User created/retrieved:", {
       id: user.id,
       email: user.email,
     });
 
-    console.log("🔵 Generating JWT token...");
+    console.log("ðŸ”µ Generating JWT token...");
     // Generate JWT token
     const token = generateToken(user);
 
@@ -354,7 +354,7 @@ router.get("/google/callback", async (req, res) => {
 
     res.cookie("auth_token", token, cookieOptions);
 
-    console.log("✅ Google OAuth callback successful:", {
+    console.log("âœ… Google OAuth callback successful:", {
       userId: user.id,
       email: user.email,
     });
@@ -400,13 +400,13 @@ router.get("/google/callback", async (req, res) => {
 </head>
 <body>
     <div class="container">
-        <div class="success">✓ Authentication Successful</div>
+        <div class="success">âœ“ Authentication Successful</div>
         <div class="loading">Completing sign-in...</div>
     </div>
     <script>
-        console.log('🔵 OAuth bridge page loaded');
-        console.log('🔵 Window opener exists:', !!window.opener);
-        console.log('🔵 Parent origin:', '${parentOrigin}');
+        console.log('ðŸ”µ OAuth bridge page loaded');
+        console.log('ðŸ”µ Window opener exists:', !!window.opener);
+        console.log('ðŸ”µ Parent origin:', '${parentOrigin}');
 
         // Send success message to parent window
         if (window.opener) {
@@ -423,7 +423,7 @@ router.get("/google/callback", async (req, res) => {
                 token: '${token}'
             };
 
-            console.log('🔵 Sending success message:', message);
+            console.log('ðŸ”µ Sending success message:', message);
             window.opener.postMessage(message, '${parentOrigin}');
 
             // Also try Builder.io origin if different
@@ -433,11 +433,11 @@ router.get("/google/callback", async (req, res) => {
 
             // Close the popup after a short delay
             setTimeout(() => {
-                console.log('🔵 Closing popup window');
+                console.log('ðŸ”µ Closing popup window');
                 window.close();
             }, 1000);
         } else {
-            console.log('🔴 No window.opener found');
+            console.log('ðŸ”´ No window.opener found');
             // Fallback: redirect to main app
             setTimeout(() => {
                 window.location.href = '${parentOrigin}';
@@ -450,7 +450,7 @@ router.get("/google/callback", async (req, res) => {
     res.setHeader("Content-Type", "text/html");
     res.send(bridgeHTML);
   } catch (error) {
-    console.error("🔴 Google OAuth GET callback error:", error);
+    console.error("ðŸ”´ Google OAuth GET callback error:", error);
 
     // Determine parent origin based on environment
     const parentOrigin =
@@ -493,12 +493,12 @@ router.get("/google/callback", async (req, res) => {
 </head>
 <body>
     <div class="container">
-        <div class="error">✗ Authentication Failed</div>
+        <div class="error">âœ— Authentication Failed</div>
         <div class="message">Please try again</div>
     </div>
     <script>
-        console.log('🔴 OAuth error bridge page loaded');
-        console.log('🔴 Error:', '${error.message}');
+        console.log('ðŸ”´ OAuth error bridge page loaded');
+        console.log('ðŸ”´ Error:', '${error.message}');
 
         // Send error message to parent window
         if (window.opener) {
@@ -507,7 +507,7 @@ router.get("/google/callback", async (req, res) => {
                 error: 'Google authentication failed. Please try again.'
             };
 
-            console.log('🔴 Sending error message:', message);
+            console.log('ðŸ”´ Sending error message:', message);
             window.opener.postMessage(message, '${parentOrigin}');
 
             // Also try Builder.io origin if different
@@ -549,15 +549,15 @@ router.get("/google/callback", async (req, res) => {
  */
 router.post("/google/callback", async (req, res) => {
   try {
-    console.log("🔵 Google OAuth callback received");
-    console.log("🔵 Request body:", {
+    console.log("ðŸ”µ Google OAuth callback received");
+    console.log("ðŸ”µ Request body:", {
       code: req.body.code?.substring(0, 20) + "...",
       state: req.body.state,
     });
 
     // Check if Google OAuth is configured
     if (!isGoogleConfigured || !googleClient) {
-      console.error("🔴 Google OAuth not configured");
+      console.error("ðŸ”´ Google OAuth not configured");
       return res.status(503).json({
         success: false,
         message: "Google OAuth is not configured",
@@ -568,18 +568,18 @@ router.post("/google/callback", async (req, res) => {
     const { code, state } = req.body;
 
     if (!code) {
-      console.error("🔴 Missing authorization code");
+      console.error("ðŸ”´ Missing authorization code");
       return res.status(400).json({
         success: false,
         message: "Authorization code is required",
       });
     }
 
-    console.log("🔵 Validating OAuth state:", state?.substring(0, 8) + "...");
+    console.log("ðŸ”µ Validating OAuth state:", state?.substring(0, 8) + "...");
 
     // Verify state for CSRF protection
     if (!state) {
-      console.error("🔴 No state parameter provided");
+      console.error("ðŸ”´ No state parameter provided");
       return res.status(400).json({
         success: false,
         message: "Missing state parameter. Please try again.",
@@ -587,24 +587,24 @@ router.post("/google/callback", async (req, res) => {
     }
 
     if (!validateAndConsumeState(state)) {
-      console.error("🔴 Invalid or expired OAuth state");
+      console.error("ðŸ”´ Invalid or expired OAuth state");
       return res.status(400).json({
         success: false,
         message: "OAuth session expired or invalid. Please try again.",
       });
     }
 
-    console.log("🔵 Exchanging code for tokens...");
+    console.log("ðŸ”µ Exchanging code for tokens...");
     // Exchange code for tokens
     const { tokens } = await googleClient.getToken(code);
-    console.log("🔵 Tokens received:", {
+    console.log("ðŸ”µ Tokens received:", {
       id_token: !!tokens.id_token,
       access_token: !!tokens.access_token,
     });
 
     googleClient.setCredentials(tokens);
 
-    console.log("🔵 Verifying ID token...");
+    console.log("ðŸ”µ Verifying ID token...");
     // Get user info
     const ticket = await googleClient.verifyIdToken({
       idToken: tokens.id_token,
@@ -612,14 +612,14 @@ router.post("/google/callback", async (req, res) => {
     });
 
     const payload = ticket.getPayload();
-    console.log("🔵 User payload:", {
+    console.log("ðŸ”µ User payload:", {
       sub: payload.sub,
       email: payload.email,
       name: payload.name,
       email_verified: payload.email_verified,
     });
 
-    console.log("🔵 Creating/getting social user...");
+    console.log("ðŸ”µ Creating/getting social user...");
     // Create or get user
     const user = await createOrGetSocialUser(
       {
@@ -634,12 +634,12 @@ router.post("/google/callback", async (req, res) => {
       "google",
     );
 
-    console.log("🔵 User created/retrieved:", {
+    console.log("ðŸ”µ User created/retrieved:", {
       id: user.id,
       email: user.email,
     });
 
-    console.log("🔵 Generating JWT token...");
+    console.log("ðŸ”µ Generating JWT token...");
     // Generate JWT token
     const token = generateToken(user);
 
@@ -657,7 +657,7 @@ router.post("/google/callback", async (req, res) => {
 
     res.cookie("auth_token", token, cookieOptions);
 
-    console.log("✅ Google OAuth callback successful:", {
+    console.log("âœ… Google OAuth callback successful:", {
       userId: user.id,
       email: user.email,
     });
@@ -703,13 +703,13 @@ router.post("/google/callback", async (req, res) => {
 </head>
 <body>
     <div class="container">
-        <div class="success">✓ Authentication Successful</div>
+        <div class="success">âœ“ Authentication Successful</div>
         <div class="loading">Completing sign-in...</div>
     </div>
     <script>
-        console.log('🔵 OAuth bridge page loaded');
-        console.log('🔵 Window opener exists:', !!window.opener);
-        console.log('🔵 Parent origin:', '${parentOrigin}');
+        console.log('ðŸ”µ OAuth bridge page loaded');
+        console.log('ðŸ”µ Window opener exists:', !!window.opener);
+        console.log('ðŸ”µ Parent origin:', '${parentOrigin}');
 
         // Send success message to parent window
         if (window.opener) {
@@ -726,7 +726,7 @@ router.post("/google/callback", async (req, res) => {
                 token: '${token}'
             };
 
-            console.log('🔵 Sending success message:', message);
+            console.log('ðŸ”µ Sending success message:', message);
             window.opener.postMessage(message, '${parentOrigin}');
 
             // Also try Builder.io origin if different
@@ -736,11 +736,11 @@ router.post("/google/callback", async (req, res) => {
 
             // Close the popup after a short delay
             setTimeout(() => {
-                console.log('🔵 Closing popup window');
+                console.log('ðŸ”µ Closing popup window');
                 window.close();
             }, 1000);
         } else {
-            console.log('🔴 No window.opener found');
+            console.log('ðŸ”´ No window.opener found');
             // Fallback: redirect to main app
             setTimeout(() => {
                 window.location.href = '${parentOrigin}';
@@ -753,7 +753,7 @@ router.post("/google/callback", async (req, res) => {
     res.setHeader("Content-Type", "text/html");
     res.send(bridgeHTML);
   } catch (error) {
-    console.error("🔴 Google OAuth callback error:", error);
+    console.error("ðŸ”´ Google OAuth callback error:", error);
 
     // Determine parent origin based on environment
     const parentOrigin =
@@ -796,12 +796,12 @@ router.post("/google/callback", async (req, res) => {
 </head>
 <body>
     <div class="container">
-        <div class="error">✗ Authentication Failed</div>
+        <div class="error">âœ— Authentication Failed</div>
         <div class="message">Please try again</div>
     </div>
     <script>
-        console.log('🔴 OAuth error bridge page loaded');
-        console.log('🔴 Error:', '${error.message}');
+        console.log('ðŸ”´ OAuth error bridge page loaded');
+        console.log('ðŸ”´ Error:', '${error.message}');
 
         // Send error message to parent window
         if (window.opener) {
@@ -810,7 +810,7 @@ router.post("/google/callback", async (req, res) => {
                 error: 'Google authentication failed. Please try again.'
             };
 
-            console.log('🔴 Sending error message:', message);
+            console.log('ðŸ”´ Sending error message:', message);
             window.opener.postMessage(message, '${parentOrigin}');
 
             // Also try Builder.io origin if different
@@ -1198,5 +1198,4 @@ function generateAppleClientSecret() {
     header: header,
   });
 }
-
-module.exports = router;
+export default router;

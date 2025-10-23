@@ -1,8 +1,8 @@
+﻿import express from "express";
 /**
  * Live API Integration Test Routes
  */
 
-const express = require("express");
 const router = express.Router();
 const HotelbedsService = require("../services/hotelbedsService");
 const GiataService = require("../services/giataService");
@@ -13,7 +13,7 @@ const GiataService = require("../services/giataService");
  */
 router.get("/hotelbeds", async (req, res) => {
   try {
-    console.log("🧪 Testing live Hotelbeds API...");
+    console.log("ðŸ§ª Testing live Hotelbeds API...");
     const hotelbedsService = new HotelbedsService();
 
     const results = {
@@ -115,7 +115,7 @@ router.get("/hotelbeds", async (req, res) => {
  */
 router.get("/giata", async (req, res) => {
   try {
-    console.log("🧪 Testing GIATA room mapping...");
+    console.log("ðŸ§ª Testing GIATA room mapping...");
     const giataService = new GiataService();
 
     // Sample room data for testing
@@ -153,7 +153,7 @@ router.get("/giata", async (req, res) => {
  */
 router.get("/full", async (req, res) => {
   try {
-    console.log("🧪 Running full live integration test...");
+    console.log("ðŸ§ª Running full live integration test...");
 
     const results = {
       timestamp: new Date().toISOString(),
@@ -217,5 +217,4 @@ router.get("/full", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

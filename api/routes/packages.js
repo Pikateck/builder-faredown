@@ -10,400 +10,61 @@ import crypto from "crypto";
 
 const router = express.Router();
 
-// Database connection
-const dbUrl = process.env.DATABASE_URL;
-const sslConfig =
-  dbUrl && (dbUrl.includes("render.com") || dbUrl.includes("postgres://"))
-    ? { rejectUnauthorized: false }
-    : false;
-
 const pool = new Pool({
-  connectionString: dbUrl,
-  ssl: sslConfig,
+  connectionString: process.env.DATABASE_URL,
+  ssl: { rejectUnauthorized: false },
 });
-
-// Helper function to generate booking reference
-function generateBookingRef() {
-  const timestamp = Date.now().toString().slice(-6);
-  const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-  return `PKG${timestamp}${random}`;
-}
 
 /**
  * GET /api/packages
- * List packages with proper destination and date filtering
+ * List all fixed packages with optional filters
  */
 router.get("/", async (req, res) => {
   try {
-    const {
-      q = "",
-      destination,
-      destination_code,
-      destination_type,
-      departure_date,
-      return_date,
-      region_id,
-      country_id,
-      city_id,
-      category,
-      package_category,
-      tags,
-      price_min,
-      price_max,
-      duration_min,
-      duration_max,
-      departure_city,
-      month,
-      sort = "popularity",
-      page = 1,
-      page_size = 20,
-    } = req.query;
+    const { destination, startDate, endDate, limit = 10, offset = 0 } = req.query;
 
-    // Build WHERE clause dynamically
-    let whereConditions = ["p.status = 'active'"];
-    let queryParams = [];
-    let paramCount = 0;
-
-    // Text search
-    if (q.trim()) {
-      paramCount++;
-      whereConditions.push(
-        `(p.title ILIKE $${paramCount} OR p.overview ILIKE $${paramCount})`,
-      );
-      queryParams.push(`%${q.trim()}%`);
-    }
-
-    // **SMART DESTINATION FILTERING** - Handles city-country fallback
-    if (destination && destination_type) {
-      const destinationName = destination.split(",")[0].trim();
-
-      if (destination_type === "city") {
-        // Smart city search: Check both city-level AND country-level packages
-        // This handles cases like "London" where packages might be stored at country level
-        paramCount++;
-        whereConditions.push(`(
-          -- Direct city match
-          EXISTS (
-            SELECT 1 FROM cities ci
-            WHERE ci.id = p.city_id
-            AND ci.name ILIKE $${paramCount}
-          )
-          OR
-          -- Country match for major cities (e.g., London -> United Kingdom)
-          EXISTS (
-            SELECT 1 FROM countries c
-            WHERE c.id = p.country_id
-            AND (
-              -- Direct country name match
-              c.name ILIKE $${paramCount}
-              OR
-              -- Major city to country mapping
-              (
-                ($${paramCount} ILIKE '%London%' AND c.name ILIKE '%United Kingdom%') OR
-                ($${paramCount} ILIKE '%Paris%' AND c.name ILIKE '%France%') OR
-                ($${paramCount} ILIKE '%Tokyo%' AND c.name ILIKE '%Japan%') OR
-                ($${paramCount} ILIKE '%Sydney%' AND c.name ILIKE '%Australia%') OR
-                ($${paramCount} ILIKE '%New York%' AND c.name ILIKE '%United States%') OR
-                ($${paramCount} ILIKE '%Dubai%' AND c.name ILIKE '%United Arab Emirates%') OR
-                ($${paramCount} ILIKE '%Bangkok%' AND c.name ILIKE '%Thailand%') OR
-                ($${paramCount} ILIKE '%Singapore%' AND c.name ILIKE '%Singapore%') OR
-                ($${paramCount} ILIKE '%Rome%' AND c.name ILIKE '%Italy%') OR
-                ($${paramCount} ILIKE '%Madrid%' AND c.name ILIKE '%Spain%') OR
-                ($${paramCount} ILIKE '%Berlin%' AND c.name ILIKE '%Germany%') OR
-                ($${paramCount} ILIKE '%Amsterdam%' AND c.name ILIKE '%Netherlands%')
-              )
-            )
-          )
-        )`);
-        queryParams.push(`%${destinationName}%`);
-      } else if (destination_type === "country") {
-        // Use country-based filtering
-        paramCount++;
-        whereConditions.push(`EXISTS (
-          SELECT 1 FROM countries c
-          WHERE c.id = p.country_id
-          AND c.name ILIKE $${paramCount}
-        )`);
-        queryParams.push(`%${destinationName}%`);
-      } else if (destination_type === "region") {
-        // Use region-based filtering
-        paramCount++;
-        whereConditions.push(`EXISTS (
-          SELECT 1 FROM regions r
-          WHERE r.id = p.region_id
-          AND r.name ILIKE $${paramCount}
-        )`);
-        queryParams.push(`%${destinationName}%`);
-      }
-    }
-
-    // **NEW: DATE RANGE FILTERING** - Filter packages with departures in specified date range
-    if (departure_date || return_date) {
-      let dateConditions = [];
-
-      if (departure_date) {
-        paramCount++;
-        dateConditions.push(`pd.departure_date >= $${paramCount}`);
-        queryParams.push(departure_date);
-      }
-
-      if (return_date) {
-        paramCount++;
-        dateConditions.push(`pd.departure_date <= $${paramCount}`);
-        queryParams.push(return_date);
-      }
-
-      if (dateConditions.length > 0) {
-        whereConditions.push(`EXISTS (
-          SELECT 1 FROM package_departures pd 
-          WHERE pd.package_id = p.id 
-          AND pd.is_active = TRUE 
-          AND pd.available_seats > 0
-          AND ${dateConditions.join(" AND ")}
-        )`);
-      }
-    }
-
-    // Direct region/country/city filters (for API usage)
-    if (region_id) {
-      paramCount++;
-      whereConditions.push(`p.region_id = $${paramCount}`);
-      queryParams.push(region_id);
-    }
-
-    if (country_id) {
-      paramCount++;
-      whereConditions.push(`p.country_id = $${paramCount}`);
-      queryParams.push(country_id);
-    }
-
-    if (city_id) {
-      paramCount++;
-      whereConditions.push(`p.city_id = $${paramCount}`);
-      queryParams.push(city_id);
-    }
-
-    // Package category filter
-    if (package_category && package_category !== "any") {
-      paramCount++;
-      whereConditions.push(`p.package_category = $${paramCount}`);
-      queryParams.push(package_category);
-    }
-
-    // Category filter (ignore 'any')
-    if (category && category !== "any") {
-      paramCount++;
-      whereConditions.push(`p.category = $${paramCount}`);
-      queryParams.push(category);
-    }
-
-    // Price range filter
-    if (price_min) {
-      paramCount++;
-      whereConditions.push(`p.base_price_pp >= $${paramCount}`);
-      queryParams.push(parseFloat(price_min));
-    }
-
-    if (price_max) {
-      paramCount++;
-      whereConditions.push(`p.base_price_pp <= $${paramCount}`);
-      queryParams.push(parseFloat(price_max));
-    }
-
-    // Duration filter
-    if (duration_min) {
-      paramCount++;
-      whereConditions.push(`p.duration_days >= $${paramCount}`);
-      queryParams.push(parseInt(duration_min));
-    }
-
-    if (duration_max) {
-      paramCount++;
-      whereConditions.push(`p.duration_days <= $${paramCount}`);
-      queryParams.push(parseInt(duration_max));
-    }
-
-    // Build ORDER BY clause
-    let orderBy = "p.created_at DESC";
-    switch (sort) {
-      case "price_low":
-        orderBy = "p.base_price_pp ASC NULLS LAST, p.title ASC";
-        break;
-      case "price_high":
-        orderBy = "p.base_price_pp DESC NULLS LAST, p.title ASC";
-        break;
-      case "duration":
-        orderBy = "p.duration_days ASC, p.title ASC";
-        break;
-      case "name":
-        orderBy = "p.title ASC";
-        break;
-      case "popularity":
-      default:
-        orderBy =
-          "p.is_featured DESC, p.rating DESC, p.review_count DESC, p.created_at DESC";
-        break;
-    }
-
-    // Calculate pagination
-    const limit = Math.min(parseInt(page_size), 50);
-    const offset = (parseInt(page) - 1) * limit;
-
-    paramCount++;
-    const limitParam = paramCount;
-    queryParams.push(limit);
-
-    paramCount++;
-    const offsetParam = paramCount;
-    queryParams.push(offset);
-
-    // **IMPROVED MAIN QUERY** - Now includes proper JOINs for destination information
-    const mainQuery = `
-      SELECT
-        p.*,
-        r.name as region_name,
-        c.name as country_name,
-        ci.name as city_name,
-        (
-          SELECT MIN(pd.departure_date)
-          FROM package_departures pd 
-          WHERE pd.package_id = p.id 
-            AND pd.is_active = TRUE 
-            AND pd.departure_date >= CURRENT_DATE
-            AND pd.available_seats > 0
-        ) as next_departure_date,
-        p.base_price_pp as from_price,
-        (
-          SELECT COUNT(*)
-          FROM package_departures pd 
-          WHERE pd.package_id = p.id 
-            AND pd.is_active = TRUE 
-            AND pd.departure_date >= CURRENT_DATE
-            AND pd.available_seats > 0
-        ) as available_departures_count,
-        (
-          SELECT json_agg(pt.tag)
-          FROM package_tags pt 
-          WHERE pt.package_id = p.id
-          LIMIT 5
-        ) as tags,
-        ARRAY[p.hero_image_url] as images
+    let query = `
+      SELECT p.id, p.name, p.slug, p.destination_id, p.price, p.currency,
+             p.itinerary, p.benefits, p.included_services, p.terms_conditions,
+             p.start_date, p.end_date, p.status, p.created_at,
+             d.city_name, d.country_code
       FROM packages p
-      LEFT JOIN regions r ON p.region_id = r.id
-      LEFT JOIN countries c ON p.country_id = c.id
-      LEFT JOIN cities ci ON p.city_id = ci.id
-      WHERE ${whereConditions.join(" AND ")}
-      ORDER BY ${orderBy}
-      LIMIT $${limitParam} OFFSET $${offsetParam}
+      LEFT JOIN destinations d ON p.destination_id = d.id
+      WHERE 1=1
     `;
 
-    // Count query for pagination
-    const countQuery = `
-      SELECT COUNT(*) as total
-      FROM packages p
-      LEFT JOIN regions r ON p.region_id = r.id
-      LEFT JOIN countries c ON p.country_id = c.id
-      LEFT JOIN cities ci ON p.city_id = ci.id
-      WHERE ${whereConditions.join(" AND ")}
-    `;
+    const params = [];
+    let paramIndex = 1;
 
-    // Execute queries
-    const [mainResult, countResult] = await Promise.all([
-      pool.query(mainQuery, queryParams),
-      pool.query(countQuery, queryParams.slice(0, -2)), // Remove limit and offset
-    ]);
+    if (destination) {
+      query += ` AND (d.city_name ILIKE $${paramIndex} OR d.country_code ILIKE $${paramIndex})`;
+      params.push(`%${destination}%`);
+      paramIndex++;
+    }
 
-    const packages = mainResult.rows;
-    const total = parseInt(countResult.rows[0].total);
-    const totalPages = Math.ceil(total / limit);
+    if (startDate) {
+      query += ` AND p.start_date >= $${paramIndex}`;
+      params.push(startDate);
+      paramIndex++;
+    }
 
-    // **IMPROVED FACETS** - Generate dynamic facets based on actual data
-    const facetsQuery = `
-      SELECT 
-        'regions' as type,
-        r.name as name,
-        COUNT(p.id) as count
-      FROM packages p
-      LEFT JOIN regions r ON p.region_id = r.id
-      WHERE p.status = 'active' AND r.name IS NOT NULL
-      GROUP BY r.id, r.name
-      
-      UNION ALL
-      
-      SELECT 
-        'categories' as type,
-        p.package_category as name,
-        COUNT(p.id) as count
-      FROM packages p
-      WHERE p.status = 'active' AND p.package_category IS NOT NULL
-      GROUP BY p.package_category
-      
-      UNION ALL
-      
-      SELECT 
-        'countries' as type,
-        c.name as name,
-        COUNT(p.id) as count
-      FROM packages p
-      LEFT JOIN countries c ON p.country_id = c.id
-      WHERE p.status = 'active' AND c.name IS NOT NULL
-      GROUP BY c.id, c.name
-    `;
+    if (endDate) {
+      query += ` AND p.end_date <= $${paramIndex}`;
+      params.push(endDate);
+      paramIndex++;
+    }
 
-    const facetsResult = await pool.query(facetsQuery);
+    query += ` ORDER BY p.created_at DESC LIMIT $${paramIndex} OFFSET $${paramIndex + 1}`;
+    params.push(parseInt(limit), parseInt(offset));
 
-    // Organize facets by type
-    const facets = {
-      regions: {},
-      categories: {},
-      countries: {},
-      price_ranges: {
-        min: 0,
-        max: 500000,
-        avg: 100000,
-      },
-    };
-
-    facetsResult.rows.forEach((row) => {
-      if (facets[row.type]) {
-        facets[row.type][row.name] = parseInt(row.count);
-      }
-    });
+    const result = await pool.query(query, params);
 
     res.json({
       success: true,
-      data: {
-        packages,
-        pagination: {
-          page: parseInt(page),
-          page_size: limit,
-          total,
-          total_pages: totalPages,
-          has_next: parseInt(page) < totalPages,
-          has_prev: parseInt(page) > 1,
-        },
-        facets,
-        filters: {
-          q,
-          destination,
-          destination_type,
-          departure_date,
-          return_date,
-          region_id,
-          country_id,
-          city_id,
-          category,
-          package_category,
-          tags,
-          price_min,
-          price_max,
-          duration_min,
-          duration_max,
-          departure_city,
-          month,
-          sort,
-        },
-      },
+      data: result.rows,
+      count: result.rows.length,
+      limit: parseInt(limit),
+      offset: parseInt(offset),
     });
   } catch (error) {
     console.error("Error fetching packages:", error);
@@ -416,331 +77,121 @@ router.get("/", async (req, res) => {
 });
 
 /**
- * GET /api/packages/:slug
- * Get package details by slug (unchanged, works with existing structure)
+ * POST /api/packages
+ * Create a new package
  */
-router.get("/:slug", async (req, res) => {
-  try {
-    const { slug } = req.params;
-
-    const query = `
-      SELECT
-        p.*,
-        r.name as region_name,
-        c.name as country_name,
-        ci.name as city_name,
-        (
-          SELECT json_agg(
-            json_build_object(
-              'day_number', pid.day_number,
-              'title', pid.title,
-              'description', pid.description,
-              'cities', pid.cities,
-              'meals_included', pid.meals_included,
-              'accommodation', pid.accommodation,
-              'activities', pid.activities,
-              'transport', pid.transport
-            )
-            ORDER BY pid.day_number
-          )
-          FROM package_itinerary_days pid
-          WHERE pid.package_id = p.id
-        ) as itinerary
-      FROM packages p
-      LEFT JOIN regions r ON p.region_id = r.id
-      LEFT JOIN countries c ON p.country_id = c.id
-      LEFT JOIN cities ci ON p.city_id = ci.id
-      WHERE p.slug = $1 AND p.status = 'active'
-    `;
-
-    const result = await pool.query(query, [slug]);
-
-    if (result.rows.length === 0) {
-      return res.status(404).json({
-        success: false,
-        error: "Package not found",
-      });
-    }
-
-    const packageData = result.rows[0];
-
-    // Get available departures
-    const departuresQuery = `
-      SELECT
-        id, departure_city_code, departure_city_name,
-        departure_date, return_date, price_per_person,
-        single_supplement, child_price, infant_price,
-        currency, available_seats, total_seats,
-        is_guaranteed, special_notes
-      FROM package_departures
-      WHERE package_id = $1
-        AND is_active = TRUE
-        AND departure_date >= CURRENT_DATE
-      ORDER BY departure_date ASC
-    `;
-
-    const departuresResult = await pool.query(departuresQuery, [
-      packageData.id,
-    ]);
-
-    // Format response with destination information
-    const response = {
-      ...packageData,
-      departures: departuresResult.rows,
-      // Ensure arrays are returned even if null
-      highlights: packageData.highlights || [],
-      inclusions: packageData.inclusions || [],
-      exclusions: packageData.exclusions || [],
-      themes: packageData.themes || [],
-      tags: packageData.tags || [],
-      gallery_images: packageData.gallery_images || [],
-      itinerary: packageData.itinerary || [],
-      // Add reviews structure if not present
-      reviews_summary: packageData.reviews_summary || {
-        total_reviews: 0,
-        average_rating: 0,
-        five_star: 0,
-        four_star: 0,
-        three_star: 0,
-        two_star: 0,
-        one_star: 0,
-      },
-      recent_reviews: packageData.recent_reviews || [],
-    };
-
-    res.json({
-      success: true,
-      data: response,
-    });
-  } catch (error) {
-    console.error("Error fetching package details:", error);
-    res.status(500).json({
-      success: false,
-      error: "Failed to fetch package details",
-      message: error.message,
-    });
-  }
-});
-
-/**
- * GET /api/packages/:slug/departures
- * Get available departures for a package with date filtering
- */
-router.get("/:slug/departures", async (req, res) => {
-  try {
-    const { slug } = req.params;
-    const { city, from_date, to_date } = req.query;
-
-    // First get package ID
-    const packageQuery = `SELECT id FROM packages WHERE slug = $1 AND status = 'active'`;
-    const packageResult = await pool.query(packageQuery, [slug]);
-
-    if (packageResult.rows.length === 0) {
-      return res.status(404).json({
-        success: false,
-        error: "Package not found",
-      });
-    }
-
-    const packageId = packageResult.rows[0].id;
-
-    // Build departures query
-    let whereConditions = [
-      "package_id = $1",
-      "is_active = TRUE",
-      "departure_date >= CURRENT_DATE",
-      "available_seats > 0",
-    ];
-    let queryParams = [packageId];
-    let paramCount = 1;
-
-    if (city) {
-      paramCount++;
-      whereConditions.push(`departure_city_code = $${paramCount}`);
-      queryParams.push(city.toUpperCase());
-    }
-
-    if (from_date) {
-      paramCount++;
-      whereConditions.push(`departure_date >= $${paramCount}`);
-      queryParams.push(from_date);
-    }
-
-    if (to_date) {
-      paramCount++;
-      whereConditions.push(`departure_date <= $${paramCount}`);
-      queryParams.push(to_date);
-    }
-
-    const departuresQuery = `
-      SELECT 
-        id, departure_city_code, departure_city_name,
-        departure_date, return_date, price_per_person,
-        single_supplement, child_price, infant_price,
-        currency, available_seats, total_seats,
-        is_guaranteed, special_notes
-      FROM package_departures
-      WHERE ${whereConditions.join(" AND ")}
-      ORDER BY departure_date ASC
-    `;
-
-    const result = await pool.query(departuresQuery, queryParams);
-
-    res.json({
-      success: true,
-      data: result.rows,
-    });
-  } catch (error) {
-    console.error("Error fetching departures:", error);
-    res.status(500).json({
-      success: false,
-      error: "Failed to fetch departures",
-      message: error.message,
-    });
-  }
-});
-
-/**
- * **NEW ENDPOINT**
- * GET /api/packages/by-destination
- * Specifically for filtering packages by destination and date range
- */
-router.get("/by-destination", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
-      destination,
-      destination_type = "city",
-      departure_date,
-      return_date,
-      package_types = 3, // Number of package types to return per region
-      limit = 20,
-    } = req.query;
+      name,
+      destination_id,
+      price,
+      currency,
+      itinerary,
+      benefits,
+      included_services,
+      terms_conditions,
+      start_date,
+      end_date,
+    } = req.body;
 
-    if (!destination) {
+    if (!name || !destination_id || !price) {
       return res.status(400).json({
         success: false,
-        error: "Destination parameter is required",
+        error: "Missing required fields: name, destination_id, price",
       });
     }
 
-    const destinationName = destination.split(",")[0].trim();
-
-    // Build base query based on destination type
-    let destinationJoin = "";
-    let destinationCondition = "";
-    let queryParams = [];
-    let paramCount = 0;
-
-    if (destination_type === "city") {
-      destinationJoin = "JOIN cities ci ON p.city_id = ci.id";
-      paramCount++;
-      destinationCondition = `ci.name ILIKE $${paramCount}`;
-      queryParams.push(`%${destinationName}%`);
-    } else if (destination_type === "country") {
-      destinationJoin = "JOIN countries c ON p.country_id = c.id";
-      paramCount++;
-      destinationCondition = `c.name ILIKE $${paramCount}`;
-      queryParams.push(`%${destinationName}%`);
-    } else if (destination_type === "region") {
-      destinationJoin = "JOIN regions r ON p.region_id = r.id";
-      paramCount++;
-      destinationCondition = `r.name ILIKE $${paramCount}`;
-      queryParams.push(`%${destinationName}%`);
-    }
-
-    // Add date filtering if provided
-    let dateJoin = "";
-    let dateCondition = "";
-
-    if (departure_date || return_date) {
-      dateJoin = `
-        JOIN package_departures pd ON p.id = pd.package_id 
-        AND pd.is_active = TRUE 
-        AND pd.available_seats > 0
-      `;
-
-      let dateConditions = [];
-      if (departure_date) {
-        paramCount++;
-        dateConditions.push(`pd.departure_date >= $${paramCount}`);
-        queryParams.push(departure_date);
-      }
-      if (return_date) {
-        paramCount++;
-        dateConditions.push(`pd.departure_date <= $${paramCount}`);
-        queryParams.push(return_date);
-      }
-
-      dateCondition = `AND ${dateConditions.join(" AND ")}`;
-    }
-
-    paramCount++;
-    queryParams.push(parseInt(limit));
+    const slug = name.toLowerCase().replace(/\s+/g, "-") + "-" + crypto.randomBytes(4).toString("hex");
 
     const query = `
-      SELECT DISTINCT
-        p.*,
-        r.name as region_name,
-        c.name as country_name,
-        ci.name as city_name,
-        p.base_price_pp as from_price,
-        (
-          SELECT COUNT(*)
-          FROM package_departures pd2 
-          WHERE pd2.package_id = p.id 
-            AND pd2.is_active = TRUE 
-            AND pd2.departure_date >= CURRENT_DATE
-            AND pd2.available_seats > 0
-            ${departure_date ? `AND pd2.departure_date >= '${departure_date}'` : ""}
-            ${return_date ? `AND pd2.departure_date <= '${return_date}'` : ""}
-        ) as available_departures_count
-      FROM packages p
-      LEFT JOIN regions r ON p.region_id = r.id
-      LEFT JOIN countries c ON p.country_id = c.id
-      LEFT JOIN cities ci ON p.city_id = ci.id
-      ${destinationJoin}
-      ${dateJoin}
-      WHERE p.status = 'active' 
-        AND ${destinationCondition}
-        ${dateCondition}
-      ORDER BY 
-        p.package_category,
-        p.is_featured DESC,
-        p.base_price_pp ASC
-      LIMIT $${paramCount}
+      INSERT INTO packages (name, slug, destination_id, price, currency, itinerary, 
+                          benefits, included_services, terms_conditions, start_date, end_date)
+      VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
+      RETURNING *
     `;
 
-    const result = await pool.query(query, queryParams);
+    const params = [
+      name,
+      slug,
+      destination_id,
+      price,
+      currency || "USD",
+      itinerary || null,
+      benefits || null,
+      included_services || null,
+      terms_conditions || null,
+      start_date || null,
+      end_date || null,
+    ];
 
-    res.json({
+    const result = await pool.query(query, params);
+
+    res.status(201).json({
       success: true,
-      data: {
-        packages: result.rows,
-        destination: destination,
-        destination_type: destination_type,
-        departure_date: departure_date,
-        return_date: return_date,
-        total: result.rows.length,
-      },
-      message: `Found ${result.rows.length} packages for ${destination}`,
+      data: result.rows[0],
     });
   } catch (error) {
-    console.error("Error fetching packages by destination:", error);
+    console.error("Error creating package:", error);
     res.status(500).json({
       success: false,
-      error: "Failed to fetch packages by destination",
+      error: "Failed to create package",
       message: error.message,
     });
   }
 });
 
-// Keep existing enquiry and other endpoints unchanged
+/**
+ * POST /api/packages/:slug/enquire
+ * Create an inquiry for a package
+ */
 router.post("/:slug/enquire", async (req, res) => {
-  // ... existing enquiry endpoint code
-  res.json({
-    success: true,
-    message: "Enquiry endpoint - implementation unchanged",
-  });
+  try {
+    const { slug } = req.params;
+    const { email, name, phone, message, travel_dates } = req.body;
+
+    if (!email || !name) {
+      return res.status(400).json({
+        success: false,
+        error: "Missing required fields: email, name",
+      });
+    }
+
+    const packageQuery = "SELECT id FROM packages WHERE slug = $1";
+    const packageResult = await pool.query(packageQuery, [slug]);
+
+    if (!packageResult.rows.length) {
+      return res.status(404).json({
+        success: false,
+        error: "Package not found",
+      });
+    }
+
+    const package_id = packageResult.rows[0].id;
+
+    const inquiryQuery = `
+      INSERT INTO package_enquiries (package_id, email, name, phone, message, travel_dates)
+      VALUES ($1, $2, $3, $4, $5, $6)
+      RETURNING *
+    `;
+
+    const params = [package_id, email, name, phone || null, message || null, travel_dates || null];
+
+    const result = await pool.query(inquiryQuery, params);
+
+    res.status(201).json({
+      success: true,
+      message: "Enquiry created successfully",
+      data: result.rows[0],
+    });
+  } catch (error) {
+    console.error("Error creating enquiry:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to create enquiry",
+      message: error.message,
+    });
+  }
 });
 
 export default router;

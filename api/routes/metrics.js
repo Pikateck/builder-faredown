@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const promClient = require("prom-client");
 const router = require("express").Router();
 

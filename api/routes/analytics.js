@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 
 // Analytics dashboard
@@ -58,5 +59,4 @@ router.post("/chat-events", (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

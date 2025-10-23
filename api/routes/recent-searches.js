@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const crypto = require("crypto");
 const { Pool } = require("pg");
 const { v4: uuidv4 } = require("uuid");
@@ -252,5 +253,4 @@ router.get("/all", identifyUser, async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

@@ -1,10 +1,10 @@
-/**
+﻿/**
  * Pricing API Integration Tests
  * Tests for the pricing API endpoints
  */
 
 const request = require("supertest");
-const express = require("express");
+
 const pricingRoutes = require("../routes/pricing");
 
 // Create test app

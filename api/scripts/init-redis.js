@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Redis Initialization Script for AI Bargaining Platform
  * Sets up cache structure and loads initial data
  */
@@ -8,7 +8,7 @@ const { Pool } = require("pg");
 require("dotenv").config();
 
 async function initRedis() {
-  console.log("🚀 Initializing Redis for AI Bargaining Platform...");
+  console.log("ðŸš€ Initializing Redis for AI Bargaining Platform...");
 
   try {
     // Initialize Redis connection
@@ -17,7 +17,7 @@ async function initRedis() {
       throw new Error("Failed to connect to Redis");
     }
 
-    console.log("✅ Redis connected successfully");
+    console.log("âœ… Redis connected successfully");
 
     // Initialize PostgreSQL connection for data loading
     const pool = new Pool({
@@ -28,7 +28,7 @@ async function initRedis() {
           : false,
     });
 
-    console.log("📊 Loading initial data from PostgreSQL...");
+    console.log("ðŸ“Š Loading initial data from PostgreSQL...");
 
     // 1. Load and cache active policy
     const policyResult = await pool.query(
@@ -43,7 +43,7 @@ async function initRedis() {
         checksum: policy.checksum,
         activated_at: policy.activated_at,
       });
-      console.log("  ✓ Active policy v1 cached");
+      console.log("  âœ“ Active policy v1 cached");
     }
 
     // 2. Load and cache supplier data
@@ -52,7 +52,7 @@ async function initRedis() {
     );
     const suppliers = suppliersResult.rows;
     await redisService.set("config:suppliers", suppliers, 3600); // 1 hour TTL
-    console.log(`  ✓ ${suppliers.length} active suppliers cached`);
+    console.log(`  âœ“ ${suppliers.length} active suppliers cached`);
 
     // 3. Load and cache model configuration
     const modelsResult = await pool.query(
@@ -68,7 +68,7 @@ async function initRedis() {
     }, {});
 
     await redisService.setModelConfig(activeModels);
-    console.log(`  ✓ ${Object.keys(activeModels).length} active models cached`);
+    console.log(`  âœ“ ${Object.keys(activeModels).length} active models cached`);
 
     // 4. Load and cache A/B test configuration
     const abTestsResult = await pool.query(
@@ -84,7 +84,7 @@ async function initRedis() {
     }, {});
 
     await redisService.setABConfig(abTests);
-    console.log(`  ✓ ${Object.keys(abTests).length} A/B tests cached`);
+    console.log(`  âœ“ ${Object.keys(abTests).length} A/B tests cached`);
 
     // 5. Pre-cache top product features
     const topProductsResult = await pool.query(`
@@ -108,7 +108,7 @@ async function initRedis() {
         cachedProducts++;
       }
     }
-    console.log(`  ✓ ${cachedProducts} top product features cached`);
+    console.log(`  âœ“ ${cachedProducts} top product features cached`);
 
     // 6. Pre-cache latest supplier rate snapshots
     const snapshotsResult = await pool.query(`
@@ -136,7 +136,7 @@ async function initRedis() {
       await redisService.setSupplierRates(canonicalKey, snapshots);
       cachedSnapshots++;
     }
-    console.log(`  ✓ ${cachedSnapshots} product rate snapshots cached`);
+    console.log(`  âœ“ ${cachedSnapshots} product rate snapshots cached`);
 
     // 7. Cache demo user profiles
     const userProfilesResult = await pool.query(
@@ -151,11 +151,11 @@ async function initRedis() {
         updated_at: profile.updated_at,
       });
     }
-    console.log(`  ✓ ${userProfilesResult.rows.length} user profiles cached`);
+    console.log(`  âœ“ ${userProfilesResult.rows.length} user profiles cached`);
 
     // 8. Verify cache health
     const healthMetrics = await redisService.getHealthMetrics();
-    console.log("\n📈 Cache Health Metrics:");
+    console.log("\nðŸ“ˆ Cache Health Metrics:");
     console.log(`  Connected: ${healthMetrics?.connected}`);
     console.log(`  Policies: ${healthMetrics?.bargain_keys?.policies}`);
     console.log(`  Features: ${healthMetrics?.bargain_keys?.features}`);
@@ -163,19 +163,19 @@ async function initRedis() {
     console.log(`  Config: ${healthMetrics?.bargain_keys?.config}`);
 
     await pool.end();
-    console.log("\n✅ Redis initialization completed successfully!");
+    console.log("\nâœ… Redis initialization completed successfully!");
     console.log(
-      "🎯 AI Bargaining Platform cache is ready for <300ms responses",
+      "ðŸŽ¯ AI Bargaining Platform cache is ready for <300ms responses",
     );
   } catch (error) {
-    console.error("❌ Redis initialization failed:", error);
+    console.error("âŒ Redis initialization failed:", error);
     process.exit(1);
   }
 }
 
 // Handle graceful shutdown
 process.on("SIGINT", async () => {
-  console.log("\n🛑 Shutting down Redis initialization...");
+  console.log("\nðŸ›‘ Shutting down Redis initialization...");
   await redisService.close();
   process.exit(0);
 });
@@ -183,9 +183,9 @@ process.on("SIGINT", async () => {
 // Run initialization
 if (require.main === module) {
   initRedis().catch((error) => {
-    console.error("❌ Fatal error:", error);
+    console.error("âŒ Fatal error:", error);
     process.exit(1);
   });
 }
 
-module.exports = { initRedis };
+export default { initRedis };
