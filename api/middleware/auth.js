@@ -230,10 +230,30 @@ const requireAdmin = (req, res, next) => {
   next();
 };
 
+/**
+ * Require specific permission (higher-order middleware)
+ */
+const requirePermission = (permission) => (req, res, next) => {
+  if (!req.user || req.user.role !== "admin") {
+    return res.status(403).json({
+      error: "Access required",
+    });
+  }
+  next();
+};
+
 const PERMISSIONS = {
   MANAGE_USERS: "manage:users",
   MANAGE_CONTENT: "manage:content",
   VIEW_ANALYTICS: "view:analytics",
+  ADMIN_DASHBOARD: "admin:dashboard",
+  ANALYTICS_VIEW: "view:analytics",
+  REPORTS_GENERATE: "generate:reports",
+  AUDIT_VIEW: "view:audit",
+  SYSTEM_CONFIG: "config:system",
+  BACKUP_MANAGE: "manage:backup",
+  PROMO_VIEW: "view:promo",
+  PROMO_MANAGE: "manage:promo",
 };
 
 module.exports = {
