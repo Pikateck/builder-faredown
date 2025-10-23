@@ -401,6 +401,111 @@ export default function HotelResults() {
     return processedImages.slice(0, 6); // Limit to 6 images max
   };
 
+  // Fetch TBO hotels from the cities cache
+  const fetchTBOHotels = async (destCode: string) => {
+    try {
+      console.log("🏨 Fetching TBO hotels for:", destCode);
+
+      // Extract city name from destination
+      const destName = urlSearchParams.get("destinationName") || destination || destCode;
+
+      const tboResponse = await fetch("/api/tbo-hotels/search", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          destination: destCode,
+          destinationName: destName,
+          checkIn: departureDate
+            ? departureDate.toISOString().split("T")[0]
+            : checkIn || new Date().toISOString().split("T")[0],
+          checkOut: returnDate
+            ? returnDate.toISOString().split("T")[0]
+            : checkOut || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+          adults: parseInt(adults) || 2,
+          children: parseInt(children) || 0,
+          rooms: parseInt(rooms) || 1,
+          currency: selectedCurrency?.code || "INR",
+        }),
+      });
+
+      if (tboResponse.ok) {
+        const data = await tboResponse.json();
+        if (data.success && Array.isArray(data.data)) {
+          console.log("✅ TBO hotels fetched:", data.data.length);
+          return transformTBOData(data.data);
+        }
+      }
+      return [];
+    } catch (error) {
+      console.warn("⚠️ Failed to fetch TBO hotels:", error);
+      return [];
+    }
+  };
+
+  // Transform TBO UnifiedHotel data to frontend format
+  const transformTBOData = (tboHotels: any[]): Hotel[] => {
+    return tboHotels.map((hotel, index) => ({
+      id: hotel.supplierHotelId || `tbo-${index}`,
+      name: hotel.name || `Hotel ${destination}`,
+      location: hotel.address
+        ? `${hotel.address}, ${hotel.city || destination}`
+        : `${hotel.city || destination}, ${hotel.countryCode || "IN"}`,
+      images: hotel.images && hotel.images.length > 0
+        ? hotel.images
+        : transformHotelImages([]),
+      rating: hotel.rating || 4.0,
+      reviews: hotel.reviewCount || 0,
+      originalPrice: hotel.minTotal ? Math.round(hotel.minTotal * 1.15) : 0,
+      currentPrice: hotel.minTotal || 0,
+      description: hotel.description || `Discover ${hotel.name}`,
+      amenities: hotel.amenities || [],
+      features: hotel.amenities?.slice(0, 3) || [],
+      roomTypes: (hotel.rooms || []).map((room: any) => ({
+        name: room.roomName || "Standard Room",
+        price: room.price?.total || room.price || hotel.minTotal || 0,
+        features: [room.board || "Room Only"],
+      })),
+      address: {
+        street: hotel.address || "",
+        city: hotel.city || destination || "Unknown",
+        country: hotel.countryCode || "IN",
+        postalCode: hotel.zipCode || "00000",
+      },
+      starRating: hotel.rating || 4,
+      reviewCount: hotel.reviewCount || 0,
+      contact: {
+        phone: hotel.phone || "+1234567890",
+        email: hotel.email || "info@hotel.com",
+      },
+      priceRange: {
+        min: hotel.minTotal || 0,
+        max: hotel.maxTotal || (hotel.minTotal ? Math.round(hotel.minTotal * 1.5) : 0),
+      },
+      currency: hotel.currency || selectedCurrency?.code || "INR",
+      policies: {
+        checkIn: hotel.checkInTime || "14:00",
+        checkOut: hotel.checkOutTime || "11:00",
+        cancellation: hotel.cancellationPolicy || "Check hotel policy",
+        children: "Children welcome",
+        pets: "Check hotel policy",
+        smoking: "Non-smoking",
+      },
+      breakfastIncluded: hotel.breakfastIncluded || false,
+      breakfastType: hotel.breakfastType || "Not included",
+      availableRoom: {
+        type: hotel.rooms?.[0]?.roomName || "1 X Standard Room",
+        bedType: hotel.rooms?.[0]?.bedType || "Double bed",
+        rateType: "Flexible Rate",
+        paymentTerms: "Check details",
+        cancellationPolicy: hotel.cancellationPolicy || "Check policy",
+      },
+      supplier: "TBO",
+      supplierCode: "tbo",
+      isLiveData: true,
+      priceBreakdown: hotel.rooms?.[0]?.price?.breakdown || null,
+    }));
+  };
+
   const fetchHotelsPage = async (pageToLoad: number, append: boolean) => {
     try {
       if (append) setLoadingMore(true);
@@ -431,9 +536,19 @@ export default function HotelResults() {
 
       console.log("🏨 Searching hotels (paged)", searchRequest);
 
-      const results = await hotelsService.searchHotels(searchRequest);
+      // Fetch from both Hotelbeds and TBO in parallel
+      const [hbResults, tboResults] = await Promise.allSettled([
+        hotelsService.searchHotels(searchRequest),
+        fetchTBOHotels(destCode),
+      ]).then((results) => [
+        results[0].status === "fulfilled" ? results[0].value : [],
+        results[1].status === "fulfilled" ? results[1].value : [],
+      ]);
 
-      const transformed = transformHotelbedsData(results);
+      const transformed = transformHotelbedsData(hbResults);
+
+      // Merge TBO and Hotelbeds results
+      const mergedHotels = [...transformed, ...tboResults];
       if (append) {
         setHotels((prev) => {
           const merged = [...prev, ...transformed];
