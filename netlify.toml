@@ -1,7 +1,10 @@
 [build]
-  command = "npm install && npm run build:client"
+  command = "npm ci && npm run build:client"
   functions = "netlify/functions"
-  publish = "dist/spa"
+  publish = "dist"
+
+[build.environment]
+  NODE_VERSION = "20"
 
 [functions]
   external_node_modules = ["express"]
