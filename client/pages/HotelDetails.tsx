@@ -286,31 +286,45 @@ export default function HotelDetails() {
       const attemptFetch = async (retryCount = 0): Promise<any> => {
         try {
           console.log(
-            `🏨 Attempt ${retryCount + 1}: Fetching hotel details for: ${hotelId}`,
+            `🏨 Attempt ${retryCount + 1}: Fetching TBO hotel details for: ${hotelId}`,
           );
 
-          // Check if we're in development environment
-          const isDevelopment =
-            typeof window !== "undefined" &&
-            (window.location.hostname.includes("localhost") ||
-              window.location.hostname.includes("127.0.0.1") ||
-              window.location.hostname.includes(".dev") ||
-              window.location.hostname.includes(".local") ||
-              window.location.port !== "");
+          // Get supplier code from URL or location state
+          const supplier =
+            (location.state as any)?.preselectRate?.supplierData
+              ?.supplierCode ||
+            new URLSearchParams(window.location.search).get("supplier") ||
+            "tbo";
 
-          // Try using the hotels service first for proper API integration
-          try {
+          // Check if this is a TBO hotel
+          if (supplier === "tbo" || supplier === "TBO") {
+            console.log("🏨 Fetching TBO hotel details:", hotelId);
+
+            // Fetch from TBO endpoint
+            const searchId =
+              new URLSearchParams(window.location.search).get("searchId") || "";
+            const tboUrl = `/api/tbo-hotels/hotel/${hotelId}${searchId ? `?searchId=${searchId}` : ""}`;
+
+            const response = await fetchWithTimeout(tboUrl);
+
+            if (response.ok) {
+              const data = await response.json();
+              console.log("✅ TBO Hotel data received:", data);
+              if (data.success && data.data) {
+                return data.data; // Return TBO UnifiedHotel format
+              }
+            } else {
+              throw new Error(`TBO API returned ${response.status}`);
+            }
+          } else {
+            // Fallback to Hotelbeds service for other suppliers
             const searchParams = {
               checkIn: checkInParam,
               checkOut: checkOutParam,
               rooms: parseInt(roomsParam || "1"),
               adults: parseInt(adultsParam || "2"),
               children: parseInt(childrenParam || "0"),
-              supplier:
-                (location.state as any)?.preselectRate?.supplierData
-                  ?.supplierCode ||
-                new URLSearchParams(window.location.search).get("supplier") ||
-                undefined,
+              supplier: supplier,
             };
 
             console.log(
@@ -324,13 +338,6 @@ export default function HotelDetails() {
             );
             console.log("✅ Hotel data received via service:", hotel);
             return hotel;
-          } catch (serviceError) {
-            console.info(
-              "Service handled with built-in fallback. Using returned data.",
-            );
-            // The service now provides mock data on failure, so this shouldn't throw
-            // If it does throw, something else is wrong, so let it bubble up
-            throw serviceError;
           }
         } catch (error) {
           console.warn(`⚠️ Attempt ${retryCount + 1} failed:`, error);
