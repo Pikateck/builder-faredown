@@ -1198,4 +1198,4 @@ function generateAppleClientSecret() {
     header: header,
   });
 }
-export default router;
+module.exports = router;

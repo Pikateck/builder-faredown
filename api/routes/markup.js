@@ -416,4 +416,4 @@ router.post("/hotel/:id/toggle-status", async (req, res) => {
     res.status(500).json({ error: "Failed to toggle hotel markup status" });
   }
 });
-export default router;
+module.exports = router;

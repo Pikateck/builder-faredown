@@ -1062,4 +1062,4 @@ router.post("/booking-passengers", authenticateUser, async (req, res) => {
     if (client) client.release();
   }
 });
-export default router;
+module.exports = router;

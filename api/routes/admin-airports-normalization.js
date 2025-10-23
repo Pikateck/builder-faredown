@@ -47,7 +47,7 @@ function normalizePromoCodeData(promoData) {
   };
 }
 
-export default {
+module.exports = {
   normalizeAirportField,
   normalizeMarkupData,
   normalizePromoCodeData,

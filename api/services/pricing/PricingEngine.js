@@ -326,4 +326,4 @@ class PricingEngine {
   }
 }
 
-export default PricingEngine;
+module.exports = PricingEngine;

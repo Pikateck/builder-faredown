@@ -222,4 +222,4 @@ router.get("/destinations/search", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

@@ -204,4 +204,4 @@ router.get("/analytics", (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

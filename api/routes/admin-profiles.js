@@ -518,4 +518,4 @@ router.get("/stats/overview", requirePermission("view_dashboard"), async (req, r
     if (client) client.release();
   }
 });
-export default router;
+module.exports = router;

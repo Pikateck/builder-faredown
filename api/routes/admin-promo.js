@@ -806,4 +806,4 @@ router.get("/:id/stats", requireAdmin, async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

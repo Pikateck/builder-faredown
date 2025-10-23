@@ -253,4 +253,4 @@ router.get("/all", identifyUser, async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

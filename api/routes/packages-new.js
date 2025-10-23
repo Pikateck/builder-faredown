@@ -673,4 +673,4 @@ router.post("/:slug/enquire", async (req, res) => {
     message: "Enquiry endpoint - implementation unchanged"
   });
 });
-export default router;
+module.exports = router;

@@ -773,4 +773,4 @@ router.get("/metrics", (req, res) => {
     status: p95 < 300 ? "HEALTHY" : "DEGRADED",
   });
 });
-export default router;
+module.exports = router;

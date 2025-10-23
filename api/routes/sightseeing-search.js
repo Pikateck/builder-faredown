@@ -571,4 +571,4 @@ function getFallbackSightseeingData(searchParams) {
     },
   ];
 }
-export default router;
+module.exports = router;

@@ -301,4 +301,4 @@ router.use((error, req, res, next) => {
     ...(isDevelopment && { stack: error.stack }),
   });
 });
-export default router;
+module.exports = router;

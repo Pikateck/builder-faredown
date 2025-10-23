@@ -832,4 +832,4 @@ router.get("/api/admin/reviews/stats", requireAdmin, async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

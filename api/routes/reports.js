@@ -613,4 +613,4 @@ router.post("/custom", authenticateToken, (req, res) => {
     res.status(500).json({ error: "Failed to generate custom report" });
   }
 });
-export default router;
+module.exports = router;

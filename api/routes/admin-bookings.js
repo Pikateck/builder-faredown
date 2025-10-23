@@ -379,4 +379,4 @@ router.get("/database/health", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

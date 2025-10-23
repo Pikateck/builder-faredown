@@ -146,4 +146,4 @@ function generateSuggestions(checks) {
 
   return suggestions;
 }
-export default router;
+module.exports = router;

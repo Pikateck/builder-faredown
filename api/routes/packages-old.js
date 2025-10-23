@@ -661,4 +661,4 @@ router.get("/featured", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

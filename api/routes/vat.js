@@ -416,4 +416,4 @@ router.get("/default/:serviceType/:country", (req, res) => {
     res.status(500).json({ error: "Failed to fetch default VAT rule" });
   }
 });
-export default router;
+module.exports = router;

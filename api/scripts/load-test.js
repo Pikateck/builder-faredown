@@ -7,7 +7,7 @@ const sessionLatency = new Trend("session_latency");
 const offerLatency = new Trend("offer_latency");
 const acceptLatency = new Trend("accept_latency");
 
-export let options = {
+let options = {
   vus: 150,
   duration: "3m",
   thresholds: {
@@ -64,7 +64,7 @@ function getRandomUserId() {
   return `u${Math.floor(Math.random() * 10000)}`;
 }
 
-export default function () {
+module.exports = function () {
   const userId = getRandomUserId();
   const userTier = getRandomUserTier();
   const product = getRandomProduct();
@@ -195,7 +195,7 @@ export default function () {
   sleep(0.2);
 }
 
-export function handleSummary(data) {
+function handleSummary(data) {
   const summary = {
     test_duration: data.state.testRunDurationMs,
     iterations: data.metrics.iterations.values.count,

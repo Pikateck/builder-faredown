@@ -401,4 +401,4 @@ router.get("/email/tracking", authenticateToken, (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

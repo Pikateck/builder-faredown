@@ -639,4 +639,4 @@ router.post("/:slug/book", async (req, res) => {
     client.release();
   }
 });
-export default router;
+module.exports = router;

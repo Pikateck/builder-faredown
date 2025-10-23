@@ -82,4 +82,4 @@ router.post("/destinations", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

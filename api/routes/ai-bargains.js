@@ -523,4 +523,4 @@ router.get("/health", (req, res) => {
     version: "1.0.0",
   });
 });
-export default router;
+module.exports = router;

@@ -381,4 +381,4 @@ router.get("/health", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

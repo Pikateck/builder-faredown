@@ -636,4 +636,4 @@ router.delete("/promo-codes/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete promo code" });
   }
 });
-export default router;
+module.exports = router;

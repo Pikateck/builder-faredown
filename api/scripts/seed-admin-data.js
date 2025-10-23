@@ -851,7 +851,7 @@ function loadSeedData() {
 }
 
 // Export for use in other modules
-export default {
+module.exports = {
   seedData,
   generateSeedFiles,
   loadSeedData,

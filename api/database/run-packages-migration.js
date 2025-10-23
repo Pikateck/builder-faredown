@@ -175,7 +175,7 @@ if (require.main === module) {
   }
 }
 
-export default {
+module.exports = {
   runMigration,
   rollbackMigration
 };
