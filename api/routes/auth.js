@@ -207,4 +207,4 @@ router.get("/me", authenticateToken, (req, res) => {
   });
 });
 
-export default router;
+module.exports = router;
