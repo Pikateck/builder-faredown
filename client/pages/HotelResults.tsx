@@ -549,9 +549,14 @@ export default function HotelResults() {
 
       // Merge TBO and Hotelbeds results
       const mergedHotels = [...transformed, ...tboResults];
+
+      console.log(
+        `🏨 Merged results: ${transformed.length} Hotelbeds + ${tboResults.length} TBO = ${mergedHotels.length} total`,
+      );
+
       if (append) {
         setHotels((prev) => {
-          const merged = [...prev, ...transformed];
+          const merged = [...prev, ...mergedHotels];
           // Update bounds with merged data
           const extract = (h: any) =>
             h.currentPrice || h.priceRange?.min || h.roomTypes?.[0]?.price || 0;
@@ -567,14 +572,14 @@ export default function HotelResults() {
         });
         setPage(pageToLoad);
       } else {
-        setHotels(transformed);
+        setHotels(mergedHotels);
         setPage(pageToLoad);
         // Dynamic price bounds from dataset
         const extract = (h: any) =>
           h.currentPrice || h.priceRange?.min || h.roomTypes?.[0]?.price || 0;
         const maxPrice = Math.max(
           50000,
-          ...transformed
+          ...mergedHotels
             .map(extract)
             .filter((n: any) => typeof n === "number" && isFinite(n)),
         );
@@ -584,13 +589,13 @@ export default function HotelResults() {
       }
 
       setTotalResults((prev) =>
-        append ? prev + transformed.length : transformed.length,
+        append ? prev + mergedHotels.length : mergedHotels.length,
       );
 
-      const hasMoreNow = transformed.length === pageSizeRef.current;
+      const hasMoreNow = mergedHotels.length === pageSizeRef.current;
       setHasMore(hasMoreNow);
 
-      const hasLive = (append ? hotels : transformed).some(
+      const hasLive = (append ? hotels : mergedHotels).some(
         (h: any) => (h as any)?.isLiveData === true,
       );
       setIsLiveData(hasLive);
