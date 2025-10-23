@@ -163,7 +163,7 @@ router.get(
  */
 router.get(
   "/stats",
-  requirePermission(PERMISSIONS.ANALYTICS_VIEW),
+  requireAdmin,
   validateDateRange,
   async (req, res) => {
     try {
@@ -227,7 +227,7 @@ router.get(
  */
 router.get(
   "/analytics",
-  requirePermission(PERMISSIONS.ANALYTICS_VIEW),
+  requireAdmin,
   validate.analyticsQuery,
   async (req, res) => {
     try {
