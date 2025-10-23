@@ -36,4 +36,4 @@ router.get("/ai-tables-check", async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
