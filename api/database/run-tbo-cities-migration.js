@@ -33,7 +33,13 @@ class TBOCitiesMigrationRunner {
     console.log("🚀 Running TBO Cities Cache migration...\n");
 
     try {
-      // Read migration SQL
+      // Step 1: Drop existing table if it exists
+      console.log("1️⃣ Dropping existing tbo_cities table...");
+      await this.client.query("DROP TABLE IF EXISTS tbo_cities CASCADE;");
+      console.log("✅ Old table dropped\n");
+
+      // Step 2: Read migration SQL
+      console.log("2️⃣ Creating new tbo_cities table...");
       const migrationSQL = fs.readFileSync(
         path.join(__dirname, "migrations/20251023_create_tbo_cities_cache.sql"),
         "utf8",
