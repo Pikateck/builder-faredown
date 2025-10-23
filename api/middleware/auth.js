@@ -246,6 +246,7 @@ module.exports = {
   createUser,
   authenticateToken,
   requireAdmin,
+  requirePermission: requireAdmin,
   PERMISSIONS,
   users,
 };
