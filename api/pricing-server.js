@@ -3,9 +3,9 @@
  * Focuses only on the new pricing and markup endpoints
  */
 
-const express = require("express");
-const cors = require("cors");
-const { Pool } = require("pg");
+import express from "express";
+import cors from "cors";
+import { Pool } from "pg";
 
 // Initialize Express app
 const app = express();
@@ -39,8 +39,8 @@ const pool = new Pool({
 });
 
 // Import pricing components
-const createPricingRoutes = require("./routes/pricing");
-const { priceEcho, createDiffEndpoint } = require("./middleware/priceEcho");
+import createPricingRoutes from "./routes/pricing.js";
+import { priceEcho, createDiffEndpoint } from "./middleware/priceEcho.js";
 
 // Initialize Price Echo middleware
 const priceEchoMiddleware = priceEcho({
@@ -120,7 +120,7 @@ app.get("/api/pricing/diff", (req, res) => createDiffEndpoint(pool)(req, res));
 
 // Packages routes
 try {
-  const packagesRoutes = require("./routes/packages");
+  const packagesRoutes = (await import("./routes/packages.js")).default;
   app.use("/api/packages", packagesRoutes);
   console.log("✅ Packages routes mounted successfully");
 } catch (e) {
@@ -129,7 +129,7 @@ try {
 
 // Unified markups routes (for Admin CMS)
 try {
-  const markupsRoutes = require("./routes/markups-unified");
+  const markupsRoutes = (await import("./routes/markups-unified.js")).default;
   app.use("/api/markups", markupsRoutes);
 } catch (e) {
   console.warn("⚠️ Markups routes not mounted:", e?.message);
@@ -211,4 +211,4 @@ async function startServer() {
 // Start the server
 startServer();
 
-module.exports = app;
+export default app;

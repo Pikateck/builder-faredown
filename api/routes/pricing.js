@@ -3,8 +3,8 @@
  * Handles all pricing calculation endpoints
  */
 
-const express = require("express");
-const PricingEngine = require("../services/pricing/PricingEngine");
+import express from "express";
+import PricingEngine from "../services/pricing/PricingEngine.js";
 
 // Factory function to create pricing routes with database pool
 function createPricingRoutes(pool) {
@@ -237,4 +237,4 @@ function createPricingRoutes(pool) {
   return router;
 }
 
-module.exports = createPricingRoutes;
+export default createPricingRoutes;
