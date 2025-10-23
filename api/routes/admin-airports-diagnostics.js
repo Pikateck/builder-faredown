@@ -1,3 +1,4 @@
+﻿import express from "express";
 /**
  * Admin Airports Diagnostics API
  * Provides diagnostic information for staging verification
@@ -6,7 +7,6 @@
  * Only enabled in staging with AIRPORTS_DIAGNOSTICS_ENABLED=true
  */
 
-const express = require("express");
 const router = express.Router();
 const db = require("../database/connection");
 const { authenticateToken, requireAdmin } = require("../middleware/auth");
@@ -254,5 +254,4 @@ router.get("/", diagnosticsRateLimitMiddleware, async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Admin Routes
  * Handles all admin dashboard operations and management
  */
 
-const express = require("express");
 const router = express.Router();
 const { requirePermission, PERMISSIONS } = require("../middleware/auth");
 const {
@@ -841,10 +841,10 @@ router.get(
 router.get("/users", async (req, res) => {
   try {
     // Debug logging
-    console.log("🔍 DEBUG - Admin Users Route Hit");
-    console.log("🔍 Headers:", JSON.stringify(req.headers, null, 2));
-    console.log("🔍 Authorization Header:", req.headers.authorization);
-    console.log("🔍 User from middleware:", req.user);
+    console.log("ðŸ” DEBUG - Admin Users Route Hit");
+    console.log("ðŸ” Headers:", JSON.stringify(req.headers, null, 2));
+    console.log("ðŸ” Authorization Header:", req.headers.authorization);
+    console.log("ðŸ” User from middleware:", req.user);
 
     const { search, role, status, page = 1, limit = 10 } = req.query;
 
@@ -1232,5 +1232,4 @@ function getRolePermissions(role) {
 
   return rolePermissions[role] || [];
 }
-
-module.exports = router;
+export default router;

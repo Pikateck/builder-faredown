@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 
 // Simple database validation endpoint
@@ -72,5 +73,4 @@ router.get("/ai-tables-check", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

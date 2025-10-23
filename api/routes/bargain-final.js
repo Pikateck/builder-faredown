@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Final Bargain API - Production Ready
  * Endpoints: /session/start, /session/offer, /session/accept, /event/log, /session/replay/:id
  * Performance target: p95 < 300ms with warm cache
  */
 
-const express = require("express");
 const { Client } = require("pg");
 const crypto = require("crypto");
 const { redisHotCache } = require("../services/redisHotCache");
@@ -26,7 +26,7 @@ try {
     connectionTimeoutMillis: 2000,
   });
 } catch (error) {
-  console.error("❌ Database pool initialization failed:", error);
+  console.error("âŒ Database pool initialization failed:", error);
 }
 
 // Initialize pricing engine for audit fields
@@ -34,7 +34,7 @@ let pricingEngine = null;
 try {
   pricingEngine = new PricingEngine(pgPool);
 } catch (e) {
-  console.warn("⚠️ PricingEngine initialization failed (audit disabled)", e);
+  console.warn("âš ï¸ PricingEngine initialization failed (audit disabled)", e);
 }
 
 // Performance metrics
@@ -64,7 +64,7 @@ function trackPerformance(req, res, next) {
     // Log slow requests
     if (duration > 300) {
       console.warn(
-        `⚠️ Slow request: ${req.method} ${req.path} - ${duration}ms`,
+        `âš ï¸ Slow request: ${req.method} ${req.path} - ${duration}ms`,
       );
     }
 
@@ -116,7 +116,7 @@ class OfferabilityEngine {
       this.lastPolicyLoad = now;
       return policy;
     } catch (error) {
-      console.error("❌ Policy load failed:", error);
+      console.error("âŒ Policy load failed:", error);
       return this.getDefaultPolicy();
     }
   }
@@ -336,7 +336,7 @@ router.post("/session/start", async (req, res) => {
           ],
         );
       } catch (error) {
-        console.error("❌ Session storage failed:", error);
+        console.error("âŒ Session storage failed:", error);
       }
     });
 
@@ -363,7 +363,7 @@ router.post("/session/start", async (req, res) => {
       safety_capsule: capsule,
     });
   } catch (error) {
-    console.error("❌ Session start error:", error);
+    console.error("âŒ Session start error:", error);
     performanceMetrics.errors++;
     res
       .status(500)
@@ -455,7 +455,7 @@ router.post("/session/offer", async (req, res) => {
           ],
         );
       } catch (error) {
-        console.error("❌ Event logging failed:", error);
+        console.error("âŒ Event logging failed:", error);
       }
     });
 
@@ -529,13 +529,13 @@ router.post("/session/offer", async (req, res) => {
           expires_in: 30,
         };
       } catch (auditErr) {
-        console.warn("⚠️ Pricing audit generation failed", auditErr.message);
+        console.warn("âš ï¸ Pricing audit generation failed", auditErr.message);
       }
     }
 
     res.json(response);
   } catch (error) {
-    console.error("❌ Session offer error:", error);
+    console.error("âŒ Session offer error:", error);
     performanceMetrics.errors++;
     res
       .status(500)
@@ -590,7 +590,7 @@ router.post("/session/accept", async (req, res) => {
         finalPrice,
       ]);
     } catch (neverLossError) {
-      console.error("🚨 NEVER-LOSS VIOLATION:", neverLossError);
+      console.error("ðŸš¨ NEVER-LOSS VIOLATION:", neverLossError);
       return res.status(409).json({
         error: "Never-loss violation detected",
         code: "NEVER_LOSS_VIOLATION",
@@ -644,7 +644,7 @@ router.post("/session/accept", async (req, res) => {
 
     res.json({ payment_payload: paymentPayload });
   } catch (error) {
-    console.error("❌ Session accept error:", error);
+    console.error("âŒ Session accept error:", error);
     performanceMetrics.errors++;
 
     if (error.code === "INVENTORY_CHANGED") {
@@ -683,13 +683,13 @@ router.post("/event/log", async (req, res) => {
           );
         }
       } catch (error) {
-        console.error("❌ Batch event logging failed:", error);
+        console.error("âŒ Batch event logging failed:", error);
       }
     });
 
     res.json({ status: "logged", count: events?.length || 0 });
   } catch (error) {
-    console.error("❌ Event log error:", error);
+    console.error("âŒ Event log error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -733,7 +733,7 @@ router.get("/session/replay/:id", async (req, res) => {
 
     res.json(replay);
   } catch (error) {
-    console.error("❌ Session replay error:", error);
+    console.error("âŒ Session replay error:", error);
     res.status(500).json({ error: "Internal server error" });
   }
 });
@@ -773,5 +773,4 @@ router.get("/metrics", (req, res) => {
     status: p95 < 300 ? "HEALTHY" : "DEGRADED",
   });
 });
-
-module.exports = router;
+export default router;

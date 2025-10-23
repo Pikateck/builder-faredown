@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const { body, validationResult, query } = require("express-validator");
 
@@ -577,5 +578,4 @@ router.get("/analytics/stats", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

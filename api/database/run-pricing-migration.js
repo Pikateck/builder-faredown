@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Pricing Engine Migration Runner
  * Sets up the pricing engine database schema and seed data
  */
@@ -14,11 +14,11 @@ const pool = new Pool({
 });
 
 async function runPricingMigration() {
-  console.log("🚀 Starting Pricing Engine Migration...");
+  console.log("ðŸš€ Starting Pricing Engine Migration...");
 
   try {
     // Check if pricing tables already exist
-    console.log("🔍 Checking existing tables...");
+    console.log("ðŸ” Checking existing tables...");
     const tablesCheck = await pool.query(`
       SELECT table_name
       FROM information_schema.tables
@@ -27,13 +27,13 @@ async function runPricingMigration() {
     `);
 
     console.log(
-      `📊 Found ${tablesCheck.rows.length}/4 pricing tables already exist`,
+      `ðŸ“Š Found ${tablesCheck.rows.length}/4 pricing tables already exist`,
     );
-    tablesCheck.rows.forEach((row) => console.log(`   ✓ ${row.table_name}`));
+    tablesCheck.rows.forEach((row) => console.log(`   âœ“ ${row.table_name}`));
 
     if (tablesCheck.rows.length === 4) {
-      console.log("✅ All pricing tables already exist - skipping migration");
-      console.log("🌱 Verifying seed data...");
+      console.log("âœ… All pricing tables already exist - skipping migration");
+      console.log("ðŸŒ± Verifying seed data...");
 
       // Check and add seed data if missing
       await ensureSeedData();
@@ -46,36 +46,36 @@ async function runPricingMigration() {
       );
       const migrationSQL = fs.readFileSync(migrationPath, "utf8");
 
-      console.log("📁 Compatibility migration file loaded:", migrationPath);
+      console.log("ðŸ“ Compatibility migration file loaded:", migrationPath);
 
       // Execute the migration
-      console.log("⚡ Executing compatibility migration...");
+      console.log("âš¡ Executing compatibility migration...");
       await pool.query(migrationSQL);
     }
 
-    console.log("✅ Pricing Engine migration completed successfully!");
+    console.log("âœ… Pricing Engine migration completed successfully!");
     console.log("");
-    console.log("📊 Created tables:");
+    console.log("ðŸ“Š Created tables:");
     console.log("  - markup_rules (pricing rules by route/airline/class)");
     console.log("  - promo_codes (discount codes)");
     console.log("  - tax_policies (tax calculation rules)");
     console.log("  - price_checkpoints (price tracking logs)");
     console.log("");
-    console.log("🌱 Seed data inserted:");
+    console.log("ðŸŒ± Seed data inserted:");
     console.log("  - Basic markup rules for all modules");
     console.log("  - Sample route-specific markups");
     console.log("  - Demo promo codes (WELCOME10, FIRST50, SAVE100)");
     console.log("  - Tax policies for all modules");
     console.log("");
-    console.log("🎯 Next steps:");
+    console.log("ðŸŽ¯ Next steps:");
     console.log("  1. Start the pricing server: npm run start:pricing");
     console.log("  2. Run tests: npm run test:pricing");
     console.log("  3. Test API endpoints at /api/pricing/*");
     console.log("");
   } catch (error) {
-    console.error("❌ Migration failed:", error.message);
+    console.error("âŒ Migration failed:", error.message);
     console.error("");
-    console.error("💡 Troubleshooting:");
+    console.error("ðŸ’¡ Troubleshooting:");
     console.error("  - Check DATABASE_URL environment variable");
     console.error("  - Ensure PostgreSQL is running and accessible");
     console.error("  - Verify database credentials");
@@ -129,9 +129,9 @@ async function ensureSeedData() {
       `);
     }
 
-    console.log("✅ Seed data verified/added successfully");
+    console.log("âœ… Seed data verified/added successfully");
   } catch (error) {
-    console.error("⚠️ Error ensuring seed data:", error.message);
+    console.error("âš ï¸ Error ensuring seed data:", error.message);
   }
 }
 
@@ -140,4 +140,4 @@ if (require.main === module) {
   runPricingMigration().catch(console.error);
 }
 
-module.exports = { runPricingMigration };
+export default { runPricingMigration };

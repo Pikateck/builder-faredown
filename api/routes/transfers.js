@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Transfers API Routes
  * Handles all transfer-related API endpoints following Hotels/Sightseeing pattern
  */
 
-const express = require("express");
 const transfersService = require("../services/transfersService");
 const transfersRepository = require("../repositories/transfersRepository");
 const markupService = require("../services/markupService");
@@ -757,5 +757,4 @@ router.use((error, req, res, next) => {
     timestamp: new Date().toISOString(),
   });
 });
-
-module.exports = router;
+export default router;

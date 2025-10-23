@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Sightseeing API Routes - Complete CRUD operations for activities and bookings
  * Integrates with Hotelbeds Activities API and internal markup/promo systems
  */
 
-const express = require("express");
 const router = express.Router();
 const { Pool } = require("pg");
 const crypto = require("crypto");
@@ -139,7 +139,7 @@ router.post("/destinations", async (req, res) => {
     }
 
     console.log(
-      `🎯 Sightseeing destinations API called with query: "${query}"`,
+      `ðŸŽ¯ Sightseeing destinations API called with query: "${query}"`,
     );
 
     // Create cache key
@@ -149,7 +149,7 @@ router.post("/destinations", async (req, res) => {
     const cached = destinationsCache.get(cacheKey);
     if (cached && Date.now() - cached.timestamp < CACHE_TTL) {
       console.log(
-        `✅ Returning cached sightseeing destinations for: "${query}"`,
+        `âœ… Returning cached sightseeing destinations for: "${query}"`,
       );
       // Set cache headers
       res.set({
@@ -167,7 +167,7 @@ router.post("/destinations", async (req, res) => {
     const result = await activitiesService.getDestinations("en", limit * 2); // Get more to filter
 
     if (!result.success) {
-      console.error("❌ Hotelbeds Activities API failed:", result.error);
+      console.error("âŒ Hotelbeds Activities API failed:", result.error);
       return res.status(500).json({
         success: false,
         error: "Failed to fetch destinations from Hotelbeds",
@@ -251,7 +251,7 @@ router.post("/destinations", async (req, res) => {
     });
 
     console.log(
-      `✅ Found ${destinations.length} sightseeing destinations (cached)`,
+      `âœ… Found ${destinations.length} sightseeing destinations (cached)`,
     );
 
     // Set cache headers
@@ -266,7 +266,7 @@ router.post("/destinations", async (req, res) => {
       cached: false,
     });
   } catch (error) {
-    console.error("❌ Sightseeing destinations API error:", error);
+    console.error("âŒ Sightseeing destinations API error:", error);
     res.status(500).json({
       success: false,
       error: error.message || "Internal server error",
@@ -1111,5 +1111,4 @@ router.get("/voucher/verify/:bookingRef", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

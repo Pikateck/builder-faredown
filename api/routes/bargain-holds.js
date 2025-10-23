@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Bargain Hold Management API
  * Handles price holds for negotiated bargain prices
  */
 
-const express = require("express");
 const router = express.Router();
 
 // Database connection (using existing pool)
@@ -12,7 +12,7 @@ let pool;
 // Initialize with database pool
 function initializeBargainHolds(dbPool) {
   pool = dbPool;
-  console.log("✅ Bargain Holds API initialized");
+  console.log("âœ… Bargain Holds API initialized");
 }
 
 /**
@@ -91,7 +91,7 @@ router.post("/create-hold", async (req, res) => {
         holdResult = await pool.query(holdQuery, holdValues);
       } catch (dbErr) {
         console.warn(
-          "⚠️ DB error creating hold, falling back to in-memory storage:",
+          "âš ï¸ DB error creating hold, falling back to in-memory storage:",
           dbErr.message,
         );
         global.bargainHolds = global.bargainHolds || new Map();
@@ -113,7 +113,7 @@ router.post("/create-hold", async (req, res) => {
       }
     } else {
       // Fallback: Store in memory (for development)
-      console.warn("⚠️ No database pool - storing hold in memory only");
+      console.warn("âš ï¸ No database pool - storing hold in memory only");
       global.bargainHolds = global.bargainHolds || new Map();
       global.bargainHolds.set(holdId, {
         hold_id: holdId,
@@ -133,7 +133,7 @@ router.post("/create-hold", async (req, res) => {
     }
 
     console.log(
-      `🔒 Price hold created: ${holdId} - ${currency} ${negotiatedPrice} (expires ${expiresAt})`,
+      `ðŸ”’ Price hold created: ${holdId} - ${currency} ${negotiatedPrice} (expires ${expiresAt})`,
     );
 
     res.json({
@@ -151,7 +151,7 @@ router.post("/create-hold", async (req, res) => {
       message: `Price held for ${holdDurationMinutes} minutes`,
     });
   } catch (error) {
-    console.error("❌ Create hold error:", error);
+    console.error("âŒ Create hold error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to create price hold",
@@ -232,7 +232,7 @@ router.get("/verify-hold/:holdId", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("❌ Verify hold error:", error);
+    console.error("âŒ Verify hold error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to verify hold",
@@ -295,7 +295,7 @@ router.post("/consume-hold", async (req, res) => {
 
     const hold = updateResult.rows[0];
 
-    console.log(`✅ Hold consumed: ${holdId} -> Booking: ${bookingRef}`);
+    console.log(`âœ… Hold consumed: ${holdId} -> Booking: ${bookingRef}`);
 
     res.json({
       success: true,
@@ -306,7 +306,7 @@ router.post("/consume-hold", async (req, res) => {
       consumedAt: hold.consumed_at || new Date(),
     });
   } catch (error) {
-    console.error("❌ Consume hold error:", error);
+    console.error("âŒ Consume hold error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to consume hold",
@@ -362,7 +362,7 @@ router.post("/release-hold", async (req, res) => {
       released: updateResult.rows.length > 0,
     });
   } catch (error) {
-    console.error("❌ Release hold error:", error);
+    console.error("âŒ Release hold error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to release hold",
@@ -410,7 +410,7 @@ router.get("/holds/cleanup", async (req, res) => {
       expiredCount,
     });
   } catch (error) {
-    console.error("❌ Cleanup holds error:", error);
+    console.error("âŒ Cleanup holds error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to cleanup holds",
@@ -419,4 +419,4 @@ router.get("/holds/cleanup", async (req, res) => {
   }
 });
 
-module.exports = { router, initializeBargainHolds };
+export default { router, initializeBargainHolds };

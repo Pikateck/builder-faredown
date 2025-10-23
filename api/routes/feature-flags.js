@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Feature Flags API Routes
  * For AI Chat Analytics and Bargain Engine Feature Control
  */
 
-const express = require("express");
 const router = express.Router();
 const { requirePermission, PERMISSIONS } = require("../middleware/auth");
 
@@ -223,5 +223,4 @@ router.get("/status", (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

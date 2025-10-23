@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Price Echo Middleware
  * Tracks pricing consistency across user journey steps
  * Logs prices and detects mismatches automatically
@@ -314,7 +314,7 @@ async function createDiffEndpoint(pool) {
   };
 }
 
-module.exports = {
+export default {
   priceEcho,
   createDiffEndpoint,
 };

@@ -1,9 +1,8 @@
-/**
+﻿/**
  * Simple Pricing API Server
  * Focuses only on the new pricing and markup endpoints
  */
 
-const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
 
@@ -122,9 +121,9 @@ app.get("/api/pricing/diff", (req, res) => createDiffEndpoint(pool)(req, res));
 try {
   const packagesRoutes = require("./routes/packages");
   app.use("/api/packages", packagesRoutes);
-  console.log("✅ Packages routes mounted successfully");
+  console.log("âœ… Packages routes mounted successfully");
 } catch (e) {
-  console.warn("⚠️ Packages routes not mounted:", e?.message);
+  console.warn("âš ï¸ Packages routes not mounted:", e?.message);
 }
 
 // Unified markups routes (for Admin CMS)
@@ -132,7 +131,7 @@ try {
   const markupsRoutes = require("./routes/markups-unified");
   app.use("/api/markups", markupsRoutes);
 } catch (e) {
-  console.warn("⚠️ Markups routes not mounted:", e?.message);
+  console.warn("âš ï¸ Markups routes not mounted:", e?.message);
 }
 
 // Error handling middleware
@@ -169,9 +168,9 @@ app.use("*", (req, res) => {
 async function startServer() {
   try {
     // Test database connection
-    console.log("🔌 Testing database connection...");
+    console.log("ðŸ”Œ Testing database connection...");
     await pool.query("SELECT 1");
-    console.log("✅ Database connected successfully");
+    console.log("âœ… Database connected successfully");
 
     // Test if our new tables exist
     const tablesResult = await pool.query(`
@@ -181,29 +180,29 @@ async function startServer() {
       AND table_name IN ('markup_rules', 'promo_codes', 'bookings', 'bargain_events', 'pricing_quotes')
     `);
 
-    console.log(`✅ Found ${tablesResult.rows.length}/5 pricing tables`);
+    console.log(`âœ… Found ${tablesResult.rows.length}/5 pricing tables`);
     tablesResult.rows.forEach((row) => {
       console.log(`   - ${row.table_name}`);
     });
 
     // Start server - MUST bind to 0.0.0.0 for Render
     const server = app.listen(PORT, "0.0.0.0", () => {
-      console.log("\n🚀 Faredown Pricing API Server Started");
+      console.log("\nðŸš€ Faredown Pricing API Server Started");
       console.log("================================");
-      console.log(`📍 Server URL: http://0.0.0.0:${PORT}`);
-      console.log(`🏥 Health Check: http://0.0.0.0:${PORT}/api/health`);
+      console.log(`ðŸ“ Server URL: http://0.0.0.0:${PORT}`);
+      console.log(`ðŸ¥ Health Check: http://0.0.0.0:${PORT}/api/health`);
       console.log(
-        `🧪 Test Endpoint: http://0.0.0.0:${PORT}/api/pricing/test-quote`,
+        `ðŸ§ª Test Endpoint: http://0.0.0.0:${PORT}/api/pricing/test-quote`,
       );
-      console.log(`��� Environment: ${process.env.NODE_ENV || "development"}`);
-      console.log(`🗄️  Database: Connected to PostgreSQL`);
-      console.log(`🔗 Render Compatible: ✅`);
+      console.log(`ï¿½ï¿½ï¿½ Environment: ${process.env.NODE_ENV || "development"}`);
+      console.log(`ðŸ—„ï¸  Database: Connected to PostgreSQL`);
+      console.log(`ðŸ”— Render Compatible: âœ…`);
       console.log("================================\n");
     });
 
     return server;
   } catch (error) {
-    console.error("❌ Failed to start server:", error);
+    console.error("âŒ Failed to start server:", error);
     process.exit(1);
   }
 }

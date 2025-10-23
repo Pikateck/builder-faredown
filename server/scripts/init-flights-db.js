@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Flight Database Initialization Script
  * Run this to create flight tables in the Render database
  */
@@ -20,17 +20,17 @@ async function initializeFlightDatabase() {
   const pool = new Pool(dbConfig);
 
   try {
-    console.log("🛫 Initializing flight database schema...");
+    console.log("ðŸ›« Initializing flight database schema...");
 
     // Read the SQL schema file
     const schemaPath = path.join(__dirname, "../database/schema/flights.sql");
     const flightSchema = fs.readFileSync(schemaPath, "utf8");
 
     // Execute the schema
-    console.log("📝 Creating flight tables...");
+    console.log("ðŸ“ Creating flight tables...");
     await pool.query(flightSchema);
 
-    console.log("✅ Flight database schema initialized successfully!");
+    console.log("âœ… Flight database schema initialized successfully!");
     console.log("");
     console.log("Created tables:");
     console.log("  - airlines");
@@ -44,7 +44,7 @@ async function initializeFlightDatabase() {
     console.log("  - flight_passengers");
     console.log("  - flight_routes");
     console.log("");
-    console.log("🎯 Flight booking system is ready to use!");
+    console.log("ðŸŽ¯ Flight booking system is ready to use!");
 
     // Test the connection
     const testQuery = `
@@ -58,12 +58,12 @@ async function initializeFlightDatabase() {
     const result = await pool.query(testQuery);
     const stats = result.rows[0];
 
-    console.log("📊 Database Statistics:");
+    console.log("ðŸ“Š Database Statistics:");
     console.log(`  - Airlines: ${stats.airline_count}`);
     console.log(`  - Airports: ${stats.airport_count}`);
     console.log(`  - Popular Routes: ${stats.route_count}`);
   } catch (error) {
-    console.error("❌ Error initializing flight database:", error);
+    console.error("âŒ Error initializing flight database:", error);
     console.error("");
     console.error("Common solutions:");
     console.error("1. Check DATABASE_URL environment variable");
@@ -80,4 +80,4 @@ if (require.main === module) {
   initializeFlightDatabase();
 }
 
-module.exports = { initializeFlightDatabase };
+export default { initializeFlightDatabase };

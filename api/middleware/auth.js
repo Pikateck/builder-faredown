@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Authentication and Authorization Middleware
  * JWT-based authentication for Faredown API
  */
@@ -228,7 +228,7 @@ const verifyToken = (token = "") => {
       token.startsWith("mock-admin-token")
     ) {
       console.log(
-        "⚠️ Admin mock token detected - bypassing JWT verification (dev mode)",
+        "âš ï¸ Admin mock token detected - bypassing JWT verification (dev mode)",
       );
       return {
         id: "mock-admin-1",
@@ -244,7 +244,7 @@ const verifyToken = (token = "") => {
 
     if (token.startsWith("mock-user-token-")) {
       console.log(
-        "⚠️ General mock token detected - granting elevated access for dev mode",
+        "âš ï¸ General mock token detected - granting elevated access for dev mode",
       );
       return {
         id: "mock-admin-2",
@@ -340,7 +340,7 @@ const requireAdmin = (req, res, next) => {
   ];
 
   if (!adminRoles.includes(req.user.role)) {
-    console.warn("⚠️ User role not in admin roles:", req.user.role);
+    console.warn("âš ï¸ User role not in admin roles:", req.user.role);
     return res.status(403).json({
       error: "Access denied",
       message: "Admin privileges required",
@@ -437,11 +437,11 @@ const getUserById = (id) => {
  * Create new user
  */
 const createUser = async (userData) => {
-  console.log("🔵 Creating user with data:", userData);
+  console.log("ðŸ”µ Creating user with data:", userData);
 
   try {
     const hashedPassword = await hashPassword(userData.password);
-    console.log("🔵 Password hashed successfully");
+    console.log("ðŸ”µ Password hashed successfully");
 
     const user = {
       id: userData.email.split("@")[0] + "_" + Date.now(), // Generate unique ID
@@ -456,7 +456,7 @@ const createUser = async (userData) => {
       lastLogin: null,
     };
 
-    console.log("🔵 User object created:", {
+    console.log("ðŸ”µ User object created:", {
       id: user.id,
       email: user.email,
       role: user.role,
@@ -464,16 +464,16 @@ const createUser = async (userData) => {
 
     // Store user in the users Map
     users.set(user.email, user); // Use email as the key
-    console.log("🔵 User stored in database, total users:", users.size);
+    console.log("ðŸ”µ User stored in database, total users:", users.size);
 
     return user;
   } catch (error) {
-    console.error("🔴 Error creating user:", error);
+    console.error("ðŸ”´ Error creating user:", error);
     throw error;
   }
 };
 
-module.exports = {
+export default {
   ROLES,
   PERMISSIONS,
   ROLE_PERMISSIONS,

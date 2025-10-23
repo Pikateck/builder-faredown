@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Test script for Transfers Bargain API
  * Tests the end-to-end bargain flow with sample transfer data
  */
@@ -75,17 +75,17 @@ function makeRequest(path, method = "GET", data = null) {
 
 // Test the complete bargain flow
 async function testTransfersBargainFlow() {
-  console.log("\n🚀 Testing Transfers Bargain API Flow\n");
+  console.log("\nðŸš€ Testing Transfers Bargain API Flow\n");
 
   try {
     // Test 1: Health Check
-    console.log("1️⃣ Testing health endpoint...");
+    console.log("1ï¸âƒ£ Testing health endpoint...");
     const health = await makeRequest("/health", "GET");
     console.log(`   Status: ${health.status}`);
     console.log(`   Response:`, health.data);
 
     // Test 2: Start Bargain Session
-    console.log("\n2️⃣ Starting bargain session...");
+    console.log("\n2ï¸âƒ£ Starting bargain session...");
     const startPayload = {
       transferData: sampleTransferData,
       userProfile: sampleUserProfile,
@@ -105,14 +105,14 @@ async function testTransfersBargainFlow() {
     }
 
     const sessionId = startResponse.data.sessionId;
-    console.log(`   ✅ Session created: ${sessionId}`);
+    console.log(`   âœ… Session created: ${sessionId}`);
 
     // Test 3: Make First Offer (Too Low)
-    console.log("\n3️⃣ Making first offer (too low - ₹800)...");
+    console.log("\n3ï¸âƒ£ Making first offer (too low - â‚¹800)...");
     const firstOffer = {
       sessionId: sessionId,
       userOffer: 800,
-      message: "I'd like to pay ₹800 for this transfer.",
+      message: "I'd like to pay â‚¹800 for this transfer.",
     };
 
     const firstOfferResponse = await makeRequest(
@@ -129,11 +129,11 @@ async function testTransfersBargainFlow() {
     );
 
     // Test 4: Make Second Offer (Reasonable)
-    console.log("\n4️⃣ Making second offer (reasonable - ₹1200)...");
+    console.log("\n4ï¸âƒ£ Making second offer (reasonable - â‚¹1200)...");
     const secondOffer = {
       sessionId: sessionId,
       userOffer: 1200,
-      message: "How about ₹1200?",
+      message: "How about â‚¹1200?",
     };
 
     const secondOfferResponse = await makeRequest(
@@ -146,19 +146,19 @@ async function testTransfersBargainFlow() {
       `   AI Decision: ${secondOfferResponse.data.aiResponse?.decision}`,
     );
     console.log(
-      `   AI Counter Price: ₹${secondOfferResponse.data.aiResponse?.counterPrice}`,
+      `   AI Counter Price: â‚¹${secondOfferResponse.data.aiResponse?.counterPrice}`,
     );
     console.log(
       `   AI Message: ${secondOfferResponse.data.aiResponse?.message}`,
     );
-    console.log(`   Savings: ₹${secondOfferResponse.data.aiResponse?.savings}`);
+    console.log(`   Savings: â‚¹${secondOfferResponse.data.aiResponse?.savings}`);
 
     // Test 5: Accept Counter Offer (if there is one)
     if (
       secondOfferResponse.data.aiResponse?.decision === "counter" ||
       secondOfferResponse.data.aiResponse?.decision === "accept"
     ) {
-      console.log("\n5️⃣ Accepting the bargain...");
+      console.log("\n5ï¸âƒ£ Accepting the bargain...");
       const acceptPayload = { sessionId: sessionId };
 
       const acceptResponse = await makeRequest(
@@ -171,23 +171,23 @@ async function testTransfersBargainFlow() {
         `   Booking Reference: ${acceptResponse.data.bookingPayload?.bookingReference}`,
       );
       console.log(
-        `   Final Price: ₹${acceptResponse.data.bookingPayload?.finalPrice}`,
+        `   Final Price: â‚¹${acceptResponse.data.bookingPayload?.finalPrice}`,
       );
       console.log(
-        `   Savings: ₹${acceptResponse.data.bookingPayload?.savings}`,
+        `   Savings: â‚¹${acceptResponse.data.bookingPayload?.savings}`,
       );
     }
 
     // Test 6: Get Session Details
-    console.log("\n6️⃣ Getting session details...");
+    console.log("\n6ï¸âƒ£ Getting session details...");
     const sessionDetails = await makeRequest(`/session/${sessionId}`, "GET");
     console.log(`   Status: ${sessionDetails.status}`);
     console.log(`   Session Status: ${sessionDetails.data.session?.status}`);
     console.log(`   Total Rounds: ${sessionDetails.data.session?.rounds}`);
 
-    console.log("\n✅ All tests completed successfully!");
+    console.log("\nâœ… All tests completed successfully!");
   } catch (error) {
-    console.error("\n❌ Test failed:", error.message);
+    console.error("\nâŒ Test failed:", error.message);
     console.error("Details:", error);
   }
 }
@@ -197,4 +197,4 @@ if (require.main === module) {
   testTransfersBargainFlow();
 }
 
-module.exports = { testTransfersBargainFlow };
+export default { testTransfersBargainFlow };

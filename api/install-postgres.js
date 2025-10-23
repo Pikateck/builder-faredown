@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Install PostgreSQL dependency for Faredown API
  */
 
@@ -7,26 +7,26 @@ const fs = require("fs");
 const path = require("path");
 
 async function installPostgreSQL() {
-  console.log("📦 Installing PostgreSQL driver (pg)...");
+  console.log("ðŸ“¦ Installing PostgreSQL driver (pg)...");
 
   return new Promise((resolve, reject) => {
     exec("npm install pg", { cwd: __dirname }, (error, stdout, stderr) => {
       if (error) {
-        console.error("❌ Failed to install PostgreSQL driver:", error);
+        console.error("âŒ Failed to install PostgreSQL driver:", error);
         reject(error);
         return;
       }
 
-      console.log("✅ PostgreSQL driver installed successfully");
+      console.log("âœ… PostgreSQL driver installed successfully");
       console.log(stdout);
 
       // Check if pg is now available
       try {
         require("pg");
-        console.log("✅ PostgreSQL driver is working");
+        console.log("âœ… PostgreSQL driver is working");
         resolve();
       } catch (err) {
-        console.error("❌ PostgreSQL driver not working:", err);
+        console.error("âŒ PostgreSQL driver not working:", err);
         reject(err);
       }
     });
@@ -37,13 +37,13 @@ async function installPostgreSQL() {
 if (require.main === module) {
   installPostgreSQL()
     .then(() => {
-      console.log("🎉 PostgreSQL setup complete!");
+      console.log("ðŸŽ‰ PostgreSQL setup complete!");
       process.exit(0);
     })
     .catch((error) => {
-      console.error("💥 Installation failed:", error);
+      console.error("ðŸ’¥ Installation failed:", error);
       process.exit(1);
     });
 }
 
-module.exports = { installPostgreSQL };
+export default { installPostgreSQL };

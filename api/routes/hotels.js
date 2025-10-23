@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const axios = require("axios");
 const crypto = require("crypto");
 const db = require("../database/connection");
@@ -334,7 +335,7 @@ async function saveHotelSearchToDatabase(searchParams, results) {
 
     const result = await db.query(searchQuery, searchValues);
     console.log(
-      `💾 Hotel search saved to database with ID: ${result.rows[0].id}`,
+      `ðŸ’¾ Hotel search saved to database with ID: ${result.rows[0].id}`,
     );
 
     return result.rows[0].id;
@@ -349,7 +350,7 @@ async function saveHotelSearchToDatabase(searchParams, results) {
  */
 router.get("/search", async (req, res) => {
   try {
-    console.log("🏨 Hotel search request received:", req.query);
+    console.log("ðŸ¨ Hotel search request received:", req.query);
 
     const {
       destination,
@@ -409,7 +410,7 @@ router.get("/search", async (req, res) => {
     };
 
     console.log(
-      "📡 Calling Hotelbeds API with request:",
+      "ðŸ“¡ Calling Hotelbeds API with request:",
       JSON.stringify(hotelbedsRequest, null, 2),
     );
 
@@ -424,7 +425,7 @@ router.get("/search", async (req, res) => {
     );
 
     console.log(
-      `✅ Hotelbeds API returned ${hotelbedsResponse.data?.hotels?.length || 0} hotels`,
+      `âœ… Hotelbeds API returned ${hotelbedsResponse.data?.hotels?.length || 0} hotels`,
     );
 
     // Transform Hotelbeds data to our format with markup and promo codes
@@ -449,7 +450,7 @@ router.get("/search", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("❌ Hotel search error:", error.message);
+    console.error("âŒ Hotel search error:", error.message);
 
     // Return fallback data on API failure
     const fallbackHotels = getFallbackHotelData(req.query);
@@ -475,7 +476,7 @@ router.get("/details/:hotelId", async (req, res) => {
   try {
     const { hotelId } = req.params;
 
-    console.log(`🏨 Hotel details request for: ${hotelId}`);
+    console.log(`ðŸ¨ Hotel details request for: ${hotelId}`);
 
     // Call Hotelbeds Hotel Details API
     const hotelbedsResponse = await axios.get(
@@ -494,7 +495,7 @@ router.get("/details/:hotelId", async (req, res) => {
       source: "hotelbeds_live",
     });
   } catch (error) {
-    console.error("❌ Hotel details error:", error.message);
+    console.error("âŒ Hotel details error:", error.message);
 
     res.status(500).json({
       success: false,
@@ -569,5 +570,4 @@ function getFallbackHotelData(searchParams) {
     },
   ];
 }
-
-module.exports = router;
+export default router;

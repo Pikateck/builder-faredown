@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Fixed Packages API Routes
  * Handles all public package operations - listing, details, departures, bookings
  * Integrates with existing bargain system and follows established patterns
  */
 
-const express = require("express");
 const router = express.Router();
 const { Pool } = require("pg");
 const crypto = require("crypto");
@@ -661,5 +661,4 @@ router.get("/featured", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

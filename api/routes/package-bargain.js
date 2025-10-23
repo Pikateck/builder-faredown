@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Package Bargain API Routes
  * Integrates packages with the existing bargain system
  * Handles bargain sessions for package total pricing
  */
 
-const express = require("express");
 const router = express.Router();
 const { Pool } = require("pg");
 const crypto = require("crypto");
@@ -639,5 +639,4 @@ router.post("/:slug/book", async (req, res) => {
     client.release();
   }
 });
-
-module.exports = router;
+export default router;

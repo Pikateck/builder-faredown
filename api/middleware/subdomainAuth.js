@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Subdomain-Based Authentication Middleware
  * Enforces admin access only via admin subdomain
  */
@@ -19,7 +19,7 @@ const detectSubdomain = (req, res, next) => {
   req.isApiSubdomain = subdomain === 'api';
   req.isLiveSubdomain = !req.isAdminSubdomain; // api, www, or root
   
-  console.log(`🌐 Request from subdomain: ${subdomain} (admin: ${req.isAdminSubdomain})`);
+  console.log(`ðŸŒ Request from subdomain: ${subdomain} (admin: ${req.isAdminSubdomain})`);
   next();
 };
 
@@ -29,7 +29,7 @@ const detectSubdomain = (req, res, next) => {
 const enforceAdminSubdomain = (req, res, next) => {
   // Only allow admin routes on admin subdomain
   if (!req.isAdminSubdomain) {
-    console.warn(`⚠️ Admin route access denied from ${req.subdomain} subdomain`);
+    console.warn(`âš ï¸ Admin route access denied from ${req.subdomain} subdomain`);
     return res.status(403).json({
       error: 'Forbidden',
       message: 'Admin routes are accessible only via admin.faredown.com',
@@ -37,7 +37,7 @@ const enforceAdminSubdomain = (req, res, next) => {
     });
   }
   
-  console.log(`✅ Admin route access granted from admin subdomain`);
+  console.log(`âœ… Admin route access granted from admin subdomain`);
   next();
 };
 
@@ -47,7 +47,7 @@ const enforceAdminSubdomain = (req, res, next) => {
 const enforceLiveSubdomain = (req, res, next) => {
   // Only allow live routes on non-admin subdomains
   if (req.isAdminSubdomain) {
-    console.warn(`⚠️ Live route access denied from admin subdomain`);
+    console.warn(`âš ï¸ Live route access denied from admin subdomain`);
     return res.status(403).json({
       error: 'Forbidden',
       message: 'Public routes are not accessible via admin subdomain',
@@ -90,7 +90,7 @@ const subdomainCors = (req, res, next) => {
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS');
     res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Request-ID, X-Admin-Key');
   } else {
-    console.warn(`⚠️ CORS rejected for origin: ${origin} on subdomain: ${req.subdomain}`);
+    console.warn(`âš ï¸ CORS rejected for origin: ${origin} on subdomain: ${req.subdomain}`);
   }
   
   // Handle preflight
@@ -140,7 +140,7 @@ const logSubdomainAccess = (req, res, next) => {
     // TODO: Send to monitoring service (Sentry, DataDog, etc.)
     console.log('[SUBDOMAIN_ACCESS]', JSON.stringify(logData));
   } else {
-    console.log('📊 Subdomain Access:', logData);
+    console.log('ðŸ“Š Subdomain Access:', logData);
   }
   
   next();
@@ -183,7 +183,7 @@ const verifyAdminToken = (req, res, next) => {
   }
 };
 
-module.exports = {
+export default {
   detectSubdomain,
   enforceAdminSubdomain,
   enforceLiveSubdomain,

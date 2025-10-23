@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Marketing Budget Monitoring Service
  * Automated budget tracking, alerts, and auto-disable functionality
  */
@@ -336,10 +336,10 @@ class BudgetMonitorService {
     console.log("=== DAILY BUDGET REPORT ===");
     console.log(`Date: ${report.date}`);
     console.log(
-      `Total Budget: ₹${report.summary.totalBudget.toLocaleString()}`,
+      `Total Budget: â‚¹${report.summary.totalBudget.toLocaleString()}`,
     );
     console.log(
-      `Budget Used: ₹${report.summary.totalBudgetUsed.toLocaleString()} (${report.summary.budgetUtilization}%)`,
+      `Budget Used: â‚¹${report.summary.totalBudgetUsed.toLocaleString()} (${report.summary.budgetUtilization}%)`,
     );
     console.log(
       `Active Promos: ${report.summary.activePromoCodes}/${report.summary.totalPromoCodes}`,
@@ -372,7 +372,7 @@ class BudgetMonitorService {
    * Send critical notification for auto-disabled promos
    */
   async sendCriticalNotification(notification) {
-    const message = `🚨 CRITICAL: Promo code "${notification.promoCode}" has been automatically disabled due to budget exhaustion (${notification.utilizationPercent.toFixed(2)}% used)`;
+    const message = `ðŸš¨ CRITICAL: Promo code "${notification.promoCode}" has been automatically disabled due to budget exhaustion (${notification.utilizationPercent.toFixed(2)}% used)`;
 
     console.log(`[CRITICAL NOTIFICATION] ${message}`);
 
@@ -384,7 +384,7 @@ class BudgetMonitorService {
    * Send recovery notification
    */
   async sendRecoveryNotification(notification) {
-    const message = `✅ RECOVERY: Promo code "${notification.promoCode}" has been automatically recovered due to budget increase (${notification.utilizationPercent.toFixed(2)}% utilization)`;
+    const message = `âœ… RECOVERY: Promo code "${notification.promoCode}" has been automatically recovered due to budget increase (${notification.utilizationPercent.toFixed(2)}% utilization)`;
 
     console.log(`[RECOVERY NOTIFICATION] ${message}`);
   }
@@ -393,8 +393,8 @@ class BudgetMonitorService {
    * Format alert message
    */
   formatAlertMessage(alert) {
-    const emoji = alert.level === "CRITICAL" ? "🚨" : "⚠️";
-    return `${emoji} Budget Alert: Promo "${alert.promoCode}" is at ${alert.utilizationPercent}% budget utilization (₹${alert.budgetUsed.toLocaleString()} / ₹${alert.budgetAllocated.toLocaleString()})`;
+    const emoji = alert.level === "CRITICAL" ? "ðŸš¨" : "âš ï¸";
+    return `${emoji} Budget Alert: Promo "${alert.promoCode}" is at ${alert.utilizationPercent}% budget utilization (â‚¹${alert.budgetUsed.toLocaleString()} / â‚¹${alert.budgetAllocated.toLocaleString()})`;
   }
 
   /**
@@ -491,7 +491,7 @@ process.on("SIGINT", () => {
   budgetMonitorService.stop();
 });
 
-module.exports = {
+export default {
   budgetMonitorService,
   BudgetMonitorService,
   BUDGET_CONFIG,

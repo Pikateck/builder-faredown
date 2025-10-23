@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Enhanced Bargain System Migration Runner
  * Applies the comprehensive bargain logic database schema
  */
@@ -21,15 +21,15 @@ async function runEnhancedBargainMigration() {
   const client = new Client(dbConfig);
   
   try {
-    console.log("🔄 Connecting to database...");
+    console.log("ðŸ”„ Connecting to database...");
     await client.connect();
-    console.log("✅ Connected to database");
+    console.log("âœ… Connected to database");
 
     // Read the migration file
     const migrationPath = path.join(__dirname, "migrations", "V2025_02_20_simple_enhanced_bargain.sql");
     const migrationSQL = fs.readFileSync(migrationPath, "utf8");
 
-    console.log("🔄 Running enhanced bargain system migration...");
+    console.log("ðŸ”„ Running enhanced bargain system migration...");
     
     // Execute the migration in a transaction
     await client.query("BEGIN");
@@ -37,10 +37,10 @@ async function runEnhancedBargainMigration() {
     try {
       await client.query(migrationSQL);
       await client.query("COMMIT");
-      console.log("✅ Enhanced bargain system migration completed successfully");
+      console.log("âœ… Enhanced bargain system migration completed successfully");
       
       // Verify the migration by checking key tables
-      console.log("🔍 Verifying migration...");
+      console.log("ðŸ” Verifying migration...");
       
       const verificationQueries = [
         "SELECT COUNT(*) as count FROM modules",
@@ -51,24 +51,24 @@ async function runEnhancedBargainMigration() {
       
       for (const query of verificationQueries) {
         const result = await client.query(query);
-        console.log("  ✓", query, "->", result.rows);
+        console.log("  âœ“", query, "->", result.rows);
       }
       
       // Test the calculation function
-      console.log("🧪 Testing bargain calculation function...");
+      console.log("ðŸ§ª Testing bargain calculation function...");
       const testResult = await client.query(`
         SELECT * FROM calculate_enhanced_bargain_price(
-          10000,  -- ₹10,000 supplier net rate
+          10000,  -- â‚¹10,000 supplier net rate
           'hotels',  -- Hotels module
           'FAREDOWN25'  -- Test promo code
         )
       `);
       
       if (testResult.rows.length > 0) {
-        console.log("  ✓ Bargain calculation function working:", testResult.rows[0]);
+        console.log("  âœ“ Bargain calculation function working:", testResult.rows[0]);
       }
       
-      console.log("🎉 All verifications passed!");
+      console.log("ðŸŽ‰ All verifications passed!");
       
     } catch (error) {
       await client.query("ROLLBACK");
@@ -76,27 +76,27 @@ async function runEnhancedBargainMigration() {
     }
     
   } catch (error) {
-    console.error("❌ Migration failed:", error.message);
+    console.error("âŒ Migration failed:", error.message);
     console.error("Stack trace:", error.stack);
     process.exit(1);
   } finally {
     await client.end();
-    console.log("🔒 Database connection closed");
+    console.log("ðŸ”’ Database connection closed");
   }
 }
 
 // Run the migration
 if (require.main === module) {
-  console.log("🚀 Starting Enhanced Bargain System Migration");
+  console.log("ðŸš€ Starting Enhanced Bargain System Migration");
   runEnhancedBargainMigration()
     .then(() => {
-      console.log("✅ Migration process completed");
+      console.log("âœ… Migration process completed");
       process.exit(0);
     })
     .catch((error) => {
-      console.error("❌ Migration process failed:", error);
+      console.error("âŒ Migration process failed:", error);
       process.exit(1);
     });
 }
 
-module.exports = { runEnhancedBargainMigration };
+export default { runEnhancedBargainMigration };

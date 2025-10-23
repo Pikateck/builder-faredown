@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const voucherService = require("../services/voucherService");
 const hotelBookingService = require("../services/hotelBookingService");
@@ -259,11 +260,11 @@ router.post("/hotel/:bookingRef/email", async (req, res) => {
         });
 
         console.log(
-          `📧 Voucher email sent to ${recipientEmail}: ${emailResult.success ? "SUCCESS" : "FAILED"}`,
+          `ðŸ“§ Voucher email sent to ${recipientEmail}: ${emailResult.success ? "SUCCESS" : "FAILED"}`,
         );
       } catch (error) {
         console.error(
-          `❌ Failed to send voucher email to ${recipientEmail}:`,
+          `âŒ Failed to send voucher email to ${recipientEmail}:`,
           error,
         );
         emailResults.push({
@@ -376,5 +377,4 @@ router.get("/email/tracking", authenticateToken, (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

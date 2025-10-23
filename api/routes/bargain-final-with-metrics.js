@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const { v4: uuidv4 } = require("uuid");
 const crypto = require("crypto");
 const router = express.Router();
@@ -585,5 +586,4 @@ router.get("/session/:session_id/status", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

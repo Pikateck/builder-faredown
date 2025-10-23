@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Fixed Packages Migration Script
  * Runs the complete database schema and seed data for the packages module
  */
@@ -21,25 +21,25 @@ async function runMigration() {
   const client = await pool.connect();
   
   try {
-    console.log('🚀 Starting Fixed Packages migration...');
+    console.log('ðŸš€ Starting Fixed Packages migration...');
     
     // Begin transaction
     await client.query('BEGIN');
     
     // 1. Run schema migration
-    console.log('📊 Creating database schema...');
+    console.log('ðŸ“Š Creating database schema...');
     const schemaSQL = fs.readFileSync(path.join(__dirname, 'fixed-packages-schema.sql'), 'utf8');
     await client.query(schemaSQL);
-    console.log('✅ Schema created successfully');
+    console.log('âœ… Schema created successfully');
     
     // 2. Run seed data
-    console.log('🌱 Inserting seed data...');
+    console.log('ðŸŒ± Inserting seed data...');
     const seedSQL = fs.readFileSync(path.join(__dirname, 'fixed-packages-seed.sql'), 'utf8');
     await client.query(seedSQL);
-    console.log('✅ Seed data inserted successfully');
+    console.log('âœ… Seed data inserted successfully');
     
     // 3. Verify the migration
-    console.log('🔍 Verifying migration...');
+    console.log('ðŸ” Verifying migration...');
     
     // Check if tables exist
     const tables = await client.query(`
@@ -51,7 +51,7 @@ async function runMigration() {
       ORDER BY table_name
     `);
     
-    console.log('📋 Created tables:');
+    console.log('ðŸ“‹ Created tables:');
     tables.rows.forEach(row => {
       console.log(`   - ${row.table_name}`);
     });
@@ -63,7 +63,7 @@ async function runMigration() {
     const cityCount = await client.query('SELECT COUNT(*) FROM cities');
     const departureCount = await client.query('SELECT COUNT(*) FROM package_departures');
     
-    console.log('📊 Data summary:');
+    console.log('ðŸ“Š Data summary:');
     console.log(`   - Packages: ${packageCount.rows[0].count}`);
     console.log(`   - Regions: ${regionCount.rows[0].count}`);
     console.log(`   - Countries: ${countryCount.rows[0].count}`);
@@ -74,16 +74,16 @@ async function runMigration() {
     const listingView = await client.query('SELECT COUNT(*) FROM v_packages_listing');
     const hierarchyView = await client.query('SELECT COUNT(*) FROM v_destination_hierarchy');
     
-    console.log('👁️ Views verification:');
+    console.log('ðŸ‘ï¸ Views verification:');
     console.log(`   - v_packages_listing: ${listingView.rows[0].count} packages`);
     console.log(`   - v_destination_hierarchy: ${hierarchyView.rows[0].count} root regions`);
     
     // Commit transaction
     await client.query('COMMIT');
     
-    console.log('✅ Fixed Packages migration completed successfully!');
+    console.log('âœ… Fixed Packages migration completed successfully!');
     console.log('');
-    console.log('🎯 Next steps:');
+    console.log('ðŸŽ¯ Next steps:');
     console.log('   1. Create API routes for packages');
     console.log('   2. Build frontend components');
     console.log('   3. Integrate bargain system');
@@ -92,7 +92,7 @@ async function runMigration() {
   } catch (error) {
     // Rollback transaction on error
     await client.query('ROLLBACK');
-    console.error('❌ Migration failed:', error);
+    console.error('âŒ Migration failed:', error);
     throw error;
   } finally {
     client.release();
@@ -103,7 +103,7 @@ async function rollbackMigration() {
   const client = await pool.connect();
   
   try {
-    console.log('🔄 Rolling back Fixed Packages migration...');
+    console.log('ðŸ”„ Rolling back Fixed Packages migration...');
     
     await client.query('BEGIN');
     
@@ -149,11 +149,11 @@ async function rollbackMigration() {
     }
     
     await client.query('COMMIT');
-    console.log('✅ Rollback completed successfully');
+    console.log('âœ… Rollback completed successfully');
     
   } catch (error) {
     await client.query('ROLLBACK');
-    console.error('❌ Rollback failed:', error);
+    console.error('âŒ Rollback failed:', error);
     throw error;
   } finally {
     client.release();
@@ -175,7 +175,7 @@ if (require.main === module) {
   }
 }
 
-module.exports = {
+export default {
   runMigration,
   rollbackMigration
 };

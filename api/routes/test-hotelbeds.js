@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Test endpoint for Hotelbeds API integration
  * Verify credentials and basic functionality
  */
 
-const express = require("express");
 const router = express.Router();
 const contentService = require("../services/hotelbeds/contentService");
 const bookingService = require("../services/hotelbeds/bookingService");
@@ -14,7 +14,7 @@ const bookingService = require("../services/hotelbeds/bookingService");
  */
 router.get("/credentials", async (req, res) => {
   try {
-    console.log("🔑 Testing Hotelbeds API credentials...");
+    console.log("ðŸ”‘ Testing Hotelbeds API credentials...");
     
     const config = {
       apiKey: process.env.HOTELBEDS_API_KEY,
@@ -41,7 +41,7 @@ router.get("/credentials", async (req, res) => {
     });
     
   } catch (error) {
-    console.error("❌ Credentials test error:", error);
+    console.error("âŒ Credentials test error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -56,7 +56,7 @@ router.get("/credentials", async (req, res) => {
  */
 router.get("/content", async (req, res) => {
   try {
-    console.log("🏨 Testing Hotelbeds Content API...");
+    console.log("ðŸ¨ Testing Hotelbeds Content API...");
     
     // Test getting destinations
     const destinations = await contentService.getDestinations('ES'); // Spain as test
@@ -73,7 +73,7 @@ router.get("/content", async (req, res) => {
     });
     
   } catch (error) {
-    console.error("❌ Content API test error:", error);
+    console.error("âŒ Content API test error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -89,7 +89,7 @@ router.get("/content", async (req, res) => {
  */
 router.get("/booking", async (req, res) => {
   try {
-    console.log("💰 Testing Hotelbeds Booking API...");
+    console.log("ðŸ’° Testing Hotelbeds Booking API...");
     
     // Test availability search for tomorrow
     const tomorrow = new Date();
@@ -124,7 +124,7 @@ router.get("/booking", async (req, res) => {
     });
     
   } catch (error) {
-    console.error("❌ Booking API test error:", error);
+    console.error("âŒ Booking API test error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -140,7 +140,7 @@ router.get("/booking", async (req, res) => {
  */
 router.get("/integration", async (req, res) => {
   try {
-    console.log("🔄 Testing full Hotelbeds integration...");
+    console.log("ðŸ”„ Testing full Hotelbeds integration...");
     
     const results = {
       credentials: { status: 'checking...' },
@@ -205,7 +205,7 @@ router.get("/integration", async (req, res) => {
     });
     
   } catch (error) {
-    console.error("❌ Integration test error:", error);
+    console.error("âŒ Integration test error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
@@ -214,5 +214,4 @@ router.get("/integration", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

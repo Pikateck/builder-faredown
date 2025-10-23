@@ -1,4 +1,4 @@
-/**
+﻿/**
  * CORS Configuration with Explicit Allowlist
  * Production-safe CORS handling for Faredown API
  */
@@ -74,7 +74,7 @@ const corsConfig = {
   maxAge: 86400 // 24 hours
 };
 
-module.exports = {
+export default {
   corsConfig,
   corsAllowedOrigins,
   isOriginAllowed

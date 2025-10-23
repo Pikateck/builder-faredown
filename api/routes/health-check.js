@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Enhanced Health Check Route
  * Provides detailed information about API server status
  * Helps debug "Failed to fetch" errors
  */
 
-const express = require("express");
 const { Pool } = require("pg");
 const router = express.Router();
 
@@ -146,5 +146,4 @@ function generateSuggestions(checks) {
 
   return suggestions;
 }
-
-module.exports = router;
+export default router;

@@ -1,10 +1,10 @@
+﻿import express from "express";
 /**
  * Enhanced Hotels Live API Routes
  * Full production integration with Hotelbeds Content and Booking APIs
  * Uses test credentials for development: 91d2368789abdb5beec101ce95a9d185
  */
 
-const express = require("express");
 const router = express.Router();
 const contentService = require("../services/hotelbeds/contentService");
 const bookingService = require("../services/hotelbeds/bookingService");
@@ -50,13 +50,13 @@ router.post("/search", searchLimiter, async (req, res) => {
  */
 router.get("/test", async (req, res) => {
   try {
-    console.log("🧪 Testing direct Hotelbeds API connection...");
+    console.log("ðŸ§ª Testing direct Hotelbeds API connection...");
 
     // Test credentials
     const hasCredentials = !!(
       process.env.HOTELBEDS_API_KEY && process.env.HOTELBEDS_SECRET
     );
-    console.log("🔑 Credentials check:", {
+    console.log("ðŸ”‘ Credentials check:", {
       hasApiKey: !!process.env.HOTELBEDS_API_KEY,
       hasSecret: !!process.env.HOTELBEDS_SECRET,
       apiKeyLength: process.env.HOTELBEDS_API_KEY?.length,
@@ -85,7 +85,7 @@ router.get("/test", async (req, res) => {
       currency: "EUR",
     };
 
-    console.log("🏨 Testing availability search:", testSearch);
+    console.log("ðŸ¨ Testing availability search:", testSearch);
     const result = await bookingService.searchAvailability(testSearch);
 
     res.json({
@@ -97,7 +97,7 @@ router.get("/test", async (req, res) => {
       testParams: testSearch,
     });
   } catch (error) {
-    console.error("❌ Hotelbeds test failed:", error);
+    console.error("âŒ Hotelbeds test failed:", error);
     res.json({
       success: false,
       error: error.message,
@@ -124,7 +124,7 @@ async function handleHotelSearch(req, res) {
       currencyCode,
     } = params;
 
-    console.log("🔍 Enhanced hotel search request:", params);
+    console.log("ðŸ” Enhanced hotel search request:", params);
 
     // Use currencyCode if provided (for backward compatibility)
     const finalCurrency = currencyCode || currency;
@@ -150,7 +150,7 @@ async function handleHotelSearch(req, res) {
     // Determine destination code
     let destCode = destinationCode;
     if (!destCode && destination) {
-      console.log(`🔍 Searching destinations for: ${destination}`);
+      console.log(`ðŸ” Searching destinations for: ${destination}`);
       try {
         const destinations = await contentService.getDestinations();
         const matched = destinations.find(
@@ -161,23 +161,23 @@ async function handleHotelSearch(req, res) {
         if (matched) {
           destCode = matched.code;
           console.log(
-            `✅ Found destination code: ${destCode} for ${matched.name}`,
+            `âœ… Found destination code: ${destCode} for ${matched.name}`,
           );
         }
       } catch (destError) {
-        console.warn("⚠️ Destination lookup failed:", destError.message);
+        console.warn("âš ï¸ Destination lookup failed:", destError.message);
       }
     }
 
     // Default to Dubai if no destination found
     if (!destCode) {
       destCode = "DXB"; // Dubai as fallback
-      console.log("ℹ️ Using default destination: Dubai (DXB)");
+      console.log("â„¹ï¸ Using default destination: Dubai (DXB)");
     }
 
     // Search for availability and pricing
-    console.log("🏨 Searching availability with Hotelbeds...");
-    console.log("🔑 API Credentials:", {
+    console.log("ðŸ¨ Searching availability with Hotelbeds...");
+    console.log("ðŸ”‘ API Credentials:", {
       hasApiKey: !!process.env.HOTELBEDS_API_KEY,
       hasSecret: !!process.env.HOTELBEDS_SECRET,
       apiKeyLength: process.env.HOTELBEDS_API_KEY?.length,
@@ -196,13 +196,13 @@ async function handleHotelSearch(req, res) {
         childAges: Array.isArray(childAges) ? childAges : [],
         currency: finalCurrency,
       });
-      console.log("✅ Hotelbeds availability search successful:", {
+      console.log("âœ… Hotelbeds availability search successful:", {
         hotelCount: availabilityResults.hotels?.length || 0,
         destination: destCode,
       });
     } catch (apiError) {
-      console.error("❌ Hotelbeds API Error:", apiError.message);
-      console.error("🔍 Full API Error:", apiError);
+      console.error("âŒ Hotelbeds API Error:", apiError.message);
+      console.error("ðŸ” Full API Error:", apiError);
 
       // Return fallback data for now to debug
       return res.json({
@@ -217,7 +217,7 @@ async function handleHotelSearch(req, res) {
 
     if (availabilityResults.hotels && availabilityResults.hotels.length > 0) {
       console.log(
-        `🔄 Enriching ${availabilityResults.hotels.length} hotels with content data`,
+        `ðŸ”„ Enriching ${availabilityResults.hotels.length} hotels with content data`,
       );
 
       // Get hotel codes for content enrichment (limit to reasonable number)
@@ -227,9 +227,9 @@ async function handleHotelSearch(req, res) {
 
       try {
         // Get detailed content for these hotels
-        console.log("📚 Fetching content for hotel codes:", hotelCodes);
+        console.log("ðŸ“š Fetching content for hotel codes:", hotelCodes);
         const contentData = await contentService.getHotels(hotelCodes);
-        console.log("📚 Content data received:", {
+        console.log("ðŸ“š Content data received:", {
           hotelCount: contentData?.length || 0,
           hasImages: contentData?.some((h) => h.images?.length > 0) || false,
         });
@@ -238,7 +238,7 @@ async function handleHotelSearch(req, res) {
         const contentMap = new Map();
         if (contentData && contentData.length > 0) {
           contentData.forEach((hotel) => {
-            console.log(`📝 Hotel ${hotel.code} content:`, {
+            console.log(`ðŸ“ Hotel ${hotel.code} content:`, {
               name: hotel.name,
               imageCount: hotel.images?.length || 0,
               firstImageUrl:
@@ -256,7 +256,7 @@ async function handleHotelSearch(req, res) {
 
           // Log content data for debugging
           if (content) {
-            console.log(`🔍 Hotel ${hotel.code} content:`, {
+            console.log(`ðŸ” Hotel ${hotel.code} content:`, {
               name: content.name,
               hasImages: content.images?.length > 0,
               imageCount: content.images?.length || 0,
@@ -267,7 +267,7 @@ async function handleHotelSearch(req, res) {
                   : "unknown",
             });
           } else {
-            console.log(`⚠️  No content found for hotel ${hotel.code}`);
+            console.log(`âš ï¸  No content found for hotel ${hotel.code}`);
           }
 
           // Extract images with proper fallback logic
@@ -277,14 +277,14 @@ async function handleHotelSearch(req, res) {
               .map((img) => img.urlStandard || img.url || img.urlOriginal)
               .filter(Boolean); // Remove any undefined/null URLs
             console.log(
-              `📸 Hotel ${hotel.code}: Found ${hotelImages.length} valid images from Hotelbeds`,
+              `ðŸ“¸ Hotel ${hotel.code}: Found ${hotelImages.length} valid images from Hotelbeds`,
             );
           }
 
           // Only use fallback if no real images available
           if (hotelImages.length === 0) {
             console.log(
-              `⚠️  Hotel ${hotel.code}: No images from API, using fallback`,
+              `âš ï¸  Hotel ${hotel.code}: No images from API, using fallback`,
             );
             hotelImages = [
               "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
@@ -386,11 +386,11 @@ async function handleHotelSearch(req, res) {
         });
 
         console.log(
-          `✅ Enhanced ${processedHotels.length} hotels with content`,
+          `âœ… Enhanced ${processedHotels.length} hotels with content`,
         );
       } catch (contentError) {
         console.warn(
-          "⚠️ Content enrichment failed, using availability data only:",
+          "âš ï¸ Content enrichment failed, using availability data only:",
           contentError.message,
         );
 
@@ -420,7 +420,7 @@ async function handleHotelSearch(req, res) {
       }
     }
 
-    console.log(`✅ Returning ${processedHotels.length} hotels to frontend`);
+    console.log(`âœ… Returning ${processedHotels.length} hotels to frontend`);
 
     // Return response in format expected by existing frontend
     res.json({
@@ -443,7 +443,7 @@ async function handleHotelSearch(req, res) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Enhanced hotel search error:", error);
+    console.error("âŒ Enhanced hotel search error:", error);
 
     // Return graceful fallback for frontend compatibility
     res.status(200).json({
@@ -509,9 +509,9 @@ router.get("/hotel/:code", async (req, res) => {
   try {
     const { code } = req.params;
 
-    console.log(`🏨 Hotel details API called for: ${code}`);
-    console.log("🔧 Request query params:", req.query);
-    console.log("🔑 API credentials check:", {
+    console.log(`ðŸ¨ Hotel details API called for: ${code}`);
+    console.log("ðŸ”§ Request query params:", req.query);
+    console.log("ðŸ”‘ API credentials check:", {
       hasApiKey: !!process.env.HOTELBEDS_API_KEY,
       hasSecret: !!process.env.HOTELBEDS_SECRET,
       apiKeyLength: process.env.HOTELBEDS_API_KEY
@@ -521,7 +521,7 @@ router.get("/hotel/:code", async (req, res) => {
 
     // Validate hotel code parameter
     if (!code || typeof code !== "string" || code.trim() === "") {
-      console.log("❌ Invalid hotel code provided");
+      console.log("âŒ Invalid hotel code provided");
       return res.status(400).json({
         success: false,
         error: "Invalid hotel code",
@@ -531,7 +531,7 @@ router.get("/hotel/:code", async (req, res) => {
 
     const { language = "ENG", checkIn, checkOut } = req.query;
 
-    console.log(`🏨 Getting enhanced hotel details for: ${code}`);
+    console.log(`ðŸ¨ Getting enhanced hotel details for: ${code}`);
 
     // Create immediate fallback hotel data structure
     const createFallbackHotel = (hotelCode) => ({
@@ -574,7 +574,7 @@ router.get("/hotel/:code", async (req, res) => {
       hotel = contentData && contentData.length > 0 ? contentData[0] : null;
     } catch (contentError) {
       console.warn(
-        "⚠️ Content API error for hotel details:",
+        "âš ï¸ Content API error for hotel details:",
         contentError.message,
       );
       // Use fallback hotel data
@@ -583,7 +583,7 @@ router.get("/hotel/:code", async (req, res) => {
 
     // If still no hotel data, use fallback
     if (!hotel) {
-      console.log("ℹ️ No hotel data found, using fallback");
+      console.log("â„¹ï¸ No hotel data found, using fallback");
       hotel = createFallbackHotel(code);
     }
 
@@ -606,7 +606,7 @@ router.get("/hotel/:code", async (req, res) => {
           availability.hotels?.find((h) => h.code === code) || null;
       } catch (availError) {
         console.warn(
-          "⚠️ Could not fetch availability for hotel details:",
+          "âš ï¸ Could not fetch availability for hotel details:",
           availError.message,
         );
       }
@@ -638,7 +638,7 @@ router.get("/hotel/:code", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Hotel details error:", error);
+    console.error("âŒ Hotel details error:", error);
 
     // Ensure we ALWAYS return a valid JSON response, never HTML
     try {
@@ -685,7 +685,7 @@ router.get("/hotel/:code", async (req, res) => {
     } catch (jsonError) {
       // Final failsafe - even if JSON.stringify fails, return minimal valid JSON
       console.error(
-        "❌ Critical error in JSON response generation:",
+        "âŒ Critical error in JSON response generation:",
         jsonError,
       );
       res.end(
@@ -712,7 +712,7 @@ async function handleDestinations(req, res) {
   try {
     const { country, q: query } = req.query;
 
-    console.log("🌍 Getting destinations list", { country, query });
+    console.log("ðŸŒ Getting destinations list", { country, query });
 
     const destinations = await contentService.getDestinations(country);
 
@@ -748,7 +748,7 @@ async function handleDestinations(req, res) {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Destinations error:", error);
+    console.error("âŒ Destinations error:", error);
     res.status(500).json({
       error: "Failed to get destinations",
       message: error.message,
@@ -770,7 +770,7 @@ router.post("/checkrate", async (req, res) => {
       });
     }
 
-    console.log("💰 Checking rate details for:", rateKey);
+    console.log("ðŸ’° Checking rate details for:", rateKey);
 
     const rateDetails = await bookingService.getRateDetails(rateKey);
 
@@ -780,7 +780,7 @@ router.post("/checkrate", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Rate check error:", error);
+    console.error("âŒ Rate check error:", error);
     res.status(500).json({
       error: "Failed to check rate",
       message: error.message,
@@ -796,7 +796,7 @@ router.post("/book", bookingLimiter, async (req, res) => {
   try {
     const bookingData = req.body;
 
-    console.log("📝 Creating production hotel booking");
+    console.log("ðŸ“ Creating production hotel booking");
 
     // Validate booking data
     const required = ["rateKey", "holder", "rooms"];
@@ -827,7 +827,7 @@ router.post("/book", bookingLimiter, async (req, res) => {
       clientReference: `FD${Date.now()}${Math.random().toString(36).substr(2, 5)}`,
     });
 
-    console.log("✅ Booking created successfully:", booking.reference);
+    console.log("âœ… Booking created successfully:", booking.reference);
 
     res.json({
       success: true,
@@ -835,7 +835,7 @@ router.post("/book", bookingLimiter, async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Booking creation error:", error);
+    console.error("âŒ Booking creation error:", error);
     res.status(500).json({
       error: "Failed to create booking",
       message: error.message,
@@ -850,7 +850,7 @@ router.post("/book", bookingLimiter, async (req, res) => {
  */
 router.get("/health", async (req, res) => {
   try {
-    console.log("🏥 Running comprehensive health check...");
+    console.log("ðŸ¥ Running comprehensive health check...");
 
     // Check both services in parallel
     const [contentHealth, bookingHealth] = await Promise.allSettled([
@@ -900,7 +900,7 @@ router.get("/health", async (req, res) => {
 
     res.status(httpStatus).json(overall);
   } catch (error) {
-    console.error("❌ Health check error:", error);
+    console.error("âŒ Health check error:", error);
     res.status(500).json({
       service: "hotels-live-enhanced",
       status: "unhealthy",
@@ -916,7 +916,7 @@ router.get("/health", async (req, res) => {
  */
 router.post("/admin/clear-cache", async (req, res) => {
   try {
-    console.log("🗑️ Clearing all caches...");
+    console.log("ðŸ—‘ï¸ Clearing all caches...");
 
     contentService.clearCache();
     bookingService.clearCache();
@@ -927,7 +927,7 @@ router.post("/admin/clear-cache", async (req, res) => {
       timestamp: new Date().toISOString(),
     });
   } catch (error) {
-    console.error("❌ Cache clear error:", error);
+    console.error("âŒ Cache clear error:", error);
     res.status(500).json({
       error: "Failed to clear caches",
       message: error.message,
@@ -938,7 +938,7 @@ router.post("/admin/clear-cache", async (req, res) => {
 // Global error handler middleware for this router
 // Ensures all errors return JSON responses instead of HTML
 router.use((error, req, res, next) => {
-  console.error("❌ Unhandled router error:", error);
+  console.error("âŒ Unhandled router error:", error);
 
   // Set JSON content type
   res.setHeader("Content-Type", "application/json");
@@ -958,5 +958,4 @@ router.use((error, req, res, next) => {
     fallback: true,
   });
 });
-
-module.exports = router;
+export default router;

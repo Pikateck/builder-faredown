@@ -1,4 +1,4 @@
-/**
+﻿/**
  * AI Bargaining Platform Migration Runner
  * Executes the AI schema and seed data migrations
  */
@@ -22,7 +22,7 @@ async function runMigration() {
   const client = await pool.connect();
 
   try {
-    console.log("🚀 Starting AI Bargaining Platform migration...");
+    console.log("ðŸš€ Starting AI Bargaining Platform migration...");
 
     // Read schema file
     const schemaPath = path.join(__dirname, "ai-bargaining-schema.sql");
@@ -35,14 +35,14 @@ async function runMigration() {
     // Begin transaction
     await client.query("BEGIN");
 
-    console.log("📊 Creating AI schema and tables...");
+    console.log("ðŸ“Š Creating AI schema and tables...");
     await client.query(schemaSQL);
 
-    console.log("🌱 Inserting seed data...");
+    console.log("ðŸŒ± Inserting seed data...");
     await client.query(seedSQL);
 
     // Create unique indexes for materialized views (for concurrent refresh)
-    console.log("📈 Creating materialized view indexes...");
+    console.log("ðŸ“ˆ Creating materialized view indexes...");
     await client.query(`
       CREATE UNIQUE INDEX IF NOT EXISTS mv_daily_agg_pkey 
       ON ai.mv_daily_agg (day, product_type, COALESCE(primary_supplier_id, 0));
@@ -57,7 +57,7 @@ async function runMigration() {
     // Commit transaction
     await client.query("COMMIT");
 
-    console.log("✅ AI Bargaining Platform migration completed successfully!");
+    console.log("âœ… AI Bargaining Platform migration completed successfully!");
 
     // Display summary
     const summary = await client.query(`
@@ -80,7 +80,7 @@ async function runMigration() {
       ORDER BY table_name;
     `);
 
-    console.log("\n📋 Migration Summary:");
+    console.log("\nðŸ“‹ Migration Summary:");
     summary.rows.forEach((row) => {
       console.log(`  ${row.table_name}: ${row.count} records`);
     });
@@ -91,12 +91,12 @@ async function runMigration() {
       ["v1"],
     );
     if (policyTest.rows.length > 0) {
-      console.log("\n🎯 Policy v1 loaded successfully");
+      console.log("\nðŸŽ¯ Policy v1 loaded successfully");
       console.log("Preview:", policyTest.rows[0].preview + "...");
     }
   } catch (error) {
     await client.query("ROLLBACK");
-    console.error("❌ Migration failed:", error);
+    console.error("âŒ Migration failed:", error);
     process.exit(1);
   } finally {
     client.release();
@@ -106,7 +106,7 @@ async function runMigration() {
 
 // Handle graceful shutdown
 process.on("SIGINT", async () => {
-  console.log("\n🛑 Migration interrupted");
+  console.log("\nðŸ›‘ Migration interrupted");
   await pool.end();
   process.exit(0);
 });
@@ -114,9 +114,9 @@ process.on("SIGINT", async () => {
 // Run migration
 if (require.main === module) {
   runMigration().catch((error) => {
-    console.error("❌ Fatal error:", error);
+    console.error("âŒ Fatal error:", error);
     process.exit(1);
   });
 }
 
-module.exports = { runMigration };
+export default { runMigration };

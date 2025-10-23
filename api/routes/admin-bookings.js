@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Admin Bookings API Routes
  * Database-backed routes for viewing and managing hotel bookings
  */
 
-const express = require("express");
 const router = express.Router();
 const HotelBooking = require("../models/HotelBooking");
 const Payment = require("../models/Payment");
@@ -379,5 +379,4 @@ router.get("/database/health", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

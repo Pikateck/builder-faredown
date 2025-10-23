@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Comprehensive Seed Data Script for Faredown Admin Panel
  * Populates all modules with realistic sample data
  */
@@ -829,7 +829,7 @@ function generateSeedFiles() {
   fs.writeFileSync(combinedPath, JSON.stringify(seedData, null, 2));
   console.log(`Generated: ${combinedPath}`);
 
-  console.log("\n✅ Seed data files generated successfully!");
+  console.log("\nâœ… Seed data files generated successfully!");
   console.log("Files created:");
   console.log(`- promoCodes.json (${seedData.promoCodes.length} promo codes)`);
   console.log(
@@ -851,7 +851,7 @@ function loadSeedData() {
 }
 
 // Export for use in other modules
-module.exports = {
+export default {
   seedData,
   generateSeedFiles,
   loadSeedData,
@@ -860,7 +860,7 @@ module.exports = {
 // Run if called directly
 if (require.main === module) {
   console.log(
-    "🌱 Generating comprehensive seed data for Faredown Admin Panel...\n",
+    "ðŸŒ± Generating comprehensive seed data for Faredown Admin Panel...\n",
   );
   generateSeedFiles();
 }

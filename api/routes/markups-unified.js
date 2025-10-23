@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const { Pool } = require("pg");
 
 const router = express.Router();
@@ -258,7 +259,7 @@ router.get("/export", async (req, res) => {
     );
     res.send(csvContent);
   } catch (error) {
-    console.error("❌ Export markups error:", error);
+    console.error("âŒ Export markups error:", error);
     res.status(500).json({
       success: false,
       error: "Failed to export markups",
@@ -266,5 +267,4 @@ router.get("/export", async (req, res) => {
     });
   }
 });
-
-module.exports = router;
+export default router;

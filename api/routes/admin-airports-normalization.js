@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Server-side normalization utilities for airport data
  * Defense in depth: Normalize "ALL" to NULL when saving to database
  */
@@ -47,7 +47,7 @@ function normalizePromoCodeData(promoData) {
   };
 }
 
-module.exports = {
+export default {
   normalizeAirportField,
   normalizeMarkupData,
   normalizePromoCodeData,

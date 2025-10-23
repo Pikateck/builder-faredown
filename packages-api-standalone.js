@@ -1,9 +1,8 @@
-/**
+﻿/**
  * Standalone Packages API Server
  * This bypasses the main API server bootstrap issues
  */
 
-const express = require("express");
 const cors = require("cors");
 const { Pool } = require("pg");
 
@@ -74,7 +73,7 @@ app.get("/packages", async (req, res) => {
       page_size = 20,
     } = req.query;
 
-    console.log("🔍 Packages API Request:", {
+    console.log("ðŸ” Packages API Request:", {
       destination,
       destination_type,
       q,
@@ -100,7 +99,7 @@ app.get("/packages", async (req, res) => {
 
       if (destination_type === "city") {
         // Smart city search: Check both city-level AND country-level packages
-        console.log(`🏙️ City search for: ${destinationName}`);
+        console.log(`ðŸ™ï¸ City search for: ${destinationName}`);
         paramCount++;
         whereConditions.push(`(
           -- Direct city match
@@ -182,7 +181,7 @@ app.get("/packages", async (req, res) => {
       WHERE ${whereConditions.join(" AND ")}
     `;
 
-    console.log("📝 Executing query with params:", queryParams.slice(0, -2));
+    console.log("ðŸ“ Executing query with params:", queryParams.slice(0, -2));
 
     // Execute queries
     const [mainResult, countResult] = await Promise.all([
@@ -194,7 +193,7 @@ app.get("/packages", async (req, res) => {
     const total = parseInt(countResult.rows[0].total);
     const totalPages = Math.ceil(total / limit);
 
-    console.log(`✅ Found ${packages.length} packages (total: ${total})`);
+    console.log(`âœ… Found ${packages.length} packages (total: ${total})`);
 
     res.json({
       success: true,
@@ -223,7 +222,7 @@ app.get("/packages", async (req, res) => {
       },
     });
   } catch (error) {
-    console.error("❌ Error fetching packages:", error);
+    console.error("âŒ Error fetching packages:", error);
     res.status(500).json({
       success: false,
       error: "Failed to fetch packages",
@@ -234,6 +233,6 @@ app.get("/packages", async (req, res) => {
 
 // Start the server
 app.listen(PORT, () => {
-  console.log(`🚀 Standalone Packages API Server running on port ${PORT}`);
-  console.log(`📡 Packages endpoint: http://localhost:${PORT}/packages`);
+  console.log(`ðŸš€ Standalone Packages API Server running on port ${PORT}`);
+  console.log(`ðŸ“¡ Packages endpoint: http://localhost:${PORT}/packages`);
 });

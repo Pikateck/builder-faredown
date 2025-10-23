@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Profile Management API Routes
  * Comprehensive endpoints for Booking.com-style profile system
  */
 
-const express = require("express");
 const router = express.Router();
 const { Pool } = require("pg");
 const bcrypt = require("bcryptjs");
@@ -1062,5 +1062,4 @@ router.post("/booking-passengers", authenticateUser, async (req, res) => {
     if (client) client.release();
   }
 });
-
-module.exports = router;
+export default router;

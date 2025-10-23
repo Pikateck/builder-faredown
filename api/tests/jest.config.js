@@ -1,8 +1,8 @@
-/**
+﻿/**
  * Jest Configuration for Pricing Engine Tests
  */
 
-module.exports = {
+export default {
   testEnvironment: "node",
   testMatch: ["**/tests/**/*.test.js", "**/tests/**/*.spec.js"],
   collectCoverageFrom: [

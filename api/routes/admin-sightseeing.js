@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const { Pool } = require("pg");
 
@@ -635,5 +636,4 @@ router.delete("/promo-codes/:id", async (req, res) => {
     res.status(500).json({ error: "Failed to delete promo code" });
   }
 });
-
-module.exports = router;
+export default router;

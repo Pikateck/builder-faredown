@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Faredown Pricing API Routes
  * Handles all pricing calculation endpoints
  */
 
-const express = require("express");
 const PricingEngine = require("../services/pricing/PricingEngine");
 
 // Factory function to create pricing routes with database pool

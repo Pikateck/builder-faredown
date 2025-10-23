@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Admin Reports API Routes
  * Provides comprehensive booking and pricing reports for admin dashboard
  */
 
-const express = require("express");
 const router = express.Router();
 const { query, validationResult } = require("express-validator");
 
@@ -458,5 +458,4 @@ router.get(
     }
   },
 );
-
-module.exports = router;
+export default router;

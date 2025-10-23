@@ -1,4 +1,4 @@
-/**
+﻿/**
  * Faredown Node.js API Server
  * Backend API connecting frontend to admin panel
  * Handles all booking, user management, and admin operations
@@ -6,7 +6,6 @@
 
 require("dotenv").config();
 
-const express = require("express");
 const cors = require("cors");
 const helmet = require("helmet");
 const morgan = require("morgan");
@@ -149,7 +148,7 @@ app.use(express.json({ limit: "10mb" }));
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 
-// CORS — allow your UI origins + Builder preview
+// CORS â€” allow your UI origins + Builder preview
 const allowed = (process.env.CORS_ORIGIN || "")
   .split(",")
   .map(s => s.trim())
@@ -234,7 +233,7 @@ app.use("/api/auth", authLimiter, authRoutes);
 app.use("/api/oauth", oauthRoutes);
 app.use("/api/oauth", oauthStatusRoutes);
 
-// 🔁 SHIMS so older frontends keep working
+// ðŸ” SHIMS so older frontends keep working
 // 307 redirect preserves method & signals clearly in DevTools
 app.get(["/api/auth/google/url", "/auth/google/url"], (req, res) => {
   res.redirect(307, "/api/oauth/google/url");
@@ -299,11 +298,11 @@ try {
   if (typeof createPricingRoutes === "function") {
     const pricingRoutes = createPricingRoutes(db.pool);
     app.use("/api/pricing", pricingRoutes);
-    console.log("✅ Pricing routes mounted");
+    console.log("âœ… Pricing routes mounted");
   }
 } catch (error) {
-  console.error("❌ Failed to mount pricing routes:", error.message);
-  console.log("💡 Ensure ./routes/pricing.js exports a function");
+  console.error("âŒ Failed to mount pricing routes:", error.message);
+  console.log("ðŸ’¡ Ensure ./routes/pricing.js exports a function");
 }
 
 // Error handler
@@ -352,34 +351,34 @@ process.on("SIGINT", () => { if (server) server.close(() => console.log("Process
 // Init DB then start
 async function startServer() {
   try {
-    console.log("🔌 Initializing database connection...");
+    console.log("ðŸ”Œ Initializing database connection...");
     await db.initialize();
     await db.initializeSchema();
 
     const { initializeBargainHolds } = require("./routes/bargain-holds");
     if (initializeBargainHolds && db.pool) {
       try { initializeBargainHolds(db.pool); }
-      catch (e) { console.warn("⚠️ Failed to initialize Bargain Holds with DB pool:", e.message); }
+      catch (e) { console.warn("âš ï¸ Failed to initialize Bargain Holds with DB pool:", e.message); }
     }
-    console.log("✅ Database connected and schema ready");
+    console.log("âœ… Database connected and schema ready");
 
     server = app.listen(PORT, () => {
-      console.log("\n🚀 Faredown API Server Started");
+      console.log("\nðŸš€ Faredown API Server Started");
       console.log("================================");
-      console.log(`📍 Server URL: http://localhost:${PORT}`);
-      console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
-      console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
+      console.log(`ðŸ“ Server URL: http://localhost:${PORT}`);
+      console.log(`ðŸ¥ Health Check: http://localhost:${PORT}/health`);
+      console.log(`ðŸŒ Environment: ${process.env.NODE_ENV || "development"}`);
       console.log("================================\n");
     });
 
     return server;
   } catch (error) {
-    console.error("❌ Failed to start server:", error);
+    console.error("âŒ Failed to start server:", error);
     server = app.listen(PORT, () => {
-      console.log("\n🚀 Fallback Mode: DB offline");
+      console.log("\nðŸš€ Fallback Mode: DB offline");
       console.log("================================");
-      console.log(`📍 Server URL: http://localhost:${PORT}`);
-      console.log(`🏥 Health Check: http://localhost:${PORT}/health`);
+      console.log(`ðŸ“ Server URL: http://localhost:${PORT}`);
+      console.log(`ðŸ¥ Health Check: http://localhost:${PORT}/health`);
       console.log("================================\n");
     });
     return server;

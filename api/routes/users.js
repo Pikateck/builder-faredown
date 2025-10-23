@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
@@ -437,5 +438,4 @@ router.get(
     }
   },
 );
-
-module.exports = router;
+export default router;

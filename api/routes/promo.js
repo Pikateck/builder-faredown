@@ -1,9 +1,9 @@
+﻿import express from "express";
 /**
  * Promo Code and Bargain Engine API Routes
  * Handles dynamic pricing, promo codes, and bargain validation for flights and hotels
  */
 
-const express = require("express");
 const router = express.Router();
 const {
   requirePermission,
@@ -110,12 +110,12 @@ let promoCodes = [
     code: "FAREDOWNBONUS",
     name: "FAREDOWNBONUS Flight Discount",
     type: "fixed", // INR (Flat) as per Zubin's spec
-    discountFrom: 2000, // Min Discount: ₹2,000
-    discountTo: 5000, // Max Discount: ₹5,000
+    discountFrom: 2000, // Min Discount: â‚¹2,000
+    discountTo: 5000, // Max Discount: â‚¹5,000
     applicableTo: "flights",
     filters: {
       // Universal for flights - no specific filters
-      minFare: 10500, // Min Fare: ₹10,500 from Zubin's spec
+      minFare: 10500, // Min Fare: â‚¹10,500 from Zubin's spec
     },
     travelPeriod: {
       from: "2025-01-01",
@@ -125,7 +125,7 @@ let promoCodes = [
       startDate: "2025-01-01",
       endDate: "2025-12-31",
     },
-    marketingBudget: 100000, // Budget: ₹100,000 from Zubin's spec
+    marketingBudget: 100000, // Budget: â‚¹100,000 from Zubin's spec
     budgetUsed: 0,
     status: "active", // Status: Active from Zubin's spec
     usageCount: 0,
@@ -138,12 +138,12 @@ let promoCodes = [
     code: "FAREDOWNBONUS",
     name: "FAREDOWNBONUS Hotel Discount",
     type: "fixed", // INR (Flat) as per Zubin's spec
-    discountFrom: 2000, // Min Discount: ₹2,000
-    discountTo: 5000, // Max Discount: ₹5,000
+    discountFrom: 2000, // Min Discount: â‚¹2,000
+    discountTo: 5000, // Max Discount: â‚¹5,000
     applicableTo: "hotels",
     filters: {
       // Universal for hotels - no specific filters
-      minFare: 10500, // Min Fare: ₹10,500 from Zubin's spec
+      minFare: 10500, // Min Fare: â‚¹10,500 from Zubin's spec
     },
     travelPeriod: {
       from: "2025-01-01",
@@ -153,7 +153,7 @@ let promoCodes = [
       startDate: "2025-01-01",
       endDate: "2025-12-31",
     },
-    marketingBudget: 100000, // Budget: ₹100,000 from Zubin's spec
+    marketingBudget: 100000, // Budget: â‚¹100,000 from Zubin's spec
     budgetUsed: 0,
     status: "active", // Status: Active from Zubin's spec
     usageCount: 0,
@@ -265,7 +265,7 @@ router.post(
         promoDetails: {
           id: validation.promo.id,
           name: validation.promo.name,
-          description: `Save ${validation.promo.discountFrom}${validation.promo.type === "percent" ? "%" : "₹"} to ${validation.promo.discountTo}${validation.promo.type === "percent" ? "%" : "₹"}`,
+          description: `Save ${validation.promo.discountFrom}${validation.promo.type === "percent" ? "%" : "â‚¹"} to ${validation.promo.discountTo}${validation.promo.type === "percent" ? "%" : "â‚¹"}`,
         },
       });
     } catch (error) {
@@ -455,7 +455,7 @@ router.post(
           status: "counter",
           counterOffer,
           sessionId,
-          message: `Your price is a bit low. How about ₹${counterOffer.toLocaleString()}?`,
+          message: `Your price is a bit low. How about â‚¹${counterOffer.toLocaleString()}?`,
           priceBreakdown: {
             basePrice: baseNetPrice,
             markup: markupAmount,
@@ -608,7 +608,7 @@ router.post(
             success: true,
             status: "counter",
             counterOffer: newCounter,
-            message: `How about ₹${newCounter.toLocaleString()}? This is our best offer.`,
+            message: `How about â‚¹${newCounter.toLocaleString()}? This is our best offer.`,
             sessionId,
             attemptsLeft: 3 - session.attempts,
           });
@@ -1196,5 +1196,4 @@ router.get(
     }
   },
 );
-
-module.exports = router;
+export default router;

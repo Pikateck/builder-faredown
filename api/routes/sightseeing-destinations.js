@@ -1,4 +1,5 @@
-const express = require("express");
+﻿import express from "express";
+
 const router = express.Router();
 const HotelbedsActivitiesService = require("../services/hotelbedsActivitiesService");
 
@@ -13,13 +14,13 @@ router.post("/destinations", async (req, res) => {
   try {
     const { query = "", limit = 10, popularOnly = false } = req.body;
 
-    console.log(`🎯 Sightseeing destinations API called with query: "${query}"`);
+    console.log(`ðŸŽ¯ Sightseeing destinations API called with query: "${query}"`);
 
     // Get destinations from Hotelbeds Activities API
     const result = await activitiesService.getDestinations("en", limit * 2); // Get more to filter
 
     if (!result.success) {
-      console.error("❌ Hotelbeds Activities API failed:", result.error);
+      console.error("âŒ Hotelbeds Activities API failed:", result.error);
       return res.status(500).json({
         success: false,
         error: "Failed to fetch destinations from Hotelbeds",
@@ -67,19 +68,18 @@ router.post("/destinations", async (req, res) => {
     // Limit results
     destinations = destinations.slice(0, limit);
 
-    console.log(`✅ Found ${destinations.length} sightseeing destinations`);
+    console.log(`âœ… Found ${destinations.length} sightseeing destinations`);
 
     res.json({
       success: true,
       data: { destinations },
     });
   } catch (error) {
-    console.error("❌ Sightseeing destinations API error:", error);
+    console.error("âŒ Sightseeing destinations API error:", error);
     res.status(500).json({
       success: false,
       error: error.message || "Internal server error",
     });
   }
 });
-
-module.exports = router;
+export default router;
