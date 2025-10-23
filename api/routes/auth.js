@@ -10,7 +10,9 @@ import {
   authenticateToken,
   PERMISSIONS,
 } from "../middleware/auth.js";
-import validate from "../middleware/validation.js";
+import validationExport from "../middleware/validation.js";
+
+const validate = validationExport.validate;
 
 /**
  * Authentication Routes
