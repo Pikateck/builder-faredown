@@ -1,10 +1,11 @@
 [build]
-  command = "npm ci && npm run build:client"
+  command = "npm install --include=dev && npm run build:client"
   functions = "netlify/functions"
   publish = "dist"
 
 [build.environment]
   NODE_VERSION = "20"
+  NPM_FLAGS = "--include=dev"
 
 [functions]
   external_node_modules = ["express"]
