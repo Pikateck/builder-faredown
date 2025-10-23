@@ -1,12 +1,6 @@
 import express from "express";
-/**
- * Authentication Routes
- * Handles user login, registration, and token management
- */
-
 import crypto from "crypto";
-const router = express.Router();
-const {
+import {
   generateToken,
   comparePassword,
   getUserByEmail,
@@ -15,10 +9,16 @@ const {
   createUser,
   authenticateToken,
   PERMISSIONS,
-} = require("../middleware/auth");
+} from "../middleware/auth.js";
+import validate from "../middleware/validation.js";
+import { db } from "../pricing-server.js";
 
-const validate = require("../middleware/validation");
-const { db } = require("../index");
+/**
+ * Authentication Routes
+ * Handles user login, registration, and token management
+ */
+
+const router = express.Router();
 
 /**
  * POST /api/auth/register
