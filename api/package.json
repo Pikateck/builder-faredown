@@ -1,6 +1,7 @@
 {
   "name": "faredown-pricing-api",
   "version": "1.0.0",
+  "type": "commonjs",
   "description": "Faredown Pricing Engine API for Render deployment",
   "main": "pricing-server.js",
   "scripts": {
