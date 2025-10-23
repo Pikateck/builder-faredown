@@ -526,4 +526,4 @@ router.post("/google/callback", async (req, res) => {
 
 // Health check
 router.get("/health", (_, res) => res.json({ ok: true }));
-export default router;
+module.exports = router;
