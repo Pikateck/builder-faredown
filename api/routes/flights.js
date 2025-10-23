@@ -1,9 +1,9 @@
-import express from "express";
+const express = require("express");
 
 const axios = require("axios");
 const crypto = require("crypto");
 const db = require("../database/connection");
-const router = require("express").Router();
+const router = express.Router();
 const {
   resolveSupplierMarkup,
   applyMarkupToAmount,
