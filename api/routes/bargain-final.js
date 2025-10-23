@@ -1,10 +1,10 @@
-﻿import express from "express";
 /**
  * Final Bargain API - Production Ready
  * Endpoints: /session/start, /session/offer, /session/accept, /event/log, /session/replay/:id
  * Performance target: p95 < 300ms with warm cache
  */
 
+const express = require("express");
 const { Client } = require("pg");
 const crypto = require("crypto");
 const { redisHotCache } = require("../services/redisHotCache");
