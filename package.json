@@ -67,7 +67,7 @@
     "express": "^4.18.2",
     "framer-motion": "^12.23.6",
     "geolocation-utils": "^1.2.0",
-    "jsonwebtoken": "^9.1.0",
+    "jsonwebtoken": "^9.0.0",
     "lucide-react": "^0.263.1",
     "pg": "^8.11.3",
     "qrcode": "^1.5.4",
