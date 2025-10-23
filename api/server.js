@@ -473,25 +473,6 @@ app.use("/api/packages", packagesRoutes);
 app.use("/api/destinations", destinationsRoutes);
 app.use("/api/enhanced-bargain", enhancedBargainRoutes);
 
-// Temporary ops route to verify egress via supplier proxy (will be removed after verification)
-try {
-  const axios = require("axios");
-  const { agentFor } = require("./lib/proxy");
-  app.get("/ops/egress-ip", async (_req, res) => {
-    try {
-      const { data } = await axios({
-        url: "https://ifconfig.me",
-        method: "GET",
-        timeout: 8000,
-        ...agentFor("https://ifconfig.me"),
-      });
-      res.send(String(data).trim());
-    } catch (e) {
-      res.status(500).send("error");
-    }
-  });
-} catch {}
-
 // FX + Pricing utilities
 app.use("/api/fx", require("./routes/fx"));
 app.use("/api/pricing", require("./routes/pricing-preview"));
