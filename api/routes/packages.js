@@ -210,4 +210,4 @@ router.post("/:slug/enquire", async (req, res) => {
   }
 });
 
-export default router;
+module.exports = router;
