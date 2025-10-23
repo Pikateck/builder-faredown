@@ -1232,4 +1232,4 @@ function getRolePermissions(role) {
 
   return rolePermissions[role] || [];
 }
-export default router;
+module.exports = router;
