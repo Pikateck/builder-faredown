@@ -1,8 +1,8 @@
-const { defineConfig } = require("vite");
-const react = require("@vitejs/plugin-react-swc");
-const path = require("path");
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react-swc";
+import path from "path";
 
-module.exports = defineConfig({
+export default defineConfig({
   plugins: [react()],
   build: {
     outDir: "dist/spa",
