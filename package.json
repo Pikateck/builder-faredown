@@ -21,6 +21,10 @@
     "uuid": "^9.0.1",
     "winston": "^3.11.0"
   },
+  "devDependencies": {
+    "vite": "^5.0.0",
+    "@vitejs/plugin-react-swc": "^3.5.0"
+  },
   "engines": {
     "node": ">=20"
   }
