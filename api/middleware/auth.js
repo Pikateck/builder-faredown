@@ -242,7 +242,7 @@ const PERMISSIONS = {
   VIEW_ANALYTICS: "view:analytics",
 };
 
-module.exports = {
+export {
   generateToken,
   hashPassword,
   comparePassword,
@@ -254,4 +254,5 @@ module.exports = {
   requireAdmin,
   PERMISSIONS,
   users,
+  initDb,
 };
