@@ -4,27 +4,18 @@
  * Handles all booking, user management, and admin operations
  */
 
-import dotenv from "dotenv";
-import express from "express";
-import cors from "cors";
-import helmet from "helmet";
-import morgan from "morgan";
-import rateLimit from "express-rate-limit";
-import compression from "compression";
-import cookieParser from "cookie-parser";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { v4 as uuidv4 } from "uuid";
-import { createRequire } from "module";
-import { fileURLToPath } from "url";
-import path from "path";
+require("dotenv").config();
 
-dotenv.config();
-
-// Create require function for ES modules
-const require = createRequire(import.meta.url);
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
+const cors = require("cors");
+const helmet = require("helmet");
+const morgan = require("morgan");
+const rateLimit = require("express-rate-limit");
+const compression = require("compression");
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
+const bcrypt = require("bcryptjs");
+const { v4: uuidv4 } = require("uuid");
+const express = require("express");
 
 // Import route modules (keeping CommonJS requires for now due to mixed codebase)
 const authRoutes = require("./routes/auth.js");
