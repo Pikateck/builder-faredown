@@ -406,11 +406,25 @@ export default function HotelResults() {
     try {
       console.log("🏨 Fetching TBO hotels for:", destCode);
 
+      // Get the proper API base URL (handles Netlify redirects automatically)
+      const apiBaseUrl = (() => {
+        if (typeof window !== 'undefined') {
+          // Check for explicit VITE_API_BASE_URL
+          const envUrl = import.meta.env.VITE_API_BASE_URL;
+          if (envUrl) {
+            return envUrl.replace(/\/$/, ''); // Remove trailing slash
+          }
+          // Fallback: use current origin (Netlify redirects will handle it)
+          return window.location.origin + '/api';
+        }
+        return '/api';
+      })();
+
       // Extract city name from destination
       const destName =
         urlSearchParams.get("destinationName") || destination || destCode;
 
-      const tboResponse = await fetch("/api/tbo-hotels/search", {
+      const tboResponse = await fetch(`${apiBaseUrl}/tbo-hotels/search`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -439,6 +453,7 @@ export default function HotelResults() {
           return transformTBOData(data.data);
         }
       }
+      console.error("❌ TBO API error response:", tboResponse.status);
       return [];
     } catch (error) {
       console.warn("⚠️ Failed to fetch TBO hotels:", error);
