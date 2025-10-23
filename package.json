@@ -4,7 +4,7 @@
   "description": "Faredown pricing API server",
   "main": "server.js",
   "scripts": {
-    "dev": "vite",
+    "dev": "./node_modules/.bin/vite || npx vite",
     "build": "vite build",
     "start": "node pricing-server.js",
     "start:prod": "node dist/server/node-build.mjs",
