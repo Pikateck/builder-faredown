@@ -11,7 +11,6 @@ import {
   PERMISSIONS,
 } from "../middleware/auth.js";
 import validate from "../middleware/validation.js";
-import { db } from "../pricing-server.js";
 
 /**
  * Authentication Routes
@@ -19,6 +18,12 @@ import { db } from "../pricing-server.js";
  */
 
 const router = express.Router();
+
+// Database will be injected if available
+let db = null;
+export const setDb = (database) => {
+  db = database;
+};
 
 /**
  * POST /api/auth/register
