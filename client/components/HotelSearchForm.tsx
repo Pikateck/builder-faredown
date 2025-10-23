@@ -115,10 +115,38 @@ export function HotelSearchForm({
 
   // Update search results when input changes
   useEffect(() => {
-    if (isUserTyping) {
-      const results = searchHotels(inputValue);
-      setSearchResults(results);
-    } else {
+    if (isUserTyping && inputValue.length > 0) {
+      // Fetch from TBO API
+      const fetchCities = async () => {
+        try {
+          const response = await fetch(
+            `/api/tbo-hotels/cities?q=${encodeURIComponent(inputValue)}&limit=15`,
+          );
+          if (response.ok) {
+            const data = await response.json();
+            if (data.success && Array.isArray(data.data)) {
+              // Map TBO cities to SearchResult format
+              const cities = data.data.map((city: any) => ({
+                id: city.code,
+                code: city.code,
+                name: city.name,
+                type: city.type?.toLowerCase() || "city",
+                location: city.displayLabel,
+                description: city.countryName || "",
+                rating: undefined,
+              }));
+              setSearchResults(cities);
+            }
+          }
+        } catch (error) {
+          console.warn("Failed to fetch TBO cities:", error);
+          // Fallback to local search if API fails
+          const results = searchHotels(inputValue);
+          setSearchResults(results);
+        }
+      };
+      fetchCities();
+    } else if (!isUserTyping) {
       // Show popular destinations when not typing
       const results = searchHotels("", 8);
       setSearchResults(results);
