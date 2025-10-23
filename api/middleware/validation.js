@@ -1,9 +1,9 @@
-﻿/**
+/**
  * Request Validation Middleware
  * Joi-based validation for API requests
  */
 
-const Joi = require("joi");
+import Joi from "joi";
 
 /**
  * Validation schemas
