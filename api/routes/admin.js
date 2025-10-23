@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Admin Routes
  * Handles all admin dashboard operations and management
