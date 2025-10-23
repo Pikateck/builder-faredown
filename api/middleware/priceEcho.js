@@ -4,7 +4,7 @@
  * Logs prices and detects mismatches automatically
  */
 
-import { Pool } from "pg";
+const { Pool } = require("pg");
 
 /**
  * Price Echo Middleware Factory
