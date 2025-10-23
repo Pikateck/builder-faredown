@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Marketing Budget Monitoring Service
  * Automated budget tracking, alerts, and auto-disable functionality
  */
@@ -491,7 +491,7 @@ process.on("SIGINT", () => {
   budgetMonitorService.stop();
 });
 
-export default {
+module.exports = {
   budgetMonitorService,
   BudgetMonitorService,
   BUDGET_CONFIG,
