@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Promo Code Validation Middleware
  * Comprehensive validation, budget tracking, and usage monitoring
  */
@@ -628,7 +628,7 @@ const checkBudgetLimits = (req, res, next) => {
 // Initialize promo codes on module load
 PromoCodeValidator.initializePromoCodes();
 
-export default {
+module.exports = {
   PromoCodeValidator,
   validatePromoCode,
   trackPromoUsage,

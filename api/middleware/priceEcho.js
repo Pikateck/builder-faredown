@@ -314,4 +314,4 @@ async function createDiffEndpoint(pool) {
   };
 }
 
-export { priceEcho, createDiffEndpoint };
+module.exports = { priceEcho, createDiffEndpoint };
