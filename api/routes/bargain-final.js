@@ -505,10 +505,16 @@ router.post("/session/offer", async (req, res) => {
           debug: true,
           extras: { promoCode: sessionData.promo_code || undefined },
         });
-        const markupRuleId = quote.breakdown?.steps?.find((s) => s.label === "markup")?.rule?.id || null;
-        const markupPct = quote.breakdown?.steps?.find((s) => s.label === "markup")?.rule?.markup_value || 0;
+        const markupRuleId =
+          quote.breakdown?.steps?.find((s) => s.label === "markup")?.rule?.id ||
+          null;
+        const markupPct =
+          quote.breakdown?.steps?.find((s) => s.label === "markup")?.rule
+            ?.markup_value || 0;
         const markupAmount = quote.markup || 0;
-        const promo = quote.breakdown?.steps?.find((s) => s.label === "discount")?.promo || null;
+        const promo =
+          quote.breakdown?.steps?.find((s) => s.label === "discount")?.promo ||
+          null;
         const promoAmount = quote.discount || 0;
         const candidatePrice = Math.max(0, quote.taxableAmount);
         const offerPrice = decision === "accept" ? user_offer : counterOffer;
@@ -523,7 +529,13 @@ router.post("/session/offer", async (req, res) => {
           promo_amount: promoAmount,
           total_discount: Number((markupAmount - promoAmount).toFixed(2)),
           candidate_price: candidatePrice,
-          round: (await pgPool.query("SELECT COUNT(*)::int as n FROM ai.bargain_events WHERE session_id=$1 AND event_type='offer'", [session_id])).rows[0].n + 1,
+          round:
+            (
+              await pgPool.query(
+                "SELECT COUNT(*)::int as n FROM ai.bargain_events WHERE session_id=$1 AND event_type='offer'",
+                [session_id],
+              )
+            ).rows[0].n + 1,
           offer_price: offerPrice,
           matched: decision === "accept",
           expires_in: 30,

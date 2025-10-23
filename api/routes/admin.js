@@ -11,7 +11,11 @@ const {
   validatePagination,
   validateDateRange,
 } = require("../middleware/validation");
-const { audit, getAuditTrail, getAuditStats } = require("../middleware/audit.cjs");
+const {
+  audit,
+  getAuditTrail,
+  getAuditStats,
+} = require("../middleware/audit.cjs");
 const { budgetMonitorService } = require("../services/budgetMonitorService");
 
 // Mock data for demonstration
@@ -96,56 +100,52 @@ const mockStats = {
  * @apiSuccess {Array} stats.topDestinations Top booking destinations
  * @apiSuccess {Array} stats.recentBookings Recent booking activities
  */
-router.get(
-  "/dashboard",
-  requireAdmin,
-  async (req, res) => {
-    try {
-      const { timeframe = "30d" } = req.query;
+router.get("/dashboard", requireAdmin, async (req, res) => {
+  try {
+    const { timeframe = "30d" } = req.query;
 
-      // Log dashboard access
-      await audit.systemAction(req, "dashboard_view", { timeframe });
+    // Log dashboard access
+    await audit.systemAction(req, "dashboard_view", { timeframe });
 
-      // Calculate real-time stats (in a real app, this would query the database)
-      const dashboardData = {
-        ...mockStats,
-        timestamp: new Date().toISOString(),
-        timeframe,
-        systemHealth: {
-          database: "healthy",
-          api: "healthy",
-          paymentGateway: "healthy",
-          externalAPIs: "healthy",
+    // Calculate real-time stats (in a real app, this would query the database)
+    const dashboardData = {
+      ...mockStats,
+      timestamp: new Date().toISOString(),
+      timeframe,
+      systemHealth: {
+        database: "healthy",
+        api: "healthy",
+        paymentGateway: "healthy",
+        externalAPIs: "healthy",
+      },
+      alerts: [
+        {
+          id: "alert_001",
+          type: "info",
+          message: "System backup completed successfully",
+          timestamp: new Date().toISOString(),
         },
-        alerts: [
-          {
-            id: "alert_001",
-            type: "info",
-            message: "System backup completed successfully",
-            timestamp: new Date().toISOString(),
-          },
-          {
-            id: "alert_002",
-            type: "warning",
-            message: "Payment gateway response time increased",
-            timestamp: new Date(Date.now() - 3600000).toISOString(),
-          },
-        ],
-      };
+        {
+          id: "alert_002",
+          type: "warning",
+          message: "Payment gateway response time increased",
+          timestamp: new Date(Date.now() - 3600000).toISOString(),
+        },
+      ],
+    };
 
-      res.json({
-        success: true,
-        data: dashboardData,
-      });
-    } catch (error) {
-      console.error("Dashboard error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to fetch dashboard data",
-      });
-    }
-  },
-);
+    res.json({
+      success: true,
+      data: dashboardData,
+    });
+  } catch (error) {
+    console.error("Dashboard error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch dashboard data",
+    });
+  }
+});
 
 /**
  * @api {get} /api/admin/stats Real-time Statistics
@@ -161,53 +161,48 @@ router.get(
  *
  * @apiSuccess {Object} stats Real-time statistics
  */
-router.get(
-  "/stats",
-  requireAdmin,
-  validateDateRange,
-  async (req, res) => {
-    try {
-      const { period = "today", metric = "all" } = req.query;
+router.get("/stats", requireAdmin, validateDateRange, async (req, res) => {
+  try {
+    const { period = "today", metric = "all" } = req.query;
 
-      // Generate stats based on period
-      let stats;
-      switch (period) {
-        case "today":
-          stats = mockStats.todayStats;
-          break;
-        case "week":
-          stats = mockStats.weeklyStats;
-          break;
-        case "month":
-          stats = mockStats.monthlyStats;
-          break;
-        default:
-          stats = mockStats.todayStats;
-      }
-
-      // Filter by specific metric if requested
-      if (metric !== "all" && stats[metric]) {
-        stats = { [metric]: stats[metric] };
-      }
-
-      res.json({
-        success: true,
-        data: {
-          period,
-          metric,
-          stats,
-          lastUpdated: new Date().toISOString(),
-        },
-      });
-    } catch (error) {
-      console.error("Stats error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to fetch statistics",
-      });
+    // Generate stats based on period
+    let stats;
+    switch (period) {
+      case "today":
+        stats = mockStats.todayStats;
+        break;
+      case "week":
+        stats = mockStats.weeklyStats;
+        break;
+      case "month":
+        stats = mockStats.monthlyStats;
+        break;
+      default:
+        stats = mockStats.todayStats;
     }
-  },
-);
+
+    // Filter by specific metric if requested
+    if (metric !== "all" && stats[metric]) {
+      stats = { [metric]: stats[metric] };
+    }
+
+    res.json({
+      success: true,
+      data: {
+        period,
+        metric,
+        stats,
+        lastUpdated: new Date().toISOString(),
+      },
+    });
+  } catch (error) {
+    console.error("Stats error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch statistics",
+    });
+  }
+});
 
 /**
  * @api {get} /api/admin/analytics Analytics Data
@@ -305,143 +300,138 @@ router.get(
  *
  * @apiSuccess {Object} report Generated report data
  */
-router.get(
-  "/reports",
-  requireAdmin,
-  validateDateRange,
-  async (req, res) => {
-    try {
-      const {
-        type = "financial",
-        format = "json",
-        startDate,
-        endDate,
-      } = req.query;
+router.get("/reports", requireAdmin, validateDateRange, async (req, res) => {
+  try {
+    const {
+      type = "financial",
+      format = "json",
+      startDate,
+      endDate,
+    } = req.query;
 
-      // Log report generation
-      await audit.systemAction(req, "report_generate", {
-        type,
-        format,
-        startDate,
-        endDate,
-      });
+    // Log report generation
+    await audit.systemAction(req, "report_generate", {
+      type,
+      format,
+      startDate,
+      endDate,
+    });
 
-      // Generate report based on type
-      let reportData;
-      switch (type) {
-        case "financial":
-          reportData = {
-            totalRevenue: mockStats.totalRevenue,
-            totalBookings: mockStats.totalBookings,
-            averageBookingValue: Math.round(
-              mockStats.totalRevenue / mockStats.totalBookings,
-            ),
-            revenueByService: {
-              flights: mockStats.totalRevenue * 0.65,
-              hotels: mockStats.totalRevenue * 0.35,
-            },
-            topDestinations: mockStats.topDestinations,
-          };
-          break;
+    // Generate report based on type
+    let reportData;
+    switch (type) {
+      case "financial":
+        reportData = {
+          totalRevenue: mockStats.totalRevenue,
+          totalBookings: mockStats.totalBookings,
+          averageBookingValue: Math.round(
+            mockStats.totalRevenue / mockStats.totalBookings,
+          ),
+          revenueByService: {
+            flights: mockStats.totalRevenue * 0.65,
+            hotels: mockStats.totalRevenue * 0.35,
+          },
+          topDestinations: mockStats.topDestinations,
+        };
+        break;
 
-        case "bookings":
-          reportData = {
-            totalBookings: mockStats.totalBookings,
-            flightBookings: mockStats.flightBookings,
-            hotelBookings: mockStats.hotelBookings,
-            successRate: mockStats.successRate,
-            cancellationRate: 100 - mockStats.successRate,
-            recentBookings: mockStats.recentBookings,
-          };
-          break;
+      case "bookings":
+        reportData = {
+          totalBookings: mockStats.totalBookings,
+          flightBookings: mockStats.flightBookings,
+          hotelBookings: mockStats.hotelBookings,
+          successRate: mockStats.successRate,
+          cancellationRate: 100 - mockStats.successRate,
+          recentBookings: mockStats.recentBookings,
+        };
+        break;
 
-        case "users":
-          reportData = {
-            totalUsers: mockStats.totalUsers,
-            activeUsers: Math.round(mockStats.totalUsers * 0.75),
-            newUsersThisMonth: 234,
-            userRetentionRate: 85.5,
-            topUserSegments: [
-              { segment: "Business Travelers", count: 3456, percentage: 38.7 },
-              { segment: "Leisure Travelers", count: 2890, percentage: 32.3 },
-              { segment: "Family Bookings", count: 1567, percentage: 17.5 },
-              { segment: "Group Bookings", count: 1021, percentage: 11.4 },
-            ],
-          };
-          break;
+      case "users":
+        reportData = {
+          totalUsers: mockStats.totalUsers,
+          activeUsers: Math.round(mockStats.totalUsers * 0.75),
+          newUsersThisMonth: 234,
+          userRetentionRate: 85.5,
+          topUserSegments: [
+            { segment: "Business Travelers", count: 3456, percentage: 38.7 },
+            { segment: "Leisure Travelers", count: 2890, percentage: 32.3 },
+            { segment: "Family Bookings", count: 1567, percentage: 17.5 },
+            { segment: "Group Bookings", count: 1021, percentage: 11.4 },
+          ],
+        };
+        break;
 
-        case "performance":
-          reportData = {
-            systemUptime: "99.8%",
-            averageResponseTime: "245ms",
-            apiCallsToday: 15678,
-            errorRate: "0.2%",
-            paymentSuccessRate: "98.5%",
-            searchSuccessRate: "99.1%",
-          };
-          break;
+      case "performance":
+        reportData = {
+          systemUptime: "99.8%",
+          averageResponseTime: "245ms",
+          apiCallsToday: 15678,
+          errorRate: "0.2%",
+          paymentSuccessRate: "98.5%",
+          searchSuccessRate: "99.1%",
+        };
+        break;
 
-        default:
-          return res.status(400).json({
-            success: false,
-            message: "Invalid report type",
-          });
-      }
-
-      const report = {
-        id: `report_${Date.now()}`,
-        type,
-        format,
-        period: { startDate, endDate },
-        generatedAt: new Date().toISOString(),
-        generatedBy: req.user.username,
-        data: reportData,
-      };
-
-      // For non-JSON formats, you would generate the appropriate file format here
-      if (format === "csv") {
-        // Generate CSV
-        res.header("Content-Type", "text/csv");
-        res.header(
-          "Content-Disposition",
-          `attachment; filename="report_${type}_${Date.now()}.csv"`,
-        );
-        // Convert data to CSV and send
-      } else if (format === "excel") {
-        // Generate Excel file
-        res.header(
-          "Content-Type",
-          "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-        );
-        res.header(
-          "Content-Disposition",
-          `attachment; filename="report_${type}_${Date.now()}.xlsx"`,
-        );
-        // Generate Excel file and send
-      } else if (format === "pdf") {
-        // Generate PDF
-        res.header("Content-Type", "application/pdf");
-        res.header(
-          "Content-Disposition",
-          `attachment; filename="report_${type}_${Date.now()}.pdf"`,
-        );
-        // Generate PDF and send
-      } else {
-        // Default JSON response
-        res.json({
-          success: true,
-          data: report,
+      default:
+        return res.status(400).json({
+          success: false,
+          message: "Invalid report type",
         });
-      }
-    } catch (error) {
-      console.error("Reports error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to generate report",
+    }
+
+    const report = {
+      id: `report_${Date.now()}`,
+      type,
+      format,
+      period: { startDate, endDate },
+      generatedAt: new Date().toISOString(),
+      generatedBy: req.user.username,
+      data: reportData,
+    };
+
+    // For non-JSON formats, you would generate the appropriate file format here
+    if (format === "csv") {
+      // Generate CSV
+      res.header("Content-Type", "text/csv");
+      res.header(
+        "Content-Disposition",
+        `attachment; filename="report_${type}_${Date.now()}.csv"`,
+      );
+      // Convert data to CSV and send
+    } else if (format === "excel") {
+      // Generate Excel file
+      res.header(
+        "Content-Type",
+        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+      );
+      res.header(
+        "Content-Disposition",
+        `attachment; filename="report_${type}_${Date.now()}.xlsx"`,
+      );
+      // Generate Excel file and send
+    } else if (format === "pdf") {
+      // Generate PDF
+      res.header("Content-Type", "application/pdf");
+      res.header(
+        "Content-Disposition",
+        `attachment; filename="report_${type}_${Date.now()}.pdf"`,
+      );
+      // Generate PDF and send
+    } else {
+      // Default JSON response
+      res.json({
+        success: true,
+        data: report,
       });
     }
-  },
-);
+  } catch (error) {
+    console.error("Reports error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to generate report",
+    });
+  }
+});
 
 /**
  * @api {get} /api/admin/audit Audit Logs
@@ -519,47 +509,43 @@ router.get(
  *
  * @apiSuccess {Object} system System information
  */
-router.get(
-  "/system",
-  requireAdmin,
-  async (req, res) => {
-    try {
-      const systemInfo = {
-        version: "1.0.0",
-        environment: process.env.NODE_ENV || "development",
-        uptime: process.uptime(),
-        memoryUsage: process.memoryUsage(),
-        nodeVersion: process.version,
-        platform: process.platform,
-        cpuUsage: process.cpuUsage(),
-        timestamp: new Date().toISOString(),
-        services: {
-          database: "connected",
-          redis: "connected",
-          paymentGateway: "connected",
-          emailService: "connected",
-          externalAPIs: "connected",
-        },
-        health: {
-          status: "healthy",
-          lastHealthCheck: new Date().toISOString(),
-          issues: [],
-        },
-      };
+router.get("/system", requireAdmin, async (req, res) => {
+  try {
+    const systemInfo = {
+      version: "1.0.0",
+      environment: process.env.NODE_ENV || "development",
+      uptime: process.uptime(),
+      memoryUsage: process.memoryUsage(),
+      nodeVersion: process.version,
+      platform: process.platform,
+      cpuUsage: process.cpuUsage(),
+      timestamp: new Date().toISOString(),
+      services: {
+        database: "connected",
+        redis: "connected",
+        paymentGateway: "connected",
+        emailService: "connected",
+        externalAPIs: "connected",
+      },
+      health: {
+        status: "healthy",
+        lastHealthCheck: new Date().toISOString(),
+        issues: [],
+      },
+    };
 
-      res.json({
-        success: true,
-        data: systemInfo,
-      });
-    } catch (error) {
-      console.error("System info error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to fetch system information",
-      });
-    }
-  },
-);
+    res.json({
+      success: true,
+      data: systemInfo,
+    });
+  } catch (error) {
+    console.error("System info error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to fetch system information",
+    });
+  }
+});
 
 /**
  * @api {post} /api/admin/backup Create Backup
@@ -575,42 +561,38 @@ router.get(
  *
  * @apiSuccess {Object} backup Backup information
  */
-router.post(
-  "/backup",
-  requireAdmin,
-  async (req, res) => {
-    try {
-      const { type = "full", description } = req.body;
+router.post("/backup", requireAdmin, async (req, res) => {
+  try {
+    const { type = "full", description } = req.body;
 
-      // Log backup creation
-      await audit.systemAction(req, "backup", { type, description });
+    // Log backup creation
+    await audit.systemAction(req, "backup", { type, description });
 
-      // Create backup (mock implementation)
-      const backup = {
-        id: `backup_${Date.now()}`,
-        type,
-        description,
-        createdAt: new Date().toISOString(),
-        createdBy: req.user.username,
-        size: "145.7 MB",
-        status: "completed",
-        downloadUrl: `/api/admin/backup/download/backup_${Date.now()}`,
-      };
+    // Create backup (mock implementation)
+    const backup = {
+      id: `backup_${Date.now()}`,
+      type,
+      description,
+      createdAt: new Date().toISOString(),
+      createdBy: req.user.username,
+      size: "145.7 MB",
+      status: "completed",
+      downloadUrl: `/api/admin/backup/download/backup_${Date.now()}`,
+    };
 
-      res.json({
-        success: true,
-        message: "Backup created successfully",
-        data: backup,
-      });
-    } catch (error) {
-      console.error("Backup error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to create backup",
-      });
-    }
-  },
-);
+    res.json({
+      success: true,
+      message: "Backup created successfully",
+      data: backup,
+    });
+  } catch (error) {
+    console.error("Backup error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to create backup",
+    });
+  }
+});
 
 /**
  * @api {get} /api/admin/budget/status Budget Monitor Status
@@ -623,26 +605,22 @@ router.post(
  *
  * @apiSuccess {Object} status Budget monitoring status
  */
-router.get(
-  "/budget/status",
-  requireAdmin,
-  async (req, res) => {
-    try {
-      const status = budgetMonitorService.getStatus();
+router.get("/budget/status", requireAdmin, async (req, res) => {
+  try {
+    const status = budgetMonitorService.getStatus();
 
-      res.json({
-        success: true,
-        data: status,
-      });
-    } catch (error) {
-      console.error("Budget status error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to get budget monitor status",
-      });
-    }
-  },
-);
+    res.json({
+      success: true,
+      data: status,
+    });
+  } catch (error) {
+    console.error("Budget status error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get budget monitor status",
+    });
+  }
+});
 
 /**
  * @api {get} /api/admin/budget/alerts Budget Alert History
@@ -660,26 +638,22 @@ router.get(
  *
  * @apiSuccess {Array} alerts Alert history
  */
-router.get(
-  "/budget/alerts",
-  requireAdmin,
-  async (req, res) => {
-    try {
-      const alerts = budgetMonitorService.getAlertHistory(req.query);
+router.get("/budget/alerts", requireAdmin, async (req, res) => {
+  try {
+    const alerts = budgetMonitorService.getAlertHistory(req.query);
 
-      res.json({
-        success: true,
-        data: alerts,
-      });
-    } catch (error) {
-      console.error("Budget alerts error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to get budget alerts",
-      });
-    }
-  },
-);
+    res.json({
+      success: true,
+      data: alerts,
+    });
+  } catch (error) {
+    console.error("Budget alerts error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to get budget alerts",
+    });
+  }
+});
 
 /**
  * @api {post} /api/admin/budget/check/:promoId Manual Budget Check
@@ -694,36 +668,32 @@ router.get(
  *
  * @apiSuccess {Object} result Budget check result
  */
-router.post(
-  "/budget/check/:promoId",
-  requireAdmin,
-  async (req, res) => {
-    try {
-      const { promoId } = req.params;
-      const result = await budgetMonitorService.checkPromocodeBudget(promoId);
+router.post("/budget/check/:promoId", requireAdmin, async (req, res) => {
+  try {
+    const { promoId } = req.params;
+    const result = await budgetMonitorService.checkPromocodeBudget(promoId);
 
-      if (!result) {
-        return res.status(404).json({
-          success: false,
-          message: "Promo code not found",
-        });
-      }
-
-      await audit.adminAction(req, "manual_budget_check", { promoId });
-
-      res.json({
-        success: true,
-        data: result,
-      });
-    } catch (error) {
-      console.error("Manual budget check error:", error);
-      res.status(500).json({
+    if (!result) {
+      return res.status(404).json({
         success: false,
-        message: "Failed to check budget",
+        message: "Promo code not found",
       });
     }
-  },
-);
+
+    await audit.adminAction(req, "manual_budget_check", { promoId });
+
+    res.json({
+      success: true,
+      data: result,
+    });
+  } catch (error) {
+    console.error("Manual budget check error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to check budget",
+    });
+  }
+});
 
 /**
  * @api {put} /api/admin/budget/config Update Budget Config
@@ -741,52 +711,48 @@ router.post(
  *
  * @apiSuccess {Object} config Updated configuration
  */
-router.put(
-  "/budget/config",
-  requireAdmin,
-  async (req, res) => {
-    try {
-      const allowedFields = [
-        "WARNING_THRESHOLD",
-        "CRITICAL_THRESHOLD",
-        "MONITORING_INTERVAL",
-        "ENABLE_AUTO_RECOVERY",
-      ];
+router.put("/budget/config", requireAdmin, async (req, res) => {
+  try {
+    const allowedFields = [
+      "WARNING_THRESHOLD",
+      "CRITICAL_THRESHOLD",
+      "MONITORING_INTERVAL",
+      "ENABLE_AUTO_RECOVERY",
+    ];
 
-      const updateConfig = {};
+    const updateConfig = {};
 
-      for (const [key, value] of Object.entries(req.body)) {
-        const configKey = key.toUpperCase();
-        if (allowedFields.includes(configKey)) {
-          updateConfig[configKey] = value;
-        }
+    for (const [key, value] of Object.entries(req.body)) {
+      const configKey = key.toUpperCase();
+      if (allowedFields.includes(configKey)) {
+        updateConfig[configKey] = value;
       }
+    }
 
-      if (Object.keys(updateConfig).length === 0) {
-        return res.status(400).json({
-          success: false,
-          message: "No valid configuration fields provided",
-        });
-      }
-
-      budgetMonitorService.updateConfig(updateConfig);
-
-      await audit.adminAction(req, "budget_config_update", updateConfig);
-
-      res.json({
-        success: true,
-        message: "Budget configuration updated",
-        data: budgetMonitorService.getStatus().config,
-      });
-    } catch (error) {
-      console.error("Budget config update error:", error);
-      res.status(500).json({
+    if (Object.keys(updateConfig).length === 0) {
+      return res.status(400).json({
         success: false,
-        message: "Failed to update budget configuration",
+        message: "No valid configuration fields provided",
       });
     }
-  },
-);
+
+    budgetMonitorService.updateConfig(updateConfig);
+
+    await audit.adminAction(req, "budget_config_update", updateConfig);
+
+    res.json({
+      success: true,
+      message: "Budget configuration updated",
+      data: budgetMonitorService.getStatus().config,
+    });
+  } catch (error) {
+    console.error("Budget config update error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to update budget configuration",
+    });
+  }
+});
 
 /**
  * @api {get} /api/admin/budget/report Daily Budget Report
@@ -799,26 +765,22 @@ router.put(
  *
  * @apiSuccess {Object} report Daily budget report
  */
-router.get(
-  "/budget/report",
-  requireAdmin,
-  async (req, res) => {
-    try {
-      const report = await budgetMonitorService.generateDailyReport();
+router.get("/budget/report", requireAdmin, async (req, res) => {
+  try {
+    const report = await budgetMonitorService.generateDailyReport();
 
-      res.json({
-        success: true,
-        data: report,
-      });
-    } catch (error) {
-      console.error("Budget report error:", error);
-      res.status(500).json({
-        success: false,
-        message: "Failed to generate budget report",
-      });
-    }
-  },
-);
+    res.json({
+      success: true,
+      data: report,
+    });
+  } catch (error) {
+    console.error("Budget report error:", error);
+    res.status(500).json({
+      success: false,
+      message: "Failed to generate budget report",
+    });
+  }
+});
 
 /**
  * @api {get} /api/admin/users Get All Users

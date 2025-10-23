@@ -86,7 +86,7 @@ router.post("/create-hold", async (req, res) => {
 
     let holdResult;
 
-      if (pool) {
+    if (pool) {
       try {
         holdResult = await pool.query(holdQuery, holdValues);
       } catch (dbErr) {
