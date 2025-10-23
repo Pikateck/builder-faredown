@@ -3,8 +3,8 @@
  * Handles all pricing calculation endpoints
  */
 
-import express from "express";
-import PricingEngine from "../services/pricing/PricingEngine.js";
+const express = require("express");
+const PricingEngine = require("../services/pricing/PricingEngine.js");
 
 const router = express.Router();
 
