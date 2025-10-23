@@ -408,16 +408,16 @@ export default function HotelResults() {
 
       // Get the proper API base URL (handles Netlify redirects automatically)
       const apiBaseUrl = (() => {
-        if (typeof window !== 'undefined') {
+        if (typeof window !== "undefined") {
           // Check for explicit VITE_API_BASE_URL
           const envUrl = import.meta.env.VITE_API_BASE_URL;
           if (envUrl) {
-            return envUrl.replace(/\/$/, ''); // Remove trailing slash
+            return envUrl.replace(/\/$/, ""); // Remove trailing slash
           }
           // Fallback: use current origin (Netlify redirects will handle it)
-          return window.location.origin + '/api';
+          return window.location.origin + "/api";
         }
-        return '/api';
+        return "/api";
       })();
 
       // Extract city name from destination
