@@ -407,7 +407,8 @@ export default function HotelResults() {
       console.log("🏨 Fetching TBO hotels for:", destCode);
 
       // Extract city name from destination
-      const destName = urlSearchParams.get("destinationName") || destination || destCode;
+      const destName =
+        urlSearchParams.get("destinationName") || destination || destCode;
 
       const tboResponse = await fetch("/api/tbo-hotels/search", {
         method: "POST",
@@ -420,7 +421,10 @@ export default function HotelResults() {
             : checkIn || new Date().toISOString().split("T")[0],
           checkOut: returnDate
             ? returnDate.toISOString().split("T")[0]
-            : checkOut || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+            : checkOut ||
+              new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+                .toISOString()
+                .split("T")[0],
           adults: parseInt(adults) || 2,
           children: parseInt(children) || 0,
           rooms: parseInt(rooms) || 1,
@@ -450,9 +454,10 @@ export default function HotelResults() {
       location: hotel.address
         ? `${hotel.address}, ${hotel.city || destination}`
         : `${hotel.city || destination}, ${hotel.countryCode || "IN"}`,
-      images: hotel.images && hotel.images.length > 0
-        ? hotel.images
-        : transformHotelImages([]),
+      images:
+        hotel.images && hotel.images.length > 0
+          ? hotel.images
+          : transformHotelImages([]),
       rating: hotel.rating || 4.0,
       reviews: hotel.reviewCount || 0,
       originalPrice: hotel.minTotal ? Math.round(hotel.minTotal * 1.15) : 0,
@@ -479,7 +484,9 @@ export default function HotelResults() {
       },
       priceRange: {
         min: hotel.minTotal || 0,
-        max: hotel.maxTotal || (hotel.minTotal ? Math.round(hotel.minTotal * 1.5) : 0),
+        max:
+          hotel.maxTotal ||
+          (hotel.minTotal ? Math.round(hotel.minTotal * 1.5) : 0),
       },
       currency: hotel.currency || selectedCurrency?.code || "INR",
       policies: {
