@@ -3,7 +3,7 @@
  * Joi-based validation for API requests
  */
 
-import Joi from "joi";
+const Joi = require("joi");
 
 /**
  * Validation schemas
