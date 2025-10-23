@@ -4,7 +4,7 @@
  */
 
 const { PromoCodeValidator } = require("../middleware/promoValidation");
-const { audit } = require("../middleware/audit");
+const { audit } = require("../middleware/audit.cjs");
 
 // Budget monitoring configuration
 const BUDGET_CONFIG = {

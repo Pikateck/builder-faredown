@@ -2,7 +2,7 @@
 
 const router = express.Router();
 const { requireAdmin } = require("../middleware/auth");
-const { audit } = require("../middleware/audit");
+const { audit } = require("../middleware/audit.cjs");
 
 // Wrapper function for backward compatibility
 const auditLog = (action) => async (req, res, next) => {

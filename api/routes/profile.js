@@ -8,7 +8,7 @@ const router = express.Router();
 const { Pool } = require("pg");
 const bcrypt = require("bcryptjs");
 const { validate } = require("../middleware/validation");
-const { audit } = require("../middleware/audit");
+const { audit } = require("../middleware/audit.cjs");
 
 // Database connection - Use SSL for Render PostgreSQL
 const pool = new Pool({

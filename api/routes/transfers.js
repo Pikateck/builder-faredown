@@ -32,7 +32,7 @@ try {
 
 // const { validateBookingData } = require("../middleware/validation"); // Not available
 const validateBookingData = (req, res, next) => next(); // Placeholder middleware
-const { auditLogger } = require("../middleware/audit");
+const { auditLogger } = require("../middleware/audit.cjs");
 const auditRequest = auditLogger;
 const {
   authenticateToken: requireAuth,

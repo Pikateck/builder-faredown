@@ -87,7 +87,7 @@ const hotelsMultiSupplierRoutes = require("./routes/hotels-multi-supplier.js");
 const { authenticateToken, requireAdmin } = require("./middleware/auth.js");
 const adminKeyMiddleware = require("./middleware/adminKey.js");
 const { validateRequest } = require("./middleware/validation.js");
-const { auditLogger } = require("./middleware/audit.js");
+const { auditLogger } = require("./middleware/audit.cjs");
 
 // DB
 const db = require("./database/connection.js");

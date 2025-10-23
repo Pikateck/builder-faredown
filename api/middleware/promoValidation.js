@@ -3,7 +3,7 @@
  * Comprehensive validation, budget tracking, and usage monitoring
  */
 
-const { audit } = require("./audit");
+const { audit } = require("./audit.cjs");
 
 // In-memory storage for promo codes (in production, use database)
 let promoCodes = [];

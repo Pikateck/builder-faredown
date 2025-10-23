@@ -11,7 +11,7 @@ const {
   authenticateToken,
 } = require("../middleware/auth");
 const { validate } = require("../middleware/validation");
-const { audit } = require("../middleware/audit");
+const { audit } = require("../middleware/audit.cjs");
 const {
   PromoCodeValidator,
   validatePromoCode,

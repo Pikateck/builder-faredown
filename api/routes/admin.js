@@ -11,7 +11,7 @@ const {
   validatePagination,
   validateDateRange,
 } = require("../middleware/validation");
-const { audit, getAuditTrail, getAuditStats } = require("../middleware/audit");
+const { audit, getAuditTrail, getAuditStats } = require("../middleware/audit.cjs");
 const { budgetMonitorService } = require("../services/budgetMonitorService");
 
 // Mock data for demonstration
