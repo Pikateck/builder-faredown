@@ -119,4 +119,4 @@ function createPricingRoutes() {
   return router;
 }
 
-export default createPricingRoutes;
+module.exports = createPricingRoutes;
