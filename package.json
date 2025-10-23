@@ -1,7 +1,6 @@
 {
   "name": "faredown-pricing-api",
   "version": "1.0.0",
-  "type": "module",
   "description": "Faredown pricing API server",
   "main": "server.js",
   "scripts": {
