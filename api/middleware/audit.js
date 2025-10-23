@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Audit Logging Middleware
  * Tracks all admin actions for security and compliance
  */
@@ -519,7 +519,7 @@ const auditRequest = (req, res, next) => {
   next();
 };
 
-export default {
+module.exports = {
   auditLogger: auditMiddleware,
   auditRequest,
   logAuditEvent,
