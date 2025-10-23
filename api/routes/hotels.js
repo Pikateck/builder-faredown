@@ -1,9 +1,8 @@
-﻿import express from "express";
-
+const express = require("express");
 const axios = require("axios");
 const crypto = require("crypto");
 const db = require("../database/connection");
-const router = require("express").Router();
+const router = express.Router();
 
 // Hotelbeds API Configuration
 const HOTELBEDS_API_KEY =
@@ -570,4 +569,4 @@ function getFallbackHotelData(searchParams) {
     },
   ];
 }
-export default router;
+module.exports = router;

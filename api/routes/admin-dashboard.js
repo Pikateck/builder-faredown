@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Admin Dashboard API Routes
  * Provides live data from database for admin analytics and management
@@ -419,4 +419,4 @@ router.get("/export/bookings", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

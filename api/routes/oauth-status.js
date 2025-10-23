@@ -1,9 +1,9 @@
-﻿import express from "express";
 /**
  * OAuth Status Routes
  * Provides information about OAuth service availability
  */
 
+const express = require("express");
 const router = express.Router();
 
 // OAuth environment validation
@@ -40,4 +40,4 @@ router.get("/status", (req, res) => {
     message: "OAuth configuration status retrieved successfully",
   });
 });
-export default router;
+module.exports = router;
