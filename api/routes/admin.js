@@ -5,7 +5,7 @@ const express = require("express");
  */
 
 const router = express.Router();
-const { requirePermission, PERMISSIONS } = require("../middleware/auth");
+const { requireAdmin, PERMISSIONS } = require("../middleware/auth");
 const {
   validate,
   validatePagination,
