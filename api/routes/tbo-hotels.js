@@ -171,10 +171,11 @@ router.get("/hotel/:supplierHotelId", async (req, res) => {
       const adapter = getTboAdapter();
       const rawHotel = await adapter.getHotelDetails(supplierHotelId);
       if (rawHotel) {
-        const unifiedHotel = require("../services/adapters/tboAdapter").toUnifiedHotel(
-          rawHotel,
-          { destination: hotel?.city, currency: "INR" },
-        );
+        const unifiedHotel =
+          require("../services/adapters/tboAdapter").toUnifiedHotel(rawHotel, {
+            destination: hotel?.city,
+            currency: "INR",
+          });
         if (unifiedHotel && hotel) {
           // Merge: keep pricing from snapshot, add description/images from fresh
           hotel.images = unifiedHotel.images || hotel.images;

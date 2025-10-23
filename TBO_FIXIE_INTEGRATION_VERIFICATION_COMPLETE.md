@@ -15,6 +15,7 @@ Fixie proxy integration for TBO Hotels API is **fully implemented and verified**
 ## ✅ Implementation Checklist
 
 ### 1. Proxy Layer Implementation
+
 - **File:** `api/lib/proxy.js`
   - ✅ Lazy-loads `https-proxy-agent` and `http-proxy-agent`
   - ✅ Creates agents only when `USE_SUPPLIER_PROXY=true` and `FIXIE_URL` is set
@@ -23,6 +24,7 @@ Fixie proxy integration for TBO Hotels API is **fully implemented and verified**
   - ✅ Gracefully handles missing dependencies
 
 ### 2. TBO Request Wrapper
+
 - **File:** `api/lib/tboRequest.js`
   - ✅ Wraps axios requests with proxy agent configuration
   - ✅ Exports `tboRequest(url, config)` for all TBO API calls
@@ -30,6 +32,7 @@ Fixie proxy integration for TBO Hotels API is **fully implemented and verified**
   - ✅ All TBO calls route through this wrapper
 
 ### 3. TBO Adapter Integration
+
 - **File:** `api/services/adapters/tboAdapter.js`
   - ✅ All hotel API calls use `tboRequest()` wrapper
   - ✅ Logging includes `via: tboVia()` in all API attempt logs
@@ -45,6 +48,7 @@ Fixie proxy integration for TBO Hotels API is **fully implemented and verified**
     - Top destinations (getTopDestinations)
 
 ### 4. TBO Hotels Routes
+
 - **File:** `api/routes/tbo-hotels.js`
   - ✅ `/health` - Health check with proxy verification
   - ✅ `/diagnostics/auth` - Auth diagnostics with egress IP tracking
@@ -57,22 +61,26 @@ Fixie proxy integration for TBO Hotels API is **fully implemented and verified**
 ## 🔄 TBO Flow (Search → PreBook → Book)
 
 ### Step 1: Authentication
+
 - Call `getHotelToken()` → authenticates against Fixie IP
 - Token cached in `tbo_token_cache` table
 - Auth logs recorded with `via=fixie`
 
 ### Step 2: Search
+
 - Call `POST /api/tbo-hotels/search` with destination, dates, guests
 - Routed through `tboRequest()` → uses Fixie proxy
 - Results cached and returned to client
 - Search logged to `search_logs` table with `supplier=TBO via=fixie`
 
 ### Step 3: PreBook
+
 - Call `preBookHotel(holdId)` with search result
 - Validates prices and availability
 - Returns PreBook reference
 
 ### Step 4: Book
+
 - Call `bookHotel()` with passenger details
 - Creates booking record in `hotel_bookings` table
 - Returns booking confirmation & voucher
@@ -89,11 +97,13 @@ FIXIE_URL=http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80
 ```
 
 **Verification:**
+
 - ✅ Environment variables confirmed set in Render
 - ✅ Egress IP verified: 52.5.155.132 (Fixie static range)
 - ✅ IP whitelisted by TBO
 
 **Related TBO Credentials (Already Configured):**
+
 - TBO_HOTEL_BASE_URL_AUTHENTICATION=https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc
 - TBO_HOTEL_STATIC_DATA=https://apiwr.tboholidays.com/HotelAPI/
 - TBO_HOTEL_SEARCH_PREBOOK=https://affiliate.travelboutiqueonline.com/HotelAPI/
@@ -104,10 +114,12 @@ FIXIE_URL=http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80
 ## 🧹 Cleanup Complete
 
 **Removed:** Temporary Operations Route
+
 - ✅ Deleted `/ops/egress-ip` endpoint from `api/server.js` (lines 476-493)
 - ✅ This temporary route was used for initial Fixie verification and is no longer needed
 
 **Not Changed:**
+
 - All TBO endpoints remain operational
 - All authentication and booking flows unaffected
 - Database schemas intact
@@ -116,31 +128,35 @@ FIXIE_URL=http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80
 
 ## 📊 Traffic Routing
 
-| Traffic Type | Route | Status |
-|---|---|---|
-| TBO Hotel APIs | → Fixie proxy (52.5.155.132) | ✅ Active |
-| RateHawk APIs | → Fixie proxy (52.5.155.132) | ✅ Active |
-| Database (Render Postgres) | Direct | ✅ Active |
-| CDN & Static Assets | Direct | ✅ Active |
-| OAuth/Auth Services | Direct | ✅ Active |
-| External APIs (non-TBO) | Direct | ✅ Active |
+| Traffic Type               | Route                        | Status    |
+| -------------------------- | ---------------------------- | --------- |
+| TBO Hotel APIs             | → Fixie proxy (52.5.155.132) | ✅ Active |
+| RateHawk APIs              | → Fixie proxy (52.5.155.132) | ✅ Active |
+| Database (Render Postgres) | Direct                       | ✅ Active |
+| CDN & Static Assets        | Direct                       | ✅ Active |
+| OAuth/Auth Services        | Direct                       | ✅ Active |
+| External APIs (non-TBO)    | Direct                       | ✅ Active |
 
 ---
 
 ## 🔍 Logging & Diagnostics
 
 ### API Call Logging
+
 All TBO API calls log:
+
 - `via: tboVia()` → "fixie" or "direct" based on proxy mode
 - `egressIp` → current egress IP (if Fixie, will be static)
 - Request/response metadata for audit trail
 
 ### Available Diagnostics
+
 - `GET /api/tbo-hotels/health` → Check service status
 - `GET /api/tbo-hotels/diagnostics/auth` → View recent auth attempts + egress IP
 - `GET /api/tbo-hotels/egress-ip` → Get current egress IP (route in tbo-hotels.js)
 
 ### Database Audit
+
 - `search_logs` table: All TBO hotel searches logged with supplier=TBO
 - `hotel_bookings` table: All bookings tracked
 - `tbo_token_cache` table: Auth tokens cached for performance
@@ -167,13 +183,13 @@ All TBO API calls log:
 
 ## 📝 Files Modified
 
-| File | Changes | Status |
-|---|---|---|
-| `api/server.js` | Removed `/ops/egress-ip` route | ✅ Deployed |
-| `api/lib/proxy.js` | Existing (no changes needed) | ✅ Working |
-| `api/lib/tboRequest.js` | Existing (no changes needed) | ✅ Working |
-| `api/services/adapters/tboAdapter.js` | All calls via tboRequest | ✅ Deployed |
-| `api/routes/tbo-hotels.js` | All endpoints ready | ✅ Deployed |
+| File                                  | Changes                        | Status      |
+| ------------------------------------- | ------------------------------ | ----------- |
+| `api/server.js`                       | Removed `/ops/egress-ip` route | ✅ Deployed |
+| `api/lib/proxy.js`                    | Existing (no changes needed)   | ✅ Working  |
+| `api/lib/tboRequest.js`               | Existing (no changes needed)   | ✅ Working  |
+| `api/services/adapters/tboAdapter.js` | All calls via tboRequest       | ✅ Deployed |
+| `api/routes/tbo-hotels.js`            | All endpoints ready            | ✅ Deployed |
 
 ---
 

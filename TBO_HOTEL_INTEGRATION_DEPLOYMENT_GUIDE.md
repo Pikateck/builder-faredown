@@ -2,7 +2,7 @@
 
 **Status:** Implementation Complete ✅  
 **Date:** October 23, 2025  
-**Environment:** Render (builder-faredown-pricing)  
+**Environment:** Render (builder-faredown-pricing)
 
 ---
 
@@ -15,21 +15,25 @@ This guide documents the complete TBO hotel data integration into the Faredown U
 ## 📋 Implementation Checklist
 
 ### Backend Endpoints
+
 - ✅ `GET /api/tbo-hotels/cities?q=<text>&limit=15[&country=IN]`
 - ✅ `GET /api/tbo-hotels/hotel/:supplierHotelId?searchId=<uuid>[&fresh=true]`
 - ✅ Updated `POST /api/tbo-hotels/search` to return UnifiedHotel format
 
 ### Database
+
 - ✅ Created migration: `api/database/migrations/20251023_create_tbo_cities_cache.sql`
 - ✅ Added persistence for search snapshots to `hotel_unified` & `room_offer_unified` tables
 
 ### Adapter (TBO)
+
 - ✅ Added `toUnifiedHotel()` static method for normalizing TBO responses
 - ✅ Added `syncCitiesToCache()` to populate tbo_cities table
 - ✅ Added `searchCities()` with ranking logic (starts-with > contains, longer matches first)
 - ✅ Added `persistSearchSnapshot()` to cache search results
 
 ### Frontend
+
 - ✅ Updated `HotelSearchForm.tsx` destination dropdown to call `/api/tbo-hotels/cities`
 - ✅ Typeahead now shows TBO cities with proper formatting
 - ✅ No layout or styling changes—only data binding
@@ -61,6 +65,7 @@ CREATE TABLE IF NOT EXISTS tbo_cities (
 ```
 
 **Indexes:**
+
 - `idx_tbo_cities_code` - city code lookup
 - `idx_tbo_cities_name` - city name search
 - `idx_tbo_cities_country` - country filter
@@ -72,11 +77,13 @@ CREATE TABLE IF NOT EXISTS tbo_cities (
 ### To Apply Migration
 
 **Option 1: Using migration runner (preferred)**
+
 ```bash
 node api/database/run-tbo-cities-migration.js
 ```
 
 **Option 2: Direct SQL execution**
+
 ```bash
 psql $DATABASE_URL < api/database/migrations/20251023_create_tbo_cities_cache.sql
 ```
@@ -93,17 +100,20 @@ The migration will be automatically applied when the server initializes (if auto
 **Purpose:** Typeahead search for TBO cities, airports, and regions
 
 **Query Parameters:**
+
 - `q` (string, required) - Search text (min 1 character)
 - `limit` (integer, optional, default: 15, max: 100) - Result limit
 - `country` (string, optional) - ISO2 country code filter (e.g., "IN", "US")
 
 **Request:**
+
 ```bash
 GET /api/tbo-hotels/cities?q=london&limit=15
 GET /api/tbo-hotels/cities?q=mumbai&limit=10&country=IN
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -126,6 +136,7 @@ GET /api/tbo-hotels/cities?q=mumbai&limit=10&country=IN
 ```
 
 **Behavior:**
+
 - On first request, syncs all TBO cities to database (background, non-blocking)
 - Subsequent requests read from cache with full-text search
 - Ranking: starts-with prefix match > contains match; longer matches first
@@ -138,19 +149,23 @@ GET /api/tbo-hotels/cities?q=mumbai&limit=10&country=IN
 **Purpose:** Get full hotel details with room inventory (snapshot-first approach)
 
 **Path Parameters:**
+
 - `supplierHotelId` (string, required) - TBO hotel ID (e.g., "12345")
 
 **Query Parameters:**
+
 - `searchId` (uuid, optional) - Search snapshot ID (enables cache lookup)
 - `fresh` (boolean, optional, default: false) - Force fresh data from TBO
 
 **Request:**
+
 ```bash
 GET /api/tbo-hotels/hotel/12345?searchId=550e8400-e29b-41d4-a716-446655440000
 GET /api/tbo-hotels/hotel/12345?fresh=true
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -208,6 +223,7 @@ GET /api/tbo-hotels/hotel/12345?fresh=true
 ```
 
 **Behavior:**
+
 - **Snapshot-first:** Loads from search cache if `searchId` provided
 - **Fresh option:** If `fresh=true`, fetches from TBO and merges non-price static data
 - **Price stability:** Never overwrites pricing from search snapshot; only adds static fields
@@ -218,11 +234,13 @@ GET /api/tbo-hotels/hotel/12345?fresh=true
 ### 3. POST /api/tbo-hotels/search (Updated)
 
 **Changes:**
+
 - Now returns `UnifiedHotel` format instead of raw TBO format
 - Includes `searchId` in response for later details lookup
 - Includes `via: "fixie"` in response to confirm Fixie routing
 
 **Response (new):**
+
 ```json
 {
   "success": true,
@@ -310,11 +328,13 @@ interface UnifiedHotel {
 ## 🔐 Security & Fixie Routing
 
 **All TBO API calls route through Fixie:**
+
 - `USE_SUPPLIER_PROXY=true`
 - `FIXIE_URL=http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80`
 - Egress IP: `52.5.155.132` (static, whitelisted by TBO)
 
 **Proxy verification:**
+
 - Health endpoint logs include `via: fixie`
 - Cities endpoint logs supplier calls with `via: fixie`
 - Search endpoint confirms `via: "fixie"` in response
@@ -326,6 +346,7 @@ interface UnifiedHotel {
 ### HotelSearchForm.tsx
 
 **Changes Made:**
+
 ```typescript
 // Before: Used local searchHotels() function
 // After: Calls /api/tbo-hotels/cities endpoint
@@ -335,18 +356,18 @@ useEffect(() => {
     // Fetch from TBO API
     const fetchCities = async () => {
       const response = await fetch(
-        `/api/tbo-hotels/cities?q=${encodeURIComponent(inputValue)}&limit=15`
+        `/api/tbo-hotels/cities?q=${encodeURIComponent(inputValue)}&limit=15`,
       );
       if (response.ok) {
         const data = await response.json();
         // Map TBO response to SearchResult format
-        const cities = data.data.map(city => ({
+        const cities = data.data.map((city) => ({
           id: city.code,
           code: city.code,
           name: city.name,
           type: city.type?.toLowerCase() || "city",
           location: city.displayLabel,
-          description: city.countryName || ""
+          description: city.countryName || "",
         }));
         setSearchResults(cities);
       }
@@ -357,6 +378,7 @@ useEffect(() => {
 ```
 
 **No CSS/Layout Changes:**
+
 - Uses existing `HotelSearchForm` UI components
 - Uses existing dropdown styling
 - Maintains same icon/label display logic
@@ -365,6 +387,7 @@ useEffect(() => {
 ### Results Page (hotels/results)
 
 **No Changes Needed:**
+
 - Existing `HotelCard` component already handles UnifiedHotel format
 - Price display logic compatible with `rooms[].price.total`
 - Amenities display compatible with `amenities[]` array
@@ -373,14 +396,15 @@ useEffect(() => {
 ### Details Page (hotels/details)
 
 **To be updated by frontend team:**
+
 ```typescript
 // Fetch on mount:
 const hotelData = await fetch(
-  `/api/tbo-hotels/hotel/${hotelId}?searchId=${searchId}`
+  `/api/tbo-hotels/hotel/${hotelId}?searchId=${searchId}`,
 );
 
 // Pass to room display components:
-hotel.rooms.forEach(room => {
+hotel.rooms.forEach((room) => {
   // Display:
   // - room.roomName
   // - room.board
@@ -407,6 +431,7 @@ node api/database/run-tbo-cities-migration.js
 ### Step 2: Verify Environment Variables
 
 Confirm these are set in Render:
+
 ```
 USE_SUPPLIER_PROXY=true
 FIXIE_URL=http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80
@@ -447,9 +472,11 @@ curl "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/diagnostics/a
 ## 📝 Files Modified
 
 ### New Files
+
 - `api/database/migrations/20251023_create_tbo_cities_cache.sql` — TBO cities cache table
 
 ### Modified Files
+
 1. **`api/services/adapters/tboAdapter.js`**
    - Added `toUnifiedHotel()` static method
    - Added `syncCitiesToCache()` for initial population
@@ -473,6 +500,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/diagnostics/a
 ## 🧪 Testing Checklist
 
 ### API Testing
+
 - [ ] `GET /api/tbo-hotels/cities?q=london` returns cities
 - [ ] City ranking: "london" should show London first, not "llandrindod"
 - [ ] Optional `country=GB` filter works
@@ -482,6 +510,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/diagnostics/a
 - [ ] `POST /api/tbo-hotels/search` returns UnifiedHotel format + searchId
 
 ### Frontend Testing
+
 - [ ] Type "london" in Hotel Search form
 - [ ] Dropdown shows TBO cities from API
 - [ ] Select a city and perform search
@@ -491,6 +520,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/diagnostics/a
 - [ ] Mobile form typeahead also works (if updated)
 
 ### Fixie Verification
+
 - [ ] Logs show `via=fixie` for all TBO API calls
 - [ ] Egress IP confirmed as `52.5.155.132`
 - [ ] `/api/tbo-hotels/diagnostics/auth` shows authenticated status
@@ -501,6 +531,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/diagnostics/a
 ## 🔄 Rollback Plan
 
 If issues arise:
+
 ```bash
 # Revert migration (if needed)
 DROP TABLE tbo_cities;
@@ -517,6 +548,7 @@ git push origin main
 ## 📞 Support
 
 **Questions?**
+
 - Check `/api/tbo-hotels/diagnostics/auth` for auth status
 - Check `/api/tbo-hotels/health` for service health
 - Review server logs for `TBO.*error` entries
@@ -524,12 +556,12 @@ git push origin main
 
 **Common Issues:**
 
-| Issue | Solution |
-|-------|----------|
-| 404 on cities endpoint | Confirm deployment; check server logs |
-| Empty cities list | Sync may be in progress; retry after 30s |
-| "Not authorized" health error | Verify TBO credentials in Render env vars |
-| Prices differ from TBO | Using cached snapshot; pass `fresh=true` for live data |
+| Issue                         | Solution                                               |
+| ----------------------------- | ------------------------------------------------------ |
+| 404 on cities endpoint        | Confirm deployment; check server logs                  |
+| Empty cities list             | Sync may be in progress; retry after 30s               |
+| "Not authorized" health error | Verify TBO credentials in Render env vars              |
+| Prices differ from TBO        | Using cached snapshot; pass `fresh=true` for live data |
 
 ---
 
@@ -543,6 +575,7 @@ git push origin main
 - ✅ Ready for production deployment
 
 **Next Steps:**
+
 1. Apply migration to Render PostgreSQL
 2. Push code to main branch
 3. Verify with curl tests

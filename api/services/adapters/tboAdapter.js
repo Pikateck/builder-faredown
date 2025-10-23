@@ -1959,7 +1959,8 @@ class TBOAdapter extends BaseSupplierAdapter {
         const rates = Array.isArray(room.Rates) ? room.Rates : [];
 
         for (const rate of rates) {
-          const basePrice = parseFloat(rate.NetFare || rate.BasePrice || 0) || 0;
+          const basePrice =
+            parseFloat(rate.NetFare || rate.BasePrice || 0) || 0;
           const totalPrice =
             parseFloat(rate.PublishedPrice || rate.TotalPrice || basePrice) ||
             basePrice;
@@ -2029,9 +2030,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         images,
         amenities,
         minTotal:
-          rooms.length > 0
-            ? Math.min(...rooms.map((r) => r.price.total))
-            : 0,
+          rooms.length > 0 ? Math.min(...rooms.map((r) => r.price.total)) : 0,
         currency: searchContext.currency || "INR",
         taxesAndFees: {
           included: rooms.length > 0,
@@ -2040,8 +2039,7 @@ class TBOAdapter extends BaseSupplierAdapter {
             rooms.some((r) => r.price.taxes > 0) &&
             !rawHotel.TaxesIncluded,
           text:
-            rooms.length > 0 &&
-            rooms.some((r) => r.payType === "at_hotel")
+            rooms.length > 0 && rooms.some((r) => r.payType === "at_hotel")
               ? "Taxes & fees payable at hotel"
               : "",
         },
