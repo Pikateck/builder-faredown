@@ -15,29 +15,94 @@ import cookieParser from "cookie-parser";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { v4 as uuidv4 } from "uuid";
+import { createRequire } from "module";
+import { fileURLToPath } from "url";
+import path from "path";
 
 dotenv.config();
 
-// Import route modules - lazy load with fallback
-const loadRoute = async (path) => {
-  try {
-    const module = await import(path);
-    return module.default || module;
-  } catch (error) {
-    console.warn(`⚠️ Failed to load route ${path}:`, error.message);
-    return null;
-  }
-};
+// Create require function for ES modules
+const require = createRequire(import.meta.url);
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+
+// Import route modules (keeping CommonJS requires for now due to mixed codebase)
+const authRoutes = require("./routes/auth.js");
+const oauthRoutes = require("./routes/oauth-simple.js");
+const oauthStatusRoutes = require("./routes/oauth-status.js");
+const adminRoutes = require("./routes/admin.js");
+const adminDashboardRoutes = require("./routes/admin-dashboard.js");
+const bookingRoutes = require("./routes/bookings.js");
+const userRoutes = require("./routes/users.js");
+const flightRoutes = require("./routes/flights.js");
+const hotelRoutes = require("./routes/hotels.js");
+const hotelsLiveRoutes = require("./routes/hotels-live.js");
+const bargainRoutes = require("./routes/bargain.js");
+const bargainV1Routes = require("./routes/bargain-final.js");
+const currencyRoutes = require("./routes/currency.js");
+const countriesRoutes = require("./routes/countries.js");
+const promoRoutes = require("./routes/promo.js");
+const analyticsRoutes = require("./routes/analytics.js");
+const dbTestRoutes = require("./routes/db-test.js");
+const paymentRoutes = require("./routes/payments.js");
+const cmsRoutes = require("./routes/cms.js");
+const testLiveRoutes = require("./routes/test-live.js");
+const testHotelbedsRoutes = require("./routes/test-hotelbeds.js");
+const testLiveHotelRoutes = require("./routes/test-live-hotel.js");
+const sightseeingRoutes = require("./routes/sightseeing.js");
+const transfersRoutes = require("./routes/transfers.js");
+const transfersBargainRoutes = require("./routes/transfers-bargain.js");
+const packagesRoutes = require("./routes/packages.js");
+const destinationsRoutes = require("./routes/destinations-v2.js");
+const enhancedBargainRoutes = require("./routes/enhanced-bargain-engine.js");
+const featureFlagsRoutes = require("./routes/feature-flags.js");
+
+// New admin module routes
+const usersAdminRoutes = require("./routes/users.js");
+const markupRoutes = require("./routes/markup.js");
+const markupsUnifiedRoutes = require("./routes/markups-unified.js");
+const adminPackagesRoutes = require("./routes/admin-packages.js");
+const vatRoutes = require("./routes/vat.js");
+const currencyAdminRoutes = require("./routes/currency.js");
+const reportsRoutes = require("./routes/reports.js");
+const suppliersRoutes = require("./routes/suppliers.js");
+const voucherRoutes = require("./routes/vouchers.js");
+const profileRoutes = require("./routes/profile.js");
+const adminBookingsRoutes = require("./routes/admin-bookings.js");
+const adminSightseeingRoutes = require("./routes/admin-sightseeing.js");
+const sightseeingSearchRoutes = require("./routes/sightseeing-search.js");
+const adminAiRoutes = require("./routes/admin-ai.js");
+const adminAirportsRoutes = require("./routes/admin-airports.js");
+const aiBargainRoutes = require("./routes/ai-bargains.js");
+const transfersMarkupRoutes = require("./routes/admin-transfers-markup.js");
+const adminProfilesRoutes = require("./routes/admin-profiles.js");
+const pricingRoutesLegacy = require("./routes/pricing.js");
+const reviewsRoutes = require("./routes/reviews.js");
+const recentSearchesRoutes = require("./routes/recent-searches.js");
+const healthCheckRoutes = require("./routes/health-check.js");
+const adminReportsRoutes = require("./routes/admin-reports.js");
+const adminExtranetRoutes = require("./routes/admin-extranet.js");
+const adminMarkupPackagesRoutes = require("./routes/admin-markup-packages.js");
+const adminPromoRoutes = require("./routes/admin-promo.js");
+const pricingEngineRoutes = require("./routes/pricing-engine.js");
+const adminUsersVerifyRoutes = require("./routes/admin-users-verify.js");
+const adminUsersPublic = require("./routes/admin-users-public.js");
+const adminSystemStatusRoutes = require("./routes/admin-system-status.js");
+const adminSystemMonitorHistoryRoutes = require("./routes/admin-system-monitor-history.js");
+const adminSuppliersRoutes = require("./routes/admin-suppliers.js");
+const hotelsMultiSupplierRoutes = require("./routes/hotels-multi-supplier.js");
 
 // Middleware
-import { authenticateToken, requireAdmin } from "./middleware/auth.js";
-import adminKeyMiddleware from "./middleware/adminKey.js";
-import validate from "./middleware/validation.js";
-import { auditLogger } from "./middleware/audit.js";
+const { authenticateToken, requireAdmin } = require("./middleware/auth.js");
+const adminKeyMiddleware = require("./middleware/adminKey.js");
+const { validateRequest } = require("./middleware/validation.js");
+const { auditLogger } = require("./middleware/audit.js");
 
 // DB
-import db from "./database/connection.js";
-import { initializeRetentionSchedule } from "./services/systemMonitorService.js";
+const db = require("./database/connection.js");
+const {
+  initializeRetentionSchedule,
+} = require("./services/systemMonitorService.js");
 
 // Initialize Express
 const app = express();
