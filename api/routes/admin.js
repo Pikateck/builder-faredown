@@ -98,7 +98,7 @@ const mockStats = {
  */
 router.get(
   "/dashboard",
-  requirePermission(PERMISSIONS.ADMIN_DASHBOARD),
+  requireAdmin,
   async (req, res) => {
     try {
       const { timeframe = "30d" } = req.query;
@@ -625,7 +625,7 @@ router.post(
  */
 router.get(
   "/budget/status",
-  requirePermission(PERMISSIONS.ADMIN_DASHBOARD),
+  requireAdmin,
   async (req, res) => {
     try {
       const status = budgetMonitorService.getStatus();
