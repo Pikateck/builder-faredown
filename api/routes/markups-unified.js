@@ -1,7 +1,7 @@
-const express = require("express");
-const { Pool } = require("pg");
+import express from "express";
+import { Pool } from "pg";
 
-const router = require("express").Router();
+const router = express.Router();
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: { rejectUnauthorized: false },
@@ -415,4 +415,4 @@ router.get("/export", async (req, res) => {
   }
 });
 
-module.exports = router;
+export default router;

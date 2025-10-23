@@ -4,7 +4,7 @@
  * Logs prices and detects mismatches automatically
  */
 
-const { Pool } = require("pg");
+import { Pool } from "pg";
 
 /**
  * Price Echo Middleware Factory
@@ -314,7 +314,7 @@ async function createDiffEndpoint(pool) {
   };
 }
 
-module.exports = {
+export {
   priceEcho,
   createDiffEndpoint,
 };
