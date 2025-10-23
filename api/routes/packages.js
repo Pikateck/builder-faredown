@@ -4,9 +4,9 @@
  * Supports filtering by destination and date range as requested
  */
 
-import express from "express";
-import { Pool } from "pg";
-import crypto from "crypto";
+const express = require("express");
+const { Pool } = require("pg");
+const crypto = require("crypto");
 
 const router = express.Router();
 
