@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Enhanced Hotels Live API Routes
  * Full production integration with Hotelbeds Content and Booking APIs
@@ -959,4 +959,4 @@ router.use((error, req, res, next) => {
     fallback: true,
   });
 });
-export default router;
+module.exports = router;

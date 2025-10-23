@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 
 const router = express.Router();
 const axios = require("axios");
@@ -561,4 +561,4 @@ router.get("/rates/history/:code", authenticateToken, (req, res) => {
     res.status(500).json({ error: "Failed to fetch rate history" });
   }
 });
-export default router;
+module.exports = router;

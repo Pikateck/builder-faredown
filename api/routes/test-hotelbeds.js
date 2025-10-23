@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Test endpoint for Hotelbeds API integration
  * Verify credentials and basic functionality
@@ -214,4 +214,4 @@ router.get("/integration", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

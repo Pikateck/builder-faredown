@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 
 const router = express.Router();
 
@@ -59,4 +59,4 @@ router.post("/chat-events", (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

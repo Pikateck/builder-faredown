@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Test Live Hotel Data Endpoint
  * Shows exactly what data we get from Hotelbeds for a specific hotel
@@ -242,4 +242,4 @@ router.get("/images", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

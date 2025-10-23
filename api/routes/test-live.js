@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Live API Integration Test Routes
  */
@@ -217,4 +217,4 @@ router.get("/full", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;
