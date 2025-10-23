@@ -85,7 +85,9 @@ function putState(state) {
 function consumeState(state) {
   const exp = stateStore.get(state);
   if (!exp || Date.now() > exp) {
-    console.log(`ðŸ”´ State expired or not found: ${state?.substring(0, 8)}...`);
+    console.log(
+      `ðŸ”´ State expired or not found: ${state?.substring(0, 8)}...`,
+    );
     return false;
   }
   stateStore.delete(state);
@@ -228,7 +230,10 @@ router.get("/google", async (req, res) => {
       include_granted_scopes: true,
     });
 
-    console.log(`ðŸ” Generated OAuth URL (length: ${authUrl.length}):`, authUrl);
+    console.log(
+      `ðŸ” Generated OAuth URL (length: ${authUrl.length}):`,
+      authUrl,
+    );
     console.log(`ðŸ” State parameter: ${state}`);
     console.log(`ðŸ” Redirect URI: ${oauthRedirectUri}`);
     console.log(
