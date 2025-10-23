@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Streamlined Google OAuth Implementation
  * Based on Zubin's exact specifications for reliable popup flow
