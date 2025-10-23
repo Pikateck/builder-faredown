@@ -1,4 +1,5 @@
 {
+  "type": "module",
   "name": "faredown-pricing-api",
   "version": "1.0.0",
   "description": "Faredown Pricing Engine API for Render deployment",
