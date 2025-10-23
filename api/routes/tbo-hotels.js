@@ -82,6 +82,118 @@ router.post("/circuit/reset", async (req, res) => {
   }
 });
 
+// Cities typeahead (cached, searchable)
+router.get("/cities", async (req, res) => {
+  try {
+    const adapter = getTboAdapter();
+    const { q = "", limit = 15, country = null } = req.query;
+
+    // Sync cities on first request or periodic refresh (best-effort)
+    const redis = require("../services/redisService");
+    const syncCacheKey = "tbo:cities:last_sync";
+    const lastSync = await redis.get(syncCacheKey);
+    if (!lastSync) {
+      adapter.syncCitiesToCache().catch((e) => {
+        console.warn("TBO cities sync failed in background:", e.message);
+      });
+      await redis.setIfNotExists(syncCacheKey, { synced: true }, 24 * 60 * 60);
+    }
+
+    const cities = await adapter.searchCities(
+      q,
+      Math.min(parseInt(limit, 10) || 15, 100),
+      country,
+    );
+    res.json({ success: true, data: cities });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
+// Hotel details (snapshot-first, optional fresh)
+router.get("/hotel/:supplierHotelId", async (req, res) => {
+  try {
+    const { supplierHotelId } = req.params;
+    const { searchId, fresh = false } = req.query;
+    const db = require("../database/connection");
+
+    // Load from snapshot (search cache)
+    let hotel = null;
+    if (searchId) {
+      const snapshotResult = await db.query(
+        `SELECT h.*,
+                json_agg(json_build_object(
+                  'roomId', r.offer_id,
+                  'roomName', r.room_name,
+                  'board', r.board_basis,
+                  'occupants', json_build_object('adults', r.occupancy_adults, 'children', r.occupancy_children),
+                  'price', json_build_object('base', r.price_base, 'taxes', r.price_taxes, 'total', r.price_total, 'currency', r.currency),
+                  'rateKey', r.rate_key_or_token
+                )) as rooms
+         FROM hotel_unified h
+         LEFT JOIN room_offer_unified r ON h.property_id = r.property_id
+         WHERE h.supplier_code = $1 AND h.supplier_hotel_id = $2
+         GROUP BY h.property_id`,
+        ["TBO", supplierHotelId],
+      );
+
+      if (snapshotResult.rows.length > 0) {
+        const row = snapshotResult.rows[0];
+        hotel = {
+          supplier: "TBO",
+          supplierHotelId: row.supplier_hotel_id,
+          name: row.hotel_name,
+          address: row.address,
+          city: row.city,
+          countryCode: row.country,
+          location: {
+            lat: row.lat,
+            lng: row.lng,
+          },
+          rating: parseFloat(row.star_rating) || 0,
+          amenities: row.amenities_json || [],
+          images: [],
+          minTotal: 0,
+          currency: "INR",
+          taxesAndFees: { included: true, excluded: false },
+          refundable: true,
+          rooms: row.rooms?.filter((r) => r.rateKey) || [],
+        };
+
+        if (hotel.rooms.length > 0) {
+          hotel.minTotal = Math.min(...hotel.rooms.map((r) => r.price.total));
+        }
+      }
+    }
+
+    // If fresh=true or not found in snapshot, fetch from TBO static data
+    if (fresh || !hotel) {
+      const adapter = getTboAdapter();
+      const rawHotel = await adapter.getHotelDetails(supplierHotelId);
+      if (rawHotel) {
+        const unifiedHotel = require("../services/adapters/tboAdapter").toUnifiedHotel(
+          rawHotel,
+          { destination: hotel?.city, currency: "INR" },
+        );
+        if (unifiedHotel && hotel) {
+          // Merge: keep pricing from snapshot, add description/images from fresh
+          hotel.images = unifiedHotel.images || hotel.images;
+        } else if (unifiedHotel) {
+          hotel = unifiedHotel;
+        }
+      }
+    }
+
+    if (!hotel) {
+      return res.status(404).json({ success: false, error: "Hotel not found" });
+    }
+
+    res.json({ success: true, data: hotel });
+  } catch (e) {
+    res.status(500).json({ success: false, error: e.message });
+  }
+});
+
 // Search (POST)
 router.post("/search", async (req, res) => {
   const start = Date.now();
