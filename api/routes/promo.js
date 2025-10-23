@@ -1,9 +1,9 @@
-﻿import express from "express";
 /**
  * Promo Code and Bargain Engine API Routes
  * Handles dynamic pricing, promo codes, and bargain validation for flights and hotels
  */
 
+const express = require("express");
 const router = express.Router();
 const {
   requirePermission,
