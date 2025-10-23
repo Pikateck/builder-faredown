@@ -1,4 +1,4 @@
-﻿/**
+/**
  * Subdomain-Based Authentication Middleware
  * Enforces admin access only via admin subdomain
  */
@@ -183,7 +183,7 @@ const verifyAdminToken = (req, res, next) => {
   }
 };
 
-export default {
+module.exports = {
   detectSubdomain,
   enforceAdminSubdomain,
   enforceLiveSubdomain,
