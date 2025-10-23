@@ -32,9 +32,7 @@ router.get("/ai-tables-check", async (req, res) => {
 
     res.json({ success: true, data: result });
   } catch (error) {
-    res
-      .status(500)
-      .json({ success: false, error: error.message });
+    res.status(500).json({ success: false, error: error.message });
   }
 });
 

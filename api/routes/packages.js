@@ -21,7 +21,13 @@ const pool = new Pool({
  */
 router.get("/", async (req, res) => {
   try {
-    const { destination, startDate, endDate, limit = 10, offset = 0 } = req.query;
+    const {
+      destination,
+      startDate,
+      endDate,
+      limit = 10,
+      offset = 0,
+    } = req.query;
 
     let query = `
       SELECT p.id, p.name, p.slug, p.destination_id, p.price, p.currency,
@@ -102,7 +108,10 @@ router.post("/", async (req, res) => {
       });
     }
 
-    const slug = name.toLowerCase().replace(/\s+/g, "-") + "-" + crypto.randomBytes(4).toString("hex");
+    const slug =
+      name.toLowerCase().replace(/\s+/g, "-") +
+      "-" +
+      crypto.randomBytes(4).toString("hex");
 
     const query = `
       INSERT INTO packages (name, slug, destination_id, price, currency, itinerary, 
@@ -175,7 +184,14 @@ router.post("/:slug/enquire", async (req, res) => {
       RETURNING *
     `;
 
-    const params = [package_id, email, name, phone || null, message || null, travel_dates || null];
+    const params = [
+      package_id,
+      email,
+      name,
+      phone || null,
+      message || null,
+      travel_dates || null,
+    ];
 
     const result = await pool.query(inquiryQuery, params);
 

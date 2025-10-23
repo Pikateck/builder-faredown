@@ -74,7 +74,9 @@ router.get("/export", async (req, res) => {
         const value = row[col];
         // Escape quotes and wrap in quotes if contains comma
         if (value === null || value === undefined) return "";
-        return String(value).includes(",") ? `"${String(value).replace(/"/g, '""')}"` : value;
+        return String(value).includes(",")
+          ? `"${String(value).replace(/"/g, '""')}"`
+          : value;
       }).join(","),
     );
 

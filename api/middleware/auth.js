@@ -173,9 +173,7 @@ const createUser = async (userData) => {
       user.verificationSentAt = row.verification_sent_at
         ? new Date(row.verification_sent_at)
         : verificationSentAt;
-      user.verifiedAt = row.verified_at
-        ? new Date(row.verified_at)
-        : null;
+      user.verifiedAt = row.verified_at ? new Date(row.verified_at) : null;
       user.createdAt = row.created_at
         ? new Date(row.created_at)
         : user.createdAt;
