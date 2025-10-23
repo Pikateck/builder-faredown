@@ -1,4 +1,4 @@
-﻿const express = require("express");
+const express = require("express");
 /**
  * Bargain Hold Management API
  * Handles price holds for negotiated bargain prices
@@ -419,4 +419,4 @@ router.get("/holds/cleanup", async (req, res) => {
   }
 });
 
-export default { router, initializeBargainHolds };
+module.exports = { router, initializeBargainHolds };
