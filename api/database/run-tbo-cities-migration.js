@@ -33,20 +33,54 @@ class TBOCitiesMigrationRunner {
     console.log("🚀 Running TBO Cities Cache migration...\n");
 
     try {
-      // Step 1: Drop existing table if it exists
+      // Step 1: Drop existing table
       console.log("1️⃣ Dropping existing tbo_cities table...");
       await this.client.query("DROP TABLE IF EXISTS tbo_cities CASCADE;");
       console.log("✅ Old table dropped\n");
 
-      // Step 2: Read migration SQL
-      console.log("2️⃣ Creating new tbo_cities table...");
-      const migrationSQL = fs.readFileSync(
-        path.join(__dirname, "migrations/20251023_create_tbo_cities_cache.sql"),
-        "utf8",
-      );
+      // Step 2: Create table
+      console.log("2️⃣ Creating tbo_cities table...");
+      await this.client.query(`
+        CREATE TABLE tbo_cities (
+          id SERIAL PRIMARY KEY,
+          city_code VARCHAR(50) NOT NULL,
+          city_name VARCHAR(255) NOT NULL,
+          country_code VARCHAR(10),
+          country_name VARCHAR(255),
+          region_code VARCHAR(50),
+          region_name VARCHAR(255),
+          type VARCHAR(50) DEFAULT 'CITY',
+          latitude NUMERIC(10, 8),
+          longitude NUMERIC(11, 8),
+          is_active BOOLEAN DEFAULT true,
+          last_seen_at TIMESTAMPTZ DEFAULT NOW(),
+          synced_at TIMESTAMPTZ DEFAULT NOW(),
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        );
+      `);
+      console.log("✅ Table created\n");
 
-      // Execute migration
-      await this.client.query(migrationSQL);
+      // Step 3: Create indexes
+      console.log("3️⃣ Creating indexes...");
+      await this.client.query(`
+        CREATE INDEX idx_tbo_cities_code ON tbo_cities(city_code);
+        CREATE INDEX idx_tbo_cities_name ON tbo_cities(city_name);
+        CREATE INDEX idx_tbo_cities_country ON tbo_cities(country_code);
+        CREATE INDEX idx_tbo_cities_type ON tbo_cities(type);
+        CREATE INDEX idx_tbo_cities_active ON tbo_cities(is_active);
+        CREATE INDEX idx_tbo_cities_code_country ON tbo_cities(city_code, country_code);
+      `);
+      console.log("✅ Indexes created\n");
+
+      // Step 4: Create FTS index
+      console.log("4️⃣ Creating full-text search index...");
+      await this.client.query(`
+        CREATE INDEX idx_tbo_cities_fts ON tbo_cities USING GIN (
+          to_tsvector('english', city_name || ' ' || COALESCE(country_name, ''))
+        );
+      `);
+      console.log("✅ FTS index created\n");
 
       console.log("✅ TBO Cities Cache migration completed successfully\n");
 
@@ -56,6 +90,7 @@ class TBOCitiesMigrationRunner {
       return true;
     } catch (error) {
       console.error("❌ Migration failed:", error.message);
+      if (error.detail) console.error("Detail:", error.detail);
       throw error;
     }
   }
@@ -75,7 +110,7 @@ class TBOCitiesMigrationRunner {
       if (tableResult.rows[0].table_exists) {
         console.log("✅ Table tbo_cities created successfully");
       } else {
-        console.warn("⚠️  Table tbo_cities not found");
+        console.warn("���️  Table tbo_cities not found");
         return false;
       }
 
