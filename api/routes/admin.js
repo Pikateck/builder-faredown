@@ -307,7 +307,7 @@ router.get(
  */
 router.get(
   "/reports",
-  requirePermission(PERMISSIONS.REPORTS_GENERATE),
+  requireAdmin,
   validateDateRange,
   async (req, res) => {
     try {
@@ -465,7 +465,7 @@ router.get(
  */
 router.get(
   "/audit",
-  requirePermission(PERMISSIONS.AUDIT_VIEW),
+  requireAdmin,
   validatePagination,
   validateDateRange,
   async (req, res) => {
@@ -521,7 +521,7 @@ router.get(
  */
 router.get(
   "/system",
-  requirePermission(PERMISSIONS.SYSTEM_CONFIG),
+  requireAdmin,
   async (req, res) => {
     try {
       const systemInfo = {
@@ -577,7 +577,7 @@ router.get(
  */
 router.post(
   "/backup",
-  requirePermission(PERMISSIONS.BACKUP_MANAGE),
+  requireAdmin,
   async (req, res) => {
     try {
       const { type = "full", description } = req.body;
@@ -662,7 +662,7 @@ router.get(
  */
 router.get(
   "/budget/alerts",
-  requirePermission(PERMISSIONS.PROMO_VIEW),
+  requireAdmin,
   async (req, res) => {
     try {
       const alerts = budgetMonitorService.getAlertHistory(req.query);
@@ -696,7 +696,7 @@ router.get(
  */
 router.post(
   "/budget/check/:promoId",
-  requirePermission(PERMISSIONS.PROMO_MANAGE),
+  requireAdmin,
   async (req, res) => {
     try {
       const { promoId } = req.params;
@@ -743,7 +743,7 @@ router.post(
  */
 router.put(
   "/budget/config",
-  requirePermission(PERMISSIONS.SYSTEM_CONFIG),
+  requireAdmin,
   async (req, res) => {
     try {
       const allowedFields = [
@@ -801,7 +801,7 @@ router.put(
  */
 router.get(
   "/budget/report",
-  requirePermission(PERMISSIONS.REPORTS_GENERATE),
+  requireAdmin,
   async (req, res) => {
     try {
       const report = await budgetMonitorService.generateDailyReport();
