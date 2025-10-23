@@ -1074,4 +1074,4 @@ function getFallbackFlightData(searchParams) {
     },
   ];
 }
-export default router;
+module.exports = router;
