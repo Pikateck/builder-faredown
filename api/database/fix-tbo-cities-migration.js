@@ -57,7 +57,7 @@ class TBOCitiesMigrationFix {
           updated_at TIMESTAMPTZ DEFAULT NOW()
         );
       `;
-      
+
       await this.client.query(createTableSQL);
       console.log("✅ Created tbo_cities table\n");
 
@@ -71,30 +71,30 @@ class TBOCitiesMigrationFix {
         CREATE INDEX idx_tbo_cities_active ON tbo_cities(is_active);
         CREATE INDEX idx_tbo_cities_code_country ON tbo_cities(city_code, country_code);
       `;
-      
+
       await this.client.query(indexSQL);
       console.log("✅ Created all indexes\n");
 
       // Step 4: Verify
       console.log("4️⃣ Verifying table...");
       const result = await this.client.query(
-        "SELECT table_name FROM information_schema.tables WHERE table_name = 'tbo_cities'"
+        "SELECT table_name FROM information_schema.tables WHERE table_name = 'tbo_cities'",
       );
-      
+
       if (result.rows.length > 0) {
         console.log("✅ tbo_cities table verified!\n");
-        
+
         // Show columns
         const columns = await this.client.query(
-          "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'tbo_cities' ORDER BY ordinal_position;"
+          "SELECT column_name, data_type FROM information_schema.columns WHERE table_name = 'tbo_cities' ORDER BY ordinal_position;",
         );
-        
+
         console.log("📋 Table columns:");
-        columns.rows.forEach(col => {
+        columns.rows.forEach((col) => {
           console.log(`   - ${col.column_name}: ${col.data_type}`);
         });
         console.log();
-        
+
         return true;
       } else {
         console.log("❌ Failed to create tbo_cities table");
@@ -112,7 +112,7 @@ class TBOCitiesMigrationFix {
       await this.connect();
       const success = await this.fixMigration();
       await this.disconnect();
-      
+
       if (success) {
         console.log("🎉 Migration fix completed successfully!");
         console.log("\nNext: Run the original migration to populate data:");
