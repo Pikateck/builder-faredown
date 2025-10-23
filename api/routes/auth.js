@@ -11,7 +11,7 @@ const {
   PERMISSIONS,
 } = require("../middleware/auth");
 
-const validate = require("../middleware/validation");
+const { validate } = require("../middleware/validation");
 
 /**
  * Authentication Routes
