@@ -3,10 +3,16 @@
  * Handles JWT token validation, user creation, and permission checks
  */
 
-const jwt = require("jsonwebtoken");
-const bcrypt = require("bcryptjs");
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
+
+// Import db dynamically to avoid circular dependency
+let db = null;
+const initDb = (dbInstance) => {
+  db = dbInstance;
+};
 
 // In-memory user storage (will be replaced with DB later)
 const users = new Map();
