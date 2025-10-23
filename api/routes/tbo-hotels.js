@@ -199,10 +199,39 @@ router.post("/search", async (req, res) => {
   const start = Date.now();
   try {
     const adapter = getTboAdapter();
-    const results = await adapter.searchHotels(req.body || {});
+    const TBOAdapter = require("../services/adapters/tboAdapter");
+    const { v4: uuidv4 } = require("uuid");
+
+    // Execute raw search
+    const rawResults = await adapter.searchHotels(req.body || {});
     const duration = Date.now() - start;
 
-    // Best-effort search_logs insert for TBO route
+    // Convert to UnifiedHotel format
+    const searchContext = {
+      destination: req.body.destination || req.body.City,
+      checkIn: req.body.checkIn || req.body.CheckIn,
+      checkOut: req.body.checkOut || req.body.CheckOut,
+      adults: Number(req.body.adults || req.body.Adults || 2),
+      children: Number(req.body.children || req.body.Children || 0),
+      currency: req.body.currency || req.body.Currency || "INR",
+    };
+
+    const unifiedResults = rawResults
+      .map((h) => TBOAdapter.toUnifiedHotel(h, searchContext))
+      .filter(Boolean);
+
+    // Persist snapshot (best-effort, fire-and-forget)
+    const searchId = uuidv4();
+    adapter
+      .persistSearchSnapshot(searchId, rawResults, searchContext)
+      .catch((e) => {
+        console.warn(
+          "TBO search snapshot persist failed (non-blocking):",
+          e.message,
+        );
+      });
+
+    // Log search (best-effort)
     try {
       const db = require("../database/connection");
       const b = req.body || {};
@@ -214,16 +243,21 @@ router.post("/search", async (req, res) => {
           b.destination || b.City || b.city || null,
           Number(b.adults || b.Adults || 0),
           Number(b.children || b.Children || 0),
-          Array.isArray(results) ? results.length : 0,
+          unifiedResults.length,
           duration,
-          "tbo",
+          "TBO",
         ],
       );
     } catch (logErr) {
       console.warn("search_logs insert skipped (tbo-hotels):", logErr.message);
     }
 
-    res.json({ success: true, data: results });
+    res.json({
+      success: true,
+      data: unifiedResults,
+      searchId,
+      via: "fixie",
+    });
   } catch (e) {
     res
       .status(statusFromErrorCode(e.code))
