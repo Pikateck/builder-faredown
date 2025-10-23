@@ -1,6 +1,6 @@
-import express from "express";
-import crypto from "crypto";
-import {
+const express = require("express");
+const crypto = require("crypto");
+const {
   generateToken,
   comparePassword,
   getUserByEmail,
@@ -9,10 +9,9 @@ import {
   createUser,
   authenticateToken,
   PERMISSIONS,
-} from "../middleware/auth.js";
-import validationExport from "../middleware/validation.js";
+} = require("../middleware/auth");
 
-const validate = validationExport.validate;
+const validate = require("../middleware/validation");
 
 /**
  * Authentication Routes
@@ -23,7 +22,7 @@ const router = express.Router();
 
 // Database will be injected if available
 let db = null;
-export const setDb = (database) => {
+const setDb = (database) => {
   db = database;
 };
 
