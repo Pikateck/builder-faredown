@@ -1,6 +1,6 @@
-import http from "k6/http";
-import { check, sleep } from "k6";
-import { Rate, Trend } from "k6/metrics";
+const http = require("k6/http");
+const { check, sleep } = require("k6");
+const { Rate, Trend } = require("k6/metrics");
 
 const errorRate = new Rate("errors");
 const sessionLatency = new Trend("session_latency");

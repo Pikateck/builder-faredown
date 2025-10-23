@@ -3,16 +3,16 @@
  * Focuses only on the new pricing and markup endpoints
  */
 
-import express from "express";
-import cors from "cors";
-import { Pool } from "pg";
-import dotenv from "dotenv";
+const express = require("express");
+const cors = require("cors");
+const { Pool } = require("pg");
+const dotenv = require("dotenv");
 
 dotenv.config();
 
 // Import pricing components
-import createPricingRoutes from "./routes/pricing.js";
-import { priceEcho, createDiffEndpoint } from "./middleware/priceEcho.js";
+const createPricingRoutes = require("./routes/pricing.js");
+const { priceEcho, createDiffEndpoint } = require("./middleware/priceEcho.js");
 
 const app = express();
 const PORT = process.env.PORT || 3002;
