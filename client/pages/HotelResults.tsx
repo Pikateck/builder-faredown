@@ -524,47 +524,17 @@ export default function HotelResults() {
         urlSearchParams.get("destination") ||
         "DXB";
 
-      const searchRequest = {
-        destination: destCode,
-        checkIn: departureDate
-          ? departureDate.toISOString()
-          : checkIn || new Date().toISOString(),
-        checkOut: returnDate
-          ? returnDate.toISOString()
-          : checkOut ||
-            new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString(),
-        rooms: parseInt(rooms) || 1,
-        adults: parseInt(adults) || 2,
-        children: parseInt(children) || 0,
-        currencyCode: selectedCurrency?.code || "INR",
-        page: pageToLoad,
-        pageSize: pageSizeRef.current,
-      };
+      console.log("🏨 Fetching TBO hotels only for:", destCode);
 
-      console.log("🏨 Searching hotels (paged)", searchRequest);
+      // Fetch ONLY from TBO (no Hotelbeds)
+      const tboHotels = await fetchTBOHotels(destCode);
 
-      // Fetch from both Hotelbeds and TBO in parallel
-      const [hbResults, tboResults] = await Promise.allSettled([
-        hotelsService.searchHotels(searchRequest),
-        fetchTBOHotels(destCode),
-      ]).then((results) => [
-        results[0].status === "fulfilled" ? results[0].value : [],
-        results[1].status === "fulfilled" ? results[1].value : [],
-      ]);
-
-      const transformed = transformHotelbedsData(hbResults);
-
-      // Merge TBO and Hotelbeds results
-      const mergedHotels = [...transformed, ...tboResults];
-
-      console.log(
-        `🏨 Merged results: ${transformed.length} Hotelbeds + ${tboResults.length} TBO = ${mergedHotels.length} total`,
-      );
+      console.log(`✅ TBO Results: ${tboHotels.length} hotels found`);
 
       if (append) {
         setHotels((prev) => {
-          const merged = [...prev, ...mergedHotels];
-          // Update bounds with merged data
+          const merged = [...prev, ...tboHotels];
+          // Update bounds with data
           const extract = (h: any) =>
             h.currentPrice || h.priceRange?.min || h.roomTypes?.[0]?.price || 0;
           const maxPrice = Math.max(
@@ -579,14 +549,14 @@ export default function HotelResults() {
         });
         setPage(pageToLoad);
       } else {
-        setHotels(mergedHotels);
+        setHotels(tboHotels);
         setPage(pageToLoad);
-        // Dynamic price bounds from dataset
+        // Dynamic price bounds from TBO dataset
         const extract = (h: any) =>
           h.currentPrice || h.priceRange?.min || h.roomTypes?.[0]?.price || 0;
         const maxPrice = Math.max(
           50000,
-          ...mergedHotels
+          ...tboHotels
             .map(extract)
             .filter((n: any) => typeof n === "number" && isFinite(n)),
         );
@@ -596,13 +566,13 @@ export default function HotelResults() {
       }
 
       setTotalResults((prev) =>
-        append ? prev + mergedHotels.length : mergedHotels.length,
+        append ? prev + tboHotels.length : tboHotels.length,
       );
 
-      const hasMoreNow = mergedHotels.length === pageSizeRef.current;
+      const hasMoreNow = tboHotels.length === pageSizeRef.current;
       setHasMore(hasMoreNow);
 
-      const hasLive = (append ? hotels : mergedHotels).some(
+      const hasLive = (append ? hotels : tboHotels).some(
         (h: any) => (h as any)?.isLiveData === true,
       );
       setIsLiveData(hasLive);
