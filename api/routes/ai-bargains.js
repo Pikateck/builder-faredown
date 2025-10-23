@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * AI Bargain Routes
  * Handles conversational bargaining logic with PostgreSQL persistence

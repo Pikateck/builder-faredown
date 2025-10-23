@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Updated Fixed Packages API Routes
  * Now uses proper foreign key relationships for destination filtering

@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * OAuth Authentication Routes
  * Handles Google, Facebook, and Apple social login

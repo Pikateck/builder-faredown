@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Admin Bookings API Routes
  * Database-backed routes for viewing and managing hotel bookings

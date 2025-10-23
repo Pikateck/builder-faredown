@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Bargain API v1 Routes
  * /api/bargain/v1/* endpoints for AI bargaining platform

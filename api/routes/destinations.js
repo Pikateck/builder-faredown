@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Destinations API Routes
  * Handles regions, countries, cities hierarchy for packages

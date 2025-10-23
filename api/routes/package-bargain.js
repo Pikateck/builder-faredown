@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Package Bargain API Routes
  * Integrates packages with the existing bargain system

@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Bargain Hold Management API
  * Handles price holds for negotiated bargain prices

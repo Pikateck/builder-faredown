@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Profile Management API Routes
  * Comprehensive endpoints for Booking.com-style profile system

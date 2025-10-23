@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Comprehensive Destinations API Routes
  * Implements the full specification with hierarchical regions, countries, cities

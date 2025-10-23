@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Fixed Packages API Routes
  * Handles all public package operations - listing, details, departures, bookings

@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Enhanced Health Check Route
  * Provides detailed information about API server status

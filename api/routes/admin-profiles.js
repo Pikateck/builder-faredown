@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Admin Profile Management Routes
  * Admin endpoints for managing customer profiles, travelers, and bookings

@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 
 const { body, validationResult, query } = require("express-validator");
 const { pool } = require("../database/connection");

@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Admin Reports API Routes
  * Provides comprehensive booking and pricing reports for admin dashboard

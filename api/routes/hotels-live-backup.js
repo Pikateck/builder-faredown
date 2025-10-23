@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Live Hotel Search Routes (bypasses fallback for testing)
  */

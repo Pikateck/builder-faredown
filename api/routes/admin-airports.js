@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Admin Airports API Routes
  * Provides airport master data for admin dropdowns and forms

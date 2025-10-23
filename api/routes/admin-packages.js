@@ -1,4 +1,4 @@
-﻿import express from "express";
+﻿const express = require("express");
 /**
  * Admin Packages API Routes
  * Handles all admin operations for packages - CRUD, bulk operations, reporting
