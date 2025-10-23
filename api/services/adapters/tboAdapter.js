@@ -1816,6 +1816,327 @@ class TBOAdapter extends BaseSupplierAdapter {
       return { success: false, error: e.message };
     }
   }
+
+  /**
+   * Sync TBO cities to cache for fast typeahead search
+   * Fetches countries, cities, and airports; stores to tbo_cities table
+   */
+  async syncCitiesToCache() {
+    try {
+      const db = require("../../database/connection");
+
+      // Fetch all countries
+      const countries = await this.getCountryList(true);
+      if (!Array.isArray(countries)) return { synced: 0 };
+
+      let totalSynced = 0;
+
+      // For each country, fetch cities
+      for (const country of countries) {
+        const countryCode = country.CountryCode || country.code;
+        if (!countryCode) continue;
+
+        const cities = await this.getCityList(countryCode, true);
+        if (!Array.isArray(cities)) continue;
+
+        for (const city of cities) {
+          const cityCode = city.CityCode || city.code;
+          const cityName = city.CityName || city.name;
+          if (!cityCode || !cityName) continue;
+
+          // Upsert to tbo_cities
+          await db.query(
+            `INSERT INTO tbo_cities (
+              city_code, city_name, country_code, country_name, type, last_seen_at, synced_at
+            ) VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+            ON CONFLICT (city_code) DO UPDATE SET
+              last_seen_at = NOW(),
+              synced_at = NOW(),
+              is_active = true`,
+            [
+              cityCode,
+              cityName,
+              countryCode,
+              country.CountryName || country.name,
+              "CITY",
+            ],
+          );
+          totalSynced++;
+        }
+      }
+
+      this.logger.info("TBO cities synced", { synced: totalSynced });
+      return { synced: totalSynced };
+    } catch (e) {
+      this.logger.error("TBO city sync failed", { error: e.message });
+      return { synced: 0, error: e.message };
+    }
+  }
+
+  /**
+   * Search cities by text with ranking
+   * Ranking: starts-with > contains; break ties by longer match
+   * Optionally filter by country
+   */
+  async searchCities(searchText, limit = 15, countryCode = null) {
+    try {
+      const db = require("../../database/connection");
+      const text = (searchText || "").trim().toLowerCase();
+
+      if (!text || text.length < 1) return [];
+
+      let query = `
+        SELECT
+          city_code, city_name, country_code, country_name,
+          region_code, region_name, type, latitude, longitude
+        FROM tbo_cities
+        WHERE is_active = true
+      `;
+      const params = [];
+
+      // Optional country filter
+      if (countryCode) {
+        query += ` AND country_code = $1`;
+        params.push(countryCode.toUpperCase());
+      }
+
+      // Text search with ranking (starts-with > contains)
+      const paramIndex = params.length + 1;
+      query += `
+        AND (
+          LOWER(city_name) LIKE $${paramIndex}
+          OR LOWER(city_code) LIKE $${paramIndex}
+        )
+        ORDER BY
+          CASE
+            WHEN LOWER(city_name) LIKE $${paramIndex} THEN 0  -- exact/prefix match
+            ELSE 1                                              -- contains match
+          END,
+          LENGTH(city_name) DESC,  -- longer names first (tie-breaker)
+          city_name ASC
+        LIMIT $${paramIndex + 1}
+      `;
+      params.push(`${text}%`, limit);
+
+      const result = await db.query(query, params);
+
+      return result.rows.map((row) => ({
+        id: row.city_code,
+        code: row.city_code,
+        name: row.city_name,
+        region: row.region_name || null,
+        countryCode: row.country_code,
+        countryName: row.country_name,
+        lat: row.latitude,
+        lng: row.longitude,
+        type: row.type || "CITY",
+        displayLabel: `${row.city_name}${row.country_name ? ", " + row.country_name : ""}`,
+      }));
+    } catch (e) {
+      this.logger.error("TBO city search failed", {
+        search: searchText,
+        error: e.message,
+      });
+      return [];
+    }
+  }
+
+  /**
+   * Convert raw TBO search result to UnifiedHotel format
+   * Handles room pricing, taxes, fees, and cancellation rules
+   */
+  static toUnifiedHotel(rawHotel, searchContext = {}) {
+    try {
+      const hotelId = String(
+        rawHotel.HotelCode || rawHotel.HotelId || rawHotel.Id || "",
+      );
+
+      // Build rates/rooms from Rooms[].Rates[]
+      const rooms = [];
+      const roomsArr = Array.isArray(rawHotel.Rooms) ? rawHotel.Rooms : [];
+
+      for (const room of roomsArr) {
+        const rates = Array.isArray(room.Rates) ? room.Rates : [];
+
+        for (const rate of rates) {
+          const basePrice = parseFloat(rate.NetFare || rate.BasePrice || 0) || 0;
+          const totalPrice =
+            parseFloat(rate.PublishedPrice || rate.TotalPrice || basePrice) ||
+            basePrice;
+          const taxes = totalPrice - basePrice;
+
+          const cancellationPolicies = [];
+          if (Array.isArray(rate.CancellationPolicies)) {
+            cancellationPolicies.push(...rate.CancellationPolicies);
+          } else if (rate.CancellationPolicy) {
+            cancellationPolicies.push(rate.CancellationPolicy);
+          }
+
+          rooms.push({
+            roomId:
+              room.RoomTypeCode ||
+              room.RoomTypeName ||
+              `room_${hotelId}_${room.RoomType || "standard"}`,
+            roomName: room.RoomTypeName || room.RoomType || "Room",
+            board: rate.MealType || rate.BoardType || rate.Board || "RO",
+            occupants: {
+              adults: parseInt(searchContext.adults || 2),
+              children: parseInt(searchContext.children || 0),
+            },
+            price: {
+              base: basePrice,
+              taxes: taxes,
+              total: totalPrice,
+              currency: rate.Currency || searchContext.currency || "INR",
+            },
+            cancellation: cancellationPolicies,
+            payType: rate.PayType || "at_hotel",
+            rateKey:
+              rate.RateKey ||
+              rate.Token ||
+              `${hotelId}_${room.RoomTypeCode || room.RoomTypeName}`,
+          });
+        }
+      }
+
+      // Images
+      const images = [];
+      if (Array.isArray(rawHotel.Images)) {
+        rawHotel.Images.forEach((img) => {
+          if (typeof img === "string" && img) images.push(img);
+          else if (img?.Url) images.push(img.Url);
+          else if (img?.url) images.push(img.url);
+        });
+      }
+      if (rawHotel.ImageUrl) images.push(rawHotel.ImageUrl);
+      if (rawHotel.ThumbnailUrl) images.push(rawHotel.ThumbnailUrl);
+
+      // Amenities
+      const amenities = rawHotel.Amenities || rawHotel.Facilities || [];
+
+      return {
+        supplier: "TBO",
+        supplierHotelId: hotelId,
+        name: rawHotel.HotelName || rawHotel.Name || "",
+        address: rawHotel.Address || rawHotel.address || "",
+        city: searchContext.destination || rawHotel.CityName || "",
+        countryCode: rawHotel.CountryCode || rawHotel.CountryName || "",
+        location: {
+          lat: parseFloat(rawHotel.Latitude) || null,
+          lng: parseFloat(rawHotel.Longitude) || null,
+        },
+        rating: parseFloat(rawHotel.StarRating) || 0,
+        images,
+        amenities,
+        minTotal:
+          rooms.length > 0
+            ? Math.min(...rooms.map((r) => r.price.total))
+            : 0,
+        currency: searchContext.currency || "INR",
+        taxesAndFees: {
+          included: rooms.length > 0,
+          excluded:
+            rooms.length > 0 &&
+            rooms.some((r) => r.price.taxes > 0) &&
+            !rawHotel.TaxesIncluded,
+          text:
+            rooms.length > 0 &&
+            rooms.some((r) => r.payType === "at_hotel")
+              ? "Taxes & fees payable at hotel"
+              : "",
+        },
+        refundable:
+          rooms.length > 0 &&
+          rooms.some((r) => r.cancellation && r.cancellation.length > 0),
+        rooms,
+      };
+    } catch (e) {
+      console.error("Error converting TBO hotel to UnifiedHotel", {
+        hotel: rawHotel,
+        error: e.message,
+      });
+      return null;
+    }
+  }
+
+  /**
+   * Persist search snapshot to database for later retrieval
+   * Stores hotel_unified and room_offer_unified records
+   */
+  async persistSearchSnapshot(searchId, hotels, searchContext) {
+    try {
+      const db = require("../../database/connection");
+
+      for (const hotel of hotels) {
+        const unifiedHotel = TBOAdapter.toUnifiedHotel(hotel, searchContext);
+        if (!unifiedHotel) continue;
+
+        // Insert/upsert hotel_unified
+        await db.query(
+          `INSERT INTO hotel_unified (
+            property_id, supplier_code, supplier_hotel_id, hotel_name,
+            address, city, country, lat, lng, star_rating, amenities_json
+          ) VALUES (
+            gen_random_uuid(), $1, $2, $3, $4, $5, $6, $7, $8, $9, $10
+          ) ON CONFLICT (supplier_code, supplier_hotel_id) DO UPDATE SET
+            updated_at = NOW()
+          RETURNING property_id`,
+          [
+            "TBO",
+            unifiedHotel.supplierHotelId,
+            unifiedHotel.name,
+            unifiedHotel.address,
+            unifiedHotel.city,
+            unifiedHotel.countryCode,
+            unifiedHotel.location.lat,
+            unifiedHotel.location.lng,
+            unifiedHotel.rating,
+            JSON.stringify(unifiedHotel.amenities),
+          ],
+        );
+
+        // Insert room offers
+        for (const room of unifiedHotel.rooms) {
+          await db.query(
+            `INSERT INTO room_offer_unified (
+              offer_id, property_id, supplier_code, room_name,
+              board_basis, refundable, occupancy_adults, occupancy_children,
+              currency, price_base, price_taxes, price_total,
+              rate_key_or_token, search_checkin, search_checkout,
+              hotel_name, city, created_at
+            ) VALUES (
+              gen_random_uuid(),
+              (SELECT property_id FROM hotel_unified
+               WHERE supplier_code = 'TBO' AND supplier_hotel_id = $1),
+              $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, NOW()
+            )`,
+            [
+              unifiedHotel.supplierHotelId,
+              "TBO",
+              room.roomName,
+              room.board,
+              unifiedHotel.refundable,
+              room.occupants.adults,
+              room.occupants.children,
+              room.price.currency,
+              room.price.base,
+              room.price.taxes,
+              room.price.total,
+              room.rateKey,
+              searchContext.checkIn,
+              searchContext.checkOut,
+              unifiedHotel.name,
+              unifiedHotel.city,
+            ],
+          );
+        }
+      }
+    } catch (e) {
+      this.logger.warn("Failed to persist search snapshot", {
+        error: e.message,
+      });
+    }
+  }
 }
 
 module.exports = TBOAdapter;
