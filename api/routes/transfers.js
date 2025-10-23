@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Transfers API Routes
  * Handles all transfer-related API endpoints following Hotels/Sightseeing pattern
@@ -757,4 +757,4 @@ router.use((error, req, res, next) => {
     timestamp: new Date().toISOString(),
   });
 });
-export default router;
+module.exports = router;

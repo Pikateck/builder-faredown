@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Destinations API v2
  * Uses materialized view and search function for fast, comprehensive search
@@ -567,4 +567,4 @@ router.post("/cache/clear", (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

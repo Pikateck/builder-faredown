@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Feature Flags API Routes
  * For AI Chat Analytics and Bargain Engine Feature Control
@@ -223,4 +223,4 @@ router.get("/status", (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

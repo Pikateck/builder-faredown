@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Transfers Bargain API - AI-Powered Negotiation for Transfer Services
  * Handles bargain sessions specifically for transfers with real pricing data
@@ -553,4 +553,4 @@ router.get("/health", (req, res) => {
     timestamp: new Date().toISOString(),
   });
 });
-export default router;
+module.exports = router;

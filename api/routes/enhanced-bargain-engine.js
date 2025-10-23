@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Enhanced Bargain Engine API
  * Implements comprehensive bargain logic with proper formula and round-specific messaging
@@ -595,4 +595,4 @@ router.post("/cleanup", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;

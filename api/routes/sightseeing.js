@@ -1,4 +1,4 @@
-﻿import express from "express";
+const express = require("express");
 /**
  * Sightseeing API Routes - Complete CRUD operations for activities and bookings
  * Integrates with Hotelbeds Activities API and internal markup/promo systems
@@ -1111,4 +1111,4 @@ router.get("/voucher/verify/:bookingRef", async (req, res) => {
     });
   }
 });
-export default router;
+module.exports = router;
