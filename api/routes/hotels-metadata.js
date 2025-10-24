@@ -43,11 +43,11 @@ router.get("/", async (req, res) => {
 
     // Query DB for hotels in this city
     const hotelsRes = await db.query(
-      `SELECT id, supplier_id, name, address, lat, lng, stars, 
-              created_at, updated_at 
-       FROM tbo_hotels 
-       WHERE city_supplier_id = $1 
-       ORDER BY popularity DESC, name ASC 
+      `SELECT id, supplier_id, name, address, lat, lng, stars,
+              created_at, updated_at
+       FROM tbo_hotels
+       WHERE city_code = $1
+       ORDER BY popularity DESC, name ASC
        LIMIT 50`,
       [cityId],
     );
