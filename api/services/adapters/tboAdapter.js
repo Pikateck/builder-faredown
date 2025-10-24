@@ -12,6 +12,17 @@ const { agentFor, proxyMode } = require("../../lib/proxy");
 const HotelNormalizer = require("../normalization/hotelNormalizer");
 const HotelDedupAndMergeUnified = require("../merging/hotelDedupAndMergeUnified");
 
+// Explicit proxy agent setup for TBO calls
+let HttpsProxyAgent, HttpProxyAgent;
+try {
+  const HttpsProxyAgentModule = require("https-proxy-agent");
+  const HttpProxyAgentModule = require("http-proxy-agent");
+  HttpsProxyAgent = HttpsProxyAgentModule.HttpsProxyAgent;
+  HttpProxyAgent = HttpProxyAgentModule.HttpProxyAgent;
+} catch (e) {
+  console.warn("⚠️ Proxy agent modules not loaded:", e.message);
+}
+
 class TBOAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
     const searchUrlRaw =
