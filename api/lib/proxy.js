@@ -9,6 +9,12 @@ const FIXIE_URL = process.env.FIXIE_URL || "";
 const USE_SUPPLIER_PROXY =
   String(process.env.USE_SUPPLIER_PROXY || "false") === "true";
 
+console.log("🔌 PROXY CONFIGURATION:");
+console.log("  USE_SUPPLIER_PROXY:", USE_SUPPLIER_PROXY);
+console.log("  FIXIE_URL:", FIXIE_URL ? "✅ SET" : "❌ NOT SET");
+console.log("  HttpsProxyAgentCtor:", HttpsProxyAgentCtor ? "✅ LOADED" : "❌ NOT LOADED");
+console.log("  HttpProxyAgentCtor:", HttpProxyAgentCtor ? "✅ LOADED" : "❌ NOT LOADED");
+
 let agents = { https: undefined, http: undefined };
 if (
   USE_SUPPLIER_PROXY &&
@@ -19,7 +25,12 @@ if (
   try {
     agents.https = new HttpsProxyAgentCtor(FIXIE_URL);
     agents.http = new HttpProxyAgentCtor(FIXIE_URL);
-  } catch (_) {}
+    console.log("✅ Proxy agents initialized successfully");
+  } catch (err) {
+    console.log("❌ Proxy agent initialization failed:", err.message);
+  }
+} else {
+  console.log("⚠️ Proxy NOT configured (missing dependencies or env vars)");
 }
 
 function agentFor(url) {
