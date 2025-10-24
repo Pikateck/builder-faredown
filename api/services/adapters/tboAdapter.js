@@ -48,6 +48,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       hotelRoomEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelRoom",
       hotelPreBookEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/PreBook",
       hotelBookEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/Book",
+      hotelGenerateVoucherEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/GenerateVoucher",
       // Credentials
       hotelClientId: "ApiIntegrationNew",
       hotelUserId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_HOTEL_USERNAME || process.env.TBO_USERNAME,
