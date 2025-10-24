@@ -514,13 +514,31 @@ export default function HotelResults() {
           statusText: metadataResponse.statusText,
           body: errorText.slice(0, 500),
         });
-        setError(
-          `Hotel service error: ${metadataResponse.status} ${metadataResponse.statusText}`,
-        );
+        // Provide user-friendly error message for supplier issues
+        const userMessage =
+          metadataResponse.status >= 500
+            ? "Live rates temporarily unavailable from supplier. Please retry or try different dates."
+            : `Hotel service error: ${metadataResponse.status}. Please try again.`;
+        setError(userMessage);
         return [];
       }
 
       const metadataData = await metadataResponse.json();
+
+      // Check if TBO returned an error status
+      if (
+        metadataData.tboStatus?.Code &&
+        metadataData.tboStatus.Code !== 1
+      ) {
+        console.warn("⚠️ TBO API returned error status", {
+          statusCode: metadataData.tboStatus.Code,
+          description: metadataData.tboStatus.Description,
+        });
+        setError(
+          "Live rates temporarily unavailable from supplier. Please retry or try different dates.",
+        );
+        return [];
+      }
 
       if (!metadataData.hotels || metadataData.hotels.length === 0) {
         console.warn("⚠️ No metadata hotels found from API");
