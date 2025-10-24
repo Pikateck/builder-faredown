@@ -2033,7 +2033,9 @@ class TBOAdapter extends BaseSupplierAdapter {
         }
       }
 
-      this.logger.info("Top cities seeded successfully", { count: TOP_CITIES.length });
+      this.logger.info("Top cities seeded successfully", {
+        count: TOP_CITIES.length,
+      });
     } catch (e) {
       this.logger.error("Failed to seed top cities:", e.message);
     }
@@ -2056,7 +2058,9 @@ class TBOAdapter extends BaseSupplierAdapter {
         `SELECT COUNT(*) as count FROM tbo_cities WHERE is_active = true`,
       );
       if (countResult.rows[0].count === 0) {
-        this.logger.info("TBO cities table is empty, seeding with top destinations");
+        this.logger.info(
+          "TBO cities table is empty, seeding with top destinations",
+        );
         await this.seedTopCities();
       }
 
