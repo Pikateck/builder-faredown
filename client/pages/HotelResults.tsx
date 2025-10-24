@@ -2000,15 +2000,11 @@ export default function HotelResults() {
               }
             >
               {loading ? (
-                <div className="text-center py-8 sm:py-12 px-4">
-                  <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#003580] mx-auto"></div>
-                  <p className="text-gray-600 text-sm sm:text-base mt-4">
-                    Searching hotels...
-                  </p>
-                  <p className="text-gray-500 text-xs mt-2">
-                    Getting real-time availability and pricing
-                  </p>
-                </div>
+                <>
+                  {[...Array(6)].map((_, i) => (
+                    <HotelCardSkeleton key={`skeleton-${i}`} />
+                  ))}
+                </>
               ) : error ? (
                 <div className="text-center py-8 sm:py-12 px-4">
                   <div className="text-red-600 mb-4">
