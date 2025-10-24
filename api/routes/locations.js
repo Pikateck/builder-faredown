@@ -380,7 +380,7 @@ router.get("/stats", async (req, res) => {
 
 /**
  * GET /api/locations/sync-status
- * Check if sync is needed and trigger auto-sync if data is empty
+ * Check if sync is needed and trigger sync if data is empty
  */
 router.get("/sync-status", async (req, res) => {
   try {
@@ -390,23 +390,22 @@ router.get("/sync-status", async (req, res) => {
     const cityCount = parseInt(citiesResult.rows[0]?.count || 0);
 
     if (cityCount === 0) {
-      // Auto-trigger sync if no data
-      console.log("🔄 Auto-triggering TBO locations sync (no cities found)...");
-      const { syncTboLocations } = require("../jobs/tboSyncLocations.js");
+      console.log("🔄 Auto-triggering TBO top destinations sync (no cities found)...");
+      const { syncTopDestinations } = require("../jobs/tboSyncTopDestinations.js");
 
       // Fire-and-forget async sync
-      syncTboLocations()
+      syncTopDestinations()
         .then((result) => {
-          console.log("✅ Auto-sync completed:", result);
+          console.log("✅ Top destinations sync completed:", result);
         })
         .catch((error) => {
-          console.error("❌ Auto-sync failed:", error.message);
+          console.warn("⚠️  Top destinations sync failed:", error.message);
         });
 
       return res.json({
         synced: false,
         syncing: true,
-        message: "Data is empty, auto-sync triggered in background",
+        message: "Seeding top destinations in background",
         cityCount: 0,
       });
     }
