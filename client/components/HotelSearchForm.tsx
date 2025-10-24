@@ -137,7 +137,7 @@ export function HotelSearchForm({
           );
           if (response.ok) {
             const data = await response.json();
-            if (data.success && Array.isArray(data.data)) {
+            if (data.success && Array.isArray(data.data) && data.data.length > 0) {
               // Map TBO cities to SearchResult format
               const cities = data.data.map((city: any) => ({
                 id: city.code,
@@ -149,7 +149,15 @@ export function HotelSearchForm({
                 rating: undefined,
               }));
               setSearchResults(cities);
+            } else {
+              // Fallback to local search if API returns empty results
+              const results = searchHotels(inputValue);
+              setSearchResults(results);
             }
+          } else {
+            // Fallback to local search if API fails
+            const results = searchHotels(inputValue);
+            setSearchResults(results);
           }
         } catch (error) {
           console.warn("Failed to fetch TBO cities:", error);
