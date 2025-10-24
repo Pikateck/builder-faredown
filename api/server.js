@@ -82,6 +82,8 @@ const adminSystemStatusRoutes = require("./routes/admin-system-status.js");
 const adminSystemMonitorHistoryRoutes = require("./routes/admin-system-monitor-history.js");
 const adminSuppliersRoutes = require("./routes/admin-suppliers.js");
 const hotelsMultiSupplierRoutes = require("./routes/hotels-multi-supplier.js");
+const locationsRoutes = require("./routes/locations.js");
+const adminTboRoutes = require("./routes/admin-tbo.js");
 
 // Middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth.js");
