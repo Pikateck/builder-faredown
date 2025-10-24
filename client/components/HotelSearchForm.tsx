@@ -137,7 +137,11 @@ export function HotelSearchForm({
           );
           if (response.ok) {
             const data = await response.json();
-            if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+            if (
+              data.success &&
+              Array.isArray(data.data) &&
+              data.data.length > 0
+            ) {
               // Map TBO cities API results to SearchResult format
               const results = data.data.map((item: any) => ({
                 id: item.code,
