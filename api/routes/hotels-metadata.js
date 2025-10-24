@@ -177,7 +177,7 @@ const MOCK_HOTELS = {
       name: "Taj Palace Mumbai",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1568084308940-d50b8e6655ec?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Pool", "Spa", "Fine Dining", "Concierge"],
       price: 350,
@@ -189,7 +189,7 @@ const MOCK_HOTELS = {
       name: "Oberoi Mumbai",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Pool", "Spa", "Restaurant"],
       price: 380,
@@ -203,7 +203,7 @@ const MOCK_HOTELS = {
       name: "ITC Delhi Grand",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1570129477492-45ec003e2e7f?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Pool", "Spa", "Restaurant"],
       price: 320,
@@ -215,7 +215,7 @@ const MOCK_HOTELS = {
       name: "Hilton New Delhi",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Pool", "Restaurant", "Gym"],
       price: 300,
@@ -229,7 +229,7 @@ const MOCK_HOTELS = {
       name: "Marina Bay Sands",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Pool", "Spa", "Fine Dining"],
       price: 400,
@@ -243,7 +243,7 @@ const MOCK_HOTELS = {
       name: "Hotel Ritz Paris",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1570129477492-45ec003e2e7f?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1551632786-de41ec4a5fcd?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Spa", "Fine Dining", "Concierge"],
       price: 850,
@@ -255,7 +255,7 @@ const MOCK_HOTELS = {
       name: "Le Louvre Paris",
       starRating: 4,
       images: [
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Restaurant", "Bar"],
       price: 450,
@@ -269,7 +269,7 @@ const MOCK_HOTELS = {
       name: "The Savoy London",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1520250497591-ec2413095a27?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Spa", "River View", "Fine Dining"],
       price: 800,
@@ -283,7 +283,7 @@ const MOCK_HOTELS = {
       name: "The Plaza New York",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1570129477492-45ec003e2e7f?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Spa", "Rooftop Bar", "Fine Dining"],
       price: 750,
@@ -297,7 +297,7 @@ const MOCK_HOTELS = {
       name: "Emirates Palace Abu Dhabi",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1576675784246-fb3fc6f95f98?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Private Beach", "Spa", "Fine Dining"],
       price: 550,
