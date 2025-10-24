@@ -118,6 +118,7 @@ function buildSearchQuery(type, searchText, limit) {
 
 /**
  * GET /api/locations/search
+ * Hybrid caching: Redis → DB → Lazy TBO Sync
  * Query params:
  *   - q (required): search text
  *   - type (optional): "all" | "city" | "hotel" | "country" (default: "all")
@@ -129,7 +130,9 @@ function buildSearchQuery(type, searchText, limit) {
  *       { kind: "city", id: "1", name: "Paris", country_id: "250" },
  *       { kind: "hotel", id: "123", name: "Hotel Paris", city_id: "1" },
  *       ...
- *     ]
+ *     ],
+ *     cached: boolean,
+ *     syncing: boolean (if lazy sync triggered)
  *   }
  */
 router.get("/search", async (req, res) => {
@@ -140,53 +143,37 @@ router.get("/search", async (req, res) => {
 
     // Validation
     if (!qtext || qtext.length < 1) {
-      return res.json({ items: [] });
+      return res.json({ items: [], cached: false });
     }
 
     if (qtext.length < 2) {
-      return res.json({ items: [] });
+      return res.json({ items: [], cached: false });
     }
 
-    // Check if tables have data, auto-sync if empty
-    const citiesCountResult = await db.query(
-      "SELECT COUNT(*) as count FROM tbo_cities",
-    );
-    const citiesCount = parseInt(citiesCountResult.rows[0]?.count || 0);
+    const normalized = redis.normalize(qtext);
+    const cacheKey = `loc:search:${normalized}:${type}:${limit}`;
 
-    if (citiesCount === 0) {
-      console.log("⚠️  No cities data found, auto-triggering sync...");
-      const { syncTboLocations } = require("../jobs/tboSyncLocations.js");
-
-      // Fire-and-forget async sync
-      syncTboLocations()
-        .then((result) => {
-          console.log("✅ Background sync completed:", result);
-        })
-        .catch((error) => {
-          console.warn(
-            "⚠️  Background sync failed (search will proceed):",
-            error.message,
-          );
-        });
-
-      // Return a message to the user about syncing
+    // STEP 1: Check Redis cache first (< 10ms)
+    console.log(`🔍 Redis cache check for: ${cacheKey}`);
+    const cachedResults = await redis.getJSON(cacheKey);
+    if (cachedResults) {
+      console.log(`✅ Cache hit for "${qtext}" (${cachedResults.items.length} results)`);
       return res.json({
-        items: [],
-        count: 0,
-        query: qtext,
-        message:
-          "Sync in progress - data will be available shortly. Please try again in a moment.",
-        syncing: true,
+        ...cachedResults,
+        cached: true,
+        source: "redis",
       });
     }
 
-    // Determine which types to search
+    console.log(`❌ Cache miss for "${qtext}", checking DB...`);
+
+    // STEP 2: Determine which types to search
     const typesToSearch = [];
     if (type === "all" || type === "city") typesToSearch.push("city");
     if (type === "all" || type === "hotel") typesToSearch.push("hotel");
     if (type === "all" || type === "country") typesToSearch.push("country");
 
-    // Execute searches in parallel
+    // STEP 3: Query database in parallel
     const promises = typesToSearch.map(async (t) => {
       const query = buildSearchQuery(t, qtext, limit);
       if (!query) return [];
@@ -203,11 +190,42 @@ router.get("/search", async (req, res) => {
     const results = await Promise.all(promises);
     const items = results.flat();
 
+    // STEP 4: Check if we have results
+    if (items.length > 0) {
+      // Cache and return results
+      console.log(`✅ DB hit for "${qtext}" (${items.length} results)`);
+      const responseData = {
+        items,
+        count: items.length,
+        query: qtext,
+        types: typesToSearch,
+      };
+      await redis.setJSON(cacheKey, responseData, REDIS_TTL);
+
+      return res.json({
+        ...responseData,
+        cached: false,
+        source: "database",
+      });
+    }
+
+    // STEP 5: No results in DB, trigger lazy sync for this city
+    console.log(`⚠️  No results in DB for "${qtext}", triggering lazy sync...`);
+
+    // Fire-and-forget lazy sync (city-specific)
+    queueTargetedCityFetch(qtext).catch((e) => {
+      console.warn(`Lazy sync failed for "${qtext}":`, e.message);
+    });
+
     res.json({
-      items,
-      count: items.length,
+      items: [],
+      count: 0,
       query: qtext,
       types: typesToSearch,
+      cached: false,
+      source: "none",
+      syncing: true,
+      message: `Fetching "${qtext}" from TBO in background. Please retry in a moment.`,
     });
   } catch (error) {
     console.error("Locations search error:", error.message);
@@ -217,6 +235,114 @@ router.get("/search", async (req, res) => {
     });
   }
 });
+
+/**
+ * Queue a targeted city fetch from TBO (async, non-blocking)
+ * Fetches city metadata and hotels, stores in DB, warms cache
+ */
+async function queueTargetedCityFetch(cityName) {
+  try {
+    const adapter = require("../services/adapters/tboAdapter.js").getTboAdapter?.()
+      || require("../services/adapters/tboAdapter.js");
+
+    if (!adapter || typeof adapter.getCityList !== "function") {
+      console.warn("TBO adapter not available for targeted fetch");
+      return;
+    }
+
+    // Get countries from DB
+    const countriesRes = await db.query(
+      "SELECT supplier_id FROM tbo_countries LIMIT 100",
+    );
+    const countries = countriesRes.rows || [];
+
+    if (countries.length === 0) {
+      console.warn(
+        `No countries in DB, cannot fetch cities for "${cityName}"`,
+      );
+      return;
+    }
+
+    console.log(
+      `🔄 Fetching cities for "${cityName}" from ${countries.length} countries...`,
+    );
+
+    const normalized = redis.normalize(cityName);
+    let found = false;
+
+    for (const country of countries) {
+      try {
+        const cities = await adapter.getCityList(country.supplier_id, true);
+        if (!Array.isArray(cities)) continue;
+
+        for (const city of cities) {
+          const cityName_tbo = city.CityName || city.name;
+          const cityCode = city.CityCode || city.code;
+
+          if (!cityName_tbo || !cityCode) continue;
+
+          const normalizedCity = redis.normalize(cityName_tbo);
+
+          if (normalizedCity.includes(normalized) || normalized.includes(normalizedCity)) {
+            // Match found! Insert into DB
+            await db.query(
+              `INSERT INTO tbo_cities (supplier_id, country_supplier_id, name, normalized_name, lat, lng, popularity, created_at, updated_at)
+               VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+               ON CONFLICT (supplier_id) DO UPDATE SET updated_at = NOW()`,
+              [
+                cityCode,
+                country.supplier_id,
+                cityName_tbo,
+                normalizedCity,
+                city.Latitude || null,
+                city.Longitude || null,
+                0,
+              ],
+            );
+
+            // Fetch hotels for this city
+            try {
+              const hotelCodes = await adapter.getHotelCodes(cityCode, true);
+              if (Array.isArray(hotelCodes)) {
+                for (const hotelCode of hotelCodes) {
+                  const hotelId = typeof hotelCode === "string" ? hotelCode : hotelCode.HotelCode || hotelCode.code;
+                  if (!hotelId) continue;
+
+                  // Insert hotel placeholder
+                  await db.query(
+                    `INSERT INTO tbo_hotels (supplier_id, city_supplier_id, country_supplier_id, name, normalized_name, created_at, updated_at)
+                     VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
+                     ON CONFLICT (supplier_id) DO UPDATE SET updated_at = NOW()`,
+                    [hotelId, cityCode, country.supplier_id, `Hotel ${cityCode}`, redis.normalize(`Hotel ${cityCode}`)],
+                  );
+                }
+              }
+            } catch (e) {
+              console.warn(`Hotel fetch failed for city ${cityCode}:`, e.message);
+            }
+
+            found = true;
+            console.log(`✅ Lazy sync completed for "${cityName}"`);
+            break;
+          }
+        }
+
+        if (found) break;
+      } catch (e) {
+        console.warn(
+          `Failed to fetch cities for country ${country.supplier_id}:`,
+          e.message,
+        );
+      }
+    }
+
+    if (!found) {
+      console.warn(`City "${cityName}" not found in TBO`);
+    }
+  } catch (error) {
+    console.error("Targeted city fetch error:", error.message);
+  }
+}
 
 /**
  * GET /api/locations/stats
