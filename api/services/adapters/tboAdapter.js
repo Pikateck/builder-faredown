@@ -971,7 +971,9 @@ class TBOAdapter extends BaseSupplierAdapter {
             status: response.data?.Status,
             error: response.data?.Error,
             errorMessage: response.data?.Error?.ErrorMessage,
-            responseData: JSON.stringify(response.data).substring(0, 300),
+            errorCode: response.data?.Error?.ErrorCode,
+            responseData: JSON.stringify(response.data),
+            sentPayload: JSON.stringify(authRequest),
           });
 
           lastErr = new Error(
