@@ -1299,7 +1299,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         hasTokenId: !!tokenId,
       });
 
-      // Log the exact payload being sent (for debugging)
+      // Log the exact payload being sent (NEVER log Password or tokens)
       this.logger.info("📤 TBO Hotel Search Request", {
         endpoint: this.config.hotelSearchEndpoint,
         clientId: payload.ClientId,
@@ -1312,6 +1312,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         preferredCurrency: payload.PreferredCurrency,
         endUserIp: payload.EndUserIp,
         via: tboVia(),
+        // NEVER log: password, tokenId
       });
 
       // Use retry wrapper with correct endpoint
@@ -1329,24 +1330,23 @@ class TBOAdapter extends BaseSupplierAdapter {
           }),
         );
         this.logger.info("✅ TBO hotel search response received", {
-          status: res.status,
-          tboStatus: res.data?.Status,
+          httpStatus: res.status,
+          tboStatusCode: res.data?.Status?.Code || res.data?.Status,
+          tboStatusDescription: res.data?.Status?.Description,
           hasHotelResults: !!res.data?.HotelResults,
           hotelCount: Array.isArray(res.data?.HotelResults)
             ? res.data.HotelResults.length
             : 0,
           hasTraceId: !!res.data?.TraceId,
-          dataKeys: Object.keys(res.data || {}).slice(0, 10),
           responseSize: JSON.stringify(res.data).length,
         });
       } catch (apiError) {
         this.logger.error("❌ TBO search API call failed", {
           message: apiError.message,
-          status: apiError.response?.status,
+          httpStatus: apiError.response?.status,
           statusText: apiError.response?.statusText,
-          errorData: apiError.response?.data
-            ? JSON.stringify(apiError.response.data).substring(0, 300)
-            : "no error data",
+          tboErrorCode: apiError.response?.data?.Error?.ErrorCode,
+          tboErrorMessage: apiError.response?.data?.Error?.ErrorMessage,
           url: this.config.hotelSearchEndpoint,
           via: tboVia(),
         });
@@ -1354,7 +1354,15 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       // Check for TBO status code
-      if (res.data?.Status !== 1) {
+      if (res.data?.Status?.Code && res.data.Status.Code !== 1) {
+        this.logger.warn("❌ TBO search returned non-success status", {
+          statusCode: res.data.Status.Code,
+          statusDescription: res.data.Status.Description,
+          errorCode: res.data?.Error?.ErrorCode,
+          errorMessage: res.data?.Error?.ErrorMessage,
+        });
+        return [];
+      } else if (res.data?.Status !== 1) {
         this.logger.warn("❌ TBO search returned non-success status", {
           status: res.data?.Status,
           error: res.data?.Error?.ErrorMessage || res.data?.Error?.Description,
