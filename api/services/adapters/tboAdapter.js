@@ -1182,29 +1182,29 @@ class TBOAdapter extends BaseSupplierAdapter {
           }),
         );
         this.logger.info("✅ TBO search response received", {
-        status: res.status,
-        hasHotelResult: !!res.data?.HotelResult,
-        hasHotels: !!res.data?.Hotels,
-        dataKeys: Object.keys(res.data || {}).slice(0, 10),
-        responseDataType: typeof res.data,
-        responseDataLength: JSON.stringify(res.data).length,
-        tboStatus: res.data?.Status,
-        tboError: res.data?.Error,
-        fullResponse: JSON.stringify(res.data).substring(0, 500),
-      });
-    } catch (apiError) {
-      this.logger.error("❌ TBO search API call failed", {
-        message: apiError.message,
-        status: apiError.response?.status,
-        statusText: apiError.response?.statusText,
-        errorData: apiError.response?.data
-          ? JSON.stringify(apiError.response.data).substring(0, 300)
-          : "no error data",
-        url: `${this.config.hotelSearchBase}/Search`,
-        via: tboVia(),
-      });
-      throw apiError;
-    }
+          status: res.status,
+          hasHotelResult: !!res.data?.HotelResult,
+          hasHotels: !!res.data?.Hotels,
+          dataKeys: Object.keys(res.data || {}).slice(0, 10),
+          responseDataType: typeof res.data,
+          responseDataLength: JSON.stringify(res.data).length,
+          tboStatus: res.data?.Status,
+          tboError: res.data?.Error,
+          fullResponse: JSON.stringify(res.data).substring(0, 500),
+        });
+      } catch (apiError) {
+        this.logger.error("❌ TBO search API call failed", {
+          message: apiError.message,
+          status: apiError.response?.status,
+          statusText: apiError.response?.statusText,
+          errorData: apiError.response?.data
+            ? JSON.stringify(apiError.response.data).substring(0, 300)
+            : "no error data",
+          url: `${this.config.hotelSearchBase}/Search`,
+          via: tboVia(),
+        });
+        throw apiError;
+      }
 
       // Try multiple possible response keys for TBO hotels
       let hotels =
