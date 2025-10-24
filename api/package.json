@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "type": "commonjs",
   "description": "Faredown Pricing Engine API for Render deployment",
-  "main": "pricing-server.js",
+  "type": "commonjs",
+  "main": "server.js",
   "scripts": {
     "start": "node server.js",
     "dev": "nodemon server.js",
@@ -86,10 +87,10 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/faredown/api.git"
+    "url": "https://github.com/Pikateck/builder-faredown.git"
   },
   "bugs": {
-    "url": "https://github.com/faredown/api/issues"
+    "url": "https://github.com/Pikateck/builder-faredown/issues"
   },
   "homepage": "https://faredown.com"
 }
