@@ -1,74 +1,177 @@
 /**
  * TBO Content API Client
  * Fetches and manages country, city, and hotel master data from TBO
+ * Uses TBO Static Data API endpoints from HotelAPI
  */
 
-const axios = require("axios");
+const { tboRequest } = require("../lib/tboRequest");
 
-const baseURL = process.env.TBO_CONTENT_BASE_URL; // e.g. https://api.test.hotelbeds.com/hotel-content-api/1.0/
-const apiKey = process.env.TBO_API_KEY;
-const apiSecret = process.env.TBO_API_SECRET;
+const hotelStaticBase =
+  process.env.TBO_HOTEL_STATIC_DATA ||
+  "https://apiwr.tboholidays.com/HotelAPI/";
+const staticUserName = process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME;
+const staticPassword = process.env.TBO_STATIC_DATA_CREDENTIALS_PASSWORD;
 
-if (!baseURL || !apiKey || !apiSecret) {
+if (!staticUserName || !staticPassword) {
   console.warn(
-    "⚠️  TBO Content API credentials not fully configured. Sync may fail.",
+    "⚠️  TBO Static Data credentials not fully configured. Sync may fail.",
     {
-      baseURL: !!baseURL,
-      apiKey: !!apiKey,
-      apiSecret: !!apiSecret,
+      hotelStaticBase: !!hotelStaticBase,
+      staticUserName: !!staticUserName,
+      staticPassword: !!staticPassword,
     },
   );
 }
 
-const tbo = axios.create({
-  baseURL,
-  timeout: 30000,
-  headers: {
-    "Content-Type": "application/json",
-    "api-key": apiKey,
-    "api-secret": apiSecret,
-  },
-});
-
 /**
- * Generic paginator for TBO endpoints
- * Returns async generator that yields items page by page
+ * Fetch all countries from TBO
  */
-async function* fetchPages(endpoint, params = {}) {
+async function* fetchCountries() {
   try {
-    let offset = 0;
-    const limit = 100;
-    let hasMore = true;
+    const response = await tboRequest(`${hotelStaticBase}/CountryList`, {
+      method: "POST",
+      data: {
+        UserName: staticUserName?.trim(),
+        Password: staticPassword,
+      },
+      timeout: 30000,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
 
-    while (hasMore) {
-      const resp = await tbo.get(endpoint, {
-        params: { ...params, offset, limit },
-      });
+    const countries = response.data?.CountryList || response.data?.Result || [];
+    console.log(`📥 Fetched ${countries.length} countries from TBO`);
 
-      const items = resp.data?.data || resp.data?.items || [];
-
-      if (Array.isArray(items)) {
-        for (const item of items) {
-          yield item;
-        }
-      }
-
-      // Check if there are more pages
-      hasMore = items.length === limit;
-      offset += limit;
-
-      // Rate limiting: 100ms between requests
-      if (hasMore) {
-        await new Promise((resolve) => setTimeout(resolve, 100));
-      }
+    for (const country of countries) {
+      yield country;
     }
   } catch (error) {
-    console.error(`TBO Content API error on ${endpoint}:`, error.message);
+    console.error("Failed to fetch TBO countries:", error.message);
     throw error;
   }
 }
 
+/**
+ * Fetch all cities for a country from TBO
+ */
+async function* fetchCitiesForCountry(countryCode) {
+  try {
+    const response = await tboRequest(`${hotelStaticBase}/CityList`, {
+      method: "POST",
+      data: {
+        UserName: staticUserName?.trim(),
+        Password: staticPassword,
+        CountryCode: countryCode,
+      },
+      timeout: 30000,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    const cities = response.data?.CityList || response.data?.Result || [];
+    console.log(`📥 Fetched ${cities.length} cities for country ${countryCode}`);
+
+    for (const city of cities) {
+      yield city;
+    }
+  } catch (error) {
+    console.error(
+      `Failed to fetch TBO cities for country ${countryCode}:`,
+      error.message,
+    );
+    // Don't throw - continue with other countries
+  }
+}
+
+/**
+ * Fetch all hotel codes for a city from TBO
+ */
+async function* fetchHotelCodesForCity(cityCode) {
+  try {
+    const response = await tboRequest(`${hotelStaticBase}/HotelCodesList`, {
+      method: "POST",
+      data: {
+        UserName: staticUserName?.trim(),
+        Password: staticPassword,
+        CityCode: cityCode,
+      },
+      timeout: 30000,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    const hotelCodes = response.data?.HotelCodes || response.data?.Result || [];
+    console.log(`📥 Fetched ${hotelCodes.length} hotels for city ${cityCode}`);
+
+    for (const hotelCode of hotelCodes) {
+      yield hotelCode;
+    }
+  } catch (error) {
+    console.error(
+      `Failed to fetch hotel codes for city ${cityCode}:`,
+      error.message,
+    );
+    // Don't throw - continue with other cities
+  }
+}
+
+/**
+ * Fetch hotel details for a specific hotel code
+ */
+async function fetchHotelDetails(hotelCode) {
+  try {
+    const response = await tboRequest(`${hotelStaticBase}/HotelDetails`, {
+      method: "POST",
+      data: {
+        UserName: staticUserName?.trim(),
+        Password: staticPassword,
+        HotelCode: hotelCode,
+      },
+      timeout: 30000,
+      headers: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+      },
+    });
+
+    return response.data?.Hotel || response.data?.Result || null;
+  } catch (error) {
+    console.error(
+      `Failed to fetch hotel details for code ${hotelCode}:`,
+      error.message,
+    );
+    return null;
+  }
+}
+
+/**
+ * Legacy fetchPages function - kept for backward compatibility
+ * Maps to the new country/city/hotel structure
+ */
+async function* fetchPages(endpoint, params = {}) {
+  if (endpoint === "lists/countries") {
+    yield* fetchCountries();
+  } else if (endpoint === "lists/cities") {
+    // This needs to be called per-country - handled in sync job
+    console.warn("fetchPages(lists/cities) called without country context");
+  } else if (endpoint === "lists/hotels") {
+    // This needs to be called per-city - handled in sync job
+    console.warn("fetchPages(lists/hotels) called without city context");
+  } else {
+    console.error(`Unknown endpoint: ${endpoint}`);
+  }
+}
+
 module.exports = {
-  tbo,
   fetchPages,
+  fetchCountries,
+  fetchCitiesForCountry,
+  fetchHotelCodesForCity,
+  fetchHotelDetails,
 };
