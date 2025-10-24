@@ -68,6 +68,7 @@ router.get("/", async (req, res) => {
     const checkOut = req.query.checkOut || req.query.checkout;
     const adults = parseInt(req.query.adults || "2");
     const children = parseInt(req.query.children || "0");
+    const countryCode = req.query.countryCode || "IN"; // Default to India
 
     if (!cityId) {
       console.warn("❌ /api/hotels called without cityId");
@@ -79,7 +80,7 @@ router.get("/", async (req, res) => {
 
     console.log(`\n🏨 === HOTEL SEARCH START ===`);
     console.log(
-      `   City: ${cityId} | CheckIn: ${checkIn} | CheckOut: ${checkOut}`,
+      `   City: ${cityId} | Country: ${countryCode} | CheckIn: ${checkIn} | CheckOut: ${checkOut}`,
     );
     console.log(`   Guests: ${adults} adults, ${children} children`);
 
