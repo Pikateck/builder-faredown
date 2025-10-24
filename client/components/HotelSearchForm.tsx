@@ -133,35 +133,21 @@ export function HotelSearchForm({
           })();
 
           const response = await fetch(
-            `${apiBaseUrl}/locations/search?q=${encodeURIComponent(inputValue)}&type=all&limit=15`,
+            `${apiBaseUrl}/tbo-hotels/cities?q=${encodeURIComponent(inputValue)}&limit=15`,
           );
           if (response.ok) {
             const data = await response.json();
-            if (Array.isArray(data.items) && data.items.length > 0) {
-              // Map API results to SearchResult format
-              const results = data.items.map((item: any) => {
-                const baseResult: any = {
-                  id: item.id,
-                  code: item.id,
-                  name: item.name,
-                  type: item.kind,
-                  rating: undefined,
-                };
-
-                // Add location/description based on type
-                if (item.kind === "city") {
-                  baseResult.location = item.name;
-                  baseResult.description = "City";
-                } else if (item.kind === "hotel") {
-                  baseResult.location = item.city_name || "Hotel";
-                  baseResult.description = "Hotel";
-                } else if (item.kind === "country") {
-                  baseResult.location = item.name;
-                  baseResult.description = "Country";
-                }
-
-                return baseResult;
-              });
+            if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+              // Map TBO cities API results to SearchResult format
+              const results = data.data.map((item: any) => ({
+                id: item.code,
+                code: item.code,
+                name: item.name,
+                type: "city",
+                location: `${item.name}${item.countryName ? ", " + item.countryName : ""}`,
+                description: item.region || "City",
+                rating: undefined,
+              }));
 
               setSearchResults(results);
             } else {
