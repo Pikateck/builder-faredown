@@ -595,13 +595,24 @@ export default function HotelResults() {
       },
       breakfastIncluded: hotel.breakfastIncluded || false,
       breakfastType: hotel.breakfastType || "Not included",
-      availableRoom: {
-        type: hotel.rooms?.[0]?.roomName || "1 X Standard Room",
-        bedType: hotel.rooms?.[0]?.bedType || "Double bed",
-        rateType: "Flexible Rate",
-        paymentTerms: "Check details",
-        cancellationPolicy: hotel.cancellationPolicy || "Check policy",
-      },
+      availableRoom: (() => {
+        const cheapestRoom = (hotel.rooms || []).reduce((best, room) => {
+          const roomPrice = room.price?.total || room.price || Infinity;
+          const bestPrice = best.price?.total || best.price || Infinity;
+          return roomPrice < bestPrice ? room : best;
+        }, hotel.rooms?.[0] || {});
+
+        return {
+          type: cheapestRoom.roomName || "Standard Room",
+          bedType: cheapestRoom.bedType || "1 Double Bed",
+          rateType: cheapestRoom.board || "Room Only",
+          paymentTerms: cheapestRoom.payType === "at_hotel" ? "Pay at Hotel" : "Prepaid",
+          cancellationPolicy: (cheapestRoom.cancellation && cheapestRoom.cancellation.length > 0)
+            ? "Free cancellation available"
+            : "Non-refundable",
+          description: cheapestRoom.roomDescription || "",
+        };
+      })(),
       supplier: "TBO",
       supplierCode: "tbo",
       isLiveData: true,
