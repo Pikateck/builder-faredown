@@ -425,8 +425,28 @@ export default function HotelResults() {
       const checkOutStr = checkOutDate.toISOString().split("T")[0];
       const adultsCount = parseInt(adults) || 2;
       const childrenCount = parseInt(children) || 0;
+
+      // Determine country code from destination
+      // Common mappings: DXB=AE, DEL=IN, PAR=FR, LDN=GB, NYC=US, TYO=JP
+      const countryCodeMap: { [key: string]: string } = {
+        "DXB": "AE", "AUH": "AE", "RAK": "AE", // UAE
+        "DEL": "IN", "BLR": "IN", "BOM": "IN", "CCU": "IN", "HYD": "IN", "COK": "IN", // India
+        "PAR": "FR", "CDG": "FR", // France
+        "LDN": "GB", "LGW": "GB", "STN": "GB", // UK
+        "NYC": "US", "LAX": "US", "SFO": "US", "MIA": "US", // US
+        "TYO": "JP", "KIX": "JP", // Japan
+        "SYD": "AU", // Australia
+        "SGP": "SG", // Singapore
+        "BKK": "TH", // Thailand
+        "HKG": "HK", // Hong Kong
+      };
+
+      const countryCode = countryCodeMap[destCode] || "IN"; // Default to India if not found
+
+      console.log(`🌍 Destination: ${destCode}, Country Code: ${countryCode}`);
+
       const metadataResponse = await fetch(
-        `${apiBaseUrl}/hotels?cityId=${destCode}&checkIn=${checkInStr}&checkOut=${checkOutStr}&adults=${adultsCount}&children=${childrenCount}`,
+        `${apiBaseUrl}/hotels?cityId=${destCode}&checkIn=${checkInStr}&checkOut=${checkOutStr}&adults=${adultsCount}&children=${childrenCount}&countryCode=${countryCode}`,
       );
       const metadataData = await metadataResponse.json();
 
@@ -510,7 +530,7 @@ export default function HotelResults() {
       const pricesData = await pricesResponse.json();
 
       if (pricesData.prices && Object.keys(pricesData.prices).length > 0) {
-        console.log("💲 Merging prices into hotels...");
+        console.log("���� Merging prices into hotels...");
         setHotels((prev) =>
           prev.map((h) => {
             const supplierId = h.supplier_id || h.id;
