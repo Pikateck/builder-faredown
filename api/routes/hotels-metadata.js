@@ -78,7 +78,9 @@ router.get("/", async (req, res) => {
     }
 
     console.log(`\n🏨 === HOTEL SEARCH START ===`);
-    console.log(`   City: ${cityId} | CheckIn: ${checkIn} | CheckOut: ${checkOut}`);
+    console.log(
+      `   City: ${cityId} | CheckIn: ${checkIn} | CheckOut: ${checkOut}`,
+    );
     console.log(`   Guests: ${adults} adults, ${children} children`);
 
     // Get TBO adapter
@@ -112,13 +114,18 @@ router.get("/", async (req, res) => {
       maxResults: 50,
     };
 
-    console.log(`📍 Calling adapter.searchHotels with:`, JSON.stringify(searchParams, null, 2));
+    console.log(
+      `📍 Calling adapter.searchHotels with:`,
+      JSON.stringify(searchParams, null, 2),
+    );
 
     // Fetch live TBO hotel results
     let tboResults = [];
     try {
       tboResults = await adapter.searchHotels(searchParams);
-      console.log(`✅ adapter.searchHotels returned ${tboResults.length} hotels`);
+      console.log(
+        `✅ adapter.searchHotels returned ${tboResults.length} hotels`,
+      );
 
       if (tboResults.length === 0) {
         console.warn(`⚠️ TBO returned 0 hotels for ${cityId}`);
@@ -133,7 +140,10 @@ router.get("/", async (req, res) => {
       });
 
       if (searchError.response?.data) {
-        console.error(`   Response data:`, JSON.stringify(searchError.response.data).slice(0, 500));
+        console.error(
+          `   Response data:`,
+          JSON.stringify(searchError.response.data).slice(0, 500),
+        );
       }
 
       tboResults = [];
@@ -232,9 +242,7 @@ router.get("/prices", async (req, res) => {
     // Fetch live prices from TBO
     const tboResults = await adapter.searchHotels({
       destination: cityId,
-      checkIn:
-        checkIn ||
-        new Date().toISOString().split("T")[0],
+      checkIn: checkIn || new Date().toISOString().split("T")[0],
       checkOut:
         checkOut ||
         new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
