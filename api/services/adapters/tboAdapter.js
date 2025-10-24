@@ -1537,6 +1537,70 @@ class TBOAdapter extends BaseSupplierAdapter {
   }
 
   /**
+   * PRIVATE: Enrich a single hotel with detailed room information
+   * Calls GetHotelRoom to fetch pricing, amenities, and cancellation policies per room
+   */
+  async _enrichHotelWithRoomDetails(hotel, searchContext = {}) {
+    try {
+      const { checkIn, checkOut, tokenId, traceId, destination } = searchContext;
+
+      // Call GetHotelRoom to fetch detailed room-wise information
+      const roomDetails = await this.getHotelRoom({
+        TraceId: traceId,
+        HotelCode: hotel.HotelCode,
+        ResultIndex: hotel.ResultIndex || 0,
+      });
+
+      if (!roomDetails || roomDetails.Status !== 1) {
+        throw new Error("GetHotelRoom returned non-success status");
+      }
+
+      // Extract room details from response
+      const hotelRoomDetails = roomDetails.HotelRoomDetails || [];
+      if (!Array.isArray(hotelRoomDetails) || hotelRoomDetails.length === 0) {
+        return hotel; // Return original if no room details found
+      }
+
+      // Transform room details into TBO format structure
+      const enrichedRooms = hotelRoomDetails.map((roomDetail, idx) => ({
+        RoomTypeCode: roomDetail.RoomTypeCode || `room_${idx}`,
+        RoomTypeName: roomDetail.RoomTypeName || "Standard Room",
+        Description: roomDetail.RoomDescription || "",
+        Amenities: roomDetail.Amenities || [],
+        Rates: [
+          {
+            RateKey: roomDetail.RatePlanCode || `rate_${idx}`,
+            MealType: roomDetail.Board || "Room Only",
+            BoardType: roomDetail.Board || "Room Only",
+            PublishedPrice: roomDetail.PublishedPrice || 0,
+            OfferedPrice: roomDetail.OfferedPrice || roomDetail.PublishedPrice || 0,
+            NetFare: roomDetail.NetFare || 0,
+            Tax: roomDetail.Tax || 0,
+            TotalPrice: (roomDetail.OfferedPrice || roomDetail.PublishedPrice || 0) + (roomDetail.Tax || 0),
+            CancellationPolicies: roomDetail.CancellationPolicies || [],
+            LastCancellationDate: roomDetail.LastCancellationDate,
+            Token: roomDetail.RateKey || `token_${idx}`,
+            Inclusions: roomDetail.Inclusions || [],
+          },
+        ],
+      }));
+
+      // Return enriched hotel with full room details
+      return {
+        ...hotel,
+        Rooms: enrichedRooms,
+        EnrichedAt: new Date().toISOString(),
+      };
+    } catch (err) {
+      this.logger.warn("_enrichHotelWithRoomDetails failed", {
+        hotelCode: hotel?.HotelCode,
+        error: err.message,
+      });
+      throw err; // Let caller decide how to handle
+    }
+  }
+
+  /**
    * Normalize and persist TBO results to unified master hotel schema (Phase 3)
    * Note: TBO hotel data structure (when available)
    */
