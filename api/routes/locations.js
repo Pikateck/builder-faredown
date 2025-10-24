@@ -346,7 +346,7 @@ async function queueTargetedCityFetch(cityName) {
 
 /**
  * GET /api/locations/stats
- * Returns sync statistics
+ * Returns sync statistics and warm cache
  */
 router.get("/stats", async (req, res) => {
   try {
@@ -362,7 +362,13 @@ router.get("/stats", async (req, res) => {
       hotels: parseInt(hotelsRes.rows[0]?.count || 0),
     };
 
-    res.json(stats);
+    // Warm cache with stats
+    await redis.setJSON("loc:stats", stats, REDIS_TTL);
+
+    res.json({
+      ...stats,
+      cached: false,
+    });
   } catch (error) {
     console.error("Stats error:", error.message);
     res.status(500).json({
