@@ -1284,6 +1284,21 @@ class TBOAdapter extends BaseSupplierAdapter {
         hasTokenId: !!tokenId,
       });
 
+      // Log the exact payload being sent (for debugging)
+      this.logger.info("📤 TBO Hotel Search Request", {
+        endpoint: this.config.hotelSearchEndpoint,
+        clientId: payload.ClientId,
+        username: payload.UserName,
+        city: payload.City,
+        checkIn: payload.CheckIn,
+        checkOut: payload.CheckOut,
+        noOfRooms: payload.NoOfRooms,
+        guestNationality: payload.GuestNationality,
+        preferredCurrency: payload.PreferredCurrency,
+        endUserIp: payload.EndUserIp,
+        via: tboVia(),
+      });
+
       // Use retry wrapper with correct endpoint
       let res;
       try {
