@@ -1,11 +1,15 @@
 /**
  * Locations Autocomplete API
  * Searches TBO cities, hotels, and countries with ranking
+ * Hybrid approach: Redis cache → DB → Lazy TBO sync
  */
 
 const express = require("express");
 const db = require("../database/connection.js");
+const redis = require("../lib/redisClient.js");
 const router = express.Router();
+
+const REDIS_TTL = 1800; // 30 minutes
 
 /**
  * Helper function to build search query with proper ranking
