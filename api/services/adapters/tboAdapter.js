@@ -1163,7 +1163,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         ? this.config.hotelSearchBase.slice(0, -1)
         : this.config.hotelSearchBase;
 
-      this.logger.info("📍 TBO hotel search payload", {
+      this.logger.info("📍 TBO hotel search payload (dynamic booking method)", {
         url: `${baseUrl}/Search`,
         destination,
         checkIn,
@@ -1172,6 +1172,9 @@ class TBOAdapter extends BaseSupplierAdapter {
         children,
         currency,
         rooms: Array.isArray(rooms) ? rooms.length : rooms,
+        clientId: this.config.hotelClientId,
+        userId: this.config.hotelUserId,
+        hasPassword: !!this.config.hotelPassword,
       });
 
       // Use retry wrapper
@@ -1229,7 +1232,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         res.data?.data ||
         (Array.isArray(res.data) ? res.data : []);
 
-      this.logger.info("🏨 Hotels extracted from TBO response", {
+      this.logger.info("���� Hotels extracted from TBO response", {
         count: Array.isArray(hotels) ? hotels.length : 0,
         responseDataKeys: Object.keys(res.data || {}),
         detectedHotelsType: typeof hotels,
