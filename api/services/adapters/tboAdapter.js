@@ -54,13 +54,16 @@ class TBOAdapter extends BaseSupplierAdapter {
         "https://affiliate.travelboutiqueonline.com/HotelAPI/CancelBooking",
       hotelGetBookingDetailsEndpoint:
         "https://affiliate.travelboutiqueonline.com/HotelAPI/GetBookingDetails",
-      // Credentials
-      hotelClientId: "ApiIntegrationNew",
+      // CORRECT TBO Hotel API Credentials (NOT Tek Travels)
+      hotelClientId: "tboprod", // CORRECT: "tboprod" not "ApiIntegrationNew"
       hotelUserId:
         process.env.TBO_HOTEL_USER_ID ||
-        process.env.TBO_HOTEL_USERNAME ||
-        process.env.TBO_USERNAME,
-      hotelPassword: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_PASSWORD,
+        process.env.TBO_USERNAME ||
+        "BOMF145", // Default from provided credentials
+      hotelPassword:
+        process.env.TBO_HOTEL_PASSWORD ||
+        process.env.TBO_PASSWORD ||
+        "@Bo#4M-Api@", // Default from provided credentials
       ...config,
     });
 
