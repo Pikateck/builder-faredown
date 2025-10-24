@@ -21,6 +21,7 @@ Response JSON (below)
 ## 📋 API Response JSON Structure
 
 ### GET /api/hotels
+
 **Endpoint:** `https://builder-faredown-pricing.onrender.com/api/hotels`
 
 **Response (TBO Live Only):**
@@ -144,22 +145,22 @@ Each hotel in the `hotels` array has this structure:
   id: string;                    // Hotel code from TBO (e.g., "DXBHOTEL001")
   name: string;                  // Hotel name (e.g., "Luxury Hotel Dubai")
   stars: number;                 // Star rating (0-5)
-  
+
   // Images & Media
   image: string | null;          // Primary image URL
-  
+
   // Pricing
   currentPrice: number;          // Minimum price from all rates (in base currency)
   originalPrice: number;         // Maximum price from all rates
   currency: string;              // Currency code (default: "INR")
-  
+
   // Metadata
   supplier: "TBO";               // Always "TBO" for these results
   isLiveData: true;              // Always true (live pricing from TBO)
-  
+
   // Room & Rate Details
   rates: Rate[];                 // Array of room types with pricing
-  
+
   // Amenities
   amenities: string[];           // List of hotel amenities (WiFi, Pool, etc.)
 }
@@ -173,23 +174,23 @@ Each hotel in the `hotels` array has this structure:
 {
   // Rate Identification
   rateKey: string;               // Unique identifier for this rate
-  
+
   // Room Details
   roomType: string;              // Room type name (e.g., "Deluxe Room", "Suite")
   roomDescription: string;       // Description of the room
   board: string;                 // Meal plan (e.g., "Room Only", "Bed & Breakfast")
-  
+
   // Pricing
   originalPrice: number;         // Published/base price
   price: number;                 // Offered/current price
   markedUpPrice: number;         // Price with markup (same as price in this case)
   currency: string;              // Currency code
   tax: number;                   // Tax amount
-  
+
   // Cancellation Policy
   cancellationPolicy: CancellationPolicy[];  // Array of cancellation rules
   isRefundable: boolean;         // Whether any refundable rate exists
-  
+
   // Inclusions
   inclusions: string[];          // What's included (WiFi, Breakfast, etc.)
 }
@@ -201,12 +202,12 @@ Each hotel in the `hotels` array has this structure:
 
 ```typescript
 {
-  FromDate: string;              // Start date of policy (yyyy-mm-dd)
-  ToDate: string;                // End date of policy
-  Charge: number;                // Cancellation charge (value)
-  ChargeType: string;            // "Percentage" or "Amount"
-  BaseCurrency: string;          // Currency of charge
-  CancellationPolicy: string;    // Human-readable policy description
+  FromDate: string; // Start date of policy (yyyy-mm-dd)
+  ToDate: string; // End date of policy
+  Charge: number; // Cancellation charge (value)
+  ChargeType: string; // "Percentage" or "Amount"
+  BaseCurrency: string; // Currency of charge
+  CancellationPolicy: string; // Human-readable policy description
 }
 ```
 
@@ -214,14 +215,14 @@ Each hotel in the `hotels` array has this structure:
 
 ## 🔗 Query Parameters for /api/hotels
 
-| Parameter | Required | Type | Example | Notes |
-|-----------|----------|------|---------|-------|
-| `cityId` | ✅ Yes | string | `DXB` | TBO destination code |
-| `countryCode` | ✅ Yes | string | `AE` | ISO country code (required for city resolution) |
-| `checkIn` | ✅ Yes | string | `2025-10-31` | Format: yyyy-mm-dd |
-| `checkOut` | ✅ Yes | string | `2025-11-03` | Format: yyyy-mm-dd |
-| `adults` | ✅ Yes | number | `2` | Number of adults |
-| `children` | ✅ Yes | number | `0` | Number of children |
+| Parameter     | Required | Type   | Example      | Notes                                           |
+| ------------- | -------- | ------ | ------------ | ----------------------------------------------- |
+| `cityId`      | ✅ Yes   | string | `DXB`        | TBO destination code                            |
+| `countryCode` | ✅ Yes   | string | `AE`         | ISO country code (required for city resolution) |
+| `checkIn`     | ✅ Yes   | string | `2025-10-31` | Format: yyyy-mm-dd                              |
+| `checkOut`    | ✅ Yes   | string | `2025-11-03` | Format: yyyy-mm-dd                              |
+| `adults`      | ✅ Yes   | number | `2`          | Number of adults                                |
+| `children`    | ✅ Yes   | number | `0`          | Number of children                              |
 
 ---
 
@@ -237,13 +238,13 @@ hotels.map((h) => {
     name: h.name,
     stars: h.starRating,
     image: h.images?.[0],
-    currentPrice: minPrice,         // Minimum price from rates
-    originalPrice: maxPrice,        // Maximum price from rates
+    currentPrice: minPrice, // Minimum price from rates
+    originalPrice: maxPrice, // Maximum price from rates
     currency: h.currency,
     supplier: "TBO",
     isLiveData: true,
-    rates: h.rates,                 // All room types with pricing
-    amenities: h.amenities,         // Hotel amenities
+    rates: h.rates, // All room types with pricing
+    amenities: h.amenities, // Hotel amenities
   };
 });
 ```
@@ -274,6 +275,7 @@ hotels.map((h) => {
 ## 🎯 Key Fields for Design Display
 
 ### Hotel Card (Main Display)
+
 - **Hotel Name:** `name` (e.g., "Luxury Hotel Dubai")
 - **Star Rating:** `stars` (0-5)
 - **Price:** `currentPrice` (e.g., "₹15,000")
@@ -282,6 +284,7 @@ hotels.map((h) => {
 - **Supplier Badge:** "TBO" (always for these results)
 
 ### Room Selection / Details
+
 - **Room Types:** `rates[].roomType` (e.g., ["Deluxe Room", "Suite"])
 - **Room Price:** `rates[].price` (e.g., 15000)
 - **Meal Plan:** `rates[].board` (e.g., "Room Only", "Bed & Breakfast")
@@ -289,6 +292,7 @@ hotels.map((h) => {
 - **Room Description:** `rates[].roomDescription`
 
 ### Pricing Breakdown
+
 - **Nightly Price:** `rates[].price`
 - **Tax:** `rates[].tax`
 - **Total for Stay:** (price + tax) × number of nights
@@ -378,6 +382,7 @@ If TBO search fails:
 ## 📍 Live Data Characteristics
 
 **For TBO Hotels:**
+
 - ✅ `supplier`: Always "TBO"
 - ✅ `isLiveData`: Always `true`
 - ✅ `source`: Always "tbo_live"

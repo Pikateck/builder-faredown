@@ -427,7 +427,10 @@ export default function HotelResults() {
         // FALLBACK: Use Render API directly
         // This is the production API endpoint
         const renderApi = "https://builder-faredown-pricing.onrender.com/api";
-        console.log("⚠️ VITE_API_BASE_URL not configured, using Render directly:", renderApi);
+        console.log(
+          "⚠️ VITE_API_BASE_URL not configured, using Render directly:",
+          renderApi,
+        );
         return renderApi;
       })();
 
@@ -479,7 +482,8 @@ export default function HotelResults() {
         console.log("📡 Attempting fetch with config:", {
           url: apiUrl,
           apiBaseUrl,
-          currentOrigin: typeof window !== "undefined" ? window.location.origin : "N/A",
+          currentOrigin:
+            typeof window !== "undefined" ? window.location.origin : "N/A",
           envViteUrl: import.meta.env.VITE_API_BASE_URL,
         });
 
@@ -526,10 +530,7 @@ export default function HotelResults() {
       const metadataData = await metadataResponse.json();
 
       // Check if TBO returned an error status
-      if (
-        metadataData.tboStatus?.Code &&
-        metadataData.tboStatus.Code !== 1
-      ) {
+      if (metadataData.tboStatus?.Code && metadataData.tboStatus.Code !== 1) {
         console.warn("⚠️ TBO API returned error status", {
           statusCode: metadataData.tboStatus.Code,
           description: metadataData.tboStatus.Description,

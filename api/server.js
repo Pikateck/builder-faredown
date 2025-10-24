@@ -672,22 +672,34 @@ async function startServer() {
     }
 
     // Verify Fixie proxy configuration and detect outbound IP
-    const fixieUrl = process.env.FIXIE_URL || process.env.HTTP_PROXY || "NOT SET";
+    const fixieUrl =
+      process.env.FIXIE_URL || process.env.HTTP_PROXY || "NOT SET";
     const verifyFixieIP = async () => {
       try {
         const { tboRequest } = require("./lib/tboRequest");
         console.log("\n🔍 Verifying Fixie Proxy Configuration...");
-        console.log(`   FIXIE_URL: ${fixieUrl.includes("@") ? fixieUrl.substring(0, 20) + "***@***" : fixieUrl}`);
-        console.log(`   HTTP_PROXY: ${process.env.HTTP_PROXY ? "SET" : "NOT SET"}`);
-        console.log(`   HTTPS_PROXY: ${process.env.HTTPS_PROXY ? "SET" : "NOT SET"}`);
-        console.log(`   USE_SUPPLIER_PROXY: ${process.env.USE_SUPPLIER_PROXY === "true" ? "ENABLED" : "DISABLED"}`);
+        console.log(
+          `   FIXIE_URL: ${fixieUrl.includes("@") ? fixieUrl.substring(0, 20) + "***@***" : fixieUrl}`,
+        );
+        console.log(
+          `   HTTP_PROXY: ${process.env.HTTP_PROXY ? "SET" : "NOT SET"}`,
+        );
+        console.log(
+          `   HTTPS_PROXY: ${process.env.HTTPS_PROXY ? "SET" : "NOT SET"}`,
+        );
+        console.log(
+          `   USE_SUPPLIER_PROXY: ${process.env.USE_SUPPLIER_PROXY === "true" ? "ENABLED" : "DISABLED"}`,
+        );
 
         // Detect outbound IP
         try {
-          const ipResponse = await tboRequest("https://api.ipify.org?format=json", {
-            method: "GET",
-            timeout: 5000,
-          });
+          const ipResponse = await tboRequest(
+            "https://api.ipify.org?format=json",
+            {
+              method: "GET",
+              timeout: 5000,
+            },
+          );
           const outboundIP = ipResponse.data.ip;
           console.log(`   🌐 Detected Outbound IP: ${outboundIP}`);
 
@@ -696,10 +708,14 @@ async function startServer() {
           if (expectedFixieIPs.includes(outboundIP)) {
             console.log(`   ✅ Outbound IP is whitelisted Fixie IP`);
           } else {
-            console.log(`   ⚠️ Outbound IP (${outboundIP}) does not match expected Fixie IPs (52.5.155.132, 52.87.82.133)`);
+            console.log(
+              `   ⚠️ Outbound IP (${outboundIP}) does not match expected Fixie IPs (52.5.155.132, 52.87.82.133)`,
+            );
           }
         } catch (ipError) {
-          console.warn(`   ⚠️ Could not detect outbound IP: ${ipError.message}`);
+          console.warn(
+            `   ⚠️ Could not detect outbound IP: ${ipError.message}`,
+          );
         }
       } catch (e) {
         console.warn("⚠️ Fixie verification skipped:", e.message);

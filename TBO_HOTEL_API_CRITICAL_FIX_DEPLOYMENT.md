@@ -7,9 +7,11 @@
 ## 🔴 CRITICAL ISSUE IDENTIFIED & FIXED
 
 ### What Was Wrong
+
 The code was using **WRONG endpoints** and **WRONG authentication**:
 
 **Before (WRONG):**
+
 ```
 Endpoint: https://HotelBE.tektravels.com/hotelservice.svc/rest/Gethotelresult
 ClientId: ApiIntegrationNew (WRONG)
@@ -18,6 +20,7 @@ Payload: CountryCode, CityId (numeric), CheckInDate format: dd/mm/yyyy
 ```
 
 **After (CORRECT):**
+
 ```
 Endpoint: https://affiliate.travelboutiqueonline.com/HotelAPI/Search
 ClientId: tboprod (CORRECT)
@@ -32,6 +35,7 @@ Payload: City (code like "DXB"), CheckIn format: yyyy-mm-dd
 ### 1. **api/services/adapters/tboAdapter.js** - Endpoint URLs & Credentials
 
 **Lines 44-58:** Updated to use CORRECT TBO Hotel API endpoints
+
 ```javascript
 hotelSearchEndpoint: "https://affiliate.travelboutiqueonline.com/HotelAPI/Search",
 hotelPreBookEndpoint: "https://affiliate.travelboutiqueonline.com/HotelAPI/BlockRoom",
@@ -40,6 +44,7 @@ hotelBookEndpoint: "https://affiliate.travelboutiqueonline.com/HotelAPI/Book",
 ```
 
 **Lines 62-72:** Updated credentials to CORRECT values
+
 ```javascript
 hotelClientId: "tboprod", // NOT "ApiIntegrationNew"
 hotelUserId: "BOMF145",
@@ -49,22 +54,23 @@ hotelPassword: "@Bo#4M-Api@",
 ### 2. **api/services/adapters/tboAdapter.js** - Payload Format
 
 **Lines 1247-1268:** Completely rewrote search payload to match TBO Hotel API spec
+
 ```javascript
 const payload = {
   // Direct credentials (NO TokenId)
   ClientId: "tboprod",
   UserName: "BOMF145",
   Password: "@Bo#4M-Api@",
-  
+
   // Search criteria with CORRECT field names
-  EndUserIp: fixieProxyIP,  // CRITICAL: Must be 52.5.155.132 or 52.87.82.133
-  CheckIn: "2025-10-31",    // Format: yyyy-mm-dd
-  CheckOut: "2025-11-03",   // Format: yyyy-mm-dd
-  City: "DXB",              // City code, NOT numeric CityId
-  
+  EndUserIp: fixieProxyIP, // CRITICAL: Must be 52.5.155.132 or 52.87.82.133
+  CheckIn: "2025-10-31", // Format: yyyy-mm-dd
+  CheckOut: "2025-11-03", // Format: yyyy-mm-dd
+  City: "DXB", // City code, NOT numeric CityId
+
   // Guest info
   NoOfRooms: 1,
-  RoomGuests: [{NoOfAdults: 2, NoOfChild: 0}],
+  RoomGuests: [{ NoOfAdults: 2, NoOfChild: 0 }],
   GuestNationality: "IN",
   PreferredCurrency: "INR",
   IsNearBySearchAllowed: true,
@@ -74,6 +80,7 @@ const payload = {
 ### 3. **api/services/adapters/tboAdapter.js** - Enhanced Logging
 
 **Lines 1287-1301:** Added detailed request logging
+
 ```
 📤 TBO Hotel Search Request
    endpoint: https://affiliate.travelboutiqueonline.com/HotelAPI/Search
@@ -89,6 +96,7 @@ const payload = {
 ### 4. **api/server.js** - Startup Fixie Verification
 
 **Lines 673-688:** Added Fixie proxy verification at startup
+
 ```
 🔍 Verifying Fixie Proxy Configuration...
    FIXIE_URL: http://fixie:***@criterium.usefixie.com:80
@@ -106,18 +114,19 @@ Go to **Render Dashboard → builder-faredown-pricing → Environment**
 
 **Add these variables:**
 
-| Variable | Value | Notes |
-|----------|-------|-------|
-| `HTTP_PROXY` | `http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80` | Fixie proxy for outbound |
-| `HTTPS_PROXY` | `http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80` | Same for HTTPS |
-| `TBO_HOTEL_USER_ID` | `BOMF145` | (Optional, has fallback) |
-| `TBO_HOTEL_PASSWORD` | `@Bo#4M-Api@` | (Optional, has fallback) |
+| Variable             | Value                                                    | Notes                    |
+| -------------------- | -------------------------------------------------------- | ------------------------ |
+| `HTTP_PROXY`         | `http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80` | Fixie proxy for outbound |
+| `HTTPS_PROXY`        | `http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80` | Same for HTTPS           |
+| `TBO_HOTEL_USER_ID`  | `BOMF145`                                                | (Optional, has fallback) |
+| `TBO_HOTEL_PASSWORD` | `@Bo#4M-Api@`                                            | (Optional, has fallback) |
 
 **Save** → Render will auto-redeploy
 
 ### Step 2: Verify Deployment
 
 Check Render logs:
+
 ```
 🚀 Faredown API Server Started
 🔍 Verifying Fixie Proxy Configuration...
@@ -133,6 +142,7 @@ Check Render logs:
 ### Test 1: Direct cURL with Fixie (Prove IP Routing)
 
 **DXB Search via Fixie:**
+
 ```bash
 curl --proxy "http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80" \
   -X POST \
@@ -155,6 +165,7 @@ curl --proxy "http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80" \
 ```
 
 **Expected Response:**
+
 ```json
 {
   "Status": {
@@ -182,6 +193,7 @@ curl --proxy "http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80" \
 ```
 
 **If you get 401 (Access Credentials incorrect):**
+
 1. Credentials might be wrong
 2. Fixie IP might not be whitelisted
 3. Contact TBO support
@@ -193,11 +205,13 @@ curl --proxy "http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80" \
 Once Render is deployed and logs show Fixie is SET:
 
 **GET /api/hotels?...**
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/hotels?cityId=DXB&countryCode=AE&checkIn=2025-10-31&checkOut=2025-11-03&adults=2&children=0"
 ```
 
 **Check Render logs:**
+
 ```
 📤 TBO Hotel Search Request
    endpoint: https://affiliate.travelboutiqueonline.com/HotelAPI/Search
@@ -214,6 +228,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/hotels?cityId=DXB&countr
 ### Test 3: Frontend Display
 
 Navigate to:
+
 ```
 https://spontaneous-biscotti-da44bc.netlify.app/hotels/results
   ?destination=DXB
@@ -224,6 +239,7 @@ https://spontaneous-biscotti-da44bc.netlify.app/hotels/results
 ```
 
 **Should show:**
+
 - ✅ 50+ hotels (not 0 properties)
 - ✅ Real hotel names & images
 - ✅ Real pricing in INR
@@ -237,13 +253,16 @@ https://spontaneous-biscotti-da44bc.netlify.app/hotels/results
 ### Issue: Still Getting 401 "Access Credentials incorrect"
 
 **Check:**
+
 1. **Credentials in Render env vars are set correctly?**
+
    ```
    TBO_HOTEL_USER_ID = BOMF145
    TBO_HOTEL_PASSWORD = @Bo#4M-Api@
    ```
 
 2. **Proxy is set and active?**
+
    ```
    Render logs should show:
    HTTP_PROXY: SET
@@ -259,6 +278,7 @@ https://spontaneous-biscotti-da44bc.netlify.app/hotels/results
 ### Issue: Getting 0 hotels
 
 **Check:**
+
 1. **Request payload matches exactly** (field names, date format)
 2. **City code is correct** (DXB, not numeric)
 3. **CheckIn/CheckOut format is yyyy-mm-dd**
@@ -267,6 +287,7 @@ https://spontaneous-biscotti-da44bc.netlify.app/hotels/results
 ### Issue: Getting connection timeout
 
 **Check:**
+
 1. **Proxy is configured and working**
 2. **TBO API is not down**
 3. **Timeout in tboAdapter.js is sufficient** (default: 15000ms)
@@ -275,12 +296,12 @@ https://spontaneous-biscotti-da44bc.netlify.app/hotels/results
 
 ## 📊 Files Changed Summary
 
-| File | Lines | Change | Priority |
-|------|-------|--------|----------|
-| `api/services/adapters/tboAdapter.js` | 44-72 | Correct endpoints & credentials | 🔴 CRITICAL |
-| `api/services/adapters/tboAdapter.js` | 1247-1268 | Correct payload format | 🔴 CRITICAL |
-| `api/services/adapters/tboAdapter.js` | 1287-1301 | Enhanced logging | 🟡 High |
-| `api/server.js` | 673-688 | Fixie verification | 🟡 High |
+| File                                  | Lines     | Change                          | Priority    |
+| ------------------------------------- | --------- | ------------------------------- | ----------- |
+| `api/services/adapters/tboAdapter.js` | 44-72     | Correct endpoints & credentials | 🔴 CRITICAL |
+| `api/services/adapters/tboAdapter.js` | 1247-1268 | Correct payload format          | 🔴 CRITICAL |
+| `api/services/adapters/tboAdapter.js` | 1287-1301 | Enhanced logging                | 🟡 High     |
+| `api/server.js`                       | 673-688   | Fixie verification              | 🟡 High     |
 
 ---
 

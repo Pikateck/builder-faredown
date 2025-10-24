@@ -72,9 +72,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       // CORRECT TBO Hotel API Credentials (NOT Tek Travels)
       hotelClientId: "tboprod", // CORRECT: "tboprod" not "ApiIntegrationNew"
       hotelUserId:
-        process.env.TBO_HOTEL_USER_ID ||
-        process.env.TBO_USERNAME ||
-        "BOMF145", // Default from provided credentials
+        process.env.TBO_HOTEL_USER_ID || process.env.TBO_USERNAME || "BOMF145", // Default from provided credentials
       hotelPassword:
         process.env.TBO_HOTEL_PASSWORD ||
         process.env.TBO_PASSWORD ||

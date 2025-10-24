@@ -202,9 +202,7 @@ router.get("/diagnostics", async (req, res) => {
       tbo_hotel_search: hotelSearchTest,
       summary: {
         proxy_configured:
-          !!process.env.HTTP_PROXY || !!process.env.FIXIE_URL
-            ? "YES"
-            : "NO",
+          !!process.env.HTTP_PROXY || !!process.env.FIXIE_URL ? "YES" : "NO",
         outbound_ip_detected:
           ipDetection.via_ipify ||
           ipDetection.via_ifconfig ||

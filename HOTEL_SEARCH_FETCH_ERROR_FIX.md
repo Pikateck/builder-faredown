@@ -9,12 +9,14 @@
 ## 🔍 Problem Analysis
 
 ### Error Details
+
 ```
 TypeError: Failed to fetch
     at fetchTBOHotels (HotelResults.tsx:375:42)
 ```
 
 **What was happening:**
+
 - Frontend on fly.dev preview trying to call hotel API
 - Network request completely failing (not even reaching backend)
 - No response, no CORS error message, just "Failed to fetch"
@@ -32,6 +34,7 @@ TypeError: Failed to fetch
 ### Change 1: API URL Resolution (client/pages/HotelResults.tsx, lines 414-429)
 
 **Before:**
+
 ```javascript
 const apiBaseUrl = (() => {
   // Complex logic that tried to detect same-origin
@@ -41,10 +44,11 @@ const apiBaseUrl = (() => {
 ```
 
 **After:**
+
 ```javascript
 const apiBaseUrl = (() => {
   if (typeof window === "undefined") return "/api";
-  
+
   // 1. Try environment variable first
   const envUrl = import.meta.env.VITE_API_BASE_URL;
   if (envUrl && typeof envUrl === "string" && envUrl.trim().length > 0) {
@@ -52,7 +56,7 @@ const apiBaseUrl = (() => {
     console.log("✅ Using configured API URL:", cleanUrl);
     return cleanUrl;
   }
-  
+
   // 2. FALLBACK: Use Render API explicitly
   const renderApi = "https://builder-faredown-pricing.onrender.com/api";
   console.log("⚠️ Using Render API directly:", renderApi);
@@ -63,6 +67,7 @@ const apiBaseUrl = (() => {
 ### Change 2: Enhanced Error Logging (lines 481-511)
 
 **Added detailed debug info:**
+
 ```javascript
 console.log("📡 Attempting fetch with config:", {
   url: apiUrl,
@@ -71,7 +76,7 @@ console.log("📡 Attempting fetch with config:", {
   envViteUrl: import.meta.env.VITE_API_BASE_URL,
 });
 
-// ... 
+// ...
 
 console.error("❌ Fetch failed:", {
   url: apiUrl,
@@ -84,6 +89,7 @@ console.error("❌ Fetch failed:", {
 ```
 
 **Why this helps:**
+
 - Shows exact URL being called
 - Shows which API base URL is being used
 - Shows if env var was loaded
@@ -107,27 +113,30 @@ console.error("❌ Fetch failed:", {
 The backend (`api/server.js`) already has proper CORS configuration:
 
 **Line 216** - Allows fly.dev domains:
+
 ```javascript
-/^https:\/\/([a-z0-9-]+\.)*fly\.dev$/i
+/^https:\/\/([a-z0-9-]+\.)*fly\.dev$/i;
 ```
 
 This regex matches:
+
 - ✅ `https://example.fly.dev`
 - ✅ `https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev`
 - ✅ `https://any-preview.fly.dev`
 
 **Full CORS matcher list:**
+
 ```javascript
 const corsMatchers = [
   ...envAllowedOrigins,
   ...staticAllowedOrigins,
-  /^https?:\/\/localhost(:\d+)?$/i,          // localhost
+  /^https?:\/\/localhost(:\d+)?$/i, // localhost
   /^https:\/\/([a-z0-9-]+\.)*builder\.io$/i, // builder.io
   /^https:\/\/.*\.projects\.builder\.(my|codes)$/i, // builder projects
-  /^https:\/\/([a-z0-9-]+\.)*fly\.dev$/i,    // fly.dev previews ✅
+  /^https:\/\/([a-z0-9-]+\.)*fly\.dev$/i, // fly.dev previews ✅
   /^https:\/\/([a-z0-9-]+\.)*netlify\.app$/i, // netlify
   /^https:\/\/builder-faredown-pricing\.onrender\.com$/i, // main API
-  /^https:\/\/faredown\.com$/i,              // production domain
+  /^https:\/\/faredown\.com$/i, // production domain
 ];
 ```
 
@@ -163,10 +172,12 @@ Object {
 ### Step 3: Expected Outcomes
 
 **✅ Success:**
+
 - Hotels display in search results
 - No fetch error in console
 
 **❌ Still Failing:**
+
 - You'll see: `❌ Fetch failed:` with detailed error object
 - Error message will show the actual issue (CORS, timeout, etc.)
 
@@ -179,6 +190,7 @@ If fly.dev continues to have issues, test on the Netlify production deployment:
 **URL:** https://spontaneous-biscotti-da44bc.netlify.app/
 
 Netlify has configured redirects:
+
 ```
 /api/*  → https://builder-faredown-pricing.onrender.com/api/:splat
 ```
@@ -198,10 +210,10 @@ This makes API calls work perfectly without CORS issues.
 
 ## 🔄 Files Changed
 
-| File | Lines | Change |
-|------|-------|--------|
+| File                            | Lines   | Change                                    |
+| ------------------------------- | ------- | ----------------------------------------- |
 | `client/pages/HotelResults.tsx` | 414-429 | API URL resolution with explicit fallback |
-| `client/pages/HotelResults.tsx` | 481-511 | Enhanced error logging & debugging |
+| `client/pages/HotelResults.tsx` | 481-511 | Enhanced error logging & debugging        |
 
 ---
 
@@ -209,7 +221,7 @@ This makes API calls work perfectly without CORS issues.
 
 1. **Environment Variables in Builds**: `VITE_` prefixed variables must be available at build time. If the preview was built without `VITE_API_BASE_URL`, it won't be available at runtime.
 
-2. **Relative vs Absolute URLs**: 
+2. **Relative vs Absolute URLs**:
    - Relative `/api/...` → Points to current domain
    - On fly.dev preview → Points to fly.dev (wrong!)
    - Need absolute URL → Points to Render (correct!)
