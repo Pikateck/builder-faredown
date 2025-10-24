@@ -4,8 +4,58 @@
  */
 
 const express = require("express");
+const db = require("../database/connection.js");
 const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
 const router = express.Router();
+
+/**
+ * Initialize tbo_cities table if not exists
+ */
+async function ensureCitiesTableExists() {
+  try {
+    const result = await db.query(`
+      SELECT EXISTS (
+        SELECT 1 FROM information_schema.tables
+        WHERE table_name = 'tbo_cities'
+      ) as table_exists;
+    `);
+
+    if (!result.rows[0].table_exists) {
+      console.log("📦 Creating tbo_cities table...");
+      await db.query(`
+        CREATE TABLE IF NOT EXISTS tbo_cities (
+          id SERIAL PRIMARY KEY,
+          city_code VARCHAR(50) NOT NULL UNIQUE,
+          city_name VARCHAR(255) NOT NULL,
+          country_code VARCHAR(10),
+          country_name VARCHAR(255),
+          region_code VARCHAR(50),
+          region_name VARCHAR(255),
+          type VARCHAR(50) DEFAULT 'CITY',
+          latitude NUMERIC(10, 8),
+          longitude NUMERIC(11, 8),
+          is_active BOOLEAN DEFAULT true,
+          created_at TIMESTAMPTZ DEFAULT NOW(),
+          updated_at TIMESTAMPTZ DEFAULT NOW()
+        );
+      `);
+
+      console.log("📑 Creating indexes...");
+      await db.query(`
+        CREATE INDEX IF NOT EXISTS idx_tbo_cities_code ON tbo_cities(city_code);
+        CREATE INDEX IF NOT EXISTS idx_tbo_cities_name ON tbo_cities(city_name);
+        CREATE INDEX IF NOT EXISTS idx_tbo_cities_country ON tbo_cities(country_code);
+      `);
+
+      console.log("✅ tbo_cities table created");
+    }
+  } catch (e) {
+    console.warn("⚠️ Failed to ensure tbo_cities table:", e.message);
+  }
+}
+
+// Initialize table on startup
+ensureCitiesTableExists().catch(console.error);
 
 /**
  * GET /api/hotels
