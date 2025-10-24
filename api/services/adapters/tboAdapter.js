@@ -1157,7 +1157,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       };
 
       // Remove trailing slash from base URL to avoid double slashes
-      const baseUrl = this.config.hotelSearchBase.endsWith('/')
+      const baseUrl = this.config.hotelSearchBase.endsWith("/")
         ? this.config.hotelSearchBase.slice(0, -1)
         : this.config.hotelSearchBase;
 
@@ -1176,7 +1176,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       let res;
       try {
         // Remove trailing slash from base URL to avoid double slashes
-        const baseUrl = this.config.hotelSearchBase.endsWith('/')
+        const baseUrl = this.config.hotelSearchBase.endsWith("/")
           ? this.config.hotelSearchBase.slice(0, -1)
           : this.config.hotelSearchBase;
         const searchUrl = `${baseUrl}/Search`;
