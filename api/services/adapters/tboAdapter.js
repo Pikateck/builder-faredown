@@ -1242,18 +1242,28 @@ class TBOAdapter extends BaseSupplierAdapter {
         ];
       }
 
-      // Step 5: Build search payload with correct TBO Hotel API format
+      // Step 5: Build search payload with CORRECT TBO Hotel API format
+      // NOTE: TBO Hotel API uses direct credentials, NOT TokenId
       const payload = {
-        EndUserIp: this.config.endUserIp,
-        TokenId: tokenId,
-        CheckInDate: this._formatDateForTBO(checkIn),
-        NoOfNights: noOfNights,
-        CountryCode: countryCode,
-        CityId: cityId,
-        PreferredCurrency: currency,
-        GuestNationality: guestNationality,
+        // CREDENTIALS - Direct auth, no TokenId
+        ClientId: this.config.hotelClientId, // "tboprod"
+        UserName: this.config.hotelUserId, // "BOMF145"
+        Password: this.config.hotelPassword, // "@Bo#4M-Api@"
+
+        // SEARCH CRITERIA
+        EndUserIp: this.config.endUserIp, // Fixie proxy IP or direct IP
+        CheckIn: checkIn, // Format: yyyy-mm-dd (e.g., "2025-10-31")
+        CheckOut: checkOut, // Format: yyyy-mm-dd
+        City: destination, // City code (e.g., "DXB", not numeric CityId)
+
+        // GUEST & ROOM INFO
         NoOfRooms: Array.isArray(rooms) ? rooms.length : Number(rooms) || 1,
-        RoomGuests: roomGuests,
+        RoomGuests: roomGuests, // [{NoOfAdults, NoOfChild, ChildAge}]
+        GuestNationality: guestNationality, // ISO code (e.g., "IN")
+
+        // PREFERENCES
+        PreferredCurrency: currency, // "INR"
+        IsNearBySearchAllowed: true, // Allow nearby city results
       };
 
       // Remove trailing slash from base URL to avoid double slashes
