@@ -1042,7 +1042,23 @@ class TBOAdapter extends BaseSupplierAdapter {
         checkOut: searchParams.checkOut,
       });
 
-      const tokenId = await this.getHotelToken();
+      let tokenId;
+      try {
+        tokenId = await this.getHotelToken();
+        this.logger.info("✅ TBO hotel token obtained", {
+          tokenId: tokenId ? `${tokenId.substring(0, 20)}...` : "null",
+        });
+      } catch (tokenError) {
+        this.logger.error("❌ Failed to get TBO hotel token", {
+          message: tokenError.message,
+          stack: tokenError.stack?.split("\n")[0],
+        });
+        throw tokenError;
+      }
+
+      if (!tokenId) {
+        throw new Error("TBO hotel token is null or empty");
+      }
 
       const {
         destination,
@@ -1091,19 +1107,58 @@ class TBOAdapter extends BaseSupplierAdapter {
         EndUserIp: this.config.endUserIp,
       };
 
+      this.logger.info("📍 TBO hotel search payload", {
+        url: `${this.config.hotelSearchBase}/Search`,
+        destination,
+        checkIn,
+        checkOut,
+        adults,
+        children,
+        currency,
+        rooms: Array.isArray(rooms) ? rooms.length : rooms,
+      });
+
       // Use retry wrapper
-      const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelSearchBase}/Search`, {
-          method: "POST",
-          data: payload,
-          timeout: this.config.timeout,
-          headers: {
-            "Content-Type": "application/json",
-            Accept: "application/json",
-          },
-        }),
-      );
+      let res;
+      try {
+        res = await this.executeWithRetry(() =>
+          tboRequest(`${this.config.hotelSearchBase}/Search`, {
+            method: "POST",
+            data: payload,
+            timeout: this.config.timeout,
+            headers: {
+              "Content-Type": "application/json",
+              Accept: "application/json",
+            },
+          }),
+        );
+        this.logger.info("✅ TBO search response received", {
+          status: res.status,
+          hasHotelResult: !!res.data?.HotelResult,
+          hasHotels: !!res.data?.Hotels,
+          dataKeys: Object.keys(res.data || {}).slice(0, 10),
+          responseDataType: typeof res.data,
+          responseDataLength: JSON.stringify(res.data).length,
+        });
+      } catch (apiError) {
+        this.logger.error("❌ TBO search API call failed", {
+          message: apiError.message,
+          status: apiError.response?.status,
+          statusText: apiError.response?.statusText,
+          errorData: apiError.response?.data
+            ? JSON.stringify(apiError.response.data).substring(0, 300)
+            : "no error data",
+          url: `${this.config.hotelSearchBase}/Search`,
+          via: tboVia(),
+        });
+        throw apiError;
+      }
+
       const hotels = res.data?.HotelResult || res.data?.Hotels || [];
+      this.logger.info("🏨 Hotels extracted from TBO response", {
+        count: hotels.length,
+        responseDataKeys: Object.keys(res.data || {}),
+      });
 
       // Persist to master schema (fire-and-forget)
       const searchContext = {
