@@ -119,8 +119,21 @@ export function HotelSearchForm({
       // Fetch from TBO API
       const fetchCities = async () => {
         try {
+          // Get the proper API base URL
+          const apiBaseUrl = (() => {
+            if (typeof window !== 'undefined') {
+              const envUrl = import.meta.env.VITE_API_BASE_URL;
+              if (envUrl) {
+                return envUrl.replace(/\/$/, ''); // Remove trailing slash
+              }
+              // Fallback: use Render API
+              return 'https://builder-faredown-pricing.onrender.com/api';
+            }
+            return '/api';
+          })();
+
           const response = await fetch(
-            `/api/tbo-hotels/cities?q=${encodeURIComponent(inputValue)}&limit=15`,
+            `${apiBaseUrl}/tbo-hotels/cities?q=${encodeURIComponent(inputValue)}&limit=15`,
           );
           if (response.ok) {
             const data = await response.json();
