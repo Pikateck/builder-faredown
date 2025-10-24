@@ -67,8 +67,8 @@ const MOCK_HOTELS = {
       name: "Taj Beachfront Dubai",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1568084308940-d50b8e6655ec?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&h=400&fit=crop",
       ],
       amenities: [
         "WiFi",
@@ -91,8 +91,8 @@ const MOCK_HOTELS = {
       name: "Burj Luxury Hotel",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1570129477492-45ec003e2e7f?w=600&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Pool", "Spa", "Fine Dining", "Lounge", "Gym"],
       price: 520,
@@ -123,8 +123,8 @@ const MOCK_HOTELS = {
       name: "Downtown Plaza Hotel",
       starRating: 4,
       images: [
-        "https://images.unsplash.com/photo-1595576508898-eae0dff5d285?w=600&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1619641740950-c8dbe4c13081?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
       price: 280,
@@ -139,8 +139,8 @@ const MOCK_HOTELS = {
       name: "Palm Jumeirah Oasis",
       starRating: 5,
       images: [
-        "https://images.unsplash.com/photo-1568084308940-d50b8e6655ec?w=600&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1520250497591-ec2413095a27?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1551632786-de41ec4a5fcd?w=600&h=400&fit=crop",
       ],
       amenities: [
         "WiFi",
@@ -162,8 +162,8 @@ const MOCK_HOTELS = {
       name: "Deira Heritage Hotel",
       starRating: 3,
       images: [
-        "https://images.unsplash.com/photo-1578899413026-4b5800b87fcb?w=600&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1576675784246-fb3fc6f95f98?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Restaurant", "Bar", "Gym"],
       price: 180,
