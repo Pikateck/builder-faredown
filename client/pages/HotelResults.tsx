@@ -423,8 +423,10 @@ export default function HotelResults() {
       setPricingStatus("loading");
       const checkInStr = checkInDate.toISOString().split("T")[0];
       const checkOutStr = checkOutDate.toISOString().split("T")[0];
+      const adultsCount = parseInt(adults) || 2;
+      const childrenCount = parseInt(children) || 0;
       const metadataResponse = await fetch(
-        `${apiBaseUrl}/hotels?cityId=${destCode}&checkIn=${checkInStr}&checkOut=${checkOutStr}&adults=${guestCount.adults}&children=${guestCount.children}`,
+        `${apiBaseUrl}/hotels?cityId=${destCode}&checkIn=${checkInStr}&checkOut=${checkOutStr}&adults=${adultsCount}&children=${childrenCount}`,
       );
       const metadataData = await metadataResponse.json();
 
