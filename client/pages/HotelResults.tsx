@@ -403,63 +403,121 @@ export default function HotelResults() {
     return processedImages.slice(0, 6); // Limit to 6 images max
   };
 
-  // Fetch TBO hotels from the cities cache
+  // Fetch hotel metadata from DB + prices from TBO in parallel (hybrid approach)
   const fetchTBOHotels = async (destCode: string) => {
     try {
-      console.log("🏨 Fetching TBO hotels for:", destCode);
+      console.log("🏨 Fetching hotel metadata for:", destCode);
 
-      // Get the proper API base URL (handles Netlify redirects automatically)
       const apiBaseUrl = (() => {
         if (typeof window !== "undefined") {
-          // Check for explicit VITE_API_BASE_URL
           const envUrl = import.meta.env.VITE_API_BASE_URL;
-          if (envUrl) {
-            return envUrl.replace(/\/$/, ""); // Remove trailing slash
-          }
-          // Fallback: use current origin (Netlify redirects will handle it)
+          if (envUrl) return envUrl.replace(/\/$/, "");
           return window.location.origin + "/api";
         }
         return "/api";
       })();
 
-      // Extract city name from destination
-      const destName =
-        urlSearchParams.get("destinationName") || destination || destCode;
+      // STEP 1: Fetch metadata instantly from DB
+      setPricingStatus("loading");
+      const metadataResponse = await fetch(
+        `${apiBaseUrl}/hotels/metadata?cityId=${destCode}`
+      );
+      const metadataData = await metadataResponse.json();
 
-      const tboResponse = await fetch(`${apiBaseUrl}/tbo-hotels/search`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          destination: destCode,
-          destinationName: destName,
-          checkIn: departureDate
-            ? departureDate.toISOString().split("T")[0]
-            : checkIn || new Date().toISOString().split("T")[0],
-          checkOut: returnDate
-            ? returnDate.toISOString().split("T")[0]
-            : checkOut ||
-              new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
-                .toISOString()
-                .split("T")[0],
-          adults: parseInt(adults) || 2,
-          children: parseInt(children) || 0,
-          rooms: parseInt(rooms) || 1,
-          currency: selectedCurrency?.code || "INR",
-        }),
-      });
-
-      if (tboResponse.ok) {
-        const data = await tboResponse.json();
-        if (data.success && Array.isArray(data.data)) {
-          console.log("✅ TBO hotels fetched:", data.data.length);
-          return transformTBOData(data.data);
-        }
+      if (!metadataData.hotels || metadataData.hotels.length === 0) {
+        console.warn("No metadata hotels found");
+        return [];
       }
-      console.error("❌ TBO API error response:", tboResponse.status);
-      return [];
+
+      // Convert metadata to Hotel format
+      const metadataHotels: Hotel[] = metadataData.hotels.map((h: any, i: number) => ({
+        id: h.supplier_id || h.id || `hotel-${i}`,
+        name: h.name,
+        location: h.address || destCode,
+        images: [],
+        rating: h.stars || 4.0,
+        reviews: 0,
+        currentPrice: 0,
+        originalPrice: 0,
+        description: `Discover ${h.name}`,
+        amenities: [],
+        features: [],
+        roomTypes: [],
+        address: {
+          street: h.address || "",
+          city: destCode,
+          country: "Unknown",
+          postalCode: "00000",
+        },
+        starRating: h.stars || 4,
+        reviewCount: 0,
+        currency: selectedCurrency?.code || "INR",
+        supplier: "TBO",
+        supplierCode: "tbo",
+        isLiveData: true,
+        priceRange: { min: 0, max: 0 },
+      }));
+
+      console.log("✅ Metadata loaded:", metadataHotels.length, "hotels");
+
+      // STEP 2: Fetch live prices in parallel (non-blocking)
+      fetchLivePrices(destCode, metadataHotels)
+        .then(() => {
+          console.log("✅ Prices merged");
+          setPricingStatus("ready");
+        })
+        .catch((e) => {
+          console.warn("Price fetch error:", e.message);
+          setPricingStatus("ready");
+        });
+
+      return metadataHotels;
     } catch (error) {
-      console.warn("⚠️ Failed to fetch TBO hotels:", error);
+      console.warn("⚠️ Failed to fetch hotel metadata:", error);
+      setPricingStatus("ready");
       return [];
+    }
+  };
+
+  // Fetch live prices from TBO in background
+  const fetchLivePrices = async (destCode: string, hotels: Hotel[]) => {
+    try {
+      const apiBaseUrl = (() => {
+        if (typeof window !== "undefined") {
+          const envUrl = import.meta.env.VITE_API_BASE_URL;
+          if (envUrl) return envUrl.replace(/\/$/, "");
+          return window.location.origin + "/api";
+        }
+        return "/api";
+      })();
+
+      console.log("💰 Fetching live TBO prices...");
+
+      const pricesResponse = await fetch(
+        `${apiBaseUrl}/hotels/prices?cityId=${destCode}`
+      );
+      const pricesData = await pricesResponse.json();
+
+      if (pricesData.prices && Object.keys(pricesData.prices).length > 0) {
+        console.log("💲 Merging prices into hotels...");
+        setHotels((prev) =>
+          prev.map((h) => {
+            const supplierId = h.supplier_id || h.id;
+            const price = pricesData.prices[supplierId];
+            return {
+              ...h,
+              currentPrice: price?.minTotal || 0,
+              originalPrice: price?.maxTotal || 0,
+              priceRange: {
+                min: price?.minTotal || 0,
+                max: price?.maxTotal || 0,
+              },
+            };
+          })
+        );
+      }
+    } catch (e) {
+      console.warn("Failed to fetch prices:", e);
     }
   };
 
