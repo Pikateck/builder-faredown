@@ -922,6 +922,15 @@ class TBOAdapter extends BaseSupplierAdapter {
           ) {
             throw new Error("HTML page returned");
           }
+
+          this.logger.info("TBO hotel auth response received", {
+            url,
+            status: response.status,
+            dataStatus: response.data?.Status,
+            hasTokenId: !!response.data?.TokenId,
+            dataKeys: Object.keys(response.data || {}).slice(0, 10),
+          });
+
           if (response.data?.Status === 1 && response.data?.TokenId) {
             // Cache token ~55 minutes (memory + DB)
             this.hotelTokenId = response.data.TokenId;
@@ -938,8 +947,20 @@ class TBOAdapter extends BaseSupplierAdapter {
               egressIp: egress,
               hotel: true,
             });
+            this.logger.info("✅ TBO hotel authentication successful", {
+              tokenLength: response.data.TokenId.length,
+              expiryTime: new Date(this.hotelTokenExpiry).toISOString(),
+            });
             return this.hotelTokenId;
           }
+
+          this.logger.error("❌ TBO hotel auth response status not 1", {
+            status: response.data?.Status,
+            error: response.data?.Error,
+            errorMessage: response.data?.Error?.ErrorMessage,
+            responseData: JSON.stringify(response.data).substring(0, 300),
+          });
+
           lastErr = new Error(
             `TBO Hotel auth failed: ${response.data?.Error?.ErrorMessage || JSON.stringify(response.data)}`,
           );
