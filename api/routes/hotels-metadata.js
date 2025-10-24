@@ -94,8 +94,7 @@ router.get("/", async (req, res) => {
     // Fetch live TBO hotel results
     const tboResults = await adapter.searchHotels({
       destination: cityId,
-      checkIn:
-        checkIn || new Date().toISOString().split("T")[0],
+      checkIn: checkIn || new Date().toISOString().split("T")[0],
       checkOut:
         checkOut ||
         new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
@@ -197,9 +196,7 @@ router.get("/prices", async (req, res) => {
     // Fetch live prices from TBO
     const tboResults = await adapter.searchHotels({
       destination: cityId,
-      checkIn:
-        checkIn ||
-        new Date().toISOString().split("T")[0],
+      checkIn: checkIn || new Date().toISOString().split("T")[0],
       checkOut:
         checkOut ||
         new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)

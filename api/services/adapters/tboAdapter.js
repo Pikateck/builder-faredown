@@ -2078,7 +2078,8 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       // If no search text, return popular cities
       if (!text || text.length < 1) {
-        const result = await db.query(`
+        const result = await db.query(
+          `
           SELECT
             city_code, city_name, country_code, country_name,
             region_code, region_name, type, latitude, longitude
@@ -2086,7 +2087,9 @@ class TBOAdapter extends BaseSupplierAdapter {
           WHERE is_active = true
           ORDER BY city_name ASC
           LIMIT $1
-        `, [limit]);
+        `,
+          [limit],
+        );
 
         return result.rows.map((row) => ({
           id: row.city_code,
