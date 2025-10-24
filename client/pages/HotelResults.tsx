@@ -414,32 +414,21 @@ export default function HotelResults() {
       const apiBaseUrl = (() => {
         if (typeof window === "undefined") return "/api";
 
-        // CRITICAL FIX: Use relative URL for all cases to avoid CORS issues
-        // The backend will handle routing whether it's same-origin or cross-origin
-        // Try environment first, then fall back to relative
+        // Get VITE_API_BASE_URL from environment
         const envUrl = import.meta.env.VITE_API_BASE_URL;
+
+        // If environment specifies a specific backend URL, use it
         if (envUrl && typeof envUrl === "string" && envUrl.trim().length > 0) {
-          try {
-            const url = new URL(envUrl);
-            const currentUrl = new URL(window.location.href);
-
-            // Same origin? Use relative URL
-            if (url.origin === currentUrl.origin) {
-              console.log("✅ Using relative API URL (same origin)");
-              return "/api";
-            }
-
-            // Cross-origin? Still use relative and hope for proxy/redirect
-            console.log("⚠️ Using relative API URL for cross-origin (proxy expected)");
-            return "/api";
-          } catch (e) {
-            console.warn("⚠️ Failed to parse VITE_API_BASE_URL, using relative:", e.message);
-          }
+          const cleanUrl = envUrl.replace(/\/$/, "");
+          console.log("✅ Using configured API URL:", cleanUrl);
+          return cleanUrl;
         }
 
-        // Always default to relative URL
-        console.log("✅ Using relative API URL (default)");
-        return "/api";
+        // FALLBACK: Use Render API directly
+        // This is the production API endpoint
+        const renderApi = "https://builder-faredown-pricing.onrender.com/api";
+        console.log("⚠️ VITE_API_BASE_URL not configured, using Render directly:", renderApi);
+        return renderApi;
       })();
 
       // STEP 1: Fetch metadata instantly from TBO
