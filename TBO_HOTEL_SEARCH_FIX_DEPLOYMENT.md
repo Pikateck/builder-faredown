@@ -1,19 +1,24 @@
 # TBO Hotel Search Authorization Fix - Deployment Guide
 
 ## Problem
+
 The TBO hotel search endpoint was returning a 401 "Access Credentials is incorrect" error even though authentication was succeeding. The root cause was that the search endpoint (and other dynamic booking methods) were using the `TokenId` obtained from the authentication endpoint, which is only valid for static data endpoints.
 
 ## Root Cause Analysis
+
 According to TBO's credential email:
+
 - **Static Data credentials** (travelcategory / Tra@59334536): Used for Country List, City List, Hotel Codes List, Hotel Details
 - **Dynamic Booking credentials** (tboprod / BOMF145 / @Bo#4M-Api@): Used for authorization in Search, PreBook, Book, and other dynamic booking methods
 
 The search endpoint requires **direct credential authorization** (ClientId, UserName, Password) in the request payload, NOT the TokenId.
 
 ## Solution Implemented
+
 Updated all dynamic booking methods in `api/services/adapters/tboAdapter.js` to use direct credentials instead of TokenId:
 
 ### Methods Updated:
+
 1. **searchHotels()** (line 1146)
    - Changed from: `TokenId: tokenId`
    - Changed to: `ClientId, UserName, Password` (direct credentials)
@@ -28,9 +33,11 @@ Updated all dynamic booking methods in `api/services/adapters/tboAdapter.js` to 
 9. **getChangeRequestStatus()** (line 1912)
 
 ### Unchanged (Correct Implementation):
+
 - **Static data methods** (getCountryList, getCityList, getHotelCodes, getHotelDetails, getTopDestinations): Already use staticUserName and staticPassword - No changes needed
 
 ## Credentials Configuration
+
 Environment variables are already correctly configured:
 
 ```
@@ -43,13 +50,16 @@ TBO_STATIC_DATA_CREDENTIALS_PASSWORD="Tra@59334536"
 ```
 
 ## Expected Behavior After Fix
+
 1. Hotel search requests will include ClientId, UserName, Password in payload
 2. TBO search endpoint will recognize valid credentials and return hotel results
 3. Status: 1 will be returned with hotel list (instead of 401 error)
 4. PreBook, Book, and other dynamic methods will also work with same credential approach
 
 ## Testing
+
 After deployment, test with:
+
 ```bash
 # Hotel search should return hotels with Status: 1
 curl -X POST https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search \
@@ -64,6 +74,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search
 ```
 
 Expected response:
+
 ```json
 {
   "hotels": [
@@ -81,6 +92,7 @@ Expected response:
 ```
 
 ## Deployment Checklist
+
 - [x] Updated all 9 dynamic booking methods
 - [x] Verified static data methods use correct credentials
 - [x] Verified environment variables are set correctly
@@ -91,9 +103,11 @@ Expected response:
 - [ ] Verify results return with hotel list and pricing
 
 ## Files Modified
+
 - `api/services/adapters/tboAdapter.js` (9 methods updated)
 
 ## Revert Plan (if needed)
+
 ```bash
 git revert <commit-hash>
 ```
@@ -101,6 +115,7 @@ git revert <commit-hash>
 This will restore TokenId-based approach (though it won't work with TBO's authorization model).
 
 ## Notes
+
 - TokenId is no longer used for dynamic booking methods
 - The `getHotelToken()` method can be kept as-is or removed later (currently not used by dynamic methods after this fix)
 - The proxy configuration (Fixie) remains in place and working
