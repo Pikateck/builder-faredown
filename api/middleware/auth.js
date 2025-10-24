@@ -12,6 +12,32 @@ const JWT_SECRET = process.env.JWT_SECRET || "your-secret-key";
 const users = new Map();
 
 /**
+ * Initialize demo user for testing
+ */
+async function initializeDemoUser() {
+  const existingDemo = getUserByEmail("demo@faredown.com");
+  if (!existingDemo) {
+    const demoPassword = await hashPassword("password123");
+    const demoUser = {
+      id: "demo_user_001",
+      email: "demo@faredown.com",
+      password: demoPassword,
+      firstName: "Demo",
+      lastName: "User",
+      username: "demo_user",
+      role: "user",
+      isVerified: true,
+      createdAt: new Date(),
+    };
+    users.set(demoUser.id, demoUser);
+    console.log("✅ Demo user initialized: demo@faredown.com / password123");
+  }
+}
+
+// Initialize demo user on module load
+initializeDemoUser().catch(err => console.error("Failed to initialize demo user:", err));
+
+/**
  * Generate JWT token
  */
 function generateToken(user) {
