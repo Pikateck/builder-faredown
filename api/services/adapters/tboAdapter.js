@@ -1250,31 +1250,24 @@ class TBOAdapter extends BaseSupplierAdapter {
         ? this.config.hotelSearchBase.slice(0, -1)
         : this.config.hotelSearchBase;
 
-      this.logger.info("📍 TBO hotel search payload (dynamic booking method)", {
-        url: `${baseUrl}/Search`,
+      this.logger.info("📍 TBO hotel search payload (Tek Travels API)", {
+        url: this.config.hotelSearchEndpoint,
         destination,
         checkIn,
         checkOut,
         adults,
         children,
         currency,
-        rooms: Array.isArray(rooms) ? rooms.length : rooms,
-        clientId: this.config.hotelClientId,
-        userId: this.config.hotelUserId,
-        hasPassword: !!this.config.hotelPassword,
+        cityId,
+        noOfNights,
+        hasTokenId: !!tokenId,
       });
 
-      // Use retry wrapper
+      // Use retry wrapper with correct endpoint
       let res;
       try {
-        // Remove trailing slash from base URL to avoid double slashes
-        const baseUrl = this.config.hotelSearchBase.endsWith("/")
-          ? this.config.hotelSearchBase.slice(0, -1)
-          : this.config.hotelSearchBase;
-        const searchUrl = `${baseUrl}/Search`;
-
         res = await this.executeWithRetry(() =>
-          tboRequest(searchUrl, {
+          tboRequest(this.config.hotelSearchEndpoint, {
             method: "POST",
             data: payload,
             timeout: this.config.timeout,
@@ -1284,16 +1277,14 @@ class TBOAdapter extends BaseSupplierAdapter {
             },
           }),
         );
-        this.logger.info("✅ TBO search response received", {
+        this.logger.info("✅ TBO hotel search response received", {
           status: res.status,
-          hasHotelResult: !!res.data?.HotelResult,
-          hasHotels: !!res.data?.Hotels,
-          dataKeys: Object.keys(res.data || {}).slice(0, 10),
-          responseDataType: typeof res.data,
-          responseDataLength: JSON.stringify(res.data).length,
           tboStatus: res.data?.Status,
-          tboError: res.data?.Error,
-          fullResponse: JSON.stringify(res.data).substring(0, 500),
+          hasHotelResults: !!res.data?.HotelResults,
+          hotelCount: Array.isArray(res.data?.HotelResults) ? res.data.HotelResults.length : 0,
+          hasTraceId: !!res.data?.TraceId,
+          dataKeys: Object.keys(res.data || {}).slice(0, 10),
+          responseSize: JSON.stringify(res.data).length,
         });
       } catch (apiError) {
         this.logger.error("❌ TBO search API call failed", {
@@ -1303,21 +1294,24 @@ class TBOAdapter extends BaseSupplierAdapter {
           errorData: apiError.response?.data
             ? JSON.stringify(apiError.response.data).substring(0, 300)
             : "no error data",
-          url: `${this.config.hotelSearchBase}/Search`,
+          url: this.config.hotelSearchEndpoint,
           via: tboVia(),
         });
         throw apiError;
       }
 
-      // Try multiple possible response keys for TBO hotels
-      let hotels =
-        res.data?.HotelResult ||
-        res.data?.Hotels ||
-        res.data?.hotel_result ||
-        res.data?.Result ||
-        res.data?.results ||
-        res.data?.data ||
-        (Array.isArray(res.data) ? res.data : []);
+      // Check for TBO status code
+      if (res.data?.Status !== 1) {
+        this.logger.warn("❌ TBO search returned non-success status", {
+          status: res.data?.Status,
+          error: res.data?.Error?.ErrorMessage || res.data?.Error?.Description,
+          errorCode: res.data?.Error?.ErrorCode,
+        });
+        return [];
+      }
+
+      // Extract hotels from correct response key (Tek Travels API uses HotelResults)
+      let hotels = res.data?.HotelResults || [];
 
       this.logger.info("���� Hotels extracted from TBO response", {
         count: Array.isArray(hotels) ? hotels.length : 0,
