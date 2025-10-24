@@ -107,8 +107,8 @@ const MOCK_HOTELS = {
       name: "Marina Bay Resort",
       starRating: 4,
       images: [
-        "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1551632786-de41ec4a5fcd?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1576675784246-fb3fc6f95f98?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Pool", "Restaurant", "Beach Access", "Gym"],
       price: 320,
