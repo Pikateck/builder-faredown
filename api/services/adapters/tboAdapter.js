@@ -893,7 +893,7 @@ class TBOAdapter extends BaseSupplierAdapter {
     } catch {}
 
     return await this.executeWithRetry(async () => {
-      // Try minimal payload first (without AgencyId, which may not be needed for hotel auth)
+      // TBO Hotel Authentication - Tek Travels API format
       const authRequest = {
         ClientId: this.config.hotelClientId,
         UserName: this.config.hotelUserId,
@@ -901,125 +901,93 @@ class TBOAdapter extends BaseSupplierAdapter {
         EndUserIp: this.config.endUserIp,
       };
 
-      this.logger.info("🔐 TBO Hotel Auth Request Payload", {
+      this.logger.info("🔐 TBO Hotel Auth Request (Tek Travels API)", {
         clientId: authRequest.ClientId,
         userName: authRequest.UserName,
         password: authRequest.Password ? "***" : "null",
         endUserIp: authRequest.EndUserIp,
-        payloadJSON: JSON.stringify(authRequest),
-        configAgencyId: this.config.agencyId,
-        configHotelClientId: this.config.hotelClientId,
-        configHotelUserId: this.config.hotelUserId,
+        endpoint: this.config.hotelAuthEndpoint,
       });
 
-      const paths = ["/Authenticate", "/Authenticate/", "/rest/Authenticate"];
-      let lastErr;
-      for (const p of paths) {
-        try {
-          const egress = await this._getEgressIp();
-          const url = `${this.config.hotelAuthBase}${p}`;
-          this.logger.info("TBO Hotel Auth attempt", { url, via: tboVia() });
-          const response = await tboRequest(url, {
-            method: "POST",
-            data: authRequest,
-            timeout: this.config.timeout,
-            headers: {
-              "Content-Type": "application/json",
-              Accept: "application/json",
-            },
-          });
-          if (
-            typeof response.data === "string" &&
-            /<html/i.test(response.data)
-          ) {
-            throw new Error("HTML page returned");
-          }
+      try {
+        const egress = await this._getEgressIp();
+        this.logger.info("TBO Hotel Auth attempt", {
+          url: this.config.hotelAuthEndpoint,
+          via: tboVia(),
+          egressIp: egress,
+        });
 
-          this.logger.info("TBO hotel auth response received", {
-            url,
-            status: response.status,
-            statusText: response.statusText,
-            dataStatus: response.data?.Status,
-            hasTokenId: !!response.data?.TokenId,
-            dataKeys: Object.keys(response.data || {}).slice(0, 10),
-            responseHeaders: JSON.stringify(response.headers || {}),
-            fullResponseData: JSON.stringify(response.data),
-          });
+        const response = await tboRequest(this.config.hotelAuthEndpoint, {
+          method: "POST",
+          data: authRequest,
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        });
 
-          if (response.data?.Status === 1 && response.data?.TokenId) {
-            // Cache token ~55 minutes (memory + DB)
-            this.hotelTokenId = response.data.TokenId;
-            this.hotelTokenExpiry = Date.now() + 55 * 60 * 1000;
-            await this.cacheHotelToken(
-              this.hotelTokenId,
-              this.hotelTokenExpiry,
-            );
-            this._recordAuthAttempt({
-              url,
-              method: "POST",
-              status: response.status || 200,
-              bodySnippet: JSON.stringify(response.data).slice(0, 200),
-              egressIp: egress,
-              hotel: true,
-            });
-            this.logger.info("✅ TBO hotel authentication successful", {
-              tokenLength: response.data.TokenId.length,
-              expiryTime: new Date(this.hotelTokenExpiry).toISOString(),
-            });
-            return this.hotelTokenId;
-          }
+        this.logger.info("TBO hotel auth response received", {
+          status: response.status,
+          responseStatus: response.data?.Status,
+          hasTokenId: !!response.data?.TokenId,
+          hasError: !!response.data?.Error,
+          errorCode: response.data?.Error?.ErrorCode,
+          errorMessage: response.data?.Error?.ErrorMessage,
+        });
 
-          this.logger.error("❌ TBO hotel auth response status not 1", {
-            status: response.data?.Status,
-            error: response.data?.Error,
-            errorMessage: response.data?.Error?.ErrorMessage,
-            errorCode: response.data?.Error?.ErrorCode,
-            responseData: JSON.stringify(response.data),
-            sentPayload: JSON.stringify(authRequest),
-          });
-
-          lastErr = new Error(
-            `TBO Hotel auth failed: ${response.data?.Error?.ErrorMessage || JSON.stringify(response.data)}`,
+        if (response.data?.Status === 1 && response.data?.TokenId) {
+          // Cache token ~23 hours (expires in 24 hours per TBO API)
+          this.hotelTokenId = response.data.TokenId;
+          this.hotelTokenExpiry = Date.now() + 23 * 60 * 60 * 1000;
+          await this.cacheHotelToken(
+            this.hotelTokenId,
+            this.hotelTokenExpiry,
           );
           this._recordAuthAttempt({
-            url,
+            url: this.config.hotelAuthEndpoint,
             method: "POST",
             status: response.status || 200,
-            bodySnippet: JSON.stringify(response.data).slice(0, 200),
+            bodySnippet: `Status: ${response.data.Status}, TokenId: ${response.data.TokenId.substring(0, 20)}...`,
             egressIp: egress,
             hotel: true,
           });
-        } catch (e) {
-          lastErr = e;
-          const status = e.response?.status;
-          const body = e.response?.data;
-          const egress = await this._getEgressIp();
-          const url = `${this.config.hotelAuthBase}${p}`;
-          this._recordAuthAttempt({
-            url,
-            method: "POST",
-            status: status || null,
-            bodySnippet:
-              (typeof body === "string" ? body : JSON.stringify(body))?.slice(
-                0,
-                200,
-              ) || String(e.message).slice(0, 200),
-            egressIp: egress,
-            hotel: true,
+          this.logger.info("✅ TBO hotel authentication successful", {
+            tokenLength: response.data.TokenId.length,
+            expiryTime: new Date(this.hotelTokenExpiry).toISOString(),
           });
-          this.logger.error("TBO Hotel Auth attempt failed", {
-            url,
-            status,
-            via: tboVia(),
-            body:
-              typeof body === "string"
-                ? body.slice(0, 200)
-                : JSON.stringify(body)?.slice(0, 200),
-          });
-          continue;
+          return this.hotelTokenId;
         }
+
+        this.logger.error("❌ TBO hotel auth failed", {
+          status: response.data?.Status,
+          errorCode: response.data?.Error?.ErrorCode,
+          errorMessage: response.data?.Error?.ErrorMessage,
+        });
+
+        throw new Error(
+          `TBO Hotel auth failed: ${response.data?.Error?.ErrorMessage || `Status: ${response.data?.Status}`}`,
+        );
+      } catch (e) {
+        const status = e.response?.status;
+        const body = e.response?.data;
+        const egress = await this._getEgressIp();
+        this._recordAuthAttempt({
+          url: this.config.hotelAuthEndpoint,
+          method: "POST",
+          status: status || null,
+          bodySnippet: String(e.message).slice(0, 200),
+          egressIp: egress,
+          hotel: true,
+        });
+        this.logger.error("TBO Hotel Auth attempt failed", {
+          url: this.config.hotelAuthEndpoint,
+          status,
+          via: tboVia(),
+          message: e.message,
+        });
+        throw e;
       }
-      throw lastErr || new Error("TBO Hotel auth failed");
     });
   }
 
