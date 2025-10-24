@@ -195,12 +195,9 @@ router.get("/prices", async (req, res) => {
     }
 
     // Get TBO adapter
-    let adapter;
-    try {
-      const adapterModule = require("../services/adapters/tboAdapter.js");
-      adapter = adapterModule.getTboAdapter?.() || adapterModule;
-    } catch (e) {
-      console.error("TBO adapter not available:", e.message);
+    const adapter = supplierAdapterManager.getAdapter("TBO");
+    if (!adapter) {
+      console.error("TBO adapter not available");
       return res.status(503).json({
         error: "Pricing service unavailable",
         prices: {},
