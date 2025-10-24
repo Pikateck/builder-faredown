@@ -479,6 +479,13 @@ export default function HotelResults() {
 
       let metadataResponse;
       try {
+        console.log("📡 Attempting fetch with config:", {
+          url: apiUrl,
+          apiBaseUrl,
+          currentOrigin: typeof window !== "undefined" ? window.location.origin : "N/A",
+          envViteUrl: import.meta.env.VITE_API_BASE_URL,
+        });
+
         metadataResponse = await fetch(apiUrl, {
           method: "GET",
           headers: {
@@ -488,12 +495,18 @@ export default function HotelResults() {
           credentials: "include", // Include cookies for same-origin requests
         });
       } catch (fetchError) {
-        console.error("❌ Fetch failed:", {
+        const errorDetails = {
           url: apiUrl,
-          error: fetchError.message,
-          type: fetchError.name,
-        });
-        setError(`Failed to reach hotel service: ${fetchError.message}`);
+          apiBaseUrl,
+          message: fetchError?.message || "Unknown error",
+          name: fetchError?.name || "UnknownError",
+          cause: fetchError?.cause || null,
+          stack: fetchError?.stack?.slice(0, 200) || null,
+        };
+        console.error("❌ Fetch failed:", errorDetails);
+        setError(
+          `Network error: ${fetchError?.message || "Failed to reach hotel service"}`,
+        );
         return [];
       }
 
