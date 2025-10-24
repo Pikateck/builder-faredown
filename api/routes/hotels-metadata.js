@@ -70,7 +70,15 @@ const MOCK_HOTELS = {
         "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
       ],
-      amenities: ["WiFi", "Pool", "Spa", "Restaurant", "Bar", "Gym", "Concierge"],
+      amenities: [
+        "WiFi",
+        "Pool",
+        "Spa",
+        "Restaurant",
+        "Bar",
+        "Gym",
+        "Concierge",
+      ],
       price: 450,
       currency: "INR",
       rates: [
@@ -434,7 +442,9 @@ router.get("/", async (req, res) => {
     let finalHotels = hotels;
     let source = "tbo_live";
     if (hotels.length === 0 && MOCK_HOTELS[cityId]) {
-      console.log(`📦 TBO returned 0 results, using fallback mock data for ${cityId}`);
+      console.log(
+        `📦 TBO returned 0 results, using fallback mock data for ${cityId}`,
+      );
       finalHotels = MOCK_HOTELS[cityId].map((h) => {
         let minPrice = Infinity;
         let maxPrice = 0;
@@ -472,7 +482,9 @@ router.get("/", async (req, res) => {
       console.log(`✅ Loaded ${finalHotels.length} fallback mock hotels`);
     }
 
-    console.log(`📊 Returning ${finalHotels.length} formatted hotels (source: ${source})`);
+    console.log(
+      `📊 Returning ${finalHotels.length} formatted hotels (source: ${source})`,
+    );
     console.log(`🏨 === HOTEL SEARCH END ===\n`);
 
     return res.json({
