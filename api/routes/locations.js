@@ -193,15 +193,64 @@ router.get("/stats", async (req, res) => {
       db.query("SELECT COUNT(*) as count FROM tbo_hotels"),
     ]);
 
-    res.json({
+    const stats = {
       countries: parseInt(countriesRes.rows[0]?.count || 0),
       cities: parseInt(citiesRes.rows[0]?.count || 0),
       hotels: parseInt(hotelsRes.rows[0]?.count || 0),
-    });
+    };
+
+    res.json(stats);
   } catch (error) {
     console.error("Stats error:", error.message);
     res.status(500).json({
       error: "Failed to fetch stats",
+      message: error.message,
+    });
+  }
+});
+
+/**
+ * GET /api/locations/sync-status
+ * Check if sync is needed and trigger auto-sync if data is empty
+ */
+router.get("/sync-status", async (req, res) => {
+  try {
+    const citiesResult = await db.query(
+      "SELECT COUNT(*) as count FROM tbo_cities",
+    );
+    const cityCount = parseInt(citiesResult.rows[0]?.count || 0);
+
+    if (cityCount === 0) {
+      // Auto-trigger sync if no data
+      console.log("🔄 Auto-triggering TBO locations sync (no cities found)...");
+      const { syncTboLocations } = require("../jobs/tboSyncLocations.js");
+
+      // Fire-and-forget async sync
+      syncTboLocations()
+        .then((result) => {
+          console.log("✅ Auto-sync completed:", result);
+        })
+        .catch((error) => {
+          console.error("❌ Auto-sync failed:", error.message);
+        });
+
+      return res.json({
+        synced: false,
+        syncing: true,
+        message: "Data is empty, auto-sync triggered in background",
+        cityCount: 0,
+      });
+    }
+
+    res.json({
+      synced: true,
+      syncing: false,
+      cityCount,
+    });
+  } catch (error) {
+    console.error("Sync status error:", error.message);
+    res.status(500).json({
+      error: "Failed to check sync status",
       message: error.message,
     });
   }
