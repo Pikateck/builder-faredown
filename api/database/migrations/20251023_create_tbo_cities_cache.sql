@@ -4,7 +4,7 @@
 
 CREATE TABLE IF NOT EXISTS tbo_cities (
   id SERIAL PRIMARY KEY,
-  city_code VARCHAR(50) NOT NULL,
+  city_code VARCHAR(50) NOT NULL UNIQUE,
   city_name VARCHAR(255) NOT NULL,
   country_code VARCHAR(10),
   country_name VARCHAR(255),
