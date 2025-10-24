@@ -323,7 +323,7 @@ export function HotelSearchForm({
         searchTimestamp: new Date().toISOString(),
       });
 
-      const searchParams = new URLSearchParams({
+      const urlSearchParams = new URLSearchParams({
         checkIn: checkInDate.toISOString(),
         checkOut: checkOutDate.toISOString(),
         adults: guests.adults.toString(),
@@ -337,9 +337,9 @@ export function HotelSearchForm({
       if (destination) {
         const code =
           destinationCode || (selectedResult?.code as string) || "HTL";
-        searchParams.set("destination", code); // use code for backend search
-        searchParams.set("destinationCode", code);
-        searchParams.set("destinationName", destination);
+        urlSearchParams.set("destination", code); // use code for backend search
+        urlSearchParams.set("destinationCode", code);
+        urlSearchParams.set("destinationName", destination);
       }
 
       // Save search data to sessionStorage for persistence
@@ -406,7 +406,7 @@ export function HotelSearchForm({
           console.error("Failed to save recent hotel search:", error);
         });
 
-      const url = `/hotels/results?${searchParams.toString()}`;
+      const url = `/hotels/results?${urlSearchParams.toString()}`;
       console.log("🏨 Navigating to hotel search:", url);
 
       if (onSearch) {
