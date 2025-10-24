@@ -670,12 +670,29 @@ async function startServer() {
       );
     }
 
-    server = app.listen(PORT, () => {
+    // Verify Fixie proxy configuration
+    const fixieUrl = process.env.FIXIE_URL || process.env.HTTP_PROXY || "NOT SET";
+    const verifyFixieIP = async () => {
+      try {
+        console.log("\n🔍 Verifying Fixie Proxy Configuration...");
+        console.log(`   FIXIE_URL: ${fixieUrl.includes("@") ? fixieUrl.substring(0, 20) + "***@***" : fixieUrl}`);
+        console.log(`   HTTP_PROXY: ${process.env.HTTP_PROXY ? "SET" : "NOT SET"}`);
+        console.log(`   HTTPS_PROXY: ${process.env.HTTPS_PROXY ? "SET" : "NOT SET"}`);
+      } catch (e) {
+        console.warn("⚠️ Fixie verification skipped");
+      }
+    };
+
+    server = app.listen(PORT, async () => {
       console.log("\n🚀 Faredown API Server Started");
       console.log("================================");
       console.log(`📍 Server URL: http://localhost:${PORT}`);
       console.log(`🥊 Health Check: http://localhost:${PORT}/health`);
       console.log(`🌍 Environment: ${process.env.NODE_ENV || "development"}`);
+
+      // Verify proxy setup
+      await verifyFixieIP();
+
       console.log("================================\n");
     });
 
