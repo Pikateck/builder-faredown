@@ -41,22 +41,19 @@ class TBOAdapter extends BaseSupplierAdapter {
       timeout: parseInt(process.env.TBO_TIMEOUT_MS || "15000"),
       requestsPerSecond: 10,
       // TBO Hotel API (Tek Travels API) - corrected endpoints
-      hotelAuthEndpoint:
-        "http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate",
-      hotelCityListEndpoint:
-        "http://api.tektravels.com/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
+      // CORRECT TBO Hotel API Endpoints (not Tek Travels)
       hotelSearchEndpoint:
-        "https://HotelBE.tektravels.com/hotelservice.svc/rest/Gethotelresult",
-      hotelInfoEndpoint:
-        "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelInfo",
-      hotelRoomEndpoint:
-        "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelRoom",
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/Search",
       hotelPreBookEndpoint:
-        "https://HotelBE.tektravels.com/hotelservice.svc/rest/PreBook",
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/BlockRoom",
       hotelBookEndpoint:
-        "https://HotelBE.tektravels.com/hotelservice.svc/rest/Book",
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/Book",
       hotelGenerateVoucherEndpoint:
-        "https://HotelBE.tektravels.com/hotelservice.svc/rest/GenerateVoucher",
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/GenerateVoucher",
+      hotelCancelEndpoint:
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/CancelBooking",
+      hotelGetBookingDetailsEndpoint:
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/GetBookingDetails",
       // Credentials
       hotelClientId: "ApiIntegrationNew",
       hotelUserId:
