@@ -101,6 +101,7 @@ export default function HotelResults() {
   const [error, setError] = useState<string | null>(null);
   const [totalResults, setTotalResults] = useState(0);
   const [isLiveData, setIsLiveData] = useState(false);
+  const [pricingStatus, setPricingStatus] = useState<"loading" | "ready" | "error">("loading");
   const [showSearchEdit, setShowSearchEdit] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [nameQuery, setNameQuery] = useState("");
