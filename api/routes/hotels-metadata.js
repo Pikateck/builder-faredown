@@ -124,7 +124,7 @@ router.get("/", async (req, res) => {
     res.json({
       ...responseData,
       cached: false,
-      source: "database",
+      source: source,
       pricing_status: "loading",
       message: "Fetching live prices in parallel...",
     });
