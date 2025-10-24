@@ -460,7 +460,10 @@ export default function HotelResults() {
           supplier: "TBO",
           supplierCode: "tbo",
           isLiveData: true,
-          priceRange: { min: h.minTotal || 0, max: h.maxTotal || h.minTotal || 0 },
+          priceRange: {
+            min: h.minTotal || 0,
+            max: h.maxTotal || h.minTotal || 0,
+          },
         }),
       );
 
