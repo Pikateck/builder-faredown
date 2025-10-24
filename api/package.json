@@ -3,7 +3,6 @@
   "version": "1.0.0",
   "type": "commonjs",
   "description": "Faredown Pricing Engine API for Render deployment",
-  "type": "commonjs",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
