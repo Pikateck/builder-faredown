@@ -112,6 +112,7 @@ router.get("/", async (req, res) => {
       adults,
       children,
       currency: "INR",
+      countryCode, // Include country code for city lookup
       maxResults: 50,
     };
 
