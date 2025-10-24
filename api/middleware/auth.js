@@ -35,7 +35,9 @@ async function initializeDemoUser() {
 }
 
 // Initialize demo user on module load
-initializeDemoUser().catch(err => console.error("Failed to initialize demo user:", err));
+initializeDemoUser().catch((err) =>
+  console.error("Failed to initialize demo user:", err),
+);
 
 /**
  * Generate JWT token
