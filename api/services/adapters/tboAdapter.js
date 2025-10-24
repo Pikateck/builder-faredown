@@ -2051,17 +2051,53 @@ class TBOAdapter extends BaseSupplierAdapter {
       const db = require("../../database/connection");
       const text = (searchText || "").trim().toLowerCase();
 
-      if (!text || text.length < 1) return [];
+      // Check if table exists
+      const tableCheckResult = await db.query(`
+        SELECT EXISTS (
+          SELECT 1 FROM information_schema.tables
+          WHERE table_name = 'tbo_cities'
+        ) as table_exists;
+      `);
+
+      if (!tableCheckResult.rows[0].table_exists) {
+        this.logger.warn("tbo_cities table does not exist");
+        return [];
+      }
 
       // Check if table is empty and seed with top destinations if needed
       const countResult = await db.query(
         `SELECT COUNT(*) as count FROM tbo_cities WHERE is_active = true`,
       );
+
       if (countResult.rows[0].count === 0) {
         this.logger.info(
           "TBO cities table is empty, seeding with top destinations",
         );
         await this.seedTopCities();
+      }
+
+      // If no search text, return popular cities
+      if (!text || text.length < 1) {
+        const result = await db.query(`
+          SELECT
+            city_code, city_name, country_code, country_name,
+            region_code, region_name, type, latitude, longitude
+          FROM tbo_cities
+          WHERE is_active = true
+          ORDER BY city_name ASC
+          LIMIT $1
+        `, [limit]);
+
+        return result.rows.map((row) => ({
+          id: row.city_code,
+          code: row.city_code,
+          name: row.city_name,
+          region: row.region_name || null,
+          countryCode: row.country_code,
+          countryName: row.country_name,
+          lat: row.latitude,
+          lng: row.longitude,
+        }));
       }
 
       let query = `
