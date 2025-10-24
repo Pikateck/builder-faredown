@@ -202,6 +202,100 @@ const MOCK_HOTELS = {
       currency: "INR",
       rates: [{ price: 320, description: "Deluxe Room" }],
     },
+    {
+      hotelId: "mock_hilton_delhi",
+      name: "Hilton New Delhi",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Pool", "Restaurant", "Gym"],
+      price: 300,
+      currency: "INR",
+      rates: [{ price: 300, description: "Standard Room" }],
+    },
+  ],
+  SIN: [
+    {
+      hotelId: "mock_marina_bay",
+      name: "Marina Bay Sands",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Pool", "Spa", "Fine Dining"],
+      price: 400,
+      currency: "INR",
+      rates: [{ price: 400, description: "Deluxe Room" }],
+    },
+  ],
+  PAR: [
+    {
+      hotelId: "mock_ritz_paris",
+      name: "Hotel Ritz Paris",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1570129477492-45ec003e2e7f?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Spa", "Fine Dining", "Concierge"],
+      price: 850,
+      currency: "INR",
+      rates: [{ price: 850, description: "Deluxe Suite" }],
+    },
+    {
+      hotelId: "mock_louvre_paris",
+      name: "Le Louvre Paris",
+      starRating: 4,
+      images: [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Restaurant", "Bar"],
+      price: 450,
+      currency: "INR",
+      rates: [{ price: 450, description: "Standard Room" }],
+    },
+  ],
+  LDN: [
+    {
+      hotelId: "mock_savoy_london",
+      name: "The Savoy London",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Spa", "River View", "Fine Dining"],
+      price: 800,
+      currency: "INR",
+      rates: [{ price: 800, description: "Deluxe Suite" }],
+    },
+  ],
+  NYC: [
+    {
+      hotelId: "mock_plaza_nyc",
+      name: "The Plaza New York",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1570129477492-45ec003e2e7f?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Spa", "Rooftop Bar", "Fine Dining"],
+      price: 750,
+      currency: "INR",
+      rates: [{ price: 750, description: "Deluxe Room" }],
+    },
+  ],
+  AUH: [
+    {
+      hotelId: "mock_emirates_palace",
+      name: "Emirates Palace Abu Dhabi",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Private Beach", "Spa", "Fine Dining"],
+      price: 550,
+      currency: "INR",
+      rates: [{ price: 550, description: "Beachfront Suite" }],
+    },
   ],
 };
 
