@@ -482,7 +482,7 @@ export default function HotelResults() {
         metadataResponse = await fetch(apiUrl, {
           method: "GET",
           headers: {
-            "Accept": "application/json",
+            Accept: "application/json",
             "Content-Type": "application/json",
           },
           credentials: "include", // Include cookies for same-origin requests
@@ -504,7 +504,9 @@ export default function HotelResults() {
           statusText: metadataResponse.statusText,
           body: errorText.slice(0, 500),
         });
-        setError(`Hotel service error: ${metadataResponse.status} ${metadataResponse.statusText}`);
+        setError(
+          `Hotel service error: ${metadataResponse.status} ${metadataResponse.statusText}`,
+        );
         return [];
       }
 
