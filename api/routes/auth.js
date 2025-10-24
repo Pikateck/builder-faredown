@@ -67,17 +67,15 @@ router.post("/register", validate.register, async (req, res) => {
 
     res.status(201).json({
       success: true,
-      data: {
-        user: {
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          username: user.username,
-          isVerified: user.isVerified,
-        },
-        token,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
+        isVerified: user.isVerified,
       },
+      token,
     });
   } catch (error) {
     console.error("🔴 Registration error:", error);
