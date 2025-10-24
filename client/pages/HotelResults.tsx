@@ -422,7 +422,7 @@ export default function HotelResults() {
       // STEP 1: Fetch metadata instantly from DB
       setPricingStatus("loading");
       const metadataResponse = await fetch(
-        `${apiBaseUrl}/hotels/metadata?cityId=${destCode}`,
+        `${apiBaseUrl}/hotels?cityId=${destCode}`,
       );
       const metadataData = await metadataResponse.json();
 
@@ -1750,7 +1750,7 @@ export default function HotelResults() {
                         return `${formatDisplayDate(inD)} - ${formatDisplayDate(outD)}`;
                       return "Select dates";
                     })()}
-                    {` • ${adults} adult${parseInt(adults) > 1 ? "s" : ""}`}
+                    {` ��� ${adults} adult${parseInt(adults) > 1 ? "s" : ""}`}
                     {parseInt(children) > 0
                       ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}`
                       : ""}
