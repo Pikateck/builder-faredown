@@ -56,12 +56,14 @@ router.get("/", async (req, res) => {
       // Call TBO searchHotels to get actual hotel data
       const tboResults = await adapter.searchHotels({
         destination: cityId,
-        checkIn: new Date().toISOString().split("T")[0],
-        checkOut: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
-          .toISOString()
-          .split("T")[0],
-        adults: 2,
-        children: 0,
+        checkIn: checkIn || new Date().toISOString().split("T")[0],
+        checkOut:
+          checkOut ||
+          new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+            .toISOString()
+            .split("T")[0],
+        adults,
+        children,
         currency: "INR",
       });
 
