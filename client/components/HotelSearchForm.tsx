@@ -346,7 +346,18 @@ export function HotelSearchForm({
       };
 
       // Non-blocking API call to store recent search
-      fetch("/api/recent-searches", {
+      const apiBaseUrl = (() => {
+        if (typeof window !== 'undefined') {
+          const envUrl = import.meta.env.VITE_API_BASE_URL;
+          if (envUrl) {
+            return envUrl.replace(/\/$/, '');
+          }
+          return 'https://builder-faredown-pricing.onrender.com/api';
+        }
+        return '/api';
+      })();
+
+      fetch(`${apiBaseUrl}/recent-searches`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
