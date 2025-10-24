@@ -419,10 +419,12 @@ export default function HotelResults() {
         return "/api";
       })();
 
-      // STEP 1: Fetch metadata instantly from DB
+      // STEP 1: Fetch metadata instantly from TBO
       setPricingStatus("loading");
+      const checkInStr = checkInDate.toISOString().split("T")[0];
+      const checkOutStr = checkOutDate.toISOString().split("T")[0];
       const metadataResponse = await fetch(
-        `${apiBaseUrl}/hotels?cityId=${destCode}`,
+        `${apiBaseUrl}/hotels?cityId=${destCode}&checkIn=${checkInStr}&checkOut=${checkOutStr}&adults=${guestCount.adults}&children=${guestCount.children}`,
       );
       const metadataData = await metadataResponse.json();
 
@@ -1750,7 +1752,7 @@ export default function HotelResults() {
                         return `${formatDisplayDate(inD)} - ${formatDisplayDate(outD)}`;
                       return "Select dates";
                     })()}
-                    {` ��� ${adults} adult${parseInt(adults) > 1 ? "s" : ""}`}
+                    {` • ${adults} adult${parseInt(adults) > 1 ? "s" : ""}`}
                     {parseInt(children) > 0
                       ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}`
                       : ""}
