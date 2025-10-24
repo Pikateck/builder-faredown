@@ -7,6 +7,7 @@
 const express = require("express");
 const db = require("../database/connection.js");
 const redis = require("../lib/redisClient.js");
+const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
 const router = express.Router();
 
 const REDIS_TTL = 1800; // 30 minutes
