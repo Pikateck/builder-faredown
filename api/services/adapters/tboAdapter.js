@@ -40,7 +40,22 @@ class TBOAdapter extends BaseSupplierAdapter {
       credentialMode: process.env.TBO_CREDENTIAL_MODE || "runtime",
       timeout: parseInt(process.env.TBO_TIMEOUT_MS || "15000"),
       requestsPerSecond: 10,
-      // TBO Hotel API (Tek Travels API) - corrected endpoints
+      // TBO Hotel API Base URLs (from environment variables)
+      hotelAuthBase:
+        process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION ||
+        "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc",
+      hotelAuthEndpoint:
+        process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION ||
+        "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc",
+      hotelStaticBase:
+        process.env.TBO_HOTEL_STATIC_DATA ||
+        "https://apiwr.tboholidays.com/HotelAPI/",
+      hotelSearchBase:
+        process.env.TBO_HOTEL_SEARCH_PREBOOK ||
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/",
+      hotelBookingBase:
+        process.env.TBO_HOTEL_BOOKING ||
+        "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
       // CORRECT TBO Hotel API Endpoints (not Tek Travels)
       hotelSearchEndpoint:
         "https://affiliate.travelboutiqueonline.com/HotelAPI/Search",
