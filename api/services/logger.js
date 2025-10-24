@@ -14,7 +14,7 @@ function createLogger(label = "APP") {
         const metaStr =
           Object.keys(meta).length > 0 ? ` ${JSON.stringify(meta)}` : "";
         return `${timestamp} [${level.toUpperCase()}] [${label}] ${message}${metaStr}`;
-      })
+      }),
     ),
     transports: [new winston.transports.Console()],
   });
