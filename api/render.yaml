@@ -25,3 +25,19 @@ services:
       maxInstances: 3
       targetMemoryPercent: 70
       targetCPUPercent: 70
+
+  # TBO Locations Nightly Sync (02:00 IST = 20:30 UTC)
+  - type: cron
+    name: tbo-sync-nightly
+    schedule: "30 20 * * *"
+    startCommand: cd /workspace/api && node jobs/tboSyncLocationsNightly.js
+    plan: starter
+    region: singapore
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_URL
+        fromService:
+          type: pserv
+          name: faredown-postgres
+          envVarKey: DATABASE_URL
