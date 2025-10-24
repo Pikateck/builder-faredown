@@ -135,10 +135,12 @@ router.get("/", async (req, res) => {
       message: "Fetching live prices in parallel...",
     });
 
-    // Kick off async price fetch (fire-and-forget)
-    queuePriceFetch(cityId, hotels).catch((e) => {
-      console.warn("Price fetch queue failed:", e.message);
-    });
+    // Kick off async price fetch (fire-and-forget) with actual dates
+    queuePriceFetch(cityId, hotels, checkIn, checkOut, adults, children).catch(
+      (e) => {
+        console.warn("Price fetch queue failed:", e.message);
+      },
+    );
   } catch (error) {
     console.error("Hotels metadata error:", error.message);
     res.status(500).json({
