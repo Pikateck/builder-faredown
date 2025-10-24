@@ -1324,11 +1324,20 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       // Ensure hotels is an array
       if (!Array.isArray(hotels)) {
-        this.logger.warn("⚠️ TBO response hotels not in array format", {
-          hotelsType: typeof hotels,
-          hotelsValue: JSON.stringify(hotels).substring(0, 100),
+        this.logger.warn("TBO response hotels not in expected array format", {
+          type: typeof hotels,
+          received: JSON.stringify(hotels).substring(0, 200),
         });
         hotels = [];
+      }
+
+      if (hotels.length === 0) {
+        this.logger.info("No hotels found in TBO response", {
+          destination,
+          checkIn,
+          checkOut,
+        });
+        return [];
       }
 
       // Persist to master schema (fire-and-forget)
