@@ -1038,7 +1038,104 @@ class TBOAdapter extends BaseSupplierAdapter {
   }
 
   /**
-   * Hotel search using TBO Hotel API (scaffold)
+   * Convert date from yyyy-mm-dd to dd/mm/yyyy
+   */
+  _formatDateForTBO(dateStr) {
+    if (!dateStr) return null;
+    // If already in dd/mm/yyyy format, return as-is
+    if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return dateStr;
+    // Convert from yyyy-mm-dd to dd/mm/yyyy
+    const [year, month, day] = dateStr.split("-");
+    return `${day}/${month}/${year}`;
+  }
+
+  /**
+   * Get CityId from destination code by fetching city list
+   */
+  async getCityId(destination, countryCode = "IN") {
+    try {
+      this.logger.info("🏙️ Fetching CityId for destination", {
+        destination,
+        countryCode,
+      });
+
+      let tokenId;
+      try {
+        tokenId = await this.getHotelToken();
+      } catch (e) {
+        this.logger.error("Failed to get token for city list fetch", {
+          error: e.message,
+        });
+        throw e;
+      }
+
+      const cityListPayload = {
+        ClientId: this.config.hotelClientId,
+        EndUserIp: this.config.endUserIp,
+        TokenId: tokenId,
+        SearchType: "1",
+        CountryCode: countryCode,
+      };
+
+      const response = await this.executeWithRetry(() =>
+        tboRequest(this.config.hotelCityListEndpoint, {
+          method: "POST",
+          data: cityListPayload,
+          timeout: this.config.timeout,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+          },
+        }),
+      );
+
+      this.logger.info("City list response received", {
+        status: response.data?.Status,
+        hasResults: !!response.data?.GetDestinationSearchStaticDataResult,
+      });
+
+      const cities = response.data?.GetDestinationSearchStaticDataResult || [];
+      if (!Array.isArray(cities)) {
+        this.logger.warn("City list not in array format", {
+          type: typeof cities,
+        });
+        return null;
+      }
+
+      // Find matching city by code (case-insensitive)
+      const destUpper = destination?.toUpperCase();
+      for (const city of cities) {
+        // Try matching by various city code fields
+        if (
+          city.DestinationCode?.toUpperCase() === destUpper ||
+          city.CityCode?.toUpperCase() === destUpper ||
+          city.Code?.toUpperCase() === destUpper
+        ) {
+          this.logger.info("✅ City found", {
+            code: destination,
+            cityId: city.DestinationId,
+            name: city.DestinationName || city.CityName,
+          });
+          return String(city.DestinationId);
+        }
+      }
+
+      this.logger.warn("City not found in list", {
+        destination,
+        availableCities: cities.slice(0, 5).map((c) => c.DestinationCode || c.CityCode),
+      });
+      return null;
+    } catch (e) {
+      this.logger.error("❌ Failed to get CityId", {
+        destination,
+        error: e.message,
+      });
+      throw e;
+    }
+  }
+
+  /**
+   * Hotel search using TBO Hotel API (Tek Travels)
    */
   async searchHotels(searchParams) {
     try {
@@ -1046,8 +1143,11 @@ class TBOAdapter extends BaseSupplierAdapter {
         destination: searchParams.destination,
         checkIn: searchParams.checkIn,
         checkOut: searchParams.checkOut,
+        adults: searchParams.adults,
+        children: searchParams.children,
       });
 
+      // Step 1: Get TokenId
       let tokenId;
       try {
         tokenId = await this.getHotelToken();
@@ -1057,7 +1157,6 @@ class TBOAdapter extends BaseSupplierAdapter {
       } catch (tokenError) {
         this.logger.error("❌ Failed to get TBO hotel token", {
           message: tokenError.message,
-          stack: tokenError.stack?.split("\n")[0],
         });
         throw tokenError;
       }
@@ -1066,6 +1165,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         throw new Error("TBO hotel token is null or empty");
       }
 
+      // Step 2: Get CityId from destination code
       const {
         destination,
         checkIn,
@@ -1076,9 +1176,40 @@ class TBOAdapter extends BaseSupplierAdapter {
         rooms = 1,
         childAges = [],
         guestNationality = "IN",
+        countryCode = "IN",
       } = searchParams;
 
-      // Build RoomGuests payload supporting both numeric rooms and per-room array
+      let cityId;
+      try {
+        cityId = await this.getCityId(destination, countryCode);
+        if (!cityId) {
+          this.logger.warn("⚠️ CityId not found for destination", {
+            destination,
+          });
+          return [];
+        }
+      } catch (e) {
+        this.logger.error("Failed to get CityId", {
+          destination,
+          error: e.message,
+        });
+        throw e;
+      }
+
+      // Step 3: Calculate NoOfNights from check-in and check-out
+      const checkInDate = new Date(checkIn);
+      const checkOutDate = new Date(checkOut);
+      const noOfNights = Math.ceil(
+        (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24),
+      );
+
+      if (noOfNights < 1) {
+        throw new Error(
+          `Invalid dates: checkOut must be after checkIn (${checkIn} to ${checkOut})`,
+        );
+      }
+
+      // Step 4: Build RoomGuests payload
       let roomGuests = [];
       if (Array.isArray(rooms)) {
         roomGuests = rooms.map((r) => ({
@@ -1100,19 +1231,18 @@ class TBOAdapter extends BaseSupplierAdapter {
         ];
       }
 
+      // Step 5: Build search payload with correct TBO Hotel API format
       const payload = {
-        ClientId: this.config.hotelClientId,
-        UserName: this.config.hotelUserId,
-        Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
-        CheckIn: checkIn,
-        CheckOut: checkOut,
-        NoOfRooms: Array.isArray(rooms) ? rooms.length : Number(rooms) || 1,
-        GuestNationality: guestNationality,
-        City: destination,
-        IsNearBySearchAllowed: true,
-        RoomGuests: roomGuests,
+        TokenId: tokenId,
+        CheckInDate: this._formatDateForTBO(checkIn),
+        NoOfNights: noOfNights,
+        CountryCode: countryCode,
+        CityId: cityId,
         PreferredCurrency: currency,
+        GuestNationality: guestNationality,
+        NoOfRooms: Array.isArray(rooms) ? rooms.length : Number(rooms) || 1,
+        RoomGuests: roomGuests,
       };
 
       // Remove trailing slash from base URL to avoid double slashes
