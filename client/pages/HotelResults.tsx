@@ -474,13 +474,45 @@ export default function HotelResults() {
 
       console.log(`🌍 Destination: ${destCode}, Country Code: ${countryCode}`);
 
-      const metadataResponse = await fetch(
-        `${apiBaseUrl}/hotels?cityId=${destCode}&checkIn=${checkInStr}&checkOut=${checkOutStr}&adults=${adultsCount}&children=${childrenCount}&countryCode=${countryCode}`,
-      );
+      const apiUrl = `${apiBaseUrl}/hotels?cityId=${destCode}&checkIn=${checkInStr}&checkOut=${checkOutStr}&adults=${adultsCount}&children=${childrenCount}&countryCode=${countryCode}`;
+      console.log(`📡 API Call: ${apiUrl}`);
+
+      let metadataResponse;
+      try {
+        metadataResponse = await fetch(apiUrl, {
+          method: "GET",
+          headers: {
+            "Accept": "application/json",
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // Include cookies for same-origin requests
+        });
+      } catch (fetchError) {
+        console.error("❌ Fetch failed:", {
+          url: apiUrl,
+          error: fetchError.message,
+          type: fetchError.name,
+        });
+        setError(`Failed to reach hotel service: ${fetchError.message}`);
+        return [];
+      }
+
+      if (!metadataResponse.ok) {
+        const errorText = await metadataResponse.text();
+        console.error("❌ API returned error:", {
+          status: metadataResponse.status,
+          statusText: metadataResponse.statusText,
+          body: errorText.slice(0, 500),
+        });
+        setError(`Hotel service error: ${metadataResponse.status} ${metadataResponse.statusText}`);
+        return [];
+      }
+
       const metadataData = await metadataResponse.json();
 
       if (!metadataData.hotels || metadataData.hotels.length === 0) {
-        console.warn("No metadata hotels found");
+        console.warn("⚠️ No metadata hotels found from API");
+        setError("No hotels available for your search criteria");
         return [];
       }
 
