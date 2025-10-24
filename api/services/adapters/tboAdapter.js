@@ -1373,8 +1373,52 @@ class TBOAdapter extends BaseSupplierAdapter {
         ? Math.max(1, Math.min(parseInt(searchParams.maxResults, 10), 500))
         : 50;
 
+      // ENHANCEMENT: Enrich top hotels with room-wise details
+      // Fetch detailed room information for first N hotels to show rich room details
+      const enrichLimit = Math.min(10, hotels.length); // Fetch room details for top 10
+      const hotelEnrichmentPromises = hotels.slice(0, enrichLimit).map((h) =>
+        this._enrichHotelWithRoomDetails(h, {
+          checkIn,
+          checkOut,
+          adults,
+          children,
+          currency,
+          destination,
+          tokenId,
+          traceId: res.data?.TraceId,
+        }).catch((err) => {
+          // If enrichment fails, return original hotel (fallback)
+          this.logger.warn("Hotel enrichment failed, using basic data", {
+            hotelId: h.HotelCode,
+            error: err.message,
+          });
+          return h;
+        }),
+      );
+
+      // Wait for enrichment to complete (with timeout to avoid blocking)
+      let enrichedHotels = hotels;
+      try {
+        const enrichedTop = await Promise.race([
+          Promise.all(hotelEnrichmentPromises),
+          new Promise((_, reject) =>
+            setTimeout(() => reject(new Error("Enrichment timeout")), 8000),
+          ),
+        ]);
+        enrichedHotels = [...enrichedTop, ...hotels.slice(enrichLimit)];
+        this.logger.info("✅ Hotel enrichment completed", {
+          enriched: enrichedTop.length,
+          total: enrichedHotels.length,
+        });
+      } catch (enrichErr) {
+        this.logger.warn("Hotel enrichment skipped (timeout or error)", {
+          error: enrichErr.message,
+        });
+        enrichedHotels = hotels; // Fall back to non-enriched
+      }
+
       // Map to aggregator format - Tek Travels API response
-      const results = hotels.slice(0, maxResults).map((h) => {
+      const results = enrichedHotels.slice(0, maxResults).map((h) => {
         const hotelId = String(h.HotelCode || h.HotelId || h.Id || "");
 
         // Extract pricing from TBO response
@@ -1385,13 +1429,42 @@ class TBOAdapter extends BaseSupplierAdapter {
           parseFloat(priceObj.OfferedPrice) || publishedPrice;
         const tax = parseFloat(priceObj.Tax) || 0;
 
-        // Build single rate entry from pricing info
-        const rawRates = [];
-        if (roomPrice > 0 || publishedPrice > 0 || offeredPrice > 0) {
+        // Build rates from Rooms array if available (from enrichment)
+        let rawRates = [];
+        if (Array.isArray(h.Rooms) && h.Rooms.length > 0) {
+          // Use enriched room data
+          for (const room of h.Rooms) {
+            if (!Array.isArray(room.Rates)) continue;
+            for (const rate of room.Rates) {
+              const ratePrice =
+                parseFloat(rate.PublishedPrice ||
+                  rate.TotalPrice ||
+                  rate.NetFare) || 0;
+              rawRates.push({
+                rateKey: rate.RateKey || rate.Token || `${hotelId}_${room.RoomTypeCode}`,
+                roomType: room.RoomTypeName || room.RoomType || "Room",
+                roomDescription: room.Description || "",
+                board: rate.MealType || rate.BoardType || "Room Only",
+                originalPrice: ratePrice,
+                price: ratePrice,
+                markedUpPrice: ratePrice,
+                currency: currency,
+                tax: parseFloat(rate.Tax) || 0,
+                cancellationPolicy: rate.CancellationPolicies || [],
+                isRefundable: !!(rate.CancellationPolicies && rate.CancellationPolicies.length > 0),
+                inclusions: rate.Inclusions || [],
+                amenities: room.Amenities || [],
+              });
+            }
+          }
+        }
+
+        // Fallback to basic pricing if no enriched room data
+        if (rawRates.length === 0 && (roomPrice > 0 || publishedPrice > 0 || offeredPrice > 0)) {
           rawRates.push({
             rateKey: h.RateKey || `${hotelId}_standard`,
             roomType: h.RoomType || "Standard Room",
-            boardType: h.MealType || h.BoardType || "Room Only",
+            board: h.MealType || h.BoardType || "Room Only",
             originalPrice: publishedPrice,
             price: offeredPrice,
             markedUpPrice: offeredPrice,
@@ -1415,17 +1488,22 @@ class TBOAdapter extends BaseSupplierAdapter {
         if (h.ImageUrl) images.push(h.ImageUrl);
         if (h.Image) images.push(h.Image);
 
-        // Extract amenities
+        // Extract amenities from hotel level
         const amenities =
           h.Amenities || h.Facilities || h.HotelFacilities || [];
 
-        // Calculate display price
-        const displayPrice =
-          offeredPrice > 0
-            ? offeredPrice
-            : publishedPrice > 0
-              ? publishedPrice
-              : roomPrice;
+        // Calculate display price (use minimum from rates)
+        let displayPrice;
+        if (rawRates.length > 0) {
+          displayPrice = Math.min(...rawRates.map(r => r.price));
+        } else {
+          displayPrice =
+            offeredPrice > 0
+              ? offeredPrice
+              : publishedPrice > 0
+                ? publishedPrice
+                : roomPrice;
+        }
 
         return {
           hotelId,
@@ -1440,6 +1518,7 @@ class TBOAdapter extends BaseSupplierAdapter {
           rates: rawRates,
           images,
           amenities,
+          rooms: h.Rooms || [], // Include full Rooms array for frontend
           starRating: parseFloat(h.StarRating) || undefined,
           reviewCount: h.ReviewCount || undefined,
           reviewScore: h.ReviewScore || undefined,
