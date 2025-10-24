@@ -445,13 +445,13 @@ app.use("/api/admin-dashboard", adminDashboardRoutes);
 app.use("/api/bookings", authenticateToken, bookingRoutes);
 app.use("/api/users", authenticateToken, usersAdminRoutes);
 app.use("/api/flights", flightRoutes);
-app.use("/api/hotels", hotelsMultiSupplierRoutes); // Multi-supplier (Hotelbeds + RateHawk)
+app.use("/api/hotels-multi", hotelsMultiSupplierRoutes); // Multi-supplier (Hotelbeds + RateHawk)
 app.use("/api/hotels-legacy", hotelRoutes); // Legacy Hotelbeds-only route
 app.use("/api/hotels-live", hotelsLiveRoutes);
 app.use("/api/hotels-ranked", require("./routes/hotels-ranked"));
 app.use("/api/tbo-hotels", require("./routes/tbo-hotels"));
 app.use("/api/tbo-hotels/static", require("./routes/tbo-hotels-static"));
-app.use("/api/hotels", require("./routes/hotels-metadata")); // Hybrid metadata + async pricing
+app.use("/api/hotels", require("./routes/hotels-metadata")); // Hybrid metadata + async pricing (TBO first)
 app.use("/api/locations", locationsRoutes); // TBO locations autocomplete
 app.use("/api/bargain", bargainRoutes);
 app.use("/api/bargain/v1", bargainV1Routes);
