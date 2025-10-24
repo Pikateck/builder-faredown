@@ -1156,8 +1156,13 @@ class TBOAdapter extends BaseSupplierAdapter {
         EndUserIp: this.config.endUserIp,
       };
 
+      // Remove trailing slash from base URL to avoid double slashes
+      const baseUrl = this.config.hotelSearchBase.endsWith('/')
+        ? this.config.hotelSearchBase.slice(0, -1)
+        : this.config.hotelSearchBase;
+
       this.logger.info("📍 TBO hotel search payload", {
-        url: `${this.config.hotelSearchBase}/Search`,
+        url: `${baseUrl}/Search`,
         destination,
         checkIn,
         checkOut,
