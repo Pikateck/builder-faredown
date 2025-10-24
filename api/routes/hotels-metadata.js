@@ -224,13 +224,33 @@ router.get("/prices", async (req, res) => {
     // Map TBO results to hotel ID -> price
     if (Array.isArray(tboResults)) {
       for (const hotel of tboResults) {
-        const hotelId = hotel.supplierHotelId || hotel.code;
+        const hotelId = hotel.hotelId || hotel.id;
         if (hotelId) {
+          // Calculate min/max from rates
+          let minTotal = Infinity;
+          let maxTotal = 0;
+
+          if (Array.isArray(hotel.rates) && hotel.rates.length > 0) {
+            for (const rate of hotel.rates) {
+              const price = rate.price || rate.originalPrice || 0;
+              if (price > 0) {
+                minTotal = Math.min(minTotal, price);
+                maxTotal = Math.max(maxTotal, price);
+              }
+            }
+          }
+
+          // Fallback to single price if no rates
+          if (minTotal === Infinity) {
+            minTotal = hotel.price || 0;
+            maxTotal = hotel.price || 0;
+          }
+
           prices[hotelId] = {
-            minTotal: hotel.minTotal || 0,
-            maxTotal: hotel.maxTotal || 0,
+            minTotal: minTotal === Infinity ? hotel.price || 0 : minTotal,
+            maxTotal: maxTotal || hotel.price || 0,
             currency: hotel.currency || "INR",
-            rateKey: hotel.rateKey || hotel.token,
+            rateKey: hotel.rateKey || hotel.roomCode,
           };
         }
       }
