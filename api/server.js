@@ -557,6 +557,13 @@ app.use(
   auditLogger,
   adminPromoRoutes,
 );
+app.use(
+  "/api/admin/tbo",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  adminTboRoutes,
+);
 // Public endpoint for evidence collection (must be before /api/admin catch-all)
 app.use("/api/verify-users", adminUsersVerifyRoutes);
 
