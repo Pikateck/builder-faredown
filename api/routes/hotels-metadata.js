@@ -69,19 +69,41 @@ router.get("/", async (req, res) => {
 
       // Map TBO results to our hotel format
       if (Array.isArray(tboResults) && tboResults.length > 0) {
-        hotels = tboResults.slice(0, 50).map((h) => ({
-          id: h.supplierHotelId || h.code || h.id,
-          supplier_id: h.supplierHotelId || h.code,
-          name: h.name,
-          address: h.address || h.hotelName || "",
-          lat: h.latitude || h.lat,
-          lng: h.longitude || h.lng,
-          stars: h.ratingValue || h.stars || 0,
-          image: h.image,
-          minTotal: h.minTotal,
-          maxTotal: h.maxTotal,
-          currency: h.currency || "INR",
-        }));
+        hotels = tboResults.slice(0, 50).map((h) => {
+          // Get min/max prices from rates array
+          let minTotal = Infinity;
+          let maxTotal = 0;
+
+          if (Array.isArray(h.rates) && h.rates.length > 0) {
+            for (const rate of h.rates) {
+              const price = rate.price || rate.originalPrice || 0;
+              if (price > 0) {
+                minTotal = Math.min(minTotal, price);
+                maxTotal = Math.max(maxTotal, price);
+              }
+            }
+          }
+
+          // Fallback to single price if no rates
+          if (minTotal === Infinity) {
+            minTotal = h.price || 0;
+            maxTotal = h.price || 0;
+          }
+
+          return {
+            id: h.hotelId || h.id,
+            supplier_id: h.hotelId || h.id,
+            name: h.name || "",
+            address: h.address || "",
+            lat: h.latitude || 0,
+            lng: h.longitude || 0,
+            stars: h.starRating || 0,
+            image: h.images && h.images[0] ? h.images[0] : null,
+            minTotal: minTotal === Infinity ? h.price || 0 : minTotal,
+            maxTotal: maxTotal || h.price || 0,
+            currency: h.currency || "INR",
+          };
+        });
       }
     } catch (e) {
       console.warn("TBO search failed, falling back to DB:", e.message);
