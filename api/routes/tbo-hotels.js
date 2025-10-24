@@ -1,6 +1,6 @@
 /**
  * TBO Hotels Routes (Live)
- * Search → PreBook → Book → Voucher → BookingDetails/Change
+ * Search → PreBook → Book → Voucher ��� BookingDetails/Change
  */
 
 const express = require("express");
@@ -88,24 +88,20 @@ router.get("/cities", async (req, res) => {
     const adapter = getTboAdapter();
     const { q = "", limit = 15, country = null } = req.query;
 
-    // Sync cities on first request or periodic refresh (best-effort)
-    const redis = require("../services/redisService");
-    const syncCacheKey = "tbo:cities:last_sync";
-    const lastSync = await redis.get(syncCacheKey);
-    if (!lastSync) {
-      adapter.syncCitiesToCache().catch((e) => {
-        console.warn("TBO cities sync failed in background:", e.message);
-      });
-      await redis.setIfNotExists(syncCacheKey, { synced: true }, 24 * 60 * 60);
-    }
+    console.log(`🔍 Cities search - Query: "${q}", Limit: ${limit}`);
 
+    // Call searchCities - it will auto-seed if table is empty
     const cities = await adapter.searchCities(
       q,
       Math.min(parseInt(limit, 10) || 15, 100),
       country,
     );
+
+    console.log(`✅ Found ${cities.length} cities matching "${q}"`);
+
     res.json({ success: true, data: cities });
   } catch (e) {
+    console.error(`❌ Cities search error:`, e.message);
     res.status(500).json({ success: false, error: e.message });
   }
 });
