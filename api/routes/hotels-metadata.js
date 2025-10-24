@@ -20,6 +20,10 @@ router.get("/", async (req, res) => {
   try {
     const cityId = req.query.cityId || req.query.city || req.query.destination;
     const hotelId = req.query.hotelId || req.query.hotel;
+    const checkIn = req.query.checkIn || req.query.checkin;
+    const checkOut = req.query.checkOut || req.query.checkout;
+    const adults = parseInt(req.query.adults || "2");
+    const children = parseInt(req.query.children || "0");
 
     if (!cityId) {
       return res.status(400).json({
@@ -28,7 +32,7 @@ router.get("/", async (req, res) => {
       });
     }
 
-    // Check Redis cache first
+    // Check Redis cache first (simplified - don't use date-specific cache key)
     const cacheKey = `city:${cityId}:hotels`;
     const cached = await redis.getJSON(cacheKey);
 
