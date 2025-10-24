@@ -1154,11 +1154,31 @@ class TBOAdapter extends BaseSupplierAdapter {
         throw apiError;
       }
 
-      const hotels = res.data?.HotelResult || res.data?.Hotels || [];
+      // Try multiple possible response keys for TBO hotels
+      let hotels =
+        res.data?.HotelResult ||
+        res.data?.Hotels ||
+        res.data?.hotel_result ||
+        res.data?.Result ||
+        res.data?.results ||
+        res.data?.data ||
+        (Array.isArray(res.data) ? res.data : []);
+
       this.logger.info("🏨 Hotels extracted from TBO response", {
-        count: hotels.length,
+        count: Array.isArray(hotels) ? hotels.length : 0,
         responseDataKeys: Object.keys(res.data || {}),
+        detectedHotelsType: typeof hotels,
+        isArray: Array.isArray(hotels),
       });
+
+      // Ensure hotels is an array
+      if (!Array.isArray(hotels)) {
+        this.logger.warn("⚠️ TBO response hotels not in array format", {
+          hotelsType: typeof hotels,
+          hotelsValue: JSON.stringify(hotels).substring(0, 100),
+        });
+        hotels = [];
+      }
 
       // Persist to master schema (fire-and-forget)
       const searchContext = {
