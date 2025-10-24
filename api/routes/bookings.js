@@ -405,4 +405,93 @@ router.post("/hotels/cleanup", (req, res) => {
     });
   }
 });
+
+/**
+ * Get ticket/voucher PDF for a booking
+ * GET /api/bookings/:bookingRef/ticket
+ */
+router.get("/:bookingRef/ticket", (req, res) => {
+  try {
+    const { bookingRef } = req.params;
+
+    // Return mock ticket PDF URLs based on booking reference type
+    const ticketUrls = {
+      flight:
+        "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      hotel:
+        "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      sightseeing:
+        "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      transfer:
+        "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+      package:
+        "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+    };
+
+    let ticketUrl;
+
+    // Determine booking type from reference
+    if (bookingRef.includes("FL") || bookingRef.includes("FD-FL")) {
+      ticketUrl = ticketUrls.flight;
+    } else if (bookingRef.includes("HT") || bookingRef.includes("FD-HT")) {
+      ticketUrl = ticketUrls.hotel;
+    } else if (bookingRef.includes("SG") || bookingRef.includes("SS")) {
+      ticketUrl = ticketUrls.sightseeing;
+    } else if (bookingRef.includes("TR") || bookingRef.includes("TF")) {
+      ticketUrl = ticketUrls.transfer;
+    } else if (bookingRef.includes("PK")) {
+      ticketUrl = ticketUrls.package;
+    } else {
+      // Default to flight ticket
+      ticketUrl = ticketUrls.flight;
+    }
+
+    res.json({
+      success: true,
+      data: {
+        bookingRef,
+        type: "ticket",
+        pdf_url: ticketUrl,
+        download_url: ticketUrl,
+      },
+    });
+  } catch (error) {
+    console.error("Ticket download error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to get ticket download",
+    });
+  }
+});
+
+/**
+ * Get invoice PDF for a booking
+ * GET /api/bookings/:bookingRef/invoice
+ */
+router.get("/:bookingRef/invoice", (req, res) => {
+  try {
+    const { bookingRef } = req.params;
+
+    // Return mock invoice PDF URLs
+    const invoiceUrl =
+      "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
+
+    res.json({
+      success: true,
+      data: {
+        bookingRef,
+        type: "invoice",
+        pdf_url: invoiceUrl,
+        download_url: invoiceUrl,
+      },
+    });
+  } catch (error) {
+    console.error("Invoice download error:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to get invoice download",
+    });
+  }
+});
+
 module.exports = router;
