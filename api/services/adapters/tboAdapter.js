@@ -1170,8 +1170,14 @@ class TBOAdapter extends BaseSupplierAdapter {
       // Use retry wrapper
       let res;
       try {
+        // Remove trailing slash from base URL to avoid double slashes
+        const baseUrl = this.config.hotelSearchBase.endsWith('/')
+          ? this.config.hotelSearchBase.slice(0, -1)
+          : this.config.hotelSearchBase;
+        const searchUrl = `${baseUrl}/Search`;
+
         res = await this.executeWithRetry(() =>
-          tboRequest(`${this.config.hotelSearchBase}/Search`, {
+          tboRequest(searchUrl, {
             method: "POST",
             data: payload,
             timeout: this.config.timeout,
