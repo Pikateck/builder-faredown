@@ -1885,6 +1885,15 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       if (!text || text.length < 1) return [];
 
+      // Check if table is empty and seed with top destinations if needed
+      const countResult = await db.query(
+        `SELECT COUNT(*) as count FROM tbo_cities WHERE is_active = true`,
+      );
+      if (countResult.rows[0].count === 0) {
+        this.logger.info("TBO cities table is empty, seeding with top destinations");
+        await this.seedTopCities();
+      }
+
       let query = `
         SELECT
           city_code, city_name, country_code, country_name,
