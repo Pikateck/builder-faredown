@@ -139,7 +139,11 @@ router.get("/prices", async (req, res) => {
     const searchParams = {
       destination: cityId,
       checkIn: checkIn || new Date().toISOString().split("T")[0],
-      checkOut: checkOut || new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      checkOut:
+        checkOut ||
+        new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split("T")[0],
       adults,
       children,
       currency: req.query.currency || "INR",
@@ -195,7 +199,9 @@ async function queuePriceFetch(cityId, hotels) {
       return;
     }
 
-    console.log(`💰 Queuing price fetch for city ${cityId} (${hotels.length} hotels)`);
+    console.log(
+      `💰 Queuing price fetch for city ${cityId} (${hotels.length} hotels)`,
+    );
 
     // Get TBO adapter
     let adapter;
@@ -211,7 +217,9 @@ async function queuePriceFetch(cityId, hotels) {
     const searchParams = {
       destination: cityId,
       checkIn: new Date().toISOString().split("T")[0],
-      checkOut: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split("T")[0],
+      checkOut: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0],
       adults: 2,
       children: 0,
       currency: "INR",
@@ -236,7 +244,9 @@ async function queuePriceFetch(cityId, hotels) {
       const pricesCacheKey = `city:${cityId}:prices`;
       await redis.setJSON(pricesCacheKey, prices, 300); // 5 min cache
 
-      console.log(`✅ Price fetch completed for city ${cityId} (${Object.keys(prices).length} prices)`);
+      console.log(
+        `✅ Price fetch completed for city ${cityId} (${Object.keys(prices).length} prices)`,
+      );
     }
   } catch (error) {
     console.warn("Background price fetch failed:", error.message);

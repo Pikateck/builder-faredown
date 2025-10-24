@@ -25,7 +25,9 @@ async function syncCountries() {
 
   try {
     for await (const country of fetchCountries()) {
-      const supplierId = String(country.CountryCode || country.code || country.id);
+      const supplierId = String(
+        country.CountryCode || country.code || country.id,
+      );
       const name = country.CountryName || country.name;
       const iso2 = country.CountryCode || country.code;
 

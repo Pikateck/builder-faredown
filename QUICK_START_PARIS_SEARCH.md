@@ -1,6 +1,7 @@
 # Quick Start: Test Paris Search Now
 
 ## What Was Fixed
+
 - ✅ TBO API client now uses correct endpoints and credentials
 - ✅ Database sync now properly fetches countries, cities, and hotels from TBO
 - ✅ Autocomplete dropdown will show live TBO results (Paris, Eiffel Tower, hotels, etc.)
@@ -10,9 +11,11 @@
 ## How to Test
 
 ### Step 1: Go to Hotel Search
+
 Open your browser and navigate to the hotel booking page
 
 ### Step 2: Type "paris" in the Search Field
+
 - Clear any existing destination
 - Type "paris" in "Where are you going?" field
 - **First time**: Will see "Sync in progress" message
@@ -20,13 +23,16 @@ Open your browser and navigate to the hotel booking page
 - **Second search**: Try typing "paris" again
 
 ### Step 3: Select Paris from Dropdown
+
 You should now see:
+
 - 🏙️ Paris (City)
 - 🏨 Paris hotels (from TBO)
 - 🗼 Eiffel Tower and other landmarks
 - 🌍 France (Country)
 
 ### Step 4: Complete Booking
+
 1. Select "Paris" city
 2. Choose check-in and check-out dates
 3. Select number of guests
@@ -65,43 +71,51 @@ You should now see:
 
 ## Timeline
 
-| Action | Time | What Happens |
-|--------|------|-------------|
-| Type "paris" | 0s | Frontend calls /api/locations/search |
-| Initial search | 1s | API detects empty database, returns "syncing" message |
-| Auto-sync starts | 2s | Background job fetches TBO data |
-| Countries | 10s | ~250 countries added to database |
-| Cities | 30-60s | ~10,000 cities added (including Paris) |
-| Paris hotels | 1-2min | ~50 hotels for Paris added |
-| User retries | 2-5min | "paris" search now returns live results ✅ |
-| Hotel selection | 5min+ | Results page shows TBO hotels with live pricing ✅ |
+| Action           | Time   | What Happens                                          |
+| ---------------- | ------ | ----------------------------------------------------- |
+| Type "paris"     | 0s     | Frontend calls /api/locations/search                  |
+| Initial search   | 1s     | API detects empty database, returns "syncing" message |
+| Auto-sync starts | 2s     | Background job fetches TBO data                       |
+| Countries        | 10s    | ~250 countries added to database                      |
+| Cities           | 30-60s | ~10,000 cities added (including Paris)                |
+| Paris hotels     | 1-2min | ~50 hotels for Paris added                            |
+| User retries     | 2-5min | "paris" search now returns live results ✅            |
+| Hotel selection  | 5min+  | Results page shows TBO hotels with live pricing ✅    |
 
 ## Troubleshooting
 
 ### Q: Still showing mock data?
-**A:** 
+
+**A:**
+
 1. Wait a bit longer - sync might still be running
 2. Hard refresh your browser (Ctrl+Shift+R)
 3. Check sync status: https://builder-faredown-pricing.onrender.com/api/locations/stats
 4. If stats show 0 cities, sync may have failed - check Render logs
 
 ### Q: Search shows "Sync in progress" every time?
+
 **A:**
+
 1. Sync is still running (normal for first time)
 2. Should complete in 2-5 minutes
 3. Try again after waiting
 4. If still shows after 10+ minutes, check Render logs for errors
 
 ### Q: Getting an error instead of results?
+
 **A:**
+
 1. This is a one-time initial sync
 2. Subsequent searches will be instant
 3. Database caches results for 24 hours
 4. Check browser console (F12) for specific error
 
 ### Q: Don't want to wait for full sync?
-**A:** 
+
+**A:**
 You can manually trigger sync via admin endpoint:
+
 ```bash
 curl -X POST \
   https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync \
@@ -112,6 +126,7 @@ curl -X POST \
 ## Expected Results
 
 ### Good ✅
+
 - Typing "paris" shows dropdown with Paris, hotels, landmarks
 - Selecting Paris shows real TBO hotels
 - Hotel card shows "TBO" supplier tag
@@ -119,6 +134,7 @@ curl -X POST \
 - Checkout flow works normally
 
 ### Bad ❌
+
 - Still seeing mock hotel data (old hardcoded hotels)
 - "Eiffel Tower Hotel" or "Taj Mahal" in results (these are mock)
 - No "TBO" supplier tag
@@ -135,15 +151,16 @@ After first sync completes, everything is fast!
 ## Files Changed
 
 Only backend files modified (safe to deploy):
+
 - `api/services/tboClient.js` - Fixed TBO API client
-- `api/jobs/tboSyncLocations.js` - Fixed sync logic  
+- `api/jobs/tboSyncLocations.js` - Fixed sync logic
 - `api/routes/locations.js` - Added auto-sync endpoints
 
 Frontend (`client/components/HotelSearchForm.tsx`) - No changes needed, works with new API
 
 ## Next Steps
 
-1. **If at Render**: 
+1. **If at Render**:
    - Redeploy or wait for auto-deploy
    - Then follow "How to Test" steps above
 

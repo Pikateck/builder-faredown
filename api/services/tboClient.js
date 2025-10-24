@@ -73,7 +73,9 @@ async function* fetchCitiesForCountry(countryCode) {
     });
 
     const cities = response.data?.CityList || response.data?.Result || [];
-    console.log(`📥 Fetched ${cities.length} cities for country ${countryCode}`);
+    console.log(
+      `📥 Fetched ${cities.length} cities for country ${countryCode}`,
+    );
 
     for (const city of cities) {
       yield city;

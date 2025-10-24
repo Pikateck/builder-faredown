@@ -157,7 +157,9 @@ router.get("/search", async (req, res) => {
     console.log(`🔍 Redis cache check for: ${cacheKey}`);
     const cachedResults = await redis.getJSON(cacheKey);
     if (cachedResults) {
-      console.log(`✅ Cache hit for "${qtext}" (${cachedResults.items.length} results)`);
+      console.log(
+        `✅ Cache hit for "${qtext}" (${cachedResults.items.length} results)`,
+      );
       return res.json({
         ...cachedResults,
         cached: true,
@@ -242,8 +244,9 @@ router.get("/search", async (req, res) => {
  */
 async function queueTargetedCityFetch(cityName) {
   try {
-    const adapter = require("../services/adapters/tboAdapter.js").getTboAdapter?.()
-      || require("../services/adapters/tboAdapter.js");
+    const adapter =
+      require("../services/adapters/tboAdapter.js").getTboAdapter?.() ||
+      require("../services/adapters/tboAdapter.js");
 
     if (!adapter || typeof adapter.getCityList !== "function") {
       console.warn("TBO adapter not available for targeted fetch");
@@ -257,9 +260,7 @@ async function queueTargetedCityFetch(cityName) {
     const countries = countriesRes.rows || [];
 
     if (countries.length === 0) {
-      console.warn(
-        `No countries in DB, cannot fetch cities for "${cityName}"`,
-      );
+      console.warn(`No countries in DB, cannot fetch cities for "${cityName}"`);
       return;
     }
 
@@ -283,7 +284,10 @@ async function queueTargetedCityFetch(cityName) {
 
           const normalizedCity = redis.normalize(cityName_tbo);
 
-          if (normalizedCity.includes(normalized) || normalized.includes(normalizedCity)) {
+          if (
+            normalizedCity.includes(normalized) ||
+            normalized.includes(normalizedCity)
+          ) {
             // Match found! Insert into DB
             await db.query(
               `INSERT INTO tbo_cities (supplier_id, country_supplier_id, name, normalized_name, lat, lng, popularity, created_at, updated_at)
@@ -305,7 +309,10 @@ async function queueTargetedCityFetch(cityName) {
               const hotelCodes = await adapter.getHotelCodes(cityCode, true);
               if (Array.isArray(hotelCodes)) {
                 for (const hotelCode of hotelCodes) {
-                  const hotelId = typeof hotelCode === "string" ? hotelCode : hotelCode.HotelCode || hotelCode.code;
+                  const hotelId =
+                    typeof hotelCode === "string"
+                      ? hotelCode
+                      : hotelCode.HotelCode || hotelCode.code;
                   if (!hotelId) continue;
 
                   // Insert hotel placeholder
@@ -313,12 +320,21 @@ async function queueTargetedCityFetch(cityName) {
                     `INSERT INTO tbo_hotels (supplier_id, city_supplier_id, country_supplier_id, name, normalized_name, created_at, updated_at)
                      VALUES ($1, $2, $3, $4, $5, NOW(), NOW())
                      ON CONFLICT (supplier_id) DO UPDATE SET updated_at = NOW()`,
-                    [hotelId, cityCode, country.supplier_id, `Hotel ${cityCode}`, redis.normalize(`Hotel ${cityCode}`)],
+                    [
+                      hotelId,
+                      cityCode,
+                      country.supplier_id,
+                      `Hotel ${cityCode}`,
+                      redis.normalize(`Hotel ${cityCode}`),
+                    ],
                   );
                 }
               }
             } catch (e) {
-              console.warn(`Hotel fetch failed for city ${cityCode}:`, e.message);
+              console.warn(
+                `Hotel fetch failed for city ${cityCode}:`,
+                e.message,
+              );
             }
 
             found = true;
@@ -390,8 +406,12 @@ router.get("/sync-status", async (req, res) => {
     const cityCount = parseInt(citiesResult.rows[0]?.count || 0);
 
     if (cityCount === 0) {
-      console.log("🔄 Auto-triggering TBO top destinations sync (no cities found)...");
-      const { syncTopDestinations } = require("../jobs/tboSyncTopDestinations.js");
+      console.log(
+        "🔄 Auto-triggering TBO top destinations sync (no cities found)...",
+      );
+      const {
+        syncTopDestinations,
+      } = require("../jobs/tboSyncTopDestinations.js");
 
       // Fire-and-forget async sync
       syncTopDestinations()

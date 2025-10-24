@@ -154,16 +154,23 @@ async function syncTopDestinations() {
         const matchingCountry = countries.find(
           (c) =>
             c.supplier_id === dest.country ||
-            c.name.toLowerCase().includes(dest.city.split(" ")[0].toLowerCase()),
+            c.name
+              .toLowerCase()
+              .includes(dest.city.split(" ")[0].toLowerCase()),
         );
 
         if (!matchingCountry) {
-          console.log(`⏭️  Skipping "${dest.city}" - country ${dest.country} not found`);
+          console.log(
+            `⏭️  Skipping "${dest.city}" - country ${dest.country} not found`,
+          );
           continue;
         }
 
         // Fetch cities from TBO for this country
-        const cities = await adapter.getCityList(matchingCountry.supplier_id, true);
+        const cities = await adapter.getCityList(
+          matchingCountry.supplier_id,
+          true,
+        );
         if (!Array.isArray(cities)) {
           console.warn(`⚠️  No cities returned for ${dest.country}`);
           continue;
@@ -214,8 +221,14 @@ async function syncTopDestinations() {
           if (Array.isArray(hotelCodes)) {
             for (const hcode of hotelCodes.slice(0, 50)) {
               // Limit to top 50 hotels per city
-              const hotelId = typeof hcode === "string" ? hcode : hcode.HotelCode || hcode.code;
-              const hotelName = typeof hcode === "object" ? hcode.HotelName || hcode.name : `Hotel ${cityCode}`;
+              const hotelId =
+                typeof hcode === "string"
+                  ? hcode
+                  : hcode.HotelCode || hcode.code;
+              const hotelName =
+                typeof hcode === "object"
+                  ? hcode.HotelName || hcode.name
+                  : `Hotel ${cityCode}`;
 
               if (!hotelId) continue;
 
@@ -242,9 +255,7 @@ async function syncTopDestinations() {
           );
         }
 
-        console.log(
-          `✅ Seeded "${cityName}" with ${hotelsSeeded} hotels`,
-        );
+        console.log(`✅ Seeded "${cityName}" with ${hotelsSeeded} hotels`);
       } catch (error) {
         console.warn(`⚠️  Failed to seed "${dest.city}":`, error.message);
       }

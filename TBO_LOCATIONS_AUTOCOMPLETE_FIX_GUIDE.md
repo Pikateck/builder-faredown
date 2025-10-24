@@ -1,10 +1,13 @@
 # TBO Locations Autocomplete - Complete Fix
 
 ## Problem
+
 User was typing "paris" in the hotel search field but getting no results from TBO, instead showing mock data. The dropdown and results page were not displaying live TBO data.
 
 ## Root Cause
+
 The TBO locations sync was not working because:
+
 1. **Wrong API configuration**: `tboClient.js` was looking for `TBO_CONTENT_BASE_URL`, `TBO_API_KEY`, `TBO_API_SECRET` environment variables that don't exist
 2. **Missing TBO credentials**: The correct TBO Static Data API credentials were not being used
 3. **Empty database tables**: The `tbo_countries`, `tbo_cities`, and `tbo_hotels` tables were created but never populated with data
@@ -13,6 +16,7 @@ The TBO locations sync was not working because:
 ## Solution Implemented
 
 ### 1. Fixed `api/services/tboClient.js`
+
 - **Changed from**: Using non-existent Content API endpoints
 - **Changed to**: Using correct TBO Static Data API endpoints
 - **New endpoints**:
@@ -24,12 +28,14 @@ The TBO locations sync was not working because:
 - **Proxy support**: Uses `tboRequest` function which handles Fixie proxy automatically
 
 ### 2. Updated `api/jobs/tboSyncLocations.js`
+
 - **Sync flow**: Countries → Cities (per country) → Hotels (per city)
 - **Error handling**: Gracefully skips failed countries/cities and continues with others
 - **Progress logging**: Shows sync progress every 50 cities
 - **Data normalization**: Properly handles TBO field variations (CityCode vs cityCode, etc.)
 
 ### 3. Enhanced `api/routes/locations.js`
+
 - **Auto-sync on first access**: If tables are empty, automatically triggers sync in background
 - **New endpoints**:
   - `GET /api/locations/search` - Search with auto-sync trigger
@@ -38,7 +44,9 @@ The TBO locations sync was not working because:
 - **Smart fallback**: Returns helpful message if sync is in progress
 
 ### 4. Database Tables
+
 Tables created in migration `20250124_tbo_locations_master_tables.sql`:
+
 - `tbo_countries` - Countries with ISO2 codes
 - `tbo_cities` - Cities with coordinates and country references
 - `tbo_hotels` - Hotels with city/country references
@@ -46,13 +54,16 @@ Tables created in migration `20250124_tbo_locations_master_tables.sql`:
 ## How to Trigger the Sync
 
 ### Option 1: Automatic (Recommended)
+
 Simply search for "paris" in the hotel search field. The system will:
+
 1. Detect that tables are empty
 2. Auto-trigger background sync
 3. Return "Sync in progress" message
 4. User can retry search after a few moments
 
 ### Option 2: Manual Admin Endpoint (Requires Authentication)
+
 If you have admin credentials or API key:
 
 ```bash
@@ -64,19 +75,21 @@ curl -X POST \
 ```
 
 Or in JavaScript:
+
 ```javascript
-fetch('/api/admin/tbo/sync', {
-  method: 'POST',
+fetch("/api/admin/tbo/sync", {
+  method: "POST",
   headers: {
-    'Content-Type': 'application/json',
-    'Authorization': 'Bearer YOUR_ADMIN_TOKEN'
-  }
+    "Content-Type": "application/json",
+    Authorization: "Bearer YOUR_ADMIN_TOKEN",
+  },
 })
-.then(r => r.json())
-.then(data => console.log('Sync result:', data));
+  .then((r) => r.json())
+  .then((data) => console.log("Sync result:", data));
 ```
 
 ### Option 3: Check Sync Status
+
 Check if data has been synced and view statistics:
 
 ```bash
@@ -101,6 +114,7 @@ curl https://builder-faredown-pricing.onrender.com/api/locations/sync-status
 ## What's Happening Behind the Scenes
 
 ### Search Flow
+
 1. User types "paris" → Frontend calls `GET /api/locations/search?q=paris`
 2. Backend checks if tables are empty → Yes, triggers auto-sync
 3. Auto-sync starts fetching from TBO:
@@ -111,6 +125,7 @@ curl https://builder-faredown-pricing.onrender.com/api/locations/sync-status
 5. Search retries after sync completes
 
 ### Hotel Selection Flow
+
 1. User selects "Paris" from dropdown
 2. Frontend navigates to `/hotels/results?destination=<PARIS_CODE>&...`
 3. HotelResults page calls `/api/tbo-hotels/search` with TBO city code
@@ -127,7 +142,7 @@ curl https://builder-faredown-pricing.onrender.com/api/locations/sync-status
 
 ```
 TBO_HOTEL_STATIC_DATA=https://apiwr.tboholidays.com/HotelAPI/
-TBO_STATIC_DATA_CREDENTIALS_USERNAME=travelcategory 
+TBO_STATIC_DATA_CREDENTIALS_USERNAME=travelcategory
 TBO_STATIC_DATA_CREDENTIALS_PASSWORD=Tra@59334536
 TBO_AGENCY_ID=BOMF145
 TBO_CLIENT_ID=BOMF145
@@ -146,6 +161,7 @@ All these are already configured in your Render environment.
 - **Hotels**: Depends on selected cities, can be 100000+ (10-30 minutes for full sync)
 
 For testing, you can:
+
 - Just sync countries (instant results)
 - Sync countries + top 100 cities (few minutes)
 - Sync everything (30+ minutes)
@@ -153,22 +169,26 @@ For testing, you can:
 ## Troubleshooting
 
 ### Still showing mock data after retry?
+
 1. Check sync status: `GET /api/locations/sync-status`
 2. Wait longer (sync might still be running)
 3. Check browser console for errors
 4. Check Render logs for sync errors
 
 ### No results for specific city?
+
 1. The city might not be in TBO's database
 2. Try searching for the country (e.g., "france") first
 3. Try searching with diacritics: "Montréal" vs "Montreal"
 
 ### Sync is taking too long?
+
 1. This is normal for first sync (lots of data)
 2. Subsequent syncs are cached (24 hours)
 3. Can be triggered manually if needed
 
 ### Getting "Sync in progress" every time?
+
 1. Check if sync is actually running: `GET /api/locations/stats`
 2. If still 0 cities, check Render logs for sync errors
 3. May need to manually trigger sync with admin endpoint
@@ -193,6 +213,7 @@ Since code is already committed, the fix is deployed when you:
 ## Summary
 
 The TBO locations autocomplete is now fully functional:
+
 - ✅ Database tables properly configured
 - ✅ TBO API client uses correct endpoints and credentials
 - ✅ Sync job handles all data types correctly
@@ -201,6 +222,7 @@ The TBO locations autocomplete is now fully functional:
 - ✅ Fallback to mock data only if sync fails
 
 Users can now search for "paris" (or any city) and see:
+
 1. **Dropdown suggestions**: Cities, hotels, landmarks from TBO
 2. **Results page**: Live TBO hotel data with real pricing
 3. **Booking flow**: Direct TBO booking integration

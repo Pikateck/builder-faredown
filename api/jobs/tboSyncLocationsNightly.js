@@ -43,7 +43,9 @@ async function syncLocationsNightly() {
       const countries = await adapter.getCountryList(true);
       if (Array.isArray(countries)) {
         for (const country of countries) {
-          const supplierId = String(country.CountryCode || country.code || country.id);
+          const supplierId = String(
+            country.CountryCode || country.code || country.id,
+          );
           const name = country.CountryName || country.name;
           const iso2 = country.CountryCode || country.code;
 
@@ -58,7 +60,8 @@ async function syncLocationsNightly() {
           const existing = existingRes.rows[0];
           if (existing) {
             const lastUpdate = new Date(existing.updated_at);
-            const hoursSinceUpdate = (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60);
+            const hoursSinceUpdate =
+              (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60);
             if (hoursSinceUpdate < 24) {
               // Skip if updated in last 24 hours
               continue;
@@ -113,7 +116,8 @@ async function syncLocationsNightly() {
             const existing = existingRes.rows[0];
             if (existing) {
               const lastUpdate = new Date(existing.updated_at);
-              const hoursSinceUpdate = (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60);
+              const hoursSinceUpdate =
+                (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60);
               if (hoursSinceUpdate < 24) {
                 // Skip if updated in last 24 hours
                 continue;
@@ -144,10 +148,15 @@ async function syncLocationsNightly() {
 
           if (countryCount > 0) {
             citiesUpdated += countryCount;
-            console.log(`  ✓ Updated ${countryCount} cities for ${countryCode}`);
+            console.log(
+              `  ✓ Updated ${countryCount} cities for ${countryCode}`,
+            );
           }
         } catch (error) {
-          console.warn(`⚠️  City sync failed for ${countryCode}:`, error.message);
+          console.warn(
+            `⚠️  City sync failed for ${countryCode}:`,
+            error.message,
+          );
         }
       }
 
@@ -174,8 +183,12 @@ async function syncLocationsNightly() {
 
           for (const hcode of hotelCodes.slice(0, 50)) {
             // Limit to top 50 hotels per city
-            const hotelId = typeof hcode === "string" ? hcode : hcode.HotelCode || hcode.code;
-            const hotelName = typeof hcode === "object" ? hcode.HotelName || hcode.name : `Hotel ${cityCode}`;
+            const hotelId =
+              typeof hcode === "string" ? hcode : hcode.HotelCode || hcode.code;
+            const hotelName =
+              typeof hcode === "object"
+                ? hcode.HotelName || hcode.name
+                : `Hotel ${cityCode}`;
 
             if (!hotelId) continue;
 
@@ -188,7 +201,8 @@ async function syncLocationsNightly() {
             const existing = existingRes.rows[0];
             if (existing) {
               const lastUpdate = new Date(existing.updated_at);
-              const hoursSinceUpdate = (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60);
+              const hoursSinceUpdate =
+                (Date.now() - lastUpdate.getTime()) / (1000 * 60 * 60);
               if (hoursSinceUpdate < 24) {
                 // Skip if updated in last 24 hours
                 continue;
@@ -220,7 +234,10 @@ async function syncLocationsNightly() {
             hotelsUpdated += cityHotelCount;
           }
         } catch (error) {
-          console.warn(`⚠️  Hotel sync failed for city ${cityCode}:`, error.message);
+          console.warn(
+            `⚠️  Hotel sync failed for city ${cityCode}:`,
+            error.message,
+          );
         }
       }
 
@@ -264,7 +281,9 @@ async function syncLocationsNightly() {
     const elapsed = Date.now() - startTime;
 
     console.log("\n✅ Nightly sync completed!");
-    console.log(`  Countries: ${countriesUpdated}, Cities: ${citiesUpdated}, Hotels: ${hotelsUpdated}`);
+    console.log(
+      `  Countries: ${countriesUpdated}, Cities: ${citiesUpdated}, Hotels: ${hotelsUpdated}`,
+    );
     console.log(`  ⏱️  Total time: ${(elapsed / 1000).toFixed(2)}s\n`);
 
     return {
@@ -283,7 +302,11 @@ async function syncLocationsNightly() {
       await db.query(
         `INSERT INTO admin_sync_logs (sync_type, status, details, created_at)
          VALUES ($1, $2, $3, NOW())`,
-        ["tbo_locations_nightly", "failed", JSON.stringify({ error: error.message })],
+        [
+          "tbo_locations_nightly",
+          "failed",
+          JSON.stringify({ error: error.message }),
+        ],
       );
     } catch (e) {
       // Ignore log errors

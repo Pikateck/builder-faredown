@@ -101,7 +101,9 @@ export default function HotelResults() {
   const [error, setError] = useState<string | null>(null);
   const [totalResults, setTotalResults] = useState(0);
   const [isLiveData, setIsLiveData] = useState(false);
-  const [pricingStatus, setPricingStatus] = useState<"loading" | "ready" | "error">("loading");
+  const [pricingStatus, setPricingStatus] = useState<
+    "loading" | "ready" | "error"
+  >("loading");
   const [showSearchEdit, setShowSearchEdit] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [nameQuery, setNameQuery] = useState("");
@@ -420,7 +422,7 @@ export default function HotelResults() {
       // STEP 1: Fetch metadata instantly from DB
       setPricingStatus("loading");
       const metadataResponse = await fetch(
-        `${apiBaseUrl}/hotels/metadata?cityId=${destCode}`
+        `${apiBaseUrl}/hotels/metadata?cityId=${destCode}`,
       );
       const metadataData = await metadataResponse.json();
 
@@ -430,33 +432,35 @@ export default function HotelResults() {
       }
 
       // Convert metadata to Hotel format
-      const metadataHotels: Hotel[] = metadataData.hotels.map((h: any, i: number) => ({
-        id: h.supplier_id || h.id || `hotel-${i}`,
-        name: h.name,
-        location: h.address || destCode,
-        images: [],
-        rating: h.stars || 4.0,
-        reviews: 0,
-        currentPrice: 0,
-        originalPrice: 0,
-        description: `Discover ${h.name}`,
-        amenities: [],
-        features: [],
-        roomTypes: [],
-        address: {
-          street: h.address || "",
-          city: destCode,
-          country: "Unknown",
-          postalCode: "00000",
-        },
-        starRating: h.stars || 4,
-        reviewCount: 0,
-        currency: selectedCurrency?.code || "INR",
-        supplier: "TBO",
-        supplierCode: "tbo",
-        isLiveData: true,
-        priceRange: { min: 0, max: 0 },
-      }));
+      const metadataHotels: Hotel[] = metadataData.hotels.map(
+        (h: any, i: number) => ({
+          id: h.supplier_id || h.id || `hotel-${i}`,
+          name: h.name,
+          location: h.address || destCode,
+          images: [],
+          rating: h.stars || 4.0,
+          reviews: 0,
+          currentPrice: 0,
+          originalPrice: 0,
+          description: `Discover ${h.name}`,
+          amenities: [],
+          features: [],
+          roomTypes: [],
+          address: {
+            street: h.address || "",
+            city: destCode,
+            country: "Unknown",
+            postalCode: "00000",
+          },
+          starRating: h.stars || 4,
+          reviewCount: 0,
+          currency: selectedCurrency?.code || "INR",
+          supplier: "TBO",
+          supplierCode: "tbo",
+          isLiveData: true,
+          priceRange: { min: 0, max: 0 },
+        }),
+      );
 
       console.log("✅ Metadata loaded:", metadataHotels.length, "hotels");
 
@@ -494,7 +498,7 @@ export default function HotelResults() {
       console.log("💰 Fetching live TBO prices...");
 
       const pricesResponse = await fetch(
-        `${apiBaseUrl}/hotels/prices?cityId=${destCode}`
+        `${apiBaseUrl}/hotels/prices?cityId=${destCode}`,
       );
       const pricesData = await pricesResponse.json();
 
@@ -513,7 +517,7 @@ export default function HotelResults() {
                 max: price?.maxTotal || 0,
               },
             };
-          })
+          }),
         );
       }
     } catch (e) {
