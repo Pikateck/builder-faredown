@@ -12,8 +12,14 @@ const USE_SUPPLIER_PROXY =
 console.log("🔌 PROXY CONFIGURATION:");
 console.log("  USE_SUPPLIER_PROXY:", USE_SUPPLIER_PROXY);
 console.log("  FIXIE_URL:", FIXIE_URL ? "✅ SET" : "❌ NOT SET");
-console.log("  HttpsProxyAgentCtor:", HttpsProxyAgentCtor ? "✅ LOADED" : "❌ NOT LOADED");
-console.log("  HttpProxyAgentCtor:", HttpProxyAgentCtor ? "✅ LOADED" : "❌ NOT LOADED");
+console.log(
+  "  HttpsProxyAgentCtor:",
+  HttpsProxyAgentCtor ? "✅ LOADED" : "❌ NOT LOADED",
+);
+console.log(
+  "  HttpProxyAgentCtor:",
+  HttpProxyAgentCtor ? "✅ LOADED" : "❌ NOT LOADED",
+);
 
 let agents = { https: undefined, http: undefined };
 if (
@@ -46,12 +52,10 @@ function agentFor(url) {
 }
 
 function proxyMode() {
-  const mode = USE_SUPPLIER_PROXY &&
-    FIXIE_URL &&
-    HttpsProxyAgentCtor &&
-    HttpProxyAgentCtor
-    ? "fixie"
-    : "direct";
+  const mode =
+    USE_SUPPLIER_PROXY && FIXIE_URL && HttpsProxyAgentCtor && HttpProxyAgentCtor
+      ? "fixie"
+      : "direct";
 
   if (mode === "direct") {
     console.warn("⚠️ PROXY MODE: direct (NOT using Fixie)");
