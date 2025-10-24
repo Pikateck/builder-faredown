@@ -1874,6 +1874,172 @@ class TBOAdapter extends BaseSupplierAdapter {
   }
 
   /**
+   * Seed top global cities into tbo_cities table
+   * Used as fallback when table is empty
+   */
+  async seedTopCities() {
+    try {
+      const db = require("../../database/connection");
+      const TOP_CITIES = [
+        // Europe
+        {
+          code: "PAR",
+          name: "Paris",
+          country: "FR",
+          countryName: "France",
+          lat: 48.8566,
+          lng: 2.3522,
+        },
+        {
+          code: "LON",
+          name: "London",
+          country: "GB",
+          countryName: "United Kingdom",
+          lat: 51.5074,
+          lng: -0.1278,
+        },
+        {
+          code: "ROM",
+          name: "Rome",
+          country: "IT",
+          countryName: "Italy",
+          lat: 41.9028,
+          lng: 12.4964,
+        },
+        {
+          code: "BCN",
+          name: "Barcelona",
+          country: "ES",
+          countryName: "Spain",
+          lat: 41.3874,
+          lng: 2.1686,
+        },
+        {
+          code: "MAD",
+          name: "Madrid",
+          country: "ES",
+          countryName: "Spain",
+          lat: 40.4168,
+          lng: -3.7038,
+        },
+        // Asia
+        {
+          code: "DXB",
+          name: "Dubai",
+          country: "AE",
+          countryName: "United Arab Emirates",
+          lat: 25.2048,
+          lng: 55.2708,
+        },
+        {
+          code: "BKK",
+          name: "Bangkok",
+          country: "TH",
+          countryName: "Thailand",
+          lat: 13.7563,
+          lng: 100.5018,
+        },
+        {
+          code: "SIN",
+          name: "Singapore",
+          country: "SG",
+          countryName: "Singapore",
+          lat: 1.3521,
+          lng: 103.8198,
+        },
+        {
+          code: "TYO",
+          name: "Tokyo",
+          country: "JP",
+          countryName: "Japan",
+          lat: 35.6762,
+          lng: 139.6503,
+        },
+        {
+          code: "DEL",
+          name: "Delhi",
+          country: "IN",
+          countryName: "India",
+          lat: 28.7041,
+          lng: 77.1025,
+        },
+        {
+          code: "BOM",
+          name: "Mumbai",
+          country: "IN",
+          countryName: "India",
+          lat: 19.076,
+          lng: 72.8777,
+        },
+        // Americas
+        {
+          code: "NYC",
+          name: "New York",
+          country: "US",
+          countryName: "United States",
+          lat: 40.7128,
+          lng: -74.006,
+        },
+        {
+          code: "LAX",
+          name: "Los Angeles",
+          country: "US",
+          countryName: "United States",
+          lat: 34.0522,
+          lng: -118.2437,
+        },
+        {
+          code: "MIA",
+          name: "Miami",
+          country: "US",
+          countryName: "United States",
+          lat: 25.7617,
+          lng: -80.1918,
+        },
+        // Middle East
+        {
+          code: "AUH",
+          name: "Abu Dhabi",
+          country: "AE",
+          countryName: "United Arab Emirates",
+          lat: 24.4539,
+          lng: 54.3773,
+        },
+      ];
+
+      for (const city of TOP_CITIES) {
+        try {
+          await db.query(
+            `INSERT INTO tbo_cities (
+              city_code, city_name, country_code, country_name,
+              type, latitude, longitude, is_active, created_at, updated_at
+            ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, NOW(), NOW())
+            ON CONFLICT (city_code) DO UPDATE SET
+              updated_at = NOW(),
+              is_active = true`,
+            [
+              city.code,
+              city.name,
+              city.country,
+              city.countryName,
+              "CITY",
+              city.lat,
+              city.lng,
+              true,
+            ],
+          );
+        } catch (e) {
+          this.logger.warn(`Failed to seed city ${city.code}:`, e.message);
+        }
+      }
+
+      this.logger.info("Top cities seeded successfully", { count: TOP_CITIES.length });
+    } catch (e) {
+      this.logger.error("Failed to seed top cities:", e.message);
+    }
+  }
+
+  /**
    * Search cities by text with ranking
    * Ranking: starts-with > contains; break ties by longer match
    * Optionally filter by country
