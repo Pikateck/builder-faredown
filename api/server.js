@@ -451,6 +451,7 @@ app.use("/api/hotels-live", hotelsLiveRoutes);
 app.use("/api/hotels-ranked", require("./routes/hotels-ranked"));
 app.use("/api/tbo-hotels", require("./routes/tbo-hotels"));
 app.use("/api/tbo-hotels/static", require("./routes/tbo-hotels-static"));
+app.use("/api/locations", locationsRoutes); // TBO locations autocomplete
 app.use("/api/bargain", bargainRoutes);
 app.use("/api/bargain/v1", bargainV1Routes);
 app.use("/api/ai-bargains", aiBargainRoutes);
