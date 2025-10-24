@@ -8,39 +8,40 @@
 
 ### ✅ FULLY IMPLEMENTED (19 Endpoints)
 
-| # | Endpoint | Service | Auth | Cache | Status |
-|-|----------|---------|------|-------|--------|
-| 1 | **Authenticate** | SharedData.svc/rest/Authenticate | N/A | DB 24h | ✅ |
-| 2 | **CountryList** | SharedData.svc/rest/CountryList | TokenId | Redis 24h | ✅ |
-| 3 | **DestinationCityList** | StaticData.svc/rest/GetDestinationSearchStaticData | TokenId | Redis 24h | ✅ |
-| 4 | **TopDestinationList** | SharedData.svc/rest/TopDestinationList | TokenId | Redis 24h | ✅ |
-| 5 | **Hotel Search** | hotelservice.svc/rest/Gethotelresult | TokenId | None | ✅ |
-| 6 | **Hotel Info** | hotelservice.svc/rest/GetHotelInfo | TokenId | None | ✅ |
-| 7 | **Hotel Room** | hotelservice.svc/rest/GetHotelRoom | TokenId | None | ✅ |
-| 8 | **PreBook/BlockRoom** | hotelservice.svc/rest/blockRoom | TokenId | None | ✅ |
-| 9 | **Book** | hotelservice.svc/rest/book | TokenId | None | ✅ |
-| 10 | **Generate Voucher** | hotelservice.svc/rest/GenerateVoucher | TokenId | None | ✅ |
-| 11 | **Get Booking Details** | hotelservice.svc/rest/GetBookingDetail | TokenId | None | ✅ |
-| 12 | **Send Change Request** | hotelservice.svc/rest/SendChangeRequest | TokenId | None | ✅ |
-| 13 | **Get Change Status** | hotelservice.svc/rest/GetChangeRequestStatus | TokenId | None | ✅ |
-| 14 | **Logout** | SharedData.svc/rest/Logout | TokenId | None | ✅ |
-| 15 | **Hotel Codes List** | Static API | Username/Password | Redis 24h | ✅ |
-| 16 | **Hotel Details** | Static API | Username/Password | Redis 24h | ✅ |
-| 17 | **City List** | Static API | Username/Password | Redis 24h | �� |
+| #   | Endpoint                | Service                                            | Auth              | Cache     | Status |
+| --- | ----------------------- | -------------------------------------------------- | ----------------- | --------- | ------ |
+| 1   | **Authenticate**        | SharedData.svc/rest/Authenticate                   | N/A               | DB 24h    | ✅     |
+| 2   | **CountryList**         | SharedData.svc/rest/CountryList                    | TokenId           | Redis 24h | ✅     |
+| 3   | **DestinationCityList** | StaticData.svc/rest/GetDestinationSearchStaticData | TokenId           | Redis 24h | ✅     |
+| 4   | **TopDestinationList**  | SharedData.svc/rest/TopDestinationList             | TokenId           | Redis 24h | ✅     |
+| 5   | **Hotel Search**        | hotelservice.svc/rest/Gethotelresult               | TokenId           | None      | ✅     |
+| 6   | **Hotel Info**          | hotelservice.svc/rest/GetHotelInfo                 | TokenId           | None      | ✅     |
+| 7   | **Hotel Room**          | hotelservice.svc/rest/GetHotelRoom                 | TokenId           | None      | ✅     |
+| 8   | **PreBook/BlockRoom**   | hotelservice.svc/rest/blockRoom                    | TokenId           | None      | ✅     |
+| 9   | **Book**                | hotelservice.svc/rest/book                         | TokenId           | None      | ✅     |
+| 10  | **Generate Voucher**    | hotelservice.svc/rest/GenerateVoucher              | TokenId           | None      | ✅     |
+| 11  | **Get Booking Details** | hotelservice.svc/rest/GetBookingDetail             | TokenId           | None      | ✅     |
+| 12  | **Send Change Request** | hotelservice.svc/rest/SendChangeRequest            | TokenId           | None      | ✅     |
+| 13  | **Get Change Status**   | hotelservice.svc/rest/GetChangeRequestStatus       | TokenId           | None      | ✅     |
+| 14  | **Logout**              | SharedData.svc/rest/Logout                         | TokenId           | None      | ✅     |
+| 15  | **Hotel Codes List**    | Static API                                         | Username/Password | Redis 24h | ✅     |
+| 16  | **Hotel Details**       | Static API                                         | Username/Password | Redis 24h | ✅     |
+| 17  | **City List**           | Static API                                         | Username/Password | Redis 24h | ��     |
 
 ---
 
 ### ⏳ PENDING IMPLEMENTATION (1 Endpoint)
 
-| # | Endpoint | Service | Priority | Effort |
-|-|----------|---------|----------|--------|
-| 1 | **GetAgencyBalance** | SharedData.svc/rest/GetAgencyBalance | Low | 30 min |
+| #   | Endpoint             | Service                              | Priority | Effort |
+| --- | -------------------- | ------------------------------------ | -------- | ------ |
+| 1   | **GetAgencyBalance** | SharedData.svc/rest/GetAgencyBalance | Low      | 30 min |
 
 ---
 
 ## 🎯 Core Workflow Status
 
 ### Search Workflow
+
 ```
 ✅ searchHotels()
   ├─ ✅ getHotelToken()
@@ -51,6 +52,7 @@
 ```
 
 ### Booking Workflow
+
 ```
 ✅ preBookHotel()          (BlockRoom)
 ✅ bookHotel()             (Book confirmation)
@@ -61,12 +63,14 @@
 ```
 
 ### Details Workflow
+
 ```
 ✅ getHotelInfo()   (Amenities, facilities, images)
 ✅ getHotelRoom()   (Pricing, policies, day rates)
 ```
 
 ### Static Data Workflow
+
 ```
 ✅ getCountryList()
 ✅ getCityList()
@@ -156,7 +160,7 @@ Step 5: User selects room & continues
         ↓
 Step 6: preBookHotel(traceId, hotelCode, roomDetails)
         └─ Validates price & policies
-        
+
 Step 7: User confirms booking
         ↓
 Step 8: bookHotel(traceId, hotelCode, guestDetails)
@@ -201,20 +205,21 @@ CACHE STRATEGY
 
 ## 📅 Date & Format Requirements
 
-| Field | Format | Example | Used In |
-|-------|--------|---------|---------|
-| CheckInDate | dd/mm/yyyy | 25/10/2025 | Search, Book |
-| CheckOutDate | dd/mm/yyyy | 28/10/2025 | Search |
-| PassportIssueDate | yyyy-MM-ddTHH:mm:ss | 2020-01-01T00:00:00 | Book |
-| LastCancellationDate | dd/mm/yyyy | 23/10/2025 | Room Details |
-| FromDate (policy) | dd/mm/yyyy | 23/10/2025 | Cancellation Policy |
-| ToDate (policy) | dd/mm/yyyy | 25/10/2025 | Cancellation Policy |
+| Field                | Format              | Example             | Used In             |
+| -------------------- | ------------------- | ------------------- | ------------------- |
+| CheckInDate          | dd/mm/yyyy          | 25/10/2025          | Search, Book        |
+| CheckOutDate         | dd/mm/yyyy          | 28/10/2025          | Search              |
+| PassportIssueDate    | yyyy-MM-ddTHH:mm:ss | 2020-01-01T00:00:00 | Book                |
+| LastCancellationDate | dd/mm/yyyy          | 23/10/2025          | Room Details        |
+| FromDate (policy)    | dd/mm/yyyy          | 23/10/2025          | Cancellation Policy |
+| ToDate (policy)      | dd/mm/yyyy          | 25/10/2025          | Cancellation Policy |
 
 ---
 
 ## 🌍 Supported Destinations
 
 ### Countries
+
 - India (IN)
 - United Arab Emirates (AE)
 - United Kingdom (GB)
@@ -224,6 +229,7 @@ CACHE STRATEGY
 - [And 100+ more]
 
 ### Major Cities Tested
+
 - Delhi (DEL)
 - Dubai (DXB)
 - Paris (PAR)
@@ -236,6 +242,7 @@ CACHE STRATEGY
 ## �� Database Tables
 
 ### tbo_token_cache
+
 ```sql
 CREATE TABLE tbo_token_cache (
   token_id VARCHAR(255),
@@ -246,6 +253,7 @@ CREATE TABLE tbo_token_cache (
 ```
 
 ### Cache Lookup Logic
+
 ```
 TokenId needed?
   ├─ Check in-memory: this.hotelTokenId (instant)
@@ -258,6 +266,7 @@ TokenId needed?
 ## 🧪 Testing Coverage
 
 ### Unit Tests ✅
+
 - [x] Authenticate token retrieval
 - [x] Token caching & expiry
 - [x] City ID conversion
@@ -267,6 +276,7 @@ TokenId needed?
 - [x] Booking flow validation
 
 ### Integration Tests ✅
+
 - [x] End-to-end search → book flow
 - [x] PreBook before book (validation)
 - [x] Voucher generation
@@ -275,6 +285,7 @@ TokenId needed?
 - [x] Error handling (401, 500, etc.)
 
 ### Production Tests ✅
+
 - [x] Live hotel search (50+ results)
 - [x] Real-time pricing updates
 - [x] Concurrent requests
@@ -285,22 +296,23 @@ TokenId needed?
 
 ## 📊 API Performance Metrics
 
-| Operation | Avg Time | P95 | P99 | Cached |
-|-----------|----------|-----|-----|--------|
-| Authenticate | 1.2s | 2.5s | 4.0s | 24h DB |
-| CountryList | 800ms | 1.5s | 2.0s | 24h Redis |
-| CityList | 900ms | 1.8s | 2.5s | 24h Redis |
-| Hotel Search | 3.5s | 5.0s | 7.0s | No |
-| Hotel Info | 600ms | 1.0s | 1.5s | No |
-| Hotel Room | 700ms | 1.2s | 1.8s | No |
-| PreBook | 1.5s | 2.5s | 3.5s | No |
-| Book | 2.0s | 3.0s | 4.5s | No |
+| Operation    | Avg Time | P95  | P99  | Cached    |
+| ------------ | -------- | ---- | ---- | --------- |
+| Authenticate | 1.2s     | 2.5s | 4.0s | 24h DB    |
+| CountryList  | 800ms    | 1.5s | 2.0s | 24h Redis |
+| CityList     | 900ms    | 1.8s | 2.5s | 24h Redis |
+| Hotel Search | 3.5s     | 5.0s | 7.0s | No        |
+| Hotel Info   | 600ms    | 1.0s | 1.5s | No        |
+| Hotel Room   | 700ms    | 1.2s | 1.8s | No        |
+| PreBook      | 1.5s     | 2.5s | 3.5s | No        |
+| Book         | 2.0s     | 3.0s | 4.5s | No        |
 
 ---
 
 ## 🔧 Configuration
 
 ### Environment Variables Required
+
 ```
 TBO_HOTEL_CLIENT_ID=ApiIntegrationNew
 TBO_HOTEL_USER_ID=BOMF145
@@ -310,6 +322,7 @@ TBO_HOTEL_TIMEOUT_MS=15000
 ```
 
 ### Feature Flags
+
 ```
 USE_SUPPLIER_PROXY=true        (Use Fixie proxy)
 FIXIE_URL=<proxy-url>          (Proxy configuration)
@@ -320,52 +333,56 @@ HOTELS_SUPPLIERS=HOTELBEDS,RATEHAWK,TBO
 
 ## 🚨 Common Error Codes & Fixes
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `Status: 2` | Generic failure | Check ErrorMessage, retry |
-| `Status: 4` | Invalid session | Token expired, refresh |
-| `Status: 5` | Invalid credentials | Check env vars |
-| `401 Unauthorized` | Auth failed | Verify ClientId, UserName, Password |
-| `400 Bad Request` | Invalid format | Check date format (dd/mm/yyyy), CityId type |
-| `503 Service Unavailable` | TBO down | Retry with backoff |
+| Error                     | Cause               | Solution                                    |
+| ------------------------- | ------------------- | ------------------------------------------- |
+| `Status: 2`               | Generic failure     | Check ErrorMessage, retry                   |
+| `Status: 4`               | Invalid session     | Token expired, refresh                      |
+| `Status: 5`               | Invalid credentials | Check env vars                              |
+| `401 Unauthorized`        | Auth failed         | Verify ClientId, UserName, Password         |
+| `400 Bad Request`         | Invalid format      | Check date format (dd/mm/yyyy), CityId type |
+| `503 Service Unavailable` | TBO down            | Retry with backoff                          |
 
 ---
 
 ## 📈 Completion Percentage by Category
 
-| Category | Completed | Total | % |
-|----------|-----------|-------|---|
-| Authentication | 1 | 1 | 100% |
-| Static Data | 5 | 5 | 100% |
-| Search | 1 | 1 | 100% |
-| Details | 2 | 2 | 100% |
-| Booking | 6 | 6 | 100% |
-| Account Mgmt | 0 | 1 | 0% |
-| **TOTAL** | **15** | **16** | **94%** |
+| Category       | Completed | Total  | %       |
+| -------------- | --------- | ------ | ------- |
+| Authentication | 1         | 1      | 100%    |
+| Static Data    | 5         | 5      | 100%    |
+| Search         | 1         | 1      | 100%    |
+| Details        | 2         | 2      | 100%    |
+| Booking        | 6         | 6      | 100%    |
+| Account Mgmt   | 0         | 1      | 0%      |
+| **TOTAL**      | **15**    | **16** | **94%** |
 
 ---
 
 ## 🎯 Implementation Roadmap
 
 ### Phase 1: Core (✅ COMPLETE)
+
 - [x] Authentication
 - [x] Hotel Search
 - [x] Hotel Details
 - [x] Booking Flow
 
 ### Phase 2: Advanced (✅ COMPLETE)
+
 - [x] PreBook/BlockRoom
 - [x] Cancellation
 - [x] Voucher Generation
 - [x] Change Requests
 
 ### Phase 3: Complete (✅ COMPLETE)
+
 - [x] All static data endpoints
 - [x] Token caching
 - [x] Error handling
 - [x] Health checks
 
 ### Phase 4: Optional (⏳ PENDING)
+
 - [ ] GetAgencyBalance
 - [ ] Advanced filtering
 - [ ] Bulk operations
@@ -388,13 +405,13 @@ HOTELS_SUPPLIERS=HOTELBEDS,RATEHAWK,TBO
 
 ## 📞 Support Resources
 
-| Resource | Location | Purpose |
-|----------|----------|---------|
-| Main Adapter | `api/services/adapters/tboAdapter.js` | All hotel methods |
-| Routes | `api/routes/tbo-hotels.js` | API endpoints |
-| Error Mapper | `api/services/tboErrorMapper.js` | Error handling |
+| Resource      | Location                                         | Purpose            |
+| ------------- | ------------------------------------------------ | ------------------ |
+| Main Adapter  | `api/services/adapters/tboAdapter.js`            | All hotel methods  |
+| Routes        | `api/routes/tbo-hotels.js`                       | API endpoints      |
+| Error Mapper  | `api/services/tboErrorMapper.js`                 | Error handling     |
 | Documentation | `TBO_HOTEL_API_COMPLETE_DOCUMENTATION_REPORT.md` | Full API reference |
-| Official Docs | https://apidoc.tektravels.com/hotel/ | TBO API docs |
+| Official Docs | https://apidoc.tektravels.com/hotel/             | TBO API docs       |
 
 ---
 
@@ -413,4 +430,4 @@ HOTELS_SUPPLIERS=HOTELBEDS,RATEHAWK,TBO
 
 **Status:** PRODUCTION READY - 95% COMPLETE  
 **Last Updated:** October 25, 2025  
-**Prepared by:** Fusion AI  
+**Prepared by:** Fusion AI

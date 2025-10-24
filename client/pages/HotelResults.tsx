@@ -429,16 +429,30 @@ export default function HotelResults() {
       // Determine country code from destination
       // Common mappings: DXB=AE, DEL=IN, PAR=FR, LDN=GB, NYC=US, TYO=JP
       const countryCodeMap: { [key: string]: string } = {
-        "DXB": "AE", "AUH": "AE", "RAK": "AE", // UAE
-        "DEL": "IN", "BLR": "IN", "BOM": "IN", "CCU": "IN", "HYD": "IN", "COK": "IN", // India
-        "PAR": "FR", "CDG": "FR", // France
-        "LDN": "GB", "LGW": "GB", "STN": "GB", // UK
-        "NYC": "US", "LAX": "US", "SFO": "US", "MIA": "US", // US
-        "TYO": "JP", "KIX": "JP", // Japan
-        "SYD": "AU", // Australia
-        "SGP": "SG", // Singapore
-        "BKK": "TH", // Thailand
-        "HKG": "HK", // Hong Kong
+        DXB: "AE",
+        AUH: "AE",
+        RAK: "AE", // UAE
+        DEL: "IN",
+        BLR: "IN",
+        BOM: "IN",
+        CCU: "IN",
+        HYD: "IN",
+        COK: "IN", // India
+        PAR: "FR",
+        CDG: "FR", // France
+        LDN: "GB",
+        LGW: "GB",
+        STN: "GB", // UK
+        NYC: "US",
+        LAX: "US",
+        SFO: "US",
+        MIA: "US", // US
+        TYO: "JP",
+        KIX: "JP", // Japan
+        SYD: "AU", // Australia
+        SGP: "SG", // Singapore
+        BKK: "TH", // Thailand
+        HKG: "HK", // Hong Kong
       };
 
       const countryCode = countryCodeMap[destCode] || "IN"; // Default to India if not found
@@ -576,14 +590,24 @@ export default function HotelResults() {
         name: room.roomName || "Standard Room",
         description: room.roomDescription || "",
         price: room.price?.total || room.price || hotel.minTotal || 0,
-        pricePerNight: room.price?.base || (room.price?.total || 0) / nights || 0,
+        pricePerNight:
+          room.price?.base || (room.price?.total || 0) / nights || 0,
         tax: room.price?.taxes || 0,
         board: room.board || "Room Only",
-        occupants: room.occupants || { adults: parseInt(adults) || 2, children: parseInt(children) || 0 },
+        occupants: room.occupants || {
+          adults: parseInt(adults) || 2,
+          children: parseInt(children) || 0,
+        },
         cancellation: room.cancellation || [],
         amenities: room.amenities || [],
-        features: [room.board || "Room Only", ...(room.amenities || []).slice(0, 2)],
-        rateKey: room.rateKey || room.token || `room-${hotel.supplierHotelId}-${room.roomName}`,
+        features: [
+          room.board || "Room Only",
+          ...(room.amenities || []).slice(0, 2),
+        ],
+        rateKey:
+          room.rateKey ||
+          room.token ||
+          `room-${hotel.supplierHotelId}-${room.roomName}`,
         refundable: room.cancellation && room.cancellation.length > 0,
       })),
       address: {
@@ -626,10 +650,12 @@ export default function HotelResults() {
           type: cheapestRoom.roomName || "Standard Room",
           bedType: cheapestRoom.bedType || "1 Double Bed",
           rateType: cheapestRoom.board || "Room Only",
-          paymentTerms: cheapestRoom.payType === "at_hotel" ? "Pay at Hotel" : "Prepaid",
-          cancellationPolicy: (cheapestRoom.cancellation && cheapestRoom.cancellation.length > 0)
-            ? "Free cancellation available"
-            : "Non-refundable",
+          paymentTerms:
+            cheapestRoom.payType === "at_hotel" ? "Pay at Hotel" : "Prepaid",
+          cancellationPolicy:
+            cheapestRoom.cancellation && cheapestRoom.cancellation.length > 0
+              ? "Free cancellation available"
+              : "Non-refundable",
           description: cheapestRoom.roomDescription || "",
         };
       })(),

@@ -13,6 +13,7 @@ The frontend was calling `/api/hotels?cityId=DXB&...` without passing a country 
 When TBO adapter tried to find DXB in India (via `getCityId("DXB", "IN")`), it failed and returned 0 results.
 
 **Issue Flow:**
+
 ```
 Frontend sends: ?cityId=DXB
 Backend defaults: countryCode="IN"
@@ -115,21 +116,21 @@ console.log(
 
 ## 📋 Supported Cities
 
-| Code | City | Country | Code |
-|------|------|---------|------|
-| DXB | Dubai | UAE | AE |
-| AUH | Abu Dhabi | UAE | AE |
-| DEL | Delhi | India | IN |
-| BLR | Bangalore | India | IN |
-| BOM | Mumbai | India | IN |
-| PAR | Paris | France | FR |
-| LDN | London | UK | GB |
-| NYC | New York | USA | US |
-| TYO | Tokyo | Japan | JP |
-| SYD | Sydney | Australia | AU |
-| SGP | Singapore | Singapore | SG |
-| BKK | Bangkok | Thailand | TH |
-| HKG | Hong Kong | Hong Kong | HK |
+| Code | City      | Country   | Code |
+| ---- | --------- | --------- | ---- |
+| DXB  | Dubai     | UAE       | AE   |
+| AUH  | Abu Dhabi | UAE       | AE   |
+| DEL  | Delhi     | India     | IN   |
+| BLR  | Bangalore | India     | IN   |
+| BOM  | Mumbai    | India     | IN   |
+| PAR  | Paris     | France    | FR   |
+| LDN  | London    | UK        | GB   |
+| NYC  | New York  | USA       | US   |
+| TYO  | Tokyo     | Japan     | JP   |
+| SYD  | Sydney    | Australia | AU   |
+| SGP  | Singapore | Singapore | SG   |
+| BKK  | Bangkok   | Thailand  | TH   |
+| HKG  | Hong Kong | Hong Kong | HK   |
 
 ---
 
@@ -140,6 +141,7 @@ console.log(
 The search now also enriches top 10 hotels with room-wise details:
 
 **What's Included:**
+
 - ✅ Room type names
 - ✅ Bed types
 - ✅ Pricing per room
@@ -150,6 +152,7 @@ The search now also enriches top 10 hotels with room-wise details:
 - ✅ Room descriptions
 
 **Implementation:** `api/services/adapters/tboAdapter.js`
+
 - Lines 1376-1420: Enrichment with timeout protection
 - Lines 1460-1507: `_enrichHotelWithRoomDetails()` method
 
@@ -158,17 +161,20 @@ The search now also enriches top 10 hotels with room-wise details:
 ## 🧪 Testing
 
 ### Frontend Test
+
 1. Navigate to hotel search
 2. Enter: Destination: "Dubai", Dates: Oct 31 - Nov 3, Guests: 2 adults, 0 children
 3. Click Search
 4. Verify: Results page shows hotels (not 0 properties)
 
 ### Backend Test (via curl)
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/hotels?cityId=DXB&checkIn=2025-10-31&checkOut=2025-11-03&adults=2&children=0&countryCode=AE"
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -197,9 +203,9 @@ curl "https://builder-faredown-pricing.onrender.com/api/hotels?cityId=DXB&checkI
 
 ## 📊 Files Modified
 
-| File | Changes | Lines |
-|------|---------|-------|
-| client/pages/HotelResults.tsx | Added countryCodeMap, updated API call | 428-448 |
+| File                          | Changes                                      | Lines       |
+| ----------------------------- | -------------------------------------------- | ----------- |
+| client/pages/HotelResults.tsx | Added countryCodeMap, updated API call       | 428-448     |
 | api/routes/hotels-metadata.js | Added countryCode parameter, pass to adapter | 70, 82, 110 |
 
 ---
@@ -235,6 +241,7 @@ If issues occur:
 **Status:** ✅ DEPLOYED AND READY FOR TESTING
 
 Test the fix by navigating to the hotel results page again with:
+
 - Destination: Dubai (DXB)
 - Dates: Oct 31 - Nov 3, 2025
 - Guests: 2 adults, 0 children

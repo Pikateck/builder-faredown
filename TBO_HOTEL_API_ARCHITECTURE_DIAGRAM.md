@@ -141,7 +141,7 @@
          ├─ NoOfRooms: 1
          ├─ RoomGuests: [{NoOfAdults: 2, NoOfChild: 1, ChildAge: [8]}]
          └─ PreferredCurrency: "INR"
-         
+
          Response:
          ├─ TraceId: "abc-def-123"
          ├─ HotelResults: [
@@ -312,7 +312,7 @@
               ├─ ChangeRequestId: 987654321
               ├─ RequestStatus: "Pending"
               └─ Status: 1
-              
+
               Then check status:
               GET /api/tbo-hotels/cancel-status/987654321
               └─ Backend: getChangeRequestStatus({TokenId, ChangeRequestId})
@@ -339,7 +339,7 @@ Level 1: IN-MEMORY CACHE (Fastest)
   }
   Lookup: O(1), ~1ms
   Scope: Single process instance
-  
+
 
 Level 2: DATABASE CACHE (Medium)
 ────────────────────────────────
@@ -355,7 +355,7 @@ Level 2: DATABASE CACHE (Medium)
   Queries:
     SELECT token_id FROM tbo_token_cache
     WHERE agency_id = $1 AND expires_at > NOW()
-    
+
 
 Level 3: REDIS CACHE (Static Data)
 ──────────────────────────────────
@@ -366,10 +366,10 @@ Level 3: REDIS CACHE (Static Data)
   - tbo:static:topdestinations  (Array, 24h TTL)
   - tbo:static:hotelcodes:DXB   (Array, 24h TTL)
   - tbo:static:hotel:DXBHOT001  (Object, 24h TTL)
-  
+
   Lookup: O(1), ~2-5ms
   Scope: All processes, across restarts
-  
+
 
 Level 4: NETWORK CACHE (TBO API)
 ───────────────────────────────
@@ -378,7 +378,7 @@ Level 4: NETWORK CACHE (TBO API)
   - Always fetch fresh from TBO
   - Real-time pricing
   - Real-time availability
-  
+
 
 CACHE FLOW DIAGRAM:
 ─────────────────
@@ -545,7 +545,7 @@ Client (Frontend/System):
 
 2. Send via HTTP:
    POST https://HotelBE.tektravels.com/hotelservice.svc/rest/Gethotelresult
-   
+
    Headers:
    ├─ Content-Type: application/json
    ├─ Accept: application/json

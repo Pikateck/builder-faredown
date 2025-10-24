@@ -1437,11 +1437,14 @@ class TBOAdapter extends BaseSupplierAdapter {
             if (!Array.isArray(room.Rates)) continue;
             for (const rate of room.Rates) {
               const ratePrice =
-                parseFloat(rate.PublishedPrice ||
-                  rate.TotalPrice ||
-                  rate.NetFare) || 0;
+                parseFloat(
+                  rate.PublishedPrice || rate.TotalPrice || rate.NetFare,
+                ) || 0;
               rawRates.push({
-                rateKey: rate.RateKey || rate.Token || `${hotelId}_${room.RoomTypeCode}`,
+                rateKey:
+                  rate.RateKey ||
+                  rate.Token ||
+                  `${hotelId}_${room.RoomTypeCode}`,
                 roomType: room.RoomTypeName || room.RoomType || "Room",
                 roomDescription: room.Description || "",
                 board: rate.MealType || rate.BoardType || "Room Only",
@@ -1451,7 +1454,10 @@ class TBOAdapter extends BaseSupplierAdapter {
                 currency: currency,
                 tax: parseFloat(rate.Tax) || 0,
                 cancellationPolicy: rate.CancellationPolicies || [],
-                isRefundable: !!(rate.CancellationPolicies && rate.CancellationPolicies.length > 0),
+                isRefundable: !!(
+                  rate.CancellationPolicies &&
+                  rate.CancellationPolicies.length > 0
+                ),
                 inclusions: rate.Inclusions || [],
                 amenities: room.Amenities || [],
               });
@@ -1460,7 +1466,10 @@ class TBOAdapter extends BaseSupplierAdapter {
         }
 
         // Fallback to basic pricing if no enriched room data
-        if (rawRates.length === 0 && (roomPrice > 0 || publishedPrice > 0 || offeredPrice > 0)) {
+        if (
+          rawRates.length === 0 &&
+          (roomPrice > 0 || publishedPrice > 0 || offeredPrice > 0)
+        ) {
           rawRates.push({
             rateKey: h.RateKey || `${hotelId}_standard`,
             roomType: h.RoomType || "Standard Room",
@@ -1495,7 +1504,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         // Calculate display price (use minimum from rates)
         let displayPrice;
         if (rawRates.length > 0) {
-          displayPrice = Math.min(...rawRates.map(r => r.price));
+          displayPrice = Math.min(...rawRates.map((r) => r.price));
         } else {
           displayPrice =
             offeredPrice > 0
@@ -1542,7 +1551,8 @@ class TBOAdapter extends BaseSupplierAdapter {
    */
   async _enrichHotelWithRoomDetails(hotel, searchContext = {}) {
     try {
-      const { checkIn, checkOut, tokenId, traceId, destination } = searchContext;
+      const { checkIn, checkOut, tokenId, traceId, destination } =
+        searchContext;
 
       // Call GetHotelRoom to fetch detailed room-wise information
       const roomDetails = await this.getHotelRoom({
@@ -1573,10 +1583,13 @@ class TBOAdapter extends BaseSupplierAdapter {
             MealType: roomDetail.Board || "Room Only",
             BoardType: roomDetail.Board || "Room Only",
             PublishedPrice: roomDetail.PublishedPrice || 0,
-            OfferedPrice: roomDetail.OfferedPrice || roomDetail.PublishedPrice || 0,
+            OfferedPrice:
+              roomDetail.OfferedPrice || roomDetail.PublishedPrice || 0,
             NetFare: roomDetail.NetFare || 0,
             Tax: roomDetail.Tax || 0,
-            TotalPrice: (roomDetail.OfferedPrice || roomDetail.PublishedPrice || 0) + (roomDetail.Tax || 0),
+            TotalPrice:
+              (roomDetail.OfferedPrice || roomDetail.PublishedPrice || 0) +
+              (roomDetail.Tax || 0),
             CancellationPolicies: roomDetail.CancellationPolicies || [],
             LastCancellationDate: roomDetail.LastCancellationDate,
             Token: roomDetail.RateKey || `token_${idx}`,

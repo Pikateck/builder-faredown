@@ -2,13 +2,14 @@
 
 **Date:** October 25, 2025  
 **API Source:** https://apidoc.tektravels.com/hotel/  
-**Project:** Faredown - Hotel Integration  
+**Project:** Faredown - Hotel Integration
 
 ---
 
 ## 📋 Executive Summary
 
 This report provides a **complete mapping** of all TBO (Tek Travels) Hotel API endpoints, including:
+
 - Service URLs (REST)
 - HTTP Methods
 - Request/Response structures
@@ -24,6 +25,7 @@ This report provides a **complete mapping** of all TBO (Tek Travels) Hotel API e
 Based on the official documentation at https://apidoc.tektravels.com/hotel/, the API is organized into these sections:
 
 ### Main Sections (Tabs)
+
 1. **Getting Started** - API basics and setup
 2. **Compression** - Data compression guidance
 3. **Method to POST JSON Data** - Request format guidelines
@@ -67,6 +69,7 @@ RESPONSE CACHE:   Yes - 24 hours (DB: tbo_token_cache)
 ```
 
 **Request Format:**
+
 ```json
 {
   "ClientId": "ApiIntegrationNew",
@@ -77,6 +80,7 @@ RESPONSE CACHE:   Yes - 24 hours (DB: tbo_token_cache)
 ```
 
 **Response Format:**
+
 ```json
 {
   "TokenId": "f17c0838-65d4-4985-8fd5-56cc64a076bd",
@@ -89,6 +93,7 @@ RESPONSE CACHE:   Yes - 24 hours (DB: tbo_token_cache)
 ```
 
 **Status Codes:**
+
 - `1` = Successful
 - `2` = Failed
 - `3` = IncorrectUserName
@@ -112,6 +117,7 @@ RESPONSE CACHE:   Yes - 24 hours (Redis: tbo:static:countries)
 ```
 
 **Request Format:**
+
 ```json
 {
   "ClientId": "ApiIntegrationNew",
@@ -121,6 +127,7 @@ RESPONSE CACHE:   Yes - 24 hours (Redis: tbo:static:countries)
 ```
 
 **Response Format:**
+
 ```json
 {
   "CountryList": "<XML list of countries with country_code and country_name>",
@@ -149,6 +156,7 @@ RESPONSE CACHE:   Yes - 24 hours (Redis: tbo:static:cities:{countryCode})
 ```
 
 **Request Format:**
+
 ```json
 {
   "ClientId": "ApiIntegrationNew",
@@ -160,10 +168,12 @@ RESPONSE CACHE:   Yes - 24 hours (Redis: tbo:static:cities:{countryCode})
 ```
 
 **SearchType Values:**
+
 - `1` = City
 - `2` = Hotel
 
 **Response Format:**
+
 ```json
 {
   "GetDestinationSearchStaticDataResult": [
@@ -184,6 +194,7 @@ RESPONSE CACHE:   Yes - 24 hours (Redis: tbo:static:cities:{countryCode})
 ```
 
 **Key Response Fields:**
+
 - `DestinationId` - Numeric city ID (required for hotel search)
 - `DestinationCode` - 3-letter city code (DXB, DEL, PAR, etc.)
 - `DestinationName` - City name
@@ -206,6 +217,7 @@ RESPONSE CACHE:   Yes - 24 hours (Redis: tbo:static:topdestinations)
 ```
 
 **Request Format:**
+
 ```json
 {
   "TokenId": "f17c0838-65d4-4985-8fd5-56cc64a076bd",
@@ -216,6 +228,7 @@ RESPONSE CACHE:   Yes - 24 hours (Redis: tbo:static:topdestinations)
 ```
 
 **Response Format:**
+
 ```json
 {
   "TopDestination": "<XML Response of Cities>",
@@ -228,6 +241,7 @@ RESPONSE CACHE:   Yes - 24 hours (Redis: tbo:static:topdestinations)
 ```
 
 **Status Values:**
+
 - `1` = Successful
 - `2` = Failed
 
@@ -249,6 +263,7 @@ RESPONSE TIME:    2-5 seconds
 ```
 
 **Request Format:**
+
 ```json
 {
   "EndUserIp": "192.168.10.130",
@@ -271,6 +286,7 @@ RESPONSE TIME:    2-5 seconds
 ```
 
 **Mandatory Request Fields:**
+
 - `EndUserIp` - Client IP address
 - `TokenId` - From Authenticate
 - `CheckInDate` - Format: **dd/mm/yyyy**
@@ -283,12 +299,14 @@ RESPONSE TIME:    2-5 seconds
 - `RoomGuests` - Array with guest details per room
 
 **Optional Request Fields:**
+
 - `ResultCount` - Limit results
 - `MaxRating` / `MinRating` - Filter by star rating (0-5)
 - `ReviewScore` - Filter by review score
 - `IsNearBySearchAllowed` - Allow nearby city search
 
 **Response Format:**
+
 ```json
 {
   "TraceId": "unique-trace-id-for-this-search",
@@ -327,6 +345,7 @@ RESPONSE TIME:    2-5 seconds
 ```
 
 **Response Status Codes:**
+
 - `1` = Successful
 - `2` = Failed
 - `3` = InvalidRequest
@@ -352,6 +371,7 @@ RESPONSE CACHE:   Partial (30 min cache)
 ```
 
 **Request Format:**
+
 ```json
 {
   "EndUserIp": "192.168.10.130",
@@ -363,6 +383,7 @@ RESPONSE CACHE:   Partial (30 min cache)
 ```
 
 **Mandatory Request Fields:**
+
 - `EndUserIp` - Client IP
 - `TokenId` - From Authenticate
 - `TraceId` - From HotelSearch response
@@ -370,6 +391,7 @@ RESPONSE CACHE:   Partial (30 min cache)
 - `HotelCode` - Hotel code from search results
 
 **Response Format:**
+
 ```json
 {
   "HotelInfoResult": {
@@ -422,6 +444,7 @@ RESPONSE CACHE:   No (real-time pricing)
 ```
 
 **Request Format:**
+
 ```json
 {
   "EndUserIp": "192.168.10.130",
@@ -433,6 +456,7 @@ RESPONSE CACHE:   No (real-time pricing)
 ```
 
 **Mandatory Request Fields:**
+
 - `EndUserIp` - Client IP
 - `TokenId` - From Authenticate
 - `TraceId` - From HotelSearch
@@ -440,6 +464,7 @@ RESPONSE CACHE:   No (real-time pricing)
 - `HotelCode` - Hotel code
 
 **Response Format:**
+
 ```json
 {
   "TraceId": "trace_from_search",
@@ -498,6 +523,7 @@ RESPONSE CACHE:   No (real-time pricing)
 ```
 
 **Key Response Fields:**
+
 - `IsUnderCancellationAllowed` - Can book with negative cancellation policies
 - `IsPolicyPerStay` - Cancellation policy applies to entire stay (vs. per-room)
 - `LastCancellationDate` - Deadline for free cancellation
@@ -523,6 +549,7 @@ PURPOSE:          Validate pricing & policies before final booking
 ```
 
 **Request Format:**
+
 ```json
 {
   "EndUserIp": "192.168.10.130",
@@ -563,6 +590,7 @@ PURPOSE:          Validate pricing & policies before final booking
 ```
 
 **Response Format:**
+
 ```json
 {
   "AvailabilityType": "Confirm",
@@ -578,10 +606,12 @@ PURPOSE:          Validate pricing & policies before final booking
 ```
 
 **AvailabilityType Values:**
+
 - `Available` - May reconfirm before booking
 - `Confirm` - May book without reconfirmation
 
 **IsPriceChanged / IsCancellationPolicyChanged:**
+
 - `true` - Price or policy has changed; should re-verify with user
 - `false` - No changes since GetHotelRoom call
 
@@ -602,6 +632,7 @@ PURPOSE:          Confirm booking (with or without voucher)
 ```
 
 **Request Format:**
+
 ```json
 {
   "EndUserIp": "192.168.10.130",
@@ -646,6 +677,7 @@ PURPOSE:          Confirm booking (with or without voucher)
 ```
 
 **Guest Details (HotelPassenger) Fields:**
+
 - `Title` - Mr, Mrs, Miss, Ms (Mandatory)
 - `FirstName` - 2-50 chars, no special chars (Mandatory)
 - `LastName` - 2-50 chars, no special chars (Mandatory)
@@ -658,6 +690,7 @@ PURPOSE:          Confirm booking (with or without voucher)
 - `PAN` - PAN number (Optional but mandatory for Indians)
 
 **Response Format:**
+
 ```json
 {
   "VoucherStatus": true,
@@ -677,6 +710,7 @@ PURPOSE:          Confirm booking (with or without voucher)
 ```
 
 **Booking Status Values:**
+
 - `0` = BookFailed
 - `1` = Confirmed
 - `3` = VerifyPrice (price changed; requires re-submission)
@@ -701,6 +735,7 @@ PURPOSE:          Generate voucher for held booking
 ```
 
 **Request Format:**
+
 ```json
 {
   "EndUserIp": "192.168.10.130",
@@ -710,11 +745,13 @@ PURPOSE:          Generate voucher for held booking
 ```
 
 **Mandatory Request Fields:**
+
 - `EndUserIp` - Client IP
 - `TokenId` - From Authenticate
 - `BookingId` - From Book response (must be > 0)
 
 **Response Format:**
+
 ```json
 {
   "VoucherStatus": true,
@@ -734,6 +771,7 @@ PURPOSE:          Generate voucher for held booking
 ```
 
 **VoucherStatus Values:**
+
 - `true` = Booking vouchered successfully
 - `false` = Booking not yet vouchered
 
@@ -754,6 +792,7 @@ PURPOSE:          Retrieve booking details & status
 ```
 
 **Request Format:**
+
 ```json
 {
   "EndUserIp": "192.168.10.130",
@@ -763,11 +802,13 @@ PURPOSE:          Retrieve booking details & status
 ```
 
 **Mandatory Request Fields:**
+
 - `EndUserIp` - Client IP
 - `TokenId` - From Authenticate
 - `BookingId` - Booking ID from Book response
 
 **Response Format:**
+
 ```json
 {
   "BookingId": 123456789,
@@ -808,6 +849,7 @@ PURPOSE:          Submit cancellation or amendment request
 ```
 
 **Request Format:**
+
 ```json
 {
   "EndUserIp": "192.168.10.130",
@@ -819,6 +861,7 @@ PURPOSE:          Submit cancellation or amendment request
 ```
 
 **Mandatory Request Fields:**
+
 - `EndUserIp` - Client IP
 - `TokenId` - From Authenticate
 - `BookingId` - Booking ID
@@ -826,6 +869,7 @@ PURPOSE:          Submit cancellation or amendment request
 - `Remarks` - Reason for request
 
 **Response Format:**
+
 ```json
 {
   "Status": 1,
@@ -841,10 +885,12 @@ PURPOSE:          Submit cancellation or amendment request
 ```
 
 **RequestType Values:**
+
 - `1` = Cancellation request
 - `2` = Modification/Amendment request
 
 **RequestStatus Values:**
+
 - `Pending` - Awaiting TBO processing
 - `Approved` - Change approved
 - `Rejected` - Change rejected
@@ -867,6 +913,7 @@ PURPOSE:          Check status of submitted change request
 ```
 
 **Request Format:**
+
 ```json
 {
   "EndUserIp": "192.168.10.130",
@@ -876,6 +923,7 @@ PURPOSE:          Check status of submitted change request
 ```
 
 **Response Format:**
+
 ```json
 {
   "ChangeRequestId": 987654321,
@@ -909,6 +957,7 @@ PURPOSE:          End session and invalidate token
 ```
 
 **Request Format:**
+
 ```json
 {
   "TokenId": "token_from_auth",
@@ -917,6 +966,7 @@ PURPOSE:          End session and invalidate token
 ```
 
 **Response Format:**
+
 ```json
 {
   "Status": 1,
@@ -944,6 +994,7 @@ PURPOSE:          Check prepaid account balance
 ```
 
 **Request Format:**
+
 ```json
 {
   "ClientId": "ApiIntegrationNew",
@@ -953,6 +1004,7 @@ PURPOSE:          Check prepaid account balance
 ```
 
 **Expected Response Format:**
+
 ```json
 {
   "Balance": 500000,
@@ -971,29 +1023,30 @@ PURPOSE:          Check prepaid account balance
 
 ## 📊 Implementation Summary Table
 
-| # | Endpoint | Service URL | HTTP | Status | Code Location | Notes |
-|---|----------|-------------|------|--------|---------------|-------|
-| 1 | Authenticate | SharedData.svc/rest/Authenticate | POST | ✅ Complete | Line 887-1001 | Token cache (24h) in DB |
-| 2 | CountryList | SharedData.svc/rest/CountryList | POST | ✅ Complete | Line 1557-1586 | Redis cache (24h) |
-| 3 | DestinationCityList | StaticData.svc/rest/GetDestinationSearchStaticData | POST | ✅ Complete | Line 1064-1146 | getCityId() method |
-| 4 | TopDestinationList | SharedData.svc/rest/TopDestinationList | POST | ✅ Complete | Line 1966-1997 | Redis cache (24h) |
-| 5 | Hotel Search | hotelservice.svc/rest/Gethotelresult | POST | ✅ Complete | Line 1151-1458 | Real-time pricing |
-| 6 | Hotel Info | hotelservice.svc/rest/GetHotelInfo | POST | ✅ Complete | Line 1904-1930 | Hotel details & amenities |
-| 7 | Hotel Room | hotelservice.svc/rest/GetHotelRoom | POST | ✅ Complete | Line 1935-1961 | Room pricing & policies |
-| 8 | PreBook (BlockRoom) | hotelservice.svc/rest/blockRoom | POST | ✅ Complete | Line 1706-1734 | Validates pricing before book |
-| 9 | Book | hotelservice.svc/rest/book | POST | ✅ Complete | Line 1739-1771 | Creates booking |
-| 10 | Generate Voucher | hotelservice.svc/rest/GenerateVoucher | POST | ✅ Complete | Line 1776-1806 | Vouchers held booking |
-| 11 | Get Booking Details | hotelservice.svc/rest/GetBookingDetail | POST | ✅ Complete | Line 1811-1839 | Check booking status |
-| 12 | Cancel/Change Request | hotelservice.svc/rest/SendChangeRequest | POST | ✅ Complete | Line 1844-1874 | Submit cancel/amend |
-| 13 | Get Change Status | hotelservice.svc/rest/GetChangeRequestStatus | POST | ✅ Complete | Line 2002-2028 | Check change request status |
-| 14 | Logout | SharedData.svc/rest/Logout | POST | ✅ Complete | Line 2033-2050+ | End session |
-| 15 | GetAgencyBalance | SharedData.svc/rest/GetAgencyBalance | POST | ⏳ Pending | Not implemented | Account balance inquiry |
+| #   | Endpoint              | Service URL                                        | HTTP | Status      | Code Location   | Notes                         |
+| --- | --------------------- | -------------------------------------------------- | ---- | ----------- | --------------- | ----------------------------- |
+| 1   | Authenticate          | SharedData.svc/rest/Authenticate                   | POST | ✅ Complete | Line 887-1001   | Token cache (24h) in DB       |
+| 2   | CountryList           | SharedData.svc/rest/CountryList                    | POST | ✅ Complete | Line 1557-1586  | Redis cache (24h)             |
+| 3   | DestinationCityList   | StaticData.svc/rest/GetDestinationSearchStaticData | POST | ✅ Complete | Line 1064-1146  | getCityId() method            |
+| 4   | TopDestinationList    | SharedData.svc/rest/TopDestinationList             | POST | ✅ Complete | Line 1966-1997  | Redis cache (24h)             |
+| 5   | Hotel Search          | hotelservice.svc/rest/Gethotelresult               | POST | ✅ Complete | Line 1151-1458  | Real-time pricing             |
+| 6   | Hotel Info            | hotelservice.svc/rest/GetHotelInfo                 | POST | ✅ Complete | Line 1904-1930  | Hotel details & amenities     |
+| 7   | Hotel Room            | hotelservice.svc/rest/GetHotelRoom                 | POST | ✅ Complete | Line 1935-1961  | Room pricing & policies       |
+| 8   | PreBook (BlockRoom)   | hotelservice.svc/rest/blockRoom                    | POST | ✅ Complete | Line 1706-1734  | Validates pricing before book |
+| 9   | Book                  | hotelservice.svc/rest/book                         | POST | ✅ Complete | Line 1739-1771  | Creates booking               |
+| 10  | Generate Voucher      | hotelservice.svc/rest/GenerateVoucher              | POST | ✅ Complete | Line 1776-1806  | Vouchers held booking         |
+| 11  | Get Booking Details   | hotelservice.svc/rest/GetBookingDetail             | POST | ✅ Complete | Line 1811-1839  | Check booking status          |
+| 12  | Cancel/Change Request | hotelservice.svc/rest/SendChangeRequest            | POST | ✅ Complete | Line 1844-1874  | Submit cancel/amend           |
+| 13  | Get Change Status     | hotelservice.svc/rest/GetChangeRequestStatus       | POST | ✅ Complete | Line 2002-2028  | Check change request status   |
+| 14  | Logout                | SharedData.svc/rest/Logout                         | POST | ✅ Complete | Line 2033-2050+ | End session                   |
+| 15  | GetAgencyBalance      | SharedData.svc/rest/GetAgencyBalance               | POST | ⏳ Pending  | Not implemented | Account balance inquiry       |
 
 ---
 
 ## ✅ Completed & Tested Methods
 
 ### Search Workflow (Complete)
+
 1. ✅ **searchHotels()** - Hotel search with live pricing
    - Calls getHotelToken()
    - Calls getCityId() to convert city code to numeric ID
@@ -1002,6 +1055,7 @@ PURPOSE:          Check prepaid account balance
    - Returns UnifiedHotel format
 
 ### Booking Workflow (Complete)
+
 2. ✅ **preBookHotel()** - BlockRoom (hold reservation)
 3. ✅ **bookHotel()** - Final booking confirmation
 4. ✅ **generateHotelVoucher()** - Generate voucher for booking
@@ -1010,10 +1064,12 @@ PURPOSE:          Check prepaid account balance
 7. ✅ **getChangeRequestStatus()** - Check change request status
 
 ### Details Workflow (Complete)
+
 8. ✅ **getHotelInfo()** - Hotel details, amenities, facilities
 9. ✅ **getHotelRoom()** - Room pricing and cancellation policies
 
 ### Static Data (Complete)
+
 10. ✅ **getHotelToken()** - Authentication & token management
 11. ✅ **getCityId()** - Convert destination code to numeric ID
 12. ✅ **getCountryList()** - List of supported countries
@@ -1028,6 +1084,7 @@ PURPOSE:          Check prepaid account balance
 ## ⏳ Pending Implementation
 
 ### 1. GetAgencyBalance
+
 - **Purpose:** Check prepaid account balance
 - **Priority:** Low (informational only)
 - **Effort:** ~30 minutes
@@ -1038,14 +1095,16 @@ PURPOSE:          Check prepaid account balance
 ## 🔒 Authentication & Authorization
 
 ### Token Management
+
 - **Token Validity:** 24 hours from issuance
 - **Token Cache:** Database table `tbo_token_cache`
   - Caches token with expiry timestamp
   - In-memory cache checked first (faster)
   - DB cache checked if in-memory expired
   - New token fetched if all caches miss
-  
+
 ### Credentials (Configured in Environment)
+
 ```
 TBO_HOTEL_CLIENT_ID = "ApiIntegrationNew"
 TBO_HOTEL_USER_ID = "BOMF145"
@@ -1054,6 +1113,7 @@ TBO_END_USER_IP = "192.168.5.56" (or current user IP)
 ```
 
 ### Static Data Credentials (Different)
+
 ```
 TBO_STATIC_DATA_CREDENTIALS_USERNAME = "travelcategory"
 TBO_STATIC_DATA_CREDENTIALS_PASSWORD = "Tra@59334536"
@@ -1066,11 +1126,13 @@ TBO_STATIC_DATA_CREDENTIALS_PASSWORD = "Tra@59334536"
 **All date fields must be in: `dd/mm/yyyy` format**
 
 Examples:
+
 - ✅ Correct: `"25/10/2025"`
 - ❌ Incorrect: `"2025-10-25"` (will fail)
 - ❌ Incorrect: `"10/25/2025"` (will fail)
 
 **Conversion Method:**
+
 ```javascript
 function formatDateForTBO(dateStr) {
   if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) return dateStr;
@@ -1086,6 +1148,7 @@ function formatDateForTBO(dateStr) {
 ## 💱 Supported Currencies
 
 Common currencies (not exhaustive):
+
 - `INR` - Indian Rupee (default)
 - `USD` - US Dollar
 - `GBP` - British Pound
@@ -1099,15 +1162,18 @@ Common currencies (not exhaustive):
 ## 🌍 Country & City Code Format
 
 ### Country Codes
+
 - ISO 3166-1 alpha-2 format (2 letters)
 - Examples: `IN` (India), `AE` (UAE), `GB` (UK), `US`, `FR`, `DE`
 
 ### City Codes
+
 - 3-letter codes used for search
 - Examples: `DEL` (Delhi), `DXB` (Dubai), `PAR` (Paris), `LDN` (London)
 - **Important:** Must be converted to numeric `DestinationId` for API calls
 
 ### Mapping Example
+
 ```
 City Code: "DXB"
   ↓ (getCityId)
@@ -1120,11 +1186,13 @@ DestinationId: 130443
 ## 🚀 API Rate Limits & Performance
 
 ### Request Rate
+
 - **Requests per second:** 10 (TBO adapter configured)
 - **Timeout per request:** 15 seconds (configurable)
 - **Retry strategy:** Exponential backoff (3 retries by default)
 
 ### Response Times
+
 - **Authentication:** 500ms - 2s
 - **Hotel Search:** 2-5s (depends on result size)
 - **Hotel Info:** 500ms - 1s
@@ -1132,6 +1200,7 @@ DestinationId: 130443
 - **PreBook/Book:** 1-3s
 
 ### Caching Strategy
+
 - **Country List:** 24-hour Redis cache
 - **City List:** 24-hour Redis cache per country
 - **Hotel Search:** No cache (real-time pricing)
@@ -1166,7 +1235,7 @@ DestinationId: 130443
 6. PREBOOK (BlockRoom) - RECOMMENDED
    POST /rest/blockRoom
    ← AvailabilityType, IsPriceChanged, IsCancellationPolicyChanged
-   
+
 7. VERIFY PRICE & POLICIES
    If IsPriceChanged or IsCancellationPolicyChanged:
      → Display to user, get re-confirmation
@@ -1202,6 +1271,7 @@ DestinationId: 130443
 ## 🔧 Error Handling
 
 ### HTTP Status Codes
+
 - `200` - Request processed (check TBO Status field)
 - `400` - Invalid request
 - `401` - Authentication failed
@@ -1211,6 +1281,7 @@ DestinationId: 130443
 - `503` - Service unavailable
 
 ### TBO Status Codes (in response.Status)
+
 - `1` - Successful
 - `2` - Failed
 - `3` - Invalid Request
@@ -1218,7 +1289,9 @@ DestinationId: 130443
 - `5` - Invalid Credentials
 
 ### Response Error Field
+
 All responses include Error object:
+
 ```json
 {
   "Error": {
@@ -1227,6 +1300,7 @@ All responses include Error object:
   }
 }
 ```
+
 - `ErrorCode: 0` = No error (ErrorMessage blank)
 - `ErrorCode > 0` = Error (ErrorMessage contains details)
 
@@ -1237,17 +1311,20 @@ All responses include Error object:
 ## 📱 Integration Points in Project
 
 ### Frontend Routes
+
 - Search page → `/api/hotels?cityId=X&checkIn=Y&checkOut=Z&adults=A&children=C`
 - Results page → Displays TBO hotels from search
 - Details page → `/api/tbo-hotels/hotel/:hotelId?searchId=X`
 - Booking flow → Calls `/api/tbo-hotels/book`
 
 ### Backend Routes
+
 - `api/routes/tbo-hotels.js` - Main TBO routes
 - `api/routes/hotels-metadata.js` - Hotel metadata endpoint
 - `api/services/adapters/tboAdapter.js` - Adapter with all 19 methods
 
 ### Database Tables
+
 - `tbo_token_cache` - Token storage with expiry
 - `hotel_unified` - Master hotel data
 - `room_offer_unified` - Room pricing snapshots
@@ -1309,10 +1386,10 @@ All responses include Error object:
 
 ## 📋 Revision History
 
-| Date | Version | Changes |
-|------|---------|---------|
-| Oct 25, 2025 | 1.0 | Complete documentation with 19/20 endpoints |
-| Oct 25, 2025 | 1.1 | Added implementation details & code references |
+| Date         | Version | Changes                                        |
+| ------------ | ------- | ---------------------------------------------- |
+| Oct 25, 2025 | 1.0     | Complete documentation with 19/20 endpoints    |
+| Oct 25, 2025 | 1.1     | Added implementation details & code references |
 
 ---
 
