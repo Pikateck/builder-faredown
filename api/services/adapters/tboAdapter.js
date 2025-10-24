@@ -1360,44 +1360,36 @@ class TBOAdapter extends BaseSupplierAdapter {
         ? Math.max(1, Math.min(parseInt(searchParams.maxResults, 10), 500))
         : 50;
 
-      // Map to aggregator format and enrich with rates/images/amenities
+      // Map to aggregator format - Tek Travels API response
       const results = hotels.slice(0, maxResults).map((h) => {
         const hotelId = String(h.HotelCode || h.HotelId || h.Id || "");
-        // Build rates from Rooms[].Rates[]
+
+        // Extract pricing from TBO response
+        const priceObj = h.Price || {};
+        const roomPrice = parseFloat(priceObj.RoomPrice) || 0;
+        const publishedPrice = parseFloat(priceObj.PublishedPrice) || roomPrice;
+        const offeredPrice = parseFloat(priceObj.OfferedPrice) || publishedPrice;
+        const tax = parseFloat(priceObj.Tax) || 0;
+
+        // Build single rate entry from pricing info
         const rawRates = [];
-        const roomsArr = Array.isArray(h.Rooms) ? h.Rooms : [];
-        for (const room of roomsArr) {
-          const rates = Array.isArray(room.Rates) ? room.Rates : [];
-          for (const r of rates) {
-            const base = parseFloat(r.NetFare || r.BasePrice || 0) || 0;
-            const total =
-              parseFloat(r.PublishedPrice || r.TotalPrice || base) || base;
-            const refundable = !(r.IsNonRefundable === true);
-            const policies = Array.isArray(r.CancellationPolicies)
-              ? r.CancellationPolicies
-              : r.CancellationPolicy
-                ? [r.CancellationPolicy]
-                : [];
-            rawRates.push({
-              rateKey:
-                r.RateKey ||
-                r.Token ||
-                `${hotelId}_${room.RoomTypeCode || room.RoomTypeName || "room"}`,
-              roomType:
-                room.RoomTypeName || room.RoomType || r.RoomName || "Room",
-              boardType: r.MealType || r.BoardType || r.Board || "Room Only",
-              originalPrice: base,
-              price: total,
-              markedUpPrice: total,
-              currency: r.Currency || currency,
-              cancellationPolicy: policies,
-              isRefundable: refundable,
-              inclusions: r.Inclusions || r.Included || [],
-            });
-          }
+        if (roomPrice > 0 || publishedPrice > 0 || offeredPrice > 0) {
+          rawRates.push({
+            rateKey: h.RateKey || `${hotelId}_standard`,
+            roomType: h.RoomType || "Standard Room",
+            boardType: h.MealType || h.BoardType || "Room Only",
+            originalPrice: publishedPrice,
+            price: offeredPrice,
+            markedUpPrice: offeredPrice,
+            currency: currency,
+            tax: tax,
+            cancellationPolicy: [],
+            isRefundable: true,
+            inclusions: h.Inclusions || [],
+          });
         }
 
-        // Images & amenities
+        // Extract images from TBO response
         const images = [];
         if (Array.isArray(h.Images)) {
           h.Images.forEach((img) => {
@@ -1407,31 +1399,31 @@ class TBOAdapter extends BaseSupplierAdapter {
           });
         }
         if (h.ImageUrl) images.push(h.ImageUrl);
-        if (h.ThumbnailUrl) images.push(h.ThumbnailUrl);
+        if (h.Image) images.push(h.Image);
 
-        const amenities =
-          h.Amenities || h.Facilities || h.HotelFacilities || [];
+        // Extract amenities
+        const amenities = h.Amenities || h.Facilities || h.HotelFacilities || [];
+
+        // Calculate display price
+        const displayPrice = offeredPrice > 0 ? offeredPrice : publishedPrice > 0 ? publishedPrice : roomPrice;
 
         return {
           hotelId,
           name: h.HotelName || h.Name || "",
           city: destination,
-          price:
-            parseFloat(h.Price?.PublishedPrice) ||
-            parseFloat(h.MinPrice) ||
-            rawRates[0]?.price ||
-            0,
-          currency,
+          price: displayPrice,
+          currency: currency,
           supplier: "TBO",
           checkIn,
           checkOut,
-          roomCode: h.Rooms?.[0]?.RoomTypeCode || "",
+          roomCode: h.RoomCode || "",
           rates: rawRates,
           images,
           amenities,
           starRating: parseFloat(h.StarRating) || undefined,
           reviewCount: h.ReviewCount || undefined,
           reviewScore: h.ReviewScore || undefined,
+          location: h.Location || h.Address || "",
         };
       });
 
