@@ -1638,9 +1638,10 @@ class TBOAdapter extends BaseSupplierAdapter {
   async bookHotel(params) {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
-      const tokenId = await this.getHotelToken();
       const payload = {
-        TokenId: tokenId,
+        ClientId: this.config.hotelClientId,
+        UserName: this.config.hotelUserId,
+        Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
         ...params,
       };
