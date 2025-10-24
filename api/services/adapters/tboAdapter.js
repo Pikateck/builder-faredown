@@ -31,10 +31,6 @@ class TBOAdapter extends BaseSupplierAdapter {
     const bookingUrlRaw =
       process.env.TBO_BOOKING_URL ||
       "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc";
-    const hotelAuthBaseRaw =
-      process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION ||
-      "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc";
-
     super("TBO", {
       searchUrl: searchUrlRaw,
       bookingUrl: bookingUrlRaw,
@@ -44,25 +40,18 @@ class TBOAdapter extends BaseSupplierAdapter {
       credentialMode: process.env.TBO_CREDENTIAL_MODE || "runtime",
       timeout: parseInt(process.env.TBO_TIMEOUT_MS || "15000"),
       requestsPerSecond: 10,
-      // Hotel API specific configuration (live)
-      hotelAuthBase: hotelAuthBaseRaw,
-      hotelStaticBase:
-        process.env.TBO_HOTEL_STATIC_DATA ||
-        "https://apiwr.tboholidays.com/HotelAPI/",
-      hotelSearchBase:
-        process.env.TBO_HOTEL_SEARCH_PREBOOK ||
-        "https://affiliate.travelboutiqueonline.com/HotelAPI/",
-      hotelBookingBase:
-        process.env.TBO_HOTEL_BOOKING ||
-        "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
-      hotelClientId:
-        process.env.TBO_HOTEL_CLIENT_ID ||
-        process.env.TBO_CLIENT_ID ||
-        process.env.TBO_AGENCY_ID,
-      hotelUserId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_USERNAME,
+      // TBO Hotel API (Tek Travels API) - corrected endpoints
+      hotelAuthEndpoint: "http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate",
+      hotelCityListEndpoint: "http://api.tektravels.com/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
+      hotelSearchEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/Gethotelresult",
+      hotelInfoEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelInfo",
+      hotelRoomEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelRoom",
+      hotelPreBookEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/PreBook",
+      hotelBookEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/Book",
+      // Credentials
+      hotelClientId: "ApiIntegrationNew",
+      hotelUserId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_HOTEL_USERNAME || process.env.TBO_USERNAME,
       hotelPassword: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_PASSWORD,
-      staticUserName: process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME,
-      staticPassword: process.env.TBO_STATIC_DATA_CREDENTIALS_PASSWORD,
       ...config,
     });
 
