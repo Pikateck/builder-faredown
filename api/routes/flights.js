@@ -880,6 +880,107 @@ router.get("/search", async (req, res) => {
 });
 
 /**
+ * Get Flight Details by ID
+ * Route: GET /api/flights/:id
+ * Returns flight details for a specific flight ID
+ */
+router.get("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    console.log(`🔍 Flight details request for ID: ${id}`);
+
+    // Check if this is a fallback flight ID (from mock data)
+    if (id.startsWith("fallback_") || id === "fallback_1") {
+      console.log(`✅ Returning fallback flight details for ID: ${id}`);
+
+      const fallbackFlight = {
+        id: id,
+        airline: "Emirates",
+        airlineCode: "EK",
+        flightNumber: "EK 506",
+        departure: {
+          code: "BOM",
+          name: "Chhatrapati Shivaji Maharaj International Airport",
+          city: "Mumbai",
+          country: "India",
+        },
+        arrival: {
+          code: "DXB",
+          name: "Dubai International Airport",
+          city: "Dubai",
+          country: "United Arab Emirates",
+        },
+        departureTime: "14:30",
+        arrivalTime: "17:45",
+        duration: "3h 15m",
+        aircraft: "B777",
+        stops: 0,
+        price: {
+          amount: 45000,
+          currency: "INR",
+          breakdown: {
+            baseFare: 38000,
+            taxes: 5500,
+            fees: 1500,
+            total: 45000,
+          },
+        },
+        amenities: ["WiFi", "Entertainment System", "Premium Meals"],
+        baggage: {
+          carryOn: {
+            weight: "7kg",
+            dimensions: "22x14x9cm",
+            included: true,
+          },
+          checked: {
+            weight: "23kg",
+            count: 1,
+            included: true,
+          },
+        },
+        refundable: true,
+        changeable: true,
+        bookingClass: "Y",
+        availableSeats: 12,
+      };
+
+      return res.json({
+        success: true,
+        data: fallbackFlight,
+        meta: {
+          source: "fallback",
+          timestamp: new Date().toISOString(),
+        },
+      });
+    }
+
+    // For non-fallback IDs, return 404 as we don't store flight details in DB
+    // Flight details come from supplier APIs during search
+    return res.status(404).json({
+      success: false,
+      error: "Flight details endpoint not implemented",
+      message:
+        "Flight details are provided during search results. Please search for flights first to get detailed information.",
+      data: null,
+      meta: {
+        requestedId: id,
+        timestamp: new Date().toISOString(),
+        hint: "This endpoint does not store historical flight details. Use /api/flights/search to get flight information.",
+      },
+    });
+  } catch (error) {
+    console.error("❌ Error fetching flight details:", error);
+    res.status(500).json({
+      success: false,
+      error: "Internal server error",
+      message: error.message,
+      timestamp: new Date().toISOString(),
+    });
+  }
+});
+
+/**
  * Utility Functions
  */
 function getAirlineName(code) {
