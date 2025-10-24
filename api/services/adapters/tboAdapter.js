@@ -1144,7 +1144,10 @@ class TBOAdapter extends BaseSupplierAdapter {
       }
 
       const payload = {
-        TokenId: tokenId,
+        ClientId: this.config.hotelClientId,
+        UserName: this.config.hotelUserId,
+        Password: this.config.hotelPassword,
+        EndUserIp: this.config.endUserIp,
         CheckIn: checkIn,
         CheckOut: checkOut,
         NoOfRooms: Array.isArray(rooms) ? rooms.length : Number(rooms) || 1,
@@ -1153,7 +1156,6 @@ class TBOAdapter extends BaseSupplierAdapter {
         IsNearBySearchAllowed: true,
         RoomGuests: roomGuests,
         PreferredCurrency: currency,
-        EndUserIp: this.config.endUserIp,
       };
 
       // Remove trailing slash from base URL to avoid double slashes
