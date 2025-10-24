@@ -41,17 +41,28 @@ class TBOAdapter extends BaseSupplierAdapter {
       timeout: parseInt(process.env.TBO_TIMEOUT_MS || "15000"),
       requestsPerSecond: 10,
       // TBO Hotel API (Tek Travels API) - corrected endpoints
-      hotelAuthEndpoint: "http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate",
-      hotelCityListEndpoint: "http://api.tektravels.com/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
-      hotelSearchEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/Gethotelresult",
-      hotelInfoEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelInfo",
-      hotelRoomEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelRoom",
-      hotelPreBookEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/PreBook",
-      hotelBookEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/Book",
-      hotelGenerateVoucherEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/rest/GenerateVoucher",
+      hotelAuthEndpoint:
+        "http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate",
+      hotelCityListEndpoint:
+        "http://api.tektravels.com/SharedServices/StaticData.svc/rest/GetDestinationSearchStaticData",
+      hotelSearchEndpoint:
+        "https://HotelBE.tektravels.com/hotelservice.svc/rest/Gethotelresult",
+      hotelInfoEndpoint:
+        "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelInfo",
+      hotelRoomEndpoint:
+        "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelRoom",
+      hotelPreBookEndpoint:
+        "https://HotelBE.tektravels.com/hotelservice.svc/rest/PreBook",
+      hotelBookEndpoint:
+        "https://HotelBE.tektravels.com/hotelservice.svc/rest/Book",
+      hotelGenerateVoucherEndpoint:
+        "https://HotelBE.tektravels.com/hotelservice.svc/rest/GenerateVoucher",
       // Credentials
       hotelClientId: "ApiIntegrationNew",
-      hotelUserId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_HOTEL_USERNAME || process.env.TBO_USERNAME,
+      hotelUserId:
+        process.env.TBO_HOTEL_USER_ID ||
+        process.env.TBO_HOTEL_USERNAME ||
+        process.env.TBO_USERNAME,
       hotelPassword: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_PASSWORD,
       ...config,
     });
@@ -941,10 +952,7 @@ class TBOAdapter extends BaseSupplierAdapter {
           // Cache token ~23 hours (expires in 24 hours per TBO API)
           this.hotelTokenId = response.data.TokenId;
           this.hotelTokenExpiry = Date.now() + 23 * 60 * 60 * 1000;
-          await this.cacheHotelToken(
-            this.hotelTokenId,
-            this.hotelTokenExpiry,
-          );
+          await this.cacheHotelToken(this.hotelTokenId, this.hotelTokenExpiry);
           this._recordAuthAttempt({
             url: this.config.hotelAuthEndpoint,
             method: "POST",
@@ -1123,7 +1131,9 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       this.logger.warn("City not found in list", {
         destination,
-        availableCities: cities.slice(0, 5).map((c) => c.DestinationCode || c.CityCode),
+        availableCities: cities
+          .slice(0, 5)
+          .map((c) => c.DestinationCode || c.CityCode),
       });
       return null;
     } catch (e) {
@@ -1282,7 +1292,9 @@ class TBOAdapter extends BaseSupplierAdapter {
           status: res.status,
           tboStatus: res.data?.Status,
           hasHotelResults: !!res.data?.HotelResults,
-          hotelCount: Array.isArray(res.data?.HotelResults) ? res.data.HotelResults.length : 0,
+          hotelCount: Array.isArray(res.data?.HotelResults)
+            ? res.data.HotelResults.length
+            : 0,
           hasTraceId: !!res.data?.TraceId,
           dataKeys: Object.keys(res.data || {}).slice(0, 10),
           responseSize: JSON.stringify(res.data).length,
@@ -1369,7 +1381,8 @@ class TBOAdapter extends BaseSupplierAdapter {
         const priceObj = h.Price || {};
         const roomPrice = parseFloat(priceObj.RoomPrice) || 0;
         const publishedPrice = parseFloat(priceObj.PublishedPrice) || roomPrice;
-        const offeredPrice = parseFloat(priceObj.OfferedPrice) || publishedPrice;
+        const offeredPrice =
+          parseFloat(priceObj.OfferedPrice) || publishedPrice;
         const tax = parseFloat(priceObj.Tax) || 0;
 
         // Build single rate entry from pricing info
@@ -1403,10 +1416,16 @@ class TBOAdapter extends BaseSupplierAdapter {
         if (h.Image) images.push(h.Image);
 
         // Extract amenities
-        const amenities = h.Amenities || h.Facilities || h.HotelFacilities || [];
+        const amenities =
+          h.Amenities || h.Facilities || h.HotelFacilities || [];
 
         // Calculate display price
-        const displayPrice = offeredPrice > 0 ? offeredPrice : publishedPrice > 0 ? publishedPrice : roomPrice;
+        const displayPrice =
+          offeredPrice > 0
+            ? offeredPrice
+            : publishedPrice > 0
+              ? publishedPrice
+              : roomPrice;
 
         return {
           hotelId,

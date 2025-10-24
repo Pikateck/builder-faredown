@@ -8,9 +8,10 @@ All 8 tasks completed. Complete rewrite of TBO hotel integration using correct T
 
 ## Executive Summary
 
-The previous TBO hotel API integration was using **incorrect endpoints and authentication method**, causing 401 "Access Credentials is incorrect" errors. 
+The previous TBO hotel API integration was using **incorrect endpoints and authentication method**, causing 401 "Access Credentials is incorrect" errors.
 
 This rewrite implements the **official Tek Travels API** (which TBO uses), with correct:
+
 - ✅ Authentication endpoint and flow
 - ✅ City list endpoint with numeric DestinationId mapping
 - ✅ Hotel search with TokenId-based authorization
@@ -22,6 +23,7 @@ This rewrite implements the **official Tek Travels API** (which TBO uses), with 
 ## What Was Changed
 
 ### 1. Constructor Configuration ✅
+
 **File**: `api/services/adapters/tboAdapter.js` (lines 44-55)
 
 All 8 endpoints now point to correct Tek Travels API:
@@ -38,6 +40,7 @@ hotelGenerateVoucherEndpoint: "https://HotelBE.tektravels.com/hotelservice.svc/r
 ```
 
 Credentials:
+
 ```javascript
 hotelClientId: "ApiIntegrationNew",  // Required by Tek Travels API
 hotelUserId: process.env.TBO_HOTEL_USER_ID,  // BOMF145
@@ -45,15 +48,18 @@ hotelPassword: process.env.TBO_HOTEL_PASSWORD,  // @Bo#4M-Api@
 ```
 
 ### 2. Authentication Method ✅
+
 **File**: `api/services/adapters/tboAdapter.js` (lines 875-975)
 
 **Method**: `getHotelToken()`
 
 **Old (WRONG)**:
+
 - Used local TBO SharedAPI endpoints
 - Wrong request format
 
 **New (CORRECT)**:
+
 - Uses: `http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate`
 - Sends: `{ClientId: "ApiIntegrationNew", UserName, Password, EndUserIp}`
 - Returns: `TokenId` (valid 24 hours)
@@ -72,31 +78,39 @@ async getHotelToken() {
 ```
 
 ### 3. Helper Methods ✅
+
 **File**: `api/services/adapters/tboAdapter.js`
 
 #### 3a. `_formatDateForTBO()` (NEW)
+
 Converts yyyy-mm-dd to dd/mm/yyyy format required by API.
 
 #### 3b. `getCityId()` (NEW)
+
 Converts city codes to numeric DestinationId:
+
 - Calls: `GetDestinationSearchStaticData` endpoint
 - Input: City code like "DXB", "PAR"
 - Output: Numeric DestinationId like "130443"
 
 Example:
+
 ```javascript
 cityId = await adapter.getCityId("DXB", "AE");
 // Returns: "123456" (numeric Tek Travels city ID)
 ```
 
 ### 4. Hotel Search Method ✅
+
 **File**: `api/services/adapters/tboAdapter.js` (lines 1140-1443)
 
 **Old (WRONG)**:
+
 - Used direct credentials in payload
 - Wrong endpoint URL
 
 **New (CORRECT)**:
+
 - Step 1: Get TokenId via authentication
 - Step 2: Convert city code to numeric DestinationId
 - Step 3: Calculate NoOfNights from dates
@@ -106,6 +120,7 @@ cityId = await adapter.getCityId("DXB", "AE");
 - Step 7: Map to UnifiedHotel format with pricing
 
 **Request Payload**:
+
 ```javascript
 {
   "EndUserIp": "192.168.5.56",
@@ -128,6 +143,7 @@ cityId = await adapter.getCityId("DXB", "AE");
 ```
 
 **Response Parsing**:
+
 ```javascript
 {
   "Status": 1,  // Success indicator
@@ -149,9 +165,11 @@ cityId = await adapter.getCityId("DXB", "AE");
 ```
 
 ### 5. All Dynamic Hotel Methods ✅
+
 **File**: `api/services/adapters/tboAdapter.js`
 
 **Updated Methods** (8 total):
+
 1. `preBookHotel()` (line 1686) - Uses TokenId + correct endpoint
 2. `bookHotel()` (line 1720) - Uses TokenId + correct endpoint
 3. `generateHotelVoucher()` (line 1758) - Uses TokenId + correct endpoint
@@ -162,6 +180,7 @@ cityId = await adapter.getCityId("DXB", "AE");
 8. `getChangeRequestStatus()` (line 1984) - Uses TokenId + correct endpoint
 
 **Pattern Change**:
+
 ```javascript
 // OLD (WRONG):
 const payload = {
@@ -198,6 +217,7 @@ TBO_END_USER_IP="192.168.5.56"  (or any private IP)
 ## Expected Behavior After Deployment
 
 ### Success Scenario
+
 ```
 User searches: Dubai, Oct 31 - Nov 3, 2 adults
 
@@ -207,12 +227,13 @@ Logs:
 ✅ TBO hotel search response received (Status: 1)
 🏨 Hotels extracted from TBO response (count: 50)
 
-Results: 
+Results:
 - 50+ hotels displayed with real pricing
 - No 401 errors
 ```
 
 ### Error Handling
+
 - If city not found → Returns empty array
 - If token fails → Logs error, returns empty array
 - If search fails with non-1 status → Logs warning, returns empty array
@@ -225,22 +246,25 @@ Results:
 ### Manual Testing (After Deployment)
 
 1. **Test City Resolution**
+
    ```
    Search for "Dubai" → Should return Dubai as option
    Select Dubai → Should resolve to numeric CityId
    ```
 
 2. **Test Hotel Search**
+
    ```
    Destination: Dubai
    Check-in: Oct 31, 2025
    Check-out: Nov 3, 2025
    Guests: 2 adults, 0 children
-   
+
    Expected: 50+ hotels with prices (not 401 error)
    ```
 
 3. **Test Different Cities**
+
    ```
    Paris (PAR), London (LHR), New York (NYC)
    Each should resolve to numeric IDs and return hotels
@@ -256,6 +280,7 @@ Results:
    ```
 
 ### Automated Testing (Optional)
+
 ```bash
 # Test authentication
 curl -X POST http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate \
@@ -276,6 +301,7 @@ curl -X POST http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authen
    - All changes in `api/services/adapters/tboAdapter.js`
 
 2. **Push to git**
+
    ```bash
    git add api/services/adapters/tboAdapter.js
    git commit -m "TBO Hotel API: Complete rewrite using Tek Travels API endpoints"
@@ -294,27 +320,28 @@ curl -X POST http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authen
 
 ## File Changes Summary
 
-| File | Changes | Lines |
-|------|---------|-------|
-| `api/services/adapters/tboAdapter.js` | Constructor: 8 endpoints | 44-55 |
-| `api/services/adapters/tboAdapter.js` | getHotelToken(): Complete rewrite | 875-975 |
-| `api/services/adapters/tboAdapter.js` | _formatDateForTBO(): NEW helper | NEW |
-| `api/services/adapters/tboAdapter.js` | getCityId(): NEW city resolution | NEW |
-| `api/services/adapters/tboAdapter.js` | searchHotels(): Complete rewrite | 1140-1443 |
-| `api/services/adapters/tboAdapter.js` | preBookHotel(): Updated payload | 1686 |
-| `api/services/adapters/tboAdapter.js` | bookHotel(): Updated payload | 1720 |
-| `api/services/adapters/tboAdapter.js` | generateVoucher(): Updated payload | 1758 |
-| `api/services/adapters/tboAdapter.js` | getBookingDetails(): Updated payload | 1791 |
-| `api/services/adapters/tboAdapter.js` | cancelBooking(): Updated payload | 1825 |
-| `api/services/adapters/tboAdapter.js` | getHotelInfo(): Updated payload | 1885 |
-| `api/services/adapters/tboAdapter.js` | getHotelRoom(): Updated payload | 1916 |
-| `api/services/adapters/tboAdapter.js` | getChangeStatus(): Updated payload | 1984 |
+| File                                  | Changes                              | Lines     |
+| ------------------------------------- | ------------------------------------ | --------- |
+| `api/services/adapters/tboAdapter.js` | Constructor: 8 endpoints             | 44-55     |
+| `api/services/adapters/tboAdapter.js` | getHotelToken(): Complete rewrite    | 875-975   |
+| `api/services/adapters/tboAdapter.js` | \_formatDateForTBO(): NEW helper     | NEW       |
+| `api/services/adapters/tboAdapter.js` | getCityId(): NEW city resolution     | NEW       |
+| `api/services/adapters/tboAdapter.js` | searchHotels(): Complete rewrite     | 1140-1443 |
+| `api/services/adapters/tboAdapter.js` | preBookHotel(): Updated payload      | 1686      |
+| `api/services/adapters/tboAdapter.js` | bookHotel(): Updated payload         | 1720      |
+| `api/services/adapters/tboAdapter.js` | generateVoucher(): Updated payload   | 1758      |
+| `api/services/adapters/tboAdapter.js` | getBookingDetails(): Updated payload | 1791      |
+| `api/services/adapters/tboAdapter.js` | cancelBooking(): Updated payload     | 1825      |
+| `api/services/adapters/tboAdapter.js` | getHotelInfo(): Updated payload      | 1885      |
+| `api/services/adapters/tboAdapter.js` | getHotelRoom(): Updated payload      | 1916      |
+| `api/services/adapters/tboAdapter.js` | getChangeStatus(): Updated payload   | 1984      |
 
 ---
 
 ## Root Cause of 401 Error
 
 The previous implementation was using:
+
 1. **Wrong endpoints** - Old TBO shared API instead of Tek Travels API
 2. **Wrong auth method** - Sending credentials in search payload instead of using TokenId
 3. **Wrong format** - City codes instead of numeric IDs
