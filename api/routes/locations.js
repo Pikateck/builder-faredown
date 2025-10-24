@@ -143,6 +143,39 @@ router.get("/search", async (req, res) => {
       return res.json({ items: [] });
     }
 
+    // Check if tables have data, auto-sync if empty
+    const citiesCountResult = await db.query(
+      "SELECT COUNT(*) as count FROM tbo_cities",
+    );
+    const citiesCount = parseInt(citiesCountResult.rows[0]?.count || 0);
+
+    if (citiesCount === 0) {
+      console.log("⚠️  No cities data found, auto-triggering sync...");
+      const { syncTboLocations } = require("../jobs/tboSyncLocations.js");
+
+      // Fire-and-forget async sync
+      syncTboLocations()
+        .then((result) => {
+          console.log("✅ Background sync completed:", result);
+        })
+        .catch((error) => {
+          console.warn(
+            "⚠️  Background sync failed (search will proceed):",
+            error.message,
+          );
+        });
+
+      // Return a message to the user about syncing
+      return res.json({
+        items: [],
+        count: 0,
+        query: qtext,
+        message:
+          "Sync in progress - data will be available shortly. Please try again in a moment.",
+        syncing: true,
+      });
+    }
+
     // Determine which types to search
     const typesToSearch = [];
     if (type === "all" || type === "city") typesToSearch.push("city");
