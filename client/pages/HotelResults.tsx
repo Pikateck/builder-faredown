@@ -53,6 +53,7 @@ import {
 import { MobileNavBar } from "@/components/mobile/MobileNavBar";
 import { MobileNavigation } from "@/components/mobile/MobileNavigation";
 import { useScrollToTop } from "@/hooks/useScrollToTop";
+import { HotelCardSkeleton } from "@/components/HotelCardSkeleton";
 
 // Use the Hotel type from hotelsService for consistency
 interface Hotel extends HotelType {
