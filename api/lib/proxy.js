@@ -46,12 +46,24 @@ function agentFor(url) {
 }
 
 function proxyMode() {
-  return USE_SUPPLIER_PROXY &&
+  const mode = USE_SUPPLIER_PROXY &&
     FIXIE_URL &&
     HttpsProxyAgentCtor &&
     HttpProxyAgentCtor
     ? "fixie"
     : "direct";
+
+  if (mode === "direct") {
+    console.warn("⚠️ PROXY MODE: direct (NOT using Fixie)");
+    console.warn("   USE_SUPPLIER_PROXY:", USE_SUPPLIER_PROXY);
+    console.warn("   FIXIE_URL:", !!FIXIE_URL);
+    console.warn("   HttpsProxyAgentCtor:", !!HttpsProxyAgentCtor);
+    console.warn("   HttpProxyAgentCtor:", !!HttpProxyAgentCtor);
+  } else {
+    console.log("✅ PROXY MODE: fixie");
+  }
+
+  return mode;
 }
 
 module.exports = { agents, agentFor, proxyMode };
