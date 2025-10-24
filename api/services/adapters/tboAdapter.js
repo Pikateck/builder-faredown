@@ -900,6 +900,16 @@ class TBOAdapter extends BaseSupplierAdapter {
         EndUserIp: this.config.endUserIp,
         AgencyId: this.config.agencyId || process.env.TBO_AGENCY_ID,
       };
+
+      this.logger.info("🔐 TBO Hotel Auth Request Payload", {
+        clientId: authRequest.ClientId,
+        userName: authRequest.UserName,
+        password: authRequest.Password ? "***" : "null",
+        endUserIp: authRequest.EndUserIp,
+        agencyId: authRequest.AgencyId,
+        payloadJSON: JSON.stringify(authRequest),
+      });
+
       const paths = ["/Authenticate", "/Authenticate/", "/rest/Authenticate"];
       let lastErr;
       for (const p of paths) {
