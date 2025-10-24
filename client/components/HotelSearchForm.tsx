@@ -116,8 +116,8 @@ export function HotelSearchForm({
   // Update search results when input changes
   useEffect(() => {
     if (isUserTyping && inputValue.length > 0) {
-      // Fetch from TBO API
-      const fetchCities = async () => {
+      // Fetch from TBO locations API (cities, hotels, countries)
+      const fetchLocations = async () => {
         try {
           // Get the proper API base URL
           const apiBaseUrl = (() => {
@@ -133,26 +133,37 @@ export function HotelSearchForm({
           })();
 
           const response = await fetch(
-            `${apiBaseUrl}/tbo-hotels/cities?q=${encodeURIComponent(inputValue)}&limit=15`,
+            `${apiBaseUrl}/locations/search?q=${encodeURIComponent(inputValue)}&type=all&limit=15`,
           );
           if (response.ok) {
             const data = await response.json();
-            if (
-              data.success &&
-              Array.isArray(data.data) &&
-              data.data.length > 0
-            ) {
-              // Map TBO cities to SearchResult format
-              const cities = data.data.map((city: any) => ({
-                id: city.code,
-                code: city.code,
-                name: city.name,
-                type: city.type?.toLowerCase() || "city",
-                location: city.displayLabel,
-                description: city.countryName || "",
-                rating: undefined,
-              }));
-              setSearchResults(cities);
+            if (Array.isArray(data.items) && data.items.length > 0) {
+              // Map API results to SearchResult format
+              const results = data.items.map((item: any) => {
+                const baseResult: any = {
+                  id: item.id,
+                  code: item.id,
+                  name: item.name,
+                  type: item.kind,
+                  rating: undefined,
+                };
+
+                // Add location/description based on type
+                if (item.kind === "city") {
+                  baseResult.location = item.name;
+                  baseResult.description = "City";
+                } else if (item.kind === "hotel") {
+                  baseResult.location = item.city_name || "Hotel";
+                  baseResult.description = "Hotel";
+                } else if (item.kind === "country") {
+                  baseResult.location = item.name;
+                  baseResult.description = "Country";
+                }
+
+                return baseResult;
+              });
+
+              setSearchResults(results);
             } else {
               // Fallback to local search if API returns empty results
               const results = searchHotels(inputValue);
@@ -164,13 +175,13 @@ export function HotelSearchForm({
             setSearchResults(results);
           }
         } catch (error) {
-          console.warn("Failed to fetch TBO cities:", error);
+          console.warn("Failed to fetch locations:", error);
           // Fallback to local search if API fails
           const results = searchHotels(inputValue);
           setSearchResults(results);
         }
       };
-      fetchCities();
+      fetchLocations();
     } else if (!isUserTyping) {
       // Show popular destinations when not typing
       const results = searchHotels("", 8);
