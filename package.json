@@ -5,6 +5,7 @@
   "description": "Faredown Pricing API (Node/Express)",
   "main": "server.js",
   "scripts": {
+    "dev": "vite",
     "start": "node server.js",
     "build:client": "vite build --outDir dist"
   },
