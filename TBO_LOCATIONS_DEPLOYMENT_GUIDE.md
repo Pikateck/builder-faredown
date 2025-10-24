@@ -3,6 +3,7 @@
 ## ✅ What Has Been Implemented
 
 ### Backend Files Created:
+
 1. ✅ `api/services/tboClient.js` — TBO Content API client
 2. ✅ `api/jobs/tboSyncLocations.js` — Sync job for countries, cities, hotels
 3. ✅ `api/routes/locations.js` — Autocomplete search API
@@ -10,9 +11,11 @@
 5. ✅ `api/server.js` — Updated with route mounts
 
 ### Frontend Files Updated:
+
 1. ✅ `client/components/HotelSearchForm.tsx` — Now calls `/api/locations/search`
 
 ### Database Schema:
+
 1. ✅ `api/database/migrations/20250124_tbo_locations_master_tables.sql` — Create tables
 
 ---
@@ -20,6 +23,7 @@
 ## 🚀 Step 1: Deploy to Render
 
 ### Push Changes to Git:
+
 ```bash
 git add .
 git commit -m "feat: implement TBO locations autocomplete system
@@ -34,6 +38,7 @@ git push origin main
 ```
 
 ### Verify Render Auto-Deploy:
+
 1. Go to: https://dashboard.render.com/services
 2. Click: `builder-faredown-pricing`
 3. Wait for "Deploy status" → **Live** (green)
@@ -44,6 +49,7 @@ git push origin main
 ## 🗄️ Step 2: Verify Database Schema
 
 ### Option A: Run Migration Manually (If tables don't exist)
+
 ```bash
 # Connect to Render PostgreSQL
 psql postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db
@@ -62,6 +68,7 @@ psql postgresql://faredown_user:VFEkJ35EShYkok2OfgabKLRCKIluidqb@dpg-d2086mndiee
 ```
 
 ### Option B: Let Sync Job Create Tables (If AUTO CREATE is enabled)
+
 The tables will be created automatically on first sync if they don't exist.
 
 ---
@@ -69,10 +76,12 @@ The tables will be created automatically on first sync if they don't exist.
 ## 🔄 Step 3: Trigger Initial Sync
 
 ### Get Admin Token:
+
 1. Manually create an admin user in your database, OR
 2. Use existing admin token if you have one
 
 ### Trigger Sync via API:
+
 ```bash
 curl -X POST https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync \
   -H "Authorization: Bearer <YOUR_ADMIN_JWT_TOKEN>" \
@@ -80,6 +89,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync \
 ```
 
 ### Expected Response:
+
 ```json
 {
   "success": true,
@@ -94,6 +104,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync \
 **⏱️ First sync takes 2-3 minutes (250 countries + 5000 cities + 500k hotels)**
 
 ### Check Sync Status:
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync-status \
   -H "Authorization: Bearer <YOUR_ADMIN_JWT_TOKEN>"
@@ -104,6 +115,7 @@ curl https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync-status \
 ## 🔍 Step 4: Test the Autocomplete API
 
 ### Test 1: Search for Paris (City)
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/locations/search?q=paris&type=city"
 
@@ -112,6 +124,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/locations/search?q=paris
 ```
 
 ### Test 2: Search for Hotels in Paris
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/locations/search?q=paris&type=hotel&limit=5"
 
@@ -120,6 +133,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/locations/search?q=paris
 ```
 
 ### Test 3: Search for Dubai
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/locations/search?q=dubai"
 
@@ -128,11 +142,13 @@ curl "https://builder-faredown-pricing.onrender.com/api/locations/search?q=dubai
 ```
 
 ### Test 4: Search for Prague
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/locations/search?q=prague"
 ```
 
 ### Test 5: Get Statistics
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/locations/stats"
 
@@ -145,6 +161,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/locations/stats"
 ## 🧪 Step 5: Frontend Testing
 
 ### Test 1: Desktop View
+
 1. Go to: https://spontaneous-biscotti-da44bc.netlify.app (or your Netlify URL)
 2. Click "Hotels" tab
 3. In the search box "Where are you going?", type: **paris**
@@ -154,6 +171,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/locations/stats"
    - ❌ NO Dubai, Bangkok, or unrelated results
 
 ### Test 2: Mobile View
+
 1. Resize browser to mobile (< 768px width)
 2. Refresh page
 3. Tap "Hotels" tab
@@ -164,12 +182,14 @@ curl "https://builder-faredown-pricing.onrender.com/api/locations/stats"
    - ��� NO Paris, Dubai, or other cities
 
 ### Test 3: Hotel Selection
+
 1. Type **dubai** in search
 2. Click on "Dubai (City, United Arab Emirates)"
 3. Verify navigation to `/hotels/results?selectedResult=...`
 4. Verify hotel search loads for Dubai
 
 ### Test 4: Fallback to Local Search
+
 1. Temporarily disable the autocomplete API (use DevTools Network tab)
 2. Type **london**
 3. Verify results still appear from local fallback search
@@ -180,7 +200,9 @@ curl "https://builder-faredown-pricing.onrender.com/api/locations/stats"
 ## 🛠️ Troubleshooting
 
 ### Issue 1: "No results found" in autocomplete
+
 **Solution:**
+
 1. Check if sync completed: `curl https://...onrender.com/api/locations/stats`
 2. If counts are 0, run sync again: `curl -X POST https://...onrender.com/api/admin/tbo/sync`
 3. Check Render logs: `builder-faredown-pricing` service logs
@@ -190,29 +212,36 @@ curl "https://builder-faredown-pricing.onrender.com/api/locations/stats"
    - `TBO_API_SECRET`
 
 ### Issue 2: Sync fails with "network timeout"
+
 **Solution:**
+
 1. Sync is slow on first run (120+ seconds)
 2. Check Render logs for timeout messages
 3. Increase timeout if needed in `tboClient.js`: `timeout: 60000`
 4. Try running sync again (it will resume from last position)
 
 ### Issue 3: Search returns Paris results when typing "dubai"
+
 **Solution:**
+
 1. Database may have stale data
 2. Clear and resync:
+
    ```bash
    curl -X POST https://...onrender.com/api/admin/tbo/clear \
      -H "Authorization: Bearer <TOKEN>" \
      -H "Content-Type: application/json" \
      -d '{"confirm": "CLEAR_ALL_TBO_DATA"}'
-   
+
    # Then sync again
    curl -X POST https://...onrender.com/api/admin/tbo/sync \
      -H "Authorization: Bearer <TOKEN>"
    ```
 
 ### Issue 4: Frontend still shows old results
+
 **Solution:**
+
 1. Clear browser cache: `Ctrl+Shift+Delete` (Chrome) or `Cmd+Shift+Delete` (Mac)
 2. Or do a hard refresh: `Ctrl+Shift+R`
 3. Check browser console (F12) for errors
@@ -222,12 +251,12 @@ curl "https://builder-faredown-pricing.onrender.com/api/locations/stats"
 
 ## 📊 Performance Benchmarks
 
-| Operation | Time | Notes |
-|-----------|------|-------|
-| Initial Sync | 2-3 min | Fetches 250 countries + 5k cities + 500k hotels |
-| City Search | < 100ms | With 5k cities in database |
-| Hotel Search | < 200ms | With 500k hotels in database |
-| Combined Search | < 300ms | All types + ranking + sorting |
+| Operation       | Time    | Notes                                           |
+| --------------- | ------- | ----------------------------------------------- |
+| Initial Sync    | 2-3 min | Fetches 250 countries + 5k cities + 500k hotels |
+| City Search     | < 100ms | With 5k cities in database                      |
+| Hotel Search    | < 200ms | With 500k hotels in database                    |
+| Combined Search | < 300ms | All types + ranking + sorting                   |
 
 ---
 
@@ -246,12 +275,14 @@ curl "https://builder-faredown-pricing.onrender.com/api/locations/stats"
 ## 📈 Monitoring & Logging
 
 ### Check Sync Logs:
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync-status \
   -H "Authorization: Bearer <TOKEN>"
 ```
 
 ### View Render Logs:
+
 ```
 https://dashboard.render.com/services/builder-faredown-pricing
 → Logs tab
@@ -259,6 +290,7 @@ https://dashboard.render.com/services/builder-faredown-pricing
 ```
 
 ### Expected Log Output:
+
 ```
 🔄 Starting TBO locations sync...
 🌍 Syncing TBO countries...

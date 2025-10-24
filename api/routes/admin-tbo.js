@@ -20,13 +20,15 @@ router.post("/sync", async (req, res) => {
 
     // Store sync result in audit log
     if (result.success) {
-      await db.query(
-        `INSERT INTO admin_sync_logs (sync_type, status, details, created_at)
+      await db
+        .query(
+          `INSERT INTO admin_sync_logs (sync_type, status, details, created_at)
          VALUES ($1, $2, $3, NOW())`,
-        ["tbo_locations", "success", JSON.stringify(result)],
-      ).catch(() => {
-        // Log table may not exist, ignore
-      });
+          ["tbo_locations", "success", JSON.stringify(result)],
+        )
+        .catch(() => {
+          // Log table may not exist, ignore
+        });
     }
 
     res.json(result);
@@ -89,15 +91,17 @@ router.get("/stats", async (req, res) => {
  */
 router.get("/sync-status", async (req, res) => {
   try {
-    const result = await db.query(
-      `SELECT * FROM admin_sync_logs 
+    const result = await db
+      .query(
+        `SELECT * FROM admin_sync_logs 
        WHERE sync_type = 'tbo_locations' 
        ORDER BY created_at DESC 
        LIMIT 5`,
-    ).catch(() => {
-      // Log table may not exist
-      return { rows: [] };
-    });
+      )
+      .catch(() => {
+        // Log table may not exist
+        return { rows: [] };
+      });
 
     res.json({
       recent_syncs: result.rows || [],

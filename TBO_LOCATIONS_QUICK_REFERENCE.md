@@ -2,14 +2,14 @@
 
 ## 📁 Files Implemented
 
-| File | Purpose |
-|------|---------|
-| `api/services/tboClient.js` | TBO Content API client with pagination |
-| `api/jobs/tboSyncLocations.js` | Fetch & sync countries, cities, hotels |
-| `api/routes/locations.js` | Public autocomplete search API |
-| `api/routes/admin-tbo.js` | Admin: sync, stats, clear |
-| `api/database/migrations/20250124_tbo_locations_master_tables.sql` | DB schema |
-| `client/components/HotelSearchForm.tsx` | Updated to use `/api/locations/search` |
+| File                                                               | Purpose                                |
+| ------------------------------------------------------------------ | -------------------------------------- |
+| `api/services/tboClient.js`                                        | TBO Content API client with pagination |
+| `api/jobs/tboSyncLocations.js`                                     | Fetch & sync countries, cities, hotels |
+| `api/routes/locations.js`                                          | Public autocomplete search API         |
+| `api/routes/admin-tbo.js`                                          | Admin: sync, stats, clear              |
+| `api/database/migrations/20250124_tbo_locations_master_tables.sql` | DB schema                              |
+| `client/components/HotelSearchForm.tsx`                            | Updated to use `/api/locations/search` |
 
 ---
 
@@ -45,36 +45,40 @@ POST /api/admin/tbo/clear
 
 ## 🗄️ Database Tables
 
-| Table | Columns | Purpose |
-|-------|---------|---------|
-| `tbo_countries` | supplier_id, name, normalized_name, iso2 | Country master data |
-| `tbo_cities` | supplier_id, country_supplier_id, name, normalized_name, lat, lng, popularity | City master data |
-| `tbo_hotels` | supplier_id, city_supplier_id, country_supplier_id, name, normalized_name, address, lat, lng, stars, popularity | Hotel master data |
-| `admin_sync_logs` | sync_type, status, details, created_at | Sync audit trail |
+| Table             | Columns                                                                                                         | Purpose             |
+| ----------------- | --------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `tbo_countries`   | supplier_id, name, normalized_name, iso2                                                                        | Country master data |
+| `tbo_cities`      | supplier_id, country_supplier_id, name, normalized_name, lat, lng, popularity                                   | City master data    |
+| `tbo_hotels`      | supplier_id, city_supplier_id, country_supplier_id, name, normalized_name, address, lat, lng, stars, popularity | Hotel master data   |
+| `admin_sync_logs` | sync_type, status, details, created_at                                                                          | Sync audit trail    |
 
 ---
 
 ## 🚀 Quick Start
 
 ### 1. Deploy
+
 ```bash
 git push origin main
 # Wait for Render deploy (2-3 min)
 ```
 
 ### 2. Create Tables
+
 ```bash
 # Connect to DB or let sync job create them
 psql <DB_URL> < api/database/migrations/20250124_tbo_locations_master_tables.sql
 ```
 
 ### 3. Run Sync
+
 ```bash
 curl -X POST https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync \
   -H "Authorization: Bearer <ADMIN_TOKEN>"
 ```
 
 ### 4. Test Search
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/locations/search?q=paris"
 ```
@@ -109,6 +113,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync-status" \
 ## 🔍 Response Examples
 
 ### Search Response
+
 ```json
 {
   "items": [
@@ -132,6 +137,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync-status" \
 ```
 
 ### Stats Response
+
 ```json
 {
   "cities": 5000,
@@ -141,6 +147,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync-status" \
 ```
 
 ### Sync Response
+
 ```json
 {
   "success": true,
@@ -168,6 +175,7 @@ DATABASE_URL=postgresql://...
 ## 🛠️ Common Tasks
 
 ### Clear Old Data
+
 ```bash
 curl -X POST https://builder-faredown-pricing.onrender.com/api/admin/tbo/clear \
   -H "Authorization: Bearer <TOKEN>" \
@@ -176,6 +184,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/admin/tbo/clear \
 ```
 
 ### Re-sync Everything
+
 ```bash
 # Clear first
 curl -X POST https://builder-faredown-pricing.onrender.com/api/admin/tbo/clear \
@@ -188,6 +197,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync \
 ```
 
 ### Check Database Records
+
 ```bash
 psql <DB_URL>
 
@@ -207,14 +217,14 @@ SELECT * FROM tbo_hotels WHERE city_supplier_id = '<paris-id>';
 
 ## ⚠️ Common Issues & Fixes
 
-| Issue | Fix |
-|-------|-----|
-| No results on search | Run sync: `POST /api/admin/tbo/sync` |
-| Paris returns Dubai | Clear & resync: `POST /api/admin/tbo/clear` then sync |
-| Slow search | Check indexes: `\d+ tbo_cities` in psql |
-| Sync timeout | Increase timeout in `tboClient.js` |
-| Auth error on sync | Verify JWT token is admin token |
-| Empty stats | Database tables don't exist - run migration |
+| Issue                | Fix                                                   |
+| -------------------- | ----------------------------------------------------- |
+| No results on search | Run sync: `POST /api/admin/tbo/sync`                  |
+| Paris returns Dubai  | Clear & resync: `POST /api/admin/tbo/clear` then sync |
+| Slow search          | Check indexes: `\d+ tbo_cities` in psql               |
+| Sync timeout         | Increase timeout in `tboClient.js`                    |
+| Auth error on sync   | Verify JWT token is admin token                       |
+| Empty stats          | Database tables don't exist - run migration           |
 
 ---
 

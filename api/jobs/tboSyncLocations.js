@@ -8,10 +8,7 @@ const db = require("../database/connection.js");
 const { fetchPages } = require("../services/tboClient.js");
 
 async function normalizeString(str) {
-  return (str || "")
-    .toLowerCase()
-    .replace(/\s+/g, "")
-    .trim();
+  return (str || "").toLowerCase().replace(/\s+/g, "").trim();
 }
 
 /**

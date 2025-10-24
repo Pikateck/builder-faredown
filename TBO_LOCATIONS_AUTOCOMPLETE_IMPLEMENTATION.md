@@ -43,11 +43,13 @@ GET /api/locations/search?q=paris&type=all&limit=10
 ```
 
 **Query Parameters:**
+
 - `q` (required): Search text (min 2 chars)
 - `type` (optional): `all` | `city` | `hotel` | `country` (default: `all`)
 - `limit` (optional): Results per type (default: 10, max: 25)
 
 **Response:**
+
 ```json
 {
   "items": [
@@ -77,6 +79,7 @@ GET /api/locations/stats
 ```
 
 **Response:**
+
 ```json
 {
   "cities": 5000,
@@ -93,6 +96,7 @@ Authorization: Bearer <admin_token>
 ```
 
 **Response:**
+
 ```json
 {
   "success": true,
@@ -112,6 +116,7 @@ Authorization: Bearer <admin_token>
 ```
 
 **Response:**
+
 ```json
 {
   "countries": {
@@ -132,6 +137,7 @@ Authorization: Bearer <admin_token>
 ## Database Schema
 
 ### tbo_countries
+
 ```sql
 CREATE TABLE tbo_countries (
   id SERIAL PRIMARY KEY,
@@ -145,6 +151,7 @@ CREATE TABLE tbo_countries (
 ```
 
 ### tbo_cities
+
 ```sql
 CREATE TABLE tbo_cities (
   id SERIAL PRIMARY KEY,
@@ -161,6 +168,7 @@ CREATE TABLE tbo_cities (
 ```
 
 ### tbo_hotels
+
 ```sql
 CREATE TABLE tbo_hotels (
   id SERIAL PRIMARY KEY,
@@ -271,6 +279,7 @@ curl https://builder-faredown-pricing.onrender.com/api/admin/tbo/sync-status \
 ### Enable Debug Logging
 
 In your backend logs, you'll see:
+
 ```
 🌍 Syncing TBO countries...
 ✅ Synced 250 countries
@@ -285,15 +294,18 @@ In your backend logs, you'll see:
 ### Common Issues
 
 **Issue: "No results found" on autocomplete**
+
 - Check if sync has completed: `GET /api/locations/stats`
 - Verify TBO API credentials in Render env vars
 - Check browser console for fetch errors
 
 **Issue: Slow autocomplete**
+
 - Ensure database indexes exist on `normalized_name` columns
 - Check for missing `limit` parameter (defaults to 10)
 
 **Issue: Duplicate results**
+
 - Run clear and resync: `POST /api/admin/tbo/clear` then `POST /api/admin/tbo/sync`
 
 ## Deployment Checklist
@@ -321,6 +333,7 @@ In your backend logs, you'll see:
 ## Support
 
 For issues, check:
+
 1. Render logs: `builder-faredown-pricing` service
-2. Database: `faredown_booking_db` tbo_* tables
+2. Database: `faredown_booking_db` tbo\_\* tables
 3. Frontend console: Network tab for API calls
