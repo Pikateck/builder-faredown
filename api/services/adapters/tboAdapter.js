@@ -1686,15 +1686,14 @@ class TBOAdapter extends BaseSupplierAdapter {
   async preBookHotel(params) {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
+      const tokenId = await this.getHotelToken();
       const payload = {
-        ClientId: this.config.hotelClientId,
-        UserName: this.config.hotelUserId,
-        Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
+        TokenId: tokenId,
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelSearchBase}/PreBook`, {
+        tboRequest(this.config.hotelPreBookEndpoint, {
           method: "POST",
           data: payload,
           timeout: this.config.timeout,
@@ -1720,15 +1719,14 @@ class TBOAdapter extends BaseSupplierAdapter {
   async bookHotel(params) {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
+      const tokenId = await this.getHotelToken();
       const payload = {
-        ClientId: this.config.hotelClientId,
-        UserName: this.config.hotelUserId,
-        Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
+        TokenId: tokenId,
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelBookingBase}/Book`, {
+        tboRequest(this.config.hotelBookEndpoint, {
           method: "POST",
           data: payload,
           timeout: this.config.timeout,
@@ -1758,11 +1756,10 @@ class TBOAdapter extends BaseSupplierAdapter {
   async generateHotelVoucher(params) {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
+      const tokenId = await this.getHotelToken();
       const payload = {
-        ClientId: this.config.hotelClientId,
-        UserName: this.config.hotelUserId,
-        Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
+        TokenId: tokenId,
         ...params,
       };
       const res = await this.executeWithRetry(
