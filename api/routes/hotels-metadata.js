@@ -12,11 +12,11 @@ const router = express.Router();
 const REDIS_TTL = 1800; // 30 minutes
 
 /**
- * GET /api/hotels/metadata?cityId=X[&hotelId=Y]
+ * GET /api/hotels?cityId=X[&hotelId=Y]
  * Returns hotel metadata instantly from DB
  * Optionally fetches live prices in background
  */
-router.get("/metadata", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
     const cityId = req.query.cityId || req.query.city || req.query.destination;
     const hotelId = req.query.hotelId || req.query.hotel;
