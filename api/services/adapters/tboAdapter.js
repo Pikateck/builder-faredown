@@ -936,9 +936,12 @@ class TBOAdapter extends BaseSupplierAdapter {
           this.logger.info("TBO hotel auth response received", {
             url,
             status: response.status,
+            statusText: response.statusText,
             dataStatus: response.data?.Status,
             hasTokenId: !!response.data?.TokenId,
             dataKeys: Object.keys(response.data || {}).slice(0, 10),
+            responseHeaders: JSON.stringify(response.headers || {}),
+            fullResponseData: JSON.stringify(response.data),
           });
 
           if (response.data?.Status === 1 && response.data?.TokenId) {
