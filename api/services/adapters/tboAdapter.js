@@ -1373,49 +1373,18 @@ class TBOAdapter extends BaseSupplierAdapter {
         ? Math.max(1, Math.min(parseInt(searchParams.maxResults, 10), 500))
         : 50;
 
-      // ENHANCEMENT: Enrich top hotels with room-wise details
-      // Fetch detailed room information for first N hotels to show rich room details
-      const enrichLimit = Math.min(10, hotels.length); // Fetch room details for top 10
-      const hotelEnrichmentPromises = hotels.slice(0, enrichLimit).map((h) =>
-        this._enrichHotelWithRoomDetails(h, {
-          checkIn,
-          checkOut,
-          adults,
-          children,
-          currency,
-          destination,
-          tokenId,
-          traceId: res.data?.TraceId,
-        }).catch((err) => {
-          // If enrichment fails, return original hotel (fallback)
-          this.logger.warn("Hotel enrichment failed, using basic data", {
-            hotelId: h.HotelCode,
-            error: err.message,
-          });
-          return h;
-        }),
-      );
+      // Determine requested max results
+      const maxResults = Number.isFinite(parseInt(searchParams.maxResults, 10))
+        ? Math.max(1, Math.min(parseInt(searchParams.maxResults, 10), 500))
+        : 50;
 
-      // Wait for enrichment to complete (with timeout to avoid blocking)
-      let enrichedHotels = hotels;
-      try {
-        const enrichedTop = await Promise.race([
-          Promise.all(hotelEnrichmentPromises),
-          new Promise((_, reject) =>
-            setTimeout(() => reject(new Error("Enrichment timeout")), 8000),
-          ),
-        ]);
-        enrichedHotels = [...enrichedTop, ...hotels.slice(enrichLimit)];
-        this.logger.info("✅ Hotel enrichment completed", {
-          enriched: enrichedTop.length,
-          total: enrichedHotels.length,
-        });
-      } catch (enrichErr) {
-        this.logger.warn("Hotel enrichment skipped (timeout or error)", {
-          error: enrichErr.message,
-        });
-        enrichedHotels = hotels; // Fall back to non-enriched
-      }
+      // TODO: ENHANCEMENT: Enrich top hotels with room-wise details
+      // Disabled for now - causing issues with hotel display
+      // Will re-enable after fixing enrichment logic
+      // const enrichLimit = Math.min(10, hotels.length);
+      // const hotelEnrichmentPromises = hotels.slice(0, enrichLimit).map(...);
+
+      const enrichedHotels = hotels;
 
       // Map to aggregator format - Tek Travels API response
       const results = enrichedHotels.slice(0, maxResults).map((h) => {
