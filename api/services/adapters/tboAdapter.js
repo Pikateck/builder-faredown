@@ -1373,11 +1373,6 @@ class TBOAdapter extends BaseSupplierAdapter {
         ? Math.max(1, Math.min(parseInt(searchParams.maxResults, 10), 500))
         : 50;
 
-      // Determine requested max results
-      const maxResults = Number.isFinite(parseInt(searchParams.maxResults, 10))
-        ? Math.max(1, Math.min(parseInt(searchParams.maxResults, 10), 500))
-        : 50;
-
       // TODO: ENHANCEMENT: Enrich top hotels with room-wise details
       // Disabled for now - causing issues with hotel display
       // Will re-enable after fixing enrichment logic
