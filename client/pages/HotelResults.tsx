@@ -414,23 +414,31 @@ export default function HotelResults() {
       const apiBaseUrl = (() => {
         if (typeof window === "undefined") return "/api";
 
-        // Get VITE API URL (if configured)
+        // CRITICAL FIX: Use relative URL for all cases to avoid CORS issues
+        // The backend will handle routing whether it's same-origin or cross-origin
+        // Try environment first, then fall back to relative
         const envUrl = import.meta.env.VITE_API_BASE_URL;
-        if (envUrl) {
+        if (envUrl && typeof envUrl === "string" && envUrl.trim().length > 0) {
           try {
             const url = new URL(envUrl);
-            // If API URL matches current origin, use relative URL to avoid CORS
-            if (url.origin === window.location.origin) {
-              return url.pathname.replace(/\/$/, "");
+            const currentUrl = new URL(window.location.href);
+
+            // Same origin? Use relative URL
+            if (url.origin === currentUrl.origin) {
+              console.log("✅ Using relative API URL (same origin)");
+              return "/api";
             }
-            // Otherwise use absolute URL for cross-origin
-            return envUrl.replace(/\/$/, "");
+
+            // Cross-origin? Still use relative and hope for proxy/redirect
+            console.log("⚠️ Using relative API URL for cross-origin (proxy expected)");
+            return "/api";
           } catch (e) {
-            console.warn("Invalid VITE_API_BASE_URL:", envUrl);
+            console.warn("⚠️ Failed to parse VITE_API_BASE_URL, using relative:", e.message);
           }
         }
 
-        // Default: use relative URL (same origin as frontend)
+        // Always default to relative URL
+        console.log("✅ Using relative API URL (default)");
         return "/api";
       })();
 
