@@ -121,15 +121,15 @@ export function HotelSearchForm({
         try {
           // Get the proper API base URL
           const apiBaseUrl = (() => {
-            if (typeof window !== 'undefined') {
+            if (typeof window !== "undefined") {
               const envUrl = import.meta.env.VITE_API_BASE_URL;
               if (envUrl) {
-                return envUrl.replace(/\/$/, ''); // Remove trailing slash
+                return envUrl.replace(/\/$/, ""); // Remove trailing slash
               }
               // Fallback: use Render API
-              return 'https://builder-faredown-pricing.onrender.com/api';
+              return "https://builder-faredown-pricing.onrender.com/api";
             }
-            return '/api';
+            return "/api";
           })();
 
           const response = await fetch(
@@ -137,7 +137,11 @@ export function HotelSearchForm({
           );
           if (response.ok) {
             const data = await response.json();
-            if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+            if (
+              data.success &&
+              Array.isArray(data.data) &&
+              data.data.length > 0
+            ) {
               // Map TBO cities to SearchResult format
               const cities = data.data.map((city: any) => ({
                 id: city.code,
@@ -355,14 +359,14 @@ export function HotelSearchForm({
 
       // Non-blocking API call to store recent search
       const apiBaseUrl = (() => {
-        if (typeof window !== 'undefined') {
+        if (typeof window !== "undefined") {
           const envUrl = import.meta.env.VITE_API_BASE_URL;
           if (envUrl) {
-            return envUrl.replace(/\/$/, '');
+            return envUrl.replace(/\/$/, "");
           }
-          return 'https://builder-faredown-pricing.onrender.com/api';
+          return "https://builder-faredown-pricing.onrender.com/api";
         }
-        return '/api';
+        return "/api";
       })();
 
       fetch(`${apiBaseUrl}/recent-searches`, {
