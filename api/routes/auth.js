@@ -118,16 +118,14 @@ router.post("/login", validate.login, async (req, res) => {
 
     res.json({
       success: true,
-      data: {
-        user: {
-          id: user.id,
-          email: user.email,
-          firstName: user.firstName,
-          lastName: user.lastName,
-          username: user.username,
-        },
-        token,
+      user: {
+        id: user.id,
+        email: user.email,
+        firstName: user.firstName,
+        lastName: user.lastName,
+        username: user.username,
       },
+      token,
     });
   } catch (error) {
     console.error("🔴 Login error:", error);
