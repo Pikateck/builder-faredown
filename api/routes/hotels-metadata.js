@@ -51,8 +51,10 @@ router.get("/", async (req, res) => {
     let source = "tbo";
 
     try {
-      const adapterModule = require("../services/adapters/tboAdapter.js");
-      const adapter = adapterModule.getTboAdapter?.() || adapterModule;
+      const adapter = supplierAdapterManager.getAdapter("TBO");
+      if (!adapter) {
+        throw new Error("TBO adapter not available");
+      }
 
       // Call TBO searchHotels to get actual hotel data
       const tboResults = await adapter.searchHotels({
