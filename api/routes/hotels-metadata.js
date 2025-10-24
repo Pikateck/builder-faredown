@@ -15,7 +15,7 @@ async function ensureCitiesTableExists() {
   try {
     const result = await db.query(`
       SELECT EXISTS (
-        SELECT 1 FROM information_schema.tables
+        SELECT 1 FROM information_schema.tables 
         WHERE table_name = 'tbo_cities'
       ) as table_exists;
     `);
@@ -70,20 +70,21 @@ router.get("/", async (req, res) => {
     const children = parseInt(req.query.children || "0");
 
     if (!cityId) {
+      console.warn("❌ /api/hotels called without cityId");
       return res.status(400).json({
         error: "Missing parameter",
         message: "cityId is required",
       });
     }
 
-    console.log(
-      `🏨 Hotel search - City: ${cityId}, CheckIn: ${checkIn}, CheckOut: ${checkOut}, Guests: ${adults}A/${children}C`,
-    );
+    console.log(`\n🏨 === HOTEL SEARCH START ===`);
+    console.log(`   City: ${cityId} | CheckIn: ${checkIn} | CheckOut: ${checkOut}`);
+    console.log(`   Guests: ${adults} adults, ${children} children`);
 
     // Get TBO adapter
     const adapter = supplierAdapterManager.getAdapter("TBO");
     if (!adapter) {
-      console.error("❌ TBO adapter not available");
+      console.error("❌ TBO adapter not found in supplierAdapterManager");
       return res.status(503).json({
         error: "TBO adapter not available",
         hotels: [],
@@ -91,22 +92,52 @@ router.get("/", async (req, res) => {
       });
     }
 
-    // Fetch live TBO hotel results
-    const tboResults = await adapter.searchHotels({
+    console.log("✅ TBO adapter found");
+
+    // Prepare search parameters
+    const finalCheckIn = checkIn || new Date().toISOString().split("T")[0];
+    const finalCheckOut =
+      checkOut ||
+      new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+        .toISOString()
+        .split("T")[0];
+
+    const searchParams = {
       destination: cityId,
-      checkIn: checkIn || new Date().toISOString().split("T")[0],
-      checkOut:
-        checkOut ||
-        new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
-          .toISOString()
-          .split("T")[0],
+      checkIn: finalCheckIn,
+      checkOut: finalCheckOut,
       adults,
       children,
       currency: "INR",
       maxResults: 50,
-    });
+    };
 
-    console.log(`✅ TBO returned ${tboResults.length} hotels for ${cityId}`);
+    console.log(`📍 Calling adapter.searchHotels with:`, JSON.stringify(searchParams, null, 2));
+
+    // Fetch live TBO hotel results
+    let tboResults = [];
+    try {
+      tboResults = await adapter.searchHotels(searchParams);
+      console.log(`✅ adapter.searchHotels returned ${tboResults.length} hotels`);
+
+      if (tboResults.length === 0) {
+        console.warn(`⚠️ TBO returned 0 hotels for ${cityId}`);
+      }
+    } catch (searchError) {
+      console.error(`❌ adapter.searchHotels FAILED:`, {
+        message: searchError.message,
+        code: searchError.code,
+        status: searchError.response?.status,
+        destination: cityId,
+        stack: searchError.stack?.split("\n").slice(0, 3).join(" | "),
+      });
+
+      if (searchError.response?.data) {
+        console.error(`   Response data:`, JSON.stringify(searchError.response.data).slice(0, 500));
+      }
+
+      tboResults = [];
+    }
 
     // Transform TBO results to display format
     const hotels = (tboResults || []).map((h) => {
@@ -146,6 +177,7 @@ router.get("/", async (req, res) => {
     });
 
     console.log(`📊 Returning ${hotels.length} formatted hotels`);
+    console.log(`🏨 === HOTEL SEARCH END ===\n`);
 
     return res.json({
       success: true,
@@ -155,7 +187,11 @@ router.get("/", async (req, res) => {
       pricing_status: "ready",
     });
   } catch (error) {
-    console.error("❌ Hotel search error:", error.message);
+    console.error("❌ /api/hotels ENDPOINT ERROR:", {
+      message: error.message,
+      stack: error.stack?.split("\n")[0],
+    });
+
     return res.status(500).json({
       error: "Failed to fetch hotels",
       message: error.message,
@@ -196,7 +232,9 @@ router.get("/prices", async (req, res) => {
     // Fetch live prices from TBO
     const tboResults = await adapter.searchHotels({
       destination: cityId,
-      checkIn: checkIn || new Date().toISOString().split("T")[0],
+      checkIn:
+        checkIn ||
+        new Date().toISOString().split("T")[0],
       checkOut:
         checkOut ||
         new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
@@ -252,7 +290,7 @@ router.get("/prices", async (req, res) => {
       source: "tbo_live",
     });
   } catch (error) {
-    console.error("❌ Prices error:", error.message);
+    console.error("❌ /api/hotels/prices ENDPOINT ERROR:", error.message);
     return res.status(500).json({
       error: "Failed to fetch prices",
       message: error.message,
