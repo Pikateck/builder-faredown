@@ -240,7 +240,14 @@ router.get("/prices", async (req, res) => {
 /**
  * Queue price fetch in background (fire-and-forget)
  */
-async function queuePriceFetch(cityId, hotels) {
+async function queuePriceFetch(
+  cityId,
+  hotels,
+  checkIn,
+  checkOut,
+  adults = 2,
+  children = 0,
+) {
   try {
     if (!Array.isArray(hotels) || hotels.length === 0) {
       return;
@@ -260,15 +267,17 @@ async function queuePriceFetch(cityId, hotels) {
       return;
     }
 
-    // Fetch live prices
+    // Fetch live prices with actual dates
     const searchParams = {
       destination: cityId,
-      checkIn: new Date().toISOString().split("T")[0],
-      checkOut: new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
-        .toISOString()
-        .split("T")[0],
-      adults: 2,
-      children: 0,
+      checkIn: checkIn || new Date().toISOString().split("T")[0],
+      checkOut:
+        checkOut ||
+        new Date(Date.now() + 3 * 24 * 60 * 60 * 1000)
+          .toISOString()
+          .split("T")[0],
+      adults: adults || 2,
+      children: children || 0,
       currency: "INR",
     };
 
