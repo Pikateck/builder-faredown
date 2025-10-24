@@ -893,12 +893,12 @@ class TBOAdapter extends BaseSupplierAdapter {
     } catch {}
 
     return await this.executeWithRetry(async () => {
+      // Try minimal payload first (without AgencyId, which may not be needed for hotel auth)
       const authRequest = {
         ClientId: this.config.hotelClientId,
         UserName: this.config.hotelUserId,
         Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
-        AgencyId: this.config.agencyId || process.env.TBO_AGENCY_ID,
       };
 
       this.logger.info("🔐 TBO Hotel Auth Request Payload", {
@@ -906,8 +906,10 @@ class TBOAdapter extends BaseSupplierAdapter {
         userName: authRequest.UserName,
         password: authRequest.Password ? "***" : "null",
         endUserIp: authRequest.EndUserIp,
-        agencyId: authRequest.AgencyId,
         payloadJSON: JSON.stringify(authRequest),
+        configAgencyId: this.config.agencyId,
+        configHotelClientId: this.config.hotelClientId,
+        configHotelUserId: this.config.hotelUserId,
       });
 
       const paths = ["/Authenticate", "/Authenticate/", "/rest/Authenticate"];
