@@ -1,11 +1,16 @@
 /**
  * TBO Locations Sync Job
- * Fetches countries, cities, and hotels from TBO Content API
+ * Fetches countries, cities, and hotels from TBO Static Data API
  * and syncs them into the faredown_booking_db
  */
 
 const db = require("../database/connection.js");
-const { fetchPages } = require("../services/tboClient.js");
+const {
+  fetchCountries,
+  fetchCitiesForCountry,
+  fetchHotelCodesForCity,
+  fetchHotelDetails,
+} = require("../services/tboClient.js");
 
 async function normalizeString(str) {
   return (str || "").toLowerCase().replace(/\s+/g, "").trim();
@@ -19,12 +24,15 @@ async function syncCountries() {
   let count = 0;
 
   try {
-    for await (const country of fetchPages("lists/countries")) {
-      const supplierId = String(country.id || country.code);
-      const name = country.name || country.countryName;
-      const iso2 = country.code || country.countryCode;
+    for await (const country of fetchCountries()) {
+      const supplierId = String(country.CountryCode || country.code || country.id);
+      const name = country.CountryName || country.name;
+      const iso2 = country.CountryCode || country.code;
 
-      if (!supplierId || !name) continue;
+      if (!supplierId || !name) {
+        console.log("⏭️  Skipping country with missing data:", country);
+        continue;
+      }
 
       await db.query(
         `INSERT INTO tbo_countries (supplier_id, name, normalized_name, iso2, created_at, updated_at)
@@ -35,9 +43,12 @@ async function syncCountries() {
         [supplierId, name, await normalizeString(name), iso2],
       );
       count++;
+      if (count % 10 === 0) {
+        console.log(`  → Synced ${count} countries so far...`);
+      }
     }
 
-    console.log(`✅ Synced ${count} countries`);
+    console.log(`✅ Synced ${count} countries total`);
     return count;
   } catch (error) {
     console.error("❌ Error syncing countries:", error.message);
@@ -46,46 +57,74 @@ async function syncCountries() {
 }
 
 /**
- * Sync all TBO cities
+ * Sync all TBO cities (per country)
  */
 async function syncCities() {
   console.log("🏙️  Syncing TBO cities...");
   let count = 0;
 
   try {
-    for await (const city of fetchPages("lists/cities")) {
-      const supplierId = String(city.id || city.code);
-      const countryId = String(city.countryId || city.countryCode);
-      const name = city.name || city.cityName;
-      const lat = city.latitude || city.lat;
-      const lng = city.longitude || city.lng;
-      const popularity = city.popularity || city.visitCount || 0;
+    // First get all countries
+    const countriesResult = await db.query(
+      "SELECT supplier_id FROM tbo_countries ORDER BY supplier_id",
+    );
+    const countries = countriesResult.rows;
 
-      if (!supplierId || !countryId || !name) continue;
-
-      await db.query(
-        `INSERT INTO tbo_cities (supplier_id, country_supplier_id, name, normalized_name, 
-                                 lat, lng, popularity, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
-         ON CONFLICT (supplier_id)
-         DO UPDATE SET country_supplier_id = EXCLUDED.country_supplier_id,
-                       name = EXCLUDED.name, normalized_name = EXCLUDED.normalized_name,
-                       lat = EXCLUDED.lat, lng = EXCLUDED.lng, 
-                       popularity = EXCLUDED.popularity, updated_at = NOW()`,
-        [
-          supplierId,
-          countryId,
-          name,
-          await normalizeString(name),
-          lat,
-          lng,
-          popularity,
-        ],
-      );
-      count++;
+    if (countries.length === 0) {
+      console.warn("⚠️  No countries found. Run syncCountries() first.");
+      return count;
     }
 
-    console.log(`✅ Synced ${count} cities`);
+    console.log(`📍 Syncing cities for ${countries.length} countries...`);
+
+    for (const country of countries) {
+      const countryCode = country.supplier_id;
+      let countryCount = 0;
+
+      try {
+        for await (const city of fetchCitiesForCountry(countryCode)) {
+          const supplierId = String(city.CityCode || city.code || city.id);
+          const cityName = city.CityName || city.name;
+
+          if (!supplierId || !cityName) {
+            continue;
+          }
+
+          await db.query(
+            `INSERT INTO tbo_cities (supplier_id, country_supplier_id, name, normalized_name,
+                                     lat, lng, popularity, created_at, updated_at)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, NOW(), NOW())
+             ON CONFLICT (supplier_id)
+             DO UPDATE SET country_supplier_id = EXCLUDED.country_supplier_id,
+                           name = EXCLUDED.name, normalized_name = EXCLUDED.normalized_name,
+                           lat = EXCLUDED.lat, lng = EXCLUDED.lng,
+                           popularity = EXCLUDED.popularity, updated_at = NOW()`,
+            [
+              supplierId,
+              countryCode,
+              cityName,
+              await normalizeString(cityName),
+              city.Latitude || null,
+              city.Longitude || null,
+              0, // TBO doesn't provide popularity in city list
+            ],
+          );
+          count++;
+          countryCount++;
+        }
+        console.log(
+          `  ✓ Synced ${countryCount} cities for country ${countryCode}`,
+        );
+      } catch (error) {
+        console.warn(
+          `⚠️  Failed to sync cities for country ${countryCode}:`,
+          error.message,
+        );
+        // Continue with next country
+      }
+    }
+
+    console.log(`✅ Synced ${count} cities total`);
     return count;
   } catch (error) {
     console.error("❌ Error syncing cities:", error.message);
@@ -94,54 +133,114 @@ async function syncCities() {
 }
 
 /**
- * Sync all TBO hotels
+ * Sync all TBO hotels (per city)
  */
 async function syncHotels() {
   console.log("🏨 Syncing TBO hotels...");
   let count = 0;
 
   try {
-    for await (const hotel of fetchPages("lists/hotels")) {
-      const supplierId = String(hotel.id || hotel.code);
-      const cityId = String(hotel.cityId || hotel.cityCode);
-      const countryId = String(hotel.countryId || hotel.countryCode);
-      const name = hotel.name || hotel.hotelName;
-      const address = hotel.address || "";
-      const lat = hotel.latitude || hotel.lat;
-      const lng = hotel.longitude || hotel.lng;
-      const stars = hotel.category || hotel.stars;
-      const popularity = hotel.popularity || hotel.bookingCount || 0;
+    // Get all cities with their countries
+    const citiesResult = await db.query(
+      `SELECT tbc.supplier_id, tbc.country_supplier_id
+       FROM tbo_cities tbc
+       ORDER BY tbc.country_supplier_id, tbc.supplier_id`,
+    );
+    const cities = citiesResult.rows;
 
-      if (!supplierId || !cityId || !countryId || !name) continue;
-
-      await db.query(
-        `INSERT INTO tbo_hotels (supplier_id, city_supplier_id, country_supplier_id, name, 
-                                normalized_name, address, lat, lng, stars, popularity, created_at, updated_at)
-         VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW(), NOW())
-         ON CONFLICT (supplier_id)
-         DO UPDATE SET city_supplier_id = EXCLUDED.city_supplier_id,
-                       country_supplier_id = EXCLUDED.country_supplier_id,
-                       name = EXCLUDED.name, normalized_name = EXCLUDED.normalized_name,
-                       address = EXCLUDED.address, lat = EXCLUDED.lat, 
-                       lng = EXCLUDED.lng, stars = EXCLUDED.stars,
-                       popularity = EXCLUDED.popularity, updated_at = NOW()`,
-        [
-          supplierId,
-          cityId,
-          countryId,
-          name,
-          await normalizeString(name),
-          address,
-          lat,
-          lng,
-          stars,
-          popularity,
-        ],
-      );
-      count++;
+    if (cities.length === 0) {
+      console.warn("⚠️  No cities found. Run syncCities() first.");
+      return count;
     }
 
-    console.log(`✅ Synced ${count} hotels`);
+    console.log(`🏨 Syncing hotels for ${cities.length} cities...`);
+
+    let processedCities = 0;
+    for (const city of cities) {
+      const cityCode = city.supplier_id;
+      const countryCode = city.country_supplier_id;
+      let cityHotelCount = 0;
+
+      try {
+        for await (const hotelCode of fetchHotelCodesForCity(cityCode)) {
+          // Get full hotel details
+          let hotelId, hotelName, hotelAddress, stars;
+
+          // hotelCode might be a string or object depending on API response
+          if (typeof hotelCode === "object") {
+            hotelId = String(hotelCode.HotelCode || hotelCode.code);
+            hotelName = hotelCode.HotelName || hotelCode.name;
+            hotelAddress = hotelCode.Address || hotelCode.address || "";
+            stars = hotelCode.Category || hotelCode.stars || null;
+          } else {
+            hotelId = String(hotelCode);
+            // Fetch details for this hotel
+            const details = await fetchHotelDetails(hotelId);
+            if (!details) {
+              console.warn(
+                `  ⚠️  Could not fetch details for hotel ${hotelId}`,
+              );
+              continue;
+            }
+            hotelName = details.HotelName || details.name;
+            hotelAddress = details.Address || details.address || "";
+            stars = details.Category || details.stars || null;
+          }
+
+          if (!hotelId || !hotelName) {
+            continue;
+          }
+
+          await db.query(
+            `INSERT INTO tbo_hotels (supplier_id, city_supplier_id, country_supplier_id, name,
+                                    normalized_name, address, lat, lng, stars, popularity, created_at, updated_at)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, NOW(), NOW())
+             ON CONFLICT (supplier_id)
+             DO UPDATE SET city_supplier_id = EXCLUDED.city_supplier_id,
+                           country_supplier_id = EXCLUDED.country_supplier_id,
+                           name = EXCLUDED.name, normalized_name = EXCLUDED.normalized_name,
+                           address = EXCLUDED.address, lat = EXCLUDED.lat,
+                           lng = EXCLUDED.lng, stars = EXCLUDED.stars,
+                           popularity = EXCLUDED.popularity, updated_at = NOW()`,
+            [
+              hotelId,
+              cityCode,
+              countryCode,
+              hotelName,
+              await normalizeString(hotelName),
+              hotelAddress,
+              null,
+              null,
+              stars,
+              0,
+            ],
+          );
+          count++;
+          cityHotelCount++;
+        }
+
+        processedCities++;
+        if (cityHotelCount > 0) {
+          console.log(
+            `  ✓ Synced ${cityHotelCount} hotels for city ${cityCode}`,
+          );
+        }
+
+        if (processedCities % 50 === 0) {
+          console.log(
+            `  → Progress: ${processedCities}/${cities.length} cities processed`,
+          );
+        }
+      } catch (error) {
+        console.warn(
+          `⚠️  Failed to sync hotels for city ${cityCode}:`,
+          error.message,
+        );
+        // Continue with next city
+      }
+    }
+
+    console.log(`✅ Synced ${count} hotels total`);
     return count;
   } catch (error) {
     console.error("❌ Error syncing hotels:", error.message);
