@@ -300,11 +300,8 @@ async function queuePriceFetch(
     );
 
     // Get TBO adapter
-    let adapter;
-    try {
-      const adapterModule = require("../services/adapters/tboAdapter.js");
-      adapter = adapterModule.getTboAdapter?.() || adapterModule;
-    } catch (e) {
+    const adapter = supplierAdapterManager.getAdapter("TBO");
+    if (!adapter) {
       console.warn("TBO adapter not available for price fetch");
       return;
     }
