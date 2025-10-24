@@ -438,20 +438,20 @@ export default function HotelResults() {
       // Convert metadata to Hotel format
       const metadataHotels: Hotel[] = metadataData.hotels.map(
         (h: any, i: number) => ({
-          id: h.supplier_id || h.id || `hotel-${i}`,
+          id: h.id || `hotel-${i}`,
           name: h.name,
           location: h.address || destCode,
           images: h.image ? [h.image] : [],
           rating: h.stars || 4.0,
           reviews: 0,
-          currentPrice: h.minTotal || 0,
-          originalPrice: h.maxTotal || h.minTotal || 0,
+          currentPrice: h.currentPrice || 0,
+          originalPrice: h.originalPrice || h.currentPrice || 0,
           description: `Discover ${h.name}`,
-          amenities: [],
+          amenities: h.amenities || [],
           features: [],
           roomTypes: [],
           address: {
-            street: h.address || "",
+            street: "",
             city: destCode,
             country: "Unknown",
             postalCode: "00000",
@@ -463,8 +463,8 @@ export default function HotelResults() {
           supplierCode: "tbo",
           isLiveData: true,
           priceRange: {
-            min: h.minTotal || 0,
-            max: h.maxTotal || h.minTotal || 0,
+            min: h.currentPrice || 0,
+            max: h.originalPrice || h.currentPrice || 0,
           },
         }),
       );
