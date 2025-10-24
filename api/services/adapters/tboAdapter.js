@@ -1791,15 +1791,14 @@ class TBOAdapter extends BaseSupplierAdapter {
   async getHotelBookingDetails(params) {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
+      const tokenId = await this.getHotelToken();
       const payload = {
-        ClientId: this.config.hotelClientId,
-        UserName: this.config.hotelUserId,
-        Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
+        TokenId: tokenId,
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelBookingBase}/GetBookingDetail`, {
+        tboRequest(this.config.hotelSearchBase + "/GetBookingDetail", {
           method: "POST",
           data: payload,
           timeout: this.config.timeout,
@@ -1825,17 +1824,16 @@ class TBOAdapter extends BaseSupplierAdapter {
   async cancelHotelBooking(params) {
     const { mapFromResponse, mapFromAxiosError } = require("../tboErrorMapper");
     try {
+      const tokenId = await this.getHotelToken();
       const payload = {
-        ClientId: this.config.hotelClientId,
-        UserName: this.config.hotelUserId,
-        Password: this.config.hotelPassword,
         EndUserIp: this.config.endUserIp,
+        TokenId: tokenId,
         RequestType: 1,
         Remarks: "User cancellation",
         ...params,
       };
       const res = await this.executeWithRetry(() =>
-        tboRequest(`${this.config.hotelBookingBase}/SendChangeRequest`, {
+        tboRequest(this.config.hotelSearchBase + "/SendChangeRequest", {
           method: "POST",
           data: payload,
           timeout: this.config.timeout,
