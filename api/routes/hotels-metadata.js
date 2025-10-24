@@ -58,6 +58,154 @@ async function ensureCitiesTableExists() {
 ensureCitiesTableExists().catch(console.error);
 
 /**
+ * Mock hotel data for fallback (when TBO API unavailable)
+ */
+const MOCK_HOTELS = {
+  DXB: [
+    {
+      hotelId: "mock_taj_beachfront",
+      name: "Taj Beachfront Dubai",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Pool", "Spa", "Restaurant", "Bar", "Gym", "Concierge"],
+      price: 450,
+      currency: "INR",
+      rates: [
+        { price: 450, description: "Deluxe Room" },
+        { price: 550, description: "Suite" },
+      ],
+    },
+    {
+      hotelId: "mock_burj_luxury",
+      name: "Burj Luxury Hotel",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1570129477492-45ec003e2e7f?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1571003123894-1f0594d2b5d9?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Pool", "Spa", "Fine Dining", "Lounge", "Gym"],
+      price: 520,
+      currency: "INR",
+      rates: [
+        { price: 520, description: "Deluxe Room" },
+        { price: 650, description: "Presidential Suite" },
+      ],
+    },
+    {
+      hotelId: "mock_marina_resort",
+      name: "Marina Bay Resort",
+      starRating: 4,
+      images: [
+        "https://images.unsplash.com/photo-1582719471384-894fbb16e074?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Pool", "Restaurant", "Beach Access", "Gym"],
+      price: 320,
+      currency: "INR",
+      rates: [
+        { price: 320, description: "Standard Room" },
+        { price: 420, description: "Deluxe Room" },
+      ],
+    },
+    {
+      hotelId: "mock_downtown_plaza",
+      name: "Downtown Plaza Hotel",
+      starRating: 4,
+      images: [
+        "https://images.unsplash.com/photo-1595576508898-eae0dff5d285?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1619641740950-c8dbe4c13081?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
+      price: 280,
+      currency: "INR",
+      rates: [
+        { price: 280, description: "Standard Room" },
+        { price: 380, description: "Deluxe Room" },
+      ],
+    },
+    {
+      hotelId: "mock_palm_jumeirah",
+      name: "Palm Jumeirah Oasis",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1568084308940-d50b8e6655ec?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
+      ],
+      amenities: [
+        "WiFi",
+        "Private Beach",
+        "Pool",
+        "Spa",
+        "Michelin Restaurant",
+        "Concierge",
+      ],
+      price: 680,
+      currency: "INR",
+      rates: [
+        { price: 680, description: "Beachfront Suite" },
+        { price: 850, description: "Penthouse" },
+      ],
+    },
+    {
+      hotelId: "mock_deira_heritage",
+      name: "Deira Heritage Hotel",
+      starRating: 3,
+      images: [
+        "https://images.unsplash.com/photo-1578899413026-4b5800b87fcb?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Restaurant", "Bar", "Gym"],
+      price: 180,
+      currency: "INR",
+      rates: [{ price: 180, description: "Standard Room" }],
+    },
+  ],
+  BOM: [
+    {
+      hotelId: "mock_taj_mumbai",
+      name: "Taj Palace Mumbai",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Pool", "Spa", "Fine Dining", "Concierge"],
+      price: 350,
+      currency: "INR",
+      rates: [{ price: 350, description: "Deluxe Room" }],
+    },
+    {
+      hotelId: "mock_oberoi_mumbai",
+      name: "Oberoi Mumbai",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Pool", "Spa", "Restaurant"],
+      price: 380,
+      currency: "INR",
+      rates: [{ price: 380, description: "Suite" }],
+    },
+  ],
+  DEL: [
+    {
+      hotelId: "mock_itc_delhi",
+      name: "ITC Delhi Grand",
+      starRating: 5,
+      images: [
+        "https://images.unsplash.com/photo-1570129477492-45ec003e2e7f?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Pool", "Spa", "Restaurant"],
+      price: 320,
+      currency: "INR",
+      rates: [{ price: 320, description: "Deluxe Room" }],
+    },
+  ],
+};
+
+/**
  * GET /api/hotels
  * Returns live TBO hotels for a city
  */
