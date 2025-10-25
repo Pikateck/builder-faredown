@@ -43,12 +43,22 @@ interface HotelSearchFormProps {
   className?: string;
   variant?: "compact" | "full";
   onSearch?: (searchData: any) => void;
+  initialDestination?: string;
+  initialDestinationCode?: string;
+  initialCheckIn?: string;
+  initialCheckOut?: string;
+  initialGuests?: { adults: number; children: number; rooms: number };
 }
 
 export function HotelSearchForm({
   className = "",
   variant = "full",
   onSearch,
+  initialDestination,
+  initialDestinationCode,
+  initialCheckIn,
+  initialCheckOut,
+  initialGuests,
 }: HotelSearchFormProps) {
   const navigate = useNavigate();
   const { updateSearchParams, getDisplayData, searchParams } = useSearch();
