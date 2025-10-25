@@ -754,10 +754,10 @@ export default function HotelDetails() {
   const roomsSnapshot: any[] = (location.state as any)?.roomsSnapshot || [];
   const roomTypes = (() => {
     const sourceRooms =
-      hotelData && hotelData.roomTypes && hotelData.roomTypes.length > 0
-        ? hotelData.roomTypes
-        : Array.isArray(roomsSnapshot) && roomsSnapshot.length > 0
-          ? roomsSnapshot
+      Array.isArray(roomsSnapshot) && roomsSnapshot.length > 0
+        ? roomsSnapshot
+        : hotelData && hotelData.roomTypes && hotelData.roomTypes.length > 0
+          ? hotelData.roomTypes
           : null;
 
     if (sourceRooms) {
