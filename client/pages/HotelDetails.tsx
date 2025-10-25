@@ -2080,6 +2080,9 @@ export default function HotelDetails() {
                       src={hotel.image}
                       alt={hotel.name}
                       className="w-full h-40 sm:h-48 md:h-56 lg:h-72 xl:h-80 object-cover rounded-t-lg"
+                      onError={(e) => {
+                        e.currentTarget.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop";
+                      }}
                     />
                     <div className="absolute top-4 right-4 flex items-center gap-2">
                       <div className="relative" ref={saveDropdownRef}>
