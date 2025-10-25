@@ -110,14 +110,14 @@ Hotels UI Tweaks: Remove Bargain Now, make breakfast bold, remove supplier messa
 
 After pushing, the preview will auto-deploy. Verify at:
 
-- **URL:** https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev
+- **URL:** https://spontaneous-biscotti-da44bc.netlify.app
 - **Expected:** Changes should be visible within 2-3 minutes
 
 ### Step 3: Test Critical Flows
 
 Once deployed, verify:
 
-1. **Results Page Flow:**
+1. **Results Page Flow (https://spontaneous-biscotti-da44bc.netlify.app/hotels/results):**
    - Navigate to Hotels search
    - Enter: Dubai (Oct 31 - Nov 3, 2 adults)
    - Verify: Only "View Details" button per card
