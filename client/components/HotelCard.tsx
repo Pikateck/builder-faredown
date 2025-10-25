@@ -948,7 +948,7 @@ export function HotelCard({
       <div className="hidden md:flex flex-col md:flex-row">
         {/* Image Gallery - Extended height and clickable */}
         <div
-          className="relative sm:w-48 md:w-56 h-48 sm:h-52 md:h-56 flex-shrink-0 cursor-pointer"
+          className="relative md:w-48 lg:w-56 h-48 md:h-52 lg:h-56 flex-shrink-0 cursor-pointer"
           onClick={handleImageClick}
         >
           <img
