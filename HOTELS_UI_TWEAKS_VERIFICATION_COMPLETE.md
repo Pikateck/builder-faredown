@@ -5,6 +5,7 @@
 ### 1. **client/components/HotelCard.tsx** - Breakfast Text Made Bold
 
 **Change Location:** Line 731 (Grid View)
+
 ```typescript
 // Before:
 <span className="text-xs font-medium">
@@ -14,11 +15,13 @@
 ```
 
 **Status:** ✅ Verified - Breakfast text now displays in **bold** across all three views:
+
 - Grid view (line 731)
 - Mobile list view (line 865)
 - Desktop/tablet view (line 1001)
 
 **Visual Result:**
+
 - ✓ Breakfast included (green, bold)
 - Breakfast not included (gray, bold)
 
@@ -27,6 +30,7 @@
 ### 2. **client/pages/HotelResults.tsx** - Removed Real-time Messaging
 
 **Change Location:** Lines 259-261
+
 ```typescript
 // Before:
 const getSupplierDescription = (): string => {
@@ -48,28 +52,30 @@ const getSupplierDescription = (): string => {
 ```
 
 **Status:** ✅ Verified - Removed:
+
 - "Real-time hotel data from TBO API with live pricing"
 - "Live Results / 🔴 LIVE" messaging
 - Supplier references in results description
 
 **Visual Result:**
+
 - Results page now displays: "X hotels found" (clean, simple)
 
 ---
 
 ## ✅ Pre-Deployment Verification Checklist
 
-| Item | Status | Evidence |
-|------|--------|----------|
-| Breakfast text is bold in all views | ✅ | Line 731, 865, 1001 in HotelCard.tsx |
-| Real-time messaging removed | ✅ | Lines 259-261 in HotelResults.tsx |
-| Suppliers filter removed | ✅ | ComprehensiveFilters.tsx (no supplier section) |
-| "Bargain Now" button removed | ✅ | HotelCard.tsx (View Details only) |
-| Supplier tags removed | ✅ | HotelCard.tsx (no TBO/HOTELBEDS labels) |
-| Location line under hotel name | ✅ | HotelCard.tsx (MapPin icon + location) |
-| Top search panel persists criteria | ✅ | HotelResults.tsx (URL params + state) |
-| Mobile bargain chat fully visible | ✅ | ConversationalBargainModal.tsx (100vh, keyboard-safe) |
-| Book flow routes to booking page | ✅ | HotelResults.tsx (navigate /hotels/booking) |
+| Item                                | Status | Evidence                                              |
+| ----------------------------------- | ------ | ----------------------------------------------------- |
+| Breakfast text is bold in all views | ✅     | Line 731, 865, 1001 in HotelCard.tsx                  |
+| Real-time messaging removed         | ✅     | Lines 259-261 in HotelResults.tsx                     |
+| Suppliers filter removed            | ✅     | ComprehensiveFilters.tsx (no supplier section)        |
+| "Bargain Now" button removed        | ✅     | HotelCard.tsx (View Details only)                     |
+| Supplier tags removed               | ✅     | HotelCard.tsx (no TBO/HOTELBEDS labels)               |
+| Location line under hotel name      | ✅     | HotelCard.tsx (MapPin icon + location)                |
+| Top search panel persists criteria  | ✅     | HotelResults.tsx (URL params + state)                 |
+| Mobile bargain chat fully visible   | ✅     | ConversationalBargainModal.tsx (100vh, keyboard-safe) |
+| Book flow routes to booking page    | ✅     | HotelResults.tsx (navigate /hotels/booking)           |
 
 ---
 
@@ -89,6 +95,7 @@ client/pages/HotelResults.tsx        (3 lines modified - removed supplier messag
 Use the **[Push Code](#push-code)** button in the top-right corner of the UI to commit and push these changes to the git repository.
 
 **Commit Message Template:**
+
 ```
 Hotels UI Tweaks: Remove Bargain Now, make breakfast bold, remove supplier messaging
 
@@ -102,6 +109,7 @@ Hotels UI Tweaks: Remove Bargain Now, make breakfast bold, remove supplier messa
 ### Step 2: Verify Preview Deployment
 
 After pushing, the preview will auto-deploy. Verify at:
+
 - **URL:** https://55e69d5755db4519a9295a29a1a55930-aaf2790235d34f3ab48afa56a.fly.dev
 - **Expected:** Changes should be visible within 2-3 minutes
 
@@ -145,17 +153,20 @@ Once deployed, verify:
 ### Expected Results:
 
 **Results Page (Web):**
+
 - Hotel cards show: Image, Name, Location (MapPin), Breakfast (bold), Amenities, Price (bottom-right)
 - Single "View Details" button per card
 - Grid layout consistent with Booking.com style
 - Message: "X hotels found" (clean, no supplier text)
 
 **Details Page (Web):**
+
 - Room selector with room name, breakfast (bold), price per night, total
 - Cheapest room highlighted
 - No duplicate buttons
 
 **Mobile View:**
+
 - Results list with View Details only
 - Bargain chat: Full-screen, scrollable, keyboard-safe
 - Book/Reserve routing to booking page
@@ -165,6 +176,7 @@ Once deployed, verify:
 ## ✅ Sign-Off Ready
 
 All code changes verified and tested. Ready for:
+
 1. Git push
 2. Preview deployment
 3. Final QA sign-off
