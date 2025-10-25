@@ -728,14 +728,14 @@ export function HotelCard({
               {/* Breakfast Information */}
               <div className="flex items-center gap-1 mb-3">
                 <Utensils className="w-3 h-3 text-gray-500" />
-                <span className="text-xs text-gray-600">
+                <span className="text-xs font-medium">
                   {hotel.breakfastIncluded ? (
-                    <span className="text-green-600 font-medium">
+                    <span className="text-green-600">
                       ✓ Breakfast included
                       {hotel.breakfastType ? ` (${hotel.breakfastType})` : ""}
                     </span>
                   ) : (
-                    "Breakfast not included"
+                    <span className="text-gray-600">Breakfast not included</span>
                   )}
                 </span>
               </div>
