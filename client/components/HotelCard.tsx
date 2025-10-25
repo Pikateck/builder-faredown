@@ -803,7 +803,7 @@ export function HotelCard({
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group mb-4">
       {/* Mobile-First Design */}
-      <div className="block sm:hidden">
+      <div className="block md:hidden">
         {/* Mobile Layout - Stacked */}
         <div className="flex flex-col">
           {/* Hotel Image - Extended and Clickable */}
