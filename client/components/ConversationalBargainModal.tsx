@@ -879,7 +879,13 @@ export function ConversationalBargainModal({
         </div>
 
         {/* Chat Area - Scrollable */}
-        <div className="flex-1 overflow-y-auto p-3 sm:p-4 mobile-chat-scroll bg-gray-50">
+        <div
+          className="flex-1 overflow-y-auto p-3 sm:p-4 mobile-chat-scroll bg-gray-50"
+          style={{
+            minHeight: isMobileDevice() ? "60vh" : "50vh",
+            maxHeight: isMobileDevice() ? "calc(100vh - 300px)" : "auto",
+          }}
+        >
           <div className="space-y-3">
             {messages.map((message) => (
               <div
