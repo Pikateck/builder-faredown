@@ -961,7 +961,7 @@ export function HotelCard({
           <Button
             variant="ghost"
             size="sm"
-            className={`absolute top-2 sm:top-4 right-2 sm:right-4 w-7 h-7 sm:w-8 sm:h-8 p-0 touch-manipulation ${
+            className={`absolute top-2 md:top-4 right-2 md:right-4 w-7 h-7 md:w-8 md:h-8 p-0 touch-manipulation ${
               isLiked
                 ? "bg-red-500 text-white hover:bg-red-600"
                 : "bg-white/80 hover:bg-white text-gray-700"
