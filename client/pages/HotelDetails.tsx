@@ -3225,6 +3225,9 @@ export default function HotelDetails() {
                     src="https://cdn.builder.io/api/v1/image/assets%2F4235b10530ff469795aa00c0333d773c%2Fa819714c5cc047bf850c81dad7db477e?format=webp&width=800"
                     alt="Street View of Grand Hyatt Dubai Entrance"
                     className="w-full h-full object-cover"
+                    onError={(e) => {
+                      e.currentTarget.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop";
+                    }}
                   />
 
                   {/* Street View Label Overlay */}
