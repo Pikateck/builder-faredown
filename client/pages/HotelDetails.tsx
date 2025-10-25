@@ -941,7 +941,7 @@ export default function HotelDetails() {
         features: ["Upgrade for +₹55", "Ocean View Suite", "Premium amenities"],
       },
     ].sort((a, b) => a.pricePerNight - b.pricePerNight);
-  })();
+  }, [roomsSnapshot, hotelData, preselectRate, tempHotelData?.currentPrice]);
 
   // Auto-select room based on Results page selection or default to first room
   useEffect(() => {
