@@ -634,7 +634,24 @@ export default function HotelResults() {
       const pricesResponse = await fetch(
         `${apiBaseUrl}/hotels/prices?cityId=${destCode}`,
       );
-      const pricesData = await pricesResponse.json();
+
+      if (!pricesResponse.ok) {
+        console.warn("⚠️ Prices API returned error:", pricesResponse.status);
+        return; // Skip price update if API fails
+      }
+
+      let pricesData;
+      try {
+        const contentType = pricesResponse.headers.get("content-type");
+        if (!contentType?.includes("application/json")) {
+          console.warn("⚠️ Prices response is not JSON, skipping price update");
+          return;
+        }
+        pricesData = await pricesResponse.json();
+      } catch (jsonError) {
+        console.warn("⚠️ Failed to parse prices response as JSON:", jsonError);
+        return; // Skip price update if JSON parsing fails
+      }
 
       if (pricesData.prices && Object.keys(pricesData.prices).length > 0) {
         console.log("���� Merging prices into hotels...");
