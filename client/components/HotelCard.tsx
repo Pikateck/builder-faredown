@@ -959,12 +959,6 @@ export function HotelCard({
                     ({hotel.reviewCount || hotel.reviews || 0})
                   </button>
                 </div>
-                <Badge
-                  variant="secondary"
-                  className="text-[10px] px-2 py-0.5 uppercase tracking-wide"
-                >
-                  {supplierDisplayName}
-                </Badge>
               </div>
             </div>
           </div>
