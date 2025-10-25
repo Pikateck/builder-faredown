@@ -1500,10 +1500,10 @@ export default function HotelDetails() {
                     {hotel.roomTypes.map((room, index) => (
                       <div
                         key={room.id}
-                        className={`border rounded-lg overflow-hidden ${
+                        className={`border rounded-lg overflow-hidden transition-all duration-200 ${
                           selectedRoomType?.id === room.id
-                            ? "border-blue-600 bg-blue-50"
-                            : "border-gray-200 bg-white"
+                            ? "border-blue-600 bg-blue-50 shadow-md"
+                            : "border-gray-200 bg-white hover:shadow-sm"
                         }`}
                       >
                         {/* Status Badge */}
@@ -2212,7 +2212,7 @@ export default function HotelDetails() {
                                 Total Price (incl. taxes)
                               </div>
                               <div className="text-xs text-gray-400">
-                                ₹{room.pricePerNight.toLocaleString()} per night
+                                ��{room.pricePerNight.toLocaleString()} per night
                               </div>
                             </div>
                             <ChevronDown
