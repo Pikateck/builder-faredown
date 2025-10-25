@@ -1830,7 +1830,16 @@ export default function HotelResults() {
         {/* Hotel Search Bar - Booking.com style */}
         <div className="bg-[#003580] py-2 sm:py-4">
           <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
-            <HotelSearchForm />
+            <HotelSearchForm
+              initialDestination={destination}
+              initialCheckIn={checkIn}
+              initialCheckOut={checkOut}
+              initialGuests={{
+                adults: parseInt(adults),
+                children: parseInt(children),
+                rooms: parseInt(rooms),
+              }}
+            />
           </div>
         </div>
 
