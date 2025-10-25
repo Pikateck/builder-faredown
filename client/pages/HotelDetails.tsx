@@ -752,7 +752,7 @@ export default function HotelDetails() {
 
   // Generate room types from live data, snapshot from navigation, or fallback
   const roomsSnapshot: any[] = (location.state as any)?.roomsSnapshot || [];
-  const roomTypes = (() => {
+  const roomTypes = useMemo(() => {
     const sourceRooms =
       Array.isArray(roomsSnapshot) && roomsSnapshot.length > 0
         ? roomsSnapshot
