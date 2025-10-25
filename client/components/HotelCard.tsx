@@ -704,6 +704,26 @@ export function HotelCard({
                 </div>
               )}
 
+              {/* Location Line */}
+              {hotel.location && (
+                <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
+                  <MapPin className="w-4 h-4 text-gray-400" />
+                  <span>{hotel.location}</span>
+                </div>
+              )}
+
+              {/* Policy Chips */}
+              {(hotel.freeCancellation || hotel.payAtProperty) && (
+                <div className="flex gap-2 mb-3 flex-wrap">
+                  {hotel.freeCancellation && (
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Free cancellation</span>
+                  )}
+                  {hotel.payAtProperty && (
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Pay at property</span>
+                  )}
+                </div>
+              )}
+
               {/* Room Type Information - Compact */}
               {hotel.availableRoom && (
                 <div className="mb-3 pb-2 border-b border-gray-100">
