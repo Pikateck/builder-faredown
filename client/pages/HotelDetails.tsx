@@ -1985,7 +1985,16 @@ export default function HotelDetails() {
         {/* Desktop Search Bar */}
         <div className="bg-white border-b border-gray-200 px-4 py-4">
           <div className="max-w-6xl mx-auto">
-            <HotelSearchForm />
+            <HotelSearchForm
+              initialDestination={urlSearchParams.get("destination") || ""}
+              initialCheckIn={urlSearchParams.get("checkIn") || ""}
+              initialCheckOut={urlSearchParams.get("checkOut") || ""}
+              initialGuests={{
+                adults: parseInt(urlSearchParams.get("adults") || "2"),
+                children: parseInt(urlSearchParams.get("children") || "0"),
+                rooms: parseInt(urlSearchParams.get("rooms") || "1"),
+              }}
+            />
           </div>
         </div>
 
