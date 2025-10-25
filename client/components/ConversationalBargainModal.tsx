@@ -108,7 +108,8 @@ export function ConversationalBargainModal({
   productRef,
 }: Props) {
   // Get authenticated user's name with fallback
-  const { user, isLoggedIn } = useAuth();
+  const authContext = useAuth() || {};
+  const { user, isLoggedIn } = authContext;
   const effectiveUserName = isLoggedIn && user?.name ? user.name : userName;
 
   // State Management
