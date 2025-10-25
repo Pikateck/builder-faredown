@@ -2212,7 +2212,8 @@ export default function HotelDetails() {
                                 Total Price (incl. taxes)
                               </div>
                               <div className="text-xs text-gray-400">
-                                ��{room.pricePerNight.toLocaleString()} per night
+                                ��{room.pricePerNight.toLocaleString()} per
+                                night
                               </div>
                             </div>
                             <ChevronDown
