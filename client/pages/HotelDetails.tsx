@@ -1343,13 +1343,13 @@ export default function HotelDetails() {
         <div className="bg-white border-b border-gray-200 px-4 py-3">
           <div className="max-w-md mx-auto">
             <HotelSearchForm
-              initialDestination={urlSearchParams.get("destination") || ""}
-              initialCheckIn={urlSearchParams.get("checkIn") || ""}
-              initialCheckOut={urlSearchParams.get("checkOut") || ""}
+              initialDestination={searchParams.get("destination") || ""}
+              initialCheckIn={searchParams.get("checkIn") || ""}
+              initialCheckOut={searchParams.get("checkOut") || ""}
               initialGuests={{
-                adults: parseInt(urlSearchParams.get("adults") || "2"),
-                children: parseInt(urlSearchParams.get("children") || "0"),
-                rooms: parseInt(urlSearchParams.get("rooms") || "1"),
+                adults: parseInt(searchParams.get("adults") || "2"),
+                children: parseInt(searchParams.get("children") || "0"),
+                rooms: parseInt(searchParams.get("rooms") || "1"),
               }}
             />
           </div>
@@ -1920,13 +1920,13 @@ export default function HotelDetails() {
         <div className="bg-white border-b border-gray-200 px-4 py-4">
           <div className="max-w-6xl mx-auto">
             <HotelSearchForm
-              initialDestination={urlSearchParams.get("destination") || ""}
-              initialCheckIn={urlSearchParams.get("checkIn") || ""}
-              initialCheckOut={urlSearchParams.get("checkOut") || ""}
+              initialDestination={searchParams.get("destination") || ""}
+              initialCheckIn={searchParams.get("checkIn") || ""}
+              initialCheckOut={searchParams.get("checkOut") || ""}
               initialGuests={{
-                adults: parseInt(urlSearchParams.get("adults") || "2"),
-                children: parseInt(urlSearchParams.get("children") || "0"),
-                rooms: parseInt(urlSearchParams.get("rooms") || "1"),
+                adults: parseInt(searchParams.get("adults") || "2"),
+                children: parseInt(searchParams.get("children") || "0"),
+                rooms: parseInt(searchParams.get("rooms") || "1"),
               }}
             />
           </div>
