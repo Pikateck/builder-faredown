@@ -945,7 +945,7 @@ export function HotelCard({
       </div>
 
       {/* Desktop/Tablet Layout */}
-      <div className="hidden sm:flex flex-col sm:flex-row">
+      <div className="hidden md:flex flex-col md:flex-row">
         {/* Image Gallery - Extended height and clickable */}
         <div
           className="relative sm:w-48 md:w-56 h-48 sm:h-52 md:h-56 flex-shrink-0 cursor-pointer"
