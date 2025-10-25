@@ -2266,12 +2266,33 @@ export default function HotelResults() {
             orderRef,
           );
           setIsBargainModalOpen(false);
-          setSelectedHotel(null);
 
-          // Navigate to booking with bargained price
-          navigate(
-            `/hotel-booking-confirmation?price=${finalPrice}&bargainApplied=true&orderRef=${orderRef}`,
-          );
+          // Navigate to booking page with hotel, room, and search data
+          if (selectedHotel) {
+            navigate("/hotels/booking", {
+              state: {
+                selectedHotel: {
+                  ...selectedHotel,
+                  price: finalPrice,
+                  bargainApplied: true,
+                  orderRef,
+                },
+                searchParams: {
+                  destination: destination,
+                  destinationName: urlSearchParams.get("destinationName"),
+                  checkIn: urlSearchParams.get("checkIn"),
+                  checkOut: urlSearchParams.get("checkOut"),
+                  guests: {
+                    adults: parseInt(urlSearchParams.get("adults") || "2"),
+                    children: parseInt(urlSearchParams.get("children") || "0"),
+                    rooms: parseInt(urlSearchParams.get("rooms") || "1"),
+                  },
+                  nights,
+                },
+              },
+            });
+          }
+          setSelectedHotel(null);
         }}
         onHold={(orderRef) => {
           console.log("Hotel bargain offer on hold with order ref:", orderRef);
