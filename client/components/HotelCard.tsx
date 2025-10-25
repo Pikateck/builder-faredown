@@ -765,26 +765,6 @@ export function HotelCard({
                 >
                   View Details
                 </Button>
-                <BargainButton
-                  useBargainModal={true}
-                  module="hotels"
-                  itemName={hotel.name}
-                  basePrice={totalPriceInclusiveTaxes}
-                  itemDetails={{
-                    location: hotelLocation,
-                    provider: supplierDisplayName,
-                    features: hotel.features || hotelAmenities,
-                  }}
-                  onBargainSuccess={(finalPrice, savings) => {
-                    console.log(
-                      `Mobile Bargain success! Final price: ${finalPrice}, Savings: ${savings}`,
-                    );
-                    // Handle successful bargain - could navigate to booking or update state
-                  }}
-                  className="flex-1 py-4 text-sm font-semibold min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
-                >
-                  Bargain Now
-                </BargainButton>
               </div>
             </div>
           </CardContent>
@@ -916,26 +896,6 @@ export function HotelCard({
                 >
                   View Details
                 </Button>
-                <BargainButton
-                  useBargainModal={true}
-                  module="hotels"
-                  itemName={hotel.name}
-                  basePrice={totalPriceInclusiveTaxes}
-                  itemDetails={{
-                    location: hotelLocation,
-                    provider: supplierDisplayName,
-                    features: hotel.features || hotelAmenities,
-                  }}
-                  onBargainSuccess={(finalPrice, savings) => {
-                    console.log(
-                      `Mobile List Bargain success! Final price: ${finalPrice}, Savings: ${savings}`,
-                    );
-                    // Handle successful bargain - could navigate to booking or update state
-                  }}
-                  className="flex-1 py-4 text-sm font-semibold min-h-[48px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
-                >
-                  Bargain Now
-                </BargainButton>
               </div>
             </div>
           </CardContent>
@@ -1075,26 +1035,6 @@ export function HotelCard({
               >
                 View Details
               </Button>
-              <BargainButton
-                useBargainModal={true}
-                module="hotels"
-                itemName={hotel.name}
-                basePrice={totalPriceInclusiveTaxes}
-                itemDetails={{
-                  location: hotelLocation,
-                  provider: supplierDisplayName,
-                  features: hotel.features || hotelAmenities,
-                }}
-                onBargainSuccess={(finalPrice, savings) => {
-                  console.log(
-                    `Bargain success! Final price: ${finalPrice}, Savings: ${savings}`,
-                  );
-                  // Handle successful bargain - could navigate to booking or update state
-                }}
-                className="text-sm px-5 py-3 font-semibold min-h-[44px] rounded-xl shadow-sm active:scale-95 touch-manipulation transition-all duration-200"
-              >
-                Bargain Now
-              </BargainButton>
             </div>
           </div>
         </CardContent>
