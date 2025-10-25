@@ -816,7 +816,8 @@ export function HotelCard({
               alt={hotel.name}
               className="w-full h-full object-cover"
               onError={(e) => {
-                e.currentTarget.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop";
+                e.currentTarget.src =
+                  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop";
               }}
             />
 
@@ -959,7 +960,8 @@ export function HotelCard({
             alt={hotel.name}
             className="w-full h-full object-cover"
             onError={(e) => {
-              e.currentTarget.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop";
+              e.currentTarget.src =
+                "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop";
             }}
           />
 
@@ -974,9 +976,7 @@ export function HotelCard({
             }`}
             onClick={() => setIsLiked(!isLiked)}
           >
-            <Heart
-              className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`}
-            />
+            <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
           </Button>
         </div>
 

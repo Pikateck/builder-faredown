@@ -1881,301 +1881,345 @@ export default function HotelResults() {
 
       {/* Desktop Results Layout */}
       <div className="hidden md:block">
-      <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6">
-        <div className="flex gap-6">
-          {/* Desktop Filters */}
-          <div className="hidden lg:block w-80 flex-shrink-0">
-            <div className="bg-white rounded-xl shadow-lg border border-gray-200 sticky top-24 overflow-hidden">
-              <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4">
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center">
-                    <Filter className="w-5 h-5 mr-2 text-[#febb02]" />
-                    <h2 className="text-lg font-semibold">Filter Hotels</h2>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <button
-                      onClick={handleClearFilters}
-                      className="text-xs underline hover:text-yellow-200"
-                      title="Clear all filters"
-                    >
-                      Clear
-                    </button>
-                    <div className="text-sm bg-white/20 px-2 py-1 rounded-lg">
-                      {filteredAndSortedHotels.length}
+        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6">
+          <div className="flex gap-6">
+            {/* Desktop Filters */}
+            <div className="hidden lg:block w-80 flex-shrink-0">
+              <div className="bg-white rounded-xl shadow-lg border border-gray-200 sticky top-24 overflow-hidden">
+                <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center">
+                      <Filter className="w-5 h-5 mr-2 text-[#febb02]" />
+                      <h2 className="text-lg font-semibold">Filter Hotels</h2>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button
+                        onClick={handleClearFilters}
+                        className="text-xs underline hover:text-yellow-200"
+                        title="Clear all filters"
+                      >
+                        Clear
+                      </button>
+                      <div className="text-sm bg-white/20 px-2 py-1 rounded-lg">
+                        {filteredAndSortedHotels.length}
+                      </div>
                     </div>
                   </div>
                 </div>
-              </div>
-              <div className="h-[calc(100vh-200px)]">
-                {/* Current search summary */}
-                <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-                  <div className="text-xs text-gray-600">Current search</div>
-                  <div className="mt-1 text-sm font-medium text-gray-900">
-                    {urlSearchParams.get("destinationName") ||
-                      destination ||
-                      "Dubai"}
-                  </div>
-                  <div className="text-xs text-gray-600 mt-1">
-                    {(() => {
-                      const inD =
-                        departureDate || (checkIn ? new Date(checkIn) : null);
-                      const outD =
-                        returnDate || (checkOut ? new Date(checkOut) : null);
-                      if (inD && outD)
-                        return `${formatDisplayDate(inD)} - ${formatDisplayDate(outD)}`;
-                      return "Select dates";
-                    })()}
-                    {` • ${adults} adult${parseInt(adults) > 1 ? "s" : ""}`}
-                    {parseInt(children) > 0
-                      ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}`
-                      : ""}
-                    {`, ${rooms} room${parseInt(rooms) > 1 ? "s" : ""}`}
-                  </div>
-                </div>
-                <ComprehensiveFilters
-                  priceRange={priceRange}
-                  setPriceRange={setPriceRange}
-                  selectedFilters={selectedFilters}
-                  setSelectedFilters={setSelectedFilters}
-                  sortBy={sortBy}
-                  setSortBy={setSortBy}
-                  onClearFilters={handleClearFilters}
-                  className="h-full border-0"
-                  priceMax={priceBounds.max}
-                  supplierCounts={supplierCounts}
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Results */}
-          <div className="flex-1">
-            {/* Results Header with View Toggle and Sort */}
-            <div className="mb-4 sm:mb-6">
-              <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-3 sm:gap-0">
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-3">
-                    <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+                <div className="h-[calc(100vh-200px)]">
+                  {/* Current search summary */}
+                  <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
+                    <div className="text-xs text-gray-600">Current search</div>
+                    <div className="mt-1 text-sm font-medium text-gray-900">
                       {urlSearchParams.get("destinationName") ||
                         destination ||
                         "Dubai"}
-                      : {filteredAndSortedHotels.length} properties found
-                    </h1>
-                  </div>
-                  <p className="text-gray-600 mt-1 text-sm sm:text-base">
-                    {filteredAndSortedHotels.length} hotels available for your
-                    dates
-                  </p>
-                  {Object.values(selectedFilters).some(
-                    (arr) => arr.length > 0,
-                  ) && (
-                    <div className="mt-2 flex flex-wrap gap-2">
-                      {Object.entries(selectedFilters).flatMap(([cat, items]) =>
-                        items.map((id) => (
-                          <span
-                            key={`${cat}-${id}`}
-                            className="inline-flex items-center text-xs bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-2 py-1"
-                          >
-                            {id}
-                          </span>
-                        )),
-                      )}
-                      <button
-                        onClick={handleClearFilters}
-                        className="text-xs underline text-blue-600"
-                        title="Clear filters"
-                      >
-                        Clear all
-                      </button>
                     </div>
-                  )}
-                </div>
-
-                {/* Name filter */}
-                <div className="flex items-center gap-2 flex-shrink-0 w-full md:w-auto md:max-w-xs">
-                  <input
-                    type="text"
-                    value={nameQuery}
-                    onChange={(e) => {
-                      setNameQuery(e.target.value);
-                    }}
-                    placeholder="Search hotel name"
-                    className="w-full md:w-64 h-10 px-3 border border-gray-300 rounded"
-                  />
-                  <div className="hidden md:flex items-center space-x-2">
-                    <Button
-                      variant={viewMode === "list" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setViewMode("list")}
-                      className="p-2 touch-manipulation"
-                    >
-                      <List className="w-4 h-4" />
-                    </Button>
-                    <Button
-                      variant={viewMode === "grid" ? "default" : "outline"}
-                      size="sm"
-                      onClick={() => setViewMode("grid")}
-                      className="p-2 touch-manipulation"
-                    >
-                      <Grid className="w-4 h-4" />
-                    </Button>
+                    <div className="text-xs text-gray-600 mt-1">
+                      {(() => {
+                        const inD =
+                          departureDate || (checkIn ? new Date(checkIn) : null);
+                        const outD =
+                          returnDate || (checkOut ? new Date(checkOut) : null);
+                        if (inD && outD)
+                          return `${formatDisplayDate(inD)} - ${formatDisplayDate(outD)}`;
+                        return "Select dates";
+                      })()}
+                      {` • ${adults} adult${parseInt(adults) > 1 ? "s" : ""}`}
+                      {parseInt(children) > 0
+                        ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}`
+                        : ""}
+                      {`, ${rooms} room${parseInt(rooms) > 1 ? "s" : ""}`}
+                    </div>
                   </div>
+                  <ComprehensiveFilters
+                    priceRange={priceRange}
+                    setPriceRange={setPriceRange}
+                    selectedFilters={selectedFilters}
+                    setSelectedFilters={setSelectedFilters}
+                    sortBy={sortBy}
+                    setSortBy={setSortBy}
+                    onClearFilters={handleClearFilters}
+                    className="h-full border-0"
+                    priceMax={priceBounds.max}
+                    supplierCounts={supplierCounts}
+                  />
                 </div>
-              </div>
-
-              {/* Sort Dropdown for Mobile/Tablet */}
-              <div className="lg:hidden mb-3 sm:mb-4">
-                <Select value={sortBy} onValueChange={setSortBy}>
-                  <SelectTrigger className="w-full h-12 px-4 py-3 text-sm sm:text-base touch-manipulation">
-                    <SelectValue placeholder="Sort by..." />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem
-                      value="recommended"
-                      className="text-sm sm:text-base"
-                    >
-                      <div className="flex items-center">
-                        <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg
-                            className="w-3 h-3 text-white"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        </div>
-                        Our top picks
-                      </div>
-                    </SelectItem>
-                    <SelectItem
-                      value="price-low"
-                      className="text-sm sm:text-base"
-                    >
-                      <div className="flex items-center">
-                        <div className="w-5 h-5 bg-gradient-to-br from-green-400 to-green-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg
-                            className="w-3 h-3 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M7 11l5-5m0 0l5 5m-5-5v12"
-                            />
-                          </svg>
-                        </div>
-                        Price (lowest first)
-                      </div>
-                    </SelectItem>
-                    <SelectItem
-                      value="price-high"
-                      className="text-sm sm:text-base"
-                    >
-                      <div className="flex items-center">
-                        <div className="w-5 h-5 bg-gradient-to-br from-red-400 to-red-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg
-                            className="w-3 h-3 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M17 13l-5 5m0 0l-5-5m5 5V6"
-                            />
-                          </svg>
-                        </div>
-                        Price (highest first)
-                      </div>
-                    </SelectItem>
-                    <SelectItem value="rating" className="text-sm sm:text-base">
-                      <div className="flex items-center">
-                        <div className="w-5 h-5 bg-gradient-to-br from-blue-400 to-blue-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg
-                            className="w-3 h-3 text-white"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        </div>
-                        Best reviewed & lowest price
-                      </div>
-                    </SelectItem>
-                    <SelectItem
-                      value="stars-high"
-                      className="text-sm sm:text-base"
-                    >
-                      <div className="flex items-center">
-                        <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-purple-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg
-                            className="w-3 h-3 text-white"
-                            fill="currentColor"
-                            viewBox="0 0 20 20"
-                          >
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                          </svg>
-                        </div>
-                        Property rating (high to low)
-                      </div>
-                    </SelectItem>
-                    <SelectItem
-                      value="distance"
-                      className="text-sm sm:text-base"
-                    >
-                      <div className="flex items-center">
-                        <div className="w-5 h-5 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
-                          <svg
-                            className="w-3 h-3 text-white"
-                            fill="none"
-                            stroke="currentColor"
-                            viewBox="0 0 24 24"
-                          >
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
-                            />
-                            <path
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth={2}
-                              d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
-                            />
-                          </svg>
-                        </div>
-                        Distance from downtown
-                      </div>
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
               </div>
             </div>
 
-            <div
-              className={
-                viewMode === "grid"
-                  ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
-                  : "space-y-4"
-              }
-            >
-              {loading ? (
-                <>
-                  {[...Array(6)].map((_, i) => (
-                    <HotelCardSkeleton key={`skeleton-${i}`} />
-                  ))}
-                </>
-              ) : error ? (
+            {/* Results */}
+            <div className="flex-1">
+              {/* Results Header with View Toggle and Sort */}
+              <div className="mb-4 sm:mb-6">
+                <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 sm:mb-4 gap-3 sm:gap-0">
+                  <div className="min-w-0 flex-1">
+                    <div className="flex items-center gap-3">
+                      <h1 className="text-xl sm:text-2xl font-bold text-gray-900 truncate">
+                        {urlSearchParams.get("destinationName") ||
+                          destination ||
+                          "Dubai"}
+                        : {filteredAndSortedHotels.length} properties found
+                      </h1>
+                    </div>
+                    <p className="text-gray-600 mt-1 text-sm sm:text-base">
+                      {filteredAndSortedHotels.length} hotels available for your
+                      dates
+                    </p>
+                    {Object.values(selectedFilters).some(
+                      (arr) => arr.length > 0,
+                    ) && (
+                      <div className="mt-2 flex flex-wrap gap-2">
+                        {Object.entries(selectedFilters).flatMap(
+                          ([cat, items]) =>
+                            items.map((id) => (
+                              <span
+                                key={`${cat}-${id}`}
+                                className="inline-flex items-center text-xs bg-blue-50 text-blue-700 border border-blue-200 rounded-full px-2 py-1"
+                              >
+                                {id}
+                              </span>
+                            )),
+                        )}
+                        <button
+                          onClick={handleClearFilters}
+                          className="text-xs underline text-blue-600"
+                          title="Clear filters"
+                        >
+                          Clear all
+                        </button>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Name filter */}
+                  <div className="flex items-center gap-2 flex-shrink-0 w-full md:w-auto md:max-w-xs">
+                    <input
+                      type="text"
+                      value={nameQuery}
+                      onChange={(e) => {
+                        setNameQuery(e.target.value);
+                      }}
+                      placeholder="Search hotel name"
+                      className="w-full md:w-64 h-10 px-3 border border-gray-300 rounded"
+                    />
+                    <div className="hidden md:flex items-center space-x-2">
+                      <Button
+                        variant={viewMode === "list" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setViewMode("list")}
+                        className="p-2 touch-manipulation"
+                      >
+                        <List className="w-4 h-4" />
+                      </Button>
+                      <Button
+                        variant={viewMode === "grid" ? "default" : "outline"}
+                        size="sm"
+                        onClick={() => setViewMode("grid")}
+                        className="p-2 touch-manipulation"
+                      >
+                        <Grid className="w-4 h-4" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Sort Dropdown for Mobile/Tablet */}
+                <div className="lg:hidden mb-3 sm:mb-4">
+                  <Select value={sortBy} onValueChange={setSortBy}>
+                    <SelectTrigger className="w-full h-12 px-4 py-3 text-sm sm:text-base touch-manipulation">
+                      <SelectValue placeholder="Sort by..." />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem
+                        value="recommended"
+                        className="text-sm sm:text-base"
+                      >
+                        <div className="flex items-center">
+                          <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-yellow-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
+                            <svg
+                              className="w-3 h-3 text-white"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          </div>
+                          Our top picks
+                        </div>
+                      </SelectItem>
+                      <SelectItem
+                        value="price-low"
+                        className="text-sm sm:text-base"
+                      >
+                        <div className="flex items-center">
+                          <div className="w-5 h-5 bg-gradient-to-br from-green-400 to-green-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
+                            <svg
+                              className="w-3 h-3 text-white"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M7 11l5-5m0 0l5 5m-5-5v12"
+                              />
+                            </svg>
+                          </div>
+                          Price (lowest first)
+                        </div>
+                      </SelectItem>
+                      <SelectItem
+                        value="price-high"
+                        className="text-sm sm:text-base"
+                      >
+                        <div className="flex items-center">
+                          <div className="w-5 h-5 bg-gradient-to-br from-red-400 to-red-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
+                            <svg
+                              className="w-3 h-3 text-white"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17 13l-5 5m0 0l-5-5m5 5V6"
+                              />
+                            </svg>
+                          </div>
+                          Price (highest first)
+                        </div>
+                      </SelectItem>
+                      <SelectItem
+                        value="rating"
+                        className="text-sm sm:text-base"
+                      >
+                        <div className="flex items-center">
+                          <div className="w-5 h-5 bg-gradient-to-br from-blue-400 to-blue-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
+                            <svg
+                              className="w-3 h-3 text-white"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          </div>
+                          Best reviewed & lowest price
+                        </div>
+                      </SelectItem>
+                      <SelectItem
+                        value="stars-high"
+                        className="text-sm sm:text-base"
+                      >
+                        <div className="flex items-center">
+                          <div className="w-5 h-5 bg-gradient-to-br from-purple-400 to-purple-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
+                            <svg
+                              className="w-3 h-3 text-white"
+                              fill="currentColor"
+                              viewBox="0 0 20 20"
+                            >
+                              <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
+                            </svg>
+                          </div>
+                          Property rating (high to low)
+                        </div>
+                      </SelectItem>
+                      <SelectItem
+                        value="distance"
+                        className="text-sm sm:text-base"
+                      >
+                        <div className="flex items-center">
+                          <div className="w-5 h-5 bg-gradient-to-br from-indigo-400 to-indigo-600 rounded-md flex items-center justify-center mr-2 shadow-sm">
+                            <svg
+                              className="w-3 h-3 text-white"
+                              fill="none"
+                              stroke="currentColor"
+                              viewBox="0 0 24 24"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z"
+                              />
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M15 11a3 3 0 11-6 0 3 3 0 016 0z"
+                              />
+                            </svg>
+                          </div>
+                          Distance from downtown
+                        </div>
+                      </SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+              </div>
+
+              <div
+                className={
+                  viewMode === "grid"
+                    ? "grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+                    : "space-y-4"
+                }
+              >
+                {loading ? (
+                  <>
+                    {[...Array(6)].map((_, i) => (
+                      <HotelCardSkeleton key={`skeleton-${i}`} />
+                    ))}
+                  </>
+                ) : error ? (
+                  <div className="text-center py-8 sm:py-12 px-4">
+                    <div className="text-red-600 mb-4">
+                      <svg
+                        className="w-12 h-12 mx-auto mb-2"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 15.5c-.77.833.192 2.5 1.732 2.5z"
+                        />
+                      </svg>
+                    </div>
+                    <h3 className="text-base sm:text-lg font-medium text-red-600 mb-2">
+                      {error}
+                    </h3>
+                    <p className="text-gray-600 text-sm mb-4">
+                      Unable to connect to Hotelbeds API. Please check your
+                      connection.
+                    </p>
+                    <Button onClick={loadHotels} className="mt-4">
+                      ����� Retry Search
+                    </Button>
+                  </div>
+                ) : (
+                  filteredAndSortedHotels.map((hotel) => (
+                    <HotelCard
+                      key={hotel.id}
+                      hotel={hotel}
+                      onBargainClick={handleBargainClick}
+                      viewMode={viewMode}
+                    />
+                  ))
+                )}
+              </div>
+
+              {!loading && !error && filteredAndSortedHotels.length === 0 && (
                 <div className="text-center py-8 sm:py-12 px-4">
-                  <div className="text-red-600 mb-4">
+                  <div className="text-gray-400 mb-4">
                     <svg
-                      className="w-12 h-12 mx-auto mb-2"
+                      className="w-16 h-16 mx-auto mb-2"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -2183,75 +2227,35 @@ export default function HotelResults() {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-2.5L13.732 4c-.77-.833-1.732-.833-2.5 0L4.268 15.5c-.77.833.192 2.5 1.732 2.5z"
+                        strokeWidth={1}
+                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
                       />
                     </svg>
                   </div>
-                  <h3 className="text-base sm:text-lg font-medium text-red-600 mb-2">
-                    {error}
+                  <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
+                    No hotels available for your search
                   </h3>
-                  <p className="text-gray-600 text-sm mb-4">
-                    Unable to connect to Hotelbeds API. Please check your
-                    connection.
+                  <p className="text-gray-600 text-sm sm:text-base mb-4">
+                    {isLiveData
+                      ? "No hotels found in Hotelbeds API for this destination and dates"
+                      : "Try adjusting your filters or search different dates"}
                   </p>
-                  <Button onClick={loadHotels} className="mt-4">
-                    ����� Retry Search
-                  </Button>
+                  <div className="flex flex-col sm:flex-row gap-2 justify-center">
+                    <Button onClick={loadHotels} variant="outline">
+                      🔄 Search Again
+                    </Button>
+                    <Button
+                      onClick={() => window.history.back()}
+                      variant="outline"
+                    >
+                      ← Modify Search
+                    </Button>
+                  </div>
                 </div>
-              ) : (
-                filteredAndSortedHotels.map((hotel) => (
-                  <HotelCard
-                    key={hotel.id}
-                    hotel={hotel}
-                    onBargainClick={handleBargainClick}
-                    viewMode={viewMode}
-                  />
-                ))
               )}
             </div>
-
-            {!loading && !error && filteredAndSortedHotels.length === 0 && (
-              <div className="text-center py-8 sm:py-12 px-4">
-                <div className="text-gray-400 mb-4">
-                  <svg
-                    className="w-16 h-16 mx-auto mb-2"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={1}
-                      d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"
-                    />
-                  </svg>
-                </div>
-                <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
-                  No hotels available for your search
-                </h3>
-                <p className="text-gray-600 text-sm sm:text-base mb-4">
-                  {isLiveData
-                    ? "No hotels found in Hotelbeds API for this destination and dates"
-                    : "Try adjusting your filters or search different dates"}
-                </p>
-                <div className="flex flex-col sm:flex-row gap-2 justify-center">
-                  <Button onClick={loadHotels} variant="outline">
-                    🔄 Search Again
-                  </Button>
-                  <Button
-                    onClick={() => window.history.back()}
-                    variant="outline"
-                  >
-                    ← Modify Search
-                  </Button>
-                </div>
-              </div>
-            )}
           </div>
         </div>
-      </div>
       </div>
 
       {/* Hotel Conversational Bargain Modal */}
