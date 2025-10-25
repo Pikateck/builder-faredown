@@ -3435,7 +3435,10 @@ export default function HotelDetails() {
       />
 
       {/* Clean Mobile Bottom Action Bar */}
-      <div className="md:hidden fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 z-[60]">
+      <div
+        className="md:hidden fixed bottom-16 left-0 right-0 bg-white border-t border-gray-200 z-[60]"
+        style={{ paddingBottom: "env(safe-area-inset-bottom)" }}
+      >
         {selectedRoomType ? (
           /* Room Selected - Clean Design */
           <div className="p-4">
