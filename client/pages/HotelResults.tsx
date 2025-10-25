@@ -1933,12 +1933,6 @@ export default function HotelResults() {
                         "Dubai"}
                       : {filteredAndSortedHotels.length} properties found
                     </h1>
-                    {!isLiveData && filteredAndSortedHotels.length > 0 && (
-                      <div className="flex items-center gap-1 bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
-                        <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
-                        🔧 ENHANCED MOCK
-                      </div>
-                    )}
                   </div>
                   <p className="text-gray-600 mt-1 text-sm sm:text-base">
                     {filteredAndSortedHotels.length} hotels available for your dates
