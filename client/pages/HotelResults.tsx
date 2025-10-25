@@ -532,15 +532,16 @@ export default function HotelResults() {
         const contentType = metadataResponse.headers.get("content-type");
         if (!contentType?.includes("application/json")) {
           throw new Error(
-            `Invalid response type: ${contentType}. Expected JSON but got ${contentType || "unknown"}`
+            `Invalid response type: ${contentType}. Expected JSON but got ${contentType || "unknown"}`,
           );
         }
         metadataData = await metadataResponse.json();
       } catch (jsonError) {
-        console.error("❌ Failed to parse metadata response as JSON:", jsonError);
-        setError(
-          "Invalid response from hotel service. Please try again."
+        console.error(
+          "❌ Failed to parse metadata response as JSON:",
+          jsonError,
         );
+        setError("Invalid response from hotel service. Please try again.");
         return [];
       }
 
@@ -1859,9 +1860,7 @@ export default function HotelResults() {
                   "Dubai"}
               </span>
               <span className="mx-2">›</span>
-              <span className="text-gray-900 font-medium">
-                Search Results
-              </span>
+              <span className="text-gray-900 font-medium">Search Results</span>
             </div>
           </div>
         </div>
@@ -1967,7 +1966,8 @@ export default function HotelResults() {
                     </h1>
                   </div>
                   <p className="text-gray-600 mt-1 text-sm sm:text-base">
-                    {filteredAndSortedHotels.length} hotels available for your dates
+                    {filteredAndSortedHotels.length} hotels available for your
+                    dates
                   </p>
                   {Object.values(selectedFilters).some(
                     (arr) => arr.length > 0,

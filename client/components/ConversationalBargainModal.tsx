@@ -948,7 +948,14 @@ export function ConversationalBargainModal({
 
         {/* Timer and Offer Actions - Keyboard Safe */}
         {showOfferActions && finalOffer && (
-          <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 flex-shrink-0" style={{ paddingBottom: isMobileDevice() ? "calc(1rem + env(safe-area-inset-bottom))" : "1rem" }}>
+          <div
+            className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 flex-shrink-0"
+            style={{
+              paddingBottom: isMobileDevice()
+                ? "calc(1rem + env(safe-area-inset-bottom))"
+                : "1rem",
+            }}
+          >
             <div className="flex justify-between items-start mb-3">
               <div>
                 <div className="text-sm text-emerald-700 mb-1">
@@ -1004,7 +1011,14 @@ export function ConversationalBargainModal({
 
         {/* Input Section - Keyboard Safe */}
         {!showOfferActions && !isComplete && (
-          <div className="border-t border-gray-200 p-4 bg-white flex-shrink-0" style={{ paddingBottom: isMobileDevice() ? "calc(1rem + env(safe-area-inset-bottom))" : "1rem" }}>
+          <div
+            className="border-t border-gray-200 p-4 bg-white flex-shrink-0"
+            style={{
+              paddingBottom: isMobileDevice()
+                ? "calc(1rem + env(safe-area-inset-bottom))"
+                : "1rem",
+            }}
+          >
             <div className="mb-3">
               <div className="text-sm text-gray-600 mb-1">Current Price:</div>
               <div className="text-lg font-semibold text-gray-900">
@@ -1149,7 +1163,14 @@ export function ConversationalBargainModal({
 
         {/* Complete State - Keyboard Safe */}
         {isComplete && (
-          <div className="border-t border-gray-200 p-4 text-center flex-shrink-0" style={{ paddingBottom: isMobileDevice() ? "calc(1rem + env(safe-area-inset-bottom))" : "1rem" }}>
+          <div
+            className="border-t border-gray-200 p-4 text-center flex-shrink-0"
+            style={{
+              paddingBottom: isMobileDevice()
+                ? "calc(1rem + env(safe-area-inset-bottom))"
+                : "1rem",
+            }}
+          >
             <div className="text-gray-600 mb-3">
               Maximum negotiation rounds reached
             </div>

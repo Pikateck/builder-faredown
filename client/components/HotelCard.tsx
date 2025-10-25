@@ -735,7 +735,9 @@ export function HotelCard({
                       {hotel.breakfastType ? ` (${hotel.breakfastType})` : ""}
                     </span>
                   ) : (
-                    <span className="text-gray-600">Breakfast not included</span>
+                    <span className="text-gray-600">
+                      Breakfast not included
+                    </span>
                   )}
                 </span>
               </div>
