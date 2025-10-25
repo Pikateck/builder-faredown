@@ -728,7 +728,7 @@ export function HotelCard({
               {/* Breakfast Information */}
               <div className="flex items-center gap-1 mb-3">
                 <Utensils className="w-3 h-3 text-gray-500" />
-                <span className="text-xs font-medium">
+                <span className="text-xs font-bold">
                   {hotel.breakfastIncluded ? (
                     <span className="text-green-600">
                       ✓ Breakfast included
@@ -862,7 +862,7 @@ export function HotelCard({
             {/* Breakfast Information - Mobile */}
             <div className="flex items-center gap-1 mb-3">
               <Utensils className="w-3 h-3 text-gray-500" />
-              <span className="text-xs font-medium">
+              <span className="text-xs font-bold">
                 {hotel.breakfastIncluded ? (
                   <span className="text-green-600">
                     ✓ Breakfast included
@@ -998,7 +998,7 @@ export function HotelCard({
           {/* Breakfast Information - Desktop */}
           <div className="flex items-center gap-1 mb-2">
             <Utensils className="w-3 h-3 text-gray-500" />
-            <span className="text-xs font-medium">
+            <span className="text-xs font-bold">
               {hotel.breakfastIncluded ? (
                 <span className="text-green-600">
                   ✓ Breakfast included
