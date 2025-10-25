@@ -1366,7 +1366,8 @@ export default function HotelDetails() {
               className="w-full h-full object-cover"
               loading="lazy"
               onError={(e) => {
-                e.currentTarget.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop";
+                e.currentTarget.src =
+                  "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop";
               }}
             />
 
@@ -2081,7 +2082,8 @@ export default function HotelDetails() {
                       alt={hotel.name}
                       className="w-full h-40 sm:h-48 md:h-56 lg:h-72 xl:h-80 object-cover rounded-t-lg"
                       onError={(e) => {
-                        e.currentTarget.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop";
+                        e.currentTarget.src =
+                          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop";
                       }}
                     />
                     <div className="absolute top-4 right-4 flex items-center gap-2">
@@ -2242,7 +2244,8 @@ export default function HotelDetails() {
                                   alt={room.name}
                                   className="w-full h-40 lg:h-32 object-cover rounded-lg"
                                   onError={(e) => {
-                                    e.currentTarget.src = "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&fit=crop";
+                                    e.currentTarget.src =
+                                      "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&fit=crop";
                                   }}
                                 />
                               </div>
@@ -2458,7 +2461,8 @@ export default function HotelDetails() {
                         alt={`${hotel.name} - Image ${index + 1}`}
                         className="w-full h-full object-cover rounded-lg"
                         onError={(e) => {
-                          e.currentTarget.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop";
+                          e.currentTarget.src =
+                            "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop";
                         }}
                       />
                     </div>
@@ -3226,7 +3230,8 @@ export default function HotelDetails() {
                     alt="Street View of Grand Hyatt Dubai Entrance"
                     className="w-full h-full object-cover"
                     onError={(e) => {
-                      e.currentTarget.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop";
+                      e.currentTarget.src =
+                        "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop";
                     }}
                   />
 
