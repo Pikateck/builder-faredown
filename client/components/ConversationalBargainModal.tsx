@@ -840,12 +840,15 @@ export function ConversationalBargainModal({
     <Dialog open={isOpen} onOpenChange={handleClose}>
       <DialogContent
         className={`
-          mobile-bargain-modal max-w-md mx-auto sm:max-w-lg p-0 
+          mobile-bargain-modal max-w-md mx-auto sm:max-w-lg p-0
           ${isMobileDevice() ? "mobile-modal" : ""}
+          flex flex-col h-screen sm:h-auto
         `}
         style={{
-          maxHeight: isMobileDevice() ? "95vh" : "90vh",
-          borderRadius: isMobileDevice() ? "1.5rem 1.5rem 0 0" : "1rem",
+          maxHeight: isMobileDevice() ? "100vh" : "90vh",
+          height: isMobileDevice() ? "100vh" : "auto",
+          borderRadius: isMobileDevice() ? "0" : "1rem",
+          paddingBottom: isMobileDevice() ? "env(safe-area-inset-bottom)" : "0",
         }}
       >
         {/* Header */}
@@ -875,8 +878,8 @@ export function ConversationalBargainModal({
           </div>
         </div>
 
-        {/* Chat Area */}
-        <div className="flex-1 max-h-96 overflow-y-auto p-3 sm:p-4 mobile-chat-scroll">
+        {/* Chat Area - Scrollable */}
+        <div className="flex-1 overflow-y-auto p-3 sm:p-4 mobile-chat-scroll bg-gray-50">
           <div className="space-y-3">
             {messages.map((message) => (
               <div
@@ -943,9 +946,9 @@ export function ConversationalBargainModal({
           <div ref={chatEndRef} />
         </div>
 
-        {/* Timer and Offer Actions */}
+        {/* Timer and Offer Actions - Keyboard Safe */}
         {showOfferActions && finalOffer && (
-          <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4">
+          <div className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 flex-shrink-0" style={{ paddingBottom: isMobileDevice() ? "calc(1rem + env(safe-area-inset-bottom))" : "1rem" }}>
             <div className="flex justify-between items-start mb-3">
               <div>
                 <div className="text-sm text-emerald-700 mb-1">
@@ -999,9 +1002,9 @@ export function ConversationalBargainModal({
           </div>
         )}
 
-        {/* Input Section */}
+        {/* Input Section - Keyboard Safe */}
         {!showOfferActions && !isComplete && (
-          <div className="border-t border-gray-200 p-4">
+          <div className="border-t border-gray-200 p-4 bg-white flex-shrink-0" style={{ paddingBottom: isMobileDevice() ? "calc(1rem + env(safe-area-inset-bottom))" : "1rem" }}>
             <div className="mb-3">
               <div className="text-sm text-gray-600 mb-1">Current Price:</div>
               <div className="text-lg font-semibold text-gray-900">
@@ -1144,9 +1147,9 @@ export function ConversationalBargainModal({
           </div>
         )}
 
-        {/* Complete State */}
+        {/* Complete State - Keyboard Safe */}
         {isComplete && (
-          <div className="border-t border-gray-200 p-4 text-center">
+          <div className="border-t border-gray-200 p-4 text-center flex-shrink-0" style={{ paddingBottom: isMobileDevice() ? "calc(1rem + env(safe-area-inset-bottom))" : "1rem" }}>
             <div className="text-gray-600 mb-3">
               Maximum negotiation rounds reached
             </div>
