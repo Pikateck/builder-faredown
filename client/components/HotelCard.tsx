@@ -799,12 +799,12 @@ export function HotelCard({
     );
   }
 
-  // Mobile-First List View - Optimized for app-like experience
+  // List/Card View - Mobile-First Responsive Layout
+  // Single unified layout with responsive adjustments (no grid view on mobile)
   return (
     <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group mb-4">
-      {/* Mobile-First Design */}
-      <div className="block md:hidden">
-        {/* Mobile Layout - Stacked */}
+      {/* Mobile Layout (< 1024px) - Stacked vertical */}
+      <div className="lg:hidden">
         <div className="flex flex-col">
           {/* Hotel Image - Extended and Clickable */}
           <div
@@ -944,11 +944,11 @@ export function HotelCard({
         </div>
       </div>
 
-      {/* Desktop/Tablet Layout */}
-      <div className="hidden md:flex flex-col md:flex-row">
+      {/* Desktop/Tablet Layout (lg+) - Horizontal/Grid */}
+      <div className="hidden lg:flex flex-col lg:flex-row">
         {/* Image Gallery - Extended height and clickable */}
         <div
-          className="relative md:w-48 lg:w-56 h-48 md:h-52 lg:h-56 flex-shrink-0 cursor-pointer"
+          className="relative lg:w-56 h-48 lg:h-56 flex-shrink-0 cursor-pointer"
           onClick={handleImageClick}
         >
           <img
@@ -961,7 +961,7 @@ export function HotelCard({
           <Button
             variant="ghost"
             size="sm"
-            className={`absolute top-2 md:top-4 right-2 md:right-4 w-7 h-7 md:w-8 md:h-8 p-0 touch-manipulation ${
+            className={`absolute top-4 right-4 w-8 h-8 p-0 touch-manipulation ${
               isLiked
                 ? "bg-red-500 text-white hover:bg-red-600"
                 : "bg-white/80 hover:bg-white text-gray-700"
@@ -969,13 +969,13 @@ export function HotelCard({
             onClick={() => setIsLiked(!isLiked)}
           >
             <Heart
-              className={`w-3 h-3 md:w-4 md:h-4 ${isLiked ? "fill-current" : ""}`}
+              className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`}
             />
           </Button>
         </div>
 
         {/* Hotel Details */}
-        <CardContent className="flex-1 p-3 flex flex-col">
+        <CardContent className="flex-1 p-4 flex flex-col">
           {/* Header Section - Compact */}
           <div className="mb-2">
             <h3 className="text-base font-bold text-gray-900 mb-1 line-clamp-1">
