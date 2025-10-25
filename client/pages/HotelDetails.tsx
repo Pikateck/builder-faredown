@@ -177,7 +177,8 @@ export default function HotelDetails() {
   const [bargainedRooms, setBargainedRooms] = useState<Set<string>>(new Set());
 
   // Get authenticated user's first name
-  const { user } = useAuth();
+  const authContext = useAuth() || {};
+  const { user } = authContext;
   const storedUser = authService.getStoredUser();
   const userFirstName =
     user?.name && user.name.trim()
@@ -351,7 +352,7 @@ export default function HotelDetails() {
             return hotel;
           }
         } catch (error) {
-          console.warn(`⚠️ Attempt ${retryCount + 1} failed:`, error);
+          console.warn(`⚠��� Attempt ${retryCount + 1} failed:`, error);
 
           // Retry up to 1 time with a short delay for any errors
           const isRetryableError =
