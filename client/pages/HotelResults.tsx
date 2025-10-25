@@ -1879,6 +1879,8 @@ export default function HotelResults() {
         `}
       </style>
 
+      {/* Desktop Results Layout */}
+      <div className="hidden md:block">
       <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6">
         <div className="flex gap-6">
           {/* Desktop Filters */}
@@ -2249,6 +2251,7 @@ export default function HotelResults() {
             )}
           </div>
         </div>
+      </div>
       </div>
 
       {/* Hotel Conversational Bargain Modal */}
