@@ -527,7 +527,22 @@ export default function HotelResults() {
         return [];
       }
 
-      const metadataData = await metadataResponse.json();
+      let metadataData;
+      try {
+        const contentType = metadataResponse.headers.get("content-type");
+        if (!contentType?.includes("application/json")) {
+          throw new Error(
+            `Invalid response type: ${contentType}. Expected JSON but got ${contentType || "unknown"}`
+          );
+        }
+        metadataData = await metadataResponse.json();
+      } catch (jsonError) {
+        console.error("❌ Failed to parse metadata response as JSON:", jsonError);
+        setError(
+          "Invalid response from hotel service. Please try again."
+        );
+        return [];
+      }
 
       // Check if TBO returned an error status
       if (metadataData.tboStatus?.Code && metadataData.tboStatus.Code !== 1) {
@@ -2167,7 +2182,7 @@ export default function HotelResults() {
                     connection.
                   </p>
                   <Button onClick={loadHotels} className="mt-4">
-                    ���� Retry Search
+                    ����� Retry Search
                   </Button>
                 </div>
               ) : (
