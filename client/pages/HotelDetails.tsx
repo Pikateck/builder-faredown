@@ -2241,6 +2241,9 @@ export default function HotelDetails() {
                                   src={room.image}
                                   alt={room.name}
                                   className="w-full h-40 lg:h-32 object-cover rounded-lg"
+                                  onError={(e) => {
+                                    e.currentTarget.src = "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&fit=crop";
+                                  }}
                                 />
                               </div>
 
