@@ -300,20 +300,31 @@ export default function HotelDetails() {
           if (supplier === "tbo" || supplier === "TBO") {
             console.log("🏨 Fetching TBO hotel details:", hotelId);
 
-            // Fetch from TBO endpoint
+            // Fetch from TBO endpoint with absolute URL
             const searchId =
               new URLSearchParams(window.location.search).get("searchId") || "";
-            const tboUrl = `/api/tbo-hotels/hotel/${hotelId}${searchId ? `?searchId=${searchId}` : ""}`;
+            const apiBaseUrl =
+              import.meta.env.VITE_API_BASE_URL ||
+              "https://builder-faredown-pricing.onrender.com/api";
+            const tboUrl = `${apiBaseUrl}/tbo-hotels/hotel/${hotelId}${searchId ? `?searchId=${searchId}` : ""}`;
 
             const response = await fetchWithTimeout(tboUrl);
 
             if (response.ok) {
+              const contentType = response.headers.get("content-type");
+              if (!contentType?.includes("application/json")) {
+                throw new Error(
+                  `Invalid response type: ${contentType}. Expected JSON but got HTML/other content.`
+                );
+              }
               const data = await response.json();
               console.log("✅ TBO Hotel data received:", data);
               if (data.success && data.data) {
                 return data.data; // Return TBO UnifiedHotel format
               }
             } else {
+              const errorText = await response.text();
+              console.error(`TBO API returned ${response.status}:`, errorText);
               throw new Error(`TBO API returned ${response.status}`);
             }
           } else {
