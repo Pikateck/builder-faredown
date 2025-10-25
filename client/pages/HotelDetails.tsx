@@ -1365,6 +1365,9 @@ export default function HotelDetails() {
               alt={hotel.name}
               className="w-full h-full object-cover"
               loading="lazy"
+              onError={(e) => {
+                e.currentTarget.src = "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop";
+              }}
             />
 
             {/* Rating and Live Data Indicator */}
