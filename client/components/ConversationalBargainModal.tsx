@@ -845,8 +845,9 @@ export function ConversationalBargainModal({
           flex flex-col h-screen sm:h-auto
         `}
         style={{
-          maxHeight: isMobileDevice() ? "100vh" : "90vh",
-          height: isMobileDevice() ? "100vh" : "auto",
+          maxHeight: isMobileDevice() ? "100dvh" : "90vh",
+          minHeight: isMobileDevice() ? "85vh" : "auto",
+          height: isMobileDevice() ? "100dvh" : "auto",
           borderRadius: isMobileDevice() ? "0" : "1rem",
           paddingBottom: isMobileDevice() ? "env(safe-area-inset-bottom)" : "0",
         }}
