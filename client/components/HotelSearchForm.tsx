@@ -67,7 +67,9 @@ export function HotelSearchForm({
 
   // Hydrate from props or start blank
   const [destination, setDestination] = useState(initialDestination || "");
-  const [destinationCode, setDestinationCode] = useState(initialDestinationCode || "");
+  const [destinationCode, setDestinationCode] = useState(
+    initialDestinationCode || "",
+  );
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
   const [inputValue, setInputValue] = useState(initialDestination || "");
   const [isUserTyping, setIsUserTyping] = useState(false);

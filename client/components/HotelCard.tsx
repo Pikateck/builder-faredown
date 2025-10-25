@@ -716,10 +716,14 @@ export function HotelCard({
               {(hotel.freeCancellation || hotel.payAtProperty) && (
                 <div className="flex gap-2 mb-3 flex-wrap">
                   {hotel.freeCancellation && (
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Free cancellation</span>
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                      Free cancellation
+                    </span>
                   )}
                   {hotel.payAtProperty && (
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Pay at property</span>
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                      Pay at property
+                    </span>
                   )}
                 </div>
               )}
@@ -898,10 +902,14 @@ export function HotelCard({
             {(hotel.freeCancellation || hotel.payAtProperty) && (
               <div className="flex gap-2 mb-3 flex-wrap">
                 {hotel.freeCancellation && (
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Free cancellation</span>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                    Free cancellation
+                  </span>
                 )}
                 {hotel.payAtProperty && (
-                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Pay at property</span>
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                    Pay at property
+                  </span>
                 )}
               </div>
             )}
@@ -1046,10 +1054,14 @@ export function HotelCard({
           {(hotel.freeCancellation || hotel.payAtProperty) && (
             <div className="flex gap-2 mb-2 flex-wrap">
               {hotel.freeCancellation && (
-                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Free cancellation</span>
+                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                  Free cancellation
+                </span>
               )}
               {hotel.payAtProperty && (
-                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Pay at property</span>
+                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                  Pay at property
+                </span>
               )}
             </div>
           )}
