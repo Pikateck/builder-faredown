@@ -65,29 +65,42 @@ export function HotelSearchForm({
   const [errorMessage, setErrorMessage] = useState("");
   const [showError, setShowError] = useState(false);
 
-  // Start blank by default - no pre-filled values
-  const [destination, setDestination] = useState("");
-  const [destinationCode, setDestinationCode] = useState("");
+  // Hydrate from props or start blank
+  const [destination, setDestination] = useState(initialDestination || "");
+  const [destinationCode, setDestinationCode] = useState(initialDestinationCode || "");
   const [isDestinationOpen, setIsDestinationOpen] = useState(false);
-  const [inputValue, setInputValue] = useState("");
+  const [inputValue, setInputValue] = useState(initialDestination || "");
   const [isUserTyping, setIsUserTyping] = useState(false);
   const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
   const [selectedResult, setSelectedResult] = useState<SearchResult | null>(
     null,
   );
 
-  // Start with no dates selected - user must choose
-  const [checkInDate, setCheckInDate] = useState<Date | undefined>(undefined);
-  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(undefined);
+  // Hydrate dates from props or start blank
+  const [checkInDate, setCheckInDate] = useState<Date | undefined>(
+    initialCheckIn ? new Date(initialCheckIn) : undefined,
+  );
+  const [checkOutDate, setCheckOutDate] = useState<Date | undefined>(
+    initialCheckOut ? new Date(initialCheckOut) : undefined,
+  );
   const [isCalendarOpen, setIsCalendarOpen] = useState(false);
 
-  // Start with default guest configuration
-  const [guests, setGuests] = useState<GuestConfig>({
-    adults: 2,
-    children: 0,
-    childrenAges: [],
-    rooms: 1,
-  });
+  // Hydrate guests from props or use defaults
+  const [guests, setGuests] = useState<GuestConfig>(
+    initialGuests
+      ? {
+          adults: initialGuests.adults,
+          children: initialGuests.children,
+          childrenAges: Array(initialGuests.children).fill(null),
+          rooms: initialGuests.rooms,
+        }
+      : {
+          adults: 2,
+          children: 0,
+          childrenAges: [],
+          rooms: 1,
+        },
+  );
   const [isGuestPopoverOpen, setIsGuestPopoverOpen] = useState(false);
 
   // Mobile detection
