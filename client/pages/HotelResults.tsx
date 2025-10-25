@@ -1828,13 +1828,8 @@ export default function HotelResults() {
               </span>
               <span className="mx-2">›</span>
               <span className="text-gray-900 font-medium">
-                {isLiveData ? "Live Results" : "Search Results"}
+                Search Results
               </span>
-              {isLiveData && (
-                <span className="ml-2 text-red-600 text-xs font-medium">
-                  🔴 LIVE
-                </span>
-              )}
             </div>
           </div>
         </div>
@@ -1938,12 +1933,6 @@ export default function HotelResults() {
                         "Dubai"}
                       : {filteredAndSortedHotels.length} properties found
                     </h1>
-                    {isLiveData && (
-                      <div className="flex items-center gap-1 bg-red-100 text-red-800 px-2 py-1 rounded-full text-xs font-medium">
-                        <div className="w-2 h-2 bg-red-500 rounded-full animate-pulse"></div>
-                        🔴 LIVE {getActiveSuppliers()}
-                      </div>
-                    )}
                     {!isLiveData && filteredAndSortedHotels.length > 0 && (
                       <div className="flex items-center gap-1 bg-orange-100 text-orange-800 px-2 py-1 rounded-full text-xs font-medium">
                         <div className="w-2 h-2 bg-orange-500 rounded-full"></div>
@@ -1952,9 +1941,7 @@ export default function HotelResults() {
                     )}
                   </div>
                   <p className="text-gray-600 mt-1 text-sm sm:text-base">
-                    {isLiveData
-                      ? getSupplierDescription()
-                      : "Enhanced mock data with realistic hotel information"}
+                    {filteredAndSortedHotels.length} hotels available for your dates
                   </p>
                   {Object.values(selectedFilters).some(
                     (arr) => arr.length > 0,
