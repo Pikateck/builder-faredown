@@ -1356,7 +1356,7 @@ export default function HotelDetails() {
         </div>
 
         {/* Mobile Content */}
-        <div className="pb-24">
+        <div className="pb-40">
           {/* Simple Hero Image */}
           <div className="relative w-full h-64 overflow-hidden bg-white">
             <img
