@@ -203,6 +203,22 @@ export function HotelCard({
     return "Location not specified";
   };
 
+  const getFullAddress = (): string => {
+    const parts = [];
+    if (hotel.address?.street) parts.push(hotel.address.street);
+    if (hotel.address?.city) parts.push(hotel.address.city);
+    if (hotel.address?.country) parts.push(hotel.address.country);
+    if (parts.length > 0) return parts.join(", ");
+    return hotelLocation;
+  };
+
+  const isRefundable = (): boolean => {
+    if (hotel.availableRoom?.cancellationPolicy?.toLowerCase().includes("free")) {
+      return true;
+    }
+    return false;
+  };
+
   const getHotelPrice = (): number => {
     // Prefer the cheapest available room type if present
     if (hotel.roomTypes && hotel.roomTypes.length > 0) {
