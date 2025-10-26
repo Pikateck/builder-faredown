@@ -1,6 +1,9 @@
 import axios from "axios";
 
-const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || process.env.VITE_API_BASE_URL || "https://builder-faredown-pricing.onrender.com/api";
+const API_BASE_URL =
+  process.env.REACT_APP_API_BASE_URL ||
+  process.env.VITE_API_BASE_URL ||
+  "https://builder-faredown-pricing.onrender.com/api";
 
 const api = axios.create({
   baseURL: `${API_BASE_URL}/rewards`,
@@ -13,7 +16,11 @@ export const rewardsService = {
   /**
    * Calculate earnings for a booking
    */
-  calculateEarnings: async (finalPrice: number, tier: string = "Silver", module: string = "hotels") => {
+  calculateEarnings: async (
+    finalPrice: number,
+    tier: string = "Silver",
+    module: string = "hotels",
+  ) => {
     try {
       const response = await api.post("/calculate-earnings", {
         final_price: finalPrice,
@@ -36,7 +43,7 @@ export const rewardsService = {
     finalPrice: number,
     module: string = "hotels",
     tier: string = "Silver",
-    discountAmount: number = 0
+    discountAmount: number = 0,
   ) => {
     try {
       const response = await api.post(
@@ -53,7 +60,7 @@ export const rewardsService = {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
       return response.data;
     } catch (error) {
@@ -86,7 +93,7 @@ export const rewardsService = {
     userId: string,
     bookingId: string,
     pointsToRedeem: number,
-    totalBookingValue: number
+    totalBookingValue: number,
   ) => {
     try {
       const response = await api.post(
@@ -101,7 +108,7 @@ export const rewardsService = {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        }
+        },
       );
       return response.data;
     } catch (error) {

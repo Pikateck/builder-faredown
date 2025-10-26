@@ -246,7 +246,10 @@ export default function HotelBooking() {
       const originalPrice = location.state?.originalPrice || finalPrice;
       const bargainedPrice = location.state?.bargainedPrice || finalPrice;
       const discountAmount = originalPrice - bargainedPrice;
-      const discountPercentage = ((discountAmount / originalPrice) * 100).toFixed(2);
+      const discountPercentage = (
+        (discountAmount / originalPrice) *
+        100
+      ).toFixed(2);
 
       // For now, we'll pass the bargain data to confirmation page
       // In a real scenario, you'd submit this to the backend booking endpoint
@@ -807,44 +810,48 @@ export default function HotelBooking() {
               </div>
 
               {/* Bargain Savings Display */}
-              {location.state?.bargainedPrice && location.state?.originalPrice && (
-                <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
-                  <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
-                    <Award className="w-4 h-4 mr-2" />
-                    Your Bargain Savings
-                  </h4>
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-700">Original Price</span>
-                      <span className="text-gray-600 line-through">
-                        {formatCurrency(location.state.originalPrice)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-700">Your Bargained Price</span>
-                      <span className="font-semibold text-blue-900">
-                        {formatCurrency(location.state.bargainedPrice)}
-                      </span>
-                    </div>
-                    <div className="border-t pt-2 flex justify-between font-semibold text-green-700">
-                      <span>You Saved</span>
-                      <span>
-                        {formatCurrency(
-                          location.state.originalPrice - location.state.bargainedPrice
-                        )}{" "}
-                        (
-                        {(
-                          ((location.state.originalPrice -
-                            location.state.bargainedPrice) /
-                            location.state.originalPrice) *
-                          100
-                        ).toFixed(1)}
-                        %)
-                      </span>
+              {location.state?.bargainedPrice &&
+                location.state?.originalPrice && (
+                  <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                    <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
+                      <Award className="w-4 h-4 mr-2" />
+                      Your Bargain Savings
+                    </h4>
+                    <div className="space-y-2 text-sm">
+                      <div className="flex justify-between">
+                        <span className="text-gray-700">Original Price</span>
+                        <span className="text-gray-600 line-through">
+                          {formatCurrency(location.state.originalPrice)}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-700">
+                          Your Bargained Price
+                        </span>
+                        <span className="font-semibold text-blue-900">
+                          {formatCurrency(location.state.bargainedPrice)}
+                        </span>
+                      </div>
+                      <div className="border-t pt-2 flex justify-between font-semibold text-green-700">
+                        <span>You Saved</span>
+                        <span>
+                          {formatCurrency(
+                            location.state.originalPrice -
+                              location.state.bargainedPrice,
+                          )}{" "}
+                          (
+                          {(
+                            ((location.state.originalPrice -
+                              location.state.bargainedPrice) /
+                              location.state.originalPrice) *
+                            100
+                          ).toFixed(1)}
+                          %)
+                        </span>
+                      </div>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
 
               {/* Rewards Earned Display */}
               {location.state?.rewardsEarned && (
@@ -867,8 +874,11 @@ export default function HotelBooking() {
                       </span>
                     </div>
                     <div className="text-xs text-gray-600 mt-2">
-                      Your tier: <span className="font-semibold">{location.state.rewardsEarned.tier_category}</span> •{" "}
-                      Redeem on your next booking!
+                      Your tier:{" "}
+                      <span className="font-semibold">
+                        {location.state.rewardsEarned.tier_category}
+                      </span>{" "}
+                      • Redeem on your next booking!
                     </div>
                   </div>
                 </div>

@@ -18,7 +18,7 @@ router.post("/calculate-earnings", async (req, res) => {
 
     const result = await db.query(
       `SELECT * FROM calculate_booking_rewards($1, $2, $3)`,
-      [final_price, tier_category, module]
+      [final_price, tier_category, module],
     );
 
     const rewards = result.rows[0] || {};
@@ -81,10 +81,10 @@ router.post("/earn-from-booking", async (req, res) => {
           original_final_price: final_price,
           discount_amount,
           discount_percentage: ((discount_amount / final_price) * 100).toFixed(
-            2
+            2,
           ),
         }),
-      ]
+      ],
     );
 
     const reward = rewardResult.rows[0];
@@ -94,11 +94,16 @@ router.post("/earn-from-booking", async (req, res) => {
       `SELECT COALESCE(SUM(points_earned) - COALESCE(SUM(points_redeemed), 0), 0) as total_points
        FROM user_rewards
        WHERE user_id = $1 AND status IN ('earned', 'pending')`,
-      [user_id]
+      [user_id],
     );
 
     const totalPoints = tierResult.rows[0]?.total_points || 0;
-    const newTier = totalPoints >= 15001 ? "Platinum" : totalPoints >= 5001 ? "Gold" : "Silver";
+    const newTier =
+      totalPoints >= 15001
+        ? "Platinum"
+        : totalPoints >= 5001
+          ? "Gold"
+          : "Silver";
 
     return res.status(201).json({
       reward_id: reward.id,
@@ -131,14 +136,19 @@ router.get("/user-balance/:user_id", async (req, res) => {
          COALESCE(SUM(points_earned) - SUM(points_redeemed), 0) as available_points
        FROM user_rewards
        WHERE user_id = $1 AND status IN ('earned', 'pending')`,
-      [user_id]
+      [user_id],
     );
 
     const points = pointsResult.rows[0] || {};
     const availablePoints = points.available_points || 0;
 
     // Determine tier
-    const tier = availablePoints >= 15001 ? "Platinum" : availablePoints >= 5001 ? "Gold" : "Silver";
+    const tier =
+      availablePoints >= 15001
+        ? "Platinum"
+        : availablePoints >= 5001
+          ? "Gold"
+          : "Silver";
 
     // Get recent rewards
     const recentResult = await db.query(
@@ -147,7 +157,7 @@ router.get("/user-balance/:user_id", async (req, res) => {
        WHERE user_id = $1
        ORDER BY created_at DESC
        LIMIT 10`,
-      [user_id]
+      [user_id],
     );
 
     // Get expiring soon rewards (within 90 days)
@@ -157,7 +167,7 @@ router.get("/user-balance/:user_id", async (req, res) => {
        WHERE user_id = $1 AND status = 'earned'
        AND expires_at BETWEEN NOW() AND NOW() + INTERVAL '90 days'
        ORDER BY expires_at ASC`,
-      [user_id]
+      [user_id],
     );
 
     return res.status(200).json({
@@ -166,7 +176,10 @@ router.get("/user-balance/:user_id", async (req, res) => {
       total_earned: parseInt(points.total_earned) || 0,
       total_redeemed: parseInt(points.total_redeemed) || 0,
       tier_category: tier,
-      points_to_next_tier: Math.max(0, (tier === "Silver" ? 5001 : 15001) - availablePoints),
+      points_to_next_tier: Math.max(
+        0,
+        (tier === "Silver" ? 5001 : 15001) - availablePoints,
+      ),
       conversion_rate: "1 point = ₹1",
       max_redeemable_percentage: 10,
       recent_rewards: recentResult.rows,
@@ -186,12 +199,15 @@ router.get("/user-balance/:user_id", async (req, res) => {
  */
 router.post("/apply-redemption", async (req, res) => {
   try {
-    const { user_id, booking_id, points_to_redeem, total_booking_value } = req.body;
+    const { user_id, booking_id, points_to_redeem, total_booking_value } =
+      req.body;
 
     if (!user_id || !points_to_redeem || !total_booking_value) {
       return res
         .status(400)
-        .json({ error: "user_id, points_to_redeem, total_booking_value required" });
+        .json({
+          error: "user_id, points_to_redeem, total_booking_value required",
+        });
     }
 
     // Check available balance
@@ -199,7 +215,7 @@ router.post("/apply-redemption", async (req, res) => {
       `SELECT COALESCE(SUM(points_earned) - SUM(points_redeemed), 0) as available_points
        FROM user_rewards
        WHERE user_id = $1 AND status = 'earned'`,
-      [user_id]
+      [user_id],
     );
 
     const availablePoints = balanceResult.rows[0]?.available_points || 0;
@@ -239,7 +255,7 @@ router.post("/apply-redemption", async (req, res) => {
           original_total: total_booking_value,
           discount_applied: redeemableAmount,
         }),
-      ]
+      ],
     );
 
     const redemption = redemptionResult.rows[0];
@@ -278,13 +294,22 @@ router.get("/tier-info", (req, res) => {
       min_points: 5001,
       max_points: 15000,
       multiplier: 1.25,
-      benefits: ["25% bonus points", "Extended redemption window", "Monthly points summary"],
+      benefits: [
+        "25% bonus points",
+        "Extended redemption window",
+        "Monthly points summary",
+      ],
     },
     {
       name: "Platinum",
       min_points: 15001,
       multiplier: 1.5,
-      benefits: ["50% bonus points", "Priority customer support", "Exclusive deals", "Lifetime point validity"],
+      benefits: [
+        "50% bonus points",
+        "Priority customer support",
+        "Exclusive deals",
+        "Lifetime point validity",
+      ],
     },
   ];
 

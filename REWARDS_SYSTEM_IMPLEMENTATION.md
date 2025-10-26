@@ -12,6 +12,7 @@ This document describes the complete **Rewards & Bargain Price Display** system 
 ## Industry Standard Formula
 
 ### Earning Rate
+
 - **Base Rate:** 1 point per ₹100 spent (calculated on final bargained price)
 - **Tier Multipliers:**
   - Silver (0-5,000 points): 1x multiplier
@@ -19,12 +20,14 @@ This document describes the complete **Rewards & Bargain Price Display** system 
   - Platinum (15,001+ points): 1.5x multiplier
 
 ### Redemption
+
 - **Conversion Rate:** 1 point = ₹1 value
 - **Max Redemption:** 10% of total booking value
 - **Point Validity:** 3 years from earning date
 - **Tier Progression:** Automatic based on total points balance
 
 ### Example
+
 ```
 Booking Price: ₹10,000
 Tier: Gold (1.25x multiplier)
@@ -40,6 +43,7 @@ Monetary Value: 125 × ₹1 = ₹125
 ### New Tables
 
 #### `user_rewards`
+
 ```sql
 - id (UUID)
 - user_id (UUID, Foreign Key to users)
@@ -56,6 +60,7 @@ Monetary Value: 125 × ₹1 = ₹125
 ```
 
 #### `user_tier_history`
+
 ```sql
 - id (UUID)
 - user_id (UUID)
@@ -67,7 +72,9 @@ Monetary Value: 125 × ₹1 = ₹125
 ```
 
 ### Updated Booking Tables
+
 All booking tables (`hotel_bookings`, `flight_bookings`, `transfers_bookings`) now have:
+
 ```sql
 - original_price (DECIMAL)
 - bargained_price (DECIMAL)
@@ -80,6 +87,7 @@ All booking tables (`hotel_bookings`, `flight_bookings`, `transfers_bookings`) n
 ```
 
 ### Database Functions
+
 - **`get_user_tier(points INT)`** - Returns tier name based on points
 - **`calculate_booking_rewards(final_price, tier_category, module)`** - Calculates points earned using industry formula
 
@@ -88,17 +96,21 @@ All booking tables (`hotel_bookings`, `flight_bookings`, `transfers_bookings`) n
 ## API Endpoints
 
 ### Authentication
+
 All endpoints require Bearer token (except `/api/rewards/tier-info`):
+
 ```
 Authorization: Bearer <JWT_TOKEN>
 ```
 
 ### 1. Calculate Earnings
+
 **POST** `/api/rewards/calculate-earnings`
 
 Calculate rewards for a given price and tier without storing.
 
 **Request:**
+
 ```json
 {
   "final_price": 10000,
@@ -108,6 +120,7 @@ Calculate rewards for a given price and tier without storing.
 ```
 
 **Response:**
+
 ```json
 {
   "points_earned": 125,
@@ -119,11 +132,13 @@ Calculate rewards for a given price and tier without storing.
 ```
 
 ### 2. Earn from Booking
+
 **POST** `/api/rewards/earn-from-booking`
 
 Record reward earning when a booking is confirmed.
 
 **Request:**
+
 ```json
 {
   "user_id": "uuid",
@@ -136,6 +151,7 @@ Record reward earning when a booking is confirmed.
 ```
 
 **Response:**
+
 ```json
 {
   "reward_id": "uuid",
@@ -149,11 +165,13 @@ Record reward earning when a booking is confirmed.
 ```
 
 ### 3. Get User Balance
+
 **GET** `/api/rewards/user-balance/:user_id`
 
 Fetch user's reward balance, tier, and recent transactions.
 
 **Response:**
+
 ```json
 {
   "user_id": "uuid",
@@ -170,11 +188,13 @@ Fetch user's reward balance, tier, and recent transactions.
 ```
 
 ### 4. Apply Redemption
+
 **POST** `/api/rewards/apply-redemption`
 
 Redeem points to reduce booking total price.
 
 **Request:**
+
 ```json
 {
   "user_id": "uuid",
@@ -185,6 +205,7 @@ Redeem points to reduce booking total price.
 ```
 
 **Response:**
+
 ```json
 {
   "redemption_id": "uuid",
@@ -198,11 +219,13 @@ Redeem points to reduce booking total price.
 ```
 
 ### 5. Get Tier Information
+
 **GET** `/api/rewards/tier-info`
 
 Public endpoint - fetch tier information and conversion rates.
 
 **Response:**
+
 ```json
 {
   "tiers": [
@@ -239,12 +262,15 @@ Public endpoint - fetch tier information and conversion rates.
 ## Frontend Integration
 
 ### 1. Bargain Price Display (HotelBooking.tsx)
+
 On the booking summary page, displays:
+
 - **Original Price** (with strikethrough)
 - **Your Bargained Price** (bold)
 - **You Saved** (amount and percentage in green)
 
 Example display:
+
 ```
 Your Bargain Savings
 Original Price:      ₹25,000
@@ -253,13 +279,16 @@ You Saved:           ₹3,000 (12%)
 ```
 
 ### 2. Rewards Earned Display (HotelBooking.tsx)
+
 After booking confirmation, shows:
+
 - **Faredown Points** (e.g., +125)
 - **Monetary Value** (e.g., ₹125)
 - **Current Tier** (e.g., Gold)
 - **CTA:** "Redeem on your next booking!"
 
 Example display:
+
 ```
 Rewards Earned
 Faredown Points: +125
@@ -268,7 +297,9 @@ Your tier: Gold • Redeem on your next booking!
 ```
 
 ### 3. Dashboard Display (Account.tsx)
+
 Existing loyalty dashboard now enhanced with:
+
 - **Available Points Balance** (e.g., "1,250 points")
 - **Current Tier** (e.g., "Gold")
 - **Points to Next Tier** (e.g., "6,500 more points to Platinum")
@@ -277,7 +308,9 @@ Existing loyalty dashboard now enhanced with:
 - **Expiring Soon** (alerts for points expiring within 90 days)
 
 ### 4. Redemption Widget (Checkout - Future Phase)
+
 Before final payment, users can:
+
 - View available points
 - Toggle "Apply Reward Points"
 - See updated total after redemption
@@ -290,12 +323,14 @@ Before final payment, users can:
 ### Step 1: Apply Database Migration
 
 **Option A: Automated (Recommended)**
+
 ```bash
 cd api
 node database/run-rewards-migration.js
 ```
 
 **Option B: Manual**
+
 ```bash
 psql -h <host> -U <user> -d <database> -f database/migrations/20250330_create_rewards_system.sql
 ```
@@ -303,6 +338,7 @@ psql -h <host> -U <user> -d <database> -f database/migrations/20250330_create_re
 ### Step 2: Verify Routes Registration
 
 Check that `api/server.js` includes:
+
 ```javascript
 const rewardsRoutes = require("./routes/rewards.js");
 app.use("/api/rewards", authenticateToken, rewardsRoutes);
@@ -334,11 +370,13 @@ curl https://builder-faredown-pricing.onrender.com/api/rewards/user-balance/<USE
 ### Step 4: Integrate with Booking Flow
 
 Update hotel booking confirmation to call:
+
 ```
 POST /api/bookings/hotels/confirm
 ```
 
 With additional fields:
+
 ```json
 {
   "userId": "user-uuid",
@@ -376,7 +414,7 @@ import { rewardsService } from "@/services/rewardsService";
 const earnings = await rewardsService.calculateEarnings(
   finalPrice,
   userTier,
-  "hotels"
+  "hotels",
 );
 
 // Record earning after booking
@@ -386,7 +424,7 @@ const reward = await rewardsService.earnFromBooking(
   finalPrice,
   "hotels",
   userTier,
-  discountAmount
+  discountAmount,
 );
 
 // Get user balance
@@ -397,7 +435,7 @@ const redemption = await rewardsService.applyRedemption(
   userId,
   bookingId,
   pointsToRedeem,
-  totalBookingValue
+  totalBookingValue,
 );
 ```
 
@@ -406,16 +444,20 @@ const redemption = await rewardsService.applyRedemption(
 ## Revenue Safeguards
 
 ### 1. Redemption Limits
+
 - **Max Redemption:** 10% of booking value
 - **Enforcement:** Server-side validation in `/api/rewards/apply-redemption`
 
 ### 2. Tier-Based Multipliers
+
 - Controlled via tier calculation
 - Encourages customer loyalty (higher tiers = more benefits)
 - Margins protected: even Platinum tier (1.5x) ensures positive ROI
 
 ### 3. Configuration Points
+
 Admins can adjust in future phases:
+
 ```env
 MAX_REDEMPTION_PERCENTAGE=10 # currently 10%
 POINTS_EARN_RATE=100 # currently 1 point per ₹100
@@ -423,6 +465,7 @@ POINTS_VALUE_CONVERSION=1 # currently 1 point = ₹1
 ```
 
 ### 4. Audit Trail
+
 - `user_tier_history` tracks all tier changes
 - `user_rewards.metadata` stores full context (discount %, source)
 - All transactions logged with timestamps
@@ -432,6 +475,7 @@ POINTS_VALUE_CONVERSION=1 # currently 1 point = ₹1
 ## Phase 2 Expansion (Future)
 
 After Hotels validation, expand to:
+
 1. **Flights** - Apply same formula to flight bookings
 2. **Transfers** - Scaled redemption for smaller values
 3. **Sightseeing** - Bonus points for package deals
@@ -442,23 +486,29 @@ After Hotels validation, expand to:
 ## Troubleshooting
 
 ### Points not showing after booking?
+
 1. Check if `earn-from-booking` was called
 2. Verify user_id passed is correct
 3. Check `user_rewards` table for records:
+
 ```sql
 SELECT * FROM user_rewards WHERE user_id = '<uuid>' ORDER BY created_at DESC;
 ```
 
 ### Redemption failing?
+
 1. Verify user has available points:
+
 ```sql
 SELECT COALESCE(SUM(points_earned) - SUM(points_redeemed), 0) as available
 FROM user_rewards WHERE user_id = '<uuid>' AND status = 'earned';
 ```
+
 2. Check if redemption amount exceeds 10% limit
 3. Verify points are not expired (expires_at < NOW())
 
 ### Tier not updating?
+
 Tier is calculated dynamically - no manual update needed. Tier is determined from total points at the time of display.
 
 ---
@@ -466,6 +516,7 @@ Tier is calculated dynamically - no manual update needed. Tier is determined fro
 ## Support & Questions
 
 For issues or feature requests related to rewards:
+
 1. Check the API response error messages
 2. Review logs in `api/routes/rewards.js`
 3. Verify database migration completed successfully

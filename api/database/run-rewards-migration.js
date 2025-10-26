@@ -9,7 +9,10 @@ async function runMigration() {
     console.log("🚀 Running Rewards System Migration...\n");
 
     // Read migration file
-    const migrationPath = path.join(__dirname, "migrations/20250330_create_rewards_system.sql");
+    const migrationPath = path.join(
+      __dirname,
+      "migrations/20250330_create_rewards_system.sql",
+    );
     const migrationSQL = fs.readFileSync(migrationPath, "utf-8");
 
     // Split by semicolons and filter out empty statements
@@ -38,7 +41,9 @@ async function runMigration() {
     console.log("\n" + "=".repeat(60));
     console.log(`✅ Migration Complete!`);
     console.log(`   Successful: ${successCount}`);
-    console.log(`   Errors/Skipped: ${errorCount} (usually due to idempotent operations)`);
+    console.log(
+      `   Errors/Skipped: ${errorCount} (usually due to idempotent operations)`,
+    );
     console.log("=".repeat(60));
 
     // Print summary of tables created
@@ -51,7 +56,9 @@ async function runMigration() {
 
     console.log("\n📝 Functions Created:");
     console.log("   ✓ get_user_tier() - Calculate tier from points");
-    console.log("   ✓ calculate_booking_rewards() - Industry standard calculation");
+    console.log(
+      "   ✓ calculate_booking_rewards() - Industry standard calculation",
+    );
 
     console.log("\n🔧 Indexes Created:");
     console.log("   ✓ Optimized for rewards, tier, and booking queries");

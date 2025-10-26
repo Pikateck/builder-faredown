@@ -132,7 +132,8 @@ router.post("/hotels/confirm", async (req, res) => {
     // Calculate and record rewards if user is authenticated and has a bargained price
     if (userId && confirmationResult?.booking_id) {
       try {
-        const finalPrice = bargainedPrice || originalPrice || confirmationResult.total_amount;
+        const finalPrice =
+          bargainedPrice || originalPrice || confirmationResult.total_amount;
 
         // Call rewards API to earn points
         const rewardsResponse = await fetch(
@@ -151,7 +152,7 @@ router.post("/hotels/confirm", async (req, res) => {
               tier_category: "Silver", // In real scenario, fetch from user profile
               discount_amount: discountAmount || 0,
             }),
-          }
+          },
         );
 
         if (rewardsResponse.ok) {
