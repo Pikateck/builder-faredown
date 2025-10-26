@@ -297,4 +297,4 @@ router.get("/tier-info", (req, res) => {
   });
 });
 
-export default router;
+module.exports = router;
