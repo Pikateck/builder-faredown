@@ -1039,7 +1039,7 @@ export function HotelCard({
               <div className="flex items-center min-w-0 flex-1">
                 <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
                 <span className="text-xs text-gray-600 truncate">
-                  {hotelLocation}
+                  {getFullAddress()}
                 </span>
               </div>
               <div className="flex items-center ml-2 gap-2">
