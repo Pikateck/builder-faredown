@@ -203,11 +203,9 @@ router.post("/apply-redemption", async (req, res) => {
       req.body;
 
     if (!user_id || !points_to_redeem || !total_booking_value) {
-      return res
-        .status(400)
-        .json({
-          error: "user_id, points_to_redeem, total_booking_value required",
-        });
+      return res.status(400).json({
+        error: "user_id, points_to_redeem, total_booking_value required",
+      });
     }
 
     // Check available balance
