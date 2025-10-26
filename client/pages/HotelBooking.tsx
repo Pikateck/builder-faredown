@@ -239,20 +239,39 @@ export default function HotelBooking() {
   };
 
   // Handle booking completion
-  const completeBooking = () => {
-    // In a real app, this would submit to backend
-    navigate("/hotels/confirmation", {
-      state: {
-        selectedHotel,
-        checkIn,
-        checkOut,
-        guests,
-        guestDetails,
-        selectedExtras,
-        finalPrice: calculateTotal(),
-        bookingId: `HB${Date.now()}`,
-      },
-    });
+  const completeBooking = async () => {
+    try {
+      const bookingId = `HB${Date.now()}`;
+      const finalPrice = calculateTotal();
+      const originalPrice = location.state?.originalPrice || finalPrice;
+      const bargainedPrice = location.state?.bargainedPrice || finalPrice;
+      const discountAmount = originalPrice - bargainedPrice;
+      const discountPercentage = ((discountAmount / originalPrice) * 100).toFixed(2);
+
+      // For now, we'll pass the bargain data to confirmation page
+      // In a real scenario, you'd submit this to the backend booking endpoint
+      // which would then call the rewards API
+
+      navigate("/hotels/confirmation", {
+        state: {
+          selectedHotel,
+          checkIn,
+          checkOut,
+          guests,
+          guestDetails,
+          selectedExtras,
+          finalPrice,
+          bookingId,
+          originalPrice,
+          bargainedPrice,
+          discountAmount,
+          discountPercentage,
+        },
+      });
+    } catch (error) {
+      console.error("Error completing booking:", error);
+      alert("Error completing booking. Please try again.");
+    }
   };
 
   const handleSignOut = () => {
