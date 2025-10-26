@@ -74,8 +74,8 @@ CREATE INDEX IF NOT EXISTS idx_transfers_bookings_points_earned ON transfers_boo
 
 -- Create user_tier_history table to track tier progression
 CREATE TABLE IF NOT EXISTS user_tier_history (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  id BIGSERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   previous_tier VARCHAR(50),
   new_tier VARCHAR(50),
   total_points_at_change INT,
