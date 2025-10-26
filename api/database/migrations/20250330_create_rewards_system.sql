@@ -5,8 +5,8 @@
 
 -- Create user_rewards table
 CREATE TABLE IF NOT EXISTS user_rewards (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  id BIGSERIAL PRIMARY KEY,
+  user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
   booking_id UUID,
   module VARCHAR(50) NOT NULL, -- hotels, flights, transfers, sightseeing, packages
   points_earned INT DEFAULT 0,
