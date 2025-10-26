@@ -678,11 +678,14 @@ export default function HotelResults() {
           ? true
           : index % 3 !== 0; // 2 out of 3 are refundable
 
-      const cheapestRoom = (hotel.rooms || []).reduce((best: any, room: any) => {
-        const roomPrice = room.price?.total || room.price || Infinity;
-        const bestPrice = best.price?.total || best.price || Infinity;
-        return roomPrice < bestPrice ? room : best;
-      }, hotel.rooms?.[0] || {});
+      const cheapestRoom = (hotel.rooms || []).reduce(
+        (best: any, room: any) => {
+          const roomPrice = room.price?.total || room.price || Infinity;
+          const bestPrice = best.price?.total || best.price || Infinity;
+          return roomPrice < bestPrice ? room : best;
+        },
+        hotel.rooms?.[0] || {},
+      );
 
       return {
         id: hotel.supplierHotelId || `tbo-${index}`,
