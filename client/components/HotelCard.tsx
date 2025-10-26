@@ -213,7 +213,9 @@ export function HotelCard({
   };
 
   const isRefundable = (): boolean => {
-    if (hotel.availableRoom?.cancellationPolicy?.toLowerCase().includes("free")) {
+    if (
+      hotel.availableRoom?.cancellationPolicy?.toLowerCase().includes("free")
+    ) {
       return true;
     }
     return false;
@@ -788,12 +790,12 @@ export function HotelCard({
                 <span className="text-xs font-bold">
                   {isRefundable() ? (
                     <span className="text-green-600">
-                      ✓ {hotel.availableRoom?.cancellationPolicy || "Free cancellation"}
+                      ✓{" "}
+                      {hotel.availableRoom?.cancellationPolicy ||
+                        "Free cancellation"}
                     </span>
                   ) : (
-                    <span className="text-red-600">
-                      Non-refundable
-                    </span>
+                    <span className="text-red-600">Non-refundable</span>
                   )}
                 </span>
               </div>
@@ -940,12 +942,12 @@ export function HotelCard({
               <span className="text-xs font-bold">
                 {isRefundable() ? (
                   <span className="text-green-600">
-                    ✓ {hotel.availableRoom?.cancellationPolicy || "Free cancellation"}
+                    ✓{" "}
+                    {hotel.availableRoom?.cancellationPolicy ||
+                      "Free cancellation"}
                   </span>
                 ) : (
-                  <span className="text-red-600">
-                    Non-refundable
-                  </span>
+                  <span className="text-red-600">Non-refundable</span>
                 )}
               </span>
             </div>
@@ -1110,12 +1112,12 @@ export function HotelCard({
             <span className="text-xs font-bold">
               {isRefundable() ? (
                 <span className="text-green-600">
-                  ✓ {hotel.availableRoom?.cancellationPolicy || "Free cancellation"}
+                  ✓{" "}
+                  {hotel.availableRoom?.cancellationPolicy ||
+                    "Free cancellation"}
                 </span>
               ) : (
-                <span className="text-red-600">
-                  Non-refundable
-                </span>
+                <span className="text-red-600">Non-refundable</span>
               )}
             </span>
           </div>
