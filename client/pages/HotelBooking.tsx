@@ -787,6 +787,74 @@ export default function HotelBooking() {
                 </div>
               </div>
 
+              {/* Bargain Savings Display */}
+              {location.state?.bargainedPrice && location.state?.originalPrice && (
+                <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
+                  <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
+                    <Award className="w-4 h-4 mr-2" />
+                    Your Bargain Savings
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between">
+                      <span className="text-gray-700">Original Price</span>
+                      <span className="text-gray-600 line-through">
+                        {formatCurrency(location.state.originalPrice)}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-700">Your Bargained Price</span>
+                      <span className="font-semibold text-blue-900">
+                        {formatCurrency(location.state.bargainedPrice)}
+                      </span>
+                    </div>
+                    <div className="border-t pt-2 flex justify-between font-semibold text-green-700">
+                      <span>You Saved</span>
+                      <span>
+                        {formatCurrency(
+                          location.state.originalPrice - location.state.bargainedPrice
+                        )}{" "}
+                        (
+                        {(
+                          ((location.state.originalPrice -
+                            location.state.bargainedPrice) /
+                            location.state.originalPrice) *
+                          100
+                        ).toFixed(1)}
+                        %)
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Rewards Earned Display */}
+              {location.state?.rewardsEarned && (
+                <div className="mt-4 p-4 bg-amber-50 rounded-lg border border-amber-200">
+                  <h4 className="font-semibold text-amber-900 mb-3 flex items-center">
+                    <Star className="w-4 h-4 mr-2 fill-amber-500 text-amber-500" />
+                    Rewards Earned
+                  </h4>
+                  <div className="space-y-2 text-sm">
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-700">Faredown Points</span>
+                      <span className="font-semibold text-amber-900">
+                        +{location.state.rewardsEarned.points_earned}
+                      </span>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-gray-700">Monetary Value</span>
+                      <span className="font-semibold text-green-700">
+                        ₹{location.state.rewardsEarned.monetary_value}
+                      </span>
+                    </div>
+                    <div className="text-xs text-gray-600 mt-2">
+                      Your tier: <span className="font-semibold">{location.state.rewardsEarned.tier_category}</span> •{" "}
+                      Redeem on your next booking!
+                    </div>
+                  </div>
+                </div>
+              )}
+
               {/* Cancellation Policy */}
               <div className="mt-6 p-3 bg-green-50 rounded-lg">
                 <div className="flex items-start space-x-2">
