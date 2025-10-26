@@ -253,15 +253,15 @@ export function ConversationalBargainModal({
     }
   }, []);
 
-  // Focus input when modal opens (for better UX)
+  // Focus input when modal opens or when user wants to continue negotiating (for better UX)
   useEffect(() => {
-    if (isOpen && inputRef.current && !isNegotiating && round < 2) {
+    if (isOpen && inputRef.current && !isNegotiating && !showOfferActions) {
       // Delay focus slightly to allow modal to fully render
       setTimeout(() => {
         inputRef.current?.focus();
       }, 300);
     }
-  }, [isOpen, round]);
+  }, [isOpen, isNegotiating, showOfferActions]);
 
   // Helper Functions
   const addMessage = useCallback(
