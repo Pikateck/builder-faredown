@@ -84,6 +84,7 @@ const adminSuppliersRoutes = require("./routes/admin-suppliers.js");
 const hotelsMultiSupplierRoutes = require("./routes/hotels-multi-supplier.js");
 const locationsRoutes = require("./routes/locations.js");
 const adminTboRoutes = require("./routes/admin-tbo.js");
+const rewardsRoutes = require("./routes/rewards.js");
 
 // Middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth.js");
