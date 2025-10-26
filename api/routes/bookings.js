@@ -95,7 +95,14 @@ router.post("/hotels/pre-book", async (req, res) => {
  */
 router.post("/hotels/confirm", async (req, res) => {
   try {
-    const { tempBookingRef, paymentDetails } = req.body;
+    const {
+      tempBookingRef,
+      paymentDetails,
+      userId,
+      originalPrice,
+      bargainedPrice,
+      discountAmount,
+    } = req.body;
 
     if (!tempBookingRef || !paymentDetails) {
       return res.status(400).json({
@@ -120,9 +127,46 @@ router.post("/hotels/confirm", async (req, res) => {
       paymentDetails,
     );
 
+    let rewardsData = null;
+
+    // Calculate and record rewards if user is authenticated and has a bargained price
+    if (userId && confirmationResult?.booking_id) {
+      try {
+        const finalPrice = bargainedPrice || originalPrice || confirmationResult.total_amount;
+
+        // Call rewards API to earn points
+        const rewardsResponse = await fetch(
+          `${process.env.API_BASE_URL || "http://localhost:3000"}/api/rewards/earn-from-booking`,
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${req.headers.authorization?.split(" ")[1] || ""}`,
+            },
+            body: JSON.stringify({
+              user_id: userId,
+              booking_id: confirmationResult.booking_id,
+              final_price: finalPrice,
+              module: "hotels",
+              tier_category: "Silver", // In real scenario, fetch from user profile
+              discount_amount: discountAmount || 0,
+            }),
+          }
+        );
+
+        if (rewardsResponse.ok) {
+          rewardsData = await rewardsResponse.json();
+        }
+      } catch (error) {
+        console.error("Error recording rewards:", error);
+        // Don't fail the booking if rewards recording fails
+      }
+    }
+
     res.json({
       success: true,
       data: confirmationResult,
+      rewards: rewardsData,
       message: "Booking confirmed successfully",
     });
   } catch (error) {
