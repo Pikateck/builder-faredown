@@ -57,20 +57,28 @@ CREATE INDEX IF NOT EXISTS idx_flight_bookings_original_price ON flight_bookings
 CREATE INDEX IF NOT EXISTS idx_flight_bookings_bargained_price ON flight_bookings(bargained_price);
 CREATE INDEX IF NOT EXISTS idx_flight_bookings_points_earned ON flight_bookings(points_earned);
 
--- Update transfers_bookings table to track bargain and rewards
-ALTER TABLE IF EXISTS transfers_bookings
-  ADD COLUMN IF NOT EXISTS original_price DECIMAL(10,2),
-  ADD COLUMN IF NOT EXISTS bargained_price DECIMAL(10,2),
-  ADD COLUMN IF NOT EXISTS discount_amount DECIMAL(10,2),
-  ADD COLUMN IF NOT EXISTS discount_percentage DECIMAL(5,2),
-  ADD COLUMN IF NOT EXISTS points_earned INT DEFAULT 0,
-  ADD COLUMN IF NOT EXISTS points_redeemed INT DEFAULT 0,
-  ADD COLUMN IF NOT EXISTS bargain_round_id UUID,
-  ADD COLUMN IF NOT EXISTS bargain_accepted_at TIMESTAMP;
+-- Update transfers_bookings table if it exists (optional table for future expansion)
+DO $$
+BEGIN
+  IF EXISTS (
+    SELECT 1 FROM information_schema.tables
+    WHERE table_schema = 'public' AND table_name = 'transfers_bookings'
+  ) THEN
+    ALTER TABLE transfers_bookings
+      ADD COLUMN IF NOT EXISTS original_price DECIMAL(10,2),
+      ADD COLUMN IF NOT EXISTS bargained_price DECIMAL(10,2),
+      ADD COLUMN IF NOT EXISTS discount_amount DECIMAL(10,2),
+      ADD COLUMN IF NOT EXISTS discount_percentage DECIMAL(5,2),
+      ADD COLUMN IF NOT EXISTS points_earned INT DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS points_redeemed INT DEFAULT 0,
+      ADD COLUMN IF NOT EXISTS bargain_round_id UUID,
+      ADD COLUMN IF NOT EXISTS bargain_accepted_at TIMESTAMP;
 
-CREATE INDEX IF NOT EXISTS idx_transfers_bookings_original_price ON transfers_bookings(original_price);
-CREATE INDEX IF NOT EXISTS idx_transfers_bookings_bargained_price ON transfers_bookings(bargained_price);
-CREATE INDEX IF NOT EXISTS idx_transfers_bookings_points_earned ON transfers_bookings(points_earned);
+    CREATE INDEX IF NOT EXISTS idx_transfers_bookings_original_price ON transfers_bookings(original_price);
+    CREATE INDEX IF NOT EXISTS idx_transfers_bookings_bargained_price ON transfers_bookings(bargained_price);
+    CREATE INDEX IF NOT EXISTS idx_transfers_bookings_points_earned ON transfers_bookings(points_earned);
+  END IF;
+END $$;
 
 -- Create user_tier_history table to track tier progression
 CREATE TABLE IF NOT EXISTS user_tier_history (
