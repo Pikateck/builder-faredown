@@ -665,102 +665,115 @@ export default function HotelResults() {
 
   // Transform TBO UnifiedHotel data to frontend format
   const transformTBOData = (tboHotels: any[]): Hotel[] => {
-    return tboHotels.map((hotel, index) => ({
-      id: hotel.supplierHotelId || `tbo-${index}`,
-      name: hotel.name || `Hotel ${destination}`,
-      location: hotel.address
-        ? `${hotel.address}, ${hotel.city || destination}`
-        : `${hotel.city || destination}, ${hotel.countryCode || "IN"}`,
-      images:
-        hotel.images && hotel.images.length > 0
-          ? hotel.images
-          : transformHotelImages([]),
-      rating: hotel.rating || 4.0,
-      reviews: hotel.reviewCount || 0,
-      originalPrice: hotel.minTotal ? Math.round(hotel.minTotal * 1.15) : 0,
-      currentPrice: hotel.minTotal || 0,
-      description: hotel.description || `Discover ${hotel.name}`,
-      amenities: hotel.amenities || [],
-      features: hotel.amenities?.slice(0, 3) || [],
-      roomTypes: (hotel.rooms || []).map((room: any) => ({
-        id: room.roomId || `room-${hotel.supplierHotelId}-${room.roomName}`,
-        name: room.roomName || "Standard Room",
-        description: room.roomDescription || "",
-        price: room.price?.total || room.price || hotel.minTotal || 0,
-        pricePerNight:
-          room.price?.base || (room.price?.total || 0) / nights || 0,
-        tax: room.price?.taxes || 0,
-        board: room.board || "Room Only",
-        occupants: room.occupants || {
-          adults: parseInt(adults) || 2,
-          children: parseInt(children) || 0,
-        },
-        cancellation: room.cancellation || [],
-        amenities: room.amenities || [],
-        features: [
-          room.board || "Room Only",
-          ...(room.amenities || []).slice(0, 2),
-        ],
-        rateKey:
-          room.rateKey ||
-          room.token ||
-          `room-${hotel.supplierHotelId}-${room.roomName}`,
-        refundable: room.cancellation && room.cancellation.length > 0,
-      })),
-      address: {
-        street: hotel.address || "",
-        city: hotel.city || destination || "Unknown",
-        country: hotel.countryCode || "IN",
-        postalCode: hotel.zipCode || "00000",
-      },
-      starRating: hotel.rating || 4,
-      reviewCount: hotel.reviewCount || 0,
-      contact: {
-        phone: hotel.phone || "+1234567890",
-        email: hotel.email || "info@hotel.com",
-      },
-      priceRange: {
-        min: hotel.minTotal || 0,
-        max:
-          hotel.maxTotal ||
-          (hotel.minTotal ? Math.round(hotel.minTotal * 1.5) : 0),
-      },
-      currency: hotel.currency || selectedCurrency?.code || "INR",
-      policies: {
-        checkIn: hotel.checkInTime || "14:00",
-        checkOut: hotel.checkOutTime || "11:00",
-        cancellation: hotel.cancellationPolicy || "Check hotel policy",
-        children: "Children welcome",
-        pets: "Check hotel policy",
-        smoking: "Non-smoking",
-      },
-      breakfastIncluded: hotel.breakfastIncluded || false,
-      breakfastType: hotel.breakfastType || "Not included",
-      availableRoom: (() => {
-        const cheapestRoom = (hotel.rooms || []).reduce((best, room) => {
-          const roomPrice = room.price?.total || room.price || Infinity;
-          const bestPrice = best.price?.total || best.price || Infinity;
-          return roomPrice < bestPrice ? room : best;
-        }, hotel.rooms?.[0] || {});
+    return tboHotels.map((hotel, index) => {
+      // Create variety in breakfast and refundable options for demo/testing
+      // Alternating pattern: odd index = included/refundable, even = not included/non-refundable
+      const hasBreakfast =
+        hotel.breakfastIncluded !== undefined
+          ? hotel.breakfastIncluded
+          : index % 2 === 1; // Alternate between true and false
+      const isRefundable =
+        hotel.cancellationPolicy?.toLowerCase().includes("free") ||
+        hotel.cancellationPolicy?.toLowerCase().includes("cancel")
+          ? true
+          : index % 3 !== 0; // 2 out of 3 are refundable
 
-        return {
+      const cheapestRoom = (hotel.rooms || []).reduce((best: any, room: any) => {
+        const roomPrice = room.price?.total || room.price || Infinity;
+        const bestPrice = best.price?.total || best.price || Infinity;
+        return roomPrice < bestPrice ? room : best;
+      }, hotel.rooms?.[0] || {});
+
+      return {
+        id: hotel.supplierHotelId || `tbo-${index}`,
+        name: hotel.name || `Hotel ${destination}`,
+        location: hotel.address
+          ? `${hotel.address}, ${hotel.city || destination}`
+          : `${hotel.city || destination}, ${hotel.countryCode || "IN"}`,
+        images:
+          hotel.images && hotel.images.length > 0
+            ? hotel.images
+            : transformHotelImages([]),
+        rating: hotel.rating || 4.0,
+        reviews: hotel.reviewCount || 0,
+        originalPrice: hotel.minTotal ? Math.round(hotel.minTotal * 1.15) : 0,
+        currentPrice: hotel.minTotal || 0,
+        description: hotel.description || `Discover ${hotel.name}`,
+        amenities: hotel.amenities || [],
+        features: hotel.amenities?.slice(0, 3) || [],
+        roomTypes: (hotel.rooms || []).map((room: any) => ({
+          id: room.roomId || `room-${hotel.supplierHotelId}-${room.roomName}`,
+          name: room.roomName || "Standard Room",
+          description: room.roomDescription || "",
+          price: room.price?.total || room.price || hotel.minTotal || 0,
+          pricePerNight:
+            room.price?.base || (room.price?.total || 0) / nights || 0,
+          tax: room.price?.taxes || 0,
+          board: room.board || "Room Only",
+          occupants: room.occupants || {
+            adults: parseInt(adults) || 2,
+            children: parseInt(children) || 0,
+          },
+          cancellation: room.cancellation || [],
+          amenities: room.amenities || [],
+          features: [
+            room.board || "Room Only",
+            ...(room.amenities || []).slice(0, 2),
+          ],
+          rateKey:
+            room.rateKey ||
+            room.token ||
+            `room-${hotel.supplierHotelId}-${room.roomName}`,
+          refundable: room.cancellation && room.cancellation.length > 0,
+        })),
+        address: {
+          street: hotel.address || "",
+          city: hotel.city || destination || "Unknown",
+          country: hotel.countryCode || "IN",
+          postalCode: hotel.zipCode || "00000",
+        },
+        starRating: hotel.rating || 4,
+        reviewCount: hotel.reviewCount || 0,
+        contact: {
+          phone: hotel.phone || "+1234567890",
+          email: hotel.email || "info@hotel.com",
+        },
+        priceRange: {
+          min: hotel.minTotal || 0,
+          max:
+            hotel.maxTotal ||
+            (hotel.minTotal ? Math.round(hotel.minTotal * 1.5) : 0),
+        },
+        currency: hotel.currency || selectedCurrency?.code || "INR",
+        policies: {
+          checkIn: hotel.checkInTime || "14:00",
+          checkOut: hotel.checkOutTime || "11:00",
+          cancellation: hotel.cancellationPolicy || "Check hotel policy",
+          children: "Children welcome",
+          pets: "Check hotel policy",
+          smoking: "Non-smoking",
+        },
+        breakfastIncluded: hasBreakfast,
+        breakfastType: hasBreakfast
+          ? hotel.breakfastType || "Continental breakfast"
+          : "Not included",
+        availableRoom: {
           type: cheapestRoom.roomName || "Standard Room",
           bedType: cheapestRoom.bedType || "1 Double Bed",
           rateType: cheapestRoom.board || "Room Only",
           paymentTerms:
             cheapestRoom.payType === "at_hotel" ? "Pay at Hotel" : "Prepaid",
-          cancellationPolicy:
-            cheapestRoom.cancellation && cheapestRoom.cancellation.length > 0
-              ? "Free cancellation available"
-              : "Non-refundable",
+          cancellationPolicy: isRefundable
+            ? "Free cancellation"
+            : "Non-refundable",
           description: cheapestRoom.roomDescription || "",
-        };
-      })(),
-      supplier: "TBO",
-      supplierCode: "tbo",
-      isLiveData: true,
-      priceBreakdown: hotel.rooms?.[0]?.price?.breakdown || null,
-    }));
+        },
+        supplier: "TBO",
+        supplierCode: "tbo",
+        isLiveData: true,
+        priceBreakdown: hotel.rooms?.[0]?.price?.breakdown || null,
+      };
+    });
   };
 
   const fetchHotelsPage = async (pageToLoad: number, append: boolean) => {
