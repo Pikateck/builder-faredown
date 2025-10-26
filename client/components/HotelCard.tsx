@@ -886,7 +886,7 @@ export function HotelCard({
                   <div className="flex items-start text-gray-600">
                     <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
                     <span className="text-sm text-gray-600 line-clamp-2 leading-tight">
-                      {hotelLocation}
+                      {getFullAddress()}
                     </span>
                   </div>
                 </div>
