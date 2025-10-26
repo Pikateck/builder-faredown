@@ -245,13 +245,23 @@ export function ConversationalBargainModal({
     chatEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Mobile optimizations
+  // Mobile optimizations and focus management
   useEffect(() => {
     if (inputRef.current && isMobileDevice()) {
       preventZoomOnInput(inputRef.current);
       addMobileTouchOptimizations(inputRef.current);
     }
   }, []);
+
+  // Focus input when modal opens (for better UX)
+  useEffect(() => {
+    if (isOpen && inputRef.current && !isNegotiating && round < 2) {
+      // Delay focus slightly to allow modal to fully render
+      setTimeout(() => {
+        inputRef.current?.focus();
+      }, 300);
+    }
+  }, [isOpen, round]);
 
   // Helper Functions
   const addMessage = useCallback(
