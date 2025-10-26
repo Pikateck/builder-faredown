@@ -1090,7 +1090,7 @@ export function HotelCard({
           )}
 
           {/* Breakfast Information - Desktop */}
-          <div className="flex items-center gap-1 mb-2">
+          <div className="flex items-center gap-1 mb-1">
             <Utensils className="w-3 h-3 text-gray-500" />
             <span className="text-xs font-bold">
               {hotel.breakfastIncluded ? (
@@ -1100,6 +1100,22 @@ export function HotelCard({
                 </span>
               ) : (
                 <span className="text-gray-600">Breakfast not included</span>
+              )}
+            </span>
+          </div>
+
+          {/* Refundable Information - Desktop */}
+          <div className="flex items-center gap-1 mb-2">
+            <CreditCard className="w-3 h-3 text-gray-500" />
+            <span className="text-xs font-bold">
+              {isRefundable() ? (
+                <span className="text-green-600">
+                  ✓ {hotel.availableRoom?.cancellationPolicy || "Free cancellation"}
+                </span>
+              ) : (
+                <span className="text-red-600">
+                  Non-refundable
+                </span>
               )}
             </span>
           </div>
