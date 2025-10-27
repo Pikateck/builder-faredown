@@ -568,18 +568,7 @@
     }
   }
 
-  /* Aspect ratio utilities */
-  .aspect-video {
-    @apply aspect-video;
-  }
-
-  .aspect-square {
-    @apply aspect-square;
-  }
-
-  .aspect-auto {
-    @apply aspect-auto;
-  }
+  /* Aspect ratio utilities - provided by Tailwind, no need to redefine */
 
   /* Container queries support */
   @supports (container-type: inline-size) {
