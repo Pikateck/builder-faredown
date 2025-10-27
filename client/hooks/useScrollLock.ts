@@ -3,34 +3,48 @@ import { useEffect } from "react";
 let lockY = 0;
 
 /**
- * Lock the page scroll position
- * Stores current scroll position and fixes the document
+ * Lock body scroll by setting overflow: hidden
+ * Compensates for scrollbar width to avoid layout shift
  */
-export function lockPageScroll() {
+export function lockBodyScroll() {
   lockY = window.scrollY || document.documentElement.scrollTop || 0;
-  const doc = document.documentElement;
-  doc.classList.add("scroll-locked");
-  doc.style.top = `-${lockY}px`;
-  doc.style.width = "100%";
-  doc.style.overflow = "hidden";
+  const { body } = document;
+  
+  // Store previous state
+  body.dataset.prevOverflow = body.style.overflow || "";
+  body.dataset.prevPaddingRight = body.style.paddingRight || "";
+  
+  // Calculate scrollbar width
+  const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+  
+  // Lock body
+  body.style.overflow = "hidden";
+  
+  // Avoid layout shift when scrollbar disappears
+  if (scrollBarWidth > 0) {
+    body.style.paddingRight = `${scrollBarWidth}px`;
+  }
 }
 
 /**
- * Unlock the page scroll position
- * Restores the previous scroll position
+ * Unlock body scroll and restore previous state
+ * Restores the exact scroll position
  */
-export function unlockPageScroll() {
-  const doc = document.documentElement;
-  doc.classList.remove("scroll-locked");
-  const y = lockY;
-  lockY = 0;
-  doc.style.top = "";
-  doc.style.width = "";
-  doc.style.overflow = "";
-
+export function unlockBodyScroll() {
+  const { body } = document;
+  const prevOverflow = body.dataset.prevOverflow || "";
+  const prevPaddingRight = body.dataset.prevPaddingRight || "";
+  
+  body.style.overflow = prevOverflow;
+  body.style.paddingRight = prevPaddingRight;
+  
+  delete body.dataset.prevOverflow;
+  delete body.dataset.prevPaddingRight;
+  
   // Use requestAnimationFrame to ensure styles are applied before scrolling
   requestAnimationFrame(() => {
-    window.scrollTo({ top: y, behavior: "instant" });
+    window.scrollTo({ top: lockY, behavior: "instant" });
+    lockY = 0;
   });
 }
 
@@ -41,35 +55,12 @@ export function unlockPageScroll() {
 export function useScrollLock(isOpen: boolean) {
   useEffect(() => {
     if (isOpen) {
-      lockPageScroll();
-
-      // Prevent touchmove on background (for iOS)
-      const preventTouchMove = (e: TouchEvent) => {
-        // Only prevent if target is not inside a scrollable modal
-        const target = e.target as HTMLElement;
-        const filterContent = document.querySelector(
-          "#filters-scroll, .filter-scroll-area",
-        );
-
-        if (filterContent && filterContent.contains(target)) {
-          // Allow scrolling inside filter content
-          return;
-        }
-
-        e.preventDefault();
-      };
-
-      document.addEventListener("touchmove", preventTouchMove, {
-        passive: false,
-      });
-
+      lockBodyScroll();
       return () => {
-        document.removeEventListener("touchmove", preventTouchMove);
-        unlockPageScroll();
+        unlockBodyScroll();
       };
     } else {
-      // Ensure scroll is unlocked if isOpen becomes false
-      unlockPageScroll();
+      unlockBodyScroll();
     }
   }, [isOpen]);
 }
