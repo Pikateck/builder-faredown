@@ -687,11 +687,19 @@ html.viewport-desktop .block.md\:hidden {
   }
 }
 
-/* Scroll lock styles for modal/sheet backgrounds */
-html.scroll-locked {
-  position: fixed !important;
-  width: 100% !important;
-  overflow: hidden !important;
+/* Root container styles - ensure page is always visible */
+html,
+body {
+  height: auto;
+  width: 100%;
+}
+
+#app-root {
+  position: relative;
+  min-height: 100dvh;
+  width: 100%;
+  overflow: visible;
+  overscroll-behavior: none;
 }
 
 /* Scrollable area inside filter sheets */
@@ -701,9 +709,4 @@ html.scroll-locked {
   overscroll-behavior: contain;
   -webkit-overflow-scrolling: touch;
   scrollbar-gutter: stable;
-}
-
-/* Prevent rubber-band effect on background */
-#app-root {
-  overscroll-behavior: none;
 }
