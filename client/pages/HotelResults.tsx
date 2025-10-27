@@ -416,7 +416,7 @@ function HotelResultsContent() {
         // This is the production API endpoint
         const renderApi = "https://builder-faredown-pricing.onrender.com/api";
         console.log(
-          "���️ VITE_API_BASE_URL not configured, using Render directly:",
+          "⚠️ VITE_API_BASE_URL not configured, using Render directly:",
           renderApi,
         );
         return renderApi;
@@ -1318,7 +1318,7 @@ function HotelResultsContent() {
   return (
     <div
       id="app-root"
-      className={`min-h-screen bg-gray-50 ${showFilters ? "pointer-events-none" : ""}`}
+      className="min-h-screen bg-gray-50"
       aria-hidden={showFilters}
     >
       {/* Mobile-First Layout */}
