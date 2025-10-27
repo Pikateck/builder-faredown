@@ -1164,13 +1164,24 @@ export default function HotelDetails() {
     const sectionId = `${tabId}-section-mobile`;
     const element = document.getElementById(sectionId);
     if (element) {
-      const y = element.getBoundingClientRect().top + window.scrollY - STICKY_OFFSET - 8;
+      const y =
+        element.getBoundingClientRect().top +
+        window.scrollY -
+        STICKY_OFFSET -
+        8;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
 
   useEffect(() => {
-    const ids = ["overview", "gallery", "amenities", "reviews", "street-view", "location"];
+    const ids = [
+      "overview",
+      "gallery",
+      "amenities",
+      "reviews",
+      "street-view",
+      "location",
+    ];
     const observerOptions = {
       root: null,
       rootMargin: `-${STICKY_OFFSET + 8}px 0px -60% 0px`,
@@ -1643,7 +1654,10 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "gallery" && (
-              <div id="gallery-section-mobile" className="bg-white rounded-lg p-4">
+              <div
+                id="gallery-section-mobile"
+                className="bg-white rounded-lg p-4"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-gray-900">Photos</h2>
                   {hotel.isLiveData && (
@@ -1740,7 +1754,10 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "amenities" && (
-              <div id="amenities-section-mobile" className="bg-white rounded-lg p-4">
+              <div
+                id="amenities-section-mobile"
+                className="bg-white rounded-lg p-4"
+              >
                 <h2 className="text-lg font-bold text-gray-900 mb-4">
                   Amenities
                 </h2>
@@ -1776,7 +1793,10 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "reviews" && (
-              <div id="reviews-section-mobile" className="bg-white rounded-lg p-4">
+              <div
+                id="reviews-section-mobile"
+                className="bg-white rounded-lg p-4"
+              >
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-gray-900">
                     Guest Reviews
@@ -1880,7 +1900,10 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "location" && (
-              <div id="location-section-mobile" className="bg-white rounded-lg p-4">
+              <div
+                id="location-section-mobile"
+                className="bg-white rounded-lg p-4"
+              >
                 <h2 className="text-lg font-bold text-gray-900 mb-4">
                   Location
                 </h2>
@@ -3253,7 +3276,10 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "street-view" && (
-              <div id="street-view-section-mobile" className="bg-white rounded-lg border border-gray-200 p-4">
+              <div
+                id="street-view-section-mobile"
+                className="bg-white rounded-lg border border-gray-200 p-4"
+              >
                 <h2 className="text-xl font-bold mb-4">Street View</h2>
                 <p className="text-gray-600 mb-4">
                   Explore the area around Grand Hyatt Dubai with Google Street
