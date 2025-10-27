@@ -739,6 +739,20 @@ export function ConversationalBargainModal({
           }
 
           // Pass both the final price and the hold data
+          // Log accepted value telemetry
+          const suggestions = getSuggestions();
+          chatAnalyticsService
+            .trackCustomEvent("accepted_value", {
+              round_index: round - 1,
+              accepted_price: finalOffer,
+              original_price: basePrice,
+              savings: savings,
+              was_suggested: suggestions.includes(finalOffer),
+              module,
+              product_ref: productRef,
+            })
+            .catch(console.warn);
+
           setTimeout(() => {
             setIsBooking(false);
             onAccept(finalOffer, orderRef, {
