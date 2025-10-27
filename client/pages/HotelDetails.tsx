@@ -1558,7 +1558,7 @@ export default function HotelDetails() {
           </div>
 
           {/* Clean Mobile Tabs - Sticky at Top */}
-          <div className="bg-white border-b border-gray-200 sticky top-[56px] z-30 md:hidden">
+        <div id="section-tabs" className="bg-white border-b border-gray-200 md:hidden">
             <div className="flex overflow-x-auto scrollbar-hide px-4 py-0 pr-16">
               {tabs.map((tab) => (
                 <button
