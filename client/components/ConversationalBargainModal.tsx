@@ -885,16 +885,17 @@ export function ConversationalBargainModal({
           height: isMobileDevice() ? "100dvh" : "auto",
           borderRadius: isMobileDevice() ? "0" : "1rem",
           paddingBottom: isMobileDevice() ? "env(safe-area-inset-bottom)" : "0",
+          zIndex: 9999,
         }}
         onOpenAutoFocus={(e) => {
           e.preventDefault();
-          if (inputRef.current && !isNegotiating) {
-            setTimeout(() => {
-              inputRef.current?.focus();
-            }, 100);
-          }
+          setTimeout(() => {
+            inputRef.current?.focus();
+          }, 200);
         }}
       >
+        {/* Accessibility Title */}
+        <DialogTitle className="sr-only">Hotel Price Negotiation</DialogTitle>
         {/* Header */}
         <div className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4 sm:p-6 rounded-t-xl">
           <button
