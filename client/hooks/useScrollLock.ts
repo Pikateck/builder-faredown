@@ -9,17 +9,18 @@ let lockY = 0;
 export function lockBodyScroll() {
   lockY = window.scrollY || document.documentElement.scrollTop || 0;
   const { body } = document;
-  
+
   // Store previous state
   body.dataset.prevOverflow = body.style.overflow || "";
   body.dataset.prevPaddingRight = body.style.paddingRight || "";
-  
+
   // Calculate scrollbar width
-  const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-  
+  const scrollBarWidth =
+    window.innerWidth - document.documentElement.clientWidth;
+
   // Lock body
   body.style.overflow = "hidden";
-  
+
   // Avoid layout shift when scrollbar disappears
   if (scrollBarWidth > 0) {
     body.style.paddingRight = `${scrollBarWidth}px`;
@@ -34,13 +35,13 @@ export function unlockBodyScroll() {
   const { body } = document;
   const prevOverflow = body.dataset.prevOverflow || "";
   const prevPaddingRight = body.dataset.prevPaddingRight || "";
-  
+
   body.style.overflow = prevOverflow;
   body.style.paddingRight = prevPaddingRight;
-  
+
   delete body.dataset.prevOverflow;
   delete body.dataset.prevPaddingRight;
-  
+
   // Use requestAnimationFrame to ensure styles are applied before scrolling
   requestAnimationFrame(() => {
     window.scrollTo({ top: lockY, behavior: "instant" });
