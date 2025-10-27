@@ -1769,10 +1769,10 @@ function HotelResultsContent() {
         {/* Mobile Filter Modal - Using Dialog Portal */}
         <Dialog open={showFilters} onOpenChange={setShowFilters}>
           <DialogPortal>
-            <DialogOverlay className="fixed inset-0 bg-black/40 z-[9998]" />
-            <DialogContent
-              className="fixed inset-x-0 bottom-0 z-[9999] w-full rounded-t-3xl shadow-2xl h-[90vh] flex flex-col p-0 data-[state=open]:slide-in-from-bottom-full"
-              showClose={false}
+            <DialogPrimitive.Overlay className="fixed inset-0 bg-black/40 z-[9998]" />
+            <DialogPrimitive.Content
+              className="fixed inset-x-0 bottom-0 z-[9999] w-full rounded-t-3xl shadow-2xl h-[90vh] flex flex-col p-0"
+              onOpenAutoFocus={(e) => e.preventDefault()}
             >
               <DialogTitle className="sr-only">Filter Hotels</DialogTitle>
 
@@ -1856,7 +1856,7 @@ function HotelResultsContent() {
                   {filteredAndSortedHotels.length !== 1 ? "s" : ""}
                 </Button>
               </div>
-            </DialogContent>
+            </DialogPrimitive.Content>
           </DialogPortal>
         </Dialog>
       </div>
