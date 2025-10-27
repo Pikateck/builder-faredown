@@ -45,6 +45,17 @@ export function useScrollLock(isOpen: boolean) {
 
       // Prevent touchmove on background (for iOS)
       const preventTouchMove = (e: TouchEvent) => {
+        // Only prevent if target is not inside a scrollable modal
+        const target = e.target as HTMLElement;
+        const filterContent = document.querySelector(
+          "#filters-scroll, .filter-scroll-area"
+        );
+
+        if (filterContent && filterContent.contains(target)) {
+          // Allow scrolling inside filter content
+          return;
+        }
+
         e.preventDefault();
       };
 
@@ -56,6 +67,9 @@ export function useScrollLock(isOpen: boolean) {
         document.removeEventListener("touchmove", preventTouchMove);
         unlockPageScroll();
       };
+    } else {
+      // Ensure scroll is unlocked if isOpen becomes false
+      unlockPageScroll();
     }
   }, [isOpen]);
 }
