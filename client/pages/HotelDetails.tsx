@@ -1427,8 +1427,8 @@ export default function HotelDetails() {
         `}
       </style>
 
-      {/* Mobile-First Layout */}
-      <div className="md:hidden min-h-screen bg-gray-50">
+      {/* Mobile-First Layout - Flex Container */}
+      <div className="md:hidden flex flex-col min-h-screen bg-gray-50">
         <div id="mobile-header">
           <MobileNavBar
             title="Hotel Details"
