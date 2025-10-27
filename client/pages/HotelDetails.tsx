@@ -254,12 +254,14 @@ export default function HotelDetails() {
 
   // Format labels for collapsed search summary
   const destination = searchParams.get("destination") || "";
-  const destinationCode = searchParams.get("destinationCode") || destination.split("-")[1] || "";
+  const destinationCode =
+    searchParams.get("destinationCode") || destination.split("-")[1] || "";
   const countryName = searchParams.get("countryName") || "";
 
-  const cityFull = countryName && destinationCode
-    ? `${destination}, ${countryName} – ${destinationCode}`
-    : destination;
+  const cityFull =
+    countryName && destinationCode
+      ? `${destination}, ${countryName} – ${destinationCode}`
+      : destination;
 
   const datesLabel = `${format(checkInDate, "EEE, d MMM")} → ${format(checkOutDate, "EEE, d MMM")}`;
 
@@ -1461,9 +1463,14 @@ export default function HotelDetails() {
 
         {/* Search Expansion Sheet */}
         <Sheet open={isSearchSheetOpen} onOpenChange={setIsSearchSheetOpen}>
-          <SheetContent side="bottom" className="h-auto max-h-[80vh] flex flex-col rounded-t-3xl">
+          <SheetContent
+            side="bottom"
+            className="h-auto max-h-[80vh] flex flex-col rounded-t-3xl"
+          >
             <div className="py-4 px-4 flex-1 overflow-y-auto">
-              <h2 className="text-lg font-semibold mb-4 text-gray-900">Edit search</h2>
+              <h2 className="text-lg font-semibold mb-4 text-gray-900">
+                Edit search
+              </h2>
               <HotelSearchForm
                 initialDestination={searchParams.get("destination") || ""}
                 initialCheckIn={searchParams.get("checkIn") || ""}
