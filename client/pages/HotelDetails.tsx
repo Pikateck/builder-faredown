@@ -1407,20 +1407,22 @@ export default function HotelDetails() {
 
       {/* Mobile-First Layout */}
       <div className="md:hidden min-h-screen bg-gray-50">
-        <MobileNavBar
-          title="Hotel Details"
-          rating={hotel.rating}
-          reviewCount={hotel.reviews}
-          showBookmark={true}
-          showShare={true}
-          isBookmarked={isSaved}
-          onBookmarkToggle={() => setIsSaved(!isSaved)}
-          onShareClick={() => setIsShareModalOpen(true)}
-          onBack={() => {
-            console.log("Back button clicked - navigating to hotels");
-            navigate("/hotels");
-          }}
-        />
+        <div id="mobile-header">
+          <MobileNavBar
+            title="Hotel Details"
+            rating={hotel.rating}
+            reviewCount={hotel.reviews}
+            showBookmark={true}
+            showShare={true}
+            isBookmarked={isSaved}
+            onBookmarkToggle={() => setIsSaved(!isSaved)}
+            onShareClick={() => setIsShareModalOpen(true)}
+            onBack={() => {
+              console.log("Back button clicked - navigating to hotels");
+              navigate("/hotels");
+            }}
+          />
+        </div>
 
         {/* Mobile Search Bar */}
         <div className="bg-white border-b border-gray-200 px-4 py-3">
