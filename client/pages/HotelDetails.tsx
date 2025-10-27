@@ -3636,19 +3636,20 @@ export default function HotelDetails() {
               </div>
             </div>
 
-            <div className="flex gap-3">
-              <Button
-                onClick={() => {
-                  handleBooking(selectedRoomType);
-                  if (navigator.vibrate) {
-                    navigator.vibrate(100);
-                  }
-                }}
-                className="flex-1 bg-blue-600 text-white font-semibold py-3"
-              >
-                Reserve
-              </Button>
-              <BargainButton
+            {!isBargainModalOpen && (
+              <div className="flex gap-3">
+                <Button
+                  onClick={() => {
+                    handleBooking(selectedRoomType);
+                    if (navigator.vibrate) {
+                      navigator.vibrate(100);
+                    }
+                  }}
+                  className="flex-1 bg-blue-600 text-white font-semibold py-3"
+                >
+                  Reserve
+                </Button>
+                <BargainButton
                 useBargainModal={true}
                 module="hotels"
                 itemName={`${hotel.name} - ${selectedRoomType?.name}`}
@@ -3703,7 +3704,8 @@ export default function HotelDetails() {
               >
                 Bargain Now
               </BargainButton>
-            </div>
+              </div>
+            )}
           </div>
         ) : (
           /* No Room Selected - Simple Prompt */
