@@ -28,11 +28,10 @@ import {
 } from "@/components/ui/sheet";
 import {
   Dialog,
-  DialogContent,
-  DialogOverlay,
   DialogPortal,
   DialogTitle,
 } from "@/components/ui/dialog";
+import * as DialogPrimitive from "@radix-ui/react-dialog";
 import {
   MapPin,
   CalendarIcon,
