@@ -1157,7 +1157,8 @@ export default function HotelDetails() {
       ? Math.min(...roomTypes.map((room) => room.pricePerNight))
       : 167; // fallback price
 
-  const STICKY_OFFSET = 60; // Match sticky top-[60px] height
+  // Offset accounts for: Header (56px) + Search (88px) + Tabs (48px) = 192px
+  const SCROLL_OFFSET = 192;
 
   const scrollToTab = (tabId: string) => {
     setActiveTab(tabId);
