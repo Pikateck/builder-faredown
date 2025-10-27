@@ -114,7 +114,12 @@ export function ConversationalBargainModal({
 
   // Constants
   const TOTAL_ROUNDS = 3;
-  type RoundState = "idle" | "submittingBid" | "timerRunning" | "receivedCounter" | "completed";
+  type RoundState =
+    | "idle"
+    | "submittingBid"
+    | "timerRunning"
+    | "receivedCounter"
+    | "completed";
 
   // State Management
   const [currentPrice, setCurrentPrice] = useState<string>("");
@@ -1059,8 +1064,7 @@ export function ConversationalBargainModal({
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
                 <span className="hidden sm:inline">Book Now at</span>
-                <span className="sm:hidden">Book</span>
-                {" "}
+                <span className="sm:hidden">Book</span>{" "}
                 {formatPrice(finalOffer)}
               </Button>
 
@@ -1072,9 +1076,7 @@ export function ConversationalBargainModal({
                   aria-label="Try another negotiation round"
                 >
                   <span className="hidden sm:inline">
-                    {round === 1
-                      ? "Try Round 2"
-                      : "Try Final Round 3"}
+                    {round === 1 ? "Try Round 2" : "Try Final Round 3"}
                   </span>
                   <span className="sm:hidden">Try Round {round + 1}</span>
                 </Button>
@@ -1254,7 +1256,8 @@ export function ConversationalBargainModal({
             aria-label="Negotiation complete"
           >
             <div className="text-gray-600 mb-3">
-              Maximum negotiation rounds reached. Please select an offer to continue.
+              Maximum negotiation rounds reached. Please select an offer to
+              continue.
             </div>
             <div className="flex flex-col sm:flex-row gap-2">
               {finalOffer && (
@@ -1268,7 +1271,9 @@ export function ConversationalBargainModal({
                 </Button>
               )}
               <Button
-                onClick={() => onAccept(basePrice, `ORD_ORIGINAL_${Date.now()}`)}
+                onClick={() =>
+                  onAccept(basePrice, `ORD_ORIGINAL_${Date.now()}`)
+                }
                 variant="outline"
                 className="flex-1 sm:flex-none mobile-touch-target"
                 aria-label="Book original price"
