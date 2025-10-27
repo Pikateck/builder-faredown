@@ -778,6 +778,20 @@ export function ConversationalBargainModal({
             .trackAccepted(module, entityId, finalOffer, savings)
             .catch(console.warn);
 
+          // Log accepted value telemetry
+          const suggestions = getSuggestions();
+          chatAnalyticsService
+            .trackCustomEvent("accepted_value", {
+              round_index: round - 1,
+              accepted_price: finalOffer,
+              original_price: basePrice,
+              savings,
+              was_suggested: suggestions.includes(finalOffer),
+              module,
+              product_ref: productRef,
+            })
+            .catch(console.warn);
+
           if (isMobileDevice()) {
             hapticFeedback("medium");
           }
