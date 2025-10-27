@@ -109,6 +109,7 @@ function HotelResultsContent() {
   >("loading");
   const [showSearchEdit, setShowSearchEdit] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
+  useScrollLock(showFilters);
   const [nameQuery, setNameQuery] = useState("");
   const [page, setPage] = useState(1);
   const pageSizeRef = React.useRef(20);
