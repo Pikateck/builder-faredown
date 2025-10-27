@@ -1157,22 +1157,25 @@ export function ConversationalBargainModal({
             ) : (
               <div className="flex space-x-2">
                 <div className="flex-1 relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium">
+                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none z-10">
                     {selectedCurrency.symbol}
                   </span>
-                  <Input
+                  <input
                     ref={inputRef}
                     type="number"
                     value={currentPrice}
                     onChange={(e) => setCurrentPrice(e.target.value)}
                     placeholder="Enter your target price"
-                    className="pl-8 pr-12 py-3 text-base mobile-input"
+                    className="w-full pl-8 pr-12 py-3 text-base mobile-input border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     disabled={isNegotiating}
+                    autoFocus={!isNegotiating}
                     onKeyPress={(e) => {
                       if (e.key === "Enter") {
                         handleSubmitOffer();
                       }
                     }}
+                    inputMode="decimal"
+                    pattern="[0-9]*"
                   />
                   <button
                     onClick={() => handleSubmitOffer()}
