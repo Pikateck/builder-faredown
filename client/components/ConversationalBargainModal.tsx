@@ -1250,16 +1250,32 @@ export function ConversationalBargainModal({
                 ? "calc(1rem + env(safe-area-inset-bottom))"
                 : "1rem",
             }}
+            aria-live="polite"
+            aria-label="Negotiation complete"
           >
             <div className="text-gray-600 mb-3">
-              Maximum negotiation rounds reached
+              Maximum negotiation rounds reached. Please select an offer to continue.
             </div>
-            <Button
-              onClick={() => onAccept(basePrice, `ORD_ORIGINAL_${Date.now()}`)}
-              className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3"
-            >
-              Book at Original Price {formatPrice(basePrice)}
-            </Button>
+            <div className="flex flex-col sm:flex-row gap-2">
+              {finalOffer && (
+                <Button
+                  onClick={() => handleAcceptOffer()}
+                  disabled={isBooking}
+                  className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3"
+                  aria-label="Book negotiated price"
+                >
+                  Book at {formatPrice(finalOffer)}
+                </Button>
+              )}
+              <Button
+                onClick={() => onAccept(basePrice, `ORD_ORIGINAL_${Date.now()}`)}
+                variant="outline"
+                className="flex-1 sm:flex-none mobile-touch-target"
+                aria-label="Book original price"
+              >
+                Book at Original {formatPrice(basePrice)}
+              </Button>
+            </div>
           </div>
         )}
       </DialogContent>
