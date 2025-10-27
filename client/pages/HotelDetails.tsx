@@ -2214,7 +2214,10 @@ export default function HotelDetails() {
           </div>
 
           {/* Main Content - Scrollable */}
-          <div id="mobile-content-scroll" className="p-2 sm:p-3 lg:p-4 overflow-y-auto max-h-[calc(100vh-120px)] lg:max-h-[calc(100vh-60px)]">
+          <div
+            id="mobile-content-scroll"
+            className="p-2 sm:p-3 lg:p-4 overflow-y-auto max-h-[calc(100vh-120px)] lg:max-h-[calc(100vh-60px)]"
+          >
             {activeTab === "overview" && (
               <>
                 {/* Hotel Header with Large Image */}
@@ -3650,60 +3653,61 @@ export default function HotelDetails() {
                   Reserve
                 </Button>
                 <BargainButton
-                useBargainModal={true}
-                module="hotels"
-                itemName={`${hotel.name} - ${selectedRoomType?.name}`}
-                basePrice={(() => {
-                  const selectedTotal = selectedRoomType
-                    ? calculateTotalPrice(selectedRoomType.pricePerNight)
-                    : 0;
-                  // Debug trace for mobile bottom bar bargain opening
-                  console.log("[BARGAIN BASE - MOBILE]", {
-                    baseFromSelectedRate: selectedTotal,
-                    selectedRoomId: selectedRoomType?.id,
-                    selectedRoomName: selectedRoomType?.name,
-                    perNightPrice: selectedRoomType?.pricePerNight,
-                    isPreselectedRoom:
-                      preselectRate?.rateKey === selectedRoomType?.id,
-                    fromPreselectRate: preselectRate?.totalPrice,
-                  });
-                  return selectedTotal;
-                })()}
-                productRef={selectedRoomType?.id || ""}
-                itemDetails={{
-                  id: selectedRoomType?.id || "",
-                  name: `${hotel.name} - ${selectedRoomType?.name}`,
-                  location: hotel.location || "Hotel Location",
-                  provider: "Hotelbeds",
-                  checkIn: searchParams.get("checkIn") || "",
-                  checkOut: searchParams.get("checkOut") || "",
-                  features:
-                    selectedRoomType && Array.isArray(selectedRoomType.features)
-                      ? selectedRoomType.features
-                          .slice(0, 5)
-                          .map((f) =>
-                            typeof f === "string" ? f : f?.name || "Feature",
-                          )
-                      : [],
-                }}
-                onBargainSuccess={(finalPrice, orderRef) => {
-                  console.log(
-                    `Hotel Details Bottom Bar Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`,
-                  );
-                  if (selectedRoomType) {
-                    handleBooking(selectedRoomType, finalPrice);
-                    setBargainedRooms(
-                      (prev) => new Set([...prev, selectedRoomType.id]),
+                  useBargainModal={true}
+                  module="hotels"
+                  itemName={`${hotel.name} - ${selectedRoomType?.name}`}
+                  basePrice={(() => {
+                    const selectedTotal = selectedRoomType
+                      ? calculateTotalPrice(selectedRoomType.pricePerNight)
+                      : 0;
+                    // Debug trace for mobile bottom bar bargain opening
+                    console.log("[BARGAIN BASE - MOBILE]", {
+                      baseFromSelectedRate: selectedTotal,
+                      selectedRoomId: selectedRoomType?.id,
+                      selectedRoomName: selectedRoomType?.name,
+                      perNightPrice: selectedRoomType?.pricePerNight,
+                      isPreselectedRoom:
+                        preselectRate?.rateKey === selectedRoomType?.id,
+                      fromPreselectRate: preselectRate?.totalPrice,
+                    });
+                    return selectedTotal;
+                  })()}
+                  productRef={selectedRoomType?.id || ""}
+                  itemDetails={{
+                    id: selectedRoomType?.id || "",
+                    name: `${hotel.name} - ${selectedRoomType?.name}`,
+                    location: hotel.location || "Hotel Location",
+                    provider: "Hotelbeds",
+                    checkIn: searchParams.get("checkIn") || "",
+                    checkOut: searchParams.get("checkOut") || "",
+                    features:
+                      selectedRoomType &&
+                      Array.isArray(selectedRoomType.features)
+                        ? selectedRoomType.features
+                            .slice(0, 5)
+                            .map((f) =>
+                              typeof f === "string" ? f : f?.name || "Feature",
+                            )
+                        : [],
+                  }}
+                  onBargainSuccess={(finalPrice, orderRef) => {
+                    console.log(
+                      `Hotel Details Bottom Bar Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`,
                     );
-                  }
-                  if (navigator.vibrate) {
-                    navigator.vibrate(50);
-                  }
-                }}
-                className="flex-1 text-black font-semibold py-3 min-h-[44px]"
-              >
-                Bargain Now
-              </BargainButton>
+                    if (selectedRoomType) {
+                      handleBooking(selectedRoomType, finalPrice);
+                      setBargainedRooms(
+                        (prev) => new Set([...prev, selectedRoomType.id]),
+                      );
+                    }
+                    if (navigator.vibrate) {
+                      navigator.vibrate(50);
+                    }
+                  }}
+                  className="flex-1 text-black font-semibold py-3 min-h-[44px]"
+                >
+                  Bargain Now
+                </BargainButton>
               </div>
             )}
           </div>
