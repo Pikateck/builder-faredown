@@ -1794,7 +1794,7 @@ function HotelResultsContent() {
                 </div>
 
                 {/* Filter Content - Scrollable */}
-                <div className="flex-1 overflow-hidden">
+                <div className="flex-1 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch] [scrollbar-gutter:stable]">
                   {/* Current search summary (mobile) */}
                   <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
                     <div className="text-xs text-gray-600">Current search</div>
