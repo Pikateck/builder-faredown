@@ -2028,7 +2028,7 @@ export default function HotelDetails() {
               </Button>
               <div className="h-4 w-px bg-gray-300"></div>
               <span className="text-sm text-gray-600">
-                ₹{lowestPrice}+ per night
+                ���{lowestPrice}+ per night
               </span>
             </div>
             <Button
@@ -3253,7 +3253,7 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "street-view" && (
-              <div className="bg-white rounded-lg border border-gray-200 p-4">
+              <div id="street-view-section-mobile" className="bg-white rounded-lg border border-gray-200 p-4">
                 <h2 className="text-xl font-bold mb-4">Street View</h2>
                 <p className="text-gray-600 mb-4">
                   Explore the area around Grand Hyatt Dubai with Google Street
