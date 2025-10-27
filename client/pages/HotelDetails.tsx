@@ -1374,7 +1374,36 @@ export default function HotelDetails() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <style>{sliderStyles}</style>
+      <style>
+        {`
+          ${sliderStyles}
+          :root {
+            --header-height: 56px;
+            --search-height: 88px;
+            --tabs-height: 48px;
+          }
+          #mobile-header {
+            position: sticky;
+            top: 0;
+            z-index: 40;
+          }
+          #mobile-search {
+            position: sticky;
+            top: var(--header-height);
+            z-index: 30;
+          }
+          #section-tabs {
+            position: sticky;
+            top: calc(var(--header-height) + var(--search-height));
+            z-index: 20;
+          }
+          #mobile-content-scroll {
+            height: calc(100dvh - var(--header-height) - var(--search-height) - var(--tabs-height));
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch;
+          }
+        `}
+      </style>
 
       {/* Mobile-First Layout */}
       <div className="md:hidden min-h-screen bg-gray-50">
