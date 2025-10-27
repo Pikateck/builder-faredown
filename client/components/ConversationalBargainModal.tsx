@@ -237,7 +237,7 @@ export function ConversationalBargainModal({
     } else if (timerActive && timerSeconds === 0) {
       setTimerExpired(true);
       setTimerActive(false);
-      setShowOfferActions(false);
+      // Keep showOfferActions true so offer buttons remain visible after expiry
       addMessage(
         "agent",
         `The offer expired. You can try again or book the original price ${formatPrice(basePrice)}.`,
