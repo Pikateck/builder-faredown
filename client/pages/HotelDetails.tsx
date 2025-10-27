@@ -2214,7 +2214,7 @@ export default function HotelDetails() {
           </div>
 
           {/* Main Content - Scrollable */}
-          <div className="p-2 sm:p-3 lg:p-4 overflow-y-auto max-h-[calc(100vh-120px)] lg:max-h-[calc(100vh-60px)]">
+          <div id="mobile-content-scroll" className="p-2 sm:p-3 lg:p-4 overflow-y-auto max-h-[calc(100vh-120px)] lg:max-h-[calc(100vh-60px)]">
             {activeTab === "overview" && (
               <>
                 {/* Hotel Header with Large Image */}
