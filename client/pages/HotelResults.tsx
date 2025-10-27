@@ -108,7 +108,6 @@ function HotelResultsContent() {
   >("loading");
   const [showSearchEdit, setShowSearchEdit] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
-  useScrollLock(showFilters);
   const [nameQuery, setNameQuery] = useState("");
   const [page, setPage] = useState(1);
   const pageSizeRef = React.useRef(20);
@@ -417,7 +416,7 @@ function HotelResultsContent() {
         // This is the production API endpoint
         const renderApi = "https://builder-faredown-pricing.onrender.com/api";
         console.log(
-          "⚠️ VITE_API_BASE_URL not configured, using Render directly:",
+          "���️ VITE_API_BASE_URL not configured, using Render directly:",
           renderApi,
         );
         return renderApi;
