@@ -1095,7 +1095,7 @@ export function ConversationalBargainModal({
               )}
 
               {/* Try another round - only after timer expires AND not at max rounds */}
-              {timerExpired && !isComplete && round < TOTAL_ROUNDS - 1 && (
+              {timerExpired && !isComplete && round < TOTAL_ROUNDS && (
                 <Button
                   onClick={handleTryAgain}
                   className="w-full bg-gray-100 text-gray-900 hover:bg-gray-200 font-medium py-3 h-11 mobile-touch-target rounded-xl"
