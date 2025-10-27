@@ -1193,14 +1193,16 @@ export function ConversationalBargainModal({
                     placeholder="Enter your target price"
                     className="w-full pl-8 pr-12 py-3 text-base mobile-input border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                     disabled={isNegotiating}
-                    autoFocus={!isNegotiating}
-                    onKeyPress={(e) => {
+                    onKeyDown={(e) => {
+                      e.stopPropagation();
                       if (e.key === "Enter") {
+                        e.preventDefault();
                         handleSubmitOffer();
                       }
                     }}
                     inputMode="decimal"
                     pattern="[0-9]*"
+                    aria-label="Target price input"
                   />
                   <button
                     onClick={() => handleSubmitOffer()}
