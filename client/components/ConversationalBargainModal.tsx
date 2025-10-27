@@ -1066,11 +1066,12 @@ export function ConversationalBargainModal({
               )}
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-2">
+            <div className="flex flex-col gap-2">
+              {/* Primary Book Button - Always visible while offer exists, enabled when not booking */}
               <Button
                 onClick={handleAcceptOffer}
-                disabled={isBooking || timerExpired}
-                className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 mobile-touch-target"
+                disabled={isBooking}
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
                 aria-label="Book now button"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
@@ -1079,15 +1080,29 @@ export function ConversationalBargainModal({
                 {formatPrice(finalOffer)}
               </Button>
 
-              {!isComplete && round < TOTAL_ROUNDS && (
+              {/* Secondary: Book at original only after timer expires */}
+              {timerExpired && (
+                <Button
+                  onClick={() => {
+                    setIsBooking(true);
+                    onAccept(basePrice, `BRG_${Date.now()}`);
+                  }}
+                  className="w-full bg-white border border-gray-300 text-gray-900 hover:bg-gray-50 font-medium py-3 h-11 mobile-touch-target rounded-xl"
+                  aria-label="Book at original price"
+                >
+                  Book at Original {formatPrice(basePrice)}
+                </Button>
+              )}
+
+              {/* Try another round - only after timer expires AND not at max rounds */}
+              {timerExpired && !isComplete && round < TOTAL_ROUNDS - 1 && (
                 <Button
                   onClick={handleTryAgain}
-                  variant="outline"
-                  className="flex-1 sm:flex-none mobile-touch-target"
+                  className="w-full bg-gray-100 text-gray-900 hover:bg-gray-200 font-medium py-3 h-11 mobile-touch-target rounded-xl"
                   aria-label="Try another negotiation round"
                 >
                   <span className="hidden sm:inline">
-                    {round === 1 ? "Try Round 2" : "Try Final Round 3"}
+                    {round === 1 ? "Try Round 2" : "Try Final Round"}
                   </span>
                   <span className="sm:hidden">Try Round {round + 1}</span>
                 </Button>
