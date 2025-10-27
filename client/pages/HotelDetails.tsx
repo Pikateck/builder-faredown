@@ -1157,6 +1157,48 @@ export default function HotelDetails() {
       ? Math.min(...roomTypes.map((room) => room.pricePerNight))
       : 167; // fallback price
 
+  const STICKY_OFFSET = 60; // Match sticky top-[60px] height
+
+  const scrollToTab = (tabId: string) => {
+    setActiveTab(tabId);
+    const sectionId = `${tabId}-section-mobile`;
+    const element = document.getElementById(sectionId);
+    if (element) {
+      const y = element.getBoundingClientRect().top + window.scrollY - STICKY_OFFSET - 8;
+      window.scrollTo({ top: y, behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    const ids = ["overview", "gallery", "amenities", "reviews", "street-view", "location"];
+    const observerOptions = {
+      root: null,
+      rootMargin: `-${STICKY_OFFSET + 8}px 0px -60% 0px`,
+      threshold: 0.1,
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      const visibleSections = entries
+        .filter((e) => e.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+
+      if (visibleSections.length > 0) {
+        const topSection = visibleSections[0];
+        const sectionId = topSection.target.id.replace("-section-mobile", "");
+        setActiveTab(sectionId);
+      }
+    }, observerOptions);
+
+    ids.forEach((id) => {
+      const element = document.getElementById(`${id}-section-mobile`);
+      if (element) {
+        observer.observe(element);
+      }
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
   const handleBargainClick = (roomType: any) => {
     console.log("Bargain clicked for room:", roomType.id);
     setSelectedRoomType(roomType);
@@ -1472,13 +1514,13 @@ export default function HotelDetails() {
             </div>
           </div>
 
-          {/* Clean Mobile Tabs */}
-          <div className="bg-white border-b border-gray-200 sticky top-[60px] z-10 md:hidden">
-            <div className="flex overflow-x-auto scrollbar-hide px-4">
+          {/* Clean Mobile Tabs - Sticky at Top */}
+          <div className="bg-white border-b border-gray-200 sticky top-[56px] z-30 md:hidden">
+            <div className="flex overflow-x-auto scrollbar-hide px-4 py-0 pr-16">
               {tabs.map((tab) => (
                 <button
                   key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
+                  onClick={() => scrollToTab(tab.id)}
                   className={`flex-shrink-0 px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                     activeTab === tab.id
                       ? "border-blue-600 text-blue-600"
@@ -1494,7 +1536,7 @@ export default function HotelDetails() {
           {/* Clean Mobile Content Sections */}
           <div className="p-4 bg-gray-50 md:hidden">
             {activeTab === "overview" && (
-              <div className="space-y-4">
+              <div id="overview-section-mobile" className="space-y-4">
                 {/* Simple Room Selection */}
                 <div className="bg-white rounded-lg p-4">
                   <h2 className="text-lg font-bold text-gray-900 mb-4">
@@ -1601,7 +1643,7 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "gallery" && (
-              <div className="bg-white rounded-lg p-4">
+              <div id="gallery-section-mobile" className="bg-white rounded-lg p-4">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-gray-900">Photos</h2>
                   {hotel.isLiveData && (
@@ -1698,7 +1740,7 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "amenities" && (
-              <div className="bg-white rounded-lg p-4">
+              <div id="amenities-section-mobile" className="bg-white rounded-lg p-4">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">
                   Amenities
                 </h2>
@@ -1734,7 +1776,7 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "reviews" && (
-              <div id="reviews-section" className="bg-white rounded-lg p-4">
+              <div id="reviews-section-mobile" className="bg-white rounded-lg p-4">
                 <div className="flex items-center justify-between mb-4">
                   <h2 className="text-lg font-bold text-gray-900">
                     Guest Reviews
@@ -1838,7 +1880,7 @@ export default function HotelDetails() {
             )}
 
             {activeTab === "location" && (
-              <div className="bg-white rounded-lg p-4">
+              <div id="location-section-mobile" className="bg-white rounded-lg p-4">
                 <h2 className="text-lg font-bold text-gray-900 mb-4">
                   Location
                 </h2>
