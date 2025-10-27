@@ -733,6 +733,7 @@ export function ConversationalBargainModal({
 
         // Fallback - proceed without hold but maintain positive UX
         setTimeout(() => {
+          setIsBooking(false);
           onAccept(finalOffer, orderRef, {
             isHeld: false,
             originalPrice: basePrice,
