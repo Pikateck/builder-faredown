@@ -436,6 +436,12 @@ export function ConversationalBargainModal({
       setIsNegotiating(true);
       setCurrentPrice("");
 
+      // Stop any existing timer when user enters new price
+      setTimerActive(false);
+      setShowOfferActions(false);
+      setTimerSeconds(30);
+      setTimerExpired(false);
+
       // Track message send and round
       const entityId = productRef || `${module}_${Date.now()}`;
       chatAnalyticsService
