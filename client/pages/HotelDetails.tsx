@@ -1166,10 +1166,8 @@ export default function HotelDetails() {
     const element = document.getElementById(sectionId);
     if (element) {
       const y =
-        element.getBoundingClientRect().top +
-        window.scrollY -
-        SCROLL_OFFSET;
-        8;
+        element.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
+      8;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
@@ -1426,7 +1424,10 @@ export default function HotelDetails() {
         </div>
 
         {/* Mobile Search Bar */}
-        <div id="mobile-search" className="bg-white border-b border-gray-200 px-4 py-3">
+        <div
+          id="mobile-search"
+          className="bg-white border-b border-gray-200 px-4 py-3"
+        >
           <div className="max-w-md mx-auto">
             <HotelSearchForm
               initialDestination={searchParams.get("destination") || ""}
@@ -1558,7 +1559,10 @@ export default function HotelDetails() {
           </div>
 
           {/* Clean Mobile Tabs - Sticky at Top */}
-        <div id="section-tabs" className="bg-white border-b border-gray-200 md:hidden">
+          <div
+            id="section-tabs"
+            className="bg-white border-b border-gray-200 md:hidden"
+          >
             <div className="flex overflow-x-auto scrollbar-hide px-4 py-0 pr-16">
               {tabs.map((tab) => (
                 <button
