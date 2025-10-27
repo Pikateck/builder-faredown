@@ -264,7 +264,10 @@ export function ConversationalBargainModal({
           if (isMobileDevice()) {
             inputRef.current.click();
             // Scroll input into view
-            inputRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+            inputRef.current.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
           }
         }
       }, 350);
