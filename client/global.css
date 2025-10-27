@@ -50,12 +50,27 @@
       "Segoe UI",
       Roboto,
       sans-serif;
-    font-weight: 400;
-    line-height: 1.6;
   }
 
-  /* Premium Typography Scale */
-  h1 {
+  /**
+   * Headings with crisp rendering and perfect letter spacing
+   */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6,
+  .heading {
+    font-synthesis: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1;
+    font-kerning: normal;
+    font-variant-ligatures: contextual common-ligatures;
     font-family:
       "Inter",
       -apple-system,
@@ -63,13 +78,11 @@
       "Segoe UI",
       Roboto,
       sans-serif;
-    @apply text-5xl md:text-6xl font-bold tracking-tight leading-tight;
-    font-feature-settings:
-      "kern" 1,
-      "liga" 1;
   }
 
-  h2 {
+  /* Premium heading styles */
+  h1,
+  .h1 {
     font-family:
       "Inter",
       -apple-system,
@@ -77,13 +90,14 @@
       "Segoe UI",
       Roboto,
       sans-serif;
-    @apply text-3xl md:text-4xl font-bold tracking-tight leading-tight;
+    @apply text-4xl font-bold tracking-tight leading-tight;
     font-feature-settings:
       "kern" 1,
       "liga" 1;
   }
 
-  h3 {
+  h2,
+  .h2 {
     font-family:
       "Inter",
       -apple-system,
@@ -91,13 +105,29 @@
       "Segoe UI",
       Roboto,
       sans-serif;
-    @apply text-2xl font-bold tracking-tight leading-tight;
+    @apply text-3xl font-bold tracking-tight leading-tight;
     font-feature-settings:
       "kern" 1,
       "liga" 1;
   }
 
-  h4 {
+  h3,
+  .h3 {
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      sans-serif;
+    @apply text-2xl font-semibold tracking-tight leading-tight;
+    font-feature-settings:
+      "kern" 1,
+      "liga" 1;
+  }
+
+  h4,
+  .h4 {
     font-family:
       "Inter",
       -apple-system,
@@ -349,42 +379,14 @@
     --sidebar-primary-foreground: 0 0% 100%;
     --sidebar-accent: 240 3.7% 15.9%;
     --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
+    --sidebar-border: 220 13% 20%;
     --sidebar-ring: 217.2 91.2% 59.8%;
   }
 
-  /* Enhanced animations with prefers-reduced-motion */
-  @media (prefers-reduced-motion: reduce) {
-    * {
-      animation-duration: 0.01ms !important;
-      animation-iteration-count: 1 !important;
-      transition-duration: 0.01ms !important;
-    }
-  }
-}
-
-@layer base {
-  * {
-    @apply border-border;
-  }
-
-  body {
-    @apply bg-background text-foreground;
-  }
-
-  /* Smooth scrolling */
-  html {
-    @apply scroll-smooth;
-    scroll-behavior: smooth;
-  }
-
-  /* Enhanced touch targets */
-  button,
-  a,
+  /* Form elements with premium styling */
   input,
   textarea,
   select {
-    @apply touch-manipulation;
     font-family:
       "Inter",
       -apple-system,
@@ -392,23 +394,17 @@
       "Segoe UI",
       Roboto,
       sans-serif;
+    font-size: 16px;
   }
 
-  /* Premium input styling */
-  input,
-  textarea,
-  select {
-    @apply min-h-[44px];
-    font-family:
-      "Inter",
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      sans-serif;
-    font-feature-settings:
-      "kern" 1,
-      "liga" 1;
+  /* iOS input zoom fix */
+  input[type="text"],
+  input[type="email"],
+  input[type="tel"],
+  input[type="date"],
+  textarea {
+    font-size: 16px;
+    line-height: 1.5;
   }
 
   /* Custom scrollbars */
@@ -458,270 +454,205 @@
     -webkit-line-clamp: 3;
   }
 
-  /* Premium Typography Utilities */
-  .text-h1 {
-    @apply text-5xl md:text-6xl font-bold tracking-tight leading-tight;
+  .line-clamp-4 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 4;
   }
 
-  .text-h2 {
-    @apply text-3xl md:text-4xl font-bold tracking-tight leading-tight;
+  .line-clamp-5 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 5;
   }
 
-  .text-h3 {
-    @apply text-2xl font-bold tracking-tight leading-tight;
+  .line-clamp-6 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 6;
   }
 
-  .text-h4 {
-    @apply text-xl font-semibold tracking-tight leading-tight;
+  /* Truncate single line */
+  .truncate {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .text-body {
-    @apply text-base leading-relaxed;
+  /* Custom focus styles */
+  .focus-ring {
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500;
   }
 
-  .text-small {
-    @apply text-sm;
+  .focus-ring-primary {
+    @apply focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-600;
   }
 
-  /* Premium Animation Utilities */
-  .animate-fade-in {
-    animation: fadeIn 300ms ease-out;
+  /* Typography utilities */
+  .text-short {
+    letter-spacing: -0.02em;
   }
 
-  .animate-slide-up {
-    animation: slideUp 400ms ease-out;
+  .text-normal {
+    letter-spacing: 0;
   }
 
-  .animate-scale-in {
-    animation: scaleIn 200ms ease-out;
+  .text-spaced {
+    letter-spacing: 0.02em;
   }
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-      transform: translateY(8px);
+  .text-wide {
+    letter-spacing: 0.05em;
+  }
+
+  /* Premium button styling */
+  .btn-premium {
+    @apply px-6 py-3 rounded-lg font-semibold transition-all duration-200 active:scale-95;
+  }
+
+  .btn-primary {
+    @apply btn-premium bg-blue-600 text-white hover:bg-blue-700 active:bg-blue-800;
+  }
+
+  .btn-secondary {
+    @apply btn-premium bg-gray-100 text-gray-900 hover:bg-gray-200 active:bg-gray-300;
+  }
+
+  .btn-outline {
+    @apply btn-premium bg-white text-gray-900 border-2 border-gray-200 hover:border-gray-300 active:bg-gray-50;
+  }
+
+  /* Glass morphism effect */
+  .glass {
+    @apply bg-white/30 backdrop-blur-md;
+  }
+
+  .glass-light {
+    @apply bg-white/10 backdrop-blur-sm;
+  }
+
+  /* Smooth transitions */
+  .transition-smooth {
+    @apply transition duration-300 ease-in-out;
+  }
+
+  .transition-fast {
+    @apply transition duration-150 ease-in-out;
+  }
+
+  .transition-slow {
+    @apply transition duration-500 ease-in-out;
+  }
+
+  /* Shimmer loading effect */
+  .shimmer {
+    background: linear-gradient(
+      90deg,
+      #f0f0f0 25%,
+      #e0e0e0 50%,
+      #f0f0f0 75%
+    );
+    background-size: 200% 100%;
+    animation: shimmer 2s infinite;
+  }
+
+  @keyframes shimmer {
+    0% {
+      background-position: 200% 0;
     }
-    to {
-      opacity: 1;
-      transform: translateY(0);
+    100% {
+      background-position: -200% 0;
     }
   }
 
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
+  /* Aspect ratio utilities */
+  .aspect-video {
+    @apply aspect-video;
   }
 
-  @keyframes scaleIn {
-    from {
-      opacity: 0;
-      transform: scale(0.95);
-    }
-    to {
-      opacity: 1;
-      transform: scale(1);
+  .aspect-square {
+    @apply aspect-square;
+  }
+
+  .aspect-auto {
+    @apply aspect-auto;
+  }
+
+  /* Container queries support */
+  @supports (container-type: inline-size) {
+    .container-sm {
+      container-type: inline-size;
     }
   }
 
-  /* Gradient Utilities */
-  .gradient-blue {
-    background: linear-gradient(135deg, #003580 0%, #0071c2 100%);
-  }
-
-  .gradient-gold {
-    background: linear-gradient(135deg, #febb02 0%, #e6a602 100%);
-  }
-
-  .gradient-text {
-    background: linear-gradient(135deg, #003580 0%, #0071c2 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
-
-  /* Shadow Utilities */
-  .shadow-premium {
-    box-shadow:
-      0 20px 25px -5px rgba(0, 0, 0, 0.1),
-      0 10px 10px -5px rgba(0, 0, 0, 0.04);
-  }
-
-  .shadow-soft {
-    box-shadow:
-      0 10px 15px -3px rgba(0, 0, 0, 0.1),
-      0 4px 6px -2px rgba(0, 0, 0, 0.05);
-  }
-
-  /* Mobile-specific utilities */
-  .mobile-container {
-    @apply w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
-  }
-
-  .mobile-padding {
-    @apply p-4 sm:p-6 lg:p-8;
-  }
-
-  .mobile-text {
-    @apply text-sm sm:text-base;
-  }
-
-  .mobile-gap {
-    @apply gap-4 sm:gap-6 lg:gap-8;
-  }
-
-  .touch-target {
-    @apply min-h-[44px] min-w-[44px] touch-manipulation;
-  }
-
-  /* Hide/show utilities */
-  .mobile-only {
-    @apply block sm:hidden;
-  }
-
-  .tablet-up {
-    @apply hidden sm:block;
-  }
-
-  .desktop-only {
-    @apply hidden lg:block;
-  }
-
-  /* Safe area support */
-  .safe-area-top {
+  /* Safe area utilities */
+  .safe-inset {
+    padding-left: env(safe-area-inset-left);
+    padding-right: env(safe-area-inset-right);
     padding-top: env(safe-area-inset-top);
-  }
-
-  .safe-area-bottom {
     padding-bottom: env(safe-area-inset-bottom);
   }
 
-  .safe-area-left {
+  .safe-pl {
     padding-left: env(safe-area-inset-left);
   }
 
-  .safe-area-right {
+  .safe-pr {
     padding-right: env(safe-area-inset-right);
   }
 
-  /* React Date Range Calendar Overrides */
-  .rdrMonthAndYearPickers,
-  .rdrMonthAndYearPickers *,
-  .rdrMonthPicker select,
-  .rdrYearPicker select {
-    color: #1f2937 !important;
-    font-weight: 700 !important;
-    font-size: 18px !important;
-    font-family:
-      "Inter",
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      sans-serif !important;
+  .safe-pt {
+    padding-top: env(safe-area-inset-top);
   }
 
-  .rdrWeekDay,
-  .rdrWeekDay * {
-    color: #1f2937 !important;
-    font-weight: 600 !important;
-    text-transform: capitalize !important;
-    font-family:
-      "Inter",
-      -apple-system,
-      BlinkMacSystemFont,
-      "Segoe UI",
-      Roboto,
-      sans-serif !important;
+  .safe-pb {
+    padding-bottom: env(safe-area-inset-bottom);
   }
-}
 
-/* BargainButton animations and styles */
-@keyframes shimmer {
-  0% {
-    transform: translateX(-100%);
+  /* Mobile viewport height fix for address bar */
+  .min-h-screen-safe {
+    min-height: 100vh;
+    min-height: 100dvh;
   }
-  50% {
-    transform: translateX(100%);
+
+  /* Prevent iOS zoom on input focus */
+  .no-zoom-input input {
+    font-size: 16px;
   }
-  100% {
-    transform: translateX(100%);
+
+  /* Prevent rubber-band scrolling in Safari */
+  .overscroll-none {
+    overscroll-behavior: none;
+  }
+
+  .overscroll-contain {
+    overscroll-behavior: contain;
+  }
+
+  .overscroll-auto {
+    overscroll-behavior: auto;
+  }
+
+  /* Momentum scrolling for iOS */
+  .-webkit-overflow-scrolling-touch {
+    -webkit-overflow-scrolling: touch;
   }
 }
 
-.bargain-button-locked::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.4),
-    transparent
-  );
-  transform: translateX(-100%);
-  transition: transform 0.7s ease-out;
-  z-index: 1;
-}
-
-.bargain-button-locked:hover::before {
-  transform: translateX(100%);
-}
-
-/* Pulse animation for special states */
-.bargain-button-pulse {
-  animation: pulse 2s infinite;
-}
-
-@keyframes pulse {
-  0% {
-    box-shadow:
-      0 10px 25px -3px rgb(254 187 2 / 0.3),
-      0 4px 6px -2px rgb(254 187 2 / 0.1);
-  }
-  50% {
-    box-shadow:
-      0 15px 35px -3px rgb(254 187 2 / 0.5),
-      0 8px 15px -2px rgb(254 187 2 / 0.3);
-  }
-  100% {
-    box-shadow:
-      0 10px 25px -3px rgb(254 187 2 / 0.3),
-      0 4px 6px -2px rgb(254 187 2 / 0.1);
-  }
-}
-
-/* ============================================================================
-   VIEWPORT CLASS OVERRIDES - MUST BE LAST FOR BUILDER.IO IFRAME SUPPORT
-   ============================================================================
-   These rules override Tailwind's responsive utilities when viewport classes
-   are applied to <html>. They enable mobile previews in Builder.io iframes.
-   DO NOT MOVE OR MODIFY - MUST STAY AT END OF FILE FOR PROPER CASCADE
-   ============================================================================ */
-
-/* Mobile viewport (<768px): Force mobile layouts */
-html.viewport-mobile .md\:hidden {
+/* Mobile viewport detection */
+html.viewport-mobile .block.md\:hidden {
   display: block !important;
-}
-
-html.viewport-mobile .md\:block {
-  display: none !important;
 }
 
 html.viewport-mobile .hidden.md\:block {
   display: none !important;
 }
 
-html.viewport-mobile .block.md\:hidden {
-  display: block !important;
+html.viewport-mobile .md\:hidden {
+  display: none !important;
 }
 
 /* Desktop viewport (≥768px): Force desktop layouts */
@@ -770,4 +701,25 @@ html.viewport-desktop .block.md\:hidden {
   .bargain-button-locked {
     border: 2px solid currentColor;
   }
+}
+
+/* Scroll lock styles for modal/sheet backgrounds */
+html.scroll-locked {
+  position: fixed !important;
+  width: 100% !important;
+  overflow: hidden !important;
+}
+
+/* Scrollable area inside filter sheets */
+.filter-scroll-area,
+#filters-scroll {
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-gutter: stable;
+}
+
+/* Prevent rubber-band effect on background */
+#app-root {
+  overscroll-behavior: none;
 }
