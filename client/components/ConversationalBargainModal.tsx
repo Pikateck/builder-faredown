@@ -360,7 +360,7 @@ export function ConversationalBargainModal({
             "Final round. The price could be higher, the same, or lower.",
           checkingMessage: "Final check…",
           supplierResponse: "Final offer: {offer}.",
-          agentResponse: "Final offer: {offer}. You have 30 seconds to book.",
+          agentResponse: "Final offer: {offer}. This is your last chance to negotiate.",
           acceptanceChance: 0.4, // 40% chance for Round 3 (final)
         };
       default:
