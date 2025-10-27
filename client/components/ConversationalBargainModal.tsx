@@ -274,6 +274,19 @@ export function ConversationalBargainModal({
     }
   }, [isOpen, isNegotiating, showOfferActions]);
 
+  // Freeze background scroll when bargain modal is open
+  useEffect(() => {
+    if (isOpen) {
+      const originalOverflow = document.documentElement.style.overflow;
+      document.documentElement.style.overflow = "hidden";
+      document.body.style.overflow = "hidden";
+      return () => {
+        document.documentElement.style.overflow = originalOverflow;
+        document.body.style.overflow = "";
+      };
+    }
+  }, [isOpen]);
+
   // Helper Functions
   const addMessage = useCallback(
     (speaker: ChatMessage["speaker"], message: string, price?: number) => {
