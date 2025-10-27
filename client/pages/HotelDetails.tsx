@@ -1185,7 +1185,7 @@ export default function HotelDetails() {
     ];
     const observerOptions = {
       root: null,
-      rootMargin: `-${STICKY_OFFSET + 8}px 0px -60% 0px`,
+      rootMargin: `-${SCROLL_OFFSET}px 0px -60% 0px`,
       threshold: 0.1,
     };
 
