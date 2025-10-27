@@ -683,6 +683,7 @@ export function ConversationalBargainModal({
           }
 
           setTimeout(() => {
+            setIsBooking(false);
             onAccept(finalOffer, orderRef, {
               isHeld: false,
               originalPrice: basePrice,
