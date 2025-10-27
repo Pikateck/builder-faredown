@@ -258,8 +258,16 @@ export function ConversationalBargainModal({
     if (isOpen && inputRef.current && !isNegotiating && !showOfferActions) {
       // Delay focus slightly to allow modal to fully render
       setTimeout(() => {
-        inputRef.current?.focus();
-      }, 300);
+        if (inputRef.current && !inputRef.current.disabled) {
+          inputRef.current.focus();
+          // On mobile, ensure keyboard appears by clicking the input
+          if (isMobileDevice()) {
+            inputRef.current.click();
+            // Scroll input into view
+            inputRef.current.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }
+      }, 350);
     }
   }, [isOpen, isNegotiating, showOfferActions]);
 
