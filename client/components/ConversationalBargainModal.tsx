@@ -432,7 +432,16 @@ export function ConversationalBargainModal({
         })
         .catch(console.warn);
     }
-  }, [round, showOfferActions, isOpen, getSuggestions, basePrice, previousOfferPrice, module, productRef]);
+  }, [
+    round,
+    showOfferActions,
+    isOpen,
+    getSuggestions,
+    basePrice,
+    previousOfferPrice,
+    module,
+    productRef,
+  ]);
 
   // Track telemetry for custom price entry
   useEffect(() => {
@@ -455,7 +464,16 @@ export function ConversationalBargainModal({
           .catch(console.warn);
       }
     }
-  }, [currentPrice, round, showOfferActions, getSuggestions, basePrice, previousOfferPrice, module, productRef]);
+  }, [
+    currentPrice,
+    round,
+    showOfferActions,
+    getSuggestions,
+    basePrice,
+    previousOfferPrice,
+    module,
+    productRef,
+  ]);
 
   // Enhanced counter offer calculation with round-specific logic
   const calculateRoundSpecificOffer = useCallback(
@@ -1211,7 +1229,8 @@ export function ConversationalBargainModal({
                         accepted_price: basePrice,
                         original_price: basePrice,
                         savings: 0,
-                        was_suggested: suggestionsAtFallback.includes(basePrice),
+                        was_suggested:
+                          suggestionsAtFallback.includes(basePrice),
                         was_fallback_original: true,
                         module,
                         product_ref: productRef,
@@ -1322,7 +1341,8 @@ export function ConversationalBargainModal({
                                   accepted_price: price,
                                   original_price: basePrice,
                                   savings,
-                                  was_suggested: suggestionsAtAccept.includes(price),
+                                  was_suggested:
+                                    suggestionsAtAccept.includes(price),
                                   was_previous_offer: true,
                                   module,
                                   product_ref: productRef,
@@ -1355,7 +1375,8 @@ export function ConversationalBargainModal({
                                   accepted_price: price,
                                   original_price: basePrice,
                                   savings,
-                                  was_suggested: suggestionsAtError.includes(price),
+                                  was_suggested:
+                                    suggestionsAtError.includes(price),
                                   was_previous_offer: true,
                                   had_hold_error: true,
                                   module,
@@ -1393,7 +1414,8 @@ export function ConversationalBargainModal({
                                 accepted_price: price,
                                 original_price: basePrice,
                                 savings,
-                                was_suggested: suggestionsAtException.includes(price),
+                                was_suggested:
+                                  suggestionsAtException.includes(price),
                                 was_previous_offer: true,
                                 had_hold_exception: true,
                                 module,
