@@ -1202,6 +1202,22 @@ export function ConversationalBargainModal({
                 <Button
                   onClick={() => {
                     setIsBooking(true);
+
+                    // Log accepted value for original price fallback
+                    const suggestionsAtFallback = getSuggestions();
+                    chatAnalyticsService
+                      .trackCustomEvent("accepted_value", {
+                        round_index: round - 1,
+                        accepted_price: basePrice,
+                        original_price: basePrice,
+                        savings: 0,
+                        was_suggested: suggestionsAtFallback.includes(basePrice),
+                        was_fallback_original: true,
+                        module,
+                        product_ref: productRef,
+                      })
+                      .catch(console.warn);
+
                     onAccept(basePrice, `BRG_${Date.now()}`);
                   }}
                   className="w-full bg-white border border-gray-300 text-gray-900 hover:bg-gray-50 font-medium py-3 h-11 mobile-touch-target rounded-xl"
