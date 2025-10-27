@@ -1623,8 +1623,8 @@ export default function HotelDetails() {
             </div>
           </div>
 
-          {/* Clean Mobile Content Sections */}
-          <div className="p-4 bg-gray-50 md:hidden pb-40">
+          {/* Clean Mobile Content Sections - Scrollable */}
+          <div className="flex-1 overflow-y-auto bg-gray-50 md:hidden" style={{ paddingBottom: "env(safe-area-inset-bottom)" }}>
             {activeTab === "overview" && (
               <div id="overview-section-mobile" className="space-y-4">
                 {/* Simple Room Selection */}
