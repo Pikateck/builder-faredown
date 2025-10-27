@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { useDateContext } from "@/contexts/DateContext";
 import { Header } from "@/components/layout/Header";
 import { HotelCard } from "@/components/HotelCard";
@@ -34,6 +35,7 @@ import {
   Grid,
   List,
   ChevronLeft,
+  X,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import {
@@ -61,7 +63,7 @@ interface Hotel extends HotelType {
   currentPrice?: number;
 }
 
-export default function HotelResults() {
+function HotelResultsContent() {
   useScrollToTop();
   const [urlSearchParams] = useSearchParams();
   const navigate = useNavigate();
@@ -1325,12 +1327,15 @@ export default function HotelResults() {
           onBack={() => navigate("/hotels")}
           showLogo={true}
           rightActions={
-            isLiveData && (
-              <div className="flex items-center gap-1 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
-                <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
-                LIVE
-              </div>
-            )
+            (() => {
+              const showLive = import.meta.env.VITE_SHOW_LIVE_BADGE === "true";
+              return showLive && isLiveData ? (
+                <div className="flex items-center gap-1 bg-red-500 text-white px-2 py-1 rounded-full text-xs font-medium">
+                  <div className="w-2 h-2 bg-white rounded-full animate-pulse"></div>
+                  LIVE
+                </div>
+              ) : null;
+            })()
           }
         />
 
@@ -1404,7 +1409,14 @@ export default function HotelResults() {
             variant="outline"
             size="sm"
             className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 py-3 rounded-xl flex items-center justify-center gap-2 font-medium"
-            onClick={() => setShowFilters(true)}
+            onClick={() => {
+              try {
+                setShowFilters(true);
+              } catch (e) {
+                console.error("Failed to open filters", e);
+                alert("Could not open filters. Please try again.");
+              }
+            }}
           >
             <Filter className="w-4 h-4" />
             Filter Hotels
@@ -2395,5 +2407,29 @@ export default function HotelResults() {
       {/* Mobile Navigation */}
       <MobileNavigation />
     </div>
+  );
+}
+
+// Wrap component in ErrorBoundary to prevent blank screen on errors
+export default function HotelResults() {
+  return (
+    <ErrorBoundary
+      fallback={
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
+          <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 text-center">
+            <h1 className="text-xl font-bold text-gray-900 mb-2">Something went wrong</h1>
+            <p className="text-gray-600 mb-6">We encountered an error loading the hotels. Please try again.</p>
+            <button
+              onClick={() => window.location.reload()}
+              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-xl transition-colors"
+            >
+              Reload Page
+            </button>
+          </div>
+        </div>
+      }
+    >
+      <HotelResultsContent />
+    </ErrorBoundary>
   );
 }
