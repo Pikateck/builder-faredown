@@ -119,6 +119,9 @@ import { useDateContext } from "@/contexts/DateContext";
 import { useSearch } from "@/contexts/SearchContext";
 import ReviewModal from "@/components/ReviewModal";
 import ReviewsSection from "@/components/ReviewsSection";
+import CollapsedSearchSummary from "@/components/CollapsedSearchSummary";
+import { Sheet, SheetContent } from "@/components/ui/sheet";
+import { format } from "date-fns";
 
 export default function HotelDetails() {
   useScrollToTop();
@@ -141,6 +144,7 @@ export default function HotelDetails() {
   const [isWriteReviewModalOpen, setIsWriteReviewModalOpen] = useState(false);
   const [isMobileFilterOpen, setIsMobileFilterOpen] = useState(false);
   const [showSaveDropdown, setShowSaveDropdown] = useState(false);
+  const [isSearchSheetOpen, setIsSearchSheetOpen] = useState(false);
 
   // Pre-selected rate data from Results page (single source of truth)
   const preselectRate = (location.state as any)?.preselectRate;
@@ -247,6 +251,23 @@ export default function HotelDetails() {
   const totalNights = Math.ceil(
     (checkOutDate.getTime() - checkInDate.getTime()) / (1000 * 60 * 60 * 24),
   );
+
+  // Format labels for collapsed search summary
+  const destination = searchParams.get("destination") || "";
+  const destinationCode = searchParams.get("destinationCode") || destination.split("-")[1] || "";
+  const countryName = searchParams.get("countryName") || "";
+
+  const cityFull = countryName && destinationCode
+    ? `${destination}, ${countryName} – ${destinationCode}`
+    : destination;
+
+  const datesLabel = `${format(checkInDate, "EEE, d MMM")} → ${format(checkOutDate, "EEE, d MMM")}`;
+
+  const adults = parseInt(searchParams.get("adults") || "2");
+  const children = parseInt(searchParams.get("children") || "0");
+  const rooms = parseInt(searchParams.get("rooms") || "1");
+
+  const paxLabel = `${adults} adult${adults > 1 ? "s" : ""} • ${rooms} room${rooms > 1 ? "s" : ""}${children ? ` • ${children} child${children > 1 ? "ren" : ""}` : ""}`;
 
   // Load context data from URL parameters
   useEffect(() => {
@@ -1423,24 +1444,39 @@ export default function HotelDetails() {
           />
         </div>
 
-        {/* Mobile Search Bar */}
+        {/* Mobile Search Bar - Collapsed Summary */}
         <div
           id="mobile-search"
           className="bg-white border-b border-gray-200 px-4 py-3"
         >
           <div className="max-w-md mx-auto">
-            <HotelSearchForm
-              initialDestination={searchParams.get("destination") || ""}
-              initialCheckIn={searchParams.get("checkIn") || ""}
-              initialCheckOut={searchParams.get("checkOut") || ""}
-              initialGuests={{
-                adults: parseInt(searchParams.get("adults") || "2"),
-                children: parseInt(searchParams.get("children") || "0"),
-                rooms: parseInt(searchParams.get("rooms") || "1"),
-              }}
+            <CollapsedSearchSummary
+              cityFull={cityFull}
+              datesLabel={datesLabel}
+              paxLabel={paxLabel}
+              onExpand={() => setIsSearchSheetOpen(true)}
             />
           </div>
         </div>
+
+        {/* Search Expansion Sheet */}
+        <Sheet open={isSearchSheetOpen} onOpenChange={setIsSearchSheetOpen}>
+          <SheetContent side="bottom" className="h-auto max-h-[80vh] flex flex-col rounded-t-3xl">
+            <div className="py-4 px-4 flex-1 overflow-y-auto">
+              <h2 className="text-lg font-semibold mb-4 text-gray-900">Edit search</h2>
+              <HotelSearchForm
+                initialDestination={searchParams.get("destination") || ""}
+                initialCheckIn={searchParams.get("checkIn") || ""}
+                initialCheckOut={searchParams.get("checkOut") || ""}
+                initialGuests={{
+                  adults: parseInt(searchParams.get("adults") || "2"),
+                  children: parseInt(searchParams.get("children") || "0"),
+                  rooms: parseInt(searchParams.get("rooms") || "1"),
+                }}
+              />
+            </div>
+          </SheetContent>
+        </Sheet>
 
         {/* Mobile Content */}
         <div>
