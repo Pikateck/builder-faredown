@@ -1297,6 +1297,22 @@ export function ConversationalBargainModal({
                               chatAnalyticsService
                                 .trackAccepted(module, entityId, price, savings)
                                 .catch(console.warn);
+
+                              // Log accepted value for previous offer
+                              const suggestionsAtAccept = getSuggestions();
+                              chatAnalyticsService
+                                .trackCustomEvent("accepted_value", {
+                                  round_index: round - 1,
+                                  accepted_price: price,
+                                  original_price: basePrice,
+                                  savings,
+                                  was_suggested: suggestionsAtAccept.includes(price),
+                                  was_previous_offer: true,
+                                  module,
+                                  product_ref: productRef,
+                                })
+                                .catch(console.warn);
+
                               onAccept(price, orderRef, {
                                 isHeld: true,
                                 holdId: holdData.holdId,
