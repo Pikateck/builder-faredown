@@ -640,6 +640,7 @@ export function ConversationalBargainModal({
 
           // Pass both the final price and the hold data
           setTimeout(() => {
+            setIsBooking(false);
             onAccept(finalOffer, orderRef, {
               isHeld: true,
               holdId: responseData.holdId,
