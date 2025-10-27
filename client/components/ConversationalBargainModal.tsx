@@ -112,10 +112,15 @@ export function ConversationalBargainModal({
   const { user, isLoggedIn } = authContext;
   const effectiveUserName = isLoggedIn && user?.name ? user.name : userName;
 
+  // Constants
+  const TOTAL_ROUNDS = 3;
+  type RoundState = "idle" | "submittingBid" | "timerRunning" | "receivedCounter" | "completed";
+
   // State Management
   const [currentPrice, setCurrentPrice] = useState<string>("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [round, setRound] = useState<number>(1);
+  const [roundState, setRoundState] = useState<RoundState>("idle");
   const [isNegotiating, setIsNegotiating] = useState<boolean>(false);
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [finalOffer, setFinalOffer] = useState<number | null>(null);
@@ -124,6 +129,7 @@ export function ConversationalBargainModal({
   const [showOfferActions, setShowOfferActions] = useState<boolean>(false);
   const [isComplete, setIsComplete] = useState<boolean>(false);
   const [timerExpired, setTimerExpired] = useState<boolean>(false);
+  const [isBooking, setIsBooking] = useState<boolean>(false);
   const [sessionId] = useState<string>(
     () => `session_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
   );
@@ -896,29 +902,32 @@ export function ConversationalBargainModal({
       >
         {/* Accessibility Title */}
         <DialogTitle className="sr-only">Hotel Price Negotiation</DialogTitle>
-        {/* Header */}
+        {/* Header - Single close icon, round counter badge */}
         <div className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4 sm:p-6 rounded-t-xl">
-          <button
-            onClick={handleClose}
-            className="absolute top-4 right-4 p-2 hover:bg-white/20 rounded-full transition-colors z-10"
-            style={{ minWidth: "36px", minHeight: "36px" }}
-          >
-            <X className="w-5 h-5" />
-          </button>
-
-          <div className="flex items-center space-x-3">
-            <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-              <Sparkles className="w-6 h-6" />
+          <div className="flex items-center justify-between">
+            <div className="flex items-center space-x-3 flex-1">
+              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                <Sparkles className="w-6 h-6" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <DialogTitle className="text-lg font-bold mb-1">
+                  {config.title}
+                </DialogTitle>
+                <p className="text-blue-100 text-sm">{config.subtitle}</p>
+              </div>
             </div>
-            <div className="flex-1">
-              <DialogTitle className="text-lg font-bold mb-1">
-                {config.title}
-              </DialogTitle>
-              <p className="text-blue-100 text-sm">{config.subtitle}</p>
-            </div>
-            <div className="text-right">
-              <div className="text-xs text-blue-200">Round</div>
-              <div className="text-lg font-bold">{round}/3</div>
+            <div className="flex items-center gap-3 ml-3">
+              <span className="inline-flex items-center rounded-full bg-white/20 px-3 py-1 text-xs font-semibold text-white whitespace-nowrap">
+                {round}/{TOTAL_ROUNDS}
+              </span>
+              <button
+                onClick={handleClose}
+                aria-label="Close"
+                className="p-2 hover:bg-white/20 rounded-full transition-colors flex-shrink-0"
+                style={{ minWidth: "36px", minHeight: "36px" }}
+              >
+                <X className="w-5 h-5" />
+              </button>
             </div>
           </div>
         </div>
@@ -997,7 +1006,7 @@ export function ConversationalBargainModal({
           <div ref={chatEndRef} />
         </div>
 
-        {/* Timer and Offer Actions - Keyboard Safe */}
+        {/* Timer and Offer Actions - Keyboard Safe with aria-live for accessibility */}
         {showOfferActions && finalOffer && (
           <div
             className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 flex-shrink-0"
@@ -1006,6 +1015,8 @@ export function ConversationalBargainModal({
                 ? "calc(1rem + env(safe-area-inset-bottom))"
                 : "1rem",
             }}
+            aria-live="polite"
+            aria-label="Negotiated offer details"
           >
             <div className="flex justify-between items-start mb-3">
               <div>
@@ -1035,25 +1046,33 @@ export function ConversationalBargainModal({
               )}
             </div>
 
-            <div className="space-y-2">
+            <div className="flex flex-col sm:flex-row gap-2">
               <Button
                 onClick={handleAcceptOffer}
-                disabled={timerExpired}
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white font-semibold py-3 mobile-touch-target"
+                disabled={isBooking || timerExpired}
+                className="flex-1 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 mobile-touch-target"
+                aria-label="Book now button"
               >
                 <CheckCircle className="w-4 h-4 mr-2" />
-                Book Now at {formatPrice(finalOffer)}
+                <span className="hidden sm:inline">Book Now at</span>
+                <span className="sm:hidden">Book</span>
+                {" "}
+                {formatPrice(finalOffer)}
               </Button>
 
-              {!isComplete && round < 3 && (
+              {!isComplete && round < TOTAL_ROUNDS && (
                 <Button
                   onClick={handleTryAgain}
                   variant="outline"
-                  className="w-full mobile-touch-target"
+                  className="flex-1 sm:flex-none mobile-touch-target"
+                  aria-label="Try another negotiation round"
                 >
-                  {round === 1
-                    ? "Try Round 2 (⚠️ May not be better)"
-                    : "Try Final Round 3 (⚠️ Unpredictable)"}
+                  <span className="hidden sm:inline">
+                    {round === 1
+                      ? "Try Round 2"
+                      : "Try Final Round 3"}
+                  </span>
+                  <span className="sm:hidden">Try Round {round + 1}</span>
                 </Button>
               )}
             </div>
@@ -1077,6 +1096,7 @@ export function ConversationalBargainModal({
               </div>
             </div>
 
+            {/* Input section with responsive layout */}
             {round >= 2 ? (
               <RoundFooter
                 currencySymbol={selectedCurrency.symbol}
