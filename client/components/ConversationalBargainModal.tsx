@@ -414,6 +414,49 @@ export function ConversationalBargainModal({
     }
   }, [previousOfferPrice, round, lastTarget, basePrice]);
 
+  // Track when suggestions are shown
+  useEffect(() => {
+    if (showOfferActions || !isOpen) return; // Only track when input is visible
+
+    const suggestions = getSuggestions();
+    if (suggestions.length > 0) {
+      chatAnalyticsService
+        .trackCustomEvent("chips_shown", {
+          round_index: round - 1,
+          num_suggestions: suggestions.length,
+          suggestions: suggestions,
+          original_price: basePrice,
+          supplier_offer: previousOfferPrice,
+          module,
+          product_ref: productRef,
+        })
+        .catch(console.warn);
+    }
+  }, [round, showOfferActions, isOpen, getSuggestions, basePrice, previousOfferPrice, module, productRef]);
+
+  // Track telemetry for custom price entry
+  useEffect(() => {
+    if (currentPrice && round >= 1 && !showOfferActions) {
+      // Check if this is a custom entry (not from a suggestion chip)
+      const suggestions = getSuggestions();
+      const enteredPrice = parseFloat(currentPrice);
+      const isCustom = !suggestions.includes(enteredPrice) && enteredPrice > 0;
+
+      if (isCustom) {
+        chatAnalyticsService
+          .trackCustomEvent("custom_entered", {
+            round_index: round - 1,
+            entered_price: enteredPrice,
+            original_price: basePrice,
+            supplier_offer: previousOfferPrice,
+            module,
+            product_ref: productRef,
+          })
+          .catch(console.warn);
+      }
+    }
+  }, [currentPrice, round, showOfferActions, getSuggestions, basePrice, previousOfferPrice, module, productRef]);
+
   // Enhanced counter offer calculation with round-specific logic
   const calculateRoundSpecificOffer = useCallback(
     (userOffer: number, round: number): number => {
