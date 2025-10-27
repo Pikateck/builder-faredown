@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { useScrollLock } from "@/hooks/useScrollLock";
 import { useDateContext } from "@/contexts/DateContext";
 import { Header } from "@/components/layout/Header";
 import { HotelCard } from "@/components/HotelCard";
