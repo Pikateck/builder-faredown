@@ -48,7 +48,7 @@ export function useScrollLock(isOpen: boolean) {
         // Only prevent if target is not inside a scrollable modal
         const target = e.target as HTMLElement;
         const filterContent = document.querySelector(
-          "#filters-scroll, .filter-scroll-area"
+          "#filters-scroll, .filter-scroll-area",
         );
 
         if (filterContent && filterContent.contains(target)) {
