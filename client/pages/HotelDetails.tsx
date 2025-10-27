@@ -1577,7 +1577,7 @@ export default function HotelDetails() {
           </div>
 
           {/* Clean Mobile Content Sections */}
-          <div className="p-4 bg-gray-50 md:hidden">
+          <div className="p-4 bg-gray-50 md:hidden pb-40">
             {activeTab === "overview" && (
               <div id="overview-section-mobile" className="space-y-4">
                 {/* Simple Room Selection */}
@@ -3532,7 +3532,7 @@ export default function HotelDetails() {
                   );
                 }}
               >
-                📘 Facebook
+                ��� Facebook
               </Button>
             </div>
           </div>
