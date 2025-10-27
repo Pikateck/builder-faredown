@@ -1765,8 +1765,6 @@ function HotelResultsContent() {
           <div className="fixed inset-0 z-50 flex items-end">
             <div className="fixed inset-0 bg-black/40 z-0" onClick={() => setShowFilters(false)} />
             <div className="relative w-full bg-white rounded-t-3xl shadow-2xl h-[90vh] flex flex-col z-10">
-              <DialogTitle className="sr-only">Filter Hotels</DialogTitle>
-
               {/* Filter Header */}
               <div className="bg-[#003580] text-white p-4 rounded-t-3xl flex-shrink-0 border-b border-blue-600">
                 <div className="flex items-center justify-between">
