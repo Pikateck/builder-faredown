@@ -27,13 +27,6 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import {
-  Dialog,
-  DialogPortal,
-  DialogOverlay,
-  DialogContent,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import {
   MapPin,
   CalendarIcon,
   Users,
