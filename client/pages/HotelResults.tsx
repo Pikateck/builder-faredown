@@ -1313,22 +1313,6 @@ export default function HotelResults() {
     loadHotels();
   };
 
-  // Calculate supplier counts from filtered hotels
-  const supplierCounts = React.useMemo(() => {
-    const counts: Record<string, number> = {};
-    filteredAndSortedHotels.forEach((hotel) => {
-      const supplier = (
-        hotel.supplier ||
-        hotel.supplierCode ||
-        "HOTELBEDS"
-      )
-        .toString()
-        .toUpperCase();
-      counts[supplier] = (counts[supplier] || 0) + 1;
-    });
-    return counts;
-  }, [filteredAndSortedHotels]);
-
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Mobile-First Layout */}
