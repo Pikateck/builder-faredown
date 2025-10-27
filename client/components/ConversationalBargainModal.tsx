@@ -567,6 +567,7 @@ export function ConversationalBargainModal({
 
   const handleAcceptOffer = useCallback(async () => {
     if (finalOffer) {
+      setIsBooking(true);
       setTimerActive(false);
 
       // Generate order reference with timestamp for tracking
