@@ -370,6 +370,50 @@ export function ConversationalBargainModal({
     }
   }, []);
 
+  // Generate dynamic price suggestions based on negotiation context
+  const getSuggestions = useCallback((): number[] => {
+    // Need supplier offer and valid round to generate suggestions
+    if (!previousOfferPrice || round < 1 || round > 3) {
+      return [];
+    }
+
+    const supplierLast = previousOfferPrice;
+    const userLast = lastTarget ?? supplierLast;
+    const floor = basePrice; // Can't negotiate below original price
+    const step = 10; // Currency step for rounding
+
+    // Helper to round to nearest step and clamp
+    const roundTo = (v: number) => {
+      const rounded = Math.max(floor, Math.round(v / step) * step);
+      return Math.min(rounded, supplierLast);
+    };
+
+    // Helper to deduplicate and filter
+    const uniq = (arr: number[]) => [
+      ...new Set(arr.filter((v) => v >= floor && v <= supplierLast)),
+    ];
+
+    if (round === 1) {
+      return uniq([
+        roundTo(supplierLast * 0.92),
+        roundTo(supplierLast * 0.88),
+        roundTo(supplierLast * 0.85),
+      ]);
+    } else if (round === 2) {
+      return uniq([
+        roundTo((userLast + supplierLast) / 2),
+        roundTo(supplierLast * 0.94),
+        roundTo(floor + 0.3 * (supplierLast - floor)),
+      ]);
+    } else {
+      // Round 3
+      return uniq([
+        roundTo((Math.min(userLast, supplierLast) + floor) / 2),
+        roundTo(supplierLast * 0.97),
+      ]);
+    }
+  }, [previousOfferPrice, round, lastTarget, basePrice]);
+
   // Enhanced counter offer calculation with round-specific logic
   const calculateRoundSpecificOffer = useCallback(
     (userOffer: number, round: number): number => {
