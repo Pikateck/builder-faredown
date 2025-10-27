@@ -626,18 +626,9 @@
   }
 }
 
-/* Mobile viewport detection */
-html.viewport-mobile .block.md\:hidden {
-  display: block !important;
-}
-
-html.viewport-mobile .hidden.md\:block {
-  display: none !important;
-}
-
-html.viewport-mobile .md\:hidden {
-  display: none !important;
-}
+/* Mobile viewport detection - REMOVED conflicting rules that broke md: breakpoints
+   The Tailwind md: breakpoint system works correctly without manual viewport detection.
+   The previous rules were hiding md:hidden elements on mobile, which is incorrect. */
 
 /* Desktop viewport (≥768px): Force desktop layouts */
 html.viewport-desktop .md\:hidden {
