@@ -1280,37 +1280,85 @@ export function ConversationalBargainModal({
                 }
               />
             ) : (
-              <div className="flex space-x-2">
-                <div className="flex-1 relative">
-                  <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none z-10">
-                    {selectedCurrency.symbol}
-                  </span>
-                  <input
-                    ref={inputRef}
-                    type="number"
-                    value={currentPrice}
-                    onChange={(e) => setCurrentPrice(e.target.value)}
-                    placeholder="Enter your target price"
-                    className="w-full pl-8 pr-12 py-3 text-base mobile-input border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
-                    disabled={isNegotiating}
-                    onKeyDown={(e) => {
-                      e.stopPropagation();
-                      if (e.key === "Enter") {
-                        e.preventDefault();
-                        handleSubmitOffer();
-                      }
-                    }}
-                    inputMode="decimal"
-                    pattern="[0-9]*"
-                    aria-label="Target price input"
-                  />
-                  <button
-                    onClick={() => handleSubmitOffer()}
-                    disabled={isNegotiating || !currentPrice}
-                    className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center"
-                  >
-                    <Handshake className="w-4 h-4" />
-                  </button>
+              <div className="space-y-3">
+                {/* Input field */}
+                <div className="flex space-x-2">
+                  <div className="flex-1 relative">
+                    <span className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 font-medium pointer-events-none z-10">
+                      {selectedCurrency.symbol}
+                    </span>
+                    <input
+                      ref={inputRef}
+                      type="number"
+                      value={currentPrice}
+                      onChange={(e) => setCurrentPrice(e.target.value)}
+                      placeholder="Enter your target price"
+                      className="w-full pl-8 pr-12 py-3 text-base mobile-input border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                      disabled={isNegotiating}
+                      onKeyDown={(e) => {
+                        e.stopPropagation();
+                        if (e.key === "Enter") {
+                          e.preventDefault();
+                          handleSubmitOffer();
+                        }
+                      }}
+                      inputMode="decimal"
+                      pattern="[0-9]*"
+                      aria-label="Target price input"
+                    />
+                    <button
+                      onClick={() => handleSubmitOffer()}
+                      disabled={isNegotiating || !currentPrice}
+                      className="absolute right-2 top-1/2 transform -translate-y-1/2 w-8 h-8 bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white rounded-lg flex items-center justify-center"
+                    >
+                      <Handshake className="w-4 h-4" />
+                    </button>
+                  </div>
+                </div>
+
+                {/* Dynamic suggestions */}
+                {(() => {
+                  const suggestions = getSuggestions();
+                  return suggestions.length > 0 ? (
+                    <div className="space-y-2">
+                      <div className="text-xs text-gray-500 font-medium">
+                        Quick picks
+                      </div>
+                      <div className="flex gap-2 flex-wrap">
+                        {suggestions.map((price) => (
+                          <button
+                            key={price}
+                            onClick={() => {
+                              const priceStr = String(price);
+                              setCurrentPrice(priceStr);
+                              inputRef.current?.focus();
+                              // Log telemetry
+                              chatAnalyticsService
+                                .trackCustomEvent("chip_clicked", {
+                                  round_index: round - 1,
+                                  suggested_price: price,
+                                  original_price: basePrice,
+                                  supplier_offer: previousOfferPrice,
+                                  module,
+                                  product_ref: productRef,
+                                })
+                                .catch(console.warn);
+                            }}
+                            disabled={isNegotiating}
+                            className="px-3 py-1.5 text-sm bg-blue-50 text-blue-700 border border-blue-200 rounded-lg hover:bg-blue-100 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                            aria-label={`Suggest price ${formatPrice(price)}`}
+                          >
+                            {formatPrice(price)}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+                  ) : null;
+                })()}
+
+                {/* Hint */}
+                <div className="text-xs text-gray-500">
+                  Or enter your own price
                 </div>
               </div>
             )}
