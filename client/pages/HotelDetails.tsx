@@ -1442,7 +1442,7 @@ export default function HotelDetails() {
         </div>
 
         {/* Mobile Content */}
-        <div className="pb-40">
+        <div>
           {/* Simple Hero Image */}
           <div className="relative w-full h-64 overflow-hidden bg-white">
             <img
@@ -3532,7 +3532,7 @@ export default function HotelDetails() {
                   );
                 }}
               >
-                ��� Facebook
+                📘 Facebook
               </Button>
             </div>
           </div>
