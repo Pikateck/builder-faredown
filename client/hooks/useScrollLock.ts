@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from "react";
 
 let lockY = 0;
 
@@ -9,10 +9,10 @@ let lockY = 0;
 export function lockPageScroll() {
   lockY = window.scrollY || document.documentElement.scrollTop || 0;
   const doc = document.documentElement;
-  doc.classList.add('scroll-locked');
+  doc.classList.add("scroll-locked");
   doc.style.top = `-${lockY}px`;
-  doc.style.width = '100%';
-  doc.style.overflow = 'hidden';
+  doc.style.width = "100%";
+  doc.style.overflow = "hidden";
 }
 
 /**
@@ -21,16 +21,16 @@ export function lockPageScroll() {
  */
 export function unlockPageScroll() {
   const doc = document.documentElement;
-  doc.classList.remove('scroll-locked');
+  doc.classList.remove("scroll-locked");
   const y = lockY;
   lockY = 0;
-  doc.style.top = '';
-  doc.style.width = '';
-  doc.style.overflow = '';
-  
+  doc.style.top = "";
+  doc.style.width = "";
+  doc.style.overflow = "";
+
   // Use requestAnimationFrame to ensure styles are applied before scrolling
   requestAnimationFrame(() => {
-    window.scrollTo({ top: y, behavior: 'instant' });
+    window.scrollTo({ top: y, behavior: "instant" });
   });
 }
 
@@ -42,16 +42,18 @@ export function useScrollLock(isOpen: boolean) {
   useEffect(() => {
     if (isOpen) {
       lockPageScroll();
-      
+
       // Prevent touchmove on background (for iOS)
       const preventTouchMove = (e: TouchEvent) => {
         e.preventDefault();
       };
-      
-      document.addEventListener('touchmove', preventTouchMove, { passive: false });
-      
+
+      document.addEventListener("touchmove", preventTouchMove, {
+        passive: false,
+      });
+
       return () => {
-        document.removeEventListener('touchmove', preventTouchMove);
+        document.removeEventListener("touchmove", preventTouchMove);
         unlockPageScroll();
       };
     }

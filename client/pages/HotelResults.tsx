@@ -1318,7 +1318,12 @@ function HotelResultsContent() {
   };
 
   return (
-    <div id="app-root" className="min-h-screen bg-gray-50" aria-hidden={showFilters} {...(showFilters ? { inert: "true" as any } : {})}>
+    <div
+      id="app-root"
+      className="min-h-screen bg-gray-50"
+      aria-hidden={showFilters}
+      {...(showFilters ? { inert: "true" as any } : {})}
+    >
       {/* Mobile-First Layout */}
       <div className="md:hidden">
         <MobileNavBar
