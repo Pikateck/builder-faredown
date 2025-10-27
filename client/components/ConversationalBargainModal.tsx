@@ -1259,11 +1259,13 @@ export function ConversationalBargainModal({
         {/* Complete State - Keyboard Safe */}
         {isComplete && (
           <div
-            className="border-t border-gray-200 p-4 text-center flex-shrink-0"
+            className="border-t border-gray-200 p-4 text-center flex-shrink-0 w-full"
             style={{
               paddingBottom: isMobileDevice()
                 ? "calc(1rem + env(safe-area-inset-bottom))"
                 : "1rem",
+              minHeight: "auto",
+              overflow: "visible",
             }}
             aria-live="polite"
             aria-label="Negotiation complete"
