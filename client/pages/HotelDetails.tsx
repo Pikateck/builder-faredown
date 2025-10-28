@@ -283,21 +283,9 @@ export default function HotelDetails() {
     }
   }, []);
 
-  // Sync filters to URL when they change
-  useEffect(() => {
-    const tboFilters = convertComprehensiveFiltersToTbo(
-      tboSelectedFilters,
-      filterPriceRange,
-    );
-    const filterQueryString = buildTboSearchUrl(tboFilters);
-
-    // Update URL with filters (preserve other params)
-    const newUrl = new URL(window.location.href);
-    if (filterQueryString) {
-      newUrl.search = filterQueryString;
-    }
-    window.history.replaceState({}, "", newUrl.toString());
-  }, [tboSelectedFilters, filterPriceRange]);
+  // Sync filters to URL when they change (optional - filters can stay local)
+  // Skipping URL sync for now as filters are already managed in local state
+  // The HotelDetails page doesn't need to persist filters to URL since they're view-local
 
   // Format date to DD-MMM-YYYY
   const formatDate = (dateStr: string) => {
