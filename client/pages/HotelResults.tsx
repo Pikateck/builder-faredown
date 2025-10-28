@@ -128,6 +128,8 @@ function HotelResultsContent() {
 
   // Get search parameters
   const destination = urlSearchParams.get("destination") || "";
+  const destinationName = urlSearchParams.get("destinationName") || destination;
+  const searchType = urlSearchParams.get("searchType") || "";
   const checkIn = urlSearchParams.get("checkIn") || "";
   const checkOut = urlSearchParams.get("checkOut") || "";
   const adults = urlSearchParams.get("adults") || "2";
@@ -421,6 +423,22 @@ function HotelResultsContent() {
         );
         return renderApi;
       })();
+
+      // CHECK: If searchType=mock, use mock data immediately
+      const urlParams = new URLSearchParams(window.location.search);
+      const searchTypeParam = urlParams.get("searchType");
+
+      if (searchTypeParam === "mock") {
+        console.log("🎭 Using mock data (searchType=mock)");
+        const mockData = getMockHotels();
+        setHotels(mockData);
+        setTotalResults(mockData.length);
+        setIsLiveData(false);
+        setHasMore(false);
+        setPricingStatus("ready");
+        setLoading(false);
+        return mockData;
+      }
 
       // STEP 1: Fetch metadata instantly from TBO
       setPricingStatus("loading");
@@ -1865,7 +1883,7 @@ function HotelResultsContent() {
         <div className="bg-[#003580] py-2 sm:py-4">
           <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
             <HotelSearchForm
-              initialDestination={destination}
+              initialDestination={destinationName}
               initialCheckIn={checkIn}
               initialCheckOut={checkOut}
               initialGuests={{
