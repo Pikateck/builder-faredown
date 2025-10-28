@@ -950,6 +950,8 @@ export default function HotelDetails() {
             status: "Upgrade for +₹25",
             statusColor: "yellow",
             nonRefundable: true,
+            isRefundable: false,
+            cancellationPolicy: "Non-refundable rate",
             image:
               "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop",
             features: ["Premium Room", "City views", "Enhanced amenities"],
@@ -964,6 +966,8 @@ export default function HotelDetails() {
             status: "Upgrade for +₹65",
             statusColor: "blue",
             nonRefundable: false,
+            isRefundable: true,
+            cancellationPolicy: "Free cancellation until 3 days before check-in",
             image:
               "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop",
             features: [
@@ -982,6 +986,8 @@ export default function HotelDetails() {
             status: "Upgrade for +₹40",
             statusColor: "blue",
             nonRefundable: true,
+            isRefundable: false,
+            cancellationPolicy: "Non-refundable rate",
             image:
               "https://images.unsplash.com/photo-1596436889106-be35e843f974?w=400&h=300&q=80&auto=format&fit=crop",
             features: ["Junior Suite", "Private balcony", "Enhanced space"],
