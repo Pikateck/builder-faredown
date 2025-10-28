@@ -547,16 +547,18 @@ function HotelResultsContent() {
         ? convertComprehensiveFiltersToTbo(selectedFilters, priceRange)
         : undefined;
 
-      // Build API URL with filter parameters
-      const apiUrl = buildTboSearchUrl(`${apiBaseUrl}/hotels`, {
+      // Build API URL with filter parameters (simple approach first)
+      const baseUrl = `${apiBaseUrl}/hotels`;
+      const params = new URLSearchParams({
         cityId: destCode,
-        countryCode,
+        countryCode: countryCode,
         checkIn: checkInStr,
         checkOut: checkOutStr,
-        adults: adultsCount,
-        children: childrenCount,
-        filters: tboFilters,
+        adults: adultsCount.toString(),
+        children: childrenCount.toString(),
       });
+      const apiUrl = `${baseUrl}?${params.toString()}`;
+
       console.log(`📡 API Call: ${apiUrl}`);
 
       let metadataResponse;
@@ -754,7 +756,7 @@ function HotelResultsContent() {
       }
 
       if (pricesData.prices && Object.keys(pricesData.prices).length > 0) {
-        console.log("����� Merging prices into hotels...");
+        console.log("���� Merging prices into hotels...");
         setHotels((prev) =>
           prev.map((h) => {
             const supplierId = h.supplier_id || h.id;
