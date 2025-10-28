@@ -281,6 +281,28 @@ export function HotelCard({
     return "Non-refundable rate";
   };
 
+  const allRoomsHaveSameRefundability = (): boolean => {
+    // If no roomTypes, can't determine
+    if (!hotel.roomTypes || hotel.roomTypes.length === 0) {
+      return false;
+    }
+
+    // Check if all rooms have the same refundability status
+    const firstRoomRefundable = (hotel.roomTypes[0] as any)?.isRefundable;
+
+    // If first room's status is undefined, we can't determine consistency
+    if (typeof firstRoomRefundable !== "boolean") {
+      return false;
+    }
+
+    // Check all other rooms match the first room's status
+    return hotel.roomTypes.every(
+      (room: any) =>
+        typeof room.isRefundable === "boolean" &&
+        room.isRefundable === firstRoomRefundable
+    );
+  };
+
   const getHotelPrice = (): number => {
     // Prefer the cheapest available room type if present
     if (hotel.roomTypes && hotel.roomTypes.length > 0) {
