@@ -382,9 +382,15 @@ export default function HotelDetails() {
             return hotel;
           }
         } catch (error) {
-          console.warn(`⚠��� Attempt ${retryCount + 1} failed:`, error);
+          console.warn(`⚠️ Attempt ${retryCount + 1} failed:`, error);
 
-          // Retry up to 1 time with a short delay for any errors
+          // Don't retry 404 errors (hotel not found in database) - use fallback immediately
+          if (error.message === "TBO_HOTEL_NOT_FOUND_404") {
+            console.log("Hotel not found in TBO database, skipping retry");
+            throw error;
+          }
+
+          // Retry up to 1 time with a short delay for network/temporary errors
           const isRetryableError =
             error instanceof TypeError || // Network errors
             error.message.includes("Failed to fetch") ||
@@ -400,7 +406,7 @@ export default function HotelDetails() {
           if (retryCount < 1 && isRetryableError) {
             const delay = 1500; // 1.5 second delay
             console.log(
-              `🔄 Retrying in ${delay}ms... (Error: ${error.message})`,
+              `Retrying in ${delay}ms... (Error: ${error.message})`,
             );
             await new Promise((resolve) => setTimeout(resolve, delay));
             return attemptFetch(retryCount + 1);
