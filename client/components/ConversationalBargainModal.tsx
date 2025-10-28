@@ -450,7 +450,7 @@ export function ConversationalBargainModal({
     const suggestions = getSuggestions();
     if (suggestions.length > 0) {
       chatAnalyticsService
-        .trackCustomEvent("chips_shown", {
+        .trackEvent("message_send" as any, {
           round_index: round - 1,
           num_suggestions: suggestions.length,
           suggestions: suggestions,
@@ -482,7 +482,7 @@ export function ConversationalBargainModal({
 
       if (isCustom) {
         chatAnalyticsService
-          .trackCustomEvent("custom_entered", {
+          .trackEvent("message_send" as any, {
             round_index: round - 1,
             entered_price: enteredPrice,
             original_price: basePrice,
@@ -789,7 +789,7 @@ export function ConversationalBargainModal({
           // Log accepted value telemetry
           const suggestions = getSuggestions();
           chatAnalyticsService
-            .trackCustomEvent("accepted_value", {
+            .trackEvent("accepted" as any, {
               round_index: round - 1,
               accepted_price: finalOffer,
               original_price: basePrice,
@@ -842,7 +842,7 @@ export function ConversationalBargainModal({
           // Log accepted value telemetry
           const suggestions = getSuggestions();
           chatAnalyticsService
-            .trackCustomEvent("accepted_value", {
+            .trackEvent("accepted" as any, {
               round_index: round - 1,
               accepted_price: finalOffer,
               original_price: basePrice,
@@ -1292,7 +1292,7 @@ export function ConversationalBargainModal({
                     // Log accepted value for original price fallback
                     const suggestionsAtFallback = getSuggestions();
                     chatAnalyticsService
-                      .trackCustomEvent("accepted_value", {
+                      .trackEvent("accepted" as any, {
                         round_index: round - 1,
                         accepted_price: basePrice,
                         original_price: basePrice,
@@ -1404,7 +1404,7 @@ export function ConversationalBargainModal({
                               // Log accepted value for previous offer
                               const suggestionsAtAccept = getSuggestions();
                               chatAnalyticsService
-                                .trackCustomEvent("accepted_value", {
+                                .trackEvent("accepted" as any, {
                                   round_index: round - 1,
                                   accepted_price: price,
                                   original_price: basePrice,
@@ -1438,7 +1438,7 @@ export function ConversationalBargainModal({
                               // Log accepted value for previous offer with error
                               const suggestionsAtError = getSuggestions();
                               chatAnalyticsService
-                                .trackCustomEvent("accepted_value", {
+                                .trackEvent("accepted" as any, {
                                   round_index: round - 1,
                                   accepted_price: price,
                                   original_price: basePrice,
@@ -1477,7 +1477,7 @@ export function ConversationalBargainModal({
                             // Log accepted value for previous offer with exception
                             const suggestionsAtException = getSuggestions();
                             chatAnalyticsService
-                              .trackCustomEvent("accepted_value", {
+                              .trackEvent("accepted" as any, {
                                 round_index: round - 1,
                                 accepted_price: price,
                                 original_price: basePrice,
