@@ -1270,20 +1270,7 @@ export function ConversationalBargainModal({
             </div>
 
             <div className="flex flex-col gap-2">
-              {/* Primary Book Button - Always visible while offer exists, enabled unless booking or at completion */}
-              <Button
-                onClick={handleAcceptOffer}
-                disabled={isBooking || isComplete}
-                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
-                aria-label="Book now button"
-              >
-                <CheckCircle className="w-4 h-4 mr-2" />
-                <span className="hidden sm:inline">Book Now at</span>
-                <span className="sm:hidden">Book</span>{" "}
-                {formatPrice(finalOffer)}
-              </Button>
-
-              {/* Secondary: Book at original - visible after timer expires */}
+              {/* Book at original - visible after timer expires */}
               {timerExpired && !isComplete && (
                 <Button
                   onClick={() => {
