@@ -4,6 +4,7 @@ import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
 import { BargainButton } from "@/components/ui/BargainButton";
 import type { Hotel as HotelType } from "@/services/hotelsService";
 import {
