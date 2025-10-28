@@ -220,6 +220,15 @@ export default function HotelDetails() {
     starRatings: new Set<string>(),
   });
 
+  // TBO filter state (mirrors HotelResults)
+  const [tboSelectedFilters, setTboSelectedFilters] = useState<
+    Record<string, string[] | string>
+  >({});
+  const [filterPriceRange, setFilterPriceRange] = useState<[number, number]>([
+    0, 25000,
+  ]);
+  const [sortBy, setSortBy] = useState("relevance");
+
   // Format date to DD-MMM-YYYY
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
