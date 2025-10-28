@@ -121,6 +121,28 @@ export function ConversationalBargainModal({
     | "receivedCounter"
     | "completed";
 
+  // Lifecycle tracking to prevent state updates on unmounted component
+  const isMountedRef = useRef(true);
+  useEffect(() => {
+    isMountedRef.current = true;
+    return () => {
+      isMountedRef.current = false;
+    };
+  }, []);
+
+  // Safe setState wrapper
+  const safeSetState = <T,>(setter: React.Dispatch<React.SetStateAction<T>>) => {
+    return (value: React.SetStateAction<T>) => {
+      if (isMountedRef.current) {
+        try {
+          setter(value);
+        } catch (error) {
+          console.error("State update error:", error);
+        }
+      }
+    };
+  };
+
   // State Management
   const [currentPrice, setCurrentPrice] = useState<string>("");
   const [messages, setMessages] = useState<ChatMessage[]>([]);
@@ -1482,13 +1504,21 @@ export function ConversationalBargainModal({
                       value={currentPrice}
                       onChange={(e) => {
                         e.stopPropagation();
-                        e.preventDefault();
-                        setCurrentPrice(e.target.value);
+                        const value = e.target.value;
+                        if (isMountedRef.current) {
+                          setCurrentPrice(value);
+                        }
                       }}
                       onInput={(e) => {
                         e.stopPropagation();
                       }}
                       onFocus={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onBlur={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onClick={(e) => {
                         e.stopPropagation();
                       }}
                       placeholder="Enter your target price"
@@ -1500,10 +1530,15 @@ export function ConversationalBargainModal({
                           e.preventDefault();
                           handleSubmitOffer();
                         }
+                        // Prevent any other navigation keys
+                        if (e.key === "Escape" || e.key === "Tab") {
+                          e.preventDefault();
+                        }
                       }}
                       inputMode="decimal"
                       pattern="[0-9]*"
                       aria-label="Target price input"
+                      autoComplete="off"
                     />
                     <button
                       onClick={() => handleSubmitOffer()}
