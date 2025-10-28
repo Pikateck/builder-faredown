@@ -264,26 +264,26 @@ export function ConversationalBargainModal({
     }
   }, []);
 
-  // Focus input when modal opens or when user wants to continue negotiating (for better UX)
+  // Focus input when modal opens (only on initial open, not on state changes)
   useEffect(() => {
-    if (isOpen && inputRef.current && !isNegotiating && !showOfferActions) {
-      // Delay focus slightly to allow modal to fully render
-      setTimeout(() => {
-        if (inputRef.current && !inputRef.current.disabled) {
-          inputRef.current.focus();
-          // On mobile, ensure keyboard appears by clicking the input
-          if (isMobileDevice()) {
-            inputRef.current.click();
-            // Scroll input into view
-            inputRef.current.scrollIntoView({
-              behavior: "smooth",
-              block: "center",
-            });
-          }
+    // Only focus when modal first opens, not on every re-render
+    const focusTimer = setTimeout(() => {
+      if (isOpen && inputRef.current && !inputRef.current.disabled && round === 1) {
+        inputRef.current.focus();
+        // On mobile, ensure keyboard appears by clicking the input
+        if (isMobileDevice()) {
+          inputRef.current.click();
+          // Scroll input into view
+          inputRef.current.scrollIntoView({
+            behavior: "smooth",
+            block: "center",
+          });
         }
-      }, 350);
-    }
-  }, [isOpen, isNegotiating, showOfferActions]);
+      }
+    }, 100);
+
+    return () => clearTimeout(focusTimer);
+  }, [isOpen]);
 
   // Freeze background scroll when bargain modal is open
   useEffect(() => {
