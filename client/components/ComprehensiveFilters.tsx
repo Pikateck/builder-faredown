@@ -45,7 +45,6 @@ import {
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
-import { FilterModalSelect } from "@/components/common/FilterModalSelect";
 
 interface FilterCategory {
   id: string;
@@ -104,9 +103,6 @@ export function ComprehensiveFilters({
     "brands",
   ]);
   const [showAllSections, setShowAllSections] = useState<string[]>([]);
-
-  // Modal state for "View more" filters
-  const [openModal, setOpenModal] = useState<string | null>(null);
 
   const sortOptions = [
     { value: "recommended", label: "Our top picks" },
