@@ -349,6 +349,13 @@ export default function HotelDetails() {
             } else {
               const errorText = await response.text();
               console.error(`TBO API returned ${response.status}:`, errorText);
+
+              // 404 means hotel not in TBO database - don't retry, use fallback immediately
+              if (response.status === 404) {
+                console.log("⚠️  Hotel not in TBO database, using fallback data");
+                throw new Error(`TBO_HOTEL_NOT_FOUND_404`);
+              }
+
               throw new Error(`TBO API returned ${response.status}`);
             }
           } else {
@@ -1109,7 +1116,7 @@ export default function HotelDetails() {
 
     console.log("🔍 Before deduplication - Total rooms:", roomTypes.length);
     roomTypes.forEach((room) => {
-      console.log("📋 Room:", room.name, "ID:", room.id);
+      console.log("��� Room:", room.name, "ID:", room.id);
     });
 
     for (const room of roomTypes) {
