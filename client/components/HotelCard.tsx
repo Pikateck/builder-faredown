@@ -253,6 +253,32 @@ export function HotelCard({
     return false;
   };
 
+  const getCancellationPolicyText = (): string => {
+    // Get from availableRoom first
+    if (hotel.availableRoom?.cancellationPolicy) {
+      return hotel.availableRoom.cancellationPolicy;
+    }
+
+    // Get from hotel level
+    if ((hotel as any).cancellationPolicy) {
+      return (hotel as any).cancellationPolicy;
+    }
+
+    // Get from first roomType
+    if (hotel.roomTypes && hotel.roomTypes.length > 0) {
+      const firstRoom = hotel.roomTypes[0] as any;
+      if (firstRoom.cancellationPolicy) {
+        return firstRoom.cancellationPolicy;
+      }
+    }
+
+    // Default based on refundability
+    if (isRefundable()) {
+      return "Free cancellation available";
+    }
+    return "Non-refundable rate";
+  };
+
   const getHotelPrice = (): number => {
     // Prefer the cheapest available room type if present
     if (hotel.roomTypes && hotel.roomTypes.length > 0) {
