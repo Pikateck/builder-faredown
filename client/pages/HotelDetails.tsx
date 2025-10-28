@@ -1469,7 +1469,7 @@ export default function HotelDetails() {
                 Edit search
               </h2>
               <HotelSearchForm
-                initialDestination={searchParams.get("destination") || ""}
+                initialDestination={destinationName || searchParams.get("destination") || ""}
                 initialCheckIn={searchParams.get("checkIn") || ""}
                 initialCheckOut={searchParams.get("checkOut") || ""}
                 initialGuests={{
@@ -2069,7 +2069,7 @@ export default function HotelDetails() {
         <div className="bg-white border-b border-gray-200 px-4 py-4">
           <div className="max-w-6xl mx-auto">
             <HotelSearchForm
-              initialDestination={searchParams.get("destination") || ""}
+              initialDestination={destinationName || searchParams.get("destination") || ""}
               initialCheckIn={searchParams.get("checkIn") || ""}
               initialCheckOut={searchParams.get("checkOut") || ""}
               initialGuests={{
