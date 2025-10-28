@@ -1050,6 +1050,12 @@ export function ConversationalBargainModal({
             inputRef.current?.focus();
           }, 200);
         }}
+        onPointerDownOutside={(e) => {
+          // Prevent closing when clicking outside on mobile
+          if (isMobileDevice()) {
+            e.preventDefault();
+          }
+        }}
       >
         {/* Accessibility Title */}
         <DialogTitle className="sr-only">Hotel Price Negotiation</DialogTitle>
