@@ -191,8 +191,8 @@ export function ComprehensiveFilters({
       ],
     },
     {
-      id: "stay-location",
-      title: "Preferred stay location",
+      id: "neighborhood",
+      title: "Locations",
       isCollapsible: true,
       items: [
         { id: "dubai-coastline", label: "Dubai's coastline", count: 2108 },
