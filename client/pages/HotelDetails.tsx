@@ -2272,18 +2272,19 @@ export default function HotelDetails() {
                 <X className="w-5 h-5" />
               </Button>
             </div>
-            {/* Enhanced Filters Component */}
-            <EnhancedFilters
-              priceRange={[Math.round((priceRange / 100) * 15000), 15000]}
-              setPriceRange={(range) => setPriceRange((range[0] / 15000) * 100)}
-              selectedRating={selectedRating}
-              setSelectedRating={setSelectedRating}
-              selectedAmenities={selectedAmenities}
-              setSelectedAmenities={setSelectedAmenities}
-              onFilterChange={(filters) => {
-                // Handle filter changes
-                console.log("Filters changed:", filters);
+            {/* Comprehensive Filters Component */}
+            <ComprehensiveFilters
+              priceRange={filterPriceRange}
+              setPriceRange={setFilterPriceRange}
+              selectedFilters={tboSelectedFilters}
+              setSelectedFilters={setTboSelectedFilters}
+              sortBy={sortBy}
+              setSortBy={setSortBy}
+              onClearFilters={() => {
+                setTboSelectedFilters({});
+                setFilterPriceRange([0, 25000]);
               }}
+              priceMax={25000}
             />
 
             {/* Mobile Apply Filters Button */}
