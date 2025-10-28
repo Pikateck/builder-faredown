@@ -1484,13 +1484,10 @@ function HotelResultsContent() {
           if (!hasMatchingAmenity) return false;
         }
 
-        if (categoryId === "property-rating") {
+        if (categoryId === "stars") {
           const hasMatchingStars = filterIds.some((filterId) => {
             const stars = Math.floor(hotel.rating);
-            if (filterId === "5-stars" && stars === 5) return true;
-            if (filterId === "4-stars" && stars === 4) return true;
-            if (filterId === "3-stars" && stars === 3) return true;
-            return false;
+            return parseInt(filterId) === stars;
           });
           if (!hasMatchingStars) return false;
         }
