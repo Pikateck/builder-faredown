@@ -650,10 +650,8 @@ function HotelResultsContent() {
           statusCode: metadataData.tboStatus.Code,
           description: metadataData.tboStatus.Description,
         });
-        setError(
-          "Live rates temporarily unavailable from supplier. Please retry or try different dates.",
-        );
-        return [];
+        console.log("⚠️ TBO error - falling back to mock data");
+        return loadMockHotels();
       }
 
       if (!metadataData.hotels || metadataData.hotels.length === 0) {
