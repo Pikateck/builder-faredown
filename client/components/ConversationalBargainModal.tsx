@@ -1072,7 +1072,6 @@ export function ConversationalBargainModal({
           mobile-bargain-modal max-w-md mx-auto sm:max-w-lg p-0
           ${isMobileDevice() ? "mobile-modal" : ""}
           flex flex-col
-          ${isMobileDevice() ? "!top-0 !translate-y-0" : ""}
         `}
         style={{
           maxHeight: isMobileDevice() ? "100dvh" : "90vh",
@@ -1082,9 +1081,20 @@ export function ConversationalBargainModal({
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
+          position: "fixed",
+          left: "50%",
           ...(isMobileDevice()
-            ? { top: "0", transform: "translate(-50%, 0)" }
-            : {}),
+            ? {
+                top: "0",
+                bottom: "0",
+                transform: "translateX(-50%)",
+                width: "100%",
+                maxWidth: "100%",
+              }
+            : {
+                top: "50%",
+                transform: "translate(-50%, -50%)",
+              }),
         }}
         onOpenAutoFocus={(e) => {
           e.preventDefault();
