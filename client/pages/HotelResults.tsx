@@ -614,7 +614,7 @@ function HotelResultsContent() {
         name: fetchError?.name || "UnknownError",
       };
       console.error("❌ Fetch failed:", errorDetails);
-      console.log("⚠️ Network error - falling back to mock data");
+      console.log("⚠�� Network error - falling back to mock data");
 
       // Use mock data as fallback for ANY error (network, CORS, parsing, etc.)
       return loadMockHotels();
@@ -627,13 +627,9 @@ function HotelResultsContent() {
           statusText: metadataResponse.statusText,
           body: errorText.slice(0, 500),
         });
-        // Provide user-friendly error message for supplier issues
-        const userMessage =
-          metadataResponse.status >= 500
-            ? "Live rates temporarily unavailable from supplier. Please retry or try different dates."
-            : `Hotel service error: ${metadataResponse.status}. Please try again.`;
-        setError(userMessage);
-        return [];
+        // Fall back to mock data on API errors
+        console.log("⚠️ API error - falling back to mock data");
+        return loadMockHotels();
       }
 
       let metadataData;
