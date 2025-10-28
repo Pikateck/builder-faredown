@@ -143,7 +143,7 @@ function HotelResultsContent() {
     max: 25000,
   });
   const [selectedFilters, setSelectedFilters] = useState<
-    Record<string, string[]>
+    Record<string, string[] | string | undefined>
   >({});
   // Hotel bargain modal state
   const [selectedHotel, setSelectedHotel] = useState<HotelType | null>(null);
