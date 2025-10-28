@@ -155,6 +155,12 @@ export function ComprehensiveFilters({
 
   const filterCategories: FilterCategory[] = [
     {
+      id: "search-block",
+      title: "Search Properties",
+      isCollapsible: false,
+      items: [],
+    },
+    {
       id: "amenities",
       title: "Amenities",
       isCollapsible: true,
