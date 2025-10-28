@@ -68,7 +68,6 @@ import { BargainButton } from "@/components/ui/BargainButton";
 import { ComprehensiveFilters } from "@/components/ComprehensiveFilters";
 import { calculateTotalPrice as calculatePriceBreakdown } from "@/lib/pricing";
 import {
-  buildTboSearchUrl,
   convertComprehensiveFiltersToTbo,
   deserializeFiltersFromUrl,
 } from "@/services/tbo/search";
