@@ -1400,10 +1400,7 @@ function HotelResultsContent() {
         }
         if (categoryId === "stars") {
           const stars = Math.floor(hotel.rating);
-          const match = filterIds.some(
-            (fid) =>
-              parseInt(fid) === stars,
-          );
+          const match = filterIds.some((fid) => parseInt(fid) === stars);
           if (!match) return false;
         }
       }

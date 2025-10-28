@@ -479,9 +479,7 @@ export function ComprehensiveFilters({
 
       {/* Filter Categories */}
       <div className="px-4 pb-4">
-        {filterCategories.map((category) =>
-          renderFilterCategory(category),
-        )}
+        {filterCategories.map((category) => renderFilterCategory(category))}
       </div>
     </div>
   );

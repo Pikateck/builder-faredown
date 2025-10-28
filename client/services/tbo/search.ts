@@ -239,89 +239,91 @@ export function convertComprehensiveFiltersToTbo(
   }
 
   // Handle each filter category
-  Object.entries(comprehensiveFilters).forEach(([categoryId, selectedValue]) => {
-    if (!selectedValue) return;
+  Object.entries(comprehensiveFilters).forEach(
+    ([categoryId, selectedValue]) => {
+      if (!selectedValue) return;
 
-    // Handle string filters (search block)
-    if (typeof selectedValue === "string") {
+      // Handle string filters (search block)
+      if (typeof selectedValue === "string") {
+        switch (categoryId) {
+          case "qPropertyName":
+            tboFilters.qPropertyName = selectedValue;
+            break;
+          case "qAddress":
+            tboFilters.qAddress = selectedValue;
+            break;
+          case "qRoomName":
+            tboFilters.qRoomName = selectedValue;
+            break;
+          default:
+            break;
+        }
+        return;
+      }
+
+      // Handle array filters
+      const selectedIds = selectedValue as string[];
+      if (selectedIds.length === 0) return;
+
       switch (categoryId) {
-        case "qPropertyName":
-          tboFilters.qPropertyName = selectedValue;
+        case "property-rating":
+          // Legacy support for old ID (convert to new stars format)
+          tboFilters.stars = selectedIds
+            .map((id) => {
+              const match = id.match(/(\d+)-star/);
+              return match ? parseInt(match[1]) : null;
+            })
+            .filter((n): n is number => n !== null);
           break;
-        case "qAddress":
-          tboFilters.qAddress = selectedValue;
+
+        case "stars":
+          // New star ratings: numeric IDs (5, 4, 3, 2, 1)
+          tboFilters.stars = selectedIds
+            .map((id) => parseInt(id))
+            .filter((n): n is number => !isNaN(n));
           break;
-        case "qRoomName":
-          tboFilters.qRoomName = selectedValue;
+
+        case "meal-plans":
+          // Meal plans: RO, BB, HB, FB, DN
+          tboFilters.mealPlans = selectedIds as any[];
           break;
+
+        case "cancellation":
+          // Cancellation: FC, PR, NR
+          tboFilters.cancellation = selectedIds as any[];
+          break;
+
+        case "amenities":
+          // Amenities: wifi, parking, etc.
+          tboFilters.amenities = selectedIds;
+          break;
+
+        case "property-type":
+          // Property types: HOTEL, APARTMENT, etc.
+          tboFilters.propertyTypes = selectedIds as any[];
+          break;
+
+        case "neighborhood":
+          // Locations: deira, sheikh-zayed-road, etc.
+          tboFilters.locations = selectedIds;
+          break;
+
+        case "guest-rating":
+          // Guest ratings: EXCELLENT, VERY_GOOD, GOOD
+          tboFilters.guestRating = selectedIds as any[];
+          break;
+
+        case "brands":
+          // Brands: marriott, hilton, etc.
+          tboFilters.brands = selectedIds;
+          break;
+
         default:
+          // Ignore unknown categories
           break;
       }
-      return;
-    }
-
-    // Handle array filters
-    const selectedIds = selectedValue as string[];
-    if (selectedIds.length === 0) return;
-
-    switch (categoryId) {
-      case "property-rating":
-        // Legacy support for old ID (convert to new stars format)
-        tboFilters.stars = selectedIds
-          .map((id) => {
-            const match = id.match(/(\d+)-star/);
-            return match ? parseInt(match[1]) : null;
-          })
-          .filter((n): n is number => n !== null);
-        break;
-
-      case "stars":
-        // New star ratings: numeric IDs (5, 4, 3, 2, 1)
-        tboFilters.stars = selectedIds
-          .map((id) => parseInt(id))
-          .filter((n): n is number => !isNaN(n));
-        break;
-
-      case "meal-plans":
-        // Meal plans: RO, BB, HB, FB, DN
-        tboFilters.mealPlans = selectedIds as any[];
-        break;
-
-      case "cancellation":
-        // Cancellation: FC, PR, NR
-        tboFilters.cancellation = selectedIds as any[];
-        break;
-
-      case "amenities":
-        // Amenities: wifi, parking, etc.
-        tboFilters.amenities = selectedIds;
-        break;
-
-      case "property-type":
-        // Property types: HOTEL, APARTMENT, etc.
-        tboFilters.propertyTypes = selectedIds as any[];
-        break;
-
-      case "neighborhood":
-        // Locations: deira, sheikh-zayed-road, etc.
-        tboFilters.locations = selectedIds;
-        break;
-
-      case "guest-rating":
-        // Guest ratings: EXCELLENT, VERY_GOOD, GOOD
-        tboFilters.guestRating = selectedIds as any[];
-        break;
-
-      case "brands":
-        // Brands: marriott, hilton, etc.
-        tboFilters.brands = selectedIds;
-        break;
-
-      default:
-        // Ignore unknown categories
-        break;
-    }
-  });
+    },
+  );
 
   return tboFilters;
 }
