@@ -1028,7 +1028,7 @@ export function ConversationalBargainModal({
   }
 
   return shouldRenderModal ? (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleClose(); }}>
       <DialogContent
         className={`
           mobile-bargain-modal max-w-md mx-auto sm:max-w-lg p-0
