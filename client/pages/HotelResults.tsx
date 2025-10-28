@@ -1005,25 +1005,25 @@ function HotelResultsContent() {
       ],
       rating: 4.8,
       reviews: 1234,
-      originalPrice: 160, // ₹160 per night (original price)
-      currentPrice: 138, // ₹138 per night (current discounted price)
+      originalPrice: 1250, // ₹1250 per night (original price)
+      currentPrice: 950, // ₹950 per night (current discounted price)
       description: `Experience luxury in the heart of ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with stunning views, world-class amenities, and exceptional service.`,
       amenities: ["WiFi", "Parking", "Restaurant", "Gym", "Pool", "Spa"],
       features: ["City View", "Business Center", "Concierge", "Room Service"],
       roomTypes: [
         {
           name: "Standard Room",
-          price: 138, // ₹138 per night (matches currentPrice)
+          price: 950, // ₹950 per night (matches currentPrice)
           features: ["King Bed", "City View", "Free WiFi"],
         },
         {
           name: "Deluxe Suite",
-          price: 155, // ₹155 per night (upgrade option)
+          price: 1100, // ₹1100 per night (upgrade option)
           features: ["Living Area", "Ocean View", "Mini Bar"],
         },
         {
           name: "Presidential Suite",
-          price: 180, // ₹180 per night (premium option)
+          price: 1350, // ₹1350 per night (premium option)
           features: ["2 Bedrooms", "Private Balcony", "Butler Service"],
         },
       ],
@@ -1050,8 +1050,8 @@ function HotelResultsContent() {
       ],
       rating: 4.6,
       reviews: 856,
-      originalPrice: 175, // ₹175 per night (original price)
-      currentPrice: 152, // ₹152 per night (current discounted price)
+      originalPrice: 1100, // ₹1100 per night (original price)
+      currentPrice: 850, // ₹850 per night (current discounted price)
       description: `Modern business hotel in ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with excellent facilities for corporate travelers and leisure guests.`,
       amenities: ["Beach Access", "Spa", "Restaurant", "Bar", "WiFi", "Pool"],
       features: [
@@ -1063,12 +1063,12 @@ function HotelResultsContent() {
       roomTypes: [
         {
           name: "Ocean View Room",
-          price: 152, // ₹152 per night (matches currentPrice)
+          price: 850, // ₹850 per night (matches currentPrice)
           features: ["Queen Bed", "Ocean View", "Balcony"],
         },
         {
           name: "Beach Villa",
-          price: 195, // ₹195 per night (upgrade option)
+          price: 1200, // ₹1200 per night (upgrade option)
           features: ["Private Beach Access", "Outdoor Shower", "Terrace"],
         },
       ],
@@ -1094,20 +1094,20 @@ function HotelResultsContent() {
       ],
       rating: 4.9,
       reviews: 567,
-      originalPrice: 140, // ₹140 per night (original price)
-      currentPrice: 120, // ₹120 per night (current discounted price)
+      originalPrice: 980, // ₹980 per night (original price)
+      currentPrice: 750, // ₹750 per night (current discounted price)
       description: `Charming boutique hotel in ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"} with unique character and personalized service.`,
       amenities: ["Ski Access", "Fireplace", "Spa", "Restaurant", "WiFi"],
       features: ["Ski-in/Ski-out", "Mountain Views", "Fireplace", "Hot Tub"],
       roomTypes: [
         {
           name: "Standard Room",
-          price: 120, // ₹120 per night (matches currentPrice)
+          price: 750, // ₹750 per night (matches currentPrice)
           features: ["Fireplace", "Mountain View", "Cozy Decor"],
         },
         {
           name: "Alpine Suite",
-          price: 140, // ₹140 per night (upgrade option)
+          price: 950, // ₹950 per night (upgrade option)
           features: ["Separate Living Area", "Hot Tub", "Ski Storage"],
         },
       ],
@@ -1134,8 +1134,8 @@ function HotelResultsContent() {
       ],
       rating: 4.7,
       reviews: 2100,
-      originalPrice: 200,
-      currentPrice: 175,
+      originalPrice: 1500,
+      currentPrice: 1100,
       description: `Premium luxury resort with exceptional amenities and stunning beach views.`,
       amenities: ["Beach", "WiFi", "Spa", "Restaurant", "Bar", "Pool", "Gym"],
       features: [
@@ -1147,12 +1147,12 @@ function HotelResultsContent() {
       roomTypes: [
         {
           name: "Deluxe Room",
-          price: 175,
+          price: 1100,
           features: ["Ocean View", "King Bed", "Private Balcony"],
         },
         {
           name: "Beach Villa",
-          price: 220,
+          price: 1500,
           features: ["Direct Beach Access", "2 Bedrooms", "Private Pool"],
         },
       ],
@@ -1179,20 +1179,20 @@ function HotelResultsContent() {
       ],
       rating: 4.4,
       reviews: 890,
-      originalPrice: 110,
-      currentPrice: 95,
+      originalPrice: 800,
+      currentPrice: 650,
       description: `Affordable city center accommodation perfect for budget-conscious travelers.`,
       amenities: ["WiFi", "Parking", "Restaurant", "24h Reception"],
       features: ["Central Location", "Metro Access", "Shopping Nearby"],
       roomTypes: [
         {
           name: "Standard Twin",
-          price: 95,
+          price: 650,
           features: ["Twin Beds", "City View", "Free WiFi"],
         },
         {
           name: "Family Room",
-          price: 125,
+          price: 850,
           features: ["2 Double Beds", "Kitchenette", "Living Area"],
         },
       ],
@@ -1218,8 +1218,8 @@ function HotelResultsContent() {
       ],
       rating: 4.5,
       reviews: 1450,
-      originalPrice: 180,
-      currentPrice: 158,
+      originalPrice: 1300,
+      currentPrice: 1050,
       description: `Modern executive suites designed for business travelers with premium amenities.`,
       amenities: [
         "WiFi",
@@ -1237,12 +1237,12 @@ function HotelResultsContent() {
       roomTypes: [
         {
           name: "Executive Room",
-          price: 158,
+          price: 1050,
           features: ["Work Desk", "Lounge Access", "Express Checkout"],
         },
         {
           name: "Corner Suite",
-          price: 190,
+          price: 1400,
           features: ["Panoramic Views", "Separate Office", "Meeting Space"],
         },
       ],
