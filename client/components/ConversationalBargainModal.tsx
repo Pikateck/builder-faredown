@@ -1034,6 +1034,7 @@ export function ConversationalBargainModal({
           mobile-bargain-modal max-w-md mx-auto sm:max-w-lg p-0
           ${isMobileDevice() ? "mobile-modal" : ""}
           flex flex-col
+          ${isMobileDevice() ? "!top-0 !translate-y-0" : ""}
         `}
         style={{
           maxHeight: isMobileDevice() ? "100dvh" : "90vh",
@@ -1043,6 +1044,7 @@ export function ConversationalBargainModal({
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
+          ...(isMobileDevice() ? { top: "0", transform: "translate(-50%, 0)" } : {}),
         }}
         onOpenAutoFocus={(e) => {
           e.preventDefault();
