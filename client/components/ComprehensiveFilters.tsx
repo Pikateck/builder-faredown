@@ -100,6 +100,9 @@ export function ComprehensiveFilters({
   ]);
   const [showAllSections, setShowAllSections] = useState<string[]>([]);
 
+  // Modal state for "View more" filters
+  const [openModal, setOpenModal] = useState<string | null>(null);
+
   const sortOptions = [
     { value: "recommended", label: "Our top picks" },
     { value: "price-low", label: "Price (lowest first)" },
