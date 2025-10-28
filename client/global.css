@@ -15,6 +15,30 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent dialog scroll lock from hiding page content */
+html,
+body {
+  position: relative !important;
+  width: 100% !important;
+  height: auto !important;
+}
+
+html.ReactModal__Html--open,
+body.ReactModal__Body--open {
+  overflow: hidden !important;
+  position: relative !important;
+  top: auto !important;
+  left: auto !important;
+}
+
+/* Ensure app root stays visible */
+#app-root,
+#root {
+  position: relative !important;
+  min-height: 100vh;
+  overflow: visible;
+}
+
 @layer base {
   /**
    * Font rendering optimizations for crisp, sharp text
