@@ -420,16 +420,16 @@ export default function HotelDetails() {
               }
             } else {
               const errorText = await response.text();
-              console.error(`TBO API returned ${response.status}:`, errorText);
 
               // 404 means hotel not in TBO database - don't retry, use fallback immediately
               if (response.status === 404) {
                 console.log(
-                  "⚠️  Hotel not in TBO database, using fallback data",
+                  "⚠️ Hotel not in TBO database, will use fallback data from location.state",
                 );
                 throw new Error(`TBO_HOTEL_NOT_FOUND_404`);
               }
 
+              console.error(`TBO API returned ${response.status}:`, errorText);
               throw new Error(`TBO API returned ${response.status}`);
             }
           } else {
