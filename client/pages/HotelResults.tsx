@@ -401,7 +401,11 @@ function HotelResultsContent() {
   };
 
   // Fetch hotel metadata from DB + prices from TBO in parallel (hybrid approach)
-  const fetchTBOHotels = async (destCode: string) => {
+  const fetchTBOHotels = async (
+    destCode: string,
+    selectedFilters?: Record<string, string[]>,
+    priceRange?: [number, number],
+  ) => {
     try {
       console.log("🏨 Fetching hotel metadata for:", destCode);
 
