@@ -496,13 +496,13 @@ export default function HotelDetails() {
         const passedHotelData = (location.state as any)?.hotel;
         if (passedHotelData) {
           console.log(
-            "✅ TBO API unavailable, using hotel data from location.state"
+            "✅ TBO API unavailable, using hotel data from location.state",
           );
           setHotelData(passedHotelData);
         } else {
           // Fallback to generic mock data if no data was passed
           console.log(
-            "📦 No hotel data from location.state, using generic mock data"
+            "📦 No hotel data from location.state, using generic mock data",
           );
           const fallbackData = getMockHotelData();
           setHotelData(fallbackData);

@@ -516,7 +516,9 @@ function HotelResultsContent() {
         window.location.origin.includes("fly.dev") &&
         !apiBaseUrl.includes("localhost")
       ) {
-        console.log("🎭 Detected fly.dev preview - using mock data for stability");
+        console.log(
+          "🎭 Detected fly.dev preview - using mock data for stability",
+        );
         return loadMockHotels();
       }
 
@@ -607,18 +609,18 @@ function HotelResultsContent() {
           clearTimeout(timeoutId);
         }
       } catch (fetchError) {
-      const errorDetails = {
-        url: apiUrl,
-        apiBaseUrl,
-        message: fetchError?.message || "Unknown error",
-        name: fetchError?.name || "UnknownError",
-      };
-      console.error("❌ Fetch failed:", errorDetails);
-      console.log("⚠️ Network error - falling back to mock data");
+        const errorDetails = {
+          url: apiUrl,
+          apiBaseUrl,
+          message: fetchError?.message || "Unknown error",
+          name: fetchError?.name || "UnknownError",
+        };
+        console.error("❌ Fetch failed:", errorDetails);
+        console.log("⚠️ Network error - falling back to mock data");
 
-      // Use mock data as fallback for ANY error (network, CORS, parsing, etc.)
-      return loadMockHotels();
-    }
+        // Use mock data as fallback for ANY error (network, CORS, parsing, etc.)
+        return loadMockHotels();
+      }
 
       if (!metadataResponse.ok) {
         const errorText = await metadataResponse.text();
