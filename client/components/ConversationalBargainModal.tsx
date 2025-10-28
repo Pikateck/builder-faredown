@@ -1270,6 +1270,16 @@ export function ConversationalBargainModal({
             </div>
 
             <div className="flex flex-col gap-2">
+              {/* Book at negotiated price - visible during timer (primary action) */}
+              <Button
+                onClick={() => handleAcceptOffer()}
+                disabled={isBooking}
+                className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
+                aria-label="Book negotiated price now"
+              >
+                {isBooking ? "Processing..." : `Book Now at ${formatPrice(finalOffer)}`}
+              </Button>
+
               {/* Book at original - visible after timer expires */}
               {timerExpired && !isComplete && (
                 <Button
