@@ -1398,13 +1398,11 @@ function HotelResultsContent() {
           );
           if (!hasAmenity) return false;
         }
-        if (categoryId === "property-rating") {
+        if (categoryId === "stars") {
           const stars = Math.floor(hotel.rating);
           const match = filterIds.some(
             (fid) =>
-              (fid === "5-stars" && stars === 5) ||
-              (fid === "4-stars" && stars === 4) ||
-              (fid === "3-stars" && stars === 3),
+              parseInt(fid) === stars,
           );
           if (!match) return false;
         }
