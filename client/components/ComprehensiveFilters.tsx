@@ -46,7 +46,6 @@ import {
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
 import { FilterModalSelect } from "@/components/common/FilterModalSelect";
-import { useState } from "react";
 
 interface FilterCategory {
   id: string;
