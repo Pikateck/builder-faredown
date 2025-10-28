@@ -1056,6 +1056,12 @@ export function ConversationalBargainModal({
             e.preventDefault();
           }
         }}
+        onEscapeKeyDown={(e) => {
+          // Allow escape to close, but only on non-mobile
+          if (isMobileDevice()) {
+            e.preventDefault();
+          }
+        }}
       >
         {/* Accessibility Title */}
         <DialogTitle className="sr-only">Hotel Price Negotiation</DialogTitle>
