@@ -2563,7 +2563,14 @@ export default function HotelDetails() {
                                 {room.cancellationPolicy && (
                                   <div className="mb-3 text-xs">
                                     {room.isRefundable ? (
-                                      <span className="text-green-700 font-semibold">✓ {room.cancellationPolicy}</span>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <span className="text-green-700 font-semibold cursor-help underline decoration-dotted">✓ {room.cancellationPolicy}</span>
+                                        </TooltipTrigger>
+                                        <TooltipContent className="max-w-xs">
+                                          {room.cancellationPolicy}
+                                        </TooltipContent>
+                                      </Tooltip>
                                     ) : (
                                       <span className="text-red-700 font-semibold">✗ {room.cancellationPolicy}</span>
                                     )}
