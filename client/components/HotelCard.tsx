@@ -949,21 +949,15 @@ export function HotelCard({
               </span>
             </div>
 
-            {/* Refundable Information - Mobile */}
-            <div className="flex items-center gap-1 mb-3">
-              <CreditCard className="w-3 h-3 text-gray-500" />
-              <span className="text-xs font-bold">
-                {isRefundable() ? (
-                  <span className="text-green-600">
-                    ✓{" "}
-                    {hotel.availableRoom?.cancellationPolicy ||
-                      "Free cancellation"}
-                  </span>
-                ) : (
-                  <span className="text-red-600">Non-refundable</span>
-                )}
-              </span>
-            </div>
+            {/* Refundable Information - Mobile - Only show if non-refundable */}
+            {!isRefundable() && (
+              <div className="flex items-center gap-1 mb-3">
+                <CreditCard className="w-3 h-3 text-gray-500" />
+                <span className="text-xs font-bold text-red-600">
+                  Non-refundable
+                </span>
+              </div>
+            )}
 
             {/* Policy Chips - Mobile */}
             {(hotel.freeCancellation || hotel.payAtProperty) && (
