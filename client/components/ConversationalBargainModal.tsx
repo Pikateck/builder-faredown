@@ -1034,7 +1034,7 @@ export function ConversationalBargainModal({
           mobile-bargain-modal max-w-md mx-auto sm:max-w-lg p-0
           ${isMobileDevice() ? "mobile-modal" : ""}
           flex flex-col
-          [&>[role="button"]]:hidden
+          [&_button:absolute]:hidden
         `}
         style={{
           maxHeight: isMobileDevice() ? "100dvh" : "90vh",
