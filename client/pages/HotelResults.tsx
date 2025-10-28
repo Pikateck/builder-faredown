@@ -1138,7 +1138,12 @@ function HotelResultsContent() {
       currentPrice: 175,
       description: `Premium luxury resort with exceptional amenities and stunning beach views.`,
       amenities: ["Beach", "WiFi", "Spa", "Restaurant", "Bar", "Pool", "Gym"],
-      features: ["Private Beach", "Water Sports", "Kids Club", "All-Inclusive Options"],
+      features: [
+        "Private Beach",
+        "Water Sports",
+        "Kids Club",
+        "All-Inclusive Options",
+      ],
       roomTypes: [
         {
           name: "Deluxe Room",
@@ -1216,8 +1221,19 @@ function HotelResultsContent() {
       originalPrice: 180,
       currentPrice: 158,
       description: `Modern executive suites designed for business travelers with premium amenities.`,
-      amenities: ["WiFi", "Gym", "Business Center", "Meeting Rooms", "Restaurant", "Bar"],
-      features: ["Executive Lounge", "Airport Shuttle", "Conference Facilities"],
+      amenities: [
+        "WiFi",
+        "Gym",
+        "Business Center",
+        "Meeting Rooms",
+        "Restaurant",
+        "Bar",
+      ],
+      features: [
+        "Executive Lounge",
+        "Airport Shuttle",
+        "Conference Facilities",
+      ],
       roomTypes: [
         {
           name: "Executive Room",

@@ -131,7 +131,9 @@ export function ConversationalBargainModal({
   }, []);
 
   // Safe setState wrapper
-  const safeSetState = <T,>(setter: React.Dispatch<React.SetStateAction<T>>) => {
+  const safeSetState = <T,>(
+    setter: React.Dispatch<React.SetStateAction<T>>,
+  ) => {
     return (value: React.SetStateAction<T>) => {
       if (isMountedRef.current) {
         try {

@@ -241,7 +241,10 @@ export function HotelCard({
       if (policyLower.includes("free") || policyLower.includes("refundable")) {
         return true;
       }
-      if (policyLower.includes("non-refundable") || policyLower.includes("nonrefundable")) {
+      if (
+        policyLower.includes("non-refundable") ||
+        policyLower.includes("nonrefundable")
+      ) {
         return false;
       }
     }
