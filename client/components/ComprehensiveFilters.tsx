@@ -92,11 +92,7 @@ export function ComprehensiveFilters({
   supplierCounts,
 }: ComprehensiveFiltersProps) {
   const { selectedCurrency } = useCurrency();
-  const [expandedSections, setExpandedSections] = useState<string[]>([
-    "budget",
-    "popular",
-    "deals",
-  ]);
+  const [expandedSections, setExpandedSections] = useState<string[]>([]);
   const [showAllSections, setShowAllSections] = useState<string[]>([]);
 
   // Modal state for "View more" filters
@@ -299,24 +295,6 @@ export function ComprehensiveFilters({
         { id: "belvilla", label: "Belvilla", count: 6 },
       ],
       maxVisible: 10,
-    },
-    {
-      id: "neighborhood",
-      title: "Neighborhood",
-      isCollapsible: true,
-      items: [
-        { id: "beach-coast", label: "Beach & Coast", count: 2108 },
-        { id: "downtown-dubai", label: "Downtown Dubai", count: 1069 },
-        { id: "guests-favorite", label: "Guests' favorite area", count: 1084 },
-        { id: "bur-dubai", label: "Bur Dubai", count: 337 },
-        { id: "palm-jumeirah", label: "Palm Jumeirah", count: 440 },
-        { id: "deira", label: "Deira", count: 217 },
-        { id: "sheikh-zayed", label: "Sheikh Zayed Road", count: 601 },
-        { id: "jumeirah-beach", label: "Jumeirah Beach Residence", count: 341 },
-        { id: "dubai-marina", label: "Dubai Marina", count: 769 },
-        { id: "old-dubai", label: "Old Dubai", count: 114 },
-      ],
-      maxVisible: 6,
     },
   ];
 
