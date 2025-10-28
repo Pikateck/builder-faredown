@@ -656,8 +656,8 @@ function HotelResultsContent() {
 
       if (!metadataData.hotels || metadataData.hotels.length === 0) {
         console.warn("⚠️ No metadata hotels found from API");
-        setError("No hotels available for your search criteria");
-        return [];
+        console.log("⚠️ No results from API - falling back to mock data");
+        return loadMockHotels();
       }
 
       // Convert metadata to Hotel format
