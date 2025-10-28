@@ -617,6 +617,7 @@ export function HotelCard({
     // Navigate with complete state for immediate availability and URL persistence
     navigate(`/hotels/${hotel.id}?${detailParams.toString()}`, {
       state: {
+        hotel: hotel, // Pass full hotel data as fallback for HotelDetails
         preselectRate,
         searchParams: standardizedHotelSearchParams,
         roomsSnapshot: hotel?.roomTypes || [],
