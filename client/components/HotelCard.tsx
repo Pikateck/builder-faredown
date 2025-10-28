@@ -967,10 +967,17 @@ export function HotelCard({
               </span>
             </div>
 
-            {/* Refundable Information - Mobile - Only show if non-refundable */}
-            {!isRefundable() && (
+            {/* Refundable Information - Mobile - Show ONE indicator per room */}
+            {isRefundable() ? (
               <div className="flex items-center gap-1 mb-3">
-                <CreditCard className="w-3 h-3 text-gray-500" />
+                <CheckCircle className="w-3 h-3 text-green-600" />
+                <span className="text-xs font-bold text-green-600">
+                  {getCancellationPolicyText()}
+                </span>
+              </div>
+            ) : (
+              <div className="flex items-center gap-1 mb-3">
+                <CreditCard className="w-3 h-3 text-red-600" />
                 <span className="text-xs font-bold text-red-600">
                   Non-refundable
                 </span>
