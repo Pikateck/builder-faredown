@@ -803,21 +803,15 @@ export function HotelCard({
                 </div>
               )}
 
-              {/* Refundable Information */}
-              <div className="flex items-center gap-1 mb-3">
-                <CreditCard className="w-3 h-3 text-gray-500" />
-                <span className="text-xs font-bold">
-                  {isRefundable() ? (
-                    <span className="text-green-600">
-                      ✓{" "}
-                      {hotel.availableRoom?.cancellationPolicy ||
-                        "Free cancellation"}
-                    </span>
-                  ) : (
-                    <span className="text-red-600">Non-refundable</span>
-                  )}
-                </span>
-              </div>
+              {/* Refundable Information - Only show if non-refundable */}
+              {!isRefundable() && (
+                <div className="flex items-center gap-1 mb-3">
+                  <CreditCard className="w-3 h-3 text-gray-500" />
+                  <span className="text-xs font-bold text-red-600">
+                    Non-refundable
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Pricing Section - Booking.com Style */}
