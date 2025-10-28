@@ -256,12 +256,9 @@ export default function HotelDetails() {
   const destination = searchParams.get("destination") || "";
   const destinationCode =
     searchParams.get("destinationCode") || destination.split("-")[1] || "";
-  const countryName = searchParams.get("countryName") || "";
+  const destinationName = searchParams.get("destinationName") || searchParams.get("countryName") || "";
 
-  const cityFull =
-    countryName && destinationCode
-      ? `${destination}, ${countryName} – ${destinationCode}`
-      : destination;
+  const cityFull = destinationName || destination;
 
   const datesLabel = `${format(checkInDate, "EEE, d MMM")} → ${format(checkOutDate, "EEE, d MMM")}`;
 
