@@ -1069,6 +1069,7 @@ export function ConversationalBargainModal({
       }}
     >
       <DialogContent
+        showClose={false}
         className={`
           mobile-bargain-modal max-w-md mx-auto sm:max-w-lg p-0
           ${isMobileDevice() ? "mobile-modal" : ""}
