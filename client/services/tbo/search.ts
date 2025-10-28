@@ -227,7 +227,7 @@ export function deserializeFiltersFromUrl(
  * to HotelSearchFilters format for TBO API
  */
 export function convertComprehensiveFiltersToTbo(
-  comprehensiveFilters: Record<string, string[]>,
+  comprehensiveFilters: Record<string, string[] | string>,
   priceRange?: [number, number],
 ): HotelSearchFilters {
   const tboFilters: HotelSearchFilters = {};
@@ -239,18 +239,47 @@ export function convertComprehensiveFiltersToTbo(
   }
 
   // Handle each filter category
-  Object.entries(comprehensiveFilters).forEach(([categoryId, selectedIds]) => {
-    if (!selectedIds || selectedIds.length === 0) return;
+  Object.entries(comprehensiveFilters).forEach(([categoryId, selectedValue]) => {
+    if (!selectedValue) return;
+
+    // Handle string filters (search block)
+    if (typeof selectedValue === "string") {
+      switch (categoryId) {
+        case "qPropertyName":
+          tboFilters.qPropertyName = selectedValue;
+          break;
+        case "qAddress":
+          tboFilters.qAddress = selectedValue;
+          break;
+        case "qRoomName":
+          tboFilters.qRoomName = selectedValue;
+          break;
+        default:
+          break;
+      }
+      return;
+    }
+
+    // Handle array filters
+    const selectedIds = selectedValue as string[];
+    if (selectedIds.length === 0) return;
 
     switch (categoryId) {
       case "property-rating":
-        // Star ratings: 1-star, 2-stars, etc.
+        // Legacy support for old ID (convert to new stars format)
         tboFilters.stars = selectedIds
           .map((id) => {
             const match = id.match(/(\d+)-star/);
             return match ? parseInt(match[1]) : null;
           })
           .filter((n): n is number => n !== null);
+        break;
+
+      case "stars":
+        // New star ratings: numeric IDs (5, 4, 3, 2, 1)
+        tboFilters.stars = selectedIds
+          .map((id) => parseInt(id))
+          .filter((n): n is number => !isNaN(n));
         break;
 
       case "meal-plans":
