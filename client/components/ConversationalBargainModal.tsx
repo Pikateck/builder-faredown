@@ -1086,7 +1086,7 @@ export function ConversationalBargainModal({
           ...(isMobileDevice()
             ? {
                 inset: "0",
-                transform: "translateX(-50%)",
+                transform: "none",
                 width: "100%",
                 maxWidth: "100%",
               }
