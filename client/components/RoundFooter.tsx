@@ -65,15 +65,6 @@ export const RoundFooter: React.FC<RoundFooterProps> = ({
         >
           Enter new price
         </button>
-        <button
-          type="button"
-          disabled={disabled || !value}
-          onClick={handleSend}
-          className="ml-auto inline-flex items-center justify-center w-9 h-9 rounded-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white disabled:opacity-50"
-          title="Send"
-        >
-          <Handshake className="w-4 h-4" />
-        </button>
       </div>
 
       {mode === "new" && (
