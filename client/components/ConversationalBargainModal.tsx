@@ -1305,7 +1305,7 @@ export function ConversationalBargainModal({
               {!isComplete && round < TOTAL_ROUNDS && !isNegotiating && (
                 <Button
                   onClick={handleTryAgain}
-                  className="w-full bg-gray-100 text-gray-900 hover:bg-gray-200 font-medium py-3 h-11 mobile-touch-target rounded-xl"
+                  className="w-full bg-[#0071c2] text-white hover:bg-[#005a9c] font-medium py-3 h-11 mobile-touch-target rounded-xl"
                   aria-label="Try another negotiation round"
                 >
                   <span className="hidden sm:inline">
