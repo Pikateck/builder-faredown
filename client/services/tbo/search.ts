@@ -3,10 +3,7 @@
  * Builds and executes TBO hotel searches with filter mapping
  */
 
-import {
-  HotelSearchFilters,
-  buildTboFilterPayload,
-} from "@/lib/tboFilterMap";
+import { HotelSearchFilters, buildTboFilterPayload } from "@/lib/tboFilterMap";
 
 export interface TboSearchParams {
   cityId: string;

@@ -27,55 +27,60 @@ export interface HotelSearchFilters {
 }
 
 // Type definitions for canonical filters
-export type MealPlan = 'RO' | 'BB' | 'HB' | 'FB' | 'DN';
-export type CancellationPolicy = 'NR' | 'PR' | 'FC';
-export type PropertyType = 'HOTEL' | 'APARTMENT' | 'APARTHOTEL' | 'RESORT' | 'VILLA';
-export type GuestRating = 'EXCELLENT' | 'VERY_GOOD' | 'GOOD';
+export type MealPlan = "RO" | "BB" | "HB" | "FB" | "DN";
+export type CancellationPolicy = "NR" | "PR" | "FC";
+export type PropertyType =
+  | "HOTEL"
+  | "APARTMENT"
+  | "APARTHOTEL"
+  | "RESORT"
+  | "VILLA";
+export type GuestRating = "EXCELLENT" | "VERY_GOOD" | "GOOD";
 
 // UI Label → TBO Code Mappings
 export const MEAL_PLAN_MAP: Record<string, MealPlan> = {
-  'Room Only': 'RO',
-  'Breakfast': 'BB',
-  'Half Board': 'HB',
-  'Full Board': 'FB',
-  'Dinner': 'DN',
+  "Room Only": "RO",
+  Breakfast: "BB",
+  "Half Board": "HB",
+  "Full Board": "FB",
+  Dinner: "DN",
 } as const;
 
 export const CANCELLATION_MAP: Record<string, CancellationPolicy> = {
-  'Non-Refundable': 'NR',
-  'Partially-Refundable': 'PR',
-  'Free Cancellation': 'FC',
+  "Non-Refundable": "NR",
+  "Partially-Refundable": "PR",
+  "Free Cancellation": "FC",
 } as const;
 
 export const GUEST_RATING_MAP: Record<string, GuestRating> = {
-  'Excellent': 'EXCELLENT',
-  'Very Good': 'VERY_GOOD',
-  'Good': 'GOOD',
+  Excellent: "EXCELLENT",
+  "Very Good": "VERY_GOOD",
+  Good: "GOOD",
 } as const;
 
 export const PROPERTY_TYPE_MAP: Record<string, PropertyType> = {
-  'Hotel': 'HOTEL',
-  'Apartment': 'APARTMENT',
-  'Aparthotel': 'APARTHOTEL',
-  'Resort': 'RESORT',
-  'Villa': 'VILLA',
+  Hotel: "HOTEL",
+  Apartment: "APARTMENT",
+  Aparthotel: "APARTHOTEL",
+  Resort: "RESORT",
+  Villa: "VILLA",
 } as const;
 
 // Reverse mappings (for display)
 export const MEAL_PLAN_LABELS = Object.fromEntries(
-  Object.entries(MEAL_PLAN_MAP).map(([label, code]) => [code, label])
+  Object.entries(MEAL_PLAN_MAP).map(([label, code]) => [code, label]),
 );
 
 export const CANCELLATION_LABELS = Object.fromEntries(
-  Object.entries(CANCELLATION_MAP).map(([label, code]) => [code, label])
+  Object.entries(CANCELLATION_MAP).map(([label, code]) => [code, label]),
 );
 
 export const GUEST_RATING_LABELS = Object.fromEntries(
-  Object.entries(GUEST_RATING_MAP).map(([label, code]) => [code, label])
+  Object.entries(GUEST_RATING_MAP).map(([label, code]) => [code, label]),
 );
 
 export const PROPERTY_TYPE_LABELS = Object.fromEntries(
-  Object.entries(PROPERTY_TYPE_MAP).map(([label, code]) => [code, label])
+  Object.entries(PROPERTY_TYPE_MAP).map(([label, code]) => [code, label]),
 );
 
 /**
@@ -91,7 +96,9 @@ export interface ReferenceItem {
  * Build TBO search payload from selected filters
  * Maps HotelSearchFilters to TBO API structure
  */
-export function buildTboFilterPayload(filters: HotelSearchFilters): Record<string, any> {
+export function buildTboFilterPayload(
+  filters: HotelSearchFilters,
+): Record<string, any> {
   const payload: Record<string, any> = {};
 
   // Text searches

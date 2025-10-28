@@ -412,9 +412,7 @@ export function ComprehensiveFilters({
               onClick={() => {
                 // For brands, amenities, and neighborhoods, open modal instead
                 if (
-                  ["brands", "amenities", "neighborhood"].includes(
-                    category.id,
-                  )
+                  ["brands", "amenities", "neighborhood"].includes(category.id)
                 ) {
                   setOpenModal(category.id);
                 } else {

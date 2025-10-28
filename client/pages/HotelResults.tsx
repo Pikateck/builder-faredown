@@ -124,7 +124,10 @@ function HotelResultsContent() {
 
         setSelectedFilters(comprehensiveFilters);
 
-        if (savedFilters.priceMin !== undefined || savedFilters.priceMax !== undefined) {
+        if (
+          savedFilters.priceMin !== undefined ||
+          savedFilters.priceMax !== undefined
+        ) {
           setPriceRange([
             savedFilters.priceMin || 0,
             savedFilters.priceMax || 25000,
@@ -538,18 +541,15 @@ function HotelResultsContent() {
         : undefined;
 
       // Build API URL with filter parameters
-      const apiUrl = buildTboSearchUrl(
-        `${apiBaseUrl}/hotels`,
-        {
-          cityId: destCode,
-          countryCode,
-          checkIn: checkInStr,
-          checkOut: checkOutStr,
-          adults: adultsCount,
-          children: childrenCount,
-          filters: tboFilters,
-        },
-      );
+      const apiUrl = buildTboSearchUrl(`${apiBaseUrl}/hotels`, {
+        cityId: destCode,
+        countryCode,
+        checkIn: checkInStr,
+        checkOut: checkOutStr,
+        adults: adultsCount,
+        children: childrenCount,
+        filters: tboFilters,
+      });
       console.log(`📡 API Call: ${apiUrl}`);
 
       let metadataResponse;
@@ -1566,7 +1566,10 @@ function HotelResultsContent() {
     });
 
     // Convert ComprehensiveFilters back to TBO format and add to URL
-    const tboFilters = convertComprehensiveFiltersToTbo(selectedFilters, priceRange as [number, number]);
+    const tboFilters = convertComprehensiveFiltersToTbo(
+      selectedFilters,
+      priceRange as [number, number],
+    );
     const filterPayload = buildTboFilterPayload(tboFilters);
 
     Object.entries(filterPayload).forEach(([key, value]) => {

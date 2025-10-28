@@ -352,7 +352,9 @@ export default function HotelDetails() {
 
               // 404 means hotel not in TBO database - don't retry, use fallback immediately
               if (response.status === 404) {
-                console.log("⚠️  Hotel not in TBO database, using fallback data");
+                console.log(
+                  "⚠️  Hotel not in TBO database, using fallback data",
+                );
                 throw new Error(`TBO_HOTEL_NOT_FOUND_404`);
               }
 
@@ -405,9 +407,7 @@ export default function HotelDetails() {
 
           if (retryCount < 1 && isRetryableError) {
             const delay = 1500; // 1.5 second delay
-            console.log(
-              `Retrying in ${delay}ms... (Error: ${error.message})`,
-            );
+            console.log(`Retrying in ${delay}ms... (Error: ${error.message})`);
             await new Promise((resolve) => setTimeout(resolve, delay));
             return attemptFetch(retryCount + 1);
           }

@@ -72,7 +72,8 @@ export const FilterModalSelect: React.FC<FilterModalSelectProps> = ({
     onClose();
   };
 
-  const allSelected = localSelected.size === filteredItems.length && filteredItems.length > 0;
+  const allSelected =
+    localSelected.size === filteredItems.length && filteredItems.length > 0;
 
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-end md:items-center md:justify-center">
@@ -106,9 +107,7 @@ export const FilterModalSelect: React.FC<FilterModalSelectProps> = ({
         {/* List Items */}
         <div className="flex-1 overflow-y-auto">
           {filteredItems.length === 0 ? (
-            <div className="p-4 text-center text-gray-500">
-              No items found
-            </div>
+            <div className="p-4 text-center text-gray-500">No items found</div>
           ) : (
             <div className="divide-y divide-gray-100">
               {filteredItems.map((item) => (
