@@ -506,14 +506,18 @@ function HotelResultsContent() {
 
       if (searchTypeParam === "mock") {
         console.log("🎭 Using mock data (searchType=mock)");
-        const mockData = getMockHotels();
-        setHotels(mockData);
-        setTotalResults(mockData.length);
-        setIsLiveData(false);
-        setHasMore(false);
-        setPricingStatus("ready");
-        setLoading(false);
-        return mockData;
+        return loadMockHotels();
+      }
+
+      // SAFETY: If flying on fly.dev (not localhost), use mock immediately
+      // because Render API is often unreachable from fly.dev preview
+      if (
+        typeof window !== "undefined" &&
+        window.location.origin.includes("fly.dev") &&
+        !apiBaseUrl.includes("localhost")
+      ) {
+        console.log("🎭 Detected fly.dev preview - using mock data for stability");
+        return loadMockHotels();
       }
 
       // STEP 1: Fetch metadata instantly from TBO
