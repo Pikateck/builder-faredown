@@ -104,57 +104,53 @@ export function ComprehensiveFilters({
 
   // Search block state (with 400ms debounce)
   const [propertyNameQuery, setPropertyNameQuery] = useState(
-    (selectedFilters.qPropertyName as string) || "",
+    (selectedFilters.qPropertyName as string | undefined) || "",
   );
   const [areaQuery, setAreaQuery] = useState(
-    (selectedFilters.qAddress as string) || "",
+    (selectedFilters.qAddress as string | undefined) || "",
   );
   const [roomNameQuery, setRoomNameQuery] = useState(
-    (selectedFilters.qRoomName as string) || "",
+    (selectedFilters.qRoomName as string | undefined) || "",
   );
 
-  // Debounce search inputs
+  // Debounce handler for property name
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setSelectedFilters((prev) => {
-        const newFilters = { ...prev };
-        if (propertyNameQuery) {
-          newFilters.qPropertyName = propertyNameQuery;
-        } else {
-          delete newFilters.qPropertyName;
-        }
-        return newFilters;
-      });
+      const newFilters = { ...selectedFilters };
+      if (propertyNameQuery) {
+        newFilters.qPropertyName = propertyNameQuery;
+      } else {
+        delete newFilters.qPropertyName;
+      }
+      setSelectedFilters(newFilters);
     }, 400);
     return () => clearTimeout(timer);
   }, [propertyNameQuery]);
 
+  // Debounce handler for area
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setSelectedFilters((prev) => {
-        const newFilters = { ...prev };
-        if (areaQuery) {
-          newFilters.qAddress = areaQuery;
-        } else {
-          delete newFilters.qAddress;
-        }
-        return newFilters;
-      });
+      const newFilters = { ...selectedFilters };
+      if (areaQuery) {
+        newFilters.qAddress = areaQuery;
+      } else {
+        delete newFilters.qAddress;
+      }
+      setSelectedFilters(newFilters);
     }, 400);
     return () => clearTimeout(timer);
   }, [areaQuery]);
 
+  // Debounce handler for room name
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setSelectedFilters((prev) => {
-        const newFilters = { ...prev };
-        if (roomNameQuery) {
-          newFilters.qRoomName = roomNameQuery;
-        } else {
-          delete newFilters.qRoomName;
-        }
-        return newFilters;
-      });
+      const newFilters = { ...selectedFilters };
+      if (roomNameQuery) {
+        newFilters.qRoomName = roomNameQuery;
+      } else {
+        delete newFilters.qRoomName;
+      }
+      setSelectedFilters(newFilters);
     }, 400);
     return () => clearTimeout(timer);
   }, [roomNameQuery]);
