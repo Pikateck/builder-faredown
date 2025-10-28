@@ -94,11 +94,18 @@ function HotelResultsContent() {
       const savedFilters = deserializeFiltersFromUrl(urlSearchParams);
       if (Object.keys(savedFilters).length > 0) {
         // Convert TBO format filters back to ComprehensiveFilters format
-        const comprehensiveFilters: Record<string, string[]> = {};
+        const comprehensiveFilters: Record<string, string[] | string> = {};
         if (savedFilters.stars?.length) {
-          comprehensiveFilters["property-rating"] = savedFilters.stars.map(
-            (s) => `${s}-star`,
-          );
+          comprehensiveFilters["stars"] = savedFilters.stars;
+        }
+        if (savedFilters.qPropertyName) {
+          comprehensiveFilters["qPropertyName"] = savedFilters.qPropertyName;
+        }
+        if (savedFilters.qAddress) {
+          comprehensiveFilters["qAddress"] = savedFilters.qAddress;
+        }
+        if (savedFilters.qRoomName) {
+          comprehensiveFilters["qRoomName"] = savedFilters.qRoomName;
         }
         if (savedFilters.mealPlans?.length) {
           comprehensiveFilters["meal-plans"] = savedFilters.mealPlans;
