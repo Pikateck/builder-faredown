@@ -1059,6 +1059,7 @@ export function ConversationalBargainModal({
   return shouldRenderModal ? (
     <Dialog
       open={isOpen}
+      modal={true}
       onOpenChange={(open) => {
         // Only allow closing via explicit user action (close button)
         // Prevent accidental closes from typing or other interactions
