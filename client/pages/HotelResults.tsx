@@ -883,6 +883,7 @@ function HotelResultsContent() {
             ? "Free cancellation"
             : "Non-refundable",
           description: cheapestRoom.roomDescription || "",
+          isRefundable: isRefundable,
         },
         supplier: "TBO",
         supplierCode: "tbo",
