@@ -92,7 +92,17 @@ export function ComprehensiveFilters({
   supplierCounts,
 }: ComprehensiveFiltersProps) {
   const { selectedCurrency } = useCurrency();
-  const [expandedSections, setExpandedSections] = useState<string[]>([]);
+  // Initialize with all filter categories expanded by default
+  const [expandedSections, setExpandedSections] = useState<string[]>([
+    "amenities",
+    "meal-plans",
+    "property-type",
+    "guest-rating",
+    "cancellation",
+    "stars",
+    "neighborhood",
+    "brands",
+  ]);
   const [showAllSections, setShowAllSections] = useState<string[]>([]);
 
   // Modal state for "View more" filters
@@ -344,18 +354,7 @@ export function ComprehensiveFilters({
                 )}
                 {hasMore && (
                   <button
-                    onClick={() => {
-                      // For brands, amenities, and neighborhoods, open modal instead
-                      if (
-                        ["brands", "amenities", "neighborhood"].includes(
-                          category.id,
-                        )
-                      ) {
-                        setOpenModal(category.id);
-                      } else {
-                        toggleShowAll(category.id);
-                      }
-                    }}
+                    onClick={() => toggleShowAll(category.id)}
                     className="text-blue-600 text-sm hover:underline mt-2 flex items-center gap-1"
                   >
                     {showAll ? (
@@ -387,16 +386,7 @@ export function ComprehensiveFilters({
           {visibleItems.map((item) => renderFilterItem(item, category.id))}
           {hasMore && (
             <button
-              onClick={() => {
-                // For brands, amenities, and neighborhoods, open modal instead
-                if (
-                  ["brands", "amenities", "neighborhood"].includes(category.id)
-                ) {
-                  setOpenModal(category.id);
-                } else {
-                  toggleShowAll(category.id);
-                }
-              }}
+              onClick={() => toggleShowAll(category.id)}
               className="text-blue-600 text-sm hover:underline mt-2 flex items-center gap-1"
             >
               {showAll ? (
@@ -492,89 +482,11 @@ export function ComprehensiveFilters({
       </div>
 
       {/* Filter Categories */}
-      <ScrollArea className="h-[calc(100vh-200px)]">
-        <div className="px-4 pb-4">
-          {filterCategories.map((category) =>
-            renderFilterCategory(category),
-          )}
-        </div>
-      </ScrollArea>
-
-      {/* View More Modals */}
-      {openModal === "brands" && filterCategories && (
-        <FilterModalSelect
-          title="Select Brands"
-          items={
-            filterCategories
-              .find((c) => c.id === "brands")
-              ?.items.map((item) => ({
-                code: item.id,
-                name: item.label,
-                count: item.count,
-              })) || []
-          }
-          selected={(selectedFilters["brands"] as string[]) || []}
-          onApply={(selected) => {
-            setSelectedFilters({
-              ...selectedFilters,
-              brands: selected,
-            });
-            setOpenModal(null);
-          }}
-          onClose={() => setOpenModal(null)}
-          searchPlaceholder="Search brands..."
-        />
-      )}
-
-      {openModal === "amenities" && filterCategories && (
-        <FilterModalSelect
-          title="Select Amenities"
-          items={
-            filterCategories
-              .find((c) => c.id === "amenities")
-              ?.items.map((item) => ({
-                code: item.id,
-                name: item.label,
-                count: item.count,
-              })) || []
-          }
-          selected={(selectedFilters["amenities"] as string[]) || []}
-          onApply={(selected) => {
-            setSelectedFilters({
-              ...selectedFilters,
-              amenities: selected,
-            });
-            setOpenModal(null);
-          }}
-          onClose={() => setOpenModal(null)}
-          searchPlaceholder="Search amenities..."
-        />
-      )}
-
-      {openModal === "neighborhood" && filterCategories && (
-        <FilterModalSelect
-          title="Select Locations"
-          items={
-            filterCategories
-              .find((c) => c.id === "neighborhood")
-              ?.items.map((item) => ({
-                code: item.id,
-                name: item.label,
-                count: item.count,
-              })) || []
-          }
-          selected={(selectedFilters["neighborhood"] as string[]) || []}
-          onApply={(selected) => {
-            setSelectedFilters({
-              ...selectedFilters,
-              neighborhood: selected,
-            });
-            setOpenModal(null);
-          }}
-          onClose={() => setOpenModal(null)}
-          searchPlaceholder="Search locations..."
-        />
-      )}
+      <div className="px-4 pb-4">
+        {filterCategories.map((category) =>
+          renderFilterCategory(category),
+        )}
+      </div>
     </div>
   );
 }
