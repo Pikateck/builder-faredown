@@ -27,6 +27,7 @@ import {
   Building2,
   Coffee as CoffeeIcon,
   Utensils,
+  CheckCircle,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import {
