@@ -1163,21 +1163,30 @@ export function HotelCard({
             </span>
           </div>
 
-          {/* Refundable Information - Desktop - Show ONE indicator per room */}
-          {isRefundable() ? (
-            <div className="flex items-center gap-1 mb-2">
-              <CheckCircle className="w-3 h-3 text-green-600" />
-              <span className="text-xs font-bold text-green-600">
-                {getCancellationPolicyText()}
-              </span>
-            </div>
-          ) : (
-            <div className="flex items-center gap-1 mb-2">
-              <CreditCard className="w-3 h-3 text-red-600" />
-              <span className="text-xs font-bold text-red-600">
-                Non-refundable
-              </span>
-            </div>
+          {/* Refundable Information - Desktop - Show ONLY if all rooms have same policy */}
+          {allRoomsHaveSameRefundability() && (
+            isRefundable() ? (
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div className="flex items-center gap-1 mb-2 cursor-help">
+                    <CheckCircle className="w-3 h-3 text-green-600" />
+                    <span className="text-xs font-bold text-green-600 underline decoration-dotted">
+                      {getCancellationPolicyText()}
+                    </span>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent className="max-w-xs">
+                  {getCancellationPolicyText()}
+                </TooltipContent>
+              </Tooltip>
+            ) : (
+              <div className="flex items-center gap-1 mb-2">
+                <CreditCard className="w-3 h-3 text-red-600" />
+                <span className="text-xs font-bold text-red-600">
+                  Non-refundable
+                </span>
+              </div>
+            )
           )}
 
           {/* Price and Actions - Booking.com Style */}
