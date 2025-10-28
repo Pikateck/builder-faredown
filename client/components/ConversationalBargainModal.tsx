@@ -1091,16 +1091,24 @@ export function ConversationalBargainModal({
           }, 200);
         }}
         onPointerDownOutside={(e) => {
-          // Always prevent closing when clicking outside
-          e.preventDefault();
+          // Check if interacting with input or dialog content
+          const target = e.target as HTMLElement;
+          if (target.closest("input, textarea, button, [role='dialog']")) {
+            e.preventDefault();
+          }
         }}
         onEscapeKeyDown={(e) => {
-          // Prevent escape key from closing modal
-          e.preventDefault();
+          // Only allow escape if not actively typing
+          if (document.activeElement?.tagName === "INPUT") {
+            e.preventDefault();
+          }
         }}
         onInteractOutside={(e) => {
-          // Prevent any outside interaction from closing modal
-          e.preventDefault();
+          // Prevent any outside interaction from closing modal during input
+          const target = e.target as HTMLElement;
+          if (target.closest("input, textarea, button, [role='dialog']")) {
+            e.preventDefault();
+          }
         }}
       >
         {/* Accessibility Title */}
