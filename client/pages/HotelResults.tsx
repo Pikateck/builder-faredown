@@ -1539,6 +1539,49 @@ function HotelResultsContent() {
     setIsBargainModalOpen(true);
   };
 
+  // Sync filter changes to URL
+  useEffect(() => {
+    // Build filter params for URL
+    const params = new URLSearchParams(urlSearchParams);
+
+    // Clear existing filter params
+    Array.from(params.keys()).forEach((key) => {
+      if (
+        [
+          "stars",
+          "mealPlans",
+          "cancellation",
+          "amenities",
+          "propertyTypes",
+          "locations",
+          "guestRating",
+          "brands",
+          "priceMin",
+          "priceMax",
+        ].includes(key)
+      ) {
+        params.delete(key);
+      }
+    });
+
+    // Convert ComprehensiveFilters back to TBO format and add to URL
+    const tboFilters = convertComprehensiveFiltersToTbo(selectedFilters, priceRange as [number, number]);
+    const filterPayload = buildTboFilterPayload(tboFilters);
+
+    Object.entries(filterPayload).forEach(([key, value]) => {
+      if (Array.isArray(value)) {
+        value.forEach((item) => {
+          params.append(key, String(item));
+        });
+      } else if (value !== undefined && value !== null) {
+        params.append(key, String(value));
+      }
+    });
+
+    // Update URL without navigation
+    window.history.replaceState(null, "", `?${params.toString()}`);
+  }, [selectedFilters, priceRange]);
+
   const handleClearFilters = () => {
     setSelectedFilters({});
     setSortBy("recommended");
