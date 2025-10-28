@@ -1073,12 +1073,12 @@ export function ConversationalBargainModal({
           mobile-bargain-modal max-w-md mx-auto sm:max-w-lg p-0
           ${isMobileDevice() ? "mobile-modal" : ""}
           flex flex-col
+          !z-[9999]
         `}
         style={{
           maxHeight: isMobileDevice() ? "100dvh" : "90vh",
           height: isMobileDevice() ? "100dvh" : "auto",
           borderRadius: isMobileDevice() ? "0" : "1rem",
-          zIndex: 9999,
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
