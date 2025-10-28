@@ -113,8 +113,8 @@ export function ComprehensiveFilters({
 
   const filterCategories: FilterCategory[] = [
     {
-      id: "facilities",
-      title: "Facilities",
+      id: "amenities",
+      title: "Amenities",
       isCollapsible: true,
       items: [
         { id: "parking", label: "Parking", count: 5444 },
@@ -132,7 +132,7 @@ export function ComprehensiveFilters({
         { id: "pet-friendly", label: "Pet friendly", count: 945 },
         { id: "non-smoking", label: "Non-smoking rooms", count: 2341 },
       ],
-      maxVisible: 5,
+      maxVisible: 10,
     },
     {
       id: "meal-plans",
