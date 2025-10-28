@@ -873,42 +873,67 @@ export default function HotelDetails() {
           : null;
 
     if (sourceRooms) {
-      const mapped = sourceRooms.map((room: any, index: number) => ({
-        id: room.rateKey || room.id || `live-room-${index}`,
-        name: room.name || `Room Type ${index + 1}`,
-        type: room.name || `1 X ${room.name || "Standard"}`,
-        details:
-          room.features || room.inclusions
-            ? (room.features || room.inclusions)
-                .map((f: any) =>
-                  typeof f === "string" ? f : f?.name || "Feature",
-                )
-                .join(", ")
-            : "Standard accommodations",
-        pricePerNight:
-          room.pricePerNight || room.price || hotelData?.currentPrice || 167,
-        status: index === 0 ? "Best Value - Start Here!" : `Available`,
-        statusColor: index === 0 ? "green" : "blue",
-        nonRefundable: true,
-        image:
-          room.image ||
-          (Array.isArray(hotelData?.images) && hotelData!.images.length > 1
-            ? typeof hotelData!.images[1] === "string"
-              ? (hotelData!.images[1] as string)
-              : (hotelData!.images[1] as any).url
-            : "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300"),
-        features: Array.isArray(room.features)
-          ? room.features.map((f) =>
-              typeof f === "string" ? f : f?.name || "Feature",
-            )
-          : [
-              "Standard room",
-              "Free WiFi",
-              "Air conditioning",
-              "Private bathroom",
-            ],
-        isLiveData: true,
-      }));
+      const mapped = sourceRooms.map((room: any, index: number) => {
+        // Determine refundability based on cancellation policies
+        const hasCancellationPolicies =
+          (Array.isArray(room.cancellation) && room.cancellation.length > 0) ||
+          (Array.isArray(room.CancellationPolicies) && room.CancellationPolicies.length > 0) ||
+          (typeof room.isRefundable === "boolean" && room.isRefundable);
+
+        // Extract cancellation policy text (for display)
+        let cancellationPolicyText = "";
+        if (Array.isArray(room.cancellation) && room.cancellation.length > 0) {
+          // TBO API returns cancellation policy objects with text
+          const policy = room.cancellation[0];
+          cancellationPolicyText = typeof policy === "string"
+            ? policy
+            : policy?.ChargeType || policy?.text || "";
+        } else if (Array.isArray(room.CancellationPolicies) && room.CancellationPolicies.length > 0) {
+          const policy = room.CancellationPolicies[0];
+          cancellationPolicyText = typeof policy === "string"
+            ? policy
+            : policy?.ChargeType || policy?.text || "";
+        }
+
+        return {
+          id: room.rateKey || room.id || `live-room-${index}`,
+          name: room.name || room.roomName || `Room Type ${index + 1}`,
+          type: room.name || room.roomName || `1 X ${room.name || "Standard"}`,
+          details:
+            room.features || room.inclusions
+              ? (room.features || room.inclusions)
+                  .map((f: any) =>
+                    typeof f === "string" ? f : f?.name || "Feature",
+                  )
+                  .join(", ")
+              : "Standard accommodations",
+          pricePerNight:
+            room.pricePerNight || room.price?.base || hotelData?.currentPrice || 167,
+          status: index === 0 ? "Best Value - Start Here!" : `Available`,
+          statusColor: index === 0 ? "green" : "blue",
+          nonRefundable: !hasCancellationPolicies,
+          cancellationPolicy: cancellationPolicyText,
+          isRefundable: hasCancellationPolicies,
+          image:
+            room.image ||
+            (Array.isArray(hotelData?.images) && hotelData!.images.length > 1
+              ? typeof hotelData!.images[1] === "string"
+                ? (hotelData!.images[1] as string)
+                : (hotelData!.images[1] as any).url
+              : "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300"),
+          features: Array.isArray(room.features)
+            ? room.features.map((f) =>
+                typeof f === "string" ? f : f?.name || "Feature",
+              )
+            : [
+                "Standard room",
+                "Free WiFi",
+                "Air conditioning",
+                "Private bathroom",
+              ],
+          isLiveData: true,
+        };
+      });
 
       // If too few options returned, synthesize sensible upgrades so users can choose
       if (mapped.length < 3) {
