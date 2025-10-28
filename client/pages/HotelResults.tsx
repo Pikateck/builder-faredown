@@ -88,6 +88,48 @@ function HotelResultsContent() {
   useEffect(() => {
     if (urlSearchParams.toString()) {
       loadFromUrlParams(urlSearchParams);
+
+      // Also initialize filters from URL if present
+      const savedFilters = deserializeFiltersFromUrl(urlSearchParams);
+      if (Object.keys(savedFilters).length > 0) {
+        // Convert TBO format filters back to ComprehensiveFilters format
+        const comprehensiveFilters: Record<string, string[]> = {};
+        if (savedFilters.stars?.length) {
+          comprehensiveFilters["property-rating"] = savedFilters.stars.map(
+            (s) => `${s}-star`,
+          );
+        }
+        if (savedFilters.mealPlans?.length) {
+          comprehensiveFilters["meal-plans"] = savedFilters.mealPlans;
+        }
+        if (savedFilters.cancellation?.length) {
+          comprehensiveFilters["cancellation"] = savedFilters.cancellation;
+        }
+        if (savedFilters.amenities?.length) {
+          comprehensiveFilters["amenities"] = savedFilters.amenities;
+        }
+        if (savedFilters.propertyTypes?.length) {
+          comprehensiveFilters["property-type"] = savedFilters.propertyTypes;
+        }
+        if (savedFilters.locations?.length) {
+          comprehensiveFilters["neighborhood"] = savedFilters.locations;
+        }
+        if (savedFilters.guestRating?.length) {
+          comprehensiveFilters["guest-rating"] = savedFilters.guestRating;
+        }
+        if (savedFilters.brands?.length) {
+          comprehensiveFilters["brands"] = savedFilters.brands;
+        }
+
+        setSelectedFilters(comprehensiveFilters);
+
+        if (savedFilters.priceMin !== undefined || savedFilters.priceMax !== undefined) {
+          setPriceRange([
+            savedFilters.priceMin || 0,
+            savedFilters.priceMax || 25000,
+          ]);
+        }
+      }
     }
   }, [urlSearchParams, loadFromUrlParams]);
   const [sortBy, setSortBy] = useState("price-low");
