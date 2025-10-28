@@ -647,7 +647,10 @@ export function HotelCard({
     detailParams.set("tab", "gallery");
 
     navigate(`/hotels/${hotel.id}?${detailParams.toString()}`, {
-      state: { preselectRate },
+      state: {
+        hotel: hotel, // Pass full hotel data as fallback for HotelDetails
+        preselectRate,
+      },
     });
   };
 
