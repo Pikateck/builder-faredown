@@ -1028,7 +1028,12 @@ export function ConversationalBargainModal({
   }
 
   return shouldRenderModal ? (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) handleClose(); }}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) handleClose();
+      }}
+    >
       <DialogContent
         className={`
           mobile-bargain-modal max-w-md mx-auto sm:max-w-lg p-0
@@ -1044,7 +1049,9 @@ export function ConversationalBargainModal({
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
-          ...(isMobileDevice() ? { top: "0", transform: "translate(-50%, 0)" } : {}),
+          ...(isMobileDevice()
+            ? { top: "0", transform: "translate(-50%, 0)" }
+            : {}),
         }}
         onOpenAutoFocus={(e) => {
           e.preventDefault();
