@@ -316,9 +316,12 @@ export function HotelSearchForm({
 
     try {
       // Update SearchContext with the search parameters
+      const fullLocationName = selectedResult?.location || destination;
+      const code = destinationCode || (selectedResult?.code as string) || "";
+
       updateSearchParams({
-        destination: destination,
-        destinationName: destination,
+        destination: code || destination,
+        destinationName: fullLocationName,
         checkIn: checkInDate.toISOString(),
         checkOut: checkOutDate.toISOString(),
         departureDate: checkInDate.toISOString(),
@@ -349,12 +352,14 @@ export function HotelSearchForm({
       });
 
       // Only add destination if it exists
-      if (destination) {
+      if (destination || selectedResult) {
         const code =
           destinationCode || (selectedResult?.code as string) || "HTL";
+        const fullLocationName = selectedResult?.location || destination;
+
         urlSearchParams.set("destination", code); // use code for backend search
         urlSearchParams.set("destinationCode", code);
-        urlSearchParams.set("destinationName", destination);
+        urlSearchParams.set("destinationName", fullLocationName);
       }
 
       // Save search data to sessionStorage for persistence
