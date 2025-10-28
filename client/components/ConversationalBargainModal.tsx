@@ -1584,7 +1584,7 @@ export function ConversationalBargainModal({
                               inputRef.current?.focus();
                               // Log telemetry
                               chatAnalyticsService
-                                .trackCustomEvent("chip_clicked", {
+                                .trackEvent("message_send" as any, {
                                   round_index: round - 1,
                                   suggested_price: price,
                                   original_price: basePrice,
