@@ -162,12 +162,6 @@ export function ComprehensiveFilters({
 
   const filterCategories: FilterCategory[] = [
     {
-      id: "search-block",
-      title: "Search Properties",
-      isCollapsible: false,
-      items: [],
-    },
-    {
       id: "amenities",
       title: "Amenities",
       isCollapsible: true,
@@ -553,53 +547,9 @@ export function ComprehensiveFilters({
       {/* Filter Categories */}
       <ScrollArea className="h-[calc(100vh-200px)]">
         <div className="px-4 pb-4">
-          {/* Search Block */}
-          <div className="border-b border-gray-200 py-4">
-            <h3 className="text-base font-semibold text-gray-900 mb-3">
-              Search Properties
-            </h3>
-            <div className="space-y-3">
-              <div>
-                <Label className="text-sm text-gray-700 mb-1.5 block">
-                  Property name
-                </Label>
-                <Input
-                  placeholder="Search property..."
-                  value={propertyNameQuery}
-                  onChange={(e) => setPropertyNameQuery(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <Label className="text-sm text-gray-700 mb-1.5 block">
-                  Area / Address
-                </Label>
-                <Input
-                  placeholder="Search area..."
-                  value={areaQuery}
-                  onChange={(e) => setAreaQuery(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-              <div>
-                <Label className="text-sm text-gray-700 mb-1.5 block">
-                  Room name
-                </Label>
-                <Input
-                  placeholder="Search room type..."
-                  value={roomNameQuery}
-                  onChange={(e) => setRoomNameQuery(e.target.value)}
-                  className="w-full"
-                />
-              </div>
-            </div>
-          </div>
-
-          {/* Other Filter Categories */}
-          {filterCategories.map((category) => {
-            if (category.id === "search-block") return null;
-            return renderFilterCategory(category);
-          })}
+          {filterCategories.map((category) =>
+            renderFilterCategory(category),
+          )}
         </div>
       </ScrollArea>
 
