@@ -268,7 +268,12 @@ export function ConversationalBargainModal({
   useEffect(() => {
     // Only focus when modal first opens, not on every re-render
     const focusTimer = setTimeout(() => {
-      if (isOpen && inputRef.current && !inputRef.current.disabled && round === 1) {
+      if (
+        isOpen &&
+        inputRef.current &&
+        !inputRef.current.disabled &&
+        round === 1
+      ) {
         inputRef.current.focus();
         // On mobile, ensure keyboard appears by clicking the input
         if (isMobileDevice()) {

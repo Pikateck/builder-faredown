@@ -256,7 +256,10 @@ export default function HotelDetails() {
   const destination = searchParams.get("destination") || "";
   const destinationCode =
     searchParams.get("destinationCode") || destination.split("-")[1] || "";
-  const destinationName = searchParams.get("destinationName") || searchParams.get("countryName") || "";
+  const destinationName =
+    searchParams.get("destinationName") ||
+    searchParams.get("countryName") ||
+    "";
 
   const cityFull = destinationName || destination;
 
@@ -1469,7 +1472,9 @@ export default function HotelDetails() {
                 Edit search
               </h2>
               <HotelSearchForm
-                initialDestination={destinationName || searchParams.get("destination") || ""}
+                initialDestination={
+                  destinationName || searchParams.get("destination") || ""
+                }
                 initialCheckIn={searchParams.get("checkIn") || ""}
                 initialCheckOut={searchParams.get("checkOut") || ""}
                 initialGuests={{
@@ -2069,7 +2074,9 @@ export default function HotelDetails() {
         <div className="bg-white border-b border-gray-200 px-4 py-4">
           <div className="max-w-6xl mx-auto">
             <HotelSearchForm
-              initialDestination={destinationName || searchParams.get("destination") || ""}
+              initialDestination={
+                destinationName || searchParams.get("destination") || ""
+              }
               initialCheckIn={searchParams.get("checkIn") || ""}
               initialCheckOut={searchParams.get("checkOut") || ""}
               initialGuests={{
