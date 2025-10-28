@@ -1038,6 +1038,8 @@ export default function HotelDetails() {
         status: "Cheapest Room",
         statusColor: "green",
         nonRefundable: true,
+        isRefundable: false,
+        cancellationPolicy: "Non-refundable rate",
         image:
           "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop",
         features: ["Standard Room", "Best value option", "Free WiFi"],
@@ -1054,6 +1056,8 @@ export default function HotelDetails() {
         status: "Upgrade for +₹15",
         statusColor: "yellow",
         nonRefundable: true,
+        isRefundable: false,
+        cancellationPolicy: "Non-refundable rate",
         image:
           "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop",
         features: ["Upgrade for +₹15", "Twin Classic", "City View"],
@@ -1066,6 +1070,9 @@ export default function HotelDetails() {
         pricePerNight: basePrice + 33,
         status: "Upgrade for +₹33",
         statusColor: "yellow",
+        nonRefundable: false,
+        isRefundable: true,
+        cancellationPolicy: "Free cancellation until 3 days before check-in",
         image:
           "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop",
         features: ["Upgrade for +₹33", "King Room", "Better city views"],
@@ -1079,6 +1086,8 @@ export default function HotelDetails() {
         status: "Upgrade for +₹55",
         statusColor: "blue",
         nonRefundable: false,
+        isRefundable: true,
+        cancellationPolicy: "Free cancellation until 5 days before check-in",
         image:
           "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop",
         features: ["Upgrade for +₹55", "Ocean View Suite", "Premium amenities"],
