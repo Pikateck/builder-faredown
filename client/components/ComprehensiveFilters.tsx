@@ -520,6 +520,82 @@ export function ComprehensiveFilters({
           {filterCategories.map(renderFilterCategory)}
         </div>
       </ScrollArea>
+
+      {/* View More Modals */}
+      {openModal === "brands" && filterCategories && (
+        <FilterModalSelect
+          title="Select Brands"
+          items={
+            filterCategories
+              .find((c) => c.id === "brands")
+              ?.items.map((item) => ({
+                code: item.id,
+                name: item.label,
+                count: item.count,
+              })) || []
+          }
+          selected={selectedFilters["brands"] || []}
+          onApply={(selected) => {
+            setSelectedFilters({
+              ...selectedFilters,
+              brands: selected,
+            });
+            setOpenModal(null);
+          }}
+          onClose={() => setOpenModal(null)}
+          searchPlaceholder="Search brands..."
+        />
+      )}
+
+      {openModal === "amenities" && filterCategories && (
+        <FilterModalSelect
+          title="Select Amenities"
+          items={
+            filterCategories
+              .find((c) => c.id === "amenities")
+              ?.items.map((item) => ({
+                code: item.id,
+                name: item.label,
+                count: item.count,
+              })) || []
+          }
+          selected={selectedFilters["amenities"] || []}
+          onApply={(selected) => {
+            setSelectedFilters({
+              ...selectedFilters,
+              amenities: selected,
+            });
+            setOpenModal(null);
+          }}
+          onClose={() => setOpenModal(null)}
+          searchPlaceholder="Search amenities..."
+        />
+      )}
+
+      {openModal === "neighborhood" && filterCategories && (
+        <FilterModalSelect
+          title="Select Locations"
+          items={
+            filterCategories
+              .find((c) => c.id === "neighborhood")
+              ?.items.map((item) => ({
+                code: item.id,
+                name: item.label,
+                count: item.count,
+              })) || []
+          }
+          selected={selectedFilters["neighborhood"] || []}
+          onApply={(selected) => {
+            setSelectedFilters({
+              ...selectedFilters,
+              neighborhood: selected,
+            });
+            setOpenModal(null);
+          }}
+          onClose={() => setOpenModal(null)}
+          searchPlaceholder="Search locations..."
+        />
+      )}
     </div>
   );
 }
