@@ -453,6 +453,20 @@ function HotelResultsContent() {
     return processedImages.slice(0, 6); // Limit to 6 images max
   };
 
+  // Fallback function - load mock hotels immediately
+  const loadMockHotels = () => {
+    console.log("📦 Loading mock hotels immediately...");
+    const mockData = getMockHotels();
+    setHotels(mockData);
+    setTotalResults(mockData.length);
+    setIsLiveData(false);
+    setHasMore(false);
+    setPricingStatus("ready");
+    setError(null);
+    setLoading(false);
+    return mockData;
+  };
+
   // Fetch hotel metadata from DB + prices from TBO in parallel (hybrid approach)
   const fetchTBOHotels = async (
     destCode: string,
