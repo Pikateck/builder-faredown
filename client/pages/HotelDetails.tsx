@@ -498,7 +498,7 @@ export default function HotelDetails() {
         const passedHotelData = (location.state as any)?.hotel;
         if (passedHotelData) {
           console.log(
-            "✅ Using hotel data from location.state (API unavailable)"
+            "✅ Using hotel data from location.state (API unavailable)",
           );
           setHotelData(passedHotelData);
         } else {

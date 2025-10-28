@@ -766,7 +766,6 @@ export function HotelCard({
                 </div>
               )}
 
-
               {/* Room Type Information - Compact */}
               {hotel.availableRoom && (
                 <div className="mb-3 pb-2 border-b border-gray-100">
@@ -944,7 +943,6 @@ export function HotelCard({
               </div>
             )}
 
-
             {/* Pricing and Actions - Mobile Booking.com Style */}
             <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mt-3">
               {/* Price Display */}
@@ -1092,7 +1090,6 @@ export function HotelCard({
               </span>
             </div>
           )}
-
 
           {/* Price and Actions - Booking.com Style */}
           <div className="flex items-end justify-between mt-auto pt-2 border-t border-gray-100">
