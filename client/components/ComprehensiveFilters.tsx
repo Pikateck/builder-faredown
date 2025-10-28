@@ -499,10 +499,12 @@ export function ComprehensiveFilters({
   };
 
   const getActiveFiltersCount = () => {
-    return Object.values(selectedFilters).reduce(
-      (total, filters) => total + filters.length,
-      0,
-    );
+    return Object.values(selectedFilters).reduce((total, value) => {
+      if (typeof value === "string") {
+        return total + (value ? 1 : 0);
+      }
+      return total + (Array.isArray(value) ? value.length : 0);
+    }, 0);
   };
 
   return (
