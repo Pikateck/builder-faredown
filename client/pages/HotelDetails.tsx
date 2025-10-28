@@ -2276,7 +2276,7 @@ export default function HotelDetails() {
               </Button>
               <div className="h-4 w-px bg-gray-300"></div>
               <span className="text-sm text-gray-600">
-                ���{lowestPrice}+ per night
+                ����{lowestPrice}+ per night
               </span>
             </div>
             <Button
@@ -2552,7 +2552,16 @@ export default function HotelDetails() {
                                 <div className="text-sm text-gray-600 mb-3">
                                   {room.details}
                                 </div>
-                                {room.nonRefundable && (
+                                {room.cancellationPolicy && (
+                                  <div className="mb-3 text-xs">
+                                    {room.isRefundable ? (
+                                      <span className="text-green-700 font-semibold">✓ {room.cancellationPolicy}</span>
+                                    ) : (
+                                      <span className="text-red-700 font-semibold">✗ {room.cancellationPolicy}</span>
+                                    )}
+                                  </div>
+                                )}
+                                {room.nonRefundable && !room.cancellationPolicy && (
                                   <Badge className="bg-red-100 text-red-800 text-xs mb-3 px-2 py-1">
                                     Non Refundable Rate
                                   </Badge>
