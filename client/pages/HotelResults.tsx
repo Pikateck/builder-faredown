@@ -16,6 +16,7 @@ import {
   convertComprehensiveFiltersToTbo,
   deserializeFiltersFromUrl,
 } from "@/services/tbo/search";
+import { buildTboFilterPayload } from "@/lib/tboFilterMap";
 import {
   Select,
   SelectContent,
