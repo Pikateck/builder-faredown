@@ -66,7 +66,13 @@ import {
 } from "@/components/ui/dialog";
 import { BargainButton } from "@/components/ui/BargainButton";
 import { EnhancedFilters } from "@/components/EnhancedFilters";
+import { ComprehensiveFilters } from "@/components/ComprehensiveFilters";
 import { calculateTotalPrice as calculatePriceBreakdown } from "@/lib/pricing";
+import {
+  buildTboSearchUrl,
+  convertComprehensiveFiltersToTbo,
+  deserializeFiltersFromUrl,
+} from "@/services/tbo/search";
 import {
   Star,
   MapPin,
