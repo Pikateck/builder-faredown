@@ -1083,20 +1083,14 @@ export function ConversationalBargainModal({
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
-          position: "fixed",
-          left: "50%",
           ...(isMobileDevice()
             ? {
-                top: "0",
-                bottom: "0",
+                inset: "0",
                 transform: "translateX(-50%)",
                 width: "100%",
                 maxWidth: "100%",
               }
-            : {
-                top: "50%",
-                transform: "translate(-50%, -50%)",
-              }),
+            : {}),
         }}
         onOpenAutoFocus={(e) => {
           e.preventDefault();
