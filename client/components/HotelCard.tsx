@@ -213,11 +213,40 @@ export function HotelCard({
   };
 
   const isRefundable = (): boolean => {
-    if (
-      hotel.availableRoom?.cancellationPolicy?.toLowerCase().includes("free")
-    ) {
-      return true;
+    // Check explicit isRefundable flag first (from API)
+    if (typeof (hotel as any).isRefundable === "boolean") {
+      return (hotel as any).isRefundable;
     }
+
+    // Check availableRoom refundability
+    if (typeof hotel.availableRoom?.isRefundable === "boolean") {
+      return hotel.availableRoom.isRefundable;
+    }
+
+    // Check roomTypes for refundability
+    if (hotel.roomTypes && hotel.roomTypes.length > 0) {
+      const firstRoom = hotel.roomTypes[0] as any;
+      if (typeof firstRoom.isRefundable === "boolean") {
+        return firstRoom.isRefundable;
+      }
+      if (firstRoom.refundable !== undefined) {
+        return Boolean(firstRoom.refundable);
+      }
+    }
+
+    // Fallback to cancellation policy string check
+    const policy = hotel.availableRoom?.cancellationPolicy;
+    if (policy && typeof policy === "string") {
+      const policyLower = policy.toLowerCase();
+      if (policyLower.includes("free") || policyLower.includes("refundable")) {
+        return true;
+      }
+      if (policyLower.includes("non-refundable") || policyLower.includes("nonrefundable")) {
+        return false;
+      }
+    }
+
+    // Default to non-refundable for safety
     return false;
   };
 
