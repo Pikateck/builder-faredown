@@ -2193,7 +2193,7 @@ function HotelResultsContent() {
           <div className="flex gap-6">
             {/* Desktop Filters */}
             <div className="hidden lg:block w-80 flex-shrink-0">
-              <div className="bg-white rounded-xl shadow-lg border border-gray-200 sticky top-24 overflow-hidden">
+              <div className="bg-white rounded-xl shadow-lg border border-gray-200 sticky top-24">
                 <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4">
                   <div className="flex items-center justify-between">
                     <div className="flex items-center">
@@ -2214,7 +2214,7 @@ function HotelResultsContent() {
                     </div>
                   </div>
                 </div>
-                <div className="h-[calc(100vh-200px)]">
+                <div>
                   {/* Current search summary */}
                   <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
                     <div className="text-xs text-gray-600">Current search</div>
@@ -2248,7 +2248,7 @@ function HotelResultsContent() {
                     sortBy={sortBy}
                     setSortBy={setSortBy}
                     onClearFilters={handleClearFilters}
-                    className="h-full border-0"
+                    className="border-0"
                     priceMax={priceBounds.max}
                     supplierCounts={supplierCounts}
                   />
