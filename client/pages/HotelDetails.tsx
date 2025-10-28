@@ -1832,6 +1832,17 @@ export default function HotelDetails() {
                               : null}
                           </div>
 
+                          {/* Cancellation Policy */}
+                          {room.cancellationPolicy && (
+                            <div className="mb-3 text-xs text-gray-700 italic">
+                              {room.isRefundable ? (
+                                <span className="text-green-700">✓ {room.cancellationPolicy}</span>
+                              ) : (
+                                <span className="text-red-700">✗ {room.cancellationPolicy}</span>
+                              )}
+                            </div>
+                          )}
+
                           {/* Action Buttons */}
                           <div className="space-y-2">
                             <Button
