@@ -489,7 +489,24 @@ function HotelResultsContent() {
 
       console.log(`🌍 Destination: ${destCode}, Country Code: ${countryCode}`);
 
-      const apiUrl = `${apiBaseUrl}/hotels?cityId=${destCode}&checkIn=${checkInStr}&checkOut=${checkOutStr}&adults=${adultsCount}&children=${childrenCount}&countryCode=${countryCode}`;
+      // Convert ComprehensiveFilters format to TBO filter format
+      const tboFilters = selectedFilters
+        ? convertComprehensiveFiltersToTbo(selectedFilters, priceRange)
+        : undefined;
+
+      // Build API URL with filter parameters
+      const apiUrl = buildTboSearchUrl(
+        `${apiBaseUrl}/hotels`,
+        {
+          cityId: destCode,
+          countryCode,
+          checkIn: checkInStr,
+          checkOut: checkOutStr,
+          adults: adultsCount,
+          children: childrenCount,
+          filters: tboFilters,
+        },
+      );
       console.log(`📡 API Call: ${apiUrl}`);
 
       let metadataResponse;
