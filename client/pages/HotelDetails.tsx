@@ -229,6 +229,77 @@ export default function HotelDetails() {
   ]);
   const [sortBy, setSortBy] = useState("relevance");
 
+  // Initialize TBO filters from URL (same as HotelResults)
+  useEffect(() => {
+    const urlSearchParams = new URLSearchParams(window.location.search);
+    const savedFilters = deserializeFiltersFromUrl(urlSearchParams);
+
+    if (Object.keys(savedFilters).length > 0) {
+      const comprehensiveFilters: Record<string, string[] | string> = {};
+      if (savedFilters.stars?.length) {
+        comprehensiveFilters["stars"] = savedFilters.stars;
+      }
+      if (savedFilters.qPropertyName) {
+        comprehensiveFilters["qPropertyName"] = savedFilters.qPropertyName;
+      }
+      if (savedFilters.qAddress) {
+        comprehensiveFilters["qAddress"] = savedFilters.qAddress;
+      }
+      if (savedFilters.qRoomName) {
+        comprehensiveFilters["qRoomName"] = savedFilters.qRoomName;
+      }
+      if (savedFilters.mealPlans?.length) {
+        comprehensiveFilters["meal-plans"] = savedFilters.mealPlans;
+      }
+      if (savedFilters.cancellation?.length) {
+        comprehensiveFilters["cancellation"] = savedFilters.cancellation;
+      }
+      if (savedFilters.amenities?.length) {
+        comprehensiveFilters["amenities"] = savedFilters.amenities;
+      }
+      if (savedFilters.propertyTypes?.length) {
+        comprehensiveFilters["property-type"] = savedFilters.propertyTypes;
+      }
+      if (savedFilters.locations?.length) {
+        comprehensiveFilters["neighborhood"] = savedFilters.locations;
+      }
+      if (savedFilters.guestRating?.length) {
+        comprehensiveFilters["guest-rating"] = savedFilters.guestRating;
+      }
+      if (savedFilters.brands?.length) {
+        comprehensiveFilters["brands"] = savedFilters.brands;
+      }
+
+      setTboSelectedFilters(comprehensiveFilters);
+
+      if (
+        savedFilters.priceMin !== undefined ||
+        savedFilters.priceMax !== undefined
+      ) {
+        setFilterPriceRange([
+          savedFilters.priceMin || 0,
+          savedFilters.priceMax || 25000,
+        ]);
+      }
+    }
+  }, []);
+
+  // Sync filters to URL when they change
+  useEffect(() => {
+    const tboFilters = convertComprehensiveFiltersToTbo(
+      tboSelectedFilters,
+      filterPriceRange,
+    );
+    const filterQueryString = buildTboSearchUrl(tboFilters);
+
+    // Update URL with filters (preserve other params)
+    const newUrl = new URL(window.location.href);
+    if (filterQueryString) {
+      newUrl.search = filterQueryString;
+    }
+    window.history.replaceState({}, "", newUrl.toString());
+  }, [tboSelectedFilters, filterPriceRange]);
+
   // Format date to DD-MMM-YYYY
   const formatDate = (dateStr: string) => {
     const date = new Date(dateStr);
