@@ -494,9 +494,17 @@ export default function HotelDetails() {
       } catch (error) {
         console.error("❌ All attempts failed, using fallback data:", error);
 
-        // Immediate fallback - don't wait for API in production
-        const fallbackData = getMockHotelData();
-        setHotelData(fallbackData);
+        // Try to use hotel data from location.state first (passed from HotelResults)
+        const passedHotelData = (location.state as any)?.hotel;
+        if (passedHotelData) {
+          console.log("✅ Using hotel data from location.state:", passedHotelData);
+          setHotelData(passedHotelData);
+        } else {
+          // Fallback to generic mock data if no data was passed
+          console.log("📦 No hotel data from location.state, using generic mock data");
+          const fallbackData = getMockHotelData();
+          setHotelData(fallbackData);
+        }
 
         // Set friendly API status message - don't alarm users
         console.info("ℹ️ Using available hotel data from cache");
