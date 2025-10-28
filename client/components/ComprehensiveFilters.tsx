@@ -102,6 +102,48 @@ export function ComprehensiveFilters({
   // Modal state for "View more" filters
   const [openModal, setOpenModal] = useState<string | null>(null);
 
+  // Search block state (with 400ms debounce)
+  const [propertyNameQuery, setPropertyNameQuery] = useState(
+    (selectedFilters.qPropertyName as string) || "",
+  );
+  const [areaQuery, setAreaQuery] = useState(
+    (selectedFilters.qAddress as string) || "",
+  );
+  const [roomNameQuery, setRoomNameQuery] = useState(
+    (selectedFilters.qRoomName as string) || "",
+  );
+
+  // Debounce search inputs
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setSelectedFilters({
+        ...selectedFilters,
+        qPropertyName: propertyNameQuery || undefined,
+      });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [propertyNameQuery]);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setSelectedFilters({
+        ...selectedFilters,
+        qAddress: areaQuery || undefined,
+      });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [areaQuery]);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setSelectedFilters({
+        ...selectedFilters,
+        qRoomName: roomNameQuery || undefined,
+      });
+    }, 400);
+    return () => clearTimeout(timer);
+  }, [roomNameQuery]);
+
   const sortOptions = [
     { value: "recommended", label: "Our top picks" },
     { value: "price-low", label: "Price (lowest first)" },
