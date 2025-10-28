@@ -179,15 +179,15 @@ export function ComprehensiveFilters({
       ],
     },
     {
-      id: "property-rating",
-      title: "Property rating",
+      id: "stars",
+      title: "Star Rating",
       isCollapsible: true,
       items: [
-        { id: "1-star", label: "1 star", count: 31 },
-        { id: "2-stars", label: "2 stars", count: 95 },
-        { id: "3-stars", label: "3 stars", count: 424 },
-        { id: "4-stars", label: "4 stars", count: 3644 },
-        { id: "5-stars", label: "5 stars", count: 799 },
+        { id: "5", label: "★★★★★ 5 stars", count: 799 },
+        { id: "4", label: "★★★★ 4 stars", count: 3644 },
+        { id: "3", label: "★★★ 3 stars", count: 424 },
+        { id: "2", label: "★★ 2 stars", count: 95 },
+        { id: "1", label: "★ 1 star", count: 31 },
       ],
     },
     {
