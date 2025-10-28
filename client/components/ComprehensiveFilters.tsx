@@ -116,33 +116,42 @@ export function ComprehensiveFilters({
   // Debounce search inputs
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setSelectedFilters({
-        ...selectedFilters,
-        qPropertyName: propertyNameQuery || undefined,
-      });
+      const newFilters = { ...selectedFilters };
+      if (propertyNameQuery) {
+        newFilters.qPropertyName = propertyNameQuery;
+      } else {
+        delete newFilters.qPropertyName;
+      }
+      setSelectedFilters(newFilters);
     }, 400);
     return () => clearTimeout(timer);
-  }, [propertyNameQuery]);
+  }, [propertyNameQuery, setSelectedFilters]);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setSelectedFilters({
-        ...selectedFilters,
-        qAddress: areaQuery || undefined,
-      });
+      const newFilters = { ...selectedFilters };
+      if (areaQuery) {
+        newFilters.qAddress = areaQuery;
+      } else {
+        delete newFilters.qAddress;
+      }
+      setSelectedFilters(newFilters);
     }, 400);
     return () => clearTimeout(timer);
-  }, [areaQuery]);
+  }, [areaQuery, setSelectedFilters]);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
-      setSelectedFilters({
-        ...selectedFilters,
-        qRoomName: roomNameQuery || undefined,
-      });
+      const newFilters = { ...selectedFilters };
+      if (roomNameQuery) {
+        newFilters.qRoomName = roomNameQuery;
+      } else {
+        delete newFilters.qRoomName;
+      }
+      setSelectedFilters(newFilters);
     }, 400);
     return () => clearTimeout(timer);
-  }, [roomNameQuery]);
+  }, [roomNameQuery, setSelectedFilters]);
 
   const sortOptions = [
     { value: "recommended", label: "Our top picks" },
