@@ -12,6 +12,11 @@ import { Badge } from "@/components/ui/badge";
 import { hotelsService } from "@/services/hotelsService";
 import type { Hotel as HotelType } from "@/services/hotelsService";
 import {
+  buildTboSearchUrl,
+  convertComprehensiveFiltersToTbo,
+  deserializeFiltersFromUrl,
+} from "@/services/tbo/search";
+import {
   Select,
   SelectContent,
   SelectItem,
