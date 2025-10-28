@@ -614,7 +614,7 @@ function HotelResultsContent() {
         name: fetchError?.name || "UnknownError",
       };
       console.error("❌ Fetch failed:", errorDetails);
-      console.log("⚠�� Network error - falling back to mock data");
+      console.log("⚠️ Network error - falling back to mock data");
 
       // Use mock data as fallback for ANY error (network, CORS, parsing, etc.)
       return loadMockHotels();
@@ -634,20 +634,14 @@ function HotelResultsContent() {
 
       let metadataData;
       try {
-        const contentType = metadataResponse.headers.get("content-type");
-        if (!contentType?.includes("application/json")) {
-          throw new Error(
-            `Invalid response type: ${contentType}. Expected JSON but got ${contentType || "unknown"}`,
-          );
-        }
         metadataData = await metadataResponse.json();
       } catch (jsonError) {
         console.error(
           "❌ Failed to parse metadata response as JSON:",
           jsonError,
         );
-        setError("Invalid response from hotel service. Please try again.");
-        return [];
+        console.log("⚠️ JSON parse error - falling back to mock data");
+        return loadMockHotels();
       }
 
       // Check if TBO returned an error status
