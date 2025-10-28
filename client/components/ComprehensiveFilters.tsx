@@ -69,8 +69,8 @@ interface FilterItem {
 interface ComprehensiveFiltersProps {
   priceRange: number[];
   setPriceRange: (range: number[]) => void;
-  selectedFilters: Record<string, string[]>;
-  setSelectedFilters: (filters: Record<string, string[]>) => void;
+  selectedFilters: Record<string, string[] | string>;
+  setSelectedFilters: (filters: Record<string, string[] | string>) => void;
   sortBy: string;
   setSortBy: (sort: string) => void;
   onClearFilters: () => void;
