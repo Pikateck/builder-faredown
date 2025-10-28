@@ -1065,16 +1065,16 @@ export function ConversationalBargainModal({
           }, 200);
         }}
         onPointerDownOutside={(e) => {
-          // Prevent closing when clicking outside on mobile
-          if (isMobileDevice()) {
-            e.preventDefault();
-          }
+          // Always prevent closing when clicking outside
+          e.preventDefault();
         }}
         onEscapeKeyDown={(e) => {
-          // Allow escape to close, but only on non-mobile
-          if (isMobileDevice()) {
-            e.preventDefault();
-          }
+          // Prevent escape key from closing modal
+          e.preventDefault();
+        }}
+        onInteractOutside={(e) => {
+          // Prevent any outside interaction from closing modal
+          e.preventDefault();
         }}
       >
         {/* Accessibility Title */}
@@ -1476,7 +1476,17 @@ export function ConversationalBargainModal({
                       ref={inputRef}
                       type="number"
                       value={currentPrice}
-                      onChange={(e) => setCurrentPrice(e.target.value)}
+                      onChange={(e) => {
+                        e.stopPropagation();
+                        e.preventDefault();
+                        setCurrentPrice(e.target.value);
+                      }}
+                      onInput={(e) => {
+                        e.stopPropagation();
+                      }}
+                      onFocus={(e) => {
+                        e.stopPropagation();
+                      }}
                       placeholder="Enter your target price"
                       className="w-full pl-8 pr-12 py-3 text-base mobile-input border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
                       disabled={isNegotiating}
