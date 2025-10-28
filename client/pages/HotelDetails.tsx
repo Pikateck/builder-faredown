@@ -58,7 +58,11 @@ import {
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 import {
   Dialog,
   DialogContent,
@@ -878,7 +882,8 @@ export default function HotelDetails() {
         // Determine refundability based on cancellation policies
         const hasCancellationPolicies =
           (Array.isArray(room.cancellation) && room.cancellation.length > 0) ||
-          (Array.isArray(room.CancellationPolicies) && room.CancellationPolicies.length > 0) ||
+          (Array.isArray(room.CancellationPolicies) &&
+            room.CancellationPolicies.length > 0) ||
           (typeof room.isRefundable === "boolean" && room.isRefundable);
 
         // Extract cancellation policy text (for display)
@@ -886,14 +891,19 @@ export default function HotelDetails() {
         if (Array.isArray(room.cancellation) && room.cancellation.length > 0) {
           // TBO API returns cancellation policy objects with text
           const policy = room.cancellation[0];
-          cancellationPolicyText = typeof policy === "string"
-            ? policy
-            : policy?.ChargeType || policy?.text || "";
-        } else if (Array.isArray(room.CancellationPolicies) && room.CancellationPolicies.length > 0) {
+          cancellationPolicyText =
+            typeof policy === "string"
+              ? policy
+              : policy?.ChargeType || policy?.text || "";
+        } else if (
+          Array.isArray(room.CancellationPolicies) &&
+          room.CancellationPolicies.length > 0
+        ) {
           const policy = room.CancellationPolicies[0];
-          cancellationPolicyText = typeof policy === "string"
-            ? policy
-            : policy?.ChargeType || policy?.text || "";
+          cancellationPolicyText =
+            typeof policy === "string"
+              ? policy
+              : policy?.ChargeType || policy?.text || "";
         }
 
         return {
@@ -909,7 +919,10 @@ export default function HotelDetails() {
                   .join(", ")
               : "Standard accommodations",
           pricePerNight:
-            room.pricePerNight || room.price?.base || hotelData?.currentPrice || 167,
+            room.pricePerNight ||
+            room.price?.base ||
+            hotelData?.currentPrice ||
+            167,
           status: index === 0 ? "Best Value - Start Here!" : `Available`,
           statusColor: index === 0 ? "green" : "blue",
           nonRefundable: !hasCancellationPolicies,
@@ -968,7 +981,8 @@ export default function HotelDetails() {
             statusColor: "blue",
             nonRefundable: false,
             isRefundable: true,
-            cancellationPolicy: "Free cancellation until 3 days before check-in",
+            cancellationPolicy:
+              "Free cancellation until 3 days before check-in",
             image:
               "https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=400&h=300&q=80&auto=format&fit=crop",
             features: [
@@ -1839,14 +1853,18 @@ export default function HotelDetails() {
                               {room.isRefundable ? (
                                 <Tooltip>
                                   <TooltipTrigger asChild>
-                                    <span className="text-green-700 font-semibold cursor-help underline decoration-dotted">✓ {room.cancellationPolicy}</span>
+                                    <span className="text-green-700 font-semibold cursor-help underline decoration-dotted">
+                                      ✓ {room.cancellationPolicy}
+                                    </span>
                                   </TooltipTrigger>
                                   <TooltipContent className="max-w-xs">
                                     {room.cancellationPolicy}
                                   </TooltipContent>
                                 </Tooltip>
                               ) : (
-                                <span className="text-red-700 font-semibold">✗ {room.cancellationPolicy}</span>
+                                <span className="text-red-700 font-semibold">
+                                  ✗ {room.cancellationPolicy}
+                                </span>
                               )}
                             </div>
                           )}
@@ -2565,22 +2583,27 @@ export default function HotelDetails() {
                                     {room.isRefundable ? (
                                       <Tooltip>
                                         <TooltipTrigger asChild>
-                                          <span className="text-green-700 font-semibold cursor-help underline decoration-dotted">✓ {room.cancellationPolicy}</span>
+                                          <span className="text-green-700 font-semibold cursor-help underline decoration-dotted">
+                                            ✓ {room.cancellationPolicy}
+                                          </span>
                                         </TooltipTrigger>
                                         <TooltipContent className="max-w-xs">
                                           {room.cancellationPolicy}
                                         </TooltipContent>
                                       </Tooltip>
                                     ) : (
-                                      <span className="text-red-700 font-semibold">✗ {room.cancellationPolicy}</span>
+                                      <span className="text-red-700 font-semibold">
+                                        ✗ {room.cancellationPolicy}
+                                      </span>
                                     )}
                                   </div>
                                 )}
-                                {room.nonRefundable && !room.cancellationPolicy && (
-                                  <Badge className="bg-red-100 text-red-800 text-xs mb-3 px-2 py-1">
-                                    Non Refundable Rate
-                                  </Badge>
-                                )}
+                                {room.nonRefundable &&
+                                  !room.cancellationPolicy && (
+                                    <Badge className="bg-red-100 text-red-800 text-xs mb-3 px-2 py-1">
+                                      Non Refundable Rate
+                                    </Badge>
+                                  )}
                                 {bargainingRoomId === room.id && (
                                   <Badge className="bg-blue-100 text-blue-800 text-xs mb-3 px-2 py-1 animate-pulse">
                                     <Sparkles className="w-3 h-3 mr-1 inline" />

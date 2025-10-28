@@ -1278,7 +1278,9 @@ export function ConversationalBargainModal({
                   className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
                   aria-label="Book negotiated price now"
                 >
-                  {isBooking ? "Processing..." : `Book Now at ${formatPrice(finalOffer)}`}
+                  {isBooking
+                    ? "Processing..."
+                    : `Book Now at ${formatPrice(finalOffer)}`}
                 </Button>
               )}
 

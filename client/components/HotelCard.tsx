@@ -4,7 +4,11 @@ import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Tooltip, TooltipTrigger, TooltipContent } from "@/components/ui/tooltip";
+import {
+  Tooltip,
+  TooltipTrigger,
+  TooltipContent,
+} from "@/components/ui/tooltip";
 import { BargainButton } from "@/components/ui/BargainButton";
 import type { Hotel as HotelType } from "@/services/hotelsService";
 import {
@@ -299,7 +303,7 @@ export function HotelCard({
     return hotel.roomTypes.every(
       (room: any) =>
         typeof room.isRefundable === "boolean" &&
-        room.isRefundable === firstRoomRefundable
+        room.isRefundable === firstRoomRefundable,
     );
   };
 
@@ -838,8 +842,8 @@ export function HotelCard({
               )}
 
               {/* Refundable Information - Show ONLY if all rooms have same policy */}
-              {allRoomsHaveSameRefundability() && (
-                isRefundable() ? (
+              {allRoomsHaveSameRefundability() &&
+                (isRefundable() ? (
                   <Tooltip>
                     <TooltipTrigger asChild>
                       <div className="flex items-center gap-1 mb-3 cursor-help">
@@ -860,8 +864,7 @@ export function HotelCard({
                       Non-refundable
                     </span>
                   </div>
-                )
-              )}
+                ))}
             </div>
 
             {/* Pricing Section - Booking.com Style */}
@@ -1000,8 +1003,8 @@ export function HotelCard({
             </div>
 
             {/* Refundable Information - Mobile - Show ONLY if all rooms have same policy */}
-            {allRoomsHaveSameRefundability() && (
-              isRefundable() ? (
+            {allRoomsHaveSameRefundability() &&
+              (isRefundable() ? (
                 <Tooltip>
                   <TooltipTrigger asChild>
                     <div className="flex items-center gap-1 mb-3 cursor-help">
@@ -1022,8 +1025,7 @@ export function HotelCard({
                     Non-refundable
                   </span>
                 </div>
-              )
-            )}
+              ))}
 
             {/* Pricing and Actions - Mobile Booking.com Style */}
             <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mt-3">
@@ -1164,8 +1166,8 @@ export function HotelCard({
           </div>
 
           {/* Refundable Information - Desktop - Show ONLY if all rooms have same policy */}
-          {allRoomsHaveSameRefundability() && (
-            isRefundable() ? (
+          {allRoomsHaveSameRefundability() &&
+            (isRefundable() ? (
               <Tooltip>
                 <TooltipTrigger asChild>
                   <div className="flex items-center gap-1 mb-2 cursor-help">
@@ -1186,8 +1188,7 @@ export function HotelCard({
                   Non-refundable
                 </span>
               </div>
-            )
-          )}
+            ))}
 
           {/* Price and Actions - Booking.com Style */}
           <div className="flex items-end justify-between mt-auto pt-2 border-t border-gray-100">
