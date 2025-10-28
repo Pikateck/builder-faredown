@@ -572,45 +572,45 @@ function HotelResultsContent() {
         });
 
         // Attempt fetch with timeout
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
+        const controller = new AbortController();
+        const timeoutId = setTimeout(() => controller.abort(), 15000); // 15 second timeout
 
-      try {
-        metadataResponse = await fetch(apiUrl, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json",
-          },
-          credentials: "include",
-          signal: controller.signal,
-        });
-      } finally {
-        clearTimeout(timeoutId);
+        try {
+          metadataResponse = await fetch(apiUrl, {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json",
+            },
+            credentials: "include",
+            signal: controller.signal,
+          });
+        } finally {
+          clearTimeout(timeoutId);
+        }
+      } catch (fetchError) {
+        const errorDetails = {
+          url: apiUrl,
+          apiBaseUrl,
+          message: fetchError?.message || "Unknown error",
+          name: fetchError?.name || "UnknownError",
+          cause: fetchError?.cause || null,
+          stack: fetchError?.stack?.slice(0, 200) || null,
+        };
+        console.error("❌ Fetch failed:", errorDetails);
+
+        // Use mock data as fallback for network errors
+        console.log("⚠️ Network error - falling back to mock data");
+        const mockData = getMockHotels();
+        setHotels(mockData);
+        setTotalResults(mockData.length);
+        setIsLiveData(false);
+        setHasMore(false);
+        setPricingStatus("ready");
+        setError(null); // Clear error since we have fallback
+        setLoading(false);
+        return mockData;
       }
-    } catch (fetchError) {
-      const errorDetails = {
-        url: apiUrl,
-        apiBaseUrl,
-        message: fetchError?.message || "Unknown error",
-        name: fetchError?.name || "UnknownError",
-        cause: fetchError?.cause || null,
-        stack: fetchError?.stack?.slice(0, 200) || null,
-      };
-      console.error("❌ Fetch failed:", errorDetails);
-
-      // Use mock data as fallback for network errors
-      console.log("⚠️ Network error - falling back to mock data");
-      const mockData = getMockHotels();
-      setHotels(mockData);
-      setTotalResults(mockData.length);
-      setIsLiveData(false);
-      setHasMore(false);
-      setPricingStatus("ready");
-      setError(null); // Clear error since we have fallback
-      setLoading(false);
-      return mockData;
-    }
 
       if (!metadataResponse.ok) {
         const errorText = await metadataResponse.text();
