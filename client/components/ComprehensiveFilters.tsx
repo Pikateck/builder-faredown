@@ -663,7 +663,7 @@ export function ComprehensiveFilters({
                 count: item.count,
               })) || []
           }
-          selected={selectedFilters["amenities"] || []}
+          selected={(selectedFilters["amenities"] as string[]) || []}
           onApply={(selected) => {
             setSelectedFilters({
               ...selectedFilters,
