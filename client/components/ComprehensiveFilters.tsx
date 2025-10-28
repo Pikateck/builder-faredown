@@ -410,7 +410,18 @@ export function ComprehensiveFilters({
           {visibleItems.map((item) => renderFilterItem(item, category.id))}
           {hasMore && (
             <button
-              onClick={() => toggleShowAll(category.id)}
+              onClick={() => {
+                // For brands, amenities, and neighborhoods, open modal instead
+                if (
+                  ["brands", "amenities", "neighborhood"].includes(
+                    category.id,
+                  )
+                ) {
+                  setOpenModal(category.id);
+                } else {
+                  toggleShowAll(category.id);
+                }
+              }}
               className="text-blue-600 text-sm hover:underline mt-2 flex items-center gap-1"
             >
               {showAll ? (
@@ -421,7 +432,7 @@ export function ComprehensiveFilters({
               ) : (
                 <>
                   <ChevronDown className="w-4 h-4" />
-                  Show all {category.items.length}
+                  View more
                 </>
               )}
             </button>
