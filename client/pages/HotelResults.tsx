@@ -838,8 +838,12 @@ function HotelResultsContent() {
 
       console.log("🏨 Fetching TBO hotels only for:", destCode);
 
-      // Fetch ONLY from TBO (no Hotelbeds)
-      const tboHotels = await fetchTBOHotels(destCode);
+      // Fetch ONLY from TBO (no Hotelbeds) with applied filters
+      const tboHotels = await fetchTBOHotels(
+        destCode,
+        selectedFilters,
+        priceRange as [number, number],
+      );
 
       console.log(`✅ TBO Results: ${tboHotels.length} hotels found`);
 
