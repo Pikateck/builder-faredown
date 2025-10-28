@@ -1036,7 +1036,11 @@ export function ConversationalBargainModal({
     <Dialog
       open={isOpen}
       onOpenChange={(open) => {
-        if (!open) handleClose();
+        // Only allow closing via explicit user action (close button)
+        // Prevent accidental closes from typing or other interactions
+        if (!open && !isNegotiating) {
+          handleClose();
+        }
       }}
     >
       <DialogContent
