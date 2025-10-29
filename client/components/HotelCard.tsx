@@ -809,6 +809,7 @@ export function HotelCard({
               onClick={handleImageClick}
             >
               <img
+                loading="lazy"
                 src={images[currentImageIndex]}
                 alt={hotel.name}
                 className="w-full h-full object-cover"
@@ -818,6 +819,7 @@ export function HotelCard({
               <Button
                 variant="ghost"
                 size="sm"
+                aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
                 className={`absolute top-3 right-3 w-8 h-8 p-0 touch-manipulation ${
                   isLiked
                     ? "bg-gradient-to-br from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700 shadow-lg"
@@ -1004,6 +1006,7 @@ export function HotelCard({
               onClick={handleImageClick}
             >
               <img
+                loading="lazy"
                 src={images[currentImageIndex]}
                 alt={hotel.name}
                 className="w-full h-full object-cover"
@@ -1159,6 +1162,7 @@ export function HotelCard({
             onClick={handleImageClick}
           >
             <img
+              loading="lazy"
               src={images[currentImageIndex]}
               alt={hotel.name}
               className="w-full h-full object-cover"
