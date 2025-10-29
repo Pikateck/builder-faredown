@@ -488,6 +488,8 @@ export function HotelCard({
         roomId: null,
         roomType: null,
         displayPrice: 0,
+        isRefundable: false,
+        cancellationPolicy: "See property for details",
       };
 
     const roomsArr: any[] = (hotel as any).roomTypes || [];
