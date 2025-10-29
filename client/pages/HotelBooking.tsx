@@ -74,24 +74,35 @@ export default function HotelBooking() {
   const selectedHotel = location.state?.selectedHotel;
   const searchParams = enhancedBooking.searchParams;
 
-  // Use exact search dates from enhanced booking context (user's requirements)
+  // ✅ CRITICAL: Use LOCKED dates from location.state (from search), not defaults
+  // These dates come from HotelDetails where user made their final selection
   const checkIn =
-    searchParams.checkIn ||
     location.state?.checkIn ||
+    searchParams.checkIn ||
     new Date().toISOString().split("T")[0];
   const checkOut =
-    searchParams.checkOut ||
     location.state?.checkOut ||
+    searchParams.checkOut ||
     new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0];
+
+  // ✅ Lock guests from the selection, not defaults
   const guests = {
-    adults: searchParams.guests?.adults || location.state?.guests?.adults || 2,
-    children:
-      searchParams.guests?.children || location.state?.guests?.children || 0,
-    rooms: searchParams.rooms || location.state?.guests?.rooms || 1,
+    adults: location.state?.guests?.adults ?? searchParams.guests?.adults ?? 2,
+    children: location.state?.guests?.children ?? searchParams.guests?.children ?? 0,
+    rooms: location.state?.guests?.rooms ?? searchParams.rooms ?? 1,
   };
+
+  // ✅ Use locked price snapshot if available, otherwise use negotiated price
   const negotiatedPrice =
-    location.state?.negotiatedPrice || selectedHotel?.price;
-  const nights = searchParams.nights || location.state?.nights || 3;
+    location.state?.priceSnapshot?.grandTotal ||
+    location.state?.negotiatedPrice ||
+    selectedHotel?.price ||
+    0;
+
+  // ✅ Calculate nights from locked dates
+  const nights = location.state?.nights ||
+    Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24)) ||
+    3;
 
   console.log("🏨 Hotel booking using exact search dates:", {
     checkIn,
