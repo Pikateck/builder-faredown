@@ -548,24 +548,59 @@ export default function HotelBookingConfirmation() {
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
-                <div className="flex justify-between text-sm">
-                  <span>Room Rate ({bookingData.pricing.nights} nights)</span>
-                  <span>
-                    {formatPriceWithSymbol(
-                      bookingData.pricing.subtotal,
-                      selectedCurrency.code,
-                    )}
-                  </span>
-                </div>
-                <div className="flex justify-between text-sm">
-                  <span>Taxes & Fees</span>
-                  <span>
-                    {formatPriceWithSymbol(
-                      bookingData.pricing.taxes + bookingData.pricing.fees,
-                      selectedCurrency.code,
-                    )}
-                  </span>
-                </div>
+                {/* Base Price */}
+                {bookingData.pricing.basePrice && (
+                  <div className="flex justify-between text-sm">
+                    <span>Base Room Rate ({bookingData.pricing.nights || bookingData.stay?.nights || 3} nights)</span>
+                    <span>
+                      {formatPriceWithSymbol(
+                        bookingData.pricing.basePrice,
+                        selectedCurrency.code,
+                      )}
+                    </span>
+                  </div>
+                )}
+
+                {/* Fallback to old structure if new pricing not available */}
+                {!bookingData.pricing.basePrice && (
+                  <div className="flex justify-between text-sm">
+                    <span>Room Rate ({bookingData.pricing.nights} nights)</span>
+                    <span>
+                      {formatPriceWithSymbol(
+                        bookingData.pricing.subtotal,
+                        selectedCurrency.code,
+                      )}
+                    </span>
+                  </div>
+                )}
+
+                {/* Taxes & Fees */}
+                {(bookingData.pricing.taxes || bookingData.pricing.fees) && (
+                  <div className="flex justify-between text-sm">
+                    <span>Taxes & Fees</span>
+                    <span>
+                      {formatPriceWithSymbol(
+                        (bookingData.pricing.taxes || 0) + (bookingData.pricing.fees || 0),
+                        selectedCurrency.code,
+                      )}
+                    </span>
+                  </div>
+                )}
+
+                {/* Discounts */}
+                {bookingData.pricing.discount > 0 && (
+                  <div className="flex justify-between text-sm text-green-600">
+                    <span>Discount</span>
+                    <span>
+                      -{formatPriceWithSymbol(
+                        bookingData.pricing.discount,
+                        selectedCurrency.code,
+                      )}
+                    </span>
+                  </div>
+                )}
+
+                {/* Add-on Services */}
                 {bookingData.pricing.addOns > 0 && (
                   <div className="flex justify-between text-sm">
                     <span>Add-on Services</span>
@@ -577,19 +612,29 @@ export default function HotelBookingConfirmation() {
                     </span>
                   </div>
                 )}
+
+                {/* Divider */}
                 <div className="border-t border-gray-200 pt-3">
-                  <div className="flex justify-between items-center">
-                    <span className="font-semibold">Total Paid</span>
+                  {/* Net Payable */}
+                  <div className="flex justify-between items-center mb-2">
+                    <span className="font-semibold">Net Payable</span>
                     <span className="text-xl font-bold text-green-600">
                       {formatPriceWithSymbol(
-                        bookingData.pricing.total,
+                        bookingData.pricing.total || bookingData.total,
                         selectedCurrency.code,
                       )}
                     </span>
                   </div>
-                </div>
-                <div className="text-xs text-gray-600">
-                  Paid with {bookingData.paymentMethod}
+
+                  {/* Payment Method */}
+                  <div className="text-xs text-gray-600">
+                    Payment Mode: {bookingData.paymentMethod}
+                  </div>
+                  {bookingData.paymentStatus && (
+                    <div className="text-xs text-green-600 font-medium mt-1">
+                      {bookingData.paymentStatus}
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
