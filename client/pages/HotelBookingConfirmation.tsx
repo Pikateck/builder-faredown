@@ -449,6 +449,59 @@ export default function HotelBookingConfirmation() {
                       </p>
                     </div>
                   )}
+
+                  {bookingData.preferences && (
+                    <div className="border border-blue-200 p-3 rounded-lg">
+                      <h5 className="font-medium text-gray-900 mb-3">
+                        Room Preferences & Guest Requests
+                      </h5>
+                      <div className="space-y-2 text-sm">
+                        {bookingData.preferences.bedType && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Bed Type:</span>
+                            <span className="font-medium">{bookingData.preferences.bedType === 'king' ? 'King Bed' : bookingData.preferences.bedType === 'queen' ? 'Queen Bed' : 'Twin Beds'}</span>
+                          </div>
+                        )}
+                        {bookingData.preferences.smokingPreference && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Smoking Preference:</span>
+                            <span className="font-medium">{bookingData.preferences.smokingPreference === 'non-smoking' ? 'Non-Smoking' : 'Smoking'}</span>
+                          </div>
+                        )}
+                        {bookingData.preferences.floorPreference && (
+                          <div className="flex justify-between">
+                            <span className="text-gray-600">Floor Preference:</span>
+                            <span className="font-medium">{bookingData.preferences.floorPreference === 'high' ? 'High Floor' : bookingData.preferences.floorPreference === 'low' ? 'Low Floor' : bookingData.preferences.floorPreference === 'mid' ? 'Mid Floor' : 'Quiet Area'}</span>
+                          </div>
+                        )}
+                        {(bookingData.preferences.earlyCheckin || bookingData.preferences.lateCheckout || bookingData.preferences.dailyHousekeeping) && (
+                          <div className="border-t pt-2 mt-2">
+                            <div className="text-gray-600 font-medium mb-1">Guest Requests:</div>
+                            <div className="space-y-1">
+                              {bookingData.preferences.earlyCheckin && (
+                                <div className="flex items-center text-gray-700">
+                                  <span className="text-blue-600 mr-2">✓</span>
+                                  Early Check-in (before 3:00 PM)
+                                </div>
+                              )}
+                              {bookingData.preferences.lateCheckout && (
+                                <div className="flex items-center text-gray-700">
+                                  <span className="text-blue-600 mr-2">✓</span>
+                                  Late Check-out (after 12:00 PM)
+                                </div>
+                              )}
+                              {bookingData.preferences.dailyHousekeeping && (
+                                <div className="flex items-center text-gray-700">
+                                  <span className="text-blue-600 mr-2">✓</span>
+                                  Daily Housekeeping
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
