@@ -35,6 +35,8 @@ import {
   CheckCircle,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
+import { usePriceContext } from "@/contexts/PriceContext";
+import { createPriceSnapshot, logPricePipeline } from "@/services/priceCalculationService";
 import {
   calculateTotalPrice,
   formatPriceWithSymbol,
