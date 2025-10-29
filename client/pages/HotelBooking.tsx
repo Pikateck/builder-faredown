@@ -572,6 +572,157 @@ export default function HotelBooking() {
               {currentStep === 2 && (
                 <div>
                   <h3 className="text-xl font-semibold mb-6">
+                    Room Preferences
+                  </h3>
+                  <div className="space-y-6">
+                    {/* Bed Type Preference */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                        Bed Type Preference
+                      </label>
+                      <div className="space-y-2">
+                        {[
+                          { value: "king", label: "King Bed" },
+                          { value: "queen", label: "Queen Bed" },
+                          { value: "twin", label: "Twin Beds" },
+                        ].map((option) => (
+                          <label
+                            key={option.value}
+                            className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
+                          >
+                            <input
+                              type="radio"
+                              name="bedType"
+                              value={option.value}
+                              checked={preferences.bedType === option.value}
+                              onChange={(e) =>
+                                setPreferences((prev) => ({
+                                  ...prev,
+                                  bedType: e.target.value,
+                                }))
+                              }
+                              className="w-4 h-4 cursor-pointer"
+                            />
+                            <span className="ml-3 text-gray-700">
+                              {option.label}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Smoking Preference */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                        Smoking Preference
+                      </label>
+                      <div className="space-y-2">
+                        {[
+                          { value: "non-smoking", label: "Non-Smoking" },
+                          { value: "smoking", label: "Smoking" },
+                        ].map((option) => (
+                          <label
+                            key={option.value}
+                            className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
+                          >
+                            <input
+                              type="radio"
+                              name="smokingPreference"
+                              value={option.value}
+                              checked={preferences.smokingPreference === option.value}
+                              onChange={(e) =>
+                                setPreferences((prev) => ({
+                                  ...prev,
+                                  smokingPreference: e.target.value,
+                                }))
+                              }
+                              className="w-4 h-4 cursor-pointer"
+                            />
+                            <span className="ml-3 text-gray-700">
+                              {option.label}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Floor Preference */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                        Floor Preference
+                      </label>
+                      <div className="space-y-2">
+                        {[
+                          { value: "high", label: "High Floor" },
+                          { value: "mid", label: "Mid Floor" },
+                          { value: "low", label: "Low Floor" },
+                          { value: "quiet", label: "Quiet Area" },
+                        ].map((option) => (
+                          <label
+                            key={option.value}
+                            className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
+                          >
+                            <input
+                              type="radio"
+                              name="floorPreference"
+                              value={option.value}
+                              checked={preferences.floorPreference === option.value}
+                              onChange={(e) =>
+                                setPreferences((prev) => ({
+                                  ...prev,
+                                  floorPreference: e.target.value,
+                                }))
+                              }
+                              className="w-4 h-4 cursor-pointer"
+                            />
+                            <span className="ml-3 text-gray-700">
+                              {option.label}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Guest Requests Checkboxes */}
+                    <div className="border-t border-gray-200 pt-6">
+                      <label className="block text-sm font-medium text-gray-700 mb-3">
+                        Guest Requests
+                      </label>
+                      <div className="space-y-2">
+                        {[
+                          { id: "earlyCheckIn", label: "Early Check-in (before 3:00 PM)" },
+                          { id: "lateCheckOut", label: "Late Check-out (after 12:00 PM)" },
+                          { id: "dailyHousekeeping", label: "Daily Housekeeping" },
+                        ].map((request) => (
+                          <label
+                            key={request.id}
+                            className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={preferences[request.id as keyof typeof preferences] as boolean}
+                              onChange={(e) =>
+                                setPreferences((prev) => ({
+                                  ...prev,
+                                  [request.id]: e.target.checked,
+                                }))
+                              }
+                              className="w-4 h-4 cursor-pointer"
+                            />
+                            <span className="ml-3 text-gray-700">
+                              {request.label}
+                            </span>
+                          </label>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {currentStep === 3 && (
+                <div>
+                  <h3 className="text-xl font-semibold mb-6">
                     Enhance Your Stay
                   </h3>
                   <div className="space-y-4">
