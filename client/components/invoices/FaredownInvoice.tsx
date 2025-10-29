@@ -104,9 +104,14 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
       <div className="print-header bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4 sm:p-6 lg:p-8">
         <div className="flex flex-col lg:flex-row lg:justify-between lg:items-start gap-4">
           <div className="flex-1">
-            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold mb-2">
-              FAREDOWN
-            </h1>
+            <div className="flex items-center space-x-3 mb-2">
+              <div className="w-10 h-10 bg-white/90 rounded-lg flex items-center justify-center">
+                <span className="text-lg font-bold text-[#003580]">F</span>
+              </div>
+              <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold">
+                FAREDOWN
+              </h1>
+            </div>
             <p className="text-blue-100 text-sm sm:text-base lg:text-lg mb-3 lg:mb-4">
               Travel Booking Platform
             </p>
