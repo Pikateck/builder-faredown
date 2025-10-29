@@ -74,12 +74,26 @@ export default function HotelBookingConfirmation() {
     rooms: enhancedBooking.searchParams.rooms,
   });
 
-  // Merge saved booking data with defaults and location state
+  // ✅ CRITICAL: Use LOCKED data from location.state (passed from HotelBooking)
+  // Prefer location.state for locked data, then fallback to enhanced booking context
+  const lockedCheckIn = location.state?.checkIn || enhancedBooking.searchParams.checkIn || searchParams.get("checkIn");
+  const lockedCheckOut = location.state?.checkOut || enhancedBooking.searchParams.checkOut || searchParams.get("checkOut");
+  const lockedNights = location.state?.nights || enhancedBooking.searchParams.nights ||
+    (() => {
+      if (lockedCheckIn && lockedCheckOut) {
+        const checkIn = new Date(lockedCheckIn);
+        const checkOut = new Date(lockedCheckOut);
+        return Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+      }
+      return 3;
+    })();
+
+  // Merge saved booking data with defaults and LOCKED location state
   const bookingData = savedBookingData || {
-    id: bookingId,
+    id: location.state?.bookingId || bookingId,
     status: "Confirmed",
     createdAt: new Date().toISOString(),
-    hotel: {
+    hotel: location.state?.selectedHotel || {
       id: hotelId,
       name: hotelName ? decodeURIComponent(hotelName) : "Grand Plaza Hotel",
       location: "Downtown Dubai, United Arab Emirates",
@@ -116,50 +130,25 @@ export default function HotelBookingConfirmation() {
       maxGuests: 3,
     },
     stay: {
-      // Use exact search dates from enhanced booking context (user's requirements)
-      checkIn:
-        enhancedBooking.searchParams.checkIn ||
-        location.state?.checkIn ||
-        searchParams.get("checkIn") ||
-        new Date().toISOString().split("T")[0],
-      checkOut:
-        enhancedBooking.searchParams.checkOut ||
-        location.state?.checkOut ||
-        searchParams.get("checkOut") ||
-        new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
-      nights:
-        enhancedBooking.searchParams.nights ||
-        (() => {
-          if (location.state?.checkIn && location.state?.checkOut) {
-            const checkIn = new Date(location.state.checkIn);
-            const checkOut = new Date(location.state.checkOut);
-            return Math.ceil(
-              (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)
-            );
-          }
-          return parseInt(searchParams.get("nights") || "3");
-        })(),
-      guests:
-        enhancedBooking.searchParams.guests?.adults ||
-        location.state?.guests?.adults ||
-        parseInt(searchParams.get("adults") || "2"),
-      rooms:
-        enhancedBooking.searchParams.rooms ||
-        location.state?.guests?.rooms ||
-        parseInt(searchParams.get("rooms") || "1"),
+      // ✅ Use LOCKED dates passed from HotelBooking.tsx
+      checkIn: lockedCheckIn,
+      checkOut: lockedCheckOut,
+      nights: lockedNights,
+      guests: location.state?.guests?.adults || enhancedBooking.searchParams.guests?.adults || 2,
+      rooms: location.state?.guests?.rooms || enhancedBooking.searchParams.rooms || 1,
     },
     pricing: {
-      roomRate: 259,
-      nights: 3,
-      subtotal: 777,
-      taxes: 93.24,
+      roomRate: location.state?.finalPrice ? Math.round(location.state.finalPrice / lockedNights) : 259,
+      nights: lockedNights,
+      subtotal: location.state?.finalPrice || 777,
+      taxes: location.state?.finalPrice ? Math.round(location.state.finalPrice * 0.18) : 93.24,
       fees: 50,
-      addOns: 0,
-      total: 920.24,
+      addOns: location.state?.selectedExtras?.length ? 200 : 0,
+      total: location.state?.finalPrice || 920.24,
     },
-    addOns: [],
+    addOns: location.state?.selectedExtras || [],
     preferences: location.state?.preferences || null,
-    specialRequests: location.state?.guestDetails?.specialRequests || "High floor room with city view preferred",
+    specialRequests: location.state?.guestDetails?.specialRequests || location.state?.preferences?.specialRequests || "None",
     paymentMethod: "•••• •••• •••• 1234",
     confirmationCode:
       "CONF-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
