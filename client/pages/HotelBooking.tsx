@@ -763,7 +763,7 @@ export default function HotelBooking() {
                 </div>
               )}
 
-              {currentStep === 3 && (
+              {currentStep === 4 && (
                 <div>
                   <h3 className="text-xl font-semibold mb-6">
                     Payment Details
