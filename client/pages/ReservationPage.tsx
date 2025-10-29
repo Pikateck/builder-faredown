@@ -262,6 +262,21 @@ export default function ReservationPage() {
       bargained: hotelData.isBargained,
       originalPrice: hotelData.originalPrice,
       specialRequests: guestDetails.specialRequests,
+      // Add room preferences and guest requests
+      preferences: {
+        bedType: preferences.bedType,
+        smokingPreference: preferences.smokingPreference,
+        floorPreference: preferences.floorPreference,
+        earlyCheckin: preferences.earlyCheckin,
+        lateCheckout: preferences.lateCheckout,
+        dailyHousekeeping: preferences.dailyHousekeeping,
+      },
+      pricing: {
+        basePrice: pricing.basePrice,
+        perNightPrice: pricing.perNightPrice,
+        total: pricing.total,
+        taxes: pricing.taxes || 0,
+      },
       cancellation: "Free cancellation until 24 hours before check-in",
     };
 
