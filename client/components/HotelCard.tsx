@@ -642,6 +642,19 @@ export function HotelCard({
       // Add displayed formatting for debugging
       displayedTotalPrice: totalPriceInclusiveTaxes, // What user sees on Results
       displayedPerNightPrice: currentPrice, // What user sees per night on Results
+      // ✅ CRITICAL: Store the exact image shown on Results card
+      mainImageIndex: currentImageIndex, // Store which image was displayed
+      mainImageUrl: hotel?.images?.[currentImageIndex] || hotel?.images?.[0], // Store the actual image URL
+      // ✅ Store complete room snapshot for exact match in Details
+      roomSnapshot: {
+        ...cheapestRoomData.room,
+        id: cheapestRoomData.roomId,
+        name: cheapestRoomData.roomType,
+        pricePerNight: cheapestRoomData.price,
+        displayPrice: cheapestRoomData.displayPrice,
+        isRefundable: cheapestRoomData.isRefundable,
+        cancellationPolicy: cheapestRoomData.cancellationPolicy,
+      },
     };
 
     // Debug trace for navigation using unified logger
