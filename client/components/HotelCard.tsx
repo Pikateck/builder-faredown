@@ -759,7 +759,8 @@ export function HotelCard({
 
   if (viewMode === "grid") {
     return (
-      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group">
+      <TooltipProvider>
+        <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group">
         {/* Grid View - Vertical Layout */}
         <div className="flex flex-col h-full">
           {/* Image Gallery - Clickable */}
@@ -945,13 +946,15 @@ export function HotelCard({
           </CardContent>
         </div>
       </Card>
+      </TooltipProvider>
     );
   }
 
   // List/Card View - Mobile-First Responsive Layout
   // Single unified layout with responsive adjustments (no grid view on mobile)
   return (
-    <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group mb-4">
+    <TooltipProvider>
+      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group mb-4">
       {/* Mobile Layout (< 1024px) - Stacked vertical */}
       <div className="lg:hidden">
         <div className="flex flex-col">
@@ -1265,5 +1268,6 @@ export function HotelCard({
         </CardContent>
       </div>
     </Card>
+    </TooltipProvider>
   );
 }
