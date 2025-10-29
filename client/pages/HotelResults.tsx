@@ -680,10 +680,12 @@ function HotelResultsContent() {
         return loadMockHotels();
       }
 
-      if (!metadataData.hotels || metadataData.hotels.length === 0) {
-        console.warn("⚠️ No metadata hotels found from API");
+      if (!metadataData || !metadataData.hotels || metadataData.hotels.length === 0) {
+        console.warn("⚠��� No metadata hotels found from API");
+        console.warn("⚠️ API response:", metadataData);
         console.log("⚠️ No results from API - falling back to mock data");
-        return loadMockHotels();
+        loadMockHotels();  // This calls setHotels and other state updates
+        return [];  // Return empty array since state was already set
       }
 
       // Convert metadata to Hotel format
@@ -754,7 +756,7 @@ function HotelResultsContent() {
         return "/api";
       })();
 
-      console.log("�� Fetching live TBO prices...");
+      console.log("��� Fetching live TBO prices...");
 
       const pricesResponse = await fetch(
         `${apiBaseUrl}/hotels/prices?cityId=${destCode}`,
@@ -2273,7 +2275,7 @@ function HotelResultsContent() {
                           return `${formatDisplayDate(inD)} - ${formatDisplayDate(outD)}`;
                         return "Select dates";
                       })()}
-                      {` • ${adults} adult${parseInt(adults) > 1 ? "s" : ""}`}
+                      {` �� ${adults} adult${parseInt(adults) > 1 ? "s" : ""}`}
                       {parseInt(children) > 0
                         ? `, ${children} child${parseInt(children) > 1 ? "ren" : ""}`
                         : ""}
