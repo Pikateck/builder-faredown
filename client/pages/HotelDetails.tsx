@@ -1229,6 +1229,9 @@ export default function HotelDetails() {
           matchedRoomName: roomToSelect?.name,
           matchedPrice: roomToSelect?.pricePerNight,
           matchType,
+          // ✅ Image consistency info
+          imageIndex: preselectRate.mainImageIndex,
+          imageUrl: preselectRate.mainImageUrl,
         });
       }
 
