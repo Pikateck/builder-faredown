@@ -772,38 +772,38 @@ export default function HotelBooking() {
                         Payment Method
                       </label>
                       <div className="space-y-2">
-                        <label className="flex items-center">
+                        <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
                           <input
                             type="radio"
                             name="payment"
                             value="card"
                             checked={paymentMethod === "card"}
                             onChange={(e) => setPaymentMethod(e.target.value)}
-                            className="mr-3"
+                            className="w-4 h-4 cursor-pointer"
                           />
-                          <span>Credit/Debit Card</span>
+                          <span className="ml-3 text-gray-700">Credit/Debit Card</span>
                         </label>
-                        <label className="flex items-center">
+                        <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
                           <input
                             type="radio"
                             name="payment"
                             value="upi"
                             checked={paymentMethod === "upi"}
                             onChange={(e) => setPaymentMethod(e.target.value)}
-                            className="mr-3"
+                            className="w-4 h-4 cursor-pointer"
                           />
-                          <span>UPI</span>
+                          <span className="ml-3 text-gray-700">UPI</span>
                         </label>
-                        <label className="flex items-center">
+                        <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
                           <input
                             type="radio"
                             name="payment"
                             value="wallet"
                             checked={paymentMethod === "wallet"}
                             onChange={(e) => setPaymentMethod(e.target.value)}
-                            className="mr-3"
+                            className="w-4 h-4 cursor-pointer"
                           />
-                          <span>Digital Wallet</span>
+                          <span className="ml-3 text-gray-700">Digital Wallet</span>
                         </label>
                       </div>
                     </div>
