@@ -492,6 +492,42 @@ Please present this at the hotel during check-in.
                     </p>
                   </div>
                 )}
+
+                {voucherData.preferences && (
+                  <div className="border-t pt-4 mt-4">
+                    <h4 className="font-semibold mb-2">Room Preferences & Guest Requests</h4>
+                    <div className="space-y-1 text-sm text-gray-700">
+                      {voucherData.preferences.bedType && (
+                        <div className="flex justify-between">
+                          <span>Bed Type:</span>
+                          <span>{voucherData.preferences.bedType}</span>
+                        </div>
+                      )}
+                      {voucherData.preferences.smokingPreference && (
+                        <div className="flex justify-between">
+                          <span>Smoking Preference:</span>
+                          <span>{voucherData.preferences.smokingPreference}</span>
+                        </div>
+                      )}
+                      {voucherData.preferences.floorPreference && (
+                        <div className="flex justify-between">
+                          <span>Floor Preference:</span>
+                          <span>{voucherData.preferences.floorPreference}</span>
+                        </div>
+                      )}
+                      {(voucherData.preferences.earlyCheckin || voucherData.preferences.lateCheckout || voucherData.preferences.dailyHousekeeping) && (
+                        <div className="pt-2 border-t">
+                          <div className="font-medium mb-1">Guest Requests:</div>
+                          <ul className="space-y-0.5 pl-4">
+                            {voucherData.preferences.earlyCheckin && <li className="text-gray-700">✓ Early Check-in (before 3:00 PM)</li>}
+                            {voucherData.preferences.lateCheckout && <li className="text-gray-700">✓ Late Check-out (after 12:00 PM)</li>}
+                            {voucherData.preferences.dailyHousekeeping && <li className="text-gray-700">✓ Daily Housekeeping</li>}
+                          </ul>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
 
