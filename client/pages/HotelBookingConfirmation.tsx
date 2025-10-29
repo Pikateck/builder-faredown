@@ -74,7 +74,7 @@ export default function HotelBookingConfirmation() {
     rooms: enhancedBooking.searchParams.rooms,
   });
 
-  // Merge saved booking data with defaults
+  // Merge saved booking data with defaults and location state
   const bookingData = savedBookingData || {
     id: bookingId,
     status: "Confirmed",
@@ -101,7 +101,7 @@ export default function HotelBookingConfirmation() {
         "Parking",
       ],
     },
-    guest: {
+    guest: location.state?.guestDetails || {
       firstName: "John",
       lastName: "Doe",
       email: "john.doe@example.com",
@@ -119,20 +119,25 @@ export default function HotelBookingConfirmation() {
       // Use exact search dates from enhanced booking context (user's requirements)
       checkIn:
         enhancedBooking.searchParams.checkIn ||
+        location.state?.checkIn ||
         searchParams.get("checkIn") ||
         new Date().toISOString().split("T")[0],
       checkOut:
         enhancedBooking.searchParams.checkOut ||
+        location.state?.checkOut ||
         searchParams.get("checkOut") ||
         new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       nights:
         enhancedBooking.searchParams.nights ||
+        location.state?.guests?.nights ||
         parseInt(searchParams.get("nights") || "3"),
       guests:
         enhancedBooking.searchParams.guests?.adults ||
+        location.state?.guests?.adults ||
         parseInt(searchParams.get("adults") || "2"),
       rooms:
         enhancedBooking.searchParams.rooms ||
+        location.state?.guests?.rooms ||
         parseInt(searchParams.get("rooms") || "1"),
     },
     pricing: {
@@ -145,7 +150,8 @@ export default function HotelBookingConfirmation() {
       total: 920.24,
     },
     addOns: [],
-    specialRequests: "High floor room with city view preferred",
+    preferences: location.state?.preferences || null,
+    specialRequests: location.state?.guestDetails?.specialRequests || "High floor room with city view preferred",
     paymentMethod: "•••• •••• •••• 1234",
     confirmationCode:
       "CONF-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
