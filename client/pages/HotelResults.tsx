@@ -2545,9 +2545,9 @@ function HotelResultsContent() {
                         />
                       </svg>
                     </div>
-                    <h3 className="text-base sm:text-lg font-medium text-red-600 mb-2">
+                    <h2 className="text-base sm:text-lg font-medium text-red-600 mb-2">
                       {error}
-                    </h3>
+                    </h2>
                     <p className="text-gray-600 text-sm mb-4">
                       Unable to connect to Hotelbeds API. Please check your
                       connection.
@@ -2585,9 +2585,9 @@ function HotelResultsContent() {
                       />
                     </svg>
                   </div>
-                  <h3 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
+                  <h2 className="text-base sm:text-lg font-medium text-gray-900 mb-2">
                     No hotels available for your search
-                  </h3>
+                  </h2>
                   <p className="text-gray-600 text-sm sm:text-base mb-4">
                     {isLiveData
                       ? "No hotels found in Hotelbeds API for this destination and dates"
@@ -2742,9 +2742,9 @@ export default function HotelResults() {
       fallback={
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
           <div className="max-w-md w-full bg-white rounded-lg shadow-lg p-6 text-center">
-            <h1 className="text-xl font-bold text-gray-900 mb-2">
+            <h2 className="text-xl font-bold text-gray-900 mb-2">
               Something went wrong
-            </h1>
+            </h2>
             <p className="text-gray-600 mb-6">
               We encountered an error loading the hotels. Please try again.
             </p>
