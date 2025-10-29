@@ -230,8 +230,10 @@ export default function HotelBooking() {
           guestDetails.phone
         );
       case 2:
-        return true; // Extras are optional
+        return true; // Preferences are optional
       case 3:
+        return true; // Extras are optional
+      case 4:
         return paymentMethod === "card"
           ? cardDetails.number &&
               cardDetails.expiry &&
