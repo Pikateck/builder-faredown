@@ -166,7 +166,7 @@ function HotelResultsContent() {
         }
       }
     }
-  }, [urlSearchParams, loadFromUrlParams]);
+  }, [urlSearchParams, loadFromUrlParams, setDepartureDate, setReturnDate]);
   const [sortBy, setSortBy] = useState("price-low");
   const [priceRange, setPriceRange] = useState([0, 25000]);
   const [priceBounds, setPriceBounds] = useState<{ min: number; max: number }>({
@@ -754,7 +754,7 @@ function HotelResultsContent() {
         return "/api";
       })();
 
-      console.log("💰 Fetching live TBO prices...");
+      console.log("�� Fetching live TBO prices...");
 
       const pricesResponse = await fetch(
         `${apiBaseUrl}/hotels/prices?cityId=${destCode}`,
