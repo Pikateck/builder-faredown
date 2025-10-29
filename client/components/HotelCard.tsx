@@ -547,6 +547,8 @@ export function HotelCard({
 
   // Handle view details action
   const handleViewDetails = () => {
+    const { setPriceSnapshot } = usePriceContext();
+
     // Create standardized search object for hotels following the user's requirements
     const standardizedHotelSearchParams = {
       module: "hotels" as const,
@@ -633,6 +635,29 @@ export function HotelCard({
       exactMatch: preselectRate.totalPrice === totalPriceInclusiveTaxes,
     });
 
+    // ✅ CAPTURE PRICE SNAPSHOT FOR PRICE CONSISTENCY
+    const priceSnapshot = createPriceSnapshot(
+      `${hotel.id}-${cheapestRoomData.roomId}`, // roomKey: unique identifier
+      preselectRate.rateKey, // rateKey
+      preselectRate.supplierData.supplierCode, // supplierCode
+      standardizedHotelSearchParams.checkIn, // checkInDate
+      standardizedHotelSearchParams.checkOut, // checkOutDate
+      {
+        basePrice: cheapestRoomData.price * totalNights,
+        taxes: (cheapestRoomData.displayPrice - cheapestRoomData.price * totalNights) / 2, // Estimate taxes
+        fees: (cheapestRoomData.displayPrice - cheapestRoomData.price * totalNights) / 2, // Estimate fees
+        nights: totalNights,
+        currency: standardizedHotelSearchParams.currency,
+      },
+      cheapestRoomData.isRefundable ? "refundable" : "non-refundable",
+      cheapestRoomData.cancellationPolicy || "See property for details",
+      cheapestRoomData.roomType,
+      "Room Only"
+    );
+    priceSnapshot.checksum = generateSimpleChecksum(priceSnapshot);
+    setPriceSnapshot(priceSnapshot);
+    logPricePipeline("SEARCH", priceSnapshot);
+
     // Load standardized search object to enhanced booking context
     loadCompleteSearchObject(standardizedHotelSearchParams);
 
@@ -677,6 +702,7 @@ export function HotelCard({
         preselectRate,
         searchParams: standardizedHotelSearchParams,
         roomsSnapshot: hotel?.roomTypes || [],
+        priceSnapshot, // ✅ Pass price snapshot through state
       },
     });
   };
