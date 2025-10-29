@@ -3,6 +3,7 @@
 ## ✅ COMPLETED (3 files created)
 
 ### 1. PriceContext.tsx (client/contexts/PriceContext.tsx)
+
 - Provides single source of truth for price data
 - PriceSnapshot interface with all required fields
 - calculateChecksum() for drift detection
@@ -10,6 +11,7 @@
 - Uses: `const price = usePriceContext();`
 
 ### 2. priceCalculationService.ts (client/services/priceCalculationService.ts)
+
 - Unified price calculation with consistent 2-decimal rounding
 - createPriceSnapshot() - main function to create snapshot
 - calculateGrandTotal() - order: base + taxes + fees + markups - discounts
@@ -18,6 +20,7 @@
 - formatPriceDisplay() - consistent formatting with currency symbols
 
 ### 3. App.tsx (updated)
+
 - Added PriceProvider wrapper around entire app
 - PriceContext now available to all components
 
@@ -28,6 +31,7 @@
 ### 4. HotelResults.tsx - Capture Price Snapshot
 
 **When user clicks "View Details" on hotel card:**
+
 ```typescript
 import { usePriceContext } from "@/contexts/PriceContext";
 import { createPriceSnapshot, logPricePipeline } from "@/services/priceCalculationService";
@@ -65,6 +69,7 @@ navigate(`/hotels/${hotelId}`, { state: { priceSnapshot: snapshot } });
 ```
 
 **Key requirements:**
+
 - Capture exact room before navigation
 - Lock room selection to this roomKey + rateKey
 - Log PRICE_PIPELINE at SEARCH stage
@@ -75,6 +80,7 @@ navigate(`/hotels/${hotelId}`, { state: { priceSnapshot: snapshot } });
 ### 5. HotelDetails.tsx - Use PriceContext
 
 **In useEffect when component loads:**
+
 ```typescript
 import { usePriceContext } from "@/contexts/PriceContext";
 import { logPricePipeline, verifyPriceIntegrity } from "@/services/priceCalculationService";
@@ -110,6 +116,7 @@ const handleRoomSelection = (newRoom) => {
 ```
 
 **Display the price:**
+
 - Use `priceSnapshot.grandTotal` for total price
 - Use `formatPriceDisplay(price, currency, true, nights)` for "per night" display
 - Show checksum in debug logs: `console.log("[PRICE_DEBUG]", priceSnapshot.checksum)`
@@ -119,13 +126,17 @@ const handleRoomSelection = (newRoom) => {
 ### 6. ConversationalBargainModal.tsx - Update Price with Bargain Delta
 
 **When user accepts bargain offer:**
+
 ```typescript
 import { usePriceContext } from "@/contexts/PriceContext";
 import { logPricePipeline } from "@/services/priceCalculationService";
 
 const { priceSnapshot, updatePrice, verifyChecksum } = usePriceContext();
 
-const handleBargainAccepted = (bargainRound: number, bargainedPrice: number) => {
+const handleBargainAccepted = (
+  bargainRound: number,
+  bargainedPrice: number,
+) => {
   if (!priceSnapshot) {
     console.error("[PRICE_PIPELINE] No price snapshot available for bargain!");
     return;
@@ -166,6 +177,7 @@ const handleBargainAccepted = (bargainRound: number, bargainedPrice: number) => 
 ```
 
 **Display current price in modal:**
+
 ```typescript
 const currentPrice = priceSnapshot?.grandTotal || 0;
 const perNightPrice = currentPrice / priceSnapshot?.nights || 0;
@@ -183,9 +195,13 @@ return (
 ### 7. HotelBooking.tsx - Verify Price Before Checkout
 
 **In the component, before accepting payment:**
+
 ```typescript
 import { usePriceContext } from "@/contexts/PriceContext";
-import { verifyPriceIntegrity, logPricePipeline } from "@/services/priceCalculationService";
+import {
+  verifyPriceIntegrity,
+  logPricePipeline,
+} from "@/services/priceCalculationService";
 
 const { priceSnapshot } = usePriceContext();
 
@@ -197,11 +213,14 @@ const handleCheckout = async () => {
 
   // Recalculate total to verify no drift
   const recalculatedTotal = calculateGrandTotal(priceSnapshot.components);
-  const { isValid, drift } = verifyPriceIntegrity(priceSnapshot, recalculatedTotal);
+  const { isValid, drift } = verifyPriceIntegrity(
+    priceSnapshot,
+    recalculatedTotal,
+  );
 
   if (!isValid) {
     showError(
-      `Price has changed (drift: ₹${drift}). Please review and try again.`
+      `Price has changed (drift: ₹${drift}). Please review and try again.`,
     );
     logPricePipeline("BOOK_FAILED_CHECKSUM", priceSnapshot);
     return;
@@ -226,6 +245,7 @@ const handleCheckout = async () => {
 ```
 
 **In the invoice/confirmation:**
+
 ```typescript
 const handleInvoiceGeneration = () => {
   if (!priceSnapshot) {
@@ -247,6 +267,7 @@ const handleInvoiceGeneration = () => {
 For each test case, verify **all 5 stages show the same price**:
 
 ### Test Case 1: Non-Refundable Room, No Promo, No Bargain
+
 - [ ] Results page price
 - [ ] Details page price
 - [ ] Bargain modal shows same price
@@ -255,12 +276,14 @@ For each test case, verify **all 5 stages show the same price**:
 - [ ] Screenshot: results | details | bargain | book | invoice
 
 ### Test Case 2: Same Room with Promo Applied
+
 - [ ] Promo discount applied at Details stage
 - [ ] Bargain modal shows discounted price
 - [ ] Book/Invoice show discounted price
 - [ ] Checksum logs show consistent values
 
 ### Test Case 3: Bargain Applied Round 1
+
 - [ ] Original price shown
 - [ ] User negotiates down
 - [ ] Bargain modal shows negotiated price
@@ -268,23 +291,27 @@ For each test case, verify **all 5 stages show the same price**:
 - [ ] Discount amount visible
 
 ### Test Case 4: Bargain Applied Round 2
+
 - [ ] Same as round 1, but round=2 in logs
 - [ ] Price locks after acceptance
 - [ ] Further changes blocked
 
 ### Test Case 5: Refundable Room with Taxes/Fees
+
 - [ ] Base + taxes + fees calculated
 - [ ] Refundable badge visible
 - [ ] Cancellation rules consistent
 - [ ] All pages show total including taxes
 
 ### Test Case 6: Mock Mode End-to-End
+
 - [ ] No API calls made
 - [ ] Mock hotel price used throughout
 - [ ] Checksum valid in all stages
 - [ ] Fallback renders correctly
 
 ### Test Case 7: Currency Switch (INR → USD)
+
 - [ ] Initial search in INR
 - [ ] Currency changed to USD
 - [ ] FX rate applied
@@ -296,6 +323,7 @@ For each test case, verify **all 5 stages show the same price**:
 ## 📊 CONSOLE LOGS TO VERIFY
 
 For each stage, check console for:
+
 ```
 [PRICE_PIPELINE] SEARCH: roomKey=..., rateKey=..., grandTotal=..., checksum=...
 [PRICE_PIPELINE] DETAILS: roomKey=..., rateKey=..., grandTotal=..., checksum=...
@@ -305,6 +333,7 @@ For each stage, check console for:
 ```
 
 If any checksum mismatches:
+
 ```
 [PRICE_PIPELINE] Price drift detected: original=X, recalculated=Y, drift=Z
 ```

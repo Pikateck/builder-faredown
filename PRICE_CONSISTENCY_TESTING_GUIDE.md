@@ -3,6 +3,7 @@
 ## ✅ IMPLEMENTATION STATUS: 100% COMPLETE
 
 All 4 critical integrations are fully implemented and ready for testing:
+
 1. ✅ HotelCard.tsx - Captures price snapshot on View Details
 2. ✅ HotelDetails.tsx - Verifies checksum on Details page
 3. ✅ ConversationalBargainModal.tsx - Updates price with bargain delta
@@ -15,12 +16,14 @@ All 4 critical integrations are fully implemented and ready for testing:
 ### Test Scenario 1: Non-Refundable Room (No Promo, No Bargain)
 
 **Setup:**
+
 - Search for Dubai hotel
 - Select a non-refundable room
 - Do NOT apply promo
 - Do NOT use bargain
 
 **Expected Prices Match:**
+
 1. **SEARCH**: Results page shows: ₹2,456 (example)
 2. **DETAILS**: Room price shows: ₹2,456
 3. **BARGAIN**: Skip (no bargain applied)
@@ -28,6 +31,7 @@ All 4 critical integrations are fully implemented and ready for testing:
 5. **INVOICE**: Confirmation shows: ₹2,456
 
 **Verification Steps:**
+
 1. Go to `/hotels/results?destination=DXB&...`
    - [ ] View hotel card price
    - [ ] Open browser console: `[PRICE_PIPELINE] SEARCH:` shows price, checksum
@@ -49,12 +53,13 @@ All 4 critical integrations are fully implemented and ready for testing:
    - [ ] Take screenshot of book page price
 
 5. View Confirmation/Invoice
-   - [ ] Console shows: `[PRICE_PIPELINE] INVOICE:` 
+   - [ ] Console shows: `[PRICE_PIPELINE] INVOICE:`
    - [ ] Price shows same ₹2,456
    - [ ] Invoice generated with matching total
    - [ ] Take screenshot of invoice
 
 **Success Criteria:**
+
 - ✅ All 5 screenshots show identical price ₹2,456
 - ✅ Console shows valid checksums at every stage
 - ✅ No "Price has changed" errors
@@ -65,15 +70,17 @@ All 4 critical integrations are fully implemented and ready for testing:
 ### Test Scenario 2: Refundable Room with Promo + Bargain
 
 **Setup:**
+
 - Search for Dubai hotel
 - Select a refundable room
 - Apply promo code (if available) for 5% discount
 - Use bargain to negotiate down 10% more
 
 **Expected Prices Match:**
+
 1. **SEARCH**: Results shows: ₹2,456
 2. **DETAILS**: Room shows: ₹2,456
-3. **BARGAIN**: 
+3. **BARGAIN**:
    - Start: ₹2,456
    - After negotiation: ₹2,210 (10% discount)
 4. **BOOK**: Shows ₹2,210
@@ -134,6 +141,7 @@ All 4 critical integrations are fully implemented and ready for testing:
    - 📸 Screenshot: Invoice with full breakdown
 
 **Success Criteria:**
+
 - ✅ All 6 screenshots show progression: 2456 → 2456 → 2333 (promo) → 2210 (bargain) → 2210 → 2210
 - ✅ Console shows:
   - SEARCH: checksum=abc123
@@ -178,11 +186,13 @@ Updated price snapshot: roomKey=hotel-123-room-456, grandTotal=2210, checksum=xy
 
 ### Hard Stop: Price Drift at Checkout
 
-**Scenario**: 
+**Scenario**:
+
 - Price changes between Details and Book (e.g., inventory update, currency fluctuation)
 - Checksum mismatch detected
 
 **Expected Behavior**:
+
 ```
 [PRICE_PIPELINE] Price drift detected: original=2456, recalculated=2400, drift=56
 Alert: "Price has changed by ₹56.00. Please review and try again."
@@ -193,10 +203,12 @@ Navigate back to Details (checkout blocked)
 ### Hard Stop: No Price Snapshot
 
 **Scenario**:
+
 - User navigates directly to Book page without selecting room in Details
 - No priceSnapshot in context
 
 **Expected Behavior**:
+
 ```
 [PRICE_PIPELINE] No price snapshot available at checkout
 Warning in console, but booking proceeds (graceful fallback)

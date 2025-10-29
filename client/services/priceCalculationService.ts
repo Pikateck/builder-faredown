@@ -54,7 +54,7 @@ export function calculateGrandTotal(components: PriceComponents): number {
  */
 export function calculatePerNightPrice(
   components: PriceComponents,
-  grandTotal: number
+  grandTotal: number,
 ): number {
   const { nights } = components;
   if (nights <= 0) return grandTotal;
@@ -77,7 +77,11 @@ export function createPriceSnapshot(
   roomType: string,
   mealPlan?: string,
   promoCode?: { code: string; discount: number },
-  bargainData?: { originalTotal: number; bargainedTotal: number; round: number }
+  bargainData?: {
+    originalTotal: number;
+    bargainedTotal: number;
+    round: number;
+  },
 ): PriceSnapshot {
   const nights = components.nights;
   const grandTotal = calculateGrandTotal(components);
@@ -95,7 +99,9 @@ export function createPriceSnapshot(
     fxRate: components.fxRate || 1,
     markupHedge: roundPrice(components.markupHedge || 0),
     moduleMarkup: roundPrice(components.moduleMarkup || 0),
-    discounts: roundPrice((components.promoDiscount || 0) + (components.bargainDiscount || 0)),
+    discounts: roundPrice(
+      (components.promoDiscount || 0) + (components.bargainDiscount || 0),
+    ),
     promoApplied: promoCode
       ? {
           code: promoCode.code,
@@ -107,7 +113,9 @@ export function createPriceSnapshot(
       ? {
           originalTotal: roundPrice(bargainData.originalTotal),
           bargainedTotal: roundPrice(bargainData.bargainedTotal),
-          discount: roundPrice(bargainData.originalTotal - bargainData.bargainedTotal),
+          discount: roundPrice(
+            bargainData.originalTotal - bargainData.bargainedTotal,
+          ),
           round: bargainData.round,
           appliedAt: new Date().toISOString(),
         }
@@ -134,7 +142,7 @@ export function formatPriceDisplay(
   amount: number,
   currency: string,
   perNight: boolean = false,
-  nights: number = 1
+  nights: number = 1,
 ): string {
   const currencySymbols: Record<string, string> = {
     INR: "₹",
@@ -161,7 +169,7 @@ export function formatPriceDisplay(
  */
 export function verifyPriceIntegrity(
   snapshot: PriceSnapshot,
-  recalculatedTotal: number
+  recalculatedTotal: number,
 ): { isValid: boolean; drift: number } {
   const drift = Math.abs(snapshot.grandTotal - recalculatedTotal);
   const isValid = drift < 0.01; // Allow 1 paisa drift due to rounding
@@ -183,7 +191,7 @@ export function verifyPriceIntegrity(
  */
 export function logPricePipeline(
   stage: "SEARCH" | "DETAILS" | "BARGAIN" | "BOOK" | "INVOICE",
-  snapshot: PriceSnapshot
+  snapshot: PriceSnapshot,
 ): void {
   const perNight =
     snapshot.nights > 0

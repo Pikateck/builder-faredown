@@ -65,7 +65,9 @@ interface PriceContextType {
 const PriceContext = createContext<PriceContextType | undefined>(undefined);
 
 export function PriceProvider({ children }: { children: React.ReactNode }) {
-  const [priceSnapshot, setPriceSnapshot] = useState<PriceSnapshot | null>(null);
+  const [priceSnapshot, setPriceSnapshot] = useState<PriceSnapshot | null>(
+    null,
+  );
 
   const calculateChecksum = useCallback((snapshot: PriceSnapshot): string => {
     // Create a checksum from critical fields that should not change
@@ -92,7 +94,7 @@ export function PriceProvider({ children }: { children: React.ReactNode }) {
     (snapshot: PriceSnapshot): boolean => {
       return calculateChecksum(snapshot) === snapshot.checksum;
     },
-    [calculateChecksum]
+    [calculateChecksum],
   );
 
   const updatePrice = useCallback(
@@ -124,7 +126,7 @@ export function PriceProvider({ children }: { children: React.ReactNode }) {
 
           newSnapshot.grandTotal = Math.max(
             0,
-            subtotal - promoDiscount - bargainDiscount
+            subtotal - promoDiscount - bargainDiscount,
           );
         }
 
@@ -143,7 +145,7 @@ export function PriceProvider({ children }: { children: React.ReactNode }) {
         return newSnapshot;
       });
     },
-    [calculateChecksum]
+    [calculateChecksum],
   );
 
   const clearPrice = useCallback(() => {

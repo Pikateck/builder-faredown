@@ -37,7 +37,10 @@ import {
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { usePriceContext } from "@/contexts/PriceContext";
-import { createPriceSnapshot, logPricePipeline } from "@/services/priceCalculationService";
+import {
+  createPriceSnapshot,
+  logPricePipeline,
+} from "@/services/priceCalculationService";
 import {
   calculateTotalPrice,
   formatPriceWithSymbol,
@@ -383,7 +386,9 @@ export function HotelCard({
   // Calculate per night price inclusive of taxes for display
   // CRITICAL: Protect from division by zero or Infinity
   const perNightInclusiveTaxes =
-    totalNights > 0 ? Math.round(priceCalculation.total / totalNights) : priceCalculation.total;
+    totalNights > 0
+      ? Math.round(priceCalculation.total / totalNights)
+      : priceCalculation.total;
   const totalPriceInclusiveTaxes = priceCalculation.total;
 
   // Debug logging for total price calculation
@@ -529,8 +534,12 @@ export function HotelCard({
           roomId: cheapestRoom.id || `room-${roomsArr.indexOf(cheapestRoom)}`,
           roomType: cheapestRoom.name || cheapestRoom.type || "Standard Room",
           displayPrice: displayedTotal, // This is the price shown on Results page
-          isRefundable: cheapestRoom.isRefundable || cheapestRoom.refundable || false,
-          cancellationPolicy: cheapestRoom.cancellationPolicy || cheapestRoom.cancellation || "See property for details",
+          isRefundable:
+            cheapestRoom.isRefundable || cheapestRoom.refundable || false,
+          cancellationPolicy:
+            cheapestRoom.cancellationPolicy ||
+            cheapestRoom.cancellation ||
+            "See property for details",
         };
       }
     }
@@ -555,7 +564,8 @@ export function HotelCard({
       roomType: null,
       displayPrice: fallbackDisplayPrice,
       isRefundable: (hotel as any)?.isRefundable || false,
-      cancellationPolicy: (hotel as any)?.cancellationPolicy || "See property for details",
+      cancellationPolicy:
+        (hotel as any)?.cancellationPolicy || "See property for details",
     };
   };
 
@@ -689,15 +699,21 @@ export function HotelCard({
       standardizedHotelSearchParams.checkOut, // checkOutDate
       {
         basePrice: cheapestRoomData.price * totalNights,
-        taxes: (cheapestRoomData.displayPrice - cheapestRoomData.price * totalNights) / 2, // Estimate taxes
-        fees: (cheapestRoomData.displayPrice - cheapestRoomData.price * totalNights) / 2, // Estimate fees
+        taxes:
+          (cheapestRoomData.displayPrice -
+            cheapestRoomData.price * totalNights) /
+          2, // Estimate taxes
+        fees:
+          (cheapestRoomData.displayPrice -
+            cheapestRoomData.price * totalNights) /
+          2, // Estimate fees
         nights: totalNights,
         currency: standardizedHotelSearchParams.currency,
       },
       cheapestRoomData.isRefundable ? "refundable" : "non-refundable",
       cheapestRoomData.cancellationPolicy || "See property for details",
       cheapestRoomData.roomType,
-      "Room Only"
+      "Room Only",
     );
     priceSnapshot.checksum = generateSimpleChecksum(priceSnapshot);
     setPriceSnapshot(priceSnapshot);
@@ -785,137 +801,302 @@ export function HotelCard({
     return (
       <TooltipProvider>
         <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group">
-        {/* Grid View - Vertical Layout */}
-        <div className="flex flex-col h-full">
-          {/* Image Gallery - Clickable */}
-          <div
-            className="relative w-full h-44 flex-shrink-0 cursor-pointer"
-            onClick={handleImageClick}
-          >
-            <img
-              src={images[currentImageIndex]}
-              alt={hotel.name}
-              className="w-full h-full object-cover"
-            />
-
-            {/* Like Button */}
-            <Button
-              variant="ghost"
-              size="sm"
-              className={`absolute top-3 right-3 w-8 h-8 p-0 touch-manipulation ${
-                isLiked
-                  ? "bg-gradient-to-br from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700 shadow-lg"
-                  : "bg-white/90 hover:bg-white text-gray-700 shadow-sm"
-              } rounded-full backdrop-blur-sm`}
-              onClick={() => setIsLiked(!isLiked)}
+          {/* Grid View - Vertical Layout */}
+          <div className="flex flex-col h-full">
+            {/* Image Gallery - Clickable */}
+            <div
+              className="relative w-full h-44 flex-shrink-0 cursor-pointer"
+              onClick={handleImageClick}
             >
-              <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
-            </Button>
+              <img
+                src={images[currentImageIndex]}
+                alt={hotel.name}
+                className="w-full h-full object-cover"
+              />
+
+              {/* Like Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`absolute top-3 right-3 w-8 h-8 p-0 touch-manipulation ${
+                  isLiked
+                    ? "bg-gradient-to-br from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700 shadow-lg"
+                    : "bg-white/90 hover:bg-white text-gray-700 shadow-sm"
+                } rounded-full backdrop-blur-sm`}
+                onClick={() => setIsLiked(!isLiked)}
+              >
+                <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
+              </Button>
+            </div>
+
+            {/* Hotel Details */}
+            <CardContent className="p-4 flex-1 flex flex-col space-y-3">
+              <div className="flex-1">
+                <div className="mb-2">
+                  <h3 className="text-lg font-bold text-gray-900 mb-0.5 group-hover:text-[#003580] transition-colors line-clamp-1">
+                    {hotel.name}
+                  </h3>
+                  {/* Full address in one line directly after hotel name */}
+                  <div className="flex items-start text-gray-600">
+                    <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
+                    <span className="text-sm text-gray-600 line-clamp-2 leading-tight">
+                      {getFullAddress()}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="flex items-center mb-3">
+                  <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full mr-2">
+                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
+                    <span className="text-xs font-medium text-yellow-700">
+                      {hotel.rating}
+                    </span>
+                  </div>
+                  <button
+                    onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
+                    className="text-xs text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
+                  >
+                    ({hotel.reviewCount || hotel.reviews || 0} reviews)
+                  </button>
+                </div>
+
+                <p className="text-gray-600 text-sm mb-3 line-clamp-2">
+                  {hotel.description}
+                </p>
+
+                {/* Features */}
+                {hotel.features && hotel.features.length > 0 && (
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {hotel.features.slice(0, 2).map((feature) => (
+                      <Badge
+                        key={feature}
+                        variant="secondary"
+                        className="text-xs"
+                      >
+                        {feature}
+                      </Badge>
+                    ))}
+                    {hotel.features.length > 2 && (
+                      <Badge variant="secondary" className="text-xs">
+                        +{hotel.features.length - 2} more
+                      </Badge>
+                    )}
+                  </div>
+                )}
+
+                {/* Amenities */}
+                {hotelAmenities.length > 0 && (
+                  <div className="flex items-center space-x-3 mb-4 overflow-x-auto">
+                    {hotelAmenities.slice(0, 3).map((amenity) => (
+                      <div
+                        key={amenity}
+                        className="flex items-center space-x-1 bg-gradient-to-r from-blue-50 to-indigo-50 px-2 py-1.5 rounded-full border border-blue-100 flex-shrink-0 shadow-sm"
+                        title={amenity}
+                      >
+                        {getAmenityIcon(amenity)}
+                        <span className="text-xs whitespace-nowrap text-gray-700 font-medium">
+                          {amenity}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {/* Location Line */}
+                {hotel.location && (
+                  <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
+                    <MapPin className="w-4 h-4 text-gray-400" />
+                    <span>{hotel.location}</span>
+                  </div>
+                )}
+
+                {/* Room Type Information - Compact */}
+                {hotel.availableRoom && (
+                  <div className="mb-3 pb-2 border-b border-gray-100">
+                    <div className="text-sm font-medium text-gray-900 mb-1">
+                      {hotel.availableRoom.type}
+                    </div>
+                    <div className="text-xs text-gray-600 mb-1">
+                      {hotel.availableRoom.bedType} •{" "}
+                      {hotel.availableRoom.rateType}
+                    </div>
+                    <div className="flex flex-wrap gap-1">
+                      <span className="text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
+                        ✓ {hotel.availableRoom.paymentTerms}
+                      </span>
+                      <span className="text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
+                        ✓ {hotel.availableRoom.cancellationPolicy}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Refundable Information - Show ONLY if all rooms have same policy */}
+                {allRoomsHaveSameRefundability() &&
+                  (isRefundable() ? (
+                    <Tooltip>
+                      <TooltipTrigger asChild>
+                        <div className="flex items-center gap-1 mb-3 cursor-help">
+                          <CheckCircle className="w-3 h-3 text-green-600" />
+                          <span className="text-xs font-bold text-green-600 underline decoration-dotted">
+                            {getCancellationPolicyText()}
+                          </span>
+                        </div>
+                      </TooltipTrigger>
+                      <TooltipContent className="max-w-xs">
+                        {getCancellationPolicyText()}
+                      </TooltipContent>
+                    </Tooltip>
+                  ) : (
+                    <div className="flex items-center gap-1 mb-3">
+                      <CreditCard className="w-3 h-3 text-red-600" />
+                      <span className="text-xs font-bold text-red-600">
+                        Non-refundable
+                      </span>
+                    </div>
+                  ))}
+              </div>
+
+              {/* Pricing Section - Booking.com Style */}
+              <div className="mt-auto bg-gray-50 rounded-lg p-3 border border-gray-100">
+                {/* Price Display */}
+                <div className="text-right mb-3">
+                  <div className="text-xl font-bold text-[#003580] mb-1">
+                    Total Price
+                  </div>
+                  <div className="text-2xl font-bold text-[#003580] mb-1">
+                    {formatPrice(totalPriceInclusiveTaxes)}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {formatPrice(currentPrice)} per room/night (incl. taxes)
+                  </div>
+                </div>
+
+                {/* Action Buttons - Native App Optimized */}
+                <div className="flex space-x-3">
+                  <Button
+                    variant="outline"
+                    className="flex-1 py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation"
+                    onClick={handleViewDetails}
+                  >
+                    View Details
+                  </Button>
+                </div>
+              </div>
+            </CardContent>
           </div>
+        </Card>
+      </TooltipProvider>
+    );
+  }
 
-          {/* Hotel Details */}
-          <CardContent className="p-4 flex-1 flex flex-col space-y-3">
-            <div className="flex-1">
+  // List/Card View - Mobile-First Responsive Layout
+  // Single unified layout with responsive adjustments (no grid view on mobile)
+  return (
+    <TooltipProvider>
+      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group mb-4">
+        {/* Mobile Layout (< 1024px) - Stacked vertical */}
+        <div className="lg:hidden">
+          <div className="flex flex-col">
+            {/* Hotel Image - Extended and Clickable */}
+            <div
+              className="relative w-full h-48 flex-shrink-0 cursor-pointer"
+              onClick={handleImageClick}
+            >
+              <img
+                src={images[currentImageIndex]}
+                alt={hotel.name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.currentTarget.src =
+                    "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop";
+                }}
+              />
+
+              {/* Like Button */}
+              <Button
+                variant="ghost"
+                size="sm"
+                className={`absolute top-3 right-3 w-8 h-8 p-0 backdrop-blur-sm rounded-full shadow-lg ${
+                  isLiked
+                    ? "bg-gradient-to-br from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700"
+                    : "bg-black/40 hover:bg-black/60 text-white"
+                }`}
+                onClick={() => setIsLiked(!isLiked)}
+              >
+                <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
+              </Button>
+
+              {/* Price Badge */}
+              <div className="absolute bottom-3 right-3 bg-white rounded-lg px-2 py-1 shadow-lg">
+                <div className="text-sm font-bold text-[#003580]">
+                  {formatPrice(totalPriceInclusiveTaxes)}
+                </div>
+              </div>
+            </div>
+
+            {/* Hotel Details - Mobile */}
+            <CardContent className="p-4 space-y-3">
               <div className="mb-2">
-                <h3 className="text-lg font-bold text-gray-900 mb-0.5 group-hover:text-[#003580] transition-colors line-clamp-1">
-                  {hotel.name}
-                </h3>
-                {/* Full address in one line directly after hotel name */}
-                <div className="flex items-start text-gray-600">
-                  <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
-                  <span className="text-sm text-gray-600 line-clamp-2 leading-tight">
-                    {getFullAddress()}
-                  </span>
+                <div className="flex items-start justify-between mb-1">
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg font-bold text-gray-900 mb-0.5 line-clamp-1">
+                      {hotel.name}
+                    </h3>
+                    <div className="flex items-start text-gray-600">
+                      <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
+                      <span className="text-sm text-gray-600 line-clamp-2 leading-tight">
+                        {getFullAddress()}
+                      </span>
+                    </div>
+                  </div>
+                  <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full ml-2">
+                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
+                    <span className="text-sm font-medium text-yellow-700">
+                      {hotel.rating}
+                    </span>
+                  </div>
                 </div>
               </div>
 
-              <div className="flex items-center mb-3">
-                <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full mr-2">
-                  <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
-                  <span className="text-xs font-medium text-yellow-700">
-                    {hotel.rating}
-                  </span>
-                </div>
-                <button
-                  onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
-                  className="text-xs text-blue-600 hover:text-blue-800 hover:underline cursor-pointer"
-                >
-                  ({hotel.reviewCount || hotel.reviews || 0} reviews)
-                </button>
-              </div>
-
-              <p className="text-gray-600 text-sm mb-3 line-clamp-2">
-                {hotel.description}
-              </p>
-
-              {/* Features */}
+              {/* Features - Mobile */}
               {hotel.features && hotel.features.length > 0 && (
                 <div className="flex flex-wrap gap-1 mb-3">
-                  {hotel.features.slice(0, 2).map((feature) => (
+                  {hotel.features.slice(0, 3).map((feature) => (
                     <Badge
                       key={feature}
                       variant="secondary"
-                      className="text-xs"
+                      className="text-xs px-2 py-1"
                     >
                       {feature}
                     </Badge>
                   ))}
-                  {hotel.features.length > 2 && (
-                    <Badge variant="secondary" className="text-xs">
-                      +{hotel.features.length - 2} more
+                  {hotel.features.length > 3 && (
+                    <Badge variant="secondary" className="text-xs px-2 py-1">
+                      +{hotel.features.length - 3}
                     </Badge>
                   )}
                 </div>
               )}
 
-              {/* Amenities */}
-              {hotelAmenities.length > 0 && (
-                <div className="flex items-center space-x-3 mb-4 overflow-x-auto">
-                  {hotelAmenities.slice(0, 3).map((amenity) => (
-                    <div
-                      key={amenity}
-                      className="flex items-center space-x-1 bg-gradient-to-r from-blue-50 to-indigo-50 px-2 py-1.5 rounded-full border border-blue-100 flex-shrink-0 shadow-sm"
-                      title={amenity}
-                    >
-                      {getAmenityIcon(amenity)}
-                      <span className="text-xs whitespace-nowrap text-gray-700 font-medium">
-                        {amenity}
-                      </span>
-                    </div>
-                  ))}
-                </div>
-              )}
-
-              {/* Location Line */}
-              {hotel.location && (
-                <div className="flex items-center gap-1 text-sm text-gray-600 mb-3">
-                  <MapPin className="w-4 h-4 text-gray-400" />
-                  <span>{hotel.location}</span>
-                </div>
-              )}
-
-              {/* Room Type Information - Compact */}
-              {hotel.availableRoom && (
-                <div className="mb-3 pb-2 border-b border-gray-100">
-                  <div className="text-sm font-medium text-gray-900 mb-1">
-                    {hotel.availableRoom.type}
-                  </div>
-                  <div className="text-xs text-gray-600 mb-1">
-                    {hotel.availableRoom.bedType} •{" "}
-                    {hotel.availableRoom.rateType}
-                  </div>
-                  <div className="flex flex-wrap gap-1">
-                    <span className="text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
-                      ✓ {hotel.availableRoom.paymentTerms}
+              {/* Breakfast Information - Mobile */}
+              <div className="flex items-center gap-1 mb-2">
+                <Utensils className="w-3 h-3 text-gray-500" />
+                <span className="text-xs font-bold">
+                  {hotel.breakfastIncluded ? (
+                    <span className="text-green-600">
+                      ✓ Breakfast included
+                      {hotel.breakfastType ? ` (${hotel.breakfastType})` : ""}
                     </span>
-                    <span className="text-xs text-green-600 bg-green-50 px-1.5 py-0.5 rounded">
-                      ✓ {hotel.availableRoom.cancellationPolicy}
+                  ) : (
+                    <span className="text-gray-600">
+                      Breakfast not included
                     </span>
-                  </div>
-                </div>
-              )}
+                  )}
+                </span>
+              </div>
 
-              {/* Refundable Information - Show ONLY if all rooms have same policy */}
+              {/* Refundable Information - Mobile - Show ONLY if all rooms have same policy */}
               {allRoomsHaveSameRefundability() &&
                 (isRefundable() ? (
                   <Tooltip>
@@ -939,52 +1120,42 @@ export function HotelCard({
                     </span>
                   </div>
                 ))}
-            </div>
 
-            {/* Pricing Section - Booking.com Style */}
-            <div className="mt-auto bg-gray-50 rounded-lg p-3 border border-gray-100">
-              {/* Price Display */}
-              <div className="text-right mb-3">
-                <div className="text-xl font-bold text-[#003580] mb-1">
-                  Total Price
+              {/* Pricing and Actions - Mobile Booking.com Style */}
+              <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mt-3">
+                {/* Price Display */}
+                <div className="text-right mb-3">
+                  <div className="text-sm font-bold text-[#003580] mb-1">
+                    Total Price
+                  </div>
+                  <div className="text-lg font-bold text-[#003580] mb-1">
+                    {formatPrice(totalPriceInclusiveTaxes)}
+                  </div>
+                  <div className="text-xs text-gray-500">
+                    {formatPrice(currentPrice)} per room/night (incl. taxes)
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-[#003580] mb-1">
-                  {formatPrice(totalPriceInclusiveTaxes)}
-                </div>
-                <div className="text-xs text-gray-500">
-                  {formatPrice(currentPrice)} per room/night (incl. taxes)
+
+                {/* Action Buttons - Native App Optimized */}
+                <div className="flex space-x-3">
+                  <Button
+                    variant="outline"
+                    className="flex-1 py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation"
+                    onClick={handleViewDetails}
+                  >
+                    View Details
+                  </Button>
                 </div>
               </div>
-
-              {/* Action Buttons - Native App Optimized */}
-              <div className="flex space-x-3">
-                <Button
-                  variant="outline"
-                  className="flex-1 py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation"
-                  onClick={handleViewDetails}
-                >
-                  View Details
-                </Button>
-              </div>
-            </div>
-          </CardContent>
+            </CardContent>
+          </div>
         </div>
-      </Card>
-      </TooltipProvider>
-    );
-  }
 
-  // List/Card View - Mobile-First Responsive Layout
-  // Single unified layout with responsive adjustments (no grid view on mobile)
-  return (
-    <TooltipProvider>
-      <Card className="overflow-hidden hover:shadow-lg transition-shadow duration-200 border border-gray-200 bg-white rounded-lg group mb-4">
-      {/* Mobile Layout (< 1024px) - Stacked vertical */}
-      <div className="lg:hidden">
-        <div className="flex flex-col">
-          {/* Hotel Image - Extended and Clickable */}
+        {/* Desktop/Tablet Layout (lg+) - Horizontal/Grid */}
+        <div className="hidden lg:flex flex-col lg:flex-row">
+          {/* Image Gallery - Extended height and clickable */}
           <div
-            className="relative w-full h-48 flex-shrink-0 cursor-pointer"
+            className="relative lg:w-56 h-48 lg:h-56 flex-shrink-0 cursor-pointer"
             onClick={handleImageClick}
           >
             <img
@@ -1001,70 +1172,82 @@ export function HotelCard({
             <Button
               variant="ghost"
               size="sm"
-              className={`absolute top-3 right-3 w-8 h-8 p-0 backdrop-blur-sm rounded-full shadow-lg ${
+              className={`absolute top-4 right-4 w-8 h-8 p-0 touch-manipulation ${
                 isLiked
-                  ? "bg-gradient-to-br from-red-500 to-pink-600 text-white hover:from-red-600 hover:to-pink-700"
-                  : "bg-black/40 hover:bg-black/60 text-white"
+                  ? "bg-red-500 text-white hover:bg-red-600"
+                  : "bg-white/80 hover:bg-white text-gray-700"
               }`}
               onClick={() => setIsLiked(!isLiked)}
             >
               <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
             </Button>
-
-            {/* Price Badge */}
-            <div className="absolute bottom-3 right-3 bg-white rounded-lg px-2 py-1 shadow-lg">
-              <div className="text-sm font-bold text-[#003580]">
-                {formatPrice(totalPriceInclusiveTaxes)}
-              </div>
-            </div>
           </div>
 
-          {/* Hotel Details - Mobile */}
-          <CardContent className="p-4 space-y-3">
+          {/* Hotel Details */}
+          <CardContent className="flex-1 p-4 flex flex-col">
+            {/* Header Section - Compact */}
             <div className="mb-2">
-              <div className="flex items-start justify-between mb-1">
-                <div className="flex-1 min-w-0">
-                  <h3 className="text-lg font-bold text-gray-900 mb-0.5 line-clamp-1">
-                    {hotel.name}
-                  </h3>
-                  <div className="flex items-start text-gray-600">
-                    <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
-                    <span className="text-sm text-gray-600 line-clamp-2 leading-tight">
-                      {getFullAddress()}
+              <h3 className="text-base font-bold text-gray-900 mb-1 line-clamp-1">
+                {hotel.name}
+              </h3>
+              <div className="flex items-center justify-between">
+                <div className="flex items-center min-w-0 flex-1">
+                  <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
+                  <span className="text-xs text-gray-600 truncate">
+                    {getFullAddress()}
+                  </span>
+                </div>
+                <div className="flex items-center ml-2 gap-2">
+                  <div className="flex items-center">
+                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
+                    <span className="text-sm font-medium text-yellow-700 mr-1">
+                      {hotel.rating}
                     </span>
+                    <button
+                      onClick={() =>
+                        navigate(`/hotels/${hotel.id}?tab=reviews`)
+                      }
+                      className="text-xs text-blue-600 hover:underline whitespace-nowrap"
+                    >
+                      ({hotel.reviewCount || hotel.reviews || 0})
+                    </button>
                   </div>
                 </div>
-                <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full ml-2">
-                  <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
-                  <span className="text-sm font-medium text-yellow-700">
-                    {hotel.rating}
+              </div>
+            </div>
+
+            {/* Features - Single Line */}
+            <div className="flex flex-wrap gap-1 mb-2">
+              {hotel.features.slice(0, 4).map((feature) => (
+                <span
+                  key={feature}
+                  className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded"
+                >
+                  {feature}
+                </span>
+              ))}
+            </div>
+
+            {/* Room Type - Inline */}
+            {hotel.availableRoom && (
+              <div className="mb-2 text-xs">
+                <span className="font-medium text-gray-900">
+                  {hotel.availableRoom.type}
+                </span>
+                <span className="text-gray-600 mx-1">•</span>
+                <span className="text-gray-600">
+                  {hotel.availableRoom.bedType}
+                </span>
+                <div className="flex gap-1 mt-1">
+                  <span className="text-green-600 bg-green-50 px-1 py-0.5 rounded text-xs">
+                    ✓ {hotel.availableRoom.cancellationPolicy}
                   </span>
                 </div>
               </div>
-            </div>
-
-            {/* Features - Mobile */}
-            {hotel.features && hotel.features.length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-3">
-                {hotel.features.slice(0, 3).map((feature) => (
-                  <Badge
-                    key={feature}
-                    variant="secondary"
-                    className="text-xs px-2 py-1"
-                  >
-                    {feature}
-                  </Badge>
-                ))}
-                {hotel.features.length > 3 && (
-                  <Badge variant="secondary" className="text-xs px-2 py-1">
-                    +{hotel.features.length - 3}
-                  </Badge>
-                )}
-              </div>
             )}
 
-            {/* Breakfast Information - Mobile */}
-            <div className="flex items-center gap-1 mb-2">
+            {/* Breakfast Information - Desktop */}
+            <div className="flex items-center gap-1 mb-1">
               <Utensils className="w-3 h-3 text-gray-500" />
               <span className="text-xs font-bold">
                 {hotel.breakfastIncluded ? (
@@ -1078,12 +1261,12 @@ export function HotelCard({
               </span>
             </div>
 
-            {/* Refundable Information - Mobile - Show ONLY if all rooms have same policy */}
+            {/* Refundable Information - Desktop - Show ONLY if all rooms have same policy */}
             {allRoomsHaveSameRefundability() &&
               (isRefundable() ? (
                 <Tooltip>
                   <TooltipTrigger asChild>
-                    <div className="flex items-center gap-1 mb-3 cursor-help">
+                    <div className="flex items-center gap-1 mb-2 cursor-help">
                       <CheckCircle className="w-3 h-3 text-green-600" />
                       <span className="text-xs font-bold text-green-600 underline decoration-dotted">
                         {getCancellationPolicyText()}
@@ -1095,7 +1278,7 @@ export function HotelCard({
                   </TooltipContent>
                 </Tooltip>
               ) : (
-                <div className="flex items-center gap-1 mb-3">
+                <div className="flex items-center gap-1 mb-2">
                   <CreditCard className="w-3 h-3 text-red-600" />
                   <span className="text-xs font-bold text-red-600">
                     Non-refundable
@@ -1103,26 +1286,23 @@ export function HotelCard({
                 </div>
               ))}
 
-            {/* Pricing and Actions - Mobile Booking.com Style */}
-            <div className="bg-gray-50 rounded-lg p-3 border border-gray-100 mt-3">
-              {/* Price Display */}
-              <div className="text-right mb-3">
+            {/* Price and Actions - Booking.com Style */}
+            <div className="flex items-end justify-between mt-auto pt-2 border-t border-gray-100">
+              <div className="flex-1">
                 <div className="text-sm font-bold text-[#003580] mb-1">
                   Total Price
                 </div>
-                <div className="text-lg font-bold text-[#003580] mb-1">
+                <div className="text-lg font-bold text-[#003580]">
                   {formatPrice(totalPriceInclusiveTaxes)}
                 </div>
                 <div className="text-xs text-gray-500">
                   {formatPrice(currentPrice)} per room/night (incl. taxes)
                 </div>
               </div>
-
-              {/* Action Buttons - Native App Optimized */}
-              <div className="flex space-x-3">
+              <div className="flex gap-3 ml-3">
                 <Button
                   variant="outline"
-                  className="flex-1 py-4 text-sm font-semibold border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 min-h-[48px] rounded-xl active:scale-95 touch-manipulation"
+                  className="text-sm px-5 py-3 border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 font-semibold min-h-[44px] rounded-xl active:scale-95 touch-manipulation"
                   onClick={handleViewDetails}
                 >
                   View Details
@@ -1131,167 +1311,7 @@ export function HotelCard({
             </div>
           </CardContent>
         </div>
-      </div>
-
-      {/* Desktop/Tablet Layout (lg+) - Horizontal/Grid */}
-      <div className="hidden lg:flex flex-col lg:flex-row">
-        {/* Image Gallery - Extended height and clickable */}
-        <div
-          className="relative lg:w-56 h-48 lg:h-56 flex-shrink-0 cursor-pointer"
-          onClick={handleImageClick}
-        >
-          <img
-            src={images[currentImageIndex]}
-            alt={hotel.name}
-            className="w-full h-full object-cover"
-            onError={(e) => {
-              e.currentTarget.src =
-                "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=400&h=300&fit=crop";
-            }}
-          />
-
-          {/* Like Button */}
-          <Button
-            variant="ghost"
-            size="sm"
-            className={`absolute top-4 right-4 w-8 h-8 p-0 touch-manipulation ${
-              isLiked
-                ? "bg-red-500 text-white hover:bg-red-600"
-                : "bg-white/80 hover:bg-white text-gray-700"
-            }`}
-            onClick={() => setIsLiked(!isLiked)}
-          >
-            <Heart className={`w-4 h-4 ${isLiked ? "fill-current" : ""}`} />
-          </Button>
-        </div>
-
-        {/* Hotel Details */}
-        <CardContent className="flex-1 p-4 flex flex-col">
-          {/* Header Section - Compact */}
-          <div className="mb-2">
-            <h3 className="text-base font-bold text-gray-900 mb-1 line-clamp-1">
-              {hotel.name}
-            </h3>
-            <div className="flex items-center justify-between">
-              <div className="flex items-center min-w-0 flex-1">
-                <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
-                <span className="text-xs text-gray-600 truncate">
-                  {getFullAddress()}
-                </span>
-              </div>
-              <div className="flex items-center ml-2 gap-2">
-                <div className="flex items-center">
-                  <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
-                  <span className="text-sm font-medium text-yellow-700 mr-1">
-                    {hotel.rating}
-                  </span>
-                  <button
-                    onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
-                    className="text-xs text-blue-600 hover:underline whitespace-nowrap"
-                  >
-                    ({hotel.reviewCount || hotel.reviews || 0})
-                  </button>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* Features - Single Line */}
-          <div className="flex flex-wrap gap-1 mb-2">
-            {hotel.features.slice(0, 4).map((feature) => (
-              <span
-                key={feature}
-                className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded"
-              >
-                {feature}
-              </span>
-            ))}
-          </div>
-
-          {/* Room Type - Inline */}
-          {hotel.availableRoom && (
-            <div className="mb-2 text-xs">
-              <span className="font-medium text-gray-900">
-                {hotel.availableRoom.type}
-              </span>
-              <span className="text-gray-600 mx-1">•</span>
-              <span className="text-gray-600">
-                {hotel.availableRoom.bedType}
-              </span>
-              <div className="flex gap-1 mt-1">
-                <span className="text-green-600 bg-green-50 px-1 py-0.5 rounded text-xs">
-                  ✓ {hotel.availableRoom.cancellationPolicy}
-                </span>
-              </div>
-            </div>
-          )}
-
-          {/* Breakfast Information - Desktop */}
-          <div className="flex items-center gap-1 mb-1">
-            <Utensils className="w-3 h-3 text-gray-500" />
-            <span className="text-xs font-bold">
-              {hotel.breakfastIncluded ? (
-                <span className="text-green-600">
-                  ✓ Breakfast included
-                  {hotel.breakfastType ? ` (${hotel.breakfastType})` : ""}
-                </span>
-              ) : (
-                <span className="text-gray-600">Breakfast not included</span>
-              )}
-            </span>
-          </div>
-
-          {/* Refundable Information - Desktop - Show ONLY if all rooms have same policy */}
-          {allRoomsHaveSameRefundability() &&
-            (isRefundable() ? (
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <div className="flex items-center gap-1 mb-2 cursor-help">
-                    <CheckCircle className="w-3 h-3 text-green-600" />
-                    <span className="text-xs font-bold text-green-600 underline decoration-dotted">
-                      {getCancellationPolicyText()}
-                    </span>
-                  </div>
-                </TooltipTrigger>
-                <TooltipContent className="max-w-xs">
-                  {getCancellationPolicyText()}
-                </TooltipContent>
-              </Tooltip>
-            ) : (
-              <div className="flex items-center gap-1 mb-2">
-                <CreditCard className="w-3 h-3 text-red-600" />
-                <span className="text-xs font-bold text-red-600">
-                  Non-refundable
-                </span>
-              </div>
-            ))}
-
-          {/* Price and Actions - Booking.com Style */}
-          <div className="flex items-end justify-between mt-auto pt-2 border-t border-gray-100">
-            <div className="flex-1">
-              <div className="text-sm font-bold text-[#003580] mb-1">
-                Total Price
-              </div>
-              <div className="text-lg font-bold text-[#003580]">
-                {formatPrice(totalPriceInclusiveTaxes)}
-              </div>
-              <div className="text-xs text-gray-500">
-                {formatPrice(currentPrice)} per room/night (incl. taxes)
-              </div>
-            </div>
-            <div className="flex gap-3 ml-3">
-              <Button
-                variant="outline"
-                className="text-sm px-5 py-3 border-2 border-[#003580] text-[#003580] hover:bg-[#003580] hover:text-white transition-all duration-200 font-semibold min-h-[44px] rounded-xl active:scale-95 touch-manipulation"
-                onClick={handleViewDetails}
-              >
-                View Details
-              </Button>
-            </div>
-          </div>
-        </CardContent>
-      </div>
-    </Card>
+      </Card>
     </TooltipProvider>
   );
 }

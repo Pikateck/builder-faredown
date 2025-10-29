@@ -47,7 +47,10 @@ import {
 import { cn } from "@/lib/utils";
 import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
 import { usePriceContext } from "@/contexts/PriceContext";
-import { verifyPriceIntegrity, logPricePipeline } from "@/services/priceCalculationService";
+import {
+  verifyPriceIntegrity,
+  logPricePipeline,
+} from "@/services/priceCalculationService";
 
 export default function HotelBooking() {
   const navigate = useNavigate();
@@ -256,7 +259,10 @@ export default function HotelBooking() {
 
       // ✅ PRICE CONSISTENCY: Verify price snapshot before booking
       if (priceSnapshot) {
-        const { isValid, drift } = verifyPriceIntegrity(priceSnapshot, finalPrice);
+        const { isValid, drift } = verifyPriceIntegrity(
+          priceSnapshot,
+          finalPrice,
+        );
         if (!isValid) {
           console.error("[PRICE_PIPELINE] Price drift detected at checkout:", {
             originalTotal: priceSnapshot.grandTotal,
@@ -264,14 +270,16 @@ export default function HotelBooking() {
             drift,
           });
           alert(
-            `Price has changed by ₹${drift.toFixed(2)}. Please review and try again.`
+            `Price has changed by ₹${drift.toFixed(2)}. Please review and try again.`,
           );
           logPricePipeline("BOOK_FAILED_CHECKSUM", priceSnapshot);
           return;
         }
         logPricePipeline("BOOK", priceSnapshot);
       } else {
-        console.warn("[PRICE_PIPELINE] No price snapshot available at checkout");
+        console.warn(
+          "[PRICE_PIPELINE] No price snapshot available at checkout",
+        );
       }
 
       // For now, we'll pass the bargain data to confirmation page
