@@ -972,9 +972,9 @@ export default function HotelDetails() {
           image:
             room.image ||
             (Array.isArray(hotelData?.images) && hotelData!.images.length > 1
-              ? typeof hotelData!.images[1] === "string"
-                ? (hotelData!.images[1] as string)
-                : (hotelData!.images[1] as any).url
+              ? typeof hotelData!.images[displayImageIndex] === "string"
+                ? (hotelData!.images[displayImageIndex] as string)
+                : (hotelData!.images[displayImageIndex] as any).url
               : "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=300"),
           features: Array.isArray(room.features)
             ? room.features.map((f) =>
