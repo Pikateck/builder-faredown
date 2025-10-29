@@ -742,6 +742,45 @@ Please present this at the hotel during check-in.
               </div>
             </div>
 
+            {/* Terms and Conditions */}
+            <div className="mb-8">
+              <h2 className="text-xl font-bold mb-4">Terms and Conditions</h2>
+              <div className="space-y-3 text-xs leading-relaxed text-gray-700">
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="font-semibold text-gray-900 mb-1">1. Booking Confirmation</p>
+                  <p>Your booking is confirmed only upon receipt of payment. A confirmation email with all booking details will be sent to your registered email address.</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="font-semibold text-gray-900 mb-1">2. Payment Terms</p>
+                  <p>All payments must be made through the Faredown booking platform using the selected payment method. Payment failure may result in automatic booking cancellation.</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="font-semibold text-gray-900 mb-1">3. Cancellation & Refunds</p>
+                  <p>Cancellation policies vary by booking. Please refer to the "Important Policies" section above for specific cancellation terms applicable to your reservation.</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="font-semibold text-gray-900 mb-1">4. Modification of Bookings</p>
+                  <p>Changes to your booking (dates, guests, room type) may be allowed subject to availability and may incur additional charges. Modifications must be made directly through your account.</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="font-semibold text-gray-900 mb-1">5. Hotel Policies</p>
+                  <p>The hotel reserves the right to enforce its own check-in/check-out policies, dress codes, and conduct rules. Guests must adhere to all hotel policies during their stay.</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="font-semibold text-gray-900 mb-1">6. Liability & Valuables</p>
+                  <p>Faredown is not responsible for loss, theft, or damage to personal belongings during your stay. Hotel safe facilities are available free of charge.</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="font-semibold text-gray-900 mb-1">7. Guest Information & Age</p>
+                  <p>Guests must be at least 18 years old. Valid government-issued photo ID is required at check-in. The name on the ID must match the booking name.</p>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="font-semibold text-gray-900 mb-1">8. Customer Support</p>
+                  <p>For booking assistance and customer support, contact us at support@faredown.com or call +971 4 123 4567. Available 24/7 for your convenience.</p>
+                </div>
+              </div>
+            </div>
+
             {/* Emergency Contacts */}
             <div className="mb-6">
               <h2 className="text-xl font-bold mb-4">Emergency Contacts</h2>
