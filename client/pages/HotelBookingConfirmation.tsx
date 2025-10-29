@@ -459,24 +459,54 @@ export default function HotelBookingConfirmation() {
                         {bookingData.preferences.bedType && (
                           <div className="flex justify-between">
                             <span className="text-gray-600">Bed Type:</span>
-                            <span className="font-medium">{bookingData.preferences.bedType === 'king' ? 'King Bed' : bookingData.preferences.bedType === 'queen' ? 'Queen Bed' : 'Twin Beds'}</span>
+                            <span className="font-medium">
+                              {bookingData.preferences.bedType === "king"
+                                ? "King Bed"
+                                : bookingData.preferences.bedType === "queen"
+                                  ? "Queen Bed"
+                                  : "Twin Beds"}
+                            </span>
                           </div>
                         )}
                         {bookingData.preferences.smokingPreference && (
                           <div className="flex justify-between">
-                            <span className="text-gray-600">Smoking Preference:</span>
-                            <span className="font-medium">{bookingData.preferences.smokingPreference === 'non-smoking' ? 'Non-Smoking' : 'Smoking'}</span>
+                            <span className="text-gray-600">
+                              Smoking Preference:
+                            </span>
+                            <span className="font-medium">
+                              {bookingData.preferences.smokingPreference ===
+                              "non-smoking"
+                                ? "Non-Smoking"
+                                : "Smoking"}
+                            </span>
                           </div>
                         )}
                         {bookingData.preferences.floorPreference && (
                           <div className="flex justify-between">
-                            <span className="text-gray-600">Floor Preference:</span>
-                            <span className="font-medium">{bookingData.preferences.floorPreference === 'high' ? 'High Floor' : bookingData.preferences.floorPreference === 'low' ? 'Low Floor' : bookingData.preferences.floorPreference === 'mid' ? 'Mid Floor' : 'Quiet Area'}</span>
+                            <span className="text-gray-600">
+                              Floor Preference:
+                            </span>
+                            <span className="font-medium">
+                              {bookingData.preferences.floorPreference ===
+                              "high"
+                                ? "High Floor"
+                                : bookingData.preferences.floorPreference ===
+                                    "low"
+                                  ? "Low Floor"
+                                  : bookingData.preferences.floorPreference ===
+                                      "mid"
+                                    ? "Mid Floor"
+                                    : "Quiet Area"}
+                            </span>
                           </div>
                         )}
-                        {(bookingData.preferences.earlyCheckin || bookingData.preferences.lateCheckout || bookingData.preferences.dailyHousekeeping) && (
+                        {(bookingData.preferences.earlyCheckin ||
+                          bookingData.preferences.lateCheckout ||
+                          bookingData.preferences.dailyHousekeeping) && (
                           <div className="border-t pt-2 mt-2">
-                            <div className="text-gray-600 font-medium mb-1">Guest Requests:</div>
+                            <div className="text-gray-600 font-medium mb-1">
+                              Guest Requests:
+                            </div>
                             <div className="space-y-1">
                               {bookingData.preferences.earlyCheckin && (
                                 <div className="flex items-center text-gray-700">
@@ -551,7 +581,13 @@ export default function HotelBookingConfirmation() {
                 {/* Base Price */}
                 {bookingData.pricing.basePrice && (
                   <div className="flex justify-between text-sm">
-                    <span>Base Room Rate ({bookingData.pricing.nights || bookingData.stay?.nights || 3} nights)</span>
+                    <span>
+                      Base Room Rate (
+                      {bookingData.pricing.nights ||
+                        bookingData.stay?.nights ||
+                        3}{" "}
+                      nights)
+                    </span>
                     <span>
                       {formatPriceWithSymbol(
                         bookingData.pricing.basePrice,
@@ -580,7 +616,8 @@ export default function HotelBookingConfirmation() {
                     <span>Taxes & Fees</span>
                     <span>
                       {formatPriceWithSymbol(
-                        (bookingData.pricing.taxes || 0) + (bookingData.pricing.fees || 0),
+                        (bookingData.pricing.taxes || 0) +
+                          (bookingData.pricing.fees || 0),
                         selectedCurrency.code,
                       )}
                     </span>
@@ -592,7 +629,8 @@ export default function HotelBookingConfirmation() {
                   <div className="flex justify-between text-sm text-green-600">
                     <span>Discount</span>
                     <span>
-                      -{formatPriceWithSymbol(
+                      -
+                      {formatPriceWithSymbol(
                         bookingData.pricing.discount,
                         selectedCurrency.code,
                       )}

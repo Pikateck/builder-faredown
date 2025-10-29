@@ -62,10 +62,16 @@ useEffect(() => {
 
 ```typescript
 // ✅ CHANGED FROM:
-const bookingData = { /* hardcoded data */ };
+const bookingData = {
+  /* hardcoded data */
+};
 
 // ✅ CHANGED TO:
-const bookingData = savedBookingData || { /* default data */ };
+const bookingData =
+  savedBookingData ||
+  {
+    /* default data */
+  };
 ```
 
 **Why**: So actual user data is used instead of hardcoded mock data.
@@ -84,8 +90,8 @@ const bookingData = savedBookingData || { /* default data */ };
         <div className="flex justify-between">
           <span className="text-gray-600">Bed Type:</span>
           <span className="font-medium">
-            {bookingData.preferences.bedType === 'king' ? 'King Bed' : 
-             bookingData.preferences.bedType === 'queen' ? 'Queen Bed' : 
+            {bookingData.preferences.bedType === 'king' ? 'King Bed' :
+             bookingData.preferences.bedType === 'queen' ? 'Queen Bed' :
              'Twin Beds'}
           </span>
         </div>
@@ -177,10 +183,16 @@ useEffect(() => {
 
 ```typescript
 // ✅ CHANGED FROM:
-const voucherData = { /* hardcoded data */ };
+const voucherData = {
+  /* hardcoded data */
+};
 
 // ✅ CHANGED TO:
-const voucherData = savedBookingData || { /* default data */ };
+const voucherData =
+  savedBookingData ||
+  {
+    /* default data */
+  };
 ```
 
 **Why**: So actual user data is used instead of hardcoded mock data.
@@ -261,27 +273,30 @@ preferences: {
 
 ## 🔍 Summary of All Changes
 
-| File | Changes | Lines | Impact |
-|------|---------|-------|--------|
-| ReservationPage.tsx | Add preferences + pricing to bookingData | 264-274 | Data now saved to localStorage |
-| HotelBookingConfirmation.tsx | Add state + useEffect + preferences section + pricing fix | 40, 52-63, 442-495, 550-603 | Confirmation shows actual user data |
-| BookingVoucher.tsx | Add state + useEffect + preferences section + pricing fix | 36, 38-50, 52, 131-140, 494-530, 534-603 | Voucher shows actual user data |
+| File                         | Changes                                                   | Lines                                    | Impact                              |
+| ---------------------------- | --------------------------------------------------------- | ---------------------------------------- | ----------------------------------- |
+| ReservationPage.tsx          | Add preferences + pricing to bookingData                  | 264-274                                  | Data now saved to localStorage      |
+| HotelBookingConfirmation.tsx | Add state + useEffect + preferences section + pricing fix | 40, 52-63, 442-495, 550-603              | Confirmation shows actual user data |
+| BookingVoucher.tsx           | Add state + useEffect + preferences section + pricing fix | 36, 38-50, 52, 131-140, 494-530, 534-603 | Voucher shows actual user data      |
 
 ---
 
 ## ✨ What Each Change Does
 
 ### ReservationPage Changes
+
 - **Stores preferences**: So they can be retrieved later
 - **Stores pricing**: So invoice can be exact
 - **Enables continuity**: Data persists across pages
 
 ### HotelBookingConfirmation Changes
+
 - **Loads real data**: From localStorage instead of hardcoded
 - **Displays preferences**: New section shows all selections
 - **Shows proper invoice**: Base + Taxes + Discount + Total
 
 ### BookingVoucher Changes
+
 - **Loads real data**: From localStorage instead of hardcoded
 - **Displays preferences**: New section in voucher
 - **Shows proper invoice**: Both old and new format support
@@ -330,6 +345,7 @@ git push origin main
 ## 📞 Questions?
 
 Each change is minimal, focused, and follows these principles:
+
 1. **Persistence**: Save to localStorage
 2. **Loading**: Read from localStorage
 3. **Fallback**: Use defaults if no saved data
@@ -337,4 +353,3 @@ Each change is minimal, focused, and follows these principles:
 5. **Format**: Both old and new formats supported
 
 All changes are backward compatible and don't break existing functionality.
-

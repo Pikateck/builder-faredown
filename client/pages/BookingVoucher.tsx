@@ -495,7 +495,9 @@ Please present this at the hotel during check-in.
 
                 {voucherData.preferences && (
                   <div className="border-t pt-4 mt-4">
-                    <h4 className="font-semibold mb-2">Room Preferences & Guest Requests</h4>
+                    <h4 className="font-semibold mb-2">
+                      Room Preferences & Guest Requests
+                    </h4>
                     <div className="space-y-1 text-sm text-gray-700">
                       {voucherData.preferences.bedType && (
                         <div className="flex justify-between">
@@ -506,7 +508,9 @@ Please present this at the hotel during check-in.
                       {voucherData.preferences.smokingPreference && (
                         <div className="flex justify-between">
                           <span>Smoking Preference:</span>
-                          <span>{voucherData.preferences.smokingPreference}</span>
+                          <span>
+                            {voucherData.preferences.smokingPreference}
+                          </span>
                         </div>
                       )}
                       {voucherData.preferences.floorPreference && (
@@ -515,13 +519,29 @@ Please present this at the hotel during check-in.
                           <span>{voucherData.preferences.floorPreference}</span>
                         </div>
                       )}
-                      {(voucherData.preferences.earlyCheckin || voucherData.preferences.lateCheckout || voucherData.preferences.dailyHousekeeping) && (
+                      {(voucherData.preferences.earlyCheckin ||
+                        voucherData.preferences.lateCheckout ||
+                        voucherData.preferences.dailyHousekeeping) && (
                         <div className="pt-2 border-t">
-                          <div className="font-medium mb-1">Guest Requests:</div>
+                          <div className="font-medium mb-1">
+                            Guest Requests:
+                          </div>
                           <ul className="space-y-0.5 pl-4">
-                            {voucherData.preferences.earlyCheckin && <li className="text-gray-700">✓ Early Check-in (before 3:00 PM)</li>}
-                            {voucherData.preferences.lateCheckout && <li className="text-gray-700">✓ Late Check-out (after 12:00 PM)</li>}
-                            {voucherData.preferences.dailyHousekeeping && <li className="text-gray-700">✓ Daily Housekeeping</li>}
+                            {voucherData.preferences.earlyCheckin && (
+                              <li className="text-gray-700">
+                                ✓ Early Check-in (before 3:00 PM)
+                              </li>
+                            )}
+                            {voucherData.preferences.lateCheckout && (
+                              <li className="text-gray-700">
+                                ✓ Late Check-out (after 12:00 PM)
+                              </li>
+                            )}
+                            {voucherData.preferences.dailyHousekeeping && (
+                              <li className="text-gray-700">
+                                ✓ Daily Housekeeping
+                              </li>
+                            )}
                           </ul>
                         </div>
                       )}
@@ -541,7 +561,11 @@ Please present this at the hotel during check-in.
                     <>
                       <div className="flex justify-between">
                         <span>
-                          Base Room Rate ({voucherData.reservation.nights || voucherData.nights || 3} nights)
+                          Base Room Rate (
+                          {voucherData.reservation.nights ||
+                            voucherData.nights ||
+                            3}{" "}
+                          nights)
                         </span>
                         <span>
                           {formatPriceWithSymbol(
@@ -563,7 +587,8 @@ Please present this at the hotel during check-in.
                         <div className="flex justify-between text-green-600">
                           <span>Discount</span>
                           <span>
-                            -{formatPriceWithSymbol(
+                            -
+                            {formatPriceWithSymbol(
                               voucherData.pricing.discount,
                               selectedCurrency.code,
                             )}
@@ -626,8 +651,22 @@ Please present this at the hotel during check-in.
                   </div>
                 </div>
                 <div className="mt-3 text-sm text-gray-600">
-                  <div>Payment Status: <span className="font-medium">{voucherData.pricing.paymentStatus || voucherData.paymentStatus || "Confirmed"}</span></div>
-                  <div>Payment Method: <span className="font-medium">{voucherData.pricing.paymentMethod || voucherData.paymentMethod || "Not specified"}</span></div>
+                  <div>
+                    Payment Status:{" "}
+                    <span className="font-medium">
+                      {voucherData.pricing.paymentStatus ||
+                        voucherData.paymentStatus ||
+                        "Confirmed"}
+                    </span>
+                  </div>
+                  <div>
+                    Payment Method:{" "}
+                    <span className="font-medium">
+                      {voucherData.pricing.paymentMethod ||
+                        voucherData.paymentMethod ||
+                        "Not specified"}
+                    </span>
+                  </div>
                 </div>
               </div>
             </div>

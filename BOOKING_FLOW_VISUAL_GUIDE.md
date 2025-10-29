@@ -195,28 +195,28 @@
 ```typescript
 // User selections on Preferences page
 const preferences = {
-  bedType: "king",                    // Select dropdown
-  smokingPreference: "non-smoking",   // Select dropdown
-  floorPreference: "high",            // Select dropdown
-  earlyCheckin: true,                 // Checkbox
-  lateCheckout: true,                 // Checkbox
-  dailyHousekeeping: true             // Checkbox
-}
+  bedType: "king", // Select dropdown
+  smokingPreference: "non-smoking", // Select dropdown
+  floorPreference: "high", // Select dropdown
+  earlyCheckin: true, // Checkbox
+  lateCheckout: true, // Checkbox
+  dailyHousekeeping: true, // Checkbox
+};
 
 // ↓ Transformed into bookingData
 const bookingData = {
   ...otherFields,
-  preferences: preferences,  // ✓ Stored
-  specialRequests: "...",   // ✓ From Guest Details
+  preferences: preferences, // ✓ Stored
+  specialRequests: "...", // ✓ From Guest Details
   pricing: {
-    basePrice: 259,         // ✓ From hotel data
-    total: 920.24,          // ✓ Calculated
-    taxes: 93.24            // ✓ Calculated
-  }
-}
+    basePrice: 259, // ✓ From hotel data
+    total: 920.24, // ✓ Calculated
+    taxes: 93.24, // ✓ Calculated
+  },
+};
 
 // ↓ Saved to localStorage
-localStorage.setItem("latestHotelBooking", JSON.stringify(bookingData))
+localStorage.setItem("latestHotelBooking", JSON.stringify(bookingData));
 ```
 
 ### Step 2: localStorage → Confirmation Page
@@ -269,11 +269,13 @@ voucherData = savedBookingData || mockData
 ## ✨ Key Improvements by Step
 
 ### Preferences Step (NEW)
+
 ✅ All preferences captured and labeled clearly
 ✅ No pricing shown (per requirements)
 ✅ Clean, minimal UI with checkboxes and dropdowns
 
 ### Confirmation Page (IMPROVED)
+
 ❌ Before: Hardcoded mock preferences
 ✅ After: Shows ACTUAL user preferences
 ❌ Before: "Original Price ₹0"
@@ -281,6 +283,7 @@ voucherData = savedBookingData || mockData
 ✅ New: Preferences section displays all selections
 
 ### Hotel Voucher (IMPROVED)
+
 ❌ Before: Hardcoded mock data throughout
 ✅ After: Reads actual booking data from localStorage
 ❌ Before: Missing preferences
@@ -338,6 +341,7 @@ Mobile (< 768px)          Desktop (≥ 768px)
 ## 📋 Testing Scenarios
 
 ### Scenario 1: Complete Booking
+
 1. Search → Select Hotel → Guest Details (with Special Requests)
 2. Preferences Page (select all options)
 3. Review → Payment
@@ -346,6 +350,7 @@ Mobile (< 768px)          Desktop (≥ 768px)
 6. **Expected**: Voucher shows all preferences
 
 ### Scenario 2: Minimal Selection
+
 1. Search → Select Hotel → Guest Details (no Special Requests)
 2. Preferences Page (select only Bed Type)
 3. Review → Payment
@@ -354,11 +359,13 @@ Mobile (< 768px)          Desktop (≥ 768px)
 6. **Expected**: Voucher shows only selected preference
 
 ### Scenario 3: Browser Refresh
+
 1. Complete booking flow through Confirmation page
 2. Refresh browser (F5)
 3. **Expected**: Confirmation page still shows preferences (from localStorage)
 
 ### Scenario 4: Back Button
+
 1. Complete booking, view voucher
 2. Click browser back button
 3. **Expected**: Confirmation page still shows preferences
@@ -372,4 +379,3 @@ Mobile (< 768px)          Desktop (≥ 768px)
 3. **Data continuity** requires intentional flow design
 4. **Invoice accuracy** needs unified pricing structure
 5. **Mobile-first** approach makes responsive design easier
-
