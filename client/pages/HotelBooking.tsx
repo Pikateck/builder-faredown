@@ -254,6 +254,26 @@ export default function HotelBooking() {
         100
       ).toFixed(2);
 
+      // ✅ PRICE CONSISTENCY: Verify price snapshot before booking
+      if (priceSnapshot) {
+        const { isValid, drift } = verifyPriceIntegrity(priceSnapshot, finalPrice);
+        if (!isValid) {
+          console.error("[PRICE_PIPELINE] Price drift detected at checkout:", {
+            originalTotal: priceSnapshot.grandTotal,
+            calculated: finalPrice,
+            drift,
+          });
+          alert(
+            `Price has changed by ₹${drift.toFixed(2)}. Please review and try again.`
+          );
+          logPricePipeline("BOOK_FAILED_CHECKSUM", priceSnapshot);
+          return;
+        }
+        logPricePipeline("BOOK", priceSnapshot);
+      } else {
+        console.warn("[PRICE_PIPELINE] No price snapshot available at checkout");
+      }
+
       // For now, we'll pass the bargain data to confirmation page
       // In a real scenario, you'd submit this to the backend booking endpoint
       // which would then call the rewards API
@@ -272,6 +292,7 @@ export default function HotelBooking() {
           bargainedPrice,
           discountAmount,
           discountPercentage,
+          priceSnapshot, // ✅ Pass price snapshot to confirmation page
         },
       });
     } catch (error) {
