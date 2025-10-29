@@ -281,9 +281,20 @@ Please present this at the hotel during check-in.
             <div className="border-b-2 border-blue-600 pb-6 mb-6">
               <div className="flex justify-between items-start">
                 <div>
-                  <h1 className="text-3xl font-bold text-blue-600 mb-2">
+                  <div className="flex items-center space-x-3 mb-2">
+                    <div className="w-12 h-12 bg-blue-600 rounded-lg flex items-center justify-center">
+                      <span className="text-lg font-bold text-white">F</span>
+                    </div>
+                    <div>
+                      <h1 className="text-3xl font-bold text-blue-600">
+                        FAREDOWN
+                      </h1>
+                      <p className="text-xs text-gray-600">Travel Booking Platform</p>
+                    </div>
+                  </div>
+                  <h2 className="text-2xl font-bold text-gray-900 mt-3 mb-2">
                     HOTEL BOOKING VOUCHER
-                  </h1>
+                  </h2>
                   <p className="text-gray-600">
                     Please present this voucher at the hotel reception
                   </p>
