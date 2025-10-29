@@ -4033,3 +4033,39 @@ function HotelDetailsContent() {
     </TooltipProvider>
   );
 }
+
+// Export with error boundary wrapper
+export default function HotelDetails() {
+  const [renderError, setRenderError] = useState<Error | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+
+  if (renderError) {
+    return (
+      <ErrorFallback
+        error={renderError}
+        retry={() => {
+          setRenderError(null);
+          setRetryCount(retryCount + 1);
+          window.location.reload();
+        }}
+      />
+    );
+  }
+
+  try {
+    return <HotelDetailsContent />;
+  } catch (error) {
+    console.error("[HOTEL_DETAILS_ERROR]", error);
+    setRenderError(error as Error);
+    return (
+      <ErrorFallback
+        error={error}
+        retry={() => {
+          setRenderError(null);
+          setRetryCount(retryCount + 1);
+          window.location.reload();
+        }}
+      />
+    );
+  }
+}
