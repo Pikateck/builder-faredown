@@ -488,7 +488,9 @@ router.get("/", async (req, res) => {
         source = "fallback_mock";
         console.log(`✅ Loaded ${finalHotels.length} fallback mock hotels`);
       } else {
-        console.warn(`⚠️ No mock data available for city: ${cityId}, returning empty`);
+        console.warn(
+          `⚠️ No mock data available for city: ${cityId}, returning empty`,
+        );
       }
     } else {
       console.log(
