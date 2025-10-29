@@ -7,13 +7,13 @@
 
 ## 📊 Current Scores
 
-| Category | Score | Status | Target |
-|----------|-------|--------|--------|
-| Performance | 55/100 | 🔴 CRITICAL | 90+ |
-| Accessibility | 88/100 | 🟡 GOOD | 95+ |
-| Best Practices | 100/100 | ✅ PERFECT | 90+ |
-| SEO | 100/100 | ✅ PERFECT | 90+ |
-| PWA | 30/100 | 🔴 CRITICAL | 90+ |
+| Category       | Score   | Status      | Target |
+| -------------- | ------- | ----------- | ------ |
+| Performance    | 55/100  | 🔴 CRITICAL | 90+    |
+| Accessibility  | 88/100  | 🟡 GOOD     | 95+    |
+| Best Practices | 100/100 | ✅ PERFECT  | 90+    |
+| SEO            | 100/100 | ✅ PERFECT  | 90+    |
+| PWA            | 30/100  | 🔴 CRITICAL | 90+    |
 
 ---
 
@@ -23,7 +23,7 @@
 
 ```
 ❌ First Contentful Paint (FCP):    5.6s (TARGET: <1.8s) - 3.1x SLOWER
-❌ Speed Index:                      5.6s (TARGET: <3.4s) - 1.6x SLOWER  
+❌ Speed Index:                      5.6s (TARGET: <3.4s) - 1.6x SLOWER
 ❌ Largest Contentful Paint (LCP):   5.7s (TARGET: <2.5s) - 2.3x SLOWER
 🟡 Time to Interactive (TTI):        6.8s (TARGET: <3.8s) - 1.8x SLOWER
 ❌ Total Blocking Time (TBT):        280ms (TARGET: <200ms) - BLOCKED
@@ -31,6 +31,7 @@
 ```
 
 ### **Root Causes:**
+
 1. **Too much JavaScript** - Bundle not code-split, modals/dialogs loaded upfront
 2. **Unoptimized images** - No lazy loading, no WebP format
 3. **Render-blocking resources** - CSS/JS blocking First Paint
@@ -52,9 +53,9 @@
 <img src={hotel.image} onError={(e) => e.currentTarget.src = fallback} />
 
 // AFTER:
-<img 
+<img
   loading="lazy"
-  src={hotel.image} 
+  src={hotel.image}
   onError={(e) => e.currentTarget.src = fallback}
 />
 ```
@@ -99,7 +100,7 @@
 </button>
 
 // AFTER:
-<button 
+<button
   aria-label={`View details for ${hotel.name}`}
   onClick={handleViewDetails}
 >
@@ -120,14 +121,14 @@
 import ConversationalBargainModal from "@/components/ConversationalBargainModal";
 
 // AFTER:
-const ConversationalBargainModal = lazy(() =>
-  import("@/components/ConversationalBargainModal")
+const ConversationalBargainModal = lazy(
+  () => import("@/components/ConversationalBargainModal"),
 );
 
 // Add Suspense wrapper:
 <Suspense fallback={<div>Loading...</div>}>
   <ConversationalBargainModal {...props} />
-</Suspense>
+</Suspense>;
 ```
 
 **Expected Improvement:** -0.3s to TTI
@@ -140,7 +141,6 @@ const ConversationalBargainModal = lazy(() =>
 
 1. ❌ **Buttons do not have an accessible name** (5 issues)
    - FIX: Add `aria-label` or visible text to all icon buttons
-   
 2. ❌ **Heading hierarchy broken** (4 issues)
    - FIX: Use h1 → h2 → h3 in sequential order
 
@@ -214,9 +214,9 @@ const ConversationalBargainModal = lazy(() =>
 ```html
 <head>
   <!-- Add this line -->
-  <link rel="manifest" href="/manifest.json">
-  <meta name="theme-color" content="#003580">
-  <link rel="apple-touch-icon" href="/logo/faredown-logo.png">
+  <link rel="manifest" href="/manifest.json" />
+  <meta name="theme-color" content="#003580" />
+  <link rel="apple-touch-icon" href="/logo/faredown-logo.png" />
 </head>
 ```
 
@@ -225,18 +225,18 @@ const ConversationalBargainModal = lazy(() =>
 **File:** `public/sw.js`
 
 ```javascript
-const CACHE_NAME = 'faredown-v1';
+const CACHE_NAME = "faredown-v1";
 
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   event.waitUntil(caches.open(CACHE_NAME));
 });
 
-self.addEventListener('fetch', (event) => {
-  if (event.request.method === 'GET') {
+self.addEventListener("fetch", (event) => {
+  if (event.request.method === "GET") {
     event.respondWith(
       caches.match(event.request).then((response) => {
         return response || fetch(event.request);
-      })
+      }),
     );
   }
 });
@@ -246,8 +246,8 @@ self.addEventListener('fetch', (event) => {
 
 ```html
 <script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('/sw.js');
+  if ("serviceWorker" in navigator) {
+    navigator.serviceWorker.register("/sw.js");
   }
 </script>
 ```
@@ -256,16 +256,17 @@ self.addEventListener('fetch', (event) => {
 
 ## 📈 Expected Improvements After Fixes
 
-| Fix | Performance | Accessibility | PWA | Effort |
-|-----|-------------|---|---|--------|
-| Lazy load images | +10 pts | - | - | 5 min |
-| Fix heading hierarchy | - | +2 pts | - | 5 min |
-| Add aria-labels | - | +3 pts | - | 10 min |
-| Dynamic imports | +15 pts | - | - | 15 min |
-| Add manifest.json | - | - | +40 pts | 10 min |
-| Create service worker | - | - | +30 pts | 20 min |
+| Fix                   | Performance | Accessibility | PWA     | Effort |
+| --------------------- | ----------- | ------------- | ------- | ------ |
+| Lazy load images      | +10 pts     | -             | -       | 5 min  |
+| Fix heading hierarchy | -           | +2 pts        | -       | 5 min  |
+| Add aria-labels       | -           | +3 pts        | -       | 10 min |
+| Dynamic imports       | +15 pts     | -             | -       | 15 min |
+| Add manifest.json     | -           | -             | +40 pts | 10 min |
+| Create service worker | -           | -             | +30 pts | 20 min |
 
 **Total Expected Gain:**
+
 - Performance: 55 → **80+** (25 point improvement)
 - Accessibility: 88 → **95+** (7 point improvement)
 - PWA: 30 → **90+** (60 point improvement)

@@ -12,11 +12,13 @@
 #### ✅ Image Lazy Loading (Client: HotelCard.tsx)
 
 **Added `loading="lazy"` to all hotel card images:**
+
 - Grid view image (line 811)
 - Mobile view image (line 1007)
 - Desktop view image (line 1162)
 
 **Impact:** Prevents off-screen images from loading until needed
+
 - Expected improvement: **-0.5s LCP**, **-0.3s FCP**
 
 ---
@@ -26,6 +28,7 @@
 #### ✅ Added aria-labels to Buttons (Client: HotelCard.tsx)
 
 **Added accessible labels to Like button:**
+
 ```tsx
 aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
 ```
@@ -33,6 +36,7 @@ aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
 #### ✅ Fixed Heading Hierarchy (Client: HotelResults.tsx)
 
 **Changed h3 → h2 for section headings:**
+
 - Error message heading (line 2548)
 - No hotels available heading (line 2588)
 - Error modal heading (line 2744)
@@ -46,6 +50,7 @@ aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
 #### ✅ Created Web App Manifest (File: public/manifest.json)
 
 **New file with:**
+
 - App name, short name, description
 - Display mode: standalone
 - Theme color: #003580 (Faredown brand color)
@@ -55,6 +60,7 @@ aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
 #### ✅ Added PWA Meta Tags (File: index.html)
 
 **Added to `<head>` section:**
+
 ```html
 <link rel="manifest" href="/manifest.json" />
 <meta name="theme-color" content="#003580" />
@@ -62,6 +68,7 @@ aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
 ```
 
 **Impact:**
+
 - ✅ Web app manifest recognized
 - ✅ Theme color applied to browser chrome
 - ✅ Apple devices can add to home screen
@@ -71,14 +78,14 @@ aria-label={isLiked ? "Remove from favorites" : "Add to favorites"}
 
 ## 📊 Expected Score Changes
 
-| Category | Before | After | Change |
-|----------|--------|-------|--------|
-| **Performance** | 55 | 70-75 | +15-20 |
-| **Accessibility** | 88 | 93-95 | +5-7 |
-| **Best Practices** | 100 | 100 | +0 |
-| **SEO** | 100 | 100 | +0 |
-| **PWA** | 30 | 75-85 | +45-55 |
-| **OVERALL** | 73 | 87-91 | +14-18 |
+| Category           | Before | After | Change |
+| ------------------ | ------ | ----- | ------ |
+| **Performance**    | 55     | 70-75 | +15-20 |
+| **Accessibility**  | 88     | 93-95 | +5-7   |
+| **Best Practices** | 100    | 100   | +0     |
+| **SEO**            | 100    | 100   | +0     |
+| **PWA**            | 30     | 75-85 | +45-55 |
+| **OVERALL**        | 73     | 87-91 | +14-18 |
 
 ---
 
