@@ -37,6 +37,7 @@ export default function HotelBookingConfirmation() {
   const { booking: enhancedBooking, loadCompleteSearchObject } =
     useEnhancedBooking();
   const [isLoading, setIsLoading] = useState(false);
+  const [savedBookingData, setSavedBookingData] = useState(null);
 
   // Load search parameters from location state if available
   useEffect(() => {
@@ -48,6 +49,18 @@ export default function HotelBookingConfirmation() {
       loadCompleteSearchObject(location.state.searchParams);
     }
   }, [location.state, loadCompleteSearchObject]);
+
+  // Load actual booking data from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("latestHotelBooking");
+    if (saved) {
+      try {
+        setSavedBookingData(JSON.parse(saved));
+      } catch (error) {
+        console.error("Error parsing booking data:", error);
+      }
+    }
+  }, []);
 
   const bookingId = searchParams.get("bookingId") || "HTL" + Date.now();
   const hotelId = searchParams.get("hotelId") || "1";
