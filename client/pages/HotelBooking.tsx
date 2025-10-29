@@ -88,7 +88,8 @@ export default function HotelBooking() {
   // ✅ Lock guests from the selection, not defaults
   const guests = {
     adults: location.state?.guests?.adults ?? searchParams.guests?.adults ?? 2,
-    children: location.state?.guests?.children ?? searchParams.guests?.children ?? 0,
+    children:
+      location.state?.guests?.children ?? searchParams.guests?.children ?? 0,
     rooms: location.state?.guests?.rooms ?? searchParams.rooms ?? 1,
   };
 
@@ -100,8 +101,12 @@ export default function HotelBooking() {
     0;
 
   // ✅ Calculate nights from locked dates
-  const nights = location.state?.nights ||
-    Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24)) ||
+  const nights =
+    location.state?.nights ||
+    Math.ceil(
+      (new Date(checkOut).getTime() - new Date(checkIn).getTime()) /
+        (1000 * 60 * 60 * 24),
+    ) ||
     3;
 
   console.log("🏨 Hotel booking using exact search dates:", {
@@ -641,7 +646,9 @@ export default function HotelBooking() {
                               type="radio"
                               name="smokingPreference"
                               value={option.value}
-                              checked={preferences.smokingPreference === option.value}
+                              checked={
+                                preferences.smokingPreference === option.value
+                              }
                               onChange={(e) =>
                                 setPreferences((prev) => ({
                                   ...prev,
@@ -675,7 +682,9 @@ export default function HotelBooking() {
                             className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
                             onClick={(e) => {
                               // Allow direct input clicks
-                              if ((e.target as HTMLElement).tagName !== 'INPUT') {
+                              if (
+                                (e.target as HTMLElement).tagName !== "INPUT"
+                              ) {
                                 setPreferences((prev) => ({
                                   ...prev,
                                   floorPreference: option.value,
@@ -687,16 +696,18 @@ export default function HotelBooking() {
                               type="radio"
                               name="floorPreference"
                               value={option.value}
-                              checked={preferences.floorPreference === option.value}
+                              checked={
+                                preferences.floorPreference === option.value
+                              }
                               onChange={(e) => {
                                 e.stopPropagation();
                                 setPreferences((prev) => ({
                                   ...prev,
                                   floorPreference: e.target.value,
-                                }))
+                                }));
                               }}
                               className="w-4 h-4 cursor-pointer"
-                              style={{ accentColor: '#2563eb' }}
+                              style={{ accentColor: "#2563eb" }}
                             />
                             <span className="ml-3 text-gray-700">
                               {option.label}
@@ -713,17 +724,32 @@ export default function HotelBooking() {
                       </label>
                       <div className="space-y-2">
                         {[
-                          { id: "earlyCheckIn", label: "Early Check-in (before 3:00 PM)" },
-                          { id: "lateCheckOut", label: "Late Check-out (after 12:00 PM)" },
-                          { id: "dailyHousekeeping", label: "Daily Housekeeping" },
+                          {
+                            id: "earlyCheckIn",
+                            label: "Early Check-in (before 3:00 PM)",
+                          },
+                          {
+                            id: "lateCheckOut",
+                            label: "Late Check-out (after 12:00 PM)",
+                          },
+                          {
+                            id: "dailyHousekeeping",
+                            label: "Daily Housekeeping",
+                          },
                         ].map((request) => (
                           <div
                             key={request.id}
                             className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
                             onClick={(e) => {
                               // Allow direct input clicks to work
-                              if ((e.target as HTMLElement).tagName !== 'INPUT') {
-                                const checkbox = (e.currentTarget as HTMLElement).querySelector('input[type="checkbox"]') as HTMLInputElement;
+                              if (
+                                (e.target as HTMLElement).tagName !== "INPUT"
+                              ) {
+                                const checkbox = (
+                                  e.currentTarget as HTMLElement
+                                ).querySelector(
+                                  'input[type="checkbox"]',
+                                ) as HTMLInputElement;
                                 if (checkbox) {
                                   checkbox.checked = !checkbox.checked;
                                   setPreferences((prev) => ({
@@ -736,16 +762,20 @@ export default function HotelBooking() {
                           >
                             <input
                               type="checkbox"
-                              checked={preferences[request.id as keyof typeof preferences] as boolean}
+                              checked={
+                                preferences[
+                                  request.id as keyof typeof preferences
+                                ] as boolean
+                              }
                               onChange={(e) => {
                                 e.stopPropagation();
                                 setPreferences((prev) => ({
                                   ...prev,
                                   [request.id]: e.target.checked,
-                                }))
+                                }));
                               }}
                               className="w-4 h-4 cursor-pointer"
-                              style={{ accentColor: '#2563eb' }}
+                              style={{ accentColor: "#2563eb" }}
                             />
                             <span className="ml-3 text-gray-700">
                               {request.label}
@@ -789,9 +819,7 @@ export default function HotelBooking() {
                           <div className="font-semibold text-gray-900">
                             {formatCurrency(extra.price)}
                           </div>
-                          <div className="text-xs text-gray-500">
-                            per stay
-                          </div>
+                          <div className="text-xs text-gray-500">per stay</div>
                         </div>
                       </label>
                     ))}
@@ -820,7 +848,9 @@ export default function HotelBooking() {
                             className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
                             onClick={(e) => {
                               // Allow direct input clicks
-                              if ((e.target as HTMLElement).tagName !== 'INPUT') {
+                              if (
+                                (e.target as HTMLElement).tagName !== "INPUT"
+                              ) {
                                 setPaymentMethod(method.value);
                               }
                             }}
@@ -835,9 +865,11 @@ export default function HotelBooking() {
                                 setPaymentMethod(e.target.value);
                               }}
                               className="w-4 h-4 cursor-pointer"
-                              style={{ accentColor: '#2563eb' }}
+                              style={{ accentColor: "#2563eb" }}
                             />
-                            <span className="ml-3 text-gray-700">{method.label}</span>
+                            <span className="ml-3 text-gray-700">
+                              {method.label}
+                            </span>
                           </div>
                         ))}
                       </div>

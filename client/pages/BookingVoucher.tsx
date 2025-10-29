@@ -289,7 +289,9 @@ Please present this at the hotel during check-in.
                       <h1 className="text-3xl font-bold text-blue-600">
                         FAREDOWN
                       </h1>
-                      <p className="text-xs text-gray-600">Travel Booking Platform</p>
+                      <p className="text-xs text-gray-600">
+                        Travel Booking Platform
+                      </p>
                     </div>
                   </div>
                   <h2 className="text-2xl font-bold text-gray-900 mt-3 mb-2">
@@ -572,7 +574,8 @@ Please present this at the hotel during check-in.
                 <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
                   <p className="text-gray-800">{voucherData.specialRequests}</p>
                   <p className="text-xs text-gray-600 mt-2">
-                    Please note: Special requests are made on a best-effort basis and subject to availability at the hotel.
+                    Please note: Special requests are made on a best-effort
+                    basis and subject to availability at the hotel.
                   </p>
                 </div>
               </div>
@@ -747,36 +750,85 @@ Please present this at the hotel during check-in.
               <h2 className="text-xl font-bold mb-4">Terms and Conditions</h2>
               <div className="space-y-3 text-xs leading-relaxed text-gray-700">
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-semibold text-gray-900 mb-1">1. Booking Confirmation</p>
-                  <p>Your booking is confirmed only upon receipt of payment. A confirmation email with all booking details will be sent to your registered email address.</p>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    1. Booking Confirmation
+                  </p>
+                  <p>
+                    Your booking is confirmed only upon receipt of payment. A
+                    confirmation email with all booking details will be sent to
+                    your registered email address.
+                  </p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-semibold text-gray-900 mb-1">2. Payment Terms</p>
-                  <p>All payments must be made through the Faredown booking platform using the selected payment method. Payment failure may result in automatic booking cancellation.</p>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    2. Payment Terms
+                  </p>
+                  <p>
+                    All payments must be made through the Faredown booking
+                    platform using the selected payment method. Payment failure
+                    may result in automatic booking cancellation.
+                  </p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-semibold text-gray-900 mb-1">3. Cancellation & Refunds</p>
-                  <p>Cancellation policies vary by booking. Please refer to the "Important Policies" section above for specific cancellation terms applicable to your reservation.</p>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    3. Cancellation & Refunds
+                  </p>
+                  <p>
+                    Cancellation policies vary by booking. Please refer to the
+                    "Important Policies" section above for specific cancellation
+                    terms applicable to your reservation.
+                  </p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-semibold text-gray-900 mb-1">4. Modification of Bookings</p>
-                  <p>Changes to your booking (dates, guests, room type) may be allowed subject to availability and may incur additional charges. Modifications must be made directly through your account.</p>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    4. Modification of Bookings
+                  </p>
+                  <p>
+                    Changes to your booking (dates, guests, room type) may be
+                    allowed subject to availability and may incur additional
+                    charges. Modifications must be made directly through your
+                    account.
+                  </p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-semibold text-gray-900 mb-1">5. Hotel Policies</p>
-                  <p>The hotel reserves the right to enforce its own check-in/check-out policies, dress codes, and conduct rules. Guests must adhere to all hotel policies during their stay.</p>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    5. Hotel Policies
+                  </p>
+                  <p>
+                    The hotel reserves the right to enforce its own
+                    check-in/check-out policies, dress codes, and conduct rules.
+                    Guests must adhere to all hotel policies during their stay.
+                  </p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-semibold text-gray-900 mb-1">6. Liability & Valuables</p>
-                  <p>Faredown is not responsible for loss, theft, or damage to personal belongings during your stay. Hotel safe facilities are available free of charge.</p>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    6. Liability & Valuables
+                  </p>
+                  <p>
+                    Faredown is not responsible for loss, theft, or damage to
+                    personal belongings during your stay. Hotel safe facilities
+                    are available free of charge.
+                  </p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-semibold text-gray-900 mb-1">7. Guest Information & Age</p>
-                  <p>Guests must be at least 18 years old. Valid government-issued photo ID is required at check-in. The name on the ID must match the booking name.</p>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    7. Guest Information & Age
+                  </p>
+                  <p>
+                    Guests must be at least 18 years old. Valid
+                    government-issued photo ID is required at check-in. The name
+                    on the ID must match the booking name.
+                  </p>
                 </div>
                 <div className="bg-gray-50 p-4 rounded-lg">
-                  <p className="font-semibold text-gray-900 mb-1">8. Customer Support</p>
-                  <p>For booking assistance and customer support, contact us at support@faredown.com or call +971 4 123 4567. Available 24/7 for your convenience.</p>
+                  <p className="font-semibold text-gray-900 mb-1">
+                    8. Customer Support
+                  </p>
+                  <p>
+                    For booking assistance and customer support, contact us at
+                    support@faredown.com or call +971 4 123 4567. Available 24/7
+                    for your convenience.
+                  </p>
                 </div>
               </div>
             </div>

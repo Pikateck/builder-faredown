@@ -76,14 +76,24 @@ export default function HotelBookingConfirmation() {
 
   // ✅ CRITICAL: Use LOCKED data from location.state (passed from HotelBooking)
   // Prefer location.state for locked data, then fallback to enhanced booking context
-  const lockedCheckIn = location.state?.checkIn || enhancedBooking.searchParams.checkIn || searchParams.get("checkIn");
-  const lockedCheckOut = location.state?.checkOut || enhancedBooking.searchParams.checkOut || searchParams.get("checkOut");
-  const lockedNights = location.state?.nights || enhancedBooking.searchParams.nights ||
+  const lockedCheckIn =
+    location.state?.checkIn ||
+    enhancedBooking.searchParams.checkIn ||
+    searchParams.get("checkIn");
+  const lockedCheckOut =
+    location.state?.checkOut ||
+    enhancedBooking.searchParams.checkOut ||
+    searchParams.get("checkOut");
+  const lockedNights =
+    location.state?.nights ||
+    enhancedBooking.searchParams.nights ||
     (() => {
       if (lockedCheckIn && lockedCheckOut) {
         const checkIn = new Date(lockedCheckIn);
         const checkOut = new Date(lockedCheckOut);
-        return Math.ceil((checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24));
+        return Math.ceil(
+          (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24),
+        );
       }
       return 3;
     })();
@@ -134,21 +144,34 @@ export default function HotelBookingConfirmation() {
       checkIn: lockedCheckIn,
       checkOut: lockedCheckOut,
       nights: lockedNights,
-      guests: location.state?.guests?.adults || enhancedBooking.searchParams.guests?.adults || 2,
-      rooms: location.state?.guests?.rooms || enhancedBooking.searchParams.rooms || 1,
+      guests:
+        location.state?.guests?.adults ||
+        enhancedBooking.searchParams.guests?.adults ||
+        2,
+      rooms:
+        location.state?.guests?.rooms ||
+        enhancedBooking.searchParams.rooms ||
+        1,
     },
     pricing: {
-      roomRate: location.state?.finalPrice ? Math.round(location.state.finalPrice / lockedNights) : 259,
+      roomRate: location.state?.finalPrice
+        ? Math.round(location.state.finalPrice / lockedNights)
+        : 259,
       nights: lockedNights,
       subtotal: location.state?.finalPrice || 777,
-      taxes: location.state?.finalPrice ? Math.round(location.state.finalPrice * 0.18) : 93.24,
+      taxes: location.state?.finalPrice
+        ? Math.round(location.state.finalPrice * 0.18)
+        : 93.24,
       fees: 50,
       addOns: location.state?.selectedExtras?.length ? 200 : 0,
       total: location.state?.finalPrice || 920.24,
     },
     addOns: location.state?.selectedExtras || [],
     preferences: location.state?.preferences || null,
-    specialRequests: location.state?.guestDetails?.specialRequests || location.state?.preferences?.specialRequests || "None",
+    specialRequests:
+      location.state?.guestDetails?.specialRequests ||
+      location.state?.preferences?.specialRequests ||
+      "None",
     paymentMethod: "•••• •••• •••• 1234",
     confirmationCode:
       "CONF-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
