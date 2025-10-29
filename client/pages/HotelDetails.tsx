@@ -825,9 +825,9 @@ export default function HotelDetails() {
         })(),
         image:
           Array.isArray(hotelData?.images) && hotelData!.images.length > 0
-            ? typeof hotelData!.images[0] === "string"
-              ? (hotelData!.images[0] as string)
-              : (hotelData!.images[0] as any).url
+            ? typeof hotelData!.images[displayImageIndex] === "string"
+              ? (hotelData!.images[displayImageIndex] as string)
+              : (hotelData!.images[displayImageIndex] as any).url
             : // Hotel-specific fallback images
               (() => {
                 const hotelCode = hotelId || "htl-DXB-003";
