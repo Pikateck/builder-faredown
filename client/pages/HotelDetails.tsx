@@ -1613,7 +1613,7 @@ function HotelDetailsContent() {
         });
       }
     }
-    // Preserve original search parameters and add booking specific ones
+    // ✅ CRITICAL: Pass locked data through location.state and URL params
     const existingParams = searchParams.toString();
     const bookingParams = new URLSearchParams({
       hotelId: hotel.id.toString(),
@@ -1639,7 +1639,40 @@ function HotelDetailsContent() {
       mergedParams.set(key, value);
     });
 
-    navigate(`/reserve?${mergedParams.toString()}`);
+    // ✅ Pass locked data through location.state to preserve prices and dates
+    navigate(`/reserve?${mergedParams.toString()}`, {
+      state: {
+        selectedHotel: {
+          id: hotel.id,
+          name: hotel.name,
+          location: hotel.location,
+          rating: hotel.rating,
+          reviews: hotel.reviews,
+          image: hotel.image,
+        },
+        selectedRoom: roomType,
+        finalPrice: totalPrice,
+        pricePerNight: perNightPrice,
+        priceSnapshot: {
+          roomKey: preselectRate?.rateKey,
+          rateKey: preselectRate?.rateKey,
+          grandTotal: totalPrice,
+          perNightPrice: perNightPrice,
+          currency: "INR",
+        },
+        checkIn: hotel.checkIn,
+        checkOut: hotel.checkOut,
+        nights: hotel.totalNights,
+        guests: {
+          adults: hotel.adults,
+          children: 0,
+          rooms: hotel.rooms,
+        },
+        // Pass through any existing preferences/requests
+        preferences: (location.state as any)?.preferences,
+        guestDetails: (location.state as any)?.guestDetails,
+      },
+    });
   };
 
   // Show loading state while fetching hotel data
