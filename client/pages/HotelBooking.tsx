@@ -46,6 +46,8 @@ import {
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useEnhancedBooking } from "@/contexts/EnhancedBookingContext";
+import { usePriceContext } from "@/contexts/PriceContext";
+import { verifyPriceIntegrity, logPricePipeline } from "@/services/priceCalculationService";
 
 export default function HotelBooking() {
   const navigate = useNavigate();
