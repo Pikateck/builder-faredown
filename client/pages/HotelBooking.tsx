@@ -128,6 +128,16 @@ export default function HotelBooking() {
   // Extras State
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
 
+  // Preferences State
+  const [preferences, setPreferences] = useState({
+    bedType: "king",
+    smokingPreference: "non-smoking",
+    floorPreference: "high",
+    earlyCheckIn: false,
+    lateCheckOut: false,
+    dailyHousekeeping: false,
+  });
+
   // Redirect if no hotel data
   useEffect(() => {
     if (!selectedHotel) {
