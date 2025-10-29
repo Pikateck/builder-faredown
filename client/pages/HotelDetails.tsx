@@ -151,6 +151,7 @@ export default function HotelDetails() {
     return tabParam || "overview";
   });
   const [selectedRoomType, setSelectedRoomType] = useState<any>(null);
+  const [displayImageIndex, setDisplayImageIndex] = useState<number>(0);
   const [expandedRooms, setExpandedRooms] = useState<Set<string>>(new Set());
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
