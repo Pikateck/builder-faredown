@@ -367,7 +367,11 @@ export function HotelCard({
     ? new Date(searchParams.get("checkOut")!)
     : new Date(Date.now() + 24 * 60 * 60 * 1000);
   const roomsCount = parseInt(searchParams.get("rooms") || "1");
-  const totalNights = calculateNights(checkInDate, checkOutDate);
+  let totalNights = calculateNights(checkInDate, checkOutDate);
+  // CRITICAL: Ensure totalNights is at least 1 to prevent division by zero
+  if (totalNights < 1) {
+    totalNights = 1;
+  }
 
   // Calculate comprehensive pricing with taxes
   const priceCalculation = calculateTotalPrice(
@@ -377,9 +381,9 @@ export function HotelCard({
   );
 
   // Calculate per night price inclusive of taxes for display
-  const perNightInclusiveTaxes = Math.round(
-    priceCalculation.total / totalNights,
-  );
+  // CRITICAL: Protect from division by zero or Infinity
+  const perNightInclusiveTaxes =
+    totalNights > 0 ? Math.round(priceCalculation.total / totalNights) : priceCalculation.total;
   const totalPriceInclusiveTaxes = priceCalculation.total;
 
   // Debug logging for total price calculation
