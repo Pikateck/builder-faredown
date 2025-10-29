@@ -73,7 +73,12 @@ export const HotelVoucher: React.FC<HotelVoucherProps> = ({
       <div className="bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-6 print:bg-[#003580]">
         <div className="flex justify-between items-start">
           <div>
-            <h1 className="text-2xl font-bold mb-1">FAREDOWN</h1>
+            <div className="flex items-center space-x-3 mb-2">
+              <div className="w-10 h-10 bg-white/90 rounded-lg flex items-center justify-center">
+                <span className="text-lg font-bold text-[#003580]">F</span>
+              </div>
+              <h1 className="text-2xl font-bold">FAREDOWN</h1>
+            </div>
             <p className="text-blue-100 text-sm">Travel Booking Platform</p>
           </div>
           <div className="text-right">
