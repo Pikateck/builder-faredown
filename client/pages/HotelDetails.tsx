@@ -170,6 +170,19 @@ export default function HotelDetails() {
     receivedRoomName: preselectRate?.roomName,
     hasPreselectData: !!preselectRate,
   });
+
+  // ✅ CRITICAL: Initialize image index from Results page selection
+  useEffect(() => {
+    if (preselectRate?.mainImageIndex !== undefined) {
+      setDisplayImageIndex(preselectRate.mainImageIndex);
+      console.log("[IMAGE CONSISTENCY]", {
+        displayImageIndex: preselectRate.mainImageIndex,
+        displayImageUrl: preselectRate.mainImageUrl,
+        source: "preselectRate from Results card",
+      });
+    }
+  }, [preselectRate?.mainImageIndex, preselectRate?.mainImageUrl]);
+
   const saveDropdownRef = useRef<HTMLDivElement>(null);
 
   // Close dropdown when clicking outside
