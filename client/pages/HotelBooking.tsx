@@ -54,6 +54,7 @@ export default function HotelBooking() {
   const location = useLocation();
   const { booking: enhancedBooking, loadCompleteSearchObject } =
     useEnhancedBooking();
+  const { priceSnapshot } = usePriceContext();
 
   // Load search parameters from location state if available
   useEffect(() => {
