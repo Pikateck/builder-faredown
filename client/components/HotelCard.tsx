@@ -8,6 +8,7 @@ import {
   Tooltip,
   TooltipTrigger,
   TooltipContent,
+  TooltipProvider,
 } from "@/components/ui/tooltip";
 import { BargainButton } from "@/components/ui/BargainButton";
 import type { Hotel as HotelType } from "@/services/hotelsService";
