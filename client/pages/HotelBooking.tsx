@@ -306,6 +306,7 @@ export default function HotelBooking() {
           guests,
           guestDetails,
           selectedExtras,
+          preferences, // ✅ Pass preferences to confirmation page
           finalPrice,
           bookingId,
           originalPrice,
