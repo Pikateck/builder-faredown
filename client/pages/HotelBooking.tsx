@@ -670,27 +670,38 @@ export default function HotelBooking() {
                           { value: "low", label: "Low Floor" },
                           { value: "quiet", label: "Quiet Area" },
                         ].map((option) => (
-                          <label
+                          <div
                             key={option.value}
                             className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
+                            onClick={(e) => {
+                              // Allow direct input clicks
+                              if ((e.target as HTMLElement).tagName !== 'INPUT') {
+                                setPreferences((prev) => ({
+                                  ...prev,
+                                  floorPreference: option.value,
+                                }));
+                              }
+                            }}
                           >
                             <input
                               type="radio"
                               name="floorPreference"
                               value={option.value}
                               checked={preferences.floorPreference === option.value}
-                              onChange={(e) =>
+                              onChange={(e) => {
+                                e.stopPropagation();
                                 setPreferences((prev) => ({
                                   ...prev,
                                   floorPreference: e.target.value,
                                 }))
-                              }
+                              }}
                               className="w-4 h-4 cursor-pointer"
+                              style={{ accentColor: '#2563eb' }}
                             />
                             <span className="ml-3 text-gray-700">
                               {option.label}
                             </span>
-                          </label>
+                          </div>
                         ))}
                       </div>
                     </div>
