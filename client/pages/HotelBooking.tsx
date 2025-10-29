@@ -331,8 +331,9 @@ export default function HotelBooking() {
 
   const steps = [
     { id: 1, title: "Guest Details", icon: User },
-    { id: 2, title: "Extras", icon: Star },
-    { id: 3, title: "Payment", icon: CreditCard },
+    { id: 2, title: "Preferences", icon: Star },
+    { id: 3, title: "Extras", icon: Star },
+    { id: 4, title: "Payment", icon: CreditCard },
   ];
 
   return (
