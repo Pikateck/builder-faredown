@@ -536,57 +536,98 @@ Please present this at the hotel during check-in.
               <h2 className="text-xl font-bold mb-4">Pricing Information</h2>
               <div className="bg-gray-50 p-4 rounded-lg">
                 <div className="space-y-2">
-                  <div className="flex justify-between">
-                    <span>
-                      Room Rate ({voucherData.reservation.nights} nights)
-                    </span>
-                    <span>
-                      {formatPriceWithSymbol(
-                        voucherData.pricing.totalRoomCharges,
-                        selectedCurrency.code,
+                  {/* New structure pricing */}
+                  {voucherData.pricing.basePrice ? (
+                    <>
+                      <div className="flex justify-between">
+                        <span>
+                          Base Room Rate ({voucherData.reservation.nights || voucherData.nights || 3} nights)
+                        </span>
+                        <span>
+                          {formatPriceWithSymbol(
+                            voucherData.pricing.basePrice,
+                            selectedCurrency.code,
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Taxes & Fees</span>
+                        <span>
+                          {formatPriceWithSymbol(
+                            voucherData.pricing.taxes || 0,
+                            selectedCurrency.code,
+                          )}
+                        </span>
+                      </div>
+                      {voucherData.pricing.discount > 0 && (
+                        <div className="flex justify-between text-green-600">
+                          <span>Discount</span>
+                          <span>
+                            -{formatPriceWithSymbol(
+                              voucherData.pricing.discount,
+                              selectedCurrency.code,
+                            )}
+                          </span>
+                        </div>
                       )}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Taxes</span>
-                    <span>
-                      {formatPriceWithSymbol(
-                        voucherData.pricing.taxes,
-                        selectedCurrency.code,
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>Service Fees</span>
-                    <span>
-                      {formatPriceWithSymbol(
-                        voucherData.pricing.serviceFees,
-                        selectedCurrency.code,
-                      )}
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span>City Tax</span>
-                    <span>
-                      {formatPriceWithSymbol(
-                        voucherData.pricing.cityTax,
-                        selectedCurrency.code,
-                      )}
-                    </span>
-                  </div>
+                    </>
+                  ) : (
+                    <>
+                      {/* Legacy structure pricing */}
+                      <div className="flex justify-between">
+                        <span>
+                          Room Rate ({voucherData.reservation.nights} nights)
+                        </span>
+                        <span>
+                          {formatPriceWithSymbol(
+                            voucherData.pricing.totalRoomCharges,
+                            selectedCurrency.code,
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Taxes</span>
+                        <span>
+                          {formatPriceWithSymbol(
+                            voucherData.pricing.taxes,
+                            selectedCurrency.code,
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Service Fees</span>
+                        <span>
+                          {formatPriceWithSymbol(
+                            voucherData.pricing.serviceFees,
+                            selectedCurrency.code,
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>City Tax</span>
+                        <span>
+                          {formatPriceWithSymbol(
+                            voucherData.pricing.cityTax,
+                            selectedCurrency.code,
+                          )}
+                        </span>
+                      </div>
+                    </>
+                  )}
+
                   <div className="border-t border-gray-300 pt-2 flex justify-between font-bold text-lg">
-                    <span>Total Amount</span>
+                    <span>Total Payable</span>
                     <span className="text-green-600">
                       {formatPriceWithSymbol(
-                        voucherData.pricing.total,
+                        voucherData.pricing.total || voucherData.total,
                         selectedCurrency.code,
                       )}
                     </span>
                   </div>
                 </div>
                 <div className="mt-3 text-sm text-gray-600">
-                  Payment Status: {voucherData.pricing.paymentStatus} via{" "}
-                  {voucherData.pricing.paymentMethod}
+                  <div>Payment Status: <span className="font-medium">{voucherData.pricing.paymentStatus || voucherData.paymentStatus || "Confirmed"}</span></div>
+                  <div>Payment Method: <span className="font-medium">{voucherData.pricing.paymentMethod || voucherData.paymentMethod || "Not specified"}</span></div>
                 </div>
               </div>
             </div>
