@@ -49,8 +49,8 @@ export default function BookingVoucher() {
     }
   }, []);
 
-  // Mock voucher data (would be fetched from API)
-  const voucherData = {
+  // Merge saved booking data with defaults for voucher
+  const voucherData = savedBookingData || {
     id: bookingId,
     confirmationCode:
       "CONF-" + Math.random().toString(36).substr(2, 9).toUpperCase(),
@@ -131,6 +131,15 @@ export default function BookingVoucher() {
 
     specialRequests:
       "High floor room with city view preferred. Late check-out if possible.",
+
+    preferences: {
+      bedType: "King",
+      smokingPreference: "Non-Smoking",
+      floorPreference: "High Floor",
+      earlyCheckin: false,
+      lateCheckout: true,
+      dailyHousekeeping: true,
+    },
 
     emergencyContacts: {
       hotel: "+971 4 123 4567",
