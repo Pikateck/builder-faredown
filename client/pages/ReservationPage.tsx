@@ -1121,12 +1121,6 @@ export default function ReservationPage() {
                   <div className="text-xs text-blue-600 text-right font-medium">
                     Total with taxes & fees: {formatINR(pricing.total)}
                   </div>
-                  {calculateAddOns() > 0 && (
-                    <div className="flex justify-between text-sm">
-                      <span>Add-on Services</span>
-                      <span>{formatINR(calculateAddOns())}</span>
-                    </div>
-                  )}
                 </div>
 
                 <div className="border-t border-gray-200 pt-4">
