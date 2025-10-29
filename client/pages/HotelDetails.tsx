@@ -456,7 +456,7 @@ export default function HotelDetails() {
               // 404 means hotel not in TBO database - don't retry, use fallback immediately
               if (response.status === 404) {
                 console.log(
-                  "⚠️ Hotel not in TBO database, will use fallback data from location.state",
+                  "��️ Hotel not in TBO database, will use fallback data from location.state",
                 );
                 throw new Error(`TBO_HOTEL_NOT_FOUND_404`);
               }
@@ -1117,7 +1117,7 @@ export default function HotelDetails() {
         cancellationPolicy: "Free cancellation until 3 days before check-in",
         image:
           "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop",
-        features: ["Upgrade for +₹33", "King Room", "Better city views"],
+        features: ["Upgrade for +���33", "King Room", "Better city views"],
       },
       {
         id: "deluxe-suite",
@@ -1585,7 +1585,8 @@ export default function HotelDetails() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50">
+    <TooltipProvider>
+      <div className="min-h-screen bg-gray-50">
       <style>
         {`
           ${sliderStyles}
@@ -3984,5 +3985,6 @@ export default function HotelDetails() {
       {/* Mobile Navigation */}
       <MobileNavigation />
     </div>
+    </TooltipProvider>
   );
 }
