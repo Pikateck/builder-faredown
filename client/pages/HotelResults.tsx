@@ -680,11 +680,15 @@ function HotelResultsContent() {
         return loadMockHotels();
       }
 
-      if (!metadataData || !metadataData.hotels || metadataData.hotels.length === 0) {
+      if (
+        !metadataData ||
+        !metadataData.hotels ||
+        metadataData.hotels.length === 0
+      ) {
         console.warn("⚠️ No metadata hotels found from API");
         console.warn("⚠️ API response:", metadataData);
         console.log("⚠️ No results from API - falling back to mock data");
-        return loadMockHotels();  // Return the mock hotels array
+        return loadMockHotels(); // Return the mock hotels array
       }
 
       // Convert metadata to Hotel format
