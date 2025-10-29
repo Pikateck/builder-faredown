@@ -260,7 +260,7 @@ export const HotelVoucher: React.FC<HotelVoucherProps> = ({
       </div>
 
       {/* Hotel Policies */}
-      <div className="p-6 bg-amber-50 border-l-4 border-amber-400">
+      <div className="p-6 bg-amber-50 border-l-4 border-amber-400 border-b-2 border-b-dashed border-b-gray-300">
         <h3 className="text-lg font-semibold text-amber-800 mb-3">
           Hotel Policies
         </h3>
@@ -282,6 +282,67 @@ export const HotelVoucher: React.FC<HotelVoucherProps> = ({
             Additional guests: Extra charges may apply
           </li>
         </ul>
+      </div>
+
+      {/* Cancellation Policy */}
+      <div className="p-6 border-b-2 border-dashed border-gray-300">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Cancellation Policy
+        </h3>
+        <div className="bg-gray-50 rounded-lg p-4 space-y-3 text-sm text-gray-700">
+          <div>
+            <p className="font-semibold text-gray-900 mb-1">Free Cancellation</p>
+            <p>Cancel for free up to 24 hours before your check-in date to receive a full refund.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900 mb-1">Non-refundable Bookings</p>
+            <p>If your booking is marked as non-refundable, no refund is possible regardless of cancellation time.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900 mb-1">Late Cancellations</p>
+            <p>Cancellations made less than 24 hours before check-in will be charged the full amount for the first night.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900 mb-1">No-show Charges</p>
+            <p>Failure to check in by the hotel's standard check-in time (usually 11:59 PM) will result in full booking charges.</p>
+          </div>
+          <div>
+            <p className="font-semibold text-gray-900 mb-1">Refund Processing</p>
+            <p>Refunds will be processed to the original payment method within 5-7 business days.</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Terms and Conditions */}
+      <div className="p-6 bg-gray-50 border-b-2 border-dashed border-gray-300">
+        <h3 className="text-lg font-semibold text-gray-900 mb-4">
+          Terms and Conditions
+        </h3>
+        <div className="space-y-3 text-xs text-gray-700 leading-relaxed">
+          <p className="font-semibold text-gray-900">1. Booking Confirmation</p>
+          <p>Your booking is confirmed only upon receipt of payment. A confirmation email with all booking details will be sent to your registered email address.</p>
+
+          <p className="font-semibold text-gray-900 mt-3">2. Payment Terms</p>
+          <p>All payments must be made through the Faredown booking platform using the selected payment method. Payment failure may result in automatic booking cancellation.</p>
+
+          <p className="font-semibold text-gray-900 mt-3">3. Modification of Bookings</p>
+          <p>Changes to your booking (dates, guests, room type) may be allowed subject to availability and may incur additional charges. Modifications must be made directly through your account or by contacting our support team.</p>
+
+          <p className="font-semibold text-gray-900 mt-3">4. Hotel Policies</p>
+          <p>The hotel reserves the right to enforce its own check-in/check-out policies, dress codes, and conduct rules. Guest must adhere to all hotel policies during their stay.</p>
+
+          <p className="font-semibold text-gray-900 mt-3">5. Liability and Responsibility</p>
+          <p>Faredown is not responsible for loss, theft, or damage to personal belongings during your stay. Hotel safe facilities are available free of charge.</p>
+
+          <p className="font-semibold text-gray-900 mt-3">6. Special Requests</p>
+          <p>Special requests (late check-in, crib, etc.) are subject to availability and cannot be guaranteed. Confirmation will be provided directly by the hotel.</p>
+
+          <p className="font-semibold text-gray-900 mt-3">7. Age and Identification</p>
+          <p>Guest must be at least 18 years old. Valid government-issued photo ID is required at check-in. The name on the ID must match the booking name.</p>
+
+          <p className="font-semibold text-gray-900 mt-3">8. Contact and Support</p>
+          <p>For booking assistance and customer support, contact us at support@faredown.com or call +971 4 123 4567. Available 24/7 for your convenience.</p>
+        </div>
       </div>
 
       {/* Footer */}
