@@ -360,8 +360,14 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
               </h4>
               <div className="text-xs sm:text-sm text-gray-600 space-y-1">
                 <p>
-                  <span className="font-medium">Payment Method:</span> Online
-                  Payment
+                  <span className="font-medium">Payment Method:</span> Credit Card
+                </p>
+                <p className="flex items-center">
+                  <span className="font-medium mr-2">Card Details:</span>
+                  <span className="bg-gray-100 px-2 py-1 rounded font-mono text-xs">Visa •••• •••• •••• 1234</span>
+                </p>
+                <p>
+                  <span className="font-medium">Card Holder:</span> {booking.customerName}
                 </p>
                 <p className="break-words">
                   <span className="font-medium">Transaction ID:</span> TXN-
@@ -370,6 +376,12 @@ export const FaredownInvoice: React.FC<FaredownInvoiceProps> = ({
                 <p>
                   <span className="font-medium">Payment Date:</span>{" "}
                   {booking.bookingDate}
+                </p>
+                <p>
+                  <span className="font-medium">Payment Status:</span> <span className="text-green-600 font-medium">✓ Confirmed</span>
+                </p>
+                <p>
+                  <span className="font-medium">Authorization Code:</span> AUTH-{booking.bookingRef?.slice(0, 8).toUpperCase()}
                 </p>
                 <p>
                   <span className="font-medium">Currency:</span>{" "}
