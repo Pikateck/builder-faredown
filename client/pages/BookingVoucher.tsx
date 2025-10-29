@@ -33,8 +33,21 @@ export default function BookingVoucher() {
   const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
   const [isLoading, setIsLoading] = useState(false);
+  const [savedBookingData, setSavedBookingData] = useState(null);
 
   const bookingId = searchParams.get("bookingId") || "HTL" + Date.now();
+
+  // Load actual booking data from localStorage
+  useEffect(() => {
+    const saved = localStorage.getItem("latestHotelBooking");
+    if (saved) {
+      try {
+        setSavedBookingData(JSON.parse(saved));
+      } catch (error) {
+        console.error("Error parsing booking data:", error);
+      }
+    }
+  }, []);
 
   // Mock voucher data (would be fetched from API)
   const voucherData = {
