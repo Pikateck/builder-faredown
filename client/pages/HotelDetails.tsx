@@ -1282,12 +1282,20 @@ export default function HotelDetails() {
     ? {
         ...tempHotelData,
         roomTypes: deduplicatedRoomTypes,
+        rating: tempHotelData.rating || 4.5,
+        reviews: tempHotelData.reviews || 0,
+        image: tempHotelData.image || "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+        name: tempHotelData.name || "Hotel",
       }
     : (() => {
         // Emergency fallback - use proper mapped names instead of placeholder
         const fallbackData = getMockHotelData();
         return {
           ...fallbackData,
+          rating: fallbackData.rating || 4.5,
+          reviews: fallbackData.reviews || 0,
+          image: fallbackData.image || "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=800&h=600&fit=crop",
+          name: fallbackData.name || "Hotel",
           roomTypes:
             deduplicatedRoomTypes.length > 0
               ? deduplicatedRoomTypes
@@ -1313,6 +1321,18 @@ export default function HotelDetails() {
                 ],
         };
       })();
+
+  // Debug log before render
+  if (typeof window !== "undefined") {
+    console.log("[HOTEL_DETAILS_RENDER]", {
+      hotelId,
+      hotelName: hotel?.name,
+      hotelRating: hotel?.rating,
+      isLoading: isLoadingHotel,
+      hasHotel: !!hotel,
+      roomCount: hotel?.roomTypes?.length || 0,
+    });
+  }
 
   const tabs = [
     { id: "overview", label: "Overview" },
