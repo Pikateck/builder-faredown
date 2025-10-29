@@ -129,8 +129,16 @@ export default function HotelBookingConfirmation() {
         new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split("T")[0],
       nights:
         enhancedBooking.searchParams.nights ||
-        location.state?.guests?.nights ||
-        parseInt(searchParams.get("nights") || "3"),
+        (() => {
+          if (location.state?.checkIn && location.state?.checkOut) {
+            const checkIn = new Date(location.state.checkIn);
+            const checkOut = new Date(location.state.checkOut);
+            return Math.ceil(
+              (checkOut.getTime() - checkIn.getTime()) / (1000 * 60 * 60 * 24)
+            );
+          }
+          return parseInt(searchParams.get("nights") || "3");
+        })(),
       guests:
         enhancedBooking.searchParams.guests?.adults ||
         location.state?.guests?.adults ||
