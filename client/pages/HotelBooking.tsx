@@ -104,7 +104,7 @@ export default function HotelBooking() {
     Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24)) ||
     3;
 
-  console.log("��� Hotel booking using exact search dates:", {
+  console.log("🏨 Hotel booking using exact search dates:", {
     checkIn,
     checkOut,
     nights,
@@ -799,39 +799,36 @@ export default function HotelBooking() {
                         Payment Method
                       </label>
                       <div className="space-y-2">
-                        <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
-                          <input
-                            type="radio"
-                            name="payment"
-                            value="card"
-                            checked={paymentMethod === "card"}
-                            onChange={(e) => setPaymentMethod(e.target.value)}
-                            className="w-4 h-4 cursor-pointer"
-                          />
-                          <span className="ml-3 text-gray-700">Credit/Debit Card</span>
-                        </label>
-                        <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
-                          <input
-                            type="radio"
-                            name="payment"
-                            value="upi"
-                            checked={paymentMethod === "upi"}
-                            onChange={(e) => setPaymentMethod(e.target.value)}
-                            className="w-4 h-4 cursor-pointer"
-                          />
-                          <span className="ml-3 text-gray-700">UPI</span>
-                        </label>
-                        <label className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all">
-                          <input
-                            type="radio"
-                            name="payment"
-                            value="wallet"
-                            checked={paymentMethod === "wallet"}
-                            onChange={(e) => setPaymentMethod(e.target.value)}
-                            className="w-4 h-4 cursor-pointer"
-                          />
-                          <span className="ml-3 text-gray-700">Digital Wallet</span>
-                        </label>
+                        {[
+                          { value: "card", label: "Credit/Debit Card" },
+                          { value: "upi", label: "UPI" },
+                          { value: "wallet", label: "Digital Wallet" },
+                        ].map((method) => (
+                          <div
+                            key={method.value}
+                            className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
+                            onClick={(e) => {
+                              // Allow direct input clicks
+                              if ((e.target as HTMLElement).tagName !== 'INPUT') {
+                                setPaymentMethod(method.value);
+                              }
+                            }}
+                          >
+                            <input
+                              type="radio"
+                              name="payment"
+                              value={method.value}
+                              checked={paymentMethod === method.value}
+                              onChange={(e) => {
+                                e.stopPropagation();
+                                setPaymentMethod(e.target.value);
+                              }}
+                              className="w-4 h-4 cursor-pointer"
+                              style={{ accentColor: '#2563eb' }}
+                            />
+                            <span className="ml-3 text-gray-700">{method.label}</span>
+                          </div>
+                        ))}
                       </div>
                     </div>
 
