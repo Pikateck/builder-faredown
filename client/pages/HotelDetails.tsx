@@ -135,7 +135,36 @@ import { format } from "date-fns";
 import { usePriceContext } from "@/contexts/PriceContext";
 import { logPricePipeline } from "@/services/priceCalculationService";
 
-export default function HotelDetails() {
+// Error Fallback Component - Always visible
+const ErrorFallback = ({ error, retry }: any) => (
+  <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+    <div className="bg-white rounded-lg shadow p-6 max-w-md w-full">
+      <h2 className="text-lg font-bold text-red-600 mb-2">Oops! Something went wrong</h2>
+      <p className="text-gray-600 text-sm mb-4">
+        We encountered an error loading hotel details. Please try again.
+      </p>
+      <div className="bg-gray-100 rounded p-3 mb-4">
+        <p className="text-xs text-gray-700 font-mono break-words">
+          {error?.message || "Unknown error"}
+        </p>
+      </div>
+      <button
+        onClick={retry}
+        className="w-full bg-blue-600 text-white py-2 rounded font-semibold hover:bg-blue-700"
+      >
+        Retry
+      </button>
+      <button
+        onClick={() => window.location.href = '/hotels'}
+        className="w-full mt-2 bg-gray-200 text-gray-800 py-2 rounded font-semibold hover:bg-gray-300"
+      >
+        Back to Search
+      </button>
+    </div>
+  </div>
+);
+
+function HotelDetailsContent() {
   useScrollToTop();
   const { hotelId } = useParams();
   const navigate = useNavigate();
