@@ -550,6 +550,8 @@ export function HotelCard({
       roomId: null,
       roomType: null,
       displayPrice: fallbackDisplayPrice,
+      isRefundable: (hotel as any)?.isRefundable || false,
+      cancellationPolicy: (hotel as any)?.cancellationPolicy || "See property for details",
     };
   };
 
