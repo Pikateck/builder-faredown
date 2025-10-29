@@ -74,8 +74,8 @@ export default function HotelBookingConfirmation() {
     rooms: enhancedBooking.searchParams.rooms,
   });
 
-  // Mock booking data (would be fetched from API)
-  const bookingData = {
+  // Merge saved booking data with defaults
+  const bookingData = savedBookingData || {
     id: bookingId,
     status: "Confirmed",
     createdAt: new Date().toISOString(),
