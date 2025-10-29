@@ -1591,9 +1591,27 @@ function HotelDetailsContent() {
       totalPrice = bargainPrice;
       perNightPrice = Math.round(bargainPrice / hotel.totalNights);
     } else {
-      // Regular booking - calculate from per-night price
-      perNightPrice = roomType.pricePerNight;
-      totalPrice = calculateTotalPrice(perNightPrice);
+      // ✅ CRITICAL: Use locked price from Results card if available
+      if (preselectRate?.totalPrice && preselectRate?.perNightPrice) {
+        // Use the EXACT price from Results page to ensure consistency
+        perNightPrice = preselectRate.perNightPrice;
+        totalPrice = preselectRate.totalPrice;
+        console.log("[BOOKING WITH LOCKED PRICE]", {
+          source: "preselectRate from Results",
+          lockedPerNight: perNightPrice,
+          lockedTotal: totalPrice,
+          roomId: roomType.id,
+        });
+      } else {
+        // Fallback: calculate from per-night price
+        perNightPrice = roomType.pricePerNight;
+        totalPrice = calculateTotalPrice(perNightPrice);
+        console.log("[BOOKING WITH CALCULATED PRICE]", {
+          source: "calculated from room type",
+          perNight: perNightPrice,
+          total: totalPrice,
+        });
+      }
     }
     // Preserve original search parameters and add booking specific ones
     const existingParams = searchParams.toString();
