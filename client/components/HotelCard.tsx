@@ -478,6 +478,8 @@ export function HotelCard({
     roomId: string | null;
     roomType: string | null;
     displayPrice: number; // Add displayed price for consistency
+    isRefundable: boolean;
+    cancellationPolicy: string;
   } => {
     if (!hotel)
       return {
