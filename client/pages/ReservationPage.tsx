@@ -591,13 +591,19 @@ export default function ReservationPage() {
                 {/* Step 2: Preferences */}
                 {currentStep === 2 && (
                   <div className="space-y-6">
+                    <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
+                      <p className="text-sm text-blue-700">
+                        Let us know your preferences for your stay. The hotel will try to accommodate your requests based on availability.
+                      </p>
+                    </div>
+
                     <div>
                       <h3 className="text-lg font-semibold mb-4">
                         Room Preferences
                       </h3>
-                      <div className="grid grid-cols-2 gap-4">
+                      <div className="space-y-4">
                         <div>
-                          <Label>Bed Type</Label>
+                          <Label className="text-sm font-medium mb-2 block">Bed Type</Label>
                           <Select
                             value={preferences.bedType}
                             onValueChange={(value) =>
@@ -607,7 +613,7 @@ export default function ReservationPage() {
                               }))
                             }
                           >
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-white border-2 border-gray-200 hover:border-blue-300 transition-colors">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
@@ -618,7 +624,7 @@ export default function ReservationPage() {
                           </Select>
                         </div>
                         <div>
-                          <Label>Smoking Preference</Label>
+                          <Label className="text-sm font-medium mb-2 block">Smoking Preference</Label>
                           <Select
                             value={preferences.smokingPreference}
                             onValueChange={(value) =>
@@ -628,14 +634,34 @@ export default function ReservationPage() {
                               }))
                             }
                           >
-                            <SelectTrigger>
+                            <SelectTrigger className="bg-white border-2 border-gray-200 hover:border-blue-300 transition-colors">
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="non-smoking">
-                                Non-Smoking
-                              </SelectItem>
+                              <SelectItem value="non-smoking">Non-Smoking</SelectItem>
                               <SelectItem value="smoking">Smoking</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                        <div>
+                          <Label className="text-sm font-medium mb-2 block">Floor Preference</Label>
+                          <Select
+                            value={preferences.floorPreference}
+                            onValueChange={(value) =>
+                              setPreferences((prev) => ({
+                                ...prev,
+                                floorPreference: value,
+                              }))
+                            }
+                          >
+                            <SelectTrigger className="bg-white border-2 border-gray-200 hover:border-blue-300 transition-colors">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="high">High Floor</SelectItem>
+                              <SelectItem value="low">Low Floor</SelectItem>
+                              <SelectItem value="mid">Mid Floor</SelectItem>
+                              <SelectItem value="quiet">Quiet Area</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
@@ -644,88 +670,61 @@ export default function ReservationPage() {
 
                     <div>
                       <h3 className="text-lg font-semibold mb-4">
-                        Additional Services
+                        Guest Requests
                       </h3>
+                      <p className="text-sm text-gray-600 mb-3">Select any additional preferences the hotel should know about:</p>
                       <div className="space-y-3">
-                        <div
-                          className={`flex items-center justify-between py-3 px-4 border-2 rounded-xl cursor-pointer transition-all duration-200 active:scale-[0.98] touch-manipulation ${
-                            preferences.earlyCheckin
-                              ? "border-blue-500 bg-blue-50 shadow-sm"
-                              : "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
-                          }`}
-                        >
-                          <div className="flex items-center gap-3 flex-1">
-                            <div className="relative">
-                              <Checkbox
-                                checked={preferences.earlyCheckin}
-                                onCheckedChange={(checked) =>
-                                  setPreferences((prev) => ({
-                                    ...prev,
-                                    earlyCheckin: checked,
-                                  }))
-                                }
-                                className="w-5 h-5 border-2 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
-                              />
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center">
-                                <Clock className="w-4 h-4 text-blue-600" />
-                              </div>
-                              <div>
-                                <div className="font-semibold text-gray-900">
-                                  Early Check-in
-                                </div>
-                                <div className="text-sm text-gray-600">
-                                  Check-in before 3:00 PM
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          <div className="text-right">
-                            <div className="font-bold text-lg text-gray-900">
-                              {formatINR(addOnPricing.earlyCheckin)}
-                            </div>
+                        <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors cursor-pointer"
+                          onClick={() => setPreferences((prev) => ({ ...prev, earlyCheckin: !prev.earlyCheckin }))}>
+                          <Checkbox
+                            checked={preferences.earlyCheckin}
+                            onCheckedChange={(checked) =>
+                              setPreferences((prev) => ({
+                                ...prev,
+                                earlyCheckin: checked,
+                              }))
+                            }
+                            className="w-5 h-5"
+                          />
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900">Early Check-in</div>
+                            <div className="text-sm text-gray-600">Request check-in before 3:00 PM</div>
                           </div>
                         </div>
 
-                        <div
-                          className={`flex items-center justify-between py-3 px-4 border-2 rounded-xl cursor-pointer transition-all duration-200 active:scale-[0.98] touch-manipulation ${
-                            preferences.lateCheckout
-                              ? "border-blue-500 bg-blue-50 shadow-sm"
-                              : "border-gray-200 hover:border-blue-300 hover:bg-blue-50"
-                          }`}
-                        >
-                          <div className="flex items-center gap-3 flex-1">
-                            <div className="relative">
-                              <Checkbox
-                                checked={preferences.lateCheckout}
-                                onCheckedChange={(checked) =>
-                                  setPreferences((prev) => ({
-                                    ...prev,
-                                    lateCheckout: checked,
-                                  }))
-                                }
-                                className="w-5 h-5 border-2 data-[state=checked]:bg-blue-600 data-[state=checked]:border-blue-600"
-                              />
-                            </div>
-                            <div className="flex items-center gap-3">
-                              <div className="w-8 h-8 bg-orange-100 rounded-full flex items-center justify-center">
-                                <Clock className="w-4 h-4 text-orange-600" />
-                              </div>
-                              <div>
-                                <div className="font-semibold text-gray-900">
-                                  Late Check-out
-                                </div>
-                                <div className="text-sm text-gray-600">
-                                  Check-out after 12:00 PM
-                                </div>
-                              </div>
-                            </div>
+                        <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors cursor-pointer"
+                          onClick={() => setPreferences((prev) => ({ ...prev, lateCheckout: !prev.lateCheckout }))}>
+                          <Checkbox
+                            checked={preferences.lateCheckout}
+                            onCheckedChange={(checked) =>
+                              setPreferences((prev) => ({
+                                ...prev,
+                                lateCheckout: checked,
+                              }))
+                            }
+                            className="w-5 h-5"
+                          />
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900">Late Check-out</div>
+                            <div className="text-sm text-gray-600">Request check-out after 12:00 PM</div>
                           </div>
-                          <div className="text-right">
-                            <div className="font-bold text-lg text-gray-900">
-                              {formatINR(addOnPricing.lateCheckout)}
-                            </div>
+                        </div>
+
+                        <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors cursor-pointer"
+                          onClick={() => setPreferences((prev) => ({ ...prev, dailyHousekeeping: !prev.dailyHousekeeping }))}>
+                          <Checkbox
+                            checked={preferences.dailyHousekeeping}
+                            onCheckedChange={(checked) =>
+                              setPreferences((prev) => ({
+                                ...prev,
+                                dailyHousekeeping: checked,
+                              }))
+                            }
+                            className="w-5 h-5"
+                          />
+                          <div className="flex-1">
+                            <div className="font-medium text-gray-900">Daily Housekeeping</div>
+                            <div className="text-sm text-gray-600">Request room cleaning during your stay</div>
                           </div>
                         </div>
                       </div>
