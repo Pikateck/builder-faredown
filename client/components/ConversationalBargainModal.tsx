@@ -888,6 +888,32 @@ export function ConversationalBargainModal({
 
           setTimeout(() => {
             setIsBooking(false);
+
+            // ✅ PRICE CONSISTENCY: Update price snapshot with bargain information
+            if (priceSnapshot) {
+              updatePrice({
+                bargainApplied: {
+                  originalTotal: basePrice,
+                  bargainedTotal: finalOffer,
+                  discount: savings,
+                  round: round,
+                  appliedAt: new Date().toISOString(),
+                },
+                grandTotal: finalOffer,
+              });
+              logPricePipeline("BARGAIN", {
+                ...priceSnapshot,
+                grandTotal: finalOffer,
+                bargainApplied: {
+                  originalTotal: basePrice,
+                  bargainedTotal: finalOffer,
+                  discount: savings,
+                  round: round,
+                  appliedAt: new Date().toISOString(),
+                },
+              });
+            }
+
             onAccept(finalOffer, orderRef, {
               isHeld: false,
               originalPrice: basePrice,
