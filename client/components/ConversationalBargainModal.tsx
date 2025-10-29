@@ -23,6 +23,8 @@ import {
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { useAuth } from "@/contexts/AuthContext";
+import { usePriceContext } from "@/contexts/PriceContext";
+import { logPricePipeline } from "@/services/priceCalculationService";
 import {
   numberToWords,
   formatNumberWithCommas,
