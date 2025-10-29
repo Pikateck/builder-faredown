@@ -195,24 +195,9 @@ export default function ReservationPage() {
     return `${day}-${month}-${year}`;
   };
 
-  // Add-on services pricing
-  const addOnPricing = {
-    earlyCheckin: 50,
-    lateCheckout: 30,
-    airportTransfer: 75,
-    extraTowels: 15,
-  };
-
-  const calculateAddOns = () => {
-    let total = 0;
-    if (preferences.earlyCheckin) total += addOnPricing.earlyCheckin;
-    if (preferences.lateCheckout) total += addOnPricing.lateCheckout;
-    if (preferences.airportTransfer) total += addOnPricing.airportTransfer;
-    if (preferences.extraTowels) total += addOnPricing.extraTowels;
-    return total;
-  };
-
-  const grandTotal = pricing.total + calculateAddOns();
+  // Preferences are guest requests without additional charges
+  // The total price remains the same regardless of preference selections
+  const grandTotal = pricing.total;
 
   const steps = [
     { number: 1, title: "Guest Details", description: "Personal information" },
