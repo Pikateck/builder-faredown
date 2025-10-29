@@ -124,7 +124,8 @@ function App() {
               <Router>
                 <BookingProvider>
                   <EnhancedBookingProvider>
-                    <SearchProvider>
+                    <PriceProvider>
+                      <SearchProvider>
                       <Routes>
                         {/* Authentication Routes */}
                         <Route path="/login" element={<Login />} />
@@ -496,7 +497,8 @@ function App() {
                         {/* Fallback */}
                         <Route path="*" element={<NotFound />} />
                       </Routes>
-                    </SearchProvider>
+                      </SearchProvider>
+                    </PriceProvider>
                   </EnhancedBookingProvider>
                 </BookingProvider>
               </Router>
