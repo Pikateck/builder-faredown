@@ -525,6 +525,8 @@ export function HotelCard({
           roomId: cheapestRoom.id || `room-${roomsArr.indexOf(cheapestRoom)}`,
           roomType: cheapestRoom.name || cheapestRoom.type || "Standard Room",
           displayPrice: displayedTotal, // This is the price shown on Results page
+          isRefundable: cheapestRoom.isRefundable || cheapestRoom.refundable || false,
+          cancellationPolicy: cheapestRoom.cancellationPolicy || cheapestRoom.cancellation || "See property for details",
         };
       }
     }
