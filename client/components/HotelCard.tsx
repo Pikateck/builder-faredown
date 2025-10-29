@@ -569,8 +569,6 @@ export function HotelCard({
 
   // Handle view details action
   const handleViewDetails = () => {
-    const { setPriceSnapshot } = usePriceContext();
-
     // Create standardized search object for hotels following the user's requirements
     const standardizedHotelSearchParams = {
       module: "hotels" as const,
