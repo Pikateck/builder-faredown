@@ -173,6 +173,7 @@ export function ConversationalBargainModal({
   >(null);
 
   const { selectedCurrency, formatPrice } = useCurrency();
+  const { priceSnapshot, updatePrice } = usePriceContext();
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
