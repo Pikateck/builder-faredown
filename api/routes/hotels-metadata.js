@@ -441,45 +441,51 @@ router.get("/", async (req, res) => {
     // Use fallback mock data if TBO returns 0 results
     let finalHotels = hotels;
     let source = "tbo_live";
-    if (hotels.length === 0 && MOCK_HOTELS[cityId]) {
-      console.log(
-        `📦 TBO returned 0 results, using fallback mock data for ${cityId}`,
-      );
-      finalHotels = MOCK_HOTELS[cityId].map((h) => {
-        let minPrice = Infinity;
-        let maxPrice = 0;
+    if (hotels.length === 0) {
+      // Try to use fallback for requested city, or default to DXB
+      const fallbackCity = MOCK_HOTELS[cityId] ? cityId : "DXB";
+      if (MOCK_HOTELS[fallbackCity]) {
+        console.log(
+          `📦 TBO returned 0 results, using fallback mock data for ${fallbackCity}`,
+        );
+        finalHotels = MOCK_HOTELS[fallbackCity].map((h) => {
+          let minPrice = Infinity;
+          let maxPrice = 0;
 
-        if (Array.isArray(h.rates) && h.rates.length > 0) {
-          for (const rate of h.rates) {
-            const price = rate.price || 0;
-            if (price > 0) {
-              minPrice = Math.min(minPrice, price);
-              maxPrice = Math.max(maxPrice, price);
+          if (Array.isArray(h.rates) && h.rates.length > 0) {
+            for (const rate of h.rates) {
+              const price = rate.price || 0;
+              if (price > 0) {
+                minPrice = Math.min(minPrice, price);
+                maxPrice = Math.max(maxPrice, price);
+              }
             }
           }
-        }
 
-        if (minPrice === Infinity) {
-          minPrice = h.price || 0;
-          maxPrice = h.price || 0;
-        }
+          if (minPrice === Infinity) {
+            minPrice = h.price || 0;
+            maxPrice = h.price || 0;
+          }
 
-        return {
-          id: h.hotelId,
-          name: h.name || "Hotel",
-          stars: h.starRating || 0,
-          image: h.images?.[0] || null,
-          currentPrice: minPrice === Infinity ? h.price || 0 : minPrice,
-          originalPrice: maxPrice || h.price || 0,
-          currency: h.currency || "INR",
-          supplier: "MOCK",
-          isLiveData: false,
-          rates: h.rates || [],
-          amenities: h.amenities || [],
-        };
-      });
-      source = "fallback_mock";
-      console.log(`✅ Loaded ${finalHotels.length} fallback mock hotels`);
+          return {
+            id: h.hotelId,
+            name: h.name || "Hotel",
+            stars: h.starRating || 0,
+            image: h.images?.[0] || null,
+            currentPrice: minPrice === Infinity ? h.price || 0 : minPrice,
+            originalPrice: maxPrice || h.price || 0,
+            currency: h.currency || "INR",
+            supplier: "MOCK",
+            isLiveData: false,
+            rates: h.rates || [],
+            amenities: h.amenities || [],
+          };
+        });
+        source = "fallback_mock";
+        console.log(`✅ Loaded ${finalHotels.length} fallback mock hotels`);
+      } else {
+        console.warn(`⚠️ No mock data available for city: ${cityId}`);
+      }
     }
 
     console.log(
