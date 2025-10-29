@@ -104,7 +104,7 @@ export default function HotelBooking() {
     Math.ceil((new Date(checkOut).getTime() - new Date(checkIn).getTime()) / (1000 * 60 * 60 * 24)) ||
     3;
 
-  console.log("🏨 Hotel booking using exact search dates:", {
+  console.log("��� Hotel booking using exact search dates:", {
     checkIn,
     checkOut,
     nights,
@@ -706,25 +706,40 @@ export default function HotelBooking() {
                           { id: "lateCheckOut", label: "Late Check-out (after 12:00 PM)" },
                           { id: "dailyHousekeeping", label: "Daily Housekeeping" },
                         ].map((request) => (
-                          <label
+                          <div
                             key={request.id}
                             className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
+                            onClick={(e) => {
+                              // Allow direct input clicks to work
+                              if ((e.target as HTMLElement).tagName !== 'INPUT') {
+                                const checkbox = (e.currentTarget as HTMLElement).querySelector('input[type="checkbox"]') as HTMLInputElement;
+                                if (checkbox) {
+                                  checkbox.checked = !checkbox.checked;
+                                  setPreferences((prev) => ({
+                                    ...prev,
+                                    [request.id]: checkbox.checked,
+                                  }));
+                                }
+                              }
+                            }}
                           >
                             <input
                               type="checkbox"
                               checked={preferences[request.id as keyof typeof preferences] as boolean}
-                              onChange={(e) =>
+                              onChange={(e) => {
+                                e.stopPropagation();
                                 setPreferences((prev) => ({
                                   ...prev,
                                   [request.id]: e.target.checked,
                                 }))
-                              }
+                              }}
                               className="w-4 h-4 cursor-pointer"
+                              style={{ accentColor: '#2563eb' }}
                             />
                             <span className="ml-3 text-gray-700">
                               {request.label}
                             </span>
-                          </label>
+                          </div>
                         ))}
                       </div>
                     </div>
