@@ -655,7 +655,7 @@ export function HotelCard({
       mainImageUrl: hotel?.images?.[currentImageIndex] || hotel?.images?.[0], // Store the actual image URL
       // ✅ Store complete room snapshot for exact match in Details
       roomSnapshot: {
-        ...cheapestRoomData.room,
+        ...(cheapestRoomData.room || {}),
         id: cheapestRoomData.roomId,
         name: cheapestRoomData.roomType,
         pricePerNight: cheapestRoomData.price,
