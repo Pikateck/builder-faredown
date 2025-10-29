@@ -1397,7 +1397,6 @@ export default function HotelDetails() {
     if (element) {
       const y =
         element.getBoundingClientRect().top + window.scrollY - SCROLL_OFFSET;
-      8;
       window.scrollTo({ top: y, behavior: "smooth" });
     }
   };
