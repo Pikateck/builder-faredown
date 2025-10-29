@@ -90,6 +90,30 @@ function HotelResultsContent() {
     if (urlSearchParams.toString()) {
       loadFromUrlParams(urlSearchParams);
 
+      // Initialize dates from URL params (checkIn/checkOut for hotels)
+      const checkInParam = urlSearchParams.get("checkIn");
+      const checkOutParam = urlSearchParams.get("checkOut");
+      if (checkInParam) {
+        try {
+          const inDate = new Date(checkInParam);
+          if (!isNaN(inDate.getTime())) {
+            setDepartureDate(inDate);
+          }
+        } catch (e) {
+          console.warn("Failed to parse checkIn date:", checkInParam);
+        }
+      }
+      if (checkOutParam) {
+        try {
+          const outDate = new Date(checkOutParam);
+          if (!isNaN(outDate.getTime())) {
+            setReturnDate(outDate);
+          }
+        } catch (e) {
+          console.warn("Failed to parse checkOut date:", checkOutParam);
+        }
+      }
+
       // Also initialize filters from URL if present
       const savedFilters = deserializeFiltersFromUrl(urlSearchParams);
       if (Object.keys(savedFilters).length > 0) {
