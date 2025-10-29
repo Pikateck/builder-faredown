@@ -713,7 +713,8 @@ function HotelResultsContent() {
     } catch (error) {
       console.warn("⚠️ Failed to fetch hotel metadata:", error);
       setPricingStatus("ready");
-      return [];
+      console.log("🔄 Falling back to mock hotels on error");
+      return loadMockHotels();
     }
   };
 
