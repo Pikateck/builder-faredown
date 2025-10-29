@@ -131,6 +131,8 @@ import ReviewsSection from "@/components/ReviewsSection";
 import CollapsedSearchSummary from "@/components/CollapsedSearchSummary";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { format } from "date-fns";
+import { usePriceContext } from "@/contexts/PriceContext";
+import { logPricePipeline } from "@/services/priceCalculationService";
 
 export default function HotelDetails() {
   useScrollToTop();
