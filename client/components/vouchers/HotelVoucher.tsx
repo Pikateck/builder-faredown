@@ -259,6 +259,55 @@ export const HotelVoucher: React.FC<HotelVoucherProps> = ({
         </ul>
       </div>
 
+      {/* Special Requests & Preferences */}
+      {(booking.preferences || booking.specialRequests) && (
+        <div className="p-6 border-b-2 border-dashed border-gray-300">
+          <h3 className="text-lg font-semibold text-gray-900 mb-4">
+            Special Requests & Guest Preferences
+          </h3>
+          <div className="bg-blue-50 rounded-lg p-4 space-y-3 text-sm">
+            {booking.preferences && (
+              <>
+                {booking.preferences.bedType && (
+                  <div className="flex justify-between text-gray-700">
+                    <span className="font-medium">Preferred Bed Type:</span>
+                    <span>{booking.preferences.bedType}</span>
+                  </div>
+                )}
+                {booking.preferences.smokingPreference && (
+                  <div className="flex justify-between text-gray-700">
+                    <span className="font-medium">Smoking Preference:</span>
+                    <span>{booking.preferences.smokingPreference}</span>
+                  </div>
+                )}
+                {booking.preferences.floorPreference && (
+                  <div className="flex justify-between text-gray-700">
+                    <span className="font-medium">Floor Preference:</span>
+                    <span>{booking.preferences.floorPreference}</span>
+                  </div>
+                )}
+                {(booking.preferences.earlyCheckIn || booking.preferences.lateCheckOut || booking.preferences.dailyHousekeeping) && (
+                  <div className="border-t pt-3 mt-3">
+                    <p className="font-medium text-gray-700 mb-2">Guest Requests:</p>
+                    <ul className="space-y-1 text-gray-700">
+                      {booking.preferences.earlyCheckIn && <li>✓ Early Check-in (before 3:00 PM)</li>}
+                      {booking.preferences.lateCheckOut && <li>✓ Late Check-out (after 12:00 PM)</li>}
+                      {booking.preferences.dailyHousekeeping && <li>✓ Daily Housekeeping</li>}
+                    </ul>
+                  </div>
+                )}
+              </>
+            )}
+            {booking.specialRequests && (
+              <div className="border-t pt-3 mt-3">
+                <p className="font-medium text-gray-700 mb-1">Special Requests:</p>
+                <p className="text-gray-700">{booking.specialRequests}</p>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
       {/* Hotel Policies */}
       <div className="p-6 bg-amber-50 border-l-4 border-amber-400 border-b-2 border-b-dashed border-b-gray-300">
         <h3 className="text-lg font-semibold text-amber-800 mb-3">
