@@ -340,11 +340,17 @@ export default function HotelDetails() {
 
   const cityFull = destinationName || destination;
 
-  const datesLabel = `${format(checkInDate, "EEE, d MMM")} → ${format(checkOutDate, "EEE, d MMM")}`;
+  let datesLabel = "Dates";
+  try {
+    datesLabel = `${format(checkInDate, "EEE, d MMM")} → ${format(checkOutDate, "EEE, d MMM")}`;
+  } catch (e) {
+    console.error("Error formatting dates:", e);
+    datesLabel = "Check-in → Check-out";
+  }
 
-  const adults = parseInt(searchParams.get("adults") || "2");
-  const children = parseInt(searchParams.get("children") || "0");
-  const rooms = parseInt(searchParams.get("rooms") || "1");
+  const adults = parseInt(searchParams.get("adults") || "2") || 2;
+  const children = parseInt(searchParams.get("children") || "0") || 0;
+  const rooms = parseInt(searchParams.get("rooms") || "1") || 1;
 
   const paxLabel = `${adults} adult${adults > 1 ? "s" : ""} • ${rooms} room${rooms > 1 ? "s" : ""}${children ? ` • ${children} child${children > 1 ? "ren" : ""}` : ""}`;
 
