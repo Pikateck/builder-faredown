@@ -152,6 +152,7 @@ export function HotelCard({
   const [searchParams] = useSearchParams();
   const { selectedCurrency, formatPrice } = useCurrency();
   const { loadCompleteSearchObject } = useEnhancedBooking();
+  const { setPriceSnapshot } = usePriceContext();
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [isLiked, setIsLiked] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
