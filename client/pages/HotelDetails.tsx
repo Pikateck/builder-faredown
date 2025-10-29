@@ -338,7 +338,7 @@ export default function HotelDetails() {
     searchParams.get("countryName") ||
     "";
 
-  const cityFull = destinationName || destination;
+  const cityFull = destinationName || destination || "Destination";
 
   let datesLabel = "Dates";
   try {
