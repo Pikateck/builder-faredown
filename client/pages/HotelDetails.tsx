@@ -357,6 +357,23 @@ export default function HotelDetails() {
 
   const paxLabel = `${adults} adult${adults > 1 ? "s" : ""} • ${rooms} room${rooms > 1 ? "s" : ""}${children ? ` • ${children} child${children > 1 ? "ren" : ""}` : ""}`;
 
+  // ✅ PRICE CONSISTENCY: Verify and log price snapshot on Details page load
+  useEffect(() => {
+    if (priceSnapshot) {
+      // Verify checksum integrity
+      if (!verifyChecksum(priceSnapshot)) {
+        console.error("[PRICE_PIPELINE] Checksum mismatch on Details page - price may have drifted!");
+        // Do NOT reset - allow page to load but add warning
+      } else {
+        console.log("[PRICE_PIPELINE_VERIFIED] Checksum valid on Details page");
+      }
+      // Log the snapshot for tracking
+      logPricePipeline("DETAILS", priceSnapshot);
+    } else {
+      console.warn("[PRICE_PIPELINE] No price snapshot available on Details page - will capture new one");
+    }
+  }, [priceSnapshot, verifyChecksum]);
+
   // Load context data from URL parameters
   useEffect(() => {
     loadDatesFromParams(searchParams);
