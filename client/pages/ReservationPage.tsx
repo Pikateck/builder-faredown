@@ -157,12 +157,14 @@ export default function ReservationPage() {
   const negotiatedFromUrl = parseInt(
     searchParams.get("finalPrice") || searchParams.get("totalPrice") || "0",
   );
-  const finalTotal = negotiatedFromUrl > 0 ? negotiatedFromUrl : priceBreakdown.total;
+  const finalTotal =
+    negotiatedFromUrl > 0 ? negotiatedFromUrl : priceBreakdown.total;
 
   // If negotiated total provided, derive a consistent per-night value for display
-  const derivedPerNight = negotiatedFromUrl > 0 && nights > 0
-    ? Math.round(negotiatedFromUrl / nights)
-    : hotelData.pricePerNight;
+  const derivedPerNight =
+    negotiatedFromUrl > 0 && nights > 0
+      ? Math.round(negotiatedFromUrl / nights)
+      : hotelData.pricePerNight;
 
   const pricing = {
     basePrice: priceBreakdown.basePrice,
@@ -578,7 +580,9 @@ export default function ReservationPage() {
                   <div className="space-y-6">
                     <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 mb-6">
                       <p className="text-sm text-blue-700">
-                        Let us know your preferences for your stay. The hotel will try to accommodate your requests based on availability.
+                        Let us know your preferences for your stay. The hotel
+                        will try to accommodate your requests based on
+                        availability.
                       </p>
                     </div>
 
@@ -588,7 +592,9 @@ export default function ReservationPage() {
                       </h3>
                       <div className="space-y-4">
                         <div>
-                          <Label className="text-sm font-medium mb-2 block">Bed Type</Label>
+                          <Label className="text-sm font-medium mb-2 block">
+                            Bed Type
+                          </Label>
                           <Select
                             value={preferences.bedType}
                             onValueChange={(value) =>
@@ -609,7 +615,9 @@ export default function ReservationPage() {
                           </Select>
                         </div>
                         <div>
-                          <Label className="text-sm font-medium mb-2 block">Smoking Preference</Label>
+                          <Label className="text-sm font-medium mb-2 block">
+                            Smoking Preference
+                          </Label>
                           <Select
                             value={preferences.smokingPreference}
                             onValueChange={(value) =>
@@ -623,13 +631,17 @@ export default function ReservationPage() {
                               <SelectValue />
                             </SelectTrigger>
                             <SelectContent>
-                              <SelectItem value="non-smoking">Non-Smoking</SelectItem>
+                              <SelectItem value="non-smoking">
+                                Non-Smoking
+                              </SelectItem>
                               <SelectItem value="smoking">Smoking</SelectItem>
                             </SelectContent>
                           </Select>
                         </div>
                         <div>
-                          <Label className="text-sm font-medium mb-2 block">Floor Preference</Label>
+                          <Label className="text-sm font-medium mb-2 block">
+                            Floor Preference
+                          </Label>
                           <Select
                             value={preferences.floorPreference}
                             onValueChange={(value) =>
@@ -657,10 +669,20 @@ export default function ReservationPage() {
                       <h3 className="text-lg font-semibold mb-4">
                         Guest Requests
                       </h3>
-                      <p className="text-sm text-gray-600 mb-3">Select any additional preferences the hotel should know about:</p>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Select any additional preferences the hotel should know
+                        about:
+                      </p>
                       <div className="space-y-3">
-                        <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors cursor-pointer"
-                          onClick={() => setPreferences((prev) => ({ ...prev, earlyCheckin: !prev.earlyCheckin }))}>
+                        <div
+                          className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors cursor-pointer"
+                          onClick={() =>
+                            setPreferences((prev) => ({
+                              ...prev,
+                              earlyCheckin: !prev.earlyCheckin,
+                            }))
+                          }
+                        >
                           <Checkbox
                             checked={preferences.earlyCheckin}
                             onCheckedChange={(checked) =>
@@ -672,13 +694,24 @@ export default function ReservationPage() {
                             className="w-5 h-5"
                           />
                           <div className="flex-1">
-                            <div className="font-medium text-gray-900">Early Check-in</div>
-                            <div className="text-sm text-gray-600">Request check-in before 3:00 PM</div>
+                            <div className="font-medium text-gray-900">
+                              Early Check-in
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              Request check-in before 3:00 PM
+                            </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors cursor-pointer"
-                          onClick={() => setPreferences((prev) => ({ ...prev, lateCheckout: !prev.lateCheckout }))}>
+                        <div
+                          className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors cursor-pointer"
+                          onClick={() =>
+                            setPreferences((prev) => ({
+                              ...prev,
+                              lateCheckout: !prev.lateCheckout,
+                            }))
+                          }
+                        >
                           <Checkbox
                             checked={preferences.lateCheckout}
                             onCheckedChange={(checked) =>
@@ -690,13 +723,24 @@ export default function ReservationPage() {
                             className="w-5 h-5"
                           />
                           <div className="flex-1">
-                            <div className="font-medium text-gray-900">Late Check-out</div>
-                            <div className="text-sm text-gray-600">Request check-out after 12:00 PM</div>
+                            <div className="font-medium text-gray-900">
+                              Late Check-out
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              Request check-out after 12:00 PM
+                            </div>
                           </div>
                         </div>
 
-                        <div className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors cursor-pointer"
-                          onClick={() => setPreferences((prev) => ({ ...prev, dailyHousekeeping: !prev.dailyHousekeeping }))}>
+                        <div
+                          className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg hover:bg-blue-50 hover:border-blue-300 transition-colors cursor-pointer"
+                          onClick={() =>
+                            setPreferences((prev) => ({
+                              ...prev,
+                              dailyHousekeeping: !prev.dailyHousekeeping,
+                            }))
+                          }
+                        >
                           <Checkbox
                             checked={preferences.dailyHousekeeping}
                             onCheckedChange={(checked) =>
@@ -708,8 +752,12 @@ export default function ReservationPage() {
                             className="w-5 h-5"
                           />
                           <div className="flex-1">
-                            <div className="font-medium text-gray-900">Daily Housekeeping</div>
-                            <div className="text-sm text-gray-600">Request room cleaning during your stay</div>
+                            <div className="font-medium text-gray-900">
+                              Daily Housekeeping
+                            </div>
+                            <div className="text-sm text-gray-600">
+                              Request room cleaning during your stay
+                            </div>
                           </div>
                         </div>
                       </div>

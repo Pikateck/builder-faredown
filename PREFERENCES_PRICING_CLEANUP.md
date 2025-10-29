@@ -1,11 +1,13 @@
 # Preferences Step: Pricing Removed ✅
 
 ## Summary
+
 The Preferences step in the booking flow has been redesigned to focus on **pure guest preferences** without any pricing. All add-on charges have been removed.
 
 ## Changes Made
 
 ### 1. **Removed Pricing Elements**
+
 - ❌ Removed "Additional Services" section with pricing
 - ❌ Removed ₹50 (Early Check-in) price tag
 - ❌ Removed ₹30 (Late Check-out) price tag
@@ -14,18 +16,22 @@ The Preferences step in the booking flow has been redesigned to focus on **pure 
 ### 2. **Redesigned UI for Pure Preferences**
 
 #### Room Preferences Section
+
 - Clean dropdown selectors (no pricing)
 - **Bed Type**: King Bed, Queen Bed, Twin Beds
 - **Smoking Preference**: Non-Smoking, Smoking
 - **Floor Preference**: High Floor, Low Floor, Mid Floor, Quiet Area
 
 #### Guest Requests Section
+
 Checkbox items without any pricing:
+
 - **Early Check-in**: Request check-in before 3:00 PM
 - **Late Check-out**: Request check-out after 12:00 PM
 - **Daily Housekeeping**: Request room cleaning during stay
 
 ### 3. **Updated Pricing Logic**
+
 ```typescript
 // BEFORE
 const grandTotal = pricing.total + calculateAddOns();
@@ -36,6 +42,7 @@ const grandTotal = pricing.total;
 ```
 
 ### 4. **Cleaned Summary Display**
+
 - Removed "Add-on Services" line from booking summary
 - Summary now only shows:
   - Room Rate (base price)
@@ -51,7 +58,9 @@ const grandTotal = pricing.total;
 ✅ **Responsive**: Works seamlessly on mobile and desktop
 
 ## Price Summary Panel (Right Side)
+
 The right-side summary panel already shows:
+
 - Room Rate breakdown
 - Taxes & Fees
 - **Total Price (incl. taxes)** in large, bold text
@@ -59,6 +68,7 @@ The right-side summary panel already shows:
 Preferences no longer affect the final price—they're purely for guest accommodation requests.
 
 ## Testing Checklist
+
 - [ ] Navigate to Step 2 (Preferences)
 - [ ] Verify no pricing labels appear
 - [ ] Select various preferences (bed type, floor, guest requests)
@@ -67,6 +77,7 @@ Preferences no longer affect the final price—they're purely for guest accommod
 - [ ] Test on desktop viewport (1024px+)
 
 ## File Modified
+
 - `client/pages/ReservationPage.tsx`
   - Removed pricing UI from Preferences step
   - Removed add-on pricing logic
@@ -74,4 +85,5 @@ Preferences no longer affect the final price—they're purely for guest accommod
   - Cleaned summary display
 
 ## Result
+
 The Preferences step is now a clean, focused UI for guest stay preferences without any pricing confusion. The Price Summary panel remains the single source of truth for all costs.
