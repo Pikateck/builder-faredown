@@ -705,7 +705,12 @@ function HotelResultsContent() {
           name: h.name,
           location: h.location || h.address || destCode,
           locationTags: h.locationTags || [],
-          images: h.images && h.images.length > 0 ? h.images : (h.image ? [h.image] : []),
+          images:
+            h.images && h.images.length > 0
+              ? h.images
+              : h.image
+                ? [h.image]
+                : [],
           rating: h.reviewScore || h.stars || 4.0,
           reviewScore: h.reviewScore || h.stars || 4.0,
           reviews: h.reviewCount || 0,
@@ -715,15 +720,23 @@ function HotelResultsContent() {
           description: `Discover ${h.name}`,
           amenities: h.amenities || [],
           features: h.roomFeatures || [],
-          roomTypes: h.rates && h.rates.length > 0 ? h.rates.map((r: any) => ({
-            id: r.id || Math.random().toString(),
-            name: r.roomType || r.description,
-            type: r.roomType || r.description,
-            bedType: r.beds || "",
-            pricePerNight: r.price,
-            isRefundable: r.isRefundable !== undefined ? r.isRefundable : h.isRefundable,
-            cancellationPolicy: r.isRefundable ? "Free cancellation" : "Non-refundable",
-          })) : [],
+          roomTypes:
+            h.rates && h.rates.length > 0
+              ? h.rates.map((r: any) => ({
+                  id: r.id || Math.random().toString(),
+                  name: r.roomType || r.description,
+                  type: r.roomType || r.description,
+                  bedType: r.beds || "",
+                  pricePerNight: r.price,
+                  isRefundable:
+                    r.isRefundable !== undefined
+                      ? r.isRefundable
+                      : h.isRefundable,
+                  cancellationPolicy: r.isRefundable
+                    ? "Free cancellation"
+                    : "Non-refundable",
+                }))
+              : [],
           roomType: h.roomType || "",
           roomFeatures: h.roomFeatures || [],
           isRefundable: h.isRefundable || false,
