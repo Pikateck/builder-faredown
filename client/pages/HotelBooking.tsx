@@ -331,6 +331,10 @@ export default function HotelBooking() {
           bargainedPrice,
           discountAmount,
           discountPercentage,
+          panCard: guestDetails.panCard,
+          specialRequests: guestDetails.specialRequests,
+          paymentMethod,
+          paymentStatus: "completed",
           priceSnapshot, // ✅ Pass price snapshot to confirmation page
         },
       });
