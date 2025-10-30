@@ -481,6 +481,9 @@ app.use("/api/packages", packagesRoutes);
 app.use("/api/destinations", destinationsRoutes);
 app.use("/api/enhanced-bargain", enhancedBargainRoutes);
 
+// P0 V1 API - Complete Postgres Integration
+app.use("/api/v1/bookings", v1BookingsRoutes);
+
 // FX + Pricing utilities
 app.use("/api/fx", require("./routes/fx"));
 app.use("/api/pricing", require("./routes/pricing-preview"));
