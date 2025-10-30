@@ -726,6 +726,52 @@ Please present this at the hotel during check-in.
               </div>
             </div>
 
+            {/* Bargain Summary - If bargain applied */}
+            {voucherData.bargainSummary && voucherData.bargainSummary.rounds > 0 && (
+              <div className="mb-8">
+                <h2 className="text-xl font-bold mb-4 flex items-center">
+                  <TrendingDown className="w-5 h-5 mr-2 text-orange-600" />
+                  Bargain Summary
+                </h2>
+                <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                  <div className="space-y-3">
+                    <div className="flex justify-between">
+                      <span className="text-gray-700">Original Price</span>
+                      <span className="font-semibold">
+                        {formatPriceWithSymbol(
+                          voucherData.bargainSummary.originalPrice,
+                          selectedCurrency.code,
+                        )}
+                      </span>
+                    </div>
+                    <div className="flex justify-between">
+                      <span className="text-gray-700">Bargain Discount</span>
+                      <span className="font-semibold text-orange-600">
+                        -
+                        {formatPriceWithSymbol(
+                          voucherData.bargainSummary.discountAmount,
+                          selectedCurrency.code,
+                        )}{" "}
+                        ({voucherData.bargainSummary.discountPercentage}%)
+                      </span>
+                    </div>
+                    <div className="border-t border-orange-300 pt-3 flex justify-between">
+                      <span className="font-bold text-lg">Final Price</span>
+                      <span className="font-bold text-lg text-orange-600">
+                        {formatPriceWithSymbol(
+                          voucherData.bargainSummary.bargainedPrice,
+                          selectedCurrency.code,
+                        )}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-600 mt-2">
+                      You successfully negotiated the price through {voucherData.bargainSummary.rounds} bargain round(s).
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Hotel Amenities */}
             <div className="mb-8">
               <h2 className="text-xl font-bold mb-4">Hotel Amenities</h2>
