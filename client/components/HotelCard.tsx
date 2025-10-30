@@ -1259,19 +1259,25 @@ export function HotelCard({
             </div>
 
             {/* Room Type - Inline */}
-            {hotel.availableRoom && (
+            {(hotel.availableRoom || hotel.roomType) && (
               <div className="mb-2 text-xs">
-                <span className="font-medium text-gray-900">
-                  {hotel.availableRoom.type}
-                </span>
-                <span className="text-gray-600 mx-1">•</span>
-                <span className="text-gray-600">
-                  {hotel.availableRoom.bedType}
-                </span>
-                <div className="flex gap-1 mt-1">
-                  <span className="text-green-600 bg-green-50 px-1 py-0.5 rounded text-xs">
-                    ✓ {hotel.availableRoom.cancellationPolicy}
-                  </span>
+                <div className="font-medium text-gray-900 mb-0.5">
+                  {hotel.availableRoom?.type || hotel.roomType}
+                </div>
+                <div className="flex items-center text-gray-600 mb-1">
+                  {(hotel.availableRoom?.bedType || hotel.roomFeatures?.[0]) && (
+                    <>
+                      <span>
+                        {hotel.availableRoom?.bedType || hotel.roomFeatures?.[0]}
+                      </span>
+                      {hotel.roomFeatures && hotel.roomFeatures.length > 1 && (
+                        <>
+                          <span className="mx-1">•</span>
+                          <span>{hotel.roomFeatures.slice(1).join(" • ")}</span>
+                        </>
+                      )}
+                    </>
+                  )}
                 </div>
               </div>
             )}
