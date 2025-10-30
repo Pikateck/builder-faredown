@@ -692,7 +692,10 @@ function HotelResultsContent() {
         console.warn("⚠️ No metadata hotels found from API");
         console.warn("⚠️ API response:", metadataData);
         console.log("⚠️ No results from API - falling back to mock data");
-        return loadMockHotels(); // Return the mock hotels array
+        // CRITICAL: Load mock hotels immediately
+        const mockHotels = loadMockHotels();
+        console.log(`📦 Fallback loaded ${mockHotels.length} mock hotels`);
+        return mockHotels;
       }
 
       // Convert metadata to Hotel format
