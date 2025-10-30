@@ -265,18 +265,33 @@ export interface Hotel {
   description: string;
   address: any;
   location: any;
+  locationTags?: string[];
   rating: number;
+  reviewScore?: number;
   starRating: number;
   reviewCount: number;
+  reviews?: number;
   images: any[];
   amenities: any[];
   roomTypes: any[];
+  roomType?: string;
+  roomFeatures?: string[];
+  isRefundable?: boolean;
+  breakfastIncluded?: boolean;
   policies: any;
   contact: any;
+  currentPrice?: number;
+  originalPrice?: number;
+  price?: number;
+  currency?: string;
+  supplier?: string;
+  supplierCode?: string;
+  isLiveData?: boolean;
+  features?: string[];
   priceRange: {
     min: number;
     max: number;
-    currency: string;
+    currency?: string;
   };
 }
 
