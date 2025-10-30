@@ -1,0 +1,184 @@
+{
+  "info": {
+    "name": "P0 Postgres Integration - Complete Bookings API",
+    "description": "Test collection for V1 API endpoints with PostgreSQL integration",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "version": "1.0.0"
+  },
+  "item": [
+    {
+      "name": "Health Check",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{API_BASE_URL}}/api/v1/bookings/health",
+          "host": ["{{API_BASE_URL}}"],
+          "path": ["api", "v1", "bookings", "health"]
+        },
+        "description": "Verify API is running and database is connected"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Hotel Booking",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"customer\": {\n    \"email\": \"guest@example.com\",\n    \"firstName\": \"John\",\n    \"lastName\": \"Doe\",\n    \"phone\": \"+91-9876543210\"\n  },\n  \"pan_number\": \"ABCDE1234F\",\n  \"hotel\": {\n    \"code\": \"HOT001\",\n    \"name\": \"Grand Hotel Dubai\",\n    \"checkIn\": \"2025-04-15\",\n    \"checkOut\": \"2025-04-20\",\n    \"nights\": 5,\n    \"rooms\": 1,\n    \"adults\": 2,\n    \"children\": 0\n  },\n  \"pricing\": {\n    \"basePrice\": 5000,\n    \"taxes\": 500,\n    \"fees\": 100,\n    \"total\": 5600,\n    \"currency\": \"INR\"\n  },\n  \"specialRequests\": \"Non-smoking room, high floor preferred\",\n  \"guestDetails\": {\n    \"title\": \"Mr\",\n    \"name\": \"John Doe\",\n    \"phone\": \"+91-9876543210\",\n    \"email\": \"guest@example.com\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{API_BASE_URL}}/api/v1/bookings/hotels",
+          "host": ["{{API_BASE_URL}}"],
+          "path": ["api", "v1", "bookings", "hotels"]
+        },
+        "description": "Create a new hotel booking with customer and PAN details"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Booking Details",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{API_BASE_URL}}/api/v1/bookings/hotels/FD202504051A2B3C",
+          "host": ["{{API_BASE_URL}}"],
+          "path": ["api", "v1", "bookings", "hotels", "FD202504051A2B3C"]
+        },
+        "description": "Retrieve complete booking details with all related data"
+      },
+      "response": []
+    },
+    {
+      "name": "Update Booking Status",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"status\": \"confirmed\",\n  \"reason\": \"Payment received\"\n}"
+        },
+        "url": {
+          "raw": "{{API_BASE_URL}}/api/v1/bookings/hotels/FD202504051A2B3C/status",
+          "host": ["{{API_BASE_URL}}"],
+          "path": ["api", "v1", "bookings", "hotels", "FD202504051A2B3C", "status"]
+        },
+        "description": "Update booking status (confirmed, cancelled, completed)"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Booking Document (Voucher)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"documentType\": \"voucher\",\n  \"fileUrl\": \"https://s3.amazonaws.com/faredown/vouchers/FD202504051A2B3C.pdf\",\n  \"documentContent\": {\n    \"title\": \"Hotel Voucher\",\n    \"bookingRef\": \"FD202504051A2B3C\",\n    \"hotelName\": \"Grand Hotel Dubai\",\n    \"checkInDate\": \"2025-04-15\",\n    \"checkOutDate\": \"2025-04-20\",\n    \"nights\": 5,\n    \"roomType\": \"Deluxe Room\",\n    \"guests\": \"2 Adults\",\n    \"ratePerNight\": 1000,\n    \"totalAmount\": 5600,\n    \"currency\": \"INR\",\n    \"items\": [\n      {\n        \"description\": \"Room Nights (5 x 1000)\",\n        \"amount\": 5000\n      },\n      {\n        \"description\": \"Taxes\",\n        \"amount\": 500\n      },\n      {\n        \"description\": \"Booking Fees\",\n        \"amount\": 100\n      }\n    ]\n  }\n}"
+        },
+        "url": {
+          "raw": "{{API_BASE_URL}}/api/v1/bookings/hotels/FD202504051A2B3C/documents",
+          "host": ["{{API_BASE_URL}}"],
+          "path": ["api", "v1", "bookings", "hotels", "FD202504051A2B3C", "documents"]
+        },
+        "description": "Create and store a booking document (voucher or invoice)"
+      },
+      "response": []
+    },
+    {
+      "name": "Create Booking Document (Invoice)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"documentType\": \"invoice\",\n  \"fileUrl\": \"https://s3.amazonaws.com/faredown/invoices/FD202504051A2B3C.pdf\",\n  \"documentContent\": {\n    \"title\": \"Invoice\",\n    \"invoiceNumber\": \"FD-2025-04-001\",\n    \"invoiceDate\": \"2025-04-05\",\n    \"bookingRef\": \"FD202504051A2B3C\",\n    \"customerName\": \"John Doe\",\n    \"customerEmail\": \"guest@example.com\",\n    \"items\": [\n      {\n        \"description\": \"Hotel Booking - Grand Hotel Dubai\",\n        \"nights\": 5,\n        \"ratePerNight\": 1000,\n        \"amount\": 5000\n      }\n    ],\n    \"subtotal\": 5000,\n    \"taxes\": 500,\n    \"fees\": 100,\n    \"total\": 5600,\n    \"currency\": \"INR\",\n    \"paymentStatus\": \"Paid\",\n    \"paymentMethod\": \"Credit Card\"\n  }\n}"
+        },
+        "url": {
+          "raw": "{{API_BASE_URL}}/api/v1/bookings/hotels/FD202504051A2B3C/documents",
+          "host": ["{{API_BASE_URL}}"],
+          "path": ["api", "v1", "bookings", "hotels", "FD202504051A2B3C", "documents"]
+        },
+        "description": "Create and store an invoice document"
+      },
+      "response": []
+    },
+    {
+      "name": "Add Special Request",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"requestType\": \"room_preference\",\n  \"requestText\": \"Non-smoking room with a view of the sea\"\n}"
+        },
+        "url": {
+          "raw": "{{API_BASE_URL}}/api/v1/bookings/hotels/FD202504051A2B3C/special-requests",
+          "host": ["{{API_BASE_URL}}"],
+          "path": ["api", "v1", "bookings", "hotels", "FD202504051A2B3C", "special-requests"]
+        },
+        "description": "Add a special request to a booking"
+      },
+      "response": []
+    },
+    {
+      "name": "Get Customer Bookings",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{API_BASE_URL}}/api/v1/bookings/customers/guest@example.com",
+          "host": ["{{API_BASE_URL}}"],
+          "path": ["api", "v1", "bookings", "customers", "guest@example.com"]
+        },
+        "description": "Get all bookings for a specific customer"
+      },
+      "response": []
+    }
+  ],
+  "variable": [
+    {
+      "key": "API_BASE_URL",
+      "value": "https://builder-faredown-pricing.onrender.com",
+      "type": "string"
+    },
+    {
+      "key": "BOOKING_REF",
+      "value": "FD202504051A2B3C",
+      "type": "string"
+    },
+    {
+      "key": "CUSTOMER_EMAIL",
+      "value": "guest@example.com",
+      "type": "string"
+    }
+  ]
+}
