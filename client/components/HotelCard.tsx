@@ -1078,9 +1078,9 @@ export function HotelCard({
               </div>
 
               {/* Features - Mobile */}
-              {hotel.features && hotel.features.length > 0 && (
+              {(hotel.amenities || hotel.features) && (hotel.amenities || hotel.features).length > 0 && (
                 <div className="flex flex-wrap gap-1 mb-3">
-                  {hotel.features.slice(0, 3).map((feature) => (
+                  {((hotel.amenities || hotel.features) || []).slice(0, 3).map((feature) => (
                     <Badge
                       key={feature}
                       variant="secondary"
@@ -1089,9 +1089,9 @@ export function HotelCard({
                       {feature}
                     </Badge>
                   ))}
-                  {hotel.features.length > 3 && (
+                  {((hotel.amenities || hotel.features) || []).length > 3 && (
                     <Badge variant="secondary" className="text-xs px-2 py-1">
-                      +{hotel.features.length - 3}
+                      +{((hotel.amenities || hotel.features) || []).length - 3}
                     </Badge>
                   )}
                 </div>
