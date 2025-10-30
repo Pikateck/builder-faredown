@@ -29,6 +29,7 @@ import ExtranetInventory from "./ExtranetInventory";
 import SystemStatus from "./SystemStatus";
 import SystemMonitor from "./SystemMonitor";
 import AdminAuthHelper from "@/components/AdminAuthHelper";
+import BookingManagement from "./BookingManagement";
 import AIBargainingDashboard from "./AIBargainingDashboard";
 import APITestingDashboard from "./APITestingDashboard";
 import { supplierService } from "@/services/supplierService";
