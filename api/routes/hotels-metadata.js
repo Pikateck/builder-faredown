@@ -47,7 +47,7 @@ async function ensureCitiesTableExists() {
         CREATE INDEX IF NOT EXISTS idx_tbo_cities_country ON tbo_cities(country_code);
       `);
 
-      console.log("✅ tbo_cities table created");
+      console.log("��� tbo_cities table created");
     }
   } catch (e) {
     console.warn("⚠️ Failed to ensure tbo_cities table:", e.message);
@@ -282,15 +282,37 @@ const MOCK_HOTELS = {
       ],
       price: 680,
       currency: "INR",
+      isRefundable: true,
+      breakfastIncluded: true,
+      roomType: "Beachfront Suite",
+      roomFeatures: ["Beach View", "Private Pool"],
       rates: [
-        { price: 680, description: "Beachfront Suite" },
-        { price: 850, description: "Penthouse" },
+        {
+          price: 680,
+          description: "Beachfront Suite",
+          roomType: "Beachfront Suite",
+          beds: "King bed",
+          isRefundable: true,
+          breakfastIncluded: true
+        },
+        {
+          price: 850,
+          description: "Penthouse",
+          roomType: "Penthouse",
+          beds: "King bed",
+          isRefundable: false,
+          breakfastIncluded: true
+        },
       ],
     },
     {
       hotelId: "mock_deira_heritage",
       name: "Deira Heritage Hotel",
       starRating: 3,
+      reviewCount: 455,
+      reviewScore: 3.8,
+      location: "Deira, Dubai, United Arab Emirates",
+      locationTags: ["Historic District", "Budget Friendly", "Local Culture"],
       images: [
         "https://images.unsplash.com/photo-1576675784246-fb3fc6f95f98?w=600&h=400&fit=crop",
         "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
@@ -298,7 +320,28 @@ const MOCK_HOTELS = {
       amenities: ["WiFi", "Restaurant", "Bar", "Gym"],
       price: 180,
       currency: "INR",
-      rates: [{ price: 180, description: "Standard Room" }],
+      isRefundable: false,
+      breakfastIncluded: false,
+      roomType: "Standard Room",
+      roomFeatures: ["Basic Amenities"],
+      rates: [
+        {
+          price: 180,
+          description: "Standard Room",
+          roomType: "Standard Room",
+          beds: "Double bed",
+          isRefundable: false,
+          breakfastIncluded: false
+        },
+        {
+          price: 240,
+          description: "Standard Twin",
+          roomType: "Standard Twin",
+          beds: "Twin beds",
+          isRefundable: true,
+          breakfastIncluded: false
+        },
+      ],
     },
   ],
   BOM: [
