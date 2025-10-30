@@ -818,6 +818,48 @@ Please present this at the hotel during check-in.
               </div>
             </div>
 
+            {/* Faredown Office & Support Information */}
+            {voucherData.faredownOffice && (
+              <div className="mb-8">
+                <h2 className="text-xl font-bold mb-4 flex items-center">
+                  <Building className="w-5 h-5 mr-2" />
+                  Faredown Office & Support
+                </h2>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
+                    <h4 className="font-bold text-blue-900 mb-3">Faredown Office</h4>
+                    <div className="space-y-2 text-sm text-gray-700">
+                      <div className="flex items-start">
+                        <MapPin className="w-4 h-4 mr-2 text-blue-600 mt-0.5 flex-shrink-0" />
+                        <span>{voucherData.faredownOffice.address}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Phone className="w-4 h-4 mr-2 text-blue-600" />
+                        <span>{voucherData.faredownOffice.phone}</span>
+                      </div>
+                      <div className="flex items-center">
+                        <Mail className="w-4 h-4 mr-2 text-blue-600" />
+                        <span>{voucherData.faredownOffice.email}</span>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="bg-green-50 p-4 rounded-lg border border-green-200">
+                    <h4 className="font-bold text-green-900 mb-3">24/7 Customer Support</h4>
+                    <div className="space-y-2 text-sm text-gray-700">
+                      <div>
+                        <div className="font-semibold text-green-900">Contact Hours</div>
+                        <p>{voucherData.faredownOffice.hours}</p>
+                      </div>
+                      <div>
+                        <div className="font-semibold text-green-900">Website</div>
+                        <p>{voucherData.faredownOffice.website}</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Terms and Conditions */}
             <div className="mb-8">
               <h2 className="text-xl font-bold mb-4">Terms and Conditions</h2>
