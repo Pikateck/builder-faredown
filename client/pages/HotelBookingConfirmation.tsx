@@ -589,6 +589,15 @@ export default function HotelBookingConfirmation() {
                       <span className="text-sm">{bookingData.guest.phone}</span>
                     </div>
                   </div>
+                  {bookingData.guest.panCard && (
+                    <div className="pt-3 border-t border-gray-200">
+                      <h5 className="font-semibold text-sm mb-2">Tax Information</h5>
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <div className="text-xs text-gray-600 mb-1">PAN Card Number</div>
+                        <div className="font-semibold text-sm">{bookingData.guest.panCard}</div>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
