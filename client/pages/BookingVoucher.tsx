@@ -24,6 +24,8 @@ import {
   Utensils,
   Dumbbell,
   Shield,
+  TrendingDown,
+  MessageCircle,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
