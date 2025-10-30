@@ -1262,16 +1262,18 @@ export function HotelCard({
             </div>
 
             {/* Features - Single Line */}
-            <div className="flex flex-wrap gap-1 mb-2">
-              {hotel.features.slice(0, 4).map((feature) => (
-                <span
-                  key={feature}
-                  className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded"
-                >
-                  {feature}
-                </span>
-              ))}
-            </div>
+            {(hotel.amenities || hotel.features) && (hotel.amenities || hotel.features).length > 0 && (
+              <div className="flex flex-wrap gap-1 mb-2">
+                {((hotel.amenities || hotel.features) || []).slice(0, 4).map((feature) => (
+                  <span
+                    key={feature}
+                    className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded"
+                  >
+                    {feature}
+                  </span>
+                ))}
+              </div>
+            )}
 
             {/* Room Type - Inline */}
             {(hotel.availableRoom || hotel.roomType) && (
