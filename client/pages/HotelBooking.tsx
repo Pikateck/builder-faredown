@@ -129,6 +129,7 @@ export default function HotelBooking() {
     email: "",
     phone: "",
     country: "India",
+    panCard: "",
     specialRequests: "",
   });
 
