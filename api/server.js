@@ -484,6 +484,16 @@ app.use("/api/enhanced-bargain", enhancedBargainRoutes);
 // P0 V1 API - Complete Postgres Integration
 app.use("/api/v1/bookings", v1BookingsRoutes);
 
+// V1 Admin API - Booking Management
+const v1AdminBookingsRoutes = require("./routes/v1-admin-bookings.js");
+app.use(
+  "/api/v1/admin/bookings",
+  authenticateToken,
+  requireAdmin,
+  auditLogger,
+  v1AdminBookingsRoutes
+);
+
 // FX + Pricing utilities
 app.use("/api/fx", require("./routes/fx"));
 app.use("/api/pricing", require("./routes/pricing-preview"));
