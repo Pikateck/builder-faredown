@@ -26,6 +26,7 @@ import {
   Shield,
   TrendingDown,
   MessageCircle,
+  Building,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
