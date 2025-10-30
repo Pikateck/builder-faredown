@@ -88,7 +88,7 @@ const MOCK_HOTELS = {
           roomType: "Standard Twin",
           beds: "Twin beds",
           isRefundable: false,
-          breakfastIncluded: false
+          breakfastIncluded: false,
         },
         {
           price: 850,
@@ -96,7 +96,7 @@ const MOCK_HOTELS = {
           roomType: "Deluxe Room",
           beds: "King bed",
           isRefundable: true,
-          breakfastIncluded: true
+          breakfastIncluded: true,
         },
       ],
     },
@@ -134,7 +134,7 @@ const MOCK_HOTELS = {
           roomType: "Deluxe Room",
           beds: "King bed",
           isRefundable: true,
-          breakfastIncluded: true
+          breakfastIncluded: true,
         },
         {
           price: 550,
@@ -142,7 +142,7 @@ const MOCK_HOTELS = {
           roomType: "Beachfront Suite",
           beds: "King bed",
           isRefundable: false,
-          breakfastIncluded: true
+          breakfastIncluded: true,
         },
       ],
     },
@@ -172,7 +172,7 @@ const MOCK_HOTELS = {
           roomType: "Deluxe Room",
           beds: "King bed",
           isRefundable: true,
-          breakfastIncluded: true
+          breakfastIncluded: true,
         },
         {
           price: 650,
@@ -180,7 +180,7 @@ const MOCK_HOTELS = {
           roomType: "Presidential Suite",
           beds: "King bed",
           isRefundable: false,
-          breakfastIncluded: true
+          breakfastIncluded: true,
         },
       ],
     },
@@ -210,7 +210,7 @@ const MOCK_HOTELS = {
           roomType: "Standard Room",
           beds: "Queen bed",
           isRefundable: true,
-          breakfastIncluded: false
+          breakfastIncluded: false,
         },
         {
           price: 420,
@@ -218,7 +218,7 @@ const MOCK_HOTELS = {
           roomType: "Deluxe Room",
           beds: "King bed",
           isRefundable: true,
-          breakfastIncluded: true
+          breakfastIncluded: true,
         },
       ],
     },
@@ -248,7 +248,7 @@ const MOCK_HOTELS = {
           roomType: "Standard Room",
           beds: "Double bed",
           isRefundable: false,
-          breakfastIncluded: true
+          breakfastIncluded: true,
         },
         {
           price: 380,
@@ -256,7 +256,7 @@ const MOCK_HOTELS = {
           roomType: "Deluxe Room",
           beds: "King bed",
           isRefundable: true,
-          breakfastIncluded: true
+          breakfastIncluded: true,
         },
       ],
     },
@@ -293,7 +293,7 @@ const MOCK_HOTELS = {
           roomType: "Beachfront Suite",
           beds: "King bed",
           isRefundable: true,
-          breakfastIncluded: true
+          breakfastIncluded: true,
         },
         {
           price: 850,
@@ -301,7 +301,7 @@ const MOCK_HOTELS = {
           roomType: "Penthouse",
           beds: "King bed",
           isRefundable: false,
-          breakfastIncluded: true
+          breakfastIncluded: true,
         },
       ],
     },
@@ -331,7 +331,7 @@ const MOCK_HOTELS = {
           roomType: "Standard Room",
           beds: "Double bed",
           isRefundable: false,
-          breakfastIncluded: false
+          breakfastIncluded: false,
         },
         {
           price: 240,
@@ -339,7 +339,7 @@ const MOCK_HOTELS = {
           roomType: "Standard Twin",
           beds: "Twin beds",
           isRefundable: true,
-          breakfastIncluded: false
+          breakfastIncluded: false,
         },
       ],
     },

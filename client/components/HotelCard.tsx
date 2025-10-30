@@ -1102,8 +1102,13 @@ export function HotelCard({
                 <div className="mb-2 text-xs">
                   <div className="font-medium text-gray-900 mb-0.5">
                     1 X {hotel.availableRoom?.type || hotel.roomType}
-                    {(hotel.availableRoom?.bedType || hotel.roomFeatures?.[0]) && (
-                      <span>•{hotel.availableRoom?.bedType || hotel.roomFeatures?.[0]}</span>
+                    {(hotel.availableRoom?.bedType ||
+                      hotel.roomFeatures?.[0]) && (
+                      <span>
+                        •
+                        {hotel.availableRoom?.bedType ||
+                          hotel.roomFeatures?.[0]}
+                      </span>
                     )}
                   </div>
                 </div>
@@ -1228,9 +1233,7 @@ export function HotelCard({
                     {hotel.reviewScore || hotel.rating || 0}
                   </span>
                   <button
-                    onClick={() =>
-                      navigate(`/hotels/${hotel.id}?tab=reviews`)
-                    }
+                    onClick={() => navigate(`/hotels/${hotel.id}?tab=reviews`)}
                     className="text-xs text-blue-600 hover:underline"
                   >
                     ({hotel.reviewCount || hotel.reviews || 0})
@@ -1277,10 +1280,12 @@ export function HotelCard({
                   {hotel.availableRoom?.type || hotel.roomType}
                 </div>
                 <div className="flex items-center text-gray-600 mb-1">
-                  {(hotel.availableRoom?.bedType || hotel.roomFeatures?.[0]) && (
+                  {(hotel.availableRoom?.bedType ||
+                    hotel.roomFeatures?.[0]) && (
                     <>
                       <span>
-                        {hotel.availableRoom?.bedType || hotel.roomFeatures?.[0]}
+                        {hotel.availableRoom?.bedType ||
+                          hotel.roomFeatures?.[0]}
                       </span>
                       {hotel.roomFeatures && hotel.roomFeatures.length > 1 && (
                         <>
