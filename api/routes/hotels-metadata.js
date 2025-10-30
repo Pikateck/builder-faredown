@@ -652,10 +652,15 @@ router.get("/", async (req, res) => {
           }
 
           return {
+            hotelId: h.hotelId,
             id: h.hotelId,
             name: h.name || "Hotel",
             stars: h.starRating || 0,
+            starRating: h.starRating || 0,
             image: h.images?.[0] || null,
+            images: h.images || [],
+            location: h.location || "",
+            locationTags: h.locationTags || [],
             currentPrice: minPrice === Infinity ? h.price || 0 : minPrice,
             originalPrice: maxPrice || h.price || 0,
             currency: h.currency || "INR",
@@ -663,6 +668,12 @@ router.get("/", async (req, res) => {
             isLiveData: false,
             rates: h.rates || [],
             amenities: h.amenities || [],
+            reviewScore: h.reviewScore || 0,
+            reviewCount: h.reviewCount || 0,
+            roomType: h.roomType || "",
+            roomFeatures: h.roomFeatures || [],
+            isRefundable: h.isRefundable || false,
+            breakfastIncluded: h.breakfastIncluded || false,
           };
         });
         source = "fallback_mock";
