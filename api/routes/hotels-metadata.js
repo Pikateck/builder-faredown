@@ -63,9 +63,51 @@ ensureCitiesTableExists().catch(console.error);
 const MOCK_HOTELS = {
   DXB: [
     {
+      hotelId: "mock_city_center_inn",
+      name: "City Center Inn Dubai Downtown",
+      starRating: 4,
+      reviewCount: 890,
+      reviewScore: 4.4,
+      location: "Downtown, Dubai, United Arab Emirates",
+      locationTags: ["Central Location", "Metro Access", "Shopping Nearby"],
+      images: [
+        "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
+      ],
+      amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
+      price: 650,
+      currency: "INR",
+      isRefundable: false,
+      breakfastIncluded: false,
+      roomType: "Standard Twin",
+      roomFeatures: ["Twin beds"],
+      rates: [
+        {
+          price: 650,
+          description: "Standard Twin",
+          roomType: "Standard Twin",
+          beds: "Twin beds",
+          isRefundable: false,
+          breakfastIncluded: false
+        },
+        {
+          price: 850,
+          description: "Deluxe Room",
+          roomType: "Deluxe Room",
+          beds: "King bed",
+          isRefundable: true,
+          breakfastIncluded: true
+        },
+      ],
+    },
+    {
       hotelId: "mock_taj_beachfront",
       name: "Taj Beachfront Dubai",
       starRating: 5,
+      reviewCount: 1250,
+      reviewScore: 4.7,
+      location: "Beachfront, Dubai, United Arab Emirates",
+      locationTags: ["Beach View", "Luxury", "Marina Access"],
       images: [
         "https://images.unsplash.com/photo-1568084308940-d50b8e6655ec?w=600&h=400&fit=crop",
         "https://images.unsplash.com/photo-1592078615290-033ee584e267?w=600&h=400&fit=crop",
@@ -81,15 +123,37 @@ const MOCK_HOTELS = {
       ],
       price: 450,
       currency: "INR",
+      isRefundable: true,
+      breakfastIncluded: true,
+      roomType: "Deluxe Room",
+      roomFeatures: ["Sea View", "Balcony"],
       rates: [
-        { price: 450, description: "Deluxe Room" },
-        { price: 550, description: "Suite" },
+        {
+          price: 450,
+          description: "Deluxe Room",
+          roomType: "Deluxe Room",
+          beds: "King bed",
+          isRefundable: true,
+          breakfastIncluded: true
+        },
+        {
+          price: 550,
+          description: "Suite",
+          roomType: "Beachfront Suite",
+          beds: "King bed",
+          isRefundable: false,
+          breakfastIncluded: true
+        },
       ],
     },
     {
       hotelId: "mock_burj_luxury",
       name: "Burj Luxury Hotel",
       starRating: 5,
+      reviewCount: 980,
+      reviewScore: 4.6,
+      location: "Downtown, Dubai, United Arab Emirates",
+      locationTags: ["Iconic", "Luxury Shopping", "Business District"],
       images: [
         "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
         "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
@@ -97,15 +161,37 @@ const MOCK_HOTELS = {
       amenities: ["WiFi", "Pool", "Spa", "Fine Dining", "Lounge", "Gym"],
       price: 520,
       currency: "INR",
+      isRefundable: true,
+      breakfastIncluded: true,
+      roomType: "Deluxe Room",
+      roomFeatures: ["City View", "Premium Amenities"],
       rates: [
-        { price: 520, description: "Deluxe Room" },
-        { price: 650, description: "Presidential Suite" },
+        {
+          price: 520,
+          description: "Deluxe Room",
+          roomType: "Deluxe Room",
+          beds: "King bed",
+          isRefundable: true,
+          breakfastIncluded: true
+        },
+        {
+          price: 650,
+          description: "Presidential Suite",
+          roomType: "Presidential Suite",
+          beds: "King bed",
+          isRefundable: false,
+          breakfastIncluded: true
+        },
       ],
     },
     {
       hotelId: "mock_marina_resort",
       name: "Marina Bay Resort",
       starRating: 4,
+      reviewCount: 756,
+      reviewScore: 4.3,
+      location: "Marina, Dubai, United Arab Emirates",
+      locationTags: ["Beach Access", "Marina View", "Waterfront"],
       images: [
         "https://images.unsplash.com/photo-1551632786-de41ec4a5fcd?w=600&h=400&fit=crop",
         "https://images.unsplash.com/photo-1576675784246-fb3fc6f95f98?w=600&h=400&fit=crop",
@@ -113,15 +199,37 @@ const MOCK_HOTELS = {
       amenities: ["WiFi", "Pool", "Restaurant", "Beach Access", "Gym"],
       price: 320,
       currency: "INR",
+      isRefundable: true,
+      breakfastIncluded: false,
+      roomType: "Standard Room",
+      roomFeatures: ["Marina View"],
       rates: [
-        { price: 320, description: "Standard Room" },
-        { price: 420, description: "Deluxe Room" },
+        {
+          price: 320,
+          description: "Standard Room",
+          roomType: "Standard Room",
+          beds: "Queen bed",
+          isRefundable: true,
+          breakfastIncluded: false
+        },
+        {
+          price: 420,
+          description: "Deluxe Room",
+          roomType: "Deluxe Room",
+          beds: "King bed",
+          isRefundable: true,
+          breakfastIncluded: true
+        },
       ],
     },
     {
       hotelId: "mock_downtown_plaza",
       name: "Downtown Plaza Hotel",
       starRating: 4,
+      reviewCount: 634,
+      reviewScore: 4.2,
+      location: "Downtown, Dubai, United Arab Emirates",
+      locationTags: ["Central Location", "Business Hub", "Shopping"],
       images: [
         "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
         "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
@@ -129,15 +237,37 @@ const MOCK_HOTELS = {
       amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
       price: 280,
       currency: "INR",
+      isRefundable: false,
+      breakfastIncluded: true,
+      roomType: "Standard Room",
+      roomFeatures: ["City View"],
       rates: [
-        { price: 280, description: "Standard Room" },
-        { price: 380, description: "Deluxe Room" },
+        {
+          price: 280,
+          description: "Standard Room",
+          roomType: "Standard Room",
+          beds: "Double bed",
+          isRefundable: false,
+          breakfastIncluded: true
+        },
+        {
+          price: 380,
+          description: "Deluxe Room",
+          roomType: "Deluxe Room",
+          beds: "King bed",
+          isRefundable: true,
+          breakfastIncluded: true
+        },
       ],
     },
     {
       hotelId: "mock_palm_jumeirah",
       name: "Palm Jumeirah Oasis",
       starRating: 5,
+      reviewCount: 1100,
+      reviewScore: 4.8,
+      location: "Palm Jumeirah, Dubai, United Arab Emirates",
+      locationTags: ["Luxury Island", "Private Beach", "Exclusive"],
       images: [
         "https://images.unsplash.com/photo-1520250497591-ec2413095a27?w=600&h=400&fit=crop",
         "https://images.unsplash.com/photo-1551632786-de41ec4a5fcd?w=600&h=400&fit=crop",
