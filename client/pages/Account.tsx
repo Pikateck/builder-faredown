@@ -114,13 +114,14 @@ export default function Account() {
   };
 
   // Determine if we're on a sub-page or the main account landing
-  const isSubPage =
+  let isSubPage =
     location.pathname !== "/account" && location.pathname !== "/my-account";
   let currentSection = location.pathname.split("/")[2]; // e.g., "personal", "security", etc.
 
-  // Override with tab parameter if provided
+  // Override with tab parameter if provided (also mark as subpage)
   if (tabParam && tabToSectionMap[tabParam]) {
     currentSection = tabToSectionMap[tabParam];
+    isSubPage = true;
   }
 
   // Search and collapsible functionality for bookings
