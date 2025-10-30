@@ -1048,12 +1048,25 @@ export function HotelCard({
                     <h3 className="text-lg font-bold text-gray-900 mb-0.5 line-clamp-1">
                       {hotel.name}
                     </h3>
-                    <div className="flex items-start text-gray-600">
+                    <div className="flex items-start text-gray-600 mb-1">
                       <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0 mt-0.5" />
                       <span className="text-sm text-gray-600 line-clamp-2 leading-tight">
-                        {getFullAddress()}
+                        {hotel.location || getFullAddress()}
                       </span>
                     </div>
+                    {/* Location Tags */}
+                    {hotel.locationTags && hotel.locationTags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-1">
+                        {hotel.locationTags.map((tag) => (
+                          <span
+                            key={tag}
+                            className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded"
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+                    )}
                   </div>
                   <div className="flex items-center bg-yellow-100 px-2 py-1 rounded-full ml-2">
                     <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
