@@ -1097,6 +1097,18 @@ export function HotelCard({
                 </div>
               )}
 
+              {/* Room Type - Mobile */}
+              {(hotel.availableRoom || hotel.roomType) && (
+                <div className="mb-2 text-xs">
+                  <div className="font-medium text-gray-900 mb-0.5">
+                    1 X {hotel.availableRoom?.type || hotel.roomType}
+                    {(hotel.availableRoom?.bedType || hotel.roomFeatures?.[0]) && (
+                      <span>•{hotel.availableRoom?.bedType || hotel.roomFeatures?.[0]}</span>
+                    )}
+                  </div>
+                </div>
+              )}
+
               {/* Breakfast Information - Mobile */}
               <div className="flex items-center gap-1 mb-2">
                 <Utensils className="w-3 h-3 text-gray-500" />
