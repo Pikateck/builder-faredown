@@ -244,7 +244,8 @@ export default function HotelBooking() {
           guestDetails.firstName &&
           guestDetails.lastName &&
           guestDetails.email &&
-          guestDetails.phone
+          guestDetails.phone &&
+          guestDetails.panCard
         );
       case 2:
         return true; // Preferences are optional
