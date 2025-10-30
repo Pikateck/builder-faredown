@@ -765,28 +765,9 @@ export default function HotelBooking() {
                             label: "Daily Housekeeping",
                           },
                         ].map((request) => (
-                          <div
+                          <label
                             key={request.id}
                             className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
-                            onClick={(e) => {
-                              // Allow direct input clicks to work
-                              if (
-                                (e.target as HTMLElement).tagName !== "INPUT"
-                              ) {
-                                const checkbox = (
-                                  e.currentTarget as HTMLElement
-                                ).querySelector(
-                                  'input[type="checkbox"]',
-                                ) as HTMLInputElement;
-                                if (checkbox) {
-                                  checkbox.checked = !checkbox.checked;
-                                  setPreferences((prev) => ({
-                                    ...prev,
-                                    [request.id]: checkbox.checked,
-                                  }));
-                                }
-                              }
-                            }}
                           >
                             <input
                               type="checkbox"
@@ -796,7 +777,6 @@ export default function HotelBooking() {
                                 ] as boolean
                               }
                               onChange={(e) => {
-                                e.stopPropagation();
                                 setPreferences((prev) => ({
                                   ...prev,
                                   [request.id]: e.target.checked,
@@ -808,7 +788,7 @@ export default function HotelBooking() {
                             <span className="ml-3 text-gray-700">
                               {request.label}
                             </span>
-                          </div>
+                          </label>
                         ))}
                       </div>
                     </div>
