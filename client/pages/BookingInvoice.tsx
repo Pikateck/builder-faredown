@@ -71,6 +71,7 @@ export default function BookingInvoice() {
       serviceType: "Hotel Accommodation",
       supplier: "Grand Plaza Hotel",
       supplierAddress: "123 Sheikh Zayed Road, Downtown Dubai, Dubai, UAE",
+      specialRequests: "High floor room with city view preferred. Late check-out if possible.",
     },
 
     service: {
