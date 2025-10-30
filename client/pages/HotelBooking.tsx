@@ -569,6 +569,28 @@ export default function HotelBooking() {
                     </div>
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
+                        PAN Card Number *
+                        <span className="text-xs text-gray-500 ml-2">(Required for Indian customers)</span>
+                      </label>
+                      <Input
+                        value={guestDetails.panCard}
+                        onChange={(e) =>
+                          setGuestDetails((prev) => ({
+                            ...prev,
+                            panCard: e.target.value.toUpperCase(),
+                          }))
+                        }
+                        placeholder="E.g., ABCDE1234F"
+                        maxLength={20}
+                      />
+                      {guestDetails.panCard && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(guestDetails.panCard) && (
+                        <p className="text-xs text-red-500 mt-1">
+                          Invalid PAN format. Expected format: ABCDE1234F
+                        </p>
+                      )}
+                    </div>
+                    <div className="md:col-span-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Special Requests (Optional)
                       </label>
                       <textarea
