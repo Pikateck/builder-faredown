@@ -125,11 +125,12 @@ export default function HotelBookingConfirmation() {
         "Parking",
       ],
     },
-    guest: location.state?.guestDetails || {
-      firstName: "John",
-      lastName: "Doe",
-      email: "john.doe@example.com",
-      phone: "+1 234 567 8900",
+    guest: {
+      firstName: location.state?.guestDetails?.firstName || "John",
+      lastName: location.state?.guestDetails?.lastName || "Doe",
+      email: location.state?.guestDetails?.email || "john.doe@example.com",
+      phone: location.state?.guestDetails?.phone || "+1 234 567 8900",
+      panCard: location.state?.panCard || location.state?.guestDetails?.panCard || "",
     },
     room: {
       type: "Deluxe Suite",
