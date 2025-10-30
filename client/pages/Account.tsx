@@ -102,10 +102,26 @@ export default function Account() {
   const userName = user?.name || "User";
   const userEmail = user?.email || "user@example.com";
 
+  // Get tab parameter from URL query string
+  const tabParam = searchParams.get("tab");
+
+  // Map tab parameter to section (for navigation from confirmation pages)
+  const tabToSectionMap: Record<string, string> = {
+    bookings: "trips",
+    trips: "trips",
+    payment: "payment",
+    account: "personal",
+  };
+
   // Determine if we're on a sub-page or the main account landing
   const isSubPage =
     location.pathname !== "/account" && location.pathname !== "/my-account";
-  const currentSection = location.pathname.split("/")[2]; // e.g., "personal", "security", etc.
+  let currentSection = location.pathname.split("/")[2]; // e.g., "personal", "security", etc.
+
+  // Override with tab parameter if provided
+  if (tabParam && tabToSectionMap[tabParam]) {
+    currentSection = tabToSectionMap[tabParam];
+  }
 
   // Search and collapsible functionality for bookings
   const [searchQuery, setSearchQuery] = useState("");
