@@ -432,6 +432,14 @@ Please present this at the hotel during check-in.
                     <div>{voucherData.guest.email}</div>
                     <div>{voucherData.guest.phone}</div>
                     <div>Nationality: {voucherData.guest.nationality}</div>
+                    {voucherData.guest.panCard && (
+                      <div className="pt-3 border-t border-gray-300 mt-3">
+                        <div className="text-xs text-gray-600">Tax Information (PAN)</div>
+                        <div className="font-semibold font-mono">
+                          {voucherData.guest.panCard}
+                        </div>
+                      </div>
+                    )}
                   </div>
                 </div>
                 <div>
