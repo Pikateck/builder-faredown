@@ -360,6 +360,7 @@ Thank you for your business!
                 </h3>
                 <div className="space-y-1 text-sm">
                   <div className="font-medium">{invoiceData.customer.name}</div>
+                  <div className="text-xs text-gray-600">Customer ID: {invoiceData.customer.id}</div>
                   <div>{invoiceData.customer.email}</div>
                   <div>{invoiceData.customer.phone}</div>
                   <div>{invoiceData.customer.address}</div>
@@ -370,6 +371,12 @@ Thank you for your business!
                     {invoiceData.customer.country}{" "}
                     {invoiceData.customer.zipCode}
                   </div>
+                  {invoiceData.customer.panCard && (
+                    <div className="pt-2 border-t border-gray-300 mt-2">
+                      <div className="text-xs text-gray-600">Tax Information (PAN)</div>
+                      <div className="font-mono font-semibold">{invoiceData.customer.panCard}</div>
+                    </div>
+                  )}
                 </div>
               </div>
 
