@@ -441,14 +441,17 @@ router.get("/", async (req, res) => {
     // Use fallback mock data if TBO returns 0 results
     let finalHotels = hotels;
     let source = "tbo_live";
+
     if (hotels.length === 0) {
+      console.warn(`⚠️ TBO returned 0 hotels for ${cityId}, checking fallback...`);
+
       // Try to use fallback for requested city, or default to DXB
       const fallbackCity = MOCK_HOTELS[cityId] ? cityId : "DXB";
       console.log(
-        `📦 No TBO hotels found, checking fallback for city: ${cityId} (using: ${fallbackCity})`,
+        `📦 Using fallback for city: ${fallbackCity}`,
       );
 
-      if (MOCK_HOTELS[fallbackCity] && MOCK_HOTELS[fallbackCity].length > 0) {
+      if (MOCK_HOTELS[fallbackCity] && Array.isArray(MOCK_HOTELS[fallbackCity]) && MOCK_HOTELS[fallbackCity].length > 0) {
         console.log(
           `✅ Using fallback mock data for ${fallbackCity} - ${MOCK_HOTELS[fallbackCity].length} hotels available`,
         );
@@ -489,8 +492,26 @@ router.get("/", async (req, res) => {
         console.log(`✅ Loaded ${finalHotels.length} fallback mock hotels`);
       } else {
         console.warn(
-          `⚠️ No mock data available for city: ${cityId}, returning empty`,
+          `⚠️ No mock data available for city: ${cityId}, using DXB as last resort`,
         );
+        // Ultimate fallback: use DXB mock hotels if available
+        if (MOCK_HOTELS.DXB && MOCK_HOTELS.DXB.length > 0) {
+          finalHotels = MOCK_HOTELS.DXB.map((h) => ({
+            id: h.hotelId,
+            name: h.name || "Hotel",
+            stars: h.starRating || 0,
+            image: h.images?.[0] || null,
+            currentPrice: h.price || 0,
+            originalPrice: h.price || 0,
+            currency: h.currency || "INR",
+            supplier: "MOCK",
+            isLiveData: false,
+            rates: h.rates || [],
+            amenities: h.amenities || [],
+          }));
+          source = "fallback_mock_default";
+          console.log(`✅ Loaded ${finalHotels.length} DXB mock hotels as fallback`);
+        }
       }
     } else {
       console.log(
