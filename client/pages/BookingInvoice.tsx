@@ -39,16 +39,16 @@ export default function BookingInvoice() {
 
     company: {
       name: "Faredown Travel Solutions",
-      address: "1234 Business Avenue",
-      city: "Dubai",
-      state: "Dubai",
-      country: "United Arab Emirates",
-      zipCode: "12345",
-      phone: "+971 4 123 4567",
-      email: "billing@faredown.com",
+      address: "309 Auto Commerce House, Gamdevi, Nana Chowk",
+      city: "Mumbai",
+      state: "Maharashtra",
+      country: "India",
+      zipCode: "400007",
+      phone: "+91 22 6680 1800",
+      email: "support@faredown.com",
       website: "www.faredown.com",
-      taxId: "TRN: 123456789012345",
-      license: "DTCM License: 987654321",
+      taxId: "GSTIN: 27AACFU3054H1ZD",
+      license: "Ministry of Tourism License",
     },
 
     customer: {
