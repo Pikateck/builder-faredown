@@ -52,6 +52,7 @@ export default function BookingInvoice() {
     },
 
     customer: {
+      id: "CUST" + Date.now().toString().slice(-8),
       name: "John Doe",
       email: "john.doe@example.com",
       phone: "+1 234 567 8900",
@@ -60,6 +61,7 @@ export default function BookingInvoice() {
       state: "NY",
       country: "United States",
       zipCode: "10001",
+      panCard: "ABCDE1234F",
     },
 
     booking: {
