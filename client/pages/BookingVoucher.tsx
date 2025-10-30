@@ -133,6 +133,22 @@ export default function BookingVoucher() {
     specialRequests:
       "High floor room with city view preferred. Late check-out if possible.",
 
+    bargainSummary: {
+      originalPrice: 1000,
+      bargainedPrice: 935,
+      discountAmount: 65,
+      discountPercentage: 6.5,
+      rounds: 2,
+    },
+
+    faredownOffice: {
+      address: "309 Auto Commerce House, Gamdevi, Nana Chowk, Mumbai-400007, India",
+      phone: "+91 22 6680 1800",
+      email: "support@faredown.com",
+      website: "www.faredown.com",
+      hours: "24/7 Customer Support",
+    },
+
     preferences: {
       bedType: "King",
       smokingPreference: "Non-Smoking",
