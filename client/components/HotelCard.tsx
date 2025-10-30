@@ -1206,33 +1206,44 @@ export function HotelCard({
           <CardContent className="flex-1 p-4 flex flex-col">
             {/* Header Section - Compact */}
             <div className="mb-2">
-              <h3 className="text-base font-bold text-gray-900 mb-1 line-clamp-1">
-                {hotel.name}
-              </h3>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center min-w-0 flex-1">
-                  <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
-                  <span className="text-xs text-gray-600 truncate">
-                    {getFullAddress()}
+              <div className="flex items-start justify-between mb-1">
+                <h3 className="text-base font-bold text-gray-900 line-clamp-1 flex-1">
+                  {hotel.name}
+                </h3>
+                <div className="flex items-center ml-2 gap-1 flex-shrink-0">
+                  <Star className="w-3 h-3 fill-yellow-500 text-yellow-500" />
+                  <span className="text-sm font-medium text-yellow-700">
+                    {hotel.reviewScore || hotel.rating || 0}
                   </span>
-                </div>
-                <div className="flex items-center ml-2 gap-2">
-                  <div className="flex items-center">
-                    <Star className="w-3 h-3 fill-yellow-500 text-yellow-500 mr-1" />
-                    <span className="text-sm font-medium text-yellow-700 mr-1">
-                      {hotel.rating}
-                    </span>
-                    <button
-                      onClick={() =>
-                        navigate(`/hotels/${hotel.id}?tab=reviews`)
-                      }
-                      className="text-xs text-blue-600 hover:underline whitespace-nowrap"
-                    >
-                      ({hotel.reviewCount || hotel.reviews || 0})
-                    </button>
-                  </div>
+                  <button
+                    onClick={() =>
+                      navigate(`/hotels/${hotel.id}?tab=reviews`)
+                    }
+                    className="text-xs text-blue-600 hover:underline"
+                  >
+                    ({hotel.reviewCount || hotel.reviews || 0})
+                  </button>
                 </div>
               </div>
+              <div className="flex items-center min-w-0 flex-1 mb-1">
+                <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
+                <span className="text-xs text-gray-600 truncate">
+                  {hotel.location || getFullAddress()}
+                </span>
+              </div>
+              {/* Location Tags */}
+              {hotel.locationTags && hotel.locationTags.length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-1">
+                  {hotel.locationTags.slice(0, 3).map((tag) => (
+                    <span
+                      key={tag}
+                      className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded"
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* Features - Single Line */}
