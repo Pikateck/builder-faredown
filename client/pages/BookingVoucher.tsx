@@ -87,6 +87,7 @@ export default function BookingVoucher() {
       email: "john.doe@example.com",
       phone: "+1 234 567 8900",
       nationality: "United States",
+      panCard: "ABCDE1234F",
     },
 
     reservation: {
