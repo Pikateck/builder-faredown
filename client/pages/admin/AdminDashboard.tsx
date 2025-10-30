@@ -1048,6 +1048,8 @@ export default function AdminDashboard() {
               <MarkupManagementPackages />
             ) : activeModule === "extranet" ? (
               <ExtranetInventory />
+            ) : activeModule === "bookings" ? (
+              <BookingManagement />
             ) : activeModule === "reports" ? (
               <BookingReports />
             ) : activeModule === "api-testing" ? (
