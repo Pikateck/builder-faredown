@@ -443,15 +443,19 @@ router.get("/", async (req, res) => {
     let source = "tbo_live";
 
     if (hotels.length === 0) {
-      console.warn(`⚠️ TBO returned 0 hotels for ${cityId}, checking fallback...`);
+      console.warn(
+        `⚠️ TBO returned 0 hotels for ${cityId}, checking fallback...`,
+      );
 
       // Try to use fallback for requested city, or default to DXB
       const fallbackCity = MOCK_HOTELS[cityId] ? cityId : "DXB";
-      console.log(
-        `📦 Using fallback for city: ${fallbackCity}`,
-      );
+      console.log(`📦 Using fallback for city: ${fallbackCity}`);
 
-      if (MOCK_HOTELS[fallbackCity] && Array.isArray(MOCK_HOTELS[fallbackCity]) && MOCK_HOTELS[fallbackCity].length > 0) {
+      if (
+        MOCK_HOTELS[fallbackCity] &&
+        Array.isArray(MOCK_HOTELS[fallbackCity]) &&
+        MOCK_HOTELS[fallbackCity].length > 0
+      ) {
         console.log(
           `✅ Using fallback mock data for ${fallbackCity} - ${MOCK_HOTELS[fallbackCity].length} hotels available`,
         );
@@ -510,7 +514,9 @@ router.get("/", async (req, res) => {
             amenities: h.amenities || [],
           }));
           source = "fallback_mock_default";
-          console.log(`✅ Loaded ${finalHotels.length} DXB mock hotels as fallback`);
+          console.log(
+            `✅ Loaded ${finalHotels.length} DXB mock hotels as fallback`,
+          );
         }
       }
     } else {
