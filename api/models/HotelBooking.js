@@ -50,6 +50,16 @@ class HotelBooking {
       supplier_response,
       special_requests,
       internal_notes,
+      pan_card,
+      bargain_summary,
+      customer_id,
+      original_price,
+      bargained_price,
+      discount_amount,
+      discount_percentage,
+      bargain_rounds,
+      payment_method,
+      payment_status,
     } = bookingData;
 
     const query = `
@@ -60,11 +70,14 @@ class HotelBooking {
         nights, rooms_count, adults_count, children_count, children_ages,
         base_price, markup_amount, markup_percentage, taxes, fees, total_amount,
         currency, status, supplier_booking_ref, supplier_response,
-        special_requests, internal_notes, supplier_code
+        special_requests, internal_notes, supplier_code,
+        pan_card, bargain_summary, customer_id, original_price, bargained_price,
+        discount_amount, discount_percentage, bargain_rounds, payment_method, payment_status
       )
       VALUES (
         $1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17,
-        $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35
+        $18, $19, $20, $21, $22, $23, $24, $25, $26, $27, $28, $29, $30, $31, $32, $33, $34, $35,
+        $36, $37, $38, $39, $40, $41, $42, $43, $44, $45
       )
       RETURNING *
     `;
@@ -105,6 +118,16 @@ class HotelBooking {
       special_requests,
       internal_notes,
       supplier_code || null,
+      pan_card || null,
+      bargain_summary ? JSON.stringify(bargain_summary) : null,
+      customer_id || null,
+      original_price || base_price,
+      bargained_price || total_amount,
+      discount_amount || 0,
+      discount_percentage || 0,
+      bargain_rounds || 0,
+      payment_method || null,
+      payment_status || 'pending',
     ];
 
     try {
