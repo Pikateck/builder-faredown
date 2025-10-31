@@ -15,6 +15,9 @@ import { SearchProvider } from "./contexts/SearchContext";
 import { PriceProvider } from "./contexts/PriceContext";
 import { useViewportClass } from "./hooks/useViewportClass";
 
+// DEPLOYMENT TEST - Zubin verification marker
+console.log("🚀 [DEPLOYMENT TEST] App.tsx loaded - Netlify/Render build verification");
+
 // Original pages
 import Index from "./pages/Index";
 import Flights from "./pages/Flights";
