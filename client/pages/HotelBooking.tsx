@@ -1058,22 +1058,40 @@ export default function HotelBooking() {
 
               {/* Price Breakdown */}
               <div className="border-t pt-4 space-y-2">
-                {location.state?.originalPrice && location.state?.bargainedPrice ? (
+                {location.state?.originalPrice &&
+                location.state?.bargainedPrice ? (
                   <>
                     <div className="flex justify-between text-sm">
-                      <span className="line-through text-gray-500">Original Price ({nights} nights)</span>
-                      <span className="line-through text-gray-500">{formatCurrency(location.state.originalPrice * nights)}</span>
+                      <span className="line-through text-gray-500">
+                        Original Price ({nights} nights)
+                      </span>
+                      <span className="line-through text-gray-500">
+                        {formatCurrency(location.state.originalPrice * nights)}
+                      </span>
                     </div>
                     <div className="flex justify-between text-sm font-semibold text-blue-900">
                       <span>Bargained Price ({nights} nights)</span>
-                      <span>{formatCurrency(location.state.bargainedPrice * nights)}</span>
+                      <span>
+                        {formatCurrency(location.state.bargainedPrice * nights)}
+                      </span>
                     </div>
                     <div className="flex justify-between text-sm text-green-700 font-semibold">
                       <span>Your Savings</span>
                       <span>
-                        -₹{Math.round((location.state.originalPrice - location.state.bargainedPrice) * nights)} ({
-                          (((location.state.originalPrice - location.state.bargainedPrice) / location.state.originalPrice) * 100).toFixed(0)
-                        }%)
+                        -₹
+                        {Math.round(
+                          (location.state.originalPrice -
+                            location.state.bargainedPrice) *
+                            nights,
+                        )}{" "}
+                        (
+                        {(
+                          ((location.state.originalPrice -
+                            location.state.bargainedPrice) /
+                            location.state.originalPrice) *
+                          100
+                        ).toFixed(0)}
+                        %)
                       </span>
                     </div>
                   </>

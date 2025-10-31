@@ -100,7 +100,8 @@ const MOCK_HOTELS = {
           isRefundable: true,
           breakfastIncluded: true,
           smokingAllowed: false,
-          cancellationPolicy: "Free cancellation until 24 hours before check-in",
+          cancellationPolicy:
+            "Free cancellation until 24 hours before check-in",
         },
       ],
     },
@@ -140,7 +141,8 @@ const MOCK_HOTELS = {
           isRefundable: true,
           breakfastIncluded: true,
           smokingAllowed: false,
-          cancellationPolicy: "Free cancellation until 48 hours before check-in",
+          cancellationPolicy:
+            "Free cancellation until 48 hours before check-in",
         },
         {
           price: 550,
@@ -182,7 +184,8 @@ const MOCK_HOTELS = {
           isRefundable: true,
           breakfastIncluded: true,
           smokingAllowed: false,
-          cancellationPolicy: "Free cancellation until 72 hours before check-in",
+          cancellationPolicy:
+            "Free cancellation until 72 hours before check-in",
         },
         {
           price: 650,
@@ -224,7 +227,8 @@ const MOCK_HOTELS = {
           isRefundable: true,
           breakfastIncluded: false,
           smokingAllowed: false,
-          cancellationPolicy: "Free cancellation until 24 hours before check-in",
+          cancellationPolicy:
+            "Free cancellation until 24 hours before check-in",
         },
         {
           price: 420,
@@ -234,7 +238,8 @@ const MOCK_HOTELS = {
           isRefundable: true,
           breakfastIncluded: true,
           smokingAllowed: false,
-          cancellationPolicy: "Free cancellation until 48 hours before check-in",
+          cancellationPolicy:
+            "Free cancellation until 48 hours before check-in",
         },
       ],
     },
@@ -276,7 +281,8 @@ const MOCK_HOTELS = {
           isRefundable: true,
           breakfastIncluded: true,
           smokingAllowed: false,
-          cancellationPolicy: "Free cancellation until 24 hours before check-in",
+          cancellationPolicy:
+            "Free cancellation until 24 hours before check-in",
         },
       ],
     },
@@ -367,7 +373,8 @@ const MOCK_HOTELS = {
           isRefundable: true,
           breakfastIncluded: false,
           smokingAllowed: false,
-          cancellationPolicy: "Free cancellation until 12 hours before check-in",
+          cancellationPolicy:
+            "Free cancellation until 12 hours before check-in",
         },
       ],
     },
@@ -641,7 +648,8 @@ router.get("/", async (req, res) => {
         isLiveData: true,
         rates: (h.rates || []).map((rate) => ({
           ...rate,
-          smokingAllowed: rate.smokingAllowed !== undefined ? rate.smokingAllowed : false,
+          smokingAllowed:
+            rate.smokingAllowed !== undefined ? rate.smokingAllowed : false,
           cancellationPolicy: rate.cancellationPolicy || "",
         })),
         amenities: h.amenities || [],
@@ -651,7 +659,8 @@ router.get("/", async (req, res) => {
         roomFeatures: h.roomFeatures || [],
         isRefundable: h.isRefundable || false,
         breakfastIncluded: h.breakfastIncluded || false,
-        smokingAllowed: h.smokingAllowed !== undefined ? h.smokingAllowed : false,
+        smokingAllowed:
+          h.smokingAllowed !== undefined ? h.smokingAllowed : false,
         cancellationPolicy: h.cancellationPolicy || "",
       };
     });
@@ -713,7 +722,8 @@ router.get("/", async (req, res) => {
             isLiveData: false,
             rates: (h.rates || []).map((rate) => ({
               ...rate,
-              smokingAllowed: rate.smokingAllowed !== undefined ? rate.smokingAllowed : false,
+              smokingAllowed:
+                rate.smokingAllowed !== undefined ? rate.smokingAllowed : false,
               cancellationPolicy: rate.cancellationPolicy || "",
             })),
             amenities: h.amenities || [],
@@ -723,7 +733,8 @@ router.get("/", async (req, res) => {
             roomFeatures: h.roomFeatures || [],
             isRefundable: h.isRefundable || false,
             breakfastIncluded: h.breakfastIncluded || false,
-            smokingAllowed: h.smokingAllowed !== undefined ? h.smokingAllowed : false,
+            smokingAllowed:
+              h.smokingAllowed !== undefined ? h.smokingAllowed : false,
             cancellationPolicy: h.cancellationPolicy || "",
           };
         });
@@ -752,7 +763,8 @@ router.get("/", async (req, res) => {
             isLiveData: false,
             rates: (h.rates || []).map((rate) => ({
               ...rate,
-              smokingAllowed: rate.smokingAllowed !== undefined ? rate.smokingAllowed : false,
+              smokingAllowed:
+                rate.smokingAllowed !== undefined ? rate.smokingAllowed : false,
               cancellationPolicy: rate.cancellationPolicy || "",
             })),
             amenities: h.amenities || [],
@@ -762,7 +774,8 @@ router.get("/", async (req, res) => {
             roomFeatures: h.roomFeatures || [],
             isRefundable: h.isRefundable || false,
             breakfastIncluded: h.breakfastIncluded || false,
-            smokingAllowed: h.smokingAllowed !== undefined ? h.smokingAllowed : false,
+            smokingAllowed:
+              h.smokingAllowed !== undefined ? h.smokingAllowed : false,
             cancellationPolicy: h.cancellationPolicy || "",
           }));
           source = "fallback_mock_default";
