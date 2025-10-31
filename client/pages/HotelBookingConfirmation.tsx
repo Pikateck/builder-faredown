@@ -527,21 +527,21 @@ export default function HotelBookingConfirmation() {
                             </span>
                           </div>
                         )}
-                        {(bookingData.preferences.earlyCheckin ||
-                          bookingData.preferences.lateCheckout ||
+                        {(bookingData.preferences.earlyCheckIn ||
+                          bookingData.preferences.lateCheckOut ||
                           bookingData.preferences.dailyHousekeeping) && (
                           <div className="border-t pt-2 mt-2">
                             <div className="text-gray-600 font-medium mb-1">
                               Guest Requests:
                             </div>
                             <div className="space-y-1">
-                              {bookingData.preferences.earlyCheckin && (
+                              {bookingData.preferences.earlyCheckIn && (
                                 <div className="flex items-center text-gray-700">
                                   <span className="text-blue-600 mr-2">✓</span>
                                   Early Check-in (before 3:00 PM)
                                 </div>
                               )}
-                              {bookingData.preferences.lateCheckout && (
+                              {bookingData.preferences.lateCheckOut && (
                                 <div className="flex items-center text-gray-700">
                                   <span className="text-blue-600 mr-2">✓</span>
                                   Late Check-out (after 12:00 PM)
