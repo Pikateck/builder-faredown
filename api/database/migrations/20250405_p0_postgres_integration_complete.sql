@@ -135,7 +135,7 @@ CREATE TABLE IF NOT EXISTS special_requests (
   updated_by VARCHAR(100)
 );
 
-CREATE INDEX IF NOT EXISTS idx_special_requests_booking_id ON special_requests(booking_id);
+-- booking_id index added after foreign key is established
 CREATE INDEX IF NOT EXISTS idx_special_requests_customer_id ON special_requests(customer_id);
 CREATE INDEX IF NOT EXISTS idx_special_requests_status ON special_requests(status);
 CREATE INDEX IF NOT EXISTS idx_special_requests_type ON special_requests(request_type);
@@ -190,7 +190,7 @@ CREATE TABLE IF NOT EXISTS booking_documents (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_booking_documents_booking_id ON booking_documents(booking_id);
+-- booking_id index added after foreign key is established
 CREATE INDEX IF NOT EXISTS idx_booking_documents_customer_id ON booking_documents(customer_id);
 CREATE INDEX IF NOT EXISTS idx_booking_documents_type ON booking_documents(document_type);
 CREATE INDEX IF NOT EXISTS idx_booking_documents_is_latest ON booking_documents(is_latest);
@@ -240,7 +240,7 @@ CREATE TABLE IF NOT EXISTS bargain_rounds (
   updated_by VARCHAR(100)
 );
 
-CREATE INDEX IF NOT EXISTS idx_bargain_rounds_booking_id ON bargain_rounds(booking_id);
+-- booking_id index added after foreign key is established
 CREATE INDEX IF NOT EXISTS idx_bargain_rounds_customer_id ON bargain_rounds(customer_id);
 CREATE INDEX IF NOT EXISTS idx_bargain_rounds_status ON bargain_rounds(status);
 CREATE INDEX IF NOT EXISTS idx_bargain_rounds_round_number ON bargain_rounds(round_number);
