@@ -27,6 +27,7 @@ import {
   TrendingDown,
   MessageCircle,
   Building,
+  CreditCard,
 } from "lucide-react";
 import { useCurrency } from "@/contexts/CurrencyContext";
 import { formatPriceWithSymbol } from "@/lib/pricing";
