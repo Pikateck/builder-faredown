@@ -639,7 +639,11 @@ router.get("/", async (req, res) => {
         currency: h.currency || "INR",
         supplier: "TBO",
         isLiveData: true,
-        rates: h.rates || [],
+        rates: (h.rates || []).map((rate) => ({
+          ...rate,
+          smokingAllowed: rate.smokingAllowed !== undefined ? rate.smokingAllowed : false,
+          cancellationPolicy: rate.cancellationPolicy || "",
+        })),
         amenities: h.amenities || [],
         reviewScore: h.reviewScore || 0,
         reviewCount: h.reviewCount || 0,
@@ -647,6 +651,8 @@ router.get("/", async (req, res) => {
         roomFeatures: h.roomFeatures || [],
         isRefundable: h.isRefundable || false,
         breakfastIncluded: h.breakfastIncluded || false,
+        smokingAllowed: h.smokingAllowed !== undefined ? h.smokingAllowed : false,
+        cancellationPolicy: h.cancellationPolicy || "",
       };
     });
 
