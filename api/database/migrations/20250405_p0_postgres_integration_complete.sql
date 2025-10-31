@@ -107,7 +107,7 @@ COMMENT ON COLUMN pan_identifiers.pan_last4 IS 'Last 4 characters of PAN for dis
 -- =====================================================
 CREATE TABLE IF NOT EXISTS special_requests (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  booking_id UUID NOT NULL, -- Will add FK after bookings migration
+  booking_id UUID, -- Will add FK after bookings migration
   customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
   
   -- Request Details
@@ -147,7 +147,7 @@ COMMENT ON TABLE special_requests IS 'Guest special requests for hotels (dietary
 -- =====================================================
 CREATE TABLE IF NOT EXISTS booking_documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  booking_id UUID NOT NULL, -- Will add FK after bookings migration
+  booking_id UUID, -- Will add FK after bookings migration
   customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
   
   -- Document Details
@@ -204,7 +204,7 @@ COMMENT ON TABLE booking_documents IS 'Invoices, vouchers, and other booking-rel
 -- =====================================================
 CREATE TABLE IF NOT EXISTS bargain_rounds (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  booking_id UUID NOT NULL, -- Will add FK after bookings migration
+  booking_id UUID, -- Will add FK after bookings migration
   customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
   
   -- Round Details
