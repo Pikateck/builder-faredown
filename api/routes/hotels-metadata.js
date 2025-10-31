@@ -265,6 +265,8 @@ const MOCK_HOTELS = {
           beds: "Double bed",
           isRefundable: false,
           breakfastIncluded: true,
+          smokingAllowed: true,
+          cancellationPolicy: "Non-refundable. No cancellations allowed.",
         },
         {
           price: 380,
@@ -273,6 +275,8 @@ const MOCK_HOTELS = {
           beds: "King bed",
           isRefundable: true,
           breakfastIncluded: true,
+          smokingAllowed: false,
+          cancellationPolicy: "Free cancellation until 24 hours before check-in",
         },
       ],
     },
