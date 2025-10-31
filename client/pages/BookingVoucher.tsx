@@ -750,6 +750,40 @@ Please present this at the hotel during check-in.
               </div>
             </div>
 
+            {/* Payment Details */}
+            <div className="mb-8">
+              <h2 className="text-xl font-bold mb-4 flex items-center">
+                <CreditCard className="w-5 h-5 mr-2" />
+                Payment Details
+              </h2>
+              <div className="bg-blue-50 p-4 rounded-lg border border-blue-200 space-y-3">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {voucherData.paymentMethod && (
+                    <div>
+                      <p className="text-gray-600 text-sm">Payment Method</p>
+                      <p className="font-semibold text-gray-900">
+                        {voucherData.paymentMethod}
+                      </p>
+                    </div>
+                  )}
+                  {voucherData.panCard && (
+                    <div>
+                      <p className="text-gray-600 text-sm">PAN Card / Tax ID</p>
+                      <p className="font-semibold text-gray-900">
+                        {voucherData.panCard}
+                      </p>
+                    </div>
+                  )}
+                </div>
+                <div className="pt-3 border-t border-blue-200">
+                  <p className="text-gray-600 text-sm">Transaction Status</p>
+                  <p className="font-semibold text-green-700">
+                    ✓ Payment Confirmed
+                  </p>
+                </div>
+              </div>
+            </div>
+
             {/* Bargain Summary - If bargain applied */}
             {voucherData.bargainSummary &&
               voucherData.bargainSummary.rounds > 0 && (
