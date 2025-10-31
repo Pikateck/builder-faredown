@@ -1035,6 +1035,18 @@ export default function HotelBooking() {
                   <span className="text-gray-600">Room Type</span>
                   <span className="font-medium">{selectedHotel.roomType}</span>
                 </div>
+                {selectedHotel.breakfastIncluded !== undefined && (
+                  <div className="flex justify-between text-sm">
+                    <span className="text-gray-600">Breakfast</span>
+                    <span className="font-medium">
+                      {selectedHotel.breakfastIncluded ? (
+                        <span className="text-green-700 font-semibold">✓ Included</span>
+                      ) : (
+                        <span className="text-orange-700">Not Included</span>
+                      )}
+                    </span>
+                  </div>
+                )}
               </div>
 
               {/* Price Breakdown */}
