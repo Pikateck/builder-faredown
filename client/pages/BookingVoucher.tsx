@@ -107,6 +107,7 @@ export default function BookingVoucher() {
       smokingPreference: "Non-Smoking",
       viewType: "City View",
       floor: "High Floor Preferred",
+      breakfastIncluded: true,
     },
 
     pricing: {
