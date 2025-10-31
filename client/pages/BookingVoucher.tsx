@@ -146,7 +146,8 @@ export default function BookingVoucher() {
     },
 
     faredownOffice: {
-      address: "309 Auto Commerce House, Gamdevi, Nana Chowk, Mumbai-400007, India",
+      address:
+        "309 Auto Commerce House, Gamdevi, Nana Chowk, Mumbai-400007, India",
       phone: "+91 22 6680 1800",
       email: "support@faredown.com",
       website: "www.faredown.com",
@@ -438,7 +439,9 @@ Please present this at the hotel during check-in.
                     <div>Nationality: {voucherData.guest.nationality}</div>
                     {voucherData.guest.panCard && (
                       <div className="pt-3 border-t border-gray-300 mt-3">
-                        <div className="text-xs text-gray-600">Tax Information (PAN)</div>
+                        <div className="text-xs text-gray-600">
+                          Tax Information (PAN)
+                        </div>
                         <div className="font-semibold font-mono">
                           {voucherData.guest.panCard}
                         </div>
@@ -524,7 +527,8 @@ Please present this at the hotel during check-in.
                     <li>• {voucherData.reservation.smokingPreference}</li>
                     <li>• {voucherData.reservation.viewType}</li>
                     <li>• {voucherData.reservation.floor}</li>
-                    {voucherData.reservation.breakfastIncluded !== undefined && (
+                    {voucherData.reservation.breakfastIncluded !==
+                      undefined && (
                       <li className="font-medium">
                         • Breakfast:{" "}
                         <span
@@ -747,50 +751,52 @@ Please present this at the hotel during check-in.
             </div>
 
             {/* Bargain Summary - If bargain applied */}
-            {voucherData.bargainSummary && voucherData.bargainSummary.rounds > 0 && (
-              <div className="mb-8">
-                <h2 className="text-xl font-bold mb-4 flex items-center">
-                  <TrendingDown className="w-5 h-5 mr-2 text-orange-600" />
-                  Bargain Summary
-                </h2>
-                <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
-                  <div className="space-y-3">
-                    <div className="flex justify-between">
-                      <span className="text-gray-700">Original Price</span>
-                      <span className="font-semibold">
-                        {formatPriceWithSymbol(
-                          voucherData.bargainSummary.originalPrice,
-                          selectedCurrency.code,
-                        )}
-                      </span>
+            {voucherData.bargainSummary &&
+              voucherData.bargainSummary.rounds > 0 && (
+                <div className="mb-8">
+                  <h2 className="text-xl font-bold mb-4 flex items-center">
+                    <TrendingDown className="w-5 h-5 mr-2 text-orange-600" />
+                    Bargain Summary
+                  </h2>
+                  <div className="bg-orange-50 p-4 rounded-lg border border-orange-200">
+                    <div className="space-y-3">
+                      <div className="flex justify-between">
+                        <span className="text-gray-700">Original Price</span>
+                        <span className="font-semibold">
+                          {formatPriceWithSymbol(
+                            voucherData.bargainSummary.originalPrice,
+                            selectedCurrency.code,
+                          )}
+                        </span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span className="text-gray-700">Bargain Discount</span>
+                        <span className="font-semibold text-orange-600">
+                          -
+                          {formatPriceWithSymbol(
+                            voucherData.bargainSummary.discountAmount,
+                            selectedCurrency.code,
+                          )}{" "}
+                          ({voucherData.bargainSummary.discountPercentage}%)
+                        </span>
+                      </div>
+                      <div className="border-t border-orange-300 pt-3 flex justify-between">
+                        <span className="font-bold text-lg">Final Price</span>
+                        <span className="font-bold text-lg text-orange-600">
+                          {formatPriceWithSymbol(
+                            voucherData.bargainSummary.bargainedPrice,
+                            selectedCurrency.code,
+                          )}
+                        </span>
+                      </div>
+                      <p className="text-xs text-gray-600 mt-2">
+                        You successfully negotiated the price through{" "}
+                        {voucherData.bargainSummary.rounds} bargain round(s).
+                      </p>
                     </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-700">Bargain Discount</span>
-                      <span className="font-semibold text-orange-600">
-                        -
-                        {formatPriceWithSymbol(
-                          voucherData.bargainSummary.discountAmount,
-                          selectedCurrency.code,
-                        )}{" "}
-                        ({voucherData.bargainSummary.discountPercentage}%)
-                      </span>
-                    </div>
-                    <div className="border-t border-orange-300 pt-3 flex justify-between">
-                      <span className="font-bold text-lg">Final Price</span>
-                      <span className="font-bold text-lg text-orange-600">
-                        {formatPriceWithSymbol(
-                          voucherData.bargainSummary.bargainedPrice,
-                          selectedCurrency.code,
-                        )}
-                      </span>
-                    </div>
-                    <p className="text-xs text-gray-600 mt-2">
-                      You successfully negotiated the price through {voucherData.bargainSummary.rounds} bargain round(s).
-                    </p>
                   </div>
                 </div>
-              </div>
-            )}
+              )}
 
             {/* Hotel Amenities */}
             <div className="mb-8">
@@ -845,7 +851,9 @@ Please present this at the hotel during check-in.
                 </h2>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="bg-blue-50 p-4 rounded-lg border border-blue-200">
-                    <h4 className="font-bold text-blue-900 mb-3">Faredown Office</h4>
+                    <h4 className="font-bold text-blue-900 mb-3">
+                      Faredown Office
+                    </h4>
                     <div className="space-y-2 text-sm text-gray-700">
                       <div className="flex items-start">
                         <MapPin className="w-4 h-4 mr-2 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -862,14 +870,20 @@ Please present this at the hotel during check-in.
                     </div>
                   </div>
                   <div className="bg-green-50 p-4 rounded-lg border border-green-200">
-                    <h4 className="font-bold text-green-900 mb-3">24/7 Customer Support</h4>
+                    <h4 className="font-bold text-green-900 mb-3">
+                      24/7 Customer Support
+                    </h4>
                     <div className="space-y-2 text-sm text-gray-700">
                       <div>
-                        <div className="font-semibold text-green-900">Contact Hours</div>
+                        <div className="font-semibold text-green-900">
+                          Contact Hours
+                        </div>
                         <p>{voucherData.faredownOffice.hours}</p>
                       </div>
                       <div>
-                        <div className="font-semibold text-green-900">Website</div>
+                        <div className="font-semibold text-green-900">
+                          Website
+                        </div>
                         <p>{voucherData.faredownOffice.website}</p>
                       </div>
                     </div>

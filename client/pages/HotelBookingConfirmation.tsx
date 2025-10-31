@@ -130,7 +130,8 @@ export default function HotelBookingConfirmation() {
       lastName: location.state?.guestDetails?.lastName || "Doe",
       email: location.state?.guestDetails?.email || "john.doe@example.com",
       phone: location.state?.guestDetails?.phone || "+1 234 567 8900",
-      panCard: location.state?.panCard || location.state?.guestDetails?.panCard || "",
+      panCard:
+        location.state?.panCard || location.state?.guestDetails?.panCard || "",
     },
     room: {
       type: "Deluxe Suite",
@@ -591,10 +592,16 @@ export default function HotelBookingConfirmation() {
                   </div>
                   {bookingData.guest.panCard && (
                     <div className="pt-3 border-t border-gray-200">
-                      <h5 className="font-semibold text-sm mb-2">Tax Information</h5>
+                      <h5 className="font-semibold text-sm mb-2">
+                        Tax Information
+                      </h5>
                       <div className="bg-gray-50 p-3 rounded-lg">
-                        <div className="text-xs text-gray-600 mb-1">PAN Card Number</div>
-                        <div className="font-semibold text-sm">{bookingData.guest.panCard}</div>
+                        <div className="text-xs text-gray-600 mb-1">
+                          PAN Card Number
+                        </div>
+                        <div className="font-semibold text-sm">
+                          {bookingData.guest.panCard}
+                        </div>
                       </div>
                     </div>
                   )}

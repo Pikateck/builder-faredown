@@ -574,7 +574,9 @@ export default function HotelBooking() {
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         PAN Card Number *
-                        <span className="text-xs text-gray-500 ml-2">(Required for Indian customers)</span>
+                        <span className="text-xs text-gray-500 ml-2">
+                          (Required for Indian customers)
+                        </span>
                       </label>
                       <Input
                         value={guestDetails.panCard}
@@ -587,11 +589,14 @@ export default function HotelBooking() {
                         placeholder="E.g., ABCDE1234F"
                         maxLength={20}
                       />
-                      {guestDetails.panCard && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(guestDetails.panCard) && (
-                        <p className="text-xs text-red-500 mt-1">
-                          Invalid PAN format. Expected format: ABCDE1234F
-                        </p>
-                      )}
+                      {guestDetails.panCard &&
+                        !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(
+                          guestDetails.panCard,
+                        ) && (
+                          <p className="text-xs text-red-500 mt-1">
+                            Invalid PAN format. Expected format: ABCDE1234F
+                          </p>
+                        )}
                     </div>
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -1040,7 +1045,9 @@ export default function HotelBooking() {
                     <span className="text-gray-600">Breakfast</span>
                     <span className="font-medium">
                       {selectedHotel.breakfastIncluded ? (
-                        <span className="text-green-700 font-semibold">✓ Included</span>
+                        <span className="text-green-700 font-semibold">
+                          ✓ Included
+                        </span>
                       ) : (
                         <span className="text-orange-700">Not Included</span>
                       )}

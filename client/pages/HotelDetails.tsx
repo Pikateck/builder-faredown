@@ -1997,9 +1997,11 @@ function HotelDetailsContent() {
                                   Breakfast Not Included
                                 </span>
                               )}
-                              {(room.smokingPreference || room.smokingAllowed !== undefined) && (
+                              {(room.smokingPreference ||
+                                room.smokingAllowed !== undefined) && (
                                 <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
-                                  {room.smokingAllowed === false || room.smokingPreference === "non-smoking"
+                                  {room.smokingAllowed === false ||
+                                  room.smokingPreference === "non-smoking"
                                     ? "🚫 Non-Smoking"
                                     : "🚬 Smoking Allowed"}
                                 </span>
@@ -2779,9 +2781,11 @@ function HotelDetailsContent() {
                                         Breakfast Not Included
                                       </Badge>
                                     )}
-                                    {(room.smokingPreference || room.smokingAllowed !== undefined) && (
+                                    {(room.smokingPreference ||
+                                      room.smokingAllowed !== undefined) && (
                                       <Badge className="bg-blue-100 text-blue-800 text-xs px-2 py-1 font-medium">
-                                        {room.smokingAllowed === false || room.smokingPreference === "non-smoking"
+                                        {room.smokingAllowed === false ||
+                                        room.smokingPreference === "non-smoking"
                                           ? "🚫 Non-Smoking"
                                           : "🚬 Smoking Allowed"}
                                       </Badge>
