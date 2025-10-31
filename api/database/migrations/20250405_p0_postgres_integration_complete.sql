@@ -298,129 +298,80 @@ CREATE TABLE IF NOT EXISTS audit_logs (
   action VARCHAR(100) NOT NULL, -- 'create', 'update', 'delete', 'confirm', 'cancel', 'email_sent', etc.
   
   -- Changes
-  old_values JSONB,
-  new_values JSONB,
+  old_values JSONB, -- Previous values
+  new_values JSONB, -- New values
   changed_fields TEXT[], -- Array of field names that changed
   
-  -- User
-  user_id UUID,
-  user_email VARCHAR(255),
-  user_role VARCHAR(50),
+  -- Context
+  performed_by VARCHAR(255), -- User email or system
+  ip_address VARCHAR(50),
+  user_agent TEXT,
   
-  -- Request
-  request_id VARCHAR(100), -- For tracing
-  request_ip VARCHAR(50),
-  request_user_agent TEXT,
-  
-  -- Status
-  status VARCHAR(50), -- 'success', 'error', 'warning'
-  error_message TEXT,
-  
-  -- Timestamps
+  -- Timestamp
   created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
   
-  -- Retention
-  retention_until TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP + INTERVAL '3 years'
+  -- Metadata
+  metadata JSONB DEFAULT '{}'
 );
 
-CREATE INDEX IF NOT EXISTS idx_audit_entity ON audit_logs(entity_type, entity_id);
-CREATE INDEX IF NOT EXISTS idx_audit_action ON audit_logs(action);
-CREATE INDEX IF NOT EXISTS idx_audit_user ON audit_logs(user_id);
-CREATE INDEX IF NOT EXISTS idx_audit_created ON audit_logs(created_at);
-CREATE INDEX IF NOT EXISTS idx_audit_request_id ON audit_logs(request_id);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_entity_id ON audit_logs(entity_id);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_entity_type ON audit_logs(entity_type);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_action ON audit_logs(action);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_created_at ON audit_logs(created_at);
+CREATE INDEX IF NOT EXISTS idx_audit_logs_performed_by ON audit_logs(performed_by);
 
-COMMENT ON TABLE audit_logs IS 'Comprehensive audit trail of all system changes with old/new values';
-
--- =====================================================
--- 8. UPDATE HOTEL_BOOKINGS TABLE (Link to customers)
--- =====================================================
-ALTER TABLE IF EXISTS hotel_bookings
-  ADD COLUMN IF NOT EXISTS customer_id UUID REFERENCES customers(id) ON DELETE SET NULL,
-  ADD COLUMN IF NOT EXISTS bargain_summary JSONB,
-  ADD COLUMN IF NOT EXISTS bargain_status VARCHAR(50) DEFAULT 'no_bargain', -- 'no_bargain', 'in_progress', 'accepted', 'rejected'
-  ADD COLUMN IF NOT EXISTS final_paid_amount DECIMAL(12, 2),
-  ADD COLUMN IF NOT EXISTS markup_breakdown JSONB; -- {basePrice, taxes, fees, markups, discounts, total}
-
-CREATE INDEX IF NOT EXISTS idx_hotel_bookings_customer_id ON hotel_bookings(customer_id);
-CREATE INDEX IF NOT EXISTS idx_hotel_bookings_bargain_status ON hotel_bookings(bargain_status);
-
--- Add foreign key constraints for special_requests and booking_documents (deferred)
-ALTER TABLE special_requests
-  ADD CONSTRAINT fk_special_requests_booking_id 
-  FOREIGN KEY (booking_id) REFERENCES hotel_bookings(id) ON DELETE CASCADE;
-
-ALTER TABLE booking_documents
-  ADD CONSTRAINT fk_booking_documents_booking_id 
-  FOREIGN KEY (booking_id) REFERENCES hotel_bookings(id) ON DELETE CASCADE;
-
-ALTER TABLE bargain_rounds
-  ADD CONSTRAINT fk_bargain_rounds_booking_id 
-  FOREIGN KEY (booking_id) REFERENCES hotel_bookings(id) ON DELETE CASCADE;
+COMMENT ON TABLE audit_logs IS 'Comprehensive audit trail for all system changes';
 
 -- =====================================================
--- 9. CREATE VIEWS FOR COMMON QUERIES
+-- 8. BOOKING SUMMARY VIEW
 -- =====================================================
-
--- Booking Summary View
 CREATE OR REPLACE VIEW booking_summary_v2 AS
 SELECT 
   hb.id,
-  hb.booking_ref,
-  hb.customer_id,
-  c.customer_id as customer_code,
-  c.email as customer_email,
-  c.loyalty_tier,
+  hb.booking_reference,
+  c.customer_id,
+  c.email,
+  c.first_name,
   hb.hotel_name,
-  hb.hotel_city,
   hb.check_in_date,
   hb.check_out_date,
-  hb.nights,
-  hb.base_price,
-  hb.markup_amount,
-  hb.total_amount,
-  hb.final_paid_amount,
-  hb.currency,
+  hb.total_price,
   hb.status,
-  hb.bargain_status,
-  hb.bargain_rounds,
-  s.name as supplier_name,
-  p.status as payment_status,
-  p.gateway_payment_id,
-  (SELECT COUNT(*) FROM booking_documents bd WHERE bd.booking_id = hb.id AND bd.document_type = 'voucher' AND bd.is_latest) as voucher_generated,
-  (SELECT COUNT(*) FROM booking_documents bd WHERE bd.booking_id = hb.id AND bd.document_type = 'invoice' AND bd.is_latest) as invoice_generated,
-  (SELECT COUNT(*) FROM special_requests sr WHERE sr.booking_id = hb.id AND sr.status != 'cancelled') as special_requests_count,
-  hb.booking_date,
+  COUNT(DISTINCT sr.id) as special_requests_count,
+  COUNT(DISTINCT bd.id) as documents_count,
+  COUNT(DISTINCT br.id) as bargain_rounds_count,
   hb.created_at
 FROM hotel_bookings hb
 LEFT JOIN customers c ON hb.customer_id = c.id
-LEFT JOIN suppliers s ON hb.supplier_id = s.id
-LEFT JOIN payments p ON hb.id = p.booking_id AND p.status = 'completed'
-ORDER BY hb.booking_date DESC;
+LEFT JOIN special_requests sr ON hb.id = sr.booking_id
+LEFT JOIN booking_documents bd ON hb.id = bd.booking_id
+LEFT JOIN bargain_rounds br ON hb.id = br.booking_id
+GROUP BY hb.id, c.id;
 
--- Customer Loyalty View
+-- =====================================================
+-- 9. CUSTOMER LOYALTY SUMMARY VIEW
+-- =====================================================
 CREATE OR REPLACE VIEW customer_loyalty_summary AS
 SELECT 
   c.id,
   c.customer_id,
   c.email,
+  c.first_name,
   c.loyalty_tier,
   c.loyalty_points_balance,
   c.loyalty_points_lifetime,
-  (SELECT COUNT(*) FROM hotel_bookings hb WHERE hb.customer_id = c.id AND hb.status IN ('confirmed', 'completed')) as total_bookings,
-  (SELECT SUM(hb.total_amount) FROM hotel_bookings hb WHERE hb.customer_id = c.id AND hb.status IN ('confirmed', 'completed')) as total_spent,
-  (SELECT SUM(COALESCE(hb.discount_amount, 0)) FROM hotel_bookings hb WHERE hb.customer_id = c.id AND hb.bargain_status = 'accepted') as total_bargain_savings,
-  (SELECT COUNT(*) FROM loyalty_events le WHERE le.customer_id = c.id AND le.event_type LIKE 'bargain%') as bargains_won,
-  (SELECT MAX(event_date) FROM loyalty_events le WHERE le.customer_id = c.id) as last_activity_date,
-  c.created_at as member_since,
-  c.updated_at
+  COUNT(DISTINCT hb.id) as total_bookings,
+  SUM(hb.total_price) as lifetime_spending,
+  MAX(le.event_date) as last_activity
 FROM customers c
-ORDER BY c.loyalty_points_balance DESC;
+LEFT JOIN hotel_bookings hb ON c.id = hb.customer_id
+LEFT JOIN loyalty_events le ON c.id = le.customer_id
+GROUP BY c.id;
 
 -- =====================================================
--- 10. CREATE UPDATE TRIGGERS
+-- 10. TRIGGER: Auto-update timestamp on customers
 -- =====================================================
-
-CREATE OR REPLACE FUNCTION update_customer_updated_at()
+CREATE OR REPLACE FUNCTION update_customers_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
   NEW.updated_at = CURRENT_TIMESTAMP;
@@ -428,77 +379,43 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_customer_updated_at BEFORE UPDATE ON customers
-  FOR EACH ROW EXECUTE FUNCTION update_customer_updated_at();
-
-CREATE TRIGGER trigger_pan_updated_at BEFORE UPDATE ON pan_identifiers
-  FOR EACH ROW EXECUTE FUNCTION update_customer_updated_at();
-
-CREATE TRIGGER trigger_special_requests_updated_at BEFORE UPDATE ON special_requests
-  FOR EACH ROW EXECUTE FUNCTION update_customer_updated_at();
-
-CREATE TRIGGER trigger_booking_documents_updated_at BEFORE UPDATE ON booking_documents
-  FOR EACH ROW EXECUTE FUNCTION update_customer_updated_at();
-
-CREATE TRIGGER trigger_bargain_rounds_updated_at BEFORE UPDATE ON bargain_rounds
-  FOR EACH ROW EXECUTE FUNCTION update_customer_updated_at();
+DROP TRIGGER IF EXISTS trigger_update_customers_timestamp ON customers;
+CREATE TRIGGER trigger_update_customers_timestamp
+BEFORE UPDATE ON customers
+FOR EACH ROW
+EXECUTE FUNCTION update_customers_timestamp();
 
 -- =====================================================
--- 11. CREATE AUDIT TRIGGER FOR BOOKINGS
+-- 11. TRIGGER: Auto-log changes to audit_logs
 -- =====================================================
-
-CREATE OR REPLACE FUNCTION audit_booking_changes()
+CREATE OR REPLACE FUNCTION log_changes_to_audit()
 RETURNS TRIGGER AS $$
-DECLARE
-  v_old_values JSONB;
-  v_new_values JSONB;
-  v_changed_fields TEXT[];
 BEGIN
-  v_old_values := to_jsonb(OLD);
-  v_new_values := to_jsonb(NEW);
-  
-  -- Find changed fields
-  SELECT ARRAY_AGG(key) INTO v_changed_fields
-  FROM jsonb_each(v_new_values) e
-  WHERE v_old_values->e.key IS DISTINCT FROM e.value;
-  
   INSERT INTO audit_logs (
-    entity_type, entity_id, entity_name, action,
-    old_values, new_values, changed_fields,
-    user_id, user_email, status, created_at
+    entity_type,
+    entity_id,
+    action,
+    old_values,
+    new_values,
+    created_at
   ) VALUES (
-    'hotel_booking', NEW.id::UUID, NEW.booking_ref, 
-    CASE WHEN TG_OP = 'INSERT' THEN 'create' ELSE 'update' END,
-    CASE WHEN TG_OP = 'UPDATE' THEN v_old_values ELSE NULL END,
-    v_new_values, v_changed_fields,
-    NULL, 'system', 'success', CURRENT_TIMESTAMP
+    TG_TABLE_NAME,
+    COALESCE(NEW.id, OLD.id),
+    TG_OP,
+    to_jsonb(OLD),
+    to_jsonb(NEW),
+    CURRENT_TIMESTAMP
   );
-  
-  RETURN NEW;
+  RETURN COALESCE(NEW, OLD);
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER trigger_audit_booking_changes 
-AFTER INSERT OR UPDATE ON hotel_bookings
-FOR EACH ROW EXECUTE FUNCTION audit_booking_changes();
-
--- =====================================================
--- 12. GRANT PERMISSIONS
--- =====================================================
-
-GRANT SELECT, INSERT, UPDATE, DELETE ON customers TO faredown_user;
-GRANT SELECT, INSERT, UPDATE, DELETE ON pan_identifiers TO faredown_user;
-GRANT SELECT, INSERT, UPDATE, DELETE ON special_requests TO faredown_user;
-GRANT SELECT, INSERT, UPDATE, DELETE ON booking_documents TO faredown_user;
-GRANT SELECT, INSERT, UPDATE, DELETE ON bargain_rounds TO faredown_user;
-GRANT SELECT, INSERT, UPDATE, DELETE ON loyalty_events TO faredown_user;
-GRANT SELECT, INSERT, UPDATE ON audit_logs TO faredown_user;
-GRANT SELECT ON booking_summary_v2 TO faredown_user;
-GRANT SELECT ON customer_loyalty_summary TO faredown_user;
-
-GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO faredown_user;
+DROP TRIGGER IF EXISTS trigger_audit_customers ON customers;
+CREATE TRIGGER trigger_audit_customers
+AFTER INSERT OR UPDATE OR DELETE ON customers
+FOR EACH ROW
+EXECUTE FUNCTION log_changes_to_audit();
 
 -- =====================================================
 -- MIGRATION COMPLETE
 -- =====================================================
-COMMENT ON SCHEMA public IS 'Faredown booking platform - P0 Postgres integration complete';
