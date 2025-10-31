@@ -223,6 +223,8 @@ const MOCK_HOTELS = {
           beds: "Queen bed",
           isRefundable: true,
           breakfastIncluded: false,
+          smokingAllowed: false,
+          cancellationPolicy: "Free cancellation until 24 hours before check-in",
         },
         {
           price: 420,
@@ -231,6 +233,8 @@ const MOCK_HOTELS = {
           beds: "King bed",
           isRefundable: true,
           breakfastIncluded: true,
+          smokingAllowed: false,
+          cancellationPolicy: "Free cancellation until 48 hours before check-in",
         },
       ],
     },
