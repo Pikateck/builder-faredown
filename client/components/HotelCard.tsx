@@ -82,6 +82,8 @@ interface Hotel extends Partial<HotelType> {
   };
   breakfastIncluded?: boolean;
   breakfastType?: string;
+  freeCancellation?: boolean;
+  payAtProperty?: boolean;
 }
 
 interface HotelCardProps {
