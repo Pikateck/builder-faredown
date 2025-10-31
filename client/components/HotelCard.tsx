@@ -892,10 +892,14 @@ export function HotelCard({
                 {(hotel.freeCancellation || hotel.payAtProperty) && (
                   <div className="flex gap-2 mb-3 flex-wrap">
                     {hotel.freeCancellation && (
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Free cancellation</span>
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                        Free cancellation
+                      </span>
                     )}
                     {hotel.payAtProperty && (
-                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Pay at property</span>
+                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                        Pay at property
+                      </span>
                     )}
                   </div>
                 )}
@@ -1090,33 +1094,40 @@ export function HotelCard({
               </div>
 
               {/* Features - Mobile */}
-              {(hotel.amenities || hotel.features) && (hotel.amenities || hotel.features).length > 0 && (
-                <div className="flex flex-wrap gap-1 mb-3">
-                  {((hotel.amenities || hotel.features) || []).slice(0, 3).map((feature) => (
-                    <Badge
-                      key={feature}
-                      variant="secondary"
-                      className="text-xs px-2 py-1"
-                    >
-                      {feature}
-                    </Badge>
-                  ))}
-                  {((hotel.amenities || hotel.features) || []).length > 3 && (
-                    <Badge variant="secondary" className="text-xs px-2 py-1">
-                      +{((hotel.amenities || hotel.features) || []).length - 3}
-                    </Badge>
-                  )}
-                </div>
-              )}
+              {(hotel.amenities || hotel.features) &&
+                (hotel.amenities || hotel.features).length > 0 && (
+                  <div className="flex flex-wrap gap-1 mb-3">
+                    {(hotel.amenities || hotel.features || [])
+                      .slice(0, 3)
+                      .map((feature) => (
+                        <Badge
+                          key={feature}
+                          variant="secondary"
+                          className="text-xs px-2 py-1"
+                        >
+                          {feature}
+                        </Badge>
+                      ))}
+                    {(hotel.amenities || hotel.features || []).length > 3 && (
+                      <Badge variant="secondary" className="text-xs px-2 py-1">
+                        +{(hotel.amenities || hotel.features || []).length - 3}
+                      </Badge>
+                    )}
+                  </div>
+                )}
 
               {/* Policy Chips - Mobile */}
               {(hotel.freeCancellation || hotel.payAtProperty) && (
                 <div className="flex gap-2 mb-3 flex-wrap">
                   {hotel.freeCancellation && (
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Free cancellation</span>
+                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                      Free cancellation
+                    </span>
                   )}
                   {hotel.payAtProperty && (
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Pay at property</span>
+                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                      Pay at property
+                    </span>
                   )}
                 </div>
               )}
@@ -1286,18 +1297,21 @@ export function HotelCard({
             </div>
 
             {/* Features - Single Line */}
-            {(hotel.amenities || hotel.features) && (hotel.amenities || hotel.features).length > 0 && (
-              <div className="flex flex-wrap gap-1 mb-2">
-                {((hotel.amenities || hotel.features) || []).slice(0, 4).map((feature) => (
-                  <span
-                    key={feature}
-                    className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded"
-                  >
-                    {feature}
-                  </span>
-                ))}
-              </div>
-            )}
+            {(hotel.amenities || hotel.features) &&
+              (hotel.amenities || hotel.features).length > 0 && (
+                <div className="flex flex-wrap gap-1 mb-2">
+                  {(hotel.amenities || hotel.features || [])
+                    .slice(0, 4)
+                    .map((feature) => (
+                      <span
+                        key={feature}
+                        className="text-xs text-gray-600 bg-gray-100 px-1.5 py-0.5 rounded"
+                      >
+                        {feature}
+                      </span>
+                    ))}
+                </div>
+              )}
 
             {/* Room Type - Inline */}
             {(hotel.availableRoom || hotel.roomType) && (
@@ -1369,10 +1383,14 @@ export function HotelCard({
             {(hotel.freeCancellation || hotel.payAtProperty) && (
               <div className="flex gap-2 mb-2 flex-wrap">
                 {hotel.freeCancellation && (
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Free cancellation</span>
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
+                    Free cancellation
+                  </span>
                 )}
                 {hotel.payAtProperty && (
-                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Pay at property</span>
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                    Pay at property
+                  </span>
                 )}
               </div>
             )}
