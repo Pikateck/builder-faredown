@@ -156,8 +156,8 @@ export default function BookingVoucher() {
       bedType: "King",
       smokingPreference: "Non-Smoking",
       floorPreference: "High Floor",
-      earlyCheckin: false,
-      lateCheckout: true,
+      earlyCheckIn: false,
+      lateCheckOut: true,
       dailyHousekeeping: true,
     },
 
