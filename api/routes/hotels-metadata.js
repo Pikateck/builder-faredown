@@ -690,6 +690,8 @@ router.get("/", async (req, res) => {
         currency: h.currency || "INR",
         supplier: "TBO",
         isLiveData: true,
+        freeCancellation: h.freeCancellation || false,
+        payAtProperty: h.payAtProperty || false,
         rates: (h.rates || []).map((rate) => ({
           ...rate,
           smokingAllowed:
