@@ -1985,6 +1985,27 @@ function HotelDetailsContent() {
                               </div>
                             </div>
 
+                            {/* Breakfast & Smoking Info */}
+                            <div className="flex flex-wrap gap-2 mb-3">
+                              {room.breakfastIncluded && (
+                                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                                  ✓ Breakfast Included
+                                </span>
+                              )}
+                              {room.breakfastIncluded === false && (
+                                <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded font-medium">
+                                  Breakfast Not Included
+                                </span>
+                              )}
+                              {(room.smokingPreference || room.smokingAllowed !== undefined) && (
+                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
+                                  {room.smokingAllowed === false || room.smokingPreference === "non-smoking"
+                                    ? "🚫 Non-Smoking"
+                                    : "🚬 Smoking Allowed"}
+                                </span>
+                              )}
+                            </div>
+
                             {/* Simple Room Features */}
                             <div className="flex flex-wrap gap-2 mb-4">
                               {Array.isArray(room.features)
