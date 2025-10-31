@@ -741,6 +741,8 @@ function HotelResultsContent() {
           roomFeatures: h.roomFeatures || [],
           isRefundable: h.isRefundable || false,
           breakfastIncluded: h.breakfastIncluded || false,
+          freeCancellation: h.freeCancellation || false,
+          payAtProperty: h.payAtProperty || false,
           address: {
             street: "",
             city: destCode,
