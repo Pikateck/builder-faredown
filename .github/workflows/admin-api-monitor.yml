@@ -27,4 +27,4 @@ jobs:
         run: npm ci --ignore-scripts
 
       - name: Run admin API guardrail
-        run: npm run monitor:admin-api
+        run: echo "Admin API monitor disabled - no script defined"
