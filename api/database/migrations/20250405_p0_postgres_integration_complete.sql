@@ -1,4 +1,4 @@
--- =====================================================
+﻿-- =====================================================
 -- P0 MIGRATION: Complete Frontend + Admin to Postgres Integration
 -- Version: 1.0.0
 -- Date: 2025-04-05
@@ -107,7 +107,7 @@ COMMENT ON COLUMN pan_identifiers.pan_last4 IS 'Last 4 characters of PAN for dis
 -- =====================================================
 CREATE TABLE IF NOT EXISTS special_requests (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  booking_id UUID NOT NULL, -- Will add FK after bookings migration
+  booking_id UUID, -- Will add FK after bookings migration
   customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
   
   -- Request Details
@@ -135,7 +135,6 @@ CREATE TABLE IF NOT EXISTS special_requests (
   updated_by VARCHAR(100)
 );
 
-CREATE INDEX IF NOT EXISTS idx_special_requests_booking_id ON special_requests(booking_id);
 CREATE INDEX IF NOT EXISTS idx_special_requests_customer_id ON special_requests(customer_id);
 CREATE INDEX IF NOT EXISTS idx_special_requests_status ON special_requests(status);
 CREATE INDEX IF NOT EXISTS idx_special_requests_type ON special_requests(request_type);
@@ -147,7 +146,7 @@ COMMENT ON TABLE special_requests IS 'Guest special requests for hotels (dietary
 -- =====================================================
 CREATE TABLE IF NOT EXISTS booking_documents (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  booking_id UUID NOT NULL, -- Will add FK after bookings migration
+  booking_id UUID, -- Will add FK after bookings migration
   customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
   
   -- Document Details
@@ -190,7 +189,6 @@ CREATE TABLE IF NOT EXISTS booking_documents (
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
 );
 
-CREATE INDEX IF NOT EXISTS idx_booking_documents_booking_id ON booking_documents(booking_id);
 CREATE INDEX IF NOT EXISTS idx_booking_documents_customer_id ON booking_documents(customer_id);
 CREATE INDEX IF NOT EXISTS idx_booking_documents_type ON booking_documents(document_type);
 CREATE INDEX IF NOT EXISTS idx_booking_documents_is_latest ON booking_documents(is_latest);
@@ -204,7 +202,7 @@ COMMENT ON TABLE booking_documents IS 'Invoices, vouchers, and other booking-rel
 -- =====================================================
 CREATE TABLE IF NOT EXISTS bargain_rounds (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  booking_id UUID NOT NULL, -- Will add FK after bookings migration
+  booking_id UUID, -- Will add FK after bookings migration
   customer_id UUID REFERENCES customers(id) ON DELETE CASCADE,
   
   -- Round Details
@@ -240,7 +238,6 @@ CREATE TABLE IF NOT EXISTS bargain_rounds (
   updated_by VARCHAR(100)
 );
 
-CREATE INDEX IF NOT EXISTS idx_bargain_rounds_booking_id ON bargain_rounds(booking_id);
 CREATE INDEX IF NOT EXISTS idx_bargain_rounds_customer_id ON bargain_rounds(customer_id);
 CREATE INDEX IF NOT EXISTS idx_bargain_rounds_status ON bargain_rounds(status);
 CREATE INDEX IF NOT EXISTS idx_bargain_rounds_round_number ON bargain_rounds(round_number);
@@ -502,3 +499,4 @@ GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO faredown_user;
 -- MIGRATION COMPLETE
 -- =====================================================
 COMMENT ON SCHEMA public IS 'Faredown booking platform - P0 Postgres integration complete';
+
