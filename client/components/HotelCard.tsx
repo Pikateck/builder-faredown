@@ -1365,6 +1365,18 @@ export function HotelCard({
                 </div>
               ))}
 
+            {/* Policy Chips - Desktop */}
+            {(hotel.freeCancellation || hotel.payAtProperty) && (
+              <div className="flex gap-2 mb-2 flex-wrap">
+                {hotel.freeCancellation && (
+                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">Free cancellation</span>
+                )}
+                {hotel.payAtProperty && (
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">Pay at property</span>
+                )}
+              </div>
+            )}
+
             {/* Price and Actions - Booking.com Style */}
             <div className="flex items-end justify-between mt-auto pt-2 border-t border-gray-100">
               <div className="flex-1">
