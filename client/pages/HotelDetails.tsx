@@ -2766,6 +2766,28 @@ function HotelDetailsContent() {
                                   <div className="text-sm text-gray-600 mb-3">
                                     {room.details}
                                   </div>
+
+                                  {/* Breakfast & Smoking Info */}
+                                  <div className="flex flex-wrap gap-2 mb-3">
+                                    {room.breakfastIncluded && (
+                                      <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1 font-medium">
+                                        ✓ Breakfast Included
+                                      </Badge>
+                                    )}
+                                    {room.breakfastIncluded === false && (
+                                      <Badge className="bg-orange-100 text-orange-800 text-xs px-2 py-1 font-medium">
+                                        Breakfast Not Included
+                                      </Badge>
+                                    )}
+                                    {(room.smokingPreference || room.smokingAllowed !== undefined) && (
+                                      <Badge className="bg-blue-100 text-blue-800 text-xs px-2 py-1 font-medium">
+                                        {room.smokingAllowed === false || room.smokingPreference === "non-smoking"
+                                          ? "🚫 Non-Smoking"
+                                          : "🚬 Smoking Allowed"}
+                                      </Badge>
+                                    )}
+                                  </div>
+
                                   {room.cancellationPolicy && (
                                     <div className="mb-3 text-xs">
                                       {room.isRefundable ? (
