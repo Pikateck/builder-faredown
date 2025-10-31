@@ -278,6 +278,8 @@ export interface Hotel {
   roomFeatures?: string[];
   isRefundable?: boolean;
   breakfastIncluded?: boolean;
+  freeCancellation?: boolean;
+  payAtProperty?: boolean;
   policies: any;
   contact: any;
   currentPrice?: number;
