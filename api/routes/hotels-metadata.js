@@ -319,6 +319,8 @@ const MOCK_HOTELS = {
       price: 680,
       currency: "INR",
       isRefundable: true,
+      freeCancellation: true,
+      payAtProperty: false,
       breakfastIncluded: true,
       roomType: "Beachfront Suite",
       roomFeatures: ["Beach View", "Private Pool"],
@@ -361,6 +363,8 @@ const MOCK_HOTELS = {
       price: 180,
       currency: "INR",
       isRefundable: false,
+      freeCancellation: false,
+      payAtProperty: true,
       breakfastIncluded: false,
       roomType: "Standard Room",
       roomFeatures: ["Basic Amenities"],
@@ -796,7 +800,7 @@ router.get("/", async (req, res) => {
       }
     } else {
       console.log(
-        `✅ Returning ${hotels.length} TBO hotels (live data from ${cityId})`,
+        `��� Returning ${hotels.length} TBO hotels (live data from ${cityId})`,
       );
     }
 
