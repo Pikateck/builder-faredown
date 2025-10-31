@@ -15,6 +15,8 @@ import { SearchProvider } from "./contexts/SearchContext";
 import { PriceProvider } from "./contexts/PriceContext";
 import { useViewportClass } from "./hooks/useViewportClass";
 
+// DEPLOYMENT TEST - Ready to push
+
 // DEPLOYMENT TEST - Zubin verification marker
 console.log(
   "🚀 [DEPLOYMENT TEST] App.tsx loaded - Netlify/Render build verification",
