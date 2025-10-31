@@ -576,20 +576,20 @@ Please present this at the hotel during check-in.
                           <span>{voucherData.preferences.floorPreference}</span>
                         </div>
                       )}
-                      {(voucherData.preferences.earlyCheckin ||
-                        voucherData.preferences.lateCheckout ||
+                      {(voucherData.preferences.earlyCheckIn ||
+                        voucherData.preferences.lateCheckOut ||
                         voucherData.preferences.dailyHousekeeping) && (
                         <div className="pt-2 border-t">
                           <div className="font-medium mb-1">
                             Guest Requests:
                           </div>
                           <ul className="space-y-0.5 pl-4">
-                            {voucherData.preferences.earlyCheckin && (
+                            {voucherData.preferences.earlyCheckIn && (
                               <li className="text-gray-700">
                                 ✓ Early Check-in (before 3:00 PM)
                               </li>
                             )}
-                            {voucherData.preferences.lateCheckout && (
+                            {voucherData.preferences.lateCheckOut && (
                               <li className="text-gray-700">
                                 ✓ Late Check-out (after 12:00 PM)
                               </li>
