@@ -518,11 +518,27 @@ Please present this at the hotel during check-in.
 
               <div className="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div>
-                  <h4 className="font-semibold mb-2">Room Preferences</h4>
+                  <h4 className="font-semibold mb-2">Room Details</h4>
                   <ul className="text-sm text-gray-700 space-y-1">
                     <li>• {voucherData.reservation.smokingPreference}</li>
                     <li>• {voucherData.reservation.viewType}</li>
                     <li>• {voucherData.reservation.floor}</li>
+                    {voucherData.reservation.breakfastIncluded !== undefined && (
+                      <li className="font-medium">
+                        • Breakfast:{" "}
+                        <span
+                          className={
+                            voucherData.reservation.breakfastIncluded
+                              ? "text-green-700"
+                              : "text-orange-700"
+                          }
+                        >
+                          {voucherData.reservation.breakfastIncluded
+                            ? "✓ Included"
+                            : "Not Included"}
+                        </span>
+                      </li>
+                    )}
                   </ul>
                 </div>
                 {voucherData.specialRequests && (
