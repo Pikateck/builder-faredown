@@ -1430,7 +1430,7 @@ export function ConversationalBargainModal({
 
             <div className="flex flex-col gap-2">
               {/* ✅ ROUND 2: Dual Price Selection - Choose between Safe Deal and Final Offer */}
-              {!isComplete && round === 2 && safeDealPrice && (
+              {!isComplete && round === 2 && safeDealPrice && showOfferActions && finalOffer && (
                 <>
                   <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
                     <p className="text-sm text-blue-700 font-semibold mb-1">
