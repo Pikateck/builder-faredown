@@ -402,7 +402,7 @@ export function ConversationalBargainModal({
   // Generate dynamic price suggestions based on negotiation context
   const getSuggestions = useCallback((): number[] => {
     // Need supplier offer and valid round to generate suggestions
-    if (!previousOfferPrice || round < 1 || round > 3) {
+    if (!previousOfferPrice || round < 1 || round > 2) {
       return [];
     }
 
