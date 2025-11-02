@@ -1506,8 +1506,7 @@ export function ConversationalBargainModal({
                 round === 2 &&
                 safeDealPrice &&
                 showOfferActions &&
-                finalOffer &&
-                !timerExpired && (
+                finalOffer && (
                   <>
                     <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
                       <p className="text-sm text-blue-700 font-semibold mb-1">
