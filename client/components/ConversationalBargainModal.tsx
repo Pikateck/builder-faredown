@@ -714,6 +714,59 @@ export function ConversationalBargainModal({
 
   const handleAcceptOffer = useCallback(async () => {
     if (finalOffer) {
+      // ✅ NEW: Round 1 acceptance - save as "Safe Deal" and proceed to Round 2
+      if (round === 1) {
+        setIsBooking(true);
+
+        // Track Round 1 acceptance event
+        const entityId = productRef || `${module}_${Date.now()}`;
+        chatAnalyticsService
+          .trackEvent("bargain_round_1_accepted", {
+            hotelId: hotel?.id,
+            city: hotel?.city,
+            price_original: basePrice,
+            price_offer1: finalOffer,
+            module,
+            product_ref: entityId,
+          })
+          .catch(console.warn);
+
+        // Save this price as the "Safe Deal"
+        setSafeDealPrice(finalOffer);
+
+        // Add message explaining the next step
+        addMessage(
+          "agent",
+          `Great! I've saved ${formatPrice(finalOffer)} as your Safe Deal. Now let me check if I can get you an even better price for your final bargain attempt...`,
+        );
+
+        // Reset for Round 2
+        setTimeout(() => {
+          setIsBooking(false);
+          setFinalOffer(null);
+          setShowOfferActions(false);
+          setCurrentPrice("");
+
+          // Move to Round 2
+          setRound(2);
+
+          // Track Round 2 trigger
+          chatAnalyticsService
+            .trackEvent("bargain_round_2_triggered", {
+              hotelId: hotel?.id,
+              city: hotel?.city,
+              price_safe_deal: finalOffer,
+              price_original: basePrice,
+              module,
+              product_ref: entityId,
+            })
+            .catch(console.warn);
+        }, 1500);
+
+        return;
+      }
+
+      // ✅ ORIGINAL LOGIC: Round 2 - Accept selected price and create hold
       setIsBooking(true);
       setTimerActive(false);
 
