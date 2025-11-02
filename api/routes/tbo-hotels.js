@@ -300,6 +300,22 @@ router.post("/search", async (req, res) => {
 
 // Search (GET convenience for diagnostics)
 router.get("/search", async (req, res) => {
+  // Set response timeout
+  const responseTimeout = setTimeout(() => {
+    if (!res.headersSent) {
+      console.error("⏱️ Response timeout on GET /search");
+      res.status(200).json({
+        success: false,
+        error: "Request timeout",
+        data: [],
+      });
+    }
+  }, 60000);
+
+  res.on("finish", () => {
+    clearTimeout(responseTimeout);
+  });
+
   try {
     const adapter = getTboAdapter();
     const {
@@ -311,7 +327,9 @@ router.get("/search", async (req, res) => {
       rooms = 1,
       currency = "INR",
     } = req.query;
-    const data = await adapter.searchHotels({
+
+    // Add timeout to search
+    const searchPromise = adapter.searchHotels({
       destination,
       checkIn: checkin,
       checkOut: checkout,
@@ -320,9 +338,25 @@ router.get("/search", async (req, res) => {
       rooms: Number(rooms),
       currency,
     });
+
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(
+        () => reject(new Error("Search timeout")),
+        30000,
+      );
+    });
+
+    const data = await Promise.race([searchPromise, timeoutPromise]);
+    clearTimeout(responseTimeout);
     res.json({ success: true, data });
   } catch (e) {
-    res.status(400).json({ success: false, error: e.message });
+    clearTimeout(responseTimeout);
+    console.error("❌ GET /search error:", e.message);
+    res.status(200).json({
+      success: false,
+      error: e.message,
+      data: [],
+    });
   }
 });
 
