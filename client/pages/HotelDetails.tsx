@@ -4290,12 +4290,13 @@ function HotelDetailsContent() {
                               )
                           : [],
                     }}
-                    onBargainSuccess={(finalPrice, orderRef) => {
+                    onBargainSuccess={(finalPrice, orderRef, bargainMetadata) => {
                       console.log(
-                        `Hotel Details Bottom Bar Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`,
+                        `Hotel Details Bottom Bar Bargain success! Final price: ${finalPrice}, Order: ${orderRef}, Bargain Metadata:`,
+                        bargainMetadata,
                       );
                       if (selectedRoomType) {
-                        handleBooking(selectedRoomType, finalPrice);
+                        handleBooking(selectedRoomType, finalPrice, bargainMetadata);
                         setBargainedRooms(
                           (prev) => new Set([...prev, selectedRoomType.id]),
                         );
