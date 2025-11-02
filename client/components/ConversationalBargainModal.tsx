@@ -115,7 +115,8 @@ export function ConversationalBargainModal({
   const effectiveUserName = isLoggedIn && user?.name ? user.name : userName;
 
   // Constants
-  const TOTAL_ROUNDS = 3;
+  // ✅ CRITICAL: Only 2 attempts allowed (per Zubin's 2-attempt bargain engine requirement)
+  const TOTAL_ROUNDS = 2;
   type RoundState =
     | "idle"
     | "submittingBid"
