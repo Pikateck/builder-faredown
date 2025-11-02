@@ -463,7 +463,7 @@ function HotelDetailsContent() {
       const attemptFetch = async (retryCount = 0): Promise<any> => {
         try {
           console.log(
-            `🏨 Attempt ${retryCount + 1}: Fetching TBO hotel details for: ${hotelId}`,
+            `���� Attempt ${retryCount + 1}: Fetching TBO hotel details for: ${hotelId}`,
           );
 
           // Get supplier code from URL or location state
@@ -1755,6 +1755,29 @@ function HotelDetailsContent() {
                 paxLabel={paxLabel}
                 onExpand={() => setIsSearchSheetOpen(true)}
               />
+            </div>
+          </div>
+
+          {/* Mobile Filter Button */}
+          <div className="md:hidden bg-white border-b border-gray-200 px-4 py-2">
+            <div className="flex gap-2">
+              <Button
+                variant="outline"
+                size="sm"
+                className="flex-1"
+                onClick={() => setIsMobileFilterOpen(true)}
+              >
+                <Filter className="w-4 h-4 mr-2" />
+                Filter Hotels
+              </Button>
+              <Button
+                variant="ghost"
+                size="sm"
+                className="flex-1"
+              >
+                <ArrowUpDown className="w-4 h-4 mr-2" />
+                Sort
+              </Button>
             </div>
           </div>
 
