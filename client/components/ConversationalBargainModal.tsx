@@ -1510,20 +1510,20 @@ export function ConversationalBargainModal({
                   <>
                     {timerActive && !timerExpired && (
                       <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                      <p className="text-sm text-blue-700 font-semibold mb-1">
-                        Your first deal is still safe. Choose your price:
-                      </p>
-                      <p className="text-xs text-blue-600">
-                        Original: {formatPrice(basePrice)} • Safe Deal saves{" "}
-                        {formatPrice(basePrice - safeDealPrice)} (
-                        {Math.round(
-                          ((basePrice - safeDealPrice) / basePrice) * 100,
-                        )}
-                        %)
-                        {finalOffer < safeDealPrice &&
-                          ` ��� Final saves ${formatPrice(basePrice - finalOffer)} (${Math.round(((basePrice - finalOffer) / basePrice) * 100)}%)`}
-                      </p>
-                    </div>
+                        <p className="text-sm text-blue-700 font-semibold mb-1">
+                          Your first deal is still safe. Choose your price:
+                        </p>
+                        <p className="text-xs text-blue-600">
+                          Original: {formatPrice(basePrice)} • Safe Deal saves{" "}
+                          {formatPrice(basePrice - safeDealPrice)} (
+                          {Math.round(
+                            ((basePrice - safeDealPrice) / basePrice) * 100,
+                          )}
+                          %)
+                          {finalOffer < safeDealPrice &&
+                            ` ��� Final saves ${formatPrice(basePrice - finalOffer)} (${Math.round(((basePrice - finalOffer) / basePrice) * 100)}%)`}
+                        </p>
+                      </div>
                     )}
 
                     {/* Safe Deal Button - enabled only while timer is active */}
@@ -1549,7 +1549,9 @@ export function ConversationalBargainModal({
                           })
                           .catch(console.warn);
                       }}
-                      disabled={selectedPrice !== null || isBooking || timerExpired}
+                      disabled={
+                        selectedPrice !== null || isBooking || timerExpired
+                      }
                       className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
                         selectedPrice === "safe"
                           ? "bg-emerald-600 text-white border-2 border-emerald-700"
@@ -1593,7 +1595,9 @@ export function ConversationalBargainModal({
                           })
                           .catch(console.warn);
                       }}
-                      disabled={selectedPrice !== null || isBooking || timerExpired}
+                      disabled={
+                        selectedPrice !== null || isBooking || timerExpired
+                      }
                       className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
                         selectedPrice === "final"
                           ? "bg-orange-600 text-white border-2 border-orange-700"
