@@ -275,6 +275,7 @@ router.post("/search", async (req, res) => {
       console.warn("search_logs insert skipped (tbo-hotels):", logErr.message);
     }
 
+    clearTimeout(responseTimeout);
     res.json({
       success: true,
       data: unifiedResults,
@@ -282,9 +283,18 @@ router.post("/search", async (req, res) => {
       via: "fixie",
     });
   } catch (e) {
-    res
-      .status(statusFromErrorCode(e.code))
-      .json({ success: false, error: e.message, code: e.code });
+    clearTimeout(responseTimeout);
+    console.error("❌ TBO search error:", e.message);
+
+    // Return safe fallback instead of error status
+    // This prevents "Failed to fetch" on client
+    res.status(200).json({
+      success: false,
+      error: e.message,
+      code: e.code,
+      data: [],
+      via: "error_fallback",
+    });
   }
 });
 
