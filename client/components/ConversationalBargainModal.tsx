@@ -1598,7 +1598,9 @@ export function ConversationalBargainModal({
                           ? "bg-orange-600 text-white border-2 border-orange-700"
                           : selectedPrice === "safe"
                             ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                            : "bg-orange-50 text-orange-900 border-2 border-orange-300 hover:bg-orange-100"
+                            : timerExpired
+                              ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
+                              : "bg-orange-50 text-orange-900 border-2 border-orange-300 hover:bg-orange-100"
                       }`}
                     >
                       {selectedPrice === "final" ? (
