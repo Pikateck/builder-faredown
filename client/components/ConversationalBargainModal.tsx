@@ -639,11 +639,11 @@ export function ConversationalBargainModal({
             setTimeout(() => {
               addMessage(
                 "agent",
-                `Your price ${formatPrice(userOffer)} is matched. ${round === 1 ? '20' : '30'} seconds to decide.`,
+                `Your price ${formatPrice(userOffer)} is matched. 30 seconds to book.`,
               );
               setShowOfferActions(true);
               setTimerActive(true);
-              setTimerSeconds(round === 1 ? 20 : 30);
+              setTimerSeconds(30);
 
               if (isMobileDevice()) {
                 hapticFeedback("heavy");
@@ -685,7 +685,7 @@ export function ConversationalBargainModal({
 
               setShowOfferActions(true);
               setTimerActive(true);
-              setTimerSeconds(round === 1 ? 20 : 30);
+              setTimerSeconds(30);
 
               if (isMobileDevice()) {
                 hapticFeedback("medium");
@@ -1513,9 +1513,9 @@ export function ConversationalBargainModal({
                       onClick={() => handleAcceptOffer()}
                       disabled={isBooking}
                       className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl mt-2"
-                      aria-label="Confirm and book at selected price"
+                      aria-label="Book at selected price"
                     >
-                      {isBooking ? "Processing..." : "Confirm & Book"}
+                      {isBooking ? "Processing..." : `Book Selected Price Now - ${timerActive ? formatTime(timerSeconds) : ''}`}
                     </Button>
                   )}
                 </>
