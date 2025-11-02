@@ -1457,9 +1457,10 @@ export function ConversationalBargainModal({
                 ? "calc(1rem + env(safe-area-inset-bottom))"
                 : "1rem",
               minHeight: "auto",
-              overflow: "visible",
-              maxHeight: isMobileDevice() ? "calc(100dvh - 200px)" : "auto",
+              maxHeight: isMobileDevice() ? "calc(100dvh - 180px)" : "auto",
               overflowY: "auto",
+              display: "flex",
+              flexDirection: "column",
             }}
             aria-live="polite"
             aria-label="Negotiated offer details"
