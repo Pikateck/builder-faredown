@@ -41,6 +41,7 @@ import {
   isAndroid,
 } from "@/lib/mobileUtils";
 import { chatAnalyticsService } from "@/services/chatAnalyticsService";
+import { initializeBargainEngine, getBargainEngine, BargainProduct } from "@/services/BargainEngine";
 import RoundFooter from "./RoundFooter";
 
 // TypeScript Interfaces
