@@ -889,11 +889,19 @@ export function ConversationalBargainModal({
               });
             }
 
-            onAccept(finalOffer, orderRef, {
+            onAccept(priceToHold, orderRef, {
               isHeld: true,
               holdId: responseData.holdId,
               expiresAt: responseData.expiresAt,
               originalPrice: basePrice,
+              bargainedPrice: priceToHold,
+              // ✅ CRITICAL: Include bargain selection info for Round 2
+              ...(round === 2 && safeDealPrice && {
+                bargainAttempts: 2,
+                selectedPrice: selectedPrice === "safe" ? "Safe Deal" : "Final Bargain Offer",
+                safeDealPrice: safeDealPrice,
+                finalOfferPrice: finalOffer,
+              }),
               savings: savings,
               module,
               productRef,
