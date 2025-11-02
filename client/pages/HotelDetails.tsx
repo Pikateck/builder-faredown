@@ -1347,7 +1347,7 @@ function HotelDetailsContent() {
       }
     }
 
-    console.log("🎯 After deduplication - Unique rooms:", uniqueRooms.length);
+    console.log("�� After deduplication - Unique rooms:", uniqueRooms.length);
     return uniqueRooms.sort((a, b) => a.pricePerNight - b.pricePerNight);
   })();
 
@@ -2562,7 +2562,7 @@ function HotelDetailsContent() {
             <div className="flex gap-6">
               {/* Left Sidebar - Desktop Filters - MATCHING RESULTS PAGE */}
               <div className="hidden lg:block w-80 flex-shrink-0 rounded-xl shadow-lg border border-gray-200 bg-white sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
-            <div className="p-3 lg:p-4">
+                <div className="p-3 lg:p-4">
               {/* Mobile Header */}
               <div className="lg:hidden flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900">Filters</h2>
