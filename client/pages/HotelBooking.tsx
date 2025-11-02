@@ -1130,7 +1130,9 @@ export default function HotelBooking() {
                   <div className="mt-4 p-4 bg-blue-50 rounded-lg border border-blue-200">
                     <h4 className="font-semibold text-blue-900 mb-3 flex items-center">
                       <Award className="w-4 h-4 mr-2" />
-                      Your Bargain Savings
+                      {location.state?.bargainMetadata?.bargainAttempts === 2
+                        ? "Your 2-Attempt Bargain"
+                        : "Your Bargain Savings"}
                     </h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
@@ -1139,9 +1141,44 @@ export default function HotelBooking() {
                           {formatCurrency(location.state.originalPrice)}
                         </span>
                       </div>
+
+                      {/* ✅ Show Safe Deal if from 2-attempt bargain */}
+                      {location.state?.bargainMetadata?.bargainAttempts === 2 && (
+                        <div className="flex justify-between">
+                          <span className="text-emerald-700">
+                            Safe Deal (Round 1)
+                          </span>
+                          <span className={`font-semibold ${
+                            location.state?.bargainMetadata?.selectedPrice === "Safe Deal"
+                              ? "text-emerald-900 underline"
+                              : "text-gray-600"
+                          }`}>
+                            {formatCurrency(location.state.bargainMetadata.safeDealPrice)}
+                          </span>
+                        </div>
+                      )}
+
+                      {/* ✅ Show Final Offer if from 2-attempt bargain */}
+                      {location.state?.bargainMetadata?.bargainAttempts === 2 && (
+                        <div className="flex justify-between">
+                          <span className="text-orange-700">
+                            Final Offer (Round 2)
+                          </span>
+                          <span className={`font-semibold ${
+                            location.state?.bargainMetadata?.selectedPrice === "Final Bargain Offer"
+                              ? "text-orange-900 underline"
+                              : "text-gray-600"
+                          }`}>
+                            {formatCurrency(location.state.bargainMetadata.finalOfferPrice)}
+                          </span>
+                        </div>
+                      )}
+
                       <div className="flex justify-between">
                         <span className="text-gray-700">
-                          Your Bargained Price
+                          {location.state?.bargainMetadata?.bargainAttempts === 2
+                            ? `Your Selected Price (${location.state?.bargainMetadata?.selectedPrice})`
+                            : "Your Bargained Price"}
                         </span>
                         <span className="font-semibold text-blue-900">
                           {formatCurrency(location.state.bargainedPrice)}
