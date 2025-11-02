@@ -1245,7 +1245,7 @@ export function ConversationalBargainModal({
       <DialogContent
         showClose={false}
         className={`
-          mobile-bargain-modal max-w-md mx-auto sm:max-w-lg p-0
+          mobile-bargain-modal max-w-md sm:max-w-lg p-0
           ${isMobileDevice() ? "mobile-modal" : ""}
           flex flex-col
           !z-[9999]
@@ -1257,9 +1257,9 @@ export function ConversationalBargainModal({
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
-          position: isMobileDevice() ? "fixed" : "relative",
           ...(isMobileDevice()
             ? {
+                position: "fixed",
                 inset: "0",
                 transform: "none",
                 width: "100%",
@@ -1269,7 +1269,10 @@ export function ConversationalBargainModal({
                 right: "0",
                 bottom: "0",
               }
-            : {}),
+            : {
+                // Desktop: keep default dialog centering via Radix UI positioning
+                // The dialog component handles left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]
+              }),
         }}
         onOpenAutoFocus={(e) => {
           e.preventDefault();
