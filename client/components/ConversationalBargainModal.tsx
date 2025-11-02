@@ -1569,7 +1569,7 @@ export function ConversationalBargainModal({
                       )}
                     </Button>
 
-                    {/* Final Offer Button */}
+                    {/* Final Offer Button - enabled only while timer is active */}
                     <Button
                       onClick={() => {
                         setSelectedPrice("final");
@@ -1592,7 +1592,7 @@ export function ConversationalBargainModal({
                           })
                           .catch(console.warn);
                       }}
-                      disabled={selectedPrice !== null || isBooking}
+                      disabled={selectedPrice !== null || isBooking || timerExpired}
                       className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
                         selectedPrice === "final"
                           ? "bg-orange-600 text-white border-2 border-orange-700"
