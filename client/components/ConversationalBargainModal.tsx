@@ -1525,7 +1525,7 @@ export function ConversationalBargainModal({
                       </p>
                     </div>
 
-                    {/* Safe Deal Button */}
+                    {/* Safe Deal Button - enabled only while timer is active */}
                     <Button
                       onClick={() => {
                         setSelectedPrice("safe");
@@ -1548,7 +1548,7 @@ export function ConversationalBargainModal({
                           })
                           .catch(console.warn);
                       }}
-                      disabled={selectedPrice !== null || isBooking}
+                      disabled={selectedPrice !== null || isBooking || timerExpired}
                       className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
                         selectedPrice === "safe"
                           ? "bg-emerald-600 text-white border-2 border-emerald-700"
