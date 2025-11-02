@@ -676,9 +676,17 @@ export default function HotelBookingConfirmation() {
                     <div className="flex justify-between text-sm">
                       <span className="text-emerald-700">
                         Safe Deal (Round 1)
-                        {bookingData.pricing.selectedPrice === "Safe Deal" ? " ✓" : ""}
+                        {bookingData.pricing.selectedPrice === "Safe Deal"
+                          ? " ✓"
+                          : ""}
                       </span>
-                      <span className={bookingData.pricing.selectedPrice === "Safe Deal" ? "font-semibold text-emerald-900" : "text-gray-600"}>
+                      <span
+                        className={
+                          bookingData.pricing.selectedPrice === "Safe Deal"
+                            ? "font-semibold text-emerald-900"
+                            : "text-gray-600"
+                        }
+                      >
                         {formatPriceWithSymbol(
                           bookingData.pricing.safeDealPrice,
                           selectedCurrency.code,
@@ -688,9 +696,19 @@ export default function HotelBookingConfirmation() {
                     <div className="flex justify-between text-sm">
                       <span className="text-orange-700">
                         Final Offer (Round 2)
-                        {bookingData.pricing.selectedPrice === "Final Bargain Offer" ? " ✓" : ""}
+                        {bookingData.pricing.selectedPrice ===
+                        "Final Bargain Offer"
+                          ? " ✓"
+                          : ""}
                       </span>
-                      <span className={bookingData.pricing.selectedPrice === "Final Bargain Offer" ? "font-semibold text-orange-900" : "text-gray-600"}>
+                      <span
+                        className={
+                          bookingData.pricing.selectedPrice ===
+                          "Final Bargain Offer"
+                            ? "font-semibold text-orange-900"
+                            : "text-gray-600"
+                        }
+                      >
                         {formatPriceWithSymbol(
                           bookingData.pricing.finalOfferPrice,
                           selectedCurrency.code,
@@ -698,7 +716,10 @@ export default function HotelBookingConfirmation() {
                       </span>
                     </div>
                     <div className="flex justify-between text-sm font-semibold border-t pt-2">
-                      <span>Your Selected Price ({bookingData.pricing.selectedPrice})</span>
+                      <span>
+                        Your Selected Price ({bookingData.pricing.selectedPrice}
+                        )
+                      </span>
                       <span className="text-blue-900">
                         {formatPriceWithSymbol(
                           bookingData.pricing.subtotal,

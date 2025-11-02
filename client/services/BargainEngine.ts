@@ -4,11 +4,11 @@
  * Ensures identical behavior across the entire platform
  */
 
-import { ChatAnalyticsService } from './chatAnalyticsService';
+import { ChatAnalyticsService } from "./chatAnalyticsService";
 
 export interface BargainProduct {
   id: string;
-  type: 'hotel' | 'flight' | 'transfer' | 'package' | 'addon';
+  type: "hotel" | "flight" | "transfer" | "package" | "addon";
   name: string;
   basePrice: number;
   currency: string;
@@ -85,7 +85,7 @@ export class BargainEngine {
       // Matched: offer user's wished price or slightly lower
       systemOffer = Math.max(
         session.basePrice * 0.7, // Don't go below 70% of base
-        userWishPrice
+        userWishPrice,
       );
     } else {
       // Counter: offer between base and user price (but closer to user)
@@ -107,7 +107,7 @@ export class BargainEngine {
     session.round1 = round;
 
     // Track analytics
-    this.trackEvent('bargain_round1_completed', {
+    this.trackEvent("bargain_round1_completed", {
       sessionId,
       productType: session.product.type,
       productId: session.product.id,
@@ -129,7 +129,8 @@ export class BargainEngine {
   processRound2(sessionId: string, userWishPrice: number): BargainRound {
     const session = this.sessions.get(sessionId);
     if (!session) throw new Error(`Session not found: ${sessionId}`);
-    if (!session.round1) throw new Error(`Round 1 not completed for session: ${sessionId}`);
+    if (!session.round1)
+      throw new Error(`Round 1 not completed for session: ${sessionId}`);
 
     const acceptanceChance = Math.random();
     // Round 2 is riskier: lower acceptance chance (40%)
@@ -140,7 +141,7 @@ export class BargainEngine {
       // Matched: offer user's price or slightly lower
       systemOffer = Math.max(
         session.basePrice * 0.65, // Don't go below 65% for Round 2
-        userWishPrice
+        userWishPrice,
       );
     } else {
       // Counter: offer between Round 1 and user price
@@ -148,7 +149,7 @@ export class BargainEngine {
       const betweenPrice = (round1Offer + userWishPrice) / 2;
       systemOffer = Math.max(
         session.basePrice * 0.65,
-        Math.min(betweenPrice, userWishPrice * 1.02)
+        Math.min(betweenPrice, userWishPrice * 1.02),
       );
     }
 
@@ -164,7 +165,7 @@ export class BargainEngine {
     session.round2 = round;
 
     // Track analytics
-    this.trackEvent('bargain_round2_triggered', {
+    this.trackEvent("bargain_round2_triggered", {
       sessionId,
       productType: session.product.type,
       productId: session.product.id,
@@ -199,7 +200,7 @@ export class BargainEngine {
     session.selectedRound = selectedRound;
 
     // Track analytics
-    this.trackEvent('bargain_price_selected', {
+    this.trackEvent("bargain_price_selected", {
       sessionId,
       productType: session.product.type,
       productId: session.product.id,
@@ -212,7 +213,7 @@ export class BargainEngine {
       finalOfferPrice: session.round2?.systemOffer,
       savings: session.basePrice - round.systemOffer,
       savingsPercent: Math.round(
-        ((session.basePrice - round.systemOffer) / session.basePrice) * 100
+        ((session.basePrice - round.systemOffer) / session.basePrice) * 100,
       ),
       currency: session.product.currency,
     });
@@ -223,12 +224,15 @@ export class BargainEngine {
   /**
    * User abandons bargain (timer expires or user exits)
    */
-  abandonBargain(sessionId: string, reason: 'timer_expired' | 'user_exit' | 'unknown'): number {
+  abandonBargain(
+    sessionId: string,
+    reason: "timer_expired" | "user_exit" | "unknown",
+  ): number {
     const session = this.sessions.get(sessionId);
     if (!session) throw new Error(`Session not found: ${sessionId}`);
 
     // Track analytics
-    this.trackEvent('bargain_abandoned', {
+    this.trackEvent("bargain_abandoned", {
       sessionId,
       productType: session.product.type,
       productId: session.product.id,
@@ -301,24 +305,24 @@ export class BargainEngine {
     const expiredIds: string[] = [];
 
     for (const [id, session] of this.sessions.entries()) {
-      if (now > session.expiresAt + 60000) { // Keep for 1 minute after expiry
+      if (now > session.expiresAt + 60000) {
+        // Keep for 1 minute after expiry
         expiredIds.push(id);
       }
     }
 
-    expiredIds.forEach(id => this.sessions.delete(id));
+    expiredIds.forEach((id) => this.sessions.delete(id));
   }
 
   /**
    * Track analytics event
    */
-  private trackEvent(
-    eventName: string,
-    properties: Record<string, any>
-  ): void {
+  private trackEvent(eventName: string, properties: Record<string, any>): void {
     this.chatAnalytics
       .trackEvent(eventName, properties)
-      .catch(err => console.warn(`Analytics tracking failed for ${eventName}:`, err));
+      .catch((err) =>
+        console.warn(`Analytics tracking failed for ${eventName}:`, err),
+      );
   }
 }
 
@@ -328,7 +332,7 @@ export class BargainEngine {
 let bargainEngineInstance: BargainEngine | null = null;
 
 export function initializeBargainEngine(
-  chatAnalyticsService: ChatAnalyticsService
+  chatAnalyticsService: ChatAnalyticsService,
 ): BargainEngine {
   if (!bargainEngineInstance) {
     bargainEngineInstance = new BargainEngine(chatAnalyticsService);
@@ -339,7 +343,7 @@ export function initializeBargainEngine(
 export function getBargainEngine(): BargainEngine {
   if (!bargainEngineInstance) {
     throw new Error(
-      'BargainEngine not initialized. Call initializeBargainEngine first.'
+      "BargainEngine not initialized. Call initializeBargainEngine first.",
     );
   }
   return bargainEngineInstance;

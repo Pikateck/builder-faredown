@@ -2,7 +2,7 @@
 
 **Version:** 1.0  
 **Status:** Ready for Implementation  
-**Platform Coverage:** Hotels, Flights, Transfers, Packages, Add-ons  
+**Platform Coverage:** Hotels, Flights, Transfers, Packages, Add-ons
 
 ---
 
@@ -25,6 +25,7 @@ The **BargainEngine** is a centralized, module-agnostic service that powers barg
 ## 🏗️ Architecture
 
 ### Service Layer: `client/services/BargainEngine.ts`
+
 ```
 BargainEngine
 ├── initSession(product, basePrice)           → BargainSession
@@ -36,6 +37,7 @@ BargainEngine
 ```
 
 ### Hook Layer: `client/hooks/useBargainEngine.ts`
+
 ```
 useBargainEngine(props)
 ├── startSession()              → sessionId
@@ -47,6 +49,7 @@ useBargainEngine(props)
 ```
 
 ### Component Layer: `client/components/ConversationalBargainModal.tsx`
+
 - Already integrated with both service and hook patterns
 - Mobile-responsive with proper scrolling
 - Accessibility: ARIA labels, DialogTitle, semantic HTML
@@ -56,20 +59,22 @@ useBargainEngine(props)
 ## 🚀 Integration for Each Module
 
 ### 1️⃣ Hotels Module (Already Updated)
+
 **Status**: ✅ Ready  
 **Component**: `client/components/ConversationalBargainModal.tsx`  
 **Trigger**: "Bargain Now" button on Hotel Details page
 
 #### Usage in HotelDetails.tsx:
+
 ```tsx
-import { BargainProduct } from '@/services/BargainEngine';
+import { BargainProduct } from "@/services/BargainEngine";
 
 const bargainProduct: BargainProduct = {
   id: hotel.id,
-  type: 'hotel',
+  type: "hotel",
   name: hotel.name,
   basePrice,
-  currency: 'INR',
+  currency: "INR",
   city: hotel.city,
   supplierId: hotel.supplierId,
 };
@@ -84,25 +89,27 @@ const bargainProduct: BargainProduct = {
   hotel={hotel}
   basePrice={basePrice}
   productRef={hotel.id}
-/>
+/>;
 ```
 
 ---
 
 ### 2️⃣ Flights Module (Template)
+
 **Status**: 🔄 To Be Implemented  
 **Component**: Use `ConversationalBargainModal` with type='flight'
 
 #### Usage in FlightResults.tsx:
+
 ```tsx
-import { BargainProduct } from '@/services/BargainEngine';
+import { BargainProduct } from "@/services/BargainEngine";
 
 const bargainProduct: BargainProduct = {
   id: flight.id,
-  type: 'flight',
+  type: "flight",
   name: `${flight.airline} - ${flight.route}`,
   basePrice: flight.totalPrice,
-  currency: 'INR',
+  currency: "INR",
   city: flight.departureCity,
   supplierId: flight.supplier,
 };
@@ -117,22 +124,24 @@ const bargainProduct: BargainProduct = {
   flight={flight}
   basePrice={flight.totalPrice}
   productRef={flight.id}
-/>
+/>;
 ```
 
 ---
 
 ### 3️⃣ Transfers Module (Template)
+
 **Status**: 🔄 To Be Implemented
 
 #### Usage in TransferDetails.tsx:
+
 ```tsx
 const bargainProduct: BargainProduct = {
   id: transfer.id,
-  type: 'transfer',
+  type: "transfer",
   name: transfer.serviceType,
   basePrice: transfer.price,
-  currency: 'INR',
+  currency: "INR",
   city: transfer.city,
   supplierId: transfer.supplier,
 };
@@ -147,22 +156,24 @@ const bargainProduct: BargainProduct = {
   transfer={transfer}
   basePrice={transfer.price}
   productRef={transfer.id}
-/>
+/>;
 ```
 
 ---
 
 ### 4️⃣ Packages / Activities (Template)
+
 **Status**: 🔄 To Be Implemented
 
 #### Usage in PackageDetails.tsx:
+
 ```tsx
 const bargainProduct: BargainProduct = {
   id: package.id,
-  type: 'package',
+  type: "package",
   name: package.title,
   basePrice: package.totalPrice,
-  currency: 'INR',
+  currency: "INR",
   city: package.city,
   supplierId: package.operator,
 };
@@ -176,22 +187,24 @@ const bargainProduct: BargainProduct = {
   module="packages"
   basePrice={package.totalPrice}
   productRef={package.id}
-/>
+/>;
 ```
 
 ---
 
 ### 5️⃣ Add-ons (Baggage, Seats, Meals)
+
 **Status**: 🔄 To Be Implemented
 
 #### Usage in AddonsSelection.tsx:
+
 ```tsx
 const bargainProduct: BargainProduct = {
   id: addon.id,
-  type: 'addon',
+  type: "addon",
   name: `${addon.category} - ${addon.description}`,
   basePrice: addon.price,
-  currency: 'INR',
+  currency: "INR",
   // No city for add-ons
 };
 
@@ -204,7 +217,7 @@ const bargainProduct: BargainProduct = {
   module="addons"
   basePrice={addon.price}
   productRef={addon.id}
-/>
+/>;
 ```
 
 ---
@@ -212,6 +225,7 @@ const bargainProduct: BargainProduct = {
 ## 📊 Analytics Events (Unified Across All Modules)
 
 ### Event 1: `bargain_round1_completed`
+
 ```json
 {
   "sessionId": "bargain_...",
@@ -228,6 +242,7 @@ const bargainProduct: BargainProduct = {
 ```
 
 ### Event 2: `bargain_round2_triggered`
+
 ```json
 {
   "sessionId": "bargain_...",
@@ -240,6 +255,7 @@ const bargainProduct: BargainProduct = {
 ```
 
 ### Event 3: `bargain_price_selected`
+
 ```json
 {
   "sessionId": "bargain_...",
@@ -254,6 +270,7 @@ const bargainProduct: BargainProduct = {
 ```
 
 ### Event 4: `bargain_abandoned`
+
 ```json
 {
   "sessionId": "bargain_...",
@@ -308,6 +325,7 @@ const bargainProduct: BargainProduct = {
 ## 📱 Mobile Responsiveness Requirements
 
 ### Testing Checklist
+
 - [ ] iPhone 12 (Safari + Chrome) - Full scroll, all buttons visible
 - [ ] iPhone 14 (Safari + Chrome) - Full scroll, timer visible
 - [ ] iPhone 16 Pro Max (Safari + Chrome) - Full scroll, no clipping
@@ -316,6 +334,7 @@ const bargainProduct: BargainProduct = {
 - [ ] Desktop (Chrome, Safari, Firefox, Edge) - All layouts functional
 
 ### Technical Requirements
+
 - ✅ 100dvh height for mobile modals
 - ✅ `overflow-y: auto` for chat and button sections
 - ✅ `-webkit-overflow-scrolling: touch` for iOS momentum scrolling
@@ -328,6 +347,7 @@ const bargainProduct: BargainProduct = {
 ## ✅ Deployment Checklist
 
 ### Phase 1: Hotels Module (Verify First)
+
 - [ ] `client/services/BargainEngine.ts` - Deployed
 - [ ] `client/hooks/useBargainEngine.ts` - Deployed
 - [ ] `client/components/ConversationalBargainModal.tsx` - Updated
@@ -336,18 +356,22 @@ const bargainProduct: BargainProduct = {
 - [ ] Preview link shared with Zubin
 
 ### Phase 2: Flights Module
+
 - [ ] Integrate BargainEngine into flight booking
 - [ ] Wire "Bargain Now" button on flight cards
 - [ ] Test full flow
 - [ ] Deploy
 
 ### Phase 3: Transfers Module
+
 - [ ] Repeat Phase 2 workflow
 
 ### Phase 4: Packages Module
+
 - [ ] Repeat Phase 2 workflow
 
 ### Phase 5: Add-ons Module
+
 - [ ] Repeat Phase 2 workflow
 
 ---
@@ -355,15 +379,19 @@ const bargainProduct: BargainProduct = {
 ## 🔧 Troubleshooting
 
 ### Issue: BargainEngine not initialized
+
 **Solution**: Ensure `chatAnalyticsService` is available before calling `useBargainEngine`
 
 ### Issue: Mobile buttons off-screen
+
 **Solution**: Check `maxHeight` and `overflow-y: auto` on parent containers; verify `env(safe-area-inset-bottom)` is applied
 
 ### Issue: Analytics events not firing
+
 **Solution**: Verify `chatAnalyticsService` is imported and `BargainEngine` is tracking events; check browser console for errors
 
 ### Issue: Round 2 input not showing
+
 **Solution**: Check that `showOfferActions === false` after user accepts Round 1; verify `round === 2` state is set
 
 ---
@@ -371,6 +399,7 @@ const bargainProduct: BargainProduct = {
 ## 📞 Support
 
 For questions or issues:
+
 1. Check this guide's Troubleshooting section
 2. Review the code comments in `BargainEngine.ts` and `useBargainEngine.ts`
 3. Check browser console for errors

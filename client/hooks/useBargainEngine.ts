@@ -4,7 +4,7 @@
  * Ensures identical behavior across all product types
  */
 
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from "react";
 import {
   BargainEngine,
   BargainProduct,
@@ -12,14 +12,21 @@ import {
   BargainRound,
   initializeBargainEngine,
   getBargainEngine,
-} from '@/services/BargainEngine';
-import { chatAnalyticsService } from '@/services/chatAnalyticsService';
+} from "@/services/BargainEngine";
+import { chatAnalyticsService } from "@/services/chatAnalyticsService";
 
 export interface UseBargainEngineProps {
   product: BargainProduct;
   basePrice: number;
-  onPriceSelected: (sessionId: string, selectedPrice: number, selectedRound: 1 | 2) => void;
-  onAbandon?: (sessionId: string, reason: 'timer_expired' | 'user_exit') => void;
+  onPriceSelected: (
+    sessionId: string,
+    selectedPrice: number,
+    selectedRound: 1 | 2,
+  ) => void;
+  onAbandon?: (
+    sessionId: string,
+    reason: "timer_expired" | "user_exit",
+  ) => void;
 }
 
 export interface UseBargainEngineReturn {
@@ -32,13 +39,13 @@ export interface UseBargainEngineReturn {
   maxRounds: number;
   isSessionActive: boolean;
   isSessionExpired: boolean;
-  
+
   // Actions
   startSession: () => string;
   submitRound1Price: (userWishPrice: number) => BargainRound;
   submitRound2Price: (userWishPrice: number) => BargainRound;
   selectPrice: (selectedRound: 1 | 2) => number;
-  abandonSession: (reason: 'timer_expired' | 'user_exit') => number;
+  abandonSession: (reason: "timer_expired" | "user_exit") => number;
   getSession: () => BargainSession | null;
   cleanupExpiredSessions: () => void;
 }
@@ -60,7 +67,9 @@ function ensureBargainEngineInitialized(): BargainEngine {
  * Hook: useBargainEngine
  * Provides bargain logic interface for any product type
  */
-export function useBargainEngine(props: UseBargainEngineProps): UseBargainEngineReturn {
+export function useBargainEngine(
+  props: UseBargainEngineProps,
+): UseBargainEngineReturn {
   const { product, basePrice, onPriceSelected, onAbandon } = props;
 
   const [sessionId, setSessionId] = useState<string | null>(null);
@@ -91,7 +100,7 @@ export function useBargainEngine(props: UseBargainEngineProps): UseBargainEngine
 
   // Start a new bargain session
   const startSession = useCallback((): string => {
-    if (!engineRef.current) throw new Error('BargainEngine not initialized');
+    if (!engineRef.current) throw new Error("BargainEngine not initialized");
 
     const newSession = engineRef.current.initSession(product, basePrice);
     setSessionId(newSession.sessionId);
@@ -105,7 +114,7 @@ export function useBargainEngine(props: UseBargainEngineProps): UseBargainEngine
   const submitRound1Price = useCallback(
     (userWishPrice: number): BargainRound => {
       if (!sessionId || !engineRef.current) {
-        throw new Error('Bargain session not initialized');
+        throw new Error("Bargain session not initialized");
       }
 
       const round = engineRef.current.processRound1(sessionId, userWishPrice);
@@ -117,14 +126,14 @@ export function useBargainEngine(props: UseBargainEngineProps): UseBargainEngine
 
       return round;
     },
-    [sessionId]
+    [sessionId],
   );
 
   // Submit Round 2 price
   const submitRound2Price = useCallback(
     (userWishPrice: number): BargainRound => {
       if (!sessionId || !engineRef.current) {
-        throw new Error('Bargain session not initialized');
+        throw new Error("Bargain session not initialized");
       }
 
       const round = engineRef.current.processRound2(sessionId, userWishPrice);
@@ -136,17 +145,20 @@ export function useBargainEngine(props: UseBargainEngineProps): UseBargainEngine
 
       return round;
     },
-    [sessionId]
+    [sessionId],
   );
 
   // User selects a price (Round 1 or Round 2)
   const selectPrice = useCallback(
     (selectedRound: 1 | 2): number => {
       if (!sessionId || !engineRef.current) {
-        throw new Error('Bargain session not initialized');
+        throw new Error("Bargain session not initialized");
       }
 
-      const selectedPrice = engineRef.current.selectPrice(sessionId, selectedRound);
+      const selectedPrice = engineRef.current.selectPrice(
+        sessionId,
+        selectedRound,
+      );
       const updatedSession = engineRef.current.getSession(sessionId);
       if (updatedSession) {
         setSession(updatedSession);
@@ -157,14 +169,14 @@ export function useBargainEngine(props: UseBargainEngineProps): UseBargainEngine
 
       return selectedPrice;
     },
-    [sessionId, onPriceSelected]
+    [sessionId, onPriceSelected],
   );
 
   // Abandon session (timer expires or user exits)
   const abandonSession = useCallback(
-    (reason: 'timer_expired' | 'user_exit'): number => {
+    (reason: "timer_expired" | "user_exit"): number => {
       if (!sessionId || !engineRef.current) {
-        throw new Error('Bargain session not initialized');
+        throw new Error("Bargain session not initialized");
       }
 
       const revertedPrice = engineRef.current.abandonBargain(sessionId, reason);
@@ -176,7 +188,7 @@ export function useBargainEngine(props: UseBargainEngineProps): UseBargainEngine
 
       return revertedPrice;
     },
-    [sessionId, onAbandon]
+    [sessionId, onAbandon],
   );
 
   // Get current session
@@ -192,8 +204,11 @@ export function useBargainEngine(props: UseBargainEngineProps): UseBargainEngine
     }
   }, []);
 
-  const isSessionActive = sessionId !== null && session !== null && !session.selectedPrice;
-  const isSessionExpired = sessionId ? engineRef.current?.isSessionExpired(sessionId) ?? false : false;
+  const isSessionActive =
+    sessionId !== null && session !== null && !session.selectedPrice;
+  const isSessionExpired = sessionId
+    ? (engineRef.current?.isSessionExpired(sessionId) ?? false)
+    : false;
 
   return {
     sessionId,

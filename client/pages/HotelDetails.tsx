@@ -1582,7 +1582,11 @@ function HotelDetailsContent() {
     });
   };
 
-  const handleBooking = (roomType: any, bargainPrice?: number, bargainMetadata?: any) => {
+  const handleBooking = (
+    roomType: any,
+    bargainPrice?: number,
+    bargainMetadata?: any,
+  ) => {
     let perNightPrice: number;
     let totalPrice: number;
 
@@ -3069,7 +3073,11 @@ function HotelDetailsContent() {
                                               `Hotel Details Desktop Bargain success! Final price: ${finalPrice}, Order: ${orderRef}, Bargain Metadata:`,
                                               bargainMetadata,
                                             );
-                                            handleBooking(room, finalPrice, bargainMetadata);
+                                            handleBooking(
+                                              room,
+                                              finalPrice,
+                                              bargainMetadata,
+                                            );
                                             setBargainedRooms(
                                               (prev) =>
                                                 new Set([...prev, room.id]),
@@ -4294,13 +4302,21 @@ function HotelDetailsContent() {
                               )
                           : [],
                     }}
-                    onBargainSuccess={(finalPrice, orderRef, bargainMetadata) => {
+                    onBargainSuccess={(
+                      finalPrice,
+                      orderRef,
+                      bargainMetadata,
+                    ) => {
                       console.log(
                         `Hotel Details Bottom Bar Bargain success! Final price: ${finalPrice}, Order: ${orderRef}, Bargain Metadata:`,
                         bargainMetadata,
                       );
                       if (selectedRoomType) {
-                        handleBooking(selectedRoomType, finalPrice, bargainMetadata);
+                        handleBooking(
+                          selectedRoomType,
+                          finalPrice,
+                          bargainMetadata,
+                        );
                         setBargainedRooms(
                           (prev) => new Set([...prev, selectedRoomType.id]),
                         );
