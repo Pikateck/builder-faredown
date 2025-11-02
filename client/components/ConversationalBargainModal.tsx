@@ -1493,7 +1493,7 @@ export function ConversationalBargainModal({
             <div
               className="flex flex-col gap-2 w-full"
               style={{
-                maxHeight: isMobileDevice() ? "none" : "auto",
+                maxHeight: "none",
                 overflowY: "visible",
                 overflowX: "hidden",
                 paddingBottom: isMobileDevice()
