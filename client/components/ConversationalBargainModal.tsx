@@ -388,7 +388,7 @@ export function ConversationalBargainModal({
         return {
           warningMessage:
             "Your final bargain. This may not be better than your Safe Deal.",
-          checkingMessage: "Rechecking at {price}…",
+          checkingMessage: "Final check at {price}…",
           supplierResponse: "Today’s offer is {offer}.",
           agentResponse:
             "Round 2 offer: {offer}. You can book now or try Round 3.",
