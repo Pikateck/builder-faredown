@@ -645,10 +645,19 @@ router.get("/", async (req, res) => {
       JSON.stringify(searchParams, null, 2),
     );
 
-    // Fetch live TBO hotel results
+    // Fetch live TBO hotel results with timeout
     let tboResults = [];
     try {
-      tboResults = await adapter.searchHotels(searchParams);
+      // Add 30-second timeout to prevent hanging
+      const searchPromise = adapter.searchHotels(searchParams);
+      const timeoutPromise = new Promise((_, reject) => {
+        setTimeout(
+          () => reject(new Error("TBO search timeout after 30 seconds")),
+          30000,
+        );
+      });
+
+      tboResults = await Promise.race([searchPromise, timeoutPromise]);
       console.log(
         `✅ adapter.searchHotels returned ${tboResults.length} hotels`,
       );
@@ -670,6 +679,11 @@ router.get("/", async (req, res) => {
           `   Response data:`,
           JSON.stringify(searchError.response.data).slice(0, 500),
         );
+      }
+
+      // Log timeout specifically
+      if (searchError.message.includes("timeout")) {
+        console.error("⏱️ Search operation timed out - using fallback");
       }
 
       tboResults = [];
