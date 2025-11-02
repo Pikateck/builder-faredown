@@ -4021,6 +4021,43 @@ function HotelDetailsContent() {
           </div>
         </div>
 
+        {/* Mobile & Tablet Filter Modal */}
+        <Sheet open={isMobileFilterOpen} onOpenChange={setIsMobileFilterOpen}>
+          <SheetContent
+            side="bottom"
+            className="lg:hidden h-auto max-h-[90vh] rounded-t-3xl flex flex-col"
+          >
+            <div className="py-4 flex-1 overflow-y-auto">
+              <div className="px-4 mb-4">
+                <h2 className="text-lg font-semibold text-gray-900">Filter Hotels</h2>
+              </div>
+              <div className="px-4">
+                <ComprehensiveFilters
+                  priceRange={filterPriceRange}
+                  setPriceRange={setFilterPriceRange}
+                  selectedFilters={tboSelectedFilters}
+                  setSelectedFilters={setTboSelectedFilters}
+                  sortBy={sortBy}
+                  setSortBy={setSortBy}
+                  onClearFilters={() => {
+                    setTboSelectedFilters({});
+                    setFilterPriceRange([0, 25000]);
+                  }}
+                  priceMax={25000}
+                />
+              </div>
+            </div>
+            <div className="border-t border-gray-200 px-4 py-4 mt-4">
+              <Button
+                className="w-full bg-[#003580] hover:bg-[#002a66] text-white font-medium py-3"
+                onClick={() => setIsMobileFilterOpen(false)}
+              >
+                Apply Filters
+              </Button>
+            </div>
+          </SheetContent>
+        </Sheet>
+
         {/* Share Modal */}
         <Dialog open={isShareModalOpen} onOpenChange={setIsShareModalOpen}>
           <DialogContent className="max-w-md">
