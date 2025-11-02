@@ -381,7 +381,7 @@ export function ConversationalBargainModal({
           checkingMessage: "Let me check with {supplier} about {price}…",
           supplierResponse: "Good news — we can offer {offer}.",
           agentResponse:
-            "Note: the first offer is often the best. {offer}. You can book now or try Round 2.",
+            "Your first deal is still safe. This is your final chance to improve it. {offer}. You can book now or try your final bargain.",
           acceptanceChance: 0.7, // 70% chance for Round 1 (best-tilt)
         };
       case 2:
