@@ -387,7 +387,7 @@ export function ConversationalBargainModal({
       case 2:
         return {
           warningMessage:
-            "Round 2. This may not be better than your last offer.",
+            "Your final bargain. This may not be better than your Safe Deal.",
           checkingMessage: "Rechecking at {price}…",
           supplierResponse: "Today’s offer is {offer}.",
           agentResponse:
