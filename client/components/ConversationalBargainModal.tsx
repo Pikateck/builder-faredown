@@ -1242,12 +1242,17 @@ export function ConversationalBargainModal({
           display: "flex",
           flexDirection: "column",
           overflow: "hidden",
+          position: isMobileDevice() ? "fixed" : "relative",
           ...(isMobileDevice()
             ? {
                 inset: "0",
                 transform: "none",
                 width: "100%",
                 maxWidth: "100%",
+                top: "0",
+                left: "0",
+                right: "0",
+                bottom: "0",
               }
             : {}),
         }}
