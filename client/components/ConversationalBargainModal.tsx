@@ -685,7 +685,7 @@ export function ConversationalBargainModal({
 
               setShowOfferActions(true);
               setTimerActive(true);
-              setTimerSeconds(30);
+              setTimerSeconds(round === 1 ? 20 : 30);
 
               if (isMobileDevice()) {
                 hapticFeedback("medium");
