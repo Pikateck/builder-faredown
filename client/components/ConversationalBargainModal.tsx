@@ -1464,12 +1464,13 @@ export function ConversationalBargainModal({
                   : "1rem",
               }}
             >
-              {/* ✅ ROUND 2: Dual Price Selection - Choose between Safe Deal and Final Offer */}
+              {/* ✅ ROUND 2: Dual Price Selection - Choose between Safe Deal and Final Offer - ONLY show if timer hasn't expired */}
               {!isComplete &&
                 round === 2 &&
                 safeDealPrice &&
                 showOfferActions &&
-                finalOffer && (
+                finalOffer &&
+                !timerExpired && (
                   <>
                     <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
                       <p className="text-sm text-blue-700 font-semibold mb-1">
@@ -1491,15 +1492,19 @@ export function ConversationalBargainModal({
                     <Button
                       onClick={() => {
                         setSelectedPrice("safe");
+                        // Track selection event
                         chatAnalyticsService
-                          .trackEvent("bargain_safe_deal_selected", {
-                            hotelId: hotel?.id,
-                            city: hotel?.city,
-                            selected_price: safeDealPrice,
-                            alternative_price: finalOffer,
-                            price_original: basePrice,
+                          .trackEvent("bargain_price_selected", {
+                            selected: "safe",
+                            safe_deal_price: safeDealPrice,
+                            final_offer_price: finalOffer,
+                            savings: basePrice - safeDealPrice,
                             module,
-                            product_ref: productRef,
+                            productId: hotel?.id || productRef,
+                            city: hotel?.city,
+                            originalPrice: basePrice,
+                            device: isMobileDevice() ? "mobile" : "desktop",
+                            browser: typeof window !== "undefined" ? (window as any).navigator?.userAgent : "",
                           })
                           .catch(console.warn);
                       }}
@@ -1526,15 +1531,19 @@ export function ConversationalBargainModal({
                     <Button
                       onClick={() => {
                         setSelectedPrice("final");
+                        // Track selection event
                         chatAnalyticsService
-                          .trackEvent("bargain_final_offer_selected", {
-                            hotelId: hotel?.id,
-                            city: hotel?.city,
-                            selected_price: finalOffer,
+                          .trackEvent("bargain_price_selected", {
+                            selected: "final",
                             safe_deal_price: safeDealPrice,
-                            price_original: basePrice,
+                            final_offer_price: finalOffer,
+                            savings: basePrice - finalOffer,
                             module,
-                            product_ref: productRef,
+                            productId: hotel?.id || productRef,
+                            city: hotel?.city,
+                            originalPrice: basePrice,
+                            device: isMobileDevice() ? "mobile" : "desktop",
+                            browser: typeof window !== "undefined" ? (window as any).navigator?.userAgent : "",
                           })
                           .catch(console.warn);
                       }}
@@ -1557,8 +1566,8 @@ export function ConversationalBargainModal({
                       )}
                     </Button>
 
-                    {/* Book button - only enabled when a price is selected */}
-                    {selectedPrice && (
+                    {/* Book button - only enabled when a price is selected AND timer is still active */}
+                    {selectedPrice && timerActive && (
                       <Button
                         onClick={() => handleAcceptOffer()}
                         disabled={isBooking}
@@ -1567,7 +1576,7 @@ export function ConversationalBargainModal({
                       >
                         {isBooking
                           ? "Processing..."
-                          : `Book Selected Price Now - ${timerActive ? formatTime(timerSeconds) : ""}`}
+                          : `Book Selected Price Now - ${formatTime(timerSeconds)}`}
                       </Button>
                     )}
                   </>
