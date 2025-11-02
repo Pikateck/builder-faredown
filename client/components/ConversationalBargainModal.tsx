@@ -1688,19 +1688,14 @@ export function ConversationalBargainModal({
                 </Button>
               )}
 
-              {/* Try another round - visible during timer AND after, but not at max rounds and not while submitting */}
-              {!isComplete && round < TOTAL_ROUNDS && !isNegotiating && (
+              {/* Try another round - only show in Round 1 */}
+              {!isComplete && round === 1 && !isNegotiating && (
                 <Button
                   onClick={handleTryAgain}
                   className="w-full bg-[#0071c2] text-white hover:bg-[#005a9c] font-medium py-3 h-11 mobile-touch-target rounded-xl"
                   aria-label="Try another negotiation round"
                 >
-                  <span className="hidden sm:inline">
-                    {round === 1 ? "Try Final Bargain" : ""}
-                  </span>
-                  <span className="sm:hidden">
-                    {round === 1 ? "Try Final Bargain" : ""}
-                  </span>
+                  Try Final Bargain
                 </Button>
               )}
             </div>
