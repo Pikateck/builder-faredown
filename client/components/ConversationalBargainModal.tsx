@@ -15,6 +15,7 @@ import {
   Star,
   TrendingUp,
   CheckCircle,
+  CheckCircle2,
   Sparkles,
   Crown,
   ArrowLeft,
