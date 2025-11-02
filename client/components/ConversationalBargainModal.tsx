@@ -929,9 +929,9 @@ export function ConversationalBargainModal({
 
           // Proceed without hold but with success messaging
           const entityId = productRef || `${module}_${Date.now()}`;
-          const savings = basePrice - finalOffer;
+          const savings = basePrice - priceToHold;
           chatAnalyticsService
-            .trackAccepted(module, entityId, finalOffer, savings)
+            .trackAccepted(module, entityId, priceToHold, savings)
             .catch(console.warn);
 
           // Log accepted value telemetry
@@ -939,10 +939,10 @@ export function ConversationalBargainModal({
           chatAnalyticsService
             .trackEvent("accepted" as any, {
               round_index: round - 1,
-              accepted_price: finalOffer,
+              accepted_price: priceToHold,
               original_price: basePrice,
               savings,
-              was_suggested: suggestions.includes(finalOffer),
+              was_suggested: suggestions.includes(priceToHold),
               module,
               product_ref: productRef,
             })
@@ -960,19 +960,19 @@ export function ConversationalBargainModal({
               updatePrice({
                 bargainApplied: {
                   originalTotal: basePrice,
-                  bargainedTotal: finalOffer,
+                  bargainedTotal: priceToHold,
                   discount: savings,
                   round: round,
                   appliedAt: new Date().toISOString(),
                 },
-                grandTotal: finalOffer,
+                grandTotal: priceToHold,
               });
               logPricePipeline("BARGAIN", {
                 ...priceSnapshot,
-                grandTotal: finalOffer,
+                grandTotal: priceToHold,
                 bargainApplied: {
                   originalTotal: basePrice,
-                  bargainedTotal: finalOffer,
+                  bargainedTotal: priceToHold,
                   discount: savings,
                   round: round,
                   appliedAt: new Date().toISOString(),
@@ -980,9 +980,17 @@ export function ConversationalBargainModal({
               });
             }
 
-            onAccept(finalOffer, orderRef, {
+            onAccept(priceToHold, orderRef, {
               isHeld: false,
               originalPrice: basePrice,
+              bargainedPrice: priceToHold,
+              // ✅ CRITICAL: Include bargain selection info for Round 2
+              ...(round === 2 && safeDealPrice && {
+                bargainAttempts: 2,
+                selectedPrice: selectedPrice === "safe" ? "Safe Deal" : "Final Bargain Offer",
+                safeDealPrice: safeDealPrice,
+                finalOfferPrice: finalOffer,
+              }),
               savings: savings,
               module,
               productRef,
