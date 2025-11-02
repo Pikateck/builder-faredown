@@ -395,7 +395,7 @@ export function ConversationalBargainModal({
           acceptanceChance: 0.5, // 50% chance for Round 2 (risk)
         };
       default:
-        return getRoundBehavior(3);
+        return getRoundBehavior(2);
     }
   }, []);
 
@@ -1451,7 +1451,7 @@ export function ConversationalBargainModal({
                           const orderRef = `BRG_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                           addMessage(
                             "agent",
-                            `�� Excellent! Creating your booking hold at ${formatPrice(price)}...`,
+                            `🎉 Excellent! Creating your booking hold at ${formatPrice(price)}...`,
                           );
                           try {
                             const holdResponse = await fetch(
