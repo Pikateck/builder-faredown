@@ -3061,11 +3061,13 @@ function HotelDetailsContent() {
                                           onBargainSuccess={(
                                             finalPrice,
                                             orderRef,
+                                            bargainMetadata,
                                           ) => {
                                             console.log(
-                                              `Hotel Details Desktop Bargain success! Final price: ${finalPrice}, Order: ${orderRef}`,
+                                              `Hotel Details Desktop Bargain success! Final price: ${finalPrice}, Order: ${orderRef}, Bargain Metadata:`,
+                                              bargainMetadata,
                                             );
-                                            handleBooking(room, finalPrice);
+                                            handleBooking(room, finalPrice, bargainMetadata);
                                             setBargainedRooms(
                                               (prev) =>
                                                 new Set([...prev, room.id]),
