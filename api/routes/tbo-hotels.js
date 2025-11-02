@@ -84,25 +84,54 @@ router.post("/circuit/reset", async (req, res) => {
 
 // Cities typeahead (cached, searchable)
 router.get("/cities", async (req, res) => {
+  // Set timeout for cities endpoint
+  const responseTimeout = setTimeout(() => {
+    if (!res.headersSent) {
+      console.error("⏱️ Cities endpoint timeout");
+      res.status(200).json({
+        success: false,
+        error: "Request timeout",
+        data: [],
+      });
+    }
+  }, 30000);
+
+  res.on("finish", () => {
+    clearTimeout(responseTimeout);
+  });
+
   try {
     const adapter = getTboAdapter();
     const { q = "", limit = 15, country = null } = req.query;
 
     console.log(`🔍 Cities search - Query: "${q}", Limit: ${limit}`);
 
-    // Call searchCities - it will auto-seed if table is empty
-    const cities = await adapter.searchCities(
+    // Call searchCities with timeout
+    const citiesPromise = adapter.searchCities(
       q,
       Math.min(parseInt(limit, 10) || 15, 100),
       country,
     );
 
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(() => reject(new Error("Cities search timeout")), 20000);
+    });
+
+    const cities = await Promise.race([citiesPromise, timeoutPromise]);
+
     console.log(`✅ Found ${cities.length} cities matching "${q}"`);
 
+    clearTimeout(responseTimeout);
     res.json({ success: true, data: cities });
   } catch (e) {
+    clearTimeout(responseTimeout);
     console.error(`❌ Cities search error:`, e.message);
-    res.status(500).json({ success: false, error: e.message });
+    // Return success with empty data instead of error
+    res.status(200).json({
+      success: false,
+      error: e.message,
+      data: [],
+    });
   }
 });
 
