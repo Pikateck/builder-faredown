@@ -167,6 +167,14 @@ export default function HotelBookingConfirmation() {
       fees: 50,
       addOns: location.state?.selectedExtras?.length ? 200 : 0,
       total: location.state?.finalPrice || 920.24,
+      // ✅ CRITICAL: Include 2-attempt bargain details
+      ...(location.state?.bargainMetadata && {
+        bargainAttempts: location.state.bargainMetadata.bargainAttempts,
+        originalPrice: location.state.bargainMetadata.originalPrice,
+        safeDealPrice: location.state.bargainMetadata.safeDealPrice,
+        finalOfferPrice: location.state.bargainMetadata.finalOfferPrice,
+        selectedPrice: location.state.bargainMetadata.selectedPrice,
+      }),
     },
     addOns: location.state?.selectedExtras || [],
     preferences: location.state?.preferences || null,
