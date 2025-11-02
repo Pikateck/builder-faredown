@@ -1451,13 +1451,15 @@ export function ConversationalBargainModal({
         {/* Timer and Offer Actions - Keyboard Safe with aria-live for accessibility */}
         {showOfferActions && finalOffer && (
           <div
-            className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 flex-shrink-0 w-full"
+            className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 w-full"
             style={{
               paddingBottom: isMobileDevice()
                 ? "calc(1rem + env(safe-area-inset-bottom))"
                 : "1rem",
               minHeight: "auto",
               overflow: "visible",
+              maxHeight: isMobileDevice() ? "calc(100dvh - 200px)" : "auto",
+              overflowY: "auto",
             }}
             aria-live="polite"
             aria-label="Negotiated offer details"
