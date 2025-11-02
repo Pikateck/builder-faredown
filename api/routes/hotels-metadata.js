@@ -394,6 +394,8 @@ const MOCK_HOTELS = {
           description: "Standard Room",
           roomType: "Standard Room",
           beds: "Double bed",
+          roomSize: "16 sq m",
+          view: "Street View",
           isRefundable: false,
           breakfastIncluded: false,
           smokingAllowed: true,
