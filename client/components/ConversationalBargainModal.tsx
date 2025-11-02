@@ -791,13 +791,15 @@ export function ConversationalBargainModal({
             module,
             productRef,
             originalPrice: basePrice,
-            negotiatedPrice: finalOffer,
+            negotiatedPrice: priceToHold,
             currency: selectedCurrency.code,
             orderRef,
             holdDurationMinutes: 15, // Hold price for 15 minutes
             userData: {
               userName: effectiveUserName,
               round,
+              // ✅ CRITICAL: Include which price was selected in Round 2
+              ...(round === 2 && selectedPrice && { selectedPrice }),
             },
           }),
         });
