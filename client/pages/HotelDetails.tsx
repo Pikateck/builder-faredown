@@ -2008,6 +2008,28 @@ function HotelDetailsContent() {
                               )}
                             </div>
 
+                            {/* Room Details: Bed Type, Size, View */}
+                            <div className="mb-4 space-y-2 text-xs">
+                              {room.beds && (
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-gray-700">Beds:</span>
+                                  <span className="text-gray-600">{room.beds}</span>
+                                </div>
+                              )}
+                              {room.roomSize && (
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-gray-700">Room Size:</span>
+                                  <span className="text-gray-600">{room.roomSize}</span>
+                                </div>
+                              )}
+                              {room.view && (
+                                <div className="flex items-center gap-2">
+                                  <span className="font-medium text-gray-700">View:</span>
+                                  <span className="text-gray-600">{room.view}</span>
+                                </div>
+                              )}
+                            </div>
+
                             {/* Simple Room Features */}
                             <div className="flex flex-wrap gap-2 mb-4">
                               {Array.isArray(room.features)
