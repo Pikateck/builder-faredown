@@ -200,12 +200,12 @@ export function useBargainEngine(props: UseBargainEngineProps): UseBargainEngine
     session,
     round,
     timerDuration: engineRef.current?.getTimerDuration() ?? 30,
-    safeDealPrice: sessionRef.current?.round1?.systemOffer ?? null,
-    finalOfferPrice: sessionRef.current?.round2?.systemOffer ?? null,
+    safeDealPrice: session?.round1?.systemOffer ?? null,
+    finalOfferPrice: session?.round2?.systemOffer ?? null,
     maxRounds: engineRef.current?.getMaxRounds() ?? 2,
     isSessionActive,
     isSessionExpired,
-    
+
     startSession,
     submitRound1Price,
     submitRound2Price,
@@ -215,8 +215,5 @@ export function useBargainEngine(props: UseBargainEngineProps): UseBargainEngine
     cleanupExpiredSessions,
   };
 }
-
-// Fix the reference error
-const sessionRef = { current: null as BargainSession | null };
 
 export default useBargainEngine;
