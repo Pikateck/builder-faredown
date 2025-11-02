@@ -776,15 +776,28 @@ export function ConversationalBargainModal({
           // Move to Round 2
           setRound(2);
 
+          // Track Round 1 completion and Round 2 trigger
+          chatAnalyticsService
+            .trackEvent("bargain_round1_completed", {
+              safe_deal_price: finalOffer,
+              original_price: basePrice,
+              savings: basePrice - finalOffer,
+              module,
+              productId: hotel?.id || entityId,
+              city: hotel?.city,
+              device: isMobileDevice() ? "mobile" : "desktop",
+            })
+            .catch(console.warn);
+
           // Track Round 2 trigger
           chatAnalyticsService
-            .trackEvent("bargain_round_2_triggered", {
-              hotelId: hotel?.id,
-              city: hotel?.city,
-              price_safe_deal: finalOffer,
-              price_original: basePrice,
+            .trackEvent("bargain_round2_triggered", {
+              safe_deal_price: finalOffer,
+              original_price: basePrice,
               module,
-              product_ref: entityId,
+              productId: hotel?.id || entityId,
+              city: hotel?.city,
+              device: isMobileDevice() ? "mobile" : "desktop",
             })
             .catch(console.warn);
         }, 1500);
