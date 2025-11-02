@@ -802,6 +802,11 @@ export function ConversationalBargainModal({
           }),
         });
 
+        // ✅ CRITICAL: Use the selected price in Round 2 (either Safe Deal or Final Offer)
+        const priceToHold = round === 2 && selectedPrice ?
+          (selectedPrice === "safe" ? safeDealPrice : finalOffer)
+          : finalOffer;
+
         // Additional safety check
         if (!holdResponse) {
           throw new Error("Network request failed");
