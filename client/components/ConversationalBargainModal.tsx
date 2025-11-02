@@ -1100,10 +1100,11 @@ export function ConversationalBargainModal({
       }, 1000);
     }
 
-    if (round >= 3) {
+    // ✅ CRITICAL: Only 2 attempts allowed - if trying to go past Round 2, lock the flow
+    if (round >= TOTAL_ROUNDS) {
       addMessage(
         "agent",
-        "You've reached the maximum number of negotiation rounds (3/3). You can book at the original price or close this chat.",
+        `You've reached your final attempt (${round}/${TOTAL_ROUNDS}). Please select your price below to complete your booking.`,
       );
       setIsComplete(true);
       return;
