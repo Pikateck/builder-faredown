@@ -2599,7 +2599,7 @@ function HotelDetailsContent() {
                   Apply Filters
                 </Button>
               </div>
-            </div>
+                </div>
               </div>
 
               {/* Right Content Area */}
