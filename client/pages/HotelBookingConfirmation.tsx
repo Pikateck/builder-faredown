@@ -661,6 +661,54 @@ export default function HotelBookingConfirmation() {
                   </div>
                 )}
 
+                {/* ✅ 2-Attempt Bargain Details */}
+                {bookingData.pricing.bargainAttempts === 2 && (
+                  <>
+                    <div className="flex justify-between text-sm text-emerald-700">
+                      <span>Original Price</span>
+                      <span className="line-through">
+                        {formatPriceWithSymbol(
+                          bookingData.pricing.originalPrice,
+                          selectedCurrency.code,
+                        )}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-emerald-700">
+                        Safe Deal (Round 1)
+                        {bookingData.pricing.selectedPrice === "Safe Deal" ? " ✓" : ""}
+                      </span>
+                      <span className={bookingData.pricing.selectedPrice === "Safe Deal" ? "font-semibold text-emerald-900" : "text-gray-600"}>
+                        {formatPriceWithSymbol(
+                          bookingData.pricing.safeDealPrice,
+                          selectedCurrency.code,
+                        )}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-orange-700">
+                        Final Offer (Round 2)
+                        {bookingData.pricing.selectedPrice === "Final Bargain Offer" ? " ✓" : ""}
+                      </span>
+                      <span className={bookingData.pricing.selectedPrice === "Final Bargain Offer" ? "font-semibold text-orange-900" : "text-gray-600"}>
+                        {formatPriceWithSymbol(
+                          bookingData.pricing.finalOfferPrice,
+                          selectedCurrency.code,
+                        )}
+                      </span>
+                    </div>
+                    <div className="flex justify-between text-sm font-semibold border-t pt-2">
+                      <span>Your Selected Price ({bookingData.pricing.selectedPrice})</span>
+                      <span className="text-blue-900">
+                        {formatPriceWithSymbol(
+                          bookingData.pricing.subtotal,
+                          selectedCurrency.code,
+                        )}
+                      </span>
+                    </div>
+                  </>
+                )}
+
                 {/* Taxes & Fees */}
                 {(bookingData.pricing.taxes || bookingData.pricing.fees) && (
                   <div className="flex justify-between text-sm">
