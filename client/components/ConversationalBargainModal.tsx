@@ -779,9 +779,21 @@ export function ConversationalBargainModal({
       // Generate order reference with timestamp for tracking
       const orderRef = `BRG_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
+      // ✅ CRITICAL: Determine the price to hold based on Round and selection
+      const priceToHold =
+        round === 2 && selectedPrice
+          ? selectedPrice === "safe"
+            ? safeDealPrice
+            : finalOffer
+          : finalOffer;
+
+      // ✅ CRITICAL: Track which price was selected
+      const priceSelectionType =
+        round === 2 && selectedPrice ? selectedPrice : null;
+
       addMessage(
         "agent",
-        `🎉 Excellent! Creating your booking hold at ${formatPrice(finalOffer)}...`,
+        `🎉 Excellent! Creating your booking hold at ${formatPrice(priceToHold)}...`,
       );
 
       try {
@@ -808,14 +820,6 @@ export function ConversationalBargainModal({
             },
           }),
         });
-
-        // ✅ CRITICAL: Use the selected price in Round 2 (either Safe Deal or Final Offer)
-        const priceToHold =
-          round === 2 && selectedPrice
-            ? selectedPrice === "safe"
-              ? safeDealPrice
-              : finalOffer
-            : finalOffer;
 
         // Additional safety check
         if (!holdResponse) {
