@@ -639,11 +639,11 @@ export function ConversationalBargainModal({
             setTimeout(() => {
               addMessage(
                 "agent",
-                `Your price ${formatPrice(userOffer)} is matched. 30 seconds to book.`,
+                `Your price ${formatPrice(userOffer)} is matched. ${round === 1 ? '20' : '30'} seconds to decide.`,
               );
               setShowOfferActions(true);
               setTimerActive(true);
-              setTimerSeconds(30);
+              setTimerSeconds(round === 1 ? 20 : 30);
 
               if (isMobileDevice()) {
                 hapticFeedback("heavy");
@@ -685,7 +685,7 @@ export function ConversationalBargainModal({
 
               setShowOfferActions(true);
               setTimerActive(true);
-              setTimerSeconds(30);
+              setTimerSeconds(round === 1 ? 20 : 30);
 
               if (isMobileDevice()) {
                 hapticFeedback("medium");
