@@ -394,16 +394,6 @@ export function ConversationalBargainModal({
             "Final offer: {offer}. Choose your price below — you can't go back after this.",
           acceptanceChance: 0.5, // 50% chance for Round 2 (risk)
         };
-      case 3:
-        return {
-          warningMessage:
-            "Final round. The price could be higher, the same, or lower.",
-          checkingMessage: "Final check…",
-          supplierResponse: "Final offer: {offer}.",
-          agentResponse:
-            "Final offer: {offer}. This is your last chance to negotiate.",
-          acceptanceChance: 0.4, // 40% chance for Round 3 (final)
-        };
       default:
         return getRoundBehavior(3);
     }
@@ -1461,7 +1451,7 @@ export function ConversationalBargainModal({
                           const orderRef = `BRG_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
                           addMessage(
                             "agent",
-                            `🎉 Excellent! Creating your booking hold at ${formatPrice(price)}...`,
+                            `�� Excellent! Creating your booking hold at ${formatPrice(price)}...`,
                           );
                           try {
                             const holdResponse = await fetch(
