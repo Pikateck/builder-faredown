@@ -1405,9 +1405,9 @@ export function ConversationalBargainModal({
                   aria-label="Try another negotiation round"
                 >
                   <span className="hidden sm:inline">
-                    {round === 1 ? "Try Round 2" : "Try Final Round"}
+                    {round === 1 ? "Try Final Bargain" : ""}
                   </span>
-                  <span className="sm:hidden">Try Round {round + 1}</span>
+                  <span className="sm:hidden">{round === 1 ? "Try Final Bargain" : ""}</span>
                 </Button>
               )}
             </div>
