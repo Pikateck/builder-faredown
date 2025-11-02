@@ -1582,7 +1582,7 @@ function HotelDetailsContent() {
     });
   };
 
-  const handleBooking = (roomType: any, bargainPrice?: number) => {
+  const handleBooking = (roomType: any, bargainPrice?: number, bargainMetadata?: any) => {
     let perNightPrice: number;
     let totalPrice: number;
 
