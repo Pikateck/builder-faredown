@@ -2556,14 +2556,12 @@ function HotelDetailsContent() {
           </div>
         </div>
 
-        {/* Main Container */}
-        <div className="flex relative">
-          {/* Left Sidebar - Filters (Always Expanded on Desktop, Modal on Mobile) */}
-          <div
-            className={`${
-              isMobileFilterOpen ? "fixed inset-0 z-50 bg-white" : "hidden"
-            } lg:block lg:relative lg:w-80 xl:w-96 bg-white border-r border-gray-200 min-h-screen lg:sticky lg:top-[64px] lg:max-h-[calc(100vh-64px)]`}
-          >
+        {/* Main Container - MATCHING RESULTS PAGE LAYOUT */}
+        <div className="hidden md:block">
+          <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6">
+            <div className="flex gap-6">
+              {/* Left Sidebar - Desktop Filters - MATCHING RESULTS PAGE */}
+              <div className="hidden lg:block w-80 flex-shrink-0 rounded-xl shadow-lg border border-gray-200 bg-white sticky top-24 max-h-[calc(100vh-120px)] overflow-y-auto">
             <div className="overflow-y-auto h-full p-3 lg:p-4">
               {/* Mobile Header */}
               <div className="lg:hidden flex items-center justify-between mb-4 pb-3 border-b border-gray-200">
@@ -2602,10 +2600,10 @@ function HotelDetailsContent() {
                 </Button>
               </div>
             </div>
-          </div>
+              </div>
 
-          {/* Right Content Area */}
-          <div className="hidden md:flex flex-1 min-h-screen pb-20 md:pb-0 flex-col">
+              {/* Right Content Area */}
+              <div className="flex-1 flex flex-col">
             {/* Tab Navigation - Sticky */}
             <div className="bg-white border-b border-gray-200 sticky top-[64px] lg:top-0 z-30">
               <div className="flex overflow-x-auto scrollbar-hide">
@@ -4017,6 +4015,8 @@ function HotelDetailsContent() {
                   </div>
                 </div>
               )}
+            </div>
+              </div>
             </div>
           </div>
         </div>
