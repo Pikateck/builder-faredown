@@ -193,14 +193,40 @@ router.get("/hotel/:supplierHotelId", async (req, res) => {
 
 // Search (POST)
 router.post("/search", async (req, res) => {
+  // Set response timeout to 60 seconds to prevent hanging connections
+  const responseTimeout = setTimeout(() => {
+    if (!res.headersSent) {
+      console.error("⏱️ Response timeout on POST /search - sending fallback");
+      res.status(200).json({
+        success: false,
+        error: "Request timeout",
+        data: [],
+        via: "fixie_timeout",
+      });
+    }
+  }, 60000);
+
+  // Ensure timeout is cleared when response is sent
+  res.on("finish", () => {
+    clearTimeout(responseTimeout);
+  });
+
   const start = Date.now();
   try {
     const adapter = getTboAdapter();
     const TBOAdapter = require("../services/adapters/tboAdapter");
     const { v4: uuidv4 } = require("uuid");
 
-    // Execute raw search
-    const rawResults = await adapter.searchHotels(req.body || {});
+    // Execute raw search with 30-second timeout
+    const searchPromise = adapter.searchHotels(req.body || {});
+    const timeoutPromise = new Promise((_, reject) => {
+      setTimeout(
+        () => reject(new Error("TBO search timeout after 30 seconds")),
+        30000,
+      );
+    });
+
+    const rawResults = await Promise.race([searchPromise, timeoutPromise]);
     const duration = Date.now() - start;
 
     // Convert to UnifiedHotel format
