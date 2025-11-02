@@ -392,7 +392,7 @@ export function ConversationalBargainModal({
           checkingMessage: "Final check at {price}…",
           supplierResponse: "Today’s offer is {offer}.",
           agentResponse:
-            "Final offer: {offer}. Choose your price below — you can't go back after this.",
+            "Final offer: {offer}. You have 30 seconds to choose between your Safe Deal or this Final Offer below.",
           acceptanceChance: 0.5, // 50% chance for Round 2 (risk)
         };
       default:
@@ -918,7 +918,7 @@ export function ConversationalBargainModal({
             // Server is offline - proceed with graceful fallback
             addMessage(
               "agent",
-              `✅ Great! Proceeding with your booking at ${formatPrice(priceToHold)}. Please complete your booking quickly to secure this price.`,
+              `�� Great! Proceeding with your booking at ${formatPrice(priceToHold)}. Please complete your booking quickly to secure this price.`,
             );
           } else {
             addMessage(
