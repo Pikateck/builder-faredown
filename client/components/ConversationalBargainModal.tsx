@@ -1123,9 +1123,7 @@ export function ConversationalBargainModal({
     let nextRoundMessage = "";
 
     if (nextRound === 2) {
-      nextRoundMessage = `Round 2. This may not be better than your last offer. What price would you like to try?`;
-    } else if (nextRound === 3) {
-      nextRoundMessage = `Final round. The price could be higher, the same, or lower. What's your final offer?`;
+      nextRoundMessage = `Your final bargain attempt. This may not be better than your Safe Deal. What's your final offer?`;
     }
 
     addMessage("agent", nextRoundMessage);
