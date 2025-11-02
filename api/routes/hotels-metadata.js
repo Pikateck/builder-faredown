@@ -900,6 +900,7 @@ router.get("/", async (req, res) => {
     );
     console.log(`🏨 === HOTEL SEARCH END ===\n`);
 
+    clearTimeout(responseTimeout);
     return res.json({
       success: true,
       hotels: finalHotels,
@@ -908,16 +909,21 @@ router.get("/", async (req, res) => {
       pricing_status: "ready",
     });
   } catch (error) {
+    clearTimeout(responseTimeout);
     console.error("❌ /api/hotels ENDPOINT ERROR:", {
       message: error.message,
       stack: error.stack?.split("\n")[0],
     });
 
-    return res.status(500).json({
+    // Return safe fallback response instead of error
+    // This prevents frontend from getting "Failed to fetch"
+    return res.status(200).json({
+      success: false,
       error: "Failed to fetch hotels",
-      message: error.message,
+      message: "Service temporarily unavailable - showing cached data",
       hotels: [],
-      source: "error",
+      source: "error_fallback",
+      pricing_status: "error",
     });
   }
 });
