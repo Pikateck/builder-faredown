@@ -172,6 +172,12 @@ export function ConversationalBargainModal({
   const [previousOfferSeconds, setPreviousOfferSeconds] = useState<
     number | null
   >(null);
+  // ✅ NEW: Store "Safe Deal" price from Round 1 for display in Round 2
+  const [safeDealPrice, setSafeDealPrice] = useState<number | null>(null);
+  // ✅ NEW: Store user's selected price (safe or final) in Round 2
+  const [selectedPrice, setSelectedPrice] = useState<"safe" | "final" | null>(
+    null,
+  );
 
   const { selectedCurrency, formatPrice } = useCurrency();
   const { priceSnapshot, updatePrice } = usePriceContext();
