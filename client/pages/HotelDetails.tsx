@@ -2814,6 +2814,28 @@ function HotelDetailsContent() {
                                     )}
                                   </div>
 
+                                  {/* Room Details: Bed Type, Size, View */}
+                                  <div className="mb-3 space-y-1 text-xs">
+                                    {room.beds && (
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-medium text-gray-700">Beds:</span>
+                                        <span className="text-gray-600">{room.beds}</span>
+                                      </div>
+                                    )}
+                                    {room.roomSize && (
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-medium text-gray-700">Room Size:</span>
+                                        <span className="text-gray-600">{room.roomSize}</span>
+                                      </div>
+                                    )}
+                                    {room.view && (
+                                      <div className="flex items-center gap-2">
+                                        <span className="font-medium text-gray-700">View:</span>
+                                        <span className="text-gray-600">{room.view}</span>
+                                      </div>
+                                    )}
+                                  </div>
+
                                   {room.cancellationPolicy && (
                                     <div className="mb-3 text-xs">
                                       {room.isRefundable ? (
