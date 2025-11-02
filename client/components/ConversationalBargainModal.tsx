@@ -1613,7 +1613,7 @@ export function ConversationalBargainModal({
                       )}
                     </Button>
 
-                    {/* Book button - only enabled when a price is selected AND timer is still active */}
+                    {/* Book Selected Price button - show only when price selected AND timer active */}
                     {selectedPrice && timerActive && (
                       <Button
                         onClick={() => handleAcceptOffer()}
@@ -1624,6 +1624,20 @@ export function ConversationalBargainModal({
                         {isBooking
                           ? "Processing..."
                           : `Book Selected Price Now - ${formatTime(timerSeconds)}`}
+                      </Button>
+                    )}
+
+                    {/* Book at selected price button - show after timer expires if price was selected */}
+                    {selectedPrice && timerExpired && (
+                      <Button
+                        onClick={() => handleAcceptOffer()}
+                        disabled={isBooking}
+                        className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
+                        aria-label="Book at selected price"
+                      >
+                        {isBooking
+                          ? "Processing..."
+                          : `Book ${selectedPrice === "safe" ? "Safe" : "Final"} Deal - ${formatPrice(selectedPrice === "safe" ? safeDealPrice : finalOffer)}`}
                       </Button>
                     )}
                   </>
