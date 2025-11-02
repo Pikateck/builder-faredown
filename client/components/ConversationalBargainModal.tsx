@@ -1435,7 +1435,15 @@ export function ConversationalBargainModal({
               )}
             </div>
 
-            <div className="flex flex-col gap-2">
+            <div
+              className="flex flex-col gap-2 w-full"
+              style={{
+                maxHeight: isMobileDevice() ? "calc(100dvh - 350px)" : "auto",
+                overflowY: "auto",
+                overflowX: "hidden",
+                paddingBottom: isMobileDevice() ? "calc(1rem + env(safe-area-inset-bottom))" : "1rem",
+              }}
+            >
               {/* ✅ ROUND 2: Dual Price Selection - Choose between Safe Deal and Final Offer */}
               {!isComplete && round === 2 && safeDealPrice && showOfferActions && finalOffer && (
                 <>
