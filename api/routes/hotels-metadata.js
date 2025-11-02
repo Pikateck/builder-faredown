@@ -586,6 +586,25 @@ const MOCK_HOTELS = {
  * Returns live TBO hotels for a city
  */
 router.get("/", async (req, res) => {
+  // Set response timeout to 60 seconds to prevent hanging connections
+  const responseTimeout = setTimeout(() => {
+    if (!res.headersSent) {
+      console.error("⏱️ Response timeout - sending fallback data");
+      res.status(504).json({
+        error: "Request timeout",
+        message: "Hotel search took too long",
+        hotels: [],
+        source: "timeout",
+        success: false,
+      });
+    }
+  }, 60000);
+
+  // Ensure timeout is cleared when response is sent
+  res.on("finish", () => {
+    clearTimeout(responseTimeout);
+  });
+
   try {
     const cityId = req.query.cityId || req.query.city || req.query.destination;
     const checkIn = req.query.checkIn || req.query.checkin;
