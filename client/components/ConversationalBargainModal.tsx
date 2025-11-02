@@ -175,7 +175,7 @@ export function ConversationalBargainModal({
   >(null);
   // ✅ NEW: Store "Safe Deal" price from Round 1 for display in Round 2
   const [safeDealPrice, setSafeDealPrice] = useState<number | null>(null);
-  // ✅ NEW: Store user's selected price (safe or final) in Round 2
+  // ��� NEW: Store user's selected price (safe or final) in Round 2
   const [selectedPrice, setSelectedPrice] = useState<"safe" | "final" | null>(
     null,
   );
@@ -837,7 +837,7 @@ export function ConversationalBargainModal({
 
           // Track successful hold creation
           const entityId = productRef || `${module}_${Date.now()}`;
-          const savings = basePrice - finalOffer;
+          const savings = basePrice - priceToHold;
           chatAnalyticsService
             .trackAccepted(module, entityId, finalOffer, savings)
             .catch(console.warn);
