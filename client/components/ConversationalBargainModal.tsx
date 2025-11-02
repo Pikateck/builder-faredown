@@ -1541,7 +1541,10 @@ export function ConversationalBargainModal({
                             city: hotel?.city,
                             originalPrice: basePrice,
                             device: isMobileDevice() ? "mobile" : "desktop",
-                            browser: typeof window !== "undefined" ? (window as any).navigator?.userAgent : "",
+                            browser:
+                              typeof window !== "undefined"
+                                ? (window as any).navigator?.userAgent
+                                : "",
                           })
                           .catch(console.warn);
                       }}
@@ -1580,7 +1583,10 @@ export function ConversationalBargainModal({
                             city: hotel?.city,
                             originalPrice: basePrice,
                             device: isMobileDevice() ? "mobile" : "desktop",
-                            browser: typeof window !== "undefined" ? (window as any).navigator?.userAgent : "",
+                            browser:
+                              typeof window !== "undefined"
+                                ? (window as any).navigator?.userAgent
+                                : "",
                           })
                           .catch(console.warn);
                       }}
