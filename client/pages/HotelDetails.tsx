@@ -1671,6 +1671,8 @@ function HotelDetailsContent() {
         // Pass through any existing preferences/requests
         preferences: (location.state as any)?.preferences,
         guestDetails: (location.state as any)?.guestDetails,
+        // ✅ CRITICAL: Pass bargain metadata for 2-attempt engine
+        ...(bargainMetadata && { bargainMetadata }),
       },
     });
   };
