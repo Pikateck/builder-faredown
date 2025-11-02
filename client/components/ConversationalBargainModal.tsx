@@ -391,7 +391,7 @@ export function ConversationalBargainModal({
           checkingMessage: "Final check at {price}…",
           supplierResponse: "Today’s offer is {offer}.",
           agentResponse:
-            "Round 2 offer: {offer}. You can book now or try Round 3.",
+            "Final offer: {offer}. Choose your price below — you can't go back after this.",
           acceptanceChance: 0.5, // 50% chance for Round 2 (risk)
         };
       case 3:
