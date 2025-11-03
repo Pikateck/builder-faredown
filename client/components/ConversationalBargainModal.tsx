@@ -1489,12 +1489,14 @@ export function ConversationalBargainModal({
             </div>
 
             <div className="flex flex-col gap-2 w-full">
-              {/* ✅ ROUND 2: Dual Price Selection - Choose between Safe Deal and Final Offer - ONLY show if timer hasn't expired */}
+              {/* ✅ ROUND 2: Dual Price Selection - Choose between Safe Deal and Final Offer */}
+              {/* Show cards: during timer OR after expiry if a selection was made */}
               {!isComplete &&
                 round === 2 &&
                 safeDealPrice &&
                 showOfferActions &&
-                finalOffer && (
+                finalOffer &&
+                (timerActive || selectedPrice) && (
                   <>
                     {timerActive && !timerExpired && (
                       <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
