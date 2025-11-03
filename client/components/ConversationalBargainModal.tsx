@@ -1506,7 +1506,7 @@ export function ConversationalBargainModal({
                   `}
                   >
                     <Clock className="w-4 h-4 inline mr-1" />
-                    {formatTime(timerSeconds)}
+                    {formatTime(timerSeconds)} left to choose
                   </div>
                 )}
               </div>
