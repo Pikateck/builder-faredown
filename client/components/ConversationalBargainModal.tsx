@@ -1505,6 +1505,18 @@ export function ConversationalBargainModal({
               </div>
             )}
 
+            {/* Round 2 waiting state - show safe deal info while waiting for final bid */}
+            {round === 2 && safeDealPrice && !finalOffer && (
+              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <p className="text-sm font-semibold text-blue-800 mb-2">
+                  ✅ Your Safe Deal: {formatPrice(safeDealPrice)}
+                </p>
+                <p className="text-xs text-blue-700">
+                  Locked and guaranteed. Enter your final bargain price above to try for an even better deal!
+                </p>
+              </div>
+            )}
+
             <div className="flex flex-col gap-2 w-full">
               {/* ✅ ROUND 2: Dual Price Selection - Show immediately when Round 2 starts */}
               {/* Cards visible as long as Round 2 and both prices exist */}
