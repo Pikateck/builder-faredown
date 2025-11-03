@@ -1501,14 +1501,12 @@ export function ConversationalBargainModal({
             </div>
 
             <div className="flex flex-col gap-2 w-full">
-              {/* ✅ ROUND 2: Dual Price Selection - Choose between Safe Deal and Final Offer */}
-              {/* Show cards: during timer OR after expiry if a selection was made */}
+              {/* ✅ ROUND 2: Dual Price Selection - ALWAYS show when R2 offer exists */}
+              {/* Show immediately after Round 2 final offer appears */}
               {!isComplete &&
                 round === 2 &&
                 safeDealPrice &&
-                showOfferActions &&
-                finalOffer &&
-                (timerActive || selectedPrice) && (
+                finalOffer && (
                   <>
                     {timerActive && !timerExpired && (
                       <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
@@ -1650,17 +1648,17 @@ export function ConversationalBargainModal({
                   </>
                 )}
 
-              {/* ✅ ROUND 1: Standard single price booking */}
+              {/* ✅ ROUND 1: Lock R1 price and try for better in Round 2 */}
               {!isComplete && round === 1 && showOfferActions && (
                 <Button
                   onClick={() => handleAcceptOffer()}
                   disabled={isBooking}
                   className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
-                  aria-label="Book negotiated price now"
+                  aria-label="Lock this price and try for better"
                 >
                   {isBooking
                     ? "Processing..."
-                    : `Accept Deal - ${formatPrice(finalOffer)}`}
+                    : `Lock ${formatPrice(finalOffer)} & Try Final Bargain`}
                 </Button>
               )}
 
