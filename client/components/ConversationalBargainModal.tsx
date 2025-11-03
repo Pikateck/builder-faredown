@@ -1650,20 +1650,29 @@ export function ConversationalBargainModal({
                   </>
                 )}
 
-              {/* ✅ ROUND 1: Two options - Accept this price or Try Final Bargain */}
+              {/* ✅ ROUND 1: Standard single price booking */}
               {!isComplete && round === 1 && showOfferActions && (
-                <>
-                  <Button
-                    onClick={() => handleAcceptOffer()}
-                    disabled={isBooking}
-                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
-                    aria-label="Lock this price and try for better"
-                  >
-                    {isBooking
-                      ? "Processing..."
-                      : `Lock ${formatPrice(finalOffer)} & Try Final Bargain`}
-                  </Button>
-                </>
+                <Button
+                  onClick={() => handleAcceptOffer()}
+                  disabled={isBooking}
+                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
+                  aria-label="Book negotiated price now"
+                >
+                  {isBooking
+                    ? "Processing..."
+                    : `Accept Deal - ${formatPrice(finalOffer)}`}
+                </Button>
+              )}
+
+              {/* Try Final Bargain - only show in Round 1 */}
+              {!isComplete && round === 1 && !isNegotiating && showOfferActions && (
+                <Button
+                  onClick={handleTryAgain}
+                  className="w-full bg-[#0071c2] text-white hover:bg-[#005a9c] font-medium py-3 h-11 mobile-touch-target rounded-xl"
+                  aria-label="Try another negotiation round"
+                >
+                  Try Final Bargain
+                </Button>
               )}
 
               {/* Book at original - ONLY visible after timer expires AND no selection was made in Round 2 */}
