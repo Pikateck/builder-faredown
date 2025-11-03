@@ -1666,9 +1666,7 @@ export function ConversationalBargainModal({
                     >
                       {isBooking
                         ? "Processing..."
-                        : timerActive
-                          ? `Book Selected Price Now - ${formatTime(timerSeconds)}`
-                          : `Book ${selectedPrice === "safe" ? "Safe" : "Final"} Deal - ${formatPrice(selectedPrice === "safe" ? safeDealPrice : finalOffer)}`}
+                        : "Book Now"}
                     </Button>
                   )}
                 </>
