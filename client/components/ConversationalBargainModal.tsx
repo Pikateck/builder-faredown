@@ -299,13 +299,8 @@ export function ConversationalBargainModal({
           .catch(console.warn);
       }
 
-      // Keep showOfferActions true so offer buttons remain visible after expiry
-      addMessage(
-        "agent",
-        round === 2 && !selectedPrice
-          ? `The offer expired. You can book the original price or try again.`
-          : `The offer expired. You can try again or book the original price ${formatPrice(basePrice)}.`,
-      );
+      // No message needed - UI components handle the timer expiry state
+      // (Clean message box + button shown in the actions area)
     }
 
     return () => {
