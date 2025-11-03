@@ -790,6 +790,10 @@ export function ConversationalBargainModal({
               productId: hotel?.id || entityId,
               city: hotel?.city,
               device: isMobileDevice() ? "mobile" : "desktop",
+              browser:
+                typeof window !== "undefined"
+                  ? (window as any).navigator?.userAgent
+                  : "",
             })
             .catch(console.warn);
 
@@ -802,6 +806,10 @@ export function ConversationalBargainModal({
               productId: hotel?.id || entityId,
               city: hotel?.city,
               device: isMobileDevice() ? "mobile" : "desktop",
+              browser:
+                typeof window !== "undefined"
+                  ? (window as any).navigator?.userAgent
+                  : "",
             })
             .catch(console.warn);
         }, 1500);
