@@ -1504,11 +1504,7 @@ export function ConversationalBargainModal({
             <div className="flex flex-col gap-2 w-full">
               {/* ✅ ROUND 2: Dual Price Selection */}
               {/* showDualCards = (round === 2) && (timerActive || !!selectedPrice) */}
-              {!isComplete &&
-                round === 2 &&
-                safeDealPrice &&
-                finalOffer &&
-                (timerActive || selectedPrice) && (
+              {round === 2 && (timerActive || !!selectedPrice) && (
                   <>
                     {timerActive && !timerExpired && (
                       <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
@@ -1529,99 +1525,103 @@ export function ConversationalBargainModal({
                     )}
 
                     {/* Safe Deal Button - enabled only while timer is active */}
-                    <Button
-                      onClick={() => {
-                        setSelectedPrice("safe");
-                        // Track selection event
-                        chatAnalyticsService
-                          .trackEvent("bargain_price_selected", {
-                            selected: "safe",
-                            safe_deal_price: safeDealPrice,
-                            final_offer_price: finalOffer,
-                            savings: basePrice - safeDealPrice,
-                            module,
-                            productId: hotel?.id || productRef,
-                            city: hotel?.city,
-                            originalPrice: basePrice,
-                            device: isMobileDevice() ? "mobile" : "desktop",
-                            browser:
-                              typeof window !== "undefined"
-                                ? (window as any).navigator?.userAgent
-                                : "",
-                          })
-                          .catch(console.warn);
-                      }}
-                      disabled={
-                        selectedPrice !== null || isBooking || timerExpired
-                      }
-                      className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
-                        selectedPrice === "safe"
-                          ? "bg-emerald-600 text-white border-2 border-emerald-700"
-                          : selectedPrice === "final"
-                            ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                            : timerExpired
+                    {safeDealPrice && (
+                      <Button
+                        onClick={() => {
+                          setSelectedPrice("safe");
+                          // Track selection event
+                          chatAnalyticsService
+                            .trackEvent("bargain_price_selected", {
+                              selected: "safe",
+                              safe_deal_price: safeDealPrice,
+                              final_offer_price: finalOffer,
+                              savings: basePrice - safeDealPrice,
+                              module,
+                              productId: hotel?.id || productRef,
+                              city: hotel?.city,
+                              originalPrice: basePrice,
+                              device: isMobileDevice() ? "mobile" : "desktop",
+                              browser:
+                                typeof window !== "undefined"
+                                  ? (window as any).navigator?.userAgent
+                                  : "",
+                            })
+                            .catch(console.warn);
+                        }}
+                        disabled={
+                          selectedPrice !== null || isBooking || timerExpired
+                        }
+                        className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
+                          selectedPrice === "safe"
+                            ? "bg-emerald-600 text-white border-2 border-emerald-700"
+                            : selectedPrice === "final"
                               ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                              : "bg-emerald-50 text-emerald-900 border-2 border-emerald-300 hover:bg-emerald-100"
-                      }`}
-                    >
-                      {selectedPrice === "safe" ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <CheckCircle2 className="w-5 h-5" />
-                          Safe Deal - {formatPrice(safeDealPrice)}
-                        </span>
-                      ) : (
-                        `Safe Deal - ${formatPrice(safeDealPrice)}`
-                      )}
-                    </Button>
+                              : timerExpired
+                                ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
+                                : "bg-emerald-50 text-emerald-900 border-2 border-emerald-300 hover:bg-emerald-100"
+                        }`}
+                      >
+                        {selectedPrice === "safe" ? (
+                          <span className="flex items-center justify-center gap-2">
+                            <CheckCircle2 className="w-5 h-5" />
+                            Safe Deal - {formatPrice(safeDealPrice)}
+                          </span>
+                        ) : (
+                          `Safe Deal - ${formatPrice(safeDealPrice)}`
+                        )}
+                      </Button>
+                    )}
 
                     {/* Final Offer Button - enabled only while timer is active */}
-                    <Button
-                      onClick={() => {
-                        setSelectedPrice("final");
-                        // Track selection event
-                        chatAnalyticsService
-                          .trackEvent("bargain_price_selected", {
-                            selected: "final",
-                            safe_deal_price: safeDealPrice,
-                            final_offer_price: finalOffer,
-                            savings: basePrice - finalOffer,
-                            module,
-                            productId: hotel?.id || productRef,
-                            city: hotel?.city,
-                            originalPrice: basePrice,
-                            device: isMobileDevice() ? "mobile" : "desktop",
-                            browser:
-                              typeof window !== "undefined"
-                                ? (window as any).navigator?.userAgent
-                                : "",
-                          })
-                          .catch(console.warn);
-                      }}
-                      disabled={
-                        selectedPrice !== null || isBooking || timerExpired
-                      }
-                      className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
-                        selectedPrice === "final"
-                          ? "bg-orange-600 text-white border-2 border-orange-700"
-                          : selectedPrice === "safe"
-                            ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                            : timerExpired
+                    {finalOffer && safeDealPrice && (
+                      <Button
+                        onClick={() => {
+                          setSelectedPrice("final");
+                          // Track selection event
+                          chatAnalyticsService
+                            .trackEvent("bargain_price_selected", {
+                              selected: "final",
+                              safe_deal_price: safeDealPrice,
+                              final_offer_price: finalOffer,
+                              savings: basePrice - finalOffer,
+                              module,
+                              productId: hotel?.id || productRef,
+                              city: hotel?.city,
+                              originalPrice: basePrice,
+                              device: isMobileDevice() ? "mobile" : "desktop",
+                              browser:
+                                typeof window !== "undefined"
+                                  ? (window as any).navigator?.userAgent
+                                  : "",
+                            })
+                            .catch(console.warn);
+                        }}
+                        disabled={
+                          selectedPrice !== null || isBooking || timerExpired
+                        }
+                        className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
+                          selectedPrice === "final"
+                            ? "bg-orange-600 text-white border-2 border-orange-700"
+                            : selectedPrice === "safe"
                               ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                              : "bg-orange-50 text-orange-900 border-2 border-orange-300 hover:bg-orange-100"
-                      }`}
-                    >
-                      {selectedPrice === "final" ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <CheckCircle2 className="w-5 h-5" />
-                          Final Offer - {formatPrice(finalOffer)}
-                        </span>
-                      ) : (
-                        `Final Offer - ${formatPrice(finalOffer)} ${finalOffer < safeDealPrice ? `(Save ${formatPrice(safeDealPrice - finalOffer)})` : ""}`
-                      )}
-                    </Button>
+                              : timerExpired
+                                ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
+                                : "bg-orange-50 text-orange-900 border-2 border-orange-300 hover:bg-orange-100"
+                        }`}
+                      >
+                        {selectedPrice === "final" ? (
+                          <span className="flex items-center justify-center gap-2">
+                            <CheckCircle2 className="w-5 h-5" />
+                            Final Offer - {formatPrice(finalOffer)}
+                          </span>
+                        ) : (
+                          `Final Offer - ${formatPrice(finalOffer)} ${finalOffer < safeDealPrice ? `(Save ${formatPrice(safeDealPrice - finalOffer)})` : ""}`
+                        )}
+                      </Button>
+                    )}
 
                     {/* showBookSelected = (round === 2) && !!selectedPrice */}
-                    {selectedPrice && (
+                    {selectedPrice && safeDealPrice && finalOffer && (
                       <Button
                         onClick={() => handleAcceptOffer()}
                         disabled={isBooking}
