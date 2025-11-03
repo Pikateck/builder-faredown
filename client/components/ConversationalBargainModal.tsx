@@ -1189,6 +1189,12 @@ export function ConversationalBargainModal({
       }, 1000);
     }
 
+    // ✅ CRITICAL: Save current offer as Safe Deal before moving to Round 2
+    // This ensures dual-price cards can show in Round 2 regardless of which button was clicked
+    if (round === 1 && finalOffer) {
+      setSafeDealPrice(finalOffer);
+    }
+
     // ✅ CRITICAL: Only 2 attempts allowed - if trying to go past Round 2, lock the flow
     if (round >= TOTAL_ROUNDS) {
       addMessage(
