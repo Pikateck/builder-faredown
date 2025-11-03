@@ -1461,8 +1461,9 @@ export function ConversationalBargainModal({
         </div>
 
         {/* Timer and Offer Actions - Keyboard Safe with aria-live for accessibility */}
-        {/* Show for Round 1 OR Round 2 when finalOffer exists */}
-        {finalOffer && (round === 1 ? showOfferActions : true) && (
+        {/* Show for Round 1 when showOfferActions, OR Round 2 when safeDealPrice exists */}
+        {((round === 1 && finalOffer && showOfferActions) ||
+          (round === 2 && (safeDealPrice || finalOffer))) && (
           <div
             className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 w-full flex-shrink-0"
             style={{
