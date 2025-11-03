@@ -1544,14 +1544,7 @@ export function ConversationalBargainModal({
                         Pick your price
                       </p>
                       <p className="text-xs" style={{ color: '#0071c2' }}>
-                        Original: {formatPrice(basePrice)} • Safe Deal saves{" "}
-                        {formatPrice(basePrice - safeDealPrice)} (
-                        {Math.round(
-                          ((basePrice - safeDealPrice) / basePrice) * 100,
-                        )}
-                        %)
-                        {finalOffer < safeDealPrice &&
-                          ` ��� Final saves ${formatPrice(basePrice - finalOffer)} (${Math.round(((basePrice - finalOffer) / basePrice) * 100)}%)`}
+                        Choose the price you want to book.
                       </p>
                     </div>
                   )}
