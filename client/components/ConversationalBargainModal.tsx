@@ -1524,104 +1524,100 @@ export function ConversationalBargainModal({
                     </div>
                   )}
 
-                  {/* Safe Deal Button - enabled only while timer is active */}
-                  {safeDealPrice && (
-                    <Button
-                      onClick={() => {
-                        setSelectedPrice("safe");
-                        // Track selection event
-                        chatAnalyticsService
-                          .trackEvent("bargain_price_selected", {
-                            selected: "safe",
-                            safe_deal_price: safeDealPrice,
-                            final_offer_price: finalOffer,
-                            savings: basePrice - safeDealPrice,
-                            module,
-                            productId: hotel?.id || productRef,
-                            city: hotel?.city,
-                            originalPrice: basePrice,
-                            device: isMobileDevice() ? "mobile" : "desktop",
-                            browser:
-                              typeof window !== "undefined"
-                                ? (window as any).navigator?.userAgent
-                                : "",
-                          })
-                          .catch(console.warn);
-                      }}
-                      disabled={
-                        selectedPrice !== null || isBooking || timerExpired
-                      }
-                      className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
-                        selectedPrice === "safe"
-                          ? "bg-emerald-600 text-white border-2 border-emerald-700"
-                          : selectedPrice === "final"
+                  {/* Safe Deal Button - Always visible in Round 2, disabled after timer expires */}
+                  <Button
+                    onClick={() => {
+                      setSelectedPrice("safe");
+                      // Track selection event
+                      chatAnalyticsService
+                        .trackEvent("bargain_price_selected", {
+                          selected: "safe",
+                          safe_deal_price: safeDealPrice,
+                          final_offer_price: finalOffer,
+                          savings: basePrice - safeDealPrice,
+                          module,
+                          productId: hotel?.id || productRef,
+                          city: hotel?.city,
+                          originalPrice: basePrice,
+                          device: isMobileDevice() ? "mobile" : "desktop",
+                          browser:
+                            typeof window !== "undefined"
+                              ? (window as any).navigator?.userAgent
+                              : "",
+                        })
+                        .catch(console.warn);
+                    }}
+                    disabled={
+                      selectedPrice !== null || isBooking || timerExpired
+                    }
+                    className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
+                      selectedPrice === "safe"
+                        ? "bg-emerald-600 text-white border-2 border-emerald-700"
+                        : selectedPrice === "final"
+                          ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
+                          : timerExpired
                             ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                            : timerExpired
-                              ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                              : "bg-emerald-50 text-emerald-900 border-2 border-emerald-300 hover:bg-emerald-100"
-                      }`}
-                    >
-                      {selectedPrice === "safe" ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <CheckCircle2 className="w-5 h-5" />
-                          Safe Deal - {formatPrice(safeDealPrice)}
-                        </span>
-                      ) : (
-                        `Safe Deal - ${formatPrice(safeDealPrice)}`
-                      )}
-                    </Button>
-                  )}
+                            : "bg-emerald-50 text-emerald-900 border-2 border-emerald-300 hover:bg-emerald-100"
+                    }`}
+                  >
+                    {selectedPrice === "safe" ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <CheckCircle2 className="w-5 h-5" />
+                        Safe Deal - {formatPrice(safeDealPrice)}
+                      </span>
+                    ) : (
+                      `Safe Deal - ${formatPrice(safeDealPrice)}`
+                    )}
+                  </Button>
 
-                  {/* Final Offer Button - enabled only while timer is active */}
-                  {finalOffer && safeDealPrice && (
-                    <Button
-                      onClick={() => {
-                        setSelectedPrice("final");
-                        // Track selection event
-                        chatAnalyticsService
-                          .trackEvent("bargain_price_selected", {
-                            selected: "final",
-                            safe_deal_price: safeDealPrice,
-                            final_offer_price: finalOffer,
-                            savings: basePrice - finalOffer,
-                            module,
-                            productId: hotel?.id || productRef,
-                            city: hotel?.city,
-                            originalPrice: basePrice,
-                            device: isMobileDevice() ? "mobile" : "desktop",
-                            browser:
-                              typeof window !== "undefined"
-                                ? (window as any).navigator?.userAgent
-                                : "",
-                          })
-                          .catch(console.warn);
-                      }}
-                      disabled={
-                        selectedPrice !== null || isBooking || timerExpired
-                      }
-                      className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
-                        selectedPrice === "final"
-                          ? "bg-orange-600 text-white border-2 border-orange-700"
-                          : selectedPrice === "safe"
+                  {/* Final Offer Button - Always visible in Round 2, disabled after timer expires */}
+                  <Button
+                    onClick={() => {
+                      setSelectedPrice("final");
+                      // Track selection event
+                      chatAnalyticsService
+                        .trackEvent("bargain_price_selected", {
+                          selected: "final",
+                          safe_deal_price: safeDealPrice,
+                          final_offer_price: finalOffer,
+                          savings: basePrice - finalOffer,
+                          module,
+                          productId: hotel?.id || productRef,
+                          city: hotel?.city,
+                          originalPrice: basePrice,
+                          device: isMobileDevice() ? "mobile" : "desktop",
+                          browser:
+                            typeof window !== "undefined"
+                              ? (window as any).navigator?.userAgent
+                              : "",
+                        })
+                        .catch(console.warn);
+                    }}
+                    disabled={
+                      selectedPrice !== null || isBooking || timerExpired
+                    }
+                    className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
+                      selectedPrice === "final"
+                        ? "bg-orange-600 text-white border-2 border-orange-700"
+                        : selectedPrice === "safe"
+                          ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
+                          : timerExpired
                             ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                            : timerExpired
-                              ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                              : "bg-orange-50 text-orange-900 border-2 border-orange-300 hover:bg-orange-100"
-                      }`}
-                    >
-                      {selectedPrice === "final" ? (
-                        <span className="flex items-center justify-center gap-2">
-                          <CheckCircle2 className="w-5 h-5" />
-                          Final Offer - {formatPrice(finalOffer)}
-                        </span>
-                      ) : (
-                        `Final Offer - ${formatPrice(finalOffer)} ${finalOffer < safeDealPrice ? `(Save ${formatPrice(safeDealPrice - finalOffer)})` : ""}`
-                      )}
-                    </Button>
-                  )}
+                            : "bg-orange-50 text-orange-900 border-2 border-orange-300 hover:bg-orange-100"
+                    }`}
+                  >
+                    {selectedPrice === "final" ? (
+                      <span className="flex items-center justify-center gap-2">
+                        <CheckCircle2 className="w-5 h-5" />
+                        Final Offer - {formatPrice(finalOffer)}
+                      </span>
+                    ) : (
+                      `Final Offer - ${formatPrice(finalOffer)} ${finalOffer < safeDealPrice ? `(Save ${formatPrice(safeDealPrice - finalOffer)})` : ""}`
+                    )}
+                  </Button>
 
                   {/* showBookSelected = (round === 2) && !!selectedPrice */}
-                  {selectedPrice && safeDealPrice && finalOffer && (
+                  {selectedPrice && (
                     <Button
                       onClick={() => handleAcceptOffer()}
                       disabled={isBooking}
