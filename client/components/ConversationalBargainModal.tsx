@@ -1596,7 +1596,14 @@ export function ConversationalBargainModal({
                         Book {formatPrice(safeDealPrice)}
                       </span>
                     ) : (
-                      `Book ${formatPrice(safeDealPrice)}`
+                      <span className="flex items-center justify-center gap-1">
+                        <span>Book {formatPrice(safeDealPrice)}</span>
+                        {safeDealPrice < finalOffer && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" style={{ backgroundColor: '#febb02', color: '#003580' }}>
+                            Recommended
+                          </span>
+                        )}
+                      </span>
                     )}
                   </Button>
 
@@ -1647,11 +1654,18 @@ export function ConversationalBargainModal({
                         Book {formatPrice(finalOffer)}
                       </span>
                     ) : (
-                      `Book ${formatPrice(finalOffer)}`
+                      <span className="flex items-center justify-center gap-1">
+                        <span>Book {formatPrice(finalOffer)}</span>
+                        {finalOffer < safeDealPrice && (
+                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" style={{ backgroundColor: '#febb02', color: '#003580' }}>
+                            Recommended
+                          </span>
+                        )}
+                      </span>
                     )}
                   </Button>
 
-                  {/* showBookSelected = (round === 2) && !!selectedPrice */}
+                  {/* showBookSelected = (round === 2) && !!selectedPrice - remains active even after timer expires */}
                   {selectedPrice && (
                     <Button
                       onClick={() => handleAcceptOffer()}
@@ -1666,7 +1680,7 @@ export function ConversationalBargainModal({
                     >
                       {isBooking
                         ? "Processing..."
-                        : "Book Now"}
+                        : "Book Selected Price"}
                     </Button>
                   )}
                 </>
