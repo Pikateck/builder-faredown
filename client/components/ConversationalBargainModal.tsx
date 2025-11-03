@@ -291,6 +291,10 @@ export function ConversationalBargainModal({
             productId: hotel?.id || productRef,
             city: hotel?.city,
             device: isMobileDevice() ? "mobile" : "desktop",
+            browser:
+              typeof window !== "undefined"
+                ? (window as any).navigator?.userAgent
+                : "",
           })
           .catch(console.warn);
       }
