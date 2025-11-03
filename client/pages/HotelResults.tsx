@@ -479,16 +479,60 @@ function HotelResultsContent() {
 
   // Fallback function - ALWAYS fetch from backend API for consistency
   // This ensures identical hotel names and images across Builder preview and Netlify
-  const loadMockHotels = () => {
-    console.log("📦 Loading mock hotels from backend API (not frontend data)...");
+  const loadMockHotels = async () => {
+    console.log("📦 Loading mock hotels from backend API (ensuring consistency across environments)...");
 
-    // Don't use frontend getMockHotels() - it has different data
-    // Instead, the fetchTBOHotels will handle backend fallback
-    setError("Loading hotels from server...");
-    setLoading(true);
+    try {
+      // Build API URL with proper fallback
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://builder-faredown-pricing.onrender.com/api";
+      const cityCode = destination || "DXB";
+      const countryCodeMap: Record<string, string> = {
+        DXB: "AE",
+        DEL: "IN",
+        PAR: "FR",
+        LDN: "GB",
+        NYC: "US",
+      };
+      const countryCode = countryCodeMap[cityCode] || "AE";
 
-    // Return empty array and let the main fetch handle it
-    return [];
+      const apiUrl = `${apiBaseUrl}/hotels?cityId=${cityCode}&countryCode=${countryCode}&checkIn=${checkIn}&checkOut=${checkOut}&adults=${adults}&children=${children}`;
+
+      console.log(`🌐 Fetching from backend: ${apiUrl}`);
+
+      const response = await fetch(apiUrl);
+
+      if (!response.ok) {
+        throw new Error(`Backend returned ${response.status}`);
+      }
+
+      const data = await response.json();
+
+      if (data.hotels && data.hotels.length > 0) {
+        console.log(`✅ Loaded ${data.hotels.length} hotels from backend mock data`);
+
+        const transformedHotels = transformTBOData(data.hotels);
+
+        setHotels(transformedHotels);
+        setTotalResults(transformedHotels.length);
+        setIsLiveData(false);
+        setHasMore(false);
+        setPricingStatus("ready");
+        setError(null);
+        setLoading(false);
+
+        return transformedHotels;
+      } else {
+        throw new Error("No hotels returned from backend");
+      }
+    } catch (err) {
+      console.error("❌ Failed to load mock hotels from backend:", err);
+      setError("Unable to load hotels. Please check your connection and try again.");
+      setHotels([]);
+      setTotalResults(0);
+      setLoading(false);
+      setHasMore(false);
+      return [];
+    }
   };
 
   // Fetch hotel metadata from DB + prices from TBO in parallel (hybrid approach)
@@ -2251,7 +2295,7 @@ function HotelResultsContent() {
                   destination ||
                   "Dubai"}
               </span>
-              <span className="mx-2">›</span>
+              <span className="mx-2">��</span>
               <span className="text-gray-900 font-medium">Search Results</span>
             </div>
           </div>
