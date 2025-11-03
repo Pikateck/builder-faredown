@@ -914,19 +914,19 @@ export function ConversationalBargainModal({
               updatePrice({
                 bargainApplied: {
                   originalTotal: basePrice,
-                  bargainedTotal: finalOffer,
+                  bargainedTotal: priceToHold,
                   discount: savings,
                   round: round,
                   appliedAt: new Date().toISOString(),
                 },
-                grandTotal: finalOffer,
+                grandTotal: priceToHold,
               });
               logPricePipeline("BARGAIN", {
                 ...priceSnapshot,
-                grandTotal: finalOffer,
+                grandTotal: priceToHold,
                 bargainApplied: {
                   originalTotal: basePrice,
-                  bargainedTotal: finalOffer,
+                  bargainedTotal: priceToHold,
                   discount: savings,
                   round: round,
                   appliedAt: new Date().toISOString(),
