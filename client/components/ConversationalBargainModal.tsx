@@ -1620,31 +1620,19 @@ export function ConversationalBargainModal({
                     )}
                   </Button>
 
-                  {/* Book Selected Price button - show only when price selected AND timer active */}
-                  {selectedPrice && timerActive && (
+                  {/* showBookSelected = (round === 2) && !!selectedPrice */}
+                  {selectedPrice && (
                     <Button
                       onClick={() => handleAcceptOffer()}
                       disabled={isBooking}
-                      className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl mt-2"
+                      className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl mt-2 animate-pulse"
                       aria-label="Book at selected price"
                     >
                       {isBooking
                         ? "Processing..."
-                        : `Book Selected Price Now - ${formatTime(timerSeconds)}`}
-                    </Button>
-                  )}
-
-                  {/* Book at selected price button - show after timer expires if price was selected */}
-                  {selectedPrice && timerExpired && (
-                    <Button
-                      onClick={() => handleAcceptOffer()}
-                      disabled={isBooking}
-                      className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
-                      aria-label="Book at selected price"
-                    >
-                      {isBooking
-                        ? "Processing..."
-                        : `Book ${selectedPrice === "safe" ? "Safe" : "Final"} Deal - ${formatPrice(selectedPrice === "safe" ? safeDealPrice : finalOffer)}`}
+                        : timerActive
+                          ? `Book Selected Price Now - ${formatTime(timerSeconds)}`
+                          : `Book ${selectedPrice === "safe" ? "Safe" : "Final"} Deal - ${formatPrice(selectedPrice === "safe" ? safeDealPrice : finalOffer)}`}
                     </Button>
                   )}
                 </>
