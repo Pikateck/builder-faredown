@@ -1519,6 +1519,15 @@ export function ConversationalBargainModal({
             )}
 
             <div className="flex flex-col gap-2 w-full">
+              {/* DEBUG: Log Round 2 state values */}
+              {round === 2 && console.log('🔍 ROUND 2 STATE:', {
+                round,
+                safeDealPrice,
+                finalOffer,
+                showOfferActions,
+                willShowCards: !!(round === 2 && safeDealPrice && finalOffer && showOfferActions)
+              })}
+
               {/* ✅ ROUND 2: Dual Price Selection - Show immediately when finalOffer is received */}
               {/* Cards visible when Round 2, showOfferActions true, and both prices exist */}
               {round === 2 && safeDealPrice && finalOffer && showOfferActions && (
