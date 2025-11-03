@@ -1461,9 +1461,10 @@ export function ConversationalBargainModal({
         </div>
 
         {/* Timer and Offer Actions - Keyboard Safe with aria-live for accessibility */}
-        {/* Show for Round 1 when showOfferActions, OR Round 2 when safeDealPrice exists */}
+        {/* Show for Round 1 when showOfferActions, OR Round 2 when safeDealPrice exists OR when finalOffer comes in */}
         {((round === 1 && finalOffer && showOfferActions) ||
-          (round === 2 && (safeDealPrice || finalOffer))) && (
+          (round === 2 && safeDealPrice) ||
+          (round === 2 && finalOffer && showOfferActions)) && (
           <div
             className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 w-full flex-shrink-0"
             style={{
@@ -1518,9 +1519,9 @@ export function ConversationalBargainModal({
             )}
 
             <div className="flex flex-col gap-2 w-full">
-              {/* ✅ ROUND 2: Dual Price Selection - Show immediately when Round 2 starts */}
-              {/* Cards visible as long as Round 2 and both prices exist */}
-              {round === 2 && safeDealPrice && finalOffer && (
+              {/* ✅ ROUND 2: Dual Price Selection - Show immediately when finalOffer is received */}
+              {/* Cards visible when Round 2, showOfferActions true, and both prices exist */}
+              {round === 2 && safeDealPrice && finalOffer && showOfferActions && (
                 <>
                   {timerActive && !timerExpired && (
                     <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
