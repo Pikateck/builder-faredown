@@ -1451,16 +1451,11 @@ export function ConversationalBargainModal({
         {/* Timer and Offer Actions - Keyboard Safe with aria-live for accessibility */}
         {showOfferActions && finalOffer && (
           <div
-            className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 w-full"
+            className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 w-full flex-shrink-0"
             style={{
               paddingBottom: isMobileDevice()
                 ? "calc(1rem + env(safe-area-inset-bottom))"
                 : "1rem",
-              minHeight: "auto",
-              maxHeight: isMobileDevice() ? "calc(100dvh - 180px)" : "auto",
-              overflowY: "auto",
-              display: "flex",
-              flexDirection: "column",
             }}
             aria-live="polite"
             aria-label="Negotiated offer details"
@@ -1493,14 +1488,7 @@ export function ConversationalBargainModal({
               )}
             </div>
 
-            <div
-              className="flex flex-col gap-2 w-full"
-              style={{
-                paddingBottom: isMobileDevice()
-                  ? "calc(1rem + env(safe-area-inset-bottom))"
-                  : "1rem",
-              }}
-            >
+            <div className="flex flex-col gap-2 w-full">
               {/* ✅ ROUND 2: Dual Price Selection - Choose between Safe Deal and Final Offer - ONLY show if timer hasn't expired */}
               {!isComplete &&
                 round === 2 &&
@@ -1662,8 +1650,8 @@ export function ConversationalBargainModal({
                 </Button>
               )}
 
-              {/* Book at original - visible after timer expires */}
-              {timerExpired && !isComplete && (
+              {/* Book at original - ONLY visible after timer expires AND no selection was made */}
+              {timerExpired && !isComplete && !selectedPrice && (
                 <Button
                   onClick={() => {
                     setIsBooking(true);
