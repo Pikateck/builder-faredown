@@ -1516,10 +1516,10 @@ export function ConversationalBargainModal({
             {round === 2 && safeDealPrice && !finalOffer && (
               <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
                 <p className="text-sm font-semibold text-blue-800 mb-2">
-                  ✅ Your Safe Deal: {formatPrice(safeDealPrice)}
+                  ✅ Price locked: {formatPrice(safeDealPrice)}
                 </p>
                 <p className="text-xs text-blue-700">
-                  Locked and guaranteed. Enter your final bargain price above to try for an even better deal!
+                  Enter your final price above to try for a better deal!
                 </p>
               </div>
             )}
