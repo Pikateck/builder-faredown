@@ -1156,8 +1156,16 @@ function HotelResultsContent() {
     loadHotels();
   };
 
-  // Mock hotel data (fallback if API fails)
-  const getMockHotels = (): Hotel[] => [
+  // ⚠️ DEPRECATED: Frontend mock hotel data - DO NOT USE
+  // This creates inconsistency between Builder preview and Netlify
+  // Always fetch from backend API at /api/hotels which has unified mock data
+  const getMockHotels = (): Hotel[] => {
+    console.warn("⚠️ WARNING: getMockHotels() should not be used. Use backend API instead.");
+    return [];
+  };
+
+  // Old frontend mock data (kept for reference but not used)
+  const _oldMockHotelsReferenceOnly = (): Hotel[] => [
     {
       id: 1,
       name: `Grand Hotel ${urlSearchParams.get("destinationName")?.split(",")[0] || destination || "Dubai"}`,
