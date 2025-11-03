@@ -1644,10 +1644,10 @@ export function ConversationalBargainModal({
                     {selectedPrice === "final" ? (
                       <span className="flex items-center justify-center gap-2">
                         <CheckCircle2 className="w-5 h-5" />
-                        Final Offer - {formatPrice(finalOffer)}
+                        Book {formatPrice(finalOffer)}
                       </span>
                     ) : (
-                      `Final Offer - ${formatPrice(finalOffer)} ${finalOffer < safeDealPrice ? `(Save ${formatPrice(safeDealPrice - finalOffer)})` : ""}`
+                      `Book ${formatPrice(finalOffer)}`
                     )}
                   </Button>
 
