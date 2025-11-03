@@ -1418,7 +1418,7 @@ export function ConversationalBargainModal({
                         ? "bg-gradient-to-r from-[#003580] to-[#0071c2] text-white"
                         : message.speaker === "supplier"
                           ? "bg-gradient-to-r from-blue-50 to-blue-100 text-blue-600"
-                          : "bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-600"
+                          : "bg-gradient-to-r from-cyan-50 to-blue-50 text-[#003580]"
                     }
                   `}
                   >
@@ -1439,8 +1439,8 @@ export function ConversationalBargainModal({
                       message.speaker === "user"
                         ? "bg-gradient-to-r from-[#003580] to-[#0071c2] text-white"
                         : message.speaker === "supplier"
-                          ? "bg-gradient-to-r from-blue-50 to-blue-100 text-blue-900"
-                          : "bg-gradient-to-r from-emerald-50 to-emerald-100 text-emerald-900"
+                          ? "bg-gradient-to-r from-blue-50 to-blue-100 text-[#003580]"
+                          : "bg-gradient-to-r from-cyan-50 to-blue-50 text-[#003580]"
                     }
                   `}
                   >
