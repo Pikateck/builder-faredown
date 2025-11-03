@@ -1638,22 +1638,24 @@ export function ConversationalBargainModal({
                   </>
                 )}
 
-              {/* ✅ ROUND 1: Standard single price booking */}
-              {!isComplete && round === 1 && (
-                <Button
-                  onClick={() => handleAcceptOffer()}
-                  disabled={isBooking}
-                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
-                  aria-label="Book negotiated price now"
-                >
-                  {isBooking
-                    ? "Processing..."
-                    : `Accept Deal - ${formatPrice(finalOffer)}`}
-                </Button>
+              {/* ✅ ROUND 1: Two options - Accept this price or Try Final Bargain */}
+              {!isComplete && round === 1 && showOfferActions && (
+                <>
+                  <Button
+                    onClick={() => handleAcceptOffer()}
+                    disabled={isBooking}
+                    className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
+                    aria-label="Lock this price and try for better"
+                  >
+                    {isBooking
+                      ? "Processing..."
+                      : `Lock ${formatPrice(finalOffer)} & Try Final Bargain`}
+                  </Button>
+                </>
               )}
 
-              {/* Book at original - ONLY visible after timer expires AND no selection was made */}
-              {timerExpired && !isComplete && !selectedPrice && (
+              {/* Book at original - ONLY visible after timer expires AND no selection was made in Round 2 */}
+              {timerExpired && !isComplete && !selectedPrice && round === 2 && (
                 <Button
                   onClick={() => {
                     setIsBooking(true);
@@ -1680,17 +1682,6 @@ export function ConversationalBargainModal({
                   aria-label="Book at original price"
                 >
                   Book at Original {formatPrice(basePrice)}
-                </Button>
-              )}
-
-              {/* Try another round - only show in Round 1 */}
-              {!isComplete && round === 1 && !isNegotiating && (
-                <Button
-                  onClick={handleTryAgain}
-                  className="w-full bg-[#0071c2] text-white hover:bg-[#005a9c] font-medium py-3 h-11 mobile-touch-target rounded-xl"
-                  aria-label="Try another negotiation round"
-                >
-                  Try Final Bargain
                 </Button>
               )}
             </div>
