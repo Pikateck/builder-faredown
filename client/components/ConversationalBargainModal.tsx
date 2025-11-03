@@ -1593,10 +1593,10 @@ export function ConversationalBargainModal({
                     {selectedPrice === "safe" ? (
                       <span className="flex items-center justify-center gap-2">
                         <CheckCircle2 className="w-5 h-5" />
-                        Safe Deal - {formatPrice(safeDealPrice)}
+                        Book {formatPrice(safeDealPrice)}
                       </span>
                     ) : (
-                      `Safe Deal - ${formatPrice(safeDealPrice)}`
+                      `Book ${formatPrice(safeDealPrice)}`
                     )}
                   </Button>
 
