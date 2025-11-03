@@ -1541,7 +1541,7 @@ export function ConversationalBargainModal({
                   {timerActive && !timerExpired && (
                     <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-[#0071c2]">
                       <p className="text-sm font-semibold mb-1" style={{ color: '#003580' }}>
-                        Your first deal is still safe. Choose your price:
+                        Pick your price
                       </p>
                       <p className="text-xs" style={{ color: '#0071c2' }}>
                         Original: {formatPrice(basePrice)} • Safe Deal saves{" "}
