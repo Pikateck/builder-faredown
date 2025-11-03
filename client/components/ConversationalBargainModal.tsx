@@ -1481,8 +1481,8 @@ export function ConversationalBargainModal({
             aria-live="polite"
             aria-label="Negotiated offer details"
           >
-            {/* Only show negotiated price display when finalOffer exists (Round 1 or Round 2 after bid) */}
-            {finalOffer && (
+            {/* Only show negotiated price display when finalOffer exists AND timer hasn't expired without selection */}
+            {finalOffer && !(timerExpired && round === 2 && !selectedPrice) && (
               <div className="flex justify-between items-start mb-3">
                 <div>
                   <div className="text-sm text-[#003580] mb-1 font-semibold">
@@ -1535,10 +1535,10 @@ export function ConversationalBargainModal({
               })}
 
               {/* ✅ ROUND 2: Dual Price Selection - Show immediately when finalOffer is received */}
-              {/* Cards visible when Round 2, showOfferActions true, and both prices exist */}
-              {round === 2 && safeDealPrice && finalOffer && showOfferActions && (
+              {/* Cards visible when Round 2, showOfferActions true, both prices exist, AND timer hasn't expired */}
+              {round === 2 && safeDealPrice && finalOffer && showOfferActions && !timerExpired && (
                 <>
-                  {timerActive && !timerExpired && (
+                  {timerActive && (
                     <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-[#0071c2]">
                       <p className="text-sm font-semibold mb-1" style={{ color: '#003580' }}>
                         Pick your price
@@ -1707,33 +1707,49 @@ export function ConversationalBargainModal({
 
               {/* Book at original - ONLY visible after timer expires AND no selection was made in Round 2 */}
               {timerExpired && !isComplete && !selectedPrice && round === 2 && (
-                <Button
-                  onClick={() => {
-                    setIsBooking(true);
+                <>
+                  {/* Message: Timer expired */}
+                  <div className="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                    <p className="text-sm text-gray-700 flex items-center gap-2">
+                      <Clock className="w-4 h-4" />
+                      Time's up. This price is no longer available.
+                    </p>
+                  </div>
 
-                    // Log accepted value for original price fallback
-                    const suggestionsAtFallback = getSuggestions();
-                    chatAnalyticsService
-                      .trackEvent("accepted" as any, {
-                        round_index: round - 1,
-                        accepted_price: basePrice,
-                        original_price: basePrice,
-                        savings: 0,
-                        was_suggested:
-                          suggestionsAtFallback.includes(basePrice),
-                        was_fallback_original: true,
-                        module,
-                        product_ref: productRef,
-                      })
-                      .catch(console.warn);
+                  {/* Single clean CTA */}
+                  <Button
+                    onClick={() => {
+                      setIsBooking(true);
 
-                    onAccept(basePrice, `BRG_${Date.now()}`);
-                  }}
-                  className="w-full bg-white border border-gray-300 text-gray-900 hover:bg-gray-50 font-medium py-3 h-11 mobile-touch-target rounded-xl"
-                  aria-label="Book at standard price"
-                >
-                  Time's up. Book at standard price: {formatPrice(basePrice)}
-                </Button>
+                      // Log accepted value for original price fallback
+                      const suggestionsAtFallback = getSuggestions();
+                      chatAnalyticsService
+                        .trackEvent("accepted" as any, {
+                          round_index: round - 1,
+                          accepted_price: basePrice,
+                          original_price: basePrice,
+                          savings: 0,
+                          was_suggested:
+                            suggestionsAtFallback.includes(basePrice),
+                          was_fallback_original: true,
+                          module,
+                          product_ref: productRef,
+                        })
+                        .catch(console.warn);
+
+                      onAccept(basePrice, `BRG_${Date.now()}`);
+                    }}
+                    className="w-full text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl transition-all"
+                    style={{
+                      backgroundColor: '#0071c2',
+                    }}
+                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#005a9c')}
+                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0071c2')}
+                    aria-label="Book at standard price"
+                  >
+                    Book at Standard Price: {formatPrice(basePrice)}
+                  </Button>
+                </>
               )}
             </div>
           </div>
