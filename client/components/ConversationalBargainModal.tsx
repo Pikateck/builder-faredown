@@ -1730,9 +1730,9 @@ export function ConversationalBargainModal({
                     onAccept(basePrice, `BRG_${Date.now()}`);
                   }}
                   className="w-full bg-white border border-gray-300 text-gray-900 hover:bg-gray-50 font-medium py-3 h-11 mobile-touch-target rounded-xl"
-                  aria-label="Book at original price"
+                  aria-label="Book at standard price"
                 >
-                  Book at Original {formatPrice(basePrice)}
+                  Time's up. Book at standard price: {formatPrice(basePrice)}
                 </Button>
               )}
             </div>
