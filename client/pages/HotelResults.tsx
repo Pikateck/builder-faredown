@@ -477,18 +477,18 @@ function HotelResultsContent() {
     return processedImages.slice(0, 6); // Limit to 6 images max
   };
 
-  // Fallback function - load mock hotels immediately
+  // Fallback function - ALWAYS fetch from backend API for consistency
+  // This ensures identical hotel names and images across Builder preview and Netlify
   const loadMockHotels = () => {
-    console.log("📦 Loading mock hotels immediately...");
-    const mockData = getMockHotels();
-    setHotels(mockData);
-    setTotalResults(mockData.length);
-    setIsLiveData(false);
-    setHasMore(false);
-    setPricingStatus("ready");
-    setError(null);
-    setLoading(false);
-    return mockData;
+    console.log("📦 Loading mock hotels from backend API (not frontend data)...");
+
+    // Don't use frontend getMockHotels() - it has different data
+    // Instead, the fetchTBOHotels will handle backend fallback
+    setError("Loading hotels from server...");
+    setLoading(true);
+
+    // Return empty array and let the main fetch handle it
+    return [];
   };
 
   // Fetch hotel metadata from DB + prices from TBO in parallel (hybrid approach)
