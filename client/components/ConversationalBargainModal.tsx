@@ -1474,33 +1474,36 @@ export function ConversationalBargainModal({
             aria-live="polite"
             aria-label="Negotiated offer details"
           >
-            <div className="flex justify-between items-start mb-3">
-              <div>
-                <div className="text-sm text-emerald-700 mb-1">
-                  Negotiated Price:
+            {/* Only show negotiated price display when finalOffer exists (Round 1 or Round 2 after bid) */}
+            {finalOffer && (
+              <div className="flex justify-between items-start mb-3">
+                <div>
+                  <div className="text-sm text-emerald-700 mb-1">
+                    {round === 2 ? "Final Bargain Offer:" : "Negotiated Price:"}
+                  </div>
+                  <div className="text-2xl font-bold text-emerald-800">
+                    {formatPrice(finalOffer)}
+                  </div>
+                  <div className="text-xs text-emerald-600">
+                    Save {formatPrice(basePrice - finalOffer)} (
+                    {Math.round(((basePrice - finalOffer) / basePrice) * 100)}%
+                    off)
+                  </div>
                 </div>
-                <div className="text-2xl font-bold text-emerald-800">
-                  {formatPrice(finalOffer)}
-                </div>
-                <div className="text-xs text-emerald-600">
-                  Save {formatPrice(basePrice - finalOffer)} (
-                  {Math.round(((basePrice - finalOffer) / basePrice) * 100)}%
-                  off)
-                </div>
-              </div>
 
-              {timerActive && (
-                <div
-                  className={`
-                  text-right font-mono font-bold
-                  ${timerSeconds <= 10 ? "text-red-600 animate-pulse" : "text-emerald-600"}
-                `}
-                >
-                  <Clock className="w-4 h-4 inline mr-1" />
-                  {formatTime(timerSeconds)}
-                </div>
-              )}
-            </div>
+                {timerActive && (
+                  <div
+                    className={`
+                    text-right font-mono font-bold
+                    ${timerSeconds <= 10 ? "text-red-600 animate-pulse" : "text-emerald-600"}
+                  `}
+                  >
+                    <Clock className="w-4 h-4 inline mr-1" />
+                    {formatTime(timerSeconds)}
+                  </div>
+                )}
+              </div>
+            )}
 
             <div className="flex flex-col gap-2 w-full">
               {/* ✅ ROUND 2: Dual Price Selection - Show immediately when Round 2 starts */}
