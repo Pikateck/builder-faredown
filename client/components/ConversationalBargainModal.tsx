@@ -1472,7 +1472,7 @@ export function ConversationalBargainModal({
           (round === 2 && safeDealPrice) ||
           (round === 2 && finalOffer && showOfferActions)) && (
           <div
-            className="bg-gradient-to-r from-emerald-50 to-green-50 border-t border-emerald-200 p-4 w-full flex-shrink-0"
+            className="bg-gradient-to-r from-blue-50 to-slate-50 border-t border-blue-200 p-4 w-full flex-shrink-0"
             style={{
               paddingBottom: isMobileDevice()
                 ? "calc(1rem + env(safe-area-inset-bottom))"
@@ -1485,13 +1485,13 @@ export function ConversationalBargainModal({
             {finalOffer && (
               <div className="flex justify-between items-start mb-3">
                 <div>
-                  <div className="text-sm text-emerald-700 mb-1">
+                  <div className="text-sm text-[#003580] mb-1 font-semibold">
                     {round === 2 ? "Final Bargain Offer:" : "Negotiated Price:"}
                   </div>
-                  <div className="text-2xl font-bold text-emerald-800">
+                  <div className="text-2xl font-bold text-[#003580]">
                     {formatPrice(finalOffer)}
                   </div>
-                  <div className="text-xs text-emerald-600">
+                  <div className="text-xs font-medium" style={{ color: '#febb02' }}>
                     Save {formatPrice(basePrice - finalOffer)} (
                     {Math.round(((basePrice - finalOffer) / basePrice) * 100)}%
                     off)
@@ -1502,7 +1502,7 @@ export function ConversationalBargainModal({
                   <div
                     className={`
                     text-right font-mono font-bold
-                    ${timerSeconds <= 10 ? "text-red-600 animate-pulse" : "text-emerald-600"}
+                    ${timerSeconds <= 10 ? "text-red-600 animate-pulse" : "text-[#003580]"}
                   `}
                   >
                     <Clock className="w-4 h-4 inline mr-1" />
@@ -1539,11 +1539,11 @@ export function ConversationalBargainModal({
               {round === 2 && safeDealPrice && finalOffer && showOfferActions && (
                 <>
                   {timerActive && !timerExpired && (
-                    <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-blue-200">
-                      <p className="text-sm text-blue-700 font-semibold mb-1">
+                    <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-[#0071c2]">
+                      <p className="text-sm font-semibold mb-1" style={{ color: '#003580' }}>
                         Your first deal is still safe. Choose your price:
                       </p>
-                      <p className="text-xs text-blue-600">
+                      <p className="text-xs" style={{ color: '#0071c2' }}>
                         Original: {formatPrice(basePrice)} • Safe Deal saves{" "}
                         {formatPrice(basePrice - safeDealPrice)} (
                         {Math.round(
@@ -1584,13 +1584,18 @@ export function ConversationalBargainModal({
                     }
                     className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
                       selectedPrice === "safe"
-                        ? "bg-emerald-600 text-white border-2 border-emerald-700"
+                        ? "text-white border-2"
                         : selectedPrice === "final"
                           ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
                           : timerExpired
                             ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                            : "bg-emerald-50 text-emerald-900 border-2 border-emerald-300 hover:bg-emerald-100"
+                            : "bg-blue-50 border-2 hover:bg-blue-100"
                     }`}
+                    style={{
+                      backgroundColor: selectedPrice === "safe" ? "#0071c2" : undefined,
+                      borderColor: selectedPrice === "safe" ? "#003580" : selectedPrice === null && !timerExpired ? "#0071c2" : undefined,
+                      color: selectedPrice === "safe" ? "#ffffff" : selectedPrice === null && !timerExpired ? "#003580" : undefined
+                    }}
                   >
                     {selectedPrice === "safe" ? (
                       <span className="flex items-center justify-center gap-2">
@@ -1630,13 +1635,18 @@ export function ConversationalBargainModal({
                     }
                     className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
                       selectedPrice === "final"
-                        ? "bg-orange-600 text-white border-2 border-orange-700"
+                        ? "text-white border-2"
                         : selectedPrice === "safe"
                           ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
                           : timerExpired
                             ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                            : "bg-orange-50 text-orange-900 border-2 border-orange-300 hover:bg-orange-100"
+                            : "bg-yellow-50 border-2 hover:bg-yellow-100"
                     }`}
+                    style={{
+                      backgroundColor: selectedPrice === "final" ? "#febb02" : undefined,
+                      borderColor: selectedPrice === "final" ? "#e6a602" : selectedPrice === null && !timerExpired ? "#febb02" : undefined,
+                      color: selectedPrice === "final" ? "#ffffff" : selectedPrice === null && !timerExpired ? "#003580" : undefined
+                    }}
                   >
                     {selectedPrice === "final" ? (
                       <span className="flex items-center justify-center gap-2">
@@ -1653,7 +1663,12 @@ export function ConversationalBargainModal({
                     <Button
                       onClick={() => handleAcceptOffer()}
                       disabled={isBooking}
-                      className="w-full bg-gradient-to-r from-purple-600 to-purple-700 hover:from-purple-700 hover:to-purple-800 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl mt-2 animate-pulse"
+                      className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl mt-2 animate-pulse transition-all"
+                      style={{
+                        backgroundColor: '#003580',
+                      }}
+                      onMouseEnter={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#00214d')}
+                      onMouseLeave={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#003580')}
                       aria-label="Book at selected price"
                     >
                       {isBooking
@@ -1671,7 +1686,12 @@ export function ConversationalBargainModal({
                 <Button
                   onClick={() => handleAcceptOffer()}
                   disabled={isBooking}
-                  className="w-full bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl"
+                  className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl transition-all"
+                  style={{
+                    backgroundColor: '#febb02',
+                  }}
+                  onMouseEnter={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#e6a602')}
+                  onMouseLeave={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#febb02')}
                   aria-label="Lock this price and try for better"
                 >
                   {isBooking
