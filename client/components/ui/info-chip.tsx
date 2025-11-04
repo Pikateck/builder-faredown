@@ -26,11 +26,14 @@ export function InfoChip({
         "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium",
         "border max-h-7",
         toneClasses,
-        className
+        className,
       )}
       aria-label={ariaLabel}
     >
-      <Icon className="mr-1.5 h-[18px] w-[18px] stroke-[1.75] md:h-4 md:w-4" aria-hidden="true" />
+      <Icon
+        className="mr-1.5 h-[18px] w-[18px] stroke-[1.75] md:h-4 md:w-4"
+        aria-hidden="true"
+      />
       {children}
     </span>
   );

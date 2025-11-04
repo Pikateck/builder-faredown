@@ -2319,10 +2319,23 @@ function HotelDetailsContent() {
                                       // Map feature names to appropriate icons
                                       const getFeatureIcon = (text: string) => {
                                         const lower = text.toLowerCase();
-                                        if (lower.includes("wifi") || lower.includes("wi-fi")) return Wifi;
-                                        if (lower.includes("air") || lower.includes("ac")) return Fan;
-                                        if (lower.includes("bath") || lower.includes("shower")) return ShowerHead;
-                                        if (lower.includes("breakfast")) return Utensils;
+                                        if (
+                                          lower.includes("wifi") ||
+                                          lower.includes("wi-fi")
+                                        )
+                                          return Wifi;
+                                        if (
+                                          lower.includes("air") ||
+                                          lower.includes("ac")
+                                        )
+                                          return Fan;
+                                        if (
+                                          lower.includes("bath") ||
+                                          lower.includes("shower")
+                                        )
+                                          return ShowerHead;
+                                        if (lower.includes("breakfast"))
+                                          return Utensils;
                                         return Wifi; // Default icon
                                       };
 
@@ -3150,7 +3163,8 @@ function HotelDetailsContent() {
                                             Pay now
                                           </InfoChip>
                                         )}
-                                        {room.isRefundable && !room.nonRefundable ? (
+                                        {room.isRefundable &&
+                                        !room.nonRefundable ? (
                                           <InfoChip
                                             icon={ShieldCheck}
                                             tone="success"
@@ -3247,23 +3261,48 @@ function HotelDetailsContent() {
                                                 const featureText =
                                                   typeof feature === "string"
                                                     ? feature
-                                                    : feature?.name || "Feature";
+                                                    : feature?.name ||
+                                                      "Feature";
 
                                                 // Map feature names to appropriate icons
-                                                const getFeatureIcon = (text: string) => {
-                                                  const lower = text.toLowerCase();
-                                                  if (lower.includes("wifi") || lower.includes("wi-fi")) return Wifi;
-                                                  if (lower.includes("air") || lower.includes("ac") || lower.includes("conditioning")) return Fan;
-                                                  if (lower.includes("bath") || lower.includes("shower")) return ShowerHead;
-                                                  if (lower.includes("breakfast")) return Utensils;
-                                                  if (lower.includes("bed")) return Bed;
+                                                const getFeatureIcon = (
+                                                  text: string,
+                                                ) => {
+                                                  const lower =
+                                                    text.toLowerCase();
+                                                  if (
+                                                    lower.includes("wifi") ||
+                                                    lower.includes("wi-fi")
+                                                  )
+                                                    return Wifi;
+                                                  if (
+                                                    lower.includes("air") ||
+                                                    lower.includes("ac") ||
+                                                    lower.includes(
+                                                      "conditioning",
+                                                    )
+                                                  )
+                                                    return Fan;
+                                                  if (
+                                                    lower.includes("bath") ||
+                                                    lower.includes("shower")
+                                                  )
+                                                    return ShowerHead;
+                                                  if (
+                                                    lower.includes("breakfast")
+                                                  )
+                                                    return Utensils;
+                                                  if (lower.includes("bed"))
+                                                    return Bed;
                                                   return Wifi; // Default icon
                                                 };
 
                                                 return (
                                                   <InfoChip
                                                     key={idx}
-                                                    icon={getFeatureIcon(featureText)}
+                                                    icon={getFeatureIcon(
+                                                      featureText,
+                                                    )}
                                                     ariaLabel={featureText}
                                                   >
                                                     {featureText}
