@@ -162,7 +162,8 @@ export function UnifiedLandingPage({
                   </h3>
                   <div className="flex-grow">
                     <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
-                      Your journey, your choice — rooms, seats, sightseeing or transfers.
+                      Your journey, your choice — rooms, seats, sightseeing or
+                      transfers.
                     </p>
                     <div className="h-10 flex items-center">
                       {/* Spacer to match other cards */}
@@ -194,7 +195,8 @@ export function UnifiedLandingPage({
                     <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
                       AI negotiates live with suppliers —{" "}
                       <strong className="text-[#003580]">2 tries</strong>,{" "}
-                      <strong className="text-[#003580]">30-second</strong> timer.
+                      <strong className="text-[#003580]">30-second</strong>{" "}
+                      timer.
                     </p>
                     <div className="h-10 flex items-center">
                       <div className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0071c2] to-[#febb02] rounded-full px-4 py-2 text-white text-sm font-semibold">

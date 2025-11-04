@@ -11,19 +11,21 @@ All UX text and logic updates have been implemented exactly as specified. The ba
 ### 1. **Landing Page Copy Update** ✅
 
 **Files Modified:**
+
 - `client/components/UnifiedLandingPage.tsx` (Line 210)
 - `client/pages/Index-simple.tsx` (Line 117)
 - `client/components/UnifiedLandingPage.tsx` (Line 567 - demo animation)
 
 **Changes:**
+
 ```tsx
 // BEFORE:
-"AI negotiates live with suppliers — 3 attempts, 30-second timer."
-"Negotiating... 2/3 attempts"
+"AI negotiates live with suppliers — 3 attempts, 30-second timer.";
+"Negotiating... 2/3 attempts";
 
 // AFTER:
-"AI negotiates live with suppliers — 2 tries, 30-second timer."
-"Negotiating... 2/2 attempts"
+"AI negotiates live with suppliers — 2 tries, 30-second timer.";
+"Negotiating... 2/2 attempts";
 ```
 
 ---
@@ -33,25 +35,33 @@ All UX text and logic updates have been implemented exactly as specified. The ba
 **File Modified:** `client/components/ConversationalBargainModal.tsx` (Lines 1690-1724)
 
 **Changes:**
+
 - **Top CTA:** `Book ₹{offer1}` (yellow button #febb02, text #111)
 - **Secondary CTA:** `Try Final Bargain` (blue button #0071c2, text #fff)
 - **Both buttons** now save `safeDealPrice = offer1` when clicked
 
 **Code:**
+
 ```tsx
-{/* Top CTA: Book offer1 (yellow button) */}
+{
+  /* Top CTA: Book offer1 (yellow button) */
+}
 <Button
   onClick={() => {
     setSafeDealPrice(finalOffer);
     handleAcceptOffer();
   }}
-  style={{ backgroundColor: '#febb02', color: '#111' }}
-  onMouseEnter={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#e6a602')}
+  style={{ backgroundColor: "#febb02", color: "#111" }}
+  onMouseEnter={(e) =>
+    !isBooking && (e.currentTarget.style.backgroundColor = "#e6a602")
+  }
 >
   {isBooking ? "Processing..." : `Book ${formatPrice(finalOffer)}`}
-</Button>
+</Button>;
 
-{/* Secondary CTA: Try Final Bargain (blue button) */}
+{
+  /* Secondary CTA: Try Final Bargain (blue button) */
+}
 <Button
   onClick={() => {
     setSafeDealPrice(finalOffer);
@@ -60,10 +70,11 @@ All UX text and logic updates have been implemented exactly as specified. The ba
   className="w-full bg-[#0071c2] text-white hover:bg-[#005a9c]"
 >
   Try Final Bargain
-</Button>
+</Button>;
 ```
 
 **Old buttons (removed):**
+
 - ❌ "Lock ₹{offer1} & Try Final Bargain"
 - ❌ Combined lock + try button
 
@@ -74,24 +85,29 @@ All UX text and logic updates have been implemented exactly as specified. The ba
 **File:** `client/components/ConversationalBargainModal.tsx` (Lines 1548-1698)
 
 **Features:**
+
 - Two "Book ₹{price}" buttons stacked vertically
 - "(Recommended)" badge on cheaper option (inline pill, 90% opacity)
 - Selecting a button shows "Book Selected Price" CTA immediately
 - User can complete booking during timer
 
 **Badge Implementation:**
+
 ```tsx
-{safeDealPrice < finalOffer && (
-  <span 
-    className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" 
-    style={{ backgroundColor: '#febb02', color: '#003580' }}
-  >
-    Recommended
-  </span>
-)}
+{
+  safeDealPrice < finalOffer && (
+    <span
+      className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
+      style={{ backgroundColor: "#febb02", color: "#003580" }}
+    >
+      Recommended
+    </span>
+  );
+}
 ```
 
 **Selection Behavior:**
+
 - Tap button → `setSelectedPrice("safe" | "final")`
 - "Book Selected Price" CTA appears
 - Booking allowed during AND after timer
@@ -105,46 +121,51 @@ All UX text and logic updates have been implemented exactly as specified. The ba
 **When timer expires with NO selection:**
 
 **UI Changes:**
+
 - ✅ Hide dual-price section
 - ✅ Hide "Final Bargain Offer" display (Line 1493: added condition `&& !(timerExpired && round === 2 && !selectedPrice)`)
 - ✅ Show info line: "⏱ Time's up. This price is no longer available."
 - ✅ Show single blue CTA: "View room options"
 
 **Button Action:**
+
 - Closes modal via `onClose()`
 - Fires analytics: `bargain_view_room_options_clicked`
 - Returns to hotel room list (preserves scroll position)
 
 **Code:**
-```tsx
-{timerExpired && !isComplete && !selectedPrice && round === 2 && (
-  <>
-    {/* Info line */}
-    <div className="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
-      <p className="text-sm text-gray-700 flex items-center gap-2">
-        <Clock className="w-4 h-4" />
-        ⏱ Time's up. This price is no longer available.
-      </p>
-    </div>
 
-    {/* View room options CTA (blue) */}
-    <Button
-      onClick={() => {
-        chatAnalyticsService.trackEvent("bargain_view_room_options_clicked", {
-          hotelId: hotel?.id || productRef,
-          module,
-          offer1: safeDealPrice,
-          offer2: finalOffer,
-        });
-        onClose();
-      }}
-      className="w-full text-white font-semibold"
-      style={{ backgroundColor: '#0071c2' }}
-    >
-      View room options
-    </Button>
-  </>
-)}
+```tsx
+{
+  timerExpired && !isComplete && !selectedPrice && round === 2 && (
+    <>
+      {/* Info line */}
+      <div className="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+        <p className="text-sm text-gray-700 flex items-center gap-2">
+          <Clock className="w-4 h-4" />⏱ Time's up. This price is no longer
+          available.
+        </p>
+      </div>
+
+      {/* View room options CTA (blue) */}
+      <Button
+        onClick={() => {
+          chatAnalyticsService.trackEvent("bargain_view_room_options_clicked", {
+            hotelId: hotel?.id || productRef,
+            module,
+            offer1: safeDealPrice,
+            offer2: finalOffer,
+          });
+          onClose();
+        }}
+        className="w-full text-white font-semibold"
+        style={{ backgroundColor: "#0071c2" }}
+      >
+        View room options
+      </Button>
+    </>
+  );
+}
 ```
 
 ---
@@ -154,18 +175,24 @@ All UX text and logic updates have been implemented exactly as specified. The ba
 **File:** `client/components/ConversationalBargainModal.tsx` (Lines 1663-1698)
 
 **When timer expires WITH selection:**
+
 - ✅ "Book Selected Price" CTA remains active
 - ✅ User can book at selected price
 - ✅ No "View room options" fallback shown
 
 **Logic:**
+
 ```tsx
-{/* Remains active even after timer expires if selection was made */}
-{selectedPrice && (
-  <Button onClick={() => handleAcceptOffer()}>
-    {isBooking ? "Processing..." : "Book Selected Price"}
-  </Button>
-)}
+{
+  /* Remains active even after timer expires if selection was made */
+}
+{
+  selectedPrice && (
+    <Button onClick={() => handleAcceptOffer()}>
+      {isBooking ? "Processing..." : "Book Selected Price"}
+    </Button>
+  );
+}
 ```
 
 ---
@@ -176,19 +203,20 @@ All UX text and logic updates have been implemented exactly as specified. The ba
 
 **All copy updated to match spec:**
 
-| Context | Copy String | Status |
-|---------|-------------|--------|
-| **Round 1 supplier response** | "Good news — we can offer {offer}." | ✅ Already correct |
-| **Round 1 agent helper** | "Your price is locked. You can book now or try your final bargain." | ✅ Updated (Line 407) |
-| **Round 1 → Round 2 transition** | "✅ Price locked: {offer1}. Enter your final price above to try for a better deal!" | ✅ Updated (Line 773) |
-| **Round 2 supplier response** | "Today's offer is {offer}." | ✅ Already correct |
-| **Round 2 agent response** | "Final offer: {offer}. You have 30 seconds to choose." | ✅ Updated (Lines 418-420) |
-| **Round 2 dual-price helper** | "Pick the price you want to book." | ✅ Already correct (Line 1558) |
-| **Round 2 buttons** | "Book ₹{offer1} (Recommended)" / "Book ₹{offer2}" | ✅ Already correct |
-| **Timer expired note** | "⏱ Time's up. This price is no longer available." | ✅ Updated (Line 1736) |
-| **Timer expired CTA** | "View room options" | ✅ Updated (Line 1754) |
+| Context                          | Copy String                                                                         | Status                         |
+| -------------------------------- | ----------------------------------------------------------------------------------- | ------------------------------ |
+| **Round 1 supplier response**    | "Good news — we can offer {offer}."                                                 | ✅ Already correct             |
+| **Round 1 agent helper**         | "Your price is locked. You can book now or try your final bargain."                 | ✅ Updated (Line 407)          |
+| **Round 1 → Round 2 transition** | "✅ Price locked: {offer1}. Enter your final price above to try for a better deal!" | ✅ Updated (Line 773)          |
+| **Round 2 supplier response**    | "Today's offer is {offer}."                                                         | ✅ Already correct             |
+| **Round 2 agent response**       | "Final offer: {offer}. You have 30 seconds to choose."                              | ✅ Updated (Lines 418-420)     |
+| **Round 2 dual-price helper**    | "Pick the price you want to book."                                                  | ✅ Already correct (Line 1558) |
+| **Round 2 buttons**              | "Book ₹{offer1} (Recommended)" / "Book ₹{offer2}"                                   | ✅ Already correct             |
+| **Timer expired note**           | "⏱ Time's up. This price is no longer available."                                  | ✅ Updated (Line 1736)         |
+| **Timer expired CTA**            | "View room options"                                                                 | ✅ Updated (Line 1754)         |
 
 **Removed:**
+
 - ❌ "Your final bargain. This may not be better than your Safe Deal." (Round 2 warning)
 - ❌ "Lock ₹{offer} & Try Final Bargain" (Round 1 button)
 - ❌ "Book at Standard Price: ₹{basePrice}" (timer-expiry fallback)
@@ -199,16 +227,17 @@ All UX text and logic updates have been implemented exactly as specified. The ba
 
 **Colors confirmed and applied:**
 
-| Token | Hex | Usage |
-|-------|-----|-------|
-| **Primary Blue** | `#0071c2` | Secondary CTA (Round 1), View room options |
-| **Secondary Blue** | `#003580` | Badge text color, heading text |
-| **Accent Yellow** | `#febb02` | Top CTA (Round 1), (Recommended) badge |
-| **Yellow Hover** | `#e6a602` | Yellow button hover state |
-| **Button Text (Yellow)** | `#111` | Dark text on yellow background |
-| **Button Text (Blue)** | `#fff` | White text on blue background |
+| Token                    | Hex       | Usage                                      |
+| ------------------------ | --------- | ------------------------------------------ |
+| **Primary Blue**         | `#0071c2` | Secondary CTA (Round 1), View room options |
+| **Secondary Blue**       | `#003580` | Badge text color, heading text             |
+| **Accent Yellow**        | `#febb02` | Top CTA (Round 1), (Recommended) badge     |
+| **Yellow Hover**         | `#e6a602` | Yellow button hover state                  |
+| **Button Text (Yellow)** | `#111`    | Dark text on yellow background             |
+| **Button Text (Blue)**   | `#fff`    | White text on blue background              |
 
 **Consistency:**
+
 - ✅ Button radius: `rounded-xl` (consistent)
 - ✅ Typography: font-semibold for CTAs
 - ✅ Spacing: Tailwind system (gap-2, mb-3, mt-2)
@@ -219,14 +248,14 @@ All UX text and logic updates have been implemented exactly as specified. The ba
 
 **All guardrails implemented:**
 
-| Rule | Implementation | Status |
-|------|----------------|--------|
-| **Round 1: Both CTAs save safeDealPrice** | Lines 1697, 1719 | ✅ Implemented |
-| **Round 2 cards render condition** | `round===2 && safeDealPrice && finalOffer && showOfferActions && !timerExpired` (Line 1547) | ✅ Implemented |
-| **Timer expiry (no selection) hides prices** | Lines 1493, 1547 | ✅ Implemented |
-| **Timer expiry (no selection) disables retry** | "View room options" closes modal (Line 1749) | ✅ Implemented |
-| **Timer expiry (with selection) allows booking** | selectedPrice check (Line 1663) | ✅ Implemented |
-| **TOTAL_ROUNDS = 2** | Line 125 | ✅ Already correct |
+| Rule                                             | Implementation                                                                              | Status             |
+| ------------------------------------------------ | ------------------------------------------------------------------------------------------- | ------------------ |
+| **Round 1: Both CTAs save safeDealPrice**        | Lines 1697, 1719                                                                            | ✅ Implemented     |
+| **Round 2 cards render condition**               | `round===2 && safeDealPrice && finalOffer && showOfferActions && !timerExpired` (Line 1547) | ✅ Implemented     |
+| **Timer expiry (no selection) hides prices**     | Lines 1493, 1547                                                                            | ✅ Implemented     |
+| **Timer expiry (no selection) disables retry**   | "View room options" closes modal (Line 1749)                                                | ✅ Implemented     |
+| **Timer expiry (with selection) allows booking** | selectedPrice check (Line 1663)                                                             | ✅ Implemented     |
+| **TOTAL_ROUNDS = 2**                             | Line 125                                                                                    | ✅ Already correct |
 
 ---
 
@@ -234,15 +263,16 @@ All UX text and logic updates have been implemented exactly as specified. The ba
 
 **All events implemented:**
 
-| Event Name | Parameters | Location | Status |
-|------------|-----------|----------|--------|
-| **bargain_round1_offer_shown** | `{ offer1, basePrice, hotelId }` | Line 710 | ✅ NEW |
-| **bargain_round2_offer_shown** | `{ offer1, offer2, basePrice, hotelId, timerSeconds:30 }` | Line 717 | ✅ NEW |
-| **bargain_price_selected** | `{ selected:'offer1'\|'offer2', price }` | Lines 1574, 1630 | ✅ Existing |
-| **bargain_timer_expired_no_selection** | `{ offer1, offer2 }` | Line 283 | ✅ Renamed (was `bargain_abandoned`) |
-| **bargain_view_room_options_clicked** | `{ hotelId }` | Line 1743 | ✅ NEW |
+| Event Name                             | Parameters                                                | Location         | Status                               |
+| -------------------------------------- | --------------------------------------------------------- | ---------------- | ------------------------------------ |
+| **bargain_round1_offer_shown**         | `{ offer1, basePrice, hotelId }`                          | Line 710         | ✅ NEW                               |
+| **bargain_round2_offer_shown**         | `{ offer1, offer2, basePrice, hotelId, timerSeconds:30 }` | Line 717         | ✅ NEW                               |
+| **bargain_price_selected**             | `{ selected:'offer1'\|'offer2', price }`                  | Lines 1574, 1630 | ✅ Existing                          |
+| **bargain_timer_expired_no_selection** | `{ offer1, offer2 }`                                      | Line 283         | ✅ Renamed (was `bargain_abandoned`) |
+| **bargain_view_room_options_clicked**  | `{ hotelId }`                                             | Line 1743        | ✅ NEW                               |
 
 **Code Example:**
+
 ```tsx
 // Round 1 offer shown
 chatAnalyticsService.trackEvent("bargain_round1_offer_shown", {
@@ -333,6 +363,7 @@ chatAnalyticsService.trackEvent("bargain_view_room_options_clicked", {
 ## ✅ Files Modified (Summary)
 
 ### Landing Page Copy
+
 1. `client/components/UnifiedLandingPage.tsx` (3 edits)
    - Line 210: "3 attempts" → "2 tries"
    - Line 567: "2/3 attempts" → "2/2 attempts"
@@ -341,6 +372,7 @@ chatAnalyticsService.trackEvent("bargain_view_room_options_clicked", {
    - Line 117: "3 attempts" → "2 tries"
 
 ### Bargain Modal
+
 3. `client/components/ConversationalBargainModal.tsx` (12 edits)
    - Lines 403-409: Round 1 copy strings
    - Lines 414-420: Round 2 copy strings (removed warning)
@@ -424,6 +456,7 @@ chatAnalyticsService.trackEvent("bargain_view_room_options_clicked", {
 ## ✅ Cross-Module Verification
 
 **All modules use the same ConversationalBargainModal:**
+
 - ✅ Hotels (primary)
 - ✅ Flights
 - ✅ Sightseeing
@@ -438,6 +471,7 @@ All modules should show identical bargain flow with new copy and buttons.
 ## ✅ Mobile Responsiveness
 
 **Screen sizes tested:**
+
 - iPhone SE (375px) ✅
 - iPhone 12/13/14 (390px) ✅
 - iPhone 14 Pro Max (428px) ✅
@@ -446,6 +480,7 @@ All modules should show identical bargain flow with new copy and buttons.
 - iPad (768px+) ✅
 
 **Safe-area padding:**
+
 - Input section: ✅ `env(safe-area-inset-bottom)`
 - Offer actions: ✅ `env(safe-area-inset-bottom)`
 - Complete state: ✅ `env(safe-area-inset-bottom)`
@@ -457,6 +492,7 @@ All modules should show identical bargain flow with new copy and buttons.
 **Status:** READY FOR STAGING ✅
 
 **Next Steps:**
+
 1. Push changes to staging
 2. Test full flow on staging (web + mobile)
 3. Record 2-minute screen video showing:
@@ -473,6 +509,7 @@ All modules should show identical bargain flow with new copy and buttons.
 ## 🎯 Summary
 
 **All 10 requirements implemented:**
+
 1. ✅ Landing copy: "2 tries, 30-second timer"
 2. ✅ Round 1 buttons: "Book ₹{offer1}" (yellow) + "Try Final Bargain" (blue)
 3. ✅ Round 2 cards: Two "Book ₹{price}" with "(Recommended)" badge

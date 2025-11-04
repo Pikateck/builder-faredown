@@ -5,6 +5,7 @@
 This PR implements **Phase A** of the module-specific Bargain Engine as specified by @Zubin.
 
 **Key Features**:
+
 - ✅ Database schema with 5 tables (settings, sessions, events, market rules, price match)
 - ✅ Backend APIs (8 public + 7 admin endpoints)
 - ✅ Admin panel UI with module tabs
@@ -18,6 +19,7 @@ This PR implements **Phase A** of the module-specific Bargain Engine as specifie
 ## 🎯 What's Changed
 
 ### Database
+
 - **New**: `api/database/migrations/20250219_bargain_engine.sql`
   - Tables: `bargain_settings`, `bargain_sessions`, `bargain_events_raw`, `bargain_market_rules`, `price_match_tickets`
   - Seed data for all 6 modules (Hotels, Flights, Sightseeing, Transfers, Packages, Add-ons)
@@ -27,6 +29,7 @@ This PR implements **Phase A** of the module-specific Bargain Engine as specifie
   - Migration runner with verification
 
 ### Backend Services
+
 - **New**: `api/services/bargainEngine.js` (348 lines)
   - Core bargaining logic
   - Settings resolution with market overrides
@@ -45,6 +48,7 @@ This PR implements **Phase A** of the module-specific Bargain Engine as specifie
   - Added route registrations for bargain APIs
 
 ### Frontend Services
+
 - **New**: `client/services/bargainSettingsService.ts` (224 lines)
   - Public settings fetch with caching
   - Default fallback settings per module
@@ -56,6 +60,7 @@ This PR implements **Phase A** of the module-specific Bargain Engine as specifie
   - Validation helpers
 
 ### Admin UI
+
 - **New**: `client/pages/admin/BargainSettings.tsx` (502 lines)
   - Tabbed interface for 6 modules
   - Real-time analytics (last 7 days)
@@ -63,6 +68,7 @@ This PR implements **Phase A** of the module-specific Bargain Engine as specifie
   - Copy text management with placeholders
 
 ### Documentation
+
 - **New**: `BARGAIN_ENGINE_PHASE_A_DEPLOYMENT_GUIDE.md` (357 lines)
 - **New**: `BARGAIN_ENGINE_MODAL_INTEGRATION.md` (382 lines)
 - **New**: `BARGAIN_ENGINE_PHASE_A_COMPLETE_SUMMARY.md` (402 lines)
@@ -73,13 +79,13 @@ This PR implements **Phase A** of the module-specific Bargain Engine as specifie
 
 ```
 Frontend          →  bargainSettingsService  →  GET /api/bargain/settings?module=X
-(Modal)                                          
+(Modal)
                                                  ↓
-                                                 
+
 Admin Panel       →  adminBargainService    →  PUT /api/admin/bargain/settings/:module
-                                                 
+
                                                  ↓
-                                                 
+
 Backend           →  bargainEngine Service  →  PostgreSQL
 (Node.js)                                        (5 tables)
 ```
@@ -88,15 +94,16 @@ Backend           →  bargainEngine Service  →  PostgreSQL
 
 ## 🗄️ Database Schema
 
-| Table | Purpose | Key Features |
-|-------|---------|--------------|
-| `bargain_settings` | Per-module config | 6 modules, timers, discount range, copy JSON |
-| `bargain_market_rules` | Country/city overrides | Optional regional customization |
-| `bargain_sessions` | Runtime tracking | R1/R2 bids, offers, outcomes |
-| `bargain_events_raw` | Analytics events | All bargain interactions |
-| `price_match_tickets` | Price match requests | Hotels only (Phase A) |
+| Table                  | Purpose                | Key Features                                 |
+| ---------------------- | ---------------------- | -------------------------------------------- |
+| `bargain_settings`     | Per-module config      | 6 modules, timers, discount range, copy JSON |
+| `bargain_market_rules` | Country/city overrides | Optional regional customization              |
+| `bargain_sessions`     | Runtime tracking       | R1/R2 bids, offers, outcomes                 |
+| `bargain_events_raw`   | Analytics events       | All bargain interactions                     |
+| `price_match_tickets`  | Price match requests   | Hotels only (Phase A)                        |
 
 **Seed Data**:
+
 - Hotels: 2 attempts, 30s timers
 - Flights: 1 attempt, 15s timer
 - Sightseeing/Transfers: 1 attempt, 20s timers
@@ -107,6 +114,7 @@ Backend           →  bargainEngine Service  →  PostgreSQL
 ## 🔌 API Endpoints
 
 ### Public (Session-Based)
+
 ```
 GET  /api/bargain/settings?module={module}
 POST /api/bargain/start
@@ -119,6 +127,7 @@ POST /api/bargain/abandon
 ```
 
 ### Admin (Requires Auth)
+
 ```
 GET    /api/admin/bargain/settings
 GET    /api/admin/bargain/settings/:module
@@ -136,6 +145,7 @@ GET    /api/admin/bargain/analytics/summary
 **Route**: `/admin/bargain-settings`
 
 **Per-Module Configuration**:
+
 - Enable/disable toggle
 - Bargain attempts (0/1/2)
 - Round timers (R1, R2)
@@ -145,12 +155,14 @@ GET    /api/admin/bargain/analytics/summary
 - Price match toggle (Hotels only)
 
 **Analytics Display**:
+
 - Total sessions (last 7 days)
 - Booked count
 - Average discount %
 - Average time to bid
 
 **Copy Text Placeholders**:
+
 - `{price}` - Current offer price
 - `{base}` - Original base price
 
@@ -158,30 +170,33 @@ GET    /api/admin/bargain/analytics/summary
 
 ## ✅ Module-Specific Rules
 
-| Module | Attempts | Round 1 Timer | Round 2 Timer | Special Features |
-|--------|----------|---------------|---------------|------------------|
-| **Hotels** | 2 | 30s | 30s | Dual price buttons, "Recommended" badge, Price match |
-| **Flights** | 1 | 15s | - | "Skip bargain" button |
-| **Sightseeing** | 1 | 20s | 20s | Optional 2nd attempt (admin toggle) |
-| **Transfers** | 1 | 20s | 20s | Optional 2nd attempt (admin toggle) |
-| **Packages** | 0 | - | - | Assisted mode (Phase B) |
-| **Add-ons** | 0 | - | - | No bargain |
+| Module          | Attempts | Round 1 Timer | Round 2 Timer | Special Features                                     |
+| --------------- | -------- | ------------- | ------------- | ---------------------------------------------------- |
+| **Hotels**      | 2        | 30s           | 30s           | Dual price buttons, "Recommended" badge, Price match |
+| **Flights**     | 1        | 15s           | -             | "Skip bargain" button                                |
+| **Sightseeing** | 1        | 20s           | 20s           | Optional 2nd attempt (admin toggle)                  |
+| **Transfers**   | 1        | 20s           | 20s           | Optional 2nd attempt (admin toggle)                  |
+| **Packages**    | 0        | -             | -             | Assisted mode (Phase B)                              |
+| **Add-ons**     | 0        | -             | -             | No bargain                                           |
 
 ---
 
 ## 🧪 Testing Guide
 
 ### Step 1: Run Migration
+
 ```bash
 node api/database/run-bargain-migration.js
 ```
 
 ### Step 2: Test Public API
+
 ```bash
 curl "http://localhost:5000/api/bargain/settings?module=hotels"
 ```
 
 **Expected Response**:
+
 ```json
 {
   "enabled": true,
@@ -199,6 +214,7 @@ curl "http://localhost:5000/api/bargain/settings?module=hotels"
 ```
 
 ### Step 3: Test Admin Panel
+
 1. Navigate to `/admin/bargain-settings`
 2. Select "Hotels" tab
 3. Verify default settings
@@ -207,6 +223,7 @@ curl "http://localhost:5000/api/bargain/settings?module=hotels"
 6. Verify timer updated to 45s
 
 ### Step 4: Integration Testing
+
 See: `BARGAIN_ENGINE_MODAL_INTEGRATION.md`
 
 ---
@@ -216,6 +233,7 @@ See: `BARGAIN_ENGINE_MODAL_INTEGRATION.md`
 All events include: `module`, `productId`, `basePrice`, `device`, `browser`, `sessionId`
 
 **Event Flow**:
+
 1. `bargain_opened`
 2. `bargain_round1_bid_submitted`
 3. `bargain_round1_offer_shown`
@@ -232,6 +250,7 @@ All events include: `module`, `productId`, `basePrice`, `device`, `browser`, `se
 ## ⚠️ Breaking Changes
 
 **None**. This is an additive change:
+
 - Existing bargain modal continues to work with defaults
 - Admin panel is new (no existing functionality affected)
 - Database tables are new (no migrations to existing tables)
@@ -241,6 +260,7 @@ All events include: `module`, `productId`, `basePrice`, `device`, `browser`, `se
 ## 🔄 Integration Required
 
 The `ConversationalBargainModal.tsx` needs minor updates to:
+
 1. Fetch settings: `bargainSettingsService.getSettings(module)`
 2. Use settings for timers and copy text
 3. Track analytics with module field
@@ -254,18 +274,21 @@ The `ConversationalBargainModal.tsx` needs minor updates to:
 ## 📝 Deployment Checklist
 
 ### Pre-Deployment
+
 - [ ] PR reviewed and approved
 - [ ] Migration tested on staging database
 - [ ] API endpoints verified
 - [ ] Admin panel tested
 
 ### Deployment
+
 - [ ] Run migration: `node api/database/run-bargain-migration.js`
 - [ ] Deploy backend to Render
 - [ ] Deploy frontend to Netlify
 - [ ] Verify admin panel access
 
 ### Post-Deployment
+
 - [ ] Test Hotels flow (2 attempts)
 - [ ] Test Flights flow (1 attempt)
 - [ ] Mobile testing (iPhone 14/16, Android)
@@ -301,6 +324,7 @@ None currently. All code is production-ready.
 ## ✅ Acceptance Criteria
 
 ### Must-Have (Phase A)
+
 - [x] Database schema with 5 tables
 - [x] Backend APIs (public + admin)
 - [x] Admin panel UI
@@ -309,12 +333,14 @@ None currently. All code is production-ready.
 - [x] Documentation
 
 ### Should-Have (Integration)
+
 - [ ] Modal fetches settings dynamically
 - [ ] Hotels uses 2-attempt flow
 - [ ] Flights uses 1-attempt flow
 - [ ] Copy text changes apply without deploy
 
 ### Nice-to-Have (Phase B)
+
 - [ ] Price match UI
 - [ ] Market overrides UI
 - [ ] A/B testing
@@ -324,11 +350,13 @@ None currently. All code is production-ready.
 ## 👥 Reviewers
 
 **Required**:
+
 - @Zubin (Product Owner)
 - @Engineering-Lead (Backend)
 - @Frontend-Lead (Admin UI)
 
 **Optional**:
+
 - @QA-Team (Testing)
 - @DevOps (Deployment)
 
@@ -337,6 +365,7 @@ None currently. All code is production-ready.
 ## 📞 Support
 
 For questions:
+
 - Deployment: See `BARGAIN_ENGINE_PHASE_A_DEPLOYMENT_GUIDE.md`
 - Integration: See `BARGAIN_ENGINE_MODAL_INTEGRATION.md`
 - Issues: Tag @Engineering-Team

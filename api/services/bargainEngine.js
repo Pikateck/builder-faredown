@@ -3,7 +3,7 @@
  * Core business logic for module-specific bargaining
  */
 
-const db = require('../lib/db');
+const db = require("../lib/db");
 
 class BargainEngine {
   /**
@@ -14,19 +14,19 @@ class BargainEngine {
    */
   async getSettings(module, options = {}) {
     const { country_code, city } = options;
-    
+
     // Get base settings
     const baseResult = await db.query(
-      'SELECT * FROM bargain_settings WHERE module = $1',
-      [module]
+      "SELECT * FROM bargain_settings WHERE module = $1",
+      [module],
     );
-    
+
     if (baseResult.rows.length === 0) {
       throw new Error(`No settings found for module: ${module}`);
     }
-    
+
     let settings = baseResult.rows[0];
-    
+
     // Apply market-specific overrides if provided
     if (country_code || city) {
       const marketResult = await db.query(
@@ -38,25 +38,40 @@ class BargainEngine {
            CASE WHEN city IS NOT NULL THEN 1 ELSE 2 END,
            CASE WHEN country_code IS NOT NULL THEN 1 ELSE 2 END
          LIMIT 1`,
-        [module, country_code, city]
+        [module, country_code, city],
       );
-      
+
       if (marketResult.rows.length > 0) {
         const override = marketResult.rows[0];
-        
+
         // Merge overrides
         settings = {
           ...settings,
-          attempts: override.attempts !== null ? override.attempts : settings.attempts,
-          r1_timer_sec: override.r1_timer_sec !== null ? override.r1_timer_sec : settings.r1_timer_sec,
-          r2_timer_sec: override.r2_timer_sec !== null ? override.r2_timer_sec : settings.r2_timer_sec,
-          discount_min_pct: override.discount_min_pct !== null ? override.discount_min_pct : settings.discount_min_pct,
-          discount_max_pct: override.discount_max_pct !== null ? override.discount_max_pct : settings.discount_max_pct,
-          copy_json: override.copy_json ? { ...settings.copy_json, ...override.copy_json } : settings.copy_json,
+          attempts:
+            override.attempts !== null ? override.attempts : settings.attempts,
+          r1_timer_sec:
+            override.r1_timer_sec !== null
+              ? override.r1_timer_sec
+              : settings.r1_timer_sec,
+          r2_timer_sec:
+            override.r2_timer_sec !== null
+              ? override.r2_timer_sec
+              : settings.r2_timer_sec,
+          discount_min_pct:
+            override.discount_min_pct !== null
+              ? override.discount_min_pct
+              : settings.discount_min_pct,
+          discount_max_pct:
+            override.discount_max_pct !== null
+              ? override.discount_max_pct
+              : settings.discount_max_pct,
+          copy_json: override.copy_json
+            ? { ...settings.copy_json, ...override.copy_json }
+            : settings.copy_json,
         };
       }
     }
-    
+
     return settings;
   }
 
@@ -67,33 +82,33 @@ class BargainEngine {
    */
   async startSession(params) {
     const { module, productId, basePrice, userId, metadata } = params;
-    
+
     // Get settings
     const settings = await this.getSettings(module, metadata);
-    
+
     if (!settings.enabled) {
       throw new Error(`Bargaining is disabled for module: ${module}`);
     }
-    
+
     // Create session
     const result = await db.query(
       `INSERT INTO bargain_sessions 
        (module, product_id, user_id, base_price_cents, metadata)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING id, created_at`,
-      [module, productId, userId, basePrice, JSON.stringify(metadata || {})]
+      [module, productId, userId, basePrice, JSON.stringify(metadata || {})],
     );
-    
+
     const session = result.rows[0];
-    
+
     // Log event
-    await this.logEvent(session.id, 'bargain_opened', {
+    await this.logEvent(session.id, "bargain_opened", {
       module,
       productId,
       basePrice,
-      ...metadata
+      ...metadata,
     });
-    
+
     return {
       sessionId: session.id,
       r1Timer: settings.r1_timer_sec,
@@ -101,11 +116,11 @@ class BargainEngine {
       attempts: settings.attempts,
       discountRange: {
         min: settings.discount_min_pct,
-        max: settings.discount_max_pct
+        max: settings.discount_max_pct,
       },
       copy: settings.copy_json,
       showRecommendedBadge: settings.show_recommended_badge,
-      recommendedLabel: settings.recommended_label
+      recommendedLabel: settings.recommended_label,
     };
   }
 
@@ -117,22 +132,26 @@ class BargainEngine {
    * @returns {number} Counter-offer in cents
    */
   calculateCounterOffer(basePriceCents, bidCents, settings) {
-    const minDiscountCents = Math.floor(basePriceCents * settings.discount_min_pct / 100);
-    const maxDiscountCents = Math.floor(basePriceCents * settings.discount_max_pct / 100);
-    
+    const minDiscountCents = Math.floor(
+      (basePriceCents * settings.discount_min_pct) / 100,
+    );
+    const maxDiscountCents = Math.floor(
+      (basePriceCents * settings.discount_max_pct) / 100,
+    );
+
     const minPrice = basePriceCents - maxDiscountCents;
     const maxPrice = basePriceCents - minDiscountCents;
-    
+
     // If bid is too low, offer min price
     if (bidCents < minPrice) {
       return minPrice;
     }
-    
+
     // If bid is acceptable, meet halfway between bid and max
     if (bidCents <= maxPrice) {
       return Math.floor((bidCents + maxPrice) / 2);
     }
-    
+
     // If bid is too high, offer max price
     return maxPrice;
   }
@@ -146,37 +165,45 @@ class BargainEngine {
   async submitRound1(sessionId, bidCents) {
     // Get session
     const sessionResult = await db.query(
-      'SELECT * FROM bargain_sessions WHERE id = $1',
-      [sessionId]
+      "SELECT * FROM bargain_sessions WHERE id = $1",
+      [sessionId],
     );
-    
+
     if (sessionResult.rows.length === 0) {
-      throw new Error('Session not found');
+      throw new Error("Session not found");
     }
-    
+
     const session = sessionResult.rows[0];
-    
+
     // Get settings
     const settings = await this.getSettings(session.module);
-    
+
     // Calculate offer
-    const offerCents = this.calculateCounterOffer(session.base_price_cents, bidCents, settings);
-    
+    const offerCents = this.calculateCounterOffer(
+      session.base_price_cents,
+      bidCents,
+      settings,
+    );
+
     // Update session
     await db.query(
       `UPDATE bargain_sessions 
        SET r1_bid_cents = $1, r1_offer_cents = $2, updated_at = now()
        WHERE id = $3`,
-      [bidCents, offerCents, sessionId]
+      [bidCents, offerCents, sessionId],
     );
-    
+
     // Log events
-    await this.logEvent(sessionId, 'bargain_round1_bid_submitted', { bidCents });
-    await this.logEvent(sessionId, 'bargain_round1_offer_shown', { offerCents });
-    
+    await this.logEvent(sessionId, "bargain_round1_bid_submitted", {
+      bidCents,
+    });
+    await this.logEvent(sessionId, "bargain_round1_offer_shown", {
+      offerCents,
+    });
+
     return {
       offer: offerCents,
-      timer: settings.r1_timer_sec
+      timer: settings.r1_timer_sec,
     };
   }
 
@@ -189,46 +216,54 @@ class BargainEngine {
   async submitRound2(sessionId, bidCents) {
     // Get session
     const sessionResult = await db.query(
-      'SELECT * FROM bargain_sessions WHERE id = $1',
-      [sessionId]
+      "SELECT * FROM bargain_sessions WHERE id = $1",
+      [sessionId],
     );
-    
+
     if (sessionResult.rows.length === 0) {
-      throw new Error('Session not found');
+      throw new Error("Session not found");
     }
-    
+
     const session = sessionResult.rows[0];
-    
+
     // Verify Round 1 was completed
     if (!session.r1_offer_cents) {
-      throw new Error('Round 1 must be completed first');
+      throw new Error("Round 1 must be completed first");
     }
-    
+
     // Get settings
     const settings = await this.getSettings(session.module);
-    
+
     if (settings.attempts < 2) {
       throw new Error(`Module ${session.module} does not support Round 2`);
     }
-    
+
     // Calculate offer
-    const offerCents = this.calculateCounterOffer(session.base_price_cents, bidCents, settings);
-    
+    const offerCents = this.calculateCounterOffer(
+      session.base_price_cents,
+      bidCents,
+      settings,
+    );
+
     // Update session
     await db.query(
       `UPDATE bargain_sessions 
        SET r2_bid_cents = $1, r2_offer_cents = $2, updated_at = now()
        WHERE id = $3`,
-      [bidCents, offerCents, sessionId]
+      [bidCents, offerCents, sessionId],
     );
-    
+
     // Log events
-    await this.logEvent(sessionId, 'bargain_round2_bid_submitted', { bidCents });
-    await this.logEvent(sessionId, 'bargain_round2_offer_shown', { offerCents });
-    
+    await this.logEvent(sessionId, "bargain_round2_bid_submitted", {
+      bidCents,
+    });
+    await this.logEvent(sessionId, "bargain_round2_offer_shown", {
+      offerCents,
+    });
+
     return {
       offer: offerCents,
-      timer: settings.r2_timer_sec
+      timer: settings.r2_timer_sec,
     };
   }
 
@@ -243,10 +278,10 @@ class BargainEngine {
       `UPDATE bargain_sessions 
        SET r1_action = $1, updated_at = now()
        WHERE id = $2`,
-      [action, sessionId]
+      [action, sessionId],
     );
-    
-    await this.logEvent(sessionId, 'bargain_round1_action', { action });
+
+    await this.logEvent(sessionId, "bargain_round1_action", { action });
   }
 
   /**
@@ -258,38 +293,39 @@ class BargainEngine {
   async selectPrice(sessionId, selection) {
     // Get session
     const sessionResult = await db.query(
-      'SELECT * FROM bargain_sessions WHERE id = $1',
-      [sessionId]
+      "SELECT * FROM bargain_sessions WHERE id = $1",
+      [sessionId],
     );
-    
+
     if (sessionResult.rows.length === 0) {
-      throw new Error('Session not found');
+      throw new Error("Session not found");
     }
-    
+
     const session = sessionResult.rows[0];
-    
-    const selectedPrice = selection === 'r1' ? session.r1_offer_cents : session.r2_offer_cents;
-    
+
+    const selectedPrice =
+      selection === "r1" ? session.r1_offer_cents : session.r2_offer_cents;
+
     if (!selectedPrice) {
       throw new Error(`No offer available for ${selection}`);
     }
-    
+
     // Update session
     await db.query(
       `UPDATE bargain_sessions 
        SET selected_price_cents = $1, updated_at = now()
        WHERE id = $2`,
-      [selectedPrice, sessionId]
+      [selectedPrice, sessionId],
     );
-    
+
     // Log event
-    await this.logEvent(sessionId, 'bargain_price_selected', { 
-      selection, 
-      priceSelected: selectedPrice 
+    await this.logEvent(sessionId, "bargain_price_selected", {
+      selection,
+      priceSelected: selectedPrice,
     });
-    
+
     return {
-      priceToBook: selectedPrice
+      priceToBook: selectedPrice,
     };
   }
 
@@ -304,10 +340,10 @@ class BargainEngine {
       `UPDATE bargain_sessions 
        SET outcome = 'abandoned', updated_at = now()
        WHERE id = $1`,
-      [sessionId]
+      [sessionId],
     );
-    
-    await this.logEvent(sessionId, 'bargain_abandoned', { reason });
+
+    await this.logEvent(sessionId, "bargain_abandoned", { reason });
   }
 
   /**
@@ -321,7 +357,7 @@ class BargainEngine {
     await db.query(
       `INSERT INTO bargain_events_raw (session_id, name, payload)
        VALUES ($1, $2, $3)`,
-      [sessionId, eventName, JSON.stringify(payload)]
+      [sessionId, eventName, JSON.stringify(payload)],
     );
   }
 
@@ -333,13 +369,13 @@ class BargainEngine {
    */
   async createHold(sessionId, holdDurationMinutes = 15) {
     const expiresAt = new Date(Date.now() + holdDurationMinutes * 60 * 1000);
-    
+
     // In Phase A, we just return hold data without DB persistence
     // Full hold tracking can be added in Phase B
     return {
       holdToken: `HOLD_${sessionId}_${Date.now()}`,
       expiresAt: expiresAt.toISOString(),
-      sessionId
+      sessionId,
     };
   }
 }

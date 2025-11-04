@@ -1,39 +1,58 @@
-import React, { useState, useEffect } from 'react';
-import { 
-  Card, 
-  CardContent, 
-  CardDescription, 
-  CardHeader, 
-  CardTitle 
-} from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Switch } from '@/components/ui/switch';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Textarea } from '@/components/ui/textarea';
-import { Alert, AlertDescription } from '@/components/ui/alert';
-import { Save, AlertCircle, CheckCircle2, TrendingUp } from 'lucide-react';
-import { adminBargainService, BargainSettings, AnalyticsSummary } from '@/services/adminBargainService';
-import { useAuth } from '@/contexts/AuthContext';
+import React, { useState, useEffect } from "react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { Save, AlertCircle, CheckCircle2, TrendingUp } from "lucide-react";
+import {
+  adminBargainService,
+  BargainSettings,
+  AnalyticsSummary,
+} from "@/services/adminBargainService";
+import { useAuth } from "@/contexts/AuthContext";
 
-type Module = 'hotels' | 'flights' | 'sightseeing' | 'transfers' | 'packages' | 'addons';
+type Module =
+  | "hotels"
+  | "flights"
+  | "sightseeing"
+  | "transfers"
+  | "packages"
+  | "addons";
 
 const MODULE_LABELS: Record<Module, string> = {
-  hotels: 'Hotels',
-  flights: 'Flights',
-  sightseeing: 'Sightseeing',
-  transfers: 'Transfers',
-  packages: 'Packages',
-  addons: 'Add-ons'
+  hotels: "Hotels",
+  flights: "Flights",
+  sightseeing: "Sightseeing",
+  transfers: "Transfers",
+  packages: "Packages",
+  addons: "Add-ons",
 };
 
-const MODULE_ORDER: Module[] = ['hotels', 'flights', 'sightseeing', 'transfers', 'packages', 'addons'];
+const MODULE_ORDER: Module[] = [
+  "hotels",
+  "flights",
+  "sightseeing",
+  "transfers",
+  "packages",
+  "addons",
+];
 
 export default function BargainSettingsPage() {
   const { user } = useAuth();
-  const [activeModule, setActiveModule] = useState<Module>('hotels');
-  const [settings, setSettings] = useState<Record<Module, BargainSettings | null>>({} as any);
+  const [activeModule, setActiveModule] = useState<Module>("hotels");
+  const [settings, setSettings] = useState<
+    Record<Module, BargainSettings | null>
+  >({} as any);
   const [analytics, setAnalytics] = useState<AnalyticsSummary[]>([]);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -50,16 +69,16 @@ export default function BargainSettingsPage() {
     try {
       setLoading(true);
       const allSettings = await adminBargainService.getAllSettings();
-      
+
       const settingsMap: Record<Module, BargainSettings> = {} as any;
-      allSettings.forEach(setting => {
+      allSettings.forEach((setting) => {
         settingsMap[setting.module] = setting;
       });
-      
+
       setSettings(settingsMap);
       setError(null);
     } catch (err: any) {
-      setError(err.message || 'Failed to load settings');
+      setError(err.message || "Failed to load settings");
     } finally {
       setLoading(false);
     }
@@ -67,10 +86,13 @@ export default function BargainSettingsPage() {
 
   const loadAnalytics = async () => {
     try {
-      const { summary } = await adminBargainService.getAnalyticsSummary(undefined, 7);
+      const { summary } = await adminBargainService.getAnalyticsSummary(
+        undefined,
+        7,
+      );
       setAnalytics(summary);
     } catch (err) {
-      console.error('Failed to load analytics:', err);
+      console.error("Failed to load analytics:", err);
     }
   };
 
@@ -94,31 +116,32 @@ export default function BargainSettingsPage() {
           discount_max_pct: currentSettings.discount_max_pct,
           show_recommended_badge: currentSettings.show_recommended_badge,
           recommended_label: currentSettings.recommended_label,
-          show_standard_price_on_expiry: currentSettings.show_standard_price_on_expiry,
+          show_standard_price_on_expiry:
+            currentSettings.show_standard_price_on_expiry,
           price_match_enabled: currentSettings.price_match_enabled,
           copy_json: currentSettings.copy_json,
-          experiment_flags: currentSettings.experiment_flags
+          experiment_flags: currentSettings.experiment_flags,
         },
-        user?.email || 'admin'
+        user?.email || "admin",
       );
 
       setSaveSuccess(true);
       setTimeout(() => setSaveSuccess(false), 3000);
       await loadAllSettings();
     } catch (err: any) {
-      setError(err.message || 'Failed to save settings');
+      setError(err.message || "Failed to save settings");
     } finally {
       setSaving(false);
     }
   };
 
   const updateSetting = (field: keyof BargainSettings, value: any) => {
-    setSettings(prev => ({
+    setSettings((prev) => ({
       ...prev,
       [activeModule]: {
         ...prev[activeModule]!,
-        [field]: value
-      }
+        [field]: value,
+      },
     }));
   };
 
@@ -126,15 +149,15 @@ export default function BargainSettingsPage() {
     const currentSettings = settings[activeModule];
     if (!currentSettings) return;
 
-    setSettings(prev => ({
+    setSettings((prev) => ({
       ...prev,
       [activeModule]: {
         ...prev[activeModule]!,
         copy_json: {
           ...currentSettings.copy_json,
-          [key]: value
-        }
-      }
+          [key]: value,
+        },
+      },
     }));
   };
 
@@ -149,7 +172,7 @@ export default function BargainSettingsPage() {
   }
 
   const currentSettings = settings[activeModule];
-  const moduleAnalytics = analytics.find(a => a.module === activeModule);
+  const moduleAnalytics = analytics.find((a) => a.module === activeModule);
 
   return (
     <div className="p-8 max-w-7xl mx-auto">
@@ -176,16 +199,19 @@ export default function BargainSettingsPage() {
         </Alert>
       )}
 
-      <Tabs value={activeModule} onValueChange={(v) => setActiveModule(v as Module)}>
+      <Tabs
+        value={activeModule}
+        onValueChange={(v) => setActiveModule(v as Module)}
+      >
         <TabsList className="grid w-full grid-cols-6">
-          {MODULE_ORDER.map(module => (
+          {MODULE_ORDER.map((module) => (
             <TabsTrigger key={module} value={module}>
               {MODULE_LABELS[module]}
             </TabsTrigger>
           ))}
         </TabsList>
 
-        {MODULE_ORDER.map(module => (
+        {MODULE_ORDER.map((module) => (
           <TabsContent key={module} value={module} className="space-y-6 mt-6">
             {currentSettings && (
               <>
@@ -201,23 +227,37 @@ export default function BargainSettingsPage() {
                     <CardContent>
                       <div className="grid grid-cols-4 gap-4">
                         <div>
-                          <div className="text-sm text-gray-600">Total Sessions</div>
-                          <div className="text-2xl font-bold">{moduleAnalytics.total_sessions}</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-600">Booked</div>
-                          <div className="text-2xl font-bold text-green-600">{moduleAnalytics.booked}</div>
-                        </div>
-                        <div>
-                          <div className="text-sm text-gray-600">Avg Discount</div>
-                          <div className="text-2xl font-bold text-blue-600">
-                            {moduleAnalytics.avg_discount_pct?.toFixed(1) || '0'}%
+                          <div className="text-sm text-gray-600">
+                            Total Sessions
+                          </div>
+                          <div className="text-2xl font-bold">
+                            {moduleAnalytics.total_sessions}
                           </div>
                         </div>
                         <div>
-                          <div className="text-sm text-gray-600">Avg Time to Bid</div>
+                          <div className="text-sm text-gray-600">Booked</div>
+                          <div className="text-2xl font-bold text-green-600">
+                            {moduleAnalytics.booked}
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm text-gray-600">
+                            Avg Discount
+                          </div>
+                          <div className="text-2xl font-bold text-blue-600">
+                            {moduleAnalytics.avg_discount_pct?.toFixed(1) ||
+                              "0"}
+                            %
+                          </div>
+                        </div>
+                        <div>
+                          <div className="text-sm text-gray-600">
+                            Avg Time to Bid
+                          </div>
                           <div className="text-2xl font-bold">
-                            {moduleAnalytics.avg_time_to_r1_sec?.toFixed(0) || '0'}s
+                            {moduleAnalytics.avg_time_to_r1_sec?.toFixed(0) ||
+                              "0"}
+                            s
                           </div>
                         </div>
                       </div>
@@ -237,15 +277,20 @@ export default function BargainSettingsPage() {
                     {/* Enable Toggle */}
                     <div className="flex items-center justify-between">
                       <div>
-                        <Label htmlFor="enabled" className="text-base">Enable Bargaining</Label>
+                        <Label htmlFor="enabled" className="text-base">
+                          Enable Bargaining
+                        </Label>
                         <p className="text-sm text-gray-500">
-                          Allow users to bargain on {MODULE_LABELS[module]} bookings
+                          Allow users to bargain on {MODULE_LABELS[module]}{" "}
+                          bookings
                         </p>
                       </div>
                       <Switch
                         id="enabled"
                         checked={currentSettings.enabled}
-                        onCheckedChange={(checked) => updateSetting('enabled', checked)}
+                        onCheckedChange={(checked) =>
+                          updateSetting("enabled", checked)
+                        }
                       />
                     </div>
 
@@ -259,22 +304,33 @@ export default function BargainSettingsPage() {
                           min="0"
                           max="2"
                           value={currentSettings.attempts}
-                          onChange={(e) => updateSetting('attempts', parseInt(e.target.value))}
+                          onChange={(e) =>
+                            updateSetting("attempts", parseInt(e.target.value))
+                          }
                           disabled={!currentSettings.enabled}
                         />
-                        <p className="text-xs text-gray-500">0 = disabled, 1 or 2 attempts</p>
+                        <p className="text-xs text-gray-500">
+                          0 = disabled, 1 or 2 attempts
+                        </p>
                       </div>
 
                       {/* R1 Timer */}
                       <div className="space-y-2">
-                        <Label htmlFor="r1_timer">Round 1 Timer (seconds)</Label>
+                        <Label htmlFor="r1_timer">
+                          Round 1 Timer (seconds)
+                        </Label>
                         <Input
                           id="r1_timer"
                           type="number"
                           min="5"
                           max="120"
                           value={currentSettings.r1_timer_sec}
-                          onChange={(e) => updateSetting('r1_timer_sec', parseInt(e.target.value))}
+                          onChange={(e) =>
+                            updateSetting(
+                              "r1_timer_sec",
+                              parseInt(e.target.value),
+                            )
+                          }
                           disabled={!currentSettings.enabled}
                         />
                       </div>
@@ -282,14 +338,21 @@ export default function BargainSettingsPage() {
                       {/* R2 Timer */}
                       {currentSettings.attempts >= 2 && (
                         <div className="space-y-2">
-                          <Label htmlFor="r2_timer">Round 2 Timer (seconds)</Label>
+                          <Label htmlFor="r2_timer">
+                            Round 2 Timer (seconds)
+                          </Label>
                           <Input
                             id="r2_timer"
                             type="number"
                             min="5"
                             max="120"
                             value={currentSettings.r2_timer_sec}
-                            onChange={(e) => updateSetting('r2_timer_sec', parseInt(e.target.value))}
+                            onChange={(e) =>
+                              updateSetting(
+                                "r2_timer_sec",
+                                parseInt(e.target.value),
+                              )
+                            }
                             disabled={!currentSettings.enabled}
                           />
                         </div>
@@ -304,7 +367,12 @@ export default function BargainSettingsPage() {
                           min="0"
                           max="100"
                           value={currentSettings.discount_min_pct}
-                          onChange={(e) => updateSetting('discount_min_pct', parseInt(e.target.value))}
+                          onChange={(e) =>
+                            updateSetting(
+                              "discount_min_pct",
+                              parseInt(e.target.value),
+                            )
+                          }
                           disabled={!currentSettings.enabled}
                         />
                       </div>
@@ -317,7 +385,12 @@ export default function BargainSettingsPage() {
                           min="0"
                           max="100"
                           value={currentSettings.discount_max_pct}
-                          onChange={(e) => updateSetting('discount_max_pct', parseInt(e.target.value))}
+                          onChange={(e) =>
+                            updateSetting(
+                              "discount_max_pct",
+                              parseInt(e.target.value),
+                            )
+                          }
                           disabled={!currentSettings.enabled}
                         />
                       </div>
@@ -327,13 +400,19 @@ export default function BargainSettingsPage() {
                     <div className="space-y-4 pt-4 border-t">
                       <div className="flex items-center justify-between">
                         <div>
-                          <Label htmlFor="show_badge">Show "Recommended" Badge</Label>
-                          <p className="text-sm text-gray-500">Display badge on lower price option</p>
+                          <Label htmlFor="show_badge">
+                            Show "Recommended" Badge
+                          </Label>
+                          <p className="text-sm text-gray-500">
+                            Display badge on lower price option
+                          </p>
                         </div>
                         <Switch
                           id="show_badge"
                           checked={currentSettings.show_recommended_badge}
-                          onCheckedChange={(checked) => updateSetting('show_recommended_badge', checked)}
+                          onCheckedChange={(checked) =>
+                            updateSetting("show_recommended_badge", checked)
+                          }
                           disabled={!currentSettings.enabled}
                         />
                       </div>
@@ -344,7 +423,9 @@ export default function BargainSettingsPage() {
                           <Input
                             id="badge_label"
                             value={currentSettings.recommended_label}
-                            onChange={(e) => updateSetting('recommended_label', e.target.value)}
+                            onChange={(e) =>
+                              updateSetting("recommended_label", e.target.value)
+                            }
                             placeholder="Recommended"
                           />
                         </div>
@@ -354,7 +435,9 @@ export default function BargainSettingsPage() {
                     {/* Expiry Settings */}
                     <div className="flex items-center justify-between pt-4 border-t">
                       <div>
-                        <Label htmlFor="show_standard">Show "Book at Standard Price" on Expiry</Label>
+                        <Label htmlFor="show_standard">
+                          Show "Book at Standard Price" on Expiry
+                        </Label>
                         <p className="text-sm text-gray-500">
                           Display fallback option when timer expires
                         </p>
@@ -362,16 +445,23 @@ export default function BargainSettingsPage() {
                       <Switch
                         id="show_standard"
                         checked={currentSettings.show_standard_price_on_expiry}
-                        onCheckedChange={(checked) => updateSetting('show_standard_price_on_expiry', checked)}
+                        onCheckedChange={(checked) =>
+                          updateSetting(
+                            "show_standard_price_on_expiry",
+                            checked,
+                          )
+                        }
                         disabled={!currentSettings.enabled}
                       />
                     </div>
 
                     {/* Price Match (Hotels only) */}
-                    {module === 'hotels' && (
+                    {module === "hotels" && (
                       <div className="flex items-center justify-between pt-4 border-t">
                         <div>
-                          <Label htmlFor="price_match">Enable Price Match Intake</Label>
+                          <Label htmlFor="price_match">
+                            Enable Price Match Intake
+                          </Label>
                           <p className="text-sm text-gray-500">
                             Allow users to submit competitor price matches
                           </p>
@@ -379,7 +469,9 @@ export default function BargainSettingsPage() {
                         <Switch
                           id="price_match"
                           checked={currentSettings.price_match_enabled}
-                          onCheckedChange={(checked) => updateSetting('price_match_enabled', checked)}
+                          onCheckedChange={(checked) =>
+                            updateSetting("price_match_enabled", checked)
+                          }
                           disabled={!currentSettings.enabled}
                         />
                       </div>
@@ -392,7 +484,8 @@ export default function BargainSettingsPage() {
                   <CardHeader>
                     <CardTitle>Copy Text Overrides</CardTitle>
                     <CardDescription>
-                      Customize button labels and messages (use {'{price}'} and {'{base}'} as placeholders)
+                      Customize button labels and messages (use {"{price}"} and{" "}
+                      {"{base}"} as placeholders)
                     </CardDescription>
                   </CardHeader>
                   <CardContent className="space-y-4">
@@ -401,18 +494,24 @@ export default function BargainSettingsPage() {
                         <Label htmlFor="r1_primary">Round 1 Primary CTA</Label>
                         <Input
                           id="r1_primary"
-                          value={currentSettings.copy_json.r1_primary || ''}
-                          onChange={(e) => updateCopy('r1_primary', e.target.value)}
+                          value={currentSettings.copy_json.r1_primary || ""}
+                          onChange={(e) =>
+                            updateCopy("r1_primary", e.target.value)
+                          }
                           placeholder="Book ₹{price}"
                         />
                       </div>
 
                       <div className="space-y-2">
-                        <Label htmlFor="r1_secondary">Round 1 Secondary CTA</Label>
+                        <Label htmlFor="r1_secondary">
+                          Round 1 Secondary CTA
+                        </Label>
                         <Input
                           id="r1_secondary"
-                          value={currentSettings.copy_json.r1_secondary || ''}
-                          onChange={(e) => updateCopy('r1_secondary', e.target.value)}
+                          value={currentSettings.copy_json.r1_secondary || ""}
+                          onChange={(e) =>
+                            updateCopy("r1_secondary", e.target.value)
+                          }
                           placeholder="Try Final Bargain"
                         />
                       </div>
@@ -420,21 +519,33 @@ export default function BargainSettingsPage() {
                       {currentSettings.attempts >= 2 && (
                         <>
                           <div className="space-y-2">
-                            <Label htmlFor="r2_low">Round 2 Lower Price Label</Label>
+                            <Label htmlFor="r2_low">
+                              Round 2 Lower Price Label
+                            </Label>
                             <Input
                               id="r2_low"
-                              value={currentSettings.copy_json.r2_card_low || ''}
-                              onChange={(e) => updateCopy('r2_card_low', e.target.value)}
+                              value={
+                                currentSettings.copy_json.r2_card_low || ""
+                              }
+                              onChange={(e) =>
+                                updateCopy("r2_card_low", e.target.value)
+                              }
                               placeholder="Book ₹{price} (Best price)"
                             />
                           </div>
 
                           <div className="space-y-2">
-                            <Label htmlFor="r2_high">Round 2 Higher Price Label</Label>
+                            <Label htmlFor="r2_high">
+                              Round 2 Higher Price Label
+                            </Label>
                             <Input
                               id="r2_high"
-                              value={currentSettings.copy_json.r2_card_high || ''}
-                              onChange={(e) => updateCopy('r2_card_high', e.target.value)}
+                              value={
+                                currentSettings.copy_json.r2_card_high || ""
+                              }
+                              onChange={(e) =>
+                                updateCopy("r2_card_high", e.target.value)
+                              }
                               placeholder="Book ₹{price}"
                             />
                           </div>
@@ -446,8 +557,10 @@ export default function BargainSettingsPage() {
                       <Label htmlFor="expiry_text">Timer Expiry Message</Label>
                       <Textarea
                         id="expiry_text"
-                        value={currentSettings.copy_json.expiry_text || ''}
-                        onChange={(e) => updateCopy('expiry_text', e.target.value)}
+                        value={currentSettings.copy_json.expiry_text || ""}
+                        onChange={(e) =>
+                          updateCopy("expiry_text", e.target.value)
+                        }
                         placeholder="⌛ Time's up. This price is no longer available."
                         rows={2}
                       />
@@ -457,8 +570,10 @@ export default function BargainSettingsPage() {
                       <Label htmlFor="expiry_cta">Expiry Fallback CTA</Label>
                       <Input
                         id="expiry_cta"
-                        value={currentSettings.copy_json.expiry_cta || ''}
-                        onChange={(e) => updateCopy('expiry_cta', e.target.value)}
+                        value={currentSettings.copy_json.expiry_cta || ""}
+                        onChange={(e) =>
+                          updateCopy("expiry_cta", e.target.value)
+                        }
                         placeholder="Book at Standard Price ₹{base}"
                       />
                     </div>
@@ -474,10 +589,7 @@ export default function BargainSettingsPage() {
                   >
                     Reset
                   </Button>
-                  <Button
-                    onClick={handleSave}
-                    disabled={saving}
-                  >
+                  <Button onClick={handleSave} disabled={saving}>
                     {saving ? (
                       <>
                         <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>

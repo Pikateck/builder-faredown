@@ -5,6 +5,7 @@
 **Phase A** of the module-specific Bargain Engine is **100% code-complete** and ready for deployment testing.
 
 All deliverables requested by Zubin have been implemented:
+
 - ✅ Database schema with 5 tables + seed data
 - ✅ Backend APIs (8 public + 7 admin endpoints)
 - ✅ Admin panel UI with module tabs
@@ -19,6 +20,7 @@ All deliverables requested by Zubin have been implemented:
 ## 📁 Files Created (18 new files)
 
 ### Database
+
 1. `api/database/migrations/20250219_bargain_engine.sql` (399 lines)
    - 5 tables with proper indexes and constraints
    - Seed data for all 6 modules
@@ -29,6 +31,7 @@ All deliverables requested by Zubin have been implemented:
    - Verification and logging
 
 ### Backend
+
 3. `api/services/bargainEngine.js` (348 lines)
    - Core business logic
    - Settings resolution with market overrides
@@ -47,6 +50,7 @@ All deliverables requested by Zubin have been implemented:
    - Analytics summary
 
 ### Frontend Services
+
 6. `client/services/bargainSettingsService.ts` (224 lines)
    - Public settings fetch with caching
    - Default fallback settings
@@ -58,6 +62,7 @@ All deliverables requested by Zubin have been implemented:
    - Validation helpers
 
 ### Admin UI
+
 8. `client/pages/admin/BargainSettings.tsx` (502 lines)
    - Tabbed interface for 6 modules
    - Real-time analytics display
@@ -65,6 +70,7 @@ All deliverables requested by Zubin have been implemented:
    - Copy text management
 
 ### Documentation
+
 9. `BARGAIN_ENGINE_PHASE_A_DEPLOYMENT_GUIDE.md` (357 lines)
    - Complete deployment instructions
    - API endpoint documentation
@@ -85,24 +91,24 @@ All deliverables requested by Zubin have been implemented:
 
 ### Tables Created
 
-| Table | Purpose | Key Fields |
-|-------|---------|------------|
-| `bargain_settings` | Per-module configuration | `module`, `enabled`, `attempts`, timers, discount range, copy_json |
-| `bargain_market_rules` | Country/city overrides | `module`, `country_code`, `city`, override fields |
-| `bargain_sessions` | Runtime session tracking | `id`, `module`, `product_id`, `user_id`, R1/R2 bids/offers, outcome |
-| `bargain_events_raw` | Analytics events | `session_id`, `ts`, `name`, `payload` |
-| `price_match_tickets` | Price match requests | `module`, `session_id`, `user_id`, competitor info, status |
+| Table                  | Purpose                  | Key Fields                                                          |
+| ---------------------- | ------------------------ | ------------------------------------------------------------------- |
+| `bargain_settings`     | Per-module configuration | `module`, `enabled`, `attempts`, timers, discount range, copy_json  |
+| `bargain_market_rules` | Country/city overrides   | `module`, `country_code`, `city`, override fields                   |
+| `bargain_sessions`     | Runtime session tracking | `id`, `module`, `product_id`, `user_id`, R1/R2 bids/offers, outcome |
+| `bargain_events_raw`   | Analytics events         | `session_id`, `ts`, `name`, `payload`                               |
+| `price_match_tickets`  | Price match requests     | `module`, `session_id`, `user_id`, competitor info, status          |
 
 ### Seed Data Summary
 
-| Module | Enabled | Attempts | R1 Timer | R2 Timer | Use Case |
-|--------|---------|----------|----------|----------|----------|
-| Hotels | ✅ Yes | 2 | 30s | 30s | Full 2-attempt bargain |
-| Flights | ✅ Yes | 1 | 15s | - | Single quick bargain |
-| Sightseeing | ✅ Yes | 1 | 20s | 20s | Optional 2nd attempt |
-| Transfers | ✅ Yes | 1 | 20s | 20s | Optional 2nd attempt |
-| Packages | ❌ No | 0 | - | - | Assisted mode (Phase B) |
-| Add-ons | ❌ No | 0 | - | - | No bargain |
+| Module      | Enabled | Attempts | R1 Timer | R2 Timer | Use Case                |
+| ----------- | ------- | -------- | -------- | -------- | ----------------------- |
+| Hotels      | ✅ Yes  | 2        | 30s      | 30s      | Full 2-attempt bargain  |
+| Flights     | ✅ Yes  | 1        | 15s      | -        | Single quick bargain    |
+| Sightseeing | ✅ Yes  | 1        | 20s      | 20s      | Optional 2nd attempt    |
+| Transfers   | ✅ Yes  | 1        | 20s      | 20s      | Optional 2nd attempt    |
+| Packages    | ❌ No   | 0        | -        | -        | Assisted mode (Phase B) |
+| Add-ons     | ❌ No   | 0        | -        | -        | No bargain              |
 
 ---
 
@@ -144,6 +150,7 @@ GET    /api/admin/bargain/analytics/summary          ✅ Analytics summary
 **Tabs**: Hotels | Flights | Sightseeing | Transfers | Packages | Add-ons
 
 **Settings Per Module**:
+
 - ✅ Enable/Disable toggle
 - ✅ Bargain attempts (0/1/2)
 - ✅ Round 1 timer (seconds)
@@ -155,6 +162,7 @@ GET    /api/admin/bargain/analytics/summary          ✅ Analytics summary
 - ✅ Price match enabled (Hotels only)
 
 **Copy Text Overrides**:
+
 - R1 Primary CTA (e.g., "Book ₹{price}")
 - R1 Secondary CTA (e.g., "Try Final Bargain")
 - R2 Lower price label (e.g., "Book ₹{price} (Best price)")
@@ -163,6 +171,7 @@ GET    /api/admin/bargain/analytics/summary          ✅ Analytics summary
 - Expiry fallback CTA (e.g., "Book at Standard Price ₹{base}")
 
 **Analytics Display**:
+
 - Total sessions (last 7 days)
 - Booked count
 - Average discount %
@@ -173,6 +182,7 @@ GET    /api/admin/bargain/analytics/summary          ✅ Analytics summary
 ## 🚦 Deployment Roadmap
 
 ### ✅ Completed (Today)
+
 1. Database schema design
 2. Migration scripts
 3. Backend business logic
@@ -183,6 +193,7 @@ GET    /api/admin/bargain/analytics/summary          ✅ Analytics summary
 8. Documentation
 
 ### 🔄 Next Steps (Deployment)
+
 1. Run migration on staging database
 2. Verify API endpoints
 3. Test admin panel
@@ -191,6 +202,7 @@ GET    /api/admin/bargain/analytics/summary          ✅ Analytics summary
 6. Deploy to production
 
 ### 📅 Phase B (Next Sprint)
+
 1. Sightseeing/Transfers full implementation
 2. Packages assisted mode (ticket creation)
 3. Price match intake UI
@@ -266,12 +278,13 @@ Admin Flow:
 
 ### Critical UX Rules (from Zubin's spec)
 
-| Module | Attempts | Buttons Shown | Timer Expiry (No Selection) |
-|--------|----------|---------------|----------------------------|
-| Hotels | 2 | "Book ₹R1 (Best price)" + "Book ₹R2" | ✅ Hide bargain UI → Show single "Book at Standard Price ₹{base}" |
-| Flights | 1 | "Book ₹F" + "Skip bargain" | ✅ Same fallback CTA |
+| Module  | Attempts | Buttons Shown                        | Timer Expiry (No Selection)                                       |
+| ------- | -------- | ------------------------------------ | ----------------------------------------------------------------- |
+| Hotels  | 2        | "Book ₹R1 (Best price)" + "Book ₹R2" | ✅ Hide bargain UI → Show single "Book at Standard Price ₹{base}" |
+| Flights | 1        | "Book ₹F" + "Skip bargain"           | ✅ Same fallback CTA                                              |
 
 **Acceptance Tests**:
+
 - [x] Database migration runs successfully
 - [x] All 5 tables created with proper indexes
 - [x] Seed data inserted for all 6 modules
@@ -280,19 +293,22 @@ Admin Flow:
 - [x] Admin panel loads all module tabs
 - [x] Settings save and persist to database
 - [x] Copy text updates without code deploy
-- [ ] **Modal integration** (Hotels + Flights) - *Pending integration*
-- [ ] **Mobile testing** (iPhone 14/16, Android) - *Pending deployment*
-- [ ] **Analytics verification** - *Pending production data*
+- [ ] **Modal integration** (Hotels + Flights) - _Pending integration_
+- [ ] **Mobile testing** (iPhone 14/16, Android) - _Pending deployment_
+- [ ] **Analytics verification** - _Pending production data_
 
 ---
 
 ## 🎯 Integration Status
 
 ### Code Ready ✅
+
 All code is written, tested, and documented. No syntax errors or build failures.
 
 ### Integration Pending 🔄
+
 The `ConversationalBargainModal.tsx` needs updates to:
+
 1. Fetch settings from `bargainSettingsService.getSettings(module)`
 2. Use `moduleSettings.r1_timer_sec` for timer
 3. Use `moduleSettings.attempts` for round logic
@@ -307,6 +323,7 @@ The `ConversationalBargainModal.tsx` needs updates to:
 ## 📝 Deployment Checklist
 
 ### Pre-Deployment
+
 - [x] All code committed to repository
 - [x] Migration script tested locally
 - [x] API endpoints verified
@@ -316,6 +333,7 @@ The `ConversationalBargainModal.tsx` needs updates to:
 - [ ] QA team notified
 
 ### Deployment Day
+
 - [ ] Run migration: `node api/database/run-bargain-migration.js`
 - [ ] Verify all tables created
 - [ ] Test API endpoints (staging)
@@ -325,6 +343,7 @@ The `ConversationalBargainModal.tsx` needs updates to:
 - [ ] Verify analytics tracking
 
 ### Post-Deployment
+
 - [ ] Test Hotels flow (2 attempts)
 - [ ] Test Flights flow (1 attempt)
 - [ ] Mobile testing (iPhone 14/16, Android)
@@ -346,14 +365,17 @@ The `ConversationalBargainModal.tsx` needs updates to:
 ## 💬 Support & Questions
 
 **For Deployment Issues**:
+
 - Check migration logs: `node api/database/run-bargain-migration.js`
 - Verify API endpoints: `curl https://.../api/bargain/settings?module=hotels`
 
 **For Integration Questions**:
+
 - See: `BARGAIN_ENGINE_MODAL_INTEGRATION.md`
 - Example code provided for Hotels and Flights
 
 **For Admin Panel Issues**:
+
 - Route: `/admin/bargain-settings`
 - Requires admin authentication
 - Check browser console for errors
@@ -363,6 +385,7 @@ The `ConversationalBargainModal.tsx` needs updates to:
 ## 🎉 Success Metrics
 
 **Phase A will be considered successful when**:
+
 1. ✅ All 6 modules configurable via admin panel
 2. ✅ Hotels uses 2-attempt flow with dual price buttons
 3. ✅ Flights uses 1-attempt flow with skip option
@@ -376,6 +399,7 @@ The `ConversationalBargainModal.tsx` needs updates to:
 ## 🚀 Next Actions
 
 **For Builder Team**:
+
 1. Review this summary
 2. Run migration on staging database
 3. Test admin panel
@@ -384,6 +408,7 @@ The `ConversationalBargainModal.tsx` needs updates to:
 6. Share staging link + screenshots
 
 **For Zubin**:
+
 1. Review admin panel UI
 2. Test copy text changes
 3. Verify mobile responsiveness

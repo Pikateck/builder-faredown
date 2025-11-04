@@ -459,7 +459,12 @@ app.use("/api/hotels", require("./routes/hotels-metadata")); // Hybrid metadata 
 app.use("/api/locations", locationsRoutes); // TBO locations autocomplete
 app.use("/api/bargain", bargainRoutes); // New module-specific bargain engine
 app.use("/api/bargain/v1", bargainV1Routes);
-app.use("/api/admin/bargain", authenticateToken, requireAdmin, adminBargainRoutes); // Admin bargain settings
+app.use(
+  "/api/admin/bargain",
+  authenticateToken,
+  requireAdmin,
+  adminBargainRoutes,
+); // Admin bargain settings
 app.use("/api/ai-bargains", aiBargainRoutes);
 app.use("/api/currency", currencyRoutes);
 app.use("/api/countries", countriesRoutes);
@@ -493,7 +498,7 @@ app.use(
   authenticateToken,
   requireAdmin,
   auditLogger,
-  v1AdminBookingsRoutes
+  v1AdminBookingsRoutes,
 );
 
 // FX + Pricing utilities

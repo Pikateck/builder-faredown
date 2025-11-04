@@ -3,6 +3,7 @@
 ## 🎯 Overview
 
 This guide covers the complete deployment of the **module-specific Bargain Engine Phase A**:
+
 - ✅ Database schema with 5 tables
 - ✅ Backend APIs (public + admin)
 - ✅ Admin panel UI
@@ -20,6 +21,7 @@ This guide covers the complete deployment of the **module-specific Bargain Engin
 **File**: `api/database/migrations/20250219_bargain_engine.sql`
 
 **Tables Created**:
+
 - `bargain_settings` - Per-module configuration
 - `bargain_market_rules` - Country/city overrides
 - `bargain_sessions` - Runtime session tracking
@@ -27,6 +29,7 @@ This guide covers the complete deployment of the **module-specific Bargain Engin
 - `price_match_tickets` - Price match requests (Hotels only)
 
 **Seed Data**:
+
 - **Hotels**: 2 attempts, 30s timers
 - **Flights**: 1 attempt, 15s timer
 - **Sightseeing**: 1 attempt, 20s timer
@@ -39,14 +42,17 @@ This guide covers the complete deployment of the **module-specific Bargain Engin
 ### 2. Backend Services
 
 **Files Created**:
+
 - `api/services/bargainEngine.js` - Core business logic
 - `api/routes/bargain.js` - Public APIs
 - `api/routes/admin-bargain.js` - Admin APIs
 
 **Files Modified**:
+
 - `api/server.js` - Added route registrations
 
 **Public Endpoints**:
+
 ```
 GET  /api/bargain/settings?module=hotels
 POST /api/bargain/start
@@ -59,6 +65,7 @@ POST /api/bargain/abandon
 ```
 
 **Admin Endpoints**:
+
 ```
 GET    /api/admin/bargain/settings
 GET    /api/admin/bargain/settings/:module
@@ -74,11 +81,13 @@ GET    /api/admin/bargain/analytics/summary
 ### 3. Frontend Services
 
 **Files Created**:
+
 - `client/services/bargainSettingsService.ts` - Public settings fetch
 - `client/services/adminBargainService.ts` - Admin management
 - `client/pages/admin/BargainSettings.tsx` - Admin panel UI
 
 **Key Features**:
+
 - Module-aware settings fetch with caching
 - Default fallback settings for each module
 - Copy text template formatting
@@ -91,6 +100,7 @@ GET    /api/admin/bargain/analytics/summary
 **Route**: `/admin/bargain-settings`
 
 **Features**:
+
 - ✅ Tab per module (Hotels, Flights, Sightseeing, Transfers, Packages, Add-ons)
 - ✅ Real-time analytics summary (last 7 days)
 - ✅ Enable/disable toggle per module
@@ -114,6 +124,7 @@ node api/database/run-bargain-migration.js
 ```
 
 **Expected Output**:
+
 ```
 🚀 Starting Bargain Engine migration...
 📄 Executing migration SQL...
@@ -144,11 +155,13 @@ node api/database/run-bargain-migration.js
 ### Step 2: Verify API Endpoints
 
 **Test Public Settings API**:
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/bargain/settings?module=hotels"
 ```
 
 **Expected Response**:
+
 ```json
 {
   "enabled": true,
@@ -171,6 +184,7 @@ curl "https://builder-faredown-pricing.onrender.com/api/bargain/settings?module=
 ```
 
 **Test Admin API (requires auth)**:
+
 ```bash
 curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
   "https://builder-faredown-pricing.onrender.com/api/admin/bargain/settings"
@@ -191,6 +205,7 @@ curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
 ### Step 4: Integration Testing
 
 **Hotels Flow** (2 attempts):
+
 1. Open hotel bargain modal
 2. Submit Round 1 bid
 3. Wait for counter-offer
@@ -201,6 +216,7 @@ curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
 8. Timer expires without selection → shows "Book at Standard Price ₹{base}"
 
 **Flights Flow** (1 attempt):
+
 1. Open flight bargain modal
 2. Submit bid
 3. See single "Book ₹{price}" button
@@ -212,6 +228,7 @@ curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
 ## ✅ QA Acceptance Checklist
 
 ### Database
+
 - [ ] All 5 tables created successfully
 - [ ] Seed data inserted for all 6 modules
 - [ ] Indexes created on bargain_sessions and bargain_events_raw
@@ -220,6 +237,7 @@ curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
 ### Backend APIs
 
 **Public Endpoints**:
+
 - [ ] `GET /bargain/settings?module=hotels` returns correct settings
 - [ ] `GET /bargain/settings?module=flights` returns correct settings
 - [ ] `POST /bargain/start` creates session and returns sessionId
@@ -229,12 +247,14 @@ curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
 - [ ] `POST /bargain/abandon` marks session as abandoned
 
 **Admin Endpoints**:
+
 - [ ] `GET /admin/bargain/settings` lists all modules
 - [ ] `PUT /admin/bargain/settings/:module` saves changes
 - [ ] `GET /admin/bargain/analytics/summary` returns metrics
 - [ ] Admin endpoints require authentication
 
 ### Admin Panel UI
+
 - [ ] All 6 module tabs visible (Hotels, Flights, etc.)
 - [ ] Each tab shows correct default settings
 - [ ] Enable/disable toggle works
@@ -252,6 +272,7 @@ curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
 ### Frontend Integration
 
 **Hotels**:
+
 - [ ] Bargain modal opens without errors
 - [ ] Round 1 timer uses `r1_timer_sec` from settings
 - [ ] Round 2 timer uses `r2_timer_sec` from settings
@@ -262,18 +283,21 @@ curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
 - [ ] No clipping on mobile
 
 **Flights**:
+
 - [ ] Single attempt flow works
 - [ ] Timer is 15 seconds (configurable via admin)
 - [ ] Button text: "Book ₹{price}" and "Skip bargain"
 - [ ] Expiry shows fallback CTA
 
 ### Analytics
+
 - [ ] Events logged to `bargain_events_raw` table
 - [ ] Session tracked in `bargain_sessions` table
 - [ ] Analytics summary aggregates correctly
 - [ ] Module field included in all events
 
 ### Mobile Responsiveness
+
 - [ ] iPhone 14/16 Safari: footer visible, no clipping
 - [ ] iPhone 14/16 Chrome: keyboard doesn't hide CTA
 - [ ] Android Chrome: buttons always visible
@@ -286,6 +310,7 @@ curl -H "Authorization: Bearer <ADMIN_TOKEN>" \
 All events include: `module`, `productId`, `basePrice`, `device`, `browser`, `sessionId`
 
 **Event Flow**:
+
 1. `bargain_opened` - Modal opened
 2. `bargain_round1_bid_submitted` - R1 bid submitted
 3. `bargain_round1_offer_shown` - R1 counter-offer shown
@@ -302,6 +327,7 @@ All events include: `module`, `productId`, `basePrice`, `device`, `browser`, `se
 ## 🔧 Troubleshooting
 
 ### Migration Fails
+
 **Issue**: Table already exists
 **Solution**: Tables have `IF NOT EXISTS` guards - safe to re-run
 
@@ -309,14 +335,17 @@ All events include: `module`, `productId`, `basePrice`, `device`, `browser`, `se
 **Solution**: Ensure `bargain_sessions` table exists before `bargain_events_raw`
 
 ### Admin API Returns 401
+
 **Issue**: Not authenticated
 **Solution**: Ensure `Authorization: Bearer <token>` header is set
 
 ### Settings Not Loading in Modal
+
 **Issue**: API call failing
 **Solution**: Check browser console, verify API endpoint is accessible
 
 ### Timer Not Working
+
 **Issue**: Settings not fetched
 **Solution**: Check `bargainSettingsService.getSettings()` is called on modal open
 

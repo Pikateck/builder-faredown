@@ -405,8 +405,7 @@ export function ConversationalBargainModal({
           warningMessage: null, // No warning for Round 2
           checkingMessage: "Final check at {price}…",
           supplierResponse: "Today’s offer is {offer}.",
-          agentResponse:
-            "Final offer: {offer}. You have 30 seconds to choose.",
+          agentResponse: "Final offer: {offer}. You have 30 seconds to choose.",
           acceptanceChance: 0.5, // 50% chance for Round 2 (risk)
         };
       default:
@@ -1500,7 +1499,10 @@ export function ConversationalBargainModal({
                   <div className="text-2xl font-bold text-[#003580]">
                     {formatPrice(finalOffer)}
                   </div>
-                  <div className="text-xs font-medium" style={{ color: '#febb02' }}>
+                  <div
+                    className="text-xs font-medium"
+                    style={{ color: "#febb02" }}
+                  >
                     Save {formatPrice(basePrice - finalOffer)} (
                     {Math.round(((basePrice - finalOffer) / basePrice) * 100)}%
                     off)
@@ -1535,165 +1537,216 @@ export function ConversationalBargainModal({
 
             <div className="flex flex-col gap-2 w-full">
               {/* DEBUG: Log Round 2 state values */}
-              {round === 2 && console.log('🔍 ROUND 2 STATE:', {
-                round,
-                safeDealPrice,
-                finalOffer,
-                showOfferActions,
-                willShowCards: !!(round === 2 && safeDealPrice && finalOffer && showOfferActions)
-              })}
+              {round === 2 &&
+                console.log("🔍 ROUND 2 STATE:", {
+                  round,
+                  safeDealPrice,
+                  finalOffer,
+                  showOfferActions,
+                  willShowCards: !!(
+                    round === 2 &&
+                    safeDealPrice &&
+                    finalOffer &&
+                    showOfferActions
+                  ),
+                })}
 
               {/* ✅ ROUND 2: Dual Price Selection - Show immediately when finalOffer is received */}
               {/* Cards visible when Round 2, showOfferActions true, both prices exist, AND timer hasn't expired */}
-              {round === 2 && safeDealPrice && finalOffer && showOfferActions && !timerExpired && (
-                <>
-                  {timerActive && (
-                    <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-[#0071c2]">
-                      <p className="text-sm font-semibold mb-1" style={{ color: '#003580' }}>
-                        Pick your price
-                      </p>
-                      <p className="text-xs" style={{ color: '#0071c2' }}>
-                        Choose the price you want to book.
-                      </p>
-                    </div>
-                  )}
-
-                  {/* Safe Deal Button - Always visible in Round 2, disabled after timer expires */}
-                  <Button
-                    onClick={() => {
-                      setSelectedPrice("safe");
-                      // Track selection event
-                      chatAnalyticsService
-                        .trackEvent("bargain_price_selected", {
-                          selected: "safe",
-                          safe_deal_price: safeDealPrice,
-                          final_offer_price: finalOffer,
-                          savings: basePrice - safeDealPrice,
-                          module,
-                          productId: hotel?.id || productRef,
-                          city: hotel?.city,
-                          originalPrice: basePrice,
-                          device: isMobileDevice() ? "mobile" : "desktop",
-                          browser:
-                            typeof window !== "undefined"
-                              ? (window as any).navigator?.userAgent
-                              : "",
-                        })
-                        .catch(console.warn);
-                    }}
-                    disabled={
-                      selectedPrice !== null || isBooking || timerExpired
-                    }
-                    className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
-                      selectedPrice === "safe"
-                        ? "text-white border-2"
-                        : selectedPrice === "final"
-                          ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                          : timerExpired
-                            ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                            : "bg-blue-50 border-2 hover:bg-blue-100"
-                    }`}
-                    style={{
-                      backgroundColor: selectedPrice === "safe" ? "#0071c2" : undefined,
-                      borderColor: selectedPrice === "safe" ? "#003580" : selectedPrice === null && !timerExpired ? "#0071c2" : undefined,
-                      color: selectedPrice === "safe" ? "#ffffff" : selectedPrice === null && !timerExpired ? "#003580" : undefined
-                    }}
-                  >
-                    {selectedPrice === "safe" ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <CheckCircle2 className="w-5 h-5" />
-                        Book {formatPrice(safeDealPrice)}
-                      </span>
-                    ) : (
-                      <span className="flex items-center justify-center gap-1">
-                        <span>Book {formatPrice(safeDealPrice)}</span>
-                        {safeDealPrice < finalOffer && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" style={{ backgroundColor: '#febb02', color: '#003580' }}>
-                            Recommended
-                          </span>
-                        )}
-                      </span>
+              {round === 2 &&
+                safeDealPrice &&
+                finalOffer &&
+                showOfferActions &&
+                !timerExpired && (
+                  <>
+                    {timerActive && (
+                      <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-[#0071c2]">
+                        <p
+                          className="text-sm font-semibold mb-1"
+                          style={{ color: "#003580" }}
+                        >
+                          Pick your price
+                        </p>
+                        <p className="text-xs" style={{ color: "#0071c2" }}>
+                          Choose the price you want to book.
+                        </p>
+                      </div>
                     )}
-                  </Button>
 
-                  {/* Final Offer Button - Always visible in Round 2, disabled after timer expires */}
-                  <Button
-                    onClick={() => {
-                      setSelectedPrice("final");
-                      // Track selection event
-                      chatAnalyticsService
-                        .trackEvent("bargain_price_selected", {
-                          selected: "final",
-                          safe_deal_price: safeDealPrice,
-                          final_offer_price: finalOffer,
-                          savings: basePrice - finalOffer,
-                          module,
-                          productId: hotel?.id || productRef,
-                          city: hotel?.city,
-                          originalPrice: basePrice,
-                          device: isMobileDevice() ? "mobile" : "desktop",
-                          browser:
-                            typeof window !== "undefined"
-                              ? (window as any).navigator?.userAgent
-                              : "",
-                        })
-                        .catch(console.warn);
-                    }}
-                    disabled={
-                      selectedPrice !== null || isBooking || timerExpired
-                    }
-                    className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
-                      selectedPrice === "final"
-                        ? "text-white border-2"
-                        : selectedPrice === "safe"
-                          ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                          : timerExpired
-                            ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
-                            : "bg-yellow-50 border-2 hover:bg-yellow-100"
-                    }`}
-                    style={{
-                      backgroundColor: selectedPrice === "final" ? "#febb02" : undefined,
-                      borderColor: selectedPrice === "final" ? "#e6a602" : selectedPrice === null && !timerExpired ? "#febb02" : undefined,
-                      color: selectedPrice === "final" ? "#ffffff" : selectedPrice === null && !timerExpired ? "#003580" : undefined
-                    }}
-                  >
-                    {selectedPrice === "final" ? (
-                      <span className="flex items-center justify-center gap-2">
-                        <CheckCircle2 className="w-5 h-5" />
-                        Book {formatPrice(finalOffer)}
-                      </span>
-                    ) : (
-                      <span className="flex items-center justify-center gap-1">
-                        <span>Book {formatPrice(finalOffer)}</span>
-                        {finalOffer < safeDealPrice && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold" style={{ backgroundColor: '#febb02', color: '#003580' }}>
-                            Recommended
-                          </span>
-                        )}
-                      </span>
-                    )}
-                  </Button>
-
-                  {/* showBookSelected = (round === 2) && !!selectedPrice - remains active even after timer expires */}
-                  {selectedPrice && (
+                    {/* Safe Deal Button - Always visible in Round 2, disabled after timer expires */}
                     <Button
-                      onClick={() => handleAcceptOffer()}
-                      disabled={isBooking}
-                      className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl mt-2 animate-pulse transition-all"
-                      style={{
-                        backgroundColor: '#003580',
+                      onClick={() => {
+                        setSelectedPrice("safe");
+                        // Track selection event
+                        chatAnalyticsService
+                          .trackEvent("bargain_price_selected", {
+                            selected: "safe",
+                            safe_deal_price: safeDealPrice,
+                            final_offer_price: finalOffer,
+                            savings: basePrice - safeDealPrice,
+                            module,
+                            productId: hotel?.id || productRef,
+                            city: hotel?.city,
+                            originalPrice: basePrice,
+                            device: isMobileDevice() ? "mobile" : "desktop",
+                            browser:
+                              typeof window !== "undefined"
+                                ? (window as any).navigator?.userAgent
+                                : "",
+                          })
+                          .catch(console.warn);
                       }}
-                      onMouseEnter={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#00214d')}
-                      onMouseLeave={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#003580')}
-                      aria-label="Book at selected price"
+                      disabled={
+                        selectedPrice !== null || isBooking || timerExpired
+                      }
+                      className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
+                        selectedPrice === "safe"
+                          ? "text-white border-2"
+                          : selectedPrice === "final"
+                            ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
+                            : timerExpired
+                              ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
+                              : "bg-blue-50 border-2 hover:bg-blue-100"
+                      }`}
+                      style={{
+                        backgroundColor:
+                          selectedPrice === "safe" ? "#0071c2" : undefined,
+                        borderColor:
+                          selectedPrice === "safe"
+                            ? "#003580"
+                            : selectedPrice === null && !timerExpired
+                              ? "#0071c2"
+                              : undefined,
+                        color:
+                          selectedPrice === "safe"
+                            ? "#ffffff"
+                            : selectedPrice === null && !timerExpired
+                              ? "#003580"
+                              : undefined,
+                      }}
                     >
-                      {isBooking
-                        ? "Processing..."
-                        : "Book Selected Price"}
+                      {selectedPrice === "safe" ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <CheckCircle2 className="w-5 h-5" />
+                          Book {formatPrice(safeDealPrice)}
+                        </span>
+                      ) : (
+                        <span className="flex items-center justify-center gap-1">
+                          <span>Book {formatPrice(safeDealPrice)}</span>
+                          {safeDealPrice < finalOffer && (
+                            <span
+                              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
+                              style={{
+                                backgroundColor: "#febb02",
+                                color: "#003580",
+                              }}
+                            >
+                              Recommended
+                            </span>
+                          )}
+                        </span>
+                      )}
                     </Button>
-                  )}
-                </>
-              )}
+
+                    {/* Final Offer Button - Always visible in Round 2, disabled after timer expires */}
+                    <Button
+                      onClick={() => {
+                        setSelectedPrice("final");
+                        // Track selection event
+                        chatAnalyticsService
+                          .trackEvent("bargain_price_selected", {
+                            selected: "final",
+                            safe_deal_price: safeDealPrice,
+                            final_offer_price: finalOffer,
+                            savings: basePrice - finalOffer,
+                            module,
+                            productId: hotel?.id || productRef,
+                            city: hotel?.city,
+                            originalPrice: basePrice,
+                            device: isMobileDevice() ? "mobile" : "desktop",
+                            browser:
+                              typeof window !== "undefined"
+                                ? (window as any).navigator?.userAgent
+                                : "",
+                          })
+                          .catch(console.warn);
+                      }}
+                      disabled={
+                        selectedPrice !== null || isBooking || timerExpired
+                      }
+                      className={`w-full py-3 h-11 mobile-touch-target rounded-xl font-semibold transition-all ${
+                        selectedPrice === "final"
+                          ? "text-white border-2"
+                          : selectedPrice === "safe"
+                            ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
+                            : timerExpired
+                              ? "bg-gray-100 text-gray-400 border-2 border-gray-200 cursor-not-allowed"
+                              : "bg-yellow-50 border-2 hover:bg-yellow-100"
+                      }`}
+                      style={{
+                        backgroundColor:
+                          selectedPrice === "final" ? "#febb02" : undefined,
+                        borderColor:
+                          selectedPrice === "final"
+                            ? "#e6a602"
+                            : selectedPrice === null && !timerExpired
+                              ? "#febb02"
+                              : undefined,
+                        color:
+                          selectedPrice === "final"
+                            ? "#ffffff"
+                            : selectedPrice === null && !timerExpired
+                              ? "#003580"
+                              : undefined,
+                      }}
+                    >
+                      {selectedPrice === "final" ? (
+                        <span className="flex items-center justify-center gap-2">
+                          <CheckCircle2 className="w-5 h-5" />
+                          Book {formatPrice(finalOffer)}
+                        </span>
+                      ) : (
+                        <span className="flex items-center justify-center gap-1">
+                          <span>Book {formatPrice(finalOffer)}</span>
+                          {finalOffer < safeDealPrice && (
+                            <span
+                              className="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-bold"
+                              style={{
+                                backgroundColor: "#febb02",
+                                color: "#003580",
+                              }}
+                            >
+                              Recommended
+                            </span>
+                          )}
+                        </span>
+                      )}
+                    </Button>
+
+                    {/* showBookSelected = (round === 2) && !!selectedPrice - remains active even after timer expires */}
+                    {selectedPrice && (
+                      <Button
+                        onClick={() => handleAcceptOffer()}
+                        disabled={isBooking}
+                        className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl mt-2 animate-pulse transition-all"
+                        style={{
+                          backgroundColor: "#003580",
+                        }}
+                        onMouseEnter={(e) =>
+                          !isBooking &&
+                          (e.currentTarget.style.backgroundColor = "#00214d")
+                        }
+                        onMouseLeave={(e) =>
+                          !isBooking &&
+                          (e.currentTarget.style.backgroundColor = "#003580")
+                        }
+                        aria-label="Book at selected price"
+                      >
+                        {isBooking ? "Processing..." : "Book Selected Price"}
+                      </Button>
+                    )}
+                  </>
+                )}
 
               {/* ✅ ROUND 1: Two buttons - Book offer1 (yellow) and Try Final Bargain (blue) */}
               {!isComplete && round === 1 && showOfferActions && (
@@ -1708,14 +1761,22 @@ export function ConversationalBargainModal({
                     disabled={isBooking}
                     className="w-full disabled:opacity-50 disabled:cursor-not-allowed font-semibold py-3 h-11 mobile-touch-target rounded-xl transition-all"
                     style={{
-                      backgroundColor: '#febb02',
-                      color: '#111',
+                      backgroundColor: "#febb02",
+                      color: "#111",
                     }}
-                    onMouseEnter={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#e6a602')}
-                    onMouseLeave={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#febb02')}
+                    onMouseEnter={(e) =>
+                      !isBooking &&
+                      (e.currentTarget.style.backgroundColor = "#e6a602")
+                    }
+                    onMouseLeave={(e) =>
+                      !isBooking &&
+                      (e.currentTarget.style.backgroundColor = "#febb02")
+                    }
                     aria-label="Book at Round 1 offer price"
                   >
-                    {isBooking ? "Processing..." : `Book ${formatPrice(finalOffer)}`}
+                    {isBooking
+                      ? "Processing..."
+                      : `Book ${formatPrice(finalOffer)}`}
                   </Button>
 
                   {/* Secondary CTA: Try Final Bargain (blue button) */}
@@ -1740,8 +1801,8 @@ export function ConversationalBargainModal({
                   {/* Info line */}
                   <div className="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                     <p className="text-sm text-gray-700 flex items-center gap-2">
-                      <Clock className="w-4 h-4" />
-                      ⌛ Time's up. This price is no longer available.
+                      <Clock className="w-4 h-4" />⌛ Time's up. This price is
+                      no longer available.
                     </p>
                   </div>
 
@@ -1763,10 +1824,14 @@ export function ConversationalBargainModal({
                     }}
                     className="w-full text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl transition-all"
                     style={{
-                      backgroundColor: '#0071c2',
+                      backgroundColor: "#0071c2",
                     }}
-                    onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#005a9c')}
-                    onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0071c2')}
+                    onMouseEnter={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#005a9c")
+                    }
+                    onMouseLeave={(e) =>
+                      (e.currentTarget.style.backgroundColor = "#0071c2")
+                    }
                     aria-label="View room options"
                   >
                     View room options

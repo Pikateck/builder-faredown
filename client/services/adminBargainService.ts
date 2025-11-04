@@ -3,11 +3,17 @@
  * API client for bargain settings management
  */
 
-import { apiClient } from '@/lib/api';
+import { apiClient } from "@/lib/api";
 
 export interface BargainSettings {
   id: number;
-  module: 'hotels' | 'flights' | 'sightseeing' | 'transfers' | 'packages' | 'addons';
+  module:
+    | "hotels"
+    | "flights"
+    | "sightseeing"
+    | "transfers"
+    | "packages"
+    | "addons";
   enabled: boolean;
   attempts: number;
   r1_timer_sec: number;
@@ -58,7 +64,7 @@ export interface AnalyticsSummary {
 }
 
 class AdminBargainService {
-  private baseUrl = '/api/admin/bargain';
+  private baseUrl = "/api/admin/bargain";
 
   /**
    * Get all module settings
@@ -81,12 +87,12 @@ class AdminBargainService {
    */
   async updateModuleSettings(
     module: string,
-    updates: Partial<Omit<BargainSettings, 'id' | 'module' | 'updated_at'>>,
-    updatedBy?: string
+    updates: Partial<Omit<BargainSettings, "id" | "module" | "updated_at">>,
+    updatedBy?: string,
   ): Promise<BargainSettings> {
     const response = await apiClient.put(`${this.baseUrl}/settings/${module}`, {
       ...updates,
-      updated_by: updatedBy
+      updated_by: updatedBy,
     });
     return response.data.settings;
   }
@@ -96,7 +102,9 @@ class AdminBargainService {
    */
   async getMarketRules(module?: string): Promise<MarketRule[]> {
     const params = module ? { module } : {};
-    const response = await apiClient.get(`${this.baseUrl}/market-rules`, { params });
+    const response = await apiClient.get(`${this.baseUrl}/market-rules`, {
+      params,
+    });
     return response.data.rules;
   }
 
@@ -118,7 +126,10 @@ class AdminBargainService {
   /**
    * Get analytics summary
    */
-  async getAnalyticsSummary(module?: string, days: number = 7): Promise<{
+  async getAnalyticsSummary(
+    module?: string,
+    days: number = 7,
+  ): Promise<{
     summary: AnalyticsSummary[];
     period_days: number;
   }> {
@@ -126,35 +137,40 @@ class AdminBargainService {
     if (module) {
       params.module = module;
     }
-    const response = await apiClient.get(`${this.baseUrl}/analytics/summary`, { params });
+    const response = await apiClient.get(`${this.baseUrl}/analytics/summary`, {
+      params,
+    });
     return {
       summary: response.data.summary,
-      period_days: response.data.period_days
+      period_days: response.data.period_days,
     };
   }
 
   /**
    * Validate copy JSON structure
    */
-  validateCopyJson(copy: Record<string, string>): { valid: boolean; errors: string[] } {
+  validateCopyJson(copy: Record<string, string>): {
+    valid: boolean;
+    errors: string[];
+  } {
     const errors: string[] = [];
     const requiredKeys = [
-      'r1_primary',
-      'r1_secondary',
-      'expiry_text',
-      'expiry_cta',
-      'recommended_label'
+      "r1_primary",
+      "r1_secondary",
+      "expiry_text",
+      "expiry_cta",
+      "recommended_label",
     ];
 
-    requiredKeys.forEach(key => {
-      if (!copy[key] || copy[key].trim() === '') {
+    requiredKeys.forEach((key) => {
+      if (!copy[key] || copy[key].trim() === "") {
         errors.push(`Missing required copy key: ${key}`);
       }
     });
 
     return {
       valid: errors.length === 0,
-      errors
+      errors,
     };
   }
 
@@ -164,59 +180,59 @@ class AdminBargainService {
   getDefaultCopy(module: string): Record<string, string> {
     const defaults: Record<string, Record<string, string>> = {
       hotels: {
-        r1_primary: 'Book ₹{price}',
-        r1_secondary: 'Try Final Bargain',
-        r2_card_low: 'Book ₹{price} (Best price)',
-        r2_card_high: 'Book ₹{price}',
+        r1_primary: "Book ₹{price}",
+        r1_secondary: "Try Final Bargain",
+        r2_card_low: "Book ₹{price} (Best price)",
+        r2_card_high: "Book ₹{price}",
         expiry_text: "⌛ Time's up. This price is no longer available.",
-        expiry_cta: 'Book at Standard Price ₹{base}',
-        recommended_label: 'Recommended'
+        expiry_cta: "Book at Standard Price ₹{base}",
+        recommended_label: "Recommended",
       },
       flights: {
-        r1_primary: 'Book ₹{price}',
-        r1_secondary: 'Skip bargain',
-        r2_card_low: '',
-        r2_card_high: '',
+        r1_primary: "Book ₹{price}",
+        r1_secondary: "Skip bargain",
+        r2_card_low: "",
+        r2_card_high: "",
         expiry_text: "⌛ Time's up. This price is no longer available.",
-        expiry_cta: 'Book at Standard Price ₹{base}',
-        recommended_label: 'Best deal'
+        expiry_cta: "Book at Standard Price ₹{base}",
+        recommended_label: "Best deal",
       },
       sightseeing: {
-        r1_primary: 'Book ₹{price}',
-        r1_secondary: 'Try one more time',
-        r2_card_low: 'Book ₹{price}',
-        r2_card_high: 'Book ₹{price}',
+        r1_primary: "Book ₹{price}",
+        r1_secondary: "Try one more time",
+        r2_card_low: "Book ₹{price}",
+        r2_card_high: "Book ₹{price}",
         expiry_text: "⌛ Time's up. This price is no longer available.",
-        expiry_cta: 'Book at Standard Price ₹{base}',
-        recommended_label: 'Recommended'
+        expiry_cta: "Book at Standard Price ₹{base}",
+        recommended_label: "Recommended",
       },
       transfers: {
-        r1_primary: 'Book ₹{price}',
-        r1_secondary: 'Try one more time',
-        r2_card_low: 'Book ₹{price}',
-        r2_card_high: 'Book ₹{price}',
+        r1_primary: "Book ₹{price}",
+        r1_secondary: "Try one more time",
+        r2_card_low: "Book ₹{price}",
+        r2_card_high: "Book ₹{price}",
         expiry_text: "⌛ Time's up. This price is no longer available.",
-        expiry_cta: 'Book at Standard Price ₹{base}',
-        recommended_label: 'Recommended'
+        expiry_cta: "Book at Standard Price ₹{base}",
+        recommended_label: "Recommended",
       },
       packages: {
-        r1_primary: 'Request better price',
-        r1_secondary: 'Book now',
-        r2_card_low: '',
-        r2_card_high: '',
-        expiry_text: 'Your request has been submitted.',
-        expiry_cta: 'View standard package',
-        recommended_label: 'Best value'
+        r1_primary: "Request better price",
+        r1_secondary: "Book now",
+        r2_card_low: "",
+        r2_card_high: "",
+        expiry_text: "Your request has been submitted.",
+        expiry_cta: "View standard package",
+        recommended_label: "Best value",
       },
       addons: {
-        r1_primary: '',
-        r1_secondary: '',
-        r2_card_low: '',
-        r2_card_high: '',
-        expiry_text: '',
-        expiry_cta: '',
-        recommended_label: ''
-      }
+        r1_primary: "",
+        r1_secondary: "",
+        r2_card_low: "",
+        r2_card_high: "",
+        expiry_text: "",
+        expiry_cta: "",
+        recommended_label: "",
+      },
     };
 
     return defaults[module] || defaults.hotels;

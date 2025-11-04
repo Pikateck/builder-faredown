@@ -13,7 +13,10 @@ This document explains how to integrate the module-aware Bargain Modal into Hote
 ### 1. Add Imports
 
 ```typescript
-import { bargainSettingsService, BargainModuleSettings } from '@/services/bargainSettingsService';
+import {
+  bargainSettingsService,
+  BargainModuleSettings,
+} from "@/services/bargainSettingsService";
 ```
 
 ### 2. Add State for Settings
@@ -22,7 +25,8 @@ Add after line ~150 (after existing state declarations):
 
 ```typescript
 // Module-specific settings (fetched from backend)
-const [moduleSettings, setModuleSettings] = useState<BargainModuleSettings | null>(null);
+const [moduleSettings, setModuleSettings] =
+  useState<BargainModuleSettings | null>(null);
 const [settingsLoading, setSettingsLoading] = useState(false);
 ```
 
@@ -42,9 +46,9 @@ useEffect(() => {
         setSettingsLoading(false);
       })
       .catch((err) => {
-        console.error('Failed to load bargain settings:', err);
+        console.error("Failed to load bargain settings:", err);
         // Use default settings on error
-        setModuleSettings(bargainSettingsService['getDefaultSettings'](module));
+        setModuleSettings(bargainSettingsService["getDefaultSettings"](module));
         setSettingsLoading(false);
       });
   }
@@ -56,26 +60,30 @@ useEffect(() => {
 Replace hardcoded timer values with settings:
 
 **Find** (around line 400-450):
+
 ```typescript
 const ROUND_DURATION = 30; // seconds
 ```
 
 **Replace with**:
+
 ```typescript
-const ROUND_DURATION = 
-  round === 1 
-    ? (moduleSettings?.r1_timer_sec || 30)
-    : (moduleSettings?.r2_timer_sec || 30);
+const ROUND_DURATION =
+  round === 1
+    ? moduleSettings?.r1_timer_sec || 30
+    : moduleSettings?.r2_timer_sec || 30;
 ```
 
 ### 5. Update Attempts Logic
 
 **Find** (around line 124):
+
 ```typescript
 const TOTAL_ROUNDS = 2;
 ```
 
 **Replace with**:
+
 ```typescript
 const TOTAL_ROUNDS = moduleSettings?.attempts || 2;
 ```
@@ -85,11 +93,13 @@ const TOTAL_ROUNDS = moduleSettings?.attempts || 2;
 **Round 1 Primary Button**:
 
 **Find** (around line 1686):
+
 ```typescript
 <Button>Book {formatPrice(finalOffer)}</Button>
 ```
 
 **Replace with**:
+
 ```typescript
 <Button>
   {bargainSettingsService.formatCopy(
@@ -102,11 +112,13 @@ const TOTAL_ROUNDS = moduleSettings?.attempts || 2;
 **Round 1 Secondary Button**:
 
 **Find** (around line 1699):
+
 ```typescript
 <Button variant="outline">Try Final Bargain</Button>
 ```
 
 **Replace with**:
+
 ```typescript
 <Button variant="outline">
   {moduleSettings?.copy?.r1_secondary || 'Try Final Bargain'}
@@ -116,16 +128,18 @@ const TOTAL_ROUNDS = moduleSettings?.attempts || 2;
 **Round 2 Dual Price Cards** (Hotels only):
 
 **Find** (around line 1750-1800):
+
 ```typescript
 Book ₹{formatPrice(safeDealPrice)}
 {safeDealPrice < finalOffer && <span>(Recommended)</span>}
 ```
 
 **Replace with**:
+
 ```typescript
 {bargainSettingsService.formatCopy(
-  safeDealPrice < finalOffer 
-    ? moduleSettings?.copy?.r2_card_low 
+  safeDealPrice < finalOffer
+    ? moduleSettings?.copy?.r2_card_low
     : moduleSettings?.copy?.r2_card_high,
   safeDealPrice
 )}
@@ -139,6 +153,7 @@ Book ₹{formatPrice(safeDealPrice)}
 **Expiry Fallback Text**:
 
 **Find** (around line 1450-1470):
+
 ```typescript
 <div className="text-gray-600 mb-4">
   ⌛ Time's up. This price is no longer available.
@@ -146,6 +161,7 @@ Book ₹{formatPrice(safeDealPrice)}
 ```
 
 **Replace with**:
+
 ```typescript
 <div className="text-gray-600 mb-4">
   {moduleSettings?.copy?.expiry_text || "⌛ Time's up. This price is no longer available."}
@@ -155,11 +171,13 @@ Book ₹{formatPrice(safeDealPrice)}
 **Expiry Fallback CTA**:
 
 **Find**:
+
 ```typescript
 <Button>Book at Standard Price ₹{formatPrice(basePrice)}</Button>
 ```
 
 **Replace with**:
+
 ```typescript
 <Button>
   {bargainSettingsService.formatCopy(
@@ -201,6 +219,7 @@ Book ₹{formatPrice(safeDealPrice)}
 ```
 
 **Changes Required**:
+
 1. ✅ Add `module="hotels"` prop
 2. ✅ Ensure `basePrice` is the room price in minor units
 3. ✅ Ensure `productRef` is unique hotel identifier
@@ -228,6 +247,7 @@ Book ₹{formatPrice(safeDealPrice)}
 ```
 
 **Changes Required**:
+
 1. ✅ Add `module="flights"` prop
 2. ✅ Ensure `basePrice` is the fare price in minor units
 3. ✅ Ensure `productRef` is unique flight identifier
@@ -239,6 +259,7 @@ Book ₹{formatPrice(safeDealPrice)}
 All analytics events now include the `module` field.
 
 **Example Event Payload**:
+
 ```json
 {
   "event": "bargain_opened",
@@ -259,6 +280,7 @@ All analytics events now include the `module` field.
 ## ✅ Acceptance Criteria
 
 ### Hotels Integration
+
 - [ ] Modal opens with `module="hotels"`
 - [ ] Settings fetched on open
 - [ ] Round 1 timer is 30 seconds (configurable)
@@ -269,6 +291,7 @@ All analytics events now include the `module` field.
 - [ ] All button text matches admin settings
 
 ### Flights Integration
+
 - [ ] Modal opens with `module="flights"`
 - [ ] Settings fetched on open
 - [ ] Round 1 timer is 15 seconds (configurable)
@@ -277,6 +300,7 @@ All analytics events now include the `module` field.
 - [ ] Expiry fallback shows correctly
 
 ### Mobile Responsiveness
+
 - [ ] iPhone 14/16: footer visible, no clipping
 - [ ] Android: buttons always accessible
 - [ ] Keyboard doesn't hide CTA
@@ -287,18 +311,22 @@ All analytics events now include the `module` field.
 ## 🐛 Troubleshooting
 
 ### Settings Not Loading
+
 **Symptom**: Modal shows default behavior
 **Fix**: Check browser console for API errors. Verify `/api/bargain/settings` endpoint is accessible.
 
 ### Timer Not Respecting Admin Settings
+
 **Symptom**: Timer always 30 seconds
 **Fix**: Ensure `moduleSettings` state is populated before timer starts. Add loading state check.
 
 ### Copy Text Not Updating
+
 **Symptom**: Buttons show old text after admin changes
 **Fix**: Clear settings cache: `bargainSettingsService.clearCache()`
 
 ### Module Prop Missing
+
 **Symptom**: Error: "No settings found for module: undefined"
 **Fix**: Ensure all modal instances have `module="hotels"` or `module="flights"` prop.
 
@@ -321,7 +349,6 @@ All analytics events now include the `module` field.
    - Verify:
      - Timer shows 45 seconds (not 30)
      - Button says "Lock this rate ₹{price}"
-   
 3. **Test Flights Modal**:
    - Open any flight results page
    - Click "Bargain" on a flight
@@ -333,25 +360,22 @@ All analytics events now include the `module` field.
 ### Automated Testing
 
 ```typescript
-describe('ConversationalBargainModal - Module Settings', () => {
-  it('should fetch settings for hotels module', async () => {
-    const settings = await bargainSettingsService.getSettings('hotels');
+describe("ConversationalBargainModal - Module Settings", () => {
+  it("should fetch settings for hotels module", async () => {
+    const settings = await bargainSettingsService.getSettings("hotels");
     expect(settings.attempts).toBe(2);
     expect(settings.r1_timer_sec).toBe(30);
   });
 
-  it('should fetch settings for flights module', async () => {
-    const settings = await bargainSettingsService.getSettings('flights');
+  it("should fetch settings for flights module", async () => {
+    const settings = await bargainSettingsService.getSettings("flights");
     expect(settings.attempts).toBe(1);
     expect(settings.r1_timer_sec).toBe(15);
   });
 
-  it('should format copy text with price placeholders', () => {
-    const formatted = bargainSettingsService.formatCopy(
-      'Book ₹{price}',
-      5000
-    );
-    expect(formatted).toBe('Book ₹5000');
+  it("should format copy text with price placeholders", () => {
+    const formatted = bargainSettingsService.formatCopy("Book ₹{price}", 5000);
+    expect(formatted).toBe("Book ₹5000");
   });
 });
 ```
@@ -361,6 +385,7 @@ describe('ConversationalBargainModal - Module Settings', () => {
 ## 📝 Phase B Extensions
 
 In Phase B, we'll add:
+
 - [ ] Sightseeing/Transfers integration
 - [ ] Packages assisted mode
 - [ ] Market-specific overrides (country/city)
@@ -369,6 +394,7 @@ In Phase B, we'll add:
 ---
 
 **✅ Integration Complete When**:
+
 - All hotel pages use `module="hotels"`
 - All flight pages use `module="flights"`
 - Settings load correctly from backend
