@@ -3174,36 +3174,30 @@ function HotelDetailsContent() {
                                       </div>
 
                                       {/* Room Details: Bed Type, Size, View */}
-                                      <div className="mb-3 space-y-1 text-xs">
+                                      <div className="flex flex-wrap gap-2 mb-3">
                                         {room.beds && (
-                                          <div className="flex items-center gap-2">
-                                            <span className="font-medium text-gray-700">
-                                              Beds:
-                                            </span>
-                                            <span className="text-gray-600">
-                                              {room.beds}
-                                            </span>
-                                          </div>
+                                          <InfoChip
+                                            icon={Bed}
+                                            ariaLabel={`Bed type: ${room.beds}`}
+                                          >
+                                            {room.beds}
+                                          </InfoChip>
                                         )}
                                         {room.roomSize && (
-                                          <div className="flex items-center gap-2">
-                                            <span className="font-medium text-gray-700">
-                                              Room Size:
-                                            </span>
-                                            <span className="text-gray-600">
-                                              {room.roomSize}
-                                            </span>
-                                          </div>
+                                          <InfoChip
+                                            icon={Ruler}
+                                            ariaLabel={`Room size: ${room.roomSize}`}
+                                          >
+                                            {room.roomSize}
+                                          </InfoChip>
                                         )}
                                         {room.view && (
-                                          <div className="flex items-center gap-2">
-                                            <span className="font-medium text-gray-700">
-                                              View:
-                                            </span>
-                                            <span className="text-gray-600">
-                                              {room.view}
-                                            </span>
-                                          </div>
+                                          <InfoChip
+                                            icon={Mountain}
+                                            ariaLabel={`View: ${room.view}`}
+                                          >
+                                            {room.view}
+                                          </InfoChip>
                                         )}
                                       </div>
 
