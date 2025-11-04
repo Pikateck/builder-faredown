@@ -58,6 +58,23 @@ import {
 import { Header } from "@/components/layout/Header";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { InfoChip } from "@/components/ui/info-chip";
+import {
+  Utensils,
+  CigaretteOff,
+  Cigarette,
+  Banknote,
+  CreditCard,
+  ShieldCheck,
+  CircleX,
+  Undo2,
+  Bed,
+  Ruler,
+  Mountain,
+  Wifi,
+  Fan,
+  ShowerHead,
+} from "lucide-react";
 import {
   Tooltip,
   TooltipTrigger,
@@ -2199,33 +2216,69 @@ function HotelDetailsContent() {
                             {/* Breakfast, Smoking & Payment Type Info */}
                             <div className="flex flex-wrap gap-2 mb-3">
                               {room.breakfastIncluded === true ? (
-                                <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
-                                  ✓ Breakfast Included
-                                </span>
+                                <InfoChip
+                                  icon={Utensils}
+                                  tone="success"
+                                  ariaLabel="Breakfast included with this room"
+                                >
+                                  Breakfast included
+                                </InfoChip>
                               ) : (
-                                <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded font-medium">
-                                  Breakfast Not Included
-                                </span>
+                                <InfoChip
+                                  icon={Utensils}
+                                  ariaLabel="Breakfast not included"
+                                >
+                                  No breakfast
+                                </InfoChip>
                               )}
                               {room.smokingAllowed === true ||
                               room.smokingPreference === "smoking" ? (
-                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
-                                  🚬 Smoking Allowed
-                                </span>
+                                <InfoChip
+                                  icon={Cigarette}
+                                  ariaLabel="Smoking allowed in this room"
+                                >
+                                  Smoking allowed
+                                </InfoChip>
                               ) : (
-                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
-                                  🚫 Non-Smoking
-                                </span>
+                                <InfoChip
+                                  icon={CigaretteOff}
+                                  ariaLabel="Non-smoking room"
+                                >
+                                  Non-smoking
+                                </InfoChip>
                               )}
                               {room.paymentType === "pay_at_hotel" ? (
-                                <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-medium">
-                                  💳 Pay at Hotel
-                                </span>
+                                <InfoChip
+                                  icon={Banknote}
+                                  ariaLabel="Pay at hotel upon arrival"
+                                >
+                                  Pay at hotel
+                                </InfoChip>
                               ) : (
-                                <span className="text-xs bg-indigo-100 text-indigo-700 px-2 py-1 rounded font-medium">
-                                  💰 Pay Now
-                                </span>
+                                <InfoChip
+                                  icon={CreditCard}
+                                  ariaLabel="Pay now online"
+                                >
+                                  Pay now
+                                </InfoChip>
                               )}
+                              {room.isRefundable && !room.nonRefundable ? (
+                                <InfoChip
+                                  icon={ShieldCheck}
+                                  tone="success"
+                                  ariaLabel="Refundable booking"
+                                >
+                                  Refundable
+                                </InfoChip>
+                              ) : room.nonRefundable ? (
+                                <InfoChip
+                                  icon={CircleX}
+                                  tone="danger"
+                                  ariaLabel="Non-refundable booking"
+                                >
+                                  Non-refundable
+                                </InfoChip>
+                              ) : null}
                             </div>
 
                             {/* Room Details: Bed Type, Size, View */}
