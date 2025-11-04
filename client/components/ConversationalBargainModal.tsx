@@ -411,12 +411,11 @@ export function ConversationalBargainModal({
         };
       case 2:
         return {
-          warningMessage:
-            "Your final bargain. This may not be better than your Safe Deal.",
+          warningMessage: null, // No warning for Round 2
           checkingMessage: "Final check at {price}…",
           supplierResponse: "Today’s offer is {offer}.",
           agentResponse:
-            "Final offer: {offer}. You have 30 seconds to choose between your Safe Deal or this Final Offer below.",
+            "Final offer: {offer}. You have 30 seconds to choose.",
           acceptanceChance: 0.5, // 50% chance for Round 2 (risk)
         };
       default:
