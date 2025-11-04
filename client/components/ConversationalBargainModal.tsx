@@ -1361,7 +1361,7 @@ export function ConversationalBargainModal({
         {/* Accessibility Title */}
         <DialogTitle className="sr-only">Hotel Price Negotiation</DialogTitle>
         {/* Header - Single close icon, round counter badge */}
-        <div className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-4 sm:p-6 rounded-t-xl">
+        <div className="relative bg-gradient-to-r from-[#003580] to-[#0071c2] text-white p-3 sm:p-4 rounded-t-xl">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3 flex-1">
               <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
