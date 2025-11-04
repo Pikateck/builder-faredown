@@ -3237,30 +3237,45 @@ function HotelDetailsContent() {
                                         <h5 className="font-medium text-sm text-gray-900 mb-2">
                                           Room features:
                                         </h5>
-                                        <div className="grid grid-cols-1 gap-2 text-sm">
+                                        <div className="flex flex-wrap gap-2">
                                           {room.features &&
                                           room.features.length > 0 ? (
                                             room.features.map(
-                                              (feature, idx) => (
-                                                <div
-                                                  key={idx}
-                                                  className="flex items-start"
-                                                >
-                                                  <CheckCircle className="w-4 h-4 text-green-600 mr-2 mt-0.5" />
-                                                  <span className="text-gray-700">
-                                                    {feature}
-                                                  </span>
-                                                </div>
-                                              ),
+                                              (feature: any, idx: number) => {
+                                                const featureText =
+                                                  typeof feature === "string"
+                                                    ? feature
+                                                    : feature?.name || "Feature";
+
+                                                // Map feature names to appropriate icons
+                                                const getFeatureIcon = (text: string) => {
+                                                  const lower = text.toLowerCase();
+                                                  if (lower.includes("wifi") || lower.includes("wi-fi")) return Wifi;
+                                                  if (lower.includes("air") || lower.includes("ac") || lower.includes("conditioning")) return Fan;
+                                                  if (lower.includes("bath") || lower.includes("shower")) return ShowerHead;
+                                                  if (lower.includes("breakfast")) return Utensils;
+                                                  if (lower.includes("bed")) return Bed;
+                                                  return Wifi; // Default icon
+                                                };
+
+                                                return (
+                                                  <InfoChip
+                                                    key={idx}
+                                                    icon={getFeatureIcon(featureText)}
+                                                    ariaLabel={featureText}
+                                                  >
+                                                    {featureText}
+                                                  </InfoChip>
+                                                );
+                                              },
                                             )
                                           ) : (
-                                            <div className="flex items-start">
-                                              <CheckCircle className="w-4 h-4 text-green-600 mr-2 mt-0.5" />
-                                              <span className="text-gray-700">
-                                                Comfortable room with standard
-                                                amenities
-                                              </span>
-                                            </div>
+                                            <InfoChip
+                                              icon={Wifi}
+                                              ariaLabel="Standard amenities"
+                                            >
+                                              Standard amenities
+                                            </InfoChip>
                                           )}
                                         </div>
                                       </div>
