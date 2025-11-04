@@ -1591,6 +1591,9 @@ export function ConversationalBargainModal({
                                 : "",
                           })
                           .catch(console.warn);
+
+                        // Immediately proceed to booking with selected price
+                        setTimeout(() => handleAcceptOffer(), 100);
                       }}
                       disabled={
                         selectedPrice !== null || isBooking || timerExpired
@@ -1666,6 +1669,9 @@ export function ConversationalBargainModal({
                                 : "",
                           })
                           .catch(console.warn);
+
+                        // Immediately proceed to booking with selected price
+                        setTimeout(() => handleAcceptOffer(), 100);
                       }}
                       disabled={
                         selectedPrice !== null || isBooking || timerExpired
@@ -1718,29 +1724,6 @@ export function ConversationalBargainModal({
                         </span>
                       )}
                     </Button>
-
-                    {/* showBookSelected = (round === 2) && !!selectedPrice - remains active even after timer expires */}
-                    {selectedPrice && (
-                      <Button
-                        onClick={() => handleAcceptOffer()}
-                        disabled={isBooking}
-                        className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl mt-2 animate-pulse transition-all"
-                        style={{
-                          backgroundColor: "#003580",
-                        }}
-                        onMouseEnter={(e) =>
-                          !isBooking &&
-                          (e.currentTarget.style.backgroundColor = "#00214d")
-                        }
-                        onMouseLeave={(e) =>
-                          !isBooking &&
-                          (e.currentTarget.style.backgroundColor = "#003580")
-                        }
-                        aria-label="Book at selected price"
-                      >
-                        {isBooking ? "Processing..." : "Book Selected Price"}
-                      </Button>
-                    )}
                   </>
                 )}
 
