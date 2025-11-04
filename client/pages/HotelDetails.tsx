@@ -3256,7 +3256,18 @@ function HotelDetailsContent() {
                                         <div className="flex flex-wrap gap-2">
                                           {room.features &&
                                           room.features.length > 0 ? (
-                                            room.features.map(
+                                            room.features
+                                              .filter((feature: any) => {
+                                                const featureText =
+                                                  typeof feature === "string"
+                                                    ? feature
+                                                    : feature?.name || "";
+                                                const lower = featureText.toLowerCase();
+                                                // Filter out non-refundable since it's already shown above
+                                                return !lower.includes("non-refundable") &&
+                                                       !lower.includes("refundable rate");
+                                              })
+                                              .map(
                                               (feature: any, idx: number) => {
                                                 const featureText =
                                                   typeof feature === "string"
