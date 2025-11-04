@@ -394,7 +394,7 @@ export function ConversationalBargainModal({
       case 1:
         return {
           warningMessage: null, // No warning for Round 1
-          checkingMessage: "Let me check with {supplier} about {price}…",
+          checkingMessage: "Let me check with {supplier} about {price}��",
           supplierResponse: "Good news — we can offer {offer}.",
           agentResponse:
             "Your price is locked. You can book now or try your final bargain.",
@@ -1315,7 +1315,7 @@ export function ConversationalBargainModal({
           borderRadius: isMobileDevice() ? "0" : "1rem",
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden",
+          overflow: isMobileDevice() ? "auto" : "hidden",
           ...(isMobileDevice()
             ? {
                 position: "fixed",
