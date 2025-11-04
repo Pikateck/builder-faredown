@@ -15,17 +15,20 @@ Implemented comprehensive booking enhancements including PAN storage, detailed t
 ## 1. PAN Card Implementation
 
 ### Frontend (HotelBooking.tsx)
+
 - ✅ **Already exists** at lines 574-600
 - Validation: Pattern `[A-Z]{5}[0-9]{4}[A-Z]` (uppercase)
 - Required when currency = INR or billingCountry = IN
 - Helper text: "For invoice & compliance in India"
 
 ### Backend Storage
+
 - ✅ **customers.pan**: Master record (1:1 with customer ID)
 - ✅ **bookings.pan**: Snapshot at booking time
 - ✅ Migration validates format: `^[A-Z]{5}[0-9]{4}[A-Z]$`
 
 ### Display Surfaces
+
 - ✅ Booking page: Input field with validation
 - ✅ Confirmation page: Tax Information section (lines 601-615)
 - ✅ Invoice/Voucher: Included in guest details
@@ -35,13 +38,14 @@ Implemented comprehensive booking enhancements including PAN storage, detailed t
 ## 2. Detailed Tax Breakdown
 
 ### Structure
+
 ```json
 {
   "room_subtotal": 5000,
   "taxes_and_fees": {
-    "gst_vat": 600,        // 12%
-    "municipal_tax": 200,   // 4%
-    "service_fee": 100      // 2%
+    "gst_vat": 600, // 12%
+    "municipal_tax": 200, // 4%
+    "service_fee": 100 // 2%
   },
   "bargain_discount": 500,
   "promo_discount": 0,
@@ -51,17 +55,21 @@ Implemented comprehensive booking enhancements including PAN storage, detailed t
 ```
 
 ### Implementation
+
 **HotelBooking.tsx (lines ~190-210):**
+
 - New function: `calculateTaxBreakdown()`
 - Calculates GST/VAT (12%), Municipal Tax (4%), Service Fee (2%)
 - Includes bargain discount if applicable
 
 **Display (lines ~1150-1195):**
+
 - Expandable tax breakdown with chevron icon
 - Shows detailed line items when expanded
 - Preserves total price typography (no design changes)
 
 **Confirmation Page (lines 733-775):**
+
 - Full breakdown displayed by default
 - Individual tax components shown
 - Bargain discount highlighted in green
@@ -71,6 +79,7 @@ Implemented comprehensive booking enhancements including PAN storage, detailed t
 ## 3. Payment Method Details
 
 ### Card Brand Detection
+
 ```javascript
 detectCardBrand(cardNumber) {
   // Detects: Visa, Mastercard, Amex, Discover, JCB
@@ -79,11 +88,13 @@ detectCardBrand(cardNumber) {
 ```
 
 ### Auth Code Generation
+
 - Mock implementation: 6-character alphanumeric
 - Format: `8F2K9A`
 - Ready for real gateway integration
 
 ### Data Structure
+
 ```json
 {
   "method": "card",
@@ -97,18 +108,22 @@ detectCardBrand(cardNumber) {
 ```
 
 ### Display Format
+
 **Confirmation Page:**
+
 ```
 Visa •••• 1111 · Exp 12/30 · Auth 8F2K9A · Status: Confirmed
 ```
 
 **Pay at Hotel:**
+
 ```
 Pay at Hotel
 Payment will be collected at the hotel upon check-in.
 ```
 
 ### Security
+
 - ✅ **Never displays** full card number or CVV
 - ✅ Only stores last 4 digits
 - ✅ Card brand detected client-side only
@@ -118,6 +133,7 @@ Payment will be collected at the hotel upon check-in.
 ## 4. Cancellation Policy
 
 ### Booking Page (lines ~1110-1145)
+
 - **Expandable section** with chevron icon
 - Shows full policy text when expanded
 - Includes:
@@ -126,11 +142,13 @@ Payment will be collected at the hotel upon check-in.
   - Policy ID reference
 
 ### Confirmation Page (lines 685-720)
+
 - **Expanded by default** (full visibility)
 - Formatted with proper typography
 - Shows complete cancellation rules
 
 ### Policy Text Example
+
 ```
 Free Cancellation Until: Friday, November 29, 2024, 02:00 PM IST
 
@@ -146,16 +164,20 @@ Policy ID: POL_STANDARD_001
 ## 5. Special Requests
 
 ### Capture (HotelBooking.tsx lines 601-617)
+
 - ✅ **Already exists** in Preferences step
 - Textarea with 500 character limit
 - Placeholder: "Any special requirements..."
 
 ### Storage
+
 - **bookings.special_requests** (TEXT field)
 - Passed through booking flow via `guestDetails.specialRequests`
 
 ### Display
+
 **Confirmation Page (lines 615-630):**
+
 ```
 Special Requests
 ┌─────────────────────────────────────┐
@@ -164,6 +186,7 @@ Special Requests
 │ King bed required                   │
 └─────────────────────────────────────┘
 ```
+
 If empty: Shows "None"
 
 ---
@@ -171,17 +194,20 @@ If empty: Shows "None"
 ## 6. Database Schema
 
 ### Migration File
+
 **Location:** `api/database/migrations/20250131_booking_enhancements.sql`
 
 ### New Columns
 
 #### customers table
+
 ```sql
-ALTER TABLE customers 
+ALTER TABLE customers
 ADD COLUMN pan VARCHAR(10) CHECK (pan ~ '^[A-Z]{5}[0-9]{4}[A-Z]$');
 ```
 
 #### bookings table
+
 ```sql
 -- PAN snapshot
 ADD COLUMN pan VARCHAR(10) CHECK (pan ~ '^[A-Z]{5}[0-9]{4}[A-Z]$');
@@ -200,6 +226,7 @@ ADD COLUMN payment JSONB DEFAULT '{...}';
 ```
 
 ### Indexes
+
 ```sql
 CREATE INDEX idx_customers_pan ON customers(pan);
 CREATE INDEX idx_bookings_pan ON bookings(pan);
@@ -208,6 +235,7 @@ CREATE INDEX idx_bookings_payment_method ON bookings((payment->>'method'));
 ```
 
 ### Validation Function
+
 ```sql
 CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 -- Validates format: AAAAA9999A
@@ -220,6 +248,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 ### POST /api/bookings/hotels/confirm
 
 **New Request Body Fields:**
+
 ```json
 {
   "tempBookingRef": "TB123...",
@@ -247,6 +276,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 ```
 
 **Validation:**
+
 - PAN format validated: `^[A-Z]{5}[0-9]{4}[A-Z]$`
 - Returns 400 if invalid PAN format
 - All fields optional except tempBookingRef and paymentDetails
@@ -254,6 +284,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 ### GET /api/bookings/hotels/:bookingRef
 
 **Response includes all new fields:**
+
 ```json
 {
   "success": true,
@@ -274,6 +305,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 ## 8. Files Modified
 
 ### Frontend
+
 1. **client/pages/HotelBooking.tsx**
    - Added: `calculateTaxBreakdown()` function
    - Added: `detectCardBrand()` function
@@ -290,6 +322,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
    - Added: Cancellation Policy card (expanded by default)
 
 ### Backend
+
 3. **api/routes/bookings.js**
    - Updated: POST /hotels/confirm to accept new fields
    - Added: PAN format validation
@@ -307,6 +340,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 ## 9. Testing Checklist
 
 ### PAN Field
+
 - [ ] Required when currency = INR
 - [ ] Rejects invalid formats (e.g., "ABC123456")
 - [ ] Accepts valid format: "ABCDE1234F"
@@ -315,6 +349,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 - [ ] Saved to both customers.pan and bookings.pan
 
 ### Tax Breakdown
+
 - [ ] Expands/collapses on click (Booking page)
 - [ ] Shows GST/VAT, Municipal, Service Fee individually
 - [ ] Math adds up to grand total
@@ -323,6 +358,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 - [ ] Displayed on Voucher
 
 ### Payment Details
+
 - [ ] Card brand detected correctly (Visa, Mastercard, etc.)
 - [ ] Only last 4 digits shown: "•••• 1111"
 - [ ] Expiry displayed: "12/30"
@@ -332,6 +368,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 - [ ] No full card number or CVV ever stored/displayed
 
 ### Cancellation Policy
+
 - [ ] Expander works on Booking page
 - [ ] Shows full policy text when expanded
 - [ ] Displays free cancellation deadline with timezone
@@ -340,6 +377,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 - [ ] Full policy visible on Confirmation (expanded by default)
 
 ### Special Requests
+
 - [ ] Captured from Preferences step
 - [ ] Displays on Confirmation page
 - [ ] Shows "None" when empty
@@ -347,6 +385,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 - [ ] Properly formatted (whitespace preserved)
 
 ### Cross-Browser Testing
+
 - [ ] iPhone 14/16 Safari - All features work
 - [ ] iPhone 14/16 Chrome - All features work
 - [ ] Android Chrome - All features work
@@ -357,6 +396,7 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 - [ ] Desktop Edge - All features work
 
 ### Responsive Testing
+
 - [ ] 375px (iPhone SE) - No layout issues
 - [ ] 390px (iPhone 12/13) - No layout issues
 - [ ] 430px (iPhone 14 Pro Max) - No layout issues
@@ -433,11 +473,13 @@ CREATE FUNCTION validate_pan(pan_value TEXT) RETURNS BOOLEAN;
 ## 11. Deployment Steps
 
 ### Step 1: Run Database Migration
+
 ```bash
 psql $DATABASE_URL -f api/database/migrations/20250131_booking_enhancements.sql
 ```
 
 ### Step 2: Verify Migration
+
 ```sql
 -- Check customers table
 \d customers
@@ -451,6 +493,7 @@ psql $DATABASE_URL -f api/database/migrations/20250131_booking_enhancements.sql
 ```
 
 ### Step 3: Deploy Code
+
 ```bash
 git add .
 git commit -m "feat: Add PAN, detailed tax breakdown, payment masking, cancellation policy"
@@ -458,6 +501,7 @@ git push origin main
 ```
 
 ### Step 4: Test Booking Flow
+
 1. Create test booking with PAN
 2. Verify tax breakdown display
 3. Check payment method masking

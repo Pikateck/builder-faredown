@@ -158,8 +158,9 @@ export default function HotelBooking() {
   // Generate mock auth code
   const generateAuthCode = () => {
     const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-    return Array.from({ length: 6 }, () =>
-      chars[Math.floor(Math.random() * chars.length)]
+    return Array.from(
+      { length: 6 },
+      () => chars[Math.floor(Math.random() * chars.length)],
     ).join("");
   };
 
@@ -252,9 +253,11 @@ export default function HotelBooking() {
     const serviceFee = Math.round(subtotalBeforeTax * 0.02); // 2% Service Fee
     const totalTaxes = gstVat + municipalTax + serviceFee;
 
-    const bargainDiscount = location.state?.originalPrice && location.state?.bargainedPrice
-      ? (location.state.originalPrice - location.state.bargainedPrice) * nights
-      : 0;
+    const bargainDiscount =
+      location.state?.originalPrice && location.state?.bargainedPrice
+        ? (location.state.originalPrice - location.state.bargainedPrice) *
+          nights
+        : 0;
 
     const grandTotal = subtotalBeforeTax + totalTaxes;
 
@@ -376,9 +379,14 @@ export default function HotelBooking() {
       };
 
       // Prepare payment details with card brand and auth code
-      const cardBrand = paymentMethod === "card" ? detectCardBrand(cardDetails.number) : null;
-      const last4 = paymentMethod === "card" ? cardDetails.number.replace(/\s/g, "").slice(-4) : null;
-      const [expMonth, expYear] = paymentMethod === "card" ? cardDetails.expiry.split("/") : [null, null];
+      const cardBrand =
+        paymentMethod === "card" ? detectCardBrand(cardDetails.number) : null;
+      const last4 =
+        paymentMethod === "card"
+          ? cardDetails.number.replace(/\s/g, "").slice(-4)
+          : null;
+      const [expMonth, expYear] =
+        paymentMethod === "card" ? cardDetails.expiry.split("/") : [null, null];
       const authCode = paymentMethod === "card" ? generateAuthCode() : null;
 
       const payment = {
@@ -392,15 +400,17 @@ export default function HotelBooking() {
       };
 
       // Full cancellation policy text
-      const cancellationPolicyFull = `Free cancellation until ${new Date(new Date(checkIn).getTime() - 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric',
-        hour: '2-digit',
-        minute: '2-digit',
-        timeZoneName: 'short'
-      })}. After this deadline: Cancellation within 24 hours of check-in incurs 100% charge (1 night's rate). No-show: 100% charge for entire booking. Policy ID: ${selectedHotel?.cancellationPolicyId || 'POL_' + selectedHotel?.id || 'STANDARD_001'}`;
+      const cancellationPolicyFull = `Free cancellation until ${new Date(
+        new Date(checkIn).getTime() - 24 * 60 * 60 * 1000,
+      ).toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+        timeZoneName: "short",
+      })}. After this deadline: Cancellation within 24 hours of check-in incurs 100% charge (1 night's rate). No-show: 100% charge for entire booking. Policy ID: ${selectedHotel?.cancellationPolicyId || "POL_" + selectedHotel?.id || "STANDARD_001"}`;
 
       // For now, we'll pass the bargain data to confirmation page
       // In a real scenario, you'd submit this to the backend booking endpoint
@@ -1156,7 +1166,9 @@ export default function HotelBooking() {
                   className="flex justify-between items-center w-full text-sm font-medium hover:text-blue-600 transition-colors"
                 >
                   <span>Cancellation Policy</span>
-                  <ChevronDown className={`w-4 h-4 transition-transform ${showPolicyDetails ? 'rotate-180' : ''}`} />
+                  <ChevronDown
+                    className={`w-4 h-4 transition-transform ${showPolicyDetails ? "rotate-180" : ""}`}
+                  />
                 </button>
 
                 {showPolicyDetails && (
@@ -1164,25 +1176,30 @@ export default function HotelBooking() {
                     <div>
                       <strong>Free Cancellation Until:</strong>
                       <br />
-                      {new Date(new Date(checkIn).getTime() - 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
-                        weekday: 'long',
-                        year: 'numeric',
-                        month: 'long',
-                        day: 'numeric',
-                        hour: '2-digit',
-                        minute: '2-digit',
-                        timeZoneName: 'short'
+                      {new Date(
+                        new Date(checkIn).getTime() - 24 * 60 * 60 * 1000,
+                      ).toLocaleDateString("en-US", {
+                        weekday: "long",
+                        year: "numeric",
+                        month: "long",
+                        day: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                        timeZoneName: "short",
                       })}
                     </div>
                     <div>
                       <strong>After Free Cancellation Deadline:</strong>
                       <br />
-                      • Cancellation within 24 hours of check-in: 100% charge (1 night's rate)
-                      <br />
-                      • No-show: 100% charge for entire booking
+                      • Cancellation within 24 hours of check-in: 100% charge (1
+                      night's rate)
+                      <br />• No-show: 100% charge for entire booking
                     </div>
                     <div className="text-xs text-gray-500">
-                      Policy ID: {selectedHotel?.cancellationPolicyId || 'POL_' + selectedHotel?.id || 'STANDARD_001'}
+                      Policy ID:{" "}
+                      {selectedHotel?.cancellationPolicyId ||
+                        "POL_" + selectedHotel?.id ||
+                        "STANDARD_001"}
                     </div>
                   </div>
                 )}
@@ -1248,8 +1265,12 @@ export default function HotelBooking() {
                   >
                     <span>Taxes & Fees</span>
                     <div className="flex items-center gap-2">
-                      <span>{formatCurrency(calculateTaxBreakdown().totalTaxes)}</span>
-                      <ChevronDown className={`w-4 h-4 transition-transform ${showTaxBreakdown ? 'rotate-180' : ''}`} />
+                      <span>
+                        {formatCurrency(calculateTaxBreakdown().totalTaxes)}
+                      </span>
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform ${showTaxBreakdown ? "rotate-180" : ""}`}
+                      />
                     </div>
                   </button>
 
@@ -1257,26 +1278,38 @@ export default function HotelBooking() {
                     <div className="mt-2 pl-4 space-y-1 text-xs text-gray-600">
                       <div className="flex justify-between">
                         <span>GST/VAT (12%)</span>
-                        <span>{formatCurrency(calculateTaxBreakdown().gstVat)}</span>
+                        <span>
+                          {formatCurrency(calculateTaxBreakdown().gstVat)}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>Municipal Tax (4%)</span>
-                        <span>{formatCurrency(calculateTaxBreakdown().municipalTax)}</span>
+                        <span>
+                          {formatCurrency(calculateTaxBreakdown().municipalTax)}
+                        </span>
                       </div>
                       <div className="flex justify-between">
                         <span>Service Fee (2%)</span>
-                        <span>{formatCurrency(calculateTaxBreakdown().serviceFee)}</span>
+                        <span>
+                          {formatCurrency(calculateTaxBreakdown().serviceFee)}
+                        </span>
                       </div>
                     </div>
                   )}
                 </div>
 
-                {location.state?.bargainedPrice && location.state?.originalPrice && (
-                  <div className="flex justify-between text-sm text-green-700">
-                    <span>Bargain Discount Applied</span>
-                    <span>-{formatCurrency(calculateTaxBreakdown().bargainDiscount)}</span>
-                  </div>
-                )}
+                {location.state?.bargainedPrice &&
+                  location.state?.originalPrice && (
+                    <div className="flex justify-between text-sm text-green-700">
+                      <span>Bargain Discount Applied</span>
+                      <span>
+                        -
+                        {formatCurrency(
+                          calculateTaxBreakdown().bargainDiscount,
+                        )}
+                      </span>
+                    </div>
+                  )}
 
                 <div className="border-t pt-2 flex justify-between font-semibold">
                   <span>Grand Total</span>

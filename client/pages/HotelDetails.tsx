@@ -3262,65 +3262,74 @@ function HotelDetailsContent() {
                                                   typeof feature === "string"
                                                     ? feature
                                                     : feature?.name || "";
-                                                const lower = featureText.toLowerCase();
+                                                const lower =
+                                                  featureText.toLowerCase();
                                                 // Filter out non-refundable since it's already shown above
-                                                return !lower.includes("non-refundable") &&
-                                                       !lower.includes("refundable rate");
+                                                return (
+                                                  !lower.includes(
+                                                    "non-refundable",
+                                                  ) &&
+                                                  !lower.includes(
+                                                    "refundable rate",
+                                                  )
+                                                );
                                               })
                                               .map(
-                                              (feature: any, idx: number) => {
-                                                const featureText =
-                                                  typeof feature === "string"
-                                                    ? feature
-                                                    : feature?.name ||
-                                                      "Feature";
+                                                (feature: any, idx: number) => {
+                                                  const featureText =
+                                                    typeof feature === "string"
+                                                      ? feature
+                                                      : feature?.name ||
+                                                        "Feature";
 
-                                                // Map feature names to appropriate icons
-                                                const getFeatureIcon = (
-                                                  text: string,
-                                                ) => {
-                                                  const lower =
-                                                    text.toLowerCase();
-                                                  if (
-                                                    lower.includes("wifi") ||
-                                                    lower.includes("wi-fi")
-                                                  )
-                                                    return Wifi;
-                                                  if (
-                                                    lower.includes("air") ||
-                                                    lower.includes("ac") ||
-                                                    lower.includes(
-                                                      "conditioning",
+                                                  // Map feature names to appropriate icons
+                                                  const getFeatureIcon = (
+                                                    text: string,
+                                                  ) => {
+                                                    const lower =
+                                                      text.toLowerCase();
+                                                    if (
+                                                      lower.includes("wifi") ||
+                                                      lower.includes("wi-fi")
                                                     )
-                                                  )
-                                                    return Fan;
-                                                  if (
-                                                    lower.includes("bath") ||
-                                                    lower.includes("shower")
-                                                  )
-                                                    return ShowerHead;
-                                                  if (
-                                                    lower.includes("breakfast")
-                                                  )
-                                                    return Utensils;
-                                                  if (lower.includes("bed"))
-                                                    return Bed;
-                                                  return Wifi; // Default icon
-                                                };
+                                                      return Wifi;
+                                                    if (
+                                                      lower.includes("air") ||
+                                                      lower.includes("ac") ||
+                                                      lower.includes(
+                                                        "conditioning",
+                                                      )
+                                                    )
+                                                      return Fan;
+                                                    if (
+                                                      lower.includes("bath") ||
+                                                      lower.includes("shower")
+                                                    )
+                                                      return ShowerHead;
+                                                    if (
+                                                      lower.includes(
+                                                        "breakfast",
+                                                      )
+                                                    )
+                                                      return Utensils;
+                                                    if (lower.includes("bed"))
+                                                      return Bed;
+                                                    return Wifi; // Default icon
+                                                  };
 
-                                                return (
-                                                  <InfoChip
-                                                    key={idx}
-                                                    icon={getFeatureIcon(
-                                                      featureText,
-                                                    )}
-                                                    ariaLabel={featureText}
-                                                  >
-                                                    {featureText}
-                                                  </InfoChip>
-                                                );
-                                              },
-                                            )
+                                                  return (
+                                                    <InfoChip
+                                                      key={idx}
+                                                      icon={getFeatureIcon(
+                                                        featureText,
+                                                      )}
+                                                      ariaLabel={featureText}
+                                                    >
+                                                      {featureText}
+                                                    </InfoChip>
+                                                  );
+                                                },
+                                              )
                                           ) : (
                                             <InfoChip
                                               icon={Wifi}
