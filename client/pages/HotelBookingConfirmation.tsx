@@ -677,7 +677,7 @@ export default function HotelBookingConfirmation() {
                       <span className="text-emerald-700">
                         Safe Deal (Round 1)
                         {bookingData.pricing.selectedPrice === "Safe Deal"
-                          ? " ✓"
+                          ? " ���"
                           : ""}
                       </span>
                       <span
@@ -730,17 +730,57 @@ export default function HotelBookingConfirmation() {
                   </>
                 )}
 
-                {/* Taxes & Fees */}
-                {(bookingData.pricing.taxes || bookingData.pricing.fees) && (
-                  <div className="flex justify-between text-sm">
-                    <span>Taxes & Fees</span>
-                    <span>
-                      {formatPriceWithSymbol(
-                        (bookingData.pricing.taxes || 0) +
-                          (bookingData.pricing.fees || 0),
-                        selectedCurrency.code,
-                      )}
-                    </span>
+                {/* Detailed Tax Breakdown */}
+                {(bookingData.amounts || bookingData.pricing.taxes || bookingData.pricing.fees) && (
+                  <div className="space-y-1">
+                    {bookingData.amounts?.taxes_and_fees ? (
+                      <>
+                        <div className="flex justify-between text-sm font-medium">
+                          <span>Taxes & Fees</span>
+                          <span>
+                            {formatPriceWithSymbol(
+                              bookingData.amounts.taxes_and_fees.gst_vat +
+                              bookingData.amounts.taxes_and_fees.municipal_tax +
+                              bookingData.amounts.taxes_and_fees.service_fee,
+                              selectedCurrency.code,
+                            )}
+                          </span>
+                        </div>
+                        <div className="pl-4 space-y-1 text-xs text-gray-600">
+                          <div className="flex justify-between">
+                            <span>GST/VAT (12%)</span>
+                            <span>{formatPriceWithSymbol(bookingData.amounts.taxes_and_fees.gst_vat, selectedCurrency.code)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Municipal Tax (4%)</span>
+                            <span>{formatPriceWithSymbol(bookingData.amounts.taxes_and_fees.municipal_tax, selectedCurrency.code)}</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Service Fee (2%)</span>
+                            <span>{formatPriceWithSymbol(bookingData.amounts.taxes_and_fees.service_fee, selectedCurrency.code)}</span>
+                          </div>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="flex justify-between text-sm">
+                        <span>Taxes & Fees</span>
+                        <span>
+                          {formatPriceWithSymbol(
+                            (bookingData.pricing.taxes || 0) +
+                              (bookingData.pricing.fees || 0),
+                            selectedCurrency.code,
+                          )}
+                        </span>
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Bargain Discount */}
+                {bookingData.amounts?.bargain_discount > 0 && (
+                  <div className="flex justify-between text-sm text-green-700">
+                    <span>Bargain Discount Applied</span>
+                    <span>-{formatPriceWithSymbol(bookingData.amounts.bargain_discount, selectedCurrency.code)}</span>
                   </div>
                 )}
 
