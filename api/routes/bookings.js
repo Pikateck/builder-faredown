@@ -102,12 +102,25 @@ router.post("/hotels/confirm", async (req, res) => {
       originalPrice,
       bargainedPrice,
       discountAmount,
+      pan,
+      specialRequests,
+      amounts,
+      payment,
+      cancellationPolicyFull,
     } = req.body;
 
     if (!tempBookingRef || !paymentDetails) {
       return res.status(400).json({
         success: false,
         error: "Booking reference and payment details are required",
+      });
+    }
+
+    // Validate PAN if provided (must match format: AAAAA9999A)
+    if (pan && !/^[A-Z]{5}[0-9]{4}[A-Z]$/.test(pan)) {
+      return res.status(400).json({
+        success: false,
+        error: "Invalid PAN format. Must be: 5 letters + 4 digits + 1 letter (e.g., ABCDE1234F)",
       });
     }
 
@@ -125,6 +138,13 @@ router.post("/hotels/confirm", async (req, res) => {
     const confirmationResult = await hotelBookingService.confirmBooking(
       tempBookingRef,
       paymentDetails,
+      {
+        pan,
+        special_requests: specialRequests,
+        amounts,
+        payment,
+        cancellation_policy_full: cancellationPolicyFull,
+      }
     );
 
     let rewardsData = null;
