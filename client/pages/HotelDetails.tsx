@@ -2887,7 +2887,7 @@ function HotelDetailsContent() {
                                         {room.details}
                                       </div>
 
-                                      {/* Breakfast & Smoking Info */}
+                                      {/* Breakfast, Smoking & Payment Type Info */}
                                       <div className="flex flex-wrap gap-2 mb-3">
                                         {room.breakfastIncluded === true ? (
                                           <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1 font-medium">
@@ -2906,6 +2906,15 @@ function HotelDetailsContent() {
                                         ) : (
                                           <Badge className="bg-blue-100 text-blue-800 text-xs px-2 py-1 font-medium">
                                             🚫 Non-Smoking
+                                          </Badge>
+                                        )}
+                                        {room.paymentType === "pay_at_hotel" ? (
+                                          <Badge className="bg-purple-100 text-purple-800 text-xs px-2 py-1 font-medium">
+                                            💳 Pay at Hotel
+                                          </Badge>
+                                        ) : (
+                                          <Badge className="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 font-medium">
+                                            💰 Pay Now
                                           </Badge>
                                         )}
                                       </div>
