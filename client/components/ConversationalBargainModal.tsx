@@ -1392,10 +1392,10 @@ export function ConversationalBargainModal({
 
         {/* Chat Area - Scrollable */}
         <div
-          className="flex-1 overflow-y-auto p-3 sm:p-4 mobile-chat-scroll bg-gray-50 w-full"
+          className="flex-1 overflow-y-auto p-2 sm:p-3 mobile-chat-scroll bg-gray-50 w-full"
           style={{
-            minHeight: isMobileDevice() ? "200px" : "50vh",
-            maxHeight: "100%",
+            minHeight: isMobileDevice() ? "150px" : "40vh",
+            maxHeight: isMobileDevice() ? "50vh" : "60vh",
             overflowY: "auto",
             overflowX: "hidden",
             overscrollBehavior: "contain",
