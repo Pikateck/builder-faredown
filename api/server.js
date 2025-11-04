@@ -86,6 +86,7 @@ const locationsRoutes = require("./routes/locations.js");
 const adminTboRoutes = require("./routes/admin-tbo.js");
 const rewardsRoutes = require("./routes/rewards.js");
 const v1BookingsRoutes = require("./routes/v1-bookings.js");
+const adminBargainRoutes = require("./routes/admin-bargain.js");
 
 // Middleware
 const { authenticateToken, requireAdmin } = require("./middleware/auth.js");
@@ -456,8 +457,9 @@ app.use("/api/tbo-hotels/static", require("./routes/tbo-hotels-static"));
 app.use("/api/tbo", require("./routes/tbo-diagnostics")); // TBO diagnostics endpoint
 app.use("/api/hotels", require("./routes/hotels-metadata")); // Hybrid metadata + async pricing (TBO first)
 app.use("/api/locations", locationsRoutes); // TBO locations autocomplete
-app.use("/api/bargain", bargainRoutes);
+app.use("/api/bargain", bargainRoutes); // New module-specific bargain engine
 app.use("/api/bargain/v1", bargainV1Routes);
+app.use("/api/admin/bargain", authenticateToken, requireAdmin, adminBargainRoutes); // Admin bargain settings
 app.use("/api/ai-bargains", aiBargainRoutes);
 app.use("/api/currency", currencyRoutes);
 app.use("/api/countries", countriesRoutes);
