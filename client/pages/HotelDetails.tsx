@@ -1122,12 +1122,64 @@ function HotelDetailsContent() {
           (extra) => !existingNames.has(extra.name),
         );
 
-        return [...mapped, ...extras]
-          .slice(0, 3)
-          .sort((a, b) => a.pricePerNight - b.pricePerNight);
+        // Best Price First sorting with tie-breakers
+        const sortRoomsByPrice = (rooms: any[]) => {
+          return rooms.sort((a, b) => {
+            // 1. Primary sort: price (ascending)
+            const priceDiff = a.pricePerNight - b.pricePerNight;
+            if (Math.abs(priceDiff) > 0.01) return priceDiff;
+
+            // 2. Tie-breaker 1: refundable > partial > non-refundable
+            const refundScore = (room: any) => {
+              if (room.isRefundable && !room.nonRefundable) return 3; // Fully refundable
+              if (room.isRefundable || !room.nonRefundable) return 2; // Partial
+              return 1; // Non-refundable
+            };
+            const refundDiff = refundScore(b) - refundScore(a);
+            if (refundDiff !== 0) return refundDiff;
+
+            // 3. Tie-breaker 2: breakfast included > not included
+            const breakfastDiff = (b.breakfastIncluded ? 1 : 0) - (a.breakfastIncluded ? 1 : 0);
+            if (breakfastDiff !== 0) return breakfastDiff;
+
+            // 4. Tie-breaker 3: pay-at-hotel > prepaid
+            const paymentDiff = (b.paymentType === "pay_at_hotel" ? 1 : 0) - (a.paymentType === "pay_at_hotel" ? 1 : 0);
+            if (paymentDiff !== 0) return paymentDiff;
+
+            // 5. Final tie-breaker: maintain original order
+            return 0;
+          });
+        };
+
+        return sortRoomsByPrice([...mapped, ...extras].slice(0, 3));
       }
 
-      return mapped.sort((a, b) => a.pricePerNight - b.pricePerNight);
+      // Best Price First sorting with tie-breakers
+      return mapped.sort((a, b) => {
+        // 1. Primary sort: price (ascending)
+        const priceDiff = a.pricePerNight - b.pricePerNight;
+        if (Math.abs(priceDiff) > 0.01) return priceDiff;
+
+        // 2. Tie-breaker 1: refundable > partial > non-refundable
+        const refundScore = (room: any) => {
+          if (room.isRefundable && !room.nonRefundable) return 3; // Fully refundable
+          if (room.isRefundable || !room.nonRefundable) return 2; // Partial
+          return 1; // Non-refundable
+        };
+        const refundDiff = refundScore(b) - refundScore(a);
+        if (refundDiff !== 0) return refundDiff;
+
+        // 3. Tie-breaker 2: breakfast included > not included
+        const breakfastDiff = (b.breakfastIncluded ? 1 : 0) - (a.breakfastIncluded ? 1 : 0);
+        if (breakfastDiff !== 0) return breakfastDiff;
+
+        // 4. Tie-breaker 3: pay-at-hotel > prepaid
+        const paymentDiff = (b.paymentType === "pay_at_hotel" ? 1 : 0) - (a.paymentType === "pay_at_hotel" ? 1 : 0);
+        if (paymentDiff !== 0) return paymentDiff;
+
+        // 5. Final tie-breaker: maintain original order
+        return 0;
+      });
     }
 
     // Fallback mock room types - use consistent pricing from Results page
