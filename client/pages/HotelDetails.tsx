@@ -512,7 +512,7 @@ function HotelDetailsContent() {
                 );
               }
               const data = await response.json();
-              console.log("�� TBO Hotel data received:", data);
+              console.log("✅ TBO Hotel data received:", data);
               if (data.success && data.data) {
                 return data.data; // Return TBO UnifiedHotel format
               }
@@ -2313,17 +2313,33 @@ function HotelDetailsContent() {
                             <div className="flex flex-wrap gap-2 mb-4">
                               {Array.isArray(room.features)
                                 ? room.features
-                                    .slice(0, 3)
-                                    .map((feature: any, idx: number) => (
-                                      <span
-                                        key={idx}
-                                        className="text-xs bg-gray-100 text-gray-700 px-2 py-1 rounded"
-                                      >
-                                        {typeof feature === "string"
+                                    .slice(0, 4)
+                                    .map((feature: any, idx: number) => {
+                                      const featureText =
+                                        typeof feature === "string"
                                           ? feature
-                                          : feature?.name || "Feature"}
-                                      </span>
-                                    ))
+                                          : feature?.name || "Feature";
+
+                                      // Map feature names to appropriate icons
+                                      const getFeatureIcon = (text: string) => {
+                                        const lower = text.toLowerCase();
+                                        if (lower.includes("wifi") || lower.includes("wi-fi")) return Wifi;
+                                        if (lower.includes("air") || lower.includes("ac")) return Fan;
+                                        if (lower.includes("bath") || lower.includes("shower")) return ShowerHead;
+                                        if (lower.includes("breakfast")) return Utensils;
+                                        return Wifi; // Default icon
+                                      };
+
+                                      return (
+                                        <InfoChip
+                                          key={idx}
+                                          icon={getFeatureIcon(featureText)}
+                                          ariaLabel={featureText}
+                                        >
+                                          {featureText}
+                                        </InfoChip>
+                                      );
+                                    })
                                 : null}
                             </div>
 
