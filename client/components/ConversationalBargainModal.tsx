@@ -278,23 +278,14 @@ export function ConversationalBargainModal({
       setTimerExpired(true);
       setTimerActive(false);
 
-      // Track abandoned bargain if no price was selected in Round 2
+      // Track timer expiry with no selection in Round 2
       if (round === 2 && !selectedPrice) {
         chatAnalyticsService
-          .trackEvent("bargain_abandoned", {
-            round,
-            reason: "timer_expired",
-            safe_deal_price: safeDealPrice,
-            final_offer_price: finalOffer,
-            original_price: basePrice,
+          .trackEvent("bargain_timer_expired_no_selection", {
+            offer1: safeDealPrice,
+            offer2: finalOffer,
             module,
-            productId: hotel?.id || productRef,
-            city: hotel?.city,
-            device: isMobileDevice() ? "mobile" : "desktop",
-            browser:
-              typeof window !== "undefined"
-                ? (window as any).navigator?.userAgent
-                : "",
+            hotelId: hotel?.id || productRef,
           })
           .catch(console.warn);
       }
