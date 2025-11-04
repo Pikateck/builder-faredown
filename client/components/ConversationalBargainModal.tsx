@@ -701,6 +701,27 @@ export function ConversationalBargainModal({
               setTimerActive(true);
               setTimerSeconds(30); // 30 seconds for both Round 1 and Round 2
 
+              // Track offer shown analytics
+              if (round === 1) {
+                chatAnalyticsService
+                  .trackEvent("bargain_round1_offer_shown", {
+                    offer1: counterOffer,
+                    basePrice,
+                    hotelId: hotel?.id || entityId,
+                  })
+                  .catch(console.warn);
+              } else if (round === 2) {
+                chatAnalyticsService
+                  .trackEvent("bargain_round2_offer_shown", {
+                    offer1: safeDealPrice,
+                    offer2: counterOffer,
+                    basePrice,
+                    hotelId: hotel?.id || entityId,
+                    timerSeconds: 30,
+                  })
+                  .catch(console.warn);
+              }
+
               if (isMobileDevice()) {
                 hapticFeedback("medium");
               }
