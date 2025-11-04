@@ -3223,9 +3223,15 @@ function HotelDetailsContent() {
                                       )}
                                       {room.nonRefundable &&
                                         !room.cancellationPolicy && (
-                                          <Badge className="bg-red-100 text-red-800 text-xs mb-3 px-2 py-1">
-                                            Non Refundable Rate
-                                          </Badge>
+                                          <div className="mb-3">
+                                            <InfoChip
+                                              icon={CircleX}
+                                              tone="danger"
+                                              ariaLabel="Non-refundable booking rate"
+                                            >
+                                              Non-refundable rate
+                                            </InfoChip>
+                                          </div>
                                         )}
                                       {bargainingRoomId === room.id && (
                                         <Badge className="bg-blue-100 text-blue-800 text-xs mb-3 px-2 py-1 animate-pulse">
