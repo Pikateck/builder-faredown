@@ -613,6 +613,97 @@ export default function HotelBookingConfirmation() {
                       </div>
                     </div>
                   )}
+
+                  {/* Special Requests */}
+                  {(specialRequests || guestDetails?.specialRequests) && (
+                    <div className="pt-3 border-t border-gray-200">
+                      <h5 className="font-semibold text-sm mb-2">
+                        Special Requests
+                      </h5>
+                      <div className="bg-gray-50 p-3 rounded-lg">
+                        <p className="text-sm text-gray-700 whitespace-pre-wrap">
+                          {specialRequests || guestDetails?.specialRequests || "None"}
+                        </p>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+
+            {/* Payment Method Card */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle className="flex items-center">
+                  <CreditCard className="w-5 h-5 mr-2" />
+                  Payment Method
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                {payment ? (
+                  payment.method === "card" ? (
+                    <div className="space-y-2">
+                      <div className="flex items-center gap-2 text-sm bg-gray-50 p-3 rounded-lg">
+                        <span className="font-semibold">{payment.brand}</span>
+                        <span className="text-gray-600">••••</span>
+                        <span className="text-gray-900 font-medium">{payment.last4}</span>
+                      </div>
+                      <div className="text-xs text-gray-600 space-y-1 px-3">
+                        <div>Expiry: {payment.exp_month}/{payment.exp_year?.slice(-2)}</div>
+                        {payment.auth_code && <div>Authorization: {payment.auth_code}</div>}
+                        <div className="text-green-600 font-medium">Status: {payment.status}</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="bg-gray-50 p-3 rounded-lg">
+                      <div className="font-semibold text-sm mb-1">Pay at Hotel</div>
+                      <p className="text-xs text-gray-600">Payment will be collected at the hotel upon check-in.</p>
+                    </div>
+                  )
+                ) : (
+                  <p className="text-sm text-gray-600 bg-gray-50 p-3 rounded-lg">
+                    {paymentMethod === "card" ? "Credit/Debit Card" : "Pay at Hotel"}
+                  </p>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* Cancellation Policy Card */}
+            <Card className="mb-6">
+              <CardHeader>
+                <CardTitle>Cancellation Policy</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="prose prose-sm max-w-none text-gray-700">
+                  {cancellationPolicyFull ? (
+                    <p className="text-sm whitespace-pre-wrap bg-gray-50 p-3 rounded-lg">
+                      {cancellationPolicyFull}
+                    </p>
+                  ) : (
+                    <div className="space-y-3 bg-gray-50 p-3 rounded-lg text-sm">
+                      <div>
+                        <strong className="block text-gray-900 mb-1">Free Cancellation Until:</strong>
+                        <span className="text-gray-700">
+                          {checkIn && new Date(new Date(checkIn).getTime() - 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
+                            weekday: 'long',
+                            year: 'numeric',
+                            month: 'long',
+                            day: 'numeric',
+                            hour: '2-digit',
+                            minute: '2-digit',
+                            timeZoneName: 'short'
+                          })}
+                        </span>
+                      </div>
+                      <div>
+                        <strong className="block text-gray-900 mb-1">After Free Cancellation Deadline:</strong>
+                        <ul className="list-disc list-inside text-gray-700 space-y-1 ml-2">
+                          <li>Cancellation within 24 hours of check-in: 100% charge (1 night's rate)</li>
+                          <li>No-show: 100% charge for entire booking</li>
+                        </ul>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </CardContent>
             </Card>
