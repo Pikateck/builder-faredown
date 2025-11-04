@@ -3098,33 +3098,69 @@ function HotelDetailsContent() {
                                       {/* Breakfast, Smoking & Payment Type Info */}
                                       <div className="flex flex-wrap gap-2 mb-3">
                                         {room.breakfastIncluded === true ? (
-                                          <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1 font-medium">
-                                            ✓ Breakfast Included
-                                          </Badge>
+                                          <InfoChip
+                                            icon={Utensils}
+                                            tone="success"
+                                            ariaLabel="Breakfast included with this room"
+                                          >
+                                            Breakfast included
+                                          </InfoChip>
                                         ) : (
-                                          <Badge className="bg-orange-100 text-orange-800 text-xs px-2 py-1 font-medium">
-                                            Breakfast Not Included
-                                          </Badge>
+                                          <InfoChip
+                                            icon={Utensils}
+                                            ariaLabel="Breakfast not included"
+                                          >
+                                            No breakfast
+                                          </InfoChip>
                                         )}
                                         {room.smokingAllowed === true ||
                                         room.smokingPreference === "smoking" ? (
-                                          <Badge className="bg-blue-100 text-blue-800 text-xs px-2 py-1 font-medium">
-                                            🚬 Smoking Allowed
-                                          </Badge>
+                                          <InfoChip
+                                            icon={Cigarette}
+                                            ariaLabel="Smoking allowed in this room"
+                                          >
+                                            Smoking allowed
+                                          </InfoChip>
                                         ) : (
-                                          <Badge className="bg-blue-100 text-blue-800 text-xs px-2 py-1 font-medium">
-                                            🚫 Non-Smoking
-                                          </Badge>
+                                          <InfoChip
+                                            icon={CigaretteOff}
+                                            ariaLabel="Non-smoking room"
+                                          >
+                                            Non-smoking
+                                          </InfoChip>
                                         )}
                                         {room.paymentType === "pay_at_hotel" ? (
-                                          <Badge className="bg-purple-100 text-purple-800 text-xs px-2 py-1 font-medium">
-                                            💳 Pay at Hotel
-                                          </Badge>
+                                          <InfoChip
+                                            icon={Banknote}
+                                            ariaLabel="Pay at hotel upon arrival"
+                                          >
+                                            Pay at hotel
+                                          </InfoChip>
                                         ) : (
-                                          <Badge className="bg-indigo-100 text-indigo-800 text-xs px-2 py-1 font-medium">
-                                            💰 Pay Now
-                                          </Badge>
+                                          <InfoChip
+                                            icon={CreditCard}
+                                            ariaLabel="Pay now online"
+                                          >
+                                            Pay now
+                                          </InfoChip>
                                         )}
+                                        {room.isRefundable && !room.nonRefundable ? (
+                                          <InfoChip
+                                            icon={ShieldCheck}
+                                            tone="success"
+                                            ariaLabel="Refundable booking"
+                                          >
+                                            Refundable
+                                          </InfoChip>
+                                        ) : room.nonRefundable ? (
+                                          <InfoChip
+                                            icon={CircleX}
+                                            tone="danger"
+                                            ariaLabel="Non-refundable booking"
+                                          >
+                                            Non-refundable
+                                          </InfoChip>
+                                        ) : null}
                                       </div>
 
                                       {/* Room Details: Bed Type, Size, View */}
