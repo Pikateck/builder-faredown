@@ -121,6 +121,8 @@ export default function HotelBooking() {
   const [showMobileMenu, setShowMobileMenu] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userName, setUserName] = useState("");
+  const [showPolicyDetails, setShowPolicyDetails] = useState(false);
+  const [showTaxBreakdown, setShowTaxBreakdown] = useState(false);
 
   // Guest Details State
   const [guestDetails, setGuestDetails] = useState({
@@ -141,6 +143,25 @@ export default function HotelBooking() {
     cvv: "123",
     name: "Test User",
   });
+
+  // Detect card brand from BIN (first 6 digits)
+  const detectCardBrand = (cardNumber: string) => {
+    const cleaned = cardNumber.replace(/\s/g, "");
+    if (/^4/.test(cleaned)) return "Visa";
+    if (/^5[1-5]/.test(cleaned)) return "Mastercard";
+    if (/^3[47]/.test(cleaned)) return "American Express";
+    if (/^6(?:011|5)/.test(cleaned)) return "Discover";
+    if (/^35/.test(cleaned)) return "JCB";
+    return "Card";
+  };
+
+  // Generate mock auth code
+  const generateAuthCode = () => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+    return Array.from({ length: 6 }, () =>
+      chars[Math.floor(Math.random() * chars.length)]
+    ).join("");
+  };
 
   // Extras State
   const [selectedExtras, setSelectedExtras] = useState<string[]>([]);
@@ -219,12 +240,39 @@ export default function HotelBooking() {
     }, 0);
   };
 
+  // Calculate detailed tax breakdown
+  const calculateTaxBreakdown = () => {
+    const roomSubtotal = negotiatedPrice * nights;
+    const extrasTotal = calculateExtrasTotal();
+    const subtotalBeforeTax = roomSubtotal + extrasTotal;
+
+    // Detailed tax breakdown (18% total)
+    const gstVat = Math.round(subtotalBeforeTax * 0.12); // 12% GST/VAT
+    const municipalTax = Math.round(subtotalBeforeTax * 0.04); // 4% Municipal
+    const serviceFee = Math.round(subtotalBeforeTax * 0.02); // 2% Service Fee
+    const totalTaxes = gstVat + municipalTax + serviceFee;
+
+    const bargainDiscount = location.state?.originalPrice && location.state?.bargainedPrice
+      ? (location.state.originalPrice - location.state.bargainedPrice) * nights
+      : 0;
+
+    const grandTotal = subtotalBeforeTax + totalTaxes;
+
+    return {
+      roomSubtotal,
+      extrasTotal,
+      gstVat,
+      municipalTax,
+      serviceFee,
+      totalTaxes,
+      bargainDiscount,
+      grandTotal,
+    };
+  };
+
   // Calculate total price
   const calculateTotal = () => {
-    const basePrice = negotiatedPrice * nights;
-    const extrasTotal = calculateExtrasTotal();
-    const taxes = Math.round((basePrice + extrasTotal) * 0.18); // 18% taxes
-    return basePrice + extrasTotal + taxes;
+    return calculateTaxBreakdown().grandTotal;
   };
 
   // Handle extra selection
