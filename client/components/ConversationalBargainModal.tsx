@@ -1789,10 +1789,9 @@ export function ConversationalBargainModal({
               {timerExpired && !isComplete && !selectedPrice && round === 2 && (
                 <>
                   {/* Info line */}
-                  <div className="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
+                  <div className="mb-2 p-2 bg-gray-50 rounded border border-gray-200">
                     <p className="text-sm text-gray-700 flex items-center gap-2">
-                      <Clock className="w-4 h-4" />⌛ Time's up. This price is
-                      no longer available.
+                      <Clock className="w-4 h-4" />⌛ Time's up
                     </p>
                   </div>
 
