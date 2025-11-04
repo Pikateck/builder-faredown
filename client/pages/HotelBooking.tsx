@@ -360,6 +360,48 @@ export default function HotelBooking() {
         );
       }
 
+      // Calculate detailed amounts breakdown
+      const taxBreakdown = calculateTaxBreakdown();
+      const amounts = {
+        room_subtotal: taxBreakdown.roomSubtotal,
+        taxes_and_fees: {
+          gst_vat: taxBreakdown.gstVat,
+          municipal_tax: taxBreakdown.municipalTax,
+          service_fee: taxBreakdown.serviceFee,
+        },
+        bargain_discount: taxBreakdown.bargainDiscount,
+        promo_discount: 0, // TODO: Add promo code support
+        payment_surcharge: 0, // TODO: Add payment gateway surcharge if applicable
+        grand_total: taxBreakdown.grandTotal,
+      };
+
+      // Prepare payment details with card brand and auth code
+      const cardBrand = paymentMethod === "card" ? detectCardBrand(cardDetails.number) : null;
+      const last4 = paymentMethod === "card" ? cardDetails.number.replace(/\s/g, "").slice(-4) : null;
+      const [expMonth, expYear] = paymentMethod === "card" ? cardDetails.expiry.split("/") : [null, null];
+      const authCode = paymentMethod === "card" ? generateAuthCode() : null;
+
+      const payment = {
+        method: paymentMethod,
+        brand: cardBrand,
+        last4: last4,
+        exp_month: expMonth,
+        exp_year: expYear ? `20${expYear}` : null,
+        auth_code: authCode,
+        status: "Confirmed",
+      };
+
+      // Full cancellation policy text
+      const cancellationPolicyFull = `Free cancellation until ${new Date(new Date(checkIn).getTime() - 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        timeZoneName: 'short'
+      })}. After this deadline: Cancellation within 24 hours of check-in incurs 100% charge (1 night's rate). No-show: 100% charge for entire booking. Policy ID: ${selectedHotel?.cancellationPolicyId || 'POL_' + selectedHotel?.id || 'STANDARD_001'}`;
+
       // For now, we'll pass the bargain data to confirmation page
       // In a real scenario, you'd submit this to the backend booking endpoint
       // which would then call the rewards API
@@ -384,6 +426,9 @@ export default function HotelBooking() {
           paymentMethod,
           paymentStatus: "completed",
           priceSnapshot, // ✅ Pass price snapshot to confirmation page
+          amounts, // ✅ Detailed amounts breakdown
+          payment, // ✅ Payment details with masked card info
+          cancellationPolicyFull, // ✅ Full cancellation policy text
         },
       });
     } catch (error) {
