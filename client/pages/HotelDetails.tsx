@@ -2012,23 +2012,23 @@ function HotelDetailsContent() {
 
                             {/* Breakfast & Smoking Info */}
                             <div className="flex flex-wrap gap-2 mb-3">
-                              {room.breakfastIncluded && (
+                              {room.breakfastIncluded === true ? (
                                 <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
                                   ✓ Breakfast Included
                                 </span>
-                              )}
-                              {room.breakfastIncluded === false && (
+                              ) : (
                                 <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded font-medium">
                                   Breakfast Not Included
                                 </span>
                               )}
-                              {(room.smokingPreference ||
-                                room.smokingAllowed !== undefined) && (
+                              {room.smokingAllowed === true ||
+                              room.smokingPreference === "smoking" ? (
                                 <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
-                                  {room.smokingAllowed === false ||
-                                  room.smokingPreference === "non-smoking"
-                                    ? "🚫 Non-Smoking"
-                                    : "🚬 Smoking Allowed"}
+                                  🚬 Smoking Allowed
+                                </span>
+                              ) : (
+                                <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
+                                  🚫 Non-Smoking
                                 </span>
                               )}
                             </div>
@@ -2849,25 +2849,23 @@ function HotelDetailsContent() {
 
                                       {/* Breakfast & Smoking Info */}
                                       <div className="flex flex-wrap gap-2 mb-3">
-                                        {room.breakfastIncluded && (
+                                        {room.breakfastIncluded === true ? (
                                           <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1 font-medium">
                                             ✓ Breakfast Included
                                           </Badge>
-                                        )}
-                                        {room.breakfastIncluded === false && (
+                                        ) : (
                                           <Badge className="bg-orange-100 text-orange-800 text-xs px-2 py-1 font-medium">
                                             Breakfast Not Included
                                           </Badge>
                                         )}
-                                        {(room.smokingPreference ||
-                                          room.smokingAllowed !==
-                                            undefined) && (
+                                        {room.smokingAllowed === true ||
+                                        room.smokingPreference === "smoking" ? (
                                           <Badge className="bg-blue-100 text-blue-800 text-xs px-2 py-1 font-medium">
-                                            {room.smokingAllowed === false ||
-                                            room.smokingPreference ===
-                                              "non-smoking"
-                                              ? "🚫 Non-Smoking"
-                                              : "🚬 Smoking Allowed"}
+                                            🚬 Smoking Allowed
+                                          </Badge>
+                                        ) : (
+                                          <Badge className="bg-blue-100 text-blue-800 text-xs px-2 py-1 font-medium">
+                                            🚫 Non-Smoking
                                           </Badge>
                                         )}
                                       </div>
