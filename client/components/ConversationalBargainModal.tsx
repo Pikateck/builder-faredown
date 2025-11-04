@@ -1681,72 +1681,71 @@ export function ConversationalBargainModal({
                 </>
               )}
 
-              {/* ✅ ROUND 1: Lock R1 price and try for better in Round 2 */}
+              {/* ✅ ROUND 1: Two buttons - Book offer1 (yellow) and Try Final Bargain (blue) */}
               {!isComplete && round === 1 && showOfferActions && (
-                <Button
-                  onClick={() => handleAcceptOffer()}
-                  disabled={isBooking}
-                  className="w-full disabled:opacity-50 disabled:cursor-not-allowed text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl transition-all"
-                  style={{
-                    backgroundColor: '#febb02',
-                  }}
-                  onMouseEnter={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#e6a602')}
-                  onMouseLeave={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#febb02')}
-                  aria-label="Lock this price and try for better"
-                >
-                  {isBooking
-                    ? "Processing..."
-                    : `Lock ${formatPrice(finalOffer)} & Try Final Bargain`}
-                </Button>
-              )}
-
-              {/* Try Final Bargain - only show in Round 1 */}
-              {!isComplete &&
-                round === 1 &&
-                !isNegotiating &&
-                showOfferActions && (
+                <>
+                  {/* Top CTA: Book offer1 (yellow button) */}
                   <Button
-                    onClick={handleTryAgain}
-                    className="w-full bg-[#0071c2] text-white hover:bg-[#005a9c] font-medium py-3 h-11 mobile-touch-target rounded-xl"
+                    onClick={() => {
+                      // Save safeDealPrice when booking Round 1 offer
+                      setSafeDealPrice(finalOffer);
+                      handleAcceptOffer();
+                    }}
+                    disabled={isBooking}
+                    className="w-full disabled:opacity-50 disabled:cursor-not-allowed font-semibold py-3 h-11 mobile-touch-target rounded-xl transition-all"
+                    style={{
+                      backgroundColor: '#febb02',
+                      color: '#111',
+                    }}
+                    onMouseEnter={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#e6a602')}
+                    onMouseLeave={(e) => !isBooking && (e.currentTarget.style.backgroundColor = '#febb02')}
+                    aria-label="Book at Round 1 offer price"
+                  >
+                    {isBooking ? "Processing..." : `Book ${formatPrice(finalOffer)}`}
+                  </Button>
+
+                  {/* Secondary CTA: Try Final Bargain (blue button) */}
+                  <Button
+                    onClick={() => {
+                      // Save safeDealPrice before trying Round 2
+                      setSafeDealPrice(finalOffer);
+                      handleTryAgain();
+                    }}
+                    disabled={isNegotiating}
+                    className="w-full bg-[#0071c2] text-white hover:bg-[#005a9c] font-semibold py-3 h-11 mobile-touch-target rounded-xl transition-all mt-2"
                     aria-label="Try another negotiation round"
                   >
                     Try Final Bargain
                   </Button>
-                )}
+                </>
+              )}
 
-              {/* Book at original - ONLY visible after timer expires AND no selection was made in Round 2 */}
+              {/* Timer expired (no selection) - View room options */}
               {timerExpired && !isComplete && !selectedPrice && round === 2 && (
                 <>
-                  {/* Message: Timer expired */}
+                  {/* Info line */}
                   <div className="mb-3 p-3 bg-gray-50 rounded-lg border border-gray-200">
                     <p className="text-sm text-gray-700 flex items-center gap-2">
                       <Clock className="w-4 h-4" />
-                      Time's up. This price is no longer available.
+                      ⌛ Time's up. This price is no longer available.
                     </p>
                   </div>
 
-                  {/* Single clean CTA */}
+                  {/* View room options CTA (blue) */}
                   <Button
                     onClick={() => {
-                      setIsBooking(true);
-
-                      // Log accepted value for original price fallback
-                      const suggestionsAtFallback = getSuggestions();
+                      // Track analytics
                       chatAnalyticsService
-                        .trackEvent("accepted" as any, {
-                          round_index: round - 1,
-                          accepted_price: basePrice,
-                          original_price: basePrice,
-                          savings: 0,
-                          was_suggested:
-                            suggestionsAtFallback.includes(basePrice),
-                          was_fallback_original: true,
+                        .trackEvent("bargain_view_room_options_clicked", {
+                          hotelId: hotel?.id || productRef,
                           module,
-                          product_ref: productRef,
+                          offer1: safeDealPrice,
+                          offer2: finalOffer,
                         })
                         .catch(console.warn);
 
-                      onAccept(basePrice, `BRG_${Date.now()}`);
+                      // Close modal and return to room list
+                      onClose();
                     }}
                     className="w-full text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl transition-all"
                     style={{
@@ -1754,9 +1753,9 @@ export function ConversationalBargainModal({
                     }}
                     onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = '#005a9c')}
                     onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = '#0071c2')}
-                    aria-label="Book at standard price"
+                    aria-label="View room options"
                   >
-                    Book at Standard Price: {formatPrice(basePrice)}
+                    View room options
                   </Button>
                 </>
               )}
