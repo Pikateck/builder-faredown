@@ -829,7 +829,7 @@ export function ConversationalBargainModal({
       // Generate order reference with timestamp for tracking
       const orderRef = `BRG_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
 
-      // ✅ CRITICAL: Determine the price to hold based on Round and selection
+      // ��� CRITICAL: Determine the price to hold based on Round and selection
       const priceToHold =
         round === 2 && selectedPrice
           ? selectedPrice === "safe"
@@ -1315,7 +1315,7 @@ export function ConversationalBargainModal({
           borderRadius: isMobileDevice() ? "0" : "1rem",
           display: "flex",
           flexDirection: "column",
-          overflow: isMobileDevice() ? "visible" : "hidden",
+          overflow: "hidden",
           ...(isMobileDevice()
             ? {
                 position: "fixed",
