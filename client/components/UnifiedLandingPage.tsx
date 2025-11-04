@@ -548,7 +548,7 @@ export function UnifiedLandingPage({
                                 AI Status
                               </div>
                               <div className="text-xs text-blue-600">
-                                Negotiating... 2/3 attempts
+                                Negotiating... 2/2 attempts
                               </div>
                             </div>
                           </div>
