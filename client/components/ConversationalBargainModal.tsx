@@ -1474,22 +1474,23 @@ export function ConversationalBargainModal({
           (round === 2 && safeDealPrice) ||
           (round === 2 && finalOffer && showOfferActions)) && (
           <div
-            className="bg-gradient-to-r from-blue-50 to-slate-50 border-t border-blue-200 p-4 w-full flex-shrink-0"
+            className="bg-gradient-to-r from-blue-50 to-slate-50 border-t border-blue-200 p-3 w-full flex-shrink-0"
             style={{
               paddingBottom: isMobileDevice()
-                ? "calc(1.5rem + env(safe-area-inset-bottom))"
-                : "1rem",
+                ? "calc(1rem + env(safe-area-inset-bottom))"
+                : "0.75rem",
               minHeight: "auto",
-              position: isMobileDevice() ? "sticky" : "relative",
-              bottom: isMobileDevice() ? "0" : "auto",
-              zIndex: isMobileDevice() ? 10 : "auto",
+              position: "sticky",
+              bottom: "0",
+              zIndex: 50,
+              backgroundColor: "white",
             }}
             aria-live="polite"
             aria-label="Negotiated offer details"
           >
             {/* Only show negotiated price display when finalOffer exists AND timer hasn't expired without selection */}
             {finalOffer && !(timerExpired && round === 2 && !selectedPrice) && (
-              <div className="flex justify-between items-start mb-3">
+              <div className="flex justify-between items-start mb-2">
                 <div>
                   <div className="text-sm text-[#003580] mb-1 font-semibold">
                     {round === 2 ? "Final Bargain Offer:" : "Negotiated Price:"}
@@ -1523,17 +1524,14 @@ export function ConversationalBargainModal({
 
             {/* Round 2 waiting state - show safe deal info while waiting for final bid */}
             {round === 2 && safeDealPrice && !finalOffer && (
-              <div className="p-4 bg-blue-50 rounded-lg border border-blue-200">
-                <p className="text-sm font-semibold text-blue-800 mb-2">
+              <div className="mb-2">
+                <p className="text-sm font-semibold" style={{ color: "#003580" }}>
                   ✅ Price locked: {formatPrice(safeDealPrice)}
-                </p>
-                <p className="text-xs text-blue-700">
-                  Enter your final price above to try for a better deal!
                 </p>
               </div>
             )}
 
-            <div className="flex flex-col gap-2 w-full">
+            <div className="flex flex-col gap-1.5 w-full">
               {/* DEBUG: Log Round 2 state values */}
               {round === 2 &&
                 console.log("🔍 ROUND 2 STATE:", {
@@ -1558,15 +1556,9 @@ export function ConversationalBargainModal({
                 !timerExpired && (
                   <>
                     {timerActive && (
-                      <div className="mb-3 p-3 bg-blue-50 rounded-lg border border-[#0071c2]">
-                        <p
-                          className="text-sm font-semibold mb-1"
-                          style={{ color: "#003580" }}
-                        >
-                          Pick your price
-                        </p>
-                        <p className="text-xs" style={{ color: "#0071c2" }}>
-                          Choose the price you want to book.
+                      <div className="mb-2">
+                        <p className="text-sm font-medium" style={{ color: "#003580" }}>
+                          ⏱ Pick your price
                         </p>
                       </div>
                     )}
