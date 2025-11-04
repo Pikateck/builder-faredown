@@ -1316,7 +1316,7 @@ export function ConversationalBargainModal({
           borderRadius: isMobileDevice() ? "0" : "1rem",
           display: "flex",
           flexDirection: "column",
-          overflow: "hidden",
+          overflow: isMobileDevice() ? "visible" : "hidden",
           ...(isMobileDevice()
             ? {
                 position: "fixed",
@@ -1397,8 +1397,8 @@ export function ConversationalBargainModal({
         <div
           className="flex-1 overflow-y-auto p-3 sm:p-4 mobile-chat-scroll bg-gray-50 w-full"
           style={{
-            minHeight: isMobileDevice() ? "45vh" : "50vh",
-            maxHeight: isMobileDevice() ? "calc(100dvh - 280px)" : "100%",
+            minHeight: isMobileDevice() ? "30vh" : "50vh",
+            maxHeight: isMobileDevice() ? "calc(100dvh - 400px)" : "100%",
             overflowY: "auto",
             overflowX: "hidden",
             overscrollBehavior: "contain",
@@ -1480,8 +1480,12 @@ export function ConversationalBargainModal({
             className="bg-gradient-to-r from-blue-50 to-slate-50 border-t border-blue-200 p-4 w-full flex-shrink-0"
             style={{
               paddingBottom: isMobileDevice()
-                ? "calc(1rem + env(safe-area-inset-bottom))"
+                ? "calc(1.5rem + env(safe-area-inset-bottom))"
                 : "1rem",
+              minHeight: "auto",
+              position: isMobileDevice() ? "sticky" : "relative",
+              bottom: isMobileDevice() ? "0" : "auto",
+              zIndex: isMobileDevice() ? 10 : "auto",
             }}
             aria-live="polite"
             aria-label="Negotiated offer details"
@@ -1779,10 +1783,14 @@ export function ConversationalBargainModal({
             className="border-t border-gray-200 p-4 bg-white flex-shrink-0 w-full"
             style={{
               paddingBottom: isMobileDevice()
-                ? "calc(1rem + env(safe-area-inset-bottom))"
+                ? "calc(1.5rem + env(safe-area-inset-bottom))"
                 : "1rem",
               minHeight: "auto",
               overflow: "visible",
+              position: isMobileDevice() ? "sticky" : "relative",
+              bottom: isMobileDevice() ? "0" : "auto",
+              zIndex: isMobileDevice() ? 10 : "auto",
+              backgroundColor: "white",
             }}
           >
             <div className="mb-3">
@@ -2063,10 +2071,14 @@ export function ConversationalBargainModal({
             className="border-t border-gray-200 p-4 text-center flex-shrink-0 w-full"
             style={{
               paddingBottom: isMobileDevice()
-                ? "calc(1rem + env(safe-area-inset-bottom))"
+                ? "calc(1.5rem + env(safe-area-inset-bottom))"
                 : "1rem",
               minHeight: "auto",
               overflow: "visible",
+              position: isMobileDevice() ? "sticky" : "relative",
+              bottom: isMobileDevice() ? "0" : "auto",
+              zIndex: isMobileDevice() ? 10 : "auto",
+              backgroundColor: "white",
             }}
             aria-live="polite"
             aria-label="Negotiation complete"
