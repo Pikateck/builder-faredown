@@ -1155,19 +1155,47 @@ export default function HotelBooking() {
                     <span>{formatCurrency(calculateExtrasTotal())}</span>
                   </div>
                 )}
-                <div className="flex justify-between text-sm">
-                  <span>Taxes & Fees</span>
-                  <span>
-                    {formatCurrency(
-                      Math.round(
-                        (negotiatedPrice * nights + calculateExtrasTotal()) *
-                          0.18,
-                      ),
-                    )}
-                  </span>
+
+                {/* Tax Breakdown - Expandable */}
+                <div className="border-t pt-2 mt-2">
+                  <button
+                    onClick={() => setShowTaxBreakdown(!showTaxBreakdown)}
+                    className="flex justify-between items-center w-full text-sm hover:text-blue-600 transition-colors"
+                  >
+                    <span>Taxes & Fees</span>
+                    <div className="flex items-center gap-2">
+                      <span>{formatCurrency(calculateTaxBreakdown().totalTaxes)}</span>
+                      <ChevronDown className={`w-4 h-4 transition-transform ${showTaxBreakdown ? 'rotate-180' : ''}`} />
+                    </div>
+                  </button>
+
+                  {showTaxBreakdown && (
+                    <div className="mt-2 pl-4 space-y-1 text-xs text-gray-600">
+                      <div className="flex justify-between">
+                        <span>GST/VAT (12%)</span>
+                        <span>{formatCurrency(calculateTaxBreakdown().gstVat)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Municipal Tax (4%)</span>
+                        <span>{formatCurrency(calculateTaxBreakdown().municipalTax)}</span>
+                      </div>
+                      <div className="flex justify-between">
+                        <span>Service Fee (2%)</span>
+                        <span>{formatCurrency(calculateTaxBreakdown().serviceFee)}</span>
+                      </div>
+                    </div>
+                  )}
                 </div>
+
+                {location.state?.bargainedPrice && location.state?.originalPrice && (
+                  <div className="flex justify-between text-sm text-green-700">
+                    <span>Bargain Discount Applied</span>
+                    <span>-{formatCurrency(calculateTaxBreakdown().bargainDiscount)}</span>
+                  </div>
+                )}
+
                 <div className="border-t pt-2 flex justify-between font-semibold">
-                  <span>Total</span>
+                  <span>Grand Total</span>
                   <span>{formatCurrency(calculateTotal())}</span>
                 </div>
               </div>
