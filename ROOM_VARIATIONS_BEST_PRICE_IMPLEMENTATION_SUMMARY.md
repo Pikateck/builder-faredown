@@ -17,11 +17,13 @@ All room objects now include the following attributes for proper variations:
 ### 2. UI Display Updates
 
 **Mobile Room Cards** (`client/pages/HotelDetails.tsx` lines ~2044-2077):
+
 - ✅ Breakfast badge (green "✓ Breakfast Included" or orange "Breakfast Not Included")
 - ✅ Smoking badge (blue "🚬 Smoking Allowed" or "🚫 Non-Smoking")
 - ✅ **NEW**: Payment type badge (purple "💳 Pay at Hotel" or indigo "💰 Pay Now")
 
 **Desktop Room Cards** (`client/pages/HotelDetails.tsx` lines ~2890-2933):
+
 - ✅ Breakfast badge (same as mobile)
 - ✅ Smoking badge (same as mobile)
 - ✅ **NEW**: Payment type badge (same as mobile)
@@ -30,6 +32,7 @@ All room objects now include the following attributes for proper variations:
 ### 3. Room Variations Implemented
 
 **Live Room Data** (from API):
+
 - Rooms now have diverse attributes based on index to simulate real variation:
   - Breakfast: Alternates between included (even indexes) and not included
   - Smoking: Varies (index % 3 === 1 gets smoking allowed)
@@ -37,6 +40,7 @@ All room objects now include the following attributes for proper variations:
   - Beds, room size, and view vary per room
 
 **Mock Room Data** (3 synthetic rooms added when < 3 rooms):
+
 1. **Standard Twin**: ₹base+100, Breakfast Included, Smoking, Pay Now, 2 Twin Beds, 22 sqm, City View
 2. **Premium Room**: ₹base+179, Breakfast Included, Non-Smoking, Pay at Hotel, 1 King Bed, 30 sqm, Ocean View
 3. **Deluxe Double**: ₹base+50, No Breakfast, Non-Smoking, Pay at Hotel, 1 Double Bed, 26 sqm, Garden View
@@ -55,6 +59,7 @@ All room objects now include the following attributes for proper variations:
 ```
 
 Applied to:
+
 - ✅ Live room data from API
 - ✅ Synthetic room additions when fewer than 3 rooms
 - ✅ Fallback mock rooms
@@ -63,12 +68,12 @@ Applied to:
 
 The fallback mock rooms (shown when no API data) now include:
 
-| Room Name | Price | Breakfast | Smoking | Refund | Payment | Beds | Size | View |
-|-----------|-------|-----------|---------|--------|---------|------|------|------|
-| Standard Double | ₹base | ✗ | Non-Smoking | Non-Refundable | Pay Now | 1 Double | 24 sqm | City |
-| Standard Twin | ₹base+100 | ✓ | Smoking | Refundable | Pay Now | 2 Twin | 22 sqm | City |
-| Premium Room | ₹base+179 | ✓ | Non-Smoking | Refundable | Pay at Hotel | 1 King | 30 sqm | Ocean |
-| Deluxe Double | ₹base+50 | ✗ | Non-Smoking | Non-Refundable | Pay at Hotel | 1 Double | 26 sqm | Garden |
+| Room Name       | Price     | Breakfast | Smoking     | Refund         | Payment      | Beds     | Size   | View   |
+| --------------- | --------- | --------- | ----------- | -------------- | ------------ | -------- | ------ | ------ |
+| Standard Double | ₹base     | ✗         | Non-Smoking | Non-Refundable | Pay Now      | 1 Double | 24 sqm | City   |
+| Standard Twin   | ₹base+100 | ✓         | Smoking     | Refundable     | Pay Now      | 2 Twin   | 22 sqm | City   |
+| Premium Room    | ₹base+179 | ✓         | Non-Smoking | Refundable     | Pay at Hotel | 1 King   | 30 sqm | Ocean  |
+| Deluxe Double   | ₹base+50  | ✗         | Non-Smoking | Non-Refundable | Pay at Hotel | 1 Double | 26 sqm | Garden |
 
 After sorting, the order will be: Standard Double → Deluxe Double → Standard Twin → Premium Room
 
@@ -79,6 +84,7 @@ After sorting, the order will be: Standard Double → Deluxe Double → Standard
 Due to Unicode character encoding issues, the fallback mock rooms section (lines 1205-1269) needs manual update to add the new attributes. Here's what needs to be added to each of the 4 fallback rooms:
 
 **For "standard-double" room (line 1206):**
+
 ```typescript
 breakfastIncluded: false,
 smokingAllowed: false,
@@ -90,9 +96,11 @@ view: "City View",
 ```
 
 **For "twin-skyline" room (line 1224):**
+
 - Change name to "Standard Twin"
 - Change pricePerNight to: `basePrice + 100`
 - Add:
+
 ```typescript
 breakfastIncluded: true,
 smokingAllowed: true,
@@ -104,9 +112,11 @@ view: "City View",
 ```
 
 **For "king-skyline" room (line 1239):**
+
 - Change name to "Premium Room"
 - Change pricePerNight to: `basePrice + 179`
 - Add:
+
 ```typescript
 breakfastIncluded: true,
 smokingAllowed: false,
@@ -118,9 +128,11 @@ view: "Ocean View",
 ```
 
 **For "deluxe-suite" room (line 1254):**
+
 - Change name to "Deluxe Double"
 - Change pricePerNight to: `basePrice + 50`
 - Add:
+
 ```typescript
 breakfastIncluded: false,
 smokingAllowed: false,
@@ -134,6 +146,7 @@ view: "Garden View",
 **Also update the sort at line 1269:**
 
 Replace:
+
 ```typescript
 ].sort((a, b) => a.pricePerNight - b.pricePerNight);
 ```
@@ -192,14 +205,14 @@ With the comprehensive sorting function (same as used for live rooms).
 
 When connecting to live APIs (RateHawk/TBO), map the following fields:
 
-| Our Field | RateHawk | TBO | Hotelbeds |
-|-----------|----------|-----|-----------|
-| breakfastIncluded | meal.includes("breakfast") | MealPlan | boardCode |
-| smokingAllowed | smokingPolicy | SmokingAllowed | roomCharacteristics |
-| paymentType | paymentType | PaymentMode | paymentType |
-| beds | bedding | BedTypes | bedding |
-| roomSize | size | RoomSize | roomSize |
-| view | view | ViewType | viewCode |
+| Our Field         | RateHawk                   | TBO            | Hotelbeds           |
+| ----------------- | -------------------------- | -------------- | ------------------- |
+| breakfastIncluded | meal.includes("breakfast") | MealPlan       | boardCode           |
+| smokingAllowed    | smokingPolicy              | SmokingAllowed | roomCharacteristics |
+| paymentType       | paymentType                | PaymentMode    | paymentType         |
+| beds              | bedding                    | BedTypes       | bedding             |
+| roomSize          | size                       | RoomSize       | roomSize            |
+| view              | view                       | ViewType       | viewCode            |
 
 ### Performance Considerations
 

@@ -3,14 +3,17 @@
 ## ✅ COMPLETED (Ready for Testing)
 
 ### 1. Mobile Room Cards - DONE ✓
+
 **File**: `client/pages/HotelDetails.tsx` lines ~2044-2077
 
 **Added**:
+
 - ✅ Payment Type badge: "💳 Pay at Hotel" (purple) or "💰 Pay Now" (indigo)
 - ✅ Breakfast badge: Already present, now properly data-driven
 - ✅ Smoking badge: Already present, now properly data-driven
 
 **What users see**:
+
 ```
 ┌─────────────────────────────────────┐
 │ Standard Room               ₹1,279  │
@@ -22,17 +25,21 @@
 ```
 
 ### 2. Desktop Room Cards - DONE ✓
+
 **File**: `client/pages/HotelDetails.tsx` lines ~2890-2933
 
 **Added**:
+
 - ✅ Payment Type badge (same as mobile)
 - ✅ Bed type, room size, view in details section
 - ✅ All badges styled with Badge component
 
 ### 3. Live Room Data Variations - DONE ✓
+
 **File**: `client/pages/HotelDetails.tsx` lines ~768-1032
 
 **Room attributes now include**:
+
 - `breakfastIncluded`: boolean (alternates even/odd indexes)
 - `smokingAllowed`: boolean (every 3rd room)
 - `smokingPreference`: "smoking" | "non_smoking"
@@ -42,17 +49,21 @@
 - `view`: "City View" | "Garden View" | "Ocean View"
 
 ### 4. Synthetic Room Additions - DONE ✓
+
 **File**: `client/pages/HotelDetails.tsx` lines ~1041-1118
 
 **Added 3 diverse rooms**:
+
 1. **Standard Twin**: ₹+100, Breakfast ✓, Smoking ✓, Pay Now, Free Cancellation
 2. **Premium Room**: ₹+179, Breakfast ✓, Non-Smoking, Pay at Hotel, Free Cancellation
 3. **Deluxe Double**: ₹+50, No Breakfast, Non-Smoking, Pay at Hotel, Non-Refundable
 
 ### 5. Best Price First Sorting - DONE ✓
+
 **File**: `client/pages/HotelDetails.tsx` lines ~1125-1182
 
 **Sorting hierarchy**:
+
 1. Price (ascending) ← Primary
 2. Refundability (refundable > partial > non-refundable)
 3. Breakfast (included > not included)
@@ -60,6 +71,7 @@
 5. Original order (if all else equal)
 
 **Applied to**:
+
 - ✅ Live room data from API
 - ✅ Synthetic room additions
 - ⚠️ Fallback mock rooms (needs manual update - see below)
@@ -69,6 +81,7 @@
 ## ⚠️ NEEDS MANUAL UPDATE
 
 ### Fallback Mock Rooms Section
+
 **File**: `client/pages/HotelDetails.tsx` lines 1205-1269
 
 **Issue**: Unicode character encoding prevented automatic update
@@ -82,6 +95,7 @@
 3. Paste the code from `FALLBACK_ROOMS_UPDATE_SNIPPET.ts`
 
 **What this adds**:
+
 - All 4 fallback rooms get breakfast, smoking, payment type, beds, size, view attributes
 - Updates room names and prices to match the diverse examples
 - Applies comprehensive sorting (not just simple price sort)
@@ -93,6 +107,7 @@
 ### Quick Visual Verification
 
 **Mobile View** (< 768px):
+
 - [ ] Open hotel details page
 - [ ] Scroll to "Available Rooms" section
 - [ ] Verify you see rooms with DIFFERENT attributes:
@@ -104,6 +119,7 @@
 - [ ] Verify other rooms show "Upgrade for +₹X" badge
 
 **Desktop View** (>= 768px):
+
 - [ ] Click to expand a room card
 - [ ] Verify you see:
   - [ ] Breakfast, smoking, payment badges
@@ -115,6 +131,7 @@
 ### Device Compatibility
 
 Test on these browsers/devices:
+
 - [ ] iPhone Safari (14/16)
 - [ ] Mobile Chrome (Android)
 - [ ] Samsung Browser
@@ -124,6 +141,7 @@ Test on these browsers/devices:
 - [ ] Desktop Edge
 
 **For each**:
+
 - [ ] No text clipping
 - [ ] All badges visible
 - [ ] No overlapping elements
@@ -148,9 +166,11 @@ Test on these browsers/devices:
    - Replace lines 1205-1269 in `client/pages/HotelDetails.tsx`
 
 2. **Build and test locally**:
+
    ```bash
    npm run dev
    ```
+
    - Navigate to any hotel details page
    - Verify all badges appear correctly
 
@@ -185,12 +205,14 @@ Given these rooms:
 | Premium Room | ₹1,179 | Yes | Yes | Pay at Hotel |
 
 **Order after sorting**:
+
 1. Standard Double (₹1,000) ← Cheapest
 2. Deluxe Double (₹1,050) ← Next cheapest
 3. Standard Twin (₹1,100) ← Lower price than Premium
 4. Premium Room (₹1,179) ← Highest price
 
 If two rooms have same price (e.g., both ₹1,100):
+
 - Refundable + Breakfast + Pay at Hotel room appears FIRST
 - Non-refundable + No Breakfast + Pay Now room appears LAST
 
@@ -199,6 +221,7 @@ If two rooms have same price (e.g., both ₹1,100):
 ## ✅ SUCCESS CRITERIA
 
 **Must have ALL of these**:
+
 - ✅ At least one room shows "Breakfast Included"
 - ✅ At least one room shows "Breakfast Not Included"
 - ✅ At least one room shows "Smoking Allowed"
@@ -217,21 +240,25 @@ If two rooms have same price (e.g., both ₹1,100):
 ## 💡 QUICK FIXES
 
 ### If badges don't show:
+
 1. Check console for errors
 2. Verify room object has the new attributes
 3. Check lines 2044-2077 (mobile) and 2890-2933 (desktop)
 
 ### If all rooms look identical:
+
 1. Verify fallback rooms section was updated (lines 1205-1269)
 2. Check live room data has index-based variations (lines 768-1032)
 3. Verify synthetic rooms were added (lines 1041-1118)
 
 ### If sorting is wrong:
+
 1. Check the sort function at lines 1125-1182
 2. Verify it uses the comprehensive sorting (not simple price sort)
 3. Check fallback rooms use the same comprehensive sort
 
 ### If payment badge missing:
+
 1. Verify room object has `paymentType` attribute
 2. Check badge render logic at lines 2069-2077 (mobile) and 2914-2922 (desktop)
 
@@ -240,11 +267,13 @@ If two rooms have same price (e.g., both ₹1,100):
 ## 📞 SUPPORT
 
 **Files to reference**:
+
 - `ROOM_VARIATIONS_BEST_PRICE_IMPLEMENTATION_SUMMARY.md` - Complete documentation
 - `FALLBACK_ROOMS_UPDATE_SNIPPET.ts` - Code for manual update
 - `client/pages/HotelDetails.tsx` - Main implementation file
 
 **Key line numbers**:
+
 - Mobile badges: 2044-2077
 - Desktop badges: 2890-2933
 - Live room variations: 768-1032

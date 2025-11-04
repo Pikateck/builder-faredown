@@ -93,7 +93,13 @@ const fallbackRooms = [
     view: "Ocean View",
     image:
       "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop",
-    features: ["1 King Bed", "Ocean View", "Free WiFi", "Breakfast Included", "Premium amenities"],
+    features: [
+      "1 King Bed",
+      "Ocean View",
+      "Free WiFi",
+      "Breakfast Included",
+      "Premium amenities",
+    ],
   },
   {
     id: "deluxe-suite",
@@ -135,11 +141,14 @@ return fallbackRooms.sort((a, b) => {
   if (refundDiff !== 0) return refundDiff;
 
   // 3. Tie-breaker 2: breakfast included > not included
-  const breakfastDiff = (b.breakfastIncluded ? 1 : 0) - (a.breakfastIncluded ? 1 : 0);
+  const breakfastDiff =
+    (b.breakfastIncluded ? 1 : 0) - (a.breakfastIncluded ? 1 : 0);
   if (breakfastDiff !== 0) return breakfastDiff;
 
   // 4. Tie-breaker 3: pay-at-hotel > prepaid
-  const paymentDiff = (b.paymentType === "pay_at_hotel" ? 1 : 0) - (a.paymentType === "pay_at_hotel" ? 1 : 0);
+  const paymentDiff =
+    (b.paymentType === "pay_at_hotel" ? 1 : 0) -
+    (a.paymentType === "pay_at_hotel" ? 1 : 0);
   if (paymentDiff !== 0) return paymentDiff;
 
   // 5. Final tie-breaker: maintain original order

@@ -1525,7 +1525,10 @@ export function ConversationalBargainModal({
             {/* Round 2 waiting state - show safe deal info while waiting for final bid */}
             {round === 2 && safeDealPrice && !finalOffer && (
               <div className="mb-2">
-                <p className="text-sm font-semibold" style={{ color: "#003580" }}>
+                <p
+                  className="text-sm font-semibold"
+                  style={{ color: "#003580" }}
+                >
                   ✅ Price locked: {formatPrice(safeDealPrice)}
                 </p>
               </div>
@@ -1557,7 +1560,10 @@ export function ConversationalBargainModal({
                   <>
                     {timerActive && (
                       <div className="mb-2">
-                        <p className="text-sm font-medium" style={{ color: "#003580" }}>
+                        <p
+                          className="text-sm font-medium"
+                          style={{ color: "#003580" }}
+                        >
                           ⏱ Pick your price
                         </p>
                       </div>

@@ -1022,12 +1022,33 @@ function HotelDetailsContent() {
                 "Private bathroom",
               ],
           // Add breakfast, smoking, and payment type attributes from API or defaults
-          breakfastIncluded: room.breakfastIncluded ?? room.mealPlan?.includes("breakfast") ?? (index % 2 === 0),
-          smokingAllowed: room.smokingAllowed ?? room.smokingPreference === "smoking" ?? (index % 3 === 1),
-          smokingPreference: room.smokingPreference || (index % 3 === 1 ? "smoking" : "non_smoking"),
-          paymentType: room.paymentType || room.paymentOptions || (index % 2 === 0 ? "pay_now" : "pay_at_hotel"),
-          beds: room.beds || room.bedding || (index === 0 ? "1 King Bed" : index === 1 ? "2 Twin Beds" : "1 Double Bed"),
-          roomSize: room.roomSize || room.size || (index === 0 ? "25 sqm" : index === 1 ? "22 sqm" : "30 sqm"),
+          breakfastIncluded:
+            room.breakfastIncluded ??
+            room.mealPlan?.includes("breakfast") ??
+            index % 2 === 0,
+          smokingAllowed:
+            room.smokingAllowed ??
+            room.smokingPreference === "smoking" ??
+            index % 3 === 1,
+          smokingPreference:
+            room.smokingPreference ||
+            (index % 3 === 1 ? "smoking" : "non_smoking"),
+          paymentType:
+            room.paymentType ||
+            room.paymentOptions ||
+            (index % 2 === 0 ? "pay_now" : "pay_at_hotel"),
+          beds:
+            room.beds ||
+            room.bedding ||
+            (index === 0
+              ? "1 King Bed"
+              : index === 1
+                ? "2 Twin Beds"
+                : "1 Double Bed"),
+          roomSize:
+            room.roomSize ||
+            room.size ||
+            (index === 0 ? "25 sqm" : index === 1 ? "22 sqm" : "30 sqm"),
           view: room.view || (index % 2 === 0 ? "City View" : "Garden View"),
           isLiveData: true,
         };
@@ -1049,7 +1070,8 @@ function HotelDetailsContent() {
             statusColor: "yellow",
             nonRefundable: false,
             isRefundable: true,
-            cancellationPolicy: "Free cancellation until 24 hours before check-in",
+            cancellationPolicy:
+              "Free cancellation until 24 hours before check-in",
             breakfastIncluded: true,
             smokingAllowed: true,
             smokingPreference: "smoking",
@@ -1059,7 +1081,12 @@ function HotelDetailsContent() {
             view: "City View",
             image:
               "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop",
-            features: ["2 Twin Beds", "City View", "Free WiFi", "Breakfast Included"],
+            features: [
+              "2 Twin Beds",
+              "City View",
+              "Free WiFi",
+              "Breakfast Included",
+            ],
             isLiveData: false,
           },
           {
@@ -1139,11 +1166,14 @@ function HotelDetailsContent() {
             if (refundDiff !== 0) return refundDiff;
 
             // 3. Tie-breaker 2: breakfast included > not included
-            const breakfastDiff = (b.breakfastIncluded ? 1 : 0) - (a.breakfastIncluded ? 1 : 0);
+            const breakfastDiff =
+              (b.breakfastIncluded ? 1 : 0) - (a.breakfastIncluded ? 1 : 0);
             if (breakfastDiff !== 0) return breakfastDiff;
 
             // 4. Tie-breaker 3: pay-at-hotel > prepaid
-            const paymentDiff = (b.paymentType === "pay_at_hotel" ? 1 : 0) - (a.paymentType === "pay_at_hotel" ? 1 : 0);
+            const paymentDiff =
+              (b.paymentType === "pay_at_hotel" ? 1 : 0) -
+              (a.paymentType === "pay_at_hotel" ? 1 : 0);
             if (paymentDiff !== 0) return paymentDiff;
 
             // 5. Final tie-breaker: maintain original order
@@ -1170,11 +1200,14 @@ function HotelDetailsContent() {
         if (refundDiff !== 0) return refundDiff;
 
         // 3. Tie-breaker 2: breakfast included > not included
-        const breakfastDiff = (b.breakfastIncluded ? 1 : 0) - (a.breakfastIncluded ? 1 : 0);
+        const breakfastDiff =
+          (b.breakfastIncluded ? 1 : 0) - (a.breakfastIncluded ? 1 : 0);
         if (breakfastDiff !== 0) return breakfastDiff;
 
         // 4. Tie-breaker 3: pay-at-hotel > prepaid
-        const paymentDiff = (b.paymentType === "pay_at_hotel" ? 1 : 0) - (a.paymentType === "pay_at_hotel" ? 1 : 0);
+        const paymentDiff =
+          (b.paymentType === "pay_at_hotel" ? 1 : 0) -
+          (a.paymentType === "pay_at_hotel" ? 1 : 0);
         if (paymentDiff !== 0) return paymentDiff;
 
         // 5. Final tie-breaker: maintain original order
@@ -1249,7 +1282,12 @@ function HotelDetailsContent() {
         view: "City View",
         image:
           "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=400&h=300&q=80&auto=format&fit=crop",
-        features: ["2 Twin Beds", "City View", "Free WiFi", "Breakfast Included"],
+        features: [
+          "2 Twin Beds",
+          "City View",
+          "Free WiFi",
+          "Breakfast Included",
+        ],
       },
       {
         id: "king-skyline",
@@ -1271,7 +1309,13 @@ function HotelDetailsContent() {
         view: "Ocean View",
         image:
           "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop",
-        features: ["1 King Bed", "Ocean View", "Free WiFi", "Breakfast Included", "Premium amenities"],
+        features: [
+          "1 King Bed",
+          "Ocean View",
+          "Free WiFi",
+          "Breakfast Included",
+          "Premium amenities",
+        ],
       },
       {
         id: "deluxe-suite",
@@ -1313,11 +1357,14 @@ function HotelDetailsContent() {
       if (refundDiff !== 0) return refundDiff;
 
       // 3. Tie-breaker 2: breakfast included > not included
-      const breakfastDiff = (b.breakfastIncluded ? 1 : 0) - (a.breakfastIncluded ? 1 : 0);
+      const breakfastDiff =
+        (b.breakfastIncluded ? 1 : 0) - (a.breakfastIncluded ? 1 : 0);
       if (breakfastDiff !== 0) return breakfastDiff;
 
       // 4. Tie-breaker 3: pay-at-hotel > prepaid
-      const paymentDiff = (b.paymentType === "pay_at_hotel" ? 1 : 0) - (a.paymentType === "pay_at_hotel" ? 1 : 0);
+      const paymentDiff =
+        (b.paymentType === "pay_at_hotel" ? 1 : 0) -
+        (a.paymentType === "pay_at_hotel" ? 1 : 0);
       if (paymentDiff !== 0) return paymentDiff;
 
       // 5. Final tie-breaker: maintain original order
