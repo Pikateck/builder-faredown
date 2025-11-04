@@ -512,7 +512,7 @@ function HotelDetailsContent() {
                 );
               }
               const data = await response.json();
-              console.log("✅ TBO Hotel data received:", data);
+              console.log("�� TBO Hotel data received:", data);
               if (data.success && data.data) {
                 return data.data; // Return TBO UnifiedHotel format
               }
@@ -2282,36 +2282,30 @@ function HotelDetailsContent() {
                             </div>
 
                             {/* Room Details: Bed Type, Size, View */}
-                            <div className="mb-4 space-y-2 text-xs">
+                            <div className="flex flex-wrap gap-2 mb-4">
                               {room.beds && (
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-gray-700">
-                                    Beds:
-                                  </span>
-                                  <span className="text-gray-600">
-                                    {room.beds}
-                                  </span>
-                                </div>
+                                <InfoChip
+                                  icon={Bed}
+                                  ariaLabel={`Bed type: ${room.beds}`}
+                                >
+                                  {room.beds}
+                                </InfoChip>
                               )}
                               {room.roomSize && (
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-gray-700">
-                                    Room Size:
-                                  </span>
-                                  <span className="text-gray-600">
-                                    {room.roomSize}
-                                  </span>
-                                </div>
+                                <InfoChip
+                                  icon={Ruler}
+                                  ariaLabel={`Room size: ${room.roomSize}`}
+                                >
+                                  {room.roomSize}
+                                </InfoChip>
                               )}
                               {room.view && (
-                                <div className="flex items-center gap-2">
-                                  <span className="font-medium text-gray-700">
-                                    View:
-                                  </span>
-                                  <span className="text-gray-600">
-                                    {room.view}
-                                  </span>
-                                </div>
+                                <InfoChip
+                                  icon={Mountain}
+                                  ariaLabel={`View: ${room.view}`}
+                                >
+                                  {room.view}
+                                </InfoChip>
                               )}
                             </div>
 
