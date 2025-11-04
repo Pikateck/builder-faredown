@@ -2146,10 +2146,7 @@ export function ConversationalBargainModal({
                 ? "calc(1.5rem + env(safe-area-inset-bottom))"
                 : "1rem",
               minHeight: "auto",
-              overflow: "visible",
-              position: isMobileDevice() ? "sticky" : "relative",
-              bottom: isMobileDevice() ? "0" : "auto",
-              zIndex: isMobileDevice() ? 10 : "auto",
+              position: "relative",
               backgroundColor: "white",
             }}
             aria-live="polite"
