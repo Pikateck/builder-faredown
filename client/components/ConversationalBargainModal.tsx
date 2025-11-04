@@ -2045,6 +2045,16 @@ export function ConversationalBargainModal({
                       }}
                       onFocus={(e) => {
                         e.stopPropagation();
+                        // Scroll input into view when focused on mobile
+                        if (isMobileDevice()) {
+                          setTimeout(() => {
+                            e.target.scrollIntoView({
+                              behavior: "smooth",
+                              block: "center",
+                              inline: "nearest"
+                            });
+                          }, 300); // Delay to let keyboard animation complete
+                        }
                       }}
                       onBlur={(e) => {
                         e.stopPropagation();
