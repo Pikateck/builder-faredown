@@ -1253,21 +1253,6 @@ function HotelDetailsContent() {
       },
       {
         id: "king-skyline",
-        name: "King Room with Skyline View",
-        type: "1 X King Classic",
-        details: "1 king bed",
-        pricePerNight: basePrice + 33,
-        status: "Upgrade for +₹33",
-        statusColor: "yellow",
-        nonRefundable: false,
-        isRefundable: true,
-        cancellationPolicy: "Free cancellation until 3 days before check-in",
-        image:
-          "https://images.unsplash.com/photo-1582719478250-c89cae4dc85b?w=400&h=300&q=80&auto=format&fit=crop",
-        features: ["Upgrade for +���33", "King Room", "Better city views"],
-      },
-      {
-        id: "king-skyline",
         name: "Premium Room",
         type: "1 X Premium Room",
         details: "Premium room with breakfast and ocean view",
