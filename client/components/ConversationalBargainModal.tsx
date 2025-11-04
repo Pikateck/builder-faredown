@@ -1396,7 +1396,7 @@ export function ConversationalBargainModal({
         <div
           className="flex-1 overflow-y-auto p-3 sm:p-4 mobile-chat-scroll bg-gray-50 w-full"
           style={{
-            minHeight: isMobileDevice() ? "30vh" : "50vh",
+            minHeight: isMobileDevice() ? "60vh" : "50vh",
             maxHeight: isMobileDevice() ? "calc(100dvh - 400px)" : "100%",
             overflowY: "auto",
             overflowX: "hidden",
