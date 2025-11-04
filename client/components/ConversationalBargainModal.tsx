@@ -2048,7 +2048,7 @@ export function ConversationalBargainModal({
                             e.target.scrollIntoView({
                               behavior: "smooth",
                               block: "center",
-                              inline: "nearest"
+                              inline: "nearest",
                             });
                           }, 300); // Delay to let keyboard animation complete
                         }
