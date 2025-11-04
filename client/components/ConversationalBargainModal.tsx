@@ -1221,13 +1221,12 @@ export function ConversationalBargainModal({
 
     // Round-specific prompt for next round
     const nextRound = round + 1;
-    let nextRoundMessage = "";
 
+    // Only show message when entering Round 2 (already shown in earlier message)
     if (nextRound === 2) {
-      nextRoundMessage = `Your final bargain attempt. This may not be better than your Safe Deal. What's your final offer?`;
+      // Message already shown: "✅ Price locked: {offer1}. Enter your final price above to try for a better deal!"
+      // No additional message needed here
     }
-
-    addMessage("agent", nextRoundMessage);
 
     if (isMobileDevice()) {
       hapticFeedback("light");
