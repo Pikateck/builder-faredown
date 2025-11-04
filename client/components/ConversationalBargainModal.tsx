@@ -1774,45 +1774,60 @@ export function ConversationalBargainModal({
                 </>
               )}
 
-              {/* Timer expired (no selection) - View room options */}
+              {/* Timer expired (no selection) - Book at Standard Price */}
               {timerExpired && !isComplete && !selectedPrice && round === 2 && (
                 <>
                   {/* Info line */}
-                  <div className="mb-2 p-2 bg-gray-50 rounded border border-gray-200">
+                  <div className="mb-2 p-2 bg-yellow-50 rounded border border-yellow-200">
                     <p className="text-sm text-gray-700 flex items-center gap-2">
-                      <Clock className="w-4 h-4" />⌛ Time's up
+                      <Clock className="w-4 h-4" />
+                      This offer expired. Showing standard price.
                     </p>
                   </div>
 
-                  {/* View room options CTA (blue) */}
+                  {/* Book at Standard Price CTA */}
                   <Button
                     onClick={() => {
                       // Track analytics
                       chatAnalyticsService
-                        .trackEvent("bargain_view_room_options_clicked", {
+                        .trackEvent("bargain_timer_expired_standard_booking", {
                           hotelId: hotel?.id || productRef,
                           module,
-                          offer1: safeDealPrice,
-                          offer2: finalOffer,
+                          standardPrice: basePrice,
+                          expiredOffer1: safeDealPrice,
+                          expiredOffer2: finalOffer,
                         })
                         .catch(console.warn);
 
-                      // Close modal and return to room list
-                      onClose();
+                      // Navigate to booking with standard price (no bargain)
+                      onAccept(basePrice, null, {
+                        isHeld: false,
+                        originalPrice: basePrice,
+                        bargainedPrice: basePrice,
+                        savings: 0,
+                        module,
+                        productRef,
+                        timerExpired: true,
+                      });
                     }}
+                    disabled={isBooking}
                     className="w-full text-white font-semibold py-3 h-11 mobile-touch-target rounded-xl transition-all"
                     style={{
-                      backgroundColor: "#0071c2",
+                      backgroundColor: "#003580",
                     }}
                     onMouseEnter={(e) =>
-                      (e.currentTarget.style.backgroundColor = "#005a9c")
+                      !isBooking &&
+                      (e.currentTarget.style.backgroundColor = "#00214d")
                     }
                     onMouseLeave={(e) =>
-                      (e.currentTarget.style.backgroundColor = "#0071c2")
+                      !isBooking &&
+                      (e.currentTarget.style.backgroundColor = "#003580")
                     }
-                    aria-label="View room options"
+                    aria-label="Book at standard price"
                   >
-                    View room options
+                    {isBooking
+                      ? "Processing..."
+                      : `Book at Standard Price ${formatPrice(basePrice)}`}
                   </Button>
                 </>
               )}
