@@ -406,7 +406,7 @@ export function ConversationalBargainModal({
           checkingMessage: "Let me check with {supplier} about {price}…",
           supplierResponse: "Good news — we can offer {offer}.",
           agentResponse:
-            "Your first deal is still safe. This is your final chance to improve it. {offer}. You can book now or try your final bargain.",
+            "Your price is locked. You can book now or try your final bargain.",
           acceptanceChance: 0.7, // 70% chance for Round 1 (best-tilt)
         };
       case 2:
@@ -762,7 +762,7 @@ export function ConversationalBargainModal({
         // Add message explaining the next step
         addMessage(
           "agent",
-          `Great! I've saved ${formatPrice(finalOffer)} as your Safe Deal. Now let me check if I can get you an even better price for your final bargain attempt...`,
+          `✅ Price locked: ${formatPrice(finalOffer)}. Enter your final price above to try for a better deal!`,
         );
 
         // Reset for Round 2
