@@ -1104,6 +1104,45 @@ export default function HotelBooking() {
                 )}
               </div>
 
+              {/* Cancellation Policy */}
+              <div className="border-t pt-4">
+                <button
+                  onClick={() => setShowPolicyDetails(!showPolicyDetails)}
+                  className="flex justify-between items-center w-full text-sm font-medium hover:text-blue-600 transition-colors"
+                >
+                  <span>Cancellation Policy</span>
+                  <ChevronDown className={`w-4 h-4 transition-transform ${showPolicyDetails ? 'rotate-180' : ''}`} />
+                </button>
+
+                {showPolicyDetails && (
+                  <div className="mt-3 p-3 bg-gray-50 rounded-lg text-xs text-gray-700 space-y-2">
+                    <div>
+                      <strong>Free Cancellation Until:</strong>
+                      <br />
+                      {new Date(new Date(checkIn).getTime() - 24 * 60 * 60 * 1000).toLocaleDateString('en-US', {
+                        weekday: 'long',
+                        year: 'numeric',
+                        month: 'long',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                        timeZoneName: 'short'
+                      })}
+                    </div>
+                    <div>
+                      <strong>After Free Cancellation Deadline:</strong>
+                      <br />
+                      • Cancellation within 24 hours of check-in: 100% charge (1 night's rate)
+                      <br />
+                      • No-show: 100% charge for entire booking
+                    </div>
+                    <div className="text-xs text-gray-500">
+                      Policy ID: {selectedHotel?.cancellationPolicyId || 'POL_' + selectedHotel?.id || 'STANDARD_001'}
+                    </div>
+                  </div>
+                )}
+              </div>
+
               {/* Price Breakdown */}
               <div className="border-t pt-4 space-y-2">
                 {location.state?.originalPrice &&
