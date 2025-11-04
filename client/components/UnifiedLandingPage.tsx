@@ -193,7 +193,7 @@ export function UnifiedLandingPage({
                   <div className="flex-grow">
                     <p className="text-base md:text-lg text-gray-600 leading-relaxed mb-4">
                       AI negotiates live with suppliers —{" "}
-                      <strong className="text-[#003580]">3 attempts</strong>,{" "}
+                      <strong className="text-[#003580]">2 tries</strong>,{" "}
                       <strong className="text-[#003580]">30-second</strong> timer.
                     </p>
                     <div className="h-10 flex items-center">

@@ -103,7 +103,7 @@ export default function Index() {
               </div>
               <h3 className="text-xl font-semibold mb-2">Bargain</h3>
               <p className="text-gray-600">
-                AI negotiates live with suppliers — 3 attempts, 30-second timer.
+                AI negotiates live with suppliers — 2 tries, 30-second timer.
               </p>
             </div>
 
