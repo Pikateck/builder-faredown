@@ -320,7 +320,8 @@ export function LandingPageSearchPanel() {
     };
 
     // Non-blocking API call to store recent search
-    fetch("/api/recent-searches", {
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://builder-faredown-pricing.onrender.com/api";
+    fetch(`${apiBaseUrl}/recent-searches`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
