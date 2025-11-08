@@ -615,41 +615,46 @@ export default function FlightBooking({
                 </CardTitle>
               </CardHeader>
               <CardContent>
-                <RadioGroup
-                  value={paymentMethod}
-                  onValueChange={setPaymentMethod}
-                >
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="card" id="card" />
-                    <Label
-                      htmlFor="card"
-                      className="flex items-center space-x-2"
-                    >
-                      <CreditCard className="w-4 h-4" />
-                      <span>Credit/Debit Card</span>
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="upi" id="upi" />
-                    <Label
-                      htmlFor="upi"
-                      className="flex items-center space-x-2"
-                    >
-                      <Phone className="w-4 h-4" />
-                      <span>UPI</span>
-                    </Label>
-                  </div>
-                  <div className="flex items-center space-x-2">
-                    <RadioGroupItem value="netbanking" id="netbanking" />
-                    <Label
-                      htmlFor="netbanking"
-                      className="flex items-center space-x-2"
-                    >
-                      <Shield className="w-4 h-4" />
-                      <span>Net Banking</span>
-                    </Label>
-                  </div>
-                </RadioGroup>
+                <div className="space-y-2">
+                  {[
+                    { value: "card", label: "Credit/Debit Card", icon: CreditCard },
+                    { value: "upi", label: "UPI", icon: Phone },
+                    { value: "netbanking", label: "Net Banking", icon: Shield },
+                  ].map((method) => {
+                    const IconComponent = method.icon;
+                    return (
+                      <div
+                        key={method.value}
+                        className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
+                        onClick={(e) => {
+                          // Allow direct input clicks
+                          if (
+                            (e.target as HTMLElement).tagName !== "INPUT"
+                          ) {
+                            setPaymentMethod(method.value);
+                          }
+                        }}
+                      >
+                        <input
+                          type="radio"
+                          name="payment"
+                          value={method.value}
+                          checked={paymentMethod === method.value}
+                          onChange={(e) => {
+                            e.stopPropagation();
+                            setPaymentMethod(e.target.value);
+                          }}
+                          className="w-4 h-4 cursor-pointer"
+                          style={{ accentColor: "#2563eb" }}
+                        />
+                        <IconComponent className="w-4 h-4 ml-3 text-gray-600" />
+                        <span className="ml-2 text-gray-700">
+                          {method.label}
+                        </span>
+                      </div>
+                    );
+                  })}
+                </div>
               </CardContent>
             </Card>
 
