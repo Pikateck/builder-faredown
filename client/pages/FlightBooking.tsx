@@ -774,7 +774,7 @@ export default function FlightBooking({
                   >
                     {isBooking
                       ? "Processing..."
-                      : `Pay ${formatPrice(flight.price.breakdown.total)}`}
+                      : `Pay ${formatPrice(negotiatedPrice || flight.price.breakdown.total)}`}
                   </Button>
 
                   <div className="text-xs text-gray-500 text-center">
