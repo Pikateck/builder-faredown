@@ -184,6 +184,8 @@ export function ConversationalBargainModal({
   const [selectedPrice, setSelectedPrice] = useState<"safe" | "final" | null>(
     null,
   );
+  // ✅ NEW: Store user's original offer to use as "Safe Deal" option
+  const [userOriginalOffer, setUserOriginalOffer] = useState<number | null>(null);
 
   const { selectedCurrency, formatPrice } = useCurrency();
   const { priceSnapshot, updatePrice } = usePriceContext();
