@@ -675,10 +675,10 @@ export function ConversationalBargainModal({
             // Counter offer based on round logic
             const counterOffer = calculateRoundSpecificOffer(userOffer, round);
             setFinalOffer(counterOffer);
-            // ✅ CRITICAL FIX: Save user's original offer as the "safe price" option
-            // So when they click "Book at {safeDealPrice}", they get their requested price
+            // ✅ CRITICAL FIX: Save user's original offer for Round 2
+            // In Round 2, the user will see two options: their original price (safe deal) and a new counter
             if (round === 1) {
-              setSafeDealPrice(userOffer);
+              setUserOriginalOffer(userOffer);
             }
 
             // Supplier response with offer
