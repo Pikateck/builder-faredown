@@ -773,8 +773,10 @@ export function ConversationalBargainModal({
           })
           .catch(console.warn);
 
-        // Save this price as the "Safe Deal"
-        setSafeDealPrice(finalOffer);
+        // ✅ CRITICAL FIX: Don't overwrite safeDealPrice here
+        // It's already set to the user's original offer from handleSubmitOffer
+        // This ensures "Book at {safeDealPrice}" shows the user's requested price
+        // (we already set it in handleSubmitOffer if there was a counter-offer)
 
         // Add message explaining the next step
         addMessage(
