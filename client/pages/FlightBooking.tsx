@@ -57,6 +57,11 @@ export default function FlightBooking({
     providedFlight || location.state?.flight || null,
   );
 
+  // Negotiated price from bargain modal
+  const [negotiatedPrice, setNegotiatedPrice] = useState<number | null>(
+    location.state?.negotiatedPrice || location.state?.bargainedPrice || null,
+  );
+
   // Booking form states
   const [passengers, setPassengers] = useState<Passenger[]>([
     {
