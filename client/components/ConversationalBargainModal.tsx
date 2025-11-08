@@ -778,11 +778,8 @@ export function ConversationalBargainModal({
         // ✅ CRITICAL FIX: Set safeDealPrice to the user's ORIGINAL offer, not the counter-offer
         // This ensures "Book at {safeDealPrice}" shows the price they actually requested (811)
         // If there's a counter-offer, safeDealPrice = their original offer, finalOffer = counter
-        // If it was a match, safeDealPrice = the matched price
-        if (finalOffer === safeDealPrice || safeDealPrice === null) {
-          // Only set if not already set (to preserve the original offer logic)
-          setSafeDealPrice(userOriginalOffer || finalOffer);
-        }
+        // If it was a match, safeDealPrice = the matched price (finalOffer = userOffer)
+        setSafeDealPrice(userOriginalOffer || finalOffer);
 
         // Add message explaining the next step
         addMessage(
