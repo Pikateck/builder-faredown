@@ -1216,16 +1216,18 @@ export default function HotelBooking() {
                   <>
                     <div className="flex justify-between text-sm">
                       <span className="line-through text-gray-500">
-                        Original Price ({nights} nights)
+                        Original Price
                       </span>
                       <span className="line-through text-gray-500">
-                        {formatCurrency(location.state.originalPrice * nights)}
+                        {/* ✅ originalPrice is TOTAL, not per-night */}
+                        {formatCurrency(location.state.originalPrice)}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm font-semibold text-blue-900">
-                      <span>Bargained Price ({nights} nights)</span>
+                      <span>Bargained Price</span>
                       <span>
-                        {formatCurrency(location.state.bargainedPrice * nights)}
+                        {/* ✅ bargainedPrice is TOTAL, not per-night */}
+                        {formatCurrency(location.state.bargainedPrice)}
                       </span>
                     </div>
                     <div className="flex justify-between text-sm text-green-700 font-semibold">
@@ -1233,9 +1235,8 @@ export default function HotelBooking() {
                       <span>
                         -₹
                         {Math.round(
-                          (location.state.originalPrice -
-                            location.state.bargainedPrice) *
-                            nights,
+                          location.state.originalPrice -
+                            location.state.bargainedPrice
                         )}{" "}
                         (
                         {(
@@ -1250,8 +1251,8 @@ export default function HotelBooking() {
                   </>
                 ) : (
                   <div className="flex justify-between text-sm">
-                    <span>Room ({nights} nights)</span>
-                    <span>{formatCurrency(negotiatedPrice * nights)}</span>
+                    <span>Room Subtotal</span>
+                    <span>{/* ✅ negotiatedPrice is TOTAL, not per-night */}{formatCurrency(negotiatedPrice)}</span>
                   </div>
                 )}
                 {selectedExtras.length > 0 && (
@@ -1333,8 +1334,9 @@ export default function HotelBooking() {
                     </h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-700">Original Price</span>
+                        <span className="text-gray-700">Original Price (Total Stay)</span>
                         <span className="text-gray-600 line-through">
+                          {/* ✅ originalPrice is TOTAL for entire stay */}
                           {formatCurrency(location.state.originalPrice)}
                         </span>
                       </div>
