@@ -246,7 +246,8 @@ export function RecentSearches({
 
     try {
       // Try to delete from API
-      const response = await fetch(`/api/recent-searches/${searchId}`, {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://builder-faredown-pricing.onrender.com/api";
+      const response = await fetch(`${apiBaseUrl}/recent-searches/${searchId}`, {
         method: "DELETE",
         credentials: "include",
         headers: {
