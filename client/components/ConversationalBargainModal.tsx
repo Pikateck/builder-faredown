@@ -644,6 +644,8 @@ export function ConversationalBargainModal({
           if (isExactMatch) {
             // 🎉 MATCH CASE - User got their exact price
             setFinalOffer(userOffer);
+            // ✅ CRITICAL FIX: Save user's offer as the "user price" for later use
+            setSafeDealPrice(userOffer);
             addMessage(
               "supplier",
               `🎉 Congratulations! Your price ${formatPrice(userOffer)} is matched!`,
@@ -671,6 +673,11 @@ export function ConversationalBargainModal({
             // Counter offer based on round logic
             const counterOffer = calculateRoundSpecificOffer(userOffer, round);
             setFinalOffer(counterOffer);
+            // ✅ CRITICAL FIX: Save user's original offer as the "safe price" option
+            // So when they click "Book at {safeDealPrice}", they get their requested price
+            if (round === 1) {
+              setSafeDealPrice(userOffer);
+            }
 
             // Supplier response with offer
             const supplierMsg = roundBehavior.supplierResponse.replace(
