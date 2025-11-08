@@ -416,35 +416,7 @@ export default function HotelBooking() {
         timeZoneName: "short",
       })}. After this deadline: Cancellation within 24 hours of check-in incurs 100% charge (1 night's rate). No-show: 100% charge for entire booking. Policy ID: ${selectedHotel?.cancellationPolicyId || "POL_" + selectedHotel?.id || "STANDARD_001"}`;
 
-      // For now, we'll pass the bargain data to confirmation page
-      // In a real scenario, you'd submit this to the backend booking endpoint
-      // which would then call the rewards API
-
-      navigate("/hotels/confirmation", {
-        state: {
-          selectedHotel,
-          checkIn,
-          checkOut,
-          guests,
-          guestDetails,
-          selectedExtras,
-          preferences, // ✅ Pass preferences to confirmation page
-          finalPrice,
-          bookingId,
-          originalPrice,
-          bargainedPrice,
-          discountAmount,
-          discountPercentage,
-          panCard: guestDetails.panCard,
-          specialRequests: guestDetails.specialRequests,
-          paymentMethod,
-          paymentStatus: "completed",
-          priceSnapshot, // ✅ Pass price snapshot to confirmation page
-          amounts, // ✅ Detailed amounts breakdown
-          payment, // ✅ Payment details with masked card info
-          cancellationPolicyFull, // ✅ Full cancellation policy text
-        },
-      });
+      // ✅ Prepare complete booking data for localStorage (used by voucher page)\n      const bookingDataForStorage = {\n        id: bookingId,\n        confirmationCode:\n          \"CONF-\" + Math.random().toString(36).substr(2, 9).toUpperCase(),\n        status: \"Confirmed\",\n        issueDate: new Date().toISOString(),\n        validUntil: new Date(\n          new Date().getTime() + 90 * 24 * 60 * 60 * 1000\n        ).toLocaleDateString(\"en-CA\"),\n        checkIn,\n        checkOut,\n        nights,\n        guests,\n        finalPrice,\n        originalPrice,\n        bargainedPrice,\n        discountAmount,\n        discountPercentage,\n        hotel: selectedHotel,\n        guestDetails,\n        preferences,\n        specialRequests: guestDetails.specialRequests,\n        panCard: guestDetails.panCard,\n        paymentMethod,\n        paymentStatus: \"Paid\",\n        paymentDetails: payment,\n        reservation: {\n          checkIn,\n          checkOut,\n          nights,\n          rooms: guests.rooms,\n          adults: guests.adults,\n          children: guests.children,\n        },\n        pricing: {\n          roomRate: Math.round(finalPrice / nights),\n          totalRoomCharges: finalPrice,\n          taxes: Math.round(amounts.taxes_and_fees.gst_vat),\n          serviceFees: Math.round(amounts.taxes_and_fees.service_fee),\n          cityTax: Math.round(amounts.taxes_and_fees.municipal_tax),\n          total: finalPrice,\n          currency: \"INR\",\n          paymentStatus: \"Paid\",\n          paymentMethod: paymentMethod === \"card\" ? `${detectCardBrand(cardDetails.number)} **** ${cardDetails.number.replace(/\\s/g, \"\").slice(-4)}` : \"Pay at Hotel\",\n          paymentDate: new Date().toISOString(),\n        },\n        bargainSummary: originalPrice && bargainedPrice ? {\n          originalPrice,\n          bargainedPrice,\n          discountAmount,\n          discountPercentage: parseFloat(discountPercentage),\n          rounds: location.state?.bargainRounds || 1,\n        } : null,\n        amounts,\n        cancellationPolicy: cancellationPolicyFull,\n      };\n\n      // ✅ Save booking data to localStorage for voucher page\n      try {\n        localStorage.setItem(\n          \"latestHotelBooking\",\n          JSON.stringify(bookingDataForStorage)\n        );\n        console.log(\n          \"[BOOKING] Booking data saved to localStorage:\",\n          bookingDataForStorage\n        );\n      } catch (error) {\n        console.warn(\n          \"[BOOKING] Error saving to localStorage:\",\n          error\n        );\n      }\n\n      // For now, we'll pass the bargain data to confirmation page\n      // In a real scenario, you'd submit this to the backend booking endpoint\n      // which would then call the rewards API\n\n      navigate(\"/hotels/confirmation\", {\n        state: {\n          selectedHotel,\n          checkIn,\n          checkOut,\n          guests,\n          guestDetails,\n          selectedExtras,\n          preferences, // ✅ Pass preferences to confirmation page\n          finalPrice,\n          bookingId,\n          originalPrice,\n          bargainedPrice,\n          discountAmount,\n          discountPercentage,\n          panCard: guestDetails.panCard,\n          specialRequests: guestDetails.specialRequests,\n          paymentMethod,\n          paymentStatus: \"completed\",\n          priceSnapshot, // ✅ Pass price snapshot to confirmation page\n          amounts, // ✅ Detailed amounts breakdown\n          payment, // ✅ Payment details with masked card info\n          cancellationPolicyFull, // ✅ Full cancellation policy text\n        },\n      });
     } catch (error) {
       console.error("Error completing booking:", error);
       alert("Error completing booking. Please try again.");
