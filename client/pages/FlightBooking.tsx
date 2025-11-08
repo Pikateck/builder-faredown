@@ -208,6 +208,10 @@ export default function FlightBooking({
           id: addon,
           quantity: 1,
         })),
+        // Include negotiated price from bargain modal if available
+        negotiatedPrice: negotiatedPrice || undefined,
+        originalPrice: flight!.price.breakdown.total,
+        bargainedPrice: negotiatedPrice || undefined,
       };
 
       console.log("🚀 Submitting booking:", bookingData);
