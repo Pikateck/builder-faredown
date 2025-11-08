@@ -27,6 +27,7 @@ import Index from "./pages/Index";
 import Flights from "./pages/Flights";
 import FlightResults from "./pages/FlightResults";
 import FlightDetails from "./pages/FlightDetails";
+import FlightBooking from "./pages/FlightBooking";
 import BookingFlow from "./pages/BookingFlow";
 import BookingConfirmation from "./pages/BookingConfirmation";
 import Account from "./pages/Account";
