@@ -1265,8 +1265,19 @@ export default function FlightResults() {
   const handleBargainAccept = (finalPrice: number, orderRef: string) => {
     console.log("✅ Bargain accepted:", finalPrice, orderRef);
     setShowBargainModal(false);
-    // Navigate to booking flow with negotiated price
-    navigate("/booking-flow");
+
+    // Prepare flight booking data with negotiated price
+    const flightBookingData = {
+      flight: selectedBargainFlight,
+      negotiatedPrice: finalPrice,
+      bargainedPrice: finalPrice,
+      originalPrice: selectedBargainFlight?.price,
+      orderRef,
+      module: "flights",
+    };
+
+    // Navigate to flight booking page (not landing page)
+    navigate("/flights/booking", { state: flightBookingData });
   };
 
   const handleBargainHold = (orderRef: string) => {
