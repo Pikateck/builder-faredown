@@ -775,10 +775,14 @@ export function ConversationalBargainModal({
           })
           .catch(console.warn);
 
-        // ✅ CRITICAL FIX: Don't overwrite safeDealPrice here
-        // It's already set to the user's original offer from handleSubmitOffer
-        // This ensures "Book at {safeDealPrice}" shows the user's requested price
-        // (we already set it in handleSubmitOffer if there was a counter-offer)
+        // ✅ CRITICAL FIX: Set safeDealPrice to the user's ORIGINAL offer, not the counter-offer
+        // This ensures "Book at {safeDealPrice}" shows the price they actually requested (811)
+        // If there's a counter-offer, safeDealPrice = their original offer, finalOffer = counter
+        // If it was a match, safeDealPrice = the matched price
+        if (finalOffer === safeDealPrice || safeDealPrice === null) {
+          // Only set if not already set (to preserve the original offer logic)
+          setSafeDealPrice(userOriginalOffer || finalOffer);
+        }
 
         // Add message explaining the next step
         addMessage(
