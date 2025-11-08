@@ -174,6 +174,10 @@ function App() {
                             element={<FlightDetails />}
                           />
                           <Route
+                            path="/flights/booking"
+                            element={<FlightBooking />}
+                          />
+                          <Route
                             path="/booking-flow"
                             element={<BookingFlow />}
                           />
