@@ -243,7 +243,9 @@ export default function HotelBooking() {
 
   // Calculate detailed tax breakdown
   const calculateTaxBreakdown = () => {
-    const roomSubtotal = negotiatedPrice * nights;
+    // ✅ negotiatedPrice is already the TOTAL for all nights (from bargain modal)
+    // DO NOT multiply by nights again
+    const roomSubtotal = negotiatedPrice;
     const extrasTotal = calculateExtrasTotal();
     const subtotalBeforeTax = roomSubtotal + extrasTotal;
 
@@ -253,10 +255,10 @@ export default function HotelBooking() {
     const serviceFee = Math.round(subtotalBeforeTax * 0.02); // 2% Service Fee
     const totalTaxes = gstVat + municipalTax + serviceFee;
 
+    // ✅ bargainDiscount is already the total discount (not per-night)
     const bargainDiscount =
       location.state?.originalPrice && location.state?.bargainedPrice
-        ? (location.state.originalPrice - location.state.bargainedPrice) *
-          nights
+        ? location.state.originalPrice - location.state.bargainedPrice
         : 0;
 
     const grandTotal = subtotalBeforeTax + totalTaxes;
@@ -330,13 +332,15 @@ export default function HotelBooking() {
     try {
       const bookingId = `HB${Date.now()}`;
       const finalPrice = calculateTotal();
-      const originalPrice = location.state?.originalPrice || finalPrice;
-      const bargainedPrice = location.state?.bargainedPrice || finalPrice;
+      // ✅ For bargained bookings, use the bargained amount as-is
+      // originalPrice and bargainedPrice are already totals from the bargain flow
+      const originalPrice = location.state?.originalPrice || negotiatedPrice;
+      const bargainedPrice = location.state?.bargainedPrice || negotiatedPrice;
       const discountAmount = originalPrice - bargainedPrice;
-      const discountPercentage = (
+      const discountPercentage = originalPrice > 0 ? (
         (discountAmount / originalPrice) *
         100
-      ).toFixed(2);
+      ).toFixed(2) : "0";
 
       // ✅ PRICE CONSISTENCY: Verify price snapshot before booking
       if (priceSnapshot) {
