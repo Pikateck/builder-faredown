@@ -152,8 +152,9 @@ export function RecentSearches({
         return;
       }
 
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://builder-faredown-pricing.onrender.com/api";
       const response = await fetch(
-        `/api/recent-searches?module=${module}&limit=6`,
+        `${apiBaseUrl}/recent-searches?module=${module}&limit=6`,
         {
           credentials: "include",
           headers: {
