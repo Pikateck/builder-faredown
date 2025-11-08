@@ -712,26 +712,42 @@ export default function FlightBooking({
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div className="space-y-2">
+                    {negotiatedPrice && (
+                      <div className="bg-green-50 border border-green-200 rounded-lg p-3 mb-3">
+                        <p className="text-sm text-green-700 font-semibold">
+                          ✅ Bargain Price Applied
+                        </p>
+                        <p className="text-xs text-green-600 mt-1">
+                          You saved {formatPrice(flight.price.breakdown.total - negotiatedPrice)}
+                        </p>
+                      </div>
+                    )}
                     <div className="flex justify-between">
                       <span className="text-gray-600">Base fare:</span>
                       <span>
-                        {formatPrice(flight.price.breakdown.baseFare)}
-                      </span>
-                    </div>
-                    <div className="flex justify-between">
-                      <span className="text-gray-600">Taxes & fees:</span>
-                      <span>
                         {formatPrice(
-                          flight.price.breakdown.taxes +
-                            flight.price.breakdown.fees,
+                          negotiatedPrice || flight.price.breakdown.baseFare
                         )}
                       </span>
                     </div>
+                    {!negotiatedPrice && (
+                      <div className="flex justify-between">
+                        <span className="text-gray-600">Taxes & fees:</span>
+                        <span>
+                          {formatPrice(
+                            flight.price.breakdown.taxes +
+                              flight.price.breakdown.fees,
+                          )}
+                        </span>
+                      </div>
+                    )}
                     <div className="border-t pt-2">
                       <div className="flex justify-between font-semibold text-lg">
                         <span>Total:</span>
                         <span className="text-blue-600">
-                          {formatPrice(flight.price.breakdown.total)}
+                          {formatPrice(
+                            negotiatedPrice || flight.price.breakdown.total
+                          )}
                         </span>
                       </div>
                     </div>
