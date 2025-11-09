@@ -70,13 +70,13 @@ class TBOAdapter extends BaseSupplierAdapter {
       hotelGetBookingDetailsEndpoint:
         "https://affiliate.travelboutiqueonline.com/HotelAPI/GetBookingDetails",
       // CORRECT TBO Hotel API Credentials (NOT Tek Travels)
-      hotelClientId: "tboprod", // CORRECT: "tboprod" not "ApiIntegrationNew"
-      hotelUserId:
-        process.env.TBO_HOTEL_USER_ID || process.env.TBO_USERNAME || "BOMF145", // Default from provided credentials
-      hotelPassword:
-        process.env.TBO_HOTEL_PASSWORD ||
-        process.env.TBO_PASSWORD ||
-        "@Bo#4M-Api@", // Default from provided credentials
+      // Use new standard env var names (no hard-coding)
+      hotelClientId: process.env.TBO_CLIENT_ID,
+      hotelUserId: process.env.TBO_API_USER_ID,
+      hotelPassword: process.env.TBO_API_PASSWORD,
+      // Static data credentials for reference data (Country, City, Hotel lists)
+      staticUserName: process.env.TBO_STATIC_USER,
+      staticPassword: process.env.TBO_STATIC_PASSWORD,
       ...config,
     });
 
