@@ -380,7 +380,7 @@ const MOCK_HOTELS = {
         "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Restaurant", "Bar", "Gym"],
-      price: 180,
+      price: 2800,
       currency: "INR",
       isRefundable: false,
       freeCancellation: false,
@@ -390,7 +390,7 @@ const MOCK_HOTELS = {
       roomFeatures: ["Basic Amenities"],
       rates: [
         {
-          price: 180,
+          price: 2800,
           description: "Standard Room",
           roomType: "Standard Room",
           beds: "Double bed",
@@ -402,7 +402,7 @@ const MOCK_HOTELS = {
           cancellationPolicy: "Non-refundable. No cancellations allowed.",
         },
         {
-          price: 240,
+          price: 3800,
           description: "Standard Twin",
           roomType: "Standard Twin",
           beds: "Twin beds",
