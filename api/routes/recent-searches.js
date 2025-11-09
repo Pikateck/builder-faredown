@@ -94,43 +94,63 @@ router.post("/", identifyUser, async (req, res) => {
     const userId = req.identity.type === "user" ? req.identity.id : null;
     const deviceId = req.identity.type === "device" ? req.identity.id : null;
 
-    // Try to upsert using conditional logic instead of ON CONFLICT with expressions
-    // First check if record exists
-    const checkQuery = `
-      SELECT id, created_at, updated_at
-      FROM recent_searches
-      WHERE (user_id = $1 OR (user_id IS NULL AND device_id = $2))
-        AND query_hash = $3
-      LIMIT 1
-    `;
+    try {
+      // Try to upsert using conditional logic instead of ON CONFLICT with expressions
+      // First check if record exists
+      const checkQuery = `
+        SELECT id, created_at, updated_at
+        FROM recent_searches
+        WHERE (user_id = $1 OR (user_id IS NULL AND device_id = $2))
+          AND query_hash = $3
+        LIMIT 1
+      `;
 
-    const checkValues = [userId, deviceId, queryHash];
-    const existing = await pool.query(checkQuery, checkValues);
+      const checkValues = [userId, deviceId, queryHash];
+      const existing = await pool.query(checkQuery, checkValues);
 
-    if (existing.rows.length > 0) {
-      // Update existing record
-      const updateQuery = `
-        UPDATE recent_searches
-        SET updated_at = NOW(), query = $1
-        WHERE id = $2
+      if (existing.rows.length > 0) {
+        // Update existing record
+        const updateQuery = `
+          UPDATE recent_searches
+          SET updated_at = NOW(), query = $1
+          WHERE id = $2
+          RETURNING id, created_at, updated_at;
+        `;
+        const updateValues = [query, existing.rows[0].id];
+        const result = await pool.query(updateQuery, updateValues);
+        return res.status(200).json(result.rows[0]);
+      }
+
+      // Insert new record
+      const insertQuery = `
+        INSERT INTO recent_searches (user_id, device_id, module, query_hash, query)
+        VALUES ($1, $2, $3, $4, $5)
         RETURNING id, created_at, updated_at;
       `;
-      const updateValues = [query, existing.rows[0].id];
-      const result = await pool.query(updateQuery, updateValues);
-      return res.status(200).json(result.rows[0]);
+
+      const insertValues = [userId, deviceId, module, queryHash, query];
+      const result = await pool.query(insertQuery, insertValues);
+
+      res.status(201).json(result.rows[0]);
+    } catch (dbError) {
+      // If table doesn't exist, return success but with warning
+      if (
+        dbError.message.includes("relation") &&
+        dbError.message.includes("does not exist")
+      ) {
+        console.warn(
+          "⚠️  recent_searches table not found. Migration may not have been applied.",
+        );
+        // Return success with warning - recent search feature is optional
+        return res.status(200).json({
+          id: 0,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          warning: "Recent searches table not initialized",
+        });
+      }
+      throw dbError;
     }
-
-    // Insert new record
-    const insertQuery = `
-      INSERT INTO recent_searches (user_id, device_id, module, query_hash, query)
-      VALUES ($1, $2, $3, $4, $5)
-      RETURNING id, created_at, updated_at;
-    `;
-
-    const insertValues = [userId, deviceId, module, queryHash, query];
-    const result = await pool.query(insertQuery, insertValues);
-
-    res.status(201).json(result.rows[0]);
   } catch (error) {
     console.error("Error creating recent search:", error);
     res.status(500).json({
