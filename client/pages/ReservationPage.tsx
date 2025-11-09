@@ -54,11 +54,16 @@ const formatINR = (amount: number): string => {
 export default function ReservationPage() {
   useScrollToTop();
   const navigate = useNavigate();
+  const location = window.location;
   const [searchParams] = useSearchParams();
   const { selectedCurrency } = useCurrency();
   const { loadFromUrlParams, getDisplayData } = useSearch();
   const [currentStep, setCurrentStep] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+
+  // Get return URL from location.state (to go back to results page with all filters)
+  const locationState = (window.history.state?.usr || {}) as any;
+  const returnUrl = locationState?.returnUrl || `/hotels/results?destination=${searchParams.get("hotelId") || "DXB"}`;
 
   // Form state
   const [guestDetails, setGuestDetails] = useState({
