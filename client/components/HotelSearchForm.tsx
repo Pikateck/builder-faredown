@@ -420,14 +420,20 @@ export function HotelSearchForm({
             console.log("✅ Recent hotel search saved successfully");
             return response.json();
           } else {
-            throw new Error(`API error: ${response.status}`);
+            console.warn(`⚠️  Recent search API returned ${response.status}, continuing anyway`);
+            return { id: 0, warning: `HTTP ${response.status}` };
           }
         })
         .then((data) => {
-          console.log("📋 Saved hotel search ID:", data.id);
+          if (data.id) {
+            console.log("📋 Saved hotel search ID:", data.id);
+          } else if (data.warning) {
+            console.warn("⚠️  Recent search note:", data.warning);
+          }
         })
         .catch((error) => {
-          console.error("Failed to save recent hotel search:", error);
+          console.warn("⚠️  Failed to save recent hotel search (non-blocking):", error.message);
+          // This is non-blocking, so don't propagate the error
         });
 
       const url = `/hotels/results?${urlSearchParams.toString()}`;
