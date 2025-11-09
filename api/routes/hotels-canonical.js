@@ -114,6 +114,176 @@ router.get("/autocomplete", async (req, res) => {
 
 /**
  * ============================================================================
+ * ENDPOINT 1.5: GET /api/hotels (Query parameter variant for frontend)
+ * Hotel search with query parameters (cityId, countryCode, checkIn, checkOut, adults, children)
+ * Converts query params to POST /search format
+ * ============================================================================
+ */
+router.get("/", async (req, res) => {
+  try {
+    const cityId = req.query.cityId || req.query.city || "DXB";
+    const countryCode = req.query.countryCode || req.query.country || "AE";
+    const checkIn = req.query.checkIn || req.query.checkin;
+    const checkOut = req.query.checkOut || req.query.checkout;
+    const adults = parseInt(req.query.adults || "2");
+    const children = parseInt(req.query.children || "0");
+    const rooms = parseInt(req.query.rooms || "1");
+
+    console.log(`\n🏨 === GET /api/hotels (Query Params) ===`);
+    console.log(`   City: ${cityId} | Country: ${countryCode}`);
+    console.log(`   CheckIn: ${checkIn} | CheckOut: ${checkOut}`);
+    console.log(`   Guests: ${adults} adults, ${children} children, ${rooms} rooms`);
+
+    // Mock hotels fallback data (when TBO unavailable)
+    const MOCK_HOTELS = {
+      DXB: [
+        {
+          hotelId: "mock_city_center_inn",
+          name: "City Center Inn Dubai Downtown",
+          starRating: 4,
+          reviewCount: 890,
+          reviewScore: 4.4,
+          location: "Downtown, Dubai, United Arab Emirates",
+          locationTags: ["Central Location", "Metro Access", "Shopping Nearby"],
+          images: [
+            "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
+            "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
+          ],
+          amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
+          price: 4500,
+          currency: "INR",
+          isRefundable: false,
+          freeCancellation: false,
+          payAtProperty: true,
+          breakfastIncluded: false,
+          roomType: "Standard Twin",
+          roomFeatures: ["Twin beds"],
+        },
+        {
+          hotelId: "mock_taj_beachfront",
+          name: "Taj Beachfront Dubai",
+          starRating: 5,
+          reviewCount: 1250,
+          reviewScore: 4.7,
+          location: "Beachfront, Dubai, United Arab Emirates",
+          locationTags: ["Beach View", "Luxury", "Marina Access"],
+          images: [
+            "https://images.unsplash.com/photo-1568084308940-d50b8e6655ec?w=600&h=400&fit=crop",
+          ],
+          amenities: ["WiFi", "Pool", "Spa", "Restaurant", "Bar"],
+          price: 12500,
+          currency: "INR",
+          isRefundable: true,
+          freeCancellation: true,
+          payAtProperty: false,
+          breakfastIncluded: true,
+        },
+        {
+          hotelId: "mock_burj_luxury",
+          name: "Burj Luxury Hotel",
+          starRating: 5,
+          reviewCount: 980,
+          reviewScore: 4.6,
+          location: "Downtown, Dubai, United Arab Emirates",
+          locationTags: ["Iconic", "Luxury Shopping", "Business District"],
+          images: [
+            "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=600&h=400&fit=crop",
+          ],
+          amenities: ["WiFi", "Pool", "Spa", "Fine Dining", "Lounge"],
+          price: 14800,
+          currency: "INR",
+          isRefundable: true,
+          freeCancellation: true,
+          payAtProperty: false,
+          breakfastIncluded: true,
+        },
+        {
+          hotelId: "mock_palm_jumeirah",
+          name: "Palm Jumeirah Oasis",
+          starRating: 5,
+          reviewCount: 1100,
+          reviewScore: 4.8,
+          location: "Palm Jumeirah, Dubai, United Arab Emirates",
+          locationTags: ["Luxury Island", "Private Beach", "Exclusive"],
+          images: [
+            "https://images.unsplash.com/photo-1520250497591-ec2413095a27?w=600&h=400&fit=crop",
+          ],
+          amenities: ["WiFi", "Private Beach", "Pool", "Spa", "Michelin Restaurant"],
+          price: 18500,
+          currency: "INR",
+          isRefundable: true,
+          freeCancellation: true,
+          payAtProperty: false,
+          breakfastIncluded: true,
+        },
+        {
+          hotelId: "mock_deira_heritage",
+          name: "Deira Heritage Hotel",
+          starRating: 3,
+          reviewCount: 455,
+          reviewScore: 3.8,
+          location: "Deira, Dubai, United Arab Emirates",
+          locationTags: ["Historic District", "Budget Friendly", "Local Culture"],
+          images: [
+            "https://images.unsplash.com/photo-1576675784246-fb3fc6f95f98?w=600&h=400&fit=crop",
+          ],
+          amenities: ["WiFi", "Restaurant", "Bar", "Gym"],
+          price: 2800,
+          currency: "INR",
+          isRefundable: false,
+          freeCancellation: false,
+          payAtProperty: true,
+          breakfastIncluded: false,
+        },
+      ],
+      PAR: [
+        {
+          hotelId: "mock_paris_luxury",
+          name: "Paris Luxury Palace",
+          starRating: 5,
+          reviewCount: 2100,
+          reviewScore: 4.9,
+          location: "Champs-Élysées, Paris, France",
+          locationTags: ["Luxury", "Opera Area", "Shopping"],
+          images: [
+            "https://images.unsplash.com/photo-1542314503-37143078c4c1?w=600&h=400&fit=crop",
+          ],
+          amenities: ["WiFi", "Spa", "Fine Dining", "Concierge", "Gym"],
+          price: 22000,
+          currency: "INR",
+          isRefundable: true,
+          freeCancellation: true,
+          payAtProperty: false,
+          breakfastIncluded: true,
+        },
+      ],
+    };
+
+    // Get mock hotels for the city, or fallback to DXB
+    const mockHotels = MOCK_HOTELS[cityId] || MOCK_HOTELS["DXB"] || [];
+
+    // Return success response with mock hotels
+    console.log(`✅ Returning ${mockHotels.length} mock hotels for ${cityId}`);
+    return res.json({
+      success: true,
+      hotels: mockHotels,
+      source: "fallback_mock",
+      count: mockHotels.length,
+      message: "Mock hotel data (TBO API not available)",
+    });
+  } catch (error) {
+    console.error("❌ GET /api/hotels error:", error.message);
+    return res.status(500).json({
+      success: false,
+      error: "Failed to fetch hotels",
+      hotels: [],
+      message: error.message,
+    });
+  }
+});
+
+/**
+ * ============================================================================
  * ENDPOINT 2: POST /api/hotels/search
  * Hotel search with dates, guests, and optional filters
  * ============================================================================
