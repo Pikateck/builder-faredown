@@ -286,7 +286,7 @@ export function BookingSearchForm() {
     isUserTyping,
   ]);
 
-  const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
+  const childAgeOptions = Array.from({ length: 13 }, (_, i) => i);
 
   const handleSearch = async () => {
     console.log("🔍 Starting Hotelbeds search with:", {

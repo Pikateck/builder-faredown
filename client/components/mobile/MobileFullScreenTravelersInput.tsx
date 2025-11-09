@@ -209,7 +209,7 @@ export function MobileFullScreenTravelersInput({
           {/* Children */}
           <Counter
             label="Children"
-            description={bookingType === "flight" ? "Ages 2-17" : "Ages 0-17"}
+            description={bookingType === "flight" ? "Ages 2-17" : "Ages 0-12"}
             value={travelers.children || 0}
             type="children"
           />
@@ -242,7 +242,7 @@ export function MobileFullScreenTravelersInput({
                           <SelectValue />
                         </SelectTrigger>
                         <SelectContent>
-                          {Array.from({ length: 18 }, (_, i) => (
+                          {Array.from({ length: 13 }, (_, i) => (
                             <SelectItem key={i} value={i.toString()}>
                               {i}
                             </SelectItem>

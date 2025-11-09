@@ -208,7 +208,7 @@ export function HotelSearchForm({
     return () => clearTimeout(debounceTimer);
   }, [inputValue, isUserTyping]);
 
-  const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
+  const childAgeOptions = Array.from({ length: 13 }, (_, i) => i);
 
   const calculateNights = (
     checkIn: Date | undefined,
