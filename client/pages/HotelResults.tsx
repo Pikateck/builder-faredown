@@ -2773,7 +2773,7 @@ function HotelResultsContent() {
           setSelectedHotel(null);
         }}
         onHold={(orderRef) => {
-          console.log("Hotel bargain offer on hold with order ref:", orderRef);
+          // Bargain on hold - silent handling
         }}
         userName={userFirstName}
         module="hotels"
