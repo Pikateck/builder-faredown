@@ -1257,13 +1257,11 @@ export default function FlightResults() {
 
   // Bargain modal handlers
   const handleBargainClick = (flight: any) => {
-    console.log("🚀 Starting bargain for flight:", flight.id);
     setSelectedBargainFlight(flight);
     setShowBargainModal(true);
   };
 
   const handleBargainAccept = (finalPrice: number, orderRef: string) => {
-    console.log("✅ Bargain accepted:", finalPrice, orderRef);
     setShowBargainModal(false);
 
     // Build the return URL to go back to results page with all filters/params preserved
