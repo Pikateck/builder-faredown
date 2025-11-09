@@ -252,6 +252,7 @@ class DatabaseConnection {
 
   async ensureRecentSearchesTable() {
     try {
+      // Create table
       const createTableSQL = `
         CREATE TABLE IF NOT EXISTS public.recent_searches (
           id                 BIGSERIAL PRIMARY KEY,
@@ -262,64 +263,60 @@ class DatabaseConnection {
           query              JSONB NOT NULL,
           created_at         TIMESTAMPTZ NOT NULL DEFAULT NOW(),
           updated_at         TIMESTAMPTZ NOT NULL DEFAULT NOW()
-        );
+        )
       `;
 
       await this.query(createTableSQL);
 
       // Create indexes
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_recent_searches_user_id ON public.recent_searches (user_id DESC, created_at DESC);`,
+        `CREATE INDEX IF NOT EXISTS idx_recent_searches_user_id ON public.recent_searches (user_id DESC, created_at DESC)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_recent_searches_device_id ON public.recent_searches (device_id DESC, created_at DESC);`,
+        `CREATE INDEX IF NOT EXISTS idx_recent_searches_device_id ON public.recent_searches (device_id DESC, created_at DESC)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_recent_searches_module ON public.recent_searches (module, created_at DESC);`,
+        `CREATE INDEX IF NOT EXISTS idx_recent_searches_module ON public.recent_searches (module, created_at DESC)`,
       );
       await this.query(
-        `CREATE INDEX IF NOT EXISTS idx_recent_searches_query_hash ON public.recent_searches (query_hash);`,
+        `CREATE INDEX IF NOT EXISTS idx_recent_searches_query_hash ON public.recent_searches (query_hash)`,
       );
-
-      // Create unique constraint
       await this.query(
         `CREATE UNIQUE INDEX IF NOT EXISTS idx_recent_searches_unique_query
-         ON public.recent_searches (COALESCE(user_id::text, device_id), query_hash);`,
+         ON public.recent_searches (COALESCE(user_id::text, device_id), query_hash)`,
       );
 
-      // Add check constraint if it doesn't exist
-      await this.query(`
-        DO $$
-        BEGIN
-            IF NOT EXISTS (
-                SELECT 1 FROM information_schema.table_constraints
-                WHERE constraint_name = 'chk_recent_searches_identity'
-                AND table_name = 'recent_searches'
-            ) THEN
-                ALTER TABLE public.recent_searches
-                ADD CONSTRAINT chk_recent_searches_identity
-                CHECK (user_id IS NOT NULL OR device_id IS NOT NULL);
-            END IF;
-        END
-        $$;
-      `);
+      // Try to add check constraint (ignore error if it already exists)
+      try {
+        await this.query(
+          `ALTER TABLE public.recent_searches ADD CONSTRAINT chk_recent_searches_identity
+           CHECK (user_id IS NOT NULL OR device_id IS NOT NULL)`,
+        );
+      } catch (e) {
+        if (!e.message.includes("already exists")) {
+          console.warn("⚠️  Could not add constraint:", e.message);
+        }
+      }
 
-      // Create or replace trigger for updated_at
-      await this.query(`
-        CREATE OR REPLACE FUNCTION update_recent_searches_updated_at()
-        RETURNS TRIGGER AS $$
-        BEGIN
-            NEW.updated_at = NOW();
-            RETURN NEW;
-        END;
-        $$ LANGUAGE plpgsql;
+      // Create function and trigger
+      try {
+        await this.query(`
+          CREATE OR REPLACE FUNCTION update_recent_searches_updated_at()
+          RETURNS TRIGGER AS $$ BEGIN NEW.updated_at = NOW(); RETURN NEW; END $$ LANGUAGE plpgsql
+        `);
 
-        DROP TRIGGER IF EXISTS tr_recent_searches_updated_at ON public.recent_searches;
-        CREATE TRIGGER tr_recent_searches_updated_at
-            BEFORE UPDATE ON public.recent_searches
-            FOR EACH ROW
-            EXECUTE FUNCTION update_recent_searches_updated_at();
-      `);
+        await this.query(
+          `DROP TRIGGER IF EXISTS tr_recent_searches_updated_at ON public.recent_searches`,
+        );
+
+        await this.query(`
+          CREATE TRIGGER tr_recent_searches_updated_at
+          BEFORE UPDATE ON public.recent_searches
+          FOR EACH ROW EXECUTE FUNCTION update_recent_searches_updated_at()
+        `);
+      } catch (e) {
+        console.warn("⚠️  Could not create trigger:", e.message);
+      }
 
       console.log("✅ recent_searches table ensured successfully");
     } catch (error) {
