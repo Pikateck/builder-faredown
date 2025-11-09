@@ -202,14 +202,17 @@ router.delete("/:id", identifyUser, async (req, res) => {
       return res.status(400).json({ error: "Valid ID is required" });
     }
 
+    const userId = req.identity.type === "user" ? req.identity.id : null;
+    const deviceId = req.identity.type === "device" ? req.identity.id : null;
+
     // Ensure user can only delete their own searches
     const deleteQuery = `
-      DELETE FROM recent_searches 
-      WHERE id = $1 AND COALESCE(user_id::text, device_id) = $2
+      DELETE FROM recent_searches
+      WHERE id = $1 AND (user_id = $2 OR (user_id IS NULL AND device_id = $3))
       RETURNING id;
     `;
 
-    const values = [parseInt(id), req.identity.id];
+    const values = [parseInt(id), userId, deviceId];
     const result = await pool.query(deleteQuery, values);
 
     if (result.rows.length === 0) {
