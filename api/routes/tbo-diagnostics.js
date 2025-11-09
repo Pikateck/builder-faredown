@@ -76,9 +76,9 @@ async function detectOutboundIP() {
  */
 async function testTBOHotelSearch() {
   const testPayload = {
-    ClientId: process.env.TBO_HOTEL_CLIENT_ID || "tboprod",
-    UserName: process.env.TBO_HOTEL_USER_ID || "BOMF145",
-    Password: process.env.TBO_HOTEL_PASSWORD || "@Bo#4M-Api@",
+    ClientId: process.env.TBO_CLIENT_ID,
+    UserName: process.env.TBO_API_USER_ID,
+    Password: process.env.TBO_API_PASSWORD,
     EndUserIp: process.env.TBO_END_USER_IP || "192.168.5.56",
     CheckIn: "2025-10-31",
     CheckOut: "2025-11-03",
