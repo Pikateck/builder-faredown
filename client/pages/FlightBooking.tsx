@@ -290,9 +290,18 @@ export default function FlightBooking({
             </div>
             <div className="text-right">
               <div className="text-2xl font-bold text-blue-600">
-                {formatPrice(flight.price.amount)}
+                {negotiatedPrice
+                  ? formatPrice(
+                      negotiatedPrice / (location.state?.searchParams?.adults || 1),
+                    )
+                  : formatPrice(flight.price.amount)}
               </div>
               <div className="text-sm text-gray-500">per person</div>
+              {negotiatedPrice && (
+                <div className="text-xs text-green-600 font-semibold">
+                  ✓ Bargain price applied
+                </div>
+              )}
             </div>
           </div>
         </div>
