@@ -11,14 +11,14 @@
 
 ## Files Created/Modified
 
-| File | Action | Purpose |
-|------|--------|---------|
-| `api/routes/hotels-canonical.js` | Created | Main implementation (658 lines) |
-| `api/server.js` | Modified | Register `/api/hotels` route |
-| `api/database/migrations/20250401_hotel_canonical_indexes.sql` | Created | DB indexes + hotel_images table |
-| `api/postman/Canonical-Hotel-API.postman_collection.json` | Created | Testing collection |
-| `api/openapi/hotels-canonical-openapi.yaml` | Created | OpenAPI 3.0 spec |
-| `HOTEL_API_STEP_2_IMPLEMENTATION_COMPLETE.md` | Created | Full documentation |
+| File                                                           | Action   | Purpose                         |
+| -------------------------------------------------------------- | -------- | ------------------------------- |
+| `api/routes/hotels-canonical.js`                               | Created  | Main implementation (658 lines) |
+| `api/server.js`                                                | Modified | Register `/api/hotels` route    |
+| `api/database/migrations/20250401_hotel_canonical_indexes.sql` | Created  | DB indexes + hotel_images table |
+| `api/postman/Canonical-Hotel-API.postman_collection.json`      | Created  | Testing collection              |
+| `api/openapi/hotels-canonical-openapi.yaml`                    | Created  | OpenAPI 3.0 spec                |
+| `HOTEL_API_STEP_2_IMPLEMENTATION_COMPLETE.md`                  | Created  | Full documentation              |
 
 ## Pre-Deployment Checklist
 
@@ -28,6 +28,7 @@
   - `TBO_HOTEL_PASSWORD=@Bo#4M-Api@`
 
 - [ ] Confirm database connection works:
+
   ```bash
   psql $DATABASE_URL -c "SELECT COUNT(*) FROM hotel_unified;"
   ```
@@ -173,13 +174,13 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/{property
 
 ### Error Scenarios
 
-| Error | Status | Expected Behavior |
-|-------|--------|-------------------|
-| TBO timeout | 200 | Hotel list returned; pricing_available=false |
-| Invalid city | 200 | Empty suggestions/hotels with message |
-| Invalid dates | 400 | Clear error message |
-| Missing hotel | 404 | Clear error message |
-| DB error | 500 | Error response |
+| Error         | Status | Expected Behavior                            |
+| ------------- | ------ | -------------------------------------------- |
+| TBO timeout   | 200    | Hotel list returned; pricing_available=false |
+| Invalid city  | 200    | Empty suggestions/hotels with message        |
+| Invalid dates | 400    | Clear error message                          |
+| Missing hotel | 404    | Clear error message                          |
+| DB error      | 500    | Error response                               |
 
 ## Configuration
 

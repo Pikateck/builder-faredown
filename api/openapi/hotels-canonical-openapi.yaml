@@ -3,7 +3,7 @@ info:
   title: Faredown Canonical Hotel API
   description: |
     STEP 2 Implementation: 4 canonical hotel endpoints for search, autocomplete, details, and rates.
-    
+
     Design principles:
     - TBO-first supplier (STEP 2)
     - Supplier-agnostic schema (ready for multi-supplier)
@@ -55,7 +55,7 @@ paths:
           description: Optional country code filter (ISO 2-letter)
           example: "AE"
       responses:
-        '200':
+        "200":
           description: Success - returns city suggestions
           content:
             application/json:
@@ -67,10 +67,10 @@ paths:
                   suggestions:
                     type: array
                     items:
-                      $ref: '#/components/schemas/City'
-        '400':
+                      $ref: "#/components/schemas/City"
+        "400":
           description: Bad request - missing q parameter
-        '500':
+        "500":
           description: Server error
 
   /api/hotels/search:
@@ -86,7 +86,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/HotelSearchRequest'
+              $ref: "#/components/schemas/HotelSearchRequest"
             example:
               city_code: "DXB"
               country_code: "AE"
@@ -100,15 +100,15 @@ paths:
               limit: 50
               offset: 0
       responses:
-        '200':
+        "200":
           description: Success - returns hotel list
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/HotelSearchResponse'
-        '400':
+                $ref: "#/components/schemas/HotelSearchResponse"
+        "400":
           description: Bad request - missing or invalid parameters
-        '500':
+        "500":
           description: Server error
 
   /api/hotels/{propertyId}:
@@ -139,7 +139,7 @@ paths:
             default: false
           description: Include guest reviews (reserved for future use)
       responses:
-        '200':
+        "200":
           description: Success - returns hotel details
           content:
             application/json:
@@ -149,10 +149,10 @@ paths:
                   success:
                     type: boolean
                   hotel:
-                    $ref: '#/components/schemas/HotelDetail'
-        '404':
+                    $ref: "#/components/schemas/HotelDetail"
+        "404":
           description: Hotel not found
-        '500':
+        "500":
           description: Server error
 
   /api/hotels/{propertyId}/rates:
@@ -176,7 +176,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RatesRequest'
+              $ref: "#/components/schemas/RatesRequest"
             example:
               check_in: "2025-10-31"
               check_out: "2025-11-03"
@@ -186,17 +186,17 @@ paths:
               preferred_currency: "INR"
               refresh: false
       responses:
-        '200':
+        "200":
           description: Success - returns available rates
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RatesResponse'
-        '400':
+                $ref: "#/components/schemas/RatesResponse"
+        "400":
           description: Bad request - invalid dates or missing parameters
-        '404':
+        "404":
           description: Hotel not found
-        '500':
+        "500":
           description: Server error
 
 components:
@@ -335,7 +335,7 @@ components:
                   lng:
                     type: number
               pricing:
-                $ref: '#/components/schemas/Pricing'
+                $ref: "#/components/schemas/Pricing"
                 nullable: true
               pricing_available:
                 type: boolean
@@ -478,7 +478,7 @@ components:
                 type: string
               board_basis:
                 type: string
-                description: 'RO=Room Only, BB=Bed+Breakfast, HB=Half Board, FB=Full Board'
+                description: "RO=Room Only, BB=Bed+Breakfast, HB=Half Board, FB=Full Board"
               bed_type:
                 type: string
               refundable:
@@ -493,7 +493,7 @@ components:
                   children:
                     type: integer
               pricing:
-                $ref: '#/components/schemas/Pricing'
+                $ref: "#/components/schemas/Pricing"
               rate_key:
                 type: string
                 description: Rate identifier for booking

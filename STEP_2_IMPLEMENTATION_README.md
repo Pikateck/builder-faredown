@@ -3,7 +3,7 @@
 **Date:** April 2025  
 **Status:** ✅ COMPLETE & READY FOR DEPLOYMENT  
 **Implementation By:** Assistant (following Zubin's specifications)  
-**Files:** 658 lines of code + 3 documentation files + migration  
+**Files:** 658 lines of code + 3 documentation files + migration
 
 ---
 
@@ -52,27 +52,27 @@ POST   /api/hotels/:propertyId/rates
 
 ### Core Implementation
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `api/routes/hotels-canonical.js` | 658 | Main implementation (4 endpoints, error handling, caching) |
-| `api/server.js` | Modified | Route registration (line 31, 459) |
+| File                             | Lines    | Purpose                                                    |
+| -------------------------------- | -------- | ---------------------------------------------------------- |
+| `api/routes/hotels-canonical.js` | 658      | Main implementation (4 endpoints, error handling, caching) |
+| `api/server.js`                  | Modified | Route registration (line 31, 459)                          |
 
 ### Database
 
-| File | Purpose |
-|------|---------|
+| File                                                           | Purpose                                |
+| -------------------------------------------------------------- | -------------------------------------- |
 | `api/database/migrations/20250401_hotel_canonical_indexes.sql` | Indexes + hotel_images table + columns |
 
 ### Testing & Docs
 
-| File | Lines | Purpose |
-|------|-------|---------|
-| `api/postman/Canonical-Hotel-API.postman_collection.json` | 75 | Postman collection for testing |
-| `api/openapi/hotels-canonical-openapi.yaml` | 540 | OpenAPI 3.0 specification |
-| `HOTEL_API_STEP_2_IMPLEMENTATION_COMPLETE.md` | 634 | Full technical documentation |
-| `STEP_2_QUICK_START_GUIDE.md` | 242 | Deployment & testing checklist |
-| `STEP_2_SUMMARY_FOR_ZUBIN.md` | 467 | Summary of implementation |
-| `STEP_2_IMPLEMENTATION_README.md` | This file | Overview for Zubin |
+| File                                                      | Lines     | Purpose                        |
+| --------------------------------------------------------- | --------- | ------------------------------ |
+| `api/postman/Canonical-Hotel-API.postman_collection.json` | 75        | Postman collection for testing |
+| `api/openapi/hotels-canonical-openapi.yaml`               | 540       | OpenAPI 3.0 specification      |
+| `HOTEL_API_STEP_2_IMPLEMENTATION_COMPLETE.md`             | 634       | Full technical documentation   |
+| `STEP_2_QUICK_START_GUIDE.md`                             | 242       | Deployment & testing checklist |
+| `STEP_2_SUMMARY_FOR_ZUBIN.md`                             | 467       | Summary of implementation      |
+| `STEP_2_IMPLEMENTATION_README.md`                         | This file | Overview for Zubin             |
 
 **Total New Code:** 1,916 lines  
 **Syntax Validation:** ✅ Passed (node -c)
@@ -91,7 +91,7 @@ hotels-canonical.js (validation)
 TBO Adapter Call
   ├─ Success: Return TBO data
   ├─ Timeout (30s): Return empty
-  ├─ 401/403: Return empty  
+  ├─ 401/403: Return empty
   └─ 500+: Return empty
     ↓
 Cache Check (if applicable)
@@ -119,12 +119,14 @@ Return 200 OK (or 4xx/5xx for critical errors only)
 ### 1. Supplier-Agnostic Schema
 
 **Current (STEP 2):**
+
 ```javascript
-const USE_SUPPLIER_FILTER = 'TBO';
+const USE_SUPPLIER_FILTER = "TBO";
 // All queries: WHERE supplier_code = $1 [USE_SUPPLIER_FILTER]
 ```
 
 **Future (STEP 4+):**
+
 ```javascript
 const USE_SUPPLIER_FILTER = null; // or ['TBO', 'HOTELBEDS', 'RATEHAWK']
 // Query: WHERE supplier_code = ANY($1) [USE_SUPPLIER_FILTER]
@@ -133,6 +135,7 @@ const USE_SUPPLIER_FILTER = null; // or ['TBO', 'HOTELBEDS', 'RATEHAWK']
 ### 2. Rate Caching (15 Minutes)
 
 **Storage:**
+
 ```sql
 room_offer_unified table
 ├─ expires_at TIMESTAMPTZ
@@ -144,6 +147,7 @@ room_offer_unified table
 ```
 
 **Query Pattern:**
+
 ```javascript
 // Find valid rates (not expired):
 WHERE expires_at > NOW()
@@ -155,6 +159,7 @@ ORDER BY price_total ASC
 ```
 
 **TTL Configuration:**
+
 ```bash
 # Set in Render environment:
 ROOM_OFFER_TTL_MINUTES=15  # Default
@@ -164,20 +169,24 @@ ROOM_OFFER_TTL_MINUTES=30  # Override example
 ### 3. Error Handling
 
 **Autocomplete:**
+
 - TBO fails → Empty suggestions (200 OK)
 - No error propagation to user
 
 **Search:**
+
 - TBO fails → Hotel list returned with `pricing_available=false` (200 OK)
 - DB fails → `pricing_available=false` + message (200 OK)
 - Critical DB error → 500 Internal Server Error
 
 **Details:**
+
 - Hotel not found → 404 Not Found
 - Images unavailable → Return empty array (200 OK)
 - DB error → 500 Internal Server Error
 
 **Rates:**
+
 - TBO fails + no cache → Empty rates array with message (200 OK)
 - Invalid dates → 400 Bad Request
 - Hotel not found → 404 Not Found
@@ -212,24 +221,24 @@ ROOM_OFFER_TTL_MINUTES=30  # Override example
   property_id: "hotel-uuid",
   supplier_code: "TBO",
   supplier_hotel_id: "123456",
-  
+
   room_name: "Deluxe Room",
   board_basis: "RO",
   bed_type: "Double",
-  
+
   currency: "INR",
   price_base: 45000,
   price_taxes: 5400,
   price_total: 50400,
   price_per_night: 16800,
-  
+
   refundable: true,
   free_cancellation: true,
   cancellable_until: "2025-10-30T00:00:00Z",
-  
+
   rate_key_or_token: "rate-key-123",
   inclusions_json: ["WiFi", "Breakfast"],
-  
+
   search_checkin: "2025-10-31",
   search_checkout: "2025-11-03",
   expires_at: NOW() + 15 minutes
@@ -239,10 +248,11 @@ ROOM_OFFER_TTL_MINUTES=30  # Override example
 ### 5. Image Handling
 
 **Strategy:**
+
 ```javascript
 // 1. Try hotel_images table
-SELECT image_url FROM hotel_images 
-WHERE property_id = $1 
+SELECT image_url FROM hotel_images
+WHERE property_id = $1
 ORDER BY "order" ASC
 LIMIT 20;
 
@@ -258,6 +268,7 @@ return {
 ```
 
 **Result:**
+
 ```json
 {
   "images": [
@@ -321,6 +332,7 @@ psql $DATABASE_URL < api/database/migrations/20250401_hotel_canonical_indexes.sq
 ### Step 2: Verify TBO Credentials
 
 In Render dashboard (Settings > Environment Variables):
+
 ```
 TBO_HOTEL_CLIENT_ID=tboprod
 TBO_HOTEL_USER_ID=BOMF145
@@ -407,8 +419,8 @@ ALTER TABLE room_offer_unified ADD COLUMN refreshed_at TIMESTAMPTZ;
 
 ```javascript
 // api/server.js line 459-460
-app.use("/api/hotels", hotelCanonicalRoutes);  // PRIMARY
-app.use("/api/hotels-metadata", legacyRoute);   // FALLBACK
+app.use("/api/hotels", hotelCanonicalRoutes); // PRIMARY
+app.use("/api/hotels-metadata", legacyRoute); // FALLBACK
 ```
 
 ### 2. TBO API Response Format ✅
@@ -419,11 +431,13 @@ app.use("/api/hotels-metadata", legacyRoute);   // FALLBACK
 ### 3. Images & Amenities ✅
 
 **Images:**
+
 - Primary: `hotel_images` table
 - Fallback: `hotel_master.thumbnail_url`
 - Gallery: Up to 20 images sorted by order
 
 **Amenities:**
+
 - Source: `hotel_master.amenities_json` (JSONB)
 - Format: Array of strings
 - Future: Can normalize to separate table
@@ -500,7 +514,7 @@ app.use("/api/hotels-metadata", legacyRoute);   // FALLBACK
 ✅ **Images & amenities:** Database-driven with fallbacks  
 ✅ **Supplier-agnostic:** Ready for multi-supplier expansion  
 ✅ **Testing & docs:** Postman collection + OpenAPI spec  
-✅ **Database:** Migration with optimized indexes  
+✅ **Database:** Migration with optimized indexes
 
 **Status:** ✅ READY FOR DEPLOYMENT & TESTING
 

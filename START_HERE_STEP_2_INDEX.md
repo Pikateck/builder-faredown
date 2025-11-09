@@ -123,27 +123,30 @@ POST   /api/hotels/:propertyId/rates
 
 ## 📊 What Was Built
 
-| Category | Files | Lines |
-|----------|-------|-------|
-| **Core Code** | 1 file | 658 |
-| **Server Config** | 1 file (modified) | - |
-| **Database** | 1 migration | 55 |
-| **Testing** | 1 Postman collection | 75 |
-| **API Docs** | 1 OpenAPI spec | 540 |
-| **Documentation** | 6 files | 2,864 |
-| **TOTAL** | 11 deliverables | 4,192 |
+| Category          | Files                | Lines |
+| ----------------- | -------------------- | ----- |
+| **Core Code**     | 1 file               | 658   |
+| **Server Config** | 1 file (modified)    | -     |
+| **Database**      | 1 migration          | 55    |
+| **Testing**       | 1 Postman collection | 75    |
+| **API Docs**      | 1 OpenAPI spec       | 540   |
+| **Documentation** | 6 files              | 2,864 |
+| **TOTAL**         | 11 deliverables      | 4,192 |
 
 ---
 
 ## 🚀 Quick Deployment
 
 ### 1. Run Migration
+
 ```bash
 psql $DATABASE_URL < api/database/migrations/20250401_hotel_canonical_indexes.sql
 ```
 
 ### 2. Verify TBO Credentials in Render
+
 Check that these env vars are set:
+
 ```
 TBO_HOTEL_CLIENT_ID=tboprod
 TBO_HOTEL_USER_ID=BOMF145
@@ -151,6 +154,7 @@ TBO_HOTEL_PASSWORD=@Bo#4M-Api@
 ```
 
 ### 3. Push to Git
+
 ```bash
 git add api/routes/hotels-canonical.js api/server.js \
         api/database/migrations/20250401_hotel_canonical_indexes.sql \
@@ -163,6 +167,7 @@ git push origin main
 ```
 
 ### 4. Test
+
 Use Postman collection or curl tests (see STEP_2_QUICK_START_GUIDE.md)
 
 ---
@@ -170,24 +175,31 @@ Use Postman collection or curl tests (see STEP_2_QUICK_START_GUIDE.md)
 ## 🔍 How to Read This Documentation
 
 ### If you have 5 minutes:
+
 → Read: [STEP_2_COMPLETION_SUMMARY.txt](STEP_2_COMPLETION_SUMMARY.txt)
 
 ### If you have 15 minutes:
+
 → Read: [STEP_2_SUMMARY_FOR_ZUBIN.md](STEP_2_SUMMARY_FOR_ZUBIN.md)
 
 ### If you have 30 minutes:
+
 → Read: [STEP_2_IMPLEMENTATION_README.md](STEP_2_IMPLEMENTATION_README.md)
 
 ### If you want the full technical spec:
+
 → Read: [HOTEL_API_STEP_2_IMPLEMENTATION_COMPLETE.md](HOTEL_API_STEP_2_IMPLEMENTATION_COMPLETE.md)
 
 ### If you need to deploy:
+
 → Follow: [STEP_2_QUICK_START_GUIDE.md](STEP_2_QUICK_START_GUIDE.md)
 
 ### If you need to test:
+
 → Use: [api/postman/Canonical-Hotel-API.postman_collection.json](api/postman/Canonical-Hotel-API.postman_collection.json)
 
 ### If you need API reference:
+
 → Use: [api/openapi/hotels-canonical-openapi.yaml](api/openapi/hotels-canonical-openapi.yaml)
 
 ---
@@ -289,11 +301,13 @@ TBO_HOTEL_BOOKING=https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/...
 ## 🧪 Testing
 
 ### Postman Collection
+
 - **Location:** `api/postman/Canonical-Hotel-API.postman_collection.json`
 - **Instructions:** Import → Set variables → Run tests
 - **Coverage:** All 4 endpoints with example requests/responses
 
 ### Manual Tests
+
 ```bash
 # Autocomplete
 curl "https://builder-faredown-pricing.onrender.com/api/hotels/autocomplete?q=Dubai"
@@ -305,6 +319,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/search" \
 ```
 
 ### OpenAPI Documentation
+
 - **Location:** `api/openapi/hotels-canonical-openapi.yaml`
 - **View:** Use Swagger UI for interactive docs
 - **Features:** Full endpoint specs, schemas, examples
@@ -313,23 +328,25 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/search" \
 
 ## 📈 Performance Targets
 
-| Operation | Timeout | Expected | Notes |
-|-----------|---------|----------|-------|
-| Autocomplete | 2s | <100ms | TBO cached |
-| Search | 5s | <2s | TBO + DB |
-| Details | 2s | <100ms | DB only |
-| Rates (cache) | 2s | <100ms | Query cached rates |
-| Rates (fresh) | 5s | 2-3s | TBO API call |
+| Operation     | Timeout | Expected | Notes              |
+| ------------- | ------- | -------- | ------------------ |
+| Autocomplete  | 2s      | <100ms   | TBO cached         |
+| Search        | 5s      | <2s      | TBO + DB           |
+| Details       | 2s      | <100ms   | DB only            |
+| Rates (cache) | 2s      | <100ms   | Query cached rates |
+| Rates (fresh) | 5s      | 2-3s     | TBO API call       |
 
 ---
 
 ## 🔄 Migration Path to Multi-Supplier
 
 ### STEP 2 (Current)
+
 - TBO only
 - `const USE_SUPPLIER_FILTER = 'TBO'`
 
 ### STEP 4 (Future)
+
 - TBO + Hotelbeds + RateHawk
 - `const USE_SUPPLIER_FILTER = null` (all suppliers)
 - Deduplication logic added
@@ -342,7 +359,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/search" \
 ## ✨ Next Steps (STEP 3)
 
 - [ ] Pre-booking: `POST /api/hotels/:propertyId/pre-book`
-- [ ] Booking confirmation: `POST /api/hotels/:propertyId/book`  
+- [ ] Booking confirmation: `POST /api/hotels/:propertyId/book`
 - [ ] Data import: Populate `hotel_unified` table with TBO hotels
 - [ ] Validate end-to-end booking flow
 
@@ -351,18 +368,22 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/search" \
 ## 🆘 Troubleshooting
 
 ### "0 properties found"
+
 → Check: Is hotel_unified table populated with TBO hotels?  
 → Fix: Run data import job (STEP 3)
 
 ### "pricing_available: false"
+
 → Expected: TBO API is unavailable (graceful fallback working)  
 → Check: TBO credentials and network connectivity
 
 ### Empty image gallery
+
 → Expected: hotel_images table not populated yet  
 → Fallback: Using thumbnail_url ✅
 
 ### Cache not working
+
 → Check: ROOM_OFFER_TTL_MINUTES env var set?  
 → Check: Database has room_offer_unified table?  
 → Run: Migration file to create table

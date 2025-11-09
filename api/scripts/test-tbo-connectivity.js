@@ -3,9 +3,9 @@
 /**
  * TBO Connectivity Test Script
  * Tests authentication and basic hotel search against TBO Hotel API
- * 
+ *
  * Usage: node api/scripts/test-tbo-connectivity.js
- * 
+ *
  * Environment variables required:
  * - TBO_CLIENT_ID=tboprod
  * - TBO_API_USER_ID=BOMF145
@@ -28,12 +28,13 @@ const colors = {
 
 function log(message, type = "info") {
   const timestamp = new Date().toISOString();
-  const prefix = {
-    info: `${colors.blue}ℹ${colors.reset}`,
-    success: `${colors.green}✓${colors.reset}`,
-    error: `${colors.red}✗${colors.reset}`,
-    warning: `${colors.yellow}⚠${colors.reset}`,
-  }[type] || "•";
+  const prefix =
+    {
+      info: `${colors.blue}ℹ${colors.reset}`,
+      success: `${colors.green}✓${colors.reset}`,
+      error: `${colors.red}✗${colors.reset}`,
+      warning: `${colors.yellow}⚠${colors.reset}`,
+    }[type] || "•";
   console.log(`[${timestamp}] ${prefix} ${message}`);
 }
 
@@ -86,7 +87,9 @@ async function testTBOConnectivity() {
   };
 
   log(`  Authenticating as: ${authPayload.UserName}@${authPayload.ClientId}`);
-  log(`  Endpoint: https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/Authenticate`);
+  log(
+    `  Endpoint: https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/Authenticate`,
+  );
 
   try {
     const authResponse = await tboRequest(
@@ -106,7 +109,9 @@ async function testTBOConnectivity() {
       const tokenId = authResponse.data.TokenId;
       log(`Authentication successful!`, "success");
       log(`  Token: ${tokenId.substring(0, 30)}...`);
-      log(`  Token expires in: ${authResponse.data?.ExpiryDuration || "~55 minutes"}`);
+      log(
+        `  Token expires in: ${authResponse.data?.ExpiryDuration || "~55 minutes"}`,
+      );
 
       console.log("");
 
@@ -115,7 +120,8 @@ async function testTBOConnectivity() {
       const searchPayload = {
         ClientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID,
         UserName: process.env.TBO_HOTEL_USER_ID || process.env.TBO_API_USER_ID,
-        Password: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_API_PASSWORD,
+        Password:
+          process.env.TBO_HOTEL_PASSWORD || process.env.TBO_API_PASSWORD,
         EndUserIp: process.env.TBO_END_USER_IP || "192.168.5.56",
         CheckInDate: "31/10/2025", // dd/mm/yyyy format
         CheckOutDate: "03/11/2025",
@@ -134,9 +140,7 @@ async function testTBOConnectivity() {
       };
 
       log(`  Searching hotels in Dubai (CityId: 130443)`);
-      log(
-        `  Dates: 31/10/2025 - 03/11/2025 (2 nights)`,
-      );
+      log(`  Dates: 31/10/2025 - 03/11/2025 (2 nights)`);
       log(
         `  Endpoint: https://affiliate.travelboutiqueonline.com/HotelAPI/Search`,
       );
@@ -163,15 +167,9 @@ async function testTBOConnectivity() {
           if (hotels.length > 0) {
             const firstHotel = hotels[0];
             log(`  Sample hotel:`, "info");
-            log(
-              `    - Name: ${firstHotel.HotelName || "N/A"}`,
-            );
-            log(
-              `    - Rating: ${firstHotel.StarRating || "N/A"} stars`,
-            );
-            log(
-              `    - Code: ${firstHotel.HotelCode || "N/A"}`,
-            );
+            log(`    - Name: ${firstHotel.HotelName || "N/A"}`);
+            log(`    - Rating: ${firstHotel.StarRating || "N/A"} stars`);
+            log(`    - Code: ${firstHotel.HotelCode || "N/A"}`);
             log(
               `    - Price (per night): ${firstHotel.Price?.CurrencyCode || "INR"} ${
                 firstHotel.Price?.RoomPrice || "N/A"
@@ -203,10 +201,7 @@ async function testTBOConnectivity() {
       } catch (searchError) {
         log(`Hotel search request failed: ${searchError.message}`, "error");
         if (searchError.response) {
-          log(
-            `  HTTP Status: ${searchError.response.status}`,
-            "error",
-          );
+          log(`  HTTP Status: ${searchError.response.status}`, "error");
           log(
             `  Response: ${JSON.stringify(searchError.response.data).substring(0, 200)}`,
             "error",
@@ -231,17 +226,17 @@ async function testTBOConnectivity() {
   } catch (authError) {
     log(`Authentication request failed: ${authError.message}`, "error");
     if (authError.response) {
-      log(
-        `  HTTP Status: ${authError.response.status}`,
-        "error",
-      );
+      log(`  HTTP Status: ${authError.response.status}`, "error");
       const responseData =
         typeof authError.response.data === "string"
           ? authError.response.data.substring(0, 200)
           : JSON.stringify(authError.response.data).substring(0, 200);
       log(`  Response: ${responseData}`, "error");
 
-      if (authError.response.status === 401 || authError.response.status === 403) {
+      if (
+        authError.response.status === 401 ||
+        authError.response.status === 403
+      ) {
         log(
           `\n⚠️  Authentication error (401/403). Possible causes:`,
           "warning",
@@ -254,10 +249,7 @@ async function testTBOConnectivity() {
           `   2. Outbound IP not whitelisted (52.5.155.132, 52.87.82.133)`,
           "warning",
         );
-        log(
-          `   3. Account not enabled for TBO Hotel API`,
-          "warning",
-        );
+        log(`   3. Account not enabled for TBO Hotel API`, "warning");
       }
     }
     console.log("");

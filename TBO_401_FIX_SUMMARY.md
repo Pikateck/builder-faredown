@@ -1,6 +1,7 @@
 # TBO 401 Unauthorized Fix - Complete Analysis & Solution
 
 ## Problem Statement
+
 TBO confirmed credentials are correct, but hotel search endpoint returning **HTTP 401 Unauthorized** error.
 
 ## Root Cause Analysis
@@ -12,6 +13,7 @@ After deep analysis, found **THREE CRITICAL ISSUES** in the implementation:
 **Location**: `api/services/adapters/tboAdapter.js` lines 74-76
 
 **The Issue**:
+
 ```javascript
 // WRONG - Looking for env vars that don't exist
 hotelClientId: process.env.TBO_CLIENT_ID,
@@ -20,6 +22,7 @@ hotelPassword: process.env.TBO_API_PASSWORD,
 ```
 
 **Environment Has**:
+
 ```
 TBO_HOTEL_CLIENT_ID="tboprod"
 TBO_HOTEL_USER_ID="BOMF145"
@@ -29,6 +32,7 @@ TBO_HOTEL_PASSWORD="@Bo#4M-Api@"
 **Impact**: Credentials were **undefined**, causing API rejection with 401.
 
 **Fix Applied**:
+
 ```javascript
 // CORRECT - Now matches actual environment variable names
 hotelClientId: process.env.TBO_HOTEL_CLIENT_ID,
@@ -41,16 +45,18 @@ hotelPassword: process.env.TBO_HOTEL_PASSWORD,
 **Location**: `api/services/adapters/tboAdapter.js` line 1270
 
 **The Issue**:
+
 - Was sending: `City: destination` (string like "DXB")
 - TBO API requires: `CityId: cityId` (numeric like "130443")
 
 **Example**:
+
 ```javascript
 // WRONG
-City: "DXB"  // String code - will fail
+City: "DXB"; // String code - will fail
 
-// CORRECT  
-CityId: "130443"  // Numeric DestinationId from getCityId()
+// CORRECT
+CityId: "130443"; // Numeric DestinationId from getCityId()
 ```
 
 **Why It Matters**: TBO API matches on numeric CityId, not string codes.
@@ -60,18 +66,20 @@ CityId: "130443"  // Numeric DestinationId from getCityId()
 **Location**: `api/services/adapters/tboAdapter.js` lines 1268-1269
 
 **The Issue**:
+
 - Was sending: `CheckIn: "2025-10-31"` (yyyy-mm-dd)
 - TBO API requires: `CheckIn: "31/10/2025"` (dd/mm/yyyy)
 
 **Example**:
+
 ```javascript
 // WRONG
-CheckIn: "2025-10-31"   // yyyy-mm-dd format
-CheckOut: "2025-11-03"
+CheckIn: "2025-10-31"; // yyyy-mm-dd format
+CheckOut: "2025-11-03";
 
 // CORRECT
-CheckIn: "31/10/2025"   // dd/mm/yyyy format
-CheckOut: "03/11/2025"
+CheckIn: "31/10/2025"; // dd/mm/yyyy format
+CheckOut: "03/11/2025";
 ```
 
 **Per TBO Documentation**: All date fields must be in dd/mm/yyyy format.
@@ -81,6 +89,7 @@ CheckOut: "03/11/2025"
 ### File 1: `api/services/adapters/tboAdapter.js`
 
 **Change 1 (Lines 74-76)**: Fixed env var names
+
 ```javascript
 hotelClientId: process.env.TBO_HOTEL_CLIENT_ID,
 hotelUserId: process.env.TBO_HOTEL_USER_ID,
@@ -88,6 +97,7 @@ hotelPassword: process.env.TBO_HOTEL_PASSWORD,
 ```
 
 **Change 2 (Lines 1258-1277)**: Added date conversion function and fixed payload
+
 ```javascript
 const formatDateForTBO = (dateStr) => {
   const d = new Date(dateStr);
@@ -101,25 +111,27 @@ const payload = {
   ClientId: this.config.hotelClientId,
   UserName: this.config.hotelUserId,
   Password: this.config.hotelPassword,
-  
+
   // CORRECTED DATE FORMATS
-  CheckIn: formatDateForTBO(checkIn),   // dd/mm/yyyy
+  CheckIn: formatDateForTBO(checkIn), // dd/mm/yyyy
   CheckOut: formatDateForTBO(checkOut), // dd/mm/yyyy
-  
+
   // CORRECTED CITY FIELD
-  CityId: cityId,  // numeric, not string
+  CityId: cityId, // numeric, not string
   // ... rest of payload
 };
 ```
 
 **Change 3 (Line 1314)**: Updated logging to show correct field
+
 ```javascript
 cityId: payload.CityId,  // Changed from payload.City
 ```
 
 ### File 2: `api/scripts/run-tbo-test.js`
 
-Updated to check TBO_HOTEL_* env vars first (already had fallback):
+Updated to check TBO*HOTEL*\* env vars first (already had fallback):
+
 ```javascript
 const tboClientId = getEnvVar("TBO_HOTEL_CLIENT_ID", "TBO_CLIENT_ID");
 const tboUserId = getEnvVar("TBO_HOTEL_USER_ID", "TBO_API_USER_ID");
@@ -129,21 +141,23 @@ const tboPassword = getEnvVar("TBO_HOTEL_PASSWORD", "TBO_API_PASSWORD");
 ### File 3: `api/routes/tbo-diagnostics.js`
 
 Updated to use correct env vars and payload format:
+
 ```javascript
 const testPayload = {
   ClientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID,
   UserName: process.env.TBO_HOTEL_USER_ID || process.env.TBO_API_USER_ID,
   Password: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_API_PASSWORD,
   // ...
-  CheckIn: "31/10/2025",    // dd/mm/yyyy (CORRECTED)
+  CheckIn: "31/10/2025", // dd/mm/yyyy (CORRECTED)
   CheckOut: "03/11/2025",
-  CityId: "130443",         // Numeric (CORRECTED)
+  CityId: "130443", // Numeric (CORRECTED)
 };
 ```
 
 ### File 4: `api/scripts/test-tbo-connectivity.js`
 
 Updated to use correct env vars and support fallback:
+
 ```javascript
 const authPayload = {
   ClientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID,
@@ -154,16 +168,16 @@ const authPayload = {
 
 const searchPayload = {
   // Same credential updates as above
-  CheckInDate: "31/10/2025",  // dd/mm/yyyy format
+  CheckInDate: "31/10/2025", // dd/mm/yyyy format
   CheckOutDate: "03/11/2025",
-  CityId: "130443",           // Numeric CityId
+  CityId: "130443", // Numeric CityId
   // ...
 };
 ```
 
 ## Verification Checklist
 
-- [x] Credentials now properly loaded from TBO_HOTEL_* env vars
+- [x] Credentials now properly loaded from TBO*HOTEL*\* env vars
 - [x] Date format converted to dd/mm/yyyy in all requests
 - [x] City field changed to numeric CityId
 - [x] Logging updated to show correct payload fields
@@ -173,6 +187,7 @@ const searchPayload = {
 ## Expected Results After Fix
 
 ### Before (401 Error):
+
 ```
 ❌ TBO search API call failed
    message: "Access Credentials is incorrect"
@@ -181,6 +196,7 @@ const searchPayload = {
 ```
 
 ### After (Success):
+
 ```
 ✅ TBO hotel search response received
    httpStatus: 200
@@ -192,6 +208,7 @@ const searchPayload = {
 ## Testing Commands
 
 ### Test Environment Variables
+
 ```bash
 echo "TBO_HOTEL_CLIENT_ID: $TBO_HOTEL_CLIENT_ID"
 echo "TBO_HOTEL_USER_ID: $TBO_HOTEL_USER_ID"
@@ -199,6 +216,7 @@ echo "TBO_HOTEL_PASSWORD: $TBO_HOTEL_PASSWORD"
 ```
 
 ### Test Hotel Search
+
 ```bash
 curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels \
   -H "Content-Type: application/json" \
@@ -206,6 +224,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/hotels \
 ```
 
 ### Check Render Logs
+
 ```
 Render Dashboard → builder-faredown-pricing → Logs
 Search for: "TBO Hotel Search Request" or "❌ TBO search API call failed"
@@ -214,6 +233,7 @@ Search for: "TBO Hotel Search Request" or "❌ TBO search API call failed"
 ## Deployment Steps
 
 1. **Push Changes**:
+
    ```bash
    git add api/services/adapters/tboAdapter.js
    git add api/scripts/run-tbo-test.js
@@ -233,6 +253,7 @@ Search for: "TBO Hotel Search Request" or "❌ TBO search API call failed"
 ## Summary
 
 The 401 error was caused by **credentials being undefined** due to env var name mismatch. Additionally:
+
 - Date format mismatch would cause further API errors
 - City field format mismatch would cause property matching failures
 

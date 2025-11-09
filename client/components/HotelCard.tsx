@@ -970,7 +970,8 @@ export function HotelCard({
                     {formatPrice(totalPriceInclusiveTaxes)}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {formatPrice(perNightInclusiveTaxes)} per room/night (incl. taxes)
+                    {formatPrice(perNightInclusiveTaxes)} per room/night (incl.
+                    taxes)
                   </div>
                 </div>
 
@@ -1189,7 +1190,8 @@ export function HotelCard({
                     {formatPrice(totalPriceInclusiveTaxes)}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {formatPrice(perNightInclusiveTaxes)} per room/night (incl. taxes)
+                    {formatPrice(perNightInclusiveTaxes)} per room/night (incl.
+                    taxes)
                   </div>
                 </div>
 
@@ -1397,7 +1399,8 @@ export function HotelCard({
                   {formatPrice(totalPriceInclusiveTaxes)}
                 </div>
                 <div className="text-xs text-gray-500">
-                  {formatPrice(perNightInclusiveTaxes)} per room/night (incl. taxes)
+                  {formatPrice(perNightInclusiveTaxes)} per room/night (incl.
+                  taxes)
                 </div>
               </div>
               <div className="flex gap-3 ml-3">

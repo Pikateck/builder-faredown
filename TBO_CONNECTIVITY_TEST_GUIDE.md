@@ -13,6 +13,7 @@ I have updated the backend code to use the **new standardized environment variab
 ### 1. Environment Variable Names Updated
 
 **Files Modified:**
+
 - ✅ `api/services/adapters/tboAdapter.js` (lines 72-78)
 - ✅ `api/routes/tbo-diagnostics.js` (lines 78-82)
 - ✅ `api/services/tboClient.js` (lines 12-13)
@@ -33,6 +34,7 @@ I have updated the backend code to use the **new standardized environment variab
 **File:** `api/scripts/test-tbo-connectivity.js` (276 lines)
 
 **Tests:**
+
 - ✅ Verifies all 5 environment variables are set
 - ✅ Authenticates with TBO Hotel API (SharedData.svc)
 - ✅ Performs a sample hotel search (Dubai, 2 nights)
@@ -157,6 +159,7 @@ If SSH is not available, I can add a temporary `/api/test/tbo-connectivity` endp
 **Message:** `Authentication failed: Invalid ClientId/UserName/Password`
 
 **Likely Causes:**
+
 1. ❌ Credentials are incorrect → Verify values match TBO email
 2. ❌ Outbound IPs not whitelisted → Confirm 52.5.155.132, 52.87.82.133 are whitelisted
 3. ❌ Account not enabled for TBO Hotel API → Contact TBO support
@@ -174,11 +177,13 @@ If SSH is not available, I can add a temporary `/api/test/tbo-connectivity` endp
 **Message:** `Request timeout` or `ECONNREFUSED`
 
 **Likely Causes:**
+
 1. Fixie proxy not active → Check USE_SUPPLIER_PROXY=true
 2. Network connectivity issue → Check Render logs
 3. TBO API temporarily down → Check TBO status page
 
 **Solution:**
+
 - Retry after 5 minutes
 - Check Render service logs for detailed errors
 - Contact support if persistent
@@ -192,6 +197,7 @@ Once the connectivity test **PASSES**, you can proceed with:
 ### STEP 2 Implementation: Canonical Hotel API Endpoints
 
 The 4 canonical endpoints are already implemented in:
+
 - **File:** `api/routes/hotels-canonical.js` (658 lines)
 - **Endpoints:**
   1. `GET /api/hotels/autocomplete?q=<city>` - City search
@@ -202,6 +208,7 @@ The 4 canonical endpoints are already implemented in:
 **Implementation Status:** ✅ Complete and ready to deploy
 
 **Quick Start:**
+
 ```bash
 # 1. Code is already implemented
 # 2. Run database migration
@@ -216,28 +223,28 @@ psql $DATABASE_URL < api/database/migrations/20250401_hotel_canonical_indexes.sq
 
 ## Timeline
 
-| Step | Action | Time | Status |
-|------|--------|------|--------|
-| 1 | Update Render env vars | 5 min | ⏳ Your action |
-| 2 | Deploy code changes | 3 min | Auto-deploy |
-| 3 | Run connectivity test | 5 min | ⏳ Your action |
-| 4 | Run database migration | 2 min | ⏳ Your action |
-| 5 | Test STEP 2 endpoints | 15 min | ⏳ Your action |
-| **Total** | **Implementation Ready** | **30 min** | |
+| Step      | Action                   | Time       | Status         |
+| --------- | ------------------------ | ---------- | -------------- |
+| 1         | Update Render env vars   | 5 min      | ⏳ Your action |
+| 2         | Deploy code changes      | 3 min      | Auto-deploy    |
+| 3         | Run connectivity test    | 5 min      | ⏳ Your action |
+| 4         | Run database migration   | 2 min      | ⏳ Your action |
+| 5         | Test STEP 2 endpoints    | 15 min     | ⏳ Your action |
+| **Total** | **Implementation Ready** | **30 min** |                |
 
 ---
 
 ## Key Files Reference
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `api/services/adapters/tboAdapter.js` | TBO adapter with new env vars | ✅ Updated |
-| `api/routes/tbo-diagnostics.js` | Diagnostics endpoint | ✅ Updated |
-| `api/services/tboClient.js` | TBO client with new env vars | ✅ Updated |
-| `api/scripts/test-tbo-connectivity.js` | Connectivity test script | ✅ Created |
-| `api/routes/hotels-canonical.js` | STEP 2 endpoints | ✅ Ready |
-| `api/postman/Canonical-Hotel-API.postman_collection.json` | Postman tests | ✅ Ready |
-| `api/openapi/hotels-canonical-openapi.yaml` | OpenAPI spec | ✅ Ready |
+| File                                                      | Purpose                       | Status     |
+| --------------------------------------------------------- | ----------------------------- | ---------- |
+| `api/services/adapters/tboAdapter.js`                     | TBO adapter with new env vars | ✅ Updated |
+| `api/routes/tbo-diagnostics.js`                           | Diagnostics endpoint          | ✅ Updated |
+| `api/services/tboClient.js`                               | TBO client with new env vars  | ✅ Updated |
+| `api/scripts/test-tbo-connectivity.js`                    | Connectivity test script      | ✅ Created |
+| `api/routes/hotels-canonical.js`                          | STEP 2 endpoints              | ✅ Ready   |
+| `api/postman/Canonical-Hotel-API.postman_collection.json` | Postman tests                 | ✅ Ready   |
+| `api/openapi/hotels-canonical-openapi.yaml`               | OpenAPI spec                  | ✅ Ready   |
 
 ---
 
@@ -256,9 +263,10 @@ If you encounter any errors during testing:
 
 ✅ **Code Updated:** All references to old env var names are updated  
 ✅ **Test Script Created:** Ready to verify TBO connectivity  
-✅ **STEP 2 Ready:** 4 canonical endpoints waiting for deployment  
+✅ **STEP 2 Ready:** 4 canonical endpoints waiting for deployment
 
 **Your Next Actions:**
+
 1. Update Render environment variables (Step 1)
 2. Deploy code (automatic after git push)
 3. Run connectivity test (Step 3)

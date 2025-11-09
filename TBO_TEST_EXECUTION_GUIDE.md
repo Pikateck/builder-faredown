@@ -1,9 +1,11 @@
 # TBO Hotel API - End-to-End Connectivity Test Guide
 
 ## Overview
+
 This guide walks through running a complete end-to-end test of the TBO Hotel API integration before implementing the STEP 2 canonical endpoints.
 
 ## Test Script Location
+
 - **File**: `api/scripts/run-tbo-test.js`
 - **Purpose**: Tests authentication and hotel search against live TBO APIs
 - **Runtime**: ~15-30 seconds total
@@ -15,6 +17,7 @@ This guide walks through running a complete end-to-end test of the TBO Hotel API
 The test script requires these environment variables to be set on Render. The script will check for **both new and old naming conventions**:
 
 ### Primary Names (Recommended)
+
 ```
 TBO_CLIENT_ID=tboprod
 TBO_API_USER_ID=BOMF145
@@ -25,6 +28,7 @@ TBO_END_USER_IP=192.168.5.56
 ```
 
 ### Alternative Names (Fallback - Currently Set)
+
 ```
 TBO_HOTEL_CLIENT_ID=tboprod
 TBO_HOTEL_USER_ID=BOMF145
@@ -50,6 +54,7 @@ cd /opt/render/project && node api/scripts/run-tbo-test.js
 ```
 
 **Expected Output**:
+
 ```
 ════════════════════════════════════════════════════════════════════════════════
 → TBO Hotel API - End-to-End Connectivity Test
@@ -106,6 +111,7 @@ node api/scripts/run-tbo-test.js
 ### ✅ **SUCCESS** (All 3 steps pass)
 
 If you see:
+
 - Step 1: All environment variables SET ✓
 - Step 2: Authentication successful with valid TokenId ✓
 - Step 3: Hotels found with rates and cancellation info ✓
@@ -115,6 +121,7 @@ If you see:
 ### ❌ **FAILURE - Authentication (Step 2)**
 
 Common errors:
+
 - `401 Unauthorized`: Credentials incorrect or account disabled on TBO
   - Action: Verify TBO_CLIENT_ID, TBO_API_USER_ID, TBO_API_PASSWORD are correct
   - Action: Contact TBO support to verify account is enabled for Hotel API
@@ -129,6 +136,7 @@ Common errors:
 ### ❌ **FAILURE - Hotel Search (Step 3)**
 
 Common errors:
+
 - `0 hotels found`: TBO has no inventory for Dubai in that date range
   - Action: Test works correctly, just no data for that specific search
   - Action: Try different dates (further in the future)
@@ -170,7 +178,9 @@ Create these 4 new endpoints using TBO adapter:
    - Caches in `room_offer_unified` with 15-minute TTL
 
 ### Database Schema
+
 Ensure these tables exist:
+
 ```sql
 -- Hotel unified data (metadata)
 CREATE TABLE hotel_unified (
@@ -209,6 +219,7 @@ CREATE INDEX idx_room_offer_expires ON room_offer_unified(expires_at);
 ```
 
 ### Implementation Checklist
+
 - [ ] Test script runs successfully (all 3 steps green)
 - [ ] Get existing database migration from `/api/database/migrations/`
 - [ ] Create new endpoints in `/api/routes/hotels-canonical.js`
@@ -225,21 +236,28 @@ CREATE INDEX idx_room_offer_expires ON room_offer_unified(expires_at);
 ## Troubleshooting
 
 ### Q: "Cannot find module '../lib/tboRequest'"
+
 **A**: Ensure you're running from project root. Use: `cd /opt/render/project && node api/scripts/run-tbo-test.js`
 
 ### Q: "All environment variables MISSING"
+
 **A**: Update Render environment variables in dashboard. Script checks for:
+
 - Primary: TBO_CLIENT_ID, TBO_API_USER_ID, TBO_API_PASSWORD
 - Fallback: TBO_HOTEL_CLIENT_ID, TBO_HOTEL_USER_ID, TBO_HOTEL_PASSWORD
 
 ### Q: Test passes but hotels showing "0 results" in app
+
 **A**: API returns data, but frontend may not be consuming it correctly. Check:
+
 - Frontend calls `/api/hotels` with correct query parameters
 - Response is being mapped to Hotel interface correctly
 - Cache layer isn't blocking fresh data
 
 ### Q: Getting "401 Unauthorized" on authentication
+
 **A**: TBO credentials are incorrect or account disabled. Verify:
+
 ```bash
 # Log into TBO portal and confirm:
 # - ClientId: tboprod
@@ -253,21 +271,25 @@ CREATE INDEX idx_room_offer_expires ON room_offer_unified(expires_at);
 ## What This Test Validates
 
 ✅ **Network Connectivity**
+
 - Backend can reach TBO Shared Data API
 - Backend can reach TBO Hotel API (via Fixie proxy if configured)
 
 ✅ **Authentication**
+
 - Credentials are correct and account is active
 - Authentication endpoint returns valid TokenId
 - TokenId format and expiry are correct
 
 ✅ **Hotel Search**
+
 - Search endpoint accepts correct payload format
 - Returns real hotel data from TBO inventory
 - Includes pricing, board types, and cancellation policies
 - Timing is acceptable (<5 seconds typical)
 
 ✅ **Data Quality**
+
 - Hotels have required fields (name, rating, price)
 - Rates/pricing data is present
 - Cancellation information is included
@@ -286,11 +308,14 @@ CREATE INDEX idx_room_offer_expires ON room_offer_unified(expires_at);
 ---
 
 ## Files Created
+
 - `api/scripts/run-tbo-test.js` - Comprehensive connectivity test script
 - `TBO_TEST_EXECUTION_GUIDE.md` - This file
 
 ## Questions?
+
 If the test fails, share:
+
 1. Full console output from the test
 2. Error message and response body
 3. Environment variables being used (credentials masked)

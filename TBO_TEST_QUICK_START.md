@@ -9,7 +9,7 @@ I've created a **comprehensive end-to-end test script** that will:
    - Confirm token is returned
    - Check token expiry
 
-2. ✅ **Test Hotel Search** against TBO's live Hotel API  
+2. ✅ **Test Hotel Search** against TBO's live Hotel API
    - Search Dubai (DXB) for 30-45 days from today
    - Verify hotels are returned
    - Confirm rates, currency, board type, cancellation info present
@@ -26,12 +26,15 @@ I've created a **comprehensive end-to-end test script** that will:
 ## 3 Quick Steps to Run the Test
 
 ### Step 1: Open Render Dashboard
+
 Go to: https://dashboard.render.com/d/builder-faredown-pricing
 
 ### Step 2: Click Shell
+
 Click the **"Shell"** button in the top-right corner
 
 ### Step 3: Run Test
+
 Paste this command and press Enter:
 
 ```bash
@@ -76,9 +79,11 @@ You should see output like:
 ## If Test Fails
 
 ### Missing Environment Variables
+
 Check Render Dashboard → Settings → Environment variables
 
 Should have (choose one set):
+
 ```
 PRIMARY NAMES:
 TBO_CLIENT_ID=tboprod
@@ -94,11 +99,13 @@ TBO_HOTEL_PASSWORD=@Bo#4M-Api@
 ```
 
 ### Authentication Failed (401)
+
 - Credentials incorrect
 - TBO account not enabled for Hotel API
 - Action: Contact TBO support
 
 ### Hotel Search Failed
+
 - TBO has no inventory for Dubai on those dates
 - Try dates 45+ days from today instead of 30
 - Check full error response in console output
@@ -108,11 +115,13 @@ TBO_HOTEL_PASSWORD=@Bo#4M-Api@
 ## After Test Passes ✅
 
 Once you see "TBO CONNECTIVITY TEST PASSED", reply with:
+
 1. The final success message
 2. Any key metrics (hotel count, timing)
 3. Confirm ready to proceed
 
 Then I'll implement:
+
 - **4 STEP 2 Canonical Endpoints**
 - **Database caching** with 15-minute TTL
 - **Error handling** and fallbacks
@@ -130,13 +139,14 @@ Then I'll implement:
 
 ## Estimated Timing
 
-| Phase | Time |
-|-------|------|
-| Run test | 30 seconds |
-| Review results | 2-5 minutes |
-| **Total** | **~5 minutes** |
+| Phase          | Time           |
+| -------------- | -------------- |
+| Run test       | 30 seconds     |
+| Review results | 2-5 minutes    |
+| **Total**      | **~5 minutes** |
 
 Then if all passes:
+
 - **STEP 2 Implementation**: 60-90 minutes
 - **Testing + Deployment**: 30 minutes
 

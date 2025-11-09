@@ -15,6 +15,7 @@
 **Responsibility:** Zubin Aibara
 
 **Action Steps:**
+
 - [ ] Contact TBO via email: support@travelboutiqueonline.com
 - [ ] Include both IPs in subject line: "IP Whitelist Confirmation Required - Faredown"
 - [ ] Mention ClientId: **tboprod** and Agency: **BOMF145**
@@ -62,13 +63,16 @@ Faredown Booking Team
 **Responsibility:** Engineering Team
 
 **Test 1: Check Outbound IP**
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 # Expected: {"success": true, "ip": "52.5.155.132"} or 52.87.82.133
 ```
+
 - [ ] IP matches whitelisted IP
 
 **Test 2: Run Diagnostics**
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/tbo/diagnostics
 # Should show:
@@ -76,18 +80,22 @@ curl https://builder-faredown-pricing.onrender.com/api/tbo/diagnostics
 # - TBO Search endpoint: Connected
 # - Response format: Valid
 ```
+
 - [ ] All diagnostics pass
 - [ ] No credential errors
 
 **Test 3: Search Cities**
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/cities?q=dubai&limit=5"
 # Expected: Array of cities with "Dubai" in results
 ```
+
 - [ ] Cities search returns results
 - [ ] Response time < 2 seconds
 
 **Test 4: Search Hotels**
+
 ```bash
 curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search" \
   -H "Content-Type: application/json" \
@@ -101,6 +109,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
   }'
 # Expected: Array of hotels with pricing
 ```
+
 - [ ] Hotels search returns results
 - [ ] Hotels have pricing data
 - [ ] Response time < 5 seconds
@@ -163,6 +172,7 @@ Backend: https://builder-faredown-pricing.onrender.com
 **Test Cases:**
 
 #### Test 4a: User Searches Hotels
+
 - [ ] Load home page
 - [ ] Click "Hotels"
 - [ ] Type "Dubai" in search
@@ -173,6 +183,7 @@ Backend: https://builder-faredown-pricing.onrender.com
 - [ ] No 401 errors in console
 
 #### Test 4b: View Hotel Details
+
 - [ ] Click "View Details" on first hotel
 - [ ] Hotel details page loads
 - [ ] Room details show pricing
@@ -180,6 +191,7 @@ Backend: https://builder-faredown-pricing.onrender.com
 - [ ] Amenities display
 
 #### Test 4c: Complete Booking
+
 - [ ] Click "Book Now"
 - [ ] Guest preferences page works
 - [ ] Checkout page shows correct price
@@ -188,6 +200,7 @@ Backend: https://builder-faredown-pricing.onrender.com
 - [ ] Voucher generates successfully
 
 #### Test 4d: Multiple Cities
+
 - [ ] Test search: London (LDN)
 - [ ] Test search: Paris (PAR)
 - [ ] Test search: Delhi (DEL)
@@ -195,6 +208,7 @@ Backend: https://builder-faredown-pricing.onrender.com
 - [ ] Pricing correct for each
 
 #### Test 4e: Error Handling
+
 - [ ] Test with invalid dates (past dates)
 - [ ] Test with no results city
 - [ ] Test with high guest count
@@ -202,6 +216,7 @@ Backend: https://builder-faredown-pricing.onrender.com
 - [ ] No technical errors shown
 
 **Pass Criteria:**
+
 - [ ] All test cases pass
 - [ ] No console errors
 - [ ] No API 401/500 errors
@@ -220,38 +235,45 @@ Backend: https://builder-faredown-pricing.onrender.com
 **Monitoring Setup:**
 
 **5a: Health Check Endpoint (Every 5 minutes)**
+
 ```bash
 # Command: (add to monitoring system)
 curl -s https://builder-faredown-pricing.onrender.com/api/tbo-hotels/health \
   | grep -q '"success":true' && echo "UP" || echo "DOWN"
 ```
+
 - [ ] Monitoring tool configured
 - [ ] Alert on failure (email/Slack)
 - [ ] Alert threshold: 1 failure
 
 **5b: Egress IP Check (Daily)**
+
 ```bash
 # Verify outbound IP doesn't change
 curl -s https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 # Should always be: 52.5.155.132 or 52.87.82.133
 ```
+
 - [ ] Daily check scheduled
 - [ ] Alert on unexpected IP change
 - [ ] Runbook for IP changes created
 
 **5c: Error Rate Monitoring**
+
 - [ ] Monitor 401 Unauthorized errors
 - [ ] Monitor 500 Internal Server errors
 - [ ] Alert if error rate > 5% in 1 hour
 - [ ] Alert threshold: 10+ errors in hour
 
 **5d: Response Time Monitoring**
+
 - [ ] Monitor average response time
 - [ ] Alert if avg time > 5 seconds
 - [ ] Alert if 95th percentile > 10 seconds
 - [ ] Track per-endpoint: /cities, /search, /hotel
 
 **5e: Database Connection**
+
 - [ ] Monitor DB connection pool
 - [ ] Alert on connection failures
 - [ ] Alert threshold: 0 available connections
@@ -265,17 +287,20 @@ curl -s https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 **Responsibility:** DevOps
 
 **Log Locations:**
+
 - [ ] Render Logs: https://dashboard.render.com/services/builder-faredown-pricing/logs
 - [ ] Search for: "TBO", "401", "hotel", "credentials", "proxy"
 - [ ] Review daily for errors or warnings
 
 **Log Format (Sample):**
+
 ```
 [2025-10-25T10:30:00Z] [INFO] [TBO] Hotel search: destination=DXB, guests=2
 [2025-10-25T10:30:02Z] [INFO] [TBO] Found 47 hotels, response time 2.1s
 ```
 
 **Action on Errors:**
+
 - [ ] 401 Unauthorized → Check IP whitelist
 - [ ] 500 Internal Server → Check proxy config
 - [ ] Timeout → Increase TBO_TIMEOUT_MS
@@ -290,12 +315,14 @@ curl -s https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 **Responsibility:** Engineering
 
 **Documentation Created:**
+
 - ✅ `TBO_CREDENTIALS_VERIFICATION_CONFIRMED.md`
 - ✅ `TBO_QUICK_REFERENCE_CARD.md`
 - ✅ `TBO_DEPLOYMENT_GUIDE_FINAL.md`
 - ✅ `AGENTS.md` (updated with TBO info)
 
 **Documentation Maintenance:**
+
 - [ ] Update on each incident/fix
 - [ ] Keep credentials section current
 - [ ] Update monitoring section after setup
@@ -305,6 +332,7 @@ curl -s https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 ## 📋 COMPLETE CHECKLIST (Summary)
 
 ### Before Production
+
 - [ ] Credentials confirmed with TBO email (Oct 25)
 - [ ] Code deployed to Render
 - [ ] All env vars set correctly
@@ -312,11 +340,13 @@ curl -s https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 - [ ] Documentation created
 
 ### IP Whitelist Phase (⏳ Current)
+
 - [ ] Contact TBO with IP whitelist request
 - [ ] Obtain confirmation from TBO
 - [ ] Expected timeline: 5-24 hours
 
 ### Post IP Whitelist (⏳ Next)
+
 - [ ] Run diagnostics test
 - [ ] Test city search
 - [ ] Test hotel search
@@ -324,6 +354,7 @@ curl -s https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 - [ ] Clear to production
 
 ### Production Launch
+
 - [ ] Verify production deployment
 - [ ] Run end-to-end tests (4 test cases)
 - [ ] Monitor for 24 hours
@@ -332,6 +363,7 @@ curl -s https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 - [ ] Brief team on new system
 
 ### Production Monitoring (Ongoing)
+
 - [ ] Daily health checks
 - [ ] Weekly error rate review
 - [ ] Monthly performance review
@@ -344,6 +376,7 @@ curl -s https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 ### If IP Whitelist Not Confirmed After 24 Hours
 
 **Escalation Path:**
+
 1. [ ] Check TBO Dashboard: https://b2b.travelboutiqueonline.com/
 2. [ ] Verify credentials are active
 3. [ ] Call TBO: +91-120-4199999 (IST)
@@ -351,6 +384,7 @@ curl -s https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 5. [ ] Ask for: IP whitelist status and ETA
 
 **Message Template:**
+
 ```
 Subject: URGENT - IP Whitelist Status for Faredown Integration
 
@@ -375,6 +409,7 @@ Engineering Team
 ### If Production Errors After Deployment
 
 **Troubleshooting Checklist:**
+
 - [ ] Check IP is still whitelisted
 - [ ] Run `/api/tbo/diagnostics` endpoint
 - [ ] Check Render logs for errors
@@ -431,6 +466,7 @@ When ALL of the following are true:
 ## Questions?
 
 **Documentation:**
+
 - Full Setup: `TBO_CREDENTIALS_VERIFICATION_CONFIRMED.md`
 - Quick Reference: `TBO_QUICK_REFERENCE_CARD.md`
 - Deployment: `TBO_DEPLOYMENT_GUIDE_FINAL.md`

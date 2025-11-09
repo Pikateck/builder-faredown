@@ -15,8 +15,8 @@
           "host": ["{{base_url}}"],
           "path": ["api", "hotels", "autocomplete"],
           "query": [
-            {"key": "q", "value": "Dubai"},
-            {"key": "limit", "value": "15"}
+            { "key": "q", "value": "Dubai" },
+            { "key": "limit", "value": "15" }
           ]
         }
       }
@@ -25,7 +25,7 @@
       "name": "2. Search Hotels",
       "request": {
         "method": "POST",
-        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
           "raw": "{\"city_code\":\"DXB\",\"check_in\":\"2025-10-31\",\"check_out\":\"2025-11-03\",\"adults\":2,\"children\":0,\"rooms\":1}"
@@ -46,7 +46,7 @@
           "raw": "{{base_url}}/api/hotels/{{property_id}}?include_images=true",
           "host": ["{{base_url}}"],
           "path": ["api", "hotels", "{{property_id}}"],
-          "query": [{"key": "include_images", "value": "true"}]
+          "query": [{ "key": "include_images", "value": "true" }]
         }
       }
     },
@@ -54,7 +54,7 @@
       "name": "4. Room Rates",
       "request": {
         "method": "POST",
-        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
         "body": {
           "mode": "raw",
           "raw": "{\"check_in\":\"2025-10-31\",\"check_out\":\"2025-11-03\",\"adults\":2,\"children\":0,\"rooms\":1,\"refresh\":false}"
@@ -68,7 +68,10 @@
     }
   ],
   "variable": [
-    {"key": "base_url", "value": "https://builder-faredown-pricing.onrender.com"},
-    {"key": "property_id", "value": ""}
+    {
+      "key": "base_url",
+      "value": "https://builder-faredown-pricing.onrender.com"
+    },
+    { "key": "property_id", "value": "" }
   ]
 }

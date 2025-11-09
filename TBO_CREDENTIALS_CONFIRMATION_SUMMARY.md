@@ -16,22 +16,22 @@ All TBO credentials have been **confirmed, verified, and deployed** to the Fared
 
 ### Production Credentials
 
-| Item | Value | Status |
-|------|-------|--------|
-| **Hotel Service URL** | `https://apiwr.tboholidays.com/HotelAPI/` | ✅ Configured |
-| **ClientId** | `tboprod` | ✅ Active |
-| **Agency ID / UserId** | `BOMF145` | ✅ Active |
-| **API Password** | `@Bo#4M-Api@` | ✅ Active |
-| **Static Data Username** | `travelcategory` | ✅ Active |
-| **Static Data Password** | `Tra@59334536` | ✅ Active |
+| Item                     | Value                                     | Status        |
+| ------------------------ | ----------------------------------------- | ------------- |
+| **Hotel Service URL**    | `https://apiwr.tboholidays.com/HotelAPI/` | ✅ Configured |
+| **ClientId**             | `tboprod`                                 | ✅ Active     |
+| **Agency ID / UserId**   | `BOMF145`                                 | ✅ Active     |
+| **API Password**         | `@Bo#4M-Api@`                             | ✅ Active     |
+| **Static Data Username** | `travelcategory`                          | ✅ Active     |
+| **Static Data Password** | `Tra@59334536`                            | ✅ Active     |
 
 ### API Endpoints (Live URLs)
 
-| Service | URL | Purpose | Status |
-|---------|-----|---------|--------|
-| **Static Data** | `https://apiwr.tboholidays.com/HotelAPI/` | Countries, cities, hotels, details | ✅ Ready |
-| **Search & PreBook** | `https://affiliate.travelboutiqueonline.com/HotelAPI/` | Hotel search, block room | ✅ Ready |
-| **Booking** | `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/` | Book, voucher, cancellation | ✅ Ready |
+| Service              | URL                                                                                 | Purpose                            | Status   |
+| -------------------- | ----------------------------------------------------------------------------------- | ---------------------------------- | -------- |
+| **Static Data**      | `https://apiwr.tboholidays.com/HotelAPI/`                                           | Countries, cities, hotels, details | ✅ Ready |
+| **Search & PreBook** | `https://affiliate.travelboutiqueonline.com/HotelAPI/`                              | Hotel search, block room           | ✅ Ready |
+| **Booking**          | `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/` | Book, voucher, cancellation        | ✅ Ready |
 
 ---
 
@@ -88,6 +88,7 @@ For:
 ### Code Implementation - ALL VERIFIED ✅
 
 **Core Files:**
+
 - ✅ `api/services/adapters/tboAdapter.js` - TBO adapter with credentials (lines 43-80)
 - ✅ `api/routes/tbo-hotels.js` - Hotel API endpoints
 - ✅ `api/routes/tbo-diagnostics.js` - Diagnostics endpoint
@@ -96,6 +97,7 @@ For:
 - ✅ `api/server.js` - Route registration
 
 **API Endpoints (Faredown):**
+
 - ✅ `GET /api/tbo-hotels/health` - Health check
 - ✅ `GET /api/tbo-hotels/cities?q=xxx` - City typeahead
 - ✅ `GET /api/tbo-hotels/hotel/:id` - Hotel details
@@ -113,17 +115,17 @@ For:
 Test 1: Outbound IP Detection
   ✅ Detected: 52.5.155.132
   ✅ Via Fixie proxy: Active
-  
+
 Test 2: Credentials Format
   ✅ ClientId: Valid format
   ✅ UserName: Valid format
   ✅ Password: Valid format
-  
+
 Test 3: Endpoint Accessibility
   ✅ Static data endpoint: Responding
   ✅ Search endpoint: Responding
   ✅ Booking endpoint: Responding
-  
+
 Test 4: Proxy Configuration
   ✅ HTTP_PROXY: Set and active
   ✅ HTTPS_PROXY: Set and active
@@ -133,11 +135,13 @@ Test 4: Proxy Configuration
 ### Sample API Test
 
 **Request:**
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/tbo-hotels/cities?q=dubai&limit=5
 ```
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -183,6 +187,7 @@ curl https://builder-faredown-pricing.onrender.com/api/tbo-hotels/cities?q=dubai
 ## Next Steps (Immediate Actions)
 
 ### Step 1: Confirm IP Whitelist with TBO ⏰ URGENT
+
 **Timeline:** Do this TODAY
 **Action:** Email TBO support confirming IPs 52.5.155.132 and 52.87.82.133 are whitelisted
 **Expected Response:** 5-24 hours
@@ -205,8 +210,10 @@ Thank you!
 ```
 
 ### Step 2: Verify Connection After IP Whitelist (After TBO Confirms)
+
 **Timeline:** Once IPs are whitelisted
 **Action:** Run verification commands
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/tbo/diagnostics
 curl https://builder-faredown-pricing.onrender.com/api/tbo-hotels/cities?q=dubai
@@ -216,12 +223,15 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search
 ```
 
 ### Step 3: Deploy to Production (After Verification)
+
 **Timeline:** Same day as IP whitelist confirmation
 **Action:** Code is already deployed. Just monitor for errors in logs.
 
 ### Step 4: Monitor & Alert (Ongoing)
+
 **Timeline:** Continuous
 **Action:** Set up monitoring for:
+
 - `/api/tbo-hotels/health` (every 5 minutes)
 - Error rate in logs
 - IP whitelist status
@@ -231,40 +241,46 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search
 ## Success Criteria ✅
 
 ### Current Status (Before IP Whitelist)
-| Criteria | Status | Notes |
-|----------|--------|-------|
-| Credentials configured | ✅ Done | All env vars set |
-| Code deployed | ✅ Done | TBO adapter ready |
-| Outbound IP detected | ✅ Done | 52.5.155.132 confirmed |
-| Documentation ready | ✅ Done | 3 guides created |
-| Health check works | ✅ Done | Endpoint responds |
-| City search works | ✅ Done | Cities can be searched |
+
+| Criteria               | Status  | Notes                  |
+| ---------------------- | ------- | ---------------------- |
+| Credentials configured | ✅ Done | All env vars set       |
+| Code deployed          | ✅ Done | TBO adapter ready      |
+| Outbound IP detected   | ✅ Done | 52.5.155.132 confirmed |
+| Documentation ready    | ✅ Done | 3 guides created       |
+| Health check works     | ✅ Done | Endpoint responds      |
+| City search works      | ✅ Done | Cities can be searched |
 
 ### After IP Whitelist (Next Step)
-| Criteria | Status | Notes |
-|----------|--------|-------|
-| IPs whitelisted with TBO | ⏳ Pending | User must confirm |
+
+| Criteria                  | Status     | Notes                     |
+| ------------------------- | ---------- | ------------------------- |
+| IPs whitelisted with TBO  | ⏳ Pending | User must confirm         |
 | Hotel search returns data | ⏳ Pending | Will work after whitelist |
-| Booking flow works | ⏳ Pending | Full integration ready |
-| Production monitoring | ⏳ Pending | Alerts will be set up |
+| Booking flow works        | ⏳ Pending | Full integration ready    |
+| Production monitoring     | ⏳ Pending | Alerts will be set up     |
 
 ---
 
 ## Risk & Mitigation
 
 ### Risk: IPs Not Whitelisted
+
 **Impact:** Hotel search returns 401 Unauthorized  
 **Mitigation:** Contact TBO support immediately; revert to mock hotels (graceful fallback)
 
 ### Risk: Proxy Configuration Changed
+
 **Impact:** Outbound IP changes  
 **Mitigation:** Monitor egress IP continuously; alert on IP change
 
 ### Risk: TBO API Downtime
+
 **Impact:** Hotel search fails  
 **Mitigation:** Automatic fallback to mock hotels; user can still book
 
 ### Risk: Credential Expiry
+
 **Impact:** Authentication fails  
 **Mitigation:** Rotate credentials immediately; test before deployment
 
@@ -273,6 +289,7 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search
 ## Fallback Strategy
 
 **If TBO integration fails:**
+
 1. ✅ Mock hotels will display automatically (6 pre-configured hotels per destination)
 2. ✅ User experience continues smoothly
 3. ✅ No errors shown to user (graceful degradation)
@@ -304,15 +321,18 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search
 ## Support Contacts
 
 **TBO Support:**
+
 - Email: support@travelboutiqueonline.com
 - Phone: +91-120-4199999 (IST)
 - Hours: 9 AM - 6 PM IST, Monday-Friday
 
 **Faredown Team:**
+
 - Technical: engineering@faredown.com
 - Operations: ops@faredown.com
 
 **Documentation Links:**
+
 - Full Verification: `TBO_CREDENTIALS_VERIFICATION_CONFIRMED.md`
 - Quick Reference: `TBO_QUICK_REFERENCE_CARD.md`
 - Deployment Guide: `TBO_DEPLOYMENT_GUIDE_FINAL.md`

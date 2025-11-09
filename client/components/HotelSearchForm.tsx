@@ -420,7 +420,9 @@ export function HotelSearchForm({
             console.log("✅ Recent hotel search saved successfully");
             return response.json();
           } else {
-            console.warn(`⚠️  Recent search API returned ${response.status}, continuing anyway`);
+            console.warn(
+              `⚠️  Recent search API returned ${response.status}, continuing anyway`,
+            );
             return { id: 0, warning: `HTTP ${response.status}` };
           }
         })
@@ -432,7 +434,10 @@ export function HotelSearchForm({
           }
         })
         .catch((error) => {
-          console.warn("⚠️  Failed to save recent hotel search (non-blocking):", error.message);
+          console.warn(
+            "⚠️  Failed to save recent hotel search (non-blocking):",
+            error.message,
+          );
           // This is non-blocking, so don't propagate the error
         });
 

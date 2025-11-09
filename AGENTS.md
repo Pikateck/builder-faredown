@@ -11,6 +11,7 @@ While the starter comes with a express server, only create endpoint when strictl
 ### Status: ✅ CONFIRMED & DEPLOYED
 
 **Credentials (PRODUCTION):**
+
 - ClientId: `tboprod`
 - Agency ID / UserId: `BOMF145`
 - API Password: `@Bo#4M-Api@`
@@ -18,23 +19,27 @@ While the starter comes with a express server, only create endpoint when strictl
 - Static Data Password: `Tra@59334536`
 
 **Outbound IPs (Fixie Proxy):**
+
 - 52.5.155.132
 - 52.87.82.133
 
 **All credentials are in Render environment variables (NOT in code)**
 
 ### Documentation
+
 - `TBO_CREDENTIALS_VERIFICATION_CONFIRMED.md` - Full setup details
 - `TBO_QUICK_REFERENCE_CARD.md` - Quick testing reference
 - `TBO_DEPLOYMENT_GUIDE_FINAL.md` - Complete deployment & troubleshooting
 
 ### Key Files
+
 - `api/services/adapters/tboAdapter.js` (lines 43-80) - Credential initialization
 - `api/routes/tbo-hotels.js` - Hotel API endpoints (/cities, /search, /hotel)
 - `api/routes/tbo-diagnostics.js` - Diagnostics test endpoint
 - `api/lib/tboRequest.js` - HTTP request helper with Fixie proxy
 
 ### Quick Verification
+
 ```bash
 # Check outbound IP
 curl https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
@@ -43,7 +48,9 @@ curl https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 ```
 
 ### ⚠️ ACTION REQUIRED
+
 **Confirm with TBO that IPs 52.5.155.132 and 52.87.82.133 are whitelisted for:**
+
 - ClientId: tboprod
 - Agency: BOMF145
 
@@ -102,7 +109,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 ### Styling System
 
 - **Primary**: TailwindCSS 3 utility classes
-- **Theme and design tokens**: Configure in `client/global.css` 
+- **Theme and design tokens**: Configure in `client/global.css`
 - **UI components**: Pre-built library in `client/components/ui/`
 - **Utility**: `cn()` function combines `clsx` + `tailwind-merge` for conditional classes
 
@@ -122,16 +129,20 @@ className={cn(
 - **API endpoints**: Prefixed with `/api/`
 
 #### Example API Routes
+
 - `GET /api/ping` - Simple ping api
-- `GET /api/demo` - Demo endpoint  
+- `GET /api/demo` - Demo endpoint
 
 ### Shared Types
+
 Import consistent types in both client and server:
+
 ```typescript
-import { DemoResponse } from '@shared/api';
+import { DemoResponse } from "@shared/api";
 ```
 
 Path aliases:
+
 - `@shared/*` - Shared folder
 - `@/*` - Client folder
 
@@ -152,7 +163,9 @@ npm test          # Run Vitest tests
 Open `client/global.css` and `tailwind.config.ts` and add new tailwind colors.
 
 ### New API Route
+
 1. **Optional**: Create a shared interface in `shared/api.ts`:
+
 ```typescript
 export interface MyRouteResponse {
   message: string;
@@ -161,19 +174,21 @@ export interface MyRouteResponse {
 ```
 
 2. Create a new route handler in `server/routes/my-route.ts`:
+
 ```typescript
 import { RequestHandler } from "express";
 import { MyRouteResponse } from "@shared/api"; // Optional: for type safety
 
 export const handleMyRoute: RequestHandler = (req, res) => {
   const response: MyRouteResponse = {
-    message: 'Hello from my endpoint!'
+    message: "Hello from my endpoint!",
   };
   res.json(response);
 };
 ```
 
 3. Register the route in `server/index.ts`:
+
 ```typescript
 import { handleMyRoute } from "./routes/my-route";
 
@@ -182,16 +197,19 @@ app.get("/api/my-endpoint", handleMyRoute);
 ```
 
 4. Use in React components with type safety:
-```typescript
-import { MyRouteResponse } from '@shared/api'; // Optional: for type safety
 
-const response = await fetch('/api/my-endpoint');
+```typescript
+import { MyRouteResponse } from "@shared/api"; // Optional: for type safety
+
+const response = await fetch("/api/my-endpoint");
 const data: MyRouteResponse = await response.json();
 ```
 
 ### New Page Route
+
 1. Create component in `client/pages/MyPage.tsx`
 2. Add route in `client/App.tsx`:
+
 ```typescript
 <Route path="/my-page" element={<MyPage />} />
 ```

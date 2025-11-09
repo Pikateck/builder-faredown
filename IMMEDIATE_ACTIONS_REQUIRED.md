@@ -44,7 +44,8 @@ TBO_STATIC_DATA_CREDENTIALS_PASSWORD → TBO_STATIC_PASSWORD
     Keep value: Tra@59334536
 ```
 
-**Verification:** 
+**Verification:**
+
 - [ ] All 5 new variables visible
 - [ ] All 5 old variables removed
 - [ ] Values match exactly
@@ -72,6 +73,7 @@ git push origin main
 **Once deployment is complete:**
 
 **Option A: SSH into Render (Recommended)**
+
 ```bash
 render connect builder-faredown-pricing
 cd /opt/render/project
@@ -79,6 +81,7 @@ node api/scripts/test-tbo-connectivity.js
 ```
 
 **Option B: Use Existing Diagnostics Endpoint**
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/tbo/diagnostics
 ```
@@ -111,12 +114,12 @@ If successful, you should see:
 
 ## Timeline
 
-| Step | Time | Status |
-|------|------|--------|
-| Update Render env vars | 5 min | ⏳ Your action |
-| Deploy code | 3 min | Auto |
-| Run test | 5 min | ⏳ Your action |
-| **Total Time to Production** | **~30 min** | |
+| Step                         | Time        | Status         |
+| ---------------------------- | ----------- | -------------- |
+| Update Render env vars       | 5 min       | ⏳ Your action |
+| Deploy code                  | 3 min       | Auto           |
+| Run test                     | 5 min       | ⏳ Your action |
+| **Total Time to Production** | **~30 min** |                |
 
 ---
 
@@ -133,12 +136,13 @@ psql $DATABASE_URL < api/database/migrations/20250401_hotel_canonical_indexes.sq
 
 # 3. 4 endpoints now live:
 #    - GET /api/hotels/autocomplete
-#    - POST /api/hotels/search  
+#    - POST /api/hotels/search
 #    - GET /api/hotels/:propertyId
 #    - POST /api/hotels/:propertyId/rates
 ```
 
 **Documentation:**
+
 - Postman tests: `api/postman/Canonical-Hotel-API.postman_collection.json`
 - OpenAPI spec: `api/openapi/hotels-canonical-openapi.yaml`
 - Implementation guide: `STEP_2_SUMMARY_FOR_ZUBIN.md`
@@ -173,18 +177,19 @@ Check these in order:
 
 ## Documentation Reference
 
-| Document | Purpose | When to Read |
-|----------|---------|--------------|
-| `TBO_CONNECTIVITY_TEST_GUIDE.md` | Detailed test instructions | Before running test |
-| `TBO_ENV_VAR_REFACTOR_COMPLETE.md` | What was changed and why | For understanding changes |
-| `STEP_2_SUMMARY_FOR_ZUBIN.md` | STEP 2 implementation details | After test passes |
-| `api/postman/Canonical-Hotel-API.postman_collection.json` | Test requests | For endpoint testing |
+| Document                                                  | Purpose                       | When to Read              |
+| --------------------------------------------------------- | ----------------------------- | ------------------------- |
+| `TBO_CONNECTIVITY_TEST_GUIDE.md`                          | Detailed test instructions    | Before running test       |
+| `TBO_ENV_VAR_REFACTOR_COMPLETE.md`                        | What was changed and why      | For understanding changes |
+| `STEP_2_SUMMARY_FOR_ZUBIN.md`                             | STEP 2 implementation details | After test passes         |
+| `api/postman/Canonical-Hotel-API.postman_collection.json` | Test requests                 | For endpoint testing      |
 
 ---
 
 ## Success Criteria
 
 ✅ Test passes when:
+
 1. All 5 environment variables are set
 2. TBO authentication returns a TokenId
 3. Hotel search returns 40+ hotels for Dubai
@@ -197,6 +202,7 @@ Check these in order:
 Once connectivity is confirmed:
 
 **STEP 2 is ready to deploy immediately:**
+
 - 4 canonical endpoints implemented
 - Database migration ready
 - All documentation provided
@@ -209,12 +215,14 @@ Once connectivity is confirmed:
 ## Summary
 
 **You have:**
+
 - ✅ Standardized environment variable names
 - ✅ Zero hard-coded credentials
 - ✅ Ready-to-run connectivity test
 - ✅ Comprehensive documentation
 
 **You need to:**
+
 1. Update 5 env vars on Render (5 min)
 2. Deploy code (automatic)
 3. Run test (5 min)

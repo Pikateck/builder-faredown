@@ -20,12 +20,14 @@ Fixie Proxy Outbound:    52.5.155.132, 52.87.82.133
 ## API Endpoints Summary
 
 ### Static Data (Cities, Countries, Hotels)
+
 ```
 https://apiwr.tboholidays.com/HotelAPI/
 Auth: travelcategory / Tra@59334536
 ```
 
 ### Search & PreBook
+
 ```
 https://affiliate.travelboutiqueonline.com/HotelAPI/Search
 https://affiliate.travelboutiqueonline.com/HotelAPI/BlockRoom
@@ -33,6 +35,7 @@ Auth: tboprod / BOMF145 / @Bo#4M-Api@
 ```
 
 ### Book & Management
+
 ```
 https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/
   /Book
@@ -47,44 +50,49 @@ Auth: tboprod / BOMF145 / @Bo#4M-Api@
 
 ## API Routes (Faredown)
 
-| Route | Method | Purpose |
-|-------|--------|---------|
-| `/api/tbo-hotels/health` | GET | Health check |
-| `/api/tbo-hotels/cities?q=dubai` | GET | City search (typeahead) |
-| `/api/tbo-hotels/hotel/:id` | GET | Hotel details |
-| `/api/tbo-hotels/search` | POST | Hotel search |
-| `/api/tbo-hotels/egress-ip` | GET | Check outbound IP |
-| `/api/tbo/diagnostics` | GET | Full system diagnostics |
+| Route                            | Method | Purpose                 |
+| -------------------------------- | ------ | ----------------------- |
+| `/api/tbo-hotels/health`         | GET    | Health check            |
+| `/api/tbo-hotels/cities?q=dubai` | GET    | City search (typeahead) |
+| `/api/tbo-hotels/hotel/:id`      | GET    | Hotel details           |
+| `/api/tbo-hotels/search`         | POST   | Hotel search            |
+| `/api/tbo-hotels/egress-ip`      | GET    | Check outbound IP       |
+| `/api/tbo/diagnostics`           | GET    | Full system diagnostics |
 
 ---
 
 ## One-Minute Verification
 
 ### Check Outbound IP
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 # Expected: 52.5.155.132 or 52.87.82.133
 ```
 
 ### Check Health
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/tbo-hotels/health
 # Expected: { "success": true, ... }
 ```
 
 ### Run Full Diagnostics
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/tbo/diagnostics
 # Returns: IP detection, credentials test, endpoint connectivity
 ```
 
 ### Test City Search
+
 ```bash
 curl "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/cities?q=dubai&limit=10"
 # Expected: City list matching "dubai"
 ```
 
 ### Test Hotel Search
+
 ```bash
 curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search" \
   -H "Content-Type: application/json" \
@@ -142,13 +150,13 @@ USE_SUPPLIER_PROXY = true
 
 ## Key Files
 
-| File | Purpose |
-|------|---------|
+| File                                  | Purpose                                                |
+| ------------------------------------- | ------------------------------------------------------ |
 | `api/services/adapters/tboAdapter.js` | Core TBO integration (lines 43-80 for endpoint config) |
-| `api/routes/tbo-hotels.js` | TBO API routes (/cities, /search, /hotel, etc.) |
-| `api/routes/tbo-diagnostics.js` | Diagnostics endpoint |
-| `api/lib/tboRequest.js` | HTTP request helper with Fixie proxy |
-| `api/server.js` | Route registration |
+| `api/routes/tbo-hotels.js`            | TBO API routes (/cities, /search, /hotel, etc.)        |
+| `api/routes/tbo-diagnostics.js`       | Diagnostics endpoint                                   |
+| `api/lib/tboRequest.js`               | HTTP request helper with Fixie proxy                   |
+| `api/server.js`                       | Route registration                                     |
 
 ---
 
@@ -157,24 +165,24 @@ USE_SUPPLIER_PROXY = true
 ```
 1. Frontend: HotelSearchForm.tsx
    ↓ calls /api/tbo-hotels/cities?q=dubai
-   
+
 2. User selects "Dubai"
    ↓ navigates to /hotels/results?destination=DXB
-   
+
 3. Frontend: HotelResults.tsx
    ↓ calls POST /api/tbo-hotels/search
-   
+
 4. Backend: tboAdapter.searchHotels()
    ↓ uses tboprod/BOMF145 credentials
    ↓ calls https://affiliate.travelboutiqueonline.com/HotelAPI/Search
    ↓ via Fixie proxy (52.5.155.132 or 52.87.82.133)
-   
+
 5. Response: Array of hotels
    ↓ displayed in HotelResults page
-   
+
 6. User clicks "View Details"
    ↓ GET /api/tbo-hotels/hotel/:hotelId
-   
+
 7. User books hotel
    ↓ POST /api/tbo-hotels/prebook (BlockRoom)
    ↓ POST /api/tbo-hotels/book (Book)
@@ -184,12 +192,12 @@ USE_SUPPLIER_PROXY = true
 
 ## SLA & Monitoring
 
-| Metric | Target | Status |
-|--------|--------|--------|
-| API Response Time | < 3 seconds | ✅ |
-| Success Rate | > 95% | ✅ |
-| Uptime | > 99.5% | ✅ |
-| IP Whitelist Status | Confirmed | ⏳ *Pending User Confirmation* |
+| Metric              | Target      | Status                         |
+| ------------------- | ----------- | ------------------------------ |
+| API Response Time   | < 3 seconds | ✅                             |
+| Success Rate        | > 95%       | ✅                             |
+| Uptime              | > 99.5%     | ✅                             |
+| IP Whitelist Status | Confirmed   | ⏳ _Pending User Confirmation_ |
 
 ---
 

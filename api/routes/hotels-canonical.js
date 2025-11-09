@@ -1,41 +1,43 @@
 /**
  * Canonical Hotel API Endpoints (STEP 2)
- * 
+ *
  * Four main endpoints for hotel search and booking:
  * 1. GET /api/hotels/autocomplete - city/destination autocomplete
  * 2. POST /api/hotels/search - hotel search with dates and guests
  * 3. GET /api/hotels/:propertyId - hotel details by property ID
  * 4. POST /api/hotels/:propertyId/rates - get available room rates
- * 
+ *
  * Design: TBO-first with supplier-agnostic schema
  * - All queries filter supplier_code = 'TBO' for STEP 2
  * - Rate caching with 15-minute TTL (configurable via ROOM_OFFER_TTL_MINUTES)
  * - Graceful fallback: return hotel content even if TBO fails
  * - pricing_available flag when rates unavailable
- * 
+ *
  * Database tables:
  * - hotel_unified: canonical hotel master
  * - room_offer_unified: cached room rates with TTL
  * - hotel_images: gallery images (if available)
  */
 
-const express = require('express');
-const { v4: uuidv4 } = require('uuid');
-const db = require('../database/connection');
-const supplierAdapterManager = require('../services/adapters/supplierAdapterManager');
+const express = require("express");
+const { v4: uuidv4 } = require("uuid");
+const db = require("../database/connection");
+const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
 const router = express.Router();
 
 // Configuration
-const ROOM_OFFER_TTL_MINUTES = parseInt(process.env.ROOM_OFFER_TTL_MINUTES || '15');
-const USE_SUPPLIER_FILTER = 'TBO'; // STEP 2: TBO only
+const ROOM_OFFER_TTL_MINUTES = parseInt(
+  process.env.ROOM_OFFER_TTL_MINUTES || "15",
+);
+const USE_SUPPLIER_FILTER = "TBO"; // STEP 2: TBO only
 
 /**
  * Utility: Get TBO adapter instance
  */
 function getTboAdapter() {
-  const adapter = supplierAdapterManager.getAdapter('TBO');
+  const adapter = supplierAdapterManager.getAdapter("TBO");
   if (!adapter) {
-    throw new Error('TBO adapter not initialized');
+    throw new Error("TBO adapter not initialized");
   }
   return adapter;
 }
@@ -63,50 +65,49 @@ function extractCityId(cityCode) {
  * Destination/city autocomplete for search form
  * ============================================================================
  */
-router.get('/autocomplete', async (req, res) => {
+router.get("/autocomplete", async (req, res) => {
   try {
-    const { q = '', limit = 15, country = null } = req.query;
-    
+    const { q = "", limit = 15, country = null } = req.query;
+
     if (!q || q.trim().length === 0) {
       return res.status(400).json({
         success: false,
         error: 'Query parameter "q" is required',
-        suggestions: []
+        suggestions: [],
       });
     }
 
     const adapter = getTboAdapter();
-    
+
     // Call TBO adapter's searchCities method
     // Adapter handles ranking (starts-with > contains) and caching
     const cities = await adapter.searchCities(
       q.trim(),
       Math.min(parseInt(limit) || 15, 100),
-      country
+      country,
     );
 
     // Transform to canonical response format
-    const suggestions = cities.map(city => ({
-      city_code: city.code || city.cityCode || '',
-      city_name: city.name || city.cityName || '',
-      country_code: city.countryCode || city.country_code || '',
-      country_name: city.countryName || city.country_name || '',
-      type: city.type || 'CITY',
+    const suggestions = cities.map((city) => ({
+      city_code: city.code || city.cityCode || "",
+      city_name: city.name || city.cityName || "",
+      country_code: city.countryCode || city.country_code || "",
+      country_name: city.countryName || city.country_name || "",
+      type: city.type || "CITY",
       lat: city.latitude || city.lat || null,
-      lng: city.longitude || city.lng || null
+      lng: city.longitude || city.lng || null,
     }));
 
     res.json({
       success: true,
-      suggestions: suggestions.slice(0, parseInt(limit) || 15)
+      suggestions: suggestions.slice(0, parseInt(limit) || 15),
     });
-
   } catch (error) {
-    console.error('❌ Hotels autocomplete error:', error.message);
+    console.error("❌ Hotels autocomplete error:", error.message);
     res.status(500).json({
       success: false,
-      error: 'Unable to fetch suggestions',
-      suggestions: []
+      error: "Unable to fetch suggestions",
+      suggestions: [],
     });
   }
 });
@@ -117,27 +118,27 @@ router.get('/autocomplete', async (req, res) => {
  * Hotel search with dates, guests, and optional filters
  * ============================================================================
  */
-router.post('/search', async (req, res) => {
+router.post("/search", async (req, res) => {
   try {
     const {
-      city_code,         // required: destination city code (DXB, PAR, etc.)
-      country_code,      // optional: country code for city lookup
-      check_in,          // required: YYYY-MM-DD format
-      check_out,         // required: YYYY-MM-DD format
+      city_code, // required: destination city code (DXB, PAR, etc.)
+      country_code, // optional: country code for city lookup
+      check_in, // required: YYYY-MM-DD format
+      check_out, // required: YYYY-MM-DD format
       adults = 2,
       children = 0,
       rooms = 1,
-      guest_nationality = 'IN',
-      preferred_currency = 'INR',
+      guest_nationality = "IN",
+      preferred_currency = "INR",
       limit = 50,
-      offset = 0
+      offset = 0,
     } = req.body;
 
     // Validation
     if (!city_code || !check_in || !check_out) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: city_code, check_in, check_out'
+        error: "Missing required fields: city_code, check_in, check_out",
       });
     }
 
@@ -147,17 +148,19 @@ router.post('/search', async (req, res) => {
     if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid date format. Use YYYY-MM-DD'
+        error: "Invalid date format. Use YYYY-MM-DD",
       });
     }
     if (checkInDate >= checkOutDate) {
       return res.status(400).json({
         success: false,
-        error: 'Check-in must be before check-out'
+        error: "Check-in must be before check-out",
       });
     }
 
-    const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+    const nights = Math.ceil(
+      (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24),
+    );
 
     // Search via TBO adapter
     const adapter = getTboAdapter();
@@ -175,18 +178,18 @@ router.post('/search', async (req, res) => {
         children: parseInt(children),
         rooms: parseInt(rooms),
         guestNationality: guest_nationality,
-        preferredCurrency: preferred_currency
+        preferredCurrency: preferred_currency,
       };
 
-      console.log('🔍 TBO hotel search:', tboSearchParams);
-      
+      console.log("🔍 TBO hotel search:", tboSearchParams);
+
       const tboResults = await adapter.searchHotels(tboSearchParams);
       hotels = Array.isArray(tboResults) ? tboResults : [];
-      
+
       console.log(`✅ TBO returned ${hotels.length} hotels`);
     } catch (error) {
       tboError = error;
-      console.error('⚠️ TBO search failed:', error.message);
+      console.error("⚠️ TBO search failed:", error.message);
       // Graceful fallback: return hotel content from DB without pricing
     }
 
@@ -196,7 +199,7 @@ router.post('/search', async (req, res) => {
       if (hotels.length > 0) {
         // If TBO returned results, use those hotel IDs
         const hotelCodes = hotels
-          .map(h => h.hotelCode || h.HotelCode)
+          .map((h) => h.hotelCode || h.HotelCode)
           .filter(Boolean)
           .slice(0, parseInt(limit));
 
@@ -206,13 +209,13 @@ router.post('/search', async (req, res) => {
            FROM hotel_unified
            WHERE supplier_code = $1 AND supplier_hotel_id = ANY($2)
            LIMIT $3 OFFSET $4`,
-          [USE_SUPPLIER_FILTER, hotelCodes, parseInt(limit), parseInt(offset)]
+          [USE_SUPPLIER_FILTER, hotelCodes, parseInt(limit), parseInt(offset)],
         );
 
         hotelRecords = result.rows;
       }
     } catch (error) {
-      console.error('⚠️ Failed to fetch hotel records:', error.message);
+      console.error("⚠️ Failed to fetch hotel records:", error.message);
     }
 
     // If no TBO results and no DB records, return empty
@@ -222,7 +225,9 @@ router.post('/search', async (req, res) => {
         hotels: [],
         total: 0,
         pricing_available: false,
-        message: tboError ? 'Pricing temporarily unavailable from supplier' : 'No hotels found'
+        message: tboError
+          ? "Pricing temporarily unavailable from supplier"
+          : "No hotels found",
       });
     }
 
@@ -244,12 +249,12 @@ router.post('/search', async (req, res) => {
                AND expires_at > NOW()
                ORDER BY price_total ASC
                LIMIT 10`,
-              [hotelRec.property_id, USE_SUPPLIER_FILTER, check_in, check_out]
+              [hotelRec.property_id, USE_SUPPLIER_FILTER, check_in, check_out],
             );
 
             rates = rateResult.rows || [];
           } catch (error) {
-            console.error('⚠️ Failed to fetch room rates:', error.message);
+            console.error("⚠️ Failed to fetch room rates:", error.message);
             pricingAvailable = false;
           }
         } else {
@@ -264,9 +269,9 @@ router.post('/search', async (req, res) => {
              WHERE property_id = $1
              ORDER BY "order" ASC
              LIMIT 5`,
-            [hotelRec.property_id]
+            [hotelRec.property_id],
           );
-          images = imgResult.rows ? imgResult.rows.map(r => r.image_url) : [];
+          images = imgResult.rows ? imgResult.rows.map((r) => r.image_url) : [];
         } catch (error) {
           // Fallback to thumbnail if available
           if (hotelRec.thumbnail_url) {
@@ -291,17 +296,20 @@ router.post('/search', async (req, res) => {
           amenities: hotelRec.amenities_json || [],
           location: {
             lat: parseFloat(hotelRec.lat) || null,
-            lng: parseFloat(hotelRec.lng) || null
+            lng: parseFloat(hotelRec.lng) || null,
           },
-          pricing: pricingAvailable && cheapestRate ? {
-            currency: cheapestRate.currency,
-            base_price: parseFloat(cheapestRate.price_base),
-            taxes: parseFloat(cheapestRate.price_taxes),
-            total_price: parseFloat(cheapestRate.price_total),
-            per_night: parseFloat(cheapestRate.price_per_night),
-            refundable: cheapestRate.refundable,
-            free_cancellation: cheapestRate.free_cancellation
-          } : null,
+          pricing:
+            pricingAvailable && cheapestRate
+              ? {
+                  currency: cheapestRate.currency,
+                  base_price: parseFloat(cheapestRate.price_base),
+                  taxes: parseFloat(cheapestRate.price_taxes),
+                  total_price: parseFloat(cheapestRate.price_total),
+                  per_night: parseFloat(cheapestRate.price_per_night),
+                  refundable: cheapestRate.refundable,
+                  free_cancellation: cheapestRate.free_cancellation,
+                }
+              : null,
           pricing_available: pricingAvailable,
           room_count: rates.length,
           search_params: {
@@ -310,10 +318,10 @@ router.post('/search', async (req, res) => {
             nights,
             adults: parseInt(adults),
             children: parseInt(children),
-            rooms: parseInt(rooms)
-          }
+            rooms: parseInt(rooms),
+          },
         };
-      })
+      }),
     );
 
     res.json({
@@ -321,15 +329,14 @@ router.post('/search', async (req, res) => {
       hotels: enrichedHotels,
       total: hotelRecords.length,
       pricing_available: !tboError,
-      message: tboError ? 'Live pricing temporarily unavailable' : 'Success'
+      message: tboError ? "Live pricing temporarily unavailable" : "Success",
     });
-
   } catch (error) {
-    console.error('❌ Hotel search error:', error.message);
+    console.error("❌ Hotel search error:", error.message);
     res.status(500).json({
       success: false,
-      error: 'Hotel search failed',
-      hotels: []
+      error: "Hotel search failed",
+      hotels: [],
     });
   }
 });
@@ -340,7 +347,7 @@ router.post('/search', async (req, res) => {
  * Get detailed information about a specific hotel
  * ============================================================================
  */
-router.get('/:propertyId', async (req, res) => {
+router.get("/:propertyId", async (req, res) => {
   try {
     const { propertyId } = req.params;
     const { include_images = true, include_reviews = false } = req.query;
@@ -349,13 +356,13 @@ router.get('/:propertyId', async (req, res) => {
     const hotelResult = await db.query(
       `SELECT * FROM hotel_unified
        WHERE property_id = $1 AND supplier_code = $2`,
-      [propertyId, USE_SUPPLIER_FILTER]
+      [propertyId, USE_SUPPLIER_FILTER],
     );
 
     if (hotelResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'Hotel not found'
+        error: "Hotel not found",
       });
     }
 
@@ -363,19 +370,21 @@ router.get('/:propertyId', async (req, res) => {
 
     // Fetch images
     let images = [];
-    if (include_images === 'true' || include_images === true) {
+    if (include_images === "true" || include_images === true) {
       try {
         const imgResult = await db.query(
           `SELECT image_url, "order" FROM hotel_images
            WHERE property_id = $1
            ORDER BY "order" ASC
            LIMIT 20`,
-          [propertyId]
+          [propertyId],
         );
-        images = imgResult.rows ? imgResult.rows.map(r => ({
-          url: r.image_url,
-          order: r.order
-        })) : [];
+        images = imgResult.rows
+          ? imgResult.rows.map((r) => ({
+              url: r.image_url,
+              order: r.order,
+            }))
+          : [];
       } catch (error) {
         // Fallback to thumbnail
         if (hotel.thumbnail_url) {
@@ -406,21 +415,20 @@ router.get('/:propertyId', async (req, res) => {
           lng: parseFloat(hotel.lng) || null,
           district: hotel.district,
           zone: hotel.zone,
-          neighborhood: hotel.neighborhood
+          neighborhood: hotel.neighborhood,
         },
         checkin_from: hotel.checkin_from,
         checkout_until: hotel.checkout_until,
         chain_code: hotel.chain_code,
         brand_code: hotel.brand_code,
-        giata_id: hotel.giata_id
-      }
+        giata_id: hotel.giata_id,
+      },
     });
-
   } catch (error) {
-    console.error('❌ Hotel details error:', error.message);
+    console.error("❌ Hotel details error:", error.message);
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch hotel details'
+      error: "Failed to fetch hotel details",
     });
   }
 });
@@ -431,7 +439,7 @@ router.get('/:propertyId', async (req, res) => {
  * Get available room rates for a specific hotel
  * ============================================================================
  */
-router.post('/:propertyId/rates', async (req, res) => {
+router.post("/:propertyId/rates", async (req, res) => {
   try {
     const { propertyId } = req.params;
     const {
@@ -440,15 +448,15 @@ router.post('/:propertyId/rates', async (req, res) => {
       adults = 2,
       children = 0,
       rooms = 1,
-      preferred_currency = 'INR',
-      refresh = false  // Force refresh from TBO
+      preferred_currency = "INR",
+      refresh = false, // Force refresh from TBO
     } = req.body;
 
     // Validation
     if (!check_in || !check_out) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: check_in, check_out'
+        error: "Missing required fields: check_in, check_out",
       });
     }
 
@@ -458,13 +466,13 @@ router.post('/:propertyId/rates', async (req, res) => {
     if (isNaN(checkInDate.getTime()) || isNaN(checkOutDate.getTime())) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid date format. Use YYYY-MM-DD'
+        error: "Invalid date format. Use YYYY-MM-DD",
       });
     }
     if (checkInDate >= checkOutDate) {
       return res.status(400).json({
         success: false,
-        error: 'Check-in must be before check-out'
+        error: "Check-in must be before check-out",
       });
     }
 
@@ -473,13 +481,13 @@ router.post('/:propertyId/rates', async (req, res) => {
       `SELECT property_id, supplier_hotel_id, hotel_name, city 
        FROM hotel_unified
        WHERE property_id = $1 AND supplier_code = $2`,
-      [propertyId, USE_SUPPLIER_FILTER]
+      [propertyId, USE_SUPPLIER_FILTER],
     );
 
     if (hotelResult.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        error: 'Hotel not found'
+        error: "Hotel not found",
       });
     }
 
@@ -503,14 +511,16 @@ router.post('/:propertyId/rates', async (req, res) => {
            AND search_checkout = $4::date
            AND expires_at > NOW()
            ORDER BY price_total ASC`,
-          [propertyId, USE_SUPPLIER_FILTER, check_in, check_out]
+          [propertyId, USE_SUPPLIER_FILTER, check_in, check_out],
         );
 
         rates = cacheResult.rows || [];
         fromCache = rates.length > 0;
-        console.log(`✅ Found ${rates.length} cached rates for hotel ${propertyId}`);
+        console.log(
+          `✅ Found ${rates.length} cached rates for hotel ${propertyId}`,
+        );
       } catch (error) {
-        console.error('⚠️ Cache lookup failed:', error.message);
+        console.error("⚠️ Cache lookup failed:", error.message);
       }
     }
 
@@ -519,7 +529,9 @@ router.post('/:propertyId/rates', async (req, res) => {
     if (rates.length === 0) {
       try {
         const adapter = getTboAdapter();
-        const nights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+        const nights = Math.ceil(
+          (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24),
+        );
 
         // Call getHotelRoom or similar enrichment method
         const tboRates = await adapter.getHotelRoom({
@@ -530,8 +542,8 @@ router.post('/:propertyId/rates', async (req, res) => {
           adults: parseInt(adults),
           children: parseInt(children),
           rooms: parseInt(rooms),
-          guestNationality: 'IN',
-          preferredCurrency: preferred_currency
+          guestNationality: "IN",
+          preferredCurrency: preferred_currency,
         });
 
         if (Array.isArray(tboRates)) {
@@ -555,8 +567,8 @@ router.post('/:propertyId/rates', async (req, res) => {
                   propertyId,
                   USE_SUPPLIER_FILTER,
                   tboRate.roomName || tboRate.RoomTypeName,
-                  tboRate.boardBasis || tboRate.BoardType || 'RO',
-                  tboRate.bedType || 'Double',
+                  tboRate.boardBasis || tboRate.BoardType || "RO",
+                  tboRate.bedType || "Double",
                   tboRate.refundable !== undefined ? tboRate.refundable : true,
                   tboRate.freeCancellation || false,
                   parseInt(adults),
@@ -573,19 +585,19 @@ router.post('/:propertyId/rates', async (req, res) => {
                   hotel.city,
                   tboRate.inclusions || tboRate.Inclusions || null,
                   tboRate.cancellableUntil || null,
-                  expiresAt
-                ]
+                  expiresAt,
+                ],
               );
             } catch (insertError) {
-              console.warn('⚠️ Failed to cache rate:', insertError.message);
+              console.warn("⚠️ Failed to cache rate:", insertError.message);
             }
           }
 
-          rates = tboRates.map(tr => ({
+          rates = tboRates.map((tr) => ({
             offer_id: uuidv4(),
             room_name: tr.roomName || tr.RoomTypeName,
-            board_basis: tr.boardBasis || tr.BoardType || 'RO',
-            bed_type: tr.bedType || 'Double',
+            board_basis: tr.boardBasis || tr.BoardType || "RO",
+            bed_type: tr.bedType || "Double",
             refundable: tr.refundable,
             free_cancellation: tr.freeCancellation || false,
             occupancy_adults: parseInt(adults),
@@ -597,17 +609,17 @@ router.post('/:propertyId/rates', async (req, res) => {
             price_per_night: parseFloat(tr.pricePerNight || 0),
             rate_key_or_token: tr.rateKey,
             inclusions_json: tr.inclusions,
-            cancellable_until: tr.cancellableUntil
+            cancellable_until: tr.cancellableUntil,
           }));
         }
       } catch (error) {
         tboError = error;
-        console.error('⚠️ TBO rate fetch failed:', error.message);
+        console.error("⚠️ TBO rate fetch failed:", error.message);
       }
     }
 
     // Format response
-    const responseRates = rates.map(rate => ({
+    const responseRates = rates.map((rate) => ({
       offer_id: rate.offer_id,
       room_name: rate.room_name,
       board_basis: rate.board_basis,
@@ -616,18 +628,18 @@ router.post('/:propertyId/rates', async (req, res) => {
       free_cancellation: rate.free_cancellation,
       occupancy: {
         adults: rate.occupancy_adults,
-        children: rate.occupancy_children
+        children: rate.occupancy_children,
       },
       pricing: {
         currency: rate.currency,
         base: parseFloat(rate.price_base),
         taxes: parseFloat(rate.price_taxes),
         total: parseFloat(rate.price_total),
-        per_night: parseFloat(rate.price_per_night)
+        per_night: parseFloat(rate.price_per_night),
       },
       rate_key: rate.rate_key_or_token,
       inclusions: rate.inclusions_json,
-      cancellable_until: rate.cancellable_until
+      cancellable_until: rate.cancellable_until,
     }));
 
     res.json({
@@ -640,16 +652,16 @@ router.post('/:propertyId/rates', async (req, res) => {
       total_rooms: responseRates.length,
       pricing_available: responseRates.length > 0,
       from_cache: fromCache,
-      message: tboError && rates.length === 0 
-        ? 'Pricing temporarily unavailable' 
-        : 'Success'
+      message:
+        tboError && rates.length === 0
+          ? "Pricing temporarily unavailable"
+          : "Success",
     });
-
   } catch (error) {
-    console.error('❌ Hotel rates error:', error.message);
+    console.error("❌ Hotel rates error:", error.message);
     res.status(500).json({
       success: false,
-      error: 'Failed to fetch room rates'
+      error: "Failed to fetch room rates",
     });
   }
 });

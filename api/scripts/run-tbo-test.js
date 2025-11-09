@@ -2,16 +2,16 @@
 
 /**
  * TBO Hotel API - Complete End-to-End Test Script
- * 
+ *
  * Tests:
  * 1) Authentication against TBO Shared Data API
  * 2) Hotel Search with live data from TBO Hotel API
- * 
+ *
  * Environment Variables Required:
  * - TBO_CLIENT_ID=tboprod (or TBO_HOTEL_CLIENT_ID)
  * - TBO_API_USER_ID=BOMF145 (or TBO_HOTEL_USER_ID)
  * - TBO_API_PASSWORD=@Bo#4M-Api@ (or TBO_HOTEL_PASSWORD)
- * 
+ *
  * Usage: node api/scripts/run-tbo-test.js
  */
 
@@ -31,20 +31,19 @@ const colors = {
 
 function log(message, type = "info") {
   const timestamp = new Date().toISOString();
-  const prefix = {
-    info: `${colors.blue}ℹ${colors.reset}`,
-    success: `${colors.green}✓${colors.reset}`,
-    error: `${colors.red}✗${colors.reset}`,
-    warning: `${colors.yellow}⚠${colors.reset}`,
-    section: `${colors.bright}${colors.cyan}→${colors.reset}`,
-  }[type] || "•";
+  const prefix =
+    {
+      info: `${colors.blue}ℹ${colors.reset}`,
+      success: `${colors.green}✓${colors.reset}`,
+      error: `${colors.red}✗${colors.reset}`,
+      warning: `${colors.yellow}⚠${colors.reset}`,
+      section: `${colors.bright}${colors.cyan}→${colors.reset}`,
+    }[type] || "•";
   console.log(`[${timestamp}] ${prefix} ${message}`);
 }
 
 function logDivider() {
-  console.log(
-    `${colors.bright}${"=".repeat(80)}${colors.reset}`
-  );
+  console.log(`${colors.bright}${"=".repeat(80)}${colors.reset}`);
 }
 
 function logSubSection(title) {
@@ -63,10 +62,7 @@ function getEnvVar(primaryName, fallbackName, defaultValue = null) {
 
 async function runTests() {
   logDivider();
-  log(
-    `TBO Hotel API - End-to-End Connectivity Test`,
-    "section"
-  );
+  log(`TBO Hotel API - End-to-End Connectivity Test`, "section");
   logDivider();
   console.log("");
 
@@ -78,8 +74,14 @@ async function runTests() {
   const tboClientId = getEnvVar("TBO_HOTEL_CLIENT_ID", "TBO_CLIENT_ID");
   const tboUserId = getEnvVar("TBO_HOTEL_USER_ID", "TBO_API_USER_ID");
   const tboPassword = getEnvVar("TBO_HOTEL_PASSWORD", "TBO_API_PASSWORD");
-  const tboStaticUser = getEnvVar("TBO_STATIC_USER", "TBO_STATIC_DATA_CREDENTIALS_USERNAME");
-  const tboStaticPass = getEnvVar("TBO_STATIC_PASSWORD", "TBO_STATIC_DATA_CREDENTIALS_PASSWORD");
+  const tboStaticUser = getEnvVar(
+    "TBO_STATIC_USER",
+    "TBO_STATIC_DATA_CREDENTIALS_USERNAME",
+  );
+  const tboStaticPass = getEnvVar(
+    "TBO_STATIC_PASSWORD",
+    "TBO_STATIC_DATA_CREDENTIALS_PASSWORD",
+  );
 
   const requiredVars = {
     "TBO Client ID": tboClientId,
@@ -101,18 +103,9 @@ async function runTests() {
   if (!allVarsPresent) {
     console.log("");
     log("Missing required environment variables. Please set:", "error");
-    log(
-      "  TBO_CLIENT_ID (or TBO_HOTEL_CLIENT_ID)=tboprod",
-      "error"
-    );
-    log(
-      "  TBO_API_USER_ID (or TBO_HOTEL_USER_ID)=BOMF145",
-      "error"
-    );
-    log(
-      "  TBO_API_PASSWORD (or TBO_HOTEL_PASSWORD)=@Bo#4M-Api@",
-      "error"
-    );
+    log("  TBO_CLIENT_ID (or TBO_HOTEL_CLIENT_ID)=tboprod", "error");
+    log("  TBO_API_USER_ID (or TBO_HOTEL_USER_ID)=BOMF145", "error");
+    log("  TBO_API_PASSWORD (or TBO_HOTEL_PASSWORD)=@Bo#4M-Api@", "error");
     process.exit(1);
   }
 
@@ -123,7 +116,8 @@ async function runTests() {
   // ============================================================================
   logSubSection("STEP 2: Authentication Test (TBO Shared Data API)");
 
-  const authEndpoint = "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/Authenticate";
+  const authEndpoint =
+    "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/Authenticate";
   log(`Endpoint: ${authEndpoint}`);
   log(`User: ${tboUserId}@${tboClientId}`);
 
@@ -159,7 +153,10 @@ async function runTests() {
     if (authData?.Status === 1 && authData?.TokenId) {
       authToken = authData.TokenId;
       log(`  Token: ${authToken.substring(0, 40)}...`, "success");
-      log(`  Expires in: ${authData?.ExpiryDuration || "~55 minutes"}`, "success");
+      log(
+        `  Expires in: ${authData?.ExpiryDuration || "~55 minutes"}`,
+        "success",
+      );
       log(`  Response Status Code: ${authResponse.status}`, "success");
 
       console.log("");
@@ -168,11 +165,11 @@ async function runTests() {
       console.log(
         `  ${responseStr.substring(0, 500).split("\n").join("\n  ")}${
           responseStr.length > 500 ? "\n  ..." : ""
-        }`
+        }`,
       );
     } else {
       throw new Error(
-        `Authentication failed: ${authData?.Error?.ErrorMessage || JSON.stringify(authData)}`
+        `Authentication failed: ${authData?.Error?.ErrorMessage || JSON.stringify(authData)}`,
       );
     }
   } catch (error) {
@@ -181,7 +178,7 @@ async function runTests() {
     if (error.response?.data) {
       log(`Full Response:`, "error");
       console.log(
-        `  ${JSON.stringify(error.response.data, null, 2).split("\n").join("\n  ")}`
+        `  ${JSON.stringify(error.response.data, null, 2).split("\n").join("\n  ")}`,
       );
     }
     process.exit(1);
@@ -248,10 +245,11 @@ async function runTests() {
   console.log("");
   log(`Request Payload:`, "info");
   console.log(
-    `  ${JSON.stringify(searchLog, null, 2).split("\n").join("\n  ")}`
+    `  ${JSON.stringify(searchLog, null, 2).split("\n").join("\n  ")}`,
   );
 
-  const searchEndpoint = "https://affiliate.travelboutiqueonline.com/HotelAPI/Search";
+  const searchEndpoint =
+    "https://affiliate.travelboutiqueonline.com/HotelAPI/Search";
   log(`Endpoint: ${searchEndpoint}`, "info");
   console.log("");
 
@@ -286,9 +284,14 @@ async function runTests() {
         log(`  Rating: ${firstHotel.StarRating || "N/A"} stars`, "info");
 
         if (firstHotel.Price) {
-          log(`  Price (per night): ${firstHotel.Price?.CurrencyCode || "INR"} ${
-            firstHotel.Price?.RoomPrice || firstHotel.Price?.PublishedPrice || "N/A"
-          }`, "info");
+          log(
+            `  Price (per night): ${firstHotel.Price?.CurrencyCode || "INR"} ${
+              firstHotel.Price?.RoomPrice ||
+              firstHotel.Price?.PublishedPrice ||
+              "N/A"
+            }`,
+            "info",
+          );
         }
 
         if (firstHotel.Address) {
@@ -302,10 +305,13 @@ async function runTests() {
 
         console.log("");
         log(`Data Validation:`, "info");
-        log(`  Has Rates: ${hasRates ? "✓ Yes" : "✗ No"}`, hasRates ? "success" : "warning");
+        log(
+          `  Has Rates: ${hasRates ? "✓ Yes" : "✗ No"}`,
+          hasRates ? "success" : "warning",
+        );
         log(
           `  Has Cancellation Info: ${hasCancellation ? "✓ Yes" : "✗ No"}`,
-          hasCancellation ? "success" : "warning"
+          hasCancellation ? "success" : "warning",
         );
 
         // Log first hotel complete JSON (truncated)
@@ -315,11 +321,14 @@ async function runTests() {
         console.log(
           `  ${hotelStr.substring(0, 800).split("\n").join("\n  ")}${
             hotelStr.length > 800 ? "\n  ..." : ""
-          }`
+          }`,
         );
       } else {
         log(`✓ Search successful, but no hotels returned`, "warning");
-        log(`  This may indicate TBO has no inventory for these dates/city`, "warning");
+        log(
+          `  This may indicate TBO has no inventory for these dates/city`,
+          "warning",
+        );
       }
 
       console.log("");
@@ -328,7 +337,7 @@ async function runTests() {
       console.log(
         `  ${responseStr.substring(0, 500).split("\n").join("\n  ")}${
           responseStr.length > 500 ? "\n  ..." : ""
-        }`
+        }`,
       );
     } else {
       const errorMsg =
@@ -344,7 +353,7 @@ async function runTests() {
       console.log("");
       log(`Full Response:`, "error");
       console.log(
-        `  ${JSON.stringify(searchData, null, 2).split("\n").join("\n  ")}`
+        `  ${JSON.stringify(searchData, null, 2).split("\n").join("\n  ")}`,
       );
       process.exit(1);
     }
@@ -360,7 +369,7 @@ async function runTests() {
     if (error.response?.data) {
       log(`Full Response:`, "error");
       console.log(
-        `  ${JSON.stringify(error.response.data, null, 2).split("\n").join("\n  ")}`
+        `  ${JSON.stringify(error.response.data, null, 2).split("\n").join("\n  ")}`,
       );
     }
 
@@ -369,36 +378,21 @@ async function runTests() {
 
   console.log("");
   logDivider();
-  log(
-    `✓ TBO CONNECTIVITY TEST PASSED - All systems operational!`,
-    "success"
-  );
+  log(`✓ TBO CONNECTIVITY TEST PASSED - All systems operational!`, "success");
   logDivider();
   console.log("");
   log(
     `You can now proceed with implementing the STEP 2 canonical endpoints:`,
-    "info"
+    "info",
   );
-  log(
-    `  - POST /api/hotels/search`,
-    "info"
-  );
-  log(
-    `  - GET /api/hotels/:propertyId`,
-    "info"
-  );
-  log(
-    `  - POST /api/hotels/:propertyId/rates`,
-    "info"
-  );
-  log(
-    `  - GET /api/hotels/autocomplete`,
-    "info"
-  );
+  log(`  - POST /api/hotels/search`, "info");
+  log(`  - GET /api/hotels/:propertyId`, "info");
+  log(`  - POST /api/hotels/:propertyId/rates`, "info");
+  log(`  - GET /api/hotels/autocomplete`, "info");
   console.log("");
   log(
     `Store results in room_offer / room_offer_unified with 15-minute TTL.`,
-    "info"
+    "info",
   );
   console.log("");
   process.exit(0);

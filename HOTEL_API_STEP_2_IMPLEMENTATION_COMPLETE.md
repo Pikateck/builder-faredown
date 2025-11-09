@@ -24,17 +24,20 @@ This document describes the complete implementation of **STEP 2** - the 4 canoni
 ## The 4 Canonical Endpoints
 
 ### Endpoint 1: GET /api/hotels/autocomplete
+
 **Purpose:** City/destination autocomplete for search form  
 **Supplier:** TBO  
 **Cache:** Search results cached via TBO adapter  
 **Error Handling:** Returns empty suggestions on error (non-blocking)
 
 **Request:**
+
 ```bash
 GET /api/hotels/autocomplete?q=Dubai&limit=15&country=AE
 ```
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -55,6 +58,7 @@ GET /api/hotels/autocomplete?q=Dubai&limit=15&country=AE
 ---
 
 ### Endpoint 2: POST /api/hotels/search
+
 **Purpose:** Search hotels by destination, dates, and guests  
 **Supplier:** TBO  
 **Returns:** Hotel list with cheapest room rate (if available)  
@@ -62,6 +66,7 @@ GET /api/hotels/autocomplete?q=Dubai&limit=15&country=AE
 **Error Handling:** Hotels returned even if TBO fails; pricing_available flag indicates status
 
 **Request:**
+
 ```bash
 POST /api/hotels/search
 Content-Type: application/json
@@ -82,6 +87,7 @@ Content-Type: application/json
 ```
 
 **Response (200 - with pricing):**
+
 ```json
 {
   "success": true,
@@ -125,6 +131,7 @@ Content-Type: application/json
 ```
 
 **Response (200 - pricing unavailable):**
+
 ```json
 {
   "success": true,
@@ -146,6 +153,7 @@ Content-Type: application/json
 ---
 
 ### Endpoint 3: GET /api/hotels/:propertyId
+
 **Purpose:** Detailed hotel information with images and amenities  
 **Supplier:** TBO  
 **Image Gallery:** Returns up to 20 images from hotel_images table  
@@ -153,11 +161,13 @@ Content-Type: application/json
 **Error Handling:** 404 if hotel not found; images are optional
 
 **Request:**
+
 ```bash
 GET /api/hotels/uuid-1?include_images=true&include_reviews=false
 ```
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -174,8 +184,8 @@ GET /api/hotels/uuid-1?include_images=true&include_reviews=false
     "review_score": 9.2,
     "review_count": 5432,
     "images": [
-      {"url": "https://example.com/image1.jpg", "order": 0},
-      {"url": "https://example.com/image2.jpg", "order": 1}
+      { "url": "https://example.com/image1.jpg", "order": 0 },
+      { "url": "https://example.com/image2.jpg", "order": 1 }
     ],
     "amenities": ["WiFi", "Pool", "Spa", "Restaurant", "Beach Access"],
     "location": {
@@ -196,6 +206,7 @@ GET /api/hotels/uuid-1?include_images=true&include_reviews=false
 ---
 
 ### Endpoint 4: POST /api/hotels/:propertyId/rates
+
 **Purpose:** Get available room types and rates for specific hotel and dates  
 **Supplier:** TBO  
 **Cache:** 15-minute TTL (stores to room_offer_unified table)  
@@ -203,6 +214,7 @@ GET /api/hotels/uuid-1?include_images=true&include_reviews=false
 **Error Handling:** Empty rates array with pricing_available=false if TBO fails and no cache
 
 **Request (use cache):**
+
 ```bash
 POST /api/hotels/uuid-1/rates
 Content-Type: application/json
@@ -219,6 +231,7 @@ Content-Type: application/json
 ```
 
 **Request (force refresh):**
+
 ```bash
 POST /api/hotels/uuid-1/rates
 Content-Type: application/json
@@ -231,6 +244,7 @@ Content-Type: application/json
 ```
 
 **Response (200):**
+
 ```json
 {
   "success": true,
@@ -315,11 +329,13 @@ api/server.js                         ← MODIFIED: Route registration
 ### Key Design Decisions
 
 #### 1. TBO-First Implementation
+
 - All endpoints filter `supplier_code = 'TBO'` in STEP 2
 - Code is supplier-agnostic; ready for multi-supplier expansion
 - Future: Add Hotelbeds/RateHawk by adding supplier filter logic
 
 #### 2. Graceful Error Handling
+
 - **Autocomplete:** Returns empty suggestions on TBO error (non-blocking)
 - **Search:** Returns hotel content from DB even if TBO fails; sets `pricing_available=false`
 - **Details:** Returns hotel metadata; images optional
@@ -327,6 +343,7 @@ api/server.js                         ← MODIFIED: Route registration
 - **Policy:** Only return 5xx for core DB failures; never for TBO timeouts
 
 #### 3. Rate Caching Strategy
+
 - **TTL:** 15 minutes (configurable via `ROOM_OFFER_TTL_MINUTES` env var)
 - **Storage:** `room_offer_unified` table with `expires_at > NOW()` filter
 - **Lookup:** Composite index on (property_id, supplier_code, search_checkin, search_checkout)
@@ -334,18 +351,21 @@ api/server.js                         ← MODIFIED: Route registration
 - **Cleanup:** Relies on query-time filtering; optional background cleanup job later
 
 #### 4. Supplier-Agnostic Schema
+
 - All tables use `supplier_code` column
 - Queries filter by supplier for STEP 2, but can be extended
 - Foreign keys avoid breaking on multi-supplier
 - Example future query: `WHERE supplier_code IN ('TBO', 'HOTELBEDS')`
 
 #### 5. Image Handling
+
 - **Primary:** `hotel_images` table (multiple images, ordered)
 - **Fallback:** `hotel_master.thumbnail_url` (single image)
 - **Gallery:** Up to 20 images returned for details endpoint
 - **Search:** Only cheapest rate image (if available)
 
 #### 6. Amenities Handling
+
 - **Source:** `hotel_master.amenities_json` (canonical)
 - **Format:** Array of strings
 - **Future:** Can normalize to separate `hotel_amenities` table if needed
@@ -373,6 +393,7 @@ CREATE INDEX idx_hotel_images_property ON hotel_images (property_id);
 Run migration: `api/database/migrations/20250401_hotel_canonical_indexes.sql`
 
 Creates:
+
 - `idx_room_offer_rates_query` - Optimizes /rates endpoint queries
 - `idx_hotel_unified_city_supplier` - Optimizes search queries
 - `idx_hotel_images_property_order` - Optimizes gallery lookups
@@ -420,6 +441,7 @@ TBO_HOTEL_BOOKING="https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/..
 File: `api/postman/Canonical-Hotel-API.postman_collection.json`
 
 Includes test requests for all 4 endpoints:
+
 1. Autocomplete: `GET /api/hotels/autocomplete?q=Dubai`
 2. Search: `POST /api/hotels/search` with full payload
 3. Details: `GET /api/hotels/:propertyId`
@@ -430,6 +452,7 @@ Includes test requests for all 4 endpoints:
 File: `api/openapi/hotels-canonical-openapi.yaml`
 
 Comprehensive OpenAPI 3.0 spec with:
+
 - Endpoint descriptions
 - Full request/response schemas
 - Example values
@@ -439,11 +462,13 @@ Comprehensive OpenAPI 3.0 spec with:
 ### Manual Testing Workflow
 
 1. **Test Autocomplete:**
+
    ```bash
    curl "https://builder-faredown-pricing.onrender.com/api/hotels/autocomplete?q=Dubai&limit=15"
    ```
 
 2. **Test Search:**
+
    ```bash
    curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/search" \
      -H "Content-Type: application/json" \
@@ -458,6 +483,7 @@ Comprehensive OpenAPI 3.0 spec with:
    ```
 
 3. **Test Details:**
+
    ```bash
    curl "https://builder-faredown-pricing.onrender.com/api/hotels/{{property_id}}"
    ```
@@ -504,22 +530,25 @@ FIXIE_URL="..."
 The design supports adding additional suppliers without breaking changes:
 
 ### Step 1: Add Hotelbeds (future)
+
 ```typescript
 // In hotels-canonical.js, line 30 change:
-const USE_SUPPLIER_FILTER = 'TBO';  // Current
+const USE_SUPPLIER_FILTER = "TBO"; // Current
 // To:
-const USE_SUPPLIER_FILTER = null;  // Null = all suppliers
+const USE_SUPPLIER_FILTER = null; // Null = all suppliers
 
 // Then update queries to include supplier-specific logic
 ```
 
 ### Step 2: Merge Duplicate Hotels
+
 ```typescript
 // Implement hotel deduplication across suppliers
 // Example: If TBO and Hotelbeds return same hotel, merge and show best rate
 ```
 
 ### Step 3: Supplier Preference Settings
+
 ```typescript
 // Allow users to prefer specific suppliers
 // Example: "Show me TBO hotels first, then Hotelbeds"
@@ -567,14 +596,14 @@ These can be marked as deprecated in code comments but left functional for backw
 
 ## Files Summary
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `api/routes/hotels-canonical.js` | 4 canonical endpoints | ✅ New (658 lines) |
-| `api/database/migrations/20250401_hotel_canonical_indexes.sql` | Schema enhancements | ✅ New |
-| `api/postman/Canonical-Hotel-API.postman_collection.json` | API testing | ✅ New |
-| `api/openapi/hotels-canonical-openapi.yaml` | OpenAPI specification | ✅ New |
-| `api/server.js` | Route registration | ✅ Modified |
-| `HOTEL_API_STEP_2_IMPLEMENTATION_COMPLETE.md` | This document | ✅ New |
+| File                                                           | Purpose               | Status             |
+| -------------------------------------------------------------- | --------------------- | ------------------ |
+| `api/routes/hotels-canonical.js`                               | 4 canonical endpoints | ✅ New (658 lines) |
+| `api/database/migrations/20250401_hotel_canonical_indexes.sql` | Schema enhancements   | ✅ New             |
+| `api/postman/Canonical-Hotel-API.postman_collection.json`      | API testing           | ✅ New             |
+| `api/openapi/hotels-canonical-openapi.yaml`                    | OpenAPI specification | ✅ New             |
+| `api/server.js`                                                | Route registration    | ✅ Modified        |
+| `HOTEL_API_STEP_2_IMPLEMENTATION_COMPLETE.md`                  | This document         | ✅ New             |
 
 ---
 
@@ -583,20 +612,24 @@ These can be marked as deprecated in code comments but left functional for backw
 During implementation, the following potential gaps were addressed:
 
 ### Gap 1: Missing hotel_images table
+
 **Status:** Added to migration file  
 **Impact:** Image gallery returns empty if table not populated  
 **Fallback:** Falls back to thumbnail_url
 
 ### Gap 2: Missing TTL tracking columns
+
 **Status:** Added to migration: ttl_minutes, refreshed_at  
 **Impact:** Optional; current implementation uses expires_at for filtering
 
 ### Gap 3: Amenities format
+
 **Status:** Assumes JSONB array in hotel_master.amenities_json  
 **Impact:** If column missing, amenities returned as empty array  
 **Plan:** Normalize to separate table in future phase
 
 ### Gap 4: Hotel master data population
+
 **Status:** Assumes hotel_unified table has TBO data  
 **Impact:** Search returns empty hotels if DB not seeded  
 **Plan:** Implement data import job (STEP 3)

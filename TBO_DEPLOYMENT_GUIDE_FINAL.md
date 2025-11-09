@@ -65,6 +65,7 @@ If you see a different IP: ⚠️ See [Proxy Not Working](#proxy-not-working)
 **⚠️ CRITICAL ACTION REQUIRED:**
 
 Contact TBO support and confirm:
+
 - **IP Address 1:** 52.5.155.132
 - **IP Address 2:** 52.87.82.133
 
@@ -102,6 +103,7 @@ curl https://builder-faredown-pricing.onrender.com/api/tbo/diagnostics
 ```
 
 **Expected Success Response:**
+
 ```json
 {
   "success": true,
@@ -163,28 +165,28 @@ Return: Array of hotels with pricing
 
 #### Credentials (Authentication)
 
-| Variable | Value | Purpose |
-|----------|-------|---------|
-| `TBO_HOTEL_CLIENT_ID` | `tboprod` | Identifies client in API calls |
-| `TBO_HOTEL_USER_ID` | `BOMF145` | Agency/User ID for login |
-| `TBO_HOTEL_PASSWORD` | `@Bo#4M-Api@` | Password for authentication |
-| `TBO_STATIC_DATA_CREDENTIALS_USERNAME` | `travelcategory` | Static data endpoint user |
-| `TBO_STATIC_DATA_CREDENTIALS_PASSWORD` | `Tra@59334536` | Static data endpoint password |
+| Variable                               | Value            | Purpose                        |
+| -------------------------------------- | ---------------- | ------------------------------ |
+| `TBO_HOTEL_CLIENT_ID`                  | `tboprod`        | Identifies client in API calls |
+| `TBO_HOTEL_USER_ID`                    | `BOMF145`        | Agency/User ID for login       |
+| `TBO_HOTEL_PASSWORD`                   | `@Bo#4M-Api@`    | Password for authentication    |
+| `TBO_STATIC_DATA_CREDENTIALS_USERNAME` | `travelcategory` | Static data endpoint user      |
+| `TBO_STATIC_DATA_CREDENTIALS_PASSWORD` | `Tra@59334536`   | Static data endpoint password  |
 
 #### Endpoints (API Paths)
 
-| Variable | Value | Purpose |
-|----------|-------|---------|
-| `TBO_HOTEL_STATIC_DATA` | `https://apiwr.tboholidays.com/HotelAPI/` | Countries, cities, hotels list |
-| `TBO_HOTEL_SEARCH_PREBOOK` | `https://affiliate.travelboutiqueonline.com/HotelAPI/` | Search hotels, preBook |
-| `TBO_HOTEL_BOOKING` | `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/` | Book, voucher, cancellation |
+| Variable                   | Value                                                                               | Purpose                        |
+| -------------------------- | ----------------------------------------------------------------------------------- | ------------------------------ |
+| `TBO_HOTEL_STATIC_DATA`    | `https://apiwr.tboholidays.com/HotelAPI/`                                           | Countries, cities, hotels list |
+| `TBO_HOTEL_SEARCH_PREBOOK` | `https://affiliate.travelboutiqueonline.com/HotelAPI/`                              | Search hotels, preBook         |
+| `TBO_HOTEL_BOOKING`        | `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/` | Book, voucher, cancellation    |
 
 #### Proxy (Network Routing)
 
-| Variable | Value | Purpose |
-|----------|-------|---------|
-| `FIXIE_URL` | `http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80` | HTTP proxy for outbound requests |
-| `USE_SUPPLIER_PROXY` | `true` | Enable proxy for TBO calls |
+| Variable             | Value                                                    | Purpose                          |
+| -------------------- | -------------------------------------------------------- | -------------------------------- |
+| `FIXIE_URL`          | `http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80` | HTTP proxy for outbound requests |
+| `USE_SUPPLIER_PROXY` | `true`                                                   | Enable proxy for TBO calls       |
 
 ---
 
@@ -283,10 +285,12 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 ### Test Scenarios
 
 #### Scenario 1: City Search
+
 **Purpose:** Verify static data endpoints work  
 **Test:** `GET /api/tbo-hotels/cities?q=paris&limit=10`
 
 **Expected Response:**
+
 ```json
 {
   "success": true,
@@ -295,7 +299,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
       "id": "PAR",
       "name": "Paris",
       "country": "FR",
-      "coordinates": {"lat": 48.8566, "lon": 2.3522}
+      "coordinates": { "lat": 48.8566, "lon": 2.3522 }
     }
   ]
 }
@@ -304,10 +308,12 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 ---
 
 #### Scenario 2: Hotel Search (Domestic)
+
 **Purpose:** Verify search endpoint for Indian cities  
 **Test:** `POST /api/tbo-hotels/search` with destination=DEL
 
 **Request:**
+
 ```json
 {
   "destination": "DEL",
@@ -324,10 +330,12 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 ---
 
 #### Scenario 3: Hotel Search (International)
+
 **Purpose:** Verify search endpoint for international cities  
 **Test:** `POST /api/tbo-hotels/search` with destination=LDN
 
 **Request:**
+
 ```json
 {
   "destination": "LDN",
@@ -345,11 +353,13 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 ---
 
 #### Scenario 4: Proxy Verification
+
 **Purpose:** Confirm outbound IP is whitelisted
 
 **Test:** `GET /api/tbo-hotels/egress-ip`
 
 **Expected:**
+
 ```json
 {
   "success": true,
@@ -363,15 +373,15 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 
 ### Success Criteria
 
-| Test | Expected | Status |
-|------|----------|--------|
-| Health check returns 200 OK | ✅ Working | |
-| Diagnostics test passes | ✅ All sections pass | |
-| Cities search returns results | ✅ Data found | |
-| Hotel search returns hotels | ✅ Array with >5 hotels | |
-| Outbound IP is 52.5.155.132 or 52.87.82.133 | ✅ Correct IP | |
-| Response time < 3 seconds | ✅ Fast | |
-| No credential errors in logs | ✅ No auth failures | |
+| Test                                        | Expected                | Status |
+| ------------------------------------------- | ----------------------- | ------ |
+| Health check returns 200 OK                 | ✅ Working              |        |
+| Diagnostics test passes                     | ✅ All sections pass    |        |
+| Cities search returns results               | ✅ Data found           |        |
+| Hotel search returns hotels                 | ✅ Array with >5 hotels |        |
+| Outbound IP is 52.5.155.132 or 52.87.82.133 | ✅ Correct IP           |        |
+| Response time < 3 seconds                   | ✅ Fast                 |        |
+| No credential errors in logs                | ✅ No auth failures     |        |
 
 ---
 
@@ -381,6 +391,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 
 **Cause:** IPs not whitelisted with TBO  
 **Fix:**
+
 1. Confirm IPs with TBO: 52.5.155.132, 52.87.82.133
 2. Wait for TBO to whitelist (usually 5-10 minutes)
 3. Retry search
@@ -393,6 +404,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 **Cause:** Fixie proxy not routing requests correctly
 
 **Fix:**
+
 1. Verify `FIXIE_URL` env var is set
 2. Verify `USE_SUPPLIER_PROXY=true`
 3. Restart Render service
@@ -406,6 +418,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 **Cause:** Static data endpoints failing
 
 **Fix:**
+
 1. Run diagnostics: `GET /api/tbo/diagnostics`
 2. Check static data credentials
 3. Verify database has cities seeded
@@ -417,6 +430,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 
 **Cause:** TBO API slow or not responding  
 **Fix:**
+
 1. Increase timeout: Set `TBO_TIMEOUT_MS=30000` (30 seconds)
 2. Check TBO status page for outages
 3. Retry request
@@ -428,6 +442,7 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 
 **Cause:** Proxy not handling HTTPS correctly  
 **Fix:**
+
 1. Verify FIXIE_URL uses HTTP (not HTTPS)
 2. Verify proxy packages installed: `npm list https-proxy-agent`
 3. Restart service
@@ -464,19 +479,20 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search
 
 ### Key Metrics to Monitor
 
-| Metric | Threshold | Alert |
-|--------|-----------|-------|
-| Hotel Search Success Rate | > 95% | < 90% |
-| Search Response Time | < 3s avg | > 5s avg |
-| IP Whitelist Status | ✅ Whitelisted | ⚠️ Connection error |
-| Database Connection | ✅ Active | ❌ Cannot connect |
-| Fixie Proxy Status | ✅ Active | ❌ No IP detected |
+| Metric                    | Threshold      | Alert               |
+| ------------------------- | -------------- | ------------------- |
+| Hotel Search Success Rate | > 95%          | < 90%               |
+| Search Response Time      | < 3s avg       | > 5s avg            |
+| IP Whitelist Status       | ✅ Whitelisted | ⚠️ Connection error |
+| Database Connection       | ✅ Active      | ❌ Cannot connect   |
+| Fixie Proxy Status        | ✅ Active      | ❌ No IP detected   |
 
 ### Logging Configuration
 
 **File:** `api/services/adapters/tboAdapter.js`
 
 All TBO calls are logged with:
+
 - Timestamp
 - Endpoint called
 - Request (masked password)
@@ -492,6 +508,7 @@ All TBO calls are logged with:
 **Endpoint:** `GET /api/tbo-hotels/health`
 
 **Expected Response (Healthy):**
+
 ```json
 {
   "success": true,
@@ -514,6 +531,7 @@ All TBO calls are logged with:
 ### Error Response Examples
 
 #### 401 Unauthorized (IPs Not Whitelisted)
+
 ```json
 {
   "success": false,
@@ -528,6 +546,7 @@ All TBO calls are logged with:
 ---
 
 #### 400 Bad Request (Invalid Dates)
+
 ```json
 {
   "success": false,
@@ -542,6 +561,7 @@ All TBO calls are logged with:
 ---
 
 #### 500 Proxy Error (FIXIE_URL Not Set)
+
 ```json
 {
   "success": false,
@@ -595,6 +615,7 @@ MOCK_HOTEL_COUNT=6
 ### Fallback Behavior (Automatic)
 
 If TBO fails:
+
 - ✅ City search: Returns empty (user can type manually)
 - ✅ Hotel search: Returns mock hotels (6 pre-configured hotels)
 - ✅ Hotel details: Shows mock data with disclaimer
@@ -642,10 +663,10 @@ If TBO fails:
 
 ### TBO Support Channels
 
-| Channel | Contact | Response Time |
-|---------|---------|---------------|
-| Email | support@travelboutiqueonline.com | 24-48 hours |
-| Phone | +91-120-4199999 | 1-4 hours (IST) |
+| Channel   | Contact                              | Response Time            |
+| --------- | ------------------------------------ | ------------------------ |
+| Email     | support@travelboutiqueonline.com     | 24-48 hours              |
+| Phone     | +91-120-4199999                      | 1-4 hours (IST)          |
 | Dashboard | https://b2b.travelboutiqueonline.com | Real-time (self-service) |
 
 ### Escalation Path

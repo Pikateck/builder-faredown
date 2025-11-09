@@ -17,6 +17,7 @@ All TBO integration code has been refactored to use standardized environment var
 **Lines 72-78:** Constructor credential initialization
 
 **Before:**
+
 ```javascript
 hotelClientId: "tboprod", // HARD-CODED!
 hotelUserId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_USERNAME || "BOMF145",
@@ -24,6 +25,7 @@ hotelPassword: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_PASSWORD || "@B
 ```
 
 **After:**
+
 ```javascript
 hotelClientId: process.env.TBO_CLIENT_ID,
 hotelUserId: process.env.TBO_API_USER_ID,
@@ -41,6 +43,7 @@ staticPassword: process.env.TBO_STATIC_PASSWORD,
 **Lines 78-82:** Test payload credential initialization
 
 **Before:**
+
 ```javascript
 ClientId: process.env.TBO_HOTEL_CLIENT_ID || "tboprod",
 UserName: process.env.TBO_HOTEL_USER_ID || "BOMF145",
@@ -48,6 +51,7 @@ Password: process.env.TBO_HOTEL_PASSWORD || "@Bo#4M-Api@",
 ```
 
 **After:**
+
 ```javascript
 ClientId: process.env.TBO_CLIENT_ID,
 UserName: process.env.TBO_API_USER_ID,
@@ -63,12 +67,14 @@ Password: process.env.TBO_API_PASSWORD,
 **Lines 12-13:** Static credentials initialization
 
 **Before:**
+
 ```javascript
 const staticUserName = process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME;
 const staticPassword = process.env.TBO_STATIC_DATA_CREDENTIALS_PASSWORD;
 ```
 
 **After:**
+
 ```javascript
 const staticUserName = process.env.TBO_STATIC_USER;
 const staticPassword = process.env.TBO_STATIC_PASSWORD;
@@ -85,6 +91,7 @@ const staticPassword = process.env.TBO_STATIC_PASSWORD;
 **Purpose:** Test TBO Hotel API connectivity end-to-end
 
 **Tests Performed:**
+
 1. ✅ Verify all 5 environment variables are set
 2. ✅ Test authentication with TBO (SharedData.svc)
 3. ✅ Test hotel search (Dubai, sample dates)
@@ -92,6 +99,7 @@ const staticPassword = process.env.TBO_STATIC_PASSWORD;
 5. ✅ Provide detailed logging for debugging
 
 **Usage:**
+
 ```bash
 node api/scripts/test-tbo-connectivity.js
 ```
@@ -164,15 +172,16 @@ TBO_STATIC_DATA_CREDENTIALS_PASSWORD  (use TBO_STATIC_PASSWORD instead)
 
 **Update these variables:**
 
-| New Name | Value | Old Name to Delete |
-|----------|-------|-------------------|
-| `TBO_CLIENT_ID` | `tboprod` | `TBO_HOTEL_CLIENT_ID` |
-| `TBO_API_USER_ID` | `BOMF145` | `TBO_HOTEL_USER_ID` |
-| `TBO_API_PASSWORD` | `@Bo#4M-Api@` | `TBO_HOTEL_PASSWORD` |
-| `TBO_STATIC_USER` | `travelcategory` | `TBO_STATIC_DATA_CREDENTIALS_USERNAME` |
-| `TBO_STATIC_PASSWORD` | `Tra@59334536` | `TBO_STATIC_DATA_CREDENTIALS_PASSWORD` |
+| New Name              | Value            | Old Name to Delete                     |
+| --------------------- | ---------------- | -------------------------------------- |
+| `TBO_CLIENT_ID`       | `tboprod`        | `TBO_HOTEL_CLIENT_ID`                  |
+| `TBO_API_USER_ID`     | `BOMF145`        | `TBO_HOTEL_USER_ID`                    |
+| `TBO_API_PASSWORD`    | `@Bo#4M-Api@`    | `TBO_HOTEL_PASSWORD`                   |
+| `TBO_STATIC_USER`     | `travelcategory` | `TBO_STATIC_DATA_CREDENTIALS_USERNAME` |
+| `TBO_STATIC_PASSWORD` | `Tra@59334536`   | `TBO_STATIC_DATA_CREDENTIALS_PASSWORD` |
 
 **Verification:**
+
 - [ ] All 5 new variables visible in Render
 - [ ] All 5 old variables removed
 
@@ -196,6 +205,7 @@ git push origin main
 ### Step 3: Run Connectivity Test
 
 **Option A: SSH into Render**
+
 ```bash
 # Connect to Render
 render connect builder-faredown-pricing
@@ -206,11 +216,13 @@ node api/scripts/test-tbo-connectivity.js
 ```
 
 **Option B: Use Diagnostics Endpoint**
+
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/tbo/diagnostics
 ```
 
 **Expected Success:**
+
 - ✅ Environment variables: All 5 present
 - ✅ Authentication: TokenId obtained
 - ✅ Hotel search: 47+ hotels returned for Dubai
@@ -235,6 +247,7 @@ psql $DATABASE_URL < api/database/migrations/20250401_hotel_canonical_indexes.sq
 ### If Test Passes ✅
 
 Proceed to STEP 2 implementation:
+
 - 4 canonical endpoints are ready in `api/routes/hotels-canonical.js`
 - Database migration ready
 - Postman collection ready
@@ -245,6 +258,7 @@ Proceed to STEP 2 implementation:
 ### If Test Fails ❌
 
 Check:
+
 1. Are all 5 new env vars set on Render?
 2. Do credentials match TBO email values?
 3. Are IPs 52.5.155.132 and 52.87.82.133 whitelisted?
@@ -256,24 +270,26 @@ Check:
 
 ## Key Files Reference
 
-| File | Purpose | Status |
-|------|---------|--------|
-| `api/services/adapters/tboAdapter.js` | TBO adapter (main integration) | ✅ Updated |
-| `api/routes/tbo-diagnostics.js` | Diagnostics endpoint | ✅ Updated |
-| `api/services/tboClient.js` | TBO client library | ✅ Updated |
-| `api/scripts/test-tbo-connectivity.js` | Connectivity test | ✅ Created |
-| `TBO_CONNECTIVITY_TEST_GUIDE.md` | Step-by-step test guide | ✅ Created |
+| File                                   | Purpose                        | Status     |
+| -------------------------------------- | ------------------------------ | ---------- |
+| `api/services/adapters/tboAdapter.js`  | TBO adapter (main integration) | ✅ Updated |
+| `api/routes/tbo-diagnostics.js`        | Diagnostics endpoint           | ✅ Updated |
+| `api/services/tboClient.js`            | TBO client library             | ✅ Updated |
+| `api/scripts/test-tbo-connectivity.js` | Connectivity test              | ✅ Created |
+| `TBO_CONNECTIVITY_TEST_GUIDE.md`       | Step-by-step test guide        | ✅ Created |
 
 ---
 
 ## Security
 
 ✅ **No credentials in code**
+
 - All sourced from environment variables
 - Suitable for production
 - Matches TBO's security requirements
 
 ✅ **Test script safety**
+
 - Masks passwords in output
 - Safe to share logs
 - No credential exposure in diagnostics
@@ -285,6 +301,7 @@ Check:
 **Status:** ✅ READY FOR TESTING
 
 **What's Done:**
+
 1. ✅ Environment variable names standardized
 2. ✅ All hard-coded credentials removed
 3. ✅ 3 files updated consistently
@@ -292,12 +309,14 @@ Check:
 5. ✅ Comprehensive guides provided
 
 **What You Need to Do:**
+
 1. Update Render env vars (5 minutes)
 2. Deploy code (automatic)
 3. Run connectivity test (5 minutes)
 4. Proceed with STEP 2 (if test passes)
 
 **Expected Outcome:**
+
 - TBO authentication works
 - Hotel search returns real data
 - Ready to implement canonical endpoints

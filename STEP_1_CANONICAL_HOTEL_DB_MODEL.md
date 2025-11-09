@@ -2,7 +2,7 @@
 
 **Status:** ✅ COMPLETE  
 **Date:** 2025-01-XX  
-**Prepared for:** Zubin Aibara & Team  
+**Prepared for:** Zubin Aibara & Team
 
 ---
 
@@ -35,13 +35,14 @@ regions (global → region → country → state)
 
 **Tables:**
 
-| Table | PK | Purpose | Key Columns |
-|-------|-----|---------|------------|
-| `public.regions` | UUID | Geo hierarchy (World, Europe, North India) | `id, name, level, parent_id, slug` |
-| `public.countries` | UUID | Country master | `id, name, iso_code, region_id, currency` |
-| `public.cities` | UUID | City master | `id, name, code (IATA), country_id, region_id` |
+| Table              | PK   | Purpose                                    | Key Columns                                    |
+| ------------------ | ---- | ------------------------------------------ | ---------------------------------------------- |
+| `public.regions`   | UUID | Geo hierarchy (World, Europe, North India) | `id, name, level, parent_id, slug`             |
+| `public.countries` | UUID | Country master                             | `id, name, iso_code, region_id, currency`      |
+| `public.cities`    | UUID | City master                                | `id, name, code (IATA), country_id, region_id` |
 
 **Example Data Flow:**
+
 ```
 World (region)
   └─ Middle East (region)
@@ -52,6 +53,7 @@ World (region)
 ```
 
 **API Exposure** (frontend autocomplete):
+
 - `city_id` (UUID from cities.id)
 - `city_name` (from cities.name)
 - `city_code` (from cities.code) — used internally as search token
@@ -65,6 +67,7 @@ World (region)
 **Source Migration:** `20250315_unified_hotel_master_schema_v2.sql`, `20251016_create_unified_hotel_tables.sql`
 
 **Dual Table Strategy:**
+
 - **`hotel_master`** — TBO-based canonical master (source of truth for hotel identity)
 - **`hotel_unified`** — Alternative unified view (same schema, use interchangeably)
 
@@ -73,18 +76,18 @@ World (region)
 ```sql
 CREATE TABLE hotel_master (
   property_id UUID PRIMARY KEY,
-  
+
   -- Hotel Identity (core)
   hotel_name TEXT NOT NULL,
   address TEXT,
   city TEXT,                          -- NOT a FK; denormalized for performance
   country TEXT,
   postal_code TEXT,
-  
+
   -- Geo
   lat DOUBLE PRECISION,
   lng DOUBLE PRECISION,
-  
+
   -- Property Attributes
   star_rating NUMERIC(3, 1),          -- e.g., 4.5
   review_score NUMERIC(3, 1),         -- e.g., 4.4
@@ -93,19 +96,19 @@ CREATE TABLE hotel_master (
   brand_code TEXT,
   giata_id TEXT,                      -- Global hotel ID
   thumbnail_url TEXT,
-  
+
   -- Location Details
   district TEXT,
   zone TEXT,
   neighborhood TEXT,
-  
+
   -- Amenities
   amenities_json JSONB,               -- ["WiFi", "Pool", "Restaurant", ...]
-  
+
   -- Policies
   checkin_from TEXT,                  -- e.g., "14:00"
   checkout_until TEXT,                -- e.g., "11:00"
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
@@ -118,6 +121,7 @@ CREATE INDEX idx_hotel_coordinates ON hotel_master(lat, lng);
 ```
 
 **Key Design Notes:**
+
 - `property_id` is the **global hotel identity** across all suppliers
 - `city` & `country` are **denormalized text** (NOT FK) for query flexibility and performance
 - Supplier mapping is separate (see Section 3)
@@ -133,43 +137,43 @@ CREATE INDEX idx_hotel_coordinates ON hotel_master(lat, lng);
 ```sql
 CREATE TABLE room_offer (
   offer_id UUID PRIMARY KEY,
-  
+
   -- Links
   property_id UUID NOT NULL REFERENCES hotel_master(property_id) ON DELETE CASCADE,
   supplier_code TEXT NOT NULL REFERENCES supplier_master(supplier_code),
-  
+
   -- Room Details
   room_name TEXT,                     -- "Standard Twin", "Deluxe Room"
   board_basis TEXT,                   -- RO, BB, HB, FB
   bed_type TEXT,                      -- "Twin beds", "King bed"
-  
+
   -- Cancellation Policy
   refundable BOOLEAN,
   cancellable_until TIMESTAMPTZ,
   free_cancellation BOOLEAN,
-  
+
   -- Occupancy
   occupancy_adults INT,
   occupancy_children INT,
-  
+
   -- Inclusions
   inclusions_json JSONB,              -- ["Breakfast", "WiFi", "Parking"]
-  
+
   -- Pricing (INR or original currency)
   currency TEXT NOT NULL,             -- 'INR', 'GBP', etc.
   price_base NUMERIC(12, 2),          -- Before taxes
   price_taxes NUMERIC(12, 2),         -- Tax amount
   price_total NUMERIC(12, 2),         -- Tax-inclusive total per room
   price_per_night NUMERIC(12, 2),     -- Per night (derived)
-  
+
   -- Supplier Booking Reference
   rate_key_or_token TEXT,             -- TBO token, RateHawk code, etc.
   availability_count INT,             -- Rooms in stock
-  
+
   -- Search Context
   search_checkin DATE,
   search_checkout DATE,
-  
+
   -- Metadata
   created_at TIMESTAMPTZ DEFAULT NOW(),
   expires_at TIMESTAMPTZ              -- Cache expiry
@@ -182,6 +186,7 @@ CREATE INDEX idx_offer_search ON room_offer(search_checkin, search_checkout);
 ```
 
 **Key Design Notes:**
+
 - Expires after search context (use for caching live rates)
 - `rate_key_or_token` allows rebook via supplier API
 - Support multiple room types per property
@@ -195,6 +200,7 @@ CREATE INDEX idx_offer_search ON room_offer(search_checkin, search_checkout);
 **Tables:**
 
 #### `public.supplier_master`
+
 ```sql
 CREATE TABLE supplier_master (
   supplier_code TEXT PRIMARY KEY,     -- 'TBO', 'RATEHAWK', 'HOTELBEDS'
@@ -217,6 +223,7 @@ ON CONFLICT DO NOTHING;
 ```
 
 #### `public.hotel_supplier_map`
+
 ```sql
 CREATE TABLE hotel_supplier_map (
   property_id UUID NOT NULL REFERENCES hotel_master(property_id) ON DELETE CASCADE,
@@ -225,7 +232,7 @@ CREATE TABLE hotel_supplier_map (
   confidence_score NUMERIC(3, 2) DEFAULT 1.00,
   matched_on TEXT,                    -- 'giata_exact', 'geo_fuzzy', etc.
   created_at TIMESTAMPTZ DEFAULT NOW(),
-  
+
   PRIMARY KEY (supplier_code, supplier_hotel_id),
   UNIQUE(property_id, supplier_code)
 );
@@ -236,6 +243,7 @@ CREATE INDEX idx_map_supplier_code ON hotel_supplier_map(supplier_code);
 ```
 
 **Key Design Notes:**
+
 - One property can map to multiple suppliers (deduplication)
 - `supplier_hotel_id` = TBO HotelCode, RateHawk hotel_id, Hotelbeds code
 - Used for multi-source pricing queries
@@ -249,6 +257,7 @@ CREATE INDEX idx_map_supplier_code ON hotel_supplier_map(supplier_code);
 **Tables:**
 
 #### `public.tbo_cities`
+
 ```sql
 CREATE TABLE tbo_cities (
   id SERIAL PRIMARY KEY,
@@ -274,6 +283,7 @@ CREATE INDEX idx_tbo_cities_code ON tbo_cities(city_code);
 ```
 
 #### `public.tbo_hotels`
+
 ```sql
 CREATE TABLE tbo_hotels (
   id SERIAL PRIMARY KEY,
@@ -298,6 +308,7 @@ CREATE INDEX idx_tbo_hotels_name ON tbo_hotels(name);
 ```
 
 **Key Design Notes:**
+
 - Mirrors TBO's master data structure
 - Used for fast fallback when `hotel_master` is unavailable
 - `supplier_id` in TBO = the HotelCode used in API calls
@@ -311,6 +322,7 @@ CREATE INDEX idx_tbo_hotels_name ON tbo_hotels(name);
 **Purpose:** Frontend city autocomplete
 
 **SQL:**
+
 ```sql
 SELECT
   c.id AS city_id,
@@ -327,6 +339,7 @@ LIMIT 20;
 ```
 
 **Frontend Response Model:**
+
 ```json
 {
   "city_id": "uuid-...",
@@ -344,6 +357,7 @@ LIMIT 20;
 **Purpose:** Get hotel metadata by city
 
 **SQL:**
+
 ```sql
 SELECT
   hm.property_id,
@@ -375,6 +389,7 @@ LIMIT 50;
 **Purpose:** Get hotel with TBO & other supplier IDs
 
 **SQL:**
+
 ```sql
 SELECT
   hm.property_id,
@@ -396,6 +411,7 @@ LIMIT 50;
 ```
 
 **Expected Output:**
+
 ```
 property_id | hotel_name | star_rating | city  | supplier_code | supplier_hotel_code
 ------------|-----------|-------------|-------|---------------|--------------------
@@ -412,6 +428,7 @@ uuid-2      | Burj Hotel| 5.0         | Dubai | TBO           | 234567
 **Purpose:** Get available rooms (rates) for a property on specific dates
 
 **SQL:**
+
 ```sql
 SELECT
   ro.offer_id,
@@ -443,6 +460,7 @@ LIMIT 10;
 **Purpose:** Fallback city search using TBO cache (when `cities` table unavailable)
 
 **SQL:**
+
 ```sql
 SELECT
   tc.id,
@@ -464,6 +482,7 @@ LIMIT 20;
 **Purpose:** Get TBO hotel data (when `hotel_master` unavailable)
 
 **SQL:**
+
 ```sql
 SELECT
   th.id,
@@ -590,15 +609,15 @@ Note: tbo_* tables are TBO-specific caches
 
 ## Part D: Data Relationships Summary
 
-| Relationship | From | To | Key | Purpose |
-|---|---|---|---|---|
-| City → Country | cities.country_id | countries.id | Reference data |
-| Country → Region | countries.region_id | regions.id | Geo hierarchy |
-| Hotel → City | hotel_master.city (TEXT) | cities.name (TEXT) | Hotel location (denormalized) |
-| Hotel → Supplier | hotel_supplier_map | supplier_master | Multi-supplier mapping |
-| Room → Hotel | room_offer.property_id | hotel_master.property_id | Inventory link |
-| Room → Supplier | room_offer.supplier_code | supplier_master.supplier_code | Which supplier has stock |
-| TBO City → TBO Hotel | tbo_hotels.city_code | tbo_cities.city_code | TBO reference cache |
+| Relationship         | From                     | To                            | Key                           | Purpose |
+| -------------------- | ------------------------ | ----------------------------- | ----------------------------- | ------- |
+| City → Country       | cities.country_id        | countries.id                  | Reference data                |
+| Country → Region     | countries.region_id      | regions.id                    | Geo hierarchy                 |
+| Hotel → City         | hotel_master.city (TEXT) | cities.name (TEXT)            | Hotel location (denormalized) |
+| Hotel → Supplier     | hotel_supplier_map       | supplier_master               | Multi-supplier mapping        |
+| Room → Hotel         | room_offer.property_id   | hotel_master.property_id      | Inventory link                |
+| Room → Supplier      | room_offer.supplier_code | supplier_master.supplier_code | Which supplier has stock      |
+| TBO City → TBO Hotel | tbo_hotels.city_code     | tbo_cities.city_code          | TBO reference cache           |
 
 ---
 
@@ -635,7 +654,7 @@ Note: tbo_* tables are TBO-specific caches
 **Canonical Hotel DB Model:** ✅ LOCKED  
 **Example Queries:** ✅ TESTED (production ready)  
 **ERD:** ✅ CONFIRMED  
-**Ready for STEP 2:** ✅ YES  
+**Ready for STEP 2:** ✅ YES
 
 ---
 

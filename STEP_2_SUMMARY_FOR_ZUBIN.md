@@ -19,12 +19,12 @@ POST   /api/hotels/:propertyId/rates         - Room rates (with 15-min cache)
 
 ### Endpoint Status
 
-| Endpoint | TBO Integration | Cache | Error Handling | Tested |
-|----------|-----------------|-------|----------------|--------|
-| Autocomplete | ✅ via adapter | Via TBO | 200 with empty suggestions | Code review |
-| Search | ✅ via adapter | Query-time (15min) | 200 with pricing_available flag | Code review |
-| Details | ✅ DB lookup | N/A | 404 if not found, images optional | Code review |
-| Rates | ✅ via adapter + cache | 15-min TTL (room_offer_unified) | 200 with empty rates if unavailable | Code review |
+| Endpoint     | TBO Integration        | Cache                           | Error Handling                      | Tested      |
+| ------------ | ---------------------- | ------------------------------- | ----------------------------------- | ----------- |
+| Autocomplete | ✅ via adapter         | Via TBO                         | 200 with empty suggestions          | Code review |
+| Search       | ✅ via adapter         | Query-time (15min)              | 200 with pricing_available flag     | Code review |
+| Details      | ✅ DB lookup           | N/A                             | 404 if not found, images optional   | Code review |
+| Rates        | ✅ via adapter + cache | 15-min TTL (room_offer_unified) | 200 with empty rates if unavailable | Code review |
 
 ---
 
@@ -36,7 +36,7 @@ All endpoints filter `supplier_code = 'TBO'` in STEP 2:
 
 ```javascript
 // api/routes/hotels-canonical.js line 30
-const USE_SUPPLIER_FILTER = 'TBO'; // STEP 2: TBO only
+const USE_SUPPLIER_FILTER = "TBO"; // STEP 2: TBO only
 
 // All queries include:
 // WHERE supplier_code = $1  [USE_SUPPLIER_FILTER]
@@ -49,9 +49,10 @@ const USE_SUPPLIER_FILTER = 'TBO'; // STEP 2: TBO only
 **Cache Storage:** `room_offer_unified` table
 
 **TTL Implementation:**
+
 ```sql
 -- Stored with expires_at timestamp:
-INSERT INTO room_offer_unified (expires_at) 
+INSERT INTO room_offer_unified (expires_at)
 VALUES (NOW() + INTERVAL '15 minutes');
 
 -- Filtered in queries:
@@ -59,14 +60,18 @@ WHERE expires_at > NOW()
 ```
 
 **TTL Configuration:**
+
 ```javascript
 // api/routes/hotels-canonical.js line 26
-const ROOM_OFFER_TTL_MINUTES = parseInt(process.env.ROOM_OFFER_TTL_MINUTES || '15');
+const ROOM_OFFER_TTL_MINUTES = parseInt(
+  process.env.ROOM_OFFER_TTL_MINUTES || "15",
+);
 ```
 
 **Override:** Set `ROOM_OFFER_TTL_MINUTES=30` (or any value) in Render env vars.
 
-**Cleanup:** 
+**Cleanup:**
+
 - Current: Relies on query-time filtering (safest approach)
 - Optional: Background job to periodically DELETE WHERE expires_at < NOW()
 
@@ -82,30 +87,30 @@ Using `tboAdapter.js` format as specified:
   supplier_code: 'TBO',          // Always TBO in STEP 2
   supplier_hotel_id: hotel.HotelCode,
   supplier_room_id: tboRate.RateKey,  // Rate identifier
-  
+
   // Dates & Occupancy
   search_checkin: check_in,
   search_checkout: check_out,
   occupancy_adults: adults,
   occupancy_children: children,
-  
+
   // Pricing
   currency: preferred_currency,
   price_base: tboRate.BaseFare,
   price_taxes: tboRate.TaxTotal,
   price_total: tboRate.TotalFare,
   price_per_night: tboRate.PerNight,
-  
+
   // Room Details
   room_name: tboRate.RoomTypeName,
   board_basis: tboRate.BoardType,     // RO, BB, HB, FB
   bed_type: tboRate.BedType,          // Double, Twin, King
-  
+
   // Cancellation
   refundable: tboRate.Refundable,
   free_cancellation: tboRate.FreeCancellation,
   cancellable_until: tboRate.CancellableUntil,
-  
+
   // Metadata
   rate_key_or_token: tboRate.RateKey,  // For booking
   inclusions_json: tboRate.Inclusions, // JSON array
@@ -116,11 +121,12 @@ Using `tboAdapter.js` format as specified:
 ### 4. Images & Amenities ✅
 
 **Images:**
+
 ```javascript
 // Primary source: hotel_images table
-SELECT image_url FROM hotel_images 
-WHERE property_id = $1 
-ORDER BY "order" ASC 
+SELECT image_url FROM hotel_images
+WHERE property_id = $1
+ORDER BY "order" ASC
 LIMIT 20;
 
 // Fallback: hotel_master.thumbnail_url
@@ -130,9 +136,10 @@ if (images.length === 0 && hotel.thumbnail_url) {
 ```
 
 **Amenities:**
+
 ```javascript
 // Source: hotel_master.amenities_json (JSONB)
-amenities: hotelRec.amenities_json || []
+amenities: hotelRec.amenities_json || [];
 
 // Expected format: ["WiFi", "Pool", "Spa", "Restaurant"]
 ```
@@ -140,11 +147,13 @@ amenities: hotelRec.amenities_json || []
 ### 5. Error Handling (Graceful Fallback) ✅
 
 **Autocomplete:** Returns empty suggestions on TBO error
+
 ```json
-{"success": true, "suggestions": []}
+{ "success": true, "suggestions": [] }
 ```
 
 **Search:** Returns hotel content even if TBO fails
+
 ```json
 {
   "success": true,
@@ -155,11 +164,13 @@ amenities: hotelRec.amenities_json || []
 ```
 
 **Details:** Returns hotel info; images optional
+
 ```json
 {"success": true, "hotel": {...}, "images": []}
 ```
 
 **Rates:** Returns empty with message if TBO fails and no cache
+
 ```json
 {
   "success": true,
@@ -178,12 +189,12 @@ amenities: hotelRec.amenities_json || []
 
 ### Database Tables Used
 
-| Table | Purpose | Status |
-|-------|---------|--------|
-| `hotel_unified` | Canonical hotel master | ✅ Exists |
-| `room_offer_unified` | Cached room rates with TTL | ✅ Exists |
-| `hotel_images` | Gallery images | ⚠️ Created in migration |
-| `hotel_master` | Legacy (fallback for amenities/images) | ✅ Exists |
+| Table                | Purpose                                | Status                  |
+| -------------------- | -------------------------------------- | ----------------------- |
+| `hotel_unified`      | Canonical hotel master                 | ✅ Exists               |
+| `room_offer_unified` | Cached room rates with TTL             | ✅ Exists               |
+| `hotel_images`       | Gallery images                         | ⚠️ Created in migration |
+| `hotel_master`       | Legacy (fallback for amenities/images) | ✅ Exists               |
 
 ### Indexes Created
 
@@ -208,21 +219,21 @@ CREATE INDEX idx_hotel_images_property_order
 ### New Columns (Added in Migration)
 
 ```sql
-ALTER TABLE room_offer_unified 
+ALTER TABLE room_offer_unified
   ADD COLUMN ttl_minutes INT DEFAULT 15;
-  
-ALTER TABLE room_offer_unified 
+
+ALTER TABLE room_offer_unified
   ADD COLUMN refreshed_at TIMESTAMPTZ;
 ```
 
 ### Schema Gaps Addressed
 
-| Gap | Status | Impact | Workaround |
-|-----|--------|--------|-----------|
-| Missing `hotel_images` table | ✅ Fixed in migration | Gallery returns empty until populated | Falls back to thumbnail_url |
-| Missing amenities in `hotel_master.amenities_json` | ⚠️ Assumes JSONB | Empty array if column missing | Future: normalize to separate table |
-| No hotel master data (hotel_unified empty) | ⚠️ Not addressed in STEP 2 | Search returns empty hotels | STEP 3: implement data import job |
-| TBO API credentials not set | ⚠️ Checked in env | Endpoints work but TBO returns empty/errors | Verify env vars in Render dashboard |
+| Gap                                                | Status                     | Impact                                      | Workaround                          |
+| -------------------------------------------------- | -------------------------- | ------------------------------------------- | ----------------------------------- |
+| Missing `hotel_images` table                       | ✅ Fixed in migration      | Gallery returns empty until populated       | Falls back to thumbnail_url         |
+| Missing amenities in `hotel_master.amenities_json` | ⚠️ Assumes JSONB           | Empty array if column missing               | Future: normalize to separate table |
+| No hotel master data (hotel_unified empty)         | ⚠️ Not addressed in STEP 2 | Search returns empty hotels                 | STEP 3: implement data import job   |
+| TBO API credentials not set                        | ⚠️ Checked in env          | Endpoints work but TBO returns empty/errors | Verify env vars in Render dashboard |
 
 ---
 
@@ -250,16 +261,19 @@ TBO_HOTEL_SEARCH_PREBOOK="https://affiliate.travelboutiqueonline.com/HotelAPI/"
 ### Runtime Behavior
 
 **On Startup:**
+
 - Route `/api/hotels` registered to `hotels-canonical.js`
 - Legacy `/api/hotels-metadata` registered as fallback
 - TBO adapter initialized (via supplierAdapterManager)
 
 **On First Request:**
+
 - TBO adapter loads credentials from env
 - searchCities/searchHotels methods called via TBO API
 - Results cached per endpoint's strategy
 
 **On Error:**
+
 - TBO timeout (30s default) → graceful fallback
 - TBO 401/403 → returns empty (triggers fallback)
 - TBO 500+ → returns empty (triggers fallback)
@@ -282,18 +296,19 @@ TBO_HOTEL_SEARCH_PREBOOK="https://affiliate.travelboutiqueonline.com/HotelAPI/"
    - Usage: Import to Swagger UI for interactive docs
 
 3. **Quick Curl Tests**
+
    ```bash
    # Autocomplete
    curl "https://builder-faredown-pricing.onrender.com/api/hotels/autocomplete?q=Dubai"
-   
+
    # Search
    curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/search" \
      -H "Content-Type: application/json" \
      -d '{"city_code":"DXB","check_in":"2025-11-01","check_out":"2025-11-05"}'
-   
+
    # Details (replace with actual property_id from search)
    curl "https://builder-faredown-pricing.onrender.com/api/hotels/{{property_id}}"
-   
+
    # Rates
    curl -X POST "https://builder-faredown-pricing.onrender.com/api/hotels/{{property_id}}/rates" \
      -H "Content-Type: application/json" \
@@ -302,15 +317,15 @@ TBO_HOTEL_SEARCH_PREBOOK="https://affiliate.travelboutiqueonline.com/HotelAPI/"
 
 ### Expected Test Results
 
-| Test | Expected Result |
-|------|-----------------|
-| Autocomplete for "Dubai" | 200 OK, 5-15 suggestions with DXB top result |
-| Search DXB, Nov 1-5, 2 adults | 200 OK with hotel list (pricing depends on TBO) |
-| Get details for valid hotel | 200 OK with images, amenities, location |
-| Get rates for valid hotel | 200 OK with 1-10 room types, pricing |
-| Invalid property_id | 404 Not Found |
-| Invalid dates (checkin >= checkout) | 400 Bad Request |
-| TBO timeout scenario | 200 OK with pricing_available=false |
+| Test                                | Expected Result                                 |
+| ----------------------------------- | ----------------------------------------------- |
+| Autocomplete for "Dubai"            | 200 OK, 5-15 suggestions with DXB top result    |
+| Search DXB, Nov 1-5, 2 adults       | 200 OK with hotel list (pricing depends on TBO) |
+| Get details for valid hotel         | 200 OK with images, amenities, location         |
+| Get rates for valid hotel           | 200 OK with 1-10 room types, pricing            |
+| Invalid property_id                 | 404 Not Found                                   |
+| Invalid dates (checkin >= checkout) | 400 Bad Request                                 |
+| TBO timeout scenario                | 200 OK with pricing_available=false             |
 
 ---
 
@@ -432,6 +447,7 @@ Code comments added for future cleanup.
 ## Summary
 
 **What was built:**
+
 - 4 canonical hotel endpoints with TBO-first design
 - 15-minute rate caching with TTL
 - Graceful error handling (return content even if TBO fails)
@@ -440,6 +456,7 @@ Code comments added for future cleanup.
 - Comprehensive testing & documentation
 
 **What works:**
+
 - Autocomplete from TBO
 - Hotel search with fallback when TBO unavailable
 - Hotel details with optional image gallery
@@ -448,6 +465,7 @@ Code comments added for future cleanup.
 - Error responses with helpful messages
 
 **What's pending:**
+
 - Data import (populate hotel_unified table - STEP 3)
 - Pre-booking endpoints (STEP 3)
 - Booking confirmation (STEP 3)
