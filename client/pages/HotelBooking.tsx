@@ -74,6 +74,9 @@ export default function HotelBooking() {
   const selectedHotel = location.state?.selectedHotel;
   const searchParams = enhancedBooking.searchParams;
 
+  // Get return URL to go back to results page with all filters preserved
+  const returnUrl = location.state?.returnUrl || `/hotels/results?destination=DXB`;
+
   // ✅ CRITICAL: Use LOCKED dates from location.state (from search), not defaults
   // These dates come from HotelDetails where user made their final selection
   const checkIn =
