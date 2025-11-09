@@ -1,4 +1,4 @@
-﻿const express = require("express");
+const express = require("express");
 
 const crypto = require("crypto");
 const { Pool } = require("pg");
@@ -91,39 +91,44 @@ router.post("/", identifyUser, async (req, res) => {
     }
 
     const queryHash = createQueryHash(module, query);
+    const userId = req.identity.type === "user" ? req.identity.id : null;
+    const deviceId = req.identity.type === "device" ? req.identity.id : null;
 
+    // Try to upsert using conditional logic instead of ON CONFLICT with expressions
+    // First check if record exists
+    const checkQuery = `
+      SELECT id, created_at, updated_at
+      FROM recent_searches
+      WHERE (user_id = $1 OR (user_id IS NULL AND device_id = $2))
+        AND query_hash = $3
+      LIMIT 1
+    `;
+
+    const checkValues = [userId, deviceId, queryHash];
+    const existing = await pool.query(checkQuery, checkValues);
+
+    if (existing.rows.length > 0) {
+      // Update existing record
+      const updateQuery = `
+        UPDATE recent_searches
+        SET updated_at = NOW(), query = $1
+        WHERE id = $2
+        RETURNING id, created_at, updated_at;
+      `;
+      const updateValues = [query, existing.rows[0].id];
+      const result = await pool.query(updateQuery, updateValues);
+      return res.status(200).json(result.rows[0]);
+    }
+
+    // Insert new record
     const insertQuery = `
       INSERT INTO recent_searches (user_id, device_id, module, query_hash, query)
       VALUES ($1, $2, $3, $4, $5)
-      ON CONFLICT (COALESCE(user_id::text, device_id), query_hash) 
-      DO UPDATE SET 
-        updated_at = NOW(),
-        query = EXCLUDED.query
       RETURNING id, created_at, updated_at;
     `;
 
-    const values = [
-      req.identity.type === "user" ? req.identity.id : null,
-      req.identity.type === "device" ? req.identity.id : null,
-      module,
-      queryHash,
-      query,
-    ];
-
-    const result = await pool.query(insertQuery, values);
-
-    if (result.rows.length === 0) {
-      // Fetch existing record if insert was ignored
-      const existingQuery = `
-        SELECT id, created_at, updated_at 
-        FROM recent_searches 
-        WHERE COALESCE(user_id::text, device_id) = $1 AND query_hash = $2
-      `;
-      const existingValues = [req.identity.id, queryHash];
-      const existing = await pool.query(existingQuery, existingValues);
-
-      return res.status(200).json(existing.rows[0]);
-    }
+    const insertValues = [userId, deviceId, module, queryHash, query];
+    const result = await pool.query(insertQuery, insertValues);
 
     res.status(201).json(result.rows[0]);
   } catch (error) {
