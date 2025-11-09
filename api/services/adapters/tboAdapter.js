@@ -70,10 +70,10 @@ class TBOAdapter extends BaseSupplierAdapter {
       hotelGetBookingDetailsEndpoint:
         "https://affiliate.travelboutiqueonline.com/HotelAPI/GetBookingDetails",
       // CORRECT TBO Hotel API Credentials (NOT Tek Travels)
-      // Use new standard env var names (no hard-coding)
-      hotelClientId: process.env.TBO_CLIENT_ID,
-      hotelUserId: process.env.TBO_API_USER_ID,
-      hotelPassword: process.env.TBO_API_PASSWORD,
+      // Use TBO_HOTEL_* env var names matching environment
+      hotelClientId: process.env.TBO_HOTEL_CLIENT_ID,
+      hotelUserId: process.env.TBO_HOTEL_USER_ID,
+      hotelPassword: process.env.TBO_HOTEL_PASSWORD,
       // Static data credentials for reference data (Country, City, Hotel lists)
       staticUserName: process.env.TBO_STATIC_USER,
       staticPassword: process.env.TBO_STATIC_PASSWORD,
@@ -1257,6 +1257,15 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       // Step 5: Build search payload with CORRECT TBO Hotel API format
       // NOTE: TBO Hotel API uses direct credentials, NOT TokenId
+      // Convert dates to dd/mm/yyyy format required by TBO
+      const formatDateForTBO = (dateStr) => {
+        const d = new Date(dateStr);
+        const day = String(d.getDate()).padStart(2, "0");
+        const month = String(d.getMonth() + 1).padStart(2, "0");
+        const year = d.getFullYear();
+        return `${day}/${month}/${year}`;
+      };
+
       const payload = {
         // CREDENTIALS - Direct auth, no TokenId
         ClientId: this.config.hotelClientId, // "tboprod"
@@ -1265,9 +1274,9 @@ class TBOAdapter extends BaseSupplierAdapter {
 
         // SEARCH CRITERIA
         EndUserIp: this.config.endUserIp, // Fixie proxy IP or direct IP
-        CheckIn: checkIn, // Format: yyyy-mm-dd (e.g., "2025-10-31")
-        CheckOut: checkOut, // Format: yyyy-mm-dd
-        City: destination, // City code (e.g., "DXB", not numeric CityId)
+        CheckIn: formatDateForTBO(checkIn), // Format: dd/mm/yyyy (e.g., "31/10/2025")
+        CheckOut: formatDateForTBO(checkOut), // Format: dd/mm/yyyy
+        CityId: cityId, // Numeric CityId from getCityId(), NOT city code
 
         // GUEST & ROOM INFO
         NoOfRooms: Array.isArray(rooms) ? rooms.length : Number(rooms) || 1,
