@@ -138,10 +138,17 @@ export function HotelSearchForm({
     }
   }, []);
 
-  // Update search results when input changes
+  // ✅ OPTIMIZED: Debounce location search to prevent excessive API calls
   useEffect(() => {
-    if (isUserTyping && inputValue.length > 0) {
-      // Fetch from TBO locations API (cities, hotels, countries)
+    if (!isUserTyping || inputValue.length === 0) {
+      // Show popular destinations when not typing
+      const results = searchHotels("", 8);
+      setSearchResults(results);
+      return;
+    }
+
+    // Debounce API call by 400ms to avoid excessive requests
+    const debounceTimer = setTimeout(() => {
       const fetchLocations = async () => {
         try {
           // Get the proper API base URL
@@ -190,18 +197,15 @@ export function HotelSearchForm({
             setSearchResults(results);
           }
         } catch (error) {
-          console.warn("Failed to fetch locations:", error);
-          // Fallback to local search if API fails
+          // Fallback to local search if API fails (silent fail, no logging)
           const results = searchHotels(inputValue);
           setSearchResults(results);
         }
       };
       fetchLocations();
-    } else if (!isUserTyping) {
-      // Show popular destinations when not typing
-      const results = searchHotels("", 8);
-      setSearchResults(results);
-    }
+    }, 400); // 400ms debounce
+
+    return () => clearTimeout(debounceTimer);
   }, [inputValue, isUserTyping]);
 
   const childAgeOptions = Array.from({ length: 18 }, (_, i) => i);
