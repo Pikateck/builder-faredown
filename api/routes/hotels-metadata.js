@@ -226,7 +226,7 @@ const MOCK_HOTELS = {
         "https://images.unsplash.com/photo-1576675784246-fb3fc6f95f98?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Pool", "Restaurant", "Beach Access", "Gym"],
-      price: 320,
+      price: 6800,
       currency: "INR",
       isRefundable: true,
       freeCancellation: true,
@@ -236,7 +236,7 @@ const MOCK_HOTELS = {
       roomFeatures: ["Marina View"],
       rates: [
         {
-          price: 320,
+          price: 6800,
           description: "Standard Room",
           roomType: "Standard Room",
           beds: "Queen bed",
@@ -249,7 +249,7 @@ const MOCK_HOTELS = {
             "Free cancellation until 24 hours before check-in",
         },
         {
-          price: 420,
+          price: 9500,
           description: "Deluxe Room",
           roomType: "Deluxe Room",
           beds: "King bed",
@@ -276,7 +276,7 @@ const MOCK_HOTELS = {
         "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
-      price: 280,
+      price: 5200,
       currency: "INR",
       isRefundable: false,
       freeCancellation: false,
@@ -286,7 +286,7 @@ const MOCK_HOTELS = {
       roomFeatures: ["City View"],
       rates: [
         {
-          price: 280,
+          price: 5200,
           description: "Standard Room",
           roomType: "Standard Room",
           beds: "Double bed",
@@ -298,7 +298,7 @@ const MOCK_HOTELS = {
           cancellationPolicy: "Non-refundable. No cancellations allowed.",
         },
         {
-          price: 380,
+          price: 7800,
           description: "Deluxe Room",
           roomType: "Deluxe Room",
           beds: "King bed",
@@ -332,7 +332,7 @@ const MOCK_HOTELS = {
         "Michelin Restaurant",
         "Concierge",
       ],
-      price: 680,
+      price: 18500,
       currency: "INR",
       isRefundable: true,
       freeCancellation: true,
@@ -342,7 +342,7 @@ const MOCK_HOTELS = {
       roomFeatures: ["Beach View", "Private Pool"],
       rates: [
         {
-          price: 680,
+          price: 18500,
           description: "Beachfront Suite",
           roomType: "Beachfront Suite",
           beds: "King bed",
@@ -354,7 +354,7 @@ const MOCK_HOTELS = {
           cancellationPolicy: "Free cancellation until 5 days before check-in",
         },
         {
-          price: 850,
+          price: 28000,
           description: "Penthouse",
           roomType: "Penthouse",
           beds: "King bed",
