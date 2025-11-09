@@ -28,6 +28,7 @@ const userRoutes = require("./routes/users.js");
 const flightRoutes = require("./routes/flights.js");
 const hotelRoutes = require("./routes/hotels.js");
 const hotelsLiveRoutes = require("./routes/hotels-live.js");
+const hotelCanonicalRoutes = require("./routes/hotels-canonical.js"); // STEP 2: Canonical endpoints
 const bargainRoutes = require("./routes/bargain.js");
 const bargainV1Routes = require("./routes/bargain-final.js");
 const currencyRoutes = require("./routes/currency.js");
