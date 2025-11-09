@@ -164,6 +164,11 @@ export default function ReservationPage() {
   const finalTotal =
     negotiatedFromUrl > 0 ? negotiatedFromUrl : priceBreakdown.total;
 
+  // Extract bargain information
+  const isBargained = searchParams.get("bargained") === "true";
+  const originalPrice = parseInt(searchParams.get("originalPrice") || "0");
+  const bargainSavings = parseInt(searchParams.get("bargainSavings") || "0");
+
   // If negotiated total provided, derive a consistent per-night value for display
   const derivedPerNight =
     negotiatedFromUrl > 0 && nights > 0
