@@ -61,6 +61,10 @@ export default function FlightBooking({
     location.state?.negotiatedPrice || location.state?.bargainedPrice || null,
   );
 
+  // Return URL to go back to results page with all search params
+  const returnUrl =
+    location.state?.returnUrl || `/flights/results?from=BOM&to=DXB`;
+
   // Booking form states
   const [passengers, setPassengers] = useState<Passenger[]>([
     {
