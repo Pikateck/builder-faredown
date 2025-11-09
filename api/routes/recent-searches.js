@@ -167,16 +167,19 @@ router.get("/", identifyUser, async (req, res) => {
     }
 
     const maxLimit = Math.min(parseInt(limit), 20); // Cap at 20
+    const userId = req.identity.type === "user" ? req.identity.id : null;
+    const deviceId = req.identity.type === "device" ? req.identity.id : null;
 
     const selectQuery = `
       SELECT id, module, query, created_at, updated_at
       FROM recent_searches
-      WHERE COALESCE(user_id::text, device_id) = $1 AND module = $2
+      WHERE (user_id = $1 OR (user_id IS NULL AND device_id = $2))
+        AND module = $3
       ORDER BY updated_at DESC, created_at DESC
-      LIMIT $3;
+      LIMIT $4;
     `;
 
-    const values = [req.identity.id, module, maxLimit];
+    const values = [userId, deviceId, module, maxLimit];
     const result = await pool.query(selectQuery, values);
 
     res.json(result.rows);
