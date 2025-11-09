@@ -990,7 +990,7 @@ export function HotelCard({
                     {formatPrice(totalPriceInclusiveTaxes)}
                   </div>
                   <div className="text-xs text-gray-500">
-                    {formatPrice(currentPrice)} per room/night (incl. taxes)
+                    {formatPrice(perNightInclusiveTaxes)} per room/night (incl. taxes)
                   </div>
                 </div>
 
