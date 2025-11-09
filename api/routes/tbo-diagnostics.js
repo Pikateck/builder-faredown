@@ -76,13 +76,13 @@ async function detectOutboundIP() {
  */
 async function testTBOHotelSearch() {
   const testPayload = {
-    ClientId: process.env.TBO_CLIENT_ID,
-    UserName: process.env.TBO_API_USER_ID,
-    Password: process.env.TBO_API_PASSWORD,
+    ClientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID,
+    UserName: process.env.TBO_HOTEL_USER_ID || process.env.TBO_API_USER_ID,
+    Password: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_API_PASSWORD,
     EndUserIp: process.env.TBO_END_USER_IP || "192.168.5.56",
-    CheckIn: "2025-10-31",
-    CheckOut: "2025-11-03",
-    City: "DXB",
+    CheckIn: "31/10/2025", // dd/mm/yyyy format (CORRECT for TBO API)
+    CheckOut: "03/11/2025",
+    CityId: "130443", // Numeric CityId for Dubai (CORRECT format)
     NoOfRooms: 1,
     RoomGuests: [{ NoOfAdults: 2, NoOfChild: 0 }],
     GuestNationality: "IN",

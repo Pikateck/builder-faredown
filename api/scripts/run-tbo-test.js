@@ -75,9 +75,9 @@ async function runTests() {
   // ============================================================================
   logSubSection("STEP 1: Environment Variable Verification");
 
-  const tboClientId = getEnvVar("TBO_CLIENT_ID", "TBO_HOTEL_CLIENT_ID");
-  const tboUserId = getEnvVar("TBO_API_USER_ID", "TBO_HOTEL_USER_ID");
-  const tboPassword = getEnvVar("TBO_API_PASSWORD", "TBO_HOTEL_PASSWORD");
+  const tboClientId = getEnvVar("TBO_HOTEL_CLIENT_ID", "TBO_CLIENT_ID");
+  const tboUserId = getEnvVar("TBO_HOTEL_USER_ID", "TBO_API_USER_ID");
+  const tboPassword = getEnvVar("TBO_HOTEL_PASSWORD", "TBO_API_PASSWORD");
   const tboStaticUser = getEnvVar("TBO_STATIC_USER", "TBO_STATIC_DATA_CREDENTIALS_USERNAME");
   const tboStaticPass = getEnvVar("TBO_STATIC_PASSWORD", "TBO_STATIC_DATA_CREDENTIALS_PASSWORD");
 

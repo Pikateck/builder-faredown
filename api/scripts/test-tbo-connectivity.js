@@ -48,11 +48,11 @@ async function testTBOConnectivity() {
   // Step 1: Verify environment variables
   log("Step 1: Checking environment variables", "info");
   const requiredVars = [
-    "TBO_CLIENT_ID",
-    "TBO_API_USER_ID",
-    "TBO_API_PASSWORD",
-    "TBO_STATIC_USER",
-    "TBO_STATIC_PASSWORD",
+    "TBO_HOTEL_CLIENT_ID",
+    "TBO_HOTEL_USER_ID",
+    "TBO_HOTEL_PASSWORD",
+    "TBO_STATIC_DATA_CREDENTIALS_USERNAME",
+    "TBO_STATIC_DATA_CREDENTIALS_PASSWORD",
   ];
 
   const envVars = {};
@@ -79,9 +79,9 @@ async function testTBOConnectivity() {
   // Step 2: Test Authentication
   log("Step 2: Testing TBO Authentication (Dynamic API)", "info");
   const authPayload = {
-    ClientId: process.env.TBO_CLIENT_ID,
-    UserName: process.env.TBO_API_USER_ID,
-    Password: process.env.TBO_API_PASSWORD,
+    ClientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID,
+    UserName: process.env.TBO_HOTEL_USER_ID || process.env.TBO_API_USER_ID,
+    Password: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_API_PASSWORD,
     EndUserIp: process.env.TBO_END_USER_IP || "192.168.5.56",
   };
 
@@ -113,9 +113,9 @@ async function testTBOConnectivity() {
       // Step 3: Test Hotel Search
       log("Step 3: Testing TBO Hotel Search (Dynamic Search)", "info");
       const searchPayload = {
-        ClientId: process.env.TBO_CLIENT_ID,
-        UserName: process.env.TBO_API_USER_ID,
-        Password: process.env.TBO_API_PASSWORD,
+        ClientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID,
+        UserName: process.env.TBO_HOTEL_USER_ID || process.env.TBO_API_USER_ID,
+        Password: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_API_PASSWORD,
         EndUserIp: process.env.TBO_END_USER_IP || "192.168.5.56",
         CheckInDate: "31/10/2025", // dd/mm/yyyy format
         CheckOutDate: "03/11/2025",
