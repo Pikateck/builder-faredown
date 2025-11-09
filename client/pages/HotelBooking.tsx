@@ -451,7 +451,7 @@ export default function HotelBooking() {
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
               <button
-                onClick={() => navigate(-1)}
+                onClick={() => navigate(returnUrl)}
                 className="text-white hover:text-blue-200 p-1"
               >
                 <ArrowLeft className="w-5 h-5" />
