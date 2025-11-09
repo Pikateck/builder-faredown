@@ -1530,7 +1530,7 @@ function HotelDetailsContent() {
 
     console.log("🔍 Before deduplication - Total rooms:", roomTypes.length);
     roomTypes.forEach((room) => {
-      console.log("��� Room:", room.name, "ID:", room.id);
+      console.log("����� Room:", room.name, "ID:", room.id);
     });
 
     for (const room of roomTypes) {
@@ -1816,6 +1816,10 @@ function HotelDetailsContent() {
         });
       }
     }
+
+    // ✅ Build return URL for back button - go back to results page with all params preserved
+    const returnUrl = `/hotels/results?${searchParams.toString()}`;
+
     // ✅ CRITICAL: Pass locked data through location.state and URL params
     const existingParams = searchParams.toString();
     const bookingParams = new URLSearchParams({
@@ -1856,6 +1860,8 @@ function HotelDetailsContent() {
         selectedRoom: roomType,
         finalPrice: totalPrice,
         pricePerNight: perNightPrice,
+        negotiatedPrice: bargainPrice, // Pass bargained price explicitly
+        bargainedPrice: bargainPrice,
         priceSnapshot: {
           roomKey: preselectRate?.rateKey,
           rateKey: preselectRate?.rateKey,
@@ -1876,6 +1882,9 @@ function HotelDetailsContent() {
         guestDetails: (location.state as any)?.guestDetails,
         // ✅ CRITICAL: Pass bargain metadata for 2-attempt engine
         ...(bargainMetadata && { bargainMetadata }),
+        // ✅ Pass return URL to go back to results page with all params
+        returnUrl,
+        returnHotelDetailsUrl: window.location.href, // Alternative: go back to current hotel details page
       },
     });
   };
