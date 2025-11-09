@@ -2734,21 +2734,19 @@ function HotelResultsContent() {
           setSelectedHotel(null);
         }}
         onAccept={(finalPrice, orderRef) => {
-          console.log(
-            "Hotel bargain booking success with price:",
-            finalPrice,
-            "Order ref:",
-            orderRef,
-          );
           setIsBargainModalOpen(false);
 
           // Navigate to booking page with hotel, room, and search data
           if (selectedHotel) {
+            // Build return URL to go back to results page with all filters/params preserved
+            const returnUrl = `/hotels/results?${urlSearchParams.toString()}`;
+
             navigate("/hotels/booking", {
               state: {
                 selectedHotel: {
                   ...selectedHotel,
                   price: finalPrice,
+                  negotiatedPrice: finalPrice,
                   bargainApplied: true,
                   orderRef,
                 },
@@ -2764,6 +2762,11 @@ function HotelResultsContent() {
                   },
                   nights,
                 },
+                // Pass return URL so back button knows where to go
+                returnUrl,
+                negotiatedPrice: finalPrice,
+                bargainedPrice: finalPrice,
+                originalPrice: selectedHotel?.price,
               },
             });
           }
