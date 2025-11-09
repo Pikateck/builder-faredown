@@ -239,23 +239,37 @@ router.delete("/:id", identifyUser, async (req, res) => {
     const userId = req.identity.type === "user" ? req.identity.id : null;
     const deviceId = req.identity.type === "device" ? req.identity.id : null;
 
-    // Ensure user can only delete their own searches
-    const deleteQuery = `
-      DELETE FROM recent_searches
-      WHERE id = $1 AND (user_id = $2 OR (user_id IS NULL AND device_id = $3))
-      RETURNING id;
-    `;
+    try {
+      // Ensure user can only delete their own searches
+      const deleteQuery = `
+        DELETE FROM recent_searches
+        WHERE id = $1 AND (user_id = $2 OR (user_id IS NULL AND device_id = $3))
+        RETURNING id;
+      `;
 
-    const values = [parseInt(id), userId, deviceId];
-    const result = await pool.query(deleteQuery, values);
+      const values = [parseInt(id), userId, deviceId];
+      const result = await pool.query(deleteQuery, values);
 
-    if (result.rows.length === 0) {
-      return res
-        .status(404)
-        .json({ error: "Recent search not found or unauthorized" });
+      if (result.rows.length === 0) {
+        return res
+          .status(404)
+          .json({ error: "Recent search not found or unauthorized" });
+      }
+
+      res.status(204).send();
+    } catch (dbError) {
+      // If table doesn't exist, return success - feature is optional
+      if (
+        dbError.message.includes("relation") &&
+        dbError.message.includes("does not exist")
+      ) {
+        console.warn(
+          "⚠️  recent_searches table not found. Migration may not have been applied.",
+        );
+        return res.status(204).send();
+      }
+      throw dbError;
     }
-
-    res.status(204).send();
   } catch (error) {
     console.error("Error deleting recent search:", error);
     res.status(500).json({
