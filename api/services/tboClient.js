@@ -9,8 +9,8 @@ const { tboRequest } = require("../lib/tboRequest");
 const hotelStaticBase =
   process.env.TBO_HOTEL_STATIC_DATA ||
   "https://apiwr.tboholidays.com/HotelAPI/";
-const staticUserName = process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME;
-const staticPassword = process.env.TBO_STATIC_DATA_CREDENTIALS_PASSWORD;
+const staticUserName = process.env.TBO_STATIC_USER;
+const staticPassword = process.env.TBO_STATIC_PASSWORD;
 
 if (!staticUserName || !staticPassword) {
   console.warn(
