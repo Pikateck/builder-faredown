@@ -229,8 +229,9 @@ router.get("/", identifyUser, async (req, res) => {
     } catch (dbError) {
       // If table doesn't exist, return empty array - feature is optional
       if (
-        dbError.message.includes("relation") &&
-        dbError.message.includes("does not exist")
+        dbError.message.includes("relation") ||
+        dbError.message.includes("does not exist") ||
+        dbError.code === "42P01" // PostgreSQL code for "undefined_table"
       ) {
         console.warn(
           "⚠️  recent_searches table not found. Migration may not have been applied.",
@@ -241,11 +242,19 @@ router.get("/", identifyUser, async (req, res) => {
     }
   } catch (error) {
     console.error("Error fetching recent searches:", error);
-    res.status(500).json({
-      error: "Internal server error",
-      details:
-        process.env.NODE_ENV === "development" ? error.message : undefined,
-    });
+
+    // Check if error is due to missing table
+    if (
+      error.message.includes("relation") ||
+      error.message.includes("does not exist") ||
+      error.code === "42P01"
+    ) {
+      console.warn("⚠️  recent_searches table not found.");
+      return res.json([]);
+    }
+
+    // For other errors, return empty array instead of 500
+    res.json([]);
   }
 });
 
