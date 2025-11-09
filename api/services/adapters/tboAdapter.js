@@ -1311,7 +1311,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         endpoint: this.config.hotelSearchEndpoint,
         clientId: payload.ClientId,
         username: payload.UserName,
-        city: payload.City,
+        cityId: payload.CityId,
         checkIn: payload.CheckIn,
         checkOut: payload.CheckOut,
         noOfRooms: payload.NoOfRooms,
