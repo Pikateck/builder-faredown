@@ -1284,9 +1284,14 @@ export function HotelCard({
               </div>
               <div className="flex items-center min-w-0 flex-1 mb-1">
                 <MapPin className="w-3 h-3 text-gray-400 mr-1 flex-shrink-0" />
-                <span className="text-xs text-gray-600 truncate">
+                <a
+                  href={`https://www.google.com/maps/search/${encodeURIComponent(hotel.location || getFullAddress())}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs text-blue-600 hover:text-blue-800 hover:underline truncate"
+                >
                   {hotel.location || getFullAddress()}
-                </span>
+                </a>
               </div>
               {/* Location Tags */}
               {hotel.locationTags && hotel.locationTags.length > 0 && (
