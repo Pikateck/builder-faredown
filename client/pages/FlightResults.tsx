@@ -1266,7 +1266,10 @@ export default function FlightResults() {
     console.log("✅ Bargain accepted:", finalPrice, orderRef);
     setShowBargainModal(false);
 
-    // Prepare flight booking data with negotiated price
+    // Build the return URL to go back to results page with all filters/params preserved
+    const returnUrl = `/flights/results?${urlSearchParams.toString()}`;
+
+    // Prepare flight booking data with negotiated price and return URL
     const flightBookingData = {
       flight: selectedBargainFlight,
       negotiatedPrice: finalPrice,
@@ -1274,6 +1277,17 @@ export default function FlightResults() {
       originalPrice: selectedBargainFlight?.price,
       orderRef,
       module: "flights",
+      returnUrl, // Pass the return URL so back button knows where to go
+      searchParams: {
+        from: urlSearchParams.get("from"),
+        to: urlSearchParams.get("to"),
+        departureDate: urlSearchParams.get("departureDate"),
+        returnDate: urlSearchParams.get("returnDate"),
+        tripType: urlSearchParams.get("tripType"),
+        adults: urlSearchParams.get("adults"),
+        children: urlSearchParams.get("children"),
+        class: urlSearchParams.get("class"),
+      },
     };
 
     // Navigate to flight booking page (not landing page)
@@ -1899,7 +1913,7 @@ export default function FlightResults() {
                       { code: "pt", name: "Português", flag: "🇵🇹" },
                       { code: "ar", name: "العربية", flag: "🇸🇦" },
                       { code: "hi", name: "हिन्दी", flag: "🇮🇳" },
-                      { code: "ja", name: "日本語", flag: "🇯🇵" },
+                      { code: "ja", name: "日本���", flag: "🇯🇵" },
                       { code: "ko", name: "한국어", flag: "🇰���" },
                       { code: "zh", name: "中文", flag: "🇨🇳" },
                     ].map((language) => (
@@ -3366,7 +3380,7 @@ export default function FlightResults() {
                                       {flight.returnDepartureTime}
                                     </div>
                                     <div className="text-sm text-gray-600 font-medium">
-                                      {flight.arrivalCode} •{" "}
+                                      {flight.arrivalCode} ���{" "}
                                       {returnDate
                                         ? formatDisplayDate(returnDate, "MMM d")
                                         : "Select return date"}
