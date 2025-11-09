@@ -1,0 +1,539 @@
+openapi: 3.0.0
+info:
+  title: Faredown Canonical Hotel API
+  description: |
+    STEP 2 Implementation: 4 canonical hotel endpoints for search, autocomplete, details, and rates.
+    
+    Design principles:
+    - TBO-first supplier (STEP 2)
+    - Supplier-agnostic schema (ready for multi-supplier)
+    - Rate caching with 15-minute TTL
+    - Graceful fallback: return hotel content even if TBO fails
+    - Clear pricing_available flag when rates unavailable
+  version: 1.0.0
+  contact:
+    name: Faredown API Support
+  license:
+    name: Proprietary
+
+servers:
+  - url: https://builder-faredown-pricing.onrender.com
+    description: Production server
+  - url: http://localhost:3000
+    description: Development server
+
+paths:
+  /api/hotels/autocomplete:
+    get:
+      tags:
+        - Autocomplete
+      summary: City/destination autocomplete
+      description: |
+        Search cities and destinations for hotel search form autocomplete.
+        Ranks results by relevance (starts-with > contains).
+      parameters:
+        - name: q
+          in: query
+          required: true
+          schema:
+            type: string
+            minLength: 1
+          description: Search query (city name or code)
+          example: "Dubai"
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 15
+            minimum: 1
+            maximum: 100
+          description: Maximum number of suggestions
+        - name: country
+          in: query
+          schema:
+            type: string
+          description: Optional country code filter (ISO 2-letter)
+          example: "AE"
+      responses:
+        '200':
+          description: Success - returns city suggestions
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  suggestions:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/City'
+        '400':
+          description: Bad request - missing q parameter
+        '500':
+          description: Server error
+
+  /api/hotels/search:
+    post:
+      tags:
+        - Search
+      summary: Search hotels by destination and dates
+      description: |
+        Search for hotels with dates, guest composition, and optional filters.
+        Returns hotel list with basic info and cheapest room rate (if available).
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HotelSearchRequest'
+            example:
+              city_code: "DXB"
+              country_code: "AE"
+              check_in: "2025-10-31"
+              check_out: "2025-11-03"
+              adults: 2
+              children: 0
+              rooms: 1
+              guest_nationality: "IN"
+              preferred_currency: "INR"
+              limit: 50
+              offset: 0
+      responses:
+        '200':
+          description: Success - returns hotel list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotelSearchResponse'
+        '400':
+          description: Bad request - missing or invalid parameters
+        '500':
+          description: Server error
+
+  /api/hotels/{propertyId}:
+    get:
+      tags:
+        - Details
+      summary: Get detailed hotel information
+      description: |
+        Fetch comprehensive details about a specific hotel, including images and amenities.
+      parameters:
+        - name: propertyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Hotel property UUID
+        - name: include_images
+          in: query
+          schema:
+            type: boolean
+            default: true
+          description: Include image gallery
+        - name: include_reviews
+          in: query
+          schema:
+            type: boolean
+            default: false
+          description: Include guest reviews (reserved for future use)
+      responses:
+        '200':
+          description: Success - returns hotel details
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  hotel:
+                    $ref: '#/components/schemas/HotelDetail'
+        '404':
+          description: Hotel not found
+        '500':
+          description: Server error
+
+  /api/hotels/{propertyId}/rates:
+    post:
+      tags:
+        - Rates
+      summary: Get available room rates for a hotel
+      description: |
+        Fetch available room types and rates for a specific hotel and date range.
+        Uses 15-minute cache; supports refresh from TBO.
+      parameters:
+        - name: propertyId
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+          description: Hotel property UUID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RatesRequest'
+            example:
+              check_in: "2025-10-31"
+              check_out: "2025-11-03"
+              adults: 2
+              children: 0
+              rooms: 1
+              preferred_currency: "INR"
+              refresh: false
+      responses:
+        '200':
+          description: Success - returns available rates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RatesResponse'
+        '400':
+          description: Bad request - invalid dates or missing parameters
+        '404':
+          description: Hotel not found
+        '500':
+          description: Server error
+
+components:
+  schemas:
+    City:
+      type: object
+      required:
+        - city_code
+        - city_name
+        - country_code
+      properties:
+        city_code:
+          type: string
+          description: City code (DXB, PAR, LDN, etc.)
+        city_name:
+          type: string
+        country_code:
+          type: string
+          description: ISO 2-letter country code
+        country_name:
+          type: string
+        type:
+          type: string
+          enum: [CITY, REGION, COUNTRY]
+          default: CITY
+        lat:
+          type: number
+          format: double
+          nullable: true
+        lng:
+          type: number
+          format: double
+          nullable: true
+
+    HotelSearchRequest:
+      type: object
+      required:
+        - city_code
+        - check_in
+        - check_out
+      properties:
+        city_code:
+          type: string
+          description: Destination city code
+        country_code:
+          type: string
+          description: Optional country code for disambiguation
+        check_in:
+          type: string
+          format: date
+          description: Check-in date (YYYY-MM-DD)
+        check_out:
+          type: string
+          format: date
+          description: Check-out date (YYYY-MM-DD)
+        adults:
+          type: integer
+          default: 2
+          minimum: 1
+        children:
+          type: integer
+          default: 0
+          minimum: 0
+        rooms:
+          type: integer
+          default: 1
+          minimum: 1
+        guest_nationality:
+          type: string
+          default: "IN"
+          description: ISO 2-letter country code
+        preferred_currency:
+          type: string
+          default: "INR"
+          description: 3-letter currency code
+        limit:
+          type: integer
+          default: 50
+          minimum: 1
+          maximum: 500
+        offset:
+          type: integer
+          default: 0
+          minimum: 0
+
+    HotelSearchResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        hotels:
+          type: array
+          items:
+            type: object
+            properties:
+              property_id:
+                type: string
+                format: uuid
+              supplier_code:
+                type: string
+                description: Always 'TBO' in STEP 2
+              supplier_hotel_id:
+                type: string
+              hotel_name:
+                type: string
+              address:
+                type: string
+              city:
+                type: string
+              country:
+                type: string
+              star_rating:
+                type: number
+                format: float
+                minimum: 0
+                maximum: 5
+              review_score:
+                type: number
+                format: float
+              review_count:
+                type: integer
+              images:
+                type: array
+                items:
+                  type: string
+                  format: uri
+              amenities:
+                type: array
+                items:
+                  type: string
+              location:
+                type: object
+                properties:
+                  lat:
+                    type: number
+                  lng:
+                    type: number
+              pricing:
+                $ref: '#/components/schemas/Pricing'
+                nullable: true
+              pricing_available:
+                type: boolean
+              room_count:
+                type: integer
+              search_params:
+                type: object
+        total:
+          type: integer
+        pricing_available:
+          type: boolean
+        message:
+          type: string
+
+    HotelDetail:
+      type: object
+      properties:
+        property_id:
+          type: string
+          format: uuid
+        supplier_code:
+          type: string
+        supplier_hotel_id:
+          type: string
+        hotel_name:
+          type: string
+        address:
+          type: string
+        city:
+          type: string
+        country:
+          type: string
+        postal_code:
+          type: string
+        star_rating:
+          type: number
+          format: float
+        review_score:
+          type: number
+          format: float
+        review_count:
+          type: integer
+        images:
+          type: array
+          items:
+            type: object
+            properties:
+              url:
+                type: string
+                format: uri
+              order:
+                type: integer
+        amenities:
+          type: array
+          items:
+            type: string
+        location:
+          type: object
+          properties:
+            lat:
+              type: number
+            lng:
+              type: number
+            district:
+              type: string
+            zone:
+              type: string
+            neighborhood:
+              type: string
+        checkin_from:
+          type: string
+          example: "15:00"
+        checkout_until:
+          type: string
+          example: "11:00"
+        chain_code:
+          type: string
+        brand_code:
+          type: string
+        giata_id:
+          type: string
+
+    RatesRequest:
+      type: object
+      required:
+        - check_in
+        - check_out
+      properties:
+        check_in:
+          type: string
+          format: date
+        check_out:
+          type: string
+          format: date
+        adults:
+          type: integer
+          default: 2
+          minimum: 1
+        children:
+          type: integer
+          default: 0
+          minimum: 0
+        rooms:
+          type: integer
+          default: 1
+          minimum: 1
+        preferred_currency:
+          type: string
+          default: "INR"
+        refresh:
+          type: boolean
+          default: false
+          description: Force refresh from TBO (ignore 15-min cache)
+
+    RatesResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+        property_id:
+          type: string
+          format: uuid
+        hotel_name:
+          type: string
+        check_in:
+          type: string
+          format: date
+        check_out:
+          type: string
+          format: date
+        rates:
+          type: array
+          items:
+            type: object
+            properties:
+              offer_id:
+                type: string
+                format: uuid
+              room_name:
+                type: string
+              board_basis:
+                type: string
+                description: 'RO=Room Only, BB=Bed+Breakfast, HB=Half Board, FB=Full Board'
+              bed_type:
+                type: string
+              refundable:
+                type: boolean
+              free_cancellation:
+                type: boolean
+              occupancy:
+                type: object
+                properties:
+                  adults:
+                    type: integer
+                  children:
+                    type: integer
+              pricing:
+                $ref: '#/components/schemas/Pricing'
+              rate_key:
+                type: string
+                description: Rate identifier for booking
+              inclusions:
+                type: array
+                items:
+                  type: string
+              cancellable_until:
+                type: string
+                format: date-time
+        total_rooms:
+          type: integer
+        pricing_available:
+          type: boolean
+        from_cache:
+          type: boolean
+        message:
+          type: string
+
+    Pricing:
+      type: object
+      properties:
+        currency:
+          type: string
+          description: 3-letter ISO currency code
+        base:
+          type: number
+          format: double
+          description: Base price before taxes
+        taxes:
+          type: number
+          format: double
+        total:
+          type: number
+          format: double
+          description: Total price including taxes
+        per_night:
+          type: number
+          format: double
+        refundable:
+          type: boolean
+        free_cancellation:
+          type: boolean
