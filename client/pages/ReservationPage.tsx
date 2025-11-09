@@ -1181,6 +1181,29 @@ export default function ReservationPage() {
                 </div>
 
                 <div className="border-t border-gray-200 pt-4">
+                  {isBargained && originalPrice > 0 && (
+                    <div className="mb-4">
+                      <div className="flex justify-between items-center text-sm mb-2">
+                        <span className="text-gray-600">Original Price</span>
+                        <span className="text-gray-500 line-through">
+                          {formatINR(originalPrice)}
+                        </span>
+                      </div>
+                      {bargainSavings > 0 && (
+                        <div className="bg-green-50 p-3 rounded-lg border border-green-200 mb-3">
+                          <div className="flex justify-between items-center">
+                            <span className="text-sm text-green-700 font-semibold">
+                              ✅ Bargain Price Applied
+                            </span>
+                            <span className="text-sm font-bold text-green-700">
+                              You saved {formatINR(bargainSavings)}
+                            </span>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
                   <div className="flex justify-between items-center">
                     <span className="text-lg font-semibold">
                       Total Price (incl. taxes)
