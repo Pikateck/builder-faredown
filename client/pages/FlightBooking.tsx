@@ -292,7 +292,8 @@ export default function FlightBooking({
               <div className="text-2xl font-bold text-blue-600">
                 {negotiatedPrice
                   ? formatPrice(
-                      negotiatedPrice / (location.state?.searchParams?.adults || 1),
+                      negotiatedPrice /
+                        (location.state?.searchParams?.adults || 1),
                     )
                   : formatPrice(flight.price.amount)}
               </div>
@@ -629,7 +630,11 @@ export default function FlightBooking({
               <CardContent>
                 <div className="space-y-2">
                   {[
-                    { value: "card", label: "Credit/Debit Card", icon: CreditCard },
+                    {
+                      value: "card",
+                      label: "Credit/Debit Card",
+                      icon: CreditCard,
+                    },
                     { value: "upi", label: "UPI", icon: Phone },
                     { value: "netbanking", label: "Net Banking", icon: Shield },
                   ].map((method) => {
@@ -640,9 +645,7 @@ export default function FlightBooking({
                         className="flex items-center p-3 border border-gray-200 rounded-lg cursor-pointer hover:border-blue-400 hover:bg-blue-50 transition-all"
                         onClick={(e) => {
                           // Allow direct input clicks
-                          if (
-                            (e.target as HTMLElement).tagName !== "INPUT"
-                          ) {
+                          if ((e.target as HTMLElement).tagName !== "INPUT") {
                             setPaymentMethod(method.value);
                           }
                         }}
@@ -739,7 +742,10 @@ export default function FlightBooking({
                           ✅ Bargain Price Applied
                         </p>
                         <p className="text-xs text-green-600 mt-1">
-                          You saved {formatPrice(flight.price.breakdown.total - negotiatedPrice)}
+                          You saved{" "}
+                          {formatPrice(
+                            flight.price.breakdown.total - negotiatedPrice,
+                          )}
                         </p>
                       </div>
                     )}
@@ -747,7 +753,7 @@ export default function FlightBooking({
                       <span className="text-gray-600">Base fare:</span>
                       <span>
                         {formatPrice(
-                          negotiatedPrice || flight.price.breakdown.baseFare
+                          negotiatedPrice || flight.price.breakdown.baseFare,
                         )}
                       </span>
                     </div>
@@ -767,7 +773,7 @@ export default function FlightBooking({
                         <span>Total:</span>
                         <span className="text-blue-600">
                           {formatPrice(
-                            negotiatedPrice || flight.price.breakdown.total
+                            negotiatedPrice || flight.price.breakdown.total,
                           )}
                         </span>
                       </div>

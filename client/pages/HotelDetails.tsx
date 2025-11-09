@@ -1833,7 +1833,9 @@ function HotelDetailsContent() {
       totalPrice: totalPrice.toString(),
       originalPrice: originalPrice.toString(),
       bargainSavings: bargainSavings.toString(),
-      finalPrice: bargainPrice ? bargainPrice.toString() : totalPrice.toString(), // Use finalPrice for consistency
+      finalPrice: bargainPrice
+        ? bargainPrice.toString()
+        : totalPrice.toString(), // Use finalPrice for consistency
       nights: hotel.totalNights.toString(),
       bargained: (!!bargainPrice).toString(),
       roomName: roomType.name,

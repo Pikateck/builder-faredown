@@ -480,11 +480,15 @@ function HotelResultsContent() {
   // Fallback function - ALWAYS fetch from backend API for consistency
   // This ensures identical hotel names and images across Builder preview and Netlify
   const loadMockHotels = async () => {
-    console.log("📦 Loading mock hotels from backend API (ensuring consistency across environments)...");
+    console.log(
+      "📦 Loading mock hotels from backend API (ensuring consistency across environments)...",
+    );
 
     try {
       // Build API URL with proper fallback
-      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL || "https://builder-faredown-pricing.onrender.com/api";
+      const apiBaseUrl =
+        import.meta.env.VITE_API_BASE_URL ||
+        "https://builder-faredown-pricing.onrender.com/api";
       const cityCode = destination || "DXB";
       const countryCodeMap: Record<string, string> = {
         DXB: "AE",
@@ -508,7 +512,9 @@ function HotelResultsContent() {
       const data = await response.json();
 
       if (data.hotels && data.hotels.length > 0) {
-        console.log(`✅ Loaded ${data.hotels.length} hotels from backend mock data`);
+        console.log(
+          `✅ Loaded ${data.hotels.length} hotels from backend mock data`,
+        );
 
         const transformedHotels = transformTBOData(data.hotels);
 
@@ -526,7 +532,9 @@ function HotelResultsContent() {
       }
     } catch (err) {
       console.error("❌ Failed to load mock hotels from backend:", err);
-      setError("Unable to load hotels. Please check your connection and try again.");
+      setError(
+        "Unable to load hotels. Please check your connection and try again.",
+      );
       setHotels([]);
       setTotalResults(0);
       setLoading(false);
@@ -1204,7 +1212,9 @@ function HotelResultsContent() {
   // This creates inconsistency between Builder preview and Netlify
   // Always fetch from backend API at /api/hotels which has unified mock data
   const getMockHotels = (): Hotel[] => {
-    console.warn("⚠️ WARNING: getMockHotels() should not be used. Use backend API instead.");
+    console.warn(
+      "⚠️ WARNING: getMockHotels() should not be used. Use backend API instead.",
+    );
     return [];
   };
 

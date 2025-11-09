@@ -62,7 +62,9 @@ export default function ReservationPage() {
   const [isLoading, setIsLoading] = useState(false);
 
   // Get return URL from location.state (to go back to results page with all filters)
-  const returnUrl = (location.state as any)?.returnUrl || `/hotels/results?destination=${searchParams.get("destination") || "DXB"}`;
+  const returnUrl =
+    (location.state as any)?.returnUrl ||
+    `/hotels/results?destination=${searchParams.get("destination") || "DXB"}`;
 
   // Form state
   const [guestDetails, setGuestDetails] = useState({

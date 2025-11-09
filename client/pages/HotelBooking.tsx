@@ -75,7 +75,8 @@ export default function HotelBooking() {
   const searchParams = enhancedBooking.searchParams;
 
   // Get return URL to go back to results page with all filters preserved
-  const returnUrl = location.state?.returnUrl || `/hotels/results?destination=DXB`;
+  const returnUrl =
+    location.state?.returnUrl || `/hotels/results?destination=DXB`;
 
   // ✅ CRITICAL: Use LOCKED dates from location.state (from search), not defaults
   // These dates come from HotelDetails where user made their final selection
@@ -340,10 +341,10 @@ export default function HotelBooking() {
       const originalPrice = location.state?.originalPrice || negotiatedPrice;
       const bargainedPrice = location.state?.bargainedPrice || negotiatedPrice;
       const discountAmount = originalPrice - bargainedPrice;
-      const discountPercentage = originalPrice > 0 ? (
-        (discountAmount / originalPrice) *
-        100
-      ).toFixed(2) : "0";
+      const discountPercentage =
+        originalPrice > 0
+          ? ((discountAmount / originalPrice) * 100).toFixed(2)
+          : "0";
 
       // ✅ PRICE CONSISTENCY: Verify price snapshot before booking
       if (priceSnapshot) {
@@ -1211,7 +1212,7 @@ export default function HotelBooking() {
                         -₹
                         {Math.round(
                           location.state.originalPrice -
-                            location.state.bargainedPrice
+                            location.state.bargainedPrice,
                         )}{" "}
                         (
                         {(
@@ -1227,7 +1228,10 @@ export default function HotelBooking() {
                 ) : (
                   <div className="flex justify-between text-sm">
                     <span>Room Subtotal</span>
-                    <span>{/* ✅ negotiatedPrice is TOTAL, not per-night */}{formatCurrency(negotiatedPrice)}</span>
+                    <span>
+                      {/* ✅ negotiatedPrice is TOTAL, not per-night */}
+                      {formatCurrency(negotiatedPrice)}
+                    </span>
                   </div>
                 )}
                 {selectedExtras.length > 0 && (
@@ -1309,7 +1313,9 @@ export default function HotelBooking() {
                     </h4>
                     <div className="space-y-2 text-sm">
                       <div className="flex justify-between">
-                        <span className="text-gray-700">Original Price (Total Stay)</span>
+                        <span className="text-gray-700">
+                          Original Price (Total Stay)
+                        </span>
                         <span className="text-gray-600 line-through">
                           {/* ✅ originalPrice is TOTAL for entire stay */}
                           {formatCurrency(location.state.originalPrice)}
