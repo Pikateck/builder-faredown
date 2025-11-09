@@ -1293,7 +1293,7 @@ export default function FlightResults() {
   };
 
   const handleBargainHold = (orderRef: string) => {
-    console.log("⏱️ Price hold created:", orderRef);
+    // Price hold created - silent handling
   };
 
   const handleBargainClose = () => {
@@ -5555,7 +5555,7 @@ export default function FlightResults() {
                         Delhi → Singapore
                       </div>
                       <div className="text-xs text-blue-200">
-                        Air India • 1 stop • 8h 45m
+                        Air India �� 1 stop • 8h 45m
                       </div>
                     </div>
                     <div className="text-lg font-bold">₹22800</div>
