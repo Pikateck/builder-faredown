@@ -354,16 +354,6 @@ export function HotelCard({
     .toString()
     .toUpperCase();
 
-  // Debug logging for price calculations
-  console.log(`[HOTEL CARD ${hotel.id}] Price Calculation:`, {
-    hotelId: hotel.id,
-    hotelName: hotel.name,
-    currentPrice,
-    hotelCurrentPrice: hotel.currentPrice,
-    roomTypes: hotel.roomTypes,
-    priceRange: hotel.priceRange,
-  });
-
   // Get search parameters for price calculation
   const checkInDate = searchParams.get("checkIn")
     ? new Date(searchParams.get("checkIn")!)
@@ -392,16 +382,6 @@ export function HotelCard({
       ? Math.round(priceCalculation.total / totalNights)
       : priceCalculation.total;
   const totalPriceInclusiveTaxes = priceCalculation.total;
-
-  // Debug logging for total price calculation
-  console.log(`[HOTEL CARD ${hotel.id}] Total Price Calculation:`, {
-    currentPrice,
-    totalNights,
-    roomsCount,
-    priceCalculation,
-    totalPriceInclusiveTaxes,
-    perNightInclusiveTaxes,
-  });
 
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev === images.length - 1 ? 0 : prev + 1));
