@@ -456,7 +456,8 @@ app.use("/api/hotels-ranked", require("./routes/hotels-ranked"));
 app.use("/api/tbo-hotels", require("./routes/tbo-hotels"));
 app.use("/api/tbo-hotels/static", require("./routes/tbo-hotels-static"));
 app.use("/api/tbo", require("./routes/tbo-diagnostics")); // TBO diagnostics endpoint
-app.use("/api/hotels", require("./routes/hotels-metadata")); // Hybrid metadata + async pricing (TBO first)
+app.use("/api/hotels", hotelCanonicalRoutes); // STEP 2: Canonical hotel endpoints (PRIORITY)
+app.use("/api/hotels-metadata", require("./routes/hotels-metadata")); // Legacy: Hybrid metadata + async pricing (TBO first) - DEPRECATED
 app.use("/api/locations", locationsRoutes); // TBO locations autocomplete
 app.use("/api/bargain", bargainRoutes); // New module-specific bargain engine
 app.use("/api/bargain/v1", bargainV1Routes);
