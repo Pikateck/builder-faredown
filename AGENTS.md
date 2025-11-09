@@ -4,12 +4,61 @@ A production-ready full-stack React application template with integrated Express
 
 While the starter comes with a express server, only create endpoint when strictly neccesary, for example to encapsulate logic that must leave in the server, such as private keys handling, or certain DB operations, db...
 
+---
+
+## ⚠️ CRITICAL: TBO Hotel API Credentials & Setup (Oct 25, 2025)
+
+### Status: ✅ CONFIRMED & DEPLOYED
+
+**Credentials (PRODUCTION):**
+- ClientId: `tboprod`
+- Agency ID / UserId: `BOMF145`
+- API Password: `@Bo#4M-Api@`
+- Static Data Username: `travelcategory`
+- Static Data Password: `Tra@59334536`
+
+**Outbound IPs (Fixie Proxy):**
+- 52.5.155.132
+- 52.87.82.133
+
+**All credentials are in Render environment variables (NOT in code)**
+
+### Documentation
+- `TBO_CREDENTIALS_VERIFICATION_CONFIRMED.md` - Full setup details
+- `TBO_QUICK_REFERENCE_CARD.md` - Quick testing reference
+- `TBO_DEPLOYMENT_GUIDE_FINAL.md` - Complete deployment & troubleshooting
+
+### Key Files
+- `api/services/adapters/tboAdapter.js` (lines 43-80) - Credential initialization
+- `api/routes/tbo-hotels.js` - Hotel API endpoints (/cities, /search, /hotel)
+- `api/routes/tbo-diagnostics.js` - Diagnostics test endpoint
+- `api/lib/tboRequest.js` - HTTP request helper with Fixie proxy
+
+### Quick Verification
+```bash
+# Check outbound IP
+curl https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
+
+# Expected: {"success": true, "ip": "52.5.155.132"}
+```
+
+### ⚠️ ACTION REQUIRED
+**Confirm with TBO that IPs 52.5.155.132 and 52.87.82.133 are whitelisted for:**
+- ClientId: tboprod
+- Agency: BOMF145
+
+---
+
 ## Tech Stack
 
 - **Frontend**: React 18 + React Router 6 (spa) + TypeScript + Vite + TailwindCSS 3
-- **Backend**: Express server integrated with Vite dev server
+- **Backend**: Express.js (Node.js) with PostgreSQL
 - **Testing**: Vitest
 - **UI**: Radix UI + TailwindCSS 3 + Lucide React icons
+- **Suppliers**: Amadeus (flights), TBO (hotels), Hotelbeds (hotels/transfers), Ratehawk (hotels)
+- **Database**: PostgreSQL (Render)
+- **Deployment**: Render (backend), Netlify (frontend)
+- **Proxy**: Fixie (HTTP proxy for outbound requests)
 
 ## Project Structure
 
