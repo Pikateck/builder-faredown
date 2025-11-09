@@ -272,7 +272,7 @@ export default function FlightBooking({
               <Button
                 variant="ghost"
                 size="sm"
-                onClick={() => navigate(-1)}
+                onClick={() => navigate(returnUrl)}
                 className="flex items-center space-x-2"
               >
                 <ArrowLeft className="w-4 h-4" />
