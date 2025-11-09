@@ -75,7 +75,7 @@ const MOCK_HOTELS = {
         "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
-      price: 650,
+      price: 4500,
       currency: "INR",
       isRefundable: false,
       freeCancellation: false,
@@ -85,7 +85,7 @@ const MOCK_HOTELS = {
       roomFeatures: ["Twin beds"],
       rates: [
         {
-          price: 650,
+          price: 4500,
           description: "Standard Twin",
           roomType: "Standard Twin",
           beds: "Twin beds",
@@ -97,7 +97,7 @@ const MOCK_HOTELS = {
           cancellationPolicy: "Non-refundable. No cancellations allowed.",
         },
         {
-          price: 850,
+          price: 6200,
           description: "Deluxe Room",
           roomType: "Deluxe Room",
           beds: "King bed",
@@ -132,7 +132,7 @@ const MOCK_HOTELS = {
         "Gym",
         "Concierge",
       ],
-      price: 450,
+      price: 12500,
       currency: "INR",
       isRefundable: true,
       freeCancellation: true,
@@ -142,7 +142,7 @@ const MOCK_HOTELS = {
       roomFeatures: ["Sea View", "Balcony"],
       rates: [
         {
-          price: 450,
+          price: 12500,
           description: "Deluxe Room",
           roomType: "Deluxe Room",
           beds: "King bed",
@@ -155,7 +155,7 @@ const MOCK_HOTELS = {
             "Free cancellation until 48 hours before check-in",
         },
         {
-          price: 550,
+          price: 16800,
           description: "Suite",
           roomType: "Beachfront Suite",
           beds: "King bed",
@@ -181,7 +181,7 @@ const MOCK_HOTELS = {
         "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Pool", "Spa", "Fine Dining", "Lounge", "Gym"],
-      price: 520,
+      price: 14800,
       currency: "INR",
       isRefundable: true,
       freeCancellation: true,
@@ -191,7 +191,7 @@ const MOCK_HOTELS = {
       roomFeatures: ["City View", "Premium Amenities"],
       rates: [
         {
-          price: 520,
+          price: 14800,
           description: "Deluxe Room",
           roomType: "Deluxe Room",
           beds: "King bed",
@@ -202,7 +202,7 @@ const MOCK_HOTELS = {
             "Free cancellation until 72 hours before check-in",
         },
         {
-          price: 650,
+          price: 22500,
           description: "Presidential Suite",
           roomType: "Presidential Suite",
           beds: "King bed",
