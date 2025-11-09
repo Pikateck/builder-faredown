@@ -1,268 +1,74 @@
 {
   "info": {
     "name": "Canonical Hotel API - STEP 2",
-    "description": "Faredown Hotels API - 4 canonical endpoints for search, autocomplete, details, and rates",
-    "version": "1.0.0",
-    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    "description": "Faredown Hotels API - 4 canonical endpoints",
+    "version": "1.0.0"
   },
   "item": [
     {
-      "name": "1. City Autocomplete",
-      "item": [
-        {
-          "name": "GET /api/hotels/autocomplete",
-          "request": {
-            "method": "GET",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "url": {
-              "raw": "{{base_url}}/api/hotels/autocomplete?q=Dubai&limit=15",
-              "host": ["{{base_url}}"],
-              "path": ["api", "hotels", "autocomplete"],
-              "query": [
-                {
-                  "key": "q",
-                  "value": "Dubai",
-                  "description": "Search query (city name or code)"
-                },
-                {
-                  "key": "limit",
-                  "value": "15",
-                  "description": "Maximum number of suggestions (default: 15, max: 100)"
-                },
-                {
-                  "key": "country",
-                  "value": "",
-                  "disabled": true,
-                  "description": "Optional: country code to filter results"
-                }
-              ]
-            },
-            "description": "Get city/destination suggestions for autocomplete\n\n**Query Parameters:**\n- `q` (required): Search query\n- `limit` (optional): Number of results to return (default: 15)\n- `country` (optional): Country code filter"
-          },
-          "response": [
-            {
-              "name": "Success",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{base_url}}/api/hotels/autocomplete?q=Dubai&limit=15",
-                  "host": ["{{base_url}}"],
-                  "path": ["api", "hotels", "autocomplete"],
-                  "query": [
-                    {
-                      "key": "q",
-                      "value": "Dubai"
-                    }
-                  ]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [],
-              "body": "{\n  \"success\": true,\n  \"suggestions\": [\n    {\n      \"city_code\": \"DXB\",\n      \"city_name\": \"Dubai\",\n      \"country_code\": \"AE\",\n      \"country_name\": \"United Arab Emirates\",\n      \"type\": \"CITY\",\n      \"lat\": 25.2048,\n      \"lng\": 55.2708\n    }\n  ]\n}\n"
-            }
+      "name": "1. Autocomplete",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/hotels/autocomplete?q=Dubai&limit=15",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hotels", "autocomplete"],
+          "query": [
+            {"key": "q", "value": "Dubai"},
+            {"key": "limit", "value": "15"}
           ]
         }
-      ]
+      }
     },
     {
-      "name": "2. Hotel Search",
-      "item": [
-        {
-          "name": "POST /api/hotels/search",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"city_code\": \"DXB\",\n  \"country_code\": \"AE\",\n  \"check_in\": \"2025-10-31\",\n  \"check_out\": \"2025-11-03\",\n  \"adults\": 2,\n  \"children\": 0,\n  \"rooms\": 1,\n  \"guest_nationality\": \"IN\",\n  \"preferred_currency\": \"INR\",\n  \"limit\": 50,\n  \"offset\": 0\n}\n"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/hotels/search",
-              "host": ["{{base_url}}"],
-              "path": ["api", "hotels", "search"]
-            },
-            "description": "Search hotels by destination, dates, and guest composition\n\n**Request Body:**\n- `city_code` (required): Destination city code (DXB, PAR, LDN, etc.)\n- `country_code` (optional): Country code for disambiguation\n- `check_in` (required): Check-in date (YYYY-MM-DD)\n- `check_out` (required): Check-out date (YYYY-MM-DD)\n- `adults` (optional, default: 2): Number of adults\n- `children` (optional, default: 0): Number of children\n- `rooms` (optional, default: 1): Number of rooms\n- `guest_nationality` (optional, default: IN): Guest's country code\n- `preferred_currency` (optional, default: INR): Currency for pricing\n- `limit` (optional, default: 50): Max hotels to return\n- `offset` (optional, default: 0): Pagination offset"
-          },
-          "response": [
-            {
-              "name": "Success with Pricing",
-              "originalRequest": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"city_code\": \"DXB\",\n  \"check_in\": \"2025-10-31\",\n  \"check_out\": \"2025-11-03\",\n  \"adults\": 2,\n  \"children\": 0,\n  \"rooms\": 1\n}\n"
-                },
-                "url": {
-                  "raw": "{{base_url}}/api/hotels/search",
-                  "host": ["{{base_url}}"],
-                  "path": ["api", "hotels", "search"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [],
-              "body": "{\n  \"success\": true,\n  \"hotels\": [\n    {\n      \"property_id\": \"uuid-1\",\n      \"supplier_code\": \"TBO\",\n      \"supplier_hotel_id\": \"123456\",\n      \"hotel_name\": \"Burj Al Arab\",\n      \"address\": \"Jumeirah Beach Road\",\n      \"city\": \"Dubai\",\n      \"country\": \"United Arab Emirates\",\n      \"star_rating\": 5,\n      \"review_score\": 9.2,\n      \"review_count\": 5432,\n      \"images\": [\"https://example.com/image1.jpg\"],\n      \"amenities\": [\"WiFi\", \"Pool\", \"Spa\", \"Restaurant\"],\n      \"location\": {\n        \"lat\": 25.1412,\n        \"lng\": 55.1858\n      },\n      \"pricing\": {\n        \"currency\": \"INR\",\n        \"base_price\": 45000,\n        \"taxes\": 5400,\n        \"total_price\": 50400,\n        \"per_night\": 16800,\n        \"refundable\": true,\n        \"free_cancellation\": true\n      },\n      \"pricing_available\": true,\n      \"room_count\": 3,\n      \"search_params\": {\n        \"check_in\": \"2025-10-31\",\n        \"check_out\": \"2025-11-03\",\n        \"nights\": 3,\n        \"adults\": 2,\n        \"children\": 0,\n        \"rooms\": 1\n      }\n    }\n  ],\n  \"total\": 1,\n  \"pricing_available\": true,\n  \"message\": \"Success\"\n}\n"
-            },
-            {
-              "name": "Success - Pricing Unavailable",
-              "originalRequest": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"city_code\": \"DXB\",\n  \"check_in\": \"2025-10-31\",\n  \"check_out\": \"2025-11-03\",\n  \"adults\": 2\n}\n"
-                },
-                "url": {
-                  "raw": "{{base_url}}/api/hotels/search",
-                  "host": ["{{base_url}}"],
-                  "path": ["api", "hotels", "search"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [],
-              "body": "{\n  \"success\": true,\n  \"hotels\": [\n    {\n      \"property_id\": \"uuid-1\",\n      \"supplier_code\": \"TBO\",\n      \"supplier_hotel_id\": \"123456\",\n      \"hotel_name\": \"Burj Al Arab\",\n      \"pricing\": null,\n      \"pricing_available\": false,\n      \"room_count\": 0\n    }\n  ],\n  \"total\": 1,\n  \"pricing_available\": false,\n  \"message\": \"Live pricing temporarily unavailable\"\n}\n"
-            }
-          ]
+      "name": "2. Search Hotels",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"city_code\":\"DXB\",\"check_in\":\"2025-10-31\",\"check_out\":\"2025-11-03\",\"adults\":2,\"children\":0,\"rooms\":1}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/hotels/search",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hotels", "search"]
         }
-      ]
+      }
     },
     {
       "name": "3. Hotel Details",
-      "item": [
-        {
-          "name": "GET /api/hotels/:propertyId",
-          "request": {
-            "method": "GET",
-            "header": [],
-            "url": {
-              "raw": "{{base_url}}/api/hotels/{{property_id}}?include_images=true&include_reviews=false",
-              "host": ["{{base_url}}"],
-              "path": ["api", "hotels", "{{property_id}}"],
-              "query": [
-                {
-                  "key": "include_images",
-                  "value": "true",
-                  "description": "Include hotel images gallery"
-                },
-                {
-                  "key": "include_reviews",
-                  "value": "false",
-                  "description": "Include guest reviews (not implemented in STEP 2)"
-                }
-              ]
-            },
-            "description": "Get detailed information about a specific hotel\n\n**Path Parameters:**\n- `propertyId` (required): Hotel property UUID\n\n**Query Parameters:**\n- `include_images` (optional, default: true): Include image gallery\n- `include_reviews` (optional, default: false): Include reviews (reserved for future)"
-          },
-          "response": [
-            {
-              "name": "Success",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{base_url}}/api/hotels/{{property_id}}",
-                  "host": ["{{base_url}}"],
-                  "path": ["api", "hotels", "{{property_id}}"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [],
-              "body": "{\n  \"success\": true,\n  \"hotel\": {\n    \"property_id\": \"uuid-1\",\n    \"supplier_code\": \"TBO\",\n    \"supplier_hotel_id\": \"123456\",\n    \"hotel_name\": \"Burj Al Arab\",\n    \"address\": \"Jumeirah Beach Road\",\n    \"city\": \"Dubai\",\n    \"country\": \"United Arab Emirates\",\n    \"postal_code\": \"00000\",\n    \"star_rating\": 5,\n    \"review_score\": 9.2,\n    \"review_count\": 5432,\n    \"images\": [\n      {\n        \"url\": \"https://example.com/image1.jpg\",\n        \"order\": 0\n      },\n      {\n        \"url\": \"https://example.com/image2.jpg\",\n        \"order\": 1\n      }\n    ],\n    \"amenities\": [\"WiFi\", \"Pool\", \"Spa\", \"Restaurant\", \"Beach Access\"],\n    \"location\": {\n      \"lat\": 25.1412,\n      \"lng\": 55.1858,\n      \"district\": \"Jumeirah\",\n      \"zone\": \"Beach\",\n      \"neighborhood\": \"Jumeirah Beach Residence\"\n    },\n    \"checkin_from\": \"15:00\",\n    \"checkout_until\": \"11:00\",\n    \"chain_code\": \"BJ\",\n    \"brand_code\": \"BJAL\",\n    \"giata_id\": \"123456\"\n  }\n}\n"
-            },
-            {
-              "name": "Not Found",
-              "originalRequest": {
-                "method": "GET",
-                "header": [],
-                "url": {
-                  "raw": "{{base_url}}/api/hotels/invalid-uuid",
-                  "host": ["{{base_url}}"],
-                  "path": ["api", "hotels", "invalid-uuid"]
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "_postman_previewlanguage": "json",
-              "header": [],
-              "body": "{\n  \"success\": false,\n  \"error\": \"Hotel not found\"\n}\n"
-            }
-          ]
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{base_url}}/api/hotels/{{property_id}}?include_images=true",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hotels", "{{property_id}}"],
+          "query": [{"key": "include_images", "value": "true"}]
         }
-      ]
+      }
     },
     {
-      "name": "4. Hotel Room Rates",
-      "item": [
-        {
-          "name": "POST /api/hotels/:propertyId/rates",
-          "request": {
-            "method": "POST",
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"check_in\": \"2025-10-31\",\n  \"check_out\": \"2025-11-03\",\n  \"adults\": 2,\n  \"children\": 0,\n  \"rooms\": 1,\n  \"preferred_currency\": \"INR\",\n  \"refresh\": false\n}\n"
-            },
-            "url": {
-              "raw": "{{base_url}}/api/hotels/{{property_id}}/rates",
-              "host": ["{{base_url}}"],
-              "path": ["api", "hotels", "{{property_id}}", "rates"]
-            },
-            "description": "Get available room rates for a specific hotel\n\nUses 15-minute cache by default. Supports refresh from TBO.\n\n**Path Parameters:**\n- `propertyId` (required): Hotel property UUID\n\n**Request Body:**\n- `check_in` (required): Check-in date (YYYY-MM-DD)\n- `check_out` (required): Check-out date (YYYY-MM-DD)\n- `adults` (optional, default: 2): Number of adults\n- `children` (optional, default: 0): Number of children\n- `rooms` (optional, default: 1): Number of rooms needed\n- `preferred_currency` (optional, default: INR): Currency for pricing\n- `refresh` (optional, default: false): Force refresh from TBO (ignore cache)"
-          },
-          "response": [
-            {
-              "name": "Success - From Cache",
-              "originalRequest": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"check_in\": \"2025-10-31\",\n  \"check_out\": \"2025-11-03\",\n  \"adults\": 2,\n  \"children\": 0,\n  \"rooms\": 1\n}\n"
-                },
-                "url": {
-                  "raw": "{{base_url}}/api/hotels/{{property_id}}/rates",
-                  "host": ["{{base_url}}"],
-                  "path": ["api", "hotels", "{{property_id}}", "rates"]
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "_postman_previewlanguage": "json",
-              "header": [],
-              "body": "{\n  \"success\": true,\n  \"property_id\": \"uuid-1\",\n  \"hotel_name\": \"Burj Al Arab\",\n  \"check_in\": \"2025-10-31\",\n  \"check_out\": \"2025-11-03\",\n  \"rates\": [\n    {\n      \"offer_id\": \"offer-uuid-1\",\n      \"room_name\": \"Deluxe Room\",\n      \"board_basis\": \"RO\",\n      \"bed_type\": \"Double\",\n      \"refundable\": true,\n      \"free_cancellation\": true,\n      \"occupancy\": {\n        \"adults\": 2,\n        \"children\": 0\n      },\n      \"pricing\": {\n        \"currency\": \"INR\",\n        \"base\": 45000,\n        \"taxes\": 5400,\n        \"total\": 50400,\n        \"per_night\": 16800\n      },\n      \"rate_key\": \"rate-key-123\",\n      \"inclusions\": [\"WiFi\", \"Breakfast\"],\n      \"cancellable_until\": \"2025-10-30\"\n    },\n    {\n      \"offer_id\": \"offer-uuid-2\",\n      \"room_name\": \"Suite\",\n      \"board_basis\": \"BB\",\n      \"bed_type\": \"King\",\n      \"refundable\": true,\n      \"free_cancellation\": false,\n      \"occupancy\": {\n        \"adults\": 2,\n        \"children\": 0\n      },\n      \"pricing\": {\n        \"currency\": \"INR\",\n        \"base\": 65000,\n        \"taxes\": 7800,\n        \"total\": 72800,\n        \"per_night\": 24267\n      },\n      \"rate_key\": \"rate-key-456\",\n      \"inclusions\": [\"WiFi\", \"Breakfast\", \"Minibar\"],\n      \"cancellable_until\": \"2025-10-29\"\n    }\n  ],\n  \"total_rooms\": 2,\n  \"pricing_available\": true,\n  \"from_cache\": true,\n  \"message\": \"Success\"\n}\n"
-            },
-            {
-              "name": "Success - Pricing Unavailable",
-              "originalRequest": {
-                "method": "POST",
-                "header": [],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"check_in\": \"2025-10-31\",\n  \"check_out\": \"2025-11-03\",\n  \"adults\": 2\n}\n"
-                },
-                "url": {
-                  "raw": "{{base_url}}/api/hotels/{{property_id}}/rates",\n  \"host\": [\"{{base_url}}\"],\n                  \"path\": [\"api\", \"hotels\", \"{{property_id}}\", \"rates\"]\n                }\n              },\n              \"status\": \"OK\",\n              \"code\": 200,\n              \"_postman_previewlanguage\": \"json\",\n              \"header\": [],\n              \"body\": \"{\\n  \\\"success\\\": true,\\n  \\\"property_id\\\": \\\"uuid-1\\\",\\n  \\\"rates\\\": [],\\n  \\\"total_rooms\\\": 0,\\n  \\\"pricing_available\\\": false,\\n  \\\"from_cache\\\": false,\\n  \\\"message\\\": \\\"Pricing temporarily unavailable\\\"\\n}\\n\"\n            }\n          ]\n        }\n      ]\n    }\n  ],\n  \"variable\": [\n    {\n      \"key\": \"base_url\",\n      \"value\": \"https://builder-faredown-pricing.onrender.com\",\n      \"description\": \"Base API URL (Render production or local: http://localhost:3000)\"\n    },\n    {\n      \"key\": \"property_id\",\n      \"value\": \"uuid-1\",\n      \"description\": \"Hotel property UUID (from search results)\"\n    }\n  ]\n}\n
+      "name": "4. Room Rates",
+      "request": {
+        "method": "POST",
+        "header": [{"key": "Content-Type", "value": "application/json"}],
+        "body": {
+          "mode": "raw",
+          "raw": "{\"check_in\":\"2025-10-31\",\"check_out\":\"2025-11-03\",\"adults\":2,\"children\":0,\"rooms\":1,\"refresh\":false}"
+        },
+        "url": {
+          "raw": "{{base_url}}/api/hotels/{{property_id}}/rates",
+          "host": ["{{base_url}}"],
+          "path": ["api", "hotels", "{{property_id}}", "rates"]
+        }
+      }
+    }
+  ],
+  "variable": [
+    {"key": "base_url", "value": "https://builder-faredown-pricing.onrender.com"},
+    {"key": "property_id", "value": ""}
+  ]
+}
