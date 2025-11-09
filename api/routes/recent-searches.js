@@ -190,19 +190,33 @@ router.get("/", identifyUser, async (req, res) => {
     const userId = req.identity.type === "user" ? req.identity.id : null;
     const deviceId = req.identity.type === "device" ? req.identity.id : null;
 
-    const selectQuery = `
-      SELECT id, module, query, created_at, updated_at
-      FROM recent_searches
-      WHERE (user_id = $1 OR (user_id IS NULL AND device_id = $2))
-        AND module = $3
-      ORDER BY updated_at DESC, created_at DESC
-      LIMIT $4;
-    `;
+    try {
+      const selectQuery = `
+        SELECT id, module, query, created_at, updated_at
+        FROM recent_searches
+        WHERE (user_id = $1 OR (user_id IS NULL AND device_id = $2))
+          AND module = $3
+        ORDER BY updated_at DESC, created_at DESC
+        LIMIT $4;
+      `;
 
-    const values = [userId, deviceId, module, maxLimit];
-    const result = await pool.query(selectQuery, values);
+      const values = [userId, deviceId, module, maxLimit];
+      const result = await pool.query(selectQuery, values);
 
-    res.json(result.rows);
+      res.json(result.rows);
+    } catch (dbError) {
+      // If table doesn't exist, return empty array - feature is optional
+      if (
+        dbError.message.includes("relation") &&
+        dbError.message.includes("does not exist")
+      ) {
+        console.warn(
+          "⚠️  recent_searches table not found. Migration may not have been applied.",
+        );
+        return res.json([]);
+      }
+      throw dbError;
+    }
   } catch (error) {
     console.error("Error fetching recent searches:", error);
     res.status(500).json({
