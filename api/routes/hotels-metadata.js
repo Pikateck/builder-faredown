@@ -272,8 +272,8 @@ const MOCK_HOTELS = {
       location: "Downtown, Dubai, United Arab Emirates",
       locationTags: ["Central Location", "Business Hub", "Shopping"],
       images: [
-        "https://images.unsplash.com/photo-1559233056-16ba83b85fda?w=600&h=400&fit=crop",
-        "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1496442226666-8d4d0e62e6e9?w=600&h=400&fit=crop",
+        "https://images.unsplash.com/photo-1631049307264-da0ec9d70304?w=600&h=400&fit=crop",
       ],
       amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
       price: 280,
