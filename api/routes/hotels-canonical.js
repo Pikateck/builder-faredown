@@ -132,7 +132,9 @@ router.get("/", async (req, res) => {
     console.log(`\n🏨 === GET /api/hotels (Query Params) ===`);
     console.log(`   City: ${cityId} | Country: ${countryCode}`);
     console.log(`   CheckIn: ${checkIn} | CheckOut: ${checkOut}`);
-    console.log(`   Guests: ${adults} adults, ${children} children, ${rooms} rooms`);
+    console.log(
+      `   Guests: ${adults} adults, ${children} children, ${rooms} rooms`,
+    );
 
     // Mock hotels fallback data (when TBO unavailable)
     // Format matches transformTBOData expectations in HotelResults.tsx
@@ -153,7 +155,8 @@ router.get("/", async (req, res) => {
             "https://images.unsplash.com/photo-1618038706269-c1f59e72ccc2?w=600&h=400&fit=crop",
           ],
           amenities: ["WiFi", "Restaurant", "Bar", "Business Center", "Gym"],
-          description: "City Center Inn Dubai Downtown - Budget friendly hotel in downtown",
+          description:
+            "City Center Inn Dubai Downtown - Budget friendly hotel in downtown",
           rooms: [
             {
               roomId: "standard-twin",
@@ -185,7 +188,8 @@ router.get("/", async (req, res) => {
             {
               roomId: "ocean-suite",
               roomName: "Ocean Suite",
-              roomDescription: "Spacious suite with ocean view and private balcony",
+              roomDescription:
+                "Spacious suite with ocean view and private balcony",
               price: { total: 12500, base: 10500, taxes: 2000 },
               board: "Breakfast Included",
               amenities: ["AC", "TV", "WiFi", "Bath", "Balcony"],
@@ -233,7 +237,13 @@ router.get("/", async (req, res) => {
           images: [
             "https://images.unsplash.com/photo-1520250497591-ec2413095a27?w=600&h=400&fit=crop",
           ],
-          amenities: ["WiFi", "Private Beach", "Pool", "Spa", "Michelin Restaurant"],
+          amenities: [
+            "WiFi",
+            "Private Beach",
+            "Pool",
+            "Spa",
+            "Michelin Restaurant",
+          ],
           description: "Ultra-luxury resort on exclusive Palm Jumeirah island",
           rooms: [
             {
@@ -261,7 +271,8 @@ router.get("/", async (req, res) => {
             "https://images.unsplash.com/photo-1576675784246-fb3fc6f95f98?w=600&h=400&fit=crop",
           ],
           amenities: ["WiFi", "Restaurant", "Bar", "Gym"],
-          description: "Budget-friendly heritage hotel in historic Deira district",
+          description:
+            "Budget-friendly heritage hotel in historic Deira district",
           rooms: [
             {
               roomId: "economy-room",
