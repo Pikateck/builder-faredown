@@ -870,20 +870,31 @@ export function HotelCard({
                   </div>
                 )}
 
-                {/* Breakfast Badge */}
-                {(hotel.breakfastIncluded !== undefined) && (
-                  <div className="flex gap-2 mb-3 flex-wrap">
-                    {hotel.breakfastIncluded ? (
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
-                        ✓ Breakfast Included
-                      </span>
-                    ) : (
-                      <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded font-medium">
-                        No Breakfast
-                      </span>
-                    )}
-                  </div>
-                )}
+                {/* Breakfast Badge - From Cheapest Room */}
+                {(() => {
+                  // Get breakfast from cheapest room (first room in roomTypes) or hotel level
+                  const cheapestRoom = hotel.roomTypes && hotel.roomTypes.length > 0 ? hotel.roomTypes[0] : null;
+                  const breakfastStatus = cheapestRoom?.breakfastIncluded !== undefined
+                    ? cheapestRoom.breakfastIncluded
+                    : hotel.breakfastIncluded;
+
+                  if (breakfastStatus !== undefined) {
+                    return (
+                      <div className="flex gap-2 mb-3 flex-wrap">
+                        {breakfastStatus ? (
+                          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                            ✓ Breakfast Included
+                          </span>
+                        ) : (
+                          <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded font-medium">
+                            No Breakfast
+                          </span>
+                        )}
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
 
                 {/* Policy Chips - Refundability */}
                 {(hotel.freeCancellation !== undefined || hotel.isRefundable !== undefined) && (
