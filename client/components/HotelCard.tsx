@@ -870,21 +870,81 @@ export function HotelCard({
                   </div>
                 )}
 
-                {/* Policy Chips */}
-                {(hotel.freeCancellation || hotel.payAtProperty) && (
-                  <div className="flex gap-2 mb-3 flex-wrap">
-                    {hotel.freeCancellation && (
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
-                        Free cancellation
-                      </span>
-                    )}
-                    {hotel.payAtProperty && (
-                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                        Pay at property
-                      </span>
-                    )}
-                  </div>
-                )}
+                {/* Breakfast Badge - From Cheapest Room */}
+                {(() => {
+                  // Get breakfast from cheapest room (first room in roomTypes) or hotel level
+                  const cheapestRoom =
+                    hotel.roomTypes && hotel.roomTypes.length > 0
+                      ? hotel.roomTypes[0]
+                      : null;
+                  const breakfastStatus =
+                    cheapestRoom?.breakfastIncluded !== undefined
+                      ? cheapestRoom.breakfastIncluded
+                      : hotel.breakfastIncluded;
+
+                  if (breakfastStatus !== undefined) {
+                    return (
+                      <div className="flex gap-2 mb-3 flex-wrap">
+                        {breakfastStatus ? (
+                          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                            ✓ Breakfast Included
+                          </span>
+                        ) : (
+                          <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded font-medium">
+                            No Breakfast
+                          </span>
+                        )}
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
+
+                {/* Policy Chips - Refundability (From Cheapest Room) */}
+                {(() => {
+                  // Get refundability from cheapest room or hotel level
+                  const cheapestRoom =
+                    hotel.roomTypes && hotel.roomTypes.length > 0
+                      ? hotel.roomTypes[0]
+                      : null;
+                  const isRefundableStatus =
+                    cheapestRoom?.isRefundable !== undefined
+                      ? cheapestRoom.isRefundable
+                      : hotel.isRefundable;
+                  const freeCancellationStatus =
+                    cheapestRoom?.freeCancellation !== undefined
+                      ? cheapestRoom.freeCancellation
+                      : hotel.freeCancellation;
+
+                  if (
+                    freeCancellationStatus !== undefined ||
+                    isRefundableStatus !== undefined
+                  ) {
+                    return (
+                      <div className="flex gap-2 mb-3 flex-wrap">
+                        {freeCancellationStatus ? (
+                          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                            Free Cancellation
+                          </span>
+                        ) : isRefundableStatus === false ? (
+                          <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded font-medium">
+                            Non-Refundable
+                          </span>
+                        ) : isRefundableStatus === true ? (
+                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
+                            Partially-Refundable
+                          </span>
+                        ) : null}
+                        {hotel.payAtProperty && (
+                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-medium">
+                            Pay at property
+                          </span>
+                        )}
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
 
                 {/* Amenities */}
                 {hotelAmenities.length > 0 && (
@@ -1104,21 +1164,79 @@ export function HotelCard({
                   </div>
                 )}
 
-              {/* Policy Chips - Mobile */}
-              {(hotel.freeCancellation || hotel.payAtProperty) && (
-                <div className="flex gap-2 mb-3 flex-wrap">
-                  {hotel.freeCancellation && (
-                    <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
-                      Free cancellation
-                    </span>
-                  )}
-                  {hotel.payAtProperty && (
-                    <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                      Pay at property
-                    </span>
-                  )}
-                </div>
-              )}
+              {/* Breakfast Badge - Mobile - From Cheapest Room */}
+              {(() => {
+                const cheapestRoom =
+                  hotel.roomTypes && hotel.roomTypes.length > 0
+                    ? hotel.roomTypes[0]
+                    : null;
+                const breakfastStatus =
+                  cheapestRoom?.breakfastIncluded !== undefined
+                    ? cheapestRoom.breakfastIncluded
+                    : hotel.breakfastIncluded;
+
+                if (breakfastStatus !== undefined) {
+                  return (
+                    <div className="flex gap-2 mb-3 flex-wrap">
+                      {breakfastStatus ? (
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                          ✓ Breakfast Included
+                        </span>
+                      ) : (
+                        <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded font-medium">
+                          No Breakfast
+                        </span>
+                      )}
+                    </div>
+                  );
+                }
+                return null;
+              })()}
+
+              {/* Policy Chips - Refundability - Mobile (From Cheapest Room) */}
+              {(() => {
+                const cheapestRoom =
+                  hotel.roomTypes && hotel.roomTypes.length > 0
+                    ? hotel.roomTypes[0]
+                    : null;
+                const isRefundableStatus =
+                  cheapestRoom?.isRefundable !== undefined
+                    ? cheapestRoom.isRefundable
+                    : hotel.isRefundable;
+                const freeCancellationStatus =
+                  cheapestRoom?.freeCancellation !== undefined
+                    ? cheapestRoom.freeCancellation
+                    : hotel.freeCancellation;
+
+                if (
+                  freeCancellationStatus !== undefined ||
+                  isRefundableStatus !== undefined
+                ) {
+                  return (
+                    <div className="flex gap-2 mb-3 flex-wrap">
+                      {freeCancellationStatus ? (
+                        <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                          Free Cancellation
+                        </span>
+                      ) : isRefundableStatus === false ? (
+                        <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded font-medium">
+                          Non-Refundable
+                        </span>
+                      ) : isRefundableStatus === true ? (
+                        <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
+                          Partially-Refundable
+                        </span>
+                      ) : null}
+                      {hotel.payAtProperty && (
+                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-medium">
+                          Pay at property
+                        </span>
+                      )}
+                    </div>
+                  );
+                }
+                return null;
+              })()}
 
               {/* Room Type - Mobile */}
               {(hotel.availableRoom || hotel.roomType) && (
@@ -1323,7 +1441,7 @@ export function HotelCard({
                       </span>
                       {hotel.roomFeatures && hotel.roomFeatures.length > 1 && (
                         <>
-                          <span className="mx-1">•</span>
+                          <span className="mx-1">���</span>
                           <span>{hotel.roomFeatures.slice(1).join(" • ")}</span>
                         </>
                       )}
@@ -1373,21 +1491,79 @@ export function HotelCard({
                 </div>
               ))}
 
-            {/* Policy Chips - Desktop */}
-            {(hotel.freeCancellation || hotel.payAtProperty) && (
-              <div className="flex gap-2 mb-2 flex-wrap">
-                {hotel.freeCancellation && (
-                  <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
-                    Free cancellation
-                  </span>
-                )}
-                {hotel.payAtProperty && (
-                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
-                    Pay at property
-                  </span>
-                )}
-              </div>
-            )}
+            {/* Breakfast Badge - Desktop - From Cheapest Room */}
+            {(() => {
+              const cheapestRoom =
+                hotel.roomTypes && hotel.roomTypes.length > 0
+                  ? hotel.roomTypes[0]
+                  : null;
+              const breakfastStatus =
+                cheapestRoom?.breakfastIncluded !== undefined
+                  ? cheapestRoom.breakfastIncluded
+                  : hotel.breakfastIncluded;
+
+              if (breakfastStatus !== undefined) {
+                return (
+                  <div className="flex gap-2 mb-2 flex-wrap">
+                    {breakfastStatus ? (
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                        ✓ Breakfast Included
+                      </span>
+                    ) : (
+                      <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded font-medium">
+                        No Breakfast
+                      </span>
+                    )}
+                  </div>
+                );
+              }
+              return null;
+            })()}
+
+            {/* Policy Chips - Refundability - Desktop (From Cheapest Room) */}
+            {(() => {
+              const cheapestRoom =
+                hotel.roomTypes && hotel.roomTypes.length > 0
+                  ? hotel.roomTypes[0]
+                  : null;
+              const isRefundableStatus =
+                cheapestRoom?.isRefundable !== undefined
+                  ? cheapestRoom.isRefundable
+                  : hotel.isRefundable;
+              const freeCancellationStatus =
+                cheapestRoom?.freeCancellation !== undefined
+                  ? cheapestRoom.freeCancellation
+                  : hotel.freeCancellation;
+
+              if (
+                freeCancellationStatus !== undefined ||
+                isRefundableStatus !== undefined
+              ) {
+                return (
+                  <div className="flex gap-2 mb-2 flex-wrap">
+                    {freeCancellationStatus ? (
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                        Free Cancellation
+                      </span>
+                    ) : isRefundableStatus === false ? (
+                      <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded font-medium">
+                        Non-Refundable
+                      </span>
+                    ) : isRefundableStatus === true ? (
+                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
+                        Partially-Refundable
+                      </span>
+                    ) : null}
+                    {hotel.payAtProperty && (
+                      <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-medium">
+                        Pay at property
+                      </span>
+                    )}
+                  </div>
+                );
+              }
+              return null;
+            })()}
 
             {/* Price and Actions - Booking.com Style */}
             <div className="flex items-end justify-between mt-auto pt-2 border-t border-gray-100">

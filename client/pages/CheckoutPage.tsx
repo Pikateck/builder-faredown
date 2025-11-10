@@ -2,7 +2,11 @@ import React, { useEffect, useState } from "react";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { Layout } from "@/components/layout/Layout";
 import RequireAuth from "@/components/RequireAuth";
-import { getResumeContext, clearResumeContext, preflightCheckout } from "@/utils/authGuards";
+import {
+  getResumeContext,
+  clearResumeContext,
+  preflightCheckout,
+} from "@/utils/authGuards";
 import { useBookingAuthGuard } from "@/utils/enhancedAuthGuards";
 import BookingSignInBanner from "@/components/ui/BookingSignInBanner";
 import type { Offer } from "@/utils/authGuards";
@@ -34,30 +38,30 @@ function CheckoutPageContent() {
   useEffect(() => {
     const initializeCheckoutFlow = async () => {
       try {
-        const contextId = searchParams.get('ctx');
-        
+        const contextId = searchParams.get("ctx");
+
         if (!contextId) {
-          setError('No checkout context found. Please start a new booking.');
+          setError("No checkout context found. Please start a new booking.");
           return;
         }
 
         // Get the resume context
         const resumeContext = getResumeContext<Offer>(contextId);
-        
+
         if (!resumeContext) {
-          setError('Checkout session expired. Please start a new booking.');
+          setError("Checkout session expired. Please start a new booking.");
           return;
         }
 
-        if (resumeContext.type !== 'CHECKOUT') {
-          setError('Invalid checkout session. Please start a new booking.');
+        if (resumeContext.type !== "CHECKOUT") {
+          setError("Invalid checkout session. Please start a new booking.");
           return;
         }
 
         // Preflight check - validate offer is still available
         const isValid = await preflightCheckout(resumeContext.payload);
         if (!isValid) {
-          setError('This offer is no longer available. Please search again.');
+          setError("This offer is no longer available. Please search again.");
           return;
         }
 
@@ -68,17 +72,16 @@ function CheckoutPageContent() {
         setOffer(resumeContext.payload);
 
         // Track successful resume
-        if (typeof window !== 'undefined' && (window as any).gtag) {
-          (window as any).gtag('event', 'checkout_resume_success', {
-            event_category: 'checkout',
+        if (typeof window !== "undefined" && (window as any).gtag) {
+          (window as any).gtag("event", "checkout_resume_success", {
+            event_category: "checkout",
             event_label: resumeContext.payload.module,
-            value: resumeContext.payload.price.amount
+            value: resumeContext.payload.price.amount,
           });
         }
-
       } catch (error) {
-        console.error('Failed to initialize checkout flow:', error);
-        setError('Failed to initialize checkout session. Please try again.');
+        console.error("Failed to initialize checkout flow:", error);
+        setError("Failed to initialize checkout session. Please try again.");
       } finally {
         setLoading(false);
       }
@@ -96,14 +99,14 @@ function CheckoutPageContent() {
       offerId: offer.offerId,
       price: offer.price.amount.toString(),
       currency: offer.price.currency,
-      supplier: offer.supplier
+      supplier: offer.supplier,
     });
 
     // Add module-specific parameters
-    Object.keys(offer).forEach(key => {
-      if (!['offerId', 'module', 'supplier', 'price'].includes(key)) {
+    Object.keys(offer).forEach((key) => {
+      if (!["offerId", "module", "supplier", "price"].includes(key)) {
         const value = (offer as any)[key];
-        if (typeof value === 'string' || typeof value === 'number') {
+        if (typeof value === "string" || typeof value === "number") {
           bookingParams.set(key, value.toString());
         }
       }
@@ -111,17 +114,17 @@ function CheckoutPageContent() {
 
     // Navigate to appropriate booking flow
     switch (offer.module) {
-      case 'flights':
+      case "flights":
         navigate(`/booking-flow?${bookingParams.toString()}`);
         break;
-      case 'hotels':
-        navigate(`/hotel/booking?${bookingParams.toString()}`);
+      case "hotels":
+        navigate(`/hotels/booking?${bookingParams.toString()}`);
         break;
-      case 'sightseeing':
+      case "sightseeing":
         navigate(`/sightseeing/booking?${bookingParams.toString()}`);
         break;
-      case 'transfers':
-        navigate(`/transfer/booking?${bookingParams.toString()}`);
+      case "transfers":
+        navigate(`/transfer-booking?${bookingParams.toString()}`);
         break;
       default:
         navigate(`/booking?${bookingParams.toString()}`);
@@ -130,26 +133,26 @@ function CheckoutPageContent() {
 
   const navigateToResults = () => {
     if (!offer) {
-      navigate('/');
+      navigate("/");
       return;
     }
 
     // Navigate back to appropriate results page
     switch (offer.module) {
-      case 'flights':
-        navigate('/flights');
+      case "flights":
+        navigate("/flights");
         break;
-      case 'hotels':
-        navigate('/hotels');
+      case "hotels":
+        navigate("/hotels");
         break;
-      case 'sightseeing':
-        navigate('/sightseeing');
+      case "sightseeing":
+        navigate("/sightseeing");
         break;
-      case 'transfers':
-        navigate('/transfers');
+      case "transfers":
+        navigate("/transfers");
         break;
       default:
-        navigate('/');
+        navigate("/");
     }
   };
 
@@ -181,14 +184,16 @@ function CheckoutPageContent() {
               <h2 className="text-xl font-semibold text-gray-900 mb-2">
                 Checkout Error
               </h2>
-              <p className="text-gray-600 mb-6">
-                {error}
-              </p>
+              <p className="text-gray-600 mb-6">{error}</p>
               <div className="flex flex-col gap-3">
-                <Button onClick={() => navigate('/')} className="w-full">
+                <Button onClick={() => navigate("/")} className="w-full">
                   Start New Search
                 </Button>
-                <Button variant="outline" onClick={() => navigate(-1)} className="w-full">
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(-1)}
+                  className="w-full"
+                >
                   Go Back
                 </Button>
               </div>
@@ -212,7 +217,7 @@ function CheckoutPageContent() {
               <p className="text-gray-600 mb-6">
                 No booking information available. Please start a new search.
               </p>
-              <Button onClick={() => navigate('/')} className="w-full">
+              <Button onClick={() => navigate("/")} className="w-full">
                 Start New Search
               </Button>
             </CardContent>
@@ -239,7 +244,7 @@ function CheckoutPageContent() {
           {!isLoggedIn && (
             <BookingSignInBanner
               onSignInSuccess={() => {
-                console.log('User signed in successfully');
+                console.log("User signed in successfully");
                 // Optionally refresh the page or update UI
               }}
               dismissible={true}
@@ -273,41 +278,50 @@ function CheckoutPageContent() {
                       <p className="text-2xl font-bold text-green-600">
                         {formatPrice(offer.price.amount)}
                       </p>
-                      <p className="text-xs text-gray-500">
-                        Total price
-                      </p>
+                      <p className="text-xs text-gray-500">Total price</p>
                     </div>
                   </div>
-                  
+
                   {/* Module-specific details */}
-                  {offer.module === 'flights' && (
+                  {offer.module === "flights" && (
                     <div className="text-sm text-gray-600 space-y-1">
-                      <p>✈️ {(offer as any).from} → {(offer as any).to}</p>
-                      <p>🛫 {(offer as any).departureTime} - {(offer as any).arrivalTime}</p>
+                      <p>
+                        ✈️ {(offer as any).from} → {(offer as any).to}
+                      </p>
+                      <p>
+                        🛫 {(offer as any).departureTime} -{" "}
+                        {(offer as any).arrivalTime}
+                      </p>
                       <p>⏱️ Duration: {(offer as any).duration}</p>
                     </div>
                   )}
-                  
-                  {offer.module === 'hotels' && (
+
+                  {offer.module === "hotels" && (
                     <div className="text-sm text-gray-600 space-y-1">
                       <p>🏨 {(offer as any).name}</p>
                       <p>📍 {(offer as any).location}</p>
-                      <p>📅 {(offer as any).checkIn} - {(offer as any).checkOut}</p>
+                      <p>
+                        📅 {(offer as any).checkIn} - {(offer as any).checkOut}
+                      </p>
                     </div>
                   )}
-                  
-                  {offer.module === 'sightseeing' && (
+
+                  {offer.module === "sightseeing" && (
                     <div className="text-sm text-gray-600 space-y-1">
                       <p>🎯 {(offer as any).name}</p>
                       <p>📍 {(offer as any).location}</p>
                       <p>📅 {(offer as any).date}</p>
                     </div>
                   )}
-                  
-                  {offer.module === 'transfers' && (
+
+                  {offer.module === "transfers" && (
                     <div className="text-sm text-gray-600 space-y-1">
-                      <p>🚗 {(offer as any).pickup} → {(offer as any).dropoff}</p>
-                      <p>📅 {(offer as any).date} at {(offer as any).time}</p>
+                      <p>
+                        🚗 {(offer as any).pickup} → {(offer as any).dropoff}
+                      </p>
+                      <p>
+                        📅 {(offer as any).date} at {(offer as any).time}
+                      </p>
                       <p>👥 {(offer as any).passengers} passengers</p>
                     </div>
                   )}
@@ -315,11 +329,15 @@ function CheckoutPageContent() {
 
                 {/* Price Breakdown */}
                 <div className="border rounded-lg p-4">
-                  <h4 className="font-medium text-gray-900 mb-3">Price Breakdown</h4>
+                  <h4 className="font-medium text-gray-900 mb-3">
+                    Price Breakdown
+                  </h4>
                   <div className="space-y-2 text-sm">
                     <div className="flex justify-between">
                       <span>Base Price</span>
-                      <span>{formatPrice(offer.price.base || offer.price.amount)}</span>
+                      <span>
+                        {formatPrice(offer.price.base || offer.price.amount)}
+                      </span>
                     </div>
                     {offer.price.taxes && (
                       <div className="flex justify-between">
@@ -336,7 +354,7 @@ function CheckoutPageContent() {
 
                 {/* Action Buttons */}
                 <div className="flex flex-col gap-3 pt-4">
-                  <Button 
+                  <Button
                     onClick={handleProceedToBooking}
                     className="w-full bg-green-600 hover:bg-green-700 text-white py-3"
                     size="lg"
@@ -344,8 +362,8 @@ function CheckoutPageContent() {
                     <ShoppingCart className="w-5 h-5 mr-2" />
                     Proceed to Booking
                   </Button>
-                  
-                  <Button 
+
+                  <Button
                     variant="outline"
                     onClick={navigateToResults}
                     className="w-full"

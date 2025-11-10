@@ -93,16 +93,17 @@ export function ComprehensiveFilters({
   const { selectedCurrency } = useCurrency();
   // Initialize with all filter categories expanded by default
   const [expandedSections, setExpandedSections] = useState<string[]>([
-    "amenities",
-    "meal-plans",
-    "property-type",
-    "guest-rating",
-    "cancellation",
     "stars",
+    "meal-plans",
+    "cancellation",
+    "amenities",
+    "property-type",
     "neighborhood",
+    "guest-rating",
     "brands",
   ]);
   const [showAllSections, setShowAllSections] = useState<string[]>([]);
+  const [hotelNameSearch, setHotelNameSearch] = useState<string>("");
 
   const sortOptions = [
     { value: "recommended", label: "Our top picks" },
@@ -114,6 +115,40 @@ export function ComprehensiveFilters({
   ];
 
   const filterCategories: FilterCategory[] = [
+    {
+      id: "stars",
+      title: "Star Rating",
+      isCollapsible: true,
+      items: [
+        { id: "5", label: "★★★★★ 5 stars", count: 799 },
+        { id: "4", label: "★★★★ 4 stars", count: 3644 },
+        { id: "3", label: "★★★ 3 stars", count: 424 },
+        { id: "2", label: "★★ 2 stars", count: 95 },
+        { id: "1", label: "★ 1 star", count: 31 },
+      ],
+    },
+    {
+      id: "meal-plans",
+      title: "Meal Plan",
+      isCollapsible: true,
+      items: [
+        { id: "RO", label: "Room Only", count: 3800 },
+        { id: "BB", label: "Breakfast Included", count: 627 },
+        { id: "HB", label: "Half Board", count: 156 },
+        { id: "FB", label: "Full Board", count: 89 },
+        { id: "DN", label: "Dinner Only", count: 42 },
+      ],
+    },
+    {
+      id: "cancellation",
+      title: "Refundability",
+      isCollapsible: true,
+      items: [
+        { id: "FC", label: "Free Cancellation", count: 4009 },
+        { id: "NR", label: "Non-Refundable", count: 1200 },
+        { id: "PR", label: "Partially-Refundable", count: 800 },
+      ],
+    },
     {
       id: "amenities",
       title: "Amenities",
@@ -137,18 +172,6 @@ export function ComprehensiveFilters({
       maxVisible: 10,
     },
     {
-      id: "meal-plans",
-      title: "Meal Plan",
-      isCollapsible: true,
-      items: [
-        { id: "RO", label: "Room Only", count: 3800 },
-        { id: "BB", label: "Breakfast Included", count: 627 },
-        { id: "HB", label: "Half Board", count: 156 },
-        { id: "FB", label: "Full Board", count: 89 },
-        { id: "DN", label: "Dinner Only", count: 42 },
-      ],
-    },
-    {
       id: "property-type",
       title: "Property Type",
       isCollapsible: true,
@@ -158,38 +181,6 @@ export function ComprehensiveFilters({
         { id: "APARTHOTEL", label: "Aparthotel", count: 2500 },
         { id: "RESORT", label: "Resort", count: 59 },
         { id: "VILLA", label: "Villa", count: 104 },
-      ],
-    },
-    {
-      id: "guest-rating",
-      title: "Guest Rating",
-      isCollapsible: true,
-      items: [
-        { id: "EXCELLENT", label: "Excellent", count: 1593 },
-        { id: "VERY_GOOD", label: "Very Good", count: 2649 },
-        { id: "GOOD", label: "Good", count: 3193 },
-      ],
-    },
-    {
-      id: "cancellation",
-      title: "Cancellation Policy",
-      isCollapsible: true,
-      items: [
-        { id: "FC", label: "Free Cancellation", count: 4009 },
-        { id: "PR", label: "Partially-Refundable", count: 2450 },
-        { id: "NR", label: "Non-Refundable", count: 1200 },
-      ],
-    },
-    {
-      id: "stars",
-      title: "Star Rating",
-      isCollapsible: true,
-      items: [
-        { id: "5", label: "★★★★★ 5 stars", count: 799 },
-        { id: "4", label: "★★★★ 4 stars", count: 3644 },
-        { id: "3", label: "★★★ 3 stars", count: 424 },
-        { id: "2", label: "★★ 2 stars", count: 95 },
-        { id: "1", label: "★ 1 star", count: 31 },
       ],
     },
     {
@@ -220,6 +211,16 @@ export function ComprehensiveFilters({
         { id: "residential-areas", label: "In residential areas", count: 76 },
       ],
       maxVisible: 6,
+    },
+    {
+      id: "guest-rating",
+      title: "Guest Rating",
+      isCollapsible: true,
+      items: [
+        { id: "EXCELLENT", label: "Excellent", count: 1593 },
+        { id: "VERY_GOOD", label: "Very Good", count: 2649 },
+        { id: "GOOD", label: "Good", count: 3193 },
+      ],
     },
     {
       id: "brands",
@@ -261,12 +262,28 @@ export function ComprehensiveFilters({
     );
   };
 
+  const handleHotelNameSearch = (value: string) => {
+    setHotelNameSearch(value);
+    setSelectedFilters({
+      ...selectedFilters,
+      hotelName: value.trim(),
+    });
+  };
+
   const handleFilterChange = (
     categoryId: string,
     itemId: string,
     checked: boolean,
   ) => {
-    const currentCategoryFilters = selectedFilters[categoryId] || [];
+    // Ensure filters are always arrays, not strings
+    let currentCategoryFilters = selectedFilters[categoryId];
+    if (typeof currentCategoryFilters === "string") {
+      currentCategoryFilters = currentCategoryFilters
+        ? [currentCategoryFilters]
+        : [];
+    } else if (!Array.isArray(currentCategoryFilters)) {
+      currentCategoryFilters = [];
+    }
 
     if (checked) {
       setSelectedFilters({
@@ -474,6 +491,24 @@ export function ComprehensiveFilters({
               className="w-full"
             />
           </div>
+        </div>
+
+        {/* Hotel Name Search */}
+        <div className="mb-6">
+          <Label
+            htmlFor="hotelNameSearch"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
+            Search hotel name
+          </Label>
+          <Input
+            id="hotelNameSearch"
+            type="text"
+            placeholder="Type hotel name..."
+            value={hotelNameSearch}
+            onChange={(e) => handleHotelNameSearch(e.target.value)}
+            className="w-full"
+          />
         </div>
       </div>
 

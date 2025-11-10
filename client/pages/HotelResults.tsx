@@ -431,6 +431,14 @@ function HotelResultsContent() {
     loadHotels();
   }, [searchKey, selectedCurrency?.code]);
 
+  // Sync hotel name search from filter to nameQuery state
+  useEffect(() => {
+    const hotelName = selectedFilters.hotelName as string;
+    if (hotelName !== undefined) {
+      setNameQuery(hotelName);
+    }
+  }, [selectedFilters.hotelName]);
+
   // Helper function to transform Hotelbeds images to usable URLs
   const transformHotelImages = (images: any[]): string[] => {
     if (!images || !Array.isArray(images) || images.length === 0) {
@@ -742,7 +750,7 @@ function HotelResultsContent() {
         metadataData.hotels.length === 0
       ) {
         console.warn("⚠️ No metadata hotels found from API");
-        console.warn("⚠️ API response:", metadataData);
+        console.warn("��️ API response:", metadataData);
         console.log("⚠️ No results from API - falling back to mock data");
         // CRITICAL: Load mock hotels immediately
         const mockHotels = loadMockHotels();
@@ -847,7 +855,7 @@ function HotelResultsContent() {
         return "/api";
       })();
 
-      console.log("�� Fetching live TBO prices...");
+      console.log("���� Fetching live TBO prices...");
 
       const pricesResponse = await fetch(
         `${apiBaseUrl}/hotels/prices?cityId=${destCode}`,
@@ -897,6 +905,9 @@ function HotelResultsContent() {
   // Transform TBO UnifiedHotel data to frontend format
   const transformTBOData = (tboHotels: any[]): Hotel[] => {
     return tboHotels.map((hotel, index) => {
+      // Support both TBO format (rooms) and mock format (rates)
+      const roomsArray = hotel.rooms || hotel.rates || [];
+
       // Create variety in breakfast and refundable options for demo/testing
       // Alternating pattern: odd index = included/refundable, even = not included/non-refundable
       const hasBreakfast =
@@ -904,19 +915,33 @@ function HotelResultsContent() {
           ? hotel.breakfastIncluded
           : index % 2 === 1; // Alternate between true and false
       const isRefundable =
+        hotel.freeCancellation === true ||
         hotel.cancellationPolicy?.toLowerCase().includes("free") ||
         hotel.cancellationPolicy?.toLowerCase().includes("cancel")
           ? true
-          : index % 3 !== 0; // 2 out of 3 are refundable
+          : hotel.isRefundable !== undefined
+            ? hotel.isRefundable
+            : index % 3 !== 0; // 2 out of 3 are refundable
 
-      const cheapestRoom = (hotel.rooms || []).reduce(
-        (best: any, room: any) => {
-          const roomPrice = room.price?.total || room.price || Infinity;
-          const bestPrice = best.price?.total || best.price || Infinity;
-          return roomPrice < bestPrice ? room : best;
-        },
-        hotel.rooms?.[0] || {},
-      );
+      // Find cheapest room from available rates/rooms
+      const cheapestRoom =
+        roomsArray && roomsArray.length > 0
+          ? roomsArray.reduce((best: any, room: any) => {
+              const roomPrice = room.price?.total || room.price || Infinity;
+              const bestPrice = best.price?.total || best.price || Infinity;
+              return roomPrice < bestPrice ? room : best;
+            }, roomsArray[0])
+          : {
+              roomName: hotel.roomType || "Standard Room",
+              roomType: hotel.roomType || "Standard Room",
+              beds: hotel.roomFeatures?.[0] || "1 Double Bed",
+              bedType: hotel.roomFeatures?.[0] || "1 Double Bed",
+              price: hotel.price || hotel.minTotal || 0,
+              isRefundable: hotel.isRefundable,
+              cancellationPolicy: hotel.cancellationPolicy || "",
+              description: "",
+              board: "Room Only",
+            };
 
       return {
         id: hotel.supplierHotelId || `tbo-${index}`,
@@ -928,22 +953,39 @@ function HotelResultsContent() {
           hotel.images && hotel.images.length > 0
             ? hotel.images
             : transformHotelImages([]),
-        rating: hotel.rating || 4.0,
+        rating: hotel.rating || hotel.reviewScore || hotel.starRating || 4.0,
         reviews: hotel.reviewCount || 0,
-        originalPrice: hotel.minTotal ? Math.round(hotel.minTotal * 1.15) : 0,
-        currentPrice: hotel.minTotal || 0,
+        originalPrice:
+          hotel.minTotal || hotel.price
+            ? Math.round((hotel.minTotal || hotel.price) * 1.15)
+            : 0,
+        currentPrice: hotel.minTotal || hotel.price || 0,
         description: hotel.description || `Discover ${hotel.name}`,
         amenities: hotel.amenities || [],
         features: hotel.amenities?.slice(0, 3) || [],
-        roomTypes: (hotel.rooms || []).map((room: any) => ({
-          id: room.roomId || `room-${hotel.supplierHotelId}-${room.roomName}`,
-          name: room.roomName || "Standard Room",
-          description: room.roomDescription || "",
-          price: room.price?.total || room.price || hotel.minTotal || 0,
+        roomTypes: roomsArray.map((room: any) => ({
+          id:
+            room.roomId ||
+            `room-${hotel.supplierHotelId}-(room.roomName || room.roomType)`,
+          name:
+            room.roomName ||
+            room.roomType ||
+            room.description ||
+            "Standard Room",
+          description: room.roomDescription || room.description || "",
+          price:
+            room.price?.total ||
+            room.price ||
+            hotel.minTotal ||
+            hotel.price ||
+            0,
           pricePerNight:
-            room.price?.base || (room.price?.total || 0) / nights || 0,
+            room.price?.base ||
+            (room.price?.total || room.price || 0) / nights ||
+            0,
           tax: room.price?.taxes || 0,
           board: room.board || "Room Only",
+          bedType: room.bedType || room.beds || "Standard Bed",
           occupants: room.occupants || {
             adults: parseInt(adults) || 2,
             children: parseInt(children) || 0,
@@ -952,13 +994,17 @@ function HotelResultsContent() {
           amenities: room.amenities || [],
           features: [
             room.board || "Room Only",
-            ...(room.amenities || []).slice(0, 2),
-          ],
+            room.bedType || room.beds || "",
+            ...(room.amenities || []).slice(0, 1),
+          ].filter(Boolean),
           rateKey:
             room.rateKey ||
             room.token ||
-            `room-${hotel.supplierHotelId}-${room.roomName}`,
-          refundable: room.cancellation && room.cancellation.length > 0,
+            `room-${hotel.supplierHotelId}-${room.roomName || room.roomType}`,
+          refundable:
+            room.isRefundable !== undefined
+              ? room.isRefundable
+              : room.cancellation && room.cancellation.length > 0,
         })),
         address: {
           street: hotel.address || "",
@@ -991,22 +1037,35 @@ function HotelResultsContent() {
         breakfastType: hasBreakfast
           ? hotel.breakfastType || "Continental breakfast"
           : "Not included",
+        boardType: cheapestRoom?.board || "Room Only",
         availableRoom: {
-          type: cheapestRoom.roomName || "Standard Room",
-          bedType: cheapestRoom.bedType || "1 Double Bed",
+          type:
+            cheapestRoom.roomName ||
+            cheapestRoom.roomType ||
+            cheapestRoom.description ||
+            "Standard Room",
+          bedType: cheapestRoom.bedType || cheapestRoom.beds || "1 Double Bed",
           rateType: cheapestRoom.board || "Room Only",
           paymentTerms:
-            cheapestRoom.payType === "at_hotel" ? "Pay at Hotel" : "Prepaid",
-          cancellationPolicy: isRefundable
-            ? "Free cancellation"
-            : "Non-refundable",
-          description: cheapestRoom.roomDescription || "",
-          isRefundable: isRefundable,
+            cheapestRoom.payType === "at_hotel" || hotel.payAtProperty
+              ? "Pay at Hotel"
+              : "Prepaid",
+          cancellationPolicy:
+            cheapestRoom.cancellationPolicy ||
+            (isRefundable ? "Free cancellation" : "Non-refundable"),
+          description:
+            cheapestRoom.roomDescription || cheapestRoom.description || "",
+          isRefundable:
+            cheapestRoom.isRefundable !== undefined
+              ? cheapestRoom.isRefundable
+              : isRefundable,
         },
+        propertyType: hotel.propertyType || "HOTEL",
+        brand: hotel.brand || hotel.hotelBrand || "",
         supplier: "TBO",
         supplierCode: "tbo",
-        isLiveData: true,
-        priceBreakdown: hotel.rooms?.[0]?.price?.breakdown || null,
+        isLiveData: hotel.isLiveData !== false,
+        priceBreakdown: roomsArray?.[0]?.price?.breakdown || null,
       };
     });
   };
@@ -1545,9 +1604,25 @@ function HotelResultsContent() {
           if (!hasAmenity) return false;
         }
         if (categoryId === "stars") {
-          const stars = Math.floor(hotel.rating);
+          const stars = Math.floor(hotel.rating || 0);
           const match = filterIds.some((fid) => parseInt(fid) === stars);
           if (!match) return false;
+        }
+
+        if (categoryId === "cancellation") {
+          // Handle cancellation policy filters
+          const hasMatchingCancellation = filterIds.some((filterId) => {
+            const hasFreeCancellation = hotel.freeCancellation === true;
+            const isPartiallyRefundable =
+              hotel.isRefundable === true && !hotel.freeCancellation;
+            const isNonRefundable = hotel.isRefundable === false;
+
+            if (filterId === "FC" && hasFreeCancellation) return true;
+            if (filterId === "PR" && isPartiallyRefundable) return true;
+            if (filterId === "NR" && isNonRefundable) return true;
+            return false;
+          });
+          if (!hasMatchingCancellation) return false;
         }
       }
       return true;
@@ -1629,10 +1704,124 @@ function HotelResultsContent() {
 
         if (categoryId === "stars") {
           const hasMatchingStars = filterIds.some((filterId) => {
-            const stars = Math.floor(hotel.rating);
+            const stars = Math.floor(hotel.rating || 0);
             return parseInt(filterId) === stars;
           });
           if (!hasMatchingStars) return false;
+        }
+
+        if (categoryId === "cancellation") {
+          // Handle cancellation policy filters
+          const hasMatchingCancellation = filterIds.some((filterId) => {
+            const hasFreeCancellation = hotel.freeCancellation === true;
+            const isPartiallyRefundable =
+              hotel.isRefundable === true && !hotel.freeCancellation;
+            const isNonRefundable = hotel.isRefundable === false;
+
+            if (filterId === "FC" && hasFreeCancellation) return true;
+            if (filterId === "PR" && isPartiallyRefundable) return true;
+            if (filterId === "NR" && isNonRefundable) return true;
+            return false;
+          });
+          if (!hasMatchingCancellation) return false;
+        }
+
+        if (categoryId === "meal-plans") {
+          // Handle meal plan filters based on cheapest room's board type
+          const boardType = hotel.boardType || "Room Only";
+          const hasMatchingMealPlan = filterIds.some((filterId) => {
+            const boardMap: Record<string, string> = {
+              RO: "Room Only",
+              BB: "Breakfast",
+              HB: "Half Board",
+              FB: "Full Board",
+              DN: "Dinner",
+            };
+            const expectedBoard = boardMap[filterId];
+            // Check if the board type matches or contains the expected board
+            return (
+              boardType?.includes?.(expectedBoard) ||
+              boardType === expectedBoard ||
+              (filterId === "BB" && hotel.breakfastIncluded) ||
+              (filterId === "RO" &&
+                !hotel.breakfastIncluded &&
+                boardType === "Room Only")
+            );
+          });
+          if (!hasMatchingMealPlan) return false;
+        }
+
+        if (categoryId === "property-type") {
+          // Handle property type filters
+          const hotelPropertyType = hotel.propertyType || "HOTEL";
+          const hasMatchingPropertyType = filterIds.some(
+            (filterId) => filterId === hotelPropertyType,
+          );
+          if (!hasMatchingPropertyType) return false;
+        }
+
+        if (categoryId === "brands") {
+          // Handle hotel brand filters
+          const hotelBrand = hotel.brand || hotel.hotelBrand || "";
+          const hasMatchingBrand = filterIds.some((filterId) => {
+            // Normalize brand names for comparison
+            const brandMap: Record<string, string> = {
+              "millennium-hotels": "Millennium",
+              jumeirah: "Jumeirah",
+              "rove-hotels": "ROVE",
+              "address-hotels": "The Address",
+              "oyo-rooms": "OYO",
+              movenpick: "Mövenpick",
+              "premier-inn": "Premier Inn",
+              "rotana-hotels": "Rotana",
+              marriott: "Marriott",
+              belvilla: "Belvilla",
+            };
+            const expectedBrand = brandMap[filterId];
+            return (
+              hotelBrand?.includes?.(expectedBrand) ||
+              hotelBrand === expectedBrand
+            );
+          });
+          if (!hasMatchingBrand) return false;
+        }
+
+        if (categoryId === "guest-rating") {
+          // Handle guest rating filters
+          const hasMatchingGuestRating = filterIds.some((filterId) => {
+            const rating = Math.floor(hotel.rating || 0);
+            if (filterId === "EXCELLENT" && rating >= 8) return true;
+            if (filterId === "VERY_GOOD" && rating >= 7 && rating < 8)
+              return true;
+            if (filterId === "GOOD" && rating >= 6 && rating < 7) return true;
+            return false;
+          });
+          if (!hasMatchingGuestRating) return false;
+        }
+
+        if (categoryId === "neighborhood") {
+          // Handle neighborhood/location filters
+          const hotelLocation = (
+            hotel.location ||
+            hotel.address?.city ||
+            ""
+          ).toLowerCase();
+          const hasMatchingNeighborhood = filterIds.some((filterId) => {
+            const locationMap: Record<string, string[]> = {
+              "dubai-coastline": ["coastline", "beach", "marina"],
+              "near-dubai-mall": ["dubai mall", "downtown"],
+              "nightlife-areas": ["nightlife", "bar", "club"],
+              "beachfront-jbr": ["jbr", "beach", "jumeirah"],
+              "traditional-souks": ["souks", "deira", "old dubai"],
+              "iconic-landmarks": ["landmarks", "burj", "creek"],
+              "metro-stations": ["metro", "station"],
+              "family-attractions": ["family", "park", "theme park"],
+              "residential-areas": ["residential", "villa"],
+            };
+            const keywords = locationMap[filterId] || [];
+            return keywords.some((keyword) => hotelLocation.includes(keyword));
+          });
+          if (!hasMatchingNeighborhood) return false;
         }
       }
 
@@ -2443,35 +2632,24 @@ function HotelResultsContent() {
                     )}
                   </div>
 
-                  {/* Name filter */}
-                  <div className="flex items-center gap-2 flex-shrink-0 w-full md:w-auto md:max-w-xs">
-                    <input
-                      type="text"
-                      value={nameQuery}
-                      onChange={(e) => {
-                        setNameQuery(e.target.value);
-                      }}
-                      placeholder="Search hotel name"
-                      className="w-full md:w-64 h-10 px-3 border border-gray-300 rounded"
-                    />
-                    <div className="hidden md:flex items-center space-x-2">
-                      <Button
-                        variant={viewMode === "list" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setViewMode("list")}
-                        className="p-2 touch-manipulation"
-                      >
-                        <List className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant={viewMode === "grid" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setViewMode("grid")}
-                        className="p-2 touch-manipulation"
-                      >
-                        <Grid className="w-4 h-4" />
-                      </Button>
-                    </div>
+                  {/* View Mode Buttons */}
+                  <div className="hidden md:flex items-center space-x-2">
+                    <Button
+                      variant={viewMode === "list" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setViewMode("list")}
+                      className="p-2 touch-manipulation"
+                    >
+                      <List className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant={viewMode === "grid" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setViewMode("grid")}
+                      className="p-2 touch-manipulation"
+                    >
+                      <Grid className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
 

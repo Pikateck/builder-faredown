@@ -1260,7 +1260,7 @@ function HotelDetailsContent() {
         statusColor: "green",
         nonRefundable: true,
         isRefundable: false,
-        cancellationPolicy: "Non-refundable rate",
+        cancellationPolicy: "Non-Refundable",
         breakfastIncluded: false,
         smokingAllowed: false,
         smokingPreference: "non_smoking",
@@ -1530,7 +1530,7 @@ function HotelDetailsContent() {
 
     console.log("🔍 Before deduplication - Total rooms:", roomTypes.length);
     roomTypes.forEach((room) => {
-      console.log("����� Room:", room.name, "ID:", room.id);
+      console.log("������� Room:", room.name, "ID:", room.id);
     });
 
     for (const room of roomTypes) {
@@ -1960,8 +1960,10 @@ function HotelDetailsContent() {
               onBookmarkToggle={() => setIsSaved(!isSaved)}
               onShareClick={() => setIsShareModalOpen(true)}
               onBack={() => {
-                console.log("Back button clicked - navigating to hotels");
-                navigate("/hotels");
+                console.log(
+                  "Back button clicked - navigating back to hotel results",
+                );
+                navigate(`/hotels/results?${searchParams.toString()}`);
               }}
             />
           </div>
@@ -2789,11 +2791,17 @@ function HotelDetailsContent() {
               <div className="flex items-center text-sm text-gray-600">
                 <span>🌍 Global</span>
                 <span className="mx-2">•</span>
-                <span>
+                <button
+                  onClick={() =>
+                    navigate(`/hotels/results?${searchParams.toString()}`)
+                  }
+                  className="hover:text-blue-600 hover:underline cursor-pointer transition-colors"
+                  title="Back to hotel results"
+                >
                   {destinationName ||
                     searchParams.get("destination") ||
                     "Dubai"}
-                </span>
+                </button>
                 <span className="mx-2">›</span>
                 <span className="text-gray-900 font-medium">Hotel Details</span>
               </div>
@@ -3255,9 +3263,9 @@ function HotelDetailsContent() {
                                             <InfoChip
                                               icon={CircleX}
                                               tone="danger"
-                                              ariaLabel="Non-refundable booking rate"
+                                              ariaLabel="Non-Refundable"
                                             >
-                                              Non-refundable rate
+                                              Non-Refundable
                                             </InfoChip>
                                           </div>
                                         )}
