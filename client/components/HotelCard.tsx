@@ -870,16 +870,39 @@ export function HotelCard({
                   </div>
                 )}
 
-                {/* Policy Chips */}
-                {(hotel.freeCancellation || hotel.payAtProperty) && (
+                {/* Breakfast Badge */}
+                {(hotel.breakfastIncluded !== undefined) && (
                   <div className="flex gap-2 mb-3 flex-wrap">
-                    {hotel.freeCancellation && (
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded">
-                        Free cancellation
+                    {hotel.breakfastIncluded ? (
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                        ✓ Breakfast Included
+                      </span>
+                    ) : (
+                      <span className="text-xs bg-orange-100 text-orange-700 px-2 py-1 rounded font-medium">
+                        No Breakfast
                       </span>
                     )}
+                  </div>
+                )}
+
+                {/* Policy Chips - Refundability */}
+                {(hotel.freeCancellation !== undefined || hotel.isRefundable !== undefined) && (
+                  <div className="flex gap-2 mb-3 flex-wrap">
+                    {hotel.freeCancellation ? (
+                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                        Free Cancellation
+                      </span>
+                    ) : hotel.isRefundable === false ? (
+                      <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded font-medium">
+                        Non-Refundable
+                      </span>
+                    ) : hotel.isRefundable === true ? (
+                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
+                        Partially-Refundable
+                      </span>
+                    ) : null}
                     {hotel.payAtProperty && (
-                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded">
+                      <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-medium">
                         Pay at property
                       </span>
                     )}
@@ -1323,7 +1346,7 @@ export function HotelCard({
                       </span>
                       {hotel.roomFeatures && hotel.roomFeatures.length > 1 && (
                         <>
-                          <span className="mx-1">•</span>
+                          <span className="mx-1">���</span>
                           <span>{hotel.roomFeatures.slice(1).join(" • ")}</span>
                         </>
                       )}
