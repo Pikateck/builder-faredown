@@ -905,6 +905,9 @@ function HotelResultsContent() {
   // Transform TBO UnifiedHotel data to frontend format
   const transformTBOData = (tboHotels: any[]): Hotel[] => {
     return tboHotels.map((hotel, index) => {
+      // Support both TBO format (rooms) and mock format (rates)
+      const roomsArray = hotel.rooms || hotel.rates || [];
+
       // Create variety in breakfast and refundable options for demo/testing
       // Alternating pattern: odd index = included/refundable, even = not included/non-refundable
       const hasBreakfast =
@@ -912,18 +915,21 @@ function HotelResultsContent() {
           ? hotel.breakfastIncluded
           : index % 2 === 1; // Alternate between true and false
       const isRefundable =
+        hotel.freeCancellation === true ||
         hotel.cancellationPolicy?.toLowerCase().includes("free") ||
         hotel.cancellationPolicy?.toLowerCase().includes("cancel")
           ? true
-          : index % 3 !== 0; // 2 out of 3 are refundable
+          : hotel.isRefundable !== undefined
+            ? hotel.isRefundable
+            : index % 3 !== 0; // 2 out of 3 are refundable
 
-      const cheapestRoom = (hotel.rooms || []).reduce(
+      const cheapestRoom = roomsArray.reduce(
         (best: any, room: any) => {
           const roomPrice = room.price?.total || room.price || Infinity;
           const bestPrice = best.price?.total || best.price || Infinity;
           return roomPrice < bestPrice ? room : best;
         },
-        hotel.rooms?.[0] || {},
+        roomsArray?.[0] || {},
       );
 
       return {
