@@ -949,15 +949,16 @@ function HotelResultsContent() {
         description: hotel.description || `Discover ${hotel.name}`,
         amenities: hotel.amenities || [],
         features: hotel.amenities?.slice(0, 3) || [],
-        roomTypes: (hotel.rooms || []).map((room: any) => ({
-          id: room.roomId || `room-${hotel.supplierHotelId}-${room.roomName}`,
-          name: room.roomName || "Standard Room",
-          description: room.roomDescription || "",
-          price: room.price?.total || room.price || hotel.minTotal || 0,
+        roomTypes: roomsArray.map((room: any) => ({
+          id: room.roomId || `room-${hotel.supplierHotelId}-(room.roomName || room.roomType)`,
+          name: room.roomName || room.roomType || room.description || "Standard Room",
+          description: room.roomDescription || room.description || "",
+          price: room.price?.total || room.price || hotel.minTotal || hotel.price || 0,
           pricePerNight:
-            room.price?.base || (room.price?.total || 0) / nights || 0,
+            room.price?.base || (room.price?.total || room.price || 0) / nights || 0,
           tax: room.price?.taxes || 0,
           board: room.board || "Room Only",
+          bedType: room.bedType || room.beds || "Standard Bed",
           occupants: room.occupants || {
             adults: parseInt(adults) || 2,
             children: parseInt(children) || 0,
@@ -966,13 +967,14 @@ function HotelResultsContent() {
           amenities: room.amenities || [],
           features: [
             room.board || "Room Only",
-            ...(room.amenities || []).slice(0, 2),
-          ],
+            room.bedType || room.beds || "",
+            ...(room.amenities || []).slice(0, 1),
+          ].filter(Boolean),
           rateKey:
             room.rateKey ||
             room.token ||
-            `room-${hotel.supplierHotelId}-${room.roomName}`,
-          refundable: room.cancellation && room.cancellation.length > 0,
+            `room-${hotel.supplierHotelId}-${room.roomName || room.roomType}`,
+          refundable: room.isRefundable !== undefined ? room.isRefundable : (room.cancellation && room.cancellation.length > 0),
         })),
         address: {
           street: hotel.address || "",
