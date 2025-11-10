@@ -275,7 +275,13 @@ export function ComprehensiveFilters({
     itemId: string,
     checked: boolean,
   ) => {
-    const currentCategoryFilters = selectedFilters[categoryId] || [];
+    // Ensure filters are always arrays, not strings
+    let currentCategoryFilters = selectedFilters[categoryId];
+    if (typeof currentCategoryFilters === "string") {
+      currentCategoryFilters = currentCategoryFilters ? [currentCategoryFilters] : [];
+    } else if (!Array.isArray(currentCategoryFilters)) {
+      currentCategoryFilters = [];
+    }
 
     if (checked) {
       setSelectedFilters({
