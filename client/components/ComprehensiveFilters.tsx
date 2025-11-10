@@ -115,6 +115,39 @@ export function ComprehensiveFilters({
 
   const filterCategories: FilterCategory[] = [
     {
+      id: "stars",
+      title: "Star Rating",
+      isCollapsible: true,
+      items: [
+        { id: "5", label: "★★★★★ 5 stars", count: 799 },
+        { id: "4", label: "★★★★ 4 stars", count: 3644 },
+        { id: "3", label: "★★★ 3 stars", count: 424 },
+        { id: "2", label: "★★ 2 stars", count: 95 },
+        { id: "1", label: "★ 1 star", count: 31 },
+      ],
+    },
+    {
+      id: "meal-plans",
+      title: "Meal Plan",
+      isCollapsible: true,
+      items: [
+        { id: "RO", label: "Room Only", count: 3800 },
+        { id: "BB", label: "Breakfast Included", count: 627 },
+        { id: "HB", label: "Half Board", count: 156 },
+        { id: "FB", label: "Full Board", count: 89 },
+        { id: "DN", label: "Dinner Only", count: 42 },
+      ],
+    },
+    {
+      id: "cancellation",
+      title: "Refundability",
+      isCollapsible: true,
+      items: [
+        { id: "FC", label: "Refundable (Free Cancellation)", count: 4009 },
+        { id: "NR", label: "Non-Refundable", count: 1200 },
+      ],
+    },
+    {
       id: "amenities",
       title: "Amenities",
       isCollapsible: true,
@@ -137,18 +170,6 @@ export function ComprehensiveFilters({
       maxVisible: 10,
     },
     {
-      id: "meal-plans",
-      title: "Meal Plan",
-      isCollapsible: true,
-      items: [
-        { id: "RO", label: "Room Only", count: 3800 },
-        { id: "BB", label: "Breakfast Included", count: 627 },
-        { id: "HB", label: "Half Board", count: 156 },
-        { id: "FB", label: "Full Board", count: 89 },
-        { id: "DN", label: "Dinner Only", count: 42 },
-      ],
-    },
-    {
       id: "property-type",
       title: "Property Type",
       isCollapsible: true,
@@ -158,37 +179,6 @@ export function ComprehensiveFilters({
         { id: "APARTHOTEL", label: "Aparthotel", count: 2500 },
         { id: "RESORT", label: "Resort", count: 59 },
         { id: "VILLA", label: "Villa", count: 104 },
-      ],
-    },
-    {
-      id: "guest-rating",
-      title: "Guest Rating",
-      isCollapsible: true,
-      items: [
-        { id: "EXCELLENT", label: "Excellent", count: 1593 },
-        { id: "VERY_GOOD", label: "Very Good", count: 2649 },
-        { id: "GOOD", label: "Good", count: 3193 },
-      ],
-    },
-    {
-      id: "cancellation",
-      title: "Refundability",
-      isCollapsible: true,
-      items: [
-        { id: "FC", label: "Refundable (Free Cancellation)", count: 4009 },
-        { id: "NR", label: "Non-Refundable", count: 1200 },
-      ],
-    },
-    {
-      id: "stars",
-      title: "Star Rating",
-      isCollapsible: true,
-      items: [
-        { id: "5", label: "★★★★★ 5 stars", count: 799 },
-        { id: "4", label: "★★★★ 4 stars", count: 3644 },
-        { id: "3", label: "★★★ 3 stars", count: 424 },
-        { id: "2", label: "★★ 2 stars", count: 95 },
-        { id: "1", label: "★ 1 star", count: 31 },
       ],
     },
     {
@@ -219,6 +209,16 @@ export function ComprehensiveFilters({
         { id: "residential-areas", label: "In residential areas", count: 76 },
       ],
       maxVisible: 6,
+    },
+    {
+      id: "guest-rating",
+      title: "Guest Rating",
+      isCollapsible: true,
+      items: [
+        { id: "EXCELLENT", label: "Excellent", count: 1593 },
+        { id: "VERY_GOOD", label: "Very Good", count: 2649 },
+        { id: "GOOD", label: "Good", count: 3193 },
+      ],
     },
     {
       id: "brands",
