@@ -1530,7 +1530,7 @@ function HotelDetailsContent() {
 
     console.log("🔍 Before deduplication - Total rooms:", roomTypes.length);
     roomTypes.forEach((room) => {
-      console.log("����� Room:", room.name, "ID:", room.id);
+      console.log("������� Room:", room.name, "ID:", room.id);
     });
 
     for (const room of roomTypes) {
@@ -1960,8 +1960,8 @@ function HotelDetailsContent() {
               onBookmarkToggle={() => setIsSaved(!isSaved)}
               onShareClick={() => setIsShareModalOpen(true)}
               onBack={() => {
-                console.log("Back button clicked - navigating to hotels");
-                navigate("/hotels");
+                console.log("Back button clicked - navigating back to hotel results");
+                navigate(`/hotels/results?${searchParams.toString()}`);
               }}
             />
           </div>
