@@ -855,7 +855,7 @@ function HotelResultsContent() {
         return "/api";
       })();
 
-      console.log("�� Fetching live TBO prices...");
+      console.log("���� Fetching live TBO prices...");
 
       const pricesResponse = await fetch(
         `${apiBaseUrl}/hotels/prices?cityId=${destCode}`,
@@ -942,10 +942,10 @@ function HotelResultsContent() {
           hotel.images && hotel.images.length > 0
             ? hotel.images
             : transformHotelImages([]),
-        rating: hotel.rating || 4.0,
+        rating: hotel.rating || hotel.reviewScore || hotel.starRating || 4.0,
         reviews: hotel.reviewCount || 0,
-        originalPrice: hotel.minTotal ? Math.round(hotel.minTotal * 1.15) : 0,
-        currentPrice: hotel.minTotal || 0,
+        originalPrice: hotel.minTotal || hotel.price ? Math.round((hotel.minTotal || hotel.price) * 1.15) : 0,
+        currentPrice: hotel.minTotal || hotel.price || 0,
         description: hotel.description || `Discover ${hotel.name}`,
         amenities: hotel.amenities || [],
         features: hotel.amenities?.slice(0, 3) || [],
