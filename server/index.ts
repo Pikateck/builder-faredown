@@ -1070,8 +1070,9 @@ export function createServer() {
 
       if (targetCurrency !== "EUR") {
         try {
+          const apiBaseUrl = process.env.API_SERVER_URL || "https://builder-faredown-pricing.onrender.com";
           const conversionResponse = await fetch(
-            "http://localhost:8080/api/currency/convert",
+            `${apiBaseUrl}/api/currency/convert`,
             {
               method: "POST",
               headers: { "Content-Type": "application/json" },
