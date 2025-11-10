@@ -262,6 +262,14 @@ export function ComprehensiveFilters({
     );
   };
 
+  const handleHotelNameSearch = (value: string) => {
+    setHotelNameSearch(value);
+    setSelectedFilters({
+      ...selectedFilters,
+      hotelName: value.trim(),
+    });
+  };
+
   const handleFilterChange = (
     categoryId: string,
     itemId: string,
