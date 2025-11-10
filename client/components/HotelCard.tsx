@@ -896,29 +896,43 @@ export function HotelCard({
                   return null;
                 })()}
 
-                {/* Policy Chips - Refundability */}
-                {(hotel.freeCancellation !== undefined || hotel.isRefundable !== undefined) && (
-                  <div className="flex gap-2 mb-3 flex-wrap">
-                    {hotel.freeCancellation ? (
-                      <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
-                        Free Cancellation
-                      </span>
-                    ) : hotel.isRefundable === false ? (
-                      <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded font-medium">
-                        Non-Refundable
-                      </span>
-                    ) : hotel.isRefundable === true ? (
-                      <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
-                        Partially-Refundable
-                      </span>
-                    ) : null}
-                    {hotel.payAtProperty && (
-                      <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-medium">
-                        Pay at property
-                      </span>
-                    )}
-                  </div>
-                )}
+                {/* Policy Chips - Refundability (From Cheapest Room) */}
+                {(() => {
+                  // Get refundability from cheapest room or hotel level
+                  const cheapestRoom = hotel.roomTypes && hotel.roomTypes.length > 0 ? hotel.roomTypes[0] : null;
+                  const isRefundableStatus = cheapestRoom?.isRefundable !== undefined
+                    ? cheapestRoom.isRefundable
+                    : hotel.isRefundable;
+                  const freeCancellationStatus = cheapestRoom?.freeCancellation !== undefined
+                    ? cheapestRoom.freeCancellation
+                    : hotel.freeCancellation;
+
+                  if (freeCancellationStatus !== undefined || isRefundableStatus !== undefined) {
+                    return (
+                      <div className="flex gap-2 mb-3 flex-wrap">
+                        {freeCancellationStatus ? (
+                          <span className="text-xs bg-green-100 text-green-700 px-2 py-1 rounded font-medium">
+                            Free Cancellation
+                          </span>
+                        ) : isRefundableStatus === false ? (
+                          <span className="text-xs bg-red-100 text-red-700 px-2 py-1 rounded font-medium">
+                            Non-Refundable
+                          </span>
+                        ) : isRefundableStatus === true ? (
+                          <span className="text-xs bg-blue-100 text-blue-700 px-2 py-1 rounded font-medium">
+                            Partially-Refundable
+                          </span>
+                        ) : null}
+                        {hotel.payAtProperty && (
+                          <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-medium">
+                            Pay at property
+                          </span>
+                        )}
+                      </div>
+                    );
+                  }
+                  return null;
+                })()}
 
                 {/* Amenities */}
                 {hotelAmenities.length > 0 && (
