@@ -431,6 +431,14 @@ function HotelResultsContent() {
     loadHotels();
   }, [searchKey, selectedCurrency?.code]);
 
+  // Sync hotel name search from filter to nameQuery state
+  useEffect(() => {
+    const hotelName = selectedFilters.hotelName as string;
+    if (hotelName !== undefined) {
+      setNameQuery(hotelName);
+    }
+  }, [selectedFilters.hotelName]);
+
   // Helper function to transform Hotelbeds images to usable URLs
   const transformHotelImages = (images: any[]): string[] => {
     if (!images || !Array.isArray(images) || images.length === 0) {
