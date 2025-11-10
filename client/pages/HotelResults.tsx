@@ -1009,21 +1009,23 @@ function HotelResultsContent() {
           : "Not included",
         boardType: cheapestRoom?.board || "Room Only",
         availableRoom: {
-          type: cheapestRoom.roomName || "Standard Room",
-          bedType: cheapestRoom.bedType || "1 Double Bed",
+          type: cheapestRoom.roomName || cheapestRoom.roomType || cheapestRoom.description || "Standard Room",
+          bedType: cheapestRoom.bedType || cheapestRoom.beds || "1 Double Bed",
           rateType: cheapestRoom.board || "Room Only",
           paymentTerms:
-            cheapestRoom.payType === "at_hotel" ? "Pay at Hotel" : "Prepaid",
-          cancellationPolicy: isRefundable
+            cheapestRoom.payType === "at_hotel" || hotel.payAtProperty
+              ? "Pay at Hotel"
+              : "Prepaid",
+          cancellationPolicy: cheapestRoom.cancellationPolicy || (isRefundable
             ? "Free cancellation"
-            : "Non-refundable",
-          description: cheapestRoom.roomDescription || "",
-          isRefundable: isRefundable,
+            : "Non-refundable"),
+          description: cheapestRoom.roomDescription || cheapestRoom.description || "",
+          isRefundable: cheapestRoom.isRefundable !== undefined ? cheapestRoom.isRefundable : isRefundable,
         },
         supplier: "TBO",
         supplierCode: "tbo",
-        isLiveData: true,
-        priceBreakdown: hotel.rooms?.[0]?.price?.breakdown || null,
+        isLiveData: hotel.isLiveData !== false,
+        priceBreakdown: roomsArray?.[0]?.price?.breakdown || null,
       };
     });
   };
