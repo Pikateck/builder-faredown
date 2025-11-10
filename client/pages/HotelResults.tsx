@@ -750,7 +750,7 @@ function HotelResultsContent() {
         metadataData.hotels.length === 0
       ) {
         console.warn("⚠️ No metadata hotels found from API");
-        console.warn("⚠️ API response:", metadataData);
+        console.warn("��️ API response:", metadataData);
         console.log("⚠️ No results from API - falling back to mock data");
         // CRITICAL: Load mock hotels immediately
         const mockHotels = loadMockHotels();
@@ -999,6 +999,7 @@ function HotelResultsContent() {
         breakfastType: hasBreakfast
           ? hotel.breakfastType || "Continental breakfast"
           : "Not included",
+        boardType: cheapestRoom?.board || "Room Only",
         availableRoom: {
           type: cheapestRoom.roomName || "Standard Room",
           bedType: cheapestRoom.bedType || "1 Double Bed",
