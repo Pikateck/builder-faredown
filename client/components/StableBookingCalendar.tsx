@@ -135,7 +135,7 @@ export function StableBookingCalendar({
               onMouseEnter={() => handleMouseEnter(date)}
               disabled={isDisabled}
               className={cn(
-                "h-10 w-10 rounded-lg text-sm font-medium transition-all duration-150",
+                "h-10 w-10 rounded-lg text-sm font-medium transition-colors duration-150",
                 "hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500",
                 {
                   "text-gray-300 cursor-not-allowed hover:bg-transparent": isDisabled,
@@ -147,6 +147,7 @@ export function StableBookingCalendar({
                   "text-gray-900": !isDisabled && !isSelected && !isInRange,
                 }
               )}
+              style={{ willChange: isSelected || isInRange ? 'background-color' : 'auto' }}
             >
               {format(date, "d")}
             </button>
