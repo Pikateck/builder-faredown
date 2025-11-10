@@ -14,6 +14,10 @@ dotenv.config();
 const createPricingRoutes = require("./routes/pricing.js");
 const { priceEcho, createDiffEndpoint } = require("./middleware/priceEcho.js");
 
+// ✅ Import TBO routes (diagnostics + live hotel search/rooms)
+const tboDiagnosticsRoutes = require("./routes/tbo-diagnostics");
+const tboLiveRoutes = require("./routes/tbo-live");
+
 const app = express();
 const PORT = process.env.PORT || 3002;
 
@@ -46,6 +50,10 @@ try {
 } catch (e) {
   console.warn("⚠️ Pricing routes not mounted:", e?.message);
 }
+
+// ✅ Mount TBO diagnostics + live hotel routes under /api/tbo
+app.use("/api/tbo", tboDiagnosticsRoutes);
+app.use("/api/tbo", tboLiveRoutes);
 
 // Price echo middleware for tracking
 app.use(
