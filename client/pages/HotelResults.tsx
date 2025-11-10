@@ -1035,6 +1035,8 @@ function HotelResultsContent() {
           description: cheapestRoom.roomDescription || cheapestRoom.description || "",
           isRefundable: cheapestRoom.isRefundable !== undefined ? cheapestRoom.isRefundable : isRefundable,
         },
+        propertyType: hotel.propertyType || "HOTEL",
+        brand: hotel.brand || hotel.hotelBrand || "",
         supplier: "TBO",
         supplierCode: "tbo",
         isLiveData: hotel.isLiveData !== false,
