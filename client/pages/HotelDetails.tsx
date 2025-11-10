@@ -1260,7 +1260,7 @@ function HotelDetailsContent() {
         statusColor: "green",
         nonRefundable: true,
         isRefundable: false,
-        cancellationPolicy: "Non-refundable rate",
+        cancellationPolicy: "Non-Refundable",
         breakfastIncluded: false,
         smokingAllowed: false,
         smokingPreference: "non_smoking",
