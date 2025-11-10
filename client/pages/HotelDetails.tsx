@@ -3255,9 +3255,9 @@ function HotelDetailsContent() {
                                             <InfoChip
                                               icon={CircleX}
                                               tone="danger"
-                                              ariaLabel="Non-refundable booking rate"
+                                              ariaLabel="Non-Refundable"
                                             >
-                                              Non-refundable rate
+                                              Non-Refundable
                                             </InfoChip>
                                           </div>
                                         )}
