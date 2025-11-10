@@ -1070,7 +1070,9 @@ export function createServer() {
 
       if (targetCurrency !== "EUR") {
         try {
-          const apiBaseUrl = process.env.API_SERVER_URL || "https://builder-faredown-pricing.onrender.com";
+          const apiBaseUrl =
+            process.env.API_SERVER_URL ||
+            "https://builder-faredown-pricing.onrender.com";
           const conversionResponse = await fetch(
             `${apiBaseUrl}/api/currency/convert`,
             {
@@ -1615,10 +1617,10 @@ export function createServer() {
       }
 
       // Get current rates
-      const apiBaseUrl = process.env.API_SERVER_URL || "https://builder-faredown-pricing.onrender.com";
-      const ratesResponse = await fetch(
-        `${apiBaseUrl}/api/currency/rates`,
-      );
+      const apiBaseUrl =
+        process.env.API_SERVER_URL ||
+        "https://builder-faredown-pricing.onrender.com";
+      const ratesResponse = await fetch(`${apiBaseUrl}/api/currency/rates`);
       const ratesData = await ratesResponse.json();
 
       if (!ratesData.success) {
@@ -2358,7 +2360,9 @@ export function createServer() {
   app.get("/health", async (_req, res) => {
     try {
       // Try to proxy to main API server
-      const apiBaseUrl = process.env.API_SERVER_URL || "https://builder-faredown-pricing.onrender.com";
+      const apiBaseUrl =
+        process.env.API_SERVER_URL ||
+        "https://builder-faredown-pricing.onrender.com";
       const response = await fetch(`${apiBaseUrl}/api/health`);
       if (response.ok) {
         const data = await response.json();
@@ -2484,7 +2488,9 @@ export function createServer() {
     try {
       // Try to proxy to the main API server first
       try {
-        const apiBaseUrl = process.env.API_SERVER_URL || "https://builder-faredown-pricing.onrender.com";
+        const apiBaseUrl =
+          process.env.API_SERVER_URL ||
+          "https://builder-faredown-pricing.onrender.com";
         const backendUrl = `${apiBaseUrl}/api/hotels-live/hotel/${code}`;
         const queryParams = new URLSearchParams();
         if (checkIn) queryParams.append("checkIn", checkIn as string);

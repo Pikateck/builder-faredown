@@ -873,10 +873,14 @@ export function HotelCard({
                 {/* Breakfast Badge - From Cheapest Room */}
                 {(() => {
                   // Get breakfast from cheapest room (first room in roomTypes) or hotel level
-                  const cheapestRoom = hotel.roomTypes && hotel.roomTypes.length > 0 ? hotel.roomTypes[0] : null;
-                  const breakfastStatus = cheapestRoom?.breakfastIncluded !== undefined
-                    ? cheapestRoom.breakfastIncluded
-                    : hotel.breakfastIncluded;
+                  const cheapestRoom =
+                    hotel.roomTypes && hotel.roomTypes.length > 0
+                      ? hotel.roomTypes[0]
+                      : null;
+                  const breakfastStatus =
+                    cheapestRoom?.breakfastIncluded !== undefined
+                      ? cheapestRoom.breakfastIncluded
+                      : hotel.breakfastIncluded;
 
                   if (breakfastStatus !== undefined) {
                     return (
@@ -899,15 +903,23 @@ export function HotelCard({
                 {/* Policy Chips - Refundability (From Cheapest Room) */}
                 {(() => {
                   // Get refundability from cheapest room or hotel level
-                  const cheapestRoom = hotel.roomTypes && hotel.roomTypes.length > 0 ? hotel.roomTypes[0] : null;
-                  const isRefundableStatus = cheapestRoom?.isRefundable !== undefined
-                    ? cheapestRoom.isRefundable
-                    : hotel.isRefundable;
-                  const freeCancellationStatus = cheapestRoom?.freeCancellation !== undefined
-                    ? cheapestRoom.freeCancellation
-                    : hotel.freeCancellation;
+                  const cheapestRoom =
+                    hotel.roomTypes && hotel.roomTypes.length > 0
+                      ? hotel.roomTypes[0]
+                      : null;
+                  const isRefundableStatus =
+                    cheapestRoom?.isRefundable !== undefined
+                      ? cheapestRoom.isRefundable
+                      : hotel.isRefundable;
+                  const freeCancellationStatus =
+                    cheapestRoom?.freeCancellation !== undefined
+                      ? cheapestRoom.freeCancellation
+                      : hotel.freeCancellation;
 
-                  if (freeCancellationStatus !== undefined || isRefundableStatus !== undefined) {
+                  if (
+                    freeCancellationStatus !== undefined ||
+                    isRefundableStatus !== undefined
+                  ) {
                     return (
                       <div className="flex gap-2 mb-3 flex-wrap">
                         {freeCancellationStatus ? (
@@ -1154,10 +1166,14 @@ export function HotelCard({
 
               {/* Breakfast Badge - Mobile - From Cheapest Room */}
               {(() => {
-                const cheapestRoom = hotel.roomTypes && hotel.roomTypes.length > 0 ? hotel.roomTypes[0] : null;
-                const breakfastStatus = cheapestRoom?.breakfastIncluded !== undefined
-                  ? cheapestRoom.breakfastIncluded
-                  : hotel.breakfastIncluded;
+                const cheapestRoom =
+                  hotel.roomTypes && hotel.roomTypes.length > 0
+                    ? hotel.roomTypes[0]
+                    : null;
+                const breakfastStatus =
+                  cheapestRoom?.breakfastIncluded !== undefined
+                    ? cheapestRoom.breakfastIncluded
+                    : hotel.breakfastIncluded;
 
                 if (breakfastStatus !== undefined) {
                   return (
@@ -1179,15 +1195,23 @@ export function HotelCard({
 
               {/* Policy Chips - Refundability - Mobile (From Cheapest Room) */}
               {(() => {
-                const cheapestRoom = hotel.roomTypes && hotel.roomTypes.length > 0 ? hotel.roomTypes[0] : null;
-                const isRefundableStatus = cheapestRoom?.isRefundable !== undefined
-                  ? cheapestRoom.isRefundable
-                  : hotel.isRefundable;
-                const freeCancellationStatus = cheapestRoom?.freeCancellation !== undefined
-                  ? cheapestRoom.freeCancellation
-                  : hotel.freeCancellation;
+                const cheapestRoom =
+                  hotel.roomTypes && hotel.roomTypes.length > 0
+                    ? hotel.roomTypes[0]
+                    : null;
+                const isRefundableStatus =
+                  cheapestRoom?.isRefundable !== undefined
+                    ? cheapestRoom.isRefundable
+                    : hotel.isRefundable;
+                const freeCancellationStatus =
+                  cheapestRoom?.freeCancellation !== undefined
+                    ? cheapestRoom.freeCancellation
+                    : hotel.freeCancellation;
 
-                if (freeCancellationStatus !== undefined || isRefundableStatus !== undefined) {
+                if (
+                  freeCancellationStatus !== undefined ||
+                  isRefundableStatus !== undefined
+                ) {
                   return (
                     <div className="flex gap-2 mb-3 flex-wrap">
                       {freeCancellationStatus ? (
@@ -1469,10 +1493,14 @@ export function HotelCard({
 
             {/* Breakfast Badge - Desktop - From Cheapest Room */}
             {(() => {
-              const cheapestRoom = hotel.roomTypes && hotel.roomTypes.length > 0 ? hotel.roomTypes[0] : null;
-              const breakfastStatus = cheapestRoom?.breakfastIncluded !== undefined
-                ? cheapestRoom.breakfastIncluded
-                : hotel.breakfastIncluded;
+              const cheapestRoom =
+                hotel.roomTypes && hotel.roomTypes.length > 0
+                  ? hotel.roomTypes[0]
+                  : null;
+              const breakfastStatus =
+                cheapestRoom?.breakfastIncluded !== undefined
+                  ? cheapestRoom.breakfastIncluded
+                  : hotel.breakfastIncluded;
 
               if (breakfastStatus !== undefined) {
                 return (
@@ -1494,15 +1522,23 @@ export function HotelCard({
 
             {/* Policy Chips - Refundability - Desktop (From Cheapest Room) */}
             {(() => {
-              const cheapestRoom = hotel.roomTypes && hotel.roomTypes.length > 0 ? hotel.roomTypes[0] : null;
-              const isRefundableStatus = cheapestRoom?.isRefundable !== undefined
-                ? cheapestRoom.isRefundable
-                : hotel.isRefundable;
-              const freeCancellationStatus = cheapestRoom?.freeCancellation !== undefined
-                ? cheapestRoom.freeCancellation
-                : hotel.freeCancellation;
+              const cheapestRoom =
+                hotel.roomTypes && hotel.roomTypes.length > 0
+                  ? hotel.roomTypes[0]
+                  : null;
+              const isRefundableStatus =
+                cheapestRoom?.isRefundable !== undefined
+                  ? cheapestRoom.isRefundable
+                  : hotel.isRefundable;
+              const freeCancellationStatus =
+                cheapestRoom?.freeCancellation !== undefined
+                  ? cheapestRoom.freeCancellation
+                  : hotel.freeCancellation;
 
-              if (freeCancellationStatus !== undefined || isRefundableStatus !== undefined) {
+              if (
+                freeCancellationStatus !== undefined ||
+                isRefundableStatus !== undefined
+              ) {
                 return (
                   <div className="flex gap-2 mb-2 flex-wrap">
                     {freeCancellationStatus ? (

@@ -1960,7 +1960,9 @@ function HotelDetailsContent() {
               onBookmarkToggle={() => setIsSaved(!isSaved)}
               onShareClick={() => setIsShareModalOpen(true)}
               onBack={() => {
-                console.log("Back button clicked - navigating back to hotel results");
+                console.log(
+                  "Back button clicked - navigating back to hotel results",
+                );
                 navigate(`/hotels/results?${searchParams.toString()}`);
               }}
             />
@@ -2790,7 +2792,9 @@ function HotelDetailsContent() {
                 <span>🌍 Global</span>
                 <span className="mx-2">•</span>
                 <button
-                  onClick={() => navigate(`/hotels/results?${searchParams.toString()}`)}
+                  onClick={() =>
+                    navigate(`/hotels/results?${searchParams.toString()}`)
+                  }
                   className="hover:text-blue-600 hover:underline cursor-pointer transition-colors"
                   title="Back to hotel results"
                 >

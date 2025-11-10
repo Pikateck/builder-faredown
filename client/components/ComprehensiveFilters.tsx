@@ -278,7 +278,9 @@ export function ComprehensiveFilters({
     // Ensure filters are always arrays, not strings
     let currentCategoryFilters = selectedFilters[categoryId];
     if (typeof currentCategoryFilters === "string") {
-      currentCategoryFilters = currentCategoryFilters ? [currentCategoryFilters] : [];
+      currentCategoryFilters = currentCategoryFilters
+        ? [currentCategoryFilters]
+        : [];
     } else if (!Array.isArray(currentCategoryFilters)) {
       currentCategoryFilters = [];
     }
@@ -493,7 +495,10 @@ export function ComprehensiveFilters({
 
         {/* Hotel Name Search */}
         <div className="mb-6">
-          <Label htmlFor="hotelNameSearch" className="text-sm font-medium text-gray-700 mb-2 block">
+          <Label
+            htmlFor="hotelNameSearch"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
             Search hotel name
           </Label>
           <Input
