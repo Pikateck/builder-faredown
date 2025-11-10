@@ -1,5 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react";
-import { format, addDays, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isSameDay, isAfter, isBefore, addMonths, subMonths } from "date-fns";
+import {
+  format,
+  addDays,
+  startOfMonth,
+  endOfMonth,
+  eachDayOfInterval,
+  isSameMonth,
+  isSameDay,
+  isAfter,
+  isBefore,
+  addMonths,
+  subMonths,
+} from "date-fns";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
@@ -23,10 +35,14 @@ export function StableBookingCalendar({
 }: StableBookingCalendarProps) {
   const tomorrow = new Date();
   tomorrow.setDate(tomorrow.getDate() + 1);
-  
+
   const [currentMonth, setCurrentMonth] = useState(new Date());
-  const [startDate, setStartDate] = useState<Date | null>(initialRange?.startDate || null);
-  const [endDate, setEndDate] = useState<Date | null>(initialRange?.endDate || null);
+  const [startDate, setStartDate] = useState<Date | null>(
+    initialRange?.startDate || null,
+  );
+  const [endDate, setEndDate] = useState<Date | null>(
+    initialRange?.endDate || null,
+  );
   const [isSelectingEnd, setIsSelectingEnd] = useState(false);
   const [hoveredDate, setHoveredDate] = useState<Date | null>(null);
 
@@ -37,59 +53,84 @@ export function StableBookingCalendar({
   const nextMonthEnd = endOfMonth(nextMonth);
 
   const days = eachDayOfInterval({ start: monthStart, end: monthEnd });
-  const nextMonthDays = eachDayOfInterval({ start: nextMonthStart, end: nextMonthEnd });
+  const nextMonthDays = eachDayOfInterval({
+    start: nextMonthStart,
+    end: nextMonthEnd,
+  });
 
-  const handleDateClick = useCallback((date: Date) => {
-    if (isBefore(date, tomorrow)) return;
+  const handleDateClick = useCallback(
+    (date: Date) => {
+      if (isBefore(date, tomorrow)) return;
 
-    if (!startDate || (startDate && endDate) || (startDate && isBefore(date, startDate))) {
-      // Start new selection
-      setStartDate(date);
-      setEndDate(null);
-      setIsSelectingEnd(true);
-    } else if (startDate && !endDate) {
-      // Complete selection
-      const newEndDate = bookingType === "hotel" && isSameDay(date, startDate) 
-        ? addDays(date, 1) 
-        : date;
-      
-      setEndDate(newEndDate);
-      setIsSelectingEnd(false);
-      
-      if (onChange) {
-        onChange({
-          startDate,
-          endDate: newEndDate,
-        });
+      if (
+        !startDate ||
+        (startDate && endDate) ||
+        (startDate && isBefore(date, startDate))
+      ) {
+        // Start new selection
+        setStartDate(date);
+        setEndDate(null);
+        setIsSelectingEnd(true);
+      } else if (startDate && !endDate) {
+        // Complete selection
+        const newEndDate =
+          bookingType === "hotel" && isSameDay(date, startDate)
+            ? addDays(date, 1)
+            : date;
+
+        setEndDate(newEndDate);
+        setIsSelectingEnd(false);
+
+        if (onChange) {
+          onChange({
+            startDate,
+            endDate: newEndDate,
+          });
+        }
       }
-    }
-  }, [startDate, endDate, isSelectingEnd, onChange, bookingType, tomorrow]);
+    },
+    [startDate, endDate, isSelectingEnd, onChange, bookingType, tomorrow],
+  );
 
-  const isDateInRange = useCallback((date: Date): boolean => {
-    if (!startDate) return false;
-    if (!endDate && !hoveredDate) return isSameDay(date, startDate);
-    
-    const rangeEnd = endDate || (isSelectingEnd ? hoveredDate : null);
-    if (!rangeEnd) return isSameDay(date, startDate);
-    
-    return (isAfter(date, startDate) || isSameDay(date, startDate)) && 
-           (isBefore(date, rangeEnd) || isSameDay(date, rangeEnd));
-  }, [startDate, endDate, hoveredDate, isSelectingEnd]);
+  const isDateInRange = useCallback(
+    (date: Date): boolean => {
+      if (!startDate) return false;
+      if (!endDate && !hoveredDate) return isSameDay(date, startDate);
 
-  const isDateRangeStart = useCallback((date: Date): boolean => {
-    return startDate ? isSameDay(date, startDate) : false;
-  }, [startDate]);
+      const rangeEnd = endDate || (isSelectingEnd ? hoveredDate : null);
+      if (!rangeEnd) return isSameDay(date, startDate);
 
-  const isDateRangeEnd = useCallback((date: Date): boolean => {
-    const rangeEnd = endDate || (isSelectingEnd ? hoveredDate : null);
-    return rangeEnd ? isSameDay(date, rangeEnd) : false;
-  }, [endDate, hoveredDate, isSelectingEnd]);
+      return (
+        (isAfter(date, startDate) || isSameDay(date, startDate)) &&
+        (isBefore(date, rangeEnd) || isSameDay(date, rangeEnd))
+      );
+    },
+    [startDate, endDate, hoveredDate, isSelectingEnd],
+  );
 
-  const handleMouseEnter = useCallback((date: Date) => {
-    if (isSelectingEnd && startDate && !endDate) {
-      setHoveredDate(date);
-    }
-  }, [isSelectingEnd, startDate, endDate]);
+  const isDateRangeStart = useCallback(
+    (date: Date): boolean => {
+      return startDate ? isSameDay(date, startDate) : false;
+    },
+    [startDate],
+  );
+
+  const isDateRangeEnd = useCallback(
+    (date: Date): boolean => {
+      const rangeEnd = endDate || (isSelectingEnd ? hoveredDate : null);
+      return rangeEnd ? isSameDay(date, rangeEnd) : false;
+    },
+    [endDate, hoveredDate, isSelectingEnd],
+  );
+
+  const handleMouseEnter = useCallback(
+    (date: Date) => {
+      if (isSelectingEnd && startDate && !endDate) {
+        setHoveredDate(date);
+      }
+    },
+    [isSelectingEnd, startDate, endDate],
+  );
 
   const renderMonth = (monthDate: Date, daysArray: Date[]) => (
     <div className="p-4">
@@ -114,7 +155,10 @@ export function StableBookingCalendar({
 
       <div className="grid grid-cols-7 gap-1 mb-2">
         {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
-          <div key={day} className="p-2 text-center text-sm font-medium text-gray-500">
+          <div
+            key={day}
+            className="p-2 text-center text-sm font-medium text-gray-500"
+          >
             {day}
           </div>
         ))}
@@ -138,16 +182,20 @@ export function StableBookingCalendar({
                 "h-10 w-10 rounded-lg text-sm font-medium transition-colors duration-150",
                 "hover:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500",
                 {
-                  "text-gray-300 cursor-not-allowed hover:bg-transparent": isDisabled,
+                  "text-gray-300 cursor-not-allowed hover:bg-transparent":
+                    isDisabled,
                   "bg-blue-600 text-white hover:bg-blue-700": isSelected,
                   "bg-blue-100 text-blue-900": isInRange && !isSelected,
                   "rounded-l-lg rounded-r-none": isStart && !isEnd,
                   "rounded-r-lg rounded-l-none": isEnd && !isStart,
                   "rounded-lg": isStart && isEnd,
                   "text-gray-900": !isDisabled && !isSelected && !isInRange,
-                }
+                },
               )}
-              style={{ willChange: isSelected || isInRange ? 'background-color' : 'auto' }}
+              style={{
+                willChange:
+                  isSelected || isInRange ? "background-color" : "auto",
+              }}
             >
               {format(date, "d")}
             </button>
@@ -178,24 +226,33 @@ export function StableBookingCalendar({
   };
 
   return (
-    <div className={cn("bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden", className)}>
+    <div
+      className={cn(
+        "bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden",
+        className,
+      )}
+    >
       {/* Header */}
       <div className="bg-gradient-to-r from-blue-50 to-indigo-50 px-6 py-4 border-b border-gray-100">
         <h2 className="text-xl font-bold text-gray-900">Select dates</h2>
         {startDate && endDate && (
           <p className="text-sm text-gray-600 mt-1">
-            {format(startDate, "MMM d")} - {format(endDate, "MMM d")} 
-            {getTotalNights() > 0 && ` • ${getTotalNights()} night${getTotalNights() > 1 ? 's' : ''}`}
+            {format(startDate, "MMM d")} - {format(endDate, "MMM d")}
+            {getTotalNights() > 0 &&
+              ` • ${getTotalNights()} night${getTotalNights() > 1 ? "s" : ""}`}
           </p>
         )}
       </div>
 
       {/* Calendar Grid */}
-      <div className="flex" style={{ willChange: 'transform' }}>
-        <div style={{ willChange: 'contents' }}>
+      <div className="flex" style={{ willChange: "transform" }}>
+        <div style={{ willChange: "contents" }}>
           {renderMonth(currentMonth, days)}
         </div>
-        <div className="border-l border-gray-200" style={{ willChange: 'contents' }}>
+        <div
+          className="border-l border-gray-200"
+          style={{ willChange: "contents" }}
+        >
           {renderMonth(nextMonth, nextMonthDays)}
         </div>
       </div>
@@ -215,7 +272,7 @@ export function StableBookingCalendar({
             "px-8 py-3 text-sm font-semibold rounded-lg transition-all duration-200",
             startDate && endDate
               ? "bg-blue-600 text-white hover:bg-blue-700 shadow-lg hover:shadow-xl"
-              : "bg-gray-300 text-gray-500 cursor-not-allowed"
+              : "bg-gray-300 text-gray-500 cursor-not-allowed",
           )}
         >
           Apply

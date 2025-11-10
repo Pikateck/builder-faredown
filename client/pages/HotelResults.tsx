@@ -1554,7 +1554,8 @@ function HotelResultsContent() {
           // Handle cancellation policy filters
           const hasMatchingCancellation = filterIds.some((filterId) => {
             const hasFreeCancellation = hotel.freeCancellation === true;
-            const isPartiallyRefundable = hotel.isRefundable === true && !hotel.freeCancellation;
+            const isPartiallyRefundable =
+              hotel.isRefundable === true && !hotel.freeCancellation;
             const isNonRefundable = hotel.isRefundable === false;
 
             if (filterId === "FC" && hasFreeCancellation) return true;
@@ -1654,7 +1655,8 @@ function HotelResultsContent() {
           // Handle cancellation policy filters
           const hasMatchingCancellation = filterIds.some((filterId) => {
             const hasFreeCancellation = hotel.freeCancellation === true;
-            const isPartiallyRefundable = hotel.isRefundable === true && !hotel.freeCancellation;
+            const isPartiallyRefundable =
+              hotel.isRefundable === true && !hotel.freeCancellation;
             const isNonRefundable = hotel.isRefundable === false;
 
             if (filterId === "FC" && hasFreeCancellation) return true;
