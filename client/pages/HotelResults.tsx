@@ -1698,6 +1698,75 @@ function HotelResultsContent() {
           });
           if (!hasMatchingMealPlan) return false;
         }
+
+        if (categoryId === "property-type") {
+          // Handle property type filters
+          const hotelPropertyType = hotel.propertyType || "HOTEL";
+          const hasMatchingPropertyType = filterIds.some(
+            (filterId) => filterId === hotelPropertyType
+          );
+          if (!hasMatchingPropertyType) return false;
+        }
+
+        if (categoryId === "brands") {
+          // Handle hotel brand filters
+          const hotelBrand = hotel.brand || hotel.hotelBrand || "";
+          const hasMatchingBrand = filterIds.some((filterId) => {
+            // Normalize brand names for comparison
+            const brandMap: Record<string, string> = {
+              "millennium-hotels": "Millennium",
+              jumeirah: "Jumeirah",
+              "rove-hotels": "ROVE",
+              "address-hotels": "The Address",
+              "oyo-rooms": "OYO",
+              movenpick: "Mövenpick",
+              "premier-inn": "Premier Inn",
+              "rotana-hotels": "Rotana",
+              marriott: "Marriott",
+              belvilla: "Belvilla",
+            };
+            const expectedBrand = brandMap[filterId];
+            return hotelBrand?.includes?.(expectedBrand) || hotelBrand === expectedBrand;
+          });
+          if (!hasMatchingBrand) return false;
+        }
+
+        if (categoryId === "guest-rating") {
+          // Handle guest rating filters
+          const hasMatchingGuestRating = filterIds.some((filterId) => {
+            const rating = Math.floor(hotel.rating || 0);
+            if (filterId === "EXCELLENT" && rating >= 8) return true;
+            if (filterId === "VERY_GOOD" && rating >= 7 && rating < 8) return true;
+            if (filterId === "GOOD" && rating >= 6 && rating < 7) return true;
+            return false;
+          });
+          if (!hasMatchingGuestRating) return false;
+        }
+
+        if (categoryId === "neighborhood") {
+          // Handle neighborhood/location filters
+          const hotelLocation = (
+            hotel.location ||
+            hotel.address?.city ||
+            ""
+          ).toLowerCase();
+          const hasMatchingNeighborhood = filterIds.some((filterId) => {
+            const locationMap: Record<string, string[]> = {
+              "dubai-coastline": ["coastline", "beach", "marina"],
+              "near-dubai-mall": ["dubai mall", "downtown"],
+              "nightlife-areas": ["nightlife", "bar", "club"],
+              "beachfront-jbr": ["jbr", "beach", "jumeirah"],
+              "traditional-souks": ["souks", "deira", "old dubai"],
+              "iconic-landmarks": ["landmarks", "burj", "creek"],
+              "metro-stations": ["metro", "station"],
+              "family-attractions": ["family", "park", "theme park"],
+              "residential-areas": ["residential", "villa"],
+            };
+            const keywords = locationMap[filterId] || [];
+            return keywords.some((keyword) => hotelLocation.includes(keyword));
+          });
+          if (!hasMatchingNeighborhood) return false;
+        }
       }
 
       return true;
