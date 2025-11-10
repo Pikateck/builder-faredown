@@ -1545,9 +1545,24 @@ function HotelResultsContent() {
           if (!hasAmenity) return false;
         }
         if (categoryId === "stars") {
-          const stars = Math.floor(hotel.rating);
+          const stars = Math.floor(hotel.rating || 0);
           const match = filterIds.some((fid) => parseInt(fid) === stars);
           if (!match) return false;
+        }
+
+        if (categoryId === "cancellation") {
+          // Handle cancellation policy filters
+          const hasMatchingCancellation = filterIds.some((filterId) => {
+            const hasFreeCancellation = hotel.freeCancellation === true;
+            const isPartiallyRefundable = hotel.isRefundable === true && !hotel.freeCancellation;
+            const isNonRefundable = hotel.isRefundable === false;
+
+            if (filterId === "FC" && hasFreeCancellation) return true;
+            if (filterId === "PR" && isPartiallyRefundable) return true;
+            if (filterId === "NR" && isNonRefundable) return true;
+            return false;
+          });
+          if (!hasMatchingCancellation) return false;
         }
       }
       return true;
@@ -1629,10 +1644,25 @@ function HotelResultsContent() {
 
         if (categoryId === "stars") {
           const hasMatchingStars = filterIds.some((filterId) => {
-            const stars = Math.floor(hotel.rating);
+            const stars = Math.floor(hotel.rating || 0);
             return parseInt(filterId) === stars;
           });
           if (!hasMatchingStars) return false;
+        }
+
+        if (categoryId === "cancellation") {
+          // Handle cancellation policy filters
+          const hasMatchingCancellation = filterIds.some((filterId) => {
+            const hasFreeCancellation = hotel.freeCancellation === true;
+            const isPartiallyRefundable = hotel.isRefundable === true && !hotel.freeCancellation;
+            const isNonRefundable = hotel.isRefundable === false;
+
+            if (filterId === "FC" && hasFreeCancellation) return true;
+            if (filterId === "PR" && isPartiallyRefundable) return true;
+            if (filterId === "NR" && isNonRefundable) return true;
+            return false;
+          });
+          if (!hasMatchingCancellation) return false;
         }
       }
 
