@@ -484,6 +484,21 @@ export function ComprehensiveFilters({
             />
           </div>
         </div>
+
+        {/* Hotel Name Search */}
+        <div className="mb-6">
+          <Label htmlFor="hotelNameSearch" className="text-sm font-medium text-gray-700 mb-2 block">
+            Search hotel name
+          </Label>
+          <Input
+            id="hotelNameSearch"
+            type="text"
+            placeholder="Type hotel name..."
+            value={hotelNameSearch}
+            onChange={(e) => handleHotelNameSearch(e.target.value)}
+            className="w-full"
+          />
+        </div>
       </div>
 
       {/* Filter Categories */}
