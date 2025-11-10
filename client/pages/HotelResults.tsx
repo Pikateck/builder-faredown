@@ -1675,6 +1675,29 @@ function HotelResultsContent() {
           });
           if (!hasMatchingCancellation) return false;
         }
+
+        if (categoryId === "meal-plans") {
+          // Handle meal plan filters based on cheapest room's board type
+          const boardType = hotel.boardType || "Room Only";
+          const hasMatchingMealPlan = filterIds.some((filterId) => {
+            const boardMap: Record<string, string> = {
+              RO: "Room Only",
+              BB: "Breakfast",
+              HB: "Half Board",
+              FB: "Full Board",
+              DN: "Dinner",
+            };
+            const expectedBoard = boardMap[filterId];
+            // Check if the board type matches or contains the expected board
+            return (
+              boardType?.includes?.(expectedBoard) ||
+              boardType === expectedBoard ||
+              (filterId === "BB" && hotel.breakfastIncluded) ||
+              (filterId === "RO" && !hotel.breakfastIncluded && boardType === "Room Only")
+            );
+          });
+          if (!hasMatchingMealPlan) return false;
+        }
       }
 
       return true;
