@@ -2483,35 +2483,24 @@ function HotelResultsContent() {
                     )}
                   </div>
 
-                  {/* Name filter */}
-                  <div className="flex items-center gap-2 flex-shrink-0 w-full md:w-auto md:max-w-xs">
-                    <input
-                      type="text"
-                      value={nameQuery}
-                      onChange={(e) => {
-                        setNameQuery(e.target.value);
-                      }}
-                      placeholder="Search hotel name"
-                      className="w-full md:w-64 h-10 px-3 border border-gray-300 rounded"
-                    />
-                    <div className="hidden md:flex items-center space-x-2">
-                      <Button
-                        variant={viewMode === "list" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setViewMode("list")}
-                        className="p-2 touch-manipulation"
-                      >
-                        <List className="w-4 h-4" />
-                      </Button>
-                      <Button
-                        variant={viewMode === "grid" ? "default" : "outline"}
-                        size="sm"
-                        onClick={() => setViewMode("grid")}
-                        className="p-2 touch-manipulation"
-                      >
-                        <Grid className="w-4 h-4" />
-                      </Button>
-                    </div>
+                  {/* View Mode Buttons */}
+                  <div className="hidden md:flex items-center space-x-2">
+                    <Button
+                      variant={viewMode === "list" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setViewMode("list")}
+                      className="p-2 touch-manipulation"
+                    >
+                      <List className="w-4 h-4" />
+                    </Button>
+                    <Button
+                      variant={viewMode === "grid" ? "default" : "outline"}
+                      size="sm"
+                      onClick={() => setViewMode("grid")}
+                      className="p-2 touch-manipulation"
+                    >
+                      <Grid className="w-4 h-4" />
+                    </Button>
                   </div>
                 </div>
 
