@@ -2484,7 +2484,8 @@ export function createServer() {
     try {
       // Try to proxy to the main API server first
       try {
-        const backendUrl = `http://localhost:3001/api/hotels-live/hotel/${code}`;
+        const apiBaseUrl = process.env.API_SERVER_URL || "https://builder-faredown-pricing.onrender.com";
+        const backendUrl = `${apiBaseUrl}/api/hotels-live/hotel/${code}`;
         const queryParams = new URLSearchParams();
         if (checkIn) queryParams.append("checkIn", checkIn as string);
         if (checkOut) queryParams.append("checkOut", checkOut as string);
