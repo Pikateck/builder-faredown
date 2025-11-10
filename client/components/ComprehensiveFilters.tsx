@@ -93,13 +93,13 @@ export function ComprehensiveFilters({
   const { selectedCurrency } = useCurrency();
   // Initialize with all filter categories expanded by default
   const [expandedSections, setExpandedSections] = useState<string[]>([
-    "amenities",
-    "meal-plans",
-    "property-type",
-    "guest-rating",
-    "cancellation",
     "stars",
+    "meal-plans",
+    "cancellation",
+    "amenities",
+    "property-type",
     "neighborhood",
+    "guest-rating",
     "brands",
   ]);
   const [showAllSections, setShowAllSections] = useState<string[]>([]);
