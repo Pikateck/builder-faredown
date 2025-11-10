@@ -923,14 +923,27 @@ function HotelResultsContent() {
             ? hotel.isRefundable
             : index % 3 !== 0; // 2 out of 3 are refundable
 
-      const cheapestRoom = roomsArray.reduce(
-        (best: any, room: any) => {
-          const roomPrice = room.price?.total || room.price || Infinity;
-          const bestPrice = best.price?.total || best.price || Infinity;
-          return roomPrice < bestPrice ? room : best;
-        },
-        roomsArray?.[0] || {},
-      );
+      // Find cheapest room from available rates/rooms
+      const cheapestRoom = roomsArray && roomsArray.length > 0
+        ? roomsArray.reduce(
+            (best: any, room: any) => {
+              const roomPrice = room.price?.total || room.price || Infinity;
+              const bestPrice = best.price?.total || best.price || Infinity;
+              return roomPrice < bestPrice ? room : best;
+            },
+            roomsArray[0]
+          )
+        : {
+            roomName: hotel.roomType || "Standard Room",
+            roomType: hotel.roomType || "Standard Room",
+            beds: hotel.roomFeatures?.[0] || "1 Double Bed",
+            bedType: hotel.roomFeatures?.[0] || "1 Double Bed",
+            price: hotel.price || hotel.minTotal || 0,
+            isRefundable: hotel.isRefundable,
+            cancellationPolicy: hotel.cancellationPolicy || "",
+            description: "",
+            board: "Room Only",
+          };
 
       return {
         id: hotel.supplierHotelId || `tbo-${index}`,
