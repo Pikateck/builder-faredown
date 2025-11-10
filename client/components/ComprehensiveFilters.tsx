@@ -143,8 +143,9 @@ export function ComprehensiveFilters({
       title: "Refundability",
       isCollapsible: true,
       items: [
-        { id: "FC", label: "Refundable (Free Cancellation)", count: 4009 },
+        { id: "FC", label: "Free Cancellation", count: 4009 },
         { id: "NR", label: "Non-Refundable", count: 1200 },
+        { id: "PR", label: "Partially-Refundable", count: 800 },
       ],
     },
     {
