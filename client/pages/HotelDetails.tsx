@@ -2789,11 +2789,15 @@ function HotelDetailsContent() {
               <div className="flex items-center text-sm text-gray-600">
                 <span>🌍 Global</span>
                 <span className="mx-2">•</span>
-                <span>
+                <button
+                  onClick={() => navigate(`/hotels/results?${searchParams.toString()}`)}
+                  className="hover:text-blue-600 hover:underline cursor-pointer transition-colors"
+                  title="Back to hotel results"
+                >
                   {destinationName ||
                     searchParams.get("destination") ||
                     "Dubai"}
-                </span>
+                </button>
                 <span className="mx-2">›</span>
                 <span className="text-gray-900 font-medium">Hotel Details</span>
               </div>
