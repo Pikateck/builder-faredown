@@ -1615,8 +1615,9 @@ export function createServer() {
       }
 
       // Get current rates
+      const apiBaseUrl = process.env.API_SERVER_URL || "https://builder-faredown-pricing.onrender.com";
       const ratesResponse = await fetch(
-        "http://localhost:8080/api/currency/rates",
+        `${apiBaseUrl}/api/currency/rates`,
       );
       const ratesData = await ratesResponse.json();
 
@@ -2357,7 +2358,8 @@ export function createServer() {
   app.get("/health", async (_req, res) => {
     try {
       // Try to proxy to main API server
-      const response = await fetch("http://localhost:3001/health");
+      const apiBaseUrl = process.env.API_SERVER_URL || "https://builder-faredown-pricing.onrender.com";
+      const response = await fetch(`${apiBaseUrl}/api/health`);
       if (response.ok) {
         const data = await response.json();
         // Add Hotelbeds simulation info
