@@ -115,13 +115,13 @@ function CheckoutPageContent() {
         navigate(`/booking-flow?${bookingParams.toString()}`);
         break;
       case 'hotels':
-        navigate(`/hotel/booking?${bookingParams.toString()}`);
+        navigate(`/hotels/booking?${bookingParams.toString()}`);
         break;
       case 'sightseeing':
         navigate(`/sightseeing/booking?${bookingParams.toString()}`);
         break;
       case 'transfers':
-        navigate(`/transfer/booking?${bookingParams.toString()}`);
+        navigate(`/transfer-booking?${bookingParams.toString()}`);
         break;
       default:
         navigate(`/booking?${bookingParams.toString()}`);
