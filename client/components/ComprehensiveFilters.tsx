@@ -103,6 +103,7 @@ export function ComprehensiveFilters({
     "brands",
   ]);
   const [showAllSections, setShowAllSections] = useState<string[]>([]);
+  const [hotelNameSearch, setHotelNameSearch] = useState<string>("");
 
   const sortOptions = [
     { value: "recommended", label: "Our top picks" },
