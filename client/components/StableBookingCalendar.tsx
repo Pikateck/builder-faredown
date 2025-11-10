@@ -190,9 +190,11 @@ export function StableBookingCalendar({
       </div>
 
       {/* Calendar Grid */}
-      <div className="flex">
-        {renderMonth(currentMonth, days)}
-        <div className="border-l border-gray-200">
+      <div className="flex" style={{ willChange: 'transform' }}>
+        <div style={{ willChange: 'contents' }}>
+          {renderMonth(currentMonth, days)}
+        </div>
+        <div className="border-l border-gray-200" style={{ willChange: 'contents' }}>
           {renderMonth(nextMonth, nextMonthDays)}
         </div>
       </div>
