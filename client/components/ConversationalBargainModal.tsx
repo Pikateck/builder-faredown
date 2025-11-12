@@ -185,7 +185,9 @@ export function ConversationalBargainModal({
     null,
   );
   // ✅ NEW: Store user's original offer to use as "Safe Deal" option
-  const [userOriginalOffer, setUserOriginalOffer] = useState<number | null>(null);
+  const [userOriginalOffer, setUserOriginalOffer] = useState<number | null>(
+    null,
+  );
 
   const { selectedCurrency, formatPrice } = useCurrency();
   const { priceSnapshot, updatePrice } = usePriceContext();
@@ -1352,7 +1354,10 @@ export function ConversationalBargainModal({
           setTimeout(() => {
             inputRef.current?.focus();
             // Scroll into view to ensure input is visible when keyboard appears
-            inputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+            inputRef.current?.scrollIntoView({
+              behavior: "smooth",
+              block: "center",
+            });
           }, 300);
         }}
         onPointerDownOutside={(e) => {
