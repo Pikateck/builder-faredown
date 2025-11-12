@@ -2468,8 +2468,8 @@ function HotelResultsContent() {
         <Header />
 
         {/* Hotel Search Bar - Booking.com style */}
-        <div className="bg-[#003580] py-2 sm:py-4">
-          <div className="max-w-6xl mx-auto px-3 sm:px-4 lg:px-8">
+        <div className="bg-[#003580] py-2 sm:py-3 lg:py-4">
+          <div className="max-w-6xl mx-auto px-2 sm:px-3 md:px-4 lg:px-8">
             <HotelSearchForm
               initialDestination={destinationName}
               initialCheckIn={checkIn}
@@ -2485,7 +2485,7 @@ function HotelResultsContent() {
 
         {/* Breadcrumb */}
         <div className="bg-gray-50 border-b border-gray-200">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-2">
+          <div className="max-w-7xl mx-auto px-2 sm:px-3 md:px-4 lg:px-8 py-2">
             <div className="flex items-center text-sm text-gray-600">
               <span>🌍 Global</span>
               <span className="mx-2">•</span>
@@ -2521,7 +2521,7 @@ function HotelResultsContent() {
 
       {/* Desktop Results Layout */}
       <div className="hidden md:block">
-        <div className="max-w-7xl mx-auto px-4 lg:px-8 py-6">
+        <div className="max-w-7xl mx-auto px-3 sm:px-4 md:px-4 lg:px-8 py-4 md:py-6">
           <div className="flex gap-6">
             {/* Desktop Filters */}
             <div className="hidden lg:block w-80 flex-shrink-0">
