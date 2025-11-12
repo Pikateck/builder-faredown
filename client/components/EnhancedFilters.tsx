@@ -324,7 +324,7 @@ export function EnhancedFilters({
         </button>
       </div>
 
-      <div className="max-h-[calc(100vh-200px)] overflow-y-auto pr-2">
+      <div className="max-h-[calc(100dvh-200px)] overflow-y-auto pr-2">
         {/* Price Range */}
         <div className="space-y-1 mt-4">
           <div className="border-b border-gray-200 pb-1">
