@@ -12,12 +12,14 @@
 
 /* Modal positioning for mobile (viewport < 768px) */
 @media (max-width: 767px) {
+  /* Base mobile modal styles */
   .mobile-modal {
     position: fixed !important;
+    inset: auto 0 0 0 !important;
+    top: auto !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    top: auto !important;
     width: 100% !important;
     max-width: 100% !important;
     height: 100dvh !important;
@@ -26,31 +28,37 @@
     border-radius: 1.5rem 1.5rem 0 0 !important;
     margin: 0 !important;
     transform: none !important;
+    translate: none !important;
     display: flex !important;
     flex-direction: column !important;
     overflow: hidden !important;
   }
 
-  /* Override Radix UI default positioning for mobile bargain modal */
+  /* Aggressive override for all Radix positioning on mobile */
   .mobile-modal[data-radix-dialog-content],
-  [data-radix-portal] .mobile-modal {
+  .mobile-modal[role="dialog"],
+  [data-radix-portal] .mobile-modal,
+  body .mobile-modal {
     position: fixed !important;
+    inset: auto 0 0 0 !important;
+    top: auto !important;
     bottom: 0 !important;
     left: 0 !important;
     right: 0 !important;
-    top: auto !important;
     transform: none !important;
     translate: none !important;
+    -webkit-transform: none !important;
   }
 
   /* Ensure proper z-index for mobile modal */
+  .mobile-modal,
   .mobile-modal .dialog-content {
-    z-index: 9999;
+    z-index: 9999 !important;
   }
 
   /* Ensure dialog overlay is visible */
-  [role="dialog"] {
-    z-index: 9999;
+  [role="dialog"].mobile-modal {
+    z-index: 9999 !important;
   }
 }
 

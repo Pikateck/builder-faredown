@@ -1324,28 +1324,34 @@ export function ConversationalBargainModal({
           !z-[9999]
         `}
         style={{
-          maxHeight: isMobileDevice() ? "100dvh" : "90vh",
-          height: isMobileDevice() ? "100dvh" : "auto",
-          minHeight: isMobileDevice() ? "100dvh" : "auto",
-          borderRadius: isMobileDevice() ? "0" : "1rem",
-          display: "flex",
-          flexDirection: "column",
-          overflow: "hidden",
           ...(isMobileDevice()
             ? {
+                // Mobile: All positioning handled by CSS .mobile-modal class
                 position: "fixed",
+                inset: "auto 0 0 0",
+                top: "auto",
+                bottom: "0",
                 left: "0",
                 right: "0",
-                bottom: "0",
-                top: "auto",
                 width: "100%",
                 maxWidth: "100%",
-                maxHeight: "100dvh",
                 height: "100dvh",
+                maxHeight: "100dvh",
+                minHeight: "100dvh",
+                transform: "none",
+                translate: "none",
+                borderRadius: "0",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
               }
             : {
-                // Desktop: keep default dialog centering via Radix UI positioning
-                // The dialog component handles left-[50%] top-[50%] translate-x-[-50%] translate-y-[-50%]
+                // Desktop: keep default dialog centering
+                maxHeight: "90vh",
+                borderRadius: "1rem",
+                display: "flex",
+                flexDirection: "column",
+                overflow: "hidden",
               }),
         }}
         onOpenAutoFocus={(e) => {
