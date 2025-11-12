@@ -1319,7 +1319,7 @@ export function ConversationalBargainModal({
         showClose={false}
         className={`
           mobile-bargain-modal p-0
-          ${isMobileDevice() ? "mobile-modal w-full" : "max-w-md sm:max-w-lg"}
+          ${isMobileDevice() ? "mobile-modal w-full !left-0 !right-0 !bottom-0 !top-auto !translate-x-0 !translate-y-0" : "max-w-md sm:max-w-lg"}
           flex flex-col
           !z-[9999]
         `}
