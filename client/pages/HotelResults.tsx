@@ -409,7 +409,7 @@ function HotelResultsContent() {
     };
 
     console.log(
-      "🏨 Loading standardized hotel search object to context:",
+      "��� Loading standardized hotel search object to context:",
       standardizedHotelSearchParams,
     );
     loadCompleteSearchObject(standardizedHotelSearchParams);
@@ -1954,7 +1954,7 @@ function HotelResultsContent() {
         />
 
         {/* Hotel Search Summary Bar with Edit Button */}
-        <div className="bg-white border-b border-gray-200 px-4 py-3">
+        <div className="bg-white border-b border-gray-200 px-3 sm:px-4 py-2.5 sm:py-3">
           <div className="flex items-center justify-between">
             <div className="flex-1 min-w-0">
               <div className="flex items-center space-x-2 text-sm">
