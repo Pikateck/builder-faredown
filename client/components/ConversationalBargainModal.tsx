@@ -1489,14 +1489,13 @@ export function ConversationalBargainModal({
           (round === 2 && safeDealPrice) ||
           (round === 2 && finalOffer && showOfferActions)) && (
           <div
-            className="bg-gradient-to-r from-blue-50 to-slate-50 border-t border-blue-200 p-3 w-full flex-shrink-0"
+            className="bg-gradient-to-r from-blue-50 to-slate-50 border-t border-blue-200 p-3 sm:p-4 w-full flex-shrink-0"
             style={{
               paddingBottom: isMobileDevice()
-                ? "calc(1rem + env(safe-area-inset-bottom))"
+                ? "calc(1rem + env(safe-area-inset-bottom, 0px))"
                 : "0.75rem",
               minHeight: "auto",
-              position: "sticky",
-              bottom: "0",
+              position: "relative",
               zIndex: 50,
               backgroundColor: "white",
             }}
