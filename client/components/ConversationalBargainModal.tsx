@@ -1853,14 +1853,15 @@ export function ConversationalBargainModal({
         {/* Input Section - Keyboard Safe */}
         {!showOfferActions && !isComplete && (
           <div
-            className="border-t border-gray-200 p-4 bg-white flex-shrink-0 w-full"
+            className="border-t border-gray-200 p-3 sm:p-4 bg-white flex-shrink-0 w-full"
             style={{
               paddingBottom: isMobileDevice()
-                ? "calc(1.5rem + env(safe-area-inset-bottom))"
+                ? "calc(1rem + env(safe-area-inset-bottom, 0px))"
                 : "1rem",
               minHeight: "auto",
               position: "relative",
               backgroundColor: "white",
+              zIndex: 50,
             }}
           >
             <div className="mb-3">
