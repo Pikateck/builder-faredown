@@ -728,7 +728,7 @@ export function Header() {
                   <button
                     onClick={() => handleTabChange("hotels")}
                     className={cn(
-                      "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
+                      "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold text-xs sm:text-sm px-1 sm:px-2 py-2 sm:py-3 lg:py-4 whitespace-nowrap",
                       activeTab === "hotels" && "border-b-2 border-white",
                     )}
                   >
@@ -737,7 +737,7 @@ export function Header() {
                   <button
                     onClick={() => handleTabChange("flights")}
                     className={cn(
-                      "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
+                      "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold text-xs sm:text-sm px-1 sm:px-2 py-2 sm:py-3 lg:py-4 whitespace-nowrap",
                       activeTab === "flights" && "border-b-2 border-white",
                     )}
                   >
@@ -746,7 +746,7 @@ export function Header() {
                   <button
                     onClick={() => handleTabChange("sightseeing")}
                     className={cn(
-                      "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
+                      "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold text-xs sm:text-sm px-1 sm:px-2 py-2 sm:py-3 lg:py-4 whitespace-nowrap",
                       activeTab === "sightseeing" && "border-b-2 border-white",
                     )}
                   >
@@ -755,7 +755,7 @@ export function Header() {
                   <button
                     onClick={() => handleTabChange("transfers")}
                     className={cn(
-                      "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
+                      "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold text-xs sm:text-sm px-1 sm:px-2 py-2 sm:py-3 lg:py-4 whitespace-nowrap",
                       activeTab === "transfers" && "border-b-2 border-white",
                     )}
                   >
@@ -764,7 +764,7 @@ export function Header() {
                   <button
                     onClick={() => handleTabChange("packages")}
                     className={cn(
-                      "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold py-3 lg:py-4",
+                      "text-white hover:text-blue-200 cursor-pointer flex items-center font-semibold text-xs sm:text-sm px-1 sm:px-2 py-2 sm:py-3 lg:py-4 whitespace-nowrap",
                       activeTab === "packages" && "border-b-2 border-white",
                     )}
                   >
