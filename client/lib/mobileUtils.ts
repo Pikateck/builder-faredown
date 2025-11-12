@@ -112,9 +112,17 @@ export const showOnTabletUp = "hidden sm:block";
 
 export const isMobileDevice = (): boolean => {
   if (typeof window === "undefined") return false;
-  return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
+
+  // Primary: Check viewport width (works with dev tools emulation)
+  const isSmallViewport = window.innerWidth < 768;
+
+  // Secondary: Check user agent (works on actual mobile devices)
+  const isMobileUA = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(
     navigator.userAgent,
   );
+
+  // Return true if EITHER condition is met (viewport < 768px OR mobile user agent)
+  return isSmallViewport || isMobileUA;
 };
 
 export const isIOS = (): boolean => {
