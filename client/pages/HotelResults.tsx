@@ -2144,7 +2144,7 @@ function HotelResultsContent() {
         </div>
 
         {/* Mobile Hotel List */}
-        <div className="px-3 py-2 space-y-3 pb-24">
+        <div className="px-2 sm:px-3 py-2 space-y-2 sm:space-y-3 pb-24">
           {loading ? (
             <div className="text-center py-12">
               <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#003580] mx-auto"></div>
