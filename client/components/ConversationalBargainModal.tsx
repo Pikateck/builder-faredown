@@ -1348,9 +1348,12 @@ export function ConversationalBargainModal({
         }}
         onOpenAutoFocus={(e) => {
           e.preventDefault();
+          // Delay focus to allow modal animation and keyboard time to settle
           setTimeout(() => {
             inputRef.current?.focus();
-          }, 200);
+            // Scroll into view to ensure input is visible when keyboard appears
+            inputRef.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+          }, 300);
         }}
         onPointerDownOutside={(e) => {
           // Check if interacting with input or dialog content
