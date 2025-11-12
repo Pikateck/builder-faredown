@@ -20,9 +20,9 @@
     top: auto !important;
     width: 100% !important;
     max-width: 100% !important;
-    height: auto !important;
+    height: 100dvh !important;
     max-height: 100dvh !important;
-    min-height: auto !important;
+    min-height: 100dvh !important;
     border-radius: 1.5rem 1.5rem 0 0 !important;
     margin: 0 !important;
     transform: none !important;

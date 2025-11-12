@@ -1325,8 +1325,8 @@ export function ConversationalBargainModal({
         `}
         style={{
           maxHeight: isMobileDevice() ? "100dvh" : "90vh",
-          height: isMobileDevice() ? "auto" : "auto",
-          minHeight: isMobileDevice() ? "auto" : "auto",
+          height: isMobileDevice() ? "100dvh" : "auto",
+          minHeight: isMobileDevice() ? "100dvh" : "auto",
           borderRadius: isMobileDevice() ? "0" : "1rem",
           display: "flex",
           flexDirection: "column",
@@ -1341,7 +1341,7 @@ export function ConversationalBargainModal({
                 width: "100%",
                 maxWidth: "100%",
                 maxHeight: "100dvh",
-                height: "auto",
+                height: "100dvh",
               }
             : {
                 // Desktop: keep default dialog centering via Radix UI positioning
