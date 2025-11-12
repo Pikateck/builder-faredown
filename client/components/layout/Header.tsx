@@ -704,7 +704,7 @@ export function Header() {
         <div className="hidden md:block">
           {/* Desktop Header */}
           <header className="text-white" style={{ backgroundColor: "#003580" }}>
-            <div className="max-w-7xl mx-auto px-3 sm:px-4 py-2 sm:py-3">
+            <div className="max-w-7xl mx-auto px-2 sm:px-3 md:px-4 lg:px-8 py-2 sm:py-2.5 lg:py-3">
               <div className="flex items-center justify-between">
                 {/* Logo */}
                 <Link to="/" className="flex items-center space-x-2">
@@ -724,7 +724,7 @@ export function Header() {
                 </Link>
 
                 {/* Centered Navigation */}
-                <nav className="flex items-center space-x-6 lg:space-x-8 text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
+                <nav className="flex items-center space-x-2 sm:space-x-4 md:space-x-4 lg:space-x-6 xl:space-x-8 text-xs sm:text-sm font-medium absolute left-1/2 transform -translate-x-1/2">
                   <button
                     onClick={() => handleTabChange("hotels")}
                     className={cn(
@@ -772,7 +772,7 @@ export function Header() {
                   </button>
                 </nav>
 
-                <div className="flex items-center space-x-2 md:space-x-6">
+                <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4 lg:space-x-6">
                   {/* Currency */}
                   <div className="flex items-center space-x-4 text-sm">
                     <div className="relative">
