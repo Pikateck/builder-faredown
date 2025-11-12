@@ -2018,11 +2018,11 @@ function HotelResultsContent() {
         </div>
 
         {/* Mobile Filter Bar */}
-        <div className="bg-white border-b border-gray-100 px-4 py-3">
+        <div className="bg-white border-b border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3">
           <Button
             variant="outline"
             size="sm"
-            className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 py-3 rounded-xl flex items-center justify-center gap-2 font-medium"
+            className="w-full text-blue-600 border-blue-600 hover:bg-blue-50 py-2.5 sm:py-3 rounded-xl flex items-center justify-center gap-2 font-medium text-sm"
             onClick={() => {
               try {
                 setShowFilters(true);
@@ -2046,7 +2046,7 @@ function HotelResultsContent() {
         </div>
 
         {/* Mobile Sort Bar */}
-        <div className="bg-white border-b border-gray-100 px-4 py-3 shadow-sm">
+        <div className="bg-white border-b border-gray-100 px-3 sm:px-4 py-2.5 sm:py-3 shadow-sm">
           <div className="flex items-center mb-2">
             <span className="text-sm font-medium text-gray-700 mr-2">
               Sort by:
