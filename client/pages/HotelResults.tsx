@@ -588,27 +588,14 @@ function HotelResultsContent() {
       const urlParams = new URLSearchParams(window.location.search);
       const searchTypeParam = urlParams.get("searchType");
 
-      // SAFETY FIRST: If flying on fly.dev (not localhost), use mock immediately
-      // because Render API is often unreachable from fly.dev preview
-      // UNLESS explicitly forcing live with searchType=live-force
-      const isForceliveonFlyDev = searchTypeParam === "live-force";
-      if (
-        typeof window !== "undefined" &&
-        window.location.origin.includes("fly.dev") &&
-        !apiBaseUrl.includes("localhost") &&
-        !isForceliveonFlyDev
-      ) {
-        console.log(
-          "🎭 Detected fly.dev preview - using mock data for stability",
-        );
-        return loadMockHotels();
-      }
-
-      // CHECK: If searchType=mock, use mock data immediately
+      // CHECK: If searchType=mock, use mock data immediately (explicit override only)
       if (searchTypeParam === "mock") {
         console.log("🎭 Using mock data (searchType=mock)");
         return loadMockHotels();
       }
+
+      // Always use live data to ensure price consistency across all environments
+      console.log("✅ Using live TBO data for consistent pricing across all environments");
 
       // STEP 1: Fetch metadata instantly from TBO
       setPricingStatus("loading");
