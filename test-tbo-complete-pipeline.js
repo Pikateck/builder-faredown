@@ -32,7 +32,9 @@ console.log('');
 const config = {
   authUrl: 'https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate',
   staticBase: 'https://apiwr.tboholidays.com/HotelAPI/',
-  searchBase: 'https://affiliate.travelboutiqueonline.com/HotelAPI/',
+  // Try V10 endpoint from user's env file
+  searchBase: 'https://affiliate.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/',
+  searchEndpoint: 'GetHotelResult',  // V10 method name
 
   // CRITICAL: ClientId must be "tboprod" (from TBO email)
   clientId: 'tboprod',
@@ -318,7 +320,7 @@ async function testHotelSearch(cities) {
   console.log('');
 
   try {
-    const response = await makeProxiedRequest(config.searchBase + 'Search', searchRequest, 30000);
+    const response = await makeProxiedRequest(config.searchBase + config.searchEndpoint, searchRequest, 30000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
