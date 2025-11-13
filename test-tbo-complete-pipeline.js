@@ -32,9 +32,9 @@ console.log('');
 const config = {
   authUrl: 'https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate',
   staticBase: 'https://apiwr.tboholidays.com/HotelAPI/',
-  // Try V10 endpoint from user's env file
-  searchBase: 'https://affiliate.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/',
-  searchEndpoint: 'GetHotelResult',  // V10 method name
+  // From TBO email (Pavneet Kaur, Oct 17, 2025)
+  searchBase: 'https://affiliate.travelboutiqueonline.com/HotelAPI/',
+  searchEndpoint: 'Search',
 
   // CRITICAL: ClientId must be "tboprod" (from TBO email)
   clientId: 'tboprod',
@@ -324,14 +324,17 @@ async function testHotelSearch(cities) {
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
+    console.log('  Status:', response.data?.Status);
     console.log('  ResponseStatus:', response.data?.ResponseStatus);
     console.log('  Hotel Count:', response.data?.HotelResults?.length || 0);
     console.log('  TraceId:', response.data?.TraceId ? 'PRESENT' : 'MISSING');
     console.log('  Error Code:', response.data?.Error?.ErrorCode);
     console.log('  Error Message:', response.data?.Error?.ErrorMessage);
     console.log('');
+    console.log('Full Response:', JSON.stringify(response.data, null, 2));
+    console.log('');
 
-    if (response.data?.ResponseStatus === 1 && response.data?.HotelResults?.length > 0) {
+    if ((response.data?.ResponseStatus === 1 || response.data?.Status?.Code === 1) && response.data?.HotelResults?.length > 0) {
       console.log('✅ SUCCESS: Hotels found!\n');
       console.log('Sample Hotels:');
       response.data.HotelResults.slice(0, 3).forEach((h, i) => {
