@@ -38,7 +38,11 @@ const config = {
   clientId: 'tboprod',
   userId: 'BOMF145',
   password: '@Bo#4M-Api@',
-  endUserIp: '52.5.155.132'  // Fixie proxy IP (whitelisted by TBO)
+  endUserIp: '52.5.155.132',  // Fixie proxy IP (whitelisted by TBO)
+
+  // Static data credentials (separate from dynamic API)
+  staticUserName: 'travelcategory',
+  staticPassword: 'Tra@59334536'
 };
 
 let tokenId = null;
@@ -143,12 +147,11 @@ async function testCountryList() {
   console.log('');
 
   try {
-    // Try GET request with TokenId in header or query
+    // Static data uses UserName/Password (not TokenId)
     const response = await axios.get(config.staticBase + 'CountryList', {
       params: {
-        TokenId: tokenId,
-        ClientId: config.clientId,
-        EndUserIp: config.endUserIp
+        UserName: config.staticUserName,
+        Password: config.staticPassword
       },
       headers: {
         'Content-Type': 'application/json',
@@ -199,21 +202,30 @@ async function testCityList() {
   console.log('TEST 3: CITY LIST for UAE (with TokenId)');
   console.log('='.repeat(60) + '\n');
 
-  const request = {
-    ClientId: config.clientId,
-    TokenId: tokenId,
-    EndUserIp: config.endUserIp,
-    CountryCode: 'AE'
-  };
-
   console.log('📤 Request:');
-  console.log('  URL:', config.staticBase + 'DestinationCityList');
+  console.log('  URL:', config.staticBase + 'HotelCityList');
   console.log('  CountryCode: AE');
-  console.log('  TokenId:', tokenId.substring(0, 20) + '...');
+  console.log('  Method: GET');
+  console.log('  Credentials: Static UserName/Password');
   console.log('');
 
   try {
-    const response = await makeProxiedRequest(config.staticBase + 'DestinationCityList', request, 15000);
+    // Static data uses UserName/Password and different endpoint
+    const response = await axios.get(config.staticBase + 'HotelCityList', {
+      params: {
+        UserName: config.staticUserName,
+        Password: config.staticPassword,
+        CountryCode: 'AE'
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Accept-Encoding': 'gzip, deflate'
+      },
+      httpsAgent: httpsAgent,
+      httpAgent: httpAgent,
+      timeout: 15000
+    });
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
