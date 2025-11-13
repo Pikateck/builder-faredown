@@ -814,14 +814,6 @@ export function Header() {
                     )}
                   </div>
 
-                  {/* Temporary Admin link for testing */}
-                  <Link
-                    to="/admin/dashboard"
-                    className="text-white underline hover:text-blue-200 font-semibold text-sm whitespace-nowrap"
-                  >
-                    Admin
-                  </Link>
-
                   <div className="flex items-center space-x-3">
                     {/* Desktop Notifications Bell */}
                     {isLoggedIn && (
