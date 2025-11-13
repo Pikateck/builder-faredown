@@ -315,10 +315,9 @@ export default function EnhancedMyBookings() {
   };
 
   return (
-    <Layout showSearch={false}>
-      <div className="min-h-screen bg-gray-50">
-        {/* Header with breadcrumb */}
-        <div className="bg-white border-b border-gray-200">
+    <div className="min-h-screen bg-gray-50">
+      {/* Header with breadcrumb - removed duplicate Layout wrapper */}
+      <div className="bg-white border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="py-4">
               <nav className="flex items-center space-x-2 text-sm text-gray-600 mb-4">
@@ -1098,7 +1097,6 @@ export default function EnhancedMyBookings() {
             </DialogFooter>
           </DialogContent>
         </Dialog>
-      </div>
-    </Layout>
+    </div>
   );
 }
