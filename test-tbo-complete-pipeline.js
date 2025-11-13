@@ -124,7 +124,7 @@ async function testAuthentication() {
 }
 
 /**
- * 2. Test Country List (with TokenId)
+ * 2. Test Country List (with TokenId) - Using GET with TokenId header
  */
 async function testCountryList() {
   if (!tokenId) {
@@ -136,19 +136,29 @@ async function testCountryList() {
   console.log('TEST 2: COUNTRY LIST (with TokenId)');
   console.log('='.repeat(60) + '\n');
 
-  const request = {
-    ClientId: config.clientId,
-    TokenId: tokenId,
-    EndUserIp: config.endUserIp
-  };
-
   console.log('📤 Request:');
   console.log('  URL:', config.staticBase + 'CountryList');
+  console.log('  Method: GET');
   console.log('  TokenId:', tokenId.substring(0, 20) + '...');
   console.log('');
 
   try {
-    const response = await makeProxiedRequest(config.staticBase + 'CountryList', request, 15000);
+    // Try GET request with TokenId in header or query
+    const response = await axios.get(config.staticBase + 'CountryList', {
+      params: {
+        TokenId: tokenId,
+        ClientId: config.clientId,
+        EndUserIp: config.endUserIp
+      },
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'Accept-Encoding': 'gzip, deflate'
+      },
+      httpsAgent: httpsAgent,
+      httpAgent: httpAgent,
+      timeout: 15000
+    });
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
