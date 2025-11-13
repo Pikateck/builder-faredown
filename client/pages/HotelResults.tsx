@@ -485,11 +485,14 @@ function HotelResultsContent() {
     return processedImages.slice(0, 6); // Limit to 6 images max
   };
 
-  // Fallback function - ALWAYS fetch from backend API for consistency
+  // Fallback function - ONLY used when live TBO API fails completely
   // This ensures identical hotel names and images across Builder preview and Netlify
   const loadMockHotels = async () => {
-    console.log(
-      "📦 Loading mock hotels from backend API (ensuring consistency across environments)...",
+    console.warn(
+      "⚠️ FALLBACK: Loading mock hotels from backend API (live TBO API unavailable)...",
+    );
+    console.warn(
+      "⚠️ Mock prices may differ from live prices - this should only happen during API outages",
     );
 
     try {
