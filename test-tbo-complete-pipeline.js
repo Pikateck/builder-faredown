@@ -12,16 +12,17 @@
 
 const axios = require('axios');
 
-// Configuration from environment
+// Configuration from TBO email (Pavneet Kaur, Oct 17, 2025)
 const config = {
   authUrl: 'https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate',
   staticBase: 'https://apiwr.tboholidays.com/HotelAPI/',
   searchBase: 'https://affiliate.travelboutiqueonline.com/HotelAPI/',
-  
-  clientId: process.env.TBO_CLIENT_ID || 'tboprod',
-  userId: process.env.TBO_API_USER_ID || 'BOMF145',
-  password: process.env.TBO_API_PASSWORD || '@Bo#4M-Api@',
-  endUserIp: process.env.TBO_END_USER_IP || '52.5.155.132'
+
+  // CRITICAL: ClientId must be "tboprod" (from TBO email)
+  clientId: 'tboprod',
+  userId: 'BOMF145',
+  password: '@Bo#4M-Api@',
+  endUserIp: '52.5.155.132'  // Fixie proxy IP
 };
 
 let tokenId = null;
