@@ -702,13 +702,18 @@ function HotelResultsContent() {
 
       if (!metadataResponse.ok) {
         const errorText = await metadataResponse.text();
-        console.error("❌ API returned error:", {
+        console.error("❌ TBO API returned error:", {
           status: metadataResponse.status,
           statusText: metadataResponse.statusText,
           body: errorText.slice(0, 500),
+          url: apiUrl,
         });
-        // Fall back to mock data on API errors
-        console.log("⚠️ API error - falling back to mock data");
+        console.error(
+          "⚠️ PRICE DISCREPANCY WARNING: Falling back to mock data with different prices!",
+        );
+        console.error(
+          "⚠️ This may cause price differences between environments. Fix TBO API connection to resolve.",
+        );
         return loadMockHotels();
       }
 
@@ -2477,7 +2482,7 @@ function HotelResultsContent() {
         <div className="bg-gray-50 border-b border-gray-200">
           <div className="max-w-7xl mx-auto px-2 sm:px-3 md:px-4 lg:px-8 py-2">
             <div className="flex items-center text-sm text-gray-600">
-              <span>🌍 Global</span>
+              <span>���� Global</span>
               <span className="mx-2">•</span>
               <span>
                 {urlSearchParams.get("destinationName") ||
