@@ -1,16 +1,32 @@
 /**
  * TBO Universal JSON Hotel API - Complete Pipeline Test
- * 
+ *
  * Tests the full flow:
  * 1. Authentication (get TokenId)
  * 2. Country List (with TokenId)
  * 3. City List (with TokenId)
  * 4. Hotel Search (with TokenId)
- * 
+ *
  * This verifies all endpoints are correct and working
+ *
+ * CRITICAL: Uses Fixie proxy to ensure requests come from whitelisted IP
  */
 
 const axios = require('axios');
+const HttpsProxyAgent = require('https-proxy-agent').HttpsProxyAgent;
+const HttpProxyAgent = require('http-proxy-agent').HttpProxyAgent;
+
+// Fixie proxy configuration (CRITICAL - TBO requires whitelisted IP)
+const FIXIE_URL = process.env.FIXIE_URL || 'http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80';
+
+// Create proxy agents
+const httpsAgent = new HttpsProxyAgent(FIXIE_URL);
+const httpAgent = new HttpProxyAgent(FIXIE_URL);
+
+console.log('\n🔌 PROXY CONFIGURATION:');
+console.log('  Fixie URL:', FIXIE_URL ? '✅ SET' : '❌ NOT SET');
+console.log('  Proxy Agent:', httpsAgent ? '✅ INITIALIZED' : '❌ FAILED');
+console.log('');
 
 // Configuration from TBO email (Pavneet Kaur, Oct 17, 2025)
 const config = {
@@ -22,10 +38,26 @@ const config = {
   clientId: 'tboprod',
   userId: 'BOMF145',
   password: '@Bo#4M-Api@',
-  endUserIp: '52.5.155.132'  // Fixie proxy IP
+  endUserIp: '52.5.155.132'  // Fixie proxy IP (whitelisted by TBO)
 };
 
 let tokenId = null;
+
+/**
+ * Helper: Make request through Fixie proxy
+ */
+function makeProxiedRequest(url, data, timeout = 15000) {
+  return axios.post(url, data, {
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'Accept-Encoding': 'gzip, deflate'
+    },
+    httpsAgent: httpsAgent,  // CRITICAL: Use Fixie proxy
+    httpAgent: httpAgent,    // CRITICAL: Use Fixie proxy
+    timeout: timeout
+  });
+}
 
 /**
  * Format date as dd/MM/yyyy (TBO requirement)
@@ -62,14 +94,7 @@ async function testAuthentication() {
   console.log('');
 
   try {
-    const response = await axios.post(config.authUrl, authRequest, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Accept-Encoding': 'gzip, deflate'
-      },
-      timeout: 15000
-    });
+    const response = await makeProxiedRequest(config.authUrl, authRequest, 15000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
@@ -123,14 +148,7 @@ async function testCountryList() {
   console.log('');
 
   try {
-    const response = await axios.post(config.staticBase + 'CountryList', request, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Accept-Encoding': 'gzip, deflate'
-      },
-      timeout: 15000
-    });
+    const response = await makeProxiedRequest(config.staticBase + 'CountryList', request, 15000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
@@ -185,14 +203,7 @@ async function testCityList() {
   console.log('');
 
   try {
-    const response = await axios.post(config.staticBase + 'DestinationCityList', request, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Accept-Encoding': 'gzip, deflate'
-      },
-      timeout: 15000
-    });
+    const response = await makeProxiedRequest(config.staticBase + 'DestinationCityList', request, 15000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
@@ -282,14 +293,7 @@ async function testHotelSearch(cities) {
   console.log('');
 
   try {
-    const response = await axios.post(config.searchBase + 'Search', searchRequest, {
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Accept-Encoding': 'gzip, deflate'
-      },
-      timeout: 30000
-    });
+    const response = await makeProxiedRequest(config.searchBase + 'Search', searchRequest, 30000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
