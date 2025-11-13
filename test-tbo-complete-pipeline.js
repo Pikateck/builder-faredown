@@ -284,9 +284,12 @@ async function testHotelSearch(cities) {
   const checkInDateObj = new Date('2025-12-15');
   const noOfNights = Math.ceil((checkOutDate - checkInDateObj) / (1000 * 60 * 60 * 24));
 
+  // CRITICAL: Hotel Search uses direct credentials, NOT TokenId!
   const searchRequest = {
+    ClientId: config.clientId,
+    UserName: config.userId,
+    Password: config.password,
     EndUserIp: config.endUserIp,
-    TokenId: tokenId,
     CheckInDate: checkInDate,
     NoOfNights: noOfNights,
     CountryCode: 'AE',
