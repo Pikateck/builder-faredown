@@ -774,52 +774,50 @@ export function Header() {
 
                 <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-4 lg:space-x-6">
                   {/* Currency */}
-                  <div className="flex items-center space-x-4 text-sm">
-                    <div className="relative">
-                      <button
-                        onClick={() =>
-                          setShowCurrencyDropdown(!showCurrencyDropdown)
-                        }
-                        className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1"
-                      >
-                        <span>
-                          {selectedCurrency.symbol} {selectedCurrency.code}
-                        </span>
-                        <ChevronDown className="w-4 h-4" />
-                      </button>
-                      {showCurrencyDropdown && (
-                        <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-56 max-h-60 overflow-y-auto">
-                          {currencies.map((currency) => (
-                            <button
-                              key={currency.code}
-                              onClick={() => {
-                                setCurrency(currency);
-                                setShowCurrencyDropdown(false);
-                              }}
-                              className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors ${
-                                selectedCurrency.code === currency.code
-                                  ? "bg-blue-50 text-blue-600"
-                                  : "text-gray-900"
-                              }`}
-                            >
-                              <div className="flex items-center space-x-2">
-                                <span>{currency.flag}</span>
-                                <span>{currency.name}</span>
-                              </div>
-                              <span className="font-medium">
-                                {currency.symbol} {currency.code}
-                              </span>
-                            </button>
-                          ))}
-                        </div>
-                      )}
-                    </div>
+                  <div className="relative">
+                    <button
+                      onClick={() =>
+                        setShowCurrencyDropdown(!showCurrencyDropdown)
+                      }
+                      className="text-white hover:text-blue-200 cursor-pointer flex items-center space-x-1 text-sm"
+                    >
+                      <span>
+                        {selectedCurrency.symbol} {selectedCurrency.code}
+                      </span>
+                      <ChevronDown className="w-4 h-4" />
+                    </button>
+                    {showCurrencyDropdown && (
+                      <div className="absolute top-8 right-0 bg-white border border-gray-200 rounded-lg shadow-lg p-2 z-50 w-56 max-h-60 overflow-y-auto">
+                        {currencies.map((currency) => (
+                          <button
+                            key={currency.code}
+                            onClick={() => {
+                              setCurrency(currency);
+                              setShowCurrencyDropdown(false);
+                            }}
+                            className={`w-full text-left px-3 py-2 hover:bg-gray-100 rounded text-sm flex items-center justify-between transition-colors ${
+                              selectedCurrency.code === currency.code
+                                ? "bg-blue-50 text-blue-600"
+                                : "text-gray-900"
+                            }`}
+                          >
+                            <div className="flex items-center space-x-2">
+                              <span>{currency.flag}</span>
+                              <span>{currency.name}</span>
+                            </div>
+                            <span className="font-medium">
+                              {currency.symbol} {currency.code}
+                            </span>
+                          </button>
+                        ))}
+                      </div>
+                    )}
                   </div>
 
                   {/* Temporary Admin link for testing */}
                   <Link
                     to="/admin/dashboard"
-                    className="text-white underline hover:text-blue-200 font-semibold"
+                    className="text-white underline hover:text-blue-200 font-semibold text-sm whitespace-nowrap"
                   >
                     Admin
                   </Link>
