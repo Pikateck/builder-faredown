@@ -46,7 +46,7 @@ const http = axios.create({
   }
 });
 
-console.log("╔═══════════════════════════════════════════════════════════════╗");
+console.log("╔══════════════════════════════��════════════════════════════════╗");
 console.log("║          TBO JSON API - Final Integration Test                ║");
 console.log("╚═══════════════════════════════════════════════════════════════╝");
 console.log("");
@@ -56,165 +56,145 @@ if (config.useProxy) {
 }
 console.log("");
 
+async function testAuth(authUrl, label) {
+  console.log(`\n🔐 Testing Auth: ${label}`);
+  console.log(`📍 URL: ${authUrl}`);
+
+  const authPayload = {
+    ClientId: config.clientId,
+    UserName: config.userName,
+    Password: config.password,
+    EndUserIp: config.endUserIp
+  };
+
+  try {
+    const authResponse = await http.post(authUrl, authPayload);
+    console.log(`✅ ${label} - SUCCESS`);
+    console.log(`   TokenId: ${authResponse.data.TokenId?.substring(0, 30)}...`);
+    return authResponse.data.TokenId;
+  } catch (error) {
+    console.log(`❌ ${label} - FAILED`);
+    console.log(`   Error: ${error.response?.data || error.message}`);
+    return null;
+  }
+}
+
+async function testSearch(searchUrl, tokenId, label) {
+  console.log(`\n🏨 Testing Search: ${label}`);
+  console.log(`📍 URL: ${searchUrl}`);
+  console.log(`🔑 TokenId: ${tokenId?.substring(0, 30)}...`);
+
+  const searchPayload = {
+    CheckInDate: "15/12/2025",
+    NoOfNights: 3,
+    CountryCode: "AE",
+    CityId: 130443,
+    ResultCount: null,
+    PreferredCurrency: "INR",
+    GuestNationality: "IN",
+    NoOfRooms: 1,
+    RoomGuests: [{ NoOfAdults: 2, NoOfChild: 0, ChildAge: null }],
+    MaxRating: 5,
+    MinRating: 0,
+    ReviewScore: null,
+    IsNearBySearchAllowed: false,
+    EndUserIp: config.endUserIp,
+    TokenId: tokenId
+  };
+
+  try {
+    const searchResponse = await http.post(searchUrl, searchPayload);
+    const status = searchResponse.data.HotelSearchResult?.ResponseStatus;
+    const hotelCount = searchResponse.data.HotelSearchResult?.HotelResults?.length || 0;
+    const error = searchResponse.data.HotelSearchResult?.Error;
+
+    if (status === 1 && hotelCount > 0) {
+      console.log(`✅ ${label} - SUCCESS`);
+      console.log(`   Hotels Found: ${hotelCount}`);
+      return true;
+    } else {
+      console.log(`❌ ${label} - FAILED`);
+      console.log(`   ResponseStatus: ${status}`);
+      console.log(`   Error: ${error?.ErrorMessage || "Unknown"}`);
+      return false;
+    }
+  } catch (error) {
+    console.log(`❌ ${label} - FAILED`);
+    console.log(`   Error: ${error.response?.data?.HotelSearchResult?.Error?.ErrorMessage || error.message}`);
+    return false;
+  }
+}
+
 async function testTBOIntegration() {
   try {
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // STEP 1: Authentication
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     console.log("╔═══════════════════════════════════════════════════════════════╗");
-    console.log("║                    STEP 1: AUTHENTICATION                      ║");
+    console.log("║          TBO Endpoint Combination Matrix Test                 ║");
     console.log("╚═══════════════════════════════════════════════════════════════╝");
-    console.log("");
-    console.log("📍 URL:", config.authUrl);
-    console.log("");
-    
-    const authPayload = {
-      ClientId: config.clientId,
-      UserName: config.userName,
-      Password: config.password,
-      EndUserIp: config.endUserIp
-    };
-    
-    console.log("📤 Request:");
-    console.log(JSON.stringify({
-      ...authPayload,
-      Password: "***MASKED***"
-    }, null, 2));
-    console.log("");
-    
-    const authResponse = await http.post(config.authUrl, authPayload);
-    
-    console.log("📥 Response:");
-    console.log("  HTTP Status:", authResponse.status);
-    console.log("  Status Code:", authResponse.data.Status);
-    console.log("  Member ID:", authResponse.data.Member?.MemberId);
-    console.log("  Agency ID:", authResponse.data.Member?.AgencyId);
-    console.log("  TokenId:", authResponse.data.TokenId ? `${authResponse.data.TokenId.substring(0, 30)}...` : "NOT RECEIVED");
-    console.log("");
-    
-    console.log("Full Auth Response:");
-    console.log(JSON.stringify(authResponse.data, null, 2));
-    console.log("");
-    
-    const tokenId = authResponse.data.TokenId;
-    
-    if (!tokenId) {
-      throw new Error("❌ No TokenId received from authentication");
-    }
-    
-    console.log("✅ Authentication successful!");
-    console.log("");
+
+    const authEndpoints = [
+      { url: "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate", label: "TBO SharedAPI" },
+      { url: "https://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate", label: "TekTravels SharedServices" }
+    ];
+
+    const searchEndpoints = [
+      { url: "https://HotelBE.tektravels.com/HotelService.svc/rest/GetHotelResult", label: "TekTravels HotelBE (capital S)" },
+      { url: "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelResult", label: "TekTravels HotelBE (lowercase s)" },
+      { url: "https://api.tektravels.com/HotelService.svc/rest/GetHotelResult", label: "TekTravels API subdomain" }
+    ];
+
+    console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("PHASE 1: Test All Auth Endpoints");
     console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("");
-    
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // STEP 2: Hotel Search (GetHotelResult)
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    console.log("╔═════════════════════════════════════════════════���═════════════╗");
-    console.log("║                 STEP 2: HOTEL SEARCH (GetHotelResult)         ║");
+
+    const tokens = {};
+    for (const auth of authEndpoints) {
+      const token = await testAuth(auth.url, auth.label);
+      if (token) {
+        tokens[auth.label] = token;
+      }
+    }
+
+    console.log("\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+    console.log("PHASE 2: Test All Endpoint Combinations");
+    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
+
+    const results = [];
+    for (const authLabel in tokens) {
+      for (const search of searchEndpoints) {
+        const success = await testSearch(search.url, tokens[authLabel], `${authLabel} + ${search.label}`);
+        results.push({ auth: authLabel, search: search.label, success });
+      }
+    }
+
+    console.log("\n╔═══════════════════════════════════════════════════════════════╗");
+    console.log("║                    RESULTS SUMMARY                             ║");
     console.log("╚═══════════════════════════════════════════════════════════════╝");
     console.log("");
-    console.log("📍 URL:", config.searchUrl);
-    console.log("");
-    
-    const searchPayload = {
-      CheckInDate: "15/12/2025",
-      NoOfNights: 3,
-      CountryCode: "AE",
-      CityId: 130443,
-      ResultCount: null,
-      PreferredCurrency: "INR",
-      GuestNationality: "IN",
-      NoOfRooms: 1,
-      RoomGuests: [
-        {
-          NoOfAdults: 2,
-          NoOfChild: 0,
-          ChildAge: null
-        }
-      ],
-      MaxRating: 5,
-      MinRating: 0,
-      ReviewScore: null,
-      IsNearBySearchAllowed: false,
-      EndUserIp: config.endUserIp,
-      TokenId: tokenId
-    };
-    
-    console.log("📤 Request:");
-    console.log(JSON.stringify({
-      ...searchPayload,
-      TokenId: `${tokenId.substring(0, 30)}...`
-    }, null, 2));
-    console.log("");
-    
-    const searchResponse = await http.post(config.searchUrl, searchPayload);
-    
-    console.log("📥 Response:");
-    console.log("  HTTP Status:", searchResponse.status);
-    console.log("  ResponseStatus:", searchResponse.data.HotelSearchResult?.ResponseStatus);
-    console.log("  TraceId:", searchResponse.data.HotelSearchResult?.TraceId || "N/A");
-    console.log("  Hotel Count:", searchResponse.data.HotelSearchResult?.HotelResults?.length || 0);
-    console.log("");
-    
-    if (searchResponse.data.HotelSearchResult?.HotelResults?.length > 0) {
-      console.log("Sample Hotels:");
-      searchResponse.data.HotelSearchResult.HotelResults.slice(0, 3).forEach((hotel, i) => {
-        console.log(`\n${i + 1}. ${hotel.HotelName}`);
-        console.log(`   Code: ${hotel.HotelCode}`);
-        console.log(`   Stars: ${hotel.StarRating || "N/A"}`);
-        console.log(`   Price: ${hotel.Price?.PublishedPrice} ${hotel.Price?.CurrencyCode}`);
+
+    const workingCombos = results.filter(r => r.success);
+    if (workingCombos.length > 0) {
+      console.log("✅ WORKING COMBINATIONS:");
+      workingCombos.forEach(r => {
+        console.log(`   • ${r.auth} → ${r.search}`);
       });
       console.log("");
-    }
-    
-    console.log("Full Search Response:");
-    console.log(JSON.stringify(searchResponse.data, null, 2));
-    console.log("");
-    
-    console.log("✅ Hotel search successful!");
-    console.log("");
-    console.log("━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━");
-    console.log("");
-    
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    // FINAL SUMMARY
-    // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    console.log("╔═══════════════════════════════════════════════════════════════╗");
-    console.log("║                         TEST SUMMARY                           ║");
-    console.log("╚═══════════════════════════════════════════════════════════════╝");
-    console.log("");
-    
-    const authSuccess = authResponse.data.Status === 1;
-    const searchSuccess = searchResponse.data.HotelSearchResult?.ResponseStatus === 1;
-    const hotelCount = searchResponse.data.HotelSearchResult?.HotelResults?.length || 0;
-    
-    console.log("✅ Authentication:", authSuccess ? "SUCCESS" : "FAILED");
-    console.log("✅ Hotel Search:", searchSuccess ? "SUCCESS" : "FAILED");
-    console.log("📊 Hotels Found:", hotelCount);
-    console.log("");
-    
-    if (authSuccess && searchSuccess && hotelCount > 0) {
-      console.log("🎉 TBO INTEGRATION FULLY WORKING!");
-      console.log("");
-      console.log("The integration is correct:");
-      console.log("  ✓ Auth endpoint: SharedAPI (travelboutiqueonline.com)");
-      console.log("  ✓ Search endpoint: TekTravels JSON (HotelBE.tektravels.com)");
-      console.log("  ✓ TokenId from auth accepted by search");
-      console.log("  ✓ Hotels returned successfully");
-      console.log("");
-      console.log("Next steps:");
-      console.log("  1. Deploy these endpoint changes to production");
-      console.log("  2. Update adapter to use GetHotelResult payload format");
-      console.log("  3. Test GetHotelRoom and Booking endpoints");
-      console.log("");
+      console.log("🎉 Integration working! Use the combination above.");
     } else {
-      console.log("⚠️  Integration issue detected");
+      console.log("❌ NO WORKING COMBINATIONS FOUND");
       console.log("");
-      console.log("Review the logs above for specific error details.");
+      console.log("Tested combinations:");
+      results.forEach(r => {
+        console.log(`   ${r.success ? '✅' : '❌'} ${r.auth} → ${r.search}`);
+      });
       console.log("");
+      console.log("⚠️  This suggests either:");
+      console.log("   1. TBO account not fully provisioned for JSON API");
+      console.log("   2. Different auth/search cluster required");
+      console.log("   3. Additional parameters needed in payload");
+      console.log("");
+      console.log("📧 Contact TBO support with these test results.");
     }
-    
+
   } catch (error) {
     console.error("╔═══════════════════════════════════════════════════════════════╗");
     console.error("║                          ERROR                                 ║");
