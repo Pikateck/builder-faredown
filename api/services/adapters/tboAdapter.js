@@ -65,15 +65,16 @@ class TBOAdapter extends BaseSupplierAdapter {
     this._authAttempts = [];
     this._egressIp = null;
 
-    this.logger.info("🏨 TBO Hotel API Adapter - CORRECTED VERSION", {
+    this.logger.info("🏨 TBO Hotel API Adapter - VERIFIED WORKING VERSION", {
       authUrl: this.config.hotelAuthUrl,
-      staticBase: this.config.hotelStaticBase,
-      searchBase: this.config.hotelSearchBase,
+      staticDataUrl: this.config.hotelStaticDataUrl,
+      searchUrl: this.config.hotelSearchUrl,
       bookingBase: this.config.hotelBookingBase,
       clientId: this.config.clientId,
       userId: this.config.userId,
       endUserIp: this.config.endUserIp,
-      via: "fixie_proxy"
+      via: "fixie_proxy",
+      flow: "Auth → Static → Search → Room → Block → Book → Voucher"
     });
   }
 
