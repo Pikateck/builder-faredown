@@ -1,13 +1,12 @@
 /**
  * TBO Universal JSON Hotel API - Complete Pipeline Test
+ * ✅ CORRECTED: Uses exact TBO production URLs and JSON specification
  *
  * Tests the full flow:
- * 1. Authentication (get TokenId)
- * 2. Country List (with TokenId)
- * 3. City List (with TokenId)
- * 4. Hotel Search (with TokenId)
- *
- * This verifies all endpoints are correct and working
+ * 1. Authentication (get TokenId) - Uses ClientId/UserName/Password
+ * 2. Country List (Static Data) - Uses UserName/Password
+ * 3. City List (Static Data) - Uses UserName/Password
+ * 4. Hotel Search - Uses TokenId
  *
  * CRITICAL: Uses Fixie proxy to ensure requests come from whitelisted IP
  */
@@ -28,21 +27,24 @@ console.log('  Fixie URL:', FIXIE_URL ? '✅ SET' : '❌ NOT SET');
 console.log('  Proxy Agent:', httpsAgent ? '✅ INITIALIZED' : '❌ FAILED');
 console.log('');
 
-// Configuration from TBO email (Pavneet Kaur, Oct 17, 2025)
+// ✅ CORRECTED: Configuration from TBO email (Pavneet Kaur, Oct 17, 2025)
 const config = {
+  // Authentication - Returns TokenId
   authUrl: 'https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate',
+  
+  // Static Data - Uses UserName/Password
   staticBase: 'https://apiwr.tboholidays.com/HotelAPI/',
-  // From TBO email (Pavneet Kaur, Oct 17, 2025)
+  
+  // Hotel Search - Uses TokenId
   searchBase: 'https://affiliate.travelboutiqueonline.com/HotelAPI/',
-  searchEndpoint: 'Search',
 
-  // CRITICAL: ClientId must be "tboprod" (from TBO email)
+  // Dynamic API Credentials
   clientId: 'tboprod',
   userId: 'BOMF145',
   password: '@Bo#4M-Api@',
   endUserIp: '52.5.155.132',  // Fixie proxy IP (whitelisted by TBO)
 
-  // Static data credentials (separate from dynamic API)
+  // Static Data Credentials (SEPARATE)
   staticUserName: 'travelcategory',
   staticPassword: 'Tra@59334536'
 };
@@ -78,10 +80,11 @@ function formatDateForTBO(dateStr) {
 
 /**
  * 1. Test Authentication
+ * ✅ CORRECTED: Uses ClientId/UserName/Password/EndUserIp
  */
 async function testAuthentication() {
   console.log('\n' + '='.repeat(60));
-  console.log('TEST 1: JSON AUTHENTICATION');
+  console.log('TEST 1: AUTHENTICATION');
   console.log('='.repeat(60) + '\n');
 
   const authRequest = {
@@ -130,40 +133,28 @@ async function testAuthentication() {
 }
 
 /**
- * 2. Test Country List (with TokenId) - Using GET with TokenId header
+ * 2. Test Country List
+ * ✅ CORRECTED: Uses UserName/Password (NOT TokenId)
  */
 async function testCountryList() {
-  if (!tokenId) {
-    console.log('⏭️  Skipping Country List test (no TokenId)\n');
-    return false;
-  }
-
   console.log('\n' + '='.repeat(60));
-  console.log('TEST 2: COUNTRY LIST (with TokenId)');
+  console.log('TEST 2: COUNTRY LIST (Static Data)');
   console.log('='.repeat(60) + '\n');
+
+  // ✅ CORRECTED: Static data uses UserName/Password
+  const request = {
+    UserName: config.staticUserName,
+    Password: config.staticPassword
+  };
 
   console.log('📤 Request:');
   console.log('  URL:', config.staticBase + 'CountryList');
-  console.log('  Method: GET');
-  console.log('  TokenId:', tokenId.substring(0, 20) + '...');
+  console.log('  Method: POST');
+  console.log('  UserName:', request.UserName);
   console.log('');
 
   try {
-    // Static data uses UserName/Password (not TokenId)
-    const response = await axios.get(config.staticBase + 'CountryList', {
-      params: {
-        UserName: config.staticUserName,
-        Password: config.staticPassword
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Accept-Encoding': 'gzip, deflate'
-      },
-      httpsAgent: httpsAgent,
-      httpAgent: httpAgent,
-      timeout: 15000
-    });
+    const response = await makeProxiedRequest(config.staticBase + 'CountryList', request, 15000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
@@ -186,48 +177,37 @@ async function testCountryList() {
     }
   } catch (error) {
     console.log('❌ ERROR:', error.message);
+    console.log('  HTTP Status:', error.response?.status);
     console.log('  Response:', JSON.stringify(error.response?.data, null, 2));
     return false;
   }
 }
 
 /**
- * 3. Test City List (with TokenId)
+ * 3. Test City List
+ * ✅ CORRECTED: Uses UserName/Password (NOT TokenId)
  */
 async function testCityList() {
-  if (!tokenId) {
-    console.log('⏭️  Skipping City List test (no TokenId)\n');
-    return false;
-  }
-
   console.log('\n' + '='.repeat(60));
-  console.log('TEST 3: CITY LIST for UAE (with TokenId)');
+  console.log('TEST 3: CITY LIST for UAE (Static Data)');
   console.log('='.repeat(60) + '\n');
 
+  // ✅ CORRECTED: Static data uses UserName/Password
+  const request = {
+    UserName: config.staticUserName,
+    Password: config.staticPassword,
+    CountryCode: 'AE'
+  };
+
   console.log('📤 Request:');
-  console.log('  URL:', config.staticBase + 'HotelCityList');
+  console.log('  URL:', config.staticBase + 'DestinationCityList');
   console.log('  CountryCode: AE');
-  console.log('  Method: GET');
-  console.log('  Credentials: Static UserName/Password');
+  console.log('  Method: POST');
+  console.log('  UserName:', request.UserName);
   console.log('');
 
   try {
-    // Static data uses UserName/Password and different endpoint
-    const response = await axios.get(config.staticBase + 'HotelCityList', {
-      params: {
-        UserName: config.staticUserName,
-        Password: config.staticPassword,
-        CountryCode: 'AE'
-      },
-      headers: {
-        'Content-Type': 'application/json',
-        'Accept': 'application/json',
-        'Accept-Encoding': 'gzip, deflate'
-      },
-      httpsAgent: httpsAgent,
-      httpAgent: httpAgent,
-      timeout: 15000
-    });
+    const response = await makeProxiedRequest(config.staticBase + 'DestinationCityList', request, 15000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
@@ -250,13 +230,15 @@ async function testCityList() {
     }
   } catch (error) {
     console.log('❌ ERROR:', error.message);
+    console.log('  HTTP Status:', error.response?.status);
     console.log('  Response:', JSON.stringify(error.response?.data, null, 2));
     return [];
   }
 }
 
 /**
- * 4. Test Hotel Search (with TokenId)
+ * 4. Test Hotel Search
+ * ✅ CORRECTED: Uses TokenId and EXACT TBO JSON specification
  */
 async function testHotelSearch(cities) {
   if (!tokenId) {
@@ -281,21 +263,22 @@ async function testHotelSearch(cities) {
   }
 
   const cityId = dubai.Id || dubai.Code;
-  const checkInDate = '15/12/2025';
+  const checkIn = '15/12/2025';   // dd/MM/yyyy
+  const checkOut = '18/12/2025';  // dd/MM/yyyy
+  
+  // Calculate NoOfNights
+  const checkInDate = new Date('2025-12-15');
   const checkOutDate = new Date('2025-12-18');
-  const checkInDateObj = new Date('2025-12-15');
-  const noOfNights = Math.ceil((checkOutDate - checkInDateObj) / (1000 * 60 * 60 * 24));
+  const noOfNights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
 
-  // CRITICAL: Hotel Search uses direct credentials, NOT TokenId!
+  // ✅ CORRECTED: Exact TBO JSON specification
   const searchRequest = {
-    ClientId: config.clientId,
-    UserName: config.userId,
-    Password: config.password,
     EndUserIp: config.endUserIp,
-    CheckInDate: checkInDate,
-    NoOfNights: noOfNights,
+    TokenId: tokenId,
+    CheckInDate: checkIn,                    // dd/MM/yyyy
+    NoOfNights: noOfNights,                  // NOT CheckOutDate
     CountryCode: 'AE',
-    CityId: parseInt(cityId),
+    CityId: Number(cityId),                  // TBO's numeric city ID
     PreferredCurrency: 'INR',
     GuestNationality: 'IN',
     NoOfRooms: 1,
@@ -305,36 +288,39 @@ async function testHotelSearch(cities) {
         NoOfChild: 0,
         ChildAge: []
       }
-    ]
+    ],
+    IsNearBySearchAllowed: false,
+    MaxRating: 5,
+    MinRating: 0
   };
 
   console.log('📤 Request:');
   console.log('  URL:', config.searchBase + 'Search');
   console.log('  City: Dubai (ID:', cityId + ')');
-  console.log('  Check-in:', checkInDate);
-  console.log('  Nights:', noOfNights);
-  console.log('  Rooms: 1 (2 adults)');
-  console.log('  TokenId:', tokenId.substring(0, 20) + '...');
+  console.log('  CheckIn:', searchRequest.CheckInDate);
+  console.log('  NoOfNights:', searchRequest.NoOfNights);
+  console.log('  Rooms:', searchRequest.NoOfRooms);
+  console.log('  Currency:', searchRequest.PreferredCurrency);
   console.log('');
   console.log('Full Request:', JSON.stringify({...searchRequest, TokenId: 'HIDDEN'}, null, 2));
   console.log('');
 
   try {
-    const response = await makeProxiedRequest(config.searchBase + config.searchEndpoint, searchRequest, 30000);
+    const response = await makeProxiedRequest(config.searchBase + 'Search', searchRequest, 30000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
-    console.log('  Status:', response.data?.Status);
     console.log('  ResponseStatus:', response.data?.ResponseStatus);
+    console.log('  Status:', response.data?.Status);
     console.log('  Hotel Count:', response.data?.HotelResults?.length || 0);
     console.log('  TraceId:', response.data?.TraceId ? 'PRESENT' : 'MISSING');
     console.log('  Error Code:', response.data?.Error?.ErrorCode);
     console.log('  Error Message:', response.data?.Error?.ErrorMessage);
     console.log('');
-    console.log('Full Response:', JSON.stringify(response.data, null, 2));
-    console.log('');
 
-    if ((response.data?.ResponseStatus === 1 || response.data?.Status?.Code === 1) && response.data?.HotelResults?.length > 0) {
+    const statusOk = response.data?.ResponseStatus === 1 || response.data?.Status === 1;
+
+    if (statusOk && response.data?.HotelResults?.length > 0) {
       console.log('✅ SUCCESS: Hotels found!\n');
       console.log('Sample Hotels:');
       response.data.HotelResults.slice(0, 3).forEach((h, i) => {
@@ -363,7 +349,8 @@ async function testHotelSearch(cities) {
  */
 async function runAllTests() {
   console.log('\n' + '█'.repeat(60));
-  console.log('TBO UNIVERSAL JSON HOTEL API - COMPLETE PIPELINE TEST');
+  console.log('TBO HOTEL API - COMPLETE PIPELINE TEST');
+  console.log('✅ CORRECTED: Uses exact TBO production URLs');
   console.log('█'.repeat(60));
 
   const results = {
@@ -381,17 +368,14 @@ async function runAllTests() {
     return;
   }
 
-  // Test 2: Country List
-  // SKIPPED - static data endpoints need different configuration
-  results.countries = true; // Skip for now
+  // Test 2: Country List (Static Data)
+  results.countries = await testCountryList();
 
-  // Test 3: City List
-  // SKIPPED - static data endpoints need different configuration
-  // Using known Dubai CityId: 130443
-  const cities = [{ Id: 130443, Name: 'Dubai' }];
-  results.cities = true;
+  // Test 3: City List (Static Data)
+  const cities = await testCityList();
+  results.cities = cities.length > 0;
 
-  // Test 4: Hotel Search (MOST IMPORTANT)
+  // Test 4: Hotel Search
   results.search = await testHotelSearch(cities);
 
   // Summary
@@ -417,8 +401,10 @@ function printSummary(results) {
 
   if (passCount === totalCount) {
     console.log('🎉 ALL TESTS PASSED - TBO Integration is working!\n');
+  } else if (results.auth && results.search) {
+    console.log('✅ CORE FUNCTIONALITY WORKING (Auth + Search)\n');
   } else {
-    console.log('⚠️  Some tests failed - check errors above\n');
+    console.log('⚠️ Some tests failed - check errors above\n');
   }
 }
 
