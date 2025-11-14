@@ -85,6 +85,7 @@ const adminSuppliersRoutes = require("./routes/admin-suppliers.js");
 const hotelsMultiSupplierRoutes = require("./routes/hotels-multi-supplier.js");
 const locationsRoutes = require("./routes/locations.js");
 const adminTboRoutes = require("./routes/admin-tbo.js");
+const tboDebugRoutes = require("./tbo/tbo-debug.js");
 const rewardsRoutes = require("./routes/rewards.js");
 const v1BookingsRoutes = require("./routes/v1-bookings.js");
 const adminBargainRoutes = require("./routes/admin-bargain.js");
