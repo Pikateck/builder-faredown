@@ -1,0 +1,55 @@
+{
+  "timestamp": "2025-11-14T09:26:33.139Z",
+  "testParams": {
+    "destination": "Dubai",
+    "countryCode": "AE",
+    "checkInDate": "2025-06-15",
+    "checkOutDate": "2025-06-20",
+    "nationality": "AE",
+    "adults": 2,
+    "children": 0,
+    "rooms": 1,
+    "passengers": [
+      {
+        "Title": "Mr",
+        "FirstName": "John",
+        "LastName": "Doe",
+        "PaxType": 1,
+        "Age": 30,
+        "PassportNo": "AB1234567",
+        "PassportIssueDate": "2020-01-01",
+        "PassportExpDate": "2030-01-01",
+        "Email": "john.doe@test.com",
+        "Phoneno": "+971501234567",
+        "AddressLine1": "Test Address",
+        "City": "Dubai",
+        "CountryCode": "AE",
+        "CountryName": "United Arab Emirates",
+        "Nationality": "AE"
+      },
+      {
+        "Title": "Mrs",
+        "FirstName": "Jane",
+        "LastName": "Doe",
+        "PaxType": 1,
+        "Age": 28,
+        "PassportNo": "AB7654321",
+        "PassportIssueDate": "2020-01-01",
+        "PassportExpDate": "2030-01-01",
+        "Email": "jane.doe@test.com",
+        "Phoneno": "+971501234568",
+        "AddressLine1": "Test Address",
+        "City": "Dubai",
+        "CountryCode": "AE",
+        "CountryName": "United Arab Emirates",
+        "Nationality": "AE"
+      }
+    ]
+  },
+  "steps": {},
+  "overallSuccess": false,
+  "error": {
+    "message": "timeout of 20000ms exceeded",
+    "stack": "AxiosError: timeout of 20000ms exceeded\n    at RedirectableRequest.handleRequestTimeout (/app/code/api/node_modules/axios/dist/node/axios.cjs:3228:16)\n    at RedirectableRequest.emit (node:events:518:28)\n    at Timeout.<anonymous> (/app/code/api/node_modules/follow-redirects/index.js:221:12)\n    at listOnTimeout (node:internal/timers:588:17)\n    at process.processTimers (node:internal/timers:523:7)\n    at Axios.request (/app/code/api/node_modules/axios/dist/node/axios.cjs:4280:41)\n    at async authenticateTBO (/app/code/api/tbo/auth.js:28:20)\n    at async runCompleteFlow (/app/code/test-tbo-full-booking-flow.js:112:24)"
+  }
+}
