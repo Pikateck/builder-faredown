@@ -13,17 +13,17 @@ const FIXIE_URL = process.env.FIXIE_URL || 'http://fixie:GseepY8oA3SemkD@criteri
 const httpsAgent = new HttpsProxyAgent(FIXIE_URL);
 const httpAgent = new HttpProxyAgent(FIXIE_URL);
 
-// TBO Configuration from .env
+// TBO Configuration (hardcoded to ensure correct values)
 const TBO_CONFIG = {
-  authUrl: process.env.TBO_AUTH_URL,
-  staticBase: process.env.TBO_HOTEL_STATIC_DATA,
-  searchBase: process.env.TBO_HOTEL_SEARCH_URL,
-  clientId: process.env.TBO_CLIENT_ID || 'tboprod',        // Must be "tboprod"
-  userId: process.env.TBO_API_USER_ID || 'BOMF145',        // UserName for auth
-  password: process.env.TBO_API_PASSWORD || '@Bo#4M-Api@', // Password for auth
-  endUserIp: process.env.TBO_END_USER_IP || '52.5.155.132',
-  staticUserName: process.env.TBO_STATIC_USER || 'travelcategory',
-  staticPassword: process.env.TBO_STATIC_PASSWORD || 'Tra@59334536'
+  authUrl: 'https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate',
+  staticBase: 'https://apiwr.tboholidays.com/HotelAPI/',
+  searchBase: 'https://affiliate.travelboutiqueonline.com/HotelAPI/',
+  clientId: 'tboprod',              // MUST be "tboprod" not BOMF145
+  userId: 'BOMF145',                // UserName for auth
+  password: '@Bo#4M-Api@',          // Password for auth
+  endUserIp: '52.5.155.132',        // Fixie proxy IP
+  staticUserName: 'travelcategory', // Static data username
+  staticPassword: 'Tra@59334536'    // Static data password
 };
 
 // Debug: Show what we're using
