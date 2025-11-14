@@ -54,8 +54,10 @@ let tokenId = null;
 /**
  * Helper: Make request through Fixie proxy
  */
-function makeProxiedRequest(url, data, timeout = 15000) {
-  return axios.post(url, data, {
+function makeProxiedRequest(url, data, method = 'POST', timeout = 15000) {
+  const config = {
+    method: method,
+    url: url,
     headers: {
       'Content-Type': 'application/json',
       'Accept': 'application/json',
@@ -64,7 +66,15 @@ function makeProxiedRequest(url, data, timeout = 15000) {
     httpsAgent: httpsAgent,  // CRITICAL: Use Fixie proxy
     httpAgent: httpAgent,    // CRITICAL: Use Fixie proxy
     timeout: timeout
-  });
+  };
+
+  if (method === 'GET') {
+    config.params = data;
+  } else {
+    config.data = data;
+  }
+
+  return axios(config);
 }
 
 /**
@@ -141,20 +151,20 @@ async function testCountryList() {
   console.log('TEST 2: COUNTRY LIST (Static Data)');
   console.log('='.repeat(60) + '\n');
 
-  // ✅ CORRECTED: Static data uses UserName/Password
-  const request = {
+  // ✅ CORRECTED: Static data uses UserName/Password (GET method)
+  const params = {
     UserName: config.staticUserName,
     Password: config.staticPassword
   };
 
   console.log('📤 Request:');
   console.log('  URL:', config.staticBase + 'CountryList');
-  console.log('  Method: POST');
-  console.log('  UserName:', request.UserName);
+  console.log('  Method: GET');
+  console.log('  UserName:', params.UserName);
   console.log('');
 
   try {
-    const response = await makeProxiedRequest(config.staticBase + 'CountryList', request, 15000);
+    const response = await makeProxiedRequest(config.staticBase + 'CountryList', params, 'GET', 15000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
@@ -192,22 +202,22 @@ async function testCityList() {
   console.log('TEST 3: CITY LIST for UAE (Static Data)');
   console.log('='.repeat(60) + '\n');
 
-  // ✅ CORRECTED: Static data uses UserName/Password
-  const request = {
+  // ✅ CORRECTED: Static data uses UserName/Password (GET method)
+  const params = {
     UserName: config.staticUserName,
     Password: config.staticPassword,
     CountryCode: 'AE'
   };
 
   console.log('📤 Request:');
-  console.log('  URL:', config.staticBase + 'DestinationCityList');
+  console.log('  URL:', config.staticBase + 'HotelCityList');
   console.log('  CountryCode: AE');
-  console.log('  Method: POST');
-  console.log('  UserName:', request.UserName);
+  console.log('  Method: GET');
+  console.log('  UserName:', params.UserName);
   console.log('');
 
   try {
-    const response = await makeProxiedRequest(config.staticBase + 'DestinationCityList', request, 15000);
+    const response = await makeProxiedRequest(config.staticBase + 'HotelCityList', params, 'GET', 15000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
