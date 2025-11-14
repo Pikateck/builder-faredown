@@ -8,6 +8,20 @@ This guide provides instructions for testing the complete TBO hotel booking inte
 
 ## Prerequisites
 
+### ⚠️ Environment Requirement
+
+**This test MUST be run on Render/Production**, not locally.
+
+**Why?** TBO requires all requests to come from a whitelisted IP (Fixie proxy). Your local machine cannot access this proxy.
+
+**Where to run:**
+- ✅ Render SSH session
+- ✅ Render web shell
+- ✅ Production API endpoint (if you create one)
+- ❌ Local machine (will timeout at proxy connection)
+
+**See**: `TBO_RENDER_TESTING_GUIDE.md` for detailed instructions on running on Render.
+
 ### Required Environment Variables
 
 All TBO endpoints and credentials must be set in your environment (`.env` or `api/.env`):
