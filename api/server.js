@@ -592,6 +592,8 @@ app.use(
   auditLogger,
   adminTboRoutes,
 );
+// TBO Debug Routes (public for testing)
+app.use("/api/tbo/debug", tboDebugRoutes);
 // Public endpoint for evidence collection (must be before /api/admin catch-all)
 app.use("/api/verify-users", adminUsersVerifyRoutes);
 
