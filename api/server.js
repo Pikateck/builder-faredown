@@ -86,6 +86,16 @@ const hotelsMultiSupplierRoutes = require("./routes/hotels-multi-supplier.js");
 const locationsRoutes = require("./routes/locations.js");
 const adminTboRoutes = require("./routes/admin-tbo.js");
 const tboDebugRoutes = require("./tbo/tbo-debug.js");
+
+// TBO Production Routes (Complete Hotel Booking Pipeline)
+const tboAuthRoutes = require("./routes/tbo/auth.js");
+const tboStaticRoutes = require("./routes/tbo/static.js");
+const tboSearchRoutes = require("./routes/tbo/search.js");
+const tboRoomRoutes = require("./routes/tbo/room.js");
+const tboBlockRoutes = require("./routes/tbo/block.js");
+const tboBookRoutes = require("./routes/tbo/book.js");
+const tboVoucherRoutes = require("./routes/tbo/voucher.js");
+
 const rewardsRoutes = require("./routes/rewards.js");
 const v1BookingsRoutes = require("./routes/v1-bookings.js");
 const adminBargainRoutes = require("./routes/admin-bargain.js");
