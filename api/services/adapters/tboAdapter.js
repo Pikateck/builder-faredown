@@ -212,24 +212,23 @@ class TBOAdapter extends BaseSupplierAdapter {
    */
   
   async getTboCountries(force = false) {
-    // ✅ CORRECTED: Use UserName/Password for static data
-    const request = {
+    // ✅ CORRECTED: Use UserName/Password for static data (GET method)
+    const params = {
       UserName: this.config.staticUserName,  // "travelcategory"
       Password: this.config.staticPassword   // "Tra@59334536"
     };
 
     this.logger.info("📍 Fetching TBO Country List (Static Data)", {
       url: this.config.hotelStaticBase + "CountryList",
-      userName: request.UserName,
+      userName: params.UserName,
       force
     });
 
     try {
       const response = await tboRequest(this.config.hotelStaticBase + "CountryList", {
-        method: "POST",
-        data: request,
+        method: "GET",
+        params: params,
         headers: {
-          "Content-Type": "application/json",
           "Accept": "application/json",
           "Accept-Encoding": "gzip, deflate"
         },
@@ -256,27 +255,26 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   async getTboCities(countryCode, force = false) {
     if (!countryCode) return [];
-    
-    // ✅ CORRECTED: Use UserName/Password for static data
-    const request = {
+
+    // ✅ CORRECTED: Use UserName/Password for static data (GET method)
+    const params = {
       UserName: this.config.staticUserName,  // "travelcategory"
       Password: this.config.staticPassword,  // "Tra@59334536"
       CountryCode: countryCode
     };
 
     this.logger.info("📍 Fetching TBO City List (Static Data)", {
-      url: this.config.hotelStaticBase + "DestinationCityList",
-      userName: request.UserName,
+      url: this.config.hotelStaticBase + "HotelCityList",
+      userName: params.UserName,
       countryCode,
       force
     });
 
     try {
-      const response = await tboRequest(this.config.hotelStaticBase + "DestinationCityList", {
-        method: "POST",
-        data: request,
+      const response = await tboRequest(this.config.hotelStaticBase + "HotelCityList", {
+        method: "GET",
+        params: params,
         headers: {
-          "Content-Type": "application/json",
           "Accept": "application/json",
           "Accept-Encoding": "gzip, deflate"
         },
