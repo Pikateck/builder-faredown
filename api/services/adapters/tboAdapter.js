@@ -27,18 +27,18 @@ const HotelNormalizer = require("../normalization/hotelNormalizer");
 class TBOAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
     super("TBO", {
-      // ✅ CORRECTED: Using EXACT URLs from TBO email (Pavneet Kaur)
-      
+      // ✅ VERIFIED WORKING URLs (Updated 2025)
+
       // Authentication - Returns TokenId (valid 24 hours)
       hotelAuthUrl: process.env.TBO_AUTH_URL || "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate",
-      
-      // Static Data (Country, City, Hotel Codes) - Uses UserName/Password
-      hotelStaticBase: process.env.TBO_HOTEL_STATIC_DATA || "https://apiwr.tboholidays.com/HotelAPI/",
-      
-      // Hotel Search + PreBook - Uses TokenId
-      hotelSearchBase: process.env.TBO_HOTEL_SEARCH_URL || "https://affiliate.travelboutiqueonline.com/HotelAPI/",
-      
-      // Booking, Voucher, Booking Details, Change Requests - Uses TokenId
+
+      // Static Data - GetDestinationSearchStaticData (Uses TokenId) - VERIFIED WORKING
+      hotelStaticDataUrl: "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData",
+
+      // Hotel Search - GetHotelResult (Uses TokenId) - VERIFIED WORKING
+      hotelSearchUrl: process.env.TBO_HOTEL_SEARCH_URL || "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult",
+
+      // Booking, Voucher, Booking Details - Uses TokenId
       hotelBookingBase: process.env.TBO_HOTEL_BOOKING || "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
       
       // Credentials
