@@ -2,9 +2,15 @@
 
 /**
  * TBO Complete Hotel Booking Flow Test
- * 
+ *
  * This is the CANONICAL end-to-end test for TBO hotel integration.
- * 
+ *
+ * ⚠️  IMPORTANT: This test REQUIRES Fixie proxy access (whitelisted IP for TBO)
+ *
+ * WHERE TO RUN:
+ *   ✅ Render/Production environment (has Fixie proxy access)
+ *   ❌ Local machine (Fixie proxy times out from most local networks)
+ *
  * Tests complete pipeline:
  * 1. Authenticate → Get TokenId
  * 2. GetDestinationSearchStaticData → Get real CityId (DestinationId)
@@ -13,13 +19,16 @@
  * 5. BlockRoom → Hold the room temporarily
  * 6. Book → Confirm the booking
  * 7. GenerateVoucher → Get booking voucher
- * 
+ *
  * All steps use the correct JSON API endpoints and TokenId authentication.
- * 
- * USAGE:
+ *
+ * USAGE (on Render/Production):
  *   npm install              (install dependencies)
  *   node test-tbo-full-booking-flow.js
- * 
+ *
+ * USAGE (local testing without proxy - will fail at TBO):
+ *   USE_SUPPLIER_PROXY=false node test-tbo-full-booking-flow.js
+ *
  * OUTPUTS:
  *   Console: Real-time progress and logging
  *   File: tbo-full-booking-flow-results.json (complete results)
@@ -27,6 +36,34 @@
 
 require('dotenv').config({ path: 'api/.env', override: true });
 require('dotenv').config({ override: true });
+
+// Check proxy configuration
+const USE_PROXY = process.env.USE_SUPPLIER_PROXY === 'true';
+const FIXIE_URL = process.env.FIXIE_URL;
+
+console.log('\n' + '='.repeat(80));
+console.log('TBO COMPLETE BOOKING FLOW TEST');
+console.log('='.repeat(80));
+console.log('\n🔧 ENVIRONMENT CHECK:');
+console.log('  USE_SUPPLIER_PROXY:', USE_PROXY ? '✅ true' : '❌ false');
+console.log('  FIXIE_URL:', FIXIE_URL ? '✅ configured' : '❌ missing');
+
+if (USE_PROXY && !FIXIE_URL) {
+  console.log('\n⚠️  WARNING: Proxy enabled but FIXIE_URL not set');
+  console.log('   TBO requires Fixie proxy with whitelisted IP');
+  console.log('   This test will likely fail.\n');
+}
+
+if (!USE_PROXY) {
+  console.log('\n⚠️  WARNING: Running WITHOUT proxy (USE_SUPPLIER_PROXY=false)');
+  console.log('   TBO will reject requests from non-whitelisted IPs');
+  console.log('   This test WILL FAIL at authentication.');
+  console.log('   This mode is only for testing request structure.\n');
+}
+
+console.log('\n📍 RECOMMENDED ENVIRONMENT:');
+console.log('   Run this test on Render/Production where Fixie proxy works');
+console.log('   Local testing will timeout at Fixie proxy connection\n');
 
 const fs = require('fs');
 const path = require('path');
