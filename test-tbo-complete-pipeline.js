@@ -113,7 +113,7 @@ async function testAuthentication() {
   console.log('');
 
   try {
-    const response = await makeProxiedRequest(config.authUrl, authRequest, 15000);
+    const response = await makeProxiedRequest(config.authUrl, authRequest, 'POST', 15000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
@@ -316,7 +316,7 @@ async function testHotelSearch(cities) {
   console.log('');
 
   try {
-    const response = await makeProxiedRequest(config.searchBase + 'Search', searchRequest, 30000);
+    const response = await makeProxiedRequest(config.searchBase + 'Search', searchRequest, 'POST', 30000);
 
     console.log('📥 Response:');
     console.log('  HTTP Status:', response.status);
