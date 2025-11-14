@@ -1,17 +1,21 @@
 /**
  * TBO (Travel Boutique Online) Universal JSON Hotel API Adapter
  * ✅ FULLY CORRECTED - Matches TBO specification EXACTLY
- * 
+ *
  * Reference: TBO Documentation + Email from Pavneet Kaur (Oct 17, 2025)
- * 
- * CRITICAL CORRECTIONS:
- * 1. Uses CORRECT production URLs (no more test/legacy endpoints)
- * 2. Static Data uses UserName/Password (NOT TokenId)
- * 3. Dynamic APIs (Search, PreBook, Book) use TokenId
- * 4. Request payloads match TBO JSON spec EXACTLY
- * 5. Date format: dd/MM/yyyy (strict)
- * 6. CityId comes from TBO (not our DB)
- * 7. Compression headers included (gzip, deflate)
+ *
+ * CRITICAL CORRECTIONS (Updated 2025):
+ * 1. Uses CORRECT production URLs (verified working endpoints)
+ * 2. Static Data (GetDestinationSearchStaticData) uses TokenId (VERIFIED)
+ * 3. Hotel Search uses GetHotelResult on hotelbooking.travelboutiqueonline.com (VERIFIED)
+ * 4. All APIs use TokenId-based authentication
+ * 5. Request payloads match TBO JSON spec EXACTLY
+ * 6. Date format: dd/MM/yyyy (strict)
+ * 7. CityId (DestinationId) from GetDestinationSearchStaticData (real-time)
+ * 8. Compression headers included (gzip, deflate)
+ *
+ * VERIFIED WORKING FLOW:
+ * Auth → TokenId → GetDestinationSearchStaticData → GetHotelResult → Rooms → Book → Voucher
  */
 
 const BaseSupplierAdapter = require("./baseSupplierAdapter");
