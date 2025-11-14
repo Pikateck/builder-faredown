@@ -1,0 +1,79 @@
+{
+  "success": true,
+  "timestamp": "2025-11-14T06:51:28.646Z",
+  "cityId": 115936,
+  "totalHotels": 2429,
+  "traceId": "39f1a87e-0475-411a-99e8-7512cc83254d",
+  "sampleHotels": [
+    {
+      "name": "",
+      "code": "1043287",
+      "stars": 2,
+      "price": 161.24,
+      "currency": "USD"
+    },
+    {
+      "name": "",
+      "code": "1108025",
+      "stars": 3,
+      "price": 167.7,
+      "currency": "USD"
+    },
+    {
+      "name": "",
+      "code": "1281591",
+      "stars": 0,
+      "price": 170.25,
+      "currency": "USD"
+    },
+    {
+      "name": "",
+      "code": "1139836",
+      "stars": 3,
+      "price": 174.87,
+      "currency": "USD"
+    },
+    {
+      "name": "",
+      "code": "1199686",
+      "stars": 3,
+      "price": 174.87,
+      "currency": "USD"
+    },
+    {
+      "name": "",
+      "code": "1508526",
+      "stars": 3,
+      "price": 176.66,
+      "currency": "USD"
+    },
+    {
+      "name": "",
+      "code": "1017415",
+      "stars": 4,
+      "price": 178.72,
+      "currency": "USD"
+    },
+    {
+      "name": "",
+      "code": "1375573",
+      "stars": 3,
+      "price": 178.89,
+      "currency": "USD"
+    },
+    {
+      "name": "",
+      "code": "1265121",
+      "stars": 0,
+      "price": 179.15,
+      "currency": "USD"
+    },
+    {
+      "name": "Palette Phoenix Hotel",
+      "code": "273320",
+      "stars": 3,
+      "price": 179.15,
+      "currency": "USD"
+    }
+  ]
+}
