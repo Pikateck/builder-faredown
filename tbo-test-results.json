@@ -1,0 +1,34 @@
+{
+  "auth": {
+    "request": {
+      "ClientId": "tboprod",
+      "UserName": "BOMF145",
+      "Password": "@Bo#4M-Api@",
+      "EndUserIp": "52.5.155.132"
+    },
+    "response": {
+      "Status": 1,
+      "TokenId": "7b7899e4-55b5-4a9f-b090-a80c86de35f1",
+      "Error": {
+        "ErrorCode": 0,
+        "ErrorMessage": ""
+      },
+      "Member": {
+        "FirstName": "Zubin",
+        "LastName": "Aibara",
+        "Email": "zubin@faredown.com",
+        "MemberId": 60945,
+        "AgencyId": 52875,
+        "LoginName": "BOMF145",
+        "LoginDetails": "Login Success at#@ 11/11/2025 02:05:54 #@ IPAddress: 106.222.208.16",
+        "isPrimaryAgent": false
+      }
+    }
+  },
+  "search": null,
+  "error": {
+    "message": "Request failed with status code 404",
+    "status": 404,
+    "data": "Cannot POST /HotelAPI_V10/HotelService.svc/rest/GetHotelResult"
+  }
+}
