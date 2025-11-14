@@ -4,7 +4,7 @@ services:
     name: builder-faredown-pricing
     env: node
     rootDir: api
-    buildCommand: npm ci
+    buildCommand: cd .. && npm ci && cd api && npm ci
     startCommand: npm start
     envVars:
       - key: NODE_ENV
