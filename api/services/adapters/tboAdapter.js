@@ -403,8 +403,12 @@ class TBOAdapter extends BaseSupplierAdapter {
       MinRating: 0
     };
 
+    // ✅ CORRECTED: Use verified working endpoint
+    const searchUrl = process.env.TBO_HOTEL_SEARCH_URL ||
+                     "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
+
     this.logger.info("🔍 TBO Hotel Search Request", {
-      endpoint: this.config.hotelSearchBase + "Search",
+      endpoint: searchUrl,
       destination,
       cityId,
       checkIn: searchRequest.CheckInDate,
@@ -421,7 +425,7 @@ class TBOAdapter extends BaseSupplierAdapter {
     });
 
     try {
-      const response = await tboRequest(this.config.hotelSearchBase + "Search", {
+      const response = await tboRequest(searchUrl, {
         method: "POST",
         data: searchRequest,
         headers: {
