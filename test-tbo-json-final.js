@@ -16,11 +16,11 @@ const { HttpsProxyAgent } = require("https-proxy-agent");
 
 // TBO Configuration
 const config = {
-  // Auth endpoint (TekTravels SharedServices - note HTTP not HTTPS)
-  authUrl: "http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate",
+  // Auth endpoint (travelboutiqueonline SharedAPI)
+  authUrl: "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate",
 
-  // Search endpoint (TekTravels JSON)
-  searchUrl: "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelResult",
+  // Search endpoint (TekTravels JSON - try with capital S in HotelService)
+  searchUrl: "https://HotelBE.tektravels.com/HotelService.svc/rest/GetHotelResult",
   
   // Credentials
   clientId: "tboprod",
@@ -110,7 +110,7 @@ async function testTBOIntegration() {
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
     // STEP 2: Hotel Search (GetHotelResult)
     // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-    console.log("╔═══════════════════════════════════════════════════════════════╗");
+    console.log("╔═════════════════════════════════════════════════���═════════════╗");
     console.log("║                 STEP 2: HOTEL SEARCH (GetHotelResult)         ║");
     console.log("╚═══════════════════════════════════════════════════════════════╝");
     console.log("");
