@@ -1,0 +1,15 @@
+{
+  "timestamp": "2025-11-14T08:20:21.983Z",
+  "steps": [
+    {
+      "step": 1,
+      "name": "Authenticate",
+      "status": "FAILED",
+      "tokenId": null
+    }
+  ],
+  "error": {
+    "message": "Authentication failed",
+    "stack": "Error: Authentication failed\n    at testCompleteFlow (/app/code/test-tbo-complete-flow-production.js:49:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+  }
+}

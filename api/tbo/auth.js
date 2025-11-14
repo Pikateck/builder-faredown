@@ -11,10 +11,10 @@ async function authenticateTBO() {
   const authUrl = process.env.TBO_AUTH_URL;
   
   const request = {
-    ClientId: process.env.TBO_CLIENT_ID,
-    UserName: process.env.TBO_API_USER_ID,
-    Password: process.env.TBO_API_PASSWORD,
-    EndUserIp: process.env.TBO_END_USER_IP
+    ClientId: process.env.TBO_CLIENT_ID || "tboprod",
+    UserName: process.env.TBO_API_USER_ID || "BOMF145",
+    Password: process.env.TBO_API_PASSWORD || "@Bo#4M-Api@",
+    EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132"
   };
 
   console.log("🔐 TBO Authentication Request");
