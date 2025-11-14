@@ -19,8 +19,9 @@ async function authenticateTBO() {
 
   console.log("🔐 TBO Authentication Request");
   console.log("  URL:", authUrl);
-  console.log("  ClientId:", request.ClientId);
+  console.log("  ClientId:", request.ClientId, "(should be 'tboprod')");
   console.log("  UserName:", request.UserName);
+  console.log("  Password:", request.Password ? "***" + request.Password.substring(request.Password.length - 4) : "MISSING");
   console.log("  EndUserIp:", request.EndUserIp);
   console.log("");
 
