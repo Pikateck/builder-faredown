@@ -11,7 +11,7 @@
  * This demonstrates the production-ready integration
  */
 
-require("dotenv").config({ path: "./api/.env" });
+require("dotenv").config({ path: "./api/.env", override: true });
 const tbo = require("./api/tbo");
 const fs = require("fs");
 
