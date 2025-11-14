@@ -436,30 +436,33 @@ class TBOAdapter extends BaseSupplierAdapter {
         timeout: this.config.timeout
       });
 
+      // ✅ Response can be wrapped in HotelSearchResult or direct
+      const searchResult = response.data?.HotelSearchResult || response.data;
+
       this.logger.info("📥 TBO Search Response", {
         httpStatus: response.status,
-        responseStatus: response.data?.ResponseStatus,
-        status: response.data?.Status,
-        hasHotelResults: !!response.data?.HotelResults,
-        hotelCount: Array.isArray(response.data?.HotelResults) ? response.data.HotelResults.length : 0,
-        traceId: response.data?.TraceId,
-        errorCode: response.data?.Error?.ErrorCode,
-        errorMessage: response.data?.Error?.ErrorMessage
+        responseStatus: searchResult?.ResponseStatus,
+        status: searchResult?.Status,
+        hasHotelResults: !!searchResult?.HotelResults,
+        hotelCount: Array.isArray(searchResult?.HotelResults) ? searchResult.HotelResults.length : 0,
+        traceId: searchResult?.TraceId,
+        errorCode: searchResult?.Error?.ErrorCode,
+        errorMessage: searchResult?.Error?.ErrorMessage
       });
 
       // Check ResponseStatus or Status
-      const statusOk = response.data?.ResponseStatus === 1 || response.data?.Status === 1;
-      
+      const statusOk = searchResult?.ResponseStatus === 1 || searchResult?.Status === 1;
+
       if (!statusOk) {
         this.logger.warn("❌ TBO Search returned non-success status", {
-          responseStatus: response.data?.ResponseStatus,
-          status: response.data?.Status,
-          error: response.data?.Error
+          responseStatus: searchResult?.ResponseStatus,
+          status: searchResult?.Status,
+          error: searchResult?.Error
         });
         return [];
       }
 
-      const hotels = response.data?.HotelResults || [];
+      const hotels = searchResult?.HotelResults || [];
       
       if (hotels.length === 0) {
         this.logger.info("ℹ️ TBO returned 0 hotels for this search");
