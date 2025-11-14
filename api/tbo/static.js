@@ -1,7 +1,8 @@
 /**
  * TBO Debug - Static Data
  * Base URL: https://apiwr.tboholidays.com/HotelAPI/
- * Endpoints: CountryList, DestinationCityList
+ * Endpoints: CountryList, HotelCityList
+ * Method: GET with query parameters
  * Auth: UserName/Password (NOT TokenId)
  */
 
@@ -13,21 +14,21 @@ const { tboRequest } = require("../lib/tboRequest");
 async function getCountryList() {
   const url = process.env.TBO_HOTEL_STATIC_DATA + "CountryList";
   
-  const request = {
+  const params = {
     UserName: process.env.TBO_STATIC_USER,
     Password: process.env.TBO_STATIC_PASSWORD
   };
 
   console.log("📍 TBO Country List Request");
   console.log("  URL:", url);
-  console.log("  UserName:", request.UserName);
+  console.log("  Method: GET");
+  console.log("  UserName:", params.UserName);
   console.log("");
 
   const response = await tboRequest(url, {
-    method: "POST",
-    data: request,
+    method: "GET",
+    params: params,
     headers: {
-      "Content-Type": "application/json",
       "Accept": "application/json",
       "Accept-Encoding": "gzip, deflate"
     }
@@ -52,11 +53,12 @@ async function getCountryList() {
 
 /**
  * Get City List for a country
+ * ✅ CORRECTED: Endpoint is "HotelCityList" (not "DestinationCityList")
  */
 async function getCityList(countryCode = "AE") {
-  const url = process.env.TBO_HOTEL_STATIC_DATA + "DestinationCityList";
+  const url = process.env.TBO_HOTEL_STATIC_DATA + "HotelCityList";
   
-  const request = {
+  const params = {
     UserName: process.env.TBO_STATIC_USER,
     Password: process.env.TBO_STATIC_PASSWORD,
     CountryCode: countryCode
@@ -64,15 +66,15 @@ async function getCityList(countryCode = "AE") {
 
   console.log("📍 TBO City List Request");
   console.log("  URL:", url);
-  console.log("  UserName:", request.UserName);
+  console.log("  Method: GET");
+  console.log("  UserName:", params.UserName);
   console.log("  CountryCode:", countryCode);
   console.log("");
 
   const response = await tboRequest(url, {
-    method: "POST",
-    data: request,
+    method: "GET",
+    params: params,
     headers: {
-      "Content-Type": "application/json",
       "Accept": "application/json",
       "Accept-Encoding": "gzip, deflate"
     }
