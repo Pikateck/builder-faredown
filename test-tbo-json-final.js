@@ -16,9 +16,9 @@ const { HttpsProxyAgent } = require("https-proxy-agent");
 
 // TBO Configuration
 const config = {
-  // Auth endpoint (SharedAPI)
-  authUrl: "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate",
-  
+  // Auth endpoint (TekTravels SharedServices - note HTTP not HTTPS)
+  authUrl: "http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate",
+
   // Search endpoint (TekTravels JSON)
   searchUrl: "https://HotelBE.tektravels.com/hotelservice.svc/rest/GetHotelResult",
   
@@ -47,7 +47,7 @@ const http = axios.create({
 });
 
 console.log("╔═══════════════════════════════════════════════════════════════╗");
-console.log("���          TBO JSON API - Final Integration Test                ║");
+console.log("║          TBO JSON API - Final Integration Test                ║");
 console.log("╚═══════════════════════════════════════════════════════════════╝");
 console.log("");
 console.log("🔌 Using Proxy:", config.useProxy ? "YES" : "NO");
