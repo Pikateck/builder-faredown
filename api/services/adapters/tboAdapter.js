@@ -208,12 +208,12 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   /**
    * ========================================
-   * 3. STATIC DATA API (Uses UserName/Password)
+   * 3. STATIC DATA API (Uses TokenId)
    * ========================================
-   * 
-   * ✅ CORRECTED: Static data uses UserName/Password (NOT TokenId)
-   * Endpoints: CountryList, DestinationCityList
-   * Base URL: https://apiwr.tboholidays.com/HotelAPI/
+   *
+   * ✅ VERIFIED WORKING: GetDestinationSearchStaticData with TokenId
+   * Endpoint: https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData
+   * Returns: Destinations with DestinationId (CityId for hotel search)
    */
   
   async getTboCountries(force = false) {
