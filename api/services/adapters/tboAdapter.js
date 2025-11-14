@@ -323,18 +323,18 @@ class TBOAdapter extends BaseSupplierAdapter {
    * ========================================
    * 4. HOTEL SEARCH (Uses TokenId)
    * ========================================
-   * 
-   * ✅ CORRECTED: Exact payload matching TBO spec
-   * Endpoint: https://affiliate.travelboutiqueonline.com/HotelAPI/Search
+   *
+   * ✅ VERIFIED WORKING: GetHotelResult on correct JSON endpoint
+   * Endpoint: https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult
    * Method: POST
-   * 
+   *
    * Required fields:
    * - EndUserIp
    * - TokenId
    * - CheckInDate (dd/MM/yyyy)
    * - NoOfNights (NOT CheckOutDate)
    * - CountryCode
-   * - CityId (TBO's numeric ID)
+   * - CityId (DestinationId from GetDestinationSearchStaticData)
    * - PreferredCurrency
    * - GuestNationality
    * - NoOfRooms
