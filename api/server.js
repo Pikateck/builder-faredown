@@ -467,6 +467,16 @@ app.use("/api/hotels-ranked", require("./routes/hotels-ranked"));
 app.use("/api/tbo-hotels", require("./routes/tbo-hotels"));
 app.use("/api/tbo-hotels/static", require("./routes/tbo-hotels-static"));
 app.use("/api/tbo", require("./routes/tbo-diagnostics")); // TBO diagnostics endpoint
+
+// TBO Production API - Complete Booking Pipeline
+app.use("/api/tbo/auth", tboAuthRoutes);
+app.use("/api/tbo/static", tboStaticRoutes);
+app.use("/api/tbo/search", tboSearchRoutes);
+app.use("/api/tbo/room", tboRoomRoutes);
+app.use("/api/tbo/block", tboBlockRoutes);
+app.use("/api/tbo/book", tboBookRoutes);
+app.use("/api/tbo/voucher", tboVoucherRoutes);
+
 app.use("/api/hotels", hotelCanonicalRoutes); // STEP 2: Canonical hotel endpoints (PRIORITY)
 app.use("/api/hotels-metadata", require("./routes/hotels-metadata")); // Legacy: Hybrid metadata + async pricing (TBO first) - DEPRECATED
 app.use("/api/locations", locationsRoutes); // TBO locations autocomplete
