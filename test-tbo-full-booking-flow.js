@@ -22,7 +22,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Import TBO modules
-const { authenticate } = require('./api/tbo/auth');
+const { authenticateTBO } = require('./api/tbo/auth');
 const { getCityId, searchCities } = require('./api/tbo/static');
 const { searchHotels } = require('./api/tbo/search');
 const { getHotelRoom } = require('./api/tbo/room');
@@ -109,20 +109,20 @@ async function runCompleteFlow() {
   try {
     // STEP 1: Authentication
     logStep(1, 'Authentication - Get TokenId');
-    const authResult = await authenticate();
-    
-    if (!authResult.success || !authResult.tokenId) {
+    const authResult = await authenticateTBO();
+
+    if (!authResult || !authResult.TokenId) {
       logError('Authentication failed', authResult);
       results.steps.authentication = { success: false, error: authResult };
       return results;
     }
-    
-    const tokenId = authResult.tokenId;
+
+    const tokenId = authResult.TokenId;
     logSuccess(`TokenId obtained: ${tokenId}`);
     results.steps.authentication = {
       success: true,
       tokenId,
-      endpoint: authResult.endpoint
+      endpoint: authResult.endpoint || 'https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate'
     };
 
     // STEP 2: Get Static Data - Real CityId
@@ -148,23 +148,25 @@ async function runCompleteFlow() {
     const searchResult = await searchHotels({
       destination: TEST_PARAMS.destination,
       countryCode: TEST_PARAMS.countryCode,
-      checkInDate: TEST_PARAMS.checkInDate,
-      checkOutDate: TEST_PARAMS.checkOutDate,
-      nationality: TEST_PARAMS.nationality,
-      adults: TEST_PARAMS.adults,
-      children: TEST_PARAMS.children,
-      rooms: TEST_PARAMS.rooms,
-      tokenId
+      checkIn: TEST_PARAMS.checkInDate,
+      checkOut: TEST_PARAMS.checkOutDate,
+      guestNationality: TEST_PARAMS.nationality,
+      rooms: [{
+        adults: TEST_PARAMS.adults,
+        children: TEST_PARAMS.children,
+        childAges: []
+      }],
+      currency: 'USD'
     });
 
-    if (!searchResult.success || !searchResult.data?.HotelSearchResult?.TraceId) {
+    if (!searchResult || !searchResult.traceId) {
       logError('Hotel search failed', searchResult);
       results.steps.hotelSearch = { success: false, error: searchResult };
       return results;
     }
 
-    const traceId = searchResult.data.HotelSearchResult.TraceId;
-    const hotels = searchResult.data.HotelSearchResult.HotelResults || [];
+    const traceId = searchResult.traceId;
+    const hotels = searchResult.hotels || [];
     
     logSuccess(`Hotel search successful. TraceId: ${traceId}, Hotels found: ${hotels.length}`);
     
@@ -189,7 +191,7 @@ async function runCompleteFlow() {
         resultIndex,
         price: selectedHotel.Price
       },
-      endpoint: searchResult.endpoint
+      endpoint: 'https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult'
     };
 
     console.log('\nSelected Hotel:', {
@@ -202,20 +204,18 @@ async function runCompleteFlow() {
     // STEP 4: Get Hotel Room Details
     logStep(4, 'Get Hotel Room Details');
     const roomResult = await getHotelRoom({
-      tokenId,
       traceId,
       resultIndex,
       hotelCode
     });
 
-    if (!roomResult.success || !roomResult.data?.GetHotelRoomResult) {
+    if (!roomResult || !roomResult.rooms || roomResult.rooms.length === 0) {
       logError('Failed to get room details', roomResult);
       results.steps.roomDetails = { success: false, error: roomResult };
       return results;
     }
 
-    const roomDetails = roomResult.data.GetHotelRoomResult;
-    const hotelRoomsDetails = roomDetails.HotelRoomsDetails || [];
+    const hotelRoomsDetails = roomResult.rooms || [];
     
     logSuccess(`Room details retrieved. Available rooms: ${hotelRoomsDetails.length}`);
     
@@ -237,7 +237,7 @@ async function runCompleteFlow() {
         price: selectedRoom.Price,
         cancellationPolicy: selectedRoom.CancellationPolicy
       },
-      endpoint: roomResult.endpoint
+      endpoint: 'https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelRoom'
     };
 
     console.log('\nSelected Room:', {
@@ -249,116 +249,105 @@ async function runCompleteFlow() {
     // STEP 5: Block Room
     logStep(5, 'Block Room - Hold room temporarily');
     const blockResult = await blockRoom({
-      tokenId,
       traceId,
       resultIndex,
       hotelCode,
       hotelName: selectedHotel.HotelName,
       guestNationality: TEST_PARAMS.nationality,
-      noOfRooms: TEST_PARAMS.rooms,
-      clientReferenceNo: `TEST-${Date.now()}`,
+      noOfRooms: 1,
       isVoucherBooking: true,
-      hotelRoomsDetails: [selectedRoom]
+      hotelRoomDetails: [selectedRoom]
     });
 
-    if (!blockResult.success || !blockResult.data?.BlockRoomResult) {
+    if (!blockResult || !blockResult.responseStatus) {
       logError('Failed to block room', blockResult);
       results.steps.blockRoom = { success: false, error: blockResult };
       return results;
     }
 
-    const blockRoomResult = blockResult.data.BlockRoomResult;
-    
-    logSuccess(`Room blocked successfully. Status: ${blockRoomResult.ResponseStatus}`);
-    
+    logSuccess(`Room blocked successfully. Status: ${blockResult.responseStatus}`);
+
     results.steps.blockRoom = {
       success: true,
-      status: blockRoomResult.ResponseStatus,
-      isPriceChanged: blockRoomResult.IsPriceChanged,
-      isPolicyChanged: blockRoomResult.IsPolicyChanged,
-      endpoint: blockResult.endpoint
+      status: blockResult.responseStatus,
+      isPriceChanged: blockResult.isPriceChanged,
+      isPolicyChanged: blockResult.isCancellationPolicyChanged,
+      endpoint: 'https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom'
     };
 
     // STEP 6: Book Hotel
     logStep(6, 'Book Hotel - Confirm booking');
     const bookResult = await bookHotel({
-      tokenId,
       traceId,
       resultIndex,
       hotelCode,
       hotelName: selectedHotel.HotelName,
       guestNationality: TEST_PARAMS.nationality,
-      noOfRooms: TEST_PARAMS.rooms,
-      clientReferenceNo: `TEST-${Date.now()}`,
+      noOfRooms: 1,
       isVoucherBooking: true,
-      passengers: TEST_PARAMS.passengers,
-      hotelRoomsDetails: [selectedRoom]
+      hotelPassenger: TEST_PARAMS.passengers,
+      hotelRoomDetails: [selectedRoom]
     });
 
-    if (!bookResult.success || !bookResult.data?.BookResult) {
+    if (!bookResult || !bookResult.bookingId) {
       logError('Failed to book hotel', bookResult);
       results.steps.booking = { success: false, error: bookResult };
       return results;
     }
 
-    const bookingResult = bookResult.data.BookResult;
-    const bookingId = bookingResult.BookingId;
-    const confirmationNo = bookingResult.ConfirmationNo;
+    const bookingId = bookResult.bookingId;
+    const confirmationNo = bookResult.confirmationNo;
     
     logSuccess(`Hotel booked successfully. BookingId: ${bookingId}, ConfirmationNo: ${confirmationNo}`);
-    
+
     results.steps.booking = {
       success: true,
       bookingId,
       confirmationNo,
-      status: bookingResult.ResponseStatus,
-      invoiceNumber: bookingResult.InvoiceNumber,
-      endpoint: bookResult.endpoint
+      status: bookResult.responseStatus,
+      bookingRefNo: bookResult.bookingRefNo,
+      endpoint: 'https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book'
     };
 
     // STEP 7: Generate Voucher
     logStep(7, 'Generate Voucher');
     const voucherResult = await generateVoucher({
-      tokenId,
       bookingId,
-      bookingRefNo: confirmationNo
+      bookingRefNo: bookResult.bookingRefNo
     });
 
-    if (!voucherResult.success || !voucherResult.data?.GenerateVoucherResult) {
+    if (!voucherResult || !voucherResult.voucherURL) {
       logError('Failed to generate voucher', voucherResult);
       results.steps.voucher = { success: false, error: voucherResult };
       return results;
     }
 
-    const voucherData = voucherResult.data.GenerateVoucherResult;
-    const voucherUrl = voucherData.VoucherURL;
-    
+    const voucherUrl = voucherResult.voucherURL;
+
     logSuccess(`Voucher generated successfully. URL: ${voucherUrl}`);
-    
+
     results.steps.voucher = {
       success: true,
       voucherUrl,
-      status: voucherData.ResponseStatus,
-      endpoint: voucherResult.endpoint
+      status: voucherResult.responseStatus,
+      endpoint: 'https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GenerateVoucher'
     };
 
     // OPTIONAL: Get Booking Details
     logStep(8, 'Get Booking Details (Optional Verification)');
     const bookingDetailsResult = await getBookingDetails({
-      tokenId,
       bookingId,
-      bookingRefNo: confirmationNo
+      bookingRefNo: bookResult.bookingRefNo
     });
 
-    if (bookingDetailsResult.success && bookingDetailsResult.data?.GetBookingDetailResult) {
-      const bookingDetails = bookingDetailsResult.data.GetBookingDetailResult;
+    if (bookingDetailsResult && bookingDetailsResult.responseStatus) {
       logSuccess('Booking details retrieved successfully');
-      
+
       results.steps.bookingDetails = {
         success: true,
-        status: bookingDetails.ResponseStatus,
-        bookingStatus: bookingDetails.BookingStatus,
-        endpoint: bookingDetailsResult.endpoint
+        status: bookingDetailsResult.responseStatus,
+        bookingStatus: bookingDetailsResult.status,
+        endpoint: 'https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetBookingDetails'
       };
     }
 
