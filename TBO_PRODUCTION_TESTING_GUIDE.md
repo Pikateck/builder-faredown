@@ -40,6 +40,16 @@ FIXIE_URL=http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80
 
 ## Running the End-to-End Test
 
+### Prerequisites
+
+First, install dependencies (if not already installed):
+
+```bash
+npm install
+```
+
+This installs required proxy agents (`https-proxy-agent`, `http-proxy-agent`).
+
 ### Command
 
 ```bash

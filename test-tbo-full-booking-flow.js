@@ -3,7 +3,9 @@
 /**
  * TBO Complete Hotel Booking Flow Test
  * 
- * This script demonstrates the full end-to-end TBO hotel booking pipeline:
+ * This is the CANONICAL end-to-end test for TBO hotel integration.
+ * 
+ * Tests complete pipeline:
  * 1. Authenticate → Get TokenId
  * 2. GetDestinationSearchStaticData → Get real CityId (DestinationId)
  * 3. SearchHotels → Get hotel results with TraceId
@@ -13,6 +15,14 @@
  * 7. GenerateVoucher → Get booking voucher
  * 
  * All steps use the correct JSON API endpoints and TokenId authentication.
+ * 
+ * USAGE:
+ *   npm install              (install dependencies)
+ *   node test-tbo-full-booking-flow.js
+ * 
+ * OUTPUTS:
+ *   Console: Real-time progress and logging
+ *   File: tbo-full-booking-flow-results.json (complete results)
  */
 
 require('dotenv').config({ path: 'api/.env', override: true });
@@ -23,7 +33,7 @@ const path = require('path');
 
 // Import TBO modules
 const { authenticateTBO } = require('./api/tbo/auth');
-const { getCityId, searchCities } = require('./api/tbo/static');
+const { getCityId } = require('./api/tbo/static');
 const { searchHotels } = require('./api/tbo/search');
 const { getHotelRoom } = require('./api/tbo/room');
 const { blockRoom, bookHotel } = require('./api/tbo/book');
@@ -78,7 +88,7 @@ const TEST_PARAMS = {
   ]
 };
 
-// Logging helper
+// Logging helpers
 function logStep(stepNumber, title, data = null) {
   console.log('\n' + '='.repeat(80));
   console.log(`STEP ${stepNumber}: ${title}`);
@@ -110,19 +120,19 @@ async function runCompleteFlow() {
     // STEP 1: Authentication
     logStep(1, 'Authentication - Get TokenId');
     const authResult = await authenticateTBO();
-
+    
     if (!authResult || !authResult.TokenId) {
       logError('Authentication failed', authResult);
       results.steps.authentication = { success: false, error: authResult };
       return results;
     }
-
+    
     const tokenId = authResult.TokenId;
-    logSuccess(`TokenId obtained: ${tokenId}`);
+    logSuccess(`TokenId obtained: ${tokenId.substring(0, 30)}...`);
     results.steps.authentication = {
       success: true,
-      tokenId,
-      endpoint: authResult.endpoint || 'https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate'
+      tokenId: tokenId.substring(0, 30) + '...',
+      endpoint: 'https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate'
     };
 
     // STEP 2: Get Static Data - Real CityId
@@ -151,10 +161,10 @@ async function runCompleteFlow() {
       checkIn: TEST_PARAMS.checkInDate,
       checkOut: TEST_PARAMS.checkOutDate,
       guestNationality: TEST_PARAMS.nationality,
-      rooms: [{
-        adults: TEST_PARAMS.adults,
-        children: TEST_PARAMS.children,
-        childAges: []
+      rooms: [{ 
+        adults: TEST_PARAMS.adults, 
+        children: TEST_PARAMS.children, 
+        childAges: [] 
       }],
       currency: 'USD'
     });
@@ -219,12 +229,6 @@ async function runCompleteFlow() {
     
     logSuccess(`Room details retrieved. Available rooms: ${hotelRoomsDetails.length}`);
     
-    if (hotelRoomsDetails.length === 0) {
-      logError('No rooms available');
-      results.steps.roomDetails = { success: false, error: 'No rooms available' };
-      return results;
-    }
-
     // Select first room
     const selectedRoom = hotelRoomsDetails[0];
     
@@ -264,9 +268,9 @@ async function runCompleteFlow() {
       results.steps.blockRoom = { success: false, error: blockResult };
       return results;
     }
-
+    
     logSuccess(`Room blocked successfully. Status: ${blockResult.responseStatus}`);
-
+    
     results.steps.blockRoom = {
       success: true,
       status: blockResult.responseStatus,
@@ -299,7 +303,7 @@ async function runCompleteFlow() {
     const confirmationNo = bookResult.confirmationNo;
     
     logSuccess(`Hotel booked successfully. BookingId: ${bookingId}, ConfirmationNo: ${confirmationNo}`);
-
+    
     results.steps.booking = {
       success: true,
       bookingId,
@@ -323,9 +327,9 @@ async function runCompleteFlow() {
     }
 
     const voucherUrl = voucherResult.voucherURL;
-
+    
     logSuccess(`Voucher generated successfully. URL: ${voucherUrl}`);
-
+    
     results.steps.voucher = {
       success: true,
       voucherUrl,
@@ -342,7 +346,7 @@ async function runCompleteFlow() {
 
     if (bookingDetailsResult && bookingDetailsResult.responseStatus) {
       logSuccess('Booking details retrieved successfully');
-
+      
       results.steps.bookingDetails = {
         success: true,
         status: bookingDetailsResult.responseStatus,
