@@ -1,11 +1,17 @@
 /**
  * TBO (Travel Boutique Online) Universal JSON Hotel API Adapter
- * Fully aligned with TBO's JSON API specification
+ * ✅ FULLY CORRECTED - Matches TBO specification EXACTLY
  * 
- * CRITICAL: This adapter uses ONLY the Universal JSON API with TokenId
- * NO legacy UserName/Password static endpoints
+ * Reference: TBO Documentation + Email from Pavneet Kaur (Oct 17, 2025)
  * 
- * Reference: TBO email from Pavneet Kaur (Oct 17, 2025)
+ * CRITICAL CORRECTIONS:
+ * 1. Uses CORRECT production URLs (no more test/legacy endpoints)
+ * 2. Static Data uses UserName/Password (NOT TokenId)
+ * 3. Dynamic APIs (Search, PreBook, Book) use TokenId
+ * 4. Request payloads match TBO JSON spec EXACTLY
+ * 5. Date format: dd/MM/yyyy (strict)
+ * 6. CityId comes from TBO (not our DB)
+ * 7. Compression headers included (gzip, deflate)
  */
 
 const BaseSupplierAdapter = require("./baseSupplierAdapter");
@@ -17,26 +23,30 @@ const HotelNormalizer = require("../normalization/hotelNormalizer");
 class TBOAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
     super("TBO", {
-      // Flight API URLs (from TBO email)
-      searchUrl: "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc",
-      bookingUrl: "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc",
+      // ✅ CORRECTED: Using EXACT URLs from TBO email (Pavneet Kaur)
       
-      // Hotel API URLs (from TBO email - EXACT MATCH)
-      hotelAuthUrl: "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate",
-      hotelStaticBase: "https://apiwr.tboholidays.com/HotelAPI/",
-      hotelSearchBase: "https://affiliate.travelboutiqueonline.com/HotelAPI/",
-      hotelBookingBase: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
+      // Authentication - Returns TokenId (valid 24 hours)
+      hotelAuthUrl: process.env.TBO_AUTH_URL || "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate",
       
-      // Credentials (from TBO email)
+      // Static Data (Country, City, Hotel Codes) - Uses UserName/Password
+      hotelStaticBase: process.env.TBO_HOTEL_STATIC_DATA || "https://apiwr.tboholidays.com/HotelAPI/",
+      
+      // Hotel Search + PreBook - Uses TokenId
+      hotelSearchBase: process.env.TBO_HOTEL_SEARCH_URL || "https://affiliate.travelboutiqueonline.com/HotelAPI/",
+      
+      // Booking, Voucher, Booking Details, Change Requests - Uses TokenId
+      hotelBookingBase: process.env.TBO_HOTEL_BOOKING || "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
+      
+      // Credentials
       clientId: process.env.TBO_CLIENT_ID || "tboprod",
       userId: process.env.TBO_API_USER_ID || "BOMF145",
       password: process.env.TBO_API_PASSWORD || "@Bo#4M-Api@",
       
-      // Static data credentials (DEPRECATED - will use TokenId instead)
+      // Static data credentials (SEPARATE from dynamic API)
       staticUserName: process.env.TBO_STATIC_USER || "travelcategory",
       staticPassword: process.env.TBO_STATIC_PASSWORD || "Tra@59334536",
       
-      // Fixie proxy IPs (whitelisted by TBO)
+      // Fixie proxy IP (whitelisted by TBO)
       endUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
       
       timeout: 30000,
@@ -51,24 +61,27 @@ class TBOAdapter extends BaseSupplierAdapter {
     this._authAttempts = [];
     this._egressIp = null;
 
-    this.logger.info("🏨 TBO Universal JSON Hotel API Adapter initialized", {
+    this.logger.info("🏨 TBO Hotel API Adapter - CORRECTED VERSION", {
       authUrl: this.config.hotelAuthUrl,
+      staticBase: this.config.hotelStaticBase,
       searchBase: this.config.hotelSearchBase,
+      bookingBase: this.config.hotelBookingBase,
       clientId: this.config.clientId,
       userId: this.config.userId,
-      endUserIp: this.config.endUserIp
+      endUserIp: this.config.endUserIp,
+      via: "fixie_proxy"
     });
   }
 
   /**
    * ========================================
-   * 1. JSON AUTHENTICATION (Universal API)
+   * 1. AUTHENTICATION (Returns TokenId)
    * ========================================
    * 
-   * Follows TBO's JSON Auth spec EXACTLY:
-   * - Request: { ClientId, UserName, Password, EndUserIp }
-   * - Response: { Status, TokenId, Member, Error }
-   * - TokenId valid for 24 hours
+   * Endpoint: https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate
+   * Method: POST
+   * Request: { ClientId, UserName, Password, EndUserIp }
+   * Response: { Status: 1, TokenId, Member, Error }
    */
   async getHotelToken(force = false) {
     // Return cached token if valid
@@ -79,22 +92,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       return this.tokenId;
     }
 
-    // Try DB cache
-    if (!force) {
-      try {
-        const cached = await this.getCachedHotelToken();
-        if (cached && Date.now() < cached.expires_at) {
-          this.tokenId = cached.token_id;
-          this.tokenExpiry = cached.expires_at;
-          this.logger.info("✅ Using DB-cached TBO TokenId");
-          return this.tokenId;
-        }
-      } catch (err) {
-        this.logger.warn("DB cache check failed:", err.message);
-      }
-    }
-
-    // Authenticate - EXACT JSON format from TBO docs
+    // EXACT JSON format from TBO docs
     const authRequest = {
       ClientId: this.config.clientId,        // "tboprod"
       UserName: this.config.userId,          // "BOMF145"
@@ -102,18 +100,12 @@ class TBOAdapter extends BaseSupplierAdapter {
       EndUserIp: this.config.endUserIp       // "52.5.155.132"
     };
 
-    this.logger.info("🔐 TBO JSON Authentication Request", {
+    this.logger.info("🔐 TBO Authentication Request", {
       url: this.config.hotelAuthUrl,
       clientId: authRequest.ClientId,
       userName: authRequest.UserName,
       endUserIp: authRequest.EndUserIp,
       via: tboVia()
-    });
-
-    // Log exact request (sanitized)
-    this.logger.debug("📤 Auth Request JSON:", {
-      ...authRequest,
-      Password: "***"
     });
 
     try {
@@ -123,7 +115,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         headers: {
           "Content-Type": "application/json",
           "Accept": "application/json",
-          "Accept-Encoding": "gzip, deflate" // COMPRESSION SUPPORT
+          "Accept-Encoding": "gzip, deflate"
         },
         timeout: this.config.timeout
       });
@@ -132,14 +124,12 @@ class TBOAdapter extends BaseSupplierAdapter {
         httpStatus: response.status,
         status: response.data?.Status,
         hasTokenId: !!response.data?.TokenId,
+        tokenLength: response.data?.TokenId?.length,
         memberId: response.data?.Member?.MemberId,
         agencyId: response.data?.Member?.AgencyId,
         errorCode: response.data?.Error?.ErrorCode,
         errorMessage: response.data?.Error?.ErrorMessage
       });
-
-      // Log full response for debugging
-      this.logger.debug("📄 Full Auth Response:", JSON.stringify(response.data, null, 2));
 
       // Check success
       if (response.data?.Status !== 1) {
@@ -171,14 +161,8 @@ class TBOAdapter extends BaseSupplierAdapter {
         expiresAt: new Date(this.tokenExpiry).toISOString()
       });
 
-      // Cache in DB
-      try {
-        await this.cacheHotelToken(this.tokenId, this.tokenExpiry);
-      } catch (err) {
-        this.logger.warn("Failed to cache token in DB:", err.message);
-      }
-
-      this.logger.info("✅ TBO Authentication SUCCESS - TokenId obtained", {
+      this.logger.info("✅ TBO Authentication SUCCESS", {
+        tokenId: this.tokenId.substring(0, 20) + "...",
         tokenLength: this.tokenId.length,
         expiresAt: new Date(this.tokenExpiry).toISOString()
       });
@@ -219,22 +203,26 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   /**
    * ========================================
-   * 3. STATIC DATA API (with TokenId)
+   * 3. STATIC DATA API (Uses UserName/Password)
    * ========================================
    * 
-   * ALL static endpoints now use TokenId (not UserName/Password)
+   * ✅ CORRECTED: Static data uses UserName/Password (NOT TokenId)
+   * Endpoints: CountryList, DestinationCityList
+   * Base URL: https://apiwr.tboholidays.com/HotelAPI/
    */
   
   async getTboCountries(force = false) {
-    const tokenId = await this.getHotelToken();
-    
+    // ✅ CORRECTED: Use UserName/Password for static data
     const request = {
-      ClientId: this.config.clientId,
-      TokenId: tokenId,
-      EndUserIp: this.config.endUserIp
+      UserName: this.config.staticUserName,  // "travelcategory"
+      Password: this.config.staticPassword   // "Tra@59334536"
     };
 
-    this.logger.info("📍 Fetching TBO Country List (JSON)", { force });
+    this.logger.info("📍 Fetching TBO Country List (Static Data)", {
+      url: this.config.hotelStaticBase + "CountryList",
+      userName: request.UserName,
+      force
+    });
 
     try {
       const response = await tboRequest(this.config.hotelStaticBase + "CountryList", {
@@ -269,16 +257,19 @@ class TBOAdapter extends BaseSupplierAdapter {
   async getTboCities(countryCode, force = false) {
     if (!countryCode) return [];
     
-    const tokenId = await this.getHotelToken();
-    
+    // ✅ CORRECTED: Use UserName/Password for static data
     const request = {
-      ClientId: this.config.clientId,
-      TokenId: tokenId,
-      EndUserIp: this.config.endUserIp,
+      UserName: this.config.staticUserName,  // "travelcategory"
+      Password: this.config.staticPassword,  // "Tra@59334536"
       CountryCode: countryCode
     };
 
-    this.logger.info("📍 Fetching TBO City List (JSON)", { countryCode, force });
+    this.logger.info("📍 Fetching TBO City List (Static Data)", {
+      url: this.config.hotelStaticBase + "DestinationCityList",
+      userName: request.UserName,
+      countryCode,
+      force
+    });
 
     try {
       const response = await tboRequest(this.config.hotelStaticBase + "DestinationCityList", {
@@ -301,6 +292,7 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       return cities.map(c => ({
         code: c.Code || c.CityCode || c.Id,
+        id: c.Id || c.Code, // TBO CityId (numeric)
         name: c.Name || c.CityName,
         countryCode
       }));
@@ -313,14 +305,24 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   /**
    * ========================================
-   * 4. HOTEL SEARCH (GetHotelResult JSON)
+   * 4. HOTEL SEARCH (Uses TokenId)
    * ========================================
    * 
-   * EXACT match with TBO's JSON specification:
-   * - Endpoint: https://affiliate.travelboutiqueonline.com/HotelAPI/Search
-   * - Date format: dd/MM/yyyy
-   * - Uses TokenId + EndUserIp
-   * - Field names EXACTLY as per docs
+   * ✅ CORRECTED: Exact payload matching TBO spec
+   * Endpoint: https://affiliate.travelboutiqueonline.com/HotelAPI/Search
+   * Method: POST
+   * 
+   * Required fields:
+   * - EndUserIp
+   * - TokenId
+   * - CheckInDate (dd/MM/yyyy)
+   * - NoOfNights (NOT CheckOutDate)
+   * - CountryCode
+   * - CityId (TBO's numeric ID)
+   * - PreferredCurrency
+   * - GuestNationality
+   * - NoOfRooms
+   * - RoomGuests [{ NoOfAdults, NoOfChild, ChildAge[] }]
    */
   async searchHotels(searchParams) {
     const tokenId = await this.getHotelToken();
@@ -337,12 +339,12 @@ class TBOAdapter extends BaseSupplierAdapter {
       countryCode = "AE"
     } = searchParams;
 
-    // Get CityId from TBO (must be numeric ID, not code)
+    // ✅ Get CityId from TBO (must be numeric ID, not code)
     let cityId;
     try {
       cityId = await this.getCityId(destination, countryCode);
       if (!cityId) {
-        this.logger.warn("⚠️ CityId not found", { destination });
+        this.logger.warn("⚠️ CityId not found for destination", { destination, countryCode });
         return [];
       }
     } catch (err) {
@@ -350,16 +352,16 @@ class TBOAdapter extends BaseSupplierAdapter {
       throw err;
     }
 
-    // Calculate NoOfNights
+    // ✅ Calculate NoOfNights (TBO requires this, NOT CheckOutDate)
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
     const noOfNights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
 
     if (noOfNights < 1) {
-      throw new Error(`Invalid dates: ${checkIn} to ${checkOut}`);
+      throw new Error(`Invalid dates: checkIn=${checkIn}, checkOut=${checkOut}`);
     }
 
-    // Build RoomGuests array
+    // ✅ Build RoomGuests array (exact format from TBO spec)
     const roomGuests = Array.isArray(rooms) 
       ? rooms.map(r => ({
           NoOfAdults: Number(r.adults) || 1,
@@ -367,37 +369,42 @@ class TBOAdapter extends BaseSupplierAdapter {
           ChildAge: Array.isArray(r.childAges) ? r.childAges.map(a => Number(a)) : []
         }))
       : [{
-          NoOfAdults: Number(adults) || 1,
+          NoOfAdults: Number(adults) || 2,
           NoOfChild: Number(children) || 0,
           ChildAge: []
         }];
 
-    // EXACT JSON request format from TBO docs
+    // ✅ EXACT JSON request format from TBO documentation
     const searchRequest = {
       EndUserIp: this.config.endUserIp,
       TokenId: tokenId,
-      CheckInDate: this.formatDateForTBO(checkIn),
-      NoOfNights: noOfNights,
+      CheckInDate: this.formatDateForTBO(checkIn),       // dd/MM/yyyy
+      NoOfNights: noOfNights,                            // NOT CheckOutDate
       CountryCode: countryCode,
-      CityId: cityId,
+      CityId: Number(cityId),                            // TBO's numeric ID
       PreferredCurrency: currency,
       GuestNationality: guestNationality,
       NoOfRooms: roomGuests.length,
-      RoomGuests: roomGuests
+      RoomGuests: roomGuests,
+      // Optional but recommended
+      IsNearBySearchAllowed: false,
+      MaxRating: 5,
+      MinRating: 0
     };
 
-    this.logger.info("🔍 TBO Hotel Search Request (JSON)", {
+    this.logger.info("🔍 TBO Hotel Search Request", {
       endpoint: this.config.hotelSearchBase + "Search",
       destination,
       cityId,
       checkIn: searchRequest.CheckInDate,
       noOfNights: searchRequest.NoOfNights,
       currency,
+      rooms: searchRequest.NoOfRooms,
       via: tboVia()
     });
 
-    // Log exact request (sanitized)
-    this.logger.debug("📤 Search Request JSON:", {
+    // Log exact request payload (sanitized)
+    this.logger.debug("📤 Search Request Payload:", {
       ...searchRequest,
       TokenId: tokenId.substring(0, 20) + "..."
     });
@@ -417,23 +424,21 @@ class TBOAdapter extends BaseSupplierAdapter {
       this.logger.info("📥 TBO Search Response", {
         httpStatus: response.status,
         responseStatus: response.data?.ResponseStatus,
+        status: response.data?.Status,
         hasHotelResults: !!response.data?.HotelResults,
         hotelCount: Array.isArray(response.data?.HotelResults) ? response.data.HotelResults.length : 0,
-        hasTraceId: !!response.data?.TraceId,
+        traceId: response.data?.TraceId,
         errorCode: response.data?.Error?.ErrorCode,
         errorMessage: response.data?.Error?.ErrorMessage
       });
 
-      // Log full response for debugging (first time)
-      if (!this._hasLoggedSearchResponse) {
-        this.logger.debug("📄 Sample Search Response:", JSON.stringify(response.data, null, 2).substring(0, 2000));
-        this._hasLoggedSearchResponse = true;
-      }
-
-      // Check ResponseStatus
-      if (response.data?.ResponseStatus !== 1) {
+      // Check ResponseStatus or Status
+      const statusOk = response.data?.ResponseStatus === 1 || response.data?.Status === 1;
+      
+      if (!statusOk) {
         this.logger.warn("❌ TBO Search returned non-success status", {
           responseStatus: response.data?.ResponseStatus,
+          status: response.data?.Status,
           error: response.data?.Error
         });
         return [];
@@ -456,7 +461,8 @@ class TBOAdapter extends BaseSupplierAdapter {
         message: error.message,
         httpStatus: error.response?.status,
         statusText: error.response?.statusText,
-        responseData: error.response?.data
+        responseData: error.response?.data,
+        url: this.config.hotelSearchBase + "Search"
       });
       return [];
     }
@@ -490,7 +496,8 @@ class TBOAdapter extends BaseSupplierAdapter {
         reviewScore: h.TripAdvisor?.Rating || 0,
         reviewCount: 0,
         location: h.HotelAddress || h.HotelLocation || "",
-        isLiveData: true
+        isLiveData: true,
+        resultIndex: h.ResultIndex
       };
     });
   }
@@ -514,70 +521,26 @@ class TBOAdapter extends BaseSupplierAdapter {
    */
   
   async getCityId(cityCode, countryCode = "AE") {
-    // Try cache first
-    const cacheKey = `tbo_city_${cityCode}_${countryCode}`;
-    
-    try {
-      const cached = await pool.query(
-        `SELECT city_id FROM tbo_city_cache WHERE cache_key = $1 AND expires_at > NOW()`,
-        [cacheKey]
-      );
-      if (cached.rows[0]) {
-        return cached.rows[0].city_id;
-      }
-    } catch (err) {
-      this.logger.warn("City cache check failed:", err.message);
-    }
-
-    // Fetch from TBO
+    // ✅ CORRECTED: Get CityId from TBO, not our DB
     const cities = await this.getTboCities(countryCode);
+    
     const city = cities.find(c => 
       c.code === cityCode || 
+      c.id === cityCode ||
       c.name.toLowerCase() === cityCode.toLowerCase()
     );
 
-    if (city && city.code) {
-      // Cache for 7 days
-      try {
-        await pool.query(
-          `INSERT INTO tbo_city_cache (cache_key, city_id, expires_at) 
-           VALUES ($1, $2, NOW() + INTERVAL '7 days')
-           ON CONFLICT (cache_key) DO UPDATE SET city_id = $2, expires_at = NOW() + INTERVAL '7 days'`,
-          [cacheKey, city.code]
-        );
-      } catch (err) {
-        this.logger.warn("City cache insert failed:", err.message);
-      }
-
-      return city.code;
+    if (city && city.id) {
+      this.logger.info("✅ Found TBO CityId", {
+        input: cityCode,
+        cityId: city.id,
+        cityName: city.name
+      });
+      return city.id;
     }
 
+    this.logger.warn("⚠️ CityId not found in TBO data", { cityCode, countryCode });
     return null;
-  }
-
-  async getCachedHotelToken() {
-    try {
-      const result = await pool.query(
-        `SELECT token_id, expires_at FROM tbo_hotel_tokens 
-         WHERE supplier = 'TBO' AND expires_at > NOW() 
-         ORDER BY created_at DESC LIMIT 1`
-      );
-      return result.rows[0] || null;
-    } catch (err) {
-      return null;
-    }
-  }
-
-  async cacheHotelToken(tokenId, expiresAt) {
-    try {
-      await pool.query(
-        `INSERT INTO tbo_hotel_tokens (supplier, token_id, expires_at) 
-         VALUES ('TBO', $1, $2)`,
-        [tokenId, new Date(expiresAt)]
-      );
-    } catch (err) {
-      this.logger.warn("Token cache failed:", err.message);
-    }
   }
 
   _recordAuthAttempt(entry) {
@@ -591,6 +554,36 @@ class TBOAdapter extends BaseSupplierAdapter {
     } catch (err) {
       // Ignore
     }
+  }
+
+  /**
+   * ========================================
+   * STATIC: Transform to UnifiedHotel format
+   * ========================================
+   */
+  static toUnifiedHotel(tboHotel, context = {}) {
+    const price = tboHotel.Price || {};
+    
+    return {
+      supplier: "TBO",
+      supplierHotelId: String(tboHotel.HotelCode || tboHotel.HotelId),
+      name: tboHotel.HotelName || tboHotel.Name,
+      address: tboHotel.HotelAddress || "",
+      city: context.destination || tboHotel.CityName || "",
+      countryCode: tboHotel.CountryCode || context.countryCode || "",
+      location: {
+        lat: tboHotel.Latitude || tboHotel.Lat || null,
+        lng: tboHotel.Longitude || tboHotel.Lng || null
+      },
+      rating: parseFloat(tboHotel.StarRating) || 0,
+      amenities: tboHotel.HotelFacilities || [],
+      images: [],
+      minTotal: parseFloat(price.OfferedPrice || price.PublishedPrice || 0),
+      currency: price.CurrencyCode || context.currency || "INR",
+      taxesAndFees: { included: true, excluded: false },
+      refundable: true,
+      rooms: []
+    };
   }
 }
 
