@@ -1,34 +1,36 @@
 /**
  * TBO Debug - Static Data
  * Base URL: https://apiwr.tboholidays.com/HotelAPI/
- * Endpoints: CountryList, HotelCityList
- * Method: GET with query parameters
- * Auth: UserName/Password (NOT TokenId)
+ * Endpoints: CountryList, DestinationCityList
+ * Method: POST with JSON body
+ * Auth: UserName/Password (separate from TokenId)
  */
 
 const { tboRequest } = require("../lib/tboRequest");
 
 /**
  * Get Country List
+ * POST https://apiwr.tboholidays.com/HotelAPI/CountryList
  */
 async function getCountryList() {
   const url = process.env.TBO_HOTEL_STATIC_DATA + "CountryList";
   
-  const params = {
+  const requestBody = {
     UserName: process.env.TBO_STATIC_USER,
     Password: process.env.TBO_STATIC_PASSWORD
   };
 
   console.log("📍 TBO Country List Request");
-  console.log("  URL:", url);
-  console.log("  Method: GET");
-  console.log("  UserName:", params.UserName);
+  console.log("  Full URL:", url);
+  console.log("  Method: POST");
+  console.log("  Request Body:", JSON.stringify(requestBody, null, 2));
   console.log("");
 
   const response = await tboRequest(url, {
-    method: "GET",
-    params: params,
+    method: "POST",
+    data: requestBody,
     headers: {
+      "Content-Type": "application/json",
       "Accept": "application/json",
       "Accept-Encoding": "gzip, deflate"
     }
@@ -36,16 +38,7 @@ async function getCountryList() {
 
   console.log("📥 TBO Country List Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  Status:", response.data?.Status);
-  console.log("  Country Count:", response.data?.Countries?.length || 0);
-  console.log("  Error:", response.data?.Error?.ErrorMessage || "None");
-  
-  if (response.data?.Countries?.length > 0) {
-    console.log("\nSample Countries:");
-    response.data.Countries.slice(0, 5).forEach(c => {
-      console.log(`  - ${c.Name} (${c.Code})`);
-    });
-  }
+  console.log("  Response Body:", JSON.stringify(response.data, null, 2).substring(0, 500));
   console.log("");
 
   return response.data;
@@ -53,28 +46,28 @@ async function getCountryList() {
 
 /**
  * Get City List for a country
- * ✅ CORRECTED: Endpoint is "HotelCityList" (not "DestinationCityList")
+ * POST https://apiwr.tboholidays.com/HotelAPI/DestinationCityList
  */
 async function getCityList(countryCode = "AE") {
-  const url = process.env.TBO_HOTEL_STATIC_DATA + "HotelCityList";
+  const url = process.env.TBO_HOTEL_STATIC_DATA + "DestinationCityList";
   
-  const params = {
+  const requestBody = {
     UserName: process.env.TBO_STATIC_USER,
     Password: process.env.TBO_STATIC_PASSWORD,
     CountryCode: countryCode
   };
 
   console.log("📍 TBO City List Request");
-  console.log("  URL:", url);
-  console.log("  Method: GET");
-  console.log("  UserName:", params.UserName);
-  console.log("  CountryCode:", countryCode);
+  console.log("  Full URL:", url);
+  console.log("  Method: POST");
+  console.log("  Request Body:", JSON.stringify(requestBody, null, 2));
   console.log("");
 
   const response = await tboRequest(url, {
-    method: "GET",
-    params: params,
+    method: "POST",
+    data: requestBody,
     headers: {
+      "Content-Type": "application/json",
       "Accept": "application/json",
       "Accept-Encoding": "gzip, deflate"
     }
@@ -82,16 +75,7 @@ async function getCityList(countryCode = "AE") {
 
   console.log("📥 TBO City List Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  Status:", response.data?.Status);
-  console.log("  City Count:", response.data?.Cities?.length || 0);
-  console.log("  Error:", response.data?.Error?.ErrorMessage || "None");
-  
-  if (response.data?.Cities?.length > 0) {
-    console.log(`\nSample Cities in ${countryCode}:`);
-    response.data.Cities.slice(0, 10).forEach(c => {
-      console.log(`  - ${c.Name} (ID: ${c.Id}, Code: ${c.Code || 'N/A'})`);
-    });
-  }
+  console.log("  Response Body:", JSON.stringify(response.data, null, 2).substring(0, 1000));
   console.log("");
 
   return response.data;

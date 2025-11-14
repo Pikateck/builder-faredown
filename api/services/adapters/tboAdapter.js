@@ -212,23 +212,25 @@ class TBOAdapter extends BaseSupplierAdapter {
    */
   
   async getTboCountries(force = false) {
-    // ✅ CORRECTED: Use UserName/Password for static data (GET method)
-    const params = {
+    // ✅ CORRECTED: Use UserName/Password for static data (POST with body)
+    const requestBody = {
       UserName: this.config.staticUserName,  // "travelcategory"
       Password: this.config.staticPassword   // "Tra@59334536"
     };
 
     this.logger.info("📍 Fetching TBO Country List (Static Data)", {
       url: this.config.hotelStaticBase + "CountryList",
-      userName: params.UserName,
+      method: "POST",
+      userName: requestBody.UserName,
       force
     });
 
     try {
       const response = await tboRequest(this.config.hotelStaticBase + "CountryList", {
-        method: "GET",
-        params: params,
+        method: "POST",
+        data: requestBody,
         headers: {
+          "Content-Type": "application/json",
           "Accept": "application/json",
           "Accept-Encoding": "gzip, deflate"
         },
@@ -256,25 +258,27 @@ class TBOAdapter extends BaseSupplierAdapter {
   async getTboCities(countryCode, force = false) {
     if (!countryCode) return [];
 
-    // ✅ CORRECTED: Use UserName/Password for static data (GET method)
-    const params = {
+    // ✅ CORRECTED: Use UserName/Password for static data (POST with body)
+    const requestBody = {
       UserName: this.config.staticUserName,  // "travelcategory"
       Password: this.config.staticPassword,  // "Tra@59334536"
       CountryCode: countryCode
     };
 
     this.logger.info("📍 Fetching TBO City List (Static Data)", {
-      url: this.config.hotelStaticBase + "HotelCityList",
-      userName: params.UserName,
+      url: this.config.hotelStaticBase + "DestinationCityList",
+      method: "POST",
+      userName: requestBody.UserName,
       countryCode,
       force
     });
 
     try {
-      const response = await tboRequest(this.config.hotelStaticBase + "HotelCityList", {
-        method: "GET",
-        params: params,
+      const response = await tboRequest(this.config.hotelStaticBase + "DestinationCityList", {
+        method: "POST",
+        data: requestBody,
         headers: {
+          "Content-Type": "application/json",
           "Accept": "application/json",
           "Accept-Encoding": "gzip, deflate"
         },
