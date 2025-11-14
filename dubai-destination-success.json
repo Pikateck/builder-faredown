@@ -1,0 +1,263 @@
+{
+  "url": "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData",
+  "destinationId": 115936,
+  "dubai": {
+    "CityName": "Dubai",
+    "CountryCode": "AE   ",
+    "CountryName": "United Arab Emirates",
+    "DestinationId": 115936,
+    "StateProvince": null,
+    "Type": 1
+  },
+  "allDestinations": [
+    {
+      "CityName": "Dubai",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 115936,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Abu Dhabi",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 100765,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Sharjah",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 137741,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Ras al Khaimah",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 133770,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Umm al-Quwain",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 140710,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Ajman",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 100687,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Fujairah",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 119041,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Al Ain",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 100692,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Deira",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 116319,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Liwa",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 146321,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Jebel Ali",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 121792,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Al Marjan Islands",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 100381,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Hatta",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 120624,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Dibba",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 116339,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Al Agah",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 100812,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Jebel Dhanna",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 122339,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Al Mirfa",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 100492,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Madinat Zayed",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 126753,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Khorfakkan",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 123151,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Corniche Beach",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 364445,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Ghayathi",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 105810,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Al Karama",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 337162,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Mezairaa",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 128835,
+      "StateProvince": "",
+      "Type": 1
+    },
+    {
+      "CityName": "Khor Fakkan",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 323994,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Palm Jumeirah",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 369509,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Jumeirah",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 337165,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Dubai Internet City",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 221830,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Dubai Marina",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 346887,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Al Madam",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 266001,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Dubai Festival City",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 407544,
+      "StateProvince": null,
+      "Type": 1
+    },
+    {
+      "CityName": "Al Ruwais",
+      "CountryCode": "AE   ",
+      "CountryName": "United Arab Emirates",
+      "DestinationId": 368181,
+      "StateProvince": null,
+      "Type": 1
+    }
+  ],
+  "timestamp": "2025-11-14T06:50:15.846Z"
+}
