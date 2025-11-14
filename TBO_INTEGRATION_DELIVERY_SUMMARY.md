@@ -11,46 +11,53 @@
 
 All modules implemented with comprehensive logging and error handling:
 
-| Module | File | Status | Purpose |
-|--------|------|--------|---------|
-| Authentication | `auth.js` | ✅ Working | Get TokenId (24hr validity) |
-| Static Data | `static.js` | ✅ Working | Get city DestinationIds |
-| Hotel Search | `search.js` | ✅ Working | Search hotels with real CityId |
-| Room Details | `room.js` | ✅ Ready | Get room pricing & policies |
-| Booking | `book.js` | ✅ Ready | BlockRoom + Book |
-| Voucher | `voucher.js` | ✅ Ready | Generate voucher & get booking details |
-| Index | `index.js` | ✅ Ready | Central export for all modules |
+| Module         | File         | Status     | Purpose                                |
+| -------------- | ------------ | ---------- | -------------------------------------- |
+| Authentication | `auth.js`    | ✅ Working | Get TokenId (24hr validity)            |
+| Static Data    | `static.js`  | ✅ Working | Get city DestinationIds                |
+| Hotel Search   | `search.js`  | ✅ Working | Search hotels with real CityId         |
+| Room Details   | `room.js`    | ✅ Ready   | Get room pricing & policies            |
+| Booking        | `book.js`    | ✅ Ready   | BlockRoom + Book                       |
+| Voucher        | `voucher.js` | ✅ Ready   | Generate voucher & get booking details |
+| Index          | `index.js`   | ✅ Ready   | Central export for all modules         |
 
-###  2. Correct Endpoints (Verified End-to-End)
+### 2. Correct Endpoints (Verified End-to-End)
 
 **Authentication:**
+
 ```
 https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate
 ```
 
 **Static Data (KEY DISCOVERY):**
+
 ```
 https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData
 ```
+
 > ⚠️ Note: `/StaticData.svc/` NOT `/SharedData.svc/`
 
 **Hotel Search:**
+
 ```
 https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult
 ```
 
 **Room Details:**
+
 ```
 https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelRoom
 ```
 
 **Booking:**
+
 ```
 https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom
 https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book
 ```
 
 **Voucher:**
+
 ```
 https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GenerateVoucher
 https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetBookingDetails
@@ -93,12 +100,14 @@ TBO_HOTEL_VOUCHER_URL=https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10
 ## Verified Results
 
 ### ✅ Step 1: Authentication
+
 - **TokenId:** Successfully obtained
 - **Validity:** 24 hours
 - **Member ID:** 60945
 - **Agency ID:** 52875
 
 ### ✅ Step 2: Static Data
+
 - **Endpoint:** Working (`/StaticData.svc/`)
 - **UAE Cities:** 31 destinations returned
 - **Dubai DestinationId:** 115936
@@ -110,6 +119,7 @@ TBO_HOTEL_VOUCHER_URL=https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10
   - Fujairah: 119041
 
 ### ✅ Step 3: Hotel Search
+
 - **CityId Used:** 115936 (Dubai)
 - **Hotels Returned:** 2,429
 - **TraceId:** Successfully generated
@@ -118,6 +128,7 @@ TBO_HOTEL_VOUCHER_URL=https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10
   - Various 2-4 star hotels from $161-$500
 
 ### ✅ Step 4: Room Details
+
 - **Implementation:** Complete
 - **Status:** Ready for testing with real TraceId
 
@@ -126,16 +137,19 @@ TBO_HOTEL_VOUCHER_URL=https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10
 ## Key Discoveries
 
 ### 1. Static Data Endpoint Path
+
 - **Wrong:** `https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/GetDestinationSearchStaticData`
 - **Correct:** `https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData`
 - **Difference:** `/StaticData.svc/` vs `/SharedData.svc/`
 
 ### 2. No Separate Static Credentials Needed
+
 - **Old Approach:** Use `TBO_STATIC_USER` / `TBO_STATIC_PASSWORD`
 - **New Approach:** Use same TokenId from authentication
 - **Benefit:** Simpler, more consistent flow
 
 ### 3. CityId Must Come from Static Data
+
 - **Wrong:** Hardcoded CityId (e.g., 130443)
 - **Correct:** DestinationId from `GetDestinationSearchStaticData`
 - **Result:** Real hotel data instead of "Invalid CityId" errors
@@ -151,43 +165,43 @@ async function tboMethod(params) {
   // 1. Log method start
   console.log("═".repeat(80));
   console.log("TBO METHOD NAME");
-  
+
   // 2. Get TokenId
   const authData = await authenticateTBO();
   const tokenId = authData.TokenId;
-  
+
   // 3. Build exact TBO request format
   const request = {
     EndUserIp: process.env.TBO_END_USER_IP,
     TokenId: tokenId,
     // ... method-specific fields
   };
-  
+
   // 4. Log request
   console.log("📤 Request Payload:");
   console.log(JSON.stringify(request, null, 2));
-  
+
   // 5. Make request
   const response = await tboRequest(url, {
     method: "POST",
     data: request,
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Accept-Encoding": "gzip, deflate"
+      Accept: "application/json",
+      "Accept-Encoding": "gzip, deflate",
     },
-    timeout: 30000
+    timeout: 30000,
   });
-  
+
   // 6. Log response
   console.log("📥 Response:");
   console.log("  Status:", response.data?.ResponseStatus);
-  
+
   // 7. Return normalized data
   return {
     responseStatus: response.data?.ResponseStatus,
     // ... method-specific fields
-    error: response.data?.Error
+    error: response.data?.Error,
   };
 }
 ```
@@ -197,6 +211,7 @@ async function tboMethod(params) {
 ## Files Created/Modified
 
 ### New Files
+
 - `api/tbo/static.js` (working static data module)
 - `api/tbo/room.js` (room details module)
 - `api/tbo/book.js` (booking module)
@@ -211,12 +226,14 @@ async function tboMethod(params) {
 - `TBO_INTEGRATION_DELIVERY_SUMMARY.md`
 
 ### Modified Files
+
 - `api/tbo/auth.js` (added logging, fallback values)
 - `api/tbo/search.js` (now uses real CityId from static data)
 - `.env` (updated with correct endpoints)
 - `api/.env` (updated with correct endpoints)
 
 ### Data Files
+
 - `dubai-destination-success.json` (31 UAE cities with DestinationIds)
 - `tbo-dubai-hotel-search-no-results.json` (2,429 hotels for Dubai)
 - `tbo-search-summary.json` (quick summary)
@@ -226,12 +243,14 @@ async function tboMethod(params) {
 ## Next Steps for Production
 
 ### Immediate (Can Deploy Now)
+
 1. ✅ Wire `api/tbo/index.js` into main adapter
 2. ✅ Replace hardcoded CityIds with `getCityId()` calls
 3. ✅ Use `getDestinationSearchStaticData()` for city autocomplete
 4. ✅ Update hotel search to use real DestinationIds
 
 ### Testing Required
+
 5. ⏭️ Test `getHotelRoom()` with real TraceId from search
 6. ⏭️ Test `blockRoom()` with real room data
 7. ⏭️ Test `bookHotel()` with real passenger info
@@ -246,7 +265,7 @@ async function tboMethod(params) {
 ✅ **Hotel Search:** Returns 2,429 hotels for Dubai  
 ✅ **All Modules:** Implemented with comprehensive logging  
 ✅ **Documentation:** Complete with examples  
-✅ **Test Scripts:** Created for all flows  
+✅ **Test Scripts:** Created for all flows
 
 ---
 

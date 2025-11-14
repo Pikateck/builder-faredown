@@ -42,11 +42,13 @@ node test-tbo-full-booking-flow.js
 The test will create `tbo-full-booking-flow-results.json` in the same directory.
 
 To view it:
+
 ```bash
 cat tbo-full-booking-flow-results.json
 ```
 
 To download it:
+
 ```bash
 # Copy the JSON output and paste it into a local file
 # or use Render's shell to view it in chunks
@@ -63,18 +65,18 @@ Create an endpoint that runs the test and returns results:
 **File**: `api/routes/tbo/test.js`
 
 ```javascript
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { runCompleteFlow } = require('../../../test-tbo-full-booking-flow');
+const { runCompleteFlow } = require("../../../test-tbo-full-booking-flow");
 
 /**
  * GET /api/tbo/test/full-flow
  * Runs complete booking flow test
- * 
+ *
  * ⚠️ WARNING: This will create a real booking!
  * Only use in staging/test environment
  */
-router.get('/full-flow', async (req, res) => {
+router.get("/full-flow", async (req, res) => {
   try {
     const results = await runCompleteFlow();
     res.json(results);
@@ -82,7 +84,7 @@ router.get('/full-flow', async (req, res) => {
     res.status(500).json({
       success: false,
       error: error.message,
-      stack: error.stack
+      stack: error.stack,
     });
   }
 });
@@ -94,8 +96,8 @@ module.exports = router;
 
 ```javascript
 // Add with other TBO routes
-const tboTestRoutes = require('./routes/tbo/test.js');
-app.use('/api/tbo/test', tboTestRoutes);
+const tboTestRoutes = require("./routes/tbo/test.js");
+app.use("/api/tbo/test", tboTestRoutes);
 ```
 
 ### Deploy and Test
@@ -173,18 +175,21 @@ TBO_HOTEL_SEARCH_URL=https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/
 
 **Error**: `Connection refused` or `Permission denied`
 
-**Solution**: 
+**Solution**:
+
 - Verify you're using the correct Service ID
 - Ensure you're logged into Render CLI: `render login`
 
 ### Test Times Out on Render
 
 **Possible Causes**:
+
 1. Fixie proxy not configured
 2. Environment variables not set
 3. TBO API is down
 
 **Check**:
+
 ```bash
 # Verify proxy config
 echo $USE_SUPPLIER_PROXY

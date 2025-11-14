@@ -1,18 +1,18 @@
 /**
  * TBO Hotel Booking Route
- * 
+ *
  * Handles final hotel booking confirmation
  * Endpoint: POST /api/tbo/book
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { bookHotel } = require('../../tbo/book');
+const { bookHotel } = require("../../tbo/book");
 
 /**
  * POST /api/tbo/book
  * Confirm hotel booking
- * 
+ *
  * Request body:
  * {
  *   traceId: string,
@@ -41,7 +41,7 @@ const { bookHotel } = require('../../tbo/book');
  *     Nationality: string
  *   }]
  * }
- * 
+ *
  * Response:
  * {
  *   success: true,
@@ -54,43 +54,56 @@ const { bookHotel } = require('../../tbo/book');
  *   hotelBookingDetails: {...}
  * }
  */
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
       traceId,
       resultIndex,
       hotelCode,
       hotelName,
-      guestNationality = 'AE',
+      guestNationality = "AE",
       noOfRooms = 1,
       isVoucherBooking = true,
       hotelRoomDetails,
-      hotelPassenger
+      hotelPassenger,
     } = req.body;
 
     // Validate required fields
-    if (!traceId || !resultIndex || !hotelCode || !hotelRoomDetails || !hotelPassenger) {
+    if (
+      !traceId ||
+      !resultIndex ||
+      !hotelCode ||
+      !hotelRoomDetails ||
+      !hotelPassenger
+    ) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: traceId, resultIndex, hotelCode, hotelRoomDetails, hotelPassenger'
+        error:
+          "Missing required fields: traceId, resultIndex, hotelCode, hotelRoomDetails, hotelPassenger",
       });
     }
 
     if (!Array.isArray(hotelPassenger) || hotelPassenger.length === 0) {
       return res.status(400).json({
         success: false,
-        error: 'hotelPassenger must be a non-empty array'
+        error: "hotelPassenger must be a non-empty array",
       });
     }
 
     // Validate passenger details
-    const requiredPassengerFields = ['Title', 'FirstName', 'LastName', 'Email', 'Phoneno'];
+    const requiredPassengerFields = [
+      "Title",
+      "FirstName",
+      "LastName",
+      "Email",
+      "Phoneno",
+    ];
     for (const passenger of hotelPassenger) {
       for (const field of requiredPassengerFields) {
         if (!passenger[field]) {
           return res.status(400).json({
             success: false,
-            error: `Missing passenger field: ${field}`
+            error: `Missing passenger field: ${field}`,
           });
         }
       }
@@ -105,14 +118,14 @@ router.post('/', async (req, res) => {
       noOfRooms: Number(noOfRooms),
       isVoucherBooking,
       hotelRoomDetails,
-      hotelPassenger
+      hotelPassenger,
     });
 
     if (!result || !result.bookingId) {
       return res.status(500).json({
         success: false,
-        error: 'Booking failed',
-        details: result
+        error: "Booking failed",
+        details: result,
       });
     }
 
@@ -124,15 +137,14 @@ router.post('/', async (req, res) => {
       status: result.status,
       responseStatus: result.responseStatus,
       isPriceChanged: result.isPriceChanged,
-      hotelBookingDetails: result.hotelBookingDetails
+      hotelBookingDetails: result.hotelBookingDetails,
     });
-
   } catch (error) {
-    console.error('TBO Booking Error:', error);
+    console.error("TBO Booking Error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code
+      code: error.code,
     });
   }
 });

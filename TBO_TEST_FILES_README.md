@@ -7,6 +7,7 @@
 This is the **OFFICIAL** end-to-end test for TBO hotel integration.
 
 ### What it tests:
+
 1. ✅ Authentication → TokenId
 2. ✅ GetDestinationSearchStaticData → Real CityId
 3. ✅ Hotel Search → Hotels with TraceId
@@ -17,6 +18,7 @@ This is the **OFFICIAL** end-to-end test for TBO hotel integration.
 8. ✅ Get Booking Details → Verification
 
 ### How to run:
+
 ```bash
 # Install dependencies (first time only)
 npm install
@@ -26,6 +28,7 @@ node test-tbo-full-booking-flow.js
 ```
 
 ### Output:
+
 - **Console**: Real-time progress logs
 - **File**: `tbo-full-booking-flow-results.json` (complete results with all request/response data)
 
@@ -34,9 +37,11 @@ node test-tbo-full-booking-flow.js
 ## Other Test Files
 
 ### `test-tbo-complete-pipeline.js`
+
 **Status**: Legacy partial test
 
 Tests only partial flow:
+
 - Authentication
 - Static data (old approach)
 - Hotel search
@@ -44,6 +49,7 @@ Tests only partial flow:
 **Not recommended** - Use `test-tbo-full-booking-flow.js` instead.
 
 ### `test-tbo-auth-direct.js`
+
 **Status**: Unit test for authentication only
 
 Tests just authentication step in isolation.
@@ -52,11 +58,11 @@ Tests just authentication step in isolation.
 
 ## Which File to Use?
 
-| Scenario | File |
-|----------|------|
+| Scenario                         | File                               |
+| -------------------------------- | ---------------------------------- |
 | Complete end-to-end booking test | `test-tbo-full-booking-flow.js` ✅ |
-| Quick auth check | `test-tbo-auth-direct.js` |
-| Legacy reference | `test-tbo-complete-pipeline.js` |
+| Quick auth check                 | `test-tbo-auth-direct.js`          |
+| Legacy reference                 | `test-tbo-complete-pipeline.js`    |
 
 ---
 
@@ -141,7 +147,8 @@ The canonical test (`test-tbo-full-booking-flow.js`) outputs this JSON structure
 
 **Cause**: Fixie proxy not accessible or env vars not set
 
-**Solution**: 
+**Solution**:
+
 - Verify `FIXIE_URL` in `.env` or `api/.env`
 - Verify `USE_SUPPLIER_PROXY=true`
 - Ensure you're running in environment with Fixie access (Render/staging, not local)

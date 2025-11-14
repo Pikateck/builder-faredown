@@ -27,6 +27,7 @@ The integration uses the documented JSON API methods exactly as designed by TBO.
 **Endpoint:** `https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate`
 
 **Request:**
+
 ```json
 {
   "ClientId": "tboprod",
@@ -37,6 +38,7 @@ The integration uses the documented JSON API methods exactly as designed by TBO.
 ```
 
 **Response:**
+
 ```json
 {
   "Status": 1,
@@ -69,6 +71,7 @@ The integration uses the documented JSON API methods exactly as designed by TBO.
 **⚠️ NOTE:** The working endpoint is `/StaticData.svc/` **NOT** `/SharedData.svc/`
 
 **Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -79,6 +82,7 @@ The integration uses the documented JSON API methods exactly as designed by TBO.
 ```
 
 **Response:**
+
 ```json
 {
   "TraceId": "8bcb5ead-24a3-45eb-bd8d-8931024bd537",
@@ -127,6 +131,7 @@ The integration uses the documented JSON API methods exactly as designed by TBO.
 **Endpoint:** `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult`
 
 **Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -152,6 +157,7 @@ The integration uses the documented JSON API methods exactly as designed by TBO.
 ```
 
 **Response Summary:**
+
 ```json
 {
   "HotelSearchResult": {
@@ -202,19 +208,19 @@ The integration uses the documented JSON API methods exactly as designed by TBO.
 
 ### ✅ Working Endpoints
 
-| Purpose | URL | Auth |
-|---------|-----|------|
-| **Authentication** | `https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate` | ClientId + UserName + Password |
-| **Static Data (CityId)** | `https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData` | TokenId |
-| **Hotel Search** | `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult` | TokenId |
-| **Hotel Room Details** | `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelRoom` | TokenId |
+| Purpose                  | URL                                                                                                 | Auth                           |
+| ------------------------ | --------------------------------------------------------------------------------------------------- | ------------------------------ |
+| **Authentication**       | `https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate`                   | ClientId + UserName + Password |
+| **Static Data (CityId)** | `https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData` | TokenId                        |
+| **Hotel Search**         | `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult`   | TokenId                        |
+| **Hotel Room Details**   | `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelRoom`     | TokenId                        |
 
 ### ❌ Failed Endpoints (Documented but Don't Work)
 
-| Endpoint | Error | Reason |
-|----------|-------|--------|
-| `https://apiwr.tboholidays.com/HotelAPI/CityList` | 401 Authorization Failed | Static credentials not activated |
-| `https://hotelbooking.travelboutiqueonline.com/.../GetDestinationSearchStaticData` | 404 Not Found | Wrong service path |
+| Endpoint                                                                           | Error                    | Reason                           |
+| ---------------------------------------------------------------------------------- | ------------------------ | -------------------------------- |
+| `https://apiwr.tboholidays.com/HotelAPI/CityList`                                  | 401 Authorization Failed | Static credentials not activated |
+| `https://hotelbooking.travelboutiqueonline.com/.../GetDestinationSearchStaticData` | 404 Not Found            | Wrong service path               |
 
 **Key Learning:** The static data endpoint is on `/StaticData.svc/` not `/SharedData.svc/` and not on the `hotelbooking` subdomain.
 
@@ -241,17 +247,20 @@ The integration uses the documented JSON API methods exactly as designed by TBO.
 ## What We Proved
 
 ### ✅ Auth Flow Works
+
 - Credentials accepted
 - TokenId returned
 - TokenId valid for 24 hours
 
 ### ✅ Static Data Works
+
 - `GetDestinationSearchStaticData` returns city data
 - No need for portal download
 - No need for static username/password (`travelcategory`)
 - Uses the same TokenId from Authenticate
 
 ### ✅ Hotel Search Works
+
 - CityId from static data is accepted
 - Returns real hotel inventory
 - 2,429 hotels for Dubai
@@ -261,31 +270,33 @@ The integration uses the documented JSON API methods exactly as designed by TBO.
 
 ## UAE Cities Available (31 total)
 
-| City | DestinationId |
-|------|---------------|
-| Dubai | 115936 |
-| Abu Dhabi | 100765 |
-| Sharjah | 137741 |
-| Ras al Khaimah | 133770 |
-| Fujairah | 119041 |
-| Ajman | 100687 |
-| Umm al-Quwain | 140710 |
-| Al Ain | 100692 |
-| Dubai Marina | 346887 |
-| Palm Jumeirah | 369509 |
-| Deira | 116319 |
-| *... and 20 more* | *...* |
+| City              | DestinationId |
+| ----------------- | ------------- |
+| Dubai             | 115936        |
+| Abu Dhabi         | 100765        |
+| Sharjah           | 137741        |
+| Ras al Khaimah    | 133770        |
+| Fujairah          | 119041        |
+| Ajman             | 100687        |
+| Umm al-Quwain     | 140710        |
+| Al Ain            | 100692        |
+| Dubai Marina      | 346887        |
+| Palm Jumeirah     | 369509        |
+| Deira             | 116319        |
+| _... and 20 more_ | _..._         |
 
 ---
 
 ## Integration Status: READY
 
 ### What Works Now
+
 1. ✅ Authenticate
 2. ✅ Get city data (GetDestinationSearchStaticData)
 3. ✅ Search hotels (GetHotelResult)
 
 ### Next Steps (Not Blockers)
+
 1. Implement GetHotelRoom (room details)
 2. Implement BlockRoom (pre-book)
 3. Implement Book (final booking)
@@ -293,6 +304,7 @@ The integration uses the documented JSON API methods exactly as designed by TBO.
 5. Wire into Faredown search flow
 
 ### No Manual Steps Required
+
 - ❌ No portal login needed
 - ❌ No file download (NewCityListHotel.rar) needed
 - ❌ No TBO support ticket needed
@@ -330,6 +342,7 @@ TBO_END_USER_IP=52.5.155.132
 4. **analyze-tbo-results.js** - Analyzes hotel search results
 
 **To reproduce the success:**
+
 ```bash
 node test-tbo-static-on-shared-api.js  # Gets Dubai CityId
 node test-tbo-hotel-search-with-real-cityid.js  # Searches hotels

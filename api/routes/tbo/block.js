@@ -1,18 +1,18 @@
 /**
  * TBO Block Room Route
- * 
+ *
  * Handles pre-booking room validation
  * Endpoint: POST /api/tbo/block
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { blockRoom } = require('../../tbo/book');
+const { blockRoom } = require("../../tbo/book");
 
 /**
  * POST /api/tbo/block
  * Block (pre-book) a room to validate pricing
- * 
+ *
  * Request body:
  * {
  *   traceId: string,
@@ -24,7 +24,7 @@ const { blockRoom } = require('../../tbo/book');
  *   isVoucherBooking: boolean,
  *   hotelRoomDetails: [...]  // Room details from GetHotelRoom
  * }
- * 
+ *
  * Response:
  * {
  *   success: true,
@@ -35,31 +35,32 @@ const { blockRoom } = require('../../tbo/book');
  *   hotelRoomDetails: [...]
  * }
  */
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
       traceId,
       resultIndex,
       hotelCode,
       hotelName,
-      guestNationality = 'AE',
+      guestNationality = "AE",
       noOfRooms = 1,
       isVoucherBooking = true,
-      hotelRoomDetails
+      hotelRoomDetails,
     } = req.body;
 
     // Validate required fields
     if (!traceId || !resultIndex || !hotelCode || !hotelRoomDetails) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: traceId, resultIndex, hotelCode, hotelRoomDetails'
+        error:
+          "Missing required fields: traceId, resultIndex, hotelCode, hotelRoomDetails",
       });
     }
 
     if (!Array.isArray(hotelRoomDetails) || hotelRoomDetails.length === 0) {
       return res.status(400).json({
         success: false,
-        error: 'hotelRoomDetails must be a non-empty array'
+        error: "hotelRoomDetails must be a non-empty array",
       });
     }
 
@@ -71,14 +72,14 @@ router.post('/', async (req, res) => {
       guestNationality,
       noOfRooms: Number(noOfRooms),
       isVoucherBooking,
-      hotelRoomDetails
+      hotelRoomDetails,
     });
 
     if (!result || !result.responseStatus) {
       return res.status(500).json({
         success: false,
-        error: 'Failed to block room',
-        details: result
+        error: "Failed to block room",
+        details: result,
       });
     }
 
@@ -88,15 +89,14 @@ router.post('/', async (req, res) => {
       isPriceChanged: result.isPriceChanged,
       isCancellationPolicyChanged: result.isCancellationPolicyChanged,
       availabilityType: result.availabilityType,
-      hotelRoomDetails: result.hotelRoomDetails
+      hotelRoomDetails: result.hotelRoomDetails,
     });
-
   } catch (error) {
-    console.error('TBO Block Room Error:', error);
+    console.error("TBO Block Room Error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code
+      code: error.code,
     });
   }
 });

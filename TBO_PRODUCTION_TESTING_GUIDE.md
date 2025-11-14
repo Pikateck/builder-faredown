@@ -15,6 +15,7 @@ This guide provides instructions for testing the complete TBO hotel booking inte
 **Why?** TBO requires all requests to come from a whitelisted IP (Fixie proxy). Your local machine cannot access this proxy.
 
 **Where to run:**
+
 - ✅ Render SSH session
 - ✅ Render web shell
 - ✅ Production API endpoint (if you create one)
@@ -202,12 +203,14 @@ The test saves complete results to `tbo-full-booking-flow-results.json`:
 All routes are mounted at `/api/tbo/*`:
 
 #### 1. Authentication
+
 ```
 POST /api/tbo/auth/token
 GET  /api/tbo/auth/status
 ```
 
 #### 2. Static Data (City Lookup)
+
 ```
 GET /api/tbo/static/destinations?countryCode=AE
 GET /api/tbo/static/city/:cityName?countryCode=AE
@@ -215,6 +218,7 @@ GET /api/tbo/static/search?q=Dubai&countryCode=AE
 ```
 
 #### 3. Hotel Search
+
 ```
 POST /api/tbo/search
 Body: {
@@ -229,6 +233,7 @@ Body: {
 ```
 
 #### 4. Room Details
+
 ```
 POST /api/tbo/room
 Body: {
@@ -239,6 +244,7 @@ Body: {
 ```
 
 #### 5. Block Room
+
 ```
 POST /api/tbo/block
 Body: {
@@ -254,6 +260,7 @@ Body: {
 ```
 
 #### 6. Book Hotel
+
 ```
 POST /api/tbo/book
 Body: {
@@ -277,6 +284,7 @@ Body: {
 ```
 
 #### 7. Voucher
+
 ```
 POST /api/tbo/voucher/generate
 Body: {
@@ -296,6 +304,7 @@ Body: {
 ## Expected Response Structures
 
 ### 1. Authentication Response
+
 ```json
 {
   "success": true,
@@ -307,6 +316,7 @@ Body: {
 ```
 
 ### 2. Static Data Response (City Lookup)
+
 ```json
 {
   "success": true,
@@ -317,6 +327,7 @@ Body: {
 ```
 
 ### 3. Search Response
+
 ```json
 {
   "success": true,
@@ -344,6 +355,7 @@ Body: {
 ```
 
 ### 4. Room Details Response
+
 ```json
 {
   "success": true,
@@ -372,6 +384,7 @@ Body: {
 ```
 
 ### 5. Block Room Response
+
 ```json
 {
   "success": true,
@@ -384,6 +397,7 @@ Body: {
 ```
 
 ### 6. Book Response
+
 ```json
 {
   "success": true,
@@ -398,6 +412,7 @@ Body: {
 ```
 
 ### 7. Voucher Response
+
 ```json
 {
   "success": true,
@@ -415,6 +430,7 @@ Body: {
 ### Enable Verbose Logging
 
 All TBO modules include comprehensive logging. Check console output for:
+
 - Request payloads (TokenId sanitized)
 - Response status codes
 - Error details
@@ -423,41 +439,49 @@ All TBO modules include comprehensive logging. Check console output for:
 ### Common Issues
 
 #### 1. Timeout Errors
+
 **Symptom**: `timeout of 20000ms exceeded`
 
 **Cause**: Fixie proxy not configured or not accessible
 
-**Solution**: 
+**Solution**:
+
 - Verify `FIXIE_URL` is set
 - Ensure `USE_SUPPLIER_PROXY=true`
 - Check network access to Fixie proxy
 
 #### 2. Authentication Failed
+
 **Symptom**: `Client-BOMF145 is not Valid`
 
 **Cause**: Incorrect credentials
 
 **Solution**:
+
 - Verify `TBO_CLIENT_ID=tboprod`
 - Verify `TBO_HOTEL_USER_ID=BOMF145`
 - Verify `TBO_HOTEL_PASSWORD=@Bo#4M-Api@`
 
 #### 3. Invalid CityId
+
 **Symptom**: `CityId is Invalid`
 
 **Cause**: Using hardcoded or incorrect CityId
 
 **Solution**:
+
 - Use `GetDestinationSearchStaticData` to get real CityId
 - Never hardcode CityIds
 - Call `/api/tbo/static/city/:cityName` first
 
 #### 4. 404 Not Found
+
 **Symptom**: TBO returns 404
 
 **Cause**: Wrong endpoint URL
 
 **Solution**:
+
 - Verify all `TBO_*_URL` env vars match the verified working endpoints
 - Use `hotelbooking.travelboutiqueonline.com` subdomain for search/room/block/book
 - Use `api.travelboutiqueonline.com` for auth and static data
@@ -496,6 +520,7 @@ Before deploying to production:
 ## Support
 
 If tests fail:
+
 1. Check logs for specific error messages
 2. Verify all environment variables
 3. Ensure Fixie proxy is accessible

@@ -29,42 +29,42 @@ The TBO hotel integration has been **fully implemented and verified** using the 
    Request:  { ClientId, UserName, Password, EndUserIp }
    Response: { TokenId, Status: 1 }
    ↓
-   
+
 2. GET STATIC DATA (Real CityId)
    ↓
    Endpoint: api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData
    Request:  { TokenId, CountryCode, SearchType: "1" }
    Response: { Destinations: [{ CityName, DestinationId }] }
    ↓
-   
+
 3. SEARCH HOTELS
    ↓
    Endpoint: hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult
    Request:  { TokenId, CityId: <DestinationId>, CheckInDate, NoOfNights, RoomGuests }
    Response: { TraceId, HotelResults: [...] }
    ↓
-   
+
 4. GET HOTEL ROOM DETAILS
    ↓
    Endpoint: hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelRoom
    Request:  { TokenId, TraceId, ResultIndex, HotelCode }
    Response: { HotelRoomDetails: [...] }
    ↓
-   
+
 5. BLOCK ROOM (PreBook)
    ↓
    Endpoint: hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom
    Request:  { TokenId, TraceId, ResultIndex, HotelRoomDetails }
    Response: { IsPriceChanged, IsCancellationPolicyChanged }
    ↓
-   
+
 6. BOOK HOTEL
    ↓
    Endpoint: hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book
    Request:  { TokenId, TraceId, HotelRoomDetails, HotelPassenger }
    Response: { BookingId, ConfirmationNo, BookingRefNo }
    ↓
-   
+
 7. GENERATE VOUCHER
    ↓
    Endpoint: hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GenerateVoucher
@@ -79,12 +79,14 @@ The TBO hotel integration has been **fully implemented and verified** using the 
 ### 1. Core TBO Modules (`api/tbo/`)
 
 #### `api/tbo/auth.js`
+
 - **Status**: ✅ Working
 - **Function**: `authenticateTBO()`
 - **Returns**: `{ TokenId, Status, Member }`
 - **Endpoint**: `https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate`
 
 #### `api/tbo/static.js` ⭐ NEW
+
 - **Status**: ✅ Verified Working
 - **Functions**:
   - `getDestinationSearchStaticData(countryCode, tokenId)` - Gets all cities for a country
@@ -94,6 +96,7 @@ The TBO hotel integration has been **fully implemented and verified** using the 
 - **Endpoint**: `https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData`
 
 #### `api/tbo/search.js`
+
 - **Status**: ✅ Updated & Working
 - **Function**: `searchHotels(params)`
 - **Key Changes**:
@@ -103,6 +106,7 @@ The TBO hotel integration has been **fully implemented and verified** using the 
 - **Endpoint**: `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult`
 
 #### `api/tbo/room.js` ⭐ NEW
+
 - **Status**: ✅ Implemented
 - **Function**: `getHotelRoom(params)`
 - **Parameters**: `{ traceId, resultIndex, hotelCode }`
@@ -110,6 +114,7 @@ The TBO hotel integration has been **fully implemented and verified** using the 
 - **Endpoint**: `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelRoom`
 
 #### `api/tbo/book.js` ⭐ NEW
+
 - **Status**: ✅ Implemented
 - **Functions**:
   - `blockRoom(params)` - Pre-book validation
@@ -119,6 +124,7 @@ The TBO hotel integration has been **fully implemented and verified** using the 
   - `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book`
 
 #### `api/tbo/voucher.js` ⭐ NEW
+
 - **Status**: ✅ Implemented
 - **Functions**:
   - `generateVoucher(params)` - Gets voucher PDF URL
@@ -128,6 +134,7 @@ The TBO hotel integration has been **fully implemented and verified** using the 
   - `https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetBookingDetails`
 
 #### `api/tbo/index.js`
+
 - **Status**: ✅ Complete
 - **Purpose**: Central export for all TBO modules
 - **Exports**: All auth, static, search, room, booking, and voucher functions
@@ -135,6 +142,7 @@ The TBO hotel integration has been **fully implemented and verified** using the 
 ### 2. Adapter Integration (`api/services/adapters/`)
 
 #### `api/services/adapters/tboAdapter.js`
+
 - **Status**: ✅ Updated
 - **Key Changes**:
   1. ✅ `getTboCities()` now uses `GetDestinationSearchStaticData` with TokenId
@@ -144,24 +152,27 @@ The TBO hotel integration has been **fully implemented and verified** using the 
   5. ✅ Complete logging added throughout
 
 **Before:**
+
 ```javascript
 // Old static data (wrong endpoint)
-hotelStaticBase: "https://apiwr.tboholidays.com/HotelAPI/"
+hotelStaticBase: "https://apiwr.tboholidays.com/HotelAPI/";
 // Old search (wrong endpoint)
-hotelSearchBase: "https://affiliate.travelboutiqueonline.com/HotelAPI/"
+hotelSearchBase: "https://affiliate.travelboutiqueonline.com/HotelAPI/";
 ```
 
 **After:**
+
 ```javascript
 // ✅ Verified working static data
-hotelStaticDataUrl: "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData"
+hotelStaticDataUrl: "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData";
 // ✅ Verified working search
-hotelSearchUrl: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult"
+hotelSearchUrl: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
 ```
 
 ### 3. Testing & Verification
 
 #### `test-tbo-full-booking-flow.js` ⭐ NEW
+
 - **Status**: ✅ Complete
 - **Purpose**: End-to-end integration test demonstrating complete booking flow
 - **Tests**:
@@ -175,11 +186,13 @@ hotelSearchUrl: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/Hote
   8. ✅ Get Booking Details
 
 **To Run:**
+
 ```bash
 node test-tbo-full-booking-flow.js
 ```
 
 **Expected Output:**
+
 ```
 ✅ All steps completed successfully!
 
@@ -204,46 +217,57 @@ Booking Information:
 ## Key Improvements
 
 ### 1. Dynamic CityId Resolution ✅
+
 **Before:**
+
 ```javascript
 // Hardcoded CityIds
 const cityId = 130443; // Dubai hardcoded
 ```
 
 **After:**
+
 ```javascript
 // Dynamic lookup from TBO
-const cityId = await getCityId('Dubai', 'AE', tokenId);
+const cityId = await getCityId("Dubai", "AE", tokenId);
 // Returns real DestinationId from GetDestinationSearchStaticData
 ```
 
 ### 2. Correct Endpoint Usage ✅
+
 **Before:**
+
 ```javascript
 // Wrong endpoint cluster
 https://affiliate.travelboutiqueonline.com/HotelAPI/Search
 ```
 
 **After:**
+
 ```javascript
 // Correct JSON endpoint
 https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult
 ```
 
 ### 3. Complete TokenId Flow ✅
+
 **Before:**
+
 ```javascript
 // Mixed auth methods (UserName/Password for static, TokenId for search)
 ```
 
 **After:**
+
 ```javascript
 // Consistent TokenId throughout
 Auth → TokenId → All APIs use same TokenId
 ```
 
 ### 4. Comprehensive Logging ✅
+
 All modules now include:
+
 - ✅ Request payload logging (sanitized TokenId)
 - ✅ Response status logging
 - ✅ Error logging with full context
@@ -288,13 +312,16 @@ FIXIE_URL="http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80"
 ## Testing Instructions
 
 ### 1. Run End-to-End Test
+
 ```bash
 cd /path/to/project
 node test-tbo-full-booking-flow.js
 ```
 
 ### 2. Verify Each Step
+
 The test script will:
+
 1. Authenticate and get TokenId
 2. Fetch real CityId for Dubai
 3. Search hotels
@@ -305,6 +332,7 @@ The test script will:
 8. Verify booking details
 
 ### 3. Check Results
+
 Results saved to: `tbo-full-booking-flow-results.json`
 
 ---
@@ -312,23 +340,26 @@ Results saved to: `tbo-full-booking-flow-results.json`
 ## Integration with Main API
 
 ### Hotel Search Endpoint
+
 **Route**: `POST /api/hotels/search`
 
 **Implementation**:
+
 ```javascript
 const tboAdapter = new TBOAdapter();
 const hotels = await tboAdapter.searchHotels({
-  destination: 'Dubai',
-  countryCode: 'AE',
-  checkIn: '2025-06-15',
-  checkOut: '2025-06-20',
+  destination: "Dubai",
+  countryCode: "AE",
+  checkIn: "2025-06-15",
+  checkOut: "2025-06-20",
   rooms: [{ adults: 2, children: 0, childAges: [] }],
-  currency: 'USD',
-  guestNationality: 'AE'
+  currency: "USD",
+  guestNationality: "AE",
 });
 ```
 
 **Flow**:
+
 1. Adapter calls `getCityId('Dubai', 'AE')` → Gets DestinationId from static data
 2. Adapter calls TBO search with real CityId
 3. Returns normalized hotel results
@@ -338,12 +369,15 @@ const hotels = await tboAdapter.searchHotels({
 ## Troubleshooting
 
 ### Issue: "Invalid CityId"
+
 **Solution**: ✅ RESOLVED - Now using GetDestinationSearchStaticData for real CityIds
 
 ### Issue: "404 Not Found"
+
 **Solution**: ✅ RESOLVED - Updated to correct JSON endpoints on `hotelbooking` subdomain
 
 ### Issue: "Authentication Failed"
+
 **Solution**: ✅ RESOLVED - Using correct credentials (`tboprod`, `BOMF145`, `@Bo#4M-Api@`)
 
 ---
@@ -371,6 +405,7 @@ const hotels = await tboAdapter.searchHotels({
 ## Conclusion
 
 The TBO hotel integration is **production-ready** with:
+
 - ✅ Correct JSON API endpoints throughout
 - ✅ Dynamic CityId resolution from static data
 - ✅ TokenId-based authentication everywhere

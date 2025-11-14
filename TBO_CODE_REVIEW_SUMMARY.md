@@ -9,13 +9,14 @@ Quick reference of the key code sections for your review before deployment.
 **File**: `api/services/adapters/tboAdapter.js`
 
 ### searchHotels()
+
 ```javascript
 async searchHotels(searchParams) {
   const tokenId = await this.getHotelToken();
-  
+
   // ✅ Get CityId from TBO (must be numeric ID, not code)
   const cityId = await this.getCityId(destination, countryCode);
-  
+
   if (!cityId) {
     this.logger.warn("⚠️ CityId not found for destination", { destination, countryCode });
     return [];
@@ -40,43 +41,45 @@ async searchHotels(searchParams) {
 
   // ✅ CORRECTED: Use verified working endpoint
   const searchUrl = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
-  
+
   const response = await tboRequest(searchUrl, {...});
-  
+
   // ✅ Response can be wrapped in HotelSearchResult or direct
   const searchResult = response.data?.HotelSearchResult || response.data;
   const hotels = searchResult?.HotelResults || [];
-  
+
   return this.transformHotelResults(hotels, searchParams);
 }
 ```
 
 ### getRooms()
+
 ```javascript
 async getRooms(params = {}) {
   const { getHotelRoom } = require("../../tbo/room");
-  
+
   const { traceId, resultIndex, hotelCode } = params;
-  
+
   this.logger.info("🛏️ TBO Get Rooms", { traceId, resultIndex, hotelCode });
-  
+
   const result = await getHotelRoom({
     traceId,
     resultIndex: Number(resultIndex),
     hotelCode: String(hotelCode)
   });
-  
+
   return result;
 }
 ```
 
 ### blockRoom()
+
 ```javascript
 async blockRoom(params = {}) {
   const { blockRoom: blockRoomFn } = require("../../tbo/book");
-  
+
   this.logger.info("🔒 TBO Block Room", { traceId, hotelCode, noOfRooms });
-  
+
   const result = await blockRoomFn({
     traceId,
     resultIndex: Number(resultIndex),
@@ -87,18 +90,19 @@ async blockRoom(params = {}) {
     isVoucherBooking,
     hotelRoomDetails
   });
-  
+
   return result;
 }
 ```
 
 ### bookHotel()
+
 ```javascript
 async bookHotel(params = {}) {
   const { bookHotel: bookHotelFn } = require("../../tbo/book");
-  
+
   this.logger.info("📝 TBO Book Hotel", { traceId, hotelCode, passengers: hotelPassenger?.length });
-  
+
   const result = await bookHotelFn({
     traceId,
     resultIndex: Number(resultIndex),
@@ -110,23 +114,24 @@ async bookHotel(params = {}) {
     hotelRoomDetails,
     hotelPassenger
   });
-  
+
   return result;
 }
 ```
 
 ### getVoucher()
+
 ```javascript
 async getVoucher(params = {}) {
   const { generateVoucher } = require("../../tbo/voucher");
-  
+
   this.logger.info("🎫 TBO Generate Voucher", { bookingId, bookingRefNo });
-  
+
   const result = await generateVoucher({
     bookingId: String(bookingId),
     bookingRefNo: String(bookingRefNo)
   });
-  
+
   return result;
 }
 ```
@@ -136,26 +141,27 @@ async getVoucher(params = {}) {
 ## 2. Key Route Handlers
 
 ### Search Route
+
 **File**: `api/routes/tbo/search.js`
 
 ```javascript
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
       destination,
-      countryCode = 'AE',
+      countryCode = "AE",
       checkIn,
       checkOut,
       rooms = [{ adults: 2, children: 0, childAges: [] }],
-      currency = 'USD',
-      guestNationality = 'AE'
+      currency = "USD",
+      guestNationality = "AE",
     } = req.body;
 
     // Validate required fields
     if (!destination || !checkIn || !checkOut) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: destination, checkIn, checkOut'
+        error: "Missing required fields: destination, checkIn, checkOut",
       });
     }
 
@@ -166,7 +172,7 @@ router.post('/', async (req, res) => {
       checkOut,
       rooms,
       currency,
-      guestNationality
+      guestNationality,
     });
 
     res.json({
@@ -177,54 +183,67 @@ router.post('/', async (req, res) => {
       checkOutDate: result.checkOutDate,
       currency: result.currency,
       noOfRooms: result.noOfRooms,
-      hotels: result.hotels
+      hotels: result.hotels,
     });
-
   } catch (error) {
-    console.error('TBO Hotel Search Error:', error);
+    console.error("TBO Hotel Search Error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code
+      code: error.code,
     });
   }
 });
 ```
 
 ### Book Route
+
 **File**: `api/routes/tbo/book.js`
 
 ```javascript
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
       traceId,
       resultIndex,
       hotelCode,
       hotelName,
-      guestNationality = 'AE',
+      guestNationality = "AE",
       noOfRooms = 1,
       isVoucherBooking = true,
       hotelRoomDetails,
-      hotelPassenger
+      hotelPassenger,
     } = req.body;
 
     // Validate required fields
-    if (!traceId || !resultIndex || !hotelCode || !hotelRoomDetails || !hotelPassenger) {
+    if (
+      !traceId ||
+      !resultIndex ||
+      !hotelCode ||
+      !hotelRoomDetails ||
+      !hotelPassenger
+    ) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: traceId, resultIndex, hotelCode, hotelRoomDetails, hotelPassenger'
+        error:
+          "Missing required fields: traceId, resultIndex, hotelCode, hotelRoomDetails, hotelPassenger",
       });
     }
 
     // Validate passenger details
-    const requiredPassengerFields = ['Title', 'FirstName', 'LastName', 'Email', 'Phoneno'];
+    const requiredPassengerFields = [
+      "Title",
+      "FirstName",
+      "LastName",
+      "Email",
+      "Phoneno",
+    ];
     for (const passenger of hotelPassenger) {
       for (const field of requiredPassengerFields) {
         if (!passenger[field]) {
           return res.status(400).json({
             success: false,
-            error: `Missing passenger field: ${field}`
+            error: `Missing passenger field: ${field}`,
           });
         }
       }
@@ -239,14 +258,14 @@ router.post('/', async (req, res) => {
       noOfRooms: Number(noOfRooms),
       isVoucherBooking,
       hotelRoomDetails,
-      hotelPassenger
+      hotelPassenger,
     });
 
     if (!result || !result.bookingId) {
       return res.status(500).json({
         success: false,
-        error: 'Booking failed',
-        details: result
+        error: "Booking failed",
+        details: result,
       });
     }
 
@@ -258,15 +277,14 @@ router.post('/', async (req, res) => {
       status: result.status,
       responseStatus: result.responseStatus,
       isPriceChanged: result.isPriceChanged,
-      hotelBookingDetails: result.hotelBookingDetails
+      hotelBookingDetails: result.hotelBookingDetails,
     });
-
   } catch (error) {
-    console.error('TBO Booking Error:', error);
+    console.error("TBO Booking Error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code
+      code: error.code,
     });
   }
 });
@@ -279,6 +297,7 @@ router.post('/', async (req, res) => {
 **File**: `api/server.js`
 
 ### Imports (Lines ~87-97)
+
 ```javascript
 const adminTboRoutes = require("./routes/admin-tbo.js");
 const tboDebugRoutes = require("./tbo/tbo-debug.js");
@@ -296,6 +315,7 @@ const rewardsRoutes = require("./routes/rewards.js");
 ```
 
 ### Route Mounting (Lines ~467-478)
+
 ```javascript
 app.use("/api/tbo-hotels", require("./routes/tbo-hotels"));
 app.use("/api/tbo-hotels/static", require("./routes/tbo-hotels-static"));
@@ -320,13 +340,14 @@ app.use("/api/hotels", hotelCanonicalRoutes);
 **File**: `api/services/adapters/tboAdapter.js`
 
 ### getTboCities() - Updated to use GetDestinationSearchStaticData
+
 ```javascript
 async getTboCities(countryCode, force = false) {
   if (!countryCode) return [];
 
   // ✅ CORRECTED: Use GetDestinationSearchStaticData with TokenId (VERIFIED WORKING)
   const tokenId = await this.getHotelToken();
-  
+
   const requestBody = {
     EndUserIp: this.config.endUserIp,
     TokenId: tokenId,
@@ -352,7 +373,7 @@ async getTboCities(countryCode, force = false) {
   }
 
   const destinations = response.data?.Destinations || [];
-  
+
   return destinations.map(d => ({
     code: d.DestinationId,           // Use DestinationId as code
     id: d.DestinationId,              // TBO CityId (numeric) - THIS IS THE KEY
@@ -372,43 +393,53 @@ async getTboCities(countryCode, force = false) {
 **All from env vars - No hardcoded values**
 
 ### Credentials
+
 ```javascript
 // auth.js
-ClientId: process.env.TBO_CLIENT_ID || "tboprod"
-UserName: process.env.TBO_HOTEL_USER_ID || "BOMF145"
-Password: process.env.TBO_HOTEL_PASSWORD || "@Bo#4M-Api@"
-EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132"
+ClientId: process.env.TBO_CLIENT_ID || "tboprod";
+UserName: process.env.TBO_HOTEL_USER_ID || "BOMF145";
+Password: process.env.TBO_HOTEL_PASSWORD || "@Bo#4M-Api@";
+EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132";
 ```
 
 ### Endpoints
+
 ```javascript
 // All modules
-const authUrl = process.env.TBO_AUTH_URL || 
-  "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate"
+const authUrl =
+  process.env.TBO_AUTH_URL ||
+  "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate";
 
-const staticDataUrl = process.env.TBO_STATIC_DATA_URL ||
-  "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData"
+const staticDataUrl =
+  process.env.TBO_STATIC_DATA_URL ||
+  "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData";
 
-const searchUrl = process.env.TBO_HOTEL_SEARCH_URL || 
-  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult"
+const searchUrl =
+  process.env.TBO_HOTEL_SEARCH_URL ||
+  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
 
-const roomUrl = process.env.TBO_HOTEL_ROOM_URL || 
-  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelRoom"
+const roomUrl =
+  process.env.TBO_HOTEL_ROOM_URL ||
+  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelRoom";
 
-const blockUrl = process.env.TBO_HOTEL_BLOCK_ROOM_URL || 
-  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom"
+const blockUrl =
+  process.env.TBO_HOTEL_BLOCK_ROOM_URL ||
+  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom";
 
-const bookUrl = process.env.TBO_HOTEL_BOOK_URL || 
-  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book"
+const bookUrl =
+  process.env.TBO_HOTEL_BOOK_URL ||
+  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book";
 
-const voucherUrl = process.env.TBO_HOTEL_VOUCHER_URL || 
-  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GenerateVoucher"
+const voucherUrl =
+  process.env.TBO_HOTEL_VOUCHER_URL ||
+  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GenerateVoucher";
 ```
 
 ### Proxy
+
 ```javascript
 // lib/tboRequest.js
-const useProxy = process.env.USE_SUPPLIER_PROXY === 'true';
+const useProxy = process.env.USE_SUPPLIER_PROXY === "true";
 const fixieUrl = process.env.FIXIE_URL;
 ```
 

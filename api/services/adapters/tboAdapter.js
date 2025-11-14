@@ -30,29 +30,36 @@ class TBOAdapter extends BaseSupplierAdapter {
       // ✅ VERIFIED WORKING URLs (Updated 2025)
 
       // Authentication - Returns TokenId (valid 24 hours)
-      hotelAuthUrl: process.env.TBO_AUTH_URL || "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate",
+      hotelAuthUrl:
+        process.env.TBO_AUTH_URL ||
+        "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate",
 
       // Static Data - GetDestinationSearchStaticData (Uses TokenId) - VERIFIED WORKING
-      hotelStaticDataUrl: "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData",
+      hotelStaticDataUrl:
+        "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData",
 
       // Hotel Search - GetHotelResult (Uses TokenId) - VERIFIED WORKING
-      hotelSearchUrl: process.env.TBO_HOTEL_SEARCH_URL || "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult",
+      hotelSearchUrl:
+        process.env.TBO_HOTEL_SEARCH_URL ||
+        "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult",
 
       // Booking, Voucher, Booking Details - Uses TokenId
-      hotelBookingBase: process.env.TBO_HOTEL_BOOKING || "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
-      
+      hotelBookingBase:
+        process.env.TBO_HOTEL_BOOKING ||
+        "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
+
       // Credentials
       clientId: process.env.TBO_CLIENT_ID || "tboprod",
       userId: process.env.TBO_API_USER_ID || "BOMF145",
       password: process.env.TBO_API_PASSWORD || "@Bo#4M-Api@",
-      
+
       // Static data credentials (SEPARATE from dynamic API)
       staticUserName: process.env.TBO_STATIC_USER || "travelcategory",
       staticPassword: process.env.TBO_STATIC_PASSWORD || "Tra@59334536",
-      
+
       // Fixie proxy IP (whitelisted by TBO)
       endUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
-      
+
       timeout: 30000,
       ...config,
     });
@@ -60,7 +67,7 @@ class TBOAdapter extends BaseSupplierAdapter {
     // Token management
     this.tokenId = null;
     this.tokenExpiry = null;
-    
+
     // Diagnostics
     this._authAttempts = [];
     this._egressIp = null;
@@ -74,7 +81,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       userId: this.config.userId,
       endUserIp: this.config.endUserIp,
       via: "fixie_proxy",
-      flow: "Auth → Static → Search → Room → Block → Book → Voucher"
+      flow: "Auth → Static → Search → Room → Block → Book → Voucher",
     });
   }
 
@@ -82,7 +89,7 @@ class TBOAdapter extends BaseSupplierAdapter {
    * ========================================
    * 1. AUTHENTICATION (Returns TokenId)
    * ========================================
-   * 
+   *
    * Endpoint: https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/Authenticate
    * Method: POST
    * Request: { ClientId, UserName, Password, EndUserIp }
@@ -90,19 +97,25 @@ class TBOAdapter extends BaseSupplierAdapter {
    */
   async getHotelToken(force = false) {
     // Return cached token if valid
-    if (!force && this.tokenId && this.tokenExpiry && Date.now() < this.tokenExpiry) {
+    if (
+      !force &&
+      this.tokenId &&
+      this.tokenExpiry &&
+      Date.now() < this.tokenExpiry
+    ) {
       this.logger.info("✅ Using cached TBO TokenId", {
-        expiresIn: Math.round((this.tokenExpiry - Date.now()) / 1000 / 60) + " minutes"
+        expiresIn:
+          Math.round((this.tokenExpiry - Date.now()) / 1000 / 60) + " minutes",
       });
       return this.tokenId;
     }
 
     // EXACT JSON format from TBO docs
     const authRequest = {
-      ClientId: this.config.clientId,        // "tboprod"
-      UserName: this.config.userId,          // "BOMF145"
-      Password: this.config.password,        // "@Bo#4M-Api@"
-      EndUserIp: this.config.endUserIp       // "52.5.155.132"
+      ClientId: this.config.clientId, // "tboprod"
+      UserName: this.config.userId, // "BOMF145"
+      Password: this.config.password, // "@Bo#4M-Api@"
+      EndUserIp: this.config.endUserIp, // "52.5.155.132"
     };
 
     this.logger.info("🔐 TBO Authentication Request", {
@@ -110,7 +123,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       clientId: authRequest.ClientId,
       userName: authRequest.UserName,
       endUserIp: authRequest.EndUserIp,
-      via: tboVia()
+      via: tboVia(),
     });
 
     try {
@@ -119,10 +132,10 @@ class TBOAdapter extends BaseSupplierAdapter {
         data: authRequest,
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Accept-Encoding": "gzip, deflate"
+          Accept: "application/json",
+          "Accept-Encoding": "gzip, deflate",
         },
-        timeout: this.config.timeout
+        timeout: this.config.timeout,
       });
 
       this.logger.info("📥 TBO Auth Response", {
@@ -133,22 +146,24 @@ class TBOAdapter extends BaseSupplierAdapter {
         memberId: response.data?.Member?.MemberId,
         agencyId: response.data?.Member?.AgencyId,
         errorCode: response.data?.Error?.ErrorCode,
-        errorMessage: response.data?.Error?.ErrorMessage
+        errorMessage: response.data?.Error?.ErrorMessage,
       });
 
       // Check success
       if (response.data?.Status !== 1) {
-        const error = new Error(`TBO Auth failed: ${response.data?.Error?.ErrorMessage || "Unknown error"}`);
+        const error = new Error(
+          `TBO Auth failed: ${response.data?.Error?.ErrorMessage || "Unknown error"}`,
+        );
         error.code = "TBO_AUTH_FAILED";
         error.tboStatus = response.data?.Status;
         error.tboError = response.data?.Error;
-        
+
         this._recordAuthAttempt({
           success: false,
           error: error.message,
-          status: response.data?.Status
+          status: response.data?.Status,
         });
-        
+
         throw error;
       }
 
@@ -158,35 +173,34 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       // Store token (valid for 24 hours)
       this.tokenId = response.data.TokenId;
-      this.tokenExpiry = Date.now() + (24 * 60 * 60 * 1000);
+      this.tokenExpiry = Date.now() + 24 * 60 * 60 * 1000;
 
       this._recordAuthAttempt({
         success: true,
         tokenLength: this.tokenId.length,
-        expiresAt: new Date(this.tokenExpiry).toISOString()
+        expiresAt: new Date(this.tokenExpiry).toISOString(),
       });
 
       this.logger.info("✅ TBO Authentication SUCCESS", {
         tokenId: this.tokenId.substring(0, 20) + "...",
         tokenLength: this.tokenId.length,
-        expiresAt: new Date(this.tokenExpiry).toISOString()
+        expiresAt: new Date(this.tokenExpiry).toISOString(),
       });
 
       return this.tokenId;
-
     } catch (error) {
       this.logger.error("❌ TBO Authentication FAILED", {
         message: error.message,
         httpStatus: error.response?.status,
         statusText: error.response?.statusText,
         responseData: error.response?.data,
-        url: this.config.hotelAuthUrl
+        url: this.config.hotelAuthUrl,
       });
 
       this._recordAuthAttempt({
         success: false,
         error: error.message,
-        httpStatus: error.response?.status
+        httpStatus: error.response?.status,
       });
 
       throw error;
@@ -215,45 +229,49 @@ class TBOAdapter extends BaseSupplierAdapter {
    * Endpoint: https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData
    * Returns: Destinations with DestinationId (CityId for hotel search)
    */
-  
+
   async getTboCountries(force = false) {
     // ✅ CORRECTED: Use UserName/Password for static data (POST with body)
     const requestBody = {
-      UserName: this.config.staticUserName,  // "travelcategory"
-      Password: this.config.staticPassword   // "Tra@59334536"
+      UserName: this.config.staticUserName, // "travelcategory"
+      Password: this.config.staticPassword, // "Tra@59334536"
     };
 
     this.logger.info("📍 Fetching TBO Country List (Static Data)", {
       url: this.config.hotelStaticBase + "CountryList",
       method: "POST",
       userName: requestBody.UserName,
-      force
+      force,
     });
 
     try {
-      const response = await tboRequest(this.config.hotelStaticBase + "CountryList", {
-        method: "POST",
-        data: requestBody,
-        headers: {
-          "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Accept-Encoding": "gzip, deflate"
+      const response = await tboRequest(
+        this.config.hotelStaticBase + "CountryList",
+        {
+          method: "POST",
+          data: requestBody,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "Accept-Encoding": "gzip, deflate",
+          },
+          timeout: this.config.timeout,
         },
-        timeout: this.config.timeout
-      });
+      );
 
       if (response.data?.Status !== 1) {
-        throw new Error(`Country List failed: ${response.data?.Error?.ErrorMessage}`);
+        throw new Error(
+          `Country List failed: ${response.data?.Error?.ErrorMessage}`,
+        );
       }
 
       const countries = response.data?.Countries || [];
       this.logger.info(`✅ Retrieved ${countries.length} countries`);
 
-      return countries.map(c => ({
+      return countries.map((c) => ({
         code: c.Code || c.CountryCode,
-        name: c.Name || c.CountryName
+        name: c.Name || c.CountryName,
       }));
-
     } catch (error) {
       this.logger.error("❌ TBO Country List failed:", error.message);
       return [];
@@ -271,18 +289,22 @@ class TBOAdapter extends BaseSupplierAdapter {
       EndUserIp: this.config.endUserIp,
       TokenId: tokenId,
       CountryCode: countryCode,
-      SearchType: "1"  // 1 = City-wise
+      SearchType: "1", // 1 = City-wise
     };
 
-    const staticDataUrl = "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData";
+    const staticDataUrl =
+      "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData";
 
-    this.logger.info("📍 Fetching TBO City List (GetDestinationSearchStaticData)", {
-      url: staticDataUrl,
-      method: "POST",
-      countryCode,
-      searchType: requestBody.SearchType,
-      via: tboVia()
-    });
+    this.logger.info(
+      "📍 Fetching TBO City List (GetDestinationSearchStaticData)",
+      {
+        url: staticDataUrl,
+        method: "POST",
+        countryCode,
+        searchType: requestBody.SearchType,
+        via: tboVia(),
+      },
+    );
 
     try {
       const response = await tboRequest(staticDataUrl, {
@@ -290,31 +312,37 @@ class TBOAdapter extends BaseSupplierAdapter {
         data: requestBody,
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Accept-Encoding": "gzip, deflate"
+          Accept: "application/json",
+          "Accept-Encoding": "gzip, deflate",
         },
-        timeout: this.config.timeout
+        timeout: this.config.timeout,
       });
 
       if (response.data?.Status !== 1) {
-        throw new Error(`GetDestinationSearchStaticData failed: ${response.data?.Error?.ErrorMessage}`);
+        throw new Error(
+          `GetDestinationSearchStaticData failed: ${response.data?.Error?.ErrorMessage}`,
+        );
       }
 
       const destinations = response.data?.Destinations || [];
-      this.logger.info(`✅ Retrieved ${destinations.length} destinations for ${countryCode}`);
+      this.logger.info(
+        `✅ Retrieved ${destinations.length} destinations for ${countryCode}`,
+      );
 
-      return destinations.map(d => ({
-        code: d.DestinationId,           // Use DestinationId as code
-        id: d.DestinationId,              // TBO CityId (numeric) - THIS IS THE KEY
+      return destinations.map((d) => ({
+        code: d.DestinationId, // Use DestinationId as code
+        id: d.DestinationId, // TBO CityId (numeric) - THIS IS THE KEY
         name: d.CityName,
         countryCode: d.CountryCode?.trim(),
         countryName: d.CountryName,
         stateProvince: d.StateProvince,
-        type: d.Type
+        type: d.Type,
       }));
-
     } catch (error) {
-      this.logger.error("❌ TBO GetDestinationSearchStaticData failed:", error.message);
+      this.logger.error(
+        "❌ TBO GetDestinationSearchStaticData failed:",
+        error.message,
+      );
       return [];
     }
   }
@@ -352,7 +380,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       rooms = 1,
       currency = "INR",
       guestNationality = "IN",
-      countryCode = "AE"
+      countryCode = "AE",
     } = searchParams;
 
     // ✅ Get CityId from TBO (must be numeric ID, not code)
@@ -360,7 +388,10 @@ class TBOAdapter extends BaseSupplierAdapter {
     try {
       cityId = await this.getCityId(destination, countryCode);
       if (!cityId) {
-        this.logger.warn("⚠️ CityId not found for destination", { destination, countryCode });
+        this.logger.warn("⚠️ CityId not found for destination", {
+          destination,
+          countryCode,
+        });
         return [];
       }
     } catch (err) {
@@ -371,33 +402,41 @@ class TBOAdapter extends BaseSupplierAdapter {
     // ✅ Calculate NoOfNights (TBO requires this, NOT CheckOutDate)
     const checkInDate = new Date(checkIn);
     const checkOutDate = new Date(checkOut);
-    const noOfNights = Math.ceil((checkOutDate - checkInDate) / (1000 * 60 * 60 * 24));
+    const noOfNights = Math.ceil(
+      (checkOutDate - checkInDate) / (1000 * 60 * 60 * 24),
+    );
 
     if (noOfNights < 1) {
-      throw new Error(`Invalid dates: checkIn=${checkIn}, checkOut=${checkOut}`);
+      throw new Error(
+        `Invalid dates: checkIn=${checkIn}, checkOut=${checkOut}`,
+      );
     }
 
     // ✅ Build RoomGuests array (exact format from TBO spec)
-    const roomGuests = Array.isArray(rooms) 
-      ? rooms.map(r => ({
+    const roomGuests = Array.isArray(rooms)
+      ? rooms.map((r) => ({
           NoOfAdults: Number(r.adults) || 1,
           NoOfChild: Number(r.children) || 0,
-          ChildAge: Array.isArray(r.childAges) ? r.childAges.map(a => Number(a)) : []
+          ChildAge: Array.isArray(r.childAges)
+            ? r.childAges.map((a) => Number(a))
+            : [],
         }))
-      : [{
-          NoOfAdults: Number(adults) || 2,
-          NoOfChild: Number(children) || 0,
-          ChildAge: []
-        }];
+      : [
+          {
+            NoOfAdults: Number(adults) || 2,
+            NoOfChild: Number(children) || 0,
+            ChildAge: [],
+          },
+        ];
 
     // ✅ EXACT JSON request format from TBO documentation
     const searchRequest = {
       EndUserIp: this.config.endUserIp,
       TokenId: tokenId,
-      CheckInDate: this.formatDateForTBO(checkIn),       // dd/MM/yyyy
-      NoOfNights: noOfNights,                            // NOT CheckOutDate
+      CheckInDate: this.formatDateForTBO(checkIn), // dd/MM/yyyy
+      NoOfNights: noOfNights, // NOT CheckOutDate
       CountryCode: countryCode,
-      CityId: Number(cityId),                            // TBO's numeric ID
+      CityId: Number(cityId), // TBO's numeric ID
       PreferredCurrency: currency,
       GuestNationality: guestNationality,
       NoOfRooms: roomGuests.length,
@@ -405,12 +444,13 @@ class TBOAdapter extends BaseSupplierAdapter {
       // Optional but recommended
       IsNearBySearchAllowed: false,
       MaxRating: 5,
-      MinRating: 0
+      MinRating: 0,
     };
 
     // ✅ CORRECTED: Use verified working endpoint
-    const searchUrl = process.env.TBO_HOTEL_SEARCH_URL ||
-                     "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
+    const searchUrl =
+      process.env.TBO_HOTEL_SEARCH_URL ||
+      "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
 
     this.logger.info("🔍 TBO Hotel Search Request", {
       endpoint: searchUrl,
@@ -420,13 +460,13 @@ class TBOAdapter extends BaseSupplierAdapter {
       noOfNights: searchRequest.NoOfNights,
       currency,
       rooms: searchRequest.NoOfRooms,
-      via: tboVia()
+      via: tboVia(),
     });
 
     // Log exact request payload (sanitized)
     this.logger.debug("📤 Search Request Payload:", {
       ...searchRequest,
-      TokenId: tokenId.substring(0, 20) + "..."
+      TokenId: tokenId.substring(0, 20) + "...",
     });
 
     try {
@@ -435,10 +475,10 @@ class TBOAdapter extends BaseSupplierAdapter {
         data: searchRequest,
         headers: {
           "Content-Type": "application/json",
-          "Accept": "application/json",
-          "Accept-Encoding": "gzip, deflate"
+          Accept: "application/json",
+          "Accept-Encoding": "gzip, deflate",
         },
-        timeout: this.config.timeout
+        timeout: this.config.timeout,
       });
 
       // ✅ Response can be wrapped in HotelSearchResult or direct
@@ -449,26 +489,29 @@ class TBOAdapter extends BaseSupplierAdapter {
         responseStatus: searchResult?.ResponseStatus,
         status: searchResult?.Status,
         hasHotelResults: !!searchResult?.HotelResults,
-        hotelCount: Array.isArray(searchResult?.HotelResults) ? searchResult.HotelResults.length : 0,
+        hotelCount: Array.isArray(searchResult?.HotelResults)
+          ? searchResult.HotelResults.length
+          : 0,
         traceId: searchResult?.TraceId,
         errorCode: searchResult?.Error?.ErrorCode,
-        errorMessage: searchResult?.Error?.ErrorMessage
+        errorMessage: searchResult?.Error?.ErrorMessage,
       });
 
       // Check ResponseStatus or Status
-      const statusOk = searchResult?.ResponseStatus === 1 || searchResult?.Status === 1;
+      const statusOk =
+        searchResult?.ResponseStatus === 1 || searchResult?.Status === 1;
 
       if (!statusOk) {
         this.logger.warn("❌ TBO Search returned non-success status", {
           responseStatus: searchResult?.ResponseStatus,
           status: searchResult?.Status,
-          error: searchResult?.Error
+          error: searchResult?.Error,
         });
         return [];
       }
 
       const hotels = searchResult?.HotelResults || [];
-      
+
       if (hotels.length === 0) {
         this.logger.info("ℹ️ TBO returned 0 hotels for this search");
         return [];
@@ -478,14 +521,13 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       // Transform to our format
       return this.transformHotelResults(hotels, searchParams);
-
     } catch (error) {
       this.logger.error("❌ TBO Hotel Search FAILED", {
         message: error.message,
         httpStatus: error.response?.status,
         statusText: error.response?.statusText,
         responseData: error.response?.data,
-        url: this.config.hotelSearchBase + "Search"
+        url: this.config.hotelSearchBase + "Search",
       });
       return [];
     }
@@ -520,7 +562,7 @@ class TBOAdapter extends BaseSupplierAdapter {
         reviewCount: 0,
         location: h.HotelAddress || h.HotelLocation || "",
         isLiveData: true,
-        resultIndex: h.ResultIndex
+        resultIndex: h.ResultIndex,
       };
     });
   }
@@ -529,7 +571,7 @@ class TBOAdapter extends BaseSupplierAdapter {
     const images = [];
     if (hotel.HotelPicture) images.push(hotel.HotelPicture);
     if (Array.isArray(hotel.Images)) {
-      hotel.Images.forEach(img => {
+      hotel.Images.forEach((img) => {
         if (typeof img === "string") images.push(img);
         else if (img?.Url) images.push(img.Url);
       });
@@ -542,27 +584,31 @@ class TBOAdapter extends BaseSupplierAdapter {
    * 6. HELPER METHODS
    * ========================================
    */
-  
+
   async getCityId(cityCode, countryCode = "AE") {
     // ✅ CORRECTED: Get CityId from TBO, not our DB
     const cities = await this.getTboCities(countryCode);
-    
-    const city = cities.find(c => 
-      c.code === cityCode || 
-      c.id === cityCode ||
-      c.name.toLowerCase() === cityCode.toLowerCase()
+
+    const city = cities.find(
+      (c) =>
+        c.code === cityCode ||
+        c.id === cityCode ||
+        c.name.toLowerCase() === cityCode.toLowerCase(),
     );
 
     if (city && city.id) {
       this.logger.info("✅ Found TBO CityId", {
         input: cityCode,
         cityId: city.id,
-        cityName: city.name
+        cityName: city.name,
       });
       return city.id;
     }
 
-    this.logger.warn("⚠️ CityId not found in TBO data", { cityCode, countryCode });
+    this.logger.warn("⚠️ CityId not found in TBO data", {
+      cityCode,
+      countryCode,
+    });
     return null;
   }
 
@@ -571,7 +617,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       this._authAttempts.push({
         ts: new Date().toISOString(),
         supplier: "TBO",
-        ...entry
+        ...entry,
       });
       if (this._authAttempts.length > 50) this._authAttempts.shift();
     } catch (err) {
@@ -595,11 +641,10 @@ class TBOAdapter extends BaseSupplierAdapter {
       const result = await getHotelRoom({
         traceId,
         resultIndex: Number(resultIndex),
-        hotelCode: String(hotelCode)
+        hotelCode: String(hotelCode),
       });
 
       return result;
-
     } catch (error) {
       this.logger.error("❌ TBO Get Rooms failed:", error.message);
       throw error;
@@ -619,10 +664,10 @@ class TBOAdapter extends BaseSupplierAdapter {
       resultIndex,
       hotelCode,
       hotelName,
-      guestNationality = 'AE',
+      guestNationality = "AE",
       noOfRooms = 1,
       isVoucherBooking = true,
-      hotelRoomDetails
+      hotelRoomDetails,
     } = params;
 
     this.logger.info("🔒 TBO Block Room", { traceId, hotelCode, noOfRooms });
@@ -636,11 +681,10 @@ class TBOAdapter extends BaseSupplierAdapter {
         guestNationality,
         noOfRooms: Number(noOfRooms),
         isVoucherBooking,
-        hotelRoomDetails
+        hotelRoomDetails,
       });
 
       return result;
-
     } catch (error) {
       this.logger.error("❌ TBO Block Room failed:", error.message);
       throw error;
@@ -660,14 +704,18 @@ class TBOAdapter extends BaseSupplierAdapter {
       resultIndex,
       hotelCode,
       hotelName,
-      guestNationality = 'AE',
+      guestNationality = "AE",
       noOfRooms = 1,
       isVoucherBooking = true,
       hotelRoomDetails,
-      hotelPassenger
+      hotelPassenger,
     } = params;
 
-    this.logger.info("📝 TBO Book Hotel", { traceId, hotelCode, passengers: hotelPassenger?.length });
+    this.logger.info("📝 TBO Book Hotel", {
+      traceId,
+      hotelCode,
+      passengers: hotelPassenger?.length,
+    });
 
     try {
       const result = await bookHotelFn({
@@ -679,11 +727,10 @@ class TBOAdapter extends BaseSupplierAdapter {
         noOfRooms: Number(noOfRooms),
         isVoucherBooking,
         hotelRoomDetails,
-        hotelPassenger
+        hotelPassenger,
       });
 
       return result;
-
     } catch (error) {
       this.logger.error("❌ TBO Book Hotel failed:", error.message);
       throw error;
@@ -705,11 +752,10 @@ class TBOAdapter extends BaseSupplierAdapter {
     try {
       const result = await generateVoucher({
         bookingId: String(bookingId),
-        bookingRefNo: String(bookingRefNo)
+        bookingRefNo: String(bookingRefNo),
       });
 
       return result;
-
     } catch (error) {
       this.logger.error("❌ TBO Generate Voucher failed:", error.message);
       throw error;
@@ -733,7 +779,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       countryCode: tboHotel.CountryCode || context.countryCode || "",
       location: {
         lat: tboHotel.Latitude || tboHotel.Lat || null,
-        lng: tboHotel.Longitude || tboHotel.Lng || null
+        lng: tboHotel.Longitude || tboHotel.Lng || null,
       },
       rating: parseFloat(tboHotel.StarRating) || 0,
       amenities: tboHotel.HotelFacilities || [],
@@ -742,7 +788,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       currency: price.CurrencyCode || context.currency || "INR",
       taxesAndFees: { included: true, excluded: false },
       refundable: true,
-      rooms: []
+      rooms: [],
     };
   }
 }

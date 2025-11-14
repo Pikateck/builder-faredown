@@ -1,23 +1,23 @@
 /**
  * TBO Voucher Routes
- * 
+ *
  * Handles voucher generation and booking details retrieval
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { generateVoucher, getBookingDetails } = require('../../tbo/voucher');
+const { generateVoucher, getBookingDetails } = require("../../tbo/voucher");
 
 /**
  * POST /api/tbo/voucher/generate
  * Generate hotel booking voucher
- * 
+ *
  * Request body:
  * {
  *   bookingId: string,
  *   bookingRefNo: string
  * }
- * 
+ *
  * Response:
  * {
  *   success: true,
@@ -27,7 +27,7 @@ const { generateVoucher, getBookingDetails } = require('../../tbo/voucher');
  *   responseStatus: number
  * }
  */
-router.post('/generate', async (req, res) => {
+router.post("/generate", async (req, res) => {
   try {
     const { bookingId, bookingRefNo } = req.body;
 
@@ -35,20 +35,20 @@ router.post('/generate', async (req, res) => {
     if (!bookingId || !bookingRefNo) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: bookingId, bookingRefNo'
+        error: "Missing required fields: bookingId, bookingRefNo",
       });
     }
 
     const result = await generateVoucher({
       bookingId: String(bookingId),
-      bookingRefNo: String(bookingRefNo)
+      bookingRefNo: String(bookingRefNo),
     });
 
     if (!result || !result.voucherURL) {
       return res.status(500).json({
         success: false,
-        error: 'Failed to generate voucher',
-        details: result
+        error: "Failed to generate voucher",
+        details: result,
       });
     }
 
@@ -57,15 +57,14 @@ router.post('/generate', async (req, res) => {
       voucherURL: result.voucherURL,
       bookingId: result.bookingId,
       bookingRefNo: result.bookingRefNo,
-      responseStatus: result.responseStatus
+      responseStatus: result.responseStatus,
     });
-
   } catch (error) {
-    console.error('TBO Voucher Generation Error:', error);
+    console.error("TBO Voucher Generation Error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code
+      code: error.code,
     });
   }
 });
@@ -73,13 +72,13 @@ router.post('/generate', async (req, res) => {
 /**
  * POST /api/tbo/voucher/details
  * Get booking details
- * 
+ *
  * Request body:
  * {
  *   bookingId: string,
  *   bookingRefNo: string
  * }
- * 
+ *
  * Response:
  * {
  *   success: true,
@@ -90,7 +89,7 @@ router.post('/generate', async (req, res) => {
  *   hotelDetails: {...}
  * }
  */
-router.post('/details', async (req, res) => {
+router.post("/details", async (req, res) => {
   try {
     const { bookingId, bookingRefNo } = req.body;
 
@@ -98,20 +97,20 @@ router.post('/details', async (req, res) => {
     if (!bookingId && !bookingRefNo) {
       return res.status(400).json({
         success: false,
-        error: 'Either bookingId or bookingRefNo is required'
+        error: "Either bookingId or bookingRefNo is required",
       });
     }
 
     const result = await getBookingDetails({
       bookingId: bookingId ? String(bookingId) : undefined,
-      bookingRefNo: bookingRefNo ? String(bookingRefNo) : undefined
+      bookingRefNo: bookingRefNo ? String(bookingRefNo) : undefined,
     });
 
     if (!result || !result.responseStatus) {
       return res.status(500).json({
         success: false,
-        error: 'Failed to retrieve booking details',
-        details: result
+        error: "Failed to retrieve booking details",
+        details: result,
       });
     }
 
@@ -122,15 +121,14 @@ router.post('/details', async (req, res) => {
       confirmationNo: result.confirmationNo,
       status: result.status,
       responseStatus: result.responseStatus,
-      hotelDetails: result.hotelDetails
+      hotelDetails: result.hotelDetails,
     });
-
   } catch (error) {
-    console.error('TBO Booking Details Error:', error);
+    console.error("TBO Booking Details Error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code
+      code: error.code,
     });
   }
 });

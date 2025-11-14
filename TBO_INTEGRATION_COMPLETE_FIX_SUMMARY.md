@@ -11,6 +11,7 @@
 All 12 critical TBO integration fixes have been implemented successfully. The codebase now uses the **EXACT** production URLs, JSON specifications, and authentication methods provided by TBO.
 
 **Key Changes:**
+
 - ✅ Corrected all TBO production URLs
 - ✅ Fixed static data authentication (UserName/Password instead of TokenId)
 - ✅ Updated search payloads to match TBO spec exactly
@@ -27,6 +28,7 @@ All 12 critical TBO integration fixes have been implemented successfully. The co
 **File:** `.env`
 
 **Changes:**
+
 ```bash
 # ✅ BEFORE (WRONG URLs):
 TBO_AUTH_URL=http://api.tektravels.com/SharedServices/SharedData.svc/rest/Authenticate
@@ -49,12 +51,13 @@ TBO_HOTEL_BOOKING=https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/Hot
 **File:** `api/services/adapters/tboAdapter.js`
 
 **Changes:**
+
 ```javascript
 // ✅ BEFORE (WRONG):
-hotelSearchBase: "https://HotelBE.tektravels.com/hotelservice.svc/rest/"
+hotelSearchBase: "https://HotelBE.tektravels.com/hotelservice.svc/rest/";
 
 // ✅ AFTER (CORRECT):
-hotelSearchBase: "https://affiliate.travelboutiqueonline.com/HotelAPI/"
+hotelSearchBase: "https://affiliate.travelboutiqueonline.com/HotelAPI/";
 ```
 
 **Impact:** Hotel searches now use the correct search endpoint that TBO expects.
@@ -66,6 +69,7 @@ hotelSearchBase: "https://affiliate.travelboutiqueonline.com/HotelAPI/"
 **File:** `api/services/adapters/tboAdapter.js`
 
 **Changes:**
+
 ```javascript
 // ✅ BEFORE (WRONG - used TokenId):
 async getTboCountries() {
@@ -97,12 +101,13 @@ async getTboCountries() {
 **File:** `api/services/adapters/tboAdapter.js`
 
 **Changes:**
+
 ```javascript
 // ✅ BEFORE (WRONG - missing fields, wrong format):
 const searchRequest = {
   CheckInDate: checkIn,
-  CheckOutDate: checkOut,  // ❌ TBO doesn't accept this
-  CityCode: cityCode,      // ❌ Should be CityId (numeric)
+  CheckOutDate: checkOut, // ❌ TBO doesn't accept this
+  CityCode: cityCode, // ❌ Should be CityId (numeric)
   // Missing: PreferredCurrency, GuestNationality, etc.
 };
 
@@ -110,17 +115,17 @@ const searchRequest = {
 const searchRequest = {
   EndUserIp: this.config.endUserIp,
   TokenId: tokenId,
-  CheckInDate: this.formatDateForTBO(checkIn),  // dd/MM/yyyy
-  NoOfNights: noOfNights,                       // NOT CheckOutDate
+  CheckInDate: this.formatDateForTBO(checkIn), // dd/MM/yyyy
+  NoOfNights: noOfNights, // NOT CheckOutDate
   CountryCode: countryCode,
-  CityId: Number(cityId),                       // TBO's numeric ID
+  CityId: Number(cityId), // TBO's numeric ID
   PreferredCurrency: currency,
   GuestNationality: guestNationality,
   NoOfRooms: roomGuests.length,
   RoomGuests: roomGuests,
   IsNearBySearchAllowed: false,
   MaxRating: 5,
-  MinRating: 0
+  MinRating: 0,
 };
 ```
 
@@ -133,6 +138,7 @@ const searchRequest = {
 **File:** `api/services/adapters/tboAdapter.js`
 
 **Implementation:**
+
 ```javascript
 formatDateForTBO(dateStr) {
   const d = new Date(dateStr);
@@ -152,14 +158,15 @@ formatDateForTBO(dateStr) {
 **File:** `api/services/adapters/tboAdapter.js`
 
 **Changes:**
+
 ```javascript
 // ✅ CORRECTED: Get CityId from TBO, not our DB
 async getCityId(cityCode, countryCode = "AE") {
   // Fetch from TBO
   const cities = await this.getTboCities(countryCode);
-  
-  const city = cities.find(c => 
-    c.code === cityCode || 
+
+  const city = cities.find(c =>
+    c.code === cityCode ||
     c.id === cityCode ||
     c.name.toLowerCase() === cityCode.toLowerCase()
   );
@@ -187,19 +194,24 @@ async getCityId(cityCode, countryCode = "AE") {
 **File:** `api/services/adapters/tboAdapter.js`
 
 **Implementation:**
+
 ```javascript
 // ✅ Build RoomGuests array (exact format from TBO spec)
-const roomGuests = Array.isArray(rooms) 
-  ? rooms.map(r => ({
+const roomGuests = Array.isArray(rooms)
+  ? rooms.map((r) => ({
       NoOfAdults: Number(r.adults) || 1,
       NoOfChild: Number(r.children) || 0,
-      ChildAge: Array.isArray(r.childAges) ? r.childAges.map(a => Number(a)) : []
+      ChildAge: Array.isArray(r.childAges)
+        ? r.childAges.map((a) => Number(a))
+        : [],
     }))
-  : [{
-      NoOfAdults: Number(adults) || 2,
-      NoOfChild: Number(children) || 0,
-      ChildAge: []
-    }];
+  : [
+      {
+        NoOfAdults: Number(adults) || 2,
+        NoOfChild: Number(children) || 0,
+        ChildAge: [],
+      },
+    ];
 ```
 
 **Impact:** Room guest data matches TBO's expected structure.
@@ -211,6 +223,7 @@ const roomGuests = Array.isArray(rooms)
 **File:** `api/services/adapters/tboAdapter.js`, `api/tbo/*.js`
 
 **Implementation:**
+
 ```javascript
 headers: {
   "Content-Type": "application/json",
@@ -226,6 +239,7 @@ headers: {
 ### **Fix 9: Structured TBO Debug Folder**
 
 **Created Files:**
+
 ```
 api/tbo/
   ├── auth.js           - Authentication (TokenId)
@@ -237,6 +251,7 @@ api/tbo/
 ```
 
 **Usage:**
+
 ```bash
 # Run complete test
 node api/tbo/test-complete.js
@@ -300,6 +315,7 @@ console.log("  Member ID:", response.data?.Member?.MemberId);
 **File:** `test-tbo-complete-pipeline.js`
 
 **Changes:**
+
 - ✅ Uses correct production URLs
 - ✅ Static data uses UserName/Password
 - ✅ Search uses TokenId
@@ -307,6 +323,7 @@ console.log("  Member ID:", response.data?.Member?.MemberId);
 - ✅ Comprehensive logging
 
 **Usage:**
+
 ```bash
 node test-tbo-complete-pipeline.js
 ```
@@ -325,6 +342,7 @@ node test-tbo-complete-pipeline.js
 ```
 
 **Expected Output:**
+
 ```
 ✅ TEST 1: AUTHENTICATION - PASS
 ✅ TEST 2: COUNTRY LIST - PASS
@@ -410,6 +428,7 @@ curl -X POST http://localhost:3001/api/tbo-hotels/search \
 ### **If Auth Works but Search Fails:**
 
 This likely means:
+
 - ✅ Credentials are correct
 - ✅ Fixie proxy is working
 - ❌ **Hotel API access is not activated for account BOMF145**
@@ -419,6 +438,7 @@ This likely means:
 ### **If Static Data Works but Search Fails:**
 
 This confirms:
+
 - ✅ Static credentials work
 - ✅ Network/proxy is correct
 - ❌ **Dynamic API (TokenId-based) may need activation**
@@ -432,6 +452,7 @@ This confirms:
 If TBO requests sample payloads, use these:
 
 ### **Authentication Request:**
+
 ```json
 {
   "ClientId": "tboprod",
@@ -442,6 +463,7 @@ If TBO requests sample payloads, use these:
 ```
 
 ### **Hotel Search Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -473,6 +495,7 @@ If TBO requests sample payloads, use these:
 **All 12 fixes have been implemented successfully.**
 
 The TBO integration now:
+
 - Uses **EXACT** production URLs from TBO email
 - Sends **EXACT** JSON payloads matching TBO specification
 - Uses **CORRECT** authentication for each endpoint type

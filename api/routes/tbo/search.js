@@ -1,18 +1,18 @@
 /**
  * TBO Hotel Search Route
- * 
+ *
  * Handles hotel search with dynamic CityId resolution
  * Endpoint: POST /api/tbo/search
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { searchHotels } = require('../../tbo/search');
+const { searchHotels } = require("../../tbo/search");
 
 /**
  * POST /api/tbo/search
  * Search hotels
- * 
+ *
  * Request body:
  * {
  *   destination: string,
@@ -23,7 +23,7 @@ const { searchHotels } = require('../../tbo/search');
  *   currency: string (default: "USD"),
  *   guestNationality: string (default: "AE")
  * }
- * 
+ *
  * Response:
  * {
  *   success: true,
@@ -45,23 +45,23 @@ const { searchHotels } = require('../../tbo/search');
  *   }]
  * }
  */
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const {
       destination,
-      countryCode = 'AE',
+      countryCode = "AE",
       checkIn,
       checkOut,
       rooms = [{ adults: 2, children: 0, childAges: [] }],
-      currency = 'USD',
-      guestNationality = 'AE'
+      currency = "USD",
+      guestNationality = "AE",
     } = req.body;
 
     // Validate required fields
     if (!destination || !checkIn || !checkOut) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: destination, checkIn, checkOut'
+        error: "Missing required fields: destination, checkIn, checkOut",
       });
     }
 
@@ -70,7 +70,7 @@ router.post('/', async (req, res) => {
     if (!dateRegex.test(checkIn) || !dateRegex.test(checkOut)) {
       return res.status(400).json({
         success: false,
-        error: 'Invalid date format. Use YYYY-MM-DD'
+        error: "Invalid date format. Use YYYY-MM-DD",
       });
     }
 
@@ -81,7 +81,7 @@ router.post('/', async (req, res) => {
       checkOut,
       rooms,
       currency,
-      guestNationality
+      guestNationality,
     });
 
     res.json({
@@ -92,15 +92,14 @@ router.post('/', async (req, res) => {
       checkOutDate: result.checkOutDate,
       currency: result.currency,
       noOfRooms: result.noOfRooms,
-      hotels: result.hotels
+      hotels: result.hotels,
     });
-
   } catch (error) {
-    console.error('TBO Hotel Search Error:', error);
+    console.error("TBO Hotel Search Error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code
+      code: error.code,
     });
   }
 });

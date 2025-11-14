@@ -1,25 +1,25 @@
 /**
  * TBO Hotel Room Details Route
- * 
+ *
  * Handles room details retrieval
  * Endpoint: POST /api/tbo/room
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { getHotelRoom } = require('../../tbo/room');
+const { getHotelRoom } = require("../../tbo/room");
 
 /**
  * POST /api/tbo/room
  * Get hotel room details
- * 
+ *
  * Request body:
  * {
  *   traceId: string,
  *   resultIndex: number,
  *   hotelCode: string
  * }
- * 
+ *
  * Response:
  * {
  *   success: true,
@@ -52,7 +52,7 @@ const { getHotelRoom } = require('../../tbo/room');
  *   isPANMandatory: boolean
  * }
  */
-router.post('/', async (req, res) => {
+router.post("/", async (req, res) => {
   try {
     const { traceId, resultIndex, hotelCode } = req.body;
 
@@ -60,21 +60,21 @@ router.post('/', async (req, res) => {
     if (!traceId || !resultIndex || !hotelCode) {
       return res.status(400).json({
         success: false,
-        error: 'Missing required fields: traceId, resultIndex, hotelCode'
+        error: "Missing required fields: traceId, resultIndex, hotelCode",
       });
     }
 
     const result = await getHotelRoom({
       traceId,
       resultIndex: Number(resultIndex),
-      hotelCode: String(hotelCode)
+      hotelCode: String(hotelCode),
     });
 
     if (!result || !result.responseStatus) {
       return res.status(500).json({
         success: false,
-        error: 'Failed to retrieve room details',
-        details: result
+        error: "Failed to retrieve room details",
+        details: result,
       });
     }
 
@@ -85,15 +85,14 @@ router.post('/', async (req, res) => {
       isUnderCancellationAllowed: result.isUnderCancellationAllowed,
       isPolicyPerStay: result.isPolicyPerStay,
       isPassportMandatory: result.isPassportMandatory,
-      isPANMandatory: result.isPANMandatory
+      isPANMandatory: result.isPANMandatory,
     });
-
   } catch (error) {
-    console.error('TBO Room Details Error:', error);
+    console.error("TBO Room Details Error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code
+      code: error.code,
     });
   }
 });

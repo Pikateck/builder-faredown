@@ -17,23 +17,27 @@ The complete TBO hotel integration has been finalized with the working static da
  */
 async function getCityId(cityName, countryCode = "AE", tokenId = null) {
   const staticData = await getDestinationSearchStaticData(countryCode, tokenId);
-  
-  const city = staticData.destinations.find(d => 
-    d.cityName.toLowerCase() === cityName.toLowerCase() ||
-    d.cityName.toLowerCase().includes(cityName.toLowerCase())
+
+  const city = staticData.destinations.find(
+    (d) =>
+      d.cityName.toLowerCase() === cityName.toLowerCase() ||
+      d.cityName.toLowerCase().includes(cityName.toLowerCase()),
   );
-  
+
   if (!city) {
     console.warn(`⚠️  City not found: ${cityName} in ${countryCode}`);
     return null;
   }
-  
-  console.log(`✅ Found ${city.cityName}: DestinationId = ${city.destinationId}`);
+
+  console.log(
+    `✅ Found ${city.cityName}: DestinationId = ${city.destinationId}`,
+  );
   return city.destinationId;
 }
 ```
 
 **Key Features**:
+
 - ✅ Uses TokenId authentication (same as hotel search)
 - ✅ Returns real DestinationId from TBO
 - ✅ No hardcoded values
@@ -53,7 +57,7 @@ async function searchHotels(params = {}) {
 
   // 2. Get CityId from static data (NO HARDCODING)
   const cityId = await getCityId(destination, countryCode, tokenId);
-  
+
   if (!cityId) {
     throw new Error(`City not found: ${destination} in ${countryCode}`);
   }
@@ -65,40 +69,42 @@ async function searchHotels(params = {}) {
     CheckInDate: formatDateForTBO(checkIn),
     NoOfNights: noOfNights,
     CountryCode: countryCode,
-    CityId: Number(cityId),  // ✅ Real CityId from static data
+    CityId: Number(cityId), // ✅ Real CityId from static data
     PreferredCurrency: currency,
     GuestNationality: guestNationality,
     NoOfRooms: roomGuests.length,
     RoomGuests: roomGuests,
     IsNearBySearchAllowed: false,
     MaxRating: 5,
-    MinRating: 0
+    MinRating: 0,
   };
 
   // 4. Use correct JSON endpoint
-  const url = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
-  
+  const url =
+    "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
+
   const response = await tboRequest(url, {
     method: "POST",
     data: searchRequest,
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Accept-Encoding": "gzip, deflate"
+      Accept: "application/json",
+      "Accept-Encoding": "gzip, deflate",
     },
-    timeout: 30000
+    timeout: 30000,
   });
 
   return {
     responseStatus: result.ResponseStatus,
     traceId: result.TraceId,
     cityId: result.CityId,
-    hotels: result.HotelResults || []
+    hotels: result.HotelResults || [],
   };
 }
 ```
 
 **Key Changes**:
+
 - ✅ Calls `getCityId()` to get real CityId dynamically
 - ✅ No hardcoded CityId values anywhere
 - ✅ Uses correct `GetHotelResult` endpoint on `hotelbooking` subdomain
@@ -120,32 +126,34 @@ async function getHotelRoom(params = {}) {
   const request = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
-    TraceId: traceId,           // From search response
+    TraceId: traceId, // From search response
     ResultIndex: Number(resultIndex),
-    HotelCode: String(hotelCode)
+    HotelCode: String(hotelCode),
   };
 
-  const url = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelRoom";
-  
+  const url =
+    "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelRoom";
+
   const response = await tboRequest(url, {
     method: "POST",
     data: request,
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Accept-Encoding": "gzip, deflate"
+      Accept: "application/json",
+      "Accept-Encoding": "gzip, deflate",
     },
-    timeout: 30000
+    timeout: 30000,
   });
 
   return {
     responseStatus: response.data?.ResponseStatus,
-    rooms: response.data?.HotelRoomDetails || []
+    rooms: response.data?.HotelRoomDetails || [],
   };
 }
 ```
 
 **Key Features**:
+
 - ✅ Uses TraceId from search
 - ✅ Returns detailed room information with pricing
 - ✅ Same `hotelbooking` subdomain as search
@@ -169,7 +177,7 @@ async function blockRoom(params = {}) {
     guestNationality = "IN",
     noOfRooms = 1,
     hotelRoomDetails,
-    isVoucherBooking = false
+    isVoucherBooking = false,
   } = params;
 
   const request = {
@@ -182,31 +190,33 @@ async function blockRoom(params = {}) {
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
     IsVoucherBooking: isVoucherBooking,
-    HotelRoomDetails: hotelRoomDetails
+    HotelRoomDetails: hotelRoomDetails,
   };
 
-  const url = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom";
-  
+  const url =
+    "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom";
+
   const response = await tboRequest(url, {
     method: "POST",
     data: request,
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Accept-Encoding": "gzip, deflate"
+      Accept: "application/json",
+      "Accept-Encoding": "gzip, deflate",
     },
-    timeout: 30000
+    timeout: 30000,
   });
 
   return {
     responseStatus: response.data?.ResponseStatus,
     isPriceChanged: response.data?.IsPriceChanged,
-    isCancellationPolicyChanged: response.data?.IsCancellationPolicyChanged
+    isCancellationPolicyChanged: response.data?.IsCancellationPolicyChanged,
   };
 }
 ```
 
 **Key Features**:
+
 - ✅ Pre-booking validation
 - ✅ Checks if price or policy changed
 - ✅ Uses same TraceId chain
@@ -231,7 +241,7 @@ async function bookHotel(params = {}) {
     noOfRooms = 1,
     hotelRoomDetails,
     isVoucherBooking = false,
-    hotelPassenger
+    hotelPassenger,
   } = params;
 
   const request = {
@@ -245,20 +255,21 @@ async function bookHotel(params = {}) {
     NoOfRooms: Number(noOfRooms),
     IsVoucherBooking: isVoucherBooking,
     HotelRoomDetails: hotelRoomDetails,
-    HotelPassenger: hotelPassenger
+    HotelPassenger: hotelPassenger,
   };
 
-  const url = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book";
-  
+  const url =
+    "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book";
+
   const response = await tboRequest(url, {
     method: "POST",
     data: request,
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Accept-Encoding": "gzip, deflate"
+      Accept: "application/json",
+      "Accept-Encoding": "gzip, deflate",
     },
-    timeout: 30000
+    timeout: 30000,
   });
 
   return {
@@ -266,12 +277,13 @@ async function bookHotel(params = {}) {
     bookingRefNo: response.data?.BookingRefNo,
     bookingId: response.data?.BookingId,
     confirmationNo: response.data?.ConfirmationNo,
-    status: response.data?.Status
+    status: response.data?.Status,
   };
 }
 ```
 
 **Key Features**:
+
 - ✅ Confirms final booking
 - ✅ Returns BookingId and ConfirmationNo for voucher
 - ✅ Includes passenger details
@@ -293,32 +305,34 @@ async function generateVoucher(params = {}) {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
     BookingRefNo: String(bookingRefNo),
-    BookingId: String(bookingId)
+    BookingId: String(bookingId),
   };
 
-  const url = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GenerateVoucher";
-  
+  const url =
+    "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GenerateVoucher";
+
   const response = await tboRequest(url, {
     method: "POST",
     data: request,
     headers: {
       "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Accept-Encoding": "gzip, deflate"
+      Accept: "application/json",
+      "Accept-Encoding": "gzip, deflate",
     },
-    timeout: 30000
+    timeout: 30000,
   });
 
   return {
     responseStatus: response.data?.ResponseStatus,
     voucherURL: response.data?.VoucherURL,
     bookingRefNo: response.data?.BookingRefNo,
-    bookingId: response.data?.BookingId
+    bookingId: response.data?.BookingId,
   };
 }
 ```
 
 **Key Features**:
+
 - ✅ Returns voucher PDF URL
 - ✅ Uses BookingId from booking response
 - ✅ Final step in booking flow
@@ -337,7 +351,7 @@ async getTboCities(countryCode, force = false) {
 
   // ✅ CORRECTED: Use GetDestinationSearchStaticData with TokenId (VERIFIED WORKING)
   const tokenId = await this.getHotelToken();
-  
+
   const requestBody = {
     EndUserIp: this.config.endUserIp,
     TokenId: tokenId,
@@ -363,7 +377,7 @@ async getTboCities(countryCode, force = false) {
   }
 
   const destinations = response.data?.Destinations || [];
-  
+
   return destinations.map(d => ({
     code: d.DestinationId,           // Use DestinationId as code
     id: d.DestinationId,              // TBO CityId (numeric) - THIS IS THE KEY
@@ -384,7 +398,7 @@ async searchHotels(searchParams) {
 
   // ✅ Get CityId from TBO (must be numeric ID, not code)
   const cityId = await this.getCityId(destination, countryCode);
-  
+
   if (!cityId) {
     this.logger.warn("⚠️ CityId not found for destination", { destination, countryCode });
     return [];
@@ -423,9 +437,9 @@ async searchHotels(searchParams) {
 
   // ✅ Response can be wrapped in HotelSearchResult or direct
   const searchResult = response.data?.HotelSearchResult || response.data;
-  
+
   const hotels = searchResult?.HotelResults || [];
-  
+
   // Transform to our format
   return this.transformHotelResults(hotels, searchParams);
 }
@@ -438,11 +452,13 @@ async searchHotels(searchParams) {
 **Status**: ✅ Ready
 
 **Run Command**:
+
 ```bash
 node test-tbo-full-booking-flow.js
 ```
 
 **What it does**:
+
 1. ✅ Authenticates and gets TokenId
 2. ✅ Gets real CityId for Dubai using GetDestinationSearchStaticData
 3. ✅ Searches hotels with real CityId
@@ -453,6 +469,7 @@ node test-tbo-full-booking-flow.js
 8. ✅ Verifies booking details
 
 **Expected Output**:
+
 ```
 ✅ All steps completed successfully!
 
@@ -472,30 +489,38 @@ Flow Summary:
 ## Key Achievements
 
 ### 1. No More Hardcoded CityIds ✅
+
 **Before**:
+
 ```javascript
-CityId: 130443  // Hardcoded Dubai
+CityId: 130443; // Hardcoded Dubai
 ```
 
 **After**:
+
 ```javascript
-const cityId = await getCityId('Dubai', 'AE', tokenId);
+const cityId = await getCityId("Dubai", "AE", tokenId);
 // Returns real DestinationId from GetDestinationSearchStaticData
 ```
 
 ### 2. Correct JSON Endpoint ✅
+
 **Before**:
+
 ```javascript
 https://affiliate.travelboutiqueonline.com/HotelAPI/Search  // Wrong
 ```
 
 **After**:
+
 ```javascript
 https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult  // ✅ Correct
 ```
 
 ### 3. Complete TokenId Chain ✅
+
 All APIs now use the same TokenId from authentication:
+
 - ✅ Authenticate → TokenId
 - ✅ GetDestinationSearchStaticData → TokenId
 - ✅ GetHotelResult → TokenId
@@ -505,7 +530,9 @@ All APIs now use the same TokenId from authentication:
 - ✅ GenerateVoucher → TokenId
 
 ### 4. Complete Logging ✅
+
 Every request/response is logged with:
+
 - Request payload (sanitized)
 - Response status
 - TraceId tracking
@@ -516,6 +543,7 @@ Every request/response is logged with:
 ## Deployment Ready
 
 All code sections have been updated and integrated:
+
 - ✅ Static data wired into main API
 - ✅ All hardcoded CityIds replaced
 - ✅ Correct JSON endpoint used consistently

@@ -1,18 +1,18 @@
 /**
  * TBO Authentication Route
- * 
+ *
  * Handles TokenId generation and management
  * Endpoint: POST /api/tbo/auth/token
  */
 
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const { authenticateTBO } = require('../../tbo/auth');
+const { authenticateTBO } = require("../../tbo/auth");
 
 /**
  * POST /api/tbo/auth/token
  * Generate or refresh TBO TokenId
- * 
+ *
  * Response:
  * {
  *   success: true,
@@ -22,15 +22,15 @@ const { authenticateTBO } = require('../../tbo/auth');
  *   agencyId: string
  * }
  */
-router.post('/token', async (req, res) => {
+router.post("/token", async (req, res) => {
   try {
     const result = await authenticateTBO();
-    
+
     if (!result || !result.TokenId) {
       return res.status(401).json({
         success: false,
-        error: 'Authentication failed',
-        details: result
+        error: "Authentication failed",
+        details: result,
       });
     }
 
@@ -39,15 +39,14 @@ router.post('/token', async (req, res) => {
       tokenId: result.TokenId,
       expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
       memberId: result.Member?.MemberId,
-      agencyId: result.Member?.AgencyId
+      agencyId: result.Member?.AgencyId,
     });
-
   } catch (error) {
-    console.error('TBO Auth Error:', error);
+    console.error("TBO Auth Error:", error);
     res.status(500).json({
       success: false,
       error: error.message,
-      code: error.code
+      code: error.code,
     });
   }
 });
@@ -56,23 +55,22 @@ router.post('/token', async (req, res) => {
  * GET /api/tbo/auth/status
  * Check authentication status (for debugging)
  */
-router.get('/status', async (req, res) => {
+router.get("/status", async (req, res) => {
   try {
     const result = await authenticateTBO();
-    
+
     res.json({
       success: !!result.TokenId,
       authenticated: !!result.TokenId,
       tokenLength: result.TokenId?.length || 0,
       memberId: result.Member?.MemberId,
-      agencyId: result.Member?.AgencyId
+      agencyId: result.Member?.AgencyId,
     });
-
   } catch (error) {
     res.status(500).json({
       success: false,
       authenticated: false,
-      error: error.message
+      error: error.message,
     });
   }
 });

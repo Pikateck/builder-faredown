@@ -1,7 +1,7 @@
 /**
  * TBO Complete Integration Test
  * Tests all endpoints in sequence with full logging
- * 
+ *
  * ✅ CORRECTED: Uses exact TBO production URLs and JSON spec
  */
 
@@ -20,7 +20,7 @@ async function runCompleteTest() {
     countries: false,
     cities: false,
     search: false,
-    room: false
+    room: false,
   };
 
   try {
@@ -29,7 +29,7 @@ async function runCompleteTest() {
     console.log("-".repeat(70));
     const authData = await authenticateTBO();
     results.auth = authData.Status === 1 && !!authData.TokenId;
-    
+
     if (!results.auth) {
       console.log("❌ Authentication failed - stopping tests\n");
       printSummary(results);
@@ -40,7 +40,8 @@ async function runCompleteTest() {
     console.log("\nTEST 2: COUNTRY LIST (Static Data)");
     console.log("-".repeat(70));
     const countryData = await getCountryList();
-    results.countries = countryData.Status === 1 && countryData.Countries?.length > 0;
+    results.countries =
+      countryData.Status === 1 && countryData.Countries?.length > 0;
 
     // 3. City List (UAE)
     console.log("\nTEST 3: CITY LIST (UAE - Static Data)");
@@ -49,7 +50,9 @@ async function runCompleteTest() {
     results.cities = cityData.Status === 1 && cityData.Cities?.length > 0;
 
     // Find Dubai CityId
-    const dubai = cityData.Cities?.find(c => c.Name.toLowerCase().includes("dubai"));
+    const dubai = cityData.Cities?.find((c) =>
+      c.Name.toLowerCase().includes("dubai"),
+    );
     const dubaiCityId = dubai?.Id || 130443;
 
     console.log(`\n✅ Found Dubai CityId: ${dubaiCityId}\n`);
@@ -64,23 +67,23 @@ async function runCompleteTest() {
       countryCode: "AE",
       currency: "INR",
       guestNationality: "IN",
-      rooms: [{ adults: 2, children: 0, childAges: [] }]
+      rooms: [{ adults: 2, children: 0, childAges: [] }],
     });
-    
+
     const statusOk = searchData.ResponseStatus === 1 || searchData.Status === 1;
     results.search = statusOk && searchData.HotelResults?.length > 0;
 
     // 5. Room Details (if search succeeded)
     if (results.search && searchData.HotelResults?.length > 0) {
       const firstHotel = searchData.HotelResults[0];
-      
+
       console.log("\nTEST 5: HOTEL ROOM DETAILS");
       console.log("-".repeat(70));
-      
+
       try {
         const roomData = await getHotelRoom({
           resultIndex: firstHotel.ResultIndex,
-          traceId: searchData.TraceId
+          traceId: searchData.TraceId,
         });
         results.room = roomData.Status === 1;
       } catch (err) {
@@ -91,7 +94,6 @@ async function runCompleteTest() {
 
     // Summary
     printSummary(results);
-
   } catch (error) {
     console.error("\n❌ Test failed with error:", error.message);
     console.error("Stack:", error.stack);
@@ -110,7 +112,7 @@ function printSummary(results) {
   console.log("4. Hotel Search:", results.search ? "✅ PASS" : "❌ FAIL");
   console.log("5. Room Details:", results.room ? "✅ PASS" : "⏭️ SKIPPED");
 
-  const passCount = Object.values(results).filter(r => r).length;
+  const passCount = Object.values(results).filter((r) => r).length;
   const totalCount = Object.keys(results).length;
 
   console.log("");
@@ -128,7 +130,7 @@ function printSummary(results) {
 
 // Run if called directly
 if (require.main === module) {
-  runCompleteTest().catch(error => {
+  runCompleteTest().catch((error) => {
     console.error("\n❌ Fatal error:", error);
     process.exit(1);
   });

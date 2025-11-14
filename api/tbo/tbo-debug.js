@@ -52,8 +52,8 @@ async function authenticateTBO() {
 router.post("/hotel-search", async (req, res) => {
   try {
     const {
-      checkIn,    // "dd/MM/yyyy"
-      checkOut,   // "dd/MM/yyyy"
+      checkIn, // "dd/MM/yyyy"
+      checkOut, // "dd/MM/yyyy"
       countryCode,
       cityId,
       rooms,
