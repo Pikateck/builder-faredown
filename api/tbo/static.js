@@ -1,84 +1,148 @@
 /**
- * TBO Debug - Static Data
- * Base URL: https://apiwr.tboholidays.com/HotelAPI/
- * Endpoints: CountryList, DestinationCityList
- * Method: POST with JSON body
- * Auth: UserName/Password (separate from TokenId)
+ * TBO Static Data API
+ * 
+ * WORKING ENDPOINT (VERIFIED):
+ * https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData
+ * 
+ * Uses TokenId-based authentication (same as hotel search)
  */
 
 const { tboRequest } = require("../lib/tboRequest");
+const { authenticateTBO } = require("./auth");
 
 /**
- * Get Country List
- * POST https://apiwr.tboholidays.com/HotelAPI/CountryList
+ * Get Destination Search Static Data
+ * Returns cities for a given country with their DestinationIds
+ * 
+ * VERIFIED WORKING - Returns real data
  */
-async function getCountryList() {
-  const url = process.env.TBO_HOTEL_STATIC_DATA + "CountryList";
+async function getDestinationSearchStaticData(countryCode = "AE", tokenId = null) {
+  const url = "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData";
   
-  const requestBody = {
-    UserName: process.env.TBO_STATIC_USER,
-    Password: process.env.TBO_STATIC_PASSWORD
+  // Get TokenId if not provided
+  if (!tokenId) {
+    const authData = await authenticateTBO();
+    tokenId = authData.TokenId;
+    
+    if (!tokenId) {
+      throw new Error("Authentication failed - no TokenId");
+    }
+  }
+  
+  const request = {
+    EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
+    TokenId: tokenId,
+    CountryCode: countryCode,
+    SearchType: "1"  // 1 = City-wise
   };
-
-  console.log("📍 TBO Country List Request");
-  console.log("  Full URL:", url);
-  console.log("  Method: POST");
-  console.log("  Request Body:", JSON.stringify(requestBody, null, 2));
+  
+  console.log("📍 TBO GetDestinationSearchStaticData Request");
+  console.log("  URL:", url);
+  console.log("  CountryCode:", request.CountryCode);
+  console.log("  SearchType:", request.SearchType);
   console.log("");
 
   const response = await tboRequest(url, {
     method: "POST",
-    data: requestBody,
+    data: request,
     headers: {
       "Content-Type": "application/json",
       "Accept": "application/json",
       "Accept-Encoding": "gzip, deflate"
-    }
+    },
+    timeout: 30000
   });
 
-  console.log("📥 TBO Country List Response");
+  console.log("📥 TBO Static Data Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  Response Body:", JSON.stringify(response.data, null, 2).substring(0, 500));
+  console.log("  Status:", response.data?.Status);
+  console.log("  Destinations Count:", response.data?.Destinations?.length || 0);
+  console.log("  TraceId:", response.data?.TraceId);
   console.log("");
-
-  return response.data;
+  
+  if (response.data?.Status !== 1) {
+    throw new Error(`Static data failed: ${response.data?.Error?.ErrorMessage || "Unknown error"}`);
+  }
+  
+  const destinations = response.data?.Destinations || [];
+  
+  if (destinations.length > 0) {
+    console.log("Sample destinations:");
+    destinations.slice(0, 5).forEach(d => {
+      console.log(`  - ${d.CityName} (DestinationId: ${d.DestinationId})`);
+    });
+    console.log("");
+  }
+  
+  return {
+    status: response.data.Status,
+    traceId: response.data.TraceId,
+    tokenId: response.data.TokenId,
+    destinations: destinations.map(d => ({
+      cityName: d.CityName,
+      countryCode: d.CountryCode?.trim(),
+      countryName: d.CountryName,
+      destinationId: d.DestinationId,
+      stateProvince: d.StateProvince,
+      type: d.Type
+    }))
+  };
 }
 
 /**
- * Get City List for a country
- * POST https://apiwr.tboholidays.com/HotelAPI/DestinationCityList
+ * Get CityId (DestinationId) for a specific city
  */
-async function getCityList(countryCode = "AE") {
-  const url = process.env.TBO_HOTEL_STATIC_DATA + "DestinationCityList";
+async function getCityId(cityName, countryCode = "AE", tokenId = null) {
+  const staticData = await getDestinationSearchStaticData(countryCode, tokenId);
   
-  const requestBody = {
-    UserName: process.env.TBO_STATIC_USER,
-    Password: process.env.TBO_STATIC_PASSWORD,
-    CountryCode: countryCode
-  };
-
-  console.log("📍 TBO City List Request");
-  console.log("  Full URL:", url);
-  console.log("  Method: POST");
-  console.log("  Request Body:", JSON.stringify(requestBody, null, 2));
-  console.log("");
-
-  const response = await tboRequest(url, {
-    method: "POST",
-    data: requestBody,
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Accept-Encoding": "gzip, deflate"
-    }
-  });
-
-  console.log("📥 TBO City List Response");
-  console.log("  HTTP Status:", response.status);
-  console.log("  Response Body:", JSON.stringify(response.data, null, 2).substring(0, 1000));
-  console.log("");
-
-  return response.data;
+  const city = staticData.destinations.find(d => 
+    d.cityName.toLowerCase() === cityName.toLowerCase() ||
+    d.cityName.toLowerCase().includes(cityName.toLowerCase())
+  );
+  
+  if (!city) {
+    console.warn(`⚠️  City not found: ${cityName} in ${countryCode}`);
+    return null;
+  }
+  
+  console.log(`✅ Found ${city.cityName}: DestinationId = ${city.destinationId}`);
+  return city.destinationId;
 }
 
-module.exports = { getCountryList, getCityList };
+/**
+ * Search cities by name (for autocomplete)
+ */
+async function searchCities(query, countryCode = null, tokenId = null) {
+  // If country code provided, search that country only
+  if (countryCode) {
+    const staticData = await getDestinationSearchStaticData(countryCode, tokenId);
+    const matches = staticData.destinations.filter(d =>
+      d.cityName.toLowerCase().includes(query.toLowerCase())
+    );
+    return matches;
+  }
+  
+  // Otherwise, search common countries (can be expanded)
+  const countries = ["AE", "GB", "FR", "US", "IN"];
+  const allMatches = [];
+  
+  for (const cc of countries) {
+    try {
+      const staticData = await getDestinationSearchStaticData(cc, tokenId);
+      const matches = staticData.destinations.filter(d =>
+        d.cityName.toLowerCase().includes(query.toLowerCase())
+      );
+      allMatches.push(...matches);
+    } catch (error) {
+      console.error(`Failed to search ${cc}:`, error.message);
+    }
+  }
+  
+  return allMatches;
+}
+
+module.exports = {
+  getDestinationSearchStaticData,
+  getCityId,
+  searchCities
+};
