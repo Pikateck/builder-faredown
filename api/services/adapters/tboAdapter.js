@@ -258,23 +258,29 @@ class TBOAdapter extends BaseSupplierAdapter {
   async getTboCities(countryCode, force = false) {
     if (!countryCode) return [];
 
-    // ✅ CORRECTED: Use UserName/Password for static data (POST with body)
+    // ✅ CORRECTED: Use GetDestinationSearchStaticData with TokenId (VERIFIED WORKING)
+    // Endpoint: https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData
+    const tokenId = await this.getHotelToken();
+
     const requestBody = {
-      UserName: this.config.staticUserName,  // "travelcategory"
-      Password: this.config.staticPassword,  // "Tra@59334536"
-      CountryCode: countryCode
+      EndUserIp: this.config.endUserIp,
+      TokenId: tokenId,
+      CountryCode: countryCode,
+      SearchType: "1"  // 1 = City-wise
     };
 
-    this.logger.info("📍 Fetching TBO City List (Static Data)", {
-      url: this.config.hotelStaticBase + "DestinationCityList",
+    const staticDataUrl = "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData";
+
+    this.logger.info("📍 Fetching TBO City List (GetDestinationSearchStaticData)", {
+      url: staticDataUrl,
       method: "POST",
-      userName: requestBody.UserName,
       countryCode,
-      force
+      searchType: requestBody.SearchType,
+      via: tboVia()
     });
 
     try {
-      const response = await tboRequest(this.config.hotelStaticBase + "DestinationCityList", {
+      const response = await tboRequest(staticDataUrl, {
         method: "POST",
         data: requestBody,
         headers: {
@@ -286,21 +292,24 @@ class TBOAdapter extends BaseSupplierAdapter {
       });
 
       if (response.data?.Status !== 1) {
-        throw new Error(`City List failed: ${response.data?.Error?.ErrorMessage}`);
+        throw new Error(`GetDestinationSearchStaticData failed: ${response.data?.Error?.ErrorMessage}`);
       }
 
-      const cities = response.data?.Cities || [];
-      this.logger.info(`✅ Retrieved ${cities.length} cities for ${countryCode}`);
+      const destinations = response.data?.Destinations || [];
+      this.logger.info(`✅ Retrieved ${destinations.length} destinations for ${countryCode}`);
 
-      return cities.map(c => ({
-        code: c.Code || c.CityCode || c.Id,
-        id: c.Id || c.Code, // TBO CityId (numeric)
-        name: c.Name || c.CityName,
-        countryCode
+      return destinations.map(d => ({
+        code: d.DestinationId,           // Use DestinationId as code
+        id: d.DestinationId,              // TBO CityId (numeric) - THIS IS THE KEY
+        name: d.CityName,
+        countryCode: d.CountryCode?.trim(),
+        countryName: d.CountryName,
+        stateProvince: d.StateProvince,
+        type: d.Type
       }));
 
     } catch (error) {
-      this.logger.error("❌ TBO City List failed:", error.message);
+      this.logger.error("❌ TBO GetDestinationSearchStaticData failed:", error.message);
       return [];
     }
   }
