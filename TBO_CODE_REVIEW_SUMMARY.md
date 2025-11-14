@@ -419,7 +419,10 @@ const fixieUrl = process.env.FIXIE_URL;
 **File**: `test-tbo-full-booking-flow.js`
 
 ```bash
-# Run the complete flow
+# First, install dependencies
+npm install
+
+# Then run the complete flow
 node test-tbo-full-booking-flow.js
 
 # Results saved to:

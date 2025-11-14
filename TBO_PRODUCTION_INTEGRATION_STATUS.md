@@ -189,7 +189,7 @@ api/
 │   ├── room.js          (102 lines)
 │   ├── block.js         (105 lines)
 │   ├── book.js          (141 lines)
-│   └── voucher.js       (139 lines)
+│   └��─ voucher.js       (139 lines)
 │
 ├── tbo/                 ✅ VERIFIED - Core modules
 │   ├── auth.js          (Working - TokenId)
@@ -225,6 +225,10 @@ Deploy the code to your Render environment where:
 ### 2. Run End-to-End Test
 
 ```bash
+# Install dependencies first
+npm install
+
+# Run the test
 node test-tbo-full-booking-flow.js
 ```
 
