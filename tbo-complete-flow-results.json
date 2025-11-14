@@ -1,0 +1,12 @@
+{
+  "staticData": null,
+  "auth": null,
+  "search": null,
+  "error": {
+    "message": "Request failed with status code 404",
+    "status": 404,
+    "data": {
+      "Message": "No HTTP resource was found that matches the request URI 'https://apiwr.tboholidays.com/HotelAPI/DestinationCityList'."
+    }
+  }
+}
