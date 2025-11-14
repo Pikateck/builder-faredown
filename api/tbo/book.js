@@ -1,10 +1,12 @@
 /**
- * TBO Debug - Hotel Booking
- * Endpoints:
- * - BlockRoom: https://affiliate.travelboutiqueonline.com/HotelAPI/BlockRoom
+ * TBO Hotel Booking
+ * 
+ * ENDPOINTS:
+ * - BlockRoom (PreBook): https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom
  * - Book: https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book
- * Method: POST
- * Auth: TokenId
+ * 
+ * BlockRoom validates pricing before final booking
+ * Book confirms the reservation
  */
 
 const { tboRequest } = require("../lib/tboRequest");
@@ -12,37 +14,69 @@ const { authenticateTBO } = require("./auth");
 
 /**
  * Block Room (PreBook)
+ * 
+ * Validates pricing and availability before final booking
+ * Required to ensure price hasn't changed
  */
 async function blockRoom(params = {}) {
+  console.log("═".repeat(80));
+  console.log("TBO BLOCK ROOM (PREBOOK)");
+  console.log("═".repeat(80));
+  
+  // 1. Get TokenId
+  console.log("\nStep 1: Authenticating...");
   const authData = await authenticateTBO();
   const tokenId = authData.TokenId;
 
   if (!tokenId) {
     throw new Error("Authentication failed - no TokenId");
   }
+  console.log("✅ TokenId obtained");
 
+  // 2. Build request
   const {
-    resultIndex,
     traceId,
+    resultIndex,
     hotelCode,
-    rateKey
+    hotelName,
+    guestNationality = "IN",
+    noOfRooms = 1,
+    hotelRoomDetails,
+    isVoucherBooking = false
   } = params;
 
+  if (!traceId || !resultIndex || !hotelCode || !hotelRoomDetails) {
+    throw new Error("Missing required parameters");
+  }
+
   const request = {
-    EndUserIp: process.env.TBO_END_USER_IP,
+    EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
-    ResultIndex: resultIndex,
     TraceId: traceId,
-    HotelCode: hotelCode,
-    RateKey: rateKey
+    ResultIndex: Number(resultIndex),
+    HotelCode: String(hotelCode),
+    HotelName: hotelName,
+    GuestNationality: guestNationality,
+    NoOfRooms: Number(noOfRooms),
+    IsVoucherBooking: isVoucherBooking,
+    HotelRoomDetails: hotelRoomDetails
   };
 
-  const url = process.env.TBO_HOTEL_SEARCH_URL + "BlockRoom";
+  const url = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom";
 
-  console.log("🔒 TBO Block Room Request");
+  console.log("\nStep 2: Blocking room...");
   console.log("  URL:", url);
+  console.log("  TraceId:", request.TraceId);
   console.log("  HotelCode:", request.HotelCode);
-  console.log("  ResultIndex:", request.ResultIndex);
+  console.log("  HotelName:", request.HotelName);
+  console.log("  NoOfRooms:", request.NoOfRooms);
+  console.log("");
+
+  console.log("📤 Request Payload:");
+  console.log(JSON.stringify({
+    ...request,
+    TokenId: tokenId.substring(0, 30) + "..."
+  }, null, 2));
   console.log("");
 
   const response = await tboRequest(url, {
@@ -52,49 +86,96 @@ async function blockRoom(params = {}) {
       "Content-Type": "application/json",
       "Accept": "application/json",
       "Accept-Encoding": "gzip, deflate"
-    }
+    },
+    timeout: 30000
   });
 
-  console.log("📥 TBO Block Room Response");
+  console.log("📥 TBO BlockRoom Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  Status:", response.data?.Status);
-  console.log("  BlockRoomId:", response.data?.BlockRoomId || "N/A");
+  console.log("  ResponseStatus:", response.data?.ResponseStatus);
+  console.log("  AvailabilityType:", response.data?.AvailabilityType);
+  console.log("  IsPriceChanged:", response.data?.IsPriceChanged);
+  console.log("  IsCancellationPolicyChanged:", response.data?.IsCancellationPolicyChanged);
   console.log("  Error:", response.data?.Error?.ErrorMessage || "None");
   console.log("");
 
-  return response.data;
+  return {
+    responseStatus: response.data?.ResponseStatus,
+    availabilityType: response.data?.AvailabilityType,
+    isPriceChanged: response.data?.IsPriceChanged,
+    isCancellationPolicyChanged: response.data?.IsCancellationPolicyChanged,
+    hotelRoomDetails: response.data?.HotelRoomDetails || [],
+    error: response.data?.Error
+  };
 }
 
 /**
  * Book Hotel
+ * 
+ * Confirms the final booking
+ * Must be called after BlockRoom
  */
 async function bookHotel(params = {}) {
+  console.log("═".repeat(80));
+  console.log("TBO BOOK HOTEL");
+  console.log("═".repeat(80));
+  
+  // 1. Get TokenId
+  console.log("\nStep 1: Authenticating...");
   const authData = await authenticateTBO();
   const tokenId = authData.TokenId;
 
   if (!tokenId) {
     throw new Error("Authentication failed - no TokenId");
   }
+  console.log("✅ TokenId obtained");
 
+  // 2. Build request
   const {
-    blockRoomId,
-    guestDetails,
-    specialRequests = ""
+    traceId,
+    resultIndex,
+    hotelCode,
+    hotelName,
+    guestNationality = "IN",
+    noOfRooms = 1,
+    hotelRoomDetails,
+    isVoucherBooking = false,
+    hotelPassenger
   } = params;
 
+  if (!traceId || !resultIndex || !hotelCode || !hotelRoomDetails || !hotelPassenger) {
+    throw new Error("Missing required parameters");
+  }
+
   const request = {
-    EndUserIp: process.env.TBO_END_USER_IP,
+    EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
-    BlockRoomId: blockRoomId,
-    GuestDetails: guestDetails,
-    SpecialRequests: specialRequests
+    TraceId: traceId,
+    ResultIndex: Number(resultIndex),
+    HotelCode: String(hotelCode),
+    HotelName: hotelName,
+    GuestNationality: guestNationality,
+    NoOfRooms: Number(noOfRooms),
+    IsVoucherBooking: isVoucherBooking,
+    HotelRoomDetails: hotelRoomDetails,
+    HotelPassenger: hotelPassenger
   };
 
-  const url = process.env.TBO_HOTEL_BOOKING + "Book";
+  const url = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book";
 
-  console.log("📝 TBO Book Hotel Request");
+  console.log("\nStep 2: Booking hotel...");
   console.log("  URL:", url);
-  console.log("  BlockRoomId:", request.BlockRoomId);
+  console.log("  TraceId:", request.TraceId);
+  console.log("  HotelCode:", request.HotelCode);
+  console.log("  HotelName:", request.HotelName);
+  console.log("  Lead Passenger:", hotelPassenger[0]?.FirstName, hotelPassenger[0]?.LastName);
+  console.log("");
+
+  console.log("📤 Request Payload:");
+  console.log(JSON.stringify({
+    ...request,
+    TokenId: tokenId.substring(0, 30) + "..."
+  }, null, 2));
   console.log("");
 
   const response = await tboRequest(url, {
@@ -104,68 +185,30 @@ async function bookHotel(params = {}) {
       "Content-Type": "application/json",
       "Accept": "application/json",
       "Accept-Encoding": "gzip, deflate"
-    }
+    },
+    timeout: 30000
   });
 
   console.log("📥 TBO Book Response");
   console.log("  HTTP Status:", response.status);
+  console.log("  ResponseStatus:", response.data?.ResponseStatus);
+  console.log("  BookingRefNo:", response.data?.BookingRefNo);
+  console.log("  BookingId:", response.data?.BookingId);
+  console.log("  ConfirmationNo:", response.data?.ConfirmationNo);
   console.log("  Status:", response.data?.Status);
-  console.log("  BookingId:", response.data?.BookingId || "N/A");
-  console.log("  ConfirmationNo:", response.data?.ConfirmationNo || "N/A");
   console.log("  Error:", response.data?.Error?.ErrorMessage || "None");
   console.log("");
 
-  return response.data;
-}
-
-/**
- * Get Booking Details
- */
-async function getBookingDetails(params = {}) {
-  const authData = await authenticateTBO();
-  const tokenId = authData.TokenId;
-
-  if (!tokenId) {
-    throw new Error("Authentication failed - no TokenId");
-  }
-
-  const {
-    bookingId,
-    confirmationNo
-  } = params;
-
-  const request = {
-    EndUserIp: process.env.TBO_END_USER_IP,
-    TokenId: tokenId,
-    BookingId: bookingId || "",
-    ConfirmationNo: confirmationNo || ""
+  return {
+    responseStatus: response.data?.ResponseStatus,
+    bookingRefNo: response.data?.BookingRefNo,
+    bookingId: response.data?.BookingId,
+    confirmationNo: response.data?.ConfirmationNo,
+    status: response.data?.Status,
+    isPriceChanged: response.data?.IsPriceChanged,
+    hotelBookingDetails: response.data?.HotelBookingDetails,
+    error: response.data?.Error
   };
-
-  const url = process.env.TBO_HOTEL_BOOKING + "GetBookingDetail";
-
-  console.log("📋 TBO Booking Details Request");
-  console.log("  URL:", url);
-  console.log("  BookingId:", request.BookingId || "N/A");
-  console.log("  ConfirmationNo:", request.ConfirmationNo || "N/A");
-  console.log("");
-
-  const response = await tboRequest(url, {
-    method: "POST",
-    data: request,
-    headers: {
-      "Content-Type": "application/json",
-      "Accept": "application/json",
-      "Accept-Encoding": "gzip, deflate"
-    }
-  });
-
-  console.log("📥 TBO Booking Details Response");
-  console.log("  HTTP Status:", response.status);
-  console.log("  Status:", response.data?.Status);
-  console.log("  Error:", response.data?.Error?.ErrorMessage || "None");
-  console.log("");
-
-  return response.data;
 }
 
-module.exports = { blockRoom, bookHotel, getBookingDetails };
+module.exports = { blockRoom, bookHotel };
