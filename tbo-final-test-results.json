@@ -1,0 +1,63 @@
+{
+  "auth": {
+    "request": {
+      "ClientId": "tboprod",
+      "UserName": "BOMF145",
+      "Password": "@Bo#4M-Api@",
+      "EndUserIp": "52.5.155.132"
+    },
+    "response": {
+      "Status": 1,
+      "TokenId": "d269c1ba-4dab-42a8-8280-cc0d9f62bf4d",
+      "Error": {
+        "ErrorCode": 0,
+        "ErrorMessage": ""
+      },
+      "Member": {
+        "FirstName": "Zubin",
+        "LastName": "Aibara",
+        "Email": "zubin@faredown.com",
+        "MemberId": 60945,
+        "AgencyId": 52875,
+        "LoginName": "BOMF145",
+        "LoginDetails": "Login Success at#@ 11/11/2025 02:05:54 #@ IPAddress: 106.222.208.16",
+        "isPrimaryAgent": false
+      }
+    }
+  },
+  "search": {
+    "request": {
+      "CheckInDate": "15/12/2025",
+      "NoOfNights": 3,
+      "CountryCode": "AE",
+      "CityId": "130443",
+      "ResultCount": null,
+      "PreferredCurrency": "INR",
+      "GuestNationality": "IN",
+      "NoOfRooms": 1,
+      "RoomGuests": [
+        {
+          "NoOfAdults": 2,
+          "NoOfChild": 0,
+          "ChildAge": null
+        }
+      ],
+      "MaxRating": 5,
+      "MinRating": 0,
+      "ReviewScore": null,
+      "IsNearBySearchAllowed": false,
+      "EndUserIp": "52.5.155.132",
+      "TokenId": "d269c1ba-4dab-42a8-8280-cc0d9f62bf4d"
+    },
+    "response": {
+      "HotelSearchResult": {
+        "ResponseStatus": 3,
+        "Error": {
+          "ErrorCode": 3,
+          "ErrorMessage": "Invalid CityId :130443"
+        },
+        "TraceId": "085a38fd-61ef-4050-b20c-18acd8450bad"
+      }
+    }
+  }
+}
