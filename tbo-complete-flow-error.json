@@ -1,15 +1,8 @@
 {
-  "timestamp": "2025-11-14T08:21:34.020Z",
-  "steps": [
-    {
-      "step": 1,
-      "name": "Authenticate",
-      "status": "FAILED",
-      "tokenId": null
-    }
-  ],
+  "timestamp": "2025-11-14T08:21:51.504Z",
+  "steps": [],
   "error": {
-    "message": "Authentication failed",
-    "stack": "Error: Authentication failed\n    at testCompleteFlow (/app/code/test-tbo-complete-flow-production.js:49:13)\n    at process.processTicksAndRejections (node:internal/process/task_queues:105:5)"
+    "message": "timeout of 20000ms exceeded",
+    "stack": "AxiosError: timeout of 20000ms exceeded\n    at RedirectableRequest.handleRequestTimeout (/app/code/api/node_modules/axios/dist/node/axios.cjs:3228:16)\n    at RedirectableRequest.emit (node:events:518:28)\n    at Timeout.<anonymous> (/app/code/api/node_modules/follow-redirects/index.js:221:12)\n    at listOnTimeout (node:internal/timers:588:17)\n    at process.processTimers (node:internal/timers:523:7)\n    at Axios.request (/app/code/api/node_modules/axios/dist/node/axios.cjs:4280:41)\n    at async Object.authenticateTBO (/app/code/api/tbo/auth.js:28:20)\n    at async testCompleteFlow (/app/code/test-tbo-complete-flow-production.js:36:22)"
   }
 }
