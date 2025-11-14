@@ -581,12 +581,149 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   /**
    * ========================================
+   * 6. ROOM DETAILS (Uses TokenId + TraceId)
+   * ========================================
+   */
+  async getRooms(params = {}) {
+    const { getHotelRoom } = require("../../tbo/room");
+
+    const { traceId, resultIndex, hotelCode } = params;
+
+    this.logger.info("🛏️ TBO Get Rooms", { traceId, resultIndex, hotelCode });
+
+    try {
+      const result = await getHotelRoom({
+        traceId,
+        resultIndex: Number(resultIndex),
+        hotelCode: String(hotelCode)
+      });
+
+      return result;
+
+    } catch (error) {
+      this.logger.error("❌ TBO Get Rooms failed:", error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * ========================================
+   * 7. BLOCK ROOM (Pre-Book Validation)
+   * ========================================
+   */
+  async blockRoom(params = {}) {
+    const { blockRoom: blockRoomFn } = require("../../tbo/book");
+
+    const {
+      traceId,
+      resultIndex,
+      hotelCode,
+      hotelName,
+      guestNationality = 'AE',
+      noOfRooms = 1,
+      isVoucherBooking = true,
+      hotelRoomDetails
+    } = params;
+
+    this.logger.info("🔒 TBO Block Room", { traceId, hotelCode, noOfRooms });
+
+    try {
+      const result = await blockRoomFn({
+        traceId,
+        resultIndex: Number(resultIndex),
+        hotelCode: String(hotelCode),
+        hotelName,
+        guestNationality,
+        noOfRooms: Number(noOfRooms),
+        isVoucherBooking,
+        hotelRoomDetails
+      });
+
+      return result;
+
+    } catch (error) {
+      this.logger.error("❌ TBO Block Room failed:", error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * ========================================
+   * 8. BOOK HOTEL (Final Booking Confirmation)
+   * ========================================
+   */
+  async bookHotel(params = {}) {
+    const { bookHotel: bookHotelFn } = require("../../tbo/book");
+
+    const {
+      traceId,
+      resultIndex,
+      hotelCode,
+      hotelName,
+      guestNationality = 'AE',
+      noOfRooms = 1,
+      isVoucherBooking = true,
+      hotelRoomDetails,
+      hotelPassenger
+    } = params;
+
+    this.logger.info("📝 TBO Book Hotel", { traceId, hotelCode, passengers: hotelPassenger?.length });
+
+    try {
+      const result = await bookHotelFn({
+        traceId,
+        resultIndex: Number(resultIndex),
+        hotelCode: String(hotelCode),
+        hotelName,
+        guestNationality,
+        noOfRooms: Number(noOfRooms),
+        isVoucherBooking,
+        hotelRoomDetails,
+        hotelPassenger
+      });
+
+      return result;
+
+    } catch (error) {
+      this.logger.error("❌ TBO Book Hotel failed:", error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * ========================================
+   * 9. GENERATE VOUCHER
+   * ========================================
+   */
+  async getVoucher(params = {}) {
+    const { generateVoucher } = require("../../tbo/voucher");
+
+    const { bookingId, bookingRefNo } = params;
+
+    this.logger.info("🎫 TBO Generate Voucher", { bookingId, bookingRefNo });
+
+    try {
+      const result = await generateVoucher({
+        bookingId: String(bookingId),
+        bookingRefNo: String(bookingRefNo)
+      });
+
+      return result;
+
+    } catch (error) {
+      this.logger.error("❌ TBO Generate Voucher failed:", error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * ========================================
    * STATIC: Transform to UnifiedHotel format
    * ========================================
    */
   static toUnifiedHotel(tboHotel, context = {}) {
     const price = tboHotel.Price || {};
-    
+
     return {
       supplier: "TBO",
       supplierHotelId: String(tboHotel.HotelCode || tboHotel.HotelId),
