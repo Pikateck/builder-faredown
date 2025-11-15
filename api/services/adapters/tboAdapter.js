@@ -60,7 +60,8 @@ class TBOAdapter extends BaseSupplierAdapter {
       // Fixie proxy IP (whitelisted by TBO)
       endUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
 
-      timeout: 30000,
+      timeout: 30000, // Default timeout for auth/static data
+      searchTimeout: 90000, // Extended timeout for hotel searches (2000+ hotels via proxy)
       ...config,
     });
 
