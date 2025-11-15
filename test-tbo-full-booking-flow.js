@@ -34,8 +34,7 @@
  *   File: tbo-full-booking-flow-results.json (complete results)
  */
 
-require("dotenv").config({ path: "api/.env", override: true });
-require("dotenv").config({ override: true });
+// NO dotenv here on Render
 
 // Check proxy configuration
 const USE_PROXY = process.env.USE_SUPPLIER_PROXY === "true";
