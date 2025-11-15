@@ -764,6 +764,62 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   /**
    * ========================================
+   * 10. CANCEL HOTEL BOOKING
+   * ========================================
+   */
+  async cancelHotelBooking(params = {}) {
+    const { cancelHotelBooking: cancelFn } = require("../../tbo/cancel");
+
+    const { bookingId, confirmationNo, remarks } = params;
+
+    this.logger.info("❌ TBO Cancel Booking", { bookingId, confirmationNo });
+
+    try {
+      const result = await cancelFn({
+        bookingId,
+        confirmationNo,
+        remarks,
+      });
+
+      return result;
+    } catch (error) {
+      this.logger.error("❌ TBO Cancel Booking failed:", error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * ========================================
+   * 11. GET CHANGE REQUEST STATUS
+   * ========================================
+   */
+  async getChangeRequestStatus(params = {}) {
+    const { getChangeRequestStatus: getStatusFn } = require("../../tbo/cancel");
+
+    const { changeRequestId, bookingId, confirmationNo } = params;
+
+    this.logger.info("📋 TBO Get Change Request Status", {
+      changeRequestId,
+      bookingId,
+      confirmationNo
+    });
+
+    try {
+      const result = await getStatusFn({
+        changeRequestId,
+        bookingId,
+        confirmationNo,
+      });
+
+      return result;
+    } catch (error) {
+      this.logger.error("❌ TBO Get Change Request Status failed:", error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * ========================================
    * STATIC: Transform to UnifiedHotel format
    * ========================================
    */
