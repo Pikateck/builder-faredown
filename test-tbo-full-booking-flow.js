@@ -14,7 +14,7 @@
  * Tests complete pipeline:
  * 1. Authenticate → Get TokenId
  * 2. GetDestinationSearchStaticData → Get real CityId (DestinationId)
- * 3. SearchHotels → Get hotel results with TraceId
+ * 3. SearchHotels ��� Get hotel results with TraceId
  * 4. GetHotelRoom → Get room details using TraceId + ResultIndex
  * 5. BlockRoom → Hold the room temporarily
  * 6. Book → Confirm the booking
@@ -102,7 +102,7 @@ const TEST_PARAMS = {
       Email: "john.doe@test.com",
       Phoneno: "+971501234567",
       AddressLine1: "Test Address",
-      City: "Dubai",
+      City: "Mumbai",
       CountryCode: "IN",
       CountryName: "India",
       Nationality: "IN",
@@ -119,7 +119,7 @@ const TEST_PARAMS = {
       Email: "jane.doe@test.com",
       Phoneno: "+971501234568",
       AddressLine1: "Test Address",
-      City: "Dubai",
+      City: "Mumbai",
       CountryCode: "IN",
       CountryName: "India",
       Nationality: "IN",
