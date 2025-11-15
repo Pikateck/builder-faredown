@@ -281,7 +281,7 @@ const corsOptionsDelegate = (req, callback) => {
     return callback(null, { ...baseCorsOptions, origin });
   }
 
-  console.warn("⚠️ CORS fallback allowing unlisted origin:", origin);
+  console.warn("��️ CORS fallback allowing unlisted origin:", origin);
   return callback(null, { ...baseCorsOptions, origin, credentials: false });
 };
 
@@ -493,6 +493,7 @@ app.use("/api/ai-bargains", aiBargainRoutes);
 app.use("/api/currency", currencyRoutes);
 app.use("/api/countries", countriesRoutes);
 app.use("/api/promo", promoRoutes);
+app.use("/api/meta", metaNationalitiesRoutes); // Nationalities metadata
 app.use("/api/feature-flags", featureFlagsRoutes);
 app.use("/api/recent-searches", recentSearchesRoutes);
 app.use("/api/loyalty", require("./routes/loyalty"));
