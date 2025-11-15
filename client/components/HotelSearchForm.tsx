@@ -31,6 +31,19 @@ import {
   getTypeLabel,
   type SearchResult,
 } from "@/lib/hotelSearchData";
+import {
+  getNationalities,
+  getDefaultNationality,
+  type Nationality,
+} from "@/services/nationalitiesService";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface GuestConfig {
   adults: number;
@@ -48,6 +61,7 @@ interface HotelSearchFormProps {
   initialCheckIn?: string;
   initialCheckOut?: string;
   initialGuests?: { adults: number; children: number; rooms: number };
+  initialNationality?: string;
 }
 
 export function HotelSearchForm({
