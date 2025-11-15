@@ -77,12 +77,39 @@ const { getHotelRoom } = require("./api/tbo/room");
 const { blockRoom, bookHotel } = require("./api/tbo/book");
 const { generateVoucher, getBookingDetails } = require("./api/tbo/voucher");
 
+/**
+ * Helper to always use FUTURE dates so TBO does not reject with
+ * "CheckInDate must be greater than current Date".
+ *
+ * - Check-in: today + 30 days
+ * - Check-out: check-in + 5 nights
+ * - Format: YYYY-MM-DD (searchHotels will convert to dd/MM/yyyy internally)
+ */
+function getFutureDates() {
+  const today = new Date();
+
+  const checkIn = new Date(today);
+  checkIn.setDate(checkIn.getDate() + 30); // 30 days from today
+
+  const checkOut = new Date(checkIn);
+  checkOut.setDate(checkOut.getDate() + 5); // 5 nights
+
+  const fmt = (d) => d.toISOString().slice(0, 10); // YYYY-MM-DD
+
+  return {
+    checkInDate: fmt(checkIn),
+    checkOutDate: fmt(checkOut),
+  };
+}
+
+const { checkInDate, checkOutDate } = getFutureDates();
+
 // Test parameters
 const TEST_PARAMS = {
   destination: "Dubai",
   countryCode: "AE",
-  checkInDate: "2025-06-15",
-  checkOutDate: "2025-06-20",
+  checkInDate,
+  checkOutDate,
   nationality: "AE",
   adults: 2,
   children: 0,
