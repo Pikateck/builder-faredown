@@ -557,7 +557,7 @@ export function HotelSearchForm({
             <div className="relative">
               <button
                 onClick={() => setIsDestinationOpen(!isDestinationOpen)}
-                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 sm:h-12 w-full hover:border-blue-600 touch-manipulation pr-10"
+                className="flex items-center bg-white rounded border-2 border-blue-500 h-10 sm:h-12 w-full hover:border-blue-600 touch-manipulation px-2 sm:px-3 pr-10"
               >
                 <MapPin className="w-4 h-4 text-gray-500 mr-2" />
                 <div className="flex items-center space-x-2 min-w-0">
