@@ -84,7 +84,7 @@ const TEST_PARAMS = {
   countryCode: "AE",
   checkInDate: "2025-06-15",
   checkOutDate: "2025-06-20",
-  nationality: "AE",
+  nationality: "IN", // ⚠️ TBO agency restriction: must be IN
   adults: 2,
   children: 0,
   rooms: 1,
