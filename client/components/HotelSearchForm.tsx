@@ -23,6 +23,7 @@ import {
   Building,
   Landmark,
   Plane,
+  Globe,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import {
@@ -970,8 +971,8 @@ export function HotelSearchForm({
 
         {/* Nationality */}
         <div className="flex-1 lg:max-w-[200px]">
-          <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-            Nationality
+          <label className="text-xs font-medium text-gray-800 mb-1 block">
+            Guest Nationality
           </label>
           <Select
             value={nationality}
@@ -979,7 +980,10 @@ export function HotelSearchForm({
             disabled={isNationalityLoading}
           >
             <SelectTrigger className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3">
-              <SelectValue placeholder="Nationality" />
+              <Globe className="mr-2 h-4 w-4 flex-shrink-0" />
+              <SelectValue placeholder="Select nationality">
+                {nationality && nationalities.find(n => n.isoCode === nationality)?.countryName}
+              </SelectValue>
             </SelectTrigger>
             <SelectContent className="max-h-[300px] overflow-y-auto">
               {nationalities.map((n) => (
