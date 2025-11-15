@@ -6,6 +6,7 @@
 const express = require("express");
 const router = express.Router();
 const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
+const { resolveGuestNationality } = require("../utils/nationalityResolver");
 
 function getTboAdapter() {
   const adapter = supplierAdapterManager.getAdapter("TBO");
