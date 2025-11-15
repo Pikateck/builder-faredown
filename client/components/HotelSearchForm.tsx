@@ -23,6 +23,7 @@ import {
   Building,
   Landmark,
   Plane,
+  Globe,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import {
@@ -739,9 +740,9 @@ export function HotelSearchForm({
           </div>
 
           {/* Check-in/Check-out Dates */}
-          <div className="flex-1 lg:max-w-[280px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Dates
+          <div className="flex-1 lg:max-w-[280px] relative">
+            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+              Check-in - Check-out
             </label>
             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
               <PopoverTrigger asChild>
@@ -800,8 +801,8 @@ export function HotelSearchForm({
           {/* Guests & Rooms + Nationality Container */}
         <div className="flex-1 lg:max-w-[280px] flex flex-col gap-2">
           {/* Guests & Rooms */}
-          <div>
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+          <div className="relative">
+            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
               Guests & Rooms
             </label>
             <Popover
@@ -971,14 +972,18 @@ export function HotelSearchForm({
           </div>
 
           {/* Nationality */}
-          <div>
+          <div className="relative">
+            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+              Guest Nationality
+            </label>
             <Select
               value={nationality}
               onValueChange={setNationality}
               disabled={isNationalityLoading}
             >
               <SelectTrigger className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3">
-                <SelectValue placeholder="Guest Nationality" />
+                <Globe className="mr-2 h-4 w-4 flex-shrink-0" />
+                <SelectValue placeholder="Select nationality" />
               </SelectTrigger>
               <SelectContent className="max-h-[300px] overflow-y-auto">
                 {nationalities.map((n) => (
