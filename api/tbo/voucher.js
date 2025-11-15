@@ -177,19 +177,66 @@ async function getBookingDetails(params = {}) {
   console.log("  HTTP Status:", response.status);
   console.log("  ResponseStatus:", result?.ResponseStatus);
   console.log("  BookingStatus:", result?.Status);
-  console.log("  BookingRefNo:", result?.BookingRefNo || "N/A");
+  console.log("  HotelBookingStatus:", result?.HotelBookingStatus || "N/A");
+  console.log("  VoucherStatus:", result?.VoucherStatus);
+  console.log("  BookingRefNo:", result?.BookingRefNo || result?.BookingReferenceNo || "N/A");
   console.log("  BookingId:", result?.BookingId || "N/A");
   console.log("  ConfirmationNo:", result?.ConfirmationNo || "N/A");
+  console.log("  TraceId:", result?.TraceId || "N/A");
+  console.log("  IsPriceChanged:", result?.IsPriceChanged);
+  console.log("  IsCancellationPolicyChanged:", result?.IsCancellationPolicyChanged);
   console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
+  // ✅ Return comprehensive booking details per TBO spec
   return {
+    // Core status fields
     responseStatus: result?.ResponseStatus,
-    status: result?.Status,
-    bookingRefNo: result?.BookingRefNo,
+    status: result?.Status,                           // Booking status enum (0-6)
+    hotelBookingStatus: result?.HotelBookingStatus,   // Booking status description
+    voucherStatus: result?.VoucherStatus,             // true if vouchered
+
+    // Reference numbers
+    traceId: result?.TraceId,
     bookingId: result?.BookingId,
     confirmationNo: result?.ConfirmationNo,
+    bookingRefNo: result?.BookingRefNo || result?.BookingReferenceNo,
+    hotelConfirmationNo: result?.HotelConfirmationNo,
+    invoiceNo: result?.InvoiceNo,
+    agentReferenceNo: result?.AgentReferenceNo,
+
+    // Price/Policy changes
+    isPriceChanged: result?.IsPriceChanged,
+    isCancellationPolicyChanged: result?.IsCancellationPolicyChanged,
+
+    // Hotel information
+    hotelName: result?.HotelName,
+    starRating: result?.StarRating,
+    city: result?.City,
+    addressLine1: result?.AddressLine1,
+    addressLine2: result?.AddressLine2,
+    latitude: result?.Latitude,
+    longitude: result?.Longitude,
+
+    // Stay details
+    checkInDate: result?.CheckInDate,
+    checkOutDate: result?.CheckOutDate,
+    bookingDate: result?.BookingDate,
+    noOfRooms: result?.NoOfRooms,
+
+    // Room and passenger details
+    hotelRoomsDetails: result?.HotelRoomsDetails,     // Full room array with guests, prices, etc.
+
+    // Additional details
+    isDomestic: result?.IsDomestic,
+    isPerStay: result?.IsPerStay,
+    specialRequest: result?.SpecialRequest,
+    invoiceCreatedOn: result?.InvoiceCreatedOn,
+
+    // Legacy field (for backward compatibility)
     hotelDetails: result?.HotelDetails,
+
+    // Error handling
     error: result?.Error,
   };
 }
