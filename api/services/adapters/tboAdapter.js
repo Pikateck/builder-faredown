@@ -821,6 +821,34 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   /**
    * ========================================
+   * 12. GET AGENCY BALANCE
+   * ========================================
+   *
+   * Endpoint: https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/GetAgencyBalance
+   * Returns: Current agency balance and currency
+   */
+  async getAgencyBalance() {
+    const { getAgencyBalance: getBalanceFn } = require("../../tbo/balance");
+
+    this.logger.info("💰 TBO Get Agency Balance");
+
+    try {
+      const result = await getBalanceFn();
+
+      this.logger.info("✅ TBO Agency Balance Retrieved", {
+        balance: result.balance,
+        currency: result.currency,
+      });
+
+      return result;
+    } catch (error) {
+      this.logger.error("❌ TBO Get Agency Balance failed:", error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * ========================================
    * STATIC: Transform to UnifiedHotel format
    * ========================================
    */
