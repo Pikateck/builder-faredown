@@ -48,6 +48,11 @@ class TBOAdapter extends BaseSupplierAdapter {
         process.env.TBO_HOTEL_BOOKING ||
         "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
 
+      // Static Data Base (UserName/Password auth)
+      hotelStaticBase:
+        process.env.TBO_HOTEL_STATIC_DATA ||
+        "https://apiwr.tboholidays.com/HotelAPI/",
+
       // ✅ Credentials - Use hotel-specific env vars (TBO_HOTEL_*)
       clientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID || "tboprod",
       userId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_API_USER_ID || "BOMF145",
@@ -299,6 +304,18 @@ class TBOAdapter extends BaseSupplierAdapter {
    */
   async getCityList(countryCode, force = false) {
     return this.getTboCities(countryCode, force);
+  }
+
+  /**
+   * ========================================
+   * PUBLIC: Search Cities (Autocomplete)
+   * ========================================
+   * Searches for cities matching a query string
+   * Returns: Filtered list of cities with fuzzy matching
+   */
+  async searchCities(query, limit = 15, countryCode = null) {
+    const { searchCities: searchFn } = require("../../tbo/static");
+    return await searchFn(query, limit, countryCode);
   }
 
   /**
