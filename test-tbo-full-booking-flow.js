@@ -307,14 +307,24 @@ async function runCompleteFlow() {
       hotelRoomDetails: [selectedRoom],
     });
 
-    if (!blockResult || !blockResult.responseStatus) {
-      logError("Failed to block room", blockResult);
-      results.steps.blockRoom = { success: false, error: blockResult };
+    // ✅ FIXED: Check ResponseStatus = 1 (TBO success code)
+    if (!blockResult || blockResult.responseStatus !== 1) {
+      logError(
+        `Failed to block room. ResponseStatus: ${blockResult?.responseStatus}, Error: ${blockResult?.error?.ErrorMessage || 'Unknown'}`,
+        blockResult
+      );
+      results.steps.blockRoom = {
+        success: false,
+        error: blockResult?.error,
+        responseStatus: blockResult?.responseStatus,
+        errorCode: blockResult?.error?.ErrorCode,
+        errorMessage: blockResult?.error?.ErrorMessage,
+      };
       return results;
     }
 
     logSuccess(
-      `Room blocked successfully. Status: ${blockResult.responseStatus}`,
+      `Room blocked successfully. ResponseStatus: ${blockResult.responseStatus}`,
     );
 
     results.steps.blockRoom = {
@@ -340,9 +350,19 @@ async function runCompleteFlow() {
       hotelRoomDetails: [selectedRoom],
     });
 
-    if (!bookResult || !bookResult.bookingId) {
-      logError("Failed to book hotel", bookResult);
-      results.steps.booking = { success: false, error: bookResult };
+    // ✅ FIXED: Check ResponseStatus = 1 AND bookingId exists
+    if (!bookResult || bookResult.responseStatus !== 1 || !bookResult.bookingId) {
+      logError(
+        `Failed to book hotel. ResponseStatus: ${bookResult?.responseStatus}, Error: ${bookResult?.error?.ErrorMessage || 'Unknown'}`,
+        bookResult
+      );
+      results.steps.booking = {
+        success: false,
+        error: bookResult?.error,
+        responseStatus: bookResult?.responseStatus,
+        errorCode: bookResult?.error?.ErrorCode,
+        errorMessage: bookResult?.error?.ErrorMessage,
+      };
       return results;
     }
 
