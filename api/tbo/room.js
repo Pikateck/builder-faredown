@@ -87,17 +87,20 @@ async function getHotelRoom(params = {}) {
     timeout: 30000,
   });
 
+  // ✅ CORRECTED: Handle GetHotelRoomResult wrapper as per TBO docs
+  const result = response.data?.GetHotelRoomResult || response.data;
+
   console.log("📥 TBO Room Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  ResponseStatus:", response.data?.ResponseStatus);
-  console.log("  TraceId:", response.data?.TraceId);
-  console.log("  Room Count:", response.data?.HotelRoomDetails?.length || 0);
-  console.log("  Error:", response.data?.Error?.ErrorMessage || "None");
+  console.log("  ResponseStatus:", result?.ResponseStatus);
+  console.log("  TraceId:", result?.TraceId);
+  console.log("  Room Count:", result?.HotelRoomsDetails?.length || 0);
+  console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
-  if (response.data?.HotelRoomDetails?.length > 0) {
+  if (result?.HotelRoomsDetails?.length > 0) {
     console.log("Sample Rooms (first 3):");
-    response.data.HotelRoomDetails.slice(0, 3).forEach((r, i) => {
+    result.HotelRoomsDetails.slice(0, 3).forEach((r, i) => {
       console.log(
         `  ${i + 1}. ${r.RoomTypeName} - ${r.Price?.CurrencyCode} ${r.Price?.OfferedPrice}`,
       );
@@ -107,14 +110,14 @@ async function getHotelRoom(params = {}) {
   }
 
   return {
-    responseStatus: response.data?.ResponseStatus,
-    traceId: response.data?.TraceId,
-    isUnderCancellationAllowed: response.data?.IsUnderCancellationAllowed,
-    isPolicyPerStay: response.data?.IsPolicyPerStay,
-    isPassportMandatory: response.data?.IsPassportMandatory,
-    isPANMandatory: response.data?.IsPANMandatory,
-    rooms: response.data?.HotelRoomDetails || [],
-    error: response.data?.Error,
+    responseStatus: result?.ResponseStatus,
+    traceId: result?.TraceId,
+    isUnderCancellationAllowed: result?.IsUnderCancellationAllowed,
+    isPolicyPerStay: result?.IsPolicyPerStay,
+    isPassportMandatory: result?.IsPassportMandatory,
+    isPANMandatory: result?.IsPANMandatory,
+    rooms: result?.HotelRoomsDetails || [],
+    error: result?.Error,
   };
 }
 

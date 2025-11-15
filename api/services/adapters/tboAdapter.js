@@ -48,10 +48,10 @@ class TBOAdapter extends BaseSupplierAdapter {
         process.env.TBO_HOTEL_BOOKING ||
         "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
 
-      // Credentials
-      clientId: process.env.TBO_CLIENT_ID || "tboprod",
-      userId: process.env.TBO_API_USER_ID || "BOMF145",
-      password: process.env.TBO_API_PASSWORD || "@Bo#4M-Api@",
+      // ✅ Credentials - Use hotel-specific env vars (TBO_HOTEL_*)
+      clientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID || "tboprod",
+      userId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_API_USER_ID || "BOMF145",
+      password: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_API_PASSWORD || "@Bo#4M-Api@",
 
       // Static data credentials (SEPARATE from dynamic API)
       staticUserName: process.env.TBO_STATIC_USER || "travelcategory",

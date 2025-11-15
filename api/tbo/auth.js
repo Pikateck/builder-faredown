@@ -8,12 +8,13 @@
 const { tboRequest } = require("../lib/tboRequest");
 
 async function authenticateTBO() {
-  const authUrl = process.env.TBO_AUTH_URL;
+  const authUrl = process.env.TBO_AUTH_URL || process.env.TBO_HOTEL_BASE_URL_AUTHENTICATION + "/rest/Authenticate";
 
+  // ✅ Use hotel-specific credentials (TBO_HOTEL_*)
   const request = {
-    ClientId: process.env.TBO_CLIENT_ID || "tboprod",
-    UserName: process.env.TBO_API_USER_ID || "BOMF145",
-    Password: process.env.TBO_API_PASSWORD || "@Bo#4M-Api@",
+    ClientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID || "tboprod",
+    UserName: process.env.TBO_HOTEL_USER_ID || process.env.TBO_API_USER_ID || "BOMF145",
+    Password: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_API_PASSWORD || "@Bo#4M-Api@",
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
   };
 
