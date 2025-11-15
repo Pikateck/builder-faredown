@@ -24,6 +24,7 @@ const { searchHotels, formatDateForTBO } = require("./search");
 const { getHotelRoom } = require("./room");
 const { blockRoom, bookHotel } = require("./book");
 const { generateVoucher, getBookingDetails } = require("./voucher");
+const { getAgencyBalance } = require("./balance");
 
 module.exports = {
   // Authentication
@@ -48,6 +49,9 @@ module.exports = {
   // Voucher
   generateVoucher,
   getBookingDetails,
+
+  // Agency Balance
+  getAgencyBalance,
 
   // Cancel/Change Request (newly implemented)
   sendChangeRequest: require("./cancel").sendChangeRequest,
