@@ -398,6 +398,7 @@ export function HotelSearchForm({
           infants: 0,
         },
         rooms: guests.rooms,
+        guestNationality: nationality,
         module: "hotels",
         tripType: "round-trip",
         searchTimestamp: new Date().toISOString(),
@@ -409,6 +410,7 @@ export function HotelSearchForm({
         adults: guests.adults.toString(),
         children: guests.children.toString(),
         rooms: guests.rooms.toString(),
+        guestNationality: nationality,
         searchType: "live",
         searchId: Date.now().toString(),
       });
@@ -432,6 +434,7 @@ export function HotelSearchForm({
         adults: guests.adults.toString(),
         children: guests.children.toString(),
         rooms: guests.rooms.toString(),
+        guestNationality: nationality,
       };
       saveLastSearch(searchData);
 
@@ -448,6 +451,7 @@ export function HotelSearchForm({
         adults: guests.adults,
         children: guests.children,
         rooms: guests.rooms,
+        guestNationality: nationality,
       };
 
       // Non-blocking API call to store recent search
