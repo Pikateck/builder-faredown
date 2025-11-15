@@ -2,9 +2,9 @@
 
 ## Overview
 
-This document describes the nationality system implementation for Faredown's hotel search and pricing engine.
+Complete nationality system for Faredown's hotel search and user profiles, enabling nationality-aware pricing and supplier compliance.
 
-**Purpose:** Enable nationality-aware hotel search to comply with supplier restrictions (TBO requires Indian nationality) and support future nationality-based pricing.
+**Purpose:** Support nationality-based hotel search (required by TBO and future suppliers) with user profile integration.
 
 **Default Behavior:** System defaults to `IN` (India) when no nationality is specified.
 
@@ -14,44 +14,38 @@ This document describes the nationality system implementation for Faredown's hot
 
 ### 1. Database Layer
 
-**Table:** `public.nationalities_master`
+**Migration File:** `api/database/migrations/20250415_nationalities_system.sql`
+
+**Tables:**
 
 ```sql
+-- Master table of all nationalities (194 countries)
 CREATE TABLE public.nationalities_master (
   id SERIAL PRIMARY KEY,
-  iso_code VARCHAR(2) NOT NULL UNIQUE,     -- ISO 3166-1 alpha-2 (IN, AE, GB, etc.)
+  iso_code VARCHAR(2) NOT NULL UNIQUE,     -- ISO 3166-1 alpha-2
   country_name VARCHAR(100) NOT NULL,
   is_active BOOLEAN NOT NULL DEFAULT true,
-  display_order INTEGER DEFAULT 999,       -- Lower = higher priority in dropdowns
+  display_order INTEGER DEFAULT 999,       -- Lower = higher priority
   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
+
+-- User profile extension
+ALTER TABLE public.users 
+  ADD COLUMN nationality_iso VARCHAR(2) REFERENCES nationalities_master(iso_code);
 ```
 
-**User Profile Extension:**
-
-```sql
-ALTER TABLE public.users 
-  ADD COLUMN nationality_iso VARCHAR(2);
-
-ALTER TABLE public.users 
-  ADD CONSTRAINT fk_users_nationality 
-  FOREIGN KEY (nationality_iso) 
-  REFERENCES public.nationalities_master(iso_code);
-```
+**Seeded Data:**
+- 194 countries (ISO 3166-1 alpha-2)
+- Top 50 prioritized by `display_order` (1-50)
+- Remaining alphabetical (display_order = 999)
 
 **Helper Function:**
 
 ```sql
-CREATE FUNCTION get_user_nationality(user_id UUID)
-RETURNS VARCHAR(2) AS $$
-  -- Returns user's nationality or 'IN' default
-$$
+CREATE FUNCTION get_user_nationality(user_id UUID) RETURNS VARCHAR(2)
+-- Returns user's nationality or 'IN' default
 ```
-
-**Migration File:** `api/database/migrations/20250415_nationalities_system.sql`
-
-**Seeded Data:** 194 countries (top 50 prioritized by `display_order`)
 
 ---
 
@@ -61,8 +55,10 @@ $$
 
 | Endpoint | Method | Description | Auth Required |
 |----------|--------|-------------|---------------|
-| `/api/meta/nationalities` | GET | Get all active nationalities for dropdowns | No |
+| `/api/meta/nationalities` | GET | Get all active nationalities | No |
 | `/api/meta/nationalities/:isoCode` | GET | Get specific nationality details | No |
+
+**File:** `api/routes/meta-nationalities.js`
 
 **Example Response:**
 
@@ -78,161 +74,18 @@ $$
 }
 ```
 
-#### **Nationality Resolution Utility**
+#### **Nationality Resolver Utility**
 
 **File:** `api/utils/nationalityResolver.js`
 
 **Main Function:** `resolveGuestNationality(req, user)`
 
 **Resolution Priority:**
-1. **Explicit in request body** (`req.body.guestNationality`)
-2. **User's saved nationality** (from profile: `users.nationality_iso`)
+1. **Explicit in request** (`req.body.guestNationality`)
+2. **User's saved nationality** (`users.nationality_iso`)
 3. **Default fallback** (`IN`)
 
-**Usage:**
-
-```javascript
-const { resolveGuestNationality } = require('../utils/nationalityResolver');
-
-router.post('/search', async (req, res) => {
-  const guestNationality = await resolveGuestNationality(req, req.user);
-  
-  const searchRequest = {
-    ...req.body,
-    guestNationality
-  };
-  
-  const results = await adapter.searchHotels(searchRequest);
-  // ...
-});
-```
-
-**Other Functions:**
-- `validateNationality(isoCode)` - Validates ISO code exists and is active
-- `getNationalityName(isoCode)` - Returns country name
-- `updateUserNationality(userId, isoCode)` - Updates user profile
-- `logNationalityResolution(...)` - Logs resolution for debugging
-
----
-
-### 3. Frontend Layer
-
-#### **Service**
-
-**File:** `client/services/nationalitiesService.ts`
-
-**Key Functions:**
-
-```typescript
-// Fetch all nationalities (cached)
-getNationalities(): Promise<Nationality[]>
-
-// Get nationality by ISO code
-getNationalityByCode(isoCode: string): Promise<Nationality | null>
-
-// Get user's saved nationality
-getUserNationality(user: any): string | null
-
-// Get default for search (user's saved or IN)
-getDefaultNationality(user: any): string
-```
-
-**Caching:** Nationalities are cached in memory on first load to minimize API calls.
-
----
-
-#### **UI Integration**
-
-**Component:** `HotelSearchForm.tsx`
-
-**Required Changes:**
-
-1. **Add State:**
-```typescript
-const [nationality, setNationality] = useState<string>('IN');
-const [nationalities, setNationalities] = useState<Nationality[]>([]);
-```
-
-2. **Load Nationalities on Mount:**
-```typescript
-useEffect(() => {
-  const loadNationalities = async () => {
-    const user = useAuth().user; // Get from AuthContext
-    const data = await getNationalities();
-    setNationalities(data);
-    
-    // Set default based on user profile
-    const defaultNat = getDefaultNationality(user);
-    setNationality(defaultNat);
-  };
-  loadNationalities();
-}, []);
-```
-
-3. **Add Dropdown Field:**
-```tsx
-<Select value={nationality} onValueChange={setNationality}>
-  <SelectTrigger>
-    <SelectValue placeholder="Nationality" />
-  </SelectTrigger>
-  <SelectContent>
-    {nationalities.map(n => (
-      <SelectItem key={n.isoCode} value={n.isoCode}>
-        {n.countryName}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
-```
-
-4. **Include in Search:**
-```typescript
-const handleSearch = () => {
-  const searchData = {
-    destination: destinationCode,
-    checkIn: format(checkInDate, 'yyyy-MM-dd'),
-    checkOut: format(checkOutDate, 'yyyy-MM-dd'),
-    adults: guests.adults,
-    children: guests.children,
-    rooms: guests.rooms,
-    guestNationality: nationality, // ← Add this
-  };
-  
-  // Navigate to results...
-};
-```
-
----
-
-## Supplier Integration
-
-### TBO (Travel Boutique Online)
-
-**Current Restriction:** Agency `BOMF145` only allows `guestNationality = "IN"`
-
-**Error When Using Non-IN:**
-```
-"Search is not allowed for other than Indian Nationality."
-```
-
-**TBO Search Payload:**
-
-```json
-{
-  "TokenId": "...",
-  "CityId": 187916,
-  "CheckInDate": "15/12/2025",
-  "NoOfNights": 3,
-  "GuestNationality": "IN",
-  "RoomGuests": [
-    { "NoOfAdults": 2, "NoOfChild": 0 }
-  ]
-}
-```
-
-**Integration File:** `api/routes/tbo-hotels.js`
-
-**Code Update:**
+**Usage in TBO Search:**
 
 ```javascript
 const { resolveGuestNationality } = require('../utils/nationalityResolver');
@@ -244,133 +97,238 @@ router.post('/search', async (req, res) => {
     ...req.body,
     guestNationality: req.body.guestNationality || guestNationality
   };
-
+  
   const results = await adapter.searchHotels(searchRequest);
   // ...
 });
 ```
 
-**Future:** When TBO lifts restriction, system will automatically support all nationalities.
+**Additional Functions:**
+- `validateNationality(isoCode)` - Check if valid and active
+- `getNationalityName(isoCode)` - Get country name
+- `updateUserNationality(userId, isoCode)` - Update user profile
 
 ---
 
-### Hotelbeds
+### 3. Frontend Layer
 
-**Status:** Supports all nationalities
+#### **Service**
 
-**Integration:** Same `guestNationality` field in search request
+**File:** `client/services/nationalitiesService.ts`
 
-**Pricing:** May vary by nationality (to be implemented)
+**Functions:**
+
+```typescript
+// Fetch all nationalities (cached)
+getNationalities(): Promise<Nationality[]>
+
+// Get by ISO code
+getNationalityByCode(isoCode: string): Promise<Nationality | null>
+
+// Get user's saved nationality
+getUserNationality(user: any): string | null
+
+// Get default for search
+getDefaultNationality(user: any): string
+```
+
+**Caching:** In-memory cache after first load to minimize API calls.
+
+**Fallback:** Returns top 20 countries if API fails.
 
 ---
 
-### RateHawk
+#### **UI Integration**
 
-**Status:** Supports all nationalities
+**Component:** `client/components/HotelSearchForm.tsx`
 
-**Integration:** Same `guestNationality` field in search request
+**Implementation:**
+
+1. **State Management:**
+```typescript
+const { user } = useAuth() || { user: null };
+const [nationality, setNationality] = useState<string>('IN');
+const [nationalities, setNationalities] = useState<Nationality[]>([]);
+```
+
+2. **Load on Mount:**
+```typescript
+useEffect(() => {
+  const loadNationalities = async () => {
+    const data = await getNationalities();
+    setNationalities(data);
+    setNationality(getDefaultNationality(user));
+  };
+  loadNationalities();
+}, [user]);
+```
+
+3. **UI Field:**
+```tsx
+<div className="relative">
+  <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+    Guest Nationality
+  </label>
+  <Select value={nationality} onValueChange={setNationality}>
+    <SelectTrigger>
+      <Globe className="mr-2 h-4 w-4" />
+      <SelectValue placeholder="Select nationality" />
+    </SelectTrigger>
+    <SelectContent>
+      {nationalities.map(n => (
+        <SelectItem key={n.isoCode} value={n.isoCode}>
+          {n.countryName}
+        </SelectItem>
+      ))}
+    </SelectContent>
+  </Select>
+</div>
+```
+
+4. **Include in Search:**
+```typescript
+const searchParams = {
+  destination,
+  checkIn,
+  checkOut,
+  adults,
+  children,
+  rooms,
+  guestNationality: nationality, // ← Add this
+};
+```
 
 ---
 
-## User Profile Integration
+## Supplier Integration
 
-### Profile Page
+### TBO (Travel Boutique Online)
 
-**Update Endpoint:** `PUT /api/profile`
+**Current Status:** Agency `BOMF145` restricted to Indian nationality only.
 
-**Request Body:**
+**Integration:** `api/routes/tbo-hotels.js` (lines 249-258)
+
+```javascript
+const { resolveGuestNationality } = require('../utils/nationalityResolver');
+
+// In search route:
+const guestNationality = await resolveGuestNationality(req, req.user);
+const searchRequest = {
+  ...req.body,
+  guestNationality: req.body.guestNationality || guestNationality
+};
+```
+
+**TBO Payload:**
+
 ```json
 {
-  "firstName": "John",
-  "lastName": "Doe",
-  "nationalityIso": "AE"
+  "TokenId": "...",
+  "CityId": 187916,
+  "CheckInDate": "15/12/2025",
+  "NoOfNights": 3,
+  "GuestNationality": "IN",
+  "RoomGuests": [...]
 }
 ```
 
-**Database Update:**
-```sql
-UPDATE public.users 
-SET nationality_iso = 'AE', updated_at = NOW()
-WHERE id = 'user-uuid';
+**Error When Using Non-IN:**
+```
+"Search is not allowed for other than Indian Nationality."
 ```
 
-**Frontend (My Account Page):**
-
-```tsx
-<Select value={profile.nationalityIso} onValueChange={handleNationalityChange}>
-  <SelectTrigger>
-    <SelectValue placeholder="Select nationality" />
-  </SelectTrigger>
-  <SelectContent>
-    {nationalities.map(n => (
-      <SelectItem key={n.isoCode} value={n.isoCode}>
-        {n.countryName}
-      </SelectItem>
-    ))}
-  </SelectContent>
-</Select>
-```
+**Future:** When TBO lifts restriction, all nationalities will work automatically.
 
 ---
 
-## Default Behavior
+### Hotelbeds & RateHawk
 
-| Scenario | Nationality Used | Source |
-|----------|-----------------|--------|
-| Anonymous user, no selection | `IN` | System default |
-| Anonymous user, selects `AE` | `AE` | Explicit selection |
-| Logged-in user, no saved nationality | `IN` | System default |
-| Logged-in user, saved `GB` | `GB` | User profile |
-| Logged-in user, overrides to `US` | `US` | Explicit selection |
+**Status:** Both support all nationalities.
+
+**Implementation:** Same `guestNationality` parameter in search requests.
+
+---
+
+## Default Behavior Matrix
+
+| Scenario | Nationality | Source |
+|----------|-------------|--------|
+| Anonymous, no selection | `IN` | System default |
+| Anonymous, selects `AE` | `AE` | Explicit selection |
+| Logged-in, no saved nationality | `IN` | System default |
+| Logged-in, saved `GB` | `GB` | User profile |
+| Logged-in, overrides to `US` | `US` | Explicit selection |
 
 **Priority:** Explicit > Profile > Default (IN)
 
 ---
 
-## Testing
+## Deployment
 
-### Database Migration
+### Steps
 
+1. **Run Migration:**
 ```bash
-# On Render or local PostgreSQL
 psql $DATABASE_URL -f api/database/migrations/20250415_nationalities_system.sql
 ```
 
-**Verify:**
+2. **Verify:**
 ```sql
 SELECT COUNT(*) FROM public.nationalities_master;
 -- Should return 194
 
-SELECT iso_code, country_name FROM public.nationalities_master 
-ORDER BY display_order LIMIT 10;
--- Should show IN, AE, GB, US, etc.
+SELECT iso_code, country_name 
+FROM public.nationalities_master 
+ORDER BY display_order 
+LIMIT 10;
+-- Should show: IN, AE, GB, US, SG, AU, CA, SA, QA, KW
 ```
 
-### API Endpoints
-
-**Test Nationalities List:**
+3. **Test API:**
 ```bash
 curl https://builder-faredown-pricing.onrender.com/api/meta/nationalities
 ```
 
-**Expected:**
-```json
-{
-  "success": true,
-  "nationalities": [...],
-  "count": 194
-}
+4. **Test Frontend:**
+- Verify dropdown appears in hotel search
+- Check nationality is included in search URL
+- Test with different nationalities
+
+---
+
+## Testing
+
+### Database
+
+```sql
+-- Verify table
+SELECT COUNT(*) as total FROM public.nationalities_master;
+
+-- Check priorities
+SELECT iso_code, country_name, display_order 
+FROM public.nationalities_master 
+WHERE display_order < 100 
+ORDER BY display_order;
+
+-- Test helper function
+SELECT get_user_nationality('00000000-0000-0000-0000-000000000000'::UUID);
+-- Should return: IN
 ```
 
-**Test Specific Nationality:**
+### API
+
 ```bash
+# List all nationalities
+curl https://builder-faredown-pricing.onrender.com/api/meta/nationalities
+
+# Get specific nationality
 curl https://builder-faredown-pricing.onrender.com/api/meta/nationalities/AE
 ```
 
-### Hotel Search with Nationality
+### Hotel Search
 
-**Test TBO Search:**
 ```bash
+# Test with IN (should work with TBO)
 curl -X POST https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search \
   -H "Content-Type: application/json" \
   -d '{
@@ -378,133 +336,66 @@ curl -X POST https://builder-faredown-pricing.onrender.com/api/tbo-hotels/search
     "checkIn": "2025-06-15",
     "checkOut": "2025-06-18",
     "adults": 2,
-    "children": 0,
-    "rooms": 1,
     "guestNationality": "IN"
   }'
+
+# Test with non-IN (currently fails with TBO)
+# Same request with "guestNationality": "AE"
 ```
-
-**Expected:** Success with hotels
-
-**Test with Non-IN (currently fails with TBO):**
-```bash
-# Same request but with "guestNationality": "AE"
-```
-
-**Expected (current):** `"Search is not allowed for other than Indian Nationality."`
-
-**Expected (after TBO lifts restriction):** Success with hotels
 
 ---
 
-## Production Deployment
+## Troubleshooting
 
-### Steps
-
-1. **Run migration on production database**
-2. **Deploy backend code** (API routes + nationality resolver)
-3. **Deploy frontend code** (HotelSearchForm + service)
-4. **Verify API endpoint:** `/api/meta/nationalities`
-5. **Test hotel search** with different nationalities
-6. **Monitor logs** for nationality resolution
-
-### Rollback Plan
-
-If issues occur:
-
-1. **Frontend:** Revert HotelSearchForm changes (system will use default `IN`)
-2. **Backend:** Nationality resolver has safe fallback to `IN`
-3. **Database:** Table can remain (doesn't break existing functionality)
-
----
-
-## Future Enhancements
-
-### Multi-Supplier Routing by Nationality
-
-```javascript
-function selectSuppliers(guestNationality) {
-  if (guestNationality === 'IN') {
-    return ['TBO', 'HOTELBEDS', 'RATEHAWK']; // TBO has best Indian rates
-  }
-  return ['HOTELBEDS', 'RATEHAWK']; // Non-Indian: skip TBO
-}
-```
-
-### Nationality-Based Pricing
-
-```javascript
-function applyNationalityMarkup(price, nationality) {
-  const markups = {
-    'IN': 1.0,   // No markup
-    'AE': 1.05,  // 5% for UAE nationals
-    'GB': 1.08,  // 8% for UK nationals
-  };
-  return price * (markups[nationality] || 1.0);
-}
-```
-
-### Passport/Visa Integration
-
-- Auto-populate passport nationality from profile
-- Validate visa requirements based on nationality + destination
-- Display visa warnings in search results
-
----
-
-## Support & Troubleshooting
-
-### Common Issues
-
-**1. "Nationality dropdown empty"**
+**Issue:** Dropdown is empty
 - Check `/api/meta/nationalities` endpoint
-- Verify database migration ran successfully
-- Check browser console for fetch errors
+- Verify migration ran successfully
+- Check browser console for errors
 
-**2. "Still getting nationality error from TBO"**
-- Verify `guestNationality` in request payload
-- Check nationality resolver logs
-- Confirm TBO agency restriction status
+**Issue:** Default nationality not working
+- Verify user has `nationality_iso` in database
+- Check AuthContext provides user object
+- Review service fallback logic
 
-**3. "User nationality not saving"**
-- Check `/api/profile` endpoint
-- Verify `nationality_iso` column exists in `users` table
-- Check foreign key constraint
-
-### Debug Commands
-
-**Check nationality in search logs:**
-```bash
-# On Render shell
-grep "nationality" /var/log/app.log
-```
-
-**Verify user's saved nationality:**
-```sql
-SELECT id, email, nationality_iso 
-FROM public.users 
-WHERE id = 'user-uuid';
-```
-
-**Test nationality resolver:**
-```javascript
-const { resolveGuestNationality } = require('./api/utils/nationalityResolver');
-const nationality = await resolveGuestNationality(req, { id: 'user-uuid' });
-console.log('Resolved:', nationality);
-```
+**Issue:** TBO nationality error
+- Confirm nationality is `IN`
+- Check resolver logs
+- Verify TBO agency restriction status
 
 ---
 
-## Contact
+## Files
 
-**Developer:** Builder.io AI Team  
-**Date:** 2025-04-15  
-**Version:** 1.0.0
-
-**Related Files:**
+### Backend
 - `api/database/migrations/20250415_nationalities_system.sql`
 - `api/routes/meta-nationalities.js`
 - `api/utils/nationalityResolver.js`
+- `api/routes/tbo-hotels.js` (integration)
+
+### Frontend
 - `client/services/nationalitiesService.ts`
-- `client/components/HotelSearchForm.tsx`
-- `api/routes/tbo-hotels.js`
+- `client/components/HotelSearchForm.tsx` (UI)
+
+### Documentation
+- `NATIONALITY_SYSTEM_DOCUMENTATION.md` (this file)
+- `HOTEL_SEARCH_FORM_NATIONALITY_UPDATE.md` (UI guide)
+
+---
+
+## Migration File Path
+
+**For Render Execution:**
+```
+api/database/migrations/20250415_nationalities_system.sql
+```
+
+**Command:**
+```bash
+psql $DATABASE_URL -f api/database/migrations/20250415_nationalities_system.sql
+```
+
+---
+
+**Version:** 1.0.0  
+**Date:** 2025-04-15  
+**Status:** Production Ready
