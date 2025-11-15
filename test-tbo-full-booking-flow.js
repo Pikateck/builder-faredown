@@ -14,7 +14,7 @@
  * Tests complete pipeline:
  * 1. Authenticate → Get TokenId
  * 2. GetDestinationSearchStaticData → Get real CityId (DestinationId)
- * 3. SearchHotels → Get hotel results with TraceId
+ * 3. SearchHotels ��� Get hotel results with TraceId
  * 4. GetHotelRoom → Get room details using TraceId + ResultIndex
  * 5. BlockRoom → Hold the room temporarily
  * 6. Book → Confirm the booking
@@ -108,9 +108,15 @@ const { checkInDate, checkOutDate } = getFutureDates();
 const TEST_PARAMS = {
   destination: "Dubai",
   countryCode: "AE",
+<<<<<<< HEAD
   checkInDate,
   checkOutDate,
   nationality: "AE",
+=======
+  checkInDate: "2025-06-15",
+  checkOutDate: "2025-06-20",
+  nationality: "IN", // ⚠️ TBO agency restriction: must be IN
+>>>>>>> 3f22b3e853d69c6ee7045e8c7a098e139373e820
   adults: 2,
   children: 0,
   rooms: 1,
@@ -128,10 +134,10 @@ const TEST_PARAMS = {
       Email: "john.doe@test.com",
       Phoneno: "+971501234567",
       AddressLine1: "Test Address",
-      City: "Dubai",
-      CountryCode: "AE",
-      CountryName: "United Arab Emirates",
-      Nationality: "AE",
+      City: "Mumbai",
+      CountryCode: "IN",
+      CountryName: "India",
+      Nationality: "IN",
     },
     {
       Title: "Mrs",
@@ -145,10 +151,10 @@ const TEST_PARAMS = {
       Email: "jane.doe@test.com",
       Phoneno: "+971501234568",
       AddressLine1: "Test Address",
-      City: "Dubai",
-      CountryCode: "AE",
-      CountryName: "United Arab Emirates",
-      Nationality: "AE",
+      City: "Mumbai",
+      CountryCode: "IN",
+      CountryName: "India",
+      Nationality: "IN",
     },
   ],
 };

@@ -6,6 +6,7 @@
 const express = require("express");
 const router = express.Router();
 const supplierAdapterManager = require("../services/adapters/supplierAdapterManager");
+const { resolveGuestNationality } = require("../utils/nationalityResolver");
 
 function getTboAdapter() {
   const adapter = supplierAdapterManager.getAdapter("TBO");
@@ -245,9 +246,19 @@ router.post("/search", async (req, res) => {
     const adapter = getTboAdapter();
     const TBOAdapter = require("../services/adapters/tboAdapter");
     const { v4: uuidv4 } = require("uuid");
+    const { resolveGuestNationality } = require("../utils/nationalityResolver");
+
+    // Resolve guest nationality (explicit > user profile > default IN)
+    const guestNationality = await resolveGuestNationality(req, req.user);
+
+    // Merge nationality into search request
+    const searchRequest = {
+      ...req.body,
+      guestNationality: req.body.guestNationality || guestNationality
+    };
 
     // Execute raw search with 30-second timeout
-    const searchPromise = adapter.searchHotels(req.body || {});
+    const searchPromise = adapter.searchHotels(searchRequest);
     const timeoutPromise = new Promise((_, reject) => {
       setTimeout(
         () => reject(new Error("TBO search timeout after 30 seconds")),
@@ -266,6 +277,7 @@ router.post("/search", async (req, res) => {
       adults: Number(req.body.adults || req.body.Adults || 2),
       children: Number(req.body.children || req.body.Children || 0),
       currency: req.body.currency || req.body.Currency || "INR",
+      guestNationality: guestNationality,
     };
 
     const unifiedResults = rawResults
@@ -332,7 +344,7 @@ router.get("/search", async (req, res) => {
   // Set response timeout
   const responseTimeout = setTimeout(() => {
     if (!res.headersSent) {
-      console.error("⏱️ Response timeout on GET /search");
+      console.error("���️ Response timeout on GET /search");
       res.status(200).json({
         success: false,
         error: "Request timeout",

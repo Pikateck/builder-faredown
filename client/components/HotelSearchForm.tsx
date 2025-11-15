@@ -23,6 +23,7 @@ import {
   Building,
   Landmark,
   Plane,
+  Globe,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import {
@@ -31,6 +32,19 @@ import {
   getTypeLabel,
   type SearchResult,
 } from "@/lib/hotelSearchData";
+import {
+  getNationalities,
+  getDefaultNationality,
+  type Nationality,
+} from "@/services/nationalitiesService";
+import { useAuth } from "@/contexts/AuthContext";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface GuestConfig {
   adults: number;
@@ -48,6 +62,7 @@ interface HotelSearchFormProps {
   initialCheckIn?: string;
   initialCheckOut?: string;
   initialGuests?: { adults: number; children: number; rooms: number };
+  initialNationality?: string;
 }
 
 export function HotelSearchForm({
@@ -59,6 +74,7 @@ export function HotelSearchForm({
   initialCheckIn,
   initialCheckOut,
   initialGuests,
+  initialNationality,
 }: HotelSearchFormProps) {
   const navigate = useNavigate();
   const { updateSearchParams, getDisplayData, searchParams } = useSearch();
@@ -108,6 +124,12 @@ export function HotelSearchForm({
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
 
+  // Nationality state
+  const { user } = useAuth() || { user: null };
+  const [nationality, setNationality] = useState<string>(initialNationality || 'IN');
+  const [nationalities, setNationalities] = useState<Nationality[]>([]);
+  const [isNationalityLoading, setIsNationalityLoading] = useState(true);
+
   // Keep form blank by default - users can load from Recent Searches if needed
   // useEffect(() => {
   //   // Auto-population logic commented out to ensure blank-by-default behavior
@@ -125,6 +147,43 @@ export function HotelSearchForm({
       return () => window.removeEventListener("resize", checkMobile);
     }
   }, []);
+
+  // Load nationalities on mount
+  useEffect(() => {
+    const loadNationalities = async () => {
+      try {
+        setIsNationalityLoading(true);
+
+        // Fetch nationalities from API
+        const data = await getNationalities();
+        setNationalities(data);
+
+        // Set default based on user profile or fallback to IN
+        if (!initialNationality) {
+          const defaultNat = getDefaultNationality(user);
+          setNationality(defaultNat);
+        }
+
+        console.log(`✅ Loaded ${data.length} nationalities, default: ${nationality}`);
+      } catch (error) {
+        console.error('❌ Error loading nationalities:', error);
+        // Fallback to minimal list if API fails
+        setNationalities([
+          { isoCode: 'IN', countryName: 'India' },
+          { isoCode: 'AE', countryName: 'United Arab Emirates' },
+          { isoCode: 'GB', countryName: 'United Kingdom' },
+          { isoCode: 'US', countryName: 'United States' },
+          { isoCode: 'SG', countryName: 'Singapore' },
+          { isoCode: 'AU', countryName: 'Australia' },
+        ]);
+        setNationality('IN');
+      } finally {
+        setIsNationalityLoading(false);
+      }
+    };
+
+    loadNationalities();
+  }, [user]);
 
   // Close dropdowns when clicking outside
   useEffect(() => {
@@ -340,6 +399,7 @@ export function HotelSearchForm({
           infants: 0,
         },
         rooms: guests.rooms,
+        guestNationality: nationality,
         module: "hotels",
         tripType: "round-trip",
         searchTimestamp: new Date().toISOString(),
@@ -351,6 +411,7 @@ export function HotelSearchForm({
         adults: guests.adults.toString(),
         children: guests.children.toString(),
         rooms: guests.rooms.toString(),
+        guestNationality: nationality,
         searchType: "live",
         searchId: Date.now().toString(),
       });
@@ -374,6 +435,7 @@ export function HotelSearchForm({
         adults: guests.adults.toString(),
         children: guests.children.toString(),
         rooms: guests.rooms.toString(),
+        guestNationality: nationality,
       };
       saveLastSearch(searchData);
 
@@ -390,6 +452,7 @@ export function HotelSearchForm({
         adults: guests.adults,
         children: guests.children,
         rooms: guests.rooms,
+        guestNationality: nationality,
       };
 
       // Non-blocking API call to store recent search
@@ -494,7 +557,7 @@ export function HotelSearchForm({
             <div className="relative">
               <button
                 onClick={() => setIsDestinationOpen(!isDestinationOpen)}
-                className="flex items-center bg-white rounded border-2 border-blue-500 px-3 py-2 h-10 w-full hover:border-blue-600 touch-manipulation pr-10"
+                className="flex items-center bg-white rounded border-2 border-blue-400 h-10 sm:h-12 w-full hover:border-blue-500 touch-manipulation px-2 sm:px-3 pr-10"
               >
                 <MapPin className="w-4 h-4 text-gray-500 mr-2" />
                 <div className="flex items-center space-x-2 min-w-0">
@@ -677,9 +740,9 @@ export function HotelSearchForm({
           </div>
 
           {/* Check-in/Check-out Dates */}
-          <div className="flex-1 lg:max-w-[280px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
-              Dates
+          <div className="flex-1 lg:max-w-[280px] relative">
+            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+              Check-in - Check-out
             </label>
             <Popover open={isCalendarOpen} onOpenChange={setIsCalendarOpen}>
               <PopoverTrigger asChild>
@@ -735,9 +798,11 @@ export function HotelSearchForm({
             </Popover>
           </div>
 
+          {/* Guests & Rooms + Nationality Container */}
+        <div className="flex-1 lg:max-w-[280px] flex flex-col gap-2">
           {/* Guests & Rooms */}
-          <div className="flex-1 lg:max-w-[280px]">
-            <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
+          <div className="relative">
+            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
               Guests & Rooms
             </label>
             <Popover
@@ -906,17 +971,42 @@ export function HotelSearchForm({
             </Popover>
           </div>
 
-          {/* Search Button */}
-          <div className="flex-shrink-0 w-full sm:w-auto">
-            <Button
-              onClick={handleSearch}
-              className="h-10 sm:h-12 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
-              title="Search hotels"
+          {/* Nationality */}
+          <div className="relative">
+            <label className="absolute -top-2 left-3 bg-white px-1 text-xs text-gray-600 font-medium z-10">
+              Guest Nationality
+            </label>
+            <Select
+              value={nationality}
+              onValueChange={setNationality}
+              disabled={isNationalityLoading}
             >
-              <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
-              <span className="text-sm sm:text-base">Search</span>
-            </Button>
+              <SelectTrigger className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3">
+                <Globe className="mr-2 h-4 w-4 flex-shrink-0" />
+                <SelectValue placeholder="Select nationality" />
+              </SelectTrigger>
+              <SelectContent className="max-h-[300px] overflow-y-auto">
+                {nationalities.map((n) => (
+                  <SelectItem key={n.isoCode} value={n.isoCode}>
+                    {n.countryName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
+        </div>
+
+        {/* Search Button */}
+        <div className="flex-shrink-0 w-full sm:w-auto">
+          <Button
+            onClick={handleSearch}
+            className="h-10 sm:h-12 w-full sm:w-auto bg-[#febb02] hover:bg-[#e6a602] active:bg-[#d19900] text-black font-bold rounded px-6 sm:px-8 transition-all duration-150"
+            title="Search hotels"
+          >
+            <Search className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
+            <span className="text-sm sm:text-base">Search</span>
+          </Button>
+        </div>
         </div>
       </div>
     </>
