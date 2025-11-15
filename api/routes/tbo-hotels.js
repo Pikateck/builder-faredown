@@ -284,16 +284,11 @@ router.post("/search", async (req, res) => {
       .map((h) => TBOAdapter.toUnifiedHotel(h, searchContext))
       .filter(Boolean);
 
-    // Persist snapshot (best-effort, fire-and-forget)
+    // Generate searchId for tracking
     const searchId = uuidv4();
-    adapter
-      .persistSearchSnapshot(searchId, rawResults, searchContext)
-      .catch((e) => {
-        console.warn(
-          "TBO search snapshot persist failed (non-blocking):",
-          e.message,
-        );
-      });
+
+    // Note: persistSearchSnapshot not yet implemented in TBO adapter
+    // Search logging happens via search_logs table below
 
     // Log search (best-effort)
     try {
