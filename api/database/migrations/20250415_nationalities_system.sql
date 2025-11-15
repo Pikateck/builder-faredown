@@ -1,7 +1,7 @@
 -- =====================================================
 -- Nationality System Migration
 -- Created: 2025-04-15
--- Purpose: Add first-class nationality support for hotel search & pricing
+-- Purpose: Add nationality support for hotel search and user profiles
 -- =====================================================
 
 -- 1. Create Nationalities Master Table
@@ -16,20 +16,18 @@ CREATE TABLE IF NOT EXISTS public.nationalities_master (
   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Create indexes
-CREATE INDEX IF NOT EXISTS idx_nationalities_is_active 
-  ON public.nationalities_master (is_active);
-
-CREATE INDEX IF NOT EXISTS idx_nationalities_display_order 
-  ON public.nationalities_master (display_order, country_name);
+-- Create index for active nationalities (used by dropdown)
+CREATE INDEX IF NOT EXISTS idx_nationalities_active 
+  ON public.nationalities_master (is_active, display_order, country_name) 
+  WHERE is_active = true;
 
 -- 2. Extend Users Table with Nationality
 -- =====================================================
 ALTER TABLE public.users 
   ADD COLUMN IF NOT EXISTS nationality_iso VARCHAR(2);
 
--- Add foreign key constraint (optional, enforces data integrity)
-DO $$ 
+-- Add foreign key constraint
+DO $$
 BEGIN
   IF NOT EXISTS (
     SELECT 1 FROM information_schema.table_constraints 
@@ -48,220 +46,216 @@ CREATE INDEX IF NOT EXISTS idx_users_nationality
   ON public.users (nationality_iso) 
   WHERE nationality_iso IS NOT NULL;
 
--- 3. Seed Nationalities Data
+-- 3. Seed Nationalities Master Data
 -- =====================================================
--- Top priority countries (commonly used in travel)
-INSERT INTO public.nationalities_master (iso_code, country_name, is_active, display_order) 
-VALUES 
-  ('IN', 'India', true, 1),
-  ('AE', 'United Arab Emirates', true, 2),
-  ('GB', 'United Kingdom', true, 3),
-  ('US', 'United States', true, 4),
-  ('SG', 'Singapore', true, 5),
-  ('AU', 'Australia', true, 6),
-  ('CA', 'Canada', true, 7),
-  ('SA', 'Saudi Arabia', true, 8),
-  ('QA', 'Qatar', true, 9),
-  ('KW', 'Kuwait', true, 10),
-  ('BH', 'Bahrain', true, 11),
-  ('OM', 'Oman', true, 12),
-  ('FR', 'France', true, 13),
-  ('DE', 'Germany', true, 14),
-  ('IT', 'Italy', true, 15),
-  ('ES', 'Spain', true, 16),
-  ('NL', 'Netherlands', true, 17),
-  ('CH', 'Switzerland', true, 18),
-  ('MY', 'Malaysia', true, 19),
-  ('TH', 'Thailand', true, 20),
-  ('JP', 'Japan', true, 21),
-  ('CN', 'China', true, 22),
-  ('KR', 'South Korea', true, 23),
-  ('PH', 'Philippines', true, 24),
-  ('ID', 'Indonesia', true, 25),
-  ('VN', 'Vietnam', true, 26),
-  ('NZ', 'New Zealand', true, 27),
-  ('ZA', 'South Africa', true, 28),
-  ('EG', 'Egypt', true, 29),
-  ('TR', 'Turkey', true, 30),
-  ('BR', 'Brazil', true, 31),
-  ('MX', 'Mexico', true, 32),
-  ('AR', 'Argentina', true, 33),
-  ('RU', 'Russia', true, 34),
-  ('PL', 'Poland', true, 35),
-  ('SE', 'Sweden', true, 36),
-  ('NO', 'Norway', true, 37),
-  ('DK', 'Denmark', true, 38),
-  ('FI', 'Finland', true, 39),
-  ('IE', 'Ireland', true, 40),
-  ('BE', 'Belgium', true, 41),
-  ('AT', 'Austria', true, 42),
-  ('PT', 'Portugal', true, 43),
-  ('GR', 'Greece', true, 44),
-  ('CZ', 'Czech Republic', true, 45),
-  ('HU', 'Hungary', true, 46),
-  ('RO', 'Romania', true, 47),
-  ('BG', 'Bulgaria', true, 48),
-  ('IL', 'Israel', true, 49),
-  ('JO', 'Jordan', true, 50)
+-- Priority countries (display_order < 100)
+INSERT INTO public.nationalities_master (iso_code, country_name, display_order) VALUES
+  ('IN', 'India', 1),
+  ('AE', 'United Arab Emirates', 2),
+  ('GB', 'United Kingdom', 3),
+  ('US', 'United States', 4),
+  ('SG', 'Singapore', 5),
+  ('AU', 'Australia', 6),
+  ('CA', 'Canada', 7),
+  ('SA', 'Saudi Arabia', 8),
+  ('QA', 'Qatar', 9),
+  ('KW', 'Kuwait', 10),
+  ('BH', 'Bahrain', 11),
+  ('OM', 'Oman', 12),
+  ('FR', 'France', 13),
+  ('DE', 'Germany', 14),
+  ('IT', 'Italy', 15),
+  ('ES', 'Spain', 16),
+  ('NL', 'Netherlands', 17),
+  ('CH', 'Switzerland', 18),
+  ('MY', 'Malaysia', 19),
+  ('TH', 'Thailand', 20),
+  ('ID', 'Indonesia', 21),
+  ('PH', 'Philippines', 22),
+  ('CN', 'China', 23),
+  ('JP', 'Japan', 24),
+  ('KR', 'South Korea', 25),
+  ('NZ', 'New Zealand', 26),
+  ('ZA', 'South Africa', 27),
+  ('EG', 'Egypt', 28),
+  ('TR', 'Turkey', 29),
+  ('BR', 'Brazil', 30),
+  ('MX', 'Mexico', 31),
+  ('AR', 'Argentina', 32),
+  ('CL', 'Chile', 33),
+  ('CO', 'Colombia', 34),
+  ('PE', 'Peru', 35),
+  ('RU', 'Russia', 36),
+  ('PL', 'Poland', 37),
+  ('SE', 'Sweden', 38),
+  ('NO', 'Norway', 39),
+  ('DK', 'Denmark', 40),
+  ('FI', 'Finland', 41),
+  ('IE', 'Ireland', 42),
+  ('BE', 'Belgium', 43),
+  ('AT', 'Austria', 44),
+  ('PT', 'Portugal', 45),
+  ('GR', 'Greece', 46),
+  ('CZ', 'Czech Republic', 47),
+  ('HU', 'Hungary', 48),
+  ('RO', 'Romania', 49),
+  ('IL', 'Israel', 50)
 ON CONFLICT (iso_code) DO UPDATE SET
   country_name = EXCLUDED.country_name,
-  is_active = EXCLUDED.is_active,
   display_order = EXCLUDED.display_order,
   updated_at = NOW();
 
--- Add remaining countries (alphabetically, lower priority)
-INSERT INTO public.nationalities_master (iso_code, country_name, is_active, display_order) 
-VALUES 
-  ('AF', 'Afghanistan', true, 100),
-  ('AL', 'Albania', true, 100),
-  ('DZ', 'Algeria', true, 100),
-  ('AD', 'Andorra', true, 100),
-  ('AO', 'Angola', true, 100),
-  ('AG', 'Antigua and Barbuda', true, 100),
-  ('AM', 'Armenia', true, 100),
-  ('AZ', 'Azerbaijan', true, 100),
-  ('BS', 'Bahamas', true, 100),
-  ('BD', 'Bangladesh', true, 100),
-  ('BB', 'Barbados', true, 100),
-  ('BY', 'Belarus', true, 100),
-  ('BZ', 'Belize', true, 100),
-  ('BJ', 'Benin', true, 100),
-  ('BT', 'Bhutan', true, 100),
-  ('BO', 'Bolivia', true, 100),
-  ('BA', 'Bosnia and Herzegovina', true, 100),
-  ('BW', 'Botswana', true, 100),
-  ('BN', 'Brunei', true, 100),
-  ('BF', 'Burkina Faso', true, 100),
-  ('BI', 'Burundi', true, 100),
-  ('KH', 'Cambodia', true, 100),
-  ('CM', 'Cameroon', true, 100),
-  ('CV', 'Cape Verde', true, 100),
-  ('CF', 'Central African Republic', true, 100),
-  ('TD', 'Chad', true, 100),
-  ('CL', 'Chile', true, 100),
-  ('CO', 'Colombia', true, 100),
-  ('KM', 'Comoros', true, 100),
-  ('CG', 'Congo', true, 100),
-  ('CR', 'Costa Rica', true, 100),
-  ('HR', 'Croatia', true, 100),
-  ('CU', 'Cuba', true, 100),
-  ('CY', 'Cyprus', true, 100),
-  ('DJ', 'Djibouti', true, 100),
-  ('DM', 'Dominica', true, 100),
-  ('DO', 'Dominican Republic', true, 100),
-  ('EC', 'Ecuador', true, 100),
-  ('SV', 'El Salvador', true, 100),
-  ('GQ', 'Equatorial Guinea', true, 100),
-  ('ER', 'Eritrea', true, 100),
-  ('EE', 'Estonia', true, 100),
-  ('ET', 'Ethiopia', true, 100),
-  ('FJ', 'Fiji', true, 100),
-  ('GA', 'Gabon', true, 100),
-  ('GM', 'Gambia', true, 100),
-  ('GE', 'Georgia', true, 100),
-  ('GH', 'Ghana', true, 100),
-  ('GD', 'Grenada', true, 100),
-  ('GT', 'Guatemala', true, 100),
-  ('GN', 'Guinea', true, 100),
-  ('GW', 'Guinea-Bissau', true, 100),
-  ('GY', 'Guyana', true, 100),
-  ('HT', 'Haiti', true, 100),
-  ('HN', 'Honduras', true, 100),
-  ('HK', 'Hong Kong', true, 100),
-  ('IS', 'Iceland', true, 100),
-  ('IQ', 'Iraq', true, 100),
-  ('JM', 'Jamaica', true, 100),
-  ('KZ', 'Kazakhstan', true, 100),
-  ('KE', 'Kenya', true, 100),
-  ('KI', 'Kiribati', true, 100),
-  ('XK', 'Kosovo', true, 100),
-  ('KG', 'Kyrgyzstan', true, 100),
-  ('LA', 'Laos', true, 100),
-  ('LV', 'Latvia', true, 100),
-  ('LB', 'Lebanon', true, 100),
-  ('LS', 'Lesotho', true, 100),
-  ('LR', 'Liberia', true, 100),
-  ('LY', 'Libya', true, 100),
-  ('LI', 'Liechtenstein', true, 100),
-  ('LT', 'Lithuania', true, 100),
-  ('LU', 'Luxembourg', true, 100),
-  ('MK', 'North Macedonia', true, 100),
-  ('MG', 'Madagascar', true, 100),
-  ('MW', 'Malawi', true, 100),
-  ('MV', 'Maldives', true, 100),
-  ('ML', 'Mali', true, 100),
-  ('MT', 'Malta', true, 100),
-  ('MH', 'Marshall Islands', true, 100),
-  ('MR', 'Mauritania', true, 100),
-  ('MU', 'Mauritius', true, 100),
-  ('FM', 'Micronesia', true, 100),
-  ('MD', 'Moldova', true, 100),
-  ('MC', 'Monaco', true, 100),
-  ('MN', 'Mongolia', true, 100),
-  ('ME', 'Montenegro', true, 100),
-  ('MA', 'Morocco', true, 100),
-  ('MZ', 'Mozambique', true, 100),
-  ('MM', 'Myanmar', true, 100),
-  ('NA', 'Namibia', true, 100),
-  ('NR', 'Nauru', true, 100),
-  ('NP', 'Nepal', true, 100),
-  ('NI', 'Nicaragua', true, 100),
-  ('NE', 'Niger', true, 100),
-  ('NG', 'Nigeria', true, 100),
-  ('KP', 'North Korea', true, 100),
-  ('PK', 'Pakistan', true, 100),
-  ('PW', 'Palau', true, 100),
-  ('PS', 'Palestine', true, 100),
-  ('PA', 'Panama', true, 100),
-  ('PG', 'Papua New Guinea', true, 100),
-  ('PY', 'Paraguay', true, 100),
-  ('PE', 'Peru', true, 100),
-  ('RW', 'Rwanda', true, 100),
-  ('KN', 'Saint Kitts and Nevis', true, 100),
-  ('LC', 'Saint Lucia', true, 100),
-  ('VC', 'Saint Vincent and the Grenadines', true, 100),
-  ('WS', 'Samoa', true, 100),
-  ('SM', 'San Marino', true, 100),
-  ('ST', 'Sao Tome and Principe', true, 100),
-  ('SN', 'Senegal', true, 100),
-  ('RS', 'Serbia', true, 100),
-  ('SC', 'Seychelles', true, 100),
-  ('SL', 'Sierra Leone', true, 100),
-  ('SK', 'Slovakia', true, 100),
-  ('SI', 'Slovenia', true, 100),
-  ('SB', 'Solomon Islands', true, 100),
-  ('SO', 'Somalia', true, 100),
-  ('SS', 'South Sudan', true, 100),
-  ('LK', 'Sri Lanka', true, 100),
-  ('SD', 'Sudan', true, 100),
-  ('SR', 'Suriname', true, 100),
-  ('SZ', 'Eswatini', true, 100),
-  ('SY', 'Syria', true, 100),
-  ('TW', 'Taiwan', true, 100),
-  ('TJ', 'Tajikistan', true, 100),
-  ('TZ', 'Tanzania', true, 100),
-  ('TL', 'Timor-Leste', true, 100),
-  ('TG', 'Togo', true, 100),
-  ('TO', 'Tonga', true, 100),
-  ('TT', 'Trinidad and Tobago', true, 100),
-  ('TN', 'Tunisia', true, 100),
-  ('TM', 'Turkmenistan', true, 100),
-  ('TV', 'Tuvalu', true, 100),
-  ('UG', 'Uganda', true, 100),
-  ('UA', 'Ukraine', true, 100),
-  ('UY', 'Uruguay', true, 100),
-  ('UZ', 'Uzbekistan', true, 100),
-  ('VU', 'Vanuatu', true, 100),
-  ('VA', 'Vatican City', true, 100),
-  ('VE', 'Venezuela', true, 100),
-  ('YE', 'Yemen', true, 100),
-  ('ZM', 'Zambia', true, 100),
-  ('ZW', 'Zimbabwe', true, 100)
+-- Standard countries (alphabetical, display_order = 999)
+INSERT INTO public.nationalities_master (iso_code, country_name) VALUES
+  ('AF', 'Afghanistan'),
+  ('AL', 'Albania'),
+  ('DZ', 'Algeria'),
+  ('AD', 'Andorra'),
+  ('AO', 'Angola'),
+  ('AG', 'Antigua and Barbuda'),
+  ('AM', 'Armenia'),
+  ('AZ', 'Azerbaijan'),
+  ('BS', 'Bahamas'),
+  ('BD', 'Bangladesh'),
+  ('BB', 'Barbados'),
+  ('BY', 'Belarus'),
+  ('BZ', 'Belize'),
+  ('BJ', 'Benin'),
+  ('BT', 'Bhutan'),
+  ('BO', 'Bolivia'),
+  ('BA', 'Bosnia and Herzegovina'),
+  ('BW', 'Botswana'),
+  ('BN', 'Brunei'),
+  ('BG', 'Bulgaria'),
+  ('BF', 'Burkina Faso'),
+  ('BI', 'Burundi'),
+  ('CV', 'Cabo Verde'),
+  ('KH', 'Cambodia'),
+  ('CM', 'Cameroon'),
+  ('CF', 'Central African Republic'),
+  ('TD', 'Chad'),
+  ('CR', 'Costa Rica'),
+  ('HR', 'Croatia'),
+  ('CU', 'Cuba'),
+  ('CY', 'Cyprus'),
+  ('CI', 'Côte d''Ivoire'),
+  ('CD', 'Democratic Republic of the Congo'),
+  ('DJ', 'Djibouti'),
+  ('DM', 'Dominica'),
+  ('DO', 'Dominican Republic'),
+  ('EC', 'Ecuador'),
+  ('SV', 'El Salvador'),
+  ('GQ', 'Equatorial Guinea'),
+  ('ER', 'Eritrea'),
+  ('EE', 'Estonia'),
+  ('SZ', 'Eswatini'),
+  ('ET', 'Ethiopia'),
+  ('FJ', 'Fiji'),
+  ('GA', 'Gabon'),
+  ('GM', 'Gambia'),
+  ('GE', 'Georgia'),
+  ('GH', 'Ghana'),
+  ('GD', 'Grenada'),
+  ('GT', 'Guatemala'),
+  ('GN', 'Guinea'),
+  ('GW', 'Guinea-Bissau'),
+  ('GY', 'Guyana'),
+  ('HT', 'Haiti'),
+  ('HN', 'Honduras'),
+  ('IS', 'Iceland'),
+  ('IQ', 'Iraq'),
+  ('JM', 'Jamaica'),
+  ('JO', 'Jordan'),
+  ('KZ', 'Kazakhstan'),
+  ('KE', 'Kenya'),
+  ('KI', 'Kiribati'),
+  ('XK', 'Kosovo'),
+  ('KG', 'Kyrgyzstan'),
+  ('LA', 'Laos'),
+  ('LV', 'Latvia'),
+  ('LB', 'Lebanon'),
+  ('LS', 'Lesotho'),
+  ('LR', 'Liberia'),
+  ('LY', 'Libya'),
+  ('LI', 'Liechtenstein'),
+  ('LT', 'Lithuania'),
+  ('LU', 'Luxembourg'),
+  ('MG', 'Madagascar'),
+  ('MW', 'Malawi'),
+  ('MV', 'Maldives'),
+  ('ML', 'Mali'),
+  ('MT', 'Malta'),
+  ('MH', 'Marshall Islands'),
+  ('MR', 'Mauritania'),
+  ('MU', 'Mauritius'),
+  ('FM', 'Micronesia'),
+  ('MD', 'Moldova'),
+  ('MC', 'Monaco'),
+  ('MN', 'Mongolia'),
+  ('ME', 'Montenegro'),
+  ('MA', 'Morocco'),
+  ('MZ', 'Mozambique'),
+  ('MM', 'Myanmar'),
+  ('NA', 'Namibia'),
+  ('NR', 'Nauru'),
+  ('NP', 'Nepal'),
+  ('NI', 'Nicaragua'),
+  ('NE', 'Niger'),
+  ('NG', 'Nigeria'),
+  ('KP', 'North Korea'),
+  ('MK', 'North Macedonia'),
+  ('PK', 'Pakistan'),
+  ('PW', 'Palau'),
+  ('PS', 'Palestine'),
+  ('PA', 'Panama'),
+  ('PG', 'Papua New Guinea'),
+  ('PY', 'Paraguay'),
+  ('CG', 'Republic of the Congo'),
+  ('RW', 'Rwanda'),
+  ('KN', 'Saint Kitts and Nevis'),
+  ('LC', 'Saint Lucia'),
+  ('VC', 'Saint Vincent and the Grenadines'),
+  ('WS', 'Samoa'),
+  ('SM', 'San Marino'),
+  ('ST', 'Sao Tome and Principe'),
+  ('SN', 'Senegal'),
+  ('RS', 'Serbia'),
+  ('SC', 'Seychelles'),
+  ('SL', 'Sierra Leone'),
+  ('SK', 'Slovakia'),
+  ('SI', 'Slovenia'),
+  ('SB', 'Solomon Islands'),
+  ('SO', 'Somalia'),
+  ('SS', 'South Sudan'),
+  ('LK', 'Sri Lanka'),
+  ('SD', 'Sudan'),
+  ('SR', 'Suriname'),
+  ('SY', 'Syria'),
+  ('TJ', 'Tajikistan'),
+  ('TZ', 'Tanzania'),
+  ('TL', 'Timor-Leste'),
+  ('TG', 'Togo'),
+  ('TO', 'Tonga'),
+  ('TT', 'Trinidad and Tobago'),
+  ('TN', 'Tunisia'),
+  ('TM', 'Turkmenistan'),
+  ('TV', 'Tuvalu'),
+  ('UG', 'Uganda'),
+  ('UA', 'Ukraine'),
+  ('UY', 'Uruguay'),
+  ('UZ', 'Uzbekistan'),
+  ('VU', 'Vanuatu'),
+  ('VA', 'Vatican City'),
+  ('VE', 'Venezuela'),
+  ('VN', 'Vietnam'),
+  ('YE', 'Yemen'),
+  ('ZM', 'Zambia'),
+  ('ZW', 'Zimbabwe')
 ON CONFLICT (iso_code) DO NOTHING;
 
--- 4. Create Updated At Trigger
+-- 4. Create Audit Trigger for Updates
 -- =====================================================
-CREATE OR REPLACE FUNCTION update_nationalities_updated_at()
+CREATE OR REPLACE FUNCTION update_nationalities_timestamp()
 RETURNS TRIGGER AS $$
 BEGIN
   NEW.updated_at = NOW();
@@ -269,12 +263,11 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-DROP TRIGGER IF EXISTS trigger_nationalities_updated_at ON public.nationalities_master;
-
-CREATE TRIGGER trigger_nationalities_updated_at
+DROP TRIGGER IF EXISTS trg_nationalities_updated_at ON public.nationalities_master;
+CREATE TRIGGER trg_nationalities_updated_at
   BEFORE UPDATE ON public.nationalities_master
   FOR EACH ROW
-  EXECUTE FUNCTION update_nationalities_updated_at();
+  EXECUTE FUNCTION update_nationalities_timestamp();
 
 -- 5. Create Helper Function for Resolving Nationality
 -- =====================================================
@@ -291,31 +284,30 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql STABLE;
 
--- 6. Comments for Documentation
+-- 6. Add Comments for Documentation
 -- =====================================================
 COMMENT ON TABLE public.nationalities_master IS 
-  'Master table for guest nationalities used in hotel search and pricing. ISO 3166-1 alpha-2 codes.';
+  'Master table of nationalities (ISO 3166-1 alpha-2) for hotel search and user profiles';
 
 COMMENT ON COLUMN public.nationalities_master.iso_code IS 
-  'ISO 3166-1 alpha-2 country code (e.g., IN, AE, GB, US)';
+  'ISO 3166-1 alpha-2 country code (2 letters)';
 
-COMMENT ON COLUMN public.nationalities_master.country_name IS 
-  'Full country name displayed in dropdowns';
+COMMENT ON COLUMN public.nationalities_master.display_order IS 
+  'Lower values appear first in dropdowns (priority countries)';
 
 COMMENT ON COLUMN public.nationalities_master.is_active IS 
   'Whether this nationality is available for selection';
 
-COMMENT ON COLUMN public.nationalities_master.display_order IS 
-  'Sort order for dropdown display (lower = higher priority)';
-
 COMMENT ON COLUMN public.users.nationality_iso IS 
-  'User''s nationality (ISO 2-letter code) for hotel search defaults';
+  'User''s nationality (ISO 2-letter code), used for hotel search defaults';
 
 COMMENT ON FUNCTION get_user_nationality(UUID) IS 
   'Helper function to resolve user nationality with IN fallback';
 
--- 7. Grant Permissions (if using specific roles)
+-- 7. Verification Queries (for testing after migration)
 -- =====================================================
--- Uncomment if you have specific database roles
--- GRANT SELECT ON public.nationalities_master TO readonly_role;
--- GRANT SELECT, UPDATE ON public.users TO app_role;
+-- Uncomment to verify migration success:
+-- SELECT COUNT(*) as total_nationalities FROM public.nationalities_master;
+-- SELECT COUNT(*) as active_nationalities FROM public.nationalities_master WHERE is_active = true;
+-- SELECT iso_code, country_name FROM public.nationalities_master ORDER BY display_order LIMIT 20;
+-- SELECT get_user_nationality('00000000-0000-0000-0000-000000000000'::UUID) as default_nationality;
