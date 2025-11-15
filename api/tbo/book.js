@@ -97,25 +97,28 @@ async function blockRoom(params = {}) {
     timeout: 30000,
   });
 
+  // ✅ Handle BlockRoomResult wrapper if present (defensive)
+  const result = response.data?.BlockRoomResult || response.data;
+
   console.log("📥 TBO BlockRoom Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  ResponseStatus:", response.data?.ResponseStatus);
-  console.log("  AvailabilityType:", response.data?.AvailabilityType);
-  console.log("  IsPriceChanged:", response.data?.IsPriceChanged);
+  console.log("  ResponseStatus:", result?.ResponseStatus);
+  console.log("  AvailabilityType:", result?.AvailabilityType);
+  console.log("  IsPriceChanged:", result?.IsPriceChanged);
   console.log(
     "  IsCancellationPolicyChanged:",
-    response.data?.IsCancellationPolicyChanged,
+    result?.IsCancellationPolicyChanged,
   );
-  console.log("  Error:", response.data?.Error?.ErrorMessage || "None");
+  console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
   return {
-    responseStatus: response.data?.ResponseStatus,
-    availabilityType: response.data?.AvailabilityType,
-    isPriceChanged: response.data?.IsPriceChanged,
-    isCancellationPolicyChanged: response.data?.IsCancellationPolicyChanged,
-    hotelRoomDetails: response.data?.HotelRoomDetails || [],
-    error: response.data?.Error,
+    responseStatus: result?.ResponseStatus,
+    availabilityType: result?.AvailabilityType,
+    isPriceChanged: result?.IsPriceChanged,
+    isCancellationPolicyChanged: result?.IsCancellationPolicyChanged,
+    hotelRoomDetails: result?.HotelRoomDetails || [],
+    error: result?.Error,
   };
 }
 
@@ -216,25 +219,28 @@ async function bookHotel(params = {}) {
     timeout: 30000,
   });
 
+  // ✅ Handle HotelBookResult wrapper if present (defensive)
+  const result = response.data?.HotelBookResult || response.data;
+
   console.log("📥 TBO Book Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  ResponseStatus:", response.data?.ResponseStatus);
-  console.log("  BookingRefNo:", response.data?.BookingRefNo);
-  console.log("  BookingId:", response.data?.BookingId);
-  console.log("  ConfirmationNo:", response.data?.ConfirmationNo);
-  console.log("  Status:", response.data?.Status);
-  console.log("  Error:", response.data?.Error?.ErrorMessage || "None");
+  console.log("  ResponseStatus:", result?.ResponseStatus);
+  console.log("  BookingRefNo:", result?.BookingRefNo);
+  console.log("  BookingId:", result?.BookingId);
+  console.log("  ConfirmationNo:", result?.ConfirmationNo);
+  console.log("  Status:", result?.Status);
+  console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
   return {
-    responseStatus: response.data?.ResponseStatus,
-    bookingRefNo: response.data?.BookingRefNo,
-    bookingId: response.data?.BookingId,
-    confirmationNo: response.data?.ConfirmationNo,
-    status: response.data?.Status,
-    isPriceChanged: response.data?.IsPriceChanged,
-    hotelBookingDetails: response.data?.HotelBookingDetails,
-    error: response.data?.Error,
+    responseStatus: result?.ResponseStatus,
+    bookingRefNo: result?.BookingRefNo,
+    bookingId: result?.BookingId,
+    confirmationNo: result?.ConfirmationNo,
+    status: result?.Status,
+    isPriceChanged: result?.IsPriceChanged,
+    hotelBookingDetails: result?.HotelBookingDetails,
+    error: result?.Error,
   };
 }
 

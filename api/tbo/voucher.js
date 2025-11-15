@@ -81,19 +81,22 @@ async function generateVoucher(params = {}) {
     timeout: 30000,
   });
 
+  // ✅ Handle GenerateVoucherResult wrapper if present (defensive)
+  const result = response.data?.GenerateVoucherResult || response.data;
+
   console.log("📥 TBO Voucher Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  ResponseStatus:", response.data?.ResponseStatus);
-  console.log("  VoucherURL:", response.data?.VoucherURL || "N/A");
-  console.log("  Error:", response.data?.Error?.ErrorMessage || "None");
+  console.log("  ResponseStatus:", result?.ResponseStatus);
+  console.log("  VoucherURL:", result?.VoucherURL || "N/A");
+  console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
   return {
-    responseStatus: response.data?.ResponseStatus,
-    voucherURL: response.data?.VoucherURL,
-    bookingRefNo: response.data?.BookingRefNo,
-    bookingId: response.data?.BookingId,
-    error: response.data?.Error,
+    responseStatus: result?.ResponseStatus,
+    voucherURL: result?.VoucherURL,
+    bookingRefNo: result?.BookingRefNo,
+    bookingId: result?.BookingId,
+    error: result?.Error,
   };
 }
 
@@ -151,21 +154,24 @@ async function getBookingDetails(params = {}) {
     timeout: 30000,
   });
 
+  // ✅ Handle GetBookingDetailsResult wrapper if present (defensive)
+  const result = response.data?.GetBookingDetailsResult || response.data;
+
   console.log("📥 TBO Booking Details Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  ResponseStatus:", response.data?.ResponseStatus);
-  console.log("  BookingStatus:", response.data?.Status);
-  console.log("  Error:", response.data?.Error?.ErrorMessage || "None");
+  console.log("  ResponseStatus:", result?.ResponseStatus);
+  console.log("  BookingStatus:", result?.Status);
+  console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
   return {
-    responseStatus: response.data?.ResponseStatus,
-    status: response.data?.Status,
-    bookingRefNo: response.data?.BookingRefNo,
-    bookingId: response.data?.BookingId,
-    confirmationNo: response.data?.ConfirmationNo,
-    hotelDetails: response.data?.HotelDetails,
-    error: response.data?.Error,
+    responseStatus: result?.ResponseStatus,
+    status: result?.Status,
+    bookingRefNo: result?.BookingRefNo,
+    bookingId: result?.BookingId,
+    confirmationNo: result?.ConfirmationNo,
+    hotelDetails: result?.HotelDetails,
+    error: result?.Error,
   };
 }
 
