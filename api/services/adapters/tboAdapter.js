@@ -238,7 +238,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       Password: this.config.staticPassword, // "Tra@59334536"
     };
 
-    this.logger.info("📍 Fetching TBO Country List (Static Data)", {
+    this.logger.info("���� Fetching TBO Country List (Static Data)", {
       url: this.config.hotelStaticBase + "CountryList",
       method: "POST",
       userName: requestBody.UserName,
@@ -277,6 +277,17 @@ class TBOAdapter extends BaseSupplierAdapter {
       this.logger.error("❌ TBO Country List failed:", error.message);
       return [];
     }
+  }
+
+  /**
+   * ========================================
+   * PUBLIC: Get Country List (Static Data)
+   * ========================================
+   * Endpoint: https://apiwr.tboholidays.com/HotelAPI/CountryList
+   * Returns: List of all supported countries
+   */
+  async getCountryList(force = false) {
+    return this.getTboCountries(force);
   }
 
   async getTboCities(countryCode, force = false) {
