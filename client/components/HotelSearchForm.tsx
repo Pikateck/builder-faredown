@@ -23,7 +23,6 @@ import {
   Building,
   Landmark,
   Plane,
-  Globe,
 } from "lucide-react";
 import { ErrorBanner } from "@/components/ErrorBanner";
 import {
