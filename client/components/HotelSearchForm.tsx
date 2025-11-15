@@ -797,8 +797,10 @@ export function HotelSearchForm({
             </Popover>
           </div>
 
+          {/* Guests & Rooms + Nationality Container */}
+        <div className="flex-1 lg:max-w-[280px] flex flex-col gap-2">
           {/* Guests & Rooms */}
-          <div className="flex-1 lg:max-w-[280px]">
+          <div>
             <label className="text-xs font-medium text-gray-800 mb-1 block sm:hidden">
               Guests & Rooms
             </label>
@@ -966,37 +968,27 @@ export function HotelSearchForm({
                 </div>
               </PopoverContent>
             </Popover>
-        </div>
+          </div>
 
-        {/* Nationality */}
-        <div className="flex-1 lg:max-w-[200px]">
-          <label className="text-xs font-medium text-gray-800 mb-1 block">
-            Guest Nationality
-          </label>
-          <Select
-            value={nationality}
-            onValueChange={setNationality}
-            disabled={isNationalityLoading}
-          >
-            <SelectTrigger className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3">
-              <Globe className="mr-2 h-4 w-4 flex-shrink-0" />
-              <SelectValue placeholder="Select nationality">
-                {nationality && nationalities.find(n => n.isoCode === nationality)?.countryName}
-              </SelectValue>
-            </SelectTrigger>
-            <SelectContent className="max-h-[300px] overflow-y-auto">
-              {nationalities.map((n) => (
-                <SelectItem key={n.isoCode} value={n.isoCode}>
-                  <span className="flex items-center">
-                    <span className="font-mono text-xs text-gray-500 mr-2">
-                      {n.isoCode}
-                    </span>
-                    <span>{n.countryName}</span>
-                  </span>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          {/* Nationality */}
+          <div>
+            <Select
+              value={nationality}
+              onValueChange={setNationality}
+              disabled={isNationalityLoading}
+            >
+              <SelectTrigger className="w-full h-10 sm:h-12 justify-start text-left font-medium bg-white border-2 border-blue-400 hover:border-blue-500 rounded text-xs sm:text-sm px-2 sm:px-3">
+                <SelectValue placeholder="Guest Nationality" />
+              </SelectTrigger>
+              <SelectContent className="max-h-[300px] overflow-y-auto">
+                {nationalities.map((n) => (
+                  <SelectItem key={n.isoCode} value={n.isoCode}>
+                    {n.countryName}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
         </div>
 
         {/* Search Button */}
