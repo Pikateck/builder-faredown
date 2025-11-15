@@ -3,31 +3,22 @@
 /**
  * TBO Complete Hotel Booking Flow Test
  *
- * This is the CANONICAL end-to-end test for TBO hotel integration.
+ * CANONICAL end-to-end test for TBO hotel integration.
  *
  * ⚠️  IMPORTANT: This test REQUIRES Fixie proxy access (whitelisted IP for TBO)
  *
  * WHERE TO RUN:
  *   ✅ Render/Production environment (has Fixie proxy access)
- *   ❌ Local machine (Fixie proxy times out from most local networks)
+ *   ❌ Local machine (Fixie proxy usually times out)
  *
- * Tests complete pipeline:
+ * Pipeline:
  * 1. Authenticate → Get TokenId
  * 2. GetDestinationSearchStaticData → Get real CityId (DestinationId)
- * 3. SearchHotels ��� Get hotel results with TraceId
+ * 3. SearchHotels → Get hotel results with TraceId
  * 4. GetHotelRoom → Get room details using TraceId + ResultIndex
  * 5. BlockRoom → Hold the room temporarily
  * 6. Book → Confirm the booking
  * 7. GenerateVoucher → Get booking voucher
- *
- * All steps use the correct JSON API endpoints and TokenId authentication.
- *
- * USAGE (on Render/Production):
- *   npm install              (install dependencies)
- *   node test-tbo-full-booking-flow.js
- *
- * USAGE (local testing without proxy - will fail at TBO):
- *   USE_SUPPLIER_PROXY=false node test-tbo-full-booking-flow.js
  *
  * OUTPUTS:
  *   Console: Real-time progress and logging
@@ -36,7 +27,7 @@
 
 // NO dotenv here on Render
 
-// Check proxy configuration
+// Proxy configuration
 const USE_PROXY = process.env.USE_SUPPLIER_PROXY === "true";
 const FIXIE_URL = process.env.FIXIE_URL;
 
@@ -69,7 +60,7 @@ console.log("   Local testing will timeout at Fixie proxy connection\n");
 const fs = require("fs");
 const path = require("path");
 
-// Import TBO modules
+// Import TBO modules (existing project modules)
 const { authenticateTBO } = require("./api/tbo/auth");
 const { getCityId } = require("./api/tbo/static");
 const { searchHotels } = require("./api/tbo/search");
@@ -77,50 +68,16 @@ const { getHotelRoom } = require("./api/tbo/room");
 const { blockRoom, bookHotel } = require("./api/tbo/book");
 const { generateVoucher, getBookingDetails } = require("./api/tbo/voucher");
 
-/**
- * Helper to always use FUTURE dates so TBO does not reject with
- * "CheckInDate must be greater than current Date".
- *
- * - Check-in: today + 30 days
- * - Check-out: check-in + 5 nights
- * - Format: YYYY-MM-DD (searchHotels will convert to dd/MM/yyyy internally)
- */
-function getFutureDates() {
-  const today = new Date();
-
-  const checkIn = new Date(today);
-  checkIn.setDate(checkIn.getDate() + 30); // 30 days from today
-
-  const checkOut = new Date(checkIn);
-  checkOut.setDate(checkOut.getDate() + 5); // 5 nights
-
-  const fmt = (d) => d.toISOString().slice(0, 10); // YYYY-MM-DD
-
-  return {
-    checkInDate: fmt(checkIn),
-    checkOutDate: fmt(checkOut),
-  };
-}
-
-const { checkInDate, checkOutDate } = getFutureDates();
-
-// Test parameters
+// Helper: choose safe future dates (static for now, but in future can be dynamic)
 const TEST_PARAMS = {
   destination: "Dubai",
   countryCode: "AE",
-<<<<<<< HEAD
-  checkInDate,
-  checkOutDate,
-  nationality: "AE",
-=======
-  checkInDate: "2025-06-15",
-  checkOutDate: "2025-06-20",
-  nationality: "IN", // ⚠️ TBO agency restriction: must be IN
->>>>>>> 3f22b3e853d69c6ee7045e8c7a098e139373e820
+  checkInDate: "2025-12-15", // must be > today
+  checkOutDate: "2025-12-20",
+  nationality: "IN", // TBO agency restriction: only Indian nationality allowed
   adults: 2,
   children: 0,
   rooms: 1,
-  // Passenger details for booking
   passengers: [
     {
       Title: "Mr",
@@ -132,7 +89,7 @@ const TEST_PARAMS = {
       PassportIssueDate: "2020-01-01",
       PassportExpDate: "2030-01-01",
       Email: "john.doe@test.com",
-      Phoneno: "+971501234567",
+      Phoneno: "+919876543210",
       AddressLine1: "Test Address",
       City: "Mumbai",
       CountryCode: "IN",
@@ -149,7 +106,7 @@ const TEST_PARAMS = {
       PassportIssueDate: "2020-01-01",
       PassportExpDate: "2030-01-01",
       Email: "jane.doe@test.com",
-      Phoneno: "+971501234568",
+      Phoneno: "+919876543211",
       AddressLine1: "Test Address",
       City: "Mumbai",
       CountryCode: "IN",
@@ -239,7 +196,7 @@ async function runCompleteFlow() {
       countryCode: TEST_PARAMS.countryCode,
       checkIn: TEST_PARAMS.checkInDate,
       checkOut: TEST_PARAMS.checkOutDate,
-      guestNationality: TEST_PARAMS.nationality,
+      guestNationality: TEST_PARAMS.nationality, // must be IN for now
       rooms: [
         {
           adults: TEST_PARAMS.adults,
@@ -450,7 +407,6 @@ async function runCompleteFlow() {
       };
     }
 
-    // Final summary
     console.log("\n" + "=".repeat(80));
     console.log("COMPLETE BOOKING FLOW SUMMARY");
     console.log("=".repeat(80));
@@ -483,7 +439,6 @@ async function runCompleteFlow() {
     };
   }
 
-  // Save results to file
   const resultsFile = path.join(
     __dirname,
     "tbo-full-booking-flow-results.json",
