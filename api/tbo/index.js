@@ -48,4 +48,9 @@ module.exports = {
   // Voucher
   generateVoucher,
   getBookingDetails,
+
+  // Cancel/Change Request (newly implemented)
+  sendChangeRequest: require("./cancel").sendChangeRequest,
+  getChangeRequestStatus: require("./cancel").getChangeRequestStatus,
+  cancelHotelBooking: require("./cancel").cancelHotelBooking,
 };
