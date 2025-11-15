@@ -34,6 +34,7 @@ const bargainV1Routes = require("./routes/bargain-final.js");
 const currencyRoutes = require("./routes/currency.js");
 const countriesRoutes = require("./routes/countries.js");
 const promoRoutes = require("./routes/promo.js");
+const metaNationalitiesRoutes = require("./routes/meta-nationalities.js");
 const analyticsRoutes = require("./routes/analytics.js");
 const dbTestRoutes = require("./routes/db-test.js");
 const paymentRoutes = require("./routes/payments.js");
