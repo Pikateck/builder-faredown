@@ -81,13 +81,22 @@ async function generateVoucher(params = {}) {
     timeout: 30000,
   });
 
-  // ✅ Handle GenerateVoucherResult wrapper if present (defensive)
-  const result = response.data?.GenerateVoucherResult || response.data;
+  // ✅ DEBUG: Log raw response to identify wrapper name
+  console.log("\n🔍 RAW RESPONSE KEYS:", Object.keys(response.data || {}));
+  console.log("🔍 RAW RESPONSE:", JSON.stringify(response.data, null, 2).substring(0, 800));
 
-  console.log("📥 TBO Voucher Response");
+  // ✅ Handle multiple possible wrapper names
+  const result = response.data?.GenerateVoucherResult ||
+                 response.data?.VoucherResponse ||
+                 response.data?.GenerateVoucherResponse ||
+                 response.data;
+
+  console.log("\n📥 TBO Voucher Response");
   console.log("  HTTP Status:", response.status);
   console.log("  ResponseStatus:", result?.ResponseStatus);
   console.log("  VoucherURL:", result?.VoucherURL || "N/A");
+  console.log("  BookingRefNo:", result?.BookingRefNo || "N/A");
+  console.log("  BookingId:", result?.BookingId || "N/A");
   console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
@@ -154,13 +163,23 @@ async function getBookingDetails(params = {}) {
     timeout: 30000,
   });
 
-  // ✅ Handle GetBookingDetailsResult wrapper if present (defensive)
-  const result = response.data?.GetBookingDetailsResult || response.data;
+  // ✅ DEBUG: Log raw response to identify wrapper name
+  console.log("\n🔍 RAW RESPONSE KEYS:", Object.keys(response.data || {}));
+  console.log("🔍 RAW RESPONSE:", JSON.stringify(response.data, null, 2).substring(0, 1000));
 
-  console.log("📥 TBO Booking Details Response");
+  // ✅ Handle multiple possible wrapper names
+  const result = response.data?.GetBookingDetailsResult ||
+                 response.data?.BookingDetailsResponse ||
+                 response.data?.GetBookingDetailsResponse ||
+                 response.data;
+
+  console.log("\n📥 TBO Booking Details Response");
   console.log("  HTTP Status:", response.status);
   console.log("  ResponseStatus:", result?.ResponseStatus);
   console.log("  BookingStatus:", result?.Status);
+  console.log("  BookingRefNo:", result?.BookingRefNo || "N/A");
+  console.log("  BookingId:", result?.BookingId || "N/A");
+  console.log("  ConfirmationNo:", result?.ConfirmationNo || "N/A");
   console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
