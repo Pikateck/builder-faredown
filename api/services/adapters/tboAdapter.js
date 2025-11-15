@@ -290,6 +290,72 @@ class TBOAdapter extends BaseSupplierAdapter {
     return this.getTboCountries(force);
   }
 
+  /**
+   * ========================================
+   * PUBLIC: Get City List for a Country
+   * ========================================
+   * Endpoint: GetDestinationSearchStaticData
+   * Returns: List of cities in the specified country
+   */
+  async getCityList(countryCode, force = false) {
+    return this.getTboCities(countryCode, force);
+  }
+
+  /**
+   * ========================================
+   * PUBLIC: Get Top Destinations
+   * ========================================
+   * Endpoint: https://apiwr.tboholidays.com/HotelAPI/TopDestinations
+   * Returns: Popular destinations by country
+   */
+  async getTopDestinations(countryCode = null, force = false) {
+    const requestBody = {
+      UserName: this.config.staticUserName,
+      Password: this.config.staticPassword,
+    };
+
+    // If countryCode provided, add it to request
+    if (countryCode) {
+      requestBody.CountryCode = countryCode;
+    }
+
+    this.logger.info("🌟 Fetching TBO Top Destinations", {
+      url: this.config.hotelStaticBase + "TopDestinations",
+      countryCode: countryCode || "All",
+      force,
+    });
+
+    try {
+      const response = await tboRequest(
+        this.config.hotelStaticBase + "TopDestinations",
+        {
+          method: "POST",
+          data: requestBody,
+          headers: {
+            "Content-Type": "application/json",
+            Accept: "application/json",
+            "Accept-Encoding": "gzip, deflate",
+          },
+          timeout: this.config.timeout,
+        },
+      );
+
+      if (response.data?.Status !== 1) {
+        throw new Error(
+          `Top Destinations failed: ${response.data?.Error?.ErrorMessage}`,
+        );
+      }
+
+      const destinations = response.data?.CityList || response.data?.Result || [];
+      this.logger.info(`✅ Retrieved ${destinations.length} top destinations`);
+
+      return destinations;
+    } catch (error) {
+      this.logger.error("❌ TBO Top Destinations failed:", error.message);
+      return [];
+    }
+  }
+
   async getTboCities(countryCode, force = false) {
     if (!countryCode) return [];
 
