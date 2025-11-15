@@ -73,6 +73,7 @@ export function HotelSearchForm({
   initialCheckIn,
   initialCheckOut,
   initialGuests,
+  initialNationality,
 }: HotelSearchFormProps) {
   const navigate = useNavigate();
   const { updateSearchParams, getDisplayData, searchParams } = useSearch();
@@ -121,6 +122,12 @@ export function HotelSearchForm({
 
   // Mobile detection
   const [isMobile, setIsMobile] = useState(false);
+
+  // Nationality state
+  const { user } = useAuth() || { user: null };
+  const [nationality, setNationality] = useState<string>(initialNationality || 'IN');
+  const [nationalities, setNationalities] = useState<Nationality[]>([]);
+  const [isNationalityLoading, setIsNationalityLoading] = useState(true);
 
   // Keep form blank by default - users can load from Recent Searches if needed
   // useEffect(() => {
@@ -469,7 +476,7 @@ export function HotelSearchForm({
         navigate(url);
       }
     } catch (error) {
-      console.error("🚨 Error in hotel search:", error);
+      console.error("�� Error in hotel search:", error);
       setErrorMessage("Search failed. Please try again.");
       setShowError(true);
     }
