@@ -57,23 +57,26 @@ async function getDestinationSearchStaticData(
     timeout: 30000,
   });
 
+  // ✅ Handle GetDestinationSearchStaticDataResult wrapper if present (defensive)
+  const result = response.data?.GetDestinationSearchStaticDataResult || response.data;
+
   console.log("📥 TBO Static Data Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  Status:", response.data?.Status);
+  console.log("  Status:", result?.Status);
   console.log(
     "  Destinations Count:",
-    response.data?.Destinations?.length || 0,
+    result?.Destinations?.length || 0,
   );
-  console.log("  TraceId:", response.data?.TraceId);
+  console.log("  TraceId:", result?.TraceId);
   console.log("");
 
-  if (response.data?.Status !== 1) {
+  if (result?.Status !== 1) {
     throw new Error(
-      `Static data failed: ${response.data?.Error?.ErrorMessage || "Unknown error"}`,
+      `Static data failed: ${result?.Error?.ErrorMessage || "Unknown error"}`,
     );
   }
 
-  const destinations = response.data?.Destinations || [];
+  const destinations = result?.Destinations || [];
 
   if (destinations.length > 0) {
     console.log("Sample destinations:");
@@ -84,9 +87,9 @@ async function getDestinationSearchStaticData(
   }
 
   return {
-    status: response.data.Status,
-    traceId: response.data.TraceId,
-    tokenId: response.data.TokenId,
+    status: result.Status,
+    traceId: result.TraceId,
+    tokenId: result.TokenId,
     destinations: destinations.map((d) => ({
       cityName: d.CityName,
       countryCode: d.CountryCode?.trim(),
