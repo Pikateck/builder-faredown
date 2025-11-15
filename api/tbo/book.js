@@ -97,10 +97,16 @@ async function blockRoom(params = {}) {
     timeout: 30000,
   });
 
-  // ✅ Handle BlockRoomResult wrapper if present (defensive)
-  const result = response.data?.BlockRoomResult || response.data;
+  // ✅ DEBUG: Log raw response to identify wrapper name
+  console.log("\n🔍 RAW RESPONSE KEYS:", Object.keys(response.data || {}));
+  console.log("🔍 RAW RESPONSE:", JSON.stringify(response.data, null, 2).substring(0, 500));
 
-  console.log("📥 TBO BlockRoom Response");
+  // ✅ Handle multiple possible wrapper names (TBO docs show BlockRoomResponse)
+  const result = response.data?.BlockRoomResponse ||
+                 response.data?.BlockRoomResult ||
+                 response.data;
+
+  console.log("\n📥 TBO BlockRoom Response");
   console.log("  HTTP Status:", response.status);
   console.log("  ResponseStatus:", result?.ResponseStatus);
   console.log("  AvailabilityType:", result?.AvailabilityType);
@@ -109,6 +115,7 @@ async function blockRoom(params = {}) {
     "  IsCancellationPolicyChanged:",
     result?.IsCancellationPolicyChanged,
   );
+  console.log("  HotelRoomDetails count:", result?.HotelRoomDetails?.length || 0);
   console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
@@ -117,7 +124,7 @@ async function blockRoom(params = {}) {
     availabilityType: result?.AvailabilityType,
     isPriceChanged: result?.IsPriceChanged,
     isCancellationPolicyChanged: result?.IsCancellationPolicyChanged,
-    hotelRoomDetails: result?.HotelRoomDetails || [],
+    hotelRoomDetails: result?.HotelRoomDetails || [], // ✅ Singular per TBO docs
     error: result?.Error,
   };
 }
@@ -219,10 +226,17 @@ async function bookHotel(params = {}) {
     timeout: 30000,
   });
 
-  // ✅ Handle HotelBookResult wrapper if present (defensive)
-  const result = response.data?.HotelBookResult || response.data;
+  // ✅ DEBUG: Log raw response to identify wrapper name and fields
+  console.log("\n🔍 RAW RESPONSE KEYS:", Object.keys(response.data || {}));
+  console.log("🔍 RAW RESPONSE:", JSON.stringify(response.data, null, 2).substring(0, 1000));
 
-  console.log("📥 TBO Book Response");
+  // ✅ Handle multiple possible wrapper names
+  const result = response.data?.BookResponse ||
+                 response.data?.HotelBookResult ||
+                 response.data?.BookResult ||
+                 response.data;
+
+  console.log("\n📥 TBO Book Response");
   console.log("  HTTP Status:", response.status);
   console.log("  ResponseStatus:", result?.ResponseStatus);
   console.log("  BookingRefNo:", result?.BookingRefNo);
