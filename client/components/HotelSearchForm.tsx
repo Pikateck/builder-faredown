@@ -147,6 +147,43 @@ export function HotelSearchForm({
     }
   }, []);
 
+  // Load nationalities on mount
+  useEffect(() => {
+    const loadNationalities = async () => {
+      try {
+        setIsNationalityLoading(true);
+
+        // Fetch nationalities from API
+        const data = await getNationalities();
+        setNationalities(data);
+
+        // Set default based on user profile or fallback to IN
+        if (!initialNationality) {
+          const defaultNat = getDefaultNationality(user);
+          setNationality(defaultNat);
+        }
+
+        console.log(`✅ Loaded ${data.length} nationalities, default: ${nationality}`);
+      } catch (error) {
+        console.error('❌ Error loading nationalities:', error);
+        // Fallback to minimal list if API fails
+        setNationalities([
+          { isoCode: 'IN', countryName: 'India' },
+          { isoCode: 'AE', countryName: 'United Arab Emirates' },
+          { isoCode: 'GB', countryName: 'United Kingdom' },
+          { isoCode: 'US', countryName: 'United States' },
+          { isoCode: 'SG', countryName: 'Singapore' },
+          { isoCode: 'AU', countryName: 'Australia' },
+        ]);
+        setNationality('IN');
+      } finally {
+        setIsNationalityLoading(false);
+      }
+    };
+
+    loadNationalities();
+  }, [user]);
+
   // Close dropdowns when clicking outside
   useEffect(() => {
     const handleClickOutside = () => {
@@ -476,7 +513,7 @@ export function HotelSearchForm({
         navigate(url);
       }
     } catch (error) {
-      console.error("�� Error in hotel search:", error);
+      console.error("🚨 Error in hotel search:", error);
       setErrorMessage("Search failed. Please try again.");
       setShowError(true);
     }
