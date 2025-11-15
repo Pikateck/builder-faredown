@@ -849,6 +849,97 @@ class TBOAdapter extends BaseSupplierAdapter {
 
   /**
    * ========================================
+   * 13. GET HOTEL BOOKING DETAILS
+   * ========================================
+   */
+  async getHotelBookingDetails(params = {}) {
+    const { getBookingDetails } = require("../../tbo/voucher");
+
+    const { bookingId, confirmationNo } = params;
+
+    this.logger.info("📋 TBO Get Booking Details", { bookingId, confirmationNo });
+
+    try {
+      const result = await getBookingDetails({
+        bookingId: bookingId ? String(bookingId) : undefined,
+        confirmationNo: confirmationNo ? String(confirmationNo) : undefined,
+      });
+
+      return result;
+    } catch (error) {
+      this.logger.error("❌ TBO Get Booking Details failed:", error.message);
+      throw error;
+    }
+  }
+
+  /**
+   * ========================================
+   * 14. GET HOTEL INFO (Static Data)
+   * ========================================
+   * Note: TBO doesn't have a dedicated HotelInfo API
+   * This is a placeholder that returns basic info
+   */
+  async getHotelInfo(params = {}) {
+    const { hotelCode } = params;
+
+    this.logger.info("ℹ️ TBO Get Hotel Info", { hotelCode });
+
+    // TBO doesn't have a separate HotelInfo endpoint
+    // Hotel details come from search results
+    // This is a placeholder for route compatibility
+    return {
+      supplier: "TBO",
+      hotelCode: hotelCode,
+      message: "Hotel info available through search results or static data",
+      available: false,
+    };
+  }
+
+  /**
+   * ========================================
+   * 15. LOGOUT ALL (Session Management)
+   * ========================================
+   * Note: TBO uses TokenId which expires after 24 hours
+   * Manual logout is not required
+   */
+  async logoutAll() {
+    this.logger.info("🚪 TBO Logout All");
+
+    // Clear cached token
+    this.tokenId = null;
+    this.tokenExpiry = null;
+
+    return {
+      supplier: "TBO",
+      message: "Token cache cleared. TokenId will expire in 24 hours.",
+      success: true,
+    };
+  }
+
+  /**
+   * ========================================
+   * ROUTE COMPATIBILITY ALIASES
+   * ========================================
+   * These provide alternate method names expected by routes
+   */
+
+  // Alias for getRooms (route expects singular)
+  async getHotelRoom(params = {}) {
+    return this.getRooms(params);
+  }
+
+  // Alias for getVoucher
+  async generateHotelVoucher(params = {}) {
+    return this.getVoucher(params);
+  }
+
+  // Alias for blockRoom
+  async preBookHotel(params = {}) {
+    return this.blockRoom(params);
+  }
+
+  /**
+   * ========================================
    * STATIC: Transform to UnifiedHotel format
    * ========================================
    */
