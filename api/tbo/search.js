@@ -118,7 +118,7 @@ async function searchHotels(params = {}) {
       Accept: "application/json",
       "Accept-Encoding": "gzip, deflate",
     },
-    timeout: 30000,
+    timeout: 90000, // Extended timeout for large result sets (2000+ hotels via proxy)
   });
 
   const result = response.data?.HotelSearchResult || response.data;

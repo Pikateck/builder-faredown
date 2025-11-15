@@ -257,12 +257,12 @@ router.post("/search", async (req, res) => {
       guestNationality: req.body.guestNationality || guestNationality
     };
 
-    // Execute raw search with 30-second timeout
+    // Execute raw search with 90-second timeout (large result sets via proxy)
     const searchPromise = adapter.searchHotels(searchRequest);
     const timeoutPromise = new Promise((_, reject) => {
       setTimeout(
-        () => reject(new Error("TBO search timeout after 30 seconds")),
-        30000,
+        () => reject(new Error("TBO search timeout after 90 seconds")),
+        90000,
       );
     });
 
@@ -376,7 +376,7 @@ router.get("/search", async (req, res) => {
     });
 
     const timeoutPromise = new Promise((_, reject) => {
-      setTimeout(() => reject(new Error("Search timeout")), 30000);
+      setTimeout(() => reject(new Error("Search timeout")), 90000);
     });
 
     const data = await Promise.race([searchPromise, timeoutPromise]);

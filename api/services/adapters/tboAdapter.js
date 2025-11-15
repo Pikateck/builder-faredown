@@ -479,7 +479,7 @@ class TBOAdapter extends BaseSupplierAdapter {
           Accept: "application/json",
           "Accept-Encoding": "gzip, deflate",
         },
-        timeout: this.config.timeout,
+        timeout: this.config.searchTimeout || 90000, // Use extended timeout for search
       });
 
       // ✅ Response can be wrapped in HotelSearchResult or direct
