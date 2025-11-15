@@ -1,10 +1,10 @@
 /**
  * Nationalities Service
- * 
+ *
  * Handles fetching and managing nationality data for hotel search dropdowns
  */
 
-import { api } from '@/lib/api';
+import { apiClient } from '@/lib/api';
 
 export interface Nationality {
   isoCode: string;
@@ -32,8 +32,8 @@ export async function getNationalities(): Promise<Nationality[]> {
     }
 
     console.log('📍 Fetching nationalities from API');
-    
-    const response = await api.get<NationalitiesResponse>('/meta/nationalities');
+
+    const response = await apiClient.get<NationalitiesResponse>('/meta/nationalities');
     
     if (response.success && response.nationalities) {
       nationalitiesCache = response.nationalities;
