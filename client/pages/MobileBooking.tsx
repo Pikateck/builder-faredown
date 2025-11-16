@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import {
   ArrowLeft,
   ChevronDown,
@@ -17,10 +18,18 @@ import {
 const MobileBooking = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  // ✅ Scroll to top on route change
+  useScrollToTop("auto");
   const selectedFlight = location.state?.selectedFlight;
   const searchData = location.state?.searchData;
 
   const [currentStep, setCurrentStep] = useState(1);
+
+  // ✅ Scroll to top whenever step changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [currentStep]);
   const [expandedSection, setExpandedSection] = useState("travellers");
   const [travellers, setTravellers] = useState([
     {
@@ -85,6 +94,9 @@ const MobileBooking = () => {
       // Auto-expand next section
       const sections = ["travellers", "addons", "seats", "payment"];
       setExpandedSection(sections[currentStep]);
+
+      // ✅ Scroll to top when advancing to next step
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
     } else {
       // Navigate to confirmation
       navigate("/mobile-confirmation", {

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { HotelSearchForm } from "@/components/HotelSearchForm";
 import {
   ArrowLeft,
@@ -24,6 +25,9 @@ import { Button } from "@/components/ui/button";
 const MobileHotelResults = () => {
   const location = useLocation();
   const navigate = useNavigate();
+
+  // ✅ Scroll to top on route change
+  useScrollToTop("auto");
   const [showFilters, setShowFilters] = useState(false);
   const [expandedFilter, setExpandedFilter] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState("recommended");
