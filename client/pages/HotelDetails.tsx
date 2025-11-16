@@ -3660,17 +3660,6 @@ function HotelDetailsContent() {
                                           )}
                                         </BargainButton>
                                       </div>
-
-                                      <div className="mt-3 flex items-center justify-center space-x-4 text-xs text-green-700">
-                                        <span className="flex items-center gap-1">
-                                          <CheckCircle className="w-3 h-3 text-green-600" />
-                                          No prepayment
-                                        </span>
-                                        <span className="flex items-center gap-1">
-                                          <CheckCircle className="w-3 h-3 text-green-600" />
-                                          Free cancellation
-                                        </span>
-                                      </div>
                                     </div>
                                   </div>
                                 </div>
