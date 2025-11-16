@@ -181,4 +181,135 @@ router.get("/export", async (req, res) => {
   }
 });
 
+// POST /api/markups - Create new markup
+router.post("/", async (req, res) => {
+  try {
+    const fields = [
+      "supplier_id",
+      "module",
+      "is_domestic",
+      "cabin",
+      "airline_code",
+      "city_code",
+      "star_rating",
+      "hotel_chain",
+      "hotel_id",
+      "room_type",
+      "origin_city",
+      "dest_city",
+      "transfer_type",
+      "vehicle_type",
+      "experience_type",
+      "attraction_id",
+      "markup_type",
+      "markup_value",
+      "fixed_currency",
+      "bargain_min_pct",
+      "bargain_max_pct",
+      "valid_from",
+      "valid_to",
+      "status",
+      "created_by",
+      "updated_by",
+    ];
+
+    const vals = fields.map((k) => req.body[k] ?? null);
+    const placeholders = vals.map((_, idx) => `$${idx + 1}`).join(",");
+
+    const ins = await db.query(
+      `INSERT INTO module_markups(${fields.join(",")}) VALUES(${placeholders}) RETURNING *`,
+      vals,
+    );
+
+    res.status(201).json({ success: true, data: ins.rows[0] });
+  } catch (error) {
+    console.error("POST /api/markups error", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// PUT /api/markups/:id - Update existing markup
+router.put("/:id", async (req, res) => {
+  try {
+    const updatable = [
+      "supplier_id",
+      "module",
+      "is_domestic",
+      "cabin",
+      "airline_code",
+      "city_code",
+      "star_rating",
+      "hotel_chain",
+      "hotel_id",
+      "room_type",
+      "origin_city",
+      "dest_city",
+      "transfer_type",
+      "vehicle_type",
+      "experience_type",
+      "attraction_id",
+      "markup_type",
+      "markup_value",
+      "fixed_currency",
+      "bargain_min_pct",
+      "bargain_max_pct",
+      "valid_from",
+      "valid_to",
+      "status",
+      "updated_by",
+    ];
+
+    const sets = [];
+    const params = [];
+    let i = 1;
+
+    updatable.forEach((k) => {
+      if (k in req.body) {
+        sets.push(`${k} = $${i++}`);
+        params.push(req.body[k]);
+      }
+    });
+
+    if (sets.length === 0) {
+      return res.status(400).json({ success: false, error: "No fields to update" });
+    }
+
+    sets.push(`updated_at = NOW()`);
+    params.push(req.params.id);
+
+    const upd = await db.query(
+      `UPDATE module_markups SET ${sets.join(", ")} WHERE id = $${i} RETURNING *`,
+      params,
+    );
+
+    if (upd.rows.length === 0) {
+      return res.status(404).json({ success: false, error: "Markup not found" });
+    }
+
+    res.json({ success: true, data: upd.rows[0] });
+  } catch (error) {
+    console.error("PUT /api/markups/:id error", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+// DELETE /api/markups/:id - Delete markup
+router.delete("/:id", async (req, res) => {
+  try {
+    const del = await db.query(
+      `DELETE FROM module_markups WHERE id = $1 RETURNING *`,
+      [req.params.id],
+    );
+
+    if (del.rows.length === 0) {
+      return res.status(404).json({ success: false, error: "Markup not found" });
+    }
+
+    res.json({ success: true, data: del.rows[0] });
+  } catch (error) {
+    console.error("DELETE /api/markups/:id error", error);
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
 module.exports = router;
