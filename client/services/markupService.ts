@@ -241,26 +241,27 @@ class MarkupService {
   }
 
   private mapAirRow(row: any): AirMarkup {
+    // Map from module_markups table schema
     const normalizedClass =
-      normalizeCabinClass(row.booking_class || row.class) ?? "economy";
+      normalizeCabinClass(row.cabin || row.booking_class || row.class) ?? "economy";
 
     return {
       id: String(row.id),
-      name: row.rule_name || "",
+      name: row.rule_name || `${row.airline_code || "ALL"} - ${row.cabin || "ALL"}`,
       description: row.description || "",
       airline: row.airline_code || "ALL",
       route: {
-        from: row.origin_iata || row.route_from || null,
-        to: row.dest_iata || row.route_to || null,
+        from: row.origin_city || row.origin_iata || row.route_from || null,
+        to: row.dest_city || row.dest_iata || row.route_to || null,
       },
-      origin_iata: row.origin_iata || null,
-      dest_iata: row.dest_iata || null,
+      origin_iata: row.origin_city || row.origin_iata || null,
+      dest_iata: row.dest_city || row.dest_iata || null,
       class: normalizedClass,
       markupType:
-        (row.m_type || "percentage").toLowerCase() === "flat"
+        (row.markup_type || "PERCENT").toUpperCase() === "FIXED"
           ? "fixed"
           : "percentage",
-      markupValue: Number(row.m_value || 0),
+      markupValue: Number(row.markup_value || 0),
       minAmount: 0,
       maxAmount: 999999,
       currentFareMin: Number(row.current_min_pct || 0),
@@ -269,7 +270,7 @@ class MarkupService {
       bargainFareMax: Number(row.bargain_max_pct || 0),
       validFrom: this.toDisplayDate(row.valid_from),
       validTo: this.toDisplayDate(row.valid_to),
-      status: row.is_active ? "active" : "inactive",
+      status: row.status === true || row.is_active === true ? "active" : "inactive",
       priority: Number(row.priority || 0),
       userType: (row.user_type || "all").toLowerCase(),
       specialConditions: "",
