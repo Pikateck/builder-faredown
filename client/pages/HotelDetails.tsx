@@ -215,7 +215,7 @@ function HotelDetailsContent() {
     hasPreselectData: !!preselectRate,
   });
 
-  // ��� CRITICAL: Initialize image index from Results page selection
+  // ����� CRITICAL: Initialize image index from Results page selection
   useEffect(() => {
     if (preselectRate?.mainImageIndex !== undefined) {
       setDisplayImageIndex(preselectRate.mainImageIndex);
@@ -3547,56 +3547,44 @@ function HotelDetailsContent() {
 
                                     {/* Pricing and Actions */}
                                     <div className="lg:col-span-3 mt-4 lg:mt-0">
-                                      <div className="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-300 rounded-xl p-6 mb-5 shadow-md">
-                                        <div className="text-center mb-4">
-                                          <div className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">
-                                            Total Price
-                                          </div>
-                                          <div className="text-4xl font-bold text-gray-900 mb-2">
-                                            ₹{calculateTotalPrice(
-                                              room.pricePerNight,
-                                              room,
-                                            ).toLocaleString()}
-                                          </div>
-                                          <div className="text-sm text-gray-600 font-medium">
-                                            includes taxes & fees
-                                          </div>
+                                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 mb-4">
+                                        <div className="text-3xl font-bold text-gray-900 mb-2">
+                                          ₹
+                                          {calculateTotalPrice(
+                                            room.pricePerNight,
+                                            room,
+                                          ).toLocaleString()}
                                         </div>
-
-                                        <div className="border-t-2 border-gray-200 pt-4 mt-4">
-                                          <div className="flex justify-between items-center mb-2">
-                                            <span className="text-sm text-gray-600">Per night</span>
-                                            <span className="text-base font-semibold text-gray-900">
-                                              ₹{room.pricePerNight.toLocaleString()}
-                                            </span>
-                                          </div>
-                                          <div className="flex justify-between items-center">
-                                            <span className="text-sm text-gray-600">Duration</span>
-                                            <span className="text-base font-semibold text-gray-900">
-                                              {hotel.totalNights} {hotel.totalNights === 1 ? 'night' : 'nights'}
-                                            </span>
-                                          </div>
+                                        <div className="text-base font-semibold text-gray-900 mb-2">
+                                          Total Price (incl. taxes)
+                                        </div>
+                                        <div className="text-sm text-gray-600">
+                                          ₹{room.pricePerNight.toLocaleString()}{" "}
+                                          per night × {hotel.totalNights} nights
+                                        </div>
+                                        <div className="text-sm text-gray-500 mt-2">
+                                          Includes taxes, fees & charges
                                         </div>
                                       </div>
 
-                                      <div className="mb-4">
+                                      <div className="mb-3">
                                         <div
-                                          className={`flex items-center justify-center text-sm font-semibold py-3 px-4 rounded-lg ${
+                                          className={`flex items-center text-sm font-medium ${
                                             room.statusColor === "green"
-                                              ? "bg-green-100 text-green-800 border-2 border-green-300"
-                                              : "bg-blue-100 text-blue-800 border-2 border-blue-300"
+                                              ? "text-green-700"
+                                              : "text-blue-700"
                                           }`}
                                         >
                                           <span
-                                            className={`w-2.5 h-2.5 rounded-full mr-2 ${
+                                            className={`w-2 h-2 rounded-full mr-2 ${
                                               room.statusColor === "green"
                                                 ? "bg-green-600"
                                                 : "bg-blue-600"
                                             }`}
                                           ></span>
                                           {room.statusColor === "green"
-                                            ? "Best Value"
-                                            : "Premium Option"}
+                                            ? "Cheapest Option Available"
+                                            : "Premium Upgrade Available"}
                                         </div>
                                       </div>
 
@@ -3604,7 +3592,7 @@ function HotelDetailsContent() {
                                         <Button
                                           onClick={() => handleBooking(room)}
                                           variant="outline"
-                                          className="w-full font-semibold py-4 text-base transition-all duration-200 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-lg rounded-lg"
+                                          className="w-full font-semibold py-3 text-sm transition-all duration-200 border-blue-500 text-blue-500 hover:bg-blue-50 hover:shadow-md"
                                         >
                                           Reserve Room
                                         </Button>
@@ -3669,9 +3657,9 @@ function HotelDetailsContent() {
                                                 new Set([...prev, room.id]),
                                             );
                                           }}
-                                          className={`w-full font-semibold py-4 text-base transition-all duration-200 rounded-lg ${
+                                          className={`w-full font-medium py-2 text-sm transition-all duration-200 min-h-[44px] ${
                                             bargainedRooms.has(room.id)
-                                              ? "bg-green-600 text-white hover:bg-green-700"
+                                              ? "bg-green-600 text-white"
                                               : bargainingRoomId === room.id
                                                 ? "bg-blue-600 text-white animate-pulse"
                                                 : ""
@@ -3694,17 +3682,15 @@ function HotelDetailsContent() {
                                         </BargainButton>
                                       </div>
 
-                                      <div className="mt-5 bg-green-50 border-2 border-green-200 rounded-lg p-4">
-                                        <div className="space-y-2">
-                                          <div className="flex items-center gap-2 text-sm font-medium text-green-800">
-                                            <CheckCircle className="w-4 h-4 text-green-600" />
-                                            No prepayment required
-                                          </div>
-                                          <div className="flex items-center gap-2 text-sm font-medium text-green-800">
-                                            <CheckCircle className="w-4 h-4 text-green-600" />
-                                            Free cancellation
-                                          </div>
-                                        </div>
+                                      <div className="mt-3 flex items-center justify-center space-x-4 text-xs text-green-700">
+                                        <span className="flex items-center gap-1">
+                                          <CheckCircle className="w-3 h-3 text-green-600" />
+                                          No prepayment
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                          <CheckCircle className="w-3 h-3 text-green-600" />
+                                          Free cancellation
+                                        </span>
                                       </div>
                                     </div>
                                   </div>
