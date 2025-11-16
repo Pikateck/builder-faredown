@@ -29,6 +29,28 @@ const EXPORT_COLUMNS = [
 // GET /api/markups - Main endpoint for admin panel queries with module filtering
 router.get("/", async (req, res) => {
   try {
+    // Check if database is connected
+    if (!db.isConnected) {
+      await db.initialize();
+    }
+
+    // Check if table exists
+    const tableCheck = await db.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables
+        WHERE table_name = 'module_markups'
+      )
+    `);
+
+    if (!tableCheck.rows[0].exists) {
+      return res.status(500).json({
+        success: false,
+        error: "Database table 'module_markups' does not exist",
+        message: "Please run migration: api/database/migrations/20251019_suppliers_master_spec.sql",
+        help: "The admin panel requires the module_markups table to be created in PostgreSQL"
+      });
+    }
+
     const { module, supplier_id, page = 1, limit = 20, search, status } = req.query;
 
     // Build WHERE clause
