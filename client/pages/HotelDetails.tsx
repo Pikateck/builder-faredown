@@ -3604,7 +3604,7 @@ function HotelDetailsContent() {
                                         <Button
                                           onClick={() => handleBooking(room)}
                                           variant="outline"
-                                          className="w-full font-semibold py-3 text-sm transition-all duration-200 border-blue-500 text-blue-500 hover:bg-blue-50 hover:shadow-md"
+                                          className="w-full font-semibold py-4 text-base transition-all duration-200 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-lg rounded-lg"
                                         >
                                           Reserve Room
                                         </Button>
@@ -3669,9 +3669,9 @@ function HotelDetailsContent() {
                                                 new Set([...prev, room.id]),
                                             );
                                           }}
-                                          className={`w-full font-medium py-2 text-sm transition-all duration-200 min-h-[44px] ${
+                                          className={`w-full font-semibold py-4 text-base transition-all duration-200 rounded-lg ${
                                             bargainedRooms.has(room.id)
-                                              ? "bg-green-600 text-white"
+                                              ? "bg-green-600 text-white hover:bg-green-700"
                                               : bargainingRoomId === room.id
                                                 ? "bg-blue-600 text-white animate-pulse"
                                                 : ""
@@ -3694,15 +3694,17 @@ function HotelDetailsContent() {
                                         </BargainButton>
                                       </div>
 
-                                      <div className="mt-3 flex items-center justify-center space-x-4 text-xs text-green-700">
-                                        <span className="flex items-center gap-1">
-                                          <CheckCircle className="w-3 h-3 text-green-600" />
-                                          No prepayment
-                                        </span>
-                                        <span className="flex items-center gap-1">
-                                          <CheckCircle className="w-3 h-3 text-green-600" />
-                                          Free cancellation
-                                        </span>
+                                      <div className="mt-5 bg-green-50 border-2 border-green-200 rounded-lg p-4">
+                                        <div className="space-y-2">
+                                          <div className="flex items-center gap-2 text-sm font-medium text-green-800">
+                                            <CheckCircle className="w-4 h-4 text-green-600" />
+                                            No prepayment required
+                                          </div>
+                                          <div className="flex items-center gap-2 text-sm font-medium text-green-800">
+                                            <CheckCircle className="w-4 h-4 text-green-600" />
+                                            Free cancellation
+                                          </div>
+                                        </div>
                                       </div>
                                     </div>
                                   </div>
