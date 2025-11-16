@@ -243,11 +243,13 @@ class MarkupService {
   private mapAirRow(row: any): AirMarkup {
     // Map from module_markups table schema
     const normalizedClass =
-      normalizeCabinClass(row.cabin || row.booking_class || row.class) ?? "economy";
+      normalizeCabinClass(row.cabin || row.booking_class || row.class) ??
+      "economy";
 
     return {
       id: String(row.id),
-      name: row.rule_name || `${row.airline_code || "ALL"} - ${row.cabin || "ALL"}`,
+      name:
+        row.rule_name || `${row.airline_code || "ALL"} - ${row.cabin || "ALL"}`,
       description: row.description || "",
       airline: row.airline_code || "ALL",
       route: {
@@ -270,7 +272,8 @@ class MarkupService {
       bargainFareMax: Number(row.bargain_max_pct || 0),
       validFrom: this.toDisplayDate(row.valid_from),
       validTo: this.toDisplayDate(row.valid_to),
-      status: row.status === true || row.is_active === true ? "active" : "inactive",
+      status:
+        row.status === true || row.is_active === true ? "active" : "inactive",
       priority: Number(row.priority || 0),
       userType: (row.user_type || "all").toLowerCase(),
       specialConditions: "",
@@ -451,7 +454,8 @@ class MarkupService {
         module: "AIR",
         airline_code: markupData.airline === "ALL" ? null : markupData.airline,
         cabin: markupData.class ? String(markupData.class).toUpperCase() : null,
-        markup_type: markupData.markupType === "percentage" ? "PERCENT" : "FIXED",
+        markup_type:
+          markupData.markupType === "percentage" ? "PERCENT" : "FIXED",
         markup_value: markupData.markupValue,
         bargain_min_pct: markupData.bargainFareMin,
         bargain_max_pct: markupData.bargainFareMax,
@@ -537,11 +541,13 @@ class MarkupService {
       };
 
       if (markupData.airline !== undefined)
-        payload.airline_code = markupData.airline === "ALL" ? null : markupData.airline;
+        payload.airline_code =
+          markupData.airline === "ALL" ? null : markupData.airline;
       if (markupData.class !== undefined)
         payload.cabin = String(markupData.class).toUpperCase();
       if (markupData.markupType !== undefined)
-        payload.markup_type = markupData.markupType === "percentage" ? "PERCENT" : "FIXED";
+        payload.markup_type =
+          markupData.markupType === "percentage" ? "PERCENT" : "FIXED";
       if (markupData.markupValue !== undefined)
         payload.markup_value = markupData.markupValue;
       if (markupData.bargainFareMin !== undefined)

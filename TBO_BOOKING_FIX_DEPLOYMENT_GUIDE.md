@@ -12,6 +12,7 @@ Fixed the TBO hotel booking error: **"HotelRoomsDetails is not found"**
 ✅ **File Modified**: `api/tbo/book.js`
 
 ### Key Changes:
+
 1. Changed `HotelRoomsDetails` → `HotelRoomDetails` (removed 's')
 2. Moved `HotelPassenger` inside each room detail object (from top level)
 3. Updated response handling to accept both singular and plural formats
@@ -66,14 +67,14 @@ STEP 6: Book Hotel - Confirm booking
 
 ### 3. Before vs After
 
-| Metric | Before Fix | After Fix |
-|--------|------------|-----------|
-| BlockRoom ResponseStatus | 3 (Error) | 1 (Success) |
-| BlockRoom Error | "HotelRoomsDetails is not found" | None |
-| Book ResponseStatus | 3 (Error) | 1 (Success) |
-| Book Error | "HotelRoomsDetails is not found" | None |
-| BookingId | 0 | Valid ID |
-| ConfirmationNo | null | Valid number |
+| Metric                   | Before Fix                       | After Fix    |
+| ------------------------ | -------------------------------- | ------------ |
+| BlockRoom ResponseStatus | 3 (Error)                        | 1 (Success)  |
+| BlockRoom Error          | "HotelRoomsDetails is not found" | None         |
+| Book ResponseStatus      | 3 (Error)                        | 1 (Success)  |
+| Book Error               | "HotelRoomsDetails is not found" | None         |
+| BookingId                | 0                                | Valid ID     |
+| ConfirmationNo           | null                             | Valid number |
 
 ## API Endpoints Affected
 
@@ -110,6 +111,7 @@ git checkout HEAD~1 api/tbo/book.js
 ## Support
 
 If booking still fails:
+
 1. Check proxy configuration (FIXIE_URL must be set)
 2. Verify TBO credentials are correct
 3. Check that the destination/dates are valid
@@ -118,6 +120,7 @@ If booking still fails:
 ## Next Steps
 
 After successful deployment:
+
 1. Monitor booking success rate in production
 2. Update frontend booking UI to handle new response format
 3. Add error handling for price changes and policy changes

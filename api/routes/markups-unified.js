@@ -46,12 +46,20 @@ router.get("/", async (req, res) => {
       return res.status(500).json({
         success: false,
         error: "Database table 'module_markups' does not exist",
-        message: "Please run migration: api/database/migrations/20251019_suppliers_master_spec.sql",
-        help: "The admin panel requires the module_markups table to be created in PostgreSQL"
+        message:
+          "Please run migration: api/database/migrations/20251019_suppliers_master_spec.sql",
+        help: "The admin panel requires the module_markups table to be created in PostgreSQL",
       });
     }
 
-    const { module, supplier_id, page = 1, limit = 20, search, status } = req.query;
+    const {
+      module,
+      supplier_id,
+      page = 1,
+      limit = 20,
+      search,
+      status,
+    } = req.query;
 
     // Build WHERE clause
     const where = [];
@@ -69,13 +77,18 @@ router.get("/", async (req, res) => {
     }
 
     if (search) {
-      where.push(`(airline_code ILIKE $${paramIndex} OR city_code ILIKE $${paramIndex} OR hotel_chain ILIKE $${paramIndex})`);
+      where.push(
+        `(airline_code ILIKE $${paramIndex} OR city_code ILIKE $${paramIndex} OR hotel_chain ILIKE $${paramIndex})`,
+      );
       params.push(`%${search}%`);
       paramIndex++;
     }
 
-    if (status !== undefined && status !== null && status !== 'all') {
-      const statusBool = String(status).toLowerCase() === 'active' || status === true || status === '1';
+    if (status !== undefined && status !== null && status !== "all") {
+      const statusBool =
+        String(status).toLowerCase() === "active" ||
+        status === true ||
+        status === "1";
       where.push(`status = $${paramIndex++}`);
       params.push(statusBool);
     }
@@ -105,7 +118,7 @@ router.get("/", async (req, res) => {
       total,
       page: parseInt(page),
       pageSize: parseInt(limit),
-      totalPages: Math.ceil(total / parseInt(limit))
+      totalPages: Math.ceil(total / parseInt(limit)),
     });
   } catch (error) {
     console.error("Error fetching markups:", error);
@@ -293,7 +306,9 @@ router.put("/:id", async (req, res) => {
     });
 
     if (sets.length === 0) {
-      return res.status(400).json({ success: false, error: "No fields to update" });
+      return res
+        .status(400)
+        .json({ success: false, error: "No fields to update" });
     }
 
     sets.push(`updated_at = NOW()`);
@@ -305,7 +320,9 @@ router.put("/:id", async (req, res) => {
     );
 
     if (upd.rows.length === 0) {
-      return res.status(404).json({ success: false, error: "Markup not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Markup not found" });
     }
 
     res.json({ success: true, data: upd.rows[0] });
@@ -324,7 +341,9 @@ router.delete("/:id", async (req, res) => {
     );
 
     if (del.rows.length === 0) {
-      return res.status(404).json({ success: false, error: "Markup not found" });
+      return res
+        .status(404)
+        .json({ success: false, error: "Markup not found" });
     }
 
     res.json({ success: true, data: del.rows[0] });

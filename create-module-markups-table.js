@@ -1,11 +1,11 @@
 /**
  * Create module_markups Table in PostgreSQL
  * Run this to fix the 500 error in Admin Panel Markup Management
- * 
+ *
  * Usage: node create-module-markups-table.js
  */
 
-const { Pool } = require('pg');
+const { Pool } = require("pg");
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -75,16 +75,16 @@ ON CONFLICT DO NOTHING;
 `;
 
 async function createTable() {
-  console.log('\n' + '='.repeat(70));
-  console.log('CREATE module_markups TABLE');
-  console.log('='.repeat(70) + '\n');
+  console.log("\n" + "=".repeat(70));
+  console.log("CREATE module_markups TABLE");
+  console.log("=".repeat(70) + "\n");
 
   try {
-    console.log('1. Connecting to database...');
-    const connResult = await pool.query('SELECT current_database()');
-    console.log('   ✅ Connected to:', connResult.rows[0].current_database);
+    console.log("1. Connecting to database...");
+    const connResult = await pool.query("SELECT current_database()");
+    console.log("   ✅ Connected to:", connResult.rows[0].current_database);
 
-    console.log('\n2. Checking if table exists...');
+    console.log("\n2. Checking if table exists...");
     const tableCheck = await pool.query(`
       SELECT EXISTS (
         SELECT FROM information_schema.tables 
@@ -93,17 +93,19 @@ async function createTable() {
     `);
 
     if (tableCheck.rows[0].exists) {
-      console.log('   ⚠️  Table module_markups already exists');
-      console.log('   💡 Skipping creation');
+      console.log("   ⚠️  Table module_markups already exists");
+      console.log("   💡 Skipping creation");
     } else {
-      console.log('   ℹ️  Table does not exist, creating...');
-      
-      console.log('\n3. Creating suppliers_master and module_markups tables...');
+      console.log("   ℹ️  Table does not exist, creating...");
+
+      console.log(
+        "\n3. Creating suppliers_master and module_markups tables...",
+      );
       await pool.query(CREATE_TABLE_SQL);
-      console.log('   ✅ Tables created successfully');
+      console.log("   ✅ Tables created successfully");
     }
 
-    console.log('\n4. Verifying table structure...');
+    console.log("\n4. Verifying table structure...");
     const columns = await pool.query(`
       SELECT column_name, data_type 
       FROM information_schema.columns 
@@ -112,8 +114,8 @@ async function createTable() {
     `);
     console.log(`   ✅ Table has ${columns.rows.length} columns`);
 
-    console.log('\n5. Checking data...');
-    const count = await pool.query('SELECT COUNT(*) FROM module_markups');
+    console.log("\n5. Checking data...");
+    const count = await pool.query("SELECT COUNT(*) FROM module_markups");
     console.log(`   ✅ Table has ${count.rows[0].count} records`);
 
     if (count.rows[0].count > 0) {
@@ -122,30 +124,30 @@ async function createTable() {
         FROM module_markups 
         GROUP BY module
       `);
-      console.log('\n   Records by module:');
-      sample.rows.forEach(row => {
+      console.log("\n   Records by module:");
+      sample.rows.forEach((row) => {
         console.log(`      - ${row.module}: ${row.count}`);
       });
     }
 
-    console.log('\n' + '='.repeat(70));
-    console.log('🎉 SUCCESS - module_markups Table Ready!');
-    console.log('='.repeat(70));
-    console.log('✅ Admin Panel Markup Management will now work');
-    console.log('✅ No more 500 errors when accessing /api/markups');
-    console.log('✅ Full sync between Admin Panel and PgAdmin enabled');
-    console.log('='.repeat(70) + '\n');
+    console.log("\n" + "=".repeat(70));
+    console.log("🎉 SUCCESS - module_markups Table Ready!");
+    console.log("=".repeat(70));
+    console.log("✅ Admin Panel Markup Management will now work");
+    console.log("✅ No more 500 errors when accessing /api/markups");
+    console.log("✅ Full sync between Admin Panel and PgAdmin enabled");
+    console.log("=".repeat(70) + "\n");
 
     process.exit(0);
   } catch (error) {
-    console.error('\n❌ ERROR:', error.message);
-    console.error('\nStack:', error.stack);
-    
-    console.log('\n💡 Troubleshooting:');
-    console.log('   1. Check DATABASE_URL is set correctly');
-    console.log('   2. Ensure PostgreSQL is accessible');
-    console.log('   3. Verify user has CREATE TABLE permissions\n');
-    
+    console.error("\n❌ ERROR:", error.message);
+    console.error("\nStack:", error.stack);
+
+    console.log("\n💡 Troubleshooting:");
+    console.log("   1. Check DATABASE_URL is set correctly");
+    console.log("   2. Ensure PostgreSQL is accessible");
+    console.log("   3. Verify user has CREATE TABLE permissions\n");
+
     process.exit(1);
   } finally {
     await pool.end();

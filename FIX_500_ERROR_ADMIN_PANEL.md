@@ -3,6 +3,7 @@
 ## Problem
 
 You're seeing a **500 Internal Server Error** when accessing the Admin Panel Markup Management at:
+
 ```
 /admin/dashboard?module=markup-air
 ```
@@ -23,6 +24,7 @@ node create-module-markups-table.js
 ```
 
 This will:
+
 - ✅ Create the `module_markups` table
 - ✅ Create the `suppliers_master` table (dependency)
 - ✅ Add indexes for performance
@@ -30,6 +32,7 @@ This will:
 - ✅ Verify everything works
 
 **Expected output:**
+
 ```
 🎉 SUCCESS - module_markups Table Ready!
 ✅ Admin Panel Markup Management will now work
@@ -93,15 +96,16 @@ CREATE INDEX IF NOT EXISTS idx_module_markups_airline ON module_markups(airline_
 
 -- Insert sample data
 INSERT INTO module_markups (
-  module, airline_code, cabin, markup_type, markup_value, 
+  module, airline_code, cabin, markup_type, markup_value,
   bargain_min_pct, bargain_max_pct, status, created_by
-) VALUES 
+) VALUES
   ('AIR', 'AI', 'ECONOMY', 'PERCENT', 15.0, 8.0, 15.0, true, 'admin'),
   ('AIR', 'EK', 'ECONOMY', 'PERCENT', 18.0, 10.0, 18.0, true, 'admin')
 ON CONFLICT DO NOTHING;
 ```
 
 3. **Verify** the table was created:
+
 ```sql
 SELECT * FROM module_markups;
 ```
@@ -131,13 +135,13 @@ After running any of the options above, verify the fix:
 ```sql
 -- Should return TRUE
 SELECT EXISTS (
-  SELECT FROM information_schema.tables 
+  SELECT FROM information_schema.tables
   WHERE table_name = 'module_markups'
 );
 
 -- Should return some records
-SELECT module, COUNT(*) as count 
-FROM module_markups 
+SELECT module, COUNT(*) as count
+FROM module_markups
 GROUP BY module;
 ```
 
@@ -153,6 +157,7 @@ curl -H "Authorization: Bearer $TOKEN" \
 ```
 
 **Expected response:**
+
 ```json
 {
   "success": true,
@@ -207,6 +212,7 @@ curl -H "Authorization: Bearer $TOKEN" \
 ### **Still seeing 500?**
 
 **Check server logs:**
+
 ```bash
 # On Render, check logs
 # Or run locally:
@@ -214,6 +220,7 @@ npm run dev
 ```
 
 **Look for:**
+
 - Database connection errors
 - Permission errors
 - Missing environment variables
@@ -221,6 +228,7 @@ npm run dev
 ### **403 Forbidden Error?**
 
 This means authentication issue:
+
 1. Log out and log back in
 2. Get fresh JWT token
 3. Check `ADMIN_API_KEY` is set in environment
@@ -228,9 +236,10 @@ This means authentication issue:
 ### **Empty data but no error?**
 
 This is normal! It means:
+
 - ✅ Connection works
 - ✅ Table exists
-- ⚠️  No data yet (create your first markup)
+- ⚠️ No data yet (create your first markup)
 
 ---
 
@@ -252,9 +261,9 @@ This is normal! It means:
 ### **2. Verify in PgAdmin**
 
 ```sql
-SELECT * FROM module_markups 
-WHERE airline_code = 'AI' 
-ORDER BY created_at DESC 
+SELECT * FROM module_markups
+WHERE airline_code = 'AI'
+ORDER BY created_at DESC
 LIMIT 1;
 ```
 
@@ -263,8 +272,8 @@ LIMIT 1;
 ### **3. Update in PgAdmin**
 
 ```sql
-UPDATE module_markups 
-SET markup_value = 18.0 
+UPDATE module_markups
+SET markup_value = 18.0
 WHERE airline_code = 'AI' AND cabin = 'ECONOMY';
 ```
 
@@ -287,11 +296,13 @@ WHERE airline_code = 'AI' AND cabin = 'ECONOMY';
 If you still see 500 errors after following this guide:
 
 1. **Check database connection:**
+
    ```bash
    node quick-db-test.js
    ```
 
 2. **Verify environment variables:**
+
    ```bash
    echo $DATABASE_URL
    ```

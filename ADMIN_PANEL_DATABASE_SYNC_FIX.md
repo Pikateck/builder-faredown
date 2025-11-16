@@ -42,6 +42,7 @@ The Admin Panel Markup Management was **NOT syncing** with PgAdmin database beca
 ### 2. Database Connection
 
 **Connection String**: Uses `DATABASE_URL` environment variable
+
 ```
 postgresql://faredown_user:***@dpg-d2086mndiees739731t0-a.singapore-postgres.render.com/faredown_booking_db
 ```
@@ -49,6 +50,7 @@ postgresql://faredown_user:***@dpg-d2086mndiees739731t0-a.singapore-postgres.ren
 **Primary Table**: `module_markups`
 
 **Schema** (from `api/database/migrations/20251019_suppliers_master_spec.sql`):
+
 ```sql
 CREATE TABLE module_markups (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -76,22 +78,23 @@ CREATE TABLE module_markups (
 
 #### **Field Mapping (Frontend → Database):**
 
-| Frontend Field | Database Column |
-|---------------|-----------------|
-| `name` | Generated from `airline_code` + `cabin` |
-| `airline` | `airline_code` |
-| `class` | `cabin` (uppercased) |
-| `markupType` | `markup_type` ('PERCENT' or 'FIXED') |
-| `markupValue` | `markup_value` |
-| `bargainFareMin` | `bargain_min_pct` |
-| `bargainFareMax` | `bargain_max_pct` |
-| `validFrom` | `valid_from` |
-| `validTo` | `valid_to` |
-| `status` | `status` (boolean) |
+| Frontend Field   | Database Column                         |
+| ---------------- | --------------------------------------- |
+| `name`           | Generated from `airline_code` + `cabin` |
+| `airline`        | `airline_code`                          |
+| `class`          | `cabin` (uppercased)                    |
+| `markupType`     | `markup_type` ('PERCENT' or 'FIXED')    |
+| `markupValue`    | `markup_value`                          |
+| `bargainFareMin` | `bargain_min_pct`                       |
+| `bargainFareMax` | `bargain_max_pct`                       |
+| `validFrom`      | `valid_from`                            |
+| `validTo`        | `valid_to`                              |
+| `status`         | `status` (boolean)                      |
 
 #### **Updated Functions:**
+
 - ✅ `createAirMarkup()` - Maps to module_markups schema
-- ✅ `updateAirMarkup()` - Maps to module_markups schema  
+- ✅ `updateAirMarkup()` - Maps to module_markups schema
 - ✅ `mapAirRow()` - Correctly parses database rows
 
 ### 4. Data Flow (Complete)
@@ -151,13 +154,14 @@ CREATE TABLE module_markups (
 ### 1. Verify Database Connection
 
 Check in PgAdmin:
+
 ```sql
 -- See all air markups
 SELECT * FROM module_markups WHERE module = 'AIR';
 
 -- Count total markups
-SELECT module, COUNT(*) as count 
-FROM module_markups 
+SELECT module, COUNT(*) as count
+FROM module_markups
 GROUP BY module;
 ```
 
@@ -263,6 +267,7 @@ The `/api/markups` endpoint requires:
 **Cause**: Invalid or expired JWT token
 
 **Solution**:
+
 1. Log out and log back in to get fresh token
 2. Check token in browser localStorage
 3. Verify `auth_token` exists and is valid
@@ -272,6 +277,7 @@ The `/api/markups` endpoint requires:
 **Cause**: No records in database OR wrong module filter
 
 **Solution**:
+
 1. Check PgAdmin: `SELECT * FROM module_markups WHERE module = 'AIR'`
 2. If empty, create test data manually
 3. Verify module name is uppercase (AIR not air)
@@ -281,6 +287,7 @@ The `/api/markups` endpoint requires:
 **Cause**: Caching OR using wrong table
 
 **Solution**:
+
 1. Refresh PgAdmin query
 2. Verify you're querying `module_markups` not `unified_markups`
 3. Check created_at timestamp to see if record is new
@@ -290,6 +297,7 @@ The `/api/markups` endpoint requires:
 **Cause**: Field mapping mismatch
 
 **Solution**:
+
 1. Check browser console for errors
 2. Verify payload structure matches module_markups schema
 3. Check database column names match exactly
@@ -300,6 +308,6 @@ The `/api/markups` endpoint requires:
 ✅ **Database → Admin Panel**: GET queries read from `module_markups`  
 ✅ **Bidirectional Sync**: Changes in either direction reflect immediately  
 ✅ **Complete CRUD**: All operations supported (Create, Read, Update, Delete)  
-✅ **Proper Authentication**: JWT tokens validated on all requests  
+✅ **Proper Authentication**: JWT tokens validated on all requests
 
 The system is now **fully connected** and **bidirectional**. Any changes made in the admin panel will immediately reflect in PgAdmin, and vice versa.

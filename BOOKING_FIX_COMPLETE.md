@@ -3,6 +3,7 @@
 ## Problem
 
 The TBO hotel booking flow was failing with error:
+
 ```
 ResponseStatus: 3
 ErrorMessage: "HotelRoomsDetails is not found."
@@ -28,6 +29,7 @@ Fixed the API request structure in `api/tbo/book.js` to match TBO's official API
 ### Code Changes:
 
 **BlockRoom** (api/tbo/book.js:64):
+
 ```javascript
 // BEFORE:
 HotelRoomsDetails: hotelRoomDetails,
@@ -37,6 +39,7 @@ HotelRoomDetails: hotelRoomDetails,
 ```
 
 **Book** (api/tbo/book.js:183-198):
+
 ```javascript
 // BEFORE:
 const request = {
@@ -66,7 +69,7 @@ STEP 5: Block Room
   ResponseStatus: 1 ✅ (was 3)
   Error: None ✅ (was "HotelRoomsDetails is not found")
 
-STEP 6: Book Hotel  
+STEP 6: Book Hotel
   ResponseStatus: 1 ✅ (was 3)
   BookingId: 12345 ✅ (was 0)
   ConfirmationNo: CONF12345 ✅ (was null)
@@ -76,6 +79,7 @@ STEP 6: Book Hotel
 ## Testing
 
 Run the test on Render (requires Fixie proxy):
+
 ```bash
 node test-tbo-full-booking-flow.js
 ```
@@ -95,6 +99,7 @@ node test-tbo-full-booking-flow.js
 ## Documentation
 
 Created:
+
 - `TBO_BOOKING_ERROR_FIX_SUMMARY.md` - Detailed technical explanation
 - `TBO_BOOKING_FIX_DEPLOYMENT_GUIDE.md` - Testing and deployment steps
 - `BOOKING_FIX_COMPLETE.md` - This file
@@ -108,6 +113,7 @@ Created:
 ## Key Learning
 
 TBO API uses different field names for requests vs responses:
+
 - **Requests**: `HotelRoomDetails` (singular)
 - **Responses**: `HotelRoomsDetails` (plural)
 

@@ -101,12 +101,16 @@ async function blockRoom(params = {}) {
 
   // ✅ DEBUG: Log raw response to identify wrapper name
   console.log("\n🔍 RAW RESPONSE KEYS:", Object.keys(response.data || {}));
-  console.log("🔍 RAW RESPONSE:", JSON.stringify(response.data, null, 2).substring(0, 500));
+  console.log(
+    "🔍 RAW RESPONSE:",
+    JSON.stringify(response.data, null, 2).substring(0, 500),
+  );
 
   // ✅ Handle multiple possible wrapper names (TBO docs show BlockRoomResult)
-  const result = response.data?.BlockRoomResponse ||
-                 response.data?.BlockRoomResult ||
-                 response.data;
+  const result =
+    response.data?.BlockRoomResponse ||
+    response.data?.BlockRoomResult ||
+    response.data;
 
   console.log("\n📥 TBO BlockRoom Response");
   console.log("  HTTP Status:", response.status);
@@ -118,7 +122,8 @@ async function blockRoom(params = {}) {
     result?.IsCancellationPolicyChanged,
   );
   // ✅ Check both singular and plural as TBO API may return either
-  const roomDetails = result?.HotelRoomDetails || result?.HotelRoomsDetails || [];
+  const roomDetails =
+    result?.HotelRoomDetails || result?.HotelRoomsDetails || [];
   console.log("  HotelRoomDetails count:", roomDetails.length);
   console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
@@ -180,9 +185,9 @@ async function bookHotel(params = {}) {
   // ✅ IMPORTANT: TBO expects HotelRoomDetails (singular) NOT HotelRoomsDetails
   // According to official TBO API docs: https://apidoc.tektravels.com/hotel/HotelBook.aspx
   // HotelPassenger should be inside each HotelRoomDetails element (Section 11.10)
-  const roomDetailsWithPassengers = hotelRoomDetails.map(room => ({
+  const roomDetailsWithPassengers = hotelRoomDetails.map((room) => ({
     ...room,
-    HotelPassenger: hotelPassenger
+    HotelPassenger: hotelPassenger,
   }));
 
   const request = {
@@ -239,13 +244,17 @@ async function bookHotel(params = {}) {
 
   // ✅ DEBUG: Log raw response to identify wrapper name and fields
   console.log("\n🔍 RAW RESPONSE KEYS:", Object.keys(response.data || {}));
-  console.log("🔍 RAW RESPONSE:", JSON.stringify(response.data, null, 2).substring(0, 1000));
+  console.log(
+    "🔍 RAW RESPONSE:",
+    JSON.stringify(response.data, null, 2).substring(0, 1000),
+  );
 
   // ✅ Handle multiple possible wrapper names
-  const result = response.data?.BookResponse ||
-                 response.data?.HotelBookResult ||
-                 response.data?.BookResult ||
-                 response.data;
+  const result =
+    response.data?.BookResponse ||
+    response.data?.HotelBookResult ||
+    response.data?.BookResult ||
+    response.data;
 
   console.log("\n📥 TBO Book Response");
   console.log("  HTTP Status:", response.status);
