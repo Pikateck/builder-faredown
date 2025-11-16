@@ -53,21 +53,25 @@ async function blockRoom(params = {}) {
     throw new Error("Missing required parameters");
   }
 
-  // ✅ CRITICAL: Per TBO docs, pass room details EXACTLY as received from GetHotelRoom
-  // Do NOT map or transform - TBO expects the full structure including RoomTypeID, RoomCombination, etc.
+  // ✅ CRITICAL: Per TBO documentation Sample Verification page:
+  // "The details in the HotelRoomsDetails array should be passed as per the combination received in the GetHotelRoom response."
+  // Pass room details EXACTLY as received from GetHotelRoom - do NOT map or transform!
+  // TBO expects full structure including RoomTypeID, RoomCombination, etc.
+
   console.log("\nStep 2: Preparing room details for BlockRoom...");
   console.log(`  Rooms count: ${hotelRoomDetails.length}`);
-  console.log(`  Using rooms AS-IS from GetHotelRoom response`);
+  console.log(`  Using rooms AS-IS from GetHotelRoom response (matching combination type)`);
 
   hotelRoomDetails.forEach((room, index) => {
-    console.log(`  Room ${index}: ${room.RoomTypeName}`);
-    console.log(`    - RoomTypeID: ${room.RoomTypeID}`);
-    console.log(`    - RoomCombination: ${room.RoomCombination}`);
-    console.log(`    - RoomIndex: ${room.RoomIndex}`);
+    console.log(`  Room ${index}:`);
+    console.log(`    RoomTypeName: ${room.RoomTypeName}`);
+    console.log(`    RoomTypeID: ${room.RoomTypeID}`);
+    console.log(`    RoomCombination: ${room.RoomCombination}`);
+    console.log(`    RoomIndex: ${room.RoomIndex}`);
   });
 
-  // ✅ IMPORTANT: TBO expects HotelRoomsDetails (WITH 's') in BlockRoom, NOT HotelRoomDetails
-  // According to TBO documentation and actual API behavior
+  // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
+  // This was the actual error - we were using the wrong field name!
   const request = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
@@ -78,7 +82,7 @@ async function blockRoom(params = {}) {
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
     IsVoucherBooking: isVoucherBooking,
-    HotelRoomsDetails: hotelRoomDetails, // ✅ WITH 's' - pass full room details as-is
+    HotelRoomsDetails: hotelRoomDetails, // ✅ WITH 's' - correct field name for BlockRoom API
   };
 
   const url =
