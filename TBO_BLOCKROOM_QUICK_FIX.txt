@@ -1,0 +1,95 @@
+╔════════════════════════════════════════════════════════════════════════════════╗
+║                 TBO BLOCKROOM API - QUICK FIX REFERENCE                        ║
+╚════════════════════════════════════════════════════════════════════════════════╝
+
+ERROR: ResponseStatus: 3, Error: HotelRoomsDetails is not found.
+
+ROOT CAUSE #1: SmokingPreference Type Mismatch
+┌───────────────────────────��─────────────────────────────────────────────────┐
+│ ❌ WRONG:  "SmokingPreference": "NoPreference"     [STRING]                 │
+│ ✅ FIXED:  "SmokingPreference": 0                  [INTEGER]                │
+│                                                                              │
+│ Valid integer values:                                                        │
+│   0 = NoPreference                                                           │
+│   1 = Smoking                                                                │
+│   2 = NonSmoking                                                             │
+│   3 = Either                                                                 │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+ROOT CAUSE #2: Price Structure Mismatch
+┌───────────────────────────────────────────────────────────────────────���─────┐
+│ ❌ WRONG:                                                                    │
+│ "Price": {                          [OBJECT]                               │
+│   "CurrencyCode": "USD",                                                    │
+│   "RoomPrice": 261.64,                                                      │
+│   ...                                                                        │
+│ }                                                                            │
+│                                                                              │
+│ ✅ FIXED:                                                                    │
+│ "Price": [                          [ARRAY]                                │
+│   {                                                                          │
+│     "CurrencyCode": "USD",                                                  │
+│     "RoomPrice": 261.64,                                                    │
+│     ...                                                                      │
+│   }                                                                          │
+│ ]                                                                            │
+└─────────────────────────────────────────────────────────────────────────────┘
+
+SOLUTION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Updated file: api/tbo/roomMapper.js
+
+1. SmokingPreference Conversion:
+   if (typeof SmokingPreference === "string") {
+     "nopreference" → 0
+     "smoking" → 1
+     "nonsmoking" → 2
+     "either" → 3
+   }
+
+2. Price Conversion:
+   if (typeof Price === "object" && !Array.isArray(Price)) {
+     Price = [Price]  // Wrap in array
+   }
+
+VERIFICATION:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+Run verification script:
+  $ node verify-tbo-blockroom-fix.js
+
+Expected output:
+  ✅ VALIDATION PASSED
+  Room is ready for BlockRoom API!
+
+BEFORE vs AFTER:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+                    BEFORE              AFTER
+SmokingPreference   "NoPreference"  →   0
+Price               {object}        →   [{object}]
+ResponseStatus      3 ❌ ERROR      →   1 ✅ SUCCESS
+HotelRoomDetails    []              →   [...]
+Booking Flow        ❌ BLOCKED      →   ✅ PROCEEDS
+
+DEPLOYMENT:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. Verify:   node verify-tbo-blockroom-fix.js
+2. Test:     node test-tbo-full-booking-flow.js
+3. Check:    BlockRoom response should show ResponseStatus: 1
+4. Push:     git push origin main
+5. Monitor:  Check production logs
+
+KEY TAKEAWAY:
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TBO BlockRoom API is STRICT about data types:
+  • SmokingPreference MUST be INTEGER (not string)
+  • Price MUST be ARRAY (not single object)
+
+Type mismatch �� "HotelRoomsDetails is not found" error
+Correct types → ResponseStatus: 1 (success)
+
+╚════════════════════════════════════════════════════════════════════════════════╝
