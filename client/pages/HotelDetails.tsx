@@ -1308,7 +1308,7 @@ function HotelDetailsContent() {
         type: "1 X Premium Room",
         details: "Premium room with breakfast and ocean view",
         pricePerNight: basePrice + 179,
-        status: "Upgrade for +₹179",
+        status: "Upgrade for +���179",
         statusColor: "blue",
         nonRefundable: false,
         isRefundable: true,
@@ -2254,8 +2254,8 @@ function HotelDetailsContent() {
                                 {/* Cancellation Policy Info Icon - Always Visible */}
                                 <Tooltip>
                                   <TooltipTrigger asChild>
-                                    <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white transition-colors">
-                                      <span className="text-xs font-bold">!</span>
+                                    <button className="inline-flex items-center justify-center w-5 h-5 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors bg-white">
+                                      <Info className="w-3.5 h-3.5" />
                                     </button>
                                   </TooltipTrigger>
                                   <TooltipContent className="max-w-md bg-white border border-gray-200 shadow-lg p-0 overflow-hidden">
@@ -3312,9 +3312,9 @@ function HotelDetailsContent() {
                                           {/* Cancellation Policy Info Icon - Always Visible */}
                                           <Tooltip>
                                             <TooltipTrigger asChild>
-                                              <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white transition-colors">
-                                                <span className="text-xs font-bold">!</span>
-                                              </button>
+                                              <button className="inline-flex items-center justify-center w-5 h-5 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors bg-white">
+                                      <Info className="w-3.5 h-3.5" />
+                                    </button>
                                             </TooltipTrigger>
                                             <TooltipContent className="max-w-md bg-white border border-gray-200 shadow-lg p-0 overflow-hidden">
                                               <div className="bg-white">
