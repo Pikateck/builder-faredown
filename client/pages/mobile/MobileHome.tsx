@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import MobileBookingFormWrapper from "@/components/mobile/MobileBookingFormWrapper";
 import {
   Menu,
@@ -16,6 +17,9 @@ import {
 import { useCurrency } from "@/contexts/CurrencyContext";
 
 const MobileHome = () => {
+  // ✅ Scroll to top on route change
+  useScrollToTop("auto");
+
   const navigate = useNavigate();
   const { currency } = useCurrency();
   const [showMenu, setShowMenu] = useState(false);
