@@ -87,6 +87,7 @@ const hotelsMultiSupplierRoutes = require("./routes/hotels-multi-supplier.js");
 const locationsRoutes = require("./routes/locations.js");
 const adminTboRoutes = require("./routes/admin-tbo.js");
 const tboDebugRoutes = require("./tbo/tbo-debug.js");
+const adminApiLogsRoutes = require("./routes/admin-api-logs.js");
 
 // TBO Production Routes (Complete Hotel Booking Pipeline)
 const tboAuthRoutes = require("./routes/tbo/auth.js");
@@ -550,6 +551,7 @@ app.use(reviewsRoutes);
 app.use("/api/admin/bookings", adminBookingsRoutes);
 app.use("/api/admin/ai", adminAiRoutes);
 app.use("/api/admin/airports", adminAirportsRoutes);
+app.use("/api/admin/api-logs", adminKeyMiddleware, adminApiLogsRoutes);
 app.use("/api/db-test", dbTestRoutes);
 app.use(
   "/api/admin/sightseeing",
