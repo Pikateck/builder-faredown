@@ -11,6 +11,10 @@
 
 const { tboRequest } = require("../lib/tboRequest");
 const { authenticateTBO } = require("./auth");
+const {
+  mapRoomsForBlockRequest,
+  validateRoomForBlockRequest,
+} = require("./roomMapper");
 
 /**
  * Block Room (PreBook)
@@ -49,8 +53,24 @@ async function blockRoom(params = {}) {
     throw new Error("Missing required parameters");
   }
 
+  // ✅ Map and validate room details
+  console.log("\nStep 2a: Mapping room details...");
+  const mappedRoomDetails = mapRoomsForBlockRequest(hotelRoomDetails);
+
+  // Validate each room has required fields
+  console.log("Step 2b: Validating room details...");
+  mappedRoomDetails.forEach((room, index) => {
+    const validation = validateRoomForBlockRequest(room);
+    if (!validation.success) {
+      console.warn(`⚠️ Room ${index} validation warnings:`, validation.errors);
+      // Log but don't throw - TBO might be more lenient
+    }
+  });
+
+  console.log(`✅ ${mappedRoomDetails.length} room(s) mapped and validated`);
+
   // ✅ IMPORTANT: TBO expects HotelRoomDetails (singular) NOT HotelRoomsDetails
-  // According to official TBO API docs: https://apidoc.tektravels.com/hotel/HotelBook.aspx
+  // According to official TBO API docs: https://apidoc.tektravels.com/hotel/HotelBlockRoom.aspx
   const request = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
@@ -61,7 +81,7 @@ async function blockRoom(params = {}) {
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
     IsVoucherBooking: isVoucherBooking,
-    HotelRoomDetails: hotelRoomDetails, // ✅ No 's' - matches TBO API spec exactly
+    HotelRoomDetails: mappedRoomDetails, // ✅ No 's' - mapped rooms with all required fields
   };
 
   const url =
@@ -182,10 +202,14 @@ async function bookHotel(params = {}) {
     throw new Error("Missing required parameters");
   }
 
+  // ✅ Map and validate room details
+  console.log("\nStep 2a: Mapping room details for booking...");
+  const mappedRoomDetails = mapRoomsForBlockRequest(hotelRoomDetails);
+
   // ✅ IMPORTANT: TBO expects HotelRoomDetails (singular) NOT HotelRoomsDetails
   // According to official TBO API docs: https://apidoc.tektravels.com/hotel/HotelBook.aspx
-  // HotelPassenger should be inside each HotelRoomDetails element (Section 11.10)
-  const roomDetailsWithPassengers = hotelRoomDetails.map((room) => ({
+  // HotelPassenger should be inside each HotelRoomDetails element
+  const roomDetailsWithPassengers = mappedRoomDetails.map((room) => ({
     ...room,
     HotelPassenger: hotelPassenger,
   }));
