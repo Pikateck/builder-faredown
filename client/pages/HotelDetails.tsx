@@ -2254,8 +2254,8 @@ function HotelDetailsContent() {
                                 {/* Cancellation Policy Info Icon - Always Visible */}
                                 <Tooltip>
                                   <TooltipTrigger asChild>
-                                    <button className="inline-flex items-center justify-center w-5 h-5 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors bg-white">
-                                      <Info className="w-3.5 h-3.5" />
+                                    <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white transition-colors">
+                                      <span className="text-xs font-bold">!</span>
                                     </button>
                                   </TooltipTrigger>
                                   <TooltipContent className="max-w-md bg-white border border-gray-200 shadow-lg p-0 overflow-hidden">
@@ -3312,8 +3312,8 @@ function HotelDetailsContent() {
                                           {/* Cancellation Policy Info Icon - Always Visible */}
                                           <Tooltip>
                                             <TooltipTrigger asChild>
-                                              <button className="inline-flex items-center justify-center w-5 h-5 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors bg-white">
-                                                <Info className="w-3.5 h-3.5" />
+                                              <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white transition-colors">
+                                                <span className="text-xs font-bold">!</span>
                                               </button>
                                             </TooltipTrigger>
                                             <TooltipContent className="max-w-md bg-white border border-gray-200 shadow-lg p-0 overflow-hidden">
@@ -3566,11 +3566,11 @@ function HotelDetailsContent() {
                                         </div>
                                       </div>
 
-                                      <div className="space-y-3">
+                                      <div className="flex gap-3">
                                         <Button
                                           onClick={() => handleBooking(room)}
                                           variant="outline"
-                                          className="w-full font-semibold py-3 text-sm transition-all duration-200 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white hover:shadow-md"
+                                          className="flex-1 font-semibold py-3 text-sm transition-all duration-200 border-blue-500 text-blue-500 hover:bg-blue-500 hover:text-white hover:shadow-md"
                                         >
                                           Reserve Room
                                         </Button>
@@ -3635,7 +3635,7 @@ function HotelDetailsContent() {
                                                 new Set([...prev, room.id]),
                                             );
                                           }}
-                                          className={`w-full font-medium py-2 text-sm transition-all duration-200 min-h-[44px] ${
+                                          className={`flex-1 font-medium py-2 text-sm transition-all duration-200 min-h-[44px] ${
                                             bargainedRooms.has(room.id)
                                               ? "bg-green-600 text-white"
                                               : bargainingRoomId === room.id
@@ -3658,17 +3658,6 @@ function HotelDetailsContent() {
                                             "Bargain Now"
                                           )}
                                         </BargainButton>
-                                      </div>
-
-                                      <div className="mt-3 flex items-center justify-center space-x-4 text-xs text-green-700">
-                                        <span className="flex items-center gap-1">
-                                          <CheckCircle className="w-3 h-3 text-green-600" />
-                                          No prepayment
-                                        </span>
-                                        <span className="flex items-center gap-1">
-                                          <CheckCircle className="w-3 h-3 text-green-600" />
-                                          Free cancellation
-                                        </span>
                                       </div>
                                     </div>
                                   </div>
