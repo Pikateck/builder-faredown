@@ -3151,8 +3151,8 @@ function HotelDetailsContent() {
                                       {/* Cancellation Policy Info Icon */}
                                       <Tooltip>
                                         <TooltipTrigger asChild>
-                                          <button className="inline-flex items-center justify-center w-5 h-5 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors bg-white">
-                                            <Info className="w-3.5 h-3.5" />
+                                          <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-600 text-white transition-colors">
+                                            <span className="text-xs font-bold">!</span>
                                           </button>
                                         </TooltipTrigger>
                                         <TooltipContent className="max-w-md bg-white border border-gray-200 shadow-lg p-0 overflow-hidden">
