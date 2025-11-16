@@ -494,7 +494,7 @@ export function ComprehensiveFilters({
         </div>
 
         {/* Hotel Name Search */}
-        <div className="mb-6">
+        <div className="mb-4">
           <Label
             htmlFor="hotelNameSearch"
             className="text-sm font-medium text-gray-700 mb-2 block"
@@ -509,6 +509,35 @@ export function ComprehensiveFilters({
             onChange={(e) => handleHotelNameSearch(e.target.value)}
             className="w-full"
           />
+        </div>
+
+        {/* Room Type Search */}
+        <div className="mb-6">
+          <Label
+            htmlFor="roomTypeSearch"
+            className="text-sm font-medium text-gray-700 mb-2 block"
+          >
+            Search by room type
+          </Label>
+          <Input
+            id="roomTypeSearch"
+            type="text"
+            placeholder="e.g. Deluxe, Suite, Twin..."
+            value={(selectedFilters["qRoomName"] as string) || ""}
+            onChange={(e) => {
+              const value = e.target.value;
+              setSelectedFilters((prev) => ({
+                ...prev,
+                qRoomName: value,
+              }));
+            }}
+            className="w-full"
+          />
+          {selectedFilters["qRoomName"] && (
+            <p className="text-xs text-gray-500 mt-1">
+              Filtering rooms matching: "{selectedFilters["qRoomName"]}"
+            </p>
+          )}
         </div>
       </div>
 
