@@ -99,7 +99,7 @@ async function verifyApiLogging() {
       console.log(`   - Status Code: ${log.status_code}`);
       console.log(`   - Duration: ${log.duration_ms}ms`);
       console.log(`   - Trace ID: ${log.trace_id}`);
-      
+
       // Check if password was sanitized
       const requestPayload = log.request_payload;
       if (requestPayload.password && requestPayload.password !== "secret123") {
@@ -142,16 +142,18 @@ async function verifyApiLogging() {
     }
 
     // 8. Summary
-    console.log("=" .repeat(60));
+    console.log("=".repeat(60));
     console.log("✅ VERIFICATION COMPLETE - All checks passed!");
-    console.log("=" .repeat(60));
+    console.log("=".repeat(60));
     console.log("\n📚 Next Steps:");
     console.log("   1. Restart API server: npm run dev");
     console.log("   2. Make test API calls to TBO/Hotelbeds");
     console.log("   3. Query logs: GET /api/admin/api-logs?supplier=TBO");
     console.log("   4. View stats: GET /api/admin/api-logs/stats/TBO");
     console.log("   5. View errors: GET /api/admin/api-logs/errors/recent");
-    console.log("\n📖 Documentation: THIRD_PARTY_API_LOGGING_IMPLEMENTATION.md\n");
+    console.log(
+      "\n📖 Documentation: THIRD_PARTY_API_LOGGING_IMPLEMENTATION.md\n",
+    );
 
     // Cleanup test data
     await pool.query(`

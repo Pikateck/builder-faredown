@@ -40,14 +40,15 @@ class ThirdPartyLogger {
       // Check if key is sensitive
       const lowerKey = key.toLowerCase();
       const isSensitive = this.sensitiveFields.some((field) =>
-        lowerKey.includes(field.toLowerCase())
+        lowerKey.includes(field.toLowerCase()),
       );
 
       if (isSensitive && typeof value === "string") {
         // Mask sensitive data
-        sanitized[key] = value.length > 4 
-          ? `${value.substring(0, 2)}***${value.substring(value.length - 2)}`
-          : "***";
+        sanitized[key] =
+          value.length > 4
+            ? `${value.substring(0, 2)}***${value.substring(value.length - 2)}`
+            : "***";
       } else if (typeof value === "object" && value !== null) {
         // Recursively sanitize nested objects
         sanitized[key] = this.sanitize(value);
@@ -59,7 +60,7 @@ class ThirdPartyLogger {
 
   /**
    * Log a third-party API call
-   * 
+   *
    * @param {Object} params - Logging parameters
    * @param {string} params.supplierName - Name of the supplier (TBO, HOTELBEDS, etc.)
    * @param {string} params.endpoint - API endpoint URL
@@ -180,11 +181,19 @@ class ThirdPartyLogger {
   /**
    * Create a request logger that tracks start and end times
    * Returns an object with end() method to log the response
-   * 
+   *
    * @param {Object} params - Request parameters
    * @returns {Object} Logger object with end() method
    */
-  startRequest({ supplierName, endpoint, method, requestPayload, requestHeaders, traceId, correlationId }) {
+  startRequest({
+    supplierName,
+    endpoint,
+    method,
+    requestPayload,
+    requestHeaders,
+    traceId,
+    correlationId,
+  }) {
     const requestTimestamp = new Date();
     const finalTraceId = traceId || uuidv4();
 
@@ -195,7 +204,13 @@ class ThirdPartyLogger {
       /**
        * End the request logging
        */
-      async end({ responsePayload, responseHeaders, statusCode, errorMessage, errorStack } = {}) {
+      async end({
+        responsePayload,
+        responseHeaders,
+        statusCode,
+        errorMessage,
+        errorStack,
+      } = {}) {
         const responseTimestamp = new Date();
 
         return await this.log({

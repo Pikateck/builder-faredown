@@ -473,7 +473,10 @@ class DatabaseConnection {
 
       console.log("✅ third_party_api_logs table ensured successfully");
     } catch (error) {
-      console.warn("⚠️  Failed to ensure third_party_api_logs table:", error.message);
+      console.warn(
+        "⚠️  Failed to ensure third_party_api_logs table:",
+        error.message,
+      );
     }
   }
 

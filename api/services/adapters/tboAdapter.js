@@ -55,9 +55,18 @@ class TBOAdapter extends BaseSupplierAdapter {
         "https://apiwr.tboholidays.com/HotelAPI/",
 
       // ✅ Credentials - Use hotel-specific env vars (TBO_HOTEL_*)
-      clientId: process.env.TBO_HOTEL_CLIENT_ID || process.env.TBO_CLIENT_ID || "tboprod",
-      userId: process.env.TBO_HOTEL_USER_ID || process.env.TBO_API_USER_ID || "BOMF145",
-      password: process.env.TBO_HOTEL_PASSWORD || process.env.TBO_API_PASSWORD || "@Bo#4M-Api@",
+      clientId:
+        process.env.TBO_HOTEL_CLIENT_ID ||
+        process.env.TBO_CLIENT_ID ||
+        "tboprod",
+      userId:
+        process.env.TBO_HOTEL_USER_ID ||
+        process.env.TBO_API_USER_ID ||
+        "BOMF145",
+      password:
+        process.env.TBO_HOTEL_PASSWORD ||
+        process.env.TBO_API_PASSWORD ||
+        "@Bo#4M-Api@",
 
       // Static data credentials (SEPARATE from dynamic API)
       staticUserName: process.env.TBO_STATIC_USER || "travelcategory",
@@ -393,7 +402,8 @@ class TBOAdapter extends BaseSupplierAdapter {
         );
       }
 
-      const destinations = response.data?.CityList || response.data?.Result || [];
+      const destinations =
+        response.data?.CityList || response.data?.Result || [];
       this.logger.info(`✅ Retrieved ${destinations.length} top destinations`);
 
       return destinations;
@@ -926,7 +936,7 @@ class TBOAdapter extends BaseSupplierAdapter {
     this.logger.info("📋 TBO Get Change Request Status", {
       changeRequestId,
       bookingId,
-      confirmationNo
+      confirmationNo,
     });
 
     try {
@@ -938,7 +948,10 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       return result;
     } catch (error) {
-      this.logger.error("❌ TBO Get Change Request Status failed:", error.message);
+      this.logger.error(
+        "❌ TBO Get Change Request Status failed:",
+        error.message,
+      );
       throw error;
     }
   }
@@ -981,7 +994,10 @@ class TBOAdapter extends BaseSupplierAdapter {
 
     const { bookingId, confirmationNo } = params;
 
-    this.logger.info("📋 TBO Get Booking Details", { bookingId, confirmationNo });
+    this.logger.info("📋 TBO Get Booking Details", {
+      bookingId,
+      confirmationNo,
+    });
 
     try {
       const result = await getBookingDetails({

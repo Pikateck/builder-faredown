@@ -21,9 +21,10 @@ This document answers all your questions about the database schema structure and
 The other two schemas (`pg_catalog` and `information_schema`) are built into PostgreSQL itself and exist in every PostgreSQL database. They store metadata about tables, columns, indexes, users, permissions, etc.
 
 **Verification**:
+
 ```sql
 -- List all schemas
-SELECT schema_name 
+SELECT schema_name
 FROM information_schema.schemata;
 
 -- Result will show:
@@ -39,12 +40,14 @@ FROM information_schema.schemata;
 **✅ CONFIRMED**
 
 All new tables are created in the `public` schema. This is:
+
 - The default PostgreSQL behavior (when no schema is specified)
 - Explicitly enforced in our codebase
 
 **Evidence**:
 
 1. **Schema Definition** (`api/database/schema.sql`):
+
    ```sql
    CREATE TABLE suppliers ( ... );  -- Goes to public schema by default
    CREATE TABLE hotel_bookings ( ... );
@@ -52,6 +55,7 @@ All new tables are created in the `public` schema. This is:
    ```
 
 2. **Migration Files** (`api/database/migrations/*.sql`):
+
    ```sql
    CREATE TABLE IF NOT EXISTS public.third_party_api_logs ( ... );
    CREATE TABLE IF NOT EXISTS public.recent_searches ( ... );
@@ -73,15 +77,17 @@ All new tables are created in the `public` schema. This is:
 **✅ CONFIRMED**
 
 New tables are NEVER created in different schemas. Our codebase:
+
 - Does NOT create custom schemas
 - Does NOT use multiple schemas for application data
 - Always uses `public` schema for all application tables
 
 **Verification Query**:
+
 ```sql
 -- List all tables in the public schema
-SELECT table_name 
-FROM information_schema.tables 
+SELECT table_name
+FROM information_schema.tables
 WHERE table_schema = 'public'
 ORDER BY table_name;
 
@@ -90,6 +96,7 @@ ORDER BY table_name;
 ```
 
 **Example Output**:
+
 ```
 table_name
 --------------------------
@@ -124,31 +131,32 @@ Both master data and transaction data are stored in the `public` schema. The sep
 
 Tables that are populated once or updated infrequently:
 
-| Table Name | Purpose | Update Frequency |
-|------------|---------|------------------|
-| `suppliers_master` | Supplier configurations | Rarely |
-| `countries` | Country reference data | One-time/Rarely |
-| `regions` | Region definitions | One-time/Rarely |
-| `airlines` | Airline reference data | One-time/Rarely |
-| `airports` | Airport reference data | One-time/Rarely |
-| `module_markups` | Markup configuration | Infrequently |
+| Table Name         | Purpose                 | Update Frequency |
+| ------------------ | ----------------------- | ---------------- |
+| `suppliers_master` | Supplier configurations | Rarely           |
+| `countries`        | Country reference data  | One-time/Rarely  |
+| `regions`          | Region definitions      | One-time/Rarely  |
+| `airlines`         | Airline reference data  | One-time/Rarely  |
+| `airports`         | Airport reference data  | One-time/Rarely  |
+| `module_markups`   | Markup configuration    | Infrequently     |
 
 #### Transaction Data (Frequent Updates)
 
 Tables that are constantly being written to:
 
-| Table Name | Purpose | Update Frequency |
-|------------|---------|------------------|
-| `bookings` | All bookings | Constant |
-| `hotel_bookings` | Hotel bookings | Constant |
-| `payments` | Payment transactions | Constant |
-| `users` | User accounts | Frequent |
-| `audit_logs` | User activity logs | Constant |
-| `third_party_api_logs` | API request/response logs | Constant |
-| `markup_rules` | Dynamic markup rules | Frequent |
-| `promo_codes` | Promotional codes | Frequent |
+| Table Name             | Purpose                   | Update Frequency |
+| ---------------------- | ------------------------- | ---------------- |
+| `bookings`             | All bookings              | Constant         |
+| `hotel_bookings`       | Hotel bookings            | Constant         |
+| `payments`             | Payment transactions      | Constant         |
+| `users`                | User accounts             | Frequent         |
+| `audit_logs`           | User activity logs        | Constant         |
+| `third_party_api_logs` | API request/response logs | Constant         |
+| `markup_rules`         | Dynamic markup rules      | Frequent         |
+| `promo_codes`          | Promotional codes         | Frequent         |
 
 **Why both are in `public` schema**:
+
 - PostgreSQL best practice: Use one schema for application data
 - Separation is achieved through table design, indexing, and archival policies
 - Easier to manage, backup, and restore
@@ -180,24 +188,24 @@ Third-party API logging is now fully implemented and operational.
 
 For every third-party API call (TBO, Hotelbeds, Amadeus, RateHawk), we log:
 
-| Field | Description |
-|-------|-------------|
-| `supplier_name` | Which supplier (TBO, HOTELBEDS, AMADEUS, RATEHAWK) |
-| `endpoint` | Full API endpoint URL |
-| `method` | HTTP method (GET, POST, etc.) |
-| `request_payload` | Full request body (sanitized) |
-| `request_headers` | Request headers (sanitized) |
-| `response_payload` | Full response body |
-| `response_headers` | Response headers |
-| `status_code` | HTTP status code (200, 404, 500, etc.) |
-| `error_message` | Error message if request failed |
-| `error_stack` | Error stack trace |
-| `request_timestamp` | When request was sent |
-| `response_timestamp` | When response was received |
-| `duration_ms` | Response time in milliseconds |
-| `trace_id` | Unique ID for correlating related requests |
-| `correlation_id` | Business ID (e.g., booking_ref) |
-| `environment` | production/staging/development |
+| Field                | Description                                        |
+| -------------------- | -------------------------------------------------- |
+| `supplier_name`      | Which supplier (TBO, HOTELBEDS, AMADEUS, RATEHAWK) |
+| `endpoint`           | Full API endpoint URL                              |
+| `method`             | HTTP method (GET, POST, etc.)                      |
+| `request_payload`    | Full request body (sanitized)                      |
+| `request_headers`    | Request headers (sanitized)                        |
+| `response_payload`   | Full response body                                 |
+| `response_headers`   | Response headers                                   |
+| `status_code`        | HTTP status code (200, 404, 500, etc.)             |
+| `error_message`      | Error message if request failed                    |
+| `error_stack`        | Error stack trace                                  |
+| `request_timestamp`  | When request was sent                              |
+| `response_timestamp` | When response was received                         |
+| `duration_ms`        | Response time in milliseconds                      |
+| `trace_id`           | Unique ID for correlating related requests         |
+| `correlation_id`     | Business ID (e.g., booking_ref)                    |
+| `environment`        | production/staging/development                     |
 
 ### How It Works
 
@@ -224,7 +232,7 @@ const apiLog = thirdPartyLogger.startRequest({
 try {
   // Make API call
   const response = await axios.post(url, data);
-  
+
   // Log successful response
   await apiLog.end({
     responsePayload: response.data,
@@ -247,11 +255,13 @@ try {
 All endpoints require admin authentication via `X-Admin-Key` header.
 
 #### 1. Query Logs
+
 ```
 GET /api/admin/api-logs?supplier=TBO&limit=100&offset=0
 ```
 
 **Query Parameters**:
+
 - `supplier` - Filter by supplier (TBO, HOTELBEDS, etc.)
 - `status` - Filter by HTTP status code
 - `from_date` - Start date (ISO 8601)
@@ -263,16 +273,19 @@ GET /api/admin/api-logs?supplier=TBO&limit=100&offset=0
 - `offset` - Pagination offset
 
 #### 2. Get Log Details
+
 ```
 GET /api/admin/api-logs/:id
 ```
 
 #### 3. Get Supplier Statistics
+
 ```
 GET /api/admin/api-logs/stats/TBO?from_date=2025-01-01
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -290,16 +303,19 @@ GET /api/admin/api-logs/stats/TBO?from_date=2025-01-01
 ```
 
 #### 4. Get Recent Errors
+
 ```
 GET /api/admin/api-logs/errors/recent?supplier=TBO&limit=50
 ```
 
 #### 5. Get Logs by Trace ID
+
 ```
 GET /api/admin/api-logs/trace/:trace_id
 ```
 
 #### 6. Cleanup Old Logs
+
 ```
 POST /api/admin/api-logs/cleanup
 ```
@@ -387,15 +403,19 @@ Deletes logs older than 90 days.
 ### Immediate Actions
 
 1. **Restart the API Server**
+
    ```bash
    npm run dev
    ```
+
    This will initialize the database and create the `third_party_api_logs` table.
 
 2. **Verify Installation**
+
    ```bash
    node verify-api-logging.js
    ```
+
    This will confirm everything is set up correctly.
 
 3. **Test Logging**
@@ -446,13 +466,13 @@ By default, logs are kept for **90 days**. To change this:
 
 ## Summary of Answers
 
-| Question | Answer |
-|----------|--------|
-| **Why 3 schemas?** | Only `public` is for application data. The other 2 are PostgreSQL internals. |
-| **New tables in `public`?** | ✅ Confirmed - all new tables go to `public` schema |
-| **Tables not in different schemas?** | ✅ Confirmed - only `public` is used |
-| **Master vs Transaction data structure?** | ✅ Correct - both in `public`, separated logically |
-| **Third-party logging stored?** | ✅ Now implemented - full logging system operational |
+| Question                                  | Answer                                                                       |
+| ----------------------------------------- | ---------------------------------------------------------------------------- |
+| **Why 3 schemas?**                        | Only `public` is for application data. The other 2 are PostgreSQL internals. |
+| **New tables in `public`?**               | ✅ Confirmed - all new tables go to `public` schema                          |
+| **Tables not in different schemas?**      | ✅ Confirmed - only `public` is used                                         |
+| **Master vs Transaction data structure?** | ✅ Correct - both in `public`, separated logically                           |
+| **Third-party logging stored?**           | ✅ Now implemented - full logging system operational                         |
 
 ---
 
@@ -480,6 +500,7 @@ By default, logs are kept for **90 days**. To change this:
 ## Contact
 
 For questions or issues:
+
 1. Check the documentation files above
 2. Run the verification script: `node verify-api-logging.js`
 3. Review the implementation in `tboAdapter.js` as a reference

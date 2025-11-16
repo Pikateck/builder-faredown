@@ -80,7 +80,7 @@ export const apiLogsService = {
       queryParams.append("errors_only", params.errors_only.toString());
 
     const response = await apiClient.get<APILogsResponse>(
-      `/admin/api-logs?${queryParams.toString()}`
+      `/admin/api-logs?${queryParams.toString()}`,
     );
     return response;
   },
@@ -89,9 +89,10 @@ export const apiLogsService = {
    * Fetch a single log by ID
    */
   async fetchLogById(id: string): Promise<APILogDetail> {
-    const response = await apiClient.get<{ success: boolean; data: APILogDetail }>(
-      `/admin/api-logs/${id}`
-    );
+    const response = await apiClient.get<{
+      success: boolean;
+      data: APILogDetail;
+    }>(`/admin/api-logs/${id}`);
     return response.data;
   },
 
@@ -100,12 +101,13 @@ export const apiLogsService = {
    */
   async fetchSupplierStats(
     supplier: string,
-    fromDate?: string
+    fromDate?: string,
   ): Promise<SupplierStats> {
     const queryParams = fromDate ? `?from_date=${fromDate}` : "";
-    const response = await apiClient.get<{ success: boolean; data: SupplierStats }>(
-      `/admin/api-logs/stats/${supplier}${queryParams}`
-    );
+    const response = await apiClient.get<{
+      success: boolean;
+      data: SupplierStats;
+    }>(`/admin/api-logs/stats/${supplier}${queryParams}`);
     return response.data;
   },
 
@@ -114,14 +116,14 @@ export const apiLogsService = {
    */
   async fetchErrorLogs(
     supplier?: string,
-    limit: number = 50
+    limit: number = 50,
   ): Promise<APILog[]> {
     const queryParams = new URLSearchParams();
     if (supplier) queryParams.append("supplier", supplier);
     queryParams.append("limit", limit.toString());
 
     const response = await apiClient.get<{ success: boolean; data: APILog[] }>(
-      `/admin/api-logs/errors/recent?${queryParams.toString()}`
+      `/admin/api-logs/errors/recent?${queryParams.toString()}`,
     );
     return response.data;
   },
@@ -131,7 +133,7 @@ export const apiLogsService = {
    */
   async fetchLogsByTraceId(traceId: string): Promise<APILog[]> {
     const response = await apiClient.get<{ success: boolean; data: APILog[] }>(
-      `/admin/api-logs/trace/${traceId}`
+      `/admin/api-logs/trace/${traceId}`,
     );
     return response.data;
   },

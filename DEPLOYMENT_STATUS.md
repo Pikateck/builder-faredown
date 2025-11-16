@@ -73,6 +73,7 @@
 ## 🎯 Features Implemented
 
 ### Statistics Dashboard
+
 - Total requests per supplier
 - Success rate percentage
 - Average response duration
@@ -80,6 +81,7 @@
 - Real-time metrics
 
 ### Logs Viewer
+
 - **Filters**:
   - Filter by supplier (TBO, Hotelbeds, Amadeus, RateHawk, or All)
   - Filter by errors only
@@ -95,6 +97,7 @@
   - View details action
 
 ### Log Details Modal
+
 - Full request payload (sanitized)
 - Full response payload
 - Request/Response headers
@@ -103,6 +106,7 @@
 - Timestamp information
 
 ### Security Features
+
 - Automatic sanitization of sensitive fields (passwords, tokens, API keys)
 - Admin authentication required for all endpoints
 - Secure display of sensitive data
@@ -114,11 +118,13 @@
 ### Production URLs
 
 **Frontend (Netlify)**:
+
 - Main Site: https://spontaneous-biscotti-da44bc.netlify.app/
 - Admin Panel: https://spontaneous-biscotti-da44bc.netlify.app/admin
 - API Logs: https://spontaneous-biscotti-da44bc.netlify.app/admin (Select "API Logs" tab)
 
 **Backend (Render)**:
+
 - API Server: https://builder-faredown-pricing.onrender.com
 - API Logs Endpoint: https://builder-faredown-pricing.onrender.com/api/admin/api-logs
 
@@ -178,6 +184,7 @@
 ✅ **All tables are in the `public` schema**
 
 The "3 schemas" visible in pgAdmin are:
+
 1. **`public`** - Application data (all our tables)
 2. **`pg_catalog`** - PostgreSQL system catalog (internal)
 3. **`information_schema`** - ANSI SQL metadata (internal)
@@ -187,6 +194,7 @@ The "3 schemas" visible in pgAdmin are:
 Both types are in `public` schema, separated logically:
 
 **Master Data** (infrequent updates):
+
 - suppliers_master
 - countries
 - regions
@@ -194,6 +202,7 @@ Both types are in `public` schema, separated logically:
 - airports
 
 **Transaction Data** (frequent updates):
+
 - bookings
 - hotel_bookings
 - payments
@@ -213,6 +222,7 @@ node verify-api-logging.js
 ```
 
 This will check:
+
 - Table exists in public schema
 - All columns and indexes are created
 - Logging functionality works
@@ -337,6 +347,7 @@ This will check:
 ## 📞 Support
 
 For issues or questions:
+
 1. Check documentation files
 2. Run verification script
 3. Check browser console

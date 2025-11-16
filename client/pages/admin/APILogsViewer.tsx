@@ -42,7 +42,12 @@ import {
   Eye,
   BarChart3,
 } from "lucide-react";
-import { apiLogsService, APILog, APILogDetail, SupplierStats } from "@/services/apiLogsService";
+import {
+  apiLogsService,
+  APILog,
+  APILogDetail,
+  SupplierStats,
+} from "@/services/apiLogsService";
 import { format } from "date-fns";
 
 const SUPPLIERS = ["TBO", "HOTELBEDS", "AMADEUS", "RATEHAWK"];
@@ -56,12 +61,12 @@ export default function APILogsViewer() {
   const [limit] = useState(50);
   const [selectedLog, setSelectedLog] = useState<APILogDetail | null>(null);
   const [detailsOpen, setDetailsOpen] = useState(false);
-  
+
   // Filters
   const [selectedSupplier, setSelectedSupplier] = useState<string>("all");
   const [errorsOnly, setErrorsOnly] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
-  
+
   // Stats
   const [stats, setStats] = useState<Record<string, SupplierStats>>({});
   const [statsLoading, setStatsLoading] = useState(false);
@@ -70,18 +75,18 @@ export default function APILogsViewer() {
   const fetchLogs = async () => {
     setLoading(true);
     setError(null);
-    
+
     try {
       const params: any = {
         limit,
         offset: page * limit,
         errors_only: errorsOnly,
       };
-      
+
       if (selectedSupplier !== "all") {
         params.supplier = selectedSupplier;
       }
-      
+
       const response = await apiLogsService.fetchLogs(params);
       setLogs(response.data);
       setTotal(response.total);
@@ -95,19 +100,19 @@ export default function APILogsViewer() {
   // Fetch stats
   const fetchStats = async () => {
     setStatsLoading(true);
-    
+
     try {
       const statsPromises = SUPPLIERS.map(async (supplier) => {
         const stat = await apiLogsService.fetchSupplierStats(supplier);
         return [supplier, stat];
       });
-      
+
       const results = await Promise.all(statsPromises);
       const statsMap: Record<string, SupplierStats> = {};
       results.forEach(([supplier, stat]) => {
         statsMap[supplier as string] = stat as SupplierStats;
       });
-      
+
       setStats(statsMap);
     } catch (err) {
       console.error("Failed to fetch stats:", err);
@@ -132,7 +137,7 @@ export default function APILogsViewer() {
     if (!confirm("Are you sure you want to delete logs older than 90 days?")) {
       return;
     }
-    
+
     try {
       const result = await apiLogsService.cleanupLogs();
       alert(result.message);
@@ -153,9 +158,19 @@ export default function APILogsViewer() {
   // Status badge
   const getStatusBadge = (statusCode: number) => {
     if (statusCode >= 200 && statusCode < 300) {
-      return <Badge className="bg-green-100 text-green-700"><CheckCircle className="w-3 h-3 mr-1" />{statusCode}</Badge>;
+      return (
+        <Badge className="bg-green-100 text-green-700">
+          <CheckCircle className="w-3 h-3 mr-1" />
+          {statusCode}
+        </Badge>
+      );
     } else if (statusCode >= 400) {
-      return <Badge className="bg-red-100 text-red-700"><AlertCircle className="w-3 h-3 mr-1" />{statusCode}</Badge>;
+      return (
+        <Badge className="bg-red-100 text-red-700">
+          <AlertCircle className="w-3 h-3 mr-1" />
+          {statusCode}
+        </Badge>
+      );
     }
     return <Badge variant="outline">{statusCode}</Badge>;
   };
@@ -174,11 +189,15 @@ export default function APILogsViewer() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold">API Logs</h1>
-          <p className="text-gray-600">Monitor third-party supplier API requests and responses</p>
+          <p className="text-gray-600">
+            Monitor third-party supplier API requests and responses
+          </p>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={fetchLogs} disabled={loading}>
-            <RefreshCw className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`} />
+            <RefreshCw
+              className={`w-4 h-4 mr-2 ${loading ? "animate-spin" : ""}`}
+            />
             Refresh
           </Button>
           <Button variant="outline" onClick={handleCleanup}>
@@ -203,37 +222,55 @@ export default function APILogsViewer() {
               {SUPPLIERS.map((supplier) => {
                 const stat = stats[supplier];
                 if (!stat) return null;
-                
-                const successRate = stat.total_requests > 0
-                  ? ((stat.successful_requests / stat.total_requests) * 100).toFixed(1)
-                  : "0";
+
+                const successRate =
+                  stat.total_requests > 0
+                    ? (
+                        (stat.successful_requests / stat.total_requests) *
+                        100
+                      ).toFixed(1)
+                    : "0";
 
                 return (
                   <Card key={supplier}>
                     <CardHeader className="pb-2">
-                      <CardTitle className="text-sm font-medium">{supplier}</CardTitle>
+                      <CardTitle className="text-sm font-medium">
+                        {supplier}
+                      </CardTitle>
                     </CardHeader>
                     <CardContent>
                       <div className="space-y-2">
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-600">Total Requests</span>
-                          <span className="text-sm font-semibold">{stat.total_requests}</span>
+                          <span className="text-xs text-gray-600">
+                            Total Requests
+                          </span>
+                          <span className="text-sm font-semibold">
+                            {stat.total_requests}
+                          </span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-600">Success Rate</span>
-                          <span className={`text-sm font-semibold ${parseFloat(successRate) >= 90 ? "text-green-600" : "text-yellow-600"}`}>
+                          <span className="text-xs text-gray-600">
+                            Success Rate
+                          </span>
+                          <span
+                            className={`text-sm font-semibold ${parseFloat(successRate) >= 90 ? "text-green-600" : "text-yellow-600"}`}
+                          >
                             {successRate}%
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
-                          <span className="text-xs text-gray-600">Avg Duration</span>
+                          <span className="text-xs text-gray-600">
+                            Avg Duration
+                          </span>
                           <span className="text-sm font-semibold">
                             {formatDuration(Math.round(stat.avg_duration_ms))}
                           </span>
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-gray-600">Errors</span>
-                          <span className={`text-sm font-semibold ${stat.error_requests > 0 ? "text-red-600" : "text-gray-600"}`}>
+                          <span
+                            className={`text-sm font-semibold ${stat.error_requests > 0 ? "text-red-600" : "text-gray-600"}`}
+                          >
                             {stat.error_requests}
                           </span>
                         </div>
@@ -252,8 +289,13 @@ export default function APILogsViewer() {
             <CardContent className="pt-6">
               <div className="flex flex-wrap gap-4">
                 <div className="flex-1 min-w-[200px]">
-                  <label className="text-sm font-medium mb-2 block">Supplier</label>
-                  <Select value={selectedSupplier} onValueChange={setSelectedSupplier}>
+                  <label className="text-sm font-medium mb-2 block">
+                    Supplier
+                  </label>
+                  <Select
+                    value={selectedSupplier}
+                    onValueChange={setSelectedSupplier}
+                  >
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>
@@ -267,7 +309,7 @@ export default function APILogsViewer() {
                     </SelectContent>
                   </Select>
                 </div>
-                
+
                 <div className="flex items-end">
                   <label className="flex items-center gap-2 cursor-pointer">
                     <input
@@ -320,7 +362,9 @@ export default function APILogsViewer() {
               {loading ? (
                 <div className="text-center py-8">Loading logs...</div>
               ) : logs.length === 0 ? (
-                <div className="text-center py-8 text-gray-500">No logs found</div>
+                <div className="text-center py-8 text-gray-500">
+                  No logs found
+                </div>
               ) : (
                 <Table>
                   <TableHeader>
@@ -338,7 +382,10 @@ export default function APILogsViewer() {
                     {logs.map((log) => (
                       <TableRow key={log.id}>
                         <TableCell className="text-xs">
-                          {format(new Date(log.request_timestamp), "MMM dd, HH:mm:ss")}
+                          {format(
+                            new Date(log.request_timestamp),
+                            "MMM dd, HH:mm:ss",
+                          )}
                         </TableCell>
                         <TableCell>
                           <Badge variant="outline">{log.supplier_name}</Badge>
@@ -391,44 +438,66 @@ export default function APILogsViewer() {
             <div className="space-y-4">
               <div className="grid grid-cols-2 gap-4">
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Supplier</label>
+                  <label className="text-sm font-medium text-gray-600">
+                    Supplier
+                  </label>
                   <p className="font-semibold">{selectedLog.supplier_name}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Status</label>
+                  <label className="text-sm font-medium text-gray-600">
+                    Status
+                  </label>
                   <p>{getStatusBadge(selectedLog.status_code)}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Duration</label>
-                  <p className="font-semibold">{formatDuration(selectedLog.duration_ms)}</p>
+                  <label className="text-sm font-medium text-gray-600">
+                    Duration
+                  </label>
+                  <p className="font-semibold">
+                    {formatDuration(selectedLog.duration_ms)}
+                  </p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">Trace ID</label>
+                  <label className="text-sm font-medium text-gray-600">
+                    Trace ID
+                  </label>
                   <p className="text-xs font-mono">{selectedLog.trace_id}</p>
                 </div>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-600">Endpoint</label>
-                <p className="text-xs font-mono bg-gray-100 p-2 rounded">{selectedLog.endpoint}</p>
+                <label className="text-sm font-medium text-gray-600">
+                  Endpoint
+                </label>
+                <p className="text-xs font-mono bg-gray-100 p-2 rounded">
+                  {selectedLog.endpoint}
+                </p>
               </div>
 
               {selectedLog.error_message && (
                 <div>
-                  <label className="text-sm font-medium text-red-600">Error Message</label>
-                  <p className="text-sm bg-red-50 p-2 rounded">{selectedLog.error_message}</p>
+                  <label className="text-sm font-medium text-red-600">
+                    Error Message
+                  </label>
+                  <p className="text-sm bg-red-50 p-2 rounded">
+                    {selectedLog.error_message}
+                  </p>
                 </div>
               )}
 
               <div>
-                <label className="text-sm font-medium text-gray-600">Request Payload</label>
+                <label className="text-sm font-medium text-gray-600">
+                  Request Payload
+                </label>
                 <pre className="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-48">
                   {JSON.stringify(selectedLog.request_payload, null, 2)}
                 </pre>
               </div>
 
               <div>
-                <label className="text-sm font-medium text-gray-600">Response Payload</label>
+                <label className="text-sm font-medium text-gray-600">
+                  Response Payload
+                </label>
                 <pre className="text-xs bg-gray-100 p-2 rounded overflow-auto max-h-48">
                   {JSON.stringify(selectedLog.response_payload, null, 2)}
                 </pre>

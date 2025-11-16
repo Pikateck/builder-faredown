@@ -29,6 +29,7 @@ When you see "3 schemas" in pgAdmin, this typically includes:
 Both master data and transaction data are stored in the `public` schema, but are logically separated:
 
 #### Master Data (One-time/Infrequent Updates)
+
 - `suppliers_master` - Supplier configurations
 - `countries` - Country reference data
 - `regions` - Region definitions
@@ -36,6 +37,7 @@ Both master data and transaction data are stored in the `public` schema, but are
 - `airports` - Airport reference data
 
 #### Transaction Data (Frequent Updates)
+
 - `bookings` - Hotel/flight bookings
 - `hotel_bookings` - Hotel-specific bookings
 - `payments` - Payment transactions
@@ -53,6 +55,7 @@ Located in the `public` schema, this table stores all third-party API interactio
 **Location**: `api/database/migrations/20250420_third_party_api_logs.sql`
 
 **Structure**:
+
 ```sql
 CREATE TABLE public.third_party_api_logs (
     id UUID PRIMARY KEY,
@@ -77,6 +80,7 @@ CREATE TABLE public.third_party_api_logs (
 ```
 
 **Indexes**:
+
 - `idx_third_party_logs_supplier` - Query by supplier and date
 - `idx_third_party_logs_timestamp` - Query by date
 - `idx_third_party_logs_status` - Query by status code
@@ -89,6 +93,7 @@ CREATE TABLE public.third_party_api_logs (
 **Location**: `api/services/thirdPartyLogger.js`
 
 **Features**:
+
 - ✅ Automatic sanitization of sensitive data (passwords, tokens, API keys)
 - ✅ Request/response tracking with timestamps
 - ✅ Duration calculation
@@ -109,13 +114,13 @@ const apiLog = thirdPartyLogger.startRequest({
   requestPayload: { ClientId: "xxx", Password: "yyy" },
   requestHeaders: { "Content-Type": "application/json" },
   correlationId: "BOOKING-12345", // Optional
-  traceId: "unique-trace-id",     // Optional (auto-generated if not provided)
+  traceId: "unique-trace-id", // Optional (auto-generated if not provided)
 });
 
 try {
   // Make API call
   const response = await axios.post(url, data);
-  
+
   // Log successful response
   await apiLog.end({
     responsePayload: response.data,
@@ -153,11 +158,13 @@ API_LOG_LEVEL=all
 All endpoints require admin authentication.
 
 #### Query Logs
+
 ```
 GET /api/admin/api-logs?supplier=TBO&limit=100&offset=0
 ```
 
 **Query Parameters**:
+
 - `supplier` - Filter by supplier name (TBO, HOTELBEDS, etc.)
 - `status` - Filter by HTTP status code
 - `limit` - Results per page (default: 100)
@@ -169,6 +176,7 @@ GET /api/admin/api-logs?supplier=TBO&limit=100&offset=0
 - `errors_only` - Show only errors (true/false)
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -180,6 +188,7 @@ GET /api/admin/api-logs?supplier=TBO&limit=100&offset=0
 ```
 
 #### Get Log Details
+
 ```
 GET /api/admin/api-logs/:id
 ```
@@ -187,11 +196,13 @@ GET /api/admin/api-logs/:id
 Returns full log details including request/response payloads.
 
 #### Get Supplier Statistics
+
 ```
 GET /api/admin/api-logs/stats/TBO?from_date=2025-01-01
 ```
 
 **Response**:
+
 ```json
 {
   "success": true,
@@ -209,6 +220,7 @@ GET /api/admin/api-logs/stats/TBO?from_date=2025-01-01
 ```
 
 #### Get Recent Errors
+
 ```
 GET /api/admin/api-logs/errors/recent?supplier=TBO&limit=50
 ```
@@ -216,6 +228,7 @@ GET /api/admin/api-logs/errors/recent?supplier=TBO&limit=50
 Returns recent error logs for debugging.
 
 #### Get Logs by Trace ID
+
 ```
 GET /api/admin/api-logs/trace/:trace_id
 ```
@@ -223,6 +236,7 @@ GET /api/admin/api-logs/trace/:trace_id
 Returns all related logs for a specific trace ID (useful for debugging a complete flow).
 
 #### Cleanup Old Logs
+
 ```
 POST /api/admin/api-logs/cleanup
 ```
@@ -251,13 +265,13 @@ async getHotelToken() {
 
   try {
     const response = await tboRequest(url, { ... });
-    
+
     await apiLog.end({
       responsePayload: response.data,
       responseHeaders: response.headers,
       statusCode: response.status,
     });
-    
+
     return response.data.TokenId;
   } catch (error) {
     await apiLog.end({
@@ -285,6 +299,7 @@ The logger automatically sanitizes sensitive fields before storing:
 - `clientId`, `ClientId`
 
 **Example**:
+
 ```javascript
 // Original: { Password: "secret123" }
 // Stored:   { Password: "se***23" }
@@ -312,8 +327,8 @@ The logger automatically sanitizes sensitive fields before storing:
 - [x] Admin API routes created: `admin-api-logs.js`
 - [ ] Register admin routes in `api/server.js`:
   ```javascript
-  const adminApiLogsRoutes = require('./routes/admin-api-logs');
-  app.use('/api/admin/api-logs', adminKeyMiddleware, adminApiLogsRoutes);
+  const adminApiLogsRoutes = require("./routes/admin-api-logs");
+  app.use("/api/admin/api-logs", adminKeyMiddleware, adminApiLogsRoutes);
   ```
 - [ ] Restart the API server to apply changes
 - [ ] Verify table creation by checking database
@@ -366,6 +381,7 @@ curl -X GET "http://localhost:3000/api/admin/api-logs/stats/TBO" \
 ### 1. Why are there 3 schemas and not 1?
 
 The "3 schemas" you see are:
+
 - **`public`** - Your application data (this is what we use)
 - **`pg_catalog`** - PostgreSQL system catalog (internal)
 - **`information_schema`** - ANSI-standard metadata views (internal)
@@ -375,6 +391,7 @@ The "3 schemas" you see are:
 ### 2. New tables should be created in public schema only - Confirmed?
 
 **✅ Confirmed.** All new tables are created in the `public` schema. This is:
+
 - The default behavior when no schema is specified
 - Explicitly enforced in our migrations (`CREATE TABLE public.table_name`)
 - Consistent across all existing tables
@@ -388,6 +405,7 @@ The "3 schemas" you see are:
 **✅ Correct structure.** Both master data and transaction data are in the `public` schema:
 
 **Master Data** (infrequent updates):
+
 - suppliers_master
 - countries
 - regions
@@ -395,6 +413,7 @@ The "3 schemas" you see are:
 - airports
 
 **Transaction Data** (frequent updates):
+
 - bookings
 - hotel_bookings
 - payments
@@ -414,7 +433,8 @@ The separation is **logical** (based on usage pattern), not **physical** (separa
 - ✅ Automatic sanitization of sensitive data
 - ✅ Query, stats, and monitoring endpoints
 
-**To complete**: 
+**To complete**:
+
 1. Register admin routes in `api/server.js`
 2. Apply logging to other adapters (Hotelbeds, Amadeus, RateHawk)
 3. Restart and test
@@ -424,6 +444,7 @@ The separation is **logical** (based on usage pattern), not **physical** (separa
 ## Support
 
 For questions or issues, refer to:
+
 - Database schema: `api/database/schema.sql`
 - Migration files: `api/database/migrations/`
 - Logger service: `api/services/thirdPartyLogger.js`

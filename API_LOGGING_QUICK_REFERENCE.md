@@ -17,6 +17,7 @@ node verify-api-logging.js
 ```
 
 This will check:
+
 - Table exists in `public` schema
 - All columns and indexes are created
 - Logging functionality works
@@ -41,7 +42,7 @@ const apiLog = thirdPartyLogger.startRequest({
 try {
   // Make API call
   const response = await axios.post(url, data);
-  
+
   // Log success
   await apiLog.end({
     responsePayload: response.data,
@@ -64,24 +65,28 @@ try {
 **Requires admin authentication header**: `X-Admin-Key: YOUR_ADMIN_KEY`
 
 #### Get Recent Logs
+
 ```bash
 curl -X GET "http://localhost:3001/api/admin/api-logs?supplier=TBO&limit=20" \
   -H "X-Admin-Key: 8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1"
 ```
 
 #### Get Error Logs Only
+
 ```bash
 curl -X GET "http://localhost:3001/api/admin/api-logs?errors_only=true&limit=10" \
   -H "X-Admin-Key: 8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1"
 ```
 
 #### Get Supplier Stats
+
 ```bash
 curl -X GET "http://localhost:3001/api/admin/api-logs/stats/TBO" \
   -H "X-Admin-Key: 8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1"
 ```
 
 #### Get Logs by Trace ID
+
 ```bash
 curl -X GET "http://localhost:3001/api/admin/api-logs/trace/abc-123-xyz" \
   -H "X-Admin-Key: 8f13a2c7b4d9e0f1a6c5d4b3e2f1908a7b6c5d4e3f2a1b0c9d8e7f6a5b4c3d2e1"
@@ -91,7 +96,7 @@ curl -X GET "http://localhost:3001/api/admin/api-logs/trace/abc-123-xyz" \
 
 ```sql
 -- Get recent TBO logs
-SELECT 
+SELECT
   supplier_name,
   endpoint,
   status_code,
@@ -110,7 +115,7 @@ ORDER BY created_at DESC
 LIMIT 10;
 
 -- Get stats for TBO
-SELECT 
+SELECT
   COUNT(*) as total_requests,
   AVG(duration_ms) as avg_duration,
   MAX(duration_ms) as max_duration,
@@ -166,6 +171,7 @@ CREATE TABLE public.table_name ( ... );
 **Answer**: ✅ Correct. Both are in `public` schema but logically separated:
 
 **Master Data** (infrequent updates):
+
 - `suppliers_master`
 - `countries`
 - `regions`
@@ -173,6 +179,7 @@ CREATE TABLE public.table_name ( ... );
 - `airports`
 
 **Transaction Data** (frequent updates):
+
 - `bookings`
 - `hotel_bookings`
 - `payments`
@@ -184,6 +191,7 @@ CREATE TABLE public.table_name ( ... );
 ## Files Modified/Created
 
 ### New Files
+
 - ✅ `api/database/migrations/20250420_third_party_api_logs.sql` - Migration file
 - ✅ `api/services/thirdPartyLogger.js` - Logger service
 - ✅ `api/routes/admin-api-logs.js` - Admin API endpoints
@@ -192,6 +200,7 @@ CREATE TABLE public.table_name ( ... );
 - ✅ `verify-api-logging.js` - Verification script
 
 ### Modified Files
+
 - ✅ `api/database/connection.js` - Added `ensureThirdPartyApiLogsTable()`
 - ✅ `api/services/adapters/tboAdapter.js` - Added logging to auth method
 - ✅ `api/server.js` - Registered admin API logs route
@@ -203,12 +212,14 @@ CREATE TABLE public.table_name ( ... );
 ### To Use in Other Adapters
 
 1. **Hotelbeds Adapter** (`api/services/adapters/hotelbedsAdapter.js`):
+
    ```javascript
    const thirdPartyLogger = require("../thirdPartyLogger");
    // Add logging to all API methods
    ```
 
 2. **Amadeus Adapter** (`api/services/adapters/amadeusAdapter.js`):
+
    ```javascript
    const thirdPartyLogger = require("../thirdPartyLogger");
    // Add logging to all API methods
@@ -239,14 +250,14 @@ async someApiMethod(params) {
   try {
     // Make API call
     const response = await axios.post(url, requestData, { headers });
-    
+
     // Log successful response
     await apiLog.end({
       responsePayload: response.data,
       responseHeaders: response.headers,
       statusCode: response.status,
     });
-    
+
     return response.data;
   } catch (error) {
     // Log failed response
@@ -257,7 +268,7 @@ async someApiMethod(params) {
       errorMessage: error.message,
       errorStack: error.stack,
     });
-    
+
     throw error;
   }
 }
