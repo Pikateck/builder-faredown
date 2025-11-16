@@ -1,5 +1,6 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import {
   Check,
   Download,
@@ -14,6 +15,9 @@ import {
 } from "lucide-react";
 
 const MobileConfirmation = () => {
+  // ✅ Scroll to top on route change
+  useScrollToTop("auto");
+
   const location = useLocation();
   const navigate = useNavigate();
   const { selectedFlight, travellers, addOns, total } = location.state || {};
@@ -186,7 +190,7 @@ const MobileConfirmation = () => {
                   const addonNames = {
                     meals: "🍽️ Meals",
                     baggage: "🧳 Extra Baggage",
-                    insurance: "🛡️ Travel Insurance",
+                    insurance: "🛡�� Travel Insurance",
                     priorityBoarding: "🚀 Priority Boarding",
                   };
 
