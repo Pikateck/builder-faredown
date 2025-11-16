@@ -3547,44 +3547,56 @@ function HotelDetailsContent() {
 
                                     {/* Pricing and Actions */}
                                     <div className="lg:col-span-3 mt-4 lg:mt-0">
-                                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
-                                        <div className="text-2xl font-bold text-gray-900 mb-1">
-                                          ₹
-                                          {calculateTotalPrice(
-                                            room.pricePerNight,
-                                            room,
-                                          ).toLocaleString()}
+                                      <div className="bg-gradient-to-br from-gray-50 to-white border-2 border-gray-300 rounded-xl p-6 mb-5 shadow-md">
+                                        <div className="text-center mb-4">
+                                          <div className="text-xs uppercase tracking-wider text-gray-500 font-semibold mb-2">
+                                            Total Price
+                                          </div>
+                                          <div className="text-4xl font-bold text-gray-900 mb-2">
+                                            ₹{calculateTotalPrice(
+                                              room.pricePerNight,
+                                              room,
+                                            ).toLocaleString()}
+                                          </div>
+                                          <div className="text-sm text-gray-600 font-medium">
+                                            includes taxes & fees
+                                          </div>
                                         </div>
-                                        <div className="text-sm font-semibold text-gray-900 mb-1">
-                                          Total Price (incl. taxes)
-                                        </div>
-                                        <div className="text-xs text-gray-600">
-                                          ₹{room.pricePerNight.toLocaleString()}{" "}
-                                          per night × {hotel.totalNights} nights
-                                        </div>
-                                        <div className="text-xs text-gray-500 mt-1">
-                                          Includes taxes, fees & charges
+
+                                        <div className="border-t-2 border-gray-200 pt-4 mt-4">
+                                          <div className="flex justify-between items-center mb-2">
+                                            <span className="text-sm text-gray-600">Per night</span>
+                                            <span className="text-base font-semibold text-gray-900">
+                                              ₹{room.pricePerNight.toLocaleString()}
+                                            </span>
+                                          </div>
+                                          <div className="flex justify-between items-center">
+                                            <span className="text-sm text-gray-600">Duration</span>
+                                            <span className="text-base font-semibold text-gray-900">
+                                              {hotel.totalNights} {hotel.totalNights === 1 ? 'night' : 'nights'}
+                                            </span>
+                                          </div>
                                         </div>
                                       </div>
 
-                                      <div className="mb-3">
+                                      <div className="mb-4">
                                         <div
-                                          className={`flex items-center text-sm font-medium ${
+                                          className={`flex items-center justify-center text-sm font-semibold py-3 px-4 rounded-lg ${
                                             room.statusColor === "green"
-                                              ? "text-green-700"
-                                              : "text-blue-700"
+                                              ? "bg-green-100 text-green-800 border-2 border-green-300"
+                                              : "bg-blue-100 text-blue-800 border-2 border-blue-300"
                                           }`}
                                         >
                                           <span
-                                            className={`w-2 h-2 rounded-full mr-2 ${
+                                            className={`w-2.5 h-2.5 rounded-full mr-2 ${
                                               room.statusColor === "green"
                                                 ? "bg-green-600"
                                                 : "bg-blue-600"
                                             }`}
                                           ></span>
                                           {room.statusColor === "green"
-                                            ? "Cheapest Option Available"
-                                            : "Premium Upgrade Available"}
+                                            ? "Best Value"
+                                            : "Premium Option"}
                                         </div>
                                       </div>
 
