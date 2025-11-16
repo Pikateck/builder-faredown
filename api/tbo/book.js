@@ -103,7 +103,7 @@ async function blockRoom(params = {}) {
   console.log("\n🔍 RAW RESPONSE KEYS:", Object.keys(response.data || {}));
   console.log("🔍 RAW RESPONSE:", JSON.stringify(response.data, null, 2).substring(0, 500));
 
-  // ✅ Handle multiple possible wrapper names (TBO docs show BlockRoomResponse)
+  // ✅ Handle multiple possible wrapper names (TBO docs show BlockRoomResult)
   const result = response.data?.BlockRoomResponse ||
                  response.data?.BlockRoomResult ||
                  response.data;
@@ -117,7 +117,9 @@ async function blockRoom(params = {}) {
     "  IsCancellationPolicyChanged:",
     result?.IsCancellationPolicyChanged,
   );
-  console.log("  HotelRoomDetails count:", result?.HotelRoomDetails?.length || 0);
+  // ✅ Check both singular and plural as TBO API may return either
+  const roomDetails = result?.HotelRoomDetails || result?.HotelRoomsDetails || [];
+  console.log("  HotelRoomDetails count:", roomDetails.length);
   console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
@@ -126,7 +128,7 @@ async function blockRoom(params = {}) {
     availabilityType: result?.AvailabilityType,
     isPriceChanged: result?.IsPriceChanged,
     isCancellationPolicyChanged: result?.IsCancellationPolicyChanged,
-    hotelRoomDetails: result?.HotelRoomDetails || [], // ✅ Singular per TBO docs
+    hotelRoomDetails: roomDetails, // ✅ Handle both singular and plural
     error: result?.Error,
   };
 }
