@@ -3083,8 +3083,70 @@ function HotelDetailsContent() {
                                       </Badge>
                                     )}
                                   </div>
-                                  <div className="text-sm text-gray-600">
+                                  <div className="text-sm text-gray-600 mb-2">
                                     {room.type} • {room.details}
+                                  </div>
+                                  {/* Order: 1) Refundability with tooltip, 2) Meal Preference */}
+                                  <div className="flex flex-wrap gap-1.5">
+                                    {/* Refundability with Cancellation Policy Tooltip */}
+                                    {room.isRefundable && !room.nonRefundable ? (
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <div>
+                                            <InfoChip
+                                              icon={ShieldCheck}
+                                              tone="success"
+                                              ariaLabel="Refundable - click for policy"
+                                            >
+                                              Free Cancellation
+                                            </InfoChip>
+                                          </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg">
+                                          <p className="text-sm font-semibold text-gray-900 mb-1">Cancellation Policy</p>
+                                          <p className="text-xs text-gray-600">
+                                            {room.cancellationPolicy || "Free cancellation available. No charges if cancelled before check-in date."}
+                                          </p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    ) : room.nonRefundable ? (
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <div>
+                                            <InfoChip
+                                              icon={CircleX}
+                                              tone="danger"
+                                              ariaLabel="Non-refundable - click for policy"
+                                            >
+                                              Non-Refundable
+                                            </InfoChip>
+                                          </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg">
+                                          <p className="text-sm font-semibold text-gray-900 mb-1">Cancellation Policy</p>
+                                          <p className="text-xs text-gray-600">
+                                            {room.cancellationPolicy || "Non-refundable rate. No refunds for cancellations or changes."}
+                                          </p>
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    ) : null}
+                                    {/* Meal Preference */}
+                                    {room.breakfastIncluded === true ? (
+                                      <InfoChip
+                                        icon={Utensils}
+                                        tone="success"
+                                        ariaLabel="Breakfast included"
+                                      >
+                                        With Breakfast
+                                      </InfoChip>
+                                    ) : (
+                                      <InfoChip
+                                        icon={Utensils}
+                                        ariaLabel="Breakfast not included"
+                                      >
+                                        Without Breakfast
+                                      </InfoChip>
+                                    )}
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-4">
