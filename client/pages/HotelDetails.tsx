@@ -3189,55 +3189,46 @@ function HotelDetailsContent() {
                                         {room.details}
                                       </div>
 
-                                      {/* Order: 1) Room Details, 2) Refundability, 3) Cancellation Policy (tooltip), 4) Meal Preference */}
+                                      {/* Order: 1) Room Details, 2) Refundability with visible info icon, 3) Meal Preference */}
                                       <div className="space-y-2 mb-3">
-                                        {/* 1. Refundability Status with Cancellation Policy Tooltip */}
-                                        <div className="flex flex-wrap gap-1.5">
+                                        <div className="flex flex-wrap gap-1.5 items-center">
+                                          {/* Refundability Status */}
                                           {room.isRefundable && !room.nonRefundable ? (
-                                            <Tooltip>
-                                              <TooltipTrigger asChild>
-                                                <div>
-                                                  <InfoChip
-                                                    icon={ShieldCheck}
-                                                    tone="success"
-                                                    ariaLabel="Refundable booking - click for policy"
-                                                  >
-                                                    Free Cancellation
-                                                  </InfoChip>
-                                                </div>
-                                              </TooltipTrigger>
-                                              <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg">
-                                                <p className="text-sm font-semibold text-gray-900 mb-1">Cancellation Policy</p>
-                                                <p className="text-xs text-gray-600">
-                                                  {room.cancellationPolicy || "Free cancellation available. No charges if cancelled before check-in date."}
-                                                </p>
-                                              </TooltipContent>
-                                            </Tooltip>
+                                            <InfoChip
+                                              icon={ShieldCheck}
+                                              tone="success"
+                                              ariaLabel="Refundable booking"
+                                            >
+                                              Free Cancellation
+                                            </InfoChip>
                                           ) : room.nonRefundable ? (
-                                            <Tooltip>
-                                              <TooltipTrigger asChild>
-                                                <div>
-                                                  <InfoChip
-                                                    icon={CircleX}
-                                                    tone="danger"
-                                                    ariaLabel="Non-refundable booking - click for policy"
-                                                  >
-                                                    Non-Refundable
-                                                  </InfoChip>
-                                                </div>
-                                              </TooltipTrigger>
-                                              <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg">
-                                                <p className="text-sm font-semibold text-gray-900 mb-1">Cancellation Policy</p>
-                                                <p className="text-xs text-gray-600">
-                                                  {room.cancellationPolicy || "Non-refundable rate. No refunds for cancellations or changes."}
-                                                </p>
-                                              </TooltipContent>
-                                            </Tooltip>
+                                            <InfoChip
+                                              icon={CircleX}
+                                              tone="danger"
+                                              ariaLabel="Non-refundable booking"
+                                            >
+                                              Non-Refundable
+                                            </InfoChip>
                                           ) : null}
-                                        </div>
 
-                                        {/* 2. Meal Preference */}
-                                        <div className="flex flex-wrap gap-1.5">
+                                          {/* Cancellation Policy Info Icon - Always Visible */}
+                                          <Tooltip>
+                                            <TooltipTrigger asChild>
+                                              <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors">
+                                                <Info className="w-3.5 h-3.5" />
+                                              </button>
+                                            </TooltipTrigger>
+                                            <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg p-3">
+                                              <p className="text-sm font-semibold text-gray-900 mb-1">Cancellation Policy</p>
+                                              <p className="text-xs text-gray-600">
+                                                {room.cancellationPolicy || (room.isRefundable && !room.nonRefundable
+                                                  ? "Free cancellation available. No charges if cancelled before check-in date."
+                                                  : "Non-refundable rate. No refunds for cancellations or changes.")}
+                                              </p>
+                                            </TooltipContent>
+                                          </Tooltip>
+
+                                          {/* Meal Preference */}
                                           {room.breakfastIncluded === true ? (
                                             <InfoChip
                                               icon={Utensils}
