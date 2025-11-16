@@ -244,6 +244,7 @@ class DatabaseConnection {
       await this.ensureUserVerificationColumns();
       await this.ensureSystemMonitorTable();
       await this.ensureRecentSearchesTable();
+      await this.ensureThirdPartyApiLogsTable();
     } catch (error) {
       console.error("❌ Failed to initialize schema:", error);
       throw error;
@@ -407,6 +408,72 @@ class DatabaseConnection {
       );
     } catch (error) {
       console.error("❌ Failed to ensure system monitor table:", error.message);
+    }
+  }
+
+  async ensureThirdPartyApiLogsTable() {
+    try {
+      // Create table
+      await this.query(`
+        CREATE TABLE IF NOT EXISTS public.third_party_api_logs (
+          id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
+          supplier_name VARCHAR(100) NOT NULL,
+          endpoint VARCHAR(500) NOT NULL,
+          method VARCHAR(10) DEFAULT 'POST',
+          request_payload JSONB,
+          request_headers JSONB,
+          response_payload JSONB,
+          response_headers JSONB,
+          status_code INTEGER,
+          error_message TEXT,
+          error_stack TEXT,
+          request_timestamp TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+          response_timestamp TIMESTAMPTZ,
+          duration_ms INTEGER,
+          trace_id VARCHAR(255),
+          correlation_id VARCHAR(255),
+          environment VARCHAR(50) DEFAULT 'production',
+          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+        )
+      `);
+
+      // Create indexes
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_third_party_logs_supplier
+         ON public.third_party_api_logs (supplier_name, created_at DESC)`,
+      );
+
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_third_party_logs_timestamp
+         ON public.third_party_api_logs (request_timestamp DESC)`,
+      );
+
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_third_party_logs_status
+         ON public.third_party_api_logs (status_code, created_at DESC)`,
+      );
+
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_third_party_logs_trace
+         ON public.third_party_api_logs (trace_id)
+         WHERE trace_id IS NOT NULL`,
+      );
+
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_third_party_logs_correlation
+         ON public.third_party_api_logs (correlation_id)
+         WHERE correlation_id IS NOT NULL`,
+      );
+
+      await this.query(
+        `CREATE INDEX IF NOT EXISTS idx_third_party_logs_errors
+         ON public.third_party_api_logs (supplier_name, created_at DESC)
+         WHERE error_message IS NOT NULL`,
+      );
+
+      console.log("✅ third_party_api_logs table ensured successfully");
+    } catch (error) {
+      console.warn("⚠️  Failed to ensure third_party_api_logs table:", error.message);
     }
   }
 
