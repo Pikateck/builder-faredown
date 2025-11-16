@@ -3437,14 +3437,23 @@ function HotelDetailsContent() {
                                                     : feature?.name || "";
                                                 const lower =
                                                   featureText.toLowerCase();
-                                                // Filter out non-refundable since it's already shown above
+                                                // Filter out duplicates: non-refundable, bed info, size info, view info
                                                 return (
                                                   !lower.includes(
                                                     "non-refundable",
                                                   ) &&
                                                   !lower.includes(
                                                     "refundable rate",
-                                                  )
+                                                  ) &&
+                                                  !lower.includes("bed") &&
+                                                  !lower.includes("sqm") &&
+                                                  !lower.includes("sq m") &&
+                                                  !lower.includes("view") &&
+                                                  !lower.includes("double") &&
+                                                  !lower.includes("single") &&
+                                                  !lower.includes("twin") &&
+                                                  !lower.includes("king") &&
+                                                  !lower.includes("queen")
                                                 );
                                               })
                                               .map(
