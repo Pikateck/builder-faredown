@@ -215,7 +215,7 @@ function HotelDetailsContent() {
     hasPreselectData: !!preselectRate,
   });
 
-  // ����� CRITICAL: Initialize image index from Results page selection
+  // ��� CRITICAL: Initialize image index from Results page selection
   useEffect(() => {
     if (preselectRate?.mainImageIndex !== undefined) {
       setDisplayImageIndex(preselectRate.mainImageIndex);
@@ -3564,27 +3564,6 @@ function HotelDetailsContent() {
                                         </div>
                                         <div className="text-sm text-gray-500 mt-2">
                                           Includes taxes, fees & charges
-                                        </div>
-                                      </div>
-
-                                      <div className="mb-3">
-                                        <div
-                                          className={`flex items-center text-sm font-medium ${
-                                            room.statusColor === "green"
-                                              ? "text-green-700"
-                                              : "text-blue-700"
-                                          }`}
-                                        >
-                                          <span
-                                            className={`w-2 h-2 rounded-full mr-2 ${
-                                              room.statusColor === "green"
-                                                ? "bg-green-600"
-                                                : "bg-blue-600"
-                                            }`}
-                                          ></span>
-                                          {room.statusColor === "green"
-                                            ? "Cheapest Option Available"
-                                            : "Premium Upgrade Available"}
                                         </div>
                                       </div>
 
