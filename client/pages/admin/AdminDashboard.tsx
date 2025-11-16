@@ -29,6 +29,7 @@ import ExtranetInventory from "./ExtranetInventory";
 import SystemStatus from "./SystemStatus";
 import SystemMonitor from "./SystemMonitor";
 import AdminAuthHelper from "@/components/AdminAuthHelper";
+import APILogsViewer from "./APILogsViewer";
 import BookingManagement from "./BookingManagement";
 import AIBargainingDashboard from "./AIBargainingDashboard";
 import APITestingDashboard from "./APITestingDashboard";
@@ -223,6 +224,12 @@ const adminModules = [
     name: "System Connectivity Monitor",
     icon: Shield,
     color: "bg-slate-600",
+  },
+  {
+    id: "api-logs",
+    name: "API Logs",
+    icon: Database,
+    color: "bg-indigo-600",
   },
   {
     id: "bookings",
@@ -1076,6 +1083,8 @@ export default function AdminDashboard() {
               <SystemStatus />
             ) : activeModule === "system-monitor" ? (
               <SystemMonitor />
+            ) : activeModule === "api-logs" ? (
+              <APILogsViewer />
             ) : activeModule === "auth-helper" ? (
               <div>
                 <h2 className="text-2xl font-bold mb-4">
