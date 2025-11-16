@@ -23,15 +23,15 @@ export function InfoChip({
   return (
     <span
       className={cn(
-        "inline-flex items-center rounded-full px-2.5 py-1 text-xs font-medium",
-        "border max-h-7",
+        "inline-flex items-center rounded-full px-2 py-0.5 text-xs font-medium",
+        "border max-h-6",
         toneClasses,
         className,
       )}
       aria-label={ariaLabel}
     >
       <Icon
-        className="mr-1.5 h-[18px] w-[18px] stroke-[1.75] md:h-4 md:w-4"
+        className="mr-1 h-3.5 w-3.5 stroke-[1.75] md:h-3.5 md:w-3.5"
         aria-hidden="true"
       />
       {children}
