@@ -129,24 +129,24 @@ export function ComprehensiveFilters({
     },
     {
       id: "meal-plans",
-      title: "Meal Plan",
+      title: "Meal Preference",
       isCollapsible: true,
       items: [
-        { id: "RO", label: "Room Only", count: 3800 },
-        { id: "BB", label: "Breakfast Included", count: 627 },
-        { id: "HB", label: "Half Board", count: 156 },
-        { id: "FB", label: "Full Board", count: 89 },
+        { id: "RO", label: "Without Breakfast", count: 3800 },
+        { id: "BB", label: "With Breakfast", count: 627 },
+        { id: "HB", label: "Half Board (Breakfast + Dinner)", count: 156 },
+        { id: "FB", label: "Full Board (All Meals)", count: 89 },
         { id: "DN", label: "Dinner Only", count: 42 },
       ],
     },
     {
       id: "cancellation",
-      title: "Refundability",
+      title: "Cancellation Policy",
       isCollapsible: true,
       items: [
         { id: "FC", label: "Free Cancellation", count: 4009 },
         { id: "NR", label: "Non-Refundable", count: 1200 },
-        { id: "PR", label: "Partially-Refundable", count: 800 },
+        { id: "PR", label: "Partially Refundable", count: 800 },
       ],
     },
     {
