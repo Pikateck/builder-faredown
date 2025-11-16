@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import {
   ArrowLeft,
   User,
@@ -19,6 +20,9 @@ import {
 } from "lucide-react";
 
 const MobileTrips = () => {
+  // ✅ Scroll to top on route change
+  useScrollToTop("auto");
+
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState("trips");
 

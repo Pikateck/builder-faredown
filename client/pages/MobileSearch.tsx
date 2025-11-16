@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import {
   ArrowLeft,
   Filter,
@@ -13,6 +14,9 @@ import {
 } from "lucide-react";
 
 const MobileSearch = () => {
+  // ✅ Scroll to top on route change
+  useScrollToTop("auto");
+
   const location = useLocation();
   const navigate = useNavigate();
   const searchData = location.state?.searchData;

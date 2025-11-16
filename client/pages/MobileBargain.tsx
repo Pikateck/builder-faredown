@@ -1,8 +1,12 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useScrollToTop } from "@/hooks/useScrollToTop";
 import { ArrowLeft } from "lucide-react";
 
 const MobileBargain = () => {
+  // ✅ Scroll to top on route change
+  useScrollToTop("auto");
+
   const navigate = useNavigate();
 
   return (
