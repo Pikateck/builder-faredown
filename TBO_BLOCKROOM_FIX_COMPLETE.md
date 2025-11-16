@@ -13,6 +13,7 @@ The TBO BlockRoom API was returning an error indicating that HotelRoomsDetails w
 The room details object from `GetHotelRoom` response did not include all mandatory fields required by the `BlockRoom` API:
 
 **Missing Fields**:
+
 - `RoomIndex` - Required to identify which room in the multi-room booking
 - `RatePlanCode` - Required rate plan identifier
 - `SmokingPreference` - Smoking room preference
@@ -38,12 +39,17 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
     BedTypes: room.BedTypes || [],
     SmokingPreference: room.SmokingPreference ?? 0,
     Supplements: room.Supplements || [],
-    Price: room.Price || [{ /* complete price structure */ }],
+    Price: room.Price || [
+      {
+        /* complete price structure */
+      },
+    ],
   };
 }
 ```
 
 **Features**:
+
 - ✅ Handles multiple field name variations (e.g., `RatePlanCode`, `PlanCode`, `OfferCode`)
 - ✅ Provides sensible defaults for optional fields
 - ✅ Ensures complete Price structure with all required sub-fields
@@ -66,7 +72,7 @@ mappedRoomDetails.forEach((room, index) => {
 
 const request = {
   // ... other fields ...
-  HotelRoomDetails: mappedRoomDetails,  // ← Mapped rooms with all required fields
+  HotelRoomDetails: mappedRoomDetails, // ← Mapped rooms with all required fields
 };
 ```
 
@@ -97,21 +103,21 @@ Applied the same mapping to the Book API call for consistency.
 
 ### GetHotelRoom Response → BlockRoom Request
 
-| GetHotelRoom Field | BlockRoom Field | Type | Default |
-|---|---|---|---|
-| (index) | RoomIndex | Integer | array index |
-| RatePlanCode / PlanCode | RatePlanCode | String | "" |
-| RatePlanName / PlanName | RatePlanName | String | "" |
-| RoomTypeCode | RoomTypeCode | String | "" |
-| RoomTypeName / RoomName | RoomTypeName | String | "" |
-| BedTypes | BedTypes | Array | [] |
-| SmokingPreference | SmokingPreference | Integer | 0 |
-| Supplements | Supplements | Array | [] |
-| Price | Price | Array | Complete structure |
-| CurrencyCode | Price[0].CurrencyCode | String | "INR" |
-| RoomPrice | Price[0].RoomPrice | Decimal | 0 |
-| Tax | Price[0].Tax | Decimal | 0 |
-| ... | ... | ... | ... |
+| GetHotelRoom Field      | BlockRoom Field       | Type    | Default            |
+| ----------------------- | --------------------- | ------- | ------------------ |
+| (index)                 | RoomIndex             | Integer | array index        |
+| RatePlanCode / PlanCode | RatePlanCode          | String  | ""                 |
+| RatePlanName / PlanName | RatePlanName          | String  | ""                 |
+| RoomTypeCode            | RoomTypeCode          | String  | ""                 |
+| RoomTypeName / RoomName | RoomTypeName          | String  | ""                 |
+| BedTypes                | BedTypes              | Array   | []                 |
+| SmokingPreference       | SmokingPreference     | Integer | 0                  |
+| Supplements             | Supplements           | Array   | []                 |
+| Price                   | Price                 | Array   | Complete structure |
+| CurrencyCode            | Price[0].CurrencyCode | String  | "INR"              |
+| RoomPrice               | Price[0].RoomPrice    | Decimal | 0                  |
+| Tax                     | Price[0].Tax          | Decimal | 0                  |
+| ...                     | ...                   | ...     | ...                |
 
 ---
 
@@ -173,7 +179,7 @@ const blockResult = await blockRoom({
       RoomTypeName: "Double Room",
       Price: { CurrencyCode: "INR", OfferedPrice: 5000 },
       // ... other fields ...
-    }
+    },
   ],
 });
 
@@ -189,7 +195,9 @@ console.log("Response Status:", blockResult.responseStatus);
   "availabilityType": "Available",
   "isPriceChanged": false,
   "isCancellationPolicyChanged": false,
-  "hotelRoomDetails": [ /* room details returned by TBO */ ],
+  "hotelRoomDetails": [
+    /* room details returned by TBO */
+  ],
   "error": null
 }
 ```
@@ -199,12 +207,14 @@ console.log("Response Status:", blockResult.responseStatus);
 ## Impact Analysis
 
 ### Before Fix
+
 - ❌ BlockRoom API returns ResponseStatus 3 (error)
 - ❌ Error: "HotelRoomsDetails is not found"
 - ❌ Booking flow cannot proceed
 - ❌ Payment processing blocked
 
 ### After Fix
+
 - ✅ BlockRoom API returns ResponseStatus 1 (success)
 - ✅ Room pricing validated before booking
 - ✅ Booking flow can proceed to Book API
@@ -263,6 +273,7 @@ The mapper is non-breaking - if room details already have all required fields, t
 ## Support
 
 For issues or questions:
+
 1. Check room details in logs
 2. Verify all mandatory fields are present
 3. Check BlockRoom API response status

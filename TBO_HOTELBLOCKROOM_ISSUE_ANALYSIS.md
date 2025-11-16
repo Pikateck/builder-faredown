@@ -33,6 +33,7 @@ The error "HotelRoomsDetails is not found" (plural) is misleading. According to 
 According to TekTravel API documentation (Section 11), each room object MUST have:
 
 **Mandatory Fields:**
+
 1. `RoomIndex` (Integer) - Index of the room
 2. `RatePlanCode` (String) - Rate plan code from search/room details response
 3. `RoomTypeCode` (String) - Room type code
@@ -60,13 +61,14 @@ According to TekTravel API documentation (Section 11), each room object MUST hav
 ## Current Code Flow
 
 ### Step 1: GetHotelRoom API Call
+
 **File:** `api/tbo/room.js` - `getHotelRoom()` function
 
 ```javascript
 return {
   responseStatus: result?.ResponseStatus,
   traceId: result?.TraceId,
-  rooms: result?.HotelRoomsDetails || [],  // ← Returns from HotelRoomsDetails
+  rooms: result?.HotelRoomsDetails || [], // ← Returns from HotelRoomsDetails
   error: result?.Error,
 };
 ```
@@ -74,6 +76,7 @@ return {
 The response from TBO includes `HotelRoomsDetails` (with 's') array. Each object in this array contains the room details.
 
 ### Step 2: BlockRoom API Call
+
 **File:** `api/tbo/book.js` - `blockRoom()` function
 
 ```javascript
@@ -87,13 +90,14 @@ const request = {
   GuestNationality: guestNationality,
   NoOfRooms: noOfRooms,
   IsVoucherBooking: isVoucherBooking,
-  HotelRoomDetails: hotelRoomDetails,  // ← Should be singular (no 's')
+  HotelRoomDetails: hotelRoomDetails, // ← Should be singular (no 's')
 };
 ```
 
 The code correctly sends `HotelRoomDetails` (singular).
 
 ### Issue in Test Flow
+
 **File:** `test-tbo-full-booking-flow.js`
 
 ```javascript
@@ -105,7 +109,7 @@ const blockResult = await blockRoom({
   guestNationality: TEST_PARAMS.nationality,
   noOfRooms: 1,
   isVoucherBooking: true,
-  hotelRoomDetails: [selectedRoom],  // ← Passing room directly
+  hotelRoomDetails: [selectedRoom], // ← Passing room directly
 });
 ```
 
@@ -173,17 +177,17 @@ const { mapRoomForBlockRequest } = require("./roomMapper");
 
 async function blockRoom(params = {}) {
   // ... existing code ...
-  
+
   // Map rooms to ensure all required fields are present
   const mappedRoomDetails = hotelRoomDetails.map((room, index) =>
-    mapRoomForBlockRequest(room, index)
+    mapRoomForBlockRequest(room, index),
   );
-  
+
   const request = {
     // ... existing fields ...
-    HotelRoomDetails: mappedRoomDetails,  // ← Use mapped rooms
+    HotelRoomDetails: mappedRoomDetails, // ← Use mapped rooms
   };
-  
+
   // ... rest of function ...
 }
 ```
@@ -206,7 +210,7 @@ const blockResult = await blockRoom({
   guestNationality: TEST_PARAMS.nationality,
   noOfRooms: 1,
   isVoucherBooking: true,
-  hotelRoomDetails: [mappedRoom],  // ← Use mapped room
+  hotelRoomDetails: [mappedRoom], // ← Use mapped room
 });
 ```
 

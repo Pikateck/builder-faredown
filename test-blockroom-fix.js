@@ -11,9 +11,15 @@ const {
   validateRoomForBlockRequest,
 } = require("./api/tbo/roomMapper");
 
-console.log("╔═══════════════════════════════════════════════════════════════╗");
-console.log("║         TBO BLOCKROOM FIX - ROOM MAPPING TEST                 ║");
-console.log("╚═══════════════════════════════════════��═══════════════════════╝\n");
+console.log(
+  "╔═══════════════════════════════════════════════════════════════╗",
+);
+console.log(
+  "║         TBO BLOCKROOM FIX - ROOM MAPPING TEST                 ║",
+);
+console.log(
+  "╚═══════════════════════════════════════��═══════════════════════╝\n",
+);
 
 // Test 1: Map a single room with minimal fields
 console.log("TEST 1: Map room with minimal fields");
@@ -31,14 +37,16 @@ const minimalRoom = {
 
 try {
   const mappedMinimal = mapRoomForBlockRequest(minimalRoom, 0);
-  
+
   console.log("✅ Minimal room mapped successfully");
   console.log("   Fields added:");
   console.log(`   - RoomIndex: ${mappedMinimal.RoomIndex}`);
   console.log(`   - RatePlanCode: "${mappedMinimal.RatePlanCode}"`);
   console.log(`   - SmokingPreference: ${mappedMinimal.SmokingPreference}`);
   console.log(`   - Supplements: ${JSON.stringify(mappedMinimal.Supplements)}`);
-  console.log(`   - Price structure: ${JSON.stringify(mappedMinimal.Price).substring(0, 50)}...`);
+  console.log(
+    `   - Price structure: ${JSON.stringify(mappedMinimal.Price).substring(0, 50)}...`,
+  );
 } catch (error) {
   console.log("❌ Failed:", error.message);
 }
@@ -77,7 +85,7 @@ const fullRoom = {
 
 try {
   const mappedFull = mapRoomForBlockRequest(fullRoom, 1);
-  
+
   console.log("✅ Full room mapped successfully");
   console.log("   Room Index:", mappedFull.RoomIndex);
   console.log("   Rate Plan Code:", mappedFull.RatePlanCode);
@@ -111,7 +119,7 @@ const multipleRooms = [
 
 try {
   const mappedRooms = mapRoomsForBlockRequest(multipleRooms);
-  
+
   console.log(`✅ ${mappedRooms.length} rooms mapped successfully`);
   mappedRooms.forEach((room, index) => {
     console.log(`   Room ${index}:`);
@@ -132,7 +140,7 @@ console.log("─".repeat(60));
 try {
   const mappedRoom = mapRoomForBlockRequest(minimalRoom, 0);
   const validation = validateRoomForBlockRequest(mappedRoom);
-  
+
   if (validation.success) {
     console.log("✅ Room validation passed");
   } else {
@@ -154,14 +162,14 @@ console.log("─".repeat(60));
 const roomWithAltNames = {
   RoomTypeCode: "RT001",
   RoomTypeName: "Standard Room",
-  PlanCode: "ALT_PLAN",  // Alternative field name
+  PlanCode: "ALT_PLAN", // Alternative field name
   PlanName: "Alternative Plan",
   Price: { CurrencyCode: "INR", RoomPrice: 5000, Tax: 900 },
 };
 
 try {
   const mapped = mapRoomForBlockRequest(roomWithAltNames, 0);
-  
+
   console.log("✅ Alternative field names handled:");
   console.log(`   - PlanCode → RatePlanCode: "${mapped.RatePlanCode}"`);
   console.log(`   - PlanName → RatePlanName: "${mapped.RatePlanName}"`);
@@ -194,16 +202,24 @@ try {
     GuestNationality: "IN",
     NoOfRooms: 1,
     IsVoucherBooking: true,
-    HotelRoomDetails: [mappedRoom],  // ← Mapped room
+    HotelRoomDetails: [mappedRoom], // ← Mapped room
   };
 
   console.log("✅ BlockRoom request structure created");
   console.log("\nRequest summary:");
-  console.log(`  - Hotel: ${blockRoomRequest.HotelName} (${blockRoomRequest.HotelCode})`);
+  console.log(
+    `  - Hotel: ${blockRoomRequest.HotelName} (${blockRoomRequest.HotelCode})`,
+  );
   console.log(`  - Rooms: ${blockRoomRequest.NoOfRooms}`);
-  console.log(`  - Room Type: ${blockRoomRequest.HotelRoomDetails[0].RoomTypeName}`);
-  console.log(`  - Room Price: ${blockRoomRequest.HotelRoomDetails[0].Price[0].CurrencyCode} ${blockRoomRequest.HotelRoomDetails[0].Price[0].RoomPrice}`);
-  console.log(`  - Room Details fields: ${Object.keys(blockRoomRequest.HotelRoomDetails[0]).length}`);
+  console.log(
+    `  - Room Type: ${blockRoomRequest.HotelRoomDetails[0].RoomTypeName}`,
+  );
+  console.log(
+    `  - Room Price: ${blockRoomRequest.HotelRoomDetails[0].Price[0].CurrencyCode} ${blockRoomRequest.HotelRoomDetails[0].Price[0].RoomPrice}`,
+  );
+  console.log(
+    `  - Room Details fields: ${Object.keys(blockRoomRequest.HotelRoomDetails[0]).length}`,
+  );
 } catch (error) {
   console.log("❌ Failed:", error.message);
 }
@@ -211,15 +227,23 @@ try {
 console.log("\n");
 
 // Summary
-console.log("╔═══════════════════════════════════════════════════════════════╗");
-console.log("║                    TEST SUMMARY                               ║");
-console.log("╚════════════════��══════════════════════════════════════════════╝");
+console.log(
+  "╔═══════════════════════════════════════════════════════════════╗",
+);
+console.log(
+  "║                    TEST SUMMARY                               ║",
+);
+console.log(
+  "╚════════════════��══════════════════════════════════════════════╝",
+);
 console.log("\n✅ Room Mapping Tests Completed Successfully\n");
 
 console.log("What the fix does:");
 console.log("  1. ✅ Maps room fields from GetHotelRoom to BlockRoom format");
 console.log("  2. ✅ Adds missing RoomIndex field");
-console.log("  3. ✅ Handles alternative field names (PlanCode, OfferCode, etc.)");
+console.log(
+  "  3. ✅ Handles alternative field names (PlanCode, OfferCode, etc.)",
+);
 console.log("  4. ✅ Provides defaults for optional fields");
 console.log("  5. ✅ Validates complete Price structure");
 console.log("  6. ✅ Ensures all mandatory fields are present\n");
