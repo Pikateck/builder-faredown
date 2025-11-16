@@ -53,24 +53,21 @@ async function blockRoom(params = {}) {
     throw new Error("Missing required parameters");
   }
 
-  // ✅ Map and validate room details
-  console.log("\nStep 2a: Mapping room details...");
-  const mappedRoomDetails = mapRoomsForBlockRequest(hotelRoomDetails);
+  // ✅ CRITICAL: Per TBO docs, pass room details EXACTLY as received from GetHotelRoom
+  // Do NOT map or transform - TBO expects the full structure including RoomTypeID, RoomCombination, etc.
+  console.log("\nStep 2: Preparing room details for BlockRoom...");
+  console.log(`  Rooms count: ${hotelRoomDetails.length}`);
+  console.log(`  Using rooms AS-IS from GetHotelRoom response`);
 
-  // Validate each room has required fields
-  console.log("Step 2b: Validating room details...");
-  mappedRoomDetails.forEach((room, index) => {
-    const validation = validateRoomForBlockRequest(room);
-    if (!validation.success) {
-      console.warn(`⚠️ Room ${index} validation warnings:`, validation.errors);
-      // Log but don't throw - TBO might be more lenient
-    }
+  hotelRoomDetails.forEach((room, index) => {
+    console.log(`  Room ${index}: ${room.RoomTypeName}`);
+    console.log(`    - RoomTypeID: ${room.RoomTypeID}`);
+    console.log(`    - RoomCombination: ${room.RoomCombination}`);
+    console.log(`    - RoomIndex: ${room.RoomIndex}`);
   });
 
-  console.log(`✅ ${mappedRoomDetails.length} room(s) mapped and validated`);
-
-  // ✅ IMPORTANT: TBO expects HotelRoomDetails (singular) NOT HotelRoomsDetails
-  // According to official TBO API docs: https://apidoc.tektravels.com/hotel/HotelBlockRoom.aspx
+  // ✅ IMPORTANT: TBO expects HotelRoomsDetails (WITH 's') in BlockRoom, NOT HotelRoomDetails
+  // According to TBO documentation and actual API behavior
   const request = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
@@ -81,7 +78,7 @@ async function blockRoom(params = {}) {
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
     IsVoucherBooking: isVoucherBooking,
-    HotelRoomDetails: mappedRoomDetails, // ✅ No 's' - mapped rooms with all required fields
+    HotelRoomsDetails: hotelRoomDetails, // ✅ WITH 's' - pass full room details as-is
   };
 
   const url =
