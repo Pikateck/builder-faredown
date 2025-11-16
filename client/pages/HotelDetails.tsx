@@ -3312,17 +3312,66 @@ function HotelDetailsContent() {
                                           {/* Cancellation Policy Info Icon - Always Visible */}
                                           <Tooltip>
                                             <TooltipTrigger asChild>
-                                              <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors">
+                                              <button className="inline-flex items-center justify-center w-5 h-5 rounded-full border-2 border-blue-600 text-blue-600 hover:bg-blue-50 transition-colors bg-white">
                                                 <Info className="w-3.5 h-3.5" />
                                               </button>
                                             </TooltipTrigger>
-                                            <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg p-3">
-                                              <p className="text-sm font-semibold text-gray-900 mb-1">Cancellation Policy</p>
-                                              <p className="text-xs text-gray-600">
-                                                {room.cancellationPolicy || (room.isRefundable && !room.nonRefundable
-                                                  ? "Free cancellation available. No charges if cancelled before check-in date."
-                                                  : "Non-refundable rate. No refunds for cancellations or changes.")}
-                                              </p>
+                                            <TooltipContent className="max-w-md bg-white border border-gray-200 shadow-lg p-0 overflow-hidden">
+                                              <div className="bg-white">
+                                                <div className="px-4 py-2 border-b border-gray-200">
+                                                  <h3 className="text-sm font-semibold text-gray-900">Cancellation Policy</h3>
+                                                </div>
+                                                <div className="overflow-x-auto">
+                                                  <table className="w-full text-xs">
+                                                    <thead className="bg-gray-50">
+                                                      <tr>
+                                                        <th className="px-3 py-2 text-left font-medium text-gray-700 border-b border-gray-200">Cancellation on or After</th>
+                                                        <th className="px-3 py-2 text-left font-medium text-gray-700 border-b border-gray-200">Cancellation on or Before</th>
+                                                        <th className="px-3 py-2 text-left font-medium text-gray-700 border-b border-gray-200">Cancellation Charge</th>
+                                                      </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                      {room.isRefundable && !room.nonRefundable ? (
+                                                        <>
+                                                          <tr className="border-b border-gray-100">
+                                                            <td className="px-3 py-2 text-gray-900">{formatDate(hotel.checkIn)}</td>
+                                                            <td className="px-3 py-2 text-gray-900">{new Date(new Date(hotel.checkIn).getTime() - 2 * 24 * 60 * 60 * 1000).toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' })}</td>
+                                                            <td className="px-3 py-2 text-gray-900">100%</td>
+                                                          </tr>
+                                                          <tr>
+                                                            <td className="px-3 py-2 text-gray-600" colSpan={3}>
+                                                              No show will attract full cancellation charge unless specified
+                                                            </td>
+                                                          </tr>
+                                                          <tr>
+                                                            <td className="px-3 py-2 text-gray-600" colSpan={3}>
+                                                              Early check out will attract full cancellation charge unless otherwise specified
+                                                            </td>
+                                                          </tr>
+                                                        </>
+                                                      ) : (
+                                                        <>
+                                                          <tr className="border-b border-gray-100">
+                                                            <td className="px-3 py-2 text-gray-900">{formatDate(hotel.checkIn)}</td>
+                                                            <td className="px-3 py-2 text-gray-900">{formatDate(hotel.checkOut)}</td>
+                                                            <td className="px-3 py-2 text-gray-900">100%</td>
+                                                          </tr>
+                                                          <tr>
+                                                            <td className="px-3 py-2 text-gray-600" colSpan={3}>
+                                                              No show will attract full cancellation charge unless specified
+                                                            </td>
+                                                          </tr>
+                                                          <tr>
+                                                            <td className="px-3 py-2 text-gray-600" colSpan={3}>
+                                                              Early check out will attract full cancellation charge unless otherwise specified
+                                                            </td>
+                                                          </tr>
+                                                        </>
+                                                      )}
+                                                    </tbody>
+                                                  </table>
+                                                </div>
+                                              </div>
                                             </TooltipContent>
                                           </Tooltip>
 
