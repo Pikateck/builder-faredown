@@ -17,6 +17,50 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
     throw new Error("Room object is required");
   }
 
+  // ✅ CRITICAL: Convert SmokingPreference string to integer
+  let smokingPref = room.SmokingPreference ?? 0;
+  if (typeof smokingPref === "string") {
+    const smokingMap = {
+      nopreference: 0,
+      smoking: 1,
+      nonsmoking: 2,
+      either: 3,
+    };
+    smokingPref = smokingMap[smokingPref.toLowerCase()] ?? 0;
+  }
+
+  // ✅ CRITICAL: Ensure Price is an ARRAY, not object
+  let priceArray = [];
+  if (Array.isArray(room.Price)) {
+    // If Price is already an array, use it
+    priceArray = room.Price;
+  } else if (typeof room.Price === "object" && room.Price !== null) {
+    // If Price is an object, convert to array
+    priceArray = [room.Price];
+  } else {
+    // Create from individual price fields
+    priceArray = [
+      {
+        CurrencyCode: room.CurrencyCode || "INR",
+        RoomPrice: room.RoomPrice || 0,
+        Tax: room.Tax || 0,
+        ExtraGuestCharge: room.ExtraGuestCharge || 0,
+        ChildCharge: room.ChildCharge || 0,
+        OtherCharges: room.OtherCharges || 0,
+        Discount: room.Discount || 0,
+        PublishedPrice: room.PublishedPrice || room.RoomPrice || 0,
+        PublishedPriceRoundedOff:
+          Math.round(room.PublishedPriceRoundedOff || room.PublishedPrice || 0),
+        OfferedPrice: room.OfferedPrice || room.RoomPrice || 0,
+        OfferedPriceRoundedOff:
+          Math.round(room.OfferedPriceRoundedOff || room.OfferedPrice || 0),
+        AgentCommission: room.AgentCommission || 0,
+        AgentMarkUp: room.AgentMarkUp || 0,
+        TDS: room.TDS || 0,
+      },
+    ];
+  }
+
   return {
     // MANDATORY: Index of the room
     RoomIndex: roomIndex,
@@ -42,31 +86,14 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
     // OPTIONAL: Bed type information
     BedTypes: room.BedTypes || [],
 
-    // MANDATORY: Smoking preference (0=NoPreference, 1=Smoking, 2=NonSmoking, 3=Either)
-    SmokingPreference: room.SmokingPreference ?? 0,
+    // ✅ MANDATORY: Smoking preference (INTEGER - 0=NoPreference, 1=Smoking, 2=NonSmoking, 3=Either)
+    SmokingPreference: smokingPref,
 
     // MANDATORY: Supplements list (can be empty array)
     Supplements: room.Supplements || room.SupplementList || [],
 
-    // MANDATORY: Price details array
-    Price: room.Price || [
-      {
-        CurrencyCode: room.CurrencyCode || "INR",
-        RoomPrice: room.RoomPrice || 0,
-        Tax: room.Tax || 0,
-        ExtraGuestCharge: room.ExtraGuestCharge || 0,
-        ChildCharge: room.ChildCharge || 0,
-        OtherCharges: room.OtherCharges || 0,
-        Discount: room.Discount || 0,
-        PublishedPrice: room.PublishedPrice || room.RoomPrice || 0,
-        PublishedPriceRoundedOff: room.PublishedPriceRoundedOff || 0,
-        OfferedPrice: room.OfferedPrice || room.RoomPrice || 0,
-        OfferedPriceRoundedOff: room.OfferedPriceRoundedOff || 0,
-        AgentCommission: room.AgentCommission || 0,
-        AgentMarkUp: room.AgentMarkUp || 0,
-        TDS: room.TDS || 0,
-      },
-    ],
+    // ✅ MANDATORY: Price details ARRAY (not object)
+    Price: priceArray,
   };
 }
 
@@ -106,24 +133,32 @@ function validateRoomForBlockRequest(room) {
     errors.push("RoomTypeName is required");
   }
 
+  // ✅ SmokingPreference must be an INTEGER (0-3)
   if (room.SmokingPreference === undefined) {
     errors.push("SmokingPreference is required");
+  } else if (typeof room.SmokingPreference !== "number") {
+    errors.push(`SmokingPreference must be integer (0-3), got ${typeof room.SmokingPreference}`);
+  } else if (![0, 1, 2, 3].includes(room.SmokingPreference)) {
+    errors.push(`SmokingPreference must be 0-3, got ${room.SmokingPreference}`);
   }
 
   if (!Array.isArray(room.Supplements)) {
     errors.push("Supplements must be an array");
   }
 
-  if (!Array.isArray(room.Price) || room.Price.length === 0) {
-    errors.push("Price must be a non-empty array");
+  // ✅ Price MUST be an ARRAY (not object)
+  if (!Array.isArray(room.Price)) {
+    errors.push("Price must be an array (not object)");
+  } else if (room.Price.length === 0) {
+    errors.push("Price array must not be empty");
   } else {
     // Validate price fields
     const price = room.Price[0];
     if (!price.CurrencyCode) {
-      errors.push("Price.CurrencyCode is required");
+      errors.push("Price[0].CurrencyCode is required");
     }
     if (price.RoomPrice === undefined) {
-      errors.push("Price.RoomPrice is required");
+      errors.push("Price[0].RoomPrice is required");
     }
   }
 
