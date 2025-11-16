@@ -445,31 +445,38 @@ class MarkupService {
     markupData: CreateAirMarkupRequest,
   ): Promise<AirMarkup> {
     try {
+      // Map to module_markups table schema
       const payload = {
-        module: "air",
-        rule_name: markupData.name,
-        description: markupData.description,
-        airline_code: markupData.airline,
-        origin_iata: markupData.origin_iata,
-        dest_iata: markupData.dest_iata,
-        route_from: markupData.route?.from,
-        route_to: markupData.route?.to,
-        booking_class: markupData.class,
-        m_type: markupData.markupType,
-        m_value: markupData.markupValue,
-        current_min_pct: markupData.currentFareMin,
-        current_max_pct: markupData.currentFareMax,
+        module: "AIR",
+        airline_code: markupData.airline === "ALL" ? null : markupData.airline,
+        cabin: markupData.class ? String(markupData.class).toUpperCase() : null,
+        markup_type: markupData.markupType === "percentage" ? "PERCENT" : "FIXED",
+        markup_value: markupData.markupValue,
         bargain_min_pct: markupData.bargainFareMin,
         bargain_max_pct: markupData.bargainFareMax,
         valid_from: this.toApiDate(markupData.validFrom),
         valid_to: this.toApiDate(markupData.validTo),
-        priority: markupData.priority,
-        user_type: markupData.userType,
-        is_active: markupData.status === "active",
+        status: markupData.status === "active",
+        created_by: "admin",
+        updated_by: "admin",
+        supplier_id: null,
+        is_domestic: null,
+        city_code: null,
+        star_rating: null,
+        hotel_chain: null,
+        hotel_id: null,
+        room_type: null,
+        origin_city: null,
+        dest_city: null,
+        transfer_type: null,
+        vehicle_type: null,
+        experience_type: null,
+        attraction_id: null,
+        fixed_currency: "USD",
       };
       const response: any = await apiClient.post(`${this.baseUrl}`, payload);
-      if (response && response.success) {
-        return this.mapAirRow(response.item);
+      if (response && response.success && response.data) {
+        return this.mapAirRow(response.data);
       }
       throw new Error(response?.error || "Failed to create air markup");
     } catch (error) {
