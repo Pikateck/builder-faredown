@@ -8,9 +8,15 @@ const {
   validateRoomForBlockRequest,
 } = require("./api/tbo/roomMapper");
 
-console.log("\n╔════════════════════════════════════════════════════════════════╗");
-console.log("║     TBO BLOCKROOM API FIX - VERIFICATION                      ║");
-console.log("╚════════════════════════════════════════════════════════════════╝\n");
+console.log(
+  "\n╔════════════════════════════════════════════════════════════════╗",
+);
+console.log(
+  "║     TBO BLOCKROOM API FIX - VERIFICATION                      ║",
+);
+console.log(
+  "╚════════════════════════════════════════════════════════════════╝\n",
+);
 
 // Test room from actual TBO response (like your test)
 const roomFromTBOResponse = {
@@ -18,7 +24,8 @@ const roomFromTBOResponse = {
   RoomTypeName: "Twin/King room",
   RatePlanCode: "74026|217183559|1",
   RatePlanName: "No meals",
-  Price: {  // ❌ This is an OBJECT (from TBO)
+  Price: {
+    // ❌ This is an OBJECT (from TBO)
     CurrencyCode: "USD",
     RoomPrice: 261.64,
     Tax: 0,
@@ -38,14 +45,16 @@ const roomFromTBOResponse = {
     ServiceCharge: 0,
     TotalGSTAmount: 1.8838,
   },
-  SmokingPreference: "NoPreference",  // ❌ This is a STRING (from TBO)
+  SmokingPreference: "NoPreference", // ❌ This is a STRING (from TBO)
 };
 
 console.log("INPUT ROOM (from TBO response):");
 console.log("─".repeat(64));
 console.log(`✓ RoomTypeCode: "${roomFromTBOResponse.RoomTypeCode}"`);
 console.log(`✓ RoomTypeName: "${roomFromTBOResponse.RoomTypeName}"`);
-console.log(`✗ SmokingPreference: "${roomFromTBOResponse.SmokingPreference}" (TYPE: ${typeof roomFromTBOResponse.SmokingPreference})`);
+console.log(
+  `✗ SmokingPreference: "${roomFromTBOResponse.SmokingPreference}" (TYPE: ${typeof roomFromTBOResponse.SmokingPreference})`,
+);
 console.log(`✗ Price type: ${typeof roomFromTBOResponse.Price}`);
 console.log();
 
@@ -58,7 +67,9 @@ console.log("\nMAPPED ROOM (for BlockRoom API):");
 console.log("─".repeat(64));
 console.log(`✓ RoomTypeCode: "${mappedRoom.RoomTypeCode}"`);
 console.log(`✓ RoomTypeName: "${mappedRoom.RoomTypeName}"`);
-console.log(`✓ SmokingPreference: ${mappedRoom.SmokingPreference} (TYPE: ${typeof mappedRoom.SmokingPreference})`);
+console.log(
+  `✓ SmokingPreference: ${mappedRoom.SmokingPreference} (TYPE: ${typeof mappedRoom.SmokingPreference})`,
+);
 console.log(`✓ Price type: ${typeof mappedRoom.Price}`);
 console.log(`✓ Price is array: ${Array.isArray(mappedRoom.Price)}`);
 console.log(`✓ Price array length: ${mappedRoom.Price.length}`);
@@ -118,12 +129,20 @@ console.log("─".repeat(64));
 console.log(JSON.stringify(mappedRoom, null, 2).substring(0, 800));
 console.log("...\n");
 
-console.log("╔════════════════════════════════════════════════════════════════╗");
-console.log("║                    VERIFICATION COMPLETE                      ║");
-console.log("╚════════════════════════════════════════════════════════════════╝\n");
+console.log(
+  "╔════════════════════════════════════════════════════════════════╗",
+);
+console.log(
+  "║                    VERIFICATION COMPLETE                      ║",
+);
+console.log(
+  "╚════════════════════════════════════════════════════════════════╝\n",
+);
 
 if (validation.success) {
-  console.log("✅ FIX VERIFIED - Room is correctly formatted for TBO BlockRoom API\n");
+  console.log(
+    "✅ FIX VERIFIED - Room is correctly formatted for TBO BlockRoom API\n",
+  );
   console.log("Next steps:");
   console.log("  1. Push code to production");
   console.log("  2. Run: node test-tbo-full-booking-flow.js");

@@ -5,6 +5,7 @@
 Each room in the `HotelRoomDetails` array MUST have:
 
 ### ✅ SmokingPreference (CRITICAL)
+
 ```
 Type: INTEGER (not String)
 Values: 0, 1, 2, 3
@@ -18,11 +19,12 @@ Values: 0, 1, 2, 3
 ```
 
 ### ✅ Price (CRITICAL)
+
 ```
 Type: ARRAY of objects (not single object)
 Structure: [{ CurrencyCode, RoomPrice, ... }]
 
-❌ WRONG: 
+❌ WRONG:
 {
   "CurrencyCode": "USD",
   "RoomPrice": 261.64
@@ -41,30 +43,31 @@ Structure: [{ CurrencyCode, RoomPrice, ... }]
 
 ```json
 {
-  "RoomIndex": 0,                      // INTEGER: 0, 1, 2, ... (sequential)
-  "RatePlanCode": "PLAN123",           // STRING: required
-  "RatePlanName": "Plan Name",         // STRING: optional
-  "RoomTypeCode": "RT001",             // STRING: required
-  "RoomTypeName": "Room Type",         // STRING: required
-  "BedTypes": [],                      // ARRAY: optional, can be empty
-  "SmokingPreference": 0,              // INTEGER: 0-3, NOT STRING
-  "Supplements": [],                   // ARRAY: required, can be empty
-  "Price": [                           // ARRAY: required, not object!
+  "RoomIndex": 0, // INTEGER: 0, 1, 2, ... (sequential)
+  "RatePlanCode": "PLAN123", // STRING: required
+  "RatePlanName": "Plan Name", // STRING: optional
+  "RoomTypeCode": "RT001", // STRING: required
+  "RoomTypeName": "Room Type", // STRING: required
+  "BedTypes": [], // ARRAY: optional, can be empty
+  "SmokingPreference": 0, // INTEGER: 0-3, NOT STRING
+  "Supplements": [], // ARRAY: required, can be empty
+  "Price": [
+    // ARRAY: required, not object!
     {
-      "CurrencyCode": "USD",           // STRING
-      "RoomPrice": 261.64,             // NUMBER
-      "Tax": 0,                        // NUMBER
-      "ExtraGuestCharge": 0,           // NUMBER
-      "ChildCharge": 0,                // NUMBER
-      "OtherCharges": 0,               // NUMBER
-      "Discount": 0,                   // NUMBER
-      "PublishedPrice": 261.64,        // NUMBER
+      "CurrencyCode": "USD", // STRING
+      "RoomPrice": 261.64, // NUMBER
+      "Tax": 0, // NUMBER
+      "ExtraGuestCharge": 0, // NUMBER
+      "ChildCharge": 0, // NUMBER
+      "OtherCharges": 0, // NUMBER
+      "Discount": 0, // NUMBER
+      "PublishedPrice": 261.64, // NUMBER
       "PublishedPriceRoundedOff": 262, // INTEGER
-      "OfferedPrice": 261.64,          // NUMBER
-      "OfferedPriceRoundedOff": 262,   // INTEGER
-      "AgentCommission": 0,            // NUMBER
-      "AgentMarkUp": 0,                // NUMBER
-      "TDS": 0                         // NUMBER
+      "OfferedPrice": 261.64, // NUMBER
+      "OfferedPriceRoundedOff": 262, // INTEGER
+      "AgentCommission": 0, // NUMBER
+      "AgentMarkUp": 0, // NUMBER
+      "TDS": 0 // NUMBER
     }
   ]
 }
@@ -73,6 +76,7 @@ Structure: [{ CurrencyCode, RoomPrice, ... }]
 ## Type Conversion Rules
 
 ### SmokingPreference
+
 ```javascript
 Input: "NoPreference" or "Smoking" or "NonSmoking" or "Either"
 Conversion:
@@ -84,6 +88,7 @@ Output: Integer (0-3)
 ```
 
 ### Price
+
 ```javascript
 Input: { CurrencyCode: "USD", RoomPrice: 100, ... }
 Conversion: [{ CurrencyCode: "USD", RoomPrice: 100, ... }]
@@ -92,12 +97,12 @@ Output: Array with single object
 
 ## Common Errors & Fixes
 
-| Error Message | Cause | Fix |
-|---|---|---|
-| "HotelRoomsDetails is not found" | SmokingPreference is string OR Price is object | Convert to correct types |
-| Invalid type for field | Type mismatch in any field | Check each field's type |
-| Price missing | Price array is empty | Ensure Price array has ≥1 object |
-| Missing required field | Field is null/undefined | Validate before sending |
+| Error Message                    | Cause                                          | Fix                              |
+| -------------------------------- | ---------------------------------------------- | -------------------------------- |
+| "HotelRoomsDetails is not found" | SmokingPreference is string OR Price is object | Convert to correct types         |
+| Invalid type for field           | Type mismatch in any field                     | Check each field's type          |
+| Price missing                    | Price array is empty                           | Ensure Price array has ≥1 object |
+| Missing required field           | Field is null/undefined                        | Validate before sending          |
 
 ## Validation Checklist
 

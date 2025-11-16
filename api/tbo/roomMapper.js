@@ -49,11 +49,13 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
         OtherCharges: room.OtherCharges || 0,
         Discount: room.Discount || 0,
         PublishedPrice: room.PublishedPrice || room.RoomPrice || 0,
-        PublishedPriceRoundedOff:
-          Math.round(room.PublishedPriceRoundedOff || room.PublishedPrice || 0),
+        PublishedPriceRoundedOff: Math.round(
+          room.PublishedPriceRoundedOff || room.PublishedPrice || 0,
+        ),
         OfferedPrice: room.OfferedPrice || room.RoomPrice || 0,
-        OfferedPriceRoundedOff:
-          Math.round(room.OfferedPriceRoundedOff || room.OfferedPrice || 0),
+        OfferedPriceRoundedOff: Math.round(
+          room.OfferedPriceRoundedOff || room.OfferedPrice || 0,
+        ),
         AgentCommission: room.AgentCommission || 0,
         AgentMarkUp: room.AgentMarkUp || 0,
         TDS: room.TDS || 0,
@@ -137,7 +139,9 @@ function validateRoomForBlockRequest(room) {
   if (room.SmokingPreference === undefined) {
     errors.push("SmokingPreference is required");
   } else if (typeof room.SmokingPreference !== "number") {
-    errors.push(`SmokingPreference must be integer (0-3), got ${typeof room.SmokingPreference}`);
+    errors.push(
+      `SmokingPreference must be integer (0-3), got ${typeof room.SmokingPreference}`,
+    );
   } else if (![0, 1, 2, 3].includes(room.SmokingPreference)) {
     errors.push(`SmokingPreference must be 0-3, got ${room.SmokingPreference}`);
   }

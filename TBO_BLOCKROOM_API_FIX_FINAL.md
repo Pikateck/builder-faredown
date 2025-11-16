@@ -7,16 +7,19 @@ Your test output revealed the exact issues:
 ### Issue #1: SmokingPreference is STRING instead of INTEGER
 
 **❌ WRONG (what was being sent):**
+
 ```json
 "SmokingPreference": "NoPreference"  // STRING!
 ```
 
 **✅ CORRECT (what TBO expects):**
+
 ```json
 "SmokingPreference": 0  // INTEGER
 ```
 
 **Valid values:**
+
 - `0` = NoPreference
 - `1` = Smoking
 - `2` = NonSmoking
@@ -27,6 +30,7 @@ Your test output revealed the exact issues:
 ### Issue #2: Price is OBJECT instead of ARRAY
 
 **❌ WRONG (what was being sent):**
+
 ```json
 "Price": {
   "CurrencyCode": "USD",
@@ -36,6 +40,7 @@ Your test output revealed the exact issues:
 ```
 
 **✅ CORRECT (what TBO expects):**
+
 ```json
 "Price": [
   {
@@ -72,11 +77,15 @@ if (typeof smokingPref === "string") {
 // ✅ CRITICAL: Ensure Price is an ARRAY, not object
 let priceArray = [];
 if (Array.isArray(room.Price)) {
-  priceArray = room.Price;  // Already an array
+  priceArray = room.Price; // Already an array
 } else if (typeof room.Price === "object" && room.Price !== null) {
-  priceArray = [room.Price];  // Convert object to array
+  priceArray = [room.Price]; // Convert object to array
 } else {
-  priceArray = [{ /* create from individual fields */ }];
+  priceArray = [
+    {
+      /* create from individual fields */
+    },
+  ];
 }
 ```
 
@@ -85,7 +94,9 @@ if (Array.isArray(room.Price)) {
 ```javascript
 // ✅ SmokingPreference must be INTEGER (0-3)
 if (typeof room.SmokingPreference !== "number") {
-  errors.push(`SmokingPreference must be integer (0-3), got ${typeof room.SmokingPreference}`);
+  errors.push(
+    `SmokingPreference must be integer (0-3), got ${typeof room.SmokingPreference}`,
+  );
 }
 
 // ✅ Price MUST be ARRAY
@@ -132,6 +143,7 @@ Based on TBO documentation, each room must have:
 ```
 
 **Key Requirements:**
+
 - ✅ `SmokingPreference` is **INTEGER** (0-3), NOT string
 - ✅ `Price` is **ARRAY** with at least one element, NOT object
 - ✅ All price fields must be numbers (not strings)
@@ -141,17 +153,17 @@ Based on TBO documentation, each room must have:
 
 ## Field-by-Field Requirements
 
-| Field | Type | Required | Values | Notes |
-|-------|------|----------|--------|-------|
-| RoomIndex | Integer | Yes | 0+ | Sequential room number |
-| RatePlanCode | String | Yes | Any | From GetHotelRoom response |
-| RatePlanName | String | No | Any | From GetHotelRoom response |
-| RoomTypeCode | String | Yes | Any | Room identifier |
-| RoomTypeName | String | Yes | Any | Room description |
-| BedTypes | Array | No | Any | Bed information |
-| SmokingPreference | **Integer** | Yes | 0, 1, 2, 3 | **NOT STRING** - must convert |
-| Supplements | Array | Yes | [] or items | Can be empty |
-| Price | **Array** | Yes | [{...}] | **ARRAY of objects** - NOT single object |
+| Field             | Type        | Required | Values      | Notes                                    |
+| ----------------- | ----------- | -------- | ----------- | ---------------------------------------- |
+| RoomIndex         | Integer     | Yes      | 0+          | Sequential room number                   |
+| RatePlanCode      | String      | Yes      | Any         | From GetHotelRoom response               |
+| RatePlanName      | String      | No       | Any         | From GetHotelRoom response               |
+| RoomTypeCode      | String      | Yes      | Any         | Room identifier                          |
+| RoomTypeName      | String      | Yes      | Any         | Room description                         |
+| BedTypes          | Array       | No       | Any         | Bed information                          |
+| SmokingPreference | **Integer** | Yes      | 0, 1, 2, 3  | **NOT STRING** - must convert            |
+| Supplements       | Array       | Yes      | [] or items | Can be empty                             |
+| Price             | **Array**   | Yes      | [{...}]     | **ARRAY of objects** - NOT single object |
 
 ---
 
@@ -160,6 +172,7 @@ Based on TBO documentation, each room must have:
 Looking at your test output:
 
 **Request being sent:**
+
 ```json
 {
   "RoomIndex": 0,
@@ -179,6 +192,7 @@ Looking at your test output:
 ```
 
 **TBO's response:**
+
 ```json
 {
   "ResponseStatus": 3,
@@ -196,6 +210,7 @@ The error "HotelRoomsDetails is not found" is TBO's way of saying: **"The room d
 ## After Fix - Expected Result
 
 **Corrected request:**
+
 ```json
 {
   "RoomIndex": 0,
@@ -217,6 +232,7 @@ The error "HotelRoomsDetails is not found" is TBO's way of saying: **"The room d
 ```
 
 **Expected response:**
+
 ```json
 {
   "ResponseStatus": 1,  // ✅ SUCCESS
@@ -231,11 +247,13 @@ The error "HotelRoomsDetails is not found" is TBO's way of saying: **"The room d
 ## Testing the Fix
 
 Run the test again:
+
 ```bash
 node test-tbo-full-booking-flow.js
 ```
 
 **Check the BlockRoom request output:**
+
 - ✅ `"SmokingPreference": 0` (integer)
 - ✅ `"Price": [{ ... }]` (array)
 - ✅ `ResponseStatus: 1` (success)
@@ -249,6 +267,7 @@ node test-tbo-full-booking-flow.js
 - **BlockRoom Details**: https://apidoc.tektravels.com/hotel/dedupe_BlockRoom.aspx
 
 Key section: **Request Parameters > Section 11 (HotelRoomDetails)** specifies:
+
 - Field 11.7: SmokingPreference = Enumeration (Integer 0-3)
 - Field 11.9: Price = Array of price objects
 
@@ -257,6 +276,7 @@ Key section: **Request Parameters > Section 11 (HotelRoomDetails)** specifies:
 ## Files Modified
 
 ✅ `api/tbo/roomMapper.js` - UPDATED
+
 - Added SmokingPreference string-to-integer conversion
 - Added Price object-to-array conversion
 - Enhanced validation for both fields
@@ -265,13 +285,13 @@ Key section: **Request Parameters > Section 11 (HotelRoomDetails)** specifies:
 
 ## Summary
 
-| Aspect | Before | After |
-|--------|--------|-------|
-| SmokingPreference type | String "NoPreference" | Integer 0 |
-| Price type | Object {...} | Array [{...}] |
-| BlockRoom ResponseStatus | 3 (Error) | 1 (Success) |
-| Error message | "HotelRoomsDetails not found" | None |
-| Booking flow | ❌ Blocked | ✅ Can proceed |
+| Aspect                   | Before                        | After          |
+| ------------------------ | ----------------------------- | -------------- |
+| SmokingPreference type   | String "NoPreference"         | Integer 0      |
+| Price type               | Object {...}                  | Array [{...}]  |
+| BlockRoom ResponseStatus | 3 (Error)                     | 1 (Success)    |
+| Error message            | "HotelRoomsDetails not found" | None           |
+| Booking flow             | ❌ Blocked                    | ✅ Can proceed |
 
 ---
 

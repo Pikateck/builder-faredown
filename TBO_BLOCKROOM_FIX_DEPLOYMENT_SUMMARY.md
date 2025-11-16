@@ -13,11 +13,13 @@ Root cause: Two critical data type mismatches in the BlockRoom API request.
 ### 1️⃣ SmokingPreference is STRING instead of INTEGER
 
 **Your test output showed:**
+
 ```json
 "SmokingPreference": "NoPreference"  // ❌ STRING
 ```
 
 **TBO API requires:**
+
 ```json
 "SmokingPreference": 0  // ✅ INTEGER (0-3)
 ```
@@ -25,6 +27,7 @@ Root cause: Two critical data type mismatches in the BlockRoom API request.
 ### 2️⃣ Price is OBJECT instead of ARRAY
 
 **Your test output showed:**
+
 ```json
 "Price": {
   "CurrencyCode": "USD",
@@ -34,6 +37,7 @@ Root cause: Two critical data type mismatches in the BlockRoom API request.
 ```
 
 **TBO API requires:**
+
 ```json
 "Price": [
   {
@@ -51,8 +55,9 @@ Root cause: Two critical data type mismatches in the BlockRoom API request.
 ### Modified Files
 
 ✅ **`api/tbo/roomMapper.js`** - UPDATED
+
 - Added SmokingPreference string-to-integer conversion
-- Added Price object-to-array conversion  
+- Added Price object-to-array conversion
 - Enhanced validation for both critical fields
 
 **Key changes:**
@@ -73,7 +78,7 @@ if (typeof smokingPref === "string") {
 if (Array.isArray(room.Price)) {
   priceArray = room.Price;
 } else if (typeof room.Price === "object") {
-  priceArray = [room.Price];  // ← Convert object to array
+  priceArray = [room.Price]; // ← Convert object to array
 }
 ```
 
@@ -117,22 +122,26 @@ Response Status: 1 ✅ SUCCESS
 ## Testing Steps
 
 ### 1. Verify the Fix
+
 ```bash
 node verify-tbo-blockroom-fix.js
 ```
 
 **Expected output:**
+
 ```
 ✅ VALIDATION PASSED
 Room is ready for BlockRoom API!
 ```
 
 ### 2. Test Full Booking Flow
+
 ```bash
 node test-tbo-full-booking-flow.js
 ```
 
 **Expected output:**
+
 ```
 ================================================================================
 STEP 5: Block Room - Hold room temporarily
@@ -145,7 +154,9 @@ STEP 5: Block Room - Hold room temporarily
 ```
 
 ### 3. Check Details
+
 Look for in the logs:
+
 - ✅ `SmokingPreference: 0` (integer, not string)
 - ✅ `"Price": [{ ... }]` (array, not object)
 - ✅ `ResponseStatus: 1` (success, not 3)
@@ -154,12 +165,12 @@ Look for in the logs:
 
 ## Affected Components
 
-| Component | Change | Status |
-|-----------|--------|--------|
-| `api/tbo/roomMapper.js` | Type conversion logic added | ✅ Updated |
-| `api/tbo/book.js` | Uses mapper (no change needed) | ✅ Already integrated |
-| `api/services/adapters/tboAdapter.js` | No changes | ✅ Compatible |
-| `test-tbo-full-booking-flow.js` | No changes | ✅ Compatible |
+| Component                             | Change                         | Status                |
+| ------------------------------------- | ------------------------------ | --------------------- |
+| `api/tbo/roomMapper.js`               | Type conversion logic added    | ✅ Updated            |
+| `api/tbo/book.js`                     | Uses mapper (no change needed) | ✅ Already integrated |
+| `api/services/adapters/tboAdapter.js` | No changes                     | ✅ Compatible         |
+| `test-tbo-full-booking-flow.js`       | No changes                     | ✅ Compatible         |
 
 ---
 
@@ -184,6 +195,7 @@ Look for in the logs:
 ### BlockRoom API Response
 
 **Before fix:**
+
 ```json
 {
   "ResponseStatus": 3,
@@ -196,6 +208,7 @@ Look for in the logs:
 ```
 
 **After fix:**
+
 ```json
 {
   "ResponseStatus": 1,
@@ -209,19 +222,20 @@ Look for in the logs:
 
 ### Full Booking Flow
 
-| Step | Before | After |
-|------|--------|-------|
-| Get Hotels | ✅ Success | ✅ Success |
-| Get Room Details | ✅ Success | ✅ Success |
-| Block Room | ❌ **FAILS** | ✅ **SUCCESS** |
-| Book Hotel | ❌ Blocked | ✅ Proceeds |
-| Generate Voucher | ❌ Blocked | ✅ Proceeds |
+| Step             | Before       | After          |
+| ---------------- | ------------ | -------------- |
+| Get Hotels       | ✅ Success   | ✅ Success     |
+| Get Room Details | ✅ Success   | ✅ Success     |
+| Block Room       | ❌ **FAILS** | ✅ **SUCCESS** |
+| Book Hotel       | ❌ Blocked   | ✅ Proceeds    |
+| Generate Voucher | ❌ Blocked   | ✅ Proceeds    |
 
 ---
 
 ## Type Conversion Reference
 
 ### SmokingPreference
+
 ```javascript
 Input: "NoPreference", "Smoking", "NonSmoking", "Either"
 Output: 0, 1, 2, 3
@@ -234,6 +248,7 @@ Conversion logic:
 ```
 
 ### Price
+
 ```javascript
 Input:  { CurrencyCode: "USD", RoomPrice: 100 }
 Output: [{ CurrencyCode: "USD", RoomPrice: 100 }]
@@ -248,12 +263,14 @@ Conversion logic:
 ## Important Notes
 
 ⚠️ **Why "HotelRoomsDetails is not found"?**
+
 - TBO's error message is misleading
 - It actually means: "Invalid room details format"
 - The parser fails because of type mismatches
 - Once types are correct, the error disappears
 
 ✅ **Why this fix works:**
+
 - TBO BlockRoom API is **strict about data types**
 - SmokingPreference MUST be integer (0-3)
 - Price MUST be array, not object
