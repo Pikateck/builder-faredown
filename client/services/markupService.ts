@@ -530,30 +530,19 @@ class MarkupService {
     markupData: Partial<CreateAirMarkupRequest>,
   ): Promise<AirMarkup> {
     try {
-      const payload: any = {};
-      if (markupData.name !== undefined) payload.rule_name = markupData.name;
-      if (markupData.description !== undefined)
-        payload.description = markupData.description;
+      // Map to module_markups table schema
+      const payload: any = {
+        updated_by: "admin",
+      };
+
       if (markupData.airline !== undefined)
-        payload.airline_code = markupData.airline;
-      if (markupData.origin_iata !== undefined)
-        payload.origin_iata = markupData.origin_iata;
-      if (markupData.dest_iata !== undefined)
-        payload.dest_iata = markupData.dest_iata;
-      if (markupData.route?.from !== undefined)
-        payload.route_from = markupData.route.from;
-      if (markupData.route?.to !== undefined)
-        payload.route_to = markupData.route.to;
+        payload.airline_code = markupData.airline === "ALL" ? null : markupData.airline;
       if (markupData.class !== undefined)
-        payload.booking_class = markupData.class;
+        payload.cabin = String(markupData.class).toUpperCase();
       if (markupData.markupType !== undefined)
-        payload.m_type = markupData.markupType;
+        payload.markup_type = markupData.markupType === "percentage" ? "PERCENT" : "FIXED";
       if (markupData.markupValue !== undefined)
-        payload.m_value = markupData.markupValue;
-      if (markupData.currentFareMin !== undefined)
-        payload.current_min_pct = markupData.currentFareMin;
-      if (markupData.currentFareMax !== undefined)
-        payload.current_max_pct = markupData.currentFareMax;
+        payload.markup_value = markupData.markupValue;
       if (markupData.bargainFareMin !== undefined)
         payload.bargain_min_pct = markupData.bargainFareMin;
       if (markupData.bargainFareMax !== undefined)
@@ -562,19 +551,15 @@ class MarkupService {
         payload.valid_from = this.toApiDate(markupData.validFrom);
       if (markupData.validTo !== undefined)
         payload.valid_to = this.toApiDate(markupData.validTo);
-      if (markupData.priority !== undefined)
-        payload.priority = markupData.priority;
-      if (markupData.userType !== undefined)
-        payload.user_type = markupData.userType;
       if (markupData.status !== undefined)
-        payload.is_active = markupData.status === "active";
+        payload.status = markupData.status === "active";
 
       const response: any = await apiClient.put(
         `${this.baseUrl}/${markupId}`,
         payload,
       );
-      if (response && response.success) {
-        return this.mapAirRow(response.item);
+      if (response && response.success && response.data) {
+        return this.mapAirRow(response.data);
       }
       throw new Error(response?.error || "Failed to update air markup");
     } catch (error) {
