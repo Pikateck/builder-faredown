@@ -53,6 +53,9 @@ import {
 } from "@/services/priceCalculationService";
 
 export default function HotelBooking() {
+  // ✅ Scroll to top on route change (instant for better mobile UX)
+  useScrollToTop("auto");
+
   const navigate = useNavigate();
   const location = useLocation();
   const { booking: enhancedBooking, loadCompleteSearchObject } =
