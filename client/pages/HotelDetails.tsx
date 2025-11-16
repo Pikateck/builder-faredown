@@ -1694,7 +1694,7 @@ function HotelDetailsContent() {
       );
       const targetSection = reviewsSectionMobile || reviewsSectionDesktop;
       if (targetSection) {
-        console.log("��� Scrolling to reviews section:", targetSection.id);
+        console.log("📍 Scrolling to reviews section:", targetSection.id);
         targetSection.scrollIntoView({ behavior: "smooth" });
       } else {
         console.log("❌ Reviews section not found");
@@ -3391,34 +3391,6 @@ function HotelDetailsContent() {
                                         </div>
                                       </div>
 
-                                      {/* Room Details: Bed Type, Size, View - Compact */}
-                                      <div className="flex flex-wrap gap-1.5 mb-2">
-                                        {room.beds && (
-                                          <InfoChip
-                                            icon={Bed}
-                                            ariaLabel={`Bed type: ${room.beds}`}
-                                          >
-                                            {room.beds}
-                                          </InfoChip>
-                                        )}
-                                        {room.roomSize && (
-                                          <InfoChip
-                                            icon={Ruler}
-                                            ariaLabel={`Room size: ${room.roomSize}`}
-                                          >
-                                            {room.roomSize}
-                                          </InfoChip>
-                                        )}
-                                        {room.view && (
-                                          <InfoChip
-                                            icon={Mountain}
-                                            ariaLabel={`View: ${room.view}`}
-                                          >
-                                            {room.view}
-                                          </InfoChip>
-                                        )}
-                                      </div>
-
                                       {/* Cancellation policy is now shown as tooltip above - removed duplicate */}
                                       {bargainingRoomId === room.id && (
                                         <Badge className="bg-blue-100 text-blue-800 text-xs mb-3 px-2 py-1 animate-pulse">
@@ -3431,6 +3403,30 @@ function HotelDetailsContent() {
                                           Room features:
                                         </h5>
                                         <div className="flex flex-wrap gap-2">
+                                          {room.beds && (
+                                            <InfoChip
+                                              icon={Bed}
+                                              ariaLabel={`Bed type: ${room.beds}`}
+                                            >
+                                              {room.beds}
+                                            </InfoChip>
+                                          )}
+                                          {room.roomSize && (
+                                            <InfoChip
+                                              icon={Ruler}
+                                              ariaLabel={`Room size: ${room.roomSize}`}
+                                            >
+                                              {room.roomSize}
+                                            </InfoChip>
+                                          )}
+                                          {room.view && (
+                                            <InfoChip
+                                              icon={Mountain}
+                                              ariaLabel={`View: ${room.view}`}
+                                            >
+                                              {room.view}
+                                            </InfoChip>
+                                          )}
                                           {room.features &&
                                           room.features.length > 0 ? (
                                             room.features
