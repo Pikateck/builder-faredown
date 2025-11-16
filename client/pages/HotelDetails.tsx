@@ -1530,7 +1530,7 @@ function HotelDetailsContent() {
 
     console.log("🔍 Before deduplication - Total rooms:", roomTypes.length);
     roomTypes.forEach((room) => {
-      console.log("������� Room:", room.name, "ID:", room.id);
+      console.log("��������� Room:", room.name, "ID:", room.id);
     });
 
     for (const room of roomTypes) {
@@ -2062,7 +2062,7 @@ function HotelDetailsContent() {
                 </div>
                 {hotel.isLiveData && (
                   <div className="bg-green-500/95 backdrop-blur-sm px-2 py-1 rounded text-xs text-white font-medium">
-                    🔴 LIVE DATA
+                    ���� LIVE DATA
                   </div>
                 )}
                 {hotel.fallback && (
@@ -3086,67 +3086,63 @@ function HotelDetailsContent() {
                                   <div className="text-sm text-gray-600 mb-2">
                                     {room.type} • {room.details}
                                   </div>
-                                  {/* Order: 1) Refundability with tooltip, 2) Meal Preference */}
-                                  <div className="flex flex-wrap gap-1.5">
-                                    {/* Refundability with Cancellation Policy Tooltip */}
-                                    {room.isRefundable && !room.nonRefundable ? (
+                                  {/* Order: 1) Refundability with info icon, 2) Meal Preference */}
+                                  <div className="space-y-2">
+                                    <div className="flex flex-wrap gap-1.5 items-center">
+                                      {/* Refundability Status */}
+                                      {room.isRefundable && !room.nonRefundable ? (
+                                        <InfoChip
+                                          icon={ShieldCheck}
+                                          tone="success"
+                                          ariaLabel="Refundable booking"
+                                        >
+                                          Free Cancellation
+                                        </InfoChip>
+                                      ) : room.nonRefundable ? (
+                                        <InfoChip
+                                          icon={CircleX}
+                                          tone="danger"
+                                          ariaLabel="Non-refundable booking"
+                                        >
+                                          Non-Refundable
+                                        </InfoChip>
+                                      ) : null}
+
+                                      {/* Cancellation Policy Info Icon */}
                                       <Tooltip>
                                         <TooltipTrigger asChild>
-                                          <div>
-                                            <InfoChip
-                                              icon={ShieldCheck}
-                                              tone="success"
-                                              ariaLabel="Refundable - click for policy"
-                                            >
-                                              Free Cancellation
-                                            </InfoChip>
-                                          </div>
+                                          <button className="inline-flex items-center justify-center w-5 h-5 rounded-full bg-blue-100 text-blue-600 hover:bg-blue-200 transition-colors">
+                                            <Info className="w-3.5 h-3.5" />
+                                          </button>
                                         </TooltipTrigger>
-                                        <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg">
+                                        <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg p-3">
                                           <p className="text-sm font-semibold text-gray-900 mb-1">Cancellation Policy</p>
                                           <p className="text-xs text-gray-600">
-                                            {room.cancellationPolicy || "Free cancellation available. No charges if cancelled before check-in date."}
+                                            {room.cancellationPolicy || (room.isRefundable && !room.nonRefundable
+                                              ? "Free cancellation available. No charges if cancelled before check-in date."
+                                              : "Non-refundable rate. No refunds for cancellations or changes.")}
                                           </p>
                                         </TooltipContent>
                                       </Tooltip>
-                                    ) : room.nonRefundable ? (
-                                      <Tooltip>
-                                        <TooltipTrigger asChild>
-                                          <div>
-                                            <InfoChip
-                                              icon={CircleX}
-                                              tone="danger"
-                                              ariaLabel="Non-refundable - click for policy"
-                                            >
-                                              Non-Refundable
-                                            </InfoChip>
-                                          </div>
-                                        </TooltipTrigger>
-                                        <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg">
-                                          <p className="text-sm font-semibold text-gray-900 mb-1">Cancellation Policy</p>
-                                          <p className="text-xs text-gray-600">
-                                            {room.cancellationPolicy || "Non-refundable rate. No refunds for cancellations or changes."}
-                                          </p>
-                                        </TooltipContent>
-                                      </Tooltip>
-                                    ) : null}
-                                    {/* Meal Preference */}
-                                    {room.breakfastIncluded === true ? (
-                                      <InfoChip
-                                        icon={Utensils}
-                                        tone="success"
-                                        ariaLabel="Breakfast included"
-                                      >
-                                        With Breakfast
-                                      </InfoChip>
-                                    ) : (
-                                      <InfoChip
-                                        icon={Utensils}
-                                        ariaLabel="Breakfast not included"
-                                      >
-                                        Without Breakfast
-                                      </InfoChip>
-                                    )}
+
+                                      {/* Meal Preference */}
+                                      {room.breakfastIncluded === true ? (
+                                        <InfoChip
+                                          icon={Utensils}
+                                          tone="success"
+                                          ariaLabel="Breakfast included"
+                                        >
+                                          With Breakfast
+                                        </InfoChip>
+                                      ) : (
+                                        <InfoChip
+                                          icon={Utensils}
+                                          ariaLabel="Breakfast not included"
+                                        >
+                                          Without Breakfast
+                                        </InfoChip>
+                                      )}
+                                    </div>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-4">
