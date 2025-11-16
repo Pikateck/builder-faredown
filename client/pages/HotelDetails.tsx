@@ -1694,7 +1694,7 @@ function HotelDetailsContent() {
       );
       const targetSection = reviewsSectionMobile || reviewsSectionDesktop;
       if (targetSection) {
-        console.log("📍 Scrolling to reviews section:", targetSection.id);
+        console.log("��� Scrolling to reviews section:", targetSection.id);
         targetSection.scrollIntoView({ behavior: "smooth" });
       } else {
         console.log("❌ Reviews section not found");
@@ -2337,7 +2337,7 @@ function HotelDetailsContent() {
                               </div>
                             </div>
 
-                            {/* Room Details: Bed Type, Size, View - Compact */}
+                            {/* Room Features - Including Bed, Size, View */}
                             <div className="flex flex-wrap gap-1.5 mb-2">
                               {room.beds && (
                                 <InfoChip
@@ -2363,10 +2363,6 @@ function HotelDetailsContent() {
                                   {room.view}
                                 </InfoChip>
                               )}
-                            </div>
-
-                            {/* Simple Room Features - Compact */}
-                            <div className="flex flex-wrap gap-1.5 mb-2">
                               {Array.isArray(room.features)
                                 ? room.features
                                     .slice(0, 4)
