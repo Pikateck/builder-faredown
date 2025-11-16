@@ -2365,6 +2365,25 @@ function HotelDetailsContent() {
                               )}
                               {Array.isArray(room.features)
                                 ? room.features
+                                    .filter((feature: any) => {
+                                      const featureText =
+                                        typeof feature === "string"
+                                          ? feature
+                                          : feature?.name || "Feature";
+                                      const lower = featureText.toLowerCase();
+                                      // Filter out duplicates: bed info, size info, view info
+                                      return (
+                                        !lower.includes("bed") &&
+                                        !lower.includes("sqm") &&
+                                        !lower.includes("sq m") &&
+                                        !lower.includes("view") &&
+                                        !lower.includes("double") &&
+                                        !lower.includes("single") &&
+                                        !lower.includes("twin") &&
+                                        !lower.includes("king") &&
+                                        !lower.includes("queen")
+                                      );
+                                    })
                                     .slice(0, 4)
                                     .map((feature: any, idx: number) => {
                                       const featureText =
