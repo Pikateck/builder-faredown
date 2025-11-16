@@ -105,8 +105,17 @@ async function getHotelRoom(params = {}) {
         `  ${i + 1}. ${r.RoomTypeName} - ${r.Price?.CurrencyCode} ${r.Price?.OfferedPrice}`,
       );
       console.log(`     Cancellation: ${r.LastCancellationDate || "N/A"}`);
+      console.log(
+        `     Fields: RoomTypeID=${r.RoomTypeID}, RoomCombination=${r.RoomCombination}, RoomIndex=${r.RoomIndex}`,
+      );
     });
     console.log("");
+  }
+
+  // ✅ IMPORTANT: Log all fields from GetHotelRoom response for BlockRoom
+  console.log("🔍 Full GetHotelRoom response structure (first room):");
+  if (result?.HotelRoomsDetails?.[0]) {
+    console.log(JSON.stringify(result.HotelRoomsDetails[0], null, 2).substring(0, 500));
   }
 
   return {
@@ -117,6 +126,8 @@ async function getHotelRoom(params = {}) {
     isPassportMandatory: result?.IsPassportMandatory,
     isPANMandatory: result?.IsPANMandatory,
     rooms: result?.HotelRoomsDetails || [],
+    // ✅ Include full response for BlockRoom
+    fullResponse: result,
     error: result?.Error,
   };
 }
