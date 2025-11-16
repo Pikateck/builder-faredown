@@ -3523,103 +3523,152 @@ function HotelDetailsContent() {
                                       </div>
                                     </div>
 
-                                    {/* Pricing and Actions - Right Column */}
-                                    <div className="lg:col-span-3">
-                                      {/* Pricing Card */}
-                                      <div className="bg-gradient-to-br from-blue-50 to-white border-2 border-blue-200 rounded-xl p-5 mb-4 shadow-lg sticky top-4">
-                                        <div className="text-right mb-3">
-                                          <div className="text-xs uppercase tracking-wide text-gray-500 font-medium mb-1">
-                                            Total Price
-                                          </div>
-                                          <div className="text-3xl font-bold text-gray-900">
-                                            ₹{calculateTotalPrice(room.pricePerNight, room).toLocaleString()}
-                                          </div>
-                                          <div className="text-xs text-gray-600 mt-1">
-                                            includes taxes & fees
-                                          </div>
+                                    {/* Pricing and Actions */}
+                                    <div className="lg:col-span-3 mt-4 lg:mt-0">
+                                      <div className="bg-gray-50 border border-gray-200 rounded-lg p-4 mb-4">
+                                        <div className="text-2xl font-bold text-gray-900 mb-1">
+                                          ₹
+                                          {calculateTotalPrice(
+                                            room.pricePerNight,
+                                            room,
+                                          ).toLocaleString()}
                                         </div>
-                                        <div className="border-t-2 border-gray-200 pt-3 mb-3">
-                                          <div className="text-right text-sm text-gray-700">
-                                            <div className="font-semibold">₹{room.pricePerNight.toLocaleString()} <span className="font-normal text-gray-500">per night</span></div>
-                                            <div className="text-xs text-gray-500 mt-0.5">{hotel.totalNights} {hotel.totalNights === 1 ? 'night' : 'nights'}</div>
-                                          </div>
+                                        <div className="text-sm font-semibold text-gray-900 mb-1">
+                                          Total Price (incl. taxes)
                                         </div>
+                                        <div className="text-xs text-gray-600">
+                                          ₹{room.pricePerNight.toLocaleString()}{" "}
+                                          per night × {hotel.totalNights} nights
+                                        </div>
+                                        <div className="text-xs text-gray-500 mt-1">
+                                          Includes taxes, fees & charges
+                                        </div>
+                                      </div>
 
-                                        {/* Status Badge */}
-                                        <div className="mb-4">
-                                          <div className={`flex items-center justify-center text-xs font-semibold py-2 px-3 rounded-lg ${
+                                      <div className="mb-3">
+                                        <div
+                                          className={`flex items-center text-sm font-medium ${
                                             room.statusColor === "green"
-                                              ? "bg-green-100 text-green-800 border-2 border-green-300"
-                                              : "bg-blue-100 text-blue-800 border-2 border-blue-300"
-                                          }`}>
-                                            <span className={`w-2 h-2 rounded-full mr-2 ${
-                                              room.statusColor === "green" ? "bg-green-600" : "bg-blue-600"
-                                            }`}></span>
-                                            {room.statusColor === "green" ? "Best Value" : "Premium Option"}
-                                          </div>
+                                              ? "text-green-700"
+                                              : "text-blue-700"
+                                          }`}
+                                        >
+                                          <span
+                                            className={`w-2 h-2 rounded-full mr-2 ${
+                                              room.statusColor === "green"
+                                                ? "bg-green-600"
+                                                : "bg-blue-600"
+                                            }`}
+                                          ></span>
+                                          {room.statusColor === "green"
+                                            ? "Cheapest Option Available"
+                                            : "Premium Upgrade Available"}
                                         </div>
+                                      </div>
 
-                                        {/* Action Buttons - Stacked */}
-                                        <div className="space-y-3">
-                                          <Button
-                                            onClick={() => handleBooking(room)}
-                                            variant="outline"
-                                            className="w-full font-semibold py-3.5 text-sm transition-all duration-200 border-2 border-blue-600 text-blue-600 hover:bg-blue-600 hover:text-white hover:shadow-lg rounded-lg"
-                                          >
-                                            Reserve Room
-                                          </Button>
-                                          <BargainButton
-                                            useBargainModal={true}
-                                            module="hotels"
-                                            itemName={`${hotel.name} - ${room.name}`}
-                                            basePrice={(() => {
-                                              const roomTotal = calculateTotalPrice(room.pricePerNight, room);
-                                              console.log("[BARGAIN BASE DESKTOP]", {
+                                      <div className="space-y-3">
+                                        <Button
+                                          onClick={() => handleBooking(room)}
+                                          variant="outline"
+                                          className="w-full font-semibold py-3 text-sm transition-all duration-200 border-blue-500 text-blue-500 hover:bg-blue-50 hover:shadow-md"
+                                        >
+                                          Reserve Room
+                                        </Button>
+                                        <BargainButton
+                                          useBargainModal={true}
+                                          module="hotels"
+                                          itemName={`${hotel.name} - ${room.name}`}
+                                          basePrice={(() => {
+                                            const roomTotal =
+                                              calculateTotalPrice(
+                                                room.pricePerNight,
+                                                room,
+                                              );
+                                            // Debug trace for bargain opening
+                                            console.log(
+                                              "[BARGAIN BASE DESKTOP]",
+                                              {
                                                 baseFromSelectedRate: roomTotal,
                                                 roomId: room.id,
                                                 roomName: room.name,
-                                                perNightPrice: room.pricePerNight,
-                                                isConsistentPrice: room.priceConsistent,
-                                                exactResultsTotal: room.exactResultsTotal,
-                                              });
-                                              return roomTotal;
-                                            })()}
-                                            productRef={room.id}
-                                            itemDetails={{
-                                              id: room.id,
-                                              name: `${hotel.name} - ${room.name}`,
-                                              location: hotel.location || "Hotel Location",
-                                              provider: "Hotelbeds",
-                                              checkIn: searchParams.get("checkIn") || "",
-                                              checkOut: searchParams.get("checkOut") || "",
-                                              features: room.amenities || [],
-                                            }}
-                                            onBargainSuccess={(finalPrice, orderRef, bargainMetadata) => {
-                                              console.log(`Hotel Details Desktop Bargain success! Final price: ${finalPrice}, Order: ${orderRef}, Bargain Metadata:`, bargainMetadata);
-                                              handleBooking(room, finalPrice, bargainMetadata);
-                                              setBargainedRooms((prev) => new Set([...prev, room.id]));
-                                            }}
-                                            className={`w-full font-semibold py-3.5 text-sm transition-all duration-200 rounded-lg ${
-                                              bargainedRooms.has(room.id)
-                                                ? "bg-green-600 text-white hover:bg-green-700"
-                                                : bargainingRoomId === room.id
-                                                  ? "bg-blue-600 text-white animate-pulse"
-                                                  : ""
-                                            }`}
-                                            disabled={bargainedRooms.has(room.id) || bargainingRoomId === room.id}
-                                          >
-                                            {bargainedRooms.has(room.id) ? (
-                                              <span className="flex items-center justify-center">
-                                                Bargained
-                                                <CheckCircle className="w-4 h-4 ml-2" />
-                                              </span>
-                                            ) : bargainingRoomId === room.id ? (
-                                              "Bargaining..."
-                                            ) : (
-                                              "Bargain Now"
-                                            )}
-                                          </BargainButton>
-                                        </div>
+                                                perNightPrice:
+                                                  room.pricePerNight,
+                                                isConsistentPrice:
+                                                  room.priceConsistent,
+                                                exactResultsTotal:
+                                                  room.exactResultsTotal,
+                                              },
+                                            );
+                                            return roomTotal;
+                                          })()}
+                                          productRef={room.id}
+                                          itemDetails={{
+                                            id: room.id,
+                                            name: `${hotel.name} - ${room.name}`,
+                                            location:
+                                              hotel.location ||
+                                              "Hotel Location",
+                                            provider: "Hotelbeds",
+                                            checkIn:
+                                              searchParams.get("checkIn") || "",
+                                            checkOut:
+                                              searchParams.get("checkOut") ||
+                                              "",
+                                            features: room.amenities || [],
+                                          }}
+                                          onBargainSuccess={(
+                                            finalPrice,
+                                            orderRef,
+                                            bargainMetadata,
+                                          ) => {
+                                            console.log(
+                                              `Hotel Details Desktop Bargain success! Final price: ${finalPrice}, Order: ${orderRef}, Bargain Metadata:`,
+                                              bargainMetadata,
+                                            );
+                                            handleBooking(
+                                              room,
+                                              finalPrice,
+                                              bargainMetadata,
+                                            );
+                                            setBargainedRooms(
+                                              (prev) =>
+                                                new Set([...prev, room.id]),
+                                            );
+                                          }}
+                                          className={`w-full font-medium py-2 text-sm transition-all duration-200 min-h-[44px] ${
+                                            bargainedRooms.has(room.id)
+                                              ? "bg-green-600 text-white"
+                                              : bargainingRoomId === room.id
+                                                ? "bg-blue-600 text-white animate-pulse"
+                                                : ""
+                                          }`}
+                                          disabled={
+                                            bargainedRooms.has(room.id) ||
+                                            bargainingRoomId === room.id
+                                          }
+                                        >
+                                          {bargainedRooms.has(room.id) ? (
+                                            <span className="flex items-center justify-center">
+                                              Bargained
+                                              <CheckCircle className="w-4 h-4 ml-2" />
+                                            </span>
+                                          ) : bargainingRoomId === room.id ? (
+                                            "Bargaining..."
+                                          ) : (
+                                            "Bargain Now"
+                                          )}
+                                        </BargainButton>
+                                      </div>
+
+                                      <div className="mt-3 flex items-center justify-center space-x-4 text-xs text-green-700">
+                                        <span className="flex items-center gap-1">
+                                          <CheckCircle className="w-3 h-3 text-green-600" />
+                                          No prepayment
+                                        </span>
+                                        <span className="flex items-center gap-1">
+                                          <CheckCircle className="w-3 h-3 text-green-600" />
+                                          Free cancellation
+                                        </span>
                                       </div>
                                     </div>
                                   </div>
