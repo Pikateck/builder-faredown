@@ -23,6 +23,7 @@ const axios = require("axios");
 const pool = require("../../database/connection");
 const { tboRequest, tboVia } = require("../../lib/tboRequest");
 const HotelNormalizer = require("../normalization/hotelNormalizer");
+const thirdPartyLogger = require("../thirdPartyLogger");
 
 class TBOAdapter extends BaseSupplierAdapter {
   constructor(config = {}) {
@@ -132,6 +133,19 @@ class TBOAdapter extends BaseSupplierAdapter {
       via: tboVia(),
     });
 
+    // Start API logging
+    const apiLog = thirdPartyLogger.startRequest({
+      supplierName: "TBO",
+      endpoint: this.config.hotelAuthUrl,
+      method: "POST",
+      requestPayload: authRequest,
+      requestHeaders: {
+        "Content-Type": "application/json",
+        Accept: "application/json",
+        "Accept-Encoding": "gzip, deflate",
+      },
+    });
+
     try {
       const response = await tboRequest(this.config.hotelAuthUrl, {
         method: "POST",
@@ -142,6 +156,13 @@ class TBOAdapter extends BaseSupplierAdapter {
           "Accept-Encoding": "gzip, deflate",
         },
         timeout: this.config.timeout,
+      });
+
+      // Log successful response
+      await apiLog.end({
+        responsePayload: response.data,
+        responseHeaders: response.headers,
+        statusCode: response.status,
       });
 
       this.logger.info("📥 TBO Auth Response", {
@@ -195,6 +216,15 @@ class TBOAdapter extends BaseSupplierAdapter {
 
       return this.tokenId;
     } catch (error) {
+      // Log failed request
+      await apiLog.end({
+        responsePayload: error.response?.data,
+        responseHeaders: error.response?.headers,
+        statusCode: error.response?.status || 500,
+        errorMessage: error.message,
+        errorStack: error.stack,
+      });
+
       this.logger.error("❌ TBO Authentication FAILED", {
         message: error.message,
         httpStatus: error.response?.status,
