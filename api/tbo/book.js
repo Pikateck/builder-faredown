@@ -49,7 +49,8 @@ async function blockRoom(params = {}) {
     throw new Error("Missing required parameters");
   }
 
-  // ✅ IMPORTANT: TBO expects HotelRoomsDetails (plural) NOT HotelRoomDetails
+  // ✅ IMPORTANT: TBO expects HotelRoomDetails (singular) NOT HotelRoomsDetails
+  // According to official TBO API docs: https://apidoc.tektravels.com/hotel/HotelBook.aspx
   const request = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
@@ -60,7 +61,7 @@ async function blockRoom(params = {}) {
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
     IsVoucherBooking: isVoucherBooking,
-    HotelRoomsDetails: hotelRoomDetails, // ✅ Note the 's' - must match TBO spec exactly
+    HotelRoomDetails: hotelRoomDetails, // ✅ No 's' - matches TBO API spec exactly
   };
 
   const url =
@@ -174,7 +175,14 @@ async function bookHotel(params = {}) {
     throw new Error("Missing required parameters");
   }
 
-  // ✅ IMPORTANT: TBO expects HotelRoomsDetails (plural) NOT HotelRoomDetails
+  // ✅ IMPORTANT: TBO expects HotelRoomDetails (singular) NOT HotelRoomsDetails
+  // According to official TBO API docs: https://apidoc.tektravels.com/hotel/HotelBook.aspx
+  // HotelPassenger should be inside each HotelRoomDetails element (Section 11.10)
+  const roomDetailsWithPassengers = hotelRoomDetails.map(room => ({
+    ...room,
+    HotelPassenger: hotelPassenger
+  }));
+
   const request = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
@@ -185,8 +193,7 @@ async function bookHotel(params = {}) {
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
     IsVoucherBooking: isVoucherBooking,
-    HotelRoomsDetails: hotelRoomDetails, // ✅ Note the 's' - must match TBO spec exactly
-    HotelPassenger: hotelPassenger,
+    HotelRoomDetails: roomDetailsWithPassengers, // ✅ No 's' - matches TBO API spec exactly
   };
 
   const url =
