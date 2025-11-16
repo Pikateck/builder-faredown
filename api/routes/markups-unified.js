@@ -1,5 +1,6 @@
 const express = require("express");
 const { Pool } = require("pg");
+const db = require("../database/connection");
 
 const router = express.Router();
 const pool = new Pool({
@@ -25,6 +26,76 @@ const EXPORT_COLUMNS = [
   "created_at",
 ];
 
+// GET /api/markups - Main endpoint for admin panel queries with module filtering
+router.get("/", async (req, res) => {
+  try {
+    const { module, supplier_id, page = 1, limit = 20, search, status } = req.query;
+
+    // Build WHERE clause
+    const where = [];
+    const params = [];
+    let paramIndex = 1;
+
+    if (module) {
+      where.push(`module = $${paramIndex++}`);
+      params.push(String(module).toUpperCase());
+    }
+
+    if (supplier_id) {
+      where.push(`supplier_id = $${paramIndex++}`);
+      params.push(supplier_id);
+    }
+
+    if (search) {
+      where.push(`(airline_code ILIKE $${paramIndex} OR city_code ILIKE $${paramIndex} OR hotel_chain ILIKE $${paramIndex})`);
+      params.push(`%${search}%`);
+      paramIndex++;
+    }
+
+    if (status !== undefined && status !== null && status !== 'all') {
+      const statusBool = String(status).toLowerCase() === 'active' || status === true || status === '1';
+      where.push(`status = $${paramIndex++}`);
+      params.push(statusBool);
+    }
+
+    const whereSql = where.length ? `WHERE ${where.join(" AND ")}` : "";
+
+    // Get total count
+    const countQuery = `SELECT COUNT(*) FROM module_markups ${whereSql}`;
+    const countResult = await db.query(countQuery, params);
+    const total = parseInt(countResult.rows[0].count);
+
+    // Get paginated data
+    const offset = (parseInt(page) - 1) * parseInt(limit);
+    const dataQuery = `
+      SELECT * FROM module_markups
+      ${whereSql}
+      ORDER BY created_at DESC
+      LIMIT $${paramIndex++} OFFSET $${paramIndex}
+    `;
+    params.push(parseInt(limit), offset);
+
+    const result = await db.query(dataQuery, params);
+
+    res.json({
+      success: true,
+      items: result.rows,
+      total,
+      page: parseInt(page),
+      pageSize: parseInt(limit),
+      totalPages: Math.ceil(total / parseInt(limit))
+    });
+  } catch (error) {
+    console.error("Error fetching markups:", error);
+    res.status(500).json({
+      success: false,
+      error: "Failed to fetch markups",
+      message: error.message,
+    });
+  }
+});
+
+// Legacy endpoint for unified_markups table
 router.get("/list", async (req, res) => {
   try {
     const query = `
@@ -55,13 +126,32 @@ router.get("/list", async (req, res) => {
 
 router.get("/export", async (req, res) => {
   try {
-    const query = `
-      SELECT ${EXPORT_COLUMNS.join(", ")}
-      FROM unified_markups
-      ORDER BY created_at DESC
-    `;
+    const { module } = req.query;
 
-    const result = await pool.query(query);
+    // Export from module_markups if module specified, otherwise unified_markups
+    let query;
+    let result;
+
+    if (module) {
+      const where = `WHERE module = $1`;
+      query = `
+        SELECT id, supplier_id, module, airline_code, cabin, city_code,
+               hotel_chain, star_rating, markup_type, markup_value,
+               bargain_min_pct, bargain_max_pct, valid_from, valid_to,
+               status, created_at, updated_at
+        FROM module_markups
+        ${where}
+        ORDER BY created_at DESC
+      `;
+      result = await db.query(query, [String(module).toUpperCase()]);
+    } else {
+      query = `
+        SELECT ${EXPORT_COLUMNS.join(", ")}
+        FROM unified_markups
+        ORDER BY created_at DESC
+      `;
+      result = await pool.query(query);
+    }
 
     // Set CSV headers
     res.setHeader("Content-Type", "text/csv; charset=utf-8");
