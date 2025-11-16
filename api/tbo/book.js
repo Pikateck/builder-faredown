@@ -203,18 +203,20 @@ async function bookHotel(params = {}) {
     throw new Error("Missing required parameters");
   }
 
-  // ✅ Map and validate room details
-  console.log("\nStep 2a: Mapping room details for booking...");
-  const mappedRoomDetails = mapRoomsForBlockRequest(hotelRoomDetails);
+  // ✅ CRITICAL: Per TBO documentation, pass full room structure from GetHotelRoom
+  // Add HotelPassenger to each room but keep all other fields (RoomTypeID, RoomCombination, etc.)
+  console.log("\nStep 2: Preparing room details with passenger information...");
 
-  // ✅ IMPORTANT: TBO expects HotelRoomDetails (singular) NOT HotelRoomsDetails
-  // According to official TBO API docs: https://apidoc.tektravels.com/hotel/HotelBook.aspx
-  // HotelPassenger should be inside each HotelRoomDetails element
-  const roomDetailsWithPassengers = mappedRoomDetails.map((room) => ({
-    ...room,
-    HotelPassenger: hotelPassenger,
+  const roomDetailsWithPassengers = hotelRoomDetails.map((room) => ({
+    ...room,  // Keep all fields from GetHotelRoom response
+    HotelPassenger: hotelPassenger,  // Add passenger details
   }));
 
+  roomDetailsWithPassengers.forEach((room, index) => {
+    console.log(`  Room ${index}: ${room.RoomTypeName} (with ${hotelPassenger.length} passenger(s))`);
+  });
+
+  // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
   const request = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
@@ -225,7 +227,7 @@ async function bookHotel(params = {}) {
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
     IsVoucherBooking: isVoucherBooking,
-    HotelRoomDetails: roomDetailsWithPassengers, // ✅ No 's' - matches TBO API spec exactly
+    HotelRoomsDetails: roomDetailsWithPassengers, // ✅ WITH 's' - correct field name for Book API
   };
 
   const url =
@@ -274,7 +276,7 @@ async function bookHotel(params = {}) {
     JSON.stringify(response.data, null, 2).substring(0, 1000),
   );
 
-  // ✅ Handle multiple possible wrapper names
+  // �� Handle multiple possible wrapper names
   const result =
     response.data?.BookResponse ||
     response.data?.HotelBookResult ||
