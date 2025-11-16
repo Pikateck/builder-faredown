@@ -2229,76 +2229,76 @@ function HotelDetailsContent() {
                               </div>
                             </div>
 
-                            {/* Breakfast, Smoking & Payment Type Info */}
-                            <div className="flex flex-wrap gap-2 mb-3">
-                              {room.breakfastIncluded === true ? (
-                                <InfoChip
-                                  icon={Utensils}
-                                  tone="success"
-                                  ariaLabel="Breakfast included with this room"
-                                >
-                                  Breakfast included
-                                </InfoChip>
-                              ) : (
-                                <InfoChip
-                                  icon={Utensils}
-                                  ariaLabel="Breakfast not included"
-                                >
-                                  No breakfast
-                                </InfoChip>
-                              )}
-                              {room.smokingAllowed === true ||
-                              room.smokingPreference === "smoking" ? (
-                                <InfoChip
-                                  icon={Cigarette}
-                                  ariaLabel="Smoking allowed in this room"
-                                >
-                                  Smoking allowed
-                                </InfoChip>
-                              ) : (
-                                <InfoChip
-                                  icon={CigaretteOff}
-                                  ariaLabel="Non-smoking room"
-                                >
-                                  Non-smoking
-                                </InfoChip>
-                              )}
-                              {room.paymentType === "pay_at_hotel" ? (
-                                <InfoChip
-                                  icon={Banknote}
-                                  ariaLabel="Pay at hotel upon arrival"
-                                >
-                                  Pay at hotel
-                                </InfoChip>
-                              ) : (
-                                <InfoChip
-                                  icon={CreditCard}
-                                  ariaLabel="Pay now online"
-                                >
-                                  Pay now
-                                </InfoChip>
-                              )}
-                              {room.isRefundable && !room.nonRefundable ? (
-                                <InfoChip
-                                  icon={ShieldCheck}
-                                  tone="success"
-                                  ariaLabel="Refundable booking"
-                                >
-                                  Refundable
-                                </InfoChip>
-                              ) : room.nonRefundable ? (
-                                <InfoChip
-                                  icon={CircleX}
-                                  tone="danger"
-                                  ariaLabel="Non-refundable booking"
-                                >
-                                  Non-refundable
-                                </InfoChip>
-                              ) : null}
+                            {/* Order: 1) Room Details, 2) Refundability, 3) Cancellation Policy (tooltip), 4) Meal Preference */}
+                            <div className="space-y-2 mb-3">
+                              {/* 1. Refundability Status with Cancellation Policy Tooltip */}
+                              <div className="flex flex-wrap gap-1.5">
+                                {room.isRefundable && !room.nonRefundable ? (
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <div>
+                                        <InfoChip
+                                          icon={ShieldCheck}
+                                          tone="success"
+                                          ariaLabel="Refundable booking - click for policy"
+                                        >
+                                          Free Cancellation
+                                        </InfoChip>
+                                      </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg">
+                                      <p className="text-sm font-semibold text-gray-900 mb-1">Cancellation Policy</p>
+                                      <p className="text-xs text-gray-600">
+                                        {room.cancellationPolicy || "Free cancellation available. No charges if cancelled before check-in date."}
+                                      </p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                ) : room.nonRefundable ? (
+                                  <Tooltip>
+                                    <TooltipTrigger asChild>
+                                      <div>
+                                        <InfoChip
+                                          icon={CircleX}
+                                          tone="danger"
+                                          ariaLabel="Non-refundable booking - click for policy"
+                                        >
+                                          Non-Refundable
+                                        </InfoChip>
+                                      </div>
+                                    </TooltipTrigger>
+                                    <TooltipContent className="max-w-xs bg-white border border-gray-200 shadow-lg">
+                                      <p className="text-sm font-semibold text-gray-900 mb-1">Cancellation Policy</p>
+                                      <p className="text-xs text-gray-600">
+                                        {room.cancellationPolicy || "Non-refundable rate. No refunds for cancellations or changes."}
+                                      </p>
+                                    </TooltipContent>
+                                  </Tooltip>
+                                ) : null}
+                              </div>
+
+                              {/* 2. Meal Preference */}
+                              <div className="flex flex-wrap gap-1.5">
+                                {room.breakfastIncluded === true ? (
+                                  <InfoChip
+                                    icon={Utensils}
+                                    tone="success"
+                                    ariaLabel="Breakfast included with this room"
+                                  >
+                                    With Breakfast
+                                  </InfoChip>
+                                ) : (
+                                  <InfoChip
+                                    icon={Utensils}
+                                    ariaLabel="Breakfast not included"
+                                  >
+                                    Without Breakfast
+                                  </InfoChip>
+                                )}
+                              </div>
                             </div>
 
-                            {/* Room Details: Bed Type, Size, View */}
-                            <div className="flex flex-wrap gap-2 mb-4">
+                            {/* Room Details: Bed Type, Size, View - Compact */}
+                            <div className="flex flex-wrap gap-1.5 mb-2">
                               {room.beds && (
                                 <InfoChip
                                   icon={Bed}
@@ -2325,8 +2325,8 @@ function HotelDetailsContent() {
                               )}
                             </div>
 
-                            {/* Simple Room Features */}
-                            <div className="flex flex-wrap gap-2 mb-4">
+                            {/* Simple Room Features - Compact */}
+                            <div className="flex flex-wrap gap-1.5 mb-2">
                               {Array.isArray(room.features)
                                 ? room.features
                                     .slice(0, 4)
