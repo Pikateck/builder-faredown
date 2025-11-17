@@ -64,8 +64,8 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
   }
 
   return {
-    // MANDATORY: Index of the room
-    RoomIndex: roomIndex,
+    // MANDATORY: Index of the room (1-based, not 0-based)
+    RoomIndex: roomIndex + 1,
 
     // MANDATORY: Rate plan code - might have different field names in TBO response
     RatePlanCode:
