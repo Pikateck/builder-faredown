@@ -148,6 +148,27 @@ async function blockRoom(params = {}) {
   });
   console.log("");
 
+  // ✅ DIAGNOSTIC: Log Price structure (must be object, not array)
+  console.log(
+    "🔍 DIAGNOSTIC: BlockRoom Price structure (TBO requires object, not array):",
+  );
+  mappedRooms.forEach((room, idx) => {
+    console.log(`  Room ${idx} Price:`);
+    console.log(`    Type: ${typeof room.Price}`);
+    console.log(`    Is Array: ${Array.isArray(room.Price)}`);
+    console.log(
+      `    CurrencyCode: "${room.Price?.CurrencyCode || "<<MISSING>>"}"`,
+    );
+    console.log(`    RoomPrice: ${room.Price?.RoomPrice || "<<MISSING>>"}`);
+    console.log(
+      `    Tax: ${room.Price?.Tax !== undefined ? room.Price.Tax : "<<MISSING>>"}`,
+    );
+    console.log(
+      `    OtherCharges: ${room.Price?.OtherCharges !== undefined ? room.Price.OtherCharges : "<<MISSING>>"}`,
+    );
+  });
+  console.log("");
+
   console.log("📤 Request Payload:");
   console.log(
     JSON.stringify(
