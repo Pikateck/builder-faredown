@@ -138,7 +138,7 @@ async function blockRoom(params = {}) {
   // ✅ PER TBO BLOCKROOM SPEC: CategoryId is a top-level MANDATORY field (field 6)
   // Extract from primary room or fall back to alternatives
   const primaryRoom = mappedRooms[0];
-  const blockRoomCategoryId =
+  const blockRequestCategoryId =
     primaryRoom?.CategoryId ||
     primaryRoom?.CategoryCode ||
     primaryRoom?.RoomCategoryId ||
@@ -150,7 +150,7 @@ async function blockRoom(params = {}) {
     TraceId: traceId,
     ResultIndex: Number(resultIndex),
     HotelCode: String(hotelCode),
-    CategoryId: blockRoomCategoryId, // ✅ TOP-LEVEL CategoryId per TBO docs (field 6, mandatory)
+    CategoryId: blockRequestCategoryId, // ✅ TOP-LEVEL CategoryId per TBO docs (field 6, mandatory)
     HotelName: hotelName,
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
