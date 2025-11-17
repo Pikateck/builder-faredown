@@ -266,7 +266,7 @@ async function blockRoom(params = {}) {
 
   // ✅ CRITICAL: Extract CategoryId from BlockRoom response for use in Book
   // Book API requires CategoryId at root level (from TBO docs: mandatory field)
-  const blockRoomCategoryId =
+  const responseCategoryId =
     result?.HotelRoomsDetails?.[0]?.CategoryId ||
     result?.HotelRoomDetails?.[0]?.CategoryId ||
     undefined;
@@ -277,7 +277,7 @@ async function blockRoom(params = {}) {
     isPriceChanged: result?.IsPriceChanged,
     isCancellationPolicyChanged: result?.IsCancellationPolicyChanged,
     hotelRoomDetails: roomDetails, // ✅ Handle both singular and plural
-    categoryId: blockRoomCategoryId, // ✅ Pass CategoryId to be used by Book
+    categoryId: responseCategoryId, // ✅ Pass CategoryId to be used by Book
     error: result?.Error,
   };
 }
