@@ -92,12 +92,23 @@ async function blockRoom(params = {}) {
 
   // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
   // ✅ Pass mapped rooms with SmokingPreference as INTEGER, not string
+
+  // ✅ PER TBO BLOCKROOM SPEC: CategoryId is a top-level MANDATORY field (field 6)
+  // Extract from primary room or fall back to alternatives
+  const primaryRoom = mappedRooms[0];
+  const blockRoomCategoryId =
+    primaryRoom?.CategoryId ||
+    primaryRoom?.CategoryCode ||
+    primaryRoom?.RoomCategoryId ||
+    undefined;
+
   const request = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
     TraceId: traceId,
     ResultIndex: Number(resultIndex),
     HotelCode: String(hotelCode),
+    CategoryId: blockRoomCategoryId, // ✅ TOP-LEVEL CategoryId per TBO docs (field 6, mandatory)
     HotelName: hotelName,
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
