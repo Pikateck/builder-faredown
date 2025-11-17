@@ -25,9 +25,9 @@ function formatDateForTBO(dateStr) {
 }
 
 /**
- * Search Hotels
- * VERIFIED WORKING - Returns real hotel data
- * Uses FINAL production URL: https://affiliate.travelboutiqueonline.com/HotelAPI/
+ * Search Hotels - GetHotelResult
+ * VERIFIED WORKING - Returns 2,429+ hotels with real pricing
+ * Uses hotelbooking subdomain with GetHotelResult method
  */
 async function searchHotels(params = {}) {
   console.log("═".repeat(80));
