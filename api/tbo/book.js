@@ -132,7 +132,7 @@ async function blockRoom(params = {}) {
     );
   });
 
-  // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
+  // ��� CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
   // ✅ Pass mapped rooms with SmokingPreference as INTEGER, not string
 
   // ✅ PER TBO BLOCKROOM SPEC: CategoryId is a top-level MANDATORY field (field 6)
@@ -318,8 +318,9 @@ async function bookHotel(params = {}) {
     throw new Error("Missing required parameters");
   }
 
-  // ✅ CRITICAL: Per TBO documentation, pass full room structure from GetHotelRoom
-  // Add HotelPassenger to each room but keep all other fields (RoomTypeID, RoomCombination, etc.)
+  // ✅ CRITICAL: Per TBO documentation, use the exact structure from BlockRoom response
+  // This includes the final Price object that BlockRoom calculated/validated
+  // Add HotelPassenger to each room but preserve ALL other fields exactly as they came from BlockRoom
   console.log("\nStep 2: Preparing room details with passenger information...");
 
   // ✅ CRITICAL: SmokingPreference must be NUMERIC (0-3) for Book API, not string
@@ -343,8 +344,10 @@ async function bookHotel(params = {}) {
     const passengersForRoom = buildHotelPassengersForRoom(hotelPassenger);
 
     return {
-      ...room, // Keep all fields from GetHotelRoom response
+      ...room, // Keep ALL fields from BlockRoom response (includes updated Price if IsPriceChanged)
       SmokingPreference: smokingPref, // ✅ OVERRIDE with numeric value for Book API
+      // ✅ DO NOT OVERRIDE Price - use the exact Price object from BlockRoom
+      // (The ...room spread above preserves room.Price from BlockRoom response)
       HotelPassenger: passengersForRoom, // ✅ WITH LeadPassenger: true for first adult
     };
   });
