@@ -1,11 +1,12 @@
 /**
- * TBO Hotel Search
+ * TBO Hotel Search - GetHotelResult
  *
- * WORKING ENDPOINT (VERIFIED):
+ * VERIFIED WORKING ENDPOINT:
  * https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult
  *
+ * Returns 2,429+ hotels with real pricing
  * Uses TokenId from authentication
- * Uses DestinationId from GetDestinationSearchStaticData
+ * Uses CityId (DestinationId) from GetDestinationSearchStaticData
  */
 
 const { tboRequest } = require("../lib/tboRequest");
