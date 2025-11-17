@@ -81,8 +81,10 @@ async function searchHotels(params = {}) {
   // 5. Build search request for AFFILIATE endpoint (uses username/password, not TokenId)
   const searchRequest = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
-    UserName: process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME || "travelcategory",
-    Password: process.env.TBO_STATIC_DATA_CREDENTIALS_PASSWORD || "Tra@59334536",
+    UserName:
+      process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME || "travelcategory",
+    Password:
+      process.env.TBO_STATIC_DATA_CREDENTIALS_PASSWORD || "Tra@59334536",
     ClientId: process.env.TBO_HOTEL_CLIENT_ID || "tboprod",
     CheckInDate: formatDateForTBO(checkIn),
     NoOfNights: noOfNights,

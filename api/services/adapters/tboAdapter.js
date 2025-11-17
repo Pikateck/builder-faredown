@@ -601,10 +601,13 @@ class TBOAdapter extends BaseSupplierAdapter {
     });
 
     // Log exact request payload (sanitized)
-    this.logger.debug("📤 Search Request Payload (affiliate - using username/password):", {
-      ...searchRequest,
-      Password: "***",
-    });
+    this.logger.debug(
+      "📤 Search Request Payload (affiliate - using username/password):",
+      {
+        ...searchRequest,
+        Password: "***",
+      },
+    );
 
     try {
       const response = await tboRequest(searchUrl, {
