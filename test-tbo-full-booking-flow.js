@@ -203,12 +203,13 @@ async function runCompleteFlow() {
 
     // STEP 3: Hotel Search
     logStep(3, "Hotel Search - Search hotels with real CityId");
-    const searchResult = await searchHotels({
+    console.log("\n📌 REQUEST BODY:");
+    const searchRequest = {
       destination: TEST_PARAMS.destination,
       countryCode: TEST_PARAMS.countryCode,
       checkIn: TEST_PARAMS.checkInDate,
       checkOut: TEST_PARAMS.checkOutDate,
-      guestNationality: TEST_PARAMS.nationality, // must be IN for now
+      guestNationality: TEST_PARAMS.nationality,
       rooms: [
         {
           adults: TEST_PARAMS.adults,
@@ -217,7 +218,14 @@ async function runCompleteFlow() {
         },
       ],
       currency: CURRENCY_BY_COUNTRY[TEST_PARAMS.countryCode] || "USD",
-    });
+    };
+    console.log(JSON.stringify(searchRequest, null, 2));
+
+    const searchResult = await searchHotels(searchRequest);
+
+    // Log full search result for debugging
+    console.log("\n📌 SEARCH RESULT (parsed by search.js):");
+    console.log(JSON.stringify(searchResult, null, 2));
 
     if (!searchResult || !searchResult.traceId) {
       logError("Hotel search failed", searchResult);
@@ -234,7 +242,13 @@ async function runCompleteFlow() {
 
     if (hotels.length === 0) {
       logError("No hotels found in search results");
-      results.steps.hotelSearch = { success: false, error: "No hotels found" };
+      console.log("\n⚠️  IMPORTANT: Upload this test output to see exactly what TBO returned.");
+      results.steps.hotelSearch = {
+        success: false,
+        error: "No hotels found",
+        responseStatus: searchResult.responseStatus,
+        debugInfo: "Check console output above for RAW TBO RESPONSE",
+      };
       return results;
     }
 
