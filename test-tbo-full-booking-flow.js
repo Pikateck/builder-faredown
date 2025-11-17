@@ -378,11 +378,13 @@ async function runCompleteFlow() {
     logStep(6, "Book Hotel - Confirm booking");
     // ✅ CRITICAL: Use BlockRoom response's room details, NOT the original GetHotelRoom details
     // BlockRoom updates the Price when IsPriceChanged: true, and Book must use that exact Price
+    // Also pass the CategoryId from BlockRoom response (mandatory for Book API)
     const bookResult = await bookHotel({
       traceId,
       resultIndex,
       hotelCode,
       hotelName: selectedHotel.HotelName,
+      categoryId: blockResult.categoryId, // ✅ CRITICAL: CategoryId from BlockRoom (mandatory for Book)
       guestNationality: TEST_PARAMS.nationality,
       noOfRooms: 1,
       isVoucherBooking: true,
