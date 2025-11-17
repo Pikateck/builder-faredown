@@ -15,7 +15,7 @@
  * 1. Authenticate → Get TokenId
  * 2. GetDestinationSearchStaticData → Get real CityId (DestinationId)
  * 3. SearchHotels → Get hotel results with TraceId
- * 4. GetHotelRoom → Get room details using TraceId + ResultIndex
+ * 4. GetHotelRoom �� Get room details using TraceId + ResultIndex
  * 5. BlockRoom → Hold the room temporarily
  * 6. Book → Confirm the booking
  * 7. GenerateVoucher → Get booking voucher
@@ -70,8 +70,8 @@ const { generateVoucher, getBookingDetails } = require("./api/tbo/voucher");
 
 // Helper: choose safe future dates (static for now, but in future can be dynamic)
 const TEST_PARAMS = {
-  destination: "Dubai",
-  countryCode: "AE",
+  destination: "Delhi",
+  countryCode: "IN",
   checkInDate: "2025-12-15", // must be > today
   checkOutDate: "2025-12-20",
   nationality: "IN", // TBO agency restriction: only Indian nationality allowed
@@ -226,8 +226,13 @@ async function runCompleteFlow() {
       return results;
     }
 
-    // Select first hotel for testing
-    const selectedHotel = hotels[0];
+    // Select cheapest hotel (sort by OfferedPrice)
+    const sortedHotels = [...hotels].sort((a, b) => {
+      const priceA = a.Price?.OfferedPrice || a.OfferedPrice || Infinity;
+      const priceB = b.Price?.OfferedPrice || b.OfferedPrice || Infinity;
+      return priceA - priceB;
+    });
+    const selectedHotel = sortedHotels[0];
     const resultIndex = selectedHotel.ResultIndex;
     const hotelCode = selectedHotel.HotelCode;
 
@@ -272,8 +277,13 @@ async function runCompleteFlow() {
       `Room details retrieved. Available rooms: ${hotelRoomsDetails.length}`,
     );
 
-    // Select first room
-    const selectedRoom = hotelRoomsDetails[0];
+    // Select cheapest room (sort by OfferedPrice)
+    const sortedRooms = [...hotelRoomsDetails].sort((a, b) => {
+      const priceA = a.Price?.OfferedPrice || a.OfferedPrice || Infinity;
+      const priceB = b.Price?.OfferedPrice || b.OfferedPrice || Infinity;
+      return priceA - priceB;
+    });
+    const selectedRoom = sortedRooms[0];
 
     results.steps.roomDetails = {
       success: true,
