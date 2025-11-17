@@ -73,7 +73,7 @@ const TEST_PARAMS = {
   destination: "Delhi",
   countryCode: "IN",
   checkInDate: "2025-12-15", // must be > today
-  checkOutDate: "2025-12-20",
+  checkOutDate: "2025-12-16", // 1 night only (cheaper for testing)
   nationality: "IN", // TBO agency restriction: only Indian nationality allowed
   adults: 2,
   children: 0,
