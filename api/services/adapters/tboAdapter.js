@@ -39,10 +39,10 @@ class TBOAdapter extends BaseSupplierAdapter {
       hotelStaticDataUrl:
         "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData",
 
-      // Hotel Search - GetHotelResult (Uses TokenId) - VERIFIED WORKING
+      // Hotel Search - Uses affiliate endpoint (FINAL PRODUCTION URL)
       hotelSearchUrl:
         process.env.TBO_HOTEL_SEARCH_URL ||
-        "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult",
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/",
 
       // Booking, Voucher, Booking Details - Uses TokenId
       hotelBookingBase:
@@ -585,7 +585,7 @@ class TBOAdapter extends BaseSupplierAdapter {
     // ✅ CORRECTED: Use verified working endpoint
     const searchUrl =
       process.env.TBO_HOTEL_SEARCH_URL ||
-      "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
+      "https://affiliate.travelboutiqueonline.com/HotelAPI/";
 
     this.logger.info("🔍 TBO Hotel Search Request", {
       endpoint: searchUrl,
