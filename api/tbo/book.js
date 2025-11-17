@@ -414,7 +414,9 @@ async function bookHotel(params = {}) {
     "🔍 BOOK CategoryId diagnostic (CRITICAL - must not be null or undefined):",
   );
   console.log(`  categoryId param received: "${categoryId || "<<MISSING>>"}"`);
-  console.log(`  bookCategoryId to be sent: "${bookCategoryId || "<<MISSING>>"}"`);
+  console.log(
+    `  bookCategoryId to be sent: "${bookCategoryId || "<<MISSING>>"}"`,
+  );
   console.log(`  Has valid CategoryId: ${!!bookCategoryId}`);
   if (!bookCategoryId) {
     console.error(
