@@ -7,12 +7,16 @@ Fixed all TBO hotel search and booking code to use environment variables instead
 ## Changes Made
 
 ### 1. ✅ api/tbo/book.js - BlockRoom URL
+
 **Before:**
+
 ```javascript
-const url = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom";
+const url =
+  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom";
 ```
 
 **After:**
+
 ```javascript
 const url =
   process.env.TBO_HOTEL_BLOCKROOM_URL ||
@@ -20,12 +24,16 @@ const url =
 ```
 
 ### 2. ✅ api/tbo/book.js - Book URL
+
 **Before:**
+
 ```javascript
-const url = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book";
+const url =
+  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book";
 ```
 
 **After:**
+
 ```javascript
 const url =
   process.env.TBO_HOTEL_BOOK_URL ||
@@ -33,20 +41,23 @@ const url =
 ```
 
 ### 3. ✅ Deleted Backup Files
+
 Removed old backup adapter files that contained affiliate URLs:
+
 - `api/services/adapters/tboAdapter.BACKUP_BEFORE_FIX.js` ❌ DELETED
 - `api/services/adapters/tboAdapter.FIXED.js` ❌ DELETED
 
 ### 4. ✅ Verified Production Code
+
 All production code paths now use environment variables:
 
-| File | URL Source | Status |
-|------|------------|--------|
-| `api/services/adapters/tboAdapter.js` | `TBO_HOTEL_SEARCH_URL` (line 44-45) | ✅ |
-| `api/tbo/search.js` | `TBO_HOTEL_SEARCH_URL` (line 101-103) | ✅ |
-| `api/tbo/book.js` | `TBO_HOTEL_BLOCKROOM_URL` (BlockRoom) | ✅ |
-| `api/tbo/book.js` | `TBO_HOTEL_BOOK_URL` (Book) | ✅ |
-| `test-tbo-full-booking-flow.js` | Imports from `./api/tbo/*` (correct) | ✅ |
+| File                                  | URL Source                            | Status |
+| ------------------------------------- | ------------------------------------- | ------ |
+| `api/services/adapters/tboAdapter.js` | `TBO_HOTEL_SEARCH_URL` (line 44-45)   | ✅     |
+| `api/tbo/search.js`                   | `TBO_HOTEL_SEARCH_URL` (line 101-103) | ✅     |
+| `api/tbo/book.js`                     | `TBO_HOTEL_BLOCKROOM_URL` (BlockRoom) | ✅     |
+| `api/tbo/book.js`                     | `TBO_HOTEL_BOOK_URL` (Book)           | ✅     |
+| `test-tbo-full-booking-flow.js`       | Imports from `./api/tbo/*` (correct)  | ✅     |
 
 ## Render Environment Variables (Already Set)
 
@@ -67,11 +78,13 @@ USE_SUPPLIER_PROXY=true
 ✅ **Search completed successfully**
 
 Remaining affiliate URL references are ONLY in:
+
 - Test scripts (not used in production): `scripts/run-tbo-test.js`, `scripts/test-tbo-connectivity.js`
 - Documentation files (markdown)
 - These do NOT affect production
 
 **Active production code paths:**
+
 - ✅ Zero affiliate URLs found in `api/tbo/`
 - ✅ Zero affiliate URLs found in `api/services/adapters/tboAdapter.js`
 - ✅ Zero affiliate URLs found in `api/routes/tbo*.js`
@@ -220,12 +233,14 @@ Step 3: Searching hotels via affiliate endpoint...
 ### If test still shows affiliate URL:
 
 1. **Verify env var is set:**
+
    ```bash
    echo $TBO_HOTEL_SEARCH_URL
    # Must output: https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult
    ```
 
 2. **Check if code was deployed:**
+
    ```bash
    grep "process.env.TBO_HOTEL_SEARCH_URL" api/tbo/search.js
    # Must show the env var is being read
@@ -239,8 +254,8 @@ Step 3: Searching hotels via affiliate endpoint...
 
 1. **Verify TokenId is obtained:**
    - Check Step 1 output shows "✅ TokenId obtained"
-   
 2. **Verify credentials:**
+
    ```bash
    echo $TBO_HOTEL_CLIENT_ID  # Should be: tboprod
    echo $TBO_HOTEL_USER_ID    # Should be: BOMF145
@@ -255,6 +270,7 @@ Step 3: Searching hotels via affiliate endpoint...
 ### If test returns 0 hotels:
 
 This is acceptable for some date/destination combinations. Try:
+
 - Different dates (further in the future)
 - Popular destinations (Dubai, London, New York)
 - Fewer restrictions (remove min/max star rating)
@@ -262,11 +278,13 @@ This is acceptable for some date/destination combinations. Try:
 ## Next Steps After Successful Test
 
 Once the test shows:
+
 - ✅ GetHotelResult endpoint in logs
 - ✅ Status: 1
 - ✅ Non-empty HotelResults array
 
 Then you can proceed to:
+
 1. Wire the Delhi → 1 night → 2 adults result into the frontend
 2. Implement cheapest-hotel logic
 3. Display real hotels in the UI
