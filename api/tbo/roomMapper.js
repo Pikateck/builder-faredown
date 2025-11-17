@@ -162,6 +162,13 @@ function validateRoomForBlockRequest(room) {
     errors.push("RoomIndex is required");
   }
 
+  // ✅ CRITICAL: CategoryId must be present and non-empty
+  if (!room.CategoryId) {
+    errors.push(
+      `CategoryId is required (got: ${room.CategoryId === undefined ? "undefined" : room.CategoryId === null ? "null" : `"${room.CategoryId}"`})`,
+    );
+  }
+
   if (!room.RoomTypeCode) {
     errors.push("RoomTypeCode is required");
   }
