@@ -99,9 +99,9 @@ async function searchHotels(params = {}) {
     MinRating: 0,
   };
 
-  // ✅ CORRECT ENDPOINT per TBO (affiliate base URL + GetHotelResult method)
+  // ✅ CORRECT ENDPOINT per TBO email (affiliate base URL + Search method)
   const CORRECT_ENDPOINT =
-    "https://affiliate.travelboutiqueonline.com/HotelAPI/GetHotelResult";
+    "https://affiliate.travelboutiqueonline.com/HotelAPI/Search";
   const url = process.env.TBO_HOTEL_SEARCH_URL || CORRECT_ENDPOINT;
 
   // Safety override: always use affiliate endpoint for search
