@@ -309,6 +309,7 @@ async function bookHotel(params = {}) {
     resultIndex,
     hotelCode,
     hotelName,
+    categoryId, // ✅ CRITICAL: CategoryId from BlockRoom response (mandatory for Book)
     guestNationality = "IN",
     noOfRooms = 1,
     hotelRoomDetails,
