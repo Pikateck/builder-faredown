@@ -409,6 +409,20 @@ async function bookHotel(params = {}) {
     HotelRoomsDetails: roomDetailsWithPassengers, // ✅ WITH 's' - correct field name for Book API
   };
 
+  // ✅ CRITICAL DIAGNOSTIC: Verify CategoryId is present before sending Book request
+  console.log(
+    "🔍 BOOK CategoryId diagnostic (CRITICAL - must not be null or undefined):",
+  );
+  console.log(`  categoryId param received: "${categoryId || "<<MISSING>>"}"`);
+  console.log(`  bookCategoryId to be sent: "${bookCategoryId || "<<MISSING>>"}"`);
+  console.log(`  Has valid CategoryId: ${!!bookCategoryId}`);
+  if (!bookCategoryId) {
+    console.error(
+      "❌ FATAL: CategoryId missing before Book request. This will fail.",
+    );
+  }
+  console.log("");
+
   const url =
     process.env.TBO_HOTEL_BOOK_URL ||
     "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book";
@@ -419,9 +433,8 @@ async function bookHotel(params = {}) {
   console.log(
     "  HotelCode:",
     request.HotelCode,
-    `(CategoryId source: ${categoryId ? "from BlockRoom param" : "from room details"})`,
+    `(CategoryId: "${bookCategoryId || "<<MISSING - ERROR>>"}}")`,
   );
-  console.log("  CategoryId:", request.CategoryId || "<<MISSING - ERROR>>");
   console.log("  HotelName:", request.HotelName);
   console.log(
     "  Lead Passenger:",
