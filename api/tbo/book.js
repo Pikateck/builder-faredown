@@ -106,6 +106,7 @@ async function blockRoom(params = {}) {
   };
 
   const url =
+    process.env.TBO_HOTEL_BLOCKROOM_URL ||
     "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom";
 
   console.log("\nStep 2: Blocking room...");
@@ -253,6 +254,7 @@ async function bookHotel(params = {}) {
   };
 
   const url =
+    process.env.TBO_HOTEL_BOOK_URL ||
     "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book";
 
   console.log("\nStep 2: Booking hotel...");
