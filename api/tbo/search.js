@@ -1,10 +1,10 @@
 /**
- * TBO Hotel Search - GetHotelResult
+ * TBO Hotel Search - Search
  *
  * CORRECT ENDPOINT (per TBO email):
- * https://affiliate.travelboutiqueonline.com/HotelAPI/GetHotelResult
+ * https://affiliate.travelboutiqueonline.com/HotelAPI/Search
  *
- * Returns 2,429+ hotels with real pricing
+ * Returns hotels with real pricing
  * Uses TokenId from authentication
  * Uses CityId (DestinationId) from GetDestinationSearchStaticData
  */
