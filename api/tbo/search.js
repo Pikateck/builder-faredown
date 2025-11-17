@@ -105,8 +105,9 @@ async function searchHotels(params = {}) {
   // Safety override: always use affiliate endpoint for search
   const finalUrl = CORRECT_ENDPOINT;
 
-  console.log("\nStep 3: Searching hotels...");
+  console.log("\nStep 3: Searching hotels via affiliate endpoint...");
   console.log("  URL:", finalUrl);
+  console.log("  Auth: UserName=", searchRequest.UserName);
   console.log("  CityId:", searchRequest.CityId, `(${destination})`);
   console.log("  CheckIn:", searchRequest.CheckInDate);
   console.log("  Nights:", searchRequest.NoOfNights);
