@@ -175,10 +175,10 @@ async function blockRoom(params = {}) {
     "🔍 DIAGNOSTIC: BlockRoom CategoryId (TBO spec requires top-level):",
   );
   console.log(
-    `  Root CategoryId   : "${blockRoomCategoryId || "<<MISSING>>"}"`,
+    `  Root CategoryId   : "${blockRequestCategoryId || "<<MISSING>>"}"`,
   );
-  console.log(`    Type: ${typeof blockRoomCategoryId}`);
-  console.log(`    Truthy: ${!!blockRoomCategoryId}`);
+  console.log(`    Type: ${typeof blockRequestCategoryId}`);
+  console.log(`    Truthy: ${!!blockRequestCategoryId}`);
   console.log("");
   console.log("🔍 DIAGNOSTIC: CategoryId in HotelRoomsDetails (nested):");
   mappedRooms.forEach((room, idx) => {
