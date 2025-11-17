@@ -91,8 +91,8 @@ async function testTBOHotelSearch() {
   };
 
   const endpoint =
-    process.env.TBO_HOTEL_SEARCH_PREBOOK ||
-    "https://affiliate.travelboutiqueonline.com/HotelAPI/";
+    process.env.TBO_HOTEL_SEARCH_URL ||
+    "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
 
   const result = {
     endpoint: endpoint + "Search",
