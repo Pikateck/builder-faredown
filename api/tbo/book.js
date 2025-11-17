@@ -86,7 +86,7 @@ async function blockRoom(params = {}) {
       `    SmokingPreference: ${room.SmokingPreference} (type: ${typeof room.SmokingPreference})`,
     );
     console.log(
-      `    Price: ${Array.isArray(room.Price) ? "array" : "NOT ARRAY!"}`,
+      `    Price: ${typeof room.Price === "object" && !Array.isArray(room.Price) ? "object ✓" : Array.isArray(room.Price) ? "ARRAY ✗" : "INVALID"}`,
     );
   });
 
