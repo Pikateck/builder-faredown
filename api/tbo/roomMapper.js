@@ -67,6 +67,9 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
     // MANDATORY: Index of the room (1-based, not 0-based)
     RoomIndex: roomIndex + 1,
 
+    // ✅ MANDATORY: Category ID (required by BlockRoom API)
+    CategoryId: room.CategoryId || "",
+
     // MANDATORY: Rate plan code - might have different field names in TBO response
     RatePlanCode:
       room.RatePlanCode ||
