@@ -142,12 +142,17 @@ async function searchHotels(params = {}) {
     console.log("");
   }
 
+  // Calculate checkout date from checkin + nights
+  const checkOutDateObj = new Date(checkInDate);
+  checkOutDateObj.setDate(checkOutDateObj.getDate() + noOfNights);
+  const checkOutDateStr = formatDateForTBO(checkOutDateObj.toISOString().split('T')[0]);
+
   return {
     responseStatus: result.ResponseStatus,
     traceId: result.TraceId,
     cityId: Number(cityId),
     checkInDate: searchRequest.CheckInDate,
-    checkOutDate: searchRequest.CheckInDate,
+    checkOutDate: checkOutDateStr,
     currency: currency,
     noOfRooms: roomGuests.length,
     hotels: result.HotelResults || [],
