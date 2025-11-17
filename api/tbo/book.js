@@ -61,7 +61,9 @@ async function blockRoom(params = {}) {
   const mappedRooms = mapRoomsForBlockRequest(hotelRoomDetails);
 
   console.log("\nStep 2b: Validating room details...");
-  const validationResults = mappedRooms.map((room) => validateRoomForBlockRequest(room));
+  const validationResults = mappedRooms.map((room) =>
+    validateRoomForBlockRequest(room),
+  );
   const invalidRooms = validationResults.filter((result) => !result.success);
 
   if (invalidRooms.length > 0) {
@@ -80,8 +82,12 @@ async function blockRoom(params = {}) {
   mappedRooms.forEach((room, index) => {
     console.log(`  Room ${index}:`);
     console.log(`    RoomTypeName: ${room.RoomTypeName}`);
-    console.log(`    SmokingPreference: ${room.SmokingPreference} (type: ${typeof room.SmokingPreference})`);
-    console.log(`    Price: ${Array.isArray(room.Price) ? "array" : "NOT ARRAY!"}`);
+    console.log(
+      `    SmokingPreference: ${room.SmokingPreference} (type: ${typeof room.SmokingPreference})`,
+    );
+    console.log(
+      `    Price: ${Array.isArray(room.Price) ? "array" : "NOT ARRAY!"}`,
+    );
   });
 
   // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
@@ -222,12 +228,14 @@ async function bookHotel(params = {}) {
   console.log("\nStep 2: Preparing room details with passenger information...");
 
   const roomDetailsWithPassengers = hotelRoomDetails.map((room) => ({
-    ...room,  // Keep all fields from GetHotelRoom response
-    HotelPassenger: hotelPassenger,  // Add passenger details
+    ...room, // Keep all fields from GetHotelRoom response
+    HotelPassenger: hotelPassenger, // Add passenger details
   }));
 
   roomDetailsWithPassengers.forEach((room, index) => {
-    console.log(`  Room ${index}: ${room.RoomTypeName} (with ${hotelPassenger.length} passenger(s))`);
+    console.log(
+      `  Room ${index}: ${room.RoomTypeName} (with ${hotelPassenger.length} passenger(s))`,
+    );
   });
 
   // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
