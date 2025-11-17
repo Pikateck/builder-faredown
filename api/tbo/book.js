@@ -392,9 +392,10 @@ async function bookHotel(params = {}) {
   console.log("");
 
   // ✅ PER TBO SPEC: CategoryId should be at root level for de-dupe Book requests
-  // Extract from first room (same as we did for BlockRoom)
-  const primaryRoom = roomDetailsWithPassengers[0];
-  const bookCategoryId = primaryRoom?.CategoryId || undefined;
+  // Use the CategoryId passed from BlockRoom response (mandatory field)
+  // Fallback to room CategoryId if not provided as parameter
+  const bookCategoryId =
+    categoryId || roomDetailsWithPassengers[0]?.CategoryId || undefined;
 
   // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
   const request = {
