@@ -333,17 +333,21 @@ async function bookHotel(params = {}) {
     either: 3,
   };
 
-  const roomDetailsWithPassengers = hotelRoomDetails.map((room) => {
+  const roomDetailsWithPassengers = hotelRoomDetails.map((room, roomIndex) => {
     // Convert SmokingPreference to numeric value if it's a string
     let smokingPref = room.SmokingPreference ?? 0;
     if (typeof smokingPref === "string") {
       smokingPref = smokingEnumMap[smokingPref.toLowerCase()] ?? 0;
     }
 
+    // ✅ CRITICAL: Build HotelPassenger with LeadPassenger flag
+    // TBO requires exactly one adult per room to have LeadPassenger: true
+    const passengersForRoom = buildHotelPassengersForRoom(hotelPassenger);
+
     return {
       ...room, // Keep all fields from GetHotelRoom response
       SmokingPreference: smokingPref, // ✅ OVERRIDE with numeric value for Book API
-      HotelPassenger: hotelPassenger, // Add passenger details
+      HotelPassenger: passengersForRoom, // ✅ WITH LeadPassenger: true for first adult
     };
   });
 
