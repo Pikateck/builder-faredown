@@ -122,18 +122,29 @@ async function searchHotels(params = {}) {
     timeout: 90000, // Extended timeout for large result sets (2000+ hotels via proxy)
   });
 
-  const result = response.data?.HotelSearchResult || response.data;
+  // Handle multiple response formats from TBO
+  let result = response.data;
+
+  // If wrapped in HotelSearchResult, unwrap it
+  if (response.data?.HotelSearchResult) {
+    result = response.data.HotelSearchResult;
+  }
+
+  // Also check for response wrapper
+  if (response.data?.response?.HotelSearchResult) {
+    result = response.data.response.HotelSearchResult;
+  }
 
   console.log("📥 TBO Search Response");
   console.log("  HTTP Status:", response.status);
-  console.log("  ResponseStatus:", result?.ResponseStatus);
+  console.log("  ResponseStatus:", result?.ResponseStatus || result?.Status);
   console.log("  TraceId:", result?.TraceId);
   console.log("  Hotel Count:", result?.HotelResults?.length || 0);
   console.log("  Error:", result?.Error?.ErrorMessage || "None");
 
   // Debug: log actual response structure if no hotels
   if (!result?.HotelResults || result.HotelResults.length === 0) {
-    console.log("⚠️  DEBUG: Response structure:", JSON.stringify(result, null, 2).substring(0, 500));
+    console.log("⚠️  DEBUG: Full response:", JSON.stringify(result, null, 2).substring(0, 800));
   }
   console.log("");
 
