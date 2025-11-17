@@ -108,7 +108,10 @@ async function searchHotels(params = {}) {
 
   console.log("\nStep 3: Searching hotels...");
   console.log("  ENV TBO_HOTEL_SEARCH_URL:", process.env.TBO_HOTEL_SEARCH_URL || "NOT SET");
-  console.log("  Final URL:", url);
+  console.log("  Final URL:", finalUrl);
+  if (url !== finalUrl) {
+    console.log("  ⚠️  WARNING: Fixed incorrect URL from:", url);
+  }
   console.log("  CityId:", searchRequest.CityId, `(${destination})`);
   console.log("  CheckIn:", searchRequest.CheckInDate);
   console.log("  Nights:", searchRequest.NoOfNights);
@@ -116,7 +119,7 @@ async function searchHotels(params = {}) {
   console.log("  Currency:", searchRequest.PreferredCurrency);
   console.log("");
 
-  const response = await tboRequest(url, {
+  const response = await tboRequest(finalUrl, {
     method: "POST",
     data: searchRequest,
     headers: {
