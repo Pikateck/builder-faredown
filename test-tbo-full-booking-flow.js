@@ -216,7 +216,7 @@ async function runCompleteFlow() {
           childAges: [],
         },
       ],
-      currency: "USD",
+      currency: CURRENCY_BY_COUNTRY[TEST_PARAMS.countryCode] || "USD",
     });
 
     if (!searchResult || !searchResult.traceId) {
