@@ -145,11 +145,11 @@ async function searchHotels(params = {}) {
   return {
     responseStatus: result.ResponseStatus,
     traceId: result.TraceId,
-    cityId: result.CityId,
-    checkInDate: result.CheckInDate,
-    checkOutDate: result.CheckOutDate,
-    currency: result.PreferredCurrency,
-    noOfRooms: result.NoOfRooms,
+    cityId: Number(cityId),
+    checkInDate: searchRequest.CheckInDate,
+    checkOutDate: searchRequest.CheckInDate,
+    currency: currency,
+    noOfRooms: roomGuests.length,
     hotels: result.HotelResults || [],
     error: result.Error,
   };
