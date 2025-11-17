@@ -117,6 +117,18 @@ async function blockRoom(params = {}) {
   console.log("  NoOfRooms:", request.NoOfRooms);
   console.log("");
 
+  // ✅ DIAGNOSTIC: Log CategoryId from each room BEFORE sending
+  console.log("🔍 DIAGNOSTIC: CategoryId in HotelRoomsDetails before sending:");
+  mappedRooms.forEach((room, idx) => {
+    console.log(`  Room ${idx}: CategoryId = "${room.CategoryId || "<<MISSING>>"}"`);
+    console.log(`    Type: ${typeof room.CategoryId}`);
+    console.log(`    Truthy: ${!!room.CategoryId}`);
+    if (room.CategoryId === "") {
+      console.log("    ⚠️  WARNING: CategoryId is EMPTY STRING!");
+    }
+  });
+  console.log("");
+
   console.log("📤 Request Payload:");
   console.log(
     JSON.stringify(
