@@ -97,13 +97,10 @@ async function searchHotels(params = {}) {
     MinRating: 0,
   };
 
-  // ✅ CORRECT ENDPOINT - Production GetHotelResult (COMPLETE & TESTED)
-  const CORRECT_ENDPOINT =
+  // ✅ PRODUCTION ENDPOINT - GetHotelResult (Uses TokenId, NOT affiliate)
+  const PRODUCTION_ENDPOINT =
     "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
-  const url = process.env.TBO_HOTEL_SEARCH_URL || CORRECT_ENDPOINT;
-
-  // Use environment variable or default to correct endpoint
-  const finalUrl = url;
+  const finalUrl = process.env.TBO_HOTEL_SEARCH_URL || PRODUCTION_ENDPOINT;
 
   console.log("\nStep 3: Searching hotels...");
   console.log("  URL:", finalUrl);
