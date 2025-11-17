@@ -34,11 +34,10 @@ async function searchHotels(params = {}) {
   console.log("TBO HOTEL SEARCH");
   console.log("═".repeat(80));
 
-  // NOTE: Affiliate endpoint uses STATIC credentials, not TokenId
-  // Static credentials are for initial auth only (used in tboRequest wrapper)
-  console.log("\nStep 1: Using static credentials for affiliate search...");
+  // NOTE: Affiliate endpoint uses STATIC credentials (username/password), not TokenId
+  console.log("\nStep 1: Getting CityId for affiliate search...");
 
-  // 2. Get CityId from static data
+  // Get params
   const {
     destination = "Dubai",
     checkIn = "15/12/2025",
@@ -49,7 +48,10 @@ async function searchHotels(params = {}) {
     rooms = [{ adults: 2, children: 0, childAges: [] }],
   } = params;
 
+  // 2. Get CityId from static data (still uses TokenId)
   console.log("\nStep 2: Getting CityId for", destination, "in", countryCode);
+  const authData = await authenticateTBO();
+  const tokenId = authData.TokenId;
   const cityId = await getCityId(destination, countryCode, tokenId);
 
   if (!cityId) {
