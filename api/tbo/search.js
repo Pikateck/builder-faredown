@@ -130,6 +130,11 @@ async function searchHotels(params = {}) {
   console.log("  TraceId:", result?.TraceId);
   console.log("  Hotel Count:", result?.HotelResults?.length || 0);
   console.log("  Error:", result?.Error?.ErrorMessage || "None");
+
+  // Debug: log actual response structure if no hotels
+  if (!result?.HotelResults || result.HotelResults.length === 0) {
+    console.log("⚠️  DEBUG: Response structure:", JSON.stringify(result, null, 2).substring(0, 500));
+  }
   console.log("");
 
   if (result?.HotelResults?.length > 0) {
