@@ -170,7 +170,7 @@ async function searchHotels(params = {}) {
   }
 
   return {
-    responseStatus: result.ResponseStatus,
+    responseStatus: responseStatus,
     traceId: result.TraceId,
     cityId: Number(cityId),
     checkInDate: searchRequest.CheckInDate,
