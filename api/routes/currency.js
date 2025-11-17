@@ -561,4 +561,48 @@ router.get("/rates/history/:code", authenticateToken, (req, res) => {
     res.status(500).json({ error: "Failed to fetch rate history" });
   }
 });
+
+// GET /api/currency/rates - Get all currency exchange rates
+router.get("/rates", (req, res) => {
+  try {
+    const rates = {};
+    const rateDetails = [];
+
+    // Build rates object for easy lookup
+    currencies.forEach((currency) => {
+      rates[currency.code] = {
+        code: currency.code,
+        exchangeRate: currency.exchangeRate,
+        baseRate: currency.baseRate,
+        markup: currency.markup,
+        symbol: currency.symbol,
+        trend: currency.trend,
+        change24h: currency.change24h,
+      };
+
+      rateDetails.push({
+        code: currency.code,
+        name: currency.name,
+        symbol: currency.symbol,
+        exchangeRate: currency.exchangeRate,
+        baseRate: currency.baseRate,
+        markup: currency.markup,
+        status: currency.status,
+        trend: currency.trend,
+        change24h: currency.change24h,
+        lastUpdated: currency.lastUpdated,
+      });
+    });
+
+    res.json({
+      rates,
+      rateDetails,
+      baseCurrency: "INR",
+      lastUpdated: new Date().toISOString(),
+    });
+  } catch (error) {
+    res.status(500).json({ error: "Failed to fetch currency rates" });
+  }
+});
+
 module.exports = router;
