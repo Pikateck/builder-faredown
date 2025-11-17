@@ -75,9 +75,12 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
     RoomStatus: room.RoomStatus !== undefined ? room.RoomStatus : 0,
     RoomId: room.RoomId !== undefined ? room.RoomId : 0,
     ChildCount: room.ChildCount !== undefined ? room.ChildCount : 0,
-    IsTransferIncluded: room.IsTransferIncluded !== undefined ? room.IsTransferIncluded : false,
+    IsTransferIncluded:
+      room.IsTransferIncluded !== undefined ? room.IsTransferIncluded : false,
     RequireAllPaxDetails:
-      room.RequireAllPaxDetails !== undefined ? room.RequireAllPaxDetails : false,
+      room.RequireAllPaxDetails !== undefined
+        ? room.RequireAllPaxDetails
+        : false,
 
     // MANDATORY: Rate plan code - might have different field names in TBO response
     RatePlanCode:
@@ -120,8 +123,10 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
       : [],
     LastVoucherDate: room.LastVoucherDate || "",
     CancellationPolicy: room.CancellationPolicy || "",
-    IsPassportMandatory: room.IsPassportMandatory !== undefined ? room.IsPassportMandatory : false,
-    IsPANMandatory: room.IsPANMandatory !== undefined ? room.IsPANMandatory : false,
+    IsPassportMandatory:
+      room.IsPassportMandatory !== undefined ? room.IsPassportMandatory : false,
+    IsPANMandatory:
+      room.IsPANMandatory !== undefined ? room.IsPANMandatory : false,
 
     // ✅ MANDATORY: Price details ARRAY (not object)
     Price: priceArray,
