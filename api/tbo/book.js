@@ -409,6 +409,20 @@ async function bookHotel(params = {}) {
   });
   console.log("");
 
+  // ✅ DIAGNOSTIC: Verify LeadPassenger is set correctly
+  console.log(
+    "🔍 DIAGNOSTIC: Book LeadPassenger (TBO requires one per room):",
+  );
+  roomDetailsWithPassengers.forEach((room, idx) => {
+    console.log(`  Room ${idx} HotelPassenger:`);
+    room.HotelPassenger.forEach((pax, paxIdx) => {
+      console.log(
+        `    Pax ${paxIdx}: ${pax.FirstName} ${pax.LastName} - LeadPassenger: ${pax.LeadPassenger}`,
+      );
+    });
+  });
+  console.log("");
+
   console.log("📤 Request Payload:");
   console.log(
     JSON.stringify(
