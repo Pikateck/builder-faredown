@@ -53,25 +53,39 @@ async function blockRoom(params = {}) {
     throw new Error("Missing required parameters");
   }
 
-  // ✅ CRITICAL: Per TBO documentation Sample Verification page:
-  // "The details in the HotelRoomsDetails array should be passed as per the combination received in the GetHotelRoom response."
-  // Pass room details EXACTLY as received from GetHotelRoom - do NOT map or transform!
-  // TBO expects full structure including RoomTypeID, RoomCombination, etc.
+  // ✅ CRITICAL: Transform room details to convert SmokingPreference from string to integer
+  // TBO's deserialization expects SmokingPreference as Int64 (0=NoPreference, 1=Smoking, 2=NonSmoking, 3=Either)
+  // The GetHotelRoom response provides SmokingPreference as string, which must be converted
+
+  console.log("\nStep 2a: Mapping room details...");
+  const mappedRooms = mapRoomsForBlockRequest(hotelRoomDetails);
+
+  console.log("\nStep 2b: Validating room details...");
+  const validationResults = mappedRooms.map((room) => validateRoomForBlockRequest(room));
+  const invalidRooms = validationResults.filter((result) => !result.success);
+
+  if (invalidRooms.length > 0) {
+    console.log("❌ Validation errors:");
+    invalidRooms.forEach((result) => {
+      console.log("  Errors:", result.errors);
+    });
+    throw new Error("Room validation failed");
+  }
+
+  console.log(`✅ ${mappedRooms.length} room(s) mapped and validated`);
 
   console.log("\nStep 2: Preparing room details for BlockRoom...");
-  console.log(`  Rooms count: ${hotelRoomDetails.length}`);
-  console.log(`  Using rooms AS-IS from GetHotelRoom response (matching combination type)`);
+  console.log(`  Rooms count: ${mappedRooms.length}`);
 
-  hotelRoomDetails.forEach((room, index) => {
+  mappedRooms.forEach((room, index) => {
     console.log(`  Room ${index}:`);
     console.log(`    RoomTypeName: ${room.RoomTypeName}`);
-    console.log(`    RoomTypeID: ${room.RoomTypeID}`);
-    console.log(`    RoomCombination: ${room.RoomCombination}`);
-    console.log(`    RoomIndex: ${room.RoomIndex}`);
+    console.log(`    SmokingPreference: ${room.SmokingPreference} (type: ${typeof room.SmokingPreference})`);
+    console.log(`    Price: ${Array.isArray(room.Price) ? "array" : "NOT ARRAY!"}`);
   });
 
   // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
-  // This was the actual error - we were using the wrong field name!
+  // ✅ Pass mapped rooms with SmokingPreference as INTEGER, not string
   const request = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
     TokenId: tokenId,
@@ -82,7 +96,7 @@ async function blockRoom(params = {}) {
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
     IsVoucherBooking: isVoucherBooking,
-    HotelRoomsDetails: hotelRoomDetails, // ✅ WITH 's' - correct field name for BlockRoom API
+    HotelRoomsDetails: mappedRooms, // ✅ WITH 's' - correct field name, WITH mapped rooms (SmokingPreference as integer)
   };
 
   const url =
