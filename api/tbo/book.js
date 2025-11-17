@@ -17,6 +17,50 @@ const {
 } = require("./roomMapper");
 
 /**
+ * Normalize passenger title to TBO-compatible format
+ */
+function normalizeTitle(title) {
+  if (!title) return "Mr";
+  const t = String(title).trim().toLowerCase();
+  if (t === "mr" || t === "mr.") return "Mr";
+  if (t === "mrs" || t === "mrs.") return "Mrs";
+  if (t === "miss") return "Miss";
+  if (t === "ms" || t === "ms.") return "Ms";
+  return "Mr";
+}
+
+/**
+ * Build HotelPassenger array for a room with LeadPassenger flag
+ * ✅ TBO requirement: Exactly one adult per room must have LeadPassenger: true
+ */
+function buildHotelPassengersForRoom(roomPassengers) {
+  return roomPassengers.map((pax, index) => ({
+    Title: normalizeTitle(pax.title || pax.Title),
+    FirstName: pax.firstName || pax.FirstName || "Guest",
+    MiddleName: pax.middleName || pax.MiddleName || null,
+    LastName: pax.lastName || pax.LastName || "Guest",
+    Phoneno: pax.phone || pax.Phoneno || null,
+    Email: pax.email || pax.Email || null,
+    PaxType: pax.paxType || pax.PaxType || 1, // 1 = Adult, 2 = Child
+    LeadPassenger: index === 0, // ✅ MANDATORY: Mark first adult in room as lead guest
+    Age: pax.age || pax.Age || 30,
+    PassportNo: pax.passportNo || pax.PassportNo || null,
+    PassportIssueDate:
+      pax.passportIssueDate ||
+      pax.PassportIssueDate ||
+      "0001-01-01T00:00:00",
+    PassportExpDate:
+      pax.passportExpDate || pax.PassportExpDate || "0001-01-01T00:00:00",
+    PAN: pax.pan || pax.PAN || null,
+    AddressLine1: pax.addressLine1 || pax.AddressLine1 || null,
+    City: pax.city || pax.City || null,
+    CountryCode: pax.countryCode || pax.CountryCode || null,
+    CountryName: pax.countryName || pax.CountryName || null,
+    Nationality: pax.nationality || pax.Nationality || null,
+  }));
+}
+
+/**
  * Block Room (PreBook)
  *
  * Validates pricing and availability before final booking
