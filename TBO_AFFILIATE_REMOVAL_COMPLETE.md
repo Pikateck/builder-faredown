@@ -7,48 +7,65 @@ All `affiliate.travelboutiqueonline.com` references have been removed from the c
 ## Changes Made
 
 ### 1. ✅ api/services/adapters/tboAdapter.js
+
 **Before:**
+
 ```javascript
-hotelSearchUrl: "https://affiliate.travelboutiqueonline.com/HotelAPI/Search"
+hotelSearchUrl: "https://affiliate.travelboutiqueonline.com/HotelAPI/Search";
 ```
 
 **After:**
+
 ```javascript
-hotelSearchUrl: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult"
+hotelSearchUrl: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
 ```
 
-### 2. ✅ api/tbo/search.js  
+### 2. ✅ api/tbo/search.js
+
 **Before:** N/A (file was already correct, but verified)
 
 **After:**
+
 ```javascript
-const PRODUCTION_ENDPOINT = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
+const PRODUCTION_ENDPOINT =
+  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
 const finalUrl = process.env.TBO_HOTEL_SEARCH_URL || PRODUCTION_ENDPOINT;
 ```
 
 ### 3. ✅ api/routes/tbo-diagnostics.js
+
 **Before:**
+
 ```javascript
-const endpoint = process.env.TBO_HOTEL_SEARCH_PREBOOK || "https://affiliate.travelboutiqueonline.com/HotelAPI/";
+const endpoint =
+  process.env.TBO_HOTEL_SEARCH_PREBOOK ||
+  "https://affiliate.travelboutiqueonline.com/HotelAPI/";
 ```
 
 **After:**
+
 ```javascript
-const endpoint = process.env.TBO_HOTEL_SEARCH_URL || "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
+const endpoint =
+  process.env.TBO_HOTEL_SEARCH_URL ||
+  "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
 ```
 
 ### 4. ✅ .env
+
 **Before:**
+
 ```bash
 TBO_HOTEL_BLOCK_ROOM_URL=https://affiliate.travelboutiqueonline.com/HotelAPI/BlockRoom
 ```
 
 **After:**
+
 ```bash
 TBO_HOTEL_BLOCK_ROOM_URL=https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/BlockRoom
 ```
 
 ### 5. ✅ Environment Variable Set
+
 ```bash
 TBO_HOTEL_SEARCH_URL=https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult
 ```
@@ -56,11 +73,13 @@ TBO_HOTEL_SEARCH_URL=https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/
 ## Production Endpoint Details
 
 **Correct Endpoint:**
+
 ```
 https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult
 ```
 
 **Request Format:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -83,6 +102,7 @@ https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest
 ```
 
 **Authentication:**
+
 - ✅ Uses `TokenId` from Authenticate (NOT static credentials)
 - ✅ Uses `tboprod` / `BOMF145` / `@Bo#4M-Api@`
 - ✅ Uses numeric `CityId` from GetDestinationSearchStaticData
@@ -91,7 +111,7 @@ https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest
 ## Files Verified Clean
 
 1. ✅ `api/services/adapters/tboAdapter.js` - Uses GetHotelResult
-2. ✅ `api/tbo/search.js` - Uses GetHotelResult  
+2. ✅ `api/tbo/search.js` - Uses GetHotelResult
 3. ✅ `api/routes/tbo-hotels.js` - Uses adapter (which uses GetHotelResult)
 4. ✅ `api/routes/tbo-diagnostics.js` - Updated to GetHotelResult
 5. ✅ `test-tbo-full-booking-flow.js` - Imports correct search.js
@@ -99,11 +119,13 @@ https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest
 ## Static Credential Usage (CORRECT)
 
 `travelcategory` credentials are ONLY used for:
-- ✅ CountryList (static data) 
+
+- ✅ CountryList (static data)
 - ✅ TopDestinations (static data)
 - ❌ **NOT used for hotel search** (uses TokenId instead)
 
 Located in:
+
 - `api/services/adapters/tboAdapter.js` lines 72-73 (for static data only)
 
 ## Deployment Instructions
@@ -111,6 +133,7 @@ Located in:
 ### For Render.com:
 
 1. **Push code to git:**
+
    ```bash
    git add -A
    git commit -m "Remove affiliate endpoint, use GetHotelResult production endpoint"
@@ -121,6 +144,7 @@ Located in:
    OR manually trigger deploy from Render dashboard
 
 3. **Verify deployment:**
+
    ```bash
    # SSH to Render or use Render shell
    cd /opt/render/project/src
@@ -180,7 +204,7 @@ Step 3: Searching hotels...
 These backup/test files still contain affiliate references but are NOT used in production:
 
 - `api/services/adapters/tboAdapter.BACKUP_BEFORE_FIX.js` (backup file)
-- `api/services/adapters/tboAdapter.FIXED.js` (backup file)  
+- `api/services/adapters/tboAdapter.FIXED.js` (backup file)
 - `api/scripts/run-tbo-test.js` (test script, not production)
 - `api/scripts/test-tbo-connectivity.js` (test script, not production)
 - `test-tbo-*.js` files in root (test harnesses)
