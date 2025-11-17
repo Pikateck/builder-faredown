@@ -99,9 +99,12 @@ async function searchHotels(params = {}) {
     MinRating: 0,
   };
 
-  const url =
-    process.env.TBO_HOTEL_SEARCH_URL ||
-    "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
+  // ✅ VERIFIED WORKING ENDPOINT (must use GetHotelResult, not affiliate)
+  const CORRECT_ENDPOINT = "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
+  const url = process.env.TBO_HOTEL_SEARCH_URL || CORRECT_ENDPOINT;
+
+  // Safety check: if URL contains "affiliate", override with correct endpoint
+  const finalUrl = url.includes("affiliate") ? CORRECT_ENDPOINT : url;
 
   console.log("\nStep 3: Searching hotels...");
   console.log("  ENV TBO_HOTEL_SEARCH_URL:", process.env.TBO_HOTEL_SEARCH_URL || "NOT SET");
