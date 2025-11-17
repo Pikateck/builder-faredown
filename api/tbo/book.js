@@ -264,12 +264,20 @@ async function blockRoom(params = {}) {
   console.log("  Error:", result?.Error?.ErrorMessage || "None");
   console.log("");
 
+  // ✅ CRITICAL: Extract CategoryId from BlockRoom response for use in Book
+  // Book API requires CategoryId at root level (from TBO docs: mandatory field)
+  const blockRoomCategoryId =
+    result?.HotelRoomsDetails?.[0]?.CategoryId ||
+    result?.HotelRoomDetails?.[0]?.CategoryId ||
+    undefined;
+
   return {
     responseStatus: result?.ResponseStatus,
     availabilityType: result?.AvailabilityType,
     isPriceChanged: result?.IsPriceChanged,
     isCancellationPolicyChanged: result?.IsCancellationPolicyChanged,
     hotelRoomDetails: roomDetails, // ✅ Handle both singular and plural
+    categoryId: blockRoomCategoryId, // ✅ Pass CategoryId to be used by Book
     error: result?.Error,
   };
 }
