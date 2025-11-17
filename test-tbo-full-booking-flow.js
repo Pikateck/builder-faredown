@@ -68,6 +68,18 @@ const { getHotelRoom } = require("./api/tbo/room");
 const { blockRoom, bookHotel } = require("./api/tbo/book");
 const { generateVoucher, getBookingDetails } = require("./api/tbo/voucher");
 
+// Currency mapping by country code
+const CURRENCY_BY_COUNTRY = {
+  IN: "INR", // India
+  AE: "AED", // UAE
+  US: "USD", // USA
+  GB: "GBP", // UK
+  EU: "EUR", // Europe
+  SG: "SGD", // Singapore
+  MY: "MYR", // Malaysia
+  TH: "THB", // Thailand
+};
+
 // Helper: choose safe future dates (static for now, but in future can be dynamic)
 const TEST_PARAMS = {
   destination: "Delhi",
