@@ -132,7 +132,7 @@ async function blockRoom(params = {}) {
     );
   });
 
-  // ��� CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
+  // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
   // ✅ Pass mapped rooms with SmokingPreference as INTEGER, not string
 
   // ✅ PER TBO BLOCKROOM SPEC: CategoryId is a top-level MANDATORY field (field 6)
@@ -360,6 +360,18 @@ async function bookHotel(params = {}) {
       `    SmokingPreference: ${room.SmokingPreference} (type: ${typeof room.SmokingPreference})`,
     );
   });
+
+  // ✅ DIAGNOSTIC: Log the Price object being used for Book (should come from BlockRoom response)
+  console.log("\n🔍 DIAGNOSTIC: Book Price (must come from BlockRoom response):");
+  roomDetailsWithPassengers.forEach((room, idx) => {
+    console.log(`  Room ${idx} Price:`);
+    console.log(`    RoomPrice: ${room.Price?.RoomPrice || "<<MISSING>>"}`);
+    console.log(`    PublishedPrice: ${room.Price?.PublishedPrice || "<<MISSING>>"}`);
+    console.log(`    OfferedPrice: ${room.Price?.OfferedPrice || "<<MISSING>>"}`);
+    console.log(`    Tax: ${room.Price?.Tax || "<<MISSING>>"}`);
+    console.log(`    Full Price object:`, JSON.stringify(room.Price, null, 2).substring(0, 200));
+  });
+  console.log("");
 
   // ✅ PER TBO SPEC: CategoryId should be at root level for de-dupe Book requests
   // Extract from first room (same as we did for BlockRoom)
