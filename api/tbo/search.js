@@ -177,36 +177,37 @@ async function searchHotels(params = {}) {
   console.log("");
 
   // Check for API errors
-  const responseStatus = result?.ResponseStatus || result?.Status;
   if (responseStatus !== 1) {
     throw new Error(
-      `TBO Hotel Search failed - ResponseStatus: ${responseStatus}, Error: ${result?.Error?.ErrorMessage || "Unknown error"}`,
+      `TBO Hotel Search failed - ResponseStatus: ${responseStatus}, Error: ${errorMessage || "Unknown error"}`,
     );
   }
 
-  if (result?.HotelResults?.length > 0) {
-    console.log("Sample Hotels (first 5):");
-    result.HotelResults.slice(0, 5).forEach((h, i) => {
-      console.log(
-        `  ${i + 1}. ${h.HotelName || "No name"} (${h.StarRating}��) - ${h.Price?.CurrencyCode} ${h.Price?.OfferedPrice}`,
-      );
+  if (hotels?.length > 0) {
+    console.log("✅ Sample Hotels (first 5):");
+    hotels.slice(0, 5).forEach((h, i) => {
+      const hotelName = h.HotelName || h.hotelName || "Unknown";
+      const stars = h.StarRating || h.starRating || "?";
+      const price = h.Price?.OfferedPrice || h.OfferedPrice || "?";
+      const currency = h.Price?.CurrencyCode || h.CurrencyCode || "?";
+      console.log(`  ${i + 1}. ${hotelName} (${stars}★) - ${currency} ${price}`);
     });
     console.log("");
   } else {
-    console.log("⚠️  WARNING: Hotel search returned no results");
+    console.log("⚠️  WARNING: Hotel search returned 0 results");
     console.log("   This could mean: no hotels available for these dates/destination");
   }
 
   return {
     responseStatus: responseStatus,
-    traceId: result.TraceId,
+    traceId: traceId,
     cityId: Number(cityId),
     checkInDate: searchRequest.CheckInDate,
     checkOutDate: formatDateForTBO(checkOut),
     currency: currency,
     noOfRooms: roomGuests.length,
-    hotels: result.HotelResults || [],
-    error: result.Error,
+    hotels: hotels || [],
+    error: { ErrorCode: 0, ErrorMessage: errorMessage },
   };
 }
 
