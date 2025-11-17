@@ -1,6 +1,6 @@
 /**
  * TBO Live URL Verification Test with Fixie Proxy
- * 
+ *
  * Tests all TBO endpoints using Fixie proxy for whitelisted IP
  */
 
@@ -23,14 +23,18 @@ const config = {
   TBO_STATIC_DATA_USERNAME: "travelcategory",
   TBO_STATIC_DATA_PASSWORD: "Tra@59334536",
   TBO_END_USER_IP: "52.5.155.132",
-  
+
   // Live URLs
   TBO_AUTH_URL: "https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc",
   TBO_HOTEL_STATIC_DATA: "https://apiwr.tboholidays.com/HotelAPI/",
-  TBO_HOTEL_SEARCH_PREBOOK: "https://affiliate.travelboutiqueonline.com/HotelAPI/",
-  TBO_HOTEL_BOOKING: "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
-  TBO_SEARCH_URL: "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc",
-  TBO_BOOKING_URL: "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc",
+  TBO_HOTEL_SEARCH_PREBOOK:
+    "https://affiliate.travelboutiqueonline.com/HotelAPI/",
+  TBO_HOTEL_BOOKING:
+    "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/",
+  TBO_SEARCH_URL:
+    "https://tboapi.travelboutiqueonline.com/AirAPI_V10/AirService.svc",
+  TBO_BOOKING_URL:
+    "https://booking.travelboutiqueonline.com/AirAPI_V10/AirService.svc",
 };
 
 const colors = {
@@ -169,11 +173,11 @@ async function testStaticData() {
       const destinations = response.data.Destinations || [];
       log(
         `✅ SUCCESS: Static data retrieved (${destinations.length} destinations)`,
-        "green"
+        "green",
       );
-      
+
       const dubai = destinations.find((d) =>
-        d.DestinationName.toLowerCase().includes("dubai")
+        d.DestinationName.toLowerCase().includes("dubai"),
       );
       if (dubai) {
         log(`   Found Dubai: DestinationId = ${dubai.DestinationId}`);
@@ -181,7 +185,10 @@ async function testStaticData() {
       }
       return destinations[0]?.DestinationId;
     } else {
-      log(`❌ FAILED: ${response.data.Error?.ErrorMessage || "Unknown error"}`, "red");
+      log(
+        `❌ FAILED: ${response.data.Error?.ErrorMessage || "Unknown error"}`,
+        "red",
+      );
       return null;
     }
   } catch (error) {
@@ -236,9 +243,14 @@ async function testHotelSearch(tokenId, cityId) {
 
     if (response.status === 200 && response.data.ResponseStatus === 1) {
       const hotels = response.data.Hotels || [];
-      log(`✅ SUCCESS: Hotel search completed (${hotels.length} hotels found)`, "green");
+      log(
+        `✅ SUCCESS: Hotel search completed (${hotels.length} hotels found)`,
+        "green",
+      );
       if (hotels.length > 0) {
-        log(`   First hotel: ${hotels[0].HotelName || "N/A"} (${hotels[0].HotelCode})`);
+        log(
+          `   First hotel: ${hotels[0].HotelName || "N/A"} (${hotels[0].HotelCode})`,
+        );
         return hotels[0];
       }
       return null;
@@ -279,7 +291,10 @@ async function testHotelRoom(tokenId, hotelData) {
 
     if (response.status === 200 && response.data.ResponseStatus === 1) {
       const rooms = response.data.HotelRoomsDetails || [];
-      log(`✅ SUCCESS: Room details retrieved (${rooms.length} rooms available)`, "green");
+      log(
+        `✅ SUCCESS: Room details retrieved (${rooms.length} rooms available)`,
+        "green",
+      );
       if (rooms.length > 0) {
         log(`   First room: ${rooms[0].RoomTypeName}`);
         return rooms[0];
@@ -349,9 +364,18 @@ async function testAirSearch(tokenId) {
 }
 
 async function runTests() {
-  log("\n╔═════════════════════════════════════��══════════════════════════════╗", "blue");
-  log("║    TBO LIVE URL & CREDENTIALS VERIFICATION (via Fixie Proxy)       ║", "blue");
-  log("╚════════════════════════════════════════════════════════════════════╝", "blue");
+  log(
+    "\n╔═════════════════════════════════════��══════════════════════════════╗",
+    "blue",
+  );
+  log(
+    "║    TBO LIVE URL & CREDENTIALS VERIFICATION (via Fixie Proxy)       ║",
+    "blue",
+  );
+  log(
+    "╚════════════════════════════════════════════════════════════════════╝",
+    "blue",
+  );
 
   log("\nConfiguration:");
   log(`  ClientId: ${config.TBO_CLIENT_ID}`);
@@ -370,7 +394,10 @@ async function runTests() {
   // Test 1: Authentication
   const tokenId = await testAuthentication();
   if (!tokenId) {
-    log("\n❌ STOPPING: Authentication failed - cannot proceed with further tests", "red");
+    log(
+      "\n❌ STOPPING: Authentication failed - cannot proceed with further tests",
+      "red",
+    );
     log("\nTroubleshooting:", "yellow");
     log("  • Verify Fixie proxy credentials are correct");
     log("  • Ensure firewall allows outbound HTTPS on port 80 to proxy");
