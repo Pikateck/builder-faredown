@@ -29,38 +29,37 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
     smokingPref = smokingMap[smokingPref.toLowerCase()] ?? 0;
   }
 
-  // ✅ CRITICAL: Ensure Price is an ARRAY, not object
-  let priceArray = [];
-  if (Array.isArray(room.Price)) {
-    // If Price is already an array, use it
-    priceArray = room.Price;
-  } else if (typeof room.Price === "object" && room.Price !== null) {
-    // If Price is an object, convert to array
-    priceArray = [room.Price];
+  // ✅ CRITICAL: Price must be a single OBJECT (not array) for BlockRoom
+  // TBO's BlockRoom expects the exact same structure as GetHotelRoom returns
+  let priceObject = {};
+  if (typeof room.Price === "object" && room.Price !== null && !Array.isArray(room.Price)) {
+    // If Price is already a single object, use it directly (1:1 mapping from GetHotelRoom)
+    priceObject = room.Price;
+  } else if (Array.isArray(room.Price) && room.Price.length > 0) {
+    // If Price is an array (from older responses), extract the first element
+    priceObject = room.Price[0];
   } else {
-    // Create from individual price fields
-    priceArray = [
-      {
-        CurrencyCode: room.CurrencyCode || "INR",
-        RoomPrice: room.RoomPrice || 0,
-        Tax: room.Tax || 0,
-        ExtraGuestCharge: room.ExtraGuestCharge || 0,
-        ChildCharge: room.ChildCharge || 0,
-        OtherCharges: room.OtherCharges || 0,
-        Discount: room.Discount || 0,
-        PublishedPrice: room.PublishedPrice || room.RoomPrice || 0,
-        PublishedPriceRoundedOff: Math.round(
-          room.PublishedPriceRoundedOff || room.PublishedPrice || 0,
-        ),
-        OfferedPrice: room.OfferedPrice || room.RoomPrice || 0,
-        OfferedPriceRoundedOff: Math.round(
-          room.OfferedPriceRoundedOff || room.OfferedPrice || 0,
-        ),
-        AgentCommission: room.AgentCommission || 0,
-        AgentMarkUp: room.AgentMarkUp || 0,
-        TDS: room.TDS || 0,
-      },
-    ];
+    // Build Price object from individual room fields
+    priceObject = {
+      CurrencyCode: room.CurrencyCode || "INR",
+      RoomPrice: room.RoomPrice || 0,
+      Tax: room.Tax || 0,
+      ExtraGuestCharge: room.ExtraGuestCharge || 0,
+      ChildCharge: room.ChildCharge || 0,
+      OtherCharges: room.OtherCharges || 0,
+      Discount: room.Discount || 0,
+      PublishedPrice: room.PublishedPrice || room.RoomPrice || 0,
+      PublishedPriceRoundedOff: Math.round(
+        room.PublishedPriceRoundedOff || room.PublishedPrice || 0,
+      ),
+      OfferedPrice: room.OfferedPrice || room.RoomPrice || 0,
+      OfferedPriceRoundedOff: Math.round(
+        room.OfferedPriceRoundedOff || room.OfferedPrice || 0,
+      ),
+      AgentCommission: room.AgentCommission || 0,
+      AgentMarkUp: room.AgentMarkUp || 0,
+      TDS: room.TDS || 0,
+    };
   }
 
   return {
@@ -130,8 +129,8 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
     IsPANMandatory:
       room.IsPANMandatory !== undefined ? room.IsPANMandatory : false,
 
-    // ✅ MANDATORY: Price details ARRAY (not object)
-    Price: priceArray,
+    // ✅ MANDATORY: Price details as OBJECT (not array) - matches TBO GetHotelRoom structure
+    Price: priceObject,
   };
 }
 
@@ -193,19 +192,16 @@ function validateRoomForBlockRequest(room) {
     errors.push("Supplements must be an array");
   }
 
-  // ✅ Price MUST be an ARRAY (not object)
-  if (!Array.isArray(room.Price)) {
-    errors.push("Price must be an array (not object)");
-  } else if (room.Price.length === 0) {
-    errors.push("Price array must not be empty");
+  // ✅ Price MUST be an OBJECT (not array) - matches TBO GetHotelRoom structure
+  if (typeof room.Price !== "object" || room.Price === null || Array.isArray(room.Price)) {
+    errors.push("Price must be an object (not array)");
   } else {
     // Validate price fields
-    const price = room.Price[0];
-    if (!price.CurrencyCode) {
-      errors.push("Price[0].CurrencyCode is required");
+    if (!room.Price.CurrencyCode) {
+      errors.push("Price.CurrencyCode is required");
     }
-    if (price.RoomPrice === undefined) {
-      errors.push("Price[0].RoomPrice is required");
+    if (room.Price.RoomPrice === undefined) {
+      errors.push("Price.RoomPrice is required");
     }
   }
 
