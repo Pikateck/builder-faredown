@@ -419,8 +419,12 @@ async function bookHotel(params = {}) {
   console.log("\nStep 2: Booking hotel...");
   console.log("  URL:", url);
   console.log("  TraceId:", request.TraceId);
-  console.log("  HotelCode:", request.HotelCode);
-  console.log("  CategoryId:", request.CategoryId || "<<Not set>>");
+  console.log(
+    "  HotelCode:",
+    request.HotelCode,
+    `(CategoryId source: ${categoryId ? "from BlockRoom param" : "from room details"})`,
+  );
+  console.log("  CategoryId:", request.CategoryId || "<<MISSING - ERROR>>");
   console.log("  HotelName:", request.HotelName);
   console.log(
     "  Lead Passenger:",
