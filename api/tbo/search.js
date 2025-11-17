@@ -126,30 +126,54 @@ async function searchHotels(params = {}) {
     timeout: 90000, // Extended timeout for large result sets (2000+ hotels via proxy)
   });
 
-  // Handle multiple response formats from TBO
-  let result = response.data;
-
-  // If wrapped in HotelSearchResult, unwrap it
-  if (response.data?.HotelSearchResult) {
-    result = response.data.HotelSearchResult;
-  }
-
-  // Also check for response wrapper
-  if (response.data?.response?.HotelSearchResult) {
-    result = response.data.response.HotelSearchResult;
-  }
-
-  console.log("📥 TBO Search Response");
+  // Log RAW response for debugging
+  console.log("📥 RAW TBO RESPONSE:");
   console.log("  HTTP Status:", response.status);
-  console.log("  ResponseStatus:", result?.ResponseStatus || result?.Status);
-  console.log("  TraceId:", result?.TraceId);
-  console.log("  Hotel Count:", result?.HotelResults?.length || 0);
-  console.log("  Error:", result?.Error?.ErrorMessage || "None");
-
-  // Debug: log actual response structure if no hotels
-  if (!result?.HotelResults || result.HotelResults.length === 0) {
-    console.log("⚠️  DEBUG: Full response:", JSON.stringify(result, null, 2).substring(0, 800));
+  console.log("  Raw body (first 2000 chars):");
+  const rawBody = JSON.stringify(response.data, null, 2);
+  console.log(rawBody.substring(0, 2000));
+  if (rawBody.length > 2000) {
+    console.log(`  ... (${rawBody.length - 2000} more characters)`);
   }
+  console.log("");
+
+  // Parse response - try different possible structures
+  let result = response.data;
+  let hotels = [];
+  let responseStatus = null;
+  let traceId = null;
+  let errorMessage = null;
+
+  // Check various possible response structures from TBO
+  if (response.data?.HotelResults) {
+    hotels = response.data.HotelResults;
+    responseStatus = response.data.Status || response.data.ResponseStatus;
+    traceId = response.data.TraceId;
+    errorMessage = response.data.Error?.ErrorMessage;
+  } else if (response.data?.HotelSearchResult?.HotelResults) {
+    hotels = response.data.HotelSearchResult.HotelResults;
+    responseStatus = response.data.HotelSearchResult.ResponseStatus || response.data.HotelSearchResult.Status;
+    traceId = response.data.HotelSearchResult.TraceId;
+    errorMessage = response.data.HotelSearchResult.Error?.ErrorMessage;
+    result = response.data.HotelSearchResult;
+  } else if (response.data?.response?.HotelResults) {
+    hotels = response.data.response.HotelResults;
+    responseStatus = response.data.response.Status || response.data.response.ResponseStatus;
+    traceId = response.data.response.TraceId;
+    errorMessage = response.data.response.Error?.ErrorMessage;
+    result = response.data.response;
+  } else if (Array.isArray(response.data)) {
+    // Direct array of hotels
+    hotels = response.data;
+    responseStatus = 1;
+    traceId = "direct_array";
+  }
+
+  console.log("📊 PARSED RESPONSE:");
+  console.log("  ResponseStatus:", responseStatus);
+  console.log("  TraceId:", traceId);
+  console.log("  Hotel Count:", hotels.length);
+  console.log("  Error:", errorMessage || "None");
   console.log("");
 
   // Check for API errors
@@ -164,7 +188,7 @@ async function searchHotels(params = {}) {
     console.log("Sample Hotels (first 5):");
     result.HotelResults.slice(0, 5).forEach((h, i) => {
       console.log(
-        `  ${i + 1}. ${h.HotelName || "No name"} (${h.StarRating}★) - ${h.Price?.CurrencyCode} ${h.Price?.OfferedPrice}`,
+        `  ${i + 1}. ${h.HotelName || "No name"} (${h.StarRating}��) - ${h.Price?.CurrencyCode} ${h.Price?.OfferedPrice}`,
       );
     });
     console.log("");
