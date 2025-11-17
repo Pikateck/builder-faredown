@@ -100,7 +100,7 @@ async function searchHotels(params = {}) {
 
   const url =
     process.env.TBO_HOTEL_SEARCH_URL ||
-    "https://affiliate.travelboutiqueonline.com/HotelAPI/";
+    "https://affiliate.travelboutiqueonline.com/HotelAPI/Search";
 
   console.log("\nStep 3: Searching hotels...");
   console.log("  URL:", url);

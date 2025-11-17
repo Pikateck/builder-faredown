@@ -42,7 +42,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       // Hotel Search - Uses affiliate endpoint (FINAL PRODUCTION URL)
       hotelSearchUrl:
         process.env.TBO_HOTEL_SEARCH_URL ||
-        "https://affiliate.travelboutiqueonline.com/HotelAPI/",
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/Search",
 
       // Booking, Voucher, Booking Details - Uses TokenId
       hotelBookingBase:
