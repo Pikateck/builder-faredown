@@ -100,7 +100,8 @@ async function searchHotels(params = {}) {
   };
 
   // ✅ CORRECT ENDPOINT per TBO (affiliate base URL + GetHotelResult method)
-  const CORRECT_ENDPOINT = "https://affiliate.travelboutiqueonline.com/HotelAPI/GetHotelResult";
+  const CORRECT_ENDPOINT =
+    "https://affiliate.travelboutiqueonline.com/HotelAPI/GetHotelResult";
   const url = process.env.TBO_HOTEL_SEARCH_URL || CORRECT_ENDPOINT;
 
   // Safety override: always use affiliate endpoint for search
@@ -152,13 +153,16 @@ async function searchHotels(params = {}) {
     errorMessage = response.data.Error?.ErrorMessage;
   } else if (response.data?.HotelSearchResult?.HotelResults) {
     hotels = response.data.HotelSearchResult.HotelResults;
-    responseStatus = response.data.HotelSearchResult.ResponseStatus || response.data.HotelSearchResult.Status;
+    responseStatus =
+      response.data.HotelSearchResult.ResponseStatus ||
+      response.data.HotelSearchResult.Status;
     traceId = response.data.HotelSearchResult.TraceId;
     errorMessage = response.data.HotelSearchResult.Error?.ErrorMessage;
     result = response.data.HotelSearchResult;
   } else if (response.data?.response?.HotelResults) {
     hotels = response.data.response.HotelResults;
-    responseStatus = response.data.response.Status || response.data.response.ResponseStatus;
+    responseStatus =
+      response.data.response.Status || response.data.response.ResponseStatus;
     traceId = response.data.response.TraceId;
     errorMessage = response.data.response.Error?.ErrorMessage;
     result = response.data.response;
@@ -190,12 +194,16 @@ async function searchHotels(params = {}) {
       const stars = h.StarRating || h.starRating || "?";
       const price = h.Price?.OfferedPrice || h.OfferedPrice || "?";
       const currency = h.Price?.CurrencyCode || h.CurrencyCode || "?";
-      console.log(`  ${i + 1}. ${hotelName} (${stars}★) - ${currency} ${price}`);
+      console.log(
+        `  ${i + 1}. ${hotelName} (${stars}★) - ${currency} ${price}`,
+      );
     });
     console.log("");
   } else {
     console.log("⚠️  WARNING: Hotel search returned 0 results");
-    console.log("   This could mean: no hotels available for these dates/destination");
+    console.log(
+      "   This could mean: no hotels available for these dates/destination",
+    );
   }
 
   return {

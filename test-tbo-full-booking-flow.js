@@ -242,7 +242,9 @@ async function runCompleteFlow() {
 
     if (hotels.length === 0) {
       logError("No hotels found in search results");
-      console.log("\n⚠️  IMPORTANT: Upload this test output to see exactly what TBO returned.");
+      console.log(
+        "\n⚠️  IMPORTANT: Upload this test output to see exactly what TBO returned.",
+      );
       results.steps.hotelSearch = {
         success: false,
         error: "No hotels found",

@@ -1,8 +1,12 @@
 #!/usr/bin/env node
 
-console.log("================================================================================");
+console.log(
+  "================================================================================",
+);
 console.log("ENVIRONMENT VARIABLE CHECK");
-console.log("================================================================================\n");
+console.log(
+  "================================================================================\n",
+);
 
 const vars = [
   "TBO_HOTEL_SEARCH_URL",
@@ -17,13 +21,21 @@ vars.forEach((varName) => {
   const value = process.env[varName];
   console.log(`${varName}:`);
   if (value) {
-    console.log(`  ✅ SET: ${value.substring(0, 80)}${value.length > 80 ? "..." : ""}`);
+    console.log(
+      `  ✅ SET: ${value.substring(0, 80)}${value.length > 80 ? "..." : ""}`,
+    );
   } else {
     console.log(`  ❌ NOT SET`);
   }
 });
 
-console.log("\n================================================================================");
-console.log("KEY INSIGHT: If TBO_HOTEL_SEARCH_URL is not set, it will use the fallback");
+console.log(
+  "\n================================================================================",
+);
+console.log(
+  "KEY INSIGHT: If TBO_HOTEL_SEARCH_URL is not set, it will use the fallback",
+);
 console.log("from the code (api/tbo/search.js)");
-console.log("================================================================================\n");
+console.log(
+  "================================================================================\n",
+);

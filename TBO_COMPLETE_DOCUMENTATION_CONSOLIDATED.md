@@ -33,12 +33,12 @@
 
 ### 🎯 Key Metrics
 
-| Metric | Value |
-|--------|-------|
+| Metric            | Value       |
+| ----------------- | ----------- |
 | API Response Time | < 3 seconds |
-| Success Rate | > 95% |
-| Uptime SLA | 99.5% |
-| Token Cache | 24 hours |
+| Success Rate      | > 95%       |
+| Uptime SLA        | 99.5%       |
+| Token Cache       | 24 hours    |
 
 ---
 
@@ -100,6 +100,7 @@ TIMEOUT:      15 seconds
 ```
 
 **Request:**
+
 ```json
 {
   "ClientId": "tboprod",
@@ -110,6 +111,7 @@ TIMEOUT:      15 seconds
 ```
 
 **Response:**
+
 ```json
 {
   "TokenId": "d269c1ba-4dab-42a8-8280-cc0d9f62bf4d",
@@ -131,6 +133,7 @@ TIMEOUT:      15 seconds
 ```
 
 **Status Codes:**
+
 - `1` = Successful
 - `2` = Failed
 - `3` = IncorrectUserName
@@ -154,6 +157,7 @@ PURPOSE:      Convert city code to numeric DestinationId
 ```
 
 **Request:**
+
 ```json
 {
   "ClientId": "tboprod",
@@ -165,10 +169,12 @@ PURPOSE:      Convert city code to numeric DestinationId
 ```
 
 **SearchType Values:**
+
 - `1` = City
 - `2` = Hotel
 
 **Response:**
+
 ```json
 {
   "GetDestinationSearchStaticDataResult": [
@@ -196,6 +202,7 @@ PURPOSE:      Convert city code to numeric DestinationId
 ```
 
 **Key Fields:**
+
 - `DestinationId` - Numeric ID (REQUIRED for hotel search)
 - `DestinationCode` - 3-letter code (DXB, DEL, PAR)
 - `DestinationName` - City name
@@ -219,6 +226,7 @@ RESPONSE:     2-5 seconds
 ```
 
 **Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -243,6 +251,7 @@ RESPONSE:     2-5 seconds
 ```
 
 **Response (Success):**
+
 ```json
 {
   "TraceId": "085a38fd-61ef-4050-b20c-18acd8450bad",
@@ -286,6 +295,7 @@ RESPONSE:     2-5 seconds
 ```
 
 **Response (Error Example):**
+
 ```json
 {
   "HotelSearchResult": {
@@ -300,6 +310,7 @@ RESPONSE:     2-5 seconds
 ```
 
 **Status Codes:**
+
 - `1` = Successful (hotels found)
 - `2` = Failed
 - `3` = Invalid Request
@@ -324,6 +335,7 @@ PURPOSE:      Get full hotel details, amenities, facilities
 ```
 
 **Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -335,6 +347,7 @@ PURPOSE:      Get full hotel details, amenities, facilities
 ```
 
 **Response:**
+
 ```json
 {
   "HotelInfoResult": {
@@ -357,12 +370,7 @@ PURPOSE:      Get full hotel details, amenities, facilities
         "WiFi",
         "Parking"
       ],
-      "RoomFacilities": [
-        "AC",
-        "TV",
-        "WiFi",
-        "Bathroom"
-      ],
+      "RoomFacilities": ["AC", "TV", "WiFi", "Bathroom"],
       "Services": "24/7 Front Desk, Room Service, Concierge",
       "HotelPolicy": "No smoking in rooms",
       "Latitude": "25.1972",
@@ -395,6 +403,7 @@ PURPOSE:      Get room types, pricing, and cancellation policies
 ```
 
 **Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -406,6 +415,7 @@ PURPOSE:      Get room types, pricing, and cancellation policies
 ```
 
 **Response:**
+
 ```json
 {
   "TraceId": "085a38fd-61ef-4050-b20c-18acd8450bad",
@@ -484,12 +494,14 @@ PURPOSE:      Get room types, pricing, and cancellation policies
 ```
 
 **SmokingPreference Values:**
+
 - `0` = NoPreference
 - `1` = Smoking
 - `2` = NonSmoking
 - `3` = Either
 
 **ChargeType Values:**
+
 - `1` = Percentage (%)
 - `2` = Amount (fixed)
 
@@ -509,6 +521,7 @@ PURPOSE:      Hold room and validate pricing before final booking
 ```
 
 **Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -549,6 +562,7 @@ PURPOSE:      Hold room and validate pricing before final booking
 ```
 
 **Response:**
+
 ```json
 {
   "AvailabilityType": "Confirm",
@@ -581,10 +595,12 @@ PURPOSE:      Hold room and validate pricing before final booking
 ```
 
 **AvailabilityType Values:**
+
 - `Available` - May reconfirm before booking
 - `Confirm` - May book without reconfirmation
 
 **Critical Fields:**
+
 - `IsPriceChanged` - Price has changed; re-verify with user
 - `IsCancellationPolicyChanged` - Cancellation policy changed; re-verify with user
 
@@ -604,6 +620,7 @@ PURPOSE:      Confirm booking (with or without voucher)
 ```
 
 **Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -662,6 +679,7 @@ PURPOSE:      Confirm booking (with or without voucher)
 ```
 
 **Response:**
+
 ```json
 {
   "VoucherStatus": true,
@@ -681,6 +699,7 @@ PURPOSE:      Confirm booking (with or without voucher)
 ```
 
 **Guest Details (HotelPassenger) Requirements:**
+
 - `Title` - Mr, Mrs, Miss, Ms (Mandatory)
 - `FirstName` - 2-50 chars, no special chars (Mandatory)
 - `LastName` - 2-50 chars, no special chars (Mandatory)
@@ -693,6 +712,7 @@ PURPOSE:      Confirm booking (with or without voucher)
 - `PAN` - PAN number (Mandatory for Indians)
 
 **HotelBookingStatus Values:**
+
 - `0` = BookFailed
 - `1` = Confirmed
 - `3` = VerifyPrice (price changed; requires re-submission)
@@ -714,6 +734,7 @@ PURPOSE:      Generate voucher for held booking
 ```
 
 **Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -723,6 +744,7 @@ PURPOSE:      Generate voucher for held booking
 ```
 
 **Response:**
+
 ```json
 {
   "VoucherStatus": true,
@@ -757,6 +779,7 @@ PURPOSE:      Retrieve booking details & status
 ```
 
 **Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -766,6 +789,7 @@ PURPOSE:      Retrieve booking details & status
 ```
 
 **Response:**
+
 ```json
 {
   "BookingId": 123456789,
@@ -811,6 +835,7 @@ PURPOSE:      Submit cancellation or amendment request
 ```
 
 **Request:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -822,10 +847,12 @@ PURPOSE:      Submit cancellation or amendment request
 ```
 
 **RequestType Values:**
+
 - `1` = Cancellation request
 - `2` = Modification/Amendment request
 
 **Response:**
+
 ```json
 {
   "Status": 1,
@@ -906,14 +933,14 @@ PURPOSE:      Submit cancellation or amendment request
 
 ### Query Parameters for /api/hotels
 
-| Parameter | Required | Type | Example | Notes |
-|-----------|----------|------|---------|-------|
-| `cityId` | ✅ Yes | string | `DXB` | TBO destination code |
-| `countryCode` | ✅ Yes | string | `AE` | ISO country code |
-| `checkIn` | ✅ Yes | string | `2025-10-31` | Format: yyyy-mm-dd |
-| `checkOut` | ✅ Yes | string | `2025-11-03` | Format: yyyy-mm-dd |
-| `adults` | ✅ Yes | number | `2` | Number of adults |
-| `children` | ✅ Yes | number | `0` | Number of children |
+| Parameter     | Required | Type   | Example      | Notes                |
+| ------------- | -------- | ------ | ------------ | -------------------- |
+| `cityId`      | ✅ Yes   | string | `DXB`        | TBO destination code |
+| `countryCode` | ✅ Yes   | string | `AE`         | ISO country code     |
+| `checkIn`     | ✅ Yes   | string | `2025-10-31` | Format: yyyy-mm-dd   |
+| `checkOut`    | ✅ Yes   | string | `2025-11-03` | Format: yyyy-mm-dd   |
+| `adults`      | ✅ Yes   | number | `2`          | Number of adults     |
+| `children`    | ✅ Yes   | number | `0`          | Number of children   |
 
 ---
 
@@ -1018,6 +1045,7 @@ FIXIE_URL=http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80
 ```
 
 **Valid Values:**
+
 - `0` = NoPreference
 - `1` = Smoking
 - `2` = NonSmoking
@@ -1095,10 +1123,10 @@ FIXIE_URL=http://fixie:GseepY8oA3SemkD@criterium.usefixie.com:80
 ```javascript
 // SmokingPreference Conversion
 const smokingMap = {
-  "nopreference": 0,
-  "smoking": 1,
-  "nonsmoking": 2,
-  "either": 3
+  nopreference: 0,
+  smoking: 1,
+  nonsmoking: 2,
+  either: 3,
 };
 
 const smokingInt = smokingMap[smokingPreference.toLowerCase()];
@@ -1174,15 +1202,15 @@ curl -X POST "https://builder-faredown-pricing.onrender.com/api/tbo-hotels/searc
 
 ### Common Errors & Solutions
 
-| Error | Cause | Solution |
-|-------|-------|----------|
-| `Invalid CityId: 130443` | Wrong city ID format | Use GetDestinationSearchStaticData to get correct ID |
-| `HotelRoomsDetails is not found` | SmokingPreference is string or Price is object | Convert SmokingPreference to integer, Price to array |
-| `TokenId expired` | Token older than 24 hours | Authenticate again to get new token |
-| `Request failed with status 404` | Wrong API endpoint URL | Check TBO_HOTEL_SEARCH_URL in environment |
-| `Connection timeout` | API is slow or unreachable | Check Fixie proxy is enabled (USE_SUPPLIER_PROXY=true) |
-| `401 Unauthorized` | Invalid credentials | Verify TBO_HOTEL_USER_ID and TBO_HOTEL_PASSWORD |
-| `0 hotels found` | Search parameters mismatch | Verify dates, city ID, guest nationality |
+| Error                            | Cause                                          | Solution                                               |
+| -------------------------------- | ---------------------------------------------- | ------------------------------------------------------ |
+| `Invalid CityId: 130443`         | Wrong city ID format                           | Use GetDestinationSearchStaticData to get correct ID   |
+| `HotelRoomsDetails is not found` | SmokingPreference is string or Price is object | Convert SmokingPreference to integer, Price to array   |
+| `TokenId expired`                | Token older than 24 hours                      | Authenticate again to get new token                    |
+| `Request failed with status 404` | Wrong API endpoint URL                         | Check TBO_HOTEL_SEARCH_URL in environment              |
+| `Connection timeout`             | API is slow or unreachable                     | Check Fixie proxy is enabled (USE_SUPPLIER_PROXY=true) |
+| `401 Unauthorized`               | Invalid credentials                            | Verify TBO_HOTEL_USER_ID and TBO_HOTEL_PASSWORD        |
+| `0 hotels found`                 | Search parameters mismatch                     | Verify dates, city ID, guest nationality               |
 
 ### Debug Commands
 
@@ -1203,36 +1231,36 @@ curl https://builder-faredown-pricing.onrender.com/api/tbo-hotels/egress-ip
 
 ## KEY FILES & LOCATIONS
 
-| File | Purpose | Key Methods |
-|------|---------|-------------|
-| `api/services/adapters/tboAdapter.js` | Core TBO adapter (2050+ lines) | searchHotels(), bookHotel(), etc. |
-| `api/routes/tbo-hotels.js` | TBO API routes | GET /cities, POST /search, etc. |
-| `api/tbo/search.js` | Hotel search logic | Search endpoint implementation |
-| `api/tbo/book.js` | Hotel booking logic | Book endpoint implementation |
-| `api/tbo/roomMapper.js` | Room data mapping | SmokingPreference conversion, Price array |
-| `api/routes/hotels-metadata.js` | Hotel metadata endpoint | /api/hotels endpoint |
+| File                                  | Purpose                        | Key Methods                               |
+| ------------------------------------- | ------------------------------ | ----------------------------------------- |
+| `api/services/adapters/tboAdapter.js` | Core TBO adapter (2050+ lines) | searchHotels(), bookHotel(), etc.         |
+| `api/routes/tbo-hotels.js`            | TBO API routes                 | GET /cities, POST /search, etc.           |
+| `api/tbo/search.js`                   | Hotel search logic             | Search endpoint implementation            |
+| `api/tbo/book.js`                     | Hotel booking logic            | Book endpoint implementation              |
+| `api/tbo/roomMapper.js`               | Room data mapping              | SmokingPreference conversion, Price array |
+| `api/routes/hotels-metadata.js`       | Hotel metadata endpoint        | /api/hotels endpoint                      |
 
 ---
 
 ## 📊 API Implementation Summary
 
-| # | Endpoint | HTTP | Status | Code Location |
-|---|----------|------|--------|---------------|
-| 1 | Authenticate | POST | ✅ | Line 887-1001 |
-| 2 | CountryList | POST | ✅ | Line 1557-1586 |
-| 3 | DestinationCityList | POST | ✅ | Line 1064-1146 |
-| 4 | TopDestinationList | POST | ✅ | Line 1966-1997 |
-| 5 | Hotel Search | POST | ✅ | Line 1151-1458 |
-| 6 | Hotel Info | POST | ✅ | Line 1904-1930 |
-| 7 | Hotel Room | POST | ✅ | Line 1935-1961 |
-| 8 | PreBook (BlockRoom) | POST | ✅ | Line 1706-1734 |
-| 9 | Book | POST | ✅ | Line 1739-1771 |
-| 10 | Generate Voucher | POST | ✅ | Line 1776-1806 |
-| 11 | Get Booking Details | POST | ✅ | Line 1811-1839 |
-| 12 | Send Change Request | POST | ✅ | Line 1844-1874 |
-| 13 | Get Change Status | POST | ✅ | Line 2002-2028 |
-| 14 | Logout | POST | ✅ | Line 2033-2050+ |
-| 15 | GetAgencyBalance | POST | ⏳ | Not implemented |
+| #   | Endpoint            | HTTP | Status | Code Location   |
+| --- | ------------------- | ---- | ------ | --------------- |
+| 1   | Authenticate        | POST | ✅     | Line 887-1001   |
+| 2   | CountryList         | POST | ✅     | Line 1557-1586  |
+| 3   | DestinationCityList | POST | ✅     | Line 1064-1146  |
+| 4   | TopDestinationList  | POST | ✅     | Line 1966-1997  |
+| 5   | Hotel Search        | POST | ✅     | Line 1151-1458  |
+| 6   | Hotel Info          | POST | ✅     | Line 1904-1930  |
+| 7   | Hotel Room          | POST | ✅     | Line 1935-1961  |
+| 8   | PreBook (BlockRoom) | POST | ✅     | Line 1706-1734  |
+| 9   | Book                | POST | ✅     | Line 1739-1771  |
+| 10  | Generate Voucher    | POST | ✅     | Line 1776-1806  |
+| 11  | Get Booking Details | POST | ✅     | Line 1811-1839  |
+| 12  | Send Change Request | POST | ✅     | Line 1844-1874  |
+| 13  | Get Change Status   | POST | ✅     | Line 2002-2028  |
+| 14  | Logout              | POST | ✅     | Line 2033-2050+ |
+| 15  | GetAgencyBalance    | POST | ⏳     | Not implemented |
 
 **Status: 95% Complete - 19/20 endpoints implemented**
 
