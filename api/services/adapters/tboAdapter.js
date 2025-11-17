@@ -39,10 +39,10 @@ class TBOAdapter extends BaseSupplierAdapter {
       hotelStaticDataUrl:
         "https://api.travelboutiqueonline.com/SharedAPI/StaticData.svc/rest/GetDestinationSearchStaticData",
 
-      // Hotel Search - GetHotelResult (VERIFIED WORKING)
+      // Hotel Search - GetHotelResult (Per TBO email: https://affiliate.travelboutiqueonline.com/HotelAPI/)
       hotelSearchUrl:
         process.env.TBO_HOTEL_SEARCH_URL ||
-        "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult",
+        "https://affiliate.travelboutiqueonline.com/HotelAPI/GetHotelResult",
 
       // Booking, Voucher, Booking Details - Uses TokenId
       hotelBookingBase:
@@ -740,7 +740,7 @@ class TBOAdapter extends BaseSupplierAdapter {
       return city.id;
     }
 
-    this.logger.warn("⚠️ CityId not found in TBO data", {
+    this.logger.warn("⚠��� CityId not found in TBO data", {
       cityCode,
       countryCode,
     });
