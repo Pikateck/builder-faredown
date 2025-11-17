@@ -26,6 +26,7 @@ function formatDateForTBO(dateStr) {
 /**
  * Search Hotels
  * VERIFIED WORKING - Returns real hotel data
+ * Uses FINAL production URL: https://affiliate.travelboutiqueonline.com/HotelAPI/
  */
 async function searchHotels(params = {}) {
   console.log("═".repeat(80));
@@ -99,7 +100,7 @@ async function searchHotels(params = {}) {
 
   const url =
     process.env.TBO_HOTEL_SEARCH_URL ||
-    "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
+    "https://affiliate.travelboutiqueonline.com/HotelAPI/";
 
   console.log("\nStep 3: Searching hotels...");
   console.log("  URL:", url);
