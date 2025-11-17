@@ -280,16 +280,42 @@ async function bookHotel(params = {}) {
   // Add HotelPassenger to each room but keep all other fields (RoomTypeID, RoomCombination, etc.)
   console.log("\nStep 2: Preparing room details with passenger information...");
 
-  const roomDetailsWithPassengers = hotelRoomDetails.map((room) => ({
-    ...room, // Keep all fields from GetHotelRoom response
-    HotelPassenger: hotelPassenger, // Add passenger details
-  }));
+  // ✅ CRITICAL: SmokingPreference must be NUMERIC (0-3) for Book API, not string
+  // TBO's Book deserialization expects Int64, not string like "NoPreference"
+  const smokingEnumMap = {
+    nopreference: 0,
+    smoking: 1,
+    nonsmoking: 2,
+    either: 3,
+  };
+
+  const roomDetailsWithPassengers = hotelRoomDetails.map((room) => {
+    // Convert SmokingPreference to numeric value if it's a string
+    let smokingPref = room.SmokingPreference ?? 0;
+    if (typeof smokingPref === "string") {
+      smokingPref = smokingEnumMap[smokingPref.toLowerCase()] ?? 0;
+    }
+
+    return {
+      ...room, // Keep all fields from GetHotelRoom response
+      SmokingPreference: smokingPref, // ✅ OVERRIDE with numeric value for Book API
+      HotelPassenger: hotelPassenger, // Add passenger details
+    };
+  });
 
   roomDetailsWithPassengers.forEach((room, index) => {
     console.log(
       `  Room ${index}: ${room.RoomTypeName} (with ${hotelPassenger.length} passenger(s))`,
     );
+    console.log(
+      `    SmokingPreference: ${room.SmokingPreference} (type: ${typeof room.SmokingPreference})`,
+    );
   });
+
+  // ✅ PER TBO SPEC: CategoryId should be at root level for de-dupe Book requests
+  // Extract from first room (same as we did for BlockRoom)
+  const primaryRoom = roomDetailsWithPassengers[0];
+  const bookCategoryId = primaryRoom?.CategoryId || undefined;
 
   // ✅ CRITICAL FIX: Field name is HotelRoomsDetails (WITH 's'), NOT HotelRoomDetails
   const request = {
@@ -298,6 +324,7 @@ async function bookHotel(params = {}) {
     TraceId: traceId,
     ResultIndex: Number(resultIndex),
     HotelCode: String(hotelCode),
+    CategoryId: bookCategoryId, // ✅ TOP-LEVEL CategoryId for de-dupe Book requests
     HotelName: hotelName,
     GuestNationality: guestNationality,
     NoOfRooms: Number(noOfRooms),
