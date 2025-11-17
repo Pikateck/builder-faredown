@@ -46,9 +46,7 @@ function buildHotelPassengersForRoom(roomPassengers) {
     Age: pax.age || pax.Age || 30,
     PassportNo: pax.passportNo || pax.PassportNo || null,
     PassportIssueDate:
-      pax.passportIssueDate ||
-      pax.PassportIssueDate ||
-      "0001-01-01T00:00:00",
+      pax.passportIssueDate || pax.PassportIssueDate || "0001-01-01T00:00:00",
     PassportExpDate:
       pax.passportExpDate || pax.PassportExpDate || "0001-01-01T00:00:00",
     PAN: pax.pan || pax.PAN || null,
@@ -405,14 +403,14 @@ async function bookHotel(params = {}) {
     console.log(`  Room ${idx} SmokingPreference:`);
     console.log(`    Value: ${room.SmokingPreference}`);
     console.log(`    Type: ${typeof room.SmokingPreference}`);
-    console.log(`    Valid: ${typeof room.SmokingPreference === "number" ? "✓" : "✗"}`);
+    console.log(
+      `    Valid: ${typeof room.SmokingPreference === "number" ? "✓" : "✗"}`,
+    );
   });
   console.log("");
 
   // ✅ DIAGNOSTIC: Verify LeadPassenger is set correctly
-  console.log(
-    "🔍 DIAGNOSTIC: Book LeadPassenger (TBO requires one per room):",
-  );
+  console.log("🔍 DIAGNOSTIC: Book LeadPassenger (TBO requires one per room):");
   roomDetailsWithPassengers.forEach((room, idx) => {
     console.log(`  Room ${idx} HotelPassenger:`);
     room.HotelPassenger.forEach((pax, paxIdx) => {

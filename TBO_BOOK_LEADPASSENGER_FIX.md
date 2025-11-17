@@ -26,13 +26,16 @@ Without this field, TBO cannot identify the lead guest and rejects the booking w
 Added two helper functions to properly format passenger data:
 
 #### 1. `normalizeTitle(title)` (Lines 22-30)
+
 Normalizes passenger title to TBO-compatible format:
+
 - Input: `"Mr"`, `"mr"`, `"MR."` → Output: `"Mr"`
 - Input: `"Mrs"`, `"mrs"`, `"MRS."` → Output: `"Mrs"`
 - Input: `"Miss"` → Output: `"Miss"`
 - Input: `"Ms"`, `"ms"`, `"MS."` → Output: `"Ms"`
 
 #### 2. `buildHotelPassengersForRoom(roomPassengers)` (Lines 32-61)
+
 Constructs the `HotelPassenger` array with all required fields including `LeadPassenger`:
 
 ```javascript
@@ -48,8 +51,10 @@ function buildHotelPassengersForRoom(roomPassengers) {
     LeadPassenger: index === 0, // ✅ MANDATORY: Mark first adult in room as lead guest
     Age: pax.age || pax.Age || 30,
     PassportNo: pax.passportNo || pax.PassportNo || null,
-    PassportIssueDate: pax.passportIssueDate || pax.PassportIssueDate || "0001-01-01T00:00:00",
-    PassportExpDate: pax.passportExpDate || pax.PassportExpDate || "0001-01-01T00:00:00",
+    PassportIssueDate:
+      pax.passportIssueDate || pax.PassportIssueDate || "0001-01-01T00:00:00",
+    PassportExpDate:
+      pax.passportExpDate || pax.PassportExpDate || "0001-01-01T00:00:00",
     PAN: pax.pan || pax.PAN || null,
     AddressLine1: pax.addressLine1 || pax.AddressLine1 || null,
     City: pax.city || pax.City || null,
@@ -61,6 +66,7 @@ function buildHotelPassengersForRoom(roomPassengers) {
 ```
 
 Key points:
+
 - **LeadPassenger**: Set to `true` for the first passenger (`index === 0`), `false` for all others
 - **Field mapping**: Handles both camelCase (`firstName`) and PascalCase (`FirstName`) for flexibility
 - **Defaults**: Provides sensible defaults for required fields (e.g., "Guest" for names, `1` for PaxType)
@@ -70,6 +76,7 @@ Key points:
 Changed from directly passing `hotelPassenger` to using the helper function:
 
 #### Before:
+
 ```javascript
 const roomDetailsWithPassengers = hotelRoomDetails.map((room) => {
   // ... SmokingPreference conversion ...
@@ -82,10 +89,11 @@ const roomDetailsWithPassengers = hotelRoomDetails.map((room) => {
 ```
 
 #### After:
+
 ```javascript
 const roomDetailsWithPassengers = hotelRoomDetails.map((room, roomIndex) => {
   // ... SmokingPreference conversion ...
-  
+
   // ✅ CRITICAL: Build HotelPassenger with LeadPassenger flag
   // TBO requires exactly one adult per room to have LeadPassenger: true
   const passengersForRoom = buildHotelPassengersForRoom(hotelPassenger);
@@ -104,9 +112,7 @@ Added comprehensive logging to verify LeadPassenger is set correctly:
 
 ```javascript
 // ✅ DIAGNOSTIC: Verify LeadPassenger is set correctly
-console.log(
-  "🔍 DIAGNOSTIC: Book LeadPassenger (TBO requires one per room):",
-);
+console.log("🔍 DIAGNOSTIC: Book LeadPassenger (TBO requires one per room):");
 roomDetailsWithPassengers.forEach((room, idx) => {
   console.log(`  Room ${idx} HotelPassenger:`);
   room.HotelPassenger.forEach((pax, paxIdx) => {
@@ -118,6 +124,7 @@ roomDetailsWithPassengers.forEach((room, idx) => {
 ```
 
 Expected output:
+
 ```
 🔍 DIAGNOSTIC: Book LeadPassenger (TBO requires one per room):
   Room 0 HotelPassenger:
@@ -127,12 +134,12 @@ Expected output:
 
 ## TBO LeadPassenger Requirement
 
-| Field | Requirement |
-|-------|-------------|
-| `LeadPassenger` | Boolean, **Mandatory** |
-| Value | `true` for **exactly one adult per room**, `false` for all others |
-| Purpose | TBO uses this to identify the lead guest for room confirmation |
-| Error if missing | `ErrorMessage: "No LeadGuest found in 1 room."` |
+| Field            | Requirement                                                       |
+| ---------------- | ----------------------------------------------------------------- |
+| `LeadPassenger`  | Boolean, **Mandatory**                                            |
+| Value            | `true` for **exactly one adult per room**, `false` for all others |
+| Purpose          | TBO uses this to identify the lead guest for room confirmation    |
+| Error if missing | `ErrorMessage: "No LeadGuest found in 1 room."`                   |
 
 ## Example Book Request (After Fix)
 
@@ -177,17 +184,18 @@ Expected output:
 
 ## Changes Summary
 
-| File | Change | Impact |
-|------|--------|--------|
-| `api/tbo/book.js` | Added `normalizeTitle()` helper | ✅ Consistent title formatting |
-| `api/tbo/book.js` | Added `buildHotelPassengersForRoom()` helper | ✅ Proper LeadPassenger assignment |
-| `api/tbo/book.js` | Use helper in room passenger mapping | ✅ Ensures LeadPassenger field present |
-| `api/tbo/book.js` | Add LeadPassenger diagnostic logging | ✅ Verification in test logs |
+| File              | Change                                       | Impact                                 |
+| ----------------- | -------------------------------------------- | -------------------------------------- |
+| `api/tbo/book.js` | Added `normalizeTitle()` helper              | ✅ Consistent title formatting         |
+| `api/tbo/book.js` | Added `buildHotelPassengersForRoom()` helper | ✅ Proper LeadPassenger assignment     |
+| `api/tbo/book.js` | Use helper in room passenger mapping         | ✅ Ensures LeadPassenger field present |
+| `api/tbo/book.js` | Add LeadPassenger diagnostic logging         | ✅ Verification in test logs           |
 
 ## Testing Instructions (Render)
 
 1. Code is now ready for deployment
 2. Run the full booking flow test:
+
    ```bash
    cd /opt/render/project/src
    node test-tbo-full-booking-flow.js
