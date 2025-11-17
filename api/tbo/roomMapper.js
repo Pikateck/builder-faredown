@@ -67,8 +67,17 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
     // MANDATORY: Index of the room (1-based, not 0-based)
     RoomIndex: roomIndex + 1,
 
-    // ✅ MANDATORY: Category ID (required by BlockRoom API)
+    // ✅ MANDATORY: Category ID (required by BlockRoom API - from GetHotelRoom response)
     CategoryId: room.CategoryId || "",
+
+    // OPTIONAL: Room status and availability fields (from GetHotelRoom)
+    AvailabilityType: room.AvailabilityType || "Confirm",
+    RoomStatus: room.RoomStatus !== undefined ? room.RoomStatus : 0,
+    RoomId: room.RoomId !== undefined ? room.RoomId : 0,
+    ChildCount: room.ChildCount !== undefined ? room.ChildCount : 0,
+    IsTransferIncluded: room.IsTransferIncluded !== undefined ? room.IsTransferIncluded : false,
+    RequireAllPaxDetails:
+      room.RequireAllPaxDetails !== undefined ? room.RequireAllPaxDetails : false,
 
     // MANDATORY: Rate plan code - might have different field names in TBO response
     RatePlanCode:
@@ -81,12 +90,14 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
 
     // OPTIONAL: Rate plan name
     RatePlanName: room.RatePlanName || room.PlanName || "",
+    RatePlan: room.RatePlan || "",
 
     // MANDATORY: Room type identifier
     RoomTypeCode: room.RoomTypeCode || "",
 
     // MANDATORY: Room type description
     RoomTypeName: room.RoomTypeName || room.RoomName || "",
+    RoomDescription: room.RoomDescription || "",
 
     // OPTIONAL: Bed type information
     BedTypes: room.BedTypes || [],
@@ -96,6 +107,21 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
 
     // MANDATORY: Supplements list (can be empty array)
     Supplements: room.Supplements || room.SupplementList || [],
+
+    // OPTIONAL: Additional fields from GetHotelRoom response
+    InfoSource: room.InfoSource || "",
+    SequenceNo: room.SequenceNo || "",
+    IsPerStay: room.IsPerStay !== undefined ? room.IsPerStay : false,
+    DayRates: Array.isArray(room.DayRates) ? room.DayRates : [],
+    Amenities: Array.isArray(room.Amenities) ? room.Amenities : [],
+    LastCancellationDate: room.LastCancellationDate || "",
+    CancellationPolicies: Array.isArray(room.CancellationPolicies)
+      ? room.CancellationPolicies
+      : [],
+    LastVoucherDate: room.LastVoucherDate || "",
+    CancellationPolicy: room.CancellationPolicy || "",
+    IsPassportMandatory: room.IsPassportMandatory !== undefined ? room.IsPassportMandatory : false,
+    IsPANMandatory: room.IsPANMandatory !== undefined ? room.IsPANMandatory : false,
 
     // ✅ MANDATORY: Price details ARRAY (not object)
     Price: priceArray,
