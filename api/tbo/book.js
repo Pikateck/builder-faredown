@@ -340,12 +340,25 @@ async function bookHotel(params = {}) {
   console.log("  URL:", url);
   console.log("  TraceId:", request.TraceId);
   console.log("  HotelCode:", request.HotelCode);
+  console.log("  CategoryId:", request.CategoryId || "<<Not set>>");
   console.log("  HotelName:", request.HotelName);
   console.log(
     "  Lead Passenger:",
     hotelPassenger[0]?.FirstName,
     hotelPassenger[0]?.LastName,
   );
+  console.log("");
+
+  // ✅ DIAGNOSTIC: Verify SmokingPreference is numeric in Book request
+  console.log(
+    "🔍 DIAGNOSTIC: Book SmokingPreference (TBO requires numeric, not string):",
+  );
+  roomDetailsWithPassengers.forEach((room, idx) => {
+    console.log(`  Room ${idx} SmokingPreference:`);
+    console.log(`    Value: ${room.SmokingPreference}`);
+    console.log(`    Type: ${typeof room.SmokingPreference}`);
+    console.log(`    Valid: ${typeof room.SmokingPreference === "number" ? "✓" : "✗"}`);
+  });
   console.log("");
 
   console.log("📤 Request Payload:");
