@@ -148,6 +148,14 @@ async function searchHotels(params = {}) {
   }
   console.log("");
 
+  // Check for API errors
+  const responseStatus = result?.ResponseStatus || result?.Status;
+  if (responseStatus !== 1) {
+    throw new Error(
+      `TBO Hotel Search failed - ResponseStatus: ${responseStatus}, Error: ${result?.Error?.ErrorMessage || "Unknown error"}`,
+    );
+  }
+
   if (result?.HotelResults?.length > 0) {
     console.log("Sample Hotels (first 5):");
     result.HotelResults.slice(0, 5).forEach((h, i) => {
@@ -156,6 +164,9 @@ async function searchHotels(params = {}) {
       );
     });
     console.log("");
+  } else {
+    console.log("⚠️  WARNING: Hotel search returned no results");
+    console.log("   This could mean: no hotels available for these dates/destination");
   }
 
   return {
