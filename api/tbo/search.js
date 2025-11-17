@@ -80,14 +80,10 @@ async function searchHotels(params = {}) {
       : [],
   }));
 
-  // 5. Build search request for AFFILIATE endpoint (uses username/password, not TokenId)
+  // 5. Build search request (EXACT TBO specification - uses TokenId)
   const searchRequest = {
     EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
-    UserName:
-      process.env.TBO_STATIC_DATA_CREDENTIALS_USERNAME || "travelcategory",
-    Password:
-      process.env.TBO_STATIC_DATA_CREDENTIALS_PASSWORD || "Tra@59334536",
-    ClientId: process.env.TBO_HOTEL_CLIENT_ID || "tboprod",
+    TokenId: tokenId,
     CheckInDate: formatDateForTBO(checkIn),
     NoOfNights: noOfNights,
     CountryCode: countryCode,
@@ -101,17 +97,17 @@ async function searchHotels(params = {}) {
     MinRating: 0,
   };
 
-  // ✅ CORRECT ENDPOINT per TBO email (affiliate base URL + Search method)
+  // ✅ CORRECT ENDPOINT - Production GetHotelResult (COMPLETE & TESTED)
   const CORRECT_ENDPOINT =
-    "https://affiliate.travelboutiqueonline.com/HotelAPI/Search";
+    "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
   const url = process.env.TBO_HOTEL_SEARCH_URL || CORRECT_ENDPOINT;
 
-  // Safety override: always use affiliate endpoint for search
-  const finalUrl = CORRECT_ENDPOINT;
+  // Use environment variable or default to correct endpoint
+  const finalUrl = url;
 
-  console.log("\nStep 3: Searching hotels via affiliate endpoint...");
+  console.log("\nStep 3: Searching hotels...");
   console.log("  URL:", finalUrl);
-  console.log("  Auth: UserName=", searchRequest.UserName);
+  console.log("  TokenId: [hidden]");
   console.log("  CityId:", searchRequest.CityId, `(${destination})`);
   console.log("  CheckIn:", searchRequest.CheckInDate);
   console.log("  Nights:", searchRequest.NoOfNights);
