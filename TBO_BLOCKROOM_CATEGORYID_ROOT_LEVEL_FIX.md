@@ -5,6 +5,7 @@
 TBO's BlockRoom API specification requires `CategoryId` as a **mandatory top-level field (field 6)** in the request, not nested inside `HotelRoomsDetails`.
 
 **What we were sending:**
+
 ```json
 {
   "EndUserIp": "52.5.155.132",
@@ -28,6 +29,7 @@ TBO's BlockRoom API specification requires `CategoryId` as a **mandatory top-lev
 ```
 
 **TBO's response:**
+
 ```
 ResponseStatus: 3
 ErrorCode: 3
@@ -39,6 +41,7 @@ ErrorMessage: "CategoryId cannot be null"
 ### Changes to `api/tbo/book.js` (BlockRoom function)
 
 **1. Extract CategoryId from primary room:**
+
 ```javascript
 const primaryRoom = mappedRooms[0];
 const blockRoomCategoryId =
@@ -49,6 +52,7 @@ const blockRoomCategoryId =
 ```
 
 **2. Add as top-level field in request:**
+
 ```javascript
 const request = {
   EndUserIp: process.env.TBO_END_USER_IP || "52.5.155.132",
@@ -56,7 +60,7 @@ const request = {
   TraceId: traceId,
   ResultIndex: Number(resultIndex),
   HotelCode: String(hotelCode),
-  CategoryId: blockRoomCategoryId,  // ✅ TOP-LEVEL per TBO spec (field 6)
+  CategoryId: blockRoomCategoryId, // ✅ TOP-LEVEL per TBO spec (field 6)
   HotelName: hotelName,
   GuestNationality: guestNationality,
   NoOfRooms: Number(noOfRooms),
@@ -66,6 +70,7 @@ const request = {
 ```
 
 **3. Enhanced diagnostic logging:**
+
 ```
 🔍 DIAGNOSTIC: BlockRoom CategoryId (TBO spec requires top-level):
   Root CategoryId   : "1###00018237"
@@ -151,11 +156,13 @@ Step 2: Blocking room...
 Per TBO's note: **"User should send CategoryId of the De-dupe result..."**
 
 For de-dupe cases where multiple supplier codes map to one hotel:
+
 - Store `CategoryId` from `SupplierHotelCodes[...]` when searching
 - Pass it through to BlockRoom builder
 - Use **that** as the root CategoryId instead of/alongside the room CategoryId
 
 This would look like:
+
 ```javascript
 // From HotelResults in search response:
 SupplierHotelCodes: [

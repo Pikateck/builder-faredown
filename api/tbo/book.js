@@ -129,14 +129,20 @@ async function blockRoom(params = {}) {
   console.log("");
 
   // ✅ DIAGNOSTIC: Log CategoryId at both root and room level (TBO spec requires top-level)
-  console.log("🔍 DIAGNOSTIC: BlockRoom CategoryId (TBO spec requires top-level):");
-  console.log(`  Root CategoryId   : "${blockRoomCategoryId || "<<MISSING>>"}"`);
+  console.log(
+    "🔍 DIAGNOSTIC: BlockRoom CategoryId (TBO spec requires top-level):",
+  );
+  console.log(
+    `  Root CategoryId   : "${blockRoomCategoryId || "<<MISSING>>"}"`,
+  );
   console.log(`    Type: ${typeof blockRoomCategoryId}`);
   console.log(`    Truthy: ${!!blockRoomCategoryId}`);
   console.log("");
   console.log("🔍 DIAGNOSTIC: CategoryId in HotelRoomsDetails (nested):");
   mappedRooms.forEach((room, idx) => {
-    console.log(`  Room ${idx}: CategoryId = "${room.CategoryId || "<<MISSING>>"}"`);
+    console.log(
+      `  Room ${idx}: CategoryId = "${room.CategoryId || "<<MISSING>>"}"`,
+    );
     console.log(`    Type: ${typeof room.CategoryId}`);
     console.log(`    Truthy: ${!!room.CategoryId}`);
   });

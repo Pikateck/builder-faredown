@@ -69,7 +69,8 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
 
     // ✅ MANDATORY: Category ID (required by BlockRoom API - from GetHotelRoom response)
     // ⚠️  DO NOT default to empty string - TBO requires actual CategoryId value
-    CategoryId: room.CategoryId || room.CategoryCode || room.RoomCategoryId || undefined,
+    CategoryId:
+      room.CategoryId || room.CategoryCode || room.RoomCategoryId || undefined,
 
     // OPTIONAL: Room status and availability fields (from GetHotelRoom)
     AvailabilityType: room.AvailabilityType || "Confirm",
