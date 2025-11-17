@@ -3,6 +3,7 @@
 ## Problem Summary
 
 The TBO BlockRoom API was failing with:
+
 ```
 ErrorMessage: "Incorrect Currency Code in Price detail."
 ```
@@ -10,6 +11,7 @@ ErrorMessage: "Incorrect Currency Code in Price detail."
 The root cause was that the `Price` field in `HotelRoomsDetails` was being sent as an **array of objects**, but TBO's BlockRoom API expects it as a **single object** - matching the exact structure that TBO returns in `GetHotelRoom` responses.
 
 ### Current (Problematic) Structure
+
 ```json
 "HotelRoomsDetails": [
   {
@@ -26,6 +28,7 @@ The root cause was that the `Price` field in `HotelRoomsDetails` was being sent 
 ```
 
 ### Expected (Correct) Structure
+
 ```json
 "HotelRoomsDetails": [
   {
@@ -44,6 +47,7 @@ The root cause was that the `Price` field in `HotelRoomsDetails` was being sent 
 ### 1. **api/tbo/roomMapper.js** - Price Mapping Fix
 
 #### Changed from:
+
 ```javascript
 // ✅ CRITICAL: Ensure Price is an ARRAY, not object
 let priceArray = [];
@@ -60,6 +64,7 @@ Price: priceArray,
 ```
 
 #### Changed to:
+
 ```javascript
 // ✅ CRITICAL: Price must be a single OBJECT (not array) for BlockRoom
 // TBO's BlockRoom expects the exact same structure as GetHotelRoom returns
@@ -87,6 +92,7 @@ Price: priceObject,  // ✅ CORRECT: Single object, not array
 ### 2. **api/tbo/roomMapper.js** - Validation Fix
 
 #### Changed from:
+
 ```javascript
 // ✅ Price MUST be an ARRAY (not object)
 if (!Array.isArray(room.Price)) {
@@ -100,9 +106,14 @@ if (!Array.isArray(room.Price)) {
 ```
 
 #### Changed to:
+
 ```javascript
 // ✅ Price MUST be an OBJECT (not array) - matches TBO GetHotelRoom structure
-if (typeof room.Price !== "object" || room.Price === null || Array.isArray(room.Price)) {
+if (
+  typeof room.Price !== "object" ||
+  room.Price === null ||
+  Array.isArray(room.Price)
+) {
   errors.push("Price must be an object (not array)");
 } else {
   // Validate price fields
@@ -142,6 +153,7 @@ mappedRooms.forEach((room, idx) => {
 ```
 
 Expected output after fix:
+
 ```
 🔍 DIAGNOSTIC: BlockRoom Price structure (TBO requires object, not array):
   Room 0 Price:
@@ -155,16 +167,17 @@ Expected output after fix:
 
 ## Changes Summary
 
-| File | Change | Impact |
-|------|--------|--------|
-| `api/tbo/roomMapper.js` | Price from array → single object | ✅ Matches TBO BlockRoom spec |
+| File                    | Change                            | Impact                           |
+| ----------------------- | --------------------------------- | -------------------------------- |
+| `api/tbo/roomMapper.js` | Price from array → single object  | ✅ Matches TBO BlockRoom spec    |
 | `api/tbo/roomMapper.js` | Validation: array → object checks | ✅ Correctly validates structure |
-| `api/tbo/book.js` | Added Price structure diagnostics | ✅ Enables verification in logs |
+| `api/tbo/book.js`       | Added Price structure diagnostics | ✅ Enables verification in logs  |
 
 ## Testing Instructions (Render)
 
 1. Code is now ready for deployment to Render
 2. Run the full booking flow test:
+
    ```bash
    cd /opt/render/project/src
    node test-tbo-full-booking-flow.js

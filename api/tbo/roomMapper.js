@@ -32,7 +32,11 @@ function mapRoomForBlockRequest(room, roomIndex = 0) {
   // ✅ CRITICAL: Price must be a single OBJECT (not array) for BlockRoom
   // TBO's BlockRoom expects the exact same structure as GetHotelRoom returns
   let priceObject = {};
-  if (typeof room.Price === "object" && room.Price !== null && !Array.isArray(room.Price)) {
+  if (
+    typeof room.Price === "object" &&
+    room.Price !== null &&
+    !Array.isArray(room.Price)
+  ) {
     // If Price is already a single object, use it directly (1:1 mapping from GetHotelRoom)
     priceObject = room.Price;
   } else if (Array.isArray(room.Price) && room.Price.length > 0) {
@@ -193,7 +197,11 @@ function validateRoomForBlockRequest(room) {
   }
 
   // ✅ Price MUST be an OBJECT (not array) - matches TBO GetHotelRoom structure
-  if (typeof room.Price !== "object" || room.Price === null || Array.isArray(room.Price)) {
+  if (
+    typeof room.Price !== "object" ||
+    room.Price === null ||
+    Array.isArray(room.Price)
+  ) {
     errors.push("Price must be an object (not array)");
   } else {
     // Validate price fields
