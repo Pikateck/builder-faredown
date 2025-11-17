@@ -13,11 +13,13 @@ ResponseStatus: 3
 ### Root Cause
 
 The critical issue:
+
 1. **BlockRoom response** returned `IsPriceChanged: true` - indicating TBO calculated/updated the room price
 2. **Book request** was still using the **old price from GetHotelRoom** instead of the **updated price from BlockRoom response**
 3. TBO's validation in Book expects the exact price object it returned from BlockRoom
 
 The flow mismatch:
+
 ```
 Search        → Price: 1115.31  (RoomPrice from initial search)
 GetHotelRoom  → Price: 1115.31  (Confirmed room price)
@@ -33,6 +35,7 @@ Book (FIXED)  → Price: (exact object from BlockRoom) ✅
 Changed from passing the original GetHotelRoom room to passing the BlockRoom response room details:
 
 #### Before:
+
 ```javascript
 const bookResult = await bookHotel({
   traceId,
@@ -48,6 +51,7 @@ const bookResult = await bookHotel({
 ```
 
 #### After:
+
 ```javascript
 const bookResult = await bookHotel({
   traceId,
@@ -75,7 +79,7 @@ Updated the comment and ensured Price is preserved from BlockRoom:
 
 const roomDetailsWithPassengers = hotelRoomDetails.map((room, roomIndex) => {
   // ... SmokingPreference conversion ...
-  
+
   // ✅ CRITICAL: Build HotelPassenger with LeadPassenger flag
   const passengersForRoom = buildHotelPassengersForRoom(hotelPassenger);
 
@@ -101,10 +105,15 @@ console.log("\n🔍 DIAGNOSTIC: Book Price (must come from BlockRoom response):"
 roomDetailsWithPassengers.forEach((room, idx) => {
   console.log(`  Room ${idx} Price:`);
   console.log(`    RoomPrice: ${room.Price?.RoomPrice || "<<MISSING>>"}`);
-  console.log(`    PublishedPrice: ${room.Price?.PublishedPrice || "<<MISSING>>"}`);
+  console.log(
+    `    PublishedPrice: ${room.Price?.PublishedPrice || "<<MISSING>>"}`,
+  );
   console.log(`    OfferedPrice: ${room.Price?.OfferedPrice || "<<MISSING>>"}`);
   console.log(`    Tax: ${room.Price?.Tax || "<<MISSING>>"}`);
-  console.log(`    Full Price object:`, JSON.stringify(room.Price, null, 2).substring(0, 200));
+  console.log(
+    `    Full Price object:`,
+    JSON.stringify(room.Price, null, 2).substring(0, 200),
+  );
 });
 ```
 
@@ -146,16 +155,17 @@ Expected output shows the exact price from BlockRoom response.
 
 ## Key Changes Summary
 
-| File | Line(s) | Change | Impact |
-|------|---------|--------|--------|
-| `test-tbo-full-booking-flow.js` | 387 | Pass `blockResult.hotelRoomDetails` to `bookHotel` | ✅ Ensures Book receives BlockRoom's updated room details |
-| `api/tbo/book.js` | 321-324 | Updated comments clarifying BlockRoom source | ✅ Documents the correct price flow |
-| `api/tbo/book.js` | 346 | `...room` spread preserves all fields from BlockRoom | ✅ Price is preserved without modification |
-| `api/tbo/book.js` | 365-376 | Added Price diagnostic logging | ✅ Verifies correct price is sent |
+| File                            | Line(s) | Change                                               | Impact                                                    |
+| ------------------------------- | ------- | ---------------------------------------------------- | --------------------------------------------------------- |
+| `test-tbo-full-booking-flow.js` | 387     | Pass `blockResult.hotelRoomDetails` to `bookHotel`   | ✅ Ensures Book receives BlockRoom's updated room details |
+| `api/tbo/book.js`               | 321-324 | Updated comments clarifying BlockRoom source         | ✅ Documents the correct price flow                       |
+| `api/tbo/book.js`               | 346     | `...room` spread preserves all fields from BlockRoom | ✅ Price is preserved without modification                |
+| `api/tbo/book.js`               | 365-376 | Added Price diagnostic logging                       | ✅ Verifies correct price is sent                         |
 
 ## Why This Fixes It
 
 TBO's Book API is strict about the Price object:
+
 - When `IsPriceChanged: true` in BlockRoom, the Price may have been updated
 - TBO expects the Book request to use the exact Price object from the BlockRoom response
 - If you send a different price (especially one from an earlier step), TBO returns: `"Incorrect Request: RoomPrice in 1 room."`
@@ -166,6 +176,7 @@ By passing `blockResult.hotelRoomDetails` to `bookHotel`, we ensure the room det
 
 1. Code changes are complete
 2. Run the full booking flow test:
+
    ```bash
    cd /opt/render/project/src
    node test-tbo-full-booking-flow.js
@@ -175,7 +186,7 @@ By passing `blockResult.hotelRoomDetails` to `bookHotel`, we ensure the room det
    - **Step 5 (BlockRoom)**: `ResponseStatus: 1` with `IsPriceChanged: true` or `false` ✅
    - **Step 5 diagnostic**: Shows updated Price object from BlockRoom ✅
    - **Step 6 (Book) diagnostic**: Shows SAME Price object (from BlockRoom) ✅
-   - **Step 6 (Book) response**: 
+   - **Step 6 (Book) response**:
      - `ResponseStatus: 1` ✅
      - `BookingId` populated ✅
      - `BookingRefNo` populated ✅
@@ -196,6 +207,7 @@ By passing `blockResult.hotelRoomDetails` to `bookHotel`, we ensure the room det
 ## For Production
 
 When integrating with UI/backend booking flow:
+
 1. **Capture BlockRoom response** with room details and price
 2. **Pass these exact details to Book**, not the original room from earlier steps
 3. **Log IsPriceChanged** to inform users if pricing changed between search and booking

@@ -362,14 +362,23 @@ async function bookHotel(params = {}) {
   });
 
   // ✅ DIAGNOSTIC: Log the Price object being used for Book (should come from BlockRoom response)
-  console.log("\n🔍 DIAGNOSTIC: Book Price (must come from BlockRoom response):");
+  console.log(
+    "\n🔍 DIAGNOSTIC: Book Price (must come from BlockRoom response):",
+  );
   roomDetailsWithPassengers.forEach((room, idx) => {
     console.log(`  Room ${idx} Price:`);
     console.log(`    RoomPrice: ${room.Price?.RoomPrice || "<<MISSING>>"}`);
-    console.log(`    PublishedPrice: ${room.Price?.PublishedPrice || "<<MISSING>>"}`);
-    console.log(`    OfferedPrice: ${room.Price?.OfferedPrice || "<<MISSING>>"}`);
+    console.log(
+      `    PublishedPrice: ${room.Price?.PublishedPrice || "<<MISSING>>"}`,
+    );
+    console.log(
+      `    OfferedPrice: ${room.Price?.OfferedPrice || "<<MISSING>>"}`,
+    );
     console.log(`    Tax: ${room.Price?.Tax || "<<MISSING>>"}`);
-    console.log(`    Full Price object:`, JSON.stringify(room.Price, null, 2).substring(0, 200));
+    console.log(
+      `    Full Price object:`,
+      JSON.stringify(room.Price, null, 2).substring(0, 200),
+    );
   });
   console.log("");
 
