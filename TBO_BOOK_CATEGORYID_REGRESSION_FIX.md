@@ -96,6 +96,7 @@ console.log("  HotelName:", request.HotelName);
 ```
 
 Expected output:
+
 ```
 Step 2: Booking hotel...
   URL: https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/Book
@@ -145,13 +146,13 @@ Book Request
 
 ## Key Changes Summary
 
-| File | Line(s) | Change | Impact |
-|------|---------|--------|--------|
-| `api/tbo/book.js` | 267-282 | Extract and return `categoryId` from BlockRoom | ✅ Makes CategoryId available to caller |
-| `api/tbo/book.js` | 312 | Add `categoryId` parameter to bookHotel | ✅ Function can receive CategoryId |
-| `api/tbo/book.js` | 394-398 | Use categoryId parameter (with fallback) | ✅ Proper CategoryId priority logic |
-| `api/tbo/book.js` | 419-429 | Enhanced diagnostic logging | ✅ Shows CategoryId source and value |
-| `test-tbo-full-booking-flow.js` | 387 | Pass `blockResult.categoryId` to bookHotel | ✅ Completes the data flow chain |
+| File                            | Line(s) | Change                                         | Impact                                  |
+| ------------------------------- | ------- | ---------------------------------------------- | --------------------------------------- |
+| `api/tbo/book.js`               | 267-282 | Extract and return `categoryId` from BlockRoom | ✅ Makes CategoryId available to caller |
+| `api/tbo/book.js`               | 312     | Add `categoryId` parameter to bookHotel        | ✅ Function can receive CategoryId      |
+| `api/tbo/book.js`               | 394-398 | Use categoryId parameter (with fallback)       | ✅ Proper CategoryId priority logic     |
+| `api/tbo/book.js`               | 419-429 | Enhanced diagnostic logging                    | ✅ Shows CategoryId source and value    |
+| `test-tbo-full-booking-flow.js` | 387     | Pass `blockResult.categoryId` to bookHotel     | ✅ Completes the data flow chain        |
 
 ## Why This Fixes the Regression
 
@@ -164,6 +165,7 @@ Book Request
 
 1. Deploy the updated code to Render
 2. Run the full booking flow test:
+
    ```bash
    cd /opt/render/project/src
    node test-tbo-full-booking-flow.js
@@ -187,6 +189,7 @@ Book Request
 ## Regression Prevention
 
 This fix ensures that:
+
 - CategoryId data flow is explicit and traceable through logs
 - The parameter-based approach is more robust than trying to extract from room details
 - Fallback logic provides safety if parameter is not provided
