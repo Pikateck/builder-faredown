@@ -479,6 +479,7 @@ app.use("/api/tbo/room", tboRoomRoutes);
 app.use("/api/tbo/block", tboBlockRoutes);
 app.use("/api/tbo/book", tboBookRoutes);
 app.use("/api/tbo/voucher", tboVoucherRoutes);
+app.use("/api/tbo/balance", tboBalanceRoutes);
 
 app.use("/api/hotels", hotelCanonicalRoutes); // STEP 2: Canonical hotel endpoints (PRIORITY)
 app.use("/api/hotels-metadata", require("./routes/hotels-metadata")); // Legacy: Hybrid metadata + async pricing (TBO first) - DEPRECATED
