@@ -601,9 +601,9 @@ class TBOAdapter extends BaseSupplierAdapter {
     });
 
     // Log exact request payload (sanitized)
-    this.logger.debug("📤 Search Request Payload:", {
+    this.logger.debug("📤 Search Request Payload (affiliate - using username/password):", {
       ...searchRequest,
-      TokenId: tokenId.substring(0, 20) + "...",
+      Password: "***",
     });
 
     try {
