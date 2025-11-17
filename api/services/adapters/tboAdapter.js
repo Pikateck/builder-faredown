@@ -564,12 +564,10 @@ class TBOAdapter extends BaseSupplierAdapter {
           },
         ];
 
-    // ✅ JSON request format for AFFILIATE endpoint (uses username/password, NOT TokenId)
+    // ✅ EXACT JSON request format from TBO documentation (uses TokenId)
     const searchRequest = {
       EndUserIp: this.config.endUserIp,
-      UserName: this.config.staticUserName || "travelcategory",
-      Password: this.config.staticPassword || "Tra@59334536",
-      ClientId: this.config.clientId || "tboprod",
+      TokenId: tokenId,
       CheckInDate: this.formatDateForTBO(checkIn), // dd/MM/yyyy
       NoOfNights: noOfNights, // NOT CheckOutDate
       CountryCode: countryCode,
