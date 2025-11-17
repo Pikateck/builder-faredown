@@ -104,7 +104,8 @@ async function searchHotels(params = {}) {
     "https://hotelbooking.travelboutiqueonline.com/HotelAPI_V10/HotelService.svc/rest/GetHotelResult";
 
   console.log("\nStep 3: Searching hotels...");
-  console.log("  URL:", url);
+  console.log("  ENV TBO_HOTEL_SEARCH_URL:", process.env.TBO_HOTEL_SEARCH_URL || "NOT SET");
+  console.log("  Final URL:", url);
   console.log("  CityId:", searchRequest.CityId, `(${destination})`);
   console.log("  CheckIn:", searchRequest.CheckInDate);
   console.log("  Nights:", searchRequest.NoOfNights);
