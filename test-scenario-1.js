@@ -81,6 +81,7 @@ async function testScenario1() {
         resultIndex: hotel.ResultIndex,
         hotelCode: hotel.HotelCode,
         hotelName: hotel.HotelName,
+        categoryId: blockRes.data.categoryId,
         bookingId: blockRes.data.bookingId,
         guestNationality: "IN",
         noOfRooms: 1,
