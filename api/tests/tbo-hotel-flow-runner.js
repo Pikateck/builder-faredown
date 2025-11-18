@@ -279,10 +279,14 @@ async function runTboHotelFlow(config = {}) {
     );
 
     const roomReq = {
-      traceId: searchRes.TraceId,
+      traceId: searchRes?.traceId || searchRes?.TraceId,
       resultIndex,
       hotelCode,
     };
+
+    if (!roomReq.traceId) {
+      throw new Error("TraceId missing from search response");
+    }
 
     const roomRes = await getHotelRoom(roomReq);
     results.steps.room = { request: roomReq, response: roomRes };
