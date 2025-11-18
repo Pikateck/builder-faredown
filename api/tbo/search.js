@@ -15,9 +15,24 @@ const { getCityId } = require("./static");
 
 /**
  * Format date as dd/MM/yyyy (TBO requirement)
+ * Handles both dd/MM/yyyy and YYYY-MM-DD formats
  */
 function formatDateForTBO(dateStr) {
+  if (!dateStr) {
+    throw new Error("Date string is required");
+  }
+
+  // If already in dd/MM/yyyy format, return as-is
+  if (/^\d{2}\/\d{2}\/\d{4}$/.test(dateStr)) {
+    return dateStr;
+  }
+
+  // Parse YYYY-MM-DD or ISO format
   const d = new Date(dateStr);
+  if (isNaN(d.getTime())) {
+    throw new Error(`Invalid date format: ${dateStr}. Expected dd/MM/yyyy or YYYY-MM-DD`);
+  }
+
   const day = String(d.getDate()).padStart(2, "0");
   const month = String(d.getMonth() + 1).padStart(2, "0");
   const year = d.getFullYear();
