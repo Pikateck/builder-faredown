@@ -44,7 +44,11 @@ class SupplierAdapterManager {
       }
 
       // Initialize TBO adapter
-      if (process.env.TBO_AGENCY_ID || process.env.TBO_API_USER_ID || process.env.TBO_HOTEL_USER_ID) {
+      if (
+        process.env.TBO_AGENCY_ID ||
+        process.env.TBO_API_USER_ID ||
+        process.env.TBO_HOTEL_USER_ID
+      ) {
         this.adapters.set("TBO", new TBOAdapter());
         this.logger.info("TBO adapter initialized");
       } else {
