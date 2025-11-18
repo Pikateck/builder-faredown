@@ -8,6 +8,7 @@
 ## 🎯 **Testing Strategy**
 
 You can test scenarios in **2 ways**:
+
 1. **Via API (Faster)** - Direct API calls to verify backend
 2. **Via Frontend (Real UX)** - Test actual user journey in browser
 
@@ -15,16 +16,16 @@ You can test scenarios in **2 ways**:
 
 ## 📋 **The 8 Scenarios**
 
-| # | Type | Room Config | Details | Status |
-|---|------|------------|---------|--------|
-| **1** | Domestic | 1 Room | 1 Adult | 🔄 Pending |
-| **2** | Domestic | 1 Room | 2 Adults + 2 Children | 🔄 Pending |
-| **3** | Domestic | 2 Rooms | 1 Adult + 1 Adult | 🔄 Pending |
-| **4** | Domestic | 2 Rooms | 1A+2C + 2 Adults | 🔄 Pending |
-| **5** | International | 1 Room | 1 Adult | 🔄 Pending |
-| **6** | International | 1 Room | 2 Adults + 2 Children | 🔄 Pending |
-| **7** | International | 2 Rooms | 1 Adult + 1 Adult | 🔄 Pending |
-| **8** | International | 2 Rooms | 1A+2C + 2 Adults | 🔄 Pending |
+| #     | Type          | Room Config | Details               | Status     |
+| ----- | ------------- | ----------- | --------------------- | ---------- |
+| **1** | Domestic      | 1 Room      | 1 Adult               | 🔄 Pending |
+| **2** | Domestic      | 1 Room      | 2 Adults + 2 Children | 🔄 Pending |
+| **3** | Domestic      | 2 Rooms     | 1 Adult + 1 Adult     | 🔄 Pending |
+| **4** | Domestic      | 2 Rooms     | 1A+2C + 2 Adults      | 🔄 Pending |
+| **5** | International | 1 Room      | 1 Adult               | 🔄 Pending |
+| **6** | International | 1 Room      | 2 Adults + 2 Children | 🔄 Pending |
+| **7** | International | 2 Rooms     | 1 Adult + 1 Adult     | 🔄 Pending |
+| **8** | International | 2 Rooms     | 1A+2C + 2 Adults      | 🔄 Pending |
 
 ---
 
@@ -61,6 +62,7 @@ axios.post('https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/G
 ```
 
 **If balance is insufficient:**
+
 1. Contact TBO support
 2. Add credit to your account
 3. Wait for confirmation (usually instant)
@@ -75,32 +77,32 @@ axios.post('https://api.travelboutiqueonline.com/SharedAPI/SharedData.svc/rest/G
 Create a file: `test-scenario-1.js`
 
 ```javascript
-const axios = require('axios');
-require('dotenv').config({ path: './.env' });
+const axios = require("axios");
+require("dotenv").config({ path: "./.env" });
 
-const API_BASE = 'http://localhost:3000/api';
+const API_BASE = "http://localhost:3000/api";
 
 async function testScenario1() {
-  console.log('\n' + '='.repeat(80));
-  console.log('SCENARIO 1: Domestic Booking (1 Room, 1 Adult)');
-  console.log('='.repeat(80));
+  console.log("\n" + "=".repeat(80));
+  console.log("SCENARIO 1: Domestic Booking (1 Room, 1 Adult)");
+  console.log("=".repeat(80));
 
   try {
     // Step 1: Search
-    console.log('\n[Step 1] Searching for hotels in Mumbai...');
+    console.log("\n[Step 1] Searching for hotels in Mumbai...");
     const searchRes = await axios.post(`${API_BASE}/tbo/search`, {
-      destination: 'Mumbai',
+      destination: "Mumbai",
       cityId: 10449,
-      countryCode: 'IN',
-      checkIn: '2025-12-20',
-      checkOut: '2025-12-22',
+      countryCode: "IN",
+      checkIn: "2025-12-20",
+      checkOut: "2025-12-22",
       rooms: [{ adults: 1, children: 0, childAges: [] }],
-      currency: 'INR',
-      guestNationality: 'IN'
+      currency: "INR",
+      guestNationality: "IN",
     });
 
     if (!searchRes.data.success) {
-      throw new Error('Search failed: ' + searchRes.data.error);
+      throw new Error("Search failed: " + searchRes.data.error);
     }
 
     console.log(`✅ Found ${searchRes.data.hotels.length} hotels`);
@@ -108,42 +110,44 @@ async function testScenario1() {
     const traceId = searchRes.data.traceId;
 
     console.log(`   Hotel: ${hotel.hotelName}`);
-    console.log(`   Price: ${hotel.price?.offeredPrice} ${hotel.price?.currencyCode}`);
+    console.log(
+      `   Price: ${hotel.price?.offeredPrice} ${hotel.price?.currencyCode}`,
+    );
 
     // Step 2: Get Room Details
-    console.log('\n[Step 2] Getting room details...');
+    console.log("\n[Step 2] Getting room details...");
     const roomRes = await axios.post(`${API_BASE}/tbo/room`, {
       traceId,
       resultIndex: hotel.resultIndex,
       hotelCode: hotel.hotelCode,
       hotelName: hotel.hotelName,
-      checkInDate: '2025-12-20',
-      checkOutDate: '2025-12-22',
-      noOfRooms: 1
+      checkInDate: "2025-12-20",
+      checkOutDate: "2025-12-22",
+      noOfRooms: 1,
     });
 
     if (!roomRes.data.success) {
-      throw new Error('Room details failed: ' + roomRes.data.error);
+      throw new Error("Room details failed: " + roomRes.data.error);
     }
 
     console.log(`✅ Got room details`);
     const roomDetails = roomRes.data.hotelRoomDetails;
 
     // Step 3: Block Room
-    console.log('\n[Step 3] Blocking room...');
+    console.log("\n[Step 3] Blocking room...");
     const blockRes = await axios.post(`${API_BASE}/tbo/block`, {
       traceId,
       resultIndex: hotel.resultIndex,
       hotelCode: hotel.hotelCode,
       hotelName: hotel.hotelName,
-      guestNationality: 'IN',
+      guestNationality: "IN",
       noOfRooms: 1,
       isVoucherBooking: true,
-      hotelRoomDetails: roomDetails
+      hotelRoomDetails: roomDetails,
     });
 
     if (!blockRes.data.success) {
-      throw new Error('Block failed: ' + blockRes.data.error);
+      throw new Error("Block failed: " + blockRes.data.error);
     }
 
     console.log(`✅ Room blocked successfully`);
@@ -151,69 +155,71 @@ async function testScenario1() {
     console.log(`   Booking ID: ${bookingId}`);
 
     if (blockRes.data.isPriceChanged) {
-      console.log(`   ⚠️  Price changed: ${blockRes.data.hotelRoomDetails[0].price?.offeredPrice}`);
+      console.log(
+        `   ⚠️  Price changed: ${blockRes.data.hotelRoomDetails[0].price?.offeredPrice}`,
+      );
     }
 
     // Step 4: Book Hotel
-    console.log('\n[Step 4] Booking hotel...');
+    console.log("\n[Step 4] Booking hotel...");
     const bookRes = await axios.post(`${API_BASE}/tbo/book`, {
       traceId,
       resultIndex: hotel.resultIndex,
       hotelCode: hotel.hotelCode,
       hotelName: hotel.hotelName,
       bookingId,
-      guestNationality: 'IN',
+      guestNationality: "IN",
       noOfRooms: 1,
       isVoucherBooking: true,
       hotelRoomDetails: blockRes.data.hotelRoomDetails,
       hotelPassenger: [
         {
-          Title: 'Mr',
-          FirstName: 'Rajesh',
-          LastName: 'Kumar',
+          Title: "Mr",
+          FirstName: "Rajesh",
+          LastName: "Kumar",
           PaxType: 1,
-          Nationality: 'IN',
-          Email: 'rajesh@example.com',
-          Phoneno: '+919876543210'
-        }
-      ]
+          Nationality: "IN",
+          Email: "rajesh@example.com",
+          Phoneno: "+919876543210",
+        },
+      ],
     });
 
     if (!bookRes.data.success) {
-      throw new Error('Book failed: ' + bookRes.data.error);
+      throw new Error("Book failed: " + bookRes.data.error);
     }
 
     console.log(`✅ Hotel booked successfully!`);
     console.log(`   Confirmation No: ${bookRes.data.confirmationNo}`);
     console.log(`   Booking Ref: ${bookRes.data.bookingRefNo}`);
 
-    console.log('\n✅ SCENARIO 1 PASSED');
+    console.log("\n✅ SCENARIO 1 PASSED");
     return {
       scenario: 1,
-      status: 'PASSED',
+      status: "PASSED",
       confirmationNo: bookRes.data.confirmationNo,
-      bookingRef: bookRes.data.bookingRefNo
+      bookingRef: bookRes.data.bookingRefNo,
     };
-
   } catch (error) {
-    console.error('\n❌ SCENARIO 1 FAILED');
-    console.error('Error:', error.response?.data || error.message);
+    console.error("\n❌ SCENARIO 1 FAILED");
+    console.error("Error:", error.response?.data || error.message);
     return {
       scenario: 1,
-      status: 'FAILED',
-      error: error.message
+      status: "FAILED",
+      error: error.message,
     };
   }
 }
 
-testScenario1().then(result => {
-  console.log('\n' + '='.repeat(80));
+testScenario1().then((result) => {
+  console.log("\n" + "=".repeat(80));
   console.log(JSON.stringify(result, null, 2));
-  console.log('='.repeat(80));
+  console.log("=".repeat(80));
 });
 ```
 
 **Run it:**
+
 ```bash
 cd /opt/render/project/src
 node test-scenario-1.js
@@ -394,6 +400,7 @@ hotelPassenger: [
 ## 🌍 **SCENARIOS 6, 7, 8: International Variations**
 
 Follow the same pattern as Domestic scenarios 2, 3, 4, but:
+
 - Change **destination** to Dubai
 - Change **currency** to USD
 - Change **nationality** to: US, GB, AU, CA (per scenario)
@@ -435,15 +442,15 @@ For each scenario:
 After testing all 8 scenarios, you should have:
 
 | Scenario | Confirmation # | Status |
-|----------|---|--------|
-| 1 | CONF-001 | ✅ |
-| 2 | CONF-002 | ✅ |
-| 3 | CONF-003 | ✅ |
-| 4 | CONF-004 | ✅ |
-| 5 | CONF-005 | ✅ |
-| 6 | CONF-006 | ✅ |
-| 7 | CONF-007 | ✅ |
-| 8 | CONF-008 | ✅ |
+| -------- | -------------- | ------ |
+| 1        | CONF-001       | ✅     |
+| 2        | CONF-002       | ✅     |
+| 3        | CONF-003       | ✅     |
+| 4        | CONF-004       | ✅     |
+| 5        | CONF-005       | ✅     |
+| 6        | CONF-006       | ✅     |
+| 7        | CONF-007       | ✅     |
+| 8        | CONF-008       | ✅     |
 
 ---
 
@@ -480,9 +487,10 @@ After testing all 8 scenarios, you should have:
 
 ## ✅ **Start Testing**
 
-Ready to test? 
+Ready to test?
 
 **First:**
+
 1. Check balance (Step 0)
 2. Run Scenario 1 test
 3. Let me know if it passes or fails

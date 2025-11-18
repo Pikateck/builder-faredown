@@ -3,9 +3,9 @@
 /**
  * TBO Hotel API Certification Test Runner
  * Executes all 8 certification test cases with live credentials
- * 
+ *
  * Usage: node api/tests/tbo-certification-runner.js
- * 
+ *
  * Output:
  * - tbo-certification-results.json (JSON logs for TBO)
  * - tbo-certification-summary.txt (Summary report)
@@ -18,7 +18,8 @@ const path = require("path");
 // Load environment variables
 require("dotenv").config({ path: path.join(__dirname, "../../.env") });
 
-const API_BASE_URL = process.env.VITE_API_BASE_URL || "http://localhost:3000/api";
+const API_BASE_URL =
+  process.env.VITE_API_BASE_URL || "http://localhost:3000/api";
 
 /**
  * 8 TBO Certification Test Cases
@@ -586,7 +587,7 @@ async function executeTestCase(testCase) {
       console.log(`\n[Step 5] Fetching booking details...`);
       try {
         const detailsResponse = await axios.get(
-          `${API_BASE_URL}/tbo/bookings/${blockingId}`
+          `${API_BASE_URL}/tbo/bookings/${blockingId}`,
         );
 
         result.steps.push({

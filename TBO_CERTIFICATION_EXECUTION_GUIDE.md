@@ -17,6 +17,7 @@ node api/tests/tbo-certification-runner.js
 ```
 
 **What This Does:**
+
 - ✅ Executes all 8 certification test cases
 - ✅ Uses your LIVE TBO credentials (already in env vars)
 - ✅ Generates JSON request/response logs for each case
@@ -25,6 +26,7 @@ node api/tests/tbo-certification-runner.js
   - `tbo-certification-summary.txt` - Text summary report
 
 **Expected Output:**
+
 ```
 ================================================================================
 # TBO HOTEL API - CERTIFICATION TEST RUNNER
@@ -66,6 +68,7 @@ Open `tbo-certification-results.json` and verify:
 ✅ All steps (search, room, block, book) executed
 
 **Example JSON Structure:**
+
 ```json
 {
   "agency": "BOMF145",
@@ -123,11 +126,13 @@ Open `tbo-certification-results.json` and verify:
 ### **Email Template for TBO**
 
 **Subject Line:**
+
 ```
 Hotel Certification Cases - Faredown (or Your Agency Name)
 ```
 
 **Email Body:**
+
 ```
 Dear TBO Certification Team,
 
@@ -198,28 +203,33 @@ Contact: [Your Contact Info]
 ## 📋 **Certification Process Timeline**
 
 ### **Step 1: Test Case Verification** (Current - YOU ARE HERE)
+
 - ✅ Execute certification tests
 - ✅ Generate JSON logs
 - ✅ Submit to TBO
 - ⏳ TBO verifies (3-4 working days)
 
 ### **Step 2: API Validation Queries**
+
 - 🔄 TBO sends validation sheet
 - 🔄 You provide comments
 - ⏳ Processing: 3-4 working days
 
 ### **Step 3: Portal Verification**
+
 - 🔄 Share website/portal URL
 - 🔄 TBO verifies implementation
 - 🔄 Complete validation sheet
 - ⏳ Processing: 3-4 working days
 
 ### **Step 4: Sign-Off & Live Access**
+
 - 🔄 TBO provides sign-off email
 - 🔄 Live production credentials provided
 - 🔄 IP whitelisting setup
 
 ### **Step 5: Go Live**
+
 - 🔄 Update env vars with live credentials
 - 🔄 Deploy to production
 - 🔄 Monitor bookings
@@ -231,7 +241,9 @@ Contact: [Your Contact Info]
 ### **Issue: Tests Fail with "No Hotels Found"**
 
 **Solution:**
+
 1. Verify TBO credentials in `.env`:
+
    ```
    TBO_HOTEL_CLIENT_ID=tboprod
    TBO_HOTEL_USER_ID=BOMF145
@@ -240,6 +252,7 @@ Contact: [Your Contact Info]
    ```
 
 2. Check TBO API connectivity:
+
    ```bash
    node api/scripts/test-tbo-connectivity.js
    ```
@@ -258,6 +271,7 @@ This is normal. TBO prices can change between search and booking. The system han
 ### **Issue: Child Passenger Age Validation**
 
 Ensure child ages match roomConfig:
+
 ```javascript
 // ✓ Correct
 roomConfigs: [{ adults: 2, children: 2, childAges: [8, 12] }]
@@ -289,16 +303,16 @@ Before sending to TBO:
 
 ## 📊 **Expected Test Case Summary**
 
-| Case | Type | Rooms | Occupancy | Expected Status |
-|------|------|-------|-----------|-----------------|
-| 1 | Domestic | 1 | 1 Adult | ✓ PASS |
-| 2 | Domestic | 1 | 2 Adults, 2 Children | ✓ PASS |
-| 3 | Domestic | 2 | 1 Adult + 1 Adult | ✓ PASS |
-| 4 | Domestic | 2 | 1 Adult + 2 Children + 2 Adults | ✓ PASS |
-| 5 | International | 1 | 1 Adult | ✓ PASS |
-| 6 | International | 1 | 2 Adults, 2 Children | ✓ PASS |
-| 7 | International | 2 | 1 Adult + 1 Adult | ✓ PASS |
-| 8 | International | 2 | 1 Adult + 2 Children + 2 Adults | ✓ PASS |
+| Case | Type          | Rooms | Occupancy                       | Expected Status |
+| ---- | ------------- | ----- | ------------------------------- | --------------- |
+| 1    | Domestic      | 1     | 1 Adult                         | ✓ PASS          |
+| 2    | Domestic      | 1     | 2 Adults, 2 Children            | ✓ PASS          |
+| 3    | Domestic      | 2     | 1 Adult + 1 Adult               | ✓ PASS          |
+| 4    | Domestic      | 2     | 1 Adult + 2 Children + 2 Adults | ✓ PASS          |
+| 5    | International | 1     | 1 Adult                         | ✓ PASS          |
+| 6    | International | 1     | 2 Adults, 2 Children            | ✓ PASS          |
+| 7    | International | 2     | 1 Adult + 1 Adult               | ✓ PASS          |
+| 8    | International | 2     | 1 Adult + 2 Children + 2 Adults | ✓ PASS          |
 
 ---
 
@@ -315,6 +329,7 @@ Before sending to TBO:
 ## 📞 **Support**
 
 If you encounter issues:
+
 1. Check Render logs: `Render > Dashboard > Logs`
 2. Verify database has `tbo_hotel_bookings` table: Check pgAdmin
 3. Test TBO connectivity: `node api/scripts/test-tbo-connectivity.js`
@@ -325,6 +340,7 @@ If you encounter issues:
 ## 🚀 **Next Phase**
 
 After TBO confirms Step 1 (3-4 working days):
+
 - You'll receive validation sheet
 - Proceed to Step 2: API Validation Queries
 - Follow up with portal verification
