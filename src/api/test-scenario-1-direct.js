@@ -59,6 +59,11 @@ async function getCityId(destination, countryCode, tokenId) {
   });
 
   console.log("Response keys:", Object.keys(response.data).slice(0, 10));
+  console.log("Status:", response.data.Status);
+  if (response.data.Error) {
+    console.log("Error:", response.data.Error);
+    throw new Error("TBO Static Data Error: " + JSON.stringify(response.data.Error));
+  }
   const destinations = response.data.Destinations || response.data.Destination || [];
   console.log(`Found ${destinations.length} destinations`);
 
