@@ -174,12 +174,12 @@ async function blockRoom(params = {}) {
   console.log("  NoOfRooms:", request.NoOfRooms);
   console.log("");
 
-  // ✅ DIAGNOSTIC: Log CategoryId at both root and room level (TBO spec requires top-level)
+  // ✅ DIAGNOSTIC: Log CategoryId context (de-dupe aware)
   console.log(
-    "🔍 DIAGNOSTIC: BlockRoom CategoryId (TBO spec requires top-level):",
+    "🔍 DIAGNOSTIC: BlockRoom CategoryId (de-dupe aware - only send when present):",
   );
   console.log(
-    `  Root CategoryId   : "${blockRequestCategoryId || "<<MISSING>>"}"`,
+    `  BlockRoom CategoryId: "${blockRequestCategoryId || "<<OMITTED (non-de-dupe)>>"}"`,
   );
   console.log(`    Type: ${typeof blockRequestCategoryId}`);
   console.log(`    Truthy: ${!!blockRequestCategoryId}`);
@@ -187,7 +187,7 @@ async function blockRoom(params = {}) {
   console.log("🔍 DIAGNOSTIC: CategoryId in HotelRoomsDetails (nested):");
   mappedRooms.forEach((room, idx) => {
     console.log(
-      `  Room ${idx}: CategoryId = "${room.CategoryId || "<<MISSING>>"}"`,
+      `  Room ${idx}: CategoryId = "${room.CategoryId || "<<OMITTED>>"}"`,
     );
     console.log(`    Type: ${typeof room.CategoryId}`);
     console.log(`    Truthy: ${!!room.CategoryId}`);
