@@ -426,12 +426,12 @@ async function bookHotel(params = {}) {
   }
 
   // ✅ DIAGNOSTIC: Log CategoryId context before sending Book request
+  console.log("🔍 BOOK CategoryId (de-dupe aware - only send when present):");
   console.log(
-    "🔍 BOOK CategoryId (de-dupe aware - only send when present):",
+    `  categoryId param received: "${categoryId || "<<NOT PROVIDED>>"}"`,
   );
-  console.log(`  categoryId param received: "${categoryId || "<<NOT PROVIDED>>"}"`);
   console.log(
-    `  Room-level CategoryId: "${roomDetailsWithPassengers[0]?.CategoryId || "<<NOT FOUND>>"}"`
+    `  Room-level CategoryId: "${roomDetailsWithPassengers[0]?.CategoryId || "<<NOT FOUND>>"}"`,
   );
   console.log(
     `  BookCategoryId to be sent: "${bookCategoryId || "<<OMITTED (non-de-dupe)>>"}"`,
