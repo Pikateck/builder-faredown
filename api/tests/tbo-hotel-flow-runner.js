@@ -267,7 +267,10 @@ async function runTboHotelFlow(config = {}) {
     const roomRes = await getHotelRoom(roomReq);
     results.steps.room = { request: roomReq, response: roomRes };
 
-    if (!roomRes.HotelRoomsDetails || roomRes.HotelRoomsDetails.length === 0) {
+    const roomCount = roomRes?.rooms?.length || roomRes?.HotelRoomsDetails?.length || 0;
+    console.log(`✅ Got ${roomCount} room options`);
+
+    if (roomCount === 0) {
       throw new Error("GetHotelRoom returned no room details");
     }
 
