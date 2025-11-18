@@ -296,10 +296,7 @@ async function runTboHotelFlow(config = {}) {
         searchRes?.traceId ||
         searchRes?.TraceId ||
         searchRes?.HotelSearchResult?.TraceId,
-      resultIndex:
-        resultIndex ??
-        hotel?.ResultIndex ??
-        hotel?.resultIndex,
+      resultIndex: resultIndex ?? hotel?.ResultIndex ?? hotel?.resultIndex,
       hotelCode: hotelCode || hotel?.HotelCode || hotel?.hotelCode,
     };
 
@@ -318,9 +315,7 @@ async function runTboHotelFlow(config = {}) {
     }
 
     if (!roomReq.resultIndex && roomReq.resultIndex !== 0) {
-      throw new Error(
-        `resultIndex missing or invalid: ${roomReq.resultIndex}`,
-      );
+      throw new Error(`resultIndex missing or invalid: ${roomReq.resultIndex}`);
     }
 
     if (!roomReq.hotelCode) {
