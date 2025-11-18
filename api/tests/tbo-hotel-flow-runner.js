@@ -94,35 +94,61 @@ function generatePassengers(startIndex, totalAdults, totalChildren) {
 
 /**
  * Find cheapest hotel from search results
- * Returns: { hotel, resultIndex, hotelCode }
+ * Returns: { hotel, resultIndex, hotelCode, traceId }
  */
 function findCheapestHotel(searchResponse) {
-  let hotels = searchResponse.HotelResults || [];
+  // Handle different response structures
+  const hotelSearchResult = searchResponse?.HotelSearchResult;
+  let hotels = Array.isArray(searchResponse?.hotels)
+    ? searchResponse.hotels
+    : Array.isArray(hotelSearchResult?.HotelResults)
+      ? hotelSearchResult.HotelResults
+      : Array.isArray(searchResponse?.HotelResults)
+        ? searchResponse.HotelResults
+        : [];
+
+  console.log(`  Hotel Count (raw): ${hotels.length}`);
 
   if (!Array.isArray(hotels) || hotels.length === 0) {
-    throw new Error("No hotels found in search response");
+    throw new Error("Search returned no hotels (HotelResults was empty)");
   }
 
   let cheapest = null;
   let resultIndex = -1;
 
   hotels.forEach((hotel, index) => {
-    const price = hotel.MinPrice || hotel.Price || Infinity;
-    if (!cheapest || price < cheapest.minPrice) {
+    // Extract price - try multiple possible structures
+    const price =
+      hotel.Price?.OfferedPrice ||
+      hotel.OfferedPrice ||
+      hotel.Price?.PublishedPrice ||
+      hotel.PublishedPrice ||
+      hotel.MinPrice ||
+      hotel.Price ||
+      Infinity;
+
+    const numPrice = typeof price === "number" ? price : parseFloat(price) || Infinity;
+
+    if (!cheapest || numPrice < cheapest.minPrice) {
       cheapest = {
         hotel,
-        minPrice: price,
+        minPrice: numPrice,
         resultIndex: index,
-        hotelCode: hotel.HotelCode,
+        hotelCode: hotel.HotelCode || hotel.hotelCode,
       };
       resultIndex = index;
     }
   });
 
+  if (!cheapest) {
+    throw new Error("No valid hotels found in search results");
+  }
+
   return {
     hotel: cheapest.hotel,
     resultIndex: cheapest.resultIndex,
     hotelCode: cheapest.hotelCode,
+    traceId: searchResponse?.traceId,
   };
 }
 
@@ -198,7 +224,7 @@ async function runTboHotelFlow(config = {}) {
 
   try {
     // STEP 1: SEARCH HOTELS
-    console.log("\n📍 STEP 1: SEARCH HOTELS (GetHotelResult)");
+    console.log("\n�� STEP 1: SEARCH HOTELS (GetHotelResult)");
     const searchReq = {
       destination,
       checkIn: checkInDate,
