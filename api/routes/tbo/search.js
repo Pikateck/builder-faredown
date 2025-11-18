@@ -8,6 +8,7 @@
 const express = require("express");
 const router = express.Router();
 const { searchHotels } = require("../../tbo/search");
+const TBOHotelRateHistory = require("../../models/TBOHotelRateHistory");
 
 /**
  * POST /api/tbo/search
