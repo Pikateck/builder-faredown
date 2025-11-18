@@ -99,6 +99,11 @@ async function searchHotels(tokenId, cityId, checkIn, checkOut) {
     MaxRating: 5,
     MinRating: 0,
   });
+
+  if (response.data.Status !== 1) {
+    throw new Error("Hotel search failed: " + response.data.Error?.ErrorMessage);
+  }
+
   return response.data;
 }
 
