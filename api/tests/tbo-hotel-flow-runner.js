@@ -157,7 +157,12 @@ function findCheapestHotel(searchResponse) {
  * Returns: { room, roomIndex }
  */
 function findCheapestRoom(roomResponse) {
-  let rooms = roomResponse.HotelRoomsDetails || [];
+  // Handle different response structures
+  let rooms = Array.isArray(roomResponse?.rooms)
+    ? roomResponse.rooms
+    : Array.isArray(roomResponse?.HotelRoomsDetails)
+      ? roomResponse.HotelRoomsDetails
+      : [];
 
   if (!Array.isArray(rooms) || rooms.length === 0) {
     throw new Error("No rooms found in room response");
@@ -167,16 +172,31 @@ function findCheapestRoom(roomResponse) {
   let roomIndex = -1;
 
   rooms.forEach((room, index) => {
-    const price = room.Price || room.RoomPrice || Infinity;
-    if (!cheapest || price < cheapest.minPrice) {
+    // Extract price - try multiple structures
+    const price =
+      room.Price?.OfferedPrice ||
+      room.Price?.PublishedPrice ||
+      room.OfferedPrice ||
+      room.PublishedPrice ||
+      room.Price ||
+      room.RoomPrice ||
+      Infinity;
+
+    const numPrice = typeof price === "number" ? price : parseFloat(price) || Infinity;
+
+    if (!cheapest || numPrice < cheapest.minPrice) {
       cheapest = {
         room,
-        minPrice: price,
+        minPrice: numPrice,
         roomIndex: index,
       };
       roomIndex = index;
     }
   });
+
+  if (!cheapest) {
+    throw new Error("No valid rooms found in room response");
+  }
 
   return {
     room: cheapest.room,
