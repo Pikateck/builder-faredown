@@ -85,8 +85,47 @@ router.post("/", async (req, res) => {
       });
     }
 
+    // Save booking to database
+    let bookingRecord = null;
+    try {
+      // Extract pricing information from hotelRoomDetails
+      let blockPrice = null;
+      let blockCurrency = null;
+      if (Array.isArray(result.hotelRoomDetails) && result.hotelRoomDetails.length > 0) {
+        const firstRoom = result.hotelRoomDetails[0];
+        if (firstRoom.price) {
+          blockPrice = firstRoom.price.offeredPrice || firstRoom.price.publishedPrice;
+          blockCurrency = firstRoom.price.currencyCode;
+        }
+      }
+
+      const bookingData = {
+        trace_id: traceId,
+        result_index: resultIndex,
+        hotel_code: hotelCode,
+        hotel_name: hotelName,
+        block_price: blockPrice,
+        block_currency: blockCurrency,
+        block_status: result.responseStatus === 1 ? 'success' : 'failed',
+        price_changed_in_block: result.isPriceChanged || false,
+        supplier_response: result,
+        room_config: JSON.stringify(hotelRoomDetails),
+      };
+
+      const saveResult = await TBOHotelBooking.create(bookingData);
+      if (saveResult.success) {
+        bookingRecord = saveResult.data;
+      } else {
+        console.error("Warning: Failed to save booking record:", saveResult.error);
+      }
+    } catch (dbError) {
+      console.error("Error saving booking to database:", dbError);
+      // Continue anyway - don't fail the API response
+    }
+
     res.json({
       success: true,
+      bookingId: bookingRecord?.id || null,
       responseStatus: result.responseStatus,
       isPriceChanged: result.isPriceChanged,
       isCancellationPolicyChanged: result.isCancellationPolicyChanged,
