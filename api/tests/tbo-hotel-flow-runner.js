@@ -282,19 +282,49 @@ async function runTboHotelFlow(config = {}) {
 
     // STEP 2: FIND CHEAPEST HOTEL & GET ROOM DETAILS
     console.log("\n📍 STEP 2: GET HOTEL ROOM DETAILS (GetHotelRoom)");
-    const { hotel, resultIndex, hotelCode } = findCheapestHotel(searchRes);
+    const cheapestHotelResult = findCheapestHotel(searchRes);
+    const { hotel, resultIndex, hotelCode, traceId } = cheapestHotelResult;
+
     console.log(
-      `✅ Selected cheapest hotel: ${hotelCode} (Index: ${resultIndex})`,
+      `✅ Selected cheapest hotel: ${hotelCode} (ResultIndex: ${resultIndex})`,
     );
 
+    // Build GetHotelRoom request with proper parameter extraction
     const roomReq = {
-      traceId: searchRes?.traceId || searchRes?.TraceId,
-      resultIndex,
-      hotelCode,
+      traceId:
+        traceId ||
+        searchRes?.traceId ||
+        searchRes?.TraceId ||
+        searchRes?.HotelSearchResult?.TraceId,
+      resultIndex:
+        resultIndex ??
+        hotel?.ResultIndex ??
+        hotel?.resultIndex,
+      hotelCode: hotelCode || hotel?.HotelCode || hotel?.hotelCode,
     };
 
+    // Debug logging
+    console.log("GET HOTEL ROOM PARAMS:", {
+      traceId: roomReq.traceId,
+      resultIndex: roomReq.resultIndex,
+      hotelCode: roomReq.hotelCode,
+    });
+
+    // Validation
     if (!roomReq.traceId) {
-      throw new Error("TraceId missing from search response");
+      throw new Error(
+        `TraceId missing - searched response keys: ${Object.keys(searchRes || {}).join(", ")}`,
+      );
+    }
+
+    if (!roomReq.resultIndex && roomReq.resultIndex !== 0) {
+      throw new Error(
+        `resultIndex missing or invalid: ${roomReq.resultIndex}`,
+      );
+    }
+
+    if (!roomReq.hotelCode) {
+      throw new Error(`hotelCode missing: ${roomReq.hotelCode}`);
     }
 
     const roomRes = await getHotelRoom(roomReq);
