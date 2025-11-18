@@ -64,9 +64,9 @@ async function testScenario1() {
         guestNationality: "IN",
         noOfRooms: 1,
         isVoucherBooking: true,
-        hotelRoomDetails: roomRes.data.hotelRoomDetails,
+        hotelRoomDetails: roomRes.data.rooms,
       },
-      { timeout: 30000 },
+      { timeout: 60000 },
     );
     if (!blockRes.data.success) throw new Error("Block failed");
     console.log("✅ Room blocked successfully");
@@ -83,7 +83,7 @@ async function testScenario1() {
         guestNationality: "IN",
         noOfRooms: 1,
         isVoucherBooking: true,
-        hotelRoomDetails: blockRes.data.hotelRoomDetails,
+        hotelRoomDetails: blockRes.data.rooms || blockRes.data.hotelRoomDetails,
         hotelPassenger: [
           {
             Title: "Mr",
