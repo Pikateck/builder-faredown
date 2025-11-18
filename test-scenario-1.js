@@ -64,7 +64,7 @@ async function testScenario1() {
         guestNationality: "IN",
         noOfRooms: 1,
         isVoucherBooking: true,
-        hotelRoomDetails: roomRes.data.rooms,
+        hotelRoomDetails: [roomRes.data.rooms[0]],
       },
       { timeout: 60000 },
     );
@@ -79,11 +79,11 @@ async function testScenario1() {
         resultIndex: hotel.ResultIndex,
         hotelCode: hotel.HotelCode,
         hotelName: hotel.HotelName,
-        bookingId: blockRes.data.bookingId,
+        bookingId: blockRes.data.blockingId || blockRes.data.bookingId,
         guestNationality: "IN",
         noOfRooms: 1,
         isVoucherBooking: true,
-        hotelRoomDetails: blockRes.data.rooms || blockRes.data.hotelRoomDetails,
+        hotelRoomDetails: blockRes.data.hotelRoomDetails || [roomRes.data.rooms[0]],
         hotelPassenger: [
           {
             Title: "Mr",
