@@ -56,7 +56,7 @@ async function testScenario6() {
 
     if (!blockRes.data.success) throw new Error('Block failed: ' + blockRes.data.error);
     const bookingId = blockRes.data.bookingId;
-    console.log(`✅ Room blocked | Booking ID: ${bookingId}`);
+    console.log(`✅ Room blocked (Paris) | Booking ID: ${bookingId}`);
 
     console.log('\n[Step 4/4] Booking hotel...');
     const bookRes = await axios.post(`${API_BASE}/tbo/book`, {
