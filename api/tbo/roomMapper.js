@@ -166,10 +166,16 @@ function validateRoomForBlockRequest(room) {
     errors.push("RoomIndex is required");
   }
 
-  // ✅ CRITICAL: CategoryId must be present and non-empty
+  // CategoryId validation: only warn if it appears to be a de-dupe context
+  // (de-dupe context is detected at flow-runner level, here we just warn)
   if (!room.CategoryId) {
-    errors.push(
-      `CategoryId is required (got: ${room.CategoryId === undefined ? "undefined" : room.CategoryId === null ? "null" : `"${room.CategoryId}"`})`,
+    // Log warning but DO NOT push to errors array - CategoryId is only required for de-dupe flows
+    // Normal flows (non-de-dupe) should not send CategoryId at all per TBO docs
+    console.warn(
+      "⚠️ BlockRoom called without CategoryId. " +
+        "This is normal for non-de-dupe flows. " +
+        "If this is a de-dupe result, TBO may reject the request.",
+      { roomIndex: room.RoomIndex },
     );
   }
 
