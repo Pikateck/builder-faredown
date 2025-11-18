@@ -61,12 +61,12 @@ const fs = require("fs");
 const path = require("path");
 
 // Import TBO modules (existing project modules)
-const { authenticateTBO } = require("./api/tbo/auth");
-const { getCityId } = require("./api/tbo/static");
-const { searchHotels } = require("./api/tbo/search");
-const { getHotelRoom } = require("./api/tbo/room");
-const { blockRoom, bookHotel } = require("./api/tbo/book");
-const { generateVoucher, getBookingDetails } = require("./api/tbo/voucher");
+const { authenticateTBO } = require("../../api/tbo/auth");
+const { getCityId } = require("../../api/tbo/static");
+const { searchHotels } = require("../../api/tbo/search");
+const { getHotelRoom } = require("../../api/tbo/room");
+const { blockRoom, bookHotel } = require("../../api/tbo/book");
+const { generateVoucher, getBookingDetails } = require("../../api/tbo/voucher");
 
 // Currency mapping by country code
 const CURRENCY_BY_COUNTRY = {
