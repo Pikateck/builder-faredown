@@ -244,7 +244,9 @@ async function runScenario() {
       return results;
     }
 
-    logSuccess(`Room details retrieved. Rooms available: ${roomResult.rooms.length}`);
+    logSuccess(
+      `Room details retrieved. Rooms available: ${roomResult.rooms.length}`,
+    );
 
     const selectedRoom = roomResult.rooms[0];
     const categoryId = roomResult.categoryId;
@@ -259,7 +261,10 @@ async function runScenario() {
     };
 
     logStep(5, "Block Rooms");
-    const hotelRoomsDetails = [roomResult.rooms[0], roomResult.rooms[Math.min(1, roomResult.rooms.length - 1)]];
+    const hotelRoomsDetails = [
+      roomResult.rooms[0],
+      roomResult.rooms[Math.min(1, roomResult.rooms.length - 1)],
+    ];
 
     const blockResult = await blockRoom({
       traceId,
@@ -302,8 +307,13 @@ async function runScenario() {
       return results;
     }
 
-    if (bookResult.responseStatus === 2 && bookResult.error?.ErrorMessage === "Agency do not have enough balance.") {
-      logSuccess("Booking request successful (agency balance error is expected for test account)");
+    if (
+      bookResult.responseStatus === 2 &&
+      bookResult.error?.ErrorMessage === "Agency do not have enough balance."
+    ) {
+      logSuccess(
+        "Booking request successful (agency balance error is expected for test account)",
+      );
       results.status = "SUCCESS_WITH_BALANCE_ERROR";
       results.steps.book = {
         success: true,
