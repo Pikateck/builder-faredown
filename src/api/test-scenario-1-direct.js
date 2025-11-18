@@ -53,6 +53,7 @@ async function authenticate() {
 async function getCityId(destination, countryCode, tokenId) {
   console.log(`Getting CityId for ${destination}, ${countryCode}...`);
   const response = await tboAxios.post(TBO_STATIC_URL, {
+    EndUserIp: "52.5.155.132",
     CountryCode: countryCode,
     TokenId: tokenId,
     SearchType: 1,
